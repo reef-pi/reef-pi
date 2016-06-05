@@ -2,6 +2,7 @@ package modules
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -43,16 +44,26 @@ func (w *CameraWorker) On() {
 }
 
 func (w *CameraWorker) takeStill() {
-	filename := filepath.Join(w.ImageDirectory, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
+	imageDir, pathErr := filepath.Abs(w.ImageDirectory)
+	if pathErr != nil {
+		log.Errorln(pathErr)
+		return
+	}
+	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
 	command := "raspistill -e png " + w.CaptureFlags + " -o " + filename
 	parts := strings.Fields(command)
 	cmd := exec.Command(parts[0], parts[1:]...)
 	err := cmd.Run()
 	if err != nil {
-		log.Println(err)
+		log.Errorln(err)
 		return
 	}
 	log.Infoln("Snapshot captured: ", filename)
+	latest := filepath.Join(imageDir, "latest.png")
+	os.Remove(latest)
+	if err := os.Symlink(filename, latest); err != nil {
+		log.Errorln(err)
+	}
 }
 
 func (w *CameraWorker) Off() {
