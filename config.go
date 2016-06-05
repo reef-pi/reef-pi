@@ -12,10 +12,10 @@ type Config struct {
 	CallbackUrl     string   `yaml:"callback_url"`
 	GomniauthSecret string   `yaml:"gomniauth_secret"`
 	Users           []string `yaml:"users"`
-	Domain          string   `yaml:"domain"`
+	AuthDomain      string   `yaml:"oauth_domain"`
 	ImageDirectory  string   `yaml:"image_directory"`
 	TickInterval    uint     `yaml:"tick_interval"`
-	AuthDomain      string   `yaml:"oauth_domain"`
+	CaptureFlags    string   `yaml:"capture_flags"`
 }
 
 func ParseConfig(filename string) (*Config, error) {

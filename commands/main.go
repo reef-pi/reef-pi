@@ -23,6 +23,9 @@ func main() {
 		log.Fatal(err)
 	}
 	camera := modules.NewCameraWorker(conf.ImageDirectory, time.Duration(conf.TickInterval))
+	if conf.CaptureFlags != "" {
+		camera.CaptureFlags = conf.CaptureFlags
+	}
 	go camera.On()
 	defer camera.Off()
 	web := &webui.Server{
@@ -32,6 +35,7 @@ func main() {
 		OauthCallbackUrl: conf.CallbackUrl,
 		GomniAuthSecret:  conf.GomniauthSecret,
 		OauthSecret:      conf.Secret,
+		ImageDirectory:   conf.ImageDirectory,
 	}
 	web.Setup()
 	addr := fmt.Sprintf(":%d", *port)
