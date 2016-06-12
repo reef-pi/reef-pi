@@ -50,10 +50,10 @@ func (w *Camera) Photoshoot() error {
 	if err := w.controller.ReturnPump().Off(); err != nil {
 		return err
 	}
+	defer w.controller.ReturnPump().On()
 	if err := w.controller.ReCirculator().Off(); err != nil {
 		return err
 	}
-	defer w.controller.ReturnPump().On()
 	defer w.controller.ReCirculator().On()
 	w.controller.CoolOff()
 	return w.takeStill()
