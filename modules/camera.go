@@ -3,15 +3,16 @@ package modules
 import (
 	log "github.com/Sirupsen/logrus"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 )
 
-type CameraWorker struct {
+type Camera struct {
 	ticker            *time.Ticker
 	quitCh            chan struct{}
+	runner            Runner
+	controller        Controller
 	ImageDirectory    string
 	RaspiStillCommand string
 	CaptureFlags      string
@@ -21,21 +22,23 @@ const (
 	DefaulCaptureFlags = ""
 )
 
-func NewCameraWorker(imageDirectory string, tickInterval time.Duration) *CameraWorker {
-	return &CameraWorker{
+func NewCamera(controller Controller, imageDirectory string, tickInterval time.Duration) *Camera {
+	return &Camera{
+		controller:     controller,
 		ticker:         time.NewTicker(tickInterval * time.Second),
 		quitCh:         make(chan struct{}),
+		runner:         &CommandRunner{},
 		ImageDirectory: imageDirectory,
 		CaptureFlags:   DefaulCaptureFlags,
 	}
 }
 
-func (w *CameraWorker) On() {
+func (w *Camera) On() {
 	log.Info("Starting camera module")
 	for {
 		select {
 		case <-w.ticker.C:
-			w.takeStill()
+			w.Photoshoot()
 		case <-w.quitCh:
 			w.ticker.Stop()
 			return
@@ -43,29 +46,43 @@ func (w *CameraWorker) On() {
 	}
 }
 
-func (w *CameraWorker) takeStill() {
+func (w *Camera) Photoshoot() error {
+	if err := w.controller.ReturnPump().Off(); err != nil {
+		return err
+	}
+	if err := w.controller.ReCirculator().Off(); err != nil {
+		return err
+	}
+	defer w.controller.ReturnPump().On()
+	defer w.controller.ReCirculator().On()
+	w.controller.CoolOff()
+	return w.takeStill()
+}
+
+func (w *Camera) takeStill() error {
 	imageDir, pathErr := filepath.Abs(w.ImageDirectory)
 	if pathErr != nil {
 		log.Errorln(pathErr)
-		return
+		return pathErr
 	}
 	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
 	command := "raspistill -e png " + w.CaptureFlags + " -o " + filename
 	parts := strings.Fields(command)
-	cmd := exec.Command(parts[0], parts[1:]...)
-	err := cmd.Run()
+	err := w.runner.Run(parts[0], parts[1:]...)
 	if err != nil {
 		log.Errorln(err)
-		return
+		return err
 	}
 	log.Infoln("Snapshot captured: ", filename)
 	latest := filepath.Join(imageDir, "latest.png")
 	os.Remove(latest)
 	if err := os.Symlink(filename, latest); err != nil {
 		log.Errorln(err)
+		return err
 	}
+	return nil
 }
 
-func (w *CameraWorker) Off() {
+func (w *Camera) Off() {
 	w.quitCh <- struct{}{}
 }
