@@ -22,7 +22,9 @@ func main() {
 		log.Warnln("Failed to pasrse oauth config")
 		log.Fatal(err)
 	}
-	camera := modules.NewCameraWorker(conf.ImageDirectory, time.Duration(conf.TickInterval))
+	controller := &modules.NullController{}
+	camera := modules.NewCamera(controller, conf.ImageDirectory, time.Duration(conf.TickInterval))
+
 	if conf.CaptureFlags != "" {
 		camera.CaptureFlags = conf.CaptureFlags
 	}
