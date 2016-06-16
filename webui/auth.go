@@ -71,7 +71,7 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		parts := strings.Split(user.Email(), "@")
 		// externalize config
-		if parts[1] != s.AuthDomain {
+		if parts[1] != s.Domain {
 			log.Fatalln("Not a valid user. Domain:", parts[1])
 		}
 		found := false

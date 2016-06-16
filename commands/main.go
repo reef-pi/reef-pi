@@ -23,21 +23,27 @@ func main() {
 		log.Fatal(err)
 	}
 	controller := &modules.NullController{}
-	camera := modules.NewCamera(controller, conf.ImageDirectory, time.Duration(conf.TickInterval))
+	if conf.Camera.On {
+		camera := modules.NewCamera(
+			controller,
+			conf.Camera.ImageDirectory,
+			time.Duration(conf.Camera.TickInterval),
+		)
 
-	if conf.CaptureFlags != "" {
-		camera.CaptureFlags = conf.CaptureFlags
+		if conf.Camera.CaptureFlags != "" {
+			camera.CaptureFlags = conf.Camera.CaptureFlags
+		}
+		go camera.On()
+		defer camera.Off()
 	}
-	go camera.On()
-	defer camera.Off()
 	web := &webui.Server{
-		AuthDomain:       conf.AuthDomain,
-		Users:            conf.Users,
-		OauthID:          conf.ID,
-		OauthCallbackUrl: conf.CallbackUrl,
-		GomniAuthSecret:  conf.GomniauthSecret,
-		OauthSecret:      conf.Secret,
-		ImageDirectory:   conf.ImageDirectory,
+		Domain:           conf.Auth.Domain,
+		Users:            conf.Auth.Users,
+		OauthID:          conf.Auth.ID,
+		OauthCallbackUrl: conf.Auth.CallbackUrl,
+		GomniAuthSecret:  conf.Auth.GomniAuthSecret,
+		OauthSecret:      conf.Auth.Secret,
+		ImageDirectory:   conf.Camera.ImageDirectory,
 	}
 	web.Setup()
 	addr := fmt.Sprintf(":%d", *port)
