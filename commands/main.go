@@ -22,7 +22,7 @@ func main() {
 		log.Warnln("Failed to pasrse oauth config")
 		log.Fatal(err)
 	}
-	controller := &modules.NullController{}
+	controller := modules.NewBC29Controller(conf.ReturnPump, conf.RecirculationPump)
 	if conf.Camera.On {
 		camera := modules.NewCamera(
 			controller,
