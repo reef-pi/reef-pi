@@ -6,16 +6,32 @@ import (
 	"log"
 )
 
-type Config struct {
+type Auth struct {
 	ID              string   `yaml:"id"`
 	Secret          string   `yaml:"secret"`
+	Domain          string   `yaml:"domain"`
 	CallbackUrl     string   `yaml:"callback_url"`
-	GomniauthSecret string   `yaml:"gomniauth_secret"`
 	Users           []string `yaml:"users"`
-	AuthDomain      string   `yaml:"oauth_domain"`
-	ImageDirectory  string   `yaml:"image_directory"`
-	TickInterval    uint     `yaml:"tick_interval"`
-	CaptureFlags    string   `yaml:"capture_flags"`
+	GomniAuthSecret string   `yaml:"gomni_auth_secret"`
+}
+
+type Camera struct {
+	On             bool   `yaml:"on"`
+	ImageDirectory string `yaml:"image_directory"`
+	TickInterval   uint   `yaml:"tick_interval"`
+	CaptureFlags   string `yaml:"capture_flags"`
+}
+
+type Pump struct {
+	Pin         uint `yaml:"pin"`
+	CoolOffTime uint `yaml:"cool_off_time"`
+}
+
+type Config struct {
+	Camera            Camera `yaml:"camera"`
+	Auth              Auth   `yaml:"auth"`
+	ReturnPump        Pump   `yaml:"return_pump"`
+	RecirculationPump Pump   `yaml:"recirculation_pump"`
 }
 
 func ParseConfig(filename string) (*Config, error) {

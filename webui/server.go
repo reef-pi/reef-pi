@@ -7,7 +7,7 @@ import (
 )
 
 type Server struct {
-	AuthDomain       string
+	Domain           string
 	Users            []string
 	OauthID          string
 	OauthCallbackUrl string
