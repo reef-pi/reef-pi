@@ -37,7 +37,36 @@ func (n *NullController) ReturnPump() Device {
 func (n *NullController) ReCirculator() Device {
 	return &NullDevice{}
 }
+
 func (n *NullController) CoolOff() error {
 	time.Sleep(n.CollOffTime)
+	return nil
+}
+
+type BC29Controller struct {
+	returnPump        Pump
+	recirculationPump Pump
+}
+
+func NewBC29Controller(returnPump, recirculationPump Pump) *BC29Controller {
+	return &BC29Controller{
+		returnPump:        returnPump,
+		recirculationPump: recirculationPump,
+	}
+}
+
+func (b *BC29Controller) ReturnPump() Device {
+	return &Pump{
+		Pin: b.returnPump.Pin,
+	}
+}
+
+func (b *BC29Controller) ReCirculator() Device {
+	return &Pump{
+		Pin: b.recirculationPump.Pin,
+	}
+}
+
+func (b *BC29Controller) CoolOff() error {
 	return nil
 }

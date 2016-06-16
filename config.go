@@ -1,6 +1,7 @@
 package reefer
 
 import (
+	"github.com/ranjib/reefer/modules"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -22,16 +23,11 @@ type Camera struct {
 	CaptureFlags   string `yaml:"capture_flags"`
 }
 
-type Pump struct {
-	Pin         uint `yaml:"pin"`
-	CoolOffTime uint `yaml:"cool_off_time"`
-}
-
 type Config struct {
-	Camera            Camera `yaml:"camera"`
-	Auth              Auth   `yaml:"auth"`
-	ReturnPump        Pump   `yaml:"return_pump"`
-	RecirculationPump Pump   `yaml:"recirculation_pump"`
+	Camera            Camera       `yaml:"camera"`
+	Auth              Auth         `yaml:"auth"`
+	ReturnPump        modules.Pump `yaml:"return_pump"`
+	RecirculationPump modules.Pump `yaml:"recirculation_pump"`
 }
 
 func ParseConfig(filename string) (*Config, error) {
