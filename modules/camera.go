@@ -47,15 +47,11 @@ func (w *Camera) On() {
 }
 
 func (w *Camera) Photoshoot() error {
-	if err := w.controller.ReturnPump().Off(); err != nil {
+	if err := w.controller.TurnOffPumps(); err != nil {
+		log.Errorln("Failed to turn off pumps during photoshoot ", err)
 		return err
 	}
-	defer w.controller.ReturnPump().On()
-	if err := w.controller.ReCirculator().Off(); err != nil {
-		return err
-	}
-	defer w.controller.ReCirculator().On()
-	w.controller.CoolOff()
+	defer w.controller.TurnOnPumps()
 	return w.takeStill()
 }
 

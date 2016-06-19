@@ -4,11 +4,12 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/hybridgroup/gobot/platforms/gpio"
 	"github.com/hybridgroup/gobot/platforms/raspi"
+	"time"
 )
 
 type Pump struct {
-	Pin         string `yaml:"pin"`
-	CoolOffTime uint   `yaml:"cool_off_time"`
+	Pin         string        `yaml:"pin"`
+	CoolOffTime time.Duration `yaml:"cool_off_time"`
 }
 
 func (p *Pump) On() error {
