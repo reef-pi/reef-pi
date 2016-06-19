@@ -68,5 +68,6 @@ func (b *BC29Controller) ReCirculator() Device {
 }
 
 func (b *BC29Controller) CoolOff() error {
+	time.Sleep(30 * time.Second)
 	return nil
 }
