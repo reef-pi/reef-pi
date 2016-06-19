@@ -47,42 +47,45 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 	case "login":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Fatalln("Error when trying to get provider", provider, " Error: ", err)
+			log.Errorln("Error when trying to get provider", provider, " Error: ", err)
+			return
 		}
 
 		loginURL, err := provider.GetBeginAuthURL(nil, nil)
 		if err != nil {
-			log.Fatalln("Error when trying to get BeginAuthURL", provider, " Error: ", err)
+			log.Errorln("Error when trying to get BeginAuthURL", provider, " Error: ", err)
 		}
 		w.Header().Set("Location", loginURL)
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	case "callback":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Fatalln("Error when trying to get provider", provider, " Error: ", err)
+			log.Errorln("Error when trying to get provider", provider, " Error: ", err)
 		}
 		creds, err := provider.CompleteAuth(objx.MustFromURLQuery(r.URL.RawQuery))
 		if err != nil {
-			log.Fatalln("Error while trying to complete auth for ", provider, " Error: ", err)
+			log.Errorln("Error while trying to complete auth for ", provider, " Error: ", err)
 		}
 		user, err := provider.GetUser(creds)
 		if err != nil {
-			log.Fatalln("Error while trying to get user from ", provider, " Error: ", err)
+			log.Errorln("Error while trying to get user from ", provider, " Error: ", err)
 		}
 		parts := strings.Split(user.Email(), "@")
 		// externalize config
 		if parts[1] != s.Domain {
-			log.Fatalln("Not a valid user. Domain:", parts[1])
+			log.Errorln("Not a valid user. Domain:", parts[1])
 		}
 		found := false
+		log.Println("User: ", parts[0])
 		for _, u := range s.Users {
+			log.Println("Valid user: ", u)
 			if u == parts[0] {
 				found = true
 				break
 			}
 		}
 		if !found {
-			log.Fatalln("Not a valid user. id:", parts[0])
+			log.Errorln("Not a valid user. id:", parts[0])
 		}
 		authCookieValue := objx.New(map[string]interface{}{
 			"name": user.Name(),
