@@ -7,7 +7,7 @@ BINARY=bin/reefer-$(VERSION)
 bin: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	go build -o $(BINARY) -ldflags "-X main.Version=$(VERSION)"  commands/*.go
+	env GOARCH=arm go build -o $(BINARY) -ldflags "-X main.Version=$(VERSION)"  commands/*.go
 	sha256sum $(BINARY)
 
 test:

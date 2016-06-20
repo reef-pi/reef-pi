@@ -2,9 +2,20 @@ package main
 
 import (
 	log "github.com/Sirupsen/logrus"
+	"os"
+	"time"
 )
 
+func isTTY() bool {
+	stat, _ := os.Stdin.Stat()
+	return (stat.Mode() & os.ModeCharDevice) == 0
+}
+
 func setupLogger(level string) {
+	log.SetFormatter(&log.TextFormatter{
+		DisableColors:   !isTTY(),
+		TimestampFormat: time.RFC3339,
+	})
 	switch level {
 	case "panic":
 		log.SetLevel(log.PanicLevel)

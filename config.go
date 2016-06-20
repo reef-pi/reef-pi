@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"time"
 )
 
 type Auth struct {
@@ -17,17 +18,17 @@ type Auth struct {
 }
 
 type Camera struct {
-	On             bool   `yaml:"on"`
-	ImageDirectory string `yaml:"image_directory"`
-	TickInterval   uint   `yaml:"tick_interval"`
-	CaptureFlags   string `yaml:"capture_flags"`
+	On             bool          `yaml:"on"`
+	ImageDirectory string        `yaml:"image_directory"`
+	TickInterval   time.Duration `yaml:"tick_interval"`
+	CaptureFlags   string        `yaml:"capture_flags"`
 }
 
 type Config struct {
-	Camera            Camera       `yaml:"camera"`
-	Auth              Auth         `yaml:"auth"`
-	ReturnPump        modules.Pump `yaml:"return_pump"`
-	RecirculationPump modules.Pump `yaml:"recirculation_pump"`
+	Camera     Camera       `yaml:"camera"`
+	Auth       Auth         `yaml:"auth"`
+	ReturnPump modules.Pump `yaml:"return_pump"`
+	PowerHead  modules.Pump `yaml:"powerhead"`
 }
 
 func ParseConfig(filename string) (*Config, error) {
