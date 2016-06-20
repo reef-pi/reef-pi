@@ -85,7 +85,7 @@ func (b *BC29Controller) TurnOffPumps() error {
 }
 
 func (b *BC29Controller) TurnOnPumps() error {
-	if err := b.returnPump.Off(); err != nil {
+	if err := b.returnPump.On(); err != nil {
 		return err
 	}
 	return b.powerHead.On()
