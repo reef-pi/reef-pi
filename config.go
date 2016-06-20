@@ -28,7 +28,7 @@ type Config struct {
 	Camera     Camera       `yaml:"camera"`
 	Auth       Auth         `yaml:"auth"`
 	ReturnPump modules.Pump `yaml:"return_pump"`
-	PowerHead  modules.Pump `yaml:"recirculation_pump"`
+	PowerHead  modules.Pump `yaml:"powerhead"`
 }
 
 func ParseConfig(filename string) (*Config, error) {

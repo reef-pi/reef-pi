@@ -63,7 +63,7 @@ func (w *Camera) takeStill() error {
 	}
 	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
 	command := "raspistill -e png " + w.CaptureFlags + " -o " + filename
-	log.Println("Executing:", command)
+	log.Debugln("Executing:", command)
 	parts := strings.Fields(command)
 	err := w.runner.Run(parts[0], parts[1:]...)
 	if err != nil {
