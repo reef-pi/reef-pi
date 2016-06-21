@@ -40,8 +40,15 @@ func (n *NullController) PowerHead() Device {
 	return &NullDevice{}
 }
 
-func (n *NullController) CoolOff() error {
+func (n *NullController) CoolOff() {
 	time.Sleep(n.CollOffTime)
+}
+
+func (n *NullController) TurnOffPumps() error {
+	return nil
+}
+
+func (n *NullController) TurnOnPumps() error {
 	return nil
 }
 
