@@ -1,0 +1,20 @@
+---
+auth:
+  id: 35adsjfaksjfdhks5eun435b.apps.googleusercontent.com
+  secret: adqwieuqiwue
+  gomni_auth_secret: sadfhsadfkh238asdf
+  domain: example.com
+  callback_url: http://localhost:8088/auth/callback/google
+  users:
+    - foobar
+camera:
+  on: true
+  tick_interval: 300
+  image_directory: /var/lib/reefer/images
+  capture_flags:
+return_pump:
+  pin: 7
+  cool_off_time: 120
+powerhead:
+  pin: 11
+  cool_off_time: 30
