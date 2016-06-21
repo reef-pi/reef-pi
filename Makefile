@@ -20,6 +20,7 @@ go-get:
 	github.com/boltdb/bolt
 	github.com/stretchr/gomniauth
 	github.com/stretchr/gomniauth/providers/google
+	github.com/hybridgroup/gobot
 
 .PHONY: vet
 vet:
