@@ -17,10 +17,9 @@ test:
 go-get:
 	go get github.com/Sirupsen/logrus
 	go get gopkg.in/yaml.v2
-	github.com/boltdb/bolt
-	github.com/stretchr/gomniauth
-	github.com/stretchr/gomniauth/providers/google
-	github.com/hybridgroup/gobot
+	go get github.com/stretchr/gomniauth
+	go get github.com/stretchr/gomniauth/providers/google
+	go get github.com/hybridgroup/gobot
 
 .PHONY: vet
 vet:
