@@ -1,0 +1,9 @@
+[Unit]
+Description=Send email about reef status every hour
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+Unit=reefer-mailer.service
+
+[Install]
+WantedBy=multi-user.target
