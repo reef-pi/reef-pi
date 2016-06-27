@@ -2,8 +2,7 @@
 Description=Send email about reef status every hour
 
 [Timer]
-OnBootSec=5min
-OnUnitActiveSec=1h
+OnCalendar=*-*-* *:00:00
 Unit=reefer-mailer.service
 
 [Install]
