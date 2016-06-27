@@ -5,3 +5,6 @@ Description=Send email about reef status every hour
 OnBootSec=5min
 OnUnitActiveSec=1h
 Unit=reefer-mailer.service
+
+[Install]
+WantedBy=multi-user.target
