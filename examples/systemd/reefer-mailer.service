@@ -1,0 +1,6 @@
+[Unit]
+Description=Send reef status email
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/reefer-mailer

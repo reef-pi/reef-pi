@@ -1,0 +1,7 @@
+[Unit]
+Description=Send email about reef status every hour
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Unit=reefer-mailer.service
