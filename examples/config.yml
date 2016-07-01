@@ -13,8 +13,14 @@ camera:
   image_directory: /var/lib/reefer/images
   capture_flags:
 return_pump:
+  on: true
   pin: 7
   cool_off_time: 120
 powerhead:
+  on: true
   pin: 11
   cool_off_time: 30
+water_level_sensor:
+  on: true
+  pin: 1
+  interval: 10

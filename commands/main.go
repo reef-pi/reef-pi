@@ -24,6 +24,7 @@ func main() {
 	}
 	controller := modules.NewBC29Controller(conf.ReturnPump, conf.PowerHead)
 	if conf.Camera.On {
+		log.Info("Turning on camera module")
 		camera := modules.NewCamera(
 			controller,
 			conf.Camera.ImageDirectory,
@@ -35,6 +36,16 @@ func main() {
 		}
 		go camera.On()
 		defer camera.Off()
+	}
+
+	if conf.WaterLevelSensor.On {
+		log.Info("Turning on water level sensor")
+		adc := &modules.ADC{
+			ChanNum:  conf.WaterLevelSensor.Pin,
+			Interval: conf.WaterLevelSensor.Interval,
+		}
+		go adc.On()
+		defer adc.Off()
 	}
 	web := &webui.Server{
 		Domain:           conf.Auth.Domain,
