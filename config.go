@@ -24,11 +24,18 @@ type Camera struct {
 	CaptureFlags   string        `yaml:"capture_flags"`
 }
 
+type WaterLevelSensor struct {
+	On       bool          `yaml:"on"`
+	Pin      int           `yaml:"pin"`
+	Interval time.Duration `yaml:"interval"`
+}
+
 type Config struct {
-	Camera     Camera       `yaml:"camera"`
-	Auth       Auth         `yaml:"auth"`
-	ReturnPump modules.Pump `yaml:"return_pump"`
-	PowerHead  modules.Pump `yaml:"powerhead"`
+	Camera           Camera           `yaml:"camera"`
+	Auth             Auth             `yaml:"auth"`
+	ReturnPump       modules.Pump     `yaml:"return_pump"`
+	PowerHead        modules.Pump     `yaml:"powerhead"`
+	WaterLevelSensor WaterLevelSensor `yaml:"water_level_sensor"`
 }
 
 func ParseConfig(filename string) (*Config, error) {
