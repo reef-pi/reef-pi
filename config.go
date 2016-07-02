@@ -31,11 +31,12 @@ type WaterLevelSensor struct {
 }
 
 type Config struct {
-	Camera           Camera           `yaml:"camera"`
-	Auth             Auth             `yaml:"auth"`
-	ReturnPump       modules.Pump     `yaml:"return_pump"`
-	PowerHead        modules.Pump     `yaml:"powerhead"`
-	WaterLevelSensor WaterLevelSensor `yaml:"water_level_sensor"`
+	Camera           Camera                  `yaml:"camera"`
+	Auth             Auth                    `yaml:"auth"`
+	ReturnPump       modules.Pump            `yaml:"return_pump"`
+	PowerHead        modules.Pump            `yaml:"powerhead"`
+	WaterLevelSensor WaterLevelSensor        `yaml:"water_level_sensor"`
+	PeristalticPump  modules.PeristalticPump `yaml:"peristaltic_pump"`
 }
 
 func ParseConfig(filename string) (*Config, error) {

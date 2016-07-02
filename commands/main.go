@@ -47,6 +47,10 @@ func main() {
 		go adc.On()
 		defer adc.Off()
 	}
+	if conf.PeristalticPump.On {
+		log.Info("Turning on peristaltic pump")
+		go conf.PeristalticPump.Start()
+	}
 	web := &webui.Server{
 		Domain:           conf.Auth.Domain,
 		Users:            conf.Auth.Users,

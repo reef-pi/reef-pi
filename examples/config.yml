@@ -24,3 +24,10 @@ water_level_sensor:
   on: true
   pin: 1
   interval: 10
+peristaltic_pump:
+  on: true
+  pwm_pin: 12
+  in1_pin: 7
+  in2_pin: 11
+  interval: 60
+  duration: 10
