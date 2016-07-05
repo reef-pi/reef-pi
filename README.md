@@ -12,10 +12,12 @@ Why another opensource Pi based controller?
  - I wanted to learn elctronics, go and also build a affordable reef tank.
  Reefer came out of that. More on this in [history](https://github.com/ranjib/reefer/blob/master/doc/history.md)
  - Costs less to get started. Raspberry Pi can be used for lot other purposes.
- - Reef building is an onerous task, with steep learning curve yet one of the most
- rewarding hobby, with lot of unknowns. Collaboration is easier on open source.
- - Customize and extend at will.
- - Codifying learnings. Develop sharable SPS/LPS specific pico, nano and standard
+ - Reef building is an onerous task, with steep learning curve. Yet reef building is one of the most
+ rewarding hobby. With lot of unknown and lot to learn, an opensource framework might
+ help collaboratively learn those things by easy sharing of settings, profiles etc.
+ - Customize and extend at will. Given here are lot more variables
+ (size of tank, type of corals, type of fish, biotopes), reef keeping style may vary a lot.
+ - Codifying learnings. Develop sharable reef tank setups
  160G tank builds. That eases initial and recurring cost and effort estimation.
  - Make it frugal. Easy to build from components with active communities.
  - Add hardware incrementally
@@ -27,16 +29,18 @@ are inspired/borrowed by them or the learning from those discussion threads.
 
 ## Software stack
 
-- Ubuntu 16.04 on Raspberry Pi 2.
-- Core software is written in go
-- Hardware abstractions are on top of gobot or embd
-- systemd for ancillary tasks
+Reefer controller uses additional softwares other than the core go based controller daemon. These include:
+
+- Ubuntu 16.04 as base operating system.
+- Go language and build tools for all develoment purposes.
+- Hardware abstractions are provided by gobot or embd, go based IoT libraries.
+- systemd for ancillary tasks (periodic tasks, on-boot tasks etc)
 
 
 ## Hardware
- - Raspberry Pi. But should be portable on most SBC running linux.
- - Most other hardwares are from Adafruit. They have tutorials for most of them.
- I have learned electronics while building this
+
+ - The main controller board is Raspberry Pi. But should be portable on most SBC running linux.
+ - Most other hardwares are from Adafruit. They have tutorials for most of them. I have learned electronics while building this
 
 
 ### Setup
@@ -59,7 +63,7 @@ Modules
 
 ## References
 
-- [Bill of Materials](https://github.com/ranjib/reefer/blob/master/BOM.md)
+- [Bill of Materials for a Pico Tank](https://github.com/ranjib/reefer/blob/master/doc/BOM.md)
 - [My Biocube 29 build thread](http://www.nano-reef.com/topic/372899-ryans-bc-29g/)
 - [Issue tracker](https://github.com/ranjib/reefer/issues) for software development
 - [Fritzing sketch](https://github.com/ranjib/reefer/blob/master/doc/reefer.fzz)
