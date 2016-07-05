@@ -8,7 +8,8 @@ that uses Raspberry Pi as main controlling board and various
 hardware peripherals (sensors, motors etc) to automate and monitor
 day to day reef keeping tasks.
 
-Why another opensource Pi based controller?
+Why an OpenSource Pi based controller?
+
  - I wanted to learn elctronics, go and also build a affordable reef tank.
  Reefer came out of that. More on this in [history](https://github.com/ranjib/reefer/blob/master/doc/history.md)
  - Costs less to get started. Raspberry Pi can be used for lot other purposes.
@@ -31,10 +32,10 @@ are inspired/borrowed by them or the learning from those discussion threads.
 
 Reefer controller uses additional softwares other than the core go based controller daemon. These include:
 
-- Ubuntu 16.04 as base operating system.
-- Go language and build tools for all develoment purposes.
-- Hardware abstractions are provided by gobot or embd, go based IoT libraries.
-- systemd for ancillary tasks (periodic tasks, on-boot tasks etc)
+  - Ubuntu 16.04 as base operating system.
+  - Go language and build tools for all develoment purposes.
+  - Hardware abstractions are provided by gobot or embd, go based IoT libraries.
+  - systemd for ancillary tasks (periodic tasks, on-boot tasks etc)
 
 
 ## Hardware
@@ -43,18 +44,19 @@ Reefer controller uses additional softwares other than the core go based control
  - Most other hardwares are from Adafruit. They have tutorials for most of them. I have learned electronics while building this
 
 
-### Setup
+## Setup
 
-- Power supply
-- Hardware assembly
-- Installing and configuring the controller software
-- Testing, calibration
-- Example setup
+  - Decide and purchase all the hardware
+  - Hardware assembly
+  - Installing and configuring the controller software
+  - Testing, calibration
+  - Example setup
 
 
 ## Usage
 
 Modules
+
   - Camera (Taking still images, streaming video)
   - Relay (Timer based on/off)
   - Dosing/TopOff
@@ -63,19 +65,19 @@ Modules
 
 ## References
 
-- [Bill of Materials for a Pico Tank](https://github.com/ranjib/reefer/blob/master/doc/BOM.md)
-- [My Biocube 29 build thread](http://www.nano-reef.com/topic/372899-ryans-bc-29g/)
-- [Issue tracker](https://github.com/ranjib/reefer/issues) for software development
-- [Fritzing sketch](https://github.com/ranjib/reefer/blob/master/doc/reefer.fzz)
-- [History](https://github.com/ranjib/reefer/blob/master/doc/history.md)
+  - [Bill of Materials for a Pico Tank](https://github.com/ranjib/reefer/blob/master/doc/BOM.md)
+  - [My Biocube 29 build thread](http://www.nano-reef.com/topic/372899-ryans-bc-29g/)
+  - [Issue tracker](https://github.com/ranjib/reefer/issues) for software development
+  - [Fritzing sketch](https://github.com/ranjib/reefer/blob/master/doc/reefer.fzz)
+  - [History](https://github.com/ranjib/reefer/blob/master/doc/history.md)
 
 
 ### Acknowledgements
 
-- Nano-reef, the best place in internet to talk about nano reef tanks.
-- Gobot & Embd, for making all those hardware abstractions in go.
-- Raspberry Pi Foundation. I hope all reference hardware becomes like this.
-- Adafruit.com for all the IoT tutorials
+  - [Nano-reef](http://www.nano-reef.com/), the best place in internet to talk about nano reef tanks.
+  - [Raspberry Pi Foundation](https://www.raspberrypi.org/). I hope all reference hardware becomes like this.
+  - [Gobot](https://gobot.io/) & [Embd](https://github.com/kidoman/embd), for making all those hardware abstractions in go.
+  - [Adafruit.com](https://www.adafruit.com/) for all the IoT tutorials
 
 
 ## License
