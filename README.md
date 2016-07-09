@@ -1,4 +1,7 @@
-# Reefer - A Raspberry Pi based reeftank automation system
+# Reefer
+
+A Raspberry Pi based reeftank automation system
+
 ![Ryan's BioCube 29G](https://raw.githubusercontent.com/ranjib/reefer/master/doc/images/bc29_fts.JPG)
 
 ## Introduction
