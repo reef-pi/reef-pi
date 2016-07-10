@@ -14,6 +14,7 @@ import (
 func main() {
 	configFile := flag.String("config", "reefer.yml", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
+	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	logLevel := flag.String("log", "info", "Logging level")
 	flag.Parse()
 	setupLogger(*logLevel)
@@ -60,7 +61,7 @@ func main() {
 		OauthSecret:      conf.Auth.Secret,
 		ImageDirectory:   conf.Camera.ImageDirectory,
 	}
-	web.Setup()
+	web.Setup(!*noAuth)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Infof("Starting http server at: %s", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
