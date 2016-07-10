@@ -8,24 +8,24 @@ auth:
   users:
     - foobar
 camera:
-  on: true
+  on: false
   tick_interval: 300
   image_directory: /var/lib/reefer/images
   capture_flags:
 return_pump:
-  on: true
+  on: false
   pin: 7
   cool_off_time: 120
 powerhead:
-  on: true
+  on: false
   pin: 11
   cool_off_time: 30
 water_level_sensor:
-  on: true
+  on: false
   pin: 1
   interval: 10
 peristaltic_pump:
-  on: true
+  on: false
   pwm_pin: 12
   in1_pin: 7
   in2_pin: 11
