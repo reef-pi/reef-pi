@@ -27,6 +27,7 @@ func (s *Server) Setup(auth bool) {
 		http.Handle("/", MustAuth(&homePageHandler{}))
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
+		http.Handle("/api", MustAuth(apiHandler()))
 
 		// Auth specific paths
 		http.HandleFunc("/auth/", s.loginHandler)
@@ -36,6 +37,6 @@ func (s *Server) Setup(auth bool) {
 		http.Handle("/", &homePageHandler{})
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
+		http.Handle("/api/", apiHandler())
 	}
-
 }
