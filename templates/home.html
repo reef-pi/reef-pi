@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <script src=" https://code.jquery.com/jquery-3.1.0.min.js"></script>
 		<script src="https://fb.me/react-with-addons-15.3.0.min.js"></script>
 		<script src="https://fb.me/react-dom-15.3.0.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
@@ -19,35 +20,28 @@
       </div>
       <div class="panel">
 				<h2>Heater</h2>
-				<div class="btn-group">
-					<label class="btn btn-default"><input type="radio" name="heater" value="on">On</label>
-					<label class="btn btn-default"><input type="radio" name="heater" value="off">Off</label>
+				<div class="btn-group" id="heater">
 				</div>
       </div>
       <div class="panel">
 				<h2>Lighting</h2>
-				<div class="btn-group">
-					<label class="btn btn-default"><input type="radio" name="heater" value="on">On</label>
-					<label class="btn btn-default"><input type="radio" name="heater" value="off">Off</label>
-				</div>
+				<div class="btn-group" id="light">
+        </div>
       </div>
       <div class="panel">
 				<h2>Pump</h2>
-				<div class="btn-group">
-					<label class="btn btn-default"><input type="radio" name="heater" value="on">On</label>
-					<label class="btn btn-default"><input type="radio" name="heater" value="off">Off</label>
-				</div>
+				<div class="btn-group" id="pump">
+        </div>
       </div>
       <div class="panel">
 				<h2>Camera</h2>
       </div>
       <div class="panel">
 				<h2>Doser</h2>
-				<div class="btn-group">
-					<label class="btn btn-default"><input type="radio" name="heater" value="on">On</label>
-					<label class="btn btn-default"><input type="radio" name="heater" value="off">Off</label>
-				</div>
+				<div class="btn-group" id="doser">
+        </div>
       </div>
     </div>
+    <script src="assets/js/reefer.js" type="text/babel"></script>
   </body>
 </html>
