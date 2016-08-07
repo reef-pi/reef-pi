@@ -6,50 +6,33 @@ A Raspberry Pi based reeftank automation system
 
 ## Introduction
 
-Reefer is an opensource reef tank controller writen in go
+Reefer is an opensource reef tank controller written in [go](https://golang.org/)
 that uses Raspberry Pi as main controlling board and various
 hardware peripherals (sensors, motors etc) to automate and monitor
 day to day reef keeping tasks.
 
-Why an OpenSource Pi based controller?
-
- - I wanted to learn elctronics, go and also build a affordable reef tank.
- Reefer came out of that. More on this in [history](https://github.com/ranjib/reefer/blob/master/doc/history.md)
- - Costs less to get started. Raspberry Pi can be used for lot other purposes.
- - Reef building is an onerous task, with steep learning curve. Yet reef building is one of the most
- rewarding hobby. With lot of unknown and lot to learn, an opensource framework might
- help collaboratively learn those things by easy sharing of settings, profiles etc.
- - Customize and extend at will. Given here are lot more variables
- (size of tank, type of corals, type of fish, biotopes), reef keeping style may vary a lot.
- - Codifying learnings. Develop sharable reef tank setups
- 160G tank builds. That eases initial and recurring cost and effort estimation.
- - Make it frugal. Easy to build from components with active communities.
- - Add hardware incrementally
- - IoT and smart reef (ability to control all reef tank devices from internet connected devices such as mobile and PC)
-
-There are already a handful of Pi based aquarium controllers. Lot of my ideas
-are inspired/borrowed by them or the learning from those discussion threads.
+More on reefer's [history](https://github.com/ranjib/reefer/blob/master/doc/history.md)
 
 
-## Software stack
+## Software
 
-Reefer controller uses additional softwares other than the core go based controller daemon. These include:
+Reefer controller uses additional software other than the core go based controller daemon. This include:
 
-  - Ubuntu 16.04 as base operating system.
-  - Go language and build tools for all develoment purposes.
+  - Ubuntu 16.04 as the base operating system.
+  - Go language and build tools for all development purposes.
   - Hardware abstractions are provided by gobot or embd, go based IoT libraries.
   - systemd for ancillary tasks (periodic tasks, on-boot tasks etc)
 
 
 ## Hardware
 
- - The main controller board is Raspberry Pi. But should be portable on most SBC running linux.
- - Most other hardwares are from Adafruit. They have tutorials for most of them. I have learned electronics while building this
+ - The main controller board is Raspberry Pi. But should be portable on most SBC running Linux.
+ - Most other hardware are from Adafruit. They have tutorials for most of them. I have learned electronics while building this
 
 
 ## Setup
 
-  - Decide and purchase all the hardware
+  - Decide and purchase all the aquarium hardware.
   - Hardware assembly
   - Installing and configuring the controller software
   - Testing, calibration
@@ -75,9 +58,9 @@ Modules
   - [History](https://github.com/ranjib/reefer/blob/master/doc/history.md)
 
 
-### Acknowledgements
+## Acknowledgements
 
-  - [Nano-reef](http://www.nano-reef.com/), the best place in internet to talk about nano reef tanks.
+  - [Nano-reef](http://www.nano-reef.com/), the best place on the internet to talk about nano reef tanks.
   - [Raspberry Pi Foundation](https://www.raspberrypi.org/). I hope all reference hardware becomes like this.
   - [Gobot](https://gobot.io/) & [Embd](https://github.com/kidoman/embd), for making all those hardware abstractions in go.
   - [Adafruit.com](https://www.adafruit.com/) for all the IoT tutorials
