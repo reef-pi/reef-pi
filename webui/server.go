@@ -1,6 +1,7 @@
 package webui
 
 import (
+	"github.com/ranjib/reefer/modules"
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
 	"net/http"
@@ -16,7 +17,7 @@ type Server struct {
 	ImageDirectory   string
 }
 
-func (s *Server) Setup(auth bool) {
+func (s *Server) Setup(controller modules.Controller, auth bool) {
 	authProvider := google.New(s.OauthID, s.OauthSecret, s.OauthCallbackUrl)
 	gomniauth.SetSecurityKey(s.GomniAuthSecret)
 	gomniauth.WithProviders(authProvider)
@@ -27,7 +28,7 @@ func (s *Server) Setup(auth bool) {
 		http.Handle("/", MustAuth(&homePageHandler{}))
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
-		http.Handle("/api", MustAuth(apiHandler()))
+		http.Handle("/api", MustAuth(NewApiHandler(controller)))
 
 		// Auth specific paths
 		http.HandleFunc("/auth/", s.loginHandler)
@@ -37,6 +38,6 @@ func (s *Server) Setup(auth bool) {
 		http.Handle("/", &homePageHandler{})
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
-		http.Handle("/api/", apiHandler())
+		http.Handle("/api/", NewApiHandler(controller))
 	}
 }

@@ -23,7 +23,7 @@ func main() {
 		log.Warnln("Failed to pasrse oauth config")
 		log.Fatal(err)
 	}
-	controller := modules.NewBC29Controller(conf.ReturnPump, conf.PowerHead)
+	controller := modules.NewPiController(conf.ReturnPump, conf.PowerHead)
 	if conf.Camera.On {
 		log.Info("Turning on camera module")
 		camera := modules.NewCamera(
@@ -61,7 +61,7 @@ func main() {
 		OauthSecret:      conf.Auth.Secret,
 		ImageDirectory:   conf.Camera.ImageDirectory,
 	}
-	web.Setup(!*noAuth)
+	web.Setup(controller, !*noAuth)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Infof("Starting http server at: %s", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
