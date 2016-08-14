@@ -1,26 +1,31 @@
+
+function consoleLog(data) {
+    $("#console").text(data);
+}
 var Device = React.createClass({
   getInitialState: function(){
     return {on: 'On'};
   },
   onClick: function(e){
+    var desired_state = ""
     if(this.state.on == "On") {
-      this.setState({on: 'Off'})
+      desired_state = "off"
     }else{
-      this.setState({on: 'On'})
+      desired_state = "on"
     }
-    console.error(this.props.url)
+    this.setState({on: desired_state})
     var deviceUrl = this.props.url
     $.ajax({
       url: deviceUrl,
       type: 'POST',
       dataType: 'json',
-      data: {state: this.state.on},
+      data: JSON.stringify({on: desired_state == 'on'}),
       cache: false,
       success: function(data) {
-        alert(data);
+        consoleLog(data);
       },
       error: function(xhr, status, err) {
-        console.error(deviceUrl, status, err.toString());
+        consoleLog(err.toString());
       }
     });
   },

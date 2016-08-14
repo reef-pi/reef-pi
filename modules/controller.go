@@ -10,6 +10,7 @@ type Device interface {
 }
 
 type Controller interface {
+	Heater() Device
 	ReturnPump() Device
 	PowerHead() Device
 	CoolOff()
@@ -52,31 +53,38 @@ func (n *NullController) TurnOnPumps() error {
 	return nil
 }
 
-type BC29Controller struct {
+type PiController struct {
 	returnPump Pump
 	powerHead  Pump
+	heater     Relay
 }
 
-func NewBC29Controller(returnPump, powerHead Pump) *BC29Controller {
-	return &BC29Controller{
+func NewPiController(returnPump, powerHead Pump) *PiController {
+	return &PiController{
 		returnPump: returnPump,
 		powerHead:  powerHead,
 	}
 }
 
-func (b *BC29Controller) ReturnPump() Device {
+func (b *PiController) ReturnPump() Device {
 	return &Pump{
 		Pin: b.returnPump.Pin,
 	}
 }
 
-func (b *BC29Controller) PowerHead() Device {
+func (b *PiController) Heater() Device {
+	return &Relay{
+		Pin: b.heater.Pin,
+	}
+}
+
+func (b *PiController) PowerHead() Device {
 	return &Pump{
 		Pin: b.powerHead.Pin,
 	}
 }
 
-func (b *BC29Controller) CoolOff() {
+func (b *PiController) CoolOff() {
 	coolOffTime := b.returnPump.CoolOffTime
 	if b.powerHead.CoolOffTime > b.returnPump.CoolOffTime {
 		coolOffTime = b.powerHead.CoolOffTime
@@ -84,14 +92,14 @@ func (b *BC29Controller) CoolOff() {
 	time.Sleep(coolOffTime * time.Second)
 }
 
-func (b *BC29Controller) TurnOffPumps() error {
+func (b *PiController) TurnOffPumps() error {
 	if err := b.returnPump.Off(); err != nil {
 		return err
 	}
 	return b.powerHead.Off()
 }
 
-func (b *BC29Controller) TurnOnPumps() error {
+func (b *PiController) TurnOnPumps() error {
 	if err := b.returnPump.On(); err != nil {
 		return err
 	}

@@ -4,29 +4,53 @@ import (
 	"encoding/json"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"io/ioutil"
+	"github.com/ranjib/reefer/modules"
 	"net/http"
 )
 
-func apiHandler() http.Handler {
+type APIHandler struct {
+	controller modules.Controller
+}
+
+type config struct {
+	On bool `json:"on"`
+}
+
+func NewApiHandler(controller modules.Controller) http.Handler {
 	router := mux.NewRouter()
+	handler := &APIHandler{
+		controller: controller,
+	}
 	log.Debug("Setting up API server")
-	router.HandleFunc("/api/heater", configureHeater).Methods("POST")
-	router.HandleFunc("/api/light", configureLight).Methods("POST")
-	router.HandleFunc("/api/pump", configurePump).Methods("POST")
-	router.HandleFunc("/api/doser", configureDoser).Methods("POST")
+	router.HandleFunc("/api/heater", handler.configureHeater).Methods("POST")
+	router.HandleFunc("/api/light", handler.configureLight).Methods("POST")
+	router.HandleFunc("/api/pump", handler.configurePump).Methods("POST")
+	router.HandleFunc("/api/doser", handler.configureDoser).Methods("POST")
 	return router
 }
 
-func configureHeater(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) configureHeater(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Errorln(err)
+	var c config
+	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+		log.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Info("Request:")
-	log.Info(string(data))
+
+	if c.On {
+		log.Info("Switching on heater")
+		if err := h.controller.Heater().On(); err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	} else {
+		log.Info("Switching off heater")
+		if err := h.controller.Heater().Off(); err != nil {
+			log.Error(err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
 	d := make(map[string]string)
 	d["state"] = "on"
 	js, jsErr := json.Marshal(d)
@@ -37,6 +61,6 @@ func configureHeater(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
-func configureLight(w http.ResponseWriter, r *http.Request) {}
-func configurePump(w http.ResponseWriter, r *http.Request)  {}
-func configureDoser(w http.ResponseWriter, r *http.Request) {}
+func (h *APIHandler) configureLight(w http.ResponseWriter, r *http.Request) {}
+func (h *APIHandler) configurePump(w http.ResponseWriter, r *http.Request)  {}
+func (h *APIHandler) configureDoser(w http.ResponseWriter, r *http.Request) {}
