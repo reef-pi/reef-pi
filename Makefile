@@ -21,6 +21,7 @@ go-get:
 	go get github.com/stretchr/gomniauth/providers/google
 	go get github.com/hybridgroup/gobot
 	go get github.com/kidoman/embd
+	go get github.com/gorilla/mux
 
 .PHONY: vet
 vet:

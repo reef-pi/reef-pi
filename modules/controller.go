@@ -53,6 +53,10 @@ func (n *NullController) TurnOnPumps() error {
 	return nil
 }
 
+func (n *NullController) Heater() Device {
+	return &NullDevice{}
+}
+
 type PiController struct {
 	returnPump Pump
 	powerHead  Pump
