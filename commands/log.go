@@ -3,7 +3,6 @@ package main
 import (
 	log "github.com/Sirupsen/logrus"
 	"os"
-	"time"
 )
 
 func isTTY() bool {
@@ -13,8 +12,7 @@ func isTTY() bool {
 
 func setupLogger(level string) {
 	log.SetFormatter(&log.TextFormatter{
-		DisableColors:   !isTTY(),
-		TimestampFormat: time.RFC3339,
+		FullTimestamp: true,
 	})
 	switch level {
 	case "panic":

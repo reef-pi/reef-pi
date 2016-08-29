@@ -1,7 +1,7 @@
 package reefer
 
 import (
-	"github.com/ranjib/reefer/modules"
+	"github.com/ranjib/reefer/controller"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -31,12 +31,9 @@ type WaterLevelSensor struct {
 }
 
 type Config struct {
-	Camera           Camera                  `yaml:"camera"`
-	Auth             Auth                    `yaml:"auth"`
-	ReturnPump       modules.Pump            `yaml:"return_pump"`
-	PowerHead        modules.Pump            `yaml:"powerhead"`
-	WaterLevelSensor WaterLevelSensor        `yaml:"water_level_sensor"`
-	PeristalticPump  modules.PeristalticPump `yaml:"peristaltic_pump"`
+	Camera    Camera                 `yaml:"camera"`
+	Auth      Auth                   `yaml:"auth"`
+	PinLayout controller.RaspiConfig `yaml:"pin_layout"`
 }
 
 func ParseConfig(filename string) (*Config, error) {

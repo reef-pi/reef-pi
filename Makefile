@@ -1,13 +1,13 @@
 SOURCEDIR=.
 SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
 VERSION=$(shell git describe --always --tags)
-BINARY=bin/reefer-$(VERSION)
+BINARY=bin/reefer
 
 .PHONY:bin
 bin: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	env GOARCH=arm go build -o $(BINARY) -ldflags "-X main.Version=$(VERSION)"  commands/*.go
+	go build -o $(BINARY) -ldflags "-X main.Version=$(VERSION)"  commands/*.go
 	sha256sum $(BINARY)
 
 test:

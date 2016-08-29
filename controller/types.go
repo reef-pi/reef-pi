@@ -1,4 +1,4 @@
-package modules
+package controller
 
 type Device interface {
 	On() error
@@ -20,12 +20,7 @@ func (n *NullDevice) On() error {
 func (n *NullDevice) Off() error {
 	return nil
 }
+
 func (n *NullDevice) Name() string {
 	return "Null device"
-}
-
-type NullController struct{}
-
-func (c *NullController) GetDevice(name string) (Device, error) {
-	return &NullDevice{}, nil
 }

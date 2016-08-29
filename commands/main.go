@@ -5,10 +5,9 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/ranjib/reefer"
-	"github.com/ranjib/reefer/modules"
+	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"net/http"
-	"time"
 )
 
 func main() {
@@ -23,35 +22,7 @@ func main() {
 		log.Warnln("Failed to pasrse oauth config")
 		log.Fatal(err)
 	}
-	controller := modules.NewPiController(conf.ReturnPump, conf.PowerHead)
-	if conf.Camera.On {
-		log.Info("Turning on camera module")
-		camera := modules.NewCamera(
-			controller,
-			conf.Camera.ImageDirectory,
-			time.Duration(conf.Camera.TickInterval),
-		)
-
-		if conf.Camera.CaptureFlags != "" {
-			camera.CaptureFlags = conf.Camera.CaptureFlags
-		}
-		go camera.On()
-		defer camera.Off()
-	}
-
-	if conf.WaterLevelSensor.On {
-		log.Info("Turning on water level sensor")
-		adc := &modules.ADC{
-			ChanNum:  conf.WaterLevelSensor.Pin,
-			Interval: conf.WaterLevelSensor.Interval,
-		}
-		go adc.On()
-		defer adc.Off()
-	}
-	if conf.PeristalticPump.On {
-		log.Info("Turning on peristaltic pump")
-		go conf.PeristalticPump.Start()
-	}
+	controller := controller.NewRaspi(&conf.PinLayout)
 	web := &webui.Server{
 		Domain:           conf.Auth.Domain,
 		Users:            conf.Auth.Users,
