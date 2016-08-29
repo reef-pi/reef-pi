@@ -11,26 +11,30 @@ import (
 )
 
 func main() {
-	configFile := flag.String("config", "reefer.yml", "Reefer config file path")
+	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	logLevel := flag.String("log", "info", "Logging level")
 	flag.Parse()
 	setupLogger(*logLevel)
-	conf, err := reefer.ParseConfig(*configFile)
-	if err != nil {
-		log.Warnln("Failed to pasrse oauth config")
-		log.Fatal(err)
+	config := reefer.DefaultConfig()
+	if *configFile != "" {
+		conf, err := reefer.ParseConfig(*configFile)
+		if err != nil {
+			log.Warnln("Failed to pasrse oauth config")
+			log.Fatal(err)
+		}
+		config = *conf
 	}
-	controller := controller.NewRaspi(&conf.PinLayout)
+	controller := controller.NewRaspi(&config.PinLayout)
 	web := &webui.Server{
-		Domain:           conf.Auth.Domain,
-		Users:            conf.Auth.Users,
-		OauthID:          conf.Auth.ID,
-		OauthCallbackUrl: conf.Auth.CallbackUrl,
-		GomniAuthSecret:  conf.Auth.GomniAuthSecret,
-		OauthSecret:      conf.Auth.Secret,
-		ImageDirectory:   conf.Camera.ImageDirectory,
+		Domain:           config.Auth.Domain,
+		Users:            config.Auth.Users,
+		OauthID:          config.Auth.ID,
+		OauthCallbackUrl: config.Auth.CallbackUrl,
+		GomniAuthSecret:  config.Auth.GomniAuthSecret,
+		OauthSecret:      config.Auth.Secret,
+		ImageDirectory:   config.Camera.ImageDirectory,
 	}
 	web.Setup(controller, !*noAuth)
 	addr := fmt.Sprintf(":%d", *port)

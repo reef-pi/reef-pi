@@ -49,3 +49,9 @@ func ParseConfig(filename string) (*Config, error) {
 	}
 	return &c, nil
 }
+
+func DefaultConfig() Config {
+	var config Config
+	config.PinLayout = controller.DefaultRaspiConfig()
+	return config
+}
