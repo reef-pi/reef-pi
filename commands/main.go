@@ -27,16 +27,7 @@ func main() {
 		config = *conf
 	}
 	controller := controller.NewRaspi(&config.PinLayout)
-	web := &webui.Server{
-		Domain:           config.Auth.Domain,
-		Users:            config.Auth.Users,
-		OauthID:          config.Auth.ID,
-		OauthCallbackUrl: config.Auth.CallbackUrl,
-		GomniAuthSecret:  config.Auth.GomniAuthSecret,
-		OauthSecret:      config.Auth.Secret,
-		ImageDirectory:   config.Camera.ImageDirectory,
-	}
-	web.Setup(controller, !*noAuth)
+	webui.SetupServer(config.Server, controller, !*noAuth, config.Camera.ImageDirectory)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Infof("Starting http server at: %s", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
