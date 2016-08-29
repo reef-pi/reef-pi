@@ -4,22 +4,22 @@ import (
 	"encoding/json"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"github.com/ranjib/reefer/modules"
+	"github.com/ranjib/reefer/controller"
 	"net/http"
 )
 
 type APIHandler struct {
-	controller modules.Controller
+	controller controller.Controller
 }
 
 type config struct {
 	On bool `json:"on"`
 }
 
-func NewApiHandler(controller modules.Controller) http.Handler {
+func NewApiHandler(c controller.Controller) http.Handler {
 	router := mux.NewRouter()
 	handler := &APIHandler{
-		controller: controller,
+		controller: c,
 	}
 	log.Debug("Setting up API server")
 	router.HandleFunc("/api/relay_1", handler.configureRelay1).Methods("POST")

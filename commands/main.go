@@ -5,7 +5,7 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/ranjib/reefer"
-	"github.com/ranjib/reefer/modules"
+	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"net/http"
 )
@@ -22,7 +22,7 @@ func main() {
 		log.Warnln("Failed to pasrse oauth config")
 		log.Fatal(err)
 	}
-	controller := modules.NewPiController()
+	controller := controller.NewRaspi(&conf.PinLayout)
 	web := &webui.Server{
 		Domain:           conf.Auth.Domain,
 		Users:            conf.Auth.Users,
