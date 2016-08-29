@@ -2,27 +2,13 @@ package reefer
 
 import (
 	"github.com/ranjib/reefer/controller"
+	"github.com/ranjib/reefer/modules"
+	"github.com/ranjib/reefer/webui"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"time"
 )
-
-type Auth struct {
-	ID              string   `yaml:"id"`
-	Secret          string   `yaml:"secret"`
-	Domain          string   `yaml:"domain"`
-	CallbackUrl     string   `yaml:"callback_url"`
-	Users           []string `yaml:"users"`
-	GomniAuthSecret string   `yaml:"gomni_auth_secret"`
-}
-
-type Camera struct {
-	On             bool          `yaml:"on"`
-	ImageDirectory string        `yaml:"image_directory"`
-	TickInterval   time.Duration `yaml:"tick_interval"`
-	CaptureFlags   string        `yaml:"capture_flags"`
-}
 
 type WaterLevelSensor struct {
 	On       bool          `yaml:"on"`
@@ -31,8 +17,8 @@ type WaterLevelSensor struct {
 }
 
 type Config struct {
-	Camera    Camera                 `yaml:"camera"`
-	Auth      Auth                   `yaml:"auth"`
+	Camera    modules.CameraConfig   `yaml:"camera"`
+	Server    webui.ServerConfig     `yaml:"server"`
 	PinLayout controller.RaspiConfig `yaml:"pin_layout"`
 }
 
@@ -48,4 +34,10 @@ func ParseConfig(filename string) (*Config, error) {
 		return nil, err
 	}
 	return &c, nil
+}
+
+func DefaultConfig() Config {
+	var config Config
+	config.PinLayout = controller.DefaultRaspiConfig()
+	return config
 }
