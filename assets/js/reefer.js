@@ -37,18 +37,18 @@ var Device = React.createClass({
 });
 
 ReactDOM.render(
-    <Device url="/api/heater" />,
-    document.getElementById('heater')
+    <Device url="/api/relay_1" />,
+    document.getElementById('relay_1')
 );
 ReactDOM.render(
-    <Device url="/api/light" />,
-    document.getElementById('light')
+    <Device url="/api/relay_2" />,
+    document.getElementById('relay_2')
 );
 ReactDOM.render(
-    <Device url="/api/pump" />,
-    document.getElementById('pump')
+    <Device url="/api/doser_1" />,
+    document.getElementById('doser_1')
 );
 ReactDOM.render(
-    <Device url="/api/doser" />,
-    document.getElementById('doser')
+    <Device url="/api/doser_2" />,
+    document.getElementById('doser_2')
 );
