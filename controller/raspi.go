@@ -12,6 +12,19 @@ type RaspiConfig struct {
 	Doser2 DoserConfig `yaml:"doser_2"`
 }
 
+func DefaultRaspiConfig() RaspiConfig {
+	var config RaspiConfig
+	config.Relay1 = "1"
+	config.Relay2 = "2"
+	config.Doser1.PWMPin = "3"
+	config.Doser1.IN1Pin = "4"
+	config.Doser1.IN2Pin = "5"
+	config.Doser2.PWMPin = "6"
+	config.Doser2.IN1Pin = "7"
+	config.Doser2.IN2Pin = "8"
+	return config
+}
+
 type Raspi struct {
 	config  *RaspiConfig
 	devices map[string]Device

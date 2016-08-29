@@ -8,69 +8,67 @@ import (
 	"time"
 )
 
+type CameraConfig struct {
+	ImageDirectory    string        `yaml"image_directory"`
+	RaspiStillCommand string        `yaml:"capture_command"`
+	CaptureFlags      string        `yaml:"capture_flags"`
+	TickInterval      time.Duration `yaml:"tick_interval"`
+}
+
 type Camera struct {
-	ticker            *time.Ticker
-	quitCh            chan struct{}
-	runner            Runner
-	controller        Controller
-	ImageDirectory    string
-	RaspiStillCommand string
-	CaptureFlags      string
+	ticker     *time.Ticker
+	quitCh     chan struct{}
+	runner     Runner
+	controller Controller
+	config     CameraConfig
 }
 
 const (
 	DefaulCaptureFlags = ""
 )
 
-func NewCamera(controller Controller, imageDirectory string, tickInterval time.Duration) *Camera {
+func NewCamera(config CameraConfig, controller Controller) *Camera {
 	return &Camera{
-		controller:     controller,
-		ticker:         time.NewTicker(tickInterval * time.Second),
-		quitCh:         make(chan struct{}),
-		runner:         &CommandRunner{},
-		ImageDirectory: imageDirectory,
-		CaptureFlags:   DefaulCaptureFlags,
+		controller: controller,
+		config:     config,
+		ticker:     time.NewTicker(config.TickInterval * time.Second),
+		quitCh:     make(chan struct{}),
+		runner:     &CommandRunner{},
 	}
 }
 
-func (w *Camera) On() {
-	log.Info("Starting camera module")
+func (c *Camera) On() {
+	log.Debug("Starting camera module")
 	for {
 		select {
-		case <-w.ticker.C:
-			w.Photoshoot()
-		case <-w.quitCh:
-			w.ticker.Stop()
+		case <-c.ticker.C:
+			c.Photoshoot()
+		case <-c.quitCh:
+			c.ticker.Stop()
 			return
 		}
 	}
 }
 
-func (w *Camera) Photoshoot() error {
-	//if err := w.controller.TurnOffPumps(); err != nil {
-	//	log.Errorln("Failed to turn off pumps during photoshoot ", err)
-	//	return err
-	//}
-	//defer w.controller.TurnOnPumps()
-	return w.takeStill()
+func (c *Camera) Photoshoot() error {
+	return c.takeStill()
 }
 
-func (w *Camera) takeStill() error {
-	imageDir, pathErr := filepath.Abs(w.ImageDirectory)
+func (c *Camera) takeStill() error {
+	imageDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
-		log.Errorln(pathErr)
 		return pathErr
 	}
 	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
-	command := "raspistill -e png " + w.CaptureFlags + " -o " + filename
+	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + filename
 	log.Debugln("Executing:", command)
 	parts := strings.Fields(command)
-	err := w.runner.Run(parts[0], parts[1:]...)
+	err := c.runner.Run(parts[0], parts[1:]...)
 	if err != nil {
 		log.Errorln(err)
 		return err
 	}
-	log.Infoln("Snapshot captured: ", filename)
+	log.Debugln("Snapshot captured: ", filename)
 	latest := filepath.Join(imageDir, "latest.png")
 	os.Remove(latest)
 	if err := os.Symlink(filename, latest); err != nil {
@@ -80,6 +78,6 @@ func (w *Camera) takeStill() error {
 	return nil
 }
 
-func (w *Camera) Off() {
-	w.quitCh <- struct{}{}
+func (c *Camera) Off() {
+	c.quitCh <- struct{}{}
 }
