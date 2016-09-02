@@ -26,8 +26,9 @@ func DefaultRaspiConfig() RaspiConfig {
 }
 
 type Raspi struct {
-	config  *RaspiConfig
-	devices map[string]Device
+	config    *RaspiConfig
+	devices   map[string]Device
+	schedules map[Device]Scheduler
 }
 
 func (c *Raspi) GetDevice(name string) (Device, error) {
@@ -40,7 +41,8 @@ func (c *Raspi) GetDevice(name string) (Device, error) {
 
 func NewRaspi(config *RaspiConfig) *Raspi {
 	return &Raspi{
-		devices: loadDevices(config),
+		devices:   loadDevices(config),
+		schedules: make(map[Device]Scheduler),
 	}
 }
 
@@ -52,4 +54,23 @@ func loadDevices(config *RaspiConfig) map[string]Device {
 	devices["doser_1"] = NewDoser("doser_1", conn, config.Doser1)
 	devices["doser_2"] = NewDoser("doser_2", conn, config.Doser2)
 	return devices
+}
+
+func (r *Raspi) Schedule(dev Device, sched Scheduler) error {
+	r.schedules[dev] = sched
+	return nil
+}
+
+func (r *Raspi) Start() error {
+	for dev, sched := range r.schedules {
+		go sched.Start(dev)
+	}
+	return nil
+}
+
+func (r *Raspi) Stop() error {
+	for _, sched := range r.schedules {
+		sched.Stop()
+	}
+	return nil
 }
