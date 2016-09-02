@@ -21,8 +21,7 @@ func main() {
 	if *configFile != "" {
 		conf, err := reefer.ParseConfig(*configFile)
 		if err != nil {
-			log.Warnln("Failed to pasrse oauth config")
-			log.Fatal(err)
+			log.Fatal("Failed to parse config file", err)
 		}
 		config = *conf
 	}
