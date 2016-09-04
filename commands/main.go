@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	"github.com/ranjib/reefer"
 	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"net/http"
@@ -17,9 +16,9 @@ func main() {
 	logLevel := flag.String("log", "info", "Logging level")
 	flag.Parse()
 	setupLogger(*logLevel)
-	config := reefer.DefaultConfig()
+	config := DefaultConfig()
 	if *configFile != "" {
-		conf, err := reefer.ParseConfig(*configFile)
+		conf, err := ParseConfig(*configFile)
 		if err != nil {
 			log.Fatal("Failed to parse config file", err)
 		}

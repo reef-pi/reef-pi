@@ -1,18 +1,11 @@
-package reefer
+package main
 
 import (
 	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"time"
 )
-
-type WaterLevelSensor struct {
-	On       bool          `yaml:"on"`
-	Pin      int           `yaml:"pin"`
-	Interval time.Duration `yaml:"interval"`
-}
 
 type Config struct {
 	Camera    controller.CameraConfig `yaml:"camera"`
