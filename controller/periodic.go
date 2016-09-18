@@ -5,30 +5,38 @@ import (
 )
 
 type PeriodicScheduler struct {
-	ticker *time.Ticker
-	quitCh chan struct{}
+	interval time.Duration
+	duration time.Duration
+	quitCh   chan struct{}
 }
 
-func NewPeriodicScheduler(interval time.Duration) *PeriodicScheduler {
+func NewPeriodicScheduler(interval, duration time.Duration) *PeriodicScheduler {
 	return &PeriodicScheduler{
-		ticker: time.NewTicker(interval * time.Second),
-		quitCh: make(chan struct{}),
+		quitCh:   make(chan struct{}),
+		interval: interval,
+		duration: duration,
 	}
 }
 
-func (p *PeriodicScheduler) Start(dev Device) {
+func (p *PeriodicScheduler) Start(dev Device) error {
+	ticker := time.NewTicker(p.interval * time.Second)
+	var after <-chan time.Time
 	for {
 		select {
-		case <-p.ticker.C:
-			dev.On()
+		case <-after:
 			dev.Off()
+		case <-ticker.C:
+			dev.On()
+			after = time.After(p.duration * time.Second)
 		case <-p.quitCh:
-			p.ticker.Stop()
-			return
+			ticker.Stop()
+			return nil
 		}
 	}
+	return nil
 }
 
-func (p *PeriodicScheduler) Stop() {
+func (p *PeriodicScheduler) Stop() error {
 	p.quitCh <- struct{}{}
+	return nil
 }
