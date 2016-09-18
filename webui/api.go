@@ -23,12 +23,13 @@ type DeviceConfig struct {
 }
 
 type SchedulerConfig struct {
-	Device   string `json:"name"`
+	Device   string `json:"device"`
 	Interval string `json:"interval"`
 	Duration string `json:"duration"`
 }
 
 func errorResponse(header int, msg string, w http.ResponseWriter) {
+	log.Errorln(msg)
 	resp := make(map[string]string)
 	w.WriteHeader(header)
 	resp["error"] = msg
