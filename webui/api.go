@@ -47,7 +47,6 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	handler := &APIHandler{
 		controller: c,
 	}
-	log.Debug("Setting up API server")
 	router.HandleFunc("/api/relay_1", handler.configureRelay1).Methods("POST")
 	router.HandleFunc("/api/relay_2", handler.configureRelay2).Methods("POST")
 	router.HandleFunc("/api/doser_1", handler.configureDoser1).Methods("POST")
@@ -60,11 +59,13 @@ func NewApiHandler(c controller.Controller) http.Handler {
 func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) {
 	var c SchedulerConfig
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+		log.Errorln("Failed to decode json. Error:", err)
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
 	dev, err := h.controller.GetDevice(c.Device)
 	if err != nil {
+		log.Errorln("No device present with name:", c.Device)
 		errorResponse(http.StatusBadRequest, "Cant find device: "+c.Device, w)
 		return
 	}
@@ -83,6 +84,14 @@ func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) 
 	if err := h.controller.Schedule(dev, cron); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
 	}
+	log.Println("Successfully constructed scheduler object")
+	js, jsErr := json.Marshal(c)
+	if jsErr != nil {
+		log.Errorln(jsErr)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 }
 
 func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {

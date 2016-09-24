@@ -41,10 +41,25 @@ var Schedule = React.createClass({
     return {
       device: "relay_1",
       interval: "10s",
-      duration: "2s"
+      duration: "2s",
+      on: "On"
     };
   },
+  onIntervalChange: function(event) {
+    this.setState({interval: event.target.value});
+  },
+  onDurationChange: function(event) {
+    this.setState({duration: event.target.value});
+  },
+  onDeviceChange: function(event) {
+    this.setState({device: event.target.value});
+  },
   onClick: function(e){
+    if (this.state.on == "On") {
+      this.setState({on: "Off"})
+    } else {
+      this.setState({on: "On"})
+    }
     $.ajax({
       url: this.props.url,
       type: 'POST',
@@ -61,14 +76,14 @@ var Schedule = React.createClass({
   },
   render: function(){
     return (
-      <div class="form-group">
-        <button type="button" class="btn btn-default" onClick={this.onClick}>Schedule</button>
-        <label>Device</label>
-        <input class="form-control" type="text" value="asd"></input>
-        <label>Duration</label>
-        <input class="form-control input-xs" type="text" value={this.state.duration} />
-        <label>Interval</label>
-        <input class="form-control input-xs" type="text" value={this.state.interval} />
+      <div>
+      <label>Device</label>
+      <input type="text" value={this.state.device} onChange={this.onDeviceChange.bind(this)}/>
+      <label>Duration</label>
+      <input type="text" value={this.state.duration} onChange={this.onDurationChange.bind(this)}/>
+      <label>Interval</label>
+      <input type="text" value={this.state.interval} onChange={this.onIntervalChange.bind(this)}/>
+      <button type="button" class="btn btn-default" onClick={this.onClick}>{this.state.on}</button>
       </div>
     );
   }

@@ -25,6 +25,10 @@ func main() {
 		config = *conf
 	}
 	controller := controller.NewRaspi(&config.PinLayout)
+	if err := controller.Start(); err != nil {
+		log.Fatal(err)
+	}
+	defer controller.Stop()
 	webui.SetupServer(config.Server, controller, !*noAuth, config.Camera.ImageDirectory)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Infof("Starting http server at: %s", addr)
