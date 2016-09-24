@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/hybridgroup/gobot"
 	"github.com/hybridgroup/gobot/platforms/gpio"
+	"log"
 )
 
 type Relay struct {
@@ -18,10 +19,12 @@ func NewRelay(name string, conn gobot.Connection, pin string) *Relay {
 }
 
 func (r *Relay) On() error {
+	log.Printf("Device[%s] On\n", r.Name())
 	return r.pin.DigitalWrite(byte(1))
 }
 
 func (r *Relay) Off() error {
+	log.Printf("Device[%s] Off\n", r.Name())
 	return r.pin.DigitalWrite(byte(0))
 }
 func (r *Relay) Name() string {

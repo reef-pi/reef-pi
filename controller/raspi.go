@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/hybridgroup/gobot/platforms/raspi"
+	"log"
 )
 
 type RaspiConfig struct {
@@ -31,6 +32,10 @@ type Raspi struct {
 	schedules map[Device]Scheduler
 }
 
+func (r *Raspi) Name() string {
+	return "raspberry-pi"
+}
+
 func (c *Raspi) GetDevice(name string) (Device, error) {
 	dev, ok := c.devices[name]
 	if !ok {
@@ -57,7 +62,14 @@ func loadDevices(config *RaspiConfig) map[string]Device {
 }
 
 func (r *Raspi) Schedule(dev Device, sched Scheduler) error {
+	if _, ok := r.schedules[dev]; ok {
+		return fmt.Errorf("Device %s already scheduled", dev.Name())
+	}
+	log.Printf("Added %s[ %s]\n", sched.Name(), dev.Name())
 	r.schedules[dev] = sched
+	if !sched.IsRunning() {
+		go sched.Start(dev)
+	}
 	return nil
 }
 
@@ -65,6 +77,7 @@ func (r *Raspi) Start() error {
 	for dev, sched := range r.schedules {
 		go sched.Start(dev)
 	}
+	log.Println("Started Controller:", r.Name())
 	return nil
 }
 
@@ -72,5 +85,6 @@ func (r *Raspi) Stop() error {
 	for _, sched := range r.schedules {
 		sched.Stop()
 	}
+	log.Println("Stopped Controller:", r.Name())
 	return nil
 }

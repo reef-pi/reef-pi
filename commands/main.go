@@ -7,6 +7,8 @@ import (
 	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 func main() {
@@ -25,10 +27,22 @@ func main() {
 		config = *conf
 	}
 	controller := controller.NewRaspi(&config.PinLayout)
+	if err := controller.Start(); err != nil {
+		log.Fatal(err)
+	}
+	defer controller.Stop()
+
 	webui.SetupServer(config.Server, controller, !*noAuth, config.Camera.ImageDirectory)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Infof("Starting http server at: %s", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		log.Fatal("ListenAndServe:", err)
+	go http.ListenAndServe(addr, nil)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	for {
+		select {
+		case <-c:
+			controller.Stop()
+			return
+		}
 	}
 }

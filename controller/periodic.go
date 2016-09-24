@@ -1,34 +1,65 @@
 package controller
 
 import (
+	"fmt"
 	"time"
 )
 
 type PeriodicScheduler struct {
-	ticker *time.Ticker
-	quitCh chan struct{}
+	interval time.Duration
+	duration time.Duration
+	quitCh   chan struct{}
+	running  bool
 }
 
-func NewPeriodicScheduler(interval time.Duration) *PeriodicScheduler {
+func NewPeriodicScheduler(interval, duration time.Duration) *PeriodicScheduler {
 	return &PeriodicScheduler{
-		ticker: time.NewTicker(interval * time.Second),
-		quitCh: make(chan struct{}),
+		quitCh:   make(chan struct{}, 1),
+		interval: interval,
+		duration: duration,
+		running:  false,
 	}
 }
 
-func (p *PeriodicScheduler) Start(dev Device) {
+func (p *PeriodicScheduler) IsRunning() bool {
+	return p.running
+}
+
+func (p *PeriodicScheduler) Name() string {
+	return "periodic"
+}
+func (p *PeriodicScheduler) String() string {
+	return fmt.Sprintf("%s[interval: %v duration:%v]", p.Name(), p.interval, p.duration)
+
+}
+
+func (p *PeriodicScheduler) Start(dev Device) error {
+	if p.running {
+		return fmt.Errorf("Scheduler %s already running", p.String())
+	}
+	p.running = true
+	ticker := time.NewTicker(p.interval)
+	var after <-chan time.Time
 	for {
 		select {
-		case <-p.ticker.C:
-			dev.On()
+		case <-after:
 			dev.Off()
+		case <-ticker.C:
+			dev.On()
+			after = time.After(p.duration)
 		case <-p.quitCh:
-			p.ticker.Stop()
-			return
+			ticker.Stop()
+			return nil
 		}
 	}
+	p.running = false
+	return nil
 }
 
-func (p *PeriodicScheduler) Stop() {
+func (p *PeriodicScheduler) Stop() error {
+	if p.running {
+		return fmt.Errorf("Scheduler[%s] already running", p.Name())
+	}
 	p.quitCh <- struct{}{}
+	return nil
 }

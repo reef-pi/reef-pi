@@ -7,8 +7,10 @@ type Device interface {
 }
 
 type Scheduler interface {
+	Name() string
 	Start(Device) error
 	Stop() error
+	IsRunning() bool
 }
 
 type Controller interface {
@@ -16,6 +18,7 @@ type Controller interface {
 	Schedule(Device, Scheduler) error
 	Start() error
 	Stop() error
+	Name() string
 }
 
 type NullDevice struct {
