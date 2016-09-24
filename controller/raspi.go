@@ -68,7 +68,7 @@ func (r *Raspi) Schedule(dev Device, sched Scheduler) error {
 	log.Printf("Added %s[ %s]\n", sched.Name(), dev.Name())
 	r.schedules[dev] = sched
 	if !sched.IsRunning() {
-		return sched.Start(dev)
+		go sched.Start(dev)
 	}
 	return nil
 }
