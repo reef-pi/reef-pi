@@ -83,15 +83,14 @@ func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) 
 	cron := controller.NewPeriodicScheduler(interval, duration)
 	if err := h.controller.Schedule(dev, cron); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
-	}
-	log.Println("Successfully constructed scheduler object")
-	js, jsErr := json.Marshal(c)
-	if jsErr != nil {
-		log.Errorln(jsErr)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(c); err != nil {
+		log.Errorln(err)
+		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
+	}
 }
 
 func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {
@@ -128,7 +127,6 @@ func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
-
 }
 
 func (h *APIHandler) configureRawDevice(deviceName string, w http.ResponseWriter, r *http.Request) {
