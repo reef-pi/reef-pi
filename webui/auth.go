@@ -2,9 +2,9 @@ package webui
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/objx"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -31,7 +31,6 @@ func MustAuth(handler http.Handler) http.Handler {
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	log.Debug("Logout handler invoked")
 	http.SetCookie(w, &http.Cookie{
 		Name:   "auth",
 		MaxAge: -1,
@@ -47,33 +46,45 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 	case "login":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Errorln("Error when trying to get provider", provider, " Error: ", err)
+			log.Println("Error when trying to get provider", provider, " Error: ", err)
+			errorResponse(http.StatusInternalServerError, fmt.Sprintf("Auth action %s not supported", action), w)
 			return
 		}
 
 		loginURL, err := provider.GetBeginAuthURL(nil, nil)
 		if err != nil {
-			log.Errorln("Error when trying to get BeginAuthURL", provider, " Error: ", err)
+			log.Println("Error when trying to get BeginAuthURL", provider, " Error: ", err)
+			errorResponse(http.StatusInternalServerError, err.Error(), w)
+			return
 		}
+
 		w.Header().Set("Location", loginURL)
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	case "callback":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Errorln("Error when trying to get provider", provider, " Error: ", err)
+			log.Println("Error when trying to get provider", provider, " Error: ", err)
+			errorResponse(http.StatusInternalServerError, err.Error(), w)
+			return
 		}
 		creds, err := provider.CompleteAuth(objx.MustFromURLQuery(r.URL.RawQuery))
 		if err != nil {
-			log.Errorln("Error while trying to complete auth for ", provider, " Error: ", err)
+			log.Println("Error while trying to complete auth for ", provider, " Error: ", err)
+			errorResponse(http.StatusForbidden, err.Error(), w)
+			return
 		}
 		user, err := provider.GetUser(creds)
 		if err != nil {
-			log.Errorln("Error while trying to get user from ", provider, " Error: ", err)
+			log.Println("Error while trying to get user from ", provider, " Error: ", err)
+			errorResponse(http.StatusForbidden, err.Error(), w)
+			return
 		}
 		parts := strings.Split(user.Email(), "@")
 		// externalize config
 		if parts[1] != s.config.Domain {
-			log.Errorln("Not a valid user. Domain:", parts[1])
+			log.Println("ERROR: Not a valid user. Domain:", parts[1])
+			errorResponse(http.StatusForbidden, "Unauthorized domain", w)
+			return
 		}
 		found := false
 		log.Println("User: ", parts[0])
@@ -85,7 +96,9 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if !found {
-			log.Errorln("Not a valid user. id:", parts[0])
+			log.Println("Not a valid user. id:", parts[0])
+			errorResponse(http.StatusForbidden, "Not a valid user", w)
+			return
 		}
 		authCookieValue := objx.New(map[string]interface{}{
 			"name": user.Name(),

@@ -1,9 +1,11 @@
 package webui
 
 import (
+	"encoding/json"
 	"github.com/ranjib/reefer/controller"
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
+	"log"
 	"net/http"
 )
 
@@ -22,6 +24,20 @@ type ServerConfig struct {
 
 type Server struct {
 	config ServerConfig
+}
+
+func errorResponse(header int, msg string, w http.ResponseWriter) {
+	log.Println(msg)
+	resp := make(map[string]string)
+	w.WriteHeader(header)
+	resp["error"] = msg
+	js, jsErr := json.Marshal(resp)
+	if jsErr != nil {
+		log.Println(jsErr)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 }
 
 func (s *Server) SetupOAuth() {

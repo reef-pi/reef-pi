@@ -2,9 +2,9 @@ package webui
 
 import (
 	"encoding/json"
-	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
+	"log"
 	"net/http"
 	"time"
 )
@@ -28,20 +28,6 @@ type SchedulerConfig struct {
 	Duration string `json:"duration"`
 }
 
-func errorResponse(header int, msg string, w http.ResponseWriter) {
-	log.Errorln(msg)
-	resp := make(map[string]string)
-	w.WriteHeader(header)
-	resp["error"] = msg
-	js, jsErr := json.Marshal(resp)
-	if jsErr != nil {
-		log.Errorln(jsErr)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-}
-
 func NewApiHandler(c controller.Controller) http.Handler {
 	router := mux.NewRouter()
 	handler := &APIHandler{
@@ -59,13 +45,13 @@ func NewApiHandler(c controller.Controller) http.Handler {
 func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) {
 	var c SchedulerConfig
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
-		log.Errorln("Failed to decode json. Error:", err)
+		log.Println("Failed to decode json. Error:", err)
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
 	dev, err := h.controller.GetDevice(c.Device)
 	if err != nil {
-		log.Errorln("No device present with name:", c.Device)
+		log.Println("No device present with name:", c.Device)
 		errorResponse(http.StatusBadRequest, "Cant find device: "+c.Device, w)
 		return
 	}
@@ -88,7 +74,7 @@ func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(c); err != nil {
-		log.Errorln(err)
+		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
 	}
 }
@@ -96,33 +82,33 @@ func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) 
 func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {
 	var c DeviceConfig
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
-		log.Error(err)
+		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	dev, err := h.controller.GetDevice(c.Name)
 	if err != nil {
-		log.Errorln("Cant find device:", c.Name)
-		log.Error(err)
+		log.Println("Cant find device:", c.Name)
+		log.Println("ERROR:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	if c.On {
-		log.Info("Switching on:", dev.Name())
+		log.Println("Switching on:", dev.Name())
 		if err := dev.On(); err != nil {
-			log.Error(err)
+			log.Println("ERROR:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	} else {
-		log.Info("Switching off:", dev.Name())
+		log.Println("Switching off:", dev.Name())
 		if err := dev.Off(); err != nil {
-			log.Error(err)
+			log.Println("ERROR:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 	js, jsErr := json.Marshal(c)
 	if jsErr != nil {
-		log.Errorln(jsErr)
+		log.Println("ERROR:", jsErr)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -133,28 +119,28 @@ func (h *APIHandler) configureRawDevice(deviceName string, w http.ResponseWriter
 	defer r.Body.Close()
 	dev, err := h.controller.GetDevice(deviceName)
 	if err != nil {
-		log.Errorln("Cant find device:", deviceName)
-		log.Error(err)
+		log.Println("Cant find device:", deviceName)
+		log.Println("ERROR:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	var c config
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
-		log.Error(err)
+		log.Println("ERROR:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	if c.On {
-		log.Info("Switching on:", dev.Name())
+		log.Println("Switching on:", dev.Name())
 		if err := dev.On(); err != nil {
-			log.Error(err)
+			log.Println("ERROR:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	} else {
-		log.Info("Switching off:", dev.Name())
+		log.Println("Switching off:", dev.Name())
 		if err := dev.Off(); err != nil {
-			log.Error(err)
+			log.Println("ERROR:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
@@ -162,7 +148,7 @@ func (h *APIHandler) configureRawDevice(deviceName string, w http.ResponseWriter
 	d["state"] = "on"
 	js, jsErr := json.Marshal(d)
 	if jsErr != nil {
-		log.Errorln(jsErr)
+		log.Println("ERROR:", jsErr)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
