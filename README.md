@@ -6,7 +6,8 @@ A Raspberry Pi based reeftank automation system
 
 ## Introduction
 
-Reefer is an opensource reef tank controller written in [go](https://golang.org/)
+Reefer is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium)
+controller written in [go](https://golang.org/)
 that uses Raspberry Pi as main controlling board and various
 hardware peripherals (sensors, motors etc) to automate and monitor
 day to day reef keeping tasks.
