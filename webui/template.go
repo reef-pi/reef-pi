@@ -1,7 +1,6 @@
 package webui
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -17,7 +16,6 @@ type templateHandler struct {
 func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
 		templPath := filepath.Join("templates", t.filename)
-		log.Info("Compiling template: ", templPath)
 		t.templ = template.Must(template.ParseFiles(templPath))
 	})
 	t.templ.Execute(w, r)

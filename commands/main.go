@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,9 +15,7 @@ func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
-	logLevel := flag.String("log", "info", "Logging level")
 	flag.Parse()
-	setupLogger(*logLevel)
 	config := DefaultConfig()
 	if *configFile != "" {
 		conf, err := ParseConfig(*configFile)
@@ -34,7 +32,7 @@ func main() {
 
 	webui.SetupServer(config.Server, controller, !*noAuth, config.Camera.ImageDirectory)
 	addr := fmt.Sprintf(":%d", *port)
-	log.Infof("Starting http server at: %s", addr)
+	log.Printf("Starting http server at: %s\n", addr)
 	go http.ListenAndServe(addr, nil)
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
