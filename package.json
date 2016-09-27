@@ -1,0 +1,28 @@
+{
+  "name": "reefer",
+  "version": "1.0.0",
+  "description": "A Raspberry Pi based reeftank automation system",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "example": "examples"
+  },
+  "dependencies": {
+    "S": "^0.0.1",
+    "react-bootstrap-switch": "^15.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ranjib/reefer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ranjib/reefer/issues"
+  },
+  "homepage": "https://github.com/ranjib/reefer#readme"
+}
