@@ -2,6 +2,7 @@
 var ReactDOM = require('react-dom');
 var Device = require('./device.jsx')
 var Schedule = require('./schedule.jsx')
+var Slider = require('./slider.jsx')
 
 ReactDOM.render(
     <Device url="/api/relay_1" />,
@@ -22,4 +23,8 @@ ReactDOM.render(
 ReactDOM.render(
     <Schedule url="/api/schedule" />,
     document.getElementById('schedule')
+);
+ReactDOM.render(
+    <Slider />,
+    document.getElementById('slider')
 );
