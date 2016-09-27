@@ -5,7 +5,7 @@ var BUILD_DIR = path.resolve(__dirname, 'assets/public');
 var APP_DIR = path.resolve(__dirname, 'assets/jsx');
 
 var config = {
-  entry: APP_DIR + '/reefer.jsx',
+  entry: APP_DIR + '/index.jsx',
 	module : {
     loaders : [
       {
