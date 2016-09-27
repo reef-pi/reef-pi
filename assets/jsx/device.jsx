@@ -20,7 +20,7 @@ var Device = React.createClass({
       data: JSON.stringify({on: desired_state == 'on'}),
       cache: false,
       success: function(data) {
-        consoleLog(data);
+        console.log(data);
       },
       error: function(xhr, status, err) {
         console.log(err.toString());
