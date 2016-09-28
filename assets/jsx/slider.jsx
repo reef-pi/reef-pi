@@ -11,7 +11,7 @@ var Slider = React.createClass({
   render: function(){
     return (
       <div>
-        <input className="col-xs" type="range" onChange={this.onChange} value={this.state.value}/>
+        <input type="range" onChange={this.onChange} value={this.state.value}/>
         <input type="text" className="col-xs" value={this.state.value} />
       </div>
     );

@@ -34,7 +34,7 @@ var Device = React.createClass({
   },
   render: function(){
     return (
-      <input readOnly="true" className={this.state.className} onClick={this.onClick} value={this.state.onString} />
+      <input readOnly="true" className={this.state.className} onClick={this.onClick} value={this.props.name} />
     );
   }
 });
