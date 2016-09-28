@@ -54,10 +54,10 @@ func NewRaspi(config *RaspiConfig) *Raspi {
 func loadDevices(config *RaspiConfig) map[string]Device {
 	conn := raspi.NewRaspiAdaptor("raspi")
 	devices := make(map[string]Device)
-	devices["relay_1"] = NewRelay("relay_1", conn, config.Relay1)
-	devices["relay_2"] = NewRelay("relay_2", conn, config.Relay2)
-	devices["doser_1"] = NewDoser("doser_1", conn, config.Doser1)
-	devices["doser_2"] = NewDoser("doser_2", conn, config.Doser2)
+	devices["Relay 1"] = NewRelay("Relay 1", conn, config.Relay1)
+	devices["Relay 2"] = NewRelay("Relay 2", conn, config.Relay2)
+	devices["Doser 1"] = NewDoser("Doser 1", conn, config.Doser1)
+	devices["Doser 2"] = NewDoser("Doser 2", conn, config.Doser2)
 	return devices
 }
 
