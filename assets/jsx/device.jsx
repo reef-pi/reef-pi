@@ -9,13 +9,13 @@ var Device = React.createClass({
     };
   },
   onClick: function(e){
-    var deviceUrl = this.props.url
     var on = !this.state.on
+    var name = this.props.name
     $.ajax({
-      url: deviceUrl,
+      url: '/api/device',
       type: 'POST',
       dataType: 'json',
-      data: JSON.stringify({on: on}),
+      data: JSON.stringify({on: on, name: name}),
       cache: false,
       success: function(data) {
         console.log(data);
