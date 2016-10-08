@@ -1,21 +1,24 @@
-var React = require('react');
+import React from 'react';
 
-var Slider = React.createClass({
-  getInitialState: function(){
-    return {value: 0};
-  },
-  onChange: function(e){
+export default class Slider extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = { value: 0 };
+      this.onChange = this.onChange.bind(this)
+  }
+  onChange(e){
     this.setState({value: e.target.value})
-    console.log("Slider value: " + this.state.value)
-  },
-  render: function(){
+  }
+  render(){
+   var rangeStyle = {
+     WebkitAppearance: 'slider-vertical'
+   };
     return (
       <div>
-        <input type="range" onChange={this.onChange} value={this.state.value}/>
-        <input type="text" className="col-xs" value={this.state.value} />
+        <input type="text"  className="col-xs" value={this.state.value} />
+        <input type="range" style={rangeStyle} onChange={this.onChange}/>
+        {this.props.index}
       </div>
     );
   }
-});
-
-module.exports = Slider;
+}

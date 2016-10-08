@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Light from './light.jsx';
 
-class App extends Component {
+export default class App extends Component {
   handleSelect(index, last) {
-    console.log('Selected tab: ' + index + ', Last tab: ' + last);
+    console.log(index);
   }
 
   render() {
     return (
-      <Tabs onSelect={this.handleSelect} selectedIndex={2}>
+      <Tabs onSelect={this.handleSelect} selectedIndex={0}>
         <TabList>
           <Tab>Lighting</Tab>
           <Tab>ATO</Tab>
@@ -17,7 +18,7 @@ class App extends Component {
           <Tab>Pumps</Tab>
         </TabList>
         <TabPanel>
-					Lighting components go here
+         <Light />
         </TabPanel>
         <TabPanel>
 					ATO components go here
