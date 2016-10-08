@@ -13,6 +13,11 @@ type APIHandler struct {
 	controller controller.Controller
 }
 
+type LightingConfig struct {
+	Name  string `json:"name"`
+	On    bool   `json:"on"`
+	Value uint   `json:"value"`
+}
 type DeviceConfig struct {
 	Name string `json:"name"`
 	On   bool   `json:"on"`
@@ -31,6 +36,7 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	}
 	router.HandleFunc("/api/device", handler.configureDevice).Methods("POST")
 	router.HandleFunc("/api/schedule", handler.configureScheduler).Methods("POST")
+	router.HandleFunc("/api/lighting", handler.configureLighting).Methods("POST")
 	return router
 }
 
@@ -94,6 +100,49 @@ func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Println("Switching off:", dev.Name())
 		if err := dev.Off(); err != nil {
+			log.Println("ERROR:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+	js, jsErr := json.Marshal(c)
+	if jsErr != nil {
+		log.Println("ERROR:", jsErr)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
+func (h *APIHandler) configureLighting(w http.ResponseWriter, r *http.Request) {
+	var c LightingConfig
+	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	light, err := h.controller.GetLighting()
+	if err != nil {
+		log.Println("Cant find lighting")
+		log.Println("ERROR:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if c.On {
+		log.Println("Switching on:", light.Name())
+		if err := light.On(); err != nil {
+			log.Println("ERROR:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		if err := light.SetValue(c.Value); err != nil {
+			log.Println("ERROR:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+	} else {
+		log.Println("Switching off:", light.Name())
+		if err := light.Off(); err != nil {
 			log.Println("ERROR:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
