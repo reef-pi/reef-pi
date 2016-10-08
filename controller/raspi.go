@@ -30,6 +30,7 @@ type Raspi struct {
 	config    *RaspiConfig
 	devices   map[string]Device
 	schedules map[Device]Scheduler
+	lighting  Lighting
 }
 
 func (r *Raspi) Name() string {
@@ -42,6 +43,10 @@ func (c *Raspi) GetDevice(name string) (Device, error) {
 		return nil, fmt.Errorf("No such device: '%s'", name)
 	}
 	return dev, nil
+}
+
+func (r *Raspi) GetLighting() (Lighting, error) {
+	return r.lighting, nil
 }
 
 func NewRaspi(config *RaspiConfig) *Raspi {
@@ -58,6 +63,7 @@ func loadDevices(config *RaspiConfig) map[string]Device {
 	devices["Relay 2"] = NewRelay("Relay 2", conn, config.Relay2)
 	devices["Doser 1"] = NewDoser("Doser 1", conn, config.Doser1)
 	devices["Doser 2"] = NewDoser("Doser 2", conn, config.Doser2)
+	devices["lighting"] = NewLEDLight("Doser 2", conn, "asd")
 	return devices
 }
 

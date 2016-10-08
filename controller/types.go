@@ -6,6 +6,11 @@ type Device interface {
 	Name() string
 }
 
+type Lighting interface {
+	Device
+	SetValue(uint) error
+}
+
 type Scheduler interface {
 	Name() string
 	Start(Device) error
@@ -16,6 +21,7 @@ type Scheduler interface {
 type Controller interface {
 	GetDevice(string) (Device, error)
 	Schedule(Device, Scheduler) error
+	GetLighting() (Lighting, error)
 	Start() error
 	Stop() error
 	Name() string
