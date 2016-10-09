@@ -13,9 +13,18 @@ type Scheduler interface {
 	IsRunning() bool
 }
 
+type Module interface {
+	Name() string
+	Configure(interface{}) error
+	Enable() error
+	Disable() error
+	IsEnabled() bool
+}
+
 type Controller interface {
 	GetDevice(string) (Device, error)
 	Schedule(Device, Scheduler) error
+	GetModule(string) (Module, error)
 	Start() error
 	Stop() error
 	Name() string
