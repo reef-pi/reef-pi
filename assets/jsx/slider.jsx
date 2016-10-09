@@ -13,12 +13,15 @@ export default class Slider extends React.Component {
    var rangeStyle = {
      WebkitAppearance: 'slider-vertical'
    };
+   var tdStyle = {
+     textAlign: 'center'
+   };
     return (
-      <div>
-        <input type="text"  className="col-xs" value={this.state.value} />
-        <input type="range" style={rangeStyle} onChange={this.onChange}/>
-        {this.props.index}
-      </div>
+      <td style={tdStyle}>
+        {this.state.value}
+        <input type="range" style={rangeStyle} onChange={this.onChange} value={this.state.value}/>
+        {this.props.time}
+      </td>
     );
   }
 }

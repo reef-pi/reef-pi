@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Light from './light.jsx';
+import ATO from './ato.jsx';
+import Temperature from './temperature.jsx';
+import Pumps from './pumps.jsx';
 
 export default class App extends Component {
   handleSelect(index, last) {
-    console.log(index);
   }
 
   render() {
@@ -21,13 +23,13 @@ export default class App extends Component {
          <Light />
         </TabPanel>
         <TabPanel>
-					ATO components go here
+					<ATO />
         </TabPanel>
         <TabPanel>
-					Temperature components go here
+          <Temperature />
         </TabPanel>
         <TabPanel>
-					Pump components go here
+          <Pumps />
         </TabPanel>
       </Tabs>
     );
