@@ -11,7 +11,8 @@
     "S": "^0.0.1",
     "react-bootstrap-slider": "^1.1.2",
     "react-bootstrap-switch": "^15.0.0",
-    "react-slider": "^0.7.0"
+    "react-slider": "^0.7.0",
+    "react-tabs": "^0.8.0"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
