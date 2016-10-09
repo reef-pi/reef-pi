@@ -30,10 +30,19 @@ type Raspi struct {
 	config    *RaspiConfig
 	devices   map[string]Device
 	schedules map[Device]Scheduler
+	modules   map[string]Module
 }
 
 func (r *Raspi) Name() string {
 	return "raspberry-pi"
+}
+
+func (c *Raspi) GetModule(name string) (Module, error) {
+	module, ok := c.modules[name]
+	if !ok {
+		return nil, fmt.Errorf("No such module: '%s'", name)
+	}
+	return module, nil
 }
 
 func (c *Raspi) GetDevice(name string) (Device, error) {
@@ -45,20 +54,27 @@ func (c *Raspi) GetDevice(name string) (Device, error) {
 }
 
 func NewRaspi(config *RaspiConfig) *Raspi {
-	return &Raspi{
-		devices:   loadDevices(config),
+	r := &Raspi{
 		schedules: make(map[Device]Scheduler),
 	}
+	r.loadDevices(config)
+	r.loadModules()
+	return r
 }
 
-func loadDevices(config *RaspiConfig) map[string]Device {
+func (r *Raspi) loadDevices(config *RaspiConfig) {
 	conn := raspi.NewRaspiAdaptor("raspi")
-	devices := make(map[string]Device)
-	devices["Relay 1"] = NewRelay("Relay 1", conn, config.Relay1)
-	devices["Relay 2"] = NewRelay("Relay 2", conn, config.Relay2)
-	devices["Doser 1"] = NewDoser("Doser 1", conn, config.Doser1)
-	devices["Doser 2"] = NewDoser("Doser 2", conn, config.Doser2)
-	return devices
+	r.devices = make(map[string]Device)
+	r.devices["Relay 1"] = NewRelay("Relay 1", conn, config.Relay1)
+	r.devices["Relay 2"] = NewRelay("Relay 2", conn, config.Relay2)
+	r.devices["Doser 1"] = NewDoser("Doser 1", conn, config.Doser1)
+	r.devices["Doser 2"] = NewDoser("Doser 2", conn, config.Doser2)
+}
+
+func (r *Raspi) loadModules() {
+	fmt.Println("Loading ATO module")
+	r.modules = make(map[string]Module)
+	r.modules["ato"] = &ATO{}
 }
 
 func (r *Raspi) Schedule(dev Device, sched Scheduler) error {
