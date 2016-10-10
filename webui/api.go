@@ -19,8 +19,8 @@ type DeviceConfig struct {
 
 type DailyJobConfig struct {
 	Device string `json:"device"`
-	Start  string `json:"interval"`
-	Stop   string `json:"duration"`
+	Start  string `json:"start"`
+	Stop   string `json:"stop"`
 	On     bool   `json:"on"`
 }
 
