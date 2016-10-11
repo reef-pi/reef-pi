@@ -6,7 +6,6 @@ import (
 	"github.com/ranjib/reefer/controller"
 	"log"
 	"net/http"
-	"time"
 )
 
 type APIHandler struct {
@@ -18,10 +17,11 @@ type DeviceConfig struct {
 	On   bool   `json:"on"`
 }
 
-type SchedulerConfig struct {
-	Device   string `json:"device"`
-	Interval string `json:"interval"`
-	Duration string `json:"duration"`
+type DailyJobConfig struct {
+	Device string `json:"device"`
+	Start  string `json:"start"`
+	Stop   string `json:"stop"`
+	On     bool   `json:"on"`
 }
 
 func NewApiHandler(c controller.Controller) http.Handler {
@@ -30,7 +30,7 @@ func NewApiHandler(c controller.Controller) http.Handler {
 		controller: c,
 	}
 	router.HandleFunc("/api/device", handler.configureDevice).Methods("POST")
-	router.HandleFunc("/api/schedule", handler.configureScheduler).Methods("POST")
+	router.HandleFunc("/api/schedule", handler.configureDailyJob).Methods("POST")
 	router.HandleFunc("/api/ato", handler.configureATO).Methods("POST")
 	return router
 }
@@ -60,8 +60,8 @@ func (h *APIHandler) configureATO(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) {
-	var c SchedulerConfig
+func (h *APIHandler) configureDailyJob(w http.ResponseWriter, r *http.Request) {
+	var c DailyJobConfig
 	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
 		log.Println("Failed to decode json. Error:", err)
 		errorResponse(http.StatusBadRequest, err.Error(), w)
@@ -74,18 +74,12 @@ func (h *APIHandler) configureScheduler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	duration, err := time.ParseDuration(c.Duration)
+	j, err := controller.NewDailyJob(c.Start, c.Stop)
 	if err != nil {
-		errorResponse(http.StatusBadRequest, "Invalid duration "+c.Duration, w)
+		errorResponse(http.StatusBadRequest, "Failed to create daily jon. Error: "+err.Error(), w)
 		return
 	}
-	interval, err := time.ParseDuration(c.Interval)
-	if err != nil {
-		errorResponse(http.StatusBadRequest, "Invalid interval "+c.Duration, w)
-		return
-	}
-	cron := controller.NewPeriodicScheduler(interval, duration)
-	if err := h.controller.Schedule(dev, cron); err != nil {
+	if err := h.controller.Schedule(dev, j); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
 		return
 	}

@@ -12,7 +12,7 @@ type PeriodicScheduler struct {
 	running  bool
 }
 
-func NewPeriodicScheduler(interval, duration time.Duration) *PeriodicScheduler {
+func NewPeriodicScheduler(interval, duration time.Duration) Scheduler {
 	return &PeriodicScheduler{
 		quitCh:   make(chan struct{}, 1),
 		interval: interval,
@@ -37,6 +37,7 @@ func (p *PeriodicScheduler) Start(dev Device) error {
 	if p.running {
 		return fmt.Errorf("Scheduler %s already running", p.String())
 	}
+	fmt.Println("Starting scheduler with ", p.interval, "interval and", p.duration, "duration")
 	p.running = true
 	ticker := time.NewTicker(p.interval)
 	var after <-chan time.Time
@@ -49,6 +50,7 @@ func (p *PeriodicScheduler) Start(dev Device) error {
 			after = time.After(p.duration)
 		case <-p.quitCh:
 			ticker.Stop()
+			p.running = false
 			return nil
 		}
 	}

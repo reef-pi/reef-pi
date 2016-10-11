@@ -5,6 +5,9 @@ import Light from './light.jsx';
 import ATO from './ato.jsx';
 import Temperature from './temperature.jsx';
 import Pumps from './pumps.jsx';
+import Dashboard from './dashboard.jsx';
+import Settings from './settings.jsx';
+import Schedule from './schedule.jsx';
 
 export default class App extends Component {
   handleSelect(index, last) {
@@ -14,22 +17,34 @@ export default class App extends Component {
     return (
       <Tabs onSelect={this.handleSelect} selectedIndex={0}>
         <TabList>
+          <Tab>Dashboard</Tab>
           <Tab>Lighting</Tab>
           <Tab>ATO</Tab>
           <Tab>Temperature</Tab>
           <Tab>Pumps</Tab>
+          <Tab>Schedules</Tab>
+          <Tab>Settings</Tab>
         </TabList>
+        <TabPanel>
+         <Dashboard />
+        </TabPanel>
         <TabPanel>
          <Light />
         </TabPanel>
         <TabPanel>
-					<ATO />
+          <ATO />
         </TabPanel>
         <TabPanel>
           <Temperature />
         </TabPanel>
         <TabPanel>
           <Pumps />
+        </TabPanel>
+        <TabPanel>
+          <Schedule url="/api/schedule"/>
+        </TabPanel>
+        <TabPanel>
+          <Settings />
         </TabPanel>
       </Tabs>
     );
