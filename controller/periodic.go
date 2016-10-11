@@ -37,6 +37,7 @@ func (p *PeriodicScheduler) Start(dev Device) error {
 	if p.running {
 		return fmt.Errorf("Scheduler %s already running", p.String())
 	}
+	fmt.Println("Starting scheduler with ", p.interval, "interval and", p.duration, "duration")
 	p.running = true
 	ticker := time.NewTicker(p.interval)
 	var after <-chan time.Time

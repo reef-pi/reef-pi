@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -55,13 +56,18 @@ func (j *DailyJob) Start(dev Device) error {
 	nowTime := time.Now().Format(format)
 	now, err := time.Parse(format, nowTime)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	if now.Before(j.start) {
+		log.Println("Before start")
+		log.Println("Sleeping for:", j.start.Sub(now))
 		time.Sleep(j.start.Sub(now))
+		log.Println("Starting periodic scheduler:", time.Now())
 		return j.periodic.Start(dev)
 	}
 	if now.After(j.start) && now.Before(j.stop) {
+		log.Println("After start & before stop")
 		go dev.On()
 		time.Sleep(j.stop.Sub(now))
 		go dev.Off()
@@ -69,10 +75,11 @@ func (j *DailyJob) Start(dev Device) error {
 		return j.periodic.Start(dev)
 	}
 	if now.After(j.stop) {
+		log.Println("After stop")
 		time.Sleep(j.start.Add(24 * time.Hour).Sub(now))
 		return j.periodic.Start(dev)
 	}
-	return nil
+	return fmt.Errorf("Failed to start. Start time: %s. Stop time: %s", j.start, j.stop)
 }
 
 func (j *DailyJob) Stop() error {
