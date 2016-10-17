@@ -15,8 +15,8 @@ type RaspiConfig struct {
 
 func DefaultRaspiConfig() RaspiConfig {
 	var config RaspiConfig
-	config.Relay1 = "1"
-	config.Relay2 = "2"
+	config.Relay1 = "40"
+	config.Relay2 = "38"
 	config.Doser1.PWMPin = "3"
 	config.Doser1.IN1Pin = "4"
 	config.Doser1.IN2Pin = "5"
