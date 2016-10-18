@@ -46,10 +46,10 @@ func New(config *Config) *Raspi {
 func (r *Raspi) loadDevices(config *Config) {
 	conn := raspi.NewRaspiAdaptor("raspi")
 	r.devices = make(map[string]controller.Device)
-	r.devices["Relay 1"] = controller.NewRelay("Relay 1", conn, config.Relay1)
-	r.devices["Relay 2"] = controller.NewRelay("Relay 2", conn, config.Relay2)
-	r.devices["Doser 1"] = controller.NewDoser("Doser 1", conn, config.Doser1)
-	r.devices["Doser 2"] = controller.NewDoser("Doser 2", conn, config.Doser2)
+	r.Devices().Create(controller.NewRelay("Relay 1", conn, config.Relay1))
+	r.Devices().Create(controller.NewRelay("Relay 2", conn, config.Relay2))
+	r.Devices().Create(controller.NewDoser("Doser 1", conn, config.Doser1))
+	r.Devices().Create(controller.NewDoser("Doser 2", conn, config.Doser2))
 }
 
 func (r *Raspi) loadModules() {
