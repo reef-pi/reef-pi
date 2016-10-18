@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ranjib/reefer/controller"
+	"github.com/ranjib/reefer/controller/raspi"
 	"github.com/ranjib/reefer/webui"
 	"log"
 	"net/http"
@@ -24,13 +24,13 @@ func main() {
 		}
 		config = *conf
 	}
-	controller := controller.NewRaspi(&config.PinLayout)
+	controller := raspi.New(&config.PinLayout)
 	if err := controller.Start(); err != nil {
 		log.Fatal(err)
 	}
 	defer controller.Stop()
 
-	webui.SetupServer(config.Server, controller, !*noAuth, config.Camera.ImageDirectory)
+	webui.SetupServer(config.Server, controller, !*noAuth)
 	addr := fmt.Sprintf(":%d", *port)
 	log.Printf("Starting http server at: %s\n", addr)
 	go http.ListenAndServe(addr, nil)
