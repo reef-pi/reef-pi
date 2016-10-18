@@ -44,5 +44,8 @@ func (d *DeviceAPI) Delete(name string) error {
 }
 func (d *DeviceAPI) List() (*[]interface{}, error) {
 	var ret []interface{}
+	for k, _ := range d.devices {
+		ret = append(ret, k)
+	}
 	return &ret, nil
 }

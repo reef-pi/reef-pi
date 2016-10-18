@@ -28,7 +28,9 @@ func (n *NullCrudAPI) List() (*[]interface{}, error) {
 }
 
 func (r *Raspi) Devices() controller.CrudAPI {
-	return &NullCrudAPI{}
+	return &DeviceAPI{
+		devices: r.devices,
+	}
 }
 
 func (r *Raspi) Modules() controller.CrudAPI {
