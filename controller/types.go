@@ -44,3 +44,17 @@ func (n *NullDevice) Off() error {
 func (n *NullDevice) Name() string {
 	return "Null device"
 }
+
+type CrudAPI interface {
+	Create(interface{}) error
+	Get(string) (interface{}, error)
+	Update(string, interface{}) error
+	Delete(string) error
+	List() (*[]interface{}, error)
+}
+
+type API interface {
+	Device() CrudAPI
+	Schedule() CrudAPI
+	Module() CrudAPI
+}

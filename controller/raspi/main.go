@@ -1,16 +1,17 @@
-package controller
+package raspi
 
 import (
 	"fmt"
 	"github.com/hybridgroup/gobot/platforms/raspi"
+	"github.com/ranjib/reefer/controller"
 	"log"
 )
 
 type RaspiConfig struct {
-	Relay1 string      `yaml:"relay_1"`
-	Relay2 string      `yaml:"relay_2"`
-	Doser1 DoserConfig `yaml:"doser_1"`
-	Doser2 DoserConfig `yaml:"doser_2"`
+	Relay1 string                 `yaml:"relay_1"`
+	Relay2 string                 `yaml:"relay_2"`
+	Doser1 controller.DoserConfig `yaml:"doser_1"`
+	Doser2 controller.DoserConfig `yaml:"doser_2"`
 }
 
 func DefaultRaspiConfig() RaspiConfig {
@@ -28,16 +29,16 @@ func DefaultRaspiConfig() RaspiConfig {
 
 type Raspi struct {
 	config    *RaspiConfig
-	devices   map[string]Device
-	schedules map[Device]Scheduler
-	modules   map[string]Module
+	devices   map[string]controller.Device
+	schedules map[controller.Device]controller.Scheduler
+	modules   map[string]controller.Module
 }
 
 func (r *Raspi) Name() string {
 	return "raspberry-pi"
 }
 
-func (c *Raspi) GetModule(name string) (Module, error) {
+func (c *Raspi) GetModule(name string) (controller.Module, error) {
 	module, ok := c.modules[name]
 	if !ok {
 		return nil, fmt.Errorf("No such module: '%s'", name)
@@ -45,7 +46,7 @@ func (c *Raspi) GetModule(name string) (Module, error) {
 	return module, nil
 }
 
-func (c *Raspi) GetDevice(name string) (Device, error) {
+func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 	dev, ok := c.devices[name]
 	if !ok {
 		return nil, fmt.Errorf("No such device: '%s'", name)
@@ -53,9 +54,9 @@ func (c *Raspi) GetDevice(name string) (Device, error) {
 	return dev, nil
 }
 
-func NewRaspi(config *RaspiConfig) *Raspi {
+func New(config *RaspiConfig) *Raspi {
 	r := &Raspi{
-		schedules: make(map[Device]Scheduler),
+		schedules: make(map[controller.Device]controller.Scheduler),
 	}
 	r.loadDevices(config)
 	r.loadModules()
@@ -64,20 +65,20 @@ func NewRaspi(config *RaspiConfig) *Raspi {
 
 func (r *Raspi) loadDevices(config *RaspiConfig) {
 	conn := raspi.NewRaspiAdaptor("raspi")
-	r.devices = make(map[string]Device)
-	r.devices["Relay 1"] = NewRelay("Relay 1", conn, config.Relay1)
-	r.devices["Relay 2"] = NewRelay("Relay 2", conn, config.Relay2)
-	r.devices["Doser 1"] = NewDoser("Doser 1", conn, config.Doser1)
-	r.devices["Doser 2"] = NewDoser("Doser 2", conn, config.Doser2)
+	r.devices = make(map[string]controller.Device)
+	r.devices["Relay 1"] = controller.NewRelay("Relay 1", conn, config.Relay1)
+	r.devices["Relay 2"] = controller.NewRelay("Relay 2", conn, config.Relay2)
+	r.devices["Doser 1"] = controller.NewDoser("Doser 1", conn, config.Doser1)
+	r.devices["Doser 2"] = controller.NewDoser("Doser 2", conn, config.Doser2)
 }
 
 func (r *Raspi) loadModules() {
 	fmt.Println("Loading ATO module")
-	r.modules = make(map[string]Module)
-	r.modules["ato"] = &ATO{}
+	r.modules = make(map[string]controller.Module)
+	r.modules["ato"] = &controller.ATO{}
 }
 
-func (r *Raspi) Schedule(dev Device, sched Scheduler) error {
+func (r *Raspi) Schedule(dev controller.Device, sched controller.Scheduler) error {
 	if _, ok := r.schedules[dev]; ok {
 		return fmt.Errorf("Device %s already scheduled", dev.Name())
 	}

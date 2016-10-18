@@ -20,6 +20,7 @@ type ServerConfig struct {
 	Users           []string    `yaml:"users"`
 	Auth            OAuthConfig `yaml:"auth"`
 	GomniAuthSecret string      `yaml:"gomni_auth_secret"`
+	ImageDirectory  string      `yaml:"image_directory"`
 }
 
 type Server struct {
@@ -46,12 +47,12 @@ func (s *Server) SetupOAuth() {
 	gomniauth.WithProviders(provider)
 }
 
-func SetupServer(config ServerConfig, c controller.Controller, auth bool, imageDirectory string) {
+func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
 	server := &Server{
 		config: config,
 	}
 	assets := http.FileServer(http.Dir("assets"))
-	images := http.FileServer(http.Dir(imageDirectory))
+	images := http.FileServer(http.Dir(server.config.ImageDirectory))
 
 	if auth {
 		server.SetupOAuth()
