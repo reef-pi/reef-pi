@@ -21,7 +21,22 @@ type Module interface {
 	IsEnabled() bool
 }
 
+type CrudAPI interface {
+	Create(interface{}) error
+	Get(string) (interface{}, error)
+	Update(string, interface{}) error
+	Delete(string) error
+	List() (*[]interface{}, error)
+}
+
+type API interface {
+	Devices() CrudAPI
+	Jobs() CrudAPI
+	Modules() CrudAPI
+}
+
 type Controller interface {
+	API
 	GetDevice(string) (Device, error)
 	Schedule(Device, Scheduler) error
 	GetModule(string) (Module, error)
@@ -43,18 +58,4 @@ func (n *NullDevice) Off() error {
 
 func (n *NullDevice) Name() string {
 	return "Null device"
-}
-
-type CrudAPI interface {
-	Create(interface{}) error
-	Get(string) (interface{}, error)
-	Update(string, interface{}) error
-	Delete(string) error
-	List() (*[]interface{}, error)
-}
-
-type API interface {
-	Device() CrudAPI
-	Schedule() CrudAPI
-	Module() CrudAPI
 }

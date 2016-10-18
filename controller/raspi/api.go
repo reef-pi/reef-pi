@@ -13,6 +13,7 @@ func (n *NullCrudAPI) Create(_ interface{}) error {
 func (n *NullCrudAPI) Get(_ string) (interface{}, error) {
 	return nil, nil
 }
+
 func (n *NullCrudAPI) Update(_ string, _ interface{}) error {
 	return nil
 }
@@ -20,19 +21,20 @@ func (n *NullCrudAPI) Update(_ string, _ interface{}) error {
 func (n *NullCrudAPI) Delete(_ string) error {
 	return nil
 }
+
 func (n *NullCrudAPI) List() (*[]interface{}, error) {
 	var ret []interface{}
 	return &ret, nil
 }
 
-type NullControllerAPI struct{}
+func (r *Raspi) Devices() controller.CrudAPI {
+	return &NullCrudAPI{}
+}
 
-func (n *NullCrudAPI) Device() controller.CrudAPI {
+func (r *Raspi) Modules() controller.CrudAPI {
 	return &NullCrudAPI{}
 }
-func (n *NullCrudAPI) Module() controller.CrudAPI {
-	return &NullCrudAPI{}
-}
-func (n *NullCrudAPI) Schedule() controller.CrudAPI {
+
+func (r *Raspi) Jobs() controller.CrudAPI {
 	return &NullCrudAPI{}
 }
