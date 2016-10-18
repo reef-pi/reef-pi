@@ -7,28 +7,8 @@ import (
 	"log"
 )
 
-type RaspiConfig struct {
-	Relay1 string                 `yaml:"relay_1"`
-	Relay2 string                 `yaml:"relay_2"`
-	Doser1 controller.DoserConfig `yaml:"doser_1"`
-	Doser2 controller.DoserConfig `yaml:"doser_2"`
-}
-
-func DefaultRaspiConfig() RaspiConfig {
-	var config RaspiConfig
-	config.Relay1 = "40"
-	config.Relay2 = "38"
-	config.Doser1.PWMPin = "3"
-	config.Doser1.IN1Pin = "4"
-	config.Doser1.IN2Pin = "5"
-	config.Doser2.PWMPin = "6"
-	config.Doser2.IN1Pin = "7"
-	config.Doser2.IN2Pin = "8"
-	return config
-}
-
 type Raspi struct {
-	config    *RaspiConfig
+	config    *Config
 	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
 	modules   map[string]controller.Module
@@ -54,7 +34,7 @@ func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 	return dev, nil
 }
 
-func New(config *RaspiConfig) *Raspi {
+func New(config *Config) *Raspi {
 	r := &Raspi{
 		schedules: make(map[controller.Device]controller.Scheduler),
 	}
@@ -63,7 +43,7 @@ func New(config *RaspiConfig) *Raspi {
 	return r
 }
 
-func (r *Raspi) loadDevices(config *RaspiConfig) {
+func (r *Raspi) loadDevices(config *Config) {
 	conn := raspi.NewRaspiAdaptor("raspi")
 	r.devices = make(map[string]controller.Device)
 	r.devices["Relay 1"] = controller.NewRelay("Relay 1", conn, config.Relay1)

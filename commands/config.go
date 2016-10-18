@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Server    webui.ServerConfig `yaml:"server"`
-	PinLayout raspi.RaspiConfig  `yaml:"pin_layout"`
+	PinLayout raspi.Config       `yaml:"pin_layout"`
 }
 
 func ParseConfig(filename string) (*Config, error) {
@@ -26,6 +26,6 @@ func ParseConfig(filename string) (*Config, error) {
 
 func DefaultConfig() Config {
 	var config Config
-	config.PinLayout = raspi.DefaultRaspiConfig()
+	config.PinLayout = raspi.DefaultConfig()
 	return config
 }

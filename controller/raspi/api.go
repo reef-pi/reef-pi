@@ -25,7 +25,7 @@ func (n *NullCrudAPI) List() (*[]interface{}, error) {
 	return &ret, nil
 }
 
-type NullDeviceAPI struct{}
+type NullControllerAPI struct{}
 
 func (n *NullCrudAPI) Device() controller.CrudAPI {
 	return &NullCrudAPI{}
