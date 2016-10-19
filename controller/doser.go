@@ -6,21 +6,22 @@ import (
 )
 
 type DoserConfig struct {
-	PWMPin string `yaml:"pwm"`
-	IN1Pin string `yaml:"in1"`
-	IN2Pin string `yaml:"in2"`
+	Name   string `json:"name"`
+	PWMPin string `json:"pwm"`
+	IN1Pin string `json:"in1"`
+	IN2Pin string `json:"in2"`
 }
 
 type Doser struct {
-	name    string
+	config  *DoserConfig
 	motor   *gpio.MotorDriver
 	in1_pin *gpio.DirectPinDriver
 	in2_pin *gpio.DirectPinDriver
 }
 
-func NewDoser(name string, conn gpio.DigitalWriter, config DoserConfig) *Doser {
+func NewDoser(config DoserConfig, conn gpio.DigitalWriter) *Doser {
 	d := &Doser{
-		name:    name,
+		config:  &config,
 		in1_pin: gpio.NewDirectPinDriver(conn, "in1_pin", config.IN1Pin),
 		in2_pin: gpio.NewDirectPinDriver(conn, "in2_pin", config.IN2Pin),
 		motor:   gpio.NewMotorDriver(conn, "doser", config.PWMPin),
@@ -29,7 +30,7 @@ func NewDoser(name string, conn gpio.DigitalWriter, config DoserConfig) *Doser {
 }
 
 func (d *Doser) Name() string {
-	return d.name
+	return d.config.Name
 }
 
 func (d *Doser) On() error {

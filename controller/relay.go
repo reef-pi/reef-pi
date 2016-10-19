@@ -16,14 +16,11 @@ type Relay struct {
 	driver *gpio.DirectPinDriver
 }
 
-func NewRelay(name string, conn gobot.Connection, pin string) *Relay {
-	log.Printf("Creating device name: %s, pin: %s\n", name, pin)
+func NewRelay(config RelayConfig, conn gobot.Connection) *Relay {
+	log.Printf("Creating device name: %s, pin: %s\n", config.Name, config.Pin)
 	return &Relay{
-		Config: RelayConfig{
-			Name: name,
-			Pin:  pin,
-		},
-		driver: gpio.NewDirectPinDriver(conn, name, pin),
+		Config: config,
+		driver: gpio.NewDirectPinDriver(conn, config.Name, config.Pin),
 	}
 }
 
