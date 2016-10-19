@@ -2,13 +2,14 @@ package raspi
 
 import (
 	"fmt"
-	"github.com/hybridgroup/gobot/platforms/raspi"
+	pi "github.com/hybridgroup/gobot/platforms/raspi"
 	"github.com/ranjib/reefer/controller"
 	"log"
 )
 
 type Raspi struct {
 	config    *Config
+	conn      *pi.RaspiAdaptor
 	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
 	modules   map[string]controller.Module
@@ -37,6 +38,7 @@ func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 func New(config *Config) *Raspi {
 	r := &Raspi{
 		schedules: make(map[controller.Device]controller.Scheduler),
+		conn:      pi.NewRaspiAdaptor("raspi"),
 	}
 	r.loadDevices(config)
 	r.loadModules()
@@ -44,12 +46,17 @@ func New(config *Config) *Raspi {
 }
 
 func (r *Raspi) loadDevices(config *Config) {
-	conn := raspi.NewRaspiAdaptor("raspi")
 	r.devices = make(map[string]controller.Device)
-	r.Devices().Create(controller.NewRelay("Relay 1", conn, config.Relay1))
-	r.Devices().Create(controller.NewRelay("Relay 2", conn, config.Relay2))
-	r.Devices().Create(controller.NewDoser("Doser 1", conn, config.Doser1))
-	r.Devices().Create(controller.NewDoser("Doser 2", conn, config.Doser2))
+	c1 := controller.RelayConfig{
+		Name: "Relay 1",
+		Pin:  config.Relay1,
+	}
+	r.Devices().Create(controller.NewRelay(c1, r.conn))
+	c2 := controller.RelayConfig{
+		Name: "Relay 2",
+		Pin:  config.Relay2,
+	}
+	r.Devices().Create(controller.NewRelay(c2, r.conn))
 }
 
 func (r *Raspi) loadModules() {

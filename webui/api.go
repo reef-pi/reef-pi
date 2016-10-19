@@ -36,9 +36,9 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	// Device CRUD api
 	router.HandleFunc("/api/devices", handler.ListDevices).Methods("GET")
 	router.HandleFunc("/api/devices", handler.CreateDevice).Methods("POST")
-	router.HandleFunc("/api/devices", handler.UpdateDevice).Methods("PUT")
-	router.HandleFunc("/api/devices", handler.DeleteDevice).Methods("DELETE")
-	router.HandleFunc("/api/devices/id", handler.GetDevice).Methods("GET")
+	router.HandleFunc("/api/devices/{id}", handler.UpdateDevice).Methods("PUT")
+	router.HandleFunc("/api/devices/{id}", handler.DeleteDevice).Methods("DELETE")
+	router.HandleFunc("/api/devices/{id}", handler.GetDevice).Methods("GET")
 
 	return router
 }

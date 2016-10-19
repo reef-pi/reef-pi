@@ -6,28 +6,33 @@ import (
 	"log"
 )
 
-type Relay struct {
-	name string
-	pin  *gpio.DirectPinDriver
+type RelayConfig struct {
+	Pin  string `json:"pin,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
-func NewRelay(name string, conn gobot.Connection, pin string) *Relay {
-	log.Printf("Creating device name: %s, pin: %s\n", name, pin)
+type Relay struct {
+	Config RelayConfig `json:"config"`
+	driver *gpio.DirectPinDriver
+}
+
+func NewRelay(config RelayConfig, conn gobot.Connection) *Relay {
+	log.Printf("Creating device name: %s, pin: %s\n", config.Name, config.Pin)
 	return &Relay{
-		name: name,
-		pin:  gpio.NewDirectPinDriver(conn, name, pin),
+		Config: config,
+		driver: gpio.NewDirectPinDriver(conn, config.Name, config.Pin),
 	}
 }
 
 func (r *Relay) On() error {
 	log.Printf("Device[%s] On\n", r.Name())
-	return r.pin.On()
+	return r.driver.On()
 }
 
 func (r *Relay) Off() error {
 	log.Printf("Device[%s] Off\n", r.Name())
-	return r.pin.Off()
+	return r.driver.Off()
 }
 func (r *Relay) Name() string {
-	return r.name
+	return r.Config.Name
 }
