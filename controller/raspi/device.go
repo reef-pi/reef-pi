@@ -74,10 +74,11 @@ func (d *DeviceAPI) Delete(name string) error {
 	delete(d.devices, name)
 	return nil
 }
+
 func (d *DeviceAPI) List() (*[]interface{}, error) {
-	var ret []interface{}
+	list := []interface{}{}
 	for k, _ := range d.devices {
-		ret = append(ret, k)
+		list = append(list, k)
 	}
-	return &ret, nil
+	return &list, nil
 }
