@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Devices from './devices.jsx'
+
 export default class Settings extends React.Component {
     constructor(props) {
         super(props);
@@ -15,9 +17,8 @@ export default class Settings extends React.Component {
       };
       return (
           <div className="container">
-            TODO
+            < Devices/>
             <ul>
-              <li> Devices </li>
               <li> Schedules </li>
               <li> Modules </li>
             </ul>

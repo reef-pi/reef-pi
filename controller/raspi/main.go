@@ -38,6 +38,7 @@ func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 func New(config *Config) *Raspi {
 	r := &Raspi{
 		schedules: make(map[controller.Device]controller.Scheduler),
+		devices:   make(map[string]controller.Device),
 		conn:      pi.NewRaspiAdaptor("raspi"),
 	}
 	r.loadDevices(config)
@@ -46,7 +47,6 @@ func New(config *Config) *Raspi {
 }
 
 func (r *Raspi) loadDevices(config *Config) {
-	r.devices = make(map[string]controller.Device)
 	c1 := controller.RelayConfig{
 		Name: "Relay 1",
 		Pin:  config.Relay1,

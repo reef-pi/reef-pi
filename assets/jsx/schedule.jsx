@@ -9,7 +9,7 @@ export default class Schedule extends React.Component {
           start: "8:00",
           stop: "17:00",
           on: "On"
-        }
+        };
         this.onStartChange = this.onStartChange.bind(this);
         this.onStopChange = this.onStopChange.bind(this);
         this.onDeviceChange = this.onDeviceChange.bind(this);
