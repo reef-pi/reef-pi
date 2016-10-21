@@ -8,6 +8,7 @@ export default class Devices extends React.Component {
           devices: []
         };
         this.loadDevices.bind(this)
+        this.loadDeviceDetails.bind(this)
     }
     loadDevices(){
       $.ajax({
@@ -24,13 +25,16 @@ export default class Devices extends React.Component {
         }
       });
     }
+    loadDeviceDetails(e){
+          console.log(data);
+    }
     componentDidMount(){
       this.loadDevices()
     }
     render() {
 
       var list = this.state.devices.map(function(d){
-        return <ul>{d}</ul>
+        return <ul><a  onClick={this.loadDeviceDetails}>{d}</a></ul>
       });
       return (
           <div className="container">
