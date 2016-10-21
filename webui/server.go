@@ -53,10 +53,12 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
 	}
 	assets := http.FileServer(http.Dir("assets"))
 	images := http.FileServer(http.Dir(server.config.ImageDirectory))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "assets/html/home.html")
+	})
 
 	if auth {
 		server.SetupOAuth()
-		http.Handle("/", MustAuth(&homePageHandler{}))
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
 		http.Handle("/api", MustAuth(NewApiHandler(c)))
@@ -66,7 +68,6 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
 		http.HandleFunc("/logout", logoutHandler)
 		http.Handle("/login", &templateHandler{filename: "login.html"})
 	} else {
-		http.Handle("/", &homePageHandler{})
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/api/", NewApiHandler(c))
