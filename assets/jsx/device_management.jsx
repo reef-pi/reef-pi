@@ -7,14 +7,23 @@ export default class DeviceManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            addDevice: false
+            addDevice: false,
+            deviceType: 'Relay'
         };
         this.addDevice = this.addDevice.bind(this)
+        this.selectDeviceType = this.selectDeviceType.bind(this)
+
     }
     addDevice() {
         this.setState({
             addDevice: !this.state.addDevice
         })
+    }
+    selectDeviceType(e){
+        console.log(e.target.value)
+        this.setState({
+           deviceType: e.target.value
+        });
     }
 
     render() {
@@ -40,10 +49,10 @@ export default class DeviceManagement extends React.Component {
                         <tr>
                           <td> Type </td>
                           <td>
-                            <DropdownButton title="Type" id ="xx">
-                            <MenuItem eventKey="1"> Relay </MenuItem>
-                            <MenuItem eventKey="2"> Doser </MenuItem>
-                            </DropdownButton>
+                            <select value={this.state.deviceType} onChange={this.selectDeviceType}>
+                              <option value="Relay"> Relay</option>
+                              <option value="Doser"> Doser</option>
+                            </select>
                           </td>
                         </tr>
                         <tr><td>Name</td><td><input type="text"/></td></tr>
