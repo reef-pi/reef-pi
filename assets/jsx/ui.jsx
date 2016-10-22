@@ -8,6 +8,7 @@ import Pumps from './pumps.jsx';
 import Dashboard from './dashboard.jsx';
 import Settings from './settings.jsx';
 import Schedule from './schedule.jsx';
+import DeviceManagement from './device_management.jsx';
 
 export default class App extends Component {
   handleSelect(index, last) {
@@ -22,7 +23,8 @@ export default class App extends Component {
           <Tab>ATO</Tab>
           <Tab>Temperature</Tab>
           <Tab>Pumps</Tab>
-          <Tab>Schedules</Tab>
+          <Tab>Jobs</Tab>
+          <Tab>Devices</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanel>
@@ -42,6 +44,9 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <Schedule url="/api/schedule"/>
+        </TabPanel>
+        <TabPanel>
+          <DeviceManagement />
         </TabPanel>
         <TabPanel>
           <Settings />
