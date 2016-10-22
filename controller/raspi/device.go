@@ -7,13 +7,6 @@ import (
 	"github.com/ranjib/reefer/controller"
 )
 
-func NewDeviceAPI(conn *pi.RaspiAdaptor) controller.CrudAPI {
-	return &DeviceAPI{
-		conn:    conn,
-		devices: make(map[string]controller.Device),
-	}
-}
-
 type DeviceAPI struct {
 	conn    *pi.RaspiAdaptor
 	devices map[string]controller.Device
@@ -22,6 +15,13 @@ type DeviceAPI struct {
 type DeviceDetails struct {
 	Type   string          `json:"type"`
 	Config json.RawMessage `json:"config"`
+}
+
+func NewDeviceAPI(conn *pi.RaspiAdaptor) controller.CrudAPI {
+	return &DeviceAPI{
+		conn:    conn,
+		devices: make(map[string]controller.Device),
+	}
 }
 
 func (d *DeviceDetails) Create(conn *pi.RaspiAdaptor) (controller.Device, error) {

@@ -7,8 +7,8 @@ export default class Devices extends React.Component {
         this.state = {
             devices: []
         };
-        this.loadDevices.bind(this)
-        this.loadDeviceDetails.bind(this)
+        this.loadDevices = this.loadDevices.bind(this)
+        this.loadDeviceDetails = this.loadDeviceDetails.bind(this)
     }
     loadDevices() {
         $.ajax({
@@ -18,11 +18,10 @@ export default class Devices extends React.Component {
                 this.setState({
                     devices: data
                 });
-                console.log(data);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.log(err.toString());
-            }
+            }.bind(this)
         });
     }
     loadDeviceDetails(e) {
@@ -33,21 +32,17 @@ export default class Devices extends React.Component {
     }
     render() {
 
-        var list = this.state.devices.map(function(d) {
-            return <ul > < a onClick = {
-                this.loadDeviceDetails
-            } > {
-                d
-            } < /a></ul >
+        var list = []
+        this.state.devices.map(function(d, i) {
+          list.push(<li key={d}>{d}</li>);
         });
-        return ( <
-            div className = "container" >
-            List of devices <
-            ul > {
-                list.join("")
-            } <
-            /ul> < /
-            div >
+        return (
+          <div className="container">
+            List of devices
+            <ul>
+              {list}
+            </ul>
+          </div>
         );
     }
 }
