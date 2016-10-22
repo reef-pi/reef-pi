@@ -1,6 +1,15 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import React, {
+    Component
+} from 'react';
+import {
+    render
+} from 'react-dom';
+import {
+    Tab,
+    Tabs,
+    TabList,
+    TabPanel
+} from 'react-tabs';
 import Light from './light.jsx';
 import ATO from './ato.jsx';
 import Temperature from './temperature.jsx';
@@ -11,49 +20,71 @@ import Schedule from './schedule.jsx';
 import DeviceManagement from './device_management.jsx';
 
 export default class App extends Component {
-  handleSelect(index, last) {
-  }
+    handleSelect(index, last) {}
 
-  render() {
-    return (
-      <Tabs onSelect={this.handleSelect} selectedIndex={0}>
-        <TabList>
-          <Tab>Dashboard</Tab>
-          <Tab>Lighting</Tab>
-          <Tab>ATO</Tab>
-          <Tab>Temperature</Tab>
-          <Tab>Pumps</Tab>
-          <Tab>Schedules</Tab>
-          <Tab>Devices</Tab>
-          <Tab>Settings</Tab>
-        </TabList>
-        <TabPanel>
-         <Dashboard />
-        </TabPanel>
-        <TabPanel>
-         <Light />
-        </TabPanel>
-        <TabPanel>
-          <ATO />
-        </TabPanel>
-        <TabPanel>
-          <Temperature />
-        </TabPanel>
-        <TabPanel>
-          <Pumps />
-        </TabPanel>
-        <TabPanel>
-          <Schedule url="/api/schedule"/>
-        </TabPanel>
-        <TabPanel>
-          <DeviceManagement />
-        </TabPanel>
-        <TabPanel>
-          <Settings />
-        </TabPanel>
-      </Tabs>
-    );
-  }
+    render() {
+        return ( <
+            Tabs onSelect = {
+                this.handleSelect
+            }
+            selectedIndex = {
+                0
+            } >
+            <
+            TabList >
+            <
+            Tab > Dashboard < /Tab> <
+            Tab > Lighting < /Tab> <
+            Tab > ATO < /Tab> <
+            Tab > Temperature < /Tab> <
+            Tab > Pumps < /Tab> <
+            Tab > Schedules < /Tab> <
+            Tab > Devices < /Tab> <
+            Tab > Settings < /Tab> < /
+            TabList > <
+            TabPanel >
+            <
+            Dashboard / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            Light / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            ATO / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            Temperature / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            Pumps / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            Schedule url = "/api/schedule" / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            DeviceManagement / >
+            <
+            /TabPanel> <
+            TabPanel >
+            <
+            Settings / >
+            <
+            /TabPanel> < /
+            Tabs >
+        );
+    }
 }
 
-render(<App/>, document.getElementById('main-panel'));
+render( < App / > , document.getElementById('main-panel'));
