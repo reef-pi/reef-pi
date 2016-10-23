@@ -3,6 +3,7 @@ package webui
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/controller/raspi"
 	"log"
 	"net/http"
@@ -64,4 +65,46 @@ func (h *APIHandler) DeleteDevice(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func (h *APIHandler) UpdateDevice(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["id"]
+	log.Println("TODO update device", name)
+}
+func (h *APIHandler) ConfigureDevice(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["id"]
+	type State struct {
+		On bool `json:"on"`
+	}
+	d, err := h.controller.Devices().Get(name)
+	if err != nil {
+		log.Println("Failed to retrive specified device")
+		errorResponse(http.StatusBadRequest, "Failed to retrieve specified device", w)
+		return
+	}
+	dev, ok := d.(controller.Device)
+	if !ok {
+		log.Println("Failed to type cast to device", d)
+		errorResponse(http.StatusBadRequest, "Failed to typecast to device", w)
+		return
+	}
+	var s State
+	if err := json.NewDecoder(r.Body).Decode(&s); err != nil {
+		log.Println("Failed to decode json. Error:", err)
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	if s.On {
+		if err := dev.On(); err != nil {
+			log.Println("Failed to start device. Error:", err)
+			errorResponse(http.StatusBadRequest, err.Error(), w)
+			return
+		}
+		return
+	}
+	if err := dev.Off(); err != nil {
+		log.Println("Failed to stop device. Error:", err)
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+
 }

@@ -39,6 +39,7 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	router.HandleFunc("/api/devices/{id}", handler.UpdateDevice).Methods("PUT")
 	router.HandleFunc("/api/devices/{id}", handler.DeleteDevice).Methods("DELETE")
 	router.HandleFunc("/api/devices/{id}", handler.GetDevice).Methods("GET")
+	router.HandleFunc("/api/devices/{id}/config", handler.ConfigureDevice).Methods("POST")
 
 	return router
 }

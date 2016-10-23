@@ -7,21 +7,9 @@ import (
 	"github.com/ranjib/reefer/controller"
 )
 
-type DeviceAPI struct {
-	conn    *pi.RaspiAdaptor
-	devices map[string]controller.Device
-}
-
 type DeviceDetails struct {
 	Type   string          `json:"type"`
 	Config json.RawMessage `json:"config"`
-}
-
-func NewDeviceAPI(conn *pi.RaspiAdaptor) controller.CrudAPI {
-	return &DeviceAPI{
-		conn:    conn,
-		devices: make(map[string]controller.Device),
-	}
 }
 
 func (d *DeviceDetails) Create(conn *pi.RaspiAdaptor) (controller.Device, error) {
@@ -41,6 +29,18 @@ func (d *DeviceDetails) Create(conn *pi.RaspiAdaptor) (controller.Device, error)
 		return controller.NewDoser(config, conn), nil
 	}
 	return nil, fmt.Errorf("Invalid device type: %s", d.Type)
+}
+
+type DeviceAPI struct {
+	conn    *pi.RaspiAdaptor
+	devices map[string]controller.Device
+}
+
+func NewDeviceAPI(conn *pi.RaspiAdaptor) controller.CrudAPI {
+	return &DeviceAPI{
+		conn:    conn,
+		devices: make(map[string]controller.Device),
+	}
 }
 
 func (d *DeviceAPI) Create(payload interface{}) error {

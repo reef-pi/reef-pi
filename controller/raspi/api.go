@@ -29,6 +29,7 @@ func (n *NullCrudAPI) List() (*[]interface{}, error) {
 
 func (r *Raspi) Devices() controller.CrudAPI {
 	return &DeviceAPI{
+		conn:    r.conn,
 		devices: r.devices,
 	}
 }
