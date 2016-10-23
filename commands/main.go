@@ -16,7 +16,7 @@ func main() {
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	flag.Parse()
-	config := DefaultConfig()
+	var config Config
 	if *configFile != "" {
 		conf, err := ParseConfig(*configFile)
 		if err != nil {
@@ -24,7 +24,7 @@ func main() {
 		}
 		config = *conf
 	}
-	controller := raspi.New(&config.PinLayout)
+	controller := raspi.New()
 	if err := controller.Start(); err != nil {
 		log.Fatal(err)
 	}

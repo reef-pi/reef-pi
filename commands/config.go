@@ -1,15 +1,13 @@
 package main
 
 import (
-	"github.com/ranjib/reefer/controller/raspi"
 	"github.com/ranjib/reefer/webui"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )
 
 type Config struct {
-	Server    webui.ServerConfig `yaml:"server"`
-	PinLayout raspi.Config       `yaml:"pin_layout"`
+	Server webui.ServerConfig `yaml:"server"`
 }
 
 func ParseConfig(filename string) (*Config, error) {
@@ -22,10 +20,4 @@ func ParseConfig(filename string) (*Config, error) {
 		return nil, err
 	}
 	return &c, nil
-}
-
-func DefaultConfig() Config {
-	var config Config
-	config.PinLayout = raspi.DefaultConfig()
-	return config
 }

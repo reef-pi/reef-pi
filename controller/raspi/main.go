@@ -8,7 +8,6 @@ import (
 )
 
 type Raspi struct {
-	config    *Config
 	conn      *pi.RaspiAdaptor
 	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
@@ -35,34 +34,13 @@ func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 	return dev, nil
 }
 
-func New(config *Config) *Raspi {
+func New() *Raspi {
 	r := &Raspi{
 		schedules: make(map[controller.Device]controller.Scheduler),
 		devices:   make(map[string]controller.Device),
 		conn:      pi.NewRaspiAdaptor("raspi"),
 	}
-	r.loadDevices(config)
-	r.loadModules()
 	return r
-}
-
-func (r *Raspi) loadDevices(config *Config) {
-	c1 := controller.RelayConfig{
-		Name: "Relay 1",
-		Pin:  config.Relay1,
-	}
-	r.Devices().Create(controller.NewRelay(c1, r.conn))
-	c2 := controller.RelayConfig{
-		Name: "Relay 2",
-		Pin:  config.Relay2,
-	}
-	r.Devices().Create(controller.NewRelay(c2, r.conn))
-}
-
-func (r *Raspi) loadModules() {
-	fmt.Println("Loading ATO module")
-	r.modules = make(map[string]controller.Module)
-	r.modules["ato"] = &controller.ATO{}
 }
 
 func (r *Raspi) Schedule(dev controller.Device, sched controller.Scheduler) error {
