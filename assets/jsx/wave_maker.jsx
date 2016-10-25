@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Pumps extends React.Component {
+export default class WaveMaker extends React.Component {
     constructor(props) {
         super(props);
     }

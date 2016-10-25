@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from './slider.jsx'
 
-export default class Light extends React.Component {
+export default class Lighting extends React.Component {
     constructor(props) {
         super(props);
     }

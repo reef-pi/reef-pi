@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Light from './light.jsx';
+import Lighting from './lighting.jsx';
 import ATO from './ato.jsx';
 import Temperature from './temperature.jsx';
-import Pumps from './pumps.jsx';
+import WaveMaker from './wave_maker.jsx';
 import Dashboard from './dashboard.jsx';
-import Settings from './settings.jsx';
-import Schedule from './schedule.jsx';
 import DeviceManagement from './device_management.jsx';
 
 export default class App extends Component {
@@ -22,15 +20,14 @@ export default class App extends Component {
           <Tab>Lighting</Tab>
           <Tab>ATO</Tab>
           <Tab>Temperature</Tab>
-          <Tab>Pumps</Tab>
-          <Tab>Jobs</Tab>
+          <Tab>WaveMaker</Tab>
           <Tab>Devices</Tab>
         </TabList>
         <TabPanel>
          <Dashboard />
         </TabPanel>
         <TabPanel>
-         <Light />
+         <Lighting />
         </TabPanel>
         <TabPanel>
           <ATO />
@@ -39,10 +36,7 @@ export default class App extends Component {
           <Temperature />
         </TabPanel>
         <TabPanel>
-          <Pumps />
-        </TabPanel>
-        <TabPanel>
-          <Schedule url="/api/schedule"/>
+          <WaveMaker />
         </TabPanel>
         <TabPanel>
           <DeviceManagement />
