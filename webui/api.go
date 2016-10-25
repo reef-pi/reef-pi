@@ -12,11 +12,6 @@ type APIHandler struct {
 	controller controller.Controller
 }
 
-type DeviceConfig struct {
-	Name string `json:"name"`
-	On   bool   `json:"on"`
-}
-
 type DailyJobConfig struct {
 	Device string `json:"device"`
 	Start  string `json:"start"`
@@ -29,7 +24,6 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	handler := &APIHandler{
 		controller: c,
 	}
-	router.HandleFunc("/api/device", handler.configureDevice).Methods("POST")
 	router.HandleFunc("/api/schedule", handler.configureDailyJob).Methods("POST")
 	router.HandleFunc("/api/ato", handler.configureATO).Methods("POST")
 
@@ -40,6 +34,10 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	router.HandleFunc("/api/devices/{id}", handler.DeleteDevice).Methods("DELETE")
 	router.HandleFunc("/api/devices/{id}", handler.GetDevice).Methods("GET")
 	router.HandleFunc("/api/devices/{id}/config", handler.ConfigureDevice).Methods("POST")
+
+	// Module specific configure api
+	router.HandleFunc("/api/lighting", handler.SetLighting).Methods("POST")
+	router.HandleFunc("/api/lighting", handler.UnsetLighting).Methods("DELETE")
 
 	return router
 }
@@ -98,40 +96,4 @@ func (h *APIHandler) configureDailyJob(w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to schedule. Error: "+err.Error(), w)
 	}
-}
-
-func (h *APIHandler) configureDevice(w http.ResponseWriter, r *http.Request) {
-	var c DeviceConfig
-	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	dev, err := h.controller.GetDevice(c.Name)
-	if err != nil {
-		log.Println("Cant find device:", c.Name)
-		log.Println("ERROR:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	if c.On {
-		log.Println("Switching on:", dev.Name())
-		if err := dev.On(); err != nil {
-			log.Println("ERROR:", err)
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-	} else {
-		log.Println("Switching off:", dev.Name())
-		if err := dev.Off(); err != nil {
-			log.Println("ERROR:", err)
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-	}
-	js, jsErr := json.Marshal(c)
-	if jsErr != nil {
-		log.Println("ERROR:", jsErr)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }

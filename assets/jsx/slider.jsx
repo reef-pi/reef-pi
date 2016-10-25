@@ -7,7 +7,9 @@ export default class Slider extends React.Component {
       this.onChange = this.onChange.bind(this)
   }
   onChange(e){
-    this.setState({value: e.target.value})
+    this.setState({
+      value: parseInt(e.target.value)
+    });
   }
   render(){
    var rangeStyle = {
