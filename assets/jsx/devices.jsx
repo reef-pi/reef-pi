@@ -78,7 +78,7 @@ class DeviceDetails extends React.Component {
                 <tr><td>Name</td><td>{this.props.name}</td></tr>
                 <tr><td>Type</td><td>{this.state.type}</td></tr>
                 <tr><td>Pin</td><td>{this.state.pin}</td></tr>
-                <tr><td></td><td><input type="button" disabled={this.state.in_progress} value={this.state.expected_on ? "Off" : "On"} onClick={this.configureDevice}/></td></tr>
+                <tr><td></td><td><input type="button" disabled={this.state.in_progress} value={this.state.on ? "On" : "Off"} onClick={this.configureDevice}/></td></tr>
               </tbody>
             </table>
           </div>

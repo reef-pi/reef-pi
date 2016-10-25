@@ -25,7 +25,6 @@ export default class App extends Component {
           <Tab>Pumps</Tab>
           <Tab>Jobs</Tab>
           <Tab>Devices</Tab>
-          <Tab>Settings</Tab>
         </TabList>
         <TabPanel>
          <Dashboard />
@@ -47,9 +46,6 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <DeviceManagement />
-        </TabPanel>
-        <TabPanel>
-          <Settings />
         </TabPanel>
       </Tabs>
     );
