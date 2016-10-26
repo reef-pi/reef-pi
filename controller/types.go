@@ -29,8 +29,16 @@ type CrudAPI interface {
 	List() (*[]interface{}, error)
 }
 
+type LightingAPI interface {
+	Enable(interface{}) error
+	Disable() error
+	IsEnabled() (bool, error)
+	Config() interface{}
+}
+
 type API interface {
 	Devices() CrudAPI
+	Lighting() LightingAPI
 	Jobs() CrudAPI
 	Modules() CrudAPI
 }

@@ -12,6 +12,7 @@ type Raspi struct {
 	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
 	modules   map[string]controller.Module
+	lighting  *Lighting
 }
 
 func (r *Raspi) Name() string {
@@ -39,6 +40,7 @@ func New() *Raspi {
 		schedules: make(map[controller.Device]controller.Scheduler),
 		devices:   make(map[string]controller.Device),
 		conn:      pi.NewRaspiAdaptor("raspi"),
+		lighting:  &Lighting{},
 	}
 	return r
 }

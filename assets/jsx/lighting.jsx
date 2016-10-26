@@ -6,10 +6,46 @@ export default class Lighting extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          intensity_values: []
+          intensity_values: [],
+          loaded: false,
+          enabled: false
         };
         this.set = this.set.bind(this)
         this.unset = this.unset.bind(this)
+        this.toggle = this.toggle.bind(this)
+        this.loadState = this.loadState.bind(this)
+    }
+
+    loadState(){
+      $.ajax({
+          url: '/api/lighting',
+          type: 'GET',
+          success: function(data){
+            this.setState({
+              loaded: true
+            });
+            console.log(data)
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+      $.ajax({
+          url: '/api/lighting/status',
+          type: 'GET',
+          success: function(data){
+            console.log(data)
+          }.bind(this),
+          error: function(xhr, status, err) {
+          }.bind(this)
+      });
+    }
+
+    toggle(){
+      if(this.state.enabled) {
+        this.unset();
+      }else{
+        this.set();
+      }
     }
 
     set(){
@@ -46,6 +82,9 @@ export default class Lighting extends React.Component {
           url: '/api/lighting',
           type: 'DELETE',
           success: function(data) {
+            this.setState({
+              enabled: false
+            });
           }.bind(this),
           error: function(xhr, status, err) {
           }.bind(this)
@@ -65,6 +104,9 @@ export default class Lighting extends React.Component {
         borderStyle: 'solid',
         borderColor: '#dddddd'
       };
+      if(!this.state.loaded){
+       this.loadState();
+      }
       return (
           <div className="container">
             <div className="row" style={sliderSetStyle}>
@@ -87,8 +129,7 @@ export default class Lighting extends React.Component {
                   </tr>
                 </tbody>
               </table>
-              <input type="button" value="Set" onClick={this.set}/>
-              <input type="button" value="Disable" onClick={this.unset}/>
+              <input type="button" value={this.state.enabled ? 'Disable' : 'Enable'} onClick={this.toggle}/>
             </div>
           </div>
       );
