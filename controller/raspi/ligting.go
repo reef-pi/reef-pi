@@ -21,7 +21,6 @@ func (l *Lighting) Enable(conf interface{}) error {
 		return fmt.Errorf("Invalid config type")
 	}
 	l.config = &c
-	fmt.Println("MODULE", l.config)
 	return nil
 }
 
@@ -35,8 +34,7 @@ func (l *Lighting) IsEnabled() (bool, error) {
 }
 
 func (l *Lighting) Config() interface{} {
-	fmt.Println("RETURN", *l.config)
-	return *l.config
+	return l.config
 }
 
 func (r *Raspi) Lighting() controller.LightingAPI {

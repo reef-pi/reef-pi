@@ -40,7 +40,11 @@ func New() *Raspi {
 		schedules: make(map[controller.Device]controller.Scheduler),
 		devices:   make(map[string]controller.Device),
 		conn:      pi.NewRaspiAdaptor("raspi"),
-		lighting:  &Lighting{},
+		lighting: &Lighting{
+			config: &LightingConfig{
+				Intensities: make([]int, 12),
+			},
+		},
 	}
 	return r
 }
