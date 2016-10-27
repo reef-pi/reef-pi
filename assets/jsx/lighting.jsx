@@ -6,7 +6,7 @@ export default class Lighting extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          intensity_values: [],
+          intensities: [0,0,0,0,0,0,0,0,0,0,0,0],
           loaded: false,
           enabled: false
         };
@@ -22,7 +22,8 @@ export default class Lighting extends React.Component {
           type: 'GET',
           success: function(data){
             this.setState({
-              loaded: true
+              loaded: true,
+              intensities: data.intensities
             });
             console.log(data)
           }.bind(this),
@@ -33,7 +34,9 @@ export default class Lighting extends React.Component {
           url: '/api/lighting/status',
           type: 'GET',
           success: function(data){
-            console.log(data)
+            this.setState({
+              enabled: data.enabled
+            });
           }.bind(this),
           error: function(xhr, status, err) {
           }.bind(this)
@@ -43,8 +46,10 @@ export default class Lighting extends React.Component {
     toggle(){
       if(this.state.enabled) {
         this.unset();
+        console.log("Unsetting ligting")
       }else{
         this.set();
+        console.log("Setting ligting")
       }
     }
 
@@ -64,13 +69,16 @@ export default class Lighting extends React.Component {
         this.refs.h22.state.value
       ];
       this.setState({
-        intensity_values: intensities
+        intensities: intensities
       });
       $.ajax({
           url: '/api/lighting',
           type: 'POST',
-          data: JSON.stringify({intensities: this.state.intensity_values}),
+          data: JSON.stringify({intensities: this.state.intensities}),
           success: function(data) {
+            this.setState({
+              enabled: true
+            });
           }.bind(this),
           error: function(xhr, status, err) {
           }.bind(this)
@@ -114,7 +122,7 @@ export default class Lighting extends React.Component {
               <table>
                 <tbody>
                   <tr>
-                    <Slider ref="h0" time="0h"/>
+                    <Slider ref="h0" time="0h" value={this.state.intensities[0]}/>
                     <Slider ref="h2" time="2h"/>
                     <Slider ref="h4" time="4h"/>
                     <Slider ref="h6" time="6h"/>
