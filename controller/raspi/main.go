@@ -2,12 +2,15 @@ package raspi
 
 import (
 	"fmt"
+	"github.com/boltdb/bolt"
 	pi "github.com/hybridgroup/gobot/platforms/raspi"
 	"github.com/ranjib/reefer/controller"
 	"log"
+	"time"
 )
 
 type Raspi struct {
+	db        *bolt.DB
 	conn      *pi.RaspiAdaptor
 	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
@@ -35,8 +38,13 @@ func (c *Raspi) GetDevice(name string) (controller.Device, error) {
 	return dev, nil
 }
 
-func New() *Raspi {
+func New() (*Raspi, error) {
+	db, err := bolt.Open("reefer.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+	if err != nil {
+		return nil, err
+	}
 	r := &Raspi{
+		db:        db,
 		schedules: make(map[controller.Device]controller.Scheduler),
 		devices:   make(map[string]controller.Device),
 		conn:      pi.NewRaspiAdaptor("raspi"),
@@ -46,7 +54,7 @@ func New() *Raspi {
 			},
 		},
 	}
-	return r
+	return r, nil
 }
 
 func (r *Raspi) Schedule(dev controller.Device, sched controller.Scheduler) error {
@@ -74,5 +82,6 @@ func (r *Raspi) Stop() error {
 		sched.Stop()
 	}
 	log.Println("Stopped Controller:", r.Name())
+	defer r.db.Close()
 	return nil
 }

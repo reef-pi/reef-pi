@@ -24,7 +24,10 @@ func main() {
 		}
 		config = *conf
 	}
-	controller := raspi.New()
+	controller, err := raspi.New()
+	if err != nil {
+		log.Fatal("Failed to initialize controller. ERROR:", err)
+	}
 	if err := controller.Start(); err != nil {
 		log.Fatal(err)
 	}
