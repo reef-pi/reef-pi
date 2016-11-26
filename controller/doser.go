@@ -29,6 +29,10 @@ func NewDoser(config DoserConfig, conn gpio.DigitalWriter) *Doser {
 	return d
 }
 
+func (d *Doser) Type() string {
+	return "doser"
+}
+
 func (d *Doser) Name() string {
 	return d.config.Name
 }
@@ -74,4 +78,7 @@ func (d *Doser) Reverse() error {
 
 func (d *Doser) Max() error {
 	return d.motor.Max()
+}
+func (d *Doser) Config() interface{} {
+	return d.config
 }

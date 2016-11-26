@@ -12,16 +12,19 @@ type RelayConfig struct {
 }
 
 type Relay struct {
-	Config RelayConfig `json:"config"`
+	config RelayConfig
 	driver *gpio.DirectPinDriver
 }
 
 func NewRelay(config RelayConfig, conn gobot.Connection) *Relay {
-	log.Printf("Creating device name: %s, pin: %s, connection: %v\n", config.Name, config.Pin, conn)
 	return &Relay{
-		Config: config,
+		config: config,
 		driver: gpio.NewDirectPinDriver(conn, config.Name, config.Pin),
 	}
+}
+
+func (r *Relay) Type() string {
+	return "relay"
 }
 
 func (r *Relay) On() error {
@@ -34,5 +37,9 @@ func (r *Relay) Off() error {
 	return r.driver.Off()
 }
 func (r *Relay) Name() string {
-	return r.Config.Name
+	return r.config.Name
+}
+
+func (r *Relay) Config() interface{} {
+	return r.config
 }

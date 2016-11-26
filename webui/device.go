@@ -12,7 +12,7 @@ import (
 func (h *APIHandler) ListDevices(w http.ResponseWriter, r *http.Request) {
 	devices, err := h.controller.Devices().List()
 	if err != nil {
-		log.Println("Failed to retrive device list")
+		log.Println("Failed to retrive device list. Error", err)
 		errorResponse(http.StatusInternalServerError, "Failed to retrieve device list", w)
 		return
 	}

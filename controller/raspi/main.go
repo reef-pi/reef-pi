@@ -12,10 +12,10 @@ import (
 type Raspi struct {
 	db        *bolt.DB
 	conn      *pi.RaspiAdaptor
-	devices   map[string]controller.Device
 	schedules map[controller.Device]controller.Scheduler
 	modules   map[string]controller.Module
 	lighting  *Lighting
+	deviceAPI controller.CrudAPI
 }
 
 func (r *Raspi) Name() string {
@@ -30,24 +30,21 @@ func (c *Raspi) GetModule(name string) (controller.Module, error) {
 	return module, nil
 }
 
-func (c *Raspi) GetDevice(name string) (controller.Device, error) {
-	dev, ok := c.devices[name]
-	if !ok {
-		return nil, fmt.Errorf("No such device: '%s'", name)
-	}
-	return dev, nil
-}
-
 func New() (*Raspi, error) {
 	db, err := bolt.Open("reefer.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return nil, err
 	}
+	conn := pi.NewRaspiAdaptor("raspi")
+	deviceAPI, err := NewDeviceAPI(conn, db)
+	if err != nil {
+		return nil, err
+	}
 	r := &Raspi{
 		db:        db,
+		conn:      conn,
+		deviceAPI: deviceAPI,
 		schedules: make(map[controller.Device]controller.Scheduler),
-		devices:   make(map[string]controller.Device),
-		conn:      pi.NewRaspiAdaptor("raspi"),
 		lighting: &Lighting{
 			config: &LightingConfig{
 				Intensities: make([]int, 12),
