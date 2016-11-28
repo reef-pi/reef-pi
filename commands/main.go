@@ -9,12 +9,28 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 )
 
 func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
+	flag.Usage = func() {
+		text := `
+    Usage: reefer [OPTIONS]
+
+    Options:
+
+      -config string
+          Config file path
+      -port  int
+          Reefer listening port
+      -no-auth
+          Disable Google OAuth
+    `
+		fmt.Println(strings.TrimSpace(text))
+	}
 	flag.Parse()
 	var config Config
 	if *configFile != "" {
