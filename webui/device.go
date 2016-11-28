@@ -12,15 +12,14 @@ import (
 func (h *APIHandler) ListDevices(w http.ResponseWriter, r *http.Request) {
 	devices, err := h.controller.Devices().List()
 	if err != nil {
-		log.Println("Failed to retrive device list. Error", err)
+		log.Println("ERROR: Failed to retrive device list. Error", err)
 		errorResponse(http.StatusInternalServerError, "Failed to retrieve device list", w)
 		return
 	}
-	log.Println(devices)
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(devices); err != nil {
-		log.Println("ERROR:", err)
+		log.Println("ERROR: Failed to encode json. Error:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 	}
 }
@@ -28,12 +27,12 @@ func (h *APIHandler) ListDevices(w http.ResponseWriter, r *http.Request) {
 func (h *APIHandler) CreateDevice(w http.ResponseWriter, r *http.Request) {
 	var dd raspi.DeviceDetails
 	if err := json.NewDecoder(r.Body).Decode(&dd); err != nil {
-		log.Println("Failed to decode json. Error:", err)
+		log.Println("ERROR: Failed to decode json. Error:", err)
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
 	if err := h.controller.Devices().Create(dd); err != nil {
-		log.Println("Failed to decode json. Error:", err)
+		log.Println("ERROR: Failed to decode json. Error:", err)
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
@@ -42,15 +41,22 @@ func (h *APIHandler) CreateDevice(w http.ResponseWriter, r *http.Request) {
 func (h *APIHandler) GetDevice(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["id"]
-	dev, err := h.controller.Devices().Get(name)
+	d, err := h.controller.Devices().Get(name)
 	if err != nil {
-		log.Println("Failed to retrive specified device")
+		log.Println("ERROR: Failed to retrive specified device")
 		errorResponse(http.StatusBadRequest, "Failed to retrieve specified device", w)
 		return
 	}
+	dev, ok := d.(controller.Device)
+	if !ok {
+		log.Println("ERROR: Failed to type cast device")
+		errorResponse(http.StatusInternalServerError, "Failed to type cast device", w)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(dev); err != nil {
+	if err := encoder.Encode(dev.Config()); err != nil {
 		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 	}

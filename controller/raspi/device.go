@@ -112,7 +112,6 @@ func (d *DeviceAPI) Get(name string) (interface{}, error) {
 			return nil, err
 		}
 		dev = controller.NewRelay(c, d.conn)
-		fmt.Println(c)
 	case "doser":
 	default:
 		return nil, fmt.Errorf("Unknown device type:%s", dr.Type)
