@@ -45,11 +45,7 @@ func New() (*Raspi, error) {
 		conn:      conn,
 		deviceAPI: deviceAPI,
 		schedules: make(map[controller.Device]controller.Scheduler),
-		lighting: &Lighting{
-			config: &LightingConfig{
-				Intensities: make([]int, 12),
-			},
-		},
+		lighting:  NewLighting(),
 	}
 	return r, nil
 }
