@@ -4,6 +4,8 @@ type Device interface {
 	On() error
 	Off() error
 	Name() string
+	Type() string
+	Config() interface{}
 }
 
 type Scheduler interface {
@@ -45,7 +47,6 @@ type API interface {
 
 type Controller interface {
 	API
-	GetDevice(string) (Device, error)
 	Schedule(Device, Scheduler) error
 	GetModule(string) (Module, error)
 	Start() error

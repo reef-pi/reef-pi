@@ -16,6 +16,7 @@ test:
 .PHONY: go-get
 go-get:
 	go get github.com/Sirupsen/logrus
+	go get github.com/boltdb/bolt/...
 	go get gopkg.in/yaml.v2
 	go get github.com/stretchr/gomniauth
 	go get github.com/stretchr/gomniauth/providers/google

@@ -42,14 +42,9 @@ func (h *APIHandler) DisableLighting(w http.ResponseWriter, r *http.Request) {
 
 func (h *APIHandler) LightingConfig(w http.ResponseWriter, r *http.Request) {
 	c := h.controller.Lighting().Config()
-	config, ok := c.(raspi.LightingConfig)
-	if !ok {
-		errorResponse(http.StatusInternalServerError, "Failed to config ", w)
-		return
-	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(config); err != nil {
+	if err := encoder.Encode(c); err != nil {
 		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 	}
