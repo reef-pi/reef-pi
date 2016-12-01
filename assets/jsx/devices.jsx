@@ -55,7 +55,7 @@ class DeviceDetails extends React.Component {
                 this.setState({
                   loaded: true,
                   type: 'Foo',
-                  pin: data.config.pin
+                  pin: data.pin
                 });
             }.bind(this),
             error: function(xhr, status, err) {

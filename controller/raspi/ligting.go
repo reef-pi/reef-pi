@@ -14,6 +14,13 @@ type Lighting struct {
 	config  *LightingConfig
 }
 
+func NewLighting() *Lighting {
+	config := &LightingConfig{
+		Intensities: make([]int, 12),
+	}
+	return &Lighting{config: config}
+}
+
 func (l *Lighting) Enable(conf interface{}) error {
 	l.enabled = true
 	c, ok := conf.(LightingConfig)
