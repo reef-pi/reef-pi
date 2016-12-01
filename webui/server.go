@@ -2,6 +2,7 @@ package webui
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ranjib/reefer/controller"
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
@@ -41,13 +42,17 @@ func errorResponse(header int, msg string, w http.ResponseWriter) {
 	w.Write(js)
 }
 
-func (s *Server) SetupOAuth() {
+func (s *Server) SetupOAuth() error {
+	if s.config.GomniAuthSecret == "" {
+		return fmt.Errorf("Please set auth secret")
+	}
 	provider := google.New(s.config.Auth.OauthID, s.config.Auth.OauthSecret, s.config.Auth.OauthCallbackUrl)
 	gomniauth.SetSecurityKey(s.config.GomniAuthSecret)
 	gomniauth.WithProviders(provider)
+	return nil
 }
 
-func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
+func SetupServer(config ServerConfig, c controller.Controller, auth bool) error {
 	server := &Server{
 		config: config,
 	}
@@ -58,7 +63,9 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
 	})
 
 	if auth {
-		server.SetupOAuth()
+		if err := server.SetupOAuth(); err != nil {
+			return err
+		}
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
 		http.Handle("/api", MustAuth(NewApiHandler(c)))
@@ -72,4 +79,5 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) {
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/api/", NewApiHandler(c))
 	}
+	return nil
 }

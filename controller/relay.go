@@ -7,8 +7,10 @@ import (
 )
 
 type RelayConfig struct {
-	Pin  string `json:"pin,omitempty"`
-	Name string `json:"name,omitempty"`
+	Pin   string `json:"pin,omitempty"`
+	Name  string `json:"name,omitempty"`
+	State bool   `json:"state"`
+	Type  string `json:"type"`
 }
 
 type Relay struct {
@@ -29,12 +31,20 @@ func (r *Relay) Type() string {
 
 func (r *Relay) On() error {
 	log.Printf("Device[%s] On\n", r.Name())
-	return r.driver.On()
+	if err := r.driver.On(); err != nil {
+		return err
+	}
+	r.config.State = true
+	return nil
 }
 
 func (r *Relay) Off() error {
 	log.Printf("Device[%s] Off\n", r.Name())
-	return r.driver.Off()
+	if err := r.driver.Off(); err != nil {
+		return err
+	}
+	r.config.State = false
+	return nil
 }
 func (r *Relay) Name() string {
 	return r.config.Name
