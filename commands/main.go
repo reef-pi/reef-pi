@@ -49,7 +49,9 @@ func main() {
 	}
 	defer controller.Stop()
 
-	webui.SetupServer(config.Server, controller, !*noAuth)
+	if err := webui.SetupServer(config.Server, controller, !*noAuth); err != nil {
+		log.Fatal("ERROR:", err)
+	}
 	addr := fmt.Sprintf(":%d", *port)
 	log.Printf("Starting http server at: %s\n", addr)
 	go http.ListenAndServe(addr, nil)
