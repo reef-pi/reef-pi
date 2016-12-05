@@ -8,7 +8,6 @@ class DeviceDetails extends React.Component {
           visible: false,
           in_progress: false,
           loaded: false,
-          type: '',
           pin: '',
           on: false
         };
@@ -54,7 +53,6 @@ class DeviceDetails extends React.Component {
             success: function(data) {
                 this.setState({
                   loaded: true,
-                  type: 'Foo',
                   pin: data.pin
                 });
             }.bind(this),
@@ -75,8 +73,6 @@ class DeviceDetails extends React.Component {
             <span onClick={this.showDetails}>{this.props.name}</span>
             <table style={style}>
               <tbody>
-                <tr><td>Name</td><td>{this.props.name}</td></tr>
-                <tr><td>Type</td><td>{this.state.type}</td></tr>
                 <tr><td>Pin</td><td>{this.state.pin}</td></tr>
                 <tr><td></td><td><input type="button" disabled={this.state.in_progress} value={this.state.on ? "On" : "Off"} onClick={this.configureDevice}/></td></tr>
               </tbody>

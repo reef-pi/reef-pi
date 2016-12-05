@@ -46,7 +46,7 @@ export default class Electronics extends React.Component {
             </DropdownButton>
             <div style={divStyle}>
               {this.state.board} pin layout
-              <Table striped bordered condensed hover>
+              <Table condensed>
                 <thead>
                   <tr>
                     <th>Pin</th>
