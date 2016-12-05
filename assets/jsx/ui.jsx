@@ -7,6 +7,7 @@ import Temperature from './temperature.jsx';
 import WaveMaker from './wave_maker.jsx';
 import Dashboard from './dashboard.jsx';
 import DeviceManagement from './device_management.jsx';
+import Configuration from './configuration.jsx';
 
 export default class App extends Component {
   handleSelect(index, last) {
@@ -22,6 +23,7 @@ export default class App extends Component {
           <Tab>Temperature</Tab>
           <Tab>WaveMaker</Tab>
           <Tab>Devices</Tab>
+          <Tab>Configure</Tab>
         </TabList>
         <TabPanel>
          <Dashboard />
@@ -40,6 +42,9 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <DeviceManagement />
+        </TabPanel>
+        <TabPanel>
+          <Configuration />
         </TabPanel>
       </Tabs>
     );
