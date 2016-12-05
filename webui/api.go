@@ -22,6 +22,10 @@ func NewApiHandler(c controller.Controller) http.Handler {
 	handler := &APIHandler{
 		controller: c,
 	}
+
+	// Info (used by dashboard)
+	router.HandleFunc("/api/info", handler.Info).Methods("GET")
+
 	// Device CRUD api
 	router.HandleFunc("/api/devices", handler.ListDevices).Methods("GET")
 	router.HandleFunc("/api/devices", handler.CreateDevice).Methods("POST")
