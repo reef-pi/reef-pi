@@ -46,7 +46,7 @@ func (h *APIHandler) LightingConfig(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(c); err != nil {
 		log.Println("ERROR:", err)
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
 	}
 }
 
