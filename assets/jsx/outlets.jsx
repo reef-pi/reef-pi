@@ -9,7 +9,7 @@ export default class Outlets extends React.Component {
     render() {
       return (
           <div>
-            <Table striped bordered condensed hover>
+            <Table responsive>
               <thead>
                 <tr>
                   <th>Outlet</th>
