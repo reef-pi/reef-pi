@@ -2,14 +2,11 @@ package webui
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"time"
-)
-
-const (
-	INTERFACE = "wlp3s0"
 )
 
 type ControllerInfo struct {
@@ -18,9 +15,14 @@ type ControllerInfo struct {
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
+	ip, err := getIP(h.Interface)
+	if err != nil {
+		log.Println("ERROR:", err)
+		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
+	}
 	info := ControllerInfo{
 		Time: time.Now().Format("Mon Jan 2 15:04:05"),
-		IP:   getIP(),
+		IP:   ip,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
@@ -30,22 +32,22 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getIP() string {
-	iface, err := net.InterfaceByName(INTERFACE)
+func getIP(i string) (string, error) {
+	iface, err := net.InterfaceByName(i)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	addrs, err := iface.Addrs()
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	for _, v := range addrs {
 		switch s := v.(type) {
 		case *net.IPNet:
 			if s.IP.To4() != nil {
-				return s.IP.To4().String()
+				return s.IP.To4().String(), nil
 			}
 		}
 	}
-	return "unknown"
+	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
 }

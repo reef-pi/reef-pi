@@ -6,8 +6,13 @@ import (
 	"net/http"
 )
 
+const (
+	DEFAULT_INTERFACE = "wlan0"
+)
+
 type APIHandler struct {
 	controller controller.Controller
+	Interface  string
 }
 
 type DailyJobConfig struct {
@@ -17,10 +22,14 @@ type DailyJobConfig struct {
 	On     bool   `json:"on"`
 }
 
-func NewApiHandler(c controller.Controller) http.Handler {
+func NewApiHandler(c controller.Controller, iface string) http.Handler {
+	if iface == "" {
+		iface = DEFAULT_INTERFACE
+	}
 	router := mux.NewRouter()
 	handler := &APIHandler{
 		controller: c,
+		Interface:  iface,
 	}
 
 	// Info (used by dashboard)
