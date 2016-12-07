@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { DropdownButton, MenuItem, Table } from 'react-bootstrap';
+import $ from 'jquery';
 
 export default class Electronics extends React.Component {
     constructor(props) {
@@ -12,22 +13,57 @@ export default class Electronics extends React.Component {
         };
         this.state = {
           board: '',
-          table_rows: ''
+          table_rows: []
         };
-        this.onBoardChange = this.onBoardChange.bind(this)
+        this.onBoardChange = this.onBoardChange.bind(this);
+        this.loadConfiguration = this.loadConfiguration.bind(this);
+        this.saveConfiguration = this.saveConfiguration.bind(this);
     }
+
+    loadConfiguration(){
+      $.ajax({
+          url: '/api/board/'+this.state.board,
+          type: 'GET',
+          success: function(data) {
+            this.setState({
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+              console.log(err.toString());
+          }.bind(this)
+      });
+    }
+
     onBoardChange(key, ev){
       var table_rows = []
       for (var i =1; i <= this.pinLayouts[key]; i++) {
         table_rows.push(
           <tr key={"Pin"+i}>
             <td>{i} </td>
-            <td> <input type="text" /></td>
+            <td> <input id={"pin-"+i}type="text"/></td>
           </tr>)
       }
       this.setState({
         board: key,
         table_rows: table_rows
+      });
+    }
+
+    saveConfiguration(){
+      var payload = {}
+      for (var i =1; i <= this.pinLayouts[this.state.board]; i++) {
+        payload["pin-"+i] = $("#pin-"+i).val()
+      }
+      console.log(payload)
+      $.ajax({
+          url: '/api/config/board/'+this.state.board,
+          type: 'POST',
+          data: JSON.stringify(payload),
+          success: function(data) {
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
       });
     }
 
@@ -38,7 +74,7 @@ export default class Electronics extends React.Component {
       }
       return (
           <div>
-            <DropdownButton  title="Board" id="board" onSelect={this.onBoardChange}>
+            <DropdownButton  title="Board" id="board" onSelect={this.onBoardChange} dropup>
               <MenuItem eventKey="pi">Pi</MenuItem>
               <MenuItem eventKey="pca9645">PCA9645</MenuItem>
               <MenuItem eventKey="relay" >Relay</MenuItem>
@@ -57,7 +93,7 @@ export default class Electronics extends React.Component {
                   {this.state.table_rows}
                 </tbody>
               </Table>
-              <input type="button" value="save" />
+              <input type="button" value="save" onClick={this.saveConfiguration}/>
             </div>
           </div>
           );
