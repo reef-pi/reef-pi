@@ -46,14 +46,12 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 	case "login":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Println("Error when trying to get provider", provider, " Error: ", err)
 			errorResponse(http.StatusInternalServerError, fmt.Sprintf("Auth action %s not supported", action), w)
 			return
 		}
 
 		loginURL, err := provider.GetBeginAuthURL(nil, nil)
 		if err != nil {
-			log.Println("Error when trying to get BeginAuthURL", provider, " Error: ", err)
 			errorResponse(http.StatusInternalServerError, err.Error(), w)
 			return
 		}
@@ -63,26 +61,22 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 	case "callback":
 		provider, err := gomniauth.Provider(segs[3])
 		if err != nil {
-			log.Println("Error when trying to get provider", provider, " Error: ", err)
 			errorResponse(http.StatusInternalServerError, err.Error(), w)
 			return
 		}
 		creds, err := provider.CompleteAuth(objx.MustFromURLQuery(r.URL.RawQuery))
 		if err != nil {
-			log.Println("Error while trying to complete auth for ", provider, " Error: ", err)
 			errorResponse(http.StatusForbidden, err.Error(), w)
 			return
 		}
 		user, err := provider.GetUser(creds)
 		if err != nil {
-			log.Println("Error while trying to get user from ", provider, " Error: ", err)
 			errorResponse(http.StatusForbidden, err.Error(), w)
 			return
 		}
 		parts := strings.Split(user.Email(), "@")
 		// externalize config
 		if parts[1] != s.config.Domain {
-			log.Println("ERROR: Not a valid user. Domain:", parts[1])
 			errorResponse(http.StatusForbidden, "Unauthorized domain", w)
 			return
 		}
@@ -96,7 +90,6 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if !found {
-			log.Println("Not a valid user. id:", parts[0])
 			errorResponse(http.StatusForbidden, "Not a valid user", w)
 			return
 		}

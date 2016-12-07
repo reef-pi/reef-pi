@@ -23,10 +23,14 @@ type Module interface {
 	IsEnabled() bool
 }
 
-type CrudAPI interface {
-	Create(interface{}) error
+type GetUpdateAPI interface {
 	Get(string) (interface{}, error)
 	Update(string, interface{}) error
+}
+
+type CrudAPI interface {
+	GetUpdateAPI
+	Create(interface{}) error
 	Delete(string) error
 	List() (*[]interface{}, error)
 }
@@ -38,11 +42,18 @@ type LightingAPI interface {
 	Config() interface{}
 }
 
+type OutletAPI interface {
+	Get() (interface{}, error)
+	Update(interface{}) error
+}
+
 type API interface {
 	Devices() CrudAPI
 	Lighting() LightingAPI
 	Jobs() CrudAPI
 	Modules() CrudAPI
+	Boards() GetUpdateAPI
+	Outlets() OutletAPI
 }
 
 type Controller interface {

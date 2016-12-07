@@ -27,6 +27,13 @@ func (n *NullCrudAPI) List() (*[]interface{}, error) {
 	return &ret, nil
 }
 
+func (r *Raspi) Boards() controller.GetUpdateAPI {
+	return r.boardAPI
+}
+
+func (r *Raspi) Outlets() controller.OutletAPI {
+	return r.outletAPI
+}
 func (r *Raspi) Devices() controller.CrudAPI {
 	return r.deviceAPI
 }

@@ -15,17 +15,43 @@ export default class Electronics extends React.Component {
           board: '',
           table_rows: []
         };
-        this.onBoardChange = this.onBoardChange.bind(this);
         this.loadConfiguration = this.loadConfiguration.bind(this);
         this.saveConfiguration = this.saveConfiguration.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
-    loadConfiguration(){
+    onChange(ev){
+      var pin = ev.target.id
+      var i = pin.split("-")[1]
+      var table_rows = this.state.table_rows
+      var el = <tr key={pin}>
+             <td>{i}</td>
+             <td><input id={pin} type="text" value={ev.target.value} onChange={this.onChange}/></td>
+           </tr>
+      table_rows[i-1] = el
+      this.setState({
+        table_rows: table_rows
+      });
+    }
+
+    loadConfiguration(key, ev){
       $.ajax({
-          url: '/api/board/'+this.state.board,
+          url: '/api/board/' + key,
           type: 'GET',
+          dataType: 'json',
           success: function(data) {
+            var table_rows = []
+            for (var i =1; i <= this.pinLayouts[key]; i++) {
+              var pin = "pin-"+i
+              table_rows.push(
+                <tr key={pin}>
+                  <td>{i} </td>
+                  <td> <input id={pin} type="text" value={data[pin]} onChange={this.onChange}/></td>
+                </tr>)
+            }
             this.setState({
+              board: key,
+              table_rows: table_rows
             });
           }.bind(this),
           error: function(xhr, status, err) {
@@ -34,30 +60,15 @@ export default class Electronics extends React.Component {
       });
     }
 
-    onBoardChange(key, ev){
-      var table_rows = []
-      for (var i =1; i <= this.pinLayouts[key]; i++) {
-        table_rows.push(
-          <tr key={"Pin"+i}>
-            <td>{i} </td>
-            <td> <input id={"pin-"+i}type="text"/></td>
-          </tr>)
-      }
-      this.setState({
-        board: key,
-        table_rows: table_rows
-      });
-    }
-
     saveConfiguration(){
       var payload = {}
       for (var i =1; i <= this.pinLayouts[this.state.board]; i++) {
         payload["pin-"+i] = $("#pin-"+i).val()
       }
-      console.log(payload)
       $.ajax({
-          url: '/api/config/board/'+this.state.board,
+          url: '/api/board/'+this.state.board,
           type: 'POST',
+          dataType: 'json',
           data: JSON.stringify(payload),
           success: function(data) {
           }.bind(this),
@@ -74,7 +85,7 @@ export default class Electronics extends React.Component {
       }
       return (
           <div>
-            <DropdownButton  title="Board" id="board" onSelect={this.onBoardChange} dropup>
+            <DropdownButton  title="Board" id="board" onSelect={this.loadConfiguration} dropup>
               <MenuItem eventKey="pi">Pi</MenuItem>
               <MenuItem eventKey="pca9645">PCA9645</MenuItem>
               <MenuItem eventKey="relay" >Relay</MenuItem>

@@ -49,5 +49,11 @@ func NewApiHandler(c controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/lighting", handler.LightingConfig).Methods("GET")
 	router.HandleFunc("/api/lighting/status", handler.IsLightingEnabled).Methods("GET")
 
+	// Config
+	router.HandleFunc("/api/board/{id}", handler.SaveBoardConfiguration).Methods("POST")
+	router.HandleFunc("/api/board/{id}", handler.GetBoardConfiguration).Methods("GET")
+	router.HandleFunc("/api/outlets", handler.GetOutletConfiguration).Methods("GET")
+	router.HandleFunc("/api/outlets", handler.SaveOutletConfiguration).Methods("POST")
+
 	return router
 }
