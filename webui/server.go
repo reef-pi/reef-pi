@@ -22,6 +22,7 @@ type ServerConfig struct {
 	Auth            OAuthConfig `yaml:"auth"`
 	GomniAuthSecret string      `yaml:"gomni_auth_secret"`
 	ImageDirectory  string      `yaml:"image_directory"`
+	Interface       string      `yaml:"interface"`
 }
 
 type Server struct {
@@ -68,7 +69,7 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) error 
 		}
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
-		http.Handle("/api", MustAuth(NewApiHandler(c)))
+		http.Handle("/api", MustAuth(NewApiHandler(c, config.Interface)))
 
 		// Auth specific paths
 		http.HandleFunc("/auth/", server.loginHandler)
@@ -77,7 +78,7 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) error 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
-		http.Handle("/api/", NewApiHandler(c))
+		http.Handle("/api/", NewApiHandler(c, config.Interface))
 	}
 	return nil
 }
