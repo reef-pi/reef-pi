@@ -30,7 +30,7 @@ type Server struct {
 }
 
 func errorResponse(header int, msg string, w http.ResponseWriter) {
-	log.Println(msg)
+	log.Println("ERROR:", msg)
 	resp := make(map[string]string)
 	w.WriteHeader(header)
 	resp["error"] = msg

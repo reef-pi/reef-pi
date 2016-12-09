@@ -3,7 +3,6 @@ package webui
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"time"
@@ -17,7 +16,6 @@ type ControllerInfo struct {
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	ip, err := getIP(h.Interface)
 	if err != nil {
-		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
 	}
 	info := ControllerInfo{
@@ -27,7 +25,6 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(&info); err != nil {
-		log.Println("ERROR:", err)
 		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
 	}
 }

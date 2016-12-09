@@ -16,6 +16,8 @@ type Raspi struct {
 	modules   map[string]controller.Module
 	lighting  *Lighting
 	deviceAPI controller.CrudAPI
+	boardAPI  controller.GetUpdateAPI
+	outletAPI controller.OutletAPI
 }
 
 func (r *Raspi) Name() string {
@@ -40,10 +42,20 @@ func New() (*Raspi, error) {
 	if err != nil {
 		return nil, err
 	}
+	boardAPI, err := NewBoardAPI(db)
+	if err != nil {
+		return nil, err
+	}
+	outletAPI, err := NewOutletAPI(db)
+	if err != nil {
+		return nil, err
+	}
 	r := &Raspi{
 		db:        db,
 		conn:      conn,
 		deviceAPI: deviceAPI,
+		outletAPI: outletAPI,
+		boardAPI:  boardAPI,
 		schedules: make(map[controller.Device]controller.Scheduler),
 		lighting:  NewLighting(),
 	}
