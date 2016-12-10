@@ -39,7 +39,6 @@ export default class Outlets extends React.Component {
     }
 
     generateTBody(){
-      console.log("TBody generated")
       var rows =[]
       $.each(this.state.outlets, function(k, v){
         rows.push(
@@ -70,8 +69,6 @@ export default class Outlets extends React.Component {
     componentWillMount(){
       this.loadConfiguration();
     }
-
-
 
     render() {
       return (
