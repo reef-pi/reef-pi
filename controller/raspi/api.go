@@ -43,5 +43,9 @@ func (r *Raspi) Modules() controller.CrudAPI {
 }
 
 func (r *Raspi) Jobs() controller.CrudAPI {
-	return &NullCrudAPI{}
+	return r.jobAPI
+}
+
+func (r *Raspi) Equipments() controller.CrudAPI {
+	return r.equipmentAPI
 }

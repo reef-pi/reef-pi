@@ -10,14 +10,16 @@ import (
 )
 
 type Raspi struct {
-	db        *bolt.DB
-	conn      *pi.RaspiAdaptor
-	schedules map[controller.Device]controller.Scheduler
-	modules   map[string]controller.Module
-	lighting  *Lighting
-	deviceAPI controller.CrudAPI
-	boardAPI  controller.GetUpdateAPI
-	outletAPI controller.OutletAPI
+	db           *bolt.DB
+	conn         *pi.RaspiAdaptor
+	schedules    map[controller.Device]controller.Scheduler
+	modules      map[string]controller.Module
+	lighting     *Lighting
+	deviceAPI    controller.CrudAPI
+	boardAPI     controller.GetUpdateAPI
+	outletAPI    controller.OutletAPI
+	jobAPI       controller.CrudAPI
+	equipmentAPI controller.CrudAPI
 }
 
 func (r *Raspi) Name() string {
@@ -50,14 +52,24 @@ func New() (*Raspi, error) {
 	if err != nil {
 		return nil, err
 	}
+	jobAPI, err := NewJobAPI(conn, db)
+	if err != nil {
+		return nil, err
+	}
+	equipmentAPI, err := NewEquipmentAPI(conn, db)
+	if err != nil {
+		return nil, err
+	}
 	r := &Raspi{
-		db:        db,
-		conn:      conn,
-		deviceAPI: deviceAPI,
-		outletAPI: outletAPI,
-		boardAPI:  boardAPI,
-		schedules: make(map[controller.Device]controller.Scheduler),
-		lighting:  NewLighting(),
+		db:           db,
+		conn:         conn,
+		deviceAPI:    deviceAPI,
+		outletAPI:    outletAPI,
+		boardAPI:     boardAPI,
+		jobAPI:       jobAPI,
+		schedules:    make(map[controller.Device]controller.Scheduler),
+		lighting:     NewLighting(),
+		equipmentAPI: equipmentAPI,
 	}
 	return r, nil
 }

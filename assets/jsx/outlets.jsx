@@ -56,7 +56,6 @@ export default class Outlets extends React.Component {
       $.ajax({
           url: '/api/outlets',
           type: 'POST',
-          dataType: 'json',
           data: JSON.stringify(this.state.outlets),
           success: function(data) {
           }.bind(this),

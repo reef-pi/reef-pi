@@ -51,6 +51,7 @@ type API interface {
 	Devices() CrudAPI
 	Lighting() LightingAPI
 	Jobs() CrudAPI
+	Equipments() CrudAPI
 	Modules() CrudAPI
 	Boards() GetUpdateAPI
 	Outlets() OutletAPI
@@ -78,4 +79,19 @@ func (n *NullDevice) Off() error {
 
 func (n *NullDevice) Name() string {
 	return "Null device"
+}
+
+type Equipment struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Outlet string `json:"outlet"`
+}
+
+type Job struct {
+	ID        string `json:"id"`
+	Minute    string `json:"minute"`
+	Day       string `json:"day"`
+	Hour      string `json:"hour"`
+	Equipment string `json:"equipment"`
+	Action    string `json:"action"`
 }
