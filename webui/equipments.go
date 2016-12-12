@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
-	"log"
 	"net/http"
 )
 
@@ -15,19 +14,29 @@ func (h *APIHandler) ListEquipments(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(list); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 }
 
 func (h *APIHandler) GetEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	log.Println("Get equipment:", id)
+	eq, err := h.controller.Equipments().Get(id)
+	if err != nil {
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	enc := json.NewEncoder(w)
+	if err := enc.Encode(eq); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
 }
 
 func (h *APIHandler) AddEquipment(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +47,6 @@ func (h *APIHandler) AddEquipment(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
-	log.Println("Creating new equipment:", payload)
 	if err := h.controller.Equipments().Create(payload); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to create equipment. Error: "+err.Error(), w)
 		return
