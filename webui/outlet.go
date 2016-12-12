@@ -16,7 +16,7 @@ func (h *APIHandler) CreateOutlet(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
-	log.Println("Creating new board:", b)
+	log.Println("Creating new outlet:", b)
 	if err := h.controller.Outlets().Create(b); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to create board. Error: "+err.Error(), w)
 		return
@@ -74,10 +74,10 @@ func (h *APIHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(list); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 }

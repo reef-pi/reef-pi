@@ -56,6 +56,13 @@ func NewApiHandler(c controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/boards/{id}", handler.UpdateBoard).Methods("POST")
 	router.HandleFunc("/api/boards/{id}", handler.DeleteBoard).Methods("DELETE")
 
+	// Outlets
+	router.HandleFunc("/api/outlets", handler.ListOutlets).Methods("GET")
+	router.HandleFunc("/api/outlets", handler.CreateOutlet).Methods("PUT")
+	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
+	router.HandleFunc("/api/outlets/{id}", handler.UpdateOutlet).Methods("POST")
+	router.HandleFunc("/api/outlets/{id}", handler.DeleteOutlet).Methods("DELETE")
+
 	// Equipments
 	router.HandleFunc("/api/equipments", handler.ListEquipments).Methods("GET")
 	router.HandleFunc("/api/equipments", handler.AddEquipment).Methods("PUT")

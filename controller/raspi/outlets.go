@@ -47,7 +47,7 @@ func (o *OutletAPI) Create(payload interface{}) error {
 	}
 
 	return o.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("outlet"))
+		b := tx.Bucket([]byte("outlets"))
 		id, _ := b.NextSequence()
 		outlet.ID = strconv.Itoa(int(id))
 		data, err := json.Marshal(outlet)
@@ -93,11 +93,33 @@ func (o *OutletAPI) Update(id string, payload interface{}) error {
 	})
 }
 
-func (o *OutletAPI) Delete(_ string) error {
-	return nil
+func (o *OutletAPI) Delete(id string) error {
+	return o.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("outlets"))
+		return b.Delete([]byte(id))
+	})
 }
 
 func (o *OutletAPI) List() (*[]interface{}, error) {
-	var ret []interface{}
-	return &ret, nil
+	list := []interface{}{}
+	err := o.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("outlets"))
+		c := b.Cursor()
+		for k, v := c.First(); k != nil; k, _ = c.Next() {
+			var outlet controller.Outlet
+			if err := json.Unmarshal(v, &outlet); err != nil {
+				return err
+			}
+			entry := map[string]string{
+				"id":   outlet.ID,
+				"name": outlet.Name,
+			}
+			list = append(list, entry)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &list, nil
 }
