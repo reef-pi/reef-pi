@@ -2,8 +2,11 @@ package raspi
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/boltdb/bolt"
+	"github.com/ranjib/reefer/controller"
 	"log"
+	"strconv"
 )
 
 type OutletAPI struct {
@@ -34,36 +37,67 @@ func NewOutletAPI(db *bolt.DB) (*OutletAPI, error) {
 	if err != nil {
 		return nil, err
 	}
-	return api, api.Update(DEFAULT_OUTLETS)
+	return api, nil
 }
 
-func (o *OutletAPI) Get() (interface{}, error) {
+func (o *OutletAPI) Create(payload interface{}) error {
+	outlet, ok := payload.(controller.Outlet)
+	if !ok {
+		return fmt.Errorf("Failed to typecast to outlet")
+	}
+
+	return o.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("outlet"))
+		id, _ := b.NextSequence()
+		outlet.ID = strconv.Itoa(int(id))
+		data, err := json.Marshal(outlet)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(outlet.ID), data)
+	})
+}
+
+func (o *OutletAPI) Get(id string) (interface{}, error) {
 	var data []byte
 
 	err := o.db.View(func(tx *bolt.Tx) error {
 		bu := tx.Bucket([]byte("outlets"))
-		data = bu.Get([]byte("config"))
+		data = bu.Get([]byte(id))
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	outlets := map[string]string{}
+	var outlet controller.Outlet
 	if data != nil {
-		if err := json.Unmarshal(data, &outlets); err != nil {
+		if err := json.Unmarshal(data, &outlet); err != nil {
 			return nil, err
 		}
 	}
-	return outlets, nil
+	return outlet, nil
 }
 
-func (o *OutletAPI) Update(outlets interface{}) error {
-	buf, err := json.Marshal(outlets)
+func (o *OutletAPI) Update(id string, payload interface{}) error {
+	outlet, ok := payload.(controller.Outlet)
+	if !ok {
+		fmt.Errorf("Failed to typecast payload to outlet")
+	}
+	buf, err := json.Marshal(outlet)
 	if err != nil {
 		return err
 	}
 	return o.db.Update(func(tx *bolt.Tx) error {
 		bu := tx.Bucket([]byte("outlets"))
-		return bu.Put([]byte("config"), buf)
+		return bu.Put([]byte(outlet.ID), buf)
 	})
+}
+
+func (o *OutletAPI) Delete(_ string) error {
+	return nil
+}
+
+func (o *OutletAPI) List() (*[]interface{}, error) {
+	var ret []interface{}
+	return &ret, nil
 }

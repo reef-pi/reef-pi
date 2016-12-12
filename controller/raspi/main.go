@@ -16,8 +16,8 @@ type Raspi struct {
 	modules      map[string]controller.Module
 	lighting     *Lighting
 	deviceAPI    controller.CrudAPI
-	boardAPI     controller.GetUpdateAPI
-	outletAPI    controller.OutletAPI
+	boardAPI     controller.CrudAPI
+	outletAPI    controller.CrudAPI
 	jobAPI       controller.CrudAPI
 	equipmentAPI controller.CrudAPI
 }

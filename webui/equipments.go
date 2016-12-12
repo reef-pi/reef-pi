@@ -40,22 +40,35 @@ func (h *APIHandler) AddEquipment(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("Creating new equipment:", payload)
 	if err := h.controller.Equipments().Create(payload); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		errorResponse(http.StatusInternalServerError, "Failed to create equipment. Error: "+err.Error(), w)
 		return
 	}
-	log.Println("Create equipment:", payload)
 }
 
 func (h *APIHandler) UpdateEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	log.Println("Update equipment:", id)
+	dec := json.NewDecoder(r.Body)
+	var e controller.Equipment
+	if err := dec.Decode(&e); err != nil {
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	e.ID = id
+	if err := h.controller.Equipments().Update(id, e); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to update equipment. Error: "+err.Error(), w)
+		return
+	}
 }
 
 func (h *APIHandler) RemoveEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	log.Println("Delete equipment:", id)
+	if err := h.controller.Equipments().Delete(id); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to delete equipment. Error: "+err.Error(), w)
+		return
+	}
+
 }

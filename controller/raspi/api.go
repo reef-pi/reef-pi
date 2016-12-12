@@ -4,34 +4,11 @@ import (
 	"github.com/ranjib/reefer/controller"
 )
 
-type NullCrudAPI struct{}
-
-func (n *NullCrudAPI) Create(_ interface{}) error {
-	return nil
-}
-
-func (n *NullCrudAPI) Get(_ string) (interface{}, error) {
-	return nil, nil
-}
-
-func (n *NullCrudAPI) Update(_ string, _ interface{}) error {
-	return nil
-}
-
-func (n *NullCrudAPI) Delete(_ string) error {
-	return nil
-}
-
-func (n *NullCrudAPI) List() (*[]interface{}, error) {
-	var ret []interface{}
-	return &ret, nil
-}
-
-func (r *Raspi) Boards() controller.GetUpdateAPI {
+func (r *Raspi) Boards() controller.CrudAPI {
 	return r.boardAPI
 }
 
-func (r *Raspi) Outlets() controller.OutletAPI {
+func (r *Raspi) Outlets() controller.CrudAPI {
 	return r.outletAPI
 }
 func (r *Raspi) Devices() controller.CrudAPI {
@@ -39,7 +16,7 @@ func (r *Raspi) Devices() controller.CrudAPI {
 }
 
 func (r *Raspi) Modules() controller.CrudAPI {
-	return &NullCrudAPI{}
+	return &controller.NullCrudAPI{}
 }
 
 func (r *Raspi) Jobs() controller.CrudAPI {

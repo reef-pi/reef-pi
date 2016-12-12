@@ -1,50 +1,11 @@
 package controller
 
-type Device interface {
-	On() error
-	Off() error
-	Name() string
-	Type() string
-	Config() interface{}
-}
-
-type Scheduler interface {
-	Name() string
-	Start(Device) error
-	Stop() error
-	IsRunning() bool
-}
-
-type Module interface {
-	Name() string
-	Configure(interface{}) error
-	Enable() error
-	Disable() error
-	IsEnabled() bool
-}
-
-type GetUpdateAPI interface {
+type CrudAPI interface {
 	Get(string) (interface{}, error)
 	Update(string, interface{}) error
-}
-
-type CrudAPI interface {
-	GetUpdateAPI
 	Create(interface{}) error
 	Delete(string) error
 	List() (*[]interface{}, error)
-}
-
-type LightingAPI interface {
-	Enable(interface{}) error
-	Disable() error
-	IsEnabled() (bool, error)
-	Config() interface{}
-}
-
-type OutletAPI interface {
-	Get() (interface{}, error)
-	Update(interface{}) error
 }
 
 type API interface {
@@ -53,8 +14,8 @@ type API interface {
 	Jobs() CrudAPI
 	Equipments() CrudAPI
 	Modules() CrudAPI
-	Boards() GetUpdateAPI
-	Outlets() OutletAPI
+	Boards() CrudAPI
+	Outlets() CrudAPI
 }
 
 type Controller interface {
@@ -65,22 +26,6 @@ type Controller interface {
 	Stop() error
 	Name() string
 }
-
-type NullDevice struct {
-}
-
-func (n *NullDevice) On() error {
-	return nil
-}
-
-func (n *NullDevice) Off() error {
-	return nil
-}
-
-func (n *NullDevice) Name() string {
-	return "Null device"
-}
-
 type Equipment struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
@@ -94,4 +39,21 @@ type Job struct {
 	Hour      string `json:"hour"`
 	Equipment string `json:"equipment"`
 	Action    string `json:"action"`
+}
+
+type Connection struct {
+	Board string `json:"board"`
+	Pin   string `json:"pin"`
+}
+
+type Outlet struct {
+	ID         string     `json:"id"`
+	Name       string     `json:"name"`
+	Connection Connection `json:"connection"`
+}
+
+type Board struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Pins uint   `json:"pins"`
 }

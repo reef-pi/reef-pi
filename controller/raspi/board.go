@@ -55,3 +55,16 @@ func (b *BoardAPI) Update(name string, pinLayout interface{}) error {
 		return bu.Put([]byte(name), buf)
 	})
 }
+
+func (b *BoardAPI) Delete(_ string) error {
+	return nil
+}
+
+func (b *BoardAPI) Create(_ interface{}) error {
+	return nil
+}
+
+func (b *BoardAPI) List() (*[]interface{}, error) {
+	var ret []interface{}
+	return &ret, nil
+}
