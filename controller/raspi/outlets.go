@@ -105,7 +105,7 @@ func (o *OutletAPI) List() (*[]interface{}, error) {
 	err := o.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("outlets"))
 		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, _ = c.Next() {
+		for k, v := c.First(); k != nil; k, v = c.Next() {
 			var outlet controller.Outlet
 			if err := json.Unmarshal(v, &outlet); err != nil {
 				return err

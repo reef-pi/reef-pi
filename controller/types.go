@@ -43,7 +43,7 @@ type Job struct {
 
 type Connection struct {
 	Board string `json:"board"`
-	Pin   string `json:"pin"`
+	Pin   uint   `json:"pin"`
 }
 
 type Outlet struct {

@@ -92,16 +92,12 @@ func (b *BoardAPI) List() (*[]interface{}, error) {
 	err := b.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("boards"))
 		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, _ = c.Next() {
+		for k, v := c.First(); k != nil; k, v = c.Next() {
 			var board controller.Board
 			if err := json.Unmarshal(v, &board); err != nil {
 				return err
 			}
-			entry := map[string]string{
-				"id":   board.ID,
-				"name": board.Name,
-			}
-			list = append(list, entry)
+			list = append(list, board)
 		}
 		return nil
 	})

@@ -7,40 +7,54 @@ export default class Equipments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          selectedOutlet: 'AC_110_1',
-          outlets: [
-            "AC_110_1",
-            "AC_110_2",
-            "AC_110_3",
-            "AC_110_4",
-            "AC_110_5",
-            "AC_110_6"
-          ]
+          selectedOutlet: undefined,
+          outlets: []
         };
         this.setOutlet = this.setOutlet.bind(this);
         this.outletList = this.outletList.bind(this);
         this.addEquipment = this.addEquipment.bind(this);
+        this.fetchData = this.fetchData.bind(this);
     }
 
-    setOutlet(k, ev){
+    fetchData(){
+      $.ajax({
+          url: '/api/outlets',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            this.setState({
+              outlets: data
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
+    }
+
+    componentWillMount(){
+      this.fetchData();
+    }
+
+    setOutlet(i, ev){
       this.setState({
-        selectedOutlet: k
+        selectedOutlet: i
       });
     }
 
     outletList(){
       var menuItems = []
-      $.each(this.state.outlets, function(v,k){
-        menuItems.push(<MenuItem key={k} eventKey={k}>{k}</MenuItem>)
+      $.each(this.state.outlets, function(i, v){
+        menuItems.push(<MenuItem key={i} eventKey={i}>{v.name}</MenuItem>)
       }.bind(this));
       return menuItems
-
     }
 
     addEquipment(){
+      var outletID = this.state.outlets[this.state.selectedOutlet].id
       var payload = {
         name: $("#equipmentName").val(),
-        outlet: this.state.selectedOutlet
+        outlet: String(outletID)
       }
       $.ajax({
           url: '/api/equipments',
@@ -55,6 +69,10 @@ export default class Equipments extends React.Component {
     }
 
     render() {
+      var outlet = ''
+      if(this.state.selectedOutlet != undefined) {
+        outlet = this.state.outlets[this.state.selectedOutlet].name;
+      }
       return (
           <div>
            <EquipmentList />
@@ -64,7 +82,7 @@ export default class Equipments extends React.Component {
            Name: <input type="text" id="equipmentName" />
            Outlet:
            <DropdownButton
-             title={this.state.selectedOutlet}
+             title={outlet}
              id="outlet"
              onSelect={this.setOutlet}>
               {this.outletList()}
