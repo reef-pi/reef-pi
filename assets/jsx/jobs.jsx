@@ -7,7 +7,7 @@ export default class Jobs extends React.Component {
         super(props);
         this.state = {
           equipment: undefined,
-          equipmentAction: 'On',
+          equipmentAction: 'on',
           equipments: [],
           jobs: []
         };
@@ -106,6 +106,7 @@ export default class Jobs extends React.Component {
        day: $("#day").val(),
        hour: $("#hour").val(),
        minute: $("#minute").val(),
+       second: $("#second").val(),
        action: this.state.equipmentAction,
        equipment: this.state.equipments[this.state.equipment].id
      }
@@ -143,6 +144,7 @@ export default class Jobs extends React.Component {
             Day: <input type="text" id="day" />
             Hour: <input type="text" id="hour"/>
             Minute: <input type="text" id="minute" />
+            Second: <input type="text" id="second" />
             Action: <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
               <MenuItem key="on" eventKey="on"> On </MenuItem>
               <MenuItem key="off" eventKey="off"> Off </MenuItem>
