@@ -49,11 +49,33 @@ func NewApiHandler(c controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/lighting", handler.LightingConfig).Methods("GET")
 	router.HandleFunc("/api/lighting/status", handler.IsLightingEnabled).Methods("GET")
 
-	// Config
-	router.HandleFunc("/api/board/{id}", handler.SaveBoardConfiguration).Methods("POST")
-	router.HandleFunc("/api/board/{id}", handler.GetBoardConfiguration).Methods("GET")
-	router.HandleFunc("/api/outlets", handler.GetOutletConfiguration).Methods("GET")
-	router.HandleFunc("/api/outlets", handler.SaveOutletConfiguration).Methods("POST")
+	// Boards
+	router.HandleFunc("/api/boards", handler.ListBoards).Methods("GET")
+	router.HandleFunc("/api/boards", handler.CreateBoard).Methods("PUT")
+	router.HandleFunc("/api/boards/{id}", handler.GetBoard).Methods("GET")
+	router.HandleFunc("/api/boards/{id}", handler.UpdateBoard).Methods("POST")
+	router.HandleFunc("/api/boards/{id}", handler.DeleteBoard).Methods("DELETE")
+
+	// Outlets
+	router.HandleFunc("/api/outlets", handler.ListOutlets).Methods("GET")
+	router.HandleFunc("/api/outlets", handler.CreateOutlet).Methods("PUT")
+	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
+	router.HandleFunc("/api/outlets/{id}", handler.UpdateOutlet).Methods("POST")
+	router.HandleFunc("/api/outlets/{id}", handler.DeleteOutlet).Methods("DELETE")
+
+	// Equipments
+	router.HandleFunc("/api/equipments", handler.ListEquipments).Methods("GET")
+	router.HandleFunc("/api/equipments", handler.AddEquipment).Methods("PUT")
+	router.HandleFunc("/api/equipments/{id}", handler.GetEquipment).Methods("GET")
+	router.HandleFunc("/api/equipments/{id}", handler.UpdateEquipment).Methods("POST")
+	router.HandleFunc("/api/equipments/{id}", handler.RemoveEquipment).Methods("DELETE")
+
+	// Jobs
+	router.HandleFunc("/api/jobs", handler.ListJobs).Methods("GET")
+	router.HandleFunc("/api/jobs", handler.CreateJob).Methods("PUT")
+	router.HandleFunc("/api/jobs/{id}", handler.GetJob).Methods("GET")
+	router.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
+	router.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
 
 	return router
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import Outlets from './outlets.jsx'
-import Boards from './boards.jsx'
+import AddBoard from './add_board.jsx';
+import BoardsList from './list_boards.jsx';
 
 export default class Electronics extends React.Component {
     constructor(props) {
@@ -13,10 +14,12 @@ export default class Electronics extends React.Component {
     render() {
       return (
           <div>
-            <hr/>
+            <h2><span className="label label-info">Outlets</span></h2>
             <Outlets />
             <hr/>
-            <Boards />
+            <h2><span className="label label-info">Boards</span></h2>
+            <BoardsList />
+            <AddBoard />
           </div>
           );
     }
