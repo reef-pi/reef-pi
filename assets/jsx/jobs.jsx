@@ -6,33 +6,91 @@ export default class Jobs extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          selectedEquipment: 'Return Pump',
+          equipment: undefined,
           equipmentAction: 'On',
-          equipments: ["LED Light", "Return Pump", "Power Head", "Heater"],
+          equipments: [],
+          jobs: []
         };
         this.jobList = this.jobList.bind(this);
         this.equipmentList = this.equipmentList.bind(this);
         this.setEquipment = this.setEquipment.bind(this);
         this.setEquipmentAction = this.setEquipmentAction.bind(this);
         this.saveJob = this.saveJob.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+        this.removeJob = this.removeJob.bind(this);
+    }
+
+    componentWillMount(){
+      this.fetchData();
+    }
+
+
+    fetchData(){
+      $.ajax({
+          url: '/api/jobs',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            this.setState({
+              jobs: data
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
+      $.ajax({
+          url: '/api/equipments',
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            this.setState({
+              equipments: data
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
     }
 
     jobList(){
       var list = []
+      $.each(this.state.jobs, function(k, v){
+        list.push(
+          <li key={k} id={v.id}>
+            {v.name} <input type="button" onClick={this.removeJob} id={"job-"+ v.id} className="btn btn-danger" value="-"/>
+          </li>
+        );
+      }.bind(this));
+      return list
     }
 
     equipmentList(){
       var menuItems = []
-      $.each(this.state.equipments, function(v,k){
-        menuItems.push(<MenuItem key={k} eventKey={k}>{k}</MenuItem>)
+      $.each(this.state.equipments, function(k, v){
+        menuItems.push(<MenuItem key={k} eventKey={k}>{v.name}</MenuItem>)
       }.bind(this));
       return menuItems
+    }
 
+    removeJob(ev) {
+      var jobID = ev.target.id.split("-")[1]
+      $.ajax({
+          url: '/api/jobs/' + jobID,
+          type: 'DELETE',
+          success: function(data) {
+            this.fetchData();
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
     }
 
     setEquipment(k, ev) {
       this.setState({
-        selectedEquipment: k
+        equipment: k
       });
     }
 
@@ -44,18 +102,19 @@ export default class Jobs extends React.Component {
 
     saveJob(){
      var payload = {
+       name: $("#name").val(),
        day: $("#day").val(),
        hour: $("#hour").val(),
        minute: $("#minute").val(),
        action: this.state.equipmentAction,
-       equipment: this.state.selectedEquipment
-
+       equipment: this.state.equipments[this.state.equipment].id
      }
       $.ajax({
           url: '/api/jobs',
           type: 'PUT',
           data: JSON.stringify(payload),
           success: function(data) {
+            this.fetchData();
           }.bind(this),
           error: function(xhr, status, err) {
             console.log(err.toString());
@@ -64,12 +123,18 @@ export default class Jobs extends React.Component {
     };
 
     render() {
+      var eqName = '';
+      if(this.state.equipment != undefined){
+        eqName = this.state.equipments[this.state.equipment].name
+      }
+
       return (
           <div>
            Jobs
-           {this.jobList()}
+           <ul>{this.jobList()}</ul>
            <hr/>
-            Equipment: <DropdownButton  title={this.state.selectedEquipment} id="equipment" onSelect={this.setEquipment}>
+            Name: <input type="text" id="name" />
+            Equipment: <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
               {this.equipmentList()}
             </DropdownButton>
             <br />
