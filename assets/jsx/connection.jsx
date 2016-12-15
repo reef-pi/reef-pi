@@ -52,10 +52,9 @@ export default class Connection extends React.Component {
       this.setState({
         pin: Number(k)
       });
-
       var payload ={
         board: this.state.boards[this.state.board].id,
-        pin: this.state.pin
+        pin: Number(k)
       }
       this.props.updateHook(payload);
     }

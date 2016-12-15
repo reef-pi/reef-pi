@@ -93,12 +93,17 @@ func (j *JobAPI) Create(payload interface{}) error {
 	runner := func() {
 		// Trace pin from job's equipment
 		// invoke gpio call based on jobs action , using pin
-		log.Println("Job:", job.Name, " Pin:", pin)
 		embd.SetDirection(pin, embd.Out)
 		if job.Action == "off" {
-			embd.DigitalWrite(pin, embd.Low)
+			log.Println("Job:", job.Name, " Pin:", pin, "State: LOW")
+			if err := embd.DigitalWrite(pin, embd.Low); err != nil {
+				log.Println("ERROR:", err)
+			}
 		} else {
-			embd.DigitalWrite(pin, embd.High)
+			log.Println("Job:", job.Name, " Pin:", pin, "State: HIGH")
+			if err := embd.DigitalWrite(pin, embd.High); err != nil {
+				log.Println("ERROR:", err)
+			}
 		}
 	}
 	return j.cronRunner.AddFunc(cronSpec, runner)
