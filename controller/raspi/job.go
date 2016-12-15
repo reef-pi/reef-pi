@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"github.com/kidoman/embd"
-	_ "github.com/kidoman/embd/host/rpi"
+	"github.com/hybridgroup/gobot"
+	"github.com/hybridgroup/gobot/platforms/gpio"
 	"github.com/ranjib/reefer/controller"
 	"github.com/robfig/cron"
 	"log"
@@ -16,9 +16,10 @@ import (
 type JobAPI struct {
 	db         *bolt.DB
 	cronRunner *cron.Cron
+	conn       gobot.Connection
 }
 
-func NewJobAPI(db *bolt.DB, cronRunner *cron.Cron) (controller.CrudAPI, error) {
+func NewJobAPI(conn gobot.Connection, db *bolt.DB, cronRunner *cron.Cron) (controller.CrudAPI, error) {
 	err := db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte("jobs")) != nil {
 			return nil
@@ -33,6 +34,7 @@ func NewJobAPI(db *bolt.DB, cronRunner *cron.Cron) (controller.CrudAPI, error) {
 	return &JobAPI{
 		db:         db,
 		cronRunner: cronRunner,
+		conn:       conn,
 	}, nil
 }
 
@@ -91,17 +93,15 @@ func (j *JobAPI) Create(payload interface{}) error {
 	}
 	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
 	runner := func() {
-		// Trace pin from job's equipment
-		// invoke gpio call based on jobs action , using pin
-		embd.SetDirection(pin, embd.Out)
+		driver := gpio.NewDirectPinDriver(j.conn, job.Name, strconv.Itoa(pin))
 		if job.Action == "off" {
 			log.Println("Job:", job.Name, " Pin:", pin, "State: LOW")
-			if err := embd.DigitalWrite(pin, embd.Low); err != nil {
+			if err := driver.Off(); err != nil {
 				log.Println("ERROR:", err)
 			}
 		} else {
 			log.Println("Job:", job.Name, " Pin:", pin, "State: HIGH")
-			if err := embd.DigitalWrite(pin, embd.High); err != nil {
+			if err := driver.On(); err != nil {
 				log.Println("ERROR:", err)
 			}
 		}

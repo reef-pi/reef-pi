@@ -57,7 +57,7 @@ func New() (*Raspi, error) {
 		return nil, err
 	}
 	cronRunner := cron.New()
-	jobAPI, err := NewJobAPI(db, cronRunner)
+	jobAPI, err := NewJobAPI(conn, db, cronRunner)
 	if err != nil {
 		return nil, err
 	}
