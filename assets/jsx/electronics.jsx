@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 import Outlets from './outlets.jsx'
-import AddBoard from './add_board.jsx';
-import BoardsList from './list_boards.jsx';
+import Boards from './boards.jsx';
 
 export default class Electronics extends React.Component {
     constructor(props) {
@@ -18,8 +17,7 @@ export default class Electronics extends React.Component {
             <Outlets />
             <hr/>
             <h2><span className="label label-info">Boards</span></h2>
-            <BoardsList />
-            <AddBoard />
+            <Boards />
           </div>
           );
     }
