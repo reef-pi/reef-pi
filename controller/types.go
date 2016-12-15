@@ -39,6 +39,7 @@ type Job struct {
 	Hour      string `json:"hour"`
 	Equipment string `json:"equipment"`
 	Action    string `json:"action"`
+	Name      string `json:"name"`
 }
 
 type Connection struct {
