@@ -4,18 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	pi "github.com/hybridgroup/gobot/platforms/raspi"
+	"github.com/kidoman/embd"
+	_ "github.com/kidoman/embd/host/rpi"
 	"github.com/ranjib/reefer/controller"
+	"github.com/robfig/cron"
 	"log"
 	"strconv"
+	"strings"
 )
 
 type JobAPI struct {
-	conn *pi.RaspiAdaptor
-	db   *bolt.DB
+	db         *bolt.DB
+	cronRunner *cron.Cron
 }
 
-func NewJobAPI(conn *pi.RaspiAdaptor, db *bolt.DB) (controller.CrudAPI, error) {
+func NewJobAPI(db *bolt.DB, cronRunner *cron.Cron) (controller.CrudAPI, error) {
 	err := db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte("jobs")) != nil {
 			return nil
@@ -28,9 +31,39 @@ func NewJobAPI(conn *pi.RaspiAdaptor, db *bolt.DB) (controller.CrudAPI, error) {
 		return nil, err
 	}
 	return &JobAPI{
-		conn: conn,
-		db:   db,
+		db:         db,
+		cronRunner: cronRunner,
 	}, nil
+}
+
+func (j *JobAPI) PinForJob(job controller.Job) (int, error) {
+	var err error
+	var data []byte
+	var eq controller.Equipment
+	err = j.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("equipments"))
+		data = b.Get([]byte(job.Equipment))
+		return nil
+	})
+	if err != nil {
+		return 0, err
+	}
+	if err = json.Unmarshal(data, &eq); err != nil {
+		return 0, err
+	}
+	err = j.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("outlets"))
+		data = b.Get([]byte(eq.Outlet))
+		return nil
+	})
+	if err != nil {
+		return 0, err
+	}
+	var outlet controller.Outlet
+	if err = json.Unmarshal(data, &outlet); err != nil {
+		return 0, err
+	}
+	return int(outlet.Connection.Pin), nil
 }
 
 func (j *JobAPI) Create(payload interface{}) error {
@@ -38,8 +71,12 @@ func (j *JobAPI) Create(payload interface{}) error {
 	if !ok {
 		return fmt.Errorf("Failed to typecast to job")
 	}
+	pin, err1 := j.PinForJob(job)
+	if err1 != nil {
+		return err1
+	}
 
-	return j.db.Update(func(tx *bolt.Tx) error {
+	err := j.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
 		id, _ := b.NextSequence()
 		job.ID = strconv.Itoa(int(id))
@@ -49,6 +86,22 @@ func (j *JobAPI) Create(payload interface{}) error {
 		}
 		return b.Put([]byte(job.ID), data)
 	})
+	if err != nil {
+		return err
+	}
+	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
+	runner := func() {
+		// Trace pin from job's equipment
+		// invoke gpio call based on jobs action , using pin
+		log.Println("Job:", job.Name, " Pin:", pin)
+		embd.SetDirection(pin, embd.Out)
+		if job.Action == "off" {
+			embd.DigitalWrite(pin, embd.Low)
+		} else {
+			embd.DigitalWrite(pin, embd.High)
+		}
+	}
+	return j.cronRunner.AddFunc(cronSpec, runner)
 }
 
 func (j *JobAPI) Get(id string) (interface{}, error) {

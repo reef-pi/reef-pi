@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	pi "github.com/hybridgroup/gobot/platforms/raspi"
+	"github.com/kidoman/embd"
+	_ "github.com/kidoman/embd/host/rpi"
 	"github.com/ranjib/reefer/controller"
+	"github.com/robfig/cron"
 	"log"
 	"time"
 )
@@ -20,6 +23,7 @@ type Raspi struct {
 	outletAPI    controller.CrudAPI
 	jobAPI       controller.CrudAPI
 	equipmentAPI controller.CrudAPI
+	cronRunner   *cron.Cron
 }
 
 func (r *Raspi) Name() string {
@@ -52,7 +56,8 @@ func New() (*Raspi, error) {
 	if err != nil {
 		return nil, err
 	}
-	jobAPI, err := NewJobAPI(conn, db)
+	cronRunner := cron.New()
+	jobAPI, err := NewJobAPI(db, cronRunner)
 	if err != nil {
 		return nil, err
 	}
@@ -70,6 +75,7 @@ func New() (*Raspi, error) {
 		schedules:    make(map[controller.Device]controller.Scheduler),
 		lighting:     NewLighting(),
 		equipmentAPI: equipmentAPI,
+		cronRunner:   cronRunner,
 	}
 	return r, nil
 }
@@ -90,6 +96,8 @@ func (r *Raspi) Start() error {
 	for dev, sched := range r.schedules {
 		go sched.Start(dev)
 	}
+	r.cronRunner.Start()
+	embd.InitGPIO()
 	log.Println("Started Controller:", r.Name())
 	return nil
 }
@@ -98,6 +106,8 @@ func (r *Raspi) Stop() error {
 	for _, sched := range r.schedules {
 		sched.Stop()
 	}
+	r.cronRunner.Stop()
+	embd.CloseGPIO()
 	log.Println("Stopped Controller:", r.Name())
 	defer r.db.Close()
 	return nil

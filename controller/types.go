@@ -37,6 +37,7 @@ type Job struct {
 	Minute    string `json:"minute"`
 	Day       string `json:"day"`
 	Hour      string `json:"hour"`
+	Second    string `json:"second"`
 	Equipment string `json:"equipment"`
 	Action    string `json:"action"`
 	Name      string `json:"name"`
