@@ -19,7 +19,7 @@ export default class Outlets extends React.Component {
         this.setConnection = this.setConnection.bind(this);
     }
 
-    componentDidMount(){
+    componentWillMount(){
       this.fetchData();
     }
 
@@ -74,7 +74,7 @@ export default class Outlets extends React.Component {
           <li key={v.id}><span>{v.name} </span> <input id={"outlet-"+v.id} type="button" value="delete" onClick={this.removeOutlet} className="btn btn-danger"/></li>
         )
       }.bind(this));
-      return <tbody>{rows}</tbody>;
+      return rows;
     }
 
     addOutlet(){

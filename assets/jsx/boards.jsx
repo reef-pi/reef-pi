@@ -114,7 +114,6 @@ export default class Boards extends React.Component {
       }
       return (
           <div>
-            <hr />
             <DropdownButton  title="Board" id="board" onSelect={this.loadConfiguration} dropup>
               {this.generateMenuList()}
             </DropdownButton>

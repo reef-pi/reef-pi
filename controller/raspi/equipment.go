@@ -89,7 +89,7 @@ func (e *EquipmentAPI) List() (*[]interface{}, error) {
 	err := e.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("equipments"))
 		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, _ = c.Next() {
+		for k, v := c.First(); k != nil; k, v = c.Next() {
 			var e controller.Equipment
 			if err := json.Unmarshal(v, &e); err != nil {
 				return err

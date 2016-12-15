@@ -34,7 +34,7 @@ export default class EquipmentList extends React.Component {
     equipments(){
       var list = []
       $.each(this.state.data, function(k, v){
-        list.push(<li>{v["name"]}</li>)
+        list.push(<li key={k}>{v.name}</li>)
       }.bind(this));
       return list;
     }
