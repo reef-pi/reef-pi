@@ -7,6 +7,7 @@ import (
 	pi "github.com/hybridgroup/gobot/platforms/raspi"
 	"github.com/ranjib/reefer/controller"
 	"log"
+	"strconv"
 )
 
 type JobAPI struct {
@@ -38,12 +39,14 @@ func (j *JobAPI) Create(payload interface{}) error {
 		return fmt.Errorf("Failed to typecast to job")
 	}
 
-	data, err := json.Marshal(job)
-	if err != nil {
-		return err
-	}
 	return j.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
+		id, _ := b.NextSequence()
+		job.ID = strconv.Itoa(int(id))
+		data, err := json.Marshal(job)
+		if err != nil {
+			return err
+		}
 		return b.Put([]byte(job.ID), data)
 	})
 }
@@ -87,8 +90,12 @@ func (j *JobAPI) List() (*[]interface{}, error) {
 	err := j.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
 		c := b.Cursor()
-		for k, _ := c.First(); k != nil; k, _ = c.Next() {
-			list = append(list, string(k))
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			var j controller.Job
+			if err := json.Unmarshal(v, &j); err != nil {
+				return err
+			}
+			list = append(list, j)
 		}
 		return nil
 	})

@@ -47,7 +47,7 @@ func (h *APIHandler) CreateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.controller.Jobs().Create(j); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		errorResponse(http.StatusInternalServerError, "Failed to create job. Error: "+err.Error(), w)
 		return
 	}
 }
