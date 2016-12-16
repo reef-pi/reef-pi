@@ -9,7 +9,8 @@ export default class Jobs extends React.Component {
           equipment: undefined,
           equipmentAction: 'on',
           equipments: [],
-          jobs: []
+          jobs: [],
+          addJob: false
         };
         this.jobList = this.jobList.bind(this);
         this.equipmentList = this.equipmentList.bind(this);
@@ -18,12 +19,14 @@ export default class Jobs extends React.Component {
         this.saveJob = this.saveJob.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.removeJob = this.removeJob.bind(this);
+        this.toggleAddJobDiv = this.toggleAddJobDiv.bind(this);
     }
 
     componentWillMount(){
+
+
       this.fetchData();
     }
-
 
     fetchData(){
       $.ajax({
@@ -59,7 +62,7 @@ export default class Jobs extends React.Component {
       $.each(this.state.jobs, function(k, v){
         list.push(
           <li key={k} id={v.id}>
-            {v.name} <input type="button" onClick={this.removeJob} id={"job-"+ v.id} className="btn btn-danger" value="-"/>
+            {v.name} <input type="button" onClick={this.removeJob} id={"job-"+ v.id} value="delete"/>
           </li>
         );
       }.bind(this));
@@ -116,6 +119,7 @@ export default class Jobs extends React.Component {
           data: JSON.stringify(payload),
           success: function(data) {
             this.fetchData();
+            this.toggleAddJobDiv();
           }.bind(this),
           error: function(xhr, status, err) {
             console.log(err.toString());
@@ -123,33 +127,50 @@ export default class Jobs extends React.Component {
       });
     };
 
+    toggleAddJobDiv(){
+      this.setState({
+        addJob: !this.state.addJob
+      });
+      $("#name").val('');
+      $("#day").val('');
+      $("#hour").val('');
+      $("#minute").val('');
+      $("#second").val('');
+    }
+
     render() {
       var eqName = '';
       if(this.state.equipment != undefined){
         eqName = this.state.equipments[this.state.equipment].name
       }
 
+      var dStyle = {
+          display: this.state.addJob ? 'block' : 'none'
+      };
       return (
           <div>
-           Jobs
            <ul>{this.jobList()}</ul>
-           <hr/>
-            Name: <input type="text" id="name" />
-            Equipment: <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
-              {this.equipmentList()}
-            </DropdownButton>
-            <br />
-            Run at:
-            <br />
-            Day: <input type="text" id="day" />
-            Hour: <input type="text" id="hour"/>
-            Minute: <input type="text" id="minute" />
-            Second: <input type="text" id="second" />
-            Action: <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
-              <MenuItem key="on" eventKey="on"> On </MenuItem>
-              <MenuItem key="off" eventKey="off"> Off </MenuItem>
-            </DropdownButton>
-            <input type="button" value="save" onClick={this.saveJob} />
+           <div>
+              <input type="button" value={this.state.addJob ? "-" : "+" } onClick = {this.toggleAddJobDiv}/>
+             <div style={dStyle}>
+                Name: <input type="text" id="name" />
+                Equipment: <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
+                  {this.equipmentList()}
+                </DropdownButton>
+                <br />
+                Run at:
+                <br />
+                Day: <input type="text" id="day" />
+                Hour: <input type="text" id="hour"/>
+                Minute: <input type="text" id="minute" />
+                Second: <input type="text" id="second" />
+                Action: <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
+                  <MenuItem key="on" eventKey="on"> On </MenuItem>
+                  <MenuItem key="off" eventKey="off"> Off </MenuItem>
+                </DropdownButton>
+                <input type="button" value="add" onClick={this.saveJob} />
+              </div>
+             </div>
           </div>
           );
     }
