@@ -13,11 +13,11 @@ export default class Electronics extends React.Component {
     render() {
       return (
           <div>
-            <h2>Outlets</h2>
-            <Outlets />
-            <hr/>
             <h2>Boards</h2>
             <Boards />
+            <hr/>
+            <h2>Outlets</h2>
+            <Outlets />
           </div>
           );
     }

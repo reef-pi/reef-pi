@@ -5,16 +5,26 @@ export default class Boards extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+          addBoard: false,
           boards: []
         };
         this.addBoard = this.addBoard.bind(this);
         this.boardList = this.boardList.bind(this);
         this.deleteBoard = this.deleteBoard.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.toggleAddBoardDiv = this.toggleAddBoardDiv.bind(this);
     }
 
     componentWillMount() {
       this.fetchData();
+    }
+
+    toggleAddBoardDiv() {
+      this.setState({
+        addBoard: !this.state.addBoard
+      });
+      $('#boardName').val('');
+      $('#boardPins').val('');
     }
 
     fetchData(){
@@ -24,6 +34,7 @@ export default class Boards extends React.Component {
             dataType: 'json',
             success: function(data) {
               this.setState({boards: data});
+              this.toggleAddBoardDiv();
             }.bind(this),
             error: function(xhr, status, err) {
               console.log(err.toString());
@@ -68,29 +79,30 @@ export default class Boards extends React.Component {
       var list = []
       $.each(this.state.boards, function(k, v){
         list.push(
-            <li key={k}>
-              {v.name}
-              <input type="button" value="delete" id={v.id} onClick={this.deleteBoard} />
-            </li>
-            );
+          <li key={k}>
+            {v.name}
+            <input type="button" value="delete" id={v.id} onClick={this.deleteBoard}/>
+          </li>
+        );
       }.bind(this));
       return list;
     }
 
 
     render() {
+      var dStyle = {
+          display: this.state.addBoard ? 'block' : 'none'
+      };
       return(
         <div>
-          <div>
-             Board list:
-            <ul>
+          <ul>
               { this.boardList() }
-            </ul>
-          </div>
-          <div>
-            Name: <input type="text" id="boardName"/>
-            Pins: <input type="text" id="boardPins"/>
-            <input type="button" value="submit" onClick={this.addBoard}/>
+          </ul>
+          <input type="button" value={this.state.addBoard ? "-" : "+" } onClick = {this.toggleAddBoardDiv}/>
+          <div style={dStyle}>
+              Name: <input type="text" id="boardName"/>
+              Pins: <input type="text" id="boardPins"/>
+              <input type="button" value="add board" onClick={this.addBoard}/>
           </div>
         </div>
       );

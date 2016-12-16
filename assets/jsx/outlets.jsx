@@ -8,6 +8,7 @@ export default class Outlets extends React.Component {
         super(props);
         this.state = {
           outlets: [],
+          addOutlet: false,
           connection: {}
         };
 
@@ -17,6 +18,7 @@ export default class Outlets extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.listOutlets = this.listOutlets.bind(this)
         this.setConnection = this.setConnection.bind(this);
+        this.toggleAddOutletDiv = this.toggleAddOutletDiv.bind(this);
     }
 
     componentWillMount(){
@@ -27,6 +29,13 @@ export default class Outlets extends React.Component {
       this.setState({
         connection: conn
       });
+    }
+
+    toggleAddOutletDiv() {
+      this.setState({
+        addOutlet: !this.state.addOutlet
+      });
+      $('#outlet-name').val('');
     }
 
     removeOutlet(ev){
@@ -71,7 +80,7 @@ export default class Outlets extends React.Component {
       var rows =[]
       $.each(this.state.outlets, function(k, v){
         rows.push(
-          <li key={v.id}><span>{v.name} </span> <input id={"outlet-"+v.id} type="button" value="delete" onClick={this.removeOutlet} className="btn btn-danger"/></li>
+          <li key={v.id}><span>{v.name} </span> <input id={"outlet-"+v.id} type="button" value="delete" onClick={this.removeOutlet} /></li>
         )
       }.bind(this));
       return rows;
@@ -88,6 +97,7 @@ export default class Outlets extends React.Component {
           data: JSON.stringify(payload),
           success: function(data) {
             this.fetchData();
+            this.toggleAddOutletDiv();
           }.bind(this),
           error: function(xhr, status, err) {
             console.log(err.toString());
@@ -96,13 +106,17 @@ export default class Outlets extends React.Component {
     }
 
     render() {
+      var dStyle = {
+          display: this.state.addOutlet ? 'block' : 'none'
+      };
       return (
           <div>
             <ul>
               {this.listOutlets()}
             </ul>
             <div>
-              <table>
+              <input type="button" value={this.state.addOutlet ? "-" : "+" } onClick = {this.toggleAddOutletDiv}/>
+              <table style={dStyle}>
                 <tbody>
                   <tr>
                       <td>
@@ -112,7 +126,7 @@ export default class Outlets extends React.Component {
                         <Connection updateHook={this.setConnection}/>
                       </td>
                       <td>
-                        <input type="button" value="save" onClick={this.addOutlet} className="btn btn-success"/>
+                        <input type="button" value="save" onClick={this.addOutlet} />
                       </td>
                   </tr>
                 </tbody>
