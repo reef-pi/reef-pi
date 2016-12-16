@@ -7,7 +7,7 @@ import (
 	"github.com/hybridgroup/gobot"
 	"github.com/hybridgroup/gobot/platforms/gpio"
 	"github.com/ranjib/reefer/controller"
-	"github.com/robfig/cron"
+	"gopkg.in/robfig/cron.v2"
 	"log"
 	"strconv"
 	"strings"
@@ -17,9 +17,10 @@ type JobAPI struct {
 	db         *bolt.DB
 	cronRunner *cron.Cron
 	conn       gobot.Connection
+	cronIDs    map[string]cron.EntryID
 }
 
-func NewJobAPI(conn gobot.Connection, db *bolt.DB, cronRunner *cron.Cron) (controller.CrudAPI, error) {
+func NewJobAPI(conn gobot.Connection, db *bolt.DB) (*JobAPI, error) {
 	err := db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte("jobs")) != nil {
 			return nil
@@ -33,9 +34,23 @@ func NewJobAPI(conn gobot.Connection, db *bolt.DB, cronRunner *cron.Cron) (contr
 	}
 	return &JobAPI{
 		db:         db,
-		cronRunner: cronRunner,
+		cronRunner: cron.New(),
 		conn:       conn,
+		cronIDs:    make(map[string]cron.EntryID),
 	}, nil
+}
+
+func (j *JobAPI) Start() error {
+	if err := j.reload(); err != nil {
+		return err
+	}
+	j.cronRunner.Start()
+	return nil
+}
+
+func (j *JobAPI) Stop() error {
+	j.cronRunner.Stop()
+	return nil
 }
 
 func (j *JobAPI) PinForJob(job controller.Job) (int, error) {
@@ -73,10 +88,6 @@ func (j *JobAPI) Create(payload interface{}) error {
 	if !ok {
 		return fmt.Errorf("Failed to typecast to job")
 	}
-	pin, err1 := j.PinForJob(job)
-	if err1 != nil {
-		return err1
-	}
 
 	err := j.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
@@ -88,6 +99,35 @@ func (j *JobAPI) Create(payload interface{}) error {
 		}
 		return b.Put([]byte(job.ID), data)
 	})
+	if err != nil {
+		return err
+	}
+	return j.addToCron(job)
+}
+
+func (j *JobAPI) reload() error {
+	jobs, err := j.List()
+	if err != nil {
+		return err
+	}
+	if jobs == nil {
+		log.Printf("No jobs present")
+		return nil
+	}
+	for _, rawJob := range *jobs {
+		job, ok := rawJob.(controller.Job)
+		if !ok {
+			fmt.Errorf("Failed to typecast to job")
+		}
+		if err := j.addToCron(job); err != nil {
+			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
+		}
+	}
+	return nil
+}
+
+func (j *JobAPI) addToCron(job controller.Job) error {
+	pin, err := j.PinForJob(job)
 	if err != nil {
 		return err
 	}
@@ -106,7 +146,21 @@ func (j *JobAPI) Create(payload interface{}) error {
 			}
 		}
 	}
-	return j.cronRunner.AddFunc(cronSpec, runner)
+	index, err := j.cronRunner.AddFunc(cronSpec, runner)
+	if err != nil {
+		return err
+	}
+	j.cronIDs[job.ID] = index
+	return nil
+}
+
+func (j *JobAPI) deleteFromCron(jobID string) error {
+	id, ok := j.cronIDs[jobID]
+	if !ok {
+		return fmt.Errorf("Cron ID not found for job ID:", jobID)
+	}
+	j.cronRunner.Remove(id)
+	return nil
 }
 
 func (j *JobAPI) Get(id string) (interface{}, error) {
@@ -138,10 +192,14 @@ func (j *JobAPI) Update(id string, payload interface{}) error {
 }
 
 func (j *JobAPI) Delete(id string) error {
-	return j.db.Update(func(tx *bolt.Tx) error {
+	err := j.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
 		return b.Delete([]byte(id))
 	})
+	if err != nil {
+		return err
+	}
+	return j.deleteFromCron(id)
 }
 func (j *JobAPI) List() (*[]interface{}, error) {
 	list := []interface{}{}
