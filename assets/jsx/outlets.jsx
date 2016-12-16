@@ -126,7 +126,7 @@ export default class Outlets extends React.Component {
                         <Connection updateHook={this.setConnection}/>
                       </td>
                       <td>
-                        <input type="button" value="save" onClick={this.addOutlet} />
+                        <input type="button" value="add" onClick={this.addOutlet} />
                       </td>
                   </tr>
                 </tbody>

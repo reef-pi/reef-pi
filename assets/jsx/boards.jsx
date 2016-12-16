@@ -34,7 +34,6 @@ export default class Boards extends React.Component {
             dataType: 'json',
             success: function(data) {
               this.setState({boards: data});
-              this.toggleAddBoardDiv();
             }.bind(this),
             error: function(xhr, status, err) {
               console.log(err.toString());
@@ -52,6 +51,7 @@ export default class Boards extends React.Component {
             }),
             success: function(data) {
               this.fetchData();
+              this.toggleAddBoardDiv();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.log(err.toString());
@@ -102,7 +102,7 @@ export default class Boards extends React.Component {
           <div style={dStyle}>
               Name: <input type="text" id="boardName"/>
               Pins: <input type="text" id="boardPins"/>
-              <input type="button" value="add board" onClick={this.addBoard}/>
+              <input type="button" value="add" onClick={this.addBoard}/>
           </div>
         </div>
       );

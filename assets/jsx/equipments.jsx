@@ -8,7 +8,8 @@ export default class Equipments extends React.Component {
         this.state = {
           selectedOutlet: undefined,
           outlets: [],
-          equipments: []
+          equipments: [],
+          addEquipment: false
         };
         this.setOutlet = this.setOutlet.bind(this);
         this.outletList = this.outletList.bind(this);
@@ -16,7 +17,9 @@ export default class Equipments extends React.Component {
         this.fetchData = this.fetchData.bind(this);
         this.removeEquiment = this.removeEquiment.bind(this);
         this.equipmentList = this.equipmentList.bind(this);
+        this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this);
     }
+
     removeEquiment(ev){
       var equipmentID = ev.target.id.split("-")[1]
       $.ajax({
@@ -37,7 +40,7 @@ export default class Equipments extends React.Component {
         list.push(
             <li key={k}>
               {v.name}
-              <input id={"equipment-"+v.id} type="button" value="-" onClick={this.removeEquiment} className="btn btn-danger"/>
+              <input id={"equipment-"+v.id} type="button" value="delete" onClick={this.removeEquiment}/>
             </li>
             );
       }.bind(this));
@@ -103,6 +106,7 @@ export default class Equipments extends React.Component {
           data: JSON.stringify(payload),
           success: function(data) {
             this.fetchData();
+            this.toggleAddEquipmentDiv();
           }.bind(this),
           error: function(xhr, status, err) {
             console.log(err.toString());
@@ -110,29 +114,40 @@ export default class Equipments extends React.Component {
       });
     }
 
+    toggleAddEquipmentDiv(){
+      this.setState({
+        addEquipment: !this.state.addEquipment
+      });
+      $('#outlet-name').val('');
+    }
+
     render() {
       var outlet = ''
       if(this.state.selectedOutlet != undefined) {
         outlet = this.state.outlets[this.state.selectedOutlet].name;
       }
+      var dStyle = {
+          display: this.state.addEquipment ? 'block' : 'none'
+      };
       return (
           <div>
-            Equipment list 
             <ul>
               {this.equipmentList()}
             </ul>
-           <hr/>
-           Add
-           <br />
-           Name: <input type="text" id="equipmentName" />
-           Outlet:
-           <DropdownButton
-             title={outlet}
-             id="outlet"
-             onSelect={this.setOutlet}>
-              {this.outletList()}
-            </DropdownButton>
-            <input type="button" value="save"  onClick={this.addEquipment} />
+            <div>
+             <input type="button" value={this.state.addEquipment ? "-" : "+" } onClick = {this.toggleAddEquipmentDiv}/>
+             <div style={dStyle}>
+               Name: <input type="text" id="equipmentName" />
+               Outlet:
+               <DropdownButton
+                 title={outlet}
+                 id="outlet"
+                 onSelect={this.setOutlet}>
+                  {this.outletList()}
+                </DropdownButton>
+                <input type="button" value="save"  onClick={this.addEquipment} />
+              </div>
+            </div>
           </div>
           );
     }

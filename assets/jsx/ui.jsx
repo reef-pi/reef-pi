@@ -5,10 +5,6 @@ import Dashboard from './dashboard.jsx';
 import Electronics from './electronics.jsx';
 import Equipments from './equipments.jsx';
 import Jobs from './jobs.jsx';
-import Lighting from './lighting.jsx';
-import ATO from './ato.jsx';
-import Temperature from './temperature.jsx';
-import WaveMaker from './wave_maker.jsx';
 
 export default class App extends Component {
   handleSelect(index, last) {
@@ -22,10 +18,6 @@ export default class App extends Component {
           <Tab>Electronics</Tab>
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
-          <Tab>Lighting</Tab>
-          <Tab>ATO</Tab>
-          <Tab>Temperature</Tab>
-          <Tab>WaveMaker</Tab>
         </TabList>
         <TabPanel>
          <Dashboard />
@@ -38,18 +30,6 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <Jobs />
-        </TabPanel>
-        <TabPanel>
-         <Lighting />
-        </TabPanel>
-        <TabPanel>
-          <ATO />
-        </TabPanel>
-        <TabPanel>
-          <Temperature />
-        </TabPanel>
-        <TabPanel>
-          <WaveMaker />
         </TabPanel>
       </Tabs>
     );
