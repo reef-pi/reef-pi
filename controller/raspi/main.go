@@ -99,8 +99,8 @@ func (r *Raspi) Stop() error {
 	for _, sched := range r.schedules {
 		sched.Stop()
 	}
-	r.jobAPI.Stop()
-	log.Println("Stopped Controller:", r.Name())
+	defer r.jobAPI.Stop()
 	defer r.db.Close()
+	log.Println("Stopped Controller:", r.Name())
 	return nil
 }
