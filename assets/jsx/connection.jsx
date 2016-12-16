@@ -87,9 +87,11 @@ export default class Connection extends React.Component {
      }
       return(
           <div>
+          Board:
             <DropdownButton  title={boardName} id="board-name" onSelect={this.setBoard}>
               {this.boardList()}
             </DropdownButton>
+          Pin:
             <DropdownButton  title={this.state.pin} id="pin-number" onSelect={this.setPin}>
               {this.pinList()}
             </DropdownButton>

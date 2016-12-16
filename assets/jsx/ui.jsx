@@ -5,7 +5,6 @@ import Dashboard from './dashboard.jsx';
 import Electronics from './electronics.jsx';
 import Equipments from './equipments.jsx';
 import Jobs from './jobs.jsx';
-import DeviceManagement from './device_management.jsx';
 import Lighting from './lighting.jsx';
 import ATO from './ato.jsx';
 import Temperature from './temperature.jsx';
@@ -23,7 +22,6 @@ export default class App extends Component {
           <Tab>Electronics</Tab>
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
-          <Tab>Devices</Tab>
           <Tab>Lighting</Tab>
           <Tab>ATO</Tab>
           <Tab>Temperature</Tab>
@@ -40,9 +38,6 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <Jobs />
-        </TabPanel>
-        <TabPanel>
-          <DeviceManagement />
         </TabPanel>
         <TabPanel>
          <Lighting />

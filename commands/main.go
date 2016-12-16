@@ -47,8 +47,6 @@ func main() {
 	if err := controller.Start(); err != nil {
 		log.Fatal(err)
 	}
-	defer controller.Stop()
-
 	if err := webui.SetupServer(config.Server, controller, !*noAuth); err != nil {
 		log.Fatal("ERROR:", err)
 	}
