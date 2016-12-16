@@ -23,8 +23,7 @@ go-get:
 	go get github.com/hybridgroup/gobot
 	go get github.com/kidoman/embd
 	go get github.com/gorilla/mux
-	go get github.com/robfig/cron
-
+	go get gopkg.in/robfig/cron.v2
 .PHONY: vet
 vet:
 	go tool vet -shadow ./...
