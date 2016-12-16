@@ -11,9 +11,6 @@ func (r *Raspi) Boards() controller.CrudAPI {
 func (r *Raspi) Outlets() controller.CrudAPI {
 	return r.outletAPI
 }
-func (r *Raspi) Devices() controller.CrudAPI {
-	return r.deviceAPI
-}
 
 func (r *Raspi) Modules() controller.CrudAPI {
 	return &controller.NullCrudAPI{}

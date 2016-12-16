@@ -9,7 +9,6 @@ type CrudAPI interface {
 }
 
 type API interface {
-	Devices() CrudAPI
 	Lighting() LightingAPI
 	Jobs() CrudAPI
 	Equipments() CrudAPI
@@ -20,7 +19,6 @@ type API interface {
 
 type Controller interface {
 	API
-	Schedule(Device, Scheduler) error
 	GetModule(string) (Module, error)
 	Start() error
 	Stop() error

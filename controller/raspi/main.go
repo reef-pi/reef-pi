@@ -12,10 +12,8 @@ import (
 type Raspi struct {
 	db           *bolt.DB
 	conn         *pi.RaspiAdaptor
-	schedules    map[controller.Device]controller.Scheduler
 	modules      map[string]controller.Module
 	lighting     *Lighting
-	deviceAPI    controller.CrudAPI
 	boardAPI     controller.CrudAPI
 	outletAPI    controller.CrudAPI
 	jobAPI       *JobAPI
@@ -40,10 +38,6 @@ func New() (*Raspi, error) {
 		return nil, err
 	}
 	conn := pi.NewRaspiAdaptor("raspi")
-	deviceAPI, err := NewDeviceAPI(conn, db)
-	if err != nil {
-		return nil, err
-	}
 	boardAPI, err := NewBoardAPI(db)
 	if err != nil {
 		return nil, err
@@ -63,44 +57,24 @@ func New() (*Raspi, error) {
 	r := &Raspi{
 		db:           db,
 		conn:         conn,
-		deviceAPI:    deviceAPI,
 		outletAPI:    outletAPI,
 		boardAPI:     boardAPI,
 		jobAPI:       jobAPI,
-		schedules:    make(map[controller.Device]controller.Scheduler),
 		lighting:     NewLighting(),
 		equipmentAPI: equipmentAPI,
 	}
 	return r, nil
 }
 
-func (r *Raspi) Schedule(dev controller.Device, sched controller.Scheduler) error {
-	if _, ok := r.schedules[dev]; ok {
-		return fmt.Errorf("Device %s already scheduled", dev.Name())
-	}
-	log.Printf("Added %s[ %s]\n", sched.Name(), dev.Name())
-	r.schedules[dev] = sched
-	if !sched.IsRunning() {
-		go sched.Start(dev)
-	}
-	return nil
-}
-
 func (r *Raspi) Start() error {
-	for dev, sched := range r.schedules {
-		go sched.Start(dev)
-	}
 	r.jobAPI.Start()
 	log.Println("Started Controller:", r.Name())
 	return nil
 }
 
 func (r *Raspi) Stop() error {
-	for _, sched := range r.schedules {
-		sched.Stop()
-	}
-	defer r.jobAPI.Stop()
-	defer r.db.Close()
+	r.jobAPI.Stop()
+	r.db.Close()
 	log.Println("Stopped Controller:", r.Name())
 	return nil
 }

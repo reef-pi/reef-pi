@@ -23,7 +23,6 @@ export default class App extends Component {
           <Tab>Electronics</Tab>
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
-          <Tab>Devices</Tab>
           <Tab>Lighting</Tab>
           <Tab>ATO</Tab>
           <Tab>Temperature</Tab>
@@ -40,9 +39,6 @@ export default class App extends Component {
         </TabPanel>
         <TabPanel>
           <Jobs />
-        </TabPanel>
-        <TabPanel>
-          <DeviceManagement />
         </TabPanel>
         <TabPanel>
          <Lighting />
