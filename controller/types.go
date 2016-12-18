@@ -15,6 +15,7 @@ type API interface {
 	Modules() CrudAPI
 	Boards() CrudAPI
 	Outlets() CrudAPI
+	StartTime() string
 }
 
 type Controller interface {

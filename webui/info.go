@@ -9,8 +9,9 @@ import (
 )
 
 type ControllerInfo struct {
-	IP   string `json:"ip"`
-	Time string `json:"time"`
+	IP        string `json:"ip"`
+	Time      string `json:"time"`
+	StartTime string `json:"start_time"`
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
@@ -19,8 +20,9 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
 	}
 	info := ControllerInfo{
-		Time: time.Now().Format("Mon Jan 2 15:04:05"),
-		IP:   ip,
+		Time:      time.Now().Format("Mon Jan 2 15:04:05"),
+		IP:        ip,
+		StartTime: h.controller.StartTime(),
 	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
