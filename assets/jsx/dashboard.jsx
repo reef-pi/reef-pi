@@ -6,7 +6,8 @@ export default class Dashboard extends React.Component {
         super(props);
         this.state = {
           ip: '',
-          time: ''
+          time: '',
+          start_time: ''
         }
         this.onChange = this.onChange.bind(this)
     }
@@ -23,7 +24,8 @@ export default class Dashboard extends React.Component {
             success: function(data) {
               this.setState({
                 ip: data.ip,
-                time: data.time
+                time: data.time,
+                start_time: data.start_time
               });
             }.bind(this),
             error: function(xhr, status, err) {
@@ -43,6 +45,7 @@ export default class Dashboard extends React.Component {
             <ul>
               <li> Time: {this.state.time}</li>
               <li> IP: {this.state.ip} </li>
+              <li> Up Since: {this.state.start_time} </li>
             </ul>
           </div>
           );

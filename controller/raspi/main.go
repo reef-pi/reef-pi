@@ -68,12 +68,14 @@ func New() (*Raspi, error) {
 
 func (r *Raspi) Start() error {
 	r.jobAPI.Start()
+	r.logStartTime()
 	log.Println("Started Controller:", r.Name())
 	return nil
 }
 
 func (r *Raspi) Stop() error {
 	r.jobAPI.Stop()
+	r.logStopTime()
 	r.db.Close()
 	log.Println("Stopped Controller:", r.Name())
 	return nil
