@@ -3,11 +3,33 @@ package webui
 import (
 	"fmt"
 	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/providers/google"
 	"github.com/stretchr/objx"
 	"log"
 	"net/http"
 	"strings"
 )
+
+type AuthConfig struct {
+	OauthID          string   `yaml:"id"`
+	OauthSecret      string   `yaml:"secret"`
+	OauthCallbackUrl string   `yaml:"callback_url"`
+	Domain           string   `yaml:"domain"`
+	Users            []string `yaml:"users"`
+	GomniAuthSecret  string   `yaml:"gomni_auth_secret"`
+}
+
+func (a *AuthConfig) Validate() error {
+	if a.GomniAuthSecret == "" {
+		return fmt.Errorf("Please set auth secret")
+	}
+	return nil
+}
+func (a *AuthConfig) SetupOAuth() {
+	provider := google.New(a.OauthID, a.OauthSecret, a.OauthCallbackUrl)
+	gomniauth.SetSecurityKey(a.GomniAuthSecret)
+	gomniauth.WithProviders(provider)
+}
 
 type authHandler struct {
 	next http.Handler
@@ -76,13 +98,13 @@ func (s *Server) loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		parts := strings.Split(user.Email(), "@")
 		// externalize config
-		if parts[1] != s.config.Domain {
+		if parts[1] != s.config.Auth.Domain {
 			errorResponse(http.StatusForbidden, "Unauthorized domain", w)
 			return
 		}
 		found := false
 		log.Println("User: ", parts[0])
-		for _, u := range s.config.Users {
+		for _, u := range s.config.Auth.Users {
 			log.Println("Valid user: ", u)
 			if u == parts[0] {
 				found = true
