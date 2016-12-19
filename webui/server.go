@@ -2,27 +2,15 @@ package webui
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ranjib/reefer/controller"
-	"github.com/stretchr/gomniauth"
-	"github.com/stretchr/gomniauth/providers/google"
 	"log"
 	"net/http"
 )
 
-type OAuthConfig struct {
-	OauthID          string `yaml:"id"`
-	OauthSecret      string `yaml:"secret"`
-	OauthCallbackUrl string `yaml:"callback_url"`
-}
-
 type ServerConfig struct {
-	Domain          string      `yaml:"domain"`
-	Users           []string    `yaml:"users"`
-	Auth            OAuthConfig `yaml:"auth"`
-	GomniAuthSecret string      `yaml:"gomni_auth_secret"`
-	ImageDirectory  string      `yaml:"image_directory"`
-	Interface       string      `yaml:"interface"`
+	Auth           AuthConfig `yaml:"auth"`
+	ImageDirectory string     `yaml:"image_directory"`
+	Interface      string     `yaml:"interface"`
 }
 
 type Server struct {
@@ -43,16 +31,6 @@ func errorResponse(header int, msg string, w http.ResponseWriter) {
 	w.Write(js)
 }
 
-func (s *Server) SetupOAuth() error {
-	if s.config.GomniAuthSecret == "" {
-		return fmt.Errorf("Please set auth secret")
-	}
-	provider := google.New(s.config.Auth.OauthID, s.config.Auth.OauthSecret, s.config.Auth.OauthCallbackUrl)
-	gomniauth.SetSecurityKey(s.config.GomniAuthSecret)
-	gomniauth.WithProviders(provider)
-	return nil
-}
-
 func SetupServer(config ServerConfig, c controller.Controller, auth bool) error {
 	server := &Server{
 		config: config,
@@ -64,9 +42,10 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) error 
 	})
 
 	if auth {
-		if err := server.SetupOAuth(); err != nil {
+		if err := config.Auth.Validate(); err != nil {
 			return err
 		}
+		config.Auth.SetupOAuth()
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
 		http.Handle("/api", MustAuth(NewApiHandler(c, config.Interface)))

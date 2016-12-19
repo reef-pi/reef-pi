@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/ranjib/reefer/controller/raspi"
 	"github.com/ranjib/reefer/webui"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +14,17 @@ import (
 	"strings"
 )
 
+func ParseConfig(filename string) (*webui.ServerConfig, error) {
+	var c webui.ServerConfig
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	if err := yaml.Unmarshal(content, &c); err != nil {
+		return nil, err
+	}
+	return &c, nil
+}
 func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
@@ -32,7 +45,7 @@ func main() {
 		fmt.Println(strings.TrimSpace(text))
 	}
 	flag.Parse()
-	var config Config
+	var config webui.ServerConfig
 	if *configFile != "" {
 		conf, err := ParseConfig(*configFile)
 		if err != nil {
@@ -47,7 +60,7 @@ func main() {
 	if err := controller.Start(); err != nil {
 		log.Fatal(err)
 	}
-	if err := webui.SetupServer(config.Server, controller, !*noAuth); err != nil {
+	if err := webui.SetupServer(config, controller, !*noAuth); err != nil {
 		log.Fatal("ERROR:", err)
 	}
 	addr := fmt.Sprintf(":%d", *port)
