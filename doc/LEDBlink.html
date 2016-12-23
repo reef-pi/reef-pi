@@ -12,12 +12,13 @@ In this section we will make 2 LEDs, Red and Green, turn on and off alternativel
 <h2>Steps:</h2>
 <h3>First LED (Red)</h3><br>
 
-1. Visit reefer homepage, go to the 'Electronics' tab</br>
+1. Visit reefer homepage, go to the 'Electronics' tab<br>
 
 2. Add a board by clicking on the '+' sign, name it anything (let's say pi), and set number of pins to 40, click 'Add'.
 <br><br><img width = "600" src=images/add_board.png><br><br>
 
 3. Similarly add an outlet. Outlet is the pin on the raspberry-pi which will be used to control the LED. Name the outlet as 'GPIO-4'. The Board is 'pi' which we created in step 2. The value of parameter 'pin' is the location of the pin on the board (see image below).
+
 
 <br><br> <img width = "600" src=images/pins.png><br><br>
 
@@ -41,6 +42,8 @@ In the field for Seconds fill in '0-59/10'. This means "between 0 to 59 seconds 
 Similarly, add a 'Switch off' job for 'Red LED'. Change seconds to '5-59/10'(increments of 10 seconds starting at 5)  and Action to be off'. Click Add.
 
 
+
+
 <br><br><img width = "600" src=images/add_job2.png><br><br>
 
 6. The configuration is done. Now Connect an the positive side of an LED (with a roughly 1k resistor in series) to the outlet (pin 7) which we configured on the pi in step 3. Connect the negative end to the 'Ground pin' (pin 6, see image in step 3).
@@ -54,13 +57,14 @@ The Led should turn on and off every 5 seconds.
 
 
 <h3>Second LED (Green)</h3>
-
 We need to repeat Steps 3 to 5 for the second LED while configuring another pin and different on-off times.<br><br>
 
 7. Repeat Step 3 but name the outlet as 'GPIO-14' and set value of pin as 8.<br><br>
 8. Repeat Step 4. Name the new Equipment as 'Green LED' and outlet as 'GPIO-14' which we just created in above step.<br><br>
 9. Repeat Step 5. Create 'Switch on' Job for Equipment 'Green LED' with the value in seconds field as '5-59/10'. Thus Green LED will switch on when Red LED will switch off. Similarly, create 'Switch Off' job for 'Green LED' at seconds '0-59/10'. Thus Green LED swicthes on when Red LED switches off and vice-versa.<br><br>
 10. Now physically connect the positive end of a Green LED with pin 8 (GPIO-14) through another resistor and connect the negative end with the 'Ground'.<br><br>
+
+
 You should now have the Red and Green LEDs blinking alternatively and periodically. <br><br>
 
 

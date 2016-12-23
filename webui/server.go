@@ -36,18 +36,21 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) error 
 		config: config,
 	}
 	assets := http.FileServer(http.Dir("assets"))
+	docs := http.FileServer(http.Dir("doc"))
 	images := http.FileServer(http.Dir(server.config.ImageDirectory))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "assets/html/home.html")
 	})
 
 	if auth {
+		log.Println("Enabling authentication")
 		if err := config.Auth.Validate(); err != nil {
 			return err
 		}
 		config.Auth.SetupOAuth()
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
+		http.Handle("/doc/", MustAuth(http.StripPrefix("/doc/", docs)))
 		http.Handle("/api", MustAuth(NewApiHandler(c, config.Interface)))
 
 		// Auth specific paths
@@ -57,6 +60,7 @@ func SetupServer(config ServerConfig, c controller.Controller, auth bool) error 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
+		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
 		http.Handle("/api/", NewApiHandler(c, config.Interface))
 	}
 	return nil
