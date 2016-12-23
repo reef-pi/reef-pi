@@ -7,17 +7,17 @@
 
 <h1>Make LED blink periodically</h1>
 
-In this section we will make 2 LEDs turn on and off alternatively and periodically.
+In this section we will make 2 LEDs, Red and Green, turn on and off alternatively and periodically.
 <br>
 <h2>Steps:</h2>
-<h3>First LED (red)</h3><br>
+<h3>First LED (Red)</h3><br>
 
 1. Visit reefer homepage, go to the 'Electronics' tab</br>
 
 2. Add a board by clicking on the '+' sign, name it anything (let's say pi), and set number of pins to 40, click 'Add'.
 <br><br><img width = "600" src=images/add_board.png><br><br>
 
-3. Similarly add an outlet. Outlet is the pin number on the pi which will used to control the LED. Name the outlet as 'GPIO-4'. The Board is 'pi' which we created in step 2. The value of parameter pin is the location of the pin on the board (see image below).
+3. Similarly add an outlet. Outlet is the pin on the raspberry-pi which will be used to control the LED. Name the outlet as 'GPIO-4'. The Board is 'pi' which we created in step 2. The value of parameter 'pin' is the location of the pin on the board (see image below).
 
 <br><br> <img width = "600" src=images/pins.png><br><br>
 
@@ -31,14 +31,14 @@ The number in the circle identifies the pin. Let us use pin 7 (which is GPIO4) f
 <br><br><img width = "600" src=images/add_equipment.png><br><br>
 
 5. Now go the 'Jobs' tab.<br>
-We will create two jobs, one to switch on the LED every 10 seconds (0,10,20,30,40,50 seconds of the minute) and the other to switch it 5 seconds after it is on (that is 4,15,25,35,45,55 seconds of the minute). <br>
+We will create two jobs, one to switch on the LED every 10 seconds (0,10,20,30,40,50 seconds of the minute) and the other to switch it off 5 seconds after it is switched on (that is 5,15,25,35,45,55 seconds of the minute). <br>
  Click on the '+' to add a new job. Let us name it 'Switch On'. Select the equipment created in step 4 (Red LED). <br>
-In the fields for Day, Hour and Minute fill '*'. This means we want it for every day, every hour, every minute.i<br>
-In the field for Seconds fill in '0-59/10'. This means between 0 to 59 seconds at increments of 10 seconds. Select Action to be 'on'.i Click Add.
+In the fields for Day, Hour and Minute fill '*'. This means we want this job to run every day, every hour, every minute.<br>
+In the field for Seconds fill in '0-59/10'. This means "between 0 to 59 seconds at increments of 10 seconds". Select Action to be 'on'. Click Add.
 
 <br><br><img width = "600" src=images/add_job1.png><br><br>
 	
-Similarly, add a 'Switch off' job for 'Red LED'. Change seconds to '5-59/10'(increments of 10 seconds starting at 5)  and Action to off'. Click Add.
+Similarly, add a 'Switch off' job for 'Red LED'. Change seconds to '5-59/10'(increments of 10 seconds starting at 5)  and Action to be off'. Click Add.
 
 
 <br><br><img width = "600" src=images/add_job2.png><br><br>
@@ -55,12 +55,12 @@ The Led should turn on and off every 5 seconds.
 
 <h3>Second LED (Green)</h3>
 
-We need to repeat Steps 3 to 5 for the sceond Led while configuring another pin and different on-off times.<br><br>
+We need to repeat Steps 3 to 5 for the second LED while configuring another pin and different on-off times.<br><br>
 
 7. Repeat Step 3 but name the outlet as 'GPIO-14' and set value of pin as 8.<br><br>
 8. Repeat Step 4. Name the new Equipment as 'Green LED' and outlet as 'GPIO-14' which we just created in above step.<br><br>
-9. Repeat Step 5. Create 'Switch on' Job for Equipment 'Green LED' with the value in seconds field as '5-59/10'. Thus Green LED will switch on when Red LED will switch off. Similarly, create 'Switch Off' job for 'Green LED' at seconds '0-58/10'. Thus Green LED swicthes on when Red LED switches off and vice-versa.<br><br>
-10. Now physically connect the positice end of a Green LED with pin 8 (GPIO-14) through a resistor and let connect the negative end with the 'Ground'.<br><br>
+9. Repeat Step 5. Create 'Switch on' Job for Equipment 'Green LED' with the value in seconds field as '5-59/10'. Thus Green LED will switch on when Red LED will switch off. Similarly, create 'Switch Off' job for 'Green LED' at seconds '0-59/10'. Thus Green LED swicthes on when Red LED switches off and vice-versa.<br><br>
+10. Now physically connect the positive end of a Green LED with pin 8 (GPIO-14) through another resistor and connect the negative end with the 'Ground'.<br><br>
 You should now have the Red and Green LEDs blinking alternatively and periodically. <br><br>
 
 
