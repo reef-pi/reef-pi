@@ -8,6 +8,7 @@ export default class Connection extends React.Component {
         this.state = {
           boards: [],
           board: 0,
+          type: 'switch',
           pin: 0
         }
         this.fetchBoards = this.fetchBoards.bind(this);
@@ -15,6 +16,7 @@ export default class Connection extends React.Component {
         this.pinList = this.pinList.bind(this);
         this.setBoard = this.setBoard.bind(this);
         this.setPin = this.setPin.bind(this);
+        this.setType = this.setType.bind(this);
     }
 
     componentWillMount(){
@@ -43,6 +45,7 @@ export default class Connection extends React.Component {
       });
       var payload ={
         board: this.state.boards[k].id,
+        type: this.state.type,
         pin: this.state.pin
       }
       this.props.updateHook(payload);
@@ -54,10 +57,23 @@ export default class Connection extends React.Component {
       });
       var payload ={
         board: this.state.boards[this.state.board].id,
+        type: this.state.type,
         pin: Number(k)
       }
       this.props.updateHook(payload);
     }
+    setType(k, ev){
+      this.setState({
+        type: k,
+      });
+      var payload ={
+        board: this.state.boards[this.state.board].id,
+        pin: this.state.pin,
+        type: k
+      }
+      this.props.updateHook(payload);
+    }
+
 
     boardList(){
       var list = []
@@ -87,14 +103,20 @@ export default class Connection extends React.Component {
      }
       return(
           <div>
-          Board:
+            Board:
             <DropdownButton  title={boardName} id="board-name" onSelect={this.setBoard}>
               {this.boardList()}
             </DropdownButton>
-          Pin:
+            Pin:
             <DropdownButton  title={this.state.pin} id="pin-number" onSelect={this.setPin}>
               {this.pinList()}
             </DropdownButton>
+            Type:
+            <DropdownButton  title={this.state.type} id="pin-number" onSelect={this.setType}>
+              <MenuItem key="pwm" eventKey="pwm">pwm</MenuItem>
+              <MenuItem key="switch" eventKey="switch">switch</MenuItem>
+            </DropdownButton>
+
           </div>
           );
     }

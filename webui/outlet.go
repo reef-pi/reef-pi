@@ -81,3 +81,19 @@ func (h *APIHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 }
+
+func (h *APIHandler) ConfigureOutlet(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	id := vars["id"]
+	dec := json.NewDecoder(r.Body)
+	var a controller.OuteltAction
+	if err := dec.Decode(&a); err != nil {
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	if err := h.controller.Outlets().Configure(id, a); err != nil {
+		errorResponse(http.StatusInternalServerError, err.Error(), w)
+		return
+	}
+}

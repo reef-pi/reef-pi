@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
+	"log"
 	"net/http"
 )
 
@@ -50,6 +51,7 @@ func (h *APIHandler) CreateJob(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, "Failed to create job. Error: "+err.Error(), w)
 		return
 	}
+	log.Println("Successfully created job:", j.Name)
 }
 
 func (h *APIHandler) UpdateJob(w http.ResponseWriter, r *http.Request) {
