@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/hybridgroup/gobot"
+	"gobot.io/x/gobot"
 	"log"
 )
 
@@ -55,7 +55,7 @@ func (j *Job) Runner(store *Store, conn gobot.Connection) (*JobRunner, error) {
 
 func (r *JobRunner) Run() {
 	log.Println("Job:", r.name, " Pin:", r.outlet.Pin, "Action:", r.action.Action)
-	if err := r.outlet.Perform(r.conn, r.name, r.action); err != nil {
+	if err := r.outlet.Perform(r.conn, r.action); err != nil {
 		log.Println("ERROR:", err)
 	}
 }

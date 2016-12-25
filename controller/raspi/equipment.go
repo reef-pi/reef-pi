@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	pi "github.com/hybridgroup/gobot/platforms/raspi"
 	"github.com/ranjib/reefer/controller"
+	pi "gobot.io/x/gobot/platforms/raspi"
 	"log"
 	"strconv"
 )
 
 type EquipmentAPI struct {
-	conn *pi.RaspiAdaptor
+	conn *pi.Adaptor
 	db   *bolt.DB
 }
 
-func NewEquipmentAPI(conn *pi.RaspiAdaptor, db *bolt.DB) (controller.CrudAPI, error) {
+func NewEquipmentAPI(conn *pi.Adaptor, db *bolt.DB) (controller.CrudAPI, error) {
 	err := db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte("equipments")) != nil {
 			return nil
