@@ -2,15 +2,15 @@ package raspi
 
 import (
 	"github.com/boltdb/bolt"
-	pi "github.com/hybridgroup/gobot/platforms/raspi"
 	"github.com/ranjib/reefer/controller"
+	pi "gobot.io/x/gobot/platforms/raspi"
 	"log"
 	"time"
 )
 
 type Raspi struct {
 	db           *bolt.DB
-	conn         *pi.RaspiAdaptor
+	conn         *pi.Adaptor
 	lighting     *Lighting
 	boardAPI     controller.CrudAPI
 	outletAPI    controller.OutletAPI
@@ -27,7 +27,7 @@ func New() (*Raspi, error) {
 	if err != nil {
 		return nil, err
 	}
-	conn := pi.NewRaspiAdaptor("raspi")
+	conn := pi.NewAdaptor()
 	boardAPI, err := NewBoardAPI(db)
 	if err != nil {
 		return nil, err

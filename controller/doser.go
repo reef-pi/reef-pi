@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/hybridgroup/gobot/platforms/gpio"
+	"gobot.io/x/gobot/drivers/gpio"
 	"time"
 )
 
@@ -22,9 +22,9 @@ type Doser struct {
 func NewDoser(config DoserConfig, conn gpio.DigitalWriter) *Doser {
 	d := &Doser{
 		config:  &config,
-		in1_pin: gpio.NewDirectPinDriver(conn, "in1_pin", config.IN1Pin),
-		in2_pin: gpio.NewDirectPinDriver(conn, "in2_pin", config.IN2Pin),
-		motor:   gpio.NewMotorDriver(conn, "doser", config.PWMPin),
+		in1_pin: gpio.NewDirectPinDriver(conn, config.IN1Pin),
+		in2_pin: gpio.NewDirectPinDriver(conn, config.IN2Pin),
+		motor:   gpio.NewMotorDriver(conn, config.PWMPin),
 	}
 	return d
 }

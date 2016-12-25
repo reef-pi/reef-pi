@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/hybridgroup/gobot"
-	"github.com/hybridgroup/gobot/platforms/gpio"
+	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/drivers/gpio"
 	"log"
 )
 
@@ -21,7 +21,7 @@ type Relay struct {
 func NewRelay(config RelayConfig, conn gobot.Connection) *Relay {
 	return &Relay{
 		config: config,
-		driver: gpio.NewDirectPinDriver(conn, config.Name, config.Pin),
+		driver: gpio.NewDirectPinDriver(conn, config.Pin),
 	}
 }
 

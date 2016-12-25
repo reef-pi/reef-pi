@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"github.com/hybridgroup/gobot"
-	"github.com/hybridgroup/gobot/platforms/gpio"
+	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/drivers/gpio"
 	"strconv"
 )
 
@@ -20,10 +20,10 @@ type OuteltAction struct {
 	Value  int    `json:"value"`
 }
 
-func (o *Outlet) Perform(conn gobot.Connection, name string, a OuteltAction) error {
+func (o *Outlet) Perform(conn gobot.Connection, a OuteltAction) error {
 	switch o.Type {
 	case "switch":
-		driver := gpio.NewDirectPinDriver(conn, name, strconv.Itoa(o.Pin))
+		driver := gpio.NewDirectPinDriver(conn, strconv.Itoa(o.Pin))
 		if a.Action == "off" {
 			if err := driver.Off(); err != nil {
 				return err

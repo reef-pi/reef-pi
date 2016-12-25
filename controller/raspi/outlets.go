@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"github.com/hybridgroup/gobot"
 	"github.com/ranjib/reefer/controller"
+	"gobot.io/x/gobot"
 	"log"
 	"strconv"
 )
@@ -135,5 +135,5 @@ func (o *OutletAPI) Configure(id string, a controller.OuteltAction) error {
 	if err != nil {
 		return err
 	}
-	return outlet.Perform(o.conn, "run-action", a)
+	return outlet.Perform(o.conn, a)
 }
