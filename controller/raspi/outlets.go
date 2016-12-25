@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
+	"github.com/hybridgroup/gobot"
 	"github.com/ranjib/reefer/controller"
 	"log"
 	"strconv"
 )
 
 type OutletAPI struct {
-	db *bolt.DB
+	db   *bolt.DB
+	conn gobot.Connection
 }
 
 var (
@@ -24,8 +26,11 @@ var (
 	}
 )
 
-func NewOutletAPI(db *bolt.DB) (*OutletAPI, error) {
-	api := &OutletAPI{db: db}
+func NewOutletAPI(conn gobot.Connection, db *bolt.DB) (*OutletAPI, error) {
+	api := &OutletAPI{
+		db:   db,
+		conn: conn,
+	}
 	err := db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte("outlets")) != nil {
 			return nil
@@ -122,4 +127,13 @@ func (o *OutletAPI) List() (*[]interface{}, error) {
 		return nil, err
 	}
 	return &list, nil
+}
+
+func (o *OutletAPI) Configure(id string, a controller.OuteltAction) error {
+	s := controller.NewStore(o.db)
+	outlet, err := s.Outlet(id)
+	if err != nil {
+		return err
+	}
+	return outlet.Perform(o.conn, "run-action", a)
 }

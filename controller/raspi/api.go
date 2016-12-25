@@ -8,12 +8,8 @@ func (r *Raspi) Boards() controller.CrudAPI {
 	return r.boardAPI
 }
 
-func (r *Raspi) Outlets() controller.CrudAPI {
+func (r *Raspi) Outlets() controller.OutletAPI {
 	return r.outletAPI
-}
-
-func (r *Raspi) Modules() controller.CrudAPI {
-	return &controller.NullCrudAPI{}
 }
 
 func (r *Raspi) Jobs() controller.CrudAPI {

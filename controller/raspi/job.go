@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"github.com/hybridgroup/gobot"
-	"github.com/hybridgroup/gobot/platforms/gpio"
 	"github.com/ranjib/reefer/controller"
 	"gopkg.in/robfig/cron.v2"
 	"log"
@@ -41,7 +40,7 @@ func NewJobAPI(conn gobot.Connection, db *bolt.DB) (*JobAPI, error) {
 }
 
 func (j *JobAPI) Start() error {
-	if err := j.reload(); err != nil {
+	if err := j.loadAll(); err != nil {
 		return err
 	}
 	j.cronRunner.Start()
@@ -53,42 +52,11 @@ func (j *JobAPI) Stop() error {
 	return nil
 }
 
-func (j *JobAPI) PinForJob(job controller.Job) (int, error) {
-	var err error
-	var data []byte
-	var eq controller.Equipment
-	err = j.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("equipments"))
-		data = b.Get([]byte(job.Equipment))
-		return nil
-	})
-	if err != nil {
-		return 0, err
-	}
-	if err = json.Unmarshal(data, &eq); err != nil {
-		return 0, err
-	}
-	err = j.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("outlets"))
-		data = b.Get([]byte(eq.Outlet))
-		return nil
-	})
-	if err != nil {
-		return 0, err
-	}
-	var outlet controller.Outlet
-	if err = json.Unmarshal(data, &outlet); err != nil {
-		return 0, err
-	}
-	return int(outlet.Connection.Pin), nil
-}
-
 func (j *JobAPI) Create(payload interface{}) error {
 	job, ok := payload.(controller.Job)
 	if !ok {
 		return fmt.Errorf("Failed to typecast to job")
 	}
-
 	err := j.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("jobs"))
 		id, _ := b.NextSequence()
@@ -105,7 +73,7 @@ func (j *JobAPI) Create(payload interface{}) error {
 	return j.addToCron(job)
 }
 
-func (j *JobAPI) reload() error {
+func (j *JobAPI) loadAll() error {
 	jobs, err := j.List()
 	if err != nil {
 		return err
@@ -127,30 +95,18 @@ func (j *JobAPI) reload() error {
 }
 
 func (j *JobAPI) addToCron(job controller.Job) error {
-	pin, err := j.PinForJob(job)
-	if err != nil {
-		return err
-	}
+	s := controller.NewStore(j.db)
 	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
-	runner := func() {
-		driver := gpio.NewDirectPinDriver(j.conn, job.Name, strconv.Itoa(pin))
-		if job.Action == "off" {
-			log.Println("Job:", job.Name, " Pin:", pin, "State: LOW")
-			if err := driver.Off(); err != nil {
-				log.Println("ERROR:", err)
-			}
-		} else {
-			log.Println("Job:", job.Name, " Pin:", pin, "State: HIGH")
-			if err := driver.On(); err != nil {
-				log.Println("ERROR:", err)
-			}
-		}
-	}
-	index, err := j.cronRunner.AddFunc(cronSpec, runner)
+	runner, err := job.Runner(s, j.conn)
 	if err != nil {
 		return err
 	}
-	j.cronIDs[job.ID] = index
+	cronID, err := j.cronRunner.AddJob(cronSpec, runner)
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully added cron entry. ID:", cronID)
+	j.cronIDs[job.ID] = cronID
 	return nil
 }
 

@@ -54,6 +54,7 @@ func NewApiHandler(c controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
 	router.HandleFunc("/api/outlets/{id}", handler.UpdateOutlet).Methods("POST")
 	router.HandleFunc("/api/outlets/{id}", handler.DeleteOutlet).Methods("DELETE")
+	router.HandleFunc("/api/outlets/{id}/configure", handler.ConfigureOutlet).Methods("POST")
 
 	// Equipments
 	router.HandleFunc("/api/equipments", handler.ListEquipments).Methods("GET")

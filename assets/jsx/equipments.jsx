@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DropdownButton, MenuItem, Table } from 'react-bootstrap';
 import $ from 'jquery';
+import Equipment from './equipment.jsx'
 
 export default class Equipments extends React.Component {
     constructor(props) {
@@ -40,6 +41,7 @@ export default class Equipments extends React.Component {
         list.push(
             <li key={k}>
               {v.name}
+              <Equipment id={v.id}/>
               <input id={"equipment-"+v.id} type="button" value="delete" onClick={this.removeEquiment}/>
             </li>
             );

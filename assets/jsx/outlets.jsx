@@ -89,7 +89,9 @@ export default class Outlets extends React.Component {
     addOutlet(){
       var payload = {
         name: $('#outlet-name').val(),
-        connection: this.state.connection
+        board: this.state.connection.board,
+        pin: this.state.connection.pin,
+        type: this.state.connection.type
       }
       $.ajax({
           url: '/api/outlets',
