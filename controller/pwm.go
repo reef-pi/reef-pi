@@ -6,45 +6,50 @@ import (
 	_ "github.com/kidoman/embd/host/rpi"
 )
 
-type PWMApi struct {
-	PWMValues map[int]int
-	conn      *pca9685.PCA9685
+type PWM struct {
+	values map[int]int
+	conn   *pca9685.PCA9685
 }
 
-type PWMConfig struct {
-	Address   int
-	BusNumber byte
-}
-
-func NewPWMApi() *PWMApi {
-	BusNumber := byte(1)
-	Address := 0x40
-	bus := embd.NewI2CBus(BusNumber)
-	conn := pca9685.New(bus, byte(Address))
-	return &PWMApi{
-		PWMValues: make(map[int]int),
-		conn:      conn,
+func NewPWM(c PWMConfig) *PWM {
+	bus := embd.NewI2CBus(byte(c.Bus))
+	conn := pca9685.New(bus, byte(c.Address))
+	return &PWM{
+		values: make(map[int]int),
+		conn:   conn,
 	}
 }
 
-func (p *PWMApi) Start() error {
-	if err := p.conn.Wake(); err != nil {
-		return err
-	}
-	for pin, value := range p.PWMValues {
-		on, off := toSteps(value)
-		if err := p.conn.SetPwm(pin, on, off); err != nil {
-			return err
-		}
-	}
-	return nil
+func (p *PWM) Start() error {
+	return p.conn.Wake()
 }
 
-func toSteps(value int) (int, int) {
-	return 0, 3800
+// value should be within 0-99
+func (p *PWM) Set(pin int, value int) error {
+	off := int(float32(value) * 40.96)
+	p.values[pin] = off
+	return p.conn.SetPwm(pin, 0, off)
 }
 
-func (p *PWMApi) Stop() error {
+func (p *PWM) Get(pin int) int {
+	return p.values[pin]
+}
+
+func (p *PWM) On(pin int) error {
+	v, ok := p.values[pin]
+	if !ok {
+		v = 4095
+		p.values[pin] = v
+	}
+	return p.conn.SetPwm(pin, 0, v)
+}
+
+func (p *PWM) Off(pin int) error {
+	p.values[pin] = 0
+	return p.conn.SetPwm(pin, 0, 0)
+}
+
+func (p *PWM) Stop() error {
 	if err := p.conn.Close(); err != nil {
 		return err
 	}

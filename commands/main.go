@@ -33,6 +33,7 @@ func main() {
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	version := flag.Bool("version", false, "Print version information")
+	pwm := flag.Bool("pwm", false, "Enable pwm")
 	flag.Usage = func() {
 		text := `
     Usage: reefer [OPTIONS]
@@ -45,6 +46,8 @@ func main() {
           Reefer listening port
       -no-auth
           Disable Google OAuth
+      -pwm
+          Enable pwm support
       -version
           Print version information
     `
@@ -63,7 +66,7 @@ func main() {
 		}
 		config = *conf
 	}
-	c, err := controller.New()
+	c, err := controller.New(*pwm)
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
