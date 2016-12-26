@@ -14,25 +14,28 @@ type Controller struct {
 	cronRunner *cron.Cron
 	cronIDs    map[string]cron.EntryID
 	pwm        *PWM
+	enablePWM  bool
 }
 
-func New() (*Controller, error) {
+func New(enablePWM bool) (*Controller, error) {
 	db, err := bolt.Open("reefer.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return nil, err
 	}
-	/*
-		config := PWMConfig{
-			Bus:     1,
-			Address: 0x40,
-		}
-		pwm := NewPWM(config)
-	*/
+
+	config := PWMConfig{
+		Bus:     1,
+		Address: 0x40,
+	}
 	pwm := new(PWM)
+	if enablePWM {
+		pwm = NewPWM(config)
+	}
 	store := NewStore(db)
 	conn := pi.NewAdaptor()
 	c := &Controller{
 		pwm:        pwm,
+		enablePWM:  enablePWM,
 		store:      store,
 		conn:       conn,
 		cronRunner: cron.New(),
@@ -47,7 +50,9 @@ func (c *Controller) Start() error {
 			return nil
 		}
 	}
-	//c.pwm.Start()
+	if c.enablePWM {
+		c.pwm.Start()
+	}
 	c.cronRunner.Start()
 	c.logStartTime()
 	if err := c.loadAllJobs(); err != nil {
@@ -59,7 +64,9 @@ func (c *Controller) Start() error {
 
 func (c *Controller) Stop() error {
 	c.cronRunner.Stop()
-	//c.pwm.Stop()
+	if c.enablePWM {
+		c.pwm.Stop()
+	}
 	c.logStopTime()
 	c.store.Close()
 	log.Println("Stopped Controller")
