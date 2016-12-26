@@ -3,40 +3,76 @@ package raspi
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/boltdb/bolt"
 	"github.com/ranjib/reefer/controller"
 	"gobot.io/x/gobot"
 	"gopkg.in/robfig/cron.v2"
 	"log"
-	"strconv"
 	"strings"
 )
 
 type JobAPI struct {
-	db         *bolt.DB
+	store      *controller.Store
 	cronRunner *cron.Cron
 	conn       gobot.Connection
 	cronIDs    map[string]cron.EntryID
 }
 
-func NewJobAPI(conn gobot.Connection, db *bolt.DB) (*JobAPI, error) {
-	err := db.Update(func(tx *bolt.Tx) error {
-		if tx.Bucket([]byte("jobs")) != nil {
-			return nil
-		}
-		log.Println("Initializing DB for jobs bucket")
-		_, err := tx.CreateBucket([]byte("jobs"))
-		return err
-	})
-	if err != nil {
+func NewJobAPI(conn gobot.Connection, store *controller.Store) (*JobAPI, error) {
+	if err := store.CreateBucket("jobs"); err != nil {
 		return nil, err
 	}
 	return &JobAPI{
-		db:         db,
+		store:      store,
 		cronRunner: cron.New(),
 		conn:       conn,
 		cronIDs:    make(map[string]cron.EntryID),
 	}, nil
+}
+
+func (j *JobAPI) Get(id string) (interface{}, error) {
+	var job controller.Job
+	return &job, j.store.Get("jobs", id, &job)
+}
+
+func (j *JobAPI) List() (*[]interface{}, error) {
+
+	fn := func(v []byte) (interface{}, error) {
+		var job controller.Job
+		if err := json.Unmarshal(v, &job); err != nil {
+			return nil, err
+		}
+		return map[string]string{
+			"id":   job.ID,
+			"name": job.Name,
+		}, nil
+	}
+	return j.store.List("jobs", fn)
+}
+
+func (j *JobAPI) Create(payload interface{}) error {
+	job, ok := payload.(controller.Job)
+	if !ok {
+		return fmt.Errorf("Failed to typecast to job")
+	}
+	fn := func(id string) interface{} {
+		job.ID = id
+		return job
+	}
+	if err := j.store.Create("jobs", fn); err != nil {
+		return err
+	}
+	return j.addToCron(job)
+}
+
+func (j *JobAPI) Update(id string, payload interface{}) error {
+	return j.store.Update("jobs", id, payload)
+}
+
+func (j *JobAPI) Delete(id string) error {
+	if err := j.store.Delete("jobs", id); err != nil {
+		return err
+	}
+	return j.deleteFromCron(id)
 }
 
 func (j *JobAPI) Start() error {
@@ -50,27 +86,6 @@ func (j *JobAPI) Start() error {
 func (j *JobAPI) Stop() error {
 	j.cronRunner.Stop()
 	return nil
-}
-
-func (j *JobAPI) Create(payload interface{}) error {
-	job, ok := payload.(controller.Job)
-	if !ok {
-		return fmt.Errorf("Failed to typecast to job")
-	}
-	err := j.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("jobs"))
-		id, _ := b.NextSequence()
-		job.ID = strconv.Itoa(int(id))
-		data, err := json.Marshal(job)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(job.ID), data)
-	})
-	if err != nil {
-		return err
-	}
-	return j.addToCron(job)
 }
 
 func (j *JobAPI) loadAll() error {
@@ -95,9 +110,8 @@ func (j *JobAPI) loadAll() error {
 }
 
 func (j *JobAPI) addToCron(job controller.Job) error {
-	s := controller.NewStore(j.db)
 	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
-	runner, err := job.Runner(s, j.conn)
+	runner, err := job.Runner(j.store, j.conn)
 	if err != nil {
 		return err
 	}
@@ -117,62 +131,4 @@ func (j *JobAPI) deleteFromCron(jobID string) error {
 	}
 	j.cronRunner.Remove(id)
 	return nil
-}
-
-func (j *JobAPI) Get(id string) (interface{}, error) {
-	var data []byte
-	var job controller.Job
-	err := j.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("jobs"))
-		data = b.Get([]byte(id))
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	if err := json.Unmarshal(data, &job); err != nil {
-		return nil, err
-	}
-	return &job, nil
-}
-
-func (j *JobAPI) Update(id string, payload interface{}) error {
-	data, err := json.Marshal(payload)
-	if err != nil {
-		return err
-	}
-	return j.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("jobs"))
-		return b.Put([]byte(id), data)
-	})
-}
-
-func (j *JobAPI) Delete(id string) error {
-	err := j.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("jobs"))
-		return b.Delete([]byte(id))
-	})
-	if err != nil {
-		return err
-	}
-	return j.deleteFromCron(id)
-}
-func (j *JobAPI) List() (*[]interface{}, error) {
-	list := []interface{}{}
-	err := j.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("jobs"))
-		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, v = c.Next() {
-			var j controller.Job
-			if err := json.Unmarshal(v, &j); err != nil {
-				return err
-			}
-			list = append(list, j)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &list, nil
 }

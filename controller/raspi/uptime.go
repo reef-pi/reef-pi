@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"log"
-	"strconv"
 	"time"
 )
 
@@ -15,14 +13,7 @@ type TimeLog struct {
 }
 
 func (r *Raspi) initUptimeBucket() error {
-	return r.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("uptime"))
-		if b == nil {
-			log.Println("Initializing DB for uptime bucket")
-			b, _ = tx.CreateBucket([]byte("uptime"))
-		}
-		return nil
-	})
+	return r.store.CreateBucket("uptime")
 }
 
 func (r *Raspi) logStartTime() error {
@@ -33,18 +24,10 @@ func (r *Raspi) logStartTime() error {
 		Time:    time.Now().Format(time.RFC3339),
 		StartUp: true,
 	}
-	data, err := json.Marshal(l)
-	if err != nil {
-		return err
+	fn := func(id string) interface{} {
+		return l
 	}
-
-	return r.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("uptime"))
-		id, _ := b.NextSequence()
-		strID := strconv.Itoa(int(id))
-		log.Println("Logging start time:", l.Time)
-		return b.Put([]byte(strID), data)
-	})
+	return r.store.Create("uptime", fn)
 }
 
 func (r *Raspi) logStopTime() error {
@@ -52,23 +35,14 @@ func (r *Raspi) logStopTime() error {
 		Time:    time.Now().Format(time.RFC3339),
 		StartUp: false,
 	}
-
-	data, err := json.Marshal(l)
-	if err != nil {
-		return err
+	fn := func(id string) interface{} {
+		return l
 	}
-
-	return r.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("uptime"))
-		id, _ := b.NextSequence()
-		strID := strconv.Itoa(int(id))
-		log.Println("Logging stop time:", l.Time)
-		return b.Put([]byte(strID), data)
-	})
+	return r.store.Create("uptime", fn)
 }
 
 func (r *Raspi) lastStartTime() (t string, err error) {
-	err = r.db.View(func(tx *bolt.Tx) error {
+	err = r.store.DB().View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("uptime"))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {
@@ -90,7 +64,7 @@ func (r *Raspi) lastStartTime() (t string, err error) {
 }
 
 func (r *Raspi) lastStopTime() (t string, err error) {
-	err = r.db.View(func(tx *bolt.Tx) error {
+	err = r.store.DB().View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("uptime"))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {

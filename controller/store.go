@@ -11,8 +11,18 @@ type Store struct {
 	db *bolt.DB
 }
 
+type Extractor func([]byte) (interface{}, error)
+
 func NewStore(db *bolt.DB) *Store {
 	return &Store{db: db}
+}
+
+func (s *Store) Close() error {
+	return s.db.Close()
+}
+
+func (s *Store) DB() *bolt.DB {
+	return s.db
 }
 
 func (s *Store) CreateBucket(bucket string) error {
@@ -39,40 +49,6 @@ func (s *Store) Get(bucket, id string, i interface{}) error {
 	return json.Unmarshal(data, i)
 }
 
-func (s *Store) Update(bucket, id string, i interface{}) error {
-	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		data, err := json.Marshal(i)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(id), data)
-	})
-}
-
-func (s *Store) Create(bucket string, updateID func(string) interface{}) error {
-	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		id, _ := b.NextSequence()
-		idString := strconv.Itoa(int(id))
-		i := updateID(idString)
-		data, err := json.Marshal(i)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(idString), data)
-	})
-}
-
-func (s *Store) Delete(bucket, id string) error {
-	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		return b.Delete([]byte(id))
-	})
-}
-
-type Extractor func([]byte) (interface{}, error)
-
 func (s *Store) List(bucket string, extractor Extractor) (*[]interface{}, error) {
 	list := []interface{}{}
 	err := s.db.View(func(tx *bolt.Tx) error {
@@ -90,10 +66,34 @@ func (s *Store) List(bucket string, extractor Extractor) (*[]interface{}, error)
 	return &list, err
 }
 
-func (s *Store) CreateOutlet(o Outlet) error {
-	fn := func(id string) interface{} {
-		o.ID = id
-		return o
-	}
-	return s.Create("outletes", fn)
+func (s *Store) Create(bucket string, updateID func(string) interface{}) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		id, _ := b.NextSequence()
+		idString := strconv.Itoa(int(id))
+		i := updateID(idString)
+		data, err := json.Marshal(i)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(idString), data)
+	})
+}
+
+func (s *Store) Update(bucket, id string, i interface{}) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		data, err := json.Marshal(i)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(id), data)
+	})
+}
+
+func (s *Store) Delete(bucket, id string) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		return b.Delete([]byte(id))
+	})
 }
