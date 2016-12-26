@@ -47,6 +47,9 @@ func (c *Controller) doSwitching(pin int, action string) error {
 }
 
 func (c *Controller) doPWM(o Outlet, a OuteltAction) error {
+	if !c.enablePWM {
+		return fmt.Errorf("PWM is not enabled")
+	}
 	if a.Action == "off" {
 		return c.pwm.Off(o.Pin)
 	}

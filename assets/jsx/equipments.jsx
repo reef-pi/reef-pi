@@ -16,33 +16,16 @@ export default class Equipments extends React.Component {
         this.outletList = this.outletList.bind(this);
         this.addEquipment = this.addEquipment.bind(this);
         this.fetchData = this.fetchData.bind(this);
-        this.removeEquiment = this.removeEquiment.bind(this);
         this.equipmentList = this.equipmentList.bind(this);
         this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this);
-    }
-
-    removeEquiment(ev){
-      var equipmentID = ev.target.id.split("-")[1]
-      $.ajax({
-          url: '/api/equipments/' + equipmentID,
-          type: 'DELETE',
-          success: function(data) {
-            this.fetchData();
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.log(err.toString());
-          }.bind(this)
-      });
     }
 
     equipmentList(){
       var list = []
       $.each(this.state.equipments, function(k, v){
         list.push(
-            <li key={k}>
-              {v.name}
-              <Equipment id={v.id}/>
-              <input id={"equipment-"+v.id} type="button" value="delete" onClick={this.removeEquiment}/>
+            <li key={k} className="list-group-item">
+              <Equipment id={v.id} name={v.name} updateHook={this.fetchData} />
             </li>
             );
       }.bind(this));
@@ -133,7 +116,7 @@ export default class Equipments extends React.Component {
       };
       return (
           <div>
-            <ul>
+            <ul className="list-group">
               {this.equipmentList()}
             </ul>
             <div>
