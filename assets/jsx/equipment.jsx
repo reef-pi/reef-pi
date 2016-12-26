@@ -8,7 +8,7 @@ export default class Equipment extends React.Component {
         this.state = {
           outlet: {},
           action: 'on',
-          value: ''
+          value: 0
         };
         this.fetchEquipment = this.fetchEquipment.bind(this);
         this.fetchOutlet = this.fetchOutlet.bind(this);
@@ -16,6 +16,7 @@ export default class Equipment extends React.Component {
         this.configureEquipment = this.configureEquipment.bind(this);
         this.removeEquiment = this.removeEquiment.bind(this);
     }
+
     removeEquiment(ev){
       var equipmentID = this.props.id
       $.ajax({
@@ -29,7 +30,6 @@ export default class Equipment extends React.Component {
           }.bind(this)
       });
     }
-
 
     fetchEquipment(){
       $.ajax({
@@ -99,22 +99,12 @@ export default class Equipment extends React.Component {
       return (
           <div className="container">
             <div className="row">
-              <div className="col-sm-4">
-                {this.props.name}
-              </div>
-              <div className="col-sm-2">
-                <input type="range" style={displayStyle} onChange={this.setValue} value={this.state.value}/>
-              </div>
-              <div className="col-sm-1">
-                <input type="button" style={displayStyle} onClick={this.configureEquipment} value="set"/>
-              </div>
-              <div className="col-sm-1">
-                <input type="button" value={this.state.action} onClick={this.configureEquipment}/>
-              </div>
-
-              <div className="col-sm-1">
-                <input type="button" value="delete" onClick={this.removeEquiment}/>
-              </div>
+              <div className="col-sm-2"> <label>{this.props.name}</label></div>
+              <div className="col-sm-2"><input  type="range" style={displayStyle} onChange={this.setValue} value={this.state.value}/></div>
+              <div className="col-sm-1"><label style={displayStyle}>{this.state.value}</label></div>
+              <div className="col-sm-1"><input type="button" style={displayStyle} onClick={this.configureEquipment} value="set" className="btn btn-outline-primary"/></div>
+              <div className="col-sm-1"><input type="button" value={this.state.action} onClick={this.configureEquipment} className="btn btn-outline-primary"/></div>
+              <div className="col-sm-1"><input type="button" value="delete" onClick={this.removeEquiment} className="btn btn-outline-danger"/></div>
             </div>
           </div>
           );

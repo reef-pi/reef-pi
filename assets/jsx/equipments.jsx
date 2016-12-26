@@ -120,7 +120,7 @@ export default class Equipments extends React.Component {
               {this.equipmentList()}
             </ul>
             <div>
-             <input type="button" value={this.state.addEquipment ? "-" : "+" } onClick = {this.toggleAddEquipmentDiv}/>
+             <input type="button" value={this.state.addEquipment ? "-" : "+" } onClick = {this.toggleAddEquipmentDiv} className="btn btn-outline-success"/>
              <div style={dStyle}>
                Name: <input type="text" id="equipmentName" />
                Outlet:
@@ -130,7 +130,7 @@ export default class Equipments extends React.Component {
                  onSelect={this.setOutlet}>
                   {this.outletList()}
                 </DropdownButton>
-                <input type="button" value="save"  onClick={this.addEquipment} />
+                <input type="button" value="add"  onClick={this.addEquipment} className="btn btn-outline-primary"/>
               </div>
             </div>
           </div>

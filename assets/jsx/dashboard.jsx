@@ -42,10 +42,25 @@ export default class Dashboard extends React.Component {
       };
       return (
           <div className="container">
-            <ul>
-              <li> Time: {this.state.time}</li>
-              <li> IP: {this.state.ip} </li>
-              <li> Up Since: {this.state.start_time} </li>
+            <ul className="list-group">
+              <li className="list-group-item">
+                <div className="row">
+                  <div className="col-sm-2">Time</div>
+                  <div classNam="col-sm-6">{this.state.time}</div>
+                </div>
+              </li>
+              <li className="list-group-item">
+                <div className="row">
+                  <div className="col-sm-2">IP</div>
+                  <div className="col-sm-6">{this.state.ip}</div>
+                </div>
+              </li>
+              <li className="list-group-item">
+                <div className="row">
+                  <div className="col-sm-2">Up Since</div>
+                  <div className="col-sm-6">{this.state.start_time}</div>
+                </div>
+              </li>
             </ul>
           </div>
           );

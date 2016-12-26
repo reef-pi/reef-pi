@@ -80,7 +80,10 @@ export default class Outlets extends React.Component {
       var rows =[]
       $.each(this.state.outlets, function(k, v){
         rows.push(
-          <li key={v.id}><span>{v.name} </span> <input id={"outlet-"+v.id} type="button" value="delete" onClick={this.removeOutlet} /></li>
+          <li className="list-group-item row" key={v.id}>
+            <div className="col-sm-7">{v.name} </div>
+            <div className="col-sm-1"><input id={"outlet-"+v.id} type="button" value="delete" onClick={this.removeOutlet} className="btn btn-outline-danger"/> </div>
+          </li>
         )
       }.bind(this));
       return rows;
@@ -113,26 +116,21 @@ export default class Outlets extends React.Component {
       };
       return (
           <div>
-            <ul>
+            <ul className="list-group">
               {this.listOutlets()}
             </ul>
             <div>
-              <input type="button" value={this.state.addOutlet ? "-" : "+" } onClick = {this.toggleAddOutletDiv}/>
-              <table style={dStyle}>
-                <tbody>
-                  <tr>
-                      <td>
-                        Name: <input type="text" id="outlet-name"/>
-                      </td>
-                      <td>
-                        <Connection updateHook={this.setConnection}/>
-                      </td>
-                      <td>
-                        <input type="button" value="add" onClick={this.addOutlet} />
-                      </td>
-                  </tr>
-                </tbody>
-              </table>
+              <input className="btn btn-outline-success" type="button" value={this.state.addOutlet ? "-" : "+" } onClick = {this.toggleAddOutletDiv}/>
+              <div className="form-inline" style={dStyle}>
+                <div className="form-group">
+                  <label for="outlet-name">Name</label>
+                  <input type="text" id="outlet-name" className="form-control"/>
+                </div>
+                <div className="form-group">
+                  <Connection updateHook={this.setConnection}/>
+                </div>
+                <input type="button" value="add" onClick={this.addOutlet} className="btn btn-outline-primary" />
+              </div>
             </div>
           </div>
           );

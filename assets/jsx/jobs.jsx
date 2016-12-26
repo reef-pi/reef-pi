@@ -61,8 +61,9 @@ export default class Jobs extends React.Component {
       var list = []
       $.each(this.state.jobs, function(k, v){
         list.push(
-          <li key={k} id={v.id}>
-            {v.name} <input type="button" onClick={this.removeJob} id={"job-"+ v.id} value="delete"/>
+          <li key={k} id={v.id} className="list-group-item row">
+            <div className="col-sm-7"> {v.name} </div>
+            <div className="col-sm-1"><input type="button" onClick={this.removeJob} id={"job-"+ v.id} value="delete" className="btn btn-outline-danger"/></div>
           </li>
         );
       }.bind(this));
@@ -150,25 +151,30 @@ export default class Jobs extends React.Component {
       return (
           <div>
            <ul>{this.jobList()}</ul>
-           <div>
-              <input type="button" value={this.state.addJob ? "-" : "+" } onClick = {this.toggleAddJobDiv}/>
-             <div style={dStyle}>
-                Name: <input type="text" id="name" />
-                Equipment: <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
+           <div className="container">
+              <input type="button" value={this.state.addJob ? "-" : "+" } onClick = {this.toggleAddJobDiv} className="btn btn-outline-success"/>
+             <div style={dStyle} className="row">
+                <div className="col-sm-1">Name</div> <input type="text" id="name" className="col-sm-2"/>
+                <div className="col-sm-3"/>
+                <div className="col-sm-2">Equipment</div>
+                <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
                   {this.equipmentList()}
                 </DropdownButton>
-                <br />
-                Run at:
-                <br />
-                Day: <input type="text" id="day" />
-                Hour: <input type="text" id="hour"/>
-                Minute: <input type="text" id="minute" />
-                Second: <input type="text" id="second" />
-                Action: <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
+             </div>
+             <div style={dStyle} className="container">
+               <div className="row">Schedule</div>
+               <div className="row">
+                 <label className="col-sm-1">Day</label> <input className="col-sm-1" type="text" id="day" className="col-sm-1"/>
+                 <label  className="col-sm-1">Hour</label> <input type="text" id="hour" className="col-sm-1"/>
+                 <label  className="col-sm-1">Minute</label> <input type="text" id="minute" className="col-sm-1"/>
+                 <label  className="col-sm-1">Second</label> <input type="text" id="second" className="col-sm-1"/>
+                 <label  className="col-sm-1"> Action</label>
+                 <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
                   <MenuItem key="on" eventKey="on"> On </MenuItem>
                   <MenuItem key="off" eventKey="off"> Off </MenuItem>
-                </DropdownButton>
-                <input type="button" value="add" onClick={this.saveJob} />
+                 </DropdownButton>
+                </div>
+                <input type="button" value="add" onClick={this.saveJob} className="btn btn-outline-primary" />
               </div>
              </div>
           </div>
