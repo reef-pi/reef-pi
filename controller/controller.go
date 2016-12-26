@@ -37,11 +37,11 @@ func (c *Controller) Start() error {
 			return nil
 		}
 	}
+	c.cronRunner.Start()
+	c.logStartTime()
 	if err := c.loadAllJobs(); err != nil {
 		return err
 	}
-	c.cronRunner.Start()
-	c.logStartTime()
 	log.Println("Started Controller")
 	return nil
 }

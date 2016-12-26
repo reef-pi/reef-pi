@@ -32,10 +32,12 @@ func (j *Job) Outlet(store *Store) (*Outlet, error) {
 	var o Outlet
 
 	if err := store.Get("equipments", j.Equipment, &e); err != nil {
+		log.Println("ERROR: Cant get equipment. ID:", j.Equipment, err)
 		return nil, err
 	}
 
 	if err := store.Get("outlets", e.Outlet, &o); err != nil {
+		log.Println("ERROR: Cant get outlet.", err)
 		return nil, err
 	}
 	return &o, nil
@@ -72,13 +74,7 @@ func (c *Controller) GetJob(id string) (Job, error) {
 func (c *Controller) ListJobs() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var job Job
-		if err := json.Unmarshal(v, &job); err != nil {
-			return nil, err
-		}
-		return map[string]string{
-			"id":   job.ID,
-			"name": job.Name,
-		}, nil
+		return &job, json.Unmarshal(v, &job)
 	}
 	return c.store.List("jobs", fn)
 }
@@ -115,11 +111,12 @@ func (c *Controller) loadAllJobs() error {
 		return nil
 	}
 	for _, rawJob := range *jobs {
-		job, ok := rawJob.(Job)
+		log.Println(rawJob)
+		job, ok := rawJob.(*Job)
 		if !ok {
 			fmt.Errorf("Failed to typecast to job")
 		}
-		if err := c.addToCron(job); err != nil {
+		if err := c.addToCron(*job); err != nil {
 			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
 		}
 	}

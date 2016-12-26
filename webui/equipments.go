@@ -7,21 +7,6 @@ import (
 	"net/http"
 )
 
-func (h *APIHandler) ListEquipments(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	list, err := h.controller.ListEquipments()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, err.Error(), w)
-		return
-	}
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(list); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-}
-
 func (h *APIHandler) GetEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
@@ -39,7 +24,22 @@ func (h *APIHandler) GetEquipment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
-func (h *APIHandler) AddEquipment(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) ListEquipments(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	list, err := h.controller.ListEquipments()
+	if err != nil {
+		errorResponse(http.StatusInternalServerError, err.Error(), w)
+		return
+	}
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(list); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func (h *APIHandler) CreateEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	dec := json.NewDecoder(r.Body)
 	var payload controller.Equipment
@@ -70,7 +70,7 @@ func (h *APIHandler) UpdateEquipment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *APIHandler) RemoveEquipment(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) DeleteEquipment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -78,5 +78,4 @@ func (h *APIHandler) RemoveEquipment(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, "Failed to delete equipment. Error: "+err.Error(), w)
 		return
 	}
-
 }

@@ -8,20 +8,6 @@ import (
 	"net/http"
 )
 
-func (h *APIHandler) ListJobs(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	jobs, err := h.controller.ListJobs()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to retrieve jobs list", w)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(jobs); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-}
 func (h *APIHandler) GetJob(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
@@ -34,6 +20,21 @@ func (h *APIHandler) GetJob(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(j); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+}
+
+func (h *APIHandler) ListJobs(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	jobs, err := h.controller.ListJobs()
+	if err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to retrieve jobs list", w)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(jobs); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
 		return
 	}

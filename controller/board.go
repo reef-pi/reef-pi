@@ -18,7 +18,7 @@ func (c *Controller) GetBoard(id string) (Board, error) {
 func (c *Controller) ListBoards() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var board Board
-		return board, json.Unmarshal(v, &board)
+		return &board, json.Unmarshal(v, &board)
 	}
 	return c.store.List("boards", fn)
 }
