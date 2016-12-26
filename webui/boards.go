@@ -17,7 +17,7 @@ func (h *APIHandler) CreateBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Creating new board:", b)
-	if err := h.controller.Boards().Create(b); err != nil {
+	if err := h.controller.CreateBoard(b); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to create board. Error: "+err.Error(), w)
 		return
 	}
@@ -27,7 +27,7 @@ func (h *APIHandler) GetBoard(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	b, err := h.controller.Boards().Get(id)
+	b, err := h.controller.GetBoard(id)
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to get board. Error: "+err.Error(), w)
 		return
@@ -44,7 +44,7 @@ func (h *APIHandler) DeleteBoard(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	if err := h.controller.Boards().Delete(id); err != nil {
+	if err := h.controller.DeleteBoard(id); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to delete board. Error: "+err.Error(), w)
 		return
 	}
@@ -61,7 +61,7 @@ func (h *APIHandler) UpdateBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	b.ID = id
-	if err := h.controller.Boards().Update(id, b); err != nil {
+	if err := h.controller.UpdateBoard(id, b); err != nil {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
@@ -69,7 +69,7 @@ func (h *APIHandler) UpdateBoard(w http.ResponseWriter, r *http.Request) {
 
 func (h *APIHandler) ListBoards(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	list, err := h.controller.Boards().List()
+	list, err := h.controller.ListBoards()
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return

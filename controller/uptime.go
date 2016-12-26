@@ -1,4 +1,4 @@
-package raspi
+package controller
 
 import (
 	"encoding/json"
@@ -12,12 +12,12 @@ type TimeLog struct {
 	StartUp bool   `json:"startup"` // true if start, false if stop
 }
 
-func (r *Raspi) initUptimeBucket() error {
-	return r.store.CreateBucket("uptime")
+func (c *Controller) initUptimeBucket() error {
+	return c.store.CreateBucket("uptime")
 }
 
-func (r *Raspi) logStartTime() error {
-	if err := r.initUptimeBucket(); err != nil {
+func (c *Controller) logStartTime() error {
+	if err := c.initUptimeBucket(); err != nil {
 		return err
 	}
 	l := TimeLog{
@@ -27,10 +27,10 @@ func (r *Raspi) logStartTime() error {
 	fn := func(id string) interface{} {
 		return l
 	}
-	return r.store.Create("uptime", fn)
+	return c.store.Create("uptime", fn)
 }
 
-func (r *Raspi) logStopTime() error {
+func (c *Controller) logStopTime() error {
 	l := TimeLog{
 		Time:    time.Now().Format(time.RFC3339),
 		StartUp: false,
@@ -38,11 +38,11 @@ func (r *Raspi) logStopTime() error {
 	fn := func(id string) interface{} {
 		return l
 	}
-	return r.store.Create("uptime", fn)
+	return c.store.Create("uptime", fn)
 }
 
-func (r *Raspi) lastStartTime() (t string, err error) {
-	err = r.store.DB().View(func(tx *bolt.Tx) error {
+func (c *Controller) lastStartTime() (t string, err error) {
+	err = c.store.DB().View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("uptime"))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {
@@ -63,8 +63,8 @@ func (r *Raspi) lastStartTime() (t string, err error) {
 	return
 }
 
-func (r *Raspi) lastStopTime() (t string, err error) {
-	err = r.store.DB().View(func(tx *bolt.Tx) error {
+func (c *Controller) lastStopTime() (t string, err error) {
+	err = c.store.DB().View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("uptime"))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {
@@ -85,8 +85,8 @@ func (r *Raspi) lastStopTime() (t string, err error) {
 	return
 }
 
-func (r *Raspi) StartTime() string {
-	t, _ := r.lastStartTime()
+func (c *Controller) StartTime() string {
+	t, _ := c.lastStartTime()
 	return t
 
 }

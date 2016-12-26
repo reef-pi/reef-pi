@@ -31,7 +31,7 @@ func errorResponse(header int, msg string, w http.ResponseWriter) {
 	w.Write(js)
 }
 
-func SetupServer(config ServerConfig, c controller.Controller, auth bool) error {
+func SetupServer(config ServerConfig, c *controller.Controller, auth bool) error {
 	server := &Server{
 		config: config,
 	}
