@@ -11,7 +11,6 @@ import (
 type Raspi struct {
 	store        *controller.Store
 	conn         *pi.Adaptor
-	lighting     *Lighting
 	boardAPI     controller.CrudAPI
 	outletAPI    controller.OutletAPI
 	jobAPI       *JobAPI
@@ -51,7 +50,6 @@ func New() (*Raspi, error) {
 		outletAPI:    outletAPI,
 		boardAPI:     boardAPI,
 		jobAPI:       jobAPI,
-		lighting:     NewLighting(),
 		equipmentAPI: equipmentAPI,
 	}
 	return r, nil

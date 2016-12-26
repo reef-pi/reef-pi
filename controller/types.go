@@ -13,7 +13,6 @@ type OutletAPI interface {
 }
 
 type API interface {
-	Lighting() LightingAPI
 	Jobs() CrudAPI
 	Equipments() CrudAPI
 	Boards() CrudAPI

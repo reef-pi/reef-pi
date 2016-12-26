@@ -35,12 +35,6 @@ func NewApiHandler(c controller.Controller, iface string) http.Handler {
 	// Info (used by dashboard)
 	router.HandleFunc("/api/info", handler.Info).Methods("GET")
 
-	// Module specific configure api
-	router.HandleFunc("/api/lighting", handler.EnableLighting).Methods("POST")
-	router.HandleFunc("/api/lighting", handler.DisableLighting).Methods("DELETE")
-	router.HandleFunc("/api/lighting", handler.LightingConfig).Methods("GET")
-	router.HandleFunc("/api/lighting/status", handler.IsLightingEnabled).Methods("GET")
-
 	// Boards
 	router.HandleFunc("/api/boards", handler.ListBoards).Methods("GET")
 	router.HandleFunc("/api/boards", handler.CreateBoard).Methods("PUT")
