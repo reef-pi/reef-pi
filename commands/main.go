@@ -25,6 +25,7 @@ func ParseConfig(filename string) (*webui.ServerConfig, error) {
 	}
 	return &c, nil
 }
+
 func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
