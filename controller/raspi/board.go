@@ -25,13 +25,7 @@ func (b *BoardAPI) Get(id string) (interface{}, error) {
 func (b *BoardAPI) List() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var board controller.Board
-		if err := json.Unmarshal(v, &board); err != nil {
-			return nil, err
-		}
-		return map[string]string{
-			"id":   board.ID,
-			"name": board.Name,
-		}, nil
+		return board, json.Unmarshal(v, &board)
 	}
 	return b.store.List("boards", fn)
 }
