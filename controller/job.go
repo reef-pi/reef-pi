@@ -25,12 +25,14 @@ type JobRunner struct {
 }
 
 func (j *Job) Outlet(store *Store) (*Outlet, error) {
-	e, err := store.Equipment(j.Equipment)
-	if err != nil {
+	var e Equipment
+	var o Outlet
+
+	if err := store.Get("equipments", j.Equipment, &e); err != nil {
 		return nil, err
 	}
-	o, err := store.Outlet(e.Outlet)
-	if err != nil {
+
+	if err := store.Get("outlets", e.Outlet, &o); err != nil {
 		return nil, err
 	}
 	return &o, nil

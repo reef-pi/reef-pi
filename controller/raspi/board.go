@@ -29,6 +29,7 @@ func NewBoardAPI(db *bolt.DB) (*BoardAPI, error) {
 }
 
 func (b *BoardAPI) Get(name string) (interface{}, error) {
+	var board controller.Board
 	var data []byte
 
 	err := b.db.View(func(tx *bolt.Tx) error {
@@ -39,7 +40,6 @@ func (b *BoardAPI) Get(name string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	var board controller.Board
 	if data != nil {
 		if err := json.Unmarshal(data, &board); err != nil {
 			return nil, err
