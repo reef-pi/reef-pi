@@ -26,10 +26,13 @@ func ParseConfig(filename string) (*webui.ServerConfig, error) {
 	return &c, nil
 }
 
+var Version string
+
 func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
+	version := flag.Bool("version", false, "Print version information")
 	flag.Usage = func() {
 		text := `
     Usage: reefer [OPTIONS]
@@ -42,10 +45,16 @@ func main() {
           Reefer listening port
       -no-auth
           Disable Google OAuth
+      -version
+          Print version information
     `
 		fmt.Println(strings.TrimSpace(text))
 	}
 	flag.Parse()
+	if *version {
+		fmt.Println(Version)
+		return
+	}
 	var config webui.ServerConfig
 	if *configFile != "" {
 		conf, err := ParseConfig(*configFile)
