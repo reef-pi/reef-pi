@@ -102,21 +102,26 @@ export default class Connection extends React.Component {
        boardName = this.state.boards[this.state.board].name
      }
       return(
-          <div>
-            Board:
-            <DropdownButton  title={boardName} id="board-name" onSelect={this.setBoard}>
-              {this.boardList()}
-            </DropdownButton>
-            Pin:
-            <DropdownButton  title={this.state.pin} id="pin-number" onSelect={this.setPin}>
-              {this.pinList()}
-            </DropdownButton>
-            Type:
-            <DropdownButton  title={this.state.type} id="pin-number" onSelect={this.setType}>
-              <MenuItem key="pwm" eventKey="pwm">pwm</MenuItem>
-              <MenuItem key="switch" eventKey="switch">switch</MenuItem>
-            </DropdownButton>
-
+          <div className="form-inline">
+            <div className="form-group">
+              <label for="board-name">Board</label>
+              <DropdownButton  title={boardName} id="board-name" onSelect={this.setBoard}>
+                {this.boardList()}
+              </DropdownButton>
+            </div>
+            <div className="form-group">
+              <label for="pin-number">Pin </label>
+              <DropdownButton  title={this.state.pin} id="pin-number" onSelect={this.setPin}>
+                {this.pinList()}
+              </DropdownButton>
+            </div>
+            <div className="form-group">
+              <label for="pin-type">Type</label>
+              <DropdownButton  title={this.state.type} id="pin-type" onSelect={this.setType}>
+                <MenuItem key="pwm" eventKey="pwm">pwm</MenuItem>
+                <MenuItem key="switch" eventKey="switch">switch</MenuItem>
+              </DropdownButton>
+            </div>
           </div>
           );
     }
