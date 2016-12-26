@@ -9,9 +9,8 @@ import (
 )
 
 type Raspi struct {
-	db           *bolt.DB
+	store        *controller.Store
 	conn         *pi.Adaptor
-	lighting     *Lighting
 	boardAPI     controller.CrudAPI
 	outletAPI    controller.OutletAPI
 	jobAPI       *JobAPI
@@ -27,30 +26,30 @@ func New() (*Raspi, error) {
 	if err != nil {
 		return nil, err
 	}
+	store := controller.NewStore(db)
 	conn := pi.NewAdaptor()
-	boardAPI, err := NewBoardAPI(db)
+	boardAPI, err := NewBoardAPI(store)
 	if err != nil {
 		return nil, err
 	}
-	outletAPI, err := NewOutletAPI(conn, db)
+	outletAPI, err := NewOutletAPI(conn, store)
 	if err != nil {
 		return nil, err
 	}
-	jobAPI, err := NewJobAPI(conn, db)
+	jobAPI, err := NewJobAPI(conn, store)
 	if err != nil {
 		return nil, err
 	}
-	equipmentAPI, err := NewEquipmentAPI(conn, db)
+	equipmentAPI, err := NewEquipmentAPI(conn, store)
 	if err != nil {
 		return nil, err
 	}
 	r := &Raspi{
-		db:           db,
+		store:        store,
 		conn:         conn,
 		outletAPI:    outletAPI,
 		boardAPI:     boardAPI,
 		jobAPI:       jobAPI,
-		lighting:     NewLighting(),
 		equipmentAPI: equipmentAPI,
 	}
 	return r, nil
@@ -66,7 +65,7 @@ func (r *Raspi) Start() error {
 func (r *Raspi) Stop() error {
 	r.jobAPI.Stop()
 	r.logStopTime()
-	r.db.Close()
+	r.store.Close()
 	log.Println("Stopped Controller:", r.Name())
 	return nil
 }
