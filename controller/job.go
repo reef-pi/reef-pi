@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"gobot.io/x/gobot"
 	"log"
 	"strings"
 )
@@ -20,52 +19,6 @@ type Job struct {
 	Name      string `json:"name"`
 }
 
-type JobRunner struct {
-	name   string
-	outlet *Outlet
-	conn   gobot.Connection
-	action OuteltAction
-}
-
-func (j *Job) Outlet(store *Store) (*Outlet, error) {
-	var e Equipment
-	var o Outlet
-
-	if err := store.Get("equipments", j.Equipment, &e); err != nil {
-		log.Println("ERROR: Cant get equipment. ID:", j.Equipment, err)
-		return nil, err
-	}
-
-	if err := store.Get("outlets", e.Outlet, &o); err != nil {
-		log.Println("ERROR: Cant get outlet.", err)
-		return nil, err
-	}
-	return &o, nil
-}
-
-func (j *Job) Runner(store *Store, conn gobot.Connection) (*JobRunner, error) {
-	o, err := j.Outlet(store)
-	if err != nil {
-		return nil, err
-	}
-	a := OuteltAction{
-		Action: j.Action,
-		Value:  j.Value,
-	}
-	return &JobRunner{
-		name:   j.Name,
-		outlet: o,
-		conn:   conn,
-		action: a,
-	}, nil
-}
-
-func (r *JobRunner) Run() {
-	log.Println("Job:", r.name, " Pin:", r.outlet.Pin, "Action:", r.action.Action)
-	if err := r.outlet.Perform(r.conn, r.action); err != nil {
-		log.Println("ERROR:", err)
-	}
-}
 func (c *Controller) GetJob(id string) (Job, error) {
 	var job Job
 	return job, c.store.Get("jobs", id, &job)
@@ -125,7 +78,7 @@ func (c *Controller) loadAllJobs() error {
 
 func (c *Controller) addToCron(job Job) error {
 	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
-	runner, err := job.Runner(c.store, c.conn)
+	runner, err := c.Runner(job)
 	if err != nil {
 		return err
 	}

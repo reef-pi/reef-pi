@@ -13,6 +13,7 @@ type Controller struct {
 	conn       *pi.Adaptor
 	cronRunner *cron.Cron
 	cronIDs    map[string]cron.EntryID
+	pwm        *PWM
 }
 
 func New() (*Controller, error) {
@@ -20,9 +21,18 @@ func New() (*Controller, error) {
 	if err != nil {
 		return nil, err
 	}
+	/*
+		config := PWMConfig{
+			Bus:     1,
+			Address: 0x40,
+		}
+		pwm := NewPWM(config)
+	*/
+	pwm := new(PWM)
 	store := NewStore(db)
 	conn := pi.NewAdaptor()
 	c := &Controller{
+		pwm:        pwm,
 		store:      store,
 		conn:       conn,
 		cronRunner: cron.New(),
@@ -37,6 +47,7 @@ func (c *Controller) Start() error {
 			return nil
 		}
 	}
+	//c.pwm.Start()
 	c.cronRunner.Start()
 	c.logStartTime()
 	if err := c.loadAllJobs(); err != nil {
@@ -48,6 +59,7 @@ func (c *Controller) Start() error {
 
 func (c *Controller) Stop() error {
 	c.cronRunner.Stop()
+	//c.pwm.Stop()
 	c.logStopTime()
 	c.store.Close()
 	log.Println("Stopped Controller")

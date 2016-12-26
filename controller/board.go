@@ -5,9 +5,15 @@ import (
 )
 
 type Board struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Pins uint   `json:"pins"`
+	ID     string          `json:"id"`
+	Name   string          `json:"name"`
+	Pins   uint            `json:"pins"`
+	Config json.RawMessage `json:"config"`
+}
+
+type PWMConfig struct {
+	Bus     int `json:"bus"`     // 1
+	Address int `json:"address"` // 0x40
 }
 
 func (c *Controller) GetBoard(id string) (Board, error) {

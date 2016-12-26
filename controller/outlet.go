@@ -3,9 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/drivers/gpio"
-	"strconv"
 )
 
 type Outlet struct {
@@ -19,27 +16,6 @@ type Outlet struct {
 type OuteltAction struct {
 	Action string `json:"action"`
 	Value  int    `json:"value"`
-}
-
-func (o *Outlet) Perform(conn gobot.Connection, a OuteltAction) error {
-	switch o.Type {
-	case "switch":
-		driver := gpio.NewDirectPinDriver(conn, strconv.Itoa(o.Pin))
-		if a.Action == "off" {
-			if err := driver.Off(); err != nil {
-				return err
-			}
-		} else {
-			if err := driver.On(); err != nil {
-				return err
-			}
-		}
-	case "pwm":
-		return fmt.Errorf("PWM outelets are not implemented")
-	default:
-		return fmt.Errorf("Unknown outlet type: %s", o.Type)
-	}
-	return nil
 }
 
 func (c *Controller) GetOutlet(id string) (Outlet, error) {
@@ -78,9 +54,17 @@ func (c *Controller) DeleteOutlet(id string) error {
 }
 
 func (c *Controller) ConfigureOutlet(id string, a OuteltAction) error {
-	var outlet Outlet
-	if err := c.store.Get("outlets", id, &outlet); err != nil {
+	var o Outlet
+	if err := c.store.Get("outlets", id, &o); err != nil {
 		return err
 	}
-	return outlet.Perform(c.conn, a)
+	switch o.Type {
+	case "switch":
+		return c.doSwitching(o.Pin, a.Action)
+	case "pwm":
+		return c.doPWM(o, a)
+	default:
+		return fmt.Errorf("Unknown outlet type: %s", o.Type)
+	}
+	return nil
 }
