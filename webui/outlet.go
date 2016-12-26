@@ -4,30 +4,14 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
-	"log"
 	"net/http"
 )
-
-func (h *APIHandler) CreateOutlet(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	dec := json.NewDecoder(r.Body)
-	var b controller.Outlet
-	if err := dec.Decode(&b); err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
-	}
-	log.Println("Creating new outlet:", b)
-	if err := h.controller.Outlets().Create(b); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to create board. Error: "+err.Error(), w)
-		return
-	}
-}
 
 func (h *APIHandler) GetOutlet(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)
 	id := vars["id"]
-	b, err := h.controller.Outlets().Get(id)
+	b, err := h.controller.GetOutlet(id)
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to get board. Error: "+err.Error(), w)
 		return
@@ -40,12 +24,31 @@ func (h *APIHandler) GetOutlet(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *APIHandler) DeleteOutlet(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	if err := h.controller.Outlets().Delete(id); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to delete board. Error: "+err.Error(), w)
+	list, err := h.controller.ListOutlets()
+	if err != nil {
+		errorResponse(http.StatusInternalServerError, err.Error(), w)
+		return
+	}
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(list); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func (h *APIHandler) CreateOutlet(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	dec := json.NewDecoder(r.Body)
+	var b controller.Outlet
+	if err := dec.Decode(&b); err != nil {
+		errorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	if err := h.controller.CreateOutlet(b); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to create board. Error: "+err.Error(), w)
 		return
 	}
 }
@@ -61,25 +64,20 @@ func (h *APIHandler) UpdateOutlet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	o.ID = id
-	if err := h.controller.Outlets().Update(id, o); err != nil {
+	if err := h.controller.UpdateOutlet(id, o); err != nil {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
 }
 
-func (h *APIHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) DeleteOutlet(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	list, err := h.controller.Outlets().List()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, err.Error(), w)
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if err := h.controller.DeleteOutlet(id); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to delete board. Error: "+err.Error(), w)
 		return
 	}
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(list); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
 }
 
 func (h *APIHandler) ConfigureOutlet(w http.ResponseWriter, r *http.Request) {
@@ -92,7 +90,7 @@ func (h *APIHandler) ConfigureOutlet(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusBadRequest, err.Error(), w)
 		return
 	}
-	if err := h.controller.Outlets().Configure(id, a); err != nil {
+	if err := h.controller.ConfigureOutlet(id, a); err != nil {
 		errorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}

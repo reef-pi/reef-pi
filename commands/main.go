@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ranjib/reefer/controller/raspi"
+	"github.com/ranjib/reefer/controller"
 	"github.com/ranjib/reefer/webui"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -25,6 +25,7 @@ func ParseConfig(filename string) (*webui.ServerConfig, error) {
 	}
 	return &c, nil
 }
+
 func main() {
 	configFile := flag.String("config", "", "Reefer config file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
@@ -53,25 +54,25 @@ func main() {
 		}
 		config = *conf
 	}
-	controller, err := raspi.New()
+	c, err := controller.New()
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
-	if err := controller.Start(); err != nil {
+	if err := c.Start(); err != nil {
 		log.Fatal(err)
 	}
-	if err := webui.SetupServer(config, controller, !*noAuth); err != nil {
+	if err := webui.SetupServer(config, c, !*noAuth); err != nil {
 		log.Fatal("ERROR:", err)
 	}
 	addr := fmt.Sprintf(":%d", *port)
 	log.Printf("Starting http server at: %s\n", addr)
 	go http.ListenAndServe(addr, nil)
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
 	for {
 		select {
-		case <-c:
-			controller.Stop()
+		case <-ch:
+			c.Stop()
 			return
 		}
 	}

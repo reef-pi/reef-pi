@@ -1,4 +1,4 @@
-package raspi
+package controller
 
 import (
 	"github.com/kidoman/embd"
