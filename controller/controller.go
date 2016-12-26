@@ -32,6 +32,11 @@ func New() (*Controller, error) {
 }
 
 func (c *Controller) Start() error {
+	for _, bucket := range []string{"boards", "equipments", "jobs", "outlets", "uptime"} {
+		if err := c.store.CreateBucket(bucket); err != nil {
+			return nil
+		}
+	}
 	if err := c.loadAllJobs(); err != nil {
 		return err
 	}
