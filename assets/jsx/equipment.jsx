@@ -14,7 +14,22 @@ export default class Equipment extends React.Component {
         this.fetchOutlet = this.fetchOutlet.bind(this);
         this.setValue = this.setValue.bind(this);
         this.configureEquipment = this.configureEquipment.bind(this);
+        this.removeEquiment = this.removeEquiment.bind(this);
     }
+    removeEquiment(ev){
+      var equipmentID = this.props.id
+      $.ajax({
+          url: '/api/equipments/' + equipmentID,
+          type: 'DELETE',
+          success: function(data) {
+            this.props.updateHook();
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
+    }
+
 
     fetchEquipment(){
       $.ajax({
@@ -76,15 +91,31 @@ export default class Equipment extends React.Component {
     }
 
     render() {
-      var rangeStyle = {};
+      var displayStyle = {};
 
       if(this.state.outlet.type != "pwm"){
-        rangeStyle['display'] = 'none';
+        displayStyle['display'] = 'none';
       }
       return (
-          <div>
-            <input type="range" style={rangeStyle} onChange={this.setValue} value={this.state.value}/>
-            <input type="button" value={this.state.action} onClick={this.configureEquipment}/>
+          <div className="container">
+            <div className="row">
+              <div className="col-sm-4">
+                {this.props.name}
+              </div>
+              <div className="col-sm-2">
+                <input type="range" style={displayStyle} onChange={this.setValue} value={this.state.value}/>
+              </div>
+              <div className="col-sm-1">
+                <input type="button" style={displayStyle} onClick={this.configureEquipment} value="set"/>
+              </div>
+              <div className="col-sm-1">
+                <input type="button" value={this.state.action} onClick={this.configureEquipment}/>
+              </div>
+
+              <div className="col-sm-1">
+                <input type="button" value="delete" onClick={this.removeEquiment}/>
+              </div>
+            </div>
           </div>
           );
     }
