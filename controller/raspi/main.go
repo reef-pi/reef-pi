@@ -69,3 +69,19 @@ func (r *Raspi) Stop() error {
 	log.Println("Stopped Controller:", r.Name())
 	return nil
 }
+
+func (r *Raspi) Boards() controller.CrudAPI {
+	return r.boardAPI
+}
+
+func (r *Raspi) Outlets() controller.OutletAPI {
+	return r.outletAPI
+}
+
+func (r *Raspi) Jobs() controller.CrudAPI {
+	return r.jobAPI
+}
+
+func (r *Raspi) Equipments() controller.CrudAPI {
+	return r.equipmentAPI
+}
