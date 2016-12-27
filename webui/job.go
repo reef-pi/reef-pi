@@ -28,7 +28,6 @@ func (h *APIHandler) CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *APIHandler) UpdateJob(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	var j controller.Job
 	fn := func(id string) error {
 		j.ID = id

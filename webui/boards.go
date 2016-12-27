@@ -1,82 +1,41 @@
 package webui
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
 	"net/http"
 )
 
 func (h *APIHandler) GetBoard(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	b, err := h.controller.GetBoard(id)
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to get board. Error: "+err.Error(), w)
-		return
+	fn := func(id string) (interface{}, error) {
+		return h.controller.GetBoard(id)
 	}
-	w.Header().Set("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(b); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonGetResponse(fn, w, r)
 }
 
 func (h *APIHandler) ListBoards(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	list, err := h.controller.ListBoards()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, err.Error(), w)
-		return
-
+	fn := func() (interface{}, error) {
+		return h.controller.ListBoards()
 	}
-	w.Header().Set("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(list); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonListResponse(fn, w, r)
 }
 
 func (h *APIHandler) CreateBoard(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	dec := json.NewDecoder(r.Body)
 	var b controller.Board
-	if err := dec.Decode(&b); err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
+	fn := func() error {
+		return h.controller.CreateBoard(b)
 	}
-	if err := h.controller.CreateBoard(b); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to create board. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonCreateResponse(&b, fn, w, r)
 }
 
 func (h *APIHandler) UpdateBoard(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	dec := json.NewDecoder(r.Body)
 	var b controller.Board
-	if err := dec.Decode(&b); err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
+	fn := func(id string) error {
+		b.ID = id
+		return h.controller.UpdateBoard(id, b)
 	}
-	b.ID = id
-	if err := h.controller.UpdateBoard(id, b); err != nil {
-		errorResponse(http.StatusInternalServerError, err.Error(), w)
-		return
-	}
+	h.jsonUpdateResponse(&b, fn, w, r)
 }
 
 func (h *APIHandler) DeleteBoard(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	if err := h.controller.DeleteBoard(id); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to delete board. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonDeleteResponse(h.controller.DeleteBoard, w, r)
 }

@@ -16,13 +16,6 @@ type APIHandler struct {
 	Interface  string
 }
 
-type DailyJobConfig struct {
-	Device string `json:"device"`
-	Start  string `json:"start"`
-	Stop   string `json:"stop"`
-	On     bool   `json:"on"`
-}
-
 func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	if iface == "" {
 		iface = DEFAULT_INTERFACE

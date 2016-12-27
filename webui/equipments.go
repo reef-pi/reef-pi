@@ -1,81 +1,41 @@
 package webui
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
 	"github.com/ranjib/reefer/controller"
 	"net/http"
 )
 
 func (h *APIHandler) GetEquipment(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	eq, err := h.controller.GetEquipment(id)
-	if err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
+	fn := func(id string) (interface{}, error) {
+		return h.controller.GetEquipment(id)
 	}
-	enc := json.NewEncoder(w)
-	if err := enc.Encode(eq); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
+	h.jsonGetResponse(fn, w, r)
 }
 
 func (h *APIHandler) ListEquipments(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	list, err := h.controller.ListEquipments()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, err.Error(), w)
-		return
+	fn := func() (interface{}, error) {
+		return h.controller.ListEquipments()
 	}
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(list); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
+	h.jsonListResponse(fn, w, r)
 }
 
 func (h *APIHandler) CreateEquipment(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	dec := json.NewDecoder(r.Body)
-	var payload controller.Equipment
-	if err := dec.Decode(&payload); err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
+	var e controller.Equipment
+	fn := func() error {
+		return h.controller.CreateEquipment(e)
 	}
-	if err := h.controller.CreateEquipment(payload); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to create equipment. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonCreateResponse(&e, fn, w, r)
 }
 
 func (h *APIHandler) UpdateEquipment(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	dec := json.NewDecoder(r.Body)
 	var e controller.Equipment
-	if err := dec.Decode(&e); err != nil {
-		errorResponse(http.StatusBadRequest, err.Error(), w)
-		return
+	fn := func(id string) error {
+		e.ID = id
+		return h.controller.UpdateEquipment(id, e)
 	}
-	e.ID = id
-	if err := h.controller.UpdateEquipment(id, e); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to update equipment. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonUpdateResponse(&e, fn, w, r)
 }
 
 func (h *APIHandler) DeleteEquipment(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
-	if err := h.controller.DeleteEquipment(id); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to delete equipment. Error: "+err.Error(), w)
-		return
-	}
+	h.jsonDeleteResponse(h.controller.DeleteEquipment, w, r)
 }
