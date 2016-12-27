@@ -46,7 +46,7 @@ export default class Dashboard extends React.Component {
               <li className="list-group-item">
                 <div className="row">
                   <div className="col-sm-2">Time</div>
-                  <div classNam="col-sm-6">{this.state.time}</div>
+                  <div className="col-sm-6">{this.state.time}</div>
                 </div>
               </li>
               <li className="list-group-item">
