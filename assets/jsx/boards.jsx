@@ -15,7 +15,7 @@ export default class Boards extends React.Component {
         this.toggleAddBoardDiv = this.toggleAddBoardDiv.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.fetchData();
     }
 

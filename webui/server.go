@@ -30,6 +30,14 @@ func errorResponse(header int, msg string, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
+func (h *APIHandler) jsonResponse(payload interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(payload); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+}
 
 func SetupServer(config ServerConfig, c *controller.Controller, auth bool) error {
 	server := &Server{
