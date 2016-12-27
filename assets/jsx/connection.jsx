@@ -19,7 +19,7 @@ export default class Connection extends React.Component {
         this.setType = this.setType.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
       this.fetchBoards();
     }
 
@@ -102,21 +102,27 @@ export default class Connection extends React.Component {
        boardName = this.state.boards[this.state.board].name
      }
       return(
-          <div className="form-inline">
-            <div className="form-group">
-              <label for="board-name">Board</label>
+          <div className="row">
+            <div className="col-sm-2">
+              Board
+            </div>
+            <div className="col-sm-3">
               <DropdownButton  title={boardName} id="board-name" onSelect={this.setBoard}>
                 {this.boardList()}
               </DropdownButton>
             </div>
-            <div className="form-group">
-              <label for="pin-number">Pin </label>
+            <div className="col-sm-1">
+              Pin
+            </div>
+            <div className="col-sm-2">
               <DropdownButton  title={this.state.pin} id="pin-number" onSelect={this.setPin}>
                 {this.pinList()}
               </DropdownButton>
             </div>
-            <div className="form-group">
-              <label for="pin-type">Type</label>
+            <div className="col-sm-2">
+              Type
+            </div>
+            <div className="col-sm-2">
               <DropdownButton  title={this.state.type} id="pin-type" onSelect={this.setType}>
                 <MenuItem key="pwm" eventKey="pwm">pwm</MenuItem>
                 <MenuItem key="switch" eventKey="switch">switch</MenuItem>

@@ -21,7 +21,7 @@ export default class Outlets extends React.Component {
         this.toggleAddOutletDiv = this.toggleAddOutletDiv.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
       this.fetchData();
     }
 
@@ -115,21 +115,23 @@ export default class Outlets extends React.Component {
           display: this.state.addOutlet ? 'block' : 'none'
       };
       return (
-          <div>
+          <div className="container">
             <ul className="list-group">
               {this.listOutlets()}
             </ul>
             <div>
               <input className="btn btn-outline-success" type="button" value={this.state.addOutlet ? "-" : "+" } onClick = {this.toggleAddOutletDiv}/>
-              <div className="form-inline" style={dStyle}>
-                <div className="form-group">
-                  <label for="outlet-name">Name</label>
-                  <input type="text" id="outlet-name" className="form-control"/>
+              <div className="container" style={dStyle}>
+                <div className="row">
+                  <div className="col-sm-1">Name</div>
+                  <input type="text" id="outlet-name" className="col-sm-2"/>
+                  <div className="col-sm-9">
+                    <Connection updateHook={this.setConnection}/>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <Connection updateHook={this.setConnection}/>
+                <div className="row">
+                  <input type="button" value="add" onClick={this.addOutlet} className="btn btn-outline-primary" />
                 </div>
-                <input type="button" value="add" onClick={this.addOutlet} className="btn btn-outline-primary" />
               </div>
             </div>
           </div>

@@ -61,7 +61,7 @@ export default class Equipments extends React.Component {
       });
     }
 
-    componentWillMount(){
+    componentDidMount(){
       this.fetchData();
     }
 

@@ -22,9 +22,7 @@ export default class Jobs extends React.Component {
         this.toggleAddJobDiv = this.toggleAddJobDiv.bind(this);
     }
 
-    componentWillMount(){
-
-
+    componentDidMount(){
       this.fetchData();
     }
 
@@ -149,32 +147,50 @@ export default class Jobs extends React.Component {
           display: this.state.addJob ? 'block' : 'none'
       };
       return (
-          <div>
-           <ul>{this.jobList()}</ul>
-           <div className="container">
-              <input type="button" value={this.state.addJob ? "-" : "+" } onClick = {this.toggleAddJobDiv} className="btn btn-outline-success"/>
-             <div style={dStyle} className="row">
-                <div className="col-sm-1">Name</div> <input type="text" id="name" className="col-sm-2"/>
-                <div className="col-sm-3"/>
-                <div className="col-sm-2">Equipment</div>
-                <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
-                  {this.equipmentList()}
-                </DropdownButton>
-             </div>
-             <div style={dStyle} className="container">
-               <div className="row">Schedule</div>
-               <div className="row">
-                 <label className="col-sm-1">Day</label> <input className="col-sm-1" type="text" id="day" className="col-sm-1"/>
-                 <label  className="col-sm-1">Hour</label> <input type="text" id="hour" className="col-sm-1"/>
-                 <label  className="col-sm-1">Minute</label> <input type="text" id="minute" className="col-sm-1"/>
-                 <label  className="col-sm-1">Second</label> <input type="text" id="second" className="col-sm-1"/>
-                 <label  className="col-sm-1"> Action</label>
-                 <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
-                  <MenuItem key="on" eventKey="on"> On </MenuItem>
-                  <MenuItem key="off" eventKey="off"> Off </MenuItem>
-                 </DropdownButton>
+        <div>
+          <ul>{this.jobList()}</ul>
+          <div className="container">
+            <input type="button" value={this.state.addJob ? "-" : "+" } onClick = {this.toggleAddJobDiv} className="btn btn-outline-success"/>
+            <div style={dStyle} className="container">
+              <div className="row">
+                <div className="col-sm-6">
+                  <div className="row">
+                    <div className="col-sm-3">Name</div> <input type="text" id="name" className="col-sm-6"/>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-6">Equipment</div>
+                    <div className="col-sm-6">
+                      <DropdownButton  title={eqName} id="equipment" onSelect={this.setEquipment}>
+                        {this.equipmentList()}
+                      </DropdownButton>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <label  className="col-sm-6 "> Action</label>
+                    <span className="col-sm-6">
+                      <DropdownButton  title={this.state.equipmentAction} id="equipmentAction" onSelect={this.setEquipmentAction}>
+                        <MenuItem key="on" eventKey="on"> On </MenuItem>
+                        <MenuItem key="off" eventKey="off"> Off </MenuItem>
+                      </DropdownButton>
+                    </span>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="row">
+                    <label className="col-sm-3">Day</label> <input type="text" id="day" className="col-sm-2"/>
+                  </div>
+                  <div className="row">
+                    <label  className="col-sm-3">Hour</label> <input type="text" id="hour" className="col-sm-2"/>
+                  </div>
+                  <div className="row">
+                    <label  className="col-sm-3">Minute</label> <input type="text" id="minute" className="col-sm-2"/>
+                  </div>
+                  <div className="row">
+                    <label  className="col-sm-3">Second</label> <input type="text" id="second" className="col-sm-2"/>
+                  </div>
                 </div>
                 <input type="button" value="add" onClick={this.saveJob} className="btn btn-outline-primary" />
+                </div>
               </div>
              </div>
           </div>
