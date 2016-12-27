@@ -8,7 +8,9 @@ export default class Jobs extends React.Component {
         this.state = {
           equipment: undefined,
           equipmentAction: 'on',
+          equipmentValue: 0,
           equipments: [],
+          outletType: undefined,
           jobs: [],
           addJob: false
         };
@@ -16,10 +18,13 @@ export default class Jobs extends React.Component {
         this.equipmentList = this.equipmentList.bind(this);
         this.setEquipment = this.setEquipment.bind(this);
         this.setEquipmentAction = this.setEquipmentAction.bind(this);
+        this.setEquipmentValue = this.setEquipmentValue.bind(this);
         this.saveJob = this.saveJob.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.removeJob = this.removeJob.bind(this);
         this.toggleAddJobDiv = this.toggleAddJobDiv.bind(this);
+        this.showValueSlider = this.showValueSlider.bind(this);
+        this.setOutletType = this.setOutletType.bind(this);
     }
 
     componentDidMount(){
@@ -91,14 +96,48 @@ export default class Jobs extends React.Component {
     }
 
     setEquipment(k, ev) {
-      this.setState({
-        equipment: k
+      var eqID = this.state.equipments[k].id
+      $.ajax({
+          url: '/api/equipments/'+eqID,
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            this.setState({
+              equipment: data
+            });
+            this.setOutletType(data.outlet);
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
+      });
+    }
+
+    setOutletType(i){
+      $.ajax({
+          url: '/api/outlets/'+i,
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            this.setState({
+              outletType: data.type
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.log(err.toString());
+          }.bind(this)
       });
     }
 
     setEquipmentAction(k, ev) {
       this.setState({
         equipmentAction: k
+      });
+    }
+
+    setEquipmentValue(e) {
+      this.setState({
+        equipmentValue: parseInt(e.target.value)
       });
     }
 
@@ -110,7 +149,8 @@ export default class Jobs extends React.Component {
        minute: $("#minute").val(),
        second: $("#second").val(),
        action: this.state.equipmentAction,
-       equipment: this.state.equipments[this.state.equipment].id
+       value: this.state.equipmentValue,
+       equipment: this.state.equipment.id
      }
       $.ajax({
           url: '/api/jobs',
@@ -137,15 +177,30 @@ export default class Jobs extends React.Component {
       $("#second").val('');
     }
 
+    showValueSlider() {
+      if(this.state.equipment == undefined ) {
+        return false;
+      }
+      if((this.state.outletType == "pwm") &&
+          (this.state.equipmentAction == "on")){
+        return true;
+      }
+      return false;
+    }
+
     render() {
+      var sliderVisible = {
+        display: this.showValueSlider() ? 'block' : 'none'
+      }
       var eqName = '';
       if(this.state.equipment != undefined){
-        eqName = this.state.equipments[this.state.equipment].name
+        eqName = this.state.equipment.name
       }
 
       var dStyle = {
           display: this.state.addJob ? 'block' : 'none'
       };
+
       return (
         <div>
           <ul>{this.jobList()}</ul>
@@ -174,6 +229,12 @@ export default class Jobs extends React.Component {
                       </DropdownButton>
                     </span>
                   </div>
+                  <div className="row" style={sliderVisible}>
+                    <input className="col-sm-4" type="range" onChange={this.setEquipmentValue} value={this.state.equipmentValue}/>
+                    <div className="col-sm-1">
+                      {this.state.equipmentValue}
+                    </div>
+                  </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="row">
@@ -189,9 +250,9 @@ export default class Jobs extends React.Component {
                     <label  className="col-sm-3">Second</label> <input type="text" id="second" className="col-sm-2"/>
                   </div>
                 </div>
-                <input type="button" value="add" onClick={this.saveJob} className="btn btn-outline-primary" />
-                </div>
               </div>
+              <input type="button" value="add" onClick={this.saveJob} className="btn btn-outline-primary" />
+             </div>
              </div>
           </div>
           );
