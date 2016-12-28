@@ -25,18 +25,16 @@ var (
 type ADC struct {
 	device  *mcp3008.MCP3008
 	ChanNum int
-	quitCh  chan struct{}
 	config  SPIConfig
 }
 
-func NewADC(c int) (*ADC, error) {
+func NewADC() *ADC {
 	return &ADC{
-		quitCh: make(chan struct{}),
 		config: DefaultSPIConfig,
-	}, nil
+	}
 }
 
-func (a *ADC) On() error {
+func (a *ADC) Start() error {
 	if err := embd.InitSPI(); err != nil {
 		return err
 	}
@@ -51,9 +49,8 @@ func (a *ADC) On() error {
 	return nil
 }
 
-func (a *ADC) Off() error {
-	a.quitCh <- struct{}{}
-	embd.CloseSPI()
+func (a *ADC) Stop() error {
+	defer embd.CloseSPI()
 	return a.device.Bus.Close()
 }
 

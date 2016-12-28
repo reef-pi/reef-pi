@@ -11,11 +11,6 @@ type Board struct {
 	Config json.RawMessage `json:"config"`
 }
 
-type PWMConfig struct {
-	Bus     int `json:"bus"`     // 1
-	Address int `json:"address"` // 0x40
-}
-
 func (c *Controller) GetBoard(id string) (Board, error) {
 	var board Board
 	return board, c.store.Get("boards", id, &board)

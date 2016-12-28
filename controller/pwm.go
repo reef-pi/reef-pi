@@ -6,12 +6,21 @@ import (
 	_ "github.com/kidoman/embd/host/rpi"
 )
 
+type PWMConfig struct {
+	Bus     int `json:"bus"`     // 1
+	Address int `json:"address"` // 0x40
+}
+
 type PWM struct {
 	values map[int]int
 	conn   *pca9685.PCA9685
 }
 
-func NewPWM(c PWMConfig) *PWM {
+func NewPWM() *PWM {
+	c := PWMConfig{
+		Bus:     1,
+		Address: 0x40,
+	}
 	bus := embd.NewI2CBus(byte(c.Bus))
 	conn := pca9685.New(bus, byte(c.Address))
 	return &PWM{

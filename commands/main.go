@@ -33,7 +33,8 @@ func main() {
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	version := flag.Bool("version", false, "Print version information")
-	pwm := flag.Bool("pwm", false, "Enable pwm")
+	pwm := flag.Bool("pwm", false, "Enable pulse width modulation using PCA9645")
+	adc := flag.Bool("adc", false, "Enable Analog to digital converter using mcp3008")
 	flag.Usage = func() {
 		text := `
     Usage: reefer [OPTIONS]
@@ -48,6 +49,8 @@ func main() {
           Disable Google OAuth
       -pwm
           Enable pwm support
+      -pwm
+          Enable adc support
       -version
           Print version information
     `
@@ -66,7 +69,7 @@ func main() {
 		}
 		config = *conf
 	}
-	c, err := controller.New(*pwm)
+	c, err := controller.New(*pwm, *adc)
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
