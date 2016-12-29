@@ -35,6 +35,7 @@ func main() {
 	version := flag.Bool("version", false, "Print version information")
 	pwm := flag.Bool("pwm", false, "Enable pulse width modulation using PCA9645")
 	adc := flag.Bool("adc", false, "Enable Analog to digital converter using mcp3008")
+	high := flag.Bool("high", false, "Assume a high relay")
 	flag.Usage = func() {
 		text := `
     Usage: reefer [OPTIONS]
@@ -53,6 +54,8 @@ func main() {
           Enable adc support
       -version
           Print version information
+			-high
+					Assume a high relay
     `
 		fmt.Println(strings.TrimSpace(text))
 	}
@@ -69,7 +72,7 @@ func main() {
 		}
 		config = *conf
 	}
-	c, err := controller.New(*pwm, *adc)
+	c, err := controller.New(*pwm, *adc, *high)
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
