@@ -62,6 +62,9 @@ func (c *Controller) ConfigureOutlet(id string, a OuteltAction) error {
 	case "switch":
 		return c.doSwitching(o.Pin, a.Action)
 	case "pwm":
+		if !c.enablePWM {
+			return fmt.Errorf("PWM is not enabled")
+		}
 		return c.doPWM(o, a)
 	default:
 		return fmt.Errorf("Unknown outlet type: %s", o.Type)

@@ -2,9 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"gobot.io/x/gobot/drivers/gpio"
 	"log"
-	"strconv"
 )
 
 type JobRunner struct {
@@ -36,22 +34,4 @@ func (c *Controller) Runner(job Job) (*JobRunner, error) {
 		c:      c,
 		action: a,
 	}, nil
-}
-
-func (c *Controller) doSwitching(pin int, action string) error {
-	driver := gpio.NewDirectPinDriver(c.conn, strconv.Itoa(pin))
-	if action == "off" {
-		return driver.Off()
-	}
-	return driver.On()
-}
-
-func (c *Controller) doPWM(o Outlet, a OuteltAction) error {
-	if !c.enablePWM {
-		return fmt.Errorf("PWM is not enabled")
-	}
-	if a.Action == "off" {
-		return c.pwm.Off(o.Pin)
-	}
-	return c.pwm.Set(o.Pin, a.Value)
 }
