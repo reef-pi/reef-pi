@@ -1,6 +1,0 @@
-[Unit]
-Description=Stop reefer service
-
-[Service]
-Type=oneshot
-ExecStart=/bin/systemctl stop reefer.service

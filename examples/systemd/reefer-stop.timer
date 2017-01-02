@@ -1,9 +1,0 @@
-[Unit]
-Description=Start reefer service every morning
-
-[Timer]
-OnCalendar=06:00:00
-Unit=reefer-stop.target
-
-[Install]
-WantedBy=multi-user.target
