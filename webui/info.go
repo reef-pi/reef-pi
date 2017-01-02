@@ -60,7 +60,7 @@ func getIP(i string) (string, error) {
 }
 
 func getTemperature() (string, error) {
-	out, err := exec.Command("vgencmd", "measure_temp").CombinedOutput()
+	out, err := exec.Command("vcgencmd", "measure_temp").CombinedOutput()
 	if err != nil {
 		return "", err
 	}
