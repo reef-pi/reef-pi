@@ -1,6 +1,0 @@
-[Unit]
-Description=Start reefer service
-
-[Service]
-Type=oneshot
-ExecStart=/bin/systemctl start reefer.service

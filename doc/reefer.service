@@ -2,5 +2,5 @@
 Description=reef tank aquarium controller
 
 [Service]
-ExecStart=/usr/bin/reefer -config /etc/reefer/config.yml -port 8088
+ExecStart=/usr/bin/reefer -config /etc/reefer/config.yml -port 8088 -adc -pwm -high
 WorkingDirectory=/var/lib/reefer
