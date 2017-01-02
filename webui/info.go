@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os/exec"
 	"time"
 )
 
 type ControllerInfo struct {
-	IP        string `json:"ip"`
-	Time      string `json:"time"`
-	StartTime string `json:"start_time"`
+	IP          string `json:"ip"`
+	Time        string `json:"time"`
+	StartTime   string `json:"start_time"`
+	Temperature string `json:"temperature"`
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
@@ -19,10 +21,15 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
 	}
+	temp, err := getTemperature()
+	if err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	}
 	info := ControllerInfo{
-		Time:      time.Now().Format("Mon Jan 2 15:04:05"),
-		IP:        ip,
-		StartTime: h.controller.StartTime(),
+		Time:        time.Now().Format("Mon Jan 2 15:04:05"),
+		IP:          ip,
+		StartTime:   h.controller.StartTime(),
+		Temperature: string(temp),
 	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
@@ -49,4 +56,8 @@ func getIP(i string) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
+}
+
+func getTemperature() ([]byte, error) {
+	return exec.Command("vgencmd", "measure_temp").CombinedOutput()
 }

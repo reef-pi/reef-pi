@@ -5,9 +5,7 @@ export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          ip: '',
-          time: '',
-          start_time: ''
+          info: {}
         }
         this.onChange = this.onChange.bind(this)
     }
@@ -23,9 +21,7 @@ export default class Dashboard extends React.Component {
             type: 'GET',
             success: function(data) {
               this.setState({
-                ip: data.ip,
-                time: data.time,
-                start_time: data.start_time
+                info: data
               });
             }.bind(this),
             error: function(xhr, status, err) {
@@ -42,23 +38,30 @@ export default class Dashboard extends React.Component {
       };
       return (
           <div className="container">
+            <h5>Controller Summary</h5>
             <ul className="list-group">
               <li className="list-group-item">
                 <div className="row">
                   <div className="col-sm-2">Time</div>
-                  <div className="col-sm-6">{this.state.time}</div>
+                  <div className="col-sm-6">{this.state.info.time}</div>
                 </div>
               </li>
               <li className="list-group-item">
                 <div className="row">
                   <div className="col-sm-2">IP</div>
-                  <div className="col-sm-6">{this.state.ip}</div>
+                  <div className="col-sm-6">{this.state.info.ip}</div>
                 </div>
               </li>
               <li className="list-group-item">
                 <div className="row">
                   <div className="col-sm-2">Up Since</div>
-                  <div className="col-sm-6">{this.state.start_time}</div>
+                  <div className="col-sm-6">{this.state.info.start_time}</div>
+                </div>
+              </li>
+              <li className="list-group-item">
+                <div className="row">
+                  <div className="col-sm-2">Temperature</div>
+                  <div className="col-sm-6">{this.state.info.temperature}</div>
                 </div>
               </li>
             </ul>
