@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -58,6 +59,10 @@ func getIP(i string) (string, error) {
 	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
 }
 
-func getTemperature() ([]byte, error) {
-	return exec.Command("vgencmd", "measure_temp").CombinedOutput()
+func getTemperature() (string, error) {
+	out, err := exec.Command("vgencmd", "measure_temp").CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+	return strings.Split(string(out), "=")[1], nil
 }
