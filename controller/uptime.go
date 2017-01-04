@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
+	"github.com/dustin/go-humanize"
 	"time"
 )
 
@@ -86,7 +87,13 @@ func (c *Controller) lastStopTime() (t string, err error) {
 }
 
 func (c *Controller) StartTime() string {
-	t, _ := c.lastStartTime()
-	return t
-
+	t, err := c.lastStartTime()
+	if err != nil {
+		return "unknown"
+	}
+	t1, err := time.Parse(t, time.RFC3339)
+	if err != nil {
+		return "unknown"
+	}
+	return humanize.Time(t1)
 }
