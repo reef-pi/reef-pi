@@ -31,7 +31,12 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 	var pwm *PWM
 	var adc *ADC
 	if enablePWM {
-		pwm = NewPWM()
+		p, err := NewPWM()
+		log.Println("Failed to initialize pwm system")
+		if err != nil {
+			return nil, err
+		}
+		pwm = p
 	}
 	if enableADC {
 		adc = NewADC()
