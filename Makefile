@@ -31,6 +31,8 @@ build: go-get test bin
 
 .PHONY: deb
 deb:
+	npm install
+	webpack -d
 	rm -rf dist
 	mkdir -p dist/var/lib/reefer/assets dist/usr/bin dist/etc
 	cp bin/reefer dist/usr/bin/reefer
