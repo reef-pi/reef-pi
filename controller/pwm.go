@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/kidoman/embd"
 	"github.com/kidoman/embd/controller/pca9685"
 	_ "github.com/kidoman/embd/host/rpi"
@@ -16,17 +17,28 @@ type PWM struct {
 	conn   *pca9685.PCA9685
 }
 
-func NewPWM() *PWM {
+func NewPWM() (pwm *PWM, err error) {
 	c := PWMConfig{
 		Bus:     1,
 		Address: 0x40,
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			e, ok := r.(error)
+			if !ok {
+				err = fmt.Errorf("pkg: %v", r)
+			} else {
+				err = e
+			}
+		}
+	}()
 	bus := embd.NewI2CBus(byte(c.Bus))
 	conn := pca9685.New(bus, byte(c.Address))
-	return &PWM{
+	pwm = &PWM{
 		values: make(map[int]int),
 		conn:   conn,
 	}
+	return
 }
 
 func (p *PWM) Start() error {
