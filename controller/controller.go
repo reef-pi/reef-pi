@@ -13,8 +13,9 @@ type Controller struct {
 	store      *Store
 	cronRunner *cron.Cron
 	cronIDs    map[string]cron.EntryID
-	pwm        *PWM
-	adc        *ADC
+	pwm        *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
+	adc        *ADC // Analog to digital converter (sensors)
+	atos       map[string]*ATO
 
 	enablePWM bool
 	enableADC bool
@@ -38,6 +39,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 	store := NewStore(db)
 	c := &Controller{
 		adc:        adc,
+		atos:       make(map[string]*ATO),
 		pwm:        pwm,
 		enablePWM:  enablePWM,
 		highRelay:  highRelay,
@@ -50,7 +52,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 }
 
 func (c *Controller) Start() error {
-	for _, bucket := range []string{"boards", "equipments", "jobs", "outlets", "uptime"} {
+	for _, bucket := range []string{"boards", "equipments", "jobs", "outlets", "uptime", ATOCONFIG_BUKET} {
 		if err := c.store.CreateBucket(bucket); err != nil {
 			return nil
 		}
@@ -75,6 +77,7 @@ func (c *Controller) Start() error {
 
 func (c *Controller) Stop() error {
 	c.cronRunner.Stop()
+	c.StopAllATOs()
 	if c.enablePWM {
 		c.pwm.Stop()
 	}
