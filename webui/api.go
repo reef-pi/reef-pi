@@ -58,6 +58,15 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
 	router.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
 
+	// Jobs
+	router.HandleFunc("/api/ato_configs/{id}", handler.GetATOConfig).Methods("GET")
+	router.HandleFunc("/api/ato_configs", handler.ListATOConfigs).Methods("GET")
+	router.HandleFunc("/api/ato_configs", handler.CreateATOConfig).Methods("PUT")
+	router.HandleFunc("/api/ato_configs/{id}", handler.UpdateATOConfig).Methods("POST")
+	router.HandleFunc("/api/ato_configs/{id}", handler.DeleteATOConfig).Methods("DELETE")
+	router.HandleFunc("/api/ato/{id}/start", handler.StartATO).Methods("POST")
+	router.HandleFunc("/api/ato/{id}/stop", handler.StopATO).Methods("POST")
+
 	return router
 }
 
