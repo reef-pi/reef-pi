@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/kidoman/embd"
 	_ "github.com/kidoman/embd/host/rpi"
+	"log"
 )
 
 func (c *Controller) doSwitching(pinNumber int, action string) error {
@@ -28,6 +29,7 @@ func (c *Controller) doSwitching(pinNumber int, action string) error {
 	default:
 		return fmt.Errorf("Unknown action: %s", action)
 	}
+	log.Println("Setting GPIO Pin:", pinNumber, "State:", state)
 	return pin.Write(state)
 }
 
