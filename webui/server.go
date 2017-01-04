@@ -47,7 +47,7 @@ func SetupServer(config ServerConfig, c *controller.Controller, auth bool) error
 	docs := http.FileServer(http.Dir("doc"))
 	images := http.FileServer(http.Dir(server.config.ImageDirectory))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "assets/html/home.html")
+		http.ServeFile(w, r, "assets/home.html")
 	})
 
 	if auth {

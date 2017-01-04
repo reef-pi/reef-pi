@@ -54,8 +54,8 @@ func main() {
           Enable adc support
       -version
           Print version information
-			-high
-					Assume a high relay
+      -high
+          Relay if off in GPIO high state
     `
 		fmt.Println(strings.TrimSpace(text))
 	}

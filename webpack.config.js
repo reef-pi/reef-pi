@@ -1,8 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'assets/public');
-var APP_DIR = path.resolve(__dirname, 'assets/jsx');
+var BUILD_DIR = path.resolve(__dirname, 'assets/');
+var APP_DIR = path.resolve(__dirname, 'jsx');
 
 var config = {
   entry: APP_DIR + '/ui.jsx',
