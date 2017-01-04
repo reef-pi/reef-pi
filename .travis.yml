@@ -6,4 +6,6 @@ script:
   - make test
   - env GOARCH=arm make bin
   - bundle install
+  - npm install
+  - webpack -d
   - make deb
