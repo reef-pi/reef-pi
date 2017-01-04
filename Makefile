@@ -40,4 +40,4 @@ deb:
 	cp assets/html/home.html dist/var/lib/reefer/assets/home.html
 	cp assets/public/ui.js dist/var/lib/reefer/assets/ui.js
 	cp doc/config.yml dist/etc/config.yml
-	bundle exec fpm -t deb -s dir -n reefer -v 0.0.$(VERSION) -m ranjib@linux.com --deb-systemd doc/reefer.service -C dist  -p reefer-0.0.$(VERSION).deb .
+	bundle exec fpm -t deb -s dir -a armhf -n reefer -v 0.0.$(VERSION) -m ranjib@linux.com --deb-systemd doc/reefer.service -C dist  -p reefer-0.0.$(VERSION).deb .
