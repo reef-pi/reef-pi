@@ -1,11 +1,11 @@
 ---
-interface: eth0
-image_directory: /var/lib/reefer/images
-auth:
-  id: 35adsjfaksjfdhks5eun435b.apps.googleusercontent.com
-  secret: adqwieuqiwue
-  callback_url: http://localhost:8088/auth/callback/google
-  domain: example.com
-  users:
-    - foobar
-  gomni_auth_secret: sadfhsadfkh238asdf
+#interface: eth0
+#image_directory: /var/lib/reefer/images
+#auth:
+#  id: 35adsjfaksjfdhks5eun435b.apps.googleusercontent.com
+#  secret: adqwieuqiwue
+#  callback_url: http://localhost:8088/auth/callback/google
+#  domain: example.com
+#  users:
+#    - foobar
+#  gomni_auth_secret: sadfhsadfkh238asdf

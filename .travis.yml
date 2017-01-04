@@ -4,4 +4,6 @@ go:
 script:
   - make go-get
   - make test
-  - make bin
+  - env GOARCH=arm make bin
+  - bundle install
+  - make deb
