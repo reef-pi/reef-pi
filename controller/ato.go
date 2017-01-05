@@ -20,6 +20,7 @@ type ATOConfig struct {
 	PumpPin   int           `json:"pump_pin"`
 	Frequency time.Duration `json:"frequency"`
 	HighRelay bool          `json:"high_relay"`
+	Enabled   bool          `json:"enabled"`
 }
 
 func (c *Controller) GetATOConfig(id string) (ATOConfig, error) {
@@ -200,7 +201,8 @@ func (c *Controller) StartATO(id string) error {
 	}
 	c.atos[id] = ato
 	go ato.Start()
-	return nil
+	config.Enabled = true
+	return c.UpdateATOConfig(id, config)
 }
 
 func (c *Controller) StopATO(id string) error {
@@ -214,11 +216,14 @@ func (c *Controller) StopATO(id string) error {
 	}
 	ato.Stop()
 	delete(c.atos, id)
-	return nil
+	ato.config.Enabled = false
+	return c.UpdateATOConfig(id, ato.config)
 }
 
 func (c *Controller) StopAllATOs() {
-	for _, ato := range c.atos {
+	for id, ato := range c.atos {
 		ato.Stop()
+		ato.config.Enabled = false
+		c.UpdateATOConfig(id, ato.config)
 	}
 }
