@@ -64,7 +64,6 @@ func (c *Controller) loadAllJobs() error {
 		return nil
 	}
 	for _, rawJob := range *jobs {
-		log.Println(rawJob)
 		job, ok := rawJob.(*Job)
 		if !ok {
 			fmt.Errorf("Failed to typecast to job")
