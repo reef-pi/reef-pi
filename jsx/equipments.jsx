@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { DropdownButton, MenuItem, Table } from 'react-bootstrap'
+import React from 'react'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
 
@@ -108,7 +108,7 @@ export default class Equipments extends React.Component {
 
   render () {
     var outlet = ''
-    if (this.state.selectedOutlet != undefined) {
+    if (this.state.selectedOutlet !== undefined) {
       outlet = this.state.outlets[this.state.selectedOutlet].name
     }
     var dStyle = {

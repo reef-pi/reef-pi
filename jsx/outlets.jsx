@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { Table } from 'react-bootstrap'
+import React from 'react'
 import $ from 'jquery'
 import Connection from './connection.jsx'
 

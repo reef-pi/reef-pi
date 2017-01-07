@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { DropdownButton, MenuItem, Table } from 'react-bootstrap'
+import React from 'react'
 import $ from 'jquery'
 
 export default class Equipment extends React.Component {
@@ -72,7 +71,7 @@ export default class Equipment extends React.Component {
       }),
       success: function (data) {
         this.setState({
-          action: this.state.action == 'on' ? 'off' : 'on'
+          action: this.state.action === 'on' ? 'off' : 'on'
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -110,7 +109,7 @@ export default class Equipment extends React.Component {
   render () {
     var displayStyle = {}
 
-    if (this.state.outlet.type != 'pwm') {
+    if (this.state.outlet.type !== 'pwm') {
       displayStyle['display'] = 'none'
     }
     return (

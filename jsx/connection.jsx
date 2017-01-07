@@ -84,7 +84,7 @@ export default class Connection extends React.Component {
 
   pinList () {
     var list = []
-    if (this.state.boards.length == 0) {
+    if (this.state.boards.length === 0) {
       return list
     }
     var l = this.state.boards[this.state.board].pins
@@ -96,7 +96,7 @@ export default class Connection extends React.Component {
 
   render () {
     var boardName = ''
-    if (this.state.boards[this.state.board] != undefined) {
+    if (this.state.boards[this.state.board] !== undefined) {
       boardName = this.state.boards[this.state.board].name
     }
     return (

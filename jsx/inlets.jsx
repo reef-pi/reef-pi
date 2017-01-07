@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { DropdownButton, MenuItem, Table } from 'react-bootstrap'
+import React from 'react'
 import $ from 'jquery'
 
 export default class Inlets extends React.Component {

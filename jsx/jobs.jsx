@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { DropdownButton, MenuItem, Table } from 'react-bootstrap'
+import React from 'react'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 import $ from 'jquery'
 
 export default class Jobs extends React.Component {
@@ -178,11 +178,11 @@ export default class Jobs extends React.Component {
   }
 
   showValueSlider () {
-    if (this.state.equipment == undefined) {
+    if (this.state.equipment === undefined) {
       return false
     }
-    if ((this.state.outletType == 'pwm') &&
-          (this.state.equipmentAction == 'on')) {
+    if ((this.state.outletType === 'pwm') &&
+          (this.state.equipmentAction === 'on')) {
       return true
     }
     return false
@@ -193,7 +193,7 @@ export default class Jobs extends React.Component {
       display: this.showValueSlider() ? 'block' : 'none'
     }
     var eqName = ''
-    if (this.state.equipment != undefined) {
+    if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
     }
 
@@ -216,17 +216,17 @@ export default class Jobs extends React.Component {
                   <div className='col-sm-6'>Equipment</div>
                   <div className='col-sm-6'>
                     <DropdownButton title={eqName} id='equipment' onSelect={this.setEquipment}>
-                        {this.equipmentList()}
-                      </DropdownButton>
+                      {this.equipmentList()}
+                    </DropdownButton>
                   </div>
                 </div>
                 <div className='row'>
                   <label className='col-sm-6 '> Action</label>
                   <span className='col-sm-6'>
                     <DropdownButton title={this.state.equipmentAction} id='equipmentAction' onSelect={this.setEquipmentAction}>
-                        <MenuItem key='on' eventKey='on'> On </MenuItem>
-                        <MenuItem key='off' eventKey='off'> Off </MenuItem>
-                      </DropdownButton>
+                      <MenuItem key='on' eventKey='on'> On </MenuItem>
+                      <MenuItem key='off' eventKey='off'> Off </MenuItem>
+                    </DropdownButton>
                   </span>
                 </div>
                 <div className='row' style={sliderVisible}>

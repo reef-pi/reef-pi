@@ -31,11 +31,6 @@ export default class Dashboard extends React.Component {
   }
 
   render () {
-    var borderStyle = {
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: '#dddddd'
-    }
     return (
       <div className='container'>
         <h5>Controller Summary</h5>
