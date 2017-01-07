@@ -67,6 +67,13 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/ato/{id}/start", handler.StartATO).Methods("POST")
 	router.HandleFunc("/api/ato/{id}/stop", handler.StopATO).Methods("POST")
 
+	// Inlets
+	router.HandleFunc("/api/inlets/{id}", handler.GetInlet).Methods("GET")
+	router.HandleFunc("/api/inlets", handler.ListInlets).Methods("GET")
+	router.HandleFunc("/api/inlets", handler.CreateInlet).Methods("PUT")
+	router.HandleFunc("/api/inlets/{id}", handler.UpdateInlet).Methods("POST")
+	router.HandleFunc("/api/inlets/{id}", handler.DeleteInlet).Methods("DELETE")
+
 	return router
 }
 

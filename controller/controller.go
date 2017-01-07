@@ -57,7 +57,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 }
 
 func (c *Controller) Start() error {
-	for _, bucket := range []string{"boards", "equipments", "jobs", "outlets", "uptime", ATOCONFIG_BUKET} {
+	for _, bucket := range []string{"boards", "equipments", "jobs", "outlets", "uptime", ATOCONFIG_BUKET, INLET_BUCKET} {
 		if err := c.store.CreateBucket(bucket); err != nil {
 			return nil
 		}

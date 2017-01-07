@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Dashboard from './dashboard.jsx';
-import Electronics from './electronics.jsx';
-import Equipments from './equipments.jsx';
-import Jobs from './jobs.jsx';
-import ATO from './ato.jsx';
+import React from 'react'
+import { render } from 'react-dom'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import Dashboard from './dashboard.jsx'
+import Electronics from './electronics.jsx'
+import Equipments from './equipments.jsx'
+import Jobs from './jobs.jsx'
+import ATO from './ato.jsx'
 
-export default class App extends Component {
-  handleSelect(index, last) {
+export default class App extends React.Component {
+  handleSelect (index, last) {
   }
 
-  render() {
+  render () {
     return (
       <Tabs onSelect={this.handleSelect} selectedIndex={0}>
         <TabList>
@@ -22,7 +22,7 @@ export default class App extends Component {
           <Tab>Auto Top Off</Tab>
         </TabList>
         <TabPanel>
-         <Dashboard />
+          <Dashboard />
         </TabPanel>
         <TabPanel>
           <Electronics />
@@ -37,8 +37,8 @@ export default class App extends Component {
           <ATO />
         </TabPanel>
       </Tabs>
-    );
+    )
   }
 }
 
-render(<App/>, document.getElementById('main-panel'));
+render(<App />, document.getElementById('main-panel'))
