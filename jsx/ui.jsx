@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { render } from 'react-dom'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Dashboard from './dashboard.jsx'
@@ -7,7 +7,7 @@ import Equipments from './equipments.jsx'
 import Jobs from './jobs.jsx'
 import ATO from './ato.jsx'
 
-export default class App extends Component {
+export default class App extends React.Component {
   handleSelect (index, last) {
   }
 

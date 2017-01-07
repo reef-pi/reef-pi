@@ -118,7 +118,7 @@ export default class Outlets extends React.Component {
         <ul className='list-group'>
           {this.listOutlets()}
         </ul>
-        <div>
+        <div className='container'>
           <input className='btn btn-outline-success' type='button' value={this.state.addOutlet ? '-' : '+'} onClick={this.toggleAddOutletDiv} />
           <div className='container' style={dStyle}>
             <div className='row'>
