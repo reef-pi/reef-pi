@@ -14,12 +14,12 @@ type Lighting struct {
 	Intensities []int  `json:"intensities"`
 }
 
-func (c *Controller) GetLighting(id string) (Equipment, error) {
-	var eq Equipment
-	return eq, c.store.Get("LightingBucket", id, &eq)
+func (c *Controller) GetLighting(id string) (Lighting, error) {
+	var l Lighting
+	return l, c.store.Get(LightingBucket, id, &l)
 }
 
-func (c Controller) ListLightingBucket() (*[]interface{}, error) {
+func (c Controller) ListLightings() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var l Lighting
 		if err := json.Unmarshal(v, &l); err != nil {
@@ -30,18 +30,26 @@ func (c Controller) ListLightingBucket() (*[]interface{}, error) {
 	return c.store.List(LightingBucket, fn)
 }
 
-func (c *Controller) CreateLighting(eq Equipment) error {
+func (c *Controller) CreateLighting(l Lighting) error {
 	fn := func(id string) interface{} {
-		eq.ID = id
-		return eq
+		l.ID = id
+		return l
 	}
 	return c.store.Create(LightingBucket, fn)
 }
 
-func (c *Controller) UpdateLighting(id string, payload Equipment) error {
+func (c *Controller) UpdateLighting(id string, payload Lighting) error {
 	return c.store.Update(LightingBucket, id, payload)
 }
 
 func (c *Controller) DeleteLighting(id string) error {
 	return c.store.Delete(LightingBucket, id)
+}
+
+func (c *Controller) EnableLighting(id string) error {
+	return nil
+}
+
+func (c *Controller) DisableLighting(id string) error {
+	return nil
 }
