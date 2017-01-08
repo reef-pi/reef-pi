@@ -9,13 +9,13 @@ export default class Dashboard extends React.Component {
       displayOn: undefined
     }
     this.refresh = this.refresh.bind(this)
-    this.toggleDisplay = this.toggleDisplay.bind(this);
+    this.toggleDisplay = this.toggleDisplay.bind(this)
   }
 
-  toggleDisplay(){
-    var action = this.state.displayOn ? 'off' : 'on';
+  toggleDisplay () {
+    var action = this.state.displayOn ? 'off' : 'on'
     $.ajax({
-      url: '/api/display/'+ action,
+      url: '/api/display/' + action,
       type: 'POST',
       success: function (data) {
         this.setState({
@@ -62,15 +62,14 @@ export default class Dashboard extends React.Component {
   }
 
   render () {
-
-    var dispalyStyle = '';
-    var displayAction = '';
-    if(this.state.displayOn){
-      dispalyStyle = 'btn btn-outline-danger';
-      displayAction = 'off';
+    var dispalyStyle = ''
+    var displayAction = ''
+    if (this.state.displayOn) {
+      dispalyStyle = 'btn btn-outline-danger'
+      displayAction = 'off'
     } else {
-      dispalyStyle = 'btn btn-outline-success';
-      displayAction = 'on';
+      dispalyStyle = 'btn btn-outline-success'
+      displayAction = 'on'
     }
     return (
       <div className='container'>
@@ -103,7 +102,7 @@ export default class Dashboard extends React.Component {
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>Display</div>
-              <input className='col-sm-6' value={displayAction} onClick={this.toggleDisplay} type="button" className={dispalyStyle}/>
+              <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
             </div>
           </li>
         </ul>
