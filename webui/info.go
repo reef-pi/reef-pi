@@ -17,6 +17,33 @@ type ControllerInfo struct {
 	Temperature string `json:"temperature"`
 }
 
+func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
+	out, err := exec.Command("vcgencmd", "display_power").CombinedOutput()
+	if err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	state := strings.Split(string(out), "=")[1]
+	payload := map[string]bool{"On": state == "1"}
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(&payload); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
+	}
+}
+
+func (h *APIHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
+	if err := exec.Command("vcgencmd", "display_power", "1").Run(); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	}
+
+}
+
+func (h *APIHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
+	if err := exec.Command("vcgencmd", "display_power", "0").Run(); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	}
+}
+
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	ip, err := getIP(h.Interface)
 	if err != nil {
