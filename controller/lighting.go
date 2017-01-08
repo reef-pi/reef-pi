@@ -22,10 +22,7 @@ func (c *Controller) GetLighting(id string) (Lighting, error) {
 func (c Controller) ListLightings() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var l Lighting
-		if err := json.Unmarshal(v, &l); err != nil {
-			return nil, err
-		}
-		return &l, nil
+		return &l, json.Unmarshal(v, &l)
 	}
 	return c.store.List(LightingBucket, fn)
 }

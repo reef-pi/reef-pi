@@ -56,7 +56,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 	return c, nil
 }
 
-func (c *Controller) Start() error {
+func (c *Controller) createBuckets() error {
 	buckets := []string{
 		BoardBucket,
 		EquipmentBucket,
@@ -69,8 +69,15 @@ func (c *Controller) Start() error {
 	}
 	for _, bucket := range buckets {
 		if err := c.store.CreateBucket(bucket); err != nil {
-			return nil
+			return err
 		}
+	}
+	return nil
+}
+
+func (c *Controller) Start() error {
+	if err := c.createBuckets(); err != nil {
+		return err
 	}
 	if err := embd.InitGPIO(); err != nil {
 		return err
