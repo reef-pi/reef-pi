@@ -8,4 +8,5 @@ script:
   - bundle install
   - npm install
   - webpack -d
+  - standard jsx/*
   - make deb

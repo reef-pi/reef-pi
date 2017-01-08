@@ -24,7 +24,7 @@ func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	state := strings.Split(string(out), "=")[1]
-	payload := map[string]bool{"On": state == "1"}
+	payload := map[string]bool{"on": state == "1"}
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(&payload); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
