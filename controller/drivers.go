@@ -12,7 +12,6 @@ func (c *Controller) doSwitching(pinNumber int, action string) error {
 	if err != nil {
 		return err
 	}
-	defer pin.Close()
 	if err := pin.SetDirection(embd.Out); err != nil {
 		return err
 	}

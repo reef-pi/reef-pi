@@ -24,7 +24,6 @@ func (c *Controller) ReadFromInlet(i *Inlet) (int, error) {
 		if err != nil {
 			return 0, err
 		}
-		defer p.Close()
 		if err := p.SetDirection(embd.In); err != nil {
 			return 0, err
 		}
