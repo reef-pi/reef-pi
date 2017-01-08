@@ -19,7 +19,7 @@ export default class App extends React.Component {
           <Tab>Electronics</Tab>
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
-          <Tab>Auto Top Off</Tab>
+          <Tab>ATO</Tab>
         </TabList>
         <TabPanel>
           <Dashboard />
