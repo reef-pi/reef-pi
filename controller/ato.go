@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	ATOCONFIG_BUKET = "ato_configs"
+	ATOConfigBucket = "ato_configs"
 )
 
 type ATOConfig struct {
@@ -25,7 +25,7 @@ type ATOConfig struct {
 
 func (c *Controller) GetATOConfig(id string) (ATOConfig, error) {
 	var config ATOConfig
-	return config, c.store.Get(ATOCONFIG_BUKET, id, &config)
+	return config, c.store.Get(ATOConfigBucket, id, &config)
 }
 
 func (c *Controller) ListATOConfigs() (*[]interface{}, error) {
@@ -33,7 +33,7 @@ func (c *Controller) ListATOConfigs() (*[]interface{}, error) {
 		var config ATOConfig
 		return &config, json.Unmarshal(v, &config)
 	}
-	return c.store.List(ATOCONFIG_BUKET, fn)
+	return c.store.List(ATOConfigBucket, fn)
 }
 
 func (c *Controller) CreateATOConfig(config ATOConfig) error {
@@ -41,15 +41,15 @@ func (c *Controller) CreateATOConfig(config ATOConfig) error {
 		config.ID = id
 		return config
 	}
-	return c.store.Create(ATOCONFIG_BUKET, fn)
+	return c.store.Create(ATOConfigBucket, fn)
 }
 
 func (c *Controller) UpdateATOConfig(id string, payload ATOConfig) error {
-	return c.store.Update(ATOCONFIG_BUKET, id, payload)
+	return c.store.Update(ATOConfigBucket, id, payload)
 }
 
 func (c *Controller) DeleteATOConfig(id string) error {
-	return c.store.Delete(ATOCONFIG_BUKET, id)
+	return c.store.Delete(ATOConfigBucket, id)
 }
 
 type ATO struct {

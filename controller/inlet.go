@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	INLET_BUCKET = "inlets"
+	InletBucket = "inlets"
 )
 
 type Inlet struct {
@@ -36,7 +36,7 @@ func (c *Controller) ReadFromInlet(i *Inlet) (int, error) {
 
 func (c *Controller) GetInlet(id string) (Inlet, error) {
 	var inlet Inlet
-	return inlet, c.store.Get(INLET_BUCKET, id, &inlet)
+	return inlet, c.store.Get(InletBucket, id, &inlet)
 }
 
 func (c *Controller) ListInlets() (*[]interface{}, error) {
@@ -47,7 +47,7 @@ func (c *Controller) ListInlets() (*[]interface{}, error) {
 		}
 		return inlet, nil
 	}
-	return c.store.List(INLET_BUCKET, fn)
+	return c.store.List(InletBucket, fn)
 }
 
 func (c *Controller) CreateInlet(inlet Inlet) error {
@@ -55,13 +55,13 @@ func (c *Controller) CreateInlet(inlet Inlet) error {
 		inlet.ID = id
 		return inlet
 	}
-	return c.store.Create(INLET_BUCKET, fn)
+	return c.store.Create(InletBucket, fn)
 }
 
 func (c *Controller) UpdateInlet(id string, payload interface{}) error {
-	return c.store.Update(INLET_BUCKET, id, payload)
+	return c.store.Update(InletBucket, id, payload)
 }
 
 func (c *Controller) DeleteInlet(id string) error {
-	return c.store.Delete(INLET_BUCKET, id)
+	return c.store.Delete(InletBucket, id)
 }

@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+const OutletBucket = "outlets"
+
 type Outlet struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
@@ -20,7 +22,7 @@ type OuteltAction struct {
 
 func (c *Controller) GetOutlet(id string) (Outlet, error) {
 	var outlet Outlet
-	return outlet, c.store.Get("outlets", id, &outlet)
+	return outlet, c.store.Get(OutletBucket, id, &outlet)
 }
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
@@ -34,7 +36,7 @@ func (c *Controller) ListOutlets() (*[]interface{}, error) {
 			"name": outlet.Name,
 		}, nil
 	}
-	return c.store.List("outlets", fn)
+	return c.store.List(OutletBucket, fn)
 }
 
 func (c *Controller) CreateOutlet(outlet Outlet) error {
@@ -42,20 +44,20 @@ func (c *Controller) CreateOutlet(outlet Outlet) error {
 		outlet.ID = id
 		return outlet
 	}
-	return c.store.Create("outlets", fn)
+	return c.store.Create(OutletBucket, fn)
 }
 
 func (c *Controller) UpdateOutlet(id string, payload interface{}) error {
-	return c.store.Update("outlets", id, payload)
+	return c.store.Update(OutletBucket, id, payload)
 }
 
 func (c *Controller) DeleteOutlet(id string) error {
-	return c.store.Delete("outlets", id)
+	return c.store.Delete(OutletBucket, id)
 }
 
 func (c *Controller) ConfigureOutlet(id string, a OuteltAction) error {
 	var o Outlet
-	if err := c.store.Get("outlets", id, &o); err != nil {
+	if err := c.store.Get(OutletBucket, id, &o); err != nil {
 		return err
 	}
 	switch o.Type {
