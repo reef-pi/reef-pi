@@ -27,12 +27,6 @@ Reefer supports following reef tank automations via webui
 
 ## Usage
 
-Modules
-
-  - Camera (Taking still images, streaming video)
-  - Relay (Timer based on/off)
-  - Dosing/TopOff
-  - Heater, temperature control
 
 
 ## References
