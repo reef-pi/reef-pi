@@ -50,12 +50,14 @@ func main() {
           Disable Google OAuth
       -pwm
           Enable pwm support
-      -pwm
+      -adc
           Enable adc support
       -version
           Print version information
       -high
           Relay if off in GPIO high state
+      -version
+			    Print version information
     `
 		fmt.Println(strings.TrimSpace(text))
 	}
