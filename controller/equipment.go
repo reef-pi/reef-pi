@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 )
 
+const EquipmentBucket = "equipments"
+
 type Equipment struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
@@ -12,7 +14,7 @@ type Equipment struct {
 
 func (c *Controller) GetEquipment(id string) (Equipment, error) {
 	var eq Equipment
-	return eq, c.store.Get("equipments", id, &eq)
+	return eq, c.store.Get(EquipmentBucket, id, &eq)
 }
 
 func (c Controller) ListEquipments() (*[]interface{}, error) {
@@ -26,7 +28,7 @@ func (c Controller) ListEquipments() (*[]interface{}, error) {
 			"name": e.Name,
 		}, nil
 	}
-	return c.store.List("equipments", fn)
+	return c.store.List(EquipmentBucket, fn)
 }
 
 func (c *Controller) CreateEquipment(eq Equipment) error {
@@ -34,13 +36,13 @@ func (c *Controller) CreateEquipment(eq Equipment) error {
 		eq.ID = id
 		return eq
 	}
-	return c.store.Create("equipments", fn)
+	return c.store.Create(EquipmentBucket, fn)
 }
 
 func (c *Controller) UpdateEquipment(id string, payload Equipment) error {
-	return c.store.Update("equipments", id, payload)
+	return c.store.Update(EquipmentBucket, id, payload)
 }
 
 func (c *Controller) DeleteEquipment(id string) error {
-	return c.store.Delete("equipments", id)
+	return c.store.Delete(EquipmentBucket, id)
 }

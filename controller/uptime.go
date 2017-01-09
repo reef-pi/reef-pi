@@ -9,13 +9,15 @@ import (
 	"time"
 )
 
+const UptimeBucket = "uptime"
+
 type TimeLog struct {
 	Time    string `json:"time"`
 	StartUp bool   `json:"startup"` // true if start, false if stop
 }
 
 func (c *Controller) initUptimeBucket() error {
-	return c.store.CreateBucket("uptime")
+	return c.store.CreateBucket(UptimeBucket)
 }
 
 func (c *Controller) logStartTime() error {
@@ -29,7 +31,7 @@ func (c *Controller) logStartTime() error {
 	fn := func(id string) interface{} {
 		return l
 	}
-	return c.store.Create("uptime", fn)
+	return c.store.Create(UptimeBucket, fn)
 }
 
 func (c *Controller) logStopTime() error {
@@ -40,12 +42,12 @@ func (c *Controller) logStopTime() error {
 	fn := func(id string) interface{} {
 		return l
 	}
-	return c.store.Create("uptime", fn)
+	return c.store.Create(UptimeBucket, fn)
 }
 
 func (c *Controller) lastStartTime() (t string, err error) {
 	err = c.store.DB().View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("uptime"))
+		b := tx.Bucket([]byte(UptimeBucket))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {
 			var tl TimeLog
@@ -67,7 +69,7 @@ func (c *Controller) lastStartTime() (t string, err error) {
 
 func (c *Controller) lastStopTime() (t string, err error) {
 	err = c.store.DB().View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("uptime"))
+		b := tx.Bucket([]byte(UptimeBucket))
 		c := b.Cursor()
 		for k, v := c.Last(); k != nil; k, v = c.Prev() {
 			var tl TimeLog

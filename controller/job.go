@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const JobBucket = "jobs"
+
 type Job struct {
 	ID        string `json:"id"`
 	Minute    string `json:"minute"`
@@ -21,7 +23,7 @@ type Job struct {
 
 func (c *Controller) GetJob(id string) (Job, error) {
 	var job Job
-	return job, c.store.Get("jobs", id, &job)
+	return job, c.store.Get(JobBucket, id, &job)
 }
 
 func (c *Controller) ListJobs() (*[]interface{}, error) {
@@ -29,7 +31,7 @@ func (c *Controller) ListJobs() (*[]interface{}, error) {
 		var job Job
 		return &job, json.Unmarshal(v, &job)
 	}
-	return c.store.List("jobs", fn)
+	return c.store.List(JobBucket, fn)
 }
 
 func (c *Controller) CreateJob(job Job) error {
@@ -37,18 +39,18 @@ func (c *Controller) CreateJob(job Job) error {
 		job.ID = id
 		return job
 	}
-	if err := c.store.Create("jobs", fn); err != nil {
+	if err := c.store.Create(JobBucket, fn); err != nil {
 		return err
 	}
 	return c.addToCron(job)
 }
 
 func (c *Controller) UpdateJob(id string, payload Job) error {
-	return c.store.Update("jobs", id, payload)
+	return c.store.Update(JobBucket, id, payload)
 }
 
 func (c *Controller) DeleteJob(id string) error {
-	if err := c.store.Delete("jobs", id); err != nil {
+	if err := c.store.Delete(JobBucket, id); err != nil {
 		return err
 	}
 	return c.deleteFromCron(id)

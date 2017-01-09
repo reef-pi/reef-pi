@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 )
 
+const BoardBucket = "boards"
+
 type Board struct {
 	ID     string          `json:"id"`
 	Name   string          `json:"name"`
@@ -13,7 +15,7 @@ type Board struct {
 
 func (c *Controller) GetBoard(id string) (Board, error) {
 	var board Board
-	return board, c.store.Get("boards", id, &board)
+	return board, c.store.Get(BoardBucket, id, &board)
 }
 
 func (c *Controller) ListBoards() (*[]interface{}, error) {
@@ -21,7 +23,7 @@ func (c *Controller) ListBoards() (*[]interface{}, error) {
 		var board Board
 		return &board, json.Unmarshal(v, &board)
 	}
-	return c.store.List("boards", fn)
+	return c.store.List(BoardBucket, fn)
 }
 
 func (c *Controller) CreateBoard(board Board) error {
@@ -29,13 +31,13 @@ func (c *Controller) CreateBoard(board Board) error {
 		board.ID = id
 		return board
 	}
-	return c.store.Create("boards", fn)
+	return c.store.Create(BoardBucket, fn)
 }
 
 func (c *Controller) UpdateBoard(id string, payload Board) error {
-	return c.store.Update("boards", id, payload)
+	return c.store.Update(BoardBucket, id, payload)
 }
 
 func (c *Controller) DeleteBoard(id string) error {
-	return c.store.Delete("boards", id)
+	return c.store.Delete(BoardBucket, id)
 }
