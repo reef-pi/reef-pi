@@ -6,6 +6,7 @@ import Electronics from './electronics.jsx'
 import Equipments from './equipments.jsx'
 import Jobs from './jobs.jsx'
 import ATO from './ato.jsx'
+import Lighting from './lighting.jsx'
 
 export default class App extends React.Component {
   handleSelect (index, last) {
@@ -20,6 +21,7 @@ export default class App extends React.Component {
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
           <Tab>ATO</Tab>
+          <Tab>Lighting</Tab>
         </TabList>
         <TabPanel>
           <Dashboard />
@@ -35,6 +37,9 @@ export default class App extends React.Component {
         </TabPanel>
         <TabPanel>
           <ATO />
+        </TabPanel>
+        <TabPanel>
+          <Lighting />
         </TabPanel>
       </Tabs>
     )
