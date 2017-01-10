@@ -3,9 +3,10 @@ package controller
 import (
 	"os"
 	"testing"
+	"time"
 )
 
-func TestLighting(t *testing.T) {
+func TestLightingAPI(t *testing.T) {
 	var err error
 	var c *Controller
 	var list *[]interface{}
@@ -36,7 +37,7 @@ func TestLighting(t *testing.T) {
 		Name:        "test-lighting",
 		Enabled:     false,
 		Intensities: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-		Outlet:      "1",
+		Channel:     1,
 	}
 	if err = c.CreateLighting(*l); err != nil {
 		t.Error(err)
@@ -58,6 +59,21 @@ func TestLighting(t *testing.T) {
 	}
 	if l.Name != "test-lighting" {
 		t.Error("Expected: 'test-lighting' Found:", l.Name)
+		return
+	}
+}
+
+func TestGetCurrentValue(t *testing.T) {
+	l := Lighting{
+		Intensities: []int{0, 0, 0, 0, 20, 40, 60, 70, 30, 10, 0, 0},
+	}
+	if err := l.Validate(); err != nil {
+		t.Error(err)
+		return
+	}
+	v := l.getCurrentValue(time.Now())
+	if v != 10 {
+		t.Error("Expected 10, found:", v)
 		return
 	}
 }

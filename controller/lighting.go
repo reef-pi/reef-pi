@@ -2,6 +2,10 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
+	"math"
+	"time"
 )
 
 const LightingBucket = "lightings"
@@ -10,8 +14,64 @@ type Lighting struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Enabled     bool   `json:"enabled"`
-	Outlet      string `json:"outlet"`
+	Channel     int    `json:"channel"`
 	Intensities []int  `json:"intensities"`
+	stopCh      chan struct{}
+	ticker      *time.Ticker
+}
+
+func (l *Lighting) Validate() error {
+	if len(l.Intensities) != 12 {
+		fmt.Errorf("Expect 12 values instead of:", len(l.Intensities))
+	}
+	for i, v := range l.Intensities {
+		if (v < 0) || (v > 100) {
+			return fmt.Errorf("Intensity value '", v, "' at posiotion", i, "is out of range (0-99)")
+		}
+	}
+	return nil
+}
+
+func (l *Lighting) getCurrentValue(t time.Time) int {
+	h1 := (t.Hour() / 2) - 1
+	h2 := h1 + 1
+	if h2 >= 12 {
+		h2 = 0
+	}
+
+	m := t.Minute()
+	from := l.Intensities[h1]
+	to := l.Intensities[h2]
+	f := float64(from) + (((float64(to) - float64(from)) / 120.0) * float64(m))
+	fmt.Println("Time:", t, "H1:", h1, "H2:", h2, "From:", from, "To:", to, "Final:", f)
+	return int(math.Floor(f - 0.5))
+}
+
+func (l *Lighting) Start(pwm *PWM) {
+	l.ticker = time.NewTicker(time.Minute)
+	l.stopCh = make(chan struct{})
+	previousValue := -1
+	for {
+		select {
+		case <-l.stopCh:
+			l.ticker.Stop()
+			l.ticker = nil
+			l.stopCh = nil
+			return
+		case <-l.ticker.C:
+			v := l.getCurrentValue(time.Now())
+			if v == previousValue {
+				continue
+			}
+			pwm.Set(l.Channel, v)
+			previousValue = v
+		}
+	}
+}
+
+func (l *Lighting) Stop() error {
+	l.stopCh <- struct{}{}
+	return nil
 }
 
 func (c *Controller) GetLighting(id string) (Lighting, error) {
@@ -28,6 +88,10 @@ func (c Controller) ListLightings() (*[]interface{}, error) {
 }
 
 func (c *Controller) CreateLighting(l Lighting) error {
+	if err := l.Validate(); err != nil {
+		return err
+	}
+
 	fn := func(id string) interface{} {
 		l.ID = id
 		return l
@@ -44,9 +108,26 @@ func (c *Controller) DeleteLighting(id string) error {
 }
 
 func (c *Controller) EnableLighting(id string) error {
+	l, err := c.GetLighting(id)
+	if err != nil {
+		return err
+	}
+	if l.Enabled {
+		log.Println("Lighting:", l.Name, "is already enabled")
+		return nil
+	}
+	go l.Start(c.pwm)
 	return nil
 }
 
 func (c *Controller) DisableLighting(id string) error {
-	return nil
+	l, err := c.GetLighting(id)
+	if err != nil {
+		return err
+	}
+	if !l.Enabled {
+		log.Println("Lighting:", l.Name, "is already disabled")
+		return nil
+	}
+	return l.Stop()
 }

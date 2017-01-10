@@ -11,6 +11,7 @@ type ServerConfig struct {
 	Auth           AuthConfig `yaml:"auth"`
 	ImageDirectory string     `yaml:"image_directory"`
 	Interface      string     `yaml:"interface"`
+	DSIDisplay     bool       `yaml:"dsi_display"`
 }
 
 type Server struct {
@@ -59,7 +60,7 @@ func SetupServer(config ServerConfig, c *controller.Controller, auth bool) error
 		http.Handle("/assets/", MustAuth(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", MustAuth(http.StripPrefix("/images/", images)))
 		http.Handle("/doc/", MustAuth(http.StripPrefix("/doc/", docs)))
-		http.Handle("/api", MustAuth(NewApiHandler(c, config.Interface)))
+		http.Handle("/api", MustAuth(NewApiHandler(c, config.Interface, config.DSIDisplay)))
 
 		// Auth specific paths
 		http.HandleFunc("/auth/", server.loginHandler)
@@ -69,7 +70,7 @@ func SetupServer(config ServerConfig, c *controller.Controller, auth bool) error
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
-		http.Handle("/api/", NewApiHandler(c, config.Interface))
+		http.Handle("/api/", NewApiHandler(c, config.Interface, config.DSIDisplay))
 	}
 	return nil
 }
