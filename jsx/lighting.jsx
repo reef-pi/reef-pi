@@ -99,7 +99,6 @@ export default class Lighting extends React.Component {
     var new_lighting = this.state.new_lighting ;
     var i = Number(e.target.id.split("-")[1])
     new_lighting.intensities[i] = Number(e.target.value);
-    console.log(i, new_lighting.intensities)
     this.setState({
       new_lighting:  new_lighting
     })

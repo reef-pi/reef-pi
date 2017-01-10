@@ -50,7 +50,7 @@ func (l *Lighting) getCurrentValue(t time.Time) int {
 }
 
 func (l *Lighting) Start(pwm *PWM) {
-	l.ticker = time.NewTicker(time.Minute)
+	l.ticker = time.NewTicker(time.Minute * 1)
 	l.stopCh = make(chan struct{})
 	previousValue := -1
 	for {
@@ -63,6 +63,7 @@ func (l *Lighting) Start(pwm *PWM) {
 		case <-l.ticker.C:
 			v := l.getCurrentValue(time.Now())
 			if v == previousValue {
+				log.Println("Skip setting pwm value:", v, "for lighting:", l.Name, "its same as previous")
 				continue
 			}
 			log.Println("Setting pwm value:", v, "for lighting:", l.Name)
@@ -73,6 +74,10 @@ func (l *Lighting) Start(pwm *PWM) {
 }
 
 func (l *Lighting) Stop() {
+	if l.stopCh == nil {
+		log.Println("WARNING: stop channel is not initialized.")
+		return
+	}
 	l.stopCh <- struct{}{}
 }
 
