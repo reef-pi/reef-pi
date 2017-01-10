@@ -39,7 +39,19 @@ export default class Lighting extends React.Component {
     })
   }
 
-  configureLighting () {
+  configureLighting (ev) {
+    var lightID = ev.target.id.split('-')[1]
+    var action = ev.target.value
+    $.ajax({
+      url: '/api/lightings/'+ lightID +'/'+action,
+      type: 'POST',
+      success: function (data) {
+        this.fetchData();
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
   }
 
   toggleAddLightingdDiv () {
@@ -135,7 +147,6 @@ export default class Lighting extends React.Component {
         </div>
           )
     }
-
     return (list)
   }
 

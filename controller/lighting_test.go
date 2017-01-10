@@ -71,9 +71,10 @@ func TestGetCurrentValue(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	v := l.getCurrentValue(time.Now())
-	if v != 10 {
-		t.Error("Expected 10, found:", v)
+	t1 := time.Date(2015, time.October, 12, 0, 0, 0, 0, time.UTC)
+	v := l.getCurrentValue(t1)
+	if v != 0 {
+		t.Error("Expected 0, found:", v)
 		return
 	}
 }

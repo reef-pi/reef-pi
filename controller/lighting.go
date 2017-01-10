@@ -34,6 +34,9 @@ func (l *Lighting) Validate() error {
 
 func (l *Lighting) getCurrentValue(t time.Time) int {
 	h1 := (t.Hour() / 2) - 1
+	if h1 == -1 {
+		h1 = 11
+	}
 	h2 := h1 + 1
 	if h2 >= 12 {
 		h2 = 0
@@ -43,8 +46,7 @@ func (l *Lighting) getCurrentValue(t time.Time) int {
 	from := l.Intensities[h1]
 	to := l.Intensities[h2]
 	f := float64(from) + (((float64(to) - float64(from)) / 120.0) * float64(m))
-	fmt.Println("Time:", t, "H1:", h1, "H2:", h2, "From:", from, "To:", to, "Final:", f)
-	return int(math.Floor(f - 0.5))
+	return int(math.Ceil(f - 0.5))
 }
 
 func (l *Lighting) Start(pwm *PWM) {
@@ -63,15 +65,15 @@ func (l *Lighting) Start(pwm *PWM) {
 			if v == previousValue {
 				continue
 			}
+			log.Println("Setting pwm value:", v, "for lighting:", l.Name)
 			pwm.Set(l.Channel, v)
 			previousValue = v
 		}
 	}
 }
 
-func (l *Lighting) Stop() error {
+func (l *Lighting) Stop() {
 	l.stopCh <- struct{}{}
-	return nil
 }
 
 func (c *Controller) GetLighting(id string) (Lighting, error) {
@@ -108,6 +110,9 @@ func (c *Controller) DeleteLighting(id string) error {
 }
 
 func (c *Controller) EnableLighting(id string) error {
+	if !c.enablePWM {
+		return fmt.Errorf("PWM is not enabled")
+	}
 	l, err := c.GetLighting(id)
 	if err != nil {
 		return err
@@ -117,7 +122,8 @@ func (c *Controller) EnableLighting(id string) error {
 		return nil
 	}
 	go l.Start(c.pwm)
-	return nil
+	l.Enabled = true
+	return c.UpdateLighting(l.ID, l)
 }
 
 func (c *Controller) DisableLighting(id string) error {
@@ -129,5 +135,7 @@ func (c *Controller) DisableLighting(id string) error {
 		log.Println("Lighting:", l.Name, "is already disabled")
 		return nil
 	}
-	return l.Stop()
+	l.Stop()
+	l.Enabled = false
+	return c.UpdateLighting(l.ID, l)
 }
