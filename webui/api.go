@@ -14,9 +14,10 @@ const (
 type APIHandler struct {
 	controller *controller.Controller
 	Interface  string
+	DSIDisplay bool
 }
 
-func NewApiHandler(c *controller.Controller, iface string) http.Handler {
+func NewApiHandler(c *controller.Controller, iface string, dsiDisplay bool) http.Handler {
 	if iface == "" {
 		iface = DEFAULT_INTERFACE
 	}
@@ -24,6 +25,7 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	handler := &APIHandler{
 		controller: c,
 		Interface:  iface,
+		DSIDisplay: dsiDisplay,
 	}
 
 	// Info (used by dashboard)

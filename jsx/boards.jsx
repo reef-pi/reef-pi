@@ -95,7 +95,7 @@ export default class Boards extends React.Component {
       display: this.state.addBoard ? 'block' : 'none'
     }
     return (
-      <div>
+      <div className='container'>
         <ul className='list-group'>
           { this.boardList() }
         </ul>

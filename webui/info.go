@@ -3,6 +3,8 @@ package webui
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"os/exec"
@@ -18,40 +20,72 @@ type ControllerInfo struct {
 }
 
 func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
-	out, err := exec.Command("vcgencmd", "display_power").CombinedOutput()
-	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	var state bool
+	if h.DSIDisplay {
+		d, err := ioutil.ReadFile("/sys/class/backlight/rpi_backlight/bl_power")
+		if err != nil {
+			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
+			return
+		}
+		state = string(d) == "0"
+	} else {
+		out, err := exec.Command("vcgencmd", "display_power").CombinedOutput()
+		if err != nil {
+			errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+			return
+		}
+		stateStr := strings.Split(string(out), "=")[1]
+		state = stateStr == "1"
 	}
 	w.Header().Set("Content-Type", "application/json")
-	state := strings.Split(string(out), "=")[1]
-	payload := map[string]bool{"on": state == "1"}
 	encoder := json.NewEncoder(w)
+	payload := map[string]bool{"on": state}
 	if err := encoder.Encode(&payload); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
 	}
 }
 
 func (h *APIHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
-	if err := exec.Command("vcgencmd", "display_power", "1").Run(); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	if h.DSIDisplay {
+		if err := ioutil.WriteFile("/sys/class/backlight/rpi_backlight/bl_power", []byte("0"), 0644); err != nil {
+			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
+			return
+		}
+	} else {
+		if err := exec.Command("vcgencmd", "display_power", "1").Run(); err != nil {
+			errorResponse(http.StatusInternalServerError, "Failed to enable display. Error: "+err.Error(), w)
+			return
+		}
 	}
-
+	log.Println("Display enabled")
 }
 
 func (h *APIHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
-	if err := exec.Command("vcgencmd", "display_power", "0").Run(); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+	if h.DSIDisplay {
+		if err := ioutil.WriteFile("/sys/class/backlight/rpi_backlight/bl_power", []byte("1"), 0644); err != nil {
+			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
+			return
+		}
+	} else {
+		if err := exec.Command("vcgencmd", "display_power", "0").Run(); err != nil {
+			log.Println("ERROR: Failed to disable display:", err)
+			errorResponse(http.StatusInternalServerError, "Failed to disable display. Error: "+err.Error(), w)
+			return
+		}
 	}
+	log.Println("Display disabled")
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	ip, err := getIP(h.Interface)
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
+		return
 	}
 	temp, err := getTemperature()
 	if err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
+		return
 	}
 	info := ControllerInfo{
 		Time:        time.Now().Format("Mon Jan 2 15:04:05"),
@@ -63,6 +97,7 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 	if err := encoder.Encode(&info); err != nil {
 		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
+		return
 	}
 }
 
