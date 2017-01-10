@@ -25,8 +25,20 @@ export default class Lighting extends React.Component {
     this.fetchData()
   }
 
-  deleteLighting () {
+  deleteLighting (ev) {
+    var lightID = ev.target.id.split('-')[1]
+    $.ajax({
+      url: '/api/lightings/' + lightID,
+      type: 'DELETE',
+      success: function (data) {
+        this.fetchData()
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
   }
+
   configureLighting () {
   }
 
@@ -35,7 +47,26 @@ export default class Lighting extends React.Component {
       addLighting: !this.state.addLighting
     })
   }
+
   addLighting(){
+    var enabled = $('#lightEnable').checked
+    $.ajax({
+      url: '/api/lightings',
+      type: 'PUT',
+      data: JSON.stringify({
+        name: $('#lightName').val(),
+        enabled:  enabled,
+        channel: Number($('#lightChannel').val()),
+        intensities: this.state.new_lighting.intensities
+      }),
+      success: function (data) {
+        this.fetchData()
+        this.toggleAddLightingdDiv()
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
   }
 
   fetchData () {
@@ -55,7 +86,7 @@ export default class Lighting extends React.Component {
   updateIntensity(e) {
     var new_lighting = this.state.new_lighting ;
     var i = Number(e.target.id.split("-")[1])
-    new_lighting.intensities[i] = e.target.value;
+    new_lighting.intensities[i] = Number(e.target.value);
     console.log(i, new_lighting.intensities)
     this.setState({
       new_lighting:  new_lighting
@@ -121,11 +152,11 @@ export default class Lighting extends React.Component {
         <div style={dStyle} className='container'>
           <div className="row">
             <div className="col-sm-1">Name</div>
-            <input className="col-sm-2" type="text" id="lighting-name"/>
+            <input className="col-sm-2" type="text" id="lightName"/>
             <div className="col-sm-1">Enable</div>
-            <input className="checkbox" type="text" id="lighting-enable"/>
-            <div className="col-sm-1">Outel</div>
-            <input className="col-xs-1" type="text" id="outlet-id"/>
+            <input className="col-xs-1 checkbox" type="checkbox" id="lightEnable"/>
+            <div className="col-sm-1">Channel</div>
+            <input className="col-xs-1" type="text" id="lightChannel"/>
           </div>
           <div className="row">
             {this.sliderList()}
