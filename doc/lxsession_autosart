@@ -5,4 +5,4 @@
 @xset s noblank
 @xset s off
 @xset -dpms
-@chromium --noerrdialogs --kiosk http://localhost:8080 --incognito
+@chromium-browser --noerrdialogs --kiosk http://localhost:8080 --incognito
