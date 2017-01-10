@@ -35,6 +35,8 @@ export default class Lighting extends React.Component {
       addLighting: !this.state.addLighting
     })
   }
+  addLighting(){
+  }
 
   fetchData () {
     $.ajax({
