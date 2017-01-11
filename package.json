@@ -11,13 +11,14 @@
     "S": "^0.0.1",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
+    "browser": "^0.2.6",
     "jquery": "^3.1.1",
     "react-bootstrap": "^0.30.5",
     "react-bootstrap-slider": "^1.1.3",
     "react-bootstrap-switch": "^15.0.0",
-    "react-d3-basic": "^1.6.11",
     "react-slider": "^0.7.0",
     "react-tabs": "^0.8.0",
+    "recharts": "^0.20.2",
     "standard": "^8.6.0"
   },
   "devDependencies": {

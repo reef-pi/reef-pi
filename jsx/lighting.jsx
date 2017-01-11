@@ -43,10 +43,10 @@ export default class Lighting extends React.Component {
     var lightID = ev.target.id.split('-')[1]
     var action = ev.target.value
     $.ajax({
-      url: '/api/lightings/'+ lightID +'/'+action,
+      url: '/api/lightings/' + lightID + '/' + action,
       type: 'POST',
       success: function (data) {
-        this.fetchData();
+        this.fetchData()
       }.bind(this),
       error: function (xhr, status, err) {
         console.log(err.toString())
@@ -60,14 +60,14 @@ export default class Lighting extends React.Component {
     })
   }
 
-  addLighting(){
+  addLighting () {
     var enabled = $('#lightEnable').checked
     $.ajax({
       url: '/api/lightings',
       type: 'PUT',
       data: JSON.stringify({
         name: $('#lightName').val(),
-        enabled:  enabled,
+        enabled: enabled,
         channel: Number($('#lightChannel').val()),
         intensities: this.state.new_lighting.intensities
       }),
@@ -95,12 +95,12 @@ export default class Lighting extends React.Component {
     })
   }
 
-  updateIntensity(e) {
-    var new_lighting = this.state.new_lighting ;
-    var i = Number(e.target.id.split("-")[1])
-    new_lighting.intensities[i] = Number(e.target.value);
+  updateIntensity (e) {
+    var new_lighting = this.state.new_lighting
+    var i = Number(e.target.id.split('-')[1])
+    new_lighting.intensities[i] = Number(e.target.value)
     this.setState({
-      new_lighting:  new_lighting
+      new_lighting: new_lighting
     })
   }
 
@@ -133,15 +133,15 @@ export default class Lighting extends React.Component {
     }
     var list = []
     for (var i = 0; i < 12; i++) {
-      var intensity = this.state.new_lighting.intensities[i];
+      var intensity = this.state.new_lighting.intensities[i]
       list.push(
-        <div className='col-sm-1 text-center' key={i+1}>
-          <div className="row">{intensity}</div>
-          <div className="row">
-            <input className="col-xs-1" type='range' style={rangeStyle} onChange={this.updateIntensity} value={intensity} id={'intensity-'+i}/>
+        <div className='col-sm-1 text-center' key={i + 1}>
+          <div className='row'>{intensity}</div>
+          <div className='row'>
+            <input className='col-xs-1' type='range' style={rangeStyle} onChange={this.updateIntensity} value={intensity} id={'intensity-' + i} />
           </div>
-          <div className="row">
-            <label>{i*2}</label>
+          <div className='row'>
+            <label>{i * 2}</label>
           </div>
         </div>
           )
@@ -160,15 +160,15 @@ export default class Lighting extends React.Component {
         </ul>
         <input type='button' value={this.state.addLighting ? '-' : '+'} onClick={this.toggleAddLightingdDiv} className='btn btn-outline-success' />
         <div style={dStyle} className='container'>
-          <div className="row">
-            <div className="col-sm-1">Name</div>
-            <input className="col-sm-2" type="text" id="lightName"/>
-            <div className="col-sm-1">Enable</div>
-            <input className="col-xs-1 checkbox" type="checkbox" id="lightEnable"/>
-            <div className="col-sm-1">Channel</div>
-            <input className="col-xs-1" type="text" id="lightChannel"/>
+          <div className='row'>
+            <div className='col-sm-1'>Name</div>
+            <input className='col-sm-2' type='text' id='lightName' />
+            <div className='col-sm-1'>Enable</div>
+            <input className='col-xs-1 checkbox' type='checkbox' id='lightEnable' />
+            <div className='col-sm-1'>Channel</div>
+            <input className='col-xs-1' type='text' id='lightChannel' />
           </div>
-          <div className="row">
+          <div className='row'>
             {this.sliderList()}
           </div>
           <div className='row'>
