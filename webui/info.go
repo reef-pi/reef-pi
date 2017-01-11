@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+const (
+	DSIDevice = "/sys/class/backlight/rpi_backlight/bl_power"
+)
+
 type ControllerInfo struct {
 	IP          string `json:"ip"`
 	Time        string `json:"time"`
@@ -22,7 +26,7 @@ type ControllerInfo struct {
 func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
 	var state bool
 	if h.DSIDisplay {
-		d, err := ioutil.ReadFile("/sys/class/backlight/rpi_backlight/bl_power")
+		d, err := ioutil.ReadFile(DSIDevice)
 		if err != nil {
 			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
 			return
@@ -47,7 +51,7 @@ func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
 
 func (h *APIHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
 	if h.DSIDisplay {
-		if err := ioutil.WriteFile("/sys/class/backlight/rpi_backlight/bl_power", []byte("0"), 0644); err != nil {
+		if err := ioutil.WriteFile(DSIDevice, []byte("0"), 0644); err != nil {
 			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
 			return
 		}
@@ -62,7 +66,7 @@ func (h *APIHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
 
 func (h *APIHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
 	if h.DSIDisplay {
-		if err := ioutil.WriteFile("/sys/class/backlight/rpi_backlight/bl_power", []byte("1"), 0644); err != nil {
+		if err := ioutil.WriteFile(DSIDevice, []byte("1"), 0644); err != nil {
 			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
 			return
 		}
