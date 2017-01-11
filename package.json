@@ -15,6 +15,7 @@
     "react-bootstrap": "^0.30.5",
     "react-bootstrap-slider": "^1.1.3",
     "react-bootstrap-switch": "^15.0.0",
+    "react-d3-basic": "^1.6.11",
     "react-slider": "^0.7.0",
     "react-tabs": "^0.8.0",
     "standard": "^8.6.0"
