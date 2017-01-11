@@ -89,7 +89,7 @@ func (c *Controller) lastStopTime() (t string, err error) {
 	return
 }
 
-func (c *Controller) StartTime() string {
+func (c *Controller) Uptime() string {
 	t, err := c.lastStartTime()
 	if err != nil {
 		log.Println("ERROR:", err)

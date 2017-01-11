@@ -16,10 +16,10 @@ type Controller struct {
 	pwm        *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
 	adc        *ADC // Analog to digital converter (sensors)
 	atos       map[string]*ATO
-
-	enablePWM bool
-	enableADC bool
-	highRelay bool
+	temp       *TemperatureSensor
+	enablePWM  bool
+	enableADC  bool
+	highRelay  bool
 }
 
 func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
@@ -44,6 +44,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 	store := NewStore(db)
 	c := &Controller{
 		adc:        adc,
+		temp:       NewTemperatureSensor(0, adc),
 		atos:       make(map[string]*ATO),
 		pwm:        pwm,
 		enablePWM:  enablePWM,

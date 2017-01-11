@@ -1,11 +1,15 @@
 import React from 'react'
 import $ from 'jquery'
+import {Area, AreaChart, XAxis, YAxis} from 'recharts'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      info: {},
+      info: {
+        system: {},
+        temperature_readings: []
+      },
       displayOn: undefined
     }
     this.refresh = this.refresh.bind(this)
@@ -28,7 +32,7 @@ export default class Dashboard extends React.Component {
     })
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.refresh()
     setInterval(this.refresh, 180 * 1000)
     $.ajax({
@@ -71,6 +75,10 @@ export default class Dashboard extends React.Component {
       dispalyStyle = 'btn btn-outline-success'
       displayAction = 'on'
     }
+    var data = []
+    $.each(this.state.info.temperature_readings, function (k, v) {
+      data.push({name: String(k), temperature: v})
+    })
     return (
       <div className='container'>
         <h5>Controller Summary</h5>
@@ -78,25 +86,25 @@ export default class Dashboard extends React.Component {
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>Time</div>
-              <div className='col-sm-6'>{this.state.info.time}</div>
+              <div className='col-sm-6'>{this.state.info.system.current_time}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>IP</div>
-              <div className='col-sm-6'>{this.state.info.ip}</div>
+              <div className='col-sm-6'>{this.state.info.system.ip}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>Up Since</div>
-              <div className='col-sm-6'>{this.state.info.start_time}</div>
+              <div className='col-sm-6'>{this.state.info.system.uptime}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
-              <div className='col-sm-2'>Temperature</div>
-              <div className='col-sm-6'>{this.state.info.temperature}</div>
+              <div className='col-sm-3'>CPU Temperature</div>
+              <div className='col-sm-6'>{this.state.info.system.cpu_temperature}</div>
             </div>
           </li>
           <li className='list-group-item'>
@@ -106,6 +114,14 @@ export default class Dashboard extends React.Component {
             </div>
           </li>
         </ul>
+        <div className='row' id='chartContainer'>
+          <h5>Temperature</h5>
+          <AreaChart data={data} width={700} height={300}>
+            <Area type='monotone' dataKey='temperature' stroke='#8884d8' fill='#8884d8' />
+            <XAxis dataKey='name' />
+            <YAxis />
+          </AreaChart>
+        </div>
       </div>
     )
   }
