@@ -3,7 +3,6 @@ package webui
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -12,90 +11,37 @@ import (
 	"time"
 )
 
-const (
-	DSIDevice = "/sys/class/backlight/rpi_backlight/bl_power"
-)
-
-type ControllerInfo struct {
-	IP          string `json:"ip"`
-	Time        string `json:"time"`
-	StartTime   string `json:"start_time"`
-	Temperature string `json:"temperature"`
+type ControllerSummary struct {
+	IP             string `json:"ip"`
+	CurrentTime    string `json:"current_time"`
+	Uptime         string `json:"uptime"`
+	CPUTemperature string `json:"cpu_temperature"`
 }
 
-func (h *APIHandler) GetDisplay(w http.ResponseWriter, r *http.Request) {
-	var state bool
-	if h.DSIDisplay {
-		d, err := ioutil.ReadFile(DSIDevice)
-		if err != nil {
-			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
-			return
-		}
-		state = string(d) == "0"
-	} else {
-		out, err := exec.Command("vcgencmd", "display_power").CombinedOutput()
-		if err != nil {
-			errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
-			return
-		}
-		stateStr := strings.Split(string(out), "=")[1]
-		state = stateStr == "1"
-	}
-	w.Header().Set("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	payload := map[string]bool{"on": state}
-	if err := encoder.Encode(&payload); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
-	}
-}
-
-func (h *APIHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
-	if h.DSIDisplay {
-		if err := ioutil.WriteFile(DSIDevice, []byte("0"), 0644); err != nil {
-			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
-			return
-		}
-	} else {
-		if err := exec.Command("vcgencmd", "display_power", "1").Run(); err != nil {
-			errorResponse(http.StatusInternalServerError, "Failed to enable display. Error: "+err.Error(), w)
-			return
-		}
-	}
-	log.Println("Display enabled")
-}
-
-func (h *APIHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
-	if h.DSIDisplay {
-		if err := ioutil.WriteFile(DSIDevice, []byte("1"), 0644); err != nil {
-			errorResponse(http.StatusInternalServerError, "Failed enable display. Error: "+err.Error(), w)
-			return
-		}
-	} else {
-		if err := exec.Command("vcgencmd", "display_power", "0").Run(); err != nil {
-			log.Println("ERROR: Failed to disable display:", err)
-			errorResponse(http.StatusInternalServerError, "Failed to disable display. Error: "+err.Error(), w)
-			return
-		}
-	}
-	log.Println("Display disabled")
+type Info struct {
+	ControllerSummary   ControllerSummary `json:"system"`
+	TemperatureReadings []int             `json:"temperature_readings"`
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	ip, err := getIP(h.Interface)
 	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to detect ip for interface '"+h.Interface+"'. Error: "+err.Error(), w)
-		return
+		log.Println("ERROR: Failed to detect ip for interface '"+h.Interface+". Error:", err)
 	}
-	temp, err := getTemperature()
+	temp, err := getCPUTemperature()
 	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to get controller temperature. Error: "+err.Error(), w)
-		return
+		log.Println("ERROR:Failed to get controller temperature. Error:", err)
 	}
-	info := ControllerInfo{
-		Time:        time.Now().Format("Mon Jan 2 15:04:05"),
-		IP:          ip,
-		StartTime:   h.controller.StartTime(),
-		Temperature: string(temp),
+	summary := ControllerSummary{
+		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05"),
+		IP:             ip,
+		Uptime:         h.controller.Uptime(),
+		CPUTemperature: string(temp),
+	}
+	temperatureReadings := h.controller.GetTemperature()
+	info := Info{
+		ControllerSummary:   summary,
+		TemperatureReadings: temperatureReadings,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
@@ -125,7 +71,7 @@ func getIP(i string) (string, error) {
 	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
 }
 
-func getTemperature() (string, error) {
+func getCPUTemperature() (string, error) {
 	out, err := exec.Command("vcgencmd", "measure_temp").CombinedOutput()
 	if err != nil {
 		return "", err
