@@ -33,6 +33,7 @@ func (c *Controller) doSwitching(pinNumber int, action string) error {
 }
 
 func (c *Controller) doPWM(o Outlet, a OuteltAction) error {
+	log.Println("Setting PWM Pin:", o.Pin, "State:", a.Action, "Value:", a.Value)
 	if a.Action == "off" {
 		return c.pwm.Off(o.Pin)
 	}
