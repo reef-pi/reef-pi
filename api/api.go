@@ -1,4 +1,4 @@
-package webui
+package api
 
 import (
 	"encoding/json"

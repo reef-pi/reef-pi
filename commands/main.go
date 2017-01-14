@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/ranjib/reefer/api"
 	"github.com/ranjib/reefer/controller"
-	"github.com/ranjib/reefer/webui"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -14,8 +14,8 @@ import (
 	"strings"
 )
 
-func ParseConfig(filename string) (*webui.ServerConfig, error) {
-	var c webui.ServerConfig
+func ParseConfig(filename string) (*api.ServerConfig, error) {
+	var c api.ServerConfig
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func main() {
 		fmt.Println(Version)
 		return
 	}
-	var config webui.ServerConfig
+	var config api.ServerConfig
 	if *configFile != "" {
 		conf, err := ParseConfig(*configFile)
 		if err != nil {
@@ -81,7 +81,7 @@ func main() {
 	if err := c.Start(); err != nil {
 		log.Fatal(err)
 	}
-	if err := webui.SetupServer(config, c, !*noAuth); err != nil {
+	if err := api.SetupServer(config, c, !*noAuth); err != nil {
 		log.Fatal("ERROR:", err)
 	}
 	addr := fmt.Sprintf(":%d", *port)
