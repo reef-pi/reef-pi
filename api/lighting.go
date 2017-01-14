@@ -1,4 +1,4 @@
-package webui
+package api
 
 import (
 	"github.com/ranjib/reefer/controller"
