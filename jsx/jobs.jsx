@@ -148,7 +148,7 @@ export default class Jobs extends React.Component {
       hour: $('#hour').val(),
       minute: $('#minute').val(),
       second: $('#second').val(),
-      action: this.state.equipmentAction,
+      on: (this.state.equipmentAction === 'on'),
       value: this.state.equipmentValue,
       equipment: this.state.equipment.id
     }

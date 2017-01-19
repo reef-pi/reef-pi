@@ -16,7 +16,7 @@ type Job struct {
 	Hour      string `json:"hour"`
 	Second    string `json:"second"`
 	Equipment string `json:"equipment"`
-	Action    string `json:"action"`
+	On        bool   `json:"on"`
 	Value     int    `json:"value"`
 	Name      string `json:"name"`
 }
