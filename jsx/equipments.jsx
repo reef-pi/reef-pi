@@ -25,7 +25,7 @@ export default class Equipments extends React.Component {
     $.each(this.state.equipments, function (k, v) {
       list.push(
         <li key={k} className='list-group-item'>
-          <Equipment id={v.id} name={v.name} updateHook={this.fetchData} />
+          <Equipment id={v.id} name={v.name} on={v.on} updateHook={this.fetchData} />
         </li>
             )
     }.bind(this))

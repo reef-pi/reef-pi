@@ -1,13 +1,12 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/kidoman/embd"
 	_ "github.com/kidoman/embd/host/rpi"
 	"log"
 )
 
-func (c *Controller) doSwitching(pinNumber int, action string) error {
+func (c *Controller) doSwitching(pinNumber int, on bool) error {
 	pin, err := embd.NewDigitalPin(pinNumber)
 	if err != nil {
 		return err
@@ -16,26 +15,23 @@ func (c *Controller) doSwitching(pinNumber int, action string) error {
 		return err
 	}
 	state := embd.High // default state is high
-	switch action {
-	case "on":
+	if on {
 		if c.highRelay { // A high relay uses High GPIO for close state
 			state = embd.Low
 		}
-	case "off":
+	} else {
 		if !c.highRelay {
 			state = embd.Low
 		}
-	default:
-		return fmt.Errorf("Unknown action: %s", action)
 	}
 	log.Println("Setting GPIO Pin:", pinNumber, "State:", state)
 	return pin.Write(state)
 }
 
-func (c *Controller) doPWM(o Outlet, a OuteltAction) error {
-	log.Println("Setting PWM Pin:", o.Pin, "State:", a.Action, "Value:", a.Value)
-	if a.Action == "off" {
-		return c.pwm.Off(o.Pin)
+func (c *Controller) doPWM(pinNumber int, on bool, value int) error {
+	log.Println("Setting PWM Pin:", pinNumber, "State:", on, "Value:", value)
+	if !on {
+		return c.pwm.Off(pinNumber)
 	}
-	return c.pwm.Set(o.Pin, a.Value)
+	return c.pwm.Set(pinNumber, value)
 }

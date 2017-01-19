@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+type OutletAction struct {
+	On    bool `json:"on"`
+	Value int  `json:"value"`
+}
+
 func (h *APIHandler) GetOutlet(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return h.controller.GetOutlet(id)
@@ -41,9 +46,9 @@ func (h *APIHandler) DeleteOutlet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *APIHandler) ConfigureOutlet(w http.ResponseWriter, r *http.Request) {
-	var a controller.OuteltAction
+	var a OutletAction
 	fn := func(id string) error {
-		return h.controller.ConfigureOutlet(id, a)
+		return h.controller.ConfigureOutlet(id, a.On, a.Value)
 	}
 	h.jsonUpdateResponse(&a, fn, w, r)
 }

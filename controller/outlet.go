@@ -15,11 +15,6 @@ type Outlet struct {
 	Type  string `json:"type"`
 }
 
-type OuteltAction struct {
-	Action string `json:"action"`
-	Value  int    `json:"value"`
-}
-
 func (c *Controller) GetOutlet(id string) (Outlet, error) {
 	var outlet Outlet
 	return outlet, c.store.Get(OutletBucket, id, &outlet)
@@ -55,19 +50,19 @@ func (c *Controller) DeleteOutlet(id string) error {
 	return c.store.Delete(OutletBucket, id)
 }
 
-func (c *Controller) ConfigureOutlet(id string, a OuteltAction) error {
+func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 	var o Outlet
 	if err := c.store.Get(OutletBucket, id, &o); err != nil {
 		return err
 	}
 	switch o.Type {
 	case "switch":
-		return c.doSwitching(o.Pin, a.Action)
+		return c.doSwitching(o.Pin, on)
 	case "pwm":
 		if !c.enablePWM {
 			return fmt.Errorf("PWM is not enabled")
 		}
-		return c.doPWM(o, a)
+		return c.doPWM(o.Pin, on, value)
 	default:
 		return fmt.Errorf("Unknown outlet type: %s", o.Type)
 	}

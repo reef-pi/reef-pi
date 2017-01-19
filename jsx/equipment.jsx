@@ -6,7 +6,7 @@ export default class Equipment extends React.Component {
     super(props)
     this.state = {
       outlet: {},
-      action: 'on',
+      action: (props.on ? 'off' : 'on'),
       value: 0
     }
     this.fetchEquipment = this.fetchEquipment.bind(this)
@@ -50,7 +50,7 @@ export default class Equipment extends React.Component {
       url: '/api/outlets/' + this.state.outlet.id + '/configure',
       type: 'POST',
       data: JSON.stringify({
-        action: 'on',
+        on: true,
         value: Number(this.state.value)
       }),
       success: function (data) {
@@ -66,7 +66,7 @@ export default class Equipment extends React.Component {
       url: '/api/outlets/' + this.state.outlet.id + '/configure',
       type: 'POST',
       data: JSON.stringify({
-        action: this.state.action,
+        on: this.state.action === 'on',
         value: Number(this.state.value)
       }),
       success: function (data) {
