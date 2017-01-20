@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"log"
 )
 
 const EquipmentBucket = "equipments"
@@ -52,4 +53,22 @@ func (c *Controller) UpdateEquipment(id string, eq Equipment) error {
 
 func (c *Controller) DeleteEquipment(id string) error {
 	return c.store.Delete(EquipmentBucket, id)
+}
+
+func (c *Controller) synEquipments() {
+	eqs, err := c.ListEquipments()
+	if err != nil {
+		log.Println("ERROR: Failed to list equipments.", err)
+		return
+	}
+	for _, raw := range *eqs {
+		eq, ok := raw.(Equipment)
+		if !ok {
+			log.Println("ERROR:Failed to convert data to equipment type")
+			continue
+		}
+		if err := c.synOutlet(eq); err != nil {
+			log.Println("ERROR: Failed to sync ", eq.Name)
+		}
+	}
 }

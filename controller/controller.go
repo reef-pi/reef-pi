@@ -94,6 +94,7 @@ func (c *Controller) Start() error {
 	if err := c.loadAllJobs(); err != nil {
 		return err
 	}
+	c.synEquipments()
 	log.Println("Started Controller")
 	return nil
 }
