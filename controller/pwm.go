@@ -17,11 +17,12 @@ type PWM struct {
 	conn   *pca9685.PCA9685
 }
 
-func NewPWM() (pwm *PWM, err error) {
+func NewPWM() (*PWM, error) {
 	c := PWMConfig{
 		Bus:     1,
 		Address: 0x40,
 	}
+	var err error
 	defer func() {
 		if r := recover(); r != nil {
 			e, ok := r.(error)
@@ -34,11 +35,11 @@ func NewPWM() (pwm *PWM, err error) {
 	}()
 	bus := embd.NewI2CBus(byte(c.Bus))
 	conn := pca9685.New(bus, byte(c.Address))
-	pwm = &PWM{
+	pwm := PWM{
 		values: make(map[int]int),
 		conn:   conn,
 	}
-	return
+	return &pwm, err
 }
 
 func (p *PWM) Start() error {
