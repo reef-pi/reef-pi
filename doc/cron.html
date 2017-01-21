@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+    <h1>Job schedule specification</h1>
+    <div>
+      In reefer, every job is triggered in a given schedule. Schedule specifies day, time etc for the trigger. Reefer uses <a href="https://en.wikipedia.org/wiki/Cron">cron</a> like syntax to define job schedules.
+      Following is a short summary of the spec:
+      <ul>
+        <li>"day of month" represent which day of every month the job will be triggered. Values can range from 1 to 31</li>
+        <li>"hour" represent which hour of the day job will be triggered. Values can range from 0 to 23</li>
+        <li>"minute" represent which minute of the hour job will be triggered. Value can range from 0 to 59</li>
+        <li>"second" represent which second of the minute job will be triggered. Values can range from 0 to 59</li>
+        <li> Other than their mentioned ranges, each of this field can also take fe special entries.
+          They are:
+          <ul>
+            <li>"*" represents <i>every</i>. i.e. every hour, every day etc.</li>
+            <li>"-" to represent <i>ranges</i>. i.e. hour can be "2-6" to trigger a job every hour from 2 to 6</li>
+            <li>"/" to represent <i>after every</i>. Example: Hour value "*/3" represents after every 3 hours</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>You can also <a href="https://godoc.org/github.com/robfig/cron#hdr-CRON_Expression_Format">check </a>the
+      underlying libraries documentation</p>
+    </div>
+  </body>
+</html>
