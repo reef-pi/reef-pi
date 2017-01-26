@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/ranjib/reefer/auth"
-	"github.com/ranjib/reefer/controller"
+	"github.com/ranjib/reef-pi/auth"
+	"github.com/ranjib/reef-pi/controller"
 	"log"
 	"net/http"
 )

@@ -1,0 +1,9 @@
+[Unit]
+Description=reef tank aquarium controller
+
+[Service]
+ExecStart=/usr/bin/reef-pi -config /etc/reef-pi/config.yml -port 8088 -adc -pwm -high
+WorkingDirectory=/var/lib/reef-pi
+
+[Install]
+WantedBy=multi-user.target

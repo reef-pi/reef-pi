@@ -6,7 +6,7 @@
 
 - Install and setup go.
 - Configure GOPATH & GOROOT
-- Clone reefer git repo & get deps
+- Clone reef-pi git repo & get deps
 
 ### React development environment setup
 

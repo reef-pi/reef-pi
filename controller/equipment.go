@@ -62,12 +62,12 @@ func (c *Controller) synEquipments() {
 		return
 	}
 	for _, raw := range *eqs {
-		eq, ok := raw.(Equipment)
+		eq, ok := raw.(*Equipment)
 		if !ok {
-			log.Println("ERROR:Failed to convert data to equipment type")
+			log.Println("ERROR:Failed to convert data to equipment type.", raw)
 			continue
 		}
-		if err := c.synOutlet(eq); err != nil {
+		if err := c.synOutlet(*eq); err != nil {
 			log.Println("ERROR: Failed to sync ", eq.Name)
 		}
 	}

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/ranjib/reefer/controller"
+	"github.com/ranjib/reef-pi/controller"
 	"net/http"
 )
 

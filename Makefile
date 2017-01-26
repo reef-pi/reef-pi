@@ -1,7 +1,7 @@
 SOURCEDIR=.
 SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
 VERSION=$(shell git describe --always --tags)
-BINARY=bin/reefer
+BINARY=bin/reef-pi
 
 .PHONY:bin
 bin: $(BINARY)
@@ -34,11 +34,11 @@ build: go-get test bin
 .PHONY: deb
 deb:
 	rm -rf dist
-	mkdir -p dist/var/lib/reefer/assets dist/usr/bin dist/etc/reefer
-	cp bin/reefer dist/usr/bin/reefer
-	cp assets/bootstrap.min.css dist/var/lib/reefer/assets/bootstrap.min.css
-	cp assets/home.html dist/var/lib/reefer/assets/home.html
-	cp assets/login.html dist/var/lib/reefer/assets/login.html
-	cp assets/ui.js dist/var/lib/reefer/assets/ui.js
-	cp doc/config.yml dist/etc/reefer/config.yml
-	bundle exec fpm -t deb -s dir -a armhf -n reefer -v 0.0.$(VERSION) -m ranjib@linux.com --deb-systemd doc/reefer.service -C dist  -p reefer-0.0.$(VERSION).deb .
+	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
+	cp bin/reef-pi dist/usr/bin/reef-pi
+	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
+	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
+	cp assets/login.html dist/var/lib/reef-pi/assets/login.html
+	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
+	cp doc/config.yml dist/etc/reef-pi/config.yml
+	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v 0.0.$(VERSION) -m ranjib@linux.com --deb-systemd doc/reef-pi.service -C dist  -p reef-pi-0.0.$(VERSION).deb .

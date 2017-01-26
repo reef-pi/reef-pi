@@ -23,7 +23,7 @@ type Controller struct {
 }
 
 func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
-	db, err := bolt.Open("reefer.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+	db, err := bolt.Open("reef-pi.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
 		p, err := NewPWM()
 		if err != nil {
 			log.Println("Failed to initialize pwm system")
-			return nil, err
+			//return nil, err
 		}
 		pwm = p
 	}
@@ -81,10 +81,10 @@ func (c *Controller) Start() error {
 		return err
 	}
 	if err := embd.InitGPIO(); err != nil {
-		return err
+		//return err
 	}
 	if c.enablePWM {
-		c.pwm.Start()
+		//c.pwm.Start()
 	}
 	if c.enableADC {
 		c.adc.Start()
