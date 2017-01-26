@@ -3,7 +3,7 @@
 ## Steps:
 ### First LED (red) 
 
-1. Visit reefer homepage, go to the 'Electronics' tab
+1. Visit reef-pi homepage, go to the 'Electronics' tab
 
 2. Add a board by clicking on the '+' sign, name it anything (let's say pi), and set number of pins to 40, click 'Add'. 
 ![Adding Board](images/add_board.png "Adding Board")

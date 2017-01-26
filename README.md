@@ -1,56 +1,44 @@
-# Reefer
+# Reef-Pi
 
-A Raspberry Pi based reeftank automation system
+A Raspberry Pi based reef tank controller
 
-![Ryan's BioCube 29G](https://raw.githubusercontent.com/ranjib/reefer/master/doc/images/bc29_fts.JPG)
+![BioCube 29G](https://raw.githubusercontent.com/ranjib/reef-pi/master/doc/images/bc29_fts.JPG)
 
 ## Introduction
 
-Reefer is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium)
-controller written in [go](https://golang.org/)
-that uses Raspberry Pi as main controlling board and various
-hardware peripherals (sensors, motors etc) to automate and monitor
-day to day reef keeping tasks.
+Reef Pi is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium)
+controller written in [go](https://golang.org/). Reef Pi uses
+[Raspberry Pi](https://www.raspberrypi.org/) a main controller board.
 
-More on reefer's [history](https://github.com/ranjib/reefer/blob/master/doc/history.md)
 
 ## Features
 
-Reefer supports following reef tank automations via webui
-
- - Switching on and off equipments on demand
- - Setting LED light intensity or DC pump speed
+ - Controlling AC 110V  electrical outlets (e.g. return pump turn on  or off). 
+ - Controlling PWM based DC outlets (e.g. dimming Kessil lights)
  - Setting up dusk to dawn like lighting
  - Auto Top Off
  - Periodic equipment on and off (daily, weekly etc)
 
 
-## Usage
-
-
-
-## References
-
-  - [Bill of Materials for a Pico Tank](https://github.com/ranjib/reefer/blob/master/doc/BOM.md)
-  - [My Biocube 29 build thread](http://www.nano-reef.com/topic/372899-ryans-bc-29g/)
-  - [Issue tracker](https://github.com/ranjib/reefer/issues) for software development
-  - [Fritzing sketch](https://github.com/ranjib/reefer/blob/master/doc/reefer.fzz)
-  - [History](https://github.com/ranjib/reefer/blob/master/doc/history.md)
+## Documentation
+### Overview
+### Hardware assembly
+### Installation
+### UI
+### Configuration
 
 
 ## Acknowledgements
 
-  - [embd](http://embd.kidoman.io/), golang library, reefer uses to control hardware
-  - [Nano-reef](http://www.nano-reef.com/), the best place on the internet to talk about nano reef tanks.
-  - [Raspberry Pi Foundation](https://www.raspberrypi.org/). I hope all reference hardware becomes like this.
-  - [Adafruit.com](https://www.adafruit.com/) for all the IoT tutorials
+Reef Pi would not be possible without these awesome things:
+
+  - [embd](http://embd.kidoman.io/), go based IoT library.
+  - [Raspberry Pi Foundation](https://www.raspberrypi.org/)
+  - [Adafruit.com](https://www.adafruit.com/) for all peripheral boards, tutorials.
+  - [Nano-reef](http://www.nano-reef.com/), nano reef tanks knowledge source.
 
 
 ## License
-
-Reefer itself the go language based controller is Apache 2.0 licensed. Rest
-of the components licensing dictated by their manufacturer or Open Source
-software / hardware projects.
 
 Copyright:: Copyright (c) 2016 Ranjib Dey.
 License:: Apache License, Version 2.0

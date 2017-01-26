@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ranjib/reefer/api"
-	"github.com/ranjib/reefer/controller"
+	"github.com/ranjib/reef-pi/api"
+	"github.com/ranjib/reef-pi/controller"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -29,7 +29,7 @@ func ParseConfig(filename string) (*api.ServerConfig, error) {
 var Version string
 
 func main() {
-	configFile := flag.String("config", "", "Reefer config file path")
+	configFile := flag.String("config", "", "Reef PI configuration file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	version := flag.Bool("version", false, "Print version information")
@@ -38,14 +38,14 @@ func main() {
 	high := flag.Bool("high", false, "Assume a high relay")
 	flag.Usage = func() {
 		text := `
-    Usage: reefer [OPTIONS]
+    Usage: reef-pi [OPTIONS]
 
     Options:
 
       -config string
-          Config file path
+          Configuration file path
       -port  int
-          Reefer listening port
+          reef-pi listening port
       -no-auth
           Disable Google OAuth
       -pwm

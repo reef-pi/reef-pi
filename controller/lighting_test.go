@@ -13,7 +13,7 @@ func TestLightingAPI(t *testing.T) {
 	var l *Lighting
 	var ok bool
 
-	os.Remove("reefer.db")
+	os.Remove("reef-pi.db")
 
 	c, err = New(false, false, false)
 	if err != nil {
