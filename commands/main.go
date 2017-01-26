@@ -29,7 +29,7 @@ func ParseConfig(filename string) (*api.ServerConfig, error) {
 var Version string
 
 func main() {
-	configFile := flag.String("config", "", "Reef PI configuration file path")
+	configFile := flag.String("config", "", "Reef Pi configuration file path")
 	port := flag.Int("port", 8080, "Network port to bind to")
 	noAuth := flag.Bool("no-auth", false, "Disable authentication")
 	version := flag.Bool("version", false, "Print version information")
