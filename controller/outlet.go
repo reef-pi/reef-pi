@@ -59,7 +59,7 @@ func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 	case "switch":
 		return c.doSwitching(o.Pin, on)
 	case "pwm":
-		if !c.enablePWM {
+		if !c.config.EnablePWM {
 			return fmt.Errorf("PWM is not enabled")
 		}
 		return c.doPWM(o.Pin, on, value)

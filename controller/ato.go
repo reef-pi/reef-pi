@@ -187,7 +187,7 @@ func (a *ATO) IsTripped() (bool, error) {
 }
 
 func (c *Controller) StartATO(id string) error {
-	_, ok := c.atos[id]
+	_, ok := c.state.atos[id]
 	if ok {
 		return fmt.Errorf("ATO is already running")
 	}
@@ -199,14 +199,14 @@ func (c *Controller) StartATO(id string) error {
 	if err != nil {
 		return err
 	}
-	c.atos[id] = ato
+	c.state.atos[id] = ato
 	go ato.Start()
 	config.Enabled = true
 	return c.UpdateATOConfig(id, config)
 }
 
 func (c *Controller) StopATO(id string) error {
-	ato, ok := c.atos[id]
+	ato, ok := c.state.atos[id]
 	if !ok {
 		return fmt.Errorf("ATO is not loaded")
 	}
@@ -215,13 +215,13 @@ func (c *Controller) StopATO(id string) error {
 		return nil
 	}
 	ato.Stop()
-	delete(c.atos, id)
+	delete(c.state.atos, id)
 	ato.config.Enabled = false
 	return c.UpdateATOConfig(id, ato.config)
 }
 
 func (c *Controller) StopAllATOs() {
-	for id, ato := range c.atos {
+	for id, ato := range c.state.atos {
 		ato.Stop()
 		ato.config.Enabled = false
 		c.UpdateATOConfig(id, ato.config)

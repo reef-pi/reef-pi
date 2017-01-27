@@ -61,6 +61,6 @@ func (t *TemperatureSensor) Stop() {
 }
 
 func (c *Controller) GetTemperature() []int {
-	return c.temp.Readings()
+	return c.state.tSensor.Readings()
 
 }

@@ -115,7 +115,7 @@ func (c *Controller) DeleteLighting(id string) error {
 }
 
 func (c *Controller) EnableLighting(id string) error {
-	if !c.enablePWM {
+	if !c.config.EnablePWM {
 		return fmt.Errorf("PWM is not enabled")
 	}
 	l, err := c.GetLighting(id)
@@ -126,7 +126,7 @@ func (c *Controller) EnableLighting(id string) error {
 		log.Println("Lighting:", l.Name, "is already enabled")
 		return nil
 	}
-	go l.Start(c.pwm)
+	go l.Start(c.state.pwm)
 	l.Enabled = true
 	return c.UpdateLighting(l.ID, l)
 }

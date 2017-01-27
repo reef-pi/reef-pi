@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/ranjib/reef-pi/controller"
+	"log"
 	"net/http"
 )
 
@@ -89,6 +90,28 @@ func NewApiHandler(c *controller.Controller, iface string, dsiDisplay bool) http
 	router.HandleFunc("/api/lightings/{id}/disable", handler.DisableLighting).Methods("POST")
 
 	return router
+}
+
+func errorResponse(header int, msg string, w http.ResponseWriter) {
+	log.Println("ERROR:", msg)
+	resp := make(map[string]string)
+	w.WriteHeader(header)
+	resp["error"] = msg
+	js, jsErr := json.Marshal(resp)
+	if jsErr != nil {
+		log.Println(jsErr)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+func (h *APIHandler) jsonResponse(payload interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(payload); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
 }
 
 func (h *APIHandler) jsonGetResponse(fn func(string) (interface{}, error), w http.ResponseWriter, r *http.Request) {

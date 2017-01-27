@@ -15,7 +15,7 @@ func TestLightingAPI(t *testing.T) {
 
 	os.Remove("reef-pi.db")
 
-	c, err = New(false, false, false)
+	c, err = New(DefaultConfig)
 	if err != nil {
 		t.Error(err)
 	}
