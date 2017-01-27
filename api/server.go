@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"github.com/ranjib/reef-pi/auth"
 	"github.com/ranjib/reef-pi/controller"
 	"log"
@@ -9,39 +8,23 @@ import (
 )
 
 type ServerConfig struct {
+	EnableAuth     bool        `yaml:"enable_auth"`
+	Address        string      `yaml:"address"`
 	Auth           auth.Config `yaml:"auth"`
 	ImageDirectory string      `yaml:"image_directory"`
 	Interface      string      `yaml:"interface"`
 	DSIDisplay     bool        `yaml:"dsi_display"`
 }
 
+var DefaultConfig = ServerConfig{
+	Address: "localhost:8080",
+}
+
 type Server struct {
 	config ServerConfig
 }
 
-func errorResponse(header int, msg string, w http.ResponseWriter) {
-	log.Println("ERROR:", msg)
-	resp := make(map[string]string)
-	w.WriteHeader(header)
-	resp["error"] = msg
-	js, jsErr := json.Marshal(resp)
-	if jsErr != nil {
-		log.Println(jsErr)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-}
-func (h *APIHandler) jsonResponse(payload interface{}, w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	encoder := json.NewEncoder(w)
-	if err := encoder.Encode(payload); err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
-		return
-	}
-}
-
-func SetupServer(config ServerConfig, c *controller.Controller, enableAuth bool) error {
+func SetupServer(config ServerConfig, c *controller.Controller) error {
 	server := &Server{
 		config: config,
 	}
@@ -52,7 +35,7 @@ func SetupServer(config ServerConfig, c *controller.Controller, enableAuth bool)
 		http.ServeFile(w, r, "assets/home.html")
 	})
 
-	if enableAuth {
+	if config.EnableAuth {
 		log.Println("Enabling authentication")
 		if err := auth.Setup(config.Auth); err != nil {
 			return err
@@ -68,5 +51,7 @@ func SetupServer(config ServerConfig, c *controller.Controller, enableAuth bool)
 		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
 		http.Handle("/api/", NewApiHandler(c, config.Interface, config.DSIDisplay))
 	}
+	log.Printf("Starting http server at: %s\n", config.Address)
+	go http.ListenAndServe(config.Address, nil)
 	return nil
 }

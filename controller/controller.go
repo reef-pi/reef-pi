@@ -2,8 +2,6 @@ package controller
 
 import (
 	"github.com/boltdb/bolt"
-	"github.com/kidoman/embd"
-	_ "github.com/kidoman/embd/host/rpi"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"time"
@@ -13,44 +11,20 @@ type Controller struct {
 	store      *Store
 	cronRunner *cron.Cron
 	cronIDs    map[string]cron.EntryID
-	pwm        *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
-	adc        *ADC // Analog to digital converter (sensors)
-	atos       map[string]*ATO
-	temp       *TemperatureSensor
-	enablePWM  bool
-	enableADC  bool
-	highRelay  bool
+	config     Config
+	state      *State
 }
 
-func New(enablePWM, enableADC, highRelay bool) (*Controller, error) {
+func New(config Config) (*Controller, error) {
 	db, err := bolt.Open("reef-pi.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return nil, err
 	}
 
-	var pwm *PWM
-	var adc *ADC
-	if enablePWM {
-		p, err := NewPWM()
-		if err != nil {
-			log.Println("Failed to initialize pwm system")
-			//return nil, err
-		}
-		pwm = p
-	}
-	if enableADC {
-		adc = NewADC()
-	}
 	store := NewStore(db)
 	c := &Controller{
-		adc:        adc,
-		temp:       NewTemperatureSensor(0, adc),
-		atos:       make(map[string]*ATO),
-		pwm:        pwm,
-		enablePWM:  enablePWM,
-		highRelay:  highRelay,
-		enableADC:  enableADC,
 		store:      store,
+		state:      NewState(config),
 		cronRunner: cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 	}
@@ -80,21 +54,13 @@ func (c *Controller) Start() error {
 	if err := c.createBuckets(); err != nil {
 		return err
 	}
-	if err := embd.InitGPIO(); err != nil {
-		//return err
-	}
-	if c.enablePWM {
-		//c.pwm.Start()
-	}
-	if c.enableADC {
-		c.adc.Start()
-	}
 	c.cronRunner.Start()
 	c.logStartTime()
+	c.state.Bootup()
+	c.synEquipments()
 	if err := c.loadAllJobs(); err != nil {
 		return err
 	}
-	c.synEquipments()
 	log.Println("Started Controller")
 	return nil
 }
@@ -102,15 +68,9 @@ func (c *Controller) Start() error {
 func (c *Controller) Stop() error {
 	c.cronRunner.Stop()
 	c.StopAllATOs()
-	if c.enablePWM {
-		c.pwm.Stop()
-	}
-	if c.enableADC {
-		c.adc.Stop()
-	}
-	embd.CloseGPIO()
-	c.logStopTime()
+	c.state.TearDown()
 	c.store.Close()
+	c.logStopTime()
 	log.Println("Stopped Controller")
 	return nil
 }

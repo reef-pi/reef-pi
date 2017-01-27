@@ -16,11 +16,11 @@ func (c *Controller) doSwitching(pinNumber int, on bool) error {
 	}
 	state := embd.High // default state is high
 	if on {
-		if c.highRelay { // A high relay uses High GPIO for close state
+		if c.config.HighRelay { // A high relay uses High GPIO for close state
 			state = embd.Low
 		}
 	} else {
-		if !c.highRelay {
+		if !c.config.HighRelay {
 			state = embd.Low
 		}
 	}
@@ -31,7 +31,7 @@ func (c *Controller) doSwitching(pinNumber int, on bool) error {
 func (c *Controller) doPWM(pinNumber int, on bool, value int) error {
 	log.Println("Setting PWM Pin:", pinNumber, "State:", on, "Value:", value)
 	if !on {
-		return c.pwm.Off(pinNumber)
+		return c.state.pwm.Off(pinNumber)
 	}
-	return c.pwm.Set(pinNumber, value)
+	return c.state.pwm.Set(pinNumber, value)
 }

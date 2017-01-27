@@ -29,7 +29,7 @@ func (c *Controller) ReadFromInlet(i *Inlet) (int, error) {
 		}
 		return p.Read()
 	case "analog":
-		return c.adc.Read(i.Pin)
+		return c.state.adc.Read(i.Pin)
 	}
 	return 0, nil
 }
