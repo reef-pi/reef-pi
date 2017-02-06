@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ButtonToolbar, OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
+import { OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
 import $ from 'jquery'
 
 export default class Jobs extends React.Component {
@@ -200,10 +200,10 @@ export default class Jobs extends React.Component {
     var dStyle = {
       display: this.state.addJob ? 'block' : 'none'
     }
-    var tooltip =( <Tooltip id="day-tooltip"> Any integer with 1 to 31, representing the day of the month or other valid specification</Tooltip>);
-    var instance =   <OverlayTrigger overlay={tooltip}>
-        <label> ? </label>
-      </OverlayTrigger>
+    var tooltip = (<Tooltip id='day-tooltip'> Any integer with 1 to 31, representing the day of the month or other valid specification</Tooltip>)
+    var instance = <OverlayTrigger overlay={tooltip}>
+      <label> ? </label>
+    </OverlayTrigger>
     return (
       <div>
         <ul>{this.jobList()}</ul>
@@ -243,7 +243,7 @@ export default class Jobs extends React.Component {
                 <div className='row'>
                   <label className='col-sm-3'>Day of month</label>
                   <input type='text' id='day' className='col-sm-2' />
-                  <label className="col-sm-1">{instance}</label>
+                  <label className='col-sm-1'>{instance}</label>
                 </div>
                 <div className='row'>
                   <label className='col-sm-3'>Hour</label> <input type='text' id='hour' className='col-sm-2' />
