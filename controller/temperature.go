@@ -60,7 +60,9 @@ func (t *TemperatureSensor) Stop() {
 	t.stopCh <- struct{}{}
 }
 
-func (c *Controller) GetTemperature() []int {
-	return c.state.tSensor.Readings()
-
+func (c *Controller) GetTemperature() (readings []int) {
+	if c.config.EnableTemperatureSensor {
+		readings = c.state.tSensor.Readings()
+	}
+	return
 }
