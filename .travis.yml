@@ -5,6 +5,9 @@ go:
 node_js:
   - "6"
 script:
+  - apt-get remove node -y --purge
+  - apt-get install nodejs -y
+  - ln -sf /usr/bin/nodejs /usr/bin/node
   - make go-get
   - make test
   - env GOARCH=arm make bin
