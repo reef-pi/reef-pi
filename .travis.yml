@@ -1,13 +1,14 @@
 language: go
 dist: trusty
+sudo: required
 go:
   - "1.6"
 node_js:
   - "6"
 script:
-  - apt-get remove node -y --purge
-  - apt-get install nodejs -y
-  - ln -sf /usr/bin/nodejs /usr/bin/node
+  - sudo apt-get remove node -y --purge
+  - sudo apt-get install nodejs -y
+  - sudo ln -sf /usr/bin/nodejs /usr/bin/node
   - make go-get
   - make test
   - env GOARCH=arm make bin
