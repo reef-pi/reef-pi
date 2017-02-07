@@ -1,5 +1,5 @@
 language: go
-dist: trusty
+dist: xenial
 sudo: required
 go:
   - "1.6"
