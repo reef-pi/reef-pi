@@ -10,7 +10,7 @@ script:
   - env GOARCH=arm make bin
   - bundle install
   - npm install -g webpack
-  - npm install -g webpack webpack-dev-server
+  - npm install -g webpack-dev-server
   - npm install
   - webpack -d
   - standard jsx/*
