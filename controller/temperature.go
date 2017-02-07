@@ -2,55 +2,60 @@ package controller
 
 import (
 	"log"
-	"math/rand"
 	"time"
 )
 
 type TemperatureSensor struct {
-	Channel  int         `json:"channel"`
-	readings map[int]int `json:"readings"`
-	stopCh   chan struct{}
-	adc      *ADC
+	Channel int `json:"channel"`
+	hours   []int
+	minutes []int
+	stopCh  chan struct{}
+	adc     *ADC
 }
 
 func NewTemperatureSensor(channel int, adc *ADC) *TemperatureSensor {
-	readings := make(map[int]int)
-	for i := 0; i < 24; i++ {
-		readings[i] = 0
-	}
 	return &TemperatureSensor{
-		Channel:  channel,
-		readings: readings,
-		adc:      adc,
+		Channel: channel,
+		hours:   make([]int, 24),
+		minutes: make([]int, 60),
+		adc:     adc,
 	}
 }
 
-func (t *TemperatureSensor) Readings() []int {
-	readings := []int{}
-	for i := 0; i < 24; i++ {
-		readings = append(readings, t.readings[i])
-	}
-	return readings
+func (t *TemperatureSensor) Hours() (readings []int) {
+	copy(t.hours, readings)
+	return
+}
 
+func (t *TemperatureSensor) Minutes() (readings []int) {
+	copy(t.minutes, readings)
+	return
 }
 
 func (t *TemperatureSensor) Start() {
 	log.Println("Starting temperature sensor")
-	ticker := time.NewTicker(time.Hour)
+	hourly := time.NewTicker(time.Hour)
+	minutely := time.NewTicker(time.Hour)
 	for {
 		select {
-		case <-ticker.C:
-			h := time.Now().Hour()
-			/*reading, err := t.adc.Read(t.Channel)
+		case <-minutely.C:
+			reading, err := t.adc.Read(t.Channel)
 			if err != nil {
 				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
 				continue
 			}
-			*/
-			t.readings[h] = 30 + rand.Intn(10)
+			t.minutes[time.Now().Minute()] = reading
+		case <-hourly.C:
+			reading, err := t.adc.Read(t.Channel)
+			if err != nil {
+				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
+				continue
+			}
+			t.hours[time.Now().Hour()] = reading
 		case <-t.stopCh:
 			log.Println("Stopping temperature sensor")
-			ticker.Stop()
+			hourly.Stop()
+			minutely.Stop()
 			return
 		}
 	}
@@ -60,7 +65,9 @@ func (t *TemperatureSensor) Stop() {
 	t.stopCh <- struct{}{}
 }
 
-func (c *Controller) GetTemperature() []int {
-	return c.state.tSensor.Readings()
-
+func (c *Controller) GetTemperature() (readings []int) {
+	if c.config.EnableTemperatureSensor {
+		readings = c.state.tSensor.Hours()
+	}
+	return
 }

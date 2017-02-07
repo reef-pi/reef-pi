@@ -25,8 +25,6 @@ func main() {
       -config string
           Configuration file path
       -version
-          Print version information
-      -version
 			    Print version information
     `
 		fmt.Println(strings.TrimSpace(text))

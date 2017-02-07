@@ -27,6 +27,7 @@ func New(config Config) (*Controller, error) {
 		state:      NewState(config),
 		cronRunner: cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
+		config:     config,
 	}
 	return c, nil
 }

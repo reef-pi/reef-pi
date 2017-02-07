@@ -7,7 +7,7 @@ export default class Lighting extends React.Component {
     this.state = {
       addLighting: false,
       lightings: [],
-      new_lighting: {
+      newLighting: {
         intensities: Array(12).fill(0)
       }
     }
@@ -69,7 +69,7 @@ export default class Lighting extends React.Component {
         name: $('#lightName').val(),
         enabled: enabled,
         channel: Number($('#lightChannel').val()),
-        intensities: this.state.new_lighting.intensities
+        intensities: this.state.newLighting.intensities
       }),
       success: function (data) {
         this.fetchData()
@@ -96,11 +96,11 @@ export default class Lighting extends React.Component {
   }
 
   updateIntensity (e) {
-    var new_lighting = this.state.new_lighting
+    var newLighting = this.state.newLighting
     var i = Number(e.target.id.split('-')[1])
-    new_lighting.intensities[i] = Number(e.target.value)
+    newLighting.intensities[i] = Number(e.target.value)
     this.setState({
-      new_lighting: new_lighting
+      newLighting: newLighting
     })
   }
 
@@ -133,7 +133,7 @@ export default class Lighting extends React.Component {
     }
     var list = []
     for (var i = 0; i < 12; i++) {
-      var intensity = this.state.new_lighting.intensities[i]
+      var intensity = this.state.newLighting.intensities[i]
       list.push(
         <div className='col-sm-1 text-center' key={i + 1}>
           <div className='row'>{intensity}</div>

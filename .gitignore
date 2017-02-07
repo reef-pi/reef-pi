@@ -2,6 +2,6 @@ bin
 node_modules
 assets/ui.js
 assets/ui.js.map
-reefer.db
+reef-pi.db
 *.deb
 dist

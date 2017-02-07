@@ -24,12 +24,12 @@ func (c *Controller) doSwitching(pinNumber int, on bool) error {
 			state = embd.Low
 		}
 	}
-	log.Println("Setting GPIO Pin:", pinNumber, "State:", state)
+	log.Println("Setting GPIO Pin:", pinNumber, "On:", on, "State:", state)
 	return pin.Write(state)
 }
 
 func (c *Controller) doPWM(pinNumber int, on bool, value int) error {
-	log.Println("Setting PWM Pin:", pinNumber, "State:", on, "Value:", value)
+	log.Println("Setting PWM Pin:", pinNumber, "On:", on, "Value:", value)
 	if !on {
 		return c.state.pwm.Off(pinNumber)
 	}
