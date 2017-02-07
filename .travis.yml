@@ -1,13 +1,10 @@
 language: go
 dist: xenial
-sudo: required
 go:
   - "1.6"
 node_js:
   - "6"
 script:
-  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-  - sudo apt-get install -y nodejs
   - make go-get
   - make test
   - env GOARCH=arm make bin
