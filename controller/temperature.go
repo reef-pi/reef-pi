@@ -35,7 +35,7 @@ func (t *TemperatureSensor) Minutes() (readings []int) {
 func (t *TemperatureSensor) Start() {
 	log.Println("Starting temperature sensor")
 	hourly := time.NewTicker(time.Hour)
-	minutely := time.NewTicker(time.Hour)
+	minutely := time.NewTicker(time.Minute)
 	for {
 		select {
 		case <-minutely.C:
@@ -44,6 +44,7 @@ func (t *TemperatureSensor) Start() {
 				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
 				continue
 			}
+			log.Println("Temperature sensor value:", reading)
 			t.minutes[time.Now().Minute()] = reading
 		case <-hourly.C:
 			reading, err := t.adc.Read(t.Channel)
