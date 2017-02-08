@@ -13,11 +13,13 @@ type Config struct {
 	EnableTemperatureSensor bool   `yaml:"enable_temperature_sensor"`
 	HighRelay               bool   `yaml:"high_relay"`
 	Database                string `yaml:"database"`
+	TemperaturePin          int    `yaml:"temperature_pin"`
 }
 
 var DefaultConfig = Config{
-	Database:   "reef-pi.db",
-	EnableGPIO: true,
+	Database:       "reef-pi.db",
+	EnableGPIO:     true,
+	TemperaturePin: 0,
 }
 
 type State struct {
@@ -46,7 +48,8 @@ func (s *State) Bootup() error {
 		log.Println("Enabled ADC subsystem")
 	}
 	if s.config.EnableTemperatureSensor && s.config.EnableADC {
-		s.tSensor = NewTemperatureSensor(0, s.adc)
+		s.tSensor = NewTemperatureSensor(s.config.TemperaturePin, s.adc)
+		go s.tSensor.Start()
 		log.Println("Enabled temperature senosor subsystem")
 	}
 	if s.config.EnablePWM {
@@ -66,13 +69,16 @@ func (s *State) TearDown() {
 	if s.config.EnablePWM {
 		s.pwm.Stop()
 		s.pwm = nil
-		log.Println("Stopping PWM subsystem")
+		log.Println("Stopped PWM subsystem")
 	}
 	if s.config.EnableADC {
 		s.adc.Stop()
 		s.adc = nil
-		s.tSensor = nil
-		log.Println("Stopping ADC subsystem")
+		if s.config.EnableTemperatureSensor {
+			s.tSensor.Stop()
+			s.tSensor = nil
+		}
+		log.Println("Stopped ADC subsystem")
 	}
 	if s.config.EnableGPIO {
 		embd.CloseGPIO()
