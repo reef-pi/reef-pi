@@ -68,7 +68,7 @@ func (t *TemperatureSensor) Stop() {
 
 func (c *Controller) GetTemperature() (readings []int) {
 	if c.config.EnableTemperatureSensor {
-		readings = c.state.tSensor.Hours()
+		readings = c.state.tSensor.Minutes()
 	}
 	return
 }
