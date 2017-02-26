@@ -26,6 +26,8 @@ controller written in [go](https://golang.org/). Reef Pi uses
 ### Installation
 ### UI
 ### Configuration
+### Build threads
+  - [reef-pi](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/) controller build basics
 
 
 ## Acknowledgements
