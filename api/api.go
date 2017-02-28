@@ -35,19 +35,9 @@ func NewApiHandler(c *controller.Controller, iface string, dsiDisplay bool) http
 	router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
 	router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
 
-	// Boards
-	router.HandleFunc("/api/boards/{id}", handler.GetBoard).Methods("GET")
-	router.HandleFunc("/api/boards", handler.ListBoards).Methods("GET")
-	router.HandleFunc("/api/boards", handler.CreateBoard).Methods("PUT")
-	router.HandleFunc("/api/boards/{id}", handler.UpdateBoard).Methods("POST")
-	router.HandleFunc("/api/boards/{id}", handler.DeleteBoard).Methods("DELETE")
-
 	// Outlets
 	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
 	router.HandleFunc("/api/outlets", handler.ListOutlets).Methods("GET")
-	router.HandleFunc("/api/outlets", handler.CreateOutlet).Methods("PUT")
-	router.HandleFunc("/api/outlets/{id}", handler.UpdateOutlet).Methods("POST")
-	router.HandleFunc("/api/outlets/{id}", handler.DeleteOutlet).Methods("DELETE")
 	router.HandleFunc("/api/outlets/{id}/configure", handler.ConfigureOutlet).Methods("POST")
 
 	// Equipments

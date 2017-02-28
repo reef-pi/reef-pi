@@ -1,53 +1,36 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
 const OutletBucket = "outlets"
 
 type Outlet struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Board string `json:"board"`
-	Pin   int    `json:"pin"`
-	Type  string `json:"type"`
+	ID   string `json:"id" yaml:"id"`
+	Name string `json:"name" yaml:"name"`
+	Pin  int    `json:"pin" yaml:"pin"`
+	Type string `json:"type" yaml:"type"`
 }
 
-func (c *Controller) GetOutlet(id string) (Outlet, error) {
-	var outlet Outlet
-	return outlet, c.store.Get(OutletBucket, id, &outlet)
+func (c *Controller) GetOutlet(name string) (Outlet, error) {
+	outlet, ok := c.state.config.Outlets[name]
+	if !ok {
+		return outlet, fmt.Errorf("No outlet named '%s' present", name)
+	}
+	return outlet, nil
 }
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
-		var outlet Outlet
-		if err := json.Unmarshal(v, &outlet); err != nil {
-			return nil, err
+	list := []interface{}{}
+	for name, _ := range c.state.config.Outlets {
+		data := map[string]string{
+			"id":   name,
+			"name": name,
 		}
-		return map[string]string{
-			"id":   outlet.ID,
-			"name": outlet.Name,
-		}, nil
+		list = append(list, &data)
 	}
-	return c.store.List(OutletBucket, fn)
-}
-
-func (c *Controller) CreateOutlet(outlet Outlet) error {
-	fn := func(id string) interface{} {
-		outlet.ID = id
-		return outlet
-	}
-	return c.store.Create(OutletBucket, fn)
-}
-
-func (c *Controller) UpdateOutlet(id string, payload interface{}) error {
-	return c.store.Update(OutletBucket, id, payload)
-}
-
-func (c *Controller) DeleteOutlet(id string) error {
-	return c.store.Delete(OutletBucket, id)
+	return &list, nil
 }
 
 func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {

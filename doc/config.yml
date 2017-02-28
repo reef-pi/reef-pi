@@ -5,6 +5,14 @@ controller:
   enable_adc: false
   enable_temperature_sensor: false
   database: "reef-pi.db"
+  outlets:
+    AC1:
+      pin: 12
+    AC2:
+      pin: 13
+    DC10:
+      pin: 12
+      type: pwm
 api:
   address: "localhost:8080"
   enable_auth: false
