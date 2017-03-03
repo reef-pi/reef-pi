@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/ranjib/reef-pi/controller"
 	"net/http"
 )
 
@@ -22,27 +21,6 @@ func (h *APIHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
 		return h.controller.ListOutlets()
 	}
 	h.jsonListResponse(fn, w, r)
-}
-
-func (h *APIHandler) CreateOutlet(w http.ResponseWriter, r *http.Request) {
-	var o controller.Outlet
-	fn := func() error {
-		return h.controller.CreateOutlet(o)
-	}
-	h.jsonCreateResponse(&o, fn, w, r)
-}
-
-func (h *APIHandler) UpdateOutlet(w http.ResponseWriter, r *http.Request) {
-	var o controller.Outlet
-	fn := func(id string) error {
-		o.ID = id
-		return h.controller.UpdateOutlet(id, o)
-	}
-	h.jsonUpdateResponse(&o, fn, w, r)
-}
-
-func (h *APIHandler) DeleteOutlet(w http.ResponseWriter, r *http.Request) {
-	h.jsonDeleteResponse(h.controller.DeleteOutlet, w, r)
 }
 
 func (h *APIHandler) ConfigureOutlet(w http.ResponseWriter, r *http.Request) {

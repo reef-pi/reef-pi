@@ -1,60 +1,39 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
-const OutletBucket = "outlets"
-
 type Outlet struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Board string `json:"board"`
-	Pin   int    `json:"pin"`
-	Type  string `json:"type"`
+	Name string `json:"name" yaml:"name"`
+	Pin  int    `json:"pin" yaml:"pin"`
+	Type string `json:"type" yaml:"type"`
 }
 
-func (c *Controller) GetOutlet(id string) (Outlet, error) {
-	var outlet Outlet
-	return outlet, c.store.Get(OutletBucket, id, &outlet)
+func (c *Controller) GetOutlet(name string) (Outlet, error) {
+	outlet, ok := c.state.config.Outlets[name]
+	if !ok {
+		return outlet, fmt.Errorf("No outlet named '%s' present", name)
+	}
+	return outlet, nil
 }
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
-		var outlet Outlet
-		if err := json.Unmarshal(v, &outlet); err != nil {
-			return nil, err
-		}
-		return map[string]string{
-			"id":   outlet.ID,
-			"name": outlet.Name,
-		}, nil
+	list := []interface{}{}
+	for _, o := range c.state.config.Outlets {
+		o1 := o
+		list = append(list, &o1)
 	}
-	return c.store.List(OutletBucket, fn)
-}
-
-func (c *Controller) CreateOutlet(outlet Outlet) error {
-	fn := func(id string) interface{} {
-		outlet.ID = id
-		return outlet
-	}
-	return c.store.Create(OutletBucket, fn)
-}
-
-func (c *Controller) UpdateOutlet(id string, payload interface{}) error {
-	return c.store.Update(OutletBucket, id, payload)
-}
-
-func (c *Controller) DeleteOutlet(id string) error {
-	return c.store.Delete(OutletBucket, id)
+	return &list, nil
 }
 
 func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
-	var o Outlet
-	if err := c.store.Get(OutletBucket, id, &o); err != nil {
-		return err
+
+	o, ok := c.config.Outlets[id]
+	if !ok {
+		return fmt.Errorf("Outlet named: '%s' does noy exist", id)
 	}
+
 	switch o.Type {
 	case "switch":
 		return c.doSwitching(o.Pin, on)
@@ -64,7 +43,7 @@ func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 		}
 		return c.doPWM(o.Pin, on, value)
 	default:
-		return fmt.Errorf("Unknown outlet type: %s", o.Type)
+		return fmt.Errorf("Outlet '%s' has unknown outlet type: %s", o.Name, o.Type)
 	}
 	return nil
 }

@@ -26,5 +26,12 @@ func ParseConfig(filename string) (*Config, error) {
 	if err := yaml.Unmarshal(content, &c); err != nil {
 		return nil, err
 	}
+	for k, o := range c.Controller.Outlets {
+		o.Name = k
+		if o.Type == "" {
+			o.Type = "switch"
+		}
+		c.Controller.Outlets[o.Name] = o
+	}
 	return &c, nil
 }

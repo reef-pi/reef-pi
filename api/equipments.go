@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/ranjib/reef-pi/controller"
+	"log"
 	"net/http"
 )
 
@@ -24,6 +25,7 @@ func (h *APIHandler) CreateEquipment(w http.ResponseWriter, r *http.Request) {
 	fn := func() error {
 		return h.controller.CreateEquipment(e)
 	}
+	log.Println("Creating equipment")
 	h.jsonCreateResponse(&e, fn, w, r)
 }
 

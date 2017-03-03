@@ -34,10 +34,8 @@ func New(config Config) (*Controller, error) {
 
 func (c *Controller) createBuckets() error {
 	buckets := []string{
-		BoardBucket,
 		EquipmentBucket,
 		JobBucket,
-		OutletBucket,
 		UptimeBucket,
 		ATOConfigBucket,
 		InletBucket,

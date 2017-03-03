@@ -47,7 +47,7 @@ export default class Equipment extends React.Component {
 
   updateEquipmentValue () {
     $.ajax({
-      url: '/api/outlets/' + this.state.outlet.id + '/configure',
+      url: '/api/outlets/' + this.state.outlet.name + '/configure',
       type: 'POST',
       data: JSON.stringify({
         on: true,
@@ -63,7 +63,7 @@ export default class Equipment extends React.Component {
 
   updateEquipmentAction () {
     $.ajax({
-      url: '/api/outlets/' + this.state.outlet.id + '/configure',
+      url: '/api/outlets/' + this.state.outlet.name + '/configure',
       type: 'POST',
       data: JSON.stringify({
         on: this.state.action === 'on',
