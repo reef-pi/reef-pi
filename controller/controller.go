@@ -36,7 +36,6 @@ func (c *Controller) createBuckets() error {
 	buckets := []string{
 		EquipmentBucket,
 		JobBucket,
-		OutletBucket,
 		UptimeBucket,
 		ATOConfigBucket,
 		InletBucket,

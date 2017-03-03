@@ -4,10 +4,7 @@ import (
 	"fmt"
 )
 
-const OutletBucket = "outlets"
-
 type Outlet struct {
-	ID   string `json:"id" yaml:"id"`
 	Name string `json:"name" yaml:"name"`
 	Pin  int    `json:"pin" yaml:"pin"`
 	Type string `json:"type" yaml:"type"`
@@ -23,21 +20,20 @@ func (c *Controller) GetOutlet(name string) (Outlet, error) {
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
 	list := []interface{}{}
-	for name, _ := range c.state.config.Outlets {
-		data := map[string]string{
-			"id":   name,
-			"name": name,
-		}
-		list = append(list, &data)
+	for _, o := range c.state.config.Outlets {
+		o1 := o
+		list = append(list, &o1)
 	}
 	return &list, nil
 }
 
 func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
-	var o Outlet
-	if err := c.store.Get(OutletBucket, id, &o); err != nil {
-		return err
+
+	o, ok := c.config.Outlets[id]
+	if !ok {
+		return fmt.Errorf("Outlet named: '%s' does noy exist", id)
 	}
+
 	switch o.Type {
 	case "switch":
 		return c.doSwitching(o.Pin, on)
@@ -47,7 +43,7 @@ func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 		}
 		return c.doPWM(o.Pin, on, value)
 	default:
-		return fmt.Errorf("Unknown outlet type: %s", o.Type)
+		return fmt.Errorf("Outlet '%s' has unknown outlet type: %s", o.Name, o.Type)
 	}
 	return nil
 }

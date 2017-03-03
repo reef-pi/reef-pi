@@ -131,6 +131,7 @@ func (h *APIHandler) jsonCreateResponse(i interface{}, fn func() error, w http.R
 	dec := json.NewDecoder(r.Body)
 	if err := dec.Decode(i); err != nil {
 		errorResponse(http.StatusBadRequest, err.Error(), w)
+		log.Println(i)
 		return
 	}
 	if err := fn(); err != nil {

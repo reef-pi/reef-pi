@@ -36,10 +36,10 @@ func (c *Controller) CreateEquipment(eq Equipment) error {
 	if err := c.store.Create(EquipmentBucket, fn); err != nil {
 		return err
 	}
-	return c.synOutlet(eq)
+	return c.syncOutlet(eq)
 }
 
-func (c *Controller) synOutlet(eq Equipment) error {
+func (c *Controller) syncOutlet(eq Equipment) error {
 	return c.ConfigureOutlet(eq.Outlet, eq.On, eq.Value)
 }
 
@@ -48,7 +48,7 @@ func (c *Controller) UpdateEquipment(id string, eq Equipment) error {
 		return err
 	}
 	eq.ID = id
-	return c.synOutlet(eq)
+	return c.syncOutlet(eq)
 }
 
 func (c *Controller) DeleteEquipment(id string) error {
@@ -67,8 +67,8 @@ func (c *Controller) synEquipments() {
 			log.Println("ERROR:Failed to convert data to equipment type.", raw)
 			continue
 		}
-		if err := c.synOutlet(*eq); err != nil {
-			log.Println("ERROR: Failed to sync ", eq.Name)
+		if err := c.syncOutlet(*eq); err != nil {
+			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
 		}
 	}
 }
