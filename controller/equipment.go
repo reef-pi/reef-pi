@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -36,6 +37,16 @@ func (c *Controller) CreateEquipment(eq Equipment) error {
 	if err := c.store.Create(EquipmentBucket, fn); err != nil {
 		return err
 	}
+	outlet, ok := c.config.Outlets[eq.Outlet]
+	if ok {
+		if outlet.Equipment != "" {
+			return fmt.Errorf("Outlet is %s already used by equipment %s", eq.Outlet, outlet.Equipment)
+		}
+		outlet.Equipment = eq.Name
+		c.config.Outlets[eq.Outlet] = outlet
+	} else {
+		return fmt.Errorf("Outlet named %s not present", eq.Outlet)
+	}
 	return c.syncOutlet(eq)
 }
 
@@ -52,6 +63,17 @@ func (c *Controller) UpdateEquipment(id string, eq Equipment) error {
 }
 
 func (c *Controller) DeleteEquipment(id string) error {
+	eq, err := c.GetEquipment(id)
+	if err != nil {
+		return err
+	}
+	outlet, ok := c.config.Outlets[eq.Outlet]
+	if ok {
+		log.Printf("Detaching and stopping outlet %s from equipment %s\n.", outlet.Name, eq.Name)
+		c.ConfigureOutlet(outlet.Name, false, 0)
+		outlet.Equipment = ""
+		c.config.Outlets[outlet.Name] = outlet
+	}
 	return c.store.Delete(EquipmentBucket, id)
 }
 

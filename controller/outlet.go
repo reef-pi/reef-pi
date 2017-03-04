@@ -5,9 +5,10 @@ import (
 )
 
 type Outlet struct {
-	Name string `json:"name" yaml:"name"`
-	Pin  int    `json:"pin" yaml:"pin"`
-	Type string `json:"type" yaml:"type"`
+	Name      string `json:"name" yaml:"name"`
+	Pin       int    `json:"pin" yaml:"pin"`
+	Type      string `json:"type" yaml:"type"`
+	Equipment string `json:"equipment" yaml:"-"`
 }
 
 func (c *Controller) GetOutlet(name string) (Outlet, error) {
