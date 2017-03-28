@@ -74,7 +74,9 @@ export default class Equipments extends React.Component {
   outletList () {
     var menuItems = []
     $.each(this.state.outlets, function (i, v) {
-      menuItems.push(<MenuItem key={i} eventKey={i}>{v.name}</MenuItem>)
+      if (v.equipment === '') {
+        menuItems.push(<MenuItem key={i} eventKey={i}>{v.name}</MenuItem>)
+      }
     })
     return menuItems
   }
