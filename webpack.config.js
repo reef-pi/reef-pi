@@ -1,17 +1,17 @@
-var webpack = require('webpack');
-var path = require('path');
+var webpack = require('webpack')
+var path = require('path')
 
-var BUILD_DIR = path.resolve(__dirname, 'assets/');
-var APP_DIR = path.resolve(__dirname, 'jsx');
+var BUILD_DIR = path.resolve(__dirname, 'assets/')
+var APP_DIR = path.resolve(__dirname, 'jsx')
 
 var config = {
   entry: APP_DIR + '/ui.jsx',
-	module : {
-    loaders : [
+  module: {
+    loaders: [
       {
-        test : /\.jsx?/,
-        include : APP_DIR,
-        loader : 'babel-loader'
+        test: /\.jsx?/,
+        include: APP_DIR,
+        loader: 'babel-loader'
       }
     ]
   },
@@ -20,6 +20,6 @@ var config = {
     filename: 'ui.js'
   }
 
-};
+}
 
-module.exports = config;
+module.exports = config

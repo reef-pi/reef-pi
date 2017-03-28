@@ -74,7 +74,7 @@ export default class Equipments extends React.Component {
   outletList () {
     var menuItems = []
     $.each(this.state.outlets, function (i, v) {
-      if(v.equipment == "") {
+      if (v.equipment === '') {
         menuItems.push(<MenuItem key={i} eventKey={i}>{v.name}</MenuItem>)
       }
     })
