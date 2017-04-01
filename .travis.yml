@@ -12,7 +12,8 @@ script:
   - make vet
   - env GOARCH=arm make bin
   - bundle install
-  - npm install
+  - env
+  - /usr/bin/npm install
   - ./node_modules/.bin/webpack -d
   - ./node_modules/.bin/standard jsx/*
   - make deb
