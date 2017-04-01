@@ -8,7 +8,6 @@ bin: $(BINARY)
 
 $(BINARY): $(SOURCES)
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=0.0.$(VERSION)"  commands/*.go
-	sha256sum $(BINARY)
 
 test:
 	go test -cover -v -race ./...
@@ -25,7 +24,7 @@ go-get:
 	go get github.com/dustin/go-humanize
 .PHONY: vet
 vet:
-	go tool vet -shadow ./...
+	go vet ./...
 
 .PHONY: build
 build: go-get test bin

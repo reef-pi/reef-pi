@@ -22,11 +22,11 @@ type Lighting struct {
 
 func (l *Lighting) Validate() error {
 	if len(l.Intensities) != 12 {
-		fmt.Errorf("Expect 12 values instead of:", len(l.Intensities))
+		return fmt.Errorf("Expect 12 values instead of: %d", len(l.Intensities))
 	}
 	for i, v := range l.Intensities {
 		if (v < 0) || (v > 100) {
-			return fmt.Errorf("Intensity value '", v, "' at posiotion", i, "is out of range (0-99)")
+			return fmt.Errorf("Intensity value %d on index %d is out of range (0-99)", v, i)
 		}
 	}
 	return nil

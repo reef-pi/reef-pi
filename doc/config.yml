@@ -1,6 +1,6 @@
 ---
 controller:
-  enable_gpio: true
+  enable_gpio: false
   enable_pwm: false
   enable_adc: false
   enable_temperature_sensor: false

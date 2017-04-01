@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"github.com/kidoman/embd"
-	_ "github.com/kidoman/embd/host/rpi"
 )
 
 const (

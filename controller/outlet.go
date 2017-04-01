@@ -46,5 +46,4 @@ func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 	default:
 		return fmt.Errorf("Outlet '%s' has unknown outlet type: %s", o.Name, o.Type)
 	}
-	return nil
 }

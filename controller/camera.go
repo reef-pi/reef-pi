@@ -9,7 +9,7 @@ import (
 )
 
 type CameraConfig struct {
-	ImageDirectory    string        `yaml"image_directory"`
+	ImageDirectory    string        `yaml:"image_directory"`
 	RaspiStillCommand string        `yaml:"capture_command"`
 	CaptureFlags      string        `yaml:"capture_flags"`
 	TickInterval      time.Duration `yaml:"tick_interval"`
