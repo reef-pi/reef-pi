@@ -22,14 +22,12 @@ func NewTemperatureSensor(channel int, adc *ADC) *TemperatureSensor {
 	}
 }
 
-func (t *TemperatureSensor) Hours() (readings []int) {
-	copy(t.hours, readings)
-	return
+func (t *TemperatureSensor) Hours() []int {
+	return t.hours
 }
 
-func (t *TemperatureSensor) Minutes() (readings []int) {
-	copy(t.minutes, readings)
-	return
+func (t *TemperatureSensor) Minutes() []int {
+	return t.minutes
 }
 
 func (t *TemperatureSensor) Start() {

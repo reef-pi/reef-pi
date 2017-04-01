@@ -68,7 +68,8 @@ func (c *Controller) loadAllJobs() error {
 	for _, rawJob := range *jobs {
 		job, ok := rawJob.(*Job)
 		if !ok {
-			fmt.Errorf("Failed to typecast to job")
+			log.Println("ERROR: Failed to typecast to job")
+			continue
 		}
 		if err := c.addToCron(*job); err != nil {
 			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
@@ -95,7 +96,7 @@ func (c *Controller) addToCron(job Job) error {
 func (c *Controller) deleteFromCron(jobID string) error {
 	id, ok := c.cronIDs[jobID]
 	if !ok {
-		return fmt.Errorf("Cron ID not found for job ID:", jobID)
+		return fmt.Errorf("Cron ID not found for job ID:%s", jobID)
 	}
 	c.cronRunner.Remove(id)
 	return nil

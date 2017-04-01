@@ -32,7 +32,7 @@ func New(config Config) (*Controller, error) {
 	return c, nil
 }
 
-func (c *Controller) createBuckets() error {
+func (c *Controller) CreateBuckets() error {
 	buckets := []string{
 		EquipmentBucket,
 		JobBucket,
@@ -50,7 +50,7 @@ func (c *Controller) createBuckets() error {
 }
 
 func (c *Controller) Start() error {
-	if err := c.createBuckets(); err != nil {
+	if err := c.CreateBuckets(); err != nil {
 		return err
 	}
 	c.cronRunner.Start()

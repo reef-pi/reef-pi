@@ -19,7 +19,7 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if err = c.createBuckets(); err != nil {
+	if err = c.CreateBuckets(); err != nil {
 		t.Error(err)
 		return
 	}
@@ -36,30 +36,25 @@ func TestLightingAPI(t *testing.T) {
 	l = &Lighting{
 		Name:        "test-lighting",
 		Enabled:     false,
-		Intensities: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Intensities: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
 		Channel:     1,
 	}
 	if err = c.CreateLighting(*l); err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 	list, err = c.ListLightings()
 	if err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 	if len(*list) == 0 {
-		t.Error("Lighting list should not be empty")
-		return
+		t.Fatal("Lighting list should not be empty")
 	}
 	l, ok = (*list)[0].(*Lighting)
 	if !ok {
-		t.Error("Failed to typecast to lighting")
-		return
+		t.Fatal("Failed to typecast to lighting")
 	}
 	if l.Name != "test-lighting" {
-		t.Error("Expected: 'test-lighting' Found:", l.Name)
-		return
+		t.Fatal("Expected: 'test-lighting' Found:", l.Name)
 	}
 }
 
@@ -68,13 +63,11 @@ func TestGetCurrentValue(t *testing.T) {
 		Intensities: []int{0, 0, 0, 0, 20, 40, 60, 70, 30, 10, 0, 0},
 	}
 	if err := l.Validate(); err != nil {
-		t.Error(err)
-		return
+		t.Fatal(err)
 	}
 	t1 := time.Date(2015, time.October, 12, 0, 0, 0, 0, time.UTC)
 	v := l.getCurrentValue(t1)
 	if v != 0 {
-		t.Error("Expected 0, found:", v)
-		return
+		t.Fatal("Expected 0, found:", v)
 	}
 }

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/kidoman/embd"
-	_ "github.com/kidoman/embd/host/rpi"
 	"log"
 )
 
