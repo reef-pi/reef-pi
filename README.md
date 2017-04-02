@@ -19,8 +19,9 @@ boards from [Adafruit](https://www.adafruit.com/) as its core electronics.
  - Reading sensor data (e.g. temperature sensor)
 
 
-### Build thread
-  - [reef-pi](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/) controller build basics
+## Build thread
+
+  - First reef-pi build [thread ](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/)
 
 
 ## Acknowledgements
