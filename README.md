@@ -5,23 +5,26 @@ A Raspberry Pi based reef tank controller
 
 ## Introduction
 
-reef-pi is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium)
-controller written in [go](https://golang.org/). reef-pi uses
-[Raspberry Pi](https://www.raspberrypi.org/) and few additional
-boards from [Adafruit](https://www.adafruit.com/) as its core electronics.
+reef-pi is a [Raspberry Pi](https://www.raspberrypi.org/) based opensource
+[reef tank](https://en.wikipedia.org/wiki/Reef_aquarium) controller written in [go](https://golang.org/). 
 
 
 ## Features
 
  - AC 110V electrical outlet control (e.g. return pump turn on  or off). 
- - PWM based DC outlet control (e.g. dimming Kessil lights)
+ - PWM based DC outlet control (e.g. controlling Kessil lights or DC pumps)
  - Periodic jobs (e.g. daily dosing pump on and off)
  - Reading sensor data (e.g. temperature sensor)
 
 
-## Build thread
-
-  - First reef-pi build [thread ](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/)
+## Guides
+  - Using reef-pi
+  - Installing and configuring reef-pi on raspbian
+  - Building reef-pi electronics
+  - Building reef-pi housing and insgtalling electronics
+  - reef-pi software development environment
+  - Online resources
+		- First reef-pi build [thread ](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/), 
 
 
 ## Acknowledgements

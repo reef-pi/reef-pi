@@ -1,5 +1,5 @@
 [Unit]
-Description=reef tank aquarium controller
+Description=raspberry pi based reef tank controller
 
 [Service]
 ExecStart=/usr/bin/reef-pi -config /etc/reef-pi/config.yml
