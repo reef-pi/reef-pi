@@ -1,6 +1,7 @@
-## Build reefer
+## Build
 
-- Install go
+- Electronics
+- Housing
 
 ```
 wget https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
