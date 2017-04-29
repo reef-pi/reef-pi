@@ -6,7 +6,7 @@ export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      brightness: 0,
+      brightness: 100,
       info: {
         system: {},
         temperature_readings: []
@@ -131,7 +131,7 @@ export default class Dashboard extends React.Component {
             <div className='row'>
               <div className='col-sm-2'>Display</div>
               <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
-              Brightness: <input type='range' onChange={this.setBrightness} />
+              Brightness: <input type='range' onChange={this.setBrightness} min={0} max={255} value={this.state.brightness}/>
             </div>
           </li>
         </ul>
