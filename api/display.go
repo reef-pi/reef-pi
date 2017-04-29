@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -68,4 +69,23 @@ func (h *APIHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	log.Println("Display disabled")
+}
+
+type DisplayConfig struct {
+	Enable     bool `json:"enable"`
+	Brightness int  `json:"brightness"`
+}
+
+func (h *APIHandler) SetBrightness(w http.ResponseWriter, r *http.Request) {
+	device := "/sys/class/backlight/rpi_backlight/brightness"
+	w.Header().Set("Content-Type", "application/json")
+	var c DisplayConfig
+	if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
+		return
+	}
+	if err := ioutil.WriteFile(device, []byte(strconv.Itoa(c.Brightness)), 0644); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to set brightness. Error: "+err.Error(), w)
+		return
+	}
 }
