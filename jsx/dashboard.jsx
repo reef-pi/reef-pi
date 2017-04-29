@@ -34,7 +34,7 @@ export default class Dashboard extends React.Component {
     })
   }
 
-  setBrightness(ev){
+  setBrightness (ev) {
     $.ajax({
       url: '/api/display',
       type: 'POST',
@@ -131,7 +131,7 @@ export default class Dashboard extends React.Component {
             <div className='row'>
               <div className='col-sm-2'>Display</div>
               <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
-              Brightness: <input type="range" onChange={this.setBrightness} />
+              Brightness: <input type='range' onChange={this.setBrightness} />
             </div>
           </li>
         </ul>
