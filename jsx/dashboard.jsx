@@ -6,6 +6,7 @@ export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      brightness: 0,
       info: {
         system: {},
         temperature_readings: []
@@ -14,6 +15,7 @@ export default class Dashboard extends React.Component {
     }
     this.refresh = this.refresh.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
+    this.setBrightness = this.setBrightness.bind(this)
   }
 
   toggleDisplay () {
@@ -24,6 +26,24 @@ export default class Dashboard extends React.Component {
       success: function (data) {
         this.setState({
           displayOn: !this.state.displayOn
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
+  }
+
+  setBrightness(ev){
+    $.ajax({
+      url: '/api/display',
+      type: 'POST',
+      data: JSON.stringify({
+        brightness: parseInt(ev.target.value)
+      }),
+      success: function (data) {
+        this.setState({
+          brightness: parseInt(ev.target.value)
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -111,6 +131,7 @@ export default class Dashboard extends React.Component {
             <div className='row'>
               <div className='col-sm-2'>Display</div>
               <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
+              Brightness: <input type="range" onChange={this.setBrightness} />
             </div>
           </li>
         </ul>

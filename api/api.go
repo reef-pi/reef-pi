@@ -33,6 +33,7 @@ func NewApiHandler(c *controller.Controller, iface string, dsiDisplay bool) http
 	router.HandleFunc("/api/info", handler.Info).Methods("GET")
 	router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
 	router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
+	router.HandleFunc("/api/display", handler.SetBrightness).Methods("POST")
 	router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
 
 	// Outlets
