@@ -31,9 +31,7 @@ build: go-get test bin
 
 
 .PHONY: deb
-deb:
-	rm -rf dist
-	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
+deb: clean
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
@@ -41,3 +39,8 @@ deb:
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp doc/config.yml dist/etc/reef-pi/config.yml
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd doc/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
+
+.PHONY: clean
+clean:
+	rm -rf *.deb
+	rm -rf dist
