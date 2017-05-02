@@ -32,6 +32,7 @@ build: clean go-get test bin
 
 .PHONY: deb
 deb:
+	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
