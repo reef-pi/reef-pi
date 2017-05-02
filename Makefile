@@ -7,7 +7,7 @@ BINARY=bin/reef-pi
 bin: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	go build -o $(BINARY) -ldflags "-s -w -X main.Version=0.0.$(VERSION)"  commands/*.go
+	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
 test:
 	go test -cover -v -race ./...
@@ -40,4 +40,4 @@ deb:
 	cp assets/login.html dist/var/lib/reef-pi/assets/login.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp doc/config.yml dist/etc/reef-pi/config.yml
-	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v 0.0.$(VERSION) -m ranjib@linux.com --deb-systemd doc/reef-pi.service -C dist  -p reef-pi-0.0.$(VERSION).deb .
+	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd doc/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
