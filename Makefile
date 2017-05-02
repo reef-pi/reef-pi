@@ -27,11 +27,11 @@ vet:
 	go vet ./...
 
 .PHONY: build
-build: go-get test bin
+build: clean go-get test bin
 
 
 .PHONY: deb
-deb: clean
+deb:
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
