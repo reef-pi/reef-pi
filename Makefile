@@ -42,5 +42,5 @@ deb: clean
 
 .PHONY: clean
 clean:
-	rm -rf *.deb
-	rm -rf dist
+	-rm -rf *.deb
+	-rm -rf dist
