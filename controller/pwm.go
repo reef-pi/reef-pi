@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/kidoman/embd"
 	"github.com/kidoman/embd/controller/pca9685"
 )
@@ -21,24 +20,13 @@ func NewPWM() (*PWM, error) {
 		Bus:     1,
 		Address: 0x40,
 	}
-	var err error
-	defer func() {
-		if r := recover(); r != nil {
-			e, ok := r.(error)
-			if !ok {
-				err = fmt.Errorf("pkg: %v", r)
-			} else {
-				err = e
-			}
-		}
-	}()
 	bus := embd.NewI2CBus(byte(c.Bus))
 	conn := pca9685.New(bus, byte(c.Address))
 	pwm := PWM{
 		values: make(map[int]int),
 		conn:   conn,
 	}
-	return &pwm, err
+	return &pwm, nil
 }
 
 func (p *PWM) Start() error {
