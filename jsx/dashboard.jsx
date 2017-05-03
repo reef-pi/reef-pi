@@ -35,15 +35,16 @@ export default class Dashboard extends React.Component {
   }
 
   setBrightness (ev) {
+    var b = parseInt(ev.target.value)
     $.ajax({
       url: '/api/display',
       type: 'POST',
       data: JSON.stringify({
-        brightness: parseInt(ev.target.value)
+        brightness: b
       }),
-      success: function (data) {
+      success: function (d) {
         this.setState({
-          brightness: parseInt(ev.target.value)
+          brightness: b
         })
       }.bind(this),
       error: function (xhr, status, err) {
