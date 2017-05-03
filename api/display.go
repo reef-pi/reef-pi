@@ -61,4 +61,9 @@ func (h *APIHandler) SetBrightness(w http.ResponseWriter, r *http.Request) {
 		errorResponse(http.StatusInternalServerError, "Failed to set brightness. Error: "+err.Error(), w)
 		return
 	}
+	encoder := json.NewEncoder(w)
+	payload := map[string]int{"brightness": c.Brightness}
+	if err := encoder.Encode(&payload); err != nil {
+		errorResponse(http.StatusInternalServerError, "Failed to encode json. Error: "+err.Error(), w)
+	}
 }
