@@ -19,8 +19,8 @@ export default class LEDChannel extends React.Component {
 
   sliderList () {
     var values = this.props.getValues()
-    if(values===undefined){
-			values = Array(12).fill(10)
+    if (values === undefined) {
+      values = Array(12).fill(10)
     }
 
     var rangeStyle = {

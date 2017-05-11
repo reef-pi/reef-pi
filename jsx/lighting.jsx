@@ -36,12 +36,12 @@ export default class Lighting extends React.Component {
     })
   }
 
-  getIntensities(){
-    return(this.state.intensities)
+  getIntensities () {
+    return (this.state.intensities)
   }
 
-  getSpectrums(){
-    return(this.state.spectrums)
+  getSpectrums () {
+    return (this.state.spectrums)
   }
 
   updateIntensity (values) {
