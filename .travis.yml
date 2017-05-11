@@ -2,7 +2,7 @@ language: go
 dist: xenial
 sudo: required
 go:
-  - "1.6"
+  - "1.8"
 script:
   - curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
   - sudo apt-get install -y nodejs
