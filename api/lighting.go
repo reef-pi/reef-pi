@@ -5,6 +5,21 @@ import (
 	"net/http"
 )
 
+func (h *APIHandler) GetLightings(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		return h.controller.GetLightings()
+	}
+	h.jsonGetResponse(fn, w, r)
+}
+
+func (h *APIHandler) UpdateLightings(w http.ResponseWriter, r *http.Request) {
+	var l controller.Lightings
+	fn := func(id string) error {
+		return h.controller.UpdateLightings(l)
+	}
+	h.jsonUpdateResponse(&l, fn, w, r)
+}
+
 func (h *APIHandler) GetLighting(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return h.controller.GetLighting(id)

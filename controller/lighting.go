@@ -81,6 +81,20 @@ func (l *Lighting) Stop() {
 	l.stopCh <- struct{}{}
 }
 
+type Lightings struct {
+	Intensities []int `json:"intensities"`
+	Spectrums   []int `json:"spectrums"`
+}
+
+func (c *Controller) GetLightings() (Lightings, error) {
+	var l Lightings
+	return l, c.store.Get(LightingBucket, "lightings", &l)
+}
+
+func (c *Controller) UpdateLightings(payload Lightings) error {
+	return c.store.Update(LightingBucket, "lightings", payload)
+}
+
 func (c *Controller) GetLighting(id string) (Lighting, error) {
 	var l Lighting
 	return l, c.store.Get(LightingBucket, id, &l)

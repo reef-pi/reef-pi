@@ -53,15 +53,6 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
 	router.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
 
-	// Jobs
-	router.HandleFunc("/api/ato_configs/{id}", handler.GetATOConfig).Methods("GET")
-	router.HandleFunc("/api/ato_configs", handler.ListATOConfigs).Methods("GET")
-	router.HandleFunc("/api/ato_configs", handler.CreateATOConfig).Methods("PUT")
-	router.HandleFunc("/api/ato_configs/{id}", handler.UpdateATOConfig).Methods("POST")
-	router.HandleFunc("/api/ato_configs/{id}", handler.DeleteATOConfig).Methods("DELETE")
-	router.HandleFunc("/api/ato/{id}/start", handler.StartATO).Methods("POST")
-	router.HandleFunc("/api/ato/{id}/stop", handler.StopATO).Methods("POST")
-
 	// Inlets
 	router.HandleFunc("/api/inlets/{id}", handler.GetInlet).Methods("GET")
 	router.HandleFunc("/api/inlets", handler.ListInlets).Methods("GET")
@@ -70,13 +61,8 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/inlets/{id}", handler.DeleteInlet).Methods("DELETE")
 
 	// Lighting
-	router.HandleFunc("/api/lightings/{id}", handler.GetLighting).Methods("GET")
-	router.HandleFunc("/api/lightings", handler.ListLightings).Methods("GET")
-	router.HandleFunc("/api/lightings", handler.CreateLighting).Methods("PUT")
-	router.HandleFunc("/api/lightings/{id}", handler.UpdateLighting).Methods("POST")
-	router.HandleFunc("/api/lightings/{id}", handler.DeleteLighting).Methods("DELETE")
-	router.HandleFunc("/api/lightings/{id}/enable", handler.EnableLighting).Methods("POST")
-	router.HandleFunc("/api/lightings/{id}/disable", handler.DisableLighting).Methods("POST")
+	router.HandleFunc("/api/lightings", handler.GetLightings).Methods("GET")
+	router.HandleFunc("/api/lightings", handler.UpdateLightings).Methods("POST")
 
 	return router
 }

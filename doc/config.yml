@@ -4,7 +4,7 @@ controller:
   enable_pwm: false
   enable_adc: false
   enable_temperature_sensor: false
- database: "reef-pi.db"
+  database: "reef-pi.db"
   outlets:
     AC1:
       pin: 12
