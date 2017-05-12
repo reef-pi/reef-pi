@@ -81,8 +81,8 @@ export default class Lighting extends React.Component {
     })
   }
 
-  toggleLighting(){
-    var  enabled = !this.state.enabled
+  toggleLighting () {
+    var enabled = !this.state.enabled
     $.ajax({
       url: '/api/lighting/cycle',
       type: 'POST',

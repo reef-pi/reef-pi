@@ -1,6 +1,6 @@
 import React from 'react'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import $ from 'jquery'
+import MenuItem from 'react-bootstrap'
 import Equipment from './equipment.jsx'
 
 export default class Equipments extends React.Component {
@@ -9,7 +9,7 @@ export default class Equipments extends React.Component {
     this.state = {
       selectedOutlet: undefined,
       outlets: [],
-      equipments: [],
+      equipments: []
     }
     this.setOutlet = this.setOutlet.bind(this)
     this.outletList = this.outletList.bind(this)
@@ -79,10 +79,6 @@ export default class Equipments extends React.Component {
   }
 
   render () {
-    var outlet = ''
-    if (this.state.selectedOutlet !== undefined) {
-      outlet = this.state.outlets[this.state.selectedOutlet].name
-    }
     return (
       <ul className='list-group'>
         {this.equipmentList()}
