@@ -9,7 +9,14 @@ type Config struct {
 	Database                string            `yaml:"database"`
 	TemperaturePin          int               `yaml:"temperature_pin"`
 	Outlets                 map[string]Outlet `yaml:"outlets"`
-	Lightings               map[string]int    `yaml:"lighting"`
+	Equipments              map[string]string `yaml:"equipments"`
+	Lighting                PCA9685Config     `yaml:"lighting"`
+}
+
+type PCA9685Config struct {
+	Enabled          bool `yaml:"enabled"`
+	IntensityChannel int  `yaml:"intensity_channel"`
+	SpectrumChannel  int  `yaml:"spectrum_channel"`
 }
 
 var DefaultConfig = Config{
@@ -17,5 +24,9 @@ var DefaultConfig = Config{
 	EnableGPIO:     true,
 	TemperaturePin: 0,
 	Outlets:        make(map[string]Outlet),
-	Lightings:      make(map[string]int),
+	Lighting: PCA9685Config{
+		Enabled:          false,
+		IntensityChannel: 0,
+		SpectrumChannel:  1,
+	},
 }

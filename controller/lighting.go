@@ -1,58 +1,30 @@
 package controller
 
 import (
-	"encoding/json"
-	"fmt"
+	"github.com/ranjib/reef-pi/controller/lighting"
 	"log"
-	"math"
 	"time"
 )
 
 const LightingBucket = "lightings"
 
 type Lighting struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Enabled     bool   `json:"enabled"`
-	Channel     int    `json:"channel"`
-	Intensities []int  `json:"intensities"`
-	stopCh      chan struct{}
-	ticker      *time.Ticker
+	IntensityChannel int
+	SpectrumChannel  int
+	stopCh           chan struct{}
+	ticker           *time.Ticker
 }
 
-func (l *Lighting) Validate() error {
-	if len(l.Intensities) != 12 {
-		return fmt.Errorf("Expect 12 values instead of: %d", len(l.Intensities))
+func NewLighting(i, s int) *Lighting {
+	return &Lighting{
+		IntensityChannel: i,
+		SpectrumChannel:  s,
 	}
-	for i, v := range l.Intensities {
-		if (v < 0) || (v > 100) {
-			return fmt.Errorf("Intensity value %d on index %d is out of range (0-99)", v, i)
-		}
-	}
-	return nil
 }
 
-func (l *Lighting) getCurrentValue(t time.Time) int {
-	h1 := (t.Hour() / 2) - 1
-	if h1 == -1 {
-		h1 = 11
-	}
-	h2 := h1 + 1
-	if h2 >= 12 {
-		h2 = 0
-	}
-
-	m := t.Minute()
-	from := l.Intensities[h1]
-	to := l.Intensities[h2]
-	f := float64(from) + (((float64(to) - float64(from)) / 120.0) * float64(m))
-	return int(math.Ceil(f - 0.5))
-}
-
-func (l *Lighting) Start(pwm *PWM) {
+func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 	l.ticker = time.NewTicker(time.Minute * 1)
 	l.stopCh = make(chan struct{})
-	previousValue := -1
 	for {
 		select {
 		case <-l.stopCh:
@@ -61,100 +33,74 @@ func (l *Lighting) Start(pwm *PWM) {
 			l.stopCh = nil
 			return
 		case <-l.ticker.C:
-			v := l.getCurrentValue(time.Now())
-			if v == previousValue {
-				log.Println("Skip setting pwm value:", v, "for lighting:", l.Name, "its same as previous")
-				continue
-			}
-			log.Println("Setting pwm value:", v, "for lighting:", l.Name)
-			pwm.Set(l.Channel, v)
-			previousValue = v
+			i := lighting.GetCurrentValue(time.Now(), conf.Intensities)
+			l.SetIntensity(pwm, i)
+			s := lighting.GetCurrentValue(time.Now(), conf.Spectrums)
+			l.SetSpectrum(pwm, s)
 		}
 	}
 }
 
-func (l *Lighting) Stop() {
+func (l *Lighting) StopCycle() {
 	if l.stopCh == nil {
 		log.Println("WARNING: stop channel is not initialized.")
 		return
 	}
 	l.stopCh <- struct{}{}
+	l.ticker = nil
+	l.stopCh = nil
 }
 
-type Lightings struct {
-	Intensities []int `json:"intensities"`
-	Spectrums   []int `json:"spectrums"`
+func (l *Lighting) SetIntensity(pwm *PWM, v int) {
+	log.Println("Setting pwm value:", v, "for lighting intensity")
+	pwm.Set(l.IntensityChannel, v)
 }
 
-func (c *Controller) GetLightings() (Lightings, error) {
-	var l Lightings
-	return l, c.store.Get(LightingBucket, "lightings", &l)
+func (l *Lighting) SetSpectrum(pwm *PWM, v int) {
+	log.Println("Setting pwm value:", v, "for lighting spectrum")
+	pwm.Set(l.SpectrumChannel, v)
 }
 
-func (c *Controller) UpdateLightings(payload Lightings) error {
-	return c.store.Update(LightingBucket, "lightings", payload)
+func (c *Controller) GetLightingCycle() (lighting.CycleConfig, error) {
+	var config lighting.Config
+	return config.CycleConfig, c.store.Get(LightingBucket, "config", &config)
 }
 
-func (c *Controller) GetLighting(id string) (Lighting, error) {
-	var l Lighting
-	return l, c.store.Get(LightingBucket, id, &l)
-}
-
-func (c Controller) ListLightings() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
-		var l Lighting
-		return &l, json.Unmarshal(v, &l)
-	}
-	return c.store.List(LightingBucket, fn)
-}
-
-func (c *Controller) CreateLighting(l Lighting) error {
-	if err := l.Validate(); err != nil {
+func (c *Controller) SetLightingCycle(conf lighting.CycleConfig) error {
+	var config lighting.Config
+	if err := c.store.Get(LightingBucket, "config", &config); err != nil {
 		return err
 	}
-
-	fn := func(id string) interface{} {
-		l.ID = id
-		return l
+	c.state.lighting.StopCycle()
+	config.CycleConfig = conf
+	if config.CycleConfig.Enabled {
+		go c.state.lighting.StartCycle(c.state.pwm, conf)
 	}
-	return c.store.Create(LightingBucket, fn)
+	return c.store.Update(LightingBucket, "config", config)
 }
 
-func (c *Controller) UpdateLighting(id string, payload Lighting) error {
-	return c.store.Update(LightingBucket, id, payload)
+func (c *Controller) GetFixedLighting() (lighting.FixedConfig, error) {
+	var config lighting.Config
+	return config.Fixed, c.store.Get(LightingBucket, "config", &config)
 }
 
-func (c *Controller) DeleteLighting(id string) error {
-	return c.store.Delete(LightingBucket, id)
-}
-
-func (c *Controller) EnableLighting(id string) error {
-	if !c.config.EnablePWM {
-		return fmt.Errorf("PWM is not enabled")
-	}
-	l, err := c.GetLighting(id)
-	if err != nil {
+func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
+	var config lighting.Config
+	if err := c.store.Get(LightingBucket, "config", &config); err != nil {
 		return err
 	}
-	if l.Enabled {
-		log.Println("Lighting:", l.Name, "is already enabled")
-		return nil
-	}
-	go l.Start(c.state.pwm)
-	l.Enabled = true
-	return c.UpdateLighting(l.ID, l)
+	c.state.lighting.StopCycle()
+	config.Fixed = conf
+	config.CycleConfig.Enabled = false
+	c.state.lighting.SetIntensity(c.state.pwm, config.Fixed.Intensity)
+	c.state.lighting.SetSpectrum(c.state.pwm, config.Fixed.Spectrum)
+	return c.store.Update(LightingBucket, "config", config)
 }
 
-func (c *Controller) DisableLighting(id string) error {
-	l, err := c.GetLighting(id)
-	if err != nil {
-		return err
+func (l *Lighting) Reconfigure(pwm *PWM, conf lighting.Config) {
+	if conf.CycleConfig.Enabled {
+		l.StartCycle(pwm, conf.CycleConfig)
 	}
-	if !l.Enabled {
-		log.Println("Lighting:", l.Name, "is already disabled")
-		return nil
-	}
-	l.Stop()
-	l.Enabled = false
-	return c.UpdateLighting(l.ID, l)
+	l.SetIntensity(pwm, conf.Fixed.Intensity)
+	l.SetSpectrum(pwm, conf.Fixed.Spectrum)
 }

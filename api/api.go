@@ -61,8 +61,10 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	router.HandleFunc("/api/inlets/{id}", handler.DeleteInlet).Methods("DELETE")
 
 	// Lighting
-	router.HandleFunc("/api/lightings", handler.GetLightings).Methods("GET")
-	router.HandleFunc("/api/lightings", handler.UpdateLightings).Methods("POST")
+	router.HandleFunc("/api/lighting/cycle", handler.GetLightingCycle).Methods("GET")
+	router.HandleFunc("/api/lighting/cycle", handler.SetLightingCycle).Methods("POST")
+	router.HandleFunc("/api/lighting/fixed", handler.GetFixedLighting).Methods("GET")
+	router.HandleFunc("/api/lighting/fixed", handler.SetFixedLighting).Methods("POST")
 
 	return router
 }

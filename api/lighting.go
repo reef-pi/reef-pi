@@ -1,70 +1,36 @@
 package api
 
 import (
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/ranjib/reef-pi/controller/lighting"
 	"net/http"
 )
 
-func (h *APIHandler) GetLightings(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) GetLightingCycle(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return h.controller.GetLightings()
+		return h.controller.GetLightingCycle()
 	}
 	h.jsonGetResponse(fn, w, r)
 }
 
-func (h *APIHandler) UpdateLightings(w http.ResponseWriter, r *http.Request) {
-	var l controller.Lightings
+func (h *APIHandler) SetLightingCycle(w http.ResponseWriter, r *http.Request) {
+	var c lighting.CycleConfig
 	fn := func(id string) error {
-		return h.controller.UpdateLightings(l)
+		return h.controller.SetLightingCycle(c)
 	}
-	h.jsonUpdateResponse(&l, fn, w, r)
+	h.jsonUpdateResponse(&c, fn, w, r)
 }
 
-func (h *APIHandler) GetLighting(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) GetFixedLighting(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return h.controller.GetLighting(id)
+		return h.controller.GetFixedLighting()
 	}
 	h.jsonGetResponse(fn, w, r)
 }
 
-func (h *APIHandler) ListLightings(w http.ResponseWriter, r *http.Request) {
-	fn := func() (interface{}, error) {
-		return h.controller.ListLightings()
+func (h *APIHandler) SetFixedLighting(w http.ResponseWriter, r *http.Request) {
+	var v lighting.FixedConfig
+	fn := func(i string) error {
+		return h.controller.SetFixedLighting(v)
 	}
-	h.jsonListResponse(fn, w, r)
-}
-
-func (h *APIHandler) CreateLighting(w http.ResponseWriter, r *http.Request) {
-	var l controller.Lighting
-	fn := func() error {
-		return h.controller.CreateLighting(l)
-	}
-	h.jsonCreateResponse(&l, fn, w, r)
-}
-
-func (h *APIHandler) UpdateLighting(w http.ResponseWriter, r *http.Request) {
-	var l controller.Lighting
-	fn := func(id string) error {
-		l.ID = id
-		return h.controller.UpdateLighting(id, l)
-	}
-	h.jsonUpdateResponse(&l, fn, w, r)
-}
-
-func (h *APIHandler) DeleteLighting(w http.ResponseWriter, r *http.Request) {
-	h.jsonDeleteResponse(h.controller.DeleteLighting, w, r)
-}
-
-func (h *APIHandler) EnableLighting(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) error {
-		return h.controller.EnableLighting(id)
-	}
-	h.jsonDeleteResponse(fn, w, r)
-}
-
-func (h *APIHandler) DisableLighting(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) error {
-		return h.controller.DisableLighting(id)
-	}
-	h.jsonDeleteResponse(fn, w, r)
+	h.jsonUpdateResponse(&v, fn, w, r)
 }

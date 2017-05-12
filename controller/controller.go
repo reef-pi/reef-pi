@@ -24,7 +24,7 @@ func New(config Config) (*Controller, error) {
 	store := NewStore(db)
 	c := &Controller{
 		store:      store,
-		state:      NewState(config),
+		state:      NewState(config, store),
 		cronRunner: cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 		config:     config,
@@ -51,6 +51,9 @@ func (c *Controller) CreateBuckets() error {
 
 func (c *Controller) Start() error {
 	if err := c.CreateBuckets(); err != nil {
+		return err
+	}
+	if err := c.preCreateEquipments(); err != nil {
 		return err
 	}
 	c.cronRunner.Start()
