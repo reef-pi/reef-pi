@@ -94,3 +94,20 @@ func (c *Controller) synEquipments() {
 		}
 	}
 }
+
+func (c *Controller) preCreateEquipments() error {
+	for e, o := range c.config.Equipments {
+		eq, err := c.GetEquipment(e)
+		if err != nil {
+			log.Println("Creating equipment:", e)
+			eq.Name = e
+			eq.ID = e
+			eq.Outlet = o
+			if eErr := c.UpdateEquipment(e, eq); eErr != nil {
+				log.Println("Failed to precreate equioment:", e)
+				return eErr
+			}
+		}
+	}
+	return nil
+}

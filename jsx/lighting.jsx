@@ -1,180 +1,124 @@
 import React from 'react'
 import $ from 'jquery'
+import LEDChannel from './led_channel.jsx'
 
 export default class Lighting extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      addLighting: false,
-      lightings: [],
-      newLighting: {
-        intensities: Array(12).fill(0)
-      }
+      updated: false,
+      enabled: false
     }
     this.fetchData = this.fetchData.bind(this)
-    this.sliderList = this.sliderList.bind(this)
     this.updateIntensity = this.updateIntensity.bind(this)
-    this.toggleAddLightingdDiv = this.toggleAddLightingdDiv.bind(this)
-    this.lightingList = this.lightingList.bind(this)
-    this.configureLighting = this.configureLighting.bind(this)
-    this.deleteLighting = this.deleteLighting.bind(this)
-    this.addLighting = this.addLighting.bind(this)
+    this.updateSpectrum = this.updateSpectrum.bind(this)
+    this.updateLighting = this.updateLighting.bind(this)
+    this.getIntensities = this.getIntensities.bind(this)
+    this.getSpectrums = this.getSpectrums.bind(this)
+    this.toggleLighting = this.toggleLighting.bind(this)
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.fetchData()
-  }
-
-  deleteLighting (ev) {
-    var lightID = ev.target.id.split('-')[1]
-    $.ajax({
-      url: '/api/lightings/' + lightID,
-      type: 'DELETE',
-      success: function (data) {
-        this.fetchData()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  configureLighting (ev) {
-    var lightID = ev.target.id.split('-')[1]
-    var action = ev.target.value
-    $.ajax({
-      url: '/api/lightings/' + lightID + '/' + action,
-      type: 'POST',
-      success: function (data) {
-        this.fetchData()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  toggleAddLightingdDiv () {
-    this.setState({
-      addLighting: !this.state.addLighting
-    })
-  }
-
-  addLighting () {
-    var enabled = $('#lightEnable').checked
-    $.ajax({
-      url: '/api/lightings',
-      type: 'PUT',
-      data: JSON.stringify({
-        name: $('#lightName').val(),
-        enabled: enabled,
-        channel: Number($('#lightChannel').val()),
-        intensities: this.state.newLighting.intensities
-      }),
-      success: function (data) {
-        this.fetchData()
-        this.toggleAddLightingdDiv()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
   }
 
   fetchData () {
     $.ajax({
-      url: '/api/lightings',
+      url: '/api/lighting/cycle',
       type: 'GET',
       success: function (data) {
         this.setState({
-          lightings: data
+          intensities: data.intensities,
+          spectrums: data.spectrums,
+          enabled: data.enabled
         })
       }.bind(this),
       error: function (xhr, status, err) {
+        console.log(err)
       }
     })
   }
 
-  updateIntensity (e) {
-    var newLighting = this.state.newLighting
-    var i = Number(e.target.id.split('-')[1])
-    newLighting.intensities[i] = Number(e.target.value)
+  getIntensities () {
+    return (this.state.intensities)
+  }
+
+  getSpectrums () {
+    return (this.state.spectrums)
+  }
+
+  updateIntensity (values) {
     this.setState({
-      newLighting: newLighting
+      intensities: values,
+      updated: true
     })
   }
 
-  lightingList () {
-    var list = []
-    $.each(this.state.lightings, function (k, v) {
-      var action = ''
-      if (v.enabled) {
-        action = 'disable'
-      } else {
-        action = 'enable'
-      }
-      list.push(
-        <li key={k} className='list-group-item row'>
-          <div className='col-sm-5'>
-            {v.name}
-          </div>
-          <input type='button' value={action} id={'l_configure-' + v.id} onClick={this.configureLighting} className='col-sm-1 btn btn-outline-primary' />
-          <div className='col-sm-1' />
-          <input type='button' value='delete' id={'l_delete-' + v.id} onClick={this.deleteLighting} className='col-sm-1 btn btn-outline-danger' />
-        </li>
-        )
-    }.bind(this))
-    return list
+  updateSpectrum (values) {
+    this.setState({
+      spectrums: values,
+      updated: true
+    })
   }
 
-  sliderList () {
-    var rangeStyle = {
-      WebkitAppearance: 'slider-vertical'
-    }
-    var list = []
-    for (var i = 0; i < 12; i++) {
-      var intensity = this.state.newLighting.intensities[i]
-      list.push(
-        <div className='col-sm-1 text-center' key={i + 1}>
-          <div className='row'>{intensity}</div>
-          <div className='row'>
-            <input className='col-xs-1' type='range' style={rangeStyle} onChange={this.updateIntensity} value={intensity} id={'intensity-' + i} />
-          </div>
-          <div className='row'>
-            <label>{i * 2}</label>
-          </div>
-        </div>
-          )
-    }
-    return (list)
+  updateLighting () {
+    $.ajax({
+      url: '/api/lighting/cycle',
+      type: 'POST',
+      data: JSON.stringify({
+        intensities: this.state.intensities,
+        spectrums: this.state.spectrums,
+        enabled: this.state.enabled
+      }),
+      success: function (data) {
+        this.setState({
+          updated: false
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err)
+      }
+    })
+  }
+
+  toggleLighting () {
+    var enabled = !this.state.enabled
+    $.ajax({
+      url: '/api/lighting/cycle',
+      type: 'POST',
+      data: JSON.stringify({
+        intensities: this.state.intensities,
+        spectrums: this.state.spectrums,
+        enabled: enabled
+      }),
+      success: function (data) {
+        this.setState({
+          enabled: !enabled
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err)
+      }
+    })
   }
 
   render () {
-    var dStyle = {
-      display: this.state.addLighting ? 'block' : 'none'
+    var btnClass = 'btn btn-outline-danger'
+    if (!this.state.updated) {
+      btnClass = 'btn btn-outline-success'
+    }
+    var enableClass = 'btn btn-outline-success'
+    var enableText = 'Enable'
+    if (this.state.enabled) {
+      enableText = 'Disable'
+      enableClass = 'btn btn-outline-danger'
     }
     return (
       <div className='container'>
-        <ul className='list-group'>
-          { this.lightingList() }
-        </ul>
-        <input type='button' value={this.state.addLighting ? '-' : '+'} onClick={this.toggleAddLightingdDiv} className='btn btn-outline-success' />
-        <div style={dStyle} className='container'>
-          <div className='row'>
-            <div className='col-sm-1'>Name</div>
-            <input className='col-sm-2' type='text' id='lightName' />
-            <div className='col-sm-1'>Enable</div>
-            <input className='col-xs-1 checkbox' type='checkbox' id='lightEnable' />
-            <div className='col-sm-1'>Channel</div>
-            <input className='col-xs-1' type='text' id='lightChannel' />
-          </div>
-          <div className='row'>
-            {this.sliderList()}
-          </div>
-          <div className='row'>
-            <input type='button' value='add' onClick={this.addLighting} className='btn btn-outline-primary' />
-          </div>
-        </div>
+        <LEDChannel name='Intensity' onChange={this.updateIntensity} getValues={this.getIntensities} />
+        <LEDChannel name='Spectrum' onChange={this.updateSpectrum} getValues={this.getSpectrums} />
+        <input type='button' onClick={this.updateLighting} value='Update' className={btnClass} />
+        <input type='button' onClick={this.toggleLighting} value={enableText} className={enableClass} />
       </div>
     )
   }

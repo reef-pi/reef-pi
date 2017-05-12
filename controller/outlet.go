@@ -12,7 +12,7 @@ type Outlet struct {
 }
 
 func (c *Controller) GetOutlet(name string) (Outlet, error) {
-	outlet, ok := c.state.config.Outlets[name]
+	outlet, ok := c.config.Outlets[name]
 	if !ok {
 		return outlet, fmt.Errorf("No outlet named '%s' present", name)
 	}
@@ -21,7 +21,7 @@ func (c *Controller) GetOutlet(name string) (Outlet, error) {
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
 	list := []interface{}{}
-	for _, o := range c.state.config.Outlets {
+	for _, o := range c.config.Outlets {
 		o1 := o
 		list = append(list, &o1)
 	}
