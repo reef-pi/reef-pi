@@ -49,7 +49,7 @@ func (s *State) Bootup() error {
 		s.pwm.Start()
 		log.Println("Enabled PWM subsystem")
 	}
-	if s.config.Lighting.Enabled {
+	if s.config.EnablePWM && s.config.Lighting.Enabled {
 		lConfig := lighting.DefaultConfig
 		if err := s.store.Get(LightingBucket, "config", &lConfig); err != nil {
 			log.Println("No existing lighting settings found. Resetting")

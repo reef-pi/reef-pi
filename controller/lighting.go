@@ -28,8 +28,10 @@ func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 	for {
 		select {
 		case <-l.stopCh:
-			l.ticker.Stop()
-			l.ticker = nil
+			if l.ticker != nil {
+				l.ticker.Stop()
+				l.ticker = nil
+			}
 			l.stopCh = nil
 			return
 		case <-l.ticker.C:
