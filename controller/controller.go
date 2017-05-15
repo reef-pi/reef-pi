@@ -53,12 +53,12 @@ func (c *Controller) Start() error {
 	if err := c.CreateBuckets(); err != nil {
 		return err
 	}
+	c.logStartTime()
+	c.state.Bootup()
+	c.cronRunner.Start()
 	if err := c.preCreateEquipments(); err != nil {
 		return err
 	}
-	c.cronRunner.Start()
-	c.logStartTime()
-	c.state.Bootup()
 	c.synEquipments()
 	if err := c.loadAllJobs(); err != nil {
 		return err
