@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"syscall"
 )
 
 var Version string
@@ -53,12 +54,17 @@ func main() {
 		log.Fatal("ERROR:", err)
 	}
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt)
+	signal.Notify(ch, os.Interrupt, syscall.SIGUSR2)
 	for {
 		select {
-		case <-ch:
-			c.Stop()
-			return
+		case s := <-ch:
+			switch s {
+			case os.Interrupt:
+				c.Stop()
+				return
+			case syscall.SIGUSR2:
+				c.EmitMetrics()
+			}
 		}
 	}
 }

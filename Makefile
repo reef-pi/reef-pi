@@ -9,6 +9,10 @@ bin: $(BINARY)
 $(BINARY): $(SOURCES)
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
+.PHONY:pi
+pi:
+	env GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
+
 test:
 	go test -cover -v -race ./...
 
@@ -22,13 +26,13 @@ go-get:
 	go get github.com/gorilla/mux
 	go get gopkg.in/robfig/cron.v2
 	go get github.com/dustin/go-humanize
+
 .PHONY: vet
 vet:
 	go vet ./...
 
 .PHONY: build
 build: clean go-get test bin
-
 
 .PHONY: deb
 deb:

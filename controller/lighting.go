@@ -12,35 +12,35 @@ type Lighting struct {
 	IntensityChannel int
 	SpectrumChannel  int
 	stopCh           chan struct{}
-	ticker           *time.Ticker
+	Interval         time.Duration
 }
 
 func NewLighting(i, s int) *Lighting {
+	interval := time.Second * 5
 	return &Lighting{
 		IntensityChannel: i,
 		SpectrumChannel:  s,
+		stopCh:           make(chan struct{}),
+		Interval:         interval,
 	}
 }
 
 func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
-	l.ticker = time.NewTicker(time.Minute * 1)
-	l.stopCh = make(chan struct{})
+	ticker := time.NewTicker(l.Interval)
+Loop:
 	for {
 		select {
 		case <-l.stopCh:
-			if l.ticker != nil {
-				l.ticker.Stop()
-				l.ticker = nil
-			}
-			l.stopCh = nil
-			return
-		case <-l.ticker.C:
+			ticker.Stop()
+			break Loop
+		case <-ticker.C:
 			i := lighting.GetCurrentValue(time.Now(), conf.Intensities)
 			l.SetIntensity(pwm, i)
 			s := lighting.GetCurrentValue(time.Now(), conf.Spectrums)
 			l.SetSpectrum(pwm, s)
 		}
 	}
+	return
 }
 
 func (l *Lighting) StopCycle() {
@@ -49,8 +49,6 @@ func (l *Lighting) StopCycle() {
 		return
 	}
 	l.stopCh <- struct{}{}
-	l.ticker = nil
-	l.stopCh = nil
 }
 
 func (l *Lighting) SetIntensity(pwm *PWM, v int) {
