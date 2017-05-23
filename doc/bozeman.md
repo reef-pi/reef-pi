@@ -4,7 +4,7 @@ Named after he beautiful [smalltown](https://en.wikipedia.org/wiki/Bozeman,_Mont
 Houses lots of visible copepods and handful of asterina star fish. It has two distinct levels, a
 valley within. The top level is acan dominant, while GSP and ricordia sits on the bottom level.
 
-[bozeman](./bozeman.jpg)
+![bozeman](./bozeman.jpg)
 
 - Aquarium. [Imagitarium 3.7G]()
 - Setup date: September, 2016
