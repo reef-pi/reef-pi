@@ -18,11 +18,10 @@ reef-pi is a [Raspberry Pi](https://www.raspberrypi.org/) based opensource
 
 
 ## Guides
+  - reef-pi controller [BoM](./doc/BOM.md) for [pico](./doc/bozeman.md) [reef](./doc/healdsburg.md) tanks
   - Using reef-pi
-  - Installing and configuring reef-pi on raspbian
-  - Building reef-pi electronics
   - Building reef-pi housing and insgtalling electronics
-  - reef-pi software development environment
+  - Installing and configuring reef-pi on raspbian
   - Online resources
 		- First reef-pi build [thread ](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/), 
 

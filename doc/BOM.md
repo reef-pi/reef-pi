@@ -1,4 +1,3 @@
-
 ## Pico
 
 This Bill of Material is for a pico reef tank controller & housing, to support 4 primary equiments (heater, return pump, light, filter)
