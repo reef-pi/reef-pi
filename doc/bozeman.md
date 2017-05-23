@@ -1,7 +1,7 @@
 ## Bozeman
 
 Named after he beautiful [smalltown](https://en.wikipedia.org/wiki/Bozeman,_Montana) of montana,
-Houses lots of visible copepods and handful of asterina star fish. It has two distinct levels, a
+bozeman is home of visible copepods and handful of asterina star fish. It has two distinct levels, a
 valley within. The top level is acan dominant, while GSP and ricordia sits on the bottom level.
 
 ![bozeman](./bozeman.jpg)
