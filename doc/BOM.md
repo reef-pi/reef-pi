@@ -2,10 +2,12 @@
 
 This Bill of Material is for a pico reef tank controller & housing, to support 4 primary equiments (heater, return pump, light, filter)
 
+[pico housing] (./pico_housing.jpg)
+
 ### Electronics
 
 - [Raspberry Pi 3](https://www.adafruit.com/product/3055)
-- [Pi touch scheern](https://www.adafruit.com/product/2718)
+- [Pi touch screen](https://www.adafruit.com/product/2718)
 - [5 Volt 2.4 A](https://www.adafruit.com/product/1995) micro usb power supply
 - [4 channel relay](https://www.amazon.com/CJRSLRB-G3MB-202P-Duemilanove-Mega2560-Mega1280/dp/B01GCCHBNS/)
 - [PCA9685](https://www.adafruit.com/product/815) pwm breakout board
@@ -20,3 +22,5 @@ This Bill of Material is for a pico reef tank controller & housing, to support 4
 - [Female panel mount BNC](https://www.amazon.com/CESS-Female-Coaxial-Connector-Soldering/dp/B012EELQK2) connector
 - [proto board](https://www.adafruit.com/product/3203)
 - [IC socket](https://www.adafruit.com/product/2203)
+
+[pico wiring] (./pico_wiring.jpg)
