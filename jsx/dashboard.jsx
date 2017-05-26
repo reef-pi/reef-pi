@@ -144,7 +144,7 @@ export default class Dashboard extends React.Component {
             <YAxis />
           </AreaChart>
         </div>
-        <div className="row">
+        <div className='row'>
           <a href='https://github.com/ranjib/reef-pi/blob/master/README.md'>Help</a>
         </div>
       </div>
