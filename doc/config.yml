@@ -28,7 +28,7 @@ controller:
     Light Intensity: PWM0
     Light Color: PWM1
   lighting:
-    enabled: true
+    enabled: false
     intensity_channel: 0
     spectrum_channel: 1
 api:
