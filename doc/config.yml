@@ -1,5 +1,6 @@
 ---
 controller:
+  adafruitio_token:
   enable_gpio: false
   enable_pwm: false
   enable_adc: false

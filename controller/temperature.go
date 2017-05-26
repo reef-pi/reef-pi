@@ -6,19 +6,21 @@ import (
 )
 
 type TemperatureSensor struct {
-	Channel int `json:"channel"`
-	hours   []int
-	minutes []int
-	stopCh  chan struct{}
-	adc     *ADC
+	Channel   int `json:"channel"`
+	hours     []int
+	minutes   []int
+	stopCh    chan struct{}
+	adc       *ADC
+	telemetry *Telemetry
 }
 
-func NewTemperatureSensor(channel int, adc *ADC) *TemperatureSensor {
+func NewTemperatureSensor(channel int, adc *ADC, telemetry *Telemetry) *TemperatureSensor {
 	return &TemperatureSensor{
-		Channel: channel,
-		hours:   make([]int, 24),
-		minutes: make([]int, 60),
-		adc:     adc,
+		Channel:   channel,
+		hours:     make([]int, 24),
+		minutes:   make([]int, 60),
+		adc:       adc,
+		telemetry: telemetry,
 	}
 }
 
@@ -43,6 +45,7 @@ func (t *TemperatureSensor) Start() {
 				continue
 			}
 			log.Println("Temperature sensor value:", reading)
+			t.telemetry.EmitMetric(reading)
 			t.minutes[time.Now().Minute()] = reading
 		case <-hourly.C:
 			reading, err := t.adc.Read(t.Channel)
@@ -50,6 +53,7 @@ func (t *TemperatureSensor) Start() {
 				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
 				continue
 			}
+			t.telemetry.EmitMetric(reading)
 			t.hours[time.Now().Hour()] = reading
 		case <-t.stopCh:
 			log.Println("Stopping temperature sensor")

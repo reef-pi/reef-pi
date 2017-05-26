@@ -11,6 +11,14 @@ type Config struct {
 	Outlets                 map[string]Outlet `yaml:"outlets"`
 	Equipments              map[string]string `yaml:"equipments"`
 	Lighting                PCA9685Config     `yaml:"lighting"`
+	AdafruitIO              AdafruitIO        `yaml:"adafruitio"`
+}
+
+type AdafruitIO struct {
+	Enabled bool   `yaml:"enabled"`
+	Token   string `yaml:"token"`
+	User    string `yaml:"user"`
+	Feed    string `yaml:"feed"`
 }
 
 type PCA9685Config struct {
