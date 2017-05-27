@@ -13,6 +13,7 @@ type Controller struct {
 	cronIDs    map[string]cron.EntryID
 	config     Config
 	state      *State
+	telemetry  *Telemetry
 }
 
 func New(config Config) (*Controller, error) {
@@ -22,12 +23,17 @@ func New(config Config) (*Controller, error) {
 	}
 
 	store := NewStore(db)
+	var telemetry *Telemetry
+	if config.AdafruitIO.Enabled {
+		telemetry = NewTelemetry(config.AdafruitIO)
+	}
 	c := &Controller{
 		store:      store,
-		state:      NewState(config, store),
+		state:      NewState(config, store, telemetry),
 		cronRunner: cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 		config:     config,
+		telemetry:  telemetry,
 	}
 	return c, nil
 }

@@ -7,20 +7,22 @@ import (
 )
 
 type State struct {
-	pwm      *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
-	adc      *ADC // Analog to digital converter (sensors)
-	lighting *Lighting
-	atos     map[string]*ATO
-	tSensor  *TemperatureSensor
-	config   Config
-	store    *Store
+	pwm       *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
+	adc       *ADC // Analog to digital converter (sensors)
+	lighting  *Lighting
+	atos      map[string]*ATO
+	tSensor   *TemperatureSensor
+	telemetry *Telemetry
+	config    Config
+	store     *Store
 }
 
-func NewState(c Config, store *Store) *State {
+func NewState(c Config, store *Store, telemetry *Telemetry) *State {
 	return &State{
-		atos:   make(map[string]*ATO),
-		config: c,
-		store:  store,
+		atos:      make(map[string]*ATO),
+		config:    c,
+		store:     store,
+		telemetry: telemetry,
 	}
 }
 
@@ -35,7 +37,7 @@ func (s *State) Bootup() error {
 		log.Println("Enabled ADC subsystem")
 	}
 	if s.config.EnableTemperatureSensor && s.config.EnableADC {
-		s.tSensor = NewTemperatureSensor(s.config.TemperaturePin, s.adc)
+		s.tSensor = NewTemperatureSensor(s.config.TemperaturePin, s.adc, s.telemetry)
 		go s.tSensor.Start()
 		log.Println("Enabled temperature senosor subsystem")
 	}
