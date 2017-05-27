@@ -26,9 +26,11 @@ func (t *Telemetry) EmitMetric(v int) {
 		Value: v,
 	}
 
-	if t.config.Enabled {
-		if err := t.client.SubmitData(t.config.User, t.config.Feed, d); err != nil {
-			log.Println("ERROR: Failed to submit data to adafruit.io. Error:", err)
-		}
+	if !t.config.Enabled {
+		log.Println("Telemetry disabled. Skipping emitting", v, "on", t.config.Feed)
+		return
+	}
+	if err := t.client.SubmitData(t.config.User, t.config.Feed, d); err != nil {
+		log.Println("ERROR: Failed to submit data to adafruit.io. Error:", err)
 	}
 }
