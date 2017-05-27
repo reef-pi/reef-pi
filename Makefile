@@ -26,6 +26,7 @@ go-get:
 	go get github.com/gorilla/mux
 	go get gopkg.in/robfig/cron.v2
 	go get github.com/dustin/go-humanize
+	go get github.com/ranjib/adafruitio
 
 .PHONY: vet
 vet:
