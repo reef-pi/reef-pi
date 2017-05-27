@@ -1,6 +1,10 @@
 ---
 controller:
-  adafruitio_token:
+  adafruitio:
+    enabled: false
+    token: xxx
+    user: xxx
+    feed: temperature
   enable_gpio: false
   enable_pwm: false
   enable_adc: false
