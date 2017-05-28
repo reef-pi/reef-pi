@@ -29,6 +29,7 @@ func SetupServer(config ServerConfig, c *controller.Controller) error {
 	}
 	assets := http.FileServer(http.Dir("assets"))
 	docs := http.FileServer(http.Dir("doc"))
+	log.Println("Image directory:", server.config.ImageDirectory)
 	images := http.FileServer(http.Dir(server.config.ImageDirectory))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "assets/home.html")
@@ -42,7 +43,7 @@ func SetupServer(config ServerConfig, c *controller.Controller) error {
 		http.Handle("/assets/", auth.Check(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", auth.Check(http.StripPrefix("/images/", images)))
 		http.Handle("/doc/", auth.Check(http.StripPrefix("/doc/", docs)))
-		http.Handle("/api", auth.Check(NewApiHandler(c, config.Interface)))
+		http.Handle("/api/", auth.Check(NewApiHandler(c, config.Interface)))
 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
