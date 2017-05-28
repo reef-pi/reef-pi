@@ -5,10 +5,10 @@ controller:
     token: xxx
     user: xxx
     feed: temperature
-  enable_gpio: false
-  enable_pwm: false
-  enable_adc: false
-  enable_temperature_sensor: false
+  enable_gpio: true
+  enable_pwm: true
+  enable_adc: true
+  enable_temperature_sensor: true
   database: "reef-pi.db"
   outlets:
     AC1:

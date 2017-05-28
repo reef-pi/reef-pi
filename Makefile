@@ -43,8 +43,8 @@ deb:
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
 	cp assets/login.html dist/var/lib/reef-pi/assets/login.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
-	cp doc/config.yml dist/etc/reef-pi/config.yml
-	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd doc/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
+	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
+	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
 .PHONY: clean
 clean:
