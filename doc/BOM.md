@@ -2,7 +2,7 @@
 
 This Bill of Material is for a pico reef tank controller & housing, to support 4 primary equiments (heater, return pump, light, filter)
 
-![pico housing](./pico_housing.jpg)
+![pico housing](./images/pico_housing.jpg)
 
 ### Electronics
 
@@ -23,4 +23,4 @@ This Bill of Material is for a pico reef tank controller & housing, to support 4
 - [proto board](https://www.adafruit.com/product/3203)
 - [IC socket](https://www.adafruit.com/product/2203)
 
-![pico wiring](./pico_wiring.jpg)
+![pico wiring](./images/pico_wiring.jpg)
