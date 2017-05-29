@@ -2,7 +2,7 @@
 
 Named after one of the famous small town of california, this pico reef tank house zoas and palys mostly. The entire rockscape is compose of a single large live rock at center and a small tonga branch in one corner. This tank has visible coralline algae in its back wall.
 
-![healdsburg](./healdsburg.jpg)
+![healdsburg](./images/healdsburg.jpg)
 
 - Aquarium. [Fluval Spec 3](https://www.amazon.com/Fluval-Spec-Aquarium-2-6-Gallon-Black/dp/B009K0ZKAQ)
 - Setup date: June, 2016
