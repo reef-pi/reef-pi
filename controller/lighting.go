@@ -20,18 +20,19 @@ func NewLighting(i, s int) *Lighting {
 	return &Lighting{
 		IntensityChannel: i,
 		SpectrumChannel:  s,
-		stopCh:           make(chan struct{}),
 		Interval:         interval,
 	}
 }
 
 func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 	ticker := time.NewTicker(l.Interval)
+	l.stopCh = make(chan struct{})
 Loop:
 	for {
 		select {
 		case <-l.stopCh:
 			ticker.Stop()
+			l.stopCh = nil
 			break Loop
 		case <-ticker.C:
 			i := lighting.GetCurrentValue(time.Now(), conf.Intensities)
@@ -67,9 +68,9 @@ func (c *Controller) GetLightingCycle() (lighting.CycleConfig, error) {
 }
 
 func (c *Controller) SetLightingCycle(conf lighting.CycleConfig) error {
-	var config lighting.Config
+	config := lighting.DefaultConfig
 	if err := c.store.Get(LightingBucket, "config", &config); err != nil {
-		return err
+		log.Println("ERROR: failed to get lighting config, using default config")
 	}
 	c.state.lighting.StopCycle()
 	config.CycleConfig = conf
