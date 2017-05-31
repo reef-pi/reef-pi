@@ -19,14 +19,11 @@ export default class LEDChannel extends React.Component {
 
   sliderList () {
     var values = this.props.getValues()
-    if (values === undefined) {
-      values = Array(12).fill(10)
-    }
-
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical'
     }
     var list = []
+    var labels = ['12 am', '2 am', '4 am', '6 am', '8 am', '10 am', '12 pm', '2 pm', '4 pm', '6 pm', '8 pm', '10 pm']
     for (var i = 0; i < 12; i++) {
       list.push(
         <div className='col-sm-1 text-center' key={i + 1}>
@@ -35,7 +32,7 @@ export default class LEDChannel extends React.Component {
             <input className='col-xs-1' type='range' style={rangeStyle} onChange={this.curry(i)} value={values[i]} id={'intensity-' + i} />
           </div>
           <div className='row'>
-            <label>{i * 2}</label>
+            <label>{labels[i]}</label>
           </div>
         </div>
       )

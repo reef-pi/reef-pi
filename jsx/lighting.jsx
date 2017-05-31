@@ -7,7 +7,9 @@ export default class Lighting extends React.Component {
     super(props)
     this.state = {
       updated: false,
-      enabled: false
+      enabled: false,
+      intensities: Array(12).fill(0),
+      spectrums: Array(12).fill(0)
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateIntensity = this.updateIntensity.bind(this)
