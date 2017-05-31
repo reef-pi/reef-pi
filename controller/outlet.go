@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 )
 
 type Outlet struct {
@@ -35,6 +36,10 @@ func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 		return fmt.Errorf("Outlet named: '%s' does noy exist", id)
 	}
 
+	if c.config.DevMode {
+		log.Println("Dev mode on. Skipping:", id, "On:", on, "Value:", value)
+		return nil
+	}
 	switch o.Type {
 	case "switch":
 		return c.doSwitching(o.Pin, on)
