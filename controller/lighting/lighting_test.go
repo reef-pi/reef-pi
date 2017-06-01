@@ -10,9 +10,9 @@ func TestGetCurrentValue(t *testing.T) {
 	if err := ValidateValues(intensities); err != nil {
 		t.Fatal(err)
 	}
-	t1 := time.Date(2015, time.October, 12, 0, 0, 0, 0, time.UTC)
+	t1 := time.Date(2015, time.October, 12, 7, 0, 0, 0, time.UTC)
 	v := GetCurrentValue(t1, intensities)
-	if v != 0 {
-		t.Fatal("Expected 0, found:", v)
+	if v != 10 {
+		t.Fatal("Expected 10, found:", v)
 	}
 }
