@@ -2,7 +2,6 @@ package lighting
 
 import (
 	"fmt"
-	"math"
 	"time"
 )
 
@@ -50,17 +49,15 @@ func ValidateValues(values []int) error {
 }
 
 func GetCurrentValue(t time.Time, series []int) int {
-	h1 := (t.Hour() / 2) - 1
-	if h1 == -1 {
-		h1 = 11
-	}
+	h1 := t.Hour() / 2
 	h2 := h1 + 1
 	if h2 >= 12 {
 		h2 = 0
 	}
-	m := t.Minute()
-	from := series[h1]
-	to := series[h2]
-	f := float64(from) + (((float64(to) - float64(from)) / 120.0) * float64(m))
-	return int(math.Ceil(f - 0.5))
+	m := float64(t.Minute() + ((t.Hour() % 2) * 60))
+	from := float64(series[h1])
+	to := float64(series[h2])
+	f := from + ((to - from) / 120.0 * m)
+	fmt.Println("h1:", h1, "h2:", h2, "from:", from, "to:", to, "m:", m, "f:", f)
+	return int(f)
 }
