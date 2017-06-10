@@ -1,6 +1,6 @@
 ## Job schedule specification
 
-Every job specified in reef-pi is triggered at a given schedule. A typical schedule specifies day, time details for the trigger.
+Each job in reef-pi is executed at a given schedule. A job's schedule specifies day and time related details.
 reef-pi uses [cron](https://en.wikipedia.org/wiki/Cron) like specification to define job schedules.
 
 Following is a summary of the specification
