@@ -15,8 +15,8 @@ Other than their mentioned ranges, each of this field can also take few special 
 
 They are:
 
-- "*" represents _every_ . Like every hour, every day etc
-- "-" to represent _ranges_. Example: hour can be "2-6" to trigger a job every hour from 2 to 6
-- "/" to represent _after every_. Example: Hour value "*/3" represents after every 3 hours
+- "\*" represents **every** . Like every hour, every day etc
+- "-" to represent **ranges**. Example: hour can be "2-6" to trigger a job every hour from 2 to 6
+- "/" to represent **after every**. Example: Hour value "\*/3" represents after every 3 hours
 
 More details can be found in  the underlying library's [documentation](https://godoc.org/github.com/robfig/cron#hdr-CRON_Expression_Format)
