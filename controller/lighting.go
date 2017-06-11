@@ -100,7 +100,8 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 
 func (l *Lighting) Reconfigure(pwm *PWM, conf lighting.Config) {
 	if conf.CycleConfig.Enabled {
-		l.StartCycle(pwm, conf.CycleConfig)
+		go l.StartCycle(pwm, conf.CycleConfig)
+		return
 	}
 	l.SetIntensity(pwm, conf.Fixed.Intensity)
 	l.SetSpectrum(pwm, conf.Fixed.Spectrum)
