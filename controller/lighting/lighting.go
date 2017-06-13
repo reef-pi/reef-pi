@@ -6,15 +6,11 @@ import (
 )
 
 type CycleConfig struct {
-	Intensities []int `json:"intensities"` // For cycle
-	Spectrums   []int `json:"spectrums"`   // For cycle
-	Enabled     bool  `json:"enabled"`
+	Enabled       bool             `json:"enabled"`
+	ChannelValues map[string][]int `json:"channel_values"`
 }
 
-type FixedConfig struct {
-	Intensity int `json:"intensity"` // For fixed spectrum
-	Spectrum  int `json:"value"`     // For fixed spectrum
-}
+type FixedConfig map[string]int
 
 type Config struct {
 	Fixed       FixedConfig `json:"fixed_config"`
@@ -23,17 +19,8 @@ type Config struct {
 
 var DefaultConfig = Config{
 	CycleConfig: CycleConfig{
-		Intensities: make([]int, 12),
-		Spectrums:   make([]int, 12),
+		ChannelValues: make(map[string][]int),
 	},
-}
-
-type Intensity struct {
-	Value int `json:"value"`
-}
-
-type Spectrum struct {
-	Value int `json:"value"`
 }
 
 func ValidateValues(values []int) error {

@@ -22,10 +22,12 @@ type AdafruitIO struct {
 	Feed    string `yaml:"feed"`
 }
 
+type Channels struct {
+}
+
 type PCA9685Config struct {
-	Enabled          bool `yaml:"enabled"`
-	IntensityChannel int  `yaml:"intensity_channel"`
-	SpectrumChannel  int  `yaml:"spectrum_channel"`
+	Enabled  bool           `yaml:"enabled"`
+	Channels map[string]int `yaml:"channels"`
 }
 
 var DefaultConfig = Config{
@@ -34,8 +36,7 @@ var DefaultConfig = Config{
 	TemperaturePin: 0,
 	Outlets:        make(map[string]Outlet),
 	Lighting: PCA9685Config{
-		Enabled:          false,
-		IntensityChannel: 0,
-		SpectrumChannel:  1,
+		Enabled:  false,
+		Channels: make(map[string]int),
 	},
 }

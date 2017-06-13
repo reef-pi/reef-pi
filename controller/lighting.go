@@ -9,18 +9,16 @@ import (
 const LightingBucket = "lightings"
 
 type Lighting struct {
-	IntensityChannel int
-	SpectrumChannel  int
-	stopCh           chan struct{}
-	Interval         time.Duration
+	stopCh   chan struct{}
+	Interval time.Duration
+	Channels map[string]int
 }
 
-func NewLighting(i, s int) *Lighting {
+func NewLighting(channels map[string]int) *Lighting {
 	interval := time.Second * 5
 	return &Lighting{
-		IntensityChannel: i,
-		SpectrumChannel:  s,
-		Interval:         interval,
+		Channels: channels,
+		Interval: interval,
 	}
 }
 
@@ -35,10 +33,15 @@ Loop:
 			l.stopCh = nil
 			break Loop
 		case <-ticker.C:
-			i := lighting.GetCurrentValue(time.Now(), conf.Intensities)
-			l.SetIntensity(pwm, i)
-			s := lighting.GetCurrentValue(time.Now(), conf.Spectrums)
-			l.SetSpectrum(pwm, s)
+			for ch, pin := range l.Channels {
+				expectedValues, ok := conf.ChannelValues[ch]
+				if !ok {
+					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", ch)
+					continue
+				}
+				v := lighting.GetCurrentValue(time.Now(), expectedValues)
+				l.UpdateChannel(pwm, pin, v)
+			}
 		}
 	}
 	return
@@ -52,14 +55,9 @@ func (l *Lighting) StopCycle() {
 	l.stopCh <- struct{}{}
 }
 
-func (l *Lighting) SetIntensity(pwm *PWM, v int) {
-	log.Println("Setting pwm value:", v, "for lighting intensity")
-	pwm.Set(l.IntensityChannel, v)
-}
-
-func (l *Lighting) SetSpectrum(pwm *PWM, v int) {
+func (l *Lighting) UpdateChannel(pwm *PWM, pin, v int) {
 	log.Println("Setting pwm value:", v, "for lighting spectrum")
-	pwm.Set(l.SpectrumChannel, v)
+	pwm.Set(pin, v)
 }
 
 func (c *Controller) GetLightingCycle() (lighting.CycleConfig, error) {
@@ -93,8 +91,9 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 	c.state.lighting.StopCycle()
 	config.Fixed = conf
 	config.CycleConfig.Enabled = false
-	c.state.lighting.SetIntensity(c.state.pwm, config.Fixed.Intensity)
-	c.state.lighting.SetSpectrum(c.state.pwm, config.Fixed.Spectrum)
+	for ch, pin := range c.state.lighting.Channels {
+		c.state.lighting.UpdateChannel(c.state.pwm, pin, conf[ch])
+	}
 	return c.store.Update(LightingBucket, "config", config)
 }
 
@@ -103,6 +102,7 @@ func (l *Lighting) Reconfigure(pwm *PWM, conf lighting.Config) {
 		go l.StartCycle(pwm, conf.CycleConfig)
 		return
 	}
-	l.SetIntensity(pwm, conf.Fixed.Intensity)
-	l.SetSpectrum(pwm, conf.Fixed.Spectrum)
+	for ch, pin := range l.Channels {
+		l.UpdateChannel(pwm, pin, conf.Fixed[ch])
+	}
 }
