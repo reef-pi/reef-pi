@@ -39,7 +39,11 @@ export default class Lighting extends React.Component {
   }
 
   getChannel (ch) {
-    return (this.state.channels[ch])
+    return (
+      function() {
+        return( this.state.channels[ch])
+      }.bind(this)
+    )
   }
 
   updateChannel (ch, values) {
@@ -93,7 +97,7 @@ export default class Lighting extends React.Component {
   channelList () {
     var channelUIs = []
     for (var ch in this.state.channels) {
-      channelUIs.push(<LEDChannel name={ch} onChange={this.updateChannel} getValues={this.getChannel} />)
+      channelUIs.push(<LEDChannel key={ch} name={ch} onChange={this.updateChannel} getValues={this.getChannel(ch)} />)
     }
     return channelUIs
   }
