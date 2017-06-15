@@ -93,7 +93,7 @@ export default class Lighting extends React.Component {
   channelList () {
     var channelUIs = []
     for (var ch in this.state.channels) {
-      <LEDChannel name={ch} onChange={this.updateChannel} getValues={this.getChannel} />
+      channelUIs.push(<LEDChannel name={ch} onChange={this.updateChannel} getValues={this.getChannel} />)
     }
     return channelUIs
   }

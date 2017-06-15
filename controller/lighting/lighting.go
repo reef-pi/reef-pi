@@ -7,20 +7,37 @@ import (
 
 type CycleConfig struct {
 	Enabled       bool             `json:"enabled"`
-	ChannelValues map[string][]int `json:"channel_values"`
+	ChannelValues map[string][]int `json:"channels"`
 }
 
 type FixedConfig map[string]int
 
 type Config struct {
-	Fixed       FixedConfig `json:"fixed_config"`
-	CycleConfig CycleConfig `json:"cycle_config"`
+	Fixed FixedConfig `json:"fixed_config"`
+	Cycle CycleConfig `json:"cycle_config"`
 }
 
-var DefaultConfig = Config{
-	CycleConfig: CycleConfig{
+var defaultConfig = Config{
+	Fixed: make(map[string]int),
+	Cycle: CycleConfig{
 		ChannelValues: make(map[string][]int),
 	},
+}
+
+func DefaultConfig(channels map[string]int) Config {
+	fixed := make(map[string]int)
+	cycles := make(map[string][]int)
+	for ch, _ := range channels {
+		fixed[ch] = 0
+		cycles[ch] = make([]int, 12, 12)
+	}
+	c := Config{
+		Fixed: fixed,
+		Cycle: CycleConfig{
+			ChannelValues: cycles,
+		},
+	}
+	return c
 }
 
 func ValidateValues(values []int) error {

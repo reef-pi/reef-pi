@@ -62,17 +62,17 @@ func (l *Lighting) UpdateChannel(pwm *PWM, pin, v int) {
 
 func (c *Controller) GetLightingCycle() (lighting.CycleConfig, error) {
 	var config lighting.Config
-	return config.CycleConfig, c.store.Get(LightingBucket, "config", &config)
+	return config.Cycle, c.store.Get(LightingBucket, "config", &config)
 }
 
 func (c *Controller) SetLightingCycle(conf lighting.CycleConfig) error {
-	config := lighting.DefaultConfig
+	var config lighting.Config
 	if err := c.store.Get(LightingBucket, "config", &config); err != nil {
 		log.Println("ERROR: failed to get lighting config, using default config")
 	}
 	c.state.lighting.StopCycle()
-	config.CycleConfig = conf
-	if config.CycleConfig.Enabled {
+	config.Cycle = conf
+	if config.Cycle.Enabled {
 		go c.state.lighting.StartCycle(c.state.pwm, conf)
 	}
 	return c.store.Update(LightingBucket, "config", config)
@@ -90,7 +90,7 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 	}
 	c.state.lighting.StopCycle()
 	config.Fixed = conf
-	config.CycleConfig.Enabled = false
+	config.Cycle.Enabled = false
 	for ch, pin := range c.state.lighting.Channels {
 		c.state.lighting.UpdateChannel(c.state.pwm, pin, conf[ch])
 	}
@@ -98,8 +98,8 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 }
 
 func (l *Lighting) Reconfigure(pwm *PWM, conf lighting.Config) {
-	if conf.CycleConfig.Enabled {
-		go l.StartCycle(pwm, conf.CycleConfig)
+	if conf.Cycle.Enabled {
+		go l.StartCycle(pwm, conf.Cycle)
 		return
 	}
 	for ch, pin := range l.Channels {
