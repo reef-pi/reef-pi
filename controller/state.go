@@ -42,7 +42,7 @@ func (s *State) Bootup() error {
 		log.Println("Enabled temperature senosor subsystem")
 	}
 	if s.config.EnablePWM {
-		p, err := NewPWM()
+		p, err := NewPWM(s.config.DevMode)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pwm system")
 			return err

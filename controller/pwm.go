@@ -15,13 +15,19 @@ type PWM struct {
 	conn   *pca9685.PCA9685
 }
 
-func NewPWM() (*PWM, error) {
+func NewPWM(devMode bool) (*PWM, error) {
 	c := PWMConfig{
 		Bus:     1,
 		Address: 0x40,
 	}
-	bus := embd.NewI2CBus(byte(c.Bus))
-	conn := pca9685.New(bus, byte(c.Address))
+	var conn *pca9685.PCA9685
+	if devMode {
+		bus := &DevI2CBus{}
+		conn = pca9685.New(bus, byte(c.Address))
+	} else {
+		bus := embd.NewI2CBus(byte(c.Bus))
+		conn = pca9685.New(bus, byte(c.Address))
+	}
 	pwm := PWM{
 		values: make(map[int]int),
 		conn:   conn,
