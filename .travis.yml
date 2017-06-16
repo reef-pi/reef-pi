@@ -9,7 +9,6 @@ script:
   - sudo ln -sf /usr/bin/nodejs /usr/bin/node
   - make go-get
   - make test
-  - make vet
   - env GOARCH=arm make bin
   - bundle install
   - env
