@@ -40,8 +40,8 @@ export default class Lighting extends React.Component {
 
   getChannel (ch) {
     return (
-      function() {
-        return( this.state.channels[ch])
+      function () {
+        return (this.state.channels[ch])
       }.bind(this)
     )
   }
