@@ -10,7 +10,7 @@ type Config struct {
 	TemperaturePin          int               `yaml:"temperature_pin"`
 	Outlets                 map[string]Outlet `yaml:"outlets"`
 	Equipments              map[string]string `yaml:"equipments"`
-	Lighting                PCA9685Config     `yaml:"lighting"`
+	Lighting                LightingConfig    `yaml:"lighting"`
 	AdafruitIO              AdafruitIO        `yaml:"adafruitio"`
 	DevMode                 bool              `yaml:"dev_mode"`
 }
@@ -22,10 +22,9 @@ type AdafruitIO struct {
 	Feed    string `yaml:"feed"`
 }
 
-type PCA9685Config struct {
-	Enabled          bool `yaml:"enabled"`
-	IntensityChannel int  `yaml:"intensity_channel"`
-	SpectrumChannel  int  `yaml:"spectrum_channel"`
+type LightingConfig struct {
+	Enabled  bool           `yaml:"enabled"`
+	Channels map[string]int `yaml:"channels"`
 }
 
 var DefaultConfig = Config{
@@ -33,9 +32,8 @@ var DefaultConfig = Config{
 	EnableGPIO:     true,
 	TemperaturePin: 0,
 	Outlets:        make(map[string]Outlet),
-	Lighting: PCA9685Config{
-		Enabled:          false,
-		IntensityChannel: 0,
-		SpectrumChannel:  1,
+	Lighting: LightingConfig{
+		Enabled:  false,
+		Channels: make(map[string]int),
 	},
 }

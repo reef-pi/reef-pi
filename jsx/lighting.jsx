@@ -8,15 +8,13 @@ export default class Lighting extends React.Component {
     this.state = {
       updated: false,
       enabled: false,
-      intensities: Array(12).fill(0),
-      spectrums: Array(12).fill(0)
+      channels: {}
     }
     this.fetchData = this.fetchData.bind(this)
-    this.updateIntensity = this.updateIntensity.bind(this)
-    this.updateSpectrum = this.updateSpectrum.bind(this)
+    this.updateChannel = this.updateChannel.bind(this)
+    this.getChannel = this.getChannel.bind(this)
+    this.channelList = this.channelList.bind(this)
     this.updateLighting = this.updateLighting.bind(this)
-    this.getIntensities = this.getIntensities.bind(this)
-    this.getSpectrums = this.getSpectrums.bind(this)
     this.toggleLighting = this.toggleLighting.bind(this)
   }
 
@@ -30,8 +28,7 @@ export default class Lighting extends React.Component {
       type: 'GET',
       success: function (data) {
         this.setState({
-          intensities: data.intensities,
-          spectrums: data.spectrums,
+          channels: data.channels,
           enabled: data.enabled
         })
       }.bind(this),
@@ -41,24 +38,19 @@ export default class Lighting extends React.Component {
     })
   }
 
-  getIntensities () {
-    return (this.state.intensities)
+  getChannel (ch) {
+    return (
+      function () {
+        return (this.state.channels[ch])
+      }.bind(this)
+    )
   }
 
-  getSpectrums () {
-    return (this.state.spectrums)
-  }
-
-  updateIntensity (values) {
+  updateChannel (ch, values) {
+    var channels = this.state.channels
+    channels[ch] = values
     this.setState({
-      intensities: values,
-      updated: true
-    })
-  }
-
-  updateSpectrum (values) {
-    this.setState({
-      spectrums: values,
+      channels: channels,
       updated: true
     })
   }
@@ -68,8 +60,7 @@ export default class Lighting extends React.Component {
       url: '/api/lighting/cycle',
       type: 'POST',
       data: JSON.stringify({
-        intensities: this.state.intensities,
-        spectrums: this.state.spectrums,
+        channels: this.state.channels,
         enabled: this.state.enabled
       }),
       success: function (data) {
@@ -89,8 +80,7 @@ export default class Lighting extends React.Component {
       url: '/api/lighting/cycle',
       type: 'POST',
       data: JSON.stringify({
-        intensities: this.state.intensities,
-        spectrums: this.state.spectrums,
+        channels: this.state.channels,
         enabled: enabled
       }),
       success: function (data) {
@@ -102,6 +92,14 @@ export default class Lighting extends React.Component {
         console.log(err)
       }
     })
+  }
+
+  channelList () {
+    var channelUIs = []
+    for (var ch in this.state.channels) {
+      channelUIs.push(<LEDChannel key={ch} name={ch} onChange={this.updateChannel} getValues={this.getChannel(ch)} />)
+    }
+    return channelUIs
   }
 
   render () {
@@ -117,8 +115,7 @@ export default class Lighting extends React.Component {
     }
     return (
       <div className='container'>
-        <LEDChannel name='Intensity' onChange={this.updateIntensity} getValues={this.getIntensities} />
-        <LEDChannel name='Spectrum' onChange={this.updateSpectrum} getValues={this.getSpectrums} />
+        {this.channelList()}
         <input type='button' onClick={this.updateLighting} value='Update' className={btnClass} />
         <input type='button' onClick={this.toggleLighting} value={enableText} className={enableClass} />
       </div>

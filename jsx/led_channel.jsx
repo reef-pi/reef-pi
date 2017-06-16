@@ -12,13 +12,13 @@ export default class LEDChannel extends React.Component {
       function (ev) {
         var values = this.props.getValues()
         values[i] = parseInt(ev.target.value)
-        this.props.onChange(values)
+        this.props.onChange(this.props.name, values)
       }.bind(this)
     )
   }
 
   sliderList () {
-    var values = this.props.getValues()
+    var values = this.props.getValues(this.props.name)
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical'
     }

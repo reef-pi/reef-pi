@@ -42,7 +42,7 @@ func (s *State) Bootup() error {
 		log.Println("Enabled temperature senosor subsystem")
 	}
 	if s.config.EnablePWM {
-		p, err := NewPWM()
+		p, err := NewPWM(s.config.DevMode)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pwm system")
 			return err
@@ -52,7 +52,7 @@ func (s *State) Bootup() error {
 		log.Println("Enabled PWM subsystem")
 	}
 	if s.config.EnablePWM && s.config.Lighting.Enabled {
-		lConfig := lighting.DefaultConfig
+		lConfig := lighting.DefaultConfig(s.config.Lighting.Channels)
 		if err := s.store.Get(LightingBucket, "config", &lConfig); err != nil {
 			log.Println("No existing lighting settings found. Resetting")
 			if lErr := s.store.Update(LightingBucket, "config", lConfig); lErr != nil {
@@ -60,7 +60,7 @@ func (s *State) Bootup() error {
 				return err
 			}
 		}
-		s.lighting = NewLighting(s.config.Lighting.IntensityChannel, s.config.Lighting.SpectrumChannel)
+		s.lighting = NewLighting(s.config.Lighting.Channels)
 		s.lighting.Reconfigure(s.pwm, lConfig)
 		log.Println("Successfully initialized lighting subsystem")
 	}

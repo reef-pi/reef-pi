@@ -98,6 +98,7 @@ func (h *APIHandler) jsonGetResponse(fn func(string) (interface{}, error), w htt
 	payload, err := fn(id)
 	if err != nil {
 		errorResponse(http.StatusNotFound, "Resource not found", w)
+		log.Println("ERROR: GET", r.RequestURI, err)
 		return
 	}
 	h.jsonResponse(payload, w, r)
@@ -107,7 +108,8 @@ func (h *APIHandler) jsonListResponse(fn func() (interface{}, error), w http.Res
 	defer r.Body.Close()
 	payload, err := fn()
 	if err != nil {
-		errorResponse(http.StatusInternalServerError, "Failed to ist", w)
+		errorResponse(http.StatusInternalServerError, "Failed to list", w)
+		log.Println("ERROR: GET", r.RequestURI, err)
 		return
 	}
 	h.jsonResponse(payload, w, r)
