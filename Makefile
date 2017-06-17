@@ -13,6 +13,10 @@ $(BINARY): $(SOURCES)
 pi:
 	env GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
+.PHONY:pi-zero
+pi-zero:
+	env GOARM=6 GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
+
 test:
 	go test -cover -v -race ./...
 
