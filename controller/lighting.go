@@ -23,15 +23,15 @@ func NewLighting(channels map[string]int) *Lighting {
 }
 
 func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
-	ticker := time.NewTicker(l.Interval)
 	l.stopCh = make(chan struct{})
-Loop:
+	ticker := time.NewTicker(l.Interval)
 	for {
 		select {
 		case <-l.stopCh:
 			ticker.Stop()
+			close(l.stopCh)
 			l.stopCh = nil
-			break Loop
+			return
 		case <-ticker.C:
 			for ch, pin := range l.Channels {
 				expectedValues, ok := conf.ChannelValues[ch]
@@ -44,7 +44,6 @@ Loop:
 			}
 		}
 	}
-	return
 }
 
 func (l *Lighting) StopCycle() {
