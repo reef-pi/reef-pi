@@ -21,7 +21,7 @@ func TestInfo(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	h := NewApiHandler(c, "lo0")
+	h := NewApiHandler(c, "lo0", false)
 	h.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)

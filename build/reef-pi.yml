@@ -34,8 +34,12 @@ controller:
     Light Color: PWM1
   lighting:
     enabled: false
-    intensity_channel: 0
-    spectrum_channel: 1
+    channels:
+      Intensity:
+        pin: 0
+        min_threshold: 30
+      Color:
+        pin: 1
 api:
   address: "localhost:8080"
   enable_auth: false

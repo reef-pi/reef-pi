@@ -60,7 +60,7 @@ func (s *State) Bootup() error {
 				return err
 			}
 		}
-		s.lighting = NewLighting(s.config.Lighting.Channels)
+		s.lighting = NewLighting(s.config.Lighting.Channels, s.telemetry)
 		s.lighting.Reconfigure(s.pwm, lConfig)
 		log.Println("Successfully initialized lighting subsystem")
 	}

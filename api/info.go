@@ -16,6 +16,7 @@ type ControllerSummary struct {
 	CurrentTime    string `json:"current_time"`
 	Uptime         string `json:"uptime"`
 	CPUTemperature string `json:"cpu_temperature"`
+	Display        bool   `json:"display"`
 }
 
 type Info struct {
@@ -37,6 +38,7 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 		IP:             ip,
 		Uptime:         h.controller.Uptime(),
 		CPUTemperature: string(temp),
+		Display:        h.Display,
 	}
 	temperatureReadings := h.controller.GetTemperature()
 	info := Info{

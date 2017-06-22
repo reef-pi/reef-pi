@@ -45,7 +45,7 @@ func (t *TemperatureSensor) Start() {
 				continue
 			}
 			log.Println("Temperature sensor value:", reading)
-			t.telemetry.EmitMetric(reading)
+			t.telemetry.EmitMetric("temperature", reading)
 			t.minutes[time.Now().Minute()] = reading
 		case <-hourly.C:
 			reading, err := t.adc.Read(t.Channel)
@@ -53,7 +53,7 @@ func (t *TemperatureSensor) Start() {
 				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
 				continue
 			}
-			t.telemetry.EmitMetric(reading)
+			t.telemetry.EmitMetric("temperature", reading)
 			t.hours[time.Now().Hour()] = reading
 		case <-t.stopCh:
 			log.Println("Stopping temperature sensor")

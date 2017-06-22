@@ -10,6 +10,11 @@ type CycleConfig struct {
 	ChannelValues map[string][]int `json:"channels"`
 }
 
+type LEDChannel struct {
+	Pin          int `yaml:"pin"`
+	MinTheshold  int `yaml:"min_threshold"`
+	MaxThreshold int `yaml:"max_threshold"`
+}
 type FixedConfig map[string]int
 
 type Config struct {
@@ -24,7 +29,7 @@ var defaultConfig = Config{
 	},
 }
 
-func DefaultConfig(channels map[string]int) Config {
+func DefaultConfig(channels map[string]LEDChannel) Config {
 	fixed := make(map[string]int)
 	cycles := make(map[string][]int)
 	for ch, _ := range channels {
