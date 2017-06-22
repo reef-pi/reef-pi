@@ -13,6 +13,7 @@ type ServerConfig struct {
 	Auth           auth.Config `yaml:"auth"`
 	ImageDirectory string      `yaml:"image_directory"`
 	Interface      string      `yaml:"interface"`
+	Display        bool        `yaml:"display"`
 }
 
 var DefaultConfig = ServerConfig{
@@ -43,13 +44,13 @@ func SetupServer(config ServerConfig, c *controller.Controller) error {
 		http.Handle("/assets/", auth.Check(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", auth.Check(http.StripPrefix("/images/", images)))
 		http.Handle("/doc/", auth.Check(http.StripPrefix("/doc/", docs)))
-		http.Handle("/api/", auth.Check(NewApiHandler(c, config.Interface)))
+		http.Handle("/api/", auth.Check(NewApiHandler(c, config.Interface, config.Display)))
 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
-		http.Handle("/api/", NewApiHandler(c, config.Interface))
+		http.Handle("/api/", NewApiHandler(c, config.Interface, config.Display))
 	}
 	log.Printf("Starting http server at: %s\n", config.Address)
 	go http.ListenAndServe(config.Address, nil)

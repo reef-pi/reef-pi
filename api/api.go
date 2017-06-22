@@ -15,9 +15,10 @@ const (
 type APIHandler struct {
 	controller *controller.Controller
 	Interface  string
+	Display    bool
 }
 
-func NewApiHandler(c *controller.Controller, iface string) http.Handler {
+func NewApiHandler(c *controller.Controller, iface string, display bool) http.Handler {
 	if iface == "" {
 		iface = DEFAULT_INTERFACE
 	}
@@ -25,14 +26,17 @@ func NewApiHandler(c *controller.Controller, iface string) http.Handler {
 	handler := &APIHandler{
 		controller: c,
 		Interface:  iface,
+		Display:    display,
 	}
 
 	// Info (used by dashboard)
 	router.HandleFunc("/api/info", handler.Info).Methods("GET")
-	router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
-	router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
-	router.HandleFunc("/api/display", handler.SetBrightness).Methods("POST")
-	router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
+	if display {
+		router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
+		router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
+		router.HandleFunc("/api/display", handler.SetBrightness).Methods("POST")
+		router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
+	}
 
 	// Outlets
 	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
