@@ -9,16 +9,18 @@ import (
 const LightingBucket = "lightings"
 
 type Lighting struct {
-	stopCh   chan struct{}
-	Interval time.Duration
-	Channels map[string]int
+	stopCh    chan struct{}
+	Interval  time.Duration
+	Channels  map[string]int
+	telemetry *Telemetry
 }
 
-func NewLighting(channels map[string]int) *Lighting {
-	interval := time.Second * 5
+func NewLighting(channels map[string]int, telemetry *Telemetry) *Lighting {
+	interval := time.Second * 15
 	return &Lighting{
-		Channels: channels,
-		Interval: interval,
+		Channels:  channels,
+		Interval:  interval,
+		telemetry: telemetry,
 	}
 }
 
@@ -41,6 +43,9 @@ Loop:
 				}
 				v := lighting.GetCurrentValue(time.Now(), expectedValues)
 				l.UpdateChannel(pwm, pin, v)
+				if l.telemetry != nil {
+					l.telemetry.EmitMetric("lighting-"+ch, v)
+				}
 			}
 		}
 	}
