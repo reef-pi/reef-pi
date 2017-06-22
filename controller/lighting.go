@@ -11,10 +11,10 @@ const LightingBucket = "lightings"
 type Lighting struct {
 	stopCh   chan struct{}
 	Interval time.Duration
-	Channels map[string]int
+	Channels map[string]lighting.LEDChannel
 }
 
-func NewLighting(channels map[string]int) *Lighting {
+func NewLighting(channels map[string]lighting.LEDChannel) *Lighting {
 	interval := time.Second * 5
 	return &Lighting{
 		Channels: channels,
@@ -33,14 +33,22 @@ Loop:
 			l.stopCh = nil
 			break Loop
 		case <-ticker.C:
-			for ch, pin := range l.Channels {
-				expectedValues, ok := conf.ChannelValues[ch]
+			for chName, ch := range l.Channels {
+				expectedValues, ok := conf.ChannelValues[chName]
 				if !ok {
-					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", ch)
+					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", chName)
 					continue
 				}
 				v := lighting.GetCurrentValue(time.Now(), expectedValues)
-				l.UpdateChannel(pwm, pin, v)
+				if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
+					log.Printf("WARNING: Calculated value(%d) for channel '%s' is below minimum threshold(%d)\n", v, chName, ch.MinTheshold)
+					continue
+				}
+				if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
+					log.Printf("WARNING: Calculated value(%d) for channel '%s' is above maximum threshold(%d)\n", v, chName, ch.MaxThreshold)
+					continue
+				}
+				l.UpdateChannel(pwm, ch.Pin, v)
 			}
 		}
 	}
@@ -91,8 +99,8 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 	c.state.lighting.StopCycle()
 	config.Fixed = conf
 	config.Cycle.Enabled = false
-	for ch, pin := range c.state.lighting.Channels {
-		c.state.lighting.UpdateChannel(c.state.pwm, pin, conf[ch])
+	for chName, ch := range c.state.lighting.Channels {
+		c.state.lighting.UpdateChannel(c.state.pwm, ch.Pin, conf[chName])
 	}
 	return c.store.Update(LightingBucket, "config", config)
 }
@@ -102,7 +110,7 @@ func (l *Lighting) Reconfigure(pwm *PWM, conf lighting.Config) {
 		go l.StartCycle(pwm, conf.Cycle)
 		return
 	}
-	for ch, pin := range l.Channels {
-		l.UpdateChannel(pwm, pin, conf.Fixed[ch])
+	for chName, ch := range l.Channels {
+		l.UpdateChannel(pwm, ch.Pin, conf.Fixed[chName])
 	}
 }
