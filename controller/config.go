@@ -1,5 +1,9 @@
 package controller
 
+import (
+	"github.com/ranjib/reef-pi/controller/lighting"
+)
+
 type Config struct {
 	EnableGPIO              bool              `yaml:"enable_gpio"`
 	EnablePWM               bool              `yaml:"enable_pwm"`
@@ -23,8 +27,8 @@ type AdafruitIO struct {
 }
 
 type LightingConfig struct {
-	Enabled  bool           `yaml:"enabled"`
-	Channels map[string]int `yaml:"channels"`
+	Enabled  bool                           `yaml:"enabled"`
+	Channels map[string]lighting.LEDChannel `yaml:"channels"`
 }
 
 var DefaultConfig = Config{
@@ -34,6 +38,6 @@ var DefaultConfig = Config{
 	Outlets:        make(map[string]Outlet),
 	Lighting: LightingConfig{
 		Enabled:  false,
-		Channels: make(map[string]int),
+		Channels: make(map[string]lighting.LEDChannel),
 	},
 }
