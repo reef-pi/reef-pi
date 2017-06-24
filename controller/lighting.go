@@ -27,6 +27,7 @@ func NewLighting(channels map[string]lighting.LEDChannel, telemetry *Telemetry) 
 func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 	l.stopCh = make(chan struct{})
 	ticker := time.NewTicker(l.Interval)
+	log.Println("Starting lighting cycle")
 	for {
 		select {
 		case <-l.stopCh:
@@ -65,6 +66,7 @@ func (l *Lighting) StopCycle() {
 		return
 	}
 	l.stopCh <- struct{}{}
+	log.Println("Stopped lighting cycle")
 }
 
 func (l *Lighting) UpdateChannel(pwm *PWM, pin, v int) {
