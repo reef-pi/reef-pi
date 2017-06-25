@@ -4,9 +4,7 @@ VERSION=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 
 .PHONY:bin
-bin: $(BINARY)
-
-$(BINARY): $(SOURCES)
+bin:
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
 .PHONY:pi
