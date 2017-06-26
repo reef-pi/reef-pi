@@ -44,12 +44,12 @@ func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 				}
 				v := lighting.GetCurrentValue(time.Now(), expectedValues)
 				if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
-					log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Skipping\n", v, chName, ch.MinTheshold)
-					continue
+					log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, chName, ch.MinTheshold)
+					v = 0
 				}
 				if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
-					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Skipping\n", v, chName, ch.MaxThreshold)
-					continue
+					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, chName, ch.MaxThreshold, ch.MaxThreshold)
+					v = ch.MaxThreshold
 				}
 				l.UpdateChannel(pwm, ch.Pin, v)
 				if l.telemetry != nil {
