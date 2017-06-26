@@ -46,8 +46,7 @@ func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 				if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
 					log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, chName, ch.MinTheshold)
 					v = 0
-				}
-				if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
+				} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
 					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, chName, ch.MaxThreshold, ch.MaxThreshold)
 					v = ch.MaxThreshold
 				}
@@ -70,7 +69,7 @@ func (l *Lighting) StopCycle() {
 }
 
 func (l *Lighting) UpdateChannel(pwm *PWM, pin, v int) {
-	log.Println("Setting pwm value:", v, "for lighting spectrum")
+	log.Println("Setting pwm value:", v, " at pin:", pin)
 	pwm.Set(pin, v)
 }
 
