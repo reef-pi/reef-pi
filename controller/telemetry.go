@@ -45,6 +45,6 @@ func (t *Telemetry) EmitMetric(feed string, v int) {
 		return
 	}
 	if err := t.client.SubmitData(t.config.User, feed, d); err != nil {
-		log.Println("ERROR: Failed to submit data to adafruit.io. Error:", err)
+		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", t.config.User, "Feed:", feed, "Error:", err)
 	}
 }

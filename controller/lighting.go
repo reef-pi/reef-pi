@@ -52,7 +52,7 @@ func (l *Lighting) StartCycle(pwm *PWM, conf lighting.CycleConfig) {
 				}
 				l.UpdateChannel(pwm, ch.Pin, v)
 				if l.telemetry != nil {
-					l.telemetry.EmitMetric("lighting-"+chName, v)
+					l.telemetry.EmitMetric(chName, v)
 				}
 			}
 		}
