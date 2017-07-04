@@ -68,6 +68,13 @@ func (s *State) Bootup() error {
 }
 
 func (s *State) TearDown() {
+	if s.config.Lighting.Enabled {
+		s.lighting.StopCycle()
+	}
+	if s.config.DevMode {
+		log.Println("Running is dev mode, skipping driver teardown")
+		return
+	}
 	if s.config.EnablePWM {
 		s.pwm.Stop()
 		s.pwm = nil
@@ -85,8 +92,5 @@ func (s *State) TearDown() {
 	if s.config.EnableGPIO {
 		embd.CloseGPIO()
 		log.Println("Stopping GPIO subsystem")
-	}
-	if s.config.Lighting.Enabled {
-		s.lighting.StopCycle()
 	}
 }
