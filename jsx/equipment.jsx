@@ -7,69 +7,16 @@ export default class Equipment extends React.Component {
     this.state = {
       outlet: {},
       action: (props.on ? 'off' : 'on'),
-      value: 0
+      value: this.props.value
     }
-    this.fetchEquipment = this.fetchEquipment.bind(this)
-    this.fetchOutlet = this.fetchOutlet.bind(this)
     this.updateEquipmentAction = this.updateEquipmentAction.bind(this)
     this.updateEquipmentValue = this.updateEquipmentValue.bind(this)
+    this.fetchOutlet = this.fetchOutlet.bind(this)
   }
 
-  fetchEquipment () {
+  fetchOutlet () {
     $.ajax({
-      url: '/api/equipments/' + this.props.id,
-      type: 'GET',
-      dataType: 'json',
-      success: function (data) {
-        this.fetchOutlet(data.outlet)
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  updateEquipmentValue (e) {
-    this.setState({
-      value: parseInt(e.target.value)
-    })
-    $.ajax({
-      url: '/api/outlets/' + this.state.outlet.name + '/configure',
-      type: 'POST',
-      data: JSON.stringify({
-        on: true,
-        value: Number(this.state.value)
-      }),
-      success: function (data) {
-      },
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  updateEquipmentAction () {
-    $.ajax({
-      url: '/api/outlets/' + this.state.outlet.name + '/configure',
-      type: 'POST',
-      data: JSON.stringify({
-        on: this.state.action === 'on',
-        value: Number(this.state.value)
-      }),
-      success: function (data) {
-        this.setState({
-          action: this.state.action === 'on' ? 'off' : 'on'
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  fetchOutlet (o) {
-    $.ajax({
-      url: '/api/outlets/' + o,
+      url: '/api/outlets/' + this.props.outlet,
       type: 'GET',
       dataType: 'json',
       success: function (data) {
@@ -83,8 +30,53 @@ export default class Equipment extends React.Component {
     })
   }
 
+  updateEquipmentAction (e) {
+    $.ajax({
+      url: '/api/equipments/' + this.props.name,
+      type: 'POST',
+      data: JSON.stringify({
+        on: this.state.action === 'on',
+        value: Number(this.state.value),
+        name: this.props.name,
+        outlet: this.props.outlet
+      }),
+      success: function (data) {
+        this.setState({
+          action: this.state.action === 'on' ? 'off' : 'on'
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
+  }
+
+  updateEquipmentValue (e) {
+    this.setState({
+      value: parseInt(e.target.value)
+    })
+    $.ajax({
+      url: '/api/equipments/' + this.props.name,
+      type: 'POST',
+      data: JSON.stringify({
+        on: true,
+        value: Number(this.state.value),
+        name: this.props.name,
+        outlet: this.props.outlet
+      }),
+      success: function (data) {
+        this.setState({
+          action: 'off'
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
+  }
+
   componentDidMount () {
-    this.fetchEquipment()
+    this.fetchOutlet()
   }
 
   render () {
