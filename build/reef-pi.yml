@@ -52,4 +52,6 @@ api:
       - foobar
     gomni_auth_secret: sadfhsadfkh238asdf
   image_directory: /var/lib/reef-pi/images
-  interface: eth0
+  interface: wlan0
+  display: false
+  admin: false

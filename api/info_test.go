@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestInfo(t *testing.T) {
+func Test_Info(t *testing.T) {
 	req, err := http.NewRequest("GET", "/api/info", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -21,7 +21,10 @@ func TestInfo(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	h := NewApiHandler(c, "lo0", false)
+	config := ServerConfig{
+		Interface: "lo0",
+	}
+	h := NewApiHandler(c, config)
 	h.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)

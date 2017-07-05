@@ -1,6 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
-import {Area, AreaChart, XAxis, YAxis} from 'recharts'
+import Admin from './admin.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -16,6 +16,31 @@ export default class Dashboard extends React.Component {
     this.refresh = this.refresh.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
     this.setBrightness = this.setBrightness.bind(this)
+    this.showDisplay = this.showDisplay.bind(this)
+  }
+
+  showDisplay () {
+    if (!this.state.info.system.display) {
+      return
+    }
+    var dispalyStyle = ''
+    var displayAction = ''
+    if (this.state.displayOn) {
+      dispalyStyle = 'btn btn-outline-danger'
+      displayAction = 'off'
+    } else {
+      dispalyStyle = 'btn btn-outline-success'
+      displayAction = 'on'
+    }
+    return (
+      <li className='list-group-item'>
+        <div className='row'>
+          <div className='col-sm-2'>Display</div>
+          <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
+              Brightness: <input type='range' onChange={this.setBrightness} min={0} max={255} value={this.state.brightness} />
+        </div>
+      </li>
+    )
   }
 
   toggleDisplay () {
@@ -87,22 +112,8 @@ export default class Dashboard extends React.Component {
   }
 
   render () {
-    var dispalyStyle = ''
-    var displayAction = ''
-    if (this.state.displayOn) {
-      dispalyStyle = 'btn btn-outline-danger'
-      displayAction = 'off'
-    } else {
-      dispalyStyle = 'btn btn-outline-success'
-      displayAction = 'on'
-    }
-    var data = []
-    $.each(this.state.info.temperature_readings, function (k, v) {
-      data.push({name: String(k), temperature: v})
-    })
     return (
       <div className='container'>
-        <h5>Controller Summary</h5>
         <ul className='list-group'>
           <li className='list-group-item'>
             <div className='row'>
@@ -128,21 +139,10 @@ export default class Dashboard extends React.Component {
               <div className='col-sm-6'>{this.state.info.system.cpu_temperature}</div>
             </div>
           </li>
-          <li className='list-group-item'>
-            <div className='row'>
-              <div className='col-sm-2'>Display</div>
-              <input value={displayAction} onClick={this.toggleDisplay} type='button' className={dispalyStyle} />
-              Brightness: <input type='range' onChange={this.setBrightness} min={0} max={255} value={this.state.brightness} />
-            </div>
-          </li>
+          {this.showDisplay()}
         </ul>
-        <div className='row' id='chartContainer'>
-          <h5>Temperature</h5>
-          <AreaChart data={data} width={700} height={300}>
-            <Area type='monotone' dataKey='temperature' stroke='#8884d8' fill='#8884d8' />
-            <XAxis dataKey='name' />
-            <YAxis />
-          </AreaChart>
+        <div className='row'>
+          {this.state.info.system.admin ? <Admin /> : '' }
         </div>
         <div className='row'>
           <a href='https://github.com/ranjib/reef-pi/blob/master/README.md'>Help</a>

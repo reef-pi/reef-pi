@@ -17,6 +17,7 @@ type ControllerSummary struct {
 	Uptime         string `json:"uptime"`
 	CPUTemperature string `json:"cpu_temperature"`
 	Display        bool   `json:"display"`
+	Admin          bool   `json:"admin"`
 }
 
 type Info struct {
@@ -25,9 +26,9 @@ type Info struct {
 }
 
 func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
-	ip, err := getIP(h.Interface)
+	ip, err := getIP(h.config.Interface)
 	if err != nil {
-		log.Println("ERROR: Failed to detect ip for interface '"+h.Interface+". Error:", err)
+		log.Println("ERROR: Failed to detect ip for interface '"+h.config.Interface+". Error:", err)
 	}
 	temp, err := getCPUTemperature()
 	if err != nil {
@@ -38,7 +39,8 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 		IP:             ip,
 		Uptime:         h.controller.Uptime(),
 		CPUTemperature: string(temp),
-		Display:        h.Display,
+		Display:        h.config.Display,
+		Admin:          h.config.Admin,
 	}
 	temperatureReadings := h.controller.GetTemperature()
 	info := Info{
