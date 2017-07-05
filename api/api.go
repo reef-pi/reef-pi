@@ -14,28 +14,31 @@ const (
 
 type APIHandler struct {
 	controller *controller.Controller
-	Interface  string
-	Display    bool
+	config     ServerConfig
 }
 
-func NewApiHandler(c *controller.Controller, iface string, display bool) http.Handler {
-	if iface == "" {
-		iface = DEFAULT_INTERFACE
+func NewApiHandler(c *controller.Controller, config ServerConfig) http.Handler {
+	if config.Interface == "" {
+		config.Interface = DEFAULT_INTERFACE
 	}
 	router := mux.NewRouter()
 	handler := &APIHandler{
 		controller: c,
-		Interface:  iface,
-		Display:    display,
+		config:     config,
 	}
 
 	// Info (used by dashboard)
 	router.HandleFunc("/api/info", handler.Info).Methods("GET")
-	if display {
+	if config.Display {
 		router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
 		router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
 		router.HandleFunc("/api/display", handler.SetBrightness).Methods("POST")
 		router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
+	}
+
+	if config.Admin {
+		router.HandleFunc("/api/admin/poweroff", handler.Poweroff).Methods("POST")
+		router.HandleFunc("/api/admin/reboot", handler.Reboot).Methods("POST")
 	}
 
 	// Outlets
