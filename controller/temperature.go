@@ -1,25 +1,40 @@
 package controller
 
 import (
+	"bufio"
+	"fmt"
+	"io"
 	"log"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
 )
 
 type TemperatureSensor struct {
-	Channel   int `json:"channel"`
 	hours     []int
 	minutes   []int
 	stopCh    chan struct{}
-	adc       *ADC
 	telemetry *Telemetry
 }
 
-func NewTemperatureSensor(channel int, adc *ADC, telemetry *Telemetry) *TemperatureSensor {
+func detectTempSensorDevice() (string, error) {
+	// TODO detect ds18b20 device path
+	files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
+	if err != nil {
+		return "", err
+	}
+	if len(files) != 1 {
+		return "", fmt.Errorf("More than one device found (%d)", len(files))
+	}
+	return files[0], nil
+}
+
+func NewTemperatureSensor(telemetry *Telemetry) *TemperatureSensor {
 	return &TemperatureSensor{
-		Channel:   channel,
 		hours:     make([]int, 24),
 		minutes:   make([]int, 60),
-		adc:       adc,
 		telemetry: telemetry,
 	}
 }
@@ -39,21 +54,20 @@ func (t *TemperatureSensor) Start() {
 	for {
 		select {
 		case <-minutely.C:
-			reading, err := t.adc.Read(t.Channel)
+			reading, err := t.Read()
 			if err != nil {
-				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
+				log.Println("ERROR: Failed to read temperature. Error:", err)
 				continue
 			}
 			log.Println("Temperature sensor value:", reading)
 			t.telemetry.EmitMetric("temperature", reading)
 			t.minutes[time.Now().Minute()] = reading
 		case <-hourly.C:
-			reading, err := t.adc.Read(t.Channel)
+			reading, err := t.Read()
 			if err != nil {
-				log.Println("ERROR: Failed to ADC on channel", t.Channel, "Error:", err)
+				log.Println("ERROR: Failed to read temperature. Error:", err)
 				continue
 			}
-			t.telemetry.EmitMetric("temperature", reading)
 			t.hours[time.Now().Hour()] = reading
 		case <-t.stopCh:
 			log.Println("Stopping temperature sensor")
@@ -66,6 +80,44 @@ func (t *TemperatureSensor) Start() {
 
 func (t *TemperatureSensor) Stop() {
 	t.stopCh <- struct{}{}
+}
+
+func (t *TemperatureSensor) Read() (int, error) {
+	device, err := detectTempSensorDevice()
+	if err != nil {
+		return -1, err
+	}
+	log.Println("Reading temperature from device:", device)
+	fi, err := os.Open(device)
+	if err != nil {
+		return -1, err
+	}
+	defer fi.Close()
+	return readTemperature(fi)
+}
+
+func readTemperature(fi io.Reader) (int, error) {
+	reader := bufio.NewReader(fi)
+	l1, _, err := reader.ReadLine()
+	if err != nil {
+		return -1, err
+	}
+	if !strings.HasSuffix(string(l1), "YES") {
+		return -1, fmt.Errorf("First line of device file does not ends with YES")
+	}
+	l2, _, err := reader.ReadLine()
+	if err != nil {
+		return -1, err
+	}
+	vals := strings.Split(string(l2), "=")
+	if len(vals) < 2 {
+		return -1, fmt.Errorf("Second line of device file does not have '=' separated temperature value")
+	}
+	v, err := strconv.Atoi(vals[1])
+	if err != nil {
+		return -1, err
+	}
+	return v, nil
 }
 
 func (c *Controller) GetTemperature() (readings []int) {

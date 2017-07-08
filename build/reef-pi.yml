@@ -7,7 +7,6 @@ controller:
     feed: temperature
   enable_gpio: true
   enable_pwm: true
-  enable_adc: true
   enable_temperature_sensor: true
   database: "reef-pi.db"
   outlets:

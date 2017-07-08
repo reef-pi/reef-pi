@@ -7,7 +7,6 @@ import (
 type Config struct {
 	EnableGPIO              bool              `yaml:"enable_gpio"`
 	EnablePWM               bool              `yaml:"enable_pwm"`
-	EnableADC               bool              `yaml:"enable_adc"`
 	EnableTemperatureSensor bool              `yaml:"enable_temperature_sensor"`
 	HighRelay               bool              `yaml:"high_relay"`
 	Database                string            `yaml:"database"`
