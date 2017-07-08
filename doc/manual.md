@@ -18,9 +18,9 @@ reef-pi, the software is built and tested on Raspberry Pi 3. This is the minimum
 
 ### Ancillary electronics
 
-- ULN2803A
 - L293D
-- MCP23017
+- DS18B20
+  dtoverlay=w1-gpio
 
 ### Part B: Software
 

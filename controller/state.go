@@ -8,7 +8,6 @@ import (
 
 type State struct {
 	pwm       *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
-	adc       *ADC // Analog to digital converter (sensors)
 	lighting  *Lighting
 	atos      map[string]*ATO
 	tSensor   *TemperatureSensor
@@ -31,13 +30,8 @@ func (s *State) Bootup() error {
 		log.Println("Enabled GPIO subsystem")
 		embd.InitGPIO()
 	}
-	if s.config.EnableADC {
-		s.adc = NewADC()
-		s.adc.Start()
-		log.Println("Enabled ADC subsystem")
-	}
-	if s.config.EnableTemperatureSensor && s.config.EnableADC {
-		s.tSensor = NewTemperatureSensor(s.config.TemperaturePin, s.adc, s.telemetry)
+	if s.config.EnableTemperatureSensor {
+		s.tSensor = NewTemperatureSensor(s.telemetry)
 		go s.tSensor.Start()
 		log.Println("Enabled temperature senosor subsystem")
 	}
@@ -80,14 +74,10 @@ func (s *State) TearDown() {
 		s.pwm = nil
 		log.Println("Stopped PWM subsystem")
 	}
-	if s.config.EnableADC {
-		s.adc.Stop()
-		s.adc = nil
-		if s.config.EnableTemperatureSensor {
-			s.tSensor.Stop()
-			s.tSensor = nil
-		}
-		log.Println("Stopped ADC subsystem")
+	if s.config.EnableTemperatureSensor {
+		s.tSensor.Stop()
+		log.Println("Stopped temperature sensor subsystem")
+		s.tSensor = nil
 	}
 	if s.config.EnableGPIO {
 		embd.CloseGPIO()
