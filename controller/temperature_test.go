@@ -13,7 +13,7 @@ func Test_ReadTemperature(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if v != 23375 {
+	if v != 74.075 {
 		t.Error("Expected 23375 found:", v)
 	}
 
