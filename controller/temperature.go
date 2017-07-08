@@ -13,8 +13,6 @@ import (
 )
 
 type TemperatureSensor struct {
-	hours     []int
-	minutes   []int
 	stopCh    chan struct{}
 	telemetry *Telemetry
 }
@@ -33,27 +31,16 @@ func detectTempSensorDevice() (string, error) {
 
 func NewTemperatureSensor(telemetry *Telemetry) *TemperatureSensor {
 	return &TemperatureSensor{
-		hours:     make([]int, 24),
-		minutes:   make([]int, 60),
 		telemetry: telemetry,
 	}
 }
 
-func (t *TemperatureSensor) Hours() []int {
-	return t.hours
-}
-
-func (t *TemperatureSensor) Minutes() []int {
-	return t.minutes
-}
-
 func (t *TemperatureSensor) Start() {
 	log.Println("Starting temperature sensor")
-	hourly := time.NewTicker(time.Hour)
-	minutely := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(time.Minute)
 	for {
 		select {
-		case <-minutely.C:
+		case <-ticker.C:
 			reading, err := t.Read()
 			if err != nil {
 				log.Println("ERROR: Failed to read temperature. Error:", err)
@@ -61,18 +48,9 @@ func (t *TemperatureSensor) Start() {
 			}
 			log.Println("Temperature sensor value:", reading)
 			t.telemetry.EmitMetric("temperature", reading)
-			t.minutes[time.Now().Minute()] = reading
-		case <-hourly.C:
-			reading, err := t.Read()
-			if err != nil {
-				log.Println("ERROR: Failed to read temperature. Error:", err)
-				continue
-			}
-			t.hours[time.Now().Hour()] = reading
 		case <-t.stopCh:
 			log.Println("Stopping temperature sensor")
-			hourly.Stop()
-			minutely.Stop()
+			ticker.Stop()
 			return
 		}
 	}
@@ -82,7 +60,7 @@ func (t *TemperatureSensor) Stop() {
 	t.stopCh <- struct{}{}
 }
 
-func (t *TemperatureSensor) Read() (int, error) {
+func (t *TemperatureSensor) Read() (float32, error) {
 	device, err := detectTempSensorDevice()
 	if err != nil {
 		return -1, err
@@ -96,7 +74,7 @@ func (t *TemperatureSensor) Read() (int, error) {
 	return readTemperature(fi)
 }
 
-func readTemperature(fi io.Reader) (int, error) {
+func readTemperature(fi io.Reader) (float32, error) {
 	reader := bufio.NewReader(fi)
 	l1, _, err := reader.ReadLine()
 	if err != nil {
@@ -117,12 +95,6 @@ func readTemperature(fi io.Reader) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	return v, nil
-}
-
-func (c *Controller) GetTemperature() (readings []int) {
-	if c.config.EnableTemperatureSensor {
-		readings = c.state.tSensor.Minutes()
-	}
-	return
+	farenheit := ((float32(v) * 9.0) / 5000.0) + 32.0
+	return farenheit, nil
 }

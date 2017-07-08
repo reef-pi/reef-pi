@@ -35,7 +35,7 @@ func (t *Telemetry) EmitDefaultMetric(v int) {
 	}
 }
 
-func (t *Telemetry) EmitMetric(feed string, v int) {
+func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	d := adafruitio.Data{
 		Value: v,
 	}

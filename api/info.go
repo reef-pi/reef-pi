@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-type ControllerSummary struct {
+type Info struct {
 	IP             string `json:"ip"`
 	CurrentTime    string `json:"current_time"`
 	Uptime         string `json:"uptime"`
@@ -20,12 +20,7 @@ type ControllerSummary struct {
 	Admin          bool   `json:"admin"`
 }
 
-type Info struct {
-	ControllerSummary   ControllerSummary `json:"system"`
-	TemperatureReadings []int             `json:"temperature_readings"`
-}
-
-func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
+func (h *APIHandler) GetInfo(w http.ResponseWriter, r *http.Request) {
 	ip, err := getIP(h.config.Interface)
 	if err != nil {
 		log.Println("ERROR: Failed to detect ip for interface '"+h.config.Interface+". Error:", err)
@@ -34,18 +29,13 @@ func (h *APIHandler) Info(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("ERROR:Failed to get controller temperature. Error:", err)
 	}
-	summary := ControllerSummary{
+	info := Info{
 		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05"),
 		IP:             ip,
 		Uptime:         h.controller.Uptime(),
 		CPUTemperature: string(temp),
 		Display:        h.config.Display,
 		Admin:          h.config.Admin,
-	}
-	temperatureReadings := h.controller.GetTemperature()
-	info := Info{
-		ControllerSummary:   summary,
-		TemperatureReadings: temperatureReadings,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)

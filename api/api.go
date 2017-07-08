@@ -28,7 +28,7 @@ func NewApiHandler(c *controller.Controller, config ServerConfig) http.Handler {
 	}
 
 	// Info (used by dashboard)
-	router.HandleFunc("/api/info", handler.Info).Methods("GET")
+	router.HandleFunc("/api/info", handler.GetInfo).Methods("GET")
 	if config.Display {
 		router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
 		router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
