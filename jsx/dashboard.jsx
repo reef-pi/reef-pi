@@ -7,10 +7,7 @@ export default class Dashboard extends React.Component {
     super(props)
     this.state = {
       brightness: 100,
-      info: {
-        system: {},
-        temperature_readings: []
-      },
+      info: {},
       displayOn: undefined
     }
     this.refresh = this.refresh.bind(this)
@@ -20,7 +17,7 @@ export default class Dashboard extends React.Component {
   }
 
   showDisplay () {
-    if (!this.state.info.system.display) {
+    if (!this.state.info.display) {
       return
     }
     var dispalyStyle = ''
@@ -118,31 +115,31 @@ export default class Dashboard extends React.Component {
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>Time</div>
-              <div className='col-sm-6'>{this.state.info.system.current_time}</div>
+              <div className='col-sm-6'>{this.state.info.current_time}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>IP</div>
-              <div className='col-sm-6'>{this.state.info.system.ip}</div>
+              <div className='col-sm-6'>{this.state.info.ip}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-2'>Up Since</div>
-              <div className='col-sm-6'>{this.state.info.system.uptime}</div>
+              <div className='col-sm-6'>{this.state.info.uptime}</div>
             </div>
           </li>
           <li className='list-group-item'>
             <div className='row'>
               <div className='col-sm-3'>CPU Temperature</div>
-              <div className='col-sm-6'>{this.state.info.system.cpu_temperature}</div>
+              <div className='col-sm-6'>{this.state.info.cpu_temperature}</div>
             </div>
           </li>
           {this.showDisplay()}
         </ul>
         <div className='row'>
-          {this.state.info.system.admin ? <Admin /> : '' }
+          {this.state.info.admin ? <Admin /> : '' }
         </div>
         <div className='row'>
           <a href='https://github.com/ranjib/reef-pi/blob/master/README.md'>Help</a>
