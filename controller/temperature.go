@@ -24,9 +24,9 @@ func detectTempSensorDevice() (string, error) {
 		return "", err
 	}
 	if len(files) != 1 {
-		return "", fmt.Errorf("More than one device found (%d)", len(files))
+		return "", fmt.Errorf("Only one temperature device expectec, found: %d", len(files))
 	}
-	return files[0], nil
+	return filepath.Join(files[0], "w1_slave"), nil
 }
 
 func NewTemperatureSensor(telemetry *Telemetry) *TemperatureSensor {
