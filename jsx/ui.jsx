@@ -1,10 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import Dashboard from './dashboard.jsx'
-import Equipments from './equipments.jsx'
-import Jobs from './jobs.jsx'
-import Lighting from './lighting.jsx'
+import MainPanel from './main_panel.jsx'
 import $ from 'jquery'
 
 export default class App extends React.Component {
@@ -35,35 +31,13 @@ export default class App extends React.Component {
     })
   }
 
-  handleSelect (index, last) {
-  }
-
   render () {
     var st = {textAlign: 'center'}
     return (
       <div className='container'>
         <div className='container'><h3 style={st}> {this.state.info.name} </h3></div>
         <div className='container'>
-          <Tabs onSelect={this.handleSelect} selectedIndex={0}>
-            <TabList>
-              <Tab>Dashboard</Tab>
-              <Tab>Equipments</Tab>
-              <Tab>Jobs</Tab>
-              <Tab>Lighting</Tab>
-            </TabList>
-            <TabPanel>
-              <Dashboard />
-            </TabPanel>
-            <TabPanel>
-              <Equipments />
-            </TabPanel>
-            <TabPanel>
-              <Jobs />
-            </TabPanel>
-            <TabPanel>
-              <Lighting />
-            </TabPanel>
-          </Tabs>
+          <MainPanel />
         </div>
       </div>
     )
