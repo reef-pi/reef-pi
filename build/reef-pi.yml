@@ -40,6 +40,7 @@ controller:
       Color:
         pin: 1
 api:
+  name: "reef-pi"
   address: "localhost:8080"
   enable_auth: false
   auth:

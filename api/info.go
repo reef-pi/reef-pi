@@ -12,6 +12,7 @@ import (
 )
 
 type Info struct {
+	Name           string `json:"name"`
 	IP             string `json:"ip"`
 	CurrentTime    string `json:"current_time"`
 	Uptime         string `json:"uptime"`
@@ -30,6 +31,7 @@ func (h *APIHandler) GetInfo(w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR:Failed to get controller temperature. Error:", err)
 	}
 	info := Info{
+		Name:           h.config.Name,
 		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05"),
 		IP:             ip,
 		Uptime:         h.controller.Uptime(),

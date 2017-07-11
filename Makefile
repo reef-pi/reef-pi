@@ -11,12 +11,17 @@ bin:
 pi:
 	env GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
-.PHONY:pi-zero
+.PHONY: pi-zero
 pi-zero:
 	env GOARM=6 GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
+.PHONY: test
 test:
 	go test -cover -v -race ./...
+
+.PHONY: js-lint
+js-lint:
+	./node_modules/.bin/standard  jsx/* --fix
 
 .PHONY: go-get
 go-get:
