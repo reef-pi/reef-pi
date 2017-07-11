@@ -15,10 +15,12 @@ type ServerConfig struct {
 	Interface      string      `yaml:"interface"`
 	Display        bool        `yaml:"display"`
 	Admin          bool        `yaml:"admin"`
+	Name           string      `yaml:"name"`
 }
 
 var DefaultConfig = ServerConfig{
 	Address: "localhost:8080",
+	Name:    "reef-pi",
 }
 
 type Server struct {
@@ -28,6 +30,12 @@ type Server struct {
 func SetupServer(config ServerConfig, c *controller.Controller) error {
 	server := &Server{
 		config: config,
+	}
+	if server.config.Address == "" {
+		server.config.Address = DefaultConfig.Address
+	}
+	if server.config.Name == "" {
+		server.config.Name = DefaultConfig.Name
 	}
 	assets := http.FileServer(http.Dir("assets"))
 	docs := http.FileServer(http.Dir("doc"))
@@ -45,15 +53,15 @@ func SetupServer(config ServerConfig, c *controller.Controller) error {
 		http.Handle("/assets/", auth.Check(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", auth.Check(http.StripPrefix("/images/", images)))
 		http.Handle("/doc/", auth.Check(http.StripPrefix("/doc/", docs)))
-		http.Handle("/api/", auth.Check(NewApiHandler(c, config)))
+		http.Handle("/api/", auth.Check(NewApiHandler(c, server.config)))
 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
-		http.Handle("/api/", NewApiHandler(c, config))
+		http.Handle("/api/", NewApiHandler(c, server.config))
 	}
-	log.Printf("Starting http server at: %s\n", config.Address)
-	go http.ListenAndServe(config.Address, nil)
+	log.Printf("Starting http server at: %s\n", server.config.Address)
+	go http.ListenAndServe(server.config.Address, nil)
 	return nil
 }
