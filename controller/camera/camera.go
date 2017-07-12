@@ -1,4 +1,4 @@
-package controller
+package camera
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type CameraConfig struct {
+type Config struct {
 	ImageDirectory    string        `yaml:"image_directory"`
 	RaspiStillCommand string        `yaml:"capture_command"`
 	CaptureFlags      string        `yaml:"capture_flags"`
@@ -16,21 +16,17 @@ type CameraConfig struct {
 }
 
 type Camera struct {
-	config CameraConfig
+	config Config
 }
 
 const (
 	DefaulCaptureFlags = ""
 )
 
-func NewCamera(config CameraConfig) *Camera {
+func NewCamera(config Config) *Camera {
 	return &Camera{
 		config: config,
 	}
-}
-
-func (c *Camera) On() error {
-	return c.CaptureImage()
 }
 
 func (c *Camera) CaptureImage() error {
@@ -50,9 +46,5 @@ func (c *Camera) CaptureImage() error {
 	if err := os.Symlink(filename, latest); err != nil {
 		return err
 	}
-	return nil
-}
-
-func (c *Camera) Off() error {
 	return nil
 }
