@@ -44,7 +44,6 @@ func (c *Controller) CreateBuckets() error {
 		EquipmentBucket,
 		JobBucket,
 		UptimeBucket,
-		InletBucket,
 		LightingBucket,
 	}
 	for _, bucket := range buckets {
