@@ -60,13 +60,6 @@ func NewApiHandler(c *controller.Controller, config ServerConfig) http.Handler {
 	router.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
 	router.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
 
-	// Inlets
-	router.HandleFunc("/api/inlets/{id}", handler.GetInlet).Methods("GET")
-	router.HandleFunc("/api/inlets", handler.ListInlets).Methods("GET")
-	router.HandleFunc("/api/inlets", handler.CreateInlet).Methods("PUT")
-	router.HandleFunc("/api/inlets/{id}", handler.UpdateInlet).Methods("POST")
-	router.HandleFunc("/api/inlets/{id}", handler.DeleteInlet).Methods("DELETE")
-
 	// Lighting
 	router.HandleFunc("/api/lighting/cycle", handler.GetLightingCycle).Methods("GET")
 	router.HandleFunc("/api/lighting/cycle", handler.SetLightingCycle).Methods("POST")

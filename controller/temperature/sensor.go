@@ -1,4 +1,4 @@
-package controller
+package temperature
 
 import (
 	"bufio"
@@ -9,16 +9,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 )
 
-type TemperatureSensor struct {
-	stopCh    chan struct{}
-	telemetry *Telemetry
-}
-
 func detectTempSensorDevice() (string, error) {
-	// TODO detect ds18b20 device path
 	files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
 	if err != nil {
 		return "", err
@@ -29,38 +22,7 @@ func detectTempSensorDevice() (string, error) {
 	return filepath.Join(files[0], "w1_slave"), nil
 }
 
-func NewTemperatureSensor(telemetry *Telemetry) *TemperatureSensor {
-	return &TemperatureSensor{
-		telemetry: telemetry,
-	}
-}
-
-func (t *TemperatureSensor) Start() {
-	log.Println("Starting temperature sensor")
-	ticker := time.NewTicker(time.Minute)
-	for {
-		select {
-		case <-ticker.C:
-			reading, err := t.Read()
-			if err != nil {
-				log.Println("ERROR: Failed to read temperature. Error:", err)
-				continue
-			}
-			log.Println("Temperature sensor value:", reading)
-			t.telemetry.EmitMetric("temperature", reading)
-		case <-t.stopCh:
-			log.Println("Stopping temperature sensor")
-			ticker.Stop()
-			return
-		}
-	}
-}
-
-func (t *TemperatureSensor) Stop() {
-	t.stopCh <- struct{}{}
-}
-
-func (t *TemperatureSensor) Read() (float32, error) {
+func (c *Controller) Read() (float32, error) {
 	device, err := detectTempSensorDevice()
 	if err != nil {
 		return -1, err

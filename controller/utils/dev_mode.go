@@ -1,4 +1,4 @@
-package controller
+package utils
 
 type DevI2CBus struct{}
 
