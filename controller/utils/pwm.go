@@ -1,4 +1,4 @@
-package controller
+package utils
 
 import (
 	"github.com/kidoman/embd"

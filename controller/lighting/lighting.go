@@ -1,72 +1,81 @@
 package lighting
 
 import (
-	"fmt"
+	"github.com/ranjib/reef-pi/controller/utils"
+	"log"
 	"time"
 )
 
-type CycleConfig struct {
-	Enabled       bool             `json:"enabled"`
-	ChannelValues map[string][]int `json:"channels"`
+type Lighting struct {
+	stopCh    chan struct{}
+	Interval  time.Duration
+	Channels  map[string]LEDChannel
+	telemetry *utils.Telemetry
 }
 
-type LEDChannel struct {
-	Pin          int `yaml:"pin"`
-	MinTheshold  int `yaml:"min_threshold"`
-	MaxThreshold int `yaml:"max_threshold"`
-}
-type FixedConfig map[string]int
-
-type Config struct {
-	Fixed FixedConfig `json:"fixed_config"`
-	Cycle CycleConfig `json:"cycle_config"`
-}
-
-var defaultConfig = Config{
-	Fixed: make(map[string]int),
-	Cycle: CycleConfig{
-		ChannelValues: make(map[string][]int),
-	},
-}
-
-func DefaultConfig(channels map[string]LEDChannel) Config {
-	fixed := make(map[string]int)
-	cycles := make(map[string][]int)
-	for ch, _ := range channels {
-		fixed[ch] = 0
-		cycles[ch] = make([]int, 12, 12)
+func New(channels map[string]LEDChannel, telemetry *utils.Telemetry) *Lighting {
+	interval := time.Second * 15
+	return &Lighting{
+		Channels:  channels,
+		Interval:  interval,
+		telemetry: telemetry,
 	}
-	c := Config{
-		Fixed: fixed,
-		Cycle: CycleConfig{
-			ChannelValues: cycles,
-		},
-	}
-	return c
 }
 
-func ValidateValues(values []int) error {
-	if len(values) != 12 {
-		return fmt.Errorf("Expect 12 values instead of: %d", len(values))
-	}
-	for i, v := range values {
-		if (v < 0) || (v > 100) {
-			return fmt.Errorf(" value %d on index %d is out of range (0-99)", v, i)
+func (l *Lighting) StartCycle(pwm *utils.PWM, conf CycleConfig) {
+	l.stopCh = make(chan struct{})
+	ticker := time.NewTicker(l.Interval)
+	log.Println("Starting lighting cycle")
+	for {
+		select {
+		case <-l.stopCh:
+			ticker.Stop()
+			close(l.stopCh)
+			l.stopCh = nil
+			return
+		case <-ticker.C:
+			for chName, ch := range l.Channels {
+				expectedValues, ok := conf.ChannelValues[chName]
+				if !ok {
+					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", chName)
+					continue
+				}
+				v := GetCurrentValue(time.Now(), expectedValues)
+				if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
+					log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, chName, ch.MinTheshold)
+					v = 0
+				} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
+					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, chName, ch.MaxThreshold, ch.MaxThreshold)
+					v = ch.MaxThreshold
+				}
+				l.UpdateChannel(pwm, ch.Pin, v)
+				if l.telemetry != nil {
+					l.telemetry.EmitMetric(chName, v)
+				}
+			}
 		}
 	}
-	return nil
 }
 
-func GetCurrentValue(t time.Time, series []int) int {
-	h1 := t.Hour() / 2
-	h2 := h1 + 1
-	if h2 >= 12 {
-		h2 = 0
+func (l *Lighting) StopCycle() {
+	if l.stopCh == nil {
+		log.Println("WARNING: stop channel is not initialized.")
+		return
 	}
-	m := float64(t.Minute() + ((t.Hour() % 2) * 60))
-	from := float64(series[h1])
-	to := float64(series[h2])
-	f := from + ((to - from) / 120.0 * m)
-	fmt.Println("h1:", h1, "h2:", h2, "from:", from, "to:", to, "m:", m, "f:", f)
-	return int(f)
+	l.stopCh <- struct{}{}
+	log.Println("Stopped lighting cycle")
+}
+
+func (l *Lighting) UpdateChannel(pwm *utils.PWM, pin, v int) {
+	log.Println("Setting pwm value:", v, " at pin:", pin)
+	pwm.Set(pin, v)
+}
+func (l *Lighting) Reconfigure(pwm *utils.PWM, conf Config) {
+	if conf.Cycle.Enabled {
+		go l.StartCycle(pwm, conf.Cycle)
+		return
+	}
+	for chName, ch := range l.Channels {
+		l.UpdateChannel(pwm, ch.Pin, conf.Fixed[chName])
+	}
 }

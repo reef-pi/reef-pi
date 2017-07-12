@@ -9,8 +9,8 @@ import (
 )
 
 type State struct {
-	pwm         *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
-	lighting    *Lighting
+	pwm         *utils.PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
+	lighting    *lighting.Lighting
 	tController *temperature.Controller
 	telemetry   *utils.Telemetry
 	config      Config
@@ -42,7 +42,7 @@ func (s *State) Bootup() error {
 		log.Println("Enabled temperature senosor subsystem")
 	}
 	if s.config.EnablePWM {
-		p, err := NewPWM(s.config.DevMode)
+		p, err := utils.NewPWM(s.config.DevMode)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pwm system")
 			return err
@@ -60,7 +60,7 @@ func (s *State) Bootup() error {
 				return err
 			}
 		}
-		s.lighting = NewLighting(s.config.Lighting.Channels, s.telemetry)
+		s.lighting = lighting.New(s.config.Lighting.Channels, s.telemetry)
 		s.lighting.Reconfigure(s.pwm, lConfig)
 		log.Println("Successfully initialized lighting subsystem")
 	}
