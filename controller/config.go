@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/ranjib/reef-pi/controller/lighting"
+	"github.com/ranjib/reef-pi/controller/utils"
 )
 
 type Config struct {
@@ -14,15 +15,8 @@ type Config struct {
 	Outlets                 map[string]Outlet `yaml:"outlets"`
 	Equipments              map[string]string `yaml:"equipments"`
 	Lighting                LightingConfig    `yaml:"lighting"`
-	AdafruitIO              AdafruitIO        `yaml:"adafruitio"`
+	AdafruitIO              utils.AdafruitIO  `yaml:"adafruitio"`
 	DevMode                 bool              `yaml:"dev_mode"`
-}
-
-type AdafruitIO struct {
-	Enabled bool   `yaml:"enabled"`
-	Token   string `yaml:"token"`
-	User    string `yaml:"user"`
-	Feed    string `yaml:"feed"`
 }
 
 type LightingConfig struct {

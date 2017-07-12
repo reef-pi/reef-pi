@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/ranjib/reef-pi/controller/lighting"
+	"github.com/ranjib/reef-pi/controller/utils"
 	"log"
 	"time"
 )
@@ -12,10 +13,10 @@ type Lighting struct {
 	stopCh    chan struct{}
 	Interval  time.Duration
 	Channels  map[string]lighting.LEDChannel
-	telemetry *Telemetry
+	telemetry *utils.Telemetry
 }
 
-func NewLighting(channels map[string]lighting.LEDChannel, telemetry *Telemetry) *Lighting {
+func NewLighting(channels map[string]lighting.LEDChannel, telemetry *utils.Telemetry) *Lighting {
 	interval := time.Second * 15
 	return &Lighting{
 		Channels:  channels,

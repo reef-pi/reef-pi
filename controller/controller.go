@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/boltdb/bolt"
+	"github.com/ranjib/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"time"
@@ -13,7 +14,7 @@ type Controller struct {
 	cronIDs    map[string]cron.EntryID
 	config     Config
 	state      *State
-	telemetry  *Telemetry
+	telemetry  *utils.Telemetry
 }
 
 func New(config Config) (*Controller, error) {
@@ -23,9 +24,9 @@ func New(config Config) (*Controller, error) {
 	}
 
 	store := NewStore(db)
-	var telemetry *Telemetry
+	var telemetry *utils.Telemetry
 	if config.AdafruitIO.Enabled {
-		telemetry = NewTelemetry(config.AdafruitIO)
+		telemetry = utils.NewTelemetry(config.AdafruitIO)
 	}
 	c := &Controller{
 		store:      store,
@@ -43,7 +44,6 @@ func (c *Controller) CreateBuckets() error {
 		EquipmentBucket,
 		JobBucket,
 		UptimeBucket,
-		ATOConfigBucket,
 		InletBucket,
 		LightingBucket,
 	}
@@ -75,7 +75,6 @@ func (c *Controller) Start() error {
 
 func (c *Controller) Stop() error {
 	c.cronRunner.Stop()
-	c.StopAllATOs()
 	c.state.TearDown()
 	c.store.Close()
 	c.logStopTime()

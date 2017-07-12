@@ -3,22 +3,22 @@ package controller
 import (
 	"github.com/kidoman/embd"
 	"github.com/ranjib/reef-pi/controller/lighting"
+	"github.com/ranjib/reef-pi/controller/temperature"
+	"github.com/ranjib/reef-pi/controller/utils"
 	"log"
 )
 
 type State struct {
-	pwm       *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
-	lighting  *Lighting
-	atos      map[string]*ATO
-	tSensor   *TemperatureSensor
-	telemetry *Telemetry
-	config    Config
-	store     *Store
+	pwm         *PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
+	lighting    *Lighting
+	tController *temperature.Controller
+	telemetry   *utils.Telemetry
+	config      Config
+	store       *Store
 }
 
-func NewState(c Config, store *Store, telemetry *Telemetry) *State {
+func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
 	return &State{
-		atos:      make(map[string]*ATO),
 		config:    c,
 		store:     store,
 		telemetry: telemetry,
@@ -31,8 +31,14 @@ func (s *State) Bootup() error {
 		embd.InitGPIO()
 	}
 	if s.config.EnableTemperatureSensor {
-		s.tSensor = NewTemperatureSensor(s.telemetry)
-		go s.tSensor.Start()
+		var tConfig temperature.Config
+		tController, err := temperature.NewController(tConfig, s.telemetry)
+		if err != nil {
+			log.Println("Failed to initialize temperature controller")
+			return err
+		}
+		s.tController = tController
+		go s.tController.Start()
 		log.Println("Enabled temperature senosor subsystem")
 	}
 	if s.config.EnablePWM {
@@ -71,13 +77,11 @@ func (s *State) TearDown() {
 	}
 	if s.config.EnablePWM {
 		s.pwm.Stop()
-		s.pwm = nil
 		log.Println("Stopped PWM subsystem")
 	}
 	if s.config.EnableTemperatureSensor {
-		s.tSensor.Stop()
+		s.tController.Stop()
 		log.Println("Stopped temperature sensor subsystem")
-		s.tSensor = nil
 	}
 	if s.config.EnableGPIO {
 		embd.CloseGPIO()
