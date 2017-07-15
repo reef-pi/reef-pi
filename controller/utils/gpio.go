@@ -5,20 +5,12 @@ import (
 	"log"
 )
 
-func SwitchOn(pinNumber int, pullUp bool) error {
-	state := embd.High
-	if pullUp {
-		state = embd.Low
-	}
-	return setGPIO(pinNumber, state)
+func SwitchOn(pinNumber int) error {
+	return setGPIO(pinNumber, embd.High)
 }
 
-func SwitchOff(pinNumber int, pullUp bool) error {
-	state := embd.Low
-	if pullUp {
-		state = embd.High
-	}
-	return setGPIO(pinNumber, state)
+func SwitchOff(pinNumber int) error {
+	return setGPIO(pinNumber, embd.Low)
 }
 
 func setGPIO(pinNumber int, state int) error {
@@ -31,4 +23,15 @@ func setGPIO(pinNumber int, state int) error {
 		return err
 	}
 	return pin.Write(state)
+}
+
+func ReadGPIO(pinNumber int) (int, error) {
+	pin, err := embd.NewDigitalPin(pinNumber)
+	if err != nil {
+		return -1, err
+	}
+	if err := pin.SetDirection(embd.In); err != nil {
+		return -1, err
+	}
+	return pin.Read()
 }
