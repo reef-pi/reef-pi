@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/kidoman/embd"
+	"github.com/ranjib/reef-pi/controller/ato"
 	"github.com/ranjib/reef-pi/controller/lighting"
 	"github.com/ranjib/reef-pi/controller/temperature"
 	"github.com/ranjib/reef-pi/controller/utils"
@@ -12,6 +13,7 @@ type State struct {
 	pwm         *utils.PWM // Pulse Width Modulation (LED bringhtiness, DC pump speed)
 	lighting    *lighting.Lighting
 	tController *temperature.Controller
+	aController *ato.Controller
 	telemetry   *utils.Telemetry
 	config      Config
 	store       *Store
@@ -30,16 +32,25 @@ func (s *State) Bootup() error {
 		log.Println("Enabled GPIO subsystem")
 		embd.InitGPIO()
 	}
-	if s.config.EnableTemperatureSensor {
-		var tConfig temperature.Config
-		tController, err := temperature.NewController(tConfig, s.telemetry)
+	if s.config.Temperature.Enable {
+		tController, err := temperature.NewController(s.config.Temperature, s.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize temperature controller")
 			return err
 		}
 		s.tController = tController
 		go s.tController.Start()
-		log.Println("Enabled temperature senosor subsystem")
+		log.Println("Temperature controller started")
+	}
+	if s.config.ATO.Enable {
+		aController, err := ato.NewController(s.config.ATO, s.telemetry)
+		if err != nil {
+			log.Println("Failed to initialize ato controller")
+			return err
+		}
+		s.aController = aController
+		go s.aController.Start()
+		log.Println("ATO controller started")
 	}
 	if s.config.EnablePWM {
 		p, err := utils.NewPWM(s.config.DevMode)
@@ -79,9 +90,13 @@ func (s *State) TearDown() {
 		s.pwm.Stop()
 		log.Println("Stopped PWM subsystem")
 	}
-	if s.config.EnableTemperatureSensor {
+	if s.config.Temperature.Enable {
 		s.tController.Stop()
-		log.Println("Stopped temperature sensor subsystem")
+		log.Println("Temperature controller stopped")
+	}
+	if s.config.ATO.Enable {
+		s.aController.Stop()
+		log.Println("ATO controller stopped")
 	}
 	if s.config.EnableGPIO {
 		embd.CloseGPIO()

@@ -1,5 +1,18 @@
 ---
 controller:
+  ato:
+    enable: false
+    sensor: 12
+    check_interval: 5
+    control: true
+    pump: 16
+  temperature:
+    enable: false
+    min: 77
+    max: 79
+    check_interval: 60
+    heater: 14
+    cooler: 17
   adafruitio:
     enabled: false
     token: xxx
@@ -7,7 +20,6 @@ controller:
     feed: temperature
   enable_gpio: true
   enable_pwm: true
-  enable_temperature_sensor: true
   database: "reef-pi.db"
   outlets:
     AC1:

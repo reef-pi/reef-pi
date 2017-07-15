@@ -12,10 +12,10 @@ type Config struct {
 	Min           float32       `yaml:"min"`
 	Max           float32       `yaml:"max"`
 	CheckInterval time.Duration `yaml:"check_interval"`
-	HeaterGPIO    int           `yaml:"heater_pin"`
-	CoolerGPIO    int           `yaml:"cooler_pin"`
+	HeaterGPIO    int           `yaml:"heater"`
+	CoolerGPIO    int           `yaml:"cooler"`
 	Control       bool          `yaml:"control"`
-	SplayTime     int           `yaml:"splay_time"` // time gap between two consecutive switch on
+	Enable        bool          `yaml:"enable"`
 }
 
 type Controller struct {
@@ -68,14 +68,14 @@ func (c *Controller) switchHeater(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if on {
-		if err := utils.SwitchOn(c.config.HeaterGPIO, false); err != nil {
+		if err := utils.SwitchOn(c.config.HeaterGPIO); err != nil {
 			return err
 		}
 		c.heaterOn = true
 		c.telemetry.EmitMetric("heater", 1)
 		log.Println("Heater switched on")
 	} else {
-		if err := utils.SwitchOff(c.config.HeaterGPIO, false); err != nil {
+		if err := utils.SwitchOff(c.config.HeaterGPIO); err != nil {
 			return err
 		}
 		c.heaterOn = false
@@ -89,7 +89,7 @@ func (c *Controller) switchCooler(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if on {
-		if err := utils.SwitchOn(c.config.CoolerGPIO, false); err != nil {
+		if err := utils.SwitchOn(c.config.CoolerGPIO); err != nil {
 			return err
 		}
 		c.coolerOn = true
@@ -97,7 +97,7 @@ func (c *Controller) switchCooler(on bool) error {
 		log.Println("Cooler switched on")
 
 	} else {
-		if err := utils.SwitchOff(c.config.HeaterGPIO, false); err != nil {
+		if err := utils.SwitchOff(c.config.HeaterGPIO); err != nil {
 			return err
 		}
 		c.heaterOn = false
