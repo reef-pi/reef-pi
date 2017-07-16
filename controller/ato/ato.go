@@ -50,7 +50,9 @@ func (c *Controller) Start() {
 			log.Println("ATO sensor value:", reading)
 			c.telemetry.EmitMetric("ato", reading)
 			if c.config.Control {
-				c.Control(reading)
+				if err := c.Control(reading); err != nil {
+					log.Println("ERROR: Failed to execute ATO control logic. Error:", err)
+				}
 			}
 		case <-c.stopCh:
 			log.Println("Stopping ATO sensor")

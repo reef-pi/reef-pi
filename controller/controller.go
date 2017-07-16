@@ -24,15 +24,14 @@ func New(config Config) (*Controller, error) {
 	}
 
 	store := NewStore(db)
-	var telemetry *utils.Telemetry
-
+	telemetry := utils.NewTelemetry(config.AdafruitIO)
 	c := &Controller{
 		store:      store,
 		state:      NewState(config, store, telemetry),
 		cronRunner: cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 		config:     config,
-		telemetry:  utils.NewTelemetry(config.AdafruitIO),
+		telemetry:  telemetry,
 	}
 	return c, nil
 }
