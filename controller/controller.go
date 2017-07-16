@@ -24,10 +24,7 @@ func New(config Config) (*Controller, error) {
 	}
 
 	store := NewStore(db)
-	var telemetry *utils.Telemetry
-	if config.AdafruitIO.Enabled {
-		telemetry = utils.NewTelemetry(config.AdafruitIO)
-	}
+	telemetry := utils.NewTelemetry(config.AdafruitIO)
 	c := &Controller{
 		store:      store,
 		state:      NewState(config, store, telemetry),
