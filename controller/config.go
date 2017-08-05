@@ -22,7 +22,7 @@ type Config struct {
 }
 
 type LightingConfig struct {
-	Enabled  bool                           `yaml:"enabled"`
+	Enable   bool                           `yaml:"enable"`
 	Channels map[string]lighting.LEDChannel `yaml:"channels"`
 }
 
@@ -31,7 +31,6 @@ var DefaultConfig = Config{
 	EnableGPIO: true,
 	Outlets:    make(map[string]Outlet),
 	Lighting: LightingConfig{
-		Enabled:  false,
 		Channels: make(map[string]lighting.LEDChannel),
 	},
 }

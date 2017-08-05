@@ -14,7 +14,7 @@ controller:
     heater: 14
     cooler: 17
   adafruitio:
-    enabled: false
+    enable: false
     token: xxx
     user: xxx
     feed: temperature
@@ -44,7 +44,7 @@ controller:
     Light Intensity: PWM0
     Light Color: PWM1
   lighting:
-    enabled: false
+    enable: false
     channels:
       Intensity:
         pin: 0

@@ -71,7 +71,7 @@ func (l *Lighting) UpdateChannel(pwm *utils.PWM, pin, v int) {
 	pwm.Set(pin, v)
 }
 func (l *Lighting) Reconfigure(pwm *utils.PWM, conf Config) {
-	if conf.Cycle.Enabled {
+	if conf.Cycle.Enable {
 		go l.StartCycle(pwm, conf.Cycle)
 		return
 	}

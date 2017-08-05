@@ -6,7 +6,7 @@ import (
 )
 
 type CycleConfig struct {
-	Enabled       bool             `json:"enabled"`
+	Enable        bool             `json:"enable"`
 	ChannelValues map[string][]int `json:"channels"`
 }
 

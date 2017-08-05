@@ -19,7 +19,7 @@ func (c *Controller) SetLightingCycle(conf lighting.CycleConfig) error {
 	}
 	c.state.lighting.StopCycle()
 	config.Cycle = conf
-	if config.Cycle.Enabled {
+	if config.Cycle.Enable {
 		go c.state.lighting.StartCycle(c.state.pwm, conf)
 	}
 	return c.store.Update(LightingBucket, "config", config)
@@ -37,7 +37,7 @@ func (c *Controller) SetFixedLighting(conf lighting.FixedConfig) error {
 	}
 	c.state.lighting.StopCycle()
 	config.Fixed = conf
-	config.Cycle.Enabled = false
+	config.Cycle.Enable = false
 	for chName, ch := range c.state.lighting.Channels {
 		c.state.lighting.UpdateChannel(c.state.pwm, ch.Pin, conf[chName])
 	}
