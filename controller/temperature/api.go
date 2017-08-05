@@ -2,7 +2,7 @@ package temperature
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
 )
 
