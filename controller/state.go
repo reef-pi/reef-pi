@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/kidoman/embd"
-	"github.com/ranjib/reef-pi/controller/ato"
-	"github.com/ranjib/reef-pi/controller/lighting"
-	"github.com/ranjib/reef-pi/controller/temperature"
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/ato"
+	"github.com/reef-pi/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/temperature"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 )
 

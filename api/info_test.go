@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller"
 	"net/http"
 	"net/http/httptest"
 	"testing"

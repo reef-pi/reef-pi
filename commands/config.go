@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/ranjib/reef-pi/api"
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/api"
+	"github.com/reef-pi/reef-pi/controller"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )

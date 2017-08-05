@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/ranjib/reef-pi/auth"
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/auth"
+	"github.com/reef-pi/reef-pi/controller"
 	"log"
 	"net/http"
 )

@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ranjib/reef-pi/api"
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/api"
+	"github.com/reef-pi/reef-pi/controller"
 	"log"
 	"os"
 	"os/signal"

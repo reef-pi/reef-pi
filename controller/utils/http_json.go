@@ -1,0 +1,94 @@
+package utils
+
+import (
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+)
+
+func ErrorResponse(header int, msg string, w http.ResponseWriter) {
+	log.Println("ERROR:", msg)
+	resp := make(map[string]string)
+	w.WriteHeader(header)
+	resp["error"] = msg
+	js, jsErr := json.Marshal(resp)
+	if jsErr != nil {
+		log.Println(jsErr)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
+func JSONResponse(payload interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(payload); err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+}
+
+func JSONGetResponse(fn func(string) (interface{}, error), w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	id := vars["id"]
+	payload, err := fn(id)
+	if err != nil {
+		ErrorResponse(http.StatusNotFound, "Resource not found", w)
+		log.Println("ERROR: GET", r.RequestURI, err)
+		return
+	}
+	JSONResponse(payload, w, r)
+}
+
+func JSONListResponse(fn func() (interface{}, error), w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	payload, err := fn()
+	if err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to list", w)
+		log.Println("ERROR: GET", r.RequestURI, err)
+		return
+	}
+	JSONResponse(payload, w, r)
+}
+
+func JSONCreateResponse(i interface{}, fn func() error, w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	dec := json.NewDecoder(r.Body)
+	if err := dec.Decode(i); err != nil {
+		ErrorResponse(http.StatusBadRequest, err.Error(), w)
+		log.Println(i)
+		return
+	}
+	if err := fn(); err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to create. Error: "+err.Error(), w)
+		return
+	}
+}
+
+func JSONUpdateResponse(i interface{}, fn func(string) error, w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	id := vars["id"]
+	dec := json.NewDecoder(r.Body)
+	if err := dec.Decode(i); err != nil {
+		ErrorResponse(http.StatusBadRequest, err.Error(), w)
+		return
+	}
+	if err := fn(id); err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to update. Error: "+err.Error(), w)
+		return
+	}
+}
+
+func JSONDeleteResponse(fn func(string) error, w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if err := fn(id); err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to delete. Error: "+err.Error(), w)
+		return
+	}
+}

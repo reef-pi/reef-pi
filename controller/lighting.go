@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/ranjib/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/lighting"
 	"log"
 )
 

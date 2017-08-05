@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/boltdb/bolt"
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"time"

@@ -32,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ranjib/reefer.git"
+    "url": "git+https://github.com/reef-pi/reef-pi.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ranjib/reefer/issues"
+    "url": "https://github.com/reef-pi/reef-pi/issues"
   },
-  "homepage": "https://github.com/ranjib/reefer#readme"
+  "homepage": "https://github.com/reef-pi/reef-pi#readme"
 }
