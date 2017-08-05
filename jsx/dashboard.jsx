@@ -142,7 +142,7 @@ export default class Dashboard extends React.Component {
           {this.state.info.admin ? <Admin /> : '' }
         </div>
         <div className='row'>
-          <a href='https://github.com/ranjib/reef-pi/blob/master/README.md'>Help</a>
+          <a href='https://github.com/reef-pi/reef-pi/blob/master/README.md'>Help</a>
         </div>
       </div>
     )

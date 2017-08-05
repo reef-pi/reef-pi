@@ -2,7 +2,7 @@ package ato
 
 import (
 	"fmt"
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
 	"time"

@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/ranjib/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller"
 	"log"
 	"net/http"
 )

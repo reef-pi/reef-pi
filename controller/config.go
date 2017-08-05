@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"github.com/ranjib/reef-pi/controller/ato"
-	"github.com/ranjib/reef-pi/controller/lighting"
-	"github.com/ranjib/reef-pi/controller/temperature"
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/ato"
+	"github.com/reef-pi/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/temperature"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Config struct {

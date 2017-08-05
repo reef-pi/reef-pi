@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Dashboard from './dashboard.jsx'
 import Equipments from './equipments.jsx'
 import Jobs from './jobs.jsx'
+import TemperatureController from './tc.jsx'
 import Lighting from './lighting.jsx'
 
 export default class MainPanel extends React.Component {
@@ -24,6 +25,7 @@ export default class MainPanel extends React.Component {
           <Tab>Equipments</Tab>
           <Tab>Jobs</Tab>
           <Tab>Lighting</Tab>
+          <Tab>Temperature</Tab>
         </TabList>
         <TabPanel>
           <Dashboard />
@@ -36,6 +38,9 @@ export default class MainPanel extends React.Component {
         </TabPanel>
         <TabPanel>
           <Lighting />
+        </TabPanel>
+        <TabPanel>
+          <TemperatureController />
         </TabPanel>
       </Tabs>
     )

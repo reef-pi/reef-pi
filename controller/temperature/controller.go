@@ -9,13 +9,13 @@ import (
 )
 
 type Config struct {
-	Min           float32       `yaml:"min"`
-	Max           float32       `yaml:"max"`
-	CheckInterval time.Duration `yaml:"check_interval"`
-	HeaterGPIO    int           `yaml:"heater"`
-	CoolerGPIO    int           `yaml:"cooler"`
-	Control       bool          `yaml:"control"`
-	Enable        bool          `yaml:"enable"`
+	Min           float32       `yaml:"min" json:"min"`
+	Max           float32       `yaml:"max" json:"max"`
+	CheckInterval time.Duration `yaml:"check_interval" json:"check_interval"`
+	HeaterGPIO    int           `yaml:"heater" json:"heater"`
+	CoolerGPIO    int           `yaml:"cooler" json:"cooler"`
+	Control       bool          `yaml:"control" json:"control"`
+	Enable        bool          `yaml:"enable" json:"enable"`
 }
 
 type Controller struct {

@@ -1,7 +1,7 @@
 package lighting
 
 import (
-	"github.com/ranjib/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
 )
