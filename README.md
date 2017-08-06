@@ -8,7 +8,7 @@ A Raspberry Pi based open source reef tank controller
 [reef-pi](http://reef-pi.com) is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium) controller based on  [Raspberry Pi](https://www.raspberrypi.org/).
 
 
-** Features **
+*Features*
 
  - Web based user interface. Use tablet, phone or anything connected to home internet to interact with reef-pi.
  - On demand and timer based control of AC (110 volt or 220 volt) electrical outlets (e.g. return pump turn on or off, nightly refugium light on/off etc). 
