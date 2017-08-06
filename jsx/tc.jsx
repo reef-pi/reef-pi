@@ -31,15 +31,15 @@ export default class TemperatureController extends React.Component {
   render () {
     return (
       <div className='container'>
-        <div className="row">
-          <div className="col-sm-3"> Minimum Threshold </div>
-          <div className="col-sm-2"><input type='text' id='min' className='col-sm-2' /></div>
+        <div className='row'>
+          <div className='col-sm-3'> Minimum Threshold </div>
+          <div className='col-sm-2'><input type='text' id='min' className='col-sm-2' /></div>
         </div>
-        <div className="row">
-          <div className="col-sm-3"> Maximum Threshold </div>
-          <div className="col-sm-2"><input type='text' id='max' className='col-sm-2' /></div>
+        <div className='row'>
+          <div className='col-sm-3'> Maximum Threshold </div>
+          <div className='col-sm-2'><input type='text' id='max' className='col-sm-2' /></div>
         </div>
-        <div className="row">
+        <div className='row'>
           <input value='Update' onClick={this.update} type='button' className='btn btn-outline-danger' />
         </div>
       </div>

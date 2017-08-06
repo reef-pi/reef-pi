@@ -6,10 +6,10 @@ import (
 )
 
 type AdafruitIO struct {
-	Enabled bool   `yaml:"enabled"`
-	Token   string `yaml:"token"`
-	User    string `yaml:"user"`
-	Feed    string `yaml:"feed"`
+	Enable bool   `yaml:"enable"`
+	Token  string `yaml:"token"`
+	User   string `yaml:"user"`
+	Feed   string `yaml:"feed"`
 }
 
 type Telemetry struct {
@@ -29,7 +29,7 @@ func (t *Telemetry) EmitDefaultMetric(v int) {
 		Value: v,
 	}
 
-	if !t.config.Enabled {
+	if !t.config.Enable {
 		log.Println("Telemetry disabled. Skipping emitting", v, "on", t.config.Feed)
 		return
 	}
@@ -43,7 +43,7 @@ func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 		Value: v,
 	}
 
-	if !t.config.Enabled {
+	if !t.config.Enable {
 		log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
 		return
 	}
