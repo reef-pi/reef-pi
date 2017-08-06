@@ -1,29 +1,23 @@
 # reef-pi
 
-A Raspberry Pi based reef tank controller
+A Raspberry Pi based open source reef tank controller
 
 
 ## Introduction
 
-reef-pi is a [Raspberry Pi](https://www.raspberrypi.org/) based opensource
-[reef tank](https://en.wikipedia.org/wiki/Reef_aquarium) controller written in [go](https://golang.org/). 
+[reef-pi](http://reef-pi.com) is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium) controller based on  [Raspberry Pi](https://www.raspberrypi.org/).
 
 
-## Features
+** Features **
 
- - AC 110V electrical outlet control (e.g. return pump turn on  or off). 
- - PWM based DC outlet control (e.g. controlling Kessil lights or DC pumps)
- - Periodic jobs (e.g. daily dosing pump on and off)
- - Reading sensor data (e.g. temperature sensor)
+ - Web based user interface. Use tablet, phone or anything connected to home internet to interact with reef-pi.
+ - On demand and timer based control of AC (110 volt or 220 volt) electrical outlets (e.g. return pump turn on or off, nightly refugium light on/off etc). 
+ - Sun-rise to sunset LED lighting control (0-10 volt DPWM, e.g. kessil light controller)
+ - Temperature sensor and controller (based on DS18B20 temperature probe)
+ - Auto Top off based on photo electric or float switch based water level sensor
+ - Dosing pump controls 
 
-
-## Guides
-  - reef-pi controller [BoM](./doc/BOM.md) for [pico](./doc/bozeman.md) [reef](./doc/healdsburg.md) tanks
-  - Using reef-pi
-  - Building reef-pi housing and insgtalling electronics
-  - Installing and configuring reef-pi on raspbian
-  - Online resources
-		- First reef-pi build [thread ](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/), 
+reef-pi is an Maker Faire Editor's choice [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/), modular, do it yourself (DIY) project that aims to provide a hackable, affordable reef tank automation platform using easy to learn electronics. Apart from Raspberry Pi, reef-pi uses handful of additional electronics boards from [adafruit](https://www.adafruit.com/), a open hardware, community focused electronics company. reef-pi is under active development. Follow reef2reef [thread](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/) if you want to stay up to date with reef-pi development. Use reef-pi [website](http://reef-pi.com) if you just want to build a reef tank controller based on reef-pi.
 
 
 ## Acknowledgements
@@ -33,7 +27,7 @@ reef-pi would not be possible without these awesome things:
   - [Raspberry Pi Foundation](https://www.raspberrypi.org/)
   - [Adafruit.com](https://www.adafruit.com/) for all peripheral boards, tutorials.
   - [embd](http://embd.kidoman.io/), go based IoT library.
-  - [Nano-reef](http://www.nano-reef.com/), nano reef tanks knowledge source.
+  - [reef2reef](https://www.reef2reef.com/), an online reef tank user forum.
 
 
 ## License
