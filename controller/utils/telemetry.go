@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/ranjib/adafruitio"
+	"github.com/reef-pi/adafruitio"
 	"log"
 )
 
