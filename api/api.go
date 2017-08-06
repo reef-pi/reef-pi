@@ -17,7 +17,7 @@ type APIHandler struct {
 	config     ServerConfig
 }
 
-func NewApiHandler(c *controller.Controller, config ServerConfig) http.Handler {
+func NewApiHandler(c *controller.Controller, config ServerConfig) *mux.Router {
 	if config.Interface == "" {
 		config.Interface = DEFAULT_INTERFACE
 	}
