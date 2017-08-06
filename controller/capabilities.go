@@ -34,7 +34,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 
 func (t *Controller) GetCapabilities(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return t.config, nil
+		return t.Capabilities(), nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
