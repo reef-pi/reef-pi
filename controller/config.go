@@ -19,6 +19,10 @@ type Config struct {
 	DevMode     bool               `yaml:"dev_mode"`
 	ATO         ato.Config         `yaml:"ato"`
 	Temperature temperature.Config `yaml:"temperature"`
+	Interface   string             `yaml:"interface"`
+	Display     bool               `yaml:"display"`
+	Admin       bool               `yaml:"admin"`
+	Name        string             `yaml:"name"`
 }
 
 type LightingConfig struct {

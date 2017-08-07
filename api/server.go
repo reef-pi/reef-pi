@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/auth"
 	"github.com/reef-pi/reef-pi/controller"
 	"log"
@@ -27,7 +28,7 @@ type Server struct {
 	config ServerConfig
 }
 
-func SetupServer(config ServerConfig, c *controller.Controller) error {
+func SetupServer(config ServerConfig, c *controller.Controller) (error, *mux.Router) {
 	server := &Server{
 		config: config,
 	}
@@ -45,23 +46,24 @@ func SetupServer(config ServerConfig, c *controller.Controller) error {
 		http.ServeFile(w, r, "assets/home.html")
 	})
 
+	router := NewApiHandler(c, server.config)
 	if config.EnableAuth {
 		log.Println("Enabling authentication")
 		if err := auth.Setup(config.Auth); err != nil {
-			return err
+			return err, nil
 		}
 		http.Handle("/assets/", auth.Check(http.StripPrefix("/assets/", assets)))
 		http.Handle("/images/", auth.Check(http.StripPrefix("/images/", images)))
 		http.Handle("/doc/", auth.Check(http.StripPrefix("/doc/", docs)))
-		http.Handle("/api/", auth.Check(NewApiHandler(c, server.config)))
+		http.Handle("/api/", auth.Check(router))
 
 	} else {
 		http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 		http.Handle("/images/", http.StripPrefix("/images/", images))
 		http.Handle("/doc/", http.StripPrefix("/doc/", docs))
-		http.Handle("/api/", NewApiHandler(c, server.config))
+		http.Handle("/api/", router)
 	}
 	log.Printf("Starting http server at: %s\n", server.config.Address)
 	go http.ListenAndServe(server.config.Address, nil)
-	return nil
+	return nil, router
 }

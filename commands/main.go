@@ -50,9 +50,11 @@ func main() {
 	if err := c.Start(); err != nil {
 		log.Fatal(err)
 	}
-	if err := api.SetupServer(config.API, c); err != nil {
+	err, r := api.SetupServer(config.API, c)
+	if err != nil {
 		log.Fatal("ERROR:", err)
 	}
+	c.LoadAPI(r)
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGUSR2)
 	for {
