@@ -1,19 +1,23 @@
-package api
+package controller
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller"
+	"github.com/gorilla/mux"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
 func Test_Info(t *testing.T) {
-	req, err := http.NewRequest("GET", "/api/info", nil)
+	req, err := http.NewRequest("GET", "/api/info", strings.NewReader("{}"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	c, err := controller.New(controller.DefaultConfig)
+	config := Config{
+		Interface: "lo0",
+	}
+	c, err := New(config)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -21,15 +25,13 @@ func Test_Info(t *testing.T) {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
-	config := ServerConfig{
-		Interface: "lo0",
-	}
-	h := NewApiHandler(c, config)
-	h.ServeHTTP(rr, req)
+	router := mux.NewRouter()
+	c.LoadAPI(router)
+	router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)
 	}
-	var resp Info
+	var resp Summary
 	if err := json.Unmarshal([]byte(rr.Body.String()), &resp); err != nil {
 		t.Fatal(err)
 	}
