@@ -1,14 +1,14 @@
 package controller
 
 func (c *Controller) Capabilities() (capabilities []string) {
-	if c.config.EnableGPIO {
-		capabilities = append(capabilities, "gpio")
+	if c.config.Dashboard.Enable {
+		capabilities = append(capabilities, "dashboard")
 	}
-	if c.config.EnablePWM {
-		capabilities = append(capabilities, "pwm")
+	if c.config.Equipments.Enable {
+		capabilities = append(capabilities, "equipments")
 	}
-	if c.config.ATO.Enable {
-		capabilities = append(capabilities, "ato")
+	if c.config.Timers.Enable {
+		capabilities = append(capabilities, "timers")
 	}
 	if c.config.Lighting.Enable {
 		capabilities = append(capabilities, "lighting")
@@ -16,8 +16,11 @@ func (c *Controller) Capabilities() (capabilities []string) {
 	if c.config.Temperature.Enable {
 		capabilities = append(capabilities, "temperature")
 	}
-	if c.config.AdafruitIO.Enable {
-		capabilities = append(capabilities, "telemetry")
+	if c.config.ATO.Enable {
+		capabilities = append(capabilities, "ato")
+	}
+	if c.config.Admin.Enable {
+		capabilities = append(capabilities, "admin")
 	}
 	return
 }

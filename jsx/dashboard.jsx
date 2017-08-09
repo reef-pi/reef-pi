@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import Admin from './admin.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -138,9 +137,6 @@ export default class Dashboard extends React.Component {
           </li>
           {this.showDisplay()}
         </ul>
-        <div className='row'>
-          {this.state.info.admin ? <Admin /> : '' }
-        </div>
         <div className='row'>
           <a href='https://github.com/reef-pi/reef-pi/blob/master/README.md'>Help</a>
         </div>

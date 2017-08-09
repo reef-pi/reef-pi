@@ -21,13 +21,28 @@ type Config struct {
 	Temperature temperature.Config `yaml:"temperature"`
 	Interface   string             `yaml:"interface"`
 	Display     bool               `yaml:"display"`
-	Admin       bool               `yaml:"admin"`
+	Admin       AdminConfig        `yaml:"admin"`
 	Name        string             `yaml:"name"`
+	Dashboard   DashboardConfig    `yaml:"dashboard"`
+	Timers      TimersConfig       `yaml:"timers"`
 }
 
 type LightingConfig struct {
 	Enable   bool                           `yaml:"enable"`
 	Channels map[string]lighting.LEDChannel `yaml:"channels"`
+}
+
+type DashboardConfig struct {
+	Enable bool `yaml:"enable"`
+}
+type EquipmentsConfig struct {
+	Enable bool `yaml:"enable"`
+}
+type AdminConfig struct {
+	Enable bool `yaml:"enable"`
+}
+type TimersConfig struct {
+	Enable bool `yaml:"enable"`
 }
 
 var DefaultConfig = Config{

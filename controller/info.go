@@ -34,7 +34,6 @@ func (c *Controller) ComputeSummary() Summary {
 		Uptime:         c.Uptime(),
 		CPUTemperature: string(temp),
 		Display:        c.config.Display,
-		Admin:          c.config.Admin,
 	}
 	return s
 }

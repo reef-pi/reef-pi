@@ -2,7 +2,7 @@ import React from 'react'
 import { OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
 import $ from 'jquery'
 
-export default class Jobs extends React.Component {
+export default class Timers extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
