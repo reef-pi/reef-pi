@@ -58,9 +58,6 @@ func (c *Controller) Start() error {
 	c.logStartTime()
 	c.state.Bootup()
 	c.cronRunner.Start()
-	if err := c.preCreateEquipments(); err != nil {
-		return err
-	}
 	c.synEquipments()
 	if err := c.loadAllJobs(); err != nil {
 		return err

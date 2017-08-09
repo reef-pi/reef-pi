@@ -13,7 +13,7 @@ type Config struct {
 	HighRelay   bool               `yaml:"high_relay"`
 	Database    string             `yaml:"database"`
 	Outlets     map[string]Outlet  `yaml:"outlets"`
-	Equipments  map[string]string  `yaml:"equipments"`
+	Equipments  EquipmentsConfig   `yaml:"equipments"`
 	Lighting    LightingConfig     `yaml:"lighting"`
 	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
 	DevMode     bool               `yaml:"dev_mode"`
