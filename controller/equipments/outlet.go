@@ -1,4 +1,4 @@
-package controller
+package equipments
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Outlet struct {
 }
 
 func (c *Controller) GetOutlet(name string) (Outlet, error) {
-	outlet, ok := c.config.Outlets[name]
+	outlet, ok := c.config.Equipments.Outlets[name]
 	if !ok {
 		return outlet, fmt.Errorf("No outlet named '%s' present", name)
 	}
@@ -22,7 +22,7 @@ func (c *Controller) GetOutlet(name string) (Outlet, error) {
 
 func (c *Controller) ListOutlets() (*[]interface{}, error) {
 	list := []interface{}{}
-	for _, o := range c.config.Outlets {
+	for _, o := range c.config.Equipments.Outlets {
 		o1 := o
 		list = append(list, &o1)
 	}
@@ -31,7 +31,7 @@ func (c *Controller) ListOutlets() (*[]interface{}, error) {
 
 func (c *Controller) ConfigureOutlet(id string, on bool, value int) error {
 
-	o, ok := c.config.Outlets[id]
+	o, ok := c.config.Equipments.Outlets[id]
 	if !ok {
 		return fmt.Errorf("Outlet named: '%s' does noy exist", id)
 	}

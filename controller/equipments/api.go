@@ -1,9 +1,7 @@
-package controller
+package equipments
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
+	"github.com/gorilla/mux"
 )
 
 const EquipmentBucket = "equipments"
@@ -16,17 +14,30 @@ type Equipment struct {
 	Value  int    `json:"value"`
 }
 
-func (c *Controller) GetEquipment(id string) (Equipment, error) {
-	var eq Equipment
-	return eq, c.store.Get(EquipmentBucket, id, &eq)
+func (e *Controller) LoadAPI(r mux.Router) {
+	r.HandleFunc("/api/equipments/{id}", e.GetEquipment).Methods("GET")
+	r.HandleFunc("/api/equipments", e.ListEquipments).Methods("GET")
+	r.HandleFunc("/api/equipments", e.CreateEquipment).Methods("PUT")
+	r.HandleFunc("/api/equipments/{id}", e.UpdateEquipment).Methods("POST")
+	r.HandleFunc("/api/equipments/{id}", e.DeleteEquipment).Methods("DELETE")
 }
 
-func (c Controller) ListEquipments() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
-		var e Equipment
-		return &e, json.Unmarshal(v, &e)
+func (e *Controller) GetEquipment(w http.ResponseWriter, r *http.Request) {
+	var eq Equipment
+	fn := func(id string) (interface{}, error) {
+		return eq, e.store.Get(EquipmentBucket, id, &eq)
 	}
-	return c.store.List(EquipmentBucket, fn)
+	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c Controller) ListEquipments(w http.ResponseWriter, r *http.Request) {
+	fn := func() (interface{}, error) {
+		return .ListEquipments()
+	}
+	fn := func(id string) (interface{}, error) {
+		return c.store.List(EquipmentBucket)
+	}
+	utils.JSONGetResponse(fn, w, r)
 }
 
 func (c *Controller) CreateEquipment(eq Equipment) error {
@@ -75,22 +86,4 @@ func (c *Controller) DeleteEquipment(id string) error {
 		c.config.Equipments.Outlets[outlet.Name] = outlet
 	}
 	return c.store.Delete(EquipmentBucket, id)
-}
-
-func (c *Controller) synEquipments() {
-	eqs, err := c.ListEquipments()
-	if err != nil {
-		log.Println("ERROR: Failed to list equipments.", err)
-		return
-	}
-	for _, raw := range *eqs {
-		eq, ok := raw.(*Equipment)
-		if !ok {
-			log.Println("ERROR:Failed to convert data to equipment type.", raw)
-			continue
-		}
-		if err := c.syncOutlet(*eq); err != nil {
-			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
-		}
-	}
 }

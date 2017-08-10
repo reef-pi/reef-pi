@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/kidoman/embd"
 	"github.com/reef-pi/reef-pi/controller/ato"
+	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/temperature"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -15,6 +16,7 @@ type State struct {
 	tController *temperature.Controller
 	aController *ato.Controller
 	telemetry   *utils.Telemetry
+	equipments  *equipments.Controller
 	config      Config
 	store       *Store
 }
@@ -28,7 +30,7 @@ func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
 }
 
 func (s *State) Bootup() error {
-	if s.config.EnableGPIO {
+	if s.config.Equipments.Enable {
 		log.Println("Enabled GPIO subsystem")
 		embd.InitGPIO()
 	}

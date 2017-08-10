@@ -12,7 +12,6 @@ type Config struct {
 	EnablePWM   bool               `yaml:"enable_pwm"`
 	HighRelay   bool               `yaml:"high_relay"`
 	Database    string             `yaml:"database"`
-	Outlets     map[string]Outlet  `yaml:"outlets"`
 	Equipments  EquipmentsConfig   `yaml:"equipments"`
 	Lighting    LightingConfig     `yaml:"lighting"`
 	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
@@ -36,7 +35,8 @@ type DashboardConfig struct {
 	Enable bool `yaml:"enable"`
 }
 type EquipmentsConfig struct {
-	Enable bool `yaml:"enable"`
+	Enable  bool              `yaml:"enable"`
+	Outlets map[string]Outlet `yaml:"outlets"`
 }
 type AdminConfig struct {
 	Enable bool `yaml:"enable"`
@@ -48,7 +48,9 @@ type TimersConfig struct {
 var DefaultConfig = Config{
 	Database:   "reef-pi.db",
 	EnableGPIO: true,
-	Outlets:    make(map[string]Outlet),
+	Equipments: EquipmentsConfig{
+		Outlets: make(map[string]Outlet),
+	},
 	Lighting: LightingConfig{
 		Channels: make(map[string]lighting.LEDChannel),
 	},
