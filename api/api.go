@@ -40,18 +40,6 @@ func NewApiHandler(c *controller.Controller, config ServerConfig) *mux.Router {
 		router.HandleFunc("/api/admin/reboot", handler.Reboot).Methods("POST")
 	}
 
-	// Outlets
-	router.HandleFunc("/api/outlets/{id}", handler.GetOutlet).Methods("GET")
-	router.HandleFunc("/api/outlets", handler.ListOutlets).Methods("GET")
-	router.HandleFunc("/api/outlets/{id}/configure", handler.ConfigureOutlet).Methods("POST")
-
-	// Equipments
-	router.HandleFunc("/api/equipments/{id}", handler.GetEquipment).Methods("GET")
-	router.HandleFunc("/api/equipments", handler.ListEquipments).Methods("GET")
-	router.HandleFunc("/api/equipments", handler.CreateEquipment).Methods("PUT")
-	router.HandleFunc("/api/equipments/{id}", handler.UpdateEquipment).Methods("POST")
-	router.HandleFunc("/api/equipments/{id}", handler.DeleteEquipment).Methods("DELETE")
-
 	// Jobs
 	router.HandleFunc("/api/jobs/{id}", handler.GetJob).Methods("GET")
 	router.HandleFunc("/api/jobs", handler.ListJobs).Methods("GET")

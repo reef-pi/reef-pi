@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/boltdb/bolt"
+	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
@@ -38,7 +39,7 @@ func New(config Config) (*Controller, error) {
 
 func (c *Controller) CreateBuckets() error {
 	buckets := []string{
-		EquipmentBucket,
+		equipments.Bucket,
 		JobBucket,
 		UptimeBucket,
 		LightingBucket,
@@ -58,7 +59,6 @@ func (c *Controller) Start() error {
 	c.logStartTime()
 	c.state.Bootup()
 	c.cronRunner.Start()
-	c.synEquipments()
 	if err := c.loadAllJobs(); err != nil {
 		return err
 	}

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/reef-pi/reef-pi/controller/ato"
+	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/temperature"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -12,8 +13,7 @@ type Config struct {
 	EnablePWM   bool               `yaml:"enable_pwm"`
 	HighRelay   bool               `yaml:"high_relay"`
 	Database    string             `yaml:"database"`
-	Outlets     map[string]Outlet  `yaml:"outlets"`
-	Equipments  EquipmentsConfig   `yaml:"equipments"`
+	Equipments  equipments.Config  `yaml:"equipments"`
 	Lighting    LightingConfig     `yaml:"lighting"`
 	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
 	DevMode     bool               `yaml:"dev_mode"`
@@ -35,9 +35,6 @@ type LightingConfig struct {
 type DashboardConfig struct {
 	Enable bool `yaml:"enable"`
 }
-type EquipmentsConfig struct {
-	Enable bool `yaml:"enable"`
-}
 type AdminConfig struct {
 	Enable bool `yaml:"enable"`
 }
@@ -48,7 +45,9 @@ type TimersConfig struct {
 var DefaultConfig = Config{
 	Database:   "reef-pi.db",
 	EnableGPIO: true,
-	Outlets:    make(map[string]Outlet),
+	Equipments: equipments.Config{
+		Outlets: make(map[string]equipments.Outlet),
+	},
 	Lighting: LightingConfig{
 		Channels: make(map[string]lighting.LEDChannel),
 	},
