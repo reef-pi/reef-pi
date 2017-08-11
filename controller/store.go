@@ -49,7 +49,7 @@ func (s *Store) Get(bucket, id string, i interface{}) error {
 	return json.Unmarshal(data, i)
 }
 
-func (s *Store) List(bucket string, extractor Extractor) (*[]interface{}, error) {
+func (s *Store) List(bucket string, extractor func([]byte) (interface{}, error)) (*[]interface{}, error) {
 	list := []interface{}{}
 	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))

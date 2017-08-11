@@ -9,6 +9,9 @@ import (
 func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/capabilities", c.GetCapabilities).Methods("GET")
 	r.HandleFunc("/api/info", c.GetSummary).Methods("GET")
+	if c.config.Equipments.Enable {
+		c.state.equipments.LoadAPI(r)
+	}
 }
 
 func (t *Controller) GetCapabilities(w http.ResponseWriter, r *http.Request) {

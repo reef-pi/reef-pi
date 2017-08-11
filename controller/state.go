@@ -22,17 +22,22 @@ type State struct {
 }
 
 func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
-	return &State{
+	s := &State{
 		config:    c,
 		store:     store,
 		telemetry: telemetry,
 	}
+	if c.Equipments.Enable {
+		s.equipments = equipments.New(store, c.Equipments, telemetry)
+	}
+	return s
 }
 
 func (s *State) Bootup() error {
 	if s.config.Equipments.Enable {
 		log.Println("Enabled GPIO subsystem")
 		embd.InitGPIO()
+		s.equipments.Start()
 	}
 	if s.config.Temperature.Enable {
 		tController, err := temperature.NewController(s.config.Temperature, s.telemetry)

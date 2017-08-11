@@ -2,7 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"log"
+	"github.com/reef-pi/reef-pi/controller/equipments"
 )
 
 type JobRunner struct {
@@ -13,13 +13,15 @@ type JobRunner struct {
 }
 
 func (r *JobRunner) Run() {
-	if err := r.c.ConfigureOutlet(r.outlet, r.on, r.value); err != nil {
-		log.Println("ERROR:", err)
-	}
+	/*
+		if err := r.c.ConfigureOutlet(r.outlet, r.on, r.value); err != nil {
+			log.Println("ERROR:", err)
+		}
+	*/
 }
 
 func (c *Controller) Runner(job Job) (*JobRunner, error) {
-	var e Equipment
+	var e equipments.Equipment
 	if err := c.store.Get("equipments", job.Equipment, &e); err != nil {
 		return nil, err
 	}

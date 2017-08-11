@@ -9,9 +9,13 @@ type Config struct {
 	Enable  bool              `yaml:"enable"`
 	Outlets map[string]Outlet `yaml:"outlets"`
 }
+
 type Store interface {
 	Get(string, string, interface{}) error
-	List(string, func([]byte) (interface{}, error)) error
+	List(string, func([]byte) (interface{}, error)) (*[]interface{}, error)
+	Create(string, func(string) interface{}) error
+	Update(string, string, interface{}) error
+	Delete(string, string) error
 }
 
 type Controller struct {
@@ -20,11 +24,12 @@ type Controller struct {
 	store     Store
 }
 
-func NewController(store Store, config Config, telemetry *utils.Telemetry) (*Controller, error) {
+func New(store Store, config Config, telemetry *utils.Telemetry) *Controller {
 	return &Controller{
 		config:    config,
 		telemetry: telemetry,
-	}, nil
+		store:     store,
+	}
 }
 
 func (c *Controller) Start() {
