@@ -1,5 +1,5 @@
 {
-  "name": "reefer",
+  "name": "reef-pi",
   "version": "1.0.0",
   "description": "A Raspberry Pi based reeftank automation system",
   "main": "index.js",
@@ -8,14 +8,14 @@
     "example": "examples"
   },
   "dependencies": {
-    "S": "^0.0.1",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
-    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.16.0",
     "bootstrap": "^4.0.0-alpha.6",
     "browser": "^0.2.6",
     "jquery": "^3.2.1",
+    "popper.js": "^1.11.1",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
