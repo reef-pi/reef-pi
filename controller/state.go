@@ -18,10 +18,10 @@ type State struct {
 	telemetry   *utils.Telemetry
 	equipments  *equipments.Controller
 	config      Config
-	store       *Store
+	store       utils.Store
 }
 
-func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
+func NewState(c Config, store utils.Store, telemetry *utils.Telemetry) *State {
 	s := &State{
 		config:    c,
 		store:     store,
