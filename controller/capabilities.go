@@ -1,5 +1,10 @@
 package controller
 
+import (
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"net/http"
+)
+
 func (c *Controller) Capabilities() (capabilities []string) {
 	if c.config.Equipments.Enable {
 		capabilities = append(capabilities, "equipments")
@@ -20,4 +25,11 @@ func (c *Controller) Capabilities() (capabilities []string) {
 		capabilities = append(capabilities, "system")
 	}
 	return
+}
+
+func (t *Controller) GetCapabilities(w http.ResponseWriter, r *http.Request) {
+	fn := func(_ string) (interface{}, error) {
+		return t.Capabilities(), nil
+	}
+	utils.JSONGetResponse(fn, w, r)
 }
