@@ -2,51 +2,49 @@ package timer
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"net/http"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
-	/*
-		r.HandleFunc("/api/jobs/{id}", handler.GetJob).Methods("GET")
-		r.HandleFunc("/api/jobs", handler.ListJobs).Methods("GET")
-		r.HandleFunc("/api/jobs", handler.CreateJob).Methods("PUT")
-		r.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
-		r.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
-	*/
+	r.HandleFunc("/api/timers/{id}", c.GetJob).Methods("GET")
+	r.HandleFunc("/api/timers", c.ListJobs).Methods("GET")
+	r.HandleFunc("/api/timers", c.CreateJob).Methods("PUT")
+	r.HandleFunc("/api/timers/{id}", c.UpdateJob).Methods("POST")
+	r.HandleFunc("/api/timers/{id}", c.DeleteJob).Methods("DELETE")
 }
 
-/*
-func (h *APIHandler) GetJob(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) GetJob(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return h.controller.GetJob(id)
+		return c.Get(id)
 	}
-	h.jsonGetResponse(fn, w, r)
+	utils.JSONGetResponse(fn, w, r)
 }
 
-func (h *APIHandler) ListJobs(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) ListJobs(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
-		return h.controller.ListJobs()
+		return c.List()
 	}
-	h.jsonListResponse(fn, w, r)
+	utils.JSONListResponse(fn, w, r)
 }
 
-func (h *APIHandler) CreateJob(w http.ResponseWriter, r *http.Request) {
-	var j controller.Job
+func (c *Controller) CreateJob(w http.ResponseWriter, r *http.Request) {
+	var j Job
 	fn := func() error {
-		return h.controller.CreateJob(j)
+		return c.Create(j)
 	}
-	h.jsonCreateResponse(&j, fn, w, r)
+	utils.JSONCreateResponse(&j, fn, w, r)
 }
 
-func (h *APIHandler) UpdateJob(w http.ResponseWriter, r *http.Request) {
-	var j controller.Job
+func (c *Controller) UpdateJob(w http.ResponseWriter, r *http.Request) {
+	var j Job
 	fn := func(id string) error {
 		j.ID = id
-		return h.controller.UpdateJob(id, j)
+		return c.Update(id, j)
 	}
-	h.jsonUpdateResponse(&j, fn, w, r)
+	utils.JSONUpdateResponse(&j, fn, w, r)
 }
 
-func (h *APIHandler) DeleteJob(w http.ResponseWriter, r *http.Request) {
-	h.jsonDeleteResponse(h.controller.DeleteJob, w, r)
+func (c *Controller) DeleteJob(w http.ResponseWriter, r *http.Request) {
+	utils.JSONDeleteResponse(c.Delete, w, r)
 }
-*/

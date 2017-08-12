@@ -6,10 +6,18 @@ import (
 )
 
 func (c *Controller) Read() (int, error) {
+	if c.config.DevMode {
+		log.Println("ATO is running under dev mode. Sending fixed sensor reading of 1")
+		return 1, nil
+	}
 	return utils.ReadGPIO(c.config.Sensor)
 }
 
 func (c *Controller) Control(reading int) error {
+	if c.config.DevMode {
+		log.Println("ATO is running under dev mode. Skipping controls")
+		return nil
+	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if reading == 1 {

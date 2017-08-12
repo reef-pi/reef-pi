@@ -21,12 +21,12 @@ type Job struct {
 	Name      string `json:"name"`
 }
 
-func (c *Controller) GetJob(id string) (Job, error) {
+func (c *Controller) Get(id string) (Job, error) {
 	var job Job
 	return job, c.store.Get(Bucket, id, &job)
 }
 
-func (c *Controller) ListJobs() (*[]interface{}, error) {
+func (c *Controller) List() (*[]interface{}, error) {
 	fn := func(v []byte) (interface{}, error) {
 		var job Job
 		return &job, json.Unmarshal(v, &job)
@@ -34,7 +34,7 @@ func (c *Controller) ListJobs() (*[]interface{}, error) {
 	return c.store.List(Bucket, fn)
 }
 
-func (c *Controller) CreateJob(job Job) error {
+func (c *Controller) Create(job Job) error {
 	fn := func(id string) interface{} {
 		job.ID = id
 		return job
@@ -45,11 +45,11 @@ func (c *Controller) CreateJob(job Job) error {
 	return c.addToCron(job)
 }
 
-func (c *Controller) UpdateJob(id string, payload Job) error {
+func (c *Controller) Update(id string, payload Job) error {
 	return c.store.Update(Bucket, id, payload)
 }
 
-func (c *Controller) DeleteJob(id string) error {
+func (c *Controller) Delete(id string) error {
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (c *Controller) DeleteJob(id string) error {
 }
 
 func (c *Controller) loadAllJobs() error {
-	jobs, err := c.ListJobs()
+	jobs, err := c.List()
 	if err != nil {
 		return err
 	}

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (t *Controller) LoadAPI(r mux.Router) {
+func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tc", t.GetConfig).Methods("GET")
 	r.HandleFunc("/api/tc", t.UpdateConfig).Methods("POST")
 }

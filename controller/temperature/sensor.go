@@ -23,6 +23,10 @@ func detectTempSensorDevice() (string, error) {
 }
 
 func (c *Controller) Read() (float32, error) {
+	if c.config.DevMode {
+		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
+		return 78.0, nil
+	}
 	device, err := detectTempSensorDevice()
 	if err != nil {
 		return -1, err

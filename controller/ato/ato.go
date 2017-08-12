@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	Sensor        int           `yaml:"sensor"`
+	DevMode       bool          `yaml:"dev_mode"`
 	Pump          int           `yaml:"pump"`
 	CheckInterval time.Duration `yaml:"check_interval"`
 	Control       bool          `yaml:"control"`
