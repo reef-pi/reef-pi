@@ -62,7 +62,8 @@ func (s *State) Bootup() error {
 	}
 	if s.config.Lighting.Enable {
 		s.lighting = lighting.New(s.config.Lighting, s.store, s.telemetry)
-		s.lighting.Reconfigure()
+		s.lighting.Start()
+		log.Println("Started lighting subsystem")
 	}
 	if s.config.System.Enable {
 		s.system = system.New(s.config.System, s.store, s.telemetry)
@@ -78,6 +79,7 @@ func (s *State) Bootup() error {
 }
 
 func (s *State) TearDown() {
+	log.Println("Teardown triggered")
 	if s.config.Lighting.Enable {
 		s.lighting.Stop()
 	}

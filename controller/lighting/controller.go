@@ -2,24 +2,17 @@ package lighting
 
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"time"
 )
 
 const Bucket = "lightings"
 
-type Config struct {
-	Enable   bool
-	Channels map[string]LEDChannel
-	Cycle    CycleConfig
-	Fixed    FixedConfig
-	Interval time.Duration
-}
 type Controller struct {
 	store     utils.Store
 	pwm       *utils.PWM
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
 	config    Config
+	running   bool
 }
 
 func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
@@ -31,21 +24,35 @@ func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller
 	}
 }
 
-func (c *Controller) GetFixed() (FixedConfig, error) {
+func (c *Controller) GetFixed() (Fixed, error) {
 	var config Config
-	return config.Fixed, c.store.Get(Bucket, "config", &config)
+	return config.Fixed, c.store.Get(Bucket, "config", &config.Fixed)
 }
 
-func (c *Controller) SetFixed(conf FixedConfig) error {
+func (c *Controller) SetFixed(conf Fixed) error {
 	var config Config
 	if err := c.store.Get(Bucket, "config", &config); err != nil {
 		return err
 	}
-	c.Stop()
 	config.Fixed = conf
 	config.Cycle.Enable = false
 	for chName, v := range config.Fixed {
 		c.UpdateChannel(chName, v)
 	}
 	return c.store.Update(Bucket, "config", config)
+}
+
+func (c *Controller) Start() {
+	config := DefaultConfig
+	c.store.Update(Bucket, "config", config)
+	if c.config.Cycle.Enable {
+		c.StartCycle()
+		return
+	}
+}
+func (c *Controller) Stop() {
+	if c.config.Cycle.Enable {
+		c.StopCycle()
+		return
+	}
 }

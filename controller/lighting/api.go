@@ -2,46 +2,43 @@ package lighting
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"net/http"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
-	/*
-		r.HandleFunc("/api/lighting/cycle", c.GetLightingCycle).Methods("GET")
-		r.HandleFunc("/api/lighting/cycle", c.SetLightingCycle).Methods("POST")
-		r.HandleFunc("/api/lighting/fixed", c.GetFixedLighting).Methods("GET")
-		r.HandleFunc("/api/lighting/fixed", c.SetFixedLighting).Methods("POST")
-	*/
+	r.HandleFunc("/api/lighting/cycle", c.GetLightingCycle).Methods("GET")
+	r.HandleFunc("/api/lighting/cycle", c.SetLightingCycle).Methods("POST")
+	r.HandleFunc("/api/lighting/fixed", c.GetFixedLighting).Methods("GET")
+	r.HandleFunc("/api/lighting/fixed", c.SetFixedLighting).Methods("POST")
 }
 
-/*
-
-func (h *APIHandler) GetLightingCycle(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return h.controller.GetLightingCycle()
+func (c *Controller) GetLightingCycle(w http.ResponseWriter, r *http.Request) {
+	fn := func(_ string) (interface{}, error) {
+		return c.GetCycle()
 	}
-	h.jsonGetResponse(fn, w, r)
+	utils.JSONGetResponse(fn, w, r)
 }
 
-func (h *APIHandler) SetLightingCycle(w http.ResponseWriter, r *http.Request) {
-	var c lighting.CycleConfig
+func (c *Controller) SetLightingCycle(w http.ResponseWriter, r *http.Request) {
+	var cy Cycle
 	fn := func(id string) error {
-		return h.controller.SetLightingCycle(c)
+		return c.SetCycle(cy)
 	}
-	h.jsonUpdateResponse(&c, fn, w, r)
+	utils.JSONUpdateResponse(&cy, fn, w, r)
 }
 
-func (h *APIHandler) GetFixedLighting(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) GetFixedLighting(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return h.controller.GetFixedLighting()
+		return c.GetFixed()
 	}
-	h.jsonGetResponse(fn, w, r)
+	utils.JSONGetResponse(fn, w, r)
 }
 
-func (h *APIHandler) SetFixedLighting(w http.ResponseWriter, r *http.Request) {
-	var v lighting.FixedConfig
+func (c *Controller) SetFixedLighting(w http.ResponseWriter, r *http.Request) {
+	var v Fixed
 	fn := func(i string) error {
-		return h.controller.SetFixedLighting(v)
+		return c.SetFixed(v)
 	}
-	h.jsonUpdateResponse(&v, fn, w, r)
+	utils.JSONUpdateResponse(&v, fn, w, r)
 }
-*/
