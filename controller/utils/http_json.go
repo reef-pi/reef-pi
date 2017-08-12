@@ -36,7 +36,7 @@ func JSONGetResponse(fn func(string) (interface{}, error), w http.ResponseWriter
 	id := vars["id"]
 	payload, err := fn(id)
 	if err != nil {
-		ErrorResponse(http.StatusNotFound, "Resource not found", w)
+		ErrorResponse(http.StatusNotFound, err.Error(), w)
 		log.Println("ERROR: GET", r.RequestURI, err)
 		return
 	}

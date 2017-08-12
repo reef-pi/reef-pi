@@ -23,13 +23,10 @@ type Config struct {
 	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
 }
 
-type TimersConfig struct {
-	Enable bool `yaml:"enable"`
-}
-
 var DefaultConfig = Config{
 	Database: "reef-pi.db",
 	Equipments: equipments.Config{
 		Outlets: make(map[string]equipments.Outlet),
 	},
+	Lighting: lighting.DefaultConfig,
 }

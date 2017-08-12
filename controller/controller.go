@@ -51,13 +51,13 @@ func (c *Controller) Start() error {
 		return err
 	}
 	c.state.Bootup()
-	log.Println("Started Controller")
+	log.Println("reef-piis up and running")
 	return nil
 }
 
 func (c *Controller) Stop() error {
 	c.state.TearDown()
 	c.store.Close()
-	log.Println("Stopped Controller")
+	log.Println("reef-pi is shutting down")
 	return nil
 }
