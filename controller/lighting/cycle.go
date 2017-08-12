@@ -2,6 +2,7 @@ package lighting
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -15,19 +16,8 @@ type LEDChannel struct {
 	MinTheshold  int `yaml:"min_threshold"`
 	MaxThreshold int `yaml:"max_threshold"`
 }
+
 type FixedConfig map[string]int
-
-type Config struct {
-	Fixed FixedConfig `json:"fixed_config"`
-	Cycle CycleConfig `json:"cycle_config"`
-}
-
-var defaultConfig = Config{
-	Fixed: make(map[string]int),
-	Cycle: CycleConfig{
-		ChannelValues: make(map[string][]int),
-	},
-}
 
 func DefaultConfig(channels map[string]LEDChannel) Config {
 	fixed := make(map[string]int)
@@ -41,6 +31,7 @@ func DefaultConfig(channels map[string]LEDChannel) Config {
 		Cycle: CycleConfig{
 			ChannelValues: cycles,
 		},
+		Interval: 15 * time.Second,
 	}
 	return c
 }
@@ -69,4 +60,22 @@ func GetCurrentValue(t time.Time, series []int) int {
 	f := from + ((to - from) / 120.0 * m)
 	fmt.Println("h1:", h1, "h2:", h2, "from:", from, "to:", to, "m:", m, "f:", f)
 	return int(f)
+}
+
+func (c *Controller) GetCycle() (CycleConfig, error) {
+	var config Config
+	return config.Cycle, c.store.Get(Bucket, "config", &config)
+}
+
+func (c *Controller) SetCycle(conf CycleConfig) error {
+	var config Config
+	if err := c.store.Get(Bucket, "config", &config); err != nil {
+		log.Println("ERROR: failed to get lighting config, using default config")
+	}
+	c.Stop()
+	config.Cycle = conf
+	if config.Cycle.Enable {
+		go c.Start()
+	}
+	return c.store.Update(Bucket, "config", config)
 }

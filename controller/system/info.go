@@ -1,8 +1,11 @@
-package controller
+package system
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
+	"net"
+	"strings"
 	"time"
 )
 
@@ -17,12 +20,12 @@ type Summary struct {
 }
 
 func (c *Controller) ComputeSummary() Summary {
-	ip, err := utils.HostIP(c.config.Interface)
+	ip, err := HostIP(c.config.Interface)
 	if err != nil {
 		log.Println("ERROR: Failed to detect ip for interface '"+c.config.Interface+". Error:", err)
 		ip = "unknown"
 	}
-	temp, err := utils.CPUTemperature()
+	temp, err := CPUTemperature()
 	if err != nil {
 		log.Println("ERROR:Failed to get controller temperature. Error:", err)
 		temp = "unknown"
@@ -36,4 +39,34 @@ func (c *Controller) ComputeSummary() Summary {
 		Display:        c.config.Display,
 	}
 	return s
+}
+
+func HostIP(i string) (string, error) {
+	iface, err := net.InterfaceByName(i)
+	if err != nil {
+		return "", err
+	}
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return "", err
+	}
+	for _, v := range addrs {
+		switch s := v.(type) {
+		case *net.IPNet:
+			if s.IP.To4() != nil {
+				return s.IP.To4().String(), nil
+			}
+		}
+	}
+	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
+}
+
+// temp=36.9'C
+func CPUTemperature() (string, error) {
+	return "36.9C", nil
+	out, err := utils.Command("vcgencmd", "measure_temp").CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+	return strings.Split(string(out), "=")[1], nil
 }

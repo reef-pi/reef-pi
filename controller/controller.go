@@ -1,38 +1,32 @@
 package controller
 
 import (
-	"github.com/boltdb/bolt"
 	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/system"
+	"github.com/reef-pi/reef-pi/controller/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"gopkg.in/robfig/cron.v2"
 	"log"
-	"time"
 )
 
 type Controller struct {
-	store      *Store
-	cronRunner *cron.Cron
-	cronIDs    map[string]cron.EntryID
-	config     Config
-	state      *State
-	telemetry  *utils.Telemetry
+	store     *Store
+	config    Config
+	state     *State
+	telemetry *utils.Telemetry
 }
 
 func New(config Config) (*Controller, error) {
-	db, err := bolt.Open("reef-pi.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+	store, err := NewStore(config.Database)
 	if err != nil {
 		return nil, err
 	}
-
-	store := NewStore(db)
 	telemetry := utils.NewTelemetry(config.AdafruitIO)
 	c := &Controller{
-		store:      store,
-		state:      NewState(config, store, telemetry),
-		cronRunner: cron.New(),
-		cronIDs:    make(map[string]cron.EntryID),
-		config:     config,
-		telemetry:  telemetry,
+		store:     store,
+		state:     NewState(config, store, telemetry),
+		config:    config,
+		telemetry: telemetry,
 	}
 	return c, nil
 }
@@ -40,9 +34,9 @@ func New(config Config) (*Controller, error) {
 func (c *Controller) CreateBuckets() error {
 	buckets := []string{
 		equipments.Bucket,
-		JobBucket,
-		UptimeBucket,
-		LightingBucket,
+		timer.Bucket,
+		lighting.Bucket,
+		system.Bucket,
 	}
 	for _, bucket := range buckets {
 		if err := c.store.CreateBucket(bucket); err != nil {
@@ -56,21 +50,14 @@ func (c *Controller) Start() error {
 	if err := c.CreateBuckets(); err != nil {
 		return err
 	}
-	c.logStartTime()
 	c.state.Bootup()
-	c.cronRunner.Start()
-	if err := c.loadAllJobs(); err != nil {
-		return err
-	}
 	log.Println("Started Controller")
 	return nil
 }
 
 func (c *Controller) Stop() error {
-	c.cronRunner.Stop()
 	c.state.TearDown()
 	c.store.Close()
-	c.logStopTime()
 	log.Println("Stopped Controller")
 	return nil
 }
