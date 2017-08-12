@@ -51,7 +51,12 @@ func (c *Controller) Start() error {
 		return err
 	}
 	c.state.Bootup()
-	log.Println("reef-piis up and running")
+	err, r := SetupAPIServer(c.config.API)
+	if err != nil {
+		log.Fatal("ERROR:", err)
+	}
+	c.LoadAPI(r)
+	log.Println("reef-pi is up and running")
 	return nil
 }
 

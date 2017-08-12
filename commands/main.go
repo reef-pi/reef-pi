@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/reef-pi/reef-pi/api"
 	"github.com/reef-pi/reef-pi/controller"
 	"log"
 	"os"
@@ -35,26 +34,21 @@ func main() {
 		fmt.Println(Version)
 		return
 	}
-	config := &DefaultConfig
+	config := controller.DefaultConfig
 	if *configFile != "" {
-		conf, err := ParseConfig(*configFile)
+		conf, err := controller.ParseConfig(*configFile)
 		if err != nil {
 			log.Fatal("Failed to parse config file", err)
 		}
 		config = conf
 	}
-	c, err := controller.New(config.Controller)
+	c, err := controller.New(config)
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
 	if err := c.Start(); err != nil {
 		log.Fatal(err)
 	}
-	err, r := api.SetupServer(config.API, c)
-	if err != nil {
-		log.Fatal("ERROR:", err)
-	}
-	c.LoadAPI(r)
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGUSR2)
 	for {
