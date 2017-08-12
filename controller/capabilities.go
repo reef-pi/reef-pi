@@ -19,8 +19,8 @@ func (c *Controller) Capabilities() (capabilities []string) {
 	if c.config.ATO.Enable {
 		capabilities = append(capabilities, "ato")
 	}
-	if c.config.Admin.Enable {
-		capabilities = append(capabilities, "admin")
+	if c.config.System.Enable {
+		capabilities = append(capabilities, "system")
 	}
 	return
 }

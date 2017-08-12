@@ -9,29 +9,24 @@ import (
 	"testing"
 )
 
-func Test_Info(t *testing.T) {
-	req, err := http.NewRequest("GET", "/api/info", strings.NewReader("{}"))
+func Test_Capabilities(t *testing.T) {
+	req, err := http.NewRequest("GET", "/api/capabilities", strings.NewReader("{}"))
 	if err != nil {
-		t.Fatal(err)
-	}
-	config := Config{
-		Interface: "lo0",
-	}
-	c, err := New(config)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := c.CreateBuckets(); err != nil {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
+	c := &Controller{}
+	cpas := c.Capabilities()
+	if len(cpas) != 0 {
+		t.Fatal(cpas)
+	}
 	c.LoadAPI(router)
 	router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)
 	}
-	var resp Summary
+	var resp []string
 	if err := json.Unmarshal([]byte(rr.Body.String()), &resp); err != nil {
 		t.Fatal(err)
 	}

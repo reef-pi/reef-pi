@@ -1,4 +1,4 @@
-package controller
+package utils
 
 import (
 	"encoding/json"
@@ -8,29 +8,38 @@ import (
 	"time"
 )
 
-type Store struct {
+type Store interface {
+	Get(string, string, interface{}) error
+	List(string, func([]byte) (interface{}, error)) (*[]interface{}, error)
+	Create(string, func(string) interface{}) error
+	CreateWithID(string, string, interface{}) error
+	Update(string, string, interface{}) error
+	Delete(string, string) error
+}
+
+type store struct {
 	db *bolt.DB
 }
 
 type Extractor func([]byte) (interface{}, error)
 
-func NewStore(fname string) (*Store, error) {
+func NewStore(fname string) (*store, error) {
 	db, err := bolt.Open(fname, 0600, &bolt.Options{Timeout: 3 * time.Second})
 	if err != nil {
 		return nil, err
 	}
-	return &Store{db: db}, nil
+	return &store{db: db}, nil
 }
 
-func (s *Store) Close() error {
+func (s *store) Close() error {
 	return s.db.Close()
 }
 
-func (s *Store) DB() *bolt.DB {
+func (s *store) DB() *bolt.DB {
 	return s.db
 }
 
-func (s *Store) CreateBucket(bucket string) error {
+func (s *store) CreateBucket(bucket string) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		if tx.Bucket([]byte(bucket)) != nil {
 			return nil
@@ -41,7 +50,7 @@ func (s *Store) CreateBucket(bucket string) error {
 	})
 }
 
-func (s *Store) Get(bucket, id string, i interface{}) error {
+func (s *store) Get(bucket, id string, i interface{}) error {
 	var data []byte
 	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
@@ -54,7 +63,7 @@ func (s *Store) Get(bucket, id string, i interface{}) error {
 	return json.Unmarshal(data, i)
 }
 
-func (s *Store) List(bucket string, extractor func([]byte) (interface{}, error)) (*[]interface{}, error) {
+func (s *store) List(bucket string, extractor func([]byte) (interface{}, error)) (*[]interface{}, error) {
 	list := []interface{}{}
 	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
@@ -71,7 +80,7 @@ func (s *Store) List(bucket string, extractor func([]byte) (interface{}, error))
 	return &list, err
 }
 
-func (s *Store) Create(bucket string, updateID func(string) interface{}) error {
+func (s *store) Create(bucket string, updateID func(string) interface{}) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		id, _ := b.NextSequence()
@@ -85,7 +94,7 @@ func (s *Store) Create(bucket string, updateID func(string) interface{}) error {
 	})
 }
 
-func (s *Store) Update(bucket, id string, i interface{}) error {
+func (s *store) Update(bucket, id string, i interface{}) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		data, err := json.Marshal(i)
@@ -96,14 +105,14 @@ func (s *Store) Update(bucket, id string, i interface{}) error {
 	})
 }
 
-func (s *Store) Delete(bucket, id string) error {
+func (s *store) Delete(bucket, id string) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		return b.Delete([]byte(id))
 	})
 }
 
-func (s *Store) CreateWithID(bucket, id string, payload interface{}) error {
+func (s *store) CreateWithID(bucket, id string, payload interface{}) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		data, err := json.Marshal(payload)

@@ -1,41 +1,21 @@
 package lighting
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
 )
 
-type Lighting struct {
-	stopCh    chan struct{}
-	Interval  time.Duration
-	Channels  map[string]LEDChannel
-	telemetry *utils.Telemetry
-}
-
-func New(channels map[string]LEDChannel, telemetry *utils.Telemetry) *Lighting {
-	interval := time.Second * 15
-	return &Lighting{
-		Channels:  channels,
-		Interval:  interval,
-		telemetry: telemetry,
-	}
-}
-
-func (l *Lighting) StartCycle(pwm *utils.PWM, conf CycleConfig) {
-	l.stopCh = make(chan struct{})
-	ticker := time.NewTicker(l.Interval)
+func (c *Controller) Start() {
+	ticker := time.NewTicker(c.config.Interval)
 	log.Println("Starting lighting cycle")
 	for {
 		select {
-		case <-l.stopCh:
+		case <-c.stopCh:
 			ticker.Stop()
-			close(l.stopCh)
-			l.stopCh = nil
 			return
 		case <-ticker.C:
-			for chName, ch := range l.Channels {
-				expectedValues, ok := conf.ChannelValues[chName]
+			for chName, ch := range c.config.Channels {
+				expectedValues, ok := c.config.Cycle.ChannelValues[chName]
 				if !ok {
 					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", chName)
 					continue
@@ -48,34 +28,35 @@ func (l *Lighting) StartCycle(pwm *utils.PWM, conf CycleConfig) {
 					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, chName, ch.MaxThreshold, ch.MaxThreshold)
 					v = ch.MaxThreshold
 				}
-				l.UpdateChannel(pwm, ch.Pin, v)
-				if l.telemetry != nil {
-					l.telemetry.EmitMetric(chName, v)
-				}
+				c.UpdateChannel(chName, v)
+				c.telemetry.EmitMetric(chName, v)
 			}
 		}
 	}
 }
 
-func (l *Lighting) StopCycle() {
-	if l.stopCh == nil {
+func (c *Controller) Stop() {
+	if c.stopCh == nil {
 		log.Println("WARNING: stop channel is not initialized.")
 		return
 	}
-	l.stopCh <- struct{}{}
+	c.stopCh <- struct{}{}
 	log.Println("Stopped lighting cycle")
 }
 
-func (l *Lighting) UpdateChannel(pwm *utils.PWM, pin, v int) {
+func (c *Controller) UpdateChannel(chName string, v int) {
+	pin := c.config.Channels[chName].Pin
 	log.Println("Setting pwm value:", v, " at pin:", pin)
-	pwm.Set(pin, v)
+	c.pwm.Set(pin, v)
 }
-func (l *Lighting) Reconfigure(pwm *utils.PWM, conf Config) {
-	if conf.Cycle.Enable {
-		go l.StartCycle(pwm, conf.Cycle)
+
+func (c *Controller) Reconfigure() {
+	if c.config.Cycle.Enable {
+		go c.Start()
 		return
 	}
-	for chName, ch := range l.Channels {
-		l.UpdateChannel(pwm, ch.Pin, conf.Fixed[chName])
+	for chName, v := range c.config.Fixed {
+		c.UpdateChannel(chName, v)
 	}
+	return
 }

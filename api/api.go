@@ -21,39 +21,7 @@ func NewApiHandler(c *controller.Controller, config ServerConfig) *mux.Router {
 	if config.Interface == "" {
 		config.Interface = DEFAULT_INTERFACE
 	}
-	router := mux.NewRouter()
-	handler := &APIHandler{
-		controller: c,
-		config:     config,
-	}
-
-	// Info (used by dashboard)
-	if config.Display {
-		router.HandleFunc("/api/display/on", handler.EnableDisplay).Methods("POST")
-		router.HandleFunc("/api/display/off", handler.DisableDisplay).Methods("POST")
-		router.HandleFunc("/api/display", handler.SetBrightness).Methods("POST")
-		router.HandleFunc("/api/display", handler.GetDisplay).Methods("GET")
-	}
-
-	if config.Admin {
-		router.HandleFunc("/api/admin/poweroff", handler.Poweroff).Methods("POST")
-		router.HandleFunc("/api/admin/reboot", handler.Reboot).Methods("POST")
-	}
-
-	// Jobs
-	router.HandleFunc("/api/jobs/{id}", handler.GetJob).Methods("GET")
-	router.HandleFunc("/api/jobs", handler.ListJobs).Methods("GET")
-	router.HandleFunc("/api/jobs", handler.CreateJob).Methods("PUT")
-	router.HandleFunc("/api/jobs/{id}", handler.UpdateJob).Methods("POST")
-	router.HandleFunc("/api/jobs/{id}", handler.DeleteJob).Methods("DELETE")
-
-	// Lighting
-	router.HandleFunc("/api/lighting/cycle", handler.GetLightingCycle).Methods("GET")
-	router.HandleFunc("/api/lighting/cycle", handler.SetLightingCycle).Methods("POST")
-	router.HandleFunc("/api/lighting/fixed", handler.GetFixedLighting).Methods("GET")
-	router.HandleFunc("/api/lighting/fixed", handler.SetFixedLighting).Methods("POST")
-
-	return router
+	return mux.NewRouter()
 }
 
 func errorResponse(header int, msg string, w http.ResponseWriter) {

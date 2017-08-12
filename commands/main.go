@@ -65,7 +65,6 @@ func main() {
 				c.Stop()
 				return
 			case syscall.SIGUSR2:
-				c.DumpTelemetry()
 			}
 		}
 	}

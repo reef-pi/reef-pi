@@ -1,4 +1,4 @@
-package controller
+package timer
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const JobBucket = "jobs"
+const Bucket = "jobs"
 
 type Job struct {
 	ID        string `json:"id"`
@@ -23,7 +23,7 @@ type Job struct {
 
 func (c *Controller) GetJob(id string) (Job, error) {
 	var job Job
-	return job, c.store.Get(JobBucket, id, &job)
+	return job, c.store.Get(Bucket, id, &job)
 }
 
 func (c *Controller) ListJobs() (*[]interface{}, error) {
@@ -31,7 +31,7 @@ func (c *Controller) ListJobs() (*[]interface{}, error) {
 		var job Job
 		return &job, json.Unmarshal(v, &job)
 	}
-	return c.store.List(JobBucket, fn)
+	return c.store.List(Bucket, fn)
 }
 
 func (c *Controller) CreateJob(job Job) error {
@@ -39,18 +39,18 @@ func (c *Controller) CreateJob(job Job) error {
 		job.ID = id
 		return job
 	}
-	if err := c.store.Create(JobBucket, fn); err != nil {
+	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
 	return c.addToCron(job)
 }
 
 func (c *Controller) UpdateJob(id string, payload Job) error {
-	return c.store.Update(JobBucket, id, payload)
+	return c.store.Update(Bucket, id, payload)
 }
 
 func (c *Controller) DeleteJob(id string) error {
-	if err := c.store.Delete(JobBucket, id); err != nil {
+	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
 	return c.deleteFromCron(id)
@@ -84,7 +84,7 @@ func (c *Controller) addToCron(job Job) error {
 	if err != nil {
 		return err
 	}
-	cronID, err := c.cronRunner.AddJob(cronSpec, runner)
+	cronID, err := c.runner.AddJob(cronSpec, runner)
 	if err != nil {
 		return err
 	}
@@ -98,6 +98,6 @@ func (c *Controller) deleteFromCron(jobID string) error {
 	if !ok {
 		return fmt.Errorf("Cron ID not found for job ID:%s", jobID)
 	}
-	c.cronRunner.Remove(id)
+	c.runner.Remove(id)
 	return nil
 }
