@@ -6,6 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/system"
 	"github.com/reef-pi/reef-pi/controller/temperature"
+	"github.com/reef-pi/reef-pi/controller/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 )
@@ -15,13 +16,14 @@ type State struct {
 	temperature *temperature.Controller
 	system      *system.Controller
 	ato         *ato.Controller
+	timer       *timer.Controller
 	telemetry   *utils.Telemetry
 	equipments  *equipments.Controller
 	config      Config
-	store       *Store
+	store       utils.Store
 }
 
-func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
+func NewState(c Config, store utils.Store, telemetry *utils.Telemetry) *State {
 	s := &State{
 		config:    c,
 		store:     store,
@@ -35,7 +37,7 @@ func NewState(c Config, store *Store, telemetry *utils.Telemetry) *State {
 
 func (s *State) Bootup() error {
 	if s.config.Equipments.Enable {
-		log.Println("Enabled GPIO subsystem")
+		log.Println("Started equipments subsystem")
 		s.equipments.Start()
 	}
 	if s.config.Temperature.Enable {
@@ -46,7 +48,7 @@ func (s *State) Bootup() error {
 		}
 		s.temperature = t
 		go s.temperature.Start()
-		log.Println("Temperature controller started")
+		log.Println("Started temperature subsystem")
 	}
 	if s.config.ATO.Enable {
 		a, err := ato.NewController(s.config.ATO, s.telemetry)
@@ -56,12 +58,21 @@ func (s *State) Bootup() error {
 		}
 		s.ato = a
 		go s.ato.Start()
-		log.Println("ATO controller started")
+		log.Println("Started ATO subsystem")
 	}
 	if s.config.Lighting.Enable {
 		s.lighting = lighting.New(s.config.Lighting, s.store, s.telemetry)
 		s.lighting.Reconfigure()
-		log.Println("Successfully initialized lighting subsystem")
+	}
+	if s.config.System.Enable {
+		s.system = system.New(s.config.System, s.store, s.telemetry)
+		log.Println("Started system subsystem")
+	}
+
+	if s.config.Timer.Enable {
+		s.timer = timer.New(s.telemetry)
+		s.timer.Start()
+		log.Println("Started timer subsystem")
 	}
 	return nil
 }
@@ -70,9 +81,8 @@ func (s *State) TearDown() {
 	if s.config.Lighting.Enable {
 		s.lighting.Stop()
 	}
-	if s.config.DevMode {
-		log.Println("Running is dev mode, skipping driver teardown")
-		return
+	if s.config.Equipments.Enable {
+		s.equipments.Stop()
 	}
 	if s.config.Temperature.Enable {
 		s.temperature.Stop()
@@ -82,4 +92,9 @@ func (s *State) TearDown() {
 		s.ato.Stop()
 		log.Println("ATO controller stopped")
 	}
+	if s.config.Timer.Enable {
+		s.timer.Stop()
+		log.Println("ATO controller stopped")
+	}
+	return
 }

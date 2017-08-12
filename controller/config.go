@@ -11,22 +11,18 @@ import (
 )
 
 type Config struct {
+	Name        string             `yaml:"name"`
 	Database    string             `yaml:"database"`
+	DevMode     bool               `yaml:"dev_mode"`
 	Equipments  equipments.Config  `yaml:"equipments"`
 	Lighting    lighting.Config    `yaml:"lighting"`
-	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
-	DevMode     bool               `yaml:"dev_mode"`
-	ATO         ato.Config         `yaml:"ato"`
 	Temperature temperature.Config `yaml:"temperature"`
-	Name        string             `yaml:"name"`
-	Dashboard   DashboardConfig    `yaml:"dashboard"`
-	Timers      timer.Config       `yaml:"timers"`
+	ATO         ato.Config         `yaml:"ato"`
+	Timer       timer.Config       `yaml:"timers"`
 	System      system.Config      `yaml:"system"`
+	AdafruitIO  utils.AdafruitIO   `yaml:"adafruitio"`
 }
 
-type DashboardConfig struct {
-	Enable bool `yaml:"enable"`
-}
 type TimersConfig struct {
 	Enable bool `yaml:"enable"`
 }

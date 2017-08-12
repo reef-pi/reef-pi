@@ -3,6 +3,7 @@ package equipments
 import (
 	"github.com/kidoman/embd"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 )
 
 type Config struct {
@@ -30,5 +31,8 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) Stop() {
-	embd.CloseGPIO()
+	if !c.config.DevMode {
+		log.Println("Equipment subsystem is running in dev mode, skipping GPIO closing")
+		embd.CloseGPIO()
+	}
 }

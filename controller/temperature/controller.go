@@ -16,6 +16,7 @@ type Config struct {
 	CoolerGPIO    int           `yaml:"cooler" json:"cooler"`
 	Control       bool          `yaml:"control" json:"control"`
 	Enable        bool          `yaml:"enable" json:"enable"`
+	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
 }
 
 type Controller struct {

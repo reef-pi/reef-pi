@@ -10,14 +10,14 @@ import (
 )
 
 type Controller struct {
-	store     *Store
+	store     utils.Store
 	config    Config
 	state     *State
 	telemetry *utils.Telemetry
 }
 
 func New(config Config) (*Controller, error) {
-	store, err := NewStore(config.Database)
+	store, err := utils.NewStore(config.Database)
 	if err != nil {
 		return nil, err
 	}

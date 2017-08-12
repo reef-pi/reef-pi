@@ -14,8 +14,14 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	if c.config.Lighting.Enable {
 		c.state.lighting.LoadAPI(r)
 	}
+	if c.config.Temperature.Enable {
+		c.state.temperature.LoadAPI(r)
+	}
 	if c.config.System.Enable {
 		c.state.system.LoadAPI(r)
+	}
+	if c.config.Timer.Enable {
+		c.state.timer.LoadAPI(r)
 	}
 }
 
