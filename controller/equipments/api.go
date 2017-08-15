@@ -15,7 +15,7 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/equipments/{id}", e.DeleteEquipment).Methods("DELETE")
 	r.HandleFunc("/api/outlets/{id}", e.GetOutlet).Methods("GET")
 	r.HandleFunc("/api/outlets", e.ListOutlets).Methods("GET")
-	r.HandleFunc("/api/outlets/{id}/configure", e.UpdateOutlet).Methods("POST")
+	r.HandleFunc("/api/outlets/{id}", e.UpdateOutlet).Methods("POST")
 }
 
 type OutletAction struct {
@@ -51,7 +51,7 @@ func (c *Controller) UpdateOutlet(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) error {
 		return c.ConfigureOutlet(id, a.On)
 	}
-	utils.JSONUpdateResponse(a, fn, w, r)
+	utils.JSONUpdateResponse(&a, fn, w, r)
 }
 
 func (c *Controller) GetEquipment(w http.ResponseWriter, r *http.Request) {
@@ -81,7 +81,7 @@ func (c *Controller) UpdateEquipment(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) error {
 		return c.Update(id, eq)
 	}
-	utils.JSONUpdateResponse(eq, fn, w, r)
+	utils.JSONUpdateResponse(&eq, fn, w, r)
 }
 
 func (c *Controller) DeleteEquipment(w http.ResponseWriter, r *http.Request) {
