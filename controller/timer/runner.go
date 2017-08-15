@@ -2,7 +2,6 @@ package timer
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/equipments"
 )
 
 type JobRunner struct {
@@ -21,15 +20,15 @@ func (r *JobRunner) Run() {
 }
 
 func (c *Controller) Runner(job Job) (*JobRunner, error) {
-	var e equipments.Equipment
-	if err := c.store.Get("equipments", job.Equipment, &e); err != nil {
+	eq, err := c.equipments.Get(job.Equipment)
+	if err != nil {
 		return nil, err
 	}
-	if e.Outlet == "" {
-		return nil, fmt.Errorf("Equipment: %s does not have associated outlet", e.Name)
+	if eq.Outlet == "" {
+		return nil, fmt.Errorf("Equipment: %s does not have associated outlet", eq.Name)
 	}
 	return &JobRunner{
-		outlet: e.Outlet,
+		outlet: eq.Outlet,
 		c:      c,
 		on:     job.On,
 		value:  job.Value,

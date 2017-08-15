@@ -18,7 +18,7 @@ type Controller struct {
 	store     utils.Store
 }
 
-func New(store utils.Store, config Config, telemetry *utils.Telemetry) *Controller {
+func New(config Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
 	return &Controller{
 		config:    config,
 		telemetry: telemetry,
@@ -26,13 +26,22 @@ func New(store utils.Store, config Config, telemetry *utils.Telemetry) *Controll
 	}
 }
 
+func (c *Controller) Setup() error {
+	return c.store.CreateBucket(Bucket)
+}
+
 func (c *Controller) Start() {
+	if c.config.DevMode {
+		log.Println("Equipment sub-system: Running in dev mode, skipping gpio initialization")
+		return
+	}
 	embd.InitGPIO()
 }
 
 func (c *Controller) Stop() {
-	if !c.config.DevMode {
+	if c.config.DevMode {
 		log.Println("Equipment subsystem is running in dev mode, skipping GPIO closing")
-		embd.CloseGPIO()
+		return
 	}
+	embd.CloseGPIO()
 }
