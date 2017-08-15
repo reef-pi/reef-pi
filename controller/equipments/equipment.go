@@ -20,12 +20,17 @@ func (c *Controller) Get(id string) (Equipment, error) {
 	return eq, c.store.Get(Bucket, id, &eq)
 }
 
-func (c Controller) List() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
+func (c Controller) List() ([]Equipment, error) {
+	var es []Equipment
+	fn := func(v []byte) error {
 		var eq Equipment
-		return &eq, json.Unmarshal(v, &eq)
+		if err := json.Unmarshal(v, &eq); err != nil {
+			return err
+		}
+		es = append(es, eq)
+		return nil
 	}
-	return c.store.List(Bucket, fn)
+	return es, c.store.ListElements(Bucket, fn)
 }
 
 func (c *Controller) Create(eq Equipment) error {
@@ -82,13 +87,8 @@ func (c *Controller) synEquipments() {
 		log.Println("ERROR: Failed to list equipments.", err)
 		return
 	}
-	for _, raw := range *eqs {
-		eq, ok := raw.(*Equipment)
-		if !ok {
-			log.Println("ERROR:Failed to convert data to equipment type.", raw)
-			continue
-		}
-		if err := c.syncOutlet(*eq); err != nil {
+	for _, eq := range eqs {
+		if err := c.syncOutlet(eq); err != nil {
 			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
 		}
 	}

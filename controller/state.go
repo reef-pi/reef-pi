@@ -30,7 +30,7 @@ func NewState(c Config, store utils.Store, telemetry *utils.Telemetry) *State {
 		telemetry: telemetry,
 	}
 	if c.Equipments.Enable {
-		s.equipments = equipments.New(store, c.Equipments, telemetry)
+		s.equipments = equipments.New(c.Equipments, store, telemetry)
 	}
 	return s
 }
@@ -69,9 +69,8 @@ func (s *State) Bootup() error {
 		s.system = system.New(s.config.System, s.store, s.telemetry)
 		log.Println("Started system subsystem")
 	}
-
 	if s.config.Timer.Enable {
-		s.timer = timer.New(s.telemetry)
+		s.timer = timer.New(s.config.Timer, s.store, s.telemetry, s.equipments)
 		s.timer.Start()
 		log.Println("Started timer subsystem")
 	}
