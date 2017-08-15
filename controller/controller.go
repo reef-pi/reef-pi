@@ -19,6 +19,7 @@ type Controller struct {
 func New(config Config) (*Controller, error) {
 	store, err := utils.NewStore(config.Database)
 	if err != nil {
+		log.Println("Failed to create store. DB:", config.Database)
 		return nil, err
 	}
 	telemetry := utils.NewTelemetry(config.AdafruitIO)
