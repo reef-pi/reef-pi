@@ -20,12 +20,12 @@ type Summary struct {
 }
 
 func (c *Controller) ComputeSummary() Summary {
-	ip, err := HostIP(c.config.Interface)
+	ip, err := c.HostIP(c.config.Interface)
 	if err != nil {
 		log.Println("ERROR: Failed to detect ip for interface '"+c.config.Interface+". Error:", err)
 		ip = "unknown"
 	}
-	temp, err := CPUTemperature()
+	temp, err := c.CPUTemperature()
 	if err != nil {
 		log.Println("ERROR:Failed to get controller temperature. Error:", err)
 		temp = "unknown"
@@ -41,7 +41,7 @@ func (c *Controller) ComputeSummary() Summary {
 	return s
 }
 
-func HostIP(i string) (string, error) {
+func (c *Controller) HostIP(i string) (string, error) {
 	iface, err := net.InterfaceByName(i)
 	if err != nil {
 		return "", err
@@ -62,8 +62,10 @@ func HostIP(i string) (string, error) {
 }
 
 // temp=36.9'C
-func CPUTemperature() (string, error) {
-	return "36.9C", nil
+func (c *Controller) CPUTemperature() (string, error) {
+	if c.config.DevMode {
+		return "36.9C", nil
+	}
 	out, err := utils.Command("vcgencmd", "measure_temp").CombinedOutput()
 	if err != nil {
 		return "", err

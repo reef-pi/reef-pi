@@ -24,20 +24,6 @@ func NewTelemetry(config AdafruitIO) *Telemetry {
 	}
 }
 
-func (t *Telemetry) EmitDefaultMetric(v int) {
-	d := adafruitio.Data{
-		Value: v,
-	}
-
-	if !t.config.Enable {
-		log.Println("Telemetry disabled. Skipping emitting", v, "on", t.config.Feed)
-		return
-	}
-	if err := t.client.SubmitData(t.config.User, t.config.Feed, d); err != nil {
-		log.Println("ERROR: Failed to submit data to adafruit.io. Error:", err)
-	}
-}
-
 func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	d := adafruitio.Data{
 		Value: v,

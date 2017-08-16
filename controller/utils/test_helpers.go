@@ -46,6 +46,7 @@ func (t *TestRouter) Do(method, path string, body io.Reader, container interface
 	if container == nil {
 		return nil
 	}
+	fmt.Println(rr.Body.String())
 	return json.Unmarshal([]byte(rr.Body.String()), container)
 
 }

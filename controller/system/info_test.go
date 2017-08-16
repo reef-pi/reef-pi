@@ -1,11 +1,7 @@
 package system
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"net/http"
-	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -14,6 +10,7 @@ func testController() (*Controller, error) {
 	config := Config{
 		Interface: "lo0",
 		Name:      "reef-pi",
+		DevMode:   true,
 	}
 	store, err := utils.NewStore("reef-pi.db")
 	if err != nil {
@@ -28,20 +25,15 @@ func testController() (*Controller, error) {
 }
 
 func Test_Info(t *testing.T) {
-	req, err := http.NewRequest("GET", "/api/info", strings.NewReader("{}"))
+	tr := utils.NewTestRouter()
+	c, err := testController()
 	if err != nil {
 		t.Fatal(err)
 	}
-	c, err := testController()
-	rr := httptest.NewRecorder()
-	router := mux.NewRouter()
-	c.LoadAPI(router)
-	router.ServeHTTP(rr, req)
-	if rr.Code != http.StatusOK {
-		t.Fatal(rr.Code)
-	}
+	c.LoadAPI(tr.Router)
 	var resp Summary
-	if err := json.Unmarshal([]byte(rr.Body.String()), &resp); err != nil {
+	if err := tr.Do("GET", "/api/info", strings.NewReader("{}"), &resp); err != nil {
 		t.Fatal(err)
 	}
+
 }

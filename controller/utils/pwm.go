@@ -6,31 +6,35 @@ import (
 )
 
 type PWMConfig struct {
-	Bus     int `json:"bus"`     // 1
-	Address int `json:"address"` // 0x40
+	Bus     int  `json:"bus"`     // 1
+	Address int  `json:"address"` // 0x40
+	DevMode bool `json:"dev_mode"`
 }
 
 type PWM struct {
 	values map[int]int
 	conn   *pca9685.PCA9685
+	config PWMConfig
 }
 
-func NewPWM(devMode bool) (*PWM, error) {
-	c := PWMConfig{
-		Bus:     1,
-		Address: 0x40,
-	}
+var DefaultPWMConfig = PWMConfig{
+	Bus:     1,
+	Address: 0x40,
+}
+
+func NewPWM(config PWMConfig) (*PWM, error) {
 	var conn *pca9685.PCA9685
-	if devMode {
+	if config.DevMode {
 		bus := &DevI2CBus{}
-		conn = pca9685.New(bus, byte(c.Address))
+		conn = pca9685.New(bus, byte(config.Address))
 	} else {
-		bus := embd.NewI2CBus(byte(c.Bus))
-		conn = pca9685.New(bus, byte(c.Address))
+		bus := embd.NewI2CBus(byte(config.Bus))
+		conn = pca9685.New(bus, byte(config.Address))
 	}
 	pwm := PWM{
 		values: make(map[int]int),
 		conn:   conn,
+		config: config,
 	}
 	return &pwm, nil
 }
@@ -67,6 +71,9 @@ func (p *PWM) Off(pin int) error {
 func (p *PWM) Stop() error {
 	if err := p.conn.Close(); err != nil {
 		return err
+	}
+	if p.config.DevMode {
+		return nil
 	}
 	return embd.CloseI2C()
 }

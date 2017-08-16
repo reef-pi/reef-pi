@@ -17,7 +17,7 @@ pi-zero:
 
 .PHONY: test
 test:
-	go test -cover -v -race ./...
+	go test -cover -race ./...
 
 .PHONY: js-lint
 js-lint:
