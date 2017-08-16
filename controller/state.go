@@ -67,6 +67,7 @@ func (s *State) Bootup() error {
 	}
 	if s.config.System.Enable {
 		s.system = system.New(s.config.System, s.store, s.telemetry)
+		s.system.Start()
 		log.Println("Started system subsystem")
 	}
 	if s.config.Timer.Enable {
