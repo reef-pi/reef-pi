@@ -15,6 +15,5 @@ func TestEmitMetric(t *testing.T) {
 	}
 	telemetry := NewTelemetry(config)
 	rand.Seed(time.Now().Unix())
-
 	telemetry.EmitMetric("test", rand.Intn(100))
 }

@@ -26,12 +26,17 @@ func (c *Controller) Get(id string) (Job, error) {
 	return job, c.store.Get(Bucket, id, &job)
 }
 
-func (c *Controller) List() (*[]interface{}, error) {
-	fn := func(v []byte) (interface{}, error) {
+func (c *Controller) List() ([]Job, error) {
+	var jobs []Job
+	fn := func(v []byte) error {
 		var job Job
-		return &job, json.Unmarshal(v, &job)
+		if err := json.Unmarshal(v, &job); err != nil {
+			return err
+		}
+		jobs = append(jobs, job)
+		return nil
 	}
-	return c.store.List(Bucket, fn)
+	return jobs, c.store.List(Bucket, fn)
 }
 
 func (c *Controller) Create(job Job) error {
@@ -65,13 +70,8 @@ func (c *Controller) loadAllJobs() error {
 		log.Printf("No jobs present")
 		return nil
 	}
-	for _, rawJob := range *jobs {
-		job, ok := rawJob.(*Job)
-		if !ok {
-			log.Println("ERROR: Failed to typecast to job")
-			continue
-		}
-		if err := c.addToCron(*job); err != nil {
+	for _, job := range jobs {
+		if err := c.addToCron(job); err != nil {
 			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
 		}
 	}

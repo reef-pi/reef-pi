@@ -53,7 +53,9 @@ func (c *Controller) SetCycle(conf Cycle) error {
 func (c *Controller) StartCycle() {
 	ticker := time.NewTicker(c.config.Interval)
 	log.Println("Starting lighting cycle")
+	c.mu.Lock()
 	c.running = true
+	c.mu.Unlock()
 	for {
 		select {
 		case <-c.stopCh:
@@ -82,10 +84,12 @@ func (c *Controller) StartCycle() {
 }
 
 func (c *Controller) StopCycle() {
+	c.mu.Lock()
 	if !c.running {
 		log.Println("lighting subsystem: controller is not running.")
 		return
 	}
+	c.mu.Unlock()
 	c.stopCh <- struct{}{}
 	c.running = false
 	log.Println("Stopped lighting cycle")

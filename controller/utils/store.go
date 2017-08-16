@@ -11,8 +11,7 @@ import (
 
 type Store interface {
 	Get(string, string, interface{}) error
-	List(string, func([]byte) (interface{}, error)) (*[]interface{}, error)
-	ListElements(string, func([]byte) error) error
+	List(string, func([]byte) error) error
 	Create(string, func(string) interface{}) error
 	CreateBucket(string) error
 	Close() error
@@ -37,10 +36,6 @@ func NewStore(fname string) (*store, error) {
 
 func (s *store) Close() error {
 	return s.db.Close()
-}
-
-func (s *store) DB() *bolt.DB {
-	return s.db
 }
 
 func (s *store) CreateBucket(bucket string) error {
@@ -73,27 +68,7 @@ func (s *store) Get(bucket, id string, i interface{}) error {
 	return json.Unmarshal(data, i)
 }
 
-func (s *store) List(bucket string, extractor func([]byte) (interface{}, error)) (*[]interface{}, error) {
-	list := []interface{}{}
-	err := s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
-		}
-		c := b.Cursor()
-		for k, v := c.First(); k != nil; k, v = c.Next() {
-			entry, err := extractor(v)
-			if err != nil {
-				return err
-			}
-			list = append(list, entry)
-		}
-		return nil
-	})
-	return &list, err
-}
-
-func (s *store) ListElements(bucket string, extractor func([]byte) error) error {
+func (s *store) List(bucket string, extractor func([]byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		if b == nil {
