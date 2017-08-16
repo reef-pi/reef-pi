@@ -2,6 +2,7 @@ package lighting
 
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"sync"
 )
 
 const Bucket = "lightings"
@@ -13,6 +14,7 @@ type Controller struct {
 	telemetry *utils.Telemetry
 	config    Config
 	running   bool
+	mu        *sync.Mutex
 }
 
 func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
@@ -21,12 +23,13 @@ func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller
 		store:     store,
 		config:    conf,
 		stopCh:    make(chan struct{}),
+		mu:        &sync.Mutex{},
 	}
 }
 
 func (c *Controller) GetFixed() (Fixed, error) {
 	var config Config
-	return config.Fixed, c.store.Get(Bucket, "config", &config.Fixed)
+	return config.Fixed, c.store.Get(Bucket, "config", &config)
 }
 
 func (c *Controller) SetFixed(conf Fixed) error {
@@ -43,10 +46,8 @@ func (c *Controller) SetFixed(conf Fixed) error {
 }
 
 func (c *Controller) Start() {
-	config := DefaultConfig
-	c.store.Update(Bucket, "config", config)
 	if c.config.Cycle.Enable {
-		c.StartCycle()
+		go c.StartCycle()
 		return
 	}
 }
@@ -55,4 +56,8 @@ func (c *Controller) Stop() {
 		c.StopCycle()
 		return
 	}
+}
+
+func (c *Controller) Setup() error {
+	return c.store.CreateBucket(Bucket)
 }

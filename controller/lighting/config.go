@@ -32,4 +32,5 @@ var DefaultConfig = Config{
 		ChannelValues: make(map[string][]int),
 	},
 	Interval: 15 * time.Second,
+	Channels: make(map[string]Channel),
 }

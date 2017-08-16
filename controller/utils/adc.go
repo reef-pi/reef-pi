@@ -10,6 +10,7 @@ type SPIConfig struct {
 	speed   int
 	bpw     int
 	delay   int
+	DevMode bool
 }
 
 var (
@@ -34,22 +35,29 @@ func NewADC() *ADC {
 }
 
 func (a *ADC) Start() error {
-	if err := embd.InitSPI(); err != nil {
-		return err
+	var bus embd.SPIBus
+	if a.config.DevMode {
+		bus = NewDevSPIBus()
+	} else {
+		bus = embd.NewSPIBus(
+			embd.SPIMode0,
+			a.config.channel,
+			a.config.speed,
+			a.config.bpw,
+			a.config.delay,
+		)
+		if err := embd.InitSPI(); err != nil {
+			return err
+		}
 	}
-	spiBus := embd.NewSPIBus(
-		embd.SPIMode0,
-		a.config.channel,
-		a.config.speed,
-		a.config.bpw,
-		a.config.delay,
-	)
-	a.device = mcp3008.New(mcp3008.SingleMode, spiBus)
+	a.device = mcp3008.New(mcp3008.SingleMode, bus)
 	return nil
 }
 
 func (a *ADC) Stop() error {
-	defer embd.CloseSPI()
+	if !a.config.DevMode {
+		defer embd.CloseSPI()
+	}
 	return a.device.Bus.Close()
 }
 

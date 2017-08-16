@@ -14,10 +14,7 @@ func TestEquipmentController(t *testing.T) {
 		Outlets: make(map[string]Outlet),
 	}
 	config.Outlets["bar"] = Outlet{Name: "bar", Pin: 4}
-	aio := utils.AdafruitIO{
-		User: "test-user",
-	}
-	telemetry := utils.NewTelemetry(aio)
+	telemetry := utils.TestTelemetry()
 	store, err := utils.TestDB()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)

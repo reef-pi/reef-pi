@@ -30,7 +30,7 @@ func (c Controller) List() ([]Equipment, error) {
 		es = append(es, eq)
 		return nil
 	}
-	return es, c.store.ListElements(Bucket, fn)
+	return es, c.store.List(Bucket, fn)
 }
 
 func (c *Controller) Create(eq Equipment) error {
