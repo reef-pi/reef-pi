@@ -20,14 +20,14 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 
 func (c *Controller) EnableDisplay(w http.ResponseWriter, r *http.Request) {
 	fn := func(_ string) error {
-		return EnableDisplay()
+		return c.enableDisplay()
 	}
 	utils.JSONDeleteResponse(fn, w, r)
 }
 
 func (c *Controller) DisableDisplay(w http.ResponseWriter, r *http.Request) {
 	fn := func(_ string) error {
-		return DisableDisplay()
+		return c.disableDisplay()
 	}
 	utils.JSONDeleteResponse(fn, w, r)
 }
@@ -35,7 +35,7 @@ func (c *Controller) DisableDisplay(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) SetBrightness(w http.ResponseWriter, r *http.Request) {
 	var conf DisplayConfig
 	fn := func() error {
-		return SetBrightness(conf.Brightness)
+		return c.setBrightness(conf.Brightness)
 	}
 	utils.JSONCreateResponse(&conf, fn, w, r)
 }
@@ -45,7 +45,7 @@ func (c *Controller) GetDisplayState(w http.ResponseWriter, r *http.Request) {
 		if !c.config.Display {
 			return false, nil
 		}
-		return currentDisplayState()
+		return c.currentDisplayState()
 	}
 	utils.JSONGetResponse(fn, w, r)
 }

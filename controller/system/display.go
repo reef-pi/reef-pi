@@ -19,7 +19,10 @@ type DisplayConfig struct {
 	Brightness int  `json:"brightness"`
 }
 
-func currentDisplayState() (bool, error) {
+func (c *Controller) currentDisplayState() (bool, error) {
+	if c.config.DevMode {
+		return true, nil
+	}
 	var state bool
 	d, err := ioutil.ReadFile(PowerFile)
 	if err != nil {
@@ -29,14 +32,23 @@ func currentDisplayState() (bool, error) {
 	return state, nil
 }
 
-func EnableDisplay() error {
+func (c *Controller) enableDisplay() error {
+	if c.config.DevMode {
+		return nil
+	}
 	return ioutil.WriteFile(PowerFile, []byte("0"), 0644)
 }
 
-func DisableDisplay() error {
+func (c *Controller) disableDisplay() error {
+	if c.config.DevMode {
+		return nil
+	}
 	return ioutil.WriteFile(PowerFile, []byte("1"), 0644)
 }
 
-func SetBrightness(b int) error {
+func (c *Controller) setBrightness(b int) error {
+	if c.config.DevMode {
+		return nil
+	}
 	return ioutil.WriteFile(BrightnessFile, []byte(strconv.Itoa(b)), 0644)
 }

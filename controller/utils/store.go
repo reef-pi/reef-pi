@@ -31,6 +31,7 @@ func NewStore(fname string) (*store, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Println("DB:", fname)
 	return &store{db: db}, nil
 }
 

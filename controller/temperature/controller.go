@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const Bucket = "temperature"
+
 type Config struct {
 	Min           float32       `yaml:"min" json:"min"`
 	Max           float32       `yaml:"max" json:"max"`
@@ -25,10 +27,11 @@ type Controller struct {
 	heaterOn  bool
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
+	store     utils.Store
 	mu        sync.Mutex
 }
 
-func NewController(config Config, telemetry *utils.Telemetry) (*Controller, error) {
+func New(config Config, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for temperature controller must be greater than zero")
 	}
@@ -37,10 +40,17 @@ func NewController(config Config, telemetry *utils.Telemetry) (*Controller, erro
 		mu:        sync.Mutex{},
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
+		store:     store,
 	}, nil
 }
 
+func (c *Controller) Setup() error {
+	return c.store.CreateBucket(Bucket)
+}
 func (c *Controller) Start() {
+	go c.run()
+}
+func (c *Controller) run() {
 	log.Println("Starting temperature controller")
 	ticker := time.NewTicker(time.Minute * c.config.CheckInterval)
 	for {

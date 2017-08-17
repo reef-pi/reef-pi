@@ -1,6 +1,7 @@
 package camera
 
 import (
+	"github.com/gorilla/mux"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -8,11 +9,13 @@ import (
 	"time"
 )
 
+const Bucket = "camera"
+
 type Config struct {
-	ImageDirectory    string        `yaml:"image_directory"`
-	RaspiStillCommand string        `yaml:"capture_command"`
-	CaptureFlags      string        `yaml:"capture_flags"`
-	TickInterval      time.Duration `yaml:"tick_interval"`
+	Enable         bool          `yaml:"enable"`
+	ImageDirectory string        `yaml:"image_directory"`
+	CaptureFlags   string        `yaml:"capture_flags"`
+	TickInterval   time.Duration `yaml:"tick_interval"`
 }
 
 type Camera struct {
@@ -23,13 +26,26 @@ const (
 	DefaulCaptureFlags = ""
 )
 
-func NewCamera(config Config) *Camera {
+func New(config Config) *Camera {
 	return &Camera{
 		config: config,
 	}
 }
 
-func (c *Camera) CaptureImage() error {
+func (c *Camera) Start() {
+}
+
+func (c *Camera) Stop() {
+}
+
+func (c *Camera) Setup() error {
+	return nil
+}
+
+func (c *Camera) LoadAPI(r *mux.Router) {
+}
+
+func (c *Camera) Capture() error {
 	imageDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
 		return pathErr

@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/reef-pi/reef-pi/auth"
 	"github.com/reef-pi/reef-pi/controller/ato"
+	"github.com/reef-pi/reef-pi/controller/camera"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/system"
@@ -24,6 +25,7 @@ type Config struct {
 	ATO         ato.Config         `yaml:"ato"`
 	Timer       timer.Config       `yaml:"timers"`
 	System      system.Config      `yaml:"system"`
+	Camera      camera.Config      `yaml:"camera"`
 
 	AdafruitIO utils.AdafruitIO `yaml:"adafruitio"`
 	API        API              `yaml:"api"`
@@ -35,6 +37,10 @@ var DefaultConfig = Config{
 		Outlets: make(map[string]equipments.Outlet),
 	},
 	Lighting: lighting.DefaultConfig,
+	API: API{
+		ImageDirectory: "images/",
+		Address:        "localhost:8080",
+	},
 }
 
 type API struct {
@@ -45,7 +51,7 @@ type API struct {
 }
 
 func ParseConfig(filename string) (Config, error) {
-	var c Config
+	c := DefaultConfig
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return c, err

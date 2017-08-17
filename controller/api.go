@@ -7,22 +7,18 @@ import (
 	"net/http"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/capabilities", c.GetCapabilities).Methods("GET")
-	if c.config.Equipments.Enable {
-		c.state.equipments.LoadAPI(r)
+func (r *ReefPi) setupAPI() {
+	err, router := createAPIServer(r.config.API)
+	if err != nil {
+		log.Fatal("ERROR:", err)
 	}
-	if c.config.Lighting.Enable {
-		c.state.lighting.LoadAPI(r)
-	}
-	if c.config.Temperature.Enable {
-		c.state.temperature.LoadAPI(r)
-	}
-	if c.config.System.Enable {
-		c.state.system.LoadAPI(r)
-	}
-	if c.config.Timer.Enable {
-		c.state.timer.LoadAPI(r)
+	r.loadAPI(router)
+}
+
+func (r *ReefPi) loadAPI(router *mux.Router) {
+	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
+	for _, sController := range r.subsystems {
+		sController.LoadAPI(router)
 	}
 }
 
@@ -34,7 +30,7 @@ type APIServer struct {
 	config API
 }
 
-func SetupAPIServer(config API) (error, *mux.Router) {
+func createAPIServer(config API) (error, *mux.Router) {
 	server := &APIServer{
 		config: config,
 	}
