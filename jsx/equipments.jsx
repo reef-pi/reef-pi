@@ -119,7 +119,7 @@ export default class Equipments extends React.Component {
           {this.equipmentList()}
         </ul>
         <div>
-          <input type='button' value={this.state.addEquipment ? '-' : '+'} onClick={this.toggleAddEquipmentDiv} className='btn btn-outline-success' />
+          <input id='new_equipment' type='button' value={this.state.addEquipment ? '-' : '+'} onClick={this.toggleAddEquipmentDiv} className='btn btn-outline-success' />
           <div style={dStyle}>
                Name: <input type='text' id='equipmentName' />
                Outlet:
