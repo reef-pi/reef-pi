@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-const Bucket = "uptime"
-
 type TimeLog struct {
 	Time string `json:"time"`
 }

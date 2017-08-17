@@ -4,6 +4,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
+const Bucket = "system"
+
 type Config struct {
 	Enable    bool   `yaml:"enable" json:"enable"`
 	Interface string `yaml:"interface" json:"interface"`
@@ -32,4 +34,8 @@ func (c *Controller) Start() {
 
 func (c *Controller) Stop() {
 	c.logStopTime()
+}
+
+func (c *Controller) Setup() error {
+	return c.store.CreateBucket(Bucket)
 }
