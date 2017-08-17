@@ -5,31 +5,31 @@ import (
 	"net/http"
 )
 
-func (c *Controller) Capabilities() (capabilities []string) {
-	if c.config.Equipments.Enable {
+func (r *ReefPi) Capabilities() (capabilities []string) {
+	if r.config.Equipments.Enable {
 		capabilities = append(capabilities, "equipments")
 	}
-	if c.config.Timer.Enable {
+	if r.config.Timer.Enable {
 		capabilities = append(capabilities, "timer")
 	}
-	if c.config.Lighting.Enable {
+	if r.config.Lighting.Enable {
 		capabilities = append(capabilities, "lighting")
 	}
-	if c.config.Temperature.Enable {
+	if r.config.Temperature.Enable {
 		capabilities = append(capabilities, "temperature")
 	}
-	if c.config.ATO.Enable {
+	if r.config.ATO.Enable {
 		capabilities = append(capabilities, "ato")
 	}
-	if c.config.System.Enable {
+	if r.config.System.Enable {
 		capabilities = append(capabilities, "system")
 	}
 	return
 }
 
-func (t *Controller) GetCapabilities(w http.ResponseWriter, r *http.Request) {
+func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
-		return t.Capabilities(), nil
+		return r.Capabilities(), nil
 	}
-	utils.JSONGetResponse(fn, w, r)
+	utils.JSONGetResponse(fn, w, req)
 }
