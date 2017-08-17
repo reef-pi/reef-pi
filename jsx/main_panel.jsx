@@ -1,7 +1,6 @@
 import React from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Dashboard from './dashboard.jsx'
-import Admin from './admin.jsx'
 import Equipments from './equipments.jsx'
 import Timers from './timers.jsx'
 import TemperatureController from './tc.jsx'
@@ -16,37 +15,37 @@ export default class MainPanel extends React.Component {
     this.state = {
       capabilities: [],
       tabs: {
-        'dashboard': 'Dashboard',
+        'system': 'System',
         'equipments': 'Equipments',
         'timers': 'Timers',
         'lighting': 'Lighting',
         'temperature': 'Temperature',
         'ato': 'Auto Top Off',
         'doser': 'Dosing pumps',
-        'admin': 'Admin'
+        'system': 'system'
       },
       panels: {
-        'dashboard': <Dashboard />,
+        'system': <Dashboard />,
         'equipments': <Equipments />,
         'timers': <Timers />,
         'lighting': <Lighting />,
         'temperature': < TemperatureController />,
         'ato': <ATO />,
         'doser': < Doser />,
-        'admin': <Admin />
       }
     }
     this.tabList = this.tabList.bind(this)
     this.panelList = this.panelList.bind(this)
     this.loadCapabilities = this.loadCapabilities.bind(this)
   }
+
   tabList () {
     var tabs = []
     $.each(this.state.capabilities, function (i, c) {
       tabs.push(
         <Tab key={c}>{c}</Tab>
       )
-    })
+    }.bind(this))
     return tabs
   }
 
