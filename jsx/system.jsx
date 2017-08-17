@@ -2,7 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Admin from './admin.jsx'
 
-export default class Dashboard extends React.Component {
+export default class System extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
