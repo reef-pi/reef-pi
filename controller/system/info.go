@@ -66,7 +66,7 @@ func (c *Controller) CPUTemperature() (string, error) {
 	if c.config.DevMode {
 		return "36.9C", nil
 	}
-	out, err := utils.Command("vcgencmd", "measure_temp").CombinedOutput()
+	out, err := utils.Command("vcgencmd", "measure_temp").WithDevMode(c.config.DevMode).CombinedOutput()
 	if err != nil {
 		return "", err
 	}

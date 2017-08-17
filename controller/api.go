@@ -7,12 +7,13 @@ import (
 	"net/http"
 )
 
-func (r *ReefPi) setupAPI() {
+func (r *ReefPi) setupAPI() error {
 	err, router := createAPIServer(r.config.API)
 	if err != nil {
-		log.Fatal("ERROR:", err)
+		return err
 	}
 	r.loadAPI(router)
+	return nil
 }
 
 func (r *ReefPi) loadAPI(router *mux.Router) {
