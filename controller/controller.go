@@ -30,6 +30,7 @@ type ReefPi struct {
 func New(config Config) (*ReefPi, error) {
 	store, err := utils.NewStore(config.Database)
 	if err != nil {
+		log.Println("Failed to create store. DB:", config.Database)
 		return nil, err
 	}
 	telemetry := utils.NewTelemetry(config.AdafruitIO)

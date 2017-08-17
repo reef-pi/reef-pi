@@ -1,7 +1,8 @@
 import React from 'react'
 import $ from 'jquery'
+import Admin from './admin.jsx'
 
-export default class Dashboard extends React.Component {
+export default class System extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -138,7 +139,7 @@ export default class Dashboard extends React.Component {
           {this.showDisplay()}
         </ul>
         <div className='row'>
-          <a href='https://github.com/reef-pi/reef-pi/blob/master/README.md'>Help</a>
+          <Admin />
         </div>
       </div>
     )

@@ -1,12 +1,12 @@
 import React from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import Dashboard from './dashboard.jsx'
-import Admin from './admin.jsx'
-import Equipments from './equipments.jsx'
-import Timers from './timers.jsx'
-import TemperatureController from './tc.jsx'
-import Lighting from './lighting.jsx'
 import ATO from './ato.jsx'
+import Camera from './camera.jsx'
+import Equipments from './equipments.jsx'
+import Lighting from './lighting.jsx'
+import System from './system.jsx'
+import TemperatureController from './tc.jsx'
+import Timers from './timers.jsx'
 import Doser from './doser.jsx'
 import $ from 'jquery'
 
@@ -16,30 +16,31 @@ export default class MainPanel extends React.Component {
     this.state = {
       capabilities: [],
       tabs: {
-        'dashboard': 'Dashboard',
-        'equipments': 'Equipments',
-        'timers': 'Timers',
-        'lighting': 'Lighting',
-        'temperature': 'Temperature',
         'ato': 'Auto Top Off',
-        'doser': 'Dosing pumps',
-        'admin': 'Admin'
+        'camera': 'Camera',
+        'equipments': 'Equipments',
+        'lighting': 'Lighting',
+        'system': 'System',
+        'temperature': 'Temperature',
+        'timers': 'Timers',
+        'doser': 'Dosing pumps'
       },
       panels: {
-        'dashboard': <Dashboard />,
+        'ato': <ATO />,
+        'camera': <Camera />,
+        'system': <System />,
         'equipments': <Equipments />,
-        'timers': <Timers />,
         'lighting': <Lighting />,
         'temperature': < TemperatureController />,
-        'ato': <ATO />,
-        'doser': < Doser />,
-        'admin': <Admin />
+        'timers': <Timers />,
+        'doser': < Doser />
       }
     }
     this.tabList = this.tabList.bind(this)
     this.panelList = this.panelList.bind(this)
     this.loadCapabilities = this.loadCapabilities.bind(this)
   }
+
   tabList () {
     var tabs = []
     $.each(this.state.capabilities, function (i, c) {
