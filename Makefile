@@ -57,4 +57,4 @@ deb:
 clean:
 	-rm -rf *.deb
 	-rm -rf dist
-	-rm *.db
+	-find . -name '*.db' -exec rm {} \;
