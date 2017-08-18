@@ -59,10 +59,10 @@ func (c *Controller) syncOutlet(eq Equipment) error {
 }
 
 func (c *Controller) Update(id string, eq Equipment) error {
+	eq.ID = id
 	if err := c.store.Update(Bucket, id, eq); err != nil {
 		return err
 	}
-	eq.ID = id
 	return c.syncOutlet(eq)
 }
 

@@ -17,18 +17,28 @@ export default class Equipments extends React.Component {
     this.setOutlet = this.setOutlet.bind(this)
     this.outletList = this.outletList.bind(this)
     this.addEquipment = this.addEquipment.bind(this)
+    this.removeEquipment = this.removeEquipment.bind(this)
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
   }
 
   equipmentList () {
     var list = []
+    var index = 0
     $.each(this.state.equipments, function (k, v) {
       list.push(
         <li key={k} className='list-group-item'>
-          <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} value={v.value} />
+          <div className='container'>
+            <div className='col-sm-4'>
+              <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} />
+            </div>
+            <div className='col-sm-2'>
+              <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
+            </div>
+          </div>
         </li>
        )
-    })
+      index = index + 1
+    }.bind(this))
     return list
   }
 
@@ -96,6 +106,21 @@ export default class Equipments extends React.Component {
         console.log(err.toString())
       }
     })
+  }
+
+  removeEquipment (id) {
+    return (function () {
+      $.ajax({
+        url: '/api/equipments/' + id,
+        type: 'DELETE',
+        success: function (data) {
+          this.fetchData()
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log(err.toString())
+        }
+      })
+    }.bind(this))
   }
 
   toggleAddEquipmentDiv () {
