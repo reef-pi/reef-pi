@@ -20,6 +20,8 @@ nightmare
   .wait(500)
   .click('input#HoBFilter')
   .wait(500)
+  .click('input#equipment-0')
+  .wait(2500)
   .end()
     .then(function (result) {
       console.log(result)
