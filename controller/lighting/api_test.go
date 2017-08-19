@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
 	"strings"
 	"testing"
 	"time"
@@ -13,10 +12,11 @@ import (
 func TestLightingController(t *testing.T) {
 	config := DefaultConfig
 	config.DevMode = true
-	config.Channels["spectrum"] = Channel{}
 	config.Interval = 1 * time.Second
-	config.Cycle.Enable = true
-	config.Cycle.ChannelValues["spectrum"] = []int{0, 0, 0, 0, 0, 12, 13, 13, 10, 0, 10, 20}
+	config.Jacks["J1"] = Jack{
+		Name: "J1",
+		Pins: []int{23},
+	}
 	telemetry := utils.TestTelemetry()
 	store, err := utils.TestDB()
 	if err != nil {
@@ -28,31 +28,22 @@ func TestLightingController(t *testing.T) {
 	}
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
-	log.Println("Here")
 	c.Start()
 	time.Sleep(2 * time.Second)
 	c.Stop()
 
-	var cycle Cycle
-	cycle.Enable = true
+	l := Light{
+		Jack: "J1",
+		Name: "Foo",
+	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
-	enc.Encode(cycle)
-	if err := tr.Do("POST", "/api/lighting/cycle", body, nil); err != nil {
-		t.Fatal("Failed to set lighting cycle using api")
+	enc.Encode(l)
+	if err := tr.Do("PUT", "/api/lights", body, nil); err != nil {
+		t.Fatal("Failed to create light using api")
 	}
-	if err := tr.Do("GET", "/api/lighting/cycle", strings.NewReader("{}"), &cycle); err != nil {
-		t.Fatal("Failed to get lighting cycle using api")
+	var lights []Light
+	if err := tr.Do("GET", "/api/lights", strings.NewReader("{}"), &lights); err != nil {
+		t.Fatal("Failed to light using api")
 	}
-	var fixed Fixed
-	body = new(bytes.Buffer)
-	enc = json.NewEncoder(body)
-	enc.Encode(fixed)
-	if err := tr.Do("POST", "/api/lighting/fixed", body, nil); err != nil {
-		t.Fatal("Failed to set fixed lighting using api")
-	}
-	if err := tr.Do("GET", "/api/lighting/fixed", strings.NewReader("{}"), &fixed); err != nil {
-		t.Fatal("Failed to get fixed lighting using api")
-	}
-	c.Reconfigure()
 }

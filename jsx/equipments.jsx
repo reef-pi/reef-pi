@@ -27,11 +27,11 @@ export default class Equipments extends React.Component {
     $.each(this.state.equipments, function (k, v) {
       list.push(
         <li key={k} className='list-group-item'>
-          <div className='container'>
-            <div className='col-sm-4'>
+          <div className='row'>
+            <div className='col-sm-8'>
               <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} />
             </div>
-            <div className='col-sm-2'>
+            <div className='col-sm-4'>
               <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
             </div>
           </div>

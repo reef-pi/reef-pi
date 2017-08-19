@@ -12,7 +12,7 @@ export default class LEDChannel extends React.Component {
       function (ev) {
         var values = this.props.getValues()
         values[i] = parseInt(ev.target.value)
-        this.props.onChange(this.props.name, values)
+        this.props.onChange(this.props.pin, values)
       }.bind(this)
     )
   }

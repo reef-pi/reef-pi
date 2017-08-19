@@ -52,7 +52,7 @@ func (c *Controller) Create(job Job) error {
 
 func (c *Controller) Update(id string, payload Job) error {
 	payload.ID = id
-	return c.store.Update(Bucket, id, payload)
+	return c.store.Update(Bucket, id, &payload)
 }
 
 func (c *Controller) Delete(id string) error {

@@ -17,7 +17,7 @@ func detectTempSensorDevice() (string, error) {
 		return "", err
 	}
 	if len(files) != 1 {
-		return "", fmt.Errorf("Only one temperature device expectec, found: %d", len(files))
+		return "", fmt.Errorf("Only one temperature device expected, found: %d", len(files))
 	}
 	return filepath.Join(files[0], "w1_slave"), nil
 }

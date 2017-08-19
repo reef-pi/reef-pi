@@ -7,38 +7,49 @@ import (
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/lighting/cycle", c.GetLightingCycle).Methods("GET")
-	r.HandleFunc("/api/lighting/cycle", c.SetLightingCycle).Methods("POST")
-	r.HandleFunc("/api/lighting/fixed", c.GetFixedLighting).Methods("GET")
-	r.HandleFunc("/api/lighting/fixed", c.SetFixedLighting).Methods("POST")
+	r.HandleFunc("/api/lights", c.ListLights).Methods("GET")
+	r.HandleFunc("/api/jacks", c.ListJacks).Methods("GET")
+	r.HandleFunc("/api/lights", c.CreateLight).Methods("PUT")
+	r.HandleFunc("/api/lights/{id}", c.GetLight).Methods("GET")
+	r.HandleFunc("/api/lights/{id}", c.UpdateLight).Methods("POST")
+	r.HandleFunc("/api/lights/{id}", c.DeleteLight).Methods("DELETE")
 }
 
-func (c *Controller) GetLightingCycle(w http.ResponseWriter, r *http.Request) {
-	fn := func(_ string) (interface{}, error) {
-		return c.GetCycle()
-	}
-	utils.JSONGetResponse(fn, w, r)
-}
-
-func (c *Controller) SetLightingCycle(w http.ResponseWriter, r *http.Request) {
-	var cy Cycle
-	fn := func(id string) error {
-		return c.SetCycle(cy)
-	}
-	utils.JSONUpdateResponse(&cy, fn, w, r)
-}
-
-func (c *Controller) GetFixedLighting(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) GetLight(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return c.GetFixed()
+		return c.Get(id)
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
-
-func (c *Controller) SetFixedLighting(w http.ResponseWriter, r *http.Request) {
-	var v Fixed
-	fn := func(i string) error {
-		return c.SetFixed(v)
+func (c *Controller) ListJacks(w http.ResponseWriter, r *http.Request) {
+	fn := func() (interface{}, error) {
+		return c.Jacks()
 	}
-	utils.JSONUpdateResponse(&v, fn, w, r)
+	utils.JSONListResponse(fn, w, r)
+}
+func (c *Controller) ListLights(w http.ResponseWriter, r *http.Request) {
+	fn := func() (interface{}, error) {
+		return c.List()
+	}
+	utils.JSONListResponse(fn, w, r)
+}
+func (c *Controller) CreateLight(w http.ResponseWriter, r *http.Request) {
+	var l Light
+	fn := func() error {
+		return c.Create(l)
+	}
+	utils.JSONCreateResponse(&l, fn, w, r)
+}
+func (c *Controller) UpdateLight(w http.ResponseWriter, r *http.Request) {
+	var l Light
+	fn := func(id string) error {
+		return c.Update(id, l)
+	}
+	utils.JSONUpdateResponse(&l, fn, w, r)
+}
+func (c *Controller) DeleteLight(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) error {
+		return c.Delete(id)
+	}
+	utils.JSONDeleteResponse(fn, w, r)
 }
