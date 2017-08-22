@@ -32,24 +32,6 @@ func GetCurrentValue(t time.Time, series []int) int {
 	return int(f)
 }
 
-func (c *Controller) GetCycle() (Cycle, error) {
-	var config Config
-	return config.Cycle, c.store.Get(Bucket, "config", &config)
-}
-
-func (c *Controller) SetCycle(conf Cycle) error {
-	var config Config
-	if err := c.store.Get(Bucket, "config", &config); err != nil {
-		log.Println("ERROR: failed to get lighting config, using default config")
-	}
-	c.Stop()
-	config.Cycle = conf
-	if config.Cycle.Enable {
-		go c.Start()
-	}
-	return c.store.Update(Bucket, "config", config)
-}
-
 func (c *Controller) StartCycle() {
 	ticker := time.NewTicker(c.config.Interval)
 	log.Println("Starting lighting cycle")
@@ -62,23 +44,33 @@ func (c *Controller) StartCycle() {
 			ticker.Stop()
 			return
 		case <-ticker.C:
-			for chName, ch := range c.config.Channels {
-				expectedValues, ok := c.config.Cycle.ChannelValues[chName]
-				if !ok {
-					log.Printf("ERROR: Could not find channel '%s' 24 hour cycle values\n", chName)
-					continue
-				}
-				v := GetCurrentValue(time.Now(), expectedValues)
-				if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
-					log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, chName, ch.MinTheshold)
-					v = 0
-				} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
-					log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, chName, ch.MaxThreshold, ch.MaxThreshold)
-					v = ch.MaxThreshold
-				}
-				c.UpdateChannel(chName, v)
-				c.telemetry.EmitMetric(chName, v)
+			c.syncLights()
+		}
+	}
+}
+
+func (c *Controller) syncLights() {
+	lights, err := c.List()
+	if err != nil {
+		log.Println("Lighting sub-system ERROR: Failed to list lights. Error:", err)
+		return
+	}
+	for _, light := range lights {
+		for pin, ch := range light.Channels {
+			if !ch.Auto {
+				continue
 			}
+			expectedValues := ch.Values // TODO implement ticks`
+			v := GetCurrentValue(time.Now(), expectedValues)
+			if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
+				log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, ch.Name, ch.MinTheshold)
+				v = 0
+			} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
+				log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
+				v = ch.MaxThreshold
+			}
+			c.UpdateChannel(pin, v)
+			c.telemetry.EmitMetric(ch.Name, v)
 		}
 	}
 }
@@ -95,27 +87,11 @@ func (c *Controller) StopCycle() {
 	log.Println("Stopped lighting cycle")
 }
 
-func (c *Controller) UpdateChannel(chName string, v int) {
-	pin := c.config.Channels[chName].Pin
+func (c *Controller) UpdateChannel(pin, v int) {
 	if c.config.DevMode {
 		log.Println("Lighting sub-system: skipping pwm setting due to dev mode.")
 		return
 	}
 	log.Println("Setting pwm value:", v, " at pin:", pin)
 	c.pwm.Set(pin, v)
-}
-
-func (c *Controller) Reconfigure() {
-	if c.config.Cycle.Enable {
-		log.Println("Lighting subsystem: cycle controller started")
-		go c.Start()
-		log.Println("Lighting subsystem: cycle controller startedx")
-		return
-	}
-	for chName, v := range c.config.Fixed {
-		c.UpdateChannel(chName, v)
-		log.Println("Lighting subsystem: Chennl ", chName, " value:", v)
-	}
-	log.Println("Lighting subsystem reconfigured")
-	return
 }

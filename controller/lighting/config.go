@@ -4,33 +4,31 @@ import (
 	"time"
 )
 
-type Cycle struct {
-	Enable        bool             `json:"enable"`
-	ChannelValues map[string][]int `json:"channels"`
+type Jack struct {
+	Name string `json:"name" yaml:"name"`
+	Pins []int  `json:"pins" yaml:"pins"`
 }
 
 type Channel struct {
-	Pin          int `yaml:"pin"`
-	MinTheshold  int `yaml:"min"`
-	MaxThreshold int `yaml:"max"`
+	Name         string `json:"name" yaml:"name"`
+	Pin          int    `json:"pin" yaml:"pin"`
+	Reverse      bool   `json:"reverse" yaml:"reverse"`
+	MinTheshold  int    `json:"min" yaml:"min"`
+	MaxThreshold int    `json:"max" yaml:"max"`
+	Ticks        int    `json:"ticks" yaml:"ticks"`
+	Values       []int  `json:"values" yaml:"values"`
+	Fixed        int    `json:"fixed" yaml:"fixed"`
+	Auto         bool   `json:"auto" yaml:"auto"`
 }
 
-type Fixed map[string]int
-
 type Config struct {
-	Enable   bool               `yaml:"enable"`
-	DevMode  bool               `yaml:"dev_mode"`
-	Channels map[string]Channel `yaml:"channels"`
-	Cycle    Cycle              `yaml:"cycle"`
-	Fixed    Fixed              `yaml:"fixed"`
-	Interval time.Duration      `yaml:"interval"`
+	Enable   bool            `yaml:"enable"`
+	DevMode  bool            `yaml:"dev_mode"`
+	Interval time.Duration   `yaml:"interval"`
+	Jacks    map[string]Jack `yaml:"jacks"`
 }
 
 var DefaultConfig = Config{
-	Fixed: make(map[string]int),
-	Cycle: Cycle{
-		ChannelValues: make(map[string][]int),
-	},
 	Interval: 15 * time.Second,
-	Channels: make(map[string]Channel),
+	Jacks:    make(map[string]Jack),
 }
