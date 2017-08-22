@@ -6,7 +6,7 @@ import LightSlider from './light_slider.jsx'
 export default class Light extends React.Component {
   constructor (props) {
     super(props)
-    console.log("Removehook:", props.removeHook)
+    console.log('Removehook:', props.removeHook)
     this.state = {
       channels: {},
       fixed: {},

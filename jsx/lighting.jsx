@@ -24,7 +24,7 @@ export default class Lighting extends React.Component {
   }
 
   removeLight (id) {
-    return(function(){
+    return (function () {
       $.ajax({
         url: '/api/lights/' + id,
         type: 'DELETE',
@@ -34,8 +34,8 @@ export default class Lighting extends React.Component {
         error: function (xhr, status, err) {
           console.log(err.toString())
         }
-      });
-     }.bind(this));
+      })
+    }.bind(this))
   }
   componentWillMount () {
     this.fetchLights()
@@ -84,12 +84,12 @@ export default class Lighting extends React.Component {
     $.each(this.state.lights, function (i, light) {
       console.log('Adding light:', light.name)
       lights.push(
-        <div key={'light-'+i} className='row'>
+        <div key={'light-' + i} className='row'>
           <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
           <input type='button' id={'remove-light-' + light.id} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
         </div>
-      );
-    }.bind(this));
+      )
+    }.bind(this))
     return (lights)
   }
 
