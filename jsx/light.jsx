@@ -6,9 +6,9 @@ import LightSlider from './light_slider.jsx'
 export default class Light extends React.Component {
   constructor (props) {
     super(props)
+    console.log("Removehook:", props.removeHook)
     this.state = {
       channels: {},
-      enabled: false,
       fixed: {},
       updated: false,
       cycleEnable: false,
@@ -21,6 +21,25 @@ export default class Light extends React.Component {
     this.channelList = this.channelList.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.setLightMode = this.setLightMode.bind(this)
+    this.updateLight = this.updateLight.bind(this)
+  }
+  updateLight () {
+    $.ajax({
+      url: '/api/lights/' + this.props.id,
+      type: 'POST',
+      data: JSON.stringify({
+        name: this.props.name,
+        channels: this.state.channels,
+        jack: this.props.jack,
+        auto: this.state.auto
+      }),
+      success: function (data) {
+        this.fetchData()
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
   }
 
   setLightMode (pin) {
@@ -45,9 +64,8 @@ export default class Light extends React.Component {
       success: function (data) {
         this.setState({
           channels: data.channels,
-          enabled: data.enabled,
-          fixed: data.fixed
-
+          auto: data.auto,
+          jack: data.jack
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -102,7 +120,7 @@ export default class Light extends React.Component {
       }
       channelUIs.push(
         <div className='container' key={this.props.name + '-' + ch.name}>
-          Auto<input name={this.props.name + '-' + ch.name + '-check'} type='checkbox' onChange={this.setLightMode(pin)} value='auto' />
+          Auto<input name={this.props.name + '-' + ch.name + '-check'} type='checkbox' onChange={this.setLightMode(pin)} value='auto' checked={this.state.auto} />
           <div className='container' style={cycleStyle}>
             <LEDChannel pin={pin} name={ch.name} onChange={this.updateValues} getValues={this.getValues(pin)} />
           </div>
@@ -121,9 +139,14 @@ export default class Light extends React.Component {
     }
     return (
       <div className='container' style={style}>
-        <div className='container'>
+        <div className='row'>
           {this.props.name}
+        </div>
+        <div className='row'>
           { this.channelList() }
+        </div>
+        <div className='row'>
+          <input type='button' id={'update-light-' + this.props.id} onClick={this.updateLight} value='update' className='btn btn-outline-danger col-sm-2' />
         </div>
       </div>
     )

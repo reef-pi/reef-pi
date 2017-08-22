@@ -7,9 +7,9 @@ export default class Lighting extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      lights: [],
       updated: false,
       enabled: false,
-      channels: {},
       addLight: false,
       jacks: [],
       selectedJack: undefined
@@ -18,11 +18,25 @@ export default class Lighting extends React.Component {
     this.jacksList = this.jacksList.bind(this)
     this.fetchLights = this.fetchLights.bind(this)
     this.addLight = this.addLight.bind(this)
-    this.removeLight = this.removeLight.bind(this)
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
+    this.removeLight = this.removeLight.bind(this)
   }
 
+  removeLight (id) {
+    return(function(){
+      $.ajax({
+        url: '/api/lights/' + id,
+        type: 'DELETE',
+        success: function (data) {
+          this.fetchLights()
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log(err.toString())
+        }
+      });
+     }.bind(this));
+  }
   componentWillMount () {
     this.fetchLights()
     this.fetchJacks()
@@ -64,15 +78,18 @@ export default class Lighting extends React.Component {
       }
     })
   }
-  removeLight () {
-  }
 
   lightsList () {
     var lights = []
     $.each(this.state.lights, function (i, light) {
       console.log('Adding light:', light.name)
-      lights.push(<Light key={i} id={light.id} name={light.name} />)
-    })
+      lights.push(
+        <div key={'light-'+i} className='row'>
+          <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
+          <input type='button' id={'remove-light-' + light.id} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
+        </div>
+      );
+    }.bind(this));
     return (lights)
   }
 
@@ -98,44 +115,6 @@ export default class Lighting extends React.Component {
       success: function (data) {
         this.setState({
           lights: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err)
-      }
-    })
-  }
-  updateLighting () {
-    $.ajax({
-      url: '/api/lighting/cycle',
-      type: 'POST',
-      data: JSON.stringify({
-        channels: this.state.channels,
-        enabled: this.state.enabled
-      }),
-      success: function (data) {
-        this.setState({
-          updated: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err)
-      }
-    })
-  }
-
-  toggleLighting () {
-    var enabled = !this.state.enabled
-    $.ajax({
-      url: '/api/lighting/cycle',
-      type: 'POST',
-      data: JSON.stringify({
-        channels: this.state.channels,
-        enabled: enabled
-      }),
-      success: function (data) {
-        this.setState({
-          enabled: !enabled
         })
       }.bind(this),
       error: function (xhr, status, err) {

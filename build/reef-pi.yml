@@ -19,18 +19,20 @@ equipments:
 lighting:
   enable: true
   dev_mode: true
-  channels:
-    Intensity:
-      pin: 0
-      min_threshold: 30
-    Color:
-      pin: 1
+  jacks:
+    SingleChannel:
+      pins:
+        - 24
+    DoubleChannel:
+      pins:
+        - 21
+        - 23
 camera:
   enable: true
 timer:
   enable: true
 ato:
-  enable: true
+  enable: false
   dev_mode: true
   sensor: 12
   check_interval: 5
