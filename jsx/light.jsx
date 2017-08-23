@@ -121,7 +121,7 @@ export default class Light extends React.Component {
           { this.channelList() }
         </div>
         <div className='row'>
-          <input type='button' id={'update-light-' + this.props.id} onClick={this.updateLight} value='update' className='btn btn-outline-danger col-sm-2' />
+          <input type='button' id={'update-light-' + this.props.name} onClick={this.updateLight} value='update' className='btn btn-outline-danger col-sm-2' />
         </div>
       </div>
     )

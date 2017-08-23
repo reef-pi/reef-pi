@@ -6,6 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
+	"time"
 )
 
 const Bucket = "lightings"
@@ -125,7 +126,11 @@ func (c *Controller) Create(l Light) error {
 
 func (c *Controller) Update(id string, l Light) error {
 	l.ID = id
-	return c.store.Update(Bucket, id, l)
+	if err := c.store.Update(Bucket, id, l); err != nil {
+		return err
+	}
+	c.syncLight(l)
+	return nil
 }
 
 func (c *Controller) Delete(id string) error {
@@ -134,4 +139,25 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	return c.store.Delete(Bucket, id)
+}
+
+func (c *Controller) syncLight(light Light) {
+	for pin, ch := range light.Channels {
+		if !ch.Auto {
+			c.UpdateChannel(pin, ch.Fixed)
+			c.telemetry.EmitMetric(ch.Name, ch.Fixed)
+			return
+		}
+		expectedValues := ch.Values // TODO implement ticks`
+		v := GetCurrentValue(time.Now(), expectedValues)
+		if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
+			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, ch.Name, ch.MinTheshold)
+			v = 0
+		} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
+			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
+			v = ch.MaxThreshold
+		}
+		c.UpdateChannel(pin, v)
+		c.telemetry.EmitMetric(ch.Name, v)
+	}
 }

@@ -1,5 +1,4 @@
 ---
-name: "reef-pi"
 database: "reef-pi.db"
 address: "localhost:8080"
 system:
@@ -7,7 +6,7 @@ system:
   interface: en0
   display: false
   dev_mode: true
-  name: reef-pi-dev
+  name: controller
 equipments:
   enable: true
   dev_mode: true
@@ -29,7 +28,7 @@ lighting:
         - 23
 camera:
   enable: true
-timer:
+timers:
   enable: true
 ato:
   enable: false
