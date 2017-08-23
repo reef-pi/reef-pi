@@ -10,7 +10,7 @@ export default class LightSlider extends React.Component {
   update (ev) {
     var value = this.props.getValue()
     value = parseInt(ev.target.value)
-    this.props.onChange(this.props.pin, value)
+    this.props.onChange(value)
   }
 
   render () {
@@ -18,13 +18,8 @@ export default class LightSlider extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>{this.props.name}</div>
-        </div>
-        <div className='row'>
-          <div className='row'>{value}</div>
-          <div className='row'>
-            <input className='col-sm-6' type='range' onChange={this.update} value={value} id={'intensity-' + this.props.name} />
-          </div>
+          <div className='col-sm-1'>{value}</div>
+          <input className='col-sm-6' type='range' onChange={this.update} value={value} id={'intensity-' + this.props.name} />
         </div>
       </div>
     )

@@ -1,7 +1,7 @@
 const Nightmare = require('nightmare')
 const nightmare = Nightmare({ show: true })
 
-function test_equipments() {
+function TestEquipments () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
@@ -23,6 +23,7 @@ function test_equipments() {
     .wait(500)
     .click('input#equipment-0')
     .wait(2500)
+		.evaluate(function() {return 'equipments'})
     .end()
       .then(function (result) {
         console.log(result)
@@ -31,4 +32,4 @@ function test_equipments() {
         console.error('Error:', error)
       })
 }
-module.exports = test_equipments;
+TestEquipments()

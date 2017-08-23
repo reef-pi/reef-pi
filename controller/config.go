@@ -23,7 +23,7 @@ type Config struct {
 	Lighting    lighting.Config    `yaml:"lighting"`
 	Temperature temperature.Config `yaml:"temperature"`
 	ATO         ato.Config         `yaml:"ato"`
-	Timer       timer.Config       `yaml:"timer"`
+	Timers      timer.Config       `yaml:"timers"`
 	System      system.Config      `yaml:"system"`
 	Camera      camera.Config      `yaml:"camera"`
 

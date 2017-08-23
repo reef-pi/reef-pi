@@ -56,22 +56,7 @@ func (c *Controller) syncLights() {
 		return
 	}
 	for _, light := range lights {
-		for pin, ch := range light.Channels {
-			if !ch.Auto {
-				continue
-			}
-			expectedValues := ch.Values // TODO implement ticks`
-			v := GetCurrentValue(time.Now(), expectedValues)
-			if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
-				log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, ch.Name, ch.MinTheshold)
-				v = 0
-			} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
-				log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
-				v = ch.MaxThreshold
-			}
-			c.UpdateChannel(pin, v)
-			c.telemetry.EmitMetric(ch.Name, v)
-		}
+		c.syncLight(light)
 	}
 }
 

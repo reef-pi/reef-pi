@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const Bucket = "jobs"
+const Bucket = "timers"
 
 type Job struct {
 	ID        string `json:"id"`
@@ -17,7 +17,6 @@ type Job struct {
 	Second    string `json:"second"`
 	Equipment string `json:"equipment"`
 	On        bool   `json:"on"`
-	Value     int    `json:"value"`
 	Name      string `json:"name"`
 }
 

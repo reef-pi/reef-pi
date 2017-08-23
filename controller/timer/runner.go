@@ -31,6 +31,5 @@ func (c *Controller) Runner(job Job) (*JobRunner, error) {
 		outlet: eq.Outlet,
 		c:      c,
 		on:     job.On,
-		value:  job.Value,
 	}, nil
 }

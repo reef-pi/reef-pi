@@ -9,8 +9,8 @@ func (r *ReefPi) Capabilities() (capabilities []string) {
 	if r.config.Equipments.Enable {
 		capabilities = append(capabilities, "equipments")
 	}
-	if r.config.Timer.Enable {
-		capabilities = append(capabilities, "timer")
+	if r.config.Timers.Enable {
+		capabilities = append(capabilities, "timers")
 	}
 	if r.config.Lighting.Enable {
 		capabilities = append(capabilities, "lighting")

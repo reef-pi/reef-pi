@@ -86,7 +86,7 @@ export default class Lighting extends React.Component {
       lights.push(
         <div key={'light-' + i} className='row'>
           <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
-          <input type='button' id={'remove-light-' + light.id} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
+          <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
         </div>
       )
     }.bind(this))

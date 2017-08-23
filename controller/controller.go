@@ -71,8 +71,8 @@ func (r *ReefPi) loadSubsystems() error {
 	if r.config.Lighting.Enable {
 		r.subsystems[lighting.Bucket] = lighting.New(r.config.Lighting, r.store, r.telemetry)
 	}
-	if r.config.Timer.Enable {
-		r.subsystems[timer.Bucket] = timer.New(r.config.Timer, r.store, r.telemetry, eqs)
+	if r.config.Timers.Enable {
+		r.subsystems[timer.Bucket] = timer.New(r.config.Timers, r.store, r.telemetry, eqs)
 	}
 	if r.config.Camera.Enable {
 		r.subsystems[camera.Bucket] = camera.New(r.config.Camera)
