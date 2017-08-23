@@ -26,7 +26,7 @@ func (c *Controller) Get(id string) (Job, error) {
 }
 
 func (c *Controller) List() ([]Job, error) {
-	var jobs []Job
+	jobs := []Job{}
 	fn := func(v []byte) error {
 		var job Job
 		if err := json.Unmarshal(v, &job); err != nil {

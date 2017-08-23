@@ -16,6 +16,7 @@ export default class Timers extends React.Component {
       addTimer: false
     }
     this.timerList = this.timerList.bind(this)
+    this.createTimer = this.createTimer.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.removeTimer = this.removeTimer.bind(this)
@@ -63,12 +64,13 @@ export default class Timers extends React.Component {
     $.each(this.state.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item row'>
+					{}
           <Timer timer_id={timer.id} name={timer.name} equipment={timer.equipment} />
           <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
         </li>
         )
     }.bind(this))
-    return list
+    return(list);
   }
 
   equipmentList () {
@@ -117,7 +119,7 @@ export default class Timers extends React.Component {
     })
   }
 
-  createTmer () {
+  createTimer () {
     var payload = {
       name: $('#name').val(),
       day: $('#day').val(),
@@ -126,7 +128,7 @@ export default class Timers extends React.Component {
       second: $('#second').val(),
       on: (this.state.equipmentAction === 'on'),
       value: this.state.equipmentValue,
-      equipment: this.state.equipment
+      equipment: this.state.equipment.id
     }
     $.ajax({
       url: '/api/timers',
@@ -144,7 +146,7 @@ export default class Timers extends React.Component {
 
   toggleAddTimerDiv () {
     this.setState({
-      addJob: !this.state.addTimer
+      addTimer: !this.state.addTimer
     })
     $('#name').val('')
     $('#day').val('')
@@ -160,7 +162,7 @@ export default class Timers extends React.Component {
     }
 
     var dStyle = {
-      display: this.state.addJob ? 'block' : 'none'
+      display: this.state.addTimer ? 'block' : 'none'
     }
     var tooltip = (<Tooltip id='day-tooltip'> Any integer with 1 to 31, representing the day of the month or other valid specification</Tooltip>)
     var instance = <OverlayTrigger overlay={tooltip}>
@@ -212,7 +214,7 @@ export default class Timers extends React.Component {
                 </div>
               </div>
             </div>
-            <input type='button' value='add' onClick={this.saveJob} className='btn btn-outline-primary' />
+            <input type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
           </div>
         </div>
       </div>

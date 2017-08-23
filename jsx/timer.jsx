@@ -1,14 +1,3 @@
-/*
-  ID        string `json:"id"`
-  Minute    string `json:"minute"`
-  Day       string `json:"day"`
-  Hour      string `json:"hour"`
-  Second    string `json:"second"`
-  Equipment string `json:"equipment"`
-  On        bool   `json:"on"`
-  Name      string `json:"name"`
-
- */
 import React from 'react'
 import $ from 'jquery'
 
@@ -34,6 +23,9 @@ export default class Timer extends React.Component {
         console.log(err.toString())
       }
     })
+  }
+
+  update() {
   }
 
   componentDidMount () {
