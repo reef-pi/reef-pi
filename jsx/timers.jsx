@@ -64,13 +64,13 @@ export default class Timers extends React.Component {
     $.each(this.state.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item row'>
-					{}
+          {}
           <Timer timer_id={timer.id} name={timer.name} equipment={timer.equipment} />
           <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
         </li>
         )
     }.bind(this))
-    return(list);
+    return (list)
   }
 
   equipmentList () {

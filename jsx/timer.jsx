@@ -25,7 +25,7 @@ export default class Timer extends React.Component {
     })
   }
 
-  update() {
+  update () {
   }
 
   componentDidMount () {
