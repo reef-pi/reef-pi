@@ -16,8 +16,15 @@ func (r *ReefPi) setupAPI() error {
 	return nil
 }
 
+// API
 func (r *ReefPi) loadAPI(router *mux.Router) {
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
+	for _, sController := range r.subsystems {
+		sController.LoadAPI(router)
+	}
+	router.HandleFunc("/api/settings", r.GetConfig).Methods("GET")
+	router.HandleFunc("/api/settings", r.UpdateConfig).Methods("POST")
+
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}

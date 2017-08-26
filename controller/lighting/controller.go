@@ -10,6 +10,7 @@ import (
 )
 
 const Bucket = "lightings"
+const JackBucket = "jacks"
 
 type Light struct {
 	ID       string          `json:"id" yaml:"id"`
@@ -17,10 +18,6 @@ type Light struct {
 	Enable   bool            `json:"enable" yaml:"enable"`
 	Channels map[int]Channel `json:"channels" yaml:"channels"`
 	Jack     string          `json:"jack" yaml:"jack"`
-}
-
-var DefaultLight = Light{
-	Channels: make(map[int]Channel),
 }
 
 type Controller struct {
@@ -49,6 +46,7 @@ func (c *Controller) Start() {
 		return
 	}
 }
+
 func (c *Controller) Stop() {
 	if c.config.Enable {
 		c.StopCycle()
@@ -57,6 +55,9 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
+	if err := c.store.CreateBucket(JackBucket); err != nil {
+		return err
+	}
 	return c.store.CreateBucket(Bucket)
 }
 
@@ -64,14 +65,7 @@ func (c *Controller) Get(id string) (Light, error) {
 	var l Light
 	return l, c.store.Get(Bucket, id, &l)
 }
-func (c Controller) Jacks() ([]Jack, error) {
-	var jacks []Jack
-	for name, j := range c.config.Jacks {
-		j.Name = name
-		jacks = append(jacks, j)
-	}
-	return jacks, nil
-}
+
 func (c Controller) List() ([]Light, error) {
 	ls := []Light{}
 	fn := func(v []byte) error {
@@ -89,9 +83,9 @@ func (c *Controller) Create(l Light) error {
 	if l.Name == "" {
 		return fmt.Errorf("Light name can not be empty")
 	}
-	j, ok := c.config.Jacks[l.Jack]
-	if !ok {
-		return fmt.Errorf("Non existent jack: '%s'", l.Jack)
+	j, err := c.GetJack(l.Jack)
+	if err != nil {
+		return fmt.Errorf("Non existent jack: '%s'. Error: %s", l.Jack, err.Error())
 	}
 	if l.Channels == nil {
 		l.Channels = make(map[int]Channel)

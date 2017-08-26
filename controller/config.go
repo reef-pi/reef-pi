@@ -12,31 +12,30 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 type Config struct {
-	Name     string `yaml:"name"`
-	Database string `yaml:"database"`
-	DevMode  bool   `yaml:"dev_mode"`
+	Name     string `json:"name" yaml:"name"`
+	Database string `json:"database" yaml:"database"`
+	DevMode  bool   `json:"dev_mode" yaml:"dev_mode"`
 
-	Equipments  equipments.Config  `yaml:"equipments"`
-	Lighting    lighting.Config    `yaml:"lighting"`
-	Temperature temperature.Config `yaml:"temperature"`
-	ATO         ato.Config         `yaml:"ato"`
-	Timers      timer.Config       `yaml:"timers"`
-	System      system.Config      `yaml:"system"`
-	Camera      camera.Config      `yaml:"camera"`
-
-	AdafruitIO utils.AdafruitIO `yaml:"adafruitio"`
-	API        API              `yaml:"api"`
+	Equipments  equipments.Config  `json:"equipments" yaml:"equipments"`
+	Lighting    lighting.Config    `json:"lighting" yaml:"lighting"`
+	Temperature temperature.Config `json:"temperature" yaml:"temperature"`
+	ATO         ato.Config         `json:"ato" yaml:"ato"`
+	Timers      timer.Config       `json:"timers" yaml:"timers"`
+	System      system.Config      `json:"system" yaml:"system"`
+	Camera      camera.Config      `json:"camera" yaml:"camera"`
+	AdafruitIO  utils.AdafruitIO   `json:"adafruitio" yaml:"adafruitio"`
+	API         API                `json:"api" yaml:"api"`
 }
 
 var DefaultConfig = Config{
-	Database: "reef-pi.db",
-	Equipments: equipments.Config{
-		Outlets: make(map[string]equipments.Outlet),
-	},
-	Lighting: lighting.DefaultConfig,
+	Database:   "reef-pi.db",
+	Equipments: equipments.Config{},
+	Lighting:   lighting.DefaultConfig,
 	API: API{
 		ImageDirectory: "images/",
 		Address:        "localhost:8080",
@@ -44,10 +43,10 @@ var DefaultConfig = Config{
 }
 
 type API struct {
-	EnableAuth     bool        `yaml:"enable_auth"`
-	Address        string      `yaml:"address"`
-	Auth           auth.Config `yaml:"auth"`
-	ImageDirectory string      `yaml:"image_directory"`
+	EnableAuth     bool        `json:"enable_auth" yaml:"enable_auth"`
+	Address        string      `json:"address" yaml:"address"`
+	Auth           auth.Config `json:"auth" yaml:"auth"`
+	ImageDirectory string      `json:"image_directory" yaml:"image_directory"`
 }
 
 func ParseConfig(filename string) (Config, error) {
@@ -56,15 +55,38 @@ func ParseConfig(filename string) (Config, error) {
 	if err != nil {
 		return c, err
 	}
-	if err := yaml.Unmarshal(content, &c); err != nil {
-		return c, err
+	return c, yaml.Unmarshal(content, &c)
+}
+
+func (c *Config) loadFromDb(store utils.Store) error {
+	var conf Config
+	if err := store.Get(Bucket, "config", &conf); err != nil {
+		log.Println("WARNING: config not found. Error:", err)
+		log.Println("Initializing persistent config")
+		return c.storeInDB(store)
 	}
-	for k, o := range c.Equipments.Outlets {
-		o.Name = k
-		if o.Type == "" {
-			o.Type = "switch"
-		}
-		c.Equipments.Outlets[o.Name] = o
+	c = &conf
+	return nil
+}
+
+func (c *Config) storeInDB(store utils.Store) error {
+	if err := store.CreateBucket(Bucket); err != nil {
+		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
+		return err
 	}
-	return c, nil
+	return store.Update(Bucket, "config", c)
+}
+
+func (r *ReefPi) GetConfig(w http.ResponseWriter, req *http.Request) {
+	fn := func(_ string) (interface{}, error) {
+		return r.config, nil
+	}
+	utils.JSONGetResponse(fn, w, req)
+}
+func (r *ReefPi) UpdateConfig(w http.ResponseWriter, req *http.Request) {
+	var conf Config
+	fn := func(_ string) error {
+		return r.store.Update(Bucket, "config", conf)
+	}
+	utils.JSONUpdateResponse(&conf, fn, w, req)
 }

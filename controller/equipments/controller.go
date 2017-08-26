@@ -7,9 +7,8 @@ import (
 )
 
 type Config struct {
-	DevMode bool              `yaml:"dev_mode"`
-	Enable  bool              `yaml:"enable"`
-	Outlets map[string]Outlet `yaml:"outlets"`
+	DevMode bool `json:"dev_mode" yaml:"dev_mode"`
+	Enable  bool `json:"enable" yaml:"enable"`
 }
 
 type Controller struct {
@@ -27,7 +26,10 @@ func New(config Config, store utils.Store, telemetry *utils.Telemetry) *Controll
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	return c.store.CreateBucket(OutletBucket)
 }
 
 func (c *Controller) Start() {

@@ -5,6 +5,7 @@ import (
 )
 
 type Jack struct {
+	ID   string `json:"id" yaml:"id"`
 	Name string `json:"name" yaml:"name"`
 	Pins []int  `json:"pins" yaml:"pins"`
 }
@@ -22,13 +23,11 @@ type Channel struct {
 }
 
 type Config struct {
-	Enable   bool            `yaml:"enable"`
-	DevMode  bool            `yaml:"dev_mode"`
-	Interval time.Duration   `yaml:"interval"`
-	Jacks    map[string]Jack `yaml:"jacks"`
+	Enable   bool          `json:"enable" yaml:"enable"`
+	DevMode  bool          `json:"dev_mode" yaml:"dev_mode"`
+	Interval time.Duration `json:"interval" yaml:"interval"`
 }
 
 var DefaultConfig = Config{
 	Interval: 15 * time.Second,
-	Jacks:    make(map[string]Jack),
 }

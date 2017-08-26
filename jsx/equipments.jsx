@@ -89,10 +89,10 @@ export default class Equipments extends React.Component {
   }
 
   addEquipment () {
-    var outletName = this.state.outlets[this.state.selectedOutlet].name
+    var outletID = this.state.outlets[this.state.selectedOutlet].id
     var payload = {
       name: $('#equipmentName').val(),
-      outlet: String(outletName)
+      outlet: outletID
     }
     $.ajax({
       url: '/api/equipments',

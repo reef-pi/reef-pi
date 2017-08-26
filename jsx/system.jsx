@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import Admin from './admin.jsx'
+import Settings from './settings.jsx'
 
 export default class System extends React.Component {
   constructor (props) {
@@ -138,6 +139,9 @@ export default class System extends React.Component {
           </li>
           {this.showDisplay()}
         </ul>
+        <div className='row'>
+          <Settings />
+        </div>
         <div className='row'>
           <Admin />
         </div>
