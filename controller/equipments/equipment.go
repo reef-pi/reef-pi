@@ -34,28 +34,39 @@ func (c Controller) List() ([]Equipment, error) {
 }
 
 func (c *Controller) Create(eq Equipment) error {
-	outlet, ok := c.config.Outlets[eq.Outlet]
+	ok := false
+	var outlet Outlet
+	outlets, err := c.ListOutlets()
+	if err != nil {
+		log.Println("ERROR: Failed to load outlet list. Error:", err)
+		return err
+	}
+	for _, o := range outlets {
+		if o.ID == eq.Outlet {
+			ok = true
+			outlet = o
+			break
+		}
+	}
 	if !ok {
 		return fmt.Errorf("Outlet named %s not present", eq.Outlet)
 	}
 	if outlet.Equipment != "" {
 		return fmt.Errorf("Outlet is %s already used by equipment %s", eq.Outlet, outlet.Equipment)
 	}
-	outlet.Equipment = eq.Name
-	c.config.Outlets[eq.Outlet] = outlet
-
 	fn := func(id string) interface{} {
 		eq.ID = id
+		outlet.Equipment = id
 		return &eq
 	}
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
+	if err := c.UpdateOutlet(outlet.ID, outlet); err != nil {
+		log.Println("Failed to update outlet")
+		return err
+	}
 	return c.syncOutlet(eq)
-}
-
-func (c *Controller) syncOutlet(eq Equipment) error {
-	return c.ConfigureOutlet(eq.Outlet, eq.On)
 }
 
 func (c *Controller) Update(id string, eq Equipment) error {
@@ -71,14 +82,15 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	outlet, ok := c.config.Outlets[eq.Outlet]
-	if ok {
-		log.Printf("Detaching and stopping outlet %s from equipment %s\n.", outlet.Name, eq.Name)
-		c.ConfigureOutlet(outlet.Name, false)
-		outlet.Equipment = ""
-		c.config.Outlets[outlet.Name] = outlet
+	outlet, err := c.GetOutlet(eq.Outlet)
+	if err != nil {
+		return err
 	}
-	return c.store.Delete(Bucket, id)
+	outlet.Equipment = ""
+	if err := c.store.Delete(Bucket, id); err != nil {
+		return nil
+	}
+	return c.UpdateOutlet(outlet.ID, outlet)
 }
 
 func (c *Controller) synEquipments() {

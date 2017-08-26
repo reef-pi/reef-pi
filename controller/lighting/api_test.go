@@ -9,14 +9,10 @@ import (
 	"time"
 )
 
-func TestLightingController(t *testing.T) {
+func TestLightingAPI(t *testing.T) {
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
-	config.Jacks["J1"] = Jack{
-		Name: "J1",
-		Pins: []int{23},
-	}
 	telemetry := utils.TestTelemetry()
 	store, err := utils.TestDB()
 	if err != nil {
@@ -31,9 +27,20 @@ func TestLightingController(t *testing.T) {
 	c.Start()
 	time.Sleep(2 * time.Second)
 	c.Stop()
+	j1 := Jack{
+		Name: "J1",
+		Pins: []int{23},
+	}
+	if err := c.CreateJack(j1); err != nil {
+		t.Fatal(err)
+	}
+	jacks, err := c.ListJacks()
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	l := Light{
-		Jack: "J1",
+		Jack: jacks[0].ID,
 		Name: "Foo",
 	}
 	body := new(bytes.Buffer)

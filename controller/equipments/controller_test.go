@@ -11,9 +11,7 @@ import (
 func TestEquipmentController(t *testing.T) {
 	config := Config{
 		DevMode: true,
-		Outlets: make(map[string]Outlet),
 	}
-	config.Outlets["bar"] = Outlet{Name: "bar", Pin: 4}
 	telemetry := utils.TestTelemetry()
 	store, err := utils.TestDB()
 	if err != nil {
@@ -23,11 +21,19 @@ func TestEquipmentController(t *testing.T) {
 	c.Setup()
 	c.Start()
 	c.Stop()
+	o := Outlet{
+		Name: "bar",
+		Pin:  23,
+	}
+	if err := c.CreateOutlet(o); err != nil {
+		t.Fatal(err)
+	}
+
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
 	eq := Equipment{
 		Name:   "foo",
-		Outlet: "bar",
+		Outlet: "1",
 	}
 	if err := c.Setup(); err != nil {
 		t.Fatal("Failed to setup equipments subsystem. Error:", err)
@@ -80,16 +86,14 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal("Expected 1 outlet, found:", len(outlets))
 	}
 	var outlet Outlet
-	if err := tr.Do("GET", "/api/outlets/bar", strings.NewReader("{}"), &outlet); err != nil {
+	if err := tr.Do("GET", "/api/outlets/1", strings.NewReader("{}"), &outlet); err != nil {
 		t.Fatal("Failed to get individual outlet  using api. Error:", err)
 	}
 
-	a := OutletAction{
-		On: true,
-	}
+	o.Name = "updated"
 	buf := new(bytes.Buffer)
-	json.NewEncoder(buf).Encode(&a)
-	if err := tr.Do("POST", "/api/outlets/bar", buf, nil); err != nil {
+	json.NewEncoder(buf).Encode(&o)
+	if err := tr.Do("POST", "/api/outlets/1", buf, nil); err != nil {
 		t.Fatal("Failed to update individual outlet  using api. Error:", err)
 	}
 	c.synEquipments()

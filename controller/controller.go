@@ -13,6 +13,8 @@ import (
 	"log"
 )
 
+const Bucket = "reef-pi"
+
 type Subsystem interface {
 	Setup() error
 	LoadAPI(*mux.Router)
@@ -30,7 +32,11 @@ type ReefPi struct {
 func New(config Config) (*ReefPi, error) {
 	store, err := utils.NewStore(config.Database)
 	if err != nil {
-		log.Println("Failed to create store. DB:", config.Database)
+		log.Println("ERROR: Failed to create store. DB:", config.Database)
+		return nil, err
+	}
+	if err := config.loadFromDb(store); err != nil {
+		log.Println("ERROR: Failed to load config from db, Error:", err)
 		return nil, err
 	}
 	telemetry := utils.NewTelemetry(config.AdafruitIO)

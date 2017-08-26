@@ -57,7 +57,7 @@ export default class Lighting extends React.Component {
   }
 
   addLight () {
-    var jack = this.state.jacks[this.state.selectedJack].name
+    var jack = this.state.jacks[this.state.selectedJack].id
     var payload = {
       name: $('#lightName').val(),
       jack: String(jack)

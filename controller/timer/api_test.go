@@ -17,19 +17,23 @@ func TestTimerController(t *testing.T) {
 	}
 
 	eConfig := equipments.Config{
-		Outlets: make(map[string]equipments.Outlet),
 		DevMode: true,
 	}
-	eConfig.Outlets["bar"] = equipments.Outlet{
+	o := equipments.Outlet{
 		Name: "bar",
+		Pin:  24,
 	}
 	e := equipments.New(eConfig, store, utils.TestTelemetry())
-	eq := equipments.Equipment{
-		Name:   "Foo",
-		Outlet: "bar",
+	e.Setup()
+	if err := e.CreateOutlet(o); err != nil {
+		t.Fatal(err)
 	}
 
-	e.Setup()
+	eq := equipments.Equipment{
+		Name:   "Foo",
+		Outlet: "1",
+	}
+
 	if err := e.Create(eq); err != nil {
 		t.Fatal("Failed to create equipment. Error:", err)
 	}

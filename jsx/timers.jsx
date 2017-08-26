@@ -172,7 +172,7 @@ export default class Timers extends React.Component {
       <div>
         <ul>{this.timerList()}</ul>
         <div className='container'>
-          <input type='button' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
+          <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
           <div style={dStyle} className='container'>
             <div className='row'>
               <div className='col-sm-6'>
@@ -214,7 +214,7 @@ export default class Timers extends React.Component {
                 </div>
               </div>
             </div>
-            <input type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
+            <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
           </div>
         </div>
       </div>

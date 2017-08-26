@@ -20,10 +20,8 @@ function TestEquipments () {
     .click('input#HoBFilter')
     .wait(500)
     .click('input#HoBFilter')
-    .wait(500)
-    .click('input#equipment-0')
     .wait(2500)
-		.evaluate(function() {return 'equipments'})
+    .evaluate(function () { return 'equipments' })
     .end()
       .then(function (result) {
         console.log(result)

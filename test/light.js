@@ -13,7 +13,7 @@ function TestLights () {
     .wait(500)
     .click('button#jack')
     .wait(500)
-    .click('div#react-tabs-5 > div.container:nth-child(1) > div.container:nth-child(2) > div:nth-child(2) > div.dropdown.open.btn-group:nth-child(2) > ul.dropdown-menu:nth-child(2) > li:nth-child(2) > a:nth-child(1)')
+    .click('div#react-tabs-5 > div.container:nth-child(1) > div.container:nth-child(2) > div:nth-child(2) > div.dropdown.open.btn-group:nth-child(2) > ul.dropdown-menu:nth-child(2) > li:nth-child(1) > a:nth-child(1)')
 
     .wait(500)
     .click('input#createLight')
@@ -28,7 +28,7 @@ function TestLights () {
     .wait(1500)
     .click('input#remove-light-KessilA80')
     .wait(1500)
-		.evaluate(function() {return 'light'})
+    .evaluate(function () { return 'light' })
     .end()
       .then(function (result) {
         console.log(result)
