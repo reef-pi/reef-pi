@@ -15,7 +15,7 @@ function TestOutlets () {
     .wait(500)
     .click('input#createOutlet')
     .wait(2500)
-		.evaluate(function() {return 'outlets'})
+    .evaluate(function () { return 'outlets' })
     .end()
       .then(function (result) {
         console.log(result)

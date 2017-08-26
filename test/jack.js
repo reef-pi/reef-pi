@@ -1,7 +1,7 @@
 const Nightmare = require('nightmare')
 const nightmare = Nightmare({ show: true })
 
-function TestJacks() {
+function TestJacks () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
@@ -15,7 +15,7 @@ function TestJacks() {
     .wait(500)
     .click('input#createJack')
     .wait(2500)
-		.evaluate(function() {return 'jacks'})
+    .evaluate(function () { return 'jacks' })
     .end()
       .then(function (result) {
         console.log(result)

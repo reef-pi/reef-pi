@@ -28,7 +28,7 @@ function TestLights () {
     .wait(1500)
     .click('input#remove-light-KessilA80')
     .wait(1500)
-		.evaluate(function() {return 'light'})
+    .evaluate(function () { return 'light' })
     .end()
       .then(function (result) {
         console.log(result)

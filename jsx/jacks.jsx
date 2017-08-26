@@ -43,7 +43,7 @@ export default class Jacks extends React.Component {
   }
 
   save () {
-    var pins = $('#jackPins').val().split(',').map((p)=>{return(parseInt(p))})
+    var pins = $('#jackPins').val().split(',').map((p) => { return (parseInt(p)) })
     var payload = {
       name: $('#jackName').val(),
       pins: pins
@@ -96,10 +96,10 @@ export default class Jacks extends React.Component {
 
   render () {
     var dStyle = {
-      display: this.state.add ? 'block' : 'none',
+      display: this.state.add ? 'block' : 'none'
     }
-    var oStyle= {
-      border: 'solid 1px #aaa',
+    var oStyle = {
+      border: 'solid 1px #aaa'
     }
     return (
       <div className='container form-control' style={oStyle}>
@@ -116,19 +116,19 @@ export default class Jacks extends React.Component {
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Name </span>
-                  <input type='text' id='jackName' className='form-control'/>
+                  <input type='text' id='jackName' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Pins </span>
-                  <input type='text' id='jackPins' className='form-control'/>
+                  <input type='text' id='jackPins' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-1'>
                 <input type='button' id='createJack' value='add' onClick={this.save} className='btn btn-outline-primary' />
               </div>
-             </div>
+            </div>
           </div>
         </div>
       </div>

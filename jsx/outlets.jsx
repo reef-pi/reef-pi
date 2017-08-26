@@ -95,10 +95,10 @@ export default class Outlets extends React.Component {
 
   render () {
     var dStyle = {
-      display: this.state.add ? 'block' : 'none',
+      display: this.state.add ? 'block' : 'none'
     }
-    var oStyle= {
-      border: 'solid 1px #aaa',
+    var oStyle = {
+      border: 'solid 1px #aaa'
     }
     return (
       <div className='container form-control' style={oStyle}>
@@ -115,19 +115,19 @@ export default class Outlets extends React.Component {
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Name </span>
-                  <input type='text' id='outletName' className='form-control'/>
+                  <input type='text' id='outletName' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='text' id='outletPin' className='form-control'/>
+                  <input type='text' id='outletPin' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-1'>
                 <input type='button' id='createOutlet' value='add' onClick={this.save} className='btn btn-outline-primary' />
               </div>
-             </div>
+            </div>
           </div>
         </div>
       </div>

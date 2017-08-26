@@ -8,7 +8,7 @@ function TestSystem () {
     .click('li#react-tabs-8')
     .wait(500)
     .wait(2500)
-		.evaluate(function() {return 'system'})
+    .evaluate(function () { return 'system' })
     .end()
     .then(function (result) {
       console.log(result)
