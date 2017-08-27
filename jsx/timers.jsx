@@ -23,7 +23,6 @@ export default class Timers extends React.Component {
     this.setEquipment = this.setEquipment.bind(this)
     this.setEquipmentAction = this.setEquipmentAction.bind(this)
     this.toggleAddTimerDiv = this.toggleAddTimerDiv.bind(this)
-    console.log('Timers are loading')
   }
 
   componentDidMount () {

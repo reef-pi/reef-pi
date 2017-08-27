@@ -82,18 +82,18 @@ export default class Settings extends React.Component {
   }
 
   updateInterface (ev) {
-    var config = this.state.config
-    config.system.interface = ev.target.value
+    var settings = this.state.settings
+    settings.interface = ev.target.value
     this.setState({
-      config: config
+      settings: settings
     })
   }
 
   updateAddress (ev) {
-    var config = this.state.config
-    config.api.address = ev.target.value
+    var settings = this.state.settings
+    settings.address = ev.target.value
     this.setState({
-      config: config
+      settings: settings
     })
   }
 
@@ -113,17 +113,17 @@ export default class Settings extends React.Component {
   }
 
   updateName (ev) {
-    var config = this.state.config
-    config.system.name = ev.target.value
+    var settings = this.state.settings
+    settings.name = ev.target.value
     this.setState({
-      config: config
+      settings: settings
     })
   }
 
   jacksDiv () {
     var displayJack = false
     $.each(this.state.capabilities, function (i, c) {
-      if (c === 'lights') {
+      if (c === 'lighting') {
         displayJack = true
       }
     })
@@ -155,15 +155,15 @@ export default class Settings extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'> Name</div>
-          <div className='col-sm-2'><input id='system-name' value={this.state.name} type='text' onChange={this.updateName} className='form-control' /></div>
+          <div className='col-sm-2'><input id='system-name' value={this.state.settings.name} type='text' onChange={this.updateName} className='form-control' /></div>
         </div>
         <div className='row'>
           <div className='col-sm-2'> Interface</div>
-          <div className='col-sm-2'> <input type='text' value={this.state.interface} onChange={this.updateInterface} id='system-interface' className='form-control' /> </div>
+          <div className='col-sm-2'> <input type='text' value={this.state.settings.interface} onChange={this.updateInterface} id='system-interface' className='form-control' /> </div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Address</div>
-          <div className='col-sm-3'><input type='text' value={this.state.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
+          <div className='col-sm-3'><input type='text' value={this.state.settings.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
         </div>
         <div className='row'>
           <div className='input-group'>
@@ -172,11 +172,11 @@ export default class Settings extends React.Component {
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Timers</span>
-            <input type='checkbox' id='updateTimers' onChange={this.updateTimers} className='form-control' />
+            <input type='checkbox' id='updateTimers' onChange={this.updateTimers} className='form-control' defaultChecked={this.state.settings.timers} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Lighting</span>
-            <input type='checkbox' id='updateLighting' onChange={this.updateLighting} className='form-control' />
+            <input type='checkbox' id='updateLighting' onChange={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
           </div>
         </div>
         <div className='row'>
