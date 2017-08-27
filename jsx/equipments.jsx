@@ -128,6 +128,7 @@ export default class Equipments extends React.Component {
       addEquipment: !this.state.addEquipment
     })
     $('#outlet-name').val('')
+    $('#equipmentName').val('')
   }
 
   render () {

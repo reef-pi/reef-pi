@@ -7,11 +7,10 @@ import (
 const Bucket = "system"
 
 type Config struct {
-	Enable    bool   `yaml:"enable" json:"enable"`
-	Interface string `yaml:"interface" json:"interface"`
-	Name      string `yaml:"name" json:"name"`
-	Display   bool   `yaml:"display" json:"display"`
-	DevMode   bool   `yaml:"dev_mode"`
+	Interface string `json:"interface" yaml:"interface"`
+	Name      string `json:"name "yaml:"name"`
+	Display   bool   `json:"display" yaml:"display"`
+	DevMode   bool   `jsob:"dev_mode" yaml:"dev_mode"`
 }
 
 type Controller struct {

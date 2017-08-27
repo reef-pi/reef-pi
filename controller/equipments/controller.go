@@ -8,7 +8,6 @@ import (
 
 type Config struct {
 	DevMode bool `json:"dev_mode" yaml:"dev_mode"`
-	Enable  bool `json:"enable" yaml:"enable"`
 }
 
 type Controller struct {

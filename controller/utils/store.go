@@ -18,10 +18,12 @@ type Store interface {
 	CreateWithID(string, string, interface{}) error
 	Update(string, string, interface{}) error
 	Delete(string, string) error
+	ReOpen() error
 }
 
 type store struct {
-	db *bolt.DB
+	db    *bolt.DB
+	fname string
 }
 
 type Extractor func([]byte) (interface{}, error)
@@ -32,7 +34,20 @@ func NewStore(fname string) (*store, error) {
 		return nil, err
 	}
 	log.Println("DB:", fname)
-	return &store{db: db}, nil
+	return &store{
+		db:    db,
+		fname: fname,
+	}, nil
+}
+
+func (s *store) ReOpen() error {
+	db, err := bolt.Open(s.fname, 0600, &bolt.Options{Timeout: 3 * time.Second})
+	if err != nil {
+		return err
+	}
+	log.Println("Reopened DB:", s.fname)
+	s.db = db
+	return nil
 }
 
 func (s *store) Close() error {

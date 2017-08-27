@@ -91,6 +91,9 @@ export default class Light extends React.Component {
         this.setState({
           channels: channels
         })
+        if (ch.fixed) {
+          this.updateLight()
+        }
       }.bind(this)
     )
   }

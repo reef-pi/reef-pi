@@ -10,7 +10,6 @@ import (
 )
 
 func TestTimerController(t *testing.T) {
-	config := Config{}
 	store, err := utils.TestDB()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
@@ -42,7 +41,7 @@ func TestTimerController(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to list equipments. Error:", err)
 	}
-	c := New(config, store, utils.TestTelemetry(), e)
+	c := New(store, utils.TestTelemetry(), e)
 	c.Setup()
 	c.Start()
 	tr := utils.NewTestRouter()

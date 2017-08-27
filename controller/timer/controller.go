@@ -7,22 +7,16 @@ import (
 	"log"
 )
 
-type Config struct {
-	Enable bool `yaml:"enable"`
-}
-
 type Controller struct {
 	store      utils.Store
 	runner     *cron.Cron
 	cronIDs    map[string]cron.EntryID
-	config     Config
 	telemetry  *utils.Telemetry
 	equipments *equipments.Controller
 }
 
-func New(config Config, store utils.Store, telemetry *utils.Telemetry, e *equipments.Controller) *Controller {
+func New(store utils.Store, telemetry *utils.Telemetry, e *equipments.Controller) *Controller {
 	return &Controller{
-		config:     config,
 		runner:     cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 		telemetry:  telemetry,

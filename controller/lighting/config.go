@@ -23,7 +23,6 @@ type Channel struct {
 }
 
 type Config struct {
-	Enable   bool          `json:"enable" yaml:"enable"`
 	DevMode  bool          `json:"dev_mode" yaml:"dev_mode"`
 	Interval time.Duration `json:"interval" yaml:"interval"`
 }

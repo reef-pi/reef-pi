@@ -41,17 +41,11 @@ func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller
 }
 
 func (c *Controller) Start() {
-	if c.config.Enable {
-		go c.StartCycle()
-		return
-	}
+	go c.StartCycle()
 }
 
 func (c *Controller) Stop() {
-	if c.config.Enable {
-		c.StopCycle()
-		return
-	}
+	c.StopCycle()
 }
 
 func (c *Controller) Setup() error {

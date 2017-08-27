@@ -104,6 +104,7 @@ export default class LEDChannel extends React.Component {
         </div>
         <div className='row'>
           Auto<input type='checkbox' onChange={this.updateAuto} defaultChecked={this.state.auto} />
+          Reverse<input type='checkbox' onChange={this.updateInverse} defaultChecked={this.state.reverse} />
         </div>
         <div className='row' style={show24HourSliders}>
           {this.sliderList()}
