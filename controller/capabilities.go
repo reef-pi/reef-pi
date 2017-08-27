@@ -6,22 +6,22 @@ import (
 )
 
 func (r *ReefPi) Capabilities() (capabilities []string) {
-	if r.config.Equipments.Enable {
+	if r.settings.Equipments {
 		capabilities = append(capabilities, "equipments")
 	}
-	if r.config.Timers.Enable {
+	if r.settings.Timers {
 		capabilities = append(capabilities, "timers")
 	}
-	if r.config.Lighting.Enable {
+	if r.settings.Lighting {
 		capabilities = append(capabilities, "lighting")
 	}
-	if r.config.Temperature.Enable {
+	if r.settings.Temperature {
 		capabilities = append(capabilities, "temperature")
 	}
-	if r.config.ATO.Enable {
+	if r.settings.ATO {
 		capabilities = append(capabilities, "ato")
 	}
-	if r.config.System.Enable {
+	if r.settings.System {
 		capabilities = append(capabilities, "system")
 	}
 	return

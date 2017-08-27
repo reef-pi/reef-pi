@@ -26,7 +26,7 @@ func (c *Controller) ConfigureOutlet(id string, on bool) error {
 		return fmt.Errorf("Outlet named: '%s' does noy exist", err)
 	}
 	if c.config.DevMode {
-		log.Println("Dev mode on. Skipping:", id, "On:", on)
+		log.Println("Dev mode on. Skipping:", o.Name, "On:", on)
 		return nil
 	}
 	if on {

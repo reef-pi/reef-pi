@@ -25,24 +25,29 @@ type Subsystem interface {
 type ReefPi struct {
 	store      utils.Store
 	subsystems map[string]Subsystem
-	config     Config
+	settings   Settings
 	telemetry  *utils.Telemetry
 }
 
-func New(config Config) (*ReefPi, error) {
-	store, err := utils.NewStore(config.Database)
+func New(database string) (*ReefPi, error) {
+	store, err := utils.NewStore(database)
 	if err != nil {
-		log.Println("ERROR: Failed to create store. DB:", config.Database)
+		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
 	}
-	if err := config.loadFromDb(store); err != nil {
-		log.Println("ERROR: Failed to load config from db, Error:", err)
-		return nil, err
+	s, err := loadSettings(store)
+	if err != nil {
+		log.Println("Warning: Failed to load settings from db, Error:", err)
+		log.Println("Warning: Initializing default settings in database")
+		s = DefaultSettings
+		if err := initializeSettings(store); err != nil {
+			return nil, err
+		}
 	}
-	telemetry := utils.NewTelemetry(config.AdafruitIO)
+	telemetry := utils.NewTelemetry(s.AdafruitIO)
 	r := &ReefPi{
 		store:      store,
-		config:     config,
+		settings:   s,
 		telemetry:  telemetry,
 		subsystems: make(map[string]Subsystem),
 	}
@@ -50,38 +55,56 @@ func New(config Config) (*ReefPi, error) {
 }
 
 func (r *ReefPi) loadSubsystems() error {
-	if r.config.System.Enable {
-		r.subsystems[system.Bucket] = system.New(r.config.System, r.store, r.telemetry)
+	if r.settings.System {
+		conf := system.Config{
+			Interface: r.settings.Interface,
+			Name:      r.settings.Name,
+			Display:   r.settings.Display,
+			DevMode:   r.settings.DevMode,
+		}
+		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
 	}
 	eqs := new(equipments.Controller)
-	if r.config.Equipments.Enable {
-		eqs = equipments.New(r.config.Equipments, r.store, r.telemetry)
+	if r.settings.Equipments {
+		conf := equipments.Config{
+			DevMode: r.settings.DevMode,
+		}
+		eqs = equipments.New(conf, r.store, r.telemetry)
 		r.subsystems[equipments.Bucket] = eqs
 	}
-	if r.config.Temperature.Enable {
-		temp, err := temperature.New(r.config.Temperature, r.store, r.telemetry)
+
+	if r.settings.Temperature {
+		conf := temperature.Config{}
+		temp, err := temperature.New(conf, r.store, r.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize temperature controller")
 			return err
 		}
 		r.subsystems[temperature.Bucket] = temp
 	}
-	if r.config.ATO.Enable {
-		a, err := ato.New(r.config.ATO, r.store, r.telemetry)
+	if r.settings.ATO {
+		conf := ato.Config{}
+		a, err := ato.New(conf, r.store, r.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize ato controller")
 			return err
 		}
 		r.subsystems[ato.Bucket] = a
 	}
-	if r.config.Lighting.Enable {
-		r.subsystems[lighting.Bucket] = lighting.New(r.config.Lighting, r.store, r.telemetry)
+	if r.settings.Lighting {
+		conf := lighting.Config{
+			DevMode:  r.settings.DevMode,
+			Interval: r.settings.LightInterval,
+		}
+		r.subsystems[lighting.Bucket] = lighting.New(conf, r.store, r.telemetry)
 	}
-	if r.config.Timers.Enable {
-		r.subsystems[timer.Bucket] = timer.New(r.config.Timers, r.store, r.telemetry, eqs)
+
+	if r.settings.Timers {
+		r.subsystems[timer.Bucket] = timer.New(r.store, r.telemetry, eqs)
 	}
-	if r.config.Camera.Enable {
-		r.subsystems[camera.Bucket] = camera.New(r.config.Camera)
+	if r.settings.Camera {
+		conf := camera.Config{}
+		r.subsystems[camera.Bucket] = camera.New(conf)
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {
@@ -103,15 +126,16 @@ func (r *ReefPi) Start() error {
 	return nil
 }
 
-func (r *ReefPi) shutDownSubsystems() {
+func (r *ReefPi) unloadSubsystems() {
 	for sName, sController := range r.subsystems {
 		sController.Stop()
-		log.Println("Successfully stopped", sName, " subsystem:")
+		delete(r.subsystems, sName)
+		log.Println("Successfully unloaded", sName, " subsystem:")
 	}
 }
 
 func (r *ReefPi) Stop() error {
-	r.shutDownSubsystems()
+	r.unloadSubsystems()
 	r.store.Close()
 	log.Println("reef-pi is shutting down")
 	return nil

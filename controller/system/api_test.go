@@ -10,7 +10,6 @@ import (
 
 func TestSystemController(t *testing.T) {
 	config := Config{
-		Enable:    true,
 		DevMode:   true,
 		Name:      "test-system",
 		Interface: "lo0",

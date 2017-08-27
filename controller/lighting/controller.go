@@ -41,17 +41,11 @@ func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller
 }
 
 func (c *Controller) Start() {
-	if c.config.Enable {
-		go c.StartCycle()
-		return
-	}
+	go c.StartCycle()
 }
 
 func (c *Controller) Stop() {
-	if c.config.Enable {
-		c.StopCycle()
-		return
-	}
+	c.StopCycle()
 }
 
 func (c *Controller) Setup() error {
@@ -136,9 +130,9 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) syncLight(light Light) {
-	for pin, ch := range light.Channels {
+	for _, ch := range light.Channels {
 		if !ch.Auto {
-			c.UpdateChannel(pin, ch.Fixed)
+			c.UpdateChannel(ch, ch.Fixed)
 			c.telemetry.EmitMetric(ch.Name, ch.Fixed)
 			return
 		}
@@ -151,7 +145,7 @@ func (c *Controller) syncLight(light Light) {
 			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
 			v = ch.MaxThreshold
 		}
-		c.UpdateChannel(pin, v)
+		c.UpdateChannel(ch, v)
 		c.telemetry.EmitMetric(ch.Name, v)
 	}
 }

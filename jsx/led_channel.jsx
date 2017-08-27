@@ -17,6 +17,7 @@ export default class LEDChannel extends React.Component {
     this.curry = this.curry.bind(this)
     this.update = this.update.bind(this)
     this.updateAuto = this.updateAuto.bind(this)
+    this.updateReverse = this.updateReverse.bind(this)
     this.updateFixedValue = this.updateFixedValue.bind(this)
     this.getFixedValue = this.getFixedValue.bind(this)
   }
@@ -24,6 +25,13 @@ export default class LEDChannel extends React.Component {
   updateAuto (ev) {
     this.setState({
       auto: ev.target.checked
+    })
+    this.update()
+  }
+
+  updateReverse (ev) {
+    this.setState({
+      reverse: ev.target.checked
     })
     this.update()
   }
@@ -104,6 +112,7 @@ export default class LEDChannel extends React.Component {
         </div>
         <div className='row'>
           Auto<input type='checkbox' onChange={this.updateAuto} defaultChecked={this.state.auto} />
+          Reverse<input type='checkbox' onChange={this.updateReverse} defaultChecked={this.state.reverse} />
         </div>
         <div className='row' style={show24HourSliders}>
           {this.sliderList()}

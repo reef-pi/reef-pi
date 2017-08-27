@@ -42,7 +42,7 @@ func main() {
 		}
 		config = conf
 	}
-	c, err := controller.New(config)
+	c, err := controller.New(config.Database)
 	if err != nil {
 		log.Fatal("Failed to initialize controller. ERROR:", err)
 	}
