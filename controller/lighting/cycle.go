@@ -72,11 +72,14 @@ func (c *Controller) StopCycle() {
 	log.Println("Stopped lighting cycle")
 }
 
-func (c *Controller) UpdateChannel(pin, v int) {
+func (c *Controller) UpdateChannel(ch Channel, v int) {
 	if c.config.DevMode {
 		log.Println("Lighting sub-system: skipping pwm setting due to dev mode.")
 		return
 	}
-	log.Println("Setting pwm value:", v, " at pin:", pin)
-	c.pwm.Set(pin, v)
+	if ch.Reverse {
+		v = 100 - v
+	}
+	log.Println("Setting pwm value:", v, " at pin:", ch.Pin)
+	c.pwm.Set(ch.Pin, v)
 }
