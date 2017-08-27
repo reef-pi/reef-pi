@@ -31,7 +31,7 @@ export default class LEDChannel extends React.Component {
 
   updateReverse (ev) {
     this.setState({
-     reverse: ev.target.checked
+      reverse: ev.target.checked
     })
     this.update()
   }
