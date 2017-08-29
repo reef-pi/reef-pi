@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/ato"
 	"github.com/reef-pi/reef-pi/controller/camera"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/system"
@@ -24,6 +25,8 @@ type Subsystem interface {
 
 type ReefPi struct {
 	store      utils.Store
+	jacks      *connectors.Jacks
+	outlets    *connectors.Outlets
 	subsystems map[string]Subsystem
 	settings   Settings
 	telemetry  *utils.Telemetry
@@ -45,10 +48,15 @@ func New(database string) (*ReefPi, error) {
 		}
 	}
 	telemetry := utils.NewTelemetry(s.AdafruitIO)
+	jacks := connectors.NewJacks(store)
+	outlets := connectors.NewOutlets(store)
+	outlets.DevMode = s.DevMode
 	r := &ReefPi{
 		store:      store,
 		settings:   s,
 		telemetry:  telemetry,
+		jacks:      jacks,
+		outlets:    outlets,
 		subsystems: make(map[string]Subsystem),
 	}
 	return r, nil
@@ -69,7 +77,7 @@ func (r *ReefPi) loadSubsystems() error {
 		conf := equipments.Config{
 			DevMode: r.settings.DevMode,
 		}
-		eqs = equipments.New(conf, r.store, r.telemetry)
+		eqs = equipments.New(conf, r.outlets, r.store, r.telemetry)
 		r.subsystems[equipments.Bucket] = eqs
 	}
 
@@ -96,7 +104,7 @@ func (r *ReefPi) loadSubsystems() error {
 			DevMode:  r.settings.DevMode,
 			Interval: r.settings.LightInterval,
 		}
-		r.subsystems[lighting.Bucket] = lighting.New(conf, r.store, r.telemetry)
+		r.subsystems[lighting.Bucket] = lighting.New(conf, r.jacks, r.store, r.telemetry)
 	}
 
 	if r.settings.Timers {
@@ -118,6 +126,12 @@ func (r *ReefPi) loadSubsystems() error {
 }
 
 func (r *ReefPi) Start() error {
+	if err := r.jacks.Setup(); err != nil {
+		return err
+	}
+	if err := r.outlets.Setup(); err != nil {
+		return err
+	}
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}

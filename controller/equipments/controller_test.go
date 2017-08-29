@@ -3,6 +3,7 @@ package equipments
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
@@ -17,20 +18,26 @@ func TestEquipmentController(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	c := New(config, store, telemetry)
+	outlets := connectors.NewOutlets(store)
+	outlets.DevMode = true
+	if err := outlets.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	c := New(config, outlets, store, telemetry)
 	c.Setup()
 	c.Start()
 	c.Stop()
-	o := Outlet{
+	o := connectors.Outlet{
 		Name: "bar",
 		Pin:  23,
 	}
-	if err := c.CreateOutlet(o); err != nil {
+	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
 
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
+	outlets.LoadAPI(tr.Router)
 	eq := Equipment{
 		Name:   "foo",
 		Outlet: "1",
@@ -58,8 +65,7 @@ func TestEquipmentController(t *testing.T) {
 	if err := tr.Do("GET", "/api/equipments/"+id, strings.NewReader("{}"), &e1); err != nil {
 		t.Fatal("GET '/api/equipments/<id>' API failure. Error:", err)
 	}
-
-	if err := c.ConfigureOutlet(eq.Outlet, true); err != nil {
+	if err := c.outlets.Configure(eq.Outlet, true); err != nil {
 		t.Fatal("Failed to configure outlet. Error:", err)
 	}
 	es, err := c.List()
@@ -78,14 +84,14 @@ func TestEquipmentController(t *testing.T) {
 	if err := tr.Do("POST", "/api/equipments/"+eq.ID, body, nil); err != nil {
 		t.Fatal("Failed to update  equipment using api. Error:", err)
 	}
-	var outlets []Outlet
-	if err := tr.Do("GET", "/api/outlets", strings.NewReader("{}"), &outlets); err != nil {
+	var outletsList []connectors.Outlet
+	if err := tr.Do("GET", "/api/outlets", strings.NewReader("{}"), &outletsList); err != nil {
 		t.Fatal("Failed to list outlets  using api")
 	}
-	if len(outlets) != 1 {
-		t.Fatal("Expected 1 outlet, found:", len(outlets))
+	if len(outletsList) != 1 {
+		t.Fatal("Expected 1 outlet, found:", len(outletsList))
 	}
-	var outlet Outlet
+	var outlet connectors.Outlet
 	if err := tr.Do("GET", "/api/outlets/1", strings.NewReader("{}"), &outlet); err != nil {
 		t.Fatal("Failed to get individual outlet  using api. Error:", err)
 	}

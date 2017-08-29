@@ -80,7 +80,7 @@ export default class Outlets extends React.Component {
     var list = []
     $.each(this.state.outlets, function (i, o) {
       list.push(
-        <div className='row' key={o.name}>
+        <div className='row'key={o.name}>
           <div className='col-sm-2'>
             {o.name}
           </div>
@@ -101,12 +101,12 @@ export default class Outlets extends React.Component {
       border: 'solid 1px #aaa'
     }
     return (
-      <div className='container form-control' style={oStyle}>
+      <div className='container' style={oStyle}>
+        <label className='h6'>Outlets</label>
         <div className='row'>
-          <label>Outlets</label>
-        </div>
-        <div className='row'>
-          {this.listOutlets()}
+          <div className='container'>
+            {this.listOutlets()}
+          </div>
         </div>
         <div className='row'>
           <input id='add_outlet' type='button' value={this.state.add ? '-' : '+'} onClick={this.add} className='btn btn-outline-success' />

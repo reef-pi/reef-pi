@@ -3,6 +3,7 @@ package lighting
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
@@ -18,7 +19,11 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	c := New(config, store, telemetry)
+	jacks := connectors.NewJacks(store)
+	if err := jacks.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	c := New(config, jacks, store, telemetry)
 	if err := c.Setup(); err != nil {
 		t.Fatal("Failed to setup lighting controller")
 	}
@@ -27,20 +32,20 @@ func TestLightingAPI(t *testing.T) {
 	c.Start()
 	time.Sleep(2 * time.Second)
 	c.Stop()
-	j1 := Jack{
+	j1 := connectors.Jack{
 		Name: "J1",
 		Pins: []int{23},
 	}
-	if err := c.CreateJack(j1); err != nil {
+	if err := c.jacks.Create(j1); err != nil {
 		t.Fatal(err)
 	}
-	jacks, err := c.ListJacks()
+	jacksList, err := c.jacks.List()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	l := Light{
-		Jack: jacks[0].ID,
+		Jack: jacksList[0].ID,
 		Name: "Foo",
 	}
 	body := new(bytes.Buffer)

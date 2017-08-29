@@ -23,7 +23,8 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	}
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
-
+	r.outlets.LoadAPI(router)
+	r.jacks.LoadAPI(router)
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}
