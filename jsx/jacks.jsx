@@ -44,10 +44,10 @@ export default class Jacks extends React.Component {
 
   save () {
     var pins = $('#jackPins').val().split(',').map((p) => { return (parseInt(p)) })
-    for(var i=0; i< pins.length; i++){
-      if(isNaN(pins[i])){
-        alert('Use only comma separated numbers');
-        return;
+    for (var i = 0; i < pins.length; i++) {
+      if (isNaN(pins[i])) {
+        window.alert('Use only comma separated numbers')
+        return
       }
     }
     var payload = {
