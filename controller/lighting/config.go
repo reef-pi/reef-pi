@@ -4,12 +4,6 @@ import (
 	"time"
 )
 
-type Jack struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
-	Pins []int  `json:"pins" yaml:"pins"`
-}
-
 type Channel struct {
 	Name         string `json:"name" yaml:"name"`
 	Pin          int    `json:"pin" yaml:"pin"`

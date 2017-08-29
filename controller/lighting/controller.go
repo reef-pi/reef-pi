@@ -3,6 +3,7 @@ package lighting
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
@@ -10,7 +11,6 @@ import (
 )
 
 const Bucket = "lightings"
-const JackBucket = "jacks"
 
 type Light struct {
 	ID       string          `json:"id" yaml:"id"`
@@ -22,6 +22,7 @@ type Light struct {
 
 type Controller struct {
 	store     utils.Store
+	jacks     *connectors.Jacks
 	pwm       *utils.PWM
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
@@ -30,10 +31,11 @@ type Controller struct {
 	mu        *sync.Mutex
 }
 
-func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
+func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *utils.Telemetry) *Controller {
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,
+		jacks:     jacks,
 		config:    conf,
 		stopCh:    make(chan struct{}),
 		mu:        &sync.Mutex{},
@@ -49,9 +51,6 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(JackBucket); err != nil {
-		return err
-	}
 	return c.store.CreateBucket(Bucket)
 }
 
@@ -77,7 +76,7 @@ func (c *Controller) Create(l Light) error {
 	if l.Name == "" {
 		return fmt.Errorf("Light name can not be empty")
 	}
-	j, err := c.GetJack(l.Jack)
+	j, err := c.jacks.Get(l.Jack)
 	if err != nil {
 		return fmt.Errorf("Non existent jack: '%s'. Error: %s", l.Jack, err.Error())
 	}

@@ -3,6 +3,7 @@ package equipments
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"log"
 )
 
@@ -35,8 +36,8 @@ func (c Controller) List() ([]Equipment, error) {
 
 func (c *Controller) Create(eq Equipment) error {
 	ok := false
-	var outlet Outlet
-	outlets, err := c.ListOutlets()
+	var outlet connectors.Outlet
+	outlets, err := c.outlets.List()
 	if err != nil {
 		log.Println("ERROR: Failed to load outlet list. Error:", err)
 		return err
@@ -62,11 +63,15 @@ func (c *Controller) Create(eq Equipment) error {
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
-	if err := c.UpdateOutlet(outlet.ID, outlet); err != nil {
-		log.Println("Failed to update outlet")
+	if err := c.outlets.Update(eq.Outlet, outlet); err != nil {
+		log.Println("Failed to configure outlet")
 		return err
 	}
-	return c.syncOutlet(eq)
+	if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		log.Println("Failed to configure outlet")
+		return err
+	}
+	return nil
 }
 
 func (c *Controller) Update(id string, eq Equipment) error {
@@ -74,7 +79,7 @@ func (c *Controller) Update(id string, eq Equipment) error {
 	if err := c.store.Update(Bucket, id, eq); err != nil {
 		return err
 	}
-	return c.syncOutlet(eq)
+	return c.outlets.Configure(eq.Outlet, eq.On)
 }
 
 func (c *Controller) Delete(id string) error {
@@ -82,7 +87,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	outlet, err := c.GetOutlet(eq.Outlet)
+	outlet, err := c.outlets.Get(eq.Outlet)
 	if err != nil {
 		return err
 	}
@@ -90,7 +95,7 @@ func (c *Controller) Delete(id string) error {
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return nil
 	}
-	return c.UpdateOutlet(outlet.ID, outlet)
+	return c.outlets.Update(outlet.ID, outlet)
 }
 
 func (c *Controller) synEquipments() {
@@ -100,7 +105,7 @@ func (c *Controller) synEquipments() {
 		return
 	}
 	for _, eq := range eqs {
-		if err := c.syncOutlet(eq); err != nil {
+		if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
 			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
 		}
 	}

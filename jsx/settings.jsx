@@ -17,10 +17,9 @@ export default class Settings extends React.Component {
     this.updateAddress = this.updateAddress.bind(this)
     this.updateEquipments = this.updateEquipments.bind(this)
     this.updateTimers = this.updateTimers.bind(this)
+    this.updateDevMode = this.updateDevMode.bind(this)
     this.updateLighting = this.updateLighting.bind(this)
     this.update = this.update.bind(this)
-    this.jacksDiv = this.jacksDiv.bind(this)
-    this.outletsDiv = this.outletsDiv.bind(this)
   }
 
   loadCapabilities () {
@@ -42,6 +41,14 @@ export default class Settings extends React.Component {
   updateLighting (ev) {
     var settings = this.state.settings
     settings.lighting = ev.target.checked
+    this.setState({
+      settings: settings
+    })
+  }
+
+  updateDevMode (ev) {
+    var settings = this.state.settings
+    settings.dev_mode = ev.target.checked
     this.setState({
       settings: settings
     })
@@ -120,38 +127,14 @@ export default class Settings extends React.Component {
     })
   }
 
-  jacksDiv () {
-    var displayJack = false
-    $.each(this.state.capabilities, function (i, c) {
-      if (c === 'lighting') {
-        displayJack = true
-      }
-    })
-    if (displayJack) {
-      return (<Jacks />)
-    }
-  }
-
-  outletsDiv () {
-    var displayOutlet = false
-    $.each(this.state.capabilities, function (i, c) {
-      if (c === 'equipments') {
-        displayOutlet = true
-      }
-    })
-    if (displayOutlet) {
-      return (<Outlets />)
-    }
-  }
-
   render () {
     return (
       <div className='container'>
         <div className='row'>
-          {this.outletsDiv()}
+          <Outlets />
         </div>
         <div className='row'>
-          {this.jacksDiv()}
+          <Jacks />
         </div>
         <div className='row'>
           <div className='col-sm-2'> Name</div>
@@ -177,6 +160,10 @@ export default class Settings extends React.Component {
           <div className='input-group'>
             <span className='input-group-addon'>Lighting</span>
             <input type='checkbox' id='updateLighting' onChange={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
+          </div>
+          <div className='input-group'>
+            <span className='input-group-addon'>DevMode</span>
+            <input type='checkbox' id='updateDevMode' onChange={this.updateDevMode} className='form-control' defaultChecked={this.state.settings.dev_mode} />
           </div>
         </div>
         <div className='row'>

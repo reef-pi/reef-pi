@@ -102,12 +102,14 @@ export default class Jacks extends React.Component {
       border: 'solid 1px #aaa'
     }
     return (
-      <div className='container form-control' style={oStyle}>
+      <div className='container' style={oStyle}>
         <div className='row'>
-          <label>Jacks</label>
+          <label className='h6'>Jacks</label>
         </div>
         <div className='row'>
-          {this.listJacks()}
+          <div className='container'>
+            {this.listJacks()}
+          </div>
         </div>
         <div className='row'>
           <input id='add_jack' type='button' value={this.state.add ? '-' : '+'} onClick={this.add} className='btn btn-outline-success' />

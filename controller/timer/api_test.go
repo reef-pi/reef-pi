@@ -3,6 +3,7 @@ package timer
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
@@ -18,13 +19,18 @@ func TestTimerController(t *testing.T) {
 	eConfig := equipments.Config{
 		DevMode: true,
 	}
-	o := equipments.Outlet{
+	o := connectors.Outlet{
 		Name: "bar",
 		Pin:  24,
 	}
-	e := equipments.New(eConfig, store, utils.TestTelemetry())
+	outlets := connectors.NewOutlets(store)
+	outlets.DevMode = true
+	if err := outlets.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	e := equipments.New(eConfig, outlets, store, utils.TestTelemetry())
 	e.Setup()
-	if err := e.CreateOutlet(o); err != nil {
+	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
 
