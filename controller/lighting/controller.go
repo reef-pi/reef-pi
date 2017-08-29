@@ -31,7 +31,13 @@ type Controller struct {
 	mu        *sync.Mutex
 }
 
-func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *utils.Telemetry) *Controller {
+func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+	pwmConf := utils.DefaultPWMConfig
+	pwmConf.DevMode = conf.DevMode
+	pwm, err := utils.NewPWM(pwmConf)
+	if err != nil {
+		return nil, err
+	}
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,
@@ -39,7 +45,8 @@ func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *uti
 		config:    conf,
 		stopCh:    make(chan struct{}),
 		mu:        &sync.Mutex{},
-	}
+		pwm:       pwm,
+	}, nil
 }
 
 func (c *Controller) Start() {

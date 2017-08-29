@@ -104,7 +104,11 @@ func (r *ReefPi) loadSubsystems() error {
 			DevMode:  r.settings.DevMode,
 			Interval: r.settings.LightInterval,
 		}
-		r.subsystems[lighting.Bucket] = lighting.New(conf, r.jacks, r.store, r.telemetry)
+		l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
+		if err != nil {
+			return err
+		}
+		r.subsystems[lighting.Bucket] = l
 	}
 
 	if r.settings.Timers {

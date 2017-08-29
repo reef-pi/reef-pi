@@ -73,10 +73,6 @@ func (c *Controller) StopCycle() {
 }
 
 func (c *Controller) UpdateChannel(ch Channel, v int) {
-	if c.config.DevMode {
-		log.Println("Lighting sub-system: skipping pwm setting due to dev mode.")
-		return
-	}
 	if ch.Reverse {
 		v = 100 - v
 	}

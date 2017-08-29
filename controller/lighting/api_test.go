@@ -23,7 +23,10 @@ func TestLightingAPI(t *testing.T) {
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c := New(config, jacks, store, telemetry)
+	c, err := New(config, jacks, store, telemetry)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if err := c.Setup(); err != nil {
 		t.Fatal("Failed to setup lighting controller")
 	}
