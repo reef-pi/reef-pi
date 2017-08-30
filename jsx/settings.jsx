@@ -19,6 +19,7 @@ export default class Settings extends React.Component {
     this.updateTimers = this.updateTimers.bind(this)
     this.updateDevMode = this.updateDevMode.bind(this)
     this.updateLighting = this.updateLighting.bind(this)
+    this.updateATO = this.updateATO.bind(this)
     this.update = this.update.bind(this)
   }
 
@@ -35,6 +36,14 @@ export default class Settings extends React.Component {
       error: function (xhr, status, err) {
         console.log(err.toString())
       }
+    })
+  }
+
+  updateATO (ev) {
+    var settings = this.state.settings
+    settings.ato = ev.target.checked
+    this.setState({
+      settings: settings
     })
   }
 
@@ -160,6 +169,10 @@ export default class Settings extends React.Component {
           <div className='input-group'>
             <span className='input-group-addon'>Lighting</span>
             <input type='checkbox' id='updateLighting' onChange={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
+          </div>
+          <div className='input-group'>
+            <span className='input-group-addon'>ATO</span>
+            <input type='checkbox' id='updateATO' onChange={this.updateATO} className='form-control' defaultChecked={this.state.settings.ato} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>DevMode</span>

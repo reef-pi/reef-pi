@@ -5,26 +5,66 @@ export default class ATO extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      ato_configs: [],
-      addATO: false,
-      new_ato_config: {}
+      ato: {}
     }
-    this.addATO = this.addATO.bind(this)
     this.fetchData = this.fetchData.bind(this)
-    this.listATOConfigs = this.listATOConfigs.bind(this)
-    this.removeATO = this.removeATO.bind(this)
-    this.toggleAddATODiv = this.toggleAddATODiv.bind(this)
-    this.configureATO = this.configureATO.bind(this)
+    this.update = this.update.bind(this)
+
+    this.updateSensor = this.updateSensor.bind(this)
+    this.updatePump = this.updatePump.bind(this)
+    this.updateCheckInterval = this.updateCheckInterval.bind(this)
+    this.updateControl = this.updateControl.bind(this)
+    this.updateEnable = this.updateEnable.bind(this)
   }
+
+  updateSensor(ev) {
+    var sensor = parseInt(ev.target.value)
+    var ato = this.state.ato
+    ato.sensor = sensor
+    this.setState({
+      ato: ato
+    })
+  }
+  updatePump(ev) {
+    var pump = parseInt(ev.target.value)
+    var ato = this.state.ato
+    ato.pump = pump
+    this.setState({
+      ato: ato
+    })
+  }
+  updateCheckInterval(ev) {
+    var check_interval = parseInt(ev.target.value)
+    var ato = this.state.ato
+    ato.check_interval = check_interval
+    this.setState({
+      ato: ato
+    })
+  }
+  updateControl(ev) {
+    var ato = this.state.ato
+    ato.control = ev.target.checked
+    this.setState({
+      ato: ato
+    })
+  }
+  updateEnable(ev) {
+    var ato = this.state.ato
+    ato.enable = ev.target.checked
+    this.setState({
+      ato: ato
+    })
+  }
+
 
   fetchData () {
     $.ajax({
-      url: '/api/ato_configs',
+      url: '/api/ato',
       type: 'GET',
       dataType: 'json',
       success: function (data) {
         this.setState({
-          ato_configs: data
+          ato: data
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -32,41 +72,12 @@ export default class ATO extends React.Component {
       }
     })
   }
-
-  addATO () {
-    var payload = {
-      name: $('#ato-name').val(),
-      sensor_pin: Number($('#sensor-pin').val()),
-      pump_pin: Number($('#pump-pin').val()),
-      frequency: Number($('#frequency').val())
-    }
-    payload['high_relay'] = $('#high-relay').checked
+ 
+  update (ev) {
     $.ajax({
-      url: '/api/ato_configs',
-      type: 'PUT',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.toggleAddATODiv()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  toggleAddATODiv () {
-    this.setState({
-      addATO: !this.state.addATO
-    })
-    $('#outlet-name').val('')
-  }
-
-  removeATO (ev) {
-    var atoID = ev.target.id.split('-')[1]
-    $.ajax({
-      url: '/api/ato_configs/' + atoID,
-      type: 'DELETE',
+      url: '/api/ato',
+      type: 'POST',
+      data: JSON.stringify(this.state.ato),
       success: function (data) {
         this.fetchData()
       }.bind(this),
@@ -80,65 +91,31 @@ export default class ATO extends React.Component {
     this.fetchData()
   }
 
-  configureATO (ev) {
-    var atoID = ev.target.id.split('-')[2]
-    $.ajax({
-      url: '/api/ato/' + atoID + '/' + ev.target.value,
-      type: 'POST',
-      success: function (data) {
-        this.fetchData()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
-    })
-  }
-
-  listATOConfigs () {
-    var rows = []
-    $.each(this.state.ato_configs, function (k, v) {
-      rows.push(
-        <li className='list-group-item row' key={v.id}>
-          <div className='col-sm-7'>{v.name} </div>
-          <div className='col-sm-1'><input id={'ato-action-' + v.id} type='button' value={v.enabled ? 'stop' : 'start'} onClick={this.configureATO} className='btn btn-outline-danger' /> </div>
-          <div className='col-sm-1'><input id={'ato-' + v.id} type='button' value='delete' onClick={this.removeATO} className='btn btn-outline-danger' /> </div>
-        </li>
-        )
-    }.bind(this))
-    return rows
-  }
-
   render () {
-    var dStyle = {
-      display: this.state.addATO ? 'block' : 'none'
-    }
     return (
       <div className='container'>
-        <ul className='list-group'>
-          {this.listATOConfigs()}
-        </ul>
-        <input className='btn btn-outline-success' type='button' value={this.state.addATO ? '-' : '+'} onClick={this.toggleAddATODiv} />
-        <div className='container' style={dStyle}>
-          <div className='row'>
-            <div className='col-sm-2'>Name</div>
-            <input type='text' id='ato-name' className='col-sm-2' />
-            <label className='col-sm-2' ><input className='checkbox' type='checkbox' id='high-relay' /> High Relay</label>
-          </div>
-          <div className='row'>
-            <div className='col-sm-3'>Check Frequency (in seconds)</div>
-            <input type='text' id='frequency' className='col-sm-1' />
-          </div>
-          <div className='row'>
-            <div className='col-sm-2'>Float switch</div>
-            <input type='text' id='sensor-pin' className='col-sm-2' />
-          </div>
-          <div className='row'>
-            <div className='col-sm-2'>Pump</div>
-            <input type='text' id='pump-pin' className='col-sm-2' />
-          </div>
-          <div className='row'>
-            <input type='button' value='add' onClick={this.addATO} className='btn btn-outline-primary' />
-          </div>
+        <div className='row'>
+          <div className='col-sm-3'>Check Interval (in seconds)</div>
+          <input type='text' onChange={this.updateCheckInterval} id='check_interval' className='col-sm-1' value={this.state.ato.check_interval} />
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Monitor</div>
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onChange={this.updateEnable}/>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Sensor Pin</div>
+          <input type='text' id='sensor_pin' onChange={this.updateSensor} className='col-sm-2' value={this.state.ato.sensor}/>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Control</div>
+          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onChange={this.updateControl}/>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>ATO Pump pin</div>
+          <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump}/>
+        </div>
+        <div className='row'>
+          <input type='button' id='updateATO'  onClick={this.update} value='update' className='btn btn-outline-primary' />
         </div>
       </div>
     )
