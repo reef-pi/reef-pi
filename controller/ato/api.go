@@ -21,6 +21,9 @@ func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 	var conf Config
 	fn := func(id string) error {
+		if err := c.store.Update(Bucket, "config", conf); err != nil {
+			return err
+		}
 		c.config = conf
 		c.Stop()
 		c.Start()

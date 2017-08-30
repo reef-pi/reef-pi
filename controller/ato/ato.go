@@ -28,7 +28,21 @@ type Controller struct {
 	pumpOn    bool
 }
 
-func New(config Config, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func loadConfig(store utils.Store) Config {
+	var conf Config
+	if err := store.Get(Bucket, "config", &conf); err != nil {
+		log.Println("WARNING: ATO config not found. Using default config")
+		conf = Config{
+			CheckInterval: 30,
+			DevMode:       true,
+		}
+	}
+	return conf
+}
+
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+	config := loadConfig(store)
+	config.DevMode = devMode
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for ATO controller must be greater than zero")
 	}
