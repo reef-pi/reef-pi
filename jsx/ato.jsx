@@ -17,7 +17,7 @@ export default class ATO extends React.Component {
     this.updateEnable = this.updateEnable.bind(this)
   }
 
-  updateSensor(ev) {
+  updateSensor (ev) {
     var sensor = parseInt(ev.target.value)
     var ato = this.state.ato
     ato.sensor = sensor
@@ -25,7 +25,7 @@ export default class ATO extends React.Component {
       ato: ato
     })
   }
-  updatePump(ev) {
+  updatePump (ev) {
     var pump = parseInt(ev.target.value)
     var ato = this.state.ato
     ato.pump = pump
@@ -33,29 +33,28 @@ export default class ATO extends React.Component {
       ato: ato
     })
   }
-  updateCheckInterval(ev) {
-    var check_interval = parseInt(ev.target.value)
+  updateCheckInterval (ev) {
+    var checkInterval = parseInt(ev.target.value)
     var ato = this.state.ato
-    ato.check_interval = check_interval
+    ato.check_interval = checkInterval
     this.setState({
       ato: ato
     })
   }
-  updateControl(ev) {
+  updateControl (ev) {
     var ato = this.state.ato
     ato.control = ev.target.checked
     this.setState({
       ato: ato
     })
   }
-  updateEnable(ev) {
+  updateEnable (ev) {
     var ato = this.state.ato
     ato.enable = ev.target.checked
     this.setState({
       ato: ato
     })
   }
-
 
   fetchData () {
     $.ajax({
@@ -72,7 +71,7 @@ export default class ATO extends React.Component {
       }
     })
   }
- 
+
   update (ev) {
     $.ajax({
       url: '/api/ato',
@@ -100,22 +99,22 @@ export default class ATO extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Monitor</div>
-          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onChange={this.updateEnable}/>
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onChange={this.updateEnable} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor Pin</div>
-          <input type='text' id='sensor_pin' onChange={this.updateSensor} className='col-sm-2' value={this.state.ato.sensor}/>
+          <input type='text' id='sensor_pin' onChange={this.updateSensor} className='col-sm-2' value={this.state.ato.sensor} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onChange={this.updateControl}/>
+          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onChange={this.updateControl} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>ATO Pump pin</div>
-          <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump}/>
+          <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
         </div>
         <div className='row'>
-          <input type='button' id='updateATO'  onClick={this.update} value='update' className='btn btn-outline-primary' />
+          <input type='button' id='updateATO' onClick={this.update} value='update' className='btn btn-outline-primary' />
         </div>
       </div>
     )
