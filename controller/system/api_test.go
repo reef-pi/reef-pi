@@ -38,9 +38,6 @@ func TestSystemController(t *testing.T) {
 	if err := tr.Do("POST", "/api/display", strings.NewReader("{}"), nil); err != nil {
 		t.Fatal("Failed to set display brightness using api")
 	}
-	if err := tr.Do("POST", "/api/admin/reboot", strings.NewReader("{}"), nil); err != nil {
-		t.Fatal(err)
-	}
 	if err := tr.Do("POST", "/api/admin/poweroff", strings.NewReader("{}"), nil); err != nil {
 		t.Fatal(err)
 	}

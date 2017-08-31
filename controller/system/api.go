@@ -71,7 +71,7 @@ func (c *Controller) Poweroff(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) Reboot(w http.ResponseWriter, r *http.Request) {
 	fn := func(string) (interface{}, error) {
 		log.Println("Rebooting reef-pi controller")
-		out, err := utils.Command("/bin/systemctl", "reboot").WithDevMode(c.config.DevMode).CombinedOutput()
+		out, err := utils.Command("/bin/systemctl", "reboot").CombinedOutput()
 		if err != nil {
 			return "", fmt.Errorf("Failed to reboot reef-pi. Output:" + string(out) + ". Error: " + err.Error())
 		}
