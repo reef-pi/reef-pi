@@ -7,16 +7,12 @@ import (
 )
 
 func TestATO(t *testing.T) {
-	config := Config{
-		DevMode:       true,
-		CheckInterval: 1,
-	}
 	store, err := utils.TestDB()
 	if err != nil {
 		t.Fatal(err)
 	}
 	telemetry := utils.TestTelemetry()
-	c, err := New(config, store, telemetry)
+	c, err := New(true, store, telemetry)
 	if err != nil {
 		t.Error(err)
 	}

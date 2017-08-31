@@ -5,6 +5,10 @@ import (
 	"github.com/kidoman/embd/controller/pca9685"
 )
 
+type VariableVoltage interface {
+	Set(int, int) error
+}
+
 type PWMConfig struct {
 	Bus     int  `json:"bus"`     // 1
 	Address int  `json:"address"` // 0x40
@@ -23,17 +27,15 @@ var DefaultPWMConfig = PWMConfig{
 }
 
 func NewPWM(config PWMConfig) (*PWM, error) {
-	var conn *pca9685.PCA9685
+	var bus embd.I2CBus
 	if config.DevMode {
-		bus := &DevI2CBus{}
-		conn = pca9685.New(bus, byte(config.Address))
+		bus = &DevI2CBus{}
 	} else {
-		bus := embd.NewI2CBus(byte(config.Bus))
-		conn = pca9685.New(bus, byte(config.Address))
+		bus = embd.NewI2CBus(byte(config.Bus))
 	}
 	pwm := PWM{
 		values: make(map[int]int),
-		conn:   conn,
+		conn:   pca9685.New(bus, byte(config.Address)),
 		config: config,
 	}
 	return &pwm, nil

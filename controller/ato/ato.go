@@ -11,12 +11,12 @@ import (
 const Bucket = "ato"
 
 type Config struct {
-	Sensor        int           `yaml:"sensor"`
-	DevMode       bool          `yaml:"dev_mode"`
-	Pump          int           `yaml:"pump"`
-	CheckInterval time.Duration `yaml:"check_interval"`
-	Control       bool          `yaml:"control"`
-	Enable        bool          `yaml:"enable"`
+	Sensor        int           `json:"sensor" yaml:"sensor"`
+	DevMode       bool          `json:"dev_mode" yaml:"dev_mode"`
+	Pump          int           `json:"pump" yaml:"pump"`
+	CheckInterval time.Duration `json:"check_interval" yaml:"check_interval"`
+	Control       bool          `json:"control" yaml:"control"`
+	Enable        bool          `json:"enable" yaml:"enable"`
 }
 
 type Controller struct {
@@ -28,7 +28,21 @@ type Controller struct {
 	pumpOn    bool
 }
 
-func New(config Config, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func loadConfig(store utils.Store) Config {
+	var conf Config
+	if err := store.Get(Bucket, "config", &conf); err != nil {
+		log.Println("WARNING: ATO config not found. Using default config")
+		conf = Config{
+			CheckInterval: 30,
+			DevMode:       true,
+		}
+	}
+	return conf
+}
+
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+	config := loadConfig(store)
+	config.DevMode = devMode
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for ATO controller must be greater than zero")
 	}
@@ -47,10 +61,13 @@ func (c *Controller) Start() {
 
 func (c *Controller) run() {
 	log.Println("Starting ATO controller")
-	ticker := time.NewTicker(time.Second * c.config.CheckInterval)
+	ticker := time.NewTicker(c.config.CheckInterval * time.Second)
 	for {
 		select {
 		case <-ticker.C:
+			if !c.config.Enable {
+				continue
+			}
 			reading, err := c.Read()
 			if err != nil {
 				log.Println("ERROR: Failed to read ATO sensor. Error:", err)

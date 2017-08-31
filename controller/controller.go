@@ -82,7 +82,9 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 
 	if r.settings.Temperature {
-		conf := temperature.Config{}
+		conf := temperature.Config{
+			CheckInterval: 10,
+		}
 		temp, err := temperature.New(conf, r.store, r.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize temperature controller")
@@ -91,8 +93,7 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[temperature.Bucket] = temp
 	}
 	if r.settings.ATO {
-		conf := ato.Config{}
-		a, err := ato.New(conf, r.store, r.telemetry)
+		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize ato controller")
 			return err
