@@ -12,10 +12,30 @@ import (
 
 const Bucket = "lightings"
 
+type Channel struct {
+	Name         string `json:"name" yaml:"name"`
+	MinTheshold  int    `json:"min" yaml:"min"`
+	MaxThreshold int    `json:"max" yaml:"max"`
+	Ticks        int    `json:"ticks" yaml:"ticks"`
+	Values       []int  `json:"values" yaml:"values"`
+	Fixed        int    `json:"fixed" yaml:"fixed"`
+	Auto         bool   `json:"auto" yaml:"auto"`
+	Reverse      bool   `json:"reverse" yaml:"reverse"`
+	Pin          int    `json:"pin" yaml:"pin"`
+}
+
+type Config struct {
+	DevMode  bool          `json:"dev_mode" yaml:"dev_mode"`
+	Interval time.Duration `json:"interval" yaml:"interval"`
+}
+
+var DefaultConfig = Config{
+	Interval: 15 * time.Second,
+}
+
 type Light struct {
 	ID       string          `json:"id" yaml:"id"`
 	Name     string          `json:"name" yaml:"name"`
-	Enable   bool            `json:"enable" yaml:"enable"`
 	Channels map[int]Channel `json:"channels" yaml:"channels"`
 	Jack     string          `json:"jack" yaml:"jack"`
 }
@@ -23,21 +43,23 @@ type Light struct {
 type Controller struct {
 	store     utils.Store
 	jacks     *connectors.Jacks
-	pwm       *utils.PWM
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
 	config    Config
 	running   bool
 	mu        *sync.Mutex
+	vv        utils.VariableVoltage
 }
 
 func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+	var vv utils.VariableVoltage
 	pwmConf := utils.DefaultPWMConfig
 	pwmConf.DevMode = conf.DevMode
 	pwm, err := utils.NewPWM(pwmConf)
 	if err != nil {
 		return nil, err
 	}
+	vv = pwm
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,
@@ -45,7 +67,7 @@ func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *uti
 		config:    conf,
 		stopCh:    make(chan struct{}),
 		mu:        &sync.Mutex{},
-		pwm:       pwm,
+		vv:        vv,
 	}, nil
 }
 
@@ -95,6 +117,7 @@ func (c *Controller) Create(l Light) error {
 		if !ok {
 			ch = Channel{Ticks: 12}
 		}
+		ch.Pin = pin
 		if ch.Ticks != 12 {
 			log.Println("Warn: Only 12 ticks are supported. Ignoring ticks:", ch.Ticks)
 			ch.Ticks = 12
@@ -102,7 +125,6 @@ func (c *Controller) Create(l Light) error {
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("Channel-%d", i+1)
 		}
-		ch.Pin = pin
 		if ch.MaxThreshold == 0 {
 			ch.MaxThreshold = 100
 		}

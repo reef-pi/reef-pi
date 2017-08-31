@@ -76,6 +76,6 @@ func (c *Controller) UpdateChannel(ch Channel, v int) {
 	if ch.Reverse {
 		v = 100 - v
 	}
-	log.Println("Setting pwm value:", v, " at pin:", ch.Pin)
-	c.pwm.Set(ch.Pin, v)
+	log.Println("Setting value:", v, " at pin:", ch.Pin)
+	c.vv.Set(ch.Pin, v)
 }

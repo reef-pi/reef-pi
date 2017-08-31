@@ -18,25 +18,22 @@ export default class ATO extends React.Component {
   }
 
   updateSensor (ev) {
-    var sensor = parseInt(ev.target.value)
     var ato = this.state.ato
-    ato.sensor = sensor
+    ato.sensor = ev.target.value
     this.setState({
       ato: ato
     })
   }
   updatePump (ev) {
-    var pump = parseInt(ev.target.value)
     var ato = this.state.ato
-    ato.pump = pump
+    ato.pump = ev.target.value
     this.setState({
       ato: ato
     })
   }
   updateCheckInterval (ev) {
-    var checkInterval = parseInt(ev.target.value)
     var ato = this.state.ato
-    ato.check_interval = checkInterval
+    ato.check_interval = ev.target.value
     this.setState({
       ato: ato
     })
@@ -73,6 +70,14 @@ export default class ATO extends React.Component {
   }
 
   update (ev) {
+    if (isNaN(this.state.ato.sensor)) {
+      window.alert('Sensor pin has to be a valid integer')
+      return
+    }
+    if (isNaN(this.state.ato.pump)) {
+      window.alert('Pump pin has to be a valid integer')
+      return
+    }
     $.ajax({
       url: '/api/ato',
       type: 'POST',
@@ -99,7 +104,7 @@ export default class ATO extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Monitor</div>
-          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onChange={this.updateEnable} />
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor Pin</div>
@@ -107,7 +112,7 @@ export default class ATO extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onChange={this.updateControl} />
+          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onClick={this.updateControl} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>ATO Pump pin</div>

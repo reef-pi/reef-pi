@@ -20,6 +20,10 @@ export default class Settings extends React.Component {
     this.updateDevMode = this.updateDevMode.bind(this)
     this.updateLighting = this.updateLighting.bind(this)
     this.updateATO = this.updateATO.bind(this)
+
+    this.updateCamera = this.updateCamera.bind(this)
+    this.updateTemperature = this.updateTemperature.bind(this)
+
     this.update = this.update.bind(this)
   }
 
@@ -42,6 +46,22 @@ export default class Settings extends React.Component {
   updateATO (ev) {
     var settings = this.state.settings
     settings.ato = ev.target.checked
+    this.setState({
+      settings: settings
+    })
+  }
+
+  updateCamera (ev) {
+    var settings = this.state.settings
+    settings.camera = ev.target.checked
+    this.setState({
+      settings: settings
+    })
+  }
+
+  updateTemperature (ev) {
+    var settings = this.state.settings
+    settings.temperature = ev.target.checked
     this.setState({
       settings: settings
     })
@@ -160,23 +180,31 @@ export default class Settings extends React.Component {
         <div className='row'>
           <div className='input-group'>
             <span className='input-group-addon'>Equipments</span>
-            <input type='checkbox' id='updateEquipments' onChange={this.updateEquipments} className='form-control' defaultChecked={this.state.settings.equipments} />
+            <input type='checkbox' id='updateEquipments' onClick={this.updateEquipments} className='form-control' defaultChecked={this.state.settings.equipments} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Timers</span>
-            <input type='checkbox' id='updateTimers' onChange={this.updateTimers} className='form-control' defaultChecked={this.state.settings.timers} />
+            <input type='checkbox' id='updateTimers' onClick={this.updateTimers} className='form-control' defaultChecked={this.state.settings.timers} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>Lighting</span>
-            <input type='checkbox' id='updateLighting' onChange={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
+            <input type='checkbox' id='updateLighting' onClick={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>ATO</span>
-            <input type='checkbox' id='updateATO' onChange={this.updateATO} className='form-control' defaultChecked={this.state.settings.ato} />
+            <input type='checkbox' id='updateATO' onClick={this.updateATO} className='form-control' defaultChecked={this.state.settings.ato} />
+          </div>
+          <div className='input-group'>
+            <span className='input-group-addon'>Temperature</span>
+            <input type='checkbox' id='updateTemperature' onClick={this.updateTemperature} className='form-control' defaultChecked={this.state.settings.temperature} />
+          </div>
+          <div className='input-group'>
+            <span className='input-group-addon'>Camera</span>
+            <input type='checkbox' id='updateCamera' onClick={this.updateCamera} className='form-control' defaultChecked={this.state.settings.camera} />
           </div>
           <div className='input-group'>
             <span className='input-group-addon'>DevMode</span>
-            <input type='checkbox' id='updateDevMode' onChange={this.updateDevMode} className='form-control' defaultChecked={this.state.settings.dev_mode} />
+            <input type='checkbox' id='updateDevMode' onClick={this.updateDevMode} className='form-control' defaultChecked={this.state.settings.dev_mode} />
           </div>
         </div>
         <div className='row'>
