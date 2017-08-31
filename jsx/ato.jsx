@@ -70,18 +70,27 @@ export default class ATO extends React.Component {
   }
 
   update (ev) {
-    if (isNaN(this.state.ato.sensor)) {
-      window.alert('Sensor pin has to be a valid integer')
+    var ato = this.state.ato
+    ato.pump = parseInt(ato.pump)
+    ato.sensor = parseInt(ato.sensor)
+    ato.check_interval = parseInt(ato.check_interval)
+    if (isNaN(ato.sensor)) {
+      window.alert('Sensor pin has to be a positive integer')
       return
     }
-    if (isNaN(this.state.ato.pump)) {
-      window.alert('Pump pin has to be a valid integer')
+
+    if (isNaN(ato.pump)) {
+      window.alert('Pump pin has to be a positive integer')
+      return
+    }
+    if (isNaN(ato.check_interval)) {
+      window.alert('Check interval has to be a positive integer')
       return
     }
     $.ajax({
       url: '/api/ato',
       type: 'POST',
-      data: JSON.stringify(this.state.ato),
+      data: JSON.stringify(ato),
       success: function (data) {
         this.fetchData()
       }.bind(this),
