@@ -25,7 +25,7 @@ function TestTimers () {
     .wait(500)
     .click('input#createTimer')
     .wait(1500)
-    .evaluate(function () { return 'light' })
+    .evaluate(function () { return 'timer' })
     .end()
     .then(function (result) {
       console.log(result)

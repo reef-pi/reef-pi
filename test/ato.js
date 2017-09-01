@@ -1,21 +1,23 @@
 const Nightmare = require('nightmare')
 const nightmare = Nightmare({ show: true })
 
-function TestOutlets () {
+function TestATO () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
-    .click('li#react-tabs-10')
+	  .click('li#react-tabs-8')
     .wait(500)
-    .click('input#add_outlet')
+		.click('input#ato_enable')
     .wait(500)
-    .type('input#outletName', 'AC1')
+		.type('input#sensor_pin' , 18)
     .wait(500)
-    .type('input#outletPin', '24')
+		.click('input#ato_control')
     .wait(500)
-    .click('input#createOutlet')
-    .wait(2500)
-    .evaluate(function () { return 'outlets' })
+		.type('input#pump_pin' , 18)
+    .wait(500)
+		.click('input#updateATO')
+    .wait(500)
+    .evaluate(function () { return 'ato' })
     .end()
       .then(function (result) {
         console.log(result)
@@ -24,4 +26,5 @@ function TestOutlets () {
         console.error('Error:', error)
       })
 }
-TestOutlets()
+
+TestATO()

@@ -5,9 +5,8 @@ function TestSystem () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
-    .click('li#react-tabs-8')
+    .click('li#react-tabs-10')
     .wait(500)
-    .wait(2500)
     .evaluate(function () { return 'system' })
     .end()
     .then(function (result) {

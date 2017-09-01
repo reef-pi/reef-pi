@@ -32,6 +32,12 @@ var DefaultSettings = Settings{
 	DevMode:       true,
 	LightInterval: 30 * time.Second,
 	System:        true,
+	Equipments:    true,
+	Lighting:      true,
+	Temperature:   true,
+	ATO:           true,
+	Timers:        true,
+	Camera:        true,
 }
 
 func loadSettings(store utils.Store) (Settings, error) {
