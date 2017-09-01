@@ -5,6 +5,8 @@ function TestEquipments () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
+    .click('li#react-tabs-0')
+    .wait(500)
     .click('input#add_equipment')
     .wait(500)
     .type('input#equipmentName', 'HoBFilter')

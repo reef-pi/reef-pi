@@ -5,7 +5,7 @@ function TestOutlets () {
   nightmare
     .goto('http://localhost:8080/')
     .wait(500)
-    .click('li#react-tabs-8')
+    .click('li#react-tabs-10')
     .wait(500)
     .click('input#add_outlet')
     .wait(500)
