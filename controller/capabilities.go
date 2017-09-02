@@ -24,6 +24,9 @@ func (r *ReefPi) Capabilities() (capabilities []string) {
 	if r.settings.System {
 		capabilities = append(capabilities, "system")
 	}
+	if r.settings.Camera {
+		capabilities = append(capabilities, "camera")
+	}
 	return
 }
 
