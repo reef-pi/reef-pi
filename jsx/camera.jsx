@@ -97,15 +97,21 @@ export default class Camera extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-3'>Tick Interval (in minutes)</div>
-          <input type='text' onChange={this.updateTickInterval} id='tick_interval' className='col-sm-1' value={this.state.camera.tick_interval} />
+          <div className='col-sm-1'>
+            <input type='text' onChange={this.updateTickInterval} id='tick_interval' value={this.state.camera.tick_interval} />
+          </div>
         </div>
         <div className='row'>
           <div className='col-sm-3'>Capture flags</div>
-          <input type='text' onChange={this.updateCaptureFlags} id='capture_flags' className='col-sm-1' value={this.state.camera.capture_flags} />
+          <div className='col-sm-3'>
+            <input type='text' onChange={this.updateCaptureFlags} id='capture_flags' value={this.state.camera.capture_flags} />
+          </div>
         </div>
         <div className='row'>
           <div className='col-sm-3'>Image Directory</div>
-          <input type='text' onChange={this.updateImageDirectory} id='image_directory' className='col-sm-1' value={this.state.camera.image_directory} />
+          <div className='col-sm-6'>
+            <input type='text' onChange={this.updateImageDirectory} id='image_directory' value={this.state.camera.image_directory} />
+          </div>
         </div>
         <div className='row'>
           <input type='button' id='updateCamera' onClick={this.update} value='update' className='btn btn-outline-primary' />
