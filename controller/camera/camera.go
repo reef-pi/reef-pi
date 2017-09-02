@@ -1,51 +1,94 @@
 package camera
 
 import (
-	"github.com/gorilla/mux"
+	"fmt"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 )
 
 const Bucket = "camera"
 
 type Config struct {
-	Enable         bool          `yaml:"enable"`
-	ImageDirectory string        `yaml:"image_directory"`
-	CaptureFlags   string        `yaml:"capture_flags"`
-	TickInterval   time.Duration `yaml:"tick_interval"`
+	Enable         bool          `json:"enable" yaml:"enable"`
+	ImageDirectory string        `json:"image_directory" yaml:"image_directory"`
+	CaptureFlags   string        `json:"capture_flags" yaml:"capture_flags"`
+	TickInterval   time.Duration `json:"tick_interval" yaml:"tick_interval"`
 }
 
-type Camera struct {
+func loadConfig(store utils.Store) Config {
+	var conf Config
+	if err := store.Get(Bucket, "config", &conf); err != nil {
+		log.Println("WARNING: camera config not found. Using default config")
+		conf = Config{
+			TickInterval: 120,
+		}
+	}
+	return conf
+}
+
+type Controller struct {
 	config Config
+	stopCh chan struct{}
+	mu     sync.Mutex
+	store  utils.Store
 }
 
 const (
 	DefaulCaptureFlags = ""
 )
 
-func New(config Config) *Camera {
-	return &Camera{
+func New(store utils.Store) (*Controller, error) {
+	config := loadConfig(store)
+	if config.TickInterval <= 0 {
+		return nil, fmt.Errorf("Tick Interval for camera controller must be greater than zero")
+	}
+	return &Controller{
 		config: config,
+		store:  store,
+		mu:     sync.Mutex{},
+		stopCh: make(chan struct{}),
+	}, nil
+}
+
+func (c *Controller) Start() {
+	go c.run()
+}
+
+func (c *Controller) run() {
+	log.Println("Starting Camera controller")
+	ticker := time.NewTicker(c.config.TickInterval * time.Minute)
+	for {
+		select {
+		case <-ticker.C:
+			if !c.config.Enable {
+				continue
+			}
+			if err := c.Capture(); err != nil {
+				log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
+			}
+		case <-c.stopCh:
+			log.Println("Stopping camera controller")
+			ticker.Stop()
+			return
+		}
 	}
 }
 
-func (c *Camera) Start() {
+func (c *Controller) Stop() {
+	c.stopCh <- struct{}{}
 }
 
-func (c *Camera) Stop() {
+func (c *Controller) Setup() error {
+	return c.store.CreateBucket(Bucket)
 }
 
-func (c *Camera) Setup() error {
-	return nil
-}
-
-func (c *Camera) LoadAPI(r *mux.Router) {
-}
-
-func (c *Camera) Capture() error {
+func (c *Controller) Capture() error {
 	imageDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
 		return pathErr

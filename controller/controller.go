@@ -116,8 +116,11 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[timer.Bucket] = timer.New(r.store, r.telemetry, eqs)
 	}
 	if r.settings.Camera {
-		conf := camera.Config{}
-		r.subsystems[camera.Bucket] = camera.New(conf)
+		cam, err := camera.New(r.store)
+		if err != nil {
+			return nil
+		}
+		r.subsystems[camera.Bucket] = cam
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {

@@ -1,14 +1,19 @@
 package camera
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 )
 
 func TestCamera(t *testing.T) {
-	config := Config{
-		ImageDirectory: "../../../images",
+	store, err := utils.TestDB()
+	if err != nil {
+		t.Fatal(err)
 	}
-	c := New(config)
+	c, err := New(store)
+	if err != nil {
+		t.Fatal(err)
+	}
 	c.Start()
 	if err := c.Setup(); err != nil {
 		t.Fatal(err)
