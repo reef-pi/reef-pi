@@ -6,10 +6,10 @@ import (
 )
 
 type AdafruitIO struct {
-	Enable bool   `yaml:"enable"`
-	Token  string `yaml:"token"`
-	User   string `yaml:"user"`
-	Feed   string `yaml:"feed"`
+	Enable bool   `json:"enable" yaml:"enable"`
+	Token  string `json:"token" yaml:"token"`
+	User   string `json:"user" yaml:"user"`
+	Feed   string `json:"feed" yaml:"feed"`
 }
 
 type Telemetry struct {

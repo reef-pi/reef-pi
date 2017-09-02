@@ -2,6 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Outlets from './outlets.jsx'
 import Jacks from './jacks.jsx'
+import Telemetry from './telemetry.jsx'
 
 export default class Settings extends React.Component {
   constructor (props) {
@@ -23,8 +24,19 @@ export default class Settings extends React.Component {
 
     this.updateCamera = this.updateCamera.bind(this)
     this.updateTemperature = this.updateTemperature.bind(this)
+    this.updateTelemetry = this.updateTelemetry.bind(this)
+    this.showTelemetry = this.showTelemetry.bind(this)
 
     this.update = this.update.bind(this)
+  }
+
+  showTelemetry () {
+    if (this.state.settings.adafruitio === undefined) {
+      return
+    }
+    return (
+      <Telemetry adafruitio={this.state.settings.adafruitio} update={this.updateTelemetry} />
+    )
   }
 
   loadCapabilities () {
@@ -40,6 +52,14 @@ export default class Settings extends React.Component {
       error: function (xhr, status, err) {
         console.log(err.toString())
       }
+    })
+  }
+
+  updateTelemetry (adafruitio) {
+    var settings = this.state.settings
+    settings.adafruitio = adafruitio
+    this.setState({
+      settings: settings
     })
   }
 
@@ -206,6 +226,9 @@ export default class Settings extends React.Component {
             <span className='input-group-addon'>DevMode</span>
             <input type='checkbox' id='updateDevMode' onClick={this.updateDevMode} className='form-control' defaultChecked={this.state.settings.dev_mode} />
           </div>
+        </div>
+        <div className='row'>
+          {this.showTelemetry()}
         </div>
         <div className='row'>
           <input type='button' className='btn btn-outline-success' onClick={this.update} id='systemUpdateSettings' value='update' />
