@@ -18,9 +18,16 @@ func (t *Controller) GetConfig(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (t *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
+	var conf Config
 	fn := func(_ string) error {
+		if err := c.store.Update(Bucket, "config", conf); err != nil {
+			return err
+		}
+		c.config = conf
+		c.Stop()
+		c.Start()
 		return nil
 	}
-	utils.JSONUpdateResponse(&t.config, fn, w, r)
+	utils.JSONUpdateResponse(&c.config, fn, w, r)
 }

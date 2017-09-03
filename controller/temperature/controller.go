@@ -21,6 +21,12 @@ type Config struct {
 	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
 }
 
+var Default = Config{
+	Min:           77,
+	Max:           81,
+	CheckInterval: 1,
+}
+
 type Controller struct {
 	config    Config
 	coolerOn  bool
@@ -31,7 +37,8 @@ type Controller struct {
 	mu        sync.Mutex
 }
 
-func New(config Config, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func New(store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+	config := loadConfig(store)
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for temperature controller must be greater than zero")
 	}
@@ -42,6 +49,15 @@ func New(config Config, store utils.Store, telemetry *utils.Telemetry) (*Control
 		telemetry: telemetry,
 		store:     store,
 	}, nil
+}
+
+func loadConfig(store utils.Store) Config {
+	var conf Config
+	if err := store.Get(Bucket, "config", &conf); err != nil {
+		log.Println("WARNING: Temperature controller config not found. Using default config")
+		conf = Default
+	}
+	return conf
 }
 
 func (c *Controller) Setup() error {

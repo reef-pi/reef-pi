@@ -82,10 +82,7 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 
 	if r.settings.Temperature {
-		conf := temperature.Config{
-			CheckInterval: 10,
-		}
-		temp, err := temperature.New(conf, r.store, r.telemetry)
+		temp, err := temperature.New(r.store, r.telemetry)
 		if err != nil {
 			log.Println("Failed to initialize temperature controller")
 			return err
