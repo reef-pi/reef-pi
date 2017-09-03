@@ -6,8 +6,20 @@ export default class Admin extends React.Component {
     super(props)
     this.powerOff = this.powerOff.bind(this)
     this.reboot = this.reboot.bind(this)
+    this.reload = this.reload.bind(this)
   }
 
+  reload () {
+    $.ajax({
+      url: '/api/admin/reload',
+      type: 'POST',
+      success: function (data) {
+      },
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
+  }
   powerOff () {
     $.ajax({
       url: '/api/admin/poweroff',
@@ -34,8 +46,9 @@ export default class Admin extends React.Component {
   render () {
     return (
       <div className='container'>
-        <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />
+        <input value='Reload' onClick={this.reload} type='button' className='btn btn-outline-danger' />
         <input value='Reboot' onClick={this.reboot} type='button' className='btn btn-outline-danger' />
+        <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />
       </div>
     )
   }
