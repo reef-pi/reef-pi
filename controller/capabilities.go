@@ -21,11 +21,11 @@ func (r *ReefPi) Capabilities() (capabilities []string) {
 	if r.settings.ATO {
 		capabilities = append(capabilities, "ato")
 	}
-	if r.settings.System {
-		capabilities = append(capabilities, "system")
-	}
 	if r.settings.Camera {
 		capabilities = append(capabilities, "camera")
+	}
+	if r.settings.System {
+		capabilities = append(capabilities, "system")
 	}
 	return
 }
