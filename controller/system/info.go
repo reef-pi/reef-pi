@@ -17,6 +17,7 @@ type Summary struct {
 	CPUTemperature string `json:"cpu_temperature"`
 	Display        bool   `json:"display"`
 	Admin          bool   `json:"admin"`
+	Version        string `json:"version"`
 }
 
 func (c *Controller) ComputeSummary() Summary {
@@ -37,6 +38,7 @@ func (c *Controller) ComputeSummary() Summary {
 		Uptime:         c.Uptime(),
 		CPUTemperature: string(temp),
 		Display:        c.config.Display,
+		Version:        c.config.Version,
 	}
 	return s
 }

@@ -30,9 +30,10 @@ type ReefPi struct {
 	subsystems map[string]Subsystem
 	settings   Settings
 	telemetry  *utils.Telemetry
+	version    string
 }
 
-func New(database string) (*ReefPi, error) {
+func New(version, database string) (*ReefPi, error) {
 	store, err := utils.NewStore(database)
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
@@ -58,6 +59,7 @@ func New(database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		subsystems: make(map[string]Subsystem),
+		version:    version,
 	}
 	return r, nil
 }
@@ -69,6 +71,7 @@ func (r *ReefPi) loadSubsystems() error {
 			Name:      r.settings.Name,
 			Display:   r.settings.Display,
 			DevMode:   r.settings.DevMode,
+			Version:   r.version,
 		}
 		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
 	}

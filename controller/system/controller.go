@@ -10,7 +10,8 @@ type Config struct {
 	Interface string `json:"interface" yaml:"interface"`
 	Name      string `json:"name "yaml:"name"`
 	Display   bool   `json:"display" yaml:"display"`
-	DevMode   bool   `jsob:"dev_mode" yaml:"dev_mode"`
+	DevMode   bool   `json:"dev_mode" yaml:"dev_mode"`
+	Version   string `json:"version" yaml:"version"`
 }
 
 type Controller struct {
