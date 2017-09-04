@@ -10,7 +10,7 @@ func TestReefPi(t *testing.T) {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
 
-	r, err := New(conf.Database)
+	r, err := New("0.1", conf.Database)
 	if err != nil {
 		t.Fatal("Failed to create new reef-pi controller. Error:", err)
 	}

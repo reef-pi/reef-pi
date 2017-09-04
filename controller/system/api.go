@@ -15,6 +15,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/display", c.GetDisplayState).Methods("GET")
 	r.HandleFunc("/api/admin/poweroff", c.Poweroff).Methods("POST")
 	r.HandleFunc("/api/admin/reboot", c.Reboot).Methods("POST")
+	r.HandleFunc("/api/admin/reload", c.reload).Methods("POST")
 	r.HandleFunc("/api/info", c.GetSummary).Methods("GET")
 }
 
@@ -74,6 +75,18 @@ func (c *Controller) Reboot(w http.ResponseWriter, r *http.Request) {
 		out, err := utils.Command("/bin/systemctl", "reboot").CombinedOutput()
 		if err != nil {
 			return "", fmt.Errorf("Failed to reboot reef-pi. Output:" + string(out) + ". Error: " + err.Error())
+		}
+		return out, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
+	fn := func(string) (interface{}, error) {
+		log.Println("Reloading reef-pi controller")
+		out, err := utils.Command("/bin/systemctl", "restart", "reef-pi.service").CombinedOutput()
+		if err != nil {
+			return "", fmt.Errorf("Failed to reload reef-pi. Output:" + string(out) + ". Error: " + err.Error())
 		}
 		return out, nil
 	}

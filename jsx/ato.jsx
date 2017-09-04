@@ -15,6 +15,7 @@ export default class ATO extends React.Component {
     this.updateCheckInterval = this.updateCheckInterval.bind(this)
     this.updateControl = this.updateControl.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
+    this.showDetails = this.showDetails.bind(this)
   }
 
   updateSensor (ev) {
@@ -104,7 +105,10 @@ export default class ATO extends React.Component {
     this.fetchData()
   }
 
-  render () {
+  showDetails () {
+    if (!this.state.ato.enable) {
+      return
+    }
     return (
       <div className='container'>
         <div className='row'>
@@ -112,21 +116,29 @@ export default class ATO extends React.Component {
           <input type='text' onChange={this.updateCheckInterval} id='check_interval' className='col-sm-1' value={this.state.ato.check_interval} />
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Monitor</div>
-          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
-        </div>
-        <div className='row'>
           <div className='col-sm-2'>Sensor Pin</div>
           <input type='text' id='sensor_pin' onChange={this.updateSensor} className='col-sm-2' value={this.state.ato.sensor} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='ato_control' className='col-sm-2' value={this.state.ato.control} onClick={this.updateControl} />
+          <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateControl} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>ATO Pump pin</div>
           <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
         </div>
+      </div>
+    )
+  }
+
+  render () {
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-2'>Monitor</div>
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
+        </div>
+        {this.showDetails()}
         <div className='row'>
           <input type='button' id='updateATO' onClick={this.update} value='update' className='btn btn-outline-primary' />
         </div>

@@ -129,6 +129,12 @@ export default class Dashboard extends React.Component {
         </li>
         <li className='list-group-item'>
           <div className='row'>
+            <div className='col-sm-3'>Version</div>
+            <div className='col-sm-6'>{this.state.info.version}</div>
+          </div>
+        </li>
+        <li className='list-group-item'>
+          <div className='row'>
             <div className='col-sm-3'>CPU Temperature</div>
             <div className='col-sm-6'>{this.state.info.cpu_temperature}</div>
           </div>

@@ -13,6 +13,7 @@ import (
 )
 
 const Bucket = "camera"
+const DefaulCaptureFlags = ""
 
 type Config struct {
 	Enable         bool          `json:"enable" yaml:"enable"`
@@ -38,10 +39,6 @@ type Controller struct {
 	mu     sync.Mutex
 	store  utils.Store
 }
-
-const (
-	DefaulCaptureFlags = ""
-)
 
 func New(store utils.Store) (*Controller, error) {
 	config := loadConfig(store)
@@ -69,7 +66,7 @@ func (c *Controller) run() {
 			if !c.config.Enable {
 				continue
 			}
-			if err := c.Capture(); err != nil {
+			if _, err := c.Capture(); err != nil {
 				log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
 			}
 		case <-c.stopCh:
@@ -88,22 +85,24 @@ func (c *Controller) Setup() error {
 	return c.store.CreateBucket(Bucket)
 }
 
-func (c *Controller) Capture() error {
+func (c *Controller) Capture() (string, error) {
 	imageDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
-		return pathErr
+		return "", pathErr
 	}
 	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
 	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + filename
 	parts := strings.Fields(command)
 	err := exec.Command(parts[0], parts[1:]...).Run()
 	if err != nil {
-		return err
+		return "", err
 	}
 	latest := filepath.Join(imageDir, "latest.png")
 	os.Remove(latest)
 	if err := os.Symlink(filename, latest); err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	data := make(map[string]string)
+	data["latest"] = filename
+	return filename, c.store.Update(Bucket, "latest", data)
 }

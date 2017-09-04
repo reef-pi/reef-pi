@@ -123,7 +123,7 @@ func (c *Controller) Create(l Light) error {
 			ch.Ticks = 12
 		}
 		if ch.Name == "" {
-			ch.Name = fmt.Sprintf("Channel-%d", i+1)
+			ch.Name = fmt.Sprintf("channel-%d", i+1)
 		}
 		if ch.MaxThreshold == 0 {
 			ch.MaxThreshold = 100

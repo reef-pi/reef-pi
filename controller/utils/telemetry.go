@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/reef-pi/adafruitio"
 	"log"
+	"strings"
 )
 
 type AdafruitIO struct {
@@ -28,6 +29,7 @@ func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	d := adafruitio.Data{
 		Value: v,
 	}
+	feed = strings.ToLower(feed)
 
 	if !t.config.Enable {
 		log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)

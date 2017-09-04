@@ -5,7 +5,8 @@ export default class Camera extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      camera: {}
+      camera: {},
+      letest: ''
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
@@ -50,7 +51,7 @@ export default class Camera extends React.Component {
 
   fetchData () {
     $.ajax({
-      url: '/api/camera',
+      url: '/api/camera/config',
       type: 'GET',
       dataType: 'json',
       success: function (data) {
@@ -72,7 +73,7 @@ export default class Camera extends React.Component {
       return
     }
     $.ajax({
-      url: '/api/camera',
+      url: '/api/camera/config',
       type: 'POST',
       data: JSON.stringify(camera),
       success: function (data) {
