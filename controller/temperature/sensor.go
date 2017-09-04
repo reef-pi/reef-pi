@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -25,7 +26,7 @@ func detectTempSensorDevice() (string, error) {
 func (c *Controller) Read() (float32, error) {
 	if c.config.DevMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
-		return 78.0, nil
+		return 78.0 + (3 * rand.Float32()), nil
 	}
 	device, err := detectTempSensorDevice()
 	if err != nil {

@@ -1,11 +1,14 @@
 import React from 'react'
 import $ from 'jquery'
+import {YAxis, XAxis, LineChart, Line} from 'recharts'
 
 export default class TemperatureController extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      tc: {}
+      tc: {},
+      readings: [],
+      latest: undefined,
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateMin = this.updateMin.bind(this)
@@ -17,6 +20,34 @@ export default class TemperatureController extends React.Component {
     this.updateControl = this.updateControl.bind(this)
     this.showDetails = this.showDetails.bind(this)
     this.update = this.update.bind(this)
+    this.showChart = this.showChart.bind(this)
+  }
+
+  showChart () {
+    if (!this.state.tc.enable) {
+      return
+    }
+    var data = []
+    $.each(this.state.readings, function (i, v) {
+      data.push({v: v})
+    })
+    return (
+      <div className='container'>
+        <div className='row'>
+          <span className='h6'>Current temperature: {this.state.latest}</span>
+        </div>
+        <div className='row'>
+          <span className='h6'>Trend </span>
+        </div>
+        <div className='row'>
+          <LineChart width={600} height={300} data={data}>
+            <Line type='monotone' dataKey='v' stroke='#8884d8' />
+            <YAxis />
+            <XAxis />
+          </LineChart>
+       </div>
+     </div>
+    )
   }
 
   updateMin (ev) {
@@ -91,7 +122,7 @@ export default class TemperatureController extends React.Component {
     }
 
     $.ajax({
-      url: '/api/tc',
+      url: '/api/tc/config',
       type: 'POST',
       data: JSON.stringify(tc),
       success: function (data) {
@@ -107,11 +138,24 @@ export default class TemperatureController extends React.Component {
 
   fetchData () {
     $.ajax({
-      url: '/api/tc',
+      url: '/api/tc/config',
       type: 'GET',
       success: function (data) {
         this.setState({
           tc: data
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
+    $.ajax({
+      url: '/api/tc/readings',
+      type: 'GET',
+      success: function (data) {
+        this.setState({
+          readings: data.readings,
+          latest: data.latest
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -158,7 +202,7 @@ export default class TemperatureController extends React.Component {
           <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.value} onClick={this.updateEnable} /></div>
         </div>
         <div className='row'>
-          <div className='col-sm-3'> Check Interval </div>
+          <div className='col-sm-3'> Check Interval (in minutes) </div>
           <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
         </div>
         <div className='row'>
@@ -170,6 +214,9 @@ export default class TemperatureController extends React.Component {
         </div>
         <div className='row'>
           <input value='Update' onClick={this.update} type='button' className='btn btn-outline-danger' />
+        </div>
+        <div className='row'>
+          {this.showChart()}
         </div>
       </div>
     )

@@ -4,22 +4,46 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
 )
 
 func (t *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/tc", t.GetConfig).Methods("GET")
-	r.HandleFunc("/api/tc", t.UpdateConfig).Methods("POST")
+	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
+	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
+	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
 }
 
-func (t *Controller) GetConfig(w http.ResponseWriter, r *http.Request) {
+func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return t.config, nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (c *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
+func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
+	resp := make(map[string]interface{})
+	readings := []float32{}
+	fn := func(id string) (interface{}, error) {
+		t.readings.Do(func(i interface{}) {
+			if i == nil {
+				return
+			}
+			v, ok := i.(float32)
+			if !ok {
+				log.Println("ERROR: tmperature subsystem. Failed to convert historical temperature.")
+				return
+			}
+			readings = append(readings, v)
+		})
+		resp["latest"] = t.latest
+		resp["readings"] = readings
+		return resp, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) updateConfig(w http.ResponseWriter, r *http.Request) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	var conf Config
