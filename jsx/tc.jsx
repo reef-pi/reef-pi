@@ -155,7 +155,7 @@ export default class TemperatureController extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-3'> Enable </div>
-          <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.value} onClick={this.updateEnable} /></div>
+          <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.enable} onClick={this.updateEnable} /></div>
         </div>
         <div className='row'>
           <div className='col-sm-3'> Check Interval </div>
