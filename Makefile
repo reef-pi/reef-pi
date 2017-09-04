@@ -27,8 +27,6 @@ js-lint:
 go-get:
 	go get -u github.com/boltdb/bolt/...
 	go get -u gopkg.in/yaml.v2
-	go get -u github.com/stretchr/gomniauth
-	go get -u github.com/stretchr/gomniauth/providers/google
 	go get -u github.com/kidoman/embd
 	go get -u github.com/gorilla/mux
 	go get -u gopkg.in/robfig/cron.v2
