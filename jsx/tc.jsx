@@ -65,7 +65,7 @@ export default class TemperatureController extends React.Component {
     var tc = this.state.tc
     tc.min = parseInt(tc.min)
     tc.max = parseInt(tc.max)
-    tc.checInterval = parseInt(tc.check_interval)
+    tc.check_interval = parseInt(tc.check_interval)
     tc.cooler = parseInt(tc.cooler)
     tc.heater = parseInt(tc.heater)
 
@@ -85,7 +85,7 @@ export default class TemperatureController extends React.Component {
       window.alert('cooler pin has to be a positive integer')
       return
     }
-    if (isNaN(tc.checInterval)) {
+    if (isNaN(tc.check_interval)) {
       window.alert('check interval to be a positive integer')
       return
     }
