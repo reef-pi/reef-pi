@@ -48,7 +48,6 @@ deb:
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
-	cp assets/login.html dist/var/lib/reef-pi/assets/login.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .

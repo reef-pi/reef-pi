@@ -37,6 +37,8 @@ func startAPIServer(address string) (error, *mux.Router) {
 	})
 	router := mux.NewRouter()
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
+	images := http.FileServer(http.Dir("images"))
+	http.Handle("/images/", http.StripPrefix("/images/", images))
 	http.Handle("/api/", router)
 	log.Printf("Starting http server at: %s\n", address)
 	go http.ListenAndServe(address, nil)

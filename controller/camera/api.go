@@ -11,6 +11,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/camera/config", c.update).Methods("POST")
 	r.HandleFunc("/api/camera/shoot", c.shoot).Methods("POST")
 	r.HandleFunc("/api/camera/latest", c.latest).Methods("GET")
+
 }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
@@ -22,12 +23,12 @@ func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 
 func (c *Controller) shoot(w http.ResponseWriter, r *http.Request) {
 	var data map[string]string
-	fn := func(_ string) error {
+	fn := func(_ string) (interface{}, error) {
 		f, err := c.Capture()
 		data["image"] = f
-		return err
+		return &data, err
 	}
-	utils.JSONUpdateResponse(&data, fn, w, r)
+	utils.JSONGetResponse(fn, w, r)
 }
 
 func (c *Controller) latest(w http.ResponseWriter, r *http.Request) {
