@@ -27,8 +27,6 @@ js-lint:
 go-get:
 	go get -u github.com/boltdb/bolt/...
 	go get -u gopkg.in/yaml.v2
-	go get -u github.com/stretchr/gomniauth
-	go get -u github.com/stretchr/gomniauth/providers/google
 	go get -u github.com/kidoman/embd
 	go get -u github.com/gorilla/mux
 	go get -u gopkg.in/robfig/cron.v2
@@ -42,13 +40,16 @@ vet:
 .PHONY: build
 build: clean go-get test bin
 
+.PHONY: ui
+ui:
+	 ./node_modules/.bin/webpack
+
 .PHONY: deb
-deb:
+deb: ui
 	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
-	cp assets/login.html dist/var/lib/reef-pi/assets/login.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .

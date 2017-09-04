@@ -72,6 +72,9 @@ func (c *Controller) run() {
 	for {
 		select {
 		case <-ticker.C:
+			if !c.config.Enable {
+				continue
+			}
 			reading, err := c.Read()
 			if err != nil {
 				log.Println("ERROR: Failed to read temperature. Error:", err)

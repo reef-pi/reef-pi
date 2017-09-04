@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -22,13 +21,16 @@ type Config struct {
 	TickInterval   time.Duration `json:"tick_interval" yaml:"tick_interval"`
 }
 
+var Default = Config{
+	ImageDirectory: "/var/lib/reef-pi/images",
+	TickInterval:   120,
+}
+
 func loadConfig(store utils.Store) Config {
 	var conf Config
 	if err := store.Get(Bucket, "config", &conf); err != nil {
 		log.Println("WARNING: camera config not found. Using default config")
-		conf = Config{
-			TickInterval: 120,
-		}
+		conf = Default
 	}
 	return conf
 }
@@ -44,6 +46,9 @@ func New(store utils.Store) (*Controller, error) {
 	config := loadConfig(store)
 	if config.TickInterval <= 0 {
 		return nil, fmt.Errorf("Tick Interval for camera controller must be greater than zero")
+	}
+	if config.ImageDirectory == "" {
+		return nil, fmt.Errorf("Image directory cant not be empty")
 	}
 	return &Controller{
 		config: config,
@@ -86,23 +91,23 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Capture() (string, error) {
-	imageDir, pathErr := filepath.Abs(c.config.ImageDirectory)
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	imgDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
 		return "", pathErr
 	}
-	filename := filepath.Join(imageDir, time.Now().Format("15-04-05-Mon-Jan-2-2006.png"))
-	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + filename
+	imgName := time.Now().Format("15-04-05-Mon-Jan-2-2006.png")
+	imgPath := filepath.Join(imgDir, imgName)
+	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + imgPath
 	parts := strings.Fields(command)
 	err := exec.Command(parts[0], parts[1:]...).Run()
 	if err != nil {
-		return "", err
-	}
-	latest := filepath.Join(imageDir, "latest.png")
-	os.Remove(latest)
-	if err := os.Symlink(filename, latest); err != nil {
+		log.Println("ERROR: Failed to execute image capture command:", command, "Error:", err)
 		return "", err
 	}
 	data := make(map[string]string)
-	data["latest"] = filename
-	return filename, c.store.Update(Bucket, "latest", data)
+	data["image"] = imgName
+	log.Println("Camera subsystem: Image captured:", imgPath)
+	return imgName, c.store.Update(Bucket, "latest", data)
 }

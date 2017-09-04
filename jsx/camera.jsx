@@ -6,10 +6,11 @@ export default class Camera extends React.Component {
     super(props)
     this.state = {
       camera: {},
-      letest: ''
+      latest: {}
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
+    this.capture = this.capture.bind(this)
 
     this.updateEnable = this.updateEnable.bind(this)
     this.updateImageDirectory = this.updateImageDirectory.bind(this)
@@ -63,6 +64,19 @@ export default class Camera extends React.Component {
         console.log(err.toString())
       }
     })
+    $.ajax({
+      url: '/api/camera/latest',
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        this.setState({
+          latest: data
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.toString())
+      }
+    })
   }
 
   update (ev) {
@@ -77,11 +91,28 @@ export default class Camera extends React.Component {
       type: 'POST',
       data: JSON.stringify(camera),
       success: function (data) {
-        this.fetchData()
+        this.fetchdata()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
+        console.log(err.tostring())
       }
+    })
+  }
+
+  capture () {
+    $.ajax({
+      url: '/api/camera/shoot',
+      type: 'POST',
+      data: JSON.stringify({}),
+      success: function (data) {
+        this.setState({
+          latest: data
+        })
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err.tostring())
+      },
+      timeout: 30000
     })
   }
 
@@ -90,6 +121,11 @@ export default class Camera extends React.Component {
   }
 
   render () {
+    var imgStyle = {
+      width: '100%',
+      height: '100%',
+      borderRadius: '25px'
+    }
     return (
       <div className='container'>
         <div className='row'>
@@ -116,6 +152,14 @@ export default class Camera extends React.Component {
         </div>
         <div className='row'>
           <input type='button' id='updateCamera' onClick={this.update} value='update' className='btn btn-outline-primary' />
+        </div>
+        <div className='row'>
+          <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
+        </div>
+        <div className='row'>
+          <div className='container'>
+            <img src={'/images/' + this.state.latest.image} style={imgStyle} />
+          </div>
         </div>
       </div>
     )
