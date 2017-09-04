@@ -8,7 +8,7 @@ export default class TemperatureController extends React.Component {
     this.state = {
       tc: {},
       readings: [],
-      latest: undefined,
+      latest: undefined
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateMin = this.updateMin.bind(this)
@@ -45,8 +45,8 @@ export default class TemperatureController extends React.Component {
             <YAxis />
             <XAxis />
           </LineChart>
-       </div>
-     </div>
+        </div>
+      </div>
     )
   }
 
