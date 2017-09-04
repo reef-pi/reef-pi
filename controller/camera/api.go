@@ -22,8 +22,8 @@ func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) shoot(w http.ResponseWriter, r *http.Request) {
-	var data map[string]string
 	fn := func(_ string) (interface{}, error) {
+		data := make(map[string]string)
 		f, err := c.Capture()
 		data["image"] = f
 		return &data, err

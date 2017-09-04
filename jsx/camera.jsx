@@ -152,7 +152,7 @@ export default class Camera extends React.Component {
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
         </div>
         <div className='row'>
-          <img src={'/images/' + this.state.latest.image} />
+          <img src={'/images/' + this.state.latest.image} className='img-responsive img-rounded' />
         </div>
       </div>
     )
