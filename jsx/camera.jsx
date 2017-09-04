@@ -121,11 +121,11 @@ export default class Camera extends React.Component {
   }
 
   render () {
-   var imgStyle ={
-		width: '100%',
-    height: '100%',
-	 borderRadius: '25px',
-   }
+    var imgStyle = {
+      width: '100%',
+      height: '100%',
+      borderRadius: '25px'
+    }
     return (
       <div className='container'>
         <div className='row'>
