@@ -20,6 +20,8 @@ func (t *Controller) GetConfig(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	var conf Config
 	fn := func(_ string) error {
 		if conf.CheckInterval <= 0 {
@@ -28,10 +30,10 @@ func (c *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		if err := c.store.Update(Bucket, "config", conf); err != nil {
 			return err
 		}
-		c.config = conf
 		c.Stop()
+		c.config = conf
 		c.Start()
 		return nil
 	}
-	utils.JSONUpdateResponse(&c.config, fn, w, r)
+	utils.JSONUpdateResponse(&conf, fn, w, r)
 }
