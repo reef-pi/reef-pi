@@ -1,6 +1,7 @@
 package temperature
 
 import (
+	"container/ring"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
@@ -34,20 +35,24 @@ type Controller struct {
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
 	store     utils.Store
+	latest    float32
+	readings  *ring.Ring
 	mu        sync.Mutex
 }
 
-func New(store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
 	config := loadConfig(store)
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for temperature controller must be greater than zero")
 	}
+	config.DevMode = devMode
 	return &Controller{
 		config:    config,
 		mu:        sync.Mutex{},
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
 		store:     store,
+		readings:  ring.New(20),
 	}, nil
 }
 
@@ -63,9 +68,11 @@ func loadConfig(store utils.Store) Config {
 func (c *Controller) Setup() error {
 	return c.store.CreateBucket(Bucket)
 }
+
 func (c *Controller) Start() {
 	go c.run()
 }
+
 func (c *Controller) run() {
 	log.Println("Starting temperature controller")
 	ticker := time.NewTicker(time.Minute * c.config.CheckInterval)
@@ -80,6 +87,9 @@ func (c *Controller) run() {
 				log.Println("ERROR: Failed to read temperature. Error:", err)
 				continue
 			}
+			c.latest = reading
+			c.readings.Value = reading
+			c.readings = c.readings.Next()
 			log.Println("Temperature sensor value:", reading)
 			c.telemetry.EmitMetric("temperature", reading)
 		case <-c.stopCh:
