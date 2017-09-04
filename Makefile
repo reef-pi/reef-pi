@@ -42,8 +42,12 @@ vet:
 .PHONY: build
 build: clean go-get test bin
 
+.PHONY: ui
+ui:
+	 ./node_modules/.bin/webpack
+
 .PHONY: deb
-deb:
+deb: ui
 	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css

@@ -121,6 +121,11 @@ export default class Camera extends React.Component {
   }
 
   render () {
+   var imgStyle ={
+		width: '100%',
+    height: '100%',
+	 borderRadius: '25px',
+   }
     return (
       <div className='container'>
         <div className='row'>
@@ -152,7 +157,9 @@ export default class Camera extends React.Component {
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
         </div>
         <div className='row'>
-          <img src={'/images/' + this.state.latest.image} className='img-responsive img-rounded' />
+          <div className='container'>
+            <img src={'/images/' + this.state.latest.image} style={imgStyle} />
+          </div>
         </div>
       </div>
     )
