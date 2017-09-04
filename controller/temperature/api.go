@@ -1,6 +1,7 @@
 package temperature
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
@@ -21,6 +22,9 @@ func (t *Controller) GetConfig(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) UpdateConfig(w http.ResponseWriter, r *http.Request) {
 	var conf Config
 	fn := func(_ string) error {
+		if conf.CheckInterval <= 0 {
+			return fmt.Errorf("check interval has to ve positive")
+		}
 		if err := c.store.Update(Bucket, "config", conf); err != nil {
 			return err
 		}
