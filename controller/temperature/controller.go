@@ -11,6 +11,11 @@ import (
 
 const Bucket = "temperature"
 
+type Measurement struct {
+	Time        string  `json:"time"`
+	Temperature float32 `json:"temperature"`
+}
+
 type Config struct {
 	Min           float32       `yaml:"min" json:"min"`
 	Max           float32       `yaml:"max" json:"max"`
@@ -88,7 +93,10 @@ func (c *Controller) run() {
 				continue
 			}
 			c.latest = reading
-			c.readings.Value = reading
+			c.readings.Value = Measurement{
+				Temperature: reading,
+				Time:        time.Now().Format("15:04"),
+			}
 			c.readings = c.readings.Next()
 			log.Println("Temperature sensor value:", reading)
 			c.telemetry.EmitMetric("temperature", reading)

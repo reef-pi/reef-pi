@@ -5,7 +5,7 @@ import Camera from './camera.jsx'
 import Equipments from './equipments.jsx'
 import Lighting from './lighting.jsx'
 import System from './system.jsx'
-import TemperatureController from './tc.jsx'
+import Temperature from './temperature.jsx'
 import Timers from './timers.jsx'
 import Doser from './doser.jsx'
 import $ from 'jquery'
@@ -31,7 +31,7 @@ export default class MainPanel extends React.Component {
         'system': <System />,
         'equipments': <Equipments />,
         'lighting': <Lighting />,
-        'temperature': < TemperatureController />,
+        'temperature': < Temperature />,
         'timers': <Timers />,
         'doser': < Doser />
       }
