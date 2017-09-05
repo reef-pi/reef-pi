@@ -16,6 +16,25 @@ export default class Camera extends React.Component {
     this.updateImageDirectory = this.updateImageDirectory.bind(this)
     this.updateCaptureFlags = this.updateCaptureFlags.bind(this)
     this.updateTickInterval = this.updateTickInterval.bind(this)
+    this.showCapture = this.showCapture.bind(this)
+  }
+
+  showCapture () {
+    if (this.state.latest.image === undefined) {
+      return
+    }
+    var imgStyle = {
+      width: '100%',
+      height: '100%',
+      borderRadius: '25px'
+    }
+    return (
+      <div className='row'>
+        <div className='container'>
+          <img src={'/images/' + this.state.latest.image} style={imgStyle} />
+        </div>
+      </div>
+    )
   }
 
   updateEnable (ev) {
@@ -121,11 +140,6 @@ export default class Camera extends React.Component {
   }
 
   render () {
-    var imgStyle = {
-      width: '100%',
-      height: '100%',
-      borderRadius: '25px'
-    }
     return (
       <div className='container'>
         <div className='row'>
@@ -156,11 +170,7 @@ export default class Camera extends React.Component {
         <div className='row'>
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
         </div>
-        <div className='row'>
-          <div className='container'>
-            <img src={'/images/' + this.state.latest.image} style={imgStyle} />
-          </div>
-        </div>
+        {this.showCapture()}
       </div>
     )
   }
