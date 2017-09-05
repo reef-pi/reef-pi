@@ -22,23 +22,20 @@ func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]interface{})
-	readings := []float32{}
 	fn := func(id string) (interface{}, error) {
+		readings := []Measurement{}
 		t.readings.Do(func(i interface{}) {
 			if i == nil {
 				return
 			}
-			v, ok := i.(float32)
+			v, ok := i.(Measurement)
 			if !ok {
 				log.Println("ERROR: tmperature subsystem. Failed to convert historical temperature.")
 				return
 			}
 			readings = append(readings, v)
 		})
-		resp["latest"] = t.latest
-		resp["readings"] = readings
-		return resp, nil
+		return readings, nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }

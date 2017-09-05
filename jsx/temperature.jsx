@@ -1,14 +1,13 @@
 import React from 'react'
 import $ from 'jquery'
-import {YAxis, XAxis, LineChart, Line} from 'recharts'
+import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
 
-export default class TemperatureController extends React.Component {
+export default class Temperature extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       tc: {},
-      readings: [],
-      latest: undefined
+      readings: []
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateMin = this.updateMin.bind(this)
@@ -24,26 +23,27 @@ export default class TemperatureController extends React.Component {
   }
 
   showChart () {
-    if (!this.state.tc.enable) {
+    if (this.state.readings === undefined) {
       return
     }
-    var data = []
-    $.each(this.state.readings, function (i, v) {
-      data.push({v: v})
-    })
+    if (this.state.readings.length <= 0) {
+      return
+    }
+    var latest = this.state.readings[this.state.readings.length - 1].temperature
     return (
       <div className='container'>
         <div className='row'>
-          <span className='h6'>Current temperature: {this.state.latest}</span>
+          <span className='h6'>Current temperature: {latest}</span>
         </div>
         <div className='row'>
           <span className='h6'>Trend </span>
         </div>
         <div className='row'>
-          <LineChart width={600} height={300} data={data}>
-            <Line type='monotone' dataKey='v' stroke='#8884d8' />
+          <LineChart width={600} height={300} data={this.state.readings}>
+            <Line type='monotone' dataKey='temperature' stroke='#8884d8' />
             <YAxis />
-            <XAxis />
+            <XAxis dataKey='time' />
+            <Tooltip />
           </LineChart>
         </div>
       </div>
@@ -154,8 +154,7 @@ export default class TemperatureController extends React.Component {
       type: 'GET',
       success: function (data) {
         this.setState({
-          readings: data.readings,
-          latest: data.latest
+          readings: data
         })
       }.bind(this),
       error: function (xhr, status, err) {
