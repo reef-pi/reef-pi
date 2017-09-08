@@ -5,7 +5,9 @@ export default class ATO extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      ato: {}
+      ato: {},
+      showAlert: false,
+      alertMsg: ''
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
