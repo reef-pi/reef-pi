@@ -10,7 +10,9 @@ export default class Equipments extends React.Component {
       selectedOutlet: undefined,
       outlets: [],
       equipments: [],
-      addEquipment: false
+      addEquipment: false,
+      showAlert: false,
+      alertMsg: ''
     }
     this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
@@ -19,6 +21,18 @@ export default class Equipments extends React.Component {
     this.addEquipment = this.addEquipment.bind(this)
     this.removeEquipment = this.removeEquipment.bind(this)
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
+    this.showAlert = this.showAlert.bind(this)
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   equipmentList () {
@@ -49,12 +63,16 @@ export default class Equipments extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          equipments: data
+          equipments: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
     $.ajax({
       url: '/api/outlets',
@@ -66,8 +84,11 @@ export default class Equipments extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -76,7 +97,8 @@ export default class Equipments extends React.Component {
   }
   setOutlet (i, ev) {
     this.setState({
-      selectedOutlet: i
+      selectedOutlet: i,
+      showAlert: false
     })
   }
 
@@ -89,11 +111,28 @@ export default class Equipments extends React.Component {
   }
 
   addEquipment () {
+    if (this.state.selectedOutlet === undefined) {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Select an outlet'
+      })
+      return
+    }
     var outletID = this.state.outlets[this.state.selectedOutlet].id
     var payload = {
       name: $('#equipmentName').val(),
       outlet: outletID
     }
+    if (payload.name === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Specify equipment name'
+      })
+      return
+    }
+    this.setState({
+      showAlert: false
+    })
     $.ajax({
       url: '/api/equipments',
       type: 'PUT',
@@ -103,8 +142,11 @@ export default class Equipments extends React.Component {
         this.toggleAddEquipmentDiv()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -117,8 +159,11 @@ export default class Equipments extends React.Component {
           this.fetchData()
         }.bind(this),
         error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
+          this.setState({
+            showAlert: true,
+            alertMsg: xhr.responseText
+          })
+        }.bind(this)
       })
     }.bind(this))
   }
@@ -141,6 +186,7 @@ export default class Equipments extends React.Component {
     }
     return (
       <div className='container'>
+        {this.showAlert()}
         <ul className='list-group'>
           {this.equipmentList()}
         </ul>

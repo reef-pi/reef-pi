@@ -53,7 +53,7 @@ func (c *Controller) Create(eq Equipment) error {
 		return fmt.Errorf("Outlet named %s not present", eq.Outlet)
 	}
 	if outlet.Equipment != "" {
-		return fmt.Errorf("Outlet is %s already used by equipment %s", eq.Outlet, outlet.Equipment)
+		return fmt.Errorf("Outlet is already in use (Equipment ID: %s)", outlet.Equipment)
 	}
 	fn := func(id string) interface{} {
 		eq.ID = id
