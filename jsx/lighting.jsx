@@ -12,7 +12,9 @@ export default class Lighting extends React.Component {
       enabled: false,
       addLight: false,
       jacks: [],
-      selectedJack: undefined
+      selectedJack: undefined,
+      showAlert: false,
+      alertMsg: ''
     }
     this.lightsList = this.lightsList.bind(this)
     this.jacksList = this.jacksList.bind(this)
@@ -21,6 +23,18 @@ export default class Lighting extends React.Component {
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
     this.removeLight = this.removeLight.bind(this)
+    this.showAlert = this.showAlert.bind(this)
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   removeLight (id) {
@@ -57,6 +71,20 @@ export default class Lighting extends React.Component {
   }
 
   addLight () {
+    if (this.state.selectedJack === undefined) {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Select a jack'
+      })
+      return
+    }
+    if ($('#lightName').val() === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Specify light name'
+      })
+      return
+    }
     var jack = this.state.jacks[this.state.selectedJack].id
     var payload = {
       name: $('#lightName').val(),
@@ -74,8 +102,11 @@ export default class Lighting extends React.Component {
         $('#lightName').val('')
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -103,8 +134,11 @@ export default class Lighting extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err)
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -118,8 +152,11 @@ export default class Lighting extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err)
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -142,6 +179,7 @@ export default class Lighting extends React.Component {
     }
     return (
       <div className='container'>
+        {this.showAlert()}
         <div className='container'>
           <ul>
             { this.lightsList() }

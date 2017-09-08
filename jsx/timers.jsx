@@ -13,7 +13,9 @@ export default class Timers extends React.Component {
       equipments: [],
       outletType: undefined,
       timers: [],
-      addTimer: false
+      addTimer: false,
+      showAlert: false,
+      alertMsg: ''
     }
     this.timerList = this.timerList.bind(this)
     this.createTimer = this.createTimer.bind(this)
@@ -23,10 +25,22 @@ export default class Timers extends React.Component {
     this.setEquipment = this.setEquipment.bind(this)
     this.setEquipmentAction = this.setEquipmentAction.bind(this)
     this.toggleAddTimerDiv = this.toggleAddTimerDiv.bind(this)
+    this.showAlert = this.showAlert.bind(this)
   }
 
   componentDidMount () {
     this.fetchData()
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   fetchData () {
@@ -36,12 +50,16 @@ export default class Timers extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          timers: data
+          timers: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
     $.ajax({
       url: '/api/equipments',
@@ -49,12 +67,16 @@ export default class Timers extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          equipments: data
+          equipments: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -89,8 +111,11 @@ export default class Timers extends React.Component {
           this.fetchData()
         }.bind(this),
         error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
+          this.setState({
+            showAlert: true,
+            alertMsg: xhr.responseText
+          })
+        }.bind(this)
       })
     }.bind(this))
   }
@@ -103,12 +128,16 @@ export default class Timers extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          equipment: data
+          equipment: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -119,6 +148,48 @@ export default class Timers extends React.Component {
   }
 
   createTimer () {
+    if ($('#name').val() === '') {
+      this.setState({
+        alertMsg: 'Specify timer name',
+        showAlert: true
+      })
+      return
+    }
+    if ($('#day').val() === '') {
+      this.setState({
+        alertMsg: 'Specify a value for "day"',
+        showAlert: true
+      })
+      return
+    }
+    if ($('#hour').val() === '') {
+      this.setState({
+        alertMsg: 'Specify a value for "hour"',
+        showAlert: true
+      })
+      return
+    }
+    if ($('#minute').val() === '') {
+      this.setState({
+        alertMsg: 'Specify a value for "minute"',
+        showAlert: true
+      })
+      return
+    }
+    if ($('#second').val() === '') {
+      this.setState({
+        alertMsg: 'Specify a value for "second"',
+        showAlert: true
+      })
+      return
+    }
+    if (this.state.equipment === undefined) {
+      this.setState({
+        alertMsg: 'Select an equipment',
+        showAlert: true
+      })
+      return
+    }
     var payload = {
       name: $('#name').val(),
       day: $('#day').val(),
@@ -138,7 +209,10 @@ export default class Timers extends React.Component {
         this.toggleAddTimerDiv()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
       }
     })
   };
@@ -168,7 +242,8 @@ export default class Timers extends React.Component {
       <label> ? </label>
     </OverlayTrigger>
     return (
-      <div>
+      <div className='containe'>
+        {this.showAlert()}
         <ul>{this.timerList()}</ul>
         <div className='container'>
           <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />

@@ -7,7 +7,9 @@ export default class Temperature extends React.Component {
     super(props)
     this.state = {
       tc: {},
-      readings: []
+      readings: [],
+      showAlert: false,
+      alertMsg: ''
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateMin = this.updateMin.bind(this)
@@ -20,6 +22,17 @@ export default class Temperature extends React.Component {
     this.showDetails = this.showDetails.bind(this)
     this.update = this.update.bind(this)
     this.showChart = this.showChart.bind(this)
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   showChart () {
@@ -101,23 +114,38 @@ export default class Temperature extends React.Component {
     tc.heater = parseInt(tc.heater)
 
     if (isNaN(tc.min)) {
-      window.alert('Minimum threshold has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Minimum threshold has to be a positive integer'
+      })
       return
     }
     if (isNaN(tc.max)) {
-      window.alert('Maximum threshold has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Maximum threshold has to be a positive integer'
+      })
       return
     }
     if (isNaN(tc.heater)) {
-      window.alert('Heater pin has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Heater pin has to be a positive integer'
+      })
       return
     }
     if (isNaN(tc.cooler)) {
-      window.alert('cooler pin has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'cooler pin has to be a positive integer'
+      })
       return
     }
     if (isNaN(tc.check_interval)) {
-      window.alert('check interval to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'check interval to be a positive integer'
+      })
       return
     }
 
@@ -127,12 +155,16 @@ export default class Temperature extends React.Component {
       data: JSON.stringify(tc),
       success: function (data) {
         this.setState({
-          tc: tc
+          tc: tc,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -142,24 +174,32 @@ export default class Temperature extends React.Component {
       type: 'GET',
       success: function (data) {
         this.setState({
-          tc: data
+          tc: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
     $.ajax({
       url: '/api/tc/readings',
       type: 'GET',
       success: function (data) {
         this.setState({
-          readings: data
+          readings: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -196,6 +236,7 @@ export default class Temperature extends React.Component {
   render () {
     return (
       <div className='container'>
+        {this.showAlert()}
         <div className='row'>
           <div className='col-sm-3'> Enable </div>
           <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.enable} onClick={this.updateEnable} /></div>

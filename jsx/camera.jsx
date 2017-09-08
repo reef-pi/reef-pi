@@ -6,7 +6,9 @@ export default class Camera extends React.Component {
     super(props)
     this.state = {
       camera: {},
-      latest: {}
+      latest: {},
+      showAlert: false,
+      alertMsg: ''
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
@@ -17,6 +19,18 @@ export default class Camera extends React.Component {
     this.updateCaptureFlags = this.updateCaptureFlags.bind(this)
     this.updateTickInterval = this.updateTickInterval.bind(this)
     this.showCapture = this.showCapture.bind(this)
+    this.showAlert = this.showAlert.bind(this)
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   showCapture () {
@@ -41,7 +55,8 @@ export default class Camera extends React.Component {
     var camera = this.state.camera
     camera.enable = ev.target.checked
     this.setState({
-      camera: camera
+      camera: camera,
+      showAlert: false
     })
   }
 
@@ -49,7 +64,8 @@ export default class Camera extends React.Component {
     var camera = this.state.camera
     camera.image_directory = ev.target.value
     this.setState({
-      camera: camera
+      camera: camera,
+      showAlert: false
     })
   }
 
@@ -57,7 +73,8 @@ export default class Camera extends React.Component {
     var camera = this.state.camera
     camera.capture_flags = ev.target.value
     this.setState({
-      camera: camera
+      camera: camera,
+      showAlert: false
     })
   }
 
@@ -65,7 +82,8 @@ export default class Camera extends React.Component {
     var camera = this.state.camera
     camera.tick_interval = ev.target.value
     this.setState({
-      camera: camera
+      camera: camera,
+      showAlert: false
     })
   }
 
@@ -76,25 +94,38 @@ export default class Camera extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          camera: data
+          camera: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
+
+    if (!this.state.camera.enable) {
+      return
+    }
+
     $.ajax({
       url: '/api/camera/latest',
       type: 'GET',
       dataType: 'json',
       success: function (data) {
         this.setState({
-          latest: data
+          latest: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -102,7 +133,10 @@ export default class Camera extends React.Component {
     var camera = this.state.camera
     camera.tick_interval = parseInt(camera.tick_interval)
     if (isNaN(camera.tick_interval)) {
-      window.alert('Capture interval  has to be a positive integer')
+      this.setStat({
+        showAlert: true,
+        alertMsg: 'Tick interval has to be a positive integer'
+      })
       return
     }
     $.ajax({
@@ -113,8 +147,11 @@ export default class Camera extends React.Component {
         this.fetchdata()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.tostring())
-      }
+        this.setStat({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -125,12 +162,16 @@ export default class Camera extends React.Component {
       data: JSON.stringify({}),
       success: function (data) {
         this.setState({
-          latest: data
+          latest: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.tostring())
-      },
+        this.setStat({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this),
       timeout: 30000
     })
   }
@@ -142,6 +183,7 @@ export default class Camera extends React.Component {
   render () {
     return (
       <div className='container'>
+        {this.showAlert()}
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
           <input type='checkbox' id='camera_enable' className='col-sm-2' defaultChecked={this.state.camera.enable} onClick={this.updateEnable} />
