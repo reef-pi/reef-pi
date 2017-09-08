@@ -38,7 +38,7 @@ func NewPWM(config PWMConfig) (*PWM, error) {
 		conn:   pca9685.New(bus, byte(config.Address)),
 		config: config,
 	}
-	return &pwm, nil
+	return &pwm, pwm.Start()
 }
 
 func (p *PWM) Start() error {
