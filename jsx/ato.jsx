@@ -16,6 +16,18 @@ export default class ATO extends React.Component {
     this.updateControl = this.updateControl.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
     this.showDetails = this.showDetails.bind(this)
+    this.showAlert = this.showAlert.bind(this)
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
+    )
   }
 
   updateSensor (ev) {
@@ -61,12 +73,16 @@ export default class ATO extends React.Component {
       dataType: 'json',
       success: function (data) {
         this.setState({
-          ato: data
+          ato: data,
+          showAlert: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -76,16 +92,25 @@ export default class ATO extends React.Component {
     ato.sensor = parseInt(ato.sensor)
     ato.check_interval = parseInt(ato.check_interval)
     if (isNaN(ato.sensor)) {
-      window.alert('Sensor pin has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Sensor pin has to be a positive integer'
+      })
       return
     }
 
     if (isNaN(ato.pump)) {
-      window.alert('Pump pin has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Pump pin has to be a positive integer'
+      })
       return
     }
     if (isNaN(ato.check_interval)) {
-      window.alert('Check interval has to be a positive integer')
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Check interval has to be a positive integer'
+      })
       return
     }
     $.ajax({
@@ -96,8 +121,11 @@ export default class ATO extends React.Component {
         this.fetchData()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -134,6 +162,7 @@ export default class ATO extends React.Component {
   render () {
     return (
       <div className='container'>
+        {this.showAlert()}
         <div className='row'>
           <div className='col-sm-2'>Monitor</div>
           <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
