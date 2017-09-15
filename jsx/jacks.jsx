@@ -104,11 +104,8 @@ export default class Jacks extends React.Component {
     var dStyle = {
       display: this.state.add ? 'block' : 'none'
     }
-    var oStyle = {
-      border: 'solid 1px #aaa'
-    }
     return (
-      <div className='container' style={oStyle}>
+      <div className='container'>
         <div className='row'>
           <label className='h6'>Jacks</label>
         </div>

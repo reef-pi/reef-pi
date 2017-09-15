@@ -97,11 +97,8 @@ export default class Outlets extends React.Component {
     var dStyle = {
       display: this.state.add ? 'block' : 'none'
     }
-    var oStyle = {
-      border: 'solid 1px #aaa'
-    }
     return (
-      <div className='container' style={oStyle}>
+      <div className='container'>
         <label className='h6'>Outlets</label>
         <div className='row'>
           <div className='container'>

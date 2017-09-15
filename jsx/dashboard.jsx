@@ -108,39 +108,32 @@ export default class Dashboard extends React.Component {
   }
   render () {
     return (
-      <ul className='list-group'>
-        <li className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-2'>Time</div>
-            <div className='col-sm-6'>{this.state.info.current_time}</div>
-          </div>
-        </li>
-        <li className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-2'>IP</div>
-            <div className='col-sm-6'>{this.state.info.ip}</div>
-          </div>
-        </li>
-        <li className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-2'>Up Since</div>
-            <div className='col-sm-6'>{this.state.info.uptime}</div>
-          </div>
-        </li>
-        <li className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-3'>Version</div>
-            <div className='col-sm-6'>{this.state.info.version}</div>
-          </div>
-        </li>
-        <li className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-3'>CPU Temperature</div>
-            <div className='col-sm-6'>{this.state.info.cpu_temperature}</div>
-          </div>
-        </li>
+      <div className='container'>
+        <div className='row'>
+          <b> Summary </b>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Time</div>
+          <div className='col-sm-6'>{this.state.info.current_time}</div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>IP</div>
+          <div className='col-sm-3'>{this.state.info.ip}</div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Up Since</div>
+          <div className='col-sm-3'>{this.state.info.uptime}</div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Version</div>
+          <div className='col-sm-3'>{this.state.info.version}</div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>CPU Temperature</div>
+          <div className='col-sm-3'>{this.state.info.cpu_temperature}</div>
+        </div>
         {this.showDisplay()}
-      </ul>
+      </div>
     )
   }
 }

@@ -9,6 +9,7 @@ export default class System extends React.Component {
       <div className='container'>
         <div className='row'>
           <Dashboard />
+          <hr />
         </div>
         <div className='row'>
           <Settings />

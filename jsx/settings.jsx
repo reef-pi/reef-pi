@@ -181,9 +181,11 @@ export default class Settings extends React.Component {
       <div className='container'>
         <div className='row'>
           <Outlets />
+          <hr />
         </div>
         <div className='row'>
           <Jacks />
+          <hr />
         </div>
         <div className='row'>
           <div className='col-sm-2'> Name</div>
@@ -197,38 +199,44 @@ export default class Settings extends React.Component {
           <div className='col-sm-2'>Address</div>
           <div className='col-sm-3'><input type='text' value={this.state.settings.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
         </div>
-        <div className='row'>
-          <div className='input-group'>
-            <span className='input-group-addon'>Equipments</span>
-            <input type='checkbox' id='updateEquipments' onClick={this.updateEquipments} className='form-control' defaultChecked={this.state.settings.equipments} />
+        <hr />
+        <div className='container'>
+          <span > <b>Capabilities</b> </span>
+          <div className='row'>
+            <span className='col-sm-2'>Equipments</span>
+            <input type='checkbox' id='updateEquipments' onClick={this.updateEquipments} className='col-sm-1' defaultChecked={this.state.settings.equipments} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>Timers</span>
-            <input type='checkbox' id='updateTimers' onClick={this.updateTimers} className='form-control' defaultChecked={this.state.settings.timers} />
+          <div className='row'>
+            <span className='col-sm-2'>Timers</span>
+            <input type='checkbox' id='updateTimers' onClick={this.updateTimers} className='col-sm-1' defaultChecked={this.state.settings.timers} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>Lighting</span>
-            <input type='checkbox' id='updateLighting' onClick={this.updateLighting} className='form-control' defaultChecked={this.state.settings.lighting} />
+          <div className='row'>
+            <span className='col-sm-2'>Lighting</span>
+            <input type='checkbox' id='updateLighting' onClick={this.updateLighting} className='col-sm-1' defaultChecked={this.state.settings.lighting} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>ATO</span>
-            <input type='checkbox' id='updateATO' onClick={this.updateATO} className='form-control' defaultChecked={this.state.settings.ato} />
+          <div className='row'>
+            <span className='col-sm-2'>ATO</span>
+            <input type='checkbox' id='updateATO' onClick={this.updateATO} className='col-sm-1' defaultChecked={this.state.settings.ato} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>Temperature</span>
-            <input type='checkbox' id='updateTemperature' onClick={this.updateTemperature} className='form-control' defaultChecked={this.state.settings.temperature} />
+          <div className='row'>
+            <span className='col-sm-2'>Temperature</span>
+            <input type='checkbox' id='updateTemperature' onClick={this.updateTemperature} className='col-sm-1' defaultChecked={this.state.settings.temperature} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>Camera</span>
-            <input type='checkbox' id='updateCamera' onClick={this.updateCamera} className='form-control' defaultChecked={this.state.settings.camera} />
+          <div className='row'>
+            <span className='col-sm-2'>Camera</span>
+            <input className='col-sm-1' type='checkbox' id='updateCamera' onClick={this.updateCamera} defaultChecked={this.state.settings.camera} />
           </div>
-          <div className='input-group'>
-            <span className='input-group-addon'>DevMode</span>
-            <input type='checkbox' id='updateDevMode' onClick={this.updateDevMode} className='form-control' defaultChecked={this.state.settings.dev_mode} />
+          <div className='row'>
+            <span className='col-sm-2'>DevMode</span>
+            <input type='checkbox' id='updateDevMode' onClick={this.updateDevMode} className='col-sm-1' defaultChecked={this.state.settings.dev_mode} />
           </div>
         </div>
+        <hr />
         <div className='row'>
-          {this.showTelemetry()}
+          <div className='container' >
+            <label> <b>Telemetry</b> </label>
+            {this.showTelemetry()}
+          </div>
         </div>
         <div className='row'>
           <input type='button' className='btn btn-outline-success' onClick={this.update} id='systemUpdateSettings' value='update' />
