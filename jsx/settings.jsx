@@ -1,7 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import Outlets from './outlets.jsx'
-import Jacks from './jacks.jsx'
 import Telemetry from './telemetry.jsx'
 
 export default class Settings extends React.Component {
@@ -180,12 +178,7 @@ export default class Settings extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <Outlets />
-          <hr />
-        </div>
-        <div className='row'>
-          <Jacks />
-          <hr />
+          <b>Settings</b>
         </div>
         <div className='row'>
           <div className='col-sm-2'> Name</div>
@@ -199,7 +192,6 @@ export default class Settings extends React.Component {
           <div className='col-sm-2'>Address</div>
           <div className='col-sm-3'><input type='text' value={this.state.settings.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
         </div>
-        <hr />
         <div className='container'>
           <span > <b>Capabilities</b> </span>
           <div className='row'>
@@ -231,7 +223,6 @@ export default class Settings extends React.Component {
             <input type='checkbox' id='updateDevMode' onClick={this.updateDevMode} className='col-sm-1' defaultChecked={this.state.settings.dev_mode} />
           </div>
         </div>
-        <hr />
         <div className='row'>
           <div className='container' >
             <label> <b>Telemetry</b> </label>
