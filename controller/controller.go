@@ -87,7 +87,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if r.settings.Temperature {
 		temp, err := temperature.New(r.settings.DevMode, r.store, r.telemetry)
 		if err != nil {
-			log.Println("Failed to initialize temperature controller")
+			log.Println("ERROR: Failed to initialize temperature subsystem")
 			return err
 		}
 		r.subsystems[temperature.Bucket] = temp
@@ -95,7 +95,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if r.settings.ATO {
 		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry)
 		if err != nil {
-			log.Println("Failed to initialize ato controller")
+			log.Println("ERROR: Failed to initialize ato subsystem")
 			return err
 		}
 		r.subsystems[ato.Bucket] = a
@@ -107,6 +107,7 @@ func (r *ReefPi) loadSubsystems() error {
 		}
 		l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
 		if err != nil {
+			log.Println("ERROR: Failed to initialize lighting subsystem")
 			return err
 		}
 		r.subsystems[lighting.Bucket] = l
@@ -124,7 +125,7 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {
-			log.Println("Failed to setup subsystem:", sName)
+			log.Println("ERROR: Failed to setup subsystem:", sName)
 			return err
 		}
 		sController.Start()
@@ -143,7 +144,6 @@ func (r *ReefPi) Start() error {
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}
-	r.setupAPI()
 	log.Println("reef-pi is up and running")
 	return nil
 }

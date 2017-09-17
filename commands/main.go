@@ -44,11 +44,15 @@ func main() {
 	}
 	c, err := controller.New(Version, config.Database)
 	if err != nil {
-		log.Fatal("Failed to initialize controller. ERROR:", err)
+		log.Fatal("ERROR: Failed to initialize controller. Error:", err)
 	}
 	if err := c.Start(); err != nil {
-		log.Fatal(err)
+		log.Println("ERROR: Failed to start controller. Error:", err)
 	}
+	if err := c.API(); err != nil {
+		log.Println("ERROR: Failed to start controller. Error:", err)
+	}
+
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGUSR2)
 	for {
