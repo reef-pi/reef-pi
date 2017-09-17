@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (r *ReefPi) setupAPI() error {
+func (r *ReefPi) API() error {
 	err, router := startAPIServer(r.settings.Address)
 	if err != nil {
 		return err
