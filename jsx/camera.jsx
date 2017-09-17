@@ -8,7 +8,8 @@ export default class Camera extends React.Component {
       camera: {},
       latest: {},
       showAlert: false,
-      alertMsg: ''
+      alertMsg: '',
+      updated: false
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
@@ -56,7 +57,8 @@ export default class Camera extends React.Component {
     camera.enable = ev.target.checked
     this.setState({
       camera: camera,
-      showAlert: false
+      showAlert: false,
+      updated: true
     })
   }
 
@@ -65,7 +67,8 @@ export default class Camera extends React.Component {
     camera.image_directory = ev.target.value
     this.setState({
       camera: camera,
-      showAlert: false
+      showAlert: false,
+      updated: true
     })
   }
 
@@ -74,7 +77,8 @@ export default class Camera extends React.Component {
     camera.capture_flags = ev.target.value
     this.setState({
       camera: camera,
-      showAlert: false
+      showAlert: false,
+      updated: true
     })
   }
 
@@ -83,7 +87,8 @@ export default class Camera extends React.Component {
     camera.tick_interval = ev.target.value
     this.setState({
       camera: camera,
-      showAlert: false
+      showAlert: false,
+      updated: true
     })
   }
 
@@ -144,7 +149,8 @@ export default class Camera extends React.Component {
       type: 'POST',
       data: JSON.stringify(camera),
       success: function (data) {
-        this.fetchdata()
+        this.fetchData()
+        this.setState({updated: false})
       }.bind(this),
       error: function (xhr, status, err) {
         this.setStat({
@@ -181,6 +187,10 @@ export default class Camera extends React.Component {
   }
 
   render () {
+    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+    }
     return (
       <div className='container'>
         {this.showAlert()}
@@ -207,7 +217,7 @@ export default class Camera extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <input type='button' id='updateCamera' onClick={this.update} value='update' className='btn btn-outline-primary' />
+          <input type='button' id='updateCamera' onClick={this.update} value='update' className={updateButtonClass} />
         </div>
         <div className='row'>
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
