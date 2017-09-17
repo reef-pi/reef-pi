@@ -58,6 +58,7 @@ export default class Equipment extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'> <label>{this.props.name}</label></div>
+          <div className='col-sm-2' />
           <div className='col-sm-1'><input id={this.props.name} type='button' value={this.state.action} onClick={this.updateEquipment} className='btn btn-outline-primary' /></div>
         </div>
       </div>

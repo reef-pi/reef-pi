@@ -98,6 +98,7 @@ export default class LEDChannel extends React.Component {
     }
     return (list)
   }
+
   render () {
     var showOnDemandSlider = {
       display: this.state.auto ? 'none' : 'block'

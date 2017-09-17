@@ -7,7 +7,8 @@ export default class ATO extends React.Component {
     this.state = {
       ato: {},
       showAlert: false,
-      alertMsg: ''
+      alertMsg: '',
+      updated: false
     }
     this.fetchData = this.fetchData.bind(this)
     this.update = this.update.bind(this)
@@ -36,35 +37,40 @@ export default class ATO extends React.Component {
     var ato = this.state.ato
     ato.sensor = ev.target.value
     this.setState({
-      ato: ato
+      ato: ato,
+      updated: true
     })
   }
   updatePump (ev) {
     var ato = this.state.ato
     ato.pump = ev.target.value
     this.setState({
-      ato: ato
+      ato: ato,
+      updated: true
     })
   }
   updateCheckInterval (ev) {
     var ato = this.state.ato
     ato.check_interval = ev.target.value
     this.setState({
-      ato: ato
+      ato: ato,
+      updated: true
     })
   }
   updateControl (ev) {
     var ato = this.state.ato
     ato.control = ev.target.checked
     this.setState({
-      ato: ato
+      ato: ato,
+      updated: true
     })
   }
   updateEnable (ev) {
     var ato = this.state.ato
     ato.enable = ev.target.checked
     this.setState({
-      ato: ato
+      ato: ato,
+      updated: true
     })
   }
 
@@ -121,6 +127,7 @@ export default class ATO extends React.Component {
       data: JSON.stringify(ato),
       success: function (data) {
         this.fetchData()
+        this.setState({updated: false})
       }.bind(this),
       error: function (xhr, status, err) {
         this.setState({
@@ -162,6 +169,10 @@ export default class ATO extends React.Component {
   }
 
   render () {
+    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+    }
     return (
       <div className='container'>
         {this.showAlert()}
@@ -171,7 +182,7 @@ export default class ATO extends React.Component {
         </div>
         {this.showDetails()}
         <div className='row'>
-          <input type='button' id='updateATO' onClick={this.update} value='update' className='btn btn-outline-primary' />
+          <input type='button' id='updateATO' onClick={this.update} value='update' className={updateButtonClass} />
         </div>
       </div>
     )
