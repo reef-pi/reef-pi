@@ -8,6 +8,7 @@ export default class Temperature extends React.Component {
     this.state = {
       tc: {},
       readings: [],
+      updated: false,
       showAlert: false,
       alertMsg: ''
     }
@@ -66,43 +67,43 @@ export default class Temperature extends React.Component {
   updateMin (ev) {
     var tc = this.state.tc
     tc.min = ev.target.value
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateMax (ev) {
     var tc = this.state.tc
     tc.max = ev.target.value
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateCheckInterval (ev) {
     var tc = this.state.tc
     tc.check_interval = ev.target.value
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateHeater (ev) {
     var tc = this.state.tc
     tc.heater = ev.target.value
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateCooler (ev) {
     var tc = this.state.tc
     tc.cooler = ev.target.value
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateEnable (ev) {
     var tc = this.state.tc
     tc.enable = ev.target.checked
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   updateControl (ev) {
     var tc = this.state.tc
     tc.control = ev.target.checked
-    this.setState({tc: tc})
+    this.setState({tc: tc, updated: true})
   }
 
   update () {
@@ -156,7 +157,8 @@ export default class Temperature extends React.Component {
       success: function (data) {
         this.setState({
           tc: tc,
-          showAlert: false
+          showAlert: false,
+          updated: false
         })
       }.bind(this),
       error: function (xhr, status, err) {
@@ -234,6 +236,10 @@ export default class Temperature extends React.Component {
   }
 
   render () {
+    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+    }
     return (
       <div className='container'>
         {this.showAlert()}
@@ -253,7 +259,7 @@ export default class Temperature extends React.Component {
           {this.showDetails()}
         </div>
         <div className='row'>
-          <input value='Update' onClick={this.update} type='button' className='btn btn-outline-danger' />
+          <input value='Update' onClick={this.update} type='button' className={updateButtonClass} />
         </div>
         <div className='row'>
           {this.showChart()}
