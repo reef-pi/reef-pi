@@ -113,11 +113,13 @@ export default class Lighting extends React.Component {
   lightsList () {
     var lights = []
     $.each(this.state.lights, function (i, light) {
-      console.log('Adding light:', light.name)
       lights.push(
         <div key={'light-' + i} className='row'>
-          <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
-          <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
+          <div className='container'>
+            <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
+            <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
+          </div>
+          <hr />
         </div>
       )
     }.bind(this))
@@ -181,9 +183,7 @@ export default class Lighting extends React.Component {
       <div className='container'>
         {this.showAlert()}
         <div className='container'>
-          <ul>
-            { this.lightsList() }
-          </ul>
+          { this.lightsList() }
         </div>
         <div className='container'>
           <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />

@@ -18,6 +18,7 @@ export default class Light extends React.Component {
     this.updateLight = this.updateLight.bind(this)
     this.updateChannel = this.updateChannel.bind(this)
   }
+
   updateLight () {
     $.ajax({
       url: '/api/lights/' + this.props.id,
@@ -29,6 +30,7 @@ export default class Light extends React.Component {
       }),
       success: function (data) {
         this.fetchData()
+        this.setState({updated: false})
       }.bind(this),
       error: function (xhr, status, err) {
         console.log(err.toString())
@@ -41,7 +43,8 @@ export default class Light extends React.Component {
       var channels = this.state.channels
       channels[pin].auto = ev.target.checked
       this.setState({
-        channels: channels
+        channels: channels,
+        updated: true
       })
     }.bind(this))
   }
@@ -89,11 +92,9 @@ export default class Light extends React.Component {
         var channels = this.state.channels
         channels[pin] = ch
         this.setState({
-          channels: channels
+          channels: channels,
+          updated: true
         })
-        if (ch.fixed) {
-          this.updateLight()
-        }
       }.bind(this)
     )
   }
@@ -112,11 +113,12 @@ export default class Light extends React.Component {
   }
 
   render () {
-    var style = {
-      border: 'solid 1px #888'
+    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
     return (
-      <div className='container' style={style}>
+      <div className='container'>
         <div className='row'>
           {this.props.name}
         </div>
@@ -124,7 +126,7 @@ export default class Light extends React.Component {
           { this.channelList() }
         </div>
         <div className='row'>
-          <input type='button' id={'update-light-' + this.props.name} onClick={this.updateLight} value='update' className='btn btn-outline-danger col-sm-2' />
+          <input type='button' id={'update-light-' + this.props.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
         </div>
       </div>
     )
