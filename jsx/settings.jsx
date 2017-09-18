@@ -76,7 +76,7 @@ export default class Settings extends React.Component {
     settings.adafruitio = adafruitio
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -85,7 +85,7 @@ export default class Settings extends React.Component {
     settings.ato = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -94,7 +94,7 @@ export default class Settings extends React.Component {
     settings.camera = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -103,7 +103,7 @@ export default class Settings extends React.Component {
     settings.temperature = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -112,7 +112,7 @@ export default class Settings extends React.Component {
     settings.lighting = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -121,7 +121,7 @@ export default class Settings extends React.Component {
     settings.dev_mode = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -130,7 +130,7 @@ export default class Settings extends React.Component {
     settings.timers = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -139,7 +139,7 @@ export default class Settings extends React.Component {
     settings.equipments = ev.target.checked
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -149,9 +149,9 @@ export default class Settings extends React.Component {
       type: 'POST',
       data: JSON.stringify(this.state.settings),
       success: function (data) {
-       this.setState({
-         updated: false
-       })
+        this.setState({
+          updated: false
+        })
       }.bind(this),
       error: function (xhr, status, err) {
         this.setState({
@@ -172,7 +172,7 @@ export default class Settings extends React.Component {
     settings.interface = ev.target.value
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -181,7 +181,7 @@ export default class Settings extends React.Component {
     settings.address = ev.target.value
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 
@@ -208,7 +208,7 @@ export default class Settings extends React.Component {
     settings.name = ev.target.value
     this.setState({
       settings: settings,
-      updated: true,
+      updated: true
     })
   }
 

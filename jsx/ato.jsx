@@ -147,15 +147,15 @@ export default class ATO extends React.Component {
     this.fetchData()
   }
 
-  showControl() {
+  showControl () {
     if (!this.state.ato.control) {
       return
     }
-    return(
-        <div className='row'>
-          <div className='col-sm-2'>ATO Pump pin</div>
-          <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
-        </div>
+    return (
+      <div className='row'>
+        <div className='col-sm-2'>ATO Pump pin</div>
+        <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
+      </div>
     )
   }
 
