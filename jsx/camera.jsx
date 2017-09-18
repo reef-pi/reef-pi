@@ -21,6 +21,38 @@ export default class Camera extends React.Component {
     this.updateTickInterval = this.updateTickInterval.bind(this)
     this.showCapture = this.showCapture.bind(this)
     this.showAlert = this.showAlert.bind(this)
+    this.showEnable = this.showEnable.bind(this)
+  }
+
+  showEnable () {
+    if (!this.state.camera.enable) {
+      return
+    }
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-3'>Tick Interval (in minutes)</div>
+          <div className='col-sm-1'>
+            <input type='text' onChange={this.updateTickInterval} id='tick_interval' value={this.state.camera.tick_interval} />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Capture flags</div>
+          <div className='col-sm-3'>
+            <input type='text' onChange={this.updateCaptureFlags} id='capture_flags' value={this.state.camera.capture_flags} />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Image Directory</div>
+          <div className='col-sm-6'>
+            <input type='text' onChange={this.updateImageDirectory} id='image_directory' value={this.state.camera.image_directory} />
+          </div>
+        </div>
+        <div className='row'>
+          <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
+        </div>
+      </div>
+    )
   }
 
   showAlert () {
@@ -198,29 +230,9 @@ export default class Camera extends React.Component {
           <div className='col-sm-2'>Enable</div>
           <input type='checkbox' id='camera_enable' className='col-sm-2' defaultChecked={this.state.camera.enable} onClick={this.updateEnable} />
         </div>
-        <div className='row'>
-          <div className='col-sm-3'>Tick Interval (in minutes)</div>
-          <div className='col-sm-1'>
-            <input type='text' onChange={this.updateTickInterval} id='tick_interval' value={this.state.camera.tick_interval} />
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-3'>Capture flags</div>
-          <div className='col-sm-3'>
-            <input type='text' onChange={this.updateCaptureFlags} id='capture_flags' value={this.state.camera.capture_flags} />
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-3'>Image Directory</div>
-          <div className='col-sm-6'>
-            <input type='text' onChange={this.updateImageDirectory} id='image_directory' value={this.state.camera.image_directory} />
-          </div>
-        </div>
+        {this.showEnable() }
         <div className='row'>
           <input type='button' id='updateCamera' onClick={this.update} value='update' className={updateButtonClass} />
-        </div>
-        <div className='row'>
-          <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
         </div>
         {this.showCapture()}
       </div>
