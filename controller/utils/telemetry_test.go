@@ -11,7 +11,6 @@ func TestEmitMetric(t *testing.T) {
 		Token:  "fake-token",
 		Enable: false,
 		User:   "ranjib",
-		Feed:   "temperature",
 	}
 	telemetry := NewTelemetry(config)
 	rand.Seed(time.Now().Unix())

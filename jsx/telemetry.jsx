@@ -9,7 +9,7 @@ export default class Telemetry extends React.Component {
     this.updateEnable = this.updateEnable.bind(this)
     this.updateUser = this.updateUser.bind(this)
     this.updateToken = this.updateToken.bind(this)
-    this.updateFeed = this.updateFeed.bind(this)
+    this.updatePrefix = this.updatePrefix.bind(this)
   }
 
   componentDidMount () {
@@ -36,9 +36,9 @@ export default class Telemetry extends React.Component {
     this.props.update(this.state.adafruitio)
   }
 
-  updateFeed (ev) {
+  updatePrefix (ev) {
     var adafruitio = this.state.adafruitio
-    adafruitio.feed = ev.target.value
+    adafruitio.prefix = ev.target.value
     this.setState({adafruitio: adafruitio})
     this.props.update(this.state.adafruitio)
   }
@@ -72,10 +72,10 @@ export default class Telemetry extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>
-            Feed
+            Prefix
           </div>
           <div className='col-sm-2'>
-            <input type='text' value={this.state.adafruitio.feed} onChange={this.updateFeed} id='telemetryFeed' />
+            <input type='text' value={this.state.adafruitio.prefix} onChange={this.updatePrefix} id='telemetryPrefix' />
           </div>
         </div>
       </div>

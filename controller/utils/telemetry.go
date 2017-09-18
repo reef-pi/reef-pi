@@ -10,7 +10,7 @@ type AdafruitIO struct {
 	Enable bool   `json:"enable" yaml:"enable"`
 	Token  string `json:"token" yaml:"token"`
 	User   string `json:"user" yaml:"user"`
-	Feed   string `json:"feed" yaml:"feed"`
+	Prefix string `json:"prefix" yaml:"prefix"`
 }
 
 type Telemetry struct {
@@ -29,7 +29,7 @@ func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	d := adafruitio.Data{
 		Value: v,
 	}
-	feed = strings.ToLower(feed)
+	feed = strings.ToLower(t.config.Prefix + feed)
 
 	if !t.config.Enable {
 		log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
