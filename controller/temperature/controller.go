@@ -27,10 +27,12 @@ type Config struct {
 	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
 }
 
-var Default = Config{
+var DefaultConfig = Config{
 	Min:           77,
 	Max:           81,
 	CheckInterval: 1,
+	HeaterGPIO:    22,
+	CoolerGPIO:    27,
 }
 
 type Controller struct {
@@ -65,7 +67,7 @@ func loadConfig(store utils.Store) Config {
 	var conf Config
 	if err := store.Get(Bucket, "config", &conf); err != nil {
 		log.Println("WARNING: Temperature controller config not found. Using default config")
-		conf = Default
+		conf = DefaultConfig
 	}
 	return conf
 }

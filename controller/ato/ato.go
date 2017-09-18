@@ -19,6 +19,13 @@ type Config struct {
 	Enable        bool          `json:"enable" yaml:"enable"`
 }
 
+var DefaultConfig = Config{
+	CheckInterval: 30,
+	DevMode:       true,
+	Sensor:        25,
+	Pump:          24,
+}
+
 type Controller struct {
 	config    Config
 	telemetry *utils.Telemetry
@@ -32,10 +39,7 @@ func loadConfig(store utils.Store) Config {
 	var conf Config
 	if err := store.Get(Bucket, "config", &conf); err != nil {
 		log.Println("WARNING: ATO config not found. Using default config")
-		conf = Config{
-			CheckInterval: 30,
-			DevMode:       true,
-		}
+		conf = DefaultConfig
 	}
 	return conf
 }
