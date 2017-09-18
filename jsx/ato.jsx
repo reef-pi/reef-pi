@@ -18,7 +18,8 @@ export default class ATO extends React.Component {
     this.updateCheckInterval = this.updateCheckInterval.bind(this)
     this.updateControl = this.updateControl.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
-    this.showDetails = this.showDetails.bind(this)
+    this.showEnable = this.showEnable.bind(this)
+    this.showControl = this.showControl.bind(this)
     this.showAlert = this.showAlert.bind(this)
   }
 
@@ -41,6 +42,7 @@ export default class ATO extends React.Component {
       updated: true
     })
   }
+
   updatePump (ev) {
     var ato = this.state.ato
     ato.pump = ev.target.value
@@ -49,6 +51,7 @@ export default class ATO extends React.Component {
       updated: true
     })
   }
+
   updateCheckInterval (ev) {
     var ato = this.state.ato
     ato.check_interval = ev.target.value
@@ -57,6 +60,7 @@ export default class ATO extends React.Component {
       updated: true
     })
   }
+
   updateControl (ev) {
     var ato = this.state.ato
     ato.control = ev.target.checked
@@ -65,6 +69,7 @@ export default class ATO extends React.Component {
       updated: true
     })
   }
+
   updateEnable (ev) {
     var ato = this.state.ato
     ato.enable = ev.target.checked
@@ -142,7 +147,19 @@ export default class ATO extends React.Component {
     this.fetchData()
   }
 
-  showDetails () {
+  showControl () {
+    if (!this.state.ato.control) {
+      return
+    }
+    return (
+      <div className='row'>
+        <div className='col-sm-2'>ATO Pump pin</div>
+        <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
+      </div>
+    )
+  }
+
+  showEnable () {
     if (!this.state.ato.enable) {
       return
     }
@@ -160,10 +177,7 @@ export default class ATO extends React.Component {
           <div className='col-sm-2'>Control</div>
           <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateControl} />
         </div>
-        <div className='row'>
-          <div className='col-sm-2'>ATO Pump pin</div>
-          <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
-        </div>
+        {this.showControl()}
       </div>
     )
   }
@@ -177,10 +191,10 @@ export default class ATO extends React.Component {
       <div className='container'>
         {this.showAlert()}
         <div className='row'>
-          <div className='col-sm-2'>Monitor</div>
+          <div className='col-sm-2'>Enable</div>
           <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
         </div>
-        {this.showDetails()}
+        {this.showEnable()}
         <div className='row'>
           <input type='button' id='updateATO' onClick={this.update} value='update' className={updateButtonClass} />
         </div>

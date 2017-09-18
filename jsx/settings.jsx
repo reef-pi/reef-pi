@@ -7,7 +7,10 @@ export default class Settings extends React.Component {
     super(props)
     this.state = {
       capabilities: [],
-      settings: {}
+      settings: {},
+      updated: false,
+      showAlert: false,
+      alertMsg: ''
     }
     this.loadCapabilities = this.loadCapabilities.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -24,6 +27,7 @@ export default class Settings extends React.Component {
     this.updateTemperature = this.updateTemperature.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
+    this.showAlert = this.showAlert.bind(this)
 
     this.update = this.update.bind(this)
   }
@@ -34,6 +38,17 @@ export default class Settings extends React.Component {
     }
     return (
       <Telemetry adafruitio={this.state.settings.adafruitio} update={this.updateTelemetry} />
+    )
+  }
+
+  showAlert () {
+    if (!this.state.showAlert) {
+      return
+    }
+    return (
+      <div className='alert alert-danger'>
+        {this.state.alertMsg}
+      </div>
     )
   }
 
@@ -48,8 +63,11 @@ export default class Settings extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -57,7 +75,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.adafruitio = adafruitio
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -65,7 +84,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.ato = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -73,7 +93,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.camera = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -81,7 +102,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.temperature = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -89,7 +111,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.lighting = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -97,7 +120,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.dev_mode = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -105,7 +129,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.timers = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -113,7 +138,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.equipments = ev.target.checked
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -123,10 +149,16 @@ export default class Settings extends React.Component {
       type: 'POST',
       data: JSON.stringify(this.state.settings),
       success: function (data) {
-      },
+        this.setState({
+          updated: false
+        })
+      }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -139,7 +171,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.interface = ev.target.value
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -147,7 +180,8 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.address = ev.target.value
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
@@ -161,8 +195,11 @@ export default class Settings extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -170,13 +207,20 @@ export default class Settings extends React.Component {
     var settings = this.state.settings
     settings.name = ev.target.value
     this.setState({
-      settings: settings
+      settings: settings,
+      updated: true
     })
   }
 
   render () {
+    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+    }
+
     return (
       <div className='container'>
+        {this.showAlert()}
         <div className='row'>
           <b>Settings</b>
         </div>
@@ -230,7 +274,7 @@ export default class Settings extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <input type='button' className='btn btn-outline-success' onClick={this.update} id='systemUpdateSettings' value='update' />
+          <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />
         </div>
       </div>
     )

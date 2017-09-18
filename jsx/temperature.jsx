@@ -20,7 +20,8 @@ export default class Temperature extends React.Component {
     this.updateCooler = this.updateCooler.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
     this.updateControl = this.updateControl.bind(this)
-    this.showDetails = this.showDetails.bind(this)
+    this.showEnable = this.showEnable.bind(this)
+    this.showControl = this.showControl.bind(this)
     this.update = this.update.bind(this)
     this.showChart = this.showChart.bind(this)
   }
@@ -209,7 +210,25 @@ export default class Temperature extends React.Component {
     this.fetchData()
   }
 
-  showDetails () {
+  showEnable () {
+    if (!this.state.tc.enable) {
+      return
+    }
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-3'> Check Interval (in minutes) </div>
+          <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'> Control </div>
+          <div className='col-sm-2'><input type='checkbox' id='tc_control' defaultChecked={this.state.tc.control} onClick={this.updateControl} /></div>
+        </div>
+      </div>
+    )
+  }
+
+  showControl () {
     if (!this.state.tc.control) {
       return
     }
@@ -247,16 +266,9 @@ export default class Temperature extends React.Component {
           <div className='col-sm-3'> Enable </div>
           <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.enable} onClick={this.updateEnable} /></div>
         </div>
+        {this.showEnable()}
         <div className='row'>
-          <div className='col-sm-3'> Check Interval (in minutes) </div>
-          <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-3'> Control </div>
-          <div className='col-sm-2'><input type='checkbox' id='tc_control' defaultChecked={this.state.tc.control} onClick={this.updateControl} /></div>
-        </div>
-        <div className='row'>
-          {this.showDetails()}
+          {this.showControl()}
         </div>
         <div className='row'>
           <input value='Update' onClick={this.update} type='button' className={updateButtonClass} />
