@@ -9,9 +9,7 @@ export default class Timers extends React.Component {
     this.state = {
       equipment: undefined,
       equipmentAction: 'on',
-      equipmentValue: 0,
       equipments: [],
-      outletType: undefined,
       timers: [],
       addTimer: false,
       showAlert: false,
@@ -197,7 +195,6 @@ export default class Timers extends React.Component {
       minute: $('#minute').val(),
       second: $('#second').val(),
       on: (this.state.equipmentAction === 'on'),
-      value: this.state.equipmentValue,
       equipment: this.state.equipment.id
     }
     $.ajax({

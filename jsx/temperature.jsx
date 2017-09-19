@@ -8,6 +8,7 @@ export default class Temperature extends React.Component {
     this.state = {
       tc: {},
       readings: [],
+      equipments: [],
       updated: false,
       showAlert: false,
       alertMsg: ''
@@ -24,6 +25,7 @@ export default class Temperature extends React.Component {
     this.showControl = this.showControl.bind(this)
     this.update = this.update.bind(this)
     this.showChart = this.showChart.bind(this)
+    this.showAlert = this.showAlert.bind(this)
   }
 
   showAlert () {
