@@ -93,7 +93,7 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[temperature.Bucket] = temp
 	}
 	if r.settings.ATO {
-		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry)
+		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry, eqs)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize ato subsystem")
 			return err

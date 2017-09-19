@@ -1,5 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
+import SelectEquipment from './select_equipment.jsx'
 
 export default class ATO extends React.Component {
   constructor (props) {
@@ -43,13 +44,14 @@ export default class ATO extends React.Component {
     })
   }
 
-  updatePump (ev) {
+  updatePump (equipment) {
     var ato = this.state.ato
-    ato.pump = ev.target.value
+    ato.pump = equipment
     this.setState({
       ato: ato,
       updated: true
     })
+    console.log('Pump update ato:', ato)
   }
 
   updateCheckInterval (ev) {
@@ -101,7 +103,6 @@ export default class ATO extends React.Component {
 
   update (ev) {
     var ato = this.state.ato
-    ato.pump = parseInt(ato.pump)
     ato.sensor = parseInt(ato.sensor)
     ato.check_interval = parseInt(ato.check_interval)
     if (isNaN(ato.sensor)) {
@@ -112,13 +113,6 @@ export default class ATO extends React.Component {
       return
     }
 
-    if (isNaN(ato.pump)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Pump pin has to be a positive integer'
-      })
-      return
-    }
     if (isNaN(ato.check_interval)) {
       this.setState({
         showAlert: true,
@@ -131,8 +125,10 @@ export default class ATO extends React.Component {
       type: 'POST',
       data: JSON.stringify(ato),
       success: function (data) {
-        this.fetchData()
-        this.setState({updated: false})
+        this.setState({
+          updated: false,
+          ato: ato
+        })
       }.bind(this),
       error: function (xhr, status, err) {
         this.setState({
@@ -153,8 +149,8 @@ export default class ATO extends React.Component {
     }
     return (
       <div className='row'>
-        <div className='col-sm-2'>ATO Pump pin</div>
-        <input type='text' id='pump_pin' className='col-sm-2' value={this.state.ato.pump} onChange={this.updatePump} />
+        <div className='col-sm-2'>Pump</div>
+        <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} /></div>
       </div>
     )
   }
