@@ -11,7 +11,6 @@ export default class Timers extends React.Component {
       equipmentAction: 'on',
       equipmentValue: 0,
       equipments: [],
-      outletType: undefined,
       timers: [],
       addTimer: false,
       showAlert: false,
