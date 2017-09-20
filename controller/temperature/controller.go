@@ -3,6 +3,7 @@ package temperature
 import (
 	"container/ring"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
@@ -20,8 +21,8 @@ type Config struct {
 	Min           float32       `yaml:"min" json:"min"`
 	Max           float32       `yaml:"max" json:"max"`
 	CheckInterval time.Duration `yaml:"check_interval" json:"check_interval"`
-	HeaterGPIO    int           `yaml:"heater" json:"heater"`
-	CoolerGPIO    int           `yaml:"cooler" json:"cooler"`
+	Heater        string        `yaml:"heater" json:"heater"`
+	Cooler        string        `yaml:"cooler" json:"cooler"`
 	Control       bool          `yaml:"control" json:"control"`
 	Enable        bool          `yaml:"enable" json:"enable"`
 	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
@@ -31,35 +32,35 @@ var DefaultConfig = Config{
 	Min:           77,
 	Max:           81,
 	CheckInterval: 1,
-	HeaterGPIO:    22,
-	CoolerGPIO:    27,
 }
 
 type Controller struct {
-	config    Config
-	coolerOn  bool
-	heaterOn  bool
-	stopCh    chan struct{}
-	telemetry *utils.Telemetry
-	store     utils.Store
-	latest    float32
-	readings  *ring.Ring
-	mu        sync.Mutex
+	config     Config
+	stopCh     chan struct{}
+	telemetry  *utils.Telemetry
+	store      utils.Store
+	latest     float32
+	readings   *ring.Ring
+	mu         sync.Mutex
+	equipments *equipments.Controller
+	heater     *equipments.Equipment
+	cooler     *equipments.Equipment
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
 	config := loadConfig(store)
 	if config.CheckInterval <= 0 {
 		return nil, fmt.Errorf("CheckInterval for temperature controller must be greater than zero")
 	}
 	config.DevMode = devMode
 	return &Controller{
-		config:    config,
-		mu:        sync.Mutex{},
-		stopCh:    make(chan struct{}),
-		telemetry: telemetry,
-		store:     store,
-		readings:  ring.New(20),
+		config:     config,
+		mu:         sync.Mutex{},
+		stopCh:     make(chan struct{}),
+		telemetry:  telemetry,
+		store:      store,
+		readings:   ring.New(20),
+		equipments: eqs,
 	}, nil
 }
 
@@ -78,6 +79,24 @@ func (c *Controller) Setup() error {
 
 func (c *Controller) Start() {
 	go c.run()
+}
+
+func (c *Controller) cacheEquipments() error {
+	if c.heater == nil {
+		heater, err := c.equipments.Get(c.config.Heater)
+		if err != nil {
+			return err
+		}
+		c.heater = &heater
+	}
+	if c.cooler == nil {
+		cooler, err := c.equipments.Get(c.config.Cooler)
+		if err != nil {
+			return err
+		}
+		c.cooler = &cooler
+	}
+	return nil
 }
 
 func (c *Controller) run() {
@@ -102,6 +121,10 @@ func (c *Controller) run() {
 			c.readings = c.readings.Next()
 			log.Println("Temperature sensor value:", reading)
 			c.telemetry.EmitMetric("temperature", reading)
+			if c.config.Control {
+				log.Println("Temeperature control is disabled. Skipping.")
+				c.control(reading)
+			}
 		case <-c.stopCh:
 			log.Println("Stopping temperature sensor")
 			ticker.Stop()
@@ -117,54 +140,41 @@ func (c *Controller) Stop() {
 func (c *Controller) switchHeater(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if on {
-		if err := utils.SwitchOn(c.config.HeaterGPIO); err != nil {
+	if on != c.heater.On {
+		log.Println("Temperature susbsyem - switching heater on:", on)
+		c.heater.On = on
+		if err := c.equipments.Update(c.heater.ID, *c.heater); err != nil {
+			c.heater.On = !on
 			return err
 		}
-		c.heaterOn = true
-		c.telemetry.EmitMetric("heater", 1)
-		log.Println("Heater switched on")
-	} else {
-		if err := utils.SwitchOff(c.config.HeaterGPIO); err != nil {
-			return err
-		}
-		c.heaterOn = false
-		c.telemetry.EmitMetric("heater", 0)
-		log.Println("Heater switched off")
 	}
+	c.telemetry.EmitMetric("heater", on)
 	return nil
 }
 
 func (c *Controller) switchCooler(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if on {
-		if err := utils.SwitchOn(c.config.CoolerGPIO); err != nil {
+	if on != c.cooler.On {
+		log.Println("Temperature susbsystem - switching cooler on:", on)
+		c.cooler.On = on
+		if err := c.equipments.Update(c.cooler.ID, *c.cooler); err != nil {
+			c.cooler.On = !on
 			return err
 		}
-		c.coolerOn = true
-		c.telemetry.EmitMetric("cooler", 1)
-		log.Println("Cooler switched on")
-
-	} else {
-		if err := utils.SwitchOff(c.config.HeaterGPIO); err != nil {
-			return err
-		}
-		c.heaterOn = false
-		c.telemetry.EmitMetric("cooler", 0)
-		log.Println("Cooler switched off")
 	}
+	c.telemetry.EmitMetric("cooler", on)
 	return nil
 }
 
 func (c *Controller) warmUp() error {
-	if c.coolerOn {
+	if c.cooler.On {
 		log.Println("WARNING: Possible flapping. Turning off cooler due to warm up routine.")
 		if err := c.switchCooler(false); err != nil {
 			return err
 		}
 	}
-	if c.heaterOn {
+	if c.heater.On {
 		log.Println("Heater is already on. Skipping switch on")
 		return nil
 	}
@@ -175,13 +185,13 @@ func (c *Controller) warmUp() error {
 }
 
 func (c *Controller) coolDown() error {
-	if c.heaterOn {
+	if c.heater.On {
 		log.Println("WARNING: Possible flapping. Turning off heater due to cool down routine.")
 		if err := c.switchHeater(false); err != nil {
 			return err
 		}
 	}
-	if c.coolerOn {
+	if c.cooler.On {
 		log.Println("Cooler is already on. Skipping switch on")
 		return nil
 	}
@@ -192,9 +202,9 @@ func (c *Controller) coolDown() error {
 }
 
 func (c *Controller) control(reading float32) error {
-	if c.config.Control {
-		log.Println("Temeperature control is disabled. Skipping.")
-		return nil
+	if err := c.cacheEquipments(); err != nil {
+		log.Println("ERROR: Failed to ")
+		return err
 	}
 	switch {
 	case reading > c.config.Max:
@@ -202,13 +212,13 @@ func (c *Controller) control(reading float32) error {
 		return c.coolDown()
 	case reading < c.config.Min:
 		log.Println("Current temperature is below minimum threshold. Executing warm up routine")
-		return c.coolDown()
+		return c.warmUp()
 	default:
-		if c.coolerOn {
-			return c.switchCooler(false)
+		if c.cooler.On {
+			c.switchCooler(false)
 		}
-		if c.heaterOn {
-			return c.switchHeater(false)
+		if c.heater.On {
+			c.switchHeater(false)
 		}
 	}
 	return nil

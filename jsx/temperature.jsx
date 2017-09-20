@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
+import SelectEquipment from './select_equipment.jsx'
 
 export default class Temperature extends React.Component {
   constructor (props) {
@@ -8,7 +9,6 @@ export default class Temperature extends React.Component {
     this.state = {
       tc: {},
       readings: [],
-      equipments: [],
       updated: false,
       showAlert: false,
       alertMsg: ''
@@ -85,15 +85,15 @@ export default class Temperature extends React.Component {
     this.setState({tc: tc, updated: true})
   }
 
-  updateHeater (ev) {
+  updateHeater (eq) {
     var tc = this.state.tc
-    tc.heater = ev.target.value
+    tc.heater = eq
     this.setState({tc: tc, updated: true})
   }
 
-  updateCooler (ev) {
+  updateCooler (eq) {
     var tc = this.state.tc
-    tc.cooler = ev.target.value
+    tc.cooler = eq
     this.setState({tc: tc, updated: true})
   }
 
@@ -114,8 +114,6 @@ export default class Temperature extends React.Component {
     tc.min = parseInt(tc.min)
     tc.max = parseInt(tc.max)
     tc.check_interval = parseInt(tc.check_interval)
-    tc.cooler = parseInt(tc.cooler)
-    tc.heater = parseInt(tc.heater)
 
     if (isNaN(tc.min)) {
       this.setState({
@@ -246,11 +244,11 @@ export default class Temperature extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-3'> Heater </div>
-          <div className='col-sm-2'><input type='text' id='heater' value={this.state.tc.heater} onChange={this.updateHeater} /></div>
+          <div className='col-sm-2'><SelectEquipment update={this.updateHeater} active={this.state.tc.heater} id='heater_selector' /></div>
         </div>
         <div className='row'>
           <div className='col-sm-3'> Cooler </div>
-          <div className='col-sm-2'><input type='text' id='cooler' value={this.state.tc.cooler} onChange={this.updateCooler} /></div>
+          <div className='col-sm-2'><SelectEquipment update={this.updateCooler} active={this.state.tc.cooler} id='cooler_selector' /></div>
         </div>
       </div>
     )
