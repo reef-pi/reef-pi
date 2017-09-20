@@ -51,7 +51,6 @@ export default class ATO extends React.Component {
       ato: ato,
       updated: true
     })
-    console.log('Pump update ato:', ato)
   }
 
   updateCheckInterval (ev) {

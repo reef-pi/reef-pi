@@ -11,7 +11,7 @@ export default class SelectEquipment extends React.Component {
       alertMsg: '',
       equipment: {
         id: props.active,
-        name: 'not-available'
+        name: ''
       }
     }
     this.fetchData = this.fetchData.bind(this)
