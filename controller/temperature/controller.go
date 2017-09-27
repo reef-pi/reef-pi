@@ -122,11 +122,10 @@ func (c *Controller) run() {
 			log.Println("Temperature sensor value:", reading)
 			c.telemetry.EmitMetric("temperature", reading)
 			if c.config.Control {
-				log.Println("Temeperature control is disabled. Skipping.")
 				c.control(reading)
 			}
 		case <-c.stopCh:
-			log.Println("Stopping temperature sensor")
+			log.Println("Stopping temperature controller")
 			ticker.Stop()
 			return
 		}
