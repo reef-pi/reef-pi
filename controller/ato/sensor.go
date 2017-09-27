@@ -28,7 +28,7 @@ func (c *Controller) Control(reading int) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if err := c.cachePump(); err != nil {
-		log.Println("ERROR: ATO susbsyem. Failed to fetch pump details. Error:", err)
+		log.Println("ERROR: ATO subsystem. Failed to fetch pump details. Error:", err)
 		return err
 	}
 	if reading == 1 { // Water is above the level
