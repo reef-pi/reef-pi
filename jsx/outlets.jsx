@@ -1,5 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
+import ReactDOM from 'react-dom'
+import Confirm from './confirm.jsx'
 
 export default class Outlets extends React.Component {
   constructor (props) {
@@ -13,20 +15,43 @@ export default class Outlets extends React.Component {
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
+    this.confirm = this.confirm.bind(this)
+  }
+
+  confirm (message, options) {
+    var cleanup, component, props, wrapper
+    if (options == null) {
+      options = {}
+    }
+    props = $.extend({
+      message: message
+    }, options)
+    wrapper = document.body.appendChild(document.createElement('div'))
+    component = ReactDOM.render(<Confirm {...props} />, wrapper)
+    cleanup = function () {
+      ReactDOM.unmountComponentAtNode(wrapper)
+      return setTimeout(function () {
+        return wrapper.remove()
+      })
+    }
+    return component.promise.always(cleanup).promise()
   }
 
   remove (id) {
     return (function () {
-      $.ajax({
-        url: '/api/outlets/' + id,
-        type: 'DELETE',
-        success: function (data) {
-          this.fetchData()
-        }.bind(this),
-        error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
-      })
+      this.confirm('Are you sure ?')
+      .then(function () {
+        $.ajax({
+          url: '/api/outlets/' + id,
+          type: 'DELETE',
+          success: function (data) {
+            this.fetchData()
+          }.bind(this),
+          error: function (xhr, status, err) {
+            console.log(err.toString())
+          }
+        })
+      }.bind(this))
     }.bind(this))
   }
 
