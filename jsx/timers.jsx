@@ -2,6 +2,8 @@ import React from 'react'
 import { OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
 import $ from 'jquery'
 import Timer from './timer.jsx'
+import ReactDOM from 'react-dom'
+import Confirm from './confirm.jsx'
 
 export default class Timers extends React.Component {
   constructor (props) {
@@ -16,6 +18,7 @@ export default class Timers extends React.Component {
       alertMsg: ''
     }
     this.timerList = this.timerList.bind(this)
+    this.confirm = this.confirm.bind(this)
     this.createTimer = this.createTimer.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -28,6 +31,25 @@ export default class Timers extends React.Component {
 
   componentDidMount () {
     this.fetchData()
+  }
+
+  confirm (message, options) {
+    var cleanup, component, props, wrapper
+    if (options == null) {
+      options = {}
+    }
+    props = $.extend({
+      message: message
+    }, options)
+    wrapper = document.body.appendChild(document.createElement('div'))
+    component = ReactDOM.render(<Confirm {...props} />, wrapper)
+    cleanup = function () {
+      ReactDOM.unmountComponentAtNode(wrapper)
+      return setTimeout(function () {
+        return wrapper.remove()
+      })
+    }
+    return component.promise.always(cleanup).promise()
   }
 
   showAlert () {
@@ -102,19 +124,22 @@ export default class Timers extends React.Component {
 
   removeTimer (id) {
     return (function () {
-      $.ajax({
-        url: '/api/timers/' + id,
-        type: 'DELETE',
-        success: function (data) {
-          this.fetchData()
-        }.bind(this),
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
-      })
+      this.confirm('Are you sure ?')
+      .then(function () {
+        $.ajax({
+          url: '/api/timers/' + id,
+          type: 'DELETE',
+          success: function (data) {
+            this.fetchData()
+          }.bind(this),
+          error: function (xhr, status, err) {
+            this.setState({
+              showAlert: true,
+              alertMsg: xhr.responseText
+            })
+          }.bind(this)
+        })
+      }.bind(this))
     }.bind(this))
   }
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
+import ReactDOM from 'react-dom'
+import Confirm from './confirm.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Equipments extends React.Component {
@@ -14,6 +16,7 @@ export default class Equipments extends React.Component {
       showAlert: false,
       alertMsg: ''
     }
+    this.confirm = this.confirm.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.setOutlet = this.setOutlet.bind(this)
@@ -22,6 +25,25 @@ export default class Equipments extends React.Component {
     this.removeEquipment = this.removeEquipment.bind(this)
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
     this.showAlert = this.showAlert.bind(this)
+  }
+
+  confirm (message, options) {
+    var cleanup, component, props, wrapper
+    if (options == null) {
+      options = {}
+    }
+    props = $.extend({
+      message: message
+    }, options)
+    wrapper = document.body.appendChild(document.createElement('div'))
+    component = ReactDOM.render(<Confirm {...props} />, wrapper)
+    cleanup = function () {
+      ReactDOM.unmountComponentAtNode(wrapper)
+      return setTimeout(function () {
+        return wrapper.remove()
+      })
+    }
+    return component.promise.always(cleanup).promise()
   }
 
   showAlert () {
@@ -152,19 +174,22 @@ export default class Equipments extends React.Component {
 
   removeEquipment (id) {
     return (function () {
-      $.ajax({
-        url: '/api/equipments/' + id,
-        type: 'DELETE',
-        success: function (data) {
-          this.fetchData()
-        }.bind(this),
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
-      })
+      this.confirm('Are you sure ?')
+      .then(function () {
+        $.ajax({
+          url: '/api/equipments/' + id,
+          type: 'DELETE',
+          success: function (data) {
+            this.fetchData()
+          }.bind(this),
+          error: function (xhr, status, err) {
+            this.setState({
+              showAlert: true,
+              alertMsg: xhr.responseText
+            })
+          }.bind(this)
+        })
+      }.bind(this))
     }.bind(this))
   }
 

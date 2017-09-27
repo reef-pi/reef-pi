@@ -2,6 +2,8 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import ReactDOM from 'react-dom'
+import Confirm from './confirm.jsx'
 
 export default class Lighting extends React.Component {
   constructor (props) {
@@ -17,6 +19,7 @@ export default class Lighting extends React.Component {
       alertMsg: ''
     }
     this.lightsList = this.lightsList.bind(this)
+    this.confirm = this.confirm.bind(this)
     this.jacksList = this.jacksList.bind(this)
     this.fetchLights = this.fetchLights.bind(this)
     this.addLight = this.addLight.bind(this)
@@ -24,6 +27,25 @@ export default class Lighting extends React.Component {
     this.setJack = this.setJack.bind(this)
     this.removeLight = this.removeLight.bind(this)
     this.showAlert = this.showAlert.bind(this)
+  }
+
+  confirm (message, options) {
+    var cleanup, component, props, wrapper
+    if (options == null) {
+      options = {}
+    }
+    props = $.extend({
+      message: message
+    }, options)
+    wrapper = document.body.appendChild(document.createElement('div'))
+    component = ReactDOM.render(<Confirm {...props} />, wrapper)
+    cleanup = function () {
+      ReactDOM.unmountComponentAtNode(wrapper)
+      return setTimeout(function () {
+        return wrapper.remove()
+      })
+    }
+    return component.promise.always(cleanup).promise()
   }
 
   showAlert () {
@@ -39,16 +61,19 @@ export default class Lighting extends React.Component {
 
   removeLight (id) {
     return (function () {
-      $.ajax({
-        url: '/api/lights/' + id,
-        type: 'DELETE',
-        success: function (data) {
-          this.fetchLights()
-        }.bind(this),
-        error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
-      })
+      this.confirm('Are you sure ?')
+      .then(function () {
+        $.ajax({
+          url: '/api/lights/' + id,
+          type: 'DELETE',
+          success: function (data) {
+            this.fetchLights()
+          }.bind(this),
+          error: function (xhr, status, err) {
+            console.log(err.toString())
+          }
+        })
+      }.bind(this))
     }.bind(this))
   }
   componentWillMount () {
