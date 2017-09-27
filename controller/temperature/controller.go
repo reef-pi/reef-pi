@@ -141,7 +141,7 @@ func (c *Controller) switchHeater(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if on != c.heater.On {
-		log.Println("Temperature susbsyem - switching heater on:", on)
+		log.Println("Temperature subsystem - switching heater on:", on)
 		c.heater.On = on
 		if err := c.equipments.Update(c.heater.ID, *c.heater); err != nil {
 			c.heater.On = !on
@@ -156,7 +156,7 @@ func (c *Controller) switchCooler(on bool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if on != c.cooler.On {
-		log.Println("Temperature susbsystem - switching cooler on:", on)
+		log.Println("Temperature subsystem - switching cooler on:", on)
 		c.cooler.On = on
 		if err := c.equipments.Update(c.cooler.ID, *c.cooler); err != nil {
 			c.cooler.On = !on
