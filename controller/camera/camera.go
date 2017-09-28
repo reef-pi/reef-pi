@@ -19,6 +19,7 @@ type Config struct {
 	ImageDirectory string        `json:"image_directory" yaml:"image_directory"`
 	CaptureFlags   string        `json:"capture_flags" yaml:"capture_flags"`
 	TickInterval   time.Duration `json:"tick_interval" yaml:"tick_interval"`
+	Upload         bool          `json:"upload" yaml:"upload"`
 }
 
 var Default = Config{
@@ -63,7 +64,7 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) run() {
-	log.Println("Starting Camera controller")
+	log.Println("Starting camera controller")
 	ticker := time.NewTicker(c.config.TickInterval * time.Minute)
 	for {
 		select {
@@ -71,8 +72,13 @@ func (c *Controller) run() {
 			if !c.config.Enable {
 				continue
 			}
-			if _, err := c.Capture(); err != nil {
+			img, err := c.Capture()
+			if err != nil {
 				log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
+				continue
+			}
+			if c.config.Upload {
+				c.uploadImage(img)
 			}
 		case <-c.stopCh:
 			log.Println("Stopping camera controller")
@@ -109,5 +115,16 @@ func (c *Controller) Capture() (string, error) {
 	data := make(map[string]string)
 	data["image"] = imgName
 	log.Println("Camera subsystem: Image captured:", imgPath)
-	return imgName, c.store.Update(Bucket, "latest", data)
+	return imgPath, c.store.Update(Bucket, "latest", data)
+}
+
+func (c *Controller) uploadImage(img string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	command := "drive push -quiet -destination reef-pi-images -files " + img
+	parts := strings.Fields(command)
+	err := exec.Command(parts[0], parts[1:]...).Run()
+	if err != nil {
+		log.Println("ERROR: Failed to upload image. Command:", command, "Error:", err)
+	}
 }

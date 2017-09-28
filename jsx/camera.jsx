@@ -16,6 +16,7 @@ export default class Camera extends React.Component {
     this.capture = this.capture.bind(this)
 
     this.updateEnable = this.updateEnable.bind(this)
+    this.updateUpload = this.updateUpload.bind(this)
     this.updateImageDirectory = this.updateImageDirectory.bind(this)
     this.updateCaptureFlags = this.updateCaptureFlags.bind(this)
     this.updateTickInterval = this.updateTickInterval.bind(this)
@@ -47,6 +48,10 @@ export default class Camera extends React.Component {
           <div className='col-sm-6'>
             <input type='text' onChange={this.updateImageDirectory} id='image_directory' value={this.state.camera.image_directory} />
           </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Upload to gDrive</div>
+          <input type='checkbox' id='camera_gdrive' className='col-sm-2' defaultChecked={this.state.camera.upload} onClick={this.updateUpload} />
         </div>
         <div className='row'>
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
@@ -87,6 +92,16 @@ export default class Camera extends React.Component {
   updateEnable (ev) {
     var camera = this.state.camera
     camera.enable = ev.target.checked
+    this.setState({
+      camera: camera,
+      showAlert: false,
+      updated: true
+    })
+  }
+
+  updateUpload (ev) {
+    var camera = this.state.camera
+    camera.upload = ev.target.checked
     this.setState({
       camera: camera,
       showAlert: false,
