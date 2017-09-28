@@ -121,7 +121,7 @@ func (c *Controller) Capture() (string, error) {
 func (c *Controller) uploadImage(img string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	command := "drive push -destination reef-pi-images -file " + img
+	command := "drive push -quiet -destination reef-pi-images -files " + img
 	parts := strings.Fields(command)
 	err := exec.Command(parts[0], parts[1:]...).Run()
 	if err != nil {
