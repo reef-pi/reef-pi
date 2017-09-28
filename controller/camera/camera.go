@@ -64,7 +64,7 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) run() {
-	log.Println("Starting Camera controller")
+	log.Println("Starting camera controller")
 	ticker := time.NewTicker(c.config.TickInterval * time.Minute)
 	for {
 		select {
