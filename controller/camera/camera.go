@@ -115,13 +115,19 @@ func (c *Controller) Capture() (string, error) {
 	data := make(map[string]string)
 	data["image"] = imgName
 	log.Println("Camera subsystem: Image captured:", imgPath)
-	return imgPath, c.store.Update(Bucket, "latest", data)
+	return imgName, c.store.Update(Bucket, "latest", data)
 }
 
-func (c *Controller) uploadImage(img string) {
+func (c *Controller) uploadImage(imgName string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	command := "drive push -quiet -destination reef-pi-images -files " + img
+	imgDir, pathErr := filepath.Abs(c.config.ImageDirectory)
+	if pathErr != nil {
+		log.Println("ERROR: Failed to compute absolute image path. Error:", pathErr)
+		return
+	}
+	imgPath := filepath.Join(imgDir, imgName)
+	command := "drive push -quiet -destination reef-pi-images -files " + imgPath
 	parts := strings.Fields(command)
 	err := exec.Command(parts[0], parts[1:]...).Run()
 	if err != nil {
