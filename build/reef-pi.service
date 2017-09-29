@@ -4,6 +4,10 @@ Description=raspberry pi based reef tank controller
 [Service]
 ExecStart=/usr/bin/reef-pi -config /etc/reef-pi/config.yml
 WorkingDirectory=/var/lib/reef-pi
+Restart=always
+RestartSec=90
+StartLimitInterval=400
+StartLimitBurst=10
 
 [Install]
 WantedBy=multi-user.target
