@@ -1,34 +1,41 @@
 package doser
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/equipments"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"encoding/json"
+	"time"
 )
 
 const Bucket = "doser"
 
 type Doser struct {
-	DevMode    bool
-	store      utils.Store
-	telemetry  *utils.Telemetry
-	equipments *equipments.Controller
+	ID        string        `json:"id"`
+	Equipment string        `json:"equipment"`
+	Start     time.Time     `json:"start"`
+	Duration  time.Duration `json:"duration"`
 }
 
-func New(devMode bool, store utils.Store, t *utils.Telemetry, eqs *equipments.Controller) (*Doser, error) {
-	return &Doser{
-		DevMode:    devMode,
-		store:      store,
-		telemetry:  t,
-		equipments: eqs,
-	}, nil
+func (c *Controller) Get(id string) (Doser, error) {
+	var d Doser
+	return d, c.store.Get(Bucket, id, &d)
 }
 
-func (d *Doser) LoadAPI(r *mux.Router) {
+func (c *Controller) Create(d Doser) error {
+	fn := func(id string) interface{} {
+		d.ID = id
+		return &d
+	}
+	return c.store.Create(Bucket, fn)
 }
 
-func (d *Doser) Start() {}
-func (d *Doser) Stop()  {}
-func (d *Doser) Setup() error {
-	return nil
+func (c *Controller) List() ([]Doser, error) {
+	var dosers []Doser
+	fn := func(v []byte) error {
+		var d Doser
+		if err := json.Unmarshal(v, &d); err != nil {
+			return err
+		}
+		dosers = append(dosers, d)
+		return nil
+	}
+	return dosers, c.store.List(Bucket, fn)
 }

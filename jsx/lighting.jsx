@@ -198,7 +198,6 @@ export default class Lighting extends React.Component {
     var jack = ''
     if (this.state.selectedJack !== undefined) {
       var j = this.state.jacks[this.state.selectedJack]
-      console.log('selected jack:', this.state.selectedJack, 'jack:', j)
       jack = j.name
     }
     var dStyle = {
