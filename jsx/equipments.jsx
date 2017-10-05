@@ -162,6 +162,9 @@ export default class Equipments extends React.Component {
       success: function (data) {
         this.fetchData()
         this.toggleAddEquipmentDiv()
+        this.setState({
+          selectedOutlet: undefined
+        })
       }.bind(this),
       error: function (xhr, status, err) {
         this.setState({

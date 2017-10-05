@@ -1,30 +1,27 @@
 import Common from './common.jsx'
 import $ from 'jquery'
 import React from 'react'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
+import SelectEquipment from './select_equipment.jsx'
 
 export default class Doser extends Common {
   constructor (props) {
     super(props)
     this.state = {
       selectedEquipment: undefined,
-      equipments: [],
       dosers: [],
       add: false
     }
     this.add = this.add.bind(this)
+    this.addUI = this.addUI.bind(this)
     this.toggle = this.toggle.bind(this)
     this.remove = this.remove.bind(this)
     this.fetch = this.fetch.bind(this)
-    this.loadEquipments = this.loadEquipments.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
-    this.equipmentList = this.equipmentList.bind(this)
     this.doserList = this.doserList.bind(this)
   }
 
   componentWillMount () {
     this.fetch()
-    this.loadEquipments()
   }
 
   doserList () {
@@ -34,7 +31,7 @@ export default class Doser extends Common {
         <div key={'doser-' + i} className='row'>
           <div className='col-sm-4'>{doser.Name}</div>
           <div className='col-sm-1'>
-            <input type='button' id={'remove-doser-' + light.name} onClick={this.remove(doser.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
+            <input type='button' id={'remove-doser-' + doser.name} onClick={this.remove(doser.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
           </div>
         </div>
       )
@@ -60,36 +57,10 @@ export default class Doser extends Common {
     })
   }
 
-  setEquipment (i, ev) {
+  setEquipment (eq) {
     this.setState({
-      selectedEquipment: i
+      selectedEquipment: eq
     })
-  }
-
-  loadEquipments () {
-    $.ajax({
-      url: '/api/equipments',
-      type: 'GET',
-      success: function (data) {
-        this.setState({
-          equipments: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
-      }.bind(this)
-    })
-  }
-
-  equipmentList () {
-    var equipments = []
-    $.each(this.state.equipments, function (i, equipment) {
-      equipments.push(<MenuItem key={i} eventKey={i}>{equipment.name}</MenuItem>)
-    })
-    return equipments
   }
 
   add () {
@@ -107,17 +78,16 @@ export default class Doser extends Common {
       })
       return
     }
-    var eq = this.state.equipments[this.state.selectedEquipment].id
     var payload = {
       name: $('#doserName').val(),
-      equipment: String(eq)
+      equipment: this.state.selectedEquipment
     }
     $.ajax({
       url: '/api/dosers',
       type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
-        this.fetchLights()
+        this.fetch()
         this.setState({
           add: !this.state.add
         })
@@ -132,7 +102,7 @@ export default class Doser extends Common {
     })
   }
 
-  remove () {
+  remove (id) {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
@@ -152,25 +122,40 @@ export default class Doser extends Common {
 
   toggle () {
     this.setState({
-      add: !this.state.addLight
+      add: !this.state.add
     })
     $('#doserName').val('')
   }
 
+  addUI () {
+    if (!this.state.add) {
+      return
+    }
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-2'>Name</div>
+          <div className='col-sm-2'><input type='text' id='doserName' /> </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Pump</div>
+          <div className='col-sm-4'><SelectEquipment update={this.setEquipment} active={this.state.selectedEquipment} /></div>
+        </div>
+        <input type='button' id='createDoser' value='add' onClick={this.add} className='btn btn-outline-primary' />
+      </div>
+    )
+  }
+
   render () {
-    var equipment = ''
-    if (this.state.selectedEquipment !== undefined) {
-      var e = this.state.equipments[this.state.selectedEquipment]
-      equipment = e.name
-    }
-    var dStyle = {
-      display: this.state.add ? 'block' : 'none'
-    }
     return (
       <div className='container'>
         {super.render()}
         <div className='container'>
           { this.doserList() }
+        </div>
+        <div className='container'>
+          <input id='add_doser' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+          {this.addUI()}
         </div>
       </div>
     )

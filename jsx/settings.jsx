@@ -24,6 +24,7 @@ export default class Settings extends React.Component {
     this.updateATO = this.updateATO.bind(this)
 
     this.updateCamera = this.updateCamera.bind(this)
+    this.updateDoser = this.updateDoser.bind(this)
     this.updateTemperature = this.updateTemperature.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
@@ -101,6 +102,15 @@ export default class Settings extends React.Component {
   updateTemperature (ev) {
     var settings = this.state.settings
     settings.temperature = ev.target.checked
+    this.setState({
+      settings: settings,
+      updated: true
+    })
+  }
+
+  updateDoser (ev) {
+    var settings = this.state.settings
+    settings.doser = ev.target.checked
     this.setState({
       settings: settings,
       updated: true
@@ -261,6 +271,10 @@ export default class Settings extends React.Component {
           <div className='row'>
             <span className='col-sm-2'>Camera</span>
             <input className='col-sm-1' type='checkbox' id='updateCamera' onClick={this.updateCamera} defaultChecked={this.state.settings.camera} />
+          </div>
+          <div className='row'>
+            <span className='col-sm-2'>Doser</span>
+            <input className='col-sm-1' type='checkbox' id='updateDoser' onClick={this.updateDoser} defaultChecked={this.state.settings.doser} />
           </div>
           <div className='row'>
             <span className='col-sm-2'>DevMode</span>
