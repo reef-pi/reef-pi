@@ -31,7 +31,7 @@ func (c *Controller) Setup() error {
 
 func (c *Controller) Start() {
 	if err := c.loadAllJobs(); err != nil {
-		log.Println("ERROR: Failed to load timer jobs. Error:", err)
+		log.Println("ERROR: timer-subsystem: Failed to load timer jobs. Error:", err)
 	}
 	c.runner.Start()
 }
