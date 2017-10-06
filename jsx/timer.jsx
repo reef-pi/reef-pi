@@ -46,28 +46,31 @@ export default class Timer extends Common {
         this.fetchEquipment(data.equipment)
       }.bind(this),
       error: function (xhr, status, err) {
-       //TODO common integration
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
   update () {
   }
 
-  t2s() {
-   if(this.state.timer == undefined){
-     return ''
-   }
-   var eqAction = this.state.timer.on ? 'on' : 'off'
-   var eqName = this.state.equipment === undefined ? '' : this.state.equipment.name
-   var parts = [ 
-     this.state.timer.day,
-     this.state.timer.hour,
-     this.state.timer.minute,
-     this.state.timer.second,
-     '('+eqName + ' ' + eqAction+')'
+  t2s () {
+    if (this.state.timer === undefined) {
+      return ''
+    }
+    var eqAction = this.state.timer.on ? 'on' : 'off'
+    var eqName = this.state.equipment === undefined ? '' : this.state.equipment.name
+    var parts = [
+      this.state.timer.day + '  ',
+      this.state.timer.hour + ':',
+      this.state.timer.minute + ':',
+      this.state.timer.second + ' ',
+      '(' + eqName + ' ' + eqAction + ')'
     ]
-   return parts.join(' ')
+    return parts.join('')
   }
 
   componentDidMount () {
@@ -80,7 +83,7 @@ export default class Timer extends Common {
         <div className='col-sm-2'>
           <label>{this.props.name}</label>
         </div>
-        <div className='col-sm-2 small'>{this.t2s()}</div>
+        <div className='col-sm-2 pre'>{this.t2s()}</div>
       </div>
     )
   }
