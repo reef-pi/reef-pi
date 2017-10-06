@@ -5,6 +5,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/ato"
 	"github.com/reef-pi/reef-pi/controller/camera"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/doser"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/system"
@@ -122,6 +123,14 @@ func (r *ReefPi) loadSubsystems() error {
 			return nil
 		}
 		r.subsystems[camera.Bucket] = cam
+	}
+	if r.settings.Doser {
+		d, err := doser.New(r.settings.DevMode, r.store, r.telemetry, eqs)
+		if err != nil {
+			log.Println("ERROR: Failed to initialize doser subsystem")
+			return err
+		}
+		r.subsystems[doser.Bucket] = d
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {

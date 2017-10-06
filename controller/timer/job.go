@@ -3,6 +3,7 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/robfig/cron.v2"
 	"log"
 	"strings"
 )
@@ -18,6 +19,15 @@ type Job struct {
 	Equipment string `json:"equipment"`
 	On        bool   `json:"on"`
 	Name      string `json:"name"`
+}
+
+func (j *Job) CronSpec() string {
+	return strings.Join([]string{j.Second, j.Minute, j.Hour, j.Day, "*", "?"}, " ")
+}
+
+func (j *Job) Validate() error {
+	_, err := cron.Parse(j.CronSpec())
+	return err
 }
 
 func (c *Controller) Get(id string) (Job, error) {
@@ -39,6 +49,9 @@ func (c *Controller) List() ([]Job, error) {
 }
 
 func (c *Controller) Create(job Job) error {
+	if err := job.Validate(); err != nil {
+		return fmt.Errorf("Ivalid cronspec: %s", job.CronSpec())
+	}
 	fn := func(id string) interface{} {
 		job.ID = id
 		return job
@@ -79,12 +92,11 @@ func (c *Controller) loadAllJobs() error {
 }
 
 func (c *Controller) addToCron(job Job) error {
-	cronSpec := strings.Join([]string{job.Second, job.Minute, job.Hour, job.Day, "*", "?"}, " ")
-	runner, err := c.Runner(job)
+	runner, err := c.Runner(job.Equipment, job.On)
 	if err != nil {
 		return err
 	}
-	cronID, err := c.runner.AddJob(cronSpec, runner)
+	cronID, err := c.runner.AddJob(job.CronSpec(), runner)
 	if err != nil {
 		return err
 	}

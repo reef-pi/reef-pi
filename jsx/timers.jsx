@@ -235,7 +235,7 @@ export default class Timers extends React.Component {
           showAlert: true,
           alertMsg: xhr.responseText
         })
-      }
+      }.bind(this)
     })
   };
 
@@ -264,7 +264,7 @@ export default class Timers extends React.Component {
       <label> ? </label>
     </OverlayTrigger>
     return (
-      <div className='containe'>
+      <div className='container'>
         {this.showAlert()}
         <ul>{this.timerList()}</ul>
         <div className='container'>

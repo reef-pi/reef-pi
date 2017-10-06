@@ -20,6 +20,7 @@ type Settings struct {
 	Timers         bool             `json:"timers" yaml:"timers"`
 	System         bool             `json:"system" yaml:"system"`
 	Camera         bool             `json:"camera" yaml:"camera"`
+	Doser          bool             `json:"doser" yaml:"doser"`
 	Display        bool             `json:"display" yaml:"display"`
 	AdafruitIO     utils.AdafruitIO `json:"adafruitio" yaml:"adafruitio"`
 	LightInterval  time.Duration    `json:"light_interval" yaml:"light_interval"`
@@ -38,6 +39,7 @@ var DefaultSettings = Settings{
 	ATO:           true,
 	Timers:        true,
 	Camera:        true,
+	Doser:         true,
 }
 
 func loadSettings(store utils.Store) (Settings, error) {
