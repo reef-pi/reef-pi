@@ -12,9 +12,6 @@ export default class Telemetry extends React.Component {
     this.updatePrefix = this.updatePrefix.bind(this)
   }
 
-  componentDidMount () {
-  }
-
   updateEnable (ev) {
     var adafruitio = this.state.adafruitio
     adafruitio.enable = ev.target.checked
@@ -56,7 +53,7 @@ export default class Telemetry extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>
-            Token
+            Key
           </div>
           <div className='col-sm-2'>
             <input type='text' value={this.state.adafruitio.token} onChange={this.updateToken} id='telemetryToken' />
