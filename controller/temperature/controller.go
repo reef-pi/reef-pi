@@ -74,7 +74,13 @@ func loadConfig(store utils.Store) Config {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	c.telemetry.CreateFeedIfNotExist("temperature")
+	c.telemetry.CreateFeedIfNotExist("heater")
+	c.telemetry.CreateFeedIfNotExist("cooler")
+	return nil
 }
 
 func (c *Controller) Start() {

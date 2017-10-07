@@ -98,5 +98,9 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	c.telemetry.CreateFeedIfNotExist("ato")
+	return nil
 }

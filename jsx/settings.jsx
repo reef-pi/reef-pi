@@ -1,16 +1,15 @@
 import React from 'react'
 import $ from 'jquery'
 import Telemetry from './telemetry.jsx'
+import Common from './common.jsx'
 
-export default class Settings extends React.Component {
+export default class Settings extends Common {
   constructor (props) {
     super(props)
     this.state = {
       capabilities: [],
       settings: {},
-      updated: false,
-      showAlert: false,
-      alertMsg: ''
+      updated: false
     }
     this.loadCapabilities = this.loadCapabilities.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -28,8 +27,6 @@ export default class Settings extends React.Component {
     this.updateTemperature = this.updateTemperature.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
-    this.showAlert = this.showAlert.bind(this)
-
     this.update = this.update.bind(this)
   }
 
@@ -39,17 +36,6 @@ export default class Settings extends React.Component {
     }
     return (
       <Telemetry adafruitio={this.state.settings.adafruitio} update={this.updateTelemetry} />
-    )
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
     )
   }
 
@@ -73,6 +59,22 @@ export default class Settings extends React.Component {
   }
 
   updateTelemetry (adafruitio) {
+    if (adafruitio.enable) {
+      if (adafruitio.user === '') {
+        this.setState({
+          showAlert: true,
+          alertMsg: 'Please set a valid adafruit.io user'
+        })
+        return
+      }
+      if (adafruitio.token === '') {
+        this.setState({
+          showAlert: true,
+          alertMsg: 'Please set a valid adafruit.io key'
+        })
+        return
+      }
+    }
     var settings = this.state.settings
     settings.adafruitio = adafruitio
     this.setState({
@@ -230,7 +232,7 @@ export default class Settings extends React.Component {
 
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <div className='row'>
           <b>Settings</b>
         </div>
@@ -283,7 +285,7 @@ export default class Settings extends React.Component {
         </div>
         <div className='row'>
           <div className='container' >
-            <label> <b>Telemetry</b> </label>
+            <label> <b>AdafruitIO</b> </label>
             {this.showTelemetry()}
           </div>
         </div>

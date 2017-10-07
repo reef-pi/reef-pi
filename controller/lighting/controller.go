@@ -137,7 +137,13 @@ func (c *Controller) Create(l Light) error {
 		l.ID = id
 		return &l
 	}
-	return c.store.Create(Bucket, fn)
+	if err := c.store.Create(Bucket, fn); err != nil {
+		return nil
+	}
+	for _, ch := range l.Channels {
+		c.telemetry.CreateFeedIfNotExist(l.Name + "-" + ch.Name)
+	}
+	return nil
 }
 
 func (c *Controller) Update(id string, l Light) error {
@@ -161,7 +167,7 @@ func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
 		if !ch.Auto {
 			c.UpdateChannel(ch, ch.Fixed)
-			c.telemetry.EmitMetric(ch.Name, ch.Fixed)
+			c.telemetry.EmitMetric(light.Name+"-"+ch.Name, ch.Fixed)
 			return
 		}
 		expectedValues := ch.Values // TODO implement ticks`
@@ -174,6 +180,6 @@ func (c *Controller) syncLight(light Light) {
 			v = ch.MaxThreshold
 		}
 		c.UpdateChannel(ch, v)
-		c.telemetry.EmitMetric(ch.Name, v)
+		c.telemetry.EmitMetric(light.Name+"-"+ch.Name, v)
 	}
 }
