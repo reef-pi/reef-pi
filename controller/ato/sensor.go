@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Controller) Read() (int, error) {
-	if c.config.DevMode {
+	if c.devMode {
 		log.Println("ATO is running under dev mode. Sending fixed sensor reading of 1")
 		return 1, nil
 	}

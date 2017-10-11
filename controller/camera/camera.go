@@ -27,13 +27,19 @@ var Default = Config{
 	TickInterval:   120,
 }
 
-func loadConfig(store utils.Store) Config {
+func loadConfig(store utils.Store) (Config, error) {
 	var conf Config
-	if err := store.Get(Bucket, "config", &conf); err != nil {
-		log.Println("WARNING: camera config not found. Using default config")
-		conf = Default
+	return conf, store.Get(Bucket, "config", &conf)
+}
+
+func saveConfig(store utils.Store, conf Config) error {
+	if conf.TickInterval <= 0 {
+		return fmt.Errorf("Tick Interval for camera controller must be greater than zero")
 	}
-	return conf
+	if conf.ImageDirectory == "" {
+		return fmt.Errorf("Image directory cant not be empty")
+	}
+	return store.Update(Bucket, "config", conf)
 }
 
 type Controller struct {
@@ -44,15 +50,8 @@ type Controller struct {
 }
 
 func New(store utils.Store) (*Controller, error) {
-	config := loadConfig(store)
-	if config.TickInterval <= 0 {
-		return nil, fmt.Errorf("Tick Interval for camera controller must be greater than zero")
-	}
-	if config.ImageDirectory == "" {
-		return nil, fmt.Errorf("Image directory cant not be empty")
-	}
 	return &Controller{
-		config: config,
+		config: Default,
 		store:  store,
 		mu:     sync.Mutex{},
 		stopCh: make(chan struct{}),
@@ -93,7 +92,20 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	conf, err := loadConfig(c.store)
+	if err != nil {
+		log.Println("WARNING: camera config not found. Initializing default config")
+		conf = Default
+		if err := saveConfig(c.store, conf); err != nil {
+			log.Println("ERROR: Failed to save camera config. Error:", err)
+			return err
+		}
+	}
+	c.config = conf
+	return nil
 }
 
 func (c *Controller) Capture() (string, error) {
@@ -119,8 +131,6 @@ func (c *Controller) Capture() (string, error) {
 }
 
 func (c *Controller) uploadImage(imgName string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	imgDir, pathErr := filepath.Abs(c.config.ImageDirectory)
 	if pathErr != nil {
 		log.Println("ERROR: Failed to compute absolute image path. Error:", pathErr)
