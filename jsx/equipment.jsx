@@ -54,13 +54,18 @@ export default class Equipment extends React.Component {
   }
 
   render () {
+    var btnClass = 'btn btn-outline-success'
+    if (this.state.action === 'off') {
+      btnClass = 'btn btn-outline-danger'
+    }
+
     return (
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'> <label>{this.props.name}</label></div>
           <div className='col-sm-2 small' > {this.state.outlet.name} </div>
           <div className='col-sm-2' />
-          <div className='col-sm-1'><input id={this.props.name} type='button' value={this.state.action} onClick={this.updateEquipment} className='btn btn-outline-primary' /></div>
+          <div className='col-sm-1'><input id={this.props.name} type='button' value={this.state.action} onClick={this.updateEquipment} className={btnClass} /></div>
         </div>
       </div>
     )

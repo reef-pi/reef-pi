@@ -15,7 +15,8 @@ type Outlet struct {
 	ID        string `json:"id" yaml:"id"`
 	Name      string `json:"name" yaml:"name"`
 	Pin       int    `json:"pin" yaml:"pin"`
-	Equipment string `json:"equipment" yaml:"-"`
+	Equipment string `json:"equipment" yaml:"equipment"`
+	Reverse   bool   `json:"reverse" yaml:"reverse"`
 }
 
 type Outlets struct {
@@ -39,6 +40,9 @@ func (c *Outlets) Configure(id string, on bool) error {
 	if c.DevMode {
 		log.Println("Dev mode on. Skipping:", o.Name, "On:", on)
 		return nil
+	}
+	if o.Reverse {
+		on = !on
 	}
 	if on {
 		return utils.SwitchOn(o.Pin)

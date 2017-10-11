@@ -1,6 +1,6 @@
 # reef-pi
 
-A Raspberry Pi based open source reef tank controller
+An open source reef tank controller based on Raspberry Pi
 
 ## Introduction
 
@@ -14,17 +14,12 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 ## Features
 
 - Web browser based user interface
-- On demand control of equipments
-- Timer based control of equipments
-- Sunrise to sunset LED lighting control
-- Temperature control
+- On demand & timer based control of equipments
+- Sunrise to sunset LED lighting automation
+- Temperature monitoring and control
 - Auto Top off
-- On demand or automatic tank photo capture
 - Adafruit.io based telemetry for monitoring, charting and dashboar
-
-
-
-## Acknowledgements
+- On demand or automatic tank photo capture with google drive upload
 
 reef-pi would not be possible without these awesome things:
 

@@ -70,7 +70,8 @@ export default class Outlets extends React.Component {
   save () {
     var payload = {
       name: $('#outletName').val(),
-      pin: parseInt($('#outletPin').val())
+      pin: parseInt($('#outletPin').val()),
+      reverse: $('#outletReverse')[0].checked
     }
     $.ajax({
       url: '/api/outlets',
@@ -144,6 +145,12 @@ export default class Outlets extends React.Component {
                 <div className='input-group'>
                   <span className='input-group-addon'> Pin </span>
                   <input type='text' id='outletPin' className='form-control' />
+                </div>
+              </div>
+              <div className='col-sm-3'>
+                <div className='input-group'>
+                  <span className='input-group-addon'> Reverse </span>
+                  <input type='checkbox' id='outletReverse' />
                 </div>
               </div>
               <div className='col-sm-1'>
