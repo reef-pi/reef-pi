@@ -13,7 +13,6 @@ const Bucket = "ato"
 
 type Config struct {
 	Sensor        int           `json:"sensor" yaml:"sensor"`
-	DevMode       bool          `json:"dev_mode" yaml:"dev_mode"`
 	Pump          string        `json:"pump" yaml:"pump"`
 	CheckInterval time.Duration `json:"check_interval" yaml:"check_interval"`
 	Control       bool          `json:"control" yaml:"control"`
@@ -22,7 +21,6 @@ type Config struct {
 
 var DefaultConfig = Config{
 	CheckInterval: 30,
-	DevMode:       true,
 	Sensor:        25,
 }
 
@@ -34,25 +32,25 @@ type Controller struct {
 	store      utils.Store
 	pump       *equipments.Equipment
 	equipments *equipments.Controller
+	devMode    bool
 }
 
-func loadConfig(store utils.Store) Config {
+func loadConfig(store utils.Store) (Config, error) {
 	var conf Config
-	if err := store.Get(Bucket, "config", &conf); err != nil {
-		log.Println("WARNING: ATO config not found. Using default config")
-		conf = DefaultConfig
+	return conf, store.Get(Bucket, "config", &conf)
+}
+
+func saveConfig(conf Config, store utils.Store) error {
+	if conf.CheckInterval <= 0 {
+		return fmt.Errorf("CheckInterval for ATO controller must be greater than zero")
 	}
-	return conf
+	return store.Update(Bucket, "config", conf)
 }
 
 func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
-	config := loadConfig(store)
-	config.DevMode = devMode
-	if config.CheckInterval <= 0 {
-		return nil, fmt.Errorf("CheckInterval for ATO controller must be greater than zero")
-	}
 	return &Controller{
-		config:     config,
+		config:     DefaultConfig,
+		devMode:    devMode,
 		mu:         sync.Mutex{},
 		stopCh:     make(chan struct{}),
 		store:      store,
@@ -101,6 +99,16 @@ func (c *Controller) Setup() error {
 	if err := c.store.CreateBucket(Bucket); err != nil {
 		return err
 	}
+	conf, err := loadConfig(c.store)
+	if err != nil {
+		log.Println("WARNING: ATO config not found. Initializing default config")
+		conf = DefaultConfig
+		if err := saveConfig(conf, c.store); err != nil {
+			log.Println("ERROR: Failed to save ato config")
+			return err
+		}
+	}
+	c.config = conf
 	c.telemetry.CreateFeedIfNotExist("ato")
 	return nil
 }

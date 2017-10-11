@@ -14,9 +14,9 @@ func TestCamera(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	c.Start()
 	if err := c.Setup(); err != nil {
 		t.Fatal(err)
 	}
+	c.Start()
 	c.Stop()
 }
