@@ -2,7 +2,6 @@ package temperature
 
 import (
 	"container/ring"
-	"fmt"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
@@ -17,23 +16,6 @@ type Measurement struct {
 	Temperature float32 `json:"temperature"`
 }
 
-type Config struct {
-	Min           float32       `yaml:"min" json:"min"`
-	Max           float32       `yaml:"max" json:"max"`
-	CheckInterval time.Duration `yaml:"check_interval" json:"check_interval"`
-	Heater        string        `yaml:"heater" json:"heater"`
-	Cooler        string        `yaml:"cooler" json:"cooler"`
-	Control       bool          `yaml:"control" json:"control"`
-	Enable        bool          `yaml:"enable" json:"enable"`
-	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
-}
-
-var DefaultConfig = Config{
-	Min:           77,
-	Max:           81,
-	CheckInterval: 1,
-}
-
 type Controller struct {
 	config     Config
 	stopCh     chan struct{}
@@ -42,41 +24,39 @@ type Controller struct {
 	latest     float32
 	readings   *ring.Ring
 	mu         sync.Mutex
+	devMode    bool
 	equipments *equipments.Controller
 	heater     *equipments.Equipment
 	cooler     *equipments.Equipment
 }
 
 func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
-	config := loadConfig(store)
-	if config.CheckInterval <= 0 {
-		return nil, fmt.Errorf("CheckInterval for temperature controller must be greater than zero")
-	}
-	config.DevMode = devMode
 	return &Controller{
-		config:     config,
+		config:     DefaultConfig,
 		mu:         sync.Mutex{},
 		stopCh:     make(chan struct{}),
 		telemetry:  telemetry,
 		store:      store,
+		devMode:    devMode,
 		readings:   ring.New(20),
 		equipments: eqs,
 	}, nil
-}
-
-func loadConfig(store utils.Store) Config {
-	var conf Config
-	if err := store.Get(Bucket, "config", &conf); err != nil {
-		log.Println("WARNING: Temperature controller config not found. Using default config")
-		conf = DefaultConfig
-	}
-	return conf
 }
 
 func (c *Controller) Setup() error {
 	if err := c.store.CreateBucket(Bucket); err != nil {
 		return err
 	}
+	conf, err := loadConfig(c.store)
+	if err != nil {
+		log.Println("WARNING: Temperature controller config not found. Initializing default config")
+		conf = DefaultConfig
+		if err := saveConfig(c.store, conf); err != nil {
+			log.Println("ERROR: Failed to save temperature controller configuration")
+			return err
+		}
+	}
+	c.config = conf
 	c.telemetry.CreateFeedIfNotExist("temperature")
 	c.telemetry.CreateFeedIfNotExist("heater")
 	c.telemetry.CreateFeedIfNotExist("cooler")
