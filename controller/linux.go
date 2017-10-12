@@ -6,6 +6,7 @@ import (
 	_ "github.com/kidoman/embd/host/rpi"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
+	"log"
 )
 
 func (h *HealthChecker) check() {
