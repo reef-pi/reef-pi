@@ -13,6 +13,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
+	"time"
 )
 
 const Bucket = "reef-pi"
@@ -32,6 +33,7 @@ type ReefPi struct {
 	settings   Settings
 	telemetry  *utils.Telemetry
 	version    string
+	h          *HealthChecker
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -61,6 +63,7 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		subsystems: make(map[string]Subsystem),
 		version:    version,
+		h:          NewHealthChecker(1*time.Minute, telemetry),
 	}
 	return r, nil
 }
@@ -157,6 +160,7 @@ func (r *ReefPi) Start() error {
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}
+	go r.h.Start()
 	log.Println("reef-pi is up and running")
 	return nil
 }
@@ -171,6 +175,7 @@ func (r *ReefPi) unloadSubsystems() {
 
 func (r *ReefPi) Stop() error {
 	r.unloadSubsystems()
+	r.h.Stop()
 	r.store.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
