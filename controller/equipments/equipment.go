@@ -14,6 +14,7 @@ type Equipment struct {
 	Name   string `json:"name"`
 	Outlet string `json:"outlet"`
 	On     bool   `json:"on"`
+	UsedBy string `json:"-"`
 }
 
 func (c *Controller) Get(id string) (Equipment, error) {
@@ -86,6 +87,9 @@ func (c *Controller) Delete(id string) error {
 	eq, err := c.Get(id)
 	if err != nil {
 		return err
+	}
+	if eq.UsedBy != "" {
+		return fmt.Errorf("Equipment is being used by:", eq.UsedBy)
 	}
 	outlet, err := c.outlets.Get(eq.Outlet)
 	if err != nil {
