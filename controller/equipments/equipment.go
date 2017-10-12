@@ -87,6 +87,14 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
+	inUse, err := c.IsEquipmentInUse(id)
+	if err != nil {
+		log.Println("ERROR: equipment subsystem: failed to determine if equipment is in use")
+		return err
+	}
+	if inUse {
+		return fmt.Errorf("ERROR: equipment is in use")
+	}
 	outlet, err := c.outlets.Get(eq.Outlet)
 	if err != nil {
 		return err

@@ -84,6 +84,11 @@ func (r *ReefPi) loadSubsystems() error {
 		eqs = equipments.New(conf, r.outlets, r.store, r.telemetry)
 		r.subsystems[equipments.Bucket] = eqs
 	}
+	if r.settings.Timers {
+		t := timer.New(r.store, r.telemetry, eqs)
+		r.subsystems[timer.Bucket] = t
+		eqs.AddCheck(t.IsEquipmentInUse)
+	}
 
 	if r.settings.Temperature {
 		temp, err := temperature.New(r.settings.DevMode, r.store, r.telemetry, eqs)
@@ -92,6 +97,7 @@ func (r *ReefPi) loadSubsystems() error {
 			return err
 		}
 		r.subsystems[temperature.Bucket] = temp
+		eqs.AddCheck(temp.IsEquipmentInUse)
 	}
 	if r.settings.ATO {
 		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry, eqs)
@@ -100,6 +106,7 @@ func (r *ReefPi) loadSubsystems() error {
 			return err
 		}
 		r.subsystems[ato.Bucket] = a
+		eqs.AddCheck(a.IsEquipmentInUse)
 	}
 	if r.settings.Lighting {
 		conf := lighting.Config{
@@ -114,9 +121,6 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[lighting.Bucket] = l
 	}
 
-	if r.settings.Timers {
-		r.subsystems[timer.Bucket] = timer.New(r.store, r.telemetry, eqs)
-	}
 	if r.settings.Camera {
 		cam, err := camera.New(r.store)
 		if err != nil {

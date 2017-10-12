@@ -59,6 +59,10 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 	}, nil
 }
 
+func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
+	return c.config.Pump == id, nil
+}
+
 func (c *Controller) Start() {
 	go c.run()
 }

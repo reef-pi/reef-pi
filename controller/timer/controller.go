@@ -25,6 +25,19 @@ func New(store utils.Store, telemetry *utils.Telemetry, e *equipments.Controller
 	}
 }
 
+func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
+	jobs, err := c.List()
+	if err != nil {
+		return false, err
+	}
+	for _, j := range jobs {
+		if j.Equipment == id {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 func (c *Controller) Setup() error {
 	return c.store.CreateBucket(Bucket)
 }

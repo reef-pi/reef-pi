@@ -52,6 +52,13 @@ func (c *Controller) Create(job Job) error {
 	if err := job.Validate(); err != nil {
 		return fmt.Errorf("Ivalid cronspec: %s", job.CronSpec())
 	}
+	if job.Equipment == "" {
+		return fmt.Errorf("Missing equipment")
+	}
+	_, err := c.equipments.Get(job.Equipment)
+	if err != nil {
+		return err
+	}
 	fn := func(id string) interface{} {
 		job.ID = id
 		return job
