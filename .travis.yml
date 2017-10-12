@@ -10,7 +10,7 @@ script:
   - sudo npm install -g npm
   - make go-get
   - make test
-  - env GOARCH=arm make bin
+  - make pi
   - bundle install
   - env
   - /usr/bin/npm install
