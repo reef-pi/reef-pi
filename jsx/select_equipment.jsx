@@ -63,15 +63,25 @@ export default class SelectEquipment extends React.Component {
   }
 
   equipmentList () {
-    var menuItems = []
+    var menuItems = [ <MenuItem key='none' active={this.state.equipment === undefined} eventKey='none'>-</MenuItem> ]
     $.each(this.state.equipments, function (k, v) {
-      var active = this.state.equipment.id === v.id
+      var active = false
+      if (this.state.equipment !== undefined) {
+        active = this.state.equipment.id === v.id
+      }
       menuItems.push(<MenuItem key={k} active={active} eventKey={k}>{v.name}</MenuItem>)
     }.bind(this))
     return menuItems
   }
 
   setEquipment (k, ev) {
+    if (k === 'none') {
+      this.setState({
+        equipment: undefined
+      })
+      this.props.update('')
+      return
+    }
     var eq = this.state.equipments[k]
     this.setState({
       equipment: eq
@@ -80,7 +90,10 @@ export default class SelectEquipment extends React.Component {
   }
 
   render () {
-    var eqName = this.state.equipment.name
+    var eqName = ''
+    if (this.state.equipment !== undefined) {
+      eqName = this.state.equipment.name
+    }
     return (
       <div className='container'>
         {this.showAlert()}
