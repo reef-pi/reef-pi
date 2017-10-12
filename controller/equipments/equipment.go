@@ -14,7 +14,6 @@ type Equipment struct {
 	Name   string `json:"name"`
 	Outlet string `json:"outlet"`
 	On     bool   `json:"on"`
-	UsedBy string `json:"-"`
 }
 
 func (c *Controller) Get(id string) (Equipment, error) {
@@ -88,8 +87,13 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	if eq.UsedBy != "" {
-		return fmt.Errorf("Equipment is being used by:", eq.UsedBy)
+	inUse, err := c.IsEquipmentInUse(id)
+	if err != nil {
+		log.Println("ERROR: equipment subsystem: failed to determine if equipment is in use")
+		return err
+	}
+	if inUse {
+		return fmt.Errorf("ERROR: equipment is in use")
 	}
 	outlet, err := c.outlets.Get(eq.Outlet)
 	if err != nil {

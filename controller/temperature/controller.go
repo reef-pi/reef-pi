@@ -43,6 +43,12 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 	}, nil
 }
 
+func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
+	if c.config.Heater == id {
+		return true, nil
+	}
+	return c.config.Cooler == id, nil
+}
 func (c *Controller) Setup() error {
 	if err := c.store.CreateBucket(Bucket); err != nil {
 		return err
