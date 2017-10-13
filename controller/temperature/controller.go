@@ -73,15 +73,15 @@ func (c *Controller) Start() {
 	go c.run()
 }
 
-func (c *Controller) cacheEquipments() error {
-	if c.heater == nil {
+func (c *Controller) loadEquipments() error {
+	if c.config.Heater != "" {
 		heater, err := c.equipments.Get(c.config.Heater)
 		if err != nil {
 			return err
 		}
 		c.heater = &heater
 	}
-	if c.cooler == nil {
+	if c.config.Cooler != "" {
 		cooler, err := c.equipments.Get(c.config.Cooler)
 		if err != nil {
 			return err
@@ -159,42 +159,58 @@ func (c *Controller) switchCooler(on bool) error {
 }
 
 func (c *Controller) warmUp() error {
-	if c.cooler.On {
-		log.Println("WARNING: Possible flapping. Turning off cooler due to warm up routine.")
-		if err := c.switchCooler(false); err != nil {
-			return err
+	if c.cooler == nil {
+		log.Println("Temperature subsystem: WarmUp routine. cooler is not set.")
+	} else {
+		if c.cooler.On {
+			log.Println("WARNING: Possible flapping. Turning off cooler due to warm up routine.")
+			if err := c.switchCooler(false); err != nil {
+				return err
+			}
 		}
 	}
-	if c.heater.On {
-		log.Println("Heater is already on. Skipping switch on")
-		return nil
-	}
-	if err := c.switchHeater(true); err != nil {
-		return err
+	if c.heater == nil {
+		log.Println("Temperature subsystem: WarmUp routine. heater is not set")
+	} else {
+		if c.heater.On {
+			log.Println("Temperature subsystem: Heater is already on. Skipping switch on")
+			return nil
+		}
+		if err := c.switchHeater(true); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
 func (c *Controller) coolDown() error {
-	if c.heater.On {
-		log.Println("WARNING: Possible flapping. Turning off heater due to cool down routine.")
-		if err := c.switchHeater(false); err != nil {
-			return err
+	if c.heater == nil {
+		log.Println("Temperature subsystem: CoolDown routine. heater is not set")
+	} else {
+		if c.heater.On {
+			log.Println("WARNING: Temperature subsystem: Possible flapping. Turning off heater due to cool down routine.")
+			if err := c.switchHeater(false); err != nil {
+				return err
+			}
 		}
 	}
-	if c.cooler.On {
-		log.Println("Cooler is already on. Skipping switch on")
-		return nil
-	}
-	if err := c.switchCooler(true); err != nil {
-		return err
+	if c.cooler == nil {
+		log.Println("Temperature subsystem: CoolDown routine. cooler is not set")
+	} else {
+		if c.cooler.On {
+			log.Println("Temperature subsystem: Cooler is already on. Skipping switch on")
+			return nil
+		}
+		if err := c.switchCooler(true); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
 func (c *Controller) control(reading float32) error {
-	if err := c.cacheEquipments(); err != nil {
-		log.Println("ERROR: Failed to ")
+	if err := c.loadEquipments(); err != nil {
+		log.Println("ERROR: temperature subsystem. Failed to load equipments: Error:", err)
 		return err
 	}
 	switch {
@@ -205,12 +221,16 @@ func (c *Controller) control(reading float32) error {
 		log.Println("Current temperature is below minimum threshold. Executing warm up routine")
 		return c.warmUp()
 	default:
-		if c.cooler.On {
-			c.switchCooler(false)
-		}
-		if c.heater.On {
-			c.switchHeater(false)
-		}
+		c.switchOffAll()
 	}
 	return nil
+}
+
+func (c *Controller) switchOffAll() {
+	if (c.cooler != nil) && c.cooler.On {
+		c.switchCooler(false)
+	}
+	if (c.heater != nil) && c.heater.On {
+		c.switchHeater(false)
+	}
 }

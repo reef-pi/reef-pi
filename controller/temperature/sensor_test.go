@@ -1,6 +1,8 @@
 package temperature
 
 import (
+	"os"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -17,4 +19,22 @@ func Test_ReadTemperature(t *testing.T) {
 		t.Error("Expected 23375 found:", v)
 	}
 
+}
+func readFromFile(path string) (float32, error) {
+	fi, err := os.Open(path)
+	if err != nil {
+		return 0, err
+	}
+	defer fi.Close()
+	data := make([]byte, 100)
+	count, err := fi.Read(data)
+	if err != nil {
+		return 0, err
+	}
+	v := strings.TrimSpace(string(data[:count]))
+	t, err := strconv.ParseFloat(v, 32)
+	if err != nil {
+		return 0, err
+	}
+	return float32(t), nil
 }
