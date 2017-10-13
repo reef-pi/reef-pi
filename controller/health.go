@@ -27,14 +27,14 @@ func (h *HealthChecker) check() {
 		log.Println("ERROR: Failed to obtain load average. Error:", err)
 		return
 	}
-	h.telemetry.EmitMetric("system_load5", loadStat.Load5)
+	h.telemetry.EmitMetric("system-load5", loadStat.Load5)
 
 	vmStat, err := mem.VirtualMemory()
 	if err != nil {
 		log.Println("ERROR: Failed to obtain memory stats. Error:", err)
 		return
 	}
-	h.telemetry.EmitMetric("system_mem_free", vmStat.Free)
+	h.telemetry.EmitMetric("system-mem-free", vmStat.Free)
 	log.Println("health check: Free memory:", vmStat.Free, " Load5:", loadStat.Load5)
 }
 
@@ -44,8 +44,8 @@ func (h *HealthChecker) Stop() {
 }
 
 func (h *HealthChecker) setup() {
-	h.telemetry.CreateFeedIfNotExist("system_load5")
-	h.telemetry.CreateFeedIfNotExist("system_mem_free")
+	h.telemetry.CreateFeedIfNotExist("system-load5")
+	h.telemetry.CreateFeedIfNotExist("system-mem-free")
 }
 
 func (h *HealthChecker) Start() {
