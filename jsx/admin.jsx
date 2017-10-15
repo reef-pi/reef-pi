@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Common from './common.jsx'
 
 export default class Admin extends Common {
@@ -13,9 +12,8 @@ export default class Admin extends Common {
   reload () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
+      this.ajaxPost({
         url: '/api/admin/reload',
-        type: 'POST',
         success: function (data) {
         },
         error: function (xhr, status, err) {
@@ -30,9 +28,8 @@ export default class Admin extends Common {
   powerOff () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
+      this.ajaxPost({
         url: '/api/admin/poweroff',
-        type: 'POST',
         success: function (data) {
         },
         error: function (xhr, status, err) {
@@ -48,9 +45,8 @@ export default class Admin extends Common {
   reboot () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
+      this.ajaxPost({
         url: '/api/admin/reboot',
-        type: 'POST',
         success: function (data) {
         },
         error: function (xhr, status, err) {

@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
 
@@ -68,10 +67,8 @@ export default class ATO extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/ato',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           ato: data,
@@ -106,7 +103,7 @@ export default class ATO extends Common {
       })
       return
     }
-    $.ajax({
+    this.ajaxPost({
       url: '/api/ato',
       type: 'POST',
       data: JSON.stringify(ato),

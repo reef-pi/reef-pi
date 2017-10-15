@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Common from './common.jsx'
 
 export default class Timer extends Common {
@@ -16,10 +15,8 @@ export default class Timer extends Common {
   }
 
   fetchEquipment (id) {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments/' + id,
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           equipment: data
@@ -35,10 +32,8 @@ export default class Timer extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/timers/' + this.props.timer_id,
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           timer: data

@@ -1,6 +1,5 @@
 import React from 'react'
 import Common from './common.jsx'
-import $ from 'jquery'
 
 export default class Equipment extends Common {
   constructor (props) {
@@ -15,10 +14,8 @@ export default class Equipment extends Common {
   }
 
   fetchOutlet () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/outlets/' + this.props.outlet,
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           outlet: data
@@ -34,9 +31,8 @@ export default class Equipment extends Common {
   }
 
   update (e) {
-    $.ajax({
+    this.ajaxPost({
       url: '/api/equipments/' + this.props.id,
-      type: 'POST',
       data: JSON.stringify({
         on: this.state.action === 'on',
         name: this.props.name,

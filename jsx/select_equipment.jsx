@@ -1,21 +1,19 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import Common from './common.jsx'
 
-export default class SelectEquipment extends React.Component {
+export default class SelectEquipment extends Common {
   constructor (props) {
     super(props)
     this.state = {
       equipments: [],
-      showAlert: false,
-      alertMsg: '',
       equipment: {
         id: props.active,
         name: ''
       }
     }
     this.fetchData = this.fetchData.bind(this)
-    this.showAlert = this.showAlert.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
   }
@@ -24,22 +22,9 @@ export default class SelectEquipment extends React.Component {
     this.fetchData()
   }
 
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
-  }
-
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         var equipment = this.state.equipment
         $.each(data, function (i, eq) {
@@ -96,7 +81,7 @@ export default class SelectEquipment extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <DropdownButton title={eqName} id='equipment' onSelect={this.setEquipment}>
           {this.equipmentList()}
         </DropdownButton>

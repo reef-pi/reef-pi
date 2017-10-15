@@ -20,9 +20,8 @@ export default class Jacks extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/jacks/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchData()
           }.bind(this),
@@ -61,9 +60,8 @@ export default class Jacks extends Common {
       name: $('#jackName').val(),
       pins: pins
     }
-    $.ajax({
+    this.ajaxPut({
       url: '/api/jacks',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
@@ -79,9 +77,8 @@ export default class Jacks extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/jacks',
-      type: 'GET',
       success: function (data) {
         this.setState({
           jacks: data

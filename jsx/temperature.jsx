@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
@@ -138,9 +137,8 @@ export default class Temperature extends Common {
       return
     }
 
-    $.ajax({
+    this.ajaxPost({
       url: '/api/tc/config',
-      type: 'POST',
       data: JSON.stringify(tc),
       success: function (data) {
         this.setState({
@@ -159,9 +157,8 @@ export default class Temperature extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/tc/config',
-      type: 'GET',
       success: function (data) {
         this.setState({
           tc: data,
@@ -175,9 +172,8 @@ export default class Temperature extends Common {
         })
       }.bind(this)
     })
-    $.ajax({
+    this.ajaxGet({
       url: '/api/tc/readings',
-      type: 'GET',
       success: function (data) {
         this.setState({
           readings: data,

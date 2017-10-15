@@ -40,9 +40,8 @@ export default class Doser extends Common {
   }
 
   fetch () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/dosers',
-      type: 'GET',
       success: function (data) {
         this.setState({
           dosers: data
@@ -82,9 +81,8 @@ export default class Doser extends Common {
       name: $('#doserName').val(),
       equipment: this.state.selectedEquipment
     }
-    $.ajax({
+    this.ajaxPut({
       url: '/api/dosers',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetch()
@@ -106,15 +104,18 @@ export default class Doser extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/dosers/' + id,
           type: 'DELETE',
           success: function (data) {
             this.fetch()
           }.bind(this),
           error: function (xhr, status, err) {
-            console.log(err.toString())
-          }
+            this.setState({
+              showAlert: true,
+              alertMsg: xhr.responseText
+            })
+          }.bind(this)
         })
       }.bind(this))
     }.bind(this))

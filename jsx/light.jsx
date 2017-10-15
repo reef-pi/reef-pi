@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import LEDChannel from './led_channel.jsx'
 import Common from './common.jsx'
 
@@ -21,9 +20,8 @@ export default class Light extends Common {
   }
 
   updateLight () {
-    $.ajax({
+    this.ajaxPost({
       url: '/api/lights/' + this.props.id,
-      type: 'POST',
       data: JSON.stringify({
         name: this.props.name,
         channels: this.state.channels,
@@ -58,9 +56,8 @@ export default class Light extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/lights/' + this.props.id,
-      type: 'GET',
       success: function (data) {
         this.setState({
           channels: data.channels,

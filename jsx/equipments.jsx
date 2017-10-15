@@ -42,10 +42,8 @@ export default class Equipments extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           equipments: data,
@@ -59,10 +57,8 @@ export default class Equipments extends Common {
         })
       }.bind(this)
     })
-    $.ajax({
+    this.ajaxGet({
       url: '/api/outlets',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           outlets: data
@@ -118,9 +114,8 @@ export default class Equipments extends Common {
     this.setState({
       showAlert: false
     })
-    $.ajax({
+    this.ajaxPut({
       url: '/api/equipments',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
@@ -142,9 +137,8 @@ export default class Equipments extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/equipments/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchData()
           }.bind(this),

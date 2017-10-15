@@ -25,10 +25,8 @@ export default class Connection extends Common {
   }
 
   fetchBoards () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/boards',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           boards: data

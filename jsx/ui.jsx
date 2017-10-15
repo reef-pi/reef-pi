@@ -1,9 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
-import $ from 'jquery'
+import Common from './common.jsx'
 
-export default class App extends React.Component {
+export default class App extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,18 +16,19 @@ export default class App extends React.Component {
   }
 
   loadInfo () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/info',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           info: data
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -35,6 +36,7 @@ export default class App extends React.Component {
     var st = {textAlign: 'center'}
     return (
       <div className='container'>
+        {super.render()}
         <div className='container'><h3 style={st}> {this.state.info.name} </h3></div>
         <div className='container'>
           <MainPanel />

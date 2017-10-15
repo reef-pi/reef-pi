@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Common from './common.jsx'
 
 export default class Camera extends Common {
@@ -127,7 +126,7 @@ export default class Camera extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/camera/config',
       type: 'GET',
       dataType: 'json',
@@ -149,10 +148,8 @@ export default class Camera extends Common {
       return
     }
 
-    $.ajax({
+    this.ajaxGer({
       url: '/api/camera/latest',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           latest: data,
@@ -178,9 +175,8 @@ export default class Camera extends Common {
       })
       return
     }
-    $.ajax({
+    this.ajaxPost({
       url: '/api/camera/config',
-      type: 'POST',
       data: JSON.stringify(camera),
       success: function (data) {
         this.fetchData()
@@ -196,9 +192,8 @@ export default class Camera extends Common {
   }
 
   capture () {
-    $.ajax({
+    this.ajaxPost({
       url: '/api/camera/shoot',
-      type: 'POST',
       data: JSON.stringify({}),
       success: function (data) {
         this.setState({

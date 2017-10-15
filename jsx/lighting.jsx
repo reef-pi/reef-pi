@@ -28,9 +28,8 @@ export default class Lighting extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/lights/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchLights()
           }.bind(this),
@@ -84,9 +83,8 @@ export default class Lighting extends Common {
       name: $('#lightName').val(),
       jack: String(jack)
     }
-    $.ajax({
+    this.ajaxPut({
       url: '/api/lights',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchLights()
@@ -121,9 +119,8 @@ export default class Lighting extends Common {
   }
 
   fetchJacks () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/jacks',
-      type: 'GET',
       success: function (data) {
         this.setState({
           jacks: data
@@ -139,9 +136,8 @@ export default class Lighting extends Common {
   }
 
   fetchLights () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/lights',
-      type: 'GET',
       success: function (data) {
         this.setState({
           lights: data
