@@ -1,34 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import Confirm from './confirm.jsx'
+import Common from './common.jsx'
 
-export default class Admin extends React.Component {
+export default class Admin extends Common {
   constructor (props) {
     super(props)
     this.powerOff = this.powerOff.bind(this)
     this.reboot = this.reboot.bind(this)
     this.reload = this.reload.bind(this)
-    this.confirm = this.confirm.bind(this)
-  }
-
-  confirm (message, options) {
-    var cleanup, component, props, wrapper
-    if (options == null) {
-      options = {}
-    }
-    props = $.extend({
-      message: message
-    }, options)
-    wrapper = document.body.appendChild(document.createElement('div'))
-    component = ReactDOM.render(<Confirm {...props} />, wrapper)
-    cleanup = function () {
-      ReactDOM.unmountComponentAtNode(wrapper)
-      return setTimeout(function () {
-        return wrapper.remove()
-      })
-    }
-    return component.promise.always(cleanup).promise()
   }
 
   reload () {
@@ -40,8 +19,11 @@ export default class Admin extends React.Component {
         success: function (data) {
         },
         error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
+          this.setState({
+            showAlert: true,
+            alertMsg: xhr.responseText
+          })
+        }.bind(this)
       })
     })
   }
@@ -54,8 +36,11 @@ export default class Admin extends React.Component {
         success: function (data) {
         },
         error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
+          this.setState({
+            showAlert: true,
+            alertMsg: xhr.responseText
+          })
+        }.bind(this)
       })
     })
   }
@@ -69,8 +54,11 @@ export default class Admin extends React.Component {
         success: function (data) {
         },
         error: function (xhr, status, err) {
-          console.log(err.toString())
-        }
+          this.setState({
+            showAlert: true,
+            alertMsg: xhr.responseText
+          })
+        }.bind(this)
       })
     })
   }
@@ -78,6 +66,7 @@ export default class Admin extends React.Component {
   render () {
     return (
       <div className='container'>
+        {super.render()}
         <input value='Reload' onClick={this.reload} type='button' className='btn btn-outline-danger' />
         <input value='Reboot' onClick={this.reboot} type='button' className='btn btn-outline-danger' />
         <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />

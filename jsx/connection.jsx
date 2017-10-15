@@ -1,8 +1,9 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import Common from './common.jsx'
 
-export default class Connection extends React.Component {
+export default class Connection extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,8 +35,11 @@ export default class Connection extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -101,6 +105,7 @@ export default class Connection extends React.Component {
     }
     return (
       <div className='row'>
+        {super.render()}
         <div className='col-sm-2'>
               Board
             </div>

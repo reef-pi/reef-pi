@@ -1,14 +1,13 @@
 import React from 'react'
 import $ from 'jquery'
 import SelectEquipment from './select_equipment.jsx'
+import Common from './common.jsx'
 
-export default class ATO extends React.Component {
+export default class ATO extends Common {
   constructor (props) {
     super(props)
     this.state = {
       ato: {},
-      showAlert: false,
-      alertMsg: '',
       updated: false
     }
     this.fetchData = this.fetchData.bind(this)
@@ -21,18 +20,6 @@ export default class ATO extends React.Component {
     this.updateEnable = this.updateEnable.bind(this)
     this.showEnable = this.showEnable.bind(this)
     this.showControl = this.showControl.bind(this)
-    this.showAlert = this.showAlert.bind(this)
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
   }
 
   updateSensor (ev) {
@@ -184,7 +171,7 @@ export default class ATO extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
           <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />

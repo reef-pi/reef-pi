@@ -1,9 +1,8 @@
 import React from 'react'
 import $ from 'jquery'
-import ReactDOM from 'react-dom'
-import Confirm from './confirm.jsx'
+import Common from './common.jsx'
 
-export default class Jacks extends React.Component {
+export default class Jacks extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -15,26 +14,6 @@ export default class Jacks extends React.Component {
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
-    this.confirm = this.confirm.bind(this)
-  }
-
-  confirm (message, options) {
-    var cleanup, component, props, wrapper
-    if (options == null) {
-      options = {}
-    }
-    props = $.extend({
-      message: message
-    }, options)
-    wrapper = document.body.appendChild(document.createElement('div'))
-    component = ReactDOM.render(<Confirm {...props} />, wrapper)
-    cleanup = function () {
-      ReactDOM.unmountComponentAtNode(wrapper)
-      return setTimeout(function () {
-        return wrapper.remove()
-      })
-    }
-    return component.promise.always(cleanup).promise()
   }
 
   remove (id) {
@@ -48,8 +27,11 @@ export default class Jacks extends React.Component {
             this.fetchData()
           }.bind(this),
           error: function (xhr, status, err) {
-            console.log(err.toString())
-          }
+            this.setState({
+              showAlert: true,
+              alertMsg: xhr.responseText
+            })
+          }.bind(this)
         })
       }.bind(this))
     }.bind(this))
@@ -88,8 +70,11 @@ export default class Jacks extends React.Component {
         this.add()
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -103,8 +88,11 @@ export default class Jacks extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -131,6 +119,7 @@ export default class Jacks extends React.Component {
     }
     return (
       <div className='container'>
+        {super.render()}
         <div className='row'>
           <label className='h6'>Jacks</label>
         </div>

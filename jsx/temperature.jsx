@@ -2,16 +2,15 @@ import React from 'react'
 import $ from 'jquery'
 import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
 import SelectEquipment from './select_equipment.jsx'
+import Common from './common.jsx'
 
-export default class Temperature extends React.Component {
+export default class Temperature extends Common {
   constructor (props) {
     super(props)
     this.state = {
       tc: {},
       readings: [],
-      updated: false,
-      showAlert: false,
-      alertMsg: ''
+      updated: false
     }
     this.fetchData = this.fetchData.bind(this)
     this.updateMin = this.updateMin.bind(this)
@@ -25,18 +24,6 @@ export default class Temperature extends React.Component {
     this.showControl = this.showControl.bind(this)
     this.update = this.update.bind(this)
     this.showChart = this.showChart.bind(this)
-    this.showAlert = this.showAlert.bind(this)
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
   }
 
   showChart () {
@@ -261,7 +248,7 @@ export default class Temperature extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <div className='row'>
           <div className='col-sm-3'> Enable </div>
           <div className='col-sm-2'><input type='checkbox' id='tc_enable' defaultChecked={this.state.tc.enable} onClick={this.updateEnable} /></div>

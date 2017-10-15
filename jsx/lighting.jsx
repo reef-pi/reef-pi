@@ -2,10 +2,9 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import ReactDOM from 'react-dom'
-import Confirm from './confirm.jsx'
+import Common from './common.jsx'
 
-export default class Lighting extends React.Component {
+export default class Lighting extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -14,49 +13,15 @@ export default class Lighting extends React.Component {
       enabled: false,
       addLight: false,
       jacks: [],
-      selectedJack: undefined,
-      showAlert: false,
-      alertMsg: ''
+      selectedJack: undefined
     }
     this.lightsList = this.lightsList.bind(this)
-    this.confirm = this.confirm.bind(this)
     this.jacksList = this.jacksList.bind(this)
     this.fetchLights = this.fetchLights.bind(this)
     this.addLight = this.addLight.bind(this)
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
     this.removeLight = this.removeLight.bind(this)
-    this.showAlert = this.showAlert.bind(this)
-  }
-
-  confirm (message, options) {
-    var cleanup, component, props, wrapper
-    if (options == null) {
-      options = {}
-    }
-    props = $.extend({
-      message: message
-    }, options)
-    wrapper = document.body.appendChild(document.createElement('div'))
-    component = ReactDOM.render(<Confirm {...props} />, wrapper)
-    cleanup = function () {
-      ReactDOM.unmountComponentAtNode(wrapper)
-      return setTimeout(function () {
-        return wrapper.remove()
-      })
-    }
-    return component.promise.always(cleanup).promise()
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
   }
 
   removeLight (id) {
@@ -70,12 +35,16 @@ export default class Lighting extends React.Component {
             this.fetchLights()
           }.bind(this),
           error: function (xhr, status, err) {
-            console.log(err.toString())
-          }
+            this.setState({
+              showAlert: true,
+              alertMsg: xhr.responseText
+            })
+          }.bind(this)
         })
       }.bind(this))
     }.bind(this))
   }
+
   componentWillMount () {
     this.fetchLights()
     this.fetchJacks()
@@ -205,7 +174,7 @@ export default class Lighting extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <div className='container'>
           { this.lightsList() }
         </div>
