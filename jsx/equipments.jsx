@@ -1,22 +1,18 @@
 import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
-import ReactDOM from 'react-dom'
-import Confirm from './confirm.jsx'
+import Common from './common.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
-export default class Equipments extends React.Component {
+export default class Equipments extends Common {
   constructor (props) {
     super(props)
     this.state = {
       selectedOutlet: undefined,
       outlets: [],
       equipments: [],
-      addEquipment: false,
-      showAlert: false,
-      alertMsg: ''
+      addEquipment: false
     }
-    this.confirm = this.confirm.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.setOutlet = this.setOutlet.bind(this)
@@ -24,37 +20,6 @@ export default class Equipments extends React.Component {
     this.addEquipment = this.addEquipment.bind(this)
     this.removeEquipment = this.removeEquipment.bind(this)
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
-    this.showAlert = this.showAlert.bind(this)
-  }
-
-  confirm (message, options) {
-    var cleanup, component, props, wrapper
-    if (options == null) {
-      options = {}
-    }
-    props = $.extend({
-      message: message
-    }, options)
-    wrapper = document.body.appendChild(document.createElement('div'))
-    component = ReactDOM.render(<Confirm {...props} />, wrapper)
-    cleanup = function () {
-      ReactDOM.unmountComponentAtNode(wrapper)
-      return setTimeout(function () {
-        return wrapper.remove()
-      })
-    }
-    return component.promise.always(cleanup).promise()
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
   }
 
   equipmentList () {
@@ -62,16 +27,14 @@ export default class Equipments extends React.Component {
     var index = 0
     $.each(this.state.equipments, function (k, v) {
       list.push(
-        <li key={k} className='list-group-item'>
-          <div className='row'>
-            <div className='col-sm-8'>
-              <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} />
-            </div>
-            <div className='col-sm-4'>
-              <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
-            </div>
+        <div key={k} className='row list-group-item'>
+          <div className='col-sm-8'>
+            <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} />
           </div>
-        </li>
+          <div className='col-sm-4'>
+            <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
+          </div>
+        </div>
        )
       index = index + 1
     }.bind(this))
@@ -214,7 +177,7 @@ export default class Equipments extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <ul className='list-group'>
           {this.equipmentList()}
         </ul>

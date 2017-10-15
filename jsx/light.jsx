@@ -1,8 +1,9 @@
 import React from 'react'
 import $ from 'jquery'
 import LEDChannel from './led_channel.jsx'
+import Common from './common.jsx'
 
-export default class Light extends React.Component {
+export default class Light extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -33,8 +34,11 @@ export default class Light extends React.Component {
         this.setState({updated: false})
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -64,8 +68,11 @@ export default class Light extends React.Component {
         })
       }.bind(this),
       error: function (xhr, status, err) {
-        console.log(err)
-      }
+        this.setState({
+          showAlert: true,
+          alertMsg: xhr.responseText
+        })
+      }.bind(this)
     })
   }
 
@@ -119,6 +126,7 @@ export default class Light extends React.Component {
     }
     return (
       <div className='container'>
+        {super.render()}
         <div className='row'>
           {this.props.name}
         </div>

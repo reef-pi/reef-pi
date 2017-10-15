@@ -1,14 +1,13 @@
 import React from 'react'
 import $ from 'jquery'
+import Common from './common.jsx'
 
-export default class Camera extends React.Component {
+export default class Camera extends Common {
   constructor (props) {
     super(props)
     this.state = {
       camera: {},
       latest: {},
-      showAlert: false,
-      alertMsg: '',
       updated: false
     }
     this.fetchData = this.fetchData.bind(this)
@@ -21,7 +20,6 @@ export default class Camera extends React.Component {
     this.updateCaptureFlags = this.updateCaptureFlags.bind(this)
     this.updateTickInterval = this.updateTickInterval.bind(this)
     this.showCapture = this.showCapture.bind(this)
-    this.showAlert = this.showAlert.bind(this)
     this.showEnable = this.showEnable.bind(this)
   }
 
@@ -56,17 +54,6 @@ export default class Camera extends React.Component {
         <div className='row'>
           <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
         </div>
-      </div>
-    )
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
       </div>
     )
   }
@@ -240,7 +227,7 @@ export default class Camera extends React.Component {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
+        {super.render()}
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
           <input type='checkbox' id='camera_enable' className='col-sm-2' defaultChecked={this.state.camera.enable} onClick={this.updateEnable} />
