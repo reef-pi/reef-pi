@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
 import Common from './common.jsx'
+import Auth from './auth.jsx'
 
 export default class App extends Common {
   constructor (props) {
@@ -33,6 +34,9 @@ export default class App extends Common {
   }
 
   render () {
+    if (!Auth.isAuthenticated()) {
+      return (<Auth />)
+    }
     var st = {textAlign: 'center'}
     return (
       <div className='container'>

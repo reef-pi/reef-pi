@@ -1,5 +1,6 @@
 import React from 'react'
 import Common from './common.jsx'
+import Auth from './auth.jsx'
 
 export default class Admin extends Common {
   constructor (props) {
@@ -7,6 +8,11 @@ export default class Admin extends Common {
     this.powerOff = this.powerOff.bind(this)
     this.reboot = this.reboot.bind(this)
     this.reload = this.reload.bind(this)
+    this.signout = this.signout.bind(this)
+  }
+
+  signout () {
+    Auth.removeCreds()
   }
 
   reload () {
@@ -25,6 +31,7 @@ export default class Admin extends Common {
       })
     })
   }
+
   powerOff () {
     this.confirm('Are you sure ?')
     .then(function () {
@@ -63,6 +70,7 @@ export default class Admin extends Common {
     return (
       <div className='container'>
         {super.render()}
+        <input value='Sign out' onClick={this.signout} type='button' className='btn btn-outline-danger' />
         <input value='Reload' onClick={this.reload} type='button' className='btn btn-outline-danger' />
         <input value='Reboot' onClick={this.reboot} type='button' className='btn btn-outline-danger' />
         <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />
