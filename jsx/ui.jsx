@@ -23,12 +23,6 @@ export default class App extends Common {
         this.setState({
           info: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }

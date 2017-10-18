@@ -33,7 +33,6 @@ export default class Auth extends React.Component {
   static removeCreds () {
     Auth.remove('reef-pi-pass')
     Auth.remove('reef-pi-user')
-    window.location.reload(true)
   }
 
   saveCreds () {

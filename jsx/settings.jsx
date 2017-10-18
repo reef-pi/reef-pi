@@ -45,12 +45,6 @@ export default class Settings extends Common {
         this.setState({
           capabilities: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -160,12 +154,6 @@ export default class Settings extends Common {
         this.setState({
           updated: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -199,12 +187,6 @@ export default class Settings extends Common {
       success: function (data) {
         this.setState({
           settings: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

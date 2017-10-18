@@ -31,12 +31,6 @@ export default class Connection extends Common {
         this.setState({
           boards: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }

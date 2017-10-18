@@ -46,12 +46,6 @@ export default class Doser extends Common {
         this.setState({
           dosers: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -90,12 +84,6 @@ export default class Doser extends Common {
           add: !this.state.add
         })
         $('#doserName').val('')
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -109,12 +97,6 @@ export default class Doser extends Common {
           type: 'DELETE',
           success: function (data) {
             this.fetch()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))

@@ -30,12 +30,6 @@ export default class Light extends Common {
       success: function (data) {
         this.fetchData()
         this.setState({updated: false})
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -62,12 +56,6 @@ export default class Light extends Common {
         this.setState({
           channels: data.channels,
           jack: data.jack
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

@@ -32,12 +32,6 @@ export default class Lighting extends Common {
           url: '/api/lights/' + id,
           success: function (data) {
             this.fetchLights()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -92,12 +86,6 @@ export default class Lighting extends Common {
           addLight: !this.state.addLight
         })
         $('#lightName').val('')
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -125,12 +113,6 @@ export default class Lighting extends Common {
         this.setState({
           jacks: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -141,12 +123,6 @@ export default class Lighting extends Common {
       success: function (data) {
         this.setState({
           lights: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

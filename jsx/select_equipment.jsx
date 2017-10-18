@@ -37,12 +37,6 @@ export default class SelectEquipment extends Common {
           equipment: equipment,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }

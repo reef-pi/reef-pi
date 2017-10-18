@@ -74,12 +74,6 @@ export default class ATO extends Common {
           ato: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -111,12 +105,6 @@ export default class ATO extends Common {
         this.setState({
           updated: false,
           ato: ato
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

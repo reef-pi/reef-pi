@@ -20,12 +20,6 @@ export default class Equipment extends Common {
         this.setState({
           outlet: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -41,12 +35,6 @@ export default class Equipment extends Common {
       success: function (data) {
         this.setState({
           action: this.state.action === 'on' ? 'off' : 'on'
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

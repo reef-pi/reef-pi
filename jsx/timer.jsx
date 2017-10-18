@@ -21,12 +21,6 @@ export default class Timer extends Common {
         this.setState({
           equipment: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -39,12 +33,6 @@ export default class Timer extends Common {
           timer: data
         })
         this.fetchEquipment(data.equipment)
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }

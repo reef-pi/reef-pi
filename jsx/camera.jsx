@@ -135,12 +135,6 @@ export default class Camera extends Common {
           camera: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
 
@@ -148,18 +142,12 @@ export default class Camera extends Common {
       return
     }
 
-    this.ajaxGer({
+    this.ajaxGet({
       url: '/api/camera/latest',
       success: function (data) {
         this.setState({
           latest: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -181,12 +169,6 @@ export default class Camera extends Common {
       success: function (data) {
         this.fetchData()
         this.setState({updated: false})
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setStat({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -199,12 +181,6 @@ export default class Camera extends Common {
         this.setState({
           latest: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setStat({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this),
       timeout: 30000

@@ -49,12 +49,6 @@ export default class Equipments extends Common {
           equipments: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
     this.ajaxGet({
@@ -63,12 +57,6 @@ export default class Equipments extends Common {
         this.setState({
           outlets: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -76,6 +64,7 @@ export default class Equipments extends Common {
   componentDidMount () {
     this.fetchData()
   }
+
   setOutlet (i, ev) {
     this.setState({
       selectedOutlet: i,
@@ -123,12 +112,6 @@ export default class Equipments extends Common {
         this.setState({
           selectedOutlet: undefined
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -141,12 +124,6 @@ export default class Equipments extends Common {
           url: '/api/equipments/' + id,
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))

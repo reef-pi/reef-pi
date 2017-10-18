@@ -13,21 +13,14 @@ export default class Admin extends Common {
 
   signout () {
     Auth.removeCreds()
+    window.location.reload(true)
   }
 
   reload () {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/reload',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+        url: '/api/admin/reload'
       })
     })
   }
@@ -36,15 +29,7 @@ export default class Admin extends Common {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/poweroff',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+        url: '/api/admin/poweroff'
       })
     })
   }
@@ -53,15 +38,7 @@ export default class Admin extends Common {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/reboot',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+        url: '/api/admin/reboot'
       })
     })
   }

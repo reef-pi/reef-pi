@@ -47,12 +47,6 @@ export default class Dashboard extends Common {
         this.setState({
           displayOn: !this.state.displayOn
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -68,12 +62,6 @@ export default class Dashboard extends Common {
         this.setState({
           brightness: b
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -87,12 +75,6 @@ export default class Dashboard extends Common {
         this.setState({
           displayOn: data.on
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -103,12 +85,6 @@ export default class Dashboard extends Common {
       success: function (data) {
         this.setState({
           info: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

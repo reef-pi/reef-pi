@@ -146,12 +146,6 @@ export default class Temperature extends Common {
           showAlert: false,
           updated: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -164,12 +158,6 @@ export default class Temperature extends Common {
           tc: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
     this.ajaxGet({
@@ -178,12 +166,6 @@ export default class Temperature extends Common {
         this.setState({
           readings: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

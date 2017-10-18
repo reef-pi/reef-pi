@@ -24,12 +24,6 @@ export default class Jacks extends Common {
           url: '/api/jacks/' + id,
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -66,12 +60,6 @@ export default class Jacks extends Common {
       success: function (data) {
         this.fetchData()
         this.add()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -82,12 +70,6 @@ export default class Jacks extends Common {
       success: function (data) {
         this.setState({
           jacks: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })

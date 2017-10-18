@@ -36,12 +36,6 @@ export default class Timers extends Common {
           timers: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
     this.ajaxGet({
@@ -50,12 +44,6 @@ export default class Timers extends Common {
         this.setState({
           equipments: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -91,12 +79,6 @@ export default class Timers extends Common {
           url: '/api/timers/' + id,
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -111,12 +93,6 @@ export default class Timers extends Common {
         this.setState({
           equipment: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -186,12 +162,6 @@ export default class Timers extends Common {
       success: function (data) {
         this.fetchData()
         this.toggleAddTimerDiv()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   };

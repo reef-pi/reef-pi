@@ -2,6 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
 import Confirm from './confirm.jsx'
+import Auth from './auth.jsx'
 
 export default class Common extends React.Component {
   constructor (props) {
@@ -13,16 +14,27 @@ export default class Common extends React.Component {
     this.showAlert = this.showAlert.bind(this)
     this.ajaxGet = this.ajaxGet.bind(this)
     this.ajaxPost = this.ajaxPost.bind(this)
-    this.username = this.username.bind(this)
-    this.password = this.password.bind(this)
+    this.ajaxPut = this.ajaxPut.bind(this)
+    this.ajaxDelete = this.ajaxDelete.bind(this)
+    this.ajaxErrorHandler = this.ajaxErrorHandler.bind(this)
+    this.ajaxBeforeSend = this.ajaxBeforeSend.bind(this)
   }
 
-  username () {
-    return ('user')
+  ajaxBeforeSend (xhr) {
+    var creds = Auth.getCreds()
+    var authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
+    xhr.setRequestHeader('Authorization', authHeader)
   }
 
-  password () {
-    return ('pass')
+  ajaxErrorHandler (xhr, status, err) {
+    this.setState({
+      showAlert: true,
+      alertMsg: xhr.responseText
+    })
+    // If authentication error, reset creds and reload page
+    if (xhr.status === 401) {
+      Auth.removeCreds()
+    }
   }
 
   ajaxDelete (params) {
@@ -30,10 +42,8 @@ export default class Common extends React.Component {
       url: params.url,
       type: 'DELETE',
       success: params.success.bind(this),
-      error: params.error.bind(this),
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(this.username() + ':' + this.password()))
-      }.bind(this)
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
     })
   }
 
@@ -43,10 +53,8 @@ export default class Common extends React.Component {
       type: 'PUT',
       data: params.data,
       success: params.success.bind(this),
-      error: params.error.bind(this),
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(this.username() + ':' + this.password()))
-      }.bind(this)
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
     })
   }
 
@@ -56,10 +64,8 @@ export default class Common extends React.Component {
       type: 'POST',
       data: params.data,
       success: params.success.bind(this),
-      error: params.error.bind(this),
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(this.username() + ':' + this.password()))
-      }.bind(this)
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
     })
   }
 
@@ -69,10 +75,8 @@ export default class Common extends React.Component {
       type: 'GET',
       dataType: 'json',
       success: params.success.bind(this),
-      error: params.error.bind(this),
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', 'Basic ' + window.btoa(this.username() + ':' + this.password()))
-      }.bind(this)
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
     })
   }
 

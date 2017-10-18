@@ -24,12 +24,6 @@ export default class Outlets extends Common {
           url: '/api/outlets/' + id,
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -60,12 +54,6 @@ export default class Outlets extends Common {
       success: function (data) {
         this.fetchData()
         this.add()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
@@ -75,13 +63,8 @@ export default class Outlets extends Common {
       url: '/api/outlets',
       success: function (data) {
         this.setState({
-          outlets: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
+          outlets: data,
+          showAlert: false
         })
       }.bind(this)
     })
