@@ -1,7 +1,10 @@
 package controller
 
 import (
+	"fmt"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
 
 type Credentials struct {
@@ -14,7 +17,7 @@ func (r *ReefPi) CheckCreds(user, password string) error {
 	if err := r.store.Get(Bucket, "credentials", &c); err != nil {
 		return err
 	}
- 
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		return err
@@ -22,7 +25,12 @@ func (r *ReefPi) CheckCreds(user, password string) error {
 	return bcrypt.CompareHashAndPassword(hash, []byte(password))
 }
 
-func (r *ReefPi
+func (r *ReefPi) UpdateAuth(w http.ResponseWriter, req *http.Request) {
+	fn := func(_ string) (interface{}, error) {
+		return r.Capabilities(), nil
+	}
+	utils.JSONGetResponse(fn, w, req)
+}
 
 func main() {
 	password := "secret"
