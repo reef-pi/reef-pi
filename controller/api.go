@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 )
@@ -23,6 +24,7 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	}
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
+	router.HandleFunc("/api/credentials", r.UpdateAuth).Methods("POST")
 	r.outlets.LoadAPI(router)
 	r.jacks.LoadAPI(router)
 	for _, sController := range r.subsystems {
@@ -39,7 +41,8 @@ func startAPIServer(address string) (error, *mux.Router) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 	images := http.FileServer(http.Dir("images"))
 	http.Handle("/images/", http.StripPrefix("/images/", images))
-	http.Handle("/api/", router)
+	a := utils.NewBasicAuth("user", "pass")
+	http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
 	log.Printf("Starting http server at: %s\n", address)
 	go http.ListenAndServe(address, nil)
 	return nil, router

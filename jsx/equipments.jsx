@@ -42,36 +42,20 @@ export default class Equipments extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           equipments: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
-    $.ajax({
+    this.ajaxGet({
       url: '/api/outlets',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           outlets: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -80,6 +64,7 @@ export default class Equipments extends Common {
   componentDidMount () {
     this.fetchData()
   }
+
   setOutlet (i, ev) {
     this.setState({
       selectedOutlet: i,
@@ -118,21 +103,14 @@ export default class Equipments extends Common {
     this.setState({
       showAlert: false
     })
-    $.ajax({
+    this.ajaxPut({
       url: '/api/equipments',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.toggleAddEquipmentDiv()
         this.setState({
           selectedOutlet: undefined
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -142,17 +120,10 @@ export default class Equipments extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/equipments/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))

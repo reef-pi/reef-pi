@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
 
@@ -68,20 +67,12 @@ export default class ATO extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/ato',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           ato: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -106,7 +97,7 @@ export default class ATO extends Common {
       })
       return
     }
-    $.ajax({
+    this.ajaxPost({
       url: '/api/ato',
       type: 'POST',
       data: JSON.stringify(ato),
@@ -114,12 +105,6 @@ export default class ATO extends Common {
         this.setState({
           updated: false,
           ato: ato
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
