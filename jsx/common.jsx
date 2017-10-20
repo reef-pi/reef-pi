@@ -2,6 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import ReactDOM from 'react-dom'
 import Confirm from './confirm.jsx'
+import SignIn from './sign_in.jsx'
 
 export default class Common extends React.Component {
   constructor (props) {
@@ -11,6 +12,72 @@ export default class Common extends React.Component {
       alertMsg: ''
     }
     this.showAlert = this.showAlert.bind(this)
+    this.ajaxGet = this.ajaxGet.bind(this)
+    this.ajaxPost = this.ajaxPost.bind(this)
+    this.ajaxPut = this.ajaxPut.bind(this)
+    this.ajaxDelete = this.ajaxDelete.bind(this)
+    this.ajaxErrorHandler = this.ajaxErrorHandler.bind(this)
+    this.ajaxBeforeSend = this.ajaxBeforeSend.bind(this)
+  }
+
+  ajaxBeforeSend (xhr) {
+    var creds = SignIn.getCreds()
+    var authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
+    xhr.setRequestHeader('Authorization', authHeader)
+  }
+
+  ajaxErrorHandler (xhr, status, err) {
+    this.setState({
+      showAlert: true,
+      alertMsg: xhr.responseText
+    })
+    // If authentication error, reset creds and reload page
+    if (xhr.status === 401) {
+      SignIn.removeCreds()
+    }
+  }
+
+  ajaxDelete (params) {
+    $.ajax({
+      url: params.url,
+      type: 'DELETE',
+      success: params.success.bind(this),
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
+    })
+  }
+
+  ajaxPut (params) {
+    $.ajax({
+      url: params.url,
+      type: 'PUT',
+      data: params.data,
+      success: params.success.bind(this),
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
+    })
+  }
+
+  ajaxPost (params) {
+    $.ajax({
+      url: params.url,
+      type: 'POST',
+      data: params.data,
+      success: params.success.bind(this),
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
+    })
+  }
+
+  ajaxGet (params) {
+    $.ajax({
+      url: params.url,
+      type: 'GET',
+      dataType: 'json',
+      success: params.success.bind(this),
+      error: this.ajaxErrorHandler,
+      beforeSend: this.ajaxBeforeSend
+    })
   }
 
   showAlert () {

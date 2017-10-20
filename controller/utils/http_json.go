@@ -7,6 +7,33 @@ import (
 	"net/http"
 )
 
+func NewBasicAuth(user, pass string) *Auth {
+	return &Auth{
+		user: user,
+		pass: pass,
+	}
+}
+
+type Auth struct {
+	user string
+	pass string
+}
+
+func (a *Auth) check(user, pass string) bool {
+	return (a.user == user) && (a.pass == pass)
+}
+
+func (a *Auth) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user, pass, _ := r.BasicAuth()
+		if !a.check(user, pass) {
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		fn(w, r)
+	}
+}
+
 func ErrorResponse(header int, msg string, w http.ResponseWriter) {
 	log.Println("ERROR:", msg)
 	resp := make(map[string]string)

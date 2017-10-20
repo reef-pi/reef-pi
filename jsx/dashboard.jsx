@@ -1,7 +1,7 @@
 import React from 'react'
-import $ from 'jquery'
+import Common from './common.jsx'
 
-export default class Dashboard extends React.Component {
+export default class Dashboard extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -41,25 +41,20 @@ export default class Dashboard extends React.Component {
 
   toggleDisplay () {
     var action = this.state.displayOn ? 'off' : 'on'
-    $.ajax({
+    this.ajaxPost({
       url: '/api/display/' + action,
-      type: 'POST',
       success: function (data) {
         this.setState({
           displayOn: !this.state.displayOn
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
 
   setBrightness (ev) {
     var b = parseInt(ev.target.value)
-    $.ajax({
+    this.ajaxPost({
       url: '/api/display',
-      type: 'POST',
       data: JSON.stringify({
         brightness: b
       }),
@@ -67,48 +62,38 @@ export default class Dashboard extends React.Component {
         this.setState({
           brightness: b
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
 
   componentWillMount () {
     this.refresh()
     setInterval(this.refresh, 180 * 1000)
-    $.ajax({
+    this.ajaxGet({
       url: '/api/display',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           displayOn: data.on
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
 
   refresh () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/info',
-      type: 'GET',
       success: function (data) {
         this.setState({
           info: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
+
   render () {
     return (
       <div className='container'>
+        {super.render()}
         <div className='row'>
           <b> Summary </b>
         </div>

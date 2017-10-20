@@ -20,17 +20,10 @@ export default class Outlets extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/outlets/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -55,36 +48,23 @@ export default class Outlets extends Common {
       pin: parseInt($('#outletPin').val()),
       reverse: $('#outletReverse')[0].checked
     }
-    $.ajax({
+    this.ajaxPut({
       url: '/api/outlets',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.add()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/outlets',
-      type: 'GET',
       success: function (data) {
         this.setState({
-          outlets: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
+          outlets: data,
+          showAlert: false
         })
       }.bind(this)
     })

@@ -1,9 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
-import $ from 'jquery'
+import Common from './common.jsx'
+import SignIn from './sign_in.jsx'
 
-export default class App extends React.Component {
+export default class App extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,25 +17,24 @@ export default class App extends React.Component {
   }
 
   loadInfo () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/info',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           info: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
 
   render () {
+    if (!SignIn.isSignIned()) {
+      return (<SignIn />)
+    }
     var st = {textAlign: 'center'}
     return (
       <div className='container'>
+        {super.render()}
         <div className='container'><h3 style={st}> {this.state.info.name} </h3></div>
         <div className='container'>
           <MainPanel />
