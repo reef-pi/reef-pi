@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Common from './common.jsx'
 
 export default class Camera extends Common {
@@ -127,7 +126,7 @@ export default class Camera extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/camera/config',
       type: 'GET',
       dataType: 'json',
@@ -136,12 +135,6 @@ export default class Camera extends Common {
           camera: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
 
@@ -149,20 +142,12 @@ export default class Camera extends Common {
       return
     }
 
-    $.ajax({
+    this.ajaxGet({
       url: '/api/camera/latest',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           latest: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -178,38 +163,24 @@ export default class Camera extends Common {
       })
       return
     }
-    $.ajax({
+    this.ajaxPost({
       url: '/api/camera/config',
-      type: 'POST',
       data: JSON.stringify(camera),
       success: function (data) {
         this.fetchData()
         this.setState({updated: false})
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setStat({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   }
 
   capture () {
-    $.ajax({
+    this.ajaxPost({
       url: '/api/camera/shoot',
-      type: 'POST',
       data: JSON.stringify({}),
       success: function (data) {
         this.setState({
           latest: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setStat({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this),
       timeout: 30000

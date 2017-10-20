@@ -2,10 +2,9 @@ import React from 'react'
 import { OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
 import $ from 'jquery'
 import Timer from './timer.jsx'
-import ReactDOM from 'react-dom'
-import Confirm from './confirm.jsx'
+import Common from './common.jsx'
 
-export default class Timers extends React.Component {
+export default class Timers extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -13,12 +12,9 @@ export default class Timers extends React.Component {
       equipmentAction: 'on',
       equipments: [],
       timers: [],
-      addTimer: false,
-      showAlert: false,
-      alertMsg: ''
+      addTimer: false
     }
     this.timerList = this.timerList.bind(this)
-    this.confirm = this.confirm.bind(this)
     this.createTimer = this.createTimer.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -26,75 +22,28 @@ export default class Timers extends React.Component {
     this.setEquipment = this.setEquipment.bind(this)
     this.setEquipmentAction = this.setEquipmentAction.bind(this)
     this.toggleAddTimerDiv = this.toggleAddTimerDiv.bind(this)
-    this.showAlert = this.showAlert.bind(this)
   }
 
   componentDidMount () {
     this.fetchData()
   }
 
-  confirm (message, options) {
-    var cleanup, component, props, wrapper
-    if (options == null) {
-      options = {}
-    }
-    props = $.extend({
-      message: message
-    }, options)
-    wrapper = document.body.appendChild(document.createElement('div'))
-    component = ReactDOM.render(<Confirm {...props} />, wrapper)
-    cleanup = function () {
-      ReactDOM.unmountComponentAtNode(wrapper)
-      return setTimeout(function () {
-        return wrapper.remove()
-      })
-    }
-    return component.promise.always(cleanup).promise()
-  }
-
-  showAlert () {
-    if (!this.state.showAlert) {
-      return
-    }
-    return (
-      <div className='alert alert-danger'>
-        {this.state.alertMsg}
-      </div>
-    )
-  }
-
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/timers',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           timers: data,
           showAlert: false
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           equipments: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -126,17 +75,10 @@ export default class Timers extends React.Component {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        $.ajax({
+        this.ajaxDelete({
           url: '/api/timers/' + id,
-          type: 'DELETE',
           success: function (data) {
             this.fetchData()
-          }.bind(this),
-          error: function (xhr, status, err) {
-            this.setState({
-              showAlert: true,
-              alertMsg: xhr.responseText
-            })
           }.bind(this)
         })
       }.bind(this))
@@ -145,20 +87,12 @@ export default class Timers extends React.Component {
 
   setEquipment (k, ev) {
     var eqID = this.state.equipments[k].id
-    $.ajax({
+    this.ajaxGet({
       url: '/api/equipments/' + eqID,
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           equipment: data,
           showAlert: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -222,19 +156,12 @@ export default class Timers extends React.Component {
       on: (this.state.equipmentAction === 'on'),
       equipment: this.state.equipment.id
     }
-    $.ajax({
+    this.ajaxPut({
       url: '/api/timers',
-      type: 'PUT',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.toggleAddTimerDiv()
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
-        })
       }.bind(this)
     })
   };

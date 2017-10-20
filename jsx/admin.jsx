@@ -1,6 +1,6 @@
 import React from 'react'
-import $ from 'jquery'
 import Common from './common.jsx'
+import Auth from './auth.jsx'
 
 export default class Admin extends Common {
   constructor (props) {
@@ -8,39 +8,28 @@ export default class Admin extends Common {
     this.powerOff = this.powerOff.bind(this)
     this.reboot = this.reboot.bind(this)
     this.reload = this.reload.bind(this)
+    this.signout = this.signout.bind(this)
+  }
+
+  signout () {
+    Auth.removeCreds()
+    window.location.reload(true)
   }
 
   reload () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
-        url: '/api/admin/reload',
-        type: 'POST',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+      this.ajaxPost({
+        url: '/api/admin/reload'
       })
     })
   }
+
   powerOff () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
-        url: '/api/admin/poweroff',
-        type: 'POST',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+      this.ajaxPost({
+        url: '/api/admin/poweroff'
       })
     })
   }
@@ -48,17 +37,8 @@ export default class Admin extends Common {
   reboot () {
     this.confirm('Are you sure ?')
     .then(function () {
-      $.ajax({
-        url: '/api/admin/reboot',
-        type: 'POST',
-        success: function (data) {
-        },
-        error: function (xhr, status, err) {
-          this.setState({
-            showAlert: true,
-            alertMsg: xhr.responseText
-          })
-        }.bind(this)
+      this.ajaxPost({
+        url: '/api/admin/reboot'
       })
     })
   }
@@ -67,6 +47,7 @@ export default class Admin extends Common {
     return (
       <div className='container'>
         {super.render()}
+        <input value='Sign out' onClick={this.signout} type='button' className='btn btn-outline-danger' />
         <input value='Reload' onClick={this.reload} type='button' className='btn btn-outline-danger' />
         <input value='Reboot' onClick={this.reboot} type='button' className='btn btn-outline-danger' />
         <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />

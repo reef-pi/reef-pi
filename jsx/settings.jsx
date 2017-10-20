@@ -1,6 +1,6 @@
 import React from 'react'
-import $ from 'jquery'
 import Telemetry from './telemetry.jsx'
+import Auth from './auth.jsx'
 import Common from './common.jsx'
 
 export default class Settings extends Common {
@@ -40,19 +40,11 @@ export default class Settings extends Common {
   }
 
   loadCapabilities () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/capabilities',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           capabilities: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -156,19 +148,12 @@ export default class Settings extends Common {
   }
 
   update () {
-    $.ajax({
+    this.ajaxPost({
       url: '/api/settings',
-      type: 'POST',
       data: JSON.stringify(this.state.settings),
       success: function (data) {
         this.setState({
           updated: false
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -198,18 +183,11 @@ export default class Settings extends Common {
   }
 
   fetchData () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/settings',
-      type: 'GET',
       success: function (data) {
         this.setState({
           settings: data
-        })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        this.setState({
-          showAlert: true,
-          alertMsg: xhr.responseText
         })
       }.bind(this)
     })
@@ -291,6 +269,9 @@ export default class Settings extends Common {
         </div>
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />
+        </div>
+        <div className='row'>
+          <Auth />
         </div>
       </div>
     )

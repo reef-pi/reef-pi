@@ -9,8 +9,9 @@ import Temperature from './temperature.jsx'
 import Timers from './timers.jsx'
 import Doser from './doser.jsx'
 import $ from 'jquery'
+import Common from './common.jsx'
 
-export default class MainPanel extends React.Component {
+export default class MainPanel extends Common {
   constructor (props) {
     super(props)
     this.state = {
@@ -59,18 +60,13 @@ export default class MainPanel extends React.Component {
   }
 
   loadCapabilities () {
-    $.ajax({
+    this.ajaxGet({
       url: '/api/capabilities',
-      type: 'GET',
-      dataType: 'json',
       success: function (data) {
         this.setState({
           capabilities: data
         })
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.log(err.toString())
-      }
+      }.bind(this)
     })
   }
 

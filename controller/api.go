@@ -2,12 +2,22 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 )
 
 func (r *ReefPi) API() error {
-	err, router := startAPIServer(r.settings.Address)
+	creds, err := r.GetCredentials()
+	if err != nil {
+		log.Println("ERROR: Failed to load credentials. Error", err)
+		creds.User = "reef-pi"
+		creds.Password = "reef-pi"
+		if err := r.store.Update(Bucket, "credentials", creds); err != nil {
+			return err
+		}
+	}
+	err, router := startAPIServer(r.settings.Address, creds)
 	if err != nil {
 		return err
 	}
@@ -23,6 +33,7 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	}
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
+	router.HandleFunc("/api/credentials", r.UpdateCredentials).Methods("POST")
 	r.outlets.LoadAPI(router)
 	r.jacks.LoadAPI(router)
 	for _, sController := range r.subsystems {
@@ -30,7 +41,7 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string) (error, *mux.Router) {
+func startAPIServer(address string, creds Credentials) (error, *mux.Router) {
 	assets := http.FileServer(http.Dir("assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "assets/home.html")
@@ -39,7 +50,8 @@ func startAPIServer(address string) (error, *mux.Router) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 	images := http.FileServer(http.Dir("images"))
 	http.Handle("/images/", http.StripPrefix("/images/", images))
-	http.Handle("/api/", router)
+	a := utils.NewBasicAuth(creds.User, creds.Password)
+	http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
 	log.Printf("Starting http server at: %s\n", address)
 	go http.ListenAndServe(address, nil)
 	return nil, router
