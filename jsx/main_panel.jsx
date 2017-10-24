@@ -4,7 +4,7 @@ import ATO from './ato.jsx'
 import Camera from './camera.jsx'
 import Equipments from './equipments.jsx'
 import Lighting from './lighting.jsx'
-import System from './system.jsx'
+import Configuration from './configuration.jsx'
 import Temperature from './temperature.jsx'
 import Timers from './timers.jsx'
 import Doser from './doser.jsx'
@@ -15,21 +15,11 @@ export default class MainPanel extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      capabilities: [],
-      tabs: {
-        'ato': 'Auto Top Off',
-        'camera': 'Camera',
-        'equipments': 'Equipments',
-        'lighting': 'Lighting',
-        'system': 'System',
-        'temperature': 'Temperature',
-        'timers': 'Timers',
-        'doser': 'Dosing pumps'
-      },
+      capabilities: {},
       panels: {
         'ato': <ATO />,
         'camera': <Camera />,
-        'system': <System />,
+        'configuration': <Configuration />,
         'equipments': <Equipments />,
         'lighting': <Lighting />,
         'temperature': < Temperature />,
@@ -37,19 +27,7 @@ export default class MainPanel extends Common {
         'doser': < Doser />
       }
     }
-    this.tabList = this.tabList.bind(this)
-    this.panelList = this.panelList.bind(this)
     this.loadCapabilities = this.loadCapabilities.bind(this)
-  }
-
-  tabList () {
-    var tabs = []
-    $.each(this.state.capabilities, function (i, c) {
-      tabs.push(
-        <Tab key={c}>{c}</Tab>
-      )
-    })
-    return tabs
   }
 
   componentDidMount () {
@@ -70,25 +48,27 @@ export default class MainPanel extends Common {
     })
   }
 
-  panelList () {
-    var panels = []
-    $.each(this.state.capabilities, function (i, c) {
-      panels.push(
-        <TabPanel key={c}>
-          {this.state.panels[c]}
-        </TabPanel>
-      )
-    }.bind(this))
-    return panels
-  }
-
   render () {
+    var tabs = []
+    var panels = []
+
+    $.each(this.state.capabilities, function (k, v) {
+      if (!v) {
+        return
+      }
+      if (this.state.panels[k] === undefined) {
+        return
+      }
+      tabs.push(<Tab key={k}>{k}</Tab>)
+      panels.push(<TabPanel key={k}> {this.state.panels[k]} </TabPanel>)
+    }.bind(this))
+
     return (
       <Tabs onSelect={this.handleSelect} selectedIndex={0}>
         <TabList>
-          {this.tabList()}
+          {tabs}
         </TabList>
-        {this.panelList()}
+        {panels}
       </Tabs>
     )
   }

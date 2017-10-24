@@ -5,7 +5,7 @@ import Dashboard from './dashboard.jsx'
 import Outlets from './outlets.jsx'
 import Jacks from './jacks.jsx'
 
-export default class System extends React.Component {
+export default class Configuration extends React.Component {
   render () {
     return (
       <div className='container'>

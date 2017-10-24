@@ -7,39 +7,45 @@ import (
 	"time"
 )
 
+type Capabilities struct {
+	DevMode       bool `json:"dev_mode" yaml:"dev_mode"`
+	Equipments    bool `json:"equipments" yaml:"equipments"`
+	Lighting      bool `json:"lighting" yaml:"lighting"`
+	Temperature   bool `json:"temperature" yaml:"temperature"`
+	ATO           bool `json:"ato" yaml:"ato"`
+	Timers        bool `json:"timers" yaml:"timers"`
+	Configuration bool `json:"configuration" yaml:"configuration"`
+	Camera        bool `json:"camera" yaml:"camera"`
+	Doser         bool `json:"doser" yaml:"doser"`
+}
+
 type Settings struct {
 	Name           string           `json:"name" yaml:"name"`
 	Interface      string           `json:"interface" yaml:"interface"`
 	Address        string           `json:"address" yaml:"address"`
 	ImageDirectory string           `json:"image_directory" yaml:"image_directory"`
-	DevMode        bool             `json:"dev_mode" yaml:"dev_mode"`
-	Equipments     bool             `json:"equipments" yaml:"equipments"`
-	Lighting       bool             `json:"lighting" yaml:"lighting"`
-	Temperature    bool             `json:"temperature" yaml:"temperature"`
-	ATO            bool             `json:"ato" yaml:"ato"`
-	Timers         bool             `json:"timers" yaml:"timers"`
-	System         bool             `json:"system" yaml:"system"`
-	Camera         bool             `json:"camera" yaml:"camera"`
-	Doser          bool             `json:"doser" yaml:"doser"`
 	Display        bool             `json:"display" yaml:"display"`
 	AdafruitIO     utils.AdafruitIO `json:"adafruitio" yaml:"adafruitio"`
 	LightInterval  time.Duration    `json:"light_interval" yaml:"light_interval"`
+	Capabilities   Capabilities     `json:"capabilities" yaml:"capabilities"`
 }
 
 var DefaultSettings = Settings{
 	Name:          "reef-pi",
 	Interface:     "eth0",
 	Address:       "0.0.0.0:8080",
-	DevMode:       true,
 	LightInterval: 30 * time.Second,
-	System:        true,
-	Equipments:    true,
-	Lighting:      true,
-	Temperature:   true,
-	ATO:           true,
-	Timers:        true,
-	Camera:        true,
-	Doser:         true,
+	Capabilities: Capabilities{
+		DevMode:       true,
+		Configuration: true,
+		Equipments:    true,
+		Lighting:      true,
+		Temperature:   true,
+		ATO:           true,
+		Timers:        true,
+		Camera:        true,
+		Doser:         true,
+	},
 }
 
 func loadSettings(store utils.Store) (Settings, error) {
