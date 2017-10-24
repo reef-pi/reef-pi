@@ -17,16 +17,12 @@ func Test_Capabilities(t *testing.T) {
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
 	r := &ReefPi{}
-	cpas := r.Capabilities()
-	if len(cpas) != 0 {
-		t.Fatal(cpas)
-	}
 	r.loadAPI(router)
 	router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)
 	}
-	var resp []string
+	var resp Capabilities
 	if err := json.Unmarshal([]byte(rr.Body.String()), &resp); err != nil {
 		t.Fatal(err)
 	}

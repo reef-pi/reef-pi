@@ -54,7 +54,7 @@ func New(version, database string) (*ReefPi, error) {
 	telemetry := utils.NewTelemetry(s.AdafruitIO)
 	jacks := connectors.NewJacks(store)
 	outlets := connectors.NewOutlets(store)
-	outlets.DevMode = s.DevMode
+	outlets.DevMode = s.Capabilities.DevMode
 	r := &ReefPi{
 		store:      store,
 		settings:   s,
@@ -69,32 +69,32 @@ func New(version, database string) (*ReefPi, error) {
 }
 
 func (r *ReefPi) loadSubsystems() error {
-	if r.settings.System {
+	if r.settings.Capabilities.Configuration {
 		conf := system.Config{
 			Interface: r.settings.Interface,
 			Name:      r.settings.Name,
 			Display:   r.settings.Display,
-			DevMode:   r.settings.DevMode,
+			DevMode:   r.settings.Capabilities.DevMode,
 			Version:   r.version,
 		}
 		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
 	}
 	eqs := new(equipments.Controller)
-	if r.settings.Equipments {
+	if r.settings.Capabilities.Equipments {
 		conf := equipments.Config{
-			DevMode: r.settings.DevMode,
+			DevMode: r.settings.Capabilities.DevMode,
 		}
 		eqs = equipments.New(conf, r.outlets, r.store, r.telemetry)
 		r.subsystems[equipments.Bucket] = eqs
 	}
-	if r.settings.Timers {
+	if r.settings.Capabilities.Timers {
 		t := timer.New(r.store, r.telemetry, eqs)
 		r.subsystems[timer.Bucket] = t
 		eqs.AddCheck(t.IsEquipmentInUse)
 	}
 
-	if r.settings.Temperature {
-		temp, err := temperature.New(r.settings.DevMode, r.store, r.telemetry, eqs)
+	if r.settings.Capabilities.Temperature {
+		temp, err := temperature.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize temperature subsystem")
 			return err
@@ -102,8 +102,8 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[temperature.Bucket] = temp
 		eqs.AddCheck(temp.IsEquipmentInUse)
 	}
-	if r.settings.ATO {
-		a, err := ato.New(r.settings.DevMode, r.store, r.telemetry, eqs)
+	if r.settings.Capabilities.ATO {
+		a, err := ato.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize ato subsystem")
 			return err
@@ -111,9 +111,9 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[ato.Bucket] = a
 		eqs.AddCheck(a.IsEquipmentInUse)
 	}
-	if r.settings.Lighting {
+	if r.settings.Capabilities.Lighting {
 		conf := lighting.Config{
-			DevMode:  r.settings.DevMode,
+			DevMode:  r.settings.Capabilities.DevMode,
 			Interval: r.settings.LightInterval,
 		}
 		l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
@@ -124,15 +124,15 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[lighting.Bucket] = l
 	}
 
-	if r.settings.Camera {
+	if r.settings.Capabilities.Camera {
 		cam, err := camera.New(r.store)
 		if err != nil {
 			return nil
 		}
 		r.subsystems[camera.Bucket] = cam
 	}
-	if r.settings.Doser {
-		d, err := doser.New(r.settings.DevMode, r.store, r.telemetry, eqs)
+	if r.settings.Capabilities.Doser {
+		d, err := doser.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize doser subsystem")
 			return err
