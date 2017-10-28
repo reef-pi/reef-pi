@@ -21,7 +21,6 @@ export default class Capabilities extends React.Component {
   render () {
     return (
       <div className='container'>
-        <span > <b>Capabilities</b> </span>
         <div className='row'>
           <span className='col-sm-2'>Equipments</span>
           <input type='checkbox' id='updateEquipments' onClick={this.updateCapability('equipments')} className='col-sm-1' defaultChecked={this.state.capabilities.equipments} />
