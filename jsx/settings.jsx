@@ -152,9 +152,6 @@ export default class Settings extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <b>Settings</b>
-        </div>
-        <div className='row'>
           <div className='col-sm-2'> Name</div>
           <div className='col-sm-2'><input id='system-name' value={this.state.settings.name} type='text' onChange={this.updateName} className='form-control' /></div>
         </div>

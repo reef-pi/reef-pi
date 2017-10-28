@@ -18,6 +18,16 @@ export default class Common extends React.Component {
     this.ajaxDelete = this.ajaxDelete.bind(this)
     this.ajaxErrorHandler = this.ajaxErrorHandler.bind(this)
     this.ajaxBeforeSend = this.ajaxBeforeSend.bind(this)
+    this.toggle = this.toggle.bind(this)
+  }
+
+  toggle (id) {
+    var el = $(id)
+    if (el.css('display') === 'block') {
+      el.css('display', 'none')
+    } else {
+      el.css('display', 'block')
+    }
   }
 
   ajaxBeforeSend (xhr) {

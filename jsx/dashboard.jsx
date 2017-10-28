@@ -95,7 +95,7 @@ export default class Dashboard extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <b> Summary </b>
+          <h5> Summary </h5>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Time</div>
