@@ -95,9 +95,6 @@ export default class Dashboard extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <h5> Summary </h5>
-        </div>
-        <div className='row'>
           <div className='col-sm-2'>Time</div>
           <div className='col-sm-6'>{this.state.info.current_time}</div>
         </div>
