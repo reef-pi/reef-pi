@@ -1,6 +1,6 @@
 import React from 'react'
 import Common from './common.jsx'
-import Auth from './auth.jsx'
+import SignIn from './sign_in.jsx'
 
 export default class Admin extends Common {
   constructor (props) {
@@ -12,7 +12,7 @@ export default class Admin extends Common {
   }
 
   signout () {
-    Auth.removeCreds()
+    SignIn.removeCreds()
     window.location.reload(true)
   }
 
@@ -47,10 +47,12 @@ export default class Admin extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <input value='Sign out' onClick={this.signout} type='button' className='btn btn-outline-danger' />
-        <input value='Reload' onClick={this.reload} type='button' className='btn btn-outline-danger' />
-        <input value='Reboot' onClick={this.reboot} type='button' className='btn btn-outline-danger' />
-        <input value='Poweroff' onClick={this.powerOff} type='button' className='btn btn-outline-danger' />
+        <div className='btn-group'>
+          <button onClick={this.signout} type='button' className='btn btn-outline-danger'>Sign Out</button>
+          <button onClick={this.reload} type='button' className='btn btn-outline-danger'>Reload</button>
+          <button onClick={this.reboot} type='button' className='btn btn-outline-danger'>Reboot</button>
+          <button onClick={this.powerOff} type='button' className='btn btn-outline-danger'>PowerOff</button>
+        </div>
       </div>
     )
   }
