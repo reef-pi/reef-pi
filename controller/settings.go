@@ -7,18 +7,6 @@ import (
 	"time"
 )
 
-type Capabilities struct {
-	DevMode       bool `json:"dev_mode" yaml:"dev_mode"`
-	Equipments    bool `json:"equipments" yaml:"equipments"`
-	Lighting      bool `json:"lighting" yaml:"lighting"`
-	Temperature   bool `json:"temperature" yaml:"temperature"`
-	ATO           bool `json:"ato" yaml:"ato"`
-	Timers        bool `json:"timers" yaml:"timers"`
-	Configuration bool `json:"configuration" yaml:"configuration"`
-	Camera        bool `json:"camera" yaml:"camera"`
-	Doser         bool `json:"doser" yaml:"doser"`
-}
-
 type Settings struct {
 	Name           string           `json:"name" yaml:"name"`
 	Interface      string           `json:"interface" yaml:"interface"`
@@ -35,17 +23,7 @@ var DefaultSettings = Settings{
 	Interface:     "eth0",
 	Address:       "0.0.0.0:8080",
 	LightInterval: 30 * time.Second,
-	Capabilities: Capabilities{
-		DevMode:       true,
-		Configuration: true,
-		Equipments:    true,
-		Lighting:      true,
-		Temperature:   true,
-		ATO:           true,
-		Timers:        true,
-		Camera:        true,
-		Doser:         true,
-	},
+	Capabilities:  DefaultCapabilities,
 }
 
 func loadSettings(store utils.Store) (Settings, error) {
