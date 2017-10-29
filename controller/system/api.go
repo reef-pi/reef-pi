@@ -44,7 +44,7 @@ func (c *Controller) SetBrightness(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) GetDisplayState(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		if !c.config.Display {
-			return false, nil
+			return DisplayState{}, nil
 		}
 		return c.currentDisplayState()
 	}
