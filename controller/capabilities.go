@@ -20,10 +20,10 @@ type Capabilities struct {
 var DefaultCapabilities = Capabilities{
 	DevMode:       true,
 	Equipments:    true,
+	Timers:        true,
 	Lighting:      true,
 	Temperature:   true,
 	ATO:           true,
-	Timers:        true,
 	Camera:        true,
 	Doser:         true,
 	Configuration: true,
