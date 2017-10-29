@@ -147,6 +147,9 @@ export default class Temperature extends Common {
           <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
         </div>
         <div className='row'>
+          { <TemperatureChart />}
+        </div>
+        <div className='row'>
           <div className='col-sm-3'> Control </div>
           <div className='col-sm-2'><input type='checkbox' id='tc_control' defaultChecked={this.state.tc.control} onClick={this.updateControl} /></div>
         </div>
@@ -155,6 +158,9 @@ export default class Temperature extends Common {
   }
 
   showControl () {
+    if (!this.state.tc.enable) {
+      return
+    }
     if (!this.state.tc.control) {
       return
     }
@@ -198,9 +204,6 @@ export default class Temperature extends Common {
         </div>
         <div className='row'>
           <input value='Update' onClick={this.update} type='button' className={updateButtonClass} />
-        </div>
-        <div className='row'>
-          { <TemperatureChart />}
         </div>
       </div>
     )
