@@ -11,7 +11,8 @@ const (
 )
 
 type DisplayState struct {
-	On bool `json:"on"`
+	On         bool `json:"on"`
+	Brightness int  `json:"brightness"`
 }
 
 type DisplayConfig struct {
@@ -19,16 +20,21 @@ type DisplayConfig struct {
 	Brightness int  `json:"brightness"`
 }
 
-func (c *Controller) currentDisplayState() (bool, error) {
+func (c *Controller) currentDisplayState() (DisplayState, error) {
+	var state DisplayState
 	if c.config.DevMode {
-		return true, nil
+		return state, nil
 	}
-	var state bool
 	d, err := ioutil.ReadFile(PowerFile)
 	if err != nil {
 		return state, err
 	}
-	state = string(d) == "0"
+	state.On = string(d) == "0"
+	b, err := c.getBrightness()
+	if err != nil {
+		return state, err
+	}
+	state.Brightness = b
 	return state, nil
 }
 
@@ -46,6 +52,16 @@ func (c *Controller) disableDisplay() error {
 	return ioutil.WriteFile(PowerFile, []byte("1"), 0644)
 }
 
+func (c *Controller) getBrightness() (int, error) {
+	if c.config.DevMode {
+		return 50, nil
+	}
+	data, err := ioutil.ReadFile(BrightnessFile)
+	if err != nil {
+		return 0, err
+	}
+	return strconv.Atoi(string(data))
+}
 func (c *Controller) setBrightness(b int) error {
 	if c.config.DevMode {
 		return nil

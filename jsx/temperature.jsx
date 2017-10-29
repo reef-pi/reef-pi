@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
+import TemperatureChart from './temperature_chart.jsx'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
 
@@ -8,7 +8,6 @@ export default class Temperature extends Common {
     super(props)
     this.state = {
       tc: {},
-      readings: [],
       updated: false
     }
     this.fetchData = this.fetchData.bind(this)
@@ -22,35 +21,6 @@ export default class Temperature extends Common {
     this.showEnable = this.showEnable.bind(this)
     this.showControl = this.showControl.bind(this)
     this.update = this.update.bind(this)
-    this.showChart = this.showChart.bind(this)
-  }
-
-  showChart () {
-    if (this.state.readings === undefined) {
-      return
-    }
-    if (this.state.readings.length <= 0) {
-      return
-    }
-    var latest = this.state.readings[this.state.readings.length - 1].temperature
-    return (
-      <div className='container'>
-        <div className='row'>
-          <span className='h6'>Current temperature: {latest}</span>
-        </div>
-        <div className='row'>
-          <span className='h6'>Trend </span>
-        </div>
-        <div className='row'>
-          <LineChart width={600} height={300} data={this.state.readings}>
-            <Line type='monotone' dataKey='temperature' stroke='#8884d8' />
-            <YAxis />
-            <XAxis dataKey='time' />
-            <Tooltip />
-          </LineChart>
-        </div>
-      </div>
-    )
   }
 
   updateMin (ev) {
@@ -160,15 +130,6 @@ export default class Temperature extends Common {
         })
       }.bind(this)
     })
-    this.ajaxGet({
-      url: '/api/tc/readings',
-      success: function (data) {
-        this.setState({
-          readings: data,
-          showAlert: false
-        })
-      }.bind(this)
-    })
   }
 
   componentDidMount () {
@@ -186,6 +147,9 @@ export default class Temperature extends Common {
           <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
         </div>
         <div className='row'>
+          { <TemperatureChart />}
+        </div>
+        <div className='row'>
           <div className='col-sm-3'> Control </div>
           <div className='col-sm-2'><input type='checkbox' id='tc_control' defaultChecked={this.state.tc.control} onClick={this.updateControl} /></div>
         </div>
@@ -194,6 +158,9 @@ export default class Temperature extends Common {
   }
 
   showControl () {
+    if (!this.state.tc.enable) {
+      return
+    }
     if (!this.state.tc.control) {
       return
     }
@@ -238,11 +205,7 @@ export default class Temperature extends Common {
         <div className='row'>
           <input value='Update' onClick={this.update} type='button' className={updateButtonClass} />
         </div>
-        <div className='row'>
-          {this.showChart()}
-        </div>
       </div>
     )
   }
 }
-
