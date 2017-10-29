@@ -51,7 +51,7 @@ export default class MainPanel extends Common {
 
   render () {
     var tabs = [ <Tab key='dashboard'> dashboard </Tab> ]
-    var panels = [ <TabPanel key='dashboard'> <Dashboard /> </TabPanel> ]
+    var panels = [ <TabPanel key='dashboard'> <Dashboard capabilities={this.state.capabilities} /> </TabPanel> ]
 
     $.each(this.state.capabilities, function (k, v) {
       if (!v) {

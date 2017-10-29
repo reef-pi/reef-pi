@@ -25,7 +25,7 @@ export default class Settings extends Common {
     this.update = this.update.bind(this)
   }
 
-  updateDisplay(ev) {
+  updateDisplay (ev) {
     var settings = this.state.settings
     settings.display = ev.target.checked
     this.setState({
@@ -175,15 +175,15 @@ export default class Settings extends Common {
         </div>
         <div className='row'>
           <div className='col-sm-2'> Display </div>
-          <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateDisplay} defaultChecked={this.state.settings.display}/></div>
+          <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateDisplay} defaultChecked={this.state.settings.display} /></div>
         </div>
-         <hr />
+        <hr />
         <div className='row'>
           <div className='container' >
             <label> <b>Capabilities</b> </label>
             {this.showCapabilities()}
           </div>
-            <hr />
+          <hr />
 
         </div>
         <div className='row'>

@@ -1,22 +1,27 @@
 import React from 'react'
 import Common from './common.jsx'
 import Display from './display.jsx'
+import TemperatureChart from './temperature_chart.jsx'
 
 export default class Dashboard extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      info: {},
+      info: {}
     }
     this.refresh = this.refresh.bind(this)
     this.showDisplay = this.showDisplay.bind(this)
-    this.showTemperature = this.showTemperature.bind(this)
+    this.showCharts = this.showCharts.bind(this)
   }
 
-  showTemperature() {
+  showCharts () {
+    var charts = []
+    if (this.props.capabilities.temperature) {
+      charts.push(<TemperatureChart key={'chart-1'} />)
+    }
+    return charts
   }
-  
-  
+
   showDisplay () {
     if (!this.state.info.display) {
       return
@@ -64,7 +69,12 @@ export default class Dashboard extends Common {
           <div className='col-sm-2'>CPU Temperature</div>
           <div className='col-sm-3'>{this.state.info.cpu_temperature}</div>
         </div>
-        {this.showDisplay()}
+        <div className='row'>
+          {this.showDisplay()}
+        </div>
+        <div className='row'>
+          {this.showCharts()}
+        </div>
       </div>
     )
   }
