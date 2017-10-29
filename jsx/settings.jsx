@@ -16,12 +16,22 @@ export default class Settings extends Common {
     this.fetchData = this.fetchData.bind(this)
     this.updateName = this.updateName.bind(this)
     this.updateInterface = this.updateInterface.bind(this)
+    this.updateDisplay = this.updateDisplay.bind(this)
     this.updateAddress = this.updateAddress.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
     this.update = this.update.bind(this)
+  }
+
+  updateDisplay(ev) {
+    var settings = this.state.settings
+    settings.display = ev.target.checked
+    this.setState({
+      settings: settings,
+      updated: true
+    })
   }
 
   showTelemetry () {
@@ -164,15 +174,23 @@ export default class Settings extends Common {
           <div className='col-sm-3'><input type='text' value={this.state.settings.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
         </div>
         <div className='row'>
+          <div className='col-sm-2'> Display </div>
+          <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateDisplay} defaultChecked={this.state.settings.display}/></div>
+        </div>
+         <hr />
+        <div className='row'>
           <div className='container' >
             <label> <b>Capabilities</b> </label>
             {this.showCapabilities()}
           </div>
+            <hr />
+
         </div>
         <div className='row'>
           <div className='container' >
             <label> <b>AdafruitIO</b> </label>
             {this.showTelemetry()}
+            <hr />
           </div>
         </div>
         <div className='row'>
