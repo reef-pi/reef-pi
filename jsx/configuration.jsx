@@ -1,7 +1,6 @@
 import React from 'react'
 import Admin from './admin.jsx'
 import Settings from './settings.jsx'
-import Dashboard from './dashboard.jsx'
 import Outlets from './outlets.jsx'
 import Jacks from './jacks.jsx'
 import Common from './common.jsx'
@@ -40,12 +39,6 @@ export default class Configuration extends Common {
   render () {
     return (
       <div className='container'>
-        <div className='row'>
-          <Dashboard />
-        </div>
-        <div className='row'>
-          <hr />
-        </div>
         <div className='row' >
           <button onClick={this.toggleSettings} className='btn btn-secondary btn-lg btn-block'>Settings </button>
           <div className='container' id='settings_config'>

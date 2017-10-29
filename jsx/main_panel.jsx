@@ -8,6 +8,7 @@ import Configuration from './configuration.jsx'
 import Temperature from './temperature.jsx'
 import Timers from './timers.jsx'
 import Doser from './doser.jsx'
+import Dashboard from './dashboard.jsx'
 import $ from 'jquery'
 import Common from './common.jsx'
 
@@ -49,8 +50,8 @@ export default class MainPanel extends Common {
   }
 
   render () {
-    var tabs = []
-    var panels = []
+    var tabs = [ <Tab key='dashboard'> dashboard </Tab> ]
+    var panels = [ <TabPanel key='dashboard'> <Dashboard /> </TabPanel> ]
 
     $.each(this.state.capabilities, function (k, v) {
       if (!v) {
