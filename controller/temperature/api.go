@@ -3,7 +3,6 @@ package temperature
 import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
 	"net/http"
 )
 
@@ -16,17 +15,11 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 
 func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		usage := []Usage{}
+		usage := []interface{}{}
 		t.usage.Do(func(i interface{}) {
-			if i == nil {
-				return
+			if i != nil {
+				usage = append(usage, i)
 			}
-			v, ok := i.(Usage)
-			if !ok {
-				log.Println("ERROR: tmperature subsystem. Failed to convert historical equipment usage")
-				return
-			}
-			usage = append(usage, v)
 		})
 		return usage, nil
 	}
@@ -42,17 +35,11 @@ func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 
 func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		readings := []Measurement{}
+		readings := []interface{}{}
 		t.readings.Do(func(i interface{}) {
-			if i == nil {
-				return
+			if i != nil {
+				readings = append(readings, i)
 			}
-			v, ok := i.(Measurement)
-			if !ok {
-				log.Println("ERROR: tmperature subsystem. Failed to convert historical temperature.")
-				return
-			}
-			readings = append(readings, v)
 		})
 		return readings, nil
 	}
