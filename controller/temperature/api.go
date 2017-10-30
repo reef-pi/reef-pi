@@ -11,6 +11,26 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
 	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
 	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
+	r.HandleFunc("/api/tc/usage", t.getUsage).Methods("GET")
+}
+
+func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []Usage{}
+		t.usage.Do(func(i interface{}) {
+			if i == nil {
+				return
+			}
+			v, ok := i.(Usage)
+			if !ok {
+				log.Println("ERROR: tmperature subsystem. Failed to convert historical equipment usage")
+				return
+			}
+			usage = append(usage, v)
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
 }
 
 func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {

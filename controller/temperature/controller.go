@@ -16,6 +16,11 @@ type Measurement struct {
 	Temperature float32 `json:"temperature"`
 }
 
+type Usage struct {
+	Heater int `json:"heater"`
+	Cooler int `json:"cooler"`
+}
+
 type Controller struct {
 	config     Config
 	stopCh     chan struct{}
@@ -23,6 +28,7 @@ type Controller struct {
 	store      utils.Store
 	latest     float32
 	readings   *ring.Ring
+	usage      *ring.Ring
 	mu         sync.Mutex
 	devMode    bool
 	equipments *equipments.Controller
@@ -39,6 +45,7 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 		store:      store,
 		devMode:    devMode,
 		readings:   ring.New(20),
+		usage:      ring.New(24),
 		equipments: eqs,
 	}, nil
 }
