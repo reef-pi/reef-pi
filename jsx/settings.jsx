@@ -17,12 +17,24 @@ export default class Settings extends Common {
     this.updateName = this.updateName.bind(this)
     this.updateInterface = this.updateInterface.bind(this)
     this.updateDisplay = this.updateDisplay.bind(this)
+    this.updateCheckbox = this.updateCheckbox.bind(this)
     this.updateAddress = this.updateAddress.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
     this.update = this.update.bind(this)
+  }
+
+  updateCheckbox (key) {
+    return(function(ev){
+      var settings = this.state.settings
+      settings[key] = ev.target.checked
+      this.setState({
+        settings: settings,
+        updated: true
+      })
+    }.bind(this))
   }
 
   updateDisplay (ev) {
@@ -177,6 +189,10 @@ export default class Settings extends Common {
           <div className='col-sm-2'> Display </div>
           <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateDisplay} defaultChecked={this.state.settings.display} /></div>
         </div>
+        <div className='row'>
+          <div className='col-sm-2'> Heart Beat </div>
+          <div className='col-sm-1'><input type='checkbox' id='updateHeartBeat' onClick={this.updateCheckbox('heart_beat')} defaultChecked={this.state.settings.heart_beat} /></div>
+        </div>
         <hr />
         <div className='row'>
           <div className='container' >
@@ -184,7 +200,6 @@ export default class Settings extends Common {
             {this.showCapabilities()}
           </div>
           <hr />
-
         </div>
         <div className='row'>
           <div className='container' >

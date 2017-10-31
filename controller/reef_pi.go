@@ -63,7 +63,9 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		subsystems: make(map[string]Subsystem),
 		version:    version,
-		h:          NewHealthChecker(1*time.Minute, telemetry),
+	}
+	if s.HeartBeat {
+		r.h = NewHealthChecker(1*time.Minute, telemetry)
 	}
 	return r, nil
 }
@@ -160,7 +162,10 @@ func (r *ReefPi) Start() error {
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}
-	go r.h.Start()
+	if r.settings.HeartBeat {
+		go r.h.Start()
+	}
+
 	log.Println("reef-pi is up and running")
 	return nil
 }
@@ -175,7 +180,9 @@ func (r *ReefPi) unloadSubsystems() {
 
 func (r *ReefPi) Stop() error {
 	r.unloadSubsystems()
-	r.h.Stop()
+	if r.settings.HeartBeat {
+		r.h.Stop()
+	}
 	r.store.Close()
 	log.Println("reef-pi is shutting down")
 	return nil

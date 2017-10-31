@@ -13,6 +13,7 @@ type Settings struct {
 	Address        string           `json:"address" yaml:"address"`
 	ImageDirectory string           `json:"image_directory" yaml:"image_directory"`
 	Display        bool             `json:"display" yaml:"display"`
+	HeartBeat      bool             `json:"heart_beat" yaml:"heart_beat"`
 	AdafruitIO     utils.AdafruitIO `json:"adafruitio" yaml:"adafruitio"`
 	LightInterval  time.Duration    `json:"light_interval" yaml:"light_interval"`
 	Capabilities   Capabilities     `json:"capabilities" yaml:"capabilities"`
@@ -24,6 +25,7 @@ var DefaultSettings = Settings{
 	Address:       "0.0.0.0:8080",
 	LightInterval: 30 * time.Second,
 	Capabilities:  DefaultCapabilities,
+	HeartBeat:     true,
 }
 
 func loadSettings(store utils.Store) (Settings, error) {
