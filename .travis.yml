@@ -2,11 +2,12 @@ language: go
 dist: trusty
 go:
   - "1.9"
-script:
+before_install:
   - curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-  - apt-get install -y nodejs
-  - ln -sf /usr/bin/nodejs /usr/bin/node
-  - npm install -g npm
+  - sudo apt-get install -y nodejs
+  - sudo ln -sf /usr/bin/nodejs /usr/bin/node
+  - sudo npm install -g npm
+script:
   - make go-get
   - make test
   - make pi
