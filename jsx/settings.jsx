@@ -16,7 +16,7 @@ export default class Settings extends Common {
     this.fetchData = this.fetchData.bind(this)
     this.updateName = this.updateName.bind(this)
     this.updateInterface = this.updateInterface.bind(this)
-    this.updateDisplay = this.updateDisplay.bind(this)
+    this.updateCheckbox = this.updateCheckbox.bind(this)
     this.updateAddress = this.updateAddress.bind(this)
     this.updateTelemetry = this.updateTelemetry.bind(this)
     this.showTelemetry = this.showTelemetry.bind(this)
@@ -25,13 +25,15 @@ export default class Settings extends Common {
     this.update = this.update.bind(this)
   }
 
-  updateDisplay (ev) {
-    var settings = this.state.settings
-    settings.display = ev.target.checked
-    this.setState({
-      settings: settings,
-      updated: true
-    })
+  updateCheckbox (key) {
+    return (function (ev) {
+      var settings = this.state.settings
+      settings[key] = ev.target.checked
+      this.setState({
+        settings: settings,
+        updated: true
+      })
+    }.bind(this))
   }
 
   showTelemetry () {
@@ -175,7 +177,11 @@ export default class Settings extends Common {
         </div>
         <div className='row'>
           <div className='col-sm-2'> Display </div>
-          <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateDisplay} defaultChecked={this.state.settings.display} /></div>
+          <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateCheckbox('display')} defaultChecked={this.state.settings.display} /></div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'> Heart Beat </div>
+          <div className='col-sm-1'><input type='checkbox' id='updateHeartBeat' onClick={this.updateCheckbox('heart_beat')} defaultChecked={this.state.settings.heart_beat} /></div>
         </div>
         <hr />
         <div className='row'>
@@ -184,7 +190,6 @@ export default class Settings extends Common {
             {this.showCapabilities()}
           </div>
           <hr />
-
         </div>
         <div className='row'>
           <div className='container' >
