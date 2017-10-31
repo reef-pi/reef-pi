@@ -26,7 +26,7 @@ export default class Settings extends Common {
   }
 
   updateCheckbox (key) {
-    return(function(ev){
+    return (function (ev) {
       var settings = this.state.settings
       settings[key] = ev.target.checked
       this.setState({
