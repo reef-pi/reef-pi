@@ -11,11 +11,6 @@ import (
 
 const Bucket = "temperature"
 
-type Measurement struct {
-	Time        string  `json:"time"`
-	Temperature float32 `json:"temperature"`
-}
-
 type Controller struct {
 	config     Config
 	stopCh     chan struct{}
@@ -23,6 +18,7 @@ type Controller struct {
 	store      utils.Store
 	latest     float32
 	readings   *ring.Ring
+	usage      *ring.Ring
 	mu         sync.Mutex
 	devMode    bool
 	equipments *equipments.Controller
@@ -39,6 +35,7 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 		store:      store,
 		devMode:    devMode,
 		readings:   ring.New(20),
+		usage:      ring.New(24),
 		equipments: eqs,
 	}, nil
 }
@@ -128,86 +125,6 @@ func (c *Controller) Stop() {
 	c.stopCh <- struct{}{}
 }
 
-func (c *Controller) switchHeater(on bool) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if on != c.heater.On {
-		log.Println("Temperature subsystem - switching heater on:", on)
-		c.heater.On = on
-		if err := c.equipments.Update(c.heater.ID, *c.heater); err != nil {
-			c.heater.On = !on
-			return err
-		}
-	}
-	c.telemetry.EmitMetric("heater", on)
-	return nil
-}
-
-func (c *Controller) switchCooler(on bool) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if on != c.cooler.On {
-		log.Println("Temperature subsystem - switching cooler on:", on)
-		c.cooler.On = on
-		if err := c.equipments.Update(c.cooler.ID, *c.cooler); err != nil {
-			c.cooler.On = !on
-			return err
-		}
-	}
-	c.telemetry.EmitMetric("cooler", on)
-	return nil
-}
-
-func (c *Controller) warmUp() error {
-	if c.cooler == nil {
-		log.Println("Temperature subsystem: WarmUp routine. cooler is not set.")
-	} else {
-		if c.cooler.On {
-			log.Println("WARNING: Possible flapping. Turning off cooler due to warm up routine.")
-			if err := c.switchCooler(false); err != nil {
-				return err
-			}
-		}
-	}
-	if c.heater == nil {
-		log.Println("Temperature subsystem: WarmUp routine. heater is not set")
-	} else {
-		if c.heater.On {
-			log.Println("Temperature subsystem: Heater is already on. Skipping switch on")
-			return nil
-		}
-		if err := c.switchHeater(true); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (c *Controller) coolDown() error {
-	if c.heater == nil {
-		log.Println("Temperature subsystem: CoolDown routine. heater is not set")
-	} else {
-		if c.heater.On {
-			log.Println("WARNING: Temperature subsystem: Possible flapping. Turning off heater due to cool down routine.")
-			if err := c.switchHeater(false); err != nil {
-				return err
-			}
-		}
-	}
-	if c.cooler == nil {
-		log.Println("Temperature subsystem: CoolDown routine. cooler is not set")
-	} else {
-		if c.cooler.On {
-			log.Println("Temperature subsystem: Cooler is already on. Skipping switch on")
-			return nil
-		}
-		if err := c.switchCooler(true); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func (c *Controller) control(reading float32) error {
 	if err := c.loadEquipments(); err != nil {
 		log.Println("ERROR: temperature subsystem. Failed to load equipments: Error:", err)
@@ -224,13 +141,4 @@ func (c *Controller) control(reading float32) error {
 		c.switchOffAll()
 	}
 	return nil
-}
-
-func (c *Controller) switchOffAll() {
-	if (c.cooler != nil) && c.cooler.On {
-		c.switchCooler(false)
-	}
-	if (c.heater != nil) && c.heater.On {
-		c.switchHeater(false)
-	}
 }

@@ -3,7 +3,6 @@ package temperature
 import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
 	"net/http"
 )
 
@@ -11,6 +10,20 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
 	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
 	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
+	r.HandleFunc("/api/tc/usage", t.getUsage).Methods("GET")
+}
+
+func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []interface{}{}
+		t.usage.Do(func(i interface{}) {
+			if i != nil {
+				usage = append(usage, i)
+			}
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
 }
 
 func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
@@ -22,17 +35,11 @@ func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 
 func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		readings := []Measurement{}
+		readings := []interface{}{}
 		t.readings.Do(func(i interface{}) {
-			if i == nil {
-				return
+			if i != nil {
+				readings = append(readings, i)
 			}
-			v, ok := i.(Measurement)
-			if !ok {
-				log.Println("ERROR: tmperature subsystem. Failed to convert historical temperature.")
-				return
-			}
-			readings = append(readings, v)
 		})
 		return readings, nil
 	}
