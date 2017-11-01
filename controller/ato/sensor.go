@@ -3,12 +3,17 @@ package ato
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
+	"math/rand"
 )
 
 func (c *Controller) Read() (int, error) {
 	if c.devMode {
 		log.Println("ATO is running under dev mode. Sending fixed sensor reading of 1")
-		return 1, nil
+		v := 0
+		if rand.Int()%2 == 0 {
+			v = 1
+		}
+		return v, nil
 	}
 	return utils.ReadGPIO(c.config.Sensor)
 }
