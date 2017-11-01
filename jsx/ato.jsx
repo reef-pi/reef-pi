@@ -1,6 +1,7 @@
 import React from 'react'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
+import ATOChart from './ato_chart.jsx'
 
 export default class ATO extends Common {
   constructor (props) {
@@ -119,9 +120,14 @@ export default class ATO extends Common {
       return
     }
     return (
-      <div className='row'>
-        <div className='col-sm-2'>Pump</div>
-        <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} /></div>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-2'>Pump</div>
+          <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} /></div>
+        </div>
+        <div className='row'>
+          <ATOChart />
+        </div>
       </div>
     )
   }

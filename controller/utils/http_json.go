@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+type Doer interface {
+	Do(func(interface{}))
+}
+
 func NewBasicAuth(user, pass string) *Auth {
 	return &Auth{
 		user: user,
@@ -118,4 +122,20 @@ func JSONDeleteResponse(fn func(string) error, w http.ResponseWriter, r *http.Re
 		ErrorResponse(http.StatusInternalServerError, "Failed to delete. Error: "+err.Error(), w)
 		return
 	}
+}
+
+func JSONGetUsage(usage Doer) http.HandlerFunc {
+	handlerFn := func(w http.ResponseWriter, r *http.Request) {
+		fn := func(id string) (interface{}, error) {
+			arrayUsage := []interface{}{}
+			usage.Do(func(i interface{}) {
+				if i != nil {
+					arrayUsage = append(arrayUsage, i)
+				}
+			})
+			return arrayUsage, nil
+		}
+		JSONGetResponse(fn, w, r)
+	}
+	return handlerFn
 }

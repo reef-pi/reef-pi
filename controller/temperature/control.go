@@ -102,6 +102,7 @@ func (c *Controller) updateUsage(heater, cooler bool) {
 		c.usage.Value = Usage{
 			Heater: currentUsage.Heater + heaterMinutes,
 			Cooler: currentUsage.Cooler + coolerMinutes,
+			Hour:   currentUsage.Hour,
 		}
 		return
 	}

@@ -1,6 +1,7 @@
 package ato
 
 import (
+	"container/ring"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -26,6 +27,7 @@ var DefaultConfig = Config{
 
 type Controller struct {
 	config     Config
+	usage      *ring.Ring
 	telemetry  *utils.Telemetry
 	stopCh     chan struct{}
 	mu         sync.Mutex
@@ -56,6 +58,7 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 		store:      store,
 		telemetry:  telemetry,
 		equipments: eqs,
+		usage:      ring.New(24),
 	}, nil
 }
 
