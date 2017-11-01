@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, LineChart, Line, BarChart, Bar, ReferenceLine} from 'recharts'
+import {Tooltip, YAxis, XAxis, AreaChart, Area, BarChart, Bar, ReferenceLine} from 'recharts'
 import Common from './common.jsx'
 import $ from 'jquery'
 
@@ -61,12 +61,12 @@ export default class TemperatureChart extends Common {
       <div className='container'>
         {super.render()}
         <span className='h6'>Temperature(Current:{latest})</span>
-        <LineChart width={500} height={250} data={this.state.readings}>
-          <Line type='monotone' dataKey='temperature' stroke='#007E33' isAnimationActive={false} />
+        <AreaChart width={500} height={250} data={this.state.readings}>
+          <Area type='monotone' dataKey='temperature' fill='#ce93d8' isAnimationActive={false} fillOpacity={1}/>
           <YAxis />
           <XAxis dataKey='time' />
           <Tooltip />
-        </LineChart>
+        </AreaChart>
         <BarChart width={500} height={250} data={this.state.usage}>
           <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} />
           <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} />
