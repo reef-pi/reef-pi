@@ -1,5 +1,4 @@
 import React from 'react'
-import Display from './display.jsx'
 import Common from './common.jsx'
 
 export default class Summary extends Common {
@@ -9,7 +8,6 @@ export default class Summary extends Common {
       info: {}
     }
     this.refresh = this.refresh.bind(this)
-    this.showDisplay = this.showDisplay.bind(this)
   }
 
   refresh () {
@@ -33,40 +31,16 @@ export default class Summary extends Common {
     window.clearInterval(this.state.timer)
   }
 
-  showDisplay () {
-    if (!this.state.info.display) {
-      return
-    }
-    return <Display />
-  }
-
   render () {
     return (
       <div className='container'>
         {super.render()}
-        <div className='row'>
-          <div className='col-sm-2'>Time</div>
-          <div className='col-sm-6'>{this.state.info.current_time}</div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>IP</div>
-          <div className='col-sm-3'>{this.state.info.ip}</div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>Up Since</div>
-          <div className='col-sm-3'>{this.state.info.uptime}</div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>Version</div>
-          <div className='col-sm-3'>{this.state.info.version}</div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>CPU Temperature</div>
-          <div className='col-sm-3'>{this.state.info.cpu_temperature}</div>
-        </div>
-        <div className='row'>
-          {this.showDisplay()}
-        </div>
+         <ul className='list-inline'>
+         <li className='list-inline-item'>{this.state.info.current_time},</li>
+         <li className='list-inline-item'>running <span className='text-primary'>{this.state.info.version}</span></li>
+         <li className='list-inline-item'>, since {this.state.info.uptime}</li>
+         <li className='list-inline-item'>IP <span className='text-primary'>{this.state.info.ip}</span></li>
+         </ul>
       </div>
     )
   }

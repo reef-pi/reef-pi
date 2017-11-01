@@ -34,10 +34,10 @@ export default class Dashboard extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <Summary />
+          {this.showCharts()}
         </div>
         <div className='row'>
-          {this.showCharts()}
+          <Summary />
         </div>
       </div>
     )

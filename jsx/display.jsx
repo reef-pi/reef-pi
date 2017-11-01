@@ -65,12 +65,9 @@ export default class Display extends Common {
     }
     return (
       <li className='list-group-item'>
-        <div className='row'>
-          <div className='col-sm-1'>Display</div>
-          <div className='col-sm-1'><button onClick={this.toggle} type='button' className={style}> {action} </button> </div>
-          <div className='col-sm-2'>Brightness</div>
-          <div className='col-sm-6'><input type='range' onChange={this.setBrightness} style={{width: '100%'}} min={0} max={255} value={this.state.brightness} /></div>
-        </div>
+        <div className='col-sm-1'><button onClick={this.toggle} type='button' className={style}> {action} </button> </div>
+        <div className='col-sm-2'>Brightness</div>
+        <div className='col-sm-6'><input type='range' onChange={this.setBrightness} style={{width: '100%'}} min={0} max={255} value={this.state.brightness} /></div>
       </li>
     )
   }

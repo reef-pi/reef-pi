@@ -3,6 +3,7 @@ import Telemetry from './telemetry.jsx'
 import Auth from './auth.jsx'
 import Common from './common.jsx'
 import Capabilities from './capabilities.jsx'
+import Display from './display.jsx'
 
 export default class Settings extends Common {
   constructor (props) {
@@ -23,6 +24,7 @@ export default class Settings extends Common {
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
     this.update = this.update.bind(this)
+    this.showDisplay = this.showDisplay.bind(this)
   }
 
   updateCheckbox (key) {
@@ -43,6 +45,13 @@ export default class Settings extends Common {
     return (
       <Telemetry adafruitio={this.state.settings.adafruitio} update={this.updateTelemetry} />
     )
+  }
+
+  showDisplay () {
+    if (!this.state.settings.display) {
+      return
+    }
+    return <Display />
   }
 
   showCapabilities () {
@@ -195,6 +204,13 @@ export default class Settings extends Common {
           <div className='container' >
             <label> <b>AdafruitIO</b> </label>
             {this.showTelemetry()}
+            <hr />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='container' >
+            <label> <b>Display</b> </label>
+            {this.showDisplay()}
             <hr />
           </div>
         </div>
