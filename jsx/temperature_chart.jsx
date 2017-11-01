@@ -20,7 +20,13 @@ export default class TemperatureChart extends Common {
   }
 
   componentDidMount () {
+    var timer = window.setInterval(this.fetch, 10 * 1000)
+    this.setState({timer: timer})
     this.fetch()
+  }
+
+  componentWillUnmount () {
+    window.clearInterval(this.state.timer)
   }
 
   fetch () {
@@ -51,7 +57,7 @@ export default class TemperatureChart extends Common {
         </div>
         <div className='row'>
           <LineChart width={600} height={300} data={this.state.readings}>
-            <Line type='monotone' dataKey='temperature' stroke='#8884d8' />
+            <Line type='monotone' dataKey='temperature' stroke='#8884d8' isAnimationActive={false} />
             <YAxis />
             <XAxis dataKey='time' />
             <Tooltip />

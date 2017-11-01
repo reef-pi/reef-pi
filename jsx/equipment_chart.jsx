@@ -13,7 +13,13 @@ export default class EquipmentsChart extends Common {
   }
 
   componentDidMount () {
+    var timer = window.setInterval(this.fetch, 10 * 1000)
+    this.setState({timer: timer})
     this.fetch()
+  }
+
+  componentWillUnmount () {
+    window.clearInterval(this.state.timer)
   }
 
   fetch () {
@@ -41,8 +47,8 @@ export default class EquipmentsChart extends Common {
         {super.render()}
         <span className='h6'>Equipments</span>
         <BarChart width={300} height={150} data={this.state.equipments}>
-          <Bar dataKey='onstate' stackId='a' fill='#0f0' />
-          <Bar dataKey='offstate' stackId='a' fill='#f00' />
+          <Bar dataKey='onstate' stackId='a' fill='#0f0' isAnimationActive={false} />
+          <Bar dataKey='offstate' stackId='a' fill='#f00' isAnimationActive={false} />
           <XAxis dataKey='name' />
         </BarChart>
       </div>
