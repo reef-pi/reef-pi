@@ -10,20 +10,7 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
 	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
 	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
-	r.HandleFunc("/api/tc/usage", t.getUsage).Methods("GET")
-}
-
-func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		usage := []interface{}{}
-		t.usage.Do(func(i interface{}) {
-			if i != nil {
-				usage = append(usage, i)
-			}
-		})
-		return usage, nil
-	}
-	utils.JSONGetResponse(fn, w, r)
+	r.HandleFunc("/api/tc/usage", utils.JSONGetUsage(t.usage)).Methods("GET")
 }
 
 func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {

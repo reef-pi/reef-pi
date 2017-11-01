@@ -1,12 +1,15 @@
 package utils
 
 import (
-	"container/ring"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
+
+type Doer interface {
+	Do(func(interface{}))
+}
 
 func NewBasicAuth(user, pass string) *Auth {
 	return &Auth{
@@ -121,7 +124,7 @@ func JSONDeleteResponse(fn func(string) error, w http.ResponseWriter, r *http.Re
 	}
 }
 
-func JSONGetUsage(usage *ring.Ring) http.HandlerFunc {
+func JSONGetUsage(usage Doer) http.HandlerFunc {
 	handlerFn := func(w http.ResponseWriter, r *http.Request) {
 		fn := func(id string) (interface{}, error) {
 			arrayUsage := []interface{}{}
