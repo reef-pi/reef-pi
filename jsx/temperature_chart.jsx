@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, AreaChart, Area, BarChart, Bar, ReferenceLine} from 'recharts'
+import {ComposedChart,Line, Tooltip, YAxis, XAxis, AreaChart, Area, BarChart, Bar, ReferenceLine} from 'recharts'
 import Common from './common.jsx'
 import $ from 'jquery'
 
@@ -60,21 +60,17 @@ export default class TemperatureChart extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>Temperature(Current:{latest})</span>
-        <AreaChart width={500} height={250} data={this.state.readings}>
-          <Area type='monotone' dataKey='temperature' fill='#ce93d8' isAnimationActive={false} fillOpacity={1} />
-          <YAxis />
-          <XAxis dataKey='time' />
+        <span className='h6'>Temperature({latest})</span>
+        <ComposedChart width={500} height={250} data={this.state.readings}>
+          <Line type='monotone' dataKey='temperature' stroke='#ce93d8' isAnimationActive={false}  yAxisId="left"/>
+          <YAxis yAxisId="left" orientation="left" />
+          <XAxis/>
           <Tooltip />
-        </AreaChart>
-        <BarChart width={500} height={250} data={this.state.usage}>
-          <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} />
-          <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} />
+          <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false}  yAxisId="left"/>
+          <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false}  yAxisId="left"/>
           <ReferenceLine y={0} stroke='#0d47a1' />
-          <YAxis label='minutes' />
-          <XAxis dataKey='hour' label='hour' />
-          <Tooltip />
-        </BarChart>
+          <YAxis label='minutes' yAxisId="right" orientation="right" />
+        </ComposedChart>
       </div>
     )
   }
