@@ -100,8 +100,8 @@ func (c *Controller) updateUsage(heater, cooler bool) {
 	}
 	if previousUsage.Hour == currentUsage.Hour {
 		c.usage.Value = Usage{
-			Heater: currentUsage.Heater + heaterMinutes,
-			Cooler: currentUsage.Cooler + coolerMinutes,
+			Heater: previousUsage.Heater + currentUsage.Heater,
+			Cooler: previousUsage.Cooler + currentUsage.Cooler,
 			Hour:   currentUsage.Hour,
 		}
 		return
