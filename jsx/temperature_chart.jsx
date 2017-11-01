@@ -62,7 +62,7 @@ export default class TemperatureChart extends Common {
         {super.render()}
         <span className='h6'>Temperature(Current:{latest})</span>
         <AreaChart width={500} height={250} data={this.state.readings}>
-          <Area type='monotone' dataKey='temperature' fill='#ce93d8' isAnimationActive={false} fillOpacity={1}/>
+          <Area type='monotone' dataKey='temperature' fill='#ce93d8' isAnimationActive={false} fillOpacity={1} />
           <YAxis />
           <XAxis dataKey='time' />
           <Tooltip />
