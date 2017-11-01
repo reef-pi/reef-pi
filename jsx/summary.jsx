@@ -35,12 +35,12 @@ export default class Summary extends Common {
     return (
       <div className='container'>
         {super.render()}
-         <ul className='list-inline'>
-         <li className='list-inline-item'>{this.state.info.current_time},</li>
-         <li className='list-inline-item'>running <span className='text-primary'>{this.state.info.version}</span></li>
-         <li className='list-inline-item'>, since {this.state.info.uptime}</li>
-         <li className='list-inline-item'>IP <span className='text-primary'>{this.state.info.ip}</span></li>
-         </ul>
+        <ul className='list-inline'>
+          <li className='list-inline-item'>{this.state.info.current_time},</li>
+          <li className='list-inline-item'>running <span className='text-primary'>{this.state.info.version}</span></li>
+          <li className='list-inline-item'>, since {this.state.info.uptime}</li>
+          <li className='list-inline-item'>IP <span className='text-primary'>{this.state.info.ip}</span></li>
+        </ul>
       </div>
     )
   }
