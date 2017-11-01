@@ -31,9 +31,11 @@ export default class LightsChart extends Common {
 
   light2chart () {
     var charts = []
+    var colors = ['#0099CC', '#007E33', '#FF8800', '#CC0000']
     $.each(this.state.lights, function (i, light) {
       var lines = []
       var data = []
+      var stIndex = 0
       $.each(light.channels, function (name, channel) {
         $.each(channel.values, function (i, value) {
           if (data[i] === undefined) {
@@ -41,12 +43,17 @@ export default class LightsChart extends Common {
           }
           data[i][channel.name] = value
         })
+        var stroke = colors[0]
+        if (stIndex < colors.length) {
+          stroke = colors[stIndex]
+        }
+        stIndex++
         lines.push(
-          <Line dataKey={channel.name} stroke='#8884d8' key={light.name + '-' + name} />
+          <Line dataKey={channel.name} stroke={stroke} key={light.name + '-' + name} />
         )
       })
       charts.push(
-        <LineChart width={600} height={300} data={data} key={'light-' + i}>
+        <LineChart width={500} height={250} data={data} key={'light-' + i}>
           <XAxis dataKey='time' />
           <YAxis />
           <Tooltip />
