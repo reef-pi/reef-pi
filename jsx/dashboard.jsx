@@ -4,6 +4,7 @@ import Display from './display.jsx'
 import TemperatureChart from './temperature_chart.jsx'
 import EquipmentsChart from './equipment_chart.jsx'
 import LightsChart from './light_chart.jsx'
+import ATOChart from './ato_chart.jsx'
 
 export default class Dashboard extends Common {
   constructor (props) {
@@ -26,6 +27,9 @@ export default class Dashboard extends Common {
     }
     if (this.props.capabilities.lighting) {
       charts.push(<LightsChart key={'chart-3'} />)
+    }
+    if (this.props.capabilities.ato) {
+      charts.push(<ATOChart key={'chart-4'} />)
     }
     return charts
   }
