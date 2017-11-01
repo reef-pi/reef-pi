@@ -1,20 +1,14 @@
 import React from 'react'
 import {Tooltip, YAxis, XAxis, LineChart, Line, BarChart, Bar, ReferenceLine} from 'recharts'
 import Common from './common.jsx'
+import $ from 'jquery'
 
 export default class TemperatureChart extends Common {
   constructor (props) {
     super(props)
-    var data = []
-    for (var i = 1; i <= 24; i++) {
-      data.push({
-        heater: Math.round(Math.random()) === 1 ? Math.round(Math.random() * 10) : 0,
-        cooler: Math.round(Math.random()) === 1 ? -1 * Math.round(Math.random() * 10) : 0
-      })
-    }
     this.state = {
       readings: [],
-      control: data
+      usage: []
     }
     this.fetch = this.fetch.bind(this)
   }
@@ -39,6 +33,23 @@ export default class TemperatureChart extends Common {
         })
       }.bind(this)
     })
+    this.ajaxGet({
+      url: '/api/tc/usage',
+      success: function (data) {
+        var processed = []
+        $.each(data, function (i, v) {
+          processed.push({
+            heater: v.heater,
+            cooler: -1 * v.cooler,
+            hour: v.hour
+          })
+        })
+        this.setState({
+          usage: processed,
+          showAlert: false
+        })
+      }.bind(this)
+    })
   }
 
   render () {
@@ -53,7 +64,7 @@ export default class TemperatureChart extends Common {
           <span className='h6'>Current temperature: {latest}</span>
         </div>
         <div className='row'>
-          <span className='h6'>Trend </span>
+          <span className='h6'>Trend</span>
         </div>
         <div className='row'>
           <LineChart width={600} height={300} data={this.state.readings}>
@@ -62,12 +73,12 @@ export default class TemperatureChart extends Common {
             <XAxis dataKey='time' />
             <Tooltip />
           </LineChart>
-          <BarChart width={600} height={300} data={this.state.control}>
-            <Bar dataKey='heater' fill='#8884d8' />
-            <Bar dataKey='cooler' fill='#38f438' />
+          <BarChart width={600} height={300} data={this.state.usage}>
+            <Bar dataKey='heater' fill='#8884d8' isAnimationActive={false} />
+            <Bar dataKey='cooler' fill='#38f438' isAnimationActive={false} />
             <ReferenceLine y={0} stroke='#000' />
-            <YAxis />
-            <XAxis />
+            <YAxis label='minutes' />
+            <XAxis dataKey='hour' label='hour' />
             <Tooltip />
           </BarChart>
         </div>
