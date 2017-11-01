@@ -9,6 +9,7 @@ import (
 func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/ato", c.get).Methods("GET")
 	r.HandleFunc("/api/ato", c.update).Methods("POST")
+	r.HandleFunc("/api/ato/usage", utils.JSONGetUsage(c.usage)).Methods("GET")
 }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {

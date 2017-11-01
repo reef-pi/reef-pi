@@ -35,6 +35,7 @@ func (c *Controller) Control(reading int) error {
 		if c.pump.On {
 			c.pump.On = false
 			if err := c.equipments.Update(c.pump.ID, *c.pump); err != nil {
+				c.pump.On = true
 				return err
 			}
 			log.Println("Switched off ATO pump")
@@ -43,8 +44,10 @@ func (c *Controller) Control(reading int) error {
 		if !c.pump.On {
 			c.pump.On = true
 			if err := c.equipments.Update(c.pump.ID, *c.pump); err != nil {
+				c.pump.On = false
 				return err
 			}
+			c.updateUsage()
 			log.Println("Switched on ATO pump")
 		}
 	}
