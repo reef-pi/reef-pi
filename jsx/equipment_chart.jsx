@@ -46,9 +46,9 @@ export default class EquipmentsChart extends Common {
       <div className='container'>
         {super.render()}
         <span className='h6'>Equipments</span>
-        <BarChart width={300} height={150} data={this.state.equipments}>
-          <Bar dataKey='onstate' stackId='a' fill='#0f0' isAnimationActive={false} />
-          <Bar dataKey='offstate' stackId='a' fill='#f00' isAnimationActive={false} />
+        <BarChart width={300} height={100} data={this.state.equipments}>
+          <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
+          <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
           <XAxis dataKey='name' />
         </BarChart>
       </div>

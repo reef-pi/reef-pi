@@ -41,7 +41,7 @@ export default class ATOChart extends Common {
         {super.render()}
         <span className='h6'>ATO</span>
         <BarChart width={600} height={300} data={this.state.usage}>
-          <Bar dataKey='pump' fill='#8884d8' isAnimationActive={false} />
+          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
           <YAxis label='minutes' />
           <XAxis dataKey='hour' label='hour' />
           <Tooltip />
