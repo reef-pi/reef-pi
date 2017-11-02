@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"container/ring"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
@@ -12,6 +13,13 @@ type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
 	telemetry *utils.Telemetry
+	usage     *ring.Ring
+}
+
+type HealthMetric struct {
+	Load5      float64 `json:"load5"`
+	UsedMemory float64 `json:"used_memory"`
+	Time       string  `json:"time"`
 }
 
 func NewHealthChecker(i time.Duration, telemetry *utils.Telemetry) *HealthChecker {
@@ -19,6 +27,7 @@ func NewHealthChecker(i time.Duration, telemetry *utils.Telemetry) *HealthChecke
 		interval:  i,
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
+		usage:     ring.New(100),
 	}
 }
 func (h *HealthChecker) check() {
@@ -36,6 +45,11 @@ func (h *HealthChecker) check() {
 	}
 	h.telemetry.EmitMetric("system-mem-used", vmStat.UsedPercent)
 	log.Println("health check: Used memory:", vmStat.UsedPercent, " Load5:", loadStat.Load5)
+	h.usage.Value = HealthMetric{
+		Load5:      loadStat.Load5,
+		UsedMemory: vmStat.UsedPercent,
+		Time:       time.Now().Format("15:04"),
+	}
 }
 
 func (h *HealthChecker) Stop() {
