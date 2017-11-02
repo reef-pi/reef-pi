@@ -52,6 +52,7 @@ func (h *HealthChecker) check() {
 		UsedMemory: usedMemory,
 		Time:       time.Now().Format("15:04"),
 	}
+	h.usage = h.usage.Next()
 }
 
 func (h *HealthChecker) Stop() {
