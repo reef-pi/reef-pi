@@ -42,12 +42,12 @@ export default class HealthChart extends Common {
         {super.render()}
         <span className='h6'>CPU/Memory</span>
         <LineChart width={this.props.width} height={this.props.height} data={this.state.health_stats}>
-          <YAxis yAxisId='left' orientation='left' stroke='#00c851'/>
+          <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
           <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
-          <XAxis dataKey='time'/>
+          <XAxis dataKey='time' />
           <Tooltip />
-          <Line type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left'/>
-          <Line type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false}  yAxisId='right'/>
+          <Line type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
+          <Line type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
         </LineChart>
       </div>
     )

@@ -21,13 +21,13 @@ export default class Dashboard extends Common {
       charts.push(<div className='col-sm-6' key='chart-1'><TemperatureChart width={500} height={250} /> </div>)
     }
     if (this.props.capabilities.equipments) {
-      charts.push(<div className='col-sm-6' key='chart-2'><EquipmentsChart width={500} height={250}/></div>)
+      charts.push(<div className='col-sm-6' key='chart-2'><EquipmentsChart width={500} height={250} /></div>)
     }
     if (this.props.capabilities.lighting) {
-      charts.push(<div className='col-sm-6' key='chart-3'><LightsChart  width={500} height={250}/></div>)
+      charts.push(<div className='col-sm-6' key='chart-3'><LightsChart width={500} height={250} /></div>)
     }
     if (this.props.capabilities.ato) {
-      charts.push(<div className='col-sm-6' key='chart-4'><ATOChart  width={500} height={250}/></div>)
+      charts.push(<div className='col-sm-6' key='chart-4'><ATOChart width={500} height={250} /></div>)
     }
     charts.push(<div className='col-sm-6' key='chart-5'><HealthChart width={500} height={250} /></div>)
     return charts

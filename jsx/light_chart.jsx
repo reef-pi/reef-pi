@@ -49,11 +49,11 @@ export default class LightsChart extends Common {
         }
         stIndex++
         lines.push(
-          <Line dataKey={channel.name} stroke={stroke} key={light.name + '-' + name} />
+          <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={light.name + '-' + name} />
         )
       })
       charts.push(
-        <LineChart width={500} height={250} data={data} key={'light-' + i}>
+        <LineChart width={500} height={250} data={data} key={'light-' + i} >
           <XAxis dataKey='time' />
           <YAxis />
           <Tooltip />

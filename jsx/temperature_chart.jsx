@@ -53,8 +53,8 @@ export default class TemperatureChart extends Common {
           <ReferenceLine yAxisId='right' y={0} />
           <XAxis />
           <Tooltip />
-          <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' />
-          <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' />
+          <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
+          <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
           <Line type='monotone' dataKey='temperature' stroke='#ce93d8' isAnimationActive={false} yAxisId='left' />
         </ComposedChart>
       </div>
