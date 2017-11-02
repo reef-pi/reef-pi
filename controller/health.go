@@ -6,6 +6,7 @@ import (
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"log"
+	"math"
 	"time"
 )
 
@@ -43,11 +44,12 @@ func (h *HealthChecker) check() {
 		log.Println("ERROR: Failed to obtain memory stats. Error:", err)
 		return
 	}
-	h.telemetry.EmitMetric("system-mem-used", vmStat.UsedPercent)
-	log.Println("health check: Used memory:", vmStat.UsedPercent, " Load5:", loadStat.Load5)
+	usedMemory := (math.Floor(vmStat.UsedPercent * 100)) / 100.0
+	h.telemetry.EmitMetric("system-mem-used", usedMemory)
+	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.usage.Value = HealthMetric{
 		Load5:      loadStat.Load5,
-		UsedMemory: vmStat.UsedPercent,
+		UsedMemory: usedMemory,
 		Time:       time.Now().Format("15:04"),
 	}
 }
