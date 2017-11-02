@@ -25,6 +25,7 @@ export default class Settings extends Common {
     this.updateCapabilities = this.updateCapabilities.bind(this)
     this.update = this.update.bind(this)
     this.showDisplay = this.showDisplay.bind(this)
+    this.toRow = this.toRow.bind(this)
   }
 
   updateCheckbox (key) {
@@ -51,12 +52,7 @@ export default class Settings extends Common {
     if (!this.state.settings.display) {
       return
     }
-    return (
-      <div className='container' >
-        <label><b>Display</b></label>
-        <Display />
-      </div>
-    )
+    return (<div className='container'><Display /></div>)
   }
 
   showCapabilities () {
@@ -168,6 +164,15 @@ export default class Settings extends Common {
     })
   }
 
+  toRow (label, hook) {
+    return (
+      <div className='row'>
+        <div className='col-sm-2'> {label}</div>
+        <div className='col-sm-2'><input id={'to-row-' + label} value={this.state.settings[label]} type='text' onChange={hook} className='form-control' /></div>
+      </div>
+    )
+  }
+
   render () {
     var updateButtonClass = 'btn btn-outline-success col-sm-2'
     if (this.state.updated) {
@@ -177,21 +182,13 @@ export default class Settings extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <div className='row'>
-          <div className='col-sm-2'> Name</div>
-          <div className='col-sm-2'><input id='system-name' value={this.state.settings.name} type='text' onChange={this.updateName} className='form-control' /></div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'> Interface</div>
-          <div className='col-sm-2'> <input type='text' value={this.state.settings.interface} onChange={this.updateInterface} id='system-interface' className='form-control' /> </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>Address</div>
-          <div className='col-sm-3'><input type='text' value={this.state.settings.address} id='system-api-address' onChange={this.updateAddress} className='form-control' /></div>
-        </div>
+        {this.toRow('name', this.updateName)}
+        {this.toRow('interface', this.updateInterface)}
+        {this.toRow('address', this.updateAddresse)}
         <div className='row'>
           <div className='col-sm-2'> Display </div>
           <div className='col-sm-1'><input type='checkbox' id='updateDisplay' onClick={this.updateCheckbox('display')} defaultChecked={this.state.settings.display} /></div>
+          {this.showDisplay()}
         </div>
         <div className='row'>
           <div className='col-sm-2'> Heart Beat </div>
@@ -210,9 +207,6 @@ export default class Settings extends Common {
             <label> <b>AdafruitIO</b> </label>
             {this.showTelemetry()}
           </div>
-        </div>
-        <div className='row'>
-          {this.showDisplay()}
         </div>
         <hr />
         <div className='row'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import TemperatureChart from './temperature_chart.jsx'
+import TemperatureReadingChart from './temperature_reading.jsx'
 import SelectEquipment from './select_equipment.jsx'
 import Common from './common.jsx'
 
@@ -147,7 +147,7 @@ export default class Temperature extends Common {
           <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
         </div>
         <div className='row'>
-          { <TemperatureChart />}
+          { <TemperatureReadingChart width={600} height={300} />}
         </div>
         <div className='row'>
           <div className='col-sm-3'> Control </div>

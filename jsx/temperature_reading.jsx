@@ -1,12 +1,12 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
+import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
 import Common from './common.jsx'
 
-export default class ATOChart extends Common {
+export default class TemperatureReadingChart extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      usage: []
+      readings: []
     }
     this.fetch = this.fetch.bind(this)
   }
@@ -23,29 +23,30 @@ export default class ATOChart extends Common {
 
   fetch () {
     this.ajaxGet({
-      url: '/api/ato/usage',
+      url: '/api/tc/readings',
       success: function (data) {
         this.setState({
-          usage: data,
+          readings: data,
           showAlert: false
         })
       }.bind(this)
     })
   }
+
   render () {
-    if (this.state.usage.length <= 0) {
+    if (this.state.readings.length <= 0) {
       return (<div />)
     }
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>ATO</span>
-        <BarChart width={this.props.width} height={this.props.height} data={this.state.usage}>
-          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-          <YAxis label='minutes' />
-          <XAxis dataKey='hour' label='hour' />
+        <span className='h6'>Temperature</span>
+        <LineChart width={this.props.width} height={this.props.height} data={this.state.readings}>
+          <YAxis />
+          <XAxis />
           <Tooltip />
-        </BarChart>
+          <Line type='linear' dataKey='temperature' stroke='#ffbb33' isAnimationActive={false} />
+        </LineChart>
       </div>
     )
   }
