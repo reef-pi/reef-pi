@@ -51,7 +51,12 @@ export default class Settings extends Common {
     if (!this.state.settings.display) {
       return
     }
-    return <Display />
+    return (
+      <div className='container' >
+        <label><b>Display</b></label>
+        <Display />
+      </div>
+    )
   }
 
   showCapabilities () {
@@ -204,16 +209,12 @@ export default class Settings extends Common {
           <div className='container' >
             <label> <b>AdafruitIO</b> </label>
             {this.showTelemetry()}
-            <hr />
           </div>
         </div>
         <div className='row'>
-          <div className='container' >
-            <label> <b>Display</b> </label>
-            {this.showDisplay()}
-            <hr />
-          </div>
+          {this.showDisplay()}
         </div>
+        <hr />
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />
         </div>

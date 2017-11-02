@@ -108,6 +108,7 @@ func (c *Controller) run() {
 				Time:        time.Now().Format("15:04"),
 			}
 			c.readings = c.readings.Next()
+			c.updateHourlyTemperature(reading)
 			log.Println("Temperature sensor value:", reading)
 			c.telemetry.EmitMetric("temperature", reading)
 			if c.config.Control {

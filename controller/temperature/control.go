@@ -11,9 +11,11 @@ type Measurement struct {
 }
 
 type Usage struct {
-	Heater int `json:"heater"`
-	Cooler int `json:"cooler"`
-	Hour   int `json:"hour"`
+	Heater      int       `json:"heater"`
+	Cooler      int       `json:"cooler"`
+	Hour        int       `json:"hour"`
+	Temperature float32   `json:"temperature"`
+	readings    []float32 `json:"-"`
 }
 
 func (c *Controller) switchHeater(on bool) error {
@@ -61,7 +63,7 @@ func (c *Controller) warmUp() error {
 	if err := c.switchHeater(true); err != nil {
 		return err
 	}
-	c.updateUsage(true, false)
+	c.updateHeaterUsage()
 	return nil
 }
 
@@ -72,42 +74,53 @@ func (c *Controller) coolDown() error {
 	if err := c.switchCooler(true); err != nil {
 		return err
 	}
-	c.updateUsage(false, true)
+	c.updateCoolerUsage()
 	return nil
 }
 
-func (c *Controller) updateUsage(heater, cooler bool) {
-	var heaterMinutes, coolerMinutes int
-	if heater {
-		heaterMinutes = int(c.config.CheckInterval)
+func (c *Controller) updateHourlyTemperature(reading float32) {
+	usage := c.syncUsage()
+	usage.readings = append(usage.readings, reading)
+	total := float32(0.0)
+	for _, v := range usage.readings {
+		total += v
 	}
-	if cooler {
-		coolerMinutes = int(c.config.CheckInterval)
-	}
-	currentUsage := Usage{
-		Heater: heaterMinutes,
-		Cooler: coolerMinutes,
-		Hour:   time.Now().Hour(),
+	usage.Temperature = total / float32(len(usage.readings))
+	c.usage.Value = usage
+}
+
+func (c *Controller) updateHeaterUsage() {
+	usage := c.syncUsage()
+	usage.Heater = usage.Heater + int(c.config.CheckInterval)
+	c.usage.Value = usage
+}
+
+func (c *Controller) updateCoolerUsage() {
+	usage := c.syncUsage()
+	usage.Cooler = usage.Cooler + int(c.config.CheckInterval)
+	c.usage.Value = usage
+}
+
+func (c *Controller) syncUsage() Usage {
+	current := Usage{
+		Hour:     time.Now().Hour(),
+		readings: []float32{},
 	}
 	if c.usage.Value == nil {
-		c.usage.Value = currentUsage
-		return
+		c.usage.Value = current
+		return current
 	}
-	previousUsage, ok := c.usage.Value.(Usage)
+	previous, ok := c.usage.Value.(Usage)
 	if !ok {
 		log.Println("ERROR: Temperature subsystem. Failed to typecast previous equipment usage")
-		return
+		return current
 	}
-	if previousUsage.Hour == currentUsage.Hour {
-		c.usage.Value = Usage{
-			Heater: previousUsage.Heater + currentUsage.Heater,
-			Cooler: previousUsage.Cooler + currentUsage.Cooler,
-			Hour:   currentUsage.Hour,
-		}
-		return
+	if previous.Hour == current.Hour {
+		return previous
 	}
 	c.usage = c.usage.Next()
-	c.usage.Value = currentUsage
+	c.usage.Value = current
+	return current
 }
 
 func (c *Controller) switchOffAll() {

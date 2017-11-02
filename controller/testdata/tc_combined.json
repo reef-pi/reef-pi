@@ -1,0 +1,11 @@
+[
+  {"time":"07:47","temperature":79.27389,"heater":8,"cooler":4,"hour":0},
+  {"time":"07:48","temperature":79.62183,"heater":2,"cooler":1,"hour":1},
+  {"time":"07:49","temperature":78.547646,"heater":24,"cooler":12,"hour":2},
+  {"time":"07:50","temperature":80.71074,"heater":22,"cooler":27,"hour":3},
+  {"time":"07:51","temperature":80.47133,"heater":28,"cooler":17,"hour":4},
+  {"time":"07:52","temperature":80.04927,"heater":25,"cooler":15,"hour":5},
+  {"time":"07:53","temperature":79.193436,"heater":24,"cooler":24,"hour":6},
+  {"time":"07:54","temperature":79.9094,"heater":23,"cooler":18,"hour":7},
+  {"time":"07:55","temperature":78.39655,"heater":3,"cooler":3,"hour":8}
+]
