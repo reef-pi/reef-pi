@@ -40,14 +40,14 @@ export default class HealthChart extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>reef-pi CPU/Memory</span>
+        <span className='h6'>CPU/Memory</span>
         <LineChart width={this.props.width} height={this.props.height} data={this.state.health_stats}>
           <YAxis yAxisId='left' orientation='left' stroke='#00c851'/>
-          <YAxis yAxisId='right' orientation='right' stroke='#ffbb33'/>
+          <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
           <XAxis dataKey='time'/>
           <Tooltip />
-          <Line type='linear' dataKey='load5' stroke='#00c851' isAnimationActive={false} yAxisId='left'/>
-          <Line type='linear' dataKey='used_memory' stroke='#ffbb33' isAnimationActive={false}  yAxisId='right'/>
+          <Line type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left'/>
+          <Line type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false}  yAxisId='right'/>
         </LineChart>
       </div>
     )

@@ -18,8 +18,8 @@ type HealthChecker struct {
 }
 
 type HealthMetric struct {
-	Load5      float64 `json:"load5"`
-	UsedMemory float64 `json:"used_memory"`
+	Load5      float64 `json:"cpu"`
+	UsedMemory float64 `json:"memory"`
 	Time       string  `json:"time"`
 }
 
