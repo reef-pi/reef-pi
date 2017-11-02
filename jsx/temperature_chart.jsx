@@ -46,7 +46,7 @@ export default class TemperatureChart extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>Temperature</span>
+        <span className='h6'>Heater/Cooler</span>
         <ComposedChart width={500} height={250} data={this.state.usage}>
           <YAxis yAxisId='left' orientation='left' />
           <YAxis yAxisId='right' orientation='right' />
