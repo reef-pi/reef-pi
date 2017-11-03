@@ -64,7 +64,7 @@ func New(version, database string) (*ReefPi, error) {
 		subsystems: make(map[string]Subsystem),
 		version:    version,
 	}
-	if s.HeartBeat {
+	if s.Capabilities.HealthCheck {
 		r.h = NewHealthChecker(1*time.Minute, telemetry)
 	}
 	return r, nil
@@ -162,7 +162,7 @@ func (r *ReefPi) Start() error {
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}
-	if r.settings.HeartBeat {
+	if r.settings.Capabilities.HealthCheck {
 		go r.h.Start()
 	}
 
@@ -180,7 +180,7 @@ func (r *ReefPi) unloadSubsystems() {
 
 func (r *ReefPi) Stop() error {
 	r.unloadSubsystems()
-	if r.settings.HeartBeat {
+	if r.settings.Capabilities.HealthCheck {
 		r.h.Stop()
 	}
 	r.store.Close()

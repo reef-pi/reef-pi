@@ -29,7 +29,9 @@ export default class Dashboard extends Common {
     if (this.props.capabilities.ato) {
       charts.push(<div className='col-sm-6' key='chart-4'><ATOChart width={500} height={250} /></div>)
     }
-    charts.push(<div className='col-sm-6' key='chart-5'><HealthChart width={500} height={250} /></div>)
+    if (this.props.capabilities.health_check) {
+      charts.push(<div className='col-sm-6' key='chart-5'><HealthChart width={500} height={250} /></div>)
+    }
     return charts
   }
 

@@ -202,10 +202,6 @@ export default class Settings extends Common {
           <div className='col-sm-2'> Notification </div>
           <div className='col-sm-1'><input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} /></div>
         </div>
-        <div className='row'>
-          <div className='col-sm-2'> Heart Beat </div>
-          <div className='col-sm-1'><input type='checkbox' id='updateHeartBeat' onClick={this.updateCheckbox('heart_beat')} defaultChecked={this.state.settings.heart_beat} /></div>
-        </div>
         <hr />
         <div className='row'>
           <div className='container' >

@@ -28,7 +28,7 @@ func (c *Controller) Create(d Doser) error {
 }
 
 func (c *Controller) List() ([]Doser, error) {
-	var dosers []Doser
+	dosers := []Doser{}
 	fn := func(v []byte) error {
 		var d Doser
 		if err := json.Unmarshal(v, &d); err != nil {
