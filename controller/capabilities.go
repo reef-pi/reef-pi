@@ -7,6 +7,8 @@ import (
 
 type Capabilities struct {
 	DevMode       bool `json:"dev_mode" yaml:"dev_mode"`
+	Dashboard     bool `json:"dashboard" yaml:"dashboard"`
+	HealthCheck   bool `json:"health_check" yaml:"health_check"`
 	Equipments    bool `json:"equipments" yaml:"equipments"`
 	Timers        bool `json:"timers" yaml:"timers"`
 	Lighting      bool `json:"lighting" yaml:"lighting"`
@@ -19,6 +21,8 @@ type Capabilities struct {
 
 var DefaultCapabilities = Capabilities{
 	DevMode:       true,
+	Dashboard:     true,
+	HealthCheck:   true,
 	Equipments:    true,
 	Timers:        true,
 	Lighting:      true,
