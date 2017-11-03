@@ -1,5 +1,5 @@
 import React from 'react'
-import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
+import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
 import Common from './common.jsx'
 
 export default class TemperatureReadingChart extends Common {
@@ -41,12 +41,18 @@ export default class TemperatureReadingChart extends Common {
       <div className='container'>
         {super.render()}
         <span className='h6'>Temperature</span>
-        <LineChart width={this.props.width} height={this.props.height} data={this.state.readings}>
+        <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
+          <defs>
+            <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
+              <stop offset='5%' stopColor='#00C851' stopOpacity={0.8} />
+              <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <YAxis />
           <XAxis />
           <Tooltip />
-          <Line type='linear' dataKey='temperature' stroke='#ffbb33' isAnimationActive={false} />
-        </LineChart>
+          <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
+        </AreaChart>
       </div>
     )
   }

@@ -3,33 +3,48 @@ package utils
 import (
 	"log"
 	"net/smtp"
+	"strconv"
 )
 
-const SMTPDomain = "smtp.gmail.com"
-const SMTPAddress = SMTPDomain + ":587"
+const GMailServer = "smtp.gmail.com"
+const GMailPort = 587
 
 type Mailer interface {
-	Email(to, subject, body string) error
+	Email(subject, body string) error
 }
 
-type gmail struct {
-	auth smtp.Auth
-	from string
+type MailerConfig struct {
+	Server   string `json:"server"`
+	Port     int    `json:"port"`
+	From     string `json:"from"`
+	Password string `json:"password"`
+	To       string `json:"to"`
 }
 
-func NewMailer(user, password string) Mailer {
-	auth := smtp.PlainAuth("", user, password, SMTPDomain)
-	return &gmail{
-		auth: auth,
-		from: user,
+func (c *MailerConfig) Mailer() Mailer {
+	auth := smtp.PlainAuth("", c.From, c.Password, c.Server)
+	return &mailer{
+		auth:   auth,
+		config: c,
 	}
 }
 
-func (m *gmail) Email(to, subject, body string) error {
-	msg := "From: " + m.from + "\n"
-	msg = msg + "To: " + to + "\n"
+type NoopMailer struct{}
+
+func (n *NoopMailer) Email(_, _ string) error {
+	return nil
+}
+
+type mailer struct {
+	auth   smtp.Auth
+	config *MailerConfig
+}
+
+func (m *mailer) Email(subject, body string) error {
+	msg := "From: " + m.config.From + "\n"
+	msg = msg + "To: " + m.config.To + "\n"
 	msg = msg + "Subject: " + subject + "\n\n"
 	msg = msg + body
-	log.Println("Sending email to:", to, " subject:", subject)
-	return smtp.SendMail(SMTPAddress, m.auth, m.from, []string{to}, []byte(msg))
+	log.Println("Sending email to:", m.config.To, " subject:", subject)
+	return smtp.SendMail(m.config.Server+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
 }

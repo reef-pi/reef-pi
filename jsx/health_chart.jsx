@@ -46,8 +46,8 @@ export default class HealthChart extends Common {
           <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
           <XAxis dataKey='time' />
           <Tooltip />
-          <Line type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
-          <Line type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
+          <Line dot={false} type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
+          <Line dot={false} type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
         </LineChart>
       </div>
     )

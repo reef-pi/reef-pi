@@ -4,6 +4,7 @@ import Auth from './auth.jsx'
 import Common from './common.jsx'
 import Capabilities from './capabilities.jsx'
 import Display from './display.jsx'
+import Notification from './notification.jsx'
 
 export default class Settings extends Common {
   constructor (props) {
@@ -26,6 +27,13 @@ export default class Settings extends Common {
     this.update = this.update.bind(this)
     this.showDisplay = this.showDisplay.bind(this)
     this.toRow = this.toRow.bind(this)
+    this.showNotification = this.showNotification.bind(this)
+  }
+  showNotification () {
+    if (!this.state.settings.notification) {
+      return
+    }
+    return (<Notification />)
   }
 
   updateCheckbox (key) {
@@ -191,6 +199,10 @@ export default class Settings extends Common {
           {this.showDisplay()}
         </div>
         <div className='row'>
+          <div className='col-sm-2'> Notification </div>
+          <div className='col-sm-1'><input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} /></div>
+        </div>
+        <div className='row'>
           <div className='col-sm-2'> Heart Beat </div>
           <div className='col-sm-1'><input type='checkbox' id='updateHeartBeat' onClick={this.updateCheckbox('heart_beat')} defaultChecked={this.state.settings.heart_beat} /></div>
         </div>
@@ -212,6 +224,7 @@ export default class Settings extends Common {
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />
         </div>
+        {this.showNotification()}
         <div className='row'>
           <Auth />
         </div>

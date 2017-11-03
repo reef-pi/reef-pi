@@ -14,6 +14,7 @@ type Settings struct {
 	ImageDirectory string           `json:"image_directory" yaml:"image_directory"`
 	Display        bool             `json:"display" yaml:"display"`
 	HeartBeat      bool             `json:"heart_beat" yaml:"heart_beat"`
+	Notification   bool             `json:"notification,yaml:"notification""`
 	AdafruitIO     utils.AdafruitIO `json:"adafruitio" yaml:"adafruitio"`
 	LightInterval  time.Duration    `json:"light_interval" yaml:"light_interval"`
 	Capabilities   Capabilities     `json:"capabilities" yaml:"capabilities"`
