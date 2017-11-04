@@ -51,7 +51,18 @@ func New(version, database string) (*ReefPi, error) {
 			return nil, err
 		}
 	}
-	telemetry := utils.NewTelemetry(s.AdafruitIO, &utils.NoopMailer{})
+	var mailer utils.Mailer
+	mailer = &utils.NoopMailer{}
+	if s.Notification {
+		var conf utils.MailerConfig
+		if err := store.Get(Bucket, "mailer_config", &conf); err != nil {
+			log.Println("ERROR: Failed to load mailer config. Error:", err)
+		} else {
+			log.Println("Using mailer from saved settings")
+			mailer = conf.Mailer()
+		}
+	}
+	telemetry := utils.NewTelemetry(s.AdafruitIO, mailer)
 	jacks := connectors.NewJacks(store)
 	outlets := connectors.NewOutlets(store)
 	outlets.DevMode = s.Capabilities.DevMode
