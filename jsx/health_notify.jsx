@@ -11,13 +11,14 @@ export default class HealthNotify extends React.Component {
       }
     }
     this.update = this.update.bind(this)
-    this.enable = this.enable.bind(this)
+    this.updateEnable = this.updateEnable.bind(this)
   }
 
-  enable (ev) {
+  updateEnable (ev) {
     var h = this.state.notify
     h.enable = ev.target.checked
     this.setState({notify: h})
+    this.props.update(h)
   }
 
   update (key) {
@@ -39,7 +40,7 @@ export default class HealthNotify extends React.Component {
             type='checkbox'
             id='health_notify_enable'
             defaultChecked={this.state.notify.enable}
-            onClick={this.enable} />
+            onClick={this.updateEnable} />
         </div>
         <div className='input-group'>
           <label className='input-group-addon'>Max Memory</label>

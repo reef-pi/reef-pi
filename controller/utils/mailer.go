@@ -47,5 +47,5 @@ func (m *mailer) Email(subject, body string) error {
 	msg = msg + "Subject: " + subject + "\n\n"
 	msg = msg + body
 	log.Println("Sending email to:", m.config.To, " subject:", subject)
-	return smtp.SendMail(m.config.Server+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
+	return smtp.SendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
 }
