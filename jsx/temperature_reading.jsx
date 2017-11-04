@@ -48,7 +48,7 @@ export default class TemperatureReadingChart extends Common {
               <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
             </linearGradient>
           </defs>
-          <YAxis />
+          <YAxis domain={[76, 82]} />
           <XAxis />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
