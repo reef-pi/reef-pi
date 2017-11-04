@@ -22,7 +22,7 @@ export default class Admin extends Common {
       this.ajaxPost({
         url: '/api/admin/reload'
       })
-    })
+    }.bind(this))
   }
 
   powerOff () {
@@ -31,7 +31,7 @@ export default class Admin extends Common {
       this.ajaxPost({
         url: '/api/admin/poweroff'
       })
-    })
+    }.bind(this))
   }
 
   reboot () {
@@ -40,7 +40,7 @@ export default class Admin extends Common {
       this.ajaxPost({
         url: '/api/admin/reboot'
       })
-    })
+    }.bind(this))
   }
 
   render () {
