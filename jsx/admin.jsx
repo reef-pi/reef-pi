@@ -20,27 +20,31 @@ export default class Admin extends Common {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/reload'
+        url: '/api/admin/reload',
+        success: function (data) {
+        }
       })
-    })
+    }.bind(this))
   }
 
   powerOff () {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/poweroff'
+        url: '/api/admin/poweroff',
+        success: function () {}
       })
-    })
+    }.bind(this))
   }
 
   reboot () {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxPost({
-        url: '/api/admin/reboot'
+        url: '/api/admin/reboot',
+        success: function () {}
       })
-    })
+    }.bind(this))
   }
 
   render () {
