@@ -2,6 +2,7 @@ package controller
 
 import (
 	"container/ring"
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
@@ -10,11 +11,18 @@ import (
 	"time"
 )
 
+type HealthCheckNotify struct {
+	Enable    bool    `json:"enable"`
+	MaxMemory float64 `json:"max_memory"`
+	MaxCPU    float64 `json:"max_cpu"`
+}
+
 type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
 	telemetry *utils.Telemetry
 	usage     *ring.Ring
+	Notify    HealthCheckNotify
 }
 
 type HealthMetric struct {
@@ -23,12 +31,13 @@ type HealthMetric struct {
 	Time       string  `json:"time"`
 }
 
-func NewHealthChecker(i time.Duration, telemetry *utils.Telemetry) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
 		usage:     ring.New(100),
+		Notify:    notify,
 	}
 }
 func (h *HealthChecker) check() {
@@ -51,6 +60,20 @@ func (h *HealthChecker) check() {
 		Load5:      loadStat.Load5,
 		UsedMemory: usedMemory,
 		Time:       time.Now().Format("15:04"),
+	}
+	if h.Notify.Enable {
+		if loadStat.Load5 >= h.Notify.MaxCPU {
+			subject := "[Reef-Pi ALERT] CPU Load high"
+			format := "Current cpu load (%f) is above threshold ( %f )"
+			body := fmt.Sprintf(format, loadStat.Load5, h.Notify.MaxCPU)
+			h.telemetry.Alert(subject, body)
+		}
+		if vmStat.UsedPercent >= h.Notify.MaxMemory {
+			subject := "[Reef-Pi ALERT] Memory consumption is high"
+			format := "Current memory consumption (%f) is above threshold ( %f )"
+			body := fmt.Sprintf(format, vmStat.UsedPercent, h.Notify.MaxMemory)
+			h.telemetry.Alert(subject, body)
+		}
 	}
 	h.usage = h.usage.Next()
 }
