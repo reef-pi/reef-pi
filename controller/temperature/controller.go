@@ -103,6 +103,7 @@ func (c *Controller) run() {
 				continue
 			}
 			c.latest = reading
+			c.NotifyIfNeeded(reading)
 			c.readings.Value = Measurement{
 				Temperature: reading,
 				Time:        time.Now().Format("15:04"),

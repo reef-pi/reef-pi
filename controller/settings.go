@@ -8,15 +8,16 @@ import (
 )
 
 type Settings struct {
-	Name           string           `json:"name" yaml:"name"`
-	Interface      string           `json:"interface" yaml:"interface"`
-	Address        string           `json:"address" yaml:"address"`
-	ImageDirectory string           `json:"image_directory" yaml:"image_directory"`
-	Display        bool             `json:"display" yaml:"display"`
-	Notification   bool             `json:"notification,yaml:"notification""`
-	AdafruitIO     utils.AdafruitIO `json:"adafruitio" yaml:"adafruitio"`
-	LightInterval  time.Duration    `json:"light_interval" yaml:"light_interval"`
-	Capabilities   Capabilities     `json:"capabilities" yaml:"capabilities"`
+	Name           string            `json:"name" yaml:"name"`
+	Interface      string            `json:"interface" yaml:"interface"`
+	Address        string            `json:"address" yaml:"address"`
+	ImageDirectory string            `json:"image_directory" yaml:"image_directory"`
+	Display        bool              `json:"display" yaml:"display"`
+	Notification   bool              `json:"notification,yaml:"notification""`
+	AdafruitIO     utils.AdafruitIO  `json:"adafruitio" yaml:"adafruitio"`
+	LightInterval  time.Duration     `json:"light_interval" yaml:"light_interval"`
+	Capabilities   Capabilities      `json:"capabilities" yaml:"capabilities"`
+	HealthCheck    HealthCheckNotify `json:"health_check" yaml:"health_check"`
 }
 
 var DefaultSettings = Settings{
@@ -25,6 +26,10 @@ var DefaultSettings = Settings{
 	Address:       "0.0.0.0:8080",
 	LightInterval: 30 * time.Second,
 	Capabilities:  DefaultCapabilities,
+	HealthCheck: HealthCheckNotify{
+		MaxMemory: 500,
+		MaxCPU:    2,
+	},
 }
 
 func loadSettings(store utils.Store) (Settings, error) {

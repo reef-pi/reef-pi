@@ -12,7 +12,7 @@ func TestEmitMetric(t *testing.T) {
 		Enable: false,
 		User:   "ranjib",
 	}
-	telemetry := NewTelemetry(config)
+	telemetry := NewTelemetry(config, &NoopMailer{})
 	rand.Seed(time.Now().Unix())
 	telemetry.EmitMetric("test", rand.Intn(100))
 }

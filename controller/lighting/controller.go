@@ -168,7 +168,7 @@ func (c *Controller) syncLight(light Light) {
 		if !ch.Auto {
 			c.UpdateChannel(ch, ch.Fixed)
 			c.telemetry.EmitMetric(light.Name+"-"+ch.Name, ch.Fixed)
-			return
+			continue
 		}
 		expectedValues := ch.Values // TODO implement ticks`
 		v := GetCurrentValue(time.Now(), expectedValues)

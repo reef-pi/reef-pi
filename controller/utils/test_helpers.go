@@ -55,5 +55,5 @@ func TestTelemetry() *Telemetry {
 	aio := AdafruitIO{
 		User: "test-user",
 	}
-	return NewTelemetry(aio)
+	return NewTelemetry(aio, &NoopMailer{})
 }

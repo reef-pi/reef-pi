@@ -21,18 +21,16 @@ export default class Capabilities extends React.Component {
 
   toLi (label) {
     return (
-      <li className='list-inline-item'>
-        <label className='btnt btn-secondary'>
-          {label}
-          <input
-            className='btn btn-secondary'
-            type='checkbox'
-            id={'update-' + label}
-            onClick={this.updateCapability(label)}
-            defaultChecked={this.state.capabilities[label]}
-            />
-        </label>
-      </li>
+      <div className='input-group'>
+        <label className='input-group-addon'>{label}</label>
+        <input
+          className='form-control'
+          type='checkbox'
+          id={'update-' + label}
+          onClick={this.updateCapability(label)}
+          defaultChecked={this.state.capabilities[label]}
+          />
+      </div>
     )
   }
 
