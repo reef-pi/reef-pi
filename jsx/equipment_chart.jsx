@@ -1,5 +1,5 @@
 import React from 'react'
-import {XAxis, BarChart, Bar} from 'recharts'
+import {Tooltip, XAxis, BarChart, Bar} from 'recharts'
 import Common from './common.jsx'
 import $ from 'jquery'
 
@@ -50,6 +50,7 @@ export default class EquipmentsChart extends Common {
           <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
           <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
           <XAxis dataKey='name' />
+          <Tooltip />
         </BarChart>
       </div>
     )

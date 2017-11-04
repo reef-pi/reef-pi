@@ -31,7 +31,8 @@ func (c *MailerConfig) Mailer() Mailer {
 
 type NoopMailer struct{}
 
-func (n *NoopMailer) Email(_, _ string) error {
+func (n *NoopMailer) Email(s, _ string) error {
+	log.Println("Noop email: subject:", s)
 	return nil
 }
 

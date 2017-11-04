@@ -51,7 +51,7 @@ func New(version, database string) (*ReefPi, error) {
 			return nil, err
 		}
 	}
-	telemetry := utils.NewTelemetry(s.AdafruitIO)
+	telemetry := utils.NewTelemetry(s.AdafruitIO, &utils.NoopMailer{})
 	jacks := connectors.NewJacks(store)
 	outlets := connectors.NewOutlets(store)
 	outlets.DevMode = s.Capabilities.DevMode

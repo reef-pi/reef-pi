@@ -14,14 +14,22 @@ type AdafruitIO struct {
 }
 
 type Telemetry struct {
-	client *adafruitio.Client
-	config AdafruitIO
+	client     *adafruitio.Client
+	dispatcher Mailer
+	config     AdafruitIO
 }
 
-func NewTelemetry(config AdafruitIO) *Telemetry {
+func NewTelemetry(config AdafruitIO, m Mailer) *Telemetry {
 	return &Telemetry{
-		client: adafruitio.NewClient(config.Token),
-		config: config,
+		client:     adafruitio.NewClient(config.Token),
+		config:     config,
+		dispatcher: m,
+	}
+}
+
+func (t *Telemetry) Alert(subject, body string) {
+	if err := t.dispatcher.Email(subject, body); err != nil {
+		log.Println("ERROR: Failed to dispatch alert:", subject, "Error:", err)
 	}
 }
 
