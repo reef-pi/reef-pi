@@ -33,7 +33,11 @@ func (c *Controller) switchHeater(on bool) error {
 			return err
 		}
 	}
-	c.telemetry.EmitMetric("heater", on)
+	var vOn int
+	if on {
+		vOn = 1
+	}
+	c.telemetry.EmitMetric("heater", vOn)
 	return nil
 }
 
@@ -52,7 +56,11 @@ func (c *Controller) switchCooler(on bool) error {
 			return err
 		}
 	}
-	c.telemetry.EmitMetric("cooler", on)
+	var vOn int
+	if on {
+		vOn = 1
+	}
+	c.telemetry.EmitMetric("cooler", vOn)
 	return nil
 }
 
