@@ -106,7 +106,7 @@ func (c *Controller) run() {
 			c.NotifyIfNeeded(reading)
 			c.readings.Value = Measurement{
 				Temperature: reading,
-				Time:        time.Now(),
+				Time:        utils.TeleTime(time.Now()),
 			}
 			c.readings = c.readings.Next()
 			c.updateHourlyTemperature(reading)

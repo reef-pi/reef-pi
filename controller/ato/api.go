@@ -3,13 +3,15 @@ package ato
 import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
+	"sort"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/ato", c.get).Methods("GET")
 	r.HandleFunc("/api/ato", c.update).Methods("POST")
-	r.HandleFunc("/api/ato/usage", utils.JSONGetUsage(c.usage)).Methods("GET")
+	r.HandleFunc("/api/ato/usage", c.getUsage).Methods("GET")
 }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
@@ -31,4 +33,25 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 		return nil
 	}
 	utils.JSONUpdateResponse(&conf, fn, w, r)
+}
+
+func (c *Controller) getUsage(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []Usage{}
+		c.usage.Do(func(i interface{}) {
+			if i != nil {
+				u, ok := i.(Usage)
+				if !ok {
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
+					return
+				}
+				usage = append(usage, u)
+			}
+		})
+		sort.Slice(usage, func(i, j int) bool {
+			return usage[i].Time.Before(usage[j].Time)
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, req)
 }
