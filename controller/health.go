@@ -18,28 +18,87 @@ type HealthCheckNotify struct {
 }
 
 type HealthChecker struct {
-	stopCh    chan struct{}
-	interval  time.Duration
-	telemetry *utils.Telemetry
-	usage     *ring.Ring
-	Notify    HealthCheckNotify
+	stopCh        chan struct{}
+	interval      time.Duration
+	telemetry     *utils.Telemetry
+	minutelyUsage *ring.Ring
+	hourlyUsage   *ring.Ring
+	Notify        HealthCheckNotify
 }
 
-type HealthMetric struct {
+type MinutelyHealthMetric struct {
 	Load5      float64 `json:"cpu"`
 	UsedMemory float64 `json:"memory"`
 	Time       string  `json:"time"`
 }
 
+type HourlyHealthMetric struct {
+	Load5      float64   `json:"cpu"`
+	UsedMemory float64   `json:"memory"`
+	Time       string    `json:"time"`
+	Hour       int       `json:"hour"`
+	lReadings  []float64 `json:"-"`
+	mReadings  []float64 `json:"-"`
+}
+
 func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry) *HealthChecker {
 	return &HealthChecker{
-		interval:  i,
-		stopCh:    make(chan struct{}),
-		telemetry: telemetry,
-		usage:     ring.New(100),
-		Notify:    notify,
+		interval:      i,
+		stopCh:        make(chan struct{}),
+		telemetry:     telemetry,
+		minutelyUsage: ring.New(60 * 3), // last 3 hours
+		hourlyUsage:   ring.New(24 * 7), // last 7 days
+		Notify:        notify,
 	}
 }
+
+func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
+	current := HourlyHealthMetric{
+		Time:      now.Format("15:04"),
+		Hour:      now.Hour(),
+		lReadings: []float64{},
+		mReadings: []float64{},
+	}
+	if h.hourlyUsage.Value == nil {
+		h.hourlyUsage.Value = current
+		return current
+	}
+	previous, ok := h.hourlyUsage.Value.(HourlyHealthMetric)
+	if !ok {
+		log.Println("ERROR: health checker. Failed to typecast previous health check metric")
+		return current
+	}
+	if previous.Hour == current.Hour {
+		return previous
+	}
+	h.hourlyUsage = h.hourlyUsage.Next()
+	h.hourlyUsage.Value = current
+	return current
+}
+
+func (h *HealthChecker) updateUsage(memory, load float64) {
+	now := time.Now()
+	h.minutelyUsage.Value = MinutelyHealthMetric{
+		Load5:      load,
+		UsedMemory: memory,
+		Time:       now.Format("15:04"),
+	}
+	h.minutelyUsage = h.minutelyUsage.Next()
+	hUsage := h.syncHourlyMetric(now)
+	hUsage.lReadings = append(hUsage.lReadings, load)
+	hUsage.mReadings = append(hUsage.mReadings, memory)
+	size := len(hUsage.lReadings)
+	lTotal := 0.0
+	mTotal := 0.0
+	for i := 0; i < size; i++ {
+		lTotal += hUsage.lReadings[i]
+		mTotal += hUsage.mReadings[i]
+	}
+	hUsage.Load5 = lTotal / float64(len(hUsage.lReadings))
+	hUsage.UsedMemory = mTotal / float64(len(hUsage.mReadings))
+	h.hourlyUsage.Value = hUsage
+}
+
 func (h *HealthChecker) check() {
 	loadStat, err := load.Avg()
 	if err != nil {
@@ -56,26 +115,25 @@ func (h *HealthChecker) check() {
 	usedMemory := (math.Floor(vmStat.UsedPercent * 100)) / 100.0
 	h.telemetry.EmitMetric("system-mem-used", usedMemory)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
-	h.usage.Value = HealthMetric{
-		Load5:      loadStat.Load5,
-		UsedMemory: usedMemory,
-		Time:       time.Now().Format("15:04"),
-	}
+	h.updateUsage(usedMemory, loadStat.Load5)
+	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
+}
+
+func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
 	if h.Notify.Enable {
-		if loadStat.Load5 >= h.Notify.MaxCPU {
+		if load >= h.Notify.MaxCPU {
 			subject := "[Reef-Pi ALERT] CPU Load high"
 			format := "Current cpu load (%f) is above threshold ( %f )"
-			body := fmt.Sprintf(format, loadStat.Load5, h.Notify.MaxCPU)
+			body := fmt.Sprintf(format, load, h.Notify.MaxCPU)
 			h.telemetry.Alert(subject, body)
 		}
-		if vmStat.UsedPercent >= h.Notify.MaxMemory {
+		if memory >= h.Notify.MaxMemory {
 			subject := "[Reef-Pi ALERT] Memory consumption is high"
 			format := "Current memory consumption (%f) is above threshold ( %f )"
-			body := fmt.Sprintf(format, vmStat.UsedPercent, h.Notify.MaxMemory)
+			body := fmt.Sprintf(format, memory, h.Notify.MaxMemory)
 			h.telemetry.Alert(subject, body)
 		}
 	}
-	h.usage = h.usage.Next()
 }
 
 func (h *HealthChecker) Stop() {
@@ -101,4 +159,7 @@ func (h *HealthChecker) Start() {
 			return
 		}
 	}
+}
+
+func (h *HealthChecker) GetUsage() {
 }

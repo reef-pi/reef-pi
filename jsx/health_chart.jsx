@@ -23,7 +23,7 @@ export default class HealthChart extends Common {
 
   fetch () {
     this.ajaxGet({
-      url: '/api/health_stats',
+      url: '/api/health_stats/hour',
       success: function (data) {
         this.setState({
           health_stats: data,
