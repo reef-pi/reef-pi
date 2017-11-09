@@ -80,7 +80,19 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	lights, err := c.List()
+	if err != nil {
+		return err
+	}
+	for _, light := range lights {
+		for _, ch := range light.Channels {
+			c.telemetry.CreateFeedIfNotExist(light.Name + "-" + ch.Name)
+		}
+	}
+	return nil
 }
 
 func (c *Controller) Get(id string) (Light, error) {
