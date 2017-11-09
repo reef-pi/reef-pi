@@ -3,14 +3,16 @@ package temperature
 import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
+	"sort"
 )
 
 func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
 	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
 	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
-	r.HandleFunc("/api/tc/usage", utils.JSONGetUsage(t.usage)).Methods("GET")
+	r.HandleFunc("/api/tc/usage", t.getUsage).Methods("GET")
 }
 
 func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
@@ -19,14 +21,42 @@ func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
+func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []Usage{}
+		t.usage.Do(func(i interface{}) {
+			if i != nil {
+				u, ok := i.(Usage)
+				if !ok {
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
+					return
+				}
+				usage = append(usage, u)
+			}
+		})
+		sort.Slice(usage, func(i, j int) bool {
+			return usage[i].Time.Before(usage[j].Time)
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
+}
 
 func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		readings := []interface{}{}
+		readings := []Measurement{}
 		t.readings.Do(func(i interface{}) {
 			if i != nil {
-				readings = append(readings, i)
+				m, ok := i.(Measurement)
+				if !ok {
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature reading")
+					return
+				}
+				readings = append(readings, m)
 			}
+		})
+		sort.Slice(readings, func(i, j int) bool {
+			return readings[i].Time.Before(readings[j].Time)
 		})
 		return readings, nil
 	}
