@@ -46,7 +46,7 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *util
 		interval:      i,
 		stopCh:        make(chan struct{}),
 		telemetry:     telemetry,
-		minutelyUsage: ring.New(120),
+		minutelyUsage: ring.New(60 * 3), // last 3 hours
 		hourlyUsage:   ring.New(24 * 7), // last 7 days
 		Notify:        notify,
 	}
