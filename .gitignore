@@ -6,3 +6,4 @@ reef-pi.db
 *.db
 *.deb
 dist
+.bundle

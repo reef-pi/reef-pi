@@ -15,8 +15,17 @@ type TeleTime struct {
 	time.Time
 }
 
-func (t *TeleTime) String() string {
-	return t.Format("Jan-2-15:04")
+func (t TeleTime) Before(t2 TeleTime) bool {
+	return t.Before(t2)
+}
+
+func (t TeleTime) MarshalJSON() ([]byte, error) {
+	format := "Jan-02-15:04"
+	b := make([]byte, 0, len(format)+2)
+	b = append(b, '"')
+	b = t.AppendFormat(b, format)
+	b = append(b, '"')
+	return b, nil
 }
 
 type HealthCheckNotify struct {

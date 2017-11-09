@@ -21,6 +21,7 @@ func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
+
 func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		usage := []Usage{}
