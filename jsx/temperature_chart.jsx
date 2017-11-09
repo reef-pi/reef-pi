@@ -51,7 +51,7 @@ export default class TemperatureChart extends Common {
           <YAxis yAxisId='left' orientation='left' domain={[76, 82]} />
           <YAxis yAxisId='right' orientation='right' />
           <ReferenceLine yAxisId='right' y={0} />
-          <XAxis dataKey='hour' />
+          <XAxis dataKey='time' />
           <Tooltip />
           <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
           <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />

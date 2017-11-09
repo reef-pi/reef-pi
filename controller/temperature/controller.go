@@ -34,8 +34,8 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 		telemetry:  telemetry,
 		store:      store,
 		devMode:    devMode,
-		readings:   ring.New(20),
-		usage:      ring.New(24),
+		readings:   ring.New(180),
+		usage:      ring.New(24 * 7),
 		equipments: eqs,
 	}, nil
 }
@@ -106,7 +106,7 @@ func (c *Controller) run() {
 			c.NotifyIfNeeded(reading)
 			c.readings.Value = Measurement{
 				Temperature: reading,
-				Time:        time.Now().Format("15:04"),
+				Time:        time.Now(),
 			}
 			c.readings = c.readings.Next()
 			c.updateHourlyTemperature(reading)

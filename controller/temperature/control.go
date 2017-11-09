@@ -6,14 +6,14 @@ import (
 )
 
 type Measurement struct {
-	Time        string  `json:"time"`
-	Temperature float32 `json:"temperature"`
+	Time        time.Time `json:"time"`
+	Temperature float32   `json:"temperature"`
 }
 
 type Usage struct {
 	Heater      int       `json:"heater"`
 	Cooler      int       `json:"cooler"`
-	Hour        int       `json:"hour"`
+	Time        time.Time `json:"time"`
 	Temperature float32   `json:"temperature"`
 	readings    []float32 `json:"-"`
 }
@@ -111,7 +111,7 @@ func (c *Controller) updateCoolerUsage() {
 
 func (c *Controller) syncUsage() Usage {
 	current := Usage{
-		Hour:     time.Now().Hour(),
+		Time:     time.Now(),
 		readings: []float32{},
 	}
 	if c.usage.Value == nil {
@@ -123,7 +123,7 @@ func (c *Controller) syncUsage() Usage {
 		log.Println("ERROR: Temperature subsystem. Failed to typecast previous equipment usage")
 		return current
 	}
-	if previous.Hour == current.Hour {
+	if previous.Time.Hour() == current.Time.Hour() {
 		return previous
 	}
 	c.usage = c.usage.Next()
