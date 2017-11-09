@@ -11,6 +11,14 @@ import (
 	"time"
 )
 
+type TeleTime struct {
+	time.Time
+}
+
+func (t *TeleTime) String() string {
+	return t.Format("Jan-2-15:04")
+}
+
 type HealthCheckNotify struct {
 	Enable    bool    `json:"enable"`
 	MaxMemory float64 `json:"max_memory"`
@@ -27,15 +35,15 @@ type HealthChecker struct {
 }
 
 type MinutelyHealthMetric struct {
-	Load5      float64   `json:"cpu"`
-	UsedMemory float64   `json:"memory"`
-	Time       time.Time `json:"time"`
+	Load5      float64  `json:"cpu"`
+	UsedMemory float64  `json:"memory"`
+	Time       TeleTime `json:"time"`
 }
 
 type HourlyHealthMetric struct {
 	Load5      float64   `json:"cpu"`
 	UsedMemory float64   `json:"memory"`
-	Time       time.Time `json:"time"`
+	Time       TeleTime  `json:"time"`
 	lReadings  []float64 `json:"-"`
 	mReadings  []float64 `json:"-"`
 }
@@ -51,7 +59,7 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *util
 	}
 }
 
-func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
+func (h *HealthChecker) syncHourlyMetric(now TeleTime) HourlyHealthMetric {
 	current := HourlyHealthMetric{
 		Time:      now,
 		lReadings: []float64{},
@@ -75,7 +83,7 @@ func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
 }
 
 func (h *HealthChecker) updateUsage(memory, load float64) {
-	now := time.Now()
+	now := TeleTime{time.Now()}
 	h.minutelyUsage.Value = MinutelyHealthMetric{
 		Load5:      load,
 		UsedMemory: memory,
