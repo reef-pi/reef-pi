@@ -33,10 +33,12 @@ type MinutelyHealthMetric struct {
 }
 
 type HourlyHealthMetric struct {
-	Load5      float64 `json:"cpu"`
-	UsedMemory float64 `json:"memory"`
-	Time       string  `json:"time"`
-	Hour       int     `json:"hour"`
+	Load5      float64   `json:"cpu"`
+	UsedMemory float64   `json:"memory"`
+	Time       string    `json:"time"`
+	Hour       int       `json:"hour"`
+	lReadings  []float64 `json:"-"`
+	mReadings  []float64 `json:"-"`
 }
 
 func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry) *HealthChecker {
@@ -50,6 +52,30 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *util
 	}
 }
 
+func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
+	current := HourlyHealthMetric{
+		Time:      now.Format("15:04"),
+		Hour:      now.Hour(),
+		lReadings: []float64{},
+		mReadings: []float64{},
+	}
+	if h.hourlyUsage.Value == nil {
+		h.hourlyUsage.Value = current
+		return current
+	}
+	previous, ok := h.hourlyUsage.Value.(HourlyHealthMetric)
+	if !ok {
+		log.Println("ERROR: health checker. Failed to typecast previous health check metric")
+		return current
+	}
+	if previous.Hour == current.Hour {
+		return previous
+	}
+	h.hourlyUsage = h.hourlyUsage.Next()
+	h.hourlyUsage.Value = current
+	return current
+}
+
 func (h *HealthChecker) updateUsage(memory, load float64) {
 	now := time.Now()
 	h.minutelyUsage.Value = MinutelyHealthMetric{
@@ -58,6 +84,19 @@ func (h *HealthChecker) updateUsage(memory, load float64) {
 		Time:       now.Format("15:04"),
 	}
 	h.minutelyUsage = h.minutelyUsage.Next()
+	hUsage := h.syncHourlyMetric(now)
+	hUsage.lReadings = append(hUsage.lReadings, load)
+	hUsage.mReadings = append(hUsage.mReadings, memory)
+	size := len(hUsage.lReadings)
+	lTotal := 0.0
+	mTotal := 0.0
+	for i := 0; i <= size; i++ {
+		lTotal += hUsage.lReadings[i]
+		mTotal += hUsage.mReadings[i]
+	}
+	hUsage.Load5 = lTotal / float64(len(hUsage.lReadings))
+	hUsage.UsedMemory = mTotal / float64(len(hUsage.mReadings))
+	h.hourlyUsage.Value = hUsage
 }
 
 func (h *HealthChecker) check() {
@@ -120,4 +159,7 @@ func (h *HealthChecker) Start() {
 			return
 		}
 	}
+}
+
+func (h *HealthChecker) GetUsage() {
 }
