@@ -90,7 +90,7 @@ func (h *HealthChecker) updateUsage(memory, load float64) {
 	size := len(hUsage.lReadings)
 	lTotal := 0.0
 	mTotal := 0.0
-	for i := 0; i <= size; i++ {
+	for i := 0; i < size; i++ {
 		lTotal += hUsage.lReadings[i]
 		mTotal += hUsage.mReadings[i]
 	}
