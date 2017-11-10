@@ -49,7 +49,7 @@ export default class TemperatureReadingChart extends Common {
             </linearGradient>
           </defs>
           <YAxis domain={[76, 82]} />
-          <XAxis dataKey='time'/>
+          <XAxis dataKey='time' />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
         </AreaChart>
