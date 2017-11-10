@@ -1,37 +1,38 @@
 package ato
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
 )
 
 type Usage struct {
-	Pump int `json:"pump"`
-	Hour int `json:"hour"`
+	Pump int            `json:"pump"`
+	Time utils.TeleTime `json:"time"`
 }
 
 func (c *Controller) updateUsage() {
 	minutes := int(c.config.CheckInterval)
-	currentUsage := Usage{
+	current := Usage{
 		Pump: minutes,
-		Hour: time.Now().Hour(),
+		Time: utils.TeleTime(time.Now()),
 	}
 	if c.usage.Value == nil {
-		c.usage.Value = currentUsage
+		c.usage.Value = current
 		return
 	}
-	previousUsage, ok := c.usage.Value.(Usage)
+	previous, ok := c.usage.Value.(Usage)
 	if !ok {
 		log.Println("ERROR: ATO subsystem. Failed to typecast previous equipment usage")
 		return
 	}
-	if previousUsage.Hour == currentUsage.Hour {
+	if previous.Time.Hour() == current.Time.Hour() {
 		c.usage.Value = Usage{
-			Pump: previousUsage.Pump + minutes,
-			Hour: currentUsage.Hour,
+			Pump: previous.Pump + minutes,
+			Time: previous.Time,
 		}
 		return
 	}
 	c.usage = c.usage.Next()
-	c.usage.Value = currentUsage
+	c.usage.Value = current
 }

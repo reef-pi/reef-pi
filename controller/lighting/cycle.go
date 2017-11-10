@@ -28,7 +28,6 @@ func GetCurrentValue(t time.Time, series []int) int {
 	from := float64(series[h1])
 	to := float64(series[h2])
 	f := from + ((to - from) / 120.0 * m)
-	fmt.Println("h1:", h1, "h2:", h2, "from:", from, "to:", to, "m:", m, "f:", f)
 	return int(f)
 }
 
@@ -52,7 +51,7 @@ func (c *Controller) StartCycle() {
 func (c *Controller) syncLights() {
 	lights, err := c.List()
 	if err != nil {
-		log.Println("Lighting sub-system ERROR: Failed to list lights. Error:", err)
+		log.Println("ERROR: lighting sub-system:  Failed to list lights. Error:", err)
 		return
 	}
 	for _, light := range lights {
@@ -76,6 +75,6 @@ func (c *Controller) UpdateChannel(ch Channel, v int) {
 	if ch.Reverse {
 		v = 100 - v
 	}
-	log.Println("Setting value:", v, " at pin:", ch.Pin)
+	log.Println("lighting-subsystem: Setting PWM value:", v, " at channel:", ch.Pin)
 	c.vv.Set(ch.Pin, v)
 }

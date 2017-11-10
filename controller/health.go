@@ -27,18 +27,17 @@ type HealthChecker struct {
 }
 
 type MinutelyHealthMetric struct {
-	Load5      float64 `json:"cpu"`
-	UsedMemory float64 `json:"memory"`
-	Time       string  `json:"time"`
+	Load5      float64        `json:"cpu"`
+	UsedMemory float64        `json:"memory"`
+	Time       utils.TeleTime `json:"time"`
 }
 
 type HourlyHealthMetric struct {
-	Load5      float64   `json:"cpu"`
-	UsedMemory float64   `json:"memory"`
-	Time       string    `json:"time"`
-	Hour       int       `json:"hour"`
-	lReadings  []float64 `json:"-"`
-	mReadings  []float64 `json:"-"`
+	Load5      float64        `json:"cpu"`
+	UsedMemory float64        `json:"memory"`
+	Time       utils.TeleTime `json:"time"`
+	lReadings  []float64      `json:"-"`
+	mReadings  []float64      `json:"-"`
 }
 
 func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry) *HealthChecker {
@@ -52,10 +51,9 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *util
 	}
 }
 
-func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
+func (h *HealthChecker) syncHourlyMetric(now utils.TeleTime) HourlyHealthMetric {
 	current := HourlyHealthMetric{
-		Time:      now.Format("15:04"),
-		Hour:      now.Hour(),
+		Time:      now,
 		lReadings: []float64{},
 		mReadings: []float64{},
 	}
@@ -68,7 +66,7 @@ func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
 		log.Println("ERROR: health checker. Failed to typecast previous health check metric")
 		return current
 	}
-	if previous.Hour == current.Hour {
+	if previous.Time.Hour() == current.Time.Hour() {
 		return previous
 	}
 	h.hourlyUsage = h.hourlyUsage.Next()
@@ -77,11 +75,11 @@ func (h *HealthChecker) syncHourlyMetric(now time.Time) HourlyHealthMetric {
 }
 
 func (h *HealthChecker) updateUsage(memory, load float64) {
-	now := time.Now()
+	now := utils.TeleTime(time.Now())
 	h.minutelyUsage.Value = MinutelyHealthMetric{
 		Load5:      load,
 		UsedMemory: memory,
-		Time:       now.Format("15:04"),
+		Time:       now,
 	}
 	h.minutelyUsage = h.minutelyUsage.Next()
 	hUsage := h.syncHourlyMetric(now)

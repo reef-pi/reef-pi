@@ -5,6 +5,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+	"sort"
 )
 
 func (r *ReefPi) API() error {
@@ -37,8 +38,8 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	router.HandleFunc("/api/notification", r.UpdateMailerConfig).Methods("POST")
 	router.HandleFunc("/api/notification", r.GetMailerConfig).Methods("GET")
 	if r.h != nil {
-		router.HandleFunc("/api/health_stats/hour", utils.JSONGetUsage(r.h.minutelyUsage)).Methods("GET")
-		router.HandleFunc("/api/health_stats/week", utils.JSONGetUsage(r.h.hourlyUsage)).Methods("GET")
+		router.HandleFunc("/api/health_stats/hour", r.getHourlyHealthStats).Methods("GET")
+		router.HandleFunc("/api/health_stats/week", r.getWeeklyHealthStats).Methods("GET")
 	}
 	r.outlets.LoadAPI(router)
 	r.jacks.LoadAPI(router)
@@ -61,4 +62,46 @@ func startAPIServer(address string, creds Credentials) (error, *mux.Router) {
 	log.Printf("Starting http server at: %s\n", address)
 	go http.ListenAndServe(address, nil)
 	return nil, router
+}
+
+func (r *ReefPi) getHourlyHealthStats(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []MinutelyHealthMetric{}
+		r.h.minutelyUsage.Do(func(i interface{}) {
+			if i != nil {
+				u, ok := i.(MinutelyHealthMetric)
+				if !ok {
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
+					return
+				}
+				usage = append(usage, u)
+			}
+		})
+		sort.Slice(usage, func(i, j int) bool {
+			return usage[i].Time.Before(usage[j].Time)
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, req)
+}
+
+func (r *ReefPi) getWeeklyHealthStats(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		usage := []HourlyHealthMetric{}
+		r.h.minutelyUsage.Do(func(i interface{}) {
+			if i != nil {
+				u, ok := i.(HourlyHealthMetric)
+				if !ok {
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
+					return
+				}
+				usage = append(usage, u)
+			}
+		})
+		sort.Slice(usage, func(i, j int) bool {
+			return usage[i].Time.Before(usage[j].Time)
+		})
+		return usage, nil
+	}
+	utils.JSONGetResponse(fn, w, req)
 }

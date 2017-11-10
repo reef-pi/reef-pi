@@ -4,6 +4,7 @@ import (
 	"github.com/reef-pi/adafruitio"
 	"log"
 	"strings"
+	"time"
 )
 
 type AdafruitIO struct {
@@ -65,4 +66,23 @@ func (t *Telemetry) CreateFeedIfNotExist(f string) {
 		}
 	}
 	return
+}
+
+type TeleTime time.Time
+
+func (t TeleTime) Before(t2 TeleTime) bool {
+	return time.Time(t).Before(time.Time(t2))
+}
+
+func (t TeleTime) Hour() int {
+	return time.Time(t).Hour()
+}
+
+func (t TeleTime) MarshalJSON() ([]byte, error) {
+	format := "Jan-02-15:04"
+	b := make([]byte, 0, len(format)+2)
+	b = append(b, '"')
+	b = time.Time(t).AppendFormat(b, format)
+	b = append(b, '"')
+	return b, nil
 }

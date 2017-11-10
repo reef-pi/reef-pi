@@ -1,21 +1,22 @@
 package temperature
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
 )
 
 type Measurement struct {
-	Time        string  `json:"time"`
-	Temperature float32 `json:"temperature"`
+	Time        utils.TeleTime `json:"time"`
+	Temperature float32        `json:"temperature"`
 }
 
 type Usage struct {
-	Heater      int       `json:"heater"`
-	Cooler      int       `json:"cooler"`
-	Hour        int       `json:"hour"`
-	Temperature float32   `json:"temperature"`
-	readings    []float32 `json:"-"`
+	Heater      int            `json:"heater"`
+	Cooler      int            `json:"cooler"`
+	Time        utils.TeleTime `json:"time"`
+	Temperature float32        `json:"temperature"`
+	readings    []float32      `json:"-"`
 }
 
 func (c *Controller) switchHeater(on bool) error {
@@ -111,7 +112,7 @@ func (c *Controller) updateCoolerUsage() {
 
 func (c *Controller) syncUsage() Usage {
 	current := Usage{
-		Hour:     time.Now().Hour(),
+		Time:     utils.TeleTime(time.Now()),
 		readings: []float32{},
 	}
 	if c.usage.Value == nil {
@@ -123,7 +124,7 @@ func (c *Controller) syncUsage() Usage {
 		log.Println("ERROR: Temperature subsystem. Failed to typecast previous equipment usage")
 		return current
 	}
-	if previous.Hour == current.Hour {
+	if previous.Time.Hour() == current.Time.Hour() {
 		return previous
 	}
 	c.usage = c.usage.Next()
