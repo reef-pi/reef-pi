@@ -1,9 +1,10 @@
 const Nightmare = require('nightmare')
-const nightmare = Nightmare({ show: true })
+const nightmare = Nightmare({ show: true, dock: true, typeInterval: 120 })
 
 function TestOutlets () {
   nightmare
     .goto('http://localhost:8080/')
+    .viewport(1200,900)
     .wait(500)
     .type('input#reef-pi-user', 'reef-pi')
     .wait(500)
