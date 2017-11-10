@@ -60,7 +60,7 @@ export default class SignIn extends React.Component {
           </div>
           <div className='row modal-footer'>
             <div className='col-sm-2' />
-            <div className='col-sm-2'><input type='button' role='confirm' ref='confirm' value='sign-in' onClick={this.saveCreds} /></div>
+            <div className='col-sm-2'><input type='button' role='confirm' ref='confirm' value='sign-in' onClick={this.saveCreds} id='btnSaveCreds'/></div>
           </div>
         </div>
       </div>

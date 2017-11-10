@@ -75,7 +75,7 @@ export default class Equipments extends Common {
   outletList () {
     var menuItems = []
     $.each(this.state.outlets, function (i, v) {
-      menuItems.push(<MenuItem key={i} eventKey={i}>{v.name}</MenuItem>)
+      menuItems.push(<MenuItem key={i} eventKey={i}><span id={"outlet-".concat(v.id)}>{v.name}</span></MenuItem>)
     })
     return menuItems
   }

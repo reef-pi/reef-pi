@@ -47,7 +47,7 @@ export default class Configuration extends Common {
           <hr />
         </div>
         <div className='row' >
-          <button onClick={this.toggleConnectors} className='btn btn-secondary btn-lg btn-block'>Connectors </button>
+          <button id='connectors' onClick={this.toggleConnectors} className='btn btn-secondary btn-lg btn-block'>Connectors </button>
           <div className='container' id='connectors_config'>
             <div className='row'>
               <Outlets />
