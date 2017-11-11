@@ -48,7 +48,7 @@ export default class SelectEquipment extends Common {
       if (this.state.equipment !== undefined) {
         active = this.state.equipment.id === v.id
       }
-      menuItems.push(<MenuItem key={k} active={active} eventKey={k}><span id={this.props.id+'-'+v.name}>{v.name}</span></MenuItem>)
+      menuItems.push(<MenuItem key={k} active={active} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
     }.bind(this))
     return menuItems
   }

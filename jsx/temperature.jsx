@@ -245,7 +245,7 @@ export default class Temperature extends Common {
           </div>
         </div>
         <div className='row'>
-          <input value='Update' onClick={this.update} type='button' className={updateButtonClass} id='update-temp-settings'/>
+          <input value='Update' onClick={this.update} type='button' className={updateButtonClass} id='update-temp-settings' />
         </div>
       </div>
     )
