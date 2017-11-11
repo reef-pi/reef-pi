@@ -16,8 +16,7 @@ done
 # 
 
 node test/outlet.js
-node test/jack.js
 node test/equipment.js
-node test/timer.js
-node test/system.js
 node test/light.js
+node test/temperature.js
+node test/ato.js
