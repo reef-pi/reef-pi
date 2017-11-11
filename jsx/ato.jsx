@@ -123,7 +123,7 @@ export default class ATO extends Common {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Pump</div>
-          <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} /></div>
+          <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} id='ato-pump' /></div>
         </div>
         <div className='row'>
           <ATOChart />

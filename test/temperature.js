@@ -1,7 +1,7 @@
 const Nightmare = require('nightmare')
-const nightmare = Nightmare({ show: true })
+const nightmare = Nightmare({ show: true, dock: true, typeInterval: 120 })
 
-function TestATO () {
+function TestTemperature () {
   nightmare
     .goto('http://localhost:8080/')
     .viewport(1100, 650)
@@ -13,26 +13,27 @@ function TestATO () {
     .click('input#btnSaveCreds')
     .wait(500)
 
-    .click('li#react-tabs-10')
-    .wait(1500)
-    .click('input#ato_enable')
+    .click('li#react-tabs-8')
     .wait(500)
-    .click('input#ato_control')
+    .click('input#tc_enable')
     .wait(500)
-    .insert('input#check_interval')
+    .click('input#tc_control')
     .wait(500)
-    .type('input#check_interval', '60')
+    .insert('input#min')
     .wait(500)
-    .insert('input#sensor_pin')
+    .type('input#min', '78')
     .wait(500)
-    .type('input#sensor_pin', '12')
+    .insert('input#max')
     .wait(500)
-    .click('span#ato-pump-Light')
+    .type('input#max', '80')
+    .wait(500)
+    .click('button#heater_selector')
+    .wait(500)
+    .click('span#heater_selector-Heater')
     .wait(1000)
-    .click('input#updateATO')
+    .click('input#update-temp-settings')
 
-    .wait(2000)
-    .evaluate(function () { return 'ato' })
+    .wait(1500)
     .end()
       .then(function (result) {
         console.log(result)
@@ -41,5 +42,4 @@ function TestATO () {
         console.error('Error:', error)
       })
 }
-
-TestATO()
+TestTemperature()

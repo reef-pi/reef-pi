@@ -5,78 +5,54 @@ export default class LEDChannel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      auto: this.props.ch.auto,
-      min: this.props.ch.min,
-      reverse: this.props.ch.reverse,
-      max: this.props.ch.max,
-      ticks: this.props.ch.ticks,
-      fixed: this.props.ch.fixed,
-      values: this.props.ch.values
+      channel: this.props.ch
     }
     this.sliderList = this.sliderList.bind(this)
     this.curry = this.curry.bind(this)
-    this.update = this.update.bind(this)
     this.updateAuto = this.updateAuto.bind(this)
     this.updateReverse = this.updateReverse.bind(this)
     this.updateFixedValue = this.updateFixedValue.bind(this)
     this.getFixedValue = this.getFixedValue.bind(this)
+    this.update = this.update.bind(this)
+  }
+
+  update (k, v) {
+    var ch = this.state.channel
+    ch[k] = v
+    this.setState({
+      channel: ch
+    })
+    this.props.updateChannel(ch)
   }
 
   updateAuto (ev) {
-    this.setState({
-      auto: ev.target.checked
-    })
-    this.update()
+    this.update('auto', ev.target.checked)
   }
 
   updateReverse (ev) {
-    this.setState({
-      reverse: ev.target.checked
-    })
-    this.update()
+    this.update('reverse', ev.target.checked)
   }
 
   getFixedValue () {
-    return this.state.fixed
+    return this.state.channel.fixed
   }
 
   updateFixedValue (v) {
-    this.setState({
-      fixed: v
-    })
-    this.update()
-  }
-
-  update () {
-    var channel = {
-      name: this.props.name,
-      pin: parseInt(this.props.pin),
-      reverse: this.state.reverse,
-      min: this.state.min,
-      max: this.state.max,
-      ticks: this.state.ticks,
-      fixed: this.state.fixed,
-      auto: this.state.auto,
-      values: this.props.ch.values
-    }
-    this.props.updateChannel(channel)
+    this.update('fixed', v)
   }
 
   curry (i) {
     return (
       function (ev) {
-        var values = this.state.values
+        var values = this.state.channel.values
         values[i] = parseInt(ev.target.value)
-        this.setState({
-          values: values
-        })
-        this.update()
+        this.update('values', values)
       }.bind(this)
     )
   }
 
   sliderList () {
-    var values = this.state.values
+    var values = this.state.channel.values
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical'
     }
@@ -101,10 +77,10 @@ export default class LEDChannel extends React.Component {
 
   render () {
     var showOnDemandSlider = {
-      display: this.state.auto ? 'none' : 'block'
+      display: this.state.channel.auto ? 'none' : 'block'
     }
     var show24HourSliders = {
-      display: this.state.auto ? 'block' : 'none'
+      display: this.state.channel.auto ? 'block' : 'none'
     }
     return (
       <div className='container'>
@@ -112,8 +88,8 @@ export default class LEDChannel extends React.Component {
           <div className='col-sm-2'>{this.props.name}</div>
         </div>
         <div className='row'>
-          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.auto} />
-          Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.reverse} />
+          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-auto'} />
+          Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.channel.reverse} />
         </div>
         <div className='row' style={show24HourSliders}>
           {this.sliderList()}
