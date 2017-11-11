@@ -52,7 +52,7 @@ export default class Lighting extends Common {
   jacksList () {
     var jacks = []
     $.each(this.state.jacks, function (i, jack) {
-      jacks.push(<MenuItem key={i} eventKey={i}>{jack.name}</MenuItem>)
+      jacks.push(<MenuItem key={i} eventKey={i}><span id={'select-jack-'+jack.id}>{jack.name}</span></MenuItem>)
     })
     return jacks
   }

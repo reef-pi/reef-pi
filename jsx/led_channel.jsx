@@ -60,6 +60,7 @@ export default class LEDChannel extends React.Component {
       values: this.props.ch.values
     }
     this.props.updateChannel(channel)
+    console.log(this.state)
   }
 
   curry (i) {
@@ -112,7 +113,7 @@ export default class LEDChannel extends React.Component {
           <div className='col-sm-2'>{this.props.name}</div>
         </div>
         <div className='row'>
-          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.auto} />
+          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.auto} id={this.props.name+'-auto'}/>
           Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.reverse} />
         </div>
         <div className='row' style={show24HourSliders}>
