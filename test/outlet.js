@@ -63,8 +63,8 @@ function TestOutlets () {
     .click('input#createJack')
     .wait(2500)
     .end()
-      .then(function (result) {
-        console.log(result)
+      .then(function () {
+        console.log('outlets')
       })
       .catch(function (error) {
         console.error('Error:', error)

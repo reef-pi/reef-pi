@@ -85,17 +85,17 @@ export default class LEDChannel extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>{this.props.name}</div>
+          <div className='col-sm-2'>{this.props.ch.name}</div>
         </div>
         <div className='row'>
-          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-auto'} />
+          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-' + this.props.ch.name + '-auto'} />
           Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.channel.reverse} />
         </div>
         <div className='row' style={show24HourSliders}>
           {this.sliderList()}
         </div>
         <div className='row' style={showOnDemandSlider}>
-          <LightSlider pin={this.props.pin} name={this.props.name} onChange={this.updateFixedValue} getValue={this.getFixedValue} style={showOnDemandSlider} />
+          <LightSlider pin={this.props.pin} name={this.props.ch.name} onChange={this.updateFixedValue} getValue={this.getFixedValue} style={showOnDemandSlider} />
         </div>
       </div>
     )

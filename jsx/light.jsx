@@ -97,7 +97,7 @@ export default class Light extends Common {
       var ch = this.state.channels[pin]
       channelUIs.push(
         <div className='container' key={this.props.name + '-' + ch.name}>
-          <LEDChannel pin={pin} name={ch.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
+          <LEDChannel pin={pin} name={this.props.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
         </div>
       )
     }
