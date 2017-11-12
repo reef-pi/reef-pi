@@ -35,8 +35,8 @@ function TestTemperature () {
 
     .wait(1500)
     .end()
-      .then(function (result) {
-        console.log(result)
+      .then(function () {
+        console.log('temperature')
       })
       .catch(function (error) {
         console.error('Error:', error)
