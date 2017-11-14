@@ -21,15 +21,17 @@ export default class Capabilities extends React.Component {
 
   toLi (label) {
     return (
-      <div className='input-group'>
-        <label className='input-group-addon'>{label}</label>
-        <input
-          className='form-control'
-          type='checkbox'
-          id={'update-' + label}
-          onClick={this.updateCapability(label)}
-          defaultChecked={this.state.capabilities[label]}
-          />
+      <div className='form-check'>
+        <label className='form-check-label'>
+          <input
+            className='form-check-input'
+            type='checkbox'
+            id={'update-' + label}
+            onClick={this.updateCapability(label)}
+            defaultChecked={this.state.capabilities[label]}
+            />
+          {label}
+        </label>
       </div>
     )
   }

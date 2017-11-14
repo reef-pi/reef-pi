@@ -216,7 +216,7 @@ export default class Settings extends Common {
           <div className='col-sm-6'>
             {this.toRow('name', this.updateName)}
             {this.toRow('interface', this.updateInterface)}
-            {this.toRow('address', this.updateAddresse)}
+            {this.toRow('address', this.updateAddress)}
             <div className='input-group'>
               <label className='input-group-addon'>Notification</label>
               <input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} className='form-control' />
@@ -230,7 +230,7 @@ export default class Settings extends Common {
           </div>
         </div>
         <div className='row'>
-          <div className='container' >
+          <div className='col-sm-4' >
             <label> <b>Capabilities</b> </label>
             {this.showCapabilities()}
           </div>
