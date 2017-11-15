@@ -18,7 +18,7 @@ function SmokeTest () {
      // create outlets and jacks
     .click('li#react-tabs-16')
     .wait(500)
-    .click('button#connectors')
+    .click('button#btn-connectors')
     .wait(500)
 
     .click('input#add_outlet')
