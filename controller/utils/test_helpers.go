@@ -52,8 +52,10 @@ func (t *TestRouter) Do(method, path string, body io.Reader, container interface
 }
 
 func TestTelemetry() *Telemetry {
-	aio := AdafruitIO{
-		User: "test-user",
+	c := TelemetryConfig{
+		AdafruitIO: AdafruitIO{
+			User: "test-user",
+		},
 	}
-	return NewTelemetry(aio, &NoopMailer{})
+	return &Telemetry{config: c, dispatcher: &NoopMailer{}}
 }

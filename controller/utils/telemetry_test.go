@@ -7,12 +7,7 @@ import (
 )
 
 func TestEmitMetric(t *testing.T) {
-	config := AdafruitIO{
-		Token:  "fake-token",
-		Enable: false,
-		User:   "ranjib",
-	}
-	telemetry := NewTelemetry(config, &NoopMailer{})
+	telemetry := TestTelemetry()
 	rand.Seed(time.Now().Unix())
 	telemetry.EmitMetric("test", rand.Intn(100))
 }

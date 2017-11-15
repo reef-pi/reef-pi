@@ -3,8 +3,9 @@ import Admin from './admin.jsx'
 import Settings from './settings.jsx'
 import Outlets from './outlets.jsx'
 import Jacks from './jacks.jsx'
+import Telemetry from './telemetry/main.jsx'
 import Common from './common.jsx'
-
+import $ from 'jquery'
 export default class Configuration extends Common {
   constructor (props) {
     super(props)
@@ -13,42 +14,34 @@ export default class Configuration extends Common {
       settings: false,
       connectors: false
     }
-    this.toggleSettings = this.toggleSettings.bind(this)
-    this.toggleConnectors = this.toggleConnectors.bind(this)
-    this.toggleAdmin = this.toggleAdmin.bind(this)
+    this.toRow = this.toRow.bind(this)
   }
 
   componentDidMount () {
-    this.toggleSettings()
-    this.toggleConnectors()
-    this.toggleAdmin()
+    $('#settings_config').hide()
+    $('#connectors_config').hide()
+    $('#admin_config').hide()
+    $('#telemetry_config').hide()
   }
 
-  toggleSettings () {
-    this.toggle('#settings_config')
-  }
-
-  toggleConnectors () {
-    this.toggle('#connectors_config')
-  }
-
-  toggleAdmin () {
-    this.toggle('#admin_config')
+  toRow (label, component) {
+    var id = label + '_config'
+    return (
+      <div className='row'>
+        <button id={'btn-' + label} onClick={() => $('#' + id).toggle()} className='btn btn-secondary btn-lg btn-block'>{label} </button>
+        <div className='container' id={id}>
+          {component}
+        </div>
+      </div>
+    )
   }
 
   render () {
     return (
       <div className='container'>
-        <div className='row' >
-          <button onClick={this.toggleSettings} className='btn btn-secondary btn-lg btn-block'>Settings </button>
-          <div className='container' id='settings_config'>
-            <Settings />
-          </div>
-          <hr />
-        </div>
-        <div className='row' >
-          <button id='connectors' onClick={this.toggleConnectors} className='btn btn-secondary btn-lg btn-block'>Connectors </button>
-          <div className='container' id='connectors_config'>
+        { this.toRow('settings', <Settings />) }
+        { this.toRow('connectors',
+          <div className='container'>
             <div className='row'>
               <Outlets />
             </div>
@@ -56,15 +49,9 @@ export default class Configuration extends Common {
               <Jacks />
             </div>
           </div>
-          <hr />
-        </div>
-        <div className='row'>
-          <button onClick={this.toggleAdmin} className='btn btn-secondary btn-lg btn-block'>Admin </button>
-          <div className='container' id='admin_config'>
-            <Admin />
-          </div>
-          <hr />
-        </div>
+        ) }
+        { this.toRow('admin', <Admin />) }
+        { this.toRow('telemetry', <Telemetry />) }
       </div>
     )
   }

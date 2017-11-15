@@ -14,17 +14,28 @@ type AdafruitIO struct {
 	Prefix string `json:"prefix" yaml:"prefix"`
 }
 
+type TelemetryConfig struct {
+	AdafruitIO AdafruitIO   `json:"adafruitio" yaml:"adafruitio"`
+	Mailer     MailerConfig `json:"mailer"yaml:"mailer"`
+	Notify     bool         `json:"notify" yaml:"notify"`
+}
+
 type Telemetry struct {
 	client     *adafruitio.Client
 	dispatcher Mailer
-	config     AdafruitIO
+	config     TelemetryConfig
 }
 
-func NewTelemetry(config AdafruitIO, m Mailer) *Telemetry {
+func NewTelemetry(config TelemetryConfig) *Telemetry {
+	var mailer Mailer
+	mailer = &NoopMailer{}
+	if config.Notify {
+		mailer = config.Mailer.Mailer()
+	}
 	return &Telemetry{
-		client:     adafruitio.NewClient(config.Token),
+		client:     adafruitio.NewClient(config.AdafruitIO.Token),
 		config:     config,
-		dispatcher: m,
+		dispatcher: mailer,
 	}
 }
 
@@ -35,22 +46,24 @@ func (t *Telemetry) Alert(subject, body string) {
 }
 
 func (t *Telemetry) EmitMetric(feed string, v interface{}) {
-	feed = strings.ToLower(t.config.Prefix + feed)
-	if !t.config.Enable {
+	aio := t.config.AdafruitIO
+	feed = strings.ToLower(aio.Prefix + feed)
+	if !aio.Enable {
 		log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
 		return
 	}
 	d := adafruitio.Data{
 		Value: v,
 	}
-	if err := t.client.SubmitData(t.config.User, feed, d); err != nil {
-		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", t.config.User, "Feed:", feed, "Error:", err)
+	if err := t.client.SubmitData(aio.User, feed, d); err != nil {
+		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
 	}
 }
 
 func (t *Telemetry) CreateFeedIfNotExist(f string) {
-	f = strings.ToLower(t.config.Prefix + f)
-	if !t.config.Enable {
+	aio := t.config.AdafruitIO
+	f = strings.ToLower(aio.Prefix + f)
+	if !aio.Enable {
 		log.Println("Telemetry disabled. Skipping creating feed:", f)
 		return
 	}
@@ -59,9 +72,9 @@ func (t *Telemetry) CreateFeedIfNotExist(f string) {
 		Key:     f,
 		Enabled: true,
 	}
-	if _, err := t.client.GetFeed(t.config.User, f); err != nil {
+	if _, err := t.client.GetFeed(aio.User, f); err != nil {
 		log.Println("Telemetry sub-system: Creating missing feed:", f)
-		if e := t.client.CreateFeed(t.config.User, feed); e != nil {
+		if e := t.client.CreateFeed(aio.User, feed); e != nil {
 			log.Println("ERROR: Telemetry sub-system: Failed to create feed:", f, "Error:", e)
 		}
 	}

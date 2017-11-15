@@ -35,8 +35,8 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
 	router.HandleFunc("/api/credentials", r.UpdateCredentials).Methods("POST")
-	router.HandleFunc("/api/notification", r.UpdateMailerConfig).Methods("POST")
-	router.HandleFunc("/api/notification", r.GetMailerConfig).Methods("GET")
+	router.HandleFunc("/api/telemetry", r.getTelemetry).Methods("GET")
+	router.HandleFunc("/api/telemetry", r.updateTelemetry).Methods("POST")
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats/hour", r.getHourlyHealthStats).Methods("GET")
 		router.HandleFunc("/api/health_stats/week", r.getWeeklyHealthStats).Methods("GET")
