@@ -44,10 +44,10 @@ func (c *Controller) NotifyIfNeeded(u Usage) {
 	if !c.config.Notify.Enable {
 		return
 	}
-	subject := "[Reef-Pi ALERT] ATO pump usage out of range"
-	format := "Current usage of ATO pump  (%d) is above acceptable value (%d)"
-	body := fmt.Sprintf(format, u.Pump, c.config.Notify.Max)
 	if u.Pump >= c.config.Notify.Max {
+		subject := "[Reef-Pi ALERT] ATO pump usage out of range"
+		format := "Current usage of ATO pump  (%d) is above acceptable value (%d)"
+		body := fmt.Sprintf(format, u.Pump, c.config.Notify.Max)
 		c.telemetry.Alert(subject, "Elevated ATO usage. "+body)
 		return
 	}

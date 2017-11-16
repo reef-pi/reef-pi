@@ -8,7 +8,6 @@ import (
 
 func (c *Controller) Read() (int, error) {
 	if c.devMode {
-		log.Println("ATO is running under dev mode. Sending fixed sensor reading of 1")
 		v := 0
 		if rand.Int()%2 == 0 {
 			v = 1
@@ -52,9 +51,9 @@ func (c *Controller) Control(reading int) error {
 				c.pump.On = false
 				return err
 			}
-			c.updateUsage()
 			log.Println("Switched on ATO pump")
 		}
+		c.updateUsage()
 	}
 	return nil
 }
