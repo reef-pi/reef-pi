@@ -10,39 +10,64 @@ export default class ATO extends Common {
       ato: {},
       updated: false
     }
-    this.fetchData = this.fetchData.bind(this)
-    this.update = this.update.bind(this)
+    this.fetch = this.fetch.bind(this)
+    this.notify = this.notify.bind(this)
+    this.save = this.save.bind(this)
 
-    this.updateSensor = this.updateSensor.bind(this)
     this.updatePump = this.updatePump.bind(this)
-    this.updateCheckInterval = this.updateCheckInterval.bind(this)
     this.updateControl = this.updateControl.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
     this.showEnable = this.showEnable.bind(this)
     this.showControl = this.showControl.bind(this)
+    this.updateAttr = this.updateAttr.bind(this)
+    this.updateCheckBox = this.updateCheckBox.bind(this)
+    this.updateNotifyEnable = this.updateNotifyEnable.bind(this)
+    this.updateNotifyMax = this.updateNotifyMax.bind(this)
   }
 
-  updateSensor (ev) {
+  updateNotifyEnable (ev) {
     var ato = this.state.ato
-    ato.sensor = ev.target.value
+    ato.notify.enable = ev.target.checked
     this.setState({
       ato: ato,
       updated: true
     })
+  }
+
+  updateNotifyMax (ev) {
+    var ato = this.state.ato
+    ato.notify.max = ev.target.value
+    this.setState({
+      ato: ato,
+      updated: true
+    })
+  }
+
+  updateCheckBox (key) {
+    return (function (ev) {
+      var ato = this.state.ato
+      ato[key] = ev.target.checked
+      this.setState({
+        ato: ato,
+        updated: true
+      })
+    }.bind(this))
+  }
+
+  updateAttr (key) {
+    return (function (ev) {
+      var ato = this.state.ato
+      ato[key] = ev.target.value
+      this.setState({
+        ato: ato,
+        updated: true
+      })
+    }.bind(this))
   }
 
   updatePump (equipment) {
     var ato = this.state.ato
     ato.pump = equipment
-    this.setState({
-      ato: ato,
-      updated: true
-    })
-  }
-
-  updateCheckInterval (ev) {
-    var ato = this.state.ato
-    ato.check_interval = ev.target.value
     this.setState({
       ato: ato,
       updated: true
@@ -67,7 +92,7 @@ export default class ATO extends Common {
     })
   }
 
-  fetchData () {
+  fetch () {
     this.ajaxGet({
       url: '/api/ato',
       success: function (data) {
@@ -79,9 +104,10 @@ export default class ATO extends Common {
     })
   }
 
-  update (ev) {
+  save () {
     var ato = this.state.ato
     ato.sensor = parseInt(ato.sensor)
+    ato.notify.max = parseInt(ato.notify.max)
     ato.check_interval = parseInt(ato.check_interval)
     if (isNaN(ato.sensor)) {
       this.setState({
@@ -95,6 +121,14 @@ export default class ATO extends Common {
       this.setState({
         showAlert: true,
         alertMsg: 'Check interval has to be a positive integer'
+      })
+      return
+    }
+
+    if (isNaN(ato.notify.max)) {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Max usage for notifiation has to be an integer'
       })
       return
     }
@@ -112,7 +146,7 @@ export default class ATO extends Common {
   }
 
   componentDidMount () {
-    this.fetchData()
+    this.fetch()
   }
 
   showControl () {
@@ -125,8 +159,26 @@ export default class ATO extends Common {
           <div className='col-sm-2'>Pump</div>
           <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} id='ato-pump' /></div>
         </div>
+        {this.notify()}
         <div className='row'>
           <ATOChart />
+        </div>
+      </div>
+    )
+  }
+
+  notify () {
+    return (
+      <div className='col-sm-4'>
+        <div className='form-check'>
+          <label className='form-check-label'>
+            <input className='form-check-input' type='checkbox' id='ato_enable' defaultChecked={this.state.ato.notify.enable} onClick={this.updateNotifyEnable} />
+            Enable notification
+          </label>
+        </div>
+        <div className='input-group'>
+          <label className='input-group-addon'>Maxmum Pump Usage</label>
+          <input className='form-control' type='text' id='ato_notify_max' value={this.state.ato.notify.max} onChange={this.updateNotifyMax} />
         </div>
       </div>
     )
@@ -140,15 +192,15 @@ export default class ATO extends Common {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-3'>Check Interval (in seconds)</div>
-          <input type='text' onChange={this.updateCheckInterval} id='check_interval' className='col-sm-1' value={this.state.ato.check_interval} />
+          <input type='text' onChange={this.updateAttr('check_interval')} id='check_interval' className='col-sm-1' value={this.state.ato.check_interval} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor Pin</div>
-          <input type='text' id='sensor_pin' onChange={this.updateSensor} className='col-sm-2' value={this.state.ato.sensor} />
+          <input type='text' id='sensor_pin' onChange={this.updateAttr('sensor')} className='col-sm-2' value={this.state.ato.sensor} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateControl} />
+          <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateCheckBox('control')} />
         </div>
         {this.showControl()}
       </div>
@@ -165,11 +217,11 @@ export default class ATO extends Common {
         {super.render()}
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
-          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateEnable} />
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateCheckBox('enable')} />
         </div>
         {this.showEnable()}
         <div className='row'>
-          <input type='button' id='updateATO' onClick={this.update} value='update' className={updateButtonClass} />
+          <input type='button' id='updateATO' onClick={this.save} value='update' className={updateButtonClass} />
         </div>
       </div>
     )

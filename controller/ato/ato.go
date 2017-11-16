@@ -12,12 +12,18 @@ import (
 
 const Bucket = "ato"
 
+type Notify struct {
+	Enable bool `yaml:"enable" json:"enable"`
+	Max    int  `yaml:"max" json:"max"`
+}
+
 type Config struct {
 	Sensor        int           `json:"sensor" yaml:"sensor"`
 	Pump          string        `json:"pump" yaml:"pump"`
 	CheckInterval time.Duration `json:"check_interval" yaml:"check_interval"`
 	Control       bool          `json:"control" yaml:"control"`
 	Enable        bool          `json:"enable" yaml:"enable"`
+	Notify        Notify        `json:"notify" yaml:"notify"`
 }
 
 var DefaultConfig = Config{
@@ -71,7 +77,7 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) run() {
-	log.Println("Starting ATO controller")
+	log.Println("Starting ATO sub system")
 	ticker := time.NewTicker(c.config.CheckInterval * time.Second)
 	for {
 		select {
@@ -92,7 +98,7 @@ func (c *Controller) run() {
 				}
 			}
 		case <-c.stopCh:
-			log.Println("Stopping ATO sensor")
+			log.Println("Stopping ATO sub-system")
 			ticker.Stop()
 			return
 		}
