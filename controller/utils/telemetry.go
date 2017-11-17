@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+type AlertStats struct {
+	Count        int       `json:"count"`
+	FirstTrigger time.Time `json:"first_trigger"`
+}
+
 type AdafruitIO struct {
 	Enable bool   `json:"enable" yaml:"enable"`
 	Token  string `json:"token" yaml:"token"`
@@ -18,12 +23,14 @@ type TelemetryConfig struct {
 	AdafruitIO AdafruitIO   `json:"adafruitio" yaml:"adafruitio"`
 	Mailer     MailerConfig `json:"mailer"yaml:"mailer"`
 	Notify     bool         `json:"notify" yaml:"notify"`
+	Throttle   int          `json:"throttle" yaml:"throttle"`
 }
 
 type Telemetry struct {
 	client     *adafruitio.Client
 	dispatcher Mailer
 	config     TelemetryConfig
+	aStats     map[string]AlertStats
 }
 
 func NewTelemetry(config TelemetryConfig) *Telemetry {
@@ -36,10 +43,36 @@ func NewTelemetry(config TelemetryConfig) *Telemetry {
 		client:     adafruitio.NewClient(config.AdafruitIO.Token),
 		config:     config,
 		dispatcher: mailer,
+		aStats:     make(map[string]AlertStats),
 	}
 }
 
+func (t *Telemetry) updateAlertStats(subject string) AlertStats {
+	now := time.Now()
+	stat, ok := t.aStats[subject]
+	if !ok {
+		stat.FirstTrigger = now
+		stat.Count = 1
+		t.aStats[subject] = stat
+		return stat
+	}
+	if stat.FirstTrigger.Hour() == now.Hour() {
+		stat.Count++
+		t.aStats[subject] = stat
+		return stat
+	}
+	stat.FirstTrigger = now
+	stat.Count = 1
+	t.aStats[subject] = stat
+	return stat
+}
+
 func (t *Telemetry) Alert(subject, body string) {
+	stat := t.updateAlertStats(subject)
+	if (t.config.Throttle > 0) && (stat.Count > t.config.Throttle) {
+		log.Printf("WARNING: Alert is above throttle limits. Skipping. Subject:", subject)
+		return
+	}
 	if err := t.dispatcher.Email(subject, body); err != nil {
 		log.Println("ERROR: Failed to dispatch alert:", subject, "Error:", err)
 	}
