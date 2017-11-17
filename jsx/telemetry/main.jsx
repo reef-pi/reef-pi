@@ -17,20 +17,22 @@ export default class Telemetry extends Common {
     this.updateMailer = this.updateMailer.bind(this)
     this.enableMailer = this.enableMailer.bind(this)
     this.save = this.save.bind(this)
+    this.updateThrottle = this.updateThrottle.bind(this)
   }
 
   enableMailer(ev){
-      var c = this.state.config
-      c.notify = ev.target.checked
-      this.setState({
-        config: c,
-        updated: true
-      })
+    var c = this.state.config
+    c.notify = ev.target.checked
+    this.setState({
+      config: c,
+      updated: true
+    })
   }
 
   save() {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
+    c.throttle = parseInt(c.throttle)
     this.ajaxPost({
       url: '/api/telemetry',
       data: JSON.stringify(c),
@@ -39,7 +41,7 @@ export default class Telemetry extends Common {
       }.bind(this)
     })
   }
-  // "mailer":{"server":"","port":0,"from":"","password":"","to":""}
+
   updateMailer(mailer) {
       if (mailer.server === '') {
         this.setState({
@@ -128,7 +130,19 @@ export default class Telemetry extends Common {
     if (!this.state.config.notify) {
       return
     }
-    return (<NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer}/>)
+    return (
+      <div className='row'>
+        <div className='col-sm-4'>
+          <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer}/>
+        </div>
+        <div className='col-sm-2'>
+          limit per hour
+        </div>
+        <div className='col-sm-2'>
+          <input type='text' value={this.state.config.throttle} onChange={this.updateThrottle} id='' />
+        </div>
+      </div>
+    )
   }
 
   show () {
@@ -141,6 +155,15 @@ export default class Telemetry extends Common {
     return (
       <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
     )
+  }
+
+  updateThrottle (ev) {
+    var c = this.state.config
+    c.throttle = ev.target.value
+    this.setState({
+      config: c,
+      updated: true
+    })
   }
 
   render() {
@@ -164,7 +187,7 @@ export default class Telemetry extends Common {
                 onClick={this.enableMailer}
                 defaultChecked={this.state.config.notify}
                 />
-                Enable email notification
+                Enable email alerts
             </label>
           </div>
           {this.notification()}
