@@ -28,8 +28,6 @@ var DefaultCapabilities = Capabilities{
 	Lighting:      true,
 	Temperature:   true,
 	ATO:           true,
-	Camera:        true,
-	Doser:         true,
 	Configuration: true,
 }
 

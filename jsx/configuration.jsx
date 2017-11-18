@@ -20,7 +20,6 @@ export default class Configuration extends Common {
   componentDidMount () {
     $('#settings_config').hide()
     $('#connectors_config').hide()
-    $('#admin_config').hide()
     $('#telemetry_config').hide()
   }
 
@@ -50,8 +49,8 @@ export default class Configuration extends Common {
             </div>
           </div>
         ) }
-        { this.toRow('admin', <Admin />) }
         { this.toRow('telemetry', <Telemetry />) }
+        <Admin />
       </div>
     )
   }

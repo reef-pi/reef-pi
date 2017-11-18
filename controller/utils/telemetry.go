@@ -26,6 +26,11 @@ type TelemetryConfig struct {
 	Throttle   int          `json:"throttle" yaml:"throttle"`
 }
 
+var DefaultTelemetryConfig = TelemetryConfig{
+	Mailer:   GMailMailer,
+	Throttle: 10,
+}
+
 type Telemetry struct {
 	client     *adafruitio.Client
 	dispatcher Mailer
