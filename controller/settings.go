@@ -22,7 +22,7 @@ type Settings struct {
 
 var DefaultSettings = Settings{
 	Name:          "reef-pi",
-	Interface:     "eth0",
+	Interface:     "wlan0",
 	Address:       "0.0.0.0:8080",
 	LightInterval: 30 * time.Second,
 	Capabilities:  DefaultCapabilities,

@@ -7,7 +7,7 @@ import (
 )
 
 func initializeTelemetry(store utils.Store, notify bool) *utils.Telemetry {
-	t := utils.TelemetryConfig{}
+	t := utils.DefaultTelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
 		store.Update(Bucket, "telemetry", t)

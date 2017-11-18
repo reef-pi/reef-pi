@@ -6,9 +6,6 @@ import (
 	"strconv"
 )
 
-const GMailServer = "smtp.gmail.com"
-const GMailPort = 587
-
 type Mailer interface {
 	Email(subject, body string) error
 }
@@ -19,6 +16,11 @@ type MailerConfig struct {
 	From     string `json:"from"`
 	Password string `json:"password"`
 	To       string `json:"to"`
+}
+
+var GMailMailer = MailerConfig{
+	Server: "smtp.gmail.com",
+	Port:   587,
 }
 
 func (c *MailerConfig) Mailer() Mailer {
