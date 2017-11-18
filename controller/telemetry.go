@@ -18,7 +18,12 @@ func initializeTelemetry(store utils.Store, notify bool) *utils.Telemetry {
 func (r *ReefPi) getTelemetry(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
 		var t utils.TelemetryConfig
-		return &t, r.store.Get(Bucket, "telemetry", &t)
+		if err := r.store.Get(Bucket, "telemetry", &t); err != nil {
+			return nil, err
+		}
+		t.AdafruitIO.Token = ""
+		t.Mailer.Password = ""
+		return &t, nil
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
