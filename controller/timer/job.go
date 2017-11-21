@@ -117,6 +117,8 @@ func (c *Controller) deleteFromCron(jobID string) error {
 	if !ok {
 		return fmt.Errorf("Cron ID not found for job ID:%s", jobID)
 	}
-	c.runner.Remove(id)
+	if c.runner != nil {
+		c.runner.Remove(id)
+	}
 	return nil
 }
