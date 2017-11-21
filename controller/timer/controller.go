@@ -17,7 +17,6 @@ type Controller struct {
 
 func New(store utils.Store, telemetry *utils.Telemetry, e *equipments.Controller) *Controller {
 	return &Controller{
-		runner:     cron.New(),
 		cronIDs:    make(map[string]cron.EntryID),
 		telemetry:  telemetry,
 		store:      store,
@@ -43,6 +42,7 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
+	c.runner = cron.New()
 	if err := c.loadAllJobs(); err != nil {
 		log.Println("ERROR: timer-subsystem: Failed to load timer jobs. Error:", err)
 	}
@@ -51,4 +51,5 @@ func (c *Controller) Start() {
 
 func (c *Controller) Stop() {
 	c.runner.Stop()
+	c.runner = nil
 }
