@@ -94,7 +94,7 @@ func (c *Controller) updateHourlyTemperature(reading float32) {
 	for _, v := range usage.readings {
 		total += v
 	}
-	usage.Temperature = total / float32(len(usage.readings))
+	usage.Temperature = twoDecimal(total / float32(len(usage.readings)))
 	c.usage.Value = usage
 }
 

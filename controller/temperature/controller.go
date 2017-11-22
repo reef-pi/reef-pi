@@ -40,6 +40,10 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 	}, nil
 }
 
+func twoDecimal(v float32) float32 {
+	return float32(int(v*100)) / 100
+}
+
 func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	if c.config.Heater == id {
 		return true, nil
@@ -102,6 +106,7 @@ func (c *Controller) run() {
 				log.Println("ERROR: Failed to read temperature. Error:", err)
 				continue
 			}
+			reading = twoDecimal(reading)
 			c.latest = reading
 			c.NotifyIfNeeded(reading)
 			c.readings.Value = Measurement{
