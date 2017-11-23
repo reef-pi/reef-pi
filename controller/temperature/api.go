@@ -29,7 +29,7 @@ func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
 			if i != nil {
 				u, ok := i.(Usage)
 				if !ok {
-					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
+					log.Println("ERROR: temperature subsystem. Failed to typecast temperature controller usage")
 					return
 				}
 				usage = append(usage, u)
