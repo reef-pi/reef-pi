@@ -4,28 +4,23 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
-	"time"
 )
 
 type Settings struct {
-	Name           string            `json:"name" yaml:"name"`
-	Interface      string            `json:"interface" yaml:"interface"`
-	Address        string            `json:"address" yaml:"address"`
-	ImageDirectory string            `json:"image_directory" yaml:"image_directory"`
-	Display        bool              `json:"display" yaml:"display"`
-	Notification   bool              `json:"notification,yaml:"notification""`
-	AdafruitIO     utils.AdafruitIO  `json:"adafruitio" yaml:"adafruitio"`
-	LightInterval  time.Duration     `json:"light_interval" yaml:"light_interval"`
-	Capabilities   Capabilities      `json:"capabilities" yaml:"capabilities"`
-	HealthCheck    HealthCheckNotify `json:"health_check" yaml:"health_check"`
+	Name         string            `json:"name" yaml:"name"`
+	Interface    string            `json:"interface" yaml:"interface"`
+	Address      string            `json:"address" yaml:"address"`
+	Display      bool              `json:"display" yaml:"display"`
+	Notification bool              `json:"notification,yaml:"notification""`
+	Capabilities Capabilities      `json:"capabilities" yaml:"capabilities"`
+	HealthCheck  HealthCheckNotify `json:"health_check" yaml:"health_check"`
 }
 
 var DefaultSettings = Settings{
-	Name:          "reef-pi",
-	Interface:     "wlan0",
-	Address:       "0.0.0.0:8080",
-	LightInterval: 30 * time.Second,
-	Capabilities:  DefaultCapabilities,
+	Name:         "reef-pi",
+	Interface:    "wlan0",
+	Address:      "0.0.0.0:8080",
+	Capabilities: DefaultCapabilities,
 	HealthCheck: HealthCheckNotify{
 		MaxMemory: 500,
 		MaxCPU:    2,

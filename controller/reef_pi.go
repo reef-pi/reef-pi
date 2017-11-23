@@ -117,7 +117,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if r.settings.Capabilities.Lighting {
 		conf := lighting.Config{
 			DevMode:  r.settings.Capabilities.DevMode,
-			Interval: r.settings.LightInterval,
+			Interval: 30 * time.Second,
 		}
 		l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
 		if err != nil {
