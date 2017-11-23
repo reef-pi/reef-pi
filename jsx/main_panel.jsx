@@ -11,6 +11,7 @@ import Doser from './doser.jsx'
 import Dashboard from './dashboard.jsx'
 import $ from 'jquery'
 import Common from './common.jsx'
+import 'react-tabs/style/react-tabs.css'
 
 export default class MainPanel extends Common {
   constructor (props) {
@@ -69,7 +70,7 @@ export default class MainPanel extends Common {
     }.bind(this))
 
     return (
-      <Tabs onSelect={this.handleSelect} selectedIndex={0}>
+      <Tabs >
         <TabList>
           {tabs}
         </TabList>
