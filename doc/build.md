@@ -1,4 +1,0 @@
-## Build
-
-- Electronics
-- Housing
