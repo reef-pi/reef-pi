@@ -36,6 +36,7 @@ export default class Summary extends Common {
       <div className='container'>
         {super.render()}
         <ul className='list-inline'>
+          <li className='list-inline-item'><a href='http://reef-pi.com'>Documentation</a> | </li>
           <li className='list-inline-item'>{this.state.info.current_time},</li>
           <li className='list-inline-item'>running <span className='text-primary'>{this.state.info.version}</span></li>
           <li className='list-inline-item'>, since {this.state.info.uptime}</li>
