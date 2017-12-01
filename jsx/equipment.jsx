@@ -45,15 +45,9 @@ export default class Equipment extends Common {
   }
 
   render () {
-    var onBtnDisable = false
-    var offBtnDisable = true
-    var onBtnClass = 'btn btn-outline-success'
-    var offBtnClass = 'btn btn-danger'
+    var onBtnClass = 'btn btn-secondary btn-block'
     if (this.state.action === 'off') {
-      onBtnDisable = true
-      offBtnDisable = false
-      onBtnClass = 'btn btn-success'
-      offBtnClass = 'btn btn-outline-danger'
+      onBtnClass = 'btn btn-success btn-block'
     }
 
     return (
@@ -61,16 +55,10 @@ export default class Equipment extends Common {
         {super.render()}
         <div className='col-sm-8'>
           <div className='col-sm-8'>
-            <label>{this.props.name}</label>
+            <input id={this.props.name + '-on'} type='button' value={this.props.name} onClick={this.update} className={onBtnClass} />
           </div>
           <div className='col-sm-4'>
             <label className='small'> {this.state.outlet.name} </label>
-          </div>
-        </div>
-        <div className='col-sm-4 pull-right'>
-          <div class='btn-group' data-toggle='buttons'>
-            <input id={this.props.name + '-on'} type='button' value='on' onClick={this.update} className={onBtnClass} disabled={onBtnDisable} />
-            <input id={this.props.name + '-off'} type='button' value='off' onClick={this.update} className={offBtnClass} disabled={offBtnDisable} />
           </div>
         </div>
       </div>
