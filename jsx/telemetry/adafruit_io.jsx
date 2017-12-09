@@ -17,7 +17,7 @@ export default class AdafruitIO extends React.Component {
     this.props.update(this.state.adafruitio)
   }
 
-  toRow (label) {
+  toRow (label, text) {
     var fn = function (ev) {
       var adafruitio = this.state.adafruitio
       adafruitio[label] = ev.target.value
@@ -27,7 +27,7 @@ export default class AdafruitIO extends React.Component {
     return (
       <div className='row'>
         <div className='col-sm-2'>
-          {label}
+          {text}
         </div>
         <div className='col-sm-2'>
           <input type='text' value={this.state.adafruitio[label]} onChange={fn} id={'telemetry-' + label} />
@@ -47,9 +47,9 @@ export default class AdafruitIO extends React.Component {
             <input type='checkbox' defaultChecked={this.state.adafruitio.enable} onClick={this.updateEnable} />
           </div>
         </div>
-        {this.toRow('token')}
-        {this.toRow('user')}
-        {this.toRow('prefix')}
+        {this.toRow('user', 'Username')}
+        {this.toRow('token', 'AIO Key')}
+        {this.toRow('prefix', 'Prefix')}
       </div>
     )
   }
