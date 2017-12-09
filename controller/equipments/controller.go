@@ -34,11 +34,20 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
-	if c.config.DevMode {
-		log.Println("Equipment sub-system: Running in dev mode, skipping gpio initialization")
+	if !c.config.DevMode {
+		embd.InitGPIO()
+	}
+	eqs, err := c.List()
+	if err != nil {
+		log.Println("ERROR: equipment subsystem: failed to list equipment. Error:", err)
 		return
 	}
-	embd.InitGPIO()
+	for _, eq := range eqs {
+		if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+			log.Println("ERROR: equipment subsystem: Failed to sync equipment", eq.Name, ". Error:", err)
+		}
+	}
+	log.Println("INFO: equipment subsystem: Finished syncing all equipment")
 }
 
 func (c *Controller) Stop() {
