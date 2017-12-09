@@ -168,18 +168,24 @@ export default class ATO extends Common {
   }
 
   notify () {
+    var ct = [ <div className='form-check' key='ato-notify-enable'>
+      <label className='form-check-label'>
+        <input className='form-check-input' type='checkbox' id='ato_enable' defaultChecked={this.state.ato.notify.enable} onClick={this.updateNotifyEnable} />
+        <b>Enable alerting</b>
+      </label>
+    </div>
+    ]
+
+    if (this.state.ato.notify.enable) {
+      ct.push(<div className='input-group' key='ato_notify_max-usage'>
+        <label className='input-group-addon'>Maxmum Pump Usage</label>
+        <input className='form-control' type='text' id='ato_notify_max' value={this.state.ato.notify.max} onChange={this.updateNotifyMax} />
+      </div>
+        )
+    }
     return (
       <div className='col-sm-4'>
-        <div className='form-check'>
-          <label className='form-check-label'>
-            <input className='form-check-input' type='checkbox' id='ato_enable' defaultChecked={this.state.ato.notify.enable} onClick={this.updateNotifyEnable} />
-            Enable notification
-          </label>
-        </div>
-        <div className='input-group'>
-          <label className='input-group-addon'>Maxmum Pump Usage</label>
-          <input className='form-control' type='text' id='ato_notify_max' value={this.state.ato.notify.max} onChange={this.updateNotifyMax} />
-        </div>
+        {ct}
       </div>
     )
   }
