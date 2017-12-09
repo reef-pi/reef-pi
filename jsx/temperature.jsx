@@ -25,6 +25,7 @@ export default class Temperature extends Common {
     this.updateNotifyEnable = this.updateNotifyEnable.bind(this)
     this.updateNotifyMin = this.updateNotifyMin.bind(this)
     this.updateNotifyMax = this.updateNotifyMax.bind(this)
+    this.notify = this.notify.bind(this)
 
     this.update = this.update.bind(this)
   }
@@ -208,6 +209,39 @@ export default class Temperature extends Common {
           <div className='col-sm-3'> Cooler </div>
           <div className='col-sm-2'><SelectEquipment update={this.updateCooler} active={this.state.tc.cooler} id='cooler_selector' /></div>
         </div>
+        <div className='row'>
+          {this.notify()}
+        </div>
+      </div>
+    )
+  }
+
+  notify () {
+    var ct = [ <div className='form-check' key='tc-notify-enable'>
+      <label className='form-check-label'>
+        <input className='form-check-input' type='checkbox' id='tc_notify_enable' defaultChecked={this.state.tc.notify.enable} onClick={this.updateNotifyEnable} />
+        <b>Enable alerting</b>
+      </label>
+    </div>
+    ]
+
+    if (this.state.tc.notify.enable) {
+      ct.push(
+        <div className='input-group' key='tc_notify_min'>
+          <label className='input-group-addon'>Min</label>
+          <input type='text' className='form-control' id='tc_notify_min' value={this.state.tc.notify.min} onChange={this.updateNotifyMin} />
+        </div>
+      )
+      ct.push(
+        <div className='input-group' key='tc_notify_max'>
+          <label className='input-group-addon'>Max</label>
+          <input className='form-control' type='text' id='tc_notify_max' value={this.state.tc.notify.max} onChange={this.updateNotifyMax} />
+        </div>
+      )
+    }
+    return (
+      <div className='col-sm-4'>
+        {ct}
       </div>
     )
   }
@@ -227,22 +261,6 @@ export default class Temperature extends Common {
         {this.showEnable()}
         <div className='row'>
           {this.showControl()}
-        </div>
-        <div className='row'>
-          <div className='col-sm-4'>
-            <div className='input-group'>
-              <label className='input-group-addon'>Enable notification</label>
-              <input className='form-control' type='checkbox' id='tc_notify_enable' defaultChecked={this.state.tc.notify.enable} onClick={this.updateNotifyEnable} />
-            </div>
-            <div className='input-group'>
-              <label className='input-group-addon'>Min</label>
-              <input type='text' className='form-control' id='tc_notify_min' value={this.state.tc.notify.min} onChange={this.updateNotifyMin} />
-            </div>
-            <div className='input-group'>
-              <label className='input-group-addon'>Max</label>
-              <input className='form-control' type='text' id='tc_notify_max' value={this.state.tc.notify.max} onChange={this.updateNotifyMax} />
-            </div>
-          </div>
         </div>
         <div className='row'>
           <input value='Update' onClick={this.update} type='button' className={updateButtonClass} id='update-temp-settings' />
