@@ -48,7 +48,7 @@ export default class AdafruitIO extends React.Component {
               <input className='form-check-input'
                 type='checkbox'
                 defaultChecked={this.state.adafruitio.enable}
-                onClick={this.updateEnable}i
+                onClick={this.updateEnable}
               />
               <b>Adafruit.IO</b>
             </label>
