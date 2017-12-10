@@ -72,15 +72,17 @@ func (t *Telemetry) updateAlertStats(subject string) AlertStats {
 	return stat
 }
 
-func (t *Telemetry) Alert(subject, body string) {
+func (t *Telemetry) Alert(subject, body string) (bool, error) {
 	stat := t.updateAlertStats(subject)
 	if (t.config.Throttle > 0) && (stat.Count > t.config.Throttle) {
-		log.Printf("WARNING: Alert is above throttle limits. Skipping. Subject:", subject)
-		return
+		log.Println("WARNING: Alert is above throttle limits. Skipping. Subject:", subject)
+		return false, nil
 	}
 	if err := t.dispatcher.Email(subject, body); err != nil {
 		log.Println("ERROR: Failed to dispatch alert:", subject, "Error:", err)
+		return false, err
 	}
+	return true, nil
 }
 
 func (t *Telemetry) EmitMetric(feed string, v interface{}) {

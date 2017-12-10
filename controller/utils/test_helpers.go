@@ -57,5 +57,9 @@ func TestTelemetry() *Telemetry {
 			User: "test-user",
 		},
 	}
-	return &Telemetry{config: c, dispatcher: &NoopMailer{}}
+	return &Telemetry{
+		config:     c,
+		dispatcher: &NoopMailer{},
+		aStats:     make(map[string]AlertStats),
+	}
 }
