@@ -18,6 +18,9 @@ export default class AdafruitIO extends React.Component {
   }
 
   toRow (label, text) {
+    if(!this.state.adafruitio.enable) {
+      return
+    }
     var fn = function (ev) {
       var adafruitio = this.state.adafruitio
       adafruitio[label] = ev.target.value
@@ -40,11 +43,15 @@ export default class AdafruitIO extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>
-            Enable
-          </div>
-          <div className='col-sm-2'>
-            <input type='checkbox' defaultChecked={this.state.adafruitio.enable} onClick={this.updateEnable} />
+          <div className='form-check'>
+            <label className='form-check-label'>
+              <input className='form-check-input'
+                type='checkbox'
+                defaultChecked={this.state.adafruitio.enable}
+                onClick={this.updateEnable}i
+              />
+              <b>Adafruit.IO</b>
+            </label>
           </div>
         </div>
         {this.toRow('user', 'Username')}

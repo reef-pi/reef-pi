@@ -11,7 +11,7 @@ export default class Telemetry extends Common {
       updated: false
     }
     this.fetch = this.fetch.bind(this)
-    this.show = this.show.bind(this)
+    this.showAdafruitIO = this.showAdafruitIO.bind(this)
     this.notification = this.notification.bind(this)
     this.updateAio = this.updateAio.bind(this)
     this.updateMailer = this.updateMailer.bind(this)
@@ -145,7 +145,7 @@ export default class Telemetry extends Common {
     )
   }
 
-  show () {
+  showAdafruitIO () {
     if (this.state.config === undefined) {
       return
     }
@@ -174,8 +174,7 @@ export default class Telemetry extends Common {
     return(
       <div className='container'>
         <div className='row'>
-          <label> <b>AdafruitIO</b> </label>
-          {this.show()}
+          {this.showAdafruitIO()}
         </div>
         <div className='row'>
           <div className='form-check'>
@@ -187,7 +186,7 @@ export default class Telemetry extends Common {
                 onClick={this.enableMailer}
                 defaultChecked={this.state.config.notify}
                 />
-                Enable email alerts
+                <b>Email alerts</b>
             </label>
           </div>
           {this.notification()}
