@@ -2,15 +2,7 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/ato"
-	"github.com/reef-pi/reef-pi/controller/camera"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/doser"
-	"github.com/reef-pi/reef-pi/controller/equipments"
-	"github.com/reef-pi/reef-pi/controller/lighting"
-	"github.com/reef-pi/reef-pi/controller/system"
-	"github.com/reef-pi/reef-pi/controller/temperature"
-	"github.com/reef-pi/reef-pi/controller/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
@@ -69,88 +61,6 @@ func New(version, database string) (*ReefPi, error) {
 		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry)
 	}
 	return r, nil
-}
-
-func (r *ReefPi) loadSubsystems() error {
-	if r.settings.Capabilities.Configuration {
-		conf := system.Config{
-			Interface: r.settings.Interface,
-			Name:      r.settings.Name,
-			Display:   r.settings.Display,
-			DevMode:   r.settings.Capabilities.DevMode,
-			Version:   r.version,
-		}
-		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
-	}
-	eqs := new(equipments.Controller)
-	if r.settings.Capabilities.Equipments {
-		conf := equipments.Config{
-			DevMode: r.settings.Capabilities.DevMode,
-		}
-		eqs = equipments.New(conf, r.outlets, r.store, r.telemetry)
-		r.subsystems[equipments.Bucket] = eqs
-	}
-	if r.settings.Capabilities.Timers {
-		t := timer.New(r.store, r.telemetry, eqs)
-		r.subsystems[timer.Bucket] = t
-		eqs.AddCheck(t.IsEquipmentInUse)
-	}
-
-	if r.settings.Capabilities.Temperature {
-		temp, err := temperature.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize temperature subsystem")
-			return err
-		}
-		r.subsystems[temperature.Bucket] = temp
-		eqs.AddCheck(temp.IsEquipmentInUse)
-	}
-	if r.settings.Capabilities.ATO {
-		a, err := ato.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize ato subsystem")
-			return err
-		}
-		r.subsystems[ato.Bucket] = a
-		eqs.AddCheck(a.IsEquipmentInUse)
-	}
-	if r.settings.Capabilities.Lighting {
-		conf := lighting.Config{
-			DevMode:  r.settings.Capabilities.DevMode,
-			Interval: 30 * time.Second,
-		}
-		l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize lighting subsystem")
-			return err
-		}
-		r.subsystems[lighting.Bucket] = l
-	}
-
-	if r.settings.Capabilities.Camera {
-		cam, err := camera.New(r.store)
-		if err != nil {
-			return nil
-		}
-		r.subsystems[camera.Bucket] = cam
-	}
-	if r.settings.Capabilities.Doser {
-		d, err := doser.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize doser subsystem")
-			return err
-		}
-		r.subsystems[doser.Bucket] = d
-	}
-	for sName, sController := range r.subsystems {
-		if err := sController.Setup(); err != nil {
-			log.Println("ERROR: Failed to setup subsystem:", sName)
-			return err
-		}
-		sController.Start()
-		log.Println("Successfully started subsystem:", sName)
-	}
-	return nil
 }
 
 func (r *ReefPi) Start() error {
