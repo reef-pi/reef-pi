@@ -29,6 +29,9 @@ export default class Settings extends Common {
     if (this.state.settings.health_check === undefined) {
       return
     }
+    if (this.state.settings.capabilities.health_check !== true) {
+      return
+    }
     return (
       <HealthNotify update={this.updateHealthNotify} state={this.state.settings.health_check} />
     )
@@ -167,10 +170,7 @@ export default class Settings extends Common {
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-4'>
-            <label> <b>Health Check Alert</b> </label>
-            {this.showHealthNotify()}
-          </div>
+          {this.showHealthNotify()}
         </div>
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />

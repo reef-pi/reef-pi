@@ -31,18 +31,22 @@ export default class HealthNotify extends React.Component {
   }
 
   render () {
-    return (
-      <div className='container'>
-        <div className='input-group'>
-          <label className='input-group-addon'>Enable</label>
+    var ct = [
+      <div className='form-check' key='health_notify_enable'>
+        <label className='form-check-label'>
           <input
-            className='form-control'
+            className='form-check-input'
             type='checkbox'
             id='health_notify_enable'
             defaultChecked={this.state.notify.enable}
             onClick={this.updateEnable} />
-        </div>
-        <div className='input-group'>
+          <b>Alert on health check</b>
+        </label>
+      </div>
+    ]
+    if (this.state.notify.enable) {
+      ct.push(
+        <div className='input-group' key='health_notify_max_memory'>
           <label className='input-group-addon'>Max Memory</label>
           <input
             type='text'
@@ -51,7 +55,9 @@ export default class HealthNotify extends React.Component {
             value={this.state.notify.max_memory}
             onChange={this.update('max_memory')} />
         </div>
-        <div className='input-group'>
+    )
+      ct.push(
+        <div className='input-group' key='health_notify_max_cpu'>
           <label className='input-group-addon'>Max CPU</label>
           <input
             type='text'
@@ -60,6 +66,11 @@ export default class HealthNotify extends React.Component {
             value={this.state.notify.max_cpu}
             onChange={this.update('max_cpu')} />
         </div>
+        )
+    }
+    return (
+      <div className='col-sm-3'>
+        {ct}
       </div>
     )
   }
