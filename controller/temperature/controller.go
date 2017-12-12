@@ -2,7 +2,7 @@ package temperature
 
 import (
 	"container/ring"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
@@ -12,31 +12,31 @@ import (
 const Bucket = "temperature"
 
 type Controller struct {
-	config     Config
-	stopCh     chan struct{}
-	telemetry  *utils.Telemetry
-	store      utils.Store
-	latest     float32
-	readings   *ring.Ring
-	usage      *ring.Ring
-	mu         sync.Mutex
-	devMode    bool
-	equipments *equipments.Controller
-	heater     *equipments.Equipment
-	cooler     *equipments.Equipment
+	config    Config
+	stopCh    chan struct{}
+	telemetry *utils.Telemetry
+	store     utils.Store
+	latest    float32
+	readings  *ring.Ring
+	usage     *ring.Ring
+	mu        sync.Mutex
+	devMode   bool
+	equipment *equipment.Controller
+	heater    *equipment.Equipment
+	cooler    *equipment.Equipment
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipment.Controller) (*Controller, error) {
 	return &Controller{
-		config:     DefaultConfig,
-		mu:         sync.Mutex{},
-		stopCh:     make(chan struct{}),
-		telemetry:  telemetry,
-		store:      store,
-		devMode:    devMode,
-		readings:   ring.New(180),
-		usage:      ring.New(24 * 7),
-		equipments: eqs,
+		config:    DefaultConfig,
+		mu:        sync.Mutex{},
+		stopCh:    make(chan struct{}),
+		telemetry: telemetry,
+		store:     store,
+		devMode:   devMode,
+		readings:  ring.New(180),
+		usage:     ring.New(24 * 7),
+		equipment: eqs,
 	}, nil
 }
 
@@ -76,14 +76,14 @@ func (c *Controller) Start() {
 
 func (c *Controller) loadEquipments() error {
 	if c.config.Heater != "" {
-		heater, err := c.equipments.Get(c.config.Heater)
+		heater, err := c.equipment.Get(c.config.Heater)
 		if err != nil {
 			return err
 		}
 		c.heater = &heater
 	}
 	if c.config.Cooler != "" {
-		cooler, err := c.equipments.Get(c.config.Cooler)
+		cooler, err := c.equipment.Get(c.config.Cooler)
 		if err != nil {
 			return err
 		}
@@ -134,7 +134,7 @@ func (c *Controller) Stop() {
 
 func (c *Controller) control(reading float32) error {
 	if err := c.loadEquipments(); err != nil {
-		log.Println("ERROR: temperature subsystem. Failed to load equipments: Error:", err)
+		log.Println("ERROR: temperature subsystem. Failed to load equipment: Error:", err)
 		return err
 	}
 	switch {

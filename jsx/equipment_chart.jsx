@@ -24,7 +24,7 @@ export default class EquipmentsChart extends Common {
 
   fetch () {
     this.ajaxGet({
-      url: '/api/equipments',
+      url: '/api/equipment',
       success: function (data) {
         this.setState({
           equipments: $.each(data, function (i, eq) {

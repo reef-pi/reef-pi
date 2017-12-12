@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"github.com/kidoman/embd"
@@ -67,11 +67,11 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	for i, checkFn := range c.checks {
 		inUse, err := checkFn(id)
 		if err != nil {
-			log.Println("ERROR: equipments subsystem: Equipment in use check returned error. Error:", err)
+			log.Println("ERROR: equipment subsystem: Equipment in use check returned error. Error:", err)
 			return true, err
 		}
 		if inUse {
-			log.Println("DEBUG: equipments subsystem: Equipment in use returned true from:", i)
+			log.Println("DEBUG: equipment subsystem: Equipment in use returned true from:", i)
 			return true, nil
 		}
 	}

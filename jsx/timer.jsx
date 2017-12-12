@@ -16,7 +16,7 @@ export default class Timer extends Common {
 
   fetchEquipment (id) {
     this.ajaxGet({
-      url: '/api/equipments/' + id,
+      url: '/api/equipment/' + id,
       success: function (data) {
         this.setState({
           equipment: data

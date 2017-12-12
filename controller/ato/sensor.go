@@ -19,7 +19,7 @@ func (c *Controller) Read() (int, error) {
 
 func (c *Controller) cachePump() error {
 	if c.pump == nil {
-		pump, err := c.equipments.Get(c.config.Pump)
+		pump, err := c.equipment.Get(c.config.Pump)
 		if err != nil {
 			return err
 		}
@@ -38,7 +38,7 @@ func (c *Controller) Control(reading int) error {
 	if reading == 1 { // Water is above the level
 		if c.pump.On {
 			c.pump.On = false
-			if err := c.equipments.Update(c.pump.ID, *c.pump); err != nil {
+			if err := c.equipment.Update(c.pump.ID, *c.pump); err != nil {
 				c.pump.On = true
 				return err
 			}
@@ -47,7 +47,7 @@ func (c *Controller) Control(reading int) error {
 	} else { // water is below the level
 		if !c.pump.On {
 			c.pump.On = true
-			if err := c.equipments.Update(c.pump.ID, *c.pump); err != nil {
+			if err := c.equipment.Update(c.pump.ID, *c.pump); err != nil {
 				c.pump.On = false
 				return err
 			}

@@ -3,7 +3,7 @@ package ato
 import (
 	"container/ring"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
@@ -32,15 +32,15 @@ var DefaultConfig = Config{
 }
 
 type Controller struct {
-	config     Config
-	usage      *ring.Ring
-	telemetry  *utils.Telemetry
-	stopCh     chan struct{}
-	mu         sync.Mutex
-	store      utils.Store
-	pump       *equipments.Equipment
-	equipments *equipments.Controller
-	devMode    bool
+	config    Config
+	usage     *ring.Ring
+	telemetry *utils.Telemetry
+	stopCh    chan struct{}
+	mu        sync.Mutex
+	store     utils.Store
+	pump      *equipment.Equipment
+	equipment *equipment.Controller
+	devMode   bool
 }
 
 func loadConfig(store utils.Store) (Config, error) {
@@ -55,16 +55,16 @@ func saveConfig(conf Config, store utils.Store) error {
 	return store.Update(Bucket, "config", conf)
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipment.Controller) (*Controller, error) {
 	return &Controller{
-		config:     DefaultConfig,
-		devMode:    devMode,
-		mu:         sync.Mutex{},
-		stopCh:     make(chan struct{}),
-		store:      store,
-		telemetry:  telemetry,
-		equipments: eqs,
-		usage:      ring.New(24),
+		config:    DefaultConfig,
+		devMode:   devMode,
+		mu:        sync.Mutex{},
+		stopCh:    make(chan struct{}),
+		store:     store,
+		telemetry: telemetry,
+		equipment: eqs,
+		usage:     ring.New(24),
 	}, nil
 }
 

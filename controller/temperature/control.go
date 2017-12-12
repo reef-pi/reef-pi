@@ -29,7 +29,7 @@ func (c *Controller) switchHeater(on bool) error {
 	if on != c.heater.On {
 		log.Println("Temperature subsystem - switching heater:", on)
 		c.heater.On = on
-		if err := c.equipments.Update(c.heater.ID, *c.heater); err != nil {
+		if err := c.equipment.Update(c.heater.ID, *c.heater); err != nil {
 			c.heater.On = !on
 			return err
 		}
@@ -52,7 +52,7 @@ func (c *Controller) switchCooler(on bool) error {
 	if on != c.cooler.On {
 		log.Println("Temperature subsystem - switching cooler:", on)
 		c.cooler.On = on
-		if err := c.equipments.Update(c.cooler.ID, *c.cooler); err != nil {
+		if err := c.equipment.Update(c.cooler.ID, *c.cooler); err != nil {
 			c.cooler.On = !on
 			return err
 		}

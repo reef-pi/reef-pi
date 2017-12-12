@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-const Bucket = "equipments"
+const Bucket = "equipment"
 
 type Equipment struct {
 	ID     string `json:"id"`
@@ -109,7 +109,7 @@ func (c *Controller) Delete(id string) error {
 func (c *Controller) synEquipments() {
 	eqs, err := c.List()
 	if err != nil {
-		log.Println("ERROR: Failed to list equipments.", err)
+		log.Println("ERROR: Failed to list equipment.", err)
 		return
 	}
 	for _, eq := range eqs {
