@@ -14,6 +14,7 @@ func TestReefPi(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create new reef-pi controller. Error:", err)
 	}
+	r.settings.Capabilities.DevMode = true
 	if err := r.Start(); err != nil {
 		t.Fatal("Failed to load subsystem. Error:", err)
 	}
