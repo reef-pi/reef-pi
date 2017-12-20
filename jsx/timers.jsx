@@ -39,7 +39,7 @@ export default class Timers extends Common {
       }.bind(this)
     })
     this.ajaxGet({
-      url: '/api/equipments',
+      url: '/api/equipment',
       success: function (data) {
         this.setState({
           equipments: data,
@@ -88,7 +88,7 @@ export default class Timers extends Common {
   setEquipment (k, ev) {
     var eqID = this.state.equipments[k].id
     this.ajaxGet({
-      url: '/api/equipments/' + eqID,
+      url: '/api/equipment/' + eqID,
       success: function (data) {
         this.setState({
           equipment: data,

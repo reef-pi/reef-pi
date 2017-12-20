@@ -22,7 +22,7 @@ export default class MainPanel extends Common {
         'ato': <ATO />,
         'camera': <Camera />,
         'configuration': <Configuration />,
-        'equipments': <Equipments />,
+        'equipment': <Equipments />,
         'lighting': <Lighting />,
         'temperature': < Temperature />,
         'timers': <Timers />,

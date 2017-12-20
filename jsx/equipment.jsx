@@ -26,7 +26,7 @@ export default class Equipment extends Common {
 
   update (e) {
     this.ajaxPost({
-      url: '/api/equipments/' + this.props.id,
+      url: '/api/equipment/' + this.props.id,
       data: JSON.stringify({
         on: this.state.action === 'on',
         name: this.props.name,

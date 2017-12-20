@@ -9,7 +9,7 @@ type Capabilities struct {
 	DevMode       bool `json:"dev_mode" yaml:"dev_mode"`
 	Dashboard     bool `json:"dashboard" yaml:"dashboard"`
 	HealthCheck   bool `json:"health_check" yaml:"health_check"`
-	Equipments    bool `json:"equipments" yaml:"equipments"`
+	Equipment     bool `json:"equipment" yaml:"equipment"`
 	Timers        bool `json:"timers" yaml:"timers"`
 	Lighting      bool `json:"lighting" yaml:"lighting"`
 	Temperature   bool `json:"temperature" yaml:"temperature"`
@@ -23,7 +23,7 @@ var DefaultCapabilities = Capabilities{
 	DevMode:       false,
 	Dashboard:     true,
 	HealthCheck:   true,
-	Equipments:    true,
+	Equipment:     true,
 	Timers:        true,
 	Lighting:      false,
 	Temperature:   true,

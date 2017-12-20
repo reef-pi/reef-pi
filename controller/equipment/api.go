@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"github.com/gorilla/mux"
@@ -8,11 +8,11 @@ import (
 
 //API
 func (e *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/equipments/{id}", e.GetEquipment).Methods("GET")
-	r.HandleFunc("/api/equipments", e.ListEquipments).Methods("GET")
-	r.HandleFunc("/api/equipments", e.CreateEquipment).Methods("PUT")
-	r.HandleFunc("/api/equipments/{id}", e.UpdateEquipment).Methods("POST")
-	r.HandleFunc("/api/equipments/{id}", e.DeleteEquipment).Methods("DELETE")
+	r.HandleFunc("/api/equipment/{id}", e.GetEquipment).Methods("GET")
+	r.HandleFunc("/api/equipment", e.ListEquipments).Methods("GET")
+	r.HandleFunc("/api/equipment", e.CreateEquipment).Methods("PUT")
+	r.HandleFunc("/api/equipment/{id}", e.UpdateEquipment).Methods("POST")
+	r.HandleFunc("/api/equipment/{id}", e.DeleteEquipment).Methods("DELETE")
 }
 
 func (c *Controller) GetEquipment(w http.ResponseWriter, r *http.Request) {

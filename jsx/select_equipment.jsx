@@ -24,7 +24,7 @@ export default class SelectEquipment extends Common {
 
   fetchData () {
     this.ajaxGet({
-      url: '/api/equipments',
+      url: '/api/equipment',
       success: function (data) {
         var equipment = this.state.equipment
         $.each(data, function (i, eq) {

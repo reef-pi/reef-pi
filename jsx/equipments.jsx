@@ -43,7 +43,7 @@ export default class Equipments extends Common {
 
   fetchData () {
     this.ajaxGet({
-      url: '/api/equipments',
+      url: '/api/equipment',
       success: function (data) {
         this.setState({
           equipments: data,
@@ -104,7 +104,7 @@ export default class Equipments extends Common {
       showAlert: false
     })
     this.ajaxPut({
-      url: '/api/equipments',
+      url: '/api/equipment',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
@@ -121,7 +121,7 @@ export default class Equipments extends Common {
       this.confirm('Are you sure ?')
       .then(function () {
         this.ajaxDelete({
-          url: '/api/equipments/' + id,
+          url: '/api/equipment/' + id,
           success: function (data) {
             this.fetchData()
           }.bind(this)

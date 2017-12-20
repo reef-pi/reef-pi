@@ -55,7 +55,7 @@ func (c *Controller) Create(job Job) error {
 	if job.Equipment == "" {
 		return fmt.Errorf("Missing equipment")
 	}
-	_, err := c.equipments.Get(job.Equipment)
+	_, err := c.equipment.Get(job.Equipment)
 	if err != nil {
 		return err
 	}

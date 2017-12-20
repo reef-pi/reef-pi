@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
@@ -16,7 +16,7 @@ func TestTimerController(t *testing.T) {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
 
-	eConfig := equipments.Config{
+	eConfig := equipment.Config{
 		DevMode: true,
 	}
 	o := connectors.Outlet{
@@ -28,13 +28,13 @@ func TestTimerController(t *testing.T) {
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	e := equipments.New(eConfig, outlets, store, utils.TestTelemetry())
+	e := equipment.New(eConfig, outlets, store, utils.TestTelemetry())
 	e.Setup()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
 
-	eq := equipments.Equipment{
+	eq := equipment.Equipment{
 		Name:   "Foo",
 		Outlet: "1",
 	}
@@ -45,7 +45,7 @@ func TestTimerController(t *testing.T) {
 	eqs, err := e.List()
 
 	if err != nil {
-		t.Fatal("Failed to list equipments. Error:", err)
+		t.Fatal("Failed to list equipment. Error:", err)
 	}
 	c := New(store, utils.TestTelemetry(), e)
 	c.Setup()
@@ -53,7 +53,7 @@ func TestTimerController(t *testing.T) {
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
 	if err := c.Setup(); err != nil {
-		t.Fatal("Failed to setup equipments subsystem. Error:", err)
+		t.Fatal("Failed to setup equipment subsystem. Error:", err)
 	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
