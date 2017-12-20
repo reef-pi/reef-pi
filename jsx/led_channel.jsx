@@ -14,6 +14,16 @@ export default class LEDChannel extends React.Component {
     this.updateFixedValue = this.updateFixedValue.bind(this)
     this.getFixedValue = this.getFixedValue.bind(this)
     this.update = this.update.bind(this)
+    this.updateMin = this.updateMin.bind(this)
+    this.updateMax = this.updateMax.bind(this)
+  }
+
+  updateMin (ev) {
+    this.update('min', ev.target.value)
+  }
+
+  updateMax (ev) {
+    this.update('max', ev.target.value)
   }
 
   update (k, v) {
@@ -90,6 +100,8 @@ export default class LEDChannel extends React.Component {
         <div className='row'>
           Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-' + this.props.ch.name + '-auto'} />
           Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.channel.reverse} />
+          Min<input type='text' onChange={this.updateMin} value={this.state.channel.min} />
+          Max<input type='text' onChange={this.updateMax} value={this.state.channel.max} />
         </div>
         <div className='row' style={show24HourSliders}>
           {this.sliderList()}

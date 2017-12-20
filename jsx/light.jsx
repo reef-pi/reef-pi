@@ -1,6 +1,7 @@
 import React from 'react'
 import LEDChannel from './led_channel.jsx'
 import Common from './common.jsx'
+import $ from 'jquery'
 
 export default class Light extends Common {
   constructor (props) {
@@ -20,13 +21,21 @@ export default class Light extends Common {
   }
 
   updateLight () {
+    var channels = this.state.channels
+    $.each(channels, function (k, v) {
+      v['min'] = parseInt(v['min'])
+      v['max'] = parseInt(v['max'])
+      channels[k] = v
+    })
+    var payload = {
+      name: this.props.name,
+      channels: channels,
+      jack: this.props.jack
+    }
+
     this.ajaxPost({
       url: '/api/lights/' + this.props.id,
-      data: JSON.stringify({
-        name: this.props.name,
-        channels: this.state.channels,
-        jack: this.props.jack
-      }),
+      data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.setState({updated: false})
