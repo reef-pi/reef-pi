@@ -12,8 +12,7 @@ type Usage struct {
 	Time utils.TeleTime `json:"time"`
 }
 
-func (c *Controller) updateUsage() {
-	minutes := int(c.config.CheckInterval)
+func (c *Controller) updateUsage(minutes int) {
 	current := Usage{
 		Pump: minutes,
 		Time: utils.TeleTime(time.Now()),
