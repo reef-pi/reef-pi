@@ -44,6 +44,7 @@ func (c *Controller) Control(reading int) error {
 			}
 			log.Println("Switched off ATO pump")
 		}
+		c.updateUsage(0)
 	} else { // water is below the level
 		if !c.pump.On {
 			c.pump.On = true
@@ -53,7 +54,7 @@ func (c *Controller) Control(reading int) error {
 			}
 			log.Println("Switched on ATO pump")
 		}
-		c.updateUsage()
+		c.updateUsage(int(c.config.CheckInterval))
 	}
 	return nil
 }
