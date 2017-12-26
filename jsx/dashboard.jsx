@@ -59,9 +59,11 @@ export default class Dashboard extends Common {
   }
 
   showCharts () {
+    var h = this.chartHeight()
+    var w = this.chartWidth()
     var charts = []
     if (this.props.capabilities.equipments) {
-      charts.push(<div className='col-sm-6' key='chart-2'><EquipmentsChart width={500} height={250} /></div>)
+      charts.push(<div className='col-sm-6' key='chart-2'><EquipmentsChart width={w} height={h} /></div>)
     }
     if (this.props.capabilities.temperature) {
       if (this.state.tc.enable) {
@@ -72,7 +74,7 @@ export default class Dashboard extends Common {
       }
     }
     if (this.props.capabilities.lighting) {
-      charts.push(<div className='col-sm-6' key='chart-3'><LightsChart width={500} height={250} /></div>)
+      charts.push(<div className='col-sm-6' key='chart-3'><LightsChart width={w} height={h} /></div>)
     }
     if (this.props.capabilities.ato) {
       if (this.state.ato.enable && this.state.ato.control) {

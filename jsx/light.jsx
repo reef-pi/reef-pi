@@ -25,6 +25,7 @@ export default class Light extends Common {
     $.each(channels, function (k, v) {
       v['min'] = parseInt(v['min'])
       v['max'] = parseInt(v['max'])
+      v['start_min'] = parseInt(v['start_min'])
       channels[k] = v
     })
     var payload = {
