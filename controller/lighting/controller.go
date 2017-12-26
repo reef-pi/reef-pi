@@ -15,6 +15,7 @@ const Bucket = "lightings"
 type Channel struct {
 	Name         string `json:"name" yaml:"name"`
 	MinTheshold  int    `json:"min" yaml:"min"`
+	StartMin     int    `json:"start_min" yaml:"start_min"`
 	MaxThreshold int    `json:"max" yaml:"max"`
 	Ticks        int    `json:"ticks" yaml:"ticks"`
 	Values       []int  `json:"values" yaml:"values"`
@@ -185,8 +186,8 @@ func (c *Controller) syncLight(light Light) {
 		expectedValues := ch.Values // TODO implement ticks`
 		v := GetCurrentValue(time.Now(), expectedValues)
 		if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
-			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 0\n", v, ch.Name, ch.MinTheshold)
-			v = 0
+			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.MinTheshold)
+			v = ch.StartMin
 		} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
 			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
 			v = ch.MaxThreshold
