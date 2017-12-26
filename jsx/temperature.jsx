@@ -174,7 +174,7 @@ export default class Temperature extends Common {
           <div className='col-sm-2'><input type='text' id='check_interval' value={this.state.tc.check_interval} onChange={this.updateCheckInterval} /></div>
         </div>
         <div className='row'>
-          { <TemperatureReadingChart width={600} height={300} />}
+          { <TemperatureReadingChart width={500} height={250} />}
         </div>
         <div className='row'>
           <div className='col-sm-3'> Control </div>

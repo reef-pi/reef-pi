@@ -19,6 +19,33 @@ export default class Common extends React.Component {
     this.ajaxErrorHandler = this.ajaxErrorHandler.bind(this)
     this.ajaxBeforeSend = this.ajaxBeforeSend.bind(this)
     this.toggle = this.toggle.bind(this)
+    this.chartWidth = this.chartWidth.bind()
+    this.chartHeight = this.chartHeight.bind(this)
+  }
+
+  chartWidth () {
+    var w = $(window).width()
+    if (w >= 2048) {
+      return 800
+    }
+    if (w >= 1024) {
+      return 500
+    }
+    if (w >= 800) {
+      return 350
+    }
+    return 200
+  }
+
+  chartHeight () {
+    var w = $(window).height()
+    if (w >= 1024) {
+      return 250
+    }
+    if (w >= 400) {
+      return 150
+    }
+    return 70
   }
 
   toggle (id) {
