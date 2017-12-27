@@ -84,6 +84,9 @@ export default class Jacks extends Common {
             {j.name}
           </div>
           <div className='col-sm-1'>
+            <label className='small'>{j.pins.join(',')}</label>
+          </div>
+          <div className='col-sm-1'>
             <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(j.id)} />
           </div>
         </div>
