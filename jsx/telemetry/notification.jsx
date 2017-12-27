@@ -6,12 +6,11 @@ export default class NotificationSettings extends Common {
     super(props)
     this.state = {
       updated: false,
-      config: props.mailer,
+      config: props.mailer
     }
     this.update = this.update.bind(this)
     this.inputGroup = this.inputGroup.bind(this)
   }
-
 
   update (key) {
     return (function (ev) {

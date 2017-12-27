@@ -18,7 +18,7 @@ export default class AdafruitIO extends React.Component {
   }
 
   toRow (label, text) {
-    if(!this.state.adafruitio.enable) {
+    if (!this.state.adafruitio.enable) {
       return
     }
     var fn = function (ev) {
