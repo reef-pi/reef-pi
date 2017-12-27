@@ -79,6 +79,15 @@ export default class Outlets extends Common {
             {o.name}
           </div>
           <div className='col-sm-1'>
+            <label className='small'>{o.pin}</label>
+          </div>
+          <div className='col-sm-1'>
+            <label className='small'>{o.equipment === '' ? '' : 'in-use'}</label>
+          </div>
+          <div className='col-sm-1'>
+            <label className='small'>{o.reverse ? 'reverse' : '' }</label>
+          </div>
+          <div className='col-sm-1'>
             <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(o.id)} />
           </div>
         </div>
