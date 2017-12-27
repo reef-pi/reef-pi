@@ -20,7 +20,7 @@ export default class Telemetry extends Common {
     this.updateThrottle = this.updateThrottle.bind(this)
   }
 
-  enableMailer(ev){
+  enableMailer (ev) {
     var c = this.state.config
     c.notify = ev.target.checked
     this.setState({
@@ -29,7 +29,7 @@ export default class Telemetry extends Common {
     })
   }
 
-  save() {
+  save () {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
@@ -42,34 +42,34 @@ export default class Telemetry extends Common {
     })
   }
 
-  updateMailer(mailer) {
-      if (mailer.server === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid mail server'
-        })
-        return
-      }
-      if (mailer.password === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid mail passowrd'
-        })
-        return
+  updateMailer (mailer) {
+    if (mailer.server === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Please set a valid mail server'
+      })
+      return
     }
-      if (mailer.To === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid mail recepient (To)'
-        })
-        return
+    if (mailer.password === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Please set a valid mail passowrd'
+      })
+      return
     }
-      if (mailer.From === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid mail sender (From)'
-        })
-        return
+    if (mailer.To === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Please set a valid mail recepient (To)'
+      })
+      return
+    }
+    if (mailer.From === '') {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Please set a valid mail sender (From)'
+      })
+      return
     }
     var c = this.state.config
     c.mailer = mailer
@@ -79,7 +79,7 @@ export default class Telemetry extends Common {
     })
   }
 
-  fetch() {
+  fetch () {
     this.ajaxGet({
       url: '/api/telemetry',
       success: function (data) {
@@ -91,9 +91,9 @@ export default class Telemetry extends Common {
     })
   }
 
- componentDidMount(){
-   this.fetch()
- }
+  componentDidMount () {
+    this.fetch()
+  }
 
   updateAio (adafruitio) {
     if (adafruitio.enable) {
@@ -133,7 +133,7 @@ export default class Telemetry extends Common {
     return (
       <div className='row'>
         <div className='col-sm-4'>
-          <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer}/>
+          <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
         </div>
         <div className='col-sm-2'>
           limit per hour
@@ -166,12 +166,12 @@ export default class Telemetry extends Common {
     })
   }
 
-  render() {
+  render () {
     var updateButtonClass = 'btn btn-outline-success col-sm-2'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
-    return(
+    return (
       <div className='container'>
         <div className='row'>
           {this.showAdafruitIO()}
@@ -186,7 +186,7 @@ export default class Telemetry extends Common {
                 onClick={this.enableMailer}
                 defaultChecked={this.state.config.notify}
                 />
-                <b>Email alerts</b>
+              <b>Email alerts</b>
             </label>
           </div>
           {this.notification()}
