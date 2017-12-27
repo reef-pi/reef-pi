@@ -17,10 +17,15 @@ export default class LEDChannel extends React.Component {
     this.updateMin = this.updateMin.bind(this)
     this.updateMax = this.updateMax.bind(this)
     this.updateStartMin = this.updateStartMin.bind(this)
+    this.updateName = this.updateName.bind(this)
   }
 
   updateMin (ev) {
     this.update('min', ev.target.value)
+  }
+
+  updateName (ev) {
+    this.update('name', ev.target.value)
   }
 
   updateStartMin (ev) {
@@ -100,7 +105,8 @@ export default class LEDChannel extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>{this.props.ch.name}</div>
+          Name: <input type='text' value={this.state.channel.name} onChange={this.updateName} />
+          Pin: {this.state.channel.pin}
         </div>
         <div className='row'>
           Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-' + this.props.ch.name + '-auto'} />
