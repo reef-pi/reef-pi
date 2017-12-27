@@ -43,7 +43,7 @@ export default class ATOChart extends Common {
         <BarChart width={this.props.width} height={this.props.height} data={this.state.usage}>
           <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
           <YAxis label='minutes' />
-          <XAxis dataKey='hour' label='hour' />
+          <XAxis dataKey='time'/>
           <Tooltip />
         </BarChart>
       </div>
