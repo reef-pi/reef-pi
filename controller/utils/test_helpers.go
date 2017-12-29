@@ -11,6 +11,18 @@ import (
 	"path/filepath"
 )
 
+type FakeStore struct{}
+
+func (f *FakeStore) Get(string, string, interface{}) error          { return nil }
+func (f *FakeStore) List(string, func([]byte) error) error          { return nil }
+func (f *FakeStore) Create(string, func(string) interface{}) error  { return nil }
+func (f *FakeStore) CreateBucket(string) error                      { return nil }
+func (f *FakeStore) Close() error                                   { return nil }
+func (f *FakeStore) CreateWithID(string, string, interface{}) error { return nil }
+func (f *FakeStore) Update(string, string, interface{}) error       { return nil }
+func (f *FakeStore) Delete(string, string) error                    { return nil }
+func (f *FakeStore) ReOpen() error                                  { return nil }
+
 func TestDB() (Store, error) {
 	wd, err := os.Getwd()
 	if err != nil {
