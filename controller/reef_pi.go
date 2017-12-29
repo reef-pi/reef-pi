@@ -38,10 +38,11 @@ func New(version, database string) (*ReefPi, error) {
 	if err != nil {
 		log.Println("Warning: Failed to load settings from db, Error:", err)
 		log.Println("Warning: Initializing default settings in database")
-		s = DefaultSettings
-		if err := initializeSettings(store); err != nil {
+		initialSettings, err := initializeSettings(store)
+		if err != nil {
 			return nil, err
 		}
+		s = initialSettings
 	}
 
 	telemetry := initializeTelemetry(store, s.Notification)
