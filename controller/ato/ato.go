@@ -96,6 +96,12 @@ func (c *Controller) run() {
 				if err := c.Control(reading); err != nil {
 					log.Println("ERROR: Failed to execute ATO control logic. Error:", err)
 				}
+
+				usage := int(c.config.CheckInterval)
+				if reading == 1 {
+					usage = 0
+				}
+				c.updateUsage(usage)
 			}
 		case <-c.stopCh:
 			log.Println("Stopping ATO sub-system")
