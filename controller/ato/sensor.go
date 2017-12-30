@@ -31,6 +31,10 @@ func (c *Controller) cachePump() error {
 func (c *Controller) Control(reading int) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	if c.config.Pump != "" {
+		log.Println("ato-subsystem: control enabled but pump not set. Skipping")
+		return nil
+	}
 	if err := c.cachePump(); err != nil {
 		log.Println("ERROR: ATO subsystem. Failed to fetch pump details. Error:", err)
 		return err
@@ -44,7 +48,6 @@ func (c *Controller) Control(reading int) error {
 			}
 			log.Println("Switched off ATO pump")
 		}
-		c.updateUsage(0)
 	} else { // water is below the level
 		if !c.pump.On {
 			c.pump.On = true
@@ -54,7 +57,6 @@ func (c *Controller) Control(reading int) error {
 			}
 			log.Println("Switched on ATO pump")
 		}
-		c.updateUsage(int(c.config.CheckInterval))
 	}
 	return nil
 }
