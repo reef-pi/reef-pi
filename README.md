@@ -33,7 +33,7 @@ reef-pi would not be possible without these awesome things:
   - [Adafruit.com](https://www.adafruit.com/) for all peripheral boards, tutorials.
   - [embd](http://embd.kidoman.io/), go based IoT library.
   - [reef2reef](https://www.reef2reef.com/), an online reef tank user forum.
-  - [nano reef][https://www.nano-reef.com/], on online forum specific for nano reef tanks
+  - [nano reef](https://www.nano-reef.com/), on online forum specific for nano reef tanks
 
 
 ## License
