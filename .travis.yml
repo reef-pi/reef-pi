@@ -9,7 +9,7 @@ before_install:
   - sudo npm install -g npm
 script:
   - make go-get
-  - make test
+  - ./build/ci.sh
   - make pi
   - bundle install
   - env
@@ -17,3 +17,5 @@ script:
   - ./node_modules/.bin/webpack -d
   - ./node_modules/.bin/standard jsx/*
   - make deb
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
