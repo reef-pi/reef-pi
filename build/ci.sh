@@ -3,7 +3,7 @@
 set -e
 pushd $PWD/..
 	echo "" > coverage.txt
-	for package in $(go list ./...); do \
+	for d in $(go list ./...); do \
     go test -race -coverprofile=profile.out -covermode=atomic $d
     if [ -f profile.out ]; then
         cat profile.out >> coverage.txt
