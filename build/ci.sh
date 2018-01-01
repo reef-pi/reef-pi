@@ -1,13 +1,12 @@
 #!/bin/bash
 
 set -e
-pushd $PWD/..
-	echo "" > coverage.txt
-	for d in $(go list ./...); do \
-    go test -race -coverprofile=profile.out -covermode=atomic $d
-    if [ -f profile.out ]; then
-        cat profile.out >> coverage.txt
-        rm profile.out
-    fi
-	done
-popd
+echo "" > coverage.txt
+for d in $(go list ./...); do \
+	echo "Running: go test -race -coverprofile=profile.out -covermode=atomic ${d}"
+	go test -race -coverprofile=profile.out -covermode=atomic $d
+	if [ -f profile.out ]; then
+			cat profile.out >> coverage.txt
+			rm profile.out
+	fi
+done
