@@ -53,12 +53,15 @@ export default class LightsChart extends Common {
         )
       })
       charts.push(
-        <LineChart width={500} height={250} data={data} key={'light-' + i} >
-          <XAxis dataKey='time' />
-          <YAxis />
-          <Tooltip />
-          {lines}
-        </LineChart>
+        <div className='container' key={'light-' + i}>
+          <label className='text-primary'>{light.name}</label>
+          <LineChart width={500} height={250} data={data}>
+            <XAxis dataKey='time' />
+            <YAxis />
+            <Tooltip />
+            {lines}
+          </LineChart>
+        </div>
       )
     })
     return (charts)
