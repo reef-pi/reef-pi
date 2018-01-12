@@ -11,14 +11,15 @@ import (
 const Bucket = "timers"
 
 type Job struct {
-	ID        string `json:"id"`
-	Minute    string `json:"minute"`
-	Day       string `json:"day"`
-	Hour      string `json:"hour"`
-	Second    string `json:"second"`
-	Equipment string `json:"equipment"`
-	On        bool   `json:"on"`
-	Name      string `json:"name"`
+	ID        string          `json:"id"`
+	Minute    string          `json:"minute"`
+	Day       string          `json:"day"`
+	Hour      string          `json:"hour"`
+	Second    string          `json:"second"`
+	Name      string          `json:"name"`
+	Type      string          `json:"type"`
+	Reminder  Reminder        `json:"reminder"`
+	Equipment UpdateEquipment `json:"equipment"`
 }
 
 func (j *Job) CronSpec() string {
@@ -26,8 +27,22 @@ func (j *Job) CronSpec() string {
 }
 
 func (j *Job) Validate() error {
-	_, err := cron.Parse(j.CronSpec())
-	return err
+	if _, err := cron.Parse(j.CronSpec()); err != nil {
+		return err
+	}
+	switch j.Type {
+	case "reminder":
+		if j.Reminder.Title == "" {
+			return fmt.Errorf("Missing reminder title")
+		}
+	case "equipment":
+		if j.Equipment.ID == "" {
+			return fmt.Errorf("Missing equipment")
+		}
+	default:
+		return fmt.Errorf("Invalid timer type: %s", j.Type)
+	}
+	return nil
 }
 
 func (c *Controller) Get(id string) (Job, error) {
@@ -50,15 +65,9 @@ func (c *Controller) List() ([]Job, error) {
 
 func (c *Controller) Create(job Job) error {
 	if err := job.Validate(); err != nil {
-		return fmt.Errorf("Ivalid cronspec: %s", job.CronSpec())
-	}
-	if job.Equipment == "" {
-		return fmt.Errorf("Missing equipment")
-	}
-	_, err := c.equipments.Get(job.Equipment)
-	if err != nil {
 		return err
 	}
+
 	fn := func(id string) interface{} {
 		job.ID = id
 		return job
@@ -99,7 +108,7 @@ func (c *Controller) loadAllJobs() error {
 }
 
 func (c *Controller) addToCron(job Job) error {
-	runner, err := c.Runner(job.Equipment, job.On)
+	runner, err := c.Runner(job)
 	if err != nil {
 		return err
 	}

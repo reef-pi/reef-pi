@@ -32,7 +32,9 @@ export default class Timer extends Common {
         this.setState({
           timer: data
         })
-        this.fetchEquipment(data.equipment)
+        if (data.type === 'equipment') {
+          this.fetchEquipment(data.equipment.id)
+        }
       }.bind(this)
     })
   }
@@ -44,14 +46,24 @@ export default class Timer extends Common {
     if (this.state.timer === undefined) {
       return ''
     }
-    var eqAction = this.state.timer.on ? 'on' : 'off'
-    var eqName = this.state.equipment === undefined ? '' : this.state.equipment.name
+    var trigger = ''
+    switch (this.state.timer.type) {
+      case 'equipment':
+        var eqAction = this.state.timer.on ? 'on' : 'off'
+        var eqName = this.state.equipment === undefined ? '' : this.state.equipment.name
+        trigger = '(' + eqName + ' ' + eqAction + ')'
+        break
+      case 'reminder':
+        trigger = '(reminder)'
+        break
+    }
+
     var parts = [
       this.state.timer.day + '  ',
       this.state.timer.hour + ':',
       this.state.timer.minute + ':',
       this.state.timer.second + ' ',
-      '(' + eqName + ' ' + eqAction + ')'
+      trigger
     ]
     return parts.join('')
   }
@@ -66,7 +78,7 @@ export default class Timer extends Common {
         <div className='col-sm-2'>
           <label>{this.props.name}</label>
         </div>
-        <div className='col-sm-2 pre'>{this.t2s()}</div>
+        <div className='col-sm-4 pre'>{this.t2s()}</div>
       </div>
     )
   }

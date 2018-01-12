@@ -30,7 +30,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 		return false, err
 	}
 	for _, j := range jobs {
-		if j.Equipment == id {
+		if (j.Type == "equipment") && (j.Equipment.ID == id) {
 			return true, nil
 		}
 	}
