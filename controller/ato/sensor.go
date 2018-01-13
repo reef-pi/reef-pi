@@ -31,7 +31,7 @@ func (c *Controller) cachePump() error {
 func (c *Controller) Control(reading int) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.config.Pump != "" {
+	if c.config.Pump == "" {
 		log.Println("ato-subsystem: control enabled but pump not set. Skipping")
 		return nil
 	}
