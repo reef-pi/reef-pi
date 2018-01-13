@@ -59,11 +59,12 @@ func TestTimerController(t *testing.T) {
 	enc := json.NewEncoder(body)
 	j := Job{
 		Name:      "test-job",
-		Equipment: eqs[0].ID,
+		Equipment: UpdateEquipment{ID: eqs[0].ID},
 		Second:    "0",
 		Minute:    "*",
 		Hour:      "*",
 		Day:       "*",
+		Type:      "equipment",
 	}
 	enc.Encode(&j)
 	if err := tr.Do("PUT", "/api/timers", body, nil); err != nil {

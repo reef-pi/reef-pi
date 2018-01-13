@@ -1,27 +1,52 @@
 import React from 'react'
-import { OverlayTrigger, DropdownButton, MenuItem, Tooltip } from 'react-bootstrap'
 import $ from 'jquery'
 import Timer from './timer.jsx'
 import Common from './common.jsx'
+import Reminder from './timers/reminder.jsx'
+import Cron from './timers/cron.jsx'
+import Equipment from './timers/equipment.jsx'
 
 export default class Timers extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      equipment: undefined,
-      equipmentAction: 'on',
-      equipments: [],
       timers: [],
-      addTimer: false
+      addTimer: false,
+      type: 'equipment',
+      equipment: undefined,
+      reminder: undefined
     }
     this.timerList = this.timerList.bind(this)
     this.createTimer = this.createTimer.bind(this)
-    this.equipmentList = this.equipmentList.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.removeTimer = this.removeTimer.bind(this)
-    this.setEquipment = this.setEquipment.bind(this)
-    this.setEquipmentAction = this.setEquipmentAction.bind(this)
     this.toggleAddTimerDiv = this.toggleAddTimerDiv.bind(this)
+    this.setType = this.setType.bind(this)
+    this.update = this.update.bind(this)
+    this.trigger = this.trigger.bind(this)
+  }
+
+  trigger () {
+    switch (this.state.type) {
+      case 'equipment':
+        return (<Equipment updateHook={this.update('equipment')} />)
+      case 'reminder':
+        return (<Reminder updateHook={this.update('reminder')} />)
+    }
+  }
+
+  update (k) {
+    return (function (d) {
+      var h = {}
+      h[k] = d
+      this.setState(h)
+    }.bind(this))
+  }
+
+  setType (t) {
+    return (function () {
+      this.setState({type: t})
+    }.bind(this))
   }
 
   componentDidMount () {
@@ -38,15 +63,6 @@ export default class Timers extends Common {
         })
       }.bind(this)
     })
-    this.ajaxGet({
-      url: '/api/equipments',
-      success: function (data) {
-        this.setState({
-          equipments: data,
-          showAlert: false
-        })
-      }.bind(this)
-    })
   }
 
   timerList () {
@@ -54,21 +70,16 @@ export default class Timers extends Common {
     $.each(this.state.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item row'>
-          {}
-          <Timer timer_id={timer.id} name={timer.name} equipment={timer.equipment} />
-          <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
+          <div className='col-sm-10'>
+            <Timer timer_id={timer.id} name={timer.name} equipment={timer.equipment} />
+          </div>
+          <div className='col-sm-2'>
+            <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
+          </div>
         </li>
         )
     }.bind(this))
     return (list)
-  }
-
-  equipmentList () {
-    var menuItems = []
-    $.each(this.state.equipments, function (k, v) {
-      menuItems.push(<MenuItem key={k} eventKey={k}>{v.name}</MenuItem>)
-    })
-    return menuItems
   }
 
   removeTimer (id) {
@@ -83,25 +94,6 @@ export default class Timers extends Common {
         })
       }.bind(this))
     }.bind(this))
-  }
-
-  setEquipment (k, ev) {
-    var eqID = this.state.equipments[k].id
-    this.ajaxGet({
-      url: '/api/equipments/' + eqID,
-      success: function (data) {
-        this.setState({
-          equipment: data,
-          showAlert: false
-        })
-      }.bind(this)
-    })
-  }
-
-  setEquipmentAction (k, ev) {
-    this.setState({
-      equipmentAction: k
-    })
   }
 
   createTimer () {
@@ -140,12 +132,21 @@ export default class Timers extends Common {
       })
       return
     }
-    if (this.state.equipment === undefined) {
-      this.setState({
-        alertMsg: 'Select an equipment',
-        showAlert: true
-      })
-      return
+    switch (this.state.type) {
+      case 'equipment':
+        if (this.state.equipment === undefined) {
+          this.setState({
+            alertMsg: 'Select an equipment',
+            showAlert: true
+          })
+          return
+        }
+        var eq = this.state.equipment
+        eq.duration = parseInt(eq.duration)
+        this.setState({equipment: eq})
+        break
+      case 'reminder':
+        break
     }
     var payload = {
       name: $('#name').val(),
@@ -153,8 +154,9 @@ export default class Timers extends Common {
       hour: $('#hour').val(),
       minute: $('#minute').val(),
       second: $('#second').val(),
-      on: (this.state.equipmentAction === 'on'),
-      equipment: this.state.equipment.id
+      equipment: this.state.equipment,
+      type: this.state.type,
+      reminder: this.state.reminder
     }
     this.ajaxPut({
       url: '/api/timers',
@@ -178,18 +180,9 @@ export default class Timers extends Common {
   }
 
   render () {
-    var eqName = ''
-    if (this.state.equipment !== undefined) {
-      eqName = this.state.equipment.name
-    }
-
     var dStyle = {
       display: this.state.addTimer ? 'block' : 'none'
     }
-    var tooltip = (<Tooltip id='day-tooltip'> Any integer with 1 to 31, representing the day of the month or other valid specification</Tooltip>)
-    var instance = <OverlayTrigger overlay={tooltip}>
-      <label> ? </label>
-    </OverlayTrigger>
     return (
       <div className='container'>
         {this.showAlert()}
@@ -198,47 +191,28 @@ export default class Timers extends Common {
           <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
           <div style={dStyle} className='container'>
             <div className='row'>
+              <label className='col-sm-1 text-secondary'>Name</label>
+              <input type='text' id='name' className='col-sm-3' />
+            </div>
+            <div className='row'>
               <div className='col-sm-6'>
-                <div className='row'>
-                  <div className='col-sm-3'>Name</div> <input type='text' id='name' className='col-sm-6' />
+                <div className='btn-group'>
+                  <label className='btn btn-secondary'>
+                    <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
+                  </label>
+                  <label className='btn btn-secondary'>
+                    <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} /> Equipment
+                  </label>
                 </div>
-                <div className='row'>
-                  <div className='col-sm-6'>Equipment</div>
-                  <div className='col-sm-6'>
-                    <DropdownButton title={eqName} id='equipment' onSelect={this.setEquipment}>
-                      {this.equipmentList()}
-                    </DropdownButton>
-                  </div>
-                </div>
-                <div className='row'>
-                  <label className='col-sm-6 '> Action</label>
-                  <span className='col-sm-6'>
-                    <DropdownButton title={this.state.equipmentAction} id='equipmentAction' onSelect={this.setEquipmentAction}>
-                      <MenuItem key='on' eventKey='on'> On </MenuItem>
-                      <MenuItem key='off' eventKey='off'> Off </MenuItem>
-                    </DropdownButton>
-                  </span>
-                </div>
+                {this.trigger()}
               </div>
               <div className='col-sm-6'>
-                <div className='row'>
-                  <label className='col-sm-3'>Day of month</label>
-                  <input type='text' id='day' className='col-sm-2' />
-                  <label className='col-sm-1'>{instance}</label>
-                </div>
-                <div className='row'>
-                  <label className='col-sm-3'>Hour</label> <input type='text' id='hour' className='col-sm-2' />
-                </div>
-                <div className='row'>
-                  <label className='col-sm-3'>Minute</label> <input type='text' id='minute' className='col-sm-2' />
-                </div>
-                <div className='row'>
-                  <label className='col-sm-3'>Second</label> <input type='text' id='second' className='col-sm-2' />
-                </div>
+                <Cron />
               </div>
             </div>
             <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
           </div>
+
         </div>
       </div>
     )
