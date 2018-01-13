@@ -12,6 +12,17 @@ type Usage struct {
 	Time utils.TeleTime `json:"time"`
 }
 
+func (c *Controller) loadUsage() {
+	var usage []Usage
+	if err := c.store.Get(Bucket, "usage", &usage); err != nil {
+		log.Println("ERROR: ato sub-system failed to restore usage statistics from db. Error:", err)
+	}
+	for _, u := range usage {
+		c.usage.Value = u
+		c.usage.Next()
+	}
+}
+
 func (c *Controller) updateUsage(minutes int) {
 	current := Usage{
 		Pump: minutes,
@@ -23,7 +34,7 @@ func (c *Controller) updateUsage(minutes int) {
 	}
 	previous, ok := c.usage.Value.(Usage)
 	if !ok {
-		log.Println("ERROR: ATO subsystem. Failed to typecast previous equipment usage")
+		log.Println("ERROR: ato subsystem. Failed to typecast previous equipment usage")
 		return
 	}
 	if previous.Time.Hour() == current.Time.Hour() {

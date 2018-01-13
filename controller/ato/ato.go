@@ -73,12 +73,14 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Start() {
+	c.loadUsage()
 	go c.run()
 }
 
 func (c *Controller) run() {
 	log.Println("Starting ATO sub system")
 	ticker := time.NewTicker(c.config.CheckInterval * time.Second)
+
 	for {
 		select {
 		case <-ticker.C:
@@ -112,6 +114,14 @@ func (c *Controller) run() {
 }
 func (c *Controller) Stop() {
 	c.stopCh <- struct{}{}
+	usage, err := c.GetUsage()
+	if err != nil {
+		log.Println("ERROR: ato sub-system failed to fetch usage statistic. Error:", err)
+		return
+	}
+	if err := c.store.Update(Bucket, "usage", usage); err != nil {
+		log.Println("ERROR: ato sub-system failed to save usage statistics in db. Error:", err)
+	}
 }
 
 func (c *Controller) Setup() error {
@@ -120,7 +130,7 @@ func (c *Controller) Setup() error {
 	}
 	conf, err := loadConfig(c.store)
 	if err != nil {
-		log.Println("WARNING: ATO config not found. Initializing default config")
+		log.Println("WARNING: ato config not found. Initializing default config")
 		conf = DefaultConfig
 		if err := saveConfig(conf, c.store); err != nil {
 			log.Println("ERROR: Failed to save ato config")

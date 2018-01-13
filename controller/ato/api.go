@@ -35,23 +35,25 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 	utils.JSONUpdateResponse(&conf, fn, w, r)
 }
 
-func (c *Controller) getUsage(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		usage := []Usage{}
-		c.usage.Do(func(i interface{}) {
-			if i != nil {
-				u, ok := i.(Usage)
-				if !ok {
-					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
-					return
-				}
-				usage = append(usage, u)
+func (c *Controller) GetUsage() ([]Usage, error) {
+	usage := []Usage{}
+	c.usage.Do(func(i interface{}) {
+		if i != nil {
+			u, ok := i.(Usage)
+			if !ok {
+				log.Println("ERROR: ato sub-system. Failed to typecast temperature readcontroller usage")
+				return
 			}
-		})
-		sort.Slice(usage, func(i, j int) bool {
-			return usage[i].Time.Before(usage[j].Time)
-		})
-		return usage, nil
-	}
+			usage = append(usage, u)
+		}
+	})
+	sort.Slice(usage, func(i, j int) bool {
+		return usage[i].Time.Before(usage[j].Time)
+	})
+	return usage, nil
+}
+
+func (c *Controller) getUsage(w http.ResponseWriter, req *http.Request) {
+	fn := func(_ string) (interface{}, error) { return c.GetUsage() }
 	utils.JSONGetResponse(fn, w, req)
 }
