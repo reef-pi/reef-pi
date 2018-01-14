@@ -41,7 +41,7 @@ func (c *Controller) GetUsage() ([]Usage, error) {
 		if i != nil {
 			u, ok := i.(Usage)
 			if !ok {
-				log.Println("ERROR: ato sub-system. Failed to typecast temperature readcontroller usage")
+				log.Println("ERROR: ato sub-system. Failed to typecast ato usage")
 				return
 			}
 			usage = append(usage, u)

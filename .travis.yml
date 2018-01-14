@@ -1,5 +1,4 @@
 language: go
-dist: xenial
 go:
   - "1.9"
 before_install:

@@ -59,7 +59,7 @@ func New(version, database string) (*ReefPi, error) {
 		version:    version,
 	}
 	if s.Capabilities.HealthCheck {
-		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry)
+		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry, store)
 	}
 	return r, nil
 }
