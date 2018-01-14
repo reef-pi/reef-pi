@@ -5,7 +5,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
-	"sort"
 )
 
 func (r *ReefPi) API() error {
@@ -66,42 +65,14 @@ func startAPIServer(address string, creds Credentials) (error, *mux.Router) {
 
 func (r *ReefPi) getHourlyHealthStats(w http.ResponseWriter, req *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		usage := []MinutelyHealthMetric{}
-		r.h.minutelyUsage.Do(func(i interface{}) {
-			if i != nil {
-				u, ok := i.(MinutelyHealthMetric)
-				if !ok {
-					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
-					return
-				}
-				usage = append(usage, u)
-			}
-		})
-		sort.Slice(usage, func(i, j int) bool {
-			return usage[i].Time.Before(usage[j].Time)
-		})
-		return usage, nil
+		return r.h.GetHourlyUsage()
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
 
 func (r *ReefPi) getWeeklyHealthStats(w http.ResponseWriter, req *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		usage := []HourlyHealthMetric{}
-		r.h.minutelyUsage.Do(func(i interface{}) {
-			if i != nil {
-				u, ok := i.(HourlyHealthMetric)
-				if !ok {
-					log.Println("ERROR: temperature subsystem. Failed to typecast temperature readcontroller usage")
-					return
-				}
-				usage = append(usage, u)
-			}
-		})
-		sort.Slice(usage, func(i, j int) bool {
-			return usage[i].Time.Before(usage[j].Time)
-		})
-		return usage, nil
+		return r.h.GetWeeklyUsage()
 	}
 	utils.JSONGetResponse(fn, w, req)
 }

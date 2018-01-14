@@ -30,7 +30,7 @@ func (c *Controller) loadReadings() {
 	}
 	for _, r := range readings {
 		c.readings.Value = r
-		c.readings.Next()
+		c.readings = c.readings.Next()
 	}
 }
 
@@ -52,7 +52,7 @@ func (c *Controller) loadUsage() {
 	}
 	for _, u := range usage {
 		c.usage.Value = u
-		c.usage.Next()
+		c.usage = c.usage.Next()
 	}
 }
 

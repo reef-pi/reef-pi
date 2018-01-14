@@ -19,7 +19,7 @@ func (c *Controller) loadUsage() {
 	}
 	for _, u := range usage {
 		c.usage.Value = u
-		c.usage.Next()
+		c.usage = c.usage.Next()
 	}
 }
 
