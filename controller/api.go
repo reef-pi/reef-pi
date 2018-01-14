@@ -17,7 +17,7 @@ func (r *ReefPi) API() error {
 			return err
 		}
 	}
-	err, router := startAPIServer(r.settings.Address, creds)
+	err, router := startAPIServer(r.settings.Address, creds, r.settings.HTTPS)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string, creds Credentials) (error, *mux.Router) {
+func startAPIServer(address string, creds Credentials, https bool) (error, *mux.Router) {
 	assets := http.FileServer(http.Dir("assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "assets/home.html")
@@ -58,8 +58,21 @@ func startAPIServer(address string, creds Credentials) (error, *mux.Router) {
 	http.Handle("/images/", http.StripPrefix("/images/", images))
 	a := utils.NewBasicAuth(creds.User, creds.Password)
 	http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
-	log.Printf("Starting http server at: %s\n", address)
-	go http.ListenAndServe(address, nil)
+	if https {
+		go func() {
+			log.Printf("Starting https server at: %s\n", address)
+			if err := http.ListenAndServeTLS(address, "server.crt", "server.key", nil); err != nil {
+				log.Println("ERROR: Failed to run https server. Error:", err)
+			}
+		}()
+	} else {
+		go func() {
+			log.Printf("Starting http server at: %s\n", address)
+			if err := http.ListenAndServe(address, nil); err != nil {
+				log.Println("ERROR: Failed to run http server. Error:", err)
+			}
+		}()
+	}
 	return nil, router
 }
 

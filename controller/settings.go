@@ -15,6 +15,7 @@ type Settings struct {
 	Notification bool              `json:"notification,yaml:"notification""`
 	Capabilities Capabilities      `json:"capabilities" yaml:"capabilities"`
 	HealthCheck  HealthCheckNotify `json:"health_check" yaml:"health_check"`
+	HTTPS        bool              `json:"https" yaml:"https"`
 }
 
 var DefaultSettings = Settings{
