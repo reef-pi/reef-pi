@@ -19,12 +19,13 @@ type HealthCheckNotify struct {
 }
 
 type HealthChecker struct {
-	stopCh        chan struct{}
-	interval      time.Duration
-	telemetry     *utils.Telemetry
-	minutelyUsage *ring.Ring
-	hourlyUsage   *ring.Ring
-	Notify        HealthCheckNotify
+	stopCh    chan struct{}
+	interval  time.Duration
+	telemetry *utils.Telemetry
+	mUsage    *ring.Ring
+	hUsage    *ring.Ring
+	Notify    HealthCheckNotify
+	store     utils.Store
 }
 
 type MinutelyHealthMetric struct {
@@ -41,14 +42,15 @@ type HourlyHealthMetric struct {
 	mReadings  []float64      `json:"-"`
 }
 
-func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry, store utils.Store) *HealthChecker {
 	return &HealthChecker{
-		interval:      i,
-		stopCh:        make(chan struct{}),
-		telemetry:     telemetry,
-		minutelyUsage: ring.New(60 * 3), // last 3 hours
-		hourlyUsage:   ring.New(24 * 7), // last 7 days
-		Notify:        notify,
+		interval:  i,
+		stopCh:    make(chan struct{}),
+		telemetry: telemetry,
+		mUsage:    ring.New(60 * 3), // last 3 hours
+		hUsage:    ring.New(24 * 7), // last 7 days
+		Notify:    notify,
+		store:     store,
 	}
 }
 
@@ -58,11 +60,11 @@ func (h *HealthChecker) syncHourlyMetric(now utils.TeleTime) HourlyHealthMetric 
 		lReadings: []float64{},
 		mReadings: []float64{},
 	}
-	if h.hourlyUsage.Value == nil {
-		h.hourlyUsage.Value = current
+	if h.hUsage.Value == nil {
+		h.hUsage.Value = current
 		return current
 	}
-	previous, ok := h.hourlyUsage.Value.(HourlyHealthMetric)
+	previous, ok := h.hUsage.Value.(HourlyHealthMetric)
 	if !ok {
 		log.Println("ERROR: health checker. Failed to typecast previous health check metric")
 		return current
@@ -70,19 +72,19 @@ func (h *HealthChecker) syncHourlyMetric(now utils.TeleTime) HourlyHealthMetric 
 	if previous.Time.Hour() == current.Time.Hour() {
 		return previous
 	}
-	h.hourlyUsage = h.hourlyUsage.Next()
-	h.hourlyUsage.Value = current
+	h.hUsage = h.hUsage.Next()
+	h.hUsage.Value = current
 	return current
 }
 
 func (h *HealthChecker) updateUsage(memory, load float64) {
 	now := utils.TeleTime(time.Now())
-	h.minutelyUsage.Value = MinutelyHealthMetric{
+	h.mUsage.Value = MinutelyHealthMetric{
 		Load5:      load,
 		UsedMemory: memory,
 		Time:       now,
 	}
-	h.minutelyUsage = h.minutelyUsage.Next()
+	h.mUsage = h.mUsage.Next()
 	hUsage := h.syncHourlyMetric(now)
 	hUsage.lReadings = append(hUsage.lReadings, load)
 	hUsage.mReadings = append(hUsage.mReadings, memory)
@@ -95,7 +97,7 @@ func (h *HealthChecker) updateUsage(memory, load float64) {
 	}
 	hUsage.Load5 = lTotal / float64(len(hUsage.lReadings))
 	hUsage.UsedMemory = mTotal / float64(len(hUsage.mReadings))
-	h.hourlyUsage.Value = hUsage
+	h.hUsage.Value = hUsage
 }
 
 func (h *HealthChecker) check() {
@@ -138,6 +140,7 @@ func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
 func (h *HealthChecker) Stop() {
 	log.Println("Stopping health checker")
 	h.stopCh <- struct{}{}
+	h.saveUsage()
 }
 
 func (h *HealthChecker) setup() {
@@ -147,6 +150,7 @@ func (h *HealthChecker) setup() {
 
 func (h *HealthChecker) Start() {
 	h.setup()
+	h.loadUsage()
 	log.Println("Starting health checker")
 	ticker := time.NewTicker(h.interval)
 	for {
@@ -162,11 +166,11 @@ func (h *HealthChecker) Start() {
 
 func (h *HealthChecker) GetWeeklyUsage() ([]HourlyHealthMetric, error) {
 	usage := []HourlyHealthMetric{}
-	h.minutelyUsage.Do(func(i interface{}) {
+	h.hUsage.Do(func(i interface{}) {
 		if i != nil {
 			u, ok := i.(HourlyHealthMetric)
 			if !ok {
-				log.Println("ERROR: health controller subsystem. Failed to typecast temperature readcontroller usage")
+				log.Println("ERROR: health controller subsystem. Failed to typecast hourly usage")
 				return
 			}
 			usage = append(usage, u)
@@ -180,7 +184,7 @@ func (h *HealthChecker) GetWeeklyUsage() ([]HourlyHealthMetric, error) {
 
 func (h *HealthChecker) GetHourlyUsage() ([]MinutelyHealthMetric, error) {
 	usage := []MinutelyHealthMetric{}
-	h.minutelyUsage.Do(func(i interface{}) {
+	h.mUsage.Do(func(i interface{}) {
 		if i != nil {
 			u, ok := i.(MinutelyHealthMetric)
 			if !ok {
@@ -196,23 +200,37 @@ func (h *HealthChecker) GetHourlyUsage() ([]MinutelyHealthMetric, error) {
 	return usage, nil
 }
 
-func (h *HealthChecker) loadUsage(store utils.Store) {
+func (h *HealthChecker) loadUsage() {
 	var mUsage []MinutelyHealthMetric
-	if err := c.store.Get(Bucket, "usage", &usage); err != nil {
-		log.Println("ERROR: ato sub-system failed to restore usage statistics from db. Error:", err)
+	var hUsage []HourlyHealthMetric
+	if err := h.store.Get(Bucket, "m_usage", &mUsage); err != nil {
+		log.Println("ERROR: health check sub-system failed to restore hourly usage statistics from db. Error:", err)
 	}
-	for _, u := range usage {
-		c.usage.Value = u
-		c.usage.Next()
+	if err := h.store.Get(Bucket, "h_usage", &hUsage); err != nil {
+		log.Println("ERROR: health check sub-system failed to restore weekly usage statistics from db. Error:", err)
+	}
+	for _, u := range mUsage {
+		h.mUsage.Value = u
+		h.mUsage.Next()
+	}
+	for _, u := range hUsage {
+		h.hUsage.Value = u
+		h.hUsage.Next()
 	}
 }
-func (h *HealthChecker) saveUsage(store utils.Store) {
-	mUsage, err := c.GetUsage()
+func (h *HealthChecker) saveUsage() {
+	mUsage, err := h.GetHourlyUsage()
 	if err != nil {
-		log.Println("ERROR: ato sub-system failed to fetch usage statistic. Error:", err)
-		return
+		log.Println("ERROR: health check sub-system failed to fetch hourly usage statistic. Error:", err)
 	}
-	if err := c.store.Update(Bucket, "usage", usage); err != nil {
-		log.Println("ERROR: ato sub-system failed to save usage statistics in db. Error:", err)
+	if err := h.store.Update(Bucket, "m_usage", mUsage); err != nil {
+		log.Println("ERROR: health check sub-system failed to save hourly usage statistics in db. Error:", err)
+	}
+	hUsage, err := h.GetWeeklyUsage()
+	if err != nil {
+		log.Println("ERROR: health check sub-system failed to fetch weekly usage statistic. Error:", err)
+	}
+	if err := h.store.Update(Bucket, "h_usage", hUsage); err != nil {
+		log.Println("ERROR: health check sub-system failed to save weekly usage statistics in db. Error:", err)
 	}
 }
