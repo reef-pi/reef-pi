@@ -211,13 +211,14 @@ func (h *HealthChecker) loadUsage() {
 	}
 	for _, u := range mUsage {
 		h.mUsage.Value = u
-		h.mUsage.Next()
+		h.mUsage = h.mUsage.Next()
 	}
 	for _, u := range hUsage {
 		h.hUsage.Value = u
-		h.hUsage.Next()
+		h.hUsage = h.hUsage.Next()
 	}
 }
+
 func (h *HealthChecker) saveUsage() {
 	mUsage, err := h.GetHourlyUsage()
 	if err != nil {
