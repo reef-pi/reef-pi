@@ -50,7 +50,7 @@ func loadConfig(store utils.Store) (Config, error) {
 
 func saveConfig(conf Config, store utils.Store) error {
 	if conf.CheckInterval <= 0 {
-		return fmt.Errorf("CheckInterval for ATO controller must be greater than zero")
+		return fmt.Errorf("CheckInterval for ato controller must be greater than zero")
 	}
 	return store.Update(Bucket, "config", conf)
 }
@@ -89,14 +89,14 @@ func (c *Controller) run() {
 			}
 			reading, err := c.Read()
 			if err != nil {
-				log.Println("ERROR: Failed to read ATO sensor. Error:", err)
+				log.Println("ERROR: Failed to read ato sensor. Error:", err)
 				continue
 			}
 			log.Println("ato sub-system:  sensor value:", reading)
 			c.telemetry.EmitMetric("ato", reading)
 			if c.config.Control {
 				if err := c.Control(reading); err != nil {
-					log.Println("ERROR: Failed to execute ATO control logic. Error:", err)
+					log.Println("ERROR: Failed to execute ato control logic. Error:", err)
 				}
 
 				usage := int(c.config.CheckInterval)
@@ -106,7 +106,7 @@ func (c *Controller) run() {
 				c.updateUsage(usage)
 			}
 		case <-c.stopCh:
-			log.Println("Stopping ATO sub-system")
+			log.Println("Stopping ato sub-system")
 			ticker.Stop()
 			return
 		}
