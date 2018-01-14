@@ -8,6 +8,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"log"
 	"math"
+	"sort"
 	"time"
 )
 
@@ -159,5 +160,59 @@ func (h *HealthChecker) Start() {
 	}
 }
 
-func (h *HealthChecker) GetUsage() {
+func (h *HealthChecker) GetWeeklyUsage() ([]HourlyHealthMetric, error) {
+	usage := []HourlyHealthMetric{}
+	h.minutelyUsage.Do(func(i interface{}) {
+		if i != nil {
+			u, ok := i.(HourlyHealthMetric)
+			if !ok {
+				log.Println("ERROR: health controller subsystem. Failed to typecast temperature readcontroller usage")
+				return
+			}
+			usage = append(usage, u)
+		}
+	})
+	sort.Slice(usage, func(i, j int) bool {
+		return usage[i].Time.Before(usage[j].Time)
+	})
+	return usage, nil
+}
+
+func (h *HealthChecker) GetHourlyUsage() ([]MinutelyHealthMetric, error) {
+	usage := []MinutelyHealthMetric{}
+	h.minutelyUsage.Do(func(i interface{}) {
+		if i != nil {
+			u, ok := i.(MinutelyHealthMetric)
+			if !ok {
+				log.Println("ERROR: health check sub-system. Failed to typecast cpu/memory  usage")
+				return
+			}
+			usage = append(usage, u)
+		}
+	})
+	sort.Slice(usage, func(i, j int) bool {
+		return usage[i].Time.Before(usage[j].Time)
+	})
+	return usage, nil
+}
+
+func (h *HealthChecker) loadUsage(store utils.Store) {
+	var mUsage []MinutelyHealthMetric
+	if err := c.store.Get(Bucket, "usage", &usage); err != nil {
+		log.Println("ERROR: ato sub-system failed to restore usage statistics from db. Error:", err)
+	}
+	for _, u := range usage {
+		c.usage.Value = u
+		c.usage.Next()
+	}
+}
+func (h *HealthChecker) saveUsage(store utils.Store) {
+	mUsage, err := c.GetUsage()
+	if err != nil {
+		log.Println("ERROR: ato sub-system failed to fetch usage statistic. Error:", err)
+		return
+	}
+	if err := c.store.Update(Bucket, "usage", usage); err != nil {
+		log.Println("ERROR: ato sub-system failed to save usage statistics in db. Error:", err)
+	}
 }
