@@ -71,6 +71,8 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
+	c.loadUsage()
+	c.loadReadings()
 	go c.run()
 }
 
@@ -130,6 +132,8 @@ func (c *Controller) run() {
 
 func (c *Controller) Stop() {
 	c.stopCh <- struct{}{}
+	c.saveUsage()
+	c.saveReadings()
 }
 
 func (c *Controller) control(reading float32) error {

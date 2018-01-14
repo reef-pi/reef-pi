@@ -78,7 +78,7 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) run() {
-	log.Println("Starting ATO sub system")
+	log.Println("Starting ato sub system")
 	ticker := time.NewTicker(c.config.CheckInterval * time.Second)
 
 	for {
@@ -92,7 +92,7 @@ func (c *Controller) run() {
 				log.Println("ERROR: Failed to read ATO sensor. Error:", err)
 				continue
 			}
-			log.Println("ATO sensor value:", reading)
+			log.Println("ato sub-system:  sensor value:", reading)
 			c.telemetry.EmitMetric("ato", reading)
 			if c.config.Control {
 				if err := c.Control(reading); err != nil {
@@ -114,14 +114,7 @@ func (c *Controller) run() {
 }
 func (c *Controller) Stop() {
 	c.stopCh <- struct{}{}
-	usage, err := c.GetUsage()
-	if err != nil {
-		log.Println("ERROR: ato sub-system failed to fetch usage statistic. Error:", err)
-		return
-	}
-	if err := c.store.Update(Bucket, "usage", usage); err != nil {
-		log.Println("ERROR: ato sub-system failed to save usage statistics in db. Error:", err)
-	}
+	c.saveUsage()
 }
 
 func (c *Controller) Setup() error {

@@ -23,6 +23,17 @@ func (c *Controller) loadUsage() {
 	}
 }
 
+func (c *Controller) saveUsage() {
+	usage, err := c.GetUsage()
+	if err != nil {
+		log.Println("ERROR: ato sub-system failed to fetch usage statistic. Error:", err)
+		return
+	}
+	if err := c.store.Update(Bucket, "usage", usage); err != nil {
+		log.Println("ERROR: ato sub-system failed to save usage statistics in db. Error:", err)
+	}
+}
+
 func (c *Controller) updateUsage(minutes int) {
 	current := Usage{
 		Pump: minutes,
