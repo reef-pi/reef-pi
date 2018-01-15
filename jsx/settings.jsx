@@ -161,6 +161,10 @@ export default class Settings extends Common {
               <input type='checkbox' id='updateDisplay' onClick={this.updateCheckbox('display')} defaultChecked={this.state.settings.display} className='form-control' />
               {this.showDisplay()}
             </div>
+            <div className='input-group'>
+              <label className='input-group-addon'>Use HTTPS</label>
+              <input type='checkbox' id='use_https' onClick={this.updateCheckbox('https')} defaultChecked={this.state.settings.https} className='form-control' />
+            </div>
           </div>
         </div>
         <div className='row'>
