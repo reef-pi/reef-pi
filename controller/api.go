@@ -59,6 +59,9 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 	a := utils.NewBasicAuth(creds.User, creds.Password)
 	http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
 	if https {
+		if err := utils.GenerateCerts(); err != nil {
+			return err, nil
+		}
 		go func() {
 			log.Printf("Starting https server at: %s\n", address)
 			if err := http.ListenAndServeTLS(address, "server.crt", "server.key", nil); err != nil {
