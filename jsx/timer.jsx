@@ -49,9 +49,13 @@ export default class Timer extends Common {
     var trigger = ''
     switch (this.state.timer.type) {
       case 'equipment':
-        var eqAction = this.state.timer.on ? 'on' : 'off'
+        var eqAction = this.state.timer.equipment.on ? 'on' : 'off'
         var eqName = this.state.equipment === undefined ? '' : this.state.equipment.name
-        trigger = '(' + eqName + ' ' + eqAction + ')'
+        if (this.state.timer.equipment.revert) {
+          trigger = '(' + eqName + ' ' + eqAction + ' [' + this.state.timer.equipment.duration + ']' + ')'
+        } else {
+          trigger = '(' + eqName + ' ' + eqAction + ')'
+        }
         break
       case 'reminder':
         trigger = '(reminder)'
@@ -75,10 +79,10 @@ export default class Timer extends Common {
   render () {
     return (
       <div className='container'>
-        <div className='col-sm-2'>
-          <label>{this.props.name}</label>
+        <div className='col-sm-3'>
+          <label className='text-primary'>{this.props.name}</label>
         </div>
-        <div className='col-sm-4 pre'>{this.t2s()}</div>
+        <div className='col-sm-9 pre'>{this.t2s()}</div>
       </div>
     )
   }
