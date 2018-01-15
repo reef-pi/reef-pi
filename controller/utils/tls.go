@@ -19,7 +19,7 @@ func GenerateCerts() error {
 
 	log.Println("Generating self signed certificate for https server")
 
-	validFor := 364 * 24 * time.Hour
+	validFor := 15 * 364 * 24 * time.Hour // 15 years
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		return err
