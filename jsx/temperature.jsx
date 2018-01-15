@@ -92,11 +92,11 @@ export default class Temperature extends Common {
 
   update () {
     var tc = this.state.tc
-    tc.min = parseInt(tc.min)
-    tc.max = parseInt(tc.max)
-    tc.notify.min = parseInt(tc.notify.min)
-    tc.notify.max = parseInt(tc.notify.max)
-    tc.check_interval = parseInt(tc.check_interval)
+    tc.min = parseFloat(tc.min)
+    tc.max = parseFloat(tc.max)
+    tc.notify.min = parseFloat(tc.notify.min)
+    tc.notify.max = parseFloat(tc.notify.max)
+    tc.check_interval = parseFloat(tc.check_interval)
 
     if (isNaN(tc.min)) {
       this.setState({
