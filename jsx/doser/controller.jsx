@@ -12,10 +12,14 @@ export default class Doser extends Common {
       add: false
     }
     this.toggle = this.toggle.bind(this)
-    this.remove = this.remove.bind(this)
     this.fetch = this.fetch.bind(this)
     this.pumpList = this.pumpList.bind(this)
+    this.update = this.update.bind(this)
   }
+
+  update() {
+  }
+
 
   componentWillMount () {
     this.fetch()
@@ -25,15 +29,12 @@ export default class Doser extends Common {
     var pumps = []
     $.each(this.state.pumps, function (i, pump) {
       pumps.push(
-        <div key={'pump-' + i} className='row'>
-          <div className='col-sm-4'><Pump data={pump}/></div>
-          <div className='col-sm-1'>
-            <input type='button' id={'remove-pump-' + pump.id} onClick={this.remove(pump.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
-          </div>
+        <div key={'pump-' + i} className='row list-group-item'>
+          <Pump data={pump} updateHook={this.update} />
         </div>
       )
     }.bind(this))
-    return (pumps)
+    return (<ul className='list-group'> {pumps} </ul>)
   }
 
   fetch () {
@@ -52,21 +53,6 @@ export default class Doser extends Common {
     */
   }
 
-
-  remove (id) {
-    return (function () {
-      this.confirm('Are you sure ?')
-      .then(function () {
-        this.ajaxDelete({
-          url: '/api/dosers/' + id,
-          type: 'DELETE',
-          success: function (data) {
-            this.fetch()
-          }.bind(this)
-        })
-      }.bind(this))
-    }.bind(this))
-  }
 
   render () {
     return (

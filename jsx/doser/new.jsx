@@ -29,10 +29,11 @@ export default class New extends Common {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' id='pump-name' /> </div>
+          <div className='col-sm-2'><input type='text' id='pump-name' /></div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Pump</div>
+          <div className='col-sm-2'>Pin</div>
+          <div className='col-sm-1'><input type='text' id='pump-pin' className='col-sm-1' /></div>
         </div>
         <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
