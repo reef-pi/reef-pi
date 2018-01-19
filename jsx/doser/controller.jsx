@@ -30,7 +30,7 @@ export default class Doser extends Common {
     $.each(this.state.pumps, function (i, pump) {
       pumps.push(
         <div key={'pump-' + i} className='row list-group-item'>
-          <Pump data={pump} updateHook={this.update} />
+          <Pump data={pump} updateHook={this.fetch} />
         </div>
       )
     }.bind(this))
