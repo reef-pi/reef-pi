@@ -9,8 +9,11 @@ export default class Pump extends Common {
     this.state = {
       calibrate: false,
       schedule: false,
-      speed: 0,
-      duration: 0
+      scheduleDetails: {},
+      calibrationSpeed: 0,
+      calibrationDuration: 0,
+      scheduleDuration: 0,
+      scheduleSpeed: 0
     }
     this.remove = this.remove.bind(this)
     this.calibrate = this.calibrate.bind(this)
@@ -18,24 +21,50 @@ export default class Pump extends Common {
     this.calibrateUI = this.calibrateUI.bind(this)
     this.scheduleUI = this.scheduleUI.bind(this)
     this.onDemand = this.onDemand.bind(this)
-    this.updateSpeed = this.updateSpeed.bind(this)
     this.setSchedule = this.setSchedule.bind(this)
-    this.setDuration = this.setDuration.bind(this)
+    this.update = this.update.bind(this)
+    this.updateSchedule = this.updateSchedule.bind(this)
   }
 
-  setDuration(ev) {
-    this.setState({duration: ev.target.value})
+  updateSchedule(data) {
+    console.log(data)
+    this.setState({scheduleDetails: data})
   }
+
+  update(k){
+    return(function(ev){
+      var h = {}
+      h[k] = ev.target.value
+      this.setState(h)
+    }.bind(this))
+  }
+
 
   setSchedule() {
-  }
-
-  updateSpeed(ev) {
-    this.setState({speed: ev.target.value})
+    var payload  = {
+      schedule: this.state.scheduleDetails,
+      duration: this.state.scheduleDuration,
+      speed: this.state.scheduleSpeed
+    }
+    this.ajaxPost({
+      url: '/api/dosers/' + this.props.data.id+'/schedule',
+      data: JSON.stringify(payload),
+      success: function (data) {
+      }.bind(this)
+    })
   }
 
   onDemand() {
-    // TODO on demand API (speed and duration against a pump
+    var payload = {
+      speed: parseInt(this.state.calibrationSpeed),
+      duration: parseInt(this.state.calibrationDuration)
+    }
+    this.ajaxPost({
+      url: '/api/dosers/' + this.props.data.id+'/calibrate',
+      data: JSON.stringify(payload),
+      success: function(data) {
+      }.bind(this)
+    })
   }
 
   calibrateUI() {
@@ -44,10 +73,10 @@ export default class Pump extends Common {
       <div className='container'>
         <hr />
         <div className='col-sm-1'><label>Speed</label></div>
-        <input className='col-sm-5' type='range' onChange={this.updateSpeed} value={this.state.speed}/>
-        <input className='col-sm-1' type='text' value={this.state.speed} readOnly={true}/>
+        <input className='col-sm-5' type='range' onChange={this.update('calibrationSpeed')} value={this.state.calibrationSpeed}/>
+        <input className='col-sm-1' type='text' value={this.state.calibrationSpeed} readOnly={true}/>
         <label className='col-sm-2'>Durartion</label>
-        <input type='text' className='col-sm-1'/>
+        <input type='text' className='col-sm-1' onChange={this.update('calibrationDuration')}/>
         <input type='button' value='Run' onClick={this.onDemand} className='btn btn-secondary'/>
       </div>
     )
@@ -58,15 +87,15 @@ export default class Pump extends Common {
     return(
       <div className='container'>
         <hr/>
-        <Cron />
+        <Cron updateHook={this.updateSchedule}/>
         <div className='row'>
           <label className='col-sm-3'> Duration </label>
-          <input type='text' value={this.state.duration} onClick={this.setDuration} className='col-sm-2'/>
+          <input type='text' value={this.state.scheduleDuration} onChange={this.update('scheduleDuration')} className='col-sm-2'/>
         </div>
         <div className='row'>
           <div className='col-sm-1'><label>Speed</label></div>
-          <input className='col-sm-5' type='range' onChange={this.updateSpeed} value={this.state.speed}/>
-          <input className='col-sm-1' type='text' value={this.state.speed} readOnly={true}/>
+          <input className='col-sm-5' type='range' onChange={this.update('scheduleSpeed')} value={this.state.scheduleSpeed}/>
+          <input className='col-sm-1' type='text' value={this.state.scheduleSpeed} readOnly={true}/>
         </div>
         <input type='button' value='Set' onClick={this.setSchedule} className='btn btn-secondary'/>
       </div>
@@ -94,7 +123,6 @@ export default class Pump extends Common {
       })
     }.bind(this))
   }
-
 
   render() {
     return(

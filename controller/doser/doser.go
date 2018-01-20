@@ -2,6 +2,7 @@ package doser
 
 import (
 	"encoding/json"
+	"log"
 	"time"
 )
 
@@ -38,4 +39,21 @@ func (c *Controller) List() ([]Doser, error) {
 		return nil
 	}
 	return dosers, c.store.List(Bucket, fn)
+}
+
+func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
+	d, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	log.Println(d.ID)
+	return nil
+}
+
+func (c *Controller) Update(id string, d Doser) error {
+	return nil
+}
+
+func (c *Controller) Schedule(id string, sc DosingSchedule) error {
+	return nil
 }

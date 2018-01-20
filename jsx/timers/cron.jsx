@@ -5,8 +5,27 @@ export default class Cron extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      day: '*',
+      hour: '*',
+      minute: '*',
+      second: '*'
     }
+    this.update = this.update.bind(this)
+  }
 
+  update(k) {
+    return(function(ev){
+      var h = {}
+      h[k] = ev.target.value
+      this.setState(h)
+      var payload = {
+        day: this.state.day,
+        hour: this.state.hour,
+        minute: this.state.minute,
+        second: this.state.second
+      }
+      this.props.updateHook(payload)
+    }.bind(this))
   }
 
   render() {
@@ -18,17 +37,20 @@ export default class Cron extends React.Component {
       <div className='container'>
         <div className='row'>
           <label className='col-sm-3'>Day of month</label>
-          <input type='text' id='day' className='col-sm-2' />
+          <input type='text' id='day' className='col-sm-2' value={this.state.day} onChange={this.update('day')}/>
           <label className='col-sm-1'>{instance}</label>
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Hour</label> <input type='text' id='hour' className='col-sm-2' />
+          <label className='col-sm-3'>Hour</label>
+          <input type='text' id='hour' className='col-sm-2' value={this.state.hour} onChange={this.update('hour')}/>
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Minute</label> <input type='text' id='minute' className='col-sm-2' />
+          <label className='col-sm-3'>Minute</label>
+          <input type='text' id='minute' className='col-sm-2' value={this.state.minute} onChange={this.update('minute')}/>
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Second</label> <input type='text' id='second' className='col-sm-2' />
+          <label className='col-sm-3'>Second</label>
+          <input type='text' id='second' className='col-sm-2'  value={this.state.second} onChange={this.update('second')}/>
         </div>
       </div>
     )

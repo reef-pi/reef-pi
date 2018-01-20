@@ -61,7 +61,7 @@ export default class Doser extends Common {
         <div className='container'>
           { this.pumpList() }
         </div>
-        <New />
+        <New updateHook={this.fetch}/>
       </div>
     )
   }

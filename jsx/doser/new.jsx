@@ -6,19 +6,32 @@ export default class New extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      dosers: [],
-      add: false
+      name: '',
+      add: false,
+      pin: 0,
     }
     this.add = this.add.bind(this)
     this.toggle = this.toggle.bind(this)
     this.ui = this.ui.bind(this)
+    this.update = this.update.bind(this)
+  }
+
+  update(k) {
+    return(function(ev){
+      var h ={}
+      h[k] = ev.target.value
+      this.setState(h)
+    }.bind(this))
   }
 
   toggle () {
     this.setState({
       add: !this.state.add
     })
-    $('#pump-name').val('')
+    this.setState({
+      name: '',
+      pin: 0,
+    })
   }
 
   ui () {
@@ -29,11 +42,13 @@ export default class New extends Common {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' id='pump-name' /></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Pin</div>
-          <div className='col-sm-1'><input type='text' id='pump-pin' className='col-sm-1' /></div>
+          <div className='col-sm-1'>
+            <input type='text' value={this.state.pin} onChange={this.update('pin')}/>
+          </div>
         </div>
         <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
@@ -42,14 +57,7 @@ export default class New extends Common {
 
   
   add () {
-    if (this.state.selectedEquipment === undefined) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Select an equipment'
-      })
-      return
-    }
-    if ($('#pump-name').val() === '') {
+    if (this.state.name === '') {
       this.setState({
         showAlert: true,
         alertMsg: 'Specify doser name'
@@ -57,17 +65,15 @@ export default class New extends Common {
       return
     }
     var payload = {
-      name: $('#pump-name').val(),
+      name: this.state.name,
+      pin: parseInt(this.state.pin)
     }
     this.ajaxPut({
-      url: '/api/dosers',
+      url: '/api/doser/pumps',
       data: JSON.stringify(payload),
       success: function (data) {
-        this.fetch()
-        this.setState({
-          add: !this.state.add
-        })
-        $('#doserName').val('')
+        this.toggle()
+        this.props.updateHook()
       }.bind(this)
     })
   }
