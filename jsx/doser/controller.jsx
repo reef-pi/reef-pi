@@ -38,10 +38,6 @@ export default class Doser extends Common {
   }
 
   fetch () {
-    this.setState({
-      pumps: [{name: 'Two Part - A', id: '1'}]
-    })
-    /*
     this.ajaxGet({
       url: '/api/doser/pumps',
       success: function (data) {
@@ -50,7 +46,6 @@ export default class Doser extends Common {
         })
       }.bind(this)
     })
-    */
   }
 
 

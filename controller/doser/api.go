@@ -25,11 +25,11 @@ func (c *Controller) list(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
-	var d Doser
+	var p Pump
 	fn := func() error {
-		return c.Create(d)
+		return c.Create(p)
 	}
-	utils.JSONCreateResponse(&d, fn, w, r)
+	utils.JSONCreateResponse(&p, fn, w, r)
 }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +40,10 @@ func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) error {
+		return c.Delete(id)
+	}
+	utils.JSONDeleteResponse(fn, w, r)
 }
 
 type CalibrationDetails struct {
@@ -57,11 +61,11 @@ func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
-	var d Doser
+	var p Pump
 	fn := func(id string) error {
-		return c.Update(id, d)
+		return c.Update(id, p)
 	}
-	utils.JSONUpdateResponse(&d, fn, w, r)
+	utils.JSONUpdateResponse(&p, fn, w, r)
 }
 
 // {"schedule":{"day":"*","hour":"*","minute":"*","second":"*"},"duration":"10","speed":"31"}

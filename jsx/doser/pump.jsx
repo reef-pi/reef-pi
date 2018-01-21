@@ -47,7 +47,7 @@ export default class Pump extends Common {
       speed: this.state.scheduleSpeed
     }
     this.ajaxPost({
-      url: '/api/dosers/' + this.props.data.id+'/schedule',
+      url: '/api/doser/pumps/' + this.props.data.id+'/schedule',
       data: JSON.stringify(payload),
       success: function (data) {
       }.bind(this)
@@ -60,7 +60,7 @@ export default class Pump extends Common {
       duration: parseInt(this.state.calibrationDuration)
     }
     this.ajaxPost({
-      url: '/api/dosers/' + this.props.data.id+'/calibrate',
+      url: '/api/doser/pumps/' + this.props.data.id+'/calibrate',
       data: JSON.stringify(payload),
       success: function(data) {
       }.bind(this)
@@ -115,7 +115,7 @@ export default class Pump extends Common {
     this.confirm('Are you sure ?')
     .then(function () {
       this.ajaxDelete({
-        url: '/api/dosers/' + this.props.data.id,
+        url: '/api/doser/pumps/' + this.props.data.id,
         type: 'DELETE',
         success: function (data) {
           this.props.updateHook()
