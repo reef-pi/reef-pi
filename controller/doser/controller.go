@@ -57,10 +57,20 @@ func (c *Controller) loadAllSchedule() error {
 		return err
 	}
 	for _, p := range pumps {
-		if !p.Schedule.Enable {
+		if !p.Regiment.Enable {
 			continue
 		}
-
+		c.addToCron(p)
 	}
+	return nil
+}
+
+func (c *Controller) addToCron(p Pump) error {
+	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.vv))
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully added cron entry. ID:", cronID)
+	c.cronIDs[p.ID] = cronID
 	return nil
 }

@@ -12,9 +12,14 @@ type Pump struct {
 	ID       string         `json:"id"`
 	Name     string         `json:"name"`
 	Pin      int            `json:"pin"`
-	Schedule DosingSchedule `json:"schedule"`
+	Regiment DosingRegiment `json:"regiment"`
 }
-
+type DosingRegiment struct {
+	Enable   bool          `json:"enable"`
+	Schedule Schedule      `json:"schedule"`
+	Duration time.Duration `json:"duration"`
+	Speed    int           `json:"speed"`
+}
 type CalibrationDetails struct {
 	Speed    int           `json:"speed"`
 	Duration time.Duration `json:"duration"`
@@ -34,11 +39,4 @@ func (s Schedule) CronSpec() string {
 func (s Schedule) Validate() error {
 	_, err := cron.Parse(s.CronSpec())
 	return err
-}
-
-type DosingSchedule struct {
-	Enable   bool          `json:"enable"`
-	Schedule Schedule      `json:"schedule"`
-	Duration time.Duration `json:"durartion"`
-	Speed    int           `json:"speed"`
 }

@@ -101,10 +101,6 @@ func (r *ReefPi) loadDoserSubsystem(eqs *equipments.Controller) error {
 	if !r.settings.Capabilities.Doser {
 		return nil
 	}
-	if eqs == nil {
-		r.settings.Capabilities.Doser = false
-		return fmt.Errorf("equipment sub-system is not initialized")
-	}
 	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, r.telemetry)
 	if err != nil {
 		r.settings.Capabilities.Doser = false

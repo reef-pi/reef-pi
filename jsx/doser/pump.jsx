@@ -9,12 +9,12 @@ export default class Pump extends Common {
     this.state = {
       calibrate: false,
       schedule: false,
-      scheduleDetails: {},
-      calibrationSpeed: 0,
-      calibrationDuration: 0,
-      scheduleDuration: 0,
-      scheduleSpeed: 0,
-      enable: false,
+      scheduleDetails: props.data.regiment.schedule,
+      calibrationSpeed: 50,
+      calibrationDuration: 10,
+      scheduleDuration: props.data.regiment.duration,
+      scheduleSpeed: props.data.regiment.speed,
+      enable: props.data.regiment.enable,
     }
     this.remove = this.remove.bind(this)
     this.calibrate = this.calibrate.bind(this)
@@ -48,8 +48,9 @@ export default class Pump extends Common {
   setSchedule() {
     var payload  = {
       schedule: this.state.scheduleDetails,
-      duration: this.state.scheduleDuration,
-      speed: this.state.scheduleSpeed
+      duration: parseInt(this.state.scheduleDuration),
+      speed: parseInt(this.state.scheduleSpeed),
+      enable: this.state.enable
     }
     this.ajaxPost({
       url: '/api/doser/pumps/' + this.props.data.id+'/schedule',
@@ -94,7 +95,7 @@ export default class Pump extends Common {
         <hr/>
         <div className='row'>
           <label className='col-sm-3'>Enable</label>
-          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2'/>
+          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.regiment.enable}/>
         </div>
         <Cron updateHook={this.updateSchedule}/>
         <div className='row'>

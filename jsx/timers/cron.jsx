@@ -8,7 +8,7 @@ export default class Cron extends React.Component {
       day: '*',
       hour: '*',
       minute: '*',
-      second: '*'
+      second: '0'
     }
     this.update = this.update.bind(this)
   }

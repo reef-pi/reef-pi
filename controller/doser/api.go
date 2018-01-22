@@ -62,9 +62,9 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) schedule(w http.ResponseWriter, r *http.Request) {
-	var sc DosingSchedule
+	var reg DosingRegiment
 	fn := func(id string) error {
-		return c.Schedule(id, sc)
+		return c.Schedule(id, reg)
 	}
-	utils.JSONUpdateResponse(&sc, fn, w, r)
+	utils.JSONUpdateResponse(&reg, fn, w, r)
 }

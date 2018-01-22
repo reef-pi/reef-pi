@@ -52,20 +52,22 @@ func (c *Controller) Update(id string, p Pump) error {
 	return nil
 }
 
-func (c *Controller) Schedule(id string, sc DosingSchedule) error {
-	if err := sc.Schedule.Validate(); err != nil {
+func (c *Controller) Schedule(id string, r DosingRegiment) error {
+	log.Println(r)
+	if err := r.Schedule.Validate(); err != nil {
+		log.Printf("CronSpec:'%s'\n", r.Schedule.CronSpec())
 		return err
 	}
 	p, err := c.Get(id)
 	if err != nil {
 		return err
 	}
-	p.Schedule = sc
+	p.Regiment = r
 	if err := c.Update(id, p); err != nil {
 		return err
 	}
-	// Add to cron if enabled
-	if p.Schedule.Enable {
+	// TODO Add to cron if enabled
+	if p.Regiment.Enable {
 	}
 	return nil
 }
@@ -81,18 +83,8 @@ func (c *Controller) Delete(id string) error {
 func (p *Pump) Runner(vv utils.VariableVoltage) cron.Job {
 	return &Runner{
 		pin:      p.Pin,
-		duration: p.Schedule.Duration,
-		speed:    p.Schedule.Speed,
+		duration: p.Regiment.Duration,
+		speed:    p.Regiment.Speed,
 		vv:       vv,
 	}
-}
-
-func (c *Controller) addToCron(p Pump) error {
-	cronID, err := c.runner.AddJob(p.Schedule.Schedule.CronSpec(), p.Runner(c.vv))
-	if err != nil {
-		return err
-	}
-	log.Println("Successfully added cron entry. ID:", cronID)
-	c.cronIDs[p.ID] = cronID
-	return nil
 }
