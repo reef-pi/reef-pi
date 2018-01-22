@@ -51,5 +51,4 @@ func (c *Controller) Start() {
 
 func (c *Controller) Stop() {
 	c.runner.Stop()
-	c.runner = nil
 }
