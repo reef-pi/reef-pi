@@ -7,3 +7,5 @@ reef-pi.db
 *.deb
 dist
 .bundle
+server.crt
+server.key
