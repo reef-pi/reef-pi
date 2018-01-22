@@ -1,6 +1,7 @@
 package doser
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"time"
 )
 
@@ -8,12 +9,13 @@ type Runner struct {
 	pin      int
 	duration time.Duration
 	speed    int
+	vv       utils.VariableVoltage
 }
 
 func (r *Runner) Run() {
-	// TODO set pwm speed and switch on pin
+	r.vv.Set(r.pin, r.speed)
 	select {
 	case <-time.After(r.duration * time.Second):
-		// TODO set pwm speed to 0 and switch off
+		r.vv.Set(r.pin, 0)
 	}
 }

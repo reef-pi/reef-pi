@@ -2,6 +2,7 @@ package doser
 
 import (
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 )
@@ -77,16 +78,17 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
-func (p *Pump) Runner() cron.Job {
+func (p *Pump) Runner(vv utils.VariableVoltage) cron.Job {
 	return &Runner{
 		pin:      p.Pin,
 		duration: p.Schedule.Duration,
 		speed:    p.Schedule.Speed,
+		vv:       vv,
 	}
 }
 
 func (c *Controller) addToCron(p Pump) error {
-	cronID, err := c.runner.AddJob(p.Schedule.Schedule.CronSpec(), p.Runner())
+	cronID, err := c.runner.AddJob(p.Schedule.Schedule.CronSpec(), p.Runner(c.vv))
 	if err != nil {
 		return err
 	}
