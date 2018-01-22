@@ -2,17 +2,9 @@ package doser
 
 import (
 	"encoding/json"
+	"gopkg.in/robfig/cron.v2"
+	"log"
 )
-
-const Bucket = "doser"
-
-type Pump struct {
-	ID       string         `json:"id"`
-	Name     string         `json:"name"`
-	Pin      int            `json:"pin"`
-	Schedule DosingSchedule `json:"schedule"`
-	Enable   bool           `json:"enable"`
-}
 
 func (c *Controller) Get(id string) (Pump, error) {
 	var p Pump
@@ -60,7 +52,20 @@ func (c *Controller) Update(id string, p Pump) error {
 }
 
 func (c *Controller) Schedule(id string, sc DosingSchedule) error {
-	// TODO add to cron if enabled
+	if err := sc.Schedule.Validate(); err != nil {
+		return err
+	}
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	p.Schedule = sc
+	if err := c.Update(id, p); err != nil {
+		return err
+	}
+	// Add to cron if enabled
+	if p.Schedule.Enable {
+	}
 	return nil
 }
 
@@ -69,5 +74,23 @@ func (c *Controller) Delete(id string) error {
 		return nil
 	}
 	// TODO remove from cron if enabled
+	return nil
+}
+
+func (p *Pump) Runner() cron.Job {
+	return &Runner{
+		pin:      p.Pin,
+		duration: p.Schedule.Duration,
+		speed:    p.Schedule.Speed,
+	}
+}
+
+func (c *Controller) addToCron(p Pump) error {
+	cronID, err := c.runner.AddJob(p.Schedule.Schedule.CronSpec(), p.Runner())
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully added cron entry. ID:", cronID)
+	c.cronIDs[p.ID] = cronID
 	return nil
 }

@@ -15,16 +15,15 @@ export default class Cron extends React.Component {
 
   update(k) {
     return(function(ev){
-      var h = {}
-      h[k] = ev.target.value
-      this.setState(h)
       var payload = {
         day: this.state.day,
         hour: this.state.hour,
         minute: this.state.minute,
         second: this.state.second
       }
+      payload[k] = ev.target.value
       this.props.updateHook(payload)
+      this.setState(payload)
     }.bind(this))
   }
 

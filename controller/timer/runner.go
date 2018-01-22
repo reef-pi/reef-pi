@@ -34,7 +34,6 @@ func (e *EquipmentRunner) Run() {
 				log.Println("ERROR: timer sub-system, Failed to revert equipment. Error:", err)
 			}
 		}
-
 	}
 }
 

@@ -13,7 +13,8 @@ export default class Pump extends Common {
       calibrationSpeed: 0,
       calibrationDuration: 0,
       scheduleDuration: 0,
-      scheduleSpeed: 0
+      scheduleSpeed: 0,
+      enable: false,
     }
     this.remove = this.remove.bind(this)
     this.calibrate = this.calibrate.bind(this)
@@ -24,10 +25,14 @@ export default class Pump extends Common {
     this.setSchedule = this.setSchedule.bind(this)
     this.update = this.update.bind(this)
     this.updateSchedule = this.updateSchedule.bind(this)
+    this.updateEnable = this.updateEnable.bind(this)
+  }
+
+  updateEnable(ev) {
+    this.setState({enable: ev.target.checked})
   }
 
   updateSchedule(data) {
-    console.log(data)
     this.setState({scheduleDetails: data})
   }
 
@@ -87,6 +92,10 @@ export default class Pump extends Common {
     return(
       <div className='container'>
         <hr/>
+        <div className='row'>
+          <label className='col-sm-3'>Enable</label>
+          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2'/>
+        </div>
         <Cron updateHook={this.updateSchedule}/>
         <div className='row'>
           <label className='col-sm-3'> Duration </label>

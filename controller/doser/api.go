@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
-	"time"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
@@ -46,12 +45,6 @@ func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
 	utils.JSONDeleteResponse(fn, w, r)
 }
 
-type CalibrationDetails struct {
-	Speed    int           `json:"speed"`
-	Duration time.Duration `json:"duration"`
-}
-
-// {"speed":16,"duration":12}
 func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
 	var cal CalibrationDetails
 	fn := func(id string) error {
@@ -66,19 +59,6 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 		return c.Update(id, p)
 	}
 	utils.JSONUpdateResponse(&p, fn, w, r)
-}
-
-// {"schedule":{"day":"*","hour":"*","minute":"*","second":"*"},"duration":"10","speed":"31"}
-type Schedule struct {
-	Day    string `json:"day"`
-	Hour   string `json:"hour"`
-	Minute string `json:"minute"`
-	Second string `json:"second"`
-}
-
-type DosingSchedule struct {
-	Schedule Schedule      `json:"schedule"`
-	Duration time.Duration `json:"durartion"`
 }
 
 func (c *Controller) schedule(w http.ResponseWriter, r *http.Request) {
