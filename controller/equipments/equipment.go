@@ -50,7 +50,7 @@ func (c *Controller) Create(eq Equipment) error {
 		}
 	}
 	if !ok {
-		return fmt.Errorf("Outlet named %s not present", eq.Outlet)
+		return fmt.Errorf("Outlet name %s not present", eq.Outlet)
 	}
 	if outlet.Equipment != "" {
 		return fmt.Errorf("Outlet is already in use (Equipment ID: %s)", outlet.Equipment)

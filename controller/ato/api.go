@@ -27,8 +27,8 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 		if err := c.store.Update(Bucket, "config", conf); err != nil {
 			return err
 		}
-		c.config = conf
 		c.Stop()
+		c.config = conf
 		c.Start()
 		return nil
 	}
