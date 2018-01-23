@@ -38,8 +38,13 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 	if err != nil {
 		return err
 	}
-	// TODO implement calibration logic
-	p.ID = ""
+	r := &Runner{
+		pin:      p.Pin,
+		duration: cal.Duration,
+		speed:    cal.Speed,
+		vv:       c.vv,
+	}
+	go r.Run()
 	return nil
 }
 
@@ -66,18 +71,31 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 	if err := c.Update(id, p); err != nil {
 		return err
 	}
-	// TODO Add to cron if enabled
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if cID, ok := c.cronIDs[id]; ok {
+		log.Printf("doser sub-system. Removing cron entry %s for pump id: %s.\n", cID, id)
+		c.runner.Remove(cID)
+	}
 	if p.Regiment.Enable {
+		cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.vv))
+		if err != nil {
+			return err
+		}
+		log.Println("Successfully added cron entry. ID:", cronID)
+		c.cronIDs[p.ID] = cronID
 	}
 	return nil
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.store.Delete(Bucket, id); err != nil {
-		return nil
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if cID, ok := c.cronIDs[id]; ok {
+		log.Printf("doser sub-system. Removing cron entry %s for pump id: %s.\n", cID, id)
+		c.runner.Remove(cID)
 	}
-	// TODO remove from cron if enabled
-	return nil
+	return c.store.Delete(Bucket, id)
 }
 
 func (p *Pump) Runner(vv utils.VariableVoltage) cron.Job {
