@@ -35,7 +35,7 @@ func (c *Outlets) Setup() error {
 func (c *Outlets) Configure(id string, on bool) error {
 	o, err := c.Get(id)
 	if err != nil {
-		return fmt.Errorf("Outlet named: '%s' does noy exist", err)
+		return fmt.Errorf("Outlet name: '%s' does noy exist", err)
 	}
 	if c.DevMode {
 		log.Println("Dev mode on. Skipping:", o.Name, "On:", on)
