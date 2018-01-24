@@ -1,8 +1,7 @@
 package system
 
 import (
-	//	"bytes"
-	//	"encoding/json"
+	"bytes"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
@@ -38,12 +37,26 @@ func TestSystemController(t *testing.T) {
 	if err := tr.Do("POST", "/api/display", strings.NewReader("{}"), nil); err != nil {
 		t.Fatal("Failed to set display brightness using api")
 	}
-	if err := tr.Do("POST", "/api/admin/poweroff", strings.NewReader("{}"), nil); err != nil {
+	if err := tr.Do("POST", "/api/admin/poweroff", new(bytes.Buffer), nil); err != nil {
+		t.Fatal(err)
+	}
+	if err := tr.Do("POST", "/api/admin/reboot", new(bytes.Buffer), nil); err != nil {
+		t.Fatal(err)
+	}
+	if err := tr.Do("POST", "/api/admin/reload", new(bytes.Buffer), nil); err != nil {
 		t.Fatal(err)
 	}
 	var resp Summary
 	if err := tr.Do("GET", "/api/info", strings.NewReader("{}"), &resp); err != nil {
 		t.Fatal(err)
 	}
-
+	if _, err := c.lastStartTime(); err != nil {
+		t.Error(err)
+	}
+	if _, err := c.currentDisplayState(); err != nil {
+		t.Error(err)
+	}
+	if _, err := c.getBrightness(); err != nil {
+		t.Error(err)
+	}
 }
