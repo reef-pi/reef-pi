@@ -40,9 +40,11 @@ func TestATO(t *testing.T) {
 		t.Error(err)
 	}
 	c.config.Pump = "1"
+	c.config.CheckInterval = 1
 	c.config.Enable = true
 	c.config.Control = true
 	c.Start()
+	c.check()
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
 	if err := tr.Do("GET", "/api/ato", new(bytes.Buffer), nil); err != nil {
@@ -58,23 +60,22 @@ func TestATO(t *testing.T) {
 	if err := c.Control(1); err != nil {
 		t.Error(err)
 	}
-	c.cachePump()
-	c.updateUsage(10)
 	c.updateUsage(15)
 	c.config.Notify.Enable = true
 	c.NotifyIfNeeded(c.usage.Value.(Usage))
+
+	inUse, err := c.IsEquipmentInUse("-1")
+	if err != nil {
+		t.Error(err)
+	}
+	if inUse == true {
+		t.Error("Imaginary equipment should not be in-use")
+	}
+
 	body := new(bytes.Buffer)
 	json.NewEncoder(body).Encode(DefaultConfig)
 	if err := tr.Do("POST", "/api/ato", body, nil); err != nil {
 		t.Error("Failed to update ato config using api. Error:", err)
-	}
-
-	if inUse, err := c.IsEquipmentInUse("-1"); err != nil {
-		t.Error(err)
-	} else {
-		if inUse == true {
-			t.Error("Imaginary equipment should not be in-use")
-		}
 	}
 	defer c.Stop()
 }

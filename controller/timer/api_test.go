@@ -68,7 +68,7 @@ func TestTimerController(t *testing.T) {
 	}
 	enc.Encode(&j)
 	if err := tr.Do("PUT", "/api/timers", body, nil); err != nil {
-		t.Fatal("Failed to create timer using api")
+		t.Fatal("Failed to create timer using api. Error:", err)
 	}
 	var jobs []Job
 	if err := tr.Do("GET", "/api/timers", strings.NewReader("{}"), &jobs); err != nil {

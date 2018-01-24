@@ -72,18 +72,13 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 		return err
 	}
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	if cID, ok := c.cronIDs[id]; ok {
 		log.Printf("doser sub-system. Removing cron entry %s for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 	}
+	c.mu.Unlock()
 	if p.Regiment.Enable {
-		cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.vv))
-		if err != nil {
-			return err
-		}
-		log.Println("Successfully added cron entry. ID:", cronID)
-		c.cronIDs[p.ID] = cronID
+		return c.addToCron(p)
 	}
 	return nil
 }

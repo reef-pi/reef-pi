@@ -68,10 +68,6 @@ func (c *Controller) loadAllSchedule() error {
 func (c *Controller) addToCron(p Pump) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if cID, ok := c.cronIDs[p.ID]; ok {
-		log.Printf("WARNING: doser sub-system pump %s already have cron entry(%s). Skipping\n", p.Name, cID)
-		return nil
-	}
 	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.vv))
 	if err != nil {
 		return err

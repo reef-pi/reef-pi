@@ -77,34 +77,37 @@ func (c *Controller) Start() {
 	go c.run()
 }
 
+func (c *Controller) check() {
+	if !c.config.Enable {
+		return
+	}
+	reading, err := c.Read()
+	if err != nil {
+		log.Println("ERROR: Failed to read ato sensor. Error:", err)
+		return
+	}
+	log.Println("ato sub-system:  sensor value:", reading)
+	c.telemetry.EmitMetric("ato", reading)
+	if c.config.Control {
+		if err := c.Control(reading); err != nil {
+			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
+		}
+
+		usage := int(c.config.CheckInterval)
+		if reading == 1 {
+			usage = 0
+		}
+		c.updateUsage(usage)
+	}
+}
+
 func (c *Controller) run() {
 	log.Println("Starting ato sub system")
 	ticker := time.NewTicker(c.config.CheckInterval * time.Second)
-
 	for {
 		select {
 		case <-ticker.C:
-			if !c.config.Enable {
-				continue
-			}
-			reading, err := c.Read()
-			if err != nil {
-				log.Println("ERROR: Failed to read ato sensor. Error:", err)
-				continue
-			}
-			log.Println("ato sub-system:  sensor value:", reading)
-			c.telemetry.EmitMetric("ato", reading)
-			if c.config.Control {
-				if err := c.Control(reading); err != nil {
-					log.Println("ERROR: Failed to execute ato control logic. Error:", err)
-				}
-
-				usage := int(c.config.CheckInterval)
-				if reading == 1 {
-					usage = 0
-				}
-				c.updateUsage(usage)
-			}
+			c.check()
 		case <-c.stopCh:
 			log.Println("Stopping ato sub-system")
 			ticker.Stop()
