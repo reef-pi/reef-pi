@@ -7,15 +7,19 @@ import (
 	"net/http"
 )
 
+var DefaultCredentials = Credentials{
+	User:     "reef-pi",
+	Password: "reef-pi",
+}
+
 func (r *ReefPi) API() error {
 	creds, err := r.GetCredentials()
 	if err != nil {
 		log.Println("ERROR: Failed to load credentials. Error", err)
-		creds.User = "reef-pi"
-		creds.Password = "reef-pi"
-		if err := r.store.Update(Bucket, "credentials", creds); err != nil {
+		if err := r.store.Update(Bucket, "credentials", DefaultCredentials); err != nil {
 			return err
 		}
+		creds = DefaultCredentials
 	}
 	err, router := startAPIServer(r.settings.Address, creds, r.settings.HTTPS)
 	if err != nil {

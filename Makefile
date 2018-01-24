@@ -61,3 +61,5 @@ clean:
 	-rm -rf *.deb
 	-rm -rf dist
 	-find . -name '*.db' -exec rm {} \;
+	-find . -name '*.crt' -exec rm {} \;
+	-find . -name '*.key' -exec rm {} \;
