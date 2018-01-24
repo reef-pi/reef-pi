@@ -23,9 +23,6 @@ func TestATOAPI(t *testing.T) {
 	}
 	c.Start()
 	c.LoadAPI(tr.Router)
-	if err := tr.Do("GET", "/api/doser/pumps", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to list dosing pumps using api. Error:", err)
-	}
 	body := new(bytes.Buffer)
 	json.NewEncoder(body).Encode(&Pump{Name: "Foo", Pin: 1})
 	if err := tr.Do("PUT", "/api/doser/pumps", body, nil); err != nil {
@@ -51,6 +48,9 @@ func TestATOAPI(t *testing.T) {
 	json.NewEncoder(body).Encode(&CalibrationDetails{})
 	if err := tr.Do("POST", "/api/doser/pumps/1/calibrate", body, nil); err != nil {
 		t.Fatal("Failed to calibrate dosing pump using api. Error:", err)
+	}
+	if err := tr.Do("GET", "/api/doser/pumps", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to list dosing pumps using api. Error:", err)
 	}
 	if err := tr.Do("DELETE", "/api/doser/pumps/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete dosing pump using api. Error:", err)
