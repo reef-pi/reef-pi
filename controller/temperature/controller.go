@@ -100,33 +100,37 @@ func (c *Controller) run() {
 	for {
 		select {
 		case <-ticker.C:
-			if !c.config.Enable {
-				continue
-			}
-			reading, err := c.Read()
-			if err != nil {
-				log.Println("ERROR: Failed to read temperature. Error:", err)
-				continue
-			}
-			reading = twoDecimal(reading)
-			c.latest = reading
-			c.NotifyIfNeeded(reading)
-			c.readings.Value = Measurement{
-				Temperature: reading,
-				Time:        utils.TeleTime(time.Now()),
-			}
-			c.readings = c.readings.Next()
-			c.updateHourlyTemperature(reading)
-			log.Println("Temperature sensor value:", reading)
-			c.telemetry.EmitMetric("temperature", reading)
-			if c.config.Control {
-				c.control(reading)
-			}
+			c.check()
 		case <-c.stopCh:
 			log.Println("Stopping temperature controller")
 			ticker.Stop()
 			return
 		}
+	}
+}
+
+func (c *Controller) check() {
+	if !c.config.Enable {
+		return
+	}
+	reading, err := c.Read()
+	if err != nil {
+		log.Println("ERROR: Failed to read temperature. Error:", err)
+		return
+	}
+	reading = twoDecimal(reading)
+	c.latest = reading
+	c.NotifyIfNeeded(reading)
+	c.readings.Value = Measurement{
+		Temperature: reading,
+		Time:        utils.TeleTime(time.Now()),
+	}
+	c.readings = c.readings.Next()
+	c.updateHourlyTemperature(reading)
+	log.Println("Temperature sensor value:", reading)
+	c.telemetry.EmitMetric("temperature", reading)
+	if c.config.Control {
+		c.control(reading)
 	}
 }
 
