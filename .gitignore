@@ -9,3 +9,6 @@ dist
 .bundle
 server.crt
 server.key
+.DS_Store
+test/thumbnails/*.png
+coverage.txt

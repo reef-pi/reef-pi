@@ -34,6 +34,7 @@ go-get:
 	go get -u gopkg.in/robfig/cron.v2
 	go get -u github.com/dustin/go-humanize
 	go get -u github.com/reef-pi/adafruitio
+	go get -u github.com/nfnt/resize
 
 .PHONY: vet
 vet:
@@ -54,6 +55,7 @@ deb: ui
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
+	mkdir dist/var/lib/reef-pi/images
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
 .PHONY: clean
