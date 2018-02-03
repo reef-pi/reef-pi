@@ -46,7 +46,6 @@ func TestCamera(t *testing.T) {
 	}
 
 	c.config.ImageDirectory = filepath.Join(p, "images")
-	c.config.ThumbnailDirectory = filepath.Join(p, "thumbnails")
 	images, err := filepath.Glob(filepath.Join(p, "images") + "/*.png")
 	if err != nil {
 		t.Error(err)
