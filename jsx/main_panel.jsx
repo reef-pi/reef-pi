@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import ATO from './ato.jsx'
-import Camera from './camera.jsx'
+import Camera from './camera/main.jsx'
 import Equipments from './equipments.jsx'
 import Lighting from './lighting.jsx'
 import Configuration from './configuration.jsx'
