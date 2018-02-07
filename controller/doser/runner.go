@@ -10,7 +10,7 @@ type Runner struct {
 	pin      int
 	duration time.Duration
 	speed    int
-	vv       utils.VariableVoltage
+	vv       utils.PWM
 }
 
 func (r *Runner) Run() {

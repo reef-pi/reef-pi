@@ -93,7 +93,7 @@ func (c *Controller) Delete(id string) error {
 	return c.store.Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(vv utils.VariableVoltage) cron.Job {
+func (p *Pump) Runner(vv utils.PWM) cron.Job {
 	return &Runner{
 		pin:      p.Pin,
 		duration: p.Regiment.Duration,

@@ -17,8 +17,8 @@ func TestPWM(t *testing.T) {
 	if err := pwm.Set(1, 12); err != nil {
 		t.Fatal("Failed to set pwm value, Error:", err)
 	}
-	if pwm.Get(1) != 491 {
-		t.Fatal("Failed to persist pwm value. Expected 12, found:", pwm.Get(1))
+	if i, _ := pwm.Get(1); i != 491 {
+		t.Fatal("Failed to persist pwm value. Expected 12, found:", i)
 	}
 	if err := pwm.On(1); err != nil {
 		t.Fatal("Failed to switch on pwm pin. Error:", err)

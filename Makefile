@@ -33,6 +33,7 @@ go-get:
 	go get -u github.com/gorilla/mux
 	go get -u gopkg.in/robfig/cron.v2
 	go get -u github.com/dustin/go-humanize
+	go get -u github.com/reef-pi/rpi/pwm
 	go get -u github.com/reef-pi/adafruitio
 	go get -u github.com/nfnt/resize
 
