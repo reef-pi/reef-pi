@@ -14,11 +14,11 @@ type Controller struct {
 	mu        *sync.Mutex
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
-	vv        utils.VariableVoltage
+	vv        utils.PWM
 }
 
 func New(devMode bool, store utils.Store, t *utils.Telemetry) (*Controller, error) {
-	var vv utils.VariableVoltage
+	var vv utils.PWM
 	pwmConf := utils.DefaultPWMConfig
 	pwmConf.DevMode = devMode
 	pwm, err := utils.NewPWM(pwmConf)
