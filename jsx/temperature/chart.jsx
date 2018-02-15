@@ -1,9 +1,9 @@
 import React from 'react'
 import {ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 import $ from 'jquery'
 
-export default class TemperatureChart extends Common {
+export default class Chart extends Common {
   constructor (props) {
     super(props)
     this.state = {
