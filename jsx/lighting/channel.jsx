@@ -1,7 +1,7 @@
 import React from 'react'
-import LightSlider from './light_slider.jsx'
+import Slider from './slider.jsx'
 
-export default class LEDChannel extends React.Component {
+export default class Channel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -119,7 +119,7 @@ export default class LEDChannel extends React.Component {
           {this.sliderList()}
         </div>
         <div className='row' style={showOnDemandSlider}>
-          <LightSlider pin={this.props.pin} name={this.props.ch.name} onChange={this.updateFixedValue} getValue={this.getFixedValue} style={showOnDemandSlider} />
+          <Slider pin={this.props.pin} name={this.props.ch.name} onChange={this.updateFixedValue} getValue={this.getFixedValue} style={showOnDemandSlider} />
         </div>
       </div>
     )
