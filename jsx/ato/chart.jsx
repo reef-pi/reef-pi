@@ -1,6 +1,6 @@
 import React from 'react'
 import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 
 export default class ATOChart extends Common {
   constructor (props) {

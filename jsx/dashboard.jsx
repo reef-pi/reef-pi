@@ -4,7 +4,7 @@ import TemperatureChart from './temperature_chart.jsx'
 import TemperatureReadingChart from './temperature_reading.jsx'
 import EquipmentsChart from './equipments/chart.jsx'
 import LightsChart from './light_chart.jsx'
-import ATOChart from './ato_chart.jsx'
+import ATOChart from './ato/chart.jsx'
 import Summary from './summary.jsx'
 import HealthChart from './health_chart.jsx'
 
