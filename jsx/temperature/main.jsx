@@ -1,7 +1,7 @@
 import React from 'react'
-import TemperatureReadingChart from './temperature_reading.jsx'
-import SelectEquipment from './select_equipment.jsx'
-import Common from './common.jsx'
+import TemperatureReadingChart from './reading.jsx'
+import SelectEquipment from '../select_equipment.jsx'
+import Common from '../common.jsx'
 
 export default class Temperature extends Common {
   constructor (props) {

@@ -1,10 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
+import Common from '../common.jsx'
+import Reminder from './reminder.jsx'
 import Timer from './timer.jsx'
-import Common from './common.jsx'
-import Reminder from './timers/reminder.jsx'
-import Cron from './timers/cron.jsx'
-import Equipment from './timers/equipment.jsx'
+import Cron from './cron.jsx'
+import Equipment from './equipment.jsx'
 
 export default class Timers extends Common {
   constructor (props) {

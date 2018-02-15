@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Equipments extends Common {

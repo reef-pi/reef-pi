@@ -1,6 +1,6 @@
 import React from 'react'
 import {Tooltip, XAxis, BarChart, Bar} from 'recharts'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 import $ from 'jquery'
 
 export default class EquipmentsChart extends Common {

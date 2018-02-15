@@ -1,7 +1,7 @@
 import React from 'react'
-import SelectEquipment from './select_equipment.jsx'
-import Common from './common.jsx'
-import ATOChart from './ato_chart.jsx'
+import SelectEquipment from '../select_equipment.jsx'
+import Common from '../common.jsx'
+import ATOChart from './chart.jsx'
 
 export default class ATO extends Common {
   constructor (props) {

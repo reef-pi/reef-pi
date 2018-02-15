@@ -2,7 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 
 export default class Lighting extends Common {
   constructor (props) {

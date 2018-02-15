@@ -1,6 +1,6 @@
 import React from 'react'
-import LEDChannel from './led_channel.jsx'
-import Common from './common.jsx'
+import Channel from './channel.jsx'
+import Common from '../common.jsx'
 import $ from 'jquery'
 
 export default class Light extends Common {
@@ -107,7 +107,7 @@ export default class Light extends Common {
       var ch = this.state.channels[pin]
       channelUIs.push(
         <div className='container' key={this.props.name + '-' + ch.pin}>
-          <LEDChannel pin={pin} name={this.props.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
+          <Channel pin={pin} name={this.props.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
         </div>
       )
     }

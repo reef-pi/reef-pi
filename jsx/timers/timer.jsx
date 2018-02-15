@@ -1,5 +1,5 @@
 import React from 'react'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 
 export default class Timer extends Common {
   constructor (props) {

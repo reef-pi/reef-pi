@@ -1,6 +1,6 @@
 import React from 'react'
 import {Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
-import Common from './common.jsx'
+import Common from '../common.jsx'
 import $ from 'jquery'
 
 export default class LightsChart extends Common {
@@ -52,6 +52,10 @@ export default class LightsChart extends Common {
           <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={light.name + '-' + name} />
         )
       })
+      data['time'] = [12]
+      lines.push(
+        <Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />
+      )
       charts.push(
         <div className='container' key={'light-' + i}>
           <label className='text-primary'>{light.name}</label>
