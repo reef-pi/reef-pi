@@ -4,6 +4,7 @@ import Gallery from './gallery.jsx'
 import Config from './config.jsx'
 import Capture from './capture.jsx'
 import {ajaxGet} from '../utils/ajax.js'
+import Motion from './motion.jsx'
 
 export default class Camera extends React.Component {
   constructor (props) {
@@ -57,6 +58,9 @@ export default class Camera extends React.Component {
         </div>
         <div className='row'>
           <Capture />
+        </div>
+        <div className='row'>
+          <Motion width={721} height={406} url='http://10.0.0.62:8081'/>
         </div>
       </div>
     )

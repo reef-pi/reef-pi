@@ -124,6 +124,10 @@ export default class Config extends React.Component {
           <input type='checkbox' id='camera_gdrive' className='col-sm-2' defaultChecked={this.state.config.upload} onClick={this.updateBool('upload')} />
         </div>
         <div className='row'>
+          <div className='col-sm-3'>Enable motion</div>
+          <input type='checkbox' id='enable_motion' className='col-sm-2' defaultChecked={this.state.config.motion} onClick={this.updateBool('motion')} />
+        </div>
+        <div className='row'>
           <input type='button' id='updateCamera' onClick={this.save} value='update' className={saveButtonClass} />
         </div>
       </div>
