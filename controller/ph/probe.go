@@ -42,8 +42,10 @@ func (c *Controller) Create(p Probe) error {
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
-	c.quitters[p.ID] = make(chan struct{})
-	go p.Run(c.bus, c.quitters[p.ID])
+	if p.Enable {
+		c.quitters[p.ID] = make(chan struct{})
+		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
+	}
 	return nil
 }
 
@@ -52,9 +54,15 @@ func (c *Controller) Update(id string, p Probe) error {
 	if err := c.store.Update(Bucket, id, p); err != nil {
 		return err
 	}
-	close(c.quitters[p.ID])
-	c.quitters[p.ID] = make(chan struct{})
-	go p.Run(c.bus, c.quitters[p.ID])
+	quit, ok := c.quitters[p.ID]
+	if ok {
+		close(quit)
+		delete(c.quitters, p.ID)
+	}
+	if p.Enable {
+		c.quitters[p.ID] = make(chan struct{})
+		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
+	}
 	return nil
 }
 
@@ -63,6 +71,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	close(c.quitters[id])
+	delete(c.quitters, id)
 	return nil
 }
 
@@ -75,13 +84,17 @@ func (p Probe) Read(d *drivers.AtlasEZO) {
 	log.Println("ph sub-system: Probe:", p.Name, "Reading:", v)
 }
 
-func (p Probe) Run(bus i2c.Bus, quit chan struct{}) {
+func (p Probe) Run(bus i2c.Bus, quit chan struct{}, devMode bool) {
 	d := drivers.NewAtlasEZO(byte(p.Address), bus)
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
 		select {
 		case <-ticker.C:
-			p.Read(d)
+			if devMode {
+				log.Println("ph subsysten: Running in devmode probe:", p.Name, "reading:", 10)
+			} else {
+				p.Read(d)
+			}
 		case <-quit:
 			ticker.Stop()
 			return

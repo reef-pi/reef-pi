@@ -20,7 +20,10 @@ func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
 	if !r.settings.Capabilities.Ph {
 		return nil
 	}
-	p := ph.New(ph.Config{}, bus, r.store, r.telemetry)
+	c := ph.Config{
+		DevMode: r.settings.Capabilities.DevMode,
+	}
+	p := ph.New(c, bus, r.store, r.telemetry)
 	r.subsystems[ph.Bucket] = p
 	return nil
 }
@@ -123,17 +126,6 @@ func (r *ReefPi) loadDoserSubsystem(eqs *equipments.Controller) error {
 }
 
 func (r *ReefPi) loadSubsystems() error {
-	var bus i2c.Bus
-	bus = i2c.MockBus()
-	if r.settings.Capabilities.DevMode {
-		b, err := i2c.New()
-		if err != nil {
-			log.Println("ERROR: Failed to initialize i2c. Using mock bus. Error:", err)
-		} else {
-			bus = b
-		}
-	}
-
 	if r.settings.Capabilities.Configuration {
 		conf := system.Config{
 			Interface: r.settings.Interface,
@@ -170,7 +162,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadCameraSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load camera sub-system. Error:", err)
 	}
-	if err := r.loadPhSubsystem(bus); err != nil {
+	if err := r.loadPhSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load ph sub-system. Error:", err)
 	}
 

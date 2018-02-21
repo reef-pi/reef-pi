@@ -45,12 +45,13 @@ func (c *Controller) Start() {
 			continue
 		}
 		c.quitters[p.ID] = make(chan struct{})
-		go p.Run(c.bus, c.quitters[p.ID])
+		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
 	}
 }
 
 func (c *Controller) Stop() {
-	for _, quit := range c.quitters {
+	for id, quit := range c.quitters {
 		close(quit)
+		delete(c.quitters, id)
 	}
 }
