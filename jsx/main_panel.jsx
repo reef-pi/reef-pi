@@ -8,6 +8,7 @@ import Configuration from './configuration.jsx'
 import Temperature from './temperature/main.jsx'
 import Timers from './timers/main.jsx'
 import Doser from './doser/controller.jsx'
+import Ph from './ph/main.jsx'
 import Dashboard from './dashboard.jsx'
 import $ from 'jquery'
 import Common from './common.jsx'
@@ -26,7 +27,8 @@ export default class MainPanel extends Common {
         'lighting': <Lighting />,
         'temperature': < Temperature />,
         'timers': <Timers />,
-        'doser': < Doser />
+        'doser': < Doser />,
+        'ph': < Ph />
       }
     }
     this.loadCapabilities = this.loadCapabilities.bind(this)

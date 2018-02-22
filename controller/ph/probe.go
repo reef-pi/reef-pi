@@ -2,6 +2,7 @@ package ph
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/reef-pi/drivers"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
@@ -35,6 +36,9 @@ func (c Controller) List() ([]Probe, error) {
 }
 
 func (c *Controller) Create(p Probe) error {
+	if p.Period <= 0 {
+		return fmt.Errorf("Period should be positive. Suppied:%f", p.Period)
+	}
 	fn := func(id string) interface{} {
 		p.ID = id
 		return &p
@@ -51,6 +55,9 @@ func (c *Controller) Create(p Probe) error {
 
 func (c *Controller) Update(id string, p Probe) error {
 	p.ID = id
+	if p.Period <= 0 {
+		return fmt.Errorf("Period should be positive. Suppied:%f", p.Period)
+	}
 	if err := c.store.Update(Bucket, id, p); err != nil {
 		return err
 	}
@@ -70,8 +77,11 @@ func (c *Controller) Delete(id string) error {
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
-	close(c.quitters[id])
-	delete(c.quitters, id)
+	quit, ok := c.quitters[id]
+	if ok {
+		close(quit)
+		delete(c.quitters, id)
+	}
 	return nil
 }
 
@@ -85,6 +95,10 @@ func (p Probe) Read(d *drivers.AtlasEZO) {
 }
 
 func (p Probe) Run(bus i2c.Bus, quit chan struct{}, devMode bool) {
+	if p.Period <= 0 {
+		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected postive, found:%f\n", p.Name, p.Period)
+		return
+	}
 	d := drivers.NewAtlasEZO(byte(p.Address), bus)
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
