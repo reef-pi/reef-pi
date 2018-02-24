@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/drivers"
-	"github.com/reef-pi/rpi/i2c"
 	"log"
+	"math/rand"
 	"time"
 )
 
@@ -47,8 +47,9 @@ func (c *Controller) Create(p Probe) error {
 		return err
 	}
 	if p.Enable {
-		c.quitters[p.ID] = make(chan struct{})
-		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
+		quit := make(chan struct{})
+		c.quitters[p.ID] = quit
+		go c.Run(p, quit)
 	}
 	return nil
 }
@@ -67,8 +68,9 @@ func (c *Controller) Update(id string, p Probe) error {
 		delete(c.quitters, p.ID)
 	}
 	if p.Enable {
-		c.quitters[p.ID] = make(chan struct{})
-		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
+		quit := make(chan struct{})
+		c.quitters[p.ID] = quit
+		go c.Run(p, quit)
 	}
 	return nil
 }
@@ -85,29 +87,27 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
-func (p Probe) Read(d *drivers.AtlasEZO) {
-	v, err := d.Read()
-	if err != nil {
-		log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
-		return
-	}
-	log.Println("ph sub-system: Probe:", p.Name, "Reading:", v)
-}
-
-func (p Probe) Run(bus i2c.Bus, quit chan struct{}, devMode bool) {
+func (c *Controller) Run(p Probe, quit chan struct{}) {
 	if p.Period <= 0 {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected postive, found:%f\n", p.Name, p.Period)
 		return
 	}
-	d := drivers.NewAtlasEZO(byte(p.Address), bus)
+	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
 		select {
 		case <-ticker.C:
-			if devMode {
+			if c.config.DevMode {
+				c.updateReadings(p.ID, 8+rand.Float64()*2)
 				log.Println("ph subsysten: Running in devmode probe:", p.Name, "reading:", 10)
 			} else {
-				p.Read(d)
+				v, err := d.Read()
+				if err != nil {
+					log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
+					continue
+				}
+				c.updateReadings(p.ID, v)
+				log.Println("ph sub-system: Probe:", p.Name, "Reading:", v)
 			}
 		case <-quit:
 			ticker.Stop()

@@ -18,6 +18,7 @@ type Controller struct {
 	store     utils.Store
 	quitters  map[string]chan struct{}
 	bus       i2c.Bus
+	readings  map[string]Readings
 }
 
 func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemetry) *Controller {
@@ -27,11 +28,15 @@ func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemet
 		store:     store,
 		bus:       bus,
 		quitters:  make(map[string]chan struct{}),
+		readings:  make(map[string]Readings),
 	}
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	if err := c.store.CreateBucket(Bucket); err != nil {
+		return err
+	}
+	return c.store.CreateBucket(ReadingsBucket)
 }
 
 func (c *Controller) Start() {
@@ -44,8 +49,9 @@ func (c *Controller) Start() {
 		if !p.Enable {
 			continue
 		}
-		c.quitters[p.ID] = make(chan struct{})
-		go p.Run(c.bus, c.quitters[p.ID], c.config.DevMode)
+		quit := make(chan struct{})
+		c.quitters[p.ID] = quit
+		go c.Run(p, quit)
 	}
 }
 

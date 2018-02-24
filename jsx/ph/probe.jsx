@@ -2,6 +2,7 @@ import $ from 'jquery'
 import React from 'react'
 import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
+import Chart from './chart.jsx'
 
 export default class Probe extends React.PureComponent {
   constructor (props) {
@@ -18,6 +19,14 @@ export default class Probe extends React.PureComponent {
     this.update = this.update.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
     this.edit = this.edit.bind(this)
+    this.chart = this.chart.bind(this)
+  }
+
+  chart() {
+    if(!this.state.enable) {
+      return(<div />)
+    }
+    return(<Chart id={this.props.data.id} width={500} height={300}/>)
   }
 
   edit() {
@@ -90,6 +99,9 @@ export default class Probe extends React.PureComponent {
         <div className='row'>
           <label className='col-sm-3'> Interval </label>
           <input type='text' value={this.state.period} onChange={this.update('period')} className='col-sm-2' readOnly={this.state.readOnly}/>
+        </div>
+        <div className='row'>
+          {this.chart()}
         </div>
         <div className='row'>
           <div className='col-sm-8'/>

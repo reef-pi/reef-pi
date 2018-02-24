@@ -12,11 +12,19 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/phprobes", e.createProbe).Methods("PUT")
 	r.HandleFunc("/api/phprobes/{id}", e.updateProbe).Methods("POST")
 	r.HandleFunc("/api/phprobes/{id}", e.deleteProbe).Methods("DELETE")
+	r.HandleFunc("/api/phprobes/{id}/readings", e.getReadings).Methods("GET")
 }
 
 func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return c.Get(id)
+	}
+	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		return c.GetReadings(id)
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
