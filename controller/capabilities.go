@@ -16,6 +16,7 @@ type Capabilities struct {
 	ATO           bool `json:"ato" yaml:"ato"`
 	Camera        bool `json:"camera" yaml:"camera"`
 	Doser         bool `json:"doser" yaml:"doser"`
+	Ph            bool `json:"ph" yaml:"configuration"`
 	Configuration bool `json:"configuration" yaml:"configuration"`
 }
 

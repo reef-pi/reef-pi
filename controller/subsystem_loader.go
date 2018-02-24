@@ -7,12 +7,26 @@ import (
 	"github.com/reef-pi/reef-pi/controller/doser"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/ph"
 	"github.com/reef-pi/reef-pi/controller/system"
 	"github.com/reef-pi/reef-pi/controller/temperature"
 	"github.com/reef-pi/reef-pi/controller/timer"
+	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"time"
 )
+
+func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
+	if !r.settings.Capabilities.Ph {
+		return nil
+	}
+	c := ph.Config{
+		DevMode: r.settings.Capabilities.DevMode,
+	}
+	p := ph.New(c, bus, r.store, r.telemetry)
+	r.subsystems[ph.Bucket] = p
+	return nil
+}
 
 func (r *ReefPi) loadTimerSubsystem(eqs *equipments.Controller) error {
 	if !r.settings.Capabilities.Timers {
@@ -147,6 +161,9 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 	if err := r.loadCameraSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load camera sub-system. Error:", err)
+	}
+	if err := r.loadPhSubsystem(r.bus); err != nil {
+		log.Println("ERROR: Failed to load ph sub-system. Error:", err)
 	}
 
 	for sName, sController := range r.subsystems {

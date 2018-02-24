@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"time"
 )
@@ -26,6 +27,7 @@ type ReefPi struct {
 	telemetry  *utils.Telemetry
 	version    string
 	h          *HealthChecker
+	bus        i2c.Bus
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -50,6 +52,7 @@ func New(version, database string) (*ReefPi, error) {
 	outlets := connectors.NewOutlets(store)
 	outlets.DevMode = s.Capabilities.DevMode
 	r := &ReefPi{
+		bus:        i2c.MockBus(),
 		store:      store,
 		settings:   s,
 		telemetry:  telemetry,
@@ -65,6 +68,14 @@ func New(version, database string) (*ReefPi, error) {
 }
 
 func (r *ReefPi) Start() error {
+	if !r.settings.Capabilities.DevMode {
+		b, err := i2c.New()
+		if err != nil {
+			log.Println("ERROR: Failed to creates i2c bus. Error:", err)
+		} else {
+			r.bus = b
+		}
+	}
 	if err := r.jacks.Setup(); err != nil {
 		return err
 	}
@@ -96,6 +107,7 @@ func (r *ReefPi) Stop() error {
 		r.h.Stop()
 	}
 	r.store.Close()
+	r.bus.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
 }

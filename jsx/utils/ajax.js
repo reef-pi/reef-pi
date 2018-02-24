@@ -6,7 +6,7 @@ export function ajaxBeforeSend (xhr) {
   var authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
   xhr.setRequestHeader('Authorization', authHeader)
 }
-
+//TODO implement modal alert on ajax call failure
 export function ajaxErrorHandler (xhr, status, err) {
   /*
   this.setState({
