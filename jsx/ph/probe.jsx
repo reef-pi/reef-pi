@@ -3,16 +3,18 @@ import React from 'react'
 import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import Chart from './chart.jsx'
+import Config from './probe_config.jsx'
 
-export default class Probe extends React.PureComponent {
+export default class Probe extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-     name: props.data.name,
-     period: props.data.period,
-     enable: props.data.enable,
-     address: props.data.address,
-     readOnly: true
+      name: props.data.name,
+      period: props.data.period,
+      enable: props.data.enable,
+      address: props.data.address,
+      config: props.data.config,
+      readOnly: true
     }
 
     this.remove = this.remove.bind(this)
@@ -20,6 +22,13 @@ export default class Probe extends React.PureComponent {
     this.updateEnable = this.updateEnable.bind(this)
     this.edit = this.edit.bind(this)
     this.chart = this.chart.bind(this)
+    this.updateConfig = this.updateConfig.bind(this)
+  }
+
+  updateConfig(d) {
+    this.setState({
+      config: d
+    })
   }
 
   chart() {
@@ -34,12 +43,15 @@ export default class Probe extends React.PureComponent {
       this.setState({readOnly: false})
       return
     }
-
+    var config = this.state.config
+    config.notify.min = parseInt(config.notify.min)
+    config.notify.max = parseInt(config.notify.max)
     var payload = {
       name: this.state.name,
       period: parseInt(this.state.period),
       enable: this.state.enable,
-      address: parseInt(this.state.address)
+      address: parseInt(this.state.address),
+      config: config
     }
 
     ajaxPost({
@@ -102,6 +114,9 @@ export default class Probe extends React.PureComponent {
         </div>
         <div className='row'>
           {this.chart()}
+        </div>
+        <div className='row'>
+          <Config  data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly}/>
         </div>
         <div className='row'>
           <div className='col-sm-8'/>

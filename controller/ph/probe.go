@@ -15,6 +15,7 @@ type Probe struct {
 	Address int           `json:"address"`
 	Enable  bool          `json:"enable"`
 	Period  time.Duration `json:"period"`
+	Config  ProbeConfig   `json:"config"`
 }
 
 func (c *Controller) Get(id string) (Probe, error) {
