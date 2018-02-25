@@ -4,7 +4,7 @@ import Probe from './probe.jsx'
 import New from './new.jsx'
 import {ajaxGet} from '../utils/ajax.js'
 
-export default class Ph extends React.PureComponent {
+export default class Ph extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
