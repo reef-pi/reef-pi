@@ -49,6 +49,7 @@ func (c *Controller) Start() {
 		if !p.Enable {
 			continue
 		}
+		c.loadReadings(p.ID)
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -58,6 +59,7 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	for id, quit := range c.quitters {
 		close(quit)
+		c.saveReadings(id)
 		delete(c.quitters, id)
 	}
 }

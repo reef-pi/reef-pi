@@ -21,12 +21,6 @@ export default class ProbeConfig extends React.Component {
     return(
       <div className='container'>
         <div className='row'>
-        Enable control
-        </div>
-        <div className='row'>
-          Equipment select
-        </div>
-        <div className='row'>
           <div className='col-sm-4'>
             <Notify data={this.props.data.notify} hook={this.updateConfig} readOnly={this.props.readOnly}/>
           </div>

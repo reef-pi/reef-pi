@@ -1,12 +1,15 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
+import {Tooltip, YAxis, XAxis, LineChart, Line, Label} from 'recharts'
 import {ajaxGet} from '../utils/ajax.js'
 
 export default class Chart extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      readings: []
+      readings: {
+        current: [],
+        historical: [],
+      }
     }
     this.fetch = this.fetch.bind(this)
   }
@@ -32,17 +35,27 @@ export default class Chart extends React.PureComponent {
     })
   }
   render () {
-    if (this.state.readings.length <= 0) {
+    if (this.state.readings.current.length <= 0) {
       return (<div />)
     }
     return (
       <div className='container'>
-        <span className='h6'>Readings</span>
-        <LineChart width={this.props.width} height={this.props.height} data={this.state.readings.Current}>
-          <Line dataKey='Ph' fill='#33b5e5' isAnimationActive={false} />
-          <XAxis dataKey='Time' />
-          <Tooltip />
-        </LineChart>
+        <div className='col-sm-6'>
+          <span className='h6'>Current</span>
+          <LineChart width={this.props.width} height={this.props.height} data={this.state.readings.current}>
+            <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false}/>
+            <XAxis dataKey='time' />
+            <Tooltip />
+          </LineChart>
+        </div>
+        <div className='col-sm-6'>
+          <span className='h6'>Historical</span>
+          <LineChart width={this.props.width} height={this.props.height} data={this.state.readings.historical}>
+            <Line dataKey='pH' stroke='#139535' isAnimationActive={false} dot={false}/>
+            <XAxis dataKey='time' />
+            <Tooltip />
+          </LineChart>
+        </div>
       </div>
     )
   }

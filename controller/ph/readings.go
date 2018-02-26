@@ -10,8 +10,9 @@ import (
 )
 
 type Measurement struct {
-	Ph   float64
-	Time utils.TeleTime
+	Ph     float64        `json:"pH"`
+	Time   utils.TeleTime `json:"time"`
+	values []float64      `json:"-"`
 }
 
 type Readings struct {
@@ -20,8 +21,8 @@ type Readings struct {
 }
 
 type ReadingsResponse struct {
-	Current    []Measurement
-	Historical []Measurement
+	Current    []Measurement `json:"current"`
+	Historical []Measurement `json:"historical"`
 }
 
 func newReadings() Readings {
@@ -46,7 +47,7 @@ func (c *Controller) GetReadings(id string) (ReadingsResponse, error) {
 		if i != nil {
 			m, ok := i.(Measurement)
 			if !ok {
-				log.Println("ERROR: ph subsystem. Failed to typecast temperature reading")
+				log.Println("ERROR: ph subsystem. Failed to typecast current ph reading")
 				return
 			}
 			resp.Current = append(resp.Current, m)
@@ -56,7 +57,43 @@ func (c *Controller) GetReadings(id string) (ReadingsResponse, error) {
 		return resp.Current[i].Time.Before(resp.Current[j].Time)
 	})
 
+	readings.Historical.Do(func(i interface{}) {
+		if i != nil {
+			m, ok := i.(Measurement)
+			if !ok {
+				log.Println("ERROR: ph subsystem. Failed to typecast historical ph reading")
+				return
+			}
+			resp.Historical = append(resp.Historical, m)
+		}
+	})
+	sort.Slice(resp.Historical, func(i, j int) bool {
+		return resp.Historical[i].Time.Before(resp.Historical[j].Time)
+	})
+
 	return resp, nil
+}
+
+func (c *Controller) syncHistoricalReadings(h *ring.Ring) Measurement {
+	current := Measurement{
+		Time:   utils.TeleTime(time.Now()),
+		values: []float64{},
+	}
+	if h.Value == nil {
+		h.Value = current
+		return current
+	}
+	previous, ok := h.Value.(Measurement)
+	if !ok {
+		log.Println("ERROR: ph subsystem. Failed to typecast previous ph reading")
+		return current
+	}
+	if previous.Time.Hour() == current.Time.Hour() {
+		return previous
+	}
+	h = h.Next()
+	h.Value = current
+	return current
 }
 
 func (c *Controller) updateReadings(id string, v float64) {
@@ -70,6 +107,61 @@ func (c *Controller) updateReadings(id string, v float64) {
 	}
 	readings.Current.Value = m
 	readings.Current = readings.Current.Next()
+
+	h := c.syncHistoricalReadings(readings.Historical)
+	h.values = append(h.values, v)
+	total := float64(0.0)
+	for _, v := range h.values {
+		total += v
+	}
+	h.Ph = total / float64(len(h.values))
+	readings.Historical.Value = h
 	c.readings[id] = readings
-	log.Println("Updated readings")
+
+}
+
+func notifyIfNeeded(t *utils.Telemetry, name string, n Notify, reading float64) {
+	if !n.Enable {
+		return
+	}
+	subject := "[Reef-Pi ALERT] ph out of range"
+	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
+	body := fmt.Sprintf(format, reading, name, n.Min, n.Max)
+	if reading >= n.Max {
+		t.Alert(subject, "Tank ph is high. "+body)
+		return
+	}
+	if reading <= n.Min {
+		t.Alert(subject, "Tank ph is low. "+body)
+		return
+	}
+}
+
+func (c *Controller) loadReadings(id string) {
+	var resp ReadingsResponse
+	if err := c.store.Get(ReadingsBucket, id, &resp); err != nil {
+		log.Println("ERROR: ph sub-system failed to restore usage statistics from db. Error:", err)
+		return
+	}
+	readings := newReadings()
+	for _, m := range resp.Current {
+		readings.Current.Value = m
+		readings.Current = readings.Current.Next()
+	}
+	for _, m := range resp.Historical {
+		readings.Historical.Value = m
+		readings.Historical = readings.Historical.Next()
+	}
+	c.readings[id] = readings
+}
+
+func (c *Controller) saveReadings(id string) {
+	readings, err := c.GetReadings(id)
+	if err != nil {
+		log.Println("ERROR: ph sub-system failed to fetch . Error:", err)
+		return
+	}
+	if err := c.store.Update(ReadingsBucket, id, readings); err != nil {
+		log.Println("ERROR: ph sub-system failed to save readings in db. Error:", err)
+	}
 }
