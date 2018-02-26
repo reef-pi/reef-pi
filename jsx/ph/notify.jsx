@@ -39,7 +39,7 @@ export default class Notify extends React.Component {
           className='form-check-input'
           type='checkbox'
           defaultChecked={this.state.data.enable}
-          readOnly={this.props.readOnly}
+          disabled={this.props.readOnly}
           onClick={this.updateEnable} />
         <b>Enable alerting</b>
       </label>

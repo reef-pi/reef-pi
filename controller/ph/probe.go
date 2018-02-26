@@ -80,6 +80,9 @@ func (c *Controller) Delete(id string) error {
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
+	if err := c.store.Delete(ReadingsBucket, id); err != nil {
+		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
+	}
 	quit, ok := c.quitters[id]
 	if ok {
 		close(quit)
@@ -98,18 +101,18 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	for {
 		select {
 		case <-ticker.C:
-			if c.config.DevMode {
-				c.updateReadings(p.ID, 8+rand.Float64()*2)
-				log.Println("ph subsysten: Running in devmode probe:", p.Name, "reading:", 10)
-			} else {
+			reading := 8 + rand.Float64()*2
+			if !c.config.DevMode {
 				v, err := d.Read()
 				if err != nil {
 					log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 					continue
 				}
-				c.updateReadings(p.ID, v)
-				log.Println("ph sub-system: Probe:", p.Name, "Reading:", v)
+				reading = v
 			}
+			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
+			notifyIfNeeded(c.telemetry, p.Name, p.Config.Notify, reading)
+			c.updateReadings(p.ID, reading)
 		case <-quit:
 			ticker.Stop()
 			return
