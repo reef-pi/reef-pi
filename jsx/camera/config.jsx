@@ -8,19 +8,14 @@ export default class Config extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      config: {},
+      config: this.props.config,
       showAlert: false,
       updated: true
     }
 
     this.updateText = this.updateText.bind(this)
     this.updateBool = this.updateBool.bind(this)
-    this.fetch = this.fetch.bind(this)
     this.save = this.save.bind(this)
-  }
-
-  componentDidMount () {
-    this.fetch()
   }
 
   save (ev) {
@@ -37,23 +32,7 @@ export default class Config extends React.Component {
       url: '/api/camera/config',
       data: JSON.stringify(config),
       success: function (data) {
-        this.fetch()
         this.setState({updated: false})
-      }.bind(this)
-    })
-  }
-
-  fetch() {
-    ajaxGet({
-      url: '/api/camera/config',
-      type: 'GET',
-      dataType: 'json',
-      success: function (data) {
-        this.setState({
-          config: data,
-          showAlert: false,
-          updated: false
-        })
       }.bind(this)
     })
   }
@@ -122,10 +101,6 @@ export default class Config extends React.Component {
         <div className='row'>
           <div className='col-sm-3'>Upload to gDrive</div>
           <input type='checkbox' id='camera_gdrive' className='col-sm-2' defaultChecked={this.state.config.upload} onClick={this.updateBool('upload')} />
-        </div>
-        <div className='row'>
-          <div className='col-sm-3'>Enable motion</div>
-          <input type='checkbox' id='enable_motion' className='col-sm-2' defaultChecked={this.state.config.motion} onClick={this.updateBool('motion')} />
         </div>
         <div className='row'>
           <input type='button' id='updateCamera' onClick={this.save} value='update' className={saveButtonClass} />

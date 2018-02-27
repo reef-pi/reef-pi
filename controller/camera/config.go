@@ -8,17 +8,30 @@ import (
 
 const DefaulCaptureFlags = ""
 
+type MotionConfig struct {
+	Enable bool   `json:"enable"`
+	URL    string `json:"url"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
+}
+
 type Config struct {
 	Enable         bool          `json:"enable" yaml:"enable"`
 	ImageDirectory string        `json:"image_directory" yaml:"image_directory"`
 	CaptureFlags   string        `json:"capture_flags" yaml:"capture_flags"`
 	TickInterval   time.Duration `json:"tick_interval" yaml:"tick_interval"`
 	Upload         bool          `json:"upload" yaml:"upload"`
+	Motion         MotionConfig  `json:"motion"`
 }
 
 var Default = Config{
 	ImageDirectory: "/var/lib/reef-pi/images",
 	TickInterval:   120,
+	Motion: MotionConfig{
+		URL:    "http://localhost:8081",
+		Width:  800,
+		Height: 600,
+	},
 }
 
 func loadConfig(store utils.Store) (Config, error) {

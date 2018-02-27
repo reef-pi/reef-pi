@@ -17,7 +17,6 @@ export default class Motion  extends React.PureComponent {
 			  <img
 				  width={this.props.width} height={this.props.height}
 					src={this.props.url}
-					style={{webkitUserSelect: 'none'}}
 				/>
 			</div>
 		)

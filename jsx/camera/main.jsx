@@ -12,10 +12,25 @@ export default class Camera extends React.Component {
     this.state = {
       latest: {},
       images: [],
-      showConfig: false
+      showConfig: false,
+      config: { }
     }
     this.fetch = this.fetch.bind(this)
     this.toggleConfig = this.toggleConfig.bind(this)
+    this.motion = this.motion.bind(this)
+  }
+
+  motion() {
+    if(this.state.config.motion === undefined) {
+      return
+    }
+    return(
+      <Motion
+        width={this.state.config.motion.width}
+        height={this.state.config.motion.height}
+        url={this.state.config.motion.url}
+      />
+    )
   }
 
   toggleConfig() {
@@ -23,6 +38,17 @@ export default class Camera extends React.Component {
   }
 
   fetch () {
+    ajaxGet({
+      url: '/api/camera/config',
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        this.setState({
+          config: data
+        })
+      }.bind(this)
+    })
+
     ajaxGet({
       url: '/api/camera/list',
       success: function (data) {
@@ -45,7 +71,7 @@ export default class Camera extends React.Component {
   render () {
     var config = <div />
     if(this.state.showConfig) {
-      config = <Config />
+      config = <Config config={this.state.config}/>
     }
     return (
       <div className='container'>
@@ -59,9 +85,7 @@ export default class Camera extends React.Component {
         <div className='row'>
           <Capture />
         </div>
-        <div className='row'>
-          <Motion width={721} height={406} url='http://10.0.0.62:8081'/>
-        </div>
+        {this.motion()}
       </div>
     )
   }
