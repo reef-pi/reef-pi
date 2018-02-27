@@ -119,3 +119,33 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 		}
 	}
 }
+
+type CalibrationDetails struct {
+	Value float32 `json:"value"`
+	Type  string  `json:"type"`
+}
+
+func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
+	if details.Value > 14 || details.Value <= 0 {
+		return fmt.Errorf("Invalid calibration value %f. Valid values are above 0  and below 14", details.Value)
+	}
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	if p.Enable {
+		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
+	}
+	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
+	switch details.Type {
+	case "high":
+		return d.CalibrateHigh(details.Value)
+	case "mid":
+		return d.CalibrateMid(details.Value)
+	case "low":
+		return d.CalibrateLow(details.Value)
+	default:
+		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
+	}
+	return nil
+}

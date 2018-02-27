@@ -74,26 +74,33 @@ func (c *Controller) GetReadings(id string) (ReadingsResponse, error) {
 	return resp, nil
 }
 
-func (c *Controller) syncHistoricalReadings(h *ring.Ring) Measurement {
+func historicalReadings(h *ring.Ring, r float64) *ring.Ring {
 	current := Measurement{
 		Time:   utils.TeleTime(time.Now()),
-		values: []float64{},
+		values: []float64{r},
+		Ph:     r,
 	}
 	if h.Value == nil {
 		h.Value = current
-		return current
+		return h
 	}
 	previous, ok := h.Value.(Measurement)
 	if !ok {
 		log.Println("ERROR: ph subsystem. Failed to typecast previous ph reading")
-		return current
+		return h
 	}
 	if previous.Time.Hour() == current.Time.Hour() {
-		return previous
+		current.values = append(previous.values, r)
+		total := float64(0.0)
+		for _, v := range current.values {
+			total += v
+		}
+		current.Ph = total / float64(len(current.values))
+		return h
 	}
 	h = h.Next()
 	h.Value = current
-	return current
+	return h
 }
 
 func (c *Controller) updateReadings(id string, v float64) {
@@ -108,14 +115,8 @@ func (c *Controller) updateReadings(id string, v float64) {
 	readings.Current.Value = m
 	readings.Current = readings.Current.Next()
 
-	h := c.syncHistoricalReadings(readings.Historical)
-	h.values = append(h.values, v)
-	total := float64(0.0)
-	for _, v := range h.values {
-		total += v
-	}
-	h.Ph = total / float64(len(h.values))
-	readings.Historical.Value = h
+	h := historicalReadings(readings.Historical, v)
+	readings.Historical = h
 	c.readings[id] = readings
 
 }

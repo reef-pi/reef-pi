@@ -13,6 +13,15 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/phprobes/{id}", e.updateProbe).Methods("POST")
 	r.HandleFunc("/api/phprobes/{id}", e.deleteProbe).Methods("DELETE")
 	r.HandleFunc("/api/phprobes/{id}/readings", e.getReadings).Methods("GET")
+	r.HandleFunc("/api/phprobes/{id}/calibrate", e.calibrate).Methods("POST")
+}
+
+func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
+	var details CalibrationDetails
+	fn := func(id string) error {
+		return c.Calibrate(id, details)
+	}
+	utils.JSONUpdateResponse(&details, fn, w, r)
 }
 
 func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {

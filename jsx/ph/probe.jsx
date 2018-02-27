@@ -4,6 +4,7 @@ import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import Chart from './chart.jsx'
 import Config from './probe_config.jsx'
+import Calibrate from './calibrate.jsx'
 
 export default class Probe extends React.Component {
   constructor (props) {
@@ -14,7 +15,8 @@ export default class Probe extends React.Component {
       enable: props.data.enable,
       address: props.data.address,
       config: props.data.config,
-      readOnly: true
+      readOnly: true,
+      calibrate: false
     }
 
     this.remove = this.remove.bind(this)
@@ -23,6 +25,11 @@ export default class Probe extends React.Component {
     this.edit = this.edit.bind(this)
     this.chart = this.chart.bind(this)
     this.updateConfig = this.updateConfig.bind(this)
+    this.calibrate = this.calibrate.bind(this)
+  }
+
+  calibrate() {
+    this.setState({calibrate: !this.state.calibrate})
   }
 
   updateConfig(d) {
@@ -119,13 +126,19 @@ export default class Probe extends React.Component {
           <Config  data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly}/>
         </div>
         <div className='row'>
-          <div className='col-sm-8'/>
+          <div className='col-sm-7'/>
+          <div className='col-sm-2'>
+            <input type='button' id={'calibrate-probe-' + this.props.data.id} onClick={this.calibrate} value='calibrate' className='btn btn-secondary' />
+          </div>
           <div className='col-sm-1'>
             <input type='button' id={'edit-probe-' + this.props.data.id} onClick={this.edit} value={editText} className={editClass} />
           </div>
             <div className='col-sm-1'>
           <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
           </div>
+        </div>
+        <div className='row'>
+          { this.state.calibrate ? <Calibrate probe={this.props.data.id} /> : <div /> }
         </div>
       </div>
     )
