@@ -12,6 +12,7 @@ func TestAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	initializeSettings(store)
 	s := DefaultSettings
 	s.Capabilities.DevMode = true
 	if err := store.Update(Bucket, "settings", s); err != nil {
