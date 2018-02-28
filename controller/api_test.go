@@ -8,6 +8,17 @@ import (
 )
 
 func TestAPI(t *testing.T) {
+	store, err := utils.NewStore("api-test.db")
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := DefaultSettings
+	s.Capabilities.DevMode = true
+	if err := store.Update(Bucket, "settings", s); err != nil {
+		t.Fatal(err)
+	}
+	store.Close()
+
 	r, err := New("0.1", "api-test.db")
 	if err != nil {
 		t.Fatal("Failed to create new reef-pi controller. Error:", err)

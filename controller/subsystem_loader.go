@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/ato"
 	"github.com/reef-pi/reef-pi/controller/camera"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/doser"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
@@ -111,11 +112,11 @@ func (r *ReefPi) loadCameraSubsystem() error {
 	return nil
 }
 
-func (r *ReefPi) loadDoserSubsystem(bus i2c.Bus) error {
+func (r *ReefPi) loadDoserSubsystem(jacks *connectors.Jacks) error {
 	if !r.settings.Capabilities.Doser {
 		return nil
 	}
-	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, bus, r.telemetry)
+	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, jacks, r.telemetry)
 	if err != nil {
 		r.settings.Capabilities.Doser = false
 		log.Println("ERROR: Failed to initialize doser subsystem")
@@ -156,7 +157,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadLightingSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load lighting sub-system. Error:", err)
 	}
-	if err := r.loadDoserSubsystem(r.bus); err != nil {
+	if err := r.loadDoserSubsystem(r.jacks); err != nil {
 		log.Println("ERROR: Failed to load doser sub-system. Error:", err)
 	}
 	if err := r.loadCameraSubsystem(); err != nil {

@@ -12,6 +12,15 @@ import (
 )
 
 func TestLightingAPI(t *testing.T) {
+
+	rpi := utils.NewRPIPWMDriver()
+	conf := utils.DefaultPWMConfig
+	conf.DevMode = true
+	pca9685, err := utils.NewPWM(i2c.MockBus(), conf)
+	if err != nil {
+		t.Error(err)
+	}
+
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
@@ -20,7 +29,7 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	jacks := connectors.NewJacks(store)
+	jacks := connectors.NewJacks(store, rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}

@@ -2,7 +2,7 @@ package doser
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 )
@@ -42,7 +42,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 		pin:      p.Pin,
 		duration: cal.Duration,
 		speed:    cal.Speed,
-		vv:       c.vv,
+		jacks:    c.jacks,
 	}
 	go r.Run()
 	return nil
@@ -93,11 +93,11 @@ func (c *Controller) Delete(id string) error {
 	return c.store.Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(vv utils.PWM) cron.Job {
+func (p *Pump) Runner(jacks *connectors.Jacks) cron.Job {
 	return &Runner{
 		pin:      p.Pin,
 		duration: p.Regiment.Duration,
 		speed:    p.Regiment.Speed,
-		vv:       vv,
+		jacks:    jacks,
 	}
 }

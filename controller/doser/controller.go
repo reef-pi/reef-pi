@@ -1,8 +1,8 @@
 package doser
 
 import (
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
@@ -15,22 +15,14 @@ type Controller struct {
 	mu        *sync.Mutex
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
-	vv        utils.PWM
+	jacks     *connectors.Jacks
 }
 
-func New(devMode bool, store utils.Store, bus i2c.Bus, t *utils.Telemetry) (*Controller, error) {
-	var vv utils.PWM
-	pwmConf := utils.DefaultPWMConfig
-	pwmConf.DevMode = devMode
-	pwm, err := utils.NewPWM(bus, pwmConf)
-	if err != nil {
-		return nil, err
-	}
-	vv = pwm
+func New(devMode bool, store utils.Store, jacks *connectors.Jacks, t *utils.Telemetry) (*Controller, error) {
 	return &Controller{
 		DevMode:   devMode,
 		store:     store,
-		vv:        vv,
+		jacks:     jacks,
 		cronIDs:   make(map[string]cron.EntryID),
 		telemetry: t,
 		mu:        &sync.Mutex{},
@@ -69,7 +61,7 @@ func (c *Controller) loadAllSchedule() error {
 func (c *Controller) addToCron(p Pump) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.vv))
+	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.jacks))
 	if err != nil {
 		return err
 	}
