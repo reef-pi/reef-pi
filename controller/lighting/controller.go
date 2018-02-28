@@ -3,6 +3,7 @@ package lighting
 import (
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"sync"
 	"time"
 )
@@ -29,11 +30,11 @@ type Controller struct {
 	vv        utils.PWM
 }
 
-func New(conf Config, jacks *connectors.Jacks, store utils.Store, telemetry *utils.Telemetry) (*Controller, error) {
+func New(conf Config, jacks *connectors.Jacks, store utils.Store, bus i2c.Bus, telemetry *utils.Telemetry) (*Controller, error) {
 	var vv utils.PWM
 	pwmConf := utils.DefaultPWMConfig
 	pwmConf.DevMode = conf.DevMode
-	pwm, err := utils.NewPWM(pwmConf)
+	pwm, err := utils.NewPWM(bus, pwmConf)
 	if err != nil {
 		return nil, err
 	}

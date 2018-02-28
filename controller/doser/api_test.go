@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestATOAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	c, err := New(true, store, telemetry)
+	c, err := New(true, store, i2c.MockBus(), telemetry)
 	if err != nil {
 		t.Fatal(err)
 	}

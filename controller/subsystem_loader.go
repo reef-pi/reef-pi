@@ -80,7 +80,7 @@ func (r *ReefPi) loadATOSubsystem(eqs *equipments.Controller) error {
 	return nil
 }
 
-func (r *ReefPi) loadLightingSubsystem() error {
+func (r *ReefPi) loadLightingSubsystem(bus i2c.Bus) error {
 	if !r.settings.Capabilities.Lighting {
 		return nil
 	}
@@ -88,7 +88,7 @@ func (r *ReefPi) loadLightingSubsystem() error {
 		DevMode:  r.settings.Capabilities.DevMode,
 		Interval: 30 * time.Second,
 	}
-	l, err := lighting.New(conf, r.jacks, r.store, r.telemetry)
+	l, err := lighting.New(conf, r.jacks, r.store, bus, r.telemetry)
 	if err != nil {
 		r.settings.Capabilities.Lighting = false
 		log.Println("ERROR: Failed to initialize lighting subsystem")
@@ -111,11 +111,11 @@ func (r *ReefPi) loadCameraSubsystem() error {
 	return nil
 }
 
-func (r *ReefPi) loadDoserSubsystem(eqs *equipments.Controller) error {
+func (r *ReefPi) loadDoserSubsystem(bus i2c.Bus) error {
 	if !r.settings.Capabilities.Doser {
 		return nil
 	}
-	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, r.telemetry)
+	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, bus, r.telemetry)
 	if err != nil {
 		r.settings.Capabilities.Doser = false
 		log.Println("ERROR: Failed to initialize doser subsystem")
@@ -153,10 +153,10 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadTemperatureSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load temperature sub-system. Error:", err)
 	}
-	if err := r.loadLightingSubsystem(); err != nil {
+	if err := r.loadLightingSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load lighting sub-system. Error:", err)
 	}
-	if err := r.loadDoserSubsystem(eqs); err != nil {
+	if err := r.loadDoserSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load doser sub-system. Error:", err)
 	}
 	if err := r.loadCameraSubsystem(); err != nil {

@@ -2,6 +2,7 @@ package doser
 
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
@@ -17,11 +18,11 @@ type Controller struct {
 	vv        utils.PWM
 }
 
-func New(devMode bool, store utils.Store, t *utils.Telemetry) (*Controller, error) {
+func New(devMode bool, store utils.Store, bus i2c.Bus, t *utils.Telemetry) (*Controller, error) {
 	var vv utils.PWM
 	pwmConf := utils.DefaultPWMConfig
 	pwmConf.DevMode = devMode
-	pwm, err := utils.NewPWM(pwmConf)
+	pwm, err := utils.NewPWM(bus, pwmConf)
 	if err != nil {
 		return nil, err
 	}

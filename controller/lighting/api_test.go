@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"strings"
 	"testing"
 	"time"
@@ -23,7 +24,7 @@ func TestLightingAPI(t *testing.T) {
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c, err := New(config, jacks, store, telemetry)
+	c, err := New(config, jacks, store, i2c.MockBus(), telemetry)
 	if err != nil {
 		t.Fatal(err)
 	}
