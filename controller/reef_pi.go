@@ -37,7 +37,6 @@ func New(version, database string) (*ReefPi, error) {
 		return nil, err
 	}
 	s, err := loadSettings(store)
-	log.Printf("Firts: %#v\n", s)
 	if err != nil {
 		log.Println("Warning: Failed to load settings from db, Error:", err)
 		log.Println("Warning: Initializing default settings in database")
@@ -47,13 +46,12 @@ func New(version, database string) (*ReefPi, error) {
 		}
 		s = initialSettings
 	}
-	log.Printf("Second: %#v\n", s)
 
 	bus := i2c.Bus(i2c.MockBus())
 	if !s.Capabilities.DevMode {
-		log.Println("Initialing i2c bus, not running in devmode")
 		b, err := i2c.New()
 		if err != nil {
+			log.Println("ERROR: Failed to initialize i2c. Error:", err)
 			return nil, err
 		}
 		bus = b
@@ -62,9 +60,9 @@ func New(version, database string) (*ReefPi, error) {
 	pi := utils.NewRPIPWMDriver()
 	pConfig := utils.DefaultPWMConfig
 	pConfig.DevMode = true
-
-	pca9685, err := utils.NewPWM(bus, pConfig)
+	pca9685, err := utils.NewPWM(i2c.MockBus(), pConfig)
 	if err != nil {
+		log.Println("ERROR: Failed to initialize pca9685 driver")
 		return nil, err
 	}
 	jacks := connectors.NewJacks(store, pi, pca9685)

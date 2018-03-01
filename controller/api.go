@@ -56,6 +56,9 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "assets/home.html")
 	})
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "assets/favicon.ico")
+	})
 	router := mux.NewRouter()
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 	images := http.FileServer(http.Dir("images"))

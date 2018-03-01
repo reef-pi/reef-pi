@@ -54,6 +54,7 @@ deb: ui
 	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/bootstrap.min.css dist/var/lib/reef-pi/assets/bootstrap.min.css
+	cp assets/favicon.ico dist/var/lib/reef-pi/assets/favicon.ico
 	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
 	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
