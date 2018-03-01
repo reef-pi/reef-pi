@@ -97,6 +97,9 @@ type PinValues map[int]int
 func (jacks *Jacks) DirectControl(driver string, pin, v int) error {
 	switch driver {
 	case "rpi":
+		if err := jacks.rpi.On(pin); err != nil {
+			return err
+		}
 		return jacks.rpi.Set(pin, v)
 	case "pca9685":
 		return jacks.pca9685.Set(pin, v)

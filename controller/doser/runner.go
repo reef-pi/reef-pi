@@ -15,10 +15,15 @@ type Runner struct {
 
 func (r *Runner) Run() {
 	log.Println("doser sub system: setting pwm pin:", r.pin, "at speed", r.speed)
-	r.jacks.DirectControl("rpi", r.pin, r.speed)
+	if err := r.jacks.DirectControl("rpi", r.pin, r.speed); err != nil {
+		log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
+		return
+	}
 	select {
 	case <-time.After(r.duration * time.Second):
-		r.jacks.DirectControl("rpi", r.pin, 0)
 		log.Println("doser sub system: setting pwm pin:", r.pin, "at speed", 0)
+		if err := r.jacks.DirectControl("rpi", r.pin, 0); err != nil {
+			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
+		}
 	}
 }
