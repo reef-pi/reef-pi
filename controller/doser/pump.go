@@ -43,6 +43,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 		duration: cal.Duration,
 		speed:    cal.Speed,
 		jacks:    c.jacks,
+		jack:     p.Jack,
 	}
 	go r.Run()
 	return nil
