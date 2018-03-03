@@ -49,7 +49,7 @@ export default class New extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name'/></div>
         </div>
         <div className='row'>
            <JackSelector update={this.setJack} id='new_doser'/>
