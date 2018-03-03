@@ -27,18 +27,9 @@ type Controller struct {
 	config    Config
 	running   bool
 	mu        *sync.Mutex
-	vv        utils.PWM
 }
 
 func New(conf Config, jacks *connectors.Jacks, store utils.Store, bus i2c.Bus, telemetry *utils.Telemetry) (*Controller, error) {
-	var vv utils.PWM
-	pwmConf := utils.DefaultPWMConfig
-	pwmConf.DevMode = conf.DevMode
-	pwm, err := utils.NewPWM(bus, pwmConf)
-	if err != nil {
-		return nil, err
-	}
-	vv = pwm
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,
@@ -46,7 +37,6 @@ func New(conf Config, jacks *connectors.Jacks, store utils.Store, bus i2c.Bus, t
 		config:    conf,
 		stopCh:    make(chan struct{}),
 		mu:        &sync.Mutex{},
-		vv:        vv,
 	}, nil
 }
 
