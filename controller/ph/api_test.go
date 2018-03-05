@@ -40,13 +40,18 @@ func TestPhAPI(t *testing.T) {
 		t.Fatal("failed to get ph probe readings using api. error:", err)
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1})
+	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1, Enable: false})
 	if err := tr.Do("POST", "/api/phprobes/1", body, nil); err != nil {
 		t.Fatal("Failed to update ph probe using api. Error:", err)
 	}
+	body.Reset()
+	json.NewEncoder(body).Encode(&CalibrationDetails{Type: "high", Value: 10})
+	if err := tr.Do("POST", "/api/phprobes/1/calibrate", body, nil); err != nil {
+		t.Fatal("Failed to calibrate ph probe using api. Error:", err)
+	}
 
+	c.Stop()
 	if err := tr.Do("DELETE", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete ph probe using api. Error:", err)
 	}
-	c.Stop()
 }
