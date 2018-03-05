@@ -8,6 +8,32 @@ import (
 	"net/http"
 )
 
+func (j Jack) IsValid() error {
+	if j.Name == "" {
+		return fmt.Errorf("Jack name can not be empty")
+	}
+	if len(j.Pins) == 0 {
+		return fmt.Errorf("Jack should have pins associated with it")
+	}
+	switch j.Driver {
+	case "pca9685":
+		for _, pin := range j.Pins {
+			if (pin > 14) || (pin < 0) {
+				return fmt.Errorf("Invalid pin:%d", pin)
+			}
+		}
+	case "rpi":
+		for _, pin := range j.Pins {
+			if (pin > 1) || (pin < 0) {
+				return fmt.Errorf("Invalid pin:%d", pin)
+			}
+		}
+	default:
+		return fmt.Errorf("Driver type can not be anything else other than rpi or pca9685")
+	}
+	return nil
+}
+
 const JackBucket = "jacks"
 
 type Jack struct {
@@ -54,12 +80,10 @@ func (c *Jacks) List() ([]Jack, error) {
 }
 
 func (c *Jacks) Create(j Jack) error {
-	if j.Name == "" {
-		return fmt.Errorf("Jack name can not be empty")
+	if err := j.IsValid(); err != nil {
+		return err
 	}
-	if len(j.Pins) == 0 {
-		return fmt.Errorf("Jack should have pins associated with it")
-	}
+
 	fn := func(id string) interface{} {
 		j.ID = id
 		return &j
@@ -68,6 +92,9 @@ func (c *Jacks) Create(j Jack) error {
 }
 
 func (c *Jacks) Update(id string, j Jack) error {
+	if err := j.IsValid(); err != nil {
+		return err
+	}
 	j.ID = id
 	if err := c.store.Update(JackBucket, id, j); err != nil {
 		return err

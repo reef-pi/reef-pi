@@ -11,12 +11,42 @@ import (
 
 const OutletBucket = "outlets"
 
+var (
+	ValidGPIOPins = map[int]bool{
+		12: true,
+		16: true,
+		17: true,
+		20: true,
+		23: true,
+		24: true,
+		21: true,
+		25: true,
+		27: true,
+		22: true,
+		5:  true,
+		6:  true,
+		13: true,
+		26: true,
+	}
+)
+
 type Outlet struct {
 	ID        string `json:"id" yaml:"id"`
 	Name      string `json:"name" yaml:"name"`
 	Pin       int    `json:"pin" yaml:"pin"`
 	Equipment string `json:"equipment" yaml:"equipment"`
 	Reverse   bool   `json:"reverse" yaml:"reverse"`
+}
+
+func (o Outlet) IsValid() error {
+	if o.Name == "" {
+		return fmt.Errorf("Outlet name can not be empty")
+	}
+	_, ok := ValidGPIOPins[o.Pin]
+	if !ok {
+		return fmt.Errorf("GPIO Pin %d is not valid", o.Pin)
+	}
+	return nil
 }
 
 type Outlets struct {
@@ -51,11 +81,8 @@ func (c *Outlets) Configure(id string, on bool) error {
 }
 
 func (c *Outlets) Create(o Outlet) error {
-	if o.Name == "" {
-		return fmt.Errorf("Outlet name can not be empty")
-	}
-	if o.Pin == 0 {
-		return fmt.Errorf("Set outlet pin")
+	if err := o.IsValid(); err != nil {
+		return err
 	}
 	fn := func(id string) interface{} {
 		o.ID = id
@@ -66,6 +93,9 @@ func (c *Outlets) Create(o Outlet) error {
 
 func (c *Outlets) Update(id string, o Outlet) error {
 	o.ID = id
+	if err := o.IsValid(); err != nil {
+		return err
+	}
 	return c.store.Update(OutletBucket, id, o)
 }
 
