@@ -35,6 +35,8 @@ func newReadings() Readings {
 const ReadingsBucket = "ph_readings"
 
 func (c *Controller) GetReadings(id string) (ReadingsResponse, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	resp := ReadingsResponse{
 		Current:    []Measurement{},
 		Historical: []Measurement{},
@@ -104,7 +106,9 @@ func historicalReadings(h *ring.Ring, r float64) *ring.Ring {
 }
 
 func (c *Controller) updateReadings(id string, v float64) {
+	c.mu.Lock()
 	readings, ok := c.readings[id]
+	c.mu.Unlock()
 	if !ok {
 		readings = newReadings()
 	}
@@ -117,7 +121,9 @@ func (c *Controller) updateReadings(id string, v float64) {
 
 	h := historicalReadings(readings.Historical, v)
 	readings.Historical = h
+	c.mu.Lock()
 	c.readings[id] = readings
+	c.mu.Unlock()
 
 }
 
@@ -139,8 +145,6 @@ func notifyIfNeeded(t *utils.Telemetry, name string, n Notify, reading float64) 
 }
 
 func (c *Controller) loadReadings(id string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	var resp ReadingsResponse
 	if err := c.store.Get(ReadingsBucket, id, &resp); err != nil {
 		log.Println("ERROR: ph sub-system failed to restore usage statistics from db. Error:", err)
@@ -155,7 +159,9 @@ func (c *Controller) loadReadings(id string) {
 		readings.Historical.Value = m
 		readings.Historical = readings.Historical.Next()
 	}
+	c.mu.Lock()
 	c.readings[id] = readings
+	c.mu.Unlock()
 }
 
 func (c *Controller) saveReadings(id string) {
