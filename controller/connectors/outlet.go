@@ -13,20 +13,20 @@ const OutletBucket = "outlets"
 
 var (
 	ValidGPIOPins = map[int]bool{
+		5:  true,
+		6:  true,
 		12: true,
+		13: true,
 		16: true,
 		17: true,
 		20: true,
+		21: true,
+		22: true,
 		23: true,
 		24: true,
-		21: true,
 		25: true,
-		27: true,
-		22: true,
-		5:  true,
-		6:  true,
-		13: true,
 		26: true,
+		27: true,
 	}
 )
 
