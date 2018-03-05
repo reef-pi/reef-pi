@@ -47,12 +47,38 @@ func New(version, database string) (*ReefPi, error) {
 		s = initialSettings
 	}
 
+	bus := i2c.Bus(i2c.MockBus())
+	if !s.Capabilities.DevMode {
+		b, err := i2c.New()
+		if err != nil {
+			log.Println("ERROR: Failed to initialize i2c. Error:", err)
+			return nil, err
+		}
+		bus = b
+	}
 	telemetry := initializeTelemetry(store, s.Notification)
-	jacks := connectors.NewJacks(store)
+	pi := utils.NewRPIPWMDriver()
+	pConfig := utils.DefaultPWMConfig
+	pConfig.DevMode = true
+
+	pca9685, err := utils.NewPWM(i2c.MockBus(), pConfig)
+	if err != nil {
+		log.Println("ERROR: Failed to initialize pca9685 driver with mock i2c bus. Error:", err)
+		return nil, err
+	}
+	if s.PCA9685 {
+		p, err := utils.NewPWM(bus, pConfig)
+		if err != nil {
+			log.Println("ERROR: Failed to initialize pca9685 driver")
+			return nil, err
+		}
+		pca9685 = p
+	}
+	jacks := connectors.NewJacks(store, pi, pca9685)
 	outlets := connectors.NewOutlets(store)
 	outlets.DevMode = s.Capabilities.DevMode
 	r := &ReefPi{
-		bus:        i2c.MockBus(),
+		bus:        bus,
 		store:      store,
 		settings:   s,
 		telemetry:  telemetry,
@@ -68,14 +94,6 @@ func New(version, database string) (*ReefPi, error) {
 }
 
 func (r *ReefPi) Start() error {
-	if !r.settings.Capabilities.DevMode {
-		b, err := i2c.New()
-		if err != nil {
-			log.Println("ERROR: Failed to creates i2c bus. Error:", err)
-		} else {
-			r.bus = b
-		}
-	}
 	if err := r.jacks.Setup(); err != nil {
 		return err
 	}

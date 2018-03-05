@@ -1,19 +1,28 @@
 import React from 'react'
 import $ from 'jquery'
 import Common from './common.jsx'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Jacks extends Common {
   constructor (props) {
     super(props)
     this.state = {
       jacks: [],
-      add: false
+      add: false,
+      driver: 'pca9685'
     }
     this.fetchData = this.fetchData.bind(this)
     this.listJacks = this.listJacks.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
+    this.setDriver = this.setDriver.bind(this)
+  }
+
+  setDriver (k, ev) {
+    this.setState({
+      driver: k
+    })
   }
 
   remove (id) {
@@ -52,7 +61,8 @@ export default class Jacks extends Common {
     }
     var payload = {
       name: $('#jackName').val(),
-      pins: pins
+      pins: pins,
+      driver: this.state.driver
     }
     this.ajaxPut({
       url: '/api/jacks',
@@ -83,8 +93,8 @@ export default class Jacks extends Common {
           <div className='col-sm-2'>
             {j.name}
           </div>
-          <div className='col-sm-1'>
-            <label className='small'>{j.pins.join(',')}</label>
+          <div className='col-sm-2'>
+            <label className='small'>{j.pins.join(',')} ({j.driver})</label>
           </div>
           <div className='col-sm-1'>
             <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(j.id)} />
@@ -126,6 +136,15 @@ export default class Jacks extends Common {
                   <input type='text' id='jackPins' className='form-control' />
                 </div>
               </div>
+
+              <div className='col-sm-3'>
+                Driver
+                <DropdownButton title={this.state.driver} id='jack-type-selection' onSelect={this.setDriver}>
+                  <MenuItem key='rpi' eventKey='rpi'>rpi</MenuItem>
+                  <MenuItem key='pca9685' eventKey='pca9685'>pca9685</MenuItem>
+                </DropdownButton>
+              </div>
+
               <div className='col-sm-1'>
                 <input type='button' id='createJack' value='add' onClick={this.save} className='btn btn-outline-primary' />
               </div>

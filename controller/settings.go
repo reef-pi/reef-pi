@@ -16,6 +16,7 @@ type Settings struct {
 	Capabilities Capabilities      `json:"capabilities" yaml:"capabilities"`
 	HealthCheck  HealthCheckNotify `json:"health_check" yaml:"health_check"`
 	HTTPS        bool              `json:"https" yaml:"https"`
+	PCA9685      bool              `json:"pca9685"`
 }
 
 var DefaultSettings = Settings{

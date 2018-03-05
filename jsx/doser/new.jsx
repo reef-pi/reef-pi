@@ -1,19 +1,26 @@
-import Common from '../common.jsx'
 import $ from 'jquery'
 import React from 'react'
+import {ajaxPut} from '../utils/ajax.js'
+import JackSelector from '../jack_selector.jsx'
 
-export default class New extends Common {
+export default class New extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       name: '',
       add: false,
-      pin: 0,
+      pin: undefined,
+      jack: undefined
     }
     this.add = this.add.bind(this)
     this.toggle = this.toggle.bind(this)
     this.ui = this.ui.bind(this)
     this.update = this.update.bind(this)
+    this.setJack = this.setJack.bind(this)
+  }
+
+  setJack(j, p) {
+    this.setState({jack: j, pin: parseInt(p)})
   }
 
   update(k) {
@@ -42,13 +49,10 @@ export default class New extends Common {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name'/></div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Pin</div>
-          <div className='col-sm-1'>
-            <input type='text' value={this.state.pin} onChange={this.update('pin')}/>
-          </div>
+           <JackSelector update={this.setJack} id='new_doser'/>
         </div>
         <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
@@ -66,9 +70,10 @@ export default class New extends Common {
     }
     var payload = {
       name: this.state.name,
-      pin: parseInt(this.state.pin)
+      pin: parseInt(this.state.pin),
+      jack: this.state.jack,
     }
-    this.ajaxPut({
+    ajaxPut({
       url: '/api/doser/pumps',
       data: JSON.stringify(payload),
       success: function (data) {

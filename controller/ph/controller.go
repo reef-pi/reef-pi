@@ -4,6 +4,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
+	"sync"
 )
 
 const Bucket = "phprobes"
@@ -19,6 +20,7 @@ type Controller struct {
 	quitters  map[string]chan struct{}
 	bus       i2c.Bus
 	readings  map[string]Readings
+	mu        *sync.Mutex
 }
 
 func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemetry) *Controller {
@@ -29,6 +31,7 @@ func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemet
 		bus:       bus,
 		quitters:  make(map[string]chan struct{}),
 		readings:  make(map[string]Readings),
+		mu:        &sync.Mutex{},
 	}
 }
 

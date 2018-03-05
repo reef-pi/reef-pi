@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 )
 
@@ -9,6 +10,17 @@ func TestReefPi(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
+	store, err := utils.NewStore(conf.Database)
+	if err != nil {
+		t.Fatal(err)
+	}
+	initializeSettings(store)
+	s := DefaultSettings
+	s.Capabilities.DevMode = true
+	if err := store.Update(Bucket, "settings", s); err != nil {
+		t.Fatal(err)
+	}
+	store.Close()
 
 	r, err := New("0.1", conf.Database)
 	if err != nil {

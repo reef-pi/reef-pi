@@ -11,6 +11,7 @@ const Bucket = "doser"
 type Pump struct {
 	ID       string         `json:"id"`
 	Name     string         `json:"name"`
+	Jack     string         `json:"jack"`
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
 }

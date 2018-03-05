@@ -5,12 +5,22 @@ import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"strings"
 	"testing"
 	"time"
 )
 
 func TestLightingAPI(t *testing.T) {
+
+	rpi := utils.NewRPIPWMDriver()
+	conf := utils.DefaultPWMConfig
+	conf.DevMode = true
+	pca9685, err := utils.NewPWM(i2c.MockBus(), conf)
+	if err != nil {
+		t.Error(err)
+	}
+
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
@@ -19,11 +29,11 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	jacks := connectors.NewJacks(store)
+	jacks := connectors.NewJacks(store, rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c, err := New(config, jacks, store, telemetry)
+	c, err := New(config, jacks, store, i2c.MockBus(), telemetry)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,8 +46,9 @@ func TestLightingAPI(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	c.Stop()
 	j1 := connectors.Jack{
-		Name: "J1",
-		Pins: []int{23},
+		Name:   "J1",
+		Pins:   []int{3},
+		Driver: "pca9685",
 	}
 	if err := c.jacks.Create(j1); err != nil {
 		t.Fatal(err)

@@ -34,8 +34,14 @@ func (d *rpiDriver) Get(pin int) (int, error) {
 }
 
 func (d *rpiDriver) On(pin int) error {
-	if err := d.driver.Export(pin); err != nil {
+	exported, err := d.driver.IsExported(pin)
+	if err != nil {
 		return err
+	}
+	if !exported {
+		if err := d.driver.Export(pin); err != nil {
+			return err
+		}
 	}
 	// Enforce 100Hz frequency
 	if err := d.driver.Frequency(pin, 10000000); err != nil {
@@ -47,6 +53,13 @@ func (d *rpiDriver) On(pin int) error {
 	return d.driver.Enable(pin)
 }
 func (d *rpiDriver) Off(pin int) error {
+	exported, err := d.driver.IsExported(pin)
+	if err != nil {
+		return err
+	}
+	if !exported {
+		return nil
+	}
 	if err := d.driver.Disable(pin); err != nil {
 		return err
 	}

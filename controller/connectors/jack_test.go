@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 	"testing"
 )
 
@@ -13,8 +14,15 @@ func TestJacksAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	j := Jack{Name: "Foo", Pins: []int{1}}
-	jacks := NewJacks(store)
+	rpi := utils.NewRPIPWMDriver()
+	conf := utils.DefaultPWMConfig
+	conf.DevMode = true
+	pca9685, err := utils.NewPWM(i2c.MockBus(), conf)
+	if err != nil {
+		t.Error(err)
+	}
+	j := Jack{Name: "Foo", Pins: []int{0}, Driver: "rpi"}
+	jacks := NewJacks(store, rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}

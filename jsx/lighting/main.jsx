@@ -96,7 +96,7 @@ export default class Lighting extends Common {
       lights.push(
         <div key={'light-' + i} className='row'>
           <div className='container'>
-            <Light id={light.id} name={light.name} removeHook={this.fetchLights} />
+            <Light id={light.id} name={light.name} removeHook={this.fetchLights} jack={light.jack}/>
             <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
           </div>
           <hr />

@@ -25,7 +25,7 @@ func TestATO(t *testing.T) {
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
-	if err := outlets.Create(connectors.Outlet{Name: "ato-outlet", Pin: 1}); err != nil {
+	if err := outlets.Create(connectors.Outlet{Name: "ato-outlet", Pin: 21}); err != nil {
 		t.Error(err)
 	}
 	if err := eqs.Create(equipments.Equipment{Outlet: "1"}); err != nil {

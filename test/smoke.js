@@ -16,7 +16,7 @@ function SmokeTest () {
     .wait(1500)
 
      // create outlets and jacks
-    .click('li#react-tabs-12')
+    .click('li#react-tabs-18')
     .wait(500)
     .click('button#btn-connectors')
     .wait(500)

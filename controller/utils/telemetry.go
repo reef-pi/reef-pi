@@ -89,7 +89,7 @@ func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	aio := t.config.AdafruitIO
 	feed = strings.ToLower(aio.Prefix + feed)
 	if !aio.Enable {
-		log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
+		//log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
 		return
 	}
 	d := adafruitio.Data{
@@ -104,7 +104,7 @@ func (t *Telemetry) CreateFeedIfNotExist(f string) {
 	aio := t.config.AdafruitIO
 	f = strings.ToLower(aio.Prefix + f)
 	if !aio.Enable {
-		log.Println("Telemetry disabled. Skipping creating feed:", f)
+		//log.Println("Telemetry disabled. Skipping creating feed:", f)
 		return
 	}
 	feed := adafruitio.Feed{

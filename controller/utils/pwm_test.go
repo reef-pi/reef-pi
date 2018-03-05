@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"github.com/reef-pi/rpi/i2c"
 	"testing"
 )
 
 func TestPWM(t *testing.T) {
 	config := DefaultPWMConfig
 	config.DevMode = true
-	pwm, err := NewPWM(config)
+	pwm, err := NewPWM(i2c.MockBus(), config)
 	if err != nil {
 		t.Fatal("Failed to inititalize pwm sub system. Error:", err)
 	}
