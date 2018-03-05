@@ -46,8 +46,9 @@ func TestLightingAPI(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	c.Stop()
 	j1 := connectors.Jack{
-		Name: "J1",
-		Pins: []int{23},
+		Name:   "J1",
+		Pins:   []int{3},
+		Driver: "pca9685",
 	}
 	if err := c.jacks.Create(j1); err != nil {
 		t.Fatal(err)

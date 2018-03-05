@@ -21,7 +21,7 @@ func TestJacksAPI(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	j := Jack{Name: "Foo", Pins: []int{1}}
+	j := Jack{Name: "Foo", Pins: []int{0}, Driver: "rpi"}
 	jacks := NewJacks(store, rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)

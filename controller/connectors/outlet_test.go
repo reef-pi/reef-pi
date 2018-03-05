@@ -13,7 +13,7 @@ func TestOutletsAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	o := Outlet{Name: "Foo", Pin: 1}
+	o := Outlet{Name: "Foo", Pin: 21}
 	outlets := NewOutlets(store)
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
