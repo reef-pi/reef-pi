@@ -139,6 +139,8 @@ func notifyIfNeeded(t *utils.Telemetry, name string, n Notify, reading float64) 
 }
 
 func (c *Controller) loadReadings(id string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	var resp ReadingsResponse
 	if err := c.store.Get(ReadingsBucket, id, &resp); err != nil {
 		log.Println("ERROR: ph sub-system failed to restore usage statistics from db. Error:", err)

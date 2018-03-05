@@ -1,12 +1,12 @@
 package ph
 
 import (
-	//	"bytes"
-	//	"encoding/json"
-	//	"github.com/reef-pi/reef-pi/controller/connectors"
+	"bytes"
+	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"testing"
+	"time"
 )
 
 func TestPhAPI(t *testing.T) {
@@ -21,7 +21,32 @@ func TestPhAPI(t *testing.T) {
 	if err := c.Setup(); err != nil {
 		t.Error(err)
 	}
-	c.Start()
 	c.LoadAPI(tr.Router)
+
+	body := new(bytes.Buffer)
+	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1, Enable: true})
+	if err := tr.Do("PUT", "/api/phprobes", body, nil); err != nil {
+		t.Fatal("Failed to create ph probe using api. Error:", err)
+	}
+	c.Start()
+	if err := tr.Do("GET", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to get ph probe using api. Error:", err)
+	}
+	if err := tr.Do("GET", "/api/phprobes", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("failed to list ph probe using api. error:", err)
+	}
+	time.Sleep(2 * time.Second)
+	if err := tr.Do("GET", "/api/phprobes/1/readings", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("failed to get ph probe readings using api. error:", err)
+	}
+	body.Reset()
+	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1})
+	if err := tr.Do("POST", "/api/phprobes/1", body, nil); err != nil {
+		t.Fatal("Failed to update ph probe using api. Error:", err)
+	}
+
+	if err := tr.Do("DELETE", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to delete ph probe using api. Error:", err)
+	}
 	c.Stop()
 }
