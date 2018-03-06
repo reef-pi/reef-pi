@@ -1,9 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Common from './common.jsx'
+import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
+import {confirm} from '../utils/confirm.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
-export default class Jacks extends Common {
+export default class Jacks extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -27,9 +28,9 @@ export default class Jacks extends Common {
 
   remove (id) {
     return (function () {
-      this.confirm('Are you sure ?')
+      confirm('Are you sure ?')
       .then(function () {
-        this.ajaxDelete({
+        ajaxDelete({
           url: '/api/jacks/' + id,
           success: function (data) {
             this.fetchData()
@@ -64,7 +65,7 @@ export default class Jacks extends Common {
       pins: pins,
       driver: this.state.driver
     }
-    this.ajaxPut({
+    ajaxPut({
       url: '/api/jacks',
       data: JSON.stringify(payload),
       success: function (data) {
@@ -75,7 +76,7 @@ export default class Jacks extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/jacks',
       success: function (data) {
         this.setState({
@@ -111,7 +112,6 @@ export default class Jacks extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <div className='row'>
           <label className='h6'>Jacks</label>
         </div>

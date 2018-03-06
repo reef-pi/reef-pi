@@ -19,9 +19,11 @@ type Subsystem interface {
 }
 
 type ReefPi struct {
-	store      utils.Store
-	jacks      *connectors.Jacks
-	outlets    *connectors.Outlets
+	store   utils.Store
+	jacks   *connectors.Jacks
+	outlets *connectors.Outlets
+	inlets  *connectors.Inlets
+
 	subsystems map[string]Subsystem
 	settings   Settings
 	telemetry  *utils.Telemetry
@@ -77,6 +79,8 @@ func New(version, database string) (*ReefPi, error) {
 	jacks := connectors.NewJacks(store, pi, pca9685)
 	outlets := connectors.NewOutlets(store)
 	outlets.DevMode = s.Capabilities.DevMode
+	inlets := connectors.NewInlets(store)
+	inlets.DevMode = s.Capabilities.DevMode
 	r := &ReefPi{
 		bus:        bus,
 		store:      store,
@@ -84,6 +88,7 @@ func New(version, database string) (*ReefPi, error) {
 		telemetry:  telemetry,
 		jacks:      jacks,
 		outlets:    outlets,
+		inlets:     inlets,
 		subsystems: make(map[string]Subsystem),
 		version:    version,
 	}
@@ -98,6 +103,9 @@ func (r *ReefPi) Start() error {
 		return err
 	}
 	if err := r.outlets.Setup(); err != nil {
+		return err
+	}
+	if err := r.inlets.Setup(); err != nil {
 		return err
 	}
 	if err := r.loadSubsystems(); err != nil {

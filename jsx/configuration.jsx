@@ -1,10 +1,9 @@
 import React from 'react'
 import Admin from './admin.jsx'
 import Settings from './settings.jsx'
-import Outlets from './outlets.jsx'
-import Jacks from './jacks.jsx'
 import Telemetry from './telemetry/main.jsx'
 import Common from './common.jsx'
+import Connectors from './connectors/main.jsx'
 import $ from 'jquery'
 export default class Configuration extends Common {
   constructor (props) {
@@ -39,16 +38,7 @@ export default class Configuration extends Common {
     return (
       <div className='container'>
         { this.toRow('settings', <Settings />) }
-        { this.toRow('connectors',
-          <div className='container'>
-            <div className='row'>
-              <Outlets />
-            </div>
-            <div className='row'>
-              <Jacks />
-            </div>
-          </div>
-        ) }
+        { this.toRow('connectors', <Connectors />) }
         { this.toRow('telemetry', <Telemetry />) }
         <Admin />
       </div>

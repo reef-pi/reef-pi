@@ -1,16 +1,17 @@
 import React from 'react'
-import Common from './common.jsx'
+import {ajaxGet, ajaxDelete, ajaxPut} from '../utils/ajax.js'
+import {confirm} from '../utils/confirm.js'
 import $ from 'jquery'
 
-export default class Outlets extends Common {
+export default class Inlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      outlets: [],
+      inlets: [],
       add: false
     }
-    this.fetchData = this.fetchData.bind(this)
-    this.listOutlets = this.listOutlets.bind(this)
+    this.fetch = this.fetch.bind(this)
+    this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
@@ -18,12 +19,12 @@ export default class Outlets extends Common {
 
   remove (id) {
     return (function () {
-      this.confirm('Are you sure ?')
+      confirm('Are you sure ?')
       .then(function () {
-        this.ajaxDelete({
-          url: '/api/outlets/' + id,
+        ajaxDelete({
+          url: '/api/inlets/' + id,
           success: function (data) {
-            this.fetchData()
+            this.fetch()
           }.bind(this)
         })
       }.bind(this))
@@ -31,69 +32,68 @@ export default class Outlets extends Common {
   }
 
   componentDidMount () {
-    this.fetchData()
+    this.fetch()
   }
 
   add () {
     this.setState({
       add: !this.state.add
     })
-    $('#outletName').val('')
-    $('#outletPin').val('')
+    $('#inletName').val('')
+    $('#inletPin').val('')
   }
 
   save () {
     var payload = {
-      name: $('#outletName').val(),
-      pin: parseInt($('#outletPin').val()),
-      reverse: $('#outletReverse')[0].checked
+      name: $('#inletName').val(),
+      pin: parseInt($('#inletPin').val()),
+      reverse: $('#inletReverse')[0].checked
     }
-    this.ajaxPut({
-      url: '/api/outlets',
+    ajaxPut({
+      url: '/api/inlets',
       data: JSON.stringify(payload),
       success: function (data) {
-        this.fetchData()
+        this.fetch()
         this.add()
       }.bind(this)
     })
   }
 
-  fetchData () {
-    this.ajaxGet({
-      url: '/api/outlets',
+  fetch () {
+    ajaxGet({
+      url: '/api/inlets',
       success: function (data) {
         this.setState({
-          outlets: data,
-          showAlert: false
+          inlets: data
         })
       }.bind(this)
     })
   }
 
-  listOutlets () {
-    var list = []
-    $.each(this.state.outlets, function (i, o) {
-      list.push(
-        <div className='row'key={o.name}>
+  list () {
+    var items = []
+    $.each(this.state.inlets, function (n, i) {
+      items.push(
+        <div className='row'key={i.name}>
           <div className='col-sm-2'>
-            {o.name}
+            {i.name}
           </div>
           <div className='col-sm-1'>
-            <label className='small'>{o.pin}</label>
+            <label className='small'>{i.pin}</label>
           </div>
           <div className='col-sm-1'>
-            <label className='small'>{o.equipment === '' ? '' : 'in-use'}</label>
+            <label className='small'>{i.equipment === '' ? '' : 'in-use'}</label>
           </div>
           <div className='col-sm-1'>
-            <label className='small'>{o.reverse ? 'reverse' : '' }</label>
+            <label className='small'>{i.reverse ? 'reverse' : '' }</label>
           </div>
           <div className='col-sm-1'>
-            <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(o.id)} />
+            <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(i.id)} />
           </div>
         </div>
       )
     }.bind(this))
-    return (list)
+    return (items)
   }
 
   render () {
@@ -102,11 +102,10 @@ export default class Outlets extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
-        <label className='h6'>Outlets</label>
+        <label className='h6'>Inlets</label>
         <div className='row'>
           <div className='container'>
-            {this.listOutlets()}
+            {this.list()}
           </div>
         </div>
         <div className='row'>
@@ -116,23 +115,23 @@ export default class Outlets extends Common {
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Name </span>
-                  <input type='text' id='outletName' className='form-control' />
+                  <input type='text' id='inletName' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='text' id='outletPin' className='form-control' />
+                  <input type='text' id='inletPin' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Reverse </span>
-                  <input type='checkbox' id='outletReverse' />
+                  <input type='checkbox' id='inletReverse' />
                 </div>
               </div>
               <div className='col-sm-1'>
-                <input type='button' id='createOutlet' value='add' onClick={this.save} className='btn btn-outline-primary' />
+                <input type='button' id='createInlet' value='add' onClick={this.save} className='btn btn-outline-primary' />
               </div>
             </div>
           </div>
