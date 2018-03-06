@@ -43,6 +43,8 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	probes, err := c.List()
 	if err != nil {
 		log.Println("ERROR: ph subsystem: Failed to list probes. Error:", err)
