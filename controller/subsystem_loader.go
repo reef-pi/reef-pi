@@ -70,7 +70,7 @@ func (r *ReefPi) loadATOSubsystem(eqs *equipments.Controller) error {
 		r.settings.Capabilities.ATO = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	a, err := ato.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
+	a, err := ato.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs, r.inlets)
 	if err != nil {
 		r.settings.Capabilities.ATO = false
 		log.Println("ERROR: Failed to initialize ato subsystem")

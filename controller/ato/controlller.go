@@ -1,37 +1,40 @@
 package ato
 
 import (
+	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"sync"
 )
 
 const Bucket = "ato"
+const UsageBucket = "ato_usage"
 
 type Controller struct {
-	usage      *ring.Ring
 	telemetry  *utils.Telemetry
+	statsMgr   *utils.StatsManager
 	stopCh     chan struct{}
-	mu         sync.Mutex
 	store      utils.Store
 	equipments *equipments.Controller
 	devMode    bool
 	quitters   map[string]chan struct{}
-	readings   map[string]Readings
 	mu         *sync.Mutex
+	inlets     *connectors.Inlets
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller, inlets *connectors.Inlets) (*Controller, error) {
 	return &Controller{
-		config:     DefaultConfig,
 		devMode:    devMode,
-		mu:         sync.Mutex{},
+		mu:         &sync.Mutex{},
 		stopCh:     make(chan struct{}),
 		store:      store,
+		inlets:     inlets,
 		telemetry:  telemetry,
 		equipments: eqs,
 		quitters:   make(map[string]chan struct{}),
-		readings:   make(map[string]Readings),
-		mu:         &sync.Mutex{},
+		statsMgr:   utils.NewStatsManager(store, UsageBucket, 180, 24*7),
 	}, nil
 }
 
@@ -39,32 +42,42 @@ func (c *Controller) Setup() error {
 	if err := c.store.CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.store.CreateBucket(ReadingsBucket)
+	return c.store.CreateBucket(UsageBucket)
 }
 
 func (c *Controller) Start() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	seonsors, err := c.List()
+	atos, err := c.List()
 	if err != nil {
 		log.Println("ERROR: ato subsystem: Failed to list sensors. Error:", err)
 		return
 	}
-	for _, s := range sensors {
-		if !s.Enable {
+	for _, a := range atos {
+		if !a.Enable {
 			continue
 		}
-		c.loadReadings(s.ID)
+		fn := func(d json.RawMessage) interface{} {
+			u := Usage{}
+			json.Unmarshal(d, &u)
+			return u
+		}
+		if err := c.statsMgr.Load(a.ID, fn); err != nil {
+			log.Println("ERROR: ato controller. Failed to load usage. Error:", err)
+		}
 		quit := make(chan struct{})
-		c.quitters[s.ID] = quit
-		go c.Run(s, quit)
+		c.quitters[a.ID] = quit
+		go c.Run(a, quit)
 	}
 }
 
 func (c *Controller) Stop() {
 	for id, quit := range c.quitters {
 		close(quit)
-		c.saveReadings(id)
+		if err := c.statsMgr.Save(id); err != nil {
+			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
+		}
+		log.Println("ato sub-system: Saved usaged data of sensor:", id)
 		delete(c.quitters, id)
 	}
 }

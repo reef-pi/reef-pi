@@ -60,7 +60,7 @@ func (c *Controller) Create(p Probe) error {
 func (c *Controller) Update(id string, p Probe) error {
 	p.ID = id
 	if p.Period <= 0 {
-		return fmt.Errorf("Period should be positive. Suppied:%f", p.Period)
+		return fmt.Errorf("Period should be positive. Supplied:%f", p.Period)
 	}
 	if err := c.store.Update(Bucket, id, p); err != nil {
 		return err
