@@ -109,7 +109,7 @@ export default class Inlets extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <input id='add_outlet' type='button' value={this.state.add ? '-' : '+'} onClick={this.add} className='btn btn-outline-success' />
+          <input id='add_inlet' type='button' value={this.state.add ? '-' : '+'} onClick={this.add} className='btn btn-outline-success' />
           <div className='container' style={dStyle}>
             <div className='row'>
               <div className='col-sm-3'>
