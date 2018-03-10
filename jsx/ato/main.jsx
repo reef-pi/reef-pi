@@ -2,7 +2,6 @@ import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import Common from '../common.jsx'
 import ATOChart from './chart.jsx'
-import InletSelector from '../connectors/inlet_selector.jsx'
 
 export default class ATO extends Common {
   constructor (props) {
@@ -200,9 +199,6 @@ export default class ATO extends Common {
         <div className='row'>
           <div className='col-sm-3'>Check Interval (in seconds)</div>
           <input type='text' onChange={this.updateAttr('check_interval')} id='check_interval' className='col-sm-1' value={this.state.ato.check_interval} />
-        </div>
-        <div className='row'>
-         <InletSelector update={this.updateAttr}/>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor Pin</div>

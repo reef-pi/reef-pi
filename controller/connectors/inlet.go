@@ -13,11 +13,11 @@ import (
 const InletBucket = "inlets"
 
 type Inlet struct {
-	ID        string `json:"id" yaml:"id"`
-	Name      string `json:"name" yaml:"name"`
-	Pin       int    `json:"pin" yaml:"pin"`
-	Equipment string `json:"equipment" yaml:"equipment"`
-	Reverse   bool   `json:"reverse" yaml:"reverse"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Pin       int    `json:"pin"`
+	Equipment string `json:"equipment"`
+	Reverse   bool   `json:"reverse"`
 }
 type Inlets struct {
 	store   utils.Store
