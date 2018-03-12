@@ -2,14 +2,15 @@ import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
 import {ajaxPut} from '../utils/ajax.js'
+import InletSelector from '../connectors/inlet_selector.jsx'
 
 export default class New extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = {
       name: '',
-      address: 99,
       enable: false,
+      inlet: '',
       period: 60,
       add: false,
     }
@@ -18,6 +19,11 @@ export default class New extends React.PureComponent {
     this.ui = this.ui.bind(this)
     this.update = this.update.bind(this)
     this.updateEnable = this.updateEnable.bind(this)
+    this.setInlet = this.setInlet.bind(this)
+  }
+
+  setInlet(id) {
+    this.setState({inlet: id})
   }
 
   updateEnable(ev) {
@@ -38,9 +44,9 @@ export default class New extends React.PureComponent {
     })
     this.setState({
       name: '',
-      address: 99,
       enable: false,
-      period: 60
+      period: 60,
+      inlet:'',
     })
   }
 
@@ -61,16 +67,13 @@ export default class New extends React.PureComponent {
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Address</div>
-          <div className='col-sm-1'>
-            <input type='text' value={this.state.address} onChange={this.update('address')}/>
-          </div>
+          <InletSelector update={this.setInlet}/>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Period</div>
           <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period}/></div>
         </div>
-        <input type='button' id='create_probe' value='add' onClick={this.add} className='btn btn-outline-primary' />
+        <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
     )
   }
@@ -83,12 +86,12 @@ export default class New extends React.PureComponent {
     }
     var payload = {
       name: this.state.name,
-      address: parseInt(this.state.address),
       enable: this.state.enable,
+      inlet: this.state.inlet,
       period: parseInt(this.state.period)
     }
     ajaxPut({
-      url: '/api/phprobes',
+      url: '/api/atos',
       data: JSON.stringify(payload),
       success: function (data) {
         this.toggle()
