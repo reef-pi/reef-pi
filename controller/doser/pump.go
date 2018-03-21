@@ -74,7 +74,7 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 	}
 	c.mu.Lock()
 	if cID, ok := c.cronIDs[id]; ok {
-		log.Printf("doser sub-system. Removing cron entry %s for pump id: %s.\n", cID, id)
+		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 	}
 	c.mu.Unlock()
@@ -88,7 +88,7 @@ func (c *Controller) Delete(id string) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if cID, ok := c.cronIDs[id]; ok {
-		log.Printf("doser sub-system. Removing cron entry %s for pump id: %s.\n", cID, id)
+		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 	}
 	return c.store.Delete(Bucket, id)
