@@ -68,7 +68,7 @@ func (c *Controller) Update(id string, a ATO) error {
 	defer c.mu.Unlock()
 	a.ID = id
 	if a.Period <= 0 {
-		return fmt.Errorf("Period should be positive. Supplied:%f", a.Period)
+		return fmt.Errorf("Period should be positive. Supplied:%d", a.Period)
 	}
 	if err := c.store.Update(Bucket, id, a); err != nil {
 		return err
@@ -143,7 +143,7 @@ func (c *Controller) Check(a ATO) {
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
 	if a.Period <= 0 {
-		log.Printf("ERROR:ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%f\n", a.Name, a.Period)
+		log.Printf("ERROR:ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", a.Name, a.Period)
 		return
 	}
 	ticker := time.NewTicker(a.Period * time.Second)
