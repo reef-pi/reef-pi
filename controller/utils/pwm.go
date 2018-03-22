@@ -35,6 +35,7 @@ func NewPWM(bus i2c.Bus, config PWMConfig) (PWM, error) {
 		driver: drivers.NewPCA9685(byte(config.Address), bus),
 		config: config,
 	}
+	pwm.driver.Freq = 1500
 	return &pwm, pwm.Start()
 }
 
