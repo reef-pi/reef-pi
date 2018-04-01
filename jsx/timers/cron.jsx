@@ -22,7 +22,6 @@ export default class Cron extends React.Component {
         second: this.state.second
       }
       payload[k] = ev.target.value
-      this.props.updateHook(payload)
       this.setState(payload)
     }.bind(this))
   }
