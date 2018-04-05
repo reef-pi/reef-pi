@@ -28,6 +28,7 @@ type StatsOnDisk struct {
 	Historical []json.RawMessage `json:"historical"`
 }
 
+// Allow storing stats in memory inside ring buffer, serializing it on disk
 type StatsManager struct {
 	inMemory        map[string]Stats
 	bucket          string
