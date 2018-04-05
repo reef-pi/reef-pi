@@ -16,11 +16,11 @@ type MotionConfig struct {
 }
 
 type Config struct {
-	Enable         bool          `json:"enable" yaml:"enable"`
-	ImageDirectory string        `json:"image_directory" yaml:"image_directory"`
-	CaptureFlags   string        `json:"capture_flags" yaml:"capture_flags"`
-	TickInterval   time.Duration `json:"tick_interval" yaml:"tick_interval"`
-	Upload         bool          `json:"upload" yaml:"upload"`
+	Enable         bool          `json:"enable"`
+	ImageDirectory string        `json:"image_directory"`
+	CaptureFlags   string        `json:"capture_flags"`
+	TickInterval   time.Duration `json:"tick_interval"`
+	Upload         bool          `json:"upload"`
 	Motion         MotionConfig  `json:"motion"`
 }
 

@@ -37,9 +37,9 @@ func (j Jack) IsValid() error {
 const JackBucket = "jacks"
 
 type Jack struct {
-	ID     string `json:"id" yaml:"id"`
-	Name   string `json:"name" yaml:"name"`
-	Pins   []int  `json:"pins" yaml:"pins"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Pins   []int  `json:"pins"`
 	Driver string `json:"driver"` // can be either rpi or pca9685
 }
 
