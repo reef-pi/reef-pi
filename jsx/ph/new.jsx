@@ -40,7 +40,7 @@ export default class New extends React.PureComponent {
       name: '',
       address: 99,
       enable: false,
-      Period: 60
+      period: 60
     })
   }
 

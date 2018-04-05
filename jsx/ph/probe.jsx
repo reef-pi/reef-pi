@@ -133,8 +133,8 @@ export default class Probe extends React.Component {
           <div className='col-sm-1'>
             <input type='button' id={'edit-probe-' + this.props.data.id} onClick={this.edit} value={editText} className={editClass} />
           </div>
-            <div className='col-sm-1'>
-          <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+          <div className='col-sm-1'>
+            <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
         <div className='row'>
