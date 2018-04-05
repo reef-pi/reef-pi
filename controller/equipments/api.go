@@ -13,8 +13,24 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/equipments", e.CreateEquipment).Methods("PUT")
 	r.HandleFunc("/api/equipments/{id}", e.UpdateEquipment).Methods("POST")
 	r.HandleFunc("/api/equipments/{id}", e.DeleteEquipment).Methods("DELETE")
+	r.HandleFunc("/api/equipments/{id}/control", e.control).Methods("POST")
 }
 
+type EquipmentAction struct {
+	On bool `json:"on"`
+}
+
+func (c *Controller) Control(id string, a EquipmentAction) error {
+	return nil
+}
+
+func (c *Controller) control(w http.ResponseWriter, r *http.Request) {
+	var action EquipmentAction
+	fn := func(id string) error {
+		return c.Control(id, action)
+	}
+	utils.JSONUpdateResponse(&action, fn, w, r)
+}
 func (c *Controller) GetEquipment(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return c.Get(id)
