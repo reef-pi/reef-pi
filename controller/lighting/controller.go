@@ -11,8 +11,8 @@ import (
 const Bucket = "lightings"
 
 type Config struct {
-	DevMode  bool          `json:"dev_mode" yaml:"dev_mode"`
-	Interval time.Duration `json:"interval" yaml:"interval"`
+	DevMode  bool          `json:"dev_mode"`
+	Interval time.Duration `json:"interval"`
 }
 
 var DefaultConfig = Config{

@@ -10,7 +10,7 @@ import (
 const Bucket = "phprobes"
 
 type Config struct {
-	DevMode bool `json:"dev_mode" yaml:"dev_mode"`
+	DevMode bool `json:"dev_mode"`
 }
 
 type Controller struct {
