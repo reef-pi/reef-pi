@@ -7,20 +7,20 @@ import (
 )
 
 type Notify struct {
-	Enable bool    `yaml:"enable" json:"enable"`
-	Min    float32 `yaml:"min" json:"min"`
-	Max    float32 `yaml:"max" json:"max"`
+	Enable bool    `json:"enable"`
+	Min    float32 `json:"min"`
+	Max    float32 `json:"max"`
 }
 type Config struct {
-	Min           float32       `yaml:"min" json:"min"`
-	Max           float32       `yaml:"max" json:"max"`
-	CheckInterval time.Duration `yaml:"check_interval" json:"check_interval"`
-	Heater        string        `yaml:"heater" json:"heater"`
-	Cooler        string        `yaml:"cooler" json:"cooler"`
-	Control       bool          `yaml:"control" json:"control"`
-	Enable        bool          `yaml:"enable" json:"enable"`
-	DevMode       bool          `yaml:"dev_mode" json:"dev_mode"`
-	Notify        Notify        `yaml:"notify" json:"notify"`
+	Min           float32       `json:"min"`
+	Max           float32       `json:"max"`
+	CheckInterval time.Duration `json:"check_interval"`
+	Heater        string        `json:"heater"`
+	Cooler        string        `json:"cooler"`
+	Control       bool          `json:"control"`
+	Enable        bool          `json:"enable"`
+	DevMode       bool          `json:"dev_mode"`
+	Notify        Notify        `json:"notify"`
 }
 
 var DefaultConfig = Config{

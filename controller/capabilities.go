@@ -6,18 +6,18 @@ import (
 )
 
 type Capabilities struct {
-	DevMode       bool `json:"dev_mode" yaml:"dev_mode"`
-	Dashboard     bool `json:"dashboard" yaml:"dashboard"`
-	HealthCheck   bool `json:"health_check" yaml:"health_check"`
-	Equipments    bool `json:"equipments" yaml:"equipments"`
-	Timers        bool `json:"timers" yaml:"timers"`
-	Lighting      bool `json:"lighting" yaml:"lighting"`
-	Temperature   bool `json:"temperature" yaml:"temperature"`
-	ATO           bool `json:"ato" yaml:"ato"`
-	Camera        bool `json:"camera" yaml:"camera"`
-	Doser         bool `json:"doser" yaml:"doser"`
-	Ph            bool `json:"ph" yaml:"configuration"`
-	Configuration bool `json:"configuration" yaml:"configuration"`
+	DevMode       bool `json:"dev_mode"`
+	Dashboard     bool `json:"dashboard"`
+	HealthCheck   bool `json:"health_check"`
+	Equipments    bool `json:"equipments"`
+	Timers        bool `json:"timers"`
+	Lighting      bool `json:"lighting"`
+	Temperature   bool `json:"temperature"`
+	ATO           bool `json:"ato"`
+	Camera        bool `json:"camera"`
+	Doser         bool `json:"doser"`
+	Ph            bool `json:"ph"`
+	Configuration bool `json:"configuration"`
 }
 
 var DefaultCapabilities = Capabilities{

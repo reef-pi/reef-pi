@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	DevMode bool `json:"dev_mode" yaml:"dev_mode"`
+	DevMode bool `json:"dev_mode"`
 }
 type Check func(string) (bool, error)
 type Controller struct {

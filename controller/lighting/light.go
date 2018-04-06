@@ -8,22 +8,22 @@ import (
 )
 
 type Channel struct {
-	Name         string `json:"name" yaml:"name"`
-	MinTheshold  int    `json:"min" yaml:"min"`
-	StartMin     int    `json:"start_min" yaml:"start_min"`
-	MaxThreshold int    `json:"max" yaml:"max"`
-	Ticks        int    `json:"ticks" yaml:"ticks"`
-	Values       []int  `json:"values" yaml:"values"`
-	Fixed        int    `json:"fixed" yaml:"fixed"`
-	Auto         bool   `json:"auto" yaml:"auto"`
-	Reverse      bool   `json:"reverse" yaml:"reverse"`
-	Pin          int    `json:"pin" yaml:"pin"`
+	Name         string `json:"name"`
+	MinTheshold  int    `json:"min"`
+	StartMin     int    `json:"start_min"`
+	MaxThreshold int    `json:"max"`
+	Ticks        int    `json:"ticks"`
+	Values       []int  `json:"values"`
+	Fixed        int    `json:"fixed"`
+	Auto         bool   `json:"auto"`
+	Reverse      bool   `json:"reverse"`
+	Pin          int    `json:"pin"`
 }
 type Light struct {
-	ID       string          `json:"id" yaml:"id"`
-	Name     string          `json:"name" yaml:"name"`
-	Channels map[int]Channel `json:"channels" yaml:"channels"`
-	Jack     string          `json:"jack" yaml:"jack"`
+	ID       string          `json:"id"`
+	Name     string          `json:"name"`
+	Channels map[int]Channel `json:"channels"`
+	Jack     string          `json:"jack"`
 }
 
 func (c *Controller) Get(id string) (Light, error) {

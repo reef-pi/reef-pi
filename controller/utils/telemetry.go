@@ -13,17 +13,17 @@ type AlertStats struct {
 }
 
 type AdafruitIO struct {
-	Enable bool   `json:"enable" yaml:"enable"`
-	Token  string `json:"token" yaml:"token"`
-	User   string `json:"user" yaml:"user"`
-	Prefix string `json:"prefix" yaml:"prefix"`
+	Enable bool   `json:"enable"`
+	Token  string `json:"token"`
+	User   string `json:"user"`
+	Prefix string `json:"prefix"`
 }
 
 type TelemetryConfig struct {
-	AdafruitIO AdafruitIO   `json:"adafruitio" yaml:"adafruitio"`
-	Mailer     MailerConfig `json:"mailer"yaml:"mailer"`
-	Notify     bool         `json:"notify" yaml:"notify"`
-	Throttle   int          `json:"throttle" yaml:"throttle"`
+	AdafruitIO AdafruitIO   `json:"adafruitio"`
+	Mailer     MailerConfig `json:"mailer"`
+	Notify     bool         `json:"notify"`
+	Throttle   int          `json:"throttle"`
 }
 
 var DefaultTelemetryConfig = TelemetryConfig{

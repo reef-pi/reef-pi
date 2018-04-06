@@ -8,14 +8,14 @@ import (
 )
 
 type Settings struct {
-	Name         string            `json:"name" yaml:"name"`
-	Interface    string            `json:"interface" yaml:"interface"`
-	Address      string            `json:"address" yaml:"address"`
-	Display      bool              `json:"display" yaml:"display"`
-	Notification bool              `json:"notification,yaml:"notification""`
-	Capabilities Capabilities      `json:"capabilities" yaml:"capabilities"`
-	HealthCheck  HealthCheckNotify `json:"health_check" yaml:"health_check"`
-	HTTPS        bool              `json:"https" yaml:"https"`
+	Name         string            `json:"name"`
+	Interface    string            `json:"interface"`
+	Address      string            `json:"address"`
+	Display      bool              `json:"display"`
+	Notification bool              `json:"notification"`
+	Capabilities Capabilities      `json:"capabilities"`
+	HealthCheck  HealthCheckNotify `json:"health_check"`
+	HTTPS        bool              `json:"https"`
 	PCA9685      bool              `json:"pca9685"`
 }
 
