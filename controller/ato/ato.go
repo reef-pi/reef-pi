@@ -10,8 +10,8 @@ import (
 )
 
 type Notify struct {
-	Enable bool `yaml:"enable" json:"enable"`
-	Max    int  `yaml:"max" json:"max"`
+	Enable bool `json:"enable"`
+	Max    int  `json:"max"`
 }
 
 type ATO struct {
