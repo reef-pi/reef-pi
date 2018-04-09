@@ -50,6 +50,10 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}
+	if r.settings.Capabilities.Dashboard {
+		router.HandleFunc("/api/dashboard", r.GetDashboard).Methods("GET")
+		router.HandleFunc("/api/dashboard", r.UpdateDashboard).Methods("POST")
+	}
 }
 
 func startAPIServer(address string, creds Credentials, https bool) (error, *mux.Router) {
