@@ -20,7 +20,13 @@ type Chart struct {
 }
 
 var DefaultDashboard = Dashboard{
-	GridDetails: make([][]Chart, 3),
+	GridDetails: [][]Chart{[]Chart{Chart{
+		Type: "health",
+	}}},
+	Column: 1,
+	Row:    1,
+	Height: 300,
+	Width:  500,
 }
 
 func loadDashboard(store utils.Store) (Dashboard, error) {
