@@ -1,0 +1,33 @@
+{
+  "column":2,
+  "row":3,
+  "width":300,
+  "height":150,
+  "grid_details":[
+    [
+      {
+        "type": "equipment"
+      },
+      {
+        "type": "temperature"
+      }
+    ],
+    [
+      {
+        "type": "ato"
+      },
+      {
+        "type": "health"
+      }
+    ],
+    [
+      {
+        "type": "ph",
+        "id": "1"
+      },
+      {
+        "type": "temperature"
+      }
+    ]
+  ]
+}

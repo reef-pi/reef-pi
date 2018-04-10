@@ -25,11 +25,9 @@ var DefaultDashboard = Dashboard{
 
 func loadDashboard(store utils.Store) (Dashboard, error) {
 	var d Dashboard
-	log.Println("Dashboard loadeding")
 	if err := store.Get(Bucket, "dashboard", &d); err != nil {
 		return d, err
 	}
-	log.Println("Dashboard loaded")
 	return d, nil
 }
 
