@@ -1,6 +1,6 @@
 import React from 'react'
-import Common from './common.jsx'
-import SignIn from './sign_in.jsx'
+import Common from '../common.jsx'
+import SignIn from '../sign_in.jsx'
 
 export default class Admin extends Common {
   constructor (props) {

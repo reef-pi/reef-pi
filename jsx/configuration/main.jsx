@@ -1,9 +1,9 @@
 import React from 'react'
 import Admin from './admin.jsx'
 import Settings from './settings.jsx'
-import Telemetry from './telemetry/main.jsx'
-import Common from './common.jsx'
-import Connectors from './connectors/main.jsx'
+import Telemetry from '../telemetry/main.jsx'
+import Common from '../common.jsx'
+import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 export default class Configuration extends Common {
   constructor (props) {
