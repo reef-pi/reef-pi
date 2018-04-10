@@ -1,6 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -16,6 +17,17 @@ export default class Dashboard extends React.Component {
 
   componentDidMount () {
     this.fetch()
+  }
+
+  setType (i,j) {
+    return function(k,ev) {
+      var config  = this.state.config
+      config.grid_details[i][j].type = k
+      this.setState({
+        config: config,
+        updated: true
+      })
+    }.bind(this)
   }
 
   fetch () {
@@ -69,6 +81,13 @@ export default class Dashboard extends React.Component {
    var column = parseInt(config.column)
    var i, j
    var rows = []
+   var types = [
+     <MenuItem key='light' active={true} eventKey='light'>light</MenuItem>,
+     <MenuItem key='temperature' active={false} eventKey='temperature'>temperature</MenuItem>,
+     <MenuItem key='health' active={false} eventKey='health'>health</MenuItem>,
+     <MenuItem key='ato' active={false} eventKey='ato'>ato</MenuItem>,
+     <MenuItem key='equipment' active={false} eventKey='equipment'>equipment</MenuItem>
+   ]
    for(i = 0; i < row; i++ ) {
        if(config.grid_details[i] === undefined){
          config.grid_details[i] = []
@@ -76,14 +95,16 @@ export default class Dashboard extends React.Component {
      var columns = []
      for(j= 0; j<column; j++) {
        if(config.grid_details[i][j] === undefined){
-         config.grid_details[i][j] = {'type':'health'}
+         config.grid_details[i][j] = {type:'health'}
          this.setState({config: config})
        }
        columns.push(
          <div className='col-sm-3' key={'chart-type-'+i+'-'+j}>
            <div className='container'>
              <div className='col-sm-6'>
-               <span>{config.grid_details[i][j].type}</span>
+                <DropdownButton title={config.grid_details[i][j].type} id={'db-'+i+'-'+j} onSelect={this.setType(i,j)}>
+                  {types}
+                </DropdownButton>
              </div>
              <div className='col-sm-6'>
                {config.grid_details[i][j].id}
