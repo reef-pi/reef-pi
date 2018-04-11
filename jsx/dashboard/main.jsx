@@ -81,6 +81,13 @@ export default class Ph extends React.Component {
               </div>
             )
             break;
+          case 'tc':
+            columns.push(
+              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
+                <TemperatureChart width={config.width} height={config.height} />
+              </div>
+            )
+            break;
           default:
             break;
         }

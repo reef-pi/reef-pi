@@ -86,7 +86,8 @@ export default class Dashboard extends React.Component {
      <MenuItem key='temperature' active={false} eventKey='temperature'>temperature</MenuItem>,
      <MenuItem key='health' active={false} eventKey='health'>health</MenuItem>,
      <MenuItem key='ato' active={false} eventKey='ato'>ato</MenuItem>,
-     <MenuItem key='equipment' active={false} eventKey='equipment'>equipment</MenuItem>
+     <MenuItem key='equipment' active={false} eventKey='equipment'>equipment</MenuItem>,
+     <MenuItem key='tc' active={false} eventKey='tc'>tc</MenuItem>
    ]
    for(i = 0; i < row; i++ ) {
        if(config.grid_details[i] === undefined){
