@@ -111,6 +111,9 @@ func (r *ReefPi) Start() error {
 	if err := r.loadSubsystems(); err != nil {
 		return err
 	}
+	if _, err := loadDashboard(r.store); err != nil {
+		initializeDashboard(r.store)
+	}
 	if r.settings.Capabilities.HealthCheck {
 		go r.h.Start()
 	}

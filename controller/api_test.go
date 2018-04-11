@@ -61,6 +61,14 @@ func TestAPI(t *testing.T) {
 	if err := tr.Do("GET", "/api/telemetry", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to get telemetry via api")
 	}
+	body.Reset()
+	json.NewEncoder(body).Encode(&DefaultDashboard)
+	if err := tr.Do("POST", "/api/dashboard", body, nil); err != nil {
+		t.Fatal("Failed to update dashboard via api")
+	}
+	if err := tr.Do("GET", "/api/dashboard", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to get dashboard via api")
+	}
 	if err := r.Stop(); err != nil {
 		t.Fatal(err)
 	}

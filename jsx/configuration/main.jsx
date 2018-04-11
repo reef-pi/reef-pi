@@ -1,9 +1,10 @@
 import React from 'react'
 import Admin from './admin.jsx'
 import Settings from './settings.jsx'
-import Telemetry from './telemetry/main.jsx'
-import Common from './common.jsx'
-import Connectors from './connectors/main.jsx'
+import Telemetry from '../telemetry/main.jsx'
+import Dashboard from './dashboard.jsx'
+import Common from '../common.jsx'
+import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 export default class Configuration extends Common {
   constructor (props) {
@@ -20,6 +21,7 @@ export default class Configuration extends Common {
     $('#settings_config').hide()
     $('#connectors_config').hide()
     $('#telemetry_config').hide()
+    $('#dashboard_config').hide()
   }
 
   toRow (label, component) {
@@ -40,6 +42,7 @@ export default class Configuration extends Common {
         { this.toRow('settings', <Settings />) }
         { this.toRow('connectors', <Connectors />) }
         { this.toRow('telemetry', <Telemetry />) }
+        { this.toRow('dashboard', <Dashboard />) }
         <Admin />
       </div>
     )
