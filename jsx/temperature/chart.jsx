@@ -47,7 +47,7 @@ export default class Chart extends Common {
       <div className='container'>
         {super.render()}
         <span className='h6'>Heater/Cooler</span>
-        <ComposedChart width={500} height={250} data={this.state.usage}>
+        <ComposedChart width={this.props.width} height={this.props.height} data={this.state.usage}>
           <YAxis yAxisId='left' orientation='left' domain={[76, 82]} />
           <YAxis yAxisId='right' orientation='right' />
           <ReferenceLine yAxisId='right' y={0} />
