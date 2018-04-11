@@ -4,12 +4,12 @@ import ATO from './ato/main.jsx'
 import Camera from './camera/main.jsx'
 import Equipments from './equipments/main.jsx'
 import Lighting from './lighting/main.jsx'
-import Configuration from './configuration.jsx'
+import Configuration from './configuration/main.jsx'
 import Temperature from './temperature/main.jsx'
 import Timers from './timers/main.jsx'
 import Doser from './doser/controller.jsx'
 import Ph from './ph/main.jsx'
-import Dashboard from './dashboard.jsx'
+import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
 import Common from './common.jsx'
 import 'react-tabs/style/react-tabs.css'
@@ -20,15 +20,15 @@ export default class MainPanel extends Common {
     this.state = {
       capabilities: {},
       panels: {
-        'ato': <ATO />,
-        'camera': <Camera />,
-        'configuration': <Configuration />,
-        'equipments': <Equipments />,
+        'equipment': <Equipments />,
+        'timers': <Timers />,
         'lighting': <Lighting />,
         'temperature': < Temperature />,
-        'timers': <Timers />,
+        'ato': <ATO />,
+        'ph': < Ph />,
         'doser': < Doser />,
-        'ph': < Ph />
+        'camera': <Camera />,
+        'configuration': <Configuration />
       }
     }
     this.loadCapabilities = this.loadCapabilities.bind(this)
@@ -45,6 +45,7 @@ export default class MainPanel extends Common {
     this.ajaxGet({
       url: '/api/capabilities',
       success: function (data) {
+        data.equipment = data.equipments
         this.setState({
           capabilities: data
         })
@@ -60,15 +61,15 @@ export default class MainPanel extends Common {
       panels.push(<TabPanel key='dashboard'> <Dashboard capabilities={this.state.capabilities} /> </TabPanel>)
     }
 
-    $.each(this.state.capabilities, function (k, v) {
-      if (!v) {
+    $.each(this.state.panels, function (k, panel) {
+      if (this.state.capabilities[k] === undefined) {
         return
       }
-      if (this.state.panels[k] === undefined) {
+      if (!this.state.capabilities[k]) {
         return
       }
       tabs.push(<Tab key={k}>{k}</Tab>)
-      panels.push(<TabPanel key={k}> {this.state.panels[k]} </TabPanel>)
+      panels.push(<TabPanel key={k}> {panel} </TabPanel>)
     }.bind(this))
 
     return (
