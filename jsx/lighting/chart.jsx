@@ -59,7 +59,7 @@ export default class LightsChart extends Common {
       charts.push(
         <div className='container' key={'light-' + i}>
           <label className='text-primary'>{light.name}</label>
-          <LineChart width={500} height={250} data={data}>
+          <LineChart width={this.props.width} height={this.props.height} data={data}>
             <XAxis dataKey='time' />
             <YAxis />
             <Tooltip />
@@ -67,7 +67,7 @@ export default class LightsChart extends Common {
           </LineChart>
         </div>
       )
-    })
+    }.bind(this))
     return (charts)
   }
 
