@@ -11,10 +11,10 @@ func TestDashboard(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if d.Width != 0 {
-		t.Error("Expected 0, found:", d.Width)
+	if d.Width != 500 {
+		t.Error("Expected 500, found:", d.Width)
 	}
-	if d.Height != 0 {
-		t.Error("Expected 0, found:", d.Width)
+	if d.Height != 300 {
+		t.Error("Expected 300, found:", d.Width)
 	}
 }
