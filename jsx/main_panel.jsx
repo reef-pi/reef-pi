@@ -45,7 +45,7 @@ export default class MainPanel extends Common {
     this.ajaxGet({
       url: '/api/capabilities',
       success: function (data) {
-			  data.equipment = data.equipments
+        data.equipment = data.equipments
         this.setState({
           capabilities: data
         })
@@ -62,7 +62,6 @@ export default class MainPanel extends Common {
     }
 
     $.each(this.state.panels, function (k, panel) {
-		  console.log(k, panel, this.state.capabilities[k])
       if (this.state.capabilities[k] === undefined) {
         return
       }
