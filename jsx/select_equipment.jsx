@@ -69,6 +69,7 @@ export default class SelectEquipment extends Common {
   }
 
   render () {
+    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var eqName = ''
     if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
@@ -76,7 +77,7 @@ export default class SelectEquipment extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <DropdownButton title={eqName} id={this.props.id} onSelect={this.setEquipment}>
+        <DropdownButton title={eqName} id={this.props.id} onSelect={this.setEquipment} disabled={readOnly}>
           {this.equipmentList()}
         </DropdownButton>
       </div>
