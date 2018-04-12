@@ -66,22 +66,25 @@ export default class ATO extends React.Component {
       this.setState({readOnly: false})
       return
     }
+
     var ato = this.state.ato
-    ato.period = parseInt(ato.check_interval)
-    if (isNaN(ato.check_interval)) {
+    ato.period = parseInt(ato.period)
+    if (isNaN(ato.period)) {
       this.setState({
         showAlert: true,
-        alertMsg: 'Check interval has to be a positive integer'
+        alertMsg: 'Check frequency has to be a positive integer',
       })
       return
     }
+
     ajaxPost({
-      url: '/api/ato/'+this.props.data.id,
+      url: '/api/atos/'+this.props.data.id,
       type: 'POST',
       data: JSON.stringify(ato),
       success: function (data) {
         this.setState({
           updated: false,
+          readOnly: true,
           ato: ato
         })
       }.bind(this)
@@ -96,7 +99,14 @@ export default class ATO extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Pump</div>
-          <div className='col-sm-4'><SelectEquipment update={this.updatePump} active={this.state.ato.pump} id='ato-pump' /></div>
+          <div className='col-sm-4'>
+            <SelectEquipment
+               update={this.updatePump}
+               active={this.state.ato.pump}
+               id='ato-pump'
+               readOnly={this.state.readOnly}
+            />
+          </div>
         </div>
       </div>
     )
@@ -126,8 +136,9 @@ export default class ATO extends React.Component {
         </div>
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-3'>Check Interval (in seconds)</div>
-          <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.ato.period} />
+          <div className='col-sm-3'>Check frequency</div>
+          <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.ato.period} readOnly={this.state.readOnly}/>
+          <span>second(s)</span>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
