@@ -11,7 +11,7 @@ export default class SelectEquipment extends Common {
       equipment: {
         id: props.active,
         name: ''
-      },
+      }
     }
     this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
@@ -69,7 +69,7 @@ export default class SelectEquipment extends Common {
   }
 
   render () {
-    var  readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
+    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var eqName = ''
     if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
