@@ -233,6 +233,21 @@ function SmokeTest () {
     .click('input#updateATO')
     .wait(1500)
 
+
+    // ph
+    .click('li#react-tabs-12')
+    .wait(500)
+    .click('input#add_probe')
+    .wait(500)
+    .type('input#new_probe_name', 'Biocube29')
+    .wait(500)
+    .click('input#new_probe_enable')
+    .wait(500)
+    .type('input#new_probe_period', 5)
+    .wait(500)
+    .click('input#create_probe')
+    .wait(1500)
+
     // Setup temperature controller
     .click('li#react-tabs-8')
     .wait(500)
