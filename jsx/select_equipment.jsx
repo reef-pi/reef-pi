@@ -11,7 +11,7 @@ export default class SelectEquipment extends Common {
       equipment: {
         id: props.active,
         name: ''
-      },
+      }
     }
     this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
