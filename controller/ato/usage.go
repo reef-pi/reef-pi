@@ -3,6 +3,7 @@ package ato
 import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 )
 
 type Usage struct {
@@ -12,6 +13,7 @@ type Usage struct {
 
 func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
 	u2 := ux.(Usage)
+	log.Printf("%v,%v", u1.Time, u2.Time)
 	u := Usage{Time: u1.Time, Pump: u1.Pump}
 	if u1.Time.Hour() == u2.Time.Hour() {
 		u.Pump += u2.Pump

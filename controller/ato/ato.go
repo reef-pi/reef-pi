@@ -126,7 +126,7 @@ func (c *Controller) Check(a ATO) {
 		log.Println("ERROR: ato sub-system. Failed to read ato sensor. Error:", err)
 		return
 	}
-	log.Println("ato sub-system:  sensor value:", reading)
+	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
 	c.telemetry.EmitMetric("ato", reading)
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
@@ -143,7 +143,7 @@ func (c *Controller) Check(a ATO) {
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
 	if a.Period <= 0 {
-		log.Printf("ERROR:ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", a.Name, a.Period)
+		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", a.Name, a.Period)
 		return
 	}
 	ticker := time.NewTicker(a.Period * time.Second)
@@ -157,6 +157,7 @@ func (c *Controller) Run(a ATO, quit chan struct{}) {
 		}
 	}
 }
+
 func (c *Controller) Read(a ATO) (int, error) {
 	if c.devMode {
 		v := 0
