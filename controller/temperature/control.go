@@ -16,7 +16,7 @@ type Usage struct {
 	Cooler      int            `json:"cooler"`
 	Time        utils.TeleTime `json:"time"`
 	Temperature float32        `json:"temperature"`
-	readings    []float32      `json:"-"`
+	readings    []float32
 }
 
 func (c *Controller) switchHeater(on bool) error {

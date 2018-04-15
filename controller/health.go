@@ -38,8 +38,8 @@ type HourlyHealthMetric struct {
 	Load5      float64        `json:"cpu"`
 	UsedMemory float64        `json:"memory"`
 	Time       utils.TeleTime `json:"time"`
-	lReadings  []float64      `json:"-"`
-	mReadings  []float64      `json:"-"`
+	lReadings  []float64
+	mReadings  []float64
 }
 
 func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry, store utils.Store) *HealthChecker {
