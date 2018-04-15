@@ -23,7 +23,7 @@ export default class ATOChart extends Common {
 
   fetch () {
     this.ajaxGet({
-      url: '/api/ato/usage',
+      url: '/api/atos/'+this.props.ato_id+'/usage',
       success: function (data) {
         this.setState({
           usage: data,
@@ -39,13 +39,15 @@ export default class ATOChart extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>ATO</span>
-        <BarChart width={this.props.width} height={this.props.height} data={this.state.usage}>
-          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-          <YAxis label='minutes' />
-          <XAxis dataKey='time' />
-          <Tooltip />
-        </BarChart>
+        <div className='row'>
+          <span className='h6'>Historical</span>
+          <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
+            <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
+            <YAxis label='minutes' />
+            <XAxis dataKey='time' />
+            <Tooltip />
+          </BarChart>
+        </div>
       </div>
     )
   }

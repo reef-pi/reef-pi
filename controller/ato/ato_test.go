@@ -21,6 +21,11 @@ func TestATO(t *testing.T) {
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
+	inlets := connectors.NewInlets(store)
+	inlets.DevMode = true
+	if err := inlets.Setup(); err != nil {
+		t.Fatal(err)
+	}
 	eqs := equipments.New(conf, outlets, store, telemetry)
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
@@ -31,7 +36,10 @@ func TestATO(t *testing.T) {
 	if err := eqs.Create(equipments.Equipment{Outlet: "1"}); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, store, telemetry, eqs)
+	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16}); err != nil {
+		t.Error(err)
+	}
+	c, err := New(true, store, telemetry, eqs, inlets)
 
 	if err != nil {
 		t.Error(err)
@@ -39,30 +47,40 @@ func TestATO(t *testing.T) {
 	if err := c.Setup(); err != nil {
 		t.Error(err)
 	}
-	c.config.Pump = "1"
-	c.config.CheckInterval = 1
-	c.config.Enable = true
-	c.config.Control = true
 	c.Start()
-	c.check()
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
-	if err := tr.Do("GET", "/api/ato", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to get ato config using api. Error:", err)
+	a := ATO{Name: "fooo", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: true}
+	body := new(bytes.Buffer)
+	json.NewEncoder(body).Encode(a)
+	if err := tr.Do("PUT", "/api/atos", body, nil); err != nil {
+		t.Error("Failed to create ato using api. Error:", err)
 	}
-	_, err = c.Read()
+	if err := tr.Do("GET", "/api/atos", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to list ato using api. Error:", err)
+	}
+	if err := tr.Do("GET", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to get ato using api. Error:", err)
+	}
+	a.ID = "1"
+
+	c.Check(a)
+	_, err = c.Read(a)
 	if err != nil {
 		t.Error(err)
 	}
-	if err := c.Control(0); err != nil {
+	if err := c.Control(a, 0); err != nil {
 		t.Error(err)
 	}
-	if err := c.Control(1); err != nil {
+	if err := c.Control(a, 1); err != nil {
 		t.Error(err)
 	}
-	c.updateUsage(15)
-	c.config.Notify.Enable = true
-	c.NotifyIfNeeded(c.usage.Value.(Usage))
+	a.Notify.Enable = true
+	stats, err := c.statsMgr.Get("1")
+	if err != nil {
+		t.Error(err)
+	}
+	c.NotifyIfNeeded(a, stats.Current[0].(Usage))
 
 	inUse, err := c.IsEquipmentInUse("-1")
 	if err != nil {
@@ -72,10 +90,19 @@ func TestATO(t *testing.T) {
 		t.Error("Imaginary equipment should not be in-use")
 	}
 
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(DefaultConfig)
-	if err := tr.Do("POST", "/api/ato", body, nil); err != nil {
-		t.Error("Failed to update ato config using api. Error:", err)
+	body = new(bytes.Buffer)
+	json.NewEncoder(body).Encode(a)
+	if err := tr.Do("POST", "/api/atos/1", body, nil); err != nil {
+		t.Error("Failed to update udate exitsing using api. Error:", err)
 	}
-	defer c.Stop()
+	c.Stop()
+	c.Start()
+	if err := tr.Do("GET", "/api/atos/1/usage", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to get ato usage using api. Error:", err)
+	}
+	if err := tr.Do("DELETE", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to delete ato using api. Error:", err)
+	}
+	c.Stop()
+
 }
