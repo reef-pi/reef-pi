@@ -59,6 +59,9 @@ func TestATO(t *testing.T) {
 	if err := tr.Do("GET", "/api/atos", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to list ato using api. Error:", err)
 	}
+	if err := tr.Do("GET", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to get ato using api. Error:", err)
+	}
 	a.ID = "1"
 
 	c.Check(a)
@@ -92,5 +95,14 @@ func TestATO(t *testing.T) {
 	if err := tr.Do("POST", "/api/atos/1", body, nil); err != nil {
 		t.Error("Failed to update udate exitsing using api. Error:", err)
 	}
-	defer c.Stop()
+	c.Stop()
+	c.Start()
+	if err := tr.Do("GET", "/api/atos/1/usage", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to get ato usage using api. Error:", err)
+	}
+	if err := tr.Do("DELETE", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to delete ato using api. Error:", err)
+	}
+	c.Stop()
+
 }
