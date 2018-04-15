@@ -40,15 +40,6 @@ export default class ATOChart extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <span className='h6'>Current</span>
-          <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.current}>
-            <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label='minutes' />
-            <XAxis dataKey='time' />
-            <Tooltip />
-          </BarChart>
-        </div>
-        <div className='row'>
           <span className='h6'>Historical</span>
           <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
