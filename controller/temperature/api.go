@@ -4,10 +4,12 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+	"path/filepath"
 )
 
 func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tcs", t.list).Methods("GET")
+	r.HandleFunc("/api/tcs/sensors", t.sensors).Methods("GET")
 	r.HandleFunc("/api/tcs", t.create).Methods("PUT")
 	r.HandleFunc("/api/tcs/{id}", t.get).Methods("GET")
 	r.HandleFunc("/api/tcs/{id}", t.update).Methods("POST")
@@ -26,6 +28,20 @@ func (c Controller) list(w http.ResponseWriter, r *http.Request) {
 		return c.List()
 	}
 	utils.JSONListResponse(fn, w, r)
+}
+func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
+		if err != nil {
+			return nil, err
+		}
+		sensors := []string{}
+		for _, f := range files {
+			sensors = append(sensors, filepath.Base(f))
+		}
+		return sensors, nil
+	}
+	utils.JSONGetResponse(fn, w, r)
 }
 func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
 	var t TC

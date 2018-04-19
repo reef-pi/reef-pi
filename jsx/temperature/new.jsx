@@ -2,7 +2,7 @@ import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
 import {ajaxPut} from '../utils/ajax.js'
-import SelectEquipment from '../select_equipment.jsx'
+import SelectSensor from './select_sensor.jsx'
 
 export default class New extends React.PureComponent {
   constructor (props) {
@@ -64,6 +64,10 @@ export default class New extends React.PureComponent {
         <div className='row'>
           <div className='col-sm-2'>Name</div>
           <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-2'>Sensor</div>
+          <div className='col-sm-2'><SelectSensor id='new-sensor' /></div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
