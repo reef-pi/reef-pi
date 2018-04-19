@@ -15,7 +15,6 @@ const UsageBucket = "ato_usage"
 type Controller struct {
 	telemetry  *utils.Telemetry
 	statsMgr   *utils.StatsManager
-	stopCh     chan struct{}
 	store      utils.Store
 	equipments *equipments.Controller
 	devMode    bool
@@ -28,7 +27,6 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 	return &Controller{
 		devMode:    devMode,
 		mu:         &sync.Mutex{},
-		stopCh:     make(chan struct{}),
 		store:      store,
 		inlets:     inlets,
 		telemetry:  telemetry,
