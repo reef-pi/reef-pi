@@ -76,9 +76,9 @@ func (c *Controller) Stop() {
 	for id, quit := range c.quitters {
 		close(quit)
 		if err := c.statsMgr.Save(id); err != nil {
-			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
+			log.Println("ERROR: temperature controller. Failed to save usage. Error:", err)
 		}
-		log.Println("ato sub-system: Saved usaged data of sensor:", id)
+		log.Println("temperature sub-system: Saved usage data of sensor:", id)
 		delete(c.quitters, id)
 	}
 }
