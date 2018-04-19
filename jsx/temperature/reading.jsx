@@ -2,7 +2,7 @@ import React from 'react'
 import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
 import Common from '../common.jsx'
 
-export default class TemperatureReadingChart extends Common {
+export default class ReadingChart extends Common {
   constructor (props) {
     super(props)
     this.state = {

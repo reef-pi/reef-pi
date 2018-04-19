@@ -7,53 +7,49 @@ import (
 )
 
 func (t *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/tc/config", t.getConfig).Methods("GET")
-	r.HandleFunc("/api/tc/config", t.updateConfig).Methods("POST")
-	r.HandleFunc("/api/tc/readings", t.getReadings).Methods("GET")
-	r.HandleFunc("/api/tc/usage", t.getUsage).Methods("GET")
+	r.HandleFunc("/api/tcs", t.list).Methods("GET")
+	r.HandleFunc("/api/tcs", t.create).Methods("PUT")
+	r.HandleFunc("/api/tcs/{id}", t.get).Methods("GET")
+	r.HandleFunc("/api/tcs/{id}", t.update).Methods("POST")
+	r.HandleFunc("/api/tcs/{id}", t.delete).Methods("DELETE")
+	r.HandleFunc("/api/tcs/{id}/usage", t.getUsage).Methods("GET")
 }
 
-func (t *Controller) getConfig(w http.ResponseWriter, r *http.Request) {
+func (t *Controller) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return t.config, nil
+		return t.Get(id)
 	}
 	utils.JSONGetResponse(fn, w, r)
+}
+func (c Controller) list(w http.ResponseWriter, r *http.Request) {
+	fn := func() (interface{}, error) {
+		return c.List()
+	}
+	utils.JSONListResponse(fn, w, r)
+}
+func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
+	var t TC
+	fn := func() error {
+		return c.Create(t)
+	}
+	utils.JSONCreateResponse(&t, fn, w, r)
+}
+func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) error {
+		return c.Delete(id)
+	}
+	utils.JSONDeleteResponse(fn, w, r)
 }
 
 func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return t.GetUsage()
-	}
+	fn := func(id string) (interface{}, error) { return t.statsMgr.Get(id) }
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (t *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return t.GetReadings()
+func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
+	var t TC
+	fn := func(id string) error {
+		return c.Update(id, t)
 	}
-	utils.JSONGetResponse(fn, w, r)
-}
-
-func (c *Controller) updateConfig(w http.ResponseWriter, r *http.Request) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	var conf Config
-	fn := func(_ string) error {
-		if err := saveConfig(c.store, conf); err != nil {
-			return err
-		}
-		return c.reload()
-	}
-	utils.JSONUpdateResponse(&conf, fn, w, r)
-}
-
-func (c *Controller) reload() error {
-	c.Stop()
-	conf, err := loadConfig(c.store)
-	if err != nil {
-		return err
-	}
-	c.config = conf
-	c.Start()
-	return nil
+	utils.JSONUpdateResponse(&t, fn, w, r)
 }
