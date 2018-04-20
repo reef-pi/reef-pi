@@ -8,11 +8,60 @@ export default class Dashboard extends React.Component {
     super(props)
     this.state = {
       config: {updated: false},
+      id_selectors: [],
+      atos: [],
+      tcs: [],
+      id_uis: []
     }
     this.fetch = this.fetch.bind(this)
     this.save = this.save.bind(this)
     this.toRow = this.toRow.bind(this)
     this.grid = this.grid.bind(this)
+    this.selectATO = this.selectATO.bind(this)
+    this.selectTC = this.selectTC.bind(this)
+    this.setID = this.setID.bind(this)
+  }
+
+
+  selectATO(i,j) {
+    if(this.state.atos.length < 1) {
+      return
+    }
+    var atos = []
+    $.each(this.state.atos, function(k,v){
+      atos.push(
+        <MenuItem key={v.id} active={false} eventKey={v.name}>{v.name}</MenuItem>
+      )
+    }.bind(this))
+    return(
+    <DropdownButton title='none' id={'ato-select'} onSelect={this.setID(i,j)}>
+      {atos}
+    </DropdownButton>
+    )
+  }
+  setID(i,j){
+    return(function(k, ev){
+      var config  = this.state.config
+      config.grid_details[i][j].id = k
+      this.setState({ config: config })
+    }.bind(this))
+  }
+
+  selectTC(i,j) {
+    if(this.state.tcs.length < 1) {
+      return
+    }
+    var tcs = []
+    $.each(this.state.tcs, function(k,v){
+      tcs.push(
+        <MenuItem key={v.id} active={false} eventKey={v.name}>{v.name}</MenuItem>
+      )
+    }.bind(this))
+    return(
+    <DropdownButton title={'none'} id={'tc-select'} onSelect={this.setID(i,j)}>
+      {tcs}
+    </DropdownButton>
+    )
   }
 
   componentDidMount () {
@@ -22,9 +71,23 @@ export default class Dashboard extends React.Component {
   setType (i,j) {
     return function(k,ev) {
       var config  = this.state.config
+      var id_uis  = this.state.id_uis
       config.grid_details[i][j].type = k
+      if( id_uis[i] === undefined){
+        id_uis[i] = []
+      }
+      switch(k){
+      case 'temperature':
+      case 'tc':
+        id_uis[i][j] = this.selectTC(i, j)
+        break
+      case 'ato':
+        id_uis[i][j] = this.selectATO(i, j)
+        break
+      } 
       this.setState({
         config: config,
+        id_uis: id_uis,
         updated: true
       })
     }.bind(this)
@@ -37,6 +100,22 @@ export default class Dashboard extends React.Component {
         this.setState({
           config: data,
           updated: false
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/atos',
+      success: function (data) {
+        this.setState({
+          atos: data
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/tcs',
+      success: function (data) {
+        this.setState({
+          tcs: data
         })
       }.bind(this)
     })
@@ -77,9 +156,10 @@ export default class Dashboard extends React.Component {
 
   grid() {
    var config = this.state.config
+   var id_uis = this.state.id_uis
    var row = parseInt(config.row)
    var column = parseInt(config.column)
-   var i, j
+   var i,j
    var rows = []
    var types = [
      <MenuItem key='light' active={true} eventKey='light'>light</MenuItem>,
@@ -93,11 +173,17 @@ export default class Dashboard extends React.Component {
        if(config.grid_details[i] === undefined){
          config.grid_details[i] = []
        }
+       if(id_uis[i] === undefined) {
+         id_uis[i] = []
+         }
      var columns = []
      for(j= 0; j<column; j++) {
        if(config.grid_details[i][j] === undefined){
          config.grid_details[i][j] = {type:'health'}
-         this.setState({config: config})
+         this.setState({config: config, id_uis: id_uis})
+       }
+       if(id_uis[i][j] === undefined){
+         id_uis[i][j] = <span>-</span>
        }
        columns.push(
          <div className='col-sm-3' key={'chart-type-'+i+'-'+j}>
@@ -106,6 +192,7 @@ export default class Dashboard extends React.Component {
                 <DropdownButton title={config.grid_details[i][j].type} id={'db-'+i+'-'+j} onSelect={this.setType(i,j)}>
                   {types}
                 </DropdownButton>
+                 {id_uis[i][j]}
              </div>
              <div className='col-sm-6'>
                {config.grid_details[i][j].id}

@@ -77,14 +77,14 @@ export default class Ph extends React.Component {
           case 'temperature':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TemperatureReadingChart width={config.width} height={config.height} />
+                <TempReadingsChart width={config.width} height={config.height} />
               </div>
             )
             break;
           case 'tc':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TemperatureChart width={config.width} height={config.height} />
+                <TempControlChart width={config.width} height={config.height} />
               </div>
             )
             break;

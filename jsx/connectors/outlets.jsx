@@ -74,7 +74,7 @@ export default class Outlets extends React.Component {
     var list = []
     $.each(this.state.outlets, function (i, o) {
       list.push(
-        <div className='row'key={o.name}>
+        <div className='row'key={'outlet-'+o.id}>
           <div className='col-sm-2'>
             {o.name}
           </div>
