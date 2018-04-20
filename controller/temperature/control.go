@@ -69,6 +69,22 @@ func (c *Controller) Check(tc TC) {
 	c.statsMgr.Update(tc.ID, u)
 }
 
+func (c *Controller) control(tc TC, u *Usage) error {
+	switch {
+	case u.Temperature > tc.Max:
+		log.Println("Current temperature is above maximum threshold. Executing cool down routine")
+		u.Cooler += int(tc.Period)
+		return c.coolDown(tc)
+	case u.Temperature < tc.Min:
+		log.Println("Current temperature is below minimum threshold. Executing warm up routine")
+		u.Heater += int(tc.Period)
+		return c.warmUp(tc)
+	default:
+		c.switchOffAll(tc)
+	}
+	return nil
+}
+
 func (c *Controller) warmUp(tc TC) error {
 	if tc.Cooler != "" {
 		if err := c.equipments.Control(tc.Cooler, false); err != nil {
@@ -104,21 +120,6 @@ func (c *Controller) switchOffAll(tc TC) {
 	if tc.Cooler != "" {
 		c.equipments.Control(tc.Heater, false)
 	}
-}
-func (c *Controller) control(tc TC, u *Usage) error {
-	switch {
-	case u.Temperature > tc.Max:
-		log.Println("Current temperature is above maximum threshold. Executing cool down routine")
-		u.Cooler += int(tc.Period)
-		return c.coolDown(tc)
-	case u.Temperature < tc.Min:
-		log.Println("Current temperature is below minimum threshold. Executing warm up routine")
-		u.Heater += int(tc.Period)
-		return c.warmUp(tc)
-	default:
-		c.switchOffAll(tc)
-	}
-	return nil
 }
 
 func (c *Controller) NotifyIfNeeded(tc TC, reading float32) {
