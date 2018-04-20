@@ -23,6 +23,11 @@ export default class New extends React.PureComponent {
     this.ui = this.ui.bind(this)
     this.update = this.update.bind(this)
     this.updateCheckbox = this.updateCheckbox.bind(this)
+    this.updateSensor = this.updateSensor.bind(this)
+  }
+
+  updateSensor(v) {
+    this.setState({sensor: v})
   }
 
   updateCheckbox(k) {
@@ -67,7 +72,7 @@ export default class New extends React.PureComponent {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor</div>
-          <div className='col-sm-2'><SelectSensor id='new-sensor' /></div>
+          <div className='col-sm-2'><SelectSensor id='new-sensor' update={this.updateSensor}/></div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
@@ -95,6 +100,7 @@ export default class New extends React.PureComponent {
       enable: this.state.enable,
       heater: this.state.heater,
       cooler: this.state.cooler,
+      sensor: this.state.sensor,
       period: parseInt(this.state.period)
     }
     ajaxPut({

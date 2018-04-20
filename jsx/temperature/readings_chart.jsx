@@ -1,8 +1,8 @@
 import React from 'react'
 import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
-import Common from '../common.jsx'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class ReadingChart extends Common {
+export default class ReadingsChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -22,11 +22,11 @@ export default class ReadingChart extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
-      url: '/api/tc/readings',
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id+'/usage',
       success: function (data) {
         this.setState({
-          readings: data,
+          readings: data.current,
           showAlert: false
         })
       }.bind(this)
@@ -39,7 +39,6 @@ export default class ReadingChart extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <span className='h6'>Temperature</span>
         <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
           <defs>
@@ -48,7 +47,7 @@ export default class ReadingChart extends Common {
               <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
             </linearGradient>
           </defs>
-          <YAxis domain={[76, 82]} />
+          <YAxis domain={[76, 82]} dataKey='temperature'/>
           <XAxis dataKey='time' />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />

@@ -22,7 +22,7 @@ export default class Notify extends React.Component {
   update(k) {
     return(function(ev){
       var h = this.state.config
-      h[k] = parseInt(ev.target.value)
+      h[k] = parseFloat(ev.target.value)
       this.setState({
        config: h
       })

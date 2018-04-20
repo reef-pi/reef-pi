@@ -26,7 +26,7 @@ export default class SelectSensor extends React.Component {
         var sensor = this.state.sensor
         $.each(data, function (i, s) {
           if (s === sensor) {
-            equipment = eq
+            sensor = s
           }
         }.bind(this))
         this.setState({
