@@ -158,7 +158,7 @@ export default class Sensor extends React.Component {
               <label className='input-group-addon'>Min</label>
               <input type='text'
                 className='form-control'
-                id={'tc_notify_min-'+this.state.tc.id}
+                id={'tc_control_min-'+this.state.tc.id}
                 value={this.state.tc.min}
                 onChange={this.update('min')}
                 disabled={this.state.readOnly}
@@ -171,7 +171,7 @@ export default class Sensor extends React.Component {
               <input
                 className='form-control'
                 type='text'
-                id={'tc_notify_max-'+this.state.tc.id}
+                id={'tc_control_max-'+this.state.tc.id}
                 value={this.state.tc.max}
                 onChange={this.update('max')}
                 disabled={this.state.readOnly}
@@ -250,7 +250,7 @@ export default class Sensor extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='tc_control' className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly}/>
+          <input type='checkbox' id={'tc_control_'+this.props.data.id} className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly}/>
         </div>
         {this.showControl()}
       </div>

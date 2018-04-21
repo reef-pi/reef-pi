@@ -4,7 +4,7 @@ import {showAlert} from '../utils/alert.js'
 import {ajaxPut} from '../utils/ajax.js'
 import InletSelector from '../connectors/inlet_selector.jsx'
 
-export default class New extends React.PureComponent {
+export default class New extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

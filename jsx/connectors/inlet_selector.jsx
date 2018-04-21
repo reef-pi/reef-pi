@@ -38,6 +38,7 @@ export default class InletSelector extends React.Component {
   }
 
   inlets () {
+    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var title = ''
     var id = ''
     if (this.state.inlet !== undefined) {
@@ -49,7 +50,7 @@ export default class InletSelector extends React.Component {
       items.push(<MenuItem key={k} active={v.id === id} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
     }.bind(this))
     return (
-      <DropdownButton title={title} id={this.props.id + '-inlet'} onSelect={this.set}>
+      <DropdownButton title={title} id={this.props.id + '-inlet'} onSelect={this.set} disabled={readOnly}>
         {items}
       </DropdownButton>
     )
