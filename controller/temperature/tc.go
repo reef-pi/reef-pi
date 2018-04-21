@@ -92,7 +92,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.store.Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR:  temperature sub-system: Failed to deleted usage details for sensor:", id)
+		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
 	}
 	quit, ok := c.quitters[id]
 	if ok {
