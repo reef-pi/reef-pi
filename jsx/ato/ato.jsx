@@ -138,7 +138,7 @@ export default class ATO extends React.Component {
           {name}
         </div>
         <div className='row'>
-          <InletSelector update={this.setInlet} readOnly={this.state.readOnly}/>
+          <InletSelector update={this.setInlet} readOnly={this.state.readOnly} active={this.state.ato.inlet} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
