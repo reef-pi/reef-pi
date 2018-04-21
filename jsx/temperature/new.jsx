@@ -68,23 +68,39 @@ export default class New extends React.PureComponent {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
+          <div className='col-sm-2'>
+            <input type='text' onChange={this.update('name')} value={this.state.name} id='new_tc_name'/>
+          </div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Sensor</div>
-          <div className='col-sm-2'><SelectSensor id='new-sensor' update={this.updateSensor}/></div>
+          <div className='col-sm-2'>
+            <SelectSensor id='new_tc_sensor' update={this.updateSensor} />
+          </div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
           <div className='col-sm-1'>
-            <input type='checkbox'  onChange={this.updateCheckbox('enable')} value={this.state.enable} />
+            <input
+              type='checkbox'
+              onChange={this.updateCheckbox('enable')}
+              value={this.state.enable}
+              id='new_tc_enable'
+            />
           </div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Period</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period}/></div>
+          <div className='col-sm-2'>
+            <input
+              type='text'
+              onChange={this.update('period')}
+              value={this.state.period}
+              id='new_tc_period'
+            />
+          </div>
         </div>
-        <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
+        <input type='button' id='create_tc' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
     )
   }
@@ -117,7 +133,7 @@ export default class New extends React.PureComponent {
   render() {
     return(
       <div className='container'>
-        <input id='add_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+        <input id='add_tc' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )
