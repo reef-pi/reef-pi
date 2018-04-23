@@ -10,7 +10,7 @@ import ATOChart from '../ato/chart.jsx'
 import Summary from '../summary.jsx'
 import HealthChart from '../health_chart.jsx'
 
-export default class Ph extends React.Component {
+export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
