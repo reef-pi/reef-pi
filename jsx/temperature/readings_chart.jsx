@@ -6,19 +6,35 @@ export default class ReadingsChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      readings: []
+      readings: [],
+      config: {
+        name: ''
+      }
     }
     this.fetch = this.fetch.bind(this)
+    this.info = this.info.bind(this)
   }
 
   componentDidMount () {
     var timer = window.setInterval(this.fetch, 10 * 1000)
     this.setState({timer: timer})
+    this.info()
     this.fetch()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
+  }
+
+  info () {
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id,
+      success: function (data) {
+        this.setState({
+          config: data
+        })
+      }.bind(this)
+    })
   }
 
   fetch () {
@@ -39,7 +55,7 @@ export default class ReadingsChart extends React.Component {
     }
     return (
       <div className='container'>
-        <span className='h6'>Temperature</span>
+        <span className='h6'>Temperature - {this.state.config.name}</span>
         <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
           <defs>
             <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>

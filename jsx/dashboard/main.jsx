@@ -5,7 +5,7 @@ import {ajaxGet} from '../utils/ajax.js'
 import TempReadingsChart from '../temperature/readings_chart.jsx'
 import TempControlChart from '../temperature/control_chart.jsx'
 import EquipmentsChart from '../equipments/chart.jsx'
-import LightsChart from '../lighting/chart.jsx'
+import LightChart from '../lighting/chart.jsx'
 import ATOChart from '../ato/chart.jsx'
 import Summary from '../summary.jsx'
 import HealthChart from '../health_chart.jsx'
@@ -47,7 +47,7 @@ export default class Dashboard extends React.Component {
           case 'light':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <LightsChart width={config.width} height={config.height} />
+                <LightChart width={config.width} height={config.height} light_id={ch.id}/>
               </div>
             )
             break;
@@ -61,7 +61,7 @@ export default class Dashboard extends React.Component {
           case 'ato':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <ATOChart width={config.width} height={config.height} />
+                <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
               </div>
             )
             break;
@@ -77,14 +77,14 @@ export default class Dashboard extends React.Component {
           case 'temperature':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TempReadingsChart width={config.width} height={config.height} />
+                <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id}/>
               </div>
             )
             break;
           case 'tc':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TempControlChart width={config.width} height={config.height} />
+                <TempControlChart width={config.width} height={config.height} sensor_id={ch.id}/>
               </div>
             )
             break;
