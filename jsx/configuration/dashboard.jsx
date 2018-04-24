@@ -8,7 +8,9 @@ export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      config: {updated: false},
+      config: {
+        updated: false
+      },
       atos: [],
       tcs: [],
       lights: [],
@@ -126,6 +128,9 @@ export default class Dashboard extends React.Component {
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
+    if(this.state.config.grid_details === undefined) {
+      return(<div />)
+    }
     return(
       <div className='container'>
         {this.toRow('row', 'Rows')}
@@ -135,6 +140,7 @@ export default class Dashboard extends React.Component {
         <div className='row'>
           <Grid
             rows={this.state.config.row}
+            cells={this.state.config.grid_details}
             columns={this.state.config.column}
             hook={this.updateHook}
             tcs={this.state.tcs}

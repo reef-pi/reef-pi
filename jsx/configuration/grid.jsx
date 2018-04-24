@@ -9,18 +9,18 @@ export default class Grid extends React.Component {
   constructor (props) {
     super(props)
     var i,j
-    var cells = props.cells
+    var cells = []
     for(i = 0; i < props.rows; i++ ) {
       var columns = []
+      cells[i] = []
       for(j= 0; j< props.columns; j++) {
-        if(cells[i]=== undefined){
-          cells[i]  = []
+        if(props.cells[i]=== undefined || props.cells[i][j] === undefined){
+          cells[i][j]  = {type: 'health'}
+          continue
         }
-        if(cells[i][j] === undefined){
-          cells[i][j] = {
-            type:'health',
-            ui: <span>-</span>
-          }
+        cells[i][j] = {
+          type: props.cells[i][j].type,
+          id: props.cells[i][j].id
         }
       }
     }
@@ -30,6 +30,41 @@ export default class Grid extends React.Component {
     this.setType = this.setType.bind(this)
     this.updateHook = this.updateHook.bind(this)
     this.initiatlizeCell = this.initiatlizeCell.bind(this)
+    this.cellUI = this.cellUI.bind(this)
+  }
+
+  cellUI(type, current_id, i,j) {
+    var data
+    switch(type){
+      case 'ato':
+        data = this.props.atos
+        break;
+      case 'equipment':
+        return(<span>-</span>)
+        break;
+      case 'health':
+        return(<span>-</span>)
+        break;
+      case 'light':
+        data = this.props.lights
+        break;
+      case 'ph':
+        data = this.props.phs
+        break;
+      case 'temperature':
+      case 'tc':
+        data = this.props.tcs
+        break;
+    }
+
+    return(
+      <ComponentSelector
+         components={data}
+         hook={this.updateHook(i, j)}
+         selector_id='-'
+         current_id={current_id}
+       />
+    )
   }
 
   initiatlizeCell(i,j) {
@@ -43,10 +78,10 @@ export default class Grid extends React.Component {
     for(j= 0; j<this.props.columns; j++) {
       if(cells[i][j] === undefined){
         cells[i][j] = {
-          type:'health',
-          ui: <span>-</span>
+          type:'health'
         }
       }
+      cells[i][j].ui = this.cellUI(cells[i][j].type, cells[i][j].id, i, j)
     }
     return(cells)
   }
@@ -62,45 +97,9 @@ export default class Grid extends React.Component {
 
   setType (i,j) {
     return( function(k,ev) {
-      var el
-      switch(k){
-      case 'health':
-        el = <span>-</span>
-        break;
-      case 'light':
-        el = <ComponentSelector
-              components={this.props.lights}
-              hook={this.updateHook(i, j)}
-              selector_id='-'
-              />
-        break;
-      case 'ph':
-        el = <ComponentSelector
-              components={this.props.phs}
-              hook={this.updateHook(i, j)}
-              selector_id='-'
-              />
-        break;
-      case 'temperature':
-      case 'tc':
-        console.log("Setting temp selector")
-        el = <ComponentSelector
-             components={this.props.tcs}
-             hook={this.updateHook(i, j)}
-             selector_id='-'
-             />
-        break;
-      case 'ato':
-        el = <ComponentSelector
-              components={this.props.atos}
-              hook={this.updateHook(i, j)}
-              selector_id='-'
-              />
-        break;
-      }
      var cells = this.initiatlizeCell(i,j)
-     cells[i][j].ui = el
      cells[i][j].type = k
+     cells[i][j].ui = this.cellUI(k, '', i, j)
      this.setState({cells: cells})
     }.bind(this))
   }
@@ -128,7 +127,7 @@ export default class Grid extends React.Component {
      for(j= 0; j<this.props.columns; j++) {
        cells = this.initiatlizeCell(i, j)
        columns.push(
-         <div className='col-sm-3' key={'chart-type-'+i+'-'+j}>
+         <div className='col-sm-3' key={'chart-type-'+i+'-'+j} style={{border: '1px solid black'}}>
            <div className='row'>
               <DropdownButton title={cells[i][j].type} id={'db-'+i+'-'+j} onSelect={this.setType(i,j)}>
                 {types}
