@@ -93,12 +93,8 @@ func (c *Controller) Delete(id string) error {
 func (c *Controller) loadAllJobs() error {
 	jobs, err := c.List()
 	if err != nil {
-		log.Println("WARNING: timer sub system failed to list jobs. Attempting covert older format jobs to new one. Error:", err)
-		jobs, err = c.updateOldJobs()
-		if err != nil {
-			log.Println("ERROR: timer sub system failed to update old jobs. Error:", err)
-			return err
-		}
+		log.Println("WARNING: timer sub system failed to list jobs. Error:", err)
+		return err
 	}
 	if jobs == nil {
 		log.Printf("No jobs present")
