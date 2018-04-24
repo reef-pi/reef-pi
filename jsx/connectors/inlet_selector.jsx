@@ -49,12 +49,12 @@ export default class InletSelector extends React.Component {
     $.each(this.state.inlets, function (k, v) {
       items.push(
         <MenuItem key={k} active={v.id === id} eventKey={k}>
-          <span id={this.props.id + '-' + v.name}>{v.name}</span>
+          <span id={this.props.name + '-' + v.id}>{v.name}</span>
         </MenuItem>
       )
     }.bind(this))
     return (
-      <DropdownButton title={title} id={this.props.id + '-inlet'} onSelect={this.set} disabled={readOnly}>
+      <DropdownButton title={title} id={this.props.name + '-inlet'} onSelect={this.set} disabled={readOnly}>
         {items}
       </DropdownButton>
     )

@@ -69,7 +69,7 @@ export default class New extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <InletSelector update={this.setInlet}/>
+          <InletSelector update={this.setInlet} name='new_ato'/>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Period</div>
