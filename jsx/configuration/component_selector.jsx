@@ -35,8 +35,8 @@ export default class ComponentSelector extends React.Component {
         title = v.name
       }
       items.push(
-        <MenuItem key={k} active={active} eventKey={v.id}>
-          { v.name }
+        <MenuItem key={k} active={active} eventKey={v.id} >
+          <span id={this.props.selector_id+'-'+v.id}>{ v.name }</span>
         </MenuItem>
       )
     }.bind(this))
