@@ -31,6 +31,8 @@ export default class Grid extends React.Component {
     this.updateHook = this.updateHook.bind(this)
     this.initiatlizeCell = this.initiatlizeCell.bind(this)
     this.cellUI = this.cellUI.bind(this)
+    this.menuItem = this.menuItem.bind(this)
+    this.menuItems = this.menuItems.bind(this)
   }
 
   cellUI(type, current_id, i,j) {
@@ -61,7 +63,7 @@ export default class Grid extends React.Component {
       <ComponentSelector
          components={data}
          hook={this.updateHook(i, j)}
-         selector_id='-'
+         selector_id={'component-'+type+'-'+i+'-'+j}
          current_id={current_id}
        />
     )
@@ -105,17 +107,28 @@ export default class Grid extends React.Component {
   }
 
 
+  menuItem(type, a, i,j) {
+    return(
+     <MenuItem key={type} active={a} eventKey={type}>
+       <span id={type+'-chart-'+i+'-'+j}>{type}</span>
+     </MenuItem>
+   )
+  }
+
+  menuItems(i, j) {
+   var types = [
+     this.menuItem('ato', false, i, j),
+     this.menuItem('equipment', false, i, j),
+     this.menuItem('health', false, i, j),
+     this.menuItem('light', false, i, j),
+     this.menuItem('ph', false, i, j),
+     this.menuItem('tc', false, i, j),
+     this.menuItem('temperature', false, i, j),
+   ]
+   return(types)
+  }
 
   render(){
-   var types = [
-     <MenuItem key='light' active={true} eventKey='light'>light</MenuItem>,
-     <MenuItem key='temperature' active={false} eventKey='temperature'>temperature</MenuItem>,
-     <MenuItem key='health' active={false} eventKey='health'>health</MenuItem>,
-     <MenuItem key='ato' active={false} eventKey='ato'>ato</MenuItem>,
-     <MenuItem key='equipment' active={false} eventKey='equipment'>equipment</MenuItem>,
-     <MenuItem key='tc' active={false} eventKey='tc'>TC</MenuItem>,
-     <MenuItem key='ph' active={false} eventKey='ph'>pH</MenuItem>
-   ]
    var rows = []
    var i,j
    var cells = this.state.cells
@@ -130,7 +143,7 @@ export default class Grid extends React.Component {
          <div className='col-sm-3' key={'chart-type-'+i+'-'+j} style={{border: '1px solid black'}}>
            <div className='row'>
               <DropdownButton title={cells[i][j].type} id={'db-'+i+'-'+j} onSelect={this.setType(i,j)}>
-                {types}
+                {this.menuItems(i,j)}
               </DropdownButton>
            </div>
            <div className='row'>
