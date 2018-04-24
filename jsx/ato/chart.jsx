@@ -6,19 +6,35 @@ export default class ATOChart extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      usage: []
+      usage: [],
+      config: {
+        name: ''
+      }
     }
     this.fetch = this.fetch.bind(this)
+    this.info = this.info.bind(this)
   }
 
   componentDidMount () {
     var timer = window.setInterval(this.fetch, 10 * 1000)
     this.setState({timer: timer})
     this.fetch()
+    this.info()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
+  }
+
+  info () {
+    this.ajaxGet({
+      url: '/api/atos/'+this.props.ato_id,
+      success: function (data) {
+        this.setState({
+          config: data
+        })
+      }.bind(this)
+    })
   }
 
   fetch () {
@@ -40,7 +56,7 @@ export default class ATOChart extends Common {
       <div className='container'>
         {super.render()}
         <div className='row'>
-          <span className='h6'>Historical</span>
+          <span className='h6'>ATO - {this.state.config.name}</span>
           <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
             <YAxis label='minutes' />

@@ -4,7 +4,7 @@ import {showAlert} from '../utils/alert.js'
 import {ajaxPut} from '../utils/ajax.js'
 import InletSelector from '../connectors/inlet_selector.jsx'
 
-export default class New extends React.PureComponent {
+export default class New extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -58,12 +58,14 @@ export default class New extends React.PureComponent {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name}/></div>
+          <div className='col-sm-2'>
+            <input type='text' id='new_ato_sensor_name' onChange={this.update('name')} value={this.state.name}/>
+          </div>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
           <div className='col-sm-1'>
-            <input type='checkbox'  onChange={this.updateEnable} value={this.state.enable} />
+            <input type='checkbox' id='new_ato_sensor_enable' onChange={this.updateEnable} value={this.state.enable} />
           </div>
         </div>
         <div className='row'>
@@ -71,7 +73,7 @@ export default class New extends React.PureComponent {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Period</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period}/></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period} id='new_ato_sensor_period'/></div>
         </div>
         <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
@@ -104,7 +106,7 @@ export default class New extends React.PureComponent {
   render() {
     return(
       <div className='container'>
-        <input id='add_probe' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+        <input id='add_new_ato_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )

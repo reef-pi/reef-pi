@@ -23,7 +23,7 @@ func detectTempSensorDevice() (string, error) {
 	return filepath.Join(files[0], "w1_slave"), nil
 }
 
-func (c *Controller) Read() (float32, error) {
+func (c *Controller) Read(tc TC) (float32, error) {
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		return 78.0 + (3 * rand.Float32()), nil

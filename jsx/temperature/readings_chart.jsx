@@ -1,19 +1,24 @@
 import React from 'react'
 import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
-import Common from '../common.jsx'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class TemperatureReadingChart extends Common {
+export default class ReadingsChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      readings: []
+      readings: [],
+      config: {
+        name: ''
+      }
     }
     this.fetch = this.fetch.bind(this)
+    this.info = this.info.bind(this)
   }
 
   componentDidMount () {
     var timer = window.setInterval(this.fetch, 10 * 1000)
     this.setState({timer: timer})
+    this.info()
     this.fetch()
   }
 
@@ -21,12 +26,23 @@ export default class TemperatureReadingChart extends Common {
     window.clearInterval(this.state.timer)
   }
 
-  fetch () {
-    this.ajaxGet({
-      url: '/api/tc/readings',
+  info () {
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id,
       success: function (data) {
         this.setState({
-          readings: data,
+          config: data
+        })
+      }.bind(this)
+    })
+  }
+
+  fetch () {
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id+'/usage',
+      success: function (data) {
+        this.setState({
+          readings: data.current,
           showAlert: false
         })
       }.bind(this)
@@ -39,8 +55,7 @@ export default class TemperatureReadingChart extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
-        <span className='h6'>Temperature</span>
+        <span className='h6'>Temperature - {this.state.config.name}</span>
         <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
           <defs>
             <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
@@ -48,7 +63,7 @@ export default class TemperatureReadingChart extends Common {
               <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
             </linearGradient>
           </defs>
-          <YAxis domain={[76, 82]} />
+          <YAxis domain={[76, 82]} dataKey='temperature'/>
           <XAxis dataKey='time' />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />

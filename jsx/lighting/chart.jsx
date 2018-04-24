@@ -7,7 +7,9 @@ export default class LightsChart extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      lights: []
+      config: {
+        channels: []
+      }
     }
     this.fetch = this.fetch.bind(this)
     this.light2chart = this.light2chart.bind(this)
@@ -19,10 +21,10 @@ export default class LightsChart extends Common {
 
   fetch () {
     this.ajaxGet({
-      url: '/api/lights',
+      url: '/api/lights/'+this.props.light_id,
       success: function (data) {
         this.setState({
-          lights: data,
+          config: data,
           showAlert: false
         })
       }.bind(this)
@@ -30,55 +32,51 @@ export default class LightsChart extends Common {
   }
 
   light2chart () {
-    var charts = []
+    var chart
     var colors = ['#0099CC', '#007E33', '#FF8800', '#CC0000']
-    $.each(this.state.lights, function (i, light) {
-      var lines = []
-      var data = []
-      var stIndex = 0
-      $.each(light.channels, function (name, channel) {
-        $.each(channel.values, function (i, value) {
-          if (data[i] === undefined) {
-            data[i] = {time: (i * 2) + 'h'}
-          }
-          data[i][channel.name] = value
-        })
-        var stroke = colors[0]
-        if (stIndex < colors.length) {
-          stroke = colors[stIndex]
+    var lines = []
+    var data = []
+    var stIndex = 0
+    $.each(this.state.config.channels, function (name, channel) {
+      $.each(channel.values, function (i, value) {
+        if (data[i] === undefined) {
+          data[i] = {time: (i * 2) + 'h'}
         }
-        stIndex++
-        lines.push(
-          <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={light.name + '-' + name} />
-        )
+        data[i][channel.name] = value
       })
-      data['time'] = [12]
+      var stroke = colors[0]
+      if (stIndex < colors.length) {
+        stroke = colors[stIndex]
+      }
+      stIndex++
       lines.push(
-        <Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />
-      )
-      charts.push(
-        <div className='container' key={'light-' + i}>
-          <label className='text-primary'>{light.name}</label>
-          <LineChart width={this.props.width} height={this.props.height} data={data}>
-            <XAxis dataKey='time' />
-            <YAxis />
-            <Tooltip />
-            {lines}
-          </LineChart>
-        </div>
+        <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={name} />
       )
     }.bind(this))
-    return (charts)
+    data['time'] = [12]
+    lines.push(
+      <Line dataKey='time'
+        isAnimationActive={false}
+        stroke='#000000'
+        key='time'
+        layout='vertical'
+      />)
+    return (
+      <div className='container'>
+        <span className='h6'>Light - {this.state.config.name}</span>
+        <LineChart width={this.props.width} height={this.props.height} data={data}>
+          <XAxis dataKey='time' />
+          <YAxis />
+          <Tooltip />
+          {lines}
+        </LineChart>
+      </div>
+    )
   }
 
   render () {
-    if (this.state.lights.length <= 0) {
-      return (<div />)
-    }
     return (
       <div className='container'>
-        {super.render()}
-        <span className='h6'>Lights</span>
         {this.light2chart()}
       </div>
     )

@@ -1,6 +1,7 @@
 package temperature
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
@@ -16,127 +17,124 @@ type Usage struct {
 	Cooler      int            `json:"cooler"`
 	Time        utils.TeleTime `json:"time"`
 	Temperature float32        `json:"temperature"`
-	readings    []float32
+	total       float32
+	len         int
 }
 
-func (c *Controller) switchHeater(on bool) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if c.heater == nil {
-		log.Println("Temperature subsystem: heater is not set. Skipping action:", on)
-		return nil
+func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
+	u2 := ux.(Usage)
+	u := Usage{
+		Heater:      u1.Heater,
+		Cooler:      u1.Cooler,
+		Time:        u1.Time,
+		Temperature: u1.Temperature,
+		total:       u1.total,
+		len:         u1.len,
 	}
-	if on != c.heater.On {
-		log.Println("Temperature subsystem - switching heater:", on)
-		c.heater.On = on
-		if err := c.equipments.Update(c.heater.ID, *c.heater); err != nil {
-			c.heater.On = !on
+	if u.Time.Hour() == u2.Time.Hour() {
+		u.Heater += u2.Heater
+		u.Cooler += u2.Cooler
+		u.total += u2.Temperature
+		u.len += 1
+		u.Temperature = float32(u.total) / float32(u.len)
+		return u, false
+	}
+	return u2, true
+}
+
+func (u1 Usage) Before(u2 utils.Metric) bool {
+	return u1.Time.Before(u2.(Usage).Time)
+}
+
+func (c *Controller) Check(tc TC) {
+	if !tc.Enable {
+		return
+	}
+	u := Usage{
+		Time: utils.TeleTime(time.Now()),
+	}
+	reading, err := c.Read(tc)
+	if err != nil {
+		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
+		return
+	}
+	u.Temperature = reading
+	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
+	if tc.Control {
+		if err := c.control(tc, &u); err != nil {
+			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
+		}
+	}
+	c.NotifyIfNeeded(tc, reading)
+	c.statsMgr.Update(tc.ID, u)
+}
+
+func (c *Controller) control(tc TC, u *Usage) error {
+	switch {
+	case u.Temperature > tc.Max:
+		log.Println("Current temperature is above maximum threshold. Executing cool down routine")
+		u.Cooler += int(tc.Period)
+		return c.coolDown(tc)
+	case u.Temperature < tc.Min:
+		log.Println("Current temperature is below minimum threshold. Executing warm up routine")
+		u.Heater += int(tc.Period)
+		return c.warmUp(tc)
+	default:
+		c.switchOffAll(tc)
+	}
+	return nil
+}
+
+func (c *Controller) warmUp(tc TC) error {
+	if tc.Cooler != "" {
+		if err := c.equipments.Control(tc.Cooler, false); err != nil {
 			return err
 		}
 	}
-	var vOn int
-	if on {
-		vOn = 1
-	}
-	c.telemetry.EmitMetric("heater", vOn)
-	return nil
-}
-
-func (c *Controller) switchCooler(on bool) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	if c.cooler == nil {
-		log.Println("Temperature subsystem: cooler is not set. Skipping action:", on)
-		return nil
-	}
-	if on != c.cooler.On {
-		log.Println("Temperature subsystem - switching cooler:", on)
-		c.cooler.On = on
-		if err := c.equipments.Update(c.cooler.ID, *c.cooler); err != nil {
-			c.cooler.On = !on
+	if tc.Heater != "" {
+		if err := c.equipments.Control(tc.Heater, true); err != nil {
 			return err
 		}
 	}
-	var vOn int
-	if on {
-		vOn = 1
-	}
-	c.telemetry.EmitMetric("cooler", vOn)
 	return nil
 }
 
-func (c *Controller) warmUp() error {
-	if err := c.switchCooler(false); err != nil {
-		return err
+func (c *Controller) coolDown(tc TC) error {
+	if tc.Heater != "" {
+		if err := c.equipments.Control(tc.Heater, false); err != nil {
+			return err
+		}
 	}
-	if err := c.switchHeater(true); err != nil {
-		return err
+	if tc.Cooler != "" {
+		if err := c.equipments.Control(tc.Cooler, true); err != nil {
+			return err
+		}
 	}
-	c.updateHeaterUsage()
 	return nil
 }
 
-func (c *Controller) coolDown() error {
-	if err := c.switchHeater(false); err != nil {
-		return err
+func (c *Controller) switchOffAll(tc TC) {
+	if tc.Heater != "" {
+		c.equipments.Control(tc.Heater, false)
 	}
-	if err := c.switchCooler(true); err != nil {
-		return err
+	if tc.Cooler != "" {
+		c.equipments.Control(tc.Heater, false)
 	}
-	c.updateCoolerUsage()
-	return nil
 }
 
-func (c *Controller) updateHourlyTemperature(reading float32) {
-	usage := c.syncUsage()
-	usage.readings = append(usage.readings, reading)
-	total := float32(0.0)
-	for _, v := range usage.readings {
-		total += v
+func (c *Controller) NotifyIfNeeded(tc TC, reading float32) {
+	if !tc.Notify.Enable {
+		return
 	}
-	usage.Temperature = twoDecimal(total / float32(len(usage.readings)))
-	c.usage.Value = usage
-}
-
-func (c *Controller) updateHeaterUsage() {
-	usage := c.syncUsage()
-	usage.Heater = usage.Heater + int(c.config.CheckInterval)
-	c.usage.Value = usage
-}
-
-func (c *Controller) updateCoolerUsage() {
-	usage := c.syncUsage()
-	usage.Cooler = usage.Cooler + int(c.config.CheckInterval)
-	c.usage.Value = usage
-}
-
-func (c *Controller) syncUsage() Usage {
-	current := Usage{
-		Time:     utils.TeleTime(time.Now()),
-		readings: []float32{},
+	subject := "[Reef-Pi ALERT] temperature out of range"
+	format := "Current temperature (%f) is out of acceptable range ( %f -%f )"
+	body := fmt.Sprintf(format, reading, tc.Notify.Min, tc.Notify.Max)
+	if reading >= tc.Notify.Max {
+		c.telemetry.Alert(subject, "Tank is running hot."+body)
+		return
 	}
-	if c.usage.Value == nil {
-		c.usage.Value = current
-		return current
-	}
-	previous, ok := c.usage.Value.(Usage)
-	if !ok {
-		log.Println("ERROR: Temperature subsystem. Failed to typecast previous equipment usage")
-		return current
-	}
-	if previous.Time.Hour() == current.Time.Hour() {
-		return previous
-	}
-	c.usage = c.usage.Next()
-	c.usage.Value = current
-	return current
-}
-
-func (c *Controller) switchOffAll() {
-	if (c.cooler != nil) && c.cooler.On {
-		c.switchCooler(false)
-	}
-	if (c.heater != nil) && c.heater.On {
-		c.switchHeater(false)
+	if reading <= tc.Notify.Min {
+		c.telemetry.Alert(subject, "Tank is running cold."+body)
+		return
 	}
 }

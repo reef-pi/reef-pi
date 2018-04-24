@@ -8,7 +8,7 @@ export default class InletSelector extends React.Component {
     super(props)
     this.state = {
       inlets: [],
-      inlet: undefined,
+      inlet: undefined
     }
     this.fetch = this.fetch.bind(this)
     this.inlets = this.inlets.bind(this)
@@ -24,20 +24,21 @@ export default class InletSelector extends React.Component {
       url: '/api/inlets',
       success: function (data) {
         var inlet
-        $.each(data, function (i, j) {
-          if (this.props.id === i.id) {
-            inlet = j
+        $.each(data, function(k,v) {
+          if(v.id == this.props.active) {
+            inlet = v
           }
         }.bind(this))
         this.setState({
           inlets: data,
-          inlet: inlet,
+          inlet: inlet
         })
       }.bind(this)
     })
   }
 
   inlets () {
+    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var title = ''
     var id = ''
     if (this.state.inlet !== undefined) {
@@ -46,10 +47,14 @@ export default class InletSelector extends React.Component {
     }
     var items = []
     $.each(this.state.inlets, function (k, v) {
-      items.push(<MenuItem key={k} active={v.id === id} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
+      items.push(
+        <MenuItem key={k} active={v.id === id} eventKey={k}>
+          <span id={this.props.id + '-' + v.name}>{v.name}</span>
+        </MenuItem>
+      )
     }.bind(this))
     return (
-      <DropdownButton title={title} id={this.props.id + '-inlet'} onSelect={this.set}>
+      <DropdownButton title={title} id={this.props.id + '-inlet'} onSelect={this.set} disabled={readOnly}>
         {items}
       </DropdownButton>
     )

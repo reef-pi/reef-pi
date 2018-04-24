@@ -2,32 +2,29 @@ import React from 'react'
 import $ from 'jquery'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import Grid from './grid.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      config: {updated: false},
+      config: {
+        updated: false
+      },
+      atos: [],
+      tcs: [],
+      lights: [],
+      phs: [],
     }
     this.fetch = this.fetch.bind(this)
     this.save = this.save.bind(this)
     this.toRow = this.toRow.bind(this)
-    this.grid = this.grid.bind(this)
+    this.updateHook = this.updateHook.bind(this)
   }
+
 
   componentDidMount () {
     this.fetch()
-  }
-
-  setType (i,j) {
-    return function(k,ev) {
-      var config  = this.state.config
-      config.grid_details[i][j].type = k
-      this.setState({
-        config: config,
-        updated: true
-      })
-    }.bind(this)
   }
 
   fetch () {
@@ -36,7 +33,41 @@ export default class Dashboard extends React.Component {
       success: function (data) {
         this.setState({
           config: data,
+          rows: data.row,
+          columns: data.column,
           updated: false
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/atos',
+      success: function (data) {
+        this.setState({
+          atos: data
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/phprobes',
+      success: function (data) {
+        this.setState({
+          phs: data
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/lights',
+      success: function (data) {
+        this.setState({
+          lights: data
+        })
+      }.bind(this)
+    })
+    ajaxGet({
+      url: '/api/tcs',
+      success: function (data) {
+        this.setState({
+          tcs: data
         })
       }.bind(this)
     })
@@ -75,56 +106,21 @@ export default class Dashboard extends React.Component {
     )
   }
 
-  grid() {
-   var config = this.state.config
-   var row = parseInt(config.row)
-   var column = parseInt(config.column)
-   var i, j
-   var rows = []
-   var types = [
-     <MenuItem key='light' active={true} eventKey='light'>light</MenuItem>,
-     <MenuItem key='temperature' active={false} eventKey='temperature'>temperature</MenuItem>,
-     <MenuItem key='health' active={false} eventKey='health'>health</MenuItem>,
-     <MenuItem key='ato' active={false} eventKey='ato'>ato</MenuItem>,
-     <MenuItem key='equipment' active={false} eventKey='equipment'>equipment</MenuItem>,
-     <MenuItem key='tc' active={false} eventKey='tc'>tc</MenuItem>
-   ]
-   for(i = 0; i < row; i++ ) {
-       if(config.grid_details[i] === undefined){
-         config.grid_details[i] = []
-       }
-     var columns = []
-     for(j= 0; j<column; j++) {
-       if(config.grid_details[i][j] === undefined){
-         config.grid_details[i][j] = {type:'health'}
-         this.setState({config: config})
-       }
-       columns.push(
-         <div className='col-sm-3' key={'chart-type-'+i+'-'+j}>
-           <div className='container'>
-             <div className='col-sm-6'>
-                <DropdownButton title={config.grid_details[i][j].type} id={'db-'+i+'-'+j} onSelect={this.setType(i,j)}>
-                  {types}
-                </DropdownButton>
-             </div>
-             <div className='col-sm-6'>
-               {config.grid_details[i][j].id}
-             </div>
-           </div>
-         </div>
-       )
-     }
-     rows.push(
-       <div className='row' key={'chart-details-'+i+'-'+'j'}>
-         {columns}
-       </div>
-     )
-   }
-   var g = <div className='container'>
-     <label> Charts </label>
-     {rows}
-   </div>
-   return(g)
+  updateHook(cells){
+    var config = this.state.config
+    var i, j
+    for(i = 0; i< config.row; i ++ ) {
+      if(config.grid_details[i]=== undefined) {
+        config.grid_details[i] = []
+      }
+      for(j =0 ;j< config.column; j++) {
+        config.grid_details[i][j] = {
+          id: cells[i][j].id,
+          type: cells[i][j].type
+        }
+      }
+    }
+    this.setState({config: config})
   }
 
   render() {
@@ -132,13 +128,27 @@ export default class Dashboard extends React.Component {
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
+    if(this.state.config.grid_details === undefined) {
+      return(<div />)
+    }
     return(
       <div className='container'>
         {this.toRow('row', 'Rows')}
         {this.toRow('column', 'Columns')}
         {this.toRow('width', 'Width')}
         {this.toRow('height', 'Height')}
-        {this.grid()}
+        <div className='row'>
+          <Grid
+            rows={this.state.config.row}
+            cells={this.state.config.grid_details}
+            columns={this.state.config.column}
+            hook={this.updateHook}
+            tcs={this.state.tcs}
+            atos={this.state.atos}
+            phs={this.state.phs}
+            lights={this.state.lights}
+          />
+        </div>
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value='update' />
         </div>

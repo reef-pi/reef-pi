@@ -1,5 +1,6 @@
 import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
+import InletSelector from '../connectors/inlet_selector.jsx'
 import ATOChart from './chart.jsx'
 import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
@@ -17,6 +18,12 @@ export default class ATO extends React.Component {
     this.updateCheckBox = this.updateCheckBox.bind(this)
     this.update = this.update.bind(this)
     this.updatePump = this.updatePump.bind(this)
+    this.setInlet = this.setInlet.bind(this)
+  }
+  setInlet(id) {
+   var ato = this.state.ato
+   ato.inlet = id
+    this.setState({ato: ato})
   }
 
   updatePump(id) {
@@ -129,6 +136,9 @@ export default class ATO extends React.Component {
       <div className='container'>
         <div className='row'>
           {name}
+        </div>
+        <div className='row'>
+          <InletSelector update={this.setInlet} readOnly={this.state.readOnly} active={this.state.ato.inlet} />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>

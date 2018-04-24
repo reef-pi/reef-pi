@@ -1,33 +1,49 @@
 import React from 'react'
 import {ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
-import Common from '../common.jsx'
 import $ from 'jquery'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class Chart extends Common {
+export default class ControlChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      usage: []
+      usage: [],
+      config: {
+        name: ''
+      }
     }
     this.fetch = this.fetch.bind(this)
+    this.info = this.info.bind(this)
   }
 
   componentDidMount () {
     var timer = window.setInterval(this.fetch, 10 * 1000)
     this.setState({timer: timer})
     this.fetch()
+    this.info()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
 
+  info () {
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id,
+      success: function (data) {
+        this.setState({
+          config: data
+        })
+      }.bind(this)
+    })
+  }
+
   fetch () {
-    this.ajaxGet({
-      url: '/api/tc/usage',
+    ajaxGet({
+      url: '/api/tcs/'+this.props.sensor_id+'/usage',
       success: function (data) {
         var processed = []
-        $.each(data, function (i, v) {
+        $.each(data.historical, function (i, v) {
           v.cooler *= -1
           processed.push(v)
         })
@@ -45,8 +61,7 @@ export default class Chart extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
-        <span className='h6'>Heater/Cooler</span>
+        <span className='h6'>Heater/Cooler - {this.state.config.name}</span>
         <ComposedChart width={this.props.width} height={this.props.height} data={this.state.usage}>
           <YAxis yAxisId='left' orientation='left' domain={[76, 82]} />
           <YAxis yAxisId='right' orientation='right' />

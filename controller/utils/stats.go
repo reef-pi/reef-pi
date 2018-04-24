@@ -130,13 +130,7 @@ func (m *StatsManager) Update(id string, metric Metric) {
 	}
 	stats.Current.Value = metric
 	stats.Current = stats.Current.Next()
-	i := 1
-	stats.Current.Do(func(v interface{}) {
-		if v != nil {
-		}
-		i = i + 1
-	})
-	m1, move := metric.Rollup(stats.Historical.Value.(Metric))
+	m1, move := stats.Historical.Value.(Metric).Rollup(metric)
 	if move {
 		stats.Historical = stats.Historical.Next()
 	}
