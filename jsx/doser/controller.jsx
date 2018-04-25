@@ -14,12 +14,7 @@ export default class Doser extends Common {
     this.toggle = this.toggle.bind(this)
     this.fetch = this.fetch.bind(this)
     this.pumpList = this.pumpList.bind(this)
-    this.update = this.update.bind(this)
   }
-
-  update() {
-  }
-
 
   componentWillMount () {
     this.fetch()

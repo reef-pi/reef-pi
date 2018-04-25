@@ -1,9 +1,10 @@
-import Common from '../common.jsx'
 import Cron from '../timers/cron.jsx'
 import $ from 'jquery'
 import React from 'react'
+import {showAlert} from '../utils/alert.js'
+import {ajaxPost, ajaxDelete} from '../utils/ajax.js'
 
-export default class Pump extends Common {
+export default class Pump extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -52,7 +53,7 @@ export default class Pump extends Common {
       speed: parseInt(this.state.scheduleSpeed),
       enable: this.state.enable
     }
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/doser/pumps/' + this.props.data.id+'/schedule',
       data: JSON.stringify(payload),
       success: function (data) {
@@ -65,7 +66,7 @@ export default class Pump extends Common {
       speed: parseInt(this.state.calibrationSpeed),
       duration: parseInt(this.state.calibrationDuration)
     }
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/doser/pumps/' + this.props.data.id+'/calibrate',
       data: JSON.stringify(payload),
       success: function(data) {
@@ -79,11 +80,30 @@ export default class Pump extends Common {
       <div className='container'>
         <hr />
         <div className='col-sm-1'><label>Speed</label></div>
-        <input className='col-sm-5' type='range' onChange={this.update('calibrationSpeed')} value={this.state.calibrationSpeed}/>
-        <input className='col-sm-1' type='text' value={this.state.calibrationSpeed} readOnly={true}/>
+        <input
+          className='col-sm-5'
+          type='range'
+          onChange={this.update('calibrationSpeed')}
+          value={this.state.calibrationSpeed}
+        />
+        <input
+          className='col-sm-1'
+          type='text'
+          value={this.state.calibrationSpeed}
+          readOnly={true}
+        />
         <label className='col-sm-2'>Durartion</label>
-        <input type='text' className='col-sm-1' onChange={this.update('calibrationDuration')}/>
-        <input type='button' value='Run' onClick={this.onDemand} className='btn btn-secondary'/>
+        <input
+          type='text'
+          className='col-sm-1'
+          onChange={this.update('calibrationDuration')}
+        />
+        <input
+          type='button'
+          value='Run'
+          onClick={this.onDemand}
+          className='btn btn-secondary'
+        />
       </div>
     )
   }
@@ -95,36 +115,72 @@ export default class Pump extends Common {
         <hr/>
         <div className='row'>
           <label className='col-sm-3'>Enable</label>
-          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.regiment.enable}/>
+          <input
+            id={'pump-enable-' + this.props.data.id}
+            type='checkbox'
+            value={this.state.enable}
+            onChange={this.updateEnable}
+            className='col-sm-2'
+            defaultChecked={this.props.data.regiment.enable}
+          />
         </div>
-        <Cron updateHook={this.updateSchedule}/>
+        <Cron
+          details={this.state.scheduleDetails}
+          updateHook={this.updateSchedule}
+        />
         <div className='row'>
           <label className='col-sm-3'> Duration </label>
-          <input type='text' value={this.state.scheduleDuration} onChange={this.update('scheduleDuration')} className='col-sm-2'/>
+          <input type='text'
+            id={'set-duration-'+this.props.data.id}
+            value={this.state.scheduleDuration}
+            onChange={this.update('scheduleDuration')}
+            className='col-sm-2'
+          />
         </div>
         <div className='row'>
           <div className='col-sm-1'><label>Speed</label></div>
-          <input className='col-sm-5' type='range' onChange={this.update('scheduleSpeed')} value={this.state.scheduleSpeed}/>
-          <input className='col-sm-1' type='text' value={this.state.scheduleSpeed} readOnly={true}/>
+          <input
+            id={'set-speed-' + this.props.data.id}
+            className='col-sm-5'
+            type='range'
+            onChange={this.update('scheduleSpeed')}
+            value={this.state.scheduleSpeed}
+          />V
+          <input
+            className='col-sm-1'
+            type='text'
+            value={this.state.scheduleSpeed}
+            readOnly={true}
+          />
         </div>
-        <input type='button' value='Set' onClick={this.setSchedule} className='btn btn-secondary'/>
+        <input
+          type='button'
+          id={'set-schedule-' + this.props.data.id}
+          value='Set'
+          onClick={this.setSchedule}
+          className='btn btn-secondary'
+        />
       </div>
     )
   }
 
 
   calibrate() {
-    this.setState({calibrate: !this.state.calibrate})
+    this.setState({
+      calibrate: !this.state.calibrate
+    })
   }
 
   schedule() {
-    this.setState({schedule: !this.state.schedule})
+    this.setState({
+      schedule: !this.state.schedule
+    })
   }
 
   remove (id) {
     this.confirm('Are you sure ?')
     .then(function () {
-      this.ajaxDelete({
+      ajaxDelete({
         url: '/api/doser/pumps/' + this.props.data.id,
         type: 'DELETE',
         success: function (data) {
@@ -142,13 +198,31 @@ export default class Pump extends Common {
           <label className='text-secondary'>{this.props.data.name}</label>
         </div>
         <div className='col-sm-2'>
-          <input type='button' id={'schedule-pump-' + this.props.data.id} onClick={this.calibrate} value='calibrate' className='btn btn-outline-primary' />
+          <input
+            type='button'
+            id={'calibrate-pump-' + this.props.data.id}
+            onClick={this.calibrate}
+            value='calibrate'
+            className='btn btn-outline-primary'
+          />
         </div>
         <div className='col-sm-2'>
-          <input type='button' id={'schedule-pump-' + this.props.data.id} onClick={this.schedule} value='schedule' className='btn btn-outline-primary' />
+          <input
+            type='button'
+            id={'schedule-pump-' + this.props.data.id}
+            onClick={this.schedule}
+            value='schedule'
+            className='btn btn-outline-primary'
+          />
         </div>
         <div className='col-sm-2'>
-          <input type='button' id={'remove-pump-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+          <input
+            type='button'
+            id={'remove-pump-' + this.props.data.id}
+            onClick={this.remove}
+            value='delete'
+            className='btn btn-outline-danger'
+          />
         </div>
       </div>
       <div className='row'>
