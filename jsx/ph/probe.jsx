@@ -2,7 +2,8 @@ import $ from 'jquery'
 import React from 'react'
 import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
-import Chart from './chart.jsx'
+import HistoricalChart from './historical_chart.jsx'
+import CurrentChart from './current_chart.jsx'
 import Config from './probe_config.jsx'
 import Calibrate from './calibrate.jsx'
 
@@ -42,7 +43,12 @@ export default class Probe extends React.Component {
     if(!this.state.enable) {
       return(<div />)
     }
-    return(<Chart id={this.props.data.id} width={500} height={300}/>)
+    return(
+      <div className='container'>
+        <CurrentChart id={this.props.data.id} width={500} height={300}/>
+        <HistoricalChart id={this.props.data.id} width={500} height={300}/>
+      </div>
+    )
   }
 
   edit() {

@@ -4,11 +4,20 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 export default class Cron extends React.Component {
   constructor (props) {
     super(props)
+    var details = props.details
+    if(details === undefined) {
+      details = {
+        day: '*',
+        hour: '*',
+        minute: '*',
+        second: '0'
+      }
+    }
     this.state = {
-      day: '*',
-      hour: '*',
-      minute: '*',
-      second: '0'
+      day: details.day,
+      hour: details.hour,
+      minute: details.minute,
+      second: details.second
     }
     this.update = this.update.bind(this)
   }
@@ -23,6 +32,9 @@ export default class Cron extends React.Component {
       }
       payload[k] = ev.target.value
       this.setState(payload)
+      if(this.props.updateHook !== undefined) {
+        this.props.updateHook(payload)
+      }
     }.bind(this))
   }
 
