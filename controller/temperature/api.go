@@ -29,6 +29,7 @@ func (c Controller) list(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONListResponse(fn, w, r)
 }
+
 func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		if t.devMode {
@@ -46,6 +47,7 @@ func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
+
 func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
 	var t TC
 	fn := func() error {
@@ -53,6 +55,7 @@ func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.JSONCreateResponse(&t, fn, w, r)
 }
+
 func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) error {
 		return c.Delete(id)

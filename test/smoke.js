@@ -305,6 +305,9 @@ function SmokeTest () {
     .type('input#second')
     .type('input#second', '1')
     .wait(500)
+    .type('input#set-duration-1')
+    .type('input#set-duration-1', '15')
+    .wait(500)
     .click('input#set-schedule-1')
     .wait(1500)
 

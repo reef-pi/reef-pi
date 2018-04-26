@@ -8,17 +8,20 @@ import (
 )
 
 type TC struct {
-	ID      string        `json:"id"`
-	Name    string        `json:"name"`
-	Max     float32       `json:"max"`
-	Min     float32       `json:"min"`
-	Heater  string        `json:"heater"`
-	Cooler  string        `json:"cooler"`
-	Period  time.Duration `json:"period"`
-	Control bool          `json:"control"`
-	Enable  bool          `json:"enable"`
-	Notify  Notify        `json:"notify"`
-	Sensor  string        `json:"sensor"`
+	ID         string        `json:"id"`
+	Name       string        `json:"name"`
+	Max        float32       `json:"max"`
+	Min        float32       `json:"min"`
+	Heater     string        `json:"heater"`
+	Cooler     string        `json:"cooler"`
+	Period     time.Duration `json:"period"`
+	Control    bool          `json:"control"`
+	Enable     bool          `json:"enable"`
+	Notify     Notify        `json:"notify"`
+	Sensor     string        `json:"sensor"`
+	Fahrenheit bool          `json:"fahrenheit"`
+	ChartMin   float32       `json:"chart_min"`
+	ChartMax   float32       `json:"chart_max"`
 }
 type Notify struct {
 	Enable bool    `json:"enable"`

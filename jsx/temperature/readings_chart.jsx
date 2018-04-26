@@ -53,6 +53,8 @@ export default class ReadingsChart extends React.Component {
     if (this.state.readings.length <= 0) {
       return (<div />)
     }
+    var min = this.props.min === undefined ? 76 : this.props.min
+    var max = this.props.max === undefined ? 82 : this.props.max
     return (
       <div className='container'>
         <span className='h6'>Temperature - {this.state.config.name}</span>
@@ -63,7 +65,7 @@ export default class ReadingsChart extends React.Component {
               <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
             </linearGradient>
           </defs>
-          <YAxis domain={[76, 82]} dataKey='temperature'/>
+          <YAxis domain={[min, max]} dataKey='temperature'/>
           <XAxis dataKey='time' />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
