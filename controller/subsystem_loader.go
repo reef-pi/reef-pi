@@ -166,7 +166,6 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadPhSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load ph sub-system. Error:", err)
 	}
-
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {
 			log.Println("ERROR: Failed to setup subsystem:", sName)
