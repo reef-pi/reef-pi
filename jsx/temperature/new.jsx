@@ -9,7 +9,7 @@ export default class New extends React.PureComponent {
     super(props)
     this.state = {
       name: '',
-      enable: false,
+      enable: true,
       period: 60,
       fahrenheit: true,
       heater: '',
@@ -28,7 +28,9 @@ export default class New extends React.PureComponent {
   }
 
   updateSensor(v) {
-    this.setState({sensor: v})
+    this.setState({
+      sensor: v
+    })
   }
 
   updateCheckbox(k) {
@@ -51,8 +53,9 @@ export default class New extends React.PureComponent {
     this.setState({
       add: !this.state.add,
       name: '',
-      enable: false,
+      enable: true,
       period: 60,
+      fahrenheit: true,
       heater: '',
       cooler: '',
       control: false,
@@ -87,6 +90,7 @@ export default class New extends React.PureComponent {
               onChange={this.updateCheckbox('enable')}
               value={this.state.enable}
               id='new_tc_enable'
+              defaultChecked={true}
             />
           </div>
         </div>
@@ -96,8 +100,9 @@ export default class New extends React.PureComponent {
             <input
               type='checkbox'
               onChange={this.updateCheckbox('fahrenheit')}
-              value={this.state.enable}
-              id='new_tc_enable'
+              value={this.state.fahrenheit}
+              defaultChecked={true}
+              id='new_tc_fahrenheit'
             />
           </div>
         </div>
@@ -129,7 +134,10 @@ export default class New extends React.PureComponent {
       heater: this.state.heater,
       cooler: this.state.cooler,
       sensor: this.state.sensor,
-      period: parseInt(this.state.period)
+      period: parseInt(this.state.period),
+      fahrenheit: this.state.fahrenheit,
+      chart_min: 65,
+      chart_max: 75,
     }
     ajaxPut({
       url: '/api/tcs',
