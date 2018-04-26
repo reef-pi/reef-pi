@@ -53,8 +53,8 @@ export default class ReadingsChart extends React.Component {
     if (this.state.readings.length <= 0) {
       return (<div />)
     }
-    var min = this.props.min === undefined ? 76 : this.props.min
-    var max = this.props.max === undefined ? 82 : this.props.max
+    var min = this.state.config.chart_min
+    var max = this.state.config.chart_max
     return (
       <div className='container'>
         <span className='h6'>Temperature - {this.state.config.name}</span>

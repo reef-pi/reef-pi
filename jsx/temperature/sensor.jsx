@@ -263,7 +263,7 @@ export default class Sensor extends React.Component {
           <div className='col-sm-3'>Fahrenheit as unit</div>
           <input
             type='checkbox'
-            id='tc_enable'
+            id='tc_fahrenheit'
             className='col-sm-2'
             defaultChecked={this.state.tc.fahrenheit}
             onClick={this.updateCheckBox('fahrenheit')}
