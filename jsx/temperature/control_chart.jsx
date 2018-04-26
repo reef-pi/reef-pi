@@ -9,7 +9,7 @@ export default class ControlChart extends React.Component {
     this.state = {
       usage: [],
       config: {
-        name: ''
+        name: '',
       }
     }
     this.fetch = this.fetch.bind(this)
@@ -59,11 +59,20 @@ export default class ControlChart extends React.Component {
     if (this.state.usage.length <= 0) {
       return (<div />)
     }
+    var min = 76
+    var max = 82
+    if(this.state.config.chart_min !== undefined){
+      min = this.state.config.chart_min
+    }
+    if(this.state.config.chart_max !== undefined){
+      max = this.state.config.chart_max
+    }
+
     return (
       <div className='container'>
         <span className='h6'>Heater/Cooler - {this.state.config.name}</span>
         <ComposedChart width={this.props.width} height={this.props.height} data={this.state.usage}>
-          <YAxis yAxisId='left' orientation='left' domain={[76, 82]} />
+          <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
           <YAxis yAxisId='right' orientation='right' />
           <ReferenceLine yAxisId='right' y={0} />
           <XAxis dataKey='time' />

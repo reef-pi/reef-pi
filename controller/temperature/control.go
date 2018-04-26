@@ -36,7 +36,7 @@ func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
 		u.Cooler += u2.Cooler
 		u.total += u2.Temperature
 		u.len += 1
-		u.Temperature = float32(u.total) / float32(u.len)
+		u.Temperature = twoDecimal(float32(u.total) / float32(u.len))
 		return u, false
 	}
 	return u2, true

@@ -110,6 +110,9 @@ export default class Sensor extends React.Component {
     tc.period = parseInt(tc.period)
     tc.max = parseFloat(tc.max)
     tc.min = parseFloat(tc.min)
+    tc.max = parseFloat(tc.max)
+    tc.chart_min = parseFloat(tc.chart_min)
+    tc.chart_max = parseFloat(tc.chart_max)
     if (isNaN(tc.period)) {
       this.setState({
         showAlert: true,
@@ -128,6 +131,20 @@ export default class Sensor extends React.Component {
       this.setState({
         showAlert: true,
         alertMsg: 'Maximum temperature has to be a positive integer',
+      })
+      return
+    }
+    if (isNaN(tc.chart_min)) {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Minium temperature value in chart has to be a positive integer',
+      })
+      return
+    }
+    if (isNaN(tc.chart_max)) {
+      this.setState({
+        showAlert: true,
+        alertMsg: 'Maximum temperature value in chart has to be a positive integer',
       })
       return
     }
@@ -242,11 +259,30 @@ export default class Sensor extends React.Component {
             disabled={this.state.readOnly}
           />
         </div>
+        <div className='row'>
+          <div className='col-sm-3'>Fahrenheit as unit</div>
+          <input
+            type='checkbox'
+            id='tc_enable'
+            className='col-sm-2'
+            defaultChecked={this.state.tc.fahrenheit}
+            onClick={this.updateCheckBox('fahrenheit')}
+            disabled={this.state.readOnly}
+          />
+        </div>
       <div className='container'>
         <div className='row'>
           <div className='col-sm-3'>Check frequency</div>
           <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.tc.period} readOnly={this.state.readOnly}/>
           <span>second(s)</span>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Chart Minimum</div>
+          <input type='text' onChange={this.update('chart_min')} id='period' className='col-sm-1' value={this.state.tc.chart_min} readOnly={this.state.readOnly}/>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Chart Maximun</div>
+          <input type='text' onChange={this.update('chart_max')} id='period' className='col-sm-1' value={this.state.tc.chart_max} readOnly={this.state.readOnly}/>
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>

@@ -11,6 +11,7 @@ export default class New extends React.PureComponent {
       name: '',
       enable: false,
       period: 60,
+      fahrenheit: true,
       heater: '',
       cooler: '',
       control: false,
@@ -84,6 +85,17 @@ export default class New extends React.PureComponent {
             <input
               type='checkbox'
               onChange={this.updateCheckbox('enable')}
+              value={this.state.enable}
+              id='new_tc_enable'
+            />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-3'>Use Fahrenheit as unit</div>
+          <div className='col-sm-1'>
+            <input
+              type='checkbox'
+              onChange={this.updateCheckbox('fahrenheit')}
               value={this.state.enable}
               id='new_tc_enable'
             />

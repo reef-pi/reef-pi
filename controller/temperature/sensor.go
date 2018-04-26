@@ -26,22 +26,22 @@ func detectTempSensorDevice() (string, error) {
 func (c *Controller) Read(tc TC) (float32, error) {
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
-		return 78.0 + (3 * rand.Float32()), nil
+		if tc.Fahrenheit {
+			return twoDecimal(78.0 + (3 * rand.Float32())), nil
+		} else {
+			return twoDecimal(24.4 + (1.5 * rand.Float32())), nil
+		}
 	}
-	device, err := detectTempSensorDevice()
-	if err != nil {
-		return -1, err
-	}
-	log.Println("Reading temperature from device:", device)
-	fi, err := os.Open(device)
+	log.Println("Reading temperature from device:", tc.Sensor)
+	fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor))
 	if err != nil {
 		return -1, err
 	}
 	defer fi.Close()
-	return readTemperature(fi)
+	return tc.readTemperature(fi)
 }
 
-func readTemperature(fi io.Reader) (float32, error) {
+func (t *TC) readTemperature(fi io.Reader) (float32, error) {
 	reader := bufio.NewReader(fi)
 	l1, _, err := reader.ReadLine()
 	if err != nil {
@@ -62,6 +62,10 @@ func readTemperature(fi io.Reader) (float32, error) {
 	if err != nil {
 		return -1, err
 	}
-	farenheit := ((float32(v) * 9.0) / 5000.0) + 32.0
-	return farenheit, nil
+	temp := float32(v) / 1000.0
+	if t.Fahrenheit {
+		temp = ((temp * 9.0) / 5.0) + 32.0
+	}
+
+	return temp, nil
 }
