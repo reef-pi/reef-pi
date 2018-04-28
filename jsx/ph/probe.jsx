@@ -44,9 +44,13 @@ export default class Probe extends React.Component {
       return(<div />)
     }
     return(
-      <div className='container'>
-        <CurrentChart id={this.props.data.id} width={500} height={300}/>
-        <HistoricalChart id={this.props.data.id} width={500} height={300}/>
+      <div className='row'>
+        <div className='col-sm-6'>
+          <CurrentChart probe_id={this.props.data.id} width={500} height={300}/>
+        </div>
+        <div className='col-sm-6'>
+          <HistoricalChart probe_id={this.props.data.id} width={500} height={300}/>
+        </div>
       </div>
     )
   }

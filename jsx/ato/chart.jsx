@@ -1,8 +1,8 @@
 import React from 'react'
 import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
-import Common from '../common.jsx'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class ATOChart extends Common {
+export default class ATOChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -27,7 +27,7 @@ export default class ATOChart extends Common {
   }
 
   info () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/atos/'+this.props.ato_id,
       success: function (data) {
         this.setState({
@@ -38,32 +38,29 @@ export default class ATOChart extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/atos/'+this.props.ato_id+'/usage',
       success: function (data) {
         this.setState({
           usage: data,
-          showAlert: false
         })
       }.bind(this)
     })
   }
+
   render () {
     if (this.state.usage.length <= 0) {
       return (<div />)
     }
     return (
       <div className='container'>
-        {super.render()}
-        <div className='row'>
-          <span className='h6'>ATO - {this.state.config.name}</span>
-          <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
-            <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label='minutes' />
-            <XAxis dataKey='time' />
-            <Tooltip />
-          </BarChart>
-        </div>
+        <span className='h6'>ATO - {this.state.config.name}</span>
+        <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
+          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
+          <YAxis label='minutes' />
+          <XAxis dataKey='time' />
+          <Tooltip />
+        </BarChart>
       </div>
     )
   }
