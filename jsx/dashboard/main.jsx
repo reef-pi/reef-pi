@@ -9,6 +9,7 @@ import LightChart from '../lighting/chart.jsx'
 import ATOChart from '../ato/chart.jsx'
 import Summary from '../summary.jsx'
 import HealthChart from '../health_chart.jsx'
+import PhChart from '../ph/historical_chart.jsx'
 
 export default class Dashboard extends React.Component {
   constructor (props) {
@@ -66,6 +67,12 @@ export default class Dashboard extends React.Component {
             )
             break;
           case  'ph':
+            columns.push(
+              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
+                <PhChart width={config.width} height={config.height} probe_id={ch.id} />
+              </div>
+            )
+            break;
             break;
           case 'health':
             columns.push(

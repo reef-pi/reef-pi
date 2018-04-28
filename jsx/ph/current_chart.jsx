@@ -26,7 +26,7 @@ export default class CurrentChart extends React.Component {
 
   fetch () {
     ajaxGet({
-      url: '/api/phprobes/'+this.props.id+'/readings',
+      url: '/api/phprobes/'+this.props.probe_id+'/readings',
       success: function (data) {
         this.setState({
           readings: data,
