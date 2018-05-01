@@ -45,6 +45,7 @@ export default class CurrentChart extends React.Component {
           <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false}/>
           <XAxis dataKey='time' />
           <Tooltip />
+          <YAxis />
         </LineChart>
       </div>
     )

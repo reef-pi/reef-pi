@@ -58,6 +58,7 @@ export default class HistoricalChart extends React.Component {
         <LineChart width={this.props.width} height={this.props.height} data={this.state.readings.historical}>
           <Line dataKey='pH' stroke='#139535' isAnimationActive={false} dot={false}/>
           <XAxis dataKey='time' />
+          <YAxis />
           <Tooltip />
         </LineChart>
       </div>
