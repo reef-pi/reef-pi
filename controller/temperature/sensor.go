@@ -33,7 +33,7 @@ func (c *Controller) Read(tc TC) (float32, error) {
 		}
 	}
 	log.Println("Reading temperature from device:", tc.Sensor)
-	fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor))
+	fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor, "w1_slave"))
 	if err != nil {
 		return -1, err
 	}
