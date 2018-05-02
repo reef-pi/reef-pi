@@ -103,6 +103,7 @@ export default class Grid extends React.Component {
      cells[i][j].type = k
      cells[i][j].ui = this.cellUI(k, '', i, j)
      this.setState({cells: cells})
+     this.props.hook(cells)
     }.bind(this))
   }
 
