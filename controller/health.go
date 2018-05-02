@@ -1,16 +1,17 @@
 package controller
 
 import (
-	"container/ring"
+	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"log"
 	"math"
-	"sort"
 	"time"
 )
+
+const HealthStatsKey = "health_stats"
 
 type HealthCheckNotify struct {
 	Enable    bool    `json:"enable"`
@@ -22,24 +23,44 @@ type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
 	telemetry *utils.Telemetry
-	mUsage    *ring.Ring
-	hUsage    *ring.Ring
 	Notify    HealthCheckNotify
 	store     utils.Store
+	statsMgr  *utils.StatsManager
 }
 
-type MinutelyHealthMetric struct {
+type HealthMetric struct {
 	Load5      float64        `json:"cpu"`
 	UsedMemory float64        `json:"memory"`
 	Time       utils.TeleTime `json:"time"`
+	len        int
+	loadSum    float64
+	memorySum  float64
 }
 
-type HourlyHealthMetric struct {
-	Load5      float64        `json:"cpu"`
-	UsedMemory float64        `json:"memory"`
-	Time       utils.TeleTime `json:"time"`
-	lReadings  []float64
-	mReadings  []float64
+func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
+	m2 := mx.(HealthMetric)
+	m := HealthMetric{
+		Time:       m1.Time,
+		Load5:      m1.Load5,
+		UsedMemory: m1.UsedMemory,
+		len:        m1.len,
+		loadSum:    m1.loadSum,
+		memorySum:  m1.memorySum,
+	}
+	if m1.Time.Hour() == m2.Time.Hour() {
+		m.loadSum += m2.Load5
+		m.memorySum += m2.UsedMemory
+		m.len += 1
+		m.Load5 = m.loadSum / float64(m.len)
+		m.UsedMemory = m.memorySum / float64(m.len)
+		return m, false
+	}
+	return m2, true
+}
+
+func (m1 HealthMetric) Before(mx utils.Metric) bool {
+	m2 := mx.(HealthMetric)
+	return m1.Time.Before(m2.Time)
 }
 
 func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry, store utils.Store) *HealthChecker {
@@ -47,57 +68,10 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *util
 		interval:  i,
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
-		mUsage:    ring.New(60 * 3), // last 3 hours
-		hUsage:    ring.New(24 * 7), // last 7 days
 		Notify:    notify,
+		statsMgr:  utils.NewStatsManager(store, Bucket, 180, 24*7),
 		store:     store,
 	}
-}
-
-func (h *HealthChecker) syncHourlyMetric(now utils.TeleTime) HourlyHealthMetric {
-	current := HourlyHealthMetric{
-		Time:      now,
-		lReadings: []float64{},
-		mReadings: []float64{},
-	}
-	if h.hUsage.Value == nil {
-		h.hUsage.Value = current
-		return current
-	}
-	previous, ok := h.hUsage.Value.(HourlyHealthMetric)
-	if !ok {
-		log.Println("ERROR: health checker. Failed to typecast previous health check metric")
-		return current
-	}
-	if previous.Time.Hour() == current.Time.Hour() {
-		return previous
-	}
-	h.hUsage = h.hUsage.Next()
-	h.hUsage.Value = current
-	return current
-}
-
-func (h *HealthChecker) updateUsage(memory, load float64) {
-	now := utils.TeleTime(time.Now())
-	h.mUsage.Value = MinutelyHealthMetric{
-		Load5:      load,
-		UsedMemory: memory,
-		Time:       now,
-	}
-	h.mUsage = h.mUsage.Next()
-	hUsage := h.syncHourlyMetric(now)
-	hUsage.lReadings = append(hUsage.lReadings, load)
-	hUsage.mReadings = append(hUsage.mReadings, memory)
-	size := len(hUsage.lReadings)
-	lTotal := 0.0
-	mTotal := 0.0
-	for i := 0; i < size; i++ {
-		lTotal += hUsage.lReadings[i]
-		mTotal += hUsage.mReadings[i]
-	}
-	hUsage.Load5 = lTotal / float64(len(hUsage.lReadings))
-	hUsage.UsedMemory = mTotal / float64(len(hUsage.mReadings))
-	h.hUsage.Value = hUsage
 }
 
 func (h *HealthChecker) check() {
@@ -114,9 +88,17 @@ func (h *HealthChecker) check() {
 		return
 	}
 	usedMemory := (math.Floor(vmStat.UsedPercent * 100)) / 100.0
+	metric := HealthMetric{
+		Load5:      loadStat.Load5,
+		UsedMemory: usedMemory,
+		len:        1,
+		loadSum:    loadStat.Load5,
+		memorySum:  usedMemory,
+		Time:       utils.TeleTime(time.Now()),
+	}
 	h.telemetry.EmitMetric("system-mem-used", usedMemory)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
-	h.updateUsage(usedMemory, loadStat.Load5)
+	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
 }
 
@@ -140,7 +122,9 @@ func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
 func (h *HealthChecker) Stop() {
 	log.Println("Stopping health checker")
 	h.stopCh <- struct{}{}
-	h.saveUsage()
+	if err := h.statsMgr.Save(HealthStatsKey); err != nil {
+		log.Println("ERROR: health checker. Failed to save usage. Error:", err)
+	}
 }
 
 func (h *HealthChecker) setup() {
@@ -150,7 +134,14 @@ func (h *HealthChecker) setup() {
 
 func (h *HealthChecker) Start() {
 	h.setup()
-	h.loadUsage()
+	fn := func(d json.RawMessage) interface{} {
+		u := HealthMetric{}
+		json.Unmarshal(d, &u)
+		return u
+	}
+	if err := h.statsMgr.Load(HealthStatsKey, fn); err != nil {
+		log.Println("ERROR: health checker. Failed to load usage. Error:", err)
+	}
 	log.Println("Starting health checker")
 	ticker := time.NewTicker(h.interval)
 	for {
@@ -161,77 +152,5 @@ func (h *HealthChecker) Start() {
 			ticker.Stop()
 			return
 		}
-	}
-}
-
-func (h *HealthChecker) GetWeeklyUsage() ([]HourlyHealthMetric, error) {
-	usage := []HourlyHealthMetric{}
-	h.hUsage.Do(func(i interface{}) {
-		if i != nil {
-			u, ok := i.(HourlyHealthMetric)
-			if !ok {
-				log.Println("ERROR: health controller subsystem. Failed to typecast hourly usage")
-				return
-			}
-			usage = append(usage, u)
-		}
-	})
-	sort.Slice(usage, func(i, j int) bool {
-		return usage[i].Time.Before(usage[j].Time)
-	})
-	return usage, nil
-}
-
-func (h *HealthChecker) GetHourlyUsage() ([]MinutelyHealthMetric, error) {
-	usage := []MinutelyHealthMetric{}
-	h.mUsage.Do(func(i interface{}) {
-		if i != nil {
-			u, ok := i.(MinutelyHealthMetric)
-			if !ok {
-				log.Println("ERROR: health check sub-system. Failed to typecast cpu/memory  usage")
-				return
-			}
-			usage = append(usage, u)
-		}
-	})
-	sort.Slice(usage, func(i, j int) bool {
-		return usage[i].Time.Before(usage[j].Time)
-	})
-	return usage, nil
-}
-
-func (h *HealthChecker) loadUsage() {
-	var mUsage []MinutelyHealthMetric
-	var hUsage []HourlyHealthMetric
-	if err := h.store.Get(Bucket, "m_usage", &mUsage); err != nil {
-		log.Println("ERROR: health check sub-system failed to restore hourly usage statistics from db. Error:", err)
-	}
-	if err := h.store.Get(Bucket, "h_usage", &hUsage); err != nil {
-		log.Println("ERROR: health check sub-system failed to restore weekly usage statistics from db. Error:", err)
-	}
-	for _, u := range mUsage {
-		h.mUsage.Value = u
-		h.mUsage = h.mUsage.Next()
-	}
-	for _, u := range hUsage {
-		h.hUsage.Value = u
-		h.hUsage = h.hUsage.Next()
-	}
-}
-
-func (h *HealthChecker) saveUsage() {
-	mUsage, err := h.GetHourlyUsage()
-	if err != nil {
-		log.Println("ERROR: health check sub-system failed to fetch hourly usage statistic. Error:", err)
-	}
-	if err := h.store.Update(Bucket, "m_usage", mUsage); err != nil {
-		log.Println("ERROR: health check sub-system failed to save hourly usage statistics in db. Error:", err)
-	}
-	hUsage, err := h.GetWeeklyUsage()
-	if err != nil {
-		log.Println("ERROR: health check sub-system failed to fetch weekly usage statistic. Error:", err)
-	}
-	if err := h.store.Update(Bucket, "h_usage", hUsage); err != nil {
-		log.Println("ERROR: health check sub-system failed to save weekly usage statistics in db. Error:", err)
 	}
 }

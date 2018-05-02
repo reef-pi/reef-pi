@@ -41,8 +41,7 @@ func (r *ReefPi) loadAPI(router *mux.Router) {
 	router.HandleFunc("/api/telemetry", r.getTelemetry).Methods("GET")
 	router.HandleFunc("/api/telemetry", r.updateTelemetry).Methods("POST")
 	if r.h != nil {
-		router.HandleFunc("/api/health_stats/hour", r.getHourlyHealthStats).Methods("GET")
-		router.HandleFunc("/api/health_stats/week", r.getWeeklyHealthStats).Methods("GET")
+		router.HandleFunc("/api/health_stats", r.getHealthStats).Methods("GET")
 	}
 	r.outlets.LoadAPI(router)
 	r.inlets.LoadAPI(router)
@@ -91,16 +90,7 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 	return nil, router
 }
 
-func (r *ReefPi) getHourlyHealthStats(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return r.h.GetHourlyUsage()
-	}
-	utils.JSONGetResponse(fn, w, req)
-}
-
-func (r *ReefPi) getWeeklyHealthStats(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return r.h.GetWeeklyUsage()
-	}
+func (r *ReefPi) getHealthStats(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) { return r.h.statsMgr.Get(HealthStatsKey) }
 	utils.JSONGetResponse(fn, w, req)
 }
