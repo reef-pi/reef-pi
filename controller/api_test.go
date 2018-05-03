@@ -31,11 +31,9 @@ func TestAPI(t *testing.T) {
 	tr := utils.NewTestRouter()
 
 	r.loadAPI(tr.Router)
-	if err := tr.Do("GET", "/api/health_stats/hour", new(bytes.Buffer), nil); err != nil {
+	r.h.check()
+	if err := tr.Do("GET", "/api/health_stats", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to get per minute health data.Error:", err)
-	}
-	if err := tr.Do("GET", "/api/health_stats/week", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to get per minute health data. Error:", err)
 	}
 	body := new(bytes.Buffer)
 	json.NewEncoder(body).Encode(&DefaultCredentials)

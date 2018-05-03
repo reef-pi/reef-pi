@@ -14,6 +14,4 @@ func TestHealthChecker(t *testing.T) {
 	h := NewHealthChecker(1, HealthCheckNotify{}, telemetry, store)
 	h.Notify.Enable = true
 	h.check()
-	h.updateUsage(1, 1)
-
 }
