@@ -36,6 +36,7 @@ type StatsManager struct {
 	CurrentLimit    int
 	HistoricalLimit int
 	store           Store
+	SaveOnRollup    bool
 }
 
 func NewStatsManager(store Store, b string, c, h int) *StatsManager {
@@ -46,6 +47,7 @@ func NewStatsManager(store Store, b string, c, h int) *StatsManager {
 		CurrentLimit:    c,
 		store:           store,
 		HistoricalLimit: h,
+		SaveOnRollup:    true,
 	}
 }
 
@@ -133,6 +135,9 @@ func (m *StatsManager) Update(id string, metric Metric) {
 	m1, move := stats.Historical.Value.(Metric).Rollup(metric)
 	if move {
 		stats.Historical = stats.Historical.Next()
+		if m.SaveOnRollup {
+			m.store.Update(m.bucket, id, stats)
+		}
 	}
 	stats.Historical.Value = m1
 	m.inMemory[id] = stats
