@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
 	"time"
@@ -114,7 +115,13 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 			}
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
 			notifyIfNeeded(c.telemetry, p.Name, p.Config.Notify, reading)
-			c.updateReadings(p.ID, reading)
+			m := Measurement{
+				Time: utils.TeleTime(time.Now()),
+				Ph:   reading,
+				len:  1,
+				sum:  reading,
+			}
+			c.statsMgr.Update(p.ID, m)
 		case <-quit:
 			ticker.Stop()
 			return
