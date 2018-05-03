@@ -32,9 +32,7 @@ func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
-	fn := func(id string) (interface{}, error) {
-		return c.GetReadings(id)
-	}
+	fn := func(id string) (interface{}, error) { return c.statsMgr.Get(id) }
 	utils.JSONGetResponse(fn, w, r)
 }
 

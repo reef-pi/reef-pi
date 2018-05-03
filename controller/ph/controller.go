@@ -1,6 +1,7 @@
 package ph
 
 import (
+	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
@@ -19,8 +20,8 @@ type Controller struct {
 	store     utils.Store
 	quitters  map[string]chan struct{}
 	bus       i2c.Bus
-	readings  map[string]Readings
 	mu        *sync.Mutex
+	statsMgr  *utils.StatsManager
 }
 
 func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemetry) *Controller {
@@ -30,8 +31,8 @@ func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemet
 		store:     store,
 		bus:       bus,
 		quitters:  make(map[string]chan struct{}),
-		readings:  make(map[string]Readings),
 		mu:        &sync.Mutex{},
+		statsMgr:  utils.NewStatsManager(store, ReadingsBucket, 180, 24*7),
 	}
 }
 
@@ -52,7 +53,14 @@ func (c *Controller) Start() {
 		if !p.Enable {
 			continue
 		}
-		c.loadReadings(p.ID)
+		fn := func(d json.RawMessage) interface{} {
+			u := Measurement{}
+			json.Unmarshal(d, &u)
+			return u
+		}
+		if err := c.statsMgr.Load(p.ID, fn); err != nil {
+			log.Println("ERROR: ph controller. Failed to load usage. Error:", err)
+		}
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -62,7 +70,10 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	for id, quit := range c.quitters {
 		close(quit)
-		c.saveReadings(id)
+		if err := c.statsMgr.Save(id); err != nil {
+			log.Println("ERROR: ph controller. Failed to save usage. Error:", err)
+		}
+		log.Println("ph sub-system: Saved usaged data of sensor:", id)
 		delete(c.quitters, id)
 	}
 }
