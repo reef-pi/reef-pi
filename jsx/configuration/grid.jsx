@@ -50,7 +50,8 @@ export default class Grid extends React.Component {
       case 'light':
         data = this.props.lights
         break;
-      case 'ph':
+      case 'ph-current':
+      case 'ph-historical':
         data = this.props.phs
         break;
       case 'temperature':
@@ -122,7 +123,8 @@ export default class Grid extends React.Component {
      this.menuItem('equipment', false, i, j),
      this.menuItem('health', false, i, j),
      this.menuItem('light', false, i, j),
-     this.menuItem('ph', false, i, j),
+     this.menuItem('ph-current', false, i, j),
+     this.menuItem('ph-historical', false, i, j),
      this.menuItem('tc', false, i, j),
      this.menuItem('temperature', false, i, j),
    ]
