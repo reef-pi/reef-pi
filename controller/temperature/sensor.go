@@ -3,6 +3,7 @@ package temperature
 import (
 	"bufio"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"io"
 	"log"
 	"math/rand"
@@ -23,13 +24,13 @@ func detectTempSensorDevice() (string, error) {
 	return filepath.Join(files[0], "w1_slave"), nil
 }
 
-func (c *Controller) Read(tc TC) (float32, error) {
+func (c *Controller) Read(tc TC) (float64, error) {
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
-			return twoDecimal(78.0 + (3 * rand.Float32())), nil
+			return utils.TwoDecimal(78.0 + (3 * rand.Float64())), nil
 		} else {
-			return twoDecimal(24.4 + (1.5 * rand.Float32())), nil
+			return utils.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 		}
 	}
 	log.Println("Reading temperature from device:", tc.Sensor)
@@ -41,7 +42,7 @@ func (c *Controller) Read(tc TC) (float32, error) {
 	return tc.readTemperature(fi)
 }
 
-func (t *TC) readTemperature(fi io.Reader) (float32, error) {
+func (t *TC) readTemperature(fi io.Reader) (float64, error) {
 	reader := bufio.NewReader(fi)
 	l1, _, err := reader.ReadLine()
 	if err != nil {
@@ -62,10 +63,9 @@ func (t *TC) readTemperature(fi io.Reader) (float32, error) {
 	if err != nil {
 		return -1, err
 	}
-	temp := float32(v) / 1000.0
+	temp := float64(v) / 1000.0
 	if t.Fahrenheit {
 		temp = ((temp * 9.0) / 5.0) + 32.0
 	}
-
 	return temp, nil
 }
