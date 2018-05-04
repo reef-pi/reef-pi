@@ -45,7 +45,7 @@ export default class Grid extends React.Component {
         return(<span>-</span>)
         break;
       case 'health':
-        return(<span>-</span>)
+        data = [{id: 'current', name: 'current'},{id: 'historical', name:'historical'}]
         break;
       case 'light':
         data = this.props.lights

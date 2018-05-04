@@ -77,7 +77,7 @@ export default class Dashboard extends React.Component {
           case 'health':
             columns.push(
               <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <HealthChart width={config.width} height={config.height} />
+                <HealthChart width={config.width} height={config.height} trend={ch.id}/>
               </div>
             )
             break;

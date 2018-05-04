@@ -6,7 +6,8 @@ export default class HealthChart extends Common {
   constructor (props) {
     super(props)
     this.state = {
-      health_stats: []
+      health_stats: [],
+      trend: this.props.trend !== undefined ? this.props.trend : 'current'
     }
     this.fetch = this.fetch.bind(this)
   }
@@ -26,7 +27,7 @@ export default class HealthChart extends Common {
       url: '/api/health_stats',
       success: function (data) {
         this.setState({
-          health_stats: data.current,
+          health_stats: data[this.state.trend],
           showAlert: false
         })
       }.bind(this)
