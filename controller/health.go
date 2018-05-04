@@ -51,8 +51,8 @@ func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
 		m.loadSum += m2.Load5
 		m.memorySum += m2.UsedMemory
 		m.len += 1
-		m.Load5 = m.loadSum / float64(m.len)
-		m.UsedMemory = m.memorySum / float64(m.len)
+		m.Load5 = utils.TwoDecimal(m.loadSum / float64(m.len))
+		m.UsedMemory = utils.TwoDecimal(m.memorySum / float64(m.len))
 		return m, false
 	}
 	return m2, true

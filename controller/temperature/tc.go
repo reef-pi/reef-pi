@@ -10,8 +10,8 @@ import (
 type TC struct {
 	ID         string        `json:"id"`
 	Name       string        `json:"name"`
-	Max        float32       `json:"max"`
-	Min        float32       `json:"min"`
+	Max        float64       `json:"max"`
+	Min        float64       `json:"min"`
 	Heater     string        `json:"heater"`
 	Cooler     string        `json:"cooler"`
 	Period     time.Duration `json:"period"`
@@ -20,13 +20,13 @@ type TC struct {
 	Notify     Notify        `json:"notify"`
 	Sensor     string        `json:"sensor"`
 	Fahrenheit bool          `json:"fahrenheit"`
-	ChartMin   float32       `json:"chart_min"`
-	ChartMax   float32       `json:"chart_max"`
+	ChartMin   float64       `json:"chart_min"`
+	ChartMax   float64       `json:"chart_max"`
 }
 type Notify struct {
 	Enable bool    `json:"enable"`
-	Max    float32 `json:"max"`
-	Min    float32 `json:"min"`
+	Max    float64 `json:"max"`
+	Min    float64 `json:"min"`
 }
 
 func (c *Controller) Get(id string) (TC, error) {

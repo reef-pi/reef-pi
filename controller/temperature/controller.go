@@ -33,10 +33,6 @@ func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equip
 	}, nil
 }
 
-func twoDecimal(v float32) float32 {
-	return float32(int(v*100)) / 100
-}
-
 func (c *Controller) Setup() error {
 	if err := c.store.CreateBucket(Bucket); err != nil {
 		return err

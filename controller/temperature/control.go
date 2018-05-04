@@ -9,15 +9,15 @@ import (
 
 type Measurement struct {
 	Time        utils.TeleTime `json:"time"`
-	Temperature float32        `json:"temperature"`
+	Temperature float64        `json:"temperature"`
 }
 
 type Usage struct {
 	Heater      int            `json:"heater"`
 	Cooler      int            `json:"cooler"`
 	Time        utils.TeleTime `json:"time"`
-	Temperature float32        `json:"temperature"`
-	total       float32
+	Temperature float64        `json:"temperature"`
+	total       float64
 	len         int
 }
 
@@ -36,7 +36,7 @@ func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
 		u.Cooler += u2.Cooler
 		u.total += u2.Temperature
 		u.len += 1
-		u.Temperature = twoDecimal(float32(u.total) / float32(u.len))
+		u.Temperature = utils.TwoDecimal(u.total / float64(u.len))
 		return u, false
 	}
 	return u2, true
@@ -122,7 +122,7 @@ func (c *Controller) switchOffAll(tc TC) {
 	}
 }
 
-func (c *Controller) NotifyIfNeeded(tc TC, reading float32) {
+func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
 	if !tc.Notify.Enable {
 		return
 	}
