@@ -104,7 +104,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	for {
 		select {
 		case <-ticker.C:
-			reading := 8 + rand.Float64()*2
+			reading := utils.TwoDecimal(8 + rand.Float64()*2)
 			if !c.config.DevMode {
 				v, err := d.Read()
 				if err != nil {
