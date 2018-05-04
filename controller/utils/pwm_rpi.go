@@ -27,7 +27,7 @@ func (d *rpiDriver) Set(pin, percentage int) error {
 	if (percentage > 100) || (percentage < 0) {
 		return fmt.Errorf("Invalid percentage:%d. Valid range is between 0 to 100", percentage)
 	}
-	return d.driver.DutyCycle(pin, (d.Freq*100)/percentage)
+	return d.driver.DutyCycle(pin, (d.Freq/100)*percentage)
 
 }
 func (d *rpiDriver) Get(pin int) (int, error) {
