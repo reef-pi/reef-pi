@@ -57,7 +57,7 @@ export default class ReadingsChart extends React.Component {
     var max = this.state.config.chart_max
     return (
       <div className='container'>
-        <span className='h6'>Temperature - {this.state.config.name}</span>
+        <span className='h6'>{this.state.config.name} - Temperature</span>
         <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
           <defs>
             <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>

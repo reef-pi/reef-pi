@@ -41,7 +41,7 @@ export default class HealthChart extends Common {
     return (
       <div className='container'>
         {super.render()}
-        <span className='h6'>CPU/Memory</span>
+        <span className='h6'>CPU/Memory ({this.props.trend})</span>
         <LineChart width={this.props.width} height={this.props.height} data={this.state.health_stats}>
           <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
           <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
