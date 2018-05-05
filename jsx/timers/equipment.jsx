@@ -59,7 +59,7 @@ export default class Equipment extends Common {
   equipmentList () {
     var menuItems = []
     $.each(this.state.equipments, function (k, v) {
-      menuItems.push(<MenuItem key={k} eventKey={k}>{v.name}</MenuItem>)
+      menuItems.push(<MenuItem key={k} eventKey={k}><span id={'equipment-'+v.id}>{v.name}</span></MenuItem>)
     })
     return menuItems
   }
@@ -106,11 +106,11 @@ export default class Equipment extends Common {
             </div>
             <div className='row'>
               <label className='col-sm-6'> Revert</label>
-              <input type='checkbox' onClick={this.updateRevert} defaultChecked={false}/>
+              <input id='equipment-revert' type='checkbox' onClick={this.updateRevert} defaultChecked={false}/>
             </div>
             <div className='row'>
               <label className='col-sm-6'> Duration</label>
-              <input type='text' className='col-sm-6' onChange={this.updateDuration}/> (in seconds)
+              <input id='equipment-action-duration' type='text' className='col-sm-6' onChange={this.updateDuration}/> (in seconds)
             </div>
           </div>
       </div>
