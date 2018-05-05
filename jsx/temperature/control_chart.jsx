@@ -70,7 +70,7 @@ export default class ControlChart extends React.Component {
 
     return (
       <div className='container'>
-        <span className='h6'>Heater/Cooler - {this.state.config.name}</span>
+        <span className='h6'>{this.state.config.name} - Heater/Cooler</span>
         <ComposedChart width={this.props.width} height={this.props.height} data={this.state.usage}>
           <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
           <YAxis yAxisId='right' orientation='right' />

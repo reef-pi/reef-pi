@@ -6,20 +6,36 @@ export default class PhChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      metrics: []
+      metrics: [],
+      config: {
+        name: ''
+      }
     }
     this.fetch = this.fetch.bind(this)
+    this.info = this.info.bind(this)
   }
 
   componentDidMount () {
     var timer = window.setInterval(this.fetch, 10 * 1000)
     this.setState({timer: timer})
     this.fetch()
+    this.info()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
+  info () {
+    ajaxGet({
+      url: '/api/phprobes/'+this.props.probe_id,
+      success: function (data) {
+        this.setState({
+          config: data
+        })
+      }.bind(this)
+    })
+  }
+
 
   fetch () {
     ajaxGet({
@@ -37,7 +53,7 @@ export default class PhChart extends React.Component {
     }
     return (
       <div className='container'>
-        <span className='h6'>Current</span>
+        <span className='h6'>{this.state.config.name}-{this.props.type} pH</span>
         <LineChart
           width={this.props.width}
           height={this.props.height}
