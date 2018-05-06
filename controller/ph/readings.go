@@ -20,7 +20,7 @@ func (m1 Measurement) Rollup(mx utils.Metric) (utils.Metric, bool) {
 	if m1.Time.Hour() == m2.Time.Hour() {
 		m.sum += m2.Ph
 		m.len += 1
-		m.Ph = m.sum / float64(m.len)
+		m.Ph = utils.TwoDecimal(m.sum / float64(m.len))
 		return m, false
 	}
 	return m2, true
