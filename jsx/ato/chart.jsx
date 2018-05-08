@@ -54,7 +54,7 @@ export default class ATOChart extends React.Component {
     }
     return (
       <div className='container'>
-        <span className='h6'>{this.state.config.name} - ATO Usgae</span>
+        <span className='h6'>{this.state.config.name} - ATO Usage</span>
         <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
           <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
           <YAxis label='minutes' />
