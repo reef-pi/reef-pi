@@ -3,10 +3,11 @@ import Admin from './admin.jsx'
 import Settings from './settings.jsx'
 import Telemetry from '../telemetry/main.jsx'
 import Dashboard from './dashboard.jsx'
-import Common from '../common.jsx'
 import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
-export default class Configuration extends Common {
+
+
+export default class Configuration extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

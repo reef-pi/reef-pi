@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import {showAlert, hideAlert} from '../utils/alert.js'
 
 
 export default class Config extends React.Component {
@@ -9,7 +10,6 @@ export default class Config extends React.Component {
     super(props)
     this.state = {
       config: this.props.config,
-      showAlert: false,
       updated: true
     }
 
@@ -22,10 +22,7 @@ export default class Config extends React.Component {
     var config = this.state.config
     config.tick_interval = parseInt(config.tick_interval)
     if (isNaN(config.tick_interval)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Tick interval has to be a positive integer'
-      })
+      showAlert('Tick interval has to be a positive integer')
       return
     }
     ajaxPost({
@@ -33,6 +30,7 @@ export default class Config extends React.Component {
       data: JSON.stringify(config),
       success: function (data) {
         this.setState({updated: false})
+        hideAlert()
       }.bind(this)
     })
   }
@@ -43,9 +41,9 @@ export default class Config extends React.Component {
       config[k] = ev.target.checked
       this.setState({
         config: config,
-        showAlert: false,
         updated: true
       })
+      hideAlert()
    }.bind(this))
   }
 
@@ -55,9 +53,9 @@ export default class Config extends React.Component {
       config[k] = ev.target.value
       this.setState({
         config: config,
-        showAlert: false,
         updated: true
       })
+      hideAlert()
     }.bind(this)
     )
   }

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
-import Common from './common.jsx'
+import {ajaxGet} from './utils/ajax.js'
+import {hideAlert} from './utils/alert.js'
 
-export default class HealthChart extends Common {
+export default class HealthChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -23,13 +24,13 @@ export default class HealthChart extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/health_stats',
       success: function (data) {
         this.setState({
-          health_stats: data[this.state.trend],
-          showAlert: false
+          health_stats: data[this.state.trend]
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -40,7 +41,6 @@ export default class HealthChart extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <span className='h6'>CPU/Memory ({this.props.trend})</span>
         <LineChart width={this.props.width} height={this.props.height} data={this.state.health_stats}>
           <YAxis yAxisId='left' orientation='left' stroke='#00c851' />

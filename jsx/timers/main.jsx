@@ -1,12 +1,13 @@
 import React from 'react'
 import $ from 'jquery'
-import Common from '../common.jsx'
 import Reminder from './reminder.jsx'
 import Timer from './timer.jsx'
 import Cron from './cron.jsx'
 import Equipment from './equipment.jsx'
+import {showAlert, hideAlert} from '../utils/alert.js'
+import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
 
-export default class Timers extends Common {
+export default class Timers extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -54,13 +55,13 @@ export default class Timers extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/timers',
       success: function (data) {
         this.setState({
           timers: data,
-          showAlert: false
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -86,10 +87,11 @@ export default class Timers extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        this.ajaxDelete({
+        ajaxDelete({
           url: '/api/timers/' + id,
           success: function (data) {
             this.fetchData()
+            hideAlert()
           }.bind(this)
         })
       }.bind(this))
@@ -98,47 +100,29 @@ export default class Timers extends Common {
 
   createTimer () {
     if ($('#name').val() === '') {
-      this.setState({
-        alertMsg: 'Specify timer name',
-        showAlert: true
-      })
+      showAlert('Specify timer name')
       return
     }
     if ($('#day').val() === '') {
-      this.setState({
-        alertMsg: 'Specify a value for "day"',
-        showAlert: true
-      })
+      showAlert('Specify a value for "day"')
       return
     }
     if ($('#hour').val() === '') {
-      this.setState({
-        alertMsg: 'Specify a value for "hour"',
-        showAlert: true
-      })
+      showAlert('Specify a value for "hour"')
       return
     }
     if ($('#minute').val() === '') {
-      this.setState({
-        alertMsg: 'Specify a value for "minute"',
-        showAlert: true
-      })
+      showAlert('Specify a value for "minute"')
       return
     }
     if ($('#second').val() === '') {
-      this.setState({
-        alertMsg: 'Specify a value for "second"',
-        showAlert: true
-      })
+      showAlert('Specify a value for "second"')
       return
     }
     switch (this.state.type) {
       case 'equipment':
         if (this.state.equipment === undefined) {
-          this.setState({
-            alertMsg: 'Select an equipment',
-            showAlert: true
-          })
+          showAlert('Select an equipment')
           return
         }
         var eq = this.state.equipment
@@ -158,12 +142,13 @@ export default class Timers extends Common {
       type: this.state.type,
       reminder: this.state.reminder
     }
-    this.ajaxPut({
+    ajaxPut({
       url: '/api/timers',
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.toggleAddTimerDiv()
+        hideAlert()
       }.bind(this)
     })
   };
@@ -185,7 +170,6 @@ export default class Timers extends Common {
     }
     return (
       <div className='container'>
-        {this.showAlert()}
         <ul>{this.timerList()}</ul>
         <div className='container'>
           <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
@@ -212,7 +196,6 @@ export default class Timers extends Common {
             </div>
             <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
           </div>
-
         </div>
       </div>
     )

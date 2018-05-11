@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import React from 'react'
 import {ajaxPut} from '../utils/ajax.js'
+import {showAlert, hideAlert} from '../utils/alert.js'
 import JackSelector from '../jack_selector.jsx'
 
 export default class New extends React.Component {
@@ -62,10 +63,7 @@ export default class New extends React.Component {
   
   add () {
     if (this.state.name === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Specify doser name'
-      })
+      showAlert('Specify doser name')
       return
     }
     var payload = {
@@ -77,6 +75,7 @@ export default class New extends React.Component {
       url: '/api/doser/pumps',
       data: JSON.stringify(payload),
       success: function (data) {
+        hideAlert()
         this.toggle()
         this.props.updateHook()
       }.bind(this)

@@ -11,10 +11,11 @@ import Doser from './doser/controller.jsx'
 import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
-import Common from './common.jsx'
+import {hideAlert} from './utils/alert.js'
+import {ajaxGet} from './utils/ajax.js'
 import 'react-tabs/style/react-tabs.css'
 
-export default class MainPanel extends Common {
+export default class MainPanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -36,19 +37,21 @@ export default class MainPanel extends Common {
 
   componentDidMount () {
     this.loadCapabilities()
+    hideAlert()
   }
 
   handleSelect (index, last) {
   }
 
   loadCapabilities () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/capabilities',
       success: function (data) {
         data.equipment = data.equipments
         this.setState({
           capabilities: data
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -73,12 +76,15 @@ export default class MainPanel extends Common {
     }.bind(this))
 
     return (
-      <Tabs >
-        <TabList>
-          {tabs}
-        </TabList>
-        {panels}
-      </Tabs>
+      <div className='containe'>
+        <div id='reef-pi-alert' className='alert alert-danger' />
+        <Tabs >
+          <TabList>
+            {tabs}
+          </TabList>
+          {panels}
+        </Tabs>
+      </div>
     )
   }
 }

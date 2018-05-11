@@ -1,9 +1,10 @@
 import React from 'react'
 import {Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
-import Common from '../common.jsx'
 import $ from 'jquery'
+import {ajaxGet} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class LightsChart extends Common {
+export default class LightsChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -20,13 +21,13 @@ export default class LightsChart extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/lights/'+this.props.light_id,
       success: function (data) {
         this.setState({
           config: data,
-          showAlert: false
         })
+        hideAlert()
       }.bind(this)
     })
   }

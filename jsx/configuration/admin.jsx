@@ -1,8 +1,9 @@
 import React from 'react'
-import Common from '../common.jsx'
 import SignIn from '../sign_in.jsx'
+import {ajaxPost} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class Admin extends Common {
+export default class Admin extends React.Component {
   constructor (props) {
     super(props)
     this.powerOff = this.powerOff.bind(this)
@@ -19,10 +20,11 @@ export default class Admin extends Common {
   reload () {
     this.confirm('Are you sure ?')
     .then(function () {
-      this.ajaxPost({
+      ajaxPost({
         url: '/api/admin/reload',
         success: function (data) {
-        }
+          hideAlert()
+        }.bind(this)
       })
     }.bind(this))
   }
@@ -30,7 +32,7 @@ export default class Admin extends Common {
   powerOff () {
     this.confirm('Are you sure ?')
     .then(function () {
-      this.ajaxPost({
+      ajaxPost({
         url: '/api/admin/poweroff',
         success: function () {}
       })
@@ -40,7 +42,7 @@ export default class Admin extends Common {
   reboot () {
     this.confirm('Are you sure ?')
     .then(function () {
-      this.ajaxPost({
+      ajaxPost({
         url: '/api/admin/reboot',
         success: function () {}
       })
@@ -50,7 +52,6 @@ export default class Admin extends Common {
   render () {
     return (
       <div className='container'>
-        {super.render()}
         <div className='btn-group'>
           <button onClick={this.signout} type='button' className='btn btn-outline-danger'>Sign Out</button>
           <button onClick={this.reload} type='button' className='btn btn-outline-danger'>Reload</button>

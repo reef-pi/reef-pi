@@ -1,10 +1,11 @@
 import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
-import Common from '../common.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
+import {showAlert, hideAlert} from '../utils/alert.js'
 
-export default class Equipments extends Common {
+export default class Equipments extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -42,16 +43,16 @@ export default class Equipments extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/equipments',
       success: function (data) {
         this.setState({
           equipments: data,
-          showAlert: false
         })
+        hideAlert()
       }.bind(this)
     })
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/outlets',
       success: function (data) {
         this.setState({
@@ -68,8 +69,8 @@ export default class Equipments extends Common {
   setOutlet (i, ev) {
     this.setState({
       selectedOutlet: i,
-      showAlert: false
     })
+    hideAlert()
   }
 
   outletList () {
@@ -82,10 +83,7 @@ export default class Equipments extends Common {
 
   addEquipment () {
     if (this.state.selectedOutlet === undefined) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Select an outlet'
-      })
+      showAlert('Select an outlet')
       return
     }
     var outletID = this.state.outlets[this.state.selectedOutlet].id
@@ -94,16 +92,11 @@ export default class Equipments extends Common {
       outlet: outletID
     }
     if (payload.name === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Specify equipment name'
-      })
+      showAlert('Specify equipment name')
       return
     }
-    this.setState({
-      showAlert: false
-    })
-    this.ajaxPut({
+    hideAlert()
+    ajaxPut({
       url: '/api/equipments',
       data: JSON.stringify(payload),
       success: function (data) {
@@ -120,10 +113,11 @@ export default class Equipments extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        this.ajaxDelete({
+        ajaxDelete({
           url: '/api/equipments/' + id,
           success: function (data) {
             this.fetchData()
+            hideAlert()
           }.bind(this)
         })
       }.bind(this))
@@ -148,7 +142,6 @@ export default class Equipments extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <ul className='list-group'>
           {this.equipmentList()}
         </ul>

@@ -1,9 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Common from '../common.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import {hideAlert} from '../utils/alert.js'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class Equipment extends Common {
+export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -65,13 +66,13 @@ export default class Equipment extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/equipments',
       success: function (data) {
         this.setState({
           equipments: data,
-          showAlert: false
         })
+        hideAlert()
       }.bind(this)
     })
   }

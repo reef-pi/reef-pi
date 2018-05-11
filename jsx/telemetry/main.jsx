@@ -1,9 +1,10 @@
 import React from 'react'
 import NotificationSettings from './notification.jsx'
 import AdafruitIO from './adafruit_io.jsx'
-import Common from '../common.jsx'
+import {ajaxPost, ajaxGet} from '../utils/ajax.js'
+import {showAlert, hideAlert} from '../utils/alert.js'
 
-export default class Telemetry extends Common {
+export default class Telemetry extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -33,42 +34,31 @@ export default class Telemetry extends Common {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/telemetry',
       data: JSON.stringify(c),
       success: function (data) {
         this.setState({updated: false, config: c})
+        hideAlert()
       }.bind(this)
     })
   }
 
   updateMailer (mailer) {
     if (mailer.server === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Please set a valid mail server'
-      })
+      showAlert('Please set a valid mail server')
       return
     }
     if (mailer.password === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Please set a valid mail passowrd'
-      })
+      showAlert('Please set a valid mail passowrd')
       return
     }
     if (mailer.To === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Please set a valid mail recepient (To)'
-      })
+      showAlert('Please set a valid mail recepient (To)')
       return
     }
     if (mailer.From === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Please set a valid mail sender (From)'
-      })
+      showAlert('Please set a valid mail sender (From)')
       return
     }
     var c = this.state.config
@@ -80,13 +70,13 @@ export default class Telemetry extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/telemetry',
       success: function (data) {
         this.setState({
           config: data,
-          showAlert: false
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -98,17 +88,11 @@ export default class Telemetry extends Common {
   updateAio (adafruitio) {
     if (adafruitio.enable) {
       if (adafruitio.user === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid adafruit.io user'
-        })
+        showAlert('Please set a valid adafruit.io user')
         return
       }
       if (adafruitio.token === '') {
-        this.setState({
-          showAlert: true,
-          alertMsg: 'Please set a valid adafruit.io key'
-        })
+        showAlert('Please set a valid adafruit.io key')
         return
       }
     }

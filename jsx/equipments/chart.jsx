@@ -1,9 +1,10 @@
 import React from 'react'
 import {Tooltip, XAxis, BarChart, Bar} from 'recharts'
-import Common from '../common.jsx'
 import $ from 'jquery'
+import {ajaxGet} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class EquipmentsChart extends Common {
+export default class EquipmentsChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -23,7 +24,7 @@ export default class EquipmentsChart extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/equipments',
       success: function (data) {
         this.setState({
@@ -31,9 +32,9 @@ export default class EquipmentsChart extends Common {
             eq.onstate = eq.on ? 1 : 0
             eq.offstate = eq.on ? 0 : -1
             return eq
-          }),
-          showAlert: false
+          })
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -44,7 +45,6 @@ export default class EquipmentsChart extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <span className='h6'>Equipment</span>
         <BarChart width={this.props.width} height={this.props.height} data={this.state.equipments}>
           <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
