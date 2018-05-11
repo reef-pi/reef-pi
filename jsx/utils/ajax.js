@@ -1,20 +1,14 @@
 import $ from 'jquery'
 import SignIn from '../sign_in.jsx'
+import {showAlert, hideAlert} from './alert.js'
 
 export function ajaxBeforeSend (xhr) {
   var creds = SignIn.getCreds()
   var authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
   xhr.setRequestHeader('Authorization', authHeader)
 }
-//TODO implement modal alert on ajax call failure
 export function ajaxErrorHandler (xhr, status, err) {
-  /*
-  this.setState({
-    showAlert: true,
-    alertMsg: xhr.responseText
-  })
-  */
-   console.log(xhr.responseText)
+   showAlert(xhr.responseText)
   // If authentication error, reset creds and reload page
   if (xhr.status === 401) {
     SignIn.removeCreds()

@@ -1,11 +1,12 @@
 import React from 'react'
 import Auth from '../auth.jsx'
-import Common from '../common.jsx'
 import Capabilities from './capabilities.jsx'
 import Display from './display.jsx'
 import HealthNotify from './health_notify.jsx'
+import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class Settings extends Common {
+export default class Settings extends React.Component{
   constructor (props) {
     super(props)
     this.state = {
@@ -74,12 +75,13 @@ export default class Settings extends Common {
   }
 
   loadCapabilities () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/capabilities',
       success: function (data) {
         this.setState({
           capabilities: data
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -94,13 +96,14 @@ export default class Settings extends Common {
   }
 
   update () {
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/settings',
       data: JSON.stringify(this.state.settings),
       success: function (data) {
         this.setState({
           updated: false
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -111,12 +114,13 @@ export default class Settings extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/settings',
       success: function (data) {
         this.setState({
           settings: data
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -146,7 +150,6 @@ export default class Settings extends Common {
 
     return (
       <div className='container'>
-        {super.render()}
         <div className='row'>
           <div className='col-sm-6'>
             {this.toRow('name')}

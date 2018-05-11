@@ -1,7 +1,8 @@
 import React from 'react'
-import Common from '../common.jsx'
+import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class Display extends Common {
+export default class Display extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -14,13 +15,14 @@ export default class Display extends Common {
   }
 
   load () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/display',
       success: function (data) {
         this.setState({
           on: data.on,
           brightness: data.brightness
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -31,19 +33,20 @@ export default class Display extends Common {
 
   toggle () {
     var action = this.state.on ? 'off' : 'on'
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/display/' + action,
       success: function (data) {
         this.setState({
           on: !this.state.on
         })
+        hideAlert()
       }.bind(this)
     })
   }
 
   setBrightness (ev) {
     var b = parseInt(ev.target.value)
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/display',
       data: JSON.stringify({
         brightness: b
@@ -52,6 +55,7 @@ export default class Display extends Common {
         this.setState({
           brightness: b
         })
+        hideAlert()
       }.bind(this)
     })
   }

@@ -1,9 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Common from './common.jsx'
 import SignIn from './sign_in.jsx'
+import {ajaxPost} from './utils/ajax.js'
+import {hideAlert} from './utils/alert.js'
 
-export default class Auth extends Common {
+export default class Auth extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -18,7 +19,7 @@ export default class Auth extends Common {
   }
 
   updateCreds () {
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/credentials',
       data: JSON.stringify({
         user: $('#reef-pi-user').val(),
@@ -26,6 +27,7 @@ export default class Auth extends Common {
       }),
       success: function (data) {
         this.setState({updated: false})
+        hideAlert()
       }.bind(this)
     })
   }

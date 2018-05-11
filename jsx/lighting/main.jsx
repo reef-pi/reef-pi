@@ -2,9 +2,10 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import Common from '../common.jsx'
+import {showAlert, hideAlert} from '../utils/alert.js'
+import {ajaxDelete, ajaxGet, ajaxPut} from '../utils/ajax.js'
 
-export default class Lighting extends Common {
+export default class Lighting extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -28,10 +29,11 @@ export default class Lighting extends Common {
     return (function () {
       this.confirm('Are you sure ?')
       .then(function () {
-        this.ajaxDelete({
+        ajaxDelete({
           url: '/api/lights/' + id,
           success: function (data) {
             this.fetchLights()
+            hideAlert()
           }.bind(this)
         })
       }.bind(this))
@@ -41,6 +43,7 @@ export default class Lighting extends Common {
   componentWillMount () {
     this.fetchLights()
     this.fetchJacks()
+    hideAlert()
   }
 
   setJack (i, ev) {
@@ -59,10 +62,7 @@ export default class Lighting extends Common {
 
   addLight () {
     if (this.state.selectedJack === undefined) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Select a jack'
-      })
+      showAlert('Select a jack')
       return
     }
     if ($('#lightName').val() === '') {
@@ -77,7 +77,7 @@ export default class Lighting extends Common {
       name: $('#lightName').val(),
       jack: String(jack)
     }
-    this.ajaxPut({
+    ajaxPut({
       url: '/api/lights',
       data: JSON.stringify(payload),
       success: function (data) {
@@ -86,6 +86,7 @@ export default class Lighting extends Common {
           addLight: !this.state.addLight
         })
         $('#lightName').val('')
+        hideAlert()
       }.bind(this)
     })
   }
@@ -107,18 +108,19 @@ export default class Lighting extends Common {
   }
 
   fetchJacks () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/jacks',
       success: function (data) {
         this.setState({
           jacks: data
         })
+        hideAlert()
       }.bind(this)
     })
   }
 
   fetchLights () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/lights',
       success: function (data) {
         this.setState({
@@ -146,7 +148,6 @@ export default class Lighting extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <div className='container'>
           { this.lightsList() }
         </div>

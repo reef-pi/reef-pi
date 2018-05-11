@@ -1,7 +1,8 @@
 import React from 'react'
-import Common from '../common.jsx'
+import {hideAlert} from '../utils/alert.js'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class Timer extends Common {
+export default class Timer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -15,7 +16,7 @@ export default class Timer extends Common {
   }
 
   fetchEquipment (id) {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/equipments/' + id,
       success: function (data) {
         this.setState({
@@ -26,7 +27,7 @@ export default class Timer extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/timers/' + this.props.timer_id,
       success: function (data) {
         this.setState({
@@ -35,6 +36,7 @@ export default class Timer extends Common {
         if (data.type === 'equipment') {
           this.fetchEquipment(data.equipment.id)
         }
+        hideAlert()
       }.bind(this)
     })
   }

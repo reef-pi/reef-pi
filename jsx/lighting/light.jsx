@@ -1,9 +1,10 @@
 import React from 'react'
 import Channel from './channel.jsx'
-import Common from '../common.jsx'
 import $ from 'jquery'
+import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert.js'
 
-export default class Light extends Common {
+export default class Light extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,12 +35,13 @@ export default class Light extends Common {
       jack: this.props.jack
     }
 
-    this.ajaxPost({
+    ajaxPost({
       url: '/api/lights/' + this.props.id,
       data: JSON.stringify(payload),
       success: function (data) {
         this.fetchData()
         this.setState({updated: false})
+        hideAlert()
       }.bind(this)
     })
   }
@@ -60,13 +62,14 @@ export default class Light extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/lights/' + this.props.id,
       success: function (data) {
         this.setState({
           channels: data.channels,
           jack: data.jack
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -121,7 +124,6 @@ export default class Light extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <div className='row'>
           {this.props.name}
         </div>

@@ -3,6 +3,7 @@ import $ from 'jquery'
 import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import {showAlert, hideAlert} from '../utils/alert.js'
 
 export default class Jacks extends React.Component {
   constructor (props) {
@@ -56,7 +57,7 @@ export default class Jacks extends React.Component {
     var pins = $('#jackPins').val().split(',').map((p) => { return (parseInt(p)) })
     for (var i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        window.alert('Use only comma separated numbers')
+        showAlert('Use only comma separated numbers')
         return
       }
     }

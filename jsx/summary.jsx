@@ -1,7 +1,7 @@
 import React from 'react'
-import Common from './common.jsx'
+import {ajaxGet} from './utils/ajax.js'
 
-export default class Summary extends Common {
+export default class Summary extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -11,7 +11,7 @@ export default class Summary extends Common {
   }
 
   refresh () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/info',
       success: function (data) {
         this.setState({
@@ -34,7 +34,6 @@ export default class Summary extends Common {
   render () {
     return (
       <div className='container'>
-        {super.render()}
         <ul className='list-inline'>
           <li className='list-inline-item'><a href='http://reef-pi.com'>Documentation</a> | </li>
           <li className='list-inline-item'>{this.state.info.current_time},</li>

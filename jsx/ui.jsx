@@ -1,10 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
-import Common from './common.jsx'
 import SignIn from './sign_in.jsx'
+import {ajaxGet} from './utils/ajax.js'
 
-export default class App extends Common {
+export default class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -17,7 +17,7 @@ export default class App extends Common {
   }
 
   loadInfo () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/info',
       success: function (data) {
         this.setState({
@@ -34,7 +34,6 @@ export default class App extends Common {
     var st = {textAlign: 'center'}
     return (
       <div className='container'>
-        {super.render()}
         <div className='container'><h3 style={st}> {this.state.info.name} </h3></div>
         <div className='container'>
           <MainPanel />

@@ -1,9 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import Common from './common.jsx'
+import {ajaxGet} from './utils/ajax.js'
+import {hideAlert} from './utils/alert.js'
 
-export default class SelectEquipment extends Common {
+export default class SelectEquipment extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -23,7 +24,7 @@ export default class SelectEquipment extends Common {
   }
 
   fetchData () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/equipments',
       success: function (data) {
         var equipment = this.state.equipment
@@ -34,9 +35,9 @@ export default class SelectEquipment extends Common {
         })
         this.setState({
           equipments: data,
-          equipment: equipment,
-          showAlert: false
+          equipment: equipment
         })
+        hideAlert()
       }.bind(this)
     })
   }
@@ -76,7 +77,6 @@ export default class SelectEquipment extends Common {
     }
     return (
       <div className='container'>
-        {super.render()}
         <DropdownButton title={eqName} id={this.props.id} onSelect={this.setEquipment} disabled={readOnly}>
           {this.equipmentList()}
         </DropdownButton>

@@ -1,17 +1,17 @@
-import Common from '../common.jsx'
 import $ from 'jquery'
 import React from 'react'
 import Pump from './pump.jsx'
 import New from './new.jsx'
+import {hideAlert} from '../utils/alert.js'
+import {ajaxGet} from '../utils/ajax.js'
 
-export default class Doser extends Common {
+export default class Doser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       dosers: [],
       add: false
     }
-    this.toggle = this.toggle.bind(this)
     this.fetch = this.fetch.bind(this)
     this.pumpList = this.pumpList.bind(this)
   }
@@ -33,21 +33,20 @@ export default class Doser extends Common {
   }
 
   fetch () {
-    this.ajaxGet({
+    ajaxGet({
       url: '/api/doser/pumps',
       success: function (data) {
         this.setState({
           pumps: data
         })
+        hideAlert()
       }.bind(this)
     })
   }
 
-
   render () {
     return (
       <div className='container'>
-        {super.render()}
         <div className='container'>
           { this.pumpList() }
         </div>

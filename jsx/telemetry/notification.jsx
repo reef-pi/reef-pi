@@ -1,7 +1,6 @@
 import React from 'react'
-import Common from '../common.jsx'
 
-export default class NotificationSettings extends Common {
+export default class NotificationSettings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -35,7 +34,6 @@ export default class NotificationSettings extends Common {
   render () {
     return (
       <div className='container'>
-        {super.render()}
         <label><b>Email settings</b></label>
         {this.inputGroup('server')}
         {this.inputGroup('port')}

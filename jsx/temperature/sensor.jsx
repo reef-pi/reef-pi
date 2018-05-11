@@ -2,6 +2,7 @@ import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import Notify from './notify.jsx'
 import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
+import {showAlert, hideAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import SelectSensor from './select_sensor.jsx'
 import ReadingsChart from './readings_chart.jsx'
@@ -114,38 +115,22 @@ export default class Sensor extends React.Component {
     tc.chart_min = parseFloat(tc.chart_min)
     tc.chart_max = parseFloat(tc.chart_max)
     if (isNaN(tc.period)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Check frequency has to be a positive integer',
-      })
-      return
+      showAlert('Check frequency has to be a positive integer')
     }
     if (isNaN(tc.min)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Minimum temperature has to be a positive integer',
-      })
+      showAlert('Minimum temperature has to be a positive integer')
       return
     }
     if (isNaN(tc.max)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Maximum temperature has to be a positive integer',
-      })
+      showAlert('Maximum temperature has to be a positive integer')
       return
     }
     if (isNaN(tc.chart_min)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Minium temperature value in chart has to be a positive integer',
-      })
+      showAlert('Minium temperature value in chart has to be a positive integer')
       return
     }
     if (isNaN(tc.chart_max)) {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Maximum temperature value in chart has to be a positive integer',
-      })
+      showAlert('Maximum temperature value in chart has to be a positive integer')
       return
     }
 
@@ -159,6 +144,7 @@ export default class Sensor extends React.Component {
           readOnly: true,
           tc: tc
         })
+        hideAlert()
       }.bind(this)
     })
   }

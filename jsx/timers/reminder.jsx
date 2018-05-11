@@ -1,9 +1,8 @@
 import React from 'react'
 import $ from 'jquery'
-import Common from '../common.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
-export default class Reminder extends Common {
+export default class Reminder extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
