@@ -3,6 +3,7 @@ import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
 import {ajaxPost, ajaxDelete} from '../utils/ajax.js'
+import {confirm} from '../utils/confirm.js'
 
 export default class Pump extends React.Component {
   constructor (props) {
@@ -178,7 +179,7 @@ export default class Pump extends React.Component {
   }
 
   remove (id) {
-    this.confirm('Are you sure ?')
+    confirm('Are you sure ?')
     .then(function () {
       ajaxDelete({
         url: '/api/doser/pumps/' + this.props.data.id,
