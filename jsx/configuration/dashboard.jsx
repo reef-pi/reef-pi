@@ -8,9 +8,8 @@ export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      config: {
-        updated: false
-      },
+      updated: false,
+      config: {},
       atos: [],
       tcs: [],
       lights: [],
@@ -120,7 +119,10 @@ export default class Dashboard extends React.Component {
         }
       }
     }
-    this.setState({config: config})
+    this.setState({
+		  config: config,
+      updated: true
+    })
   }
 
   render() {
