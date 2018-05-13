@@ -9,6 +9,7 @@ export default class Pump extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      updated: false,
       calibrate: false,
       schedule: false,
       scheduleDetails: props.data.regiment.schedule,
@@ -31,17 +32,24 @@ export default class Pump extends React.Component {
   }
 
   updateEnable(ev) {
-    this.setState({enable: ev.target.checked})
+    this.setState({
+      enable: ev.target.checked,
+      updated: true
+      })
   }
 
   updateSchedule(data) {
-    this.setState({scheduleDetails: data})
+    this.setState({
+      scheduleDetails: data,
+      updated: true
+      })
   }
 
   update(k){
     return(function(ev){
       var h = {}
       h[k] = ev.target.value
+      h['updated'] = true
       this.setState(h)
     }.bind(this))
   }
@@ -58,6 +66,7 @@ export default class Pump extends React.Component {
       url: '/api/doser/pumps/' + this.props.data.id+'/schedule',
       data: JSON.stringify(payload),
       success: function (data) {
+       this.setState({updated: false})
       }.bind(this)
     })
   }
@@ -71,6 +80,7 @@ export default class Pump extends React.Component {
       url: '/api/doser/pumps/' + this.props.data.id+'/calibrate',
       data: JSON.stringify(payload),
       success: function(data) {
+       this.setState({updated: false})
       }.bind(this)
     })
   }
@@ -111,6 +121,10 @@ export default class Pump extends React.Component {
 
   scheduleUI() {
     if(!this.state.schedule){return}
+    var setButtonClass = 'btn btn-outline-success col-sm-2'
+    if (this.state.updated) {
+      setButtonClass = 'btn btn-outline-danger col-sm-2'
+    }
     return(
       <div className='container'>
         <hr/>
@@ -159,7 +173,7 @@ export default class Pump extends React.Component {
           id={'set-schedule-' + this.props.data.id}
           value='Set'
           onClick={this.setSchedule}
-          className='btn btn-secondary'
+          className={setButtonClass}
         />
       </div>
     )
