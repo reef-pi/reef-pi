@@ -100,5 +100,6 @@ func (p *Pump) Runner(jacks *connectors.Jacks) cron.Job {
 		duration: p.Regiment.Duration,
 		speed:    p.Regiment.Speed,
 		jacks:    jacks,
+		jack:     p.Jack,
 	}
 }
