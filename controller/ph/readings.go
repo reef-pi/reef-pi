@@ -31,18 +31,18 @@ func (m1 Measurement) Before(mx utils.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func notifyIfNeeded(t *utils.Telemetry, name string, n Notify, reading float64) {
-	if !n.Enable {
+func notifyIfNeeded(t *utils.Telemetry, p Probe, reading float64) {
+	if !p.Config.Notify.Enable {
 		return
 	}
-	subject := "[Reef-Pi ALERT] ph out of range"
+	subject := fmt.Sprintf("[Reef-Pi ALERT] ph of '%s' out of range", p.Name)
 	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
-	body := fmt.Sprintf(format, reading, name, n.Min, n.Max)
-	if reading >= n.Max {
+	body := fmt.Sprintf(format, reading, p.Name, p.Config.Notify.Min, p.Config.Notify.Max)
+	if reading >= p.Config.Notify.Max {
 		t.Alert(subject, "Tank ph is high. "+body)
 		return
 	}
-	if reading <= n.Min {
+	if reading <= p.Config.Notify.Min {
 		t.Alert(subject, "Tank ph is low. "+body)
 		return
 	}

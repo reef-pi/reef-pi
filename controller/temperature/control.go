@@ -126,7 +126,7 @@ func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
 	if !tc.Notify.Enable {
 		return
 	}
-	subject := "[Reef-Pi ALERT] temperature out of range"
+	subject := fmt.Sprintf("[Reef-Pi ALERT] temperature of '%s' out of range", tc.Name)
 	format := "Current temperature (%f) is out of acceptable range ( %f -%f )"
 	body := fmt.Sprintf(format, reading, tc.Notify.Min, tc.Notify.Max)
 	if reading >= tc.Notify.Max {
@@ -134,7 +134,7 @@ func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
 		return
 	}
 	if reading <= tc.Notify.Min {
-		c.telemetry.Alert(subject, "Tank is running cold."+body)
+		c.telemetry.Alert(subject, "Tank is running cold. "+body)
 		return
 	}
 }

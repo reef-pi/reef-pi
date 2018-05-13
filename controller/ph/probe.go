@@ -114,7 +114,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 				reading = v
 			}
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
-			notifyIfNeeded(c.telemetry, p.Name, p.Config.Notify, reading)
+			notifyIfNeeded(c.telemetry, p, reading)
 			m := Measurement{
 				Time: utils.TeleTime(time.Now()),
 				Ph:   reading,
