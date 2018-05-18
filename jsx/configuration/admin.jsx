@@ -2,6 +2,7 @@ import React from 'react'
 import SignIn from '../sign_in.jsx'
 import {ajaxPost} from '../utils/ajax.js'
 import {hideAlert} from '../utils/alert.js'
+import {confirm} from '../utils/confirm.js'
 
 export default class Admin extends React.Component {
   constructor (props) {
@@ -18,7 +19,7 @@ export default class Admin extends React.Component {
   }
 
   reload () {
-    this.confirm('Are you sure ?')
+    confirm('Are you sure ?')
     .then(function () {
       ajaxPost({
         url: '/api/admin/reload',
@@ -30,7 +31,7 @@ export default class Admin extends React.Component {
   }
 
   powerOff () {
-    this.confirm('Are you sure ?')
+    confirm('Are you sure ?')
     .then(function () {
       ajaxPost({
         url: '/api/admin/poweroff',
@@ -40,7 +41,7 @@ export default class Admin extends React.Component {
   }
 
   reboot () {
-    this.confirm('Are you sure ?')
+    confirm('Are you sure ?')
     .then(function () {
       ajaxPost({
         url: '/api/admin/reboot',

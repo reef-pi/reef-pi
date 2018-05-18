@@ -4,6 +4,7 @@ import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {showAlert, hideAlert} from '../utils/alert.js'
 import {ajaxDelete, ajaxGet, ajaxPut} from '../utils/ajax.js'
+import {confirm} from '../utils/confirm.js'
 
 export default class Lighting extends React.Component {
   constructor (props) {
@@ -27,7 +28,7 @@ export default class Lighting extends React.Component {
 
   removeLight (id) {
     return (function () {
-      this.confirm('Are you sure ?')
+      confirm('Are you sure ?')
       .then(function () {
         ajaxDelete({
           url: '/api/lights/' + id,
