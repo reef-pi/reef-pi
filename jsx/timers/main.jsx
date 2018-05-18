@@ -6,6 +6,7 @@ import Cron from './cron.jsx'
 import Equipment from './equipment.jsx'
 import {showAlert, hideAlert} from '../utils/alert.js'
 import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
+import {confirm} from '../utils/confirm.js'
 
 export default class Timers extends React.Component {
   constructor (props) {
@@ -85,7 +86,7 @@ export default class Timers extends React.Component {
 
   removeTimer (id) {
     return (function () {
-      this.confirm('Are you sure ?')
+      confirm('Are you sure ?')
       .then(function () {
         ajaxDelete({
           url: '/api/timers/' + id,

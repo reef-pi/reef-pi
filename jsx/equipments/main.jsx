@@ -4,6 +4,7 @@ import Equipment from './equipment.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
+import {confirm} from '../utils/confirm.js'
 
 export default class Equipments extends React.Component {
   constructor (props) {
@@ -111,7 +112,7 @@ export default class Equipments extends React.Component {
 
   removeEquipment (id) {
     return (function () {
-      this.confirm('Are you sure ?')
+      confirm('Are you sure ?')
       .then(function () {
         ajaxDelete({
           url: '/api/equipments/' + id,
