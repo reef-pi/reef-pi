@@ -365,6 +365,8 @@ function SmokeTest () {
     .click('input#updateATO')
     .wait(1500)
 
+    // Configure dashboard
+
     .click('li#react-tabs-18')
     .wait(500)
     .click('button#btn-dashboard')
@@ -418,6 +420,8 @@ function SmokeTest () {
     .click('input#save_dashboard')
     .wait(1500)
 
+    // Create timer
+
     .click('li#react-tabs-4')
     .wait(500)
     .click('input#add_timer')
@@ -430,6 +434,8 @@ function SmokeTest () {
     .click('button#equipment')
     .wait(500)
     .click('span#equipment-4')
+    .wait(500)
+    .click('input#equipment-revert')
     .wait(500)
     .type('input#equipment-action-duration')
     .type('input#equipment-action-duration', 60*60*8)
