@@ -28,10 +28,16 @@ export default class Equipments extends React.Component {
     var list = []
     var index = 0
     $.each(this.state.equipments, function (k, v) {
+      var outlet ={}
+      $.each(this.state.outlets, function(x, o){
+        if(v.outlet== o.id){
+          outlet = o
+        }
+      }.bind(this))
       list.push(
         <div key={k} className='row list-group-item'>
           <div className='col-sm-8'>
-            <Equipment id={v.id} name={v.name} on={v.on} outlet={v.outlet} />
+            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} />
           </div>
           <div className='col-sm-4'>
             <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />

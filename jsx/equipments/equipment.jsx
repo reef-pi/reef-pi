@@ -6,24 +6,10 @@ export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      outlet: {},
       action: (props.on ? 'off' : 'on'),
-      value: this.props.value
+      value: this.props.value,
     }
     this.update = this.update.bind(this)
-    this.fetchOutlet = this.fetchOutlet.bind(this)
-  }
-
-  fetchOutlet () {
-    ajaxGet({
-      url: '/api/outlets/' + this.props.outlet,
-      success: function (data) {
-        this.setState({
-          outlet: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
   }
 
   update (e) {
@@ -32,7 +18,7 @@ export default class Equipment extends React.Component {
       data: JSON.stringify({
         on: this.state.action === 'on',
         name: this.props.name,
-        outlet: this.props.outlet
+        outlet: this.props.outlet.id
       }),
       success: function (data) {
         this.setState({
@@ -43,16 +29,11 @@ export default class Equipment extends React.Component {
     })
   }
 
-  componentDidMount () {
-    this.fetchOutlet()
-  }
-
   render () {
     var onBtnClass = 'btn btn-secondary btn-block'
     if (this.state.action === 'off') {
       onBtnClass = 'btn btn-success btn-block'
     }
-
     return (
       <div className='container'>
         <div className='col-sm-8'>
@@ -60,7 +41,7 @@ export default class Equipment extends React.Component {
             <input id={this.props.name + '-on'} type='button' value={this.props.name} onClick={this.update} className={onBtnClass} />
           </div>
           <div className='col-sm-4'>
-            <label className='small'> {this.state.outlet.name} </label>
+            <label className='small'> {this.props.outlet.name} </label>
           </div>
         </div>
       </div>
