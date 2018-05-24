@@ -11,7 +11,11 @@ export default class Settings extends React.Component{
     super(props)
     this.state = {
       capabilities: [],
-      settings: {},
+      settings: {
+        name: '',
+        address: '',
+        interface: ''
+      },
       updated: false
     }
     this.loadCapabilities = this.loadCapabilities.bind(this)
