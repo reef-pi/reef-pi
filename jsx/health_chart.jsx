@@ -36,7 +36,7 @@ export default class HealthChart extends React.Component {
   }
 
   render () {
-    if (this.state.health_stats.length <= 0) {
+    if (this.state.health_stats === undefined || this.state.health_stats.length <= 0) {
       return (<div />)
     }
     return (

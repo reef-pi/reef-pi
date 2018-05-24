@@ -7,7 +7,7 @@ var APP_DIR = path.resolve(__dirname, 'jsx')
 var config = {
   entry: APP_DIR + '/ui.jsx',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?/,
         include: APP_DIR,
