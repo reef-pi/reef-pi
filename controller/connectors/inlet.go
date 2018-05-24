@@ -61,7 +61,15 @@ func (c *Inlets) Read(id string) (int, error) {
 		log.Println("Dev mode on. Skipping:", i.Name)
 		return rand.Int() % 2, nil
 	}
-	return utils.ReadGPIO(i.Pin)
+	v, err := utils.ReadGPIO(i.Pin)
+	if !i.Reverse {
+		return v, err
+	}
+	if v == 1 {
+		return 0, err
+	} else {
+		return 1, err
+	}
 }
 
 func (c *Inlets) Create(i Inlet) error {
