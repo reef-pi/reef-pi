@@ -24,10 +24,10 @@ export default class MainPanel extends React.Component {
         'equipment': <Equipments />,
         'timers': <Timers />,
         'lighting': <Lighting />,
-        'temperature': < Temperature />,
+        'temperature': <Temperature />,
         'ato': <ATO />,
-        'ph': < Ph />,
-        'doser': < Doser />,
+        'ph': <Ph />,
+        'doser': <Doser />,
         'camera': <Camera />,
         'configuration': <Configuration />
       }
