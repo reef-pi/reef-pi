@@ -15,7 +15,7 @@ const formStyle = {
   maxWidth: '330px',
   padding: '15px',
   margin: '0 auto',
-  textAlign: 'center',
+  textAlign: 'center'
 }
 
 const formControl = {

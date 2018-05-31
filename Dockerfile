@@ -1,7 +1,7 @@
-LABEL maintainer="code@reef-pi.com"
-
 # Use debian as it matches a Raspbian environment
 FROM debian:stretch
+
+LABEL maintainer="code@reef-pi.com"
 
 RUN apt-get update -y && \
     apt-get install curl build-essential git mercurial -y
