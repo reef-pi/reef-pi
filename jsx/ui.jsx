@@ -14,6 +14,10 @@ const mapStateToProps = state => {
   return ({ info: state.info })
 }
 
+const mapDispatchToProps = dispatch => {
+  return ({fetchInfo: info => dispatch(fetchInfo(info))})
+}
+
 export default class ConnectedApp extends React.Component {
   constructor (props) {
     super(props)
@@ -30,16 +34,12 @@ export default class ConnectedApp extends React.Component {
     ajaxGet({
       url: '/api/info',
       success: function (data) {
-        store.dispatch(fetchInfo(data))
-        this.setState({
-          info: data
-        })
+        this.props.fetchInfo(data)
       }.bind(this)
     })
   }
 
   render () {
-    console.log(this.props)
     if (!SignIn.isSignIned()) {
       return (<SignIn />)
     }
@@ -55,7 +55,7 @@ export default class ConnectedApp extends React.Component {
   }
 }
 
-const App = connect(mapStateToProps)(ConnectedApp)
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
 
 render(
   <Provider store={store}>
