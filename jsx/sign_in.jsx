@@ -84,7 +84,7 @@ export default class SignIn extends React.Component {
     return (
       <div className='container' style={outerStyle}>
         <div className='form' style={formStyle}>
-          <h1 className='h3 mb-3 font-weight-normal'>Reef Pi</h1>
+          <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
           <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
           <input type='text' id='reef-pi-user' className='form-control' style={emailStyle} placeholder='Username' required='' autoFocus='' />
           <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
