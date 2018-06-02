@@ -2,29 +2,17 @@ import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
 import SignIn from './sign_in.jsx'
-import {ajaxGet} from './utils/ajax.js'
+import {connect, Provider} from 'react-redux'
+import {configureStore} from './redux/store'
+import {fetchInfo} from './redux/actions'
 
-export default class App extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      info: {}
-    }
-    this.loadInfo = this.loadInfo.bind(this)
-  }
+const store = configureStore()
+
+export default class ConnectedApp extends React.Component {
   componentDidMount () {
-    this.loadInfo()
-  }
-
-  loadInfo () {
-    ajaxGet({
-      url: '/api/info',
-      success: function (data) {
-        this.setState({
-          info: data
-        })
-      }.bind(this)
-    })
+    if (SignIn.isSignIned()) {
+      this.props.fetchInfo()
+    }
   }
 
   render () {
@@ -34,7 +22,7 @@ export default class App extends React.Component {
     var st = {textAlign: 'center'}
     return (
       <div className='container'>
-        <div className='container'><h3 style={st}> {this.state.info.name} </h3></div>
+        <div className='container'><h3 style={st}> {this.props.info.name} </h3></div>
         <div className='container'>
           <MainPanel />
         </div>
@@ -43,4 +31,19 @@ export default class App extends React.Component {
   }
 }
 
-render(<App />, document.getElementById('main-panel'))
+const mapStateToProps = (state) => {
+  return { info: state.info }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchInfo: () => dispatch(fetchInfo())}
+}
+
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('main-panel')
+)

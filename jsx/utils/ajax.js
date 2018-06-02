@@ -2,6 +2,24 @@ import $ from 'jquery'
 import SignIn from '../sign_in.jsx'
 import {showAlert, hideAlert} from './alert.js'
 
+export function reduxGet (params) {
+  return( dispatch => {
+    let headers = new Headers()
+    let creds = SignIn.getCreds()
+    let authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
+    headers.append('Authorization', authHeader)
+    fetch(params.url,{method: 'GET', headers: headers})
+    .then((response) => {
+      if (!response.ok) {
+        console.log(response.statusText)
+      }
+      return response;
+    })
+    .then((response) => response.json())
+    .then((data) => dispatch(params.success(data)))
+  })
+}
+
 export function ajaxBeforeSend (xhr) {
   var creds = SignIn.getCreds()
   var authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
