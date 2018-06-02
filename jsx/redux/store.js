@@ -1,16 +1,20 @@
-import {createStore} from 'redux'
+import {createStore, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
 import {rootReducer} from './reducer'
 
-const store = createStore(rootReducer)
-const mapStateToProps = (state) => {
-  return {
-    equipment: state
-  }
+const initialState = {
+  info: {},
+  equipments: [],
+  timers: [],
+  lights: [],
+  atos: [],
+  phs: [],
+  dosers: [],
+  camera: {},
+  configuration: {},
+  capabilities: []
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
+export const configureStore = () => {
+  return createStore(rootReducer, initialState, applyMiddleware(thunk))
 }
-
-export default store;
 

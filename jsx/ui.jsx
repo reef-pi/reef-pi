@@ -2,41 +2,18 @@ import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
 import SignIn from './sign_in.jsx'
-import {ajaxGet} from './utils/ajax.js'
+import {reduxGet} from './utils/ajax.js'
 import {connect, Provider} from 'react-redux'
-import store from './redux/store'
+import {configureStore} from './redux/store'
 import {fetchInfo} from './redux/actions'
 
-window.store = store
-window.fetchInfo = fetchInfo
-
-const mapStateToProps = state => {
-  return ({ info: state.info })
-}
-
-const mapDispatchToProps = dispatch => {
-  return ({fetchInfo: info => dispatch(fetchInfo(info))})
-}
+const store = configureStore()
 
 export default class ConnectedApp extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      info: {}
-    }
-    this.loadInfo = this.loadInfo.bind(this)
-  }
   componentDidMount () {
-    this.loadInfo()
-  }
-
-  loadInfo () {
-    ajaxGet({
-      url: '/api/info',
-      success: function (data) {
-        this.props.fetchInfo(data)
-      }.bind(this)
-    })
+    if (SignIn.isSignIned()) {
+      this.props.fetchInfo()
+    }
   }
 
   render () {
@@ -55,7 +32,15 @@ export default class ConnectedApp extends React.Component {
   }
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
+const mapStateToProps = (state = initialState) => {
+  return { info: state.info }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchInfo: () => dispatch(fetchInfo())}
+}
+
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
 
 render(
   <Provider store={store}>
