@@ -16,7 +16,7 @@ export function reduxGet (params) {
       return response;
     })
     .then((response) => response.json())
-    .then((data) => params.success(data))
+    .then((data) => dispatch(params.success(data)))
   })
 }
 
