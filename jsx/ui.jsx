@@ -2,7 +2,6 @@ import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
 import SignIn from './sign_in.jsx'
-import {reduxGet} from './utils/ajax.js'
 import {connect, Provider} from 'react-redux'
 import {configureStore} from './redux/store'
 import {fetchInfo} from './redux/actions'
@@ -32,7 +31,7 @@ export default class ConnectedApp extends React.Component {
   }
 }
 
-const mapStateToProps = (state = initialState) => {
+const mapStateToProps = (state) => {
   return { info: state.info }
 }
 
@@ -40,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
   return {fetchInfo: () => dispatch(fetchInfo())}
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
 
 render(
   <Provider store={store}>
