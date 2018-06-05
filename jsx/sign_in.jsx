@@ -1,6 +1,45 @@
 import React from 'react'
 import $ from 'jquery'
 
+const outerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingTop: '40px',
+  paddingBottom: '40px',
+  height: '100%'
+}
+
+const formStyle = {
+  width: '100%',
+  maxWidth: '330px',
+  padding: '15px',
+  margin: '0 auto',
+  textAlign: 'center'
+}
+
+const formControl = {
+  position: 'relative',
+  boxSizing: 'border-box',
+  height: 'auto',
+  padding: '10px',
+  fontSize: '16px'
+}
+
+const emailStyle = {
+  formControl,
+  marginBottom: '-1px',
+  borderBottomRightRadius: 0,
+  borderBottomLeftRadius: 0
+}
+
+const passwordStyle = {
+  formControl,
+  marginBottom: '-1px',
+  borderBottomRightRadius: 0,
+  borderBottomLeftRadius: 0
+}
+
 export default class SignIn extends React.Component {
   constructor (props) {
     super(props)
@@ -43,25 +82,14 @@ export default class SignIn extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <div className='modal-header'>
-          <h4 className='modal-title'>
-            Sign In
-          </h4>
-        </div>
-        <div className='container modal-body' >
-          <div className='row'>
-            <div className='col-sm-2'>User</div>
-            <div className='col-sm-2'><input type='text' id='reef-pi-user' /></div>
-          </div>
-          <div className='row'>
-            <div className='col-sm-2'>Password</div>
-            <div className='col-sm-2'><input type='password' id='reef-pi-pass' /></div>
-          </div>
-          <div className='row modal-footer'>
-            <div className='col-sm-2' />
-            <div className='col-sm-2'><input type='button' role='confirm' ref='confirm' value='sign-in' onClick={this.saveCreds} id='btnSaveCreds' /></div>
-          </div>
+      <div className='container' style={outerStyle}>
+        <div className='form' style={formStyle}>
+          <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
+          <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
+          <input type='text' id='reef-pi-user' className='form-control' style={emailStyle} placeholder='Username' required='' autoFocus='' />
+          <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
+          <input type='password' id='reef-pi-pass' className='form-control mb-3' style={passwordStyle} placeholder='Password' required='' />
+          <button className='btn btn-lg btn-primary btn-block' type='submit' onClick={this.saveCreds}>Sign in</button>
         </div>
       </div>
     )

@@ -60,7 +60,7 @@ class mainPanel extends React.Component {
     }.bind(this))
 
     return (
-      <div className='containe'>
+      <div className='container'>
         <div id='reef-pi-alert' className='alert alert-danger' />
         <Tabs >
           <TabList>
