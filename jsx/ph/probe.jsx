@@ -28,34 +28,34 @@ export default class Probe extends React.Component {
     this.calibrate = this.calibrate.bind(this)
   }
 
-  calibrate() {
+  calibrate () {
     this.setState({calibrate: !this.state.calibrate})
   }
 
-  updateConfig(d) {
+  updateConfig (d) {
     this.setState({
       config: d
     })
   }
 
-  chart() {
-    if(!this.state.enable) {
-      return(<div />)
+  chart () {
+    if (!this.state.enable) {
+      return (<div />)
     }
-    return(
+    return (
       <div className='row'>
         <div className='col-sm-6'>
-          <Chart probe_id={this.props.data.id} width={500} height={300} type='current'/>
+          <Chart probe_id={this.props.data.id} width={500} height={300} type='current' />
         </div>
         <div className='col-sm-6'>
-          <Chart probe_id={this.props.data.id} width={500} height={300} type='historical'/>
+          <Chart probe_id={this.props.data.id} width={500} height={300} type='historical' />
         </div>
       </div>
     )
   }
 
-  edit() {
-    if(this.state.readOnly) {
+  edit () {
+    if (this.state.readOnly) {
       this.setState({readOnly: false})
       return
     }
@@ -71,7 +71,7 @@ export default class Probe extends React.Component {
     }
 
     ajaxPost({
-      url: '/api/phprobes/'+this.props.data.id,
+      url: '/api/phprobes/' + this.props.data.id,
       data: JSON.stringify(payload),
       success: function (data) {
         this.setState({readOnly: true})
@@ -79,63 +79,63 @@ export default class Probe extends React.Component {
     })
   }
 
-  updateEnable(ev) {
+  updateEnable (ev) {
     this.setState({enable: ev.target.checked})
   }
 
-  remove() {
+  remove () {
     confirm('Are you sure ?')
-    .then(function () {
-      ajaxDelete({
-        url: '/api/phprobes/' + this.props.data.id,
-        type: 'DELETE',
-        success: function (data) {
-          if(this.props.upateHook !== undefined) {
-            this.props.upateHook()
-          }
-        }.bind(this)
-      })
-    }.bind(this))
+      .then(function () {
+        ajaxDelete({
+          url: '/api/phprobes/' + this.props.data.id,
+          type: 'DELETE',
+          success: function (data) {
+            if (this.props.upateHook !== undefined) {
+              this.props.upateHook()
+            }
+          }.bind(this)
+        })
+      }.bind(this))
   }
 
-  update(k) {
-    return(function(ev){
+  update (k) {
+    return (function (ev) {
       var h = {}
       h[k] = ev.target.value
       this.setState(h)
     }.bind(this))
   }
 
-  render(){
+  render () {
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
     var name = <label>{this.state.name}</label>
-    if(!this.state.readOnly) {
-       editText = 'save'
-       editClass = 'btn btn-outline-primary'
-       name = <input type='text' value={this.state.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly}/>
+    if (!this.state.readOnly) {
+      editText = 'save'
+      editClass = 'btn btn-outline-primary'
+      name = <input type='text' value={this.state.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly} />
     }
-    return(
+    return (
       <div className='conainer'>
         <div className='row'>
           {name}
         </div>
         <div className='row'>
           <label className='col-sm-3'>Enable</label>
-          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.enable} disabled={this.state.readOnly}/>
+          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.enable} disabled={this.state.readOnly} />
         </div>
         <div className='row'>
           <label className='col-sm-3'> Interval </label>
-          <input type='text' value={this.state.period} onChange={this.update('period')} className='col-sm-2' readOnly={this.state.readOnly}/>
+          <input type='text' value={this.state.period} onChange={this.update('period')} className='col-sm-2' readOnly={this.state.readOnly} />
         </div>
         <div className='row'>
           {this.chart()}
         </div>
         <div className='row'>
-          <Config  data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly}/>
+          <Config data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly} />
         </div>
         <div className='row'>
-          <div className='col-sm-7'/>
+          <div className='col-sm-7' />
           <div className='col-sm-2'>
             <input type='button' id={'calibrate-probe-' + this.props.data.id} onClick={this.calibrate} value='calibrate' className='btn btn-secondary' />
           </div>

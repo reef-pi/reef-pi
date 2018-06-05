@@ -11,17 +11,16 @@ import Doser from './doser/controller.jsx'
 import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
-import {hideAlert} from './utils/alert.js'
-import {ajaxGet} from './utils/ajax.js'
 import 'react-tabs/style/react-tabs.css'
+import {fetchCapabilities} from './redux/actions'
+import {connect} from 'react-redux'
 
-export default class MainPanel extends React.Component {
+class mainPanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      capabilities: {},
       panels: {
-        'equipment': <Equipments />,
+        'equipments': <Equipments />,
         'timers': <Timers />,
         'lighting': <Lighting />,
         'temperature': <Temperature />,
@@ -32,43 +31,28 @@ export default class MainPanel extends React.Component {
         'configuration': <Configuration />
       }
     }
-    this.loadCapabilities = this.loadCapabilities.bind(this)
   }
 
   componentDidMount () {
-    this.loadCapabilities()
-    hideAlert()
+    this.props.fetchCapabilities()
   }
 
   handleSelect (index, last) {
   }
 
-  loadCapabilities () {
-    ajaxGet({
-      url: '/api/capabilities',
-      success: function (data) {
-        data.equipment = data.equipments
-        this.setState({
-          capabilities: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
-  }
-
   render () {
     var tabs = [ ]
     var panels = [ ]
-    if (this.state.capabilities.dashboard) {
+    if (this.props.capabilities.dashboard) {
       tabs.push(<Tab key='dashboard'> dashboard </Tab>)
-      panels.push(<TabPanel key='dashboard'> <Dashboard capabilities={this.state.capabilities} /> </TabPanel>)
+      panels.push(<TabPanel key='dashboard'> <Dashboard capabilities={this.props.capabilities} /> </TabPanel>)
     }
 
     $.each(this.state.panels, function (k, panel) {
-      if (this.state.capabilities[k] === undefined) {
+      if (this.props.capabilities[k] === undefined) {
         return
       }
-      if (!this.state.capabilities[k]) {
+      if (!this.props.capabilities[k]) {
         return
       }
       tabs.push(<Tab key={k}>{k}</Tab>)
@@ -88,3 +72,13 @@ export default class MainPanel extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return { capabilities: state.capabilities }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchCapabilities: () => dispatch(fetchCapabilities())}
+}
+
+const MainPanel = connect(mapStateToProps, mapDispatchToProps)(mainPanel)
+export default MainPanel

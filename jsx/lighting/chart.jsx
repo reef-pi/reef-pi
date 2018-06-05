@@ -22,10 +22,10 @@ export default class LightsChart extends React.Component {
 
   fetch () {
     ajaxGet({
-      url: '/api/lights/'+this.props.light_id,
+      url: '/api/lights/' + this.props.light_id,
       success: function (data) {
         this.setState({
-          config: data,
+          config: data
         })
         hideAlert()
       }.bind(this)
@@ -53,7 +53,7 @@ export default class LightsChart extends React.Component {
       lines.push(
         <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={name} />
       )
-    }.bind(this))
+    })
     data['time'] = [12]
     lines.push(
       <Line dataKey='time'

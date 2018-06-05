@@ -50,7 +50,7 @@ export default class Doser extends React.Component {
         <div className='container'>
           { this.pumpList() }
         </div>
-        <New updateHook={this.fetch}/>
+        <New updateHook={this.fetch} />
       </div>
     )
   }

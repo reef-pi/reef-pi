@@ -4,7 +4,6 @@ import $ from 'jquery'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
 
-
 export default class Config extends React.Component {
   constructor (props) {
     super(props)
@@ -36,7 +35,7 @@ export default class Config extends React.Component {
   }
 
   updateBool (k) {
-    return(function(ev) {
+    return (function (ev) {
       var config = this.state.config
       config[k] = ev.target.checked
       this.setState({
@@ -44,11 +43,11 @@ export default class Config extends React.Component {
         updated: true
       })
       hideAlert()
-   }.bind(this))
+    }.bind(this))
   }
 
-  updateText(k) {
-    return(function(ev){
+  updateText (k) {
+    return (function (ev) {
       var config = this.state.config
       config[k] = ev.target.value
       this.setState({
@@ -60,9 +59,9 @@ export default class Config extends React.Component {
     )
   }
 
-  render() {
-    if(this.state.config.enable === undefined){
-      return(
+  render () {
+    if (this.state.config.enable === undefined) {
+      return (
         <div className='container'>
           Loading...
         </div>
@@ -72,7 +71,7 @@ export default class Config extends React.Component {
     if (this.state.updated) {
       saveButtonClass = 'btn btn-outline-danger col-sm-2'
     }
-    return(
+    return (
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
@@ -107,4 +106,3 @@ export default class Config extends React.Component {
     )
   }
 }
-

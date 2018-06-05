@@ -27,7 +27,7 @@ export default class PhChart extends React.Component {
   }
   info () {
     ajaxGet({
-      url: '/api/phprobes/'+this.props.probe_id,
+      url: '/api/phprobes/' + this.props.probe_id,
       success: function (data) {
         this.setState({
           config: data
@@ -36,10 +36,9 @@ export default class PhChart extends React.Component {
     })
   }
 
-
   fetch () {
     ajaxGet({
-      url: '/api/phprobes/'+this.props.probe_id+'/readings',
+      url: '/api/phprobes/' + this.props.probe_id + '/readings',
       success: function (data) {
         this.setState({
           metrics: data[this.props.type]
@@ -58,8 +57,8 @@ export default class PhChart extends React.Component {
           width={this.props.width}
           height={this.props.height}
           data={this.state.metrics}
-         >
-          <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false}/>
+        >
+          <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false} />
           <XAxis dataKey='time' />
           <Tooltip />
           <YAxis />

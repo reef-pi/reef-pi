@@ -55,7 +55,7 @@ export default class HealthNotify extends React.Component {
             value={this.state.notify.max_memory}
             onChange={this.update('max_memory')} />
         </div>
-    )
+      )
       ct.push(
         <div className='input-group' key='health_notify_max_cpu'>
           <label className='input-group-addon'>Max CPU</label>
@@ -66,7 +66,7 @@ export default class HealthNotify extends React.Component {
             value={this.state.notify.max_cpu}
             onChange={this.update('max_cpu')} />
         </div>
-        )
+      )
     }
     return (
       <div className='col-sm-3'>

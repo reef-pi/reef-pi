@@ -20,39 +20,39 @@ export default class ATO extends React.Component {
     this.updatePump = this.updatePump.bind(this)
     this.setInlet = this.setInlet.bind(this)
   }
-  setInlet(id) {
-   var ato = this.state.ato
-   ato.inlet = id
+  setInlet (id) {
+    var ato = this.state.ato
+    ato.inlet = id
     this.setState({ato: ato})
   }
 
-  updatePump(id) {
-   var ato = this.state.ato
-   ato.pump = id
-   this.setState({ato: ato})
+  updatePump (id) {
+    var ato = this.state.ato
+    ato.pump = id
+    this.setState({ato: ato})
   }
 
-  remove() {
+  remove () {
     confirm('Are you sure ?')
-    .then(function () {
-      ajaxDelete({
-        url: '/api/atos/' + this.props.data.id,
-        type: 'DELETE',
-        success: function (data) {
-          if(this.props.upateHook !== undefined) {
-            this.props.upateHook()
-          }
-        }.bind(this)
-      })
-    }.bind(this))
+      .then(function () {
+        ajaxDelete({
+          url: '/api/atos/' + this.props.data.id,
+          type: 'DELETE',
+          success: function (data) {
+            if (this.props.upateHook !== undefined) {
+              this.props.upateHook()
+            }
+          }.bind(this)
+        })
+      }.bind(this))
   }
 
-  update(k) {
-    return(function(ev){
+  update (k) {
+    return (function (ev) {
       var h = this.state.ato
       h[k] = ev.target.value
       this.setState({
-        ato:h,
+        ato: h
       })
     }.bind(this))
   }
@@ -69,7 +69,7 @@ export default class ATO extends React.Component {
   }
 
   save () {
-    if(this.state.readOnly) {
+    if (this.state.readOnly) {
       this.setState({readOnly: false})
       return
     }
@@ -79,13 +79,13 @@ export default class ATO extends React.Component {
     if (isNaN(ato.period)) {
       this.setState({
         showAlert: true,
-        alertMsg: 'Check frequency has to be a positive integer',
+        alertMsg: 'Check frequency has to be a positive integer'
       })
       return
     }
 
     ajaxPost({
-      url: '/api/atos/'+this.props.data.id,
+      url: '/api/atos/' + this.props.data.id,
       type: 'POST',
       data: JSON.stringify(ato),
       success: function (data) {
@@ -108,10 +108,10 @@ export default class ATO extends React.Component {
           <div className='col-sm-2'>Pump</div>
           <div className='col-sm-4'>
             <SelectEquipment
-               update={this.updatePump}
-               active={this.state.ato.pump}
-               id='ato-pump'
-               readOnly={this.state.readOnly}
+              update={this.updatePump}
+              active={this.state.ato.pump}
+              id='ato-pump'
+              readOnly={this.state.readOnly}
             />
           </div>
         </div>
@@ -127,10 +127,10 @@ export default class ATO extends React.Component {
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
     var name = <label>{this.state.ato.name}</label>
-    if(!this.state.readOnly) {
-       editText = 'save'
-       editClass = 'btn btn-outline-primary'
-       name = <input type='text' value={this.state.ato.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly}/>
+    if (!this.state.readOnly) {
+      editText = 'save'
+      editClass = 'btn btn-outline-primary'
+      name = <input type='text' value={this.state.ato.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly} />
     }
     return (
       <div className='container'>
@@ -142,32 +142,32 @@ export default class ATO extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Enable</div>
-          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateCheckBox('enable')} disabled={this.state.readOnly}/>
+          <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateCheckBox('enable')} disabled={this.state.readOnly} />
         </div>
-      <div className='container'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-sm-3'>Check frequency</div>
+            <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.ato.period} readOnly={this.state.readOnly} />
+            <span>second(s)</span>
+          </div>
+          <div className='row'>
+            <div className='col-sm-2'>Control</div>
+            <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
+          </div>
+          {this.showControl()}
+        </div>
         <div className='row'>
-          <div className='col-sm-3'>Check frequency</div>
-          <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.ato.period} readOnly={this.state.readOnly}/>
-          <span>second(s)</span>
+          <div className='col-sm-1'>
+            <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
+          </div>
+          <div className='col-sm-1'>
+            <input type='button' id={'remove-ato-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+          </div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly}/>
-        </div>
-        {this.showControl()}
-      </div>
-      <div className='row'>
-        <div className='col-sm-1'>
-          <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
-        </div>
-        <div className='col-sm-1'>
-          <input type='button' id={'remove-ato-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+          <ATOChart ato_id={this.props.data.id} width={500} height={300} />
         </div>
       </div>
-       <div className='row'>
-         <ATOChart ato_id={this.props.data.id} width={500} height={300}/>
-       </div>
-     </div>
     )
   }
 }

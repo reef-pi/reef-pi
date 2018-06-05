@@ -14,13 +14,13 @@ export default class Equipment extends React.Component {
         on: true,
         name: ''
       },
-      equipments: [],
+      equipments: []
     }
     this.equipmentList = this.equipmentList.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
     this.setEquipmentAction = this.setEquipmentAction.bind(this)
-    this.updateRevert= this.updateRevert.bind(this)
+    this.updateRevert = this.updateRevert.bind(this)
     this.updateDuration = this.updateDuration.bind(this)
   }
 
@@ -28,20 +28,20 @@ export default class Equipment extends React.Component {
     this.fetchData()
   }
 
-  updateRevert(ev){
+  updateRevert (ev) {
     var eq = this.state.equipment
     eq.revert = ev.target.checked
     this.setState({equipment: eq})
   }
 
-  updateDuration(ev) {
+  updateDuration (ev) {
     var eq = this.state.equipment
     eq.duration = ev.target.value
     this.setState({equipment: eq})
   }
 
   setEquipment (k, ev) {
-    var eq  = this.state.equipment
+    var eq = this.state.equipment
     eq['id'] = this.state.equipments[k].id
     eq['name'] = this.state.equipments[k].name
     this.setState({equipment: eq})
@@ -50,7 +50,7 @@ export default class Equipment extends React.Component {
 
   setEquipmentAction (k, ev) {
     var eq = this.state.equipment
-    eq.on =  k === 'on'
+    eq.on = k === 'on'
     this.setState({
       equipment: eq
     })
@@ -60,7 +60,7 @@ export default class Equipment extends React.Component {
   equipmentList () {
     var menuItems = []
     $.each(this.state.equipments, function (k, v) {
-      menuItems.push(<MenuItem key={k} eventKey={k}><span id={'equipment-'+v.id}>{v.name}</span></MenuItem>)
+      menuItems.push(<MenuItem key={k} eventKey={k}><span id={'equipment-' + v.id}>{v.name}</span></MenuItem>)
     })
     return menuItems
   }
@@ -70,7 +70,7 @@ export default class Equipment extends React.Component {
       url: '/api/equipments',
       success: function (data) {
         this.setState({
-          equipments: data,
+          equipments: data
         })
         hideAlert()
       }.bind(this)
@@ -80,11 +80,11 @@ export default class Equipment extends React.Component {
   render () {
     var eqName = ''
     var eqAction = ''
-    if(this.state.equipment !== undefined) {
+    if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
       eqAction = this.state.equipment.on ? 'on' : 'off'
     }
-    return(
+    return (
       <div className='container'>
         <div className='row'>
           <div className='col-sm-6'>
@@ -107,15 +107,15 @@ export default class Equipment extends React.Component {
             </div>
             <div className='row'>
               <label className='col-sm-6'> Revert</label>
-              <input id='equipment-revert' type='checkbox' onClick={this.updateRevert} defaultChecked={false}/>
+              <input id='equipment-revert' type='checkbox' onClick={this.updateRevert} defaultChecked={false} />
             </div>
             <div className='row'>
               <label className='col-sm-6'> Duration</label>
-              <input id='equipment-action-duration' type='text' className='col-sm-6' onChange={this.updateDuration}/> (in seconds)
+              <input id='equipment-action-duration' type='text' className='col-sm-6' onChange={this.updateDuration} /> (in seconds)
             </div>
           </div>
+        </div>
       </div>
-    </div>
     )
   }
 }

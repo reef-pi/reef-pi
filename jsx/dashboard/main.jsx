@@ -15,7 +15,7 @@ export default class Dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      charts: [],
+      charts: []
     }
     this.fetch = this.fetch.bind(this)
     this.charts = this.charts.bind(this)
@@ -25,95 +25,95 @@ export default class Dashboard extends React.Component {
     this.fetch()
   }
 
-  fetch(){
+  fetch () {
     ajaxGet({
       url: '/api/dashboard',
       success: function (data) {
-      this.charts(data)
+        this.charts(data)
       }.bind(this)
     })
   }
 
-  charts(config) {
-    var i,j
+  charts (config) {
+    var i, j
     var rows = []
-    for(i = 0; i< config.row; i++)  {
+    for (i = 0; i < config.row; i++) {
       var columns = []
-      for(j = 0; j< config.column; j++) {
+      for (j = 0; j < config.column; j++) {
         var ch = config.grid_details[i][j]
-        if(ch === undefined){
+        if (ch === undefined) {
           continue
         }
-        switch(ch.type){
+        switch (ch.type) {
           case 'light':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <LightChart width={config.width} height={config.height} light_id={ch.id}/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <LightChart width={config.width} height={config.height} light_id={ch.id} />
               </div>
             )
-            break;
+            break
           case 'equipment':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
                 <EquipmentsChart width={config.width} height={config.height} />
               </div>
             )
-            break;
+            break
           case 'ato':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
                 <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
               </div>
             )
-            break;
-          case  'ph-current':
+            break
+          case 'ph-current':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current'/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current' />
               </div>
             )
-            break;
-          case  'ph-historical':
+            break
+          case 'ph-historical':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical'/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
               </div>
             )
-            break;
+            break
           case 'health':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <HealthChart width={config.width} height={config.height} trend={ch.id}/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <HealthChart width={config.width} height={config.height} trend={ch.id} />
               </div>
             )
-            break;
+            break
           case 'temperature':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id}/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
               </div>
             )
-            break;
+            break
           case 'tc':
             columns.push(
-              <div className='col-sm-6' key={'chart-'+i+'-'+j}>
-                <TempControlChart width={config.width} height={config.height} sensor_id={ch.id}/>
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
               </div>
             )
-            break;
+            break
           default:
-            break;
+            break
         }
       }
       rows.push(
-        <div className='row' key={'row-'+i}>{columns}</div>
+        <div className='row' key={'row-' + i}>{columns}</div>
       )
     }
     this.setState({charts: rows})
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         {this.state.charts}
         <div className='row'>

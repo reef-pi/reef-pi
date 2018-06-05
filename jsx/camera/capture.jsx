@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import $ from 'jquery'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 
-
 export default class Capture extends React.Component {
   constructor (props) {
     super(props)
@@ -14,7 +13,7 @@ export default class Capture extends React.Component {
     this.capture = this.capture.bind(this)
   }
 
-  fetch() {
+  fetch () {
     ajaxGet({
       url: '/api/camera/latest',
       success: function (data) {
@@ -39,10 +38,10 @@ export default class Capture extends React.Component {
       timeout: 30000
     })
   }
-  render() {
-    var img = <div className='container'></div>
+  render () {
+    var img = <div className='container' />
     if (this.state.latest.image !== undefined) {
-       img =  <img src={'/images/' + this.state.latest.image} style={imgStyle} />
+      img = <img src={'/images/' + this.state.latest.image} style={imgStyle} />
     }
     var imgStyle = {
       width: '100%',

@@ -28,9 +28,9 @@ export default class SelectSensor extends React.Component {
           if (s === sensor) {
             sensor = s
           }
-        }.bind(this))
+        })
         this.setState({
-          sensors: data,
+          sensors: data
         })
       }.bind(this)
     })
@@ -38,8 +38,8 @@ export default class SelectSensor extends React.Component {
 
   list () {
     var menuItems = []
-    if(this.state.sensor === undefined){
-      menuItems.push(<MenuItem key='none' active={true} eventKey='none'>-</MenuItem>)
+    if (this.state.sensor === undefined) {
+      menuItems.push(<MenuItem key='none' active eventKey='none'>-</MenuItem>)
     }
     $.each(this.state.sensors, function (k, v) {
       menuItems.push(
@@ -50,7 +50,7 @@ export default class SelectSensor extends React.Component {
         >
           <span id={this.props.id + '-' + v}>{v}</span>
         </MenuItem>
-     )
+      )
     }.bind(this))
     return menuItems
   }

@@ -60,7 +60,7 @@ export default class Timers extends React.Component {
       url: '/api/timers',
       success: function (data) {
         this.setState({
-          timers: data,
+          timers: data
         })
         hideAlert()
       }.bind(this)
@@ -79,7 +79,7 @@ export default class Timers extends React.Component {
             <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
           </div>
         </li>
-        )
+      )
     }.bind(this))
     return (list)
   }
@@ -87,15 +87,15 @@ export default class Timers extends React.Component {
   removeTimer (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/timers/' + id,
-          success: function (data) {
-            this.fetchData()
-            hideAlert()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          ajaxDelete({
+            url: '/api/timers/' + id,
+            success: function (data) {
+              this.fetchData()
+              hideAlert()
+            }.bind(this)
+          })
+        }.bind(this))
     }.bind(this))
   }
 
@@ -152,7 +152,7 @@ export default class Timers extends React.Component {
         hideAlert()
       }.bind(this)
     })
-  };
+  }
 
   toggleAddTimerDiv () {
     this.setState({

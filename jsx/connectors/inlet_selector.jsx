@@ -1,40 +1,27 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchInlets} from '../redux/actions.js'
+import {connect} from 'react-redux'
 
-export default class InletSelector extends React.Component {
+class inletSelector extends React.Component {
   constructor (props) {
     super(props)
+    var inlet
+    $.each(props.inlets, function (k, v) {
+      if (v.id == props.active) {
+        inlet = v
+      }
+    })
     this.state = {
-      inlets: [],
-      inlet: undefined
+      inlet: inlet
     }
-    this.fetch = this.fetch.bind(this)
     this.inlets = this.inlets.bind(this)
     this.set = this.set.bind(this)
   }
 
   componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/inlets',
-      success: function (data) {
-        var inlet
-        $.each(data, function(k,v) {
-          if(v.id == this.props.active) {
-            inlet = v
-          }
-        }.bind(this))
-        this.setState({
-          inlets: data,
-          inlet: inlet
-        })
-      }.bind(this)
-    })
+    this.props.fetchInlets()
   }
 
   inlets () {
@@ -46,7 +33,7 @@ export default class InletSelector extends React.Component {
       id = this.state.inlet.id
     }
     var items = []
-    $.each(this.state.inlets, function (k, v) {
+    $.each(this.props.inlets, function (k, v) {
       items.push(
         <MenuItem key={k} active={v.id === id} eventKey={k}>
           <span id={this.props.name + '-' + v.id}>{v.name}</span>
@@ -61,7 +48,7 @@ export default class InletSelector extends React.Component {
   }
 
   set (k, ev) {
-    var i = this.state.inlets[k]
+    var i = this.props.inlets[k]
     if (i === undefined) {
       return
     }
@@ -80,3 +67,13 @@ export default class InletSelector extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return { inlets: state.inlets }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchInlets: () => dispatch(fetchInlets())}
+}
+
+const InletSelector = connect(mapStateToProps, mapDispatchToProps)(inletSelector)
+export default InletSelector

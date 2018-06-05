@@ -9,7 +9,7 @@ export default class ControlChart extends React.Component {
     this.state = {
       usage: [],
       config: {
-        name: '',
+        name: ''
       }
     }
     this.fetch = this.fetch.bind(this)
@@ -29,7 +29,7 @@ export default class ControlChart extends React.Component {
 
   info () {
     ajaxGet({
-      url: '/api/tcs/'+this.props.sensor_id,
+      url: '/api/tcs/' + this.props.sensor_id,
       success: function (data) {
         this.setState({
           config: data
@@ -40,7 +40,7 @@ export default class ControlChart extends React.Component {
 
   fetch () {
     ajaxGet({
-      url: '/api/tcs/'+this.props.sensor_id+'/usage',
+      url: '/api/tcs/' + this.props.sensor_id + '/usage',
       success: function (data) {
         var processed = []
         $.each(data.historical, function (i, v) {
@@ -61,10 +61,10 @@ export default class ControlChart extends React.Component {
     }
     var min = 76
     var max = 82
-    if(this.state.config.chart_min !== undefined){
+    if (this.state.config.chart_min !== undefined) {
       min = this.state.config.chart_min
     }
-    if(this.state.config.chart_max !== undefined){
+    if (this.state.config.chart_max !== undefined) {
       max = this.state.config.chart_max
     }
 

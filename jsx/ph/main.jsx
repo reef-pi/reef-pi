@@ -19,38 +19,38 @@ export default class Ph extends React.Component {
     this.fetch()
   }
 
-  fetch(){
+  fetch () {
     ajaxGet({
       url: '/api/phprobes',
       success: function (data) {
         this.setState({
-          probes: data,
+          probes: data
         })
       }.bind(this)
     })
   }
 
-  probeList() {
+  probeList () {
     var list = []
     var index = 0
     $.each(this.state.probes, function (k, v) {
       list.push(
         <div key={k} className='row list-group-item'>
-          <Probe data={v} upateHook={this.fetch}/>
+          <Probe data={v} upateHook={this.fetch} />
         </div>
-       )
+      )
       index = index + 1
     }.bind(this))
     return list
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <ul className='list-group'>
           {this.probeList()}
         </ul>
-        <New updateHook={this.fetch}/>
+        <New updateHook={this.fetch} />
       </div>
     )
   }

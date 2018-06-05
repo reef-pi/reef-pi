@@ -19,38 +19,38 @@ export default class Main extends React.Component {
     this.fetch()
   }
 
-  fetch(){
+  fetch () {
     ajaxGet({
       url: '/api/tcs',
       success: function (data) {
         this.setState({
-          tcs: data,
+          tcs: data
         })
       }.bind(this)
     })
   }
 
-  list() {
+  list () {
     var list = []
     var index = 0
     $.each(this.state.tcs, function (k, v) {
       list.push(
         <div key={k} className='row list-group-item'>
-          <Sensor data={v} upateHook={this.fetch}/>
+          <Sensor data={v} upateHook={this.fetch} />
         </div>
-       )
+      )
       index = index + 1
     }.bind(this))
     return list
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <ul className='list-group'>
           {this.list()}
         </ul>
-        <New updateHook={this.fetch}/>
+        <New updateHook={this.fetch} />
       </div>
     )
   }

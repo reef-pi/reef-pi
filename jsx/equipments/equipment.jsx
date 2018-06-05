@@ -7,7 +7,7 @@ export default class Equipment extends React.Component {
     super(props)
     this.state = {
       action: (props.on ? 'off' : 'on'),
-      value: this.props.value,
+      value: this.props.value
     }
     this.update = this.update.bind(this)
   }

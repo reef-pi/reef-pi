@@ -20,14 +20,14 @@ export default class Outlets extends React.Component {
   remove (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/outlets/' + id,
-          success: function (data) {
-            this.fetchData()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          ajaxDelete({
+            url: '/api/outlets/' + id,
+            success: function (data) {
+              this.fetchData()
+            }.bind(this)
+          })
+        }.bind(this))
     }.bind(this))
   }
 
@@ -74,7 +74,7 @@ export default class Outlets extends React.Component {
     var list = []
     $.each(this.state.outlets, function (i, o) {
       list.push(
-        <div className='row'key={'outlet-'+o.id}>
+        <div className='row'key={'outlet-' + o.id}>
           <div className='col-sm-2'>
             {o.name}
           </div>

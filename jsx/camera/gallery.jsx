@@ -57,9 +57,9 @@ export default class Gallery extends React.Component {
     this.gotoNext()
   }
 
-  render() {
-    const { images } = this.props;
-		if (!images) return;
+  render () {
+    const { images } = this.props
+    if (!images) return
 
     var gallery = []
     $.each(this.props.images, function (i, k) {
@@ -70,8 +70,8 @@ export default class Gallery extends React.Component {
       )
     }.bind(this))
 
-		return (
-			<div className='container'>
+    return (
+      <div className='container'>
         <Lightbox images={this.props.images} onClose={this.onClose}
           currentImage={this.state.current}
           isOpen={this.state.isOpen}
@@ -81,12 +81,12 @@ export default class Gallery extends React.Component {
           onClickThumbnail={this.gotoImage}
           showThumbnails
         />
-				{gallery}
-			</div>
-		);
+        {gallery}
+      </div>
+    )
   }
 }
 
 Gallery.propTypes = {
-	images: PropTypes.array
-};
+  images: PropTypes.array
+}

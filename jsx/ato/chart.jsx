@@ -28,7 +28,7 @@ export default class ATOChart extends React.Component {
 
   info () {
     ajaxGet({
-      url: '/api/atos/'+this.props.ato_id,
+      url: '/api/atos/' + this.props.ato_id,
       success: function (data) {
         this.setState({
           config: data
@@ -39,10 +39,10 @@ export default class ATOChart extends React.Component {
 
   fetch () {
     ajaxGet({
-      url: '/api/atos/'+this.props.ato_id+'/usage',
+      url: '/api/atos/' + this.props.ato_id + '/usage',
       success: function (data) {
         this.setState({
-          usage: data,
+          usage: data
         })
       }.bind(this)
     })

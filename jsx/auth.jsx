@@ -1,10 +1,11 @@
 import React from 'react'
 import $ from 'jquery'
 import SignIn from './sign_in.jsx'
-import {ajaxPost} from './utils/ajax.js'
-import {hideAlert} from './utils/alert.js'
+import {updateCreds} from './redux/actions'
+import {connect} from 'react-redux'
+import {hideAlert} from './utils/alert'
 
-export default class Auth extends React.Component {
+class auth extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -19,17 +20,13 @@ export default class Auth extends React.Component {
   }
 
   updateCreds () {
-    ajaxPost({
-      url: '/api/credentials',
-      data: JSON.stringify({
-        user: $('#reef-pi-user').val(),
-        password: $('#reef-pi-pass').val()
-      }),
-      success: function (data) {
-        this.setState({updated: false})
-        hideAlert()
-      }.bind(this)
-    })
+    var creds = {
+      user: $('#reef-pi-user').val(),
+      password: $('#reef-pi-pass').val()
+    }
+    this.props.updateCreds(creds)
+    this.setState({updated: false})
+    hideAlert()
   }
 
   render () {
@@ -57,3 +54,10 @@ export default class Auth extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {updateCreds: (creds) => dispatch(updateCreds(creds))}
+}
+
+const Auth = connect(null, mapDispatchToProps)(auth)
+export default Auth
