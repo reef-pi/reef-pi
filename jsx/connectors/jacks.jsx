@@ -30,14 +30,14 @@ export default class Jacks extends React.Component {
   remove (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/jacks/' + id,
-          success: function (data) {
-            this.fetchData()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          ajaxDelete({
+            url: '/api/jacks/' + id,
+            success: function (data) {
+              this.fetchData()
+            }.bind(this)
+          })
+        }.bind(this))
     }.bind(this))
   }
 

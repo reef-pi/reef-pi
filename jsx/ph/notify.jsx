@@ -13,17 +13,17 @@ export default class Notify extends React.Component {
     this.update = this.update.bind(this)
   }
 
-  updateEnable(ev) {
-    var data  = this.state.data
+  updateEnable (ev) {
+    var data = this.state.data
     data.enable = !data.enable
     this.setState({data: data})
     this.props.hook(data)
   }
 
-  update(k){
-    return(
-      function(ev){
-        var h =  this.state.data
+  update (k) {
+    return (
+      function (ev) {
+        var h = this.state.data
         h[k] = ev.target.value
         this.setState({data: h})
         this.props.hook(h)
@@ -31,27 +31,27 @@ export default class Notify extends React.Component {
     )
   }
 
-  enable() {
-    return(
-     <div className='form-check'>
-      <label className='form-check-label'>
-        <input
-          className='form-check-input'
-          type='checkbox'
-          defaultChecked={this.state.data.enable}
-          disabled={this.props.readOnly}
-          onClick={this.updateEnable} />
-        <b>Enable alerting</b>
-      </label>
-    </div>
+  enable () {
+    return (
+      <div className='form-check'>
+        <label className='form-check-label'>
+          <input
+            className='form-check-input'
+            type='checkbox'
+            defaultChecked={this.state.data.enable}
+            disabled={this.props.readOnly}
+            onClick={this.updateEnable} />
+          <b>Enable alerting</b>
+        </label>
+      </div>
     )
   }
 
-  min() {
-    if(!this.state.data.enable) {
-     return
+  min () {
+    if (!this.state.data.enable) {
+      return
     }
-    return(
+    return (
       <div className='input-group'>
         <label className='input-group-addon'>Min</label>
         <input
@@ -64,11 +64,11 @@ export default class Notify extends React.Component {
     )
   }
 
-  max() {
-    if(!this.state.data.enable) {
-     return
+  max () {
+    if (!this.state.data.enable) {
+      return
     }
-    return(
+    return (
       <div className='input-group'>
         <label className='input-group-addon'>Max</label>
         <input
@@ -81,12 +81,12 @@ export default class Notify extends React.Component {
     )
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
-         {this.enable()}
-         {this.min()}
-         {this.max()}
+        {this.enable()}
+        {this.min()}
+        {this.max()}
       </div>
     )
   }

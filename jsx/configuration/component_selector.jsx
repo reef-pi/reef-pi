@@ -14,40 +14,39 @@ export default class ComponentSelector extends React.Component {
     this.setID = this.setID.bind(this)
   }
 
-  setID(k, ev){
+  setID (k, ev) {
     this.setState({
       title: $(ev.target).text(),
       current_id: k
-      }
+    }
     )
     this.props.hook(k)
   }
 
-  render() {
+  render () {
     var items = []
     var title = this.state.title
-    $.each(this.props.components, function(k,v){
+    $.each(this.props.components, function (k, v) {
       var active = v.id === this.state.current_id
-      if(v===undefined || v === null) {
+      if (v === undefined || v === null) {
         return
       }
-      if(active){
+      if (active) {
         title = v.name
       }
       items.push(
         <MenuItem key={k} active={active} eventKey={v.id} >
-          <span id={this.props.selector_id+'-'+v.id}>{ v.name }</span>
+          <span id={this.props.selector_id + '-' + v.id}>{ v.name }</span>
         </MenuItem>
       )
     }.bind(this))
-    return(
+    return (
       <DropdownButton
         title={title}
-        id={'ato-select-'+this.props.selector_idj}
+        id={'ato-select-' + this.props.selector_idj}
         onSelect={this.setID} >
         { items }
       </DropdownButton>
     )
   }
 }
-

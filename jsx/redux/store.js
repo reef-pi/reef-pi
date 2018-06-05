@@ -12,9 +12,12 @@ const initialState = {
   dosers: [],
   camera: {},
   configuration: {},
-  capabilities: []
+  capabilities: [],
+  health_stats: {},
+  inlets: [],
+  jacks: [],
+  outlets: []
 }
 export const configureStore = () => {
   return createStore(rootReducer, initialState, applyMiddleware(thunk))
 }
-

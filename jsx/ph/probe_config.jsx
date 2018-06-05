@@ -7,22 +7,22 @@ export default class ProbeConfig extends React.Component {
     this.state = {
     }
 
-    this.updateConfig  = this.updateConfig.bind(this)
+    this.updateConfig = this.updateConfig.bind(this)
   }
 
-  updateConfig(v) {
+  updateConfig (v) {
     this.setState({
       config: v
     })
     this.props.hook
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <div className='row'>
           <div className='col-sm-4'>
-            <Notify data={this.props.data.notify} hook={this.updateConfig} readOnly={this.props.readOnly}/>
+            <Notify data={this.props.data.notify} hook={this.updateConfig} readOnly={this.props.readOnly} />
           </div>
         </div>
       </div>

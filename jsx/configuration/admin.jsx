@@ -20,34 +20,34 @@ export default class Admin extends React.Component {
 
   reload () {
     confirm('Are you sure ?')
-    .then(function () {
-      ajaxPost({
-        url: '/api/admin/reload',
-        success: function (data) {
-          hideAlert()
-        }.bind(this)
+      .then(function () {
+        ajaxPost({
+          url: '/api/admin/reload',
+          success: function (data) {
+            hideAlert()
+          }
+        })
       })
-    }.bind(this))
   }
 
   powerOff () {
     confirm('Are you sure ?')
-    .then(function () {
-      ajaxPost({
-        url: '/api/admin/poweroff',
-        success: function () {}
+      .then(function () {
+        ajaxPost({
+          url: '/api/admin/poweroff',
+          success: function () {}
+        })
       })
-    }.bind(this))
   }
 
   reboot () {
     confirm('Are you sure ?')
-    .then(function () {
-      ajaxPost({
-        url: '/api/admin/reboot',
-        success: function () {}
+      .then(function () {
+        ajaxPost({
+          url: '/api/admin/reboot',
+          success: function () {}
+        })
       })
-    }.bind(this))
   }
 
   render () {

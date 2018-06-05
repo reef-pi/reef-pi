@@ -1,48 +1,34 @@
 import React from 'react'
 import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
-import {ajaxGet} from './utils/ajax.js'
-import {hideAlert} from './utils/alert.js'
+import {fetchHealth} from './redux/actions'
+import {connect} from 'react-redux'
 
-export default class HealthChart extends React.Component {
+class healthChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      health_stats: [],
-      trend: this.props.trend !== undefined ? this.props.trend : 'current'
+      trend: this.props.trend !== undefined ? this.props.trend : 'current',
+      timer: window.setInterval(props.fetchHealth, 60 * 1000)
     }
-    this.fetch = this.fetch.bind(this)
   }
 
   componentDidMount () {
-    var timer = window.setInterval(this.fetch, 60 * 1000)
-    this.setState({timer: timer})
-    this.fetch()
+    this.props.fetchHealth()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/health_stats',
-      success: function (data) {
-        this.setState({
-          health_stats: data[this.state.trend]
-        })
-        hideAlert()
-      }.bind(this)
-    })
-  }
-
   render () {
-    if (this.state.health_stats === undefined || this.state.health_stats.length <= 0) {
+    if (this.props.health_stats === undefined || this.props.health_stats.length <= 0) {
       return (<div />)
     }
+    var healthStats = this.props.health_stats[this.state.trend]
     return (
       <div className='container'>
         <span className='h6'>CPU/Memory ({this.props.trend})</span>
-        <LineChart width={this.props.width} height={this.props.height} data={this.state.health_stats}>
+        <LineChart width={this.props.width} height={this.props.height} data={healthStats}>
           <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
           <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
           <XAxis dataKey='time' />
@@ -54,3 +40,13 @@ export default class HealthChart extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { health_stats: state.health_stats }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchHealth: () => dispatch(fetchHealth())}
+}
+const HealthChart = connect(mapStateToProps, mapDispatchToProps)(healthChart)
+export default HealthChart

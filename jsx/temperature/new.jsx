@@ -17,7 +17,7 @@ export default class New extends React.PureComponent {
       control: false,
       notify: { min: 77, max: 81},
       sensor: '',
-      add: false,
+      add: false
     }
     this.add = this.add.bind(this)
     this.toggle = this.toggle.bind(this)
@@ -27,23 +27,23 @@ export default class New extends React.PureComponent {
     this.updateSensor = this.updateSensor.bind(this)
   }
 
-  updateSensor(v) {
+  updateSensor (v) {
     this.setState({
       sensor: v
     })
   }
 
-  updateCheckbox(k) {
-    return(function(ev) {
+  updateCheckbox (k) {
+    return (function (ev) {
       var h = {}
       h[k] = ev.target.checked
       this.setState(h)
     }.bind(this))
   }
 
-  update(k) {
-    return(function(ev){
-      var h ={}
+  update (k) {
+    return (function (ev) {
+      var h = {}
       h[k] = ev.target.value
       this.setState(h)
     }.bind(this))
@@ -60,7 +60,7 @@ export default class New extends React.PureComponent {
       cooler: '',
       control: false,
       notify: { min: 77, max: 81},
-      sensor: '',
+      sensor: ''
     })
   }
 
@@ -73,7 +73,7 @@ export default class New extends React.PureComponent {
         <div className='row'>
           <div className='col-sm-2'>Name</div>
           <div className='col-sm-2'>
-            <input type='text' onChange={this.update('name')} value={this.state.name} id='new_tc_name'/>
+            <input type='text' onChange={this.update('name')} value={this.state.name} id='new_tc_name' />
           </div>
         </div>
         <div className='row'>
@@ -90,7 +90,7 @@ export default class New extends React.PureComponent {
               onChange={this.updateCheckbox('enable')}
               value={this.state.enable}
               id='new_tc_enable'
-              defaultChecked={true}
+              defaultChecked
             />
           </div>
         </div>
@@ -101,7 +101,7 @@ export default class New extends React.PureComponent {
               type='checkbox'
               onChange={this.updateCheckbox('fahrenheit')}
               value={this.state.fahrenheit}
-              defaultChecked={true}
+              defaultChecked
               id='new_tc_fahrenheit'
             />
           </div>
@@ -122,7 +122,6 @@ export default class New extends React.PureComponent {
     )
   }
 
-
   add () {
     if (this.state.name === '') {
       showAlert('Name can not be empty')
@@ -137,7 +136,7 @@ export default class New extends React.PureComponent {
       period: parseInt(this.state.period),
       fahrenheit: this.state.fahrenheit,
       chart_min: 65,
-      chart_max: 75,
+      chart_max: 75
     }
     ajaxPut({
       url: '/api/tcs',
@@ -149,9 +148,8 @@ export default class New extends React.PureComponent {
     })
   }
 
-
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <input id='add_tc' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}

@@ -14,39 +14,39 @@ export default class Calibrate extends React.PureComponent {
     this.updateValue = this.updateValue.bind(this)
   }
 
-  setType(k, ev) {
+  setType (k, ev) {
     this.setState({type: k})
   }
 
-  updateValue(ev) {
+  updateValue (ev) {
     this.setState({
       value: ev.target.value
     })
   }
 
-  calibrate() {
-    var  payload = {
+  calibrate () {
+    var payload = {
       type: this.state.type,
       value: parseFloat(this.state.value)
     }
     ajaxPost({
-      url: '/api/phprobes/'+this.props.probe+'/calibrate',
+      url: '/api/phprobes/' + this.props.probe + '/calibrate',
       data: JSON.stringify(payload),
       success: function (data) {
-      }.bind(this)
+      }
     })
   }
 
-  render() {
+  render () {
     var menuItems = [
-      <MenuItem key='high' eventKey='high'>High</MenuItem> ,
-      <MenuItem key='mid' eventKey='mid'>Mid</MenuItem> ,
-      <MenuItem key='low' eventKey='low'>Low</MenuItem> 
+      <MenuItem key='high' eventKey='high'>High</MenuItem>,
+      <MenuItem key='mid' eventKey='mid'>Mid</MenuItem>,
+      <MenuItem key='low' eventKey='low'>Low</MenuItem>
     ]
-    return(
+    return (
       <div className='container'>
         <div className='col-sm-2'>
-          <DropdownButton title={this.state.type} onSelect={this.setType} id={this.props.probe+'-calibration-type'}>
+          <DropdownButton title={this.state.type} onSelect={this.setType} id={this.props.probe + '-calibration-type'}>
             {menuItems}
           </DropdownButton>
         </div>
@@ -58,9 +58,9 @@ export default class Calibrate extends React.PureComponent {
               className='form-control'
               value={this.state.value}
               onChange={this.updateValue}
-              />
+            />
           </div>
-         </div>
+        </div>
         <button className='btn btn-primary' onClick={this.calibrate}>
          Run calibration
         </button>

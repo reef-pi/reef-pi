@@ -20,13 +20,13 @@ export default class New extends React.Component {
     this.setJack = this.setJack.bind(this)
   }
 
-  setJack(j, p) {
+  setJack (j, p) {
     this.setState({jack: j, pin: parseInt(p)})
   }
 
-  update(k) {
-    return(function(ev){
-      var h ={}
+  update (k) {
+    return (function (ev) {
+      var h = {}
       h[k] = ev.target.value
       this.setState(h)
     }.bind(this))
@@ -38,7 +38,7 @@ export default class New extends React.Component {
     })
     this.setState({
       name: '',
-      pin: 0,
+      pin: 0
     })
   }
 
@@ -50,17 +50,16 @@ export default class New extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name'/></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name' /></div>
         </div>
         <div className='row'>
-           <JackSelector update={this.setJack} id='new_doser'/>
+          <JackSelector update={this.setJack} id='new_doser' />
         </div>
         <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
     )
   }
 
-  
   add () {
     if (this.state.name === '') {
       showAlert('Specify doser name')
@@ -69,7 +68,7 @@ export default class New extends React.Component {
     var payload = {
       name: this.state.name,
       pin: parseInt(this.state.pin),
-      jack: this.state.jack,
+      jack: this.state.jack
     }
     ajaxPut({
       url: '/api/doser/pumps',
@@ -81,8 +80,8 @@ export default class New extends React.Component {
       }.bind(this)
     })
   }
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <input id='add_doser' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}

@@ -20,11 +20,11 @@ export default class Camera extends React.Component {
     this.motion = this.motion.bind(this)
   }
 
-  motion() {
-    if(this.state.config.motion === undefined) {
+  motion () {
+    if (this.state.config.motion === undefined) {
       return
     }
-    return(
+    return (
       <Motion
         width={this.state.config.motion.width}
         height={this.state.config.motion.height}
@@ -33,7 +33,7 @@ export default class Camera extends React.Component {
     )
   }
 
-  toggleConfig() {
+  toggleConfig () {
     this.setState({showConfig: !this.state.showConfig})
   }
 
@@ -70,8 +70,8 @@ export default class Camera extends React.Component {
 
   render () {
     var config = <div />
-    if(this.state.showConfig) {
-      config = <Config config={this.state.config}/>
+    if (this.state.showConfig) {
+      config = <Config config={this.state.config} />
     }
     return (
       <div className='container'>

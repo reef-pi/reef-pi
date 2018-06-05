@@ -1,50 +1,32 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {ajaxGet} from './utils/ajax.js'
-import {hideAlert} from './utils/alert.js'
+import {fetchEquipments} from './redux/actions'
 
-export default class SelectEquipment extends React.Component {
+class selectEquipment extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      equipments: [],
-      equipment: {
-        id: props.active,
-        name: ''
+    var equipment = {id: props.active, name: ''}
+    $.each(props.equipments, function (i, eq) {
+      if (eq.id === equipment.id) {
+        equipment = eq
       }
+    })
+    this.state = {
+      equipment: equipment
     }
-    this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
   }
 
   componentDidMount () {
-    this.fetchData()
-  }
-
-  fetchData () {
-    ajaxGet({
-      url: '/api/equipments',
-      success: function (data) {
-        var equipment = this.state.equipment
-        $.each(data, function (i, eq) {
-          if (eq.id === equipment.id) {
-            equipment = eq
-          }
-        })
-        this.setState({
-          equipments: data,
-          equipment: equipment
-        })
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.fetchEquipments()
   }
 
   equipmentList () {
     var menuItems = [ <MenuItem key='none' active={this.state.equipment === undefined} eventKey='none'>-</MenuItem> ]
-    $.each(this.state.equipments, function (k, v) {
+    $.each(this.props.equipments, function (k, v) {
       var active = false
       if (this.state.equipment !== undefined) {
         active = this.state.equipment.id === v.id
@@ -62,7 +44,7 @@ export default class SelectEquipment extends React.Component {
       this.props.update('')
       return
     }
-    var eq = this.state.equipments[k]
+    var eq = this.props.equipments[k]
     this.setState({
       equipment: eq
     })
@@ -84,3 +66,13 @@ export default class SelectEquipment extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return { equipments: state.equipments }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchEquipments: () => dispatch(fetchEquipments())}
+}
+
+const SelectEquipment = connect(mapStateToProps, mapDispatchToProps)(selectEquipment)
+export default SelectEquipment

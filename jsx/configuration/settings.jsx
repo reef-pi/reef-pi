@@ -6,7 +6,7 @@ import HealthNotify from './health_notify.jsx'
 import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import {hideAlert} from '../utils/alert.js'
 
-export default class Settings extends React.Component{
+export default class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

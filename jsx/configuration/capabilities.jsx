@@ -29,7 +29,7 @@ export default class Capabilities extends React.Component {
             id={'update-' + label}
             onClick={this.updateCapability(label)}
             defaultChecked={this.state.capabilities[label]}
-            />
+          />
           {label}
         </label>
       </div>

@@ -1,16 +1,15 @@
 import React from 'react'
-import {ajaxGet, ajaxDelete, ajaxPut} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import $ from 'jquery'
+import {fetchInlets, deleteInlet, createInlet} from '../redux/actions'
+import {connect} from 'react-redux'
 
-export default class Inlets extends React.Component {
+class inlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      inlets: [],
       add: false
     }
-    this.fetch = this.fetch.bind(this)
     this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
@@ -20,19 +19,14 @@ export default class Inlets extends React.Component {
   remove (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/inlets/' + id,
-          success: function (data) {
-            this.fetch()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          this.props.deleteInlet(id)
+        }.bind(this))
     }.bind(this))
   }
 
   componentDidMount () {
-    this.fetch()
+    this.props.fetchInlets()
   }
 
   add () {
@@ -49,30 +43,13 @@ export default class Inlets extends React.Component {
       pin: parseInt($('#inletPin').val()),
       reverse: $('#inletReverse')[0].checked
     }
-    ajaxPut({
-      url: '/api/inlets',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetch()
-        this.add()
-      }.bind(this)
-    })
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/inlets',
-      success: function (data) {
-        this.setState({
-          inlets: data
-        })
-      }.bind(this)
-    })
+    this.props.createInlet(payload)
+    this.add()
   }
 
   list () {
     var items = []
-    $.each(this.state.inlets, function (n, i) {
+    $.each(this.props.inlets, function (n, i) {
       items.push(
         <div className='row'key={i.name}>
           <div className='col-sm-2'>
@@ -140,3 +117,22 @@ export default class Inlets extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { inlets: state.inlets }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchInlets: () => dispatch(fetchInlets()),
+    createInlet: (inlet) => {
+      dispatch(createInlet(inlet))
+    },
+    deleteInlet: (id) => {
+      dispatch(deleteInlet(id))
+    }
+  }
+}
+
+const Inlets = connect(mapStateToProps, mapDispatchToProps)(inlets)
+export default Inlets

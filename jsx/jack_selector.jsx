@@ -1,17 +1,23 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {ajaxGet} from './utils/ajax.js'
+import {fetchJacks} from './redux/actions.js'
+import {connect} from 'react-redux'
 
-export default class JackSelector extends React.Component {
+class jackSelector extends React.Component {
   constructor (props) {
     super(props)
+    var jack
+    $.each(this.props.jacks, function (i, j) {
+      if (this.props.id === j.id) {
+        jack = j
+      }
+    })
     this.state = {
-      jacks: [],
-      jack: undefined,
-      pin: undefined
+      jack: jack,
+      pin: jack === undefined ? undefined : jack.pins[0]
     }
-    this.fetch = this.fetch.bind(this)
+
     this.jacks = this.jacks.bind(this)
     this.setJack = this.setJack.bind(this)
     this.pins = this.pins.bind(this)
@@ -19,26 +25,7 @@ export default class JackSelector extends React.Component {
   }
 
   componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/jacks',
-      success: function (data) {
-        var jack
-        $.each(data, function (i, j) {
-          if (this.props.id === j.id) {
-            jack = j
-          }
-        }.bind(this))
-        this.setState({
-          jacks: data,
-          jack: jack,
-          pin: jack === undefined ? undefined : jack.pins[0]
-        })
-      }.bind(this)
-    })
+    this.props.fetchJacks()
   }
 
   jacks () {
@@ -49,7 +36,7 @@ export default class JackSelector extends React.Component {
       id = this.state.jack.id
     }
     var items = []
-    $.each(this.state.jacks, function (k, v) {
+    $.each(this.props.jacks, function (k, v) {
       items.push(<MenuItem key={k} active={v.id === id} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
     }.bind(this))
     return (
@@ -60,7 +47,7 @@ export default class JackSelector extends React.Component {
   }
 
   setJack (k, ev) {
-    var j = this.state.jacks[k]
+    var j = this.props.jacks[k]
     if (j === undefined) {
       return
     }
@@ -104,3 +91,14 @@ export default class JackSelector extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { jacks: state.jacks }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {fetchJacks: () => dispatch(fetchJacks())}
+}
+
+const JackSelector = connect(mapStateToProps, mapDispatchToProps)(jackSelector)
+export default JackSelector

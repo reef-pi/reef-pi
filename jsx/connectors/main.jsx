@@ -10,8 +10,8 @@ export default class Connectors extends React.Component {
     }
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <div className='row'>
           <Inlets />

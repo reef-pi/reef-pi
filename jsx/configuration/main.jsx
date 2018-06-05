@@ -6,7 +6,6 @@ import Dashboard from './dashboard.jsx'
 import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 
-
 export default class Configuration extends React.Component {
   constructor (props) {
     super(props)

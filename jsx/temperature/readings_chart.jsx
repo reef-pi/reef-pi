@@ -28,7 +28,7 @@ export default class ReadingsChart extends React.Component {
 
   info () {
     ajaxGet({
-      url: '/api/tcs/'+this.props.sensor_id,
+      url: '/api/tcs/' + this.props.sensor_id,
       success: function (data) {
         this.setState({
           config: data
@@ -39,7 +39,7 @@ export default class ReadingsChart extends React.Component {
 
   fetch () {
     ajaxGet({
-      url: '/api/tcs/'+this.props.sensor_id+'/usage',
+      url: '/api/tcs/' + this.props.sensor_id + '/usage',
       success: function (data) {
         this.setState({
           readings: data.current,
@@ -65,7 +65,7 @@ export default class ReadingsChart extends React.Component {
               <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
             </linearGradient>
           </defs>
-          <YAxis domain={[min, max]} dataKey='temperature'/>
+          <YAxis domain={[min, max]} dataKey='temperature' />
           <XAxis dataKey='time' />
           <Tooltip />
           <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />

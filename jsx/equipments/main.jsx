@@ -28,12 +28,12 @@ export default class Equipments extends React.Component {
     var list = []
     var index = 0
     $.each(this.state.equipments, function (k, v) {
-      var outlet ={}
-      $.each(this.state.outlets, function(x, o){
-        if(v.outlet== o.id){
+      var outlet = {}
+      $.each(this.state.outlets, function (x, o) {
+        if (v.outlet == o.id) {
           outlet = o
         }
-      }.bind(this))
+      })
       list.push(
         <div key={k} className='row list-group-item'>
           <div className='col-sm-8'>
@@ -43,7 +43,7 @@ export default class Equipments extends React.Component {
             <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
-       )
+      )
       index = index + 1
     }.bind(this))
     return list
@@ -54,7 +54,7 @@ export default class Equipments extends React.Component {
       url: '/api/equipments',
       success: function (data) {
         this.setState({
-          equipments: data,
+          equipments: data
         })
         hideAlert()
       }.bind(this)
@@ -75,7 +75,7 @@ export default class Equipments extends React.Component {
 
   setOutlet (i, ev) {
     this.setState({
-      selectedOutlet: i,
+      selectedOutlet: i
     })
     hideAlert()
   }
@@ -119,15 +119,15 @@ export default class Equipments extends React.Component {
   removeEquipment (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/equipments/' + id,
-          success: function (data) {
-            this.fetchData()
-            hideAlert()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          ajaxDelete({
+            url: '/api/equipments/' + id,
+            success: function (data) {
+              this.fetchData()
+              hideAlert()
+            }.bind(this)
+          })
+        }.bind(this))
     }.bind(this))
   }
 
@@ -157,12 +157,12 @@ export default class Equipments extends React.Component {
           <div style={dStyle}>
                Name: <input type='text' id='equipmentName' />
                Outlet:
-               <DropdownButton
-                 title={outlet}
-                 id='outlet'
-                 onSelect={this.setOutlet}>
-                 {this.outletList()}
-               </DropdownButton>
+            <DropdownButton
+              title={outlet}
+              id='outlet'
+              onSelect={this.setOutlet}>
+              {this.outletList()}
+            </DropdownButton>
             <input type='button' id='createEquipment' value='add' onClick={this.addEquipment} className='btn btn-outline-primary' />
           </div>
         </div>

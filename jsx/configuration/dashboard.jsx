@@ -13,14 +13,13 @@ export default class Dashboard extends React.Component {
       atos: [],
       tcs: [],
       lights: [],
-      phs: [],
+      phs: []
     }
     this.fetch = this.fetch.bind(this)
     this.save = this.save.bind(this)
     this.toRow = this.toRow.bind(this)
     this.updateHook = this.updateHook.bind(this)
   }
-
 
   componentDidMount () {
     this.fetch()
@@ -105,14 +104,14 @@ export default class Dashboard extends React.Component {
     )
   }
 
-  updateHook(cells){
+  updateHook (cells) {
     var config = this.state.config
     var i, j
-    for(i = 0; i< config.row; i ++ ) {
-      if(config.grid_details[i]=== undefined) {
+    for (i = 0; i < config.row; i++) {
+      if (config.grid_details[i] === undefined) {
         config.grid_details[i] = []
       }
-      for(j =0 ;j< config.column; j++) {
+      for (j = 0; j < config.column; j++) {
         config.grid_details[i][j] = {
           id: cells[i][j].id,
           type: cells[i][j].type
@@ -125,15 +124,15 @@ export default class Dashboard extends React.Component {
     })
   }
 
-  render() {
+  render () {
     var updateButtonClass = 'btn btn-outline-success col-sm-2'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
-    if(this.state.config.grid_details === undefined) {
-      return(<div />)
+    if (this.state.config.grid_details === undefined) {
+      return (<div />)
     }
-    return(
+    return (
       <div className='container'>
         {this.toRow('row', 'Rows')}
         {this.toRow('column', 'Columns')}

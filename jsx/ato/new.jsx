@@ -12,7 +12,7 @@ export default class New extends React.Component {
       enable: false,
       inlet: '',
       period: 60,
-      add: false,
+      add: false
     }
     this.add = this.add.bind(this)
     this.toggle = this.toggle.bind(this)
@@ -22,17 +22,17 @@ export default class New extends React.Component {
     this.setInlet = this.setInlet.bind(this)
   }
 
-  setInlet(id) {
+  setInlet (id) {
     this.setState({inlet: id})
   }
 
-  updateEnable(ev) {
+  updateEnable (ev) {
     this.setState({enable: ev.target.checked})
   }
 
-  update(k) {
-    return(function(ev){
-      var h ={}
+  update (k) {
+    return (function (ev) {
+      var h = {}
       h[k] = ev.target.value
       this.setState(h)
     }.bind(this))
@@ -46,7 +46,7 @@ export default class New extends React.Component {
       name: '',
       enable: false,
       period: 60,
-      inlet:'',
+      inlet: ''
     })
   }
 
@@ -59,7 +59,7 @@ export default class New extends React.Component {
         <div className='row'>
           <div className='col-sm-2'>Name</div>
           <div className='col-sm-2'>
-            <input type='text' id='new_ato_sensor_name' onChange={this.update('name')} value={this.state.name}/>
+            <input type='text' id='new_ato_sensor_name' onChange={this.update('name')} value={this.state.name} />
           </div>
         </div>
         <div className='row'>
@@ -69,17 +69,16 @@ export default class New extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <InletSelector update={this.setInlet} name='new_ato'/>
+          <InletSelector update={this.setInlet} name='new_ato' />
         </div>
         <div className='row'>
           <div className='col-sm-2'>Period</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period} id='new_ato_sensor_period'/></div>
+          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period} id='new_ato_sensor_period' /></div>
         </div>
         <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
       </div>
     )
   }
-
 
   add () {
     if (this.state.name === '') {
@@ -102,9 +101,8 @@ export default class New extends React.Component {
     })
   }
 
-
-  render() {
-    return(
+  render () {
+    return (
       <div className='container'>
         <input id='add_new_ato_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}

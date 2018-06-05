@@ -29,15 +29,15 @@ export default class Lighting extends React.Component {
   removeLight (id) {
     return (function () {
       confirm('Are you sure ?')
-      .then(function () {
-        ajaxDelete({
-          url: '/api/lights/' + id,
-          success: function (data) {
-            this.fetchLights()
-            hideAlert()
-          }.bind(this)
-        })
-      }.bind(this))
+        .then(function () {
+          ajaxDelete({
+            url: '/api/lights/' + id,
+            success: function (data) {
+              this.fetchLights()
+              hideAlert()
+            }.bind(this)
+          })
+        }.bind(this))
     }.bind(this))
   }
 
@@ -98,7 +98,7 @@ export default class Lighting extends React.Component {
       lights.push(
         <div key={'light-' + i} className='row'>
           <div className='container'>
-            <Light id={light.id} name={light.name} removeHook={this.fetchLights} jack={light.jack}/>
+            <Light id={light.id} name={light.name} removeHook={this.fetchLights} jack={light.jack} />
             <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
           </div>
           <hr />
@@ -157,9 +157,9 @@ export default class Lighting extends React.Component {
           <div style={dStyle}>
                Name: <input type='text' id='lightName' />
                Jack:
-               <DropdownButton title={jack} id='jack' onSelect={this.setJack}>
-                 {this.jacksList()}
-               </DropdownButton>
+            <DropdownButton title={jack} id='jack' onSelect={this.setJack}>
+              {this.jacksList()}
+            </DropdownButton>
             <input type='button' id='createLight' value='add' onClick={this.addLight} className='btn btn-outline-primary' />
           </div>
         </div>

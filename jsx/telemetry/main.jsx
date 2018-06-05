@@ -74,7 +74,7 @@ export default class Telemetry extends React.Component {
       url: '/api/telemetry',
       success: function (data) {
         this.setState({
-          config: data,
+          config: data
         })
         hideAlert()
       }.bind(this)
@@ -169,7 +169,7 @@ export default class Telemetry extends React.Component {
                 id='enable-mailer'
                 onClick={this.enableMailer}
                 defaultChecked={this.state.config.notify}
-                />
+              />
               <b>Email alerts</b>
             </label>
           </div>
