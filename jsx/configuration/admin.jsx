@@ -1,10 +1,10 @@
 import React from 'react'
 import SignIn from '../sign_in.jsx'
-import {ajaxPost} from '../utils/ajax.js'
-import {hideAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
+import {reload, reboot, powerOff} from '../redux/actions/admin'
+import {connect} from 'react-redux'
 
-export default class Admin extends React.Component {
+class admin extends React.Component {
   constructor (props) {
     super(props)
     this.powerOff = this.powerOff.bind(this)
@@ -19,35 +19,15 @@ export default class Admin extends React.Component {
   }
 
   reload () {
-    confirm('Are you sure ?')
-      .then(function () {
-        ajaxPost({
-          url: '/api/admin/reload',
-          success: function (data) {
-            hideAlert()
-          }
-        })
-      })
+    confirm('Are you sure ?').then(this.props.reload)
   }
 
   powerOff () {
-    confirm('Are you sure ?')
-      .then(function () {
-        ajaxPost({
-          url: '/api/admin/poweroff',
-          success: function () {}
-        })
-      })
+    confirm('Are you sure ?').then(this.props.powerOff)
   }
 
   reboot () {
-    confirm('Are you sure ?')
-      .then(function () {
-        ajaxPost({
-          url: '/api/admin/reboot',
-          success: function () {}
-        })
-      })
+    confirm('Are you sure ?').then(this.props.reboot)
   }
 
   render () {
@@ -63,3 +43,14 @@ export default class Admin extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    reload: () => dispatch(reload()),
+    reboot: () => dispatch(reboot()),
+    powerOff: () => dispatch(powerOff())
+  }
+}
+
+const Admin = connect(null, mapDispatchToProps)(admin)
+export default Admin

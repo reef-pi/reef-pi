@@ -53,7 +53,7 @@ export function reduxPut (params) {
 
 export function reduxPost (params) {
   return dispatch => {
-    fetch(params.url, { method: 'POST', headers: headers, body: makeHeaders() })
+    fetch(params.url, { method: 'POST', headers: makeHeaders(), body: JSON.stringify(params.data)})
       .then((response) => {
         if (!response.ok) {
           console.log(response.statusText)
