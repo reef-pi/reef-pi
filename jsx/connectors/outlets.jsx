@@ -1,17 +1,16 @@
 import React from 'react'
-import {ajaxGet, ajaxDelete, ajaxPut} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import $ from 'jquery'
+import {fetchOutlets, deleteOutlet, createOutlet} from '../redux/actions'
+import {connect} from 'react-redux'
 
-export default class Outlets extends React.Component {
+class outlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      outlets: [],
       add: false
     }
-    this.fetchData = this.fetchData.bind(this)
-    this.listOutlets = this.listOutlets.bind(this)
+    this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
@@ -21,18 +20,13 @@ export default class Outlets extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          ajaxDelete({
-            url: '/api/outlets/' + id,
-            success: function (data) {
-              this.fetchData()
-            }.bind(this)
-          })
+          this.props.deleteOutlet(id)
         }.bind(this))
     }.bind(this))
   }
 
   componentDidMount () {
-    this.fetchData()
+    this.props.fetchOutlets()
   }
 
   add () {
@@ -49,30 +43,13 @@ export default class Outlets extends React.Component {
       pin: parseInt($('#outletPin').val()),
       reverse: $('#outletReverse')[0].checked
     }
-    ajaxPut({
-      url: '/api/outlets',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.add()
-      }.bind(this)
-    })
+    this.props.createOutlet(payload)
+    this.add()
   }
 
-  fetchData () {
-    ajaxGet({
-      url: '/api/outlets',
-      success: function (data) {
-        this.setState({
-          outlets: data
-        })
-      }.bind(this)
-    })
-  }
-
-  listOutlets () {
+  list () {
     var list = []
-    $.each(this.state.outlets, function (i, o) {
+    $.each(this.props.outlets, function (i, o) {
       list.push(
         <div className='row'key={'outlet-' + o.id}>
           <div className='col-sm-2'>
@@ -105,7 +82,7 @@ export default class Outlets extends React.Component {
         <label className='h6'>Outlets</label>
         <div className='row'>
           <div className='container'>
-            {this.listOutlets()}
+            {this.list()}
           </div>
         </div>
         <div className='row'>
@@ -140,3 +117,18 @@ export default class Outlets extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { outlets: state.outlets }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchOutlets: () => dispatch(fetchOutlets()),
+    createOutlet: (outlet) => dispatch(createOutlet(outlet)),
+    deleteOutlet: (id) => dispatch(deleteOutlet(id))
+  }
+}
+
+const Outlets = connect(mapStateToProps, mapDispatchToProps)(outlets)
+export default Outlets
