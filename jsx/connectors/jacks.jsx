@@ -61,6 +61,7 @@ class jacks extends React.Component {
       driver: this.state.driver
     }
     this.props.createJack(payload)
+    this.add()
   }
 
   listJacks () {

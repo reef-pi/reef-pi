@@ -1,19 +1,6 @@
-const Nightmare = require('nightmare')
-const nightmare = Nightmare({ show: true })
-
-function TestEquipments () {
-  nightmare
-    .goto('http://localhost:8080/')
-    .viewport(1100, 650)
-    .wait(500)
-    .type('input#reef-pi-user', 'reef-pi')
-    .wait(500)
-    .type('input#reef-pi-pass', 'reef-pi')
-    .wait(500)
-    .click('input#btnSaveCreds')
-    .wait(500)
-
-    .click('li#react-tabs-2')
+module.exports = {
+  Create: function(n){
+    n.click('li#react-tabs-2')
     .wait(500)
     .click('input#add_equipment')
     .wait(500)
@@ -26,8 +13,6 @@ function TestEquipments () {
     .click('input#createEquipment')
     .wait(1500)
 
-    .click('li#react-tabs-2')
-    .wait(500)
     .click('input#add_equipment')
     .wait(500)
     .type('input#equipmentName', 'Light')
@@ -39,8 +24,6 @@ function TestEquipments () {
     .click('input#createEquipment')
     .wait(1500)
 
-    .click('li#react-tabs-2')
-    .wait(500)
     .click('input#add_equipment')
     .wait(500)
     .type('input#equipmentName', 'Heater')
@@ -52,8 +35,6 @@ function TestEquipments () {
     .click('input#createEquipment')
     .wait(1500)
 
-    .click('li#react-tabs-2')
-    .wait(500)
     .click('input#add_equipment')
     .wait(500)
     .type('input#equipmentName', 'Skimmer')
@@ -63,15 +44,31 @@ function TestEquipments () {
     .click('span#outlet-4')
     .wait(1000)
     .click('input#createEquipment')
+    .wait(1500)
 
-    .wait(2500)
-    .evaluate(function () { return 'equipments' })
-    .end()
-      .then(function (result) {
-        console.log(result)
-      })
-      .catch(function (error) {
-        console.error('Error:', error)
-      })
+    .click('input#add_equipment')
+    .wait(500)
+    .type('input#equipmentName', 'Fan')
+    .wait(500)
+    .click('button#outlet')
+    .wait(500)
+    .click('span#outlet-5')
+    .wait(1000)
+    .click('input#createEquipment')
+    .wait(1500)
+
+    .click('input#add_equipment')
+    .wait(500)
+    .type('input#equipmentName', 'ATOPump')
+    .wait(500)
+    .click('button#outlet')
+    .wait(500)
+    .click('span#outlet-6')
+    .wait(1000)
+    .click('input#createEquipment')
+    .wait(1500)
+    return(function(){
+      return('Equipment created')
+    })
+  }
 }
-TestEquipments()

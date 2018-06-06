@@ -8,8 +8,8 @@ class jackSelector extends React.Component {
   constructor (props) {
     super(props)
     var jack
-    $.each(this.props.jacks, function (i, j) {
-      if (this.props.id === j.id) {
+    $.each(props.jacks, function (i, j) {
+      if (props.id === j.id) {
         jack = j
       }
     })

@@ -89,7 +89,7 @@ export default class SignIn extends React.Component {
           <input type='text' id='reef-pi-user' className='form-control' style={emailStyle} placeholder='Username' required='' autoFocus='' />
           <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
           <input type='password' id='reef-pi-pass' className='form-control mb-3' style={passwordStyle} placeholder='Password' required='' />
-          <button className='btn btn-lg btn-primary btn-block' type='submit' onClick={this.saveCreds}>Sign in</button>
+          <button className='btn btn-lg btn-primary btn-block' type='submit' onClick={this.saveCreds} id='btnSaveCreds'>Sign in</button>
         </div>
       </div>
     )
