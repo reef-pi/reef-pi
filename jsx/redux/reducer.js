@@ -1,5 +1,3 @@
-import fetchInlets from './actions'
-
 export const rootReducer = (state, action) => {
   switch (action.type) {
     case 'INFO_LOADED':
@@ -16,7 +14,7 @@ export const rootReducer = (state, action) => {
       return { ...state, equipments: action.payload }
     case 'HEALTH_STATS_LOADED':
       return { ...state, health_stats: action.payload }
-    case 'CREDS_UPDATED':
+    case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED':
       return state
     default:
       return state
