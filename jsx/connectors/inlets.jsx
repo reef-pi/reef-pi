@@ -125,12 +125,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchInlets: () => dispatch(fetchInlets()),
-    createInlet: (inlet) => {
-      dispatch(createInlet(inlet))
-    },
-    deleteInlet: (id) => {
-      dispatch(deleteInlet(id))
-    }
+    createInlet: (inlet) => dispatch(createInlet(inlet)),
+    deleteInlet: (id) => dispatch(deleteInlet(id))
   }
 }
 

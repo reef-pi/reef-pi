@@ -1,19 +1,18 @@
 import React from 'react'
 import $ from 'jquery'
-import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {showAlert, hideAlert} from '../utils/alert.js'
+import {connect} from 'react-redux'
+import {fetchJacks, deleteJack, createJack} from '../redux/actions'
 
-export default class Jacks extends React.Component {
+class jacks extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      jacks: [],
       add: false,
       driver: 'pca9685'
     }
-    this.fetchData = this.fetchData.bind(this)
     this.listJacks = this.listJacks.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
@@ -31,18 +30,13 @@ export default class Jacks extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          ajaxDelete({
-            url: '/api/jacks/' + id,
-            success: function (data) {
-              this.fetchData()
-            }.bind(this)
-          })
+          this.props.deleteJack(id)
         }.bind(this))
     }.bind(this))
   }
 
   componentDidMount () {
-    this.fetchData()
+    this.props.fetchJacks()
   }
 
   add () {
@@ -66,30 +60,12 @@ export default class Jacks extends React.Component {
       pins: pins,
       driver: this.state.driver
     }
-    ajaxPut({
-      url: '/api/jacks',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.add()
-      }.bind(this)
-    })
-  }
-
-  fetchData () {
-    ajaxGet({
-      url: '/api/jacks',
-      success: function (data) {
-        this.setState({
-          jacks: data
-        })
-      }.bind(this)
-    })
+    this.props.createJack(payload)
   }
 
   listJacks () {
     var list = []
-    $.each(this.state.jacks, function (i, j) {
+    $.each(this.props.jacks, function (i, j) {
       list.push(
         <div className='row' key={j.name}>
           <div className='col-sm-2'>
@@ -156,3 +132,22 @@ export default class Jacks extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { jacks: state.jacks }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchJacks: () => dispatch(fetchJacks()),
+    createJack: (j) => {
+      dispatch(createJack(j))
+    },
+    deleteJack: (id) => {
+      dispatch(deleteJack(id))
+    }
+  }
+}
+
+const Jacks = connect(mapStateToProps, mapDispatchToProps)(jacks)
+export default Jacks

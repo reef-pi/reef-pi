@@ -30,21 +30,6 @@ export const fetchCapabilities = () => {
     }))
 }
 
-export const jacksLoaded = (jacks) => {
-  return ({
-    type: 'JACKS_LOADED',
-    payload: jacks
-  })
-}
-
-export const fetchJacks = () => {
-  return (
-    reduxGet({
-      url: '/api/jacks',
-      success: jacksLoaded
-    }))
-}
-
 export const equipmentsLoaded = (equipments) => {
   return ({
     type: 'EQUIPMENTS_LOADED',
@@ -88,6 +73,7 @@ export const updateCreds = (creds) => {
       success: credsUpdated
     }))
 }
+
 export const inletsLoaded = (inlets) => {
   return ({
     type: 'INLETS_LOADED',
@@ -117,5 +103,69 @@ export const createInlet = (inlet) => {
       url: '/api/inlets',
       data: inlet,
       success: fetchInlets
+    }))
+}
+
+export const jacksLoaded = (jacks) => {
+  return ({
+    type: 'JACKS_LOADED',
+    payload: jacks
+  })
+}
+
+export const fetchJacks = () => {
+  return (
+    reduxGet({
+      url: '/api/jacks',
+      success: jacksLoaded
+    }))
+}
+
+export const deleteJack = (id) => {
+  return (
+    reduxDelete({
+      url: '/api/jacks/' + id,
+      success: fetchJacks
+    }))
+}
+
+export const createJack = (jack) => {
+  return (
+    reduxPut({
+      url: '/api/jacks',
+      data: jack,
+      success: fetchJacks
+    }))
+}
+
+export const outletsLoaded = (outlets) => {
+  return ({
+    type: 'OUTLETS_LOADED',
+    payload: outlets
+  })
+}
+
+export const fetchOutlets = () => {
+  return (
+    reduxGet({
+      url: '/api/outlets',
+      success: outletsLoaded
+    }))
+}
+
+export const deleteOutlet = (id) => {
+  return (
+    reduxDelete({
+      url: '/api/outlets/' + id,
+      success: fetchOutlets
+    }))
+}
+
+export const createOutlet = (outlet) => {
+  return (
+    reduxPut({
+      url: '/api/outlets',
+      data: outlet,
+      success: fetchOutlets
     }))
 }
