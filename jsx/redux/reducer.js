@@ -4,6 +4,8 @@ export const rootReducer = (state, action) => {
       return { ...state, info: action.payload }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
+    case 'SETTINGS_LOADED':
+      return { ...state, settings: action.payload }
     case 'JACKS_LOADED':
       return { ...state, jacks: action.payload }
     case 'INLETS_LOADED':
@@ -14,7 +16,7 @@ export const rootReducer = (state, action) => {
       return { ...state, equipments: action.payload }
     case 'HEALTH_STATS_LOADED':
       return { ...state, health_stats: action.payload }
-    case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED':
+    case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED', 'SETTINGS_UPDATED':
       return state
     default:
       return state
