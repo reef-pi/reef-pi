@@ -6,6 +6,7 @@ import HealthNotify from './health_notify.jsx'
 import {hideAlert} from '../utils/alert.js'
 import {updateSettings, fetchCapabilities, fetchSettings} from '../redux/actions'
 import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
 class settings extends React.Component {
   constructor (props) {
@@ -13,9 +14,7 @@ class settings extends React.Component {
     this.state = {
       capabilities: props.capabilities,
       settings: {
-        name: '',
-        address: '',
-        interface: ''
+        name: '', interface: '', address: ''
       },
       updated: false
     }
@@ -89,8 +88,8 @@ class settings extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchCapabilities()
     this.props.fetchSettings()
+    this.props.fetchCapabilities()
   }
 
   toRow (label) {
@@ -108,6 +107,20 @@ class settings extends React.Component {
         <input type='text' onChange={fn} value={this.state.settings[label]} id={'to-row-' + label} />
       </div>
     )
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.settings === state.settings) {
+      return null
+    }
+    if(isEmptyObject(props.settings)) {
+      return null
+    }
+    if(props.settings === undefined) {
+      return null
+    }
+    state.settings = props.settings
+    return state
   }
 
   render () {
@@ -161,6 +174,7 @@ class settings extends React.Component {
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     capabilities: state.capabilities,

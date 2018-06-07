@@ -16,7 +16,8 @@ const initialState = {
   health_stats: {},
   inlets: [],
   jacks: [],
-  outlets: []
+  outlets: [],
+  settings: {}
 }
 export const configureStore = () => {
   return createStore(rootReducer, initialState, applyMiddleware(thunk))
