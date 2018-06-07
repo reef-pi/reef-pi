@@ -4,7 +4,7 @@ export default class Capabilities extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      capabilities: this.props.capabilities
+      capabilities: props.capabilities
     }
     this.updateCapability = this.updateCapability.bind(this)
     this.toLi = this.toLi.bind(this)

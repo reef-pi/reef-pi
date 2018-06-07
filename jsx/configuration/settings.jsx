@@ -3,23 +3,21 @@ import Auth from '../auth.jsx'
 import Capabilities from './capabilities.jsx'
 import Display from './display.jsx'
 import HealthNotify from './health_notify.jsx'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import {hideAlert} from '../utils/alert.js'
+import {updateSettings, fetchCapabilities, fetchSettings} from '../redux/actions'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class Settings extends React.Component {
+class settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      capabilities: [],
+      capabilities: props.capabilities,
       settings: {
-        name: '',
-        address: '',
-        interface: ''
+        name: '', interface: '', address: ''
       },
       updated: false
     }
-    this.loadCapabilities = this.loadCapabilities.bind(this)
-    this.fetchData = this.fetchData.bind(this)
     this.updateCheckbox = this.updateCheckbox.bind(this)
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
@@ -70,24 +68,9 @@ export default class Settings extends React.Component {
   }
 
   showCapabilities () {
-    if (this.state.settings.capabilities === undefined) {
-      return
-    }
     return (
-      <Capabilities capabilities={this.state.settings.capabilities} update={this.updateCapabilities} />
+      <Capabilities capabilities={this.state.capabilities} update={this.updateCapabilities} />
     )
-  }
-
-  loadCapabilities () {
-    ajaxGet({
-      url: '/api/capabilities',
-      success: function (data) {
-        this.setState({
-          capabilities: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
   }
 
   updateCapabilities (capabilities) {
@@ -100,33 +83,13 @@ export default class Settings extends React.Component {
   }
 
   update () {
-    ajaxPost({
-      url: '/api/settings',
-      data: JSON.stringify(this.state.settings),
-      success: function (data) {
-        this.setState({
-          updated: false
-        })
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.updateSettings(this.state.settings)
+    this.setState({updated: false})
   }
 
   componentDidMount () {
-    this.loadCapabilities()
-    this.fetchData()
-  }
-
-  fetchData () {
-    ajaxGet({
-      url: '/api/settings',
-      success: function (data) {
-        this.setState({
-          settings: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.fetchSettings()
+    this.props.fetchCapabilities()
   }
 
   toRow (label) {
@@ -144,6 +107,20 @@ export default class Settings extends React.Component {
         <input type='text' onChange={fn} value={this.state.settings[label]} id={'to-row-' + label} />
       </div>
     )
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.settings === state.settings) {
+      return null
+    }
+    if(isEmptyObject(props.settings)) {
+      return null
+    }
+    if(props.settings === undefined) {
+      return null
+    }
+    state.settings = props.settings
+    return state
   }
 
   render () {
@@ -197,3 +174,21 @@ export default class Settings extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    capabilities: state.capabilities,
+    settings: state.settings
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchCapabilities: () => dispatch(fetchCapabilities()),
+    fetchSettings: () => dispatch(fetchSettings()),
+    updateSettings: (s) => dispatch(updateSettings(s)),
+  }
+}
+
+const Settings = connect(mapStateToProps, mapDispatchToProps)(settings)
+export default Settings
