@@ -65,6 +65,7 @@ deb: ui
 clean:
 	-rm -rf *.deb
 	-rm -rf dist
+	-find jsx -iname __snapshots__ -print | xargs rm -rf
 	-find . -name '*.db' -exec rm {} \;
 	-find . -name '*.crt' -exec rm {} \;
 	-find . -name '*.key' -exec rm {} \;
