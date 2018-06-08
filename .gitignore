@@ -13,3 +13,4 @@ server.key
 test/thumbnails/*.png
 coverage.txt
 .idea/
+__snapshots__
