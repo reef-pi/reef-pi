@@ -44,7 +44,7 @@
     "webpack-cli": "^2.1.4"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --all --updateSnapshot --no-cache"
   },
   "repository": {
     "type": "git",
