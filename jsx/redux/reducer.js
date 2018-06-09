@@ -2,6 +2,16 @@ export const rootReducer = (state, action) => {
   switch (action.type) {
     case 'INFO_LOADED':
       return { ...state, info: action.payload }
+    case 'TCS_LOADED':
+      return { ...state, tcs: action.payload }
+    case 'ATOS_LOADED':
+      return { ...state, atos: action.payload }
+    case 'LIGHTS_LOADED':
+      return { ...state, lights: action.payload }
+    case 'DASHBOARD_LOADED':
+      return { ...state, dashboard: action.payload }
+    case 'PH_PROBES_LOADED':
+      return { ...state, phs: action.payload }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
     case 'SETTINGS_LOADED':
