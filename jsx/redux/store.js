@@ -8,6 +8,7 @@ const initialState = {
   timers: [],
   lights: [],
   atos: [],
+  tcs: [],
   phs: [],
   dosers: [],
   camera: {},
@@ -17,8 +18,10 @@ const initialState = {
   inlets: [],
   jacks: [],
   outlets: [],
-  settings: {}
+  settings: {},
+  dashboard: {},
 }
+
 export const configureStore = () => {
   return createStore(rootReducer, initialState, applyMiddleware(thunk))
 }

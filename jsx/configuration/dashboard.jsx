@@ -1,74 +1,44 @@
 import React from 'react'
 import $ from 'jquery'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import Grid from './grid.jsx'
+import {connect} from 'react-redux'
+import {fetchDashboard, updateDashboard} from '../redux/actions/dashboard'
+import {fetchATOs} from '../redux/actions/ato'
+import {fetchLights} from '../redux/actions/lights'
+import {fetchPhProbes} from '../redux/actions/phprobes'
+import {fetchTCs} from '../redux/actions/tcs'
+import {isEmptyObject} from 'jquery'
 
-export default class Dashboard extends React.Component {
+class dashboard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       updated: false,
       config: {},
-      atos: [],
-      tcs: [],
-      lights: [],
-      phs: []
     }
-    this.fetch = this.fetch.bind(this)
     this.save = this.save.bind(this)
     this.toRow = this.toRow.bind(this)
     this.updateHook = this.updateHook.bind(this)
   }
 
   componentDidMount () {
-    this.fetch()
+    this.props.fetchDashboard()
+    this.props.fetchATOs()
+    this.props.fetchLights()
+    this.props.fetchPhProbes()
+    this.props.fetchTCs()
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/dashboard',
-      success: function (data) {
-        this.setState({
-          config: data,
-          rows: data.row,
-          columns: data.column,
-          updated: false
-        })
-      }.bind(this)
-    })
-    ajaxGet({
-      url: '/api/atos',
-      success: function (data) {
-        this.setState({
-          atos: data
-        })
-      }.bind(this)
-    })
-    ajaxGet({
-      url: '/api/phprobes',
-      success: function (data) {
-        this.setState({
-          phs: data
-        })
-      }.bind(this)
-    })
-    ajaxGet({
-      url: '/api/lights',
-      success: function (data) {
-        this.setState({
-          lights: data
-        })
-      }.bind(this)
-    })
-    ajaxGet({
-      url: '/api/tcs',
-      success: function (data) {
-        this.setState({
-          tcs: data
-        })
-      }.bind(this)
-    })
+  static getDerivedStateFromProps(props, state) {
+    if(props.config === undefined) {
+      return null
+    }
+    if(isEmptyObject(props.config)) {
+      return null
+    }
+    state.config = props.config
+    return state
   }
 
   save () {
@@ -78,13 +48,8 @@ export default class Dashboard extends React.Component {
     payload.column = parseInt(payload.column)
     payload.row = parseInt(payload.row)
     payload.width = parseInt(payload.width)
-    ajaxPost({
-      url: '/api/dashboard',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetch()
-      }.bind(this)
-    })
+    this.props.updateDashboard(payload)
+    this.setState({updated: false})
   }
 
   toRow (key, label) {
@@ -144,10 +109,10 @@ export default class Dashboard extends React.Component {
             cells={this.state.config.grid_details}
             columns={this.state.config.column}
             hook={this.updateHook}
-            tcs={this.state.tcs}
-            atos={this.state.atos}
-            phs={this.state.phs}
-            lights={this.state.lights}
+            tcs={this.props.tcs}
+            atos={this.props.atos}
+            phs={this.props.phs}
+            lights={this.props.lights}
           />
         </div>
         <div className='row'>
@@ -157,3 +122,27 @@ export default class Dashboard extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    atos: state.atos,
+    phs: state.phs,
+    tcs: state.tcs,
+    lights: state.lights,
+    config: state.dashboard
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchDashboard: () => dispatch(fetchDashboard()),
+    fetchATOs: () => dispatch(fetchATOs()),
+    fetchTCs: () => dispatch(fetchTCs()),
+    fetchLights: () => dispatch(fetchLights()),
+    fetchPhProbes: () => dispatch(fetchPhProbes()),
+    updateDashboard: (d) => dispatch(updateDashboard(d))
+  }
+}
+
+const Dashboard = connect(mapStateToProps, mapDispatchToProps)(dashboard)
+export default Dashboard
