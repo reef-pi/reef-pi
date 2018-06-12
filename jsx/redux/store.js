@@ -20,6 +20,7 @@ const initialState = {
   outlets: [],
   settings: {},
   dashboard: {},
+  display: {}
 }
 
 export const configureStore = () => {

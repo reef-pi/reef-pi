@@ -1,10 +1,11 @@
 import $ from 'jquery'
 import React from 'react'
-import {ajaxPut} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
 import JackSelector from '../jack_selector.jsx'
+import {createDosingPump} from '../redux/actions/doser'
+import {connect} from 'react-redux'
 
-export default class New extends React.Component {
+class newPump extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -70,16 +71,11 @@ export default class New extends React.Component {
       pin: parseInt(this.state.pin),
       jack: this.state.jack
     }
-    ajaxPut({
-      url: '/api/doser/pumps',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        hideAlert()
-        this.toggle()
-        this.props.updateHook()
-      }.bind(this)
-    })
+    this.props.createDosingPump(payload)
+    this.toggle()
+    this.props.updateHook()
   }
+
   render () {
     return (
       <div className='container'>
@@ -89,3 +85,12 @@ export default class New extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createDosingPump: (s) => dispatch(createDosingPump(s)),
+  }
+}
+
+const New = connect(null, mapDispatchToProps)(newPump)
+export default New

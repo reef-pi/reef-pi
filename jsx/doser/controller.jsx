@@ -3,45 +3,32 @@ import React from 'react'
 import Pump from './pump.jsx'
 import New from './new.jsx'
 import {hideAlert} from '../utils/alert.js'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchDosingPumps} from '../redux/actions/doser'
+import {connect} from 'react-redux'
 
-export default class Doser extends React.Component {
+class doser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      dosers: [],
       add: false
     }
-    this.fetch = this.fetch.bind(this)
     this.pumpList = this.pumpList.bind(this)
   }
 
   componentWillMount () {
-    this.fetch()
+    this.props.fetchDosingPumps()
   }
 
   pumpList () {
     var pumps = []
-    $.each(this.state.pumps, function (i, pump) {
+    $.each(this.props.pumps, function (i, pump) {
       pumps.push(
         <div key={'pump-' + i} className='row list-group-item'>
-          <Pump data={pump} updateHook={this.fetch} />
+          <Pump data={pump} updateHook={this.props.fetchDosingPumps} />
         </div>
       )
     }.bind(this))
     return (<ul className='list-group'> {pumps} </ul>)
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/doser/pumps',
-      success: function (data) {
-        this.setState({
-          pumps: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
   }
 
   render () {
@@ -50,8 +37,22 @@ export default class Doser extends React.Component {
         <div className='container'>
           { this.pumpList() }
         </div>
-        <New updateHook={this.fetch} />
+        <New updateHook={this.props.fetchDosingPumps} />
       </div>
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    pumps: state.dosers
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchDosingPumps: () => dispatch(fetchDosingPumps())
+  }
+}
+
+const Doser = connect(mapStateToProps, mapDispatchToProps)(doser)
+export default Doser

@@ -14,16 +14,31 @@ export const fetchDisplay = () => {
   }))
 }
 
-export const displayUpdated = () => {
+export const displaySwitched = () => {
   return ({
-    type: 'DISPLAY_UPDATED'
+    type: 'DISPLAY_SWITCHED'
   })
 }
 
-export const updateDisplay = (s) => {
+export const switchDisplay = (on) => {
+  var action = on ? 'off' : 'on'
+  return (reduxPost({
+    url: '/api/display/'+action,
+    success: displaySwitched,
+    data: {}
+  }))
+}
+
+export const brightnessSet = () => {
+  return ({
+    type: 'BRIGHTNESS_SET'
+  })
+}
+
+export const setBrightness = (b) => {
   return (reduxPost({
     url: '/api/display',
-    success: displayUpdated,
-    data: s
+    success: brightnessSet,
+    data:{brightness: b}
   }))
 }
