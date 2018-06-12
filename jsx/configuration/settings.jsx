@@ -110,13 +110,10 @@ class settings extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if(props.settings === state.settings) {
+    if(props.settings === undefined) {
       return null
     }
     if(isEmptyObject(props.settings)) {
-      return null
-    }
-    if(props.settings === undefined) {
       return null
     }
     state.settings = props.settings

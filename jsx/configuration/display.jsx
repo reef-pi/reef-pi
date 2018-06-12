@@ -1,63 +1,47 @@
 import React from 'react'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
-import {hideAlert} from '../utils/alert.js'
+import {fetchDisplay, switchDisplay, setBrightness} from '../redux/actions/display'
+import {hideAlert} from '../utils/alert'
+import {isEmptyObject} from 'jquery'
+import {connect} from 'react-redux'
 
-export default class Display extends React.Component {
+class display extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      brightness: 100,
-      on: undefined
+      brightness: props.config ? props.config.brightness : 100 ,
+      on: props.config ? props.config.on : undefined
     }
     this.toggle = this.toggle.bind(this)
     this.setBrightness = this.setBrightness.bind(this)
-    this.load = this.load.bind(this)
   }
 
-  load () {
-    ajaxGet({
-      url: '/api/display',
-      success: function (data) {
-        this.setState({
-          on: data.on,
-          brightness: data.brightness
-        })
-        hideAlert()
-      }.bind(this)
-    })
+  static getDerivedStateFromProps(props, state) {
+    if(props.config === undefined) {
+      return null
+    }
+    if(isEmptyObject(props.config)) {
+      return null
+    }
+    state.on = props.config.on
+    state.brightness = props.config.brightness
+    return state
   }
 
-  componentWillMount () {
-    this.load()
+
+  componentDidMount () {
+    this.props.fetchDisplay()
   }
 
   toggle () {
-    var action = this.state.on ? 'off' : 'on'
-    ajaxPost({
-      url: '/api/display/' + action,
-      success: function (data) {
-        this.setState({
-          on: !this.state.on
-        })
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.switchDisplay(this.state.on)
+    this.setState({on: !this.state.on})
+    this.props.fetchDisplay()
   }
 
   setBrightness (ev) {
     var b = parseInt(ev.target.value)
-    ajaxPost({
-      url: '/api/display',
-      data: JSON.stringify({
-        brightness: b
-      }),
-      success: function (d) {
-        this.setState({
-          brightness: b
-        })
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.setBrightness(parseInt(ev.target.value))
+    this.setState({brightness: b})
   }
 
   render () {
@@ -76,3 +60,20 @@ export default class Display extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    config: state.config
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchDisplay: () => dispatch(fetchDisplay()),
+    switchDisplay: () => dispatch(switchDisplay()),
+    setBrightness: (s) => dispatch(setBrightness(s)),
+  }
+}
+
+const Display = connect(mapStateToProps, mapDispatchToProps)(display)
+export default Display

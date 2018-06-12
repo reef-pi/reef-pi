@@ -2,10 +2,12 @@ import Cron from '../timers/cron.jsx'
 import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
-import {ajaxPost, ajaxDelete} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
+import {calibrateDosingPump, updateDosingPumpSchedule, deleteDosingPump} from '../redux/actions/doser'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class Pump extends React.Component {
+class pump extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -61,13 +63,8 @@ export default class Pump extends React.Component {
       speed: parseInt(this.state.scheduleSpeed),
       enable: this.state.enable
     }
-    ajaxPost({
-      url: '/api/doser/pumps/' + this.props.data.id + '/schedule',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.setState({updated: false})
-      }.bind(this)
-    })
+    this.props.updateDosingPumpSchedule(this.props.data.id, payload)
+    this.setState({updated: false, schedule: !this.state.schedule})
   }
 
   onDemand () {
@@ -75,13 +72,8 @@ export default class Pump extends React.Component {
       speed: parseInt(this.state.calibrationSpeed),
       duration: parseInt(this.state.calibrationDuration)
     }
-    ajaxPost({
-      url: '/api/doser/pumps/' + this.props.data.id + '/calibrate',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.setState({updated: false})
-      }.bind(this)
-    })
+    this.props.calibrateDosingPump(this.props.data.id, payload)
+    this.setState({updated: false})
   }
 
   calibrateUI () {
@@ -193,13 +185,8 @@ export default class Pump extends React.Component {
   remove (id) {
     confirm('Are you sure ?')
       .then(function () {
-        ajaxDelete({
-          url: '/api/doser/pumps/' + this.props.data.id,
-          type: 'DELETE',
-          success: function (data) {
-            this.props.updateHook()
-          }.bind(this)
-        })
+        this.props.deleteDosingPump(id)
+        this.props.updateHook()
       }.bind(this))
   }
 
@@ -248,3 +235,14 @@ export default class Pump extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateDosingPumpSchedule: (id, s) => dispatch(updateDosingPumpSchedule(id, s)),
+    deleteDosingPump: (id) => dispatch(deleteDosingPump(id)),
+    calibrateDosingPump: (id, s) => dispatch(calibrateDosingPump(id, s)),
+  }
+}
+
+const Pump = connect(null, mapDispatchToProps)(pump)
+export default Pump
