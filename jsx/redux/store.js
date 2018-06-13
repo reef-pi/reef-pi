@@ -20,7 +20,8 @@ const initialState = {
   outlets: [],
   settings: {},
   dashboard: {},
-  display: {}
+  display: {},
+  ato_usage: {}
 }
 
 export const configureStore = () => {

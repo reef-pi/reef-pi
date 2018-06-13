@@ -2,41 +2,30 @@ import React from 'react'
 import $ from 'jquery'
 import ATO from './ato.jsx'
 import New from './new.jsx'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchATOs} from '../redux/actions/ato'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class Main extends React.Component {
+class main extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      atos: [],
       add: false
     }
-    this.fetch = this.fetch.bind(this)
     this.list = this.list.bind(this)
   }
 
   componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/atos',
-      success: function (data) {
-        this.setState({
-          atos: data
-        })
-      }.bind(this)
-    })
+    this.props.fetchATOs()
   }
 
   list () {
     var list = []
     var index = 0
-    $.each(this.state.atos, function (k, v) {
+    $.each(this.props.atos, function (k, v) {
       list.push(
         <div key={k} className='row list-group-item'>
-          <ATO data={v} upateHook={this.fetch} />
+          <ATO data={v} upateHook={this.props.fetchATOs} />
         </div>
       )
       index = index + 1
@@ -50,8 +39,23 @@ export default class Main extends React.Component {
         <ul className='list-group'>
           {this.list()}
         </ul>
-        <New updateHook={this.fetch} />
+        <New updateHook={this.props.fetchATOs} />
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    atos: state.atos
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchATOs: () => dispatch(fetchATOs()),
+  }
+}
+
+const Main = connect(mapStateToProps, mapDispatchToProps)(main)
+export default Main

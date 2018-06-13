@@ -2,14 +2,16 @@ import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import InletSelector from '../connectors/inlet_selector.jsx'
 import ATOChart from './chart.jsx'
-import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
-import {confirm} from '../utils/confirm.js'
+import {deleteATO, updateATO} from '../redux/actions/ato'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
+import {confirm} from '../utils/confirm'
 
-export default class ATO extends React.Component {
+class ato extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      ato: this.props.data,
+      ato: props.data,
       readOnly: true
     }
     this.save = this.save.bind(this)
@@ -35,15 +37,8 @@ export default class ATO extends React.Component {
   remove () {
     confirm('Are you sure ?')
       .then(function () {
-        ajaxDelete({
-          url: '/api/atos/' + this.props.data.id,
-          type: 'DELETE',
-          success: function (data) {
-            if (this.props.upateHook !== undefined) {
-              this.props.upateHook()
-            }
-          }.bind(this)
-        })
+        this.props.deleteATO(this.props.data.id)
+        this.props.upateHook()
       }.bind(this))
   }
 
@@ -83,18 +78,11 @@ export default class ATO extends React.Component {
       })
       return
     }
-
-    ajaxPost({
-      url: '/api/atos/' + this.props.data.id,
-      type: 'POST',
-      data: JSON.stringify(ato),
-      success: function (data) {
-        this.setState({
-          updated: false,
-          readOnly: true,
-          ato: ato
-        })
-      }.bind(this)
+    this.props.updateATO(this.props.data.id, ato)
+    this.setState({
+      updated: false,
+      readOnly: true,
+      ato: ato
     })
   }
 
@@ -117,6 +105,17 @@ export default class ATO extends React.Component {
         </div>
       </div>
     )
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.data === undefined) {
+      return null
+    }
+    if(isEmptyObject(props.data)) {
+      return null
+    }
+    state.ato = props.data
+    return state
   }
 
   render () {
@@ -165,9 +164,19 @@ export default class ATO extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <ATOChart ato_id={this.props.data.id} width={500} height={300} />
+          <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name}/>
         </div>
       </div>
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateATO: (id, a) => dispatch(updateATO(id, a)),
+    deleteATO: (id) => dispatch(deleteATO(id)),
+  }
+}
+
+const ATO = connect(null, mapDispatchToProps)(ato)
+export default ATO
