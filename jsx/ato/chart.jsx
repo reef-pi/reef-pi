@@ -1,61 +1,37 @@
 import React from 'react'
 import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchATOUsage} from '../redux/actions/ato'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class ATOChart extends React.Component {
+class chart extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      usage: [],
-      config: {
-        name: ''
-      }
-    }
-    this.fetch = this.fetch.bind(this)
-    this.info = this.info.bind(this)
+    this.updateUsage = this.updateUsage.bind(this)
+  }
+
+  updateUsage() {
+    this.props.fetchATOUsage(this.props.ato_id)
   }
 
   componentDidMount () {
-    var timer = window.setInterval(this.fetch, 10 * 1000)
+    this.updateUsage()
+    var timer = window.setInterval(this.updateUsage, 10 * 1000)
     this.setState({timer: timer})
-    this.fetch()
-    this.info()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
 
-  info () {
-    ajaxGet({
-      url: '/api/atos/' + this.props.ato_id,
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-      }.bind(this)
-    })
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/atos/' + this.props.ato_id + '/usage',
-      success: function (data) {
-        this.setState({
-          usage: data
-        })
-      }.bind(this)
-    })
-  }
-
   render () {
-    if (this.state.usage.length <= 0) {
+    if(this.props.usage === undefined) {
       return (<div />)
     }
     return (
       <div className='container'>
-        <span className='h6'>{this.state.config.name} - ATO Usage</span>
-        <BarChart width={this.props.width} height={this.props.height} data={this.state.usage.historical}>
+        <span className='h6'>{this.props.ato_name} - ATO Usage</span>
+        <BarChart width={this.props.width} height={this.props.height} data={this.props.usage.historical}>
           <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
           <YAxis label='minutes' />
           <XAxis dataKey='time' />
@@ -65,3 +41,18 @@ export default class ATOChart extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state, props) => {
+  return {
+    usage: state.ato_usage[props.ato_id]
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchATOUsage: (id) => dispatch(fetchATOUsage(id)),
+  }
+}
+
+const Chart = connect(mapStateToProps, mapDispatchToProps)(chart)
+export default Chart

@@ -28,19 +28,6 @@ export const createDosingPump = (s) => {
   }))
 }
 
-export const dosingPumpUpdated = () => {
-  return ({
-    type: 'DOSING_PUMP_UPDATED'
-  })
-}
-
-export const updateDosingPump = (s) => {
-  return (reduxPut({
-    url: '/api/doser/pumps',
-    success: dosingPumpUpdated,
-    data: s
-  }))
-}
 export const dosingPumpDeleted = () => {
   return ({
     type: 'DOSING_PUMP_DELETED'

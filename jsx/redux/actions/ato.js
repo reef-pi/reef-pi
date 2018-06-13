@@ -1,4 +1,4 @@
-import {reduxGet, reduxPost} from '../../utils/ajax'
+import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
 
 export const atosLoaded = (s) => {
   return ({
@@ -14,3 +14,74 @@ export const fetchATOs = () => {
   }))
 }
 
+export const atoLoaded = (s) => {
+  return ({
+    type: 'ATO_LOADED',
+    payload: s
+  })
+}
+
+export const fetchATO = (id) => {
+  return (reduxGet({
+    url: '/api/atos/'+id,
+    success: atoLoaded
+  }))
+}
+
+export const atoUsageLoaded = (id) => {
+  return( (s) => {
+    return ({
+      type: 'ATO_USAGE_LOADED',
+      payload: {data:s, id: id}
+    })
+  })
+}
+
+export const fetchATOUsage = (id) => {
+  return (reduxGet({
+    url: '/api/atos/'+id+'/usage',
+    success: atoUsageLoaded(id)
+  }))
+}
+
+export const atoCreated = () => {
+  return ({
+    type: 'ATO_CREATED'
+  })
+}
+
+export const createATO = (a) => {
+  return (reduxPut({
+    url: '/api/atos',
+    data: a,
+    success: atoCreated
+  }))
+}
+
+export const atoUpdated = () => {
+  return ({
+    type: 'ATO_UPDATED'
+  })
+}
+
+export const updateATO = (id, a) => {
+  return (reduxPost({
+    url: '/api/atos/'+id,
+    data: a,
+    success: atoUpdated
+  }))
+}
+
+export const atoDeleted = () => {
+  return ({
+    type: 'ATO_DELETED'
+  })
+}
+
+export const deleteATO = (id) => {
+  console.log(id)
+  return (reduxDelete({
+    url: '/api/atos/'+id,
+    success: atoDeleted
+  }))
+}

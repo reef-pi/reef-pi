@@ -1,10 +1,12 @@
 import $ from 'jquery'
 import React from 'react'
-import {showAlert} from '../utils/alert.js'
-import {ajaxPut} from '../utils/ajax.js'
+import {showAlert} from '../utils/alert'
+import {createATO} from '../redux/actions/ato'
 import InletSelector from '../connectors/inlet_selector.jsx'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class New extends React.Component {
+class newATO extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -91,14 +93,9 @@ export default class New extends React.Component {
       inlet: this.state.inlet,
       period: parseInt(this.state.period)
     }
-    ajaxPut({
-      url: '/api/atos',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.toggle()
-        this.props.updateHook()
-      }.bind(this)
-    })
+    this.props.createATO(payload)
+    this.toggle()
+    this.props.updateHook()
   }
 
   render () {
@@ -110,3 +107,12 @@ export default class New extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createATO: (a) => dispatch(createATO(a)),
+  }
+}
+
+const New = connect(null, mapDispatchToProps)(newATO)
+export default New

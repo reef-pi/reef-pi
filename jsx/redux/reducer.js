@@ -6,6 +6,12 @@ export const rootReducer = (state, action) => {
       return { ...state, tcs: action.payload }
     case 'ATOS_LOADED':
       return { ...state, atos: action.payload }
+    case 'ATO_LOADED':
+      return { ...state, config: action.payload }
+    case 'ATO_USAGE_LOADED':
+      var ato_usage = state.ato_usage
+      ato_usage[action.payload.id] = action.payload.data
+      return { ...state, ato_usage: ato_usage }
     case 'LIGHTS_LOADED':
       return { ...state, lights: action.payload }
     case 'DASHBOARD_LOADED':
@@ -30,11 +36,13 @@ export const rootReducer = (state, action) => {
       return { ...state, display: action.payload }
     case 'DOSING_PUMPS_LOADED':
       return { ...state, dosers: action.payload }
-    case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED',
+    case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED', 'DASHBOARD_UPDATED',
         'SETTINGS_UPDATED', 'DISPLAY_SWITCHED', 'BRIGHTNESS_SET',
-        'DOSING_PUMP_CREATED','DOSING_PUMP_UPDATED', 'DOSING_PUMP_DELETED':
+        'DOSING_PUMP_CREATED', 'DOSING_PUMP_DELETED', 'DOSING_PUMP_CALIBRATED',
+        'ATO_UPDATED', 'ATO_DELETED','DOSING_PUMP_SCHEDULE_UPDATED':
       return state
     default:
+      console.log('Unknown action in redux-reducer:', action.type)
       return state
   }
 }
