@@ -14,31 +14,18 @@ export const fetchDosingPumps = () => {
   }))
 }
 
-export const dosingPumpCreated = () => {
-  return ({
-    type: 'DOSING_PUMP_CREATED'
-  })
-}
-
 export const createDosingPump = (s) => {
   return (reduxPut({
     url: '/api/doser/pumps',
-    success: dosingPumpCreated,
+    success: fetchDosingPumps,
     data: s
   }))
 }
 
-export const dosingPumpDeleted = () => {
-  return ({
-    type: 'DOSING_PUMP_DELETED'
-  })
-}
-
 export const deleteDosingPump = (s) => {
   return (reduxDelete({
-    url: '/api/doser/pumps',
-    success: dosingPumpDeleted,
-    data: {}
+    url: '/api/doser/pumps/'+s,
+    success: fetchDosingPumps,
   }))
 }
 

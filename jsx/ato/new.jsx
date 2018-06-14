@@ -95,7 +95,6 @@ class newATO extends React.Component {
     }
     this.props.createATO(payload)
     this.toggle()
-    this.props.updateHook()
   }
 
   render () {

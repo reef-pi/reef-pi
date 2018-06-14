@@ -4,6 +4,8 @@ export const rootReducer = (state, action) => {
       return { ...state, info: action.payload }
     case 'TCS_LOADED':
       return { ...state, tcs: action.payload }
+    case 'TIMERS_LOADED':
+      return { ...state, timers: action.payload }
     case 'ATOS_LOADED':
       return { ...state, atos: action.payload }
     case 'ATO_LOADED':
@@ -39,10 +41,11 @@ export const rootReducer = (state, action) => {
     case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED', 'DASHBOARD_UPDATED',
         'SETTINGS_UPDATED', 'DISPLAY_SWITCHED', 'BRIGHTNESS_SET',
         'DOSING_PUMP_CREATED', 'DOSING_PUMP_DELETED', 'DOSING_PUMP_CALIBRATED',
-        'ATO_UPDATED', 'ATO_DELETED','DOSING_PUMP_SCHEDULE_UPDATED':
+        'ATO_UPDATED', 'ATO_DELETED','DOSING_PUMP_SCHEDULE_UPDATED',
+        'TIMER_CREATED', 'TIMER_DELETED':
       return state
     default:
-      console.log('Unknown action in redux-reducer:', action.type)
+      console.log('Unknown action in redux-reducer:|' + action.type + '|')
       return state
   }
 }

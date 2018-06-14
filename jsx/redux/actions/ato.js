@@ -44,17 +44,11 @@ export const fetchATOUsage = (id) => {
   }))
 }
 
-export const atoCreated = () => {
-  return ({
-    type: 'ATO_CREATED'
-  })
-}
-
 export const createATO = (a) => {
   return (reduxPut({
     url: '/api/atos',
     data: a,
-    success: atoCreated
+    success: fetchATOs
   }))
 }
 
@@ -72,16 +66,10 @@ export const updateATO = (id, a) => {
   }))
 }
 
-export const atoDeleted = () => {
-  return ({
-    type: 'ATO_DELETED'
-  })
-}
 
 export const deleteATO = (id) => {
-  console.log(id)
   return (reduxDelete({
     url: '/api/atos/'+id,
-    success: atoDeleted
+    success: fetchATOs
   }))
 }

@@ -182,11 +182,10 @@ class pump extends React.Component {
     })
   }
 
-  remove (id) {
+  remove () {
     confirm('Are you sure ?')
       .then(function () {
-        this.props.deleteDosingPump(id)
-        this.props.updateHook()
+        this.props.deleteDosingPump(this.props.data.id)
       }.bind(this))
   }
 

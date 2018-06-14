@@ -58,20 +58,6 @@ export const fetchCapabilities = () => {
     }))
 }
 
-export const equipmentsLoaded = (equipments) => {
-  return ({
-    type: 'EQUIPMENTS_LOADED',
-    payload: equipments
-  })
-}
-
-export const fetchEquipments = () => {
-  return (
-    reduxGet({
-      url: '/api/equipments',
-      success: equipmentsLoaded
-    }))
-}
 export const healthStatsLoaded = (stats) => {
   return ({
     type: 'HEALTH_STATS_LOADED',

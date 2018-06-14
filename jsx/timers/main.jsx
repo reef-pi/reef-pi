@@ -4,15 +4,17 @@ import Reminder from './reminder.jsx'
 import Timer from './timer.jsx'
 import Cron from './cron.jsx'
 import Equipment from './equipment.jsx'
-import {showAlert, hideAlert} from '../utils/alert.js'
-import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
-import {confirm} from '../utils/confirm.js'
+import {showAlert, hideAlert} from '../utils/alert'
+import {confirm} from '../utils/confirm'
+import {fetchTimers, createTimer, deleteTimer} from '../redux/actions/timer'
+import {fetchEquipments} from '../redux/actions/equipment'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
 
-export default class Timers extends React.Component {
+class Main extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      timers: [],
       addTimer: false,
       type: 'equipment',
       equipment: undefined,
@@ -20,18 +22,18 @@ export default class Timers extends React.Component {
     }
     this.timerList = this.timerList.bind(this)
     this.createTimer = this.createTimer.bind(this)
-    this.fetchData = this.fetchData.bind(this)
     this.removeTimer = this.removeTimer.bind(this)
     this.toggleAddTimerDiv = this.toggleAddTimerDiv.bind(this)
     this.setType = this.setType.bind(this)
     this.update = this.update.bind(this)
     this.trigger = this.trigger.bind(this)
+    this.pickEquipment = this.pickEquipment.bind(this)
   }
 
   trigger () {
     switch (this.state.type) {
       case 'equipment':
-        return (<Equipment updateHook={this.update('equipment')} />)
+        return (<Equipment updateHook={this.update('equipment')} equipments={this.props.equipments}/>)
       case 'reminder':
         return (<Reminder updateHook={this.update('reminder')} />)
     }
@@ -52,28 +54,24 @@ export default class Timers extends React.Component {
   }
 
   componentDidMount () {
-    this.fetchData()
+    this.props.fetchEquipments()
+    this.props.fetchTimers()
   }
 
-  fetchData () {
-    ajaxGet({
-      url: '/api/timers',
-      success: function (data) {
-        this.setState({
-          timers: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
+  pickEquipment(id){
+    if(this.props.equipments === undefined){
+      return({})
+    }
+    return this.props.equipments.find((el) => {return el.id === id})
   }
 
   timerList () {
     var list = []
-    $.each(this.state.timers, function (i, timer) {
+    $.each(this.props.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item row'>
           <div className='col-sm-10'>
-            <Timer timer_id={timer.id} name={timer.name} equipment={timer.equipment} />
+            <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)}/>
           </div>
           <div className='col-sm-2'>
             <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
@@ -88,13 +86,7 @@ export default class Timers extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          ajaxDelete({
-            url: '/api/timers/' + id,
-            success: function (data) {
-              this.fetchData()
-              hideAlert()
-            }.bind(this)
-          })
+          this.props.deleteTimer(id)
         }.bind(this))
     }.bind(this))
   }
@@ -143,15 +135,8 @@ export default class Timers extends React.Component {
       type: this.state.type,
       reminder: this.state.reminder
     }
-    ajaxPut({
-      url: '/api/timers',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.toggleAddTimerDiv()
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.createTimer(payload)
+    this.toggleAddTimerDiv()
   }
 
   toggleAddTimerDiv () {
@@ -202,3 +187,22 @@ export default class Timers extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    timers: state.timers,
+    equipments: state.equipments
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchTimers: () => dispatch(fetchTimers()),
+    fetchEquipments: () => dispatch(fetchEquipments()),
+    createTimer: (t) => dispatch(createTimer(t)),
+    deleteTimer: (id) => dispatch(deleteTimer(id))
+  }
+}
+
+const Timers = connect(mapStateToProps, mapDispatchToProps)(Main)
+export default Timers

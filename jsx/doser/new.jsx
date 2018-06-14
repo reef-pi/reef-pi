@@ -73,7 +73,6 @@ class newPump extends React.Component {
     }
     this.props.createDosingPump(payload)
     this.toggle()
-    this.props.updateHook()
   }
 
   render () {
