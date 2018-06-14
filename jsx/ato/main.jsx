@@ -39,7 +39,7 @@ class main extends React.Component {
         <ul className='list-group'>
           {this.list()}
         </ul>
-        <New updateHook={this.props.fetchATOs} />
+        <New />
       </div>
     )
   }

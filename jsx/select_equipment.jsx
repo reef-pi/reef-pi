@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {fetchEquipments} from './redux/actions'
+import {fetchEquipments} from './redux/actions/equipment'
 
 class selectEquipment extends React.Component {
   constructor (props) {

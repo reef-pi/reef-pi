@@ -38,7 +38,6 @@ class ato extends React.Component {
     confirm('Are you sure ?')
       .then(function () {
         this.props.deleteATO(this.props.data.id)
-        this.props.upateHook()
       }.bind(this))
   }
 

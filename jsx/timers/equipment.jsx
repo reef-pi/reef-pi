@@ -1,8 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {hideAlert} from '../utils/alert.js'
-import {ajaxGet} from '../utils/ajax.js'
+import {hideAlert} from '../utils/alert'
 
 export default class Equipment extends React.Component {
   constructor (props) {
@@ -13,19 +12,13 @@ export default class Equipment extends React.Component {
         revert: false,
         on: true,
         name: ''
-      },
-      equipments: []
+      }
     }
     this.equipmentList = this.equipmentList.bind(this)
-    this.fetchData = this.fetchData.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
     this.setEquipmentAction = this.setEquipmentAction.bind(this)
     this.updateRevert = this.updateRevert.bind(this)
     this.updateDuration = this.updateDuration.bind(this)
-  }
-
-  componentDidMount () {
-    this.fetchData()
   }
 
   updateRevert (ev) {
@@ -42,8 +35,8 @@ export default class Equipment extends React.Component {
 
   setEquipment (k, ev) {
     var eq = this.state.equipment
-    eq['id'] = this.state.equipments[k].id
-    eq['name'] = this.state.equipments[k].name
+    eq['id'] = this.props.equipments[k].id
+    eq['name'] = this.props.equipments[k].name
     this.setState({equipment: eq})
     this.props.updateHook(eq)
   }
@@ -59,22 +52,10 @@ export default class Equipment extends React.Component {
 
   equipmentList () {
     var menuItems = []
-    $.each(this.state.equipments, function (k, v) {
+    $.each(this.props.equipments, function (k, v) {
       menuItems.push(<MenuItem key={k} eventKey={k}><span id={'equipment-' + v.id}>{v.name}</span></MenuItem>)
     })
     return menuItems
-  }
-
-  fetchData () {
-    ajaxGet({
-      url: '/api/equipments',
-      success: function (data) {
-        this.setState({
-          equipments: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
   }
 
   render () {

@@ -24,7 +24,7 @@ class doser extends React.Component {
     $.each(this.props.pumps, function (i, pump) {
       pumps.push(
         <div key={'pump-' + i} className='row list-group-item'>
-          <Pump data={pump} updateHook={this.props.fetchDosingPumps} />
+          <Pump data={pump} />
         </div>
       )
     }.bind(this))
@@ -37,7 +37,7 @@ class doser extends React.Component {
         <div className='container'>
           { this.pumpList() }
         </div>
-        <New updateHook={this.props.fetchDosingPumps} />
+        <New />
       </div>
     )
   }
