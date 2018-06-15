@@ -3,10 +3,13 @@ import $ from 'jquery'
 import Gallery from './gallery.jsx'
 import Config from './config.jsx'
 import Capture from './capture.jsx'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchConfig, updateConfig, listImages} from '../redux/actions/camera'
+import {connect} from 'react-redux'
+import {isEmptyObject} from 'jquery'
+
 import Motion from './motion.jsx'
 
-export default class Camera extends React.Component {
+class camera extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -15,7 +18,6 @@ export default class Camera extends React.Component {
       showConfig: false,
       config: { }
     }
-    this.fetch = this.fetch.bind(this)
     this.toggleConfig = this.toggleConfig.bind(this)
     this.motion = this.motion.bind(this)
   }
@@ -37,41 +39,22 @@ export default class Camera extends React.Component {
     this.setState({showConfig: !this.state.showConfig})
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/camera/config',
-      type: 'GET',
-      dataType: 'json',
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-      }.bind(this)
-    })
-
-    ajaxGet({
-      url: '/api/camera/list',
-      success: function (data) {
-        var images = []
-        $.each(data, function (i, d) {
-          images.push({
-            src: '/images/' + d.name,
-            thumbnail: '/images/thumbnail-' + d.name
-          })
-        })
-        this.setState({images: images})
-      }.bind(this)
-    })
-  }
-
   componentDidMount () {
-    this.fetch()
+    this.props.fetchConfig()
+    this.props.listImages()
   }
 
   render () {
+    var images = []
+    $.each(this.props.images, function (i, d) {
+      images.push({
+        src: '/images/' + d.name,
+        thumbnail: '/images/thumbnail-' + d.name
+      })
+    })
     var config = <div />
     if (this.state.showConfig) {
-      config = <Config config={this.state.config} />
+      config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
     return (
       <div className='container'>
@@ -90,3 +73,21 @@ export default class Camera extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    config: state.camera.config,
+    images: state.camera.images
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchConfig: () => dispatch(fetchConfig()),
+    updateConfig: (c) => dispatch(updateConfig(c)),
+    listImages: () => dispatch(listImages())
+  }
+}
+
+const Camera = connect(mapStateToProps, mapDispatchToProps)(camera)
+export default Camera

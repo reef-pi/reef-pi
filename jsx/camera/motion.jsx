@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 
 export default class Motion extends React.PureComponent {
   constructor (props) {
@@ -13,11 +12,11 @@ export default class Motion extends React.PureComponent {
   render () {
 	  return (
       <div className='container'>
-    <img
+        <img
           width={this.props.width} height={this.props.height}
           src={this.props.url}
         />
-  </div>
+     </div>
     )
   }
 }

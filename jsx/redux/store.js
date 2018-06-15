@@ -21,7 +21,12 @@ const initialState = {
   settings: {},
   dashboard: {},
   display: {},
-  ato_usage: {}
+  ato_usage: {},
+  camera: {
+    config: {},
+    latest: undefined,
+    images: []
+  }
 }
 
 export const configureStore = () => {
