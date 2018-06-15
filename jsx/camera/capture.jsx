@@ -1,47 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
+import {takeImage, getLatestImage} from '../redux/actions/camera'
+import {connect} from 'react-redux'
 
-export default class Capture extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      latest: {}
-    }
-    this.fetch = this.fetch.bind(this)
-    this.capture = this.capture.bind(this)
+class capture extends React.Component {
+  componentDidMount() {
+    this.props.getLatestImage()
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/camera/latest',
-      success: function (data) {
-        this.setState({
-          latest: data,
-          showAlert: false
-        })
-      }.bind(this)
-    })
-  }
-
-  capture () {
-    ajaxPost({
-      url: '/api/camera/shoot',
-      data: JSON.stringify({}),
-      success: function (data) {
-        this.setState({
-          latest: data,
-          showAlert: false
-        })
-      }.bind(this),
-      timeout: 30000
-    })
-  }
   render () {
     var img = <div className='container' />
-    if (this.state.latest.image !== undefined) {
-      img = <img src={'/images/' + this.state.latest.image} style={imgStyle} />
+    if (this.props.latest !== undefined) {
+      img = <img src={'/images/' + this.props.latest.image} style={imgStyle} />
     }
     var imgStyle = {
       width: '100%',
@@ -51,7 +22,7 @@ export default class Capture extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <input type='button' id='captureImage' onClick={this.capture} value='Take Photo' className='btn btn-outline-primary' />
+          <input type='button' id='captureImage' onClick={this.props.takeImage} value='Take Photo' className='btn btn-outline-primary' />
         </div>
         <div className='row'>
           {img}
@@ -60,3 +31,19 @@ export default class Capture extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    latest: state.camera.latest
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    takeImage: () => dispatch(takeImage()),
+    getLatestImage: () => dispatch(getLatestImage())
+  }
+}
+
+const Capture = connect(mapStateToProps, mapDispatchToProps)(capture)
+export default Capture

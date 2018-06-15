@@ -36,6 +36,18 @@ export const rootReducer = (state, action) => {
       return { ...state, health_stats: action.payload }
     case 'DISPLAY_LOADED':
       return { ...state, display: action.payload }
+    case 'IMAGES_LOADED':
+      var camera = state.camera
+      camera.images = action.payload
+      return { ...state, camera: camera }
+    case 'LATEST_IMAGE_LOADED':
+      var camera = state.camera
+      camera.latest = action.payload
+      return { ...state, camera: camera }
+    case 'CAMERA_CONFIG_LOADED':
+      var camera = state.camera
+      camera.config = action.payload
+      return { ...state, camera: camera }
     case 'DOSING_PUMPS_LOADED':
       return { ...state, dosers: action.payload }
     case 'CREDS_UPDATED', 'RELOADED', 'REBOOTED', 'POWER_OFFED', 'DASHBOARD_UPDATED',

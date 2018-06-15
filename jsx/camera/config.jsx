@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert, hideAlert} from '../utils/alert'
 
 export default class Config extends React.Component {
   constructor (props) {
@@ -24,15 +23,10 @@ export default class Config extends React.Component {
       showAlert('Tick interval has to be a positive integer')
       return
     }
-    ajaxPost({
-      url: '/api/camera/config',
-      data: JSON.stringify(config),
-      success: function (data) {
-        this.setState({updated: false})
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.update(config)
+    this.setState({updated: false})
   }
+
 
   updateBool (k) {
     return (function (ev) {
