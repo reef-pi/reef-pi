@@ -1,5 +1,4 @@
 import React from 'react'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
 import {hideAlert} from '../utils/alert.js'
 
 export default class Equipment extends React.Component {
@@ -13,19 +12,14 @@ export default class Equipment extends React.Component {
   }
 
   update (e) {
-    ajaxPost({
-      url: '/api/equipments/' + this.props.id,
-      data: JSON.stringify({
-        on: this.state.action === 'on',
-        name: this.props.name,
-        outlet: this.props.outlet.id
-      }),
-      success: function (data) {
-        this.setState({
-          action: this.state.action === 'on' ? 'off' : 'on'
-        })
-        hideAlert()
-      }.bind(this)
+    var payload = {
+      on: this.state.action === 'on',
+      name: this.props.name,
+      outlet: this.props.outlet.id
+    }
+    this.props.hook(this.props.id, payload)
+    this.setState({
+      action: this.state.action === 'on' ? 'off' : 'on'
     })
   }
 

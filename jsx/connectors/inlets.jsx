@@ -1,7 +1,7 @@
 import React from 'react'
 import {confirm} from '../utils/confirm.js'
 import $ from 'jquery'
-import {fetchInlets, deleteInlet, createInlet} from '../redux/actions'
+import {fetchInlets, deleteInlet, createInlet} from '../redux/actions/inlets'
 import {connect} from 'react-redux'
 
 class inlets extends React.Component {
