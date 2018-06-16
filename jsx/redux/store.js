@@ -22,7 +22,9 @@ const initialState = {
   dashboard: {},
   display: {},
   ato_usage: {},
+  tc_usage: {},
   ph_readings: {},
+  tc_sensors: [],
   camera: {
     config: {},
     latest: undefined,

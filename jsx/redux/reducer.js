@@ -2,8 +2,6 @@ export const rootReducer = (state, action) => {
   switch (action.type) {
     case 'INFO_LOADED':
       return { ...state, info: action.payload }
-    case 'TCS_LOADED':
-      return { ...state, tcs: action.payload }
     case 'TIMERS_LOADED':
       return { ...state, timers: action.payload }
     case 'ATOS_LOADED':
@@ -14,6 +12,14 @@ export const rootReducer = (state, action) => {
       var ato_usage = state.ato_usage
       ato_usage[action.payload.id] = action.payload.data
       return { ...state, ato_usage: ato_usage }
+    case 'TCS_LOADED':
+      return { ...state, tcs: action.payload }
+    case 'TC_SENSORS_LOADED':
+      return { ...state, tc_sensors: action.payload }
+    case 'TC_USAGE_LOADED':
+      var tc_usage = state.tc_usage
+      tc_usage[action.payload.id] = action.payload.usage
+      return { ...state, tc_usage: tc_usage }
     case 'LIGHTS_LOADED':
       return { ...state, lights: action.payload }
     case 'DASHBOARD_LOADED':

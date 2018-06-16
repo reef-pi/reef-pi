@@ -1,39 +1,15 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {ajaxGet} from '../utils/ajax.js'
 
 export default class SelectSensor extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      sensors: [],
       sensor: props.active
     }
-    this.fetch = this.fetch.bind(this)
     this.list = this.list.bind(this)
     this.set = this.set.bind(this)
-  }
-
-  componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/tcs/sensors',
-      success: function (data) {
-        var sensor = this.state.sensor
-        $.each(data, function (i, s) {
-          if (s === sensor) {
-            sensor = s
-          }
-        })
-        this.setState({
-          sensors: data
-        })
-      }.bind(this)
-    })
   }
 
   list () {
@@ -41,7 +17,7 @@ export default class SelectSensor extends React.Component {
     if (this.state.sensor === undefined) {
       menuItems.push(<MenuItem key='none' active eventKey='none'>-</MenuItem>)
     }
-    $.each(this.state.sensors, function (k, v) {
+    $.each(this.props.sensors, function (k, v) {
       menuItems.push(
         <MenuItem
           key={k}
@@ -63,7 +39,7 @@ export default class SelectSensor extends React.Component {
       this.props.update('')
       return
     }
-    var sensor = this.state.sensors[k]
+    var sensor = this.props.sensors[k]
     this.setState({
       sensor: sensor
     })
