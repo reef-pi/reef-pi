@@ -1,12 +1,13 @@
 import $ from 'jquery'
 import React from 'react'
-import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {confirm} from '../utils/confirm.js'
 import Chart from './chart.jsx'
 import Config from './probe_config.jsx'
 import Calibrate from './calibrate.jsx'
+import {calibrateProbe, updateProbe, deleteProbe} from '../redux/actions/phprobes'
+import {connect} from 'react-redux'
 
-export default class Probe extends React.Component {
+class probe extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -69,14 +70,8 @@ export default class Probe extends React.Component {
       address: parseInt(this.state.address),
       config: config
     }
-
-    ajaxPost({
-      url: '/api/phprobes/' + this.props.data.id,
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.setState({readOnly: true})
-      }.bind(this)
-    })
+    this.props.updateProbe(this.props.data.id, payload)
+    this.setState({readOnly: true})
   }
 
   updateEnable (ev) {
@@ -86,15 +81,8 @@ export default class Probe extends React.Component {
   remove () {
     confirm('Are you sure ?')
       .then(function () {
-        ajaxDelete({
-          url: '/api/phprobes/' + this.props.data.id,
-          type: 'DELETE',
-          success: function (data) {
-            if (this.props.upateHook !== undefined) {
-              this.props.upateHook()
-            }
-          }.bind(this)
-        })
+        this.props.deleteProbe(this.props.data.id)
+        this.props.upateHook()
       }.bind(this))
   }
 
@@ -147,9 +135,20 @@ export default class Probe extends React.Component {
           </div>
         </div>
         <div className='row'>
-          { this.state.calibrate ? <Calibrate probe={this.props.data.id} /> : <div /> }
+          { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : <div /> }
         </div>
       </div>
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateProbe: (id, p) => dispatch(updateProbe(id, p)),
+    calibrateProbe: (id, p) => dispatch(calibrateProbe(id, p)),
+    deleteProbe: (id) => dispatch(deleteProbe(id))
+  }
+}
+
+const Probe = connect(null, mapDispatchToProps)(probe)
+export default Probe

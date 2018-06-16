@@ -19,7 +19,11 @@ export const rootReducer = (state, action) => {
     case 'DASHBOARD_LOADED':
       return { ...state, dashboard: action.payload }
     case 'PH_PROBES_LOADED':
-      return { ...state, phs: action.payload }
+      return { ...state, phprobes: action.payload }
+    case 'PH_PROBE_READINGS_LOADED':
+      var readings = state.ph_readings
+      readings[action.payload.id] = action.payload.readings
+      return { ...state, ph_readings: readings }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
     case 'SETTINGS_LOADED':

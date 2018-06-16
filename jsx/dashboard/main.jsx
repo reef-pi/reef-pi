@@ -1,7 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import {ajaxGet} from '../utils/ajax.js'
-
 import TempReadingsChart from '../temperature/readings_chart.jsx'
 import TempControlChart from '../temperature/control_chart.jsx'
 import EquipmentsChart from '../equipments/chart.jsx'
@@ -10,31 +8,24 @@ import ATOChart from '../ato/chart.jsx'
 import Summary from '../summary.jsx'
 import HealthChart from '../health_chart.jsx'
 import PhChart from '../ph/chart.jsx'
+import {fetchDashboard} from '../redux/actions/dashboard'
+import {connect} from 'react-redux'
 
-export default class Dashboard extends React.Component {
+class dashboard extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      charts: []
-    }
-    this.fetch = this.fetch.bind(this)
     this.charts = this.charts.bind(this)
   }
 
   componentDidMount () {
-    this.fetch()
+    this.props.fetchDashboard()
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/dashboard',
-      success: function (data) {
-        this.charts(data)
-      }.bind(this)
-    })
-  }
-
-  charts (config) {
+  charts () {
+    var config = this.props.config
+    if(config === undefined) {
+      return
+    }
     var i, j
     var rows = []
     for (i = 0; i < config.row; i++) {
@@ -109,13 +100,13 @@ export default class Dashboard extends React.Component {
         <div className='row' key={'row-' + i}>{columns}</div>
       )
     }
-    this.setState({charts: rows})
+    return(rows)
   }
 
   render () {
     return (
       <div className='container'>
-        {this.state.charts}
+        {this.charts()}
         <div className='row'>
           <Summary />
         </div>
@@ -123,3 +114,17 @@ export default class Dashboard extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    config: state.dashboard
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchDashboard: () => dispatch(fetchDashboard()),
+  }
+}
+
+const Dashboard = connect(mapStateToProps, mapDispatchToProps)(dashboard)
+export default Dashboard

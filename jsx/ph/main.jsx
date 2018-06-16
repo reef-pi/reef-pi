@@ -2,41 +2,29 @@ import React from 'react'
 import $ from 'jquery'
 import Probe from './probe.jsx'
 import New from './new.jsx'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchPhProbes, createProbe} from '../redux/actions/phprobes'
+import {connect} from 'react-redux'
 
-export default class Ph extends React.Component {
+class ph extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      probes: [],
       add: false
     }
-    this.fetch = this.fetch.bind(this)
     this.probeList = this.probeList.bind(this)
   }
 
   componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/phprobes',
-      success: function (data) {
-        this.setState({
-          probes: data
-        })
-      }.bind(this)
-    })
+    this.props.fetchPhProbes()
   }
 
   probeList () {
     var list = []
     var index = 0
-    $.each(this.state.probes, function (k, v) {
+    $.each(this.props.probes, function (k, v) {
       list.push(
         <div key={k} className='row list-group-item'>
-          <Probe data={v} upateHook={this.fetch} />
+          <Probe data={v} upateHook={this.props.fetchPhProbes} />
         </div>
       )
       index = index + 1
@@ -50,8 +38,24 @@ export default class Ph extends React.Component {
         <ul className='list-group'>
           {this.probeList()}
         </ul>
-        <New updateHook={this.fetch} />
+        <New hook={this.props.createProbe} />
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    probes: state.phprobes
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchPhProbes: () => dispatch(fetchPhProbes()),
+    createProbe: (p) => dispatch(createProbe(p)),
+  }
+}
+
+const Ph = connect(mapStateToProps, mapDispatchToProps)(ph)
+export default Ph

@@ -1,5 +1,4 @@
 import React from 'react'
-import {ajaxPost} from '../utils/ajax.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Calibrate extends React.PureComponent {
@@ -29,12 +28,7 @@ export default class Calibrate extends React.PureComponent {
       type: this.state.type,
       value: parseFloat(this.state.value)
     }
-    ajaxPost({
-      url: '/api/phprobes/' + this.props.probe + '/calibrate',
-      data: JSON.stringify(payload),
-      success: function (data) {
-      }
-    })
+    this.props.hook(this.props.probe, payload)
   }
 
   render () {
