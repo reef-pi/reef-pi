@@ -126,7 +126,7 @@ class dashboard extends React.Component {
 const mapStateToProps = (state) => {
   return {
     atos: state.atos,
-    phs: state.phs,
+    phs: state.phprobes,
     tcs: state.tcs,
     lights: state.lights,
     config: state.dashboard
