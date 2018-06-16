@@ -2,20 +2,19 @@ import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {ajaxGet, ajaxPut, ajaxDelete} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
+import {updateEquipment, fetchEquipments, createEquipment, deleteEquipment} from '../redux/actions/equipment'
+import {fetchOutlets} from '../redux/actions/outlets'
+import {connect} from 'react-redux'
 
-export default class Equipments extends React.Component {
+class main extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       selectedOutlet: undefined,
-      outlets: [],
-      equipments: [],
       addEquipment: false
     }
-    this.fetchData = this.fetchData.bind(this)
     this.equipmentList = this.equipmentList.bind(this)
     this.setOutlet = this.setOutlet.bind(this)
     this.outletList = this.outletList.bind(this)
@@ -27,9 +26,9 @@ export default class Equipments extends React.Component {
   equipmentList () {
     var list = []
     var index = 0
-    $.each(this.state.equipments, function (k, v) {
+    $.each(this.props.equipments, function (k, v) {
       var outlet = {}
-      $.each(this.state.outlets, function (x, o) {
+      $.each(this.props.outlets, function (x, o) {
         if (v.outlet == o.id) {
           outlet = o
         }
@@ -37,7 +36,7 @@ export default class Equipments extends React.Component {
       list.push(
         <div key={k} className='row list-group-item'>
           <div className='col-sm-8'>
-            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} />
+            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment}/>
           </div>
           <div className='col-sm-4'>
             <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
@@ -49,28 +48,9 @@ export default class Equipments extends React.Component {
     return list
   }
 
-  fetchData () {
-    ajaxGet({
-      url: '/api/equipments',
-      success: function (data) {
-        this.setState({
-          equipments: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
-    ajaxGet({
-      url: '/api/outlets',
-      success: function (data) {
-        this.setState({
-          outlets: data
-        })
-      }.bind(this)
-    })
-  }
-
   componentDidMount () {
-    this.fetchData()
+    this.props.fetchEquipments()
+    this.props.fetchOutlets()
   }
 
   setOutlet (i, ev) {
@@ -82,7 +62,7 @@ export default class Equipments extends React.Component {
 
   outletList () {
     var menuItems = []
-    $.each(this.state.outlets, function (i, v) {
+    $.each(this.props.outlets, function (i, v) {
       menuItems.push(<MenuItem key={i} eventKey={i}><span id={'outlet-'.concat(v.id)}>{v.name}</span></MenuItem>)
     })
     return menuItems
@@ -93,7 +73,7 @@ export default class Equipments extends React.Component {
       showAlert('Select an outlet')
       return
     }
-    var outletID = this.state.outlets[this.state.selectedOutlet].id
+    var outletID = this.props.outlets[this.state.selectedOutlet].id
     var payload = {
       name: $('#equipmentName').val(),
       outlet: outletID
@@ -103,16 +83,10 @@ export default class Equipments extends React.Component {
       return
     }
     hideAlert()
-    ajaxPut({
-      url: '/api/equipments',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.toggleAddEquipmentDiv()
-        this.setState({
-          selectedOutlet: undefined
-        })
-      }.bind(this)
+    this.props.createEquipment(payload)
+    this.toggleAddEquipmentDiv()
+    this.setState({
+      selectedOutlet: undefined
     })
   }
 
@@ -120,13 +94,7 @@ export default class Equipments extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          ajaxDelete({
-            url: '/api/equipments/' + id,
-            success: function (data) {
-              this.fetchData()
-              hideAlert()
-            }.bind(this)
-          })
+          this.props.deleteEquipment(id)
         }.bind(this))
     }.bind(this))
   }
@@ -142,7 +110,7 @@ export default class Equipments extends React.Component {
   render () {
     var outlet = ''
     if (this.state.selectedOutlet !== undefined) {
-      outlet = this.state.outlets[this.state.selectedOutlet].name
+      outlet = this.props.outlets[this.state.selectedOutlet].name
     }
     var dStyle = {
       display: this.state.addEquipment ? 'block' : 'none'
@@ -170,3 +138,22 @@ export default class Equipments extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    equipments: state.equipments,
+    outlets: state.outlets
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchEquipments: () => dispatch(fetchEquipments()),
+    fetchOutlets: () => dispatch(fetchOutlets()),
+    createEquipment: (e) => dispatch(createEquipment(e)),
+    updateEquipment: (id, e) => dispatch(updateEquipment(id, e)),
+    deleteEquipment: (id) => dispatch(deleteEquipment(id))
+  }
+}
+
+const Main = connect(mapStateToProps, mapDispatchToProps)(main)
+export default Main

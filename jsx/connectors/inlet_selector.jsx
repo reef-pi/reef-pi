@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {fetchInlets} from '../redux/actions.js'
+import {fetchInlets} from '../redux/actions/inlets'
 import {connect} from 'react-redux'
 
 class inletSelector extends React.Component {
