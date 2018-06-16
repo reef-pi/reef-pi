@@ -1,44 +1,20 @@
 import React from 'react'
 import {Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
 import $ from 'jquery'
-import {ajaxGet} from '../utils/ajax.js'
 import {hideAlert} from '../utils/alert.js'
+import {connect} from 'react-redux'
 
-export default class LightsChart extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      config: {
-        channels: []
-      }
+class chart extends React.Component {
+  render() {
+    if(this.props.config === undefined) {
+      return <div />
     }
-    this.fetch = this.fetch.bind(this)
-    this.light2chart = this.light2chart.bind(this)
-  }
-
-  componentDidMount () {
-    this.fetch()
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/lights/' + this.props.light_id,
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
-  }
-
-  light2chart () {
     var chart
     var colors = ['#0099CC', '#007E33', '#FF8800', '#CC0000']
     var lines = []
     var data = []
     var stIndex = 0
-    $.each(this.state.config.channels, function (name, channel) {
+    $.each(this.props.config.channels, function (name, channel) {
       $.each(channel.values, function (i, value) {
         if (data[i] === undefined) {
           data[i] = {time: (i * 2) + 'h'}
@@ -64,7 +40,7 @@ export default class LightsChart extends React.Component {
       />)
     return (
       <div className='container'>
-        <span className='h6'>Light - {this.state.config.name}</span>
+        <span className='h6'>Light - {this.props.config.name}</span>
         <LineChart width={this.props.width} height={this.props.height} data={data}>
           <XAxis dataKey='time' />
           <YAxis />
@@ -74,12 +50,14 @@ export default class LightsChart extends React.Component {
       </div>
     )
   }
-
-  render () {
-    return (
-      <div className='container'>
-        {this.light2chart()}
-      </div>
-    )
+}
+const mapStateToProps = (state, ownProps) => {
+  return {
+    config: state.lights.find((l) =>{
+      return l.id === ownProps.light_id
+    })
   }
 }
+
+const Chart = connect(mapStateToProps, null)(chart)
+export default Chart
