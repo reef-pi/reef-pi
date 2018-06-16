@@ -1,21 +1,19 @@
 import React from 'react'
 import Channel from './channel.jsx'
 import $ from 'jquery'
-import {ajaxGet, ajaxPost} from '../utils/ajax.js'
-import {hideAlert} from '../utils/alert.js'
 
 export default class Light extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      channels: {},
-      fixed: {},
-      updated: false
+      channels: props.config.channels,
+      fixed: props.config.fixed,
+      updated: false,
+			jack: props.config.jack
     }
     this.updateValues = this.updateValues.bind(this)
     this.getValues = this.getValues.bind(this)
     this.channelList = this.channelList.bind(this)
-    this.fetchData = this.fetchData.bind(this)
     this.setLightMode = this.setLightMode.bind(this)
     this.updateLight = this.updateLight.bind(this)
     this.updateChannel = this.updateChannel.bind(this)
@@ -30,20 +28,12 @@ export default class Light extends React.Component {
       channels[k] = v
     })
     var payload = {
-      name: this.props.name,
+      name: this.props.config.name,
       channels: channels,
-      jack: this.props.jack
+      jack: this.props.config.jack
     }
-
-    ajaxPost({
-      url: '/api/lights/' + this.props.id,
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.fetchData()
-        this.setState({updated: false})
-        hideAlert()
-      }.bind(this)
-    })
+		this.props.hook(this.props.config.id, payload)
+    this.setState({updated: false})
   }
 
   setLightMode (pin) {
@@ -57,22 +47,6 @@ export default class Light extends React.Component {
     }.bind(this))
   }
 
-  componentWillMount () {
-    this.fetchData()
-  }
-
-  fetchData () {
-    ajaxGet({
-      url: '/api/lights/' + this.props.id,
-      success: function (data) {
-        this.setState({
-          channels: data.channels,
-          jack: data.jack
-        })
-        hideAlert()
-      }.bind(this)
-    })
-  }
 
   getValues (pin) {
     return (
@@ -109,8 +83,8 @@ export default class Light extends React.Component {
     for (var pin in this.state.channels) {
       var ch = this.state.channels[pin]
       channelUIs.push(
-        <div className='container' key={this.props.name + '-' + ch.pin}>
-          <Channel pin={pin} name={this.props.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
+        <div className='container' key={this.props.config.name + '-' + ch.pin}>
+          <Channel pin={pin} name={this.props.config.name} onChange={this.updateValues} ch={ch} updateChannel={this.updateChannel(pin)} />
         </div>
       )
     }
@@ -125,13 +99,13 @@ export default class Light extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          {this.props.name}
+          {this.props.config.name}
         </div>
         <div className='row'>
           { this.channelList() }
         </div>
         <div className='row'>
-          <input type='button' id={'update-light-' + this.props.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
+          <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
         </div>
       </div>
     )

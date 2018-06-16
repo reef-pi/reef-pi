@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {fetchJacks} from './redux/actions.js'
+import {fetchJacks} from './redux/actions/jacks'
 import {connect} from 'react-redux'
 
 class jackSelector extends React.Component {
