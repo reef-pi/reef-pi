@@ -1,7 +1,6 @@
 import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
-import {ajaxPut} from '../utils/ajax.js'
 
 export default class New extends React.PureComponent {
   constructor (props) {
@@ -86,14 +85,8 @@ export default class New extends React.PureComponent {
       enable: this.state.enable,
       period: parseInt(this.state.period)
     }
-    ajaxPut({
-      url: '/api/phprobes',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.toggle()
-        this.props.updateHook()
-      }.bind(this)
-    })
+    this.props.hook(payload)
+    this.toggle()
   }
 
   render () {

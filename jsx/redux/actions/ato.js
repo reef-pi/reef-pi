@@ -66,7 +66,6 @@ export const updateATO = (id, a) => {
   }))
 }
 
-
 export const deleteATO = (id) => {
   return (reduxDelete({
     url: '/api/atos/'+id,

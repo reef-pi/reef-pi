@@ -9,7 +9,7 @@ const initialState = {
   lights: [],
   atos: [],
   tcs: [],
-  phs: [],
+  phprobes: [],
   dosers: [],
   camera: {},
   configuration: {},
@@ -22,6 +22,7 @@ const initialState = {
   dashboard: {},
   display: {},
   ato_usage: {},
+  ph_readings: {},
   camera: {
     config: {},
     latest: undefined,
