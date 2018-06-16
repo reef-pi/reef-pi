@@ -1,77 +1,48 @@
 import React from 'react'
 import {ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
 import $ from 'jquery'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchTCUsage} from '../redux/actions/tcs'
+import {connect} from 'react-redux'
 
-export default class ControlChart extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      usage: [],
-      config: {
-        name: ''
-      }
-    }
-    this.fetch = this.fetch.bind(this)
-    this.info = this.info.bind(this)
-  }
-
+class chart extends React.Component {
   componentDidMount () {
-    var timer = window.setInterval(this.fetch, 10 * 1000)
+    this.props.fetchTCUsage(this.props.sensor_id)
+    var timer = window.setInterval(() => {
+      this.props.fetchTCUsage(this.props.sensor_id)
+      }, 10 * 1000)
     this.setState({timer: timer})
-    this.fetch()
-    this.info()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
 
-  info () {
-    ajaxGet({
-      url: '/api/tcs/' + this.props.sensor_id,
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-      }.bind(this)
-    })
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/tcs/' + this.props.sensor_id + '/usage',
-      success: function (data) {
-        var processed = []
-        $.each(data.historical, function (i, v) {
-          v.cooler *= -1
-          processed.push(v)
-        })
-        this.setState({
-          usage: processed,
-          showAlert: false
-        })
-      }.bind(this)
-    })
-  }
 
   render () {
-    if (this.state.usage.length <= 0) {
+    if (this.props.config === undefined) {
       return (<div />)
     }
-    var min = 76
-    var max = 82
-    if (this.state.config.chart_min !== undefined) {
-      min = this.state.config.chart_min
+    if (this.props.usage === undefined) {
+      return (<div />)
     }
-    if (this.state.config.chart_max !== undefined) {
-      max = this.state.config.chart_max
+    var usage = []
+    $.each(this.props.usage.historical, function (i, v) {
+      v.cooler *= -1
+      usage.push(v)
+    })
+    var min = 72
+    var max = 86
+    if (this.props.config.chart_min !== undefined) {
+      min = this.props.config.chart_min
+    }
+    if (this.props.config.chart_max !== undefined) {
+      max = this.props.config.chart_max
     }
 
     return (
       <div className='container'>
-        <span className='h6'>{this.state.config.name} - Heater/Cooler</span>
-        <ComposedChart width={this.props.width} height={this.props.height} data={this.state.usage}>
+        <span className='h6'>{this.props.config.name} - Heater/Cooler</span>
+        <ComposedChart width={this.props.width} height={this.props.height} data={usage}>
           <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
           <YAxis yAxisId='right' orientation='right' />
           <ReferenceLine yAxisId='right' y={0} />
@@ -85,3 +56,19 @@ export default class ControlChart extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    config: state.tcs.find((el)=>{ return el.id === ownProps.sensor_id}),
+    usage: state.tc_usage[ownProps.sensor_id]
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchTCUsage: (id) => dispatch(fetchTCUsage(id))
+  }
+}
+
+const ControlChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+export default ControlChart

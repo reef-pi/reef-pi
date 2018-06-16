@@ -42,6 +42,7 @@ class doser extends React.Component {
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     pumps: state.dosers

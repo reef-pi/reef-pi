@@ -1,7 +1,6 @@
 import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
-import {ajaxPut} from '../utils/ajax.js'
 import SelectSensor from './select_sensor.jsx'
 
 export default class New extends React.PureComponent {
@@ -79,7 +78,7 @@ export default class New extends React.PureComponent {
         <div className='row'>
           <div className='col-sm-2'>Sensor</div>
           <div className='col-sm-2'>
-            <SelectSensor id='new_tc_sensor' update={this.updateSensor} />
+            <SelectSensor id='new_tc_sensor' update={this.updateSensor} sensors={this.props.sensors}/>
           </div>
         </div>
         <div className='row'>
@@ -136,16 +135,10 @@ export default class New extends React.PureComponent {
       period: parseInt(this.state.period),
       fahrenheit: this.state.fahrenheit,
       chart_min: 65,
-      chart_max: 75
+      chart_max: 85
     }
-    ajaxPut({
-      url: '/api/tcs',
-      data: JSON.stringify(payload),
-      success: function (data) {
-        this.toggle()
-        this.props.updateHook()
-      }.bind(this)
-    })
+    this.props.create(payload)
+    this.toggle()
   }
 
   render () {

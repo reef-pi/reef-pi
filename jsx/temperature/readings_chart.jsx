@@ -1,64 +1,32 @@
 import React from 'react'
 import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
-import {ajaxGet} from '../utils/ajax.js'
+import {fetchTCUsage} from '../redux/actions/tcs'
+import {connect} from 'react-redux'
 
-export default class ReadingsChart extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      readings: [],
-      config: {
-        name: ''
-      }
-    }
-    this.fetch = this.fetch.bind(this)
-    this.info = this.info.bind(this)
-  }
-
+class chart extends React.Component {
   componentDidMount () {
-    var timer = window.setInterval(this.fetch, 10 * 1000)
+    this.props.fetchTCUsage(this.props.sensor_id)
+    var timer = window.setInterval(()=> {this.props.fetchTCUsage(this.props.sensor_id)}, 10 * 1000)
     this.setState({timer: timer})
-    this.info()
-    this.fetch()
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
 
-  info () {
-    ajaxGet({
-      url: '/api/tcs/' + this.props.sensor_id,
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-      }.bind(this)
-    })
-  }
-
-  fetch () {
-    ajaxGet({
-      url: '/api/tcs/' + this.props.sensor_id + '/usage',
-      success: function (data) {
-        this.setState({
-          readings: data.current,
-          showAlert: false
-        })
-      }.bind(this)
-    })
-  }
-
   render () {
-    if (this.state.readings.length <= 0) {
+    if (this.props.usage === undefined) {
       return (<div />)
     }
-    var min = this.state.config.chart_min
-    var max = this.state.config.chart_max
+    if (this.props.config === undefined) {
+      return (<div />)
+    }
+    var min = this.props.config.chart_min
+    var max = this.props.config.chart_max
     return (
       <div className='container'>
-        <span className='h6'>{this.state.config.name} - Temperature</span>
-        <AreaChart width={this.props.width} height={this.props.height} data={this.state.readings}>
+        <span className='h6'>{this.props.config.name} - Temperature</span>
+        <AreaChart width={this.props.width} height={this.props.height} data={this.props.usage.current}>
           <defs>
             <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
               <stop offset='5%' stopColor='#00C851' stopOpacity={0.8} />
@@ -74,3 +42,19 @@ export default class ReadingsChart extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    config: state.tcs.find((el)=>{return el.id === ownProps.sensor_id}),
+    usage: state.tc_usage[ownProps.sensor_id]
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchTCUsage: (id) => dispatch(fetchTCUsage(id))
+  }
+}
+
+const ReadingsChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+export default ReadingsChart

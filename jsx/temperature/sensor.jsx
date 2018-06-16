@@ -1,7 +1,6 @@
 import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import Notify from './notify.jsx'
-import {ajaxDelete, ajaxPost} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import SelectSensor from './select_sensor.jsx'
@@ -68,15 +67,7 @@ export default class Sensor extends React.Component {
   remove () {
     confirm('Are you sure ?')
       .then(function () {
-        ajaxDelete({
-          url: '/api/tcs/' + this.props.data.id,
-          type: 'DELETE',
-          success: function (data) {
-            if (this.props.upateHook !== undefined) {
-              this.props.upateHook()
-            }
-          }.bind(this)
-        })
+        this.props.remove(this.props.data.id)
       }.bind(this))
   }
 
@@ -133,19 +124,11 @@ export default class Sensor extends React.Component {
       showAlert('Maximum temperature value in chart has to be a positive integer')
       return
     }
-
-    ajaxPost({
-      url: '/api/tcs/' + this.props.data.id,
-      type: 'POST',
-      data: JSON.stringify(tc),
-      success: function (data) {
-        this.setState({
-          updated: false,
-          readOnly: true,
-          tc: tc
-        })
-        hideAlert()
-      }.bind(this)
+    this.props.save(this.props.data.id, tc)
+    this.setState({
+      updated: false,
+      readOnly: true,
+      tc: tc
     })
   }
 
@@ -231,6 +214,7 @@ export default class Sensor extends React.Component {
               id={'sensor-' + this.state.tc.name}
               active={this.state.tc.sensor}
               readOnly={this.state.readOnly}
+              sensors={this.props.sensors}
               update={this.updateSensor} />
           </div>
         </div>
