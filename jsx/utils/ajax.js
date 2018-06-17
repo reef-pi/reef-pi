@@ -13,7 +13,7 @@ function makeHeaders () {
 
 export function reduxGet (params) {
   return dispatch => {
-    fetch(params.url, {method: 'GET', headers: makeHeaders()})
+    return fetch(params.url, {method: 'GET', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
           console.log(response.statusText)
@@ -27,7 +27,7 @@ export function reduxGet (params) {
 
 export function reduxDelete (params) {
   return dispatch => {
-    fetch(params.url, {method: 'DELETE', headers: makeHeaders()})
+    return fetch(params.url, {method: 'DELETE', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
           console.log(response.statusText)
@@ -40,7 +40,7 @@ export function reduxDelete (params) {
 
 export function reduxPut (params) {
   return dispatch => {
-    fetch(params.url, {method: 'PUT', headers: makeHeaders(), body: JSON.stringify(params.data)})
+    return fetch(params.url, {method: 'PUT', headers: makeHeaders(), body: JSON.stringify(params.data)})
       .then((response) => {
         if (!response.ok) {
           console.log(response.statusText)
@@ -53,7 +53,7 @@ export function reduxPut (params) {
 
 export function reduxPost (params) {
   return dispatch => {
-    fetch(params.url, {
+    return fetch(params.url, {
       method: 'POST',
       headers: makeHeaders(),
       body: JSON.stringify(params.data)
