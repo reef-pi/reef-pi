@@ -1,17 +1,17 @@
 import React from 'react'
 import NotificationSettings from './notification.jsx'
 import AdafruitIO from './adafruit_io.jsx'
-import {ajaxPost, ajaxGet} from '../utils/ajax.js'
 import {showAlert, hideAlert} from '../utils/alert.js'
+import {updateTelemetry, fetchTelemetry} from '../redux/actions/telemetry'
+import {connect} from 'react-redux'
 
-export default class Telemetry extends React.Component {
+class telemetry extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       config: {},
       updated: false
     }
-    this.fetch = this.fetch.bind(this)
     this.showAdafruitIO = this.showAdafruitIO.bind(this)
     this.notification = this.notification.bind(this)
     this.updateAio = this.updateAio.bind(this)
@@ -19,6 +19,14 @@ export default class Telemetry extends React.Component {
     this.enableMailer = this.enableMailer.bind(this)
     this.save = this.save.bind(this)
     this.updateThrottle = this.updateThrottle.bind(this)
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(props.config  === undefined) {
+      return null
+    }
+    state.config = props.config
+    return state
   }
 
   enableMailer (ev) {
@@ -34,14 +42,8 @@ export default class Telemetry extends React.Component {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
-    ajaxPost({
-      url: '/api/telemetry',
-      data: JSON.stringify(c),
-      success: function (data) {
-        this.setState({updated: false, config: c})
-        hideAlert()
-      }.bind(this)
-    })
+    this.props.updateTelemetry(c)
+    this.setState({updated: false, config: c})
   }
 
   updateMailer (mailer) {
@@ -69,20 +71,8 @@ export default class Telemetry extends React.Component {
     })
   }
 
-  fetch () {
-    ajaxGet({
-      url: '/api/telemetry',
-      success: function (data) {
-        this.setState({
-          config: data
-        })
-        hideAlert()
-      }.bind(this)
-    })
-  }
-
   componentDidMount () {
-    this.fetch()
+    this.props.fetchTelemetry()
   }
 
   updateAio (adafruitio) {
@@ -182,3 +172,18 @@ export default class Telemetry extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    config: state.telemetry
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchTelemetry: () => dispatch(fetchTelemetry()),
+    updateTelemetry: (s) => dispatch(updateTelemetry(s))
+  }
+}
+
+const Telemetry = connect(mapStateToProps, mapDispatchToProps)(telemetry)
+export default Telemetry
