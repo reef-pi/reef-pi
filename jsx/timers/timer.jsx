@@ -13,8 +13,8 @@ export default class Timer extends React.Component {
     var trigger = ''
     switch (this.props.config.type) {
       case 'equipment':
-        var eqAction =  this.props.config.equipment.on ? 'on' : 'off'
-        var eqName =  this.props.equipment !== undefined ? this.props.equipment.name : ''
+        var eqAction = this.props.config.equipment.on ? 'on' : 'off'
+        var eqName = this.props.equipment !== undefined ? this.props.equipment.name : ''
         if (this.props.config.equipment.revert) {
           trigger = '(' + eqName + ' ' + eqAction + ' [' + this.props.config.equipment.duration + ']' + ')'
         } else {

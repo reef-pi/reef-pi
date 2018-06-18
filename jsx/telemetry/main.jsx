@@ -21,8 +21,8 @@ class telemetry extends React.Component {
     this.updateThrottle = this.updateThrottle.bind(this)
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(props.config  === undefined) {
+  static getDerivedStateFromProps (props, state) {
+    if (props.config === undefined) {
       return null
     }
     state.config = props.config

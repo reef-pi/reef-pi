@@ -5,7 +5,7 @@ import {takeImage, getLatestImage} from '../redux/actions/camera'
 import {connect} from 'react-redux'
 
 class capture extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.getLatestImage()
   }
 

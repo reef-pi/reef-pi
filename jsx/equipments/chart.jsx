@@ -20,7 +20,7 @@ class chart extends React.Component {
     if (this.props.equipments === undefined) {
       return (<div />)
     }
-    var equipments =  []
+    var equipments = []
     $.each(this.props.equipments, function (i, eq) {
       eq.onstate = eq.on ? 1 : 0
       eq.offstate = eq.on ? 0 : -1

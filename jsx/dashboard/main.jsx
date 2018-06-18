@@ -23,7 +23,7 @@ class dashboard extends React.Component {
 
   charts () {
     var config = this.props.config
-    if(config === undefined) {
+    if (config === undefined) {
       return
     }
     var i, j
@@ -100,7 +100,7 @@ class dashboard extends React.Component {
         <div className='row' key={'row-' + i}>{columns}</div>
       )
     }
-    return(rows)
+    return (rows)
   }
 
   render () {
@@ -122,7 +122,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchDashboard: () => dispatch(fetchDashboard()),
+    fetchDashboard: () => dispatch(fetchDashboard())
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import Enzyme, {shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import ControlChart from './control_chart'
 import Main from './main'
 import New from './new'
@@ -11,11 +11,11 @@ import SelectSensor from './select_sensor'
 import configureMockStore from 'redux-mock-store'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore =  configureMockStore()
+const mockStore = configureMockStore()
 
 describe('Temperature controller ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()}/>)
+    shallow(<Main store={mockStore()} />)
   })
 
   it('<New />', () => {
@@ -23,11 +23,11 @@ describe('Temperature controller ui', () => {
   })
 
   it('<Notify />', () => {
-    shallow(<Notify config={{}}/>)
+    shallow(<Notify config={{}} />)
   })
 
   it('<Sensor />', () => {
-    shallow(<Sensor data={{}}/>)
+    shallow(<Sensor data={{}} />)
   })
 
   it('<SelectSensor />', () => {
@@ -35,10 +35,10 @@ describe('Temperature controller ui', () => {
   })
 
   it('<ReadingsChart />', () => {
-    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})}/>)
+    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})} />)
   })
 
   it('<ControlChart />', () => {
-    shallow(<ControlChart store={mockStore({tcs: [], tc_usage: {}})}/>)
+    shallow(<ControlChart store={mockStore({tcs: [], tc_usage: {}})} />)
   })
 })

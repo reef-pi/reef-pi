@@ -1,6 +1,6 @@
 import React from 'react'
 import Enzyme, {shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import Main from './main'
 import Cron from './cron'
@@ -9,11 +9,11 @@ import Reminder from './reminder'
 import Timer from './timer'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore =  configureMockStore()
+const mockStore = configureMockStore()
 
 describe('Timer ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()}/>)
+    shallow(<Main store={mockStore()} />)
   })
 
   it('<Cron />', () => {
@@ -29,6 +29,6 @@ describe('Timer ui', () => {
   })
 
   it('<Timer />', () => {
-    shallow(<Timer config={{}}/>)
+    shallow(<Timer config={{}} />)
   })
 })

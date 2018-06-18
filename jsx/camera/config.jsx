@@ -27,7 +27,6 @@ export default class Config extends React.Component {
     this.setState({updated: false})
   }
 
-
   updateBool (k) {
     return (function (ev) {
       var config = this.state.config

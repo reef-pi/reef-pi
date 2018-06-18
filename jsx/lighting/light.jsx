@@ -9,7 +9,7 @@ export default class Light extends React.Component {
       channels: props.config.channels,
       fixed: props.config.fixed,
       updated: false,
-			jack: props.config.jack
+      jack: props.config.jack
     }
     this.updateValues = this.updateValues.bind(this)
     this.getValues = this.getValues.bind(this)
@@ -32,7 +32,7 @@ export default class Light extends React.Component {
       channels: channels,
       jack: this.props.config.jack
     }
-		this.props.hook(this.props.config.id, payload)
+    this.props.hook(this.props.config.id, payload)
     this.setState({updated: false})
   }
 
@@ -46,7 +46,6 @@ export default class Light extends React.Component {
       })
     }.bind(this))
   }
-
 
   getValues (pin) {
     return (

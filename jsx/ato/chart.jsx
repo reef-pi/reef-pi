@@ -10,7 +10,7 @@ class chart extends React.Component {
     this.updateUsage = this.updateUsage.bind(this)
   }
 
-  updateUsage() {
+  updateUsage () {
     this.props.fetchATOUsage(this.props.ato_id)
   }
 
@@ -25,7 +25,7 @@ class chart extends React.Component {
   }
 
   render () {
-    if(this.props.usage === undefined) {
+    if (this.props.usage === undefined) {
       return (<div />)
     }
     return (
@@ -50,7 +50,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchATOUsage: (id) => dispatch(fetchATOUsage(id)),
+    fetchATOUsage: (id) => dispatch(fetchATOUsage(id))
   }
 }
 

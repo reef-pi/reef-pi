@@ -109,11 +109,11 @@ class settings extends React.Component {
     )
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(props.settings === undefined) {
+  static getDerivedStateFromProps (props, state) {
+    if (props.settings === undefined) {
       return null
     }
-    if(isEmptyObject(props.settings)) {
+    if (isEmptyObject(props.settings)) {
       return null
     }
     state.settings = props.settings
@@ -183,7 +183,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchCapabilities: () => dispatch(fetchCapabilities()),
     fetchSettings: () => dispatch(fetchSettings()),
-    updateSettings: (s) => dispatch(updateSettings(s)),
+    updateSettings: (s) => dispatch(updateSettings(s))
   }
 }
 

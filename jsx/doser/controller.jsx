@@ -27,7 +27,7 @@ class doser extends React.Component {
           <Pump data={pump} />
         </div>
       )
-    }.bind(this))
+    })
     return (<ul className='list-group'> {pumps} </ul>)
   }
 

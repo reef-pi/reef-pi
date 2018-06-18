@@ -33,7 +33,7 @@ class Main extends React.Component {
   trigger () {
     switch (this.state.type) {
       case 'equipment':
-        return (<Equipment updateHook={this.update('equipment')} equipments={this.props.equipments}/>)
+        return (<Equipment updateHook={this.update('equipment')} equipments={this.props.equipments} />)
       case 'reminder':
         return (<Reminder updateHook={this.update('reminder')} />)
     }
@@ -58,11 +58,11 @@ class Main extends React.Component {
     this.props.fetchTimers()
   }
 
-  pickEquipment(id){
-    if(this.props.equipments === undefined){
-      return({})
+  pickEquipment (id) {
+    if (this.props.equipments === undefined) {
+      return ({})
     }
-    return this.props.equipments.find((el) => {return el.id === id})
+    return this.props.equipments.find((el) => { return el.id === id })
   }
 
   timerList () {
@@ -71,7 +71,7 @@ class Main extends React.Component {
       list.push(
         <li key={timer.name} className='list-group-item row'>
           <div className='col-sm-10'>
-            <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)}/>
+            <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
           </div>
           <div className='col-sm-2'>
             <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />

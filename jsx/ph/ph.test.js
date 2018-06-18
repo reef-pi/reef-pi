@@ -1,6 +1,6 @@
 import React from 'react'
 import Enzyme, {shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import Calibrate from './calibrate'
 import Chart from './chart'
 import Main from './main'
@@ -11,11 +11,11 @@ import ProbeConfig from './probe_config'
 import configureMockStore from 'redux-mock-store'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore =  configureMockStore()
+const mockStore = configureMockStore()
 
 describe('pH ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()}/>)
+    shallow(<Main store={mockStore()} />)
   })
 
   it('<New />', () => {
@@ -23,19 +23,19 @@ describe('pH ui', () => {
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore({phprobes: [], ph_readings: {}})}/>)
+    shallow(<Chart store={mockStore({phprobes: [], ph_readings: {}})} />)
   })
 
   it('<Notify />', () => {
-    shallow(<Notify data={{}}/>)
+    shallow(<Notify data={{}} />)
   })
 
   it('<Probe />', () => {
-    shallow(<Probe store={mockStore()}/>)
+    shallow(<Probe store={mockStore()} />)
   })
 
   it('<ProbeConfig />', () => {
-    shallow(<ProbeConfig data={{}}/>)
+    shallow(<ProbeConfig data={{}} />)
   })
 
   it('<Calibrate />', () => {
