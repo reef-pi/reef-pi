@@ -2,13 +2,10 @@ import React from 'react'
 import { render } from 'react-dom'
 import MainPanel from './main_panel.jsx'
 import SignIn from './sign_in.jsx'
-import {connect, Provider} from 'react-redux'
-import {configureStore} from './redux/store'
-import {fetchInfo} from './redux/actions'
+import {connect} from 'react-redux'
+import {fetchInfo} from './redux/actions/info'
 
-const store = configureStore()
-
-export default class ConnectedApp extends React.Component {
+class app extends React.Component {
   componentDidMount () {
     if (SignIn.isSignIned()) {
       this.props.fetchInfo()
@@ -39,11 +36,5 @@ const mapDispatchToProps = (dispatch) => {
   return {fetchInfo: () => dispatch(fetchInfo())}
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
-
-render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('main-panel')
-)
+const App = connect(mapStateToProps, mapDispatchToProps)(app)
+export default App

@@ -5,7 +5,7 @@ var BUILD_DIR = path.resolve(__dirname, 'assets/')
 var APP_DIR = path.resolve(__dirname, 'jsx')
 
 var config = {
-  entry: APP_DIR + '/ui.jsx',
+  entry: APP_DIR + '/entry',
   module: {
     rules: [
       {
