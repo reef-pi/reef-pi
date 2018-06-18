@@ -87,7 +87,7 @@ class newPump extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createDosingPump: (s) => dispatch(createDosingPump(s)),
+    createDosingPump: (s) => dispatch(createDosingPump(s))
   }
 }
 

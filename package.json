@@ -59,5 +59,8 @@
   "bugs": {
     "url": "https://github.com/reef-pi/reef-pi/issues"
   },
-  "homepage": "https://github.com/reef-pi/reef-pi#readme"
+  "homepage": "https://github.com/reef-pi/reef-pi#readme",
+  "standard": {
+    "globals":["describe", "it", "fetch"]
+  }
 }

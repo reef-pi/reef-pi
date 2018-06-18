@@ -106,11 +106,11 @@ class ato extends React.Component {
     )
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(props.data === undefined) {
+  static getDerivedStateFromProps (props, state) {
+    if (props.data === undefined) {
       return null
     }
-    if(isEmptyObject(props.data)) {
+    if (isEmptyObject(props.data)) {
       return null
     }
     state.ato = props.data
@@ -163,7 +163,7 @@ class ato extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name}/>
+          <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
         </div>
       </div>
     )
@@ -173,7 +173,7 @@ class ato extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateATO: (id, a) => dispatch(updateATO(id, a)),
-    deleteATO: (id) => dispatch(deleteATO(id)),
+    deleteATO: (id) => dispatch(deleteATO(id))
   }
 }
 

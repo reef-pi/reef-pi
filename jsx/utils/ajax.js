@@ -66,8 +66,8 @@ export function reduxPost (params) {
       }
       return response
     })
-    .then((data) => dispatch(params.success(data)))
-    .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
+      .then((data) => dispatch(params.success(data)))
+      .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
   }
 }
 

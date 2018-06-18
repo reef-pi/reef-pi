@@ -20,7 +20,7 @@ class main extends React.Component {
   }
 
   list () {
-    if(this.props.tcs === undefined){
+    if (this.props.tcs === undefined) {
       return
     }
     var list = []
@@ -28,7 +28,7 @@ class main extends React.Component {
     $.each(this.props.tcs, function (k, v) {
       list.push(
         <div key={k} className='row list-group-item'>
-          <Sensor data={v} remove={this.props.deleteTC} save={this.props.updateTC} sensors={this.props.sensors}/>
+          <Sensor data={v} remove={this.props.deleteTC} save={this.props.updateTC} sensors={this.props.sensors} />
         </div>
       )
       index = index + 1
@@ -42,7 +42,7 @@ class main extends React.Component {
         <ul className='list-group'>
           {this.list()}
         </ul>
-        <New create={this.props.createTC} sensors={this.props.sensors}/>
+        <New create={this.props.createTC} sensors={this.props.sensors} />
       </div>
     )
   }

@@ -36,7 +36,7 @@ class main extends React.Component {
       list.push(
         <div key={k} className='row list-group-item'>
           <div className='col-sm-8'>
-            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment}/>
+            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
           </div>
           <div className='col-sm-4'>
             <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />

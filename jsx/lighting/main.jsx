@@ -85,7 +85,7 @@ class main extends React.Component {
       lights.push(
         <div key={'light-' + i} className='row'>
           <div className='container'>
-            <Light config={light} hook={this.props.updateLight}/>
+            <Light config={light} hook={this.props.updateLight} />
             <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger col-sm-2' />
           </div>
           <hr />
@@ -144,7 +144,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchJacks: () => dispatch(fetchJacks()),
     createLight: (l) => dispatch(createLight(l)),
     deleteLight: (id) => dispatch(deleteLight(id)),
-    updateLight: (id, l) => dispatch(updateLight(id, l)),
+    updateLight: (id, l) => dispatch(updateLight(id, l))
   }
 }
 

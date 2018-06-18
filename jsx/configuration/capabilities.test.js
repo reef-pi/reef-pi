@@ -4,9 +4,9 @@ import Capabilities from './capabilities'
 
 test('render capabilities component', () => {
   const component = renderer.create(
-    <Capabilities capabilities={[]} update={()=>{}} />
+    <Capabilities capabilities={[]} update={() => {}} />
   )
 
-  let tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
+  let tree = component.toJSON()
+  expect(tree).toMatchSnapshot()
 })

@@ -21,7 +21,7 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return (<div />)
     }
-    var  metrics = this.props.readings[this.props.type]
+    var metrics = this.props.readings[this.props.type]
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}-{this.props.type} pH</span>

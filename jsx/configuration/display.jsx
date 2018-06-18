@@ -8,25 +8,24 @@ class display extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      brightness: props.config ? props.config.brightness : 100 ,
+      brightness: props.config ? props.config.brightness : 100,
       on: props.config ? props.config.on : undefined
     }
     this.toggle = this.toggle.bind(this)
     this.setBrightness = this.setBrightness.bind(this)
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(props.config === undefined) {
+  static getDerivedStateFromProps (props, state) {
+    if (props.config === undefined) {
       return null
     }
-    if(isEmptyObject(props.config)) {
+    if (isEmptyObject(props.config)) {
       return null
     }
     state.on = props.config.on
     state.brightness = props.config.brightness
     return state
   }
-
 
   componentDidMount () {
     this.props.fetchDisplay()
@@ -71,7 +70,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchDisplay: () => dispatch(fetchDisplay()),
     switchDisplay: () => dispatch(switchDisplay()),
-    setBrightness: (s) => dispatch(setBrightness(s)),
+    setBrightness: (s) => dispatch(setBrightness(s))
   }
 }
 

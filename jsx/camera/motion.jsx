@@ -12,11 +12,11 @@ export default class Motion extends React.PureComponent {
   render () {
 	  return (
       <div className='container'>
-        <img
+    <img
           width={this.props.width} height={this.props.height}
           src={this.props.url}
         />
-     </div>
+  </div>
     )
   }
 }

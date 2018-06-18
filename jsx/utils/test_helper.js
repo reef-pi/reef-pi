@@ -1,10 +1,10 @@
 export const mockLocalStorage = () => {
   var storage = {}
-  return({
+  return ({
     getItem: (k) => {
       return storage[k]
     },
-    setItem: (k,v) =>{
+    setItem: (k, v) => {
       storage[k] = v
     }
   })

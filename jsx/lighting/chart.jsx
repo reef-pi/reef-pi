@@ -5,8 +5,8 @@ import {hideAlert} from '../utils/alert.js'
 import {connect} from 'react-redux'
 
 class chart extends React.Component {
-  render() {
-    if(this.props.config === undefined) {
+  render () {
+    if (this.props.config === undefined) {
       return <div />
     }
     var chart
@@ -53,7 +53,7 @@ class chart extends React.Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    config: state.lights.find((l) =>{
+    config: state.lights.find((l) => {
       return l.id === ownProps.light_id
     })
   }

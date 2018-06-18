@@ -9,14 +9,13 @@ class chart extends React.Component {
     this.props.fetchTCUsage(this.props.sensor_id)
     var timer = window.setInterval(() => {
       this.props.fetchTCUsage(this.props.sensor_id)
-      }, 10 * 1000)
+    }, 10 * 1000)
     this.setState({timer: timer})
   }
 
   componentWillUnmount () {
     window.clearInterval(this.state.timer)
   }
-
 
   render () {
     if (this.props.config === undefined) {
@@ -59,7 +58,7 @@ class chart extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    config: state.tcs.find((el)=>{ return el.id === ownProps.sensor_id}),
+    config: state.tcs.find((el) => { return el.id === ownProps.sensor_id }),
     usage: state.tc_usage[ownProps.sensor_id]
   }
 }

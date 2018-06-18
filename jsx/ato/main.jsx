@@ -53,7 +53,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchATOs: () => dispatch(fetchATOs()),
+    fetchATOs: () => dispatch(fetchATOs())
   }
 }
 

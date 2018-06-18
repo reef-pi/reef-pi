@@ -15,7 +15,7 @@ class dashboard extends React.Component {
     super(props)
     this.state = {
       updated: false,
-      config: {},
+      config: {}
     }
     this.save = this.save.bind(this)
     this.toRow = this.toRow.bind(this)
@@ -30,11 +30,11 @@ class dashboard extends React.Component {
     this.props.fetchTCs()
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if(props.config === undefined) {
+  static getDerivedStateFromProps (props, state) {
+    if (props.config === undefined) {
       return null
     }
-    if(isEmptyObject(props.config)) {
+    if (isEmptyObject(props.config)) {
       return null
     }
     state.config = props.config

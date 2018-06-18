@@ -109,7 +109,7 @@ class newATO extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createATO: (a) => dispatch(createATO(a)),
+    createATO: (a) => dispatch(createATO(a))
   }
 }
 

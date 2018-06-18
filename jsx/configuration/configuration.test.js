@@ -1,6 +1,6 @@
 import React from 'react'
 import Enzyme, {shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
 import Capabilities from './capabilities'
@@ -13,7 +13,7 @@ import Main from './main'
 import Settings from './settings'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore =  configureMockStore()
+const mockStore = configureMockStore()
 
 describe('Configuration ui', () => {
   it('<Main />', () => {
@@ -21,15 +21,15 @@ describe('Configuration ui', () => {
   })
 
   it('<Admin />', () => {
-    shallow(<Admin store={mockStore()}/>)
+    shallow(<Admin store={mockStore()} />)
   })
 
   it('<Display />', () => {
-    shallow(<Display store={mockStore()}/>)
+    shallow(<Display store={mockStore()} />)
   })
 
   it('<Capabilities />', () => {
-    shallow(<Capabilities capabilities={[]}/>)
+    shallow(<Capabilities capabilities={[]} />)
   })
 
   it('<ComponentSelector />', () => {
@@ -37,7 +37,7 @@ describe('Configuration ui', () => {
   })
 
   it('<Dashboard />', () => {
-    shallow(<Dashboard store={mockStore()}/>)
+    shallow(<Dashboard store={mockStore()} />)
   })
 
   it('<Grid />', () => {
@@ -45,11 +45,10 @@ describe('Configuration ui', () => {
   })
 
   it('<Settings />', () => {
-    shallow(<Settings store={mockStore()}/>)
+    shallow(<Settings store={mockStore()} />)
   })
 
   it('<HealthNotify />', () => {
-    shallow(<HealthNotify state={{}}/>)
+    shallow(<HealthNotify state={{}} />)
   })
 })
-

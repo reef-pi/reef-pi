@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchTCUsage(this.props.sensor_id)
-    var timer = window.setInterval(()=> {this.props.fetchTCUsage(this.props.sensor_id)}, 10 * 1000)
+    var timer = window.setInterval(() => { this.props.fetchTCUsage(this.props.sensor_id) }, 10 * 1000)
     this.setState({timer: timer})
   }
 
@@ -45,7 +45,7 @@ class chart extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    config: state.tcs.find((el)=>{return el.id === ownProps.sensor_id}),
+    config: state.tcs.find((el) => { return el.id === ownProps.sensor_id }),
     usage: state.tc_usage[ownProps.sensor_id]
   }
 }

@@ -78,7 +78,7 @@ export default class New extends React.PureComponent {
         <div className='row'>
           <div className='col-sm-2'>Sensor</div>
           <div className='col-sm-2'>
-            <SelectSensor id='new_tc_sensor' update={this.updateSensor} sensors={this.props.sensors}/>
+            <SelectSensor id='new_tc_sensor' update={this.updateSensor} sensors={this.props.sensors} />
           </div>
         </div>
         <div className='row'>

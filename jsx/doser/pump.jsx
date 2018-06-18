@@ -239,7 +239,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateDosingPumpSchedule: (id, s) => dispatch(updateDosingPumpSchedule(id, s)),
     deleteDosingPump: (id) => dispatch(deleteDosingPump(id)),
-    calibrateDosingPump: (id, s) => dispatch(calibrateDosingPump(id, s)),
+    calibrateDosingPump: (id, s) => dispatch(calibrateDosingPump(id, s))
   }
 }
 
