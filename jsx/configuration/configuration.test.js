@@ -11,21 +11,39 @@ import Grid from './grid'
 import HealthNotify from './health_notify'
 import Main from './main'
 import Settings from './settings'
+import {mockLocalStorage} from '../utils/test_helper'
+import thunk from 'redux-thunk'
+import 'isomorphic-fetch'
+import renderer from 'react-test-renderer'
+import {Provider} from 'react-redux'
+window.localStorage = mockLocalStorage()
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore()
+const mockStore = configureMockStore([thunk])
 
 describe('Configuration ui', () => {
   it('<Main />', () => {
-    shallow(<Main />)
+    renderer.create(
+      <Provider store={mockStore({capabilities: []})} >
+        <Main />
+      </Provider>
+    )
   })
 
   it('<Admin />', () => {
-    shallow(<Admin store={mockStore()} />)
+    renderer.create(
+      <Provider store={mockStore()} >
+        <Admin />
+      </Provider>
+    )
   })
 
   it('<Display />', () => {
-    shallow(<Display store={mockStore()} />)
+    renderer.create(
+      <Provider store={mockStore({capabilities: []})} >
+        <Display />
+      </Provider>
+    )
   })
 
   it('<Capabilities />', () => {
