@@ -7,8 +7,8 @@ before_install:
   - sudo npm install -g npm
 script:
   - make go-get
-  - bash <(curl -s https://codecov.io/bash) -cF go
   - ./build/ci.sh
+  - bash <(curl -s https://codecov.io/bash) -cF go
   - make pi
   - bundle install
   - env
