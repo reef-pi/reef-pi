@@ -2,7 +2,6 @@ import $ from 'jquery'
 import React from 'react'
 import Pump from './pump.jsx'
 import New from './new.jsx'
-import {hideAlert} from '../utils/alert.js'
 import {fetchDosingPumps} from '../redux/actions/doser'
 import {connect} from 'react-redux'
 

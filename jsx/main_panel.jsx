@@ -12,7 +12,7 @@ import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
 import 'react-tabs/style/react-tabs.css'
-import {fetchCapabilities} from './redux/actions'
+import {fetchCapabilities} from './redux/actions/capabilities'
 import {connect} from 'react-redux'
 
 class mainPanel extends React.Component {

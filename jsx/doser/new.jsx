@@ -1,6 +1,5 @@
-import $ from 'jquery'
 import React from 'react'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import JackSelector from '../jack_selector.jsx'
 import {createDosingPump} from '../redux/actions/doser'
 import {connect} from 'react-redux'

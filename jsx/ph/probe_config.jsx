@@ -14,7 +14,7 @@ export default class ProbeConfig extends React.Component {
     this.setState({
       config: v
     })
-    this.props.hook
+    this.props.hook()
   }
 
   render () {

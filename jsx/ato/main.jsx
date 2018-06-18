@@ -1,10 +1,9 @@
 import React from 'react'
-import $ from 'jquery'
 import ATO from './ato.jsx'
 import New from './new.jsx'
 import {fetchATOs} from '../redux/actions/ato'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
+import $ from 'jquery'
 
 class main extends React.Component {
   constructor (props) {

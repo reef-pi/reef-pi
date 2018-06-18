@@ -1,5 +1,4 @@
 import React from 'react'
-import {hideAlert} from '../utils/alert.js'
 
 export default class Equipment extends React.Component {
   constructor (props) {

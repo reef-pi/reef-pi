@@ -1,6 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import $ from 'jquery'
 import {takeImage, getLatestImage} from '../redux/actions/camera'
 import {connect} from 'react-redux'
 
@@ -10,14 +8,14 @@ class capture extends React.Component {
   }
 
   render () {
-    var img = <div className='container' />
-    if (this.props.latest !== undefined) {
-      img = <img src={'/images/' + this.props.latest.image} style={imgStyle} />
-    }
     var imgStyle = {
       width: '100%',
       height: '100%',
       borderRadius: '25px'
+    }
+    var img = <div className='container' />
+    if (this.props.latest !== undefined) {
+      img = <img src={'/images/' + this.props.latest.image} style={imgStyle} />
     }
     return (
       <div className='container'>

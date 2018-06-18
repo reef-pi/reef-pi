@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, LineChart, Line, Label} from 'recharts'
+import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
 import {fetchProbeReadings} from '../redux/actions/phprobes'
 import {connect} from 'react-redux'
 

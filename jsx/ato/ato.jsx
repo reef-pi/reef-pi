@@ -118,10 +118,6 @@ class ato extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
-    }
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
     var name = <label>{this.state.ato.name}</label>

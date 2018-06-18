@@ -14,7 +14,7 @@ script:
   - env
   - /usr/bin/npm install
   - ./node_modules/.bin/webpack -d
-  - ./node_modules/.bin/standard jsx/*
+  - ./node_modules/.bin/standard jsx/**/*
   - npm test
   - bash <(curl -s https://codecov.io/bash) -cF javascript
   - make clean

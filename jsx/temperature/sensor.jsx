@@ -1,7 +1,7 @@
 import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import Notify from './notify.jsx'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import SelectSensor from './select_sensor.jsx'
 import ReadingsChart from './readings_chart.jsx'
@@ -60,7 +60,7 @@ export default class Sensor extends React.Component {
     return (function (v) {
       var h = this.state.tc
       h[k] = v
-      this.setState({tc: h })
+      this.setState({tc: h})
     }.bind(this))
   }
 
@@ -179,7 +179,7 @@ export default class Sensor extends React.Component {
           <div className='col-sm-2'>
             <SelectEquipment
               update={this.updateEquipment('cooler')}
-              active={this.state.tc.cooler} id={'cooler_selector-' + this.props.data.id}
+              active={this.state.tc.cooler}
               id={'cooler_selector-' + this.props.data.id}
               readOnly={this.state.readOnly}
             />
@@ -190,10 +190,6 @@ export default class Sensor extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
-    }
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
     var name = <label>{this.state.tc.name}</label>

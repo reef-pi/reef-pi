@@ -4,12 +4,11 @@ import Reminder from './reminder.jsx'
 import Timer from './timer.jsx'
 import Cron from './cron.jsx'
 import Equipment from './equipment.jsx'
-import {showAlert, hideAlert} from '../utils/alert'
+import {showAlert} from '../utils/alert'
 import {confirm} from '../utils/confirm'
 import {fetchTimers, createTimer, deleteTimer} from '../redux/actions/timer'
 import {fetchEquipments} from '../redux/actions/equipment'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
 
 class Main extends React.Component {
   constructor (props) {

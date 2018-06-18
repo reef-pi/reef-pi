@@ -1,7 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {hideAlert} from '../utils/alert'
 
 export default class Equipment extends React.Component {
   constructor (props) {

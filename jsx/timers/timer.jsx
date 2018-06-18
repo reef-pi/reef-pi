@@ -1,7 +1,4 @@
 import React from 'react'
-import {hideAlert} from '../utils/alert.js'
-import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
 
 export default class Timer extends React.Component {
   constructor (props) {

@@ -1,7 +1,6 @@
 import React from 'react'
 import {Tooltip, XAxis, BarChart, Bar} from 'recharts'
 import $ from 'jquery'
-import {hideAlert} from '../utils/alert.js'
 import {fetchEquipments} from '../redux/actions/equipment'
 import {connect} from 'react-redux'
 

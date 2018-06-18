@@ -29,7 +29,7 @@ class main extends React.Component {
     $.each(this.props.equipments, function (k, v) {
       var outlet = {}
       $.each(this.props.outlets, function (x, o) {
-        if (v.outlet == o.id) {
+        if (v.outlet === o.id) {
           outlet = o
         }
       })

@@ -1,10 +1,8 @@
-import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert'
 import {createATO} from '../redux/actions/ato'
 import InletSelector from '../connectors/inlet_selector.jsx'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
 
 class newATO extends React.Component {
   constructor (props) {

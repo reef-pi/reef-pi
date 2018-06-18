@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import ComponentSelector from './component_selector.jsx'
 
@@ -10,7 +9,6 @@ export default class Grid extends React.Component {
     var i, j
     var cells = []
     for (i = 0; i < props.rows; i++) {
-      var columns = []
       cells[i] = []
       for (j = 0; j < props.columns; j++) {
         if (props.cells[i] === undefined || props.cells[i][j] === undefined) {
@@ -34,7 +32,7 @@ export default class Grid extends React.Component {
     this.menuItems = this.menuItems.bind(this)
   }
 
-  cellUI (type, current_id, i, j) {
+  cellUI (type, currentId, i, j) {
     var data
     switch (type) {
       case 'ato':
@@ -42,7 +40,6 @@ export default class Grid extends React.Component {
         break
       case 'equipment':
         return (<span>-</span>)
-        break
       case 'health':
         data = [{id: 'current', name: 'current'}, {id: 'historical', name: 'historical'}]
         break
@@ -64,7 +61,7 @@ export default class Grid extends React.Component {
         components={data}
         hook={this.updateHook(i, j)}
         selector_id={'component-' + type + '-' + i + '-' + j}
-        current_id={current_id}
+        current_id={currentId}
       />
     )
   }
