@@ -41,6 +41,8 @@
     "webpack-dev-server": "^3.1.4"
   },
   "devDependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.9.1",
     "webpack-cli": "^2.1.4"
