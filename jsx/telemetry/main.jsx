@@ -1,7 +1,7 @@
 import React from 'react'
 import NotificationSettings from './notification.jsx'
 import AdafruitIO from './adafruit_io.jsx'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {updateTelemetry, fetchTelemetry} from '../redux/actions/telemetry'
 import {connect} from 'react-redux'
 

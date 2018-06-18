@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import SignIn from './sign_in.jsx'
-import {updateCreds} from './redux/actions'
+import {updateCreds} from './redux/actions/creds'
 import {connect} from 'react-redux'
 import {hideAlert} from './utils/alert'
 

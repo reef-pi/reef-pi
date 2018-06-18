@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
 import SelectSensor from './select_sensor.jsx'
@@ -14,7 +13,7 @@ export default class New extends React.PureComponent {
       heater: '',
       cooler: '',
       control: false,
-      notify: { min: 77, max: 81},
+      notify: {min: 77, max: 81},
       sensor: '',
       add: false
     }
@@ -58,7 +57,7 @@ export default class New extends React.PureComponent {
       heater: '',
       cooler: '',
       control: false,
-      notify: { min: 77, max: 81},
+      notify: {min: 77, max: 81},
       sensor: ''
     })
   }

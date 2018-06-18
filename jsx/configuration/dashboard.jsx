@@ -1,6 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import Grid from './grid.jsx'
 import {connect} from 'react-redux'
 import {fetchDashboard, updateDashboard} from '../redux/actions/dashboard'
@@ -84,7 +82,7 @@ class dashboard extends React.Component {
       }
     }
     this.setState({
-		  config: config,
+      config: config,
       updated: true
     })
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
-import {fetchHealth} from './redux/actions'
+import {fetchHealth} from './redux/actions/health'
 import {connect} from 'react-redux'
 
 class healthChart extends React.Component {

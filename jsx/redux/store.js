@@ -11,7 +11,6 @@ const initialState = {
   tcs: [],
   phprobes: [],
   dosers: [],
-  camera: {},
   configuration: {},
   capabilities: [],
   health_stats: {},

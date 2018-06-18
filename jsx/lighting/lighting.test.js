@@ -29,6 +29,6 @@ describe('Lighting ui', () => {
   })
 
   it('<Slider />', () => {
-    shallow(<Slider getValue={() => { [] }} />)
+    shallow(<Slider getValue={() => []} />)
   })
 })

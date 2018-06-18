@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import SignIn from '../sign_in.jsx'
-import {showAlert, hideAlert} from './alert.js'
+import {showAlert} from './alert.js'
 
 function makeHeaders () {
   let headers = new Headers()

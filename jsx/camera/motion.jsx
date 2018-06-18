@@ -1,22 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import $ from 'jquery'
 
 export default class Motion extends React.PureComponent {
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
-  }
-
   render () {
-	  return (
+    return (
       <div className='container'>
-    <img
+        <img
           width={this.props.width} height={this.props.height}
           src={this.props.url}
         />
-  </div>
+      </div>
     )
   }
 }

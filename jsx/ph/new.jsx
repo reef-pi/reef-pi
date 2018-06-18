@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import React from 'react'
 import {showAlert} from '../utils/alert.js'
 

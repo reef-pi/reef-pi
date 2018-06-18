@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import TempReadingsChart from '../temperature/readings_chart.jsx'
 import TempControlChart from '../temperature/control_chart.jsx'
 import EquipmentsChart from '../equipments/chart.jsx'

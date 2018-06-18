@@ -1,7 +1,6 @@
 import React from 'react'
 import {Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
 import $ from 'jquery'
-import {hideAlert} from '../utils/alert.js'
 import {connect} from 'react-redux'
 
 class chart extends React.Component {
@@ -9,7 +8,6 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var chart
     var colors = ['#0099CC', '#007E33', '#FF8800', '#CC0000']
     var lines = []
     var data = []

@@ -5,8 +5,6 @@ import Config from './config.jsx'
 import Capture from './capture.jsx'
 import {fetchConfig, updateConfig, listImages} from '../redux/actions/camera'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
-
 import Motion from './motion.jsx'
 
 class camera extends React.Component {

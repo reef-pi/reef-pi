@@ -1,5 +1,5 @@
 import React from 'react'
-import {fetchInfo} from './redux/actions'
+import {fetchInfo} from './redux/actions/info'
 import {connect} from 'react-redux'
 
 class summary extends React.Component {

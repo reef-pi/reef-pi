@@ -2,7 +2,6 @@ import React from 'react'
 import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
 import {fetchATOUsage} from '../redux/actions/ato'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
 
 class chart extends React.Component {
   constructor (props) {

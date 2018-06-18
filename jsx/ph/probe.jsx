@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import React from 'react'
 import {confirm} from '../utils/confirm.js'
 import Chart from './chart.jsx'

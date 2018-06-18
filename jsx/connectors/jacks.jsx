@@ -2,7 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import {confirm} from '../utils/confirm.js'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {connect} from 'react-redux'
 import {fetchJacks, deleteJack, createJack} from '../redux/actions/jacks'
 

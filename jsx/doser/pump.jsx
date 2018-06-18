@@ -1,11 +1,8 @@
 import Cron from '../timers/cron.jsx'
-import $ from 'jquery'
 import React from 'react'
-import {showAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import {calibrateDosingPump, updateDosingPumpSchedule, deleteDosingPump} from '../redux/actions/doser'
 import {connect} from 'react-redux'
-import {isEmptyObject} from 'jquery'
 
 class pump extends React.Component {
   constructor (props) {

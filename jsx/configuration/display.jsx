@@ -1,6 +1,5 @@
 import React from 'react'
 import {fetchDisplay, switchDisplay, setBrightness} from '../redux/actions/display'
-import {hideAlert} from '../utils/alert'
 import {isEmptyObject} from 'jquery'
 import {connect} from 'react-redux'
 

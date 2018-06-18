@@ -9,7 +9,7 @@ class inletSelector extends React.Component {
     super(props)
     var inlet
     $.each(props.inlets, function (k, v) {
-      if (v.id == props.active) {
+      if (v.id === props.active) {
         inlet = v
       }
     })
