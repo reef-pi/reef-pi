@@ -61,10 +61,16 @@
   },
   "homepage": "https://github.com/reef-pi/reef-pi#readme",
   "standard": {
-    "globals":["describe", "it", "fetch", "expect", "Headers"]
+    "globals": [
+      "describe",
+      "it",
+      "fetch",
+      "expect",
+      "Headers"
+    ]
   },
   "jest": {
-    "moduleNameMapper":{
+    "moduleNameMapper": {
       "\\.(css|less|sass|scss)$": "<rootDir>/test/jest_config.js"
     }
   }

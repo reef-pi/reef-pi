@@ -9,25 +9,50 @@ import ReadingsChart from './readings_chart'
 import Sensor from './sensor'
 import SelectSensor from './select_sensor'
 import configureMockStore from 'redux-mock-store'
+import 'isomorphic-fetch'
+import thunk from 'redux-thunk'
+import {mockLocalStorage} from '../utils/test_helper'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore()
+const mockStore = configureMockStore([thunk])
+window.localStorage = mockLocalStorage()
 
 describe('Temperature controller ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />)
+    shallow(<Main store={mockStore()} />).dive()
   })
 
   it('<New />', () => {
-    shallow(<New />)
+    const m = shallow(<New create={() => {}} />).instance()
+    m.toggle()
+    m.updateSensor('1')
+    m.update('name')({target: {value: 'foo'}})
+    m.updateCheckbox('foo')({target: {checked: true}})
+    m.add()
   })
 
   it('<Notify />', () => {
-    shallow(<Notify config={{}} />)
+    const m = shallow(<Notify config={{}} updateHook={() => {}} />).instance()
+    m.update('foo')({target: {value: '1.21'}})
+    m.updateEnable({target: {}})
   })
 
   it('<Sensor />', () => {
-    shallow(<Sensor data={{}} />)
+    const tc = {
+      control: true,
+      enable: true,
+      min: 78,
+      max: 81
+    }
+    const m = shallow(<Sensor data={tc} />).instance()
+    m.save()
+    m.updateSensor({})
+    m.updateNotify({})
+    m.updateEquipment('foo')('var')
+    m.update('foo')({target: {value: 'var'}})
+    m.updateCheckBox('foo')({target: {checked: true}})
+    m.save()
+    m.remove()
   })
 
   it('<SelectSensor />', () => {
@@ -35,10 +60,14 @@ describe('Temperature controller ui', () => {
   })
 
   it('<ReadingsChart />', () => {
-    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})} />)
+    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})} />).dive()
   })
 
   it('<ControlChart />', () => {
-    shallow(<ControlChart store={mockStore({tcs: [], tc_usage: {}})} />)
+    const state = {
+      tcs: [{id: '1', chart_min: 76, min: 72, max: 78}],
+      tc_usage: { '1': {} }
+    }
+    shallow(<ControlChart sensor_id='1' store={mockStore(state)} />).dive()
   })
 })

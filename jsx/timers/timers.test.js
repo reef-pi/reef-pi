@@ -7,13 +7,28 @@ import Cron from './cron'
 import Equipment from './equipment'
 import Reminder from './reminder'
 import Timer from './timer'
+import renderer from 'react-test-renderer'
+import {mockLocalStorage} from '../utils/test_helper'
+import thunk from 'redux-thunk'
+import 'isomorphic-fetch'
+import {Provider} from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore()
+window.localStorage = mockLocalStorage()
+const mockStore = configureMockStore([thunk])
 
 describe('Timer ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />)
+    renderer.create(
+      <Provider store={mockStore()}>
+        <Main />
+      </Provider>
+    )
+    const m = shallow(<Main store={mockStore({equipments: [], timers: []})} />).dive().instance()
+    m.toggleAddTimerDiv()
+    m.pickEquipment('1')
+    m.createTimer()
+    m.removeTimer()
   })
 
   it('<Cron />', () => {
@@ -29,6 +44,14 @@ describe('Timer ui', () => {
   })
 
   it('<Timer />', () => {
-    shallow(<Timer config={{}} />)
+    const config = {
+      type: 'equipment',
+      equipment: {
+        on: true,
+        name: 'TestEquipment',
+        duration: 20
+      }
+    }
+    shallow(<Timer config={config} />).instance()
   })
 })
