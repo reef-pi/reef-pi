@@ -9,8 +9,6 @@ import configureMockStore from 'redux-mock-store'
 import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import renderer from 'react-test-renderer'
-import {Provider} from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -18,22 +16,32 @@ window.localStorage = mockLocalStorage()
 
 describe('ATO ui', () => {
   it('<ATO />', () => {
-    renderer.create(
-      <Provider store={mockStore({ato_usage: {}})} >
-        <ATO data={{}} />
-      </Provider>
-    )
+    const m = shallow(
+      <ATO store={mockStore({ato_usage: {}})} data={{id: '1', period: 10}} />
+    ).dive().instance()
+    m.setInlet('1')
+    m.update('period')({target: {value: 10}})
+    m.updateCheckBox('control')({target: {}})
+    m.updatePump('1')
+    m.update('readOnly')({target: {value: false}})
+    m.save()
+    m.remove()
   })
 
   it('<New />', () => {
-    shallow(<New store={mockStore()} />)
+    const m = shallow(<New store={mockStore()} />).dive().instance()
+    m.toggle()
+    m.update('name')({target: {value: 's'}})
+    m.setInlet('1')
+    m.add()
   })
 
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />)
+    shallow(<Main store={mockStore()} />).dive()
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore({ato_usage: {}})} />)
+    const usage = {'1': {}}
+    shallow(<Chart ato_id='1 'store={mockStore({ato_usage: usage})} />).dive().instance()
   })
 })

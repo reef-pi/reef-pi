@@ -16,10 +16,10 @@ import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import renderer from 'react-test-renderer'
 import {Provider} from 'react-redux'
-window.localStorage = mockLocalStorage()
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
+window.localStorage = mockLocalStorage()
 
 describe('Configuration ui', () => {
   it('<Main />', () => {
@@ -51,22 +51,47 @@ describe('Configuration ui', () => {
   })
 
   it('<ComponentSelector />', () => {
-    shallow(<ComponentSelector />)
+    shallow(<ComponentSelector hook={() => {}} components={[{id: '1'}]} />).instance()
   })
 
   it('<Dashboard />', () => {
-    shallow(<Dashboard store={mockStore()} />)
+    const cells = [
+      [{type: 'ato', id: '1'}]
+    ]
+    const config = {row: 1, column: 1, grid_details: cells}
+    const m = shallow(<Dashboard store={mockStore({dashboard: config})} />).dive().instance()
+    m.updateHook(cells)
+    m.save()
   })
 
   it('<Grid />', () => {
-    shallow(<Grid />)
+    const cells = [
+      [{type: 'ato', id: '1'}]
+    ]
+    const m = shallow(<Grid rows={1} columns={1} cells={cells} hook={() => {}} />).instance()
+    m.setType(0, 0)('equipment')
+    m.updateHook(0, 0)('1')
   })
 
   it('<Settings />', () => {
-    shallow(<Settings store={mockStore()} />)
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'foo',
+      interface: 'en0',
+      address: 'localhost:8080'
+    }
+    const m = shallow(
+      <Settings store={mockStore({settings: settings, capabilities: capabilities})} />
+    ).dive().instance()
+    m.updateCapabilities(capabilities)
+    m.updateHealthNotify({})
   })
 
   it('<HealthNotify />', () => {
-    shallow(<HealthNotify state={{}} />)
+    const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
+    m.updateEnable({target: {}})
+    m.update('foo')({target: {}})
   })
 })

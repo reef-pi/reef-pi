@@ -5,20 +5,42 @@ import Pump from './pump'
 import New from './new'
 import Main from './controller'
 import configureMockStore from 'redux-mock-store'
+import 'isomorphic-fetch'
+import thunk from 'redux-thunk'
+import {mockLocalStorage} from '../utils/test_helper'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore()
+const mockStore = configureMockStore([thunk])
+window.localStorage = mockLocalStorage()
 
 describe('Doser ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />)
+    shallow(<Main store={mockStore()} />).dive()
   })
 
   it('<New />', () => {
-    shallow(<New store={mockStore()} />)
+    const m = shallow(<New store={mockStore()} />).dive().instance()
+    m.toggle()
+    m.setJack('1', 2)
+    m.update('name')({target: {value: 'foo'}})
+    m.add()
   })
 
   it('<Pump />', () => {
-    shallow(<Pump store={mockStore()} />)
+    const pump = {
+      regiment: {
+        schedule: {},
+        duration: 10
+      }
+    }
+    const m = shallow(<Pump data={pump} store={mockStore()} />).dive().instance()
+    m.schedule()
+    m.calibrate()
+    m.updateEnable({target: {checked: true}})
+    m.updateSchedule({})
+    m.update('hour')({target: {value: '8'}})
+    m.setSchedule()
+    m.onDemand()
+    m.remove()
   })
 })

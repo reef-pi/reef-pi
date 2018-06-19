@@ -69,3 +69,11 @@ clean:
 	-find . -name '*.db' -exec rm {} \;
 	-find . -name '*.crt' -exec rm {} \;
 	-find . -name '*.key' -exec rm {} \;
+
+.PHONY: standard
+standard:
+	-./node_modules/.bin/standard --fix jsx/**/**
+
+.PHONY: jest
+jest:
+	-./node_modules/.bin/jest --coverage --all

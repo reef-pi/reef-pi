@@ -6,6 +6,7 @@ export const mockLocalStorage = () => {
     },
     setItem: (k, v) => {
       storage[k] = v
-    }
+    },
+    removeItem: (k) => {}
   })
 }

@@ -7,9 +7,13 @@ import InletSelector from './inlet_selector'
 import Jacks from './jacks'
 import Outlets from './outlets'
 import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import 'isomorphic-fetch'
+import {mockLocalStorage} from '../utils/test_helper'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore()
+const mockStore = configureMockStore([thunk])
+window.localStorage = mockLocalStorage()
 
 describe('Connectors', () => {
   it('<Main />', () => {
@@ -17,7 +21,7 @@ describe('Connectors', () => {
   })
 
   it('<InletSelector />', () => {
-    shallow(<InletSelector store={mockStore()} />)
+    shallow(<InletSelector store={mockStore()} />).dive()
   })
 
   it('<Inlets />', () => {

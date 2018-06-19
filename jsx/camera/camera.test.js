@@ -30,7 +30,10 @@ describe('Camera module', () => {
   })
 
   it('<Config />', () => {
-    shallow(<Config config={{}} />)
+    const m = shallow(<Config config={{}} />).instance()
+    m.updateBool('foo')({target: {}})
+    m.updateText('bar')({target: {}})
+    m.save()
   })
 
   it('<Gallery />', () => {
