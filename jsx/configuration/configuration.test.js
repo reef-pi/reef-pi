@@ -37,7 +37,7 @@ describe('Configuration ui', () => {
   })
 
   it('<Admin />', () => {
-    const m = shallow(<Admin store={mockStore()}/>).dive().instance()
+    const m = shallow(<Admin store={mockStore()} />).dive().instance()
     fetchMock.postOnce('/api/admin/reload', {})
     fetchMock.postOnce('/api/admin/reboot', {})
     fetchMock.postOnce('/api/admin/poweroff', {})
@@ -47,11 +47,15 @@ describe('Configuration ui', () => {
   })
 
   it('<Display />', () => {
-    renderer.create(
-      <Provider store={mockStore({capabilities: []})} >
-        <Display />
-      </Provider>
-    )
+    const state = {
+      display: {
+        brightness: 50,
+        on: true
+      }
+    }
+    const m = shallow(<Display store={mockStore(state)} />).dive().instance()
+    m.toggle()
+    m.setBrightness({target: {value: 10}})
   })
 
   it('<Capabilities />', () => {
@@ -60,17 +64,16 @@ describe('Configuration ui', () => {
       timer: false,
       dashboard: true
     }
-    const m = shallow(<Capabilities capabilities={caps} update={()=>true}/>).instance()
+    const m = shallow(<Capabilities capabilities={caps} update={() => true} />).instance()
     m.updateCapability('dashboard')({target: {checked: true}})
   })
 
   it('<ComponentSelector />', () => {
     const comps = {
       'c1': {id: '1', name: 'foo'},
-      'c2': undefined,
+      'c2': undefined
     }
-
-    const m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1'/>).instance()
+    shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />)
   })
 
   it('<Dashboard />', () => {
