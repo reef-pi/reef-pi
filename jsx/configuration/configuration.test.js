@@ -88,9 +88,10 @@ describe('Configuration ui', () => {
 
   it('<Grid />', () => {
     const cells = [
-      [{type: 'ato', id: '1'}]
+      [{type: 'ato', id: '1'}, {type: 'light', id: '2'}],
+      [{type: 'tc', id: '1'}]
     ]
-    const m = shallow(<Grid rows={1} columns={1} cells={cells} hook={() => {}} />).instance()
+    const m = shallow(<Grid rows={2} columns={2} cells={cells} hook={() => {}} />).instance()
     m.setType(0, 0)('equipment')
     m.updateHook(0, 0)('1')
   })
@@ -108,6 +109,8 @@ describe('Configuration ui', () => {
       <Settings store={mockStore({settings: settings, capabilities: capabilities})} />
     ).dive().instance()
     m.updateCapabilities(capabilities)
+    m.updateCheckbox('foo')({target: {checked: true}})
+    m.update()
     m.updateHealthNotify({})
   })
 

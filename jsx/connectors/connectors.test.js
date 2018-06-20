@@ -21,18 +21,38 @@ describe('Connectors', () => {
   })
 
   it('<InletSelector />', () => {
-    shallow(<InletSelector store={mockStore()} />).dive()
+    const state = {
+      inlets: [{id: '1', name: 'foo', pin: [1]}]
+    }
+    const m = shallow(<InletSelector store={mockStore(state)} active='1' update={() => true} />).dive().instance()
+    m.set(0)
   })
 
   it('<Inlets />', () => {
-    shallow(<Inlets store={mockStore()} />)
+    const state = {
+      inlets: [{id: '1', name: 'foo', pin: [1]}]
+    }
+    const m = shallow(<Inlets store={mockStore(state)} />).dive().instance()
+    m.add()
+    m.remove('1')()
   })
 
   it('<Jacks />', () => {
-    shallow(<Jacks store={mockStore()} />)
+    const state = {
+      jacks: [{id: '1', name: 'J2', pins: [0, 2]}]
+    }
+    const m = shallow(<Jacks store={mockStore(state)} />).dive().instance()
+    m.add()
+    m.setDriver('rpi')
+    m.remove('1')()
   })
 
   it('<Outlets />', () => {
-    shallow(<Outlets store={mockStore()} />)
+    const state = {
+      outlets: [{id: '1', name: 'J2', pins: [0, 2]}]
+    }
+    const m = shallow(<Outlets store={mockStore(state)} />).dive().instance()
+    m.add()
+    m.remove('1')()
   })
 })
