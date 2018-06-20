@@ -10,8 +10,6 @@ import configureMockStore from 'redux-mock-store'
 import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import renderer from 'react-test-renderer'
-import {Provider} from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -19,25 +17,40 @@ window.localStorage = mockLocalStorage()
 
 describe('Camera module', () => {
   it('<Main />', () => {
-    renderer.create(
-      <Provider store={mockStore({camera: {}})} >
-        <Main />
-      </Provider>)
+    const state = {
+      camera: {
+        config: {},
+        images: [{name: 'foo'}, {name: 'bar'}]
+      }
+    }
+    const m = shallow(<Main store={mockStore(state)} />).dive().instance()
+    m.toggleConfig()
   })
 
   it('<Capture />', () => {
-    shallow(<Capture store={mockStore({camera: {}})} />)
+    shallow(<Capture store={mockStore({camera: {latest: ''}})} />).dive()
   })
 
   it('<Config />', () => {
-    const m = shallow(<Config config={{}} />).instance()
-    m.updateBool('foo')({target: {}})
-    m.updateText('bar')({target: {}})
-    m.save()
+    const m = shallow(<Config config={{tick_interval: 1}} update={() => {}} />)
+    m.instance().updateBool('enable')({target: {checked: true}})
+    m.instance().updateText('bar')({target: {}})
+    m.update()
+    m.instance().save()
   })
 
   it('<Gallery />', () => {
-    shallow(<Gallery />)
+    const images = [{thumbnail: '', src: ''}]
+    const m = shallow(<Gallery images={images} />).instance()
+    const ev = {
+      preventDefault: () => true
+    }
+    m.open(1, ev)
+    m.onClose()
+    m.gotoPrevious()
+    m.gotoNext()
+    m.gotoImage(0)
+    m.onClick()
   })
 
   it('<Motion />', () => {
