@@ -18,8 +18,12 @@ const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('Temperature controller ui', () => {
+  const state = {
+    tcs: [{id: '1', chart_min: 76, min: 72, max: 78, chart_max: 89}],
+    tc_usage: {'1': {historical: [{cooler: 1}]}}
+  }
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />).dive()
+    shallow(<Main store={mockStore(state)} />).dive()
   })
 
   it('<New />', () => {
@@ -56,18 +60,17 @@ describe('Temperature controller ui', () => {
   })
 
   it('<SelectSensor />', () => {
-    shallow(<SelectSensor />)
+    const m = shallow(<SelectSensor sensors={['a']} update={() => true} />).instance()
+    m.set('none')
+    m.set(0)
   })
 
   it('<ReadingsChart />', () => {
-    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})} />).dive()
+    shallow(<ReadingsChart store={mockStore({tcs: [], tc_usage: {}})} sensor_id='1' />)
+    shallow(<ReadingsChart store={mockStore(state)} sensor_id='1' />).dive()
   })
 
   it('<ControlChart />', () => {
-    const state = {
-      tcs: [{id: '1', chart_min: 76, min: 72, max: 78}],
-      tc_usage: { '1': {} }
-    }
     shallow(<ControlChart sensor_id='1' store={mockStore(state)} />).dive()
   })
 })

@@ -31,14 +31,22 @@ describe('Telemetry UI', () => {
     }
     const m = shallow(<Main store={mockStore({telemetry: telemetry})} />).dive().instance()
     m.updateMailer(mailer)
+    const fields = ['server', 'password', 'To', 'From']
+    fields.forEach((k) => {
+      var t = {}
+      t[k] = ''
+      m.updateMailer(t)
+    })
     m.updateAio(aio)
     m.updateThrottle({target: { value: 20 }})
+    m.enableMailer({target: {checked: true}})
     m.save()
   })
 
   it('<AdafruitIO />', () => {
     const m = shallow(<AdafruitIO adafruitio={{}} update={() => true} />).instance()
     m.updateEnable({target: {checked: true}})
+    m.onChange('foo')({target: {value: 1}})
   })
 
   it('<Main />', () => {

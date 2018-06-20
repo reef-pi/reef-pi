@@ -7,11 +7,9 @@ import Cron from './cron'
 import Equipment from './equipment'
 import Reminder from './reminder'
 import Timer from './timer'
-import renderer from 'react-test-renderer'
 import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import {Provider} from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
 window.localStorage = mockLocalStorage()
@@ -19,28 +17,36 @@ const mockStore = configureMockStore([thunk])
 
 describe('Timer ui', () => {
   it('<Main />', () => {
-    renderer.create(
-      <Provider store={mockStore()}>
-        <Main />
-      </Provider>
-    )
-    const m = shallow(<Main store={mockStore({equipments: [], timers: []})} />).dive().instance()
+    const state = {
+      timers: [{id: '1', name: 'foo', equipment: {id: '1'}}],
+      equipments: [{id: '1', name: 'bar'}]
+    }
+    const m = shallow(<Main store={mockStore(state)} />).dive().instance()
     m.toggleAddTimerDiv()
     m.pickEquipment('1')
     m.createTimer()
-    m.removeTimer()
+    m.removeTimer('1')()
+    m.setType('reminder')()
+    m.update('foo')('bar')
   })
 
   it('<Cron />', () => {
-    shallow(<Cron />)
+    const m = shallow(<Cron />).instance()
+    m.update('foo')({target: {}})
   })
 
   it('<Equipment />', () => {
-    shallow(<Equipment />)
+    const m = shallow(<Equipment equipments={[{id: '1', name: 'foo'}]} updateHook={() => true} />).instance()
+    m.updateRevert({target: {checked: true}})
+    m.updateDuration({target: {value: '10'}})
+    m.setEquipment(0)
+    m.setEquipmentAction('off')
   })
 
   it('<Reminder />', () => {
-    shallow(<Reminder />)
+    const m = shallow(<Reminder updateHook={() => true} />).instance()
+    m.updateTitle({target: {}})
+    m.updateMessage({target: {}})
   })
 
   it('<Timer />', () => {

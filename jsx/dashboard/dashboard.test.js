@@ -14,15 +14,17 @@ window.localStorage = mockLocalStorage()
 describe('Dashboard', () => {
   it('<Main />', () => {
     const config = {
-      row: 2,
+      row: 4,
       column: 2,
       width: 400,
       height: 200,
       grid_details: [
         [{type: 'equipment'}, {type: 'ato', id: '1'}],
-        [{type: 'light', id: '1'}, {type: 'health', id: 'current'}]
+        [{type: 'light', id: '1'}, {type: 'health', id: 'current'}],
+        [{type: 'ph-current', id: '1'}, {type: 'ph-historical', id: 'current'}],
+        [{type: 'tc', id: '1'}, {type: 'temperature', id: 'current'}]
       ]
     }
-    shallow(<Main store={mockStore({dashboard: config})} />).dive()
+    shallow(<Main store={mockStore({dashboard: config})} />).dive().instance()
   })
 })
