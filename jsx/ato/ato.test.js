@@ -16,14 +16,17 @@ window.localStorage = mockLocalStorage()
 
 describe('ATO ui', () => {
   it('<ATO />', () => {
-    const m = shallow(
+    const n = shallow(
       <ATO store={mockStore({ato_usage: {}})} data={{id: '1', period: 10}} />
-    ).dive().instance()
+    )
+    const m = n.dive().instance()
+    m.save()
+    m.state.readOnly = false
     m.setInlet('1')
+    m.update('period')({target: {value: 'abc'}})
     m.update('period')({target: {value: 10}})
     m.updateCheckBox('control')({target: {}})
     m.updatePump('1')
-    m.update('readOnly')({target: {value: false}})
     m.save()
     m.remove()
   })

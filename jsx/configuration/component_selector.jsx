@@ -27,10 +27,10 @@ export default class ComponentSelector extends React.Component {
     var items = []
     var title = this.state.title
     $.each(this.props.components, function (k, v) {
-      var active = v.id === this.state.current_id
       if (v === undefined || v === null) {
         return
       }
+      var active = v.id === this.state.current_id
       if (active) {
         title = v.name
       }

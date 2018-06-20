@@ -38,7 +38,7 @@ class display extends React.Component {
 
   setBrightness (ev) {
     var b = parseInt(ev.target.value)
-    this.props.setBrightness(parseInt(ev.target.value))
+    this.props.setBrightness(b)
     this.setState({brightness: b})
   }
 
@@ -61,7 +61,7 @@ class display extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    config: state.config
+    config: state.display
   }
 }
 
