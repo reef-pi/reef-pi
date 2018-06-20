@@ -1,9 +1,8 @@
 import React from 'react'
-import Enzyme from 'enzyme'
+import Enzyme,{shallow} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import MainPanel from './main_panel'
 import configureMockStore from 'redux-mock-store'
-import renderer from 'react-test-renderer'
 import {mockLocalStorage} from './utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -14,6 +13,13 @@ window.localStorage = mockLocalStorage()
 
 describe('MainPanel', () => {
   it('<MainPanel />', () => {
-    renderer.create(<MainPanel store={mockStore({capabilities: []})} />)
+    const state = {
+      capabilities: {
+        dashboard: true,
+        equipments: true,
+        timers: false
+      }
+    }
+    const m = shallow(<MainPanel store={mockStore(state)} />).dive().instance()
   })
 })

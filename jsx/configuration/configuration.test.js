@@ -16,12 +16,18 @@ import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import renderer from 'react-test-renderer'
 import {Provider} from 'react-redux'
+import fetchMock from 'fetch-mock'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('Configuration ui', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+
   it('<Main />', () => {
     renderer.create(
       <Provider store={mockStore({capabilities: []})} >
@@ -31,11 +37,13 @@ describe('Configuration ui', () => {
   })
 
   it('<Admin />', () => {
-    renderer.create(
-      <Provider store={mockStore()} >
-        <Admin />
-      </Provider>
-    )
+    const m = shallow(<Admin store={mockStore()}/>).dive().instance()
+    fetchMock.postOnce('/api/admin/reload', {})
+    fetchMock.postOnce('/api/admin/reboot', {})
+    fetchMock.postOnce('/api/admin/poweroff', {})
+    m.reload()
+    m.powerOff()
+    m.reboot()
   })
 
   it('<Display />', () => {
@@ -47,11 +55,22 @@ describe('Configuration ui', () => {
   })
 
   it('<Capabilities />', () => {
-    shallow(<Capabilities capabilities={[]} />)
+    const caps = {
+      equipment: true,
+      timer: false,
+      dashboard: true
+    }
+    const m = shallow(<Capabilities capabilities={caps} update={()=>true}/>).instance()
+    m.updateCapability('dashboard')({target: {checked: true}})
   })
 
   it('<ComponentSelector />', () => {
-    shallow(<ComponentSelector hook={() => {}} components={[{id: '1'}]} />).instance()
+    const comps = {
+      'c1': {id: '1', name: 'foo'},
+      'c2': undefined,
+    }
+
+    const m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1'/>).instance()
   })
 
   it('<Dashboard />', () => {
