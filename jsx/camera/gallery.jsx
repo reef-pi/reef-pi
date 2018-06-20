@@ -53,7 +53,7 @@ export default class Gallery extends React.Component {
   }
 
   onClick () {
-    if (this.state.current === this.state.images.length - 1) return
+    if (this.state.current === this.props.images.length - 1) return
     this.gotoNext()
   }
 

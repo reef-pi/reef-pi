@@ -1,5 +1,12 @@
 import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
 
+export const atoUpdated = () => {
+  return ({
+    type: 'ATO_UPDATED'
+  })
+}
+
+
 export const atosLoaded = (s) => {
   return ({
     type: 'ATOS_LOADED',
@@ -50,12 +57,6 @@ export const createATO = (a) => {
     data: a,
     success: fetchATOs
   }))
-}
-
-export const atoUpdated = () => {
-  return ({
-    type: 'ATO_UPDATED'
-  })
 }
 
 export const updateATO = (id, a) => {
