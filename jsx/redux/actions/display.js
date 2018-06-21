@@ -7,6 +7,18 @@ export const displayLoaded = (s) => {
   })
 }
 
+export const displaySwitched = () => {
+  return ({
+    type: 'DISPLAY_SWITCHED'
+  })
+}
+
+export const brightnessSet = () => {
+  return ({
+    type: 'BRIGHTNESS_SET'
+  })
+}
+
 export const fetchDisplay = () => {
   return (reduxGet({
     url: '/api/display',
@@ -14,11 +26,6 @@ export const fetchDisplay = () => {
   }))
 }
 
-export const displaySwitched = () => {
-  return ({
-    type: 'DISPLAY_SWITCHED'
-  })
-}
 
 export const switchDisplay = (on) => {
   var action = on ? 'off' : 'on'
@@ -27,12 +34,6 @@ export const switchDisplay = (on) => {
     success: displaySwitched,
     data: {}
   }))
-}
-
-export const brightnessSet = () => {
-  return ({
-    type: 'BRIGHTNESS_SET'
-  })
 }
 
 export const setBrightness = (b) => {

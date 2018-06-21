@@ -7,17 +7,17 @@ export const settingsLoaded = (s) => {
   })
 }
 
+export const settingsUpdated = () => {
+  return ({
+    type: 'SETTINGS_UPDATED'
+  })
+}
+
 export const fetchSettings = () => {
   return (reduxGet({
     url: '/api/settings',
     success: settingsLoaded
   }))
-}
-
-export const settingsUpdated = () => {
-  return ({
-    type: 'SETTINGS_UPDATED'
-  })
 }
 
 export const updateSettings = (s) => {
@@ -27,4 +27,3 @@ export const updateSettings = (s) => {
     data: s
   }))
 }
-

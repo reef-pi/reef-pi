@@ -15,6 +15,18 @@ export const probeReadingsLoaded = (id) => {
   })
 }
 
+export const probeUpdated = () => {
+  return ({
+    type: 'PH_PROBE_UPDATED'
+  })
+}
+
+export const probeCalibrated = () => {
+  return ({
+    type: 'PH_PROBE_CALIBRATED'
+  })
+}
+
 export const fetchPhProbes = () => {
   return (reduxGet({
     url: '/api/phprobes',
@@ -27,18 +39,6 @@ export const fetchProbeReadings = (id) => {
     url: '/api/phprobes/'+id+'/readings',
     success: probeReadingsLoaded(id)
   }))
-}
-
-export const probeUpdated = () => {
-  return ({
-    type: 'PH_PROBE_UPDATED'
-  })
-}
-
-export const probeCalibrated = () => {
-  return ({
-    type: 'PH_PROBE_CALIBRATED'
-  })
 }
 
 export const updateProbe = (id, a) => {
