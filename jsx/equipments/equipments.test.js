@@ -27,7 +27,7 @@ describe('Equipment ui', () => {
   })
 
   it('<Equipment />', () => {
-    shallow(<Equipment outlet={{}} />)
+    shallow(<Equipment outlet={{}} hook={() => true} />).instance().update()
   })
 
   it('<Chart />', () => {

@@ -7,13 +7,6 @@ export const lightsLoaded = (s) => {
   })
 }
 
-export const fetchLights = () => {
-  return (reduxGet({
-    url: '/api/lights',
-    success: lightsLoaded
-  }))
-}
-
 export const lightLoaded = (id) => {
   return((l) => {
     return ({
@@ -21,6 +14,13 @@ export const lightLoaded = (id) => {
       payload: {light:l, id: id}
     })
   })
+}
+
+export const fetchLights = () => {
+  return (reduxGet({
+    url: '/api/lights',
+    success: lightsLoaded
+  }))
 }
 
 export const fetchLight = (id) => {

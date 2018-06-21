@@ -7,6 +7,19 @@ export const dosingPumpsLoaded = (s) => {
   })
 }
 
+export const dosingPumpScheduleUpdated = () => {
+  return ({
+    type: 'DOSING_PUMP_SCHEDULE_UPDATED'
+  })
+}
+
+export const dosingPumpCalibrated = () => {
+  return ({
+    type: 'DOSING_PUMP_CALIBRATED'
+  })
+}
+
+
 export const fetchDosingPumps = () => {
   return (reduxGet({
     url: '/api/doser/pumps',
@@ -29,24 +42,12 @@ export const deleteDosingPump = (s) => {
   }))
 }
 
-export const dosingPumpScheduleUpdated = () => {
-  return ({
-    type: 'DOSING_PUMP_SCHEDULE_UPDATED'
-  })
-}
-
 export const updateDosingPumpSchedule = (id, s) => {
   return (reduxPost({
     url: '/api/doser/pumps/'+id+'/schedule',
     success: dosingPumpScheduleUpdated,
     data: s
   }))
-}
-
-export const dosingPumpCalibrated = () => {
-  return ({
-    type: 'DOSING_PUMP_CALIBRATED'
-  })
 }
 
 export const calibrateDosingPump = (id, s) => {

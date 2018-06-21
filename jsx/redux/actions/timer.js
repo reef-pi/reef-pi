@@ -7,6 +7,12 @@ export const timersLoaded = (s) => {
   })
 }
 
+export const timerDeleted = () => {
+  return ({
+    type: 'TIMER_DELETED'
+  })
+}
+
 export const fetchTimers = () => {
   return (reduxGet({
     url: '/api/timers',
@@ -20,12 +26,6 @@ export const createTimer = (a) => {
     data: a,
     success: fetchTimers
   }))
-}
-
-export const timerDeleted = () => {
-  return ({
-    type: 'TIMER_DELETED'
-  })
 }
 
 export const deleteTimer = (id) => {
