@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestATO(t *testing.T) {
+func TestController(t *testing.T) {
 	store, err := utils.TestDB()
 	if err != nil {
 		t.Fatal(err)
@@ -97,12 +97,35 @@ func TestATO(t *testing.T) {
 	}
 	c.Stop()
 	c.Start()
+	a1 := ATO{
+		Name:    "fooo",
+		Control: true,
+		Inlet:   "1",
+		Period:  0,
+		Pump:    "",
+	}
+	c.Check(a1)
+	if err := c.Control(a1, 10); err != nil {
+		t.Error(err)
+	}
+	a1.Pump = "3"
+	if err := c.Control(a1, 1); err != nil {
+		t.Error(err)
+	}
+	q := make(chan struct{})
+	c.Run(a1, q)
+	if err := c.Create(a1); err == nil {
+		t.Error("ATO creation should fail if period is set to zero")
+	}
+	if err := c.Update("1", a1); err == nil {
+		t.Error("ATO update should fail if period is set to zero")
+	}
 	if err := tr.Do("GET", "/api/atos/1/usage", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to get ato usage using api. Error:", err)
 	}
 	if err := tr.Do("DELETE", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to delete ato using api. Error:", err)
 	}
-	c.Stop()
 
+	c.Stop()
 }
