@@ -24,8 +24,8 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal(err)
 	}
 	c := New(config, outlets, store, telemetry)
+	c.AddCheck(func(_ string) (bool, error) { return false, nil })
 	c.Setup()
-	c.Start()
 	c.Stop()
 	o := connectors.Outlet{
 		Name: "bar",
@@ -51,6 +51,15 @@ func TestEquipmentController(t *testing.T) {
 
 	if err := tr.Do("PUT", "/api/equipments", body, nil); err != nil {
 		t.Fatal("Failed to create equipment using api")
+	}
+
+	c.Start()
+
+	body.Reset()
+	ea := EquipmentAction{true}
+	enc.Encode(ea)
+	if err := tr.Do("POST", "/api/equipments/1/control", body, nil); err != nil {
+		t.Fatal("Failed to control equipment using api")
 	}
 
 	var resp []Equipment
@@ -106,4 +115,18 @@ func TestEquipmentController(t *testing.T) {
 	if err := tr.Do("DELETE", "/api/equipments/"+eq.ID, buf, nil); err != nil {
 		t.Fatal("Failed to delete equipment using api. Error:", err)
 	}
+	eq.Outlet = "123"
+	if err := c.Create(eq); err == nil {
+		t.Error("Equipment creation should fail if outlet is not present")
+	}
+	eq.Outlet = "1"
+	if err := c.Create(eq); err != nil {
+		t.Error("Failed to create equipment. Error:", err)
+	}
+	c.AddCheck(func(_ string) (bool, error) { return true, nil })
+	c.IsEquipmentInUse("1")
+	if err := c.Delete("1"); err == nil {
+		t.Error("Equipment deletion should fail if rquipment is in use")
+	}
+
 }

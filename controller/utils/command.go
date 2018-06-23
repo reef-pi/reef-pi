@@ -10,6 +10,13 @@ type ExecCommand struct {
 	DevMode bool
 }
 
+func (e *ExecCommand) Run() error {
+	if e.DevMode {
+		return nil
+	}
+	return exec.Command(e.bin, e.args...).Run()
+}
+
 func (e *ExecCommand) CombinedOutput() ([]byte, error) {
 	if e.DevMode {
 		return []byte(""), nil

@@ -57,10 +57,16 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
+	channels := make(map[int]Channel)
+	channels[1] = Channel{
+		Name:  "ch1",
+		Fixed: 10,
+		Auto:  false,
+	}
 	l := Light{
-		Jack: jacksList[0].ID,
-		Name: "Foo",
+		Jack:     jacksList[0].ID,
+		Name:     "Foo",
+		Channels: channels,
 	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
@@ -72,4 +78,23 @@ func TestLightingAPI(t *testing.T) {
 	if err := tr.Do("GET", "/api/lights", strings.NewReader("{}"), &lights); err != nil {
 		t.Fatal("Failed to light using api")
 	}
+	body.Reset()
+	if err := tr.Do("GET", "/api/lights/1", body, nil); err != nil {
+		t.Fatal("get light using api")
+	}
+	body.Reset()
+	enc.Encode(l)
+	if err := tr.Do("POST", "/api/lights/1", body, nil); err != nil {
+		t.Fatal("update light using api")
+	}
+	c.Setup()
+	body.Reset()
+	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
+		t.Fatal("Delete light using api")
+	}
+	ch, _ := channels[1]
+	ch.Auto = true
+	ch.Values = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	l.Channels[1] = ch
+	c.syncLight(l)
 }

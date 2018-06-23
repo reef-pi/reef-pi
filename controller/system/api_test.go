@@ -59,4 +59,5 @@ func TestSystemController(t *testing.T) {
 	if _, err := c.getBrightness(); err != nil {
 		t.Error(err)
 	}
+	c.lastStopTime()
 }

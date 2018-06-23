@@ -15,7 +15,7 @@ func TestCamera(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	c, err := New(store)
+	c, err := New(store, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,19 +23,24 @@ func TestCamera(t *testing.T) {
 		t.Fatal(err)
 	}
 	c.LoadAPI(tr.Router)
-	c.Start()
 	if err := tr.Do("GET", "/api/camera/config", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to get camera config using api. Error:", err)
 	}
 	body := new(bytes.Buffer)
 	json.NewEncoder(body).Encode(&Default)
+	c.Start()
 	if err := tr.Do("POST", "/api/camera/config", body, nil); err != nil {
 		t.Error("Failed to update camera config using api. Error:", err)
 	}
-	body.Reset()
-	if err := tr.Do("GET", "/api/camera/list", body, nil); err != nil {
-		t.Error("Failed to list images using api. Error:", err)
+	c.Stop()
+	if err := tr.Do("POST", "/api/camera/shoot", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to photo shoot using api. Error:", err)
 	}
+
+	if err := tr.Do("GET", "/api/camera/latest", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to get latest image using api. Error:", err)
+	}
+
 	cwd, err := os.Getwd()
 	if err != nil {
 		t.Error(err)
@@ -56,5 +61,24 @@ func TestCamera(t *testing.T) {
 		}
 		break
 	}
-	c.Stop()
+	body.Reset()
+	if err := tr.Do("GET", "/api/camera/list", body, nil); err != nil {
+		t.Error("Failed to list images using api. Error:", err)
+	}
+
+	c.uploadImage(images[0])
+	c.run()
+	c.config.Enable = true
+	c.config.Upload = true
+	c.run()
+	conf := c.config
+	conf.TickInterval = -1
+	if err := saveConfig(store, conf); err == nil {
+		t.Error("config should not be saved if period is negative")
+	}
+	conf = c.config
+	conf.ImageDirectory = ""
+	if err := saveConfig(store, conf); err == nil {
+		t.Error("config should not be saved if image directory is empty")
+	}
 }
