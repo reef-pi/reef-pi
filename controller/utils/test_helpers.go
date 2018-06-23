@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 type FakeStore struct{}
@@ -73,5 +74,6 @@ func TestTelemetry() *Telemetry {
 		config:     c,
 		dispatcher: &NoopMailer{},
 		aStats:     make(map[string]AlertStats),
+		mu:         &sync.Mutex{},
 	}
 }

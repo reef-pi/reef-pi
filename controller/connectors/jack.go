@@ -8,6 +8,19 @@ import (
 	"net/http"
 )
 
+type Jack struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Pins   []int  `json:"pins"`
+	Driver string `json:"driver"` // can be either rpi or pca9685
+}
+
+type Jacks struct {
+	store   utils.Store
+	rpi     utils.PWM
+	pca9685 utils.PWM
+}
+
 func (j Jack) IsValid() error {
 	if j.Name == "" {
 		return fmt.Errorf("Jack name can not be empty")
@@ -35,19 +48,6 @@ func (j Jack) IsValid() error {
 }
 
 const JackBucket = "jacks"
-
-type Jack struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Pins   []int  `json:"pins"`
-	Driver string `json:"driver"` // can be either rpi or pca9685
-}
-
-type Jacks struct {
-	store   utils.Store
-	rpi     utils.PWM
-	pca9685 utils.PWM
-}
 
 func NewJacks(store utils.Store, r, p utils.PWM) *Jacks {
 	return &Jacks{

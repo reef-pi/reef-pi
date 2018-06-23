@@ -24,34 +24,57 @@ func TestPhAPI(t *testing.T) {
 	c.LoadAPI(tr.Router)
 
 	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1, Enable: true})
+	enc := json.NewEncoder(body)
+	p := &Probe{Name: "Foo", Period: 1, Enable: true}
+	p.Config.Notify.Enable = true
+	enc.Encode(p)
 	if err := tr.Do("PUT", "/api/phprobes", body, nil); err != nil {
 		t.Fatal("Failed to create ph probe using api. Error:", err)
 	}
+
 	c.Start()
+
+	body.Reset()
+	enc.Encode(p)
+	if err := tr.Do("PUT", "/api/phprobes", body, nil); err != nil {
+		t.Fatal("Failed to create ph probe using api. Error:", err)
+	}
+
+	time.Sleep(2 * time.Second)
 	if err := tr.Do("GET", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to get ph probe using api. Error:", err)
 	}
 	if err := tr.Do("GET", "/api/phprobes", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("failed to list ph probe using api. error:", err)
 	}
-	time.Sleep(2 * time.Second)
 	if err := tr.Do("GET", "/api/phprobes/1/readings", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("failed to get ph probe readings using api. error:", err)
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&Probe{Name: "Foo", Period: 1, Enable: false})
+	p.Enable = false
+	enc.Encode(p)
 	if err := tr.Do("POST", "/api/phprobes/1", body, nil); err != nil {
 		t.Fatal("Failed to update ph probe using api. Error:", err)
 	}
+	calib := &CalibrationDetails{Type: "high", Value: 10}
 	body.Reset()
-	json.NewEncoder(body).Encode(&CalibrationDetails{Type: "high", Value: 10})
+	enc.Encode(calib)
 	if err := tr.Do("POST", "/api/phprobes/1/calibrate", body, nil); err != nil {
 		t.Fatal("Failed to calibrate ph probe using api. Error:", err)
 	}
-
-	c.Stop()
+	calib.Type = "mid"
+	if err := c.Calibrate("1", *calib); err != nil {
+		t.Error("Mid point calibration failed", err)
+	}
+	calib.Type = "low"
+	if err := c.Calibrate("1", *calib); err != nil {
+		t.Error("Low point calibration failed", err)
+	}
+	p.Enable = true
+	c.Update("1", *p)
 	if err := tr.Do("DELETE", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete ph probe using api. Error:", err)
 	}
+	c.Stop()
+	c.Setup()
 }

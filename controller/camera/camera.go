@@ -3,7 +3,6 @@ package camera
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -14,45 +13,51 @@ const Bucket = "camera"
 const ItemBucket = "photos"
 
 type Controller struct {
-	config Config
-	stopCh chan struct{}
-	mu     sync.Mutex
-	store  utils.Store
+	config  Config
+	stopCh  chan struct{}
+	mu      sync.Mutex
+	store   utils.Store
+	DevMode bool
 }
 
-func New(store utils.Store) (*Controller, error) {
+func New(store utils.Store, devMode bool) (*Controller, error) {
 	return &Controller{
-		config: Default,
-		store:  store,
-		mu:     sync.Mutex{},
-		stopCh: make(chan struct{}),
+		config:  Default,
+		store:   store,
+		mu:      sync.Mutex{},
+		DevMode: devMode,
+		stopCh:  make(chan struct{}),
 	}, nil
 }
 
 func (c *Controller) Start() {
-	go c.run()
+	go c.runPeriodically()
 }
 
 func (c *Controller) run() {
+	if !c.config.Enable {
+		return
+	}
+	img, err := c.Capture()
+	if err != nil {
+		log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
+		return
+	}
+	if err := c.Process(img); err != nil {
+		log.Println("ERROR: camera sub-system : Failed to process image. Error:", err)
+	}
+	if c.config.Upload {
+		c.uploadImage(img)
+	}
+}
+
+func (c *Controller) runPeriodically() {
 	log.Println("Starting camera controller")
 	ticker := time.NewTicker(c.config.TickInterval * time.Minute)
 	for {
 		select {
 		case <-ticker.C:
-			if !c.config.Enable {
-				continue
-			}
-			img, err := c.Capture()
-			if err != nil {
-				log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
-				continue
-			}
-			if err := c.Process(img); err != nil {
-				log.Println("ERROR: camera sub-system : Failed to process image. Error:", err)
-			}
-			if c.config.Upload {
-				c.uploadImage(img)
-			}
+			c.run()
 		case <-c.stopCh:
 			log.Println("Stopping camera controller")
 			ticker.Stop()
@@ -98,7 +103,7 @@ func (c *Controller) Capture() (string, error) {
 	imgPath := filepath.Join(imgDir, imgName)
 	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + imgPath
 	parts := strings.Fields(command)
-	err := exec.Command(parts[0], parts[1:]...).Run()
+	err := utils.Command(parts[0], parts[1:]...).WithDevMode(c.DevMode).Run()
 	if err != nil {
 		log.Println("ERROR: Failed to execute image capture command:", command, "Error:", err)
 		return "", err
@@ -118,7 +123,7 @@ func (c *Controller) uploadImage(imgName string) {
 	imgPath := filepath.Join(imgDir, imgName)
 	command := "drive push -quiet -destination reef-pi-images -files " + imgPath
 	parts := strings.Fields(command)
-	err := exec.Command(parts[0], parts[1:]...).Run()
+	err := utils.Command(parts[0], parts[1:]...).WithDevMode(c.DevMode).Run()
 	if err != nil {
 		log.Println("ERROR: Failed to upload image. Command:", command, "Error:", err)
 	}

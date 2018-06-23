@@ -103,7 +103,7 @@ func (r *ReefPi) loadCameraSubsystem() error {
 	if !r.settings.Capabilities.Camera {
 		return nil
 	}
-	cam, err := camera.New(r.store)
+	cam, err := camera.New(r.store, r.settings.Capabilities.DevMode)
 	if err != nil {
 		r.settings.Capabilities.Camera = false
 		return nil

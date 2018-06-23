@@ -15,12 +15,14 @@ type Pump struct {
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
 }
+
 type DosingRegiment struct {
 	Enable   bool          `json:"enable"`
 	Schedule Schedule      `json:"schedule"`
 	Duration time.Duration `json:"duration"`
 	Speed    int           `json:"speed"`
 }
+
 type CalibrationDetails struct {
 	Speed    int           `json:"speed"`
 	Duration time.Duration `json:"duration"`

@@ -4,6 +4,7 @@ import (
 	"github.com/reef-pi/adafruitio"
 	"log"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -36,6 +37,7 @@ type Telemetry struct {
 	dispatcher Mailer
 	config     TelemetryConfig
 	aStats     map[string]AlertStats
+	mu         *sync.Mutex
 }
 
 func NewTelemetry(config TelemetryConfig) *Telemetry {
@@ -49,11 +51,14 @@ func NewTelemetry(config TelemetryConfig) *Telemetry {
 		config:     config,
 		dispatcher: mailer,
 		aStats:     make(map[string]AlertStats),
+		mu:         &sync.Mutex{},
 	}
 }
 
 func (t *Telemetry) updateAlertStats(subject string) AlertStats {
 	now := time.Now()
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	stat, ok := t.aStats[subject]
 	if !ok {
 		stat.FirstTrigger = now

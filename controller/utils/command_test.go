@@ -12,5 +12,4 @@ func TestCommand(t *testing.T) {
 	if _, err := Command("ls").CombinedOutput(); err != nil {
 		t.Error(err)
 	}
-
 }
