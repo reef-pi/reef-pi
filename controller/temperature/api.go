@@ -32,15 +32,20 @@ func (c Controller) list(w http.ResponseWriter, r *http.Request) {
 
 func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		if t.devMode {
-			return []string{"28-04177049bcff", "28-2392abcabcabc", "28-f0a0a0abbd4f"}, nil
+		fs := []string{
+			"/sys/bus/w1/devices28-04177049bcff",
+			"/sys/bus/w1/devices/28-2392abcabcabc",
+			"/sys/bus/w1/devices/28-f0a0a0abbd4f",
 		}
-		files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
-		if err != nil {
-			return nil, err
+		if !t.devMode {
+			files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
+			if err != nil {
+				return nil, err
+			}
+			fs = files
 		}
 		sensors := []string{}
-		for _, f := range files {
+		for _, f := range fs {
 			sensors = append(sensors, filepath.Base(f))
 		}
 		return sensors, nil

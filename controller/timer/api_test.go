@@ -86,10 +86,14 @@ func TestTimerController(t *testing.T) {
 	}
 
 	j1.Name = "altered"
+	j1.Type = "reminder"
 	body = new(bytes.Buffer)
 	json.NewEncoder(body).Encode(j1)
 	if err := tr.Do("POST", "/api/timers/"+j1.ID, body, nil); err != nil {
 		t.Fatal("Failed to update individual timer jobs using api")
+	}
+	if _, err := c.IsEquipmentInUse("1"); err != nil {
+		t.Error(err)
 	}
 	c.Stop()
 	c.Start()
@@ -97,4 +101,19 @@ func TestTimerController(t *testing.T) {
 	if err := tr.Do("DELETE", "/api/timers/"+j1.ID, strings.NewReader("{}"), nil); err != nil {
 		t.Fatal("Failed to delete timer job using api. Error:", err)
 	}
+
+	uq := UpdateEquipment{
+		Revert:   true,
+		ID:       "1",
+		On:       true,
+		Duration: 1,
+	}
+	eq.ID = "1"
+	r := EquipmentRunner{
+		equipments: e,
+		target:     uq,
+		eq:         eq,
+	}
+	r.Run()
+
 }
