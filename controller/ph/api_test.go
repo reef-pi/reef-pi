@@ -70,6 +70,10 @@ func TestPhAPI(t *testing.T) {
 	if err := c.Calibrate("1", *calib); err != nil {
 		t.Error("Low point calibration failed", err)
 	}
+	calib.Type = "invalid"
+	if err := c.Calibrate("1", *calib); err == nil {
+		t.Error("invalid calibration type should throw error")
+	}
 	p.Enable = true
 	c.Update("1", *p)
 	if err := tr.Do("DELETE", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {

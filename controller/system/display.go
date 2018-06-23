@@ -25,7 +25,7 @@ func (c *Controller) currentDisplayState() (DisplayState, error) {
 	if c.config.DevMode {
 		return state, nil
 	}
-	d, err := ioutil.ReadFile(PowerFile)
+	d, err := ioutil.ReadFile(c.PowerFile)
 	if err != nil {
 		return state, err
 	}
@@ -42,21 +42,21 @@ func (c *Controller) enableDisplay() error {
 	if c.config.DevMode {
 		return nil
 	}
-	return ioutil.WriteFile(PowerFile, []byte("0"), 0644)
+	return ioutil.WriteFile(c.PowerFile, []byte("0"), 0644)
 }
 
 func (c *Controller) disableDisplay() error {
 	if c.config.DevMode {
 		return nil
 	}
-	return ioutil.WriteFile(PowerFile, []byte("1"), 0644)
+	return ioutil.WriteFile(c.PowerFile, []byte("1"), 0644)
 }
 
 func (c *Controller) getBrightness() (int, error) {
 	if c.config.DevMode {
 		return 50, nil
 	}
-	data, err := ioutil.ReadFile(BrightnessFile)
+	data, err := ioutil.ReadFile(c.BrightnessFile)
 	if err != nil {
 		return 0, err
 	}
@@ -66,5 +66,5 @@ func (c *Controller) setBrightness(b int) error {
 	if c.config.DevMode {
 		return nil
 	}
-	return ioutil.WriteFile(BrightnessFile, []byte(strconv.Itoa(b)), 0644)
+	return ioutil.WriteFile(c.BrightnessFile, []byte(strconv.Itoa(b)), 0644)
 }

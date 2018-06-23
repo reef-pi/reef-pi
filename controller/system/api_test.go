@@ -3,6 +3,8 @@ package system
 import (
 	"bytes"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -60,4 +62,21 @@ func TestSystemController(t *testing.T) {
 		t.Error(err)
 	}
 	c.lastStopTime()
+	f, err := ioutil.TempFile("", "reef-pi-testing")
+	if err != nil {
+		t.Fatal("Failed to create tempfile", err)
+	}
+	defer os.Remove(f.Name())
+	c.PowerFile = f.Name()
+	f.Write([]byte("1"))
+	_, err = c.currentDisplayState()
+	if err != nil {
+		t.Error(err)
+	}
+	if err := c.enableDisplay(); err != nil {
+		t.Error(err)
+	}
+	if err := c.disableDisplay(); err != nil {
+		t.Error(err)
+	}
 }
