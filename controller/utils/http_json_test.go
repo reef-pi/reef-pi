@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"bytes"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -51,4 +53,41 @@ func TestJSONResponses(t *testing.T) {
 	fn3 := func(_ string) error { return nil }
 	JSONUpdateResponse(payload, fn3, resp, req)
 	JSONDeleteResponse(fn3, resp, req)
+}
+
+func TestBasicAuth(t *testing.T) {
+	a := NewBasicAuth("foo", "bar")
+	if !a.check(a.user, a.pass) {
+		t.Error("Basic auth against user password should pass")
+	}
+	fn := func(w http.ResponseWriter, r *http.Request) {}
+	req, err := http.NewRequest("GET", "http://localhost:8080/api", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.SetBasicAuth(a.user, a.pass)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(a.BasicAuth(fn))
+	handler.ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Error("Expected 200, Found:", rr.Code)
+	}
+}
+
+type testDoer struct {
+}
+
+func (t *testDoer) Do(_ func(interface{})) {
+}
+
+func Test_JSONGetUsage(t *testing.T) {
+	d := &testDoer{}
+	fn := JSONGetUsage(d)
+	req, err := http.NewRequest("GET", "http://localhost:8080/api", new(bytes.Buffer))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(fn)
+	handler.ServeHTTP(rr, req)
 }
