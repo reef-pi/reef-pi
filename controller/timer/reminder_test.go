@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestPhAPI(t *testing.T) {
+func TestReminderRunner(t *testing.T) {
 	telemetry := utils.TestTelemetry()
 	r := ReminderRunner{
 		telemetry: telemetry,
