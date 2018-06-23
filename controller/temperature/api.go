@@ -33,7 +33,7 @@ func (c Controller) list(w http.ResponseWriter, r *http.Request) {
 func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		fs := []string{
-			"/sys/bus/w1/devices28-04177049bcff",
+			"/sys/bus/w1/devices/28-04177049bcff",
 			"/sys/bus/w1/devices/28-2392abcabcabc",
 			"/sys/bus/w1/devices/28-f0a0a0abbd4f",
 		}
