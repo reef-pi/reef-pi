@@ -20,6 +20,15 @@ func TestDevMode(t *testing.T) {
 	if err := i2c.WriteBytes(b, []byte{b}); err != nil {
 		t.Fatal(err)
 	}
+	if err := i2c.WriteToReg(b, b, []byte{b}); err != nil {
+		t.Fatal(err)
+	}
+	if err := i2c.WriteByteToReg(b, b, b); err != nil {
+		t.Fatal(err)
+	}
+	if err := i2c.WriteWordToReg(b, b, 1); err != nil {
+		t.Fatal(err)
+	}
 	if err := i2c.ReadFromReg(b, b, []byte{b}); err != nil {
 		t.Fatal(err)
 	}

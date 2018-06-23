@@ -7,7 +7,10 @@ import (
 )
 
 func TestDevModeDetection(t *testing.T) {
-	store := new(utils.FakeStore)
+	store, err := utils.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
 	os.Unsetenv("DEV_MODE")
 	s, err := initializeSettings(store)
 	if err != nil {

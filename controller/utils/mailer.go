@@ -43,11 +43,16 @@ type mailer struct {
 	config *MailerConfig
 }
 
-func (m *mailer) Email(subject, body string) error {
+func (m *mailer) msg(subject, body string) string {
 	msg := "From: " + m.config.From + "\n"
 	msg = msg + "To: " + m.config.To + "\n"
 	msg = msg + "Subject: " + subject + "\n\n"
 	msg = msg + body
+	return msg
+}
+
+func (m *mailer) Email(subject, body string) error {
+	msg := m.msg(subject, body)
 	log.Println("Sending email to:", m.config.To, " subject:", subject)
 	return smtp.SendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
 }

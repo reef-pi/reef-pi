@@ -16,7 +16,6 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test databse")
 	}
-	defer store.Close()
 	if err := store.CreateBucket(testBucket); err != nil {
 		t.Fatal("Failed to create test bucket. Error:", err)
 	}
@@ -62,4 +61,7 @@ func TestStore(t *testing.T) {
 	if err := store.CreateWithID(testBucket, "test-id", data); err != nil {
 		t.Fatal("Failed to store with explicit ID. Error:", err)
 	}
+	store.Close()
+	store.ReOpen()
+	store.Close()
 }

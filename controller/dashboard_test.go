@@ -6,7 +6,10 @@ import (
 )
 
 func TestDashboard(t *testing.T) {
-	store := new(utils.FakeStore)
+	store, err := utils.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
 	d, err := initializeDashboard(store)
 	if err != nil {
 		t.Error(err)
