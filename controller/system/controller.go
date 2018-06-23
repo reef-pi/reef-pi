@@ -15,16 +15,19 @@ type Config struct {
 }
 
 type Controller struct {
-	config    Config
-	store     utils.Store
-	telemetry *utils.Telemetry
+	config                    Config
+	store                     utils.Store
+	telemetry                 *utils.Telemetry
+	PowerFile, BrightnessFile string
 }
 
 func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
 	return &Controller{
-		config:    conf,
-		store:     store,
-		telemetry: telemetry,
+		config:         conf,
+		store:          store,
+		telemetry:      telemetry,
+		PowerFile:      PowerFile,
+		BrightnessFile: BrightnessFile,
 	}
 }
 

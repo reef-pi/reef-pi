@@ -9,6 +9,7 @@ type Reminder struct {
 	Title   string `json:"title"`
 	Message string `json:"message"`
 }
+
 type ReminderRunner struct {
 	telemetry   *utils.Telemetry
 	title, body string
