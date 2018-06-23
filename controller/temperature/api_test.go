@@ -25,10 +25,22 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
-	if err := outlets.Create(connectors.Outlet{Name: "temp-outlet", Pin: 21}); err != nil {
+	o1 := connectors.Outlet{Name: "O1", Pin: 21}
+	if err := outlets.Create(o1); err != nil {
 		t.Error(err)
 	}
-	if err := eqs.Create(equipments.Equipment{Outlet: "1"}); err != nil {
+	o1.Pin = 19
+	o1.Name = "O2"
+	if err := outlets.Create(o1); err != nil {
+		t.Error(err)
+	}
+	eq := equipments.Equipment{Outlet: "1", Name: "Heater"}
+	if err := eqs.Create(eq); err != nil {
+		t.Error(err)
+	}
+	eq.Name = "cooler"
+	eq.Outlet = "2"
+	if err := eqs.Create(eq); err != nil {
 		t.Error(err)
 	}
 	c, err := New(true, store, telemetry, eqs)
@@ -42,6 +54,7 @@ func TestTemperatureAPI(t *testing.T) {
 		Control: true,
 		Enable:  true,
 		Heater:  "1",
+		Cooler:  "2",
 		Min:     77,
 		Max:     81,
 		Name:    "foo",
@@ -75,12 +88,20 @@ func TestTemperatureAPI(t *testing.T) {
 	c.control(tc, &u)
 	u.Temperature = 83
 	c.control(tc, &u)
+	u.Temperature = 70
+	c.control(tc, &u)
+	u.Temperature = 79
+	c.control(tc, &u)
+	c.switchOffAll(tc)
 
 	if err := tr.Do("GET", "/api/tcs/1/usage", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to get temperature controller usage using api")
 	}
 
 	var sensors []TC
+	if err := tr.Do("GET", "/api/tcs/sensors", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to list temperature sensors using api", err)
+	}
 	if err := tr.Do("GET", "/api/tcs", new(bytes.Buffer), &sensors); err != nil {
 		t.Fatal("Failed to list temperature controller config using api")
 	}
