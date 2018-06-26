@@ -9,7 +9,8 @@ export default class Light extends React.Component {
       channels: props.config.channels,
       fixed: props.config.fixed,
       updated: false,
-      jack: props.config.jack
+      jack: props.config.jack,
+      expand: false
     }
     this.updateValues = this.updateValues.bind(this)
     this.getValues = this.getValues.bind(this)
@@ -17,6 +18,12 @@ export default class Light extends React.Component {
     this.setLightMode = this.setLightMode.bind(this)
     this.updateLight = this.updateLight.bind(this)
     this.updateChannel = this.updateChannel.bind(this)
+    this.expand = this.expand.bind(this)
+  }
+
+  expand () {
+    console.log(this.state.expand)
+    this.setState({expand: !this.state.expand})
   }
 
   updateLight () {
@@ -95,16 +102,32 @@ export default class Light extends React.Component {
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-sm-2'
     }
+    var details = {
+      display: 'none'
+    }
+
+    if (this.state.expand) {
+      details.display = 'block'
+    }
     return (
       <div className='container'>
         <div className='row'>
-          {this.props.config.name}
+          <div className='col-sm-9'>
+            <b>{this.props.config.name}</b>
+          </div>
+          <div className='col-sm-2'>
+            <input type='button' id={'expand-light-' + this.props.config.id} onClick={this.expand} value='exapand' className='btn btn-outline-primary' />
+          </div>
         </div>
-        <div className='row'>
-          { this.channelList() }
-        </div>
-        <div className='row'>
-          <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
+        <div style={details} className='row'>
+          <div className='container'>
+            <div className='row'>
+              { this.channelList() }
+            </div>
+            <div className='row'>
+              <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
+            </div>
+          </div>
         </div>
       </div>
     )

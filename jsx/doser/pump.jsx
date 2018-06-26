@@ -191,7 +191,7 @@ class pump extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-sm-6'>
-            <label className='text-secondary'>{this.props.data.name}</label>
+            <b>{this.props.data.name}</b>
           </div>
           <div className='col-sm-2'>
             <input
