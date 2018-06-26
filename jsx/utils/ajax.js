@@ -1,4 +1,5 @@
 import SignIn from '../sign_in.jsx'
+import {showAlert} from './alert'
 
 function makeHeaders () {
   let headers = new Headers()
@@ -14,13 +15,19 @@ export function reduxGet (params) {
     return fetch(params.url, {method: 'GET', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
-          console.log(response.statusText)
+          if (params.suppressError) {
+            return
+          }
+          showAlert(response.statusText)
         }
         return response
       })
       .then((response) => response.json())
       .then((data) => dispatch(params.success(data)))
-      .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
+      .catch((v) => {
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('GET API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+      })
   }
 }
 
@@ -29,12 +36,18 @@ export function reduxDelete (params) {
     return fetch(params.url, {method: 'DELETE', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
-          console.log(response.statusText)
+          if (params.suppressError) {
+            return
+          }
+          showAlert(response.statusText)
         }
         return response
       })
       .then(() => dispatch(params.success()))
-      .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
+      .catch((v) => {
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('DELETE API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+      })
   }
 }
 
@@ -43,12 +56,18 @@ export function reduxPut (params) {
     return fetch(params.url, {method: 'PUT', headers: makeHeaders(), body: JSON.stringify(params.data)})
       .then((response) => {
         if (!response.ok) {
-          console.log(response.statusText)
+          if (params.suppressError) {
+            return
+          }
+          showAlert(response.statusText)
         }
         return response
       })
       .then(() => dispatch(params.success()))
-      .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
+      .catch((v) => {
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('PUT API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+      })
   }
 }
 
@@ -60,11 +79,17 @@ export function reduxPost (params) {
       body: JSON.stringify(params.data)
     }).then((response) => {
       if (!response.ok) {
-        console.log(response.statusText)
+        if (params.suppressError) {
+          return
+        }
+        showAlert(response.statusText)
       }
       return response
     })
       .then((data) => dispatch(params.success(data)))
-      .catch(() => dispatch({ type: 'API_FAILURE', params: params }))
+      .catch((v) => {
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+      })
   }
 }

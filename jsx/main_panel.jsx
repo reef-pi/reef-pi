@@ -12,7 +12,7 @@ import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
 import 'react-tabs/style/react-tabs.css'
-import {fetchCapabilities} from './redux/actions/capabilities'
+import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
 
 class mainPanel extends React.Component {
@@ -34,10 +34,7 @@ class mainPanel extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchCapabilities()
-  }
-
-  handleSelect (index, last) {
+    this.props.fetchUIData()
   }
 
   render () {
@@ -77,7 +74,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {fetchCapabilities: () => dispatch(fetchCapabilities())}
+  return {fetchUIData: () => dispatch(fetchUIData(dispatch))}
 }
 
 const MainPanel = connect(mapStateToProps, mapDispatchToProps)(mainPanel)
