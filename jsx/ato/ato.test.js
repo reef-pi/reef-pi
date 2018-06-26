@@ -15,9 +15,13 @@ const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('ATO ui', () => {
+  const state = {
+    ato_usage: {'1': {}},
+    atos: [{name: 'foo', id: '1'}]
+  }
   it('<ATO />', () => {
     const n = shallow(
-      <ATO store={mockStore({ato_usage: {}})} data={{id: '1', period: 10}} />
+      <ATO store={mockStore()} data={{id: '1', period: 10}} />
     )
     const m = n.dive().instance()
     m.save()
@@ -44,7 +48,6 @@ describe('ATO ui', () => {
   })
 
   it('<Chart />', () => {
-    const usage = {'1': {}}
-    shallow(<Chart ato_id='1 'store={mockStore({ato_usage: usage})} />).dive().instance()
+    shallow(<Chart ato_id='1 'store={mockStore(state)} />).dive().instance()
   })
 })
