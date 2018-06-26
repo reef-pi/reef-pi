@@ -47,7 +47,7 @@ class chart extends React.Component {
 const mapStateToProps = (state, props) => {
   return {
     usage: state.ato_usage[props.ato_id],
-    config: state.atos.find((p) => p.id === props.ato_id),
+    config: state.atos.find((p) => p.id === props.ato_id)
   }
 }
 
