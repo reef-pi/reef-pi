@@ -4,12 +4,14 @@ import MainPanel from './main_panel.jsx'
 import SignIn from './sign_in.jsx'
 import {connect} from 'react-redux'
 import {fetchInfo} from './redux/actions/info'
+import {hideAlert} from './utils/alert'
 
 class app extends React.Component {
   componentDidMount () {
     if (SignIn.isSignIned()) {
       this.props.fetchInfo()
     }
+    hideAlert()
   }
 
   render () {
