@@ -12,7 +12,8 @@ export default class Sensor extends React.Component {
     super(props)
     this.state = {
       tc: this.props.data,
-      readOnly: true
+      readOnly: true,
+      expand: false
     }
     this.save = this.save.bind(this)
     this.remove = this.remove.bind(this)
@@ -23,6 +24,11 @@ export default class Sensor extends React.Component {
     this.updateNotify = this.updateNotify.bind(this)
     this.updateSensor = this.updateSensor.bind(this)
     this.showCharts = this.showCharts.bind(this)
+    this.expand = this.expand.bind(this)
+  }
+
+  expand () {
+    this.setState({expand: !this.state.expand})
   }
 
   showCharts () {
@@ -198,76 +204,92 @@ export default class Sensor extends React.Component {
       editClass = 'btn btn-outline-primary'
       name = <input type='text' value={this.state.tc.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly} />
     }
+
+    var details = {
+      display: 'none'
+    }
+    if (this.state.expand) {
+      details.display = 'block'
+    }
     return (
       <div className='container'>
         <div className='row'>
-          {name}
-        </div>
-        <div className='row'>
-          <div className='col-sm-2'>Sensor</div>
+          <div className='col-sm-9'>
+            <b>{name}</b>
+          </div>
           <div className='col-sm-2'>
-            <SelectSensor
-              id={'sensor-' + this.state.tc.name}
-              active={this.state.tc.sensor}
-              readOnly={this.state.readOnly}
-              sensors={this.props.sensors}
-              update={this.updateSensor} />
+            <input type='button' id={'expand-tc-' + this.props.data.id} onClick={this.expand} value='expand' className='btn btn-outline-primary' />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-2'>Enable</div>
-          <input
-            type='checkbox'
-            id='tc_enable'
-            className='col-sm-2'
-            defaultChecked={this.state.tc.enable}
-            onClick={this.updateCheckBox('enable')}
-            disabled={this.state.readOnly}
-          />
+        <div className='row' style={details}>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-sm-2'>Sensor</div>
+              <div className='col-sm-2'>
+                <SelectSensor
+                  id={'sensor-' + this.state.tc.name}
+                  active={this.state.tc.sensor}
+                  readOnly={this.state.readOnly}
+                  sensors={this.props.sensors}
+                  update={this.updateSensor} />
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-sm-2'>Enable</div>
+              <input
+                type='checkbox'
+                id='tc_enable'
+                className='col-sm-2'
+                defaultChecked={this.state.tc.enable}
+                onClick={this.updateCheckBox('enable')}
+                disabled={this.state.readOnly}
+              />
+            </div>
+            <div className='row'>
+              <div className='col-sm-3'>Fahrenheit as unit</div>
+              <input
+                type='checkbox'
+                id='tc_fahrenheit'
+                className='col-sm-2'
+                defaultChecked={this.state.tc.fahrenheit}
+                onClick={this.updateCheckBox('fahrenheit')}
+                disabled={this.state.readOnly}
+              />
+            </div>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-sm-3'>Check frequency</div>
+                <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.tc.period} readOnly={this.state.readOnly} />
+                <span>second(s)</span>
+              </div>
+              <div className='row'>
+                <div className='col-sm-3'>Chart Minimum</div>
+                <input type='text' onChange={this.update('chart_min')} id='period' className='col-sm-1' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
+              </div>
+              <div className='row'>
+                <div className='col-sm-3'>Chart Maximun</div>
+                <input type='text' onChange={this.update('chart_max')} id='period' className='col-sm-1' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
+              </div>
+              <div className='row'>
+                <div className='col-sm-2'>Control</div>
+                <input type='checkbox' id={'tc_control_' + this.props.data.id} className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
+              </div>
+              {this.showControl()}
+            </div>
+            <div className='row'>
+              <Notify config={this.state.tc.notify} updateHook={this.updateNotify} readOnly={this.state.readOnly} />
+            </div>
+            <div className='row'>
+              <div className='col-sm-1'>
+                <input type='button' id={'update-tc-' + this.props.data.id} onClick={this.save} value={editText} className={editClass} />
+              </div>
+              <div className='col-sm-1'>
+                <input type='button' id={'remove-tc-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+              </div>
+            </div>
+            {this.showCharts()}
+          </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-3'>Fahrenheit as unit</div>
-          <input
-            type='checkbox'
-            id='tc_fahrenheit'
-            className='col-sm-2'
-            defaultChecked={this.state.tc.fahrenheit}
-            onClick={this.updateCheckBox('fahrenheit')}
-            disabled={this.state.readOnly}
-          />
-        </div>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-sm-3'>Check frequency</div>
-            <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.tc.period} readOnly={this.state.readOnly} />
-            <span>second(s)</span>
-          </div>
-          <div className='row'>
-            <div className='col-sm-3'>Chart Minimum</div>
-            <input type='text' onChange={this.update('chart_min')} id='period' className='col-sm-1' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
-          </div>
-          <div className='row'>
-            <div className='col-sm-3'>Chart Maximun</div>
-            <input type='text' onChange={this.update('chart_max')} id='period' className='col-sm-1' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
-          </div>
-          <div className='row'>
-            <div className='col-sm-2'>Control</div>
-            <input type='checkbox' id={'tc_control_' + this.props.data.id} className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
-          </div>
-          {this.showControl()}
-        </div>
-        <div className='row'>
-          <Notify config={this.state.tc.notify} updateHook={this.updateNotify} readOnly={this.state.readOnly} />
-        </div>
-        <div className='row'>
-          <div className='col-sm-1'>
-            <input type='button' id={'update-tc-' + this.props.data.id} onClick={this.save} value={editText} className={editClass} />
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' id={'remove-tc-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
-          </div>
-        </div>
-        {this.showCharts()}
       </div>
     )
   }

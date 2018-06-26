@@ -16,7 +16,8 @@ class probe extends React.Component {
       address: props.data.address,
       config: props.data.config,
       readOnly: true,
-      calibrate: false
+      calibrate: false,
+      expand: false
     }
 
     this.remove = this.remove.bind(this)
@@ -26,10 +27,15 @@ class probe extends React.Component {
     this.chart = this.chart.bind(this)
     this.updateConfig = this.updateConfig.bind(this)
     this.calibrate = this.calibrate.bind(this)
+    this.expand = this.expand.bind(this)
   }
 
   calibrate () {
     this.setState({calibrate: !this.state.calibrate})
+  }
+
+  expand () {
+    this.setState({expand: !this.state.expand})
   }
 
   updateConfig (d) {
@@ -97,6 +103,12 @@ class probe extends React.Component {
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
     var name = <label>{this.state.name}</label>
+    var details = {
+      display: 'none'
+    }
+    if (this.state.expand) {
+      details.display = 'block'
+    }
     if (!this.state.readOnly) {
       editText = 'save'
       editClass = 'btn btn-outline-primary'
@@ -105,36 +117,43 @@ class probe extends React.Component {
     return (
       <div className='conainer'>
         <div className='row'>
-          {name}
-        </div>
-        <div className='row'>
-          <label className='col-sm-3'>Enable</label>
-          <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.enable} disabled={this.state.readOnly} />
-        </div>
-        <div className='row'>
-          <label className='col-sm-3'> Interval </label>
-          <input type='text' value={this.state.period} onChange={this.update('period')} className='col-sm-2' readOnly={this.state.readOnly} />
-        </div>
-        <div className='row'>
-          {this.chart()}
-        </div>
-        <div className='row'>
-          <Config data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly} />
-        </div>
-        <div className='row'>
-          <div className='col-sm-7' />
+          <div className='col-sm-9'>
+            <b>{name}</b>
+          </div>
           <div className='col-sm-2'>
-            <input type='button' id={'calibrate-probe-' + this.props.data.id} onClick={this.calibrate} value='calibrate' className='btn btn-secondary' />
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' id={'edit-probe-' + this.props.data.id} onClick={this.edit} value={editText} className={editClass} />
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+            <input type='button' id={'expand-ph-' + this.props.data.id} onClick={this.expand} value='expand' className='btn btn-outline-primary' />
           </div>
         </div>
-        <div className='row'>
-          { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : <div /> }
+        <div className='row' style={details}>
+          <div className='container'>
+            <label className='col-sm-3'>Enable</label>
+            <input type='checkbox' value={this.state.enable} onChange={this.updateEnable} className='col-sm-2' defaultChecked={this.props.data.enable} disabled={this.state.readOnly} />
+          </div>
+          <div className='row'>
+            <label className='col-sm-3'> Interval </label>
+            <input type='text' value={this.state.period} onChange={this.update('period')} className='col-sm-2' readOnly={this.state.readOnly} />
+          </div>
+          <div className='row'>
+            {this.chart()}
+          </div>
+          <div className='row'>
+            <Config data={this.props.data.config} hook={this.updateConfig} readOnly={this.state.readOnly} />
+          </div>
+          <div className='row'>
+            <div className='col-sm-7' />
+            <div className='col-sm-2'>
+              <input type='button' id={'calibrate-probe-' + this.props.data.id} onClick={this.calibrate} value='calibrate' className='btn btn-secondary' />
+            </div>
+            <div className='col-sm-1'>
+              <input type='button' id={'edit-probe-' + this.props.data.id} onClick={this.edit} value={editText} className={editClass} />
+            </div>
+            <div className='col-sm-1'>
+              <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+            </div>
+          </div>
+          <div className='row'>
+            { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : <div /> }
+          </div>
         </div>
       </div>
     )
