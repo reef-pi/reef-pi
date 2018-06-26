@@ -27,9 +27,12 @@ class chart extends React.Component {
     if (this.props.usage === undefined) {
       return (<div />)
     }
+    if (this.props.config === undefined) {
+      return (<div />)
+    }
     return (
       <div className='container'>
-        <span className='h6'>{this.props.ato_name} - ATO Usage</span>
+        <span className='h6'>{this.props.config.name} - ATO Usage</span>
         <BarChart width={this.props.width} height={this.props.height} data={this.props.usage.historical}>
           <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
           <YAxis label='minutes' />
@@ -43,7 +46,8 @@ class chart extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    usage: state.ato_usage[props.ato_id]
+    usage: state.ato_usage[props.ato_id],
+    config: state.atos.find((p) => p.id === props.ato_id),
   }
 }
 
