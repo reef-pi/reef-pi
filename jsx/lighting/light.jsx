@@ -105,9 +105,11 @@ export default class Light extends React.Component {
     var details = {
       display: 'none'
     }
+    var expandLabel = 'expand'
 
     if (this.state.expand) {
       details.display = 'block'
+      expandLabel = 'fold'
     }
     return (
       <div className='container'>
@@ -116,7 +118,7 @@ export default class Light extends React.Component {
             <b>{this.props.config.name}</b>
           </div>
           <div className='col-sm-2'>
-            <input type='button' id={'expand-light-' + this.props.config.id} onClick={this.expand} value='exapand' className='btn btn-outline-primary' />
+            <input type='button' id={'expand-light-' + this.props.config.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
           </div>
         </div>
         <div style={details} className='row'>
