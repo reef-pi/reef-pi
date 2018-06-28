@@ -106,8 +106,10 @@ class probe extends React.Component {
     var details = {
       display: 'none'
     }
+    var expandLabel = 'expand'
     if (this.state.expand) {
       details.display = 'block'
+      expandLabel = 'fold'
     }
     if (!this.state.readOnly) {
       editText = 'save'
@@ -121,7 +123,7 @@ class probe extends React.Component {
             <b>{name}</b>
           </div>
           <div className='col-sm-2'>
-            <input type='button' id={'expand-ph-' + this.props.data.id} onClick={this.expand} value='expand' className='btn btn-outline-primary' />
+            <input type='button' id={'expand-ph-' + this.props.data.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
           </div>
         </div>
         <div className='row' style={details}>
