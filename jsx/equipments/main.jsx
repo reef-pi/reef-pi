@@ -26,6 +26,14 @@ class main extends React.Component {
   equipmentList () {
     var list = []
     var index = 0
+    var noPadding = {
+      padding: '0 !important',
+      margin: '0 !important',
+      marginLeft: '0px',
+      marginRight: '0px',
+      paddingLeft: '0px',
+      paddingRight: '0px'
+    }
     $.each(this.props.equipments, function (k, v) {
       var outlet = {}
       $.each(this.props.outlets, function (x, o) {
@@ -35,10 +43,10 @@ class main extends React.Component {
       })
       list.push(
         <div key={k} className='row list-group-item'>
-          <div className='col-sm-8'>
+          <div className='col-lg-10 col-xs-8' style={noPadding} >
             <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
           </div>
-          <div className='col-sm-4'>
+          <div className='col-lg-2 col-xs-2' style={noPadding} >
             <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
