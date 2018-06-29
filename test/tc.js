@@ -1,6 +1,6 @@
 module.exports = {
   Configure: function(n){
-    n.click('li#react-tabs-8')
+    n.click('div#tab-4')
     .wait(500)
     .click('input#add_tc')
     .wait(500)
@@ -15,10 +15,10 @@ module.exports = {
     .wait(500)
     .click('input#create_tc')
     .wait(1500)
-    .click('li#react-tabs-0')
+    .click('div#tab-0')
     .wait(2500)
 
-    .click('li#react-tabs-8')
+    .click('div#tab-4')
     .wait(500)
     .click('input#update-tc-1')
     .wait(500)

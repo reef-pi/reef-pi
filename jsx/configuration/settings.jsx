@@ -3,7 +3,6 @@ import Auth from '../auth.jsx'
 import Capabilities from './capabilities.jsx'
 import Display from './display.jsx'
 import HealthNotify from './health_notify.jsx'
-import {fetchCapabilities} from '../redux/actions/capabilities'
 import {updateSettings, fetchSettings} from '../redux/actions/settings'
 import {connect} from 'react-redux'
 import {isEmptyObject} from 'jquery'
@@ -89,7 +88,6 @@ class settings extends React.Component {
 
   componentDidMount () {
     this.props.fetchSettings()
-    this.props.fetchCapabilities()
   }
 
   toRow (label) {
@@ -181,7 +179,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchCapabilities: () => dispatch(fetchCapabilities()),
     fetchSettings: () => dispatch(fetchSettings()),
     updateSettings: (s) => dispatch(updateSettings(s))
   }

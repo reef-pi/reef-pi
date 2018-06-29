@@ -18,10 +18,9 @@ window.localStorage = mockLocalStorage()
 
 describe('App', () => {
   it('<App />', () => {
-    renderer.create(
-      <Provider store={mockStore({info:{}, capabilities: []})}>
-        <App />
-      </Provider>)
+    const m = shallow(
+      <App store={mockStore({info:{}, capabilities: []})} />
+    ).dive().instance()
   })
 
   it('<JackSelector />', ()=> {

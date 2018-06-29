@@ -1,6 +1,6 @@
 module.exports = {
   Create: function(n){
-    n.click('li#react-tabs-18')
+    n.click('div#tab-9')
     .wait(500)
     .click('button#btn-connectors')
     .wait(500)
