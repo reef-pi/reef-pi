@@ -1,5 +1,9 @@
 package utils
 
+import (
+	"math"
+)
+
 func TwoDecimal(f float64) float64 {
-	return float64(int(f*100)) / 100
+	return math.Round(f*100) / 100
 }
