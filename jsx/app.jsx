@@ -22,6 +22,7 @@ class app extends React.Component {
     return (
       <div className='container'>
         <div className='container'><h3 style={st}> {this.props.info.name} </h3></div>
+        <div id='reef-pi-alert' className='alert alert-danger' />
         <div className='container'>
           <MainPanel />
         </div>

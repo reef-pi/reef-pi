@@ -13,7 +13,7 @@ function TestTemperature () {
     .click('input#btnSaveCreds')
     .wait(500)
 
-    .click('li#react-tabs-8')
+    .click('div#tab-4')
     .wait(500)
     .click('input#tc_enable')
     .wait(500)

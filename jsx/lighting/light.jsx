@@ -22,7 +22,6 @@ export default class Light extends React.Component {
   }
 
   expand () {
-    console.log(this.state.expand)
     this.setState({expand: !this.state.expand})
   }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import ATO from './ato/main.jsx'
 import Camera from './camera/main.jsx'
 import Equipments from './equipments/main.jsx'
@@ -11,61 +10,51 @@ import Doser from './doser/controller.jsx'
 import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
-import 'react-tabs/style/react-tabs.css'
+import 'react-responsive-tabs/styles.css'
+import Tabs from 'react-responsive-tabs'
 import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
 
-class mainPanel extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      panels: {
-        'equipments': <Equipments />,
-        'timers': <Timers />,
-        'lighting': <Lighting />,
-        'temperature': <Temperature />,
-        'ato': <ATO />,
-        'ph': <Ph />,
-        'doser': <Doser />,
-        'camera': <Camera />,
-        'configuration': <Configuration />
-      }
-    }
-  }
+const caps = {
+  'equipments': <Equipments />,
+  'timers': <Timers />,
+  'lighting': <Lighting />,
+  'temperature': <Temperature />,
+  'ato': <ATO />,
+  'ph': <Ph />,
+  'doser': <Doser />,
+  'camera': <Camera />,
+  'configuration': <Configuration />
+}
 
+class mainPanel extends React.Component {
   componentDidMount () {
     this.props.fetchUIData()
   }
 
   render () {
-    var tabs = [ ]
     var panels = [ ]
     if (this.props.capabilities.dashboard) {
-      tabs.push(<Tab key='dashboard'> dashboard </Tab>)
-      panels.push(<TabPanel key='dashboard'> <Dashboard capabilities={this.props.capabilities} /> </TabPanel>)
+      panels.push({
+        title: 'dashboard',
+        getContent: () => <Dashboard capabilities={this.props.capabilities} />
+      })
     }
 
-    $.each(this.state.panels, function (k, panel) {
+    $.each(caps, function (k, panel) {
       if (this.props.capabilities[k] === undefined) {
         return
       }
       if (!this.props.capabilities[k]) {
         return
       }
-      tabs.push(<Tab key={k}>{k}</Tab>)
-      panels.push(<TabPanel key={k}> {panel} </TabPanel>)
+      panels.push({
+        title: k,
+        getContent: () => panel
+      })
     }.bind(this))
-
     return (
-      <div className='container'>
-        <div id='reef-pi-alert' className='alert alert-danger' />
-        <Tabs >
-          <TabList>
-            {tabs}
-          </TabList>
-          {panels}
-        </Tabs>
-      </div>
+      <Tabs items={panels} />
     )
   }
 }

@@ -45,7 +45,7 @@ function SmokeTest () {
     .wait(1500)
     .evaluate(dashboard.Configure(nightmare))
     .wait(1500)
-    .click('li#react-tabs-0')
+    .click('div#tab-0')
 		.wait(1500)
     .end()
       .then(function () {
