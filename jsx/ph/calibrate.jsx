@@ -37,8 +37,10 @@ export default class Calibrate extends React.PureComponent {
       <a className='dropdown-item' onClick={this.setType('low')} key='low'>Low</a>
     ]
     return (
-      <div className='container'>
-        <div className='col-sm-2'>
+      <div className='row'>
+        <div className='col-lg-2' />
+        <div className='col-lg-1'>Type</div>
+        <div className='col-lg-1'>
           <div className='dropdown'>
             <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.probe + '-calibration-type'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
               {this.state.type}
@@ -48,20 +50,14 @@ export default class Calibrate extends React.PureComponent {
             </div>
           </div>
         </div>
-        <div className='col-sm-2'>
-          <div className='input-group'>
-            <label className='input-group-addon'>Value</label>
-            <input
-              type='text'
-              className='form-control'
-              value={this.state.value}
-              onChange={this.updateValue}
-            />
-          </div>
+        <div className='col-lg-1' />
+        <div className='col-lg-1'>Value</div>
+        <div className='col-lg-1'>
+          <input type='text' className='form-control' value={this.state.value} onChange={this.updateValue} />
         </div>
-        <button className='btn btn-primary' onClick={this.calibrate}>
-         Run calibration
-        </button>
+        <div className='col-lg-1'>
+          <button className='btn btn-primary' onClick={this.calibrate}>Run</button>
+        </div>
       </div>
     )
   }

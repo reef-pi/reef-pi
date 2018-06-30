@@ -119,16 +119,16 @@ class main extends React.Component {
     $('#equipmentName').val('')
   }
 
-  newEquipment() {
+  newEquipment () {
     var outlet = ''
     if (this.state.selectedOutlet !== undefined) {
       outlet = this.props.outlets[this.state.selectedOutlet].name
     }
-    return(
+    return (
       <div className='row'>
         <div className='col-lg-1'>Name</div>
         <div className='col-lg-2'><input type='text' id='equipmentName' /></div>
-        <div className='col-lg-1'/>
+        <div className='col-lg-1' />
         <div className='col-lg-1'>Outlet</div>
         <div className='col-lg-2'>
           <div className='dropdown'>
@@ -147,7 +147,7 @@ class main extends React.Component {
 
   render () {
     var nEq = <div />
-    if(this.state.addEquipment){
+    if (this.state.addEquipment) {
       nEq = this.newEquipment()
     }
     return (

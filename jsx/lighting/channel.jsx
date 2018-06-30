@@ -89,7 +89,7 @@ export default class Channel extends React.Component {
           <div className='row text-center'>
             {values[i]}
           </div>
-          <input type='range' style={rangeStyle} onChange={this.curry(i)} value={values[i]} id={'intensity-' + i} orient='vertical'/>
+          <input type='range' style={rangeStyle} onChange={this.curry(i)} value={values[i]} id={'intensity-' + i} orient='vertical' />
           <div className='row text-center'>
             {labels[i]}
           </div>
@@ -106,7 +106,7 @@ export default class Channel extends React.Component {
       onChange={this.updateFixedValue}
       getValue={this.getFixedValue}
     />
-    if(this.state.channel.auto){
+    if (this.state.channel.auto) {
       channel = this.sliderList()
     }
     return (
