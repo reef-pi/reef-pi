@@ -1,5 +1,5 @@
 import React from 'react'
-import {showAlert, hideAlert} from '../utils/alert'
+import {showAlert} from '../utils/alert'
 
 export default class Config extends React.Component {
   constructor (props) {
@@ -33,7 +33,6 @@ export default class Config extends React.Component {
         config: config,
         updated: true
       })
-      hideAlert()
     }.bind(this))
   }
 
@@ -45,7 +44,6 @@ export default class Config extends React.Component {
         config: config,
         updated: true
       })
-      hideAlert()
     }.bind(this)
     )
   }

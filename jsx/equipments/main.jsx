@@ -1,8 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import Equipment from './equipment.jsx'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import {updateEquipment, fetchEquipments, createEquipment, deleteEquipment} from '../redux/actions/equipment'
 import {fetchOutlets} from '../redux/actions/outlets'
@@ -42,12 +41,14 @@ class main extends React.Component {
         }
       })
       list.push(
-        <div key={k} className='row list-group-item'>
-          <div className='col-lg-10 col-xs-8' style={noPadding} >
-            <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
-          </div>
-          <div className='col-lg-2 col-xs-2' style={noPadding} >
-            <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
+        <div key={k} className='list-group-item' style={noPadding}>
+          <div key={k} className='row'>
+            <div className='col-lg-8 col-xs-8'>
+              <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
+            </div>
+            <div className='col-lg-1 col-xs-2'>
+              <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
+            </div>
           </div>
         </div>
       )
@@ -61,19 +62,22 @@ class main extends React.Component {
     this.props.fetchOutlets()
   }
 
-  setOutlet (i, ev) {
-    this.setState({
-      selectedOutlet: i
-    })
-    hideAlert()
+  setOutlet (i) {
+    return ev => {
+      this.setState({
+        selectedOutlet: i
+      })
+    }
   }
 
   outletList () {
-    var menuItems = []
+    var items = []
     $.each(this.props.outlets, function (i, v) {
-      menuItems.push(<MenuItem key={i} eventKey={i}><span id={'outlet-'.concat(v.id)}>{v.name}</span></MenuItem>)
-    })
-    return menuItems
+      items.push(<a className='dropdown-item' href='#' onClick={this.setOutlet(i)} key={'outlet-' + i}>
+        <span id={'outlet-'.concat(v.id)}>{v.name}</span>
+      </a>)
+    }.bind(this))
+    return items
   }
 
   addEquipment () {
@@ -90,7 +94,6 @@ class main extends React.Component {
       showAlert('Specify equipment name')
       return
     }
-    hideAlert()
     this.props.createEquipment(payload)
     this.toggleAddEquipmentDiv()
     this.setState({
@@ -131,14 +134,16 @@ class main extends React.Component {
         <div>
           <input id='add_equipment' type='button' value={this.state.addEquipment ? '-' : '+'} onClick={this.toggleAddEquipmentDiv} className='btn btn-outline-success' />
           <div style={dStyle}>
-               Name: <input type='text' id='equipmentName' />
-               Outlet:
-            <DropdownButton
-              title={outlet}
-              id='outlet'
-              onSelect={this.setOutlet}>
-              {this.outletList()}
-            </DropdownButton>
+            Name: <input type='text' id='equipmentName' />
+            Outlet:
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id='outlet' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {outlet}
+              </button>
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                {this.outletList()}
+              </div>
+            </div>
             <input type='button' id='createEquipment' value='add' onClick={this.addEquipment} className='btn btn-outline-primary' />
           </div>
         </div>

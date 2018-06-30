@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class SelectSensor extends React.Component {
   constructor (props) {
@@ -15,35 +14,37 @@ export default class SelectSensor extends React.Component {
   list () {
     var menuItems = []
     if (this.state.sensor === undefined) {
-      menuItems.push(<MenuItem key='none' active eventKey='none'>-</MenuItem>)
+      menuItems.push(<a key='none' className='dropdown-item active'>-</a>)
     }
     $.each(this.props.sensors, function (k, v) {
+      var cName = 'dropdown-item'
+      if (v === this.state.sensor) {
+        cName += ' active'
+      }
       menuItems.push(
-        <MenuItem
-          key={k}
-          active={v === this.state.sensor}
-          eventKey={k}
-        >
+        <a className={cName} key={k} onClick={this.set(k)}>
           <span id={this.props.id + '-' + v}>{v}</span>
-        </MenuItem>
+        </a>
       )
     }.bind(this))
     return menuItems
   }
 
-  set (k, ev) {
-    if (k === 'none') {
+  set (k) {
+    return () => {
+      if (k === 'none') {
+        this.setState({
+          sensor: undefined
+        })
+        this.props.update('')
+        return
+      }
+      var sensor = this.props.sensors[k]
       this.setState({
-        sensor: undefined
+        sensor: sensor
       })
-      this.props.update('')
-      return
+      this.props.update(sensor)
     }
-    var sensor = this.props.sensors[k]
-    this.setState({
-      sensor: sensor
-    })
-    this.props.update(sensor)
   }
 
   render () {
@@ -53,10 +54,13 @@ export default class SelectSensor extends React.Component {
       sensor = this.state.sensor
     }
     return (
-      <div className='container'>
-        <DropdownButton title={sensor} id={this.props.id} onSelect={this.set} disabled={readOnly}>
+      <div className='dropdown'>
+        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+          {sensor}
+        </button>
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {this.list()}
-        </DropdownButton>
+        </div>
       </div>
     )
   }

@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 // props: hook, selector_id, components, current_id
 
@@ -14,13 +13,14 @@ export default class ComponentSelector extends React.Component {
     this.setID = this.setID.bind(this)
   }
 
-  setID (k, ev) {
-    this.setState({
-      title: $(ev.target).text(),
-      current_id: k
+  setID (k, name) {
+    return (ev) => {
+      this.setState({
+        title: name,
+        current_id: k
+      })
+      this.props.hook(k)
     }
-    )
-    this.props.hook(k)
   }
 
   render () {
@@ -31,22 +31,26 @@ export default class ComponentSelector extends React.Component {
         return
       }
       var active = v.id === this.state.current_id
+      var cName = 'dropdown-item'
       if (active) {
         title = v.name
+        cName += ' active'
       }
       items.push(
-        <MenuItem key={k} active={active} eventKey={v.id} >
+        <a className={cName} href='#' onClick={this.setID(v.id, v.name)} key={k}>
           <span id={this.props.selector_id + '-' + v.id}>{ v.name }</span>
-        </MenuItem>
+        </a>
       )
     }.bind(this))
     return (
-      <DropdownButton
-        title={title}
-        id={'ato-select-' + this.props.selector_idj}
-        onSelect={this.setID} >
-        { items }
-      </DropdownButton>
+      <div className='dropdown'>
+        <button id={'ato-select-' + this.props.selector_idj} className='btn btn-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+          {title}
+        </button>
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+          {items}
+        </div>
+      </div>
     )
   }
 }

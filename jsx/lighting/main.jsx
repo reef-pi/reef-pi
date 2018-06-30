@@ -1,8 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import {updateLight, fetchLights, createLight, deleteLight} from '../redux/actions/lights'
 import {fetchJacks} from '../redux/actions/jacks'
@@ -37,20 +36,21 @@ class main extends React.Component {
   componentWillMount () {
     this.props.fetchLights()
     this.props.fetchJacks()
-    hideAlert()
   }
 
-  setJack (i, ev) {
-    this.setState({
-      selectedJack: i
-    })
+  setJack (i) {
+    return () => {
+      this.setState({
+        selectedJack: i
+      })
+    }
   }
 
   jacksList () {
     var jacks = []
     $.each(this.props.jacks, function (i, jack) {
-      jacks.push(<MenuItem key={i} eventKey={i}><span id={'select-jack-' + jack.name}>{jack.name}</span></MenuItem>)
-    })
+      jacks.push(<a className='dropdown-item' key={i} onClick={this.setJack(i)}><span id={'select-jack-' + jack.name}>{jack.name}</span></a>)
+    }.bind(this))
     return jacks
   }
 
@@ -60,10 +60,7 @@ class main extends React.Component {
       return
     }
     if ($('#lightName').val() === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Specify light name'
-      })
+      showAlert('Specify light name')
       return
     }
     var jack = this.props.jacks[this.state.selectedJack].id
@@ -119,11 +116,16 @@ class main extends React.Component {
         <div className='container'>
           <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />
           <div style={dStyle}>
-               Name: <input type='text' id='lightName' />
-               Jack:
-            <DropdownButton title={jack} id='jack' onSelect={this.setJack}>
-              {this.jacksList()}
-            </DropdownButton>
+            Name: <input type='text' id='lightName' />
+            Jack:
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id='jack' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {jack}
+              </button>
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                {this.jacksList()}
+              </div>
+            </div>
             <input type='button' id='createLight' value='add' onClick={this.addLight} className='btn btn-outline-primary' />
           </div>
         </div>

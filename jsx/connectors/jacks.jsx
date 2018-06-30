@@ -1,7 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
 import {confirm} from '../utils/confirm.js'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {showAlert} from '../utils/alert.js'
 import {connect} from 'react-redux'
 import {fetchJacks, deleteJack, createJack} from '../redux/actions/jacks'
@@ -20,10 +19,12 @@ class jacks extends React.Component {
     this.setDriver = this.setDriver.bind(this)
   }
 
-  setDriver (k, ev) {
-    this.setState({
-      driver: k
-    })
+  setDriver (k) {
+    return () => {
+      this.setState({
+        driver: k
+      })
+    }
   }
 
   remove (id) {
@@ -117,12 +118,16 @@ class jacks extends React.Component {
 
               <div className='col-sm-3'>
                 Driver
-                <DropdownButton title={this.state.driver} id='jack-type-selection' onSelect={this.setDriver}>
-                  <MenuItem key='rpi' eventKey='rpi'>rpi</MenuItem>
-                  <MenuItem key='pca9685' eventKey='pca9685'>pca9685</MenuItem>
-                </DropdownButton>
+                <div className='dropdown'>
+                  <button className='btn btn-secondary dropdown-toggle' type='button' id='jack-type-selection' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                    {this.state.driver}
+                  </button>
+                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
+                  </div>
+                </div>
               </div>
-
               <div className='col-sm-1'>
                 <input type='button' id='createJack' value='add' onClick={this.save} className='btn btn-outline-primary' />
               </div>

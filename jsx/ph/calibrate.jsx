@@ -1,5 +1,4 @@
 import React from 'react'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Calibrate extends React.PureComponent {
   constructor (props) {
@@ -13,8 +12,8 @@ export default class Calibrate extends React.PureComponent {
     this.updateValue = this.updateValue.bind(this)
   }
 
-  setType (k, ev) {
-    this.setState({type: k})
+  setType (k) {
+    return () => this.setState({type: k})
   }
 
   updateValue (ev) {
@@ -33,16 +32,21 @@ export default class Calibrate extends React.PureComponent {
 
   render () {
     var menuItems = [
-      <MenuItem key='high' eventKey='high'>High</MenuItem>,
-      <MenuItem key='mid' eventKey='mid'>Mid</MenuItem>,
-      <MenuItem key='low' eventKey='low'>Low</MenuItem>
+      <a className='dropdown-item' key='high' onClick={this.setType('high')}>High</a>,
+      <a className='dropdown-item' key='mid' onClick={this.setType('mid')}>Mid</a>,
+      <a className='dropdown-item' onClick={this.setType('low')} key='low'>Low</a>
     ]
     return (
       <div className='container'>
         <div className='col-sm-2'>
-          <DropdownButton title={this.state.type} onSelect={this.setType} id={this.props.probe + '-calibration-type'}>
-            {menuItems}
-          </DropdownButton>
+          <div className='dropdown'>
+            <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.probe + '-calibration-type'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+              {this.state.type}
+            </button>
+            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+              {menuItems}
+            </div>
+          </div>
         </div>
         <div className='col-sm-2'>
           <div className='input-group'>

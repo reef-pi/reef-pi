@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {fetchEquipments} from './redux/actions/equipment'
 
 class selectEquipment extends React.Component {
@@ -25,30 +24,42 @@ class selectEquipment extends React.Component {
   }
 
   equipmentList () {
-    var menuItems = [ <MenuItem key='none' active={this.state.equipment === undefined} eventKey='none'>-</MenuItem> ]
+    var menuItems = [ 
+      <a className='dropdown-item' href="#" key='none' onClick={this.setEquipment('none')}>
+        {'--'}
+      </a>
+    ]
     $.each(this.props.equipments, function (k, v) {
+      var cName = 'dropdown-item'
       var active = false
       if (this.state.equipment !== undefined) {
-        active = this.state.equipment.id === v.id
+        if(this.state.equipment.id === v.id){
+          cName+= ' active'
+        }
       }
-      menuItems.push(<MenuItem key={k} active={active} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
+      menuItems.push(
+        <a className={cName} href="#" key={k} onClick={this.setEquipment(k)}>
+          <span id={this.props.id + '-' + v.name}>{v.name}</span>
+        </a>)
     }.bind(this))
     return menuItems
   }
 
-  setEquipment (k, ev) {
-    if (k === 'none') {
+  setEquipment (k) {
+    return(()=>{
+      if (k === 'none') {
+        this.setState({
+          equipment: undefined
+        })
+        this.props.update('')
+        return
+      }
+      var eq = this.props.equipments[k]
       this.setState({
-        equipment: undefined
+        equipment: eq
       })
-      this.props.update('')
-      return
-    }
-    var eq = this.props.equipments[k]
-    this.setState({
-      equipment: eq
+      this.props.update(eq.id)
     })
-    this.props.update(eq.id)
   }
 
   render () {
@@ -58,10 +69,13 @@ class selectEquipment extends React.Component {
       eqName = this.state.equipment.name
     }
     return (
-      <div className='container'>
-        <DropdownButton title={eqName} id={this.props.id} onSelect={this.setEquipment} disabled={readOnly}>
+      <div className="dropdown">
+        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
+          {eqName}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {this.equipmentList()}
-        </DropdownButton>
+        </div>
       </div>
     )
   }

@@ -39,6 +39,7 @@ export function reduxDelete (params) {
           if (params.suppressError) {
             return
           }
+          console.log(response)
           showAlert(response.statusText)
         }
         return response
