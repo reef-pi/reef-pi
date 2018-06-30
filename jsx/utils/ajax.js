@@ -16,8 +16,9 @@ export function reduxGet (params) {
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
-            console.log('removing creds')
+            showAlert('Authentication failure')
             SignIn.removeCreds()
+            return
           }
           if (params.suppressError) {
             return
