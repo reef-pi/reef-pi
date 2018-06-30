@@ -22,6 +22,7 @@ class main extends React.Component {
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
     this.removeLight = this.removeLight.bind(this)
+    this.newLightUI = this.newLightUI.bind(this)
   }
 
   removeLight (id) {
@@ -98,36 +99,45 @@ class main extends React.Component {
     })
     $('#jackName').val('')
   }
-
-  render () {
+  newLightUI() {
     var jack = ''
     if (this.state.selectedJack !== undefined) {
       var j = this.props.jacks[this.state.selectedJack]
       jack = j.name
     }
-    var dStyle = {
-      display: this.state.addLight ? 'block' : 'none'
+    return(
+      <div className='row'>
+        <div className='col-lg-1'>Name</div>
+        <div className='col-lg-2'><input type='text' id='lightName' /></div>
+        <div className='col-lg-1'/>
+        <div className='col-lg-1'>Jack</div>
+        <div className='col-lg-1'>
+        <div className='dropdown'>
+          <button className='btn btn-secondary dropdown-toggle' type='button' id='jack' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+            {jack}
+          </button>
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+           {this.jacksList()}
+         </div>
+       </div>
+      </div>
+      <div className='col-lg-1'>
+        <input type='button' id='createLight' value='add' onClick={this.addLight} className='btn btn-outline-primary' />
+      </div>
+    </div>)
+  }
+
+  render () {
+    var nLight = <div />
+    if(this.state.addLight){
+      nLight = this.newLightUI()
     }
     return (
       <div className='container'>
-        <div className='container'>
-          { this.lightsList() }
-        </div>
+        { this.lightsList() }
         <div className='container'>
           <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />
-          <div style={dStyle}>
-            Name: <input type='text' id='lightName' />
-            Jack:
-            <div className='dropdown'>
-              <button className='btn btn-secondary dropdown-toggle' type='button' id='jack' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                {jack}
-              </button>
-              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                {this.jacksList()}
-              </div>
-            </div>
-            <input type='button' id='createLight' value='add' onClick={this.addLight} className='btn btn-outline-primary' />
-          </div>
+          {nLight}
         </div>
       </div>
     )
