@@ -74,20 +74,24 @@ export default class Channel extends React.Component {
   sliderList () {
     var values = this.state.channel.values
     var rangeStyle = {
-      WebkitAppearance: 'slider-vertical'
+      WebkitAppearance: 'slider-vertical',
+      writingMode: 'bt-lr',
+      padding: '0 5px',
+      width: '8px',
+      height: '175px'
     }
     var list = []
     var labels = ['12 am', '2 am', '4 am', '6 am', '8 am', '10 am', '12 pm', '2 pm', '4 pm', '6 pm', '8 pm', '10 pm']
 
     for (var i = 0; i < 12; i++) {
       list.push(
-        <div className='col-sm-1 text-center' key={i + 1}>
-          <div className='row'>{values[i]}</div>
-          <div className='row'>
-            <input className='col-xs-1' type='range' style={rangeStyle} onChange={this.curry(i)} value={values[i]} id={'intensity-' + i} />
+        <div className='col-sm-1' key={i + 1}>
+          <div className='row text-center'>
+            {values[i]}
           </div>
-          <div className='row'>
-            <label>{labels[i]}</label>
+          <input type='range' style={rangeStyle} onChange={this.curry(i)} value={values[i]} id={'intensity-' + i} orient='vertical' />
+          <div className='row text-center'>
+            {labels[i]}
           </div>
         </div>
       )
@@ -96,11 +100,14 @@ export default class Channel extends React.Component {
   }
 
   render () {
-    var showOnDemandSlider = {
-      display: this.state.channel.auto ? 'none' : 'block'
-    }
-    var show24HourSliders = {
-      display: this.state.channel.auto ? 'block' : 'none'
+    var channel = <Slider
+      pin={this.props.pin}
+      name={this.props.ch.name}
+      onChange={this.updateFixedValue}
+      getValue={this.getFixedValue}
+    />
+    if (this.state.channel.auto) {
+      channel = this.sliderList()
     }
     return (
       <div className='container'>
@@ -115,11 +122,8 @@ export default class Channel extends React.Component {
           Max<input type='text' onChange={this.updateMax} value={this.state.channel.max} />
           Start<input type='text' onChange={this.updateStartMin} value={this.state.channel.start_min} />
         </div>
-        <div className='row' style={show24HourSliders}>
-          {this.sliderList()}
-        </div>
-        <div className='row' style={showOnDemandSlider}>
-          <Slider pin={this.props.pin} name={this.props.ch.name} onChange={this.updateFixedValue} getValue={this.getFixedValue} style={showOnDemandSlider} />
+        <div className='row'>
+          {channel}
         </div>
       </div>
     )

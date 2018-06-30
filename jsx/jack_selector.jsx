@@ -104,10 +104,20 @@ class jackSelector extends React.Component {
   render () {
     return (
       <div className='container'>
-        Jack
-        {this.jacks()}
-        Pins
-        {this.pins()}
+        <div className='row'>
+          <div className='col-lg-1'>
+            Jack
+          </div>
+          <div className='col-lg-1'>
+            {this.jacks()}
+          </div>
+          <div className='col-lg-1'>
+            Pin
+          </div>
+          <div className='col-lg-1'>
+          {this.pins()}
+          </div>
+        </div>
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import $ from 'jquery'
+import $, {isEmptyObject} from 'jquery'
 import {fetchInlets} from '../redux/actions/inlets'
 import {connect} from 'react-redux'
 
@@ -23,10 +23,25 @@ class inletSelector extends React.Component {
     this.props.fetchInlets()
   }
 
+  static getDerivedStateFromProps (props, state) {
+    if (props.inlets === undefined) {
+      return null
+    }
+    if (isEmptyObject(props.inlets)) {
+      return null
+    }
+    $.each(props.inlets, function (k, v) {
+      if (v.id === props.active) {
+        state.inlet = v
+      }
+    })
+    return state
+  }
+
   inlets () {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var title = ''
-    var id = ''
+    var id = this.props.active
     if (this.state.inlet !== undefined) {
       title = this.state.inlet.name
       id = this.state.inlet.id
@@ -71,8 +86,14 @@ class inletSelector extends React.Component {
   render () {
     return (
       <div className='container'>
-        Inlet
-        {this.inlets()}
+        <div className='row'>
+          <div className='col-lg-1'>
+            Inlet
+          </div>
+          <div className='col-lg-1'>
+            {this.inlets()}
+          </div>
+        </div>
       </div>
     )
   }

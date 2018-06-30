@@ -153,9 +153,7 @@ class probe extends React.Component {
               <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
             </div>
           </div>
-          <div className='row'>
-            { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : <div /> }
-          </div>
+          { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : '' }
         </div>
       </div>
     )
