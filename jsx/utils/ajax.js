@@ -15,6 +15,11 @@ export function reduxGet (params) {
     return fetch(params.url, {method: 'GET', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 401) {
+            showAlert('Authentication failure')
+            SignIn.removeCreds()
+            return
+          }
           if (params.suppressError) {
             return
           }
