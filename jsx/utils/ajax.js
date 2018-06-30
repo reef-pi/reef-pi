@@ -15,6 +15,10 @@ export function reduxGet (params) {
     return fetch(params.url, {method: 'GET', headers: makeHeaders()})
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 401) {
+            console.log('removing creds')
+            SignIn.removeCreds()
+          }
           if (params.suppressError) {
             return
           }
