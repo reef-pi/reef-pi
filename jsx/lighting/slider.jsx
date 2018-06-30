@@ -15,11 +15,9 @@ export default class Slider extends React.Component {
   render () {
     var value = this.props.getValue()
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-sm-1'>{value}</div>
-          <input className='col-sm-6' type='range' onChange={this.update} value={value} id={'intensity-' + this.props.name} />
-        </div>
+      <div className='row'>
+        <div className='col-sm-1'>{value}</div>
+        <input className='col-sm-6' type='range' onChange={this.update} value={value} id={'intensity-' + this.props.name} />
       </div>
     )
   }
