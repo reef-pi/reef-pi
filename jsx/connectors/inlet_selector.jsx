@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {fetchInlets} from '../redux/actions/inlets'
 import {connect} from 'react-redux'
 
@@ -34,28 +33,39 @@ class inletSelector extends React.Component {
     }
     var items = []
     $.each(this.props.inlets, function (k, v) {
+      var cName='dropdown-item'
+      if(v.id === id){
+        cName+= ' active'
+      }
       items.push(
-        <MenuItem key={k} active={v.id === id} eventKey={k}>
+        <a className={cName} href="#" onClick={this.set(k)} key={k}>
           <span id={this.props.name + '-' + v.id}>{v.name}</span>
-        </MenuItem>
+        </a>
       )
     }.bind(this))
     return (
-      <DropdownButton title={title} id={this.props.name + '-inlet'} onSelect={this.set} disabled={readOnly}>
-        {items}
-      </DropdownButton>
+      <div className="dropdown">
+         <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.name + '-inlet'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
+           {title}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {items}
+        </div>
+      </div>
     )
   }
 
-  set (k, ev) {
-    var i = this.props.inlets[k]
-    if (i === undefined) {
-      return
-    }
-    this.setState({
-      inlet: i
+  set (k) {
+    return(() => {
+      var i = this.props.inlets[k]
+      if (i === undefined) {
+        return
+      }
+      this.setState({
+        inlet: i
+      })
+      this.props.update(i.id)
     })
-    this.props.update(i.id)
   }
 
   render () {

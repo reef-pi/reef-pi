@@ -28,7 +28,7 @@ export default class Configuration extends React.Component {
     var id = label + '_config'
     return (
       <div className='row'>
-        <button id={'btn-' + label} onClick={() => $('#' + id).toggle()} className='btn btn-secondary btn-lg btn-block'>{label} </button>
+        <button id={'btn-' + label} onClick={() => $('#' + id).toggle()} className='btn btn-outline-secondary btn-lg btn-block'>{label} </button>
         <div className='container' id={id}>
           {component}
         </div>

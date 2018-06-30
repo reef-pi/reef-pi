@@ -2,7 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light.jsx'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import {showAlert, hideAlert} from '../utils/alert.js'
+import {showAlert} from '../utils/alert.js'
 import {confirm} from '../utils/confirm.js'
 import {updateLight, fetchLights, createLight, deleteLight} from '../redux/actions/lights'
 import {fetchJacks} from '../redux/actions/jacks'
@@ -37,7 +37,6 @@ class main extends React.Component {
   componentWillMount () {
     this.props.fetchLights()
     this.props.fetchJacks()
-    hideAlert()
   }
 
   setJack (i, ev) {
@@ -60,10 +59,7 @@ class main extends React.Component {
       return
     }
     if ($('#lightName').val() === '') {
-      this.setState({
-        showAlert: true,
-        alertMsg: 'Specify light name'
-      })
+      showAlert('Specify light name')
       return
     }
     var jack = this.props.jacks[this.state.selectedJack].id

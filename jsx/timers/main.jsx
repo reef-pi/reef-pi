@@ -69,12 +69,14 @@ class Main extends React.Component {
     $.each(this.props.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item row'>
-          <div className='col-sm-10'>
-            <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
-          </div>
-          <div className='col-sm-2'>
-            <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
-          </div>
+          <div className='row'>
+            <div className='col-lg-8 col-xs-8'>
+              <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
+            </div>
+            <div className='col-lg-1 col-xs-2'>
+              <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
+            </div>
+         </div>
         </li>
       )
     }.bind(this))

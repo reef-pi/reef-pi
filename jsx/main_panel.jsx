@@ -14,6 +14,7 @@ import 'react-responsive-tabs/styles.css'
 import Tabs from 'react-responsive-tabs'
 import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
+import {hideAlert} from './utils/alert'
 
 const caps = {
   'equipments': <Equipments />,
@@ -30,6 +31,7 @@ const caps = {
 class mainPanel extends React.Component {
   componentDidMount () {
     this.props.fetchUIData()
+    hideAlert()
   }
 
   render () {
