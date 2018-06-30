@@ -1,5 +1,4 @@
 import React from 'react'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import ComponentSelector from './component_selector.jsx'
 
 // props: rows, columns, hook, cells, tcs, atos
@@ -94,21 +93,25 @@ export default class Grid extends React.Component {
     }.bind(this))
   }
 
-  setType (i, j) {
-    return (function (k, ev) {
+  setType (i, j, type) {
+    return (function () {
       var cells = this.initiatlizeCell(i, j)
-      cells[i][j].type = k
-      cells[i][j].ui = this.cellUI(k, '', i, j)
+      cells[i][j].type = type
+      cells[i][j].ui = this.cellUI(type, '', i, j)
       this.setState({cells: cells})
       this.props.hook(cells)
     }.bind(this))
   }
 
   menuItem (type, a, i, j) {
+    var cName = 'dropdown-item'
+    if (a) {
+      cName += ' active'
+    }
     return (
-      <MenuItem key={type} active={a} eventKey={type}>
+      <a className={cName} href='#' onClick={this.setType(i, j, type)} key={type + '-chart-' + i + '-' + j}>
         <span id={type + '-chart-' + i + '-' + j}>{type}</span>
-      </MenuItem>
+      </a>
     )
   }
 
@@ -140,9 +143,14 @@ export default class Grid extends React.Component {
         columns.push(
           <div className='col-sm-3' key={'chart-type-' + i + '-' + j} style={{border: '1px solid black'}}>
             <div className='row'>
-              <DropdownButton title={cells[i][j].type} id={'db-' + i + '-' + j} onSelect={this.setType(i, j)}>
-                {this.menuItems(i, j)}
-              </DropdownButton>
+              <div className='dropdown'>
+                <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                  {cells[i][j].type}
+                </button>
+                <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                  {this.menuItems(i, j)}
+                </div>
+              </div>
             </div>
             <div className='row'>
               {cells[i][j].ui}

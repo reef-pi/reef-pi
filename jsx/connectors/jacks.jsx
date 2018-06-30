@@ -20,11 +20,11 @@ class jacks extends React.Component {
   }
 
   setDriver (k) {
-    return(() => {
+    return () => {
       this.setState({
         driver: k
       })
-    })
+    }
   }
 
   remove (id) {
@@ -118,13 +118,13 @@ class jacks extends React.Component {
 
               <div className='col-sm-3'>
                 Driver
-                <div className="dropdown">
-                  <button className="btn btn-secondary dropdown-toggle" type="button" id="jack-type-selection" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div className='dropdown'>
+                  <button className='btn btn-secondary dropdown-toggle' type='button' id='jack-type-selection' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     {this.state.driver}
                   </button>
-                  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a className="dropdown-item" href="#" onClick={this.setDriver('rpi')}>rpi</a>
-                    <a className="dropdown-item" href="#" onClick={this.setDriver('pca9685')}>pca9685</a>
+                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
                   </div>
                 </div>
               </div>

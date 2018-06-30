@@ -76,7 +76,7 @@ class Main extends React.Component {
             <div className='col-lg-1 col-xs-2'>
               <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
             </div>
-         </div>
+          </div>
         </li>
       )
     }.bind(this))

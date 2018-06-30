@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class Equipment extends React.Component {
   constructor (props) {
@@ -32,28 +31,36 @@ export default class Equipment extends React.Component {
     this.setState({equipment: eq})
   }
 
-  setEquipment (k, ev) {
-    var eq = this.state.equipment
-    eq['id'] = this.props.equipments[k].id
-    eq['name'] = this.props.equipments[k].name
-    this.setState({equipment: eq})
-    this.props.updateHook(eq)
+  setEquipment (k) {
+    return () => {
+      var eq = this.state.equipment
+      eq['id'] = this.props.equipments[k].id
+      eq['name'] = this.props.equipments[k].name
+      this.setState({equipment: eq})
+      this.props.updateHook(eq)
+    }
   }
 
-  setEquipmentAction (k, ev) {
-    var eq = this.state.equipment
-    eq.on = k === 'on'
-    this.setState({
-      equipment: eq
-    })
-    this.props.updateHook(this.state.equipment)
+  setEquipmentAction (k) {
+    return () => {
+      var eq = this.state.equipment
+      eq.on = k
+      this.setState({
+        equipment: eq
+      })
+      this.props.updateHook(this.state.equipment)
+    }
   }
 
   equipmentList () {
     var menuItems = []
     $.each(this.props.equipments, function (k, v) {
-      menuItems.push(<MenuItem key={k} eventKey={k}><span id={'equipment-' + v.id}>{v.name}</span></MenuItem>)
-    })
+      menuItems.push(
+        <a key={k} className='dropdown-item' onClick={this.setEquipment(k)}>
+          <span id={'equipment-' + v.id}>{v.name}</span>
+        </a>
+      )
+    }.bind(this))
     return menuItems
   }
 
@@ -71,18 +78,28 @@ export default class Equipment extends React.Component {
             <div className='row'>
               <div className='col-sm-6'>Equipment</div>
               <div className='col-sm-6'>
-                <DropdownButton title={eqName} id='equipment' onSelect={this.setEquipment}>
-                  {this.equipmentList()}
-                </DropdownButton>
+                <div className='dropdown'>
+                  <button className='btn btn-secondary dropdown-toggle' type='button' id='equipment' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                    {eqName}
+                  </button>
+                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                    {this.equipmentList()}
+                  </div>
+                </div>
               </div>
             </div>
             <div className='row'>
               <label className='col-sm-6 '> Action</label>
               <span className='col-sm-6'>
-                <DropdownButton title={eqAction} id='equipmentAction' onSelect={this.setEquipmentAction}>
-                  <MenuItem key='on' eventKey='on'> On </MenuItem>
-                  <MenuItem key='off' eventKey='off'> Off </MenuItem>
-                </DropdownButton>
+                <div className='dropdown'>
+                  <button className='btn btn-secondary dropdown-toggle' type='button' id='equipmentAction' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                    {eqAction}
+                  </button>
+                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                    <a className='dropdown-item' onClick={this.setEquipmentAction(true)}> On </a>
+                    <a className='dropdown-item' onClick={this.setEquipmentAction(false)}> Off </a>
+                  </div>
+                </div>
               </span>
             </div>
             <div className='row'>

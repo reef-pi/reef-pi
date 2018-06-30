@@ -63,17 +63,17 @@ class main extends React.Component {
   }
 
   setOutlet (i) {
-    return(ev => {
+    return ev => {
       this.setState({
         selectedOutlet: i
       })
-    })
+    }
   }
 
   outletList () {
     var items = []
     $.each(this.props.outlets, function (i, v) {
-      items.push(<a className="dropdown-item" href="#" onClick={this.setOutlet(i)} key={'outlet-'+i}>
+      items.push(<a className='dropdown-item' href='#' onClick={this.setOutlet(i)} key={'outlet-' + i}>
         <span id={'outlet-'.concat(v.id)}>{v.name}</span>
       </a>)
     }.bind(this))
@@ -136,11 +136,11 @@ class main extends React.Component {
           <div style={dStyle}>
             Name: <input type='text' id='equipmentName' />
             Outlet:
-            <div className="dropdown">
-               <button className="btn btn-secondary dropdown-toggle" type="button" id="outlet" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 {outlet}
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id='outlet' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {outlet}
               </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
                 {this.outletList()}
               </div>
             </div>

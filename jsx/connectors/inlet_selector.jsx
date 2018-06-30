@@ -33,22 +33,22 @@ class inletSelector extends React.Component {
     }
     var items = []
     $.each(this.props.inlets, function (k, v) {
-      var cName='dropdown-item'
-      if(v.id === id){
-        cName+= ' active'
+      var cName = 'dropdown-item'
+      if (v.id === id) {
+        cName += ' active'
       }
       items.push(
-        <a className={cName} href="#" onClick={this.set(k)} key={k}>
+        <a className={cName} href='#' onClick={this.set(k)} key={k}>
           <span id={this.props.name + '-' + v.id}>{v.name}</span>
         </a>
       )
     }.bind(this))
     return (
-      <div className="dropdown">
-         <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.name + '-inlet'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
-           {title}
+      <div className='dropdown'>
+        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.name + '-inlet'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+          {title}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {items}
         </div>
       </div>
@@ -56,7 +56,7 @@ class inletSelector extends React.Component {
   }
 
   set (k) {
-    return(() => {
+    return () => {
       var i = this.props.inlets[k]
       if (i === undefined) {
         return
@@ -65,7 +65,7 @@ class inletSelector extends React.Component {
         inlet: i
       })
       this.props.update(i.id)
-    })
+    }
   }
 
   render () {

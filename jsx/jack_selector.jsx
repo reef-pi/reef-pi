@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 import {fetchJacks} from './redux/actions/jacks'
 import {connect} from 'react-redux'
 
@@ -37,32 +36,47 @@ class jackSelector extends React.Component {
     }
     var items = []
     $.each(this.props.jacks, function (k, v) {
-      items.push(<MenuItem key={k} active={v.id === id} eventKey={k}><span id={this.props.id + '-' + v.name}>{v.name}</span></MenuItem>)
+      var cName='dropdown-item'
+      if(v.id === id){
+        cName+= ' active'
+      }
+      items.push(<a className={cName} href="#" onClick={this.setJack(k)} key={k}>
+        <span id={this.props.id + '-' + v.name}>{v.name}</span>
+      </a>)
     }.bind(this))
     return (
-      <DropdownButton title={title} id={this.props.id + 'jack'} onSelect={this.setJack}>
-        {items}
-      </DropdownButton>
+      <div className="dropdown">
+        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id + 'jack'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {title}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {items}
+        </div>
+      </div>
     )
   }
 
-  setJack (k, ev) {
-    var j = this.props.jacks[k]
-    if (j === undefined) {
-      return
-    }
-    this.setState({
-      jack: j,
-      pin: j.pins[0]
+  setJack (k) {
+   return(()=>{
+      var j = this.props.jacks[k]
+      if (j === undefined) {
+        return
+      }
+      this.setState({
+        jack: j,
+        pin: j.pins[0]
+      })
+      this.props.update(j.id, j.pins[0])
     })
-    this.props.update(j.id, j.pins[0])
   }
 
-  setPin (k, ev) {
-    this.setState({
-      pin: k
+  setPin (k) {
+    return(()=>{
+      this.setState({
+        pin: k
+      })
+      this.props.update(this.state.jack.id, k)
     })
-    this.props.update(this.state.jack.id, k)
   }
 
   pins () {
@@ -71,12 +85,19 @@ class jackSelector extends React.Component {
     }
     var items = []
     $.each(this.state.jack.pins, function (k, v) {
-      items.push(<MenuItem key={k} eventKey={v}>{v}</MenuItem>)
-    })
+      items.push(
+        <a className='dropdown-item' href="#" key={k} onClick={this.setPin(v)}>{v}</a>
+      )
+    }.bind(this))
     return (
-      <DropdownButton title={this.state.pin.toString()} id={this.props.id + 'pin'} onSelect={this.setPin}>
-        {items}
-      </DropdownButton>
+      <div className="dropdown">
+        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id + '-pin'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {this.state.pin.toString()} 
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {items}
+        </div>
+      </div>
     )
   }
 

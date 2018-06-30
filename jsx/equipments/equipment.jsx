@@ -23,14 +23,6 @@ export default class Equipment extends React.Component {
   }
 
   render () {
-    var noPadding = {
-      padding: '0 !important',
-      margin: '0 !important',
-      marginLeft: '0px',
-      marginRight: '0px',
-      paddingLeft: '0px',
-      paddingRight: '0px'
-    }
     var onBtnClass = 'btn btn-secondary btn-block'
     if (this.state.action === 'off') {
       onBtnClass = 'btn btn-success btn-block'
