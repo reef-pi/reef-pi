@@ -47,7 +47,7 @@ build: clean go-get test bin
 
 .PHONY: ui
 ui:
-	 ./node_modules/.bin/webpack
+	 ./node_modules/.bin/webpack --mode=production
 
 .PHONY: deb
 deb: ui
