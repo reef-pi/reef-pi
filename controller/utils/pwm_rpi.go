@@ -6,19 +6,22 @@ import (
 )
 
 type rpiDriver struct {
-	driver pwm.Driver
-	Freq   int
+	driver  pwm.Driver
+	Freq    int
+	DevMode bool
 }
 
-func NewRPIPWMDriver() PWM {
+func NewRPIPWMDriver(freq int, devMode bool) PWM {
 	return &rpiDriver{
-		driver: pwm.New(),
-		Freq:   150000000, //1.5K Hhz (pca9685 max)
+		driver:  pwm.New(),
+		Freq:    freq * 100000, //1.5K Hhz (pca9685 max)
+		DevMode: devMode,
 	}
 }
 func (d *rpiDriver) Start() error {
 	return nil
 }
+
 func (d *rpiDriver) Stop() error {
 	return nil
 }
@@ -35,6 +38,9 @@ func (d *rpiDriver) Get(pin int) (int, error) {
 }
 
 func (d *rpiDriver) On(pin int) error {
+	if d.DevMode {
+		return nil
+	}
 	exported, err := d.driver.IsExported(pin)
 	if err != nil {
 		return err
@@ -44,15 +50,19 @@ func (d *rpiDriver) On(pin int) error {
 			return err
 		}
 	}
-	if err := d.driver.Frequency(pin, d.Freq); err != nil {
+	if err := d.driver.DutyCycle(pin, 0); err != nil {
 		return err
 	}
-	if err := d.driver.DutyCycle(pin, 0); err != nil {
+	if err := d.driver.Frequency(pin, d.Freq); err != nil {
 		return err
 	}
 	return d.driver.Enable(pin)
 }
+
 func (d *rpiDriver) Off(pin int) error {
+	if d.DevMode {
+		return nil
+	}
 	exported, err := d.driver.IsExported(pin)
 	if err != nil {
 		return err

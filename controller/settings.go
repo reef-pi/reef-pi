@@ -17,6 +17,8 @@ type Settings struct {
 	HealthCheck  HealthCheckNotify `json:"health_check"`
 	HTTPS        bool              `json:"https"`
 	PCA9685      bool              `json:"pca9685"`
+	Pprof        bool              `json:"pprof"`
+	PWMFreq      int               `json:"pwm_freq"`
 }
 
 var DefaultSettings = Settings{
@@ -24,6 +26,7 @@ var DefaultSettings = Settings{
 	Interface:    "wlan0",
 	Address:      "0.0.0.0:80",
 	Capabilities: DefaultCapabilities,
+	PWMFreq:      100,
 	HealthCheck: HealthCheckNotify{
 		MaxMemory: 500,
 		MaxCPU:    2,

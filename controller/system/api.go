@@ -6,6 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+	"net/http/pprof"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
@@ -17,6 +18,17 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/admin/reboot", c.Reboot).Methods("POST")
 	r.HandleFunc("/api/admin/reload", c.reload).Methods("POST")
 	r.HandleFunc("/api/info", c.GetSummary).Methods("GET")
+	if c.config.Pprof {
+		c.enablePprof(r)
+	}
+}
+
+func (c *Controller) enablePprof(r *mux.Router) {
+	r.HandleFunc("/debug/pprof/", pprof.Index)
+	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	r.HandleFunc("/debug/pprof/trace", pprof.Trace)
 }
 
 func (c *Controller) EnableDisplay(w http.ResponseWriter, r *http.Request) {

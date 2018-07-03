@@ -13,7 +13,7 @@ class settings extends React.Component {
     this.state = {
       capabilities: props.capabilities,
       settings: {
-        name: '', interface: '', address: ''
+        name: '', interface: '', address: '', pwm_freq: 1500
       },
       updated: false
     }
@@ -90,10 +90,13 @@ class settings extends React.Component {
     this.props.fetchSettings()
   }
 
-  toRow (label) {
+  toRow (label, parse = false) {
     var fn = function (ev) {
       var settings = this.state.settings
       settings[label] = ev.target.value
+      if (parse) {
+        settings[label] = parseInt(settings[label])
+      }
       this.setState({
         settings: settings,
         updated: true
@@ -131,6 +134,7 @@ class settings extends React.Component {
             {this.toRow('name')}
             {this.toRow('interface')}
             {this.toRow('address')}
+            {this.toRow('pwm_freq', true)}
             <div className='input-group'>
               <label className='input-group-addon'>Notification</label>
               <input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} className='form-control' />
@@ -147,6 +151,10 @@ class settings extends React.Component {
             <div className='input-group'>
               <label className='input-group-addon'>Enable PCA9685</label>
               <input type='checkbox' id='enable_pca9685' onClick={this.updateCheckbox('pca9685')} defaultChecked={this.state.settings.pca9685} className='form-control' />
+            </div>
+            <div className='input-group'>
+              <label className='input-group-addon'>Enable profiling</label>
+              <input type='checkbox' id='enable_pprof' onClick={this.updateCheckbox('pprof')} defaultChecked={this.state.settings.pprof} className='form-control' />
             </div>
           </div>
         </div>
