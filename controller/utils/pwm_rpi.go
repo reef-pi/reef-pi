@@ -6,14 +6,16 @@ import (
 )
 
 type rpiDriver struct {
-	driver pwm.Driver
-	Freq   int
+	driver  pwm.Driver
+	Freq    int
+	DevMode bool
 }
 
-func NewRPIPWMDriver(freq int) PWM {
+func NewRPIPWMDriver(freq int, devMode bool) PWM {
 	return &rpiDriver{
-		driver: pwm.New(),
-		Freq:   freq * 100000, //1.5K Hhz (pca9685 max)
+		driver:  pwm.New(),
+		Freq:    freq * 100000, //1.5K Hhz (pca9685 max)
+		DevMode: devMode,
 	}
 }
 func (d *rpiDriver) Start() error {
@@ -36,6 +38,9 @@ func (d *rpiDriver) Get(pin int) (int, error) {
 }
 
 func (d *rpiDriver) On(pin int) error {
+	if d.DevMode {
+		return nil
+	}
 	exported, err := d.driver.IsExported(pin)
 	if err != nil {
 		return err
@@ -55,6 +60,9 @@ func (d *rpiDriver) On(pin int) error {
 }
 
 func (d *rpiDriver) Off(pin int) error {
+	if d.DevMode {
+		return nil
+	}
 	exported, err := d.driver.IsExported(pin)
 	if err != nil {
 		return err

@@ -59,7 +59,7 @@ func New(version, database string) (*ReefPi, error) {
 		bus = b
 	}
 	telemetry := initializeTelemetry(store, s.Notification)
-	pi := utils.NewRPIPWMDriver(s.PWMFreq)
+	pi := utils.NewRPIPWMDriver(s.PWMFreq, s.Capabilities.DevMode)
 	pConfig := utils.DefaultPWMConfig
 	pConfig.DevMode = true
 
@@ -69,6 +69,7 @@ func New(version, database string) (*ReefPi, error) {
 		return nil, err
 	}
 	if s.PCA9685 {
+		pConfig.DevMode = s.Capabilities.DevMode
 		p, err := utils.NewPWM(bus, pConfig)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pca9685 driver")
