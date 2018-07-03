@@ -26,6 +26,7 @@ var DefaultSettings = Settings{
 	Interface:    "wlan0",
 	Address:      "0.0.0.0:80",
 	Capabilities: DefaultCapabilities,
+	PWMFreq:      100,
 	HealthCheck: HealthCheckNotify{
 		MaxMemory: 500,
 		MaxCPU:    2,

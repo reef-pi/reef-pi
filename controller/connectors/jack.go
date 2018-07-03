@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
 )
 
@@ -58,7 +59,24 @@ func NewJacks(store utils.Store, r, p utils.PWM) *Jacks {
 }
 
 func (c *Jacks) Setup() error {
-	return c.store.CreateBucket(JackBucket)
+	if err := c.store.CreateBucket(JackBucket); err != nil {
+		return err
+	}
+	jacks, err := c.List()
+	if err != nil {
+		return err
+	}
+
+	for _, j := range jacks {
+		if j.Driver == "rpi" {
+			for _, p := range j.Pins {
+				if err := c.rpi.On(p); err != nil {
+					log.Println("ERROR: failed to switch on rpi based jack:", j.Name, "pin:", p)
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func (c *Jacks) Get(id string) (Jack, error) {
@@ -88,7 +106,17 @@ func (c *Jacks) Create(j Jack) error {
 		j.ID = id
 		return &j
 	}
-	return c.store.Create(JackBucket, fn)
+	if err := c.store.Create(JackBucket, fn); err != nil {
+		return err
+	}
+	if j.Driver == "rpi" {
+		for _, p := range j.Pins {
+			if err := c.rpi.On(p); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (c *Jacks) Update(id string, j Jack) error {
@@ -98,6 +126,13 @@ func (c *Jacks) Update(id string, j Jack) error {
 	j.ID = id
 	if err := c.store.Update(JackBucket, id, j); err != nil {
 		return err
+	}
+	if j.Driver == "rpi" {
+		for _, p := range j.Pins {
+			if err := c.rpi.On(p); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -124,9 +159,6 @@ type PinValues map[int]int
 func (jacks *Jacks) DirectControl(driver string, pin, v int) error {
 	switch driver {
 	case "rpi":
-		if err := jacks.rpi.On(pin); err != nil {
-			return err
-		}
 		return jacks.rpi.Set(pin, v)
 	case "pca9685":
 		return jacks.pca9685.Set(pin, v)

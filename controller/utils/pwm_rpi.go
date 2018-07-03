@@ -19,6 +19,7 @@ func NewRPIPWMDriver(freq int) PWM {
 func (d *rpiDriver) Start() error {
 	return nil
 }
+
 func (d *rpiDriver) Stop() error {
 	return nil
 }
@@ -44,14 +45,15 @@ func (d *rpiDriver) On(pin int) error {
 			return err
 		}
 	}
-	if err := d.driver.Frequency(pin, d.Freq); err != nil {
+	if err := d.driver.DutyCycle(pin, 0); err != nil {
 		return err
 	}
-	if err := d.driver.DutyCycle(pin, 0); err != nil {
+	if err := d.driver.Frequency(pin, d.Freq); err != nil {
 		return err
 	}
 	return d.driver.Enable(pin)
 }
+
 func (d *rpiDriver) Off(pin int) error {
 	exported, err := d.driver.IsExported(pin)
 	if err != nil {
