@@ -148,6 +148,10 @@ class settings extends React.Component {
               <label className='input-group-addon'>Enable PCA9685</label>
               <input type='checkbox' id='enable_pca9685' onClick={this.updateCheckbox('pca9685')} defaultChecked={this.state.settings.pca9685} className='form-control' />
             </div>
+            <div className='input-group'>
+              <label className='input-group-addon'>Enable profiling</label>
+              <input type='checkbox' id='enable_pprof' onClick={this.updateCheckbox('pprof')} defaultChecked={this.state.settings.pprof} className='form-control' />
+            </div>
           </div>
         </div>
         <div className='row'>

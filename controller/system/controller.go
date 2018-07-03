@@ -12,6 +12,7 @@ type Config struct {
 	Display   bool   `json:"display"`
 	DevMode   bool   `json:"dev_mode"`
 	Version   string `json:"version"`
+	Pprof     bool   `json:"pprof"`
 }
 
 type Controller struct {
