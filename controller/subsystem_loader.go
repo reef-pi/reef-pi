@@ -133,6 +133,8 @@ func (r *ReefPi) loadSubsystems() error {
 			Name:      r.settings.Name,
 			Display:   r.settings.Display,
 			DevMode:   r.settings.Capabilities.DevMode,
+			Pprof:     r.settings.Pprof,
+			PWMFreq:   r.settings.PWMFreq,
 			Version:   r.version,
 		}
 		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)

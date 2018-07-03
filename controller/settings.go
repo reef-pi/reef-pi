@@ -17,6 +17,8 @@ type Settings struct {
 	HealthCheck  HealthCheckNotify `json:"health_check"`
 	HTTPS        bool              `json:"https"`
 	PCA9685      bool              `json:"pca9685"`
+	Pprof        bool              `json:"pprof"`
+	PWMFreq      int               `json:"pwm_freq"`
 }
 
 var DefaultSettings = Settings{

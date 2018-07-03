@@ -59,7 +59,7 @@ func New(version, database string) (*ReefPi, error) {
 		bus = b
 	}
 	telemetry := initializeTelemetry(store, s.Notification)
-	pi := utils.NewRPIPWMDriver()
+	pi := utils.NewRPIPWMDriver(s.PWMFreq)
 	pConfig := utils.DefaultPWMConfig
 	pConfig.DevMode = true
 

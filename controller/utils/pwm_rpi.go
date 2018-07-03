@@ -10,10 +10,10 @@ type rpiDriver struct {
 	Freq   int
 }
 
-func NewRPIPWMDriver() PWM {
+func NewRPIPWMDriver(freq int) PWM {
 	return &rpiDriver{
 		driver: pwm.New(),
-		Freq:   150000000, //1.5K Hhz (pca9685 max)
+		Freq:   freq * 100000, //1.5K Hhz (pca9685 max)
 	}
 }
 func (d *rpiDriver) Start() error {

@@ -13,6 +13,7 @@ type Config struct {
 	DevMode   bool   `json:"dev_mode"`
 	Version   string `json:"version"`
 	Pprof     bool   `json:"pprof"`
+	PWMFreq   int    `json:"pwm_freq"`
 }
 
 type Controller struct {

@@ -13,7 +13,7 @@ class settings extends React.Component {
     this.state = {
       capabilities: props.capabilities,
       settings: {
-        name: '', interface: '', address: ''
+        name: '', interface: '', address: '', pwm_freq: 1500
       },
       updated: false
     }
@@ -90,10 +90,13 @@ class settings extends React.Component {
     this.props.fetchSettings()
   }
 
-  toRow (label) {
+  toRow (label, parse = false) {
     var fn = function (ev) {
       var settings = this.state.settings
       settings[label] = ev.target.value
+      if (parse) {
+        settings[label] = parseInt(settings[label])
+      }
       this.setState({
         settings: settings,
         updated: true
@@ -131,6 +134,7 @@ class settings extends React.Component {
             {this.toRow('name')}
             {this.toRow('interface')}
             {this.toRow('address')}
+            {this.toRow('pwm_freq', true)}
             <div className='input-group'>
               <label className='input-group-addon'>Notification</label>
               <input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} className='form-control' />
