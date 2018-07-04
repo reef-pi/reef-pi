@@ -23,7 +23,7 @@ export function reduxGet (params) {
           if (params.suppressError) {
             return
           }
-          showAlert(response.statusText)
+          showAlert(response.statusText, response.text())
         }
         return response
       })
@@ -45,7 +45,7 @@ export function reduxDelete (params) {
             return
           }
           console.log(response)
-          showAlert(response.statusText)
+          showAlert(response.statusText, response.text())
         }
         return response
       })
@@ -65,7 +65,7 @@ export function reduxPut (params) {
           if (params.suppressError) {
             return
           }
-          showAlert(response.statusText)
+          showAlert(response.statusText, response.text())
         }
         return response
       })
@@ -88,7 +88,7 @@ export function reduxPost (params) {
         if (params.suppressError) {
           return
         }
-        showAlert(response.statusText)
+        showAlert(response.statusText, response.text())
       }
       return response
     })
