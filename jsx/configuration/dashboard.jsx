@@ -2,10 +2,6 @@ import React from 'react'
 import Grid from './grid.jsx'
 import {connect} from 'react-redux'
 import {fetchDashboard, updateDashboard} from '../redux/actions/dashboard'
-import {fetchATOs} from '../redux/actions/ato'
-import {fetchLights} from '../redux/actions/lights'
-import {fetchPhProbes} from '../redux/actions/phprobes'
-import {fetchTCs} from '../redux/actions/tcs'
 import {isEmptyObject} from 'jquery'
 
 class dashboard extends React.Component {
@@ -22,10 +18,6 @@ class dashboard extends React.Component {
 
   componentDidMount () {
     this.props.fetchDashboard()
-    this.props.fetchATOs()
-    this.props.fetchLights()
-    this.props.fetchPhProbes()
-    this.props.fetchTCs()
   }
 
   static getDerivedStateFromProps (props, state) {
@@ -134,10 +126,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchDashboard: () => dispatch(fetchDashboard()),
-    fetchATOs: () => dispatch(fetchATOs()),
-    fetchTCs: () => dispatch(fetchTCs()),
-    fetchLights: () => dispatch(fetchLights()),
-    fetchPhProbes: () => dispatch(fetchPhProbes()),
     updateDashboard: (d) => dispatch(updateDashboard(d))
   }
 }
