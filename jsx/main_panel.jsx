@@ -16,6 +16,7 @@ import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
 import {hideAlert} from './utils/alert'
 import Summary from './summary.jsx'
+import '../assets/reef_pi.css'
 
 const caps = {
   'equipments': <Equipments />,
@@ -58,7 +59,8 @@ class mainPanel extends React.Component {
     }.bind(this))
     return (
       <div className='container'>
-        <Tabs items={panels} />
+        <Tabs items={panels} panelClass='reef_pi_panel'/>
+				<hr />
         <Summary />
       </div>
     )
