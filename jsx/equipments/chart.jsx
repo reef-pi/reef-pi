@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, XAxis, BarChart, Bar} from 'recharts'
+import {ResponsiveContainer, Tooltip, XAxis, BarChart, Bar} from 'recharts'
 import $ from 'jquery'
 import {fetchEquipments} from '../redux/actions/equipment'
 import {connect} from 'react-redux'
@@ -30,12 +30,14 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>Equipment</span>
-        <BarChart width={this.props.width} height={this.props.height} data={equipments}>
-          <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
-          <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
-          <XAxis dataKey='name' />
-          <Tooltip />
-        </BarChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <BarChart data={equipments}>
+            <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
+            <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
+            <XAxis dataKey='name' />
+            <Tooltip />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     )
   }

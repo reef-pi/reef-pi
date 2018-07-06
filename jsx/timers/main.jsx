@@ -70,7 +70,7 @@ class Main extends React.Component {
       list.push(
         <li key={timer.name} className='list-group-item row'>
           <div className='row'>
-            <div className='col-lg-8 col-xs-8'>
+            <div className='col-lg-10 col-xs-10'>
               <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
             </div>
             <div className='col-lg-1 col-xs-2'>

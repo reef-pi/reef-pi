@@ -35,11 +35,9 @@ export default class Timer extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <div className='col-sm-3'>
-          <label className='text-primary'>{this.props.config.name}</label>
-        </div>
-        <div className='col-sm-9 pre'>{this.t2s()}</div>
+      <div className='row'>
+        <label className='text-primary'>{this.props.config.name}</label>
+        <div className='col-sm-6'><span className='small'>{this.t2s()}</span></div>
       </div>
     )
   }

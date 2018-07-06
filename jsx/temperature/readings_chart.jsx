@@ -1,5 +1,5 @@
 import React from 'react'
-import { Area, Tooltip, YAxis, XAxis, AreaChart } from 'recharts'
+import { Area, Tooltip, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
 import {fetchTCUsage} from '../redux/actions/tcs'
 import {connect} from 'react-redux'
 
@@ -28,18 +28,20 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - Temperature</span>
-        <AreaChart width={this.props.width} height={this.props.height} data={this.props.usage.current}>
-          <defs>
-            <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
-              <stop offset='5%' stopColor='#00C851' stopOpacity={0.8} />
-              <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <YAxis domain={[min, max]} dataKey='temperature' />
-          <XAxis dataKey='time' />
-          <Tooltip />
-          <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
-        </AreaChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <AreaChart data={this.props.usage.current}>
+            <defs>
+              <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
+                <stop offset='5%' stopColor='#00C851' stopOpacity={0.8} />
+                <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <YAxis domain={[min, max]} dataKey='temperature' />
+            <XAxis dataKey='time' />
+            <Tooltip />
+            <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     )
   }

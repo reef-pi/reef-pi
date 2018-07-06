@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
+import {ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar} from 'recharts'
 import {fetchATOUsage} from '../redux/actions/ato'
 import {connect} from 'react-redux'
 
@@ -35,12 +35,14 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - ATO Usage</span>
-        <BarChart width={this.props.width} height={this.props.height} data={this.props.usage.historical}>
-          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-          <YAxis label='minutes' />
-          <XAxis dataKey='time' />
-          <Tooltip />
-        </BarChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <BarChart data={this.props.usage.historical}>
+            <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
+            <YAxis label='minutes' />
+            <XAxis dataKey='time' />
+            <Tooltip />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     )
   }

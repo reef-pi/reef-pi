@@ -1,5 +1,5 @@
 import React from 'react'
-import { Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
+import {ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
 import {fetchHealth} from './redux/actions/health'
 import {connect} from 'react-redux'
 
@@ -30,14 +30,16 @@ class healthChart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>CPU/Memory ({this.props.trend})</span>
-        <LineChart width={this.props.width} height={this.props.height} data={healthStats}>
-          <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
-          <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
-          <XAxis dataKey='time' />
-          <Tooltip />
-          <Line dot={false} type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
-          <Line dot={false} type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
-        </LineChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <LineChart data={healthStats}>
+            <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
+            <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
+            <XAxis dataKey='time' />
+            <Tooltip />
+            <Line dot={false} type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
+            <Line dot={false} type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     )
   }

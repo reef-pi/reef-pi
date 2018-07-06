@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
+import {ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
 import $ from 'jquery'
 import {connect} from 'react-redux'
 
@@ -39,12 +39,14 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>Light - {this.props.config.name}</span>
-        <LineChart width={this.props.width} height={this.props.height} data={data}>
-          <XAxis dataKey='time' />
-          <YAxis />
-          <Tooltip />
-          {lines}
-        </LineChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <LineChart data={data}>
+            <XAxis dataKey='time' />
+            <YAxis />
+            <Tooltip />
+            {lines}
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     )
   }

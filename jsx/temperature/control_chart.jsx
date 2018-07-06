@@ -1,5 +1,5 @@
 import React from 'react'
-import {ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
+import {ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
 import $ from 'jquery'
 import {fetchTCUsage} from '../redux/actions/tcs'
 import {connect} from 'react-redux'
@@ -43,16 +43,18 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - Heater/Cooler</span>
-        <ComposedChart width={this.props.width} height={this.props.height} data={usage}>
-          <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
-          <YAxis yAxisId='right' orientation='right' />
-          <ReferenceLine yAxisId='right' y={0} />
-          <XAxis dataKey='time' />
-          <Tooltip />
-          <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
-          <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
-          <Line type='monotone' dataKey='temperature' stroke='#ce93d8' isAnimationActive={false} yAxisId='left' dot={false} />
-        </ComposedChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <ComposedChart data={usage}>
+            <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
+            <YAxis yAxisId='right' orientation='right' />
+            <ReferenceLine yAxisId='right' y={0} />
+            <XAxis dataKey='time' />
+            <Tooltip />
+            <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
+            <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
+            <Line type='monotone' dataKey='temperature' stroke='#ce93d8' isAnimationActive={false} yAxisId='left' dot={false} />
+          </ComposedChart>
+        </ResponsiveContainer>
       </div>
     )
   }
