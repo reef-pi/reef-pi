@@ -1,5 +1,5 @@
 import React from 'react'
-import {Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
+import {ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
 import {fetchProbeReadings} from '../redux/actions/phprobes'
 import {connect} from 'react-redux'
 
@@ -27,16 +27,16 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}-{this.props.type} pH</span>
-        <LineChart
-          width={this.props.width}
-          height={this.props.height}
-          data={metrics}
-        >
-          <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false} />
-          <XAxis dataKey='time' />
-          <Tooltip />
-          <YAxis />
-        </LineChart>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <LineChart
+            data={metrics}
+          >
+            <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false} />
+            <XAxis dataKey='time' />
+            <Tooltip />
+            <YAxis />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     )
   }
