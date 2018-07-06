@@ -58,11 +58,9 @@ class mainPanel extends React.Component {
       })
     }.bind(this))
     return (
-      <div className='container' style={{borderStyle: 'none'}}>
-        <Tabs
-          items={panels}
-          panelClass='reef_pi_panel'
-          />
+      <div className='container'>
+        <Tabs items={panels} panelClass='reef_pi_panel'/>
+				<hr />
         <Summary />
       </div>
     )
