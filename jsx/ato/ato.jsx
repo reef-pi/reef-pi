@@ -23,6 +23,7 @@ class ato extends React.Component {
     this.updatePump = this.updatePump.bind(this)
     this.setInlet = this.setInlet.bind(this)
     this.expand = this.expand.bind(this)
+    this.detailsUI = this.detailsUI.bind(this)
   }
 
   expand () {
@@ -97,17 +98,15 @@ class ato extends React.Component {
       return
     }
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-sm-2'>Pump</div>
-          <div className='col-sm-4'>
-            <SelectEquipment
-              update={this.updatePump}
-              active={this.state.ato.pump}
-              id='ato-pump'
-              readOnly={this.state.readOnly}
-            />
-          </div>
+      <div className='row'>
+        <div className='col-lg-2'>Pump</div>
+        <div className='col-lg-4'>
+          <SelectEquipment
+            update={this.updatePump}
+            active={this.state.ato.pump}
+            id='ato-pump'
+            readOnly={this.state.readOnly}
+          />
         </div>
       </div>
     )
@@ -124,21 +123,58 @@ class ato extends React.Component {
     return state
   }
 
-  render () {
-    var details = {
-      display: 'none'
-    }
-    var expandLabel = 'expand'
-    if (this.state.expand) {
-      details.display = 'block'
-      expandLabel = 'fold'
-    }
+  detailsUI () {
     var editText = 'edit'
     var editClass = 'btn btn-outline-success'
-    var name = <label>{this.state.ato.name}</label>
     if (!this.state.readOnly) {
       editText = 'save'
       editClass = 'btn btn-outline-primary'
+    }
+    return (
+      <div className='row'>
+        <div className='container'>
+          <div className='row'>
+            <InletSelector update={this.setInlet} readOnly={this.state.readOnly} active={this.state.ato.inlet} />
+          </div>
+          <div className='row'>
+            <div className='col-lg-2'>Enable</div>
+            <input type='checkbox' id='ato_enable' className='col-lg-4' defaultChecked={this.state.ato.enable} onClick={this.updateCheckBox('enable')} disabled={this.state.readOnly} />
+          </div>
+          <div className='row'>
+            <div className='col-lg-2'>Check frequency</div>
+            <input type='text' onChange={this.update('period')} id='period' className='col-lg-1' value={this.state.ato.period} readOnly={this.state.readOnly} />
+            <span>second(s)</span>
+          </div>
+          <div className='row'>
+            <div className='col-lg-2'>Control</div>
+            <input type='checkbox' id='ato_control' className='col-lg-4' defaultChecked={this.state.ato.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
+          </div>
+          {this.showControl()}
+          <div className='row'>
+            <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
+          </div>
+          <div className='row'>
+            <div className='col-sm-1'>
+              <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
+            </div>
+            <div className='col-sm-1'>
+              <input type='button' id={'remove-ato-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  render () {
+    var details = <div />
+    var expandLabel = 'expand'
+    if (this.state.expand) {
+      details = this.detailsUI()
+      expandLabel = 'fold'
+    }
+    var name = <label>{this.state.ato.name}</label>
+    if (!this.state.readOnly) {
       name = <input type='text' value={this.state.ato.name} onChange={this.update('name')} className='col-sm-2' readOnly={this.state.readOnly} />
     }
     return (
@@ -151,38 +187,7 @@ class ato extends React.Component {
             <input type='button' id={'expand-ato-' + this.props.data.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
           </div>
         </div>
-        <div className='row' style={details}>
-          <div className='container'>
-            <InletSelector update={this.setInlet} readOnly={this.state.readOnly} active={this.state.ato.inlet} />
-          </div>
-          <div className='row'>
-            <div className='col-sm-2'>Enable</div>
-            <input type='checkbox' id='ato_enable' className='col-sm-2' defaultChecked={this.state.ato.enable} onClick={this.updateCheckBox('enable')} disabled={this.state.readOnly} />
-          </div>
-          <div className='container'>
-            <div className='row'>
-              <div className='col-sm-3'>Check frequency</div>
-              <input type='text' onChange={this.update('period')} id='period' className='col-sm-1' value={this.state.ato.period} readOnly={this.state.readOnly} />
-              <span>second(s)</span>
-            </div>
-            <div className='row'>
-              <div className='col-sm-2'>Control</div>
-              <input type='checkbox' id='ato_control' className='col-sm-2' defaultChecked={this.state.ato.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
-            </div>
-            {this.showControl()}
-          </div>
-          <div className='row'>
-            <div className='col-sm-1'>
-              <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
-            </div>
-            <div className='col-sm-1'>
-              <input type='button' id={'remove-ato-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
-            </div>
-          </div>
-          <div className='row'>
-            <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
-          </div>
-        </div>
+        {details}
       </div>
     )
   }
