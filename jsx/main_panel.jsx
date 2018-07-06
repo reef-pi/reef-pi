@@ -15,6 +15,7 @@ import Tabs from 'react-responsive-tabs'
 import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
 import {hideAlert} from './utils/alert'
+import Summary from './summary.jsx'
 
 const caps = {
   'equipments': <Equipments />,
@@ -56,7 +57,10 @@ class mainPanel extends React.Component {
       })
     }.bind(this))
     return (
-      <Tabs items={panels} />
+      <div className='container'>
+        <Tabs items={panels} />
+        <Summary />
+      </div>
     )
   }
 }

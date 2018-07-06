@@ -4,7 +4,6 @@ import TempControlChart from '../temperature/control_chart.jsx'
 import EquipmentsChart from '../equipments/chart.jsx'
 import LightChart from '../lighting/chart.jsx'
 import ATOChart from '../ato/chart.jsx'
-import Summary from '../summary.jsx'
 import HealthChart from '../health_chart.jsx'
 import PhChart from '../ph/chart.jsx'
 import {fetchDashboard} from '../redux/actions/dashboard'
@@ -106,9 +105,6 @@ class dashboard extends React.Component {
     return (
       <div className='container'>
         {this.charts()}
-        <div className='row'>
-          <Summary />
-        </div>
       </div>
     )
   }
