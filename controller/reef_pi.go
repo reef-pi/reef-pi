@@ -59,6 +59,10 @@ func New(version, database string) (*ReefPi, error) {
 		bus = b
 	}
 	telemetry := initializeTelemetry(store, s.Notification)
+	if s.PWMFreq <= 0 {
+		log.Println("ERROR: Invalid  RPI PWM frequency:", s.PWMFreq, " falling back on default 100Hz")
+		s.PWMFreq = 100
+	}
 	pi := utils.NewRPIPWMDriver(s.PWMFreq, s.Capabilities.DevMode)
 	pConfig := utils.DefaultPWMConfig
 	pConfig.DevMode = true
