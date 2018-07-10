@@ -71,7 +71,7 @@ func (c *Jacks) Setup() error {
 		if j.Driver == "rpi" {
 			for _, p := range j.Pins {
 				if err := c.rpi.On(p); err != nil {
-					log.Println("ERROR: failed to switch on rpi based jack:", j.Name, "pin:", p)
+					log.Println("ERROR: failed to switch on rpi based jack:", j.Name, "pin:", p, "Error:", err)
 				}
 			}
 		}
