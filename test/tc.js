@@ -20,6 +20,8 @@ module.exports = {
 
     .click('div#tab-4')
     .wait(500)
+    .click('input#expand-tc-1')
+    .wait(500)
     .click('input#update-tc-1')
     .wait(500)
     .click('input#tc_control_1')
