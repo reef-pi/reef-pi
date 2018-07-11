@@ -6,9 +6,9 @@ import (
 )
 
 func TestPWM(t *testing.T) {
-	config := DefaultPWMConfig
+	config := DefaultPCA9685Config
 	config.DevMode = true
-	pwm, err := NewPWM(i2c.MockBus(), config)
+	pwm, err := NewPCA9685(i2c.MockBus(), config)
 	if err != nil {
 		t.Fatal("Failed to inititalize pwm sub system. Error:", err)
 	}
