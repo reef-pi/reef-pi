@@ -38,7 +38,7 @@ class chart extends React.Component {
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={this.props.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label='minutes' />
+            <YAxis label='seconds' />
             <XAxis dataKey='time' />
             <Tooltip />
           </BarChart>
