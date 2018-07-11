@@ -29,7 +29,7 @@ export default class Channel extends React.Component {
     if (!this.state.colorPicked) {
       return (
         <button
-          onClick={()=> this.setState({colorPicked: true})}
+          onClick={() => this.setState({colorPicked: true})}
           style={{backgroundColor: this.state.channel.color}}
           className='btn btn-secondary'
         />
