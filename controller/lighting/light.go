@@ -18,6 +18,7 @@ type Channel struct {
 	Auto         bool   `json:"auto"`
 	Reverse      bool   `json:"reverse"`
 	Pin          int    `json:"pin"`
+	Color        string `json:"color"`
 }
 type Light struct {
 	ID       string          `json:"id"`

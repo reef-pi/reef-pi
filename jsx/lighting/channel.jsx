@@ -1,11 +1,14 @@
 import React from 'react'
 import Slider from './slider.jsx'
+import { HuePicker } from 'react-color'
 
 export default class Channel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      channel: this.props.ch
+      channel: this.props.ch,
+      colorPicked: false
+
     }
     this.sliderList = this.sliderList.bind(this)
     this.curry = this.curry.bind(this)
@@ -18,10 +21,37 @@ export default class Channel extends React.Component {
     this.updateMax = this.updateMax.bind(this)
     this.updateStartMin = this.updateStartMin.bind(this)
     this.updateName = this.updateName.bind(this)
+    this.updateColor = this.updateColor.bind(this)
+    this.colorPicker = this.colorPicker.bind(this)
+  }
+
+  colorPicker () {
+    if (!this.state.colorPicked) {
+      return (
+        <button
+          onClick={()=> this.setState({colorPicked: true})}
+          style={{backgroundColor: this.state.channel.color}}
+          className='btn btn-secondary'
+        />
+      )
+    }
+    return (
+      <HuePicker color={this.state.channel.color} onChangeComplete={this.updateColor} />
+    )
   }
 
   updateMin (ev) {
     this.update('min', ev.target.value)
+  }
+
+  updateColor (color) {
+    var ch = this.state.channel
+    ch.color = color.hex
+    this.setState({
+      channel: ch,
+      colorPicked: false
+    })
+    this.props.updateChannel(ch)
   }
 
   updateName (ev) {
@@ -81,7 +111,20 @@ export default class Channel extends React.Component {
       height: '175px'
     }
     var list = []
-    var labels = ['12 am', '2 am', '4 am', '6 am', '8 am', '10 am', '12 pm', '2 pm', '4 pm', '6 pm', '8 pm', '10 pm']
+    var labels = [
+      '12 am',
+      '2 am',
+      '4 am',
+      '6 am',
+      '8 am',
+      '10 am',
+      '12 pm',
+      '2 pm',
+      '4 pm',
+      '6 pm',
+      '8 pm',
+      '10 pm'
+    ]
 
     for (var i = 0; i < 12; i++) {
       list.push(
@@ -116,11 +159,44 @@ export default class Channel extends React.Component {
           Pin: {this.state.channel.pin}
         </div>
         <div className='row'>
-          Auto<input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-' + this.props.ch.name + '-auto'} />
-          Reverse<input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.channel.reverse} />
-          Min<input type='text' onChange={this.updateMin} value={this.state.channel.min} />
-          Max<input type='text' onChange={this.updateMax} value={this.state.channel.max} />
-          Start<input type='text' onChange={this.updateStartMin} value={this.state.channel.start_min} />
+          <div className='col-lg-1 col-xs-1'>
+            Auto
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            <input type='checkbox' onClick={this.updateAuto} defaultChecked={this.state.channel.auto} id={this.props.name + '-' + this.props.ch.name + '-auto'} />
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            Reverse
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            <input type='checkbox' onClick={this.updateReverse} defaultChecked={this.state.channel.reverse} />
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            Color
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            {this.colorPicker()}
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-lg-1 col-xs-1'>
+            Min
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            <input type='text' onChange={this.updateMin} value={this.state.channel.min} />
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            Max
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            <input type='text' onChange={this.updateMax} value={this.state.channel.max} />
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            Start
+          </div>
+          <div className='col-lg-1 col-xs-1'>
+            <input type='text' onChange={this.updateStartMin} value={this.state.channel.start_min} />
+          </div>
         </div>
         <div className='row'>
           {channel}
