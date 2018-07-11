@@ -15,9 +15,9 @@ func TestJacksAPI(t *testing.T) {
 	}
 	tr := utils.NewTestRouter()
 	rpi := utils.NewRPIPWMDriver(100, true)
-	conf := utils.DefaultPWMConfig
+	conf := utils.DefaultPCA9685Config
 	conf.DevMode = true
-	pca9685, err := utils.NewPWM(i2c.MockBus(), conf)
+	pca9685, err := utils.NewPCA9685(i2c.MockBus(), conf)
 	if err != nil {
 		t.Error(err)
 	}
