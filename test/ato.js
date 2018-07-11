@@ -24,6 +24,8 @@ module.exports = {
   Configure: function(n){
     n.click('div#tab-5')
     .wait(500)
+    .click('input#expand-ato-1')
+    .wait(500)
     .click('input#updateATO')
     .wait(500)
     .click('input#ato_control')
