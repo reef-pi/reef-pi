@@ -1,5 +1,4 @@
 import React from 'react'
-import Auth from '../auth.jsx'
 import Capabilities from './capabilities.jsx'
 import Display from './display.jsx'
 import HealthNotify from './health_notify.jsx'
@@ -13,7 +12,11 @@ class settings extends React.Component {
     this.state = {
       capabilities: props.capabilities,
       settings: {
-        name: '', interface: '', address: '', pwm_freq: 1500
+        name: '',
+        interface: '',
+        address: '',
+        rpi_pwm_freq: 100,
+        pca9685_pwm_freq: 1500
       },
       updated: false
     }
@@ -134,7 +137,8 @@ class settings extends React.Component {
             {this.toRow('name')}
             {this.toRow('interface')}
             {this.toRow('address')}
-            {this.toRow('pwm_freq', true)}
+            {this.toRow('rpi_pwm_freq', true)}
+            {this.toRow('pca9685_pwm_freq', true)}
             <div className='input-group'>
               <label className='input-group-addon'>Notification</label>
               <input type='checkbox' id='updateNotification' onClick={this.updateCheckbox('notification')} defaultChecked={this.state.settings.notification} className='form-control' />
@@ -169,9 +173,6 @@ class settings extends React.Component {
         </div>
         <div className='row'>
           <input type='button' className={updateButtonClass} onClick={this.update} id='systemUpdateSettings' value='update' />
-        </div>
-        <div className='row'>
-          <Auth />
         </div>
       </div>
     )

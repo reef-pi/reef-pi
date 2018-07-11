@@ -3,6 +3,7 @@ import Admin from './admin.jsx'
 import Settings from './settings.jsx'
 import Telemetry from '../telemetry/main.jsx'
 import Dashboard from './dashboard.jsx'
+import Auth from '../auth.jsx'
 import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 
@@ -22,6 +23,7 @@ export default class Configuration extends React.Component {
     $('#connectors_config').hide()
     $('#telemetry_config').hide()
     $('#dashboard_config').hide()
+    $('#authentication_config').hide()
   }
 
   toRow (label, component) {
@@ -43,6 +45,7 @@ export default class Configuration extends React.Component {
         { this.toRow('connectors', <Connectors />) }
         { this.toRow('telemetry', <Telemetry />) }
         { this.toRow('dashboard', <Dashboard />) }
+        { this.toRow('authentication', <Auth />) }
         <Admin />
       </div>
     )

@@ -7,13 +7,14 @@ import (
 const Bucket = "system"
 
 type Config struct {
-	Interface string `json:"interface"`
-	Name      string `json:"name"`
-	Display   bool   `json:"display"`
-	DevMode   bool   `json:"dev_mode"`
-	Version   string `json:"version"`
-	Pprof     bool   `json:"pprof"`
-	PWMFreq   int    `json:"pwm_freq"`
+	Interface       string `json:"interface"`
+	Name            string `json:"name"`
+	Display         bool   `json:"display"`
+	DevMode         bool   `json:"dev_mode"`
+	Version         string `json:"version"`
+	Pprof           bool   `json:"pprof"`
+	RPI_PWMFreq     int    `json:"rpi_pwm_freq"`
+	PCA9685_PWMFreq int    `json:"pca9685_pwm_freq"`
 }
 
 type Controller struct {

@@ -59,22 +59,22 @@ func New(version, database string) (*ReefPi, error) {
 		bus = b
 	}
 	telemetry := initializeTelemetry(store, s.Notification)
-	if s.PWMFreq <= 0 {
-		log.Println("ERROR: Invalid  RPI PWM frequency:", s.PWMFreq, " falling back on default 100Hz")
-		s.PWMFreq = 100
+	if s.RPI_PWMFreq <= 0 {
+		log.Println("ERROR: Invalid  RPI PWM frequency:", s.RPI_PWMFreq, " falling back on default 100Hz")
+		s.RPI_PWMFreq = 100
 	}
-	pi := utils.NewRPIPWMDriver(s.PWMFreq, s.Capabilities.DevMode)
-	pConfig := utils.DefaultPWMConfig
+	pi := utils.NewRPIPWMDriver(s.RPI_PWMFreq, s.Capabilities.DevMode)
+	pConfig := utils.DefaultPCA9685Config
 	pConfig.DevMode = true
 
-	pca9685, err := utils.NewPWM(i2c.MockBus(), pConfig)
+	pca9685, err := utils.NewPCA9685(i2c.MockBus(), pConfig)
 	if err != nil {
 		log.Println("ERROR: Failed to initialize pca9685 driver with mock i2c bus. Error:", err)
 		return nil, err
 	}
 	if s.PCA9685 {
 		pConfig.DevMode = s.Capabilities.DevMode
-		p, err := utils.NewPWM(bus, pConfig)
+		p, err := utils.NewPCA9685(bus, pConfig)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pca9685 driver")
 			return nil, err
