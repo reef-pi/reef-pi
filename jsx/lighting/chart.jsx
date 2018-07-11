@@ -8,10 +8,8 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var colors = ['#0099CC', '#007E33', '#FF8800', '#CC0000']
     var lines = []
     var data = []
-    var stIndex = 0
     $.each(this.props.config.channels, function (name, channel) {
       $.each(channel.values, function (i, value) {
         if (data[i] === undefined) {
@@ -19,11 +17,7 @@ class chart extends React.Component {
         }
         data[i][channel.name] = value
       })
-      var stroke = colors[0]
-      if (stIndex < colors.length) {
-        stroke = colors[stIndex]
-      }
-      stIndex++
+      var stroke = channel.color === '' ? '#000' : channel.color
       lines.push(
         <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={name} />
       )
