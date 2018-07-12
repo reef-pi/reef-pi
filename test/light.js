@@ -12,6 +12,8 @@ module.exports = {
     .wait(1000)
     .click('input#createLight')
     .wait(500)
+    .click('input#expand-light-1')
+    .wait(500)
     .click('input#A360-channel-1-auto')
     .wait(500)
     .click('input#A360-channel-2-auto')
