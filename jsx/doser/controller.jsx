@@ -27,7 +27,7 @@ class doser extends React.Component {
         </div>
       )
     })
-    return (<ul className='list-group'> {pumps} </ul>)
+    return (<ul className='list-group list-group-flush'> {pumps} </ul>)
   }
 
   render () {

@@ -8,6 +8,7 @@ export default class Notify extends React.Component {
     }
     this.updateEnable = this.updateEnable.bind(this)
     this.update = this.update.bind(this)
+    this.minMax = this.minMax.bind(this)
   }
 
   updateEnable (ev) {
@@ -17,6 +18,33 @@ export default class Notify extends React.Component {
       config: h
     })
     this.props.updateHook(h)
+  }
+
+  minMax () {
+    return (
+      <div className='row'>
+        <div className='col-lg-2' key='tc_notify_min'>Min</div>
+        <div className='col-lg-3'>
+          <input type='text'
+            id='tc_notify_min'
+            value={this.state.config.min}
+            onChange={this.update('min')}
+            disabled={this.props.readOnly}
+          />
+        </div>
+        <div className='col-lg-1' />
+        <div className='col-lg-2' key='tc_notify_max'>Max</div>
+        <div className='col-lg-3'>
+          <input
+            type='text'
+            id='tc_notify_max'
+            value={this.state.config.max}
+            onChange={this.update('max')}
+            disabled={this.props.readOnly}
+          />
+        </div>
+      </div>
+    )
   }
 
   update (k) {
@@ -31,38 +59,24 @@ export default class Notify extends React.Component {
   }
 
   render () {
+    var minmaxUi = <span className='col-lg-6' />
+    if (this.state.config.enable) {
+      minmaxUi = this.minMax()
+    }
     return (
-      <div className='col-sm-3'>
-        <label className='form-check-label'>
-          <input className='form-check-input'
+      <div className='container'>
+        <div className='row'>
+          <input
             type='checkbox'
             id='tc_notify_enable'
             defaultChecked={this.state.config.enable}
             onClick={this.updateEnable}
             disabled={this.props.readOnly}
           />
-          <b>Enable alerting</b>
-        </label>
-        <div className='input-group' key='tc_notify_min'>
-          <label className='input-group-addon'>Min</label>
-          <input type='text'
-            className='form-control'
-            id='tc_notify_min'
-            value={this.state.config.min}
-            onChange={this.update('min')}
-            disabled={this.props.readOnly}
-          />
+          <span >Enable alerting</span>
         </div>
-        <div className='input-group' key='tc_notify_max'>
-          <label className='input-group-addon'>Max</label>
-          <input
-            className='form-control'
-            type='text'
-            id='tc_notify_max'
-            value={this.state.config.max}
-            onChange={this.update('max')}
-            disabled={this.props.readOnly}
-          />
+        <div className='row'>
+          {minmaxUi}
         </div>
       </div>
     )

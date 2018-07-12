@@ -2,7 +2,6 @@ import React from 'react'
 import SelectEquipment from '../select_equipment.jsx'
 import Notify from './notify.jsx'
 import {showAlert} from '../utils/alert.js'
-import {confirm} from '../utils/confirm.js'
 import SelectSensor from './select_sensor.jsx'
 import ReadingsChart from './readings_chart.jsx'
 import ControlChart from './control_chart.jsx'
@@ -16,7 +15,6 @@ export default class Sensor extends React.Component {
       expand: false
     }
     this.save = this.save.bind(this)
-    this.remove = this.remove.bind(this)
     this.showControl = this.showControl.bind(this)
     this.updateCheckBox = this.updateCheckBox.bind(this)
     this.update = this.update.bind(this)
@@ -72,13 +70,6 @@ export default class Sensor extends React.Component {
       h[k] = v
       this.setState({tc: h})
     }.bind(this))
-  }
-
-  remove () {
-    confirm('Are you sure ?')
-      .then(function () {
-        this.props.remove(this.props.data.id)
-      }.bind(this))
   }
 
   update (k) {
@@ -247,28 +238,24 @@ export default class Sensor extends React.Component {
           <span>second(s)</span>
         </div>
         <div className='row'>
-          <div className='col-sm-3'>Chart Minimum</div>
-          <input type='text' onChange={this.update('chart_min')} id='period' className='col-sm-1' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
-        </div>
-        <div className='row'>
-          <div className='col-sm-3'>Chart Maximun</div>
-          <input type='text' onChange={this.update('chart_max')} id='period' className='col-sm-1' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
-        </div>
-        <div className='row'>
           <div className='col-sm-2'>Control</div>
           <input type='checkbox' id={'tc_control_' + this.props.data.id} className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
         </div>
         {this.showControl()}
+        {this.showCharts()}
+        <div className='row'>
+          <div className='col-lg-3'>Chart Minimum</div>
+          <input type='text' className='col-lg-2' onChange={this.update('chart_min')} id='period' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
+          <div className='col-lg-2' />
+          <div className='col-sm-3'>Chart Maximun</div>
+          <input type='text' className='col-lg-2' onChange={this.update('chart_max')} id='period' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
+        </div>
         <div className='row'>
           <Notify config={this.state.tc.notify} updateHook={this.updateNotify} readOnly={this.state.readOnly} />
         </div>
-        {this.showCharts()}
         <div className='row'>
           <div className='col-sm-1'>
             <input type='button' id={'update-tc-' + this.props.data.id} onClick={this.save} value={editText} className={editClass} />
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' id={'remove-tc-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
       </div>
@@ -289,10 +276,10 @@ export default class Sensor extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-9'>
+          <div className='col-lg-10 col-xs-10'>
             <b>{name}</b>
           </div>
-          <div className='col-sm-2'>
+          <div className='col-lg-2 col-xs-2'>
             <input type='button' id={'expand-tc-' + this.props.data.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
           </div>
         </div>

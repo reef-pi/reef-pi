@@ -44,10 +44,10 @@ class main extends React.Component {
       list.push(
         <div key={k} className='list-group-item' style={noPadding}>
           <div key={k} className='row'>
-            <div className='col-lg-8 col-xs-8'>
+            <div className='col-lg-10 col-xs-10'>
               <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
             </div>
-            <div className='col-lg-1 col-xs-2'>
+            <div className='col-lg-2 col-xs-2'>
               <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
             </div>
           </div>
@@ -152,7 +152,7 @@ class main extends React.Component {
     }
     return (
       <div className='container'>
-        <ul className='list-group'>
+        <ul className='list-group list-group-flush'>
           {this.equipmentList()}
         </ul>
         <div className='row'>

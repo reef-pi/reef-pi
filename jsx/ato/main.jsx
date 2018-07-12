@@ -35,7 +35,7 @@ class main extends React.Component {
   render () {
     return (
       <div className='container'>
-        <ul className='list-group'>
+        <ul className='list-group list-group-flush'>
           {this.list()}
         </ul>
         <New />

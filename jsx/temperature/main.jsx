@@ -4,6 +4,7 @@ import Sensor from './sensor.jsx'
 import New from './new.jsx'
 import {fetchSensors, createTC, deleteTC, updateTC, fetchTCs} from '../redux/actions/tcs'
 import {connect} from 'react-redux'
+import {confirm} from '../utils/confirm.js'
 
 class main extends React.Component {
   constructor (props) {
@@ -12,11 +13,21 @@ class main extends React.Component {
       add: false
     }
     this.list = this.list.bind(this)
+    this.remove = this.remove.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchSensors()
     this.props.fetchTCs()
+  }
+
+  remove (id) {
+    return (function () {
+      confirm('Are you sure ?')
+        .then(function () {
+          this.props.deleteTC(id)
+        }.bind(this))
+    }.bind(this))
   }
 
   list () {
@@ -27,8 +38,15 @@ class main extends React.Component {
     var index = 0
     $.each(this.props.tcs, function (k, v) {
       list.push(
-        <div key={k} className='row list-group-item'>
-          <Sensor data={v} remove={this.props.deleteTC} save={this.props.updateTC} sensors={this.props.sensors} />
+        <div key={k} className='list-group-item'>
+          <div className='row'>
+            <div className='col-lg-10 col-xs-10'>
+              <Sensor data={v} save={this.props.updateTC} sensors={this.props.sensors} />
+            </div>
+            <div className='col-lg-2 col-xs-2'>
+              <input type='button' id={'remove-tc-' + v.id} onClick={this.remove(v.id)} value='delete' className='btn btn-outline-danger' />
+            </div>
+          </div>
         </div>
       )
       index = index + 1
@@ -39,7 +57,7 @@ class main extends React.Component {
   render () {
     return (
       <div className='container'>
-        <ul className='list-group'>
+        <ul className='list-group list-group-flush'>
           {this.list()}
         </ul>
         <New create={this.props.createTC} sensors={this.props.sensors} />
