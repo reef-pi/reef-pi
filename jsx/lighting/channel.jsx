@@ -179,24 +179,14 @@ export default class Channel extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-lg-1 col-xs-1'>
-            Min
-          </div>
-          <div className='col-lg-1 col-xs-1'>
-            <input type='text' onChange={this.updateMin} value={this.state.channel.min} />
-          </div>
-          <div className='col-lg-1 col-xs-1'>
-            Max
-          </div>
-          <div className='col-lg-1 col-xs-1'>
-            <input type='text' onChange={this.updateMax} value={this.state.channel.max} />
-          </div>
-          <div className='col-lg-1 col-xs-1'>
-            Start
-          </div>
-          <div className='col-lg-1 col-xs-1'>
-            <input type='text' onChange={this.updateStartMin} value={this.state.channel.start_min} />
-          </div>
+          <div className='col-lg-1 col-xs-6'>Min</div>
+          <input className='col-lg-1 col-xs-6'type='text' onChange={this.updateMin} value={this.state.channel.min} />
+          <div className='col-lg-1 col-xs-1' />
+          <div className='col-lg-1 col-xs-6'>Max</div>
+          <input className='col-lg-1 col-xs-6' type='text' onChange={this.updateMax} value={this.state.channel.max} />
+          <div className='col-lg-1 col-xs-1' />
+          <div className='col-lg-1 col-xs-6'>Start</div>
+          <input className='col-lg-1 col-xs-6' type='text' onChange={this.updateStartMin} value={this.state.channel.start_min} />
         </div>
         <div className='row'>
           {channel}

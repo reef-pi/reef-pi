@@ -19,6 +19,7 @@ export default class Light extends React.Component {
     this.updateLight = this.updateLight.bind(this)
     this.updateChannel = this.updateChannel.bind(this)
     this.expand = this.expand.bind(this)
+    this.channelUI = this.channelUI.bind(this)
   }
 
   expand () {
@@ -96,39 +97,44 @@ export default class Light extends React.Component {
     return channelUIs
   }
 
-  render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+  channelUI () {
+    var updateButtonClass = 'btn btn-outline-success'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
-    }
-    var details = {
-      display: 'none'
-    }
-    var expandLabel = 'expand'
-
-    if (this.state.expand) {
-      details.display = 'block'
-      expandLabel = 'fold'
+      updateButtonClass = 'btn btn-outline-danger'
     }
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-9'>
+          { this.channelList() }
+        </div>
+        <div className='row'>
+          <div className='col-lg-2 col-xs-2'>
+            <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  render () {
+    var expandLabel = 'expand'
+    var channels = <div />
+    if (this.state.expand) {
+      expandLabel = 'fold'
+      channels = this.channelUI()
+    }
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-sm-10'>
             <b>{this.props.config.name}</b>
           </div>
           <div className='col-sm-2'>
             <input type='button' id={'expand-light-' + this.props.config.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
           </div>
         </div>
-        <div style={details} className='row'>
-          <div className='container'>
-            <div className='row'>
-              { this.channelList() }
-            </div>
-            <div className='row'>
-              <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
-            </div>
-          </div>
+        <div className='row'>
+          {channels}
         </div>
       </div>
     )

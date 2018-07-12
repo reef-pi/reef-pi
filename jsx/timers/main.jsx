@@ -68,12 +68,12 @@ class Main extends React.Component {
     var list = []
     $.each(this.props.timers, function (i, timer) {
       list.push(
-        <li key={timer.name} className='list-group-item row'>
+        <li key={timer.name} className='list-group-item'>
           <div className='row'>
             <div className='col-lg-10 col-xs-10'>
               <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
             </div>
-            <div className='col-lg-1 col-xs-2'>
+            <div className='col-lg-2 col-xs-2'>
               <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
             </div>
           </div>
@@ -157,7 +157,7 @@ class Main extends React.Component {
     }
     return (
       <div className='container'>
-        <ul>{this.timerList()}</ul>
+        <ul className='list-group list-group-flush'>{this.timerList()}</ul>
         <div className='container'>
           <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
           <div style={dStyle} className='container'>

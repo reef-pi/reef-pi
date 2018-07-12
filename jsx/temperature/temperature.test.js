@@ -56,7 +56,6 @@ describe('Temperature controller ui', () => {
     m.update('foo')({target: {value: 'var'}})
     m.updateCheckBox('foo')({target: {checked: true}})
     m.save()
-    m.remove()
   })
 
   it('<SelectSensor />', () => {
