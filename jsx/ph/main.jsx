@@ -23,7 +23,7 @@ class ph extends React.Component {
     var index = 0
     $.each(this.props.probes, function (k, v) {
       list.push(
-        <div key={k} className='row list-group-item'>
+        <div key={k} className='list-group-item'>
           <Probe data={v} upateHook={this.props.fetchPhProbes} />
         </div>
       )
@@ -35,7 +35,7 @@ class ph extends React.Component {
   render () {
     return (
       <div className='container'>
-        <ul className='list-group'>
+        <ul className='list-group list-group-flush'>
           {this.probeList()}
         </ul>
         <New hook={this.props.createProbe} />

@@ -82,14 +82,7 @@ class main extends React.Component {
     $.each(this.props.lights, function (i, light) {
       lights.push(
         <div key={'light-' + i} className='list-group-item'>
-          <div className='row'>
-            <div className='col-lg-10 col-xs-10'>
-              <Light config={light} hook={this.props.updateLight} />
-            </div>
-            <div className='col-lg-2 col-xs-2'>
-              <input type='button' id={'remove-light-' + light.name} onClick={this.removeLight(light.id)} value='delete' className='btn btn-outline-danger' />
-            </div>
-          </div>
+          <Light config={light} hook={this.props.updateLight} remove={this.removeLight} />
         </div>
       )
     }.bind(this))

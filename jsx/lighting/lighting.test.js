@@ -34,7 +34,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Light />', () => {
-    const m = shallow(<Light config={light} hook={() => {}} />).instance()
+    const m = shallow(<Light config={light} hook={() => {}} remove={() => true} />).instance()
     m.updateLight()
     m.updateValues('1', [])
     m.setLightMode('1')({target: {}})

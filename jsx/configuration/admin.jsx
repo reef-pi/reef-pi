@@ -31,14 +31,13 @@ class admin extends React.Component {
   }
 
   render () {
+    const btnClass = 'btn btn-outline-danger col-lg-1 col-xs-3'
     return (
-      <div className='container'>
-        <div className='btn-group'>
-          <button onClick={this.signout} type='button' className='btn btn-outline-danger'>Sign Out</button>
-          <button onClick={this.reload} type='button' className='btn btn-outline-danger'>Reload</button>
-          <button onClick={this.reboot} type='button' className='btn btn-outline-danger'>Reboot</button>
-          <button onClick={this.powerOff} type='button' className='btn btn-outline-danger'>PowerOff</button>
-        </div>
+      <div className='row'>
+        <button onClick={this.signout} type='button' className={btnClass}>Sign Out</button>
+        <button onClick={this.reload} type='button' className={btnClass}>Reload</button>
+        <button onClick={this.reboot} type='button' className={btnClass}>Reboot</button>
+        <button onClick={this.powerOff} type='button' className={btnClass}>PowerOff</button>
       </div>
     )
   }

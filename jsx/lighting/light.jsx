@@ -109,7 +109,13 @@ export default class Light extends React.Component {
         </div>
         <div className='row'>
           <div className='col-lg-2 col-xs-2'>
-            <input type='button' id={'update-light-' + this.props.config.name} onClick={this.updateLight} value='update' className={updateButtonClass} />
+            <input
+              type='button'
+              id={'update-light-' + this.props.config.name}
+              onClick={this.updateLight}
+              value='update'
+              className={updateButtonClass}
+            />
           </div>
         </div>
       </div>
@@ -126,11 +132,26 @@ export default class Light extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-10'>
+          <div className='col-lg-8 col-xs-8'>
             <b>{this.props.config.name}</b>
           </div>
-          <div className='col-sm-2'>
-            <input type='button' id={'expand-light-' + this.props.config.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
+          <div className='col-lg-2 col-xs-2'>
+            <input
+              type='button'
+              id={'expand-light-' + this.props.config.id}
+              onClick={this.expand}
+              value={expandLabel}
+              className='btn btn-outline-primary'
+            />
+          </div>
+          <div className='col-lg-2 col-xs-2'>
+            <input
+              type='button'
+              id={'remove-light-' + this.props.config.name}
+              onClick={this.props.remove(this.props.config.id)}
+              value='delete'
+              className='btn btn-outline-danger'
+            />
           </div>
         </div>
         <div className='row'>
