@@ -39,14 +39,7 @@ class main extends React.Component {
     $.each(this.props.tcs, function (k, v) {
       list.push(
         <div key={k} className='list-group-item'>
-          <div className='row'>
-            <div className='col-lg-10 col-xs-10'>
-              <Sensor data={v} save={this.props.updateTC} sensors={this.props.sensors} />
-            </div>
-            <div className='col-lg-2 col-xs-2'>
-              <input type='button' id={'remove-tc-' + v.id} onClick={this.remove(v.id)} value='delete' className='btn btn-outline-danger' />
-            </div>
-          </div>
+          <Sensor data={v} save={this.props.updateTC} sensors={this.props.sensors} remove={this.remove(v.id)} />
         </div>
       )
       index = index + 1

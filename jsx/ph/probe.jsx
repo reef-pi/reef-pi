@@ -129,9 +129,6 @@ class probe extends React.Component {
           <div className='col-sm-1'>
             <input type='button' id={'edit-probe-' + this.props.data.id} onClick={this.edit} value={editText} className={editClass} />
           </div>
-          <div className='col-sm-1'>
-            <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
-          </div>
         </div>
         { this.state.calibrate ? <Calibrate probe={this.props.data.id} hook={this.props.calibrateProbe} /> : '' }
       </div>
@@ -152,11 +149,14 @@ class probe extends React.Component {
     return (
       <div className='conainer'>
         <div className='row'>
-          <div className='col-sm-9'>
+          <div className='col-lg-8 col-xs-8'>
             <b>{name}</b>
           </div>
-          <div className='col-sm-2'>
+          <div className='col-lg-2 col-xs-2'>
             <input type='button' id={'expand-ph-' + this.props.data.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
+          </div>
+          <div className='col-lg-2 col-xs-2'>
+            <input type='button' id={'remove-probe-' + this.props.data.id} onClick={this.remove} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
         {details}

@@ -239,16 +239,23 @@ export default class Sensor extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-2'>Control</div>
-          <input type='checkbox' id={'tc_control_' + this.props.data.id} className='col-sm-2' defaultChecked={this.state.tc.control} onClick={this.updateCheckBox('control')} disabled={this.state.readOnly} />
+          <input
+            type='checkbox'
+            id={'tc_control_' + this.props.data.id}
+            className='col-sm-2'
+            defaultChecked={this.state.tc.control}
+            onClick={this.updateCheckBox('control')}
+            disabled={this.state.readOnly}
+          />
         </div>
         {this.showControl()}
         {this.showCharts()}
         <div className='row'>
-          <div className='col-lg-3'>Chart Minimum</div>
-          <input type='text' className='col-lg-2' onChange={this.update('chart_min')} id='period' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
-          <div className='col-lg-2' />
-          <div className='col-sm-3'>Chart Maximun</div>
-          <input type='text' className='col-lg-2' onChange={this.update('chart_max')} id='period' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
+          <div className='col-lg-2'>Chart Minimum</div>
+          <input type='text' className='col-lg-1' onChange={this.update('chart_min')} id='period' value={this.state.tc.chart_min} readOnly={this.state.readOnly} />
+          <div className='col-lg-1' />
+          <div className='col-sm-2'>Chart Maximun</div>
+          <input type='text' className='col-lg-1' onChange={this.update('chart_max')} id='period' value={this.state.tc.chart_max} readOnly={this.state.readOnly} />
         </div>
         <div className='row'>
           <Notify config={this.state.tc.notify} updateHook={this.updateNotify} readOnly={this.state.readOnly} />
@@ -276,11 +283,14 @@ export default class Sensor extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-lg-10 col-xs-10'>
+          <div className='col-lg-8 col-xs-8'>
             <b>{name}</b>
           </div>
           <div className='col-lg-2 col-xs-2'>
             <input type='button' id={'expand-tc-' + this.props.data.id} onClick={this.expand} value={expandLabel} className='btn btn-outline-primary' />
+          </div>
+          <div className='col-lg-2 col-xs-2'>
+            <input type='button' id={'remove-tc-' + this.state.tc.id} onClick={this.props.remove} value='delete' className='btn btn-outline-danger' />
           </div>
         </div>
         <div className='row'>
