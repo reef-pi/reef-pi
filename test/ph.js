@@ -1,6 +1,6 @@
 module.exports = {
   Create: function(n){
-    n.click('div#tab-6')
+    n.click('a#tab-ph')
     .wait(500)
     .click('input#add_probe')
     .wait(500)

@@ -1,6 +1,6 @@
 module.exports = {
   Create: function(n){
-    n.click('div#tab-5')
+    n.click('a#tab-ato')
     .wait(1000)
     .click('input#add_new_ato_sensor')
     .wait(1000)
@@ -22,7 +22,7 @@ module.exports = {
     })
   },
   Configure: function(n){
-    n.click('div#tab-5')
+    n.click('a#tab-ato')
     .wait(500)
     .click('input#expand-ato-1')
     .wait(500)

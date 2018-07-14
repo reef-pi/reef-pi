@@ -1,6 +1,6 @@
 module.exports = {
   Create: function(n){
-    n.click('div#tab-3')
+    n.click('a#tab-lighting')
     .wait(500)
     .click('input#add_light')
     .wait(500)
@@ -19,19 +19,6 @@ module.exports = {
     .click('input#A360-channel-2-auto')
     .wait(500)
     .click('input#update-light-A360')
-    .wait(1500)
-
-    .click('div#tab-3')
-    .wait(500)
-    .click('input#add_light')
-    .wait(500)
-    .type('input#lightName', 'MoonLight')
-    .wait(500)
-    .click('button#jack')
-    .wait(500)
-    .click('span#select-jack-J0')
-    .wait(1000)
-    .click('input#createLight')
     .wait(1500)
     return(function(){
       return('Sign In completed')

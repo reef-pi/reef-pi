@@ -1,8 +1,8 @@
 module.exports = {
   Create: function(n){
-    n.click('div#tab-9')
+    n.click('a#tab-configuration')
     .wait(500)
-    .click('button#btn-connectors')
+    .click('a#config-connectors')
     .wait(500)
     .click('input#add_outlet')
     .wait(500)

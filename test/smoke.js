@@ -45,7 +45,7 @@ function SmokeTest () {
     .wait(1500)
     .evaluate(dashboard.Configure(nightmare))
     .wait(1500)
-    .click('div#tab-0')
+    .click('a#tab-dashboard')
 		.wait(1500)
     .end()
       .then(function () {

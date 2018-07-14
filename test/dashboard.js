@@ -1,8 +1,8 @@
 module.exports = {
   Configure: function(n){
-    n.click('div#tab-9')
+    n.click('a#tab-configuration')
     .wait(500)
-    .click('button#btn-dashboard')
+    .click('a#config-dashboard')
     .wait(500)
     .type('input#to-row-row')
     .type('input#to-row-row', '3')

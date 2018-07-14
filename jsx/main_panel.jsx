@@ -59,7 +59,7 @@ class mainPanel extends React.Component {
       var cname = k ===  this.state.body ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className="nav-item" key={k}>
-          <a className={cname} onClick={this.setBody(k)}>{k}</a>
+          <a id={'tab-' + k}className={cname} onClick={this.setBody(k)}>{k}</a>
         </li>
       )
     }.bind(this))

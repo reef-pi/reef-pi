@@ -34,7 +34,7 @@ export default class Configuration extends React.Component {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
         <li className={cname} key={k}>
-          <a className="nav-link" onClick={this.setBody(k)}>{k} </a>
+          <a id={ 'config-' + k } className="nav-link" onClick={this.setBody(k)}>{k} </a>
         </li>
       )
     })
