@@ -13,7 +13,7 @@ function TestTemperature () {
     .click('input#btnSaveCreds')
     .wait(500)
 
-    .click('div#tab-4')
+    .click('a#tab-temperature')
     .wait(500)
     .click('input#tc_enable')
     .wait(500)

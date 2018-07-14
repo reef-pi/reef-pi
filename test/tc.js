@@ -1,6 +1,6 @@
 module.exports = {
   Configure: function(n){
-    n.click('div#tab-4')
+    n.click('a#tab-temperature')
     .wait(500)
     .click('input#add_tc')
     .wait(500)
@@ -15,10 +15,10 @@ module.exports = {
     .wait(500)
     .click('input#create_tc')
     .wait(1500)
-    .click('div#tab-0')
+    .click('a#tab-dashboard')
     .wait(2500)
 
-    .click('div#tab-4')
+    .click('a#tab-temperature')
     .wait(500)
     .click('input#expand-tc-1')
     .wait(500)

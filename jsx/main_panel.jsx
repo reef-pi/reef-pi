@@ -10,8 +10,6 @@ import Doser from './doser/controller.jsx'
 import Ph from './ph/main.jsx'
 import Dashboard from './dashboard/main.jsx'
 import $ from 'jquery'
-import 'react-responsive-tabs/styles.css'
-import Tabs from 'react-responsive-tabs'
 import {fetchUIData} from './redux/actions/ui'
 import {connect} from 'react-redux'
 import {hideAlert} from './utils/alert'
@@ -19,6 +17,7 @@ import Summary from './summary.jsx'
 import '../assets/reef_pi.css'
 
 const caps = {
+  'dashboard': <Dashboard />,
   'equipments': <Equipments />,
   'timers': <Timers />,
   'lighting': <Lighting />,
@@ -31,20 +30,25 @@ const caps = {
 }
 
 class mainPanel extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      body: 'dashboard'
+    }
+    this.navs = this.navs.bind(this)
+    this.setBody = this.setBody.bind(this)
+  }
   componentDidMount () {
     this.props.fetchUIData()
     hideAlert()
   }
 
-  render () {
-    var panels = [ ]
-    if (this.props.capabilities.dashboard) {
-      panels.push({
-        title: 'dashboard',
-        getContent: () => <Dashboard capabilities={this.props.capabilities} />
-      })
-    }
+  setBody(k) {
+    return(() => {this.setState({body: k})})
+  }
 
+  navs() {
+    var panels = [ ]
     $.each(caps, function (k, panel) {
       if (this.props.capabilities[k] === undefined) {
         return
@@ -52,14 +56,26 @@ class mainPanel extends React.Component {
       if (!this.props.capabilities[k]) {
         return
       }
-      panels.push({
-        title: k,
-        getContent: () => panel
-      })
+      var cname = k ===  this.state.body ? 'nav-link active text-primary' : 'nav-link'
+      panels.push(
+        <li className="nav-item" key={k}>
+          <a id={'tab-' + k}className={cname} onClick={this.setBody(k)}>{k}</a>
+        </li>
+      )
     }.bind(this))
+    return(
+        <ul className="nav nav-tabs">
+          {panels}
+        </ul>
+    )
+  }
+
+  render () {
+    var body = caps[this.state.body]
     return (
       <div className='container'>
-        <Tabs items={panels} panelClass='reef_pi_panel'/>
+        {this.navs()}
+        {body}
 				<hr />
         <Summary />
       </div>

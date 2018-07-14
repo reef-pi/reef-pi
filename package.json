@@ -29,8 +29,6 @@
     "react-dom": "^16.3.2",
     "react-images": "^0.5.17",
     "react-redux": "^5.0.7",
-    "react-responsive-tabs": "^2.1.0",
-    "react-slider": "^0.11.2",
     "react-test-renderer": "^16.4.0",
     "recharts": "^1.0.0-beta.10",
     "redux": "^4.0.0",
