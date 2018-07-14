@@ -8,11 +8,12 @@ import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 
 const components = {
-  settings: <Settings /> ,
+  settings: <Settings />,
   connectors: <Connectors />,
   telemetry: <Telemetry />,
   dashboard: <Dashboard />,
-  authentication: <Auth />
+  authentication: <Auth />,
+  admin: <Admin />
 }
 
 export default class Configuration extends React.Component {
@@ -24,24 +25,24 @@ export default class Configuration extends React.Component {
     this.setBody = this.setBody.bind(this)
   }
 
-  setBody(k) {
-    return(() => {this.setState({body: k})})
+  setBody (k) {
+    return () => { this.setState({body: k}) }
   }
 
-  render() {
+  render () {
     var panels = [ ]
-    $.each(['settings', 'connectors', 'telemetry', 'dashboard'], (_, k)=> {
+    $.each(['settings', 'connectors', 'telemetry', 'dashboard', 'authentication', 'admin'], (_, k) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
         <li className={cname} key={k}>
-          <a id={ 'config-' + k } className="nav-link" onClick={this.setBody(k)}>{k} </a>
+          <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>{k} </a>
         </li>
       )
     })
     var body = components[this.state.body]
-    return(
+    return (
       <div className='container'>
-        <ul className="nav nav-tabs">
+        <ul className='nav nav-tabs'>
           {panels}
         </ul>
         {body}
