@@ -7,46 +7,44 @@ import Auth from '../auth.jsx'
 import Connectors from '../connectors/main.jsx'
 import $ from 'jquery'
 
+const components = {
+  settings: <Settings /> ,
+  connectors: <Connectors />,
+  telemetry: <Telemetry />,
+  dashboard: <Dashboard />,
+  authentication: <Auth />
+}
+
 export default class Configuration extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      admin: false,
-      settings: false,
-      connectors: false
+      body: 'settings'
     }
-    this.toRow = this.toRow.bind(this)
+    this.setBody = this.setBody.bind(this)
   }
 
-  componentDidMount () {
-    $('#settings_config').hide()
-    $('#connectors_config').hide()
-    $('#telemetry_config').hide()
-    $('#dashboard_config').hide()
-    $('#authentication_config').hide()
+  setBody(k) {
+    return(() => {this.setState({body: k})})
   }
 
-  toRow (label, component) {
-    var id = label + '_config'
-    return (
-      <div className='row'>
-        <button id={'btn-' + label} onClick={() => $('#' + id).toggle()} className='btn btn-outline-secondary btn-lg btn-block'>{label} </button>
-        <div className='container' id={id}>
-          {component}
-        </div>
-      </div>
-    )
-  }
-
-  render () {
-    return (
+  render() {
+    var panels = [ ]
+    $.each(['settings', 'connectors', 'telemetry', 'dashboard'], (_, k)=> {
+      var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
+      panels.push(
+        <li className={cname} key={k}>
+          <a className="nav-link" onClick={this.setBody(k)}>{k} </a>
+        </li>
+      )
+    })
+    var body = components[this.state.body]
+    return(
       <div className='container'>
-        { this.toRow('settings', <Settings />) }
-        { this.toRow('connectors', <Connectors />) }
-        { this.toRow('telemetry', <Telemetry />) }
-        { this.toRow('dashboard', <Dashboard />) }
-        { this.toRow('authentication', <Auth />) }
-        <Admin />
+        <ul className="nav nav-tabs">
+          {panels}
+        </ul>
+        {body}
       </div>
     )
   }
