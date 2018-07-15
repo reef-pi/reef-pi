@@ -18,19 +18,6 @@ func ValidateValues(values []int) error {
 	return nil
 }
 
-func GetCurrentValue(t time.Time, series []int) int {
-	h1 := t.Hour() / 2
-	h2 := h1 + 1
-	if h2 >= 12 {
-		h2 = 0
-	}
-	m := float64(t.Minute() + ((t.Hour() % 2) * 60))
-	from := float64(series[h1])
-	to := float64(series[h2])
-	f := from + ((to - from) / 120.0 * m)
-	return int(f)
-}
-
 func (c *Controller) StartCycle() {
 	ticker := time.NewTicker(c.config.Interval)
 	log.Println("Starting lighting cycle")

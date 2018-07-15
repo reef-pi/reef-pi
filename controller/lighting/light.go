@@ -19,6 +19,7 @@ type Channel struct {
 	Reverse      bool   `json:"reverse"`
 	Pin          int    `json:"pin"`
 	Color        string `json:"color"`
+	Profile      string `json:"profile"`
 }
 type Light struct {
 	ID       string          `json:"id"`
@@ -114,8 +115,7 @@ func (c *Controller) syncLight(light Light) {
 			c.telemetry.EmitMetric(light.Name+"-"+ch.Name, ch.Fixed)
 			continue
 		}
-		expectedValues := ch.Values // TODO implement ticks`
-		v := GetCurrentValue(time.Now(), expectedValues)
+		v := ch.GetValue(time.Now())
 		if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
 			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.MinTheshold)
 			v = ch.StartMin
