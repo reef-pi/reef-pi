@@ -55,7 +55,13 @@ class newPump extends React.Component {
         <div className='row'>
           <JackSelector update={this.setJack} id='new_doser' />
         </div>
-        <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
+        <div className='row'>
+          <div className='col'>
+            <div className='float-right'>
+              <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

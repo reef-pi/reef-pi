@@ -41,20 +41,20 @@ export default class Cron extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <label className='col-sm-3'>Day of month</label>
-          <input type='text' id='day' className='col-sm-2' value={this.state.day} onChange={this.update('day')} />
+          <label className='col'>Day of month</label>
+          <input type='text' id='day' className='col' value={this.state.day} onChange={this.update('day')} />
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Hour</label>
-          <input type='text' id='hour' className='col-sm-2' value={this.state.hour} onChange={this.update('hour')} />
+          <label className='col'>Hour</label>
+          <input type='text' id='hour' className='col' value={this.state.hour} onChange={this.update('hour')} />
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Minute</label>
-          <input type='text' id='minute' className='col-sm-2' value={this.state.minute} onChange={this.update('minute')} />
+          <label className='col'>Minute</label>
+          <input type='text' id='minute' className='col' value={this.state.minute} onChange={this.update('minute')} />
         </div>
         <div className='row'>
-          <label className='col-sm-3'>Second</label>
-          <input type='text' id='second' className='col-sm-2' value={this.state.second} onChange={this.update('second')} />
+          <label className='col'>Second</label>
+          <input type='text' id='second' className='col' value={this.state.second} onChange={this.update('second')} />
         </div>
       </div>
     )

@@ -71,47 +71,55 @@ export default class Equipment extends React.Component {
       eqName = this.state.equipment.name
       eqAction = this.state.equipment.on ? 'on' : 'off'
     }
+    var durationUI = <div />
+    if (this.state.equipment.revert) {
+      durationUI = <div className='row'>
+        <div className='col'>
+          <label > Duration</label>
+        </div>
+        <div className='col'>
+          <input id='equipment-action-duration' type='text' onChange={this.updateDuration} className='col-lg-6' />(in seconds)
+        </div>
+      </div>
+    }
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-6'>
-            <div className='row'>
-              <div className='col-sm-6'>Equipment</div>
-              <div className='col-sm-6'>
-                <div className='dropdown'>
-                  <button className='btn btn-secondary dropdown-toggle' type='button' id='equipment' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    {eqName}
-                  </button>
-                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                    {this.equipmentList()}
-                  </div>
-                </div>
+          <div className='col'>Equipment</div>
+          <div className='col'>
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id='equipment' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {eqName}
+              </button>
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                {this.equipmentList()}
               </div>
-            </div>
-            <div className='row'>
-              <label className='col-sm-6 '> Action</label>
-              <span className='col-sm-6'>
-                <div className='dropdown'>
-                  <button className='btn btn-secondary dropdown-toggle' type='button' id='equipmentAction' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    {eqAction}
-                  </button>
-                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                    <a className='dropdown-item' onClick={this.setEquipmentAction(true)}> On </a>
-                    <a className='dropdown-item' onClick={this.setEquipmentAction(false)}> Off </a>
-                  </div>
-                </div>
-              </span>
-            </div>
-            <div className='row'>
-              <label className='col-sm-6'> Revert</label>
-              <input id='equipment-revert' type='checkbox' onClick={this.updateRevert} defaultChecked={false} />
-            </div>
-            <div className='row'>
-              <label className='col-sm-6'> Duration</label>
-              <input id='equipment-action-duration' type='text' className='col-sm-6' onChange={this.updateDuration} /> (in seconds)
             </div>
           </div>
         </div>
+        <div className='row'>
+          <label className='col'> Action</label>
+          <span className='col'>
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id='equipmentAction' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {eqAction}
+              </button>
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                <a className='dropdown-item' onClick={this.setEquipmentAction(true)}> On </a>
+                <a className='dropdown-item' onClick={this.setEquipmentAction(false)}> Off </a>
+              </div>
+            </div>
+          </span>
+        </div>
+        <div className='row'>
+          <div className='col'>
+            <label> Revert </label>
+          </div>
+          <div className='col'>
+            <input id='equipment-revert' type='checkbox' onClick={this.updateRevert} defaultChecked={false} />
+          </div>
+        </div>
+        {durationUI}
       </div>
     )
   }

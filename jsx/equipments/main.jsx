@@ -139,6 +139,8 @@ class main extends React.Component {
               {this.outletList()}
             </div>
           </div>
+        </div>
+        <div clssName='col-lg-1'>
           <input type='button' id='createEquipment' value='add' onClick={this.addEquipment} className='btn btn-outline-primary' />
         </div>
       </div>
