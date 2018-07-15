@@ -27,6 +27,7 @@ class Main extends React.Component {
     this.update = this.update.bind(this)
     this.trigger = this.trigger.bind(this)
     this.pickEquipment = this.pickEquipment.bind(this)
+    this.newTimer = this.newTimer.bind(this)
   }
 
   trigger () {
@@ -151,38 +152,49 @@ class Main extends React.Component {
     $('#second').val('')
   }
 
+  newTimer () {
+    return (
+      <div className='container'>
+        <div className='row'>
+          <label className='col-sm-1 text-secondary'>Name</label>
+          <input type='text' id='name' className='col-sm-3' />
+        </div>
+        <div className='row'>
+          <div className='col'>
+            <Cron />
+          </div>
+          <div className='col'>
+            <div className='btn-group'>
+              <label className='btn btn-secondary'>
+                <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
+              </label>
+              <label className='btn btn-secondary'>
+                <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} /> Equipment
+              </label>
+            </div>
+            {this.trigger()}
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col'>
+            <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary float-right' />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   render () {
-    var dStyle = {
-      display: this.state.addTimer ? 'block' : 'none'
+    var nT = <div />
+    if (this.state.addTimer) {
+      nT = this.newTimer()
     }
     return (
       <div className='container'>
         <ul className='list-group list-group-flush'>{this.timerList()}</ul>
         <div className='container'>
           <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
-          <div style={dStyle} className='container'>
-            <div className='row'>
-              <label className='col-sm-1 text-secondary'>Name</label>
-              <input type='text' id='name' className='col-sm-3' />
-            </div>
-            <div className='row'>
-              <div className='col-sm-6'>
-                <div className='btn-group'>
-                  <label className='btn btn-secondary'>
-                    <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
-                  </label>
-                  <label className='btn btn-secondary'>
-                    <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} /> Equipment
-                  </label>
-                </div>
-                {this.trigger()}
-              </div>
-              <div className='col-sm-6'>
-                <Cron />
-              </div>
-            </div>
-            <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary' />
-          </div>
+          {nT}
         </div>
       </div>
     )
