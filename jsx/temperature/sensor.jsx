@@ -261,8 +261,10 @@ export default class Sensor extends React.Component {
           <Notify config={this.state.tc.notify} updateHook={this.updateNotify} readOnly={this.state.readOnly} />
         </div>
         <div className='row'>
-          <div className='col-sm-1'>
-            <input type='button' id={'update-tc-' + this.props.data.id} onClick={this.save} value={editText} className={editClass} />
+          <div className='col'>
+            <div className='float-right'>
+              <input type='button' id={'update-tc-' + this.props.data.id} onClick={this.save} value={editText} className={editClass} />
+            </div>
           </div>
         </div>
       </div>

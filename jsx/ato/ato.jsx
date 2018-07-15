@@ -154,8 +154,10 @@ class ato extends React.Component {
             <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
           </div>
           <div className='row'>
-            <div className='col-sm-1'>
-              <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
+            <div className='col'>
+              <div className='float-right'>
+                <input type='button' id='updateATO' onClick={this.save} value={editText} className={editClass} />
+              </div>
             </div>
           </div>
         </div>

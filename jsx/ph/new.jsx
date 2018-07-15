@@ -49,26 +49,32 @@ export default class New extends React.PureComponent {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='new_probe_name' /></div>
+          <div className='col-lg-2'>Name</div>
+          <div className='col-lg-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='new_probe_name' /></div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Enable</div>
-          <div className='col-sm-1'>
+          <div className='col-lg-2'>Enable</div>
+          <div className='col-lg-1'>
             <input type='checkbox' onChange={this.updateEnable} value={this.state.enable} id='new_probe_enable' />
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Address</div>
-          <div className='col-sm-1'>
+          <div className='col-lg-2'>Address</div>
+          <div className='col-lg-1'>
             <input type='text' id='new_probe_address' value={this.state.address} onChange={this.update('address')} />
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Period</div>
-          <div className='col-sm-2'><input type='text' id='new_probe_period' onChange={this.update('period')} value={this.state.period} /></div>
+          <div className='col-lg-2'>Period</div>
+          <div className='col-lg-2'><input type='text' id='new_probe_period' onChange={this.update('period')} value={this.state.period} /></div>
         </div>
-        <input type='button' id='create_probe' value='add' onClick={this.add} className='btn btn-outline-primary' />
+        <div className='row'>
+          <div className='col'>
+            <div className='float-right'>
+              <input type='button' id='create_probe' value='add' onClick={this.add} className='btn btn-outline-primary' />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

@@ -57,14 +57,14 @@ class newATO extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'>
+          <div className='col'>Name</div>
+          <div className='col'>
             <input type='text' id='new_ato_sensor_name' onChange={this.update('name')} value={this.state.name} />
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Enable</div>
-          <div className='col-sm-1'>
+          <div className='col'>Enable</div>
+          <div className='col'>
             <input type='checkbox' id='new_ato_sensor_enable' onChange={this.updateEnable} value={this.state.enable} />
           </div>
         </div>
@@ -72,10 +72,16 @@ class newATO extends React.Component {
           <InletSelector update={this.setInlet} name='new_ato' />
         </div>
         <div className='row'>
-          <div className='col-sm-2'>Period</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('period')} value={this.state.period} id='new_ato_sensor_period' /></div>
+          <div className='col'>Period</div>
+          <div className='col'><input type='text' onChange={this.update('period')} value={this.state.period} id='new_ato_sensor_period' /></div>
         </div>
-        <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
+        <div className='row'>
+          <div className='col'>
+            <div className='float-right'>
+              <input type='button' id='create_ato' value='add' onClick={this.add} className='btn btn-outline-primary' />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
