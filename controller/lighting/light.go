@@ -8,18 +8,18 @@ import (
 )
 
 type Channel struct {
-	Name         string `json:"name"`
-	MinTheshold  int    `json:"min"`
-	StartMin     int    `json:"start_min"`
-	MaxThreshold int    `json:"max"`
-	Ticks        int    `json:"ticks"`
-	Values       []int  `json:"values"`
-	Fixed        int    `json:"fixed"`
-	Auto         bool   `json:"auto"`
-	Reverse      bool   `json:"reverse"`
-	Pin          int    `json:"pin"`
-	Color        string `json:"color"`
-	Profile      string `json:"profile"`
+	Name         string  `json:"name"`
+	MinTheshold  int     `json:"min"`
+	StartMin     int     `json:"start_min"`
+	MaxThreshold int     `json:"max"`
+	Ticks        int     `json:"ticks"`
+	Values       []int   `json:"values"`
+	Fixed        int     `json:"fixed"`
+	Auto         bool    `json:"auto"`
+	Reverse      bool    `json:"reverse"`
+	Pin          int     `json:"pin"`
+	Color        string  `json:"color"`
+	Profile      Profile `json:"profile"`
 }
 type Light struct {
 	ID       string          `json:"id"`
