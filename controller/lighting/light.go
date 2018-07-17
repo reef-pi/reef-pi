@@ -12,10 +12,6 @@ type Channel struct {
 	MinTheshold  int     `json:"min"`
 	StartMin     int     `json:"start_min"`
 	MaxThreshold int     `json:"max"`
-	Ticks        int     `json:"ticks"`
-	Values       []int   `json:"values"`
-	Fixed        int     `json:"fixed"`
-	Auto         bool    `json:"auto"`
 	Reverse      bool    `json:"reverse"`
 	Pin          int     `json:"pin"`
 	Color        string  `json:"color"`
@@ -60,21 +56,14 @@ func (c *Controller) Create(l Light) error {
 	for i, pin := range j.Pins {
 		ch, ok := l.Channels[pin]
 		if !ok {
-			ch = Channel{Ticks: 12}
+			ch = Channel{}
 		}
 		ch.Pin = pin
-		if ch.Ticks != 12 {
-			log.Println("Warn: Only 12 ticks are supported. Ignoring ticks:", ch.Ticks)
-			ch.Ticks = 12
-		}
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("channel-%d", i+1)
 		}
 		if ch.MaxThreshold == 0 {
 			ch.MaxThreshold = 100
-		}
-		if ch.Values == nil {
-			ch.Values = make([]int, ch.Ticks)
 		}
 		l.Channels[pin] = ch
 	}
@@ -110,11 +99,6 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
-		if !ch.Auto {
-			c.UpdateChannel(light.Jack, ch, ch.Fixed)
-			c.telemetry.EmitMetric(light.Name+"-"+ch.Name, ch.Fixed)
-			continue
-		}
 		v := ch.GetValue(time.Now())
 		if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
 			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.MinTheshold)

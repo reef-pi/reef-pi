@@ -1,23 +1,23 @@
 package lighting
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"math"
 	"time"
 )
 
 type Profile struct {
-	Type   string      `json:"type"`
-	Config interface{} `json:"config"`
+	Type   string          `json:"type"`
+	Config json.RawMessage `json:"config"`
 }
 
-type ReefPiConfig struct {
+type AutoConfig struct {
 	Values []int `json:"values"` // 12 ticks after every 2 hours
 }
 
 type FixedConfig struct {
-	Fixed int `json:"fixed"`
+	Value int `json:"value"`
 }
 
 type DiurnalConfig struct {
@@ -34,7 +34,13 @@ PercentLight * (Max - Min) + Min
 */
 const TimeFormat = "15:04"
 
-func (d DiurnalConfig) GetValue(t time.Time) int {
+func (ch Channel) GetValueDiurnal(t time.Time) int {
+	var d DiurnalConfig
+	if err := json.Unmarshal(ch.Profile.Config, &d); err != nil {
+		log.Println("ERROR: lighting subsysten failed to typecast diurnal config. Error:", err)
+		return 0
+	}
+
 	s, err := time.Parse(TimeFormat, d.Start)
 	if err != nil {
 		log.Println("ERROR: lighting subsystem, failed to parse start time in diurnal cycle. Error:", err)
@@ -58,14 +64,11 @@ func (d DiurnalConfig) GetValue(t time.Time) int {
 	percent := float64(pastMinutes) * 2 * math.Pi / float64(totalMinutes)
 	k := math.Pow(math.Cos(percent), 3)
 	v := int((1 - k) * float64(d.Max-d.Min))
-	//log.Println("Time:", t, "V:", v+d.Min, "Total minutes:", totalMinutes, "Past minutes:", pastMinutes, "Percent:", percent, "K:", k)
 	v = v + d.Min
 	if v > d.Max {
-		//v = d.Max
+		v = d.Max
 	}
-	//	log.Printf("Time:%s V:%03d", t, v)
-	fmt.Println(v)
-	//(percent * (d.Max - d.Min)) + d.Min
+	//log.Println("Time:", t, "V:", v+d.Min, "Total minutes:", totalMinutes, "Past minutes:", pastMinutes, "Percent:", percent, "K:", k)
 	return v
 }
 
@@ -77,15 +80,32 @@ type FreeFormConfig struct {
 func (ch Channel) GetValue(t time.Time) int {
 	switch ch.Profile.Type {
 	case "diurnal":
-	case "reef-pi":
+		return ch.GetValueDiurnal(t)
+	case "auto":
+		return ch.GetValueAuto(t)
+	case "fixed":
+		return ch.GetValueFixed()
 	default:
-		return ch.GetValue12Hour(t)
+		return 0
 	}
-	return ch.GetValue12Hour(t)
+	return 0
 }
 
-func (ch Channel) GetValue12Hour(t time.Time) int {
-	series := ch.Values
+func (ch Channel) GetValueFixed() int {
+	var f FixedConfig
+	if err := json.Unmarshal(ch.Profile.Config, &f); err != nil {
+		log.Println("ERROR: lighting subsysten failed to typecast fixed config. Error", err)
+		return 0
+	}
+	return f.Value
+}
+func (ch Channel) GetValueAuto(t time.Time) int {
+	var a AutoConfig
+	if err := json.Unmarshal(ch.Profile.Config, &a); err != nil {
+		log.Println("ERROR: lighting subsysten failed to typecast auto config. Error", err)
+		return 0
+	}
+	series := a.Values
 	h1 := t.Hour() / 2
 	h2 := h1 + 1
 	if h2 >= 12 {
