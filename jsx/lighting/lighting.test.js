@@ -20,7 +20,13 @@ describe('Lighting ui', () => {
     name: 'foo',
     jack: '1',
     channels: {
-      '1': [1, 2, 3, 4]
+      '1': {
+        pin: 0,
+        profile: {
+          type: 'auto',
+          config: {values: [1,2,3,4,5,6,7,8,9,10,11,12]}
+        }
+      }
     }
   }
   it('<Main />', () => {

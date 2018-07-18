@@ -33,19 +33,19 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var lines = []
-    var data = []
-    $.each(this.props.config.channels, function (name, channel) {
-      lines.push(this.channel2line(channel, data))
-    }.bind(this))
-    data['time'] = [12]
-    lines.push(
+    var lines = [
       <Line dataKey='time'
         isAnimationActive={false}
         stroke='#000000'
         key='time'
         layout='vertical'
-      />)
+      />
+    ]
+    var data = []
+    data['time'] = [12]
+    $.each(this.props.config.channels, function (name, channel) {
+      lines.push(this.channel2line(channel, data))
+    }.bind(this))
     return (
       <div className='container'>
         <span className='h6'>Light - {this.props.config.name}</span>
