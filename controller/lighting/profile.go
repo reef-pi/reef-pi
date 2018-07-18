@@ -99,6 +99,12 @@ func (ch Channel) GetValueAuto(t time.Time) int {
 		return 0
 	}
 	series := a.Values
+	l := len(series)
+	if l < 12 {
+		for i := l - 1; i < 12; i++ {
+			series = append(series, 0)
+		}
+	}
 	h1 := t.Hour() / 2
 	h2 := h1 + 1
 	if h2 >= 12 {
