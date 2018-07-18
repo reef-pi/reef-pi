@@ -6,70 +6,42 @@ export default class DiurnalProfile extends React.Component {
     super(props)
     this.state = {
       start: props.config.start,
-      end: props.config.end,
-      min: props.config.min,
-      max: props.config.max
+      end: props.config.end
     }
-    this.updateText = this.updateText.bind(this)
-    this.updateInt = this.updateInt.bind(this)
+    this.update = this.update.bind(this)
   }
 
-  updateText (k) {
+  update (k) {
     return (ev) => {
       var c = this.props.config
       c[k] = ev.target.value
-      this.props.hook(c)
-    }
-  }
-
-  updateInt (k) {
-    return (ev) => {
-      var c = this.props.config
-      c[k] = parseInt(ev.target.value)
+      this.setState({start: c.start, end: c.end})
       this.props.hook(c)
     }
   }
 
   render () {
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-2 form-group'>
-            <label>Start</label>
-            <input
-              type='text'
-              className='form-control'
-              onChange={this.updateText('start')}
-              value={this.state.start}
-            />
-          </div>
-          <div className='col-lg-2 form-group'>
-            <label>End</label>
-            <input
-              type='text'
-              className='form-control'
-              onChange={this.updateText('end')}
-              value={this.state.end}
-            />
-          </div>
-          <div className='col-lg-2 form-group'>
-            <label>Min</label>
-            <input
-              type='text'
-              className='form-control'
-              onChange={this.updateInt('min')}
-              value={this.state.min}
-            />
-          </div>
-          <div className='col-lg-2 form-group'>
-            <label>Max</label>
-            <input
-              className='form-control'
-              type='text'
-              onChange={this.updateInt('max')}
-              value={this.state.max}
-            />
-          </div>
+      <div className='form-inline row'>
+        <div className='form-group col-lg-3'>
+          <label>Start</label>
+          <input
+            type='text'
+            readOnly={this.props.readOnly}
+            className='form-control col-lg-6'
+            onChange={this.update('start')}
+            value={this.state.start}
+          />
+        </div>
+        <div className='form-group col-lg-3'>
+          <label>End</label>
+          <input
+            type='text'
+            className='form-control col-lg-6'
+            onChange={this.update('end')}
+            readOnly={this.props.readOnly}
+            value={this.state.end}
+          />
         </div>
       </div>
     )

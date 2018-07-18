@@ -7,6 +7,7 @@ import DiurnalProfile from 'lighting/diurnal_profile'
 export default class Profile extends React.Component {
   constructor (props) {
     super(props)
+    console.log(props)
     this.setConfig = this.setConfig.bind(this)
     this.setType = this.setType.bind(this)
     this.ui = this.ui.bind(this)

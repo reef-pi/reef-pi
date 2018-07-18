@@ -44,7 +44,7 @@ export default class Light extends React.Component {
       jack: this.props.config.jack
     }
     this.props.hook(this.props.config.id, payload)
-    this.setState({updated: false})
+    this.setState({updated: false, readOnly: true})
   }
 
   setLightMode (pin) {

@@ -5,7 +5,6 @@ import Channel from './channel'
 import Chart from './chart'
 import Main from './main'
 import Light from './light'
-import Slider from './slider'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -45,17 +44,10 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    const m = shallow(<Channel ch={{values: []}} updateChannel={() => {}} />).instance()
+    const m = shallow(<Channel config={{values: []}} hook={() => {}} />).instance()
     m.updateMin({target: {}})
     m.updateMax({target: {}})
-    m.updateAuto({target: {}})
     m.updateReverse({target: {}})
-    m.updateFixedValue(10)
     m.updateName({target: {}})
-  })
-
-  it('<Slider />', () => {
-    const m = shallow(<Slider onChange={() => {}} getValue={() => []} />).instance()
-    m.update({target: {}})
   })
 })
