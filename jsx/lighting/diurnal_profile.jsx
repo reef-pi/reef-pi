@@ -5,18 +5,19 @@ export default class DiurnalProfile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      start: props.config.start,
-      end: props.config.end
+      config: {
+        start: props.config.start ? props.config.start : '',
+        end: props.config.end ? props.config.end : ''
+      }
     }
     this.update = this.update.bind(this)
   }
 
   update (k) {
+    var s = this.state.config
     return (ev) => {
-      var c = this.props.config
-      c[k] = ev.target.value
-      this.setState({start: c.start, end: c.end})
-      this.props.hook(c)
+      s[k] = ev.target.value
+      this.props.hook(s)
     }
   }
 
@@ -30,7 +31,7 @@ export default class DiurnalProfile extends React.Component {
             readOnly={this.props.readOnly}
             className='form-control col-lg-6'
             onChange={this.update('start')}
-            value={this.state.start}
+            value={this.state.config.start}
           />
         </div>
         <div className='form-group col-lg-3'>
@@ -40,7 +41,7 @@ export default class DiurnalProfile extends React.Component {
             className='form-control col-lg-6'
             onChange={this.update('end')}
             readOnly={this.props.readOnly}
-            value={this.state.end}
+            value={this.state.config.end}
           />
         </div>
       </div>
