@@ -11,8 +11,6 @@ func TestProfile(t *testing.T) {
 	d := DiurnalConfig{
 		Start: "07:30",
 		End:   "18:45",
-		Min:   14,
-		Max:   80,
 	}
 	d1, err := json.Marshal(&d)
 	if err != nil {

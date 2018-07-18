@@ -23,15 +23,8 @@ type FixedConfig struct {
 type DiurnalConfig struct {
 	Start string `json:"start"`
 	End   string `json:"end"`
-	Min   int    `json:"min"`
-	Max   int    `json:"max"`
 }
 
-/*
-(Current time - Start time)* 2*pi / (End time - Start Time)
-PercentLight * (Max - Min) + Min
-=(1-COS((minutes-startMinutes)2PI/(End Minutes-startMinutes))^3) * (Max - Min) + Min
-*/
 const TimeFormat = "15:04"
 
 func (ch Channel) GetValueDiurnal(t time.Time) int {
@@ -63,10 +56,10 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 	pastMinutes := int(t.Sub(s) / time.Minute)
 	percent := float64(pastMinutes) * 2 * math.Pi / float64(totalMinutes)
 	k := math.Pow(math.Cos(percent), 3)
-	v := int((1 - k) * float64(d.Max-d.Min))
-	v = v + d.Min
-	if v > d.Max {
-		v = d.Max
+	v := int((1 - k) * float64(ch.Max-ch.Min))
+	v = v + ch.Min
+	if v > ch.Max {
+		v = ch.Max
 	}
 	//log.Println("Time:", t, "V:", v+d.Min, "Total minutes:", totalMinutes, "Past minutes:", pastMinutes, "Percent:", percent, "K:", k)
 	return v
