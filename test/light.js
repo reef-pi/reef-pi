@@ -14,14 +14,16 @@ module.exports = {
     .wait(500)
     .click('input#expand-light-1')
     .wait(500)
-    .click('input#A360-channel-1-auto')
+    .click('input#update-light-A360')
     .wait(500)
-    .click('input#A360-channel-2-auto')
+    .click('input#expand-channel-1-1')
+    .wait(500)
+    .click('input#profile-1-1-auto')
     .wait(500)
     .click('input#update-light-A360')
     .wait(1500)
     return(function(){
-      return('Sign In completed')
+      return('Light setup completed')
     })
   }
 }
