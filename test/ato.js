@@ -18,7 +18,7 @@ module.exports = {
     .click('input#create_ato')
     .wait(1500)
     return(function(){
-      return('Sign In completed')
+      return('ato setup completed')
     })
   },
   Configure: function(n){
@@ -39,6 +39,5 @@ module.exports = {
     return(function(){
       return('ATO configured')
     })
-
   }
 }

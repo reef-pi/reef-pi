@@ -4,32 +4,48 @@ import $ from 'jquery'
 import {connect} from 'react-redux'
 
 class chart extends React.Component {
+  constructor (props) {
+    super(props)
+    this.channel2line = this.channel2line.bind(this)
+  }
+
+  channel2line (ch, data) {
+    if (ch.profile.type === 'auto') {
+      $.each(ch.profile.config.values, function (i, value) {
+        if (data[i] === undefined) {
+          data[i] = {time: (i * 2) + 'h'}
+        }
+        data[i][ch.name] = value
+      })
+      var stroke = ch.color === '' ? '#000' : ch.color
+      return (
+        <Line
+          dataKey={ch.name}
+          isAnimationActive={false}
+          stroke={stroke}
+          key={ch.pin}
+        />
+      )
+    }
+  }
+
   render () {
     if (this.props.config === undefined) {
       return <div />
     }
-    var lines = []
-    var data = []
-    $.each(this.props.config.channels, function (name, channel) {
-      $.each(channel.values, function (i, value) {
-        if (data[i] === undefined) {
-          data[i] = {time: (i * 2) + 'h'}
-        }
-        data[i][channel.name] = value
-      })
-      var stroke = channel.color === '' ? '#000' : channel.color
-      lines.push(
-        <Line dataKey={channel.name} isAnimationActive={false} stroke={stroke} key={name} />
-      )
-    })
-    data['time'] = [12]
-    lines.push(
+    var lines = [
       <Line dataKey='time'
         isAnimationActive={false}
         stroke='#000000'
         key='time'
         layout='vertical'
-      />)
+      />
+    ]
+    var data = []
+    data['time'] = [12]
+    $.each(this.props.config.channels, function (name, channel) {
+      lines.push(this.channel2line(channel, data))
+    }.bind(this))
     return (
       <div className='container'>
         <span className='h6'>Light - {this.props.config.name}</span>

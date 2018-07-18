@@ -8,17 +8,14 @@ import (
 )
 
 type Channel struct {
-	Name         string `json:"name"`
-	MinTheshold  int    `json:"min"`
-	StartMin     int    `json:"start_min"`
-	MaxThreshold int    `json:"max"`
-	Ticks        int    `json:"ticks"`
-	Values       []int  `json:"values"`
-	Fixed        int    `json:"fixed"`
-	Auto         bool   `json:"auto"`
-	Reverse      bool   `json:"reverse"`
-	Pin          int    `json:"pin"`
-	Color        string `json:"color"`
+	Name     string  `json:"name"`
+	Min      int     `json:"min"`
+	StartMin int     `json:"start_min"`
+	Max      int     `json:"max"`
+	Reverse  bool    `json:"reverse"`
+	Pin      int     `json:"pin"`
+	Color    string  `json:"color"`
+	Profile  Profile `json:"profile"`
 }
 type Light struct {
 	ID       string          `json:"id"`
@@ -59,21 +56,14 @@ func (c *Controller) Create(l Light) error {
 	for i, pin := range j.Pins {
 		ch, ok := l.Channels[pin]
 		if !ok {
-			ch = Channel{Ticks: 12}
+			ch = Channel{}
 		}
 		ch.Pin = pin
-		if ch.Ticks != 12 {
-			log.Println("Warn: Only 12 ticks are supported. Ignoring ticks:", ch.Ticks)
-			ch.Ticks = 12
-		}
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("channel-%d", i+1)
 		}
-		if ch.MaxThreshold == 0 {
-			ch.MaxThreshold = 100
-		}
-		if ch.Values == nil {
-			ch.Values = make([]int, ch.Ticks)
+		if ch.Max == 0 {
+			ch.Max = 100
 		}
 		l.Channels[pin] = ch
 	}
@@ -109,19 +99,13 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
-		if !ch.Auto {
-			c.UpdateChannel(light.Jack, ch, ch.Fixed)
-			c.telemetry.EmitMetric(light.Name+"-"+ch.Name, ch.Fixed)
-			continue
-		}
-		expectedValues := ch.Values // TODO implement ticks`
-		v := GetCurrentValue(time.Now(), expectedValues)
-		if (ch.MinTheshold > 0) && (v < ch.MinTheshold) {
-			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.MinTheshold)
+		v := ch.GetValue(time.Now())
+		if (ch.Min > 0) && (v < ch.Min) {
+			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.Min)
 			v = ch.StartMin
-		} else if (ch.MaxThreshold > 0) && (v > ch.MaxThreshold) {
-			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.MaxThreshold, ch.MaxThreshold)
-			v = ch.MaxThreshold
+		} else if (ch.Max > 0) && (v > ch.Max) {
+			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.Max, ch.Max)
+			v = ch.Max
 		}
 		c.UpdateChannel(light.Jack, ch, v)
 		c.telemetry.EmitMetric(light.Name+"-"+ch.Name, v)

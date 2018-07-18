@@ -15,7 +15,7 @@ module.exports = {
     .wait(1500)
 
     return(function(){
-      return('Sign In completed')
+      return('pH setup completed')
     })
   }
 }
