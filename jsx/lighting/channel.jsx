@@ -169,7 +169,7 @@ export default class Channel extends React.Component {
             value={lbl}
             className='btn btn-secondary'
             onClick={this.toggle}
-            id={'expand-channel-'+this.props.light_id +'-'+this.state.channel.pin}
+            id={'expand-channel-' + this.props.light_id + '-' + this.state.channel.pin}
           />
         </div>
         {d}

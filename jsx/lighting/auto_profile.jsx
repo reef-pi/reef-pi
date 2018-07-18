@@ -11,7 +11,7 @@ export default class AutoProfile extends React.Component {
   curry (i) {
     return (ev) => {
       var values = []
-      if (this.props.config.values) {
+      if (this.props.config && this.props.config.values) {
         values = this.props.config.values
       }
       values[i] = parseInt(ev.target.value)

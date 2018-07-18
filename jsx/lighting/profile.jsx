@@ -7,7 +7,6 @@ import DiurnalProfile from 'lighting/diurnal_profile'
 export default class Profile extends React.Component {
   constructor (props) {
     super(props)
-    console.log(props)
     this.setConfig = this.setConfig.bind(this)
     this.setType = this.setType.bind(this)
     this.ui = this.ui.bind(this)
@@ -82,7 +81,7 @@ export default class Profile extends React.Component {
             <input
               type='radio'
               name={this.props.name}
-              id={this.props.name+'-auto'}
+              id={this.props.name + '-auto'}
               onClick={this.setType('auto')}
               defaultChecked={this.props.type === 'auto'}
               disabled={this.props.readOnly}
