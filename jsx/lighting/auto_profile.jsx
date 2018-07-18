@@ -21,7 +21,7 @@ export default class AutoProfile extends React.Component {
 
   sliderList () {
     var values = []
-    if (this.props.config.values) {
+    if (this.props.config && this.props.config.values) {
       values = this.props.config.values
     }
     var rangeStyle = {

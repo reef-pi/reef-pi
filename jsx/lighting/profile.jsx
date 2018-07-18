@@ -71,7 +71,7 @@ export default class Profile extends React.Component {
             <input
               type='radio'
               name={this.props.name}
-              id='fixed'
+              id={this.props.name + '-fixed'}
               onClick={this.setType('fixed')}
               defaultChecked={this.props.type === 'fixed'}
               disabled={this.props.readOnly}
@@ -82,7 +82,7 @@ export default class Profile extends React.Component {
             <input
               type='radio'
               name={this.props.name}
-              id='auto'
+              id={this.props.name+'-auto'}
               onClick={this.setType('auto')}
               defaultChecked={this.props.type === 'auto'}
               disabled={this.props.readOnly}
@@ -93,7 +93,7 @@ export default class Profile extends React.Component {
             <input
               type='radio'
               name={this.props.name}
-              id='diurnal'
+              id={this.props.name + '-diurnal'}
               onClick={this.setType('diurnal')}
               defaultChecked={this.props.type === 'diurnal'}
               disabled={this.props.readOnly}

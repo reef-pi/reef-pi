@@ -164,17 +164,23 @@ export default class Channel extends React.Component {
             />
             <span className='badge'>({this.state.channel.pin})</span>
           </div>
-          <input type='button' value={lbl} className='btn btn-secondary' onClick={this.toggle} />
+          <input
+            type='button'
+            value={lbl}
+            className='btn btn-secondary'
+            onClick={this.toggle}
+            id={'expand-channel-'+this.props.light_id +'-'+this.state.channel.pin}
+          />
         </div>
         {d}
       </div>
     )
   }
 }
+
 Profile.propTypes = {
   light_id: PropTypes.string,
   hook: PropTypes.func,
   config: PropTypes.object,
   readOnly: PropTypes.bool
-
 }
