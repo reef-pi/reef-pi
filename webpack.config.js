@@ -6,6 +6,10 @@ var APP_DIR = path.resolve(__dirname, 'jsx')
 
 var config = {
   entry: APP_DIR + '/entry',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', path.resolve(__dirname, 'jsx')]
+  },
   module: {
     rules: [
       {
