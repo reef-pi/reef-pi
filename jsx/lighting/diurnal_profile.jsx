@@ -6,8 +6,8 @@ export default class DiurnalProfile extends React.Component {
     super(props)
     this.state = {
       config: {
-        start: props.config.start ? props.config.start : '',
-        end: props.config.end ? props.config.end : ''
+        start: props.config && props.config.start ? props.config.start : '',
+        end: props.config && props.config.end ? props.config.end : ''
       }
     }
     this.update = this.update.bind(this)

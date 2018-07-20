@@ -5,7 +5,7 @@ export default class FixedProfile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      v: props.config.value ? props.config.value : 0
+      v: props.config && props.config.value ? props.config.value : 0
     }
     this.update = this.update.bind(this)
   }
