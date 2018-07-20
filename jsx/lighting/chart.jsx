@@ -10,7 +10,7 @@ class chart extends React.Component {
   }
 
   channel2line (ch, data) {
-    if (ch.profile.type === 'auto') {
+    if (ch.profile.type === 'auto' && ch.profile.config) {
       $.each(ch.profile.config.values, function (i, value) {
         if (data[i] === undefined) {
           data[i] = {time: (i * 2) + 'h'}
