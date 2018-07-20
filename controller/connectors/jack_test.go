@@ -54,7 +54,7 @@ func TestJacksAPI(t *testing.T) {
 		t.Error("Jack creation expected to fail when jack pins are empty")
 	}
 	body.Reset()
-	j.Pins = []int{15}
+	j.Pins = []int{16}
 	json.NewEncoder(body).Encode(j)
 	if err := tr.Do("PUT", "/api/jacks", body, nil); err == nil {
 		t.Error("Jack creation expected to fail when pca9685 pin is invalid (not 0-14)")
