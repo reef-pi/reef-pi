@@ -1,8 +1,8 @@
 import React from 'react'
 import $ from 'jquery'
-import Probe from './probe.jsx'
-import New from './new.jsx'
-import {fetchPhProbes, createProbe} from '../redux/actions/phprobes'
+import Probe from './probe'
+import New from './new'
+import {fetchPhProbes, createProbe} from 'redux/actions/phprobes'
 import {connect} from 'react-redux'
 
 class ph extends React.Component {

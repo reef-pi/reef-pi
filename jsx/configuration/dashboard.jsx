@@ -1,7 +1,7 @@
 import React from 'react'
-import Grid from './grid.jsx'
+import Grid from './grid'
 import {connect} from 'react-redux'
-import {fetchDashboard, updateDashboard} from '../redux/actions/dashboard'
+import {fetchDashboard, updateDashboard} from 'redux/actions/dashboard'
 import {isEmptyObject} from 'jquery'
 
 class dashboard extends React.Component {

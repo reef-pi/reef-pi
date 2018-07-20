@@ -1,5 +1,5 @@
 import React from 'react'
-import Channel from './channel.jsx'
+import Channel from './channel'
 import $ from 'jquery'
 
 export default class Light extends React.Component {

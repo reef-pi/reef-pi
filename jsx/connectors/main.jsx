@@ -1,7 +1,7 @@
 import React from 'react'
-import Outlets from './outlets.jsx'
-import Jacks from './jacks.jsx'
-import Inlets from './inlets.jsx'
+import Outlets from './outlets'
+import Jacks from './jacks'
+import Inlets from './inlets'
 
 export default class Connectors extends React.Component {
   render () {

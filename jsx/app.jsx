@@ -1,9 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
-import MainPanel from './main_panel.jsx'
-import SignIn from './sign_in.jsx'
+import MainPanel from 'main_panel'
+import SignIn from 'sign_in'
 import {connect} from 'react-redux'
-import {fetchInfo} from './redux/actions/info'
+import {fetchInfo} from 'redux/actions/info'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 

@@ -1,11 +1,11 @@
 import React from 'react'
 import $ from 'jquery'
-import Gallery from './gallery.jsx'
-import Config from './config.jsx'
-import Capture from './capture.jsx'
-import {fetchConfig, updateConfig, listImages} from '../redux/actions/camera'
+import Gallery from './gallery'
+import Config from './config'
+import Capture from './capture'
+import {fetchConfig, updateConfig, listImages} from 'redux/actions/camera'
 import {connect} from 'react-redux'
-import Motion from './motion.jsx'
+import Motion from './motion'
 
 class camera extends React.Component {
   constructor (props) {

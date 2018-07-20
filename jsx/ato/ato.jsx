@@ -1,11 +1,11 @@
 import React from 'react'
-import SelectEquipment from '../select_equipment.jsx'
-import InletSelector from '../connectors/inlet_selector.jsx'
-import ATOChart from './chart.jsx'
-import {deleteATO, updateATO} from '../redux/actions/ato'
+import SelectEquipment from 'select_equipment'
+import InletSelector from 'connectors/inlet_selector'
+import ATOChart from './chart'
+import {deleteATO, updateATO} from 'redux/actions/ato'
 import {connect} from 'react-redux'
 import {isEmptyObject} from 'jquery'
-import {confirm} from '../utils/confirm'
+import {confirm} from 'utils/confirm'
 
 class ato extends React.Component {
   constructor (props) {

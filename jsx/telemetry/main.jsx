@@ -1,8 +1,8 @@
 import React from 'react'
-import NotificationSettings from './notification.jsx'
-import AdafruitIO from './adafruit_io.jsx'
-import {showAlert} from '../utils/alert.js'
-import {updateTelemetry, fetchTelemetry} from '../redux/actions/telemetry'
+import NotificationSettings from './notification'
+import AdafruitIO from './adafruit_io'
+import {showAlert} from 'utils/alert'
+import {updateTelemetry, fetchTelemetry} from 'redux/actions/telemetry'
 import {connect} from 'react-redux'
 
 class telemetry extends React.Component {

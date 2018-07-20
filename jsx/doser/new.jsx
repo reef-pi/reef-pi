@@ -1,7 +1,7 @@
 import React from 'react'
-import {showAlert} from '../utils/alert.js'
-import JackSelector from '../jack_selector.jsx'
-import {createDosingPump} from '../redux/actions/doser'
+import {showAlert} from 'utils/alert'
+import JackSelector from 'jack_selector'
+import {createDosingPump} from 'redux/actions/doser'
 import {connect} from 'react-redux'
 
 class newPump extends React.Component {

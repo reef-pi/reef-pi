@@ -1,10 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Light from './light.jsx'
-import {showAlert} from '../utils/alert.js'
-import {confirm} from '../utils/confirm.js'
-import {updateLight, fetchLights, createLight, deleteLight} from '../redux/actions/lights'
-import {fetchJacks} from '../redux/actions/jacks'
+import Light from './light'
+import {showAlert} from 'utils/alert'
+import {confirm} from 'utils/confirm'
+import {updateLight, fetchLights, createLight, deleteLight} from 'redux/actions/lights'
+import {fetchJacks} from 'redux/actions/jacks'
 import {connect} from 'react-redux'
 
 class main extends React.Component {

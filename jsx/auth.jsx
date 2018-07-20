@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
-import SignIn from './sign_in.jsx'
-import {updateCreds} from './redux/actions/creds'
+import SignIn from 'sign_in'
+import {updateCreds} from 'redux/actions/creds'
 import {connect} from 'react-redux'
 
 class auth extends React.Component {

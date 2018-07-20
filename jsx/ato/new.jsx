@@ -1,7 +1,7 @@
 import React from 'react'
-import {showAlert} from '../utils/alert'
-import {createATO} from '../redux/actions/ato'
-import InletSelector from '../connectors/inlet_selector.jsx'
+import {showAlert} from 'utils/alert'
+import {createATO} from 'redux/actions/ato'
+import InletSelector from 'connectors/inlet_selector'
 import {connect} from 'react-redux'
 
 class newATO extends React.Component {

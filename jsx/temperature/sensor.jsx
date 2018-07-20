@@ -1,10 +1,10 @@
 import React from 'react'
-import SelectEquipment from '../select_equipment.jsx'
-import Notify from './notify.jsx'
-import {showAlert} from '../utils/alert.js'
-import SelectSensor from './select_sensor.jsx'
-import ReadingsChart from './readings_chart.jsx'
-import ControlChart from './control_chart.jsx'
+import SelectEquipment from 'select_equipment'
+import Notify from './notify'
+import {showAlert} from 'utils/alert'
+import SelectSensor from './select_sensor'
+import ReadingsChart from './readings_chart'
+import ControlChart from './control_chart'
 
 export default class Sensor extends React.Component {
   constructor (props) {
