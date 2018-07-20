@@ -32,7 +32,7 @@ func (j Jack) IsValid() error {
 	switch j.Driver {
 	case "pca9685":
 		for _, pin := range j.Pins {
-			if (pin > 14) || (pin < 0) {
+			if (pin > 15) || (pin < 0) {
 				return fmt.Errorf("Invalid pin:%d", pin)
 			}
 		}
