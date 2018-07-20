@@ -1,10 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Equipment from './equipment.jsx'
-import {showAlert} from '../utils/alert.js'
-import {confirm} from '../utils/confirm.js'
-import {updateEquipment, fetchEquipments, createEquipment, deleteEquipment} from '../redux/actions/equipment'
-import {fetchOutlets} from '../redux/actions/outlets'
+import Equipment from './equipment'
+import {showAlert} from 'utils/alert'
+import {confirm} from 'utils/confirm'
+import {updateEquipment, fetchEquipments, createEquipment, deleteEquipment} from 'redux/actions/equipment'
+import {fetchOutlets} from 'redux/actions/outlets'
 import {connect} from 'react-redux'
 
 class main extends React.Component {

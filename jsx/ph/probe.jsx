@@ -1,9 +1,9 @@
 import React from 'react'
-import {confirm} from '../utils/confirm.js'
-import Chart from './chart.jsx'
-import Config from './probe_config.jsx'
-import Calibrate from './calibrate.jsx'
-import {calibrateProbe, updateProbe, deleteProbe} from '../redux/actions/phprobes'
+import {confirm} from 'utils/confirm'
+import Chart from './chart'
+import Config from './probe_config'
+import Calibrate from './calibrate'
+import {calibrateProbe, updateProbe, deleteProbe} from 'redux/actions/phprobes'
 import {connect} from 'react-redux'
 
 class probe extends React.Component {

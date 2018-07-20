@@ -1,4 +1,4 @@
-import SignIn from '../sign_in.jsx'
+import SignIn from 'sign_in'
 import {showAlert} from './alert'
 
 function makeHeaders () {

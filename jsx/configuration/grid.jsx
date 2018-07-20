@@ -1,5 +1,5 @@
 import React from 'react'
-import ComponentSelector from './component_selector.jsx'
+import ComponentSelector from './component_selector'
 
 // props: rows, columns, hook, cells, tcs, atos
 export default class Grid extends React.Component {

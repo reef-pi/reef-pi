@@ -1,10 +1,10 @@
 import React from 'react'
 import $ from 'jquery'
-import Sensor from './sensor.jsx'
-import New from './new.jsx'
-import {fetchSensors, createTC, deleteTC, updateTC, fetchTCs} from '../redux/actions/tcs'
+import Sensor from './sensor'
+import New from './new'
+import {fetchSensors, createTC, deleteTC, updateTC, fetchTCs} from 'redux/actions/tcs'
 import {connect} from 'react-redux'
-import {confirm} from '../utils/confirm.js'
+import {confirm} from 'utils/confirm'
 
 class main extends React.Component {
   constructor (props) {

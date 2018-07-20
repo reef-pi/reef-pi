@@ -1,6 +1,6 @@
 import React from 'react'
-import {showAlert} from '../utils/alert.js'
-import SelectSensor from './select_sensor.jsx'
+import {showAlert} from 'utils/alert'
+import SelectSensor from './select_sensor'
 
 export default class New extends React.PureComponent {
   constructor (props) {

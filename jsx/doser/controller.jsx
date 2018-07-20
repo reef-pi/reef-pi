@@ -1,8 +1,8 @@
 import $ from 'jquery'
 import React from 'react'
-import Pump from './pump.jsx'
-import New from './new.jsx'
-import {fetchDosingPumps} from '../redux/actions/doser'
+import Pump from './pump'
+import New from './new'
+import {fetchDosingPumps} from 'redux/actions/doser'
 import {connect} from 'react-redux'
 
 class doser extends React.Component {

@@ -1,4 +1,4 @@
-import Confirm from '../confirm.jsx'
+import Confirm from 'confirm'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'

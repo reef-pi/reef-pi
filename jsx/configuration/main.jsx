@@ -1,10 +1,10 @@
 import React from 'react'
-import Admin from './admin.jsx'
-import Settings from './settings.jsx'
-import Telemetry from '../telemetry/main.jsx'
-import Dashboard from './dashboard.jsx'
-import Auth from '../auth.jsx'
-import Connectors from '../connectors/main.jsx'
+import Admin from './admin'
+import Settings from './settings'
+import Telemetry from 'telemetry/main'
+import Dashboard from './dashboard'
+import Auth from 'auth'
+import Connectors from 'connectors/main'
 import $ from 'jquery'
 
 const components = {

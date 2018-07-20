@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
-import Modal from './modal.jsx'
+import Modal from 'modal'
 
 export default class Confirm extends React.Component {
   constructor (props) {

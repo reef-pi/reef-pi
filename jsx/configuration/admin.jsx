@@ -1,7 +1,7 @@
 import React from 'react'
-import SignIn from '../sign_in.jsx'
-import {confirm} from '../utils/confirm.js'
-import {reload, reboot, powerOff} from '../redux/actions/admin'
+import SignIn from 'sign_in'
+import {confirm} from 'utils/confirm'
+import {reload, reboot, powerOff} from 'redux/actions/admin'
 import {connect} from 'react-redux'
 
 class admin extends React.Component {

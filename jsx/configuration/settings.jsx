@@ -1,8 +1,8 @@
 import React from 'react'
-import Capabilities from './capabilities.jsx'
-import Display from './display.jsx'
-import HealthNotify from './health_notify.jsx'
-import {updateSettings, fetchSettings} from '../redux/actions/settings'
+import Capabilities from './capabilities'
+import Display from './display'
+import HealthNotify from './health_notify'
+import {updateSettings, fetchSettings} from 'redux/actions/settings'
 import {connect} from 'react-redux'
 import {isEmptyObject} from 'jquery'
 

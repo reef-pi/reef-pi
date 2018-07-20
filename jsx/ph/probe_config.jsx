@@ -1,5 +1,5 @@
 import React from 'react'
-import Notify from './notify.jsx'
+import Notify from './notify'
 
 export default class ProbeConfig extends React.Component {
   constructor (props) {

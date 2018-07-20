@@ -1,7 +1,7 @@
-import Cron from '../timers/cron.jsx'
+import Cron from 'timers/cron'
 import React from 'react'
-import {confirm} from '../utils/confirm.js'
-import {calibrateDosingPump, updateDosingPumpSchedule, deleteDosingPump} from '../redux/actions/doser'
+import {confirm} from 'utils/confirm'
+import {calibrateDosingPump, updateDosingPumpSchedule, deleteDosingPump} from 'redux/actions/doser'
 import {connect} from 'react-redux'
 
 class pump extends React.Component {

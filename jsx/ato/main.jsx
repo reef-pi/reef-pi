@@ -1,7 +1,7 @@
 import React from 'react'
-import ATO from './ato.jsx'
-import New from './new.jsx'
-import {fetchATOs} from '../redux/actions/ato'
+import ATO from './ato'
+import New from './new'
+import {fetchATOs} from 'redux/actions/ato'
 import {connect} from 'react-redux'
 import $ from 'jquery'
 
