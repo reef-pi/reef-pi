@@ -33,7 +33,6 @@ func NewStore(fname string) (*store, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("DB:", fname)
 	return &store{
 		db:    db,
 		fname: fname,
@@ -45,7 +44,6 @@ func (s *store) ReOpen() error {
 	if err != nil {
 		return err
 	}
-	log.Println("Reopened DB:", s.fname)
 	s.db = db
 	return nil
 }
