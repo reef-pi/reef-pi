@@ -8,15 +8,24 @@ import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
 import {fetchDashboard} from 'redux/actions/dashboard'
 import {connect} from 'react-redux'
+import Config from './config'
 
 class dashboard extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      showConfig: false
+    }
     this.charts = this.charts.bind(this)
+    this.toggle = this.toggle.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchDashboard()
+  }
+
+  toggle () {
+    this.setState({showConfig: !this.state.showConfig})
   }
 
   charts () {
@@ -98,17 +107,35 @@ class dashboard extends React.Component {
         <div className='row' key={'row-' + i}>{columns}</div>
       )
     }
-    return (rows)
+    return (<div className='container'>{rows}</div>)
   }
 
   render () {
+    var content = <Config />
+    var lbl = 'Back to dashboard'
+    if (!this.state.showConfig) {
+      content = this.charts()
+      lbl = 'Configure'
+    }
     return (
       <div className='container'>
-        {this.charts()}
+        <div className='row'>
+          {content}
+        </div>
+        <div className='row'>
+          <div className='col'>
+            <div className='float-right'>
+              <button className='btn btn-outline-dark btn-sm' onClick={this.toggle}>
+                <label>{lbl}</label>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     config: state.dashboard

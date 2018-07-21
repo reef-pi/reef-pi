@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {fetchDashboard, updateDashboard} from 'redux/actions/dashboard'
 import {isEmptyObject} from 'jquery'
 
-class dashboard extends React.Component {
+class config extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -130,5 +130,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Dashboard = connect(mapStateToProps, mapDispatchToProps)(dashboard)
-export default Dashboard
+const Config = connect(mapStateToProps, mapDispatchToProps)(config)
+export default Config
