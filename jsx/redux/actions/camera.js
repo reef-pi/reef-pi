@@ -21,7 +21,7 @@ export const imagesLoaded = (s) => {
   })
 }
 
-export const fetchConfig= () => {
+export const fetchConfig = () => {
   return (reduxGet({
     url: '/api/camera/config',
     success: configLoaded

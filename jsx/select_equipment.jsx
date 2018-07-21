@@ -24,8 +24,8 @@ class selectEquipment extends React.Component {
   }
 
   equipmentList () {
-    var menuItems = [ 
-      <a className='dropdown-item' href="#" key='none' onClick={this.setEquipment('none')}>
+    var menuItems = [
+      <a className='dropdown-item' href='#' key='none' onClick={this.setEquipment('none')}>
         {'--'}
       </a>
     ]
@@ -33,12 +33,12 @@ class selectEquipment extends React.Component {
       var cName = 'dropdown-item'
       var active = false
       if (this.state.equipment !== undefined) {
-        if(this.state.equipment.id === v.id){
-          cName+= ' active'
+        if (this.state.equipment.id === v.id) {
+          cName += ' active'
         }
       }
       menuItems.push(
-        <a className={cName} href="#" key={k} onClick={this.setEquipment(k)}>
+        <a className={cName} href='#' key={k} onClick={this.setEquipment(k)}>
           <span id={this.props.id + '-' + v.name}>{v.name}</span>
         </a>)
     }.bind(this))
@@ -46,7 +46,7 @@ class selectEquipment extends React.Component {
   }
 
   setEquipment (k) {
-    return(()=>{
+    return () => {
       if (k === 'none') {
         this.setState({
           equipment: undefined
@@ -59,7 +59,7 @@ class selectEquipment extends React.Component {
         equipment: eq
       })
       this.props.update(eq.id)
-    })
+    }
   }
 
   render () {
@@ -69,11 +69,11 @@ class selectEquipment extends React.Component {
       eqName = this.state.equipment.name
     }
     return (
-      <div className="dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={readOnly}>
+      <div className='dropdown'>
+        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
           {eqName}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {this.equipmentList()}
         </div>
       </div>

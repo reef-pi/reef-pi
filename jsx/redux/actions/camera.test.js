@@ -3,7 +3,7 @@ import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
-import "isomorphic-fetch"
+import 'isomorphic-fetch'
 import {mockLocalStorage} from '../../utils/test_helper'
 
 const middlewares = [thunk]
@@ -11,62 +11,62 @@ const mockStore = configureMockStore(middlewares)
 
 window.localStorage = mockLocalStorage()
 
-describe( 'camera actions', () => {
+describe('camera actions', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
 
-  it('configLoaded', ()=>{
+  it('configLoaded', () => {
     expect(configLoaded({}).type).toEqual('CAMERA_CONFIG_LOADED')
   })
 
-  it('latestImageLoaded', ()=>{
+  it('latestImageLoaded', () => {
     expect(latestImageLoaded({}).type).toEqual('LATEST_IMAGE_LOADED')
   })
 
-  it('imagesLoaded', ()=>{
+  it('imagesLoaded', () => {
     expect(imagesLoaded({}).type).toEqual('IMAGES_LOADED')
   })
 
-  it('fetchConfig', ()=>{
+  it('fetchConfig', () => {
     fetchMock.getOnce('/api/camera/config', {})
     const store = mockStore()
-    return store.dispatch(fetchConfig()).then(()=>{
+    return store.dispatch(fetchConfig()).then(() => {
       expect(store.getActions()).toEqual([configLoaded({})])
     })
   })
 
-  it('updateConfig', ()=>{
+  it('updateConfig', () => {
     fetchMock.postOnce('/api/camera/config', {})
     fetchMock.getOnce('/api/camera/config', {})
     const store = mockStore()
-    return store.dispatch(updateConfig({})).then(()=>{
+    return store.dispatch(updateConfig({})).then(() => {
       expect(store.getActions()).toEqual([configLoaded({})])
     })
   })
 
-  it('takeImage', ()=>{
+  it('takeImage', () => {
     fetchMock.postOnce('/api/camera/shoot', {})
     fetchMock.getOnce('/api/camera/images', {})
     const store = mockStore()
-    return store.dispatch(takeImage()).then(()=>{
+    return store.dispatch(takeImage()).then(() => {
       expect(store.getActions()).toEqual([imagesLoaded({})])
     })
   })
 
-  it('listImages', ()=>{
+  it('listImages', () => {
     fetchMock.getOnce('/api/camera/images', {})
     const store = mockStore()
-    return store.dispatch(listImages()).then(()=>{
+    return store.dispatch(listImages()).then(() => {
       expect(store.getActions()).toEqual([imagesLoaded({})])
     })
   })
 
-  it('getLatestImage', ()=>{
+  it('getLatestImage', () => {
     fetchMock.getOnce('/api/camera/latest', {})
     const store = mockStore()
-    return store.dispatch(getLatestImage()).then(()=>{
+    return store.dispatch(getLatestImage()).then(() => {
       expect(store.getActions()).toEqual([latestImageLoaded({})])
     })
   })

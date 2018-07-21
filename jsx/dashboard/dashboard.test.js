@@ -41,7 +41,6 @@ describe('Dashboard', () => {
     m.updateHook(0, 0)('1')
   })
 
-
   it('<ComponentSelector />', () => {
     const comps = {
       'c1': {id: '1', name: 'foo'},

@@ -30,7 +30,7 @@ export const createTimer = (a) => {
 
 export const deleteTimer = (id) => {
   return (reduxDelete({
-    url: '/api/timers/'+id,
+    url: '/api/timers/' + id,
     success: fetchTimers
   }))
 }

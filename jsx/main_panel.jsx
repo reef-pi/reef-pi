@@ -30,7 +30,7 @@ const caps = {
 }
 
 class mainPanel extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = {
       body: 'dashboard'
@@ -43,11 +43,11 @@ class mainPanel extends React.Component {
     hideAlert()
   }
 
-  setBody(k) {
-    return(() => {this.setState({body: k})})
+  setBody (k) {
+    return () => { this.setState({body: k}) }
   }
 
-  navs() {
+  navs () {
     var panels = [ ]
     $.each(caps, function (k, panel) {
       if (this.props.capabilities[k] === undefined) {
@@ -56,17 +56,17 @@ class mainPanel extends React.Component {
       if (!this.props.capabilities[k]) {
         return
       }
-      var cname = k ===  this.state.body ? 'nav-link active text-primary' : 'nav-link'
+      var cname = k === this.state.body ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
-        <li className="nav-item" key={k}>
+        <li className='nav-item' key={k}>
           <a id={'tab-' + k}className={cname} onClick={this.setBody(k)}>{k}</a>
         </li>
       )
     }.bind(this))
-    return(
-        <ul className="nav nav-tabs">
-          {panels}
-        </ul>
+    return (
+      <ul className='nav nav-tabs'>
+        {panels}
+      </ul>
     )
   }
 
@@ -76,7 +76,7 @@ class mainPanel extends React.Component {
       <div className='container'>
         {this.navs()}
         {body}
-				<hr />
+        <hr />
         <Summary />
       </div>
     )

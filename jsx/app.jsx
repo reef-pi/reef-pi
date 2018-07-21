@@ -23,9 +23,9 @@ class app extends React.Component {
       <div className='container'>
         <div className='container'><h3 style={st}> {this.props.info.name} </h3></div>
         <div id='reef-pi-alert' className='alert alert-danger alert-dismissible fade show'>
-          <div id='reef-pi-alert-msg'/>
-          <button type="button" className='close' data-dismiss='alert' aria-label='Close'>
-            <span aria-hidden="true">&times;</span>
+          <div id='reef-pi-alert-msg' />
+          <button type='button' className='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
           </button>
         </div>
         <div className='container'>
