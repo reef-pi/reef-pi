@@ -15,12 +15,12 @@ export const sensorsLoaded = (s) => {
 }
 
 export const tcUsageLoaded = (id) => {
-  return((s) =>{
+  return (s) => {
     return ({
       type: 'TC_USAGE_LOADED',
       payload: {id: id, usage: s}
     })
-  })
+  }
 }
 
 export const fetchTCs = () => {
@@ -40,7 +40,7 @@ export const createTC = (t) => {
 
 export const updateTC = (id, t) => {
   return (reduxPost({
-    url: '/api/tcs/'+id,
+    url: '/api/tcs/' + id,
     data: t,
     success: fetchTCs
   }))
@@ -48,7 +48,7 @@ export const updateTC = (id, t) => {
 
 export const deleteTC = (id) => {
   return (reduxDelete({
-    url: '/api/tcs/'+id,
+    url: '/api/tcs/' + id,
     success: fetchTCs
   }))
 }
@@ -62,7 +62,7 @@ export const fetchSensors = () => {
 
 export const fetchTCUsage = (id) => {
   return (reduxGet({
-    url: '/api/tcs/'+id+'/usage',
+    url: '/api/tcs/' + id + '/usage',
     success: tcUsageLoaded(id)
   }))
 }

@@ -17,7 +17,7 @@ class healthChart extends React.Component {
   }
 
   componentWillUnmount () {
-    if(this.state && this.state.timer) {
+    if (this.state && this.state.timer) {
       window.clearInterval(this.state.timer)
     }
   }

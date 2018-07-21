@@ -1,13 +1,13 @@
 import {reduxPost} from '../../utils/ajax'
 
 export const reloaded = () => {
-  return({
+  return ({
     type: 'RELOADED'
   })
 }
 
 export const reload = () => {
-  return(
+  return (
     reduxPost({
       url: '/api/admin/reload',
       success: reloaded
@@ -15,13 +15,13 @@ export const reload = () => {
 }
 
 export const rebooted = () => {
-  return({
+  return ({
     type: 'REBOOTED'
   })
 }
 
 export const reboot = () => {
-  return(
+  return (
     reduxPost({
       url: '/api/admin/reboot',
       success: rebooted
@@ -29,13 +29,13 @@ export const reboot = () => {
 }
 
 export const powerOffed = () => {
-  return({
+  return ({
     type: 'POWER_OFFED'
   })
 }
 
 export const powerOff = () => {
-  return(
+  return (
     reduxPost({
       url: '/api/admin/poweroff',
       success: powerOffed,

@@ -8,12 +8,12 @@ export const lightsLoaded = (s) => {
 }
 
 export const lightLoaded = (id) => {
-  return((l) => {
+  return (l) => {
     return ({
       type: 'LIGHT_LOADED',
-      payload: {light:l, id: id}
+      payload: {light: l, id: id}
     })
-  })
+  }
 }
 
 export const fetchLights = () => {
@@ -25,7 +25,7 @@ export const fetchLights = () => {
 
 export const fetchLight = (id) => {
   return (reduxGet({
-    url: '/api/lights/'+id,
+    url: '/api/lights/' + id,
     success: lightLoaded(id)
   }))
 }
@@ -40,15 +40,15 @@ export const createLight = (s) => {
 
 export const updateLight = (id, l) => {
   return (reduxPost({
-    url: '/api/lights/'+id,
+    url: '/api/lights/' + id,
     success: fetchLights,
-    data: l 
+    data: l
   }))
 }
 
 export const deleteLight = (s) => {
   return (reduxDelete({
-    url: '/api/lights/'+s,
-    success: fetchLights,
+    url: '/api/lights/' + s,
+    success: fetchLights
   }))
 }

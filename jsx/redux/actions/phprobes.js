@@ -7,12 +7,12 @@ export const phProbesLoaded = (s) => {
   })
 }
 export const probeReadingsLoaded = (id) => {
-  return((s) => {
+  return (s) => {
     return ({
       type: 'PH_PROBE_READINGS_LOADED',
       payload: {readings: s, id: id}
     })
-  })
+  }
 }
 
 export const probeUpdated = () => {
@@ -36,14 +36,14 @@ export const fetchPhProbes = () => {
 
 export const fetchProbeReadings = (id) => {
   return (reduxGet({
-    url: '/api/phprobes/'+id+'/readings',
+    url: '/api/phprobes/' + id + '/readings',
     success: probeReadingsLoaded(id)
   }))
 }
 
 export const updateProbe = (id, a) => {
   return (reduxPost({
-    url: '/api/phprobes/'+id,
+    url: '/api/phprobes/' + id,
     data: a,
     success: probeUpdated
   }))
@@ -59,14 +59,14 @@ export const createProbe = (a) => {
 
 export const deleteProbe = (id) => {
   return (reduxDelete({
-    url: '/api/phprobes/'+id,
+    url: '/api/phprobes/' + id,
     success: fetchPhProbes
   }))
 }
 
 export const calibrateProbe = (id, a) => {
   return (reduxPost({
-    url: '/api/phprobes/'+id+'/calibrate',
+    url: '/api/phprobes/' + id + '/calibrate',
     data: a,
     success: probeCalibrated
   }))

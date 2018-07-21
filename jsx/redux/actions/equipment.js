@@ -34,7 +34,7 @@ export const createEquipment = (e) => {
 export const updateEquipment = (id, e) => {
   return (
     reduxPost({
-      url: '/api/equipments/'+id,
+      url: '/api/equipments/' + id,
       data: e,
       success: fetchEquipments
     }))

@@ -6,7 +6,6 @@ export const atoUpdated = () => {
   })
 }
 
-
 export const atosLoaded = (s) => {
   return ({
     type: 'ATOS_LOADED',
@@ -30,23 +29,23 @@ export const atoLoaded = (s) => {
 
 export const fetchATO = (id) => {
   return (reduxGet({
-    url: '/api/atos/'+id,
+    url: '/api/atos/' + id,
     success: atoLoaded
   }))
 }
 
 export const atoUsageLoaded = (id) => {
-  return( (s) => {
+  return (s) => {
     return ({
       type: 'ATO_USAGE_LOADED',
-      payload: {data:s, id: id}
+      payload: {data: s, id: id}
     })
-  })
+  }
 }
 
 export const fetchATOUsage = (id) => {
   return (reduxGet({
-    url: '/api/atos/'+id+'/usage',
+    url: '/api/atos/' + id + '/usage',
     success: atoUsageLoaded(id)
   }))
 }
@@ -61,7 +60,7 @@ export const createATO = (a) => {
 
 export const updateATO = (id, a) => {
   return (reduxPost({
-    url: '/api/atos/'+id,
+    url: '/api/atos/' + id,
     data: a,
     success: atoUpdated
   }))
@@ -69,7 +68,7 @@ export const updateATO = (id, a) => {
 
 export const deleteATO = (id) => {
   return (reduxDelete({
-    url: '/api/atos/'+id,
+    url: '/api/atos/' + id,
     success: fetchATOs
   }))
 }

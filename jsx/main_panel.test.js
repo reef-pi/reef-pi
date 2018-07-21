@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme,{shallow} from 'enzyme'
+import Enzyme, {shallow} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import MainPanel from './main_panel'
 import configureMockStore from 'redux-mock-store'

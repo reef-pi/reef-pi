@@ -19,27 +19,27 @@ window.localStorage = mockLocalStorage()
 describe('App', () => {
   it('<App />', () => {
     const m = shallow(
-      <App store={mockStore({info:{}, capabilities: []})} />
+      <App store={mockStore({info: {}, capabilities: []})} />
     ).dive().instance()
   })
 
-  it('<JackSelector />', ()=> {
-    const jacks = [{id: '1',name: 'Foo', pins: [1,2]}]
+  it('<JackSelector />', () => {
+    const jacks = [{id: '1', name: 'Foo', pins: [1, 2]}]
     const m = shallow(
-      <JackSelector store={mockStore({jacks: jacks})} id='1' update={()=>{}}/>
+      <JackSelector store={mockStore({jacks: jacks})} id='1' update={() => {}} />
     ).dive().instance()
     m.setJack(0)
   })
 
-  it('<SelectEquipment />', ()=> {
+  it('<SelectEquipment />', () => {
     const eqs = [{id: '1', name: 'foo'}]
     const m = shallow(
-      <SelectEquipment store={mockStore({equipments: eqs})} active='1' update={()=>{}}/>
+      <SelectEquipment store={mockStore({equipments: eqs})} active='1' update={() => {}} />
     ).dive().instance()
     m.setEquipment(0)
   })
 
-  it('<SignIn />', ()=> {
+  it('<SignIn />', () => {
     SignIn.removeCreds()
     SignIn.set('a', 1)
     const m = shallow(<SignIn />).instance()

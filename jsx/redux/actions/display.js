@@ -26,11 +26,10 @@ export const fetchDisplay = () => {
   }))
 }
 
-
 export const switchDisplay = (on) => {
   var action = on ? 'off' : 'on'
   return (reduxPost({
-    url: '/api/display/'+action,
+    url: '/api/display/' + action,
     success: displaySwitched,
     data: {}
   }))
@@ -40,6 +39,6 @@ export const setBrightness = (b) => {
   return (reduxPost({
     url: '/api/display',
     success: brightnessSet,
-    data:{brightness: b}
+    data: {brightness: b}
   }))
 }

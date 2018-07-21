@@ -6,30 +6,30 @@ import {fetchLights} from './lights'
 import {fetchPhProbes} from './phprobes'
 import {capabilitiesLoaded} from './capabilities'
 
-export const fetchUIData= (dispatch) => {
+export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-      $.each(capabilities, (i, v)=>{
-        if(!v){
+      $.each(capabilities, (i, v) => {
+        if (!v) {
           return
         }
-        switch(i){
+        switch (i) {
           case 'ato':
             dispatch(fetchATOs())
-            break;
+            break
           case 'ph':
             dispatch(fetchPhProbes())
-            break;
+            break
           case 'temperature':
             dispatch(fetchTCs())
-            break;
+            break
           case 'lighting':
             dispatch(fetchLights())
-            break;
+            break
         }
       })
-      return(capabilitiesLoaded(capabilities))
+      return (capabilitiesLoaded(capabilities))
     }
   }))
 }

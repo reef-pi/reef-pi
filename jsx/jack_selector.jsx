@@ -36,20 +36,20 @@ class jackSelector extends React.Component {
     }
     var items = []
     $.each(this.props.jacks, function (k, v) {
-      var cName='dropdown-item'
-      if(v.id === id){
-        cName+= ' active'
+      var cName = 'dropdown-item'
+      if (v.id === id) {
+        cName += ' active'
       }
-      items.push(<a className={cName} href="#" onClick={this.setJack(k)} key={k}>
+      items.push(<a className={cName} href='#' onClick={this.setJack(k)} key={k}>
         <span id={this.props.id + '-' + v.name}>{v.name}</span>
       </a>)
     }.bind(this))
     return (
-      <div className="dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id + 'jack'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div className='dropdown'>
+        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id + 'jack'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
           {title}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {items}
         </div>
       </div>
@@ -57,7 +57,7 @@ class jackSelector extends React.Component {
   }
 
   setJack (k) {
-   return(()=>{
+    return () => {
       var j = this.props.jacks[k]
       if (j === undefined) {
         return
@@ -67,16 +67,16 @@ class jackSelector extends React.Component {
         pin: j.pins[0]
       })
       this.props.update(j.id, j.pins[0])
-    })
+    }
   }
 
   setPin (k) {
-    return(()=>{
+    return () => {
       this.setState({
         pin: k
       })
       this.props.update(this.state.jack.id, k)
-    })
+    }
   }
 
   pins () {
@@ -86,15 +86,15 @@ class jackSelector extends React.Component {
     var items = []
     $.each(this.state.jack.pins, function (k, v) {
       items.push(
-        <a className='dropdown-item' href="#" key={k} onClick={this.setPin(v)}>{v}</a>
+        <a className='dropdown-item' href='#' key={k} onClick={this.setPin(v)}>{v}</a>
       )
     }.bind(this))
     return (
-      <div className="dropdown">
-        <button className="btn btn-secondary dropdown-toggle" type="button" id={this.props.id + '-pin'} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {this.state.pin.toString()} 
+      <div className='dropdown'>
+        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id + '-pin'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+          {this.state.pin.toString()}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {items}
         </div>
       </div>
@@ -115,7 +115,7 @@ class jackSelector extends React.Component {
             Pin
           </div>
           <div className='col-lg-1'>
-          {this.pins()}
+            {this.pins()}
           </div>
         </div>
       </div>

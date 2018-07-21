@@ -4,10 +4,7 @@ import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
 import Capabilities from './capabilities'
-import ComponentSelector from './component_selector'
-import Dashboard from './dashboard'
 import Display from './display'
-import Grid from './grid'
 import HealthNotify from './health_notify'
 import Main from './main'
 import Settings from './settings'
@@ -66,34 +63,6 @@ describe('Configuration ui', () => {
     }
     const m = shallow(<Capabilities capabilities={caps} update={() => true} />).instance()
     m.updateCapability('dashboard')({target: {checked: true}})
-  })
-
-  it('<ComponentSelector />', () => {
-    const comps = {
-      'c1': {id: '1', name: 'foo'},
-      'c2': undefined
-    }
-    shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />)
-  })
-
-  it('<Dashboard />', () => {
-    const cells = [
-      [{type: 'ato', id: '1'}]
-    ]
-    const config = {row: 1, column: 1, grid_details: cells}
-    const m = shallow(<Dashboard store={mockStore({dashboard: config})} />).dive().instance()
-    m.updateHook(cells)
-    m.save()
-  })
-
-  it('<Grid />', () => {
-    const cells = [
-      [{type: 'ato', id: '1'}, {type: 'light', id: '2'}],
-      [{type: 'tc', id: '1'}]
-    ]
-    const m = shallow(<Grid rows={2} columns={2} cells={cells} hook={() => {}} />).instance()
-    m.setType(0, 0)('equipment')
-    m.updateHook(0, 0)('1')
   })
 
   it('<Settings />', () => {

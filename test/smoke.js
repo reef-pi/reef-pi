@@ -46,14 +46,14 @@ function SmokeTest () {
     .evaluate(dashboard.Configure(nightmare))
     .wait(1500)
     .click('a#tab-dashboard')
-		.wait(1500)
+    .wait(1500)
     .end()
-      .then(function () {
-        console.log('Smoking Hot!')
-      })
-      .catch(function (error) {
-        console.error('Error:', error)
-        process.exit(-1)
-      })
+    .then(function () {
+      console.log('Smoking Hot!')
+    })
+    .catch(function (error) {
+      console.error('Error:', error)
+      process.exit(-1)
+    })
 }
 SmokeTest()

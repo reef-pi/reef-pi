@@ -3,7 +3,7 @@ import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
-import "isomorphic-fetch"
+import 'isomorphic-fetch'
 import {mockLocalStorage} from '../../utils/test_helper'
 
 const middlewares = [thunk]
@@ -11,38 +11,38 @@ const mockStore = configureMockStore(middlewares)
 
 window.localStorage = mockLocalStorage()
 
-describe( 'outlets actions', () => {
+describe('outlets actions', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
 
-  it('outletsLoaded', ()=>{
+  it('outletsLoaded', () => {
     expect(outletsLoaded({}).type).toEqual('OUTLETS_LOADED')
   })
 
-  it('fetchOutlets', ()=>{
+  it('fetchOutlets', () => {
     fetchMock.getOnce('/api/outlets', {})
     const store = mockStore()
-    return store.dispatch(fetchOutlets()).then(()=>{
+    return store.dispatch(fetchOutlets()).then(() => {
       expect(store.getActions()).toEqual([outletsLoaded({})])
     })
   })
 
-  it('createOutlet', ()=>{
+  it('createOutlet', () => {
     fetchMock.putOnce('/api/outlets', {})
     fetchMock.getOnce('/api/outlets', {})
     const store = mockStore()
-    return store.dispatch(createOutlet()).then(()=>{
+    return store.dispatch(createOutlet()).then(() => {
       expect(store.getActions()).toEqual([outletsLoaded({})])
     })
   })
 
-  it('deleteOutlet', ()=>{
+  it('deleteOutlet', () => {
     fetchMock.deleteOnce('/api/outlets/1', {})
     fetchMock.getOnce('/api/outlets', {})
     const store = mockStore()
-    return store.dispatch(deleteOutlet('1')).then(()=>{
+    return store.dispatch(deleteOutlet('1')).then(() => {
       expect(store.getActions()).toEqual([outletsLoaded({})])
     })
   })
