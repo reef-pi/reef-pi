@@ -8,6 +8,7 @@ import Temperature from 'temperature/main'
 import Timers from 'timers/main'
 import Doser from 'doser/controller'
 import Ph from 'ph/main'
+import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
 import $ from 'jquery'
 import {fetchUIData} from 'redux/actions/ui'
@@ -25,6 +26,7 @@ const caps = {
   'ato': <ATO />,
   'ph': <Ph />,
   'doser': <Doser />,
+  'macro': <Macro />,
   'camera': <Camera />,
   'configuration': <Configuration />
 }
