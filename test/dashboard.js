@@ -1,8 +1,8 @@
 module.exports = {
   Configure: function (n) {
-    n.click('a#tab-configuration')
+    n.click('a#tab-dashboard')
       .wait(500)
-      .click('a#config-dashboard')
+      .click('button#configure-dashboard')
       .wait(500)
       .type('input#to-row-row')
       .type('input#to-row-row', '3')
@@ -51,6 +51,8 @@ module.exports = {
       .click('span#component-health-2-1-current')
       .wait(500)
       .click('input#save_dashboard')
+      .wait(500)
+      .click('button#configure-dashboard')
     return function () {
       return ('Dashboard configured')
     }
