@@ -69,3 +69,6 @@ func (c *Controller) addToCron(p Pump) error {
 	c.cronIDs[p.ID] = cronID
 	return nil
 }
+func (c *Controller) On(id string, b bool) error {
+	return nil // TODO
+}

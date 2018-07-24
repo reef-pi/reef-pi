@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -16,6 +17,7 @@ type Subsystem interface {
 	LoadAPI(*mux.Router)
 	Start()
 	Stop()
+	On(string, bool) error
 }
 
 type ReefPi struct {
@@ -143,4 +145,12 @@ func (r *ReefPi) Stop() error {
 	r.bus.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
+}
+
+func (r *ReefPi) Module(s string) (Subsystem, error) {
+	sub, ok := r.subsystems[s]
+	if !ok {
+		return nil, fmt.Errorf("Subsystem not present: %s", s)
+	}
+	return sub, nil
 }

@@ -29,6 +29,9 @@ func New(store utils.Store, devMode bool) (*Controller, error) {
 		stopCh:  make(chan struct{}),
 	}, nil
 }
+func (c *Controller) On(id string, b bool) error {
+	return nil // TODO
+}
 
 func (c *Controller) Start() {
 	go c.runPeriodically()

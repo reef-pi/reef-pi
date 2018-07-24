@@ -5,11 +5,6 @@ import (
 	"log"
 )
 
-type Step struct {
-	Type   string          `json:"type"`
-	Config json.RawMessage `json:"config"`
-}
-
 type Macro struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`

@@ -25,6 +25,10 @@ type ATO struct {
 	Name    string        `json:"name"`
 }
 
+func (c *Controller) On(id string, b bool) error {
+	return nil // TODO
+}
+
 func (c *Controller) Get(id string) (ATO, error) {
 	var a ATO
 	return a, c.store.Get(Bucket, id, &a)

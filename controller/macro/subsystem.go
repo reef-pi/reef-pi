@@ -35,3 +35,6 @@ func (s *Subsystem) Start() {
 
 func (s *Subsystem) Stop() {
 }
+func (s *Subsystem) On(id string, b bool) error {
+	return nil // TODO
+}

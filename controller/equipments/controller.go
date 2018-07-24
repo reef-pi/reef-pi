@@ -77,3 +77,6 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	}
 	return false, nil
 }
+func (c *Controller) On(id string, b bool) error {
+	return nil // TODO
+}

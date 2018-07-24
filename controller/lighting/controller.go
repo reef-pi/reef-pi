@@ -63,3 +63,6 @@ func (c *Controller) Setup() error {
 	}
 	return nil
 }
+func (c *Controller) On(id string, on bool) error {
+	return nil
+}

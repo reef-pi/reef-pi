@@ -52,3 +52,7 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	c.runner.Stop()
 }
+
+func (c *Controller) On(id string, on bool) error {
+	return nil
+}

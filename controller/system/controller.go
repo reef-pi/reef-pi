@@ -45,3 +45,6 @@ func (c *Controller) Stop() {
 func (c *Controller) Setup() error {
 	return c.store.CreateBucket(Bucket)
 }
+func (c *Controller) On(id string, on bool) error {
+	return nil
+}

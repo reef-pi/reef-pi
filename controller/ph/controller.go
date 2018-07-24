@@ -77,3 +77,6 @@ func (c *Controller) Stop() {
 		delete(c.quitters, id)
 	}
 }
+func (c *Controller) On(id string, b bool) error {
+	return nil // TODO
+}
