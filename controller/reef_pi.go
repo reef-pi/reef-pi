@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
@@ -12,21 +12,13 @@ import (
 
 const Bucket = "reef-pi"
 
-type Subsystem interface {
-	Setup() error
-	LoadAPI(*mux.Router)
-	Start()
-	Stop()
-	On(string, bool) error
-}
-
 type ReefPi struct {
 	store   utils.Store
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
 
-	subsystems map[string]Subsystem
+	subsystems map[string]types.Subsystem
 	settings   Settings
 	telemetry  *utils.Telemetry
 	version    string
@@ -96,7 +88,7 @@ func New(version, database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
-		subsystems: make(map[string]Subsystem),
+		subsystems: make(map[string]types.Subsystem),
 		version:    version,
 	}
 	if s.Capabilities.HealthCheck {
@@ -147,7 +139,7 @@ func (r *ReefPi) Stop() error {
 	return nil
 }
 
-func (r *ReefPi) Module(s string) (Subsystem, error) {
+func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
 	sub, ok := r.subsystems[s]
 	if !ok {
 		return nil, fmt.Errorf("Subsystem not present: %s", s)

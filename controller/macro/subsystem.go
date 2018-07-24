@@ -1,6 +1,8 @@
 package macro
 
 import (
+	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"sync"
 )
@@ -9,20 +11,22 @@ const Bucket = "macro"
 const UsageBucket = "macro_usage"
 
 type Subsystem struct {
-	telemetry *utils.Telemetry
-	store     utils.Store
-	mu        sync.Mutex
-	devMode   bool
-	quitters  map[string]chan struct{}
-	statsMgr  *utils.StatsManager
+	telemetry  *utils.Telemetry
+	store      utils.Store
+	mu         sync.Mutex
+	devMode    bool
+	quitters   map[string]chan struct{}
+	statsMgr   *utils.StatsManager
+	controller types.Controller
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry) (*Subsystem, error) {
+func New(devMode bool, c types.Controller, store utils.Store, telemetry *utils.Telemetry) (*Subsystem, error) {
 	return &Subsystem{
-		mu:        sync.Mutex{},
-		telemetry: telemetry,
-		store:     store,
-		devMode:   devMode,
+		mu:         sync.Mutex{},
+		telemetry:  telemetry,
+		store:      store,
+		devMode:    devMode,
+		controller: c,
 	}, nil
 }
 
@@ -36,5 +40,5 @@ func (s *Subsystem) Start() {
 func (s *Subsystem) Stop() {
 }
 func (s *Subsystem) On(id string, b bool) error {
-	return nil // TODO
+	return fmt.Errorf("Macro sub system does not support 'on' API yet")
 }

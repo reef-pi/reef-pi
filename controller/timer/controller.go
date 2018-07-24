@@ -54,5 +54,10 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) On(id string, on bool) error {
-	return nil
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	j.Enable = on
+	return c.Update(id, j)
 }

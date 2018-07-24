@@ -27,7 +27,7 @@ class main extends React.Component {
         </div>
       )
       index = index + 1
-    }.bind(this))
+    })
     return list
   }
 

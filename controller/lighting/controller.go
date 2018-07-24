@@ -1,6 +1,7 @@
 package lighting
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
@@ -63,6 +64,7 @@ func (c *Controller) Setup() error {
 	}
 	return nil
 }
+
 func (c *Controller) On(id string, on bool) error {
-	return nil
+	return fmt.Errorf("lighting subsystem does not support 'on' api yet")
 }

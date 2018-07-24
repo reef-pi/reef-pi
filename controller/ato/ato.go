@@ -26,7 +26,12 @@ type ATO struct {
 }
 
 func (c *Controller) On(id string, b bool) error {
-	return nil // TODO
+	a, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	a.Enable = b
+	return c.Update(id, a)
 }
 
 func (c *Controller) Get(id string) (ATO, error) {

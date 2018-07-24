@@ -77,6 +77,12 @@ func (c *Controller) Stop() {
 		delete(c.quitters, id)
 	}
 }
+
 func (c *Controller) On(id string, b bool) error {
-	return nil // TODO
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	p.Enable = b
+	return c.Update(id, p)
 }

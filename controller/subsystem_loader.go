@@ -34,7 +34,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	if !r.settings.Capabilities.Macro {
 		return nil
 	}
-	m, err := macro.New(r.settings.Capabilities.DevMode, r.store, r.telemetry)
+	m, err := macro.New(r.settings.Capabilities.DevMode, r, r.store, r.telemetry)
 	if err != nil {
 		return err
 	}

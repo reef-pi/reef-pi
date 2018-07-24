@@ -6,9 +6,10 @@ import (
 )
 
 type Macro struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Steps []Step `json:"steps"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Steps  []Step `json:"steps"`
+	Enable bool   `json:"enable"`
 }
 
 func (s *Subsystem) Get(id string) (Macro, error) {
@@ -42,7 +43,18 @@ func (s *Subsystem) Update(id string, m Macro) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	m.ID = id
-	return s.store.Update(Bucket, id, m)
+	if err := s.store.Update(Bucket, id, m); err != nil {
+		return err
+	}
+	if m.Enable {
+		for i, step := range m.Steps {
+			if err := step.Run(s.controller); err != nil {
+				return err
+			}
+			log.Printf("Macro sub-system: Macro: %s, Step:%d executed successfully\n", m.Name, i)
+		}
+	}
+	return nil
 }
 
 func (s *Subsystem) Delete(id string) error {

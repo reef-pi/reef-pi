@@ -46,7 +46,7 @@ class newMacro extends React.Component {
               type='text'
               id='new_macro_name'
               onChange={this.update('name')}
-              value={this.state.name} 
+              value={this.state.name}
             />
           </div>
         </div>

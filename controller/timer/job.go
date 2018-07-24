@@ -20,6 +20,7 @@ type Job struct {
 	Type      string          `json:"type"`
 	Reminder  Reminder        `json:"reminder"`
 	Equipment UpdateEquipment `json:"equipment"`
+	Enable    bool            `json:"enable"`
 }
 
 func (j *Job) CronSpec() string {
@@ -75,12 +76,32 @@ func (c *Controller) Create(job Job) error {
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
-	return c.addToCron(job)
+	if job.Enable {
+		return c.addToCron(job)
+	}
+	return nil
 }
 
 func (c *Controller) Update(id string, payload Job) error {
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	if j.Enable {
+		if err := c.deleteFromCron(id); err != nil {
+			log.Println("ERROR: timer subsystem: Failed to remove running job from cron. Error:", err)
+			return err
+		}
+	}
 	payload.ID = id
-	return c.store.Update(Bucket, id, &payload)
+	if err := c.store.Update(Bucket, id, &payload); err != nil {
+		return err
+	}
+
+	if payload.Enable {
+		return c.addToCron(payload)
+	}
+	return nil
 }
 
 func (c *Controller) Delete(id string) error {
@@ -129,6 +150,7 @@ func (c *Controller) deleteFromCron(jobID string) error {
 	}
 	if c.runner != nil {
 		c.runner.Remove(id)
+		delete(c.cronIDs, jobID)
 	}
 	return nil
 }
