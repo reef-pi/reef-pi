@@ -3,12 +3,13 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"strings"
 )
 
-const Bucket = "timers"
+const Bucket = types.TimerBucket
 
 type Job struct {
 	ID        string          `json:"id"`
@@ -97,7 +98,6 @@ func (c *Controller) Update(id string, payload Job) error {
 	if err := c.store.Update(Bucket, id, &payload); err != nil {
 		return err
 	}
-
 	if payload.Enable {
 		return c.addToCron(payload)
 	}
@@ -122,8 +122,10 @@ func (c *Controller) loadAllJobs() error {
 		return nil
 	}
 	for _, job := range jobs {
-		if err := c.addToCron(job); err != nil {
-			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
+		if job.Enable {
+			if err := c.addToCron(job); err != nil {
+				log.Println("ERROR: Failed to add job in cron runner. Error:", err)
+			}
 		}
 	}
 	return nil

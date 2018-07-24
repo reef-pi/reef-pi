@@ -5,20 +5,23 @@ import (
 )
 
 const (
-	ReefPiBucket     = "reef-pi"
-	ATOBucket        = "ato"
-	ATOUsageBucket   = "ato_usage"
-	CameraBucket     = "camera"
-	CameraItemBucket = "photos"
-	InletBucket      = "inlets"
-	JackBucket       = "jacks"
-	OutletBucket     = "outlets"
-	DoserBucket      = "doser"
-	EquipmentBucket  = "equipments"
-	LightingBucket   = "lightings"
-	MacroBucket      = "macro"
-	MacroUsageBucket = "macro_usage"
-	PhBucket         = "phprobes"
+	ReefPiBucket           = "reef-pi"
+	ATOBucket              = "ato"
+	ATOUsageBucket         = "ato_usage"
+	CameraBucket           = "camera"
+	CameraItemBucket       = "photos"
+	InletBucket            = "inlets"
+	JackBucket             = "jacks"
+	OutletBucket           = "outlets"
+	DoserBucket            = "doser"
+	EquipmentBucket        = "equipments"
+	LightingBucket         = "lightings"
+	MacroBucket            = "macro"
+	MacroUsageBucket       = "macro_usage"
+	PhBucket               = "phprobes"
+	TemperatureBucket      = "temperature"
+	TemperatureUsageBucket = "temperature_usage"
+	TimerBucket            = "timers"
 )
 
 type Subsystem interface {

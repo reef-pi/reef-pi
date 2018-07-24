@@ -3,13 +3,14 @@ package temperature
 import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
 )
 
-const Bucket = "temperature"
-const UsageBucket = "temperature_usage"
+const Bucket = types.TemperatureBucket
+const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	telemetry  *utils.Telemetry
