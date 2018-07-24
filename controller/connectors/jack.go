@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 )
+
+const JackBucket = types.JackBucket
 
 type Jack struct {
 	ID     string `json:"id"`
@@ -47,8 +50,6 @@ func (j Jack) IsValid() error {
 	}
 	return nil
 }
-
-const JackBucket = "jacks"
 
 func NewJacks(store utils.Store, r, p utils.PWM) *Jacks {
 	return &Jacks{

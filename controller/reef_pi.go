@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const Bucket = "reef-pi"
+const Bucket = types.ReefPiBucket
 
 type ReefPi struct {
 	store   utils.Store

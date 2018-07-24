@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-const Bucket = "macro"
-const UsageBucket = "macro_usage"
+const Bucket = types.MacroBucket
+const UsageBucket = types.MacroUsageBucket
 
 type Subsystem struct {
 	telemetry  *utils.Telemetry

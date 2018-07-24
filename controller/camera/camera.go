@@ -2,6 +2,7 @@ package camera
 
 import (
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"path/filepath"
@@ -10,8 +11,8 @@ import (
 	"time"
 )
 
-const Bucket = "camera"
-const ItemBucket = "photos"
+const Bucket = types.CameraBucket
+const ItemBucket = types.CameraItemBucket
 
 type Controller struct {
 	config  Config

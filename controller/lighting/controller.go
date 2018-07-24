@@ -3,13 +3,14 @@ package lighting
 import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"sync"
 	"time"
 )
 
-const Bucket = "lightings"
+const Bucket = types.LightingBucket
 
 type Config struct {
 	DevMode  bool          `json:"dev_mode"`

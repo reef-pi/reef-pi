@@ -2,13 +2,14 @@ package ph
 
 import (
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
 )
 
-const Bucket = "phprobes"
+const Bucket = types.PhBucket
 
 type Config struct {
 	DevMode bool `json:"dev_mode"`
