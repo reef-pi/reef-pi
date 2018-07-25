@@ -105,10 +105,17 @@ func (c *Controller) Update(id string, payload Job) error {
 }
 
 func (c *Controller) Delete(id string) error {
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
-	return c.deleteFromCron(id)
+	if j.Enable {
+		return c.deleteFromCron(id)
+	}
+	return nil
 }
 
 func (c *Controller) loadAllJobs() error {
