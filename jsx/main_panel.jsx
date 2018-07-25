@@ -35,21 +35,21 @@ class mainPanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      body: 'dashboard'
+      tab: 'dashboard'
     }
     this.navs = this.navs.bind(this)
-    this.setBody = this.setBody.bind(this)
+    this.setTab = this.setTab.bind(this)
   }
   componentDidMount () {
     this.props.fetchUIData()
     hideAlert()
   }
 
-  setBody (k) {
-    return () => { this.setState({body: k}) }
+  setTab (k) {
+    return () => { this.setState({tab: k}) }
   }
 
-  navs () {
+  navs (tab) {
     var panels = [ ]
     $.each(caps, function (k, panel) {
       if (this.props.capabilities[k] === undefined) {
@@ -58,10 +58,10 @@ class mainPanel extends React.Component {
       if (!this.props.capabilities[k]) {
         return
       }
-      var cname = k === this.state.body ? 'nav-link active text-primary' : 'nav-link'
+      var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
-          <a id={'tab-' + k}className={cname} onClick={this.setBody(k)}>{k}</a>
+          <a id={'tab-' + k}className={cname} onClick={this.setTab(k)}>{k}</a>
         </li>
       )
     }.bind(this))
@@ -73,10 +73,19 @@ class mainPanel extends React.Component {
   }
 
   render () {
-    var body = caps[this.state.body]
+    var tab = this.state.tab
+    if(!this.props.capabilities['dashboard'] && tab === 'dashboard'){
+      for(var k in this.props.capabilities){
+        if(this.props.capabilities[k] && (caps[k]!== undefined)){
+          tab = k
+          break
+        }
+      }
+    }
+    var body = caps[tab]
     return (
       <div className='container'>
-        {this.navs()}
+        {this.navs(tab)}
         {body}
         <hr />
         <Summary />
