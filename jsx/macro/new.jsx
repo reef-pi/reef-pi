@@ -83,7 +83,8 @@ class newMacro extends React.Component {
       return
     }
     var payload = {
-      name: this.state.name
+      name: this.state.name,
+      steps: this.state.steps
     }
     this.props.create(payload)
     this.toggle()

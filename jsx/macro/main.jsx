@@ -3,6 +3,7 @@ import {fetchMacros} from 'redux/actions/macro'
 import {connect} from 'react-redux'
 import $ from 'jquery'
 import New from './new'
+import Macro from './macro'
 
 class main extends React.Component {
   constructor (props) {
@@ -21,9 +22,13 @@ class main extends React.Component {
     var list = []
     var index = 0
     $.each(this.props.macros, function (k, v) {
+      var steps = v.steps
+      if(!steps) {
+        steps = []
+      }
       list.push(
         <div key={k} className='row list-group-item'>
-          <span>Macro - {k}</span>
+          <span><Macro name={v.name} steps={steps} /></span>
         </div>
       )
       index = index + 1
