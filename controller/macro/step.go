@@ -8,15 +8,15 @@ import (
 )
 
 var stepTypes = []string{
-	"equipment",
-	"subsystem",
 	"wait",
+	"subsystem",
 	"macro",
-	"tc",
+	"equipment",
 	"ato",
+	"tc",
+	"lighting",
 	"ph",
 	"doser",
-	"lighting",
 	"timer",
 }
 
