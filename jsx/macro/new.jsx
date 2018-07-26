@@ -2,18 +2,27 @@ import React from 'react'
 import {showAlert} from 'utils/alert'
 import {createMacro} from 'redux/actions/macro'
 import {connect} from 'react-redux'
+import Steps from './steps'
 
 class newMacro extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       name: '',
-      add: false
+      add: false,
+      steps: []
     }
     this.add = this.add.bind(this)
     this.toggle = this.toggle.bind(this)
     this.ui = this.ui.bind(this)
     this.update = this.update.bind(this)
+    this.updateSteps = this.updateSteps.bind(this)
+  }
+
+  updateSteps (step) {
+    var steps = this.state.steps
+    steps.push(step)
+    this.setState({steps: steps})
   }
 
   update (k) {
@@ -49,6 +58,7 @@ class newMacro extends React.Component {
               value={this.state.name}
             />
           </div>
+          <div className='col'><Steps steps={this.state.steps} hook={this.updateSteps} /></div>
         </div>
         <div className='row'>
           <div className='col'>
