@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import SelectType from './select_type'
 
 export default class Step extends React.Component {
   constructor (props) {
@@ -26,7 +27,9 @@ export default class Step extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col'>{this.props.type}</div>
+        <div className='col'>
+          <SelectType type={this.props.type} update={()=>{}}/>
+        </div>
         <div className='col'>{this.configUI()}</div>
       </div>
     )
