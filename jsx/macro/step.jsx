@@ -1,13 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectType from './select_type'
+import StepConfig from './step_config'
 
 export default class Step extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-    }
     this.configUI = this.configUI.bind(this)
+    this.updateType = this.updateType.bind(this)
+    this.updateConfig = this.updateConfig.bind(this)
+  }
+
+  updateType (k) {
+    this.props.hook({type: k, config: this.props.config})
+  }
+
+  updateConfig (c) {
+    this.props.hook({
+      type: this.props.type,
+      config: c
+    })
   }
 
   configUI () {
@@ -28,9 +40,20 @@ export default class Step extends React.Component {
     return (
       <div className='row'>
         <div className='col'>
-          <SelectType type={this.props.type} update={()=>{}}/>
+          <SelectType
+            type={this.props.type}
+            hook={this.updateType}
+            readOnly={this.props.readOnly}
+          />
         </div>
-        <div className='col'>{this.configUI()}</div>
+        <div className='col'>
+          <StepConfig
+            type={this.props.type}
+            hook={this.updateConfig}
+            active={this.props.config.id}
+            readOnly={this.props.readOnly}
+          />
+        </div>
       </div>
     )
   }
@@ -39,5 +62,6 @@ export default class Step extends React.Component {
 Step.propTypes = {
   hook: PropTypes.func,
   config: PropTypes.object,
-  type: PropTypes.string
+  type: PropTypes.string,
+  readOnly: PropTypes.bool
 }

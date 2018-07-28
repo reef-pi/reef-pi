@@ -1,5 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
+import PropTypes from 'prop-types'
 
 export default class SelectType extends React.Component {
   constructor (props) {
@@ -23,20 +24,15 @@ export default class SelectType extends React.Component {
       'subsystem',
       'macro'
     ]
-    var items = [
-      <a className='dropdown-item' href='#' key='none' onClick={this.set('none')}>
-        {'--'}
-      </a>
-    ]
+    var items = []
     $.each(validTypes, function (k, v) {
       var cName = 'dropdown-item'
-      var active = false
-      if (this.state.type  === v) {
+      if (this.state.type === v) {
         cName += ' active'
       }
       items.push(
         <a className={cName} href='#' key={k} onClick={this.set(v)}>
-          <span id={this.props.id + '-' + v.name}>{v}</span>
+          <span>{v}</span>
         </a>)
     }.bind(this))
     return items
@@ -47,7 +43,7 @@ export default class SelectType extends React.Component {
       this.setState({
         type: k
       })
-      this.props.update(k)
+      this.props.hook(k)
     }
   }
 
@@ -64,4 +60,10 @@ export default class SelectType extends React.Component {
       </div>
     )
   }
+}
+
+SelectType.propTypes = {
+  hook: PropTypes.func,
+  readOnly: PropTypes.bool,
+  type: PropTypes.string
 }

@@ -5,24 +5,44 @@ import Step from './step'
 export default class Steps extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-    }
     this.updateStep = this.updateStep.bind(this)
     this.add = this.add.bind(this)
+    this.addStepUI = this.addStepUI.bind(this)
   }
 
-  updateStep () {
+  updateStep (i) {
+    return (step) => {
+      var steps = this.props.steps
+      steps[i] = step
+      this.props.hook(steps)
+    }
   }
 
   add () {
     var step = {
-      key: this.props.steps.length + 1,
       type: 'wait',
       config: {
         duration: 10
       }
     }
-    this.props.hook(step)
+    var steps = this.props.steps
+    steps.push(step)
+    this.props.hook(steps)
+  }
+
+  addStepUI () {
+    if (this.props.readOnly) {
+      return
+    }
+    return (
+      <div className='col'>
+        <div className='float-right'>
+          <button className='btn btn-outline-success' onClick={this.add}>
+            <label>+</label>
+          </button>
+        </div>
+      </div>
+    )
   }
 
   render () {
@@ -30,7 +50,12 @@ export default class Steps extends React.Component {
     this.props.steps.forEach((step, i) => {
       items.push(
         <li key={i}>
-          <Step type={step.type} config={step.config} hook={this.updateStep} />
+          <Step
+            type={step.type}
+            config={step.config}
+            hook={this.updateStep(i)}
+            readOnly={this.props.readOnly}
+          />
         </li>
       )
     })
@@ -43,13 +68,7 @@ export default class Steps extends React.Component {
           <ul>{items}</ul>
         </div>
         <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
-              <button className='btn btn-outline-success' onClick={this.add}>
-                <label>+</label>
-              </button>
-            </div>
-          </div>
+          {this.addStepUI()}
         </div>
       </div>
     )
@@ -58,5 +77,6 @@ export default class Steps extends React.Component {
 
 Steps.propTypes = {
   steps: PropTypes.array,
-  hook: PropTypes.func
+  hook: PropTypes.func,
+  readOnly: PropTypes.bool
 }

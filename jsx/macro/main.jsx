@@ -33,6 +33,7 @@ class main extends React.Component {
             steps={steps}
             delete={() => { this.props.delete(v.id) }}
             update={(m) => { this.props.update(v.id, m) }}
+            macro_id={v.id}
           />
         </div>
       )

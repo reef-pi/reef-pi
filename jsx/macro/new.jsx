@@ -19,9 +19,7 @@ class newMacro extends React.Component {
     this.updateSteps = this.updateSteps.bind(this)
   }
 
-  updateSteps (step) {
-    var steps = this.state.steps
-    steps.push(step)
+  updateSteps (steps) {
     this.setState({steps: steps})
   }
 
