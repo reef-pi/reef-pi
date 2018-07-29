@@ -38,21 +38,35 @@ export default class Step extends React.Component {
 
   render () {
     return (
-      <div className='row'>
-        <div className='col'>
-          <SelectType
-            type={this.props.type}
-            hook={this.updateType}
-            readOnly={this.props.readOnly}
-          />
-        </div>
-        <div className='col'>
-          <StepConfig
-            type={this.props.type}
-            hook={this.updateConfig}
-            active={this.props.config.id}
-            readOnly={this.props.readOnly}
-          />
+      <div className='container'>
+        <div className='row'>
+          <div className='col'>
+            <SelectType
+              type={this.props.type}
+              hook={this.updateType}
+              readOnly={this.props.readOnly}
+            />
+          </div>
+          <div className='col'>
+            <StepConfig
+              type={this.props.type}
+              hook={this.updateConfig}
+              active={this.props.config.id}
+              readOnly={this.props.readOnly}
+              macro_id={this.props.macro_id}
+              index={this.props.index}
+              on={this.props.config.on}
+            />
+          </div>
+          <div className='col'>
+            <button
+              className='btn btn-outline-danger'
+              onClick={this.props.delete}
+              disabled={this.props.readOnly}
+            >
+              X
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -61,7 +75,10 @@ export default class Step extends React.Component {
 
 Step.propTypes = {
   hook: PropTypes.func,
+  delete: PropTypes.func,
   config: PropTypes.object,
   type: PropTypes.string,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  macro_id: PropTypes.string,
+  index: PropTypes.number
 }

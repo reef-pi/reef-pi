@@ -43,7 +43,12 @@ export default class Macro extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <Steps steps={this.state.steps} hook={this.updateSteps} readOnly={!this.state.edit} />
+          <Steps
+            steps={this.state.steps}
+            hook={this.updateSteps}
+            readOnly={!this.state.edit}
+            macro_id={this.props.macro_id}
+          />
         </div>
         <div className='row'>
           <div className='col'>
@@ -95,7 +100,7 @@ export default class Macro extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-lg-8'>
+          <div className='col-lg-11'>
             {details}
           </div>
         </div>

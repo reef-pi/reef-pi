@@ -56,6 +56,8 @@ class newMacro extends React.Component {
               value={this.state.name}
             />
           </div>
+        </div>
+        <div className='row'>
           <div className='col'><Steps steps={this.state.steps} hook={this.updateSteps} /></div>
         </div>
         <div className='row'>

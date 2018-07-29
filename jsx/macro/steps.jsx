@@ -8,6 +8,15 @@ export default class Steps extends React.Component {
     this.updateStep = this.updateStep.bind(this)
     this.add = this.add.bind(this)
     this.addStepUI = this.addStepUI.bind(this)
+    this.deleteStep = this.deleteStep.bind(this)
+  }
+
+  deleteStep (i) {
+    return () => {
+      var steps = this.props.steps
+      delete (steps[i])
+      this.props.hook(steps)
+    }
   }
 
   updateStep (i) {
@@ -49,23 +58,28 @@ export default class Steps extends React.Component {
     var items = []
     this.props.steps.forEach((step, i) => {
       items.push(
-        <li key={i}>
+        <div className='row' key={i}>
           <Step
             type={step.type}
             config={step.config}
             hook={this.updateStep(i)}
             readOnly={this.props.readOnly}
+            index={i}
+            macro_id={this.props.macro_id}
+            delete={this.deleteStep(i)}
           />
-        </li>
+        </div>
       )
     })
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col'>Steps</div>
+          <label>Steps</label>
         </div>
         <div className='row'>
-          <ul>{items}</ul>
+          <div className='container'>
+            {items}
+          </div>
         </div>
         <div className='row'>
           {this.addStepUI()}
@@ -78,5 +92,6 @@ export default class Steps extends React.Component {
 Steps.propTypes = {
   steps: PropTypes.array,
   hook: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  macro_id: PropTypes.string
 }

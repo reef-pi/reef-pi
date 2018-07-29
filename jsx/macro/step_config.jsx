@@ -7,6 +7,16 @@ class stepConfig extends React.Component {
   constructor (props) {
     super(props)
     this.set = this.set.bind(this)
+    this.updateOn = this.updateOn.bind(this)
+  }
+
+  updateOn (on) {
+    return () => {
+      this.props.hook({
+        id: this.props.active,
+        on: on
+      })
+    }
   }
 
   set (k) {
@@ -39,22 +49,64 @@ class stepConfig extends React.Component {
     }.bind(this))
 
     return (
-      <div className='dropdown'>
-        <button
-          className='btn btn-secondary dropdown-toggle'
-          type='button'
-          data-toggle='dropdown'
-          aria-haspopup='true'
-          aria-expanded='false'
-          disabled={readOnly} >
-          {name}
-        </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-          {items}
+      <div className='row'>
+        <div className='col'>
+          <div className='dropdown'>
+            <button
+              className='btn btn-secondary dropdown-toggle'
+              type='button'
+              data-toggle='dropdown'
+              aria-haspopup='true'
+              aria-expanded='false'
+              disabled={readOnly} >
+              {name}
+            </button>
+            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+              {items}
+            </div>
+          </div>
+        </div>
+        <div className='col'>
+          <div className='row'>
+            <div className='input-group col'>
+              <div className='input-group-text'>
+                <input
+                  type='radio'
+                  name={this.props.macro_id + '-' + this.props.index + '-step-state'}
+                  defaultChecked={this.props.on}
+                  disabled={this.props.readOnly}
+                  onClick={this.updateOn(true)}
+                />
+              </div>
+              <label>On</label>
+            </div>
+            <div className='input-group col'>
+              <div className='input-group-text'>
+                <input
+                  type='radio'
+                  name={this.props.macro_id + '-' + this.props.index + '-step-state'}
+                  defaultChecked={!this.props.on}
+                  disabled={this.props.readOnly}
+                  onClick={this.updateOn(false)}
+                />
+              </div>
+              <label>Off</label>
+            </div>
+          </div>
         </div>
       </div>
     )
   }
+}
+
+stepConfig.propTypes = {
+  type: PropTypes.string,
+  active: PropTypes.string,
+  hook: PropTypes.func,
+  readOnly: PropTypes.bool,
+  macro_id: PropTypes.string,
+  index: PropTypes.number,
+  on: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
@@ -79,10 +131,3 @@ const mapStateToProps = (state) => {
 }
 const StepConfig = connect(mapStateToProps, null)(stepConfig)
 export default StepConfig
-
-stepConfig.propTypes = {
-  type: PropTypes.string,
-  active: PropTypes.string,
-  hook: PropTypes.func,
-  readOnly: PropTypes.bool
-}
