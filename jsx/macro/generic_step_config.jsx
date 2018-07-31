@@ -109,18 +109,18 @@ stepConfig.propTypes = {
 const mapStateToProps = (state) => {
   return {
     equipments: state.equipments,
-    timer: state.timers,
+    timers: state.timers,
     ato: state.atos,
-    tc: state.tcs,
-    ph: state.phprobes,
+    temperature: state.tcs,
+    phprobes: state.phprobes,
     doser: state.dosers,
     macro: state.macros,
     subsystem: [
-      { id: 'timer', name: 'timer' },
-      { id: 'ph', name: 'pH' },
+      { id: 'timers', name: 'timer' },
+      { id: 'phprobes', name: 'pH' },
       { id: 'ato', name: 'ATO' },
-      { id: 'tc', name: 'temperature' },
-      { id: 'lighting', name: 'lighting' },
+      { id: 'temperature', name: 'temperature' },
+      { id: 'lightings', name: 'lighting' },
       { id: 'system', name: 'system' },
       { id: 'doser', name: 'doser' }
     ]

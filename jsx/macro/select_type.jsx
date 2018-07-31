@@ -17,10 +17,10 @@ export default class SelectType extends React.Component {
       'wait',
       'equipments',
       'ato',
-      'tc',
+      'temperature',
       'doser',
-      'timer',
-      'ph',
+      'timers',
+      'phprobes',
       'subsystem',
       'macro'
     ]
