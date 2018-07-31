@@ -33,9 +33,7 @@ class stepConfig extends React.Component {
     var name = ''
     var items = []
     var elements = this.props[this.props.type]
-    if (!elements) {
-      elements = []
-    }
+    console.log(this.props, this.props.type, elements)
     $.each(elements, function (k, v) {
       var cName = 'dropdown-item'
       if (this.props.active === v.id) {
@@ -111,7 +109,7 @@ stepConfig.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    equipment: state.equipments,
+    equipments: state.equipments,
     timer: state.timers,
     ato: state.atos,
     tc: state.tcs,

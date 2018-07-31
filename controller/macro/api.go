@@ -12,19 +12,23 @@ func (t *Subsystem) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/macros/{id}", t.get).Methods("GET")
 	r.HandleFunc("/api/macros/{id}", t.update).Methods("POST")
 	r.HandleFunc("/api/macros/{id}", t.delete).Methods("DELETE")
+	r.HandleFunc("/api/macros/{id}/run", t.run).Methods("POST")
 }
+
 func (t *Subsystem) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return t.Get(id)
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
+
 func (c Subsystem) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
 	}
 	utils.JSONListResponse(fn, w, r)
 }
+
 func (c *Subsystem) create(w http.ResponseWriter, r *http.Request) {
 	var m Macro
 	fn := func() error {
@@ -46,4 +50,11 @@ func (c *Subsystem) update(w http.ResponseWriter, r *http.Request) {
 		return c.Update(id, m)
 	}
 	utils.JSONUpdateResponse(&m, fn, w, r)
+}
+
+func (c *Subsystem) run(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) error {
+		return c.Run(id)
+	}
+	utils.JSONDeleteResponse(fn, w, r)
 }

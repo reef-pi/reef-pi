@@ -66,3 +66,19 @@ func (s *Subsystem) Delete(id string) error {
 	}
 	return nil
 }
+
+func (s *Subsystem) Run(id string) error {
+	m, err := s.Get(id)
+	if err != nil {
+		return err
+	}
+	log.Println("macro subsystem. Running:", m.Name)
+	for i, step := range m.Steps {
+		if err := step.Run(s.controller); err != nil {
+			log.Println("ERROR: macro subsystem. Failed to execute step:", i, "of macro", m.Name, ". Error:", err)
+			return err
+		}
+	}
+	log.Println("macro subsystem. Finished:", m.Name)
+	return nil
+}

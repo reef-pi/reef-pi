@@ -15,7 +15,7 @@ export default class SelectType extends React.Component {
   list () {
     var validTypes = [
       'wait',
-      'equipment',
+      'equipments',
       'ato',
       'tc',
       'doser',

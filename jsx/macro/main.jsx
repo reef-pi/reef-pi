@@ -1,5 +1,5 @@
 import React from 'react'
-import {fetchMacros, updateMacro, deleteMacro} from 'redux/actions/macro'
+import {runMacro, fetchMacros, updateMacro, deleteMacro} from 'redux/actions/macro'
 import {connect} from 'react-redux'
 import $ from 'jquery'
 import New from './new'
@@ -21,6 +21,7 @@ class main extends React.Component {
             delete={() => { this.props.delete(v.id) }}
             update={(m) => { this.props.update(v.id, m) }}
             macro_id={v.id}
+            run={() => { this.props.run(v.id) }}
           />
         </div>
       )
@@ -47,7 +48,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetch: () => dispatch(fetchMacros()),
     update: (id, m) => dispatch(updateMacro(id, m)),
-    delete: (id) => dispatch(deleteMacro(id))
+    delete: (id) => dispatch(deleteMacro(id)),
+    run: (id) => dispatch(runMacro(id))
   }
 }
 

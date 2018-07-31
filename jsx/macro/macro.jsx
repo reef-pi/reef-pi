@@ -85,6 +85,13 @@ export default class Macro extends React.Component {
             <div className='float-right'>
               <input
                 type='button'
+                id={'run_macro_' + this.props.macro_id}
+                value='run'
+                onClick={this.props.run}
+                className='btn btn-outline-dark'
+              />
+              <input
+                type='button'
                 id={'expand_macro_' + this.props.macro_id}
                 value={lbl}
                 onClick={() => { this.setState({expand: !this.state.expand}) }}
@@ -115,5 +122,6 @@ Macro.propTypes = {
   steps: PropTypes.array,
   delete: PropTypes.func,
   update: PropTypes.func,
-  macro_id: PropTypes.string
+  macro_id: PropTypes.string,
+  run: PropTypes.func
 }
