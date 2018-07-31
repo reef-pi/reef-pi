@@ -33,7 +33,6 @@ class stepConfig extends React.Component {
     var name = ''
     var items = []
     var elements = this.props[this.props.type]
-    console.log(this.props, this.props.type, elements)
     $.each(elements, function (k, v) {
       var cName = 'dropdown-item'
       if (this.props.active === v.id) {
@@ -127,5 +126,5 @@ const mapStateToProps = (state) => {
     ]
   }
 }
-const StepConfig = connect(mapStateToProps, null)(stepConfig)
-export default StepConfig
+const GenericStepConfig = connect(mapStateToProps, null)(stepConfig)
+export default GenericStepConfig

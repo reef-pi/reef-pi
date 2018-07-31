@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SelectType from './select_type'
-import StepConfig from './step_config'
+import GenericStepConfig from './generic_step_config'
+import WaitStepConfig from './wait_step_config'
 
 export default class Step extends React.Component {
   constructor (props) {
@@ -37,6 +38,28 @@ export default class Step extends React.Component {
   }
 
   render () {
+    var config = <div />
+    switch (this.props.type) {
+      case 'wait':
+        config = <WaitStepConfig
+          hook={this.updateConfig}
+          readOnly={this.props.readOnly}
+          macro_id={this.props.macro_id}
+          index={this.props.index}
+          duration={this.props.config.duration}
+        />
+        break
+      default:
+        config = <GenericStepConfig
+          type={this.props.type}
+          hook={this.updateConfig}
+          active={this.props.config.id}
+          readOnly={this.props.readOnly}
+          macro_id={this.props.macro_id}
+          index={this.props.index}
+          on={this.props.config.on}
+        />
+    }
     return (
       <div className='container'>
         <div className='row'>
@@ -48,15 +71,7 @@ export default class Step extends React.Component {
             />
           </div>
           <div className='col'>
-            <StepConfig
-              type={this.props.type}
-              hook={this.updateConfig}
-              active={this.props.config.id}
-              readOnly={this.props.readOnly}
-              macro_id={this.props.macro_id}
-              index={this.props.index}
-              on={this.props.config.on}
-            />
+            {config}
           </div>
           <div className='col'>
             <button

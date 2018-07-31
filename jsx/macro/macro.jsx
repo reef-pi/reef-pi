@@ -14,12 +14,24 @@ export default class Macro extends React.Component {
     this.update = this.update.bind(this)
     this.updateSteps = this.updateSteps.bind(this)
     this.details = this.details.bind(this)
+    this.a2i = this.a2i.bind(this)
   }
 
   updateSteps (steps) {
     this.setState({
       steps: steps
     })
+  }
+
+  a2i (steps) {
+    for (var i = 0; i < steps.length; i++) {
+      switch (steps[i].type) {
+        case 'wait':
+          steps[i].config.duration = parseInt(steps[i].config.duration)
+          break
+      }
+    }
+    return steps
   }
 
   update () {
@@ -29,7 +41,7 @@ export default class Macro extends React.Component {
     }
     this.props.update({
       name: this.state.name,
-      steps: this.state.steps
+      steps: this.a2i(this.state.steps)
     })
     this.setState({edit: false})
   }
