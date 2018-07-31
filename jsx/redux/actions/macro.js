@@ -48,7 +48,7 @@ export const updateMacro = (id, a) => {
   return (reduxPost({
     url: '/api/macros/' + id,
     data: a,
-    success: macroUpdated
+    success: fetchMacros
   }))
 }
 

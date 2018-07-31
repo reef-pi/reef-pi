@@ -14,7 +14,7 @@ export default class Steps extends React.Component {
   deleteStep (i) {
     return () => {
       var steps = this.props.steps
-      delete (steps[i])
+      steps.splice(i, 1)
       this.props.hook(steps)
     }
   }

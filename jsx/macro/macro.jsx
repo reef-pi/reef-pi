@@ -18,7 +18,7 @@ export default class Macro extends React.Component {
 
   updateSteps (steps) {
     this.setState({
-      steps: this.state.steps
+      steps: steps
     })
   }
 
@@ -31,6 +31,7 @@ export default class Macro extends React.Component {
       name: this.state.name,
       steps: this.state.steps
     })
+    this.setState({edit: false})
   }
 
   details () {
