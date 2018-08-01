@@ -87,6 +87,7 @@ func TestTimerController(t *testing.T) {
 
 	j1.Name = "altered"
 	j1.Type = "reminder"
+	j1.Enable = true
 	body = new(bytes.Buffer)
 	json.NewEncoder(body).Encode(j1)
 	if err := tr.Do("POST", "/api/timers/"+j1.ID, body, nil); err != nil {

@@ -3,12 +3,13 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"strings"
 )
 
-const Bucket = "timers"
+const Bucket = types.TimerBucket
 
 type Job struct {
 	ID        string          `json:"id"`
@@ -20,6 +21,7 @@ type Job struct {
 	Type      string          `json:"type"`
 	Reminder  Reminder        `json:"reminder"`
 	Equipment UpdateEquipment `json:"equipment"`
+	Enable    bool            `json:"enable"`
 }
 
 func (j *Job) CronSpec() string {
@@ -75,19 +77,45 @@ func (c *Controller) Create(job Job) error {
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
-	return c.addToCron(job)
+	if job.Enable {
+		return c.addToCron(job)
+	}
+	return nil
 }
 
 func (c *Controller) Update(id string, payload Job) error {
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	if j.Enable {
+		if err := c.deleteFromCron(id); err != nil {
+			log.Println("ERROR: timer subsystem: Failed to remove running job from cron. Error:", err)
+			return err
+		}
+	}
 	payload.ID = id
-	return c.store.Update(Bucket, id, &payload)
+	if err := c.store.Update(Bucket, id, &payload); err != nil {
+		return err
+	}
+	if payload.Enable {
+		return c.addToCron(payload)
+	}
+	return nil
 }
 
 func (c *Controller) Delete(id string) error {
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
-	return c.deleteFromCron(id)
+	if j.Enable {
+		return c.deleteFromCron(id)
+	}
+	return nil
 }
 
 func (c *Controller) loadAllJobs() error {
@@ -101,8 +129,10 @@ func (c *Controller) loadAllJobs() error {
 		return nil
 	}
 	for _, job := range jobs {
-		if err := c.addToCron(job); err != nil {
-			log.Println("ERROR: Failed to add job in cron runner. Error:", err)
+		if job.Enable {
+			if err := c.addToCron(job); err != nil {
+				log.Println("ERROR: Failed to add job in cron runner. Error:", err)
+			}
 		}
 	}
 	return nil
@@ -129,6 +159,7 @@ func (c *Controller) deleteFromCron(jobID string) error {
 	}
 	if c.runner != nil {
 		c.runner.Remove(id)
+		delete(c.cronIDs, jobID)
 	}
 	return nil
 }

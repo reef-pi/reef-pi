@@ -69,3 +69,12 @@ func (c *Controller) addToCron(p Pump) error {
 	c.cronIDs[p.ID] = cronID
 	return nil
 }
+
+func (c *Controller) On(id string, b bool) error {
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	p.Regiment.Enable = b
+	return c.Update(id, p)
+}

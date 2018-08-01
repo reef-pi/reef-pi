@@ -1,12 +1,13 @@
 package doser
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
 	"strings"
 	"time"
 )
 
-const Bucket = "doser"
+const Bucket = types.DoserBucket
 
 type Pump struct {
 	ID       string         `json:"id"`

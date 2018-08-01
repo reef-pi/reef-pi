@@ -1,22 +1,16 @@
 package controller
 
 import (
-	"github.com/gorilla/mux"
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"time"
 )
 
-const Bucket = "reef-pi"
-
-type Subsystem interface {
-	Setup() error
-	LoadAPI(*mux.Router)
-	Start()
-	Stop()
-}
+const Bucket = types.ReefPiBucket
 
 type ReefPi struct {
 	store   utils.Store
@@ -24,7 +18,7 @@ type ReefPi struct {
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
 
-	subsystems map[string]Subsystem
+	subsystems map[string]types.Subsystem
 	settings   Settings
 	telemetry  *utils.Telemetry
 	version    string
@@ -94,7 +88,7 @@ func New(version, database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
-		subsystems: make(map[string]Subsystem),
+		subsystems: make(map[string]types.Subsystem),
 		version:    version,
 	}
 	if s.Capabilities.HealthCheck {
@@ -143,4 +137,12 @@ func (r *ReefPi) Stop() error {
 	r.bus.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
+}
+
+func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
+	sub, ok := r.subsystems[s]
+	if !ok {
+		return nil, fmt.Errorf("Subsystem not present: %s", s)
+	}
+	return sub, nil
 }

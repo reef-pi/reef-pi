@@ -3,13 +3,14 @@ package temperature
 import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
 )
 
-const Bucket = "temperature"
-const UsageBucket = "temperature_usage"
+const Bucket = types.TemperatureBucket
+const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	telemetry  *utils.Telemetry
@@ -77,4 +78,13 @@ func (c *Controller) Stop() {
 		log.Println("temperature sub-system: Saved usage data of sensor:", id)
 		delete(c.quitters, id)
 	}
+}
+
+func (c *Controller) On(id string, on bool) error {
+	tc, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	tc.Enable = on
+	return c.Update(id, tc)
 }

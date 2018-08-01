@@ -77,3 +77,12 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	}
 	return false, nil
 }
+
+func (c *Controller) On(id string, b bool) error {
+	e, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	e.On = b
+	return c.Update(id, e)
+}

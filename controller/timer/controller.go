@@ -52,3 +52,12 @@ func (c *Controller) Start() {
 func (c *Controller) Stop() {
 	c.runner.Stop()
 }
+
+func (c *Controller) On(id string, on bool) error {
+	j, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	j.Enable = on
+	return c.Update(id, j)
+}

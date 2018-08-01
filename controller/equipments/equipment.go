@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 )
 
-const Bucket = "equipments"
+const Bucket = types.EquipmentBucket
 
 type Equipment struct {
 	ID     string `json:"id"`

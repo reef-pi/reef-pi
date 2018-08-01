@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
 )
 
-const Bucket = "ato"
-const UsageBucket = "ato_usage"
+const Bucket = types.ATOBucket
+const UsageBucket = types.ATOUsageBucket
 
 type Controller struct {
 	telemetry  *utils.Telemetry

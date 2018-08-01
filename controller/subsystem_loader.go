@@ -8,6 +8,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/doser"
 	"github.com/reef-pi/reef-pi/controller/equipments"
 	"github.com/reef-pi/reef-pi/controller/lighting"
+	"github.com/reef-pi/reef-pi/controller/macro"
 	"github.com/reef-pi/reef-pi/controller/ph"
 	"github.com/reef-pi/reef-pi/controller/system"
 	"github.com/reef-pi/reef-pi/controller/temperature"
@@ -26,6 +27,18 @@ func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
 	}
 	p := ph.New(c, bus, r.store, r.telemetry)
 	r.subsystems[ph.Bucket] = p
+	return nil
+}
+
+func (r *ReefPi) loadMacroSubsystem() error {
+	if !r.settings.Capabilities.Macro {
+		return nil
+	}
+	m, err := macro.New(r.settings.Capabilities.DevMode, r, r.store, r.telemetry)
+	if err != nil {
+		return err
+	}
+	r.subsystems[macro.Bucket] = m
 	return nil
 }
 
@@ -149,25 +162,28 @@ func (r *ReefPi) loadSubsystems() error {
 		r.subsystems[equipments.Bucket] = eqs
 	}
 	if err := r.loadTimerSubsystem(eqs); err != nil {
-		log.Println("ERROR: Failed to load timer sub-system. Error:", err)
+		log.Println("ERROR: Failed to load timer subsystem. Error:", err)
 	}
 	if err := r.loadATOSubsystem(eqs); err != nil {
-		log.Println("ERROR: Failed to load ATO sub-system. Error:", err)
+		log.Println("ERROR: Failed to load ATO subsystem. Error:", err)
 	}
 	if err := r.loadTemperatureSubsystem(eqs); err != nil {
-		log.Println("ERROR: Failed to load temperature sub-system. Error:", err)
+		log.Println("ERROR: Failed to load temperature subsystem. Error:", err)
 	}
 	if err := r.loadLightingSubsystem(r.bus); err != nil {
-		log.Println("ERROR: Failed to load lighting sub-system. Error:", err)
+		log.Println("ERROR: Failed to load lighting subsystem. Error:", err)
 	}
 	if err := r.loadDoserSubsystem(r.jacks); err != nil {
-		log.Println("ERROR: Failed to load doser sub-system. Error:", err)
+		log.Println("ERROR: Failed to load doser subsystem. Error:", err)
 	}
 	if err := r.loadCameraSubsystem(); err != nil {
-		log.Println("ERROR: Failed to load camera sub-system. Error:", err)
+		log.Println("ERROR: Failed to load camera subsystem. Error:", err)
 	}
 	if err := r.loadPhSubsystem(r.bus); err != nil {
-		log.Println("ERROR: Failed to load ph sub-system. Error:", err)
+		log.Println("ERROR: Failed to load ph subsystem. Error:", err)
+	}
+	if err := r.loadMacroSubsystem(); err != nil {
+		log.Println("ERROR: Failed to load macro subsystem. Error:", err)
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {

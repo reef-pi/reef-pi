@@ -17,6 +17,7 @@ type Capabilities struct {
 	Camera        bool `json:"camera"`
 	Doser         bool `json:"doser"`
 	Ph            bool `json:"ph"`
+	Macro         bool `json:"macro"`
 	Configuration bool `json:"configuration"`
 }
 
@@ -30,6 +31,7 @@ var DefaultCapabilities = Capabilities{
 	Temperature:   true,
 	ATO:           true,
 	Configuration: true,
+	Macro:         true,
 }
 
 func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {

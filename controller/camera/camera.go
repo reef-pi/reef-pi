@@ -1,6 +1,8 @@
 package camera
 
 import (
+	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"path/filepath"
@@ -9,8 +11,8 @@ import (
 	"time"
 )
 
-const Bucket = "camera"
-const ItemBucket = "photos"
+const Bucket = types.CameraBucket
+const ItemBucket = types.CameraItemBucket
 
 type Controller struct {
 	config  Config
@@ -28,6 +30,10 @@ func New(store utils.Store, devMode bool) (*Controller, error) {
 		DevMode: devMode,
 		stopCh:  make(chan struct{}),
 	}, nil
+}
+
+func (c *Controller) On(id string, b bool) error {
+	return fmt.Errorf("Camera subsystem does not support 'on' interface")
 }
 
 func (c *Controller) Start() {

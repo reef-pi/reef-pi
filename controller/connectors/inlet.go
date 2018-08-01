@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
 	"net/http"
 )
 
-const InletBucket = "inlets"
+const InletBucket = types.InletBucket
 
 type Inlet struct {
 	ID        string `json:"id"`

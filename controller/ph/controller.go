@@ -2,13 +2,14 @@ package ph
 
 import (
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
 )
 
-const Bucket = "phprobes"
+const Bucket = types.PhBucket
 
 type Config struct {
 	DevMode bool `json:"dev_mode"`
@@ -76,4 +77,13 @@ func (c *Controller) Stop() {
 		log.Println("ph sub-system: Saved usaged data of sensor:", id)
 		delete(c.quitters, id)
 	}
+}
+
+func (c *Controller) On(id string, b bool) error {
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	p.Enable = b
+	return c.Update(id, p)
 }

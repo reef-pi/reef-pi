@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 )
 
-const OutletBucket = "outlets"
+const OutletBucket = types.OutletBucket
 
 var (
 	ValidGPIOPins = map[int]bool{

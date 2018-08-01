@@ -11,7 +11,7 @@ const mockStore = configureMockStore(middlewares)
 
 window.localStorage = mockLocalStorage()
 
-describe('dashboard actions', () => {
+describe('display actions', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
