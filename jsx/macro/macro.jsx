@@ -1,6 +1,7 @@
 import React from 'react'
 import Steps from './steps'
 import PropTypes from 'prop-types'
+import {confirm} from 'utils/confirm'
 
 export default class Macro extends React.Component {
   constructor (props) {
@@ -15,6 +16,14 @@ export default class Macro extends React.Component {
     this.updateSteps = this.updateSteps.bind(this)
     this.details = this.details.bind(this)
     this.a2i = this.a2i.bind(this)
+    this.remove = this.remove.bind(this)
+  }
+
+  remove () {
+    confirm('Are you sure ?')
+      .then(function () {
+        this.props.delete()
+      }.bind(this))
   }
 
   updateSteps (steps) {
@@ -113,7 +122,7 @@ export default class Macro extends React.Component {
                 type='button'
                 id='delete_macro'
                 value='delete'
-                onClick={this.props.delete}
+                onClick={this.remove}
                 className='btn btn-outline-danger'
               />
             </div>
