@@ -2,6 +2,7 @@ package macro
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -34,6 +35,7 @@ func (s *Subsystem) Create(m Macro) error {
 	defer s.mu.Unlock()
 	fn := func(id string) interface{} {
 		m.ID = id
+		m.Enable = false // macros are always enabled by run
 		return &m
 	}
 	return s.store.Create(Bucket, fn)
@@ -43,18 +45,8 @@ func (s *Subsystem) Update(id string, m Macro) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	m.ID = id
-	if err := s.store.Update(Bucket, id, m); err != nil {
-		return err
-	}
-	if m.Enable {
-		for i, step := range m.Steps {
-			if err := step.Run(s.controller); err != nil {
-				return err
-			}
-			log.Printf("Macro sub-system: Macro: %s, Step:%d executed successfully\n", m.Name, i)
-		}
-	}
-	return nil
+	m.Enable = false // macros are always enabled by run
+	return s.store.Update(Bucket, id, m)
 }
 
 func (s *Subsystem) Delete(id string) error {
@@ -67,12 +59,14 @@ func (s *Subsystem) Delete(id string) error {
 	return nil
 }
 
-func (s *Subsystem) Run(id string) error {
-	m, err := s.Get(id)
-	if err != nil {
+func (s *Subsystem) Run(m Macro) error {
+	if m.Enable {
+		return fmt.Errorf("Macro: %s is already running", m.Name)
+	}
+	m.Enable = true
+	if err := s.Update(m.ID, m); err != nil {
 		return err
 	}
-	log.Println("macro subsystem. Running:", m.Name)
 	for i, step := range m.Steps {
 		if err := step.Run(s.controller); err != nil {
 			log.Println("ERROR: macro subsystem. Failed to execute step:", i, "of macro", m.Name, ". Error:", err)
@@ -80,5 +74,6 @@ func (s *Subsystem) Run(id string) error {
 		}
 	}
 	log.Println("macro subsystem. Finished:", m.Name)
-	return nil
+	m.Enable = false
+	return s.Update(m.ID, m)
 }
