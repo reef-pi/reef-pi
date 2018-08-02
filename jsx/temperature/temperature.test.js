@@ -50,18 +50,20 @@ describe('Temperature controller ui', () => {
     }
     const m = shallow(<Sensor data={tc} />).instance()
     m.save()
+    m.expand()
     m.updateSensor({})
     m.updateNotify({})
     m.updateEquipment('foo')('var')
     m.update('foo')({target: {value: 'var'}})
     m.updateCheckBox('foo')({target: {checked: true}})
+    m.showCharts()
     m.save()
   })
 
   it('<SelectSensor />', () => {
     const m = shallow(<SelectSensor sensors={['a']} update={() => true} />).instance()
-    m.set('none')
-    m.set(0)
+    m.set('none')()
+    m.set(0)()
   })
 
   it('<ReadingsChart />', () => {

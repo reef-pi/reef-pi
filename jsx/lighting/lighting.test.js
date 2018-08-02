@@ -5,6 +5,10 @@ import Channel from './channel'
 import Chart from './chart'
 import Main from './main'
 import Light from './light'
+import AutoProfile from './auto_profile'
+import DiurnalProfile from './diurnal_profile'
+import FixedProfile from './fixed_profile'
+import Profile from './profile'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -15,6 +19,9 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('Lighting ui', () => {
+  const ev = {
+    target: {value: 10}
+  }
   const light = {
     id: '1',
     name: 'foo',
@@ -40,9 +47,13 @@ describe('Lighting ui', () => {
 
   it('<Light />', () => {
     const m = shallow(<Light config={light} hook={() => {}} remove={() => true} />).instance()
-    m.updateLight()
+    m.expand()
     m.updateValues('1', [])
+    m.getValues('1')()
     m.setLightMode('1')({target: {}})
+    m.updateChannel('1')(light.channels['1'])
+    m.updateLight()
+    m.updateLight()
   })
 
   it('<Chart />', () => {
@@ -50,10 +61,37 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    const m = shallow(<Channel config={{values: []}} hook={() => {}} />).instance()
+    const m = shallow(<Channel config={light.channels['1']} hook={() => {}} />).instance()
+    m.toggle()
     m.updateMin({target: {}})
     m.updateMax({target: {}})
     m.updateReverse({target: {}})
     m.updateName({target: {}})
+    m.updateStartMin(ev)
+    m.updateColor({hex: '#fff'})
+  })
+
+  it('<AutoProfile />', () => {
+    const m = shallow(<AutoProfile hook={() => true} />).instance()
+    m.curry(1)(ev)
+  })
+
+  it('<DiurnalProfile />', () => {
+    const m = shallow(<DiurnalProfile hook={() => true} />).instance()
+    m.update('foo')(ev)
+  })
+
+  it('<FiexdProfile />', () => {
+    const m = shallow(<FixedProfile hook={() => true} />).instance()
+    m.update(ev)
+  })
+
+  it('<Profile />', () => {
+    const m = shallow(<Profile hook={() => true} type='fixed' />).instance()
+    m.setConfig({})
+    m.setType('fixed')()
+    shallow(<Profile type='auto' />)
+    shallow(<Profile type='diurnal' />)
+    shallow(<Profile type='unknown' />)
   })
 })
