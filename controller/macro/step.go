@@ -73,5 +73,4 @@ func (s *Step) Run(c types.Controller) error {
 	default:
 		return fmt.Errorf("Unknown step type:%s", s.Type)
 	}
-	return nil
 }

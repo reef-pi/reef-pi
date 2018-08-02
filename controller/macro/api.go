@@ -3,6 +3,7 @@ package macro
 import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
 )
 
@@ -54,7 +55,12 @@ func (c *Subsystem) update(w http.ResponseWriter, r *http.Request) {
 
 func (c *Subsystem) run(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) error {
-		return c.Run(id)
+		m, err := c.Get(id)
+		if err != nil {
+			return err
+		}
+		log.Println("macro subsystem. Running:", m.Name)
+		return c.Run(m)
 	}
 	utils.JSONDeleteResponse(fn, w, r)
 }
