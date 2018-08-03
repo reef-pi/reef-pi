@@ -94,7 +94,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if inUse {
-		return fmt.Errorf("ERROR: equipment is in use")
+		return fmt.Errorf("equipment is in use")
 	}
 	outlet, err := c.outlets.Get(eq.Outlet)
 	if err != nil {

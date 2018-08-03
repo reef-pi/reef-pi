@@ -1,13 +1,15 @@
 import React from 'react'
 import {ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line} from 'recharts'
-import {fetchProbeReadings} from '../redux/actions/phprobes'
+import {fetchProbeReadings} from 'redux/actions/phprobes'
 import {connect} from 'react-redux'
 
 class chart extends React.Component {
   componentDidMount () {
-    var timer = window.setInterval(this.fetchProbeReadings, 10 * 1000)
-    this.setState({timer: timer})
     this.props.fetchProbeReadings(this.props.probe_id)
+    var timer = window.setInterval(() => {
+      this.props.fetchProbeReadings(this.props.probe_id)
+    }, 10 * 1000)
+    this.setState({timer: timer})
   }
 
   componentWillUnmount () {

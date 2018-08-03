@@ -24,7 +24,7 @@ export function reduxGet (params) {
             return
           }
           response.text().then((err) => {
-            showAlert(response.statusText + '\n' + err)
+            showAlert(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -47,7 +47,7 @@ export function reduxDelete (params) {
             return
           }
           response.text().then((err) => {
-            showAlert(response.statusText + '\n' + err)
+            showAlert(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -69,7 +69,7 @@ export function reduxPut (params) {
             return
           }
           response.text().then((err) => {
-            showAlert(response.statusText + '\n' + err)
+            showAlert(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -94,7 +94,7 @@ export function reduxPost (params) {
           return
         }
         response.text().then((err) => {
-          showAlert(response.statusText + '\n' + err)
+          showAlert(err + ' | HTTP ' + response.status)
         })
       }
       return response

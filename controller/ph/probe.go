@@ -83,7 +83,7 @@ func (c *Controller) Delete(id string) error {
 	if err := c.store.Delete(Bucket, id); err != nil {
 		return err
 	}
-	if err := c.store.Delete(ReadingsBucket, id); err != nil {
+	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
 	}
 	quit, ok := c.quitters[id]

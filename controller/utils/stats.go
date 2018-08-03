@@ -30,9 +30,9 @@ type StatsOnDisk struct {
 
 // Allow storing stats in memory inside ring buffer, serializing it on disk
 type StatsManager struct {
+	sync.Mutex
 	inMemory        map[string]Stats
 	bucket          string
-	mu              *sync.Mutex
 	CurrentLimit    int
 	HistoricalLimit int
 	store           Store
@@ -43,7 +43,6 @@ func NewStatsManager(store Store, b string, c, h int) *StatsManager {
 	return &StatsManager{
 		inMemory:        make(map[string]Stats),
 		bucket:          b,
-		mu:              &sync.Mutex{},
 		CurrentLimit:    c,
 		store:           store,
 		HistoricalLimit: h,
@@ -52,8 +51,8 @@ func NewStatsManager(store Store, b string, c, h int) *StatsManager {
 }
 
 func (m *StatsManager) Get(id string) (StatsResponse, error) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.Lock()
+	defer m.Unlock()
 	resp := StatsResponse{
 		Current:    []Metric{},
 		Historical: []Metric{},
@@ -104,9 +103,9 @@ func (m *StatsManager) Load(id string, fn func(json.RawMessage) interface{}) err
 		stats.Historical = stats.Historical.Next()
 	}
 	stats.Historical = stats.Historical.Prev()
-	m.mu.Lock()
+	m.Lock()
 	m.inMemory[id] = stats
-	m.mu.Unlock()
+	m.Unlock()
 	return nil
 }
 
@@ -119,8 +118,8 @@ func (m *StatsManager) Save(id string) error {
 }
 
 func (m *StatsManager) Update(id string, metric Metric) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
+	m.Lock()
+	defer m.Unlock()
 	stats, ok := m.inMemory[id]
 	if !ok {
 		stats = m.NewStats()
@@ -141,4 +140,11 @@ func (m *StatsManager) Update(id string, metric Metric) {
 	}
 	stats.Historical.Value = m1
 	m.inMemory[id] = stats
+}
+
+func (m *StatsManager) Delete(id string) error {
+	m.Lock()
+	defer m.Unlock()
+	delete(m.inMemory, id)
+	return m.store.Delete(m.bucket, id)
 }
