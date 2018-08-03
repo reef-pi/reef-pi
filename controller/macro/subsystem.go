@@ -11,9 +11,9 @@ const Bucket = types.MacroBucket
 const UsageBucket = types.MacroUsageBucket
 
 type Subsystem struct {
+	sync.Mutex
 	telemetry  *utils.Telemetry
 	store      utils.Store
-	mu         sync.Mutex
 	devMode    bool
 	quitters   map[string]chan struct{}
 	statsMgr   *utils.StatsManager
@@ -22,7 +22,6 @@ type Subsystem struct {
 
 func New(devMode bool, c types.Controller, store utils.Store, telemetry *utils.Telemetry) (*Subsystem, error) {
 	return &Subsystem{
-		mu:         sync.Mutex{},
 		telemetry:  telemetry,
 		store:      store,
 		devMode:    devMode,

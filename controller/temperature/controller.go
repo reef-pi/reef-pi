@@ -13,9 +13,9 @@ const Bucket = types.TemperatureBucket
 const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
+	sync.Mutex
 	telemetry  *utils.Telemetry
 	store      utils.Store
-	mu         sync.Mutex
 	devMode    bool
 	equipments *equipments.Controller
 	quitters   map[string]chan struct{}
@@ -24,7 +24,6 @@ type Controller struct {
 
 func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
 	return &Controller{
-		mu:         sync.Mutex{},
 		telemetry:  telemetry,
 		store:      store,
 		devMode:    devMode,
@@ -45,8 +44,8 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.Lock()
+	defer c.Unlock()
 	tcs, err := c.List()
 	if err != nil {
 		log.Println("ERROR: temperature subsystem: Failed to list sensors. Error:", err)

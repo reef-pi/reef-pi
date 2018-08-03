@@ -81,7 +81,6 @@ func (ch Channel) GetValue(t time.Time) int {
 	default:
 		return 0
 	}
-	return 0
 }
 
 func (ch Channel) GetValueFixed() int {
