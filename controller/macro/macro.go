@@ -31,8 +31,6 @@ func (s *Subsystem) List() ([]Macro, error) {
 }
 
 func (s *Subsystem) Create(m Macro) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	fn := func(id string) interface{} {
 		m.ID = id
 		m.Enable = false // macros are always enabled by run
@@ -42,8 +40,6 @@ func (s *Subsystem) Create(m Macro) error {
 }
 
 func (s *Subsystem) Update(id string, m Macro) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	m.ID = id
 	m.Enable = false // macros are always enabled by run
 	return s.store.Update(Bucket, id, m)

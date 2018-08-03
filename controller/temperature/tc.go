@@ -23,6 +23,7 @@ type TC struct {
 	ChartMin   float64       `json:"chart_min"`
 	ChartMax   float64       `json:"chart_max"`
 }
+
 type Notify struct {
 	Enable bool    `json:"enable"`
 	Max    float64 `json:"max"`
@@ -33,6 +34,7 @@ func (c *Controller) Get(id string) (TC, error) {
 	var tc TC
 	return tc, c.store.Get(Bucket, id, &tc)
 }
+
 func (c Controller) List() ([]TC, error) {
 	tcs := []TC{}
 	fn := func(v []byte) error {
@@ -47,8 +49,8 @@ func (c Controller) List() ([]TC, error) {
 }
 
 func (c *Controller) Create(tc TC) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.Lock()
+	defer c.Unlock()
 	if tc.Period <= 0 {
 		return fmt.Errorf("Check period for temperature controller must be greater than zero")
 	}
@@ -68,8 +70,8 @@ func (c *Controller) Create(tc TC) error {
 }
 
 func (c *Controller) Update(id string, tc TC) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.Lock()
+	defer c.Unlock()
 	tc.ID = id
 	if tc.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", tc.Period)

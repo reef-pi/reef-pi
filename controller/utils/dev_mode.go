@@ -5,8 +5,8 @@ type DevI2CBus struct{}
 func (d *DevI2CBus) ReadByte(addr byte) (value byte, err error) {
 	return
 }
-func (d *DevI2CBus) ReadBytes(addr byte, num int) (value []byte, err error) {
-	return
+func (d *DevI2CBus) ReadBytes(_ byte, _ int) ([]byte, error) {
+	return []byte{}, nil
 }
 func (d *DevI2CBus) WriteByte(addr, value byte) error {
 	return nil

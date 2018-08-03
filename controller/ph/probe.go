@@ -156,5 +156,4 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	default:
 		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
 	}
-	return nil
 }
