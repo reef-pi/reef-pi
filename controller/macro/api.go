@@ -59,7 +59,6 @@ func (c *Subsystem) run(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return err
 		}
-		log.Println("macro subsystem. Running:", m.Name)
 		return c.Run(m)
 	}
 	utils.JSONDeleteResponse(fn, w, r)
