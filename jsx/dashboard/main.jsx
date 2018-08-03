@@ -125,7 +125,11 @@ class dashboard extends React.Component {
         <div className='row'>
           <div className='col'>
             <div className='float-right'>
-              <button className='btn btn-outline-dark' onClick={this.toggle} id='configure-dashboard'>
+              <button
+                className='btn btn-outline-dark btn-sm'
+                onClick={this.toggle}
+                id='configure-dashboard'
+              >
                 <label>{lbl}</label>
               </button>
             </div>

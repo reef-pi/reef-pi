@@ -8,6 +8,14 @@ import Macro from './macro'
 class main extends React.Component {
   componentDidMount () {
     this.props.fetch()
+    var timer = window.setInterval(this.props.fetch, 10 * 1000)
+    this.setState({timer: timer})
+  }
+
+  componentWillUnmount () {
+    if (this.state && this.state.timer) {
+      window.clearInterval(this.state.timer)
+    }
   }
 
   render () {
@@ -21,7 +29,11 @@ class main extends React.Component {
             delete={() => { this.props.delete(v.id) }}
             update={(m) => { this.props.update(v.id, m) }}
             macro_id={v.id}
-            run={() => { this.props.run(v.id) }}
+            run={() => {
+              this.props.run(v.id)
+              this.props.fetch()
+            }}
+            enable={v.enable}
           />
         </div>
       )

@@ -1,4 +1,4 @@
-import {reboot, powerOff, reload, reloaded, rebooted, powerOffed } from './admin.js'
+import {reboot, powerOff, reload, reloaded, rebooted, powerOffed } from './admin'
 import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'

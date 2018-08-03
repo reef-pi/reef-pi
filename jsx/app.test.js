@@ -11,12 +11,17 @@ import 'isomorphic-fetch'
 import JackSelector from './jack_selector'
 import SelectEquipment from './select_equipment'
 import SignIn from './sign_in'
+import fetchMock from 'fetch-mock'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('App', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
   it('<App />', () => {
     const m = shallow(
       <App store={mockStore({info: {}, capabilities: []})} />

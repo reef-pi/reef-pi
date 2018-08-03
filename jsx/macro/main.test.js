@@ -20,6 +20,10 @@ const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('Macro UI', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
   const macro = {
     name: 'Foo',
     steps: [
@@ -58,6 +62,7 @@ describe('Macro UI', () => {
   })
 
   it('<New />', () => {
+    fetchMock.get('/api/macros', {})
     fetchMock.putOnce('/api/macros', {})
     const i = shallow(<New store={mockStore()} />).dive().instance()
     const ev = {

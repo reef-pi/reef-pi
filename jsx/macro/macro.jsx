@@ -107,9 +107,10 @@ export default class Macro extends React.Component {
               <input
                 type='button'
                 id={'run_macro_' + this.props.macro_id}
-                value='run'
+                value={this.props.enable ? 'running' : 'run'}
                 onClick={this.props.run}
                 className='btn btn-outline-dark'
+                disabled={this.props.enable}
               />
               <input
                 type='button'

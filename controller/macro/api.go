@@ -1,9 +1,9 @@
 package macro
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
 	"net/http"
 )
 
@@ -48,6 +48,7 @@ func (c *Subsystem) delete(w http.ResponseWriter, r *http.Request) {
 func (c *Subsystem) update(w http.ResponseWriter, r *http.Request) {
 	var m Macro
 	fn := func(id string) error {
+		m.Enable = false // macros are always enabled by run
 		return c.Update(id, m)
 	}
 	utils.JSONUpdateResponse(&m, fn, w, r)
@@ -59,8 +60,11 @@ func (c *Subsystem) run(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return err
 		}
-		log.Println("macro subsystem. Running:", m.Name)
-		return c.Run(m)
+		if m.Enable {
+			return fmt.Errorf("Macro: %s is already running", m.Name)
+		}
+		go c.Run(m)
+		return nil
 	}
 	utils.JSONDeleteResponse(fn, w, r)
 }

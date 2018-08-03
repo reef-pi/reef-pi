@@ -1,12 +1,12 @@
 import $ from 'jquery'
 
 export function showAlert (msg) {
-  $('#reef-pi-alert').text()
-  $('#reef-pi-alert-msg').text(msg)
-  $('#reef-pi-alert').show()
-}
-
-export function hideAlert () {
-  $('#reef-pi-alert-msg').text()
-  $('#reef-pi-alert').hide()
+  $('#reef-pi-alert').html(
+    `<div class='alert alert-danger alert-dismissible fade show'>
+      <div class='font-weight-normal'>` + msg + `</div>
+      <button type='button' class='close' data-dismiss='alert'>
+        <span>&times;</span>
+      </button>
+    </div>`
+  )
 }
