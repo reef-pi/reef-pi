@@ -32,7 +32,7 @@ export default class SelectType extends React.Component {
       }
       items.push(
         <a className={cName} href='#' key={k} onClick={this.set(v)}>
-          <span>{v}</span>
+          <span id={v + '-' + this.props.macro_id + '-' + this.props.index}>{v}</span>
         </a>)
     }.bind(this))
     return items
@@ -51,10 +51,16 @@ export default class SelectType extends React.Component {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     return (
       <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+        <button
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          data-toggle='dropdown'
+          disabled={readOnly}
+          id={'select-type-' + this.props.macro_id + '-' + this.props.index}
+        >
           {this.state.type}
         </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+        <div className='dropdown-menu'>
           {this.list()}
         </div>
       </div>
@@ -65,5 +71,7 @@ export default class SelectType extends React.Component {
 SelectType.propTypes = {
   hook: PropTypes.func,
   readOnly: PropTypes.bool,
-  type: PropTypes.string
+  macro_id: PropTypes.string,
+  type: PropTypes.string,
+  index: PropTypes.number
 }

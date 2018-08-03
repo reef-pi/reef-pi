@@ -60,6 +60,7 @@ export default class Step extends React.Component {
           on={this.props.config.on}
         />
     }
+
     return (
       <div className='container'>
         <div className='row'>
@@ -68,6 +69,8 @@ export default class Step extends React.Component {
               type={this.props.type}
               hook={this.updateType}
               readOnly={this.props.readOnly}
+              macro_id={this.props.macro_id}
+              index={this.props.index}
             />
           </div>
           <div className='col'>

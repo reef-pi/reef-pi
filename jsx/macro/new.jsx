@@ -93,7 +93,13 @@ class newMacro extends React.Component {
   render () {
     return (
       <div className='container'>
-        <input id='add_new_macro' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+        <input
+          id='add_new_macro'
+          type='button'
+          value={this.state.add ? '-' : '+'}
+          onClick={this.toggle}
+          className='btn btn-outline-success'
+        />
         {this.ui()}
       </div>
     )

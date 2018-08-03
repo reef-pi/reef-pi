@@ -53,12 +53,11 @@ class stepConfig extends React.Component {
               className='btn btn-secondary dropdown-toggle'
               type='button'
               data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
+              id={this.props.macro_id + '-' + this.props.index + '-step-state'}
               disabled={readOnly} >
               {name}
             </button>
-            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+            <div className='dropdown-menu'>
               {items}
             </div>
           </div>
@@ -70,6 +69,7 @@ class stepConfig extends React.Component {
                 <input
                   type='radio'
                   name={this.props.macro_id + '-' + this.props.index + '-step-state'}
+                  id={this.props.macro_id + '-' + this.props.index + '-step-on'}
                   defaultChecked={this.props.on}
                   disabled={this.props.readOnly}
                   onClick={this.updateOn(true)}
@@ -82,6 +82,7 @@ class stepConfig extends React.Component {
                 <input
                   type='radio'
                   name={this.props.macro_id + '-' + this.props.index + '-step-state'}
+                  id={this.props.macro_id + '-' + this.props.index + '-step-off'}
                   defaultChecked={!this.props.on}
                   disabled={this.props.readOnly}
                   onClick={this.updateOn(false)}
