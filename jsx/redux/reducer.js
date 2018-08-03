@@ -85,6 +85,8 @@ export const rootReducer = (state, action) => {
     case 'DOSING_PUMP_SCHEDULE_UPDATED':
     case 'TIMER_CREATED':
     case 'TIMER_DELETED':
+    case 'MACRO_RUN':
+    case 'API_FAILURE':
       return state
     default:
       console.log('Unknown action in redux-reducer:|' + action.type + '|')

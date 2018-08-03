@@ -1,7 +1,7 @@
 import React from 'react'
-import {confirm} from '../utils/confirm.js'
+import {confirm} from 'utils/confirm'
 import $ from 'jquery'
-import {fetchOutlets, deleteOutlet, createOutlet} from '../redux/actions/outlets'
+import {fetchOutlets, deleteOutlet, createOutlet} from 'redux/actions/outlets'
 import {connect} from 'react-redux'
 
 class outlets extends React.Component {

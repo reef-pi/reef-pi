@@ -1,5 +1,5 @@
 import SignIn from 'sign_in'
-import {showAlert} from './alert'
+import {showAlert} from 'utils/alert'
 
 function makeHeaders () {
   let headers = new Headers()
@@ -23,7 +23,9 @@ export function reduxGet (params) {
           if (params.suppressError) {
             return
           }
-          showAlert(response.statusText, response.text())
+          response.text().then((err) => {
+            showAlert(response.statusText + '\n' + err)
+          })
         }
         return response
       })
@@ -44,8 +46,9 @@ export function reduxDelete (params) {
           if (params.suppressError) {
             return
           }
-          console.log(response)
-          showAlert(response.statusText, response.text())
+          response.text().then((err) => {
+            showAlert(response.statusText + '\n' + err)
+          })
         }
         return response
       })
@@ -65,7 +68,9 @@ export function reduxPut (params) {
           if (params.suppressError) {
             return
           }
-          showAlert(response.statusText, response.text())
+          response.text().then((err) => {
+            showAlert(response.statusText + '\n' + err)
+          })
         }
         return response
       })
@@ -88,7 +93,9 @@ export function reduxPost (params) {
         if (params.suppressError) {
           return
         }
-        showAlert(response.statusText, response.text())
+        response.text().then((err) => {
+          showAlert(response.statusText + '\n' + err)
+        })
       }
       return response
     })

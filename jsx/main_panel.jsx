@@ -13,7 +13,6 @@ import Dashboard from 'dashboard/main'
 import $ from 'jquery'
 import {fetchUIData} from 'redux/actions/ui'
 import {connect} from 'react-redux'
-import {hideAlert} from 'utils/alert'
 import Summary from 'summary'
 import '../assets/reef_pi.css'
 
@@ -40,9 +39,9 @@ class mainPanel extends React.Component {
     this.navs = this.navs.bind(this)
     this.setTab = this.setTab.bind(this)
   }
+
   componentDidMount () {
     this.props.fetchUIData()
-    hideAlert()
   }
 
   setTab (k) {

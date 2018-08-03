@@ -2,7 +2,6 @@ package macro
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 )
 
@@ -41,7 +40,6 @@ func (s *Subsystem) Create(m Macro) error {
 
 func (s *Subsystem) Update(id string, m Macro) error {
 	m.ID = id
-	m.Enable = false // macros are always enabled by run
 	return s.store.Update(Bucket, id, m)
 }
 
@@ -56,9 +54,6 @@ func (s *Subsystem) Delete(id string) error {
 }
 
 func (s *Subsystem) Run(m Macro) error {
-	if m.Enable {
-		return fmt.Errorf("Macro: %s is already running", m.Name)
-	}
 	m.Enable = true
 	if err := s.Update(m.ID, m); err != nil {
 		return err

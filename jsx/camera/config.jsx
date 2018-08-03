@@ -1,5 +1,5 @@
 import React from 'react'
-import {showAlert} from '../utils/alert'
+import {showAlert} from 'utils/alert'
 
 export default class Config extends React.Component {
   constructor (props) {

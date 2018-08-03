@@ -1,9 +1,9 @@
 import React from 'react'
 import $ from 'jquery'
-import {confirm} from '../utils/confirm.js'
-import {showAlert} from '../utils/alert.js'
+import {confirm} from 'utils/confirm'
+import {showAlert} from 'utils/alert'
 import {connect} from 'react-redux'
-import {fetchJacks, deleteJack, createJack} from '../redux/actions/jacks'
+import {fetchJacks, deleteJack, createJack} from 'redux/actions/jacks'
 
 class jacks extends React.Component {
   constructor (props) {

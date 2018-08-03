@@ -1,5 +1,5 @@
 import React from 'react'
-import {showAlert} from '../utils/alert.js'
+import {showAlert} from 'utils/alert'
 
 export default class New extends React.PureComponent {
   constructor (props) {
