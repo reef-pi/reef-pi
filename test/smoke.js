@@ -1,5 +1,6 @@
 const S = require('./sign_in.js')
 const outlet = require('./outlet.js')
+const macro  = require('./macro.js')
 const inlet = require('./inlets.js')
 const jacks = require('./jacks.js')
 const ph = require('./ph.js')
@@ -47,6 +48,8 @@ function SmokeTest () {
     .wait(1500)
     .click('a#tab-dashboard')
     .wait(1500)
+    .evaluate(macro.Create(nightmare))
+    .wait(1500)
     .end()
     .then(function () {
       console.log('Smoking Hot!')
@@ -56,4 +59,5 @@ function SmokeTest () {
       process.exit(-1)
     })
 }
+
 SmokeTest()

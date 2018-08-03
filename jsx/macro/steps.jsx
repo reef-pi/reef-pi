@@ -46,7 +46,11 @@ export default class Steps extends React.Component {
     return (
       <div className='col'>
         <div className='float-right'>
-          <button className='btn btn-outline-success' onClick={this.add}>
+          <button
+            className='btn btn-outline-success'
+            onClick={this.add}
+            id={'add-step-' + this.props.macro_id}
+          >
             <label>+</label>
           </button>
         </div>

@@ -24,6 +24,7 @@ export default class WaitStepConfig extends React.Component {
               disabled={this.props.readOnly}
               onChange={this.update}
               value={this.props.duration}
+              id={this.props.macro_id + '-' + this.props.index + '-step-wait-duration'}
             />
           </div>
           <label>seconds</label>
