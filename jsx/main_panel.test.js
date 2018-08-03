@@ -6,12 +6,17 @@ import configureMockStore from 'redux-mock-store'
 import {mockLocalStorage} from './utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+import fetchMock from 'fetch-mock'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('MainPanel', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
   it('<MainPanel />', () => {
     const state = {
       capabilities: {
