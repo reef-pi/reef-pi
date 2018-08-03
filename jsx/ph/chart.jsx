@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
-    var timer = window.setInterval(()=>{
+    var timer = window.setInterval(() => {
       this.props.fetchProbeReadings(this.props.probe_id)
     }, 10 * 1000)
     this.setState({timer: timer})
