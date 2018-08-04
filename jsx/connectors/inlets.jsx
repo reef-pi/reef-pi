@@ -1,8 +1,9 @@
 import React from 'react'
 import {confirm} from 'utils/confirm'
 import $ from 'jquery'
-import {fetchInlets, deleteInlet, createInlet} from 'redux/actions/inlets'
+import {fetchInlets, deleteInlet, createInlet, updateInlet} from 'redux/actions/inlets'
 import {connect} from 'react-redux'
+import Inlet from './inlet'
 
 class inlets extends React.Component {
   constructor (props) {
@@ -16,17 +17,17 @@ class inlets extends React.Component {
     this.save = this.save.bind(this)
   }
 
+  componentDidMount () {
+    this.props.fetch()
+  }
+
   remove (id) {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          this.props.deleteInlet(id)
+          this.props.delete(id)
         }.bind(this))
     }.bind(this))
-  }
-
-  componentDidMount () {
-    this.props.fetchInlets()
   }
 
   add () {
@@ -43,7 +44,7 @@ class inlets extends React.Component {
       pin: parseInt($('#inletPin').val()),
       reverse: $('#inletReverse')[0].checked
     }
-    this.props.createInlet(payload)
+    this.props.create(payload)
     this.add()
   }
 
@@ -51,23 +52,19 @@ class inlets extends React.Component {
     var items = []
     $.each(this.props.inlets, function (n, i) {
       items.push(
-        <div className='row'key={i.name}>
-          <div className='col-sm-2'>
-            {i.name}
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{i.pin}</label>
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{i.equipment === '' ? '' : 'in-use'}</label>
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{i.reverse ? 'reverse' : '' }</label>
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(i.id)} />
-          </div>
-        </div>
+        <Inlet
+          name={i.name}
+          pin={i.pin}
+          reverse={i.reverse}
+          equipment={i.equipment}
+          inlet_id={i.id}
+          key={n}
+          remove={this.remove(i.id)}
+          update={(p) => {
+            this.props.update(i.id, p)
+            this.props.fetch()
+          }}
+        />
       )
     }.bind(this))
     return (items)
@@ -124,9 +121,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchInlets: () => dispatch(fetchInlets()),
-    createInlet: (inlet) => dispatch(createInlet(inlet)),
-    deleteInlet: (id) => dispatch(deleteInlet(id))
+    fetch: () => dispatch(fetchInlets()),
+    create: (inlet) => dispatch(createInlet(inlet)),
+    delete: (id) => dispatch(deleteInlet(id)),
+    update: (id, p) => dispatch(updateInlet(id, p))
   }
 }
 
