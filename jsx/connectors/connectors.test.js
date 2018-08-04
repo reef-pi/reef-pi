@@ -7,6 +7,7 @@ import Inlet from './inlet'
 import Outlet from './outlet'
 import InletSelector from './inlet_selector'
 import Jacks from './jacks'
+import Jack from './jack'
 import Outlets from './outlets'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -60,6 +61,20 @@ describe('Connectors', () => {
     m.add()
     m.setDriver('rpi')()
     m.remove('1')()
+  })
+
+  it('<Jack />', () => {
+    const m = shallow(
+      <Jack
+        jack_id='1'
+        name='foo'
+        pins={[1, 2]}
+        update={() => true}
+        remove={() => true}
+        driver='rpi'
+      />).instance()
+    m.edit()
+    m.setDriver('pca9685')()
   })
 
   it('<Outlets />', () => {
