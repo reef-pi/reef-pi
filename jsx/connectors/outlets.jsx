@@ -1,8 +1,9 @@
 import React from 'react'
 import {confirm} from 'utils/confirm'
 import $ from 'jquery'
-import {fetchOutlets, deleteOutlet, createOutlet} from 'redux/actions/outlets'
+import {fetchOutlets, updateOutlet, deleteOutlet, createOutlet} from 'redux/actions/outlets'
 import {connect} from 'react-redux'
+import Outlet from './outlet'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -20,13 +21,13 @@ class outlets extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          this.props.deleteOutlet(id)
+          this.props.delete(id)
         }.bind(this))
     }.bind(this))
   }
 
   componentDidMount () {
-    this.props.fetchOutlets()
+    this.props.fetch()
   }
 
   add () {
@@ -43,7 +44,7 @@ class outlets extends React.Component {
       pin: parseInt($('#outletPin').val()),
       reverse: $('#outletReverse')[0].checked
     }
-    this.props.createOutlet(payload)
+    this.props.create(payload)
     this.add()
   }
 
@@ -51,23 +52,20 @@ class outlets extends React.Component {
     var list = []
     $.each(this.props.outlets, function (i, o) {
       list.push(
-        <div className='row'key={'outlet-' + o.id}>
-          <div className='col-sm-2'>
-            {o.name}
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{o.pin}</label>
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{o.equipment === '' ? '' : 'in-use'}</label>
-          </div>
-          <div className='col-sm-1'>
-            <label className='small'>{o.reverse ? 'reverse' : '' }</label>
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(o.id)} />
-          </div>
-        </div>
+        <Outlet
+          name={o.name}
+          outlet_id={o.id}
+          pin={o.pin}
+          key={i}
+          reverse={o.reverse}
+          equipment={o.equipment}
+          remove={this.remove(o.id)}
+          update={(p) => {
+            this.props.update(o.id, p)
+            this.props.fetch()
+          }
+          }
+        />
       )
     }.bind(this))
     return (list)
@@ -124,9 +122,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchOutlets: () => dispatch(fetchOutlets()),
-    createOutlet: (outlet) => dispatch(createOutlet(outlet)),
-    deleteOutlet: (id) => dispatch(deleteOutlet(id))
+    fetch: () => dispatch(fetchOutlets()),
+    create: (outlet) => dispatch(createOutlet(outlet)),
+    delete: (id) => dispatch(deleteOutlet(id)),
+    update: (id, o) => dispatch(updateOutlet(id, o))
   }
 }
 
