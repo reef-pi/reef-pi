@@ -31,3 +31,12 @@ export const createJack = (jack) => {
       success: fetchJacks
     }))
 }
+
+export const updateJack = (id, jack) => {
+  return (
+    reduxPost({
+      url: '/api/jack/'+id,
+      data: jack,
+      success: fetchJacks
+  }))
+}

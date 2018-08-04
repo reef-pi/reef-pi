@@ -31,3 +31,12 @@ export const createInlet = (inlet) => {
       success: fetchInlets
     }))
 }
+
+export const updateInlet = (id, inlet) => {
+  return (
+    reduxPost({
+      url: '/api/inlets/'+id,
+      data: inlet,
+      success: fetchInlets
+  }))
+}

@@ -3,6 +3,7 @@ import Enzyme, {shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import Inlets from './inlets'
+import Inlet from './inlet'
 import InletSelector from './inlet_selector'
 import Jacks from './jacks'
 import Outlets from './outlets'
@@ -30,11 +31,24 @@ describe('Connectors', () => {
 
   it('<Inlets />', () => {
     const state = {
-      inlets: [{id: '1', name: 'foo', pin: [1]}]
+      inlets: [{id: '1', name: 'foo', pin: 1, reverse: true}]
     }
     const m = shallow(<Inlets store={mockStore(state)} />).dive().instance()
     m.add()
     m.remove('1')()
+  })
+
+  it('<Inlet />', () => {
+    const m = shallow(
+      <Inlet
+        inlet_id='1'
+        name='foo'
+        pin={1}
+        reverse={false}
+        update={() => true}
+        remove={() => true}
+      />).instance()
+    m.edit()
   })
 
   it('<Jacks />', () => {
@@ -43,7 +57,7 @@ describe('Connectors', () => {
     }
     const m = shallow(<Jacks store={mockStore(state)} />).dive().instance()
     m.add()
-    m.setDriver('rpi')
+    m.setDriver('rpi')()
     m.remove('1')()
   })
 
