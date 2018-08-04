@@ -3,7 +3,8 @@ import $ from 'jquery'
 import {confirm} from 'utils/confirm'
 import {showAlert} from 'utils/alert'
 import {connect} from 'react-redux'
-import {fetchJacks, deleteJack, createJack} from 'redux/actions/jacks'
+import {fetchJacks, updateJack, deleteJack, createJack} from 'redux/actions/jacks'
+import Jack from './jack'
 
 class jacks extends React.Component {
   constructor (props) {
@@ -12,7 +13,7 @@ class jacks extends React.Component {
       add: false,
       driver: 'pca9685'
     }
-    this.listJacks = this.listJacks.bind(this)
+    this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
@@ -31,13 +32,13 @@ class jacks extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          this.props.deleteJack(id)
+          this.props.delete(id)
         }.bind(this))
     }.bind(this))
   }
 
   componentDidMount () {
-    this.props.fetchJacks()
+    this.props.fetch()
   }
 
   add () {
@@ -61,25 +62,26 @@ class jacks extends React.Component {
       pins: pins,
       driver: this.state.driver
     }
-    this.props.createJack(payload)
+    this.props.create(payload)
     this.add()
   }
 
-  listJacks () {
+  list () {
     var list = []
     $.each(this.props.jacks, function (i, j) {
       list.push(
-        <div className='row' key={j.name}>
-          <div className='col-sm-2'>
-            {j.name}
-          </div>
-          <div className='col-sm-2'>
-            <label className='small'>{j.pins.join(',')} ({j.driver})</label>
-          </div>
-          <div className='col-sm-1'>
-            <input type='button' className='btn btn-outline-danger' value='X' onClick={this.remove(j.id)} />
-          </div>
-        </div>
+        <Jack
+          name={j.name}
+          key={i}
+          pins={j.pins}
+          driver={j.driver}
+          jack_id={j.id}
+          remove={this.remove(j.id)}
+          update={(p) => {
+            this.props.update(j.id, p)
+            this.props.fetch()
+          }}
+        />
       )
     }.bind(this))
     return (list)
@@ -96,7 +98,7 @@ class jacks extends React.Component {
         </div>
         <div className='row'>
           <div className='container'>
-            {this.listJacks()}
+            {this.list()}
           </div>
         </div>
         <div className='row'>
@@ -145,13 +147,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchJacks: () => dispatch(fetchJacks()),
-    createJack: (j) => {
-      dispatch(createJack(j))
-    },
-    deleteJack: (id) => {
-      dispatch(deleteJack(id))
-    }
+    fetch: () => dispatch(fetchJacks()),
+    create: (j) => dispatch(createJack(j)),
+    delete: (id) => dispatch(deleteJack(id)),
+    update: (id, j) => dispatch(updateJack(id, j))
   }
 }
 
