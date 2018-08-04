@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import $ from 'jquery'
 
-export default class Inlet extends React.Component {
+export default class Outlet extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -26,9 +26,9 @@ export default class Inlet extends React.Component {
       return
     }
     var payload = {
-      name: $('#inlet-' + this.props.inlet_id + '-name').val(),
-      pin: parseInt($('#inlet-' + this.props.inlet_id + '-pin').val()),
-      reverse: $('#inlet-' + this.props.inlet_id + '-reverse')[0].checked,
+      name: $('#outlet-' + this.props.outlet_id + '-name').val(),
+      pin: parseInt($('#outlet-' + this.props.outlet_id + '-pin').val()),
+      reverse: $('#outlet-' + this.props.outlet_id + '-reverse')[0].checked,
       equipment: this.props.equipment
     }
     this.props.update(payload)
@@ -49,7 +49,7 @@ export default class Inlet extends React.Component {
             <span className='input-group-addon'> Name </span>
             <input
               type='text'
-              id={'inlet-' + this.props.inlet_id + '-name'}
+              id={'outlet-' + this.props.outlet_id + '-name'}
               className='form-control'
               defaultValue={this.state.name}
             />
@@ -60,7 +60,7 @@ export default class Inlet extends React.Component {
             <span className='input-group-addon'> Pin </span>
             <input
               type='text'
-              id={'inlet-' + this.props.inlet_id + '-pin'}
+              id={'outlet-' + this.props.outlet_id + '-pin'}
               className='form-control'
               defaultValue={this.state.pin}
             />
@@ -71,7 +71,7 @@ export default class Inlet extends React.Component {
             <span className='input-group-addon'> Reverse </span>
             <input
               type='checkbox'
-              id={'inlet-' + this.props.inlet_id + '-reverse'}
+              id={'outlet-' + this.props.outlet_id + '-reverse'}
               defaultChecked={this.state.reverse}
             />
           </div>
@@ -125,11 +125,11 @@ export default class Inlet extends React.Component {
     )
   }
 }
-Inlet.propTypes = {
+Outlet.propTypes = {
   name: PropTypes.string.isRequired,
   pin: PropTypes.number.isRequired,
   equipment: PropTypes.string,
-  inlet_id: PropTypes.string.isRequired,
+  outlet_id: PropTypes.string.isRequired,
   remove: PropTypes.func.isRequired,
   reverse: PropTypes.bool.isRequired,
   update: PropTypes.func
