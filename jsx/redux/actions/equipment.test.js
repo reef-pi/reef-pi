@@ -1,4 +1,11 @@
-import {equipmentsLoaded, fetchEquipments, deleteEquipment, createEquipment, updateEquipment} from './equipment'
+import {
+  equipmentsLoaded,
+  equipmentUpdated,
+  fetchEquipments,
+  deleteEquipment,
+  createEquipment,
+  updateEquipment
+} from './equipment'
 import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
@@ -52,7 +59,7 @@ describe('equipment actions', () => {
     fetchMock.getOnce('/api/equipments', {})
     const store = mockStore()
     return store.dispatch(updateEquipment('1')).then(() => {
-      expect(store.getActions()).toEqual([equipmentsLoaded({})])
+      expect(store.getActions()).toEqual([equipmentUpdated({})])
     })
   })
 })
