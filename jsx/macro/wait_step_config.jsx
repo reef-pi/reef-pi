@@ -17,17 +17,18 @@ export default class WaitStepConfig extends React.Component {
     return (
       <div className='row'>
         <div className='input-group col'>
-          <div className='input-group-text'>
+          <div className='input-group-text col-lg-4'>
             <input
               type='text'
               name={this.props.macro_id + '-' + this.props.index + '-step-wait-duration'}
               disabled={this.props.readOnly}
               onChange={this.update}
               value={this.props.duration}
+              className='container'
               id={this.props.macro_id + '-' + this.props.index + '-step-wait-duration'}
             />
           </div>
-          <label>seconds</label>
+          <label className='input-group-append'>seconds</label>
         </div>
       </div>
     )
