@@ -62,7 +62,6 @@ func (s *Subsystem) Run(m Macro) error {
 	for i, step := range m.Steps {
 		if err := step.Run(s.controller); err != nil {
 			log.Println("ERROR: macro subsystem. Failed to execute step:", i, "of macro", m.Name, ". Error:", err)
-			return err
 		}
 	}
 	log.Println("macro subsystem. Finished:", m.Name)

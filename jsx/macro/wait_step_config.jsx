@@ -9,7 +9,7 @@ export default class WaitStepConfig extends React.Component {
 
   update (ev) {
     this.props.hook({
-      duration: ev.target.value
+      duration: parseInt(ev.target.value)
     })
   }
 
