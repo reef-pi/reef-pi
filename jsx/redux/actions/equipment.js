@@ -1,5 +1,10 @@
 import {reduxGet, reduxPost, reduxPut, reduxDelete} from '../../utils/ajax'
 
+export const equipmentUpdated = () => {
+  return ({
+    type: 'EQUIPMENT_UPDATED'
+  })
+}
 export const equipmentsLoaded = (equipments) => {
   return ({
     type: 'EQUIPMENTS_LOADED',
@@ -36,6 +41,6 @@ export const updateEquipment = (id, e) => {
     reduxPost({
       url: '/api/equipments/' + id,
       data: e,
-      success: fetchEquipments
+      success: equipmentUpdated
     }))
 }

@@ -18,7 +18,7 @@ class main extends React.Component {
     this.setOutlet = this.setOutlet.bind(this)
     this.outletList = this.outletList.bind(this)
     this.addEquipment = this.addEquipment.bind(this)
-    this.removeEquipment = this.removeEquipment.bind(this)
+    this.remove = this.remove.bind(this)
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
     this.newEquipment = this.newEquipment.bind(this)
   }
@@ -43,14 +43,17 @@ class main extends React.Component {
       })
       list.push(
         <div key={k} className='list-group-item' style={noPadding}>
-          <div key={k} className='row'>
-            <div className='col-lg-10 col-xs-10'>
-              <Equipment id={v.id} name={v.name} on={v.on} outlet={outlet} hook={this.props.updateEquipment} />
-            </div>
-            <div className='col-lg-2 col-xs-2'>
-              <input type='button' id={'equipment-' + index} onClick={this.removeEquipment(v.id)} value='delete' className='btn btn-outline-danger' />
-            </div>
-          </div>
+          <Equipment
+            equipment_id={v.id}
+            name={v.name}
+            on={v.on}
+            outlet={outlet}
+            update={(e) => {
+              this.props.update(v.id, e)
+            }}
+            remove={this.remove(v.id)}
+            outlets={this.props.outlets}
+          />
         </div>
       )
       index = index + 1
@@ -59,7 +62,7 @@ class main extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchEquipments()
+    this.props.fetch()
     this.props.fetchOutlets()
   }
 
@@ -95,18 +98,18 @@ class main extends React.Component {
       showAlert('Specify equipment name')
       return
     }
-    this.props.createEquipment(payload)
+    this.props.create(payload)
     this.toggleAddEquipmentDiv()
     this.setState({
       selectedOutlet: undefined
     })
   }
 
-  removeEquipment (id) {
+  remove (id) {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          this.props.deleteEquipment(id)
+          this.props.delete(id)
         }.bind(this))
     }.bind(this))
   }
@@ -132,7 +135,7 @@ class main extends React.Component {
         <div className='col-lg-1'>Outlet</div>
         <div className='col-lg-2'>
           <div className='dropdown'>
-            <button className='btn btn-secondary dropdown-toggle' type='button' id='outlet' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+            <button className='btn btn-secondary dropdown-toggle' type='button' id='outlet' data-toggle='dropdown'>
               {outlet}
             </button>
             <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
@@ -140,7 +143,7 @@ class main extends React.Component {
             </div>
           </div>
         </div>
-        <div clssName='col-lg-1'>
+        <div className='col-lg-1'>
           <input type='button' id='createEquipment' value='add' onClick={this.addEquipment} className='btn btn-outline-primary' />
         </div>
       </div>
@@ -174,11 +177,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchEquipments: () => dispatch(fetchEquipments()),
+    fetch: () => dispatch(fetchEquipments()),
     fetchOutlets: () => dispatch(fetchOutlets()),
-    createEquipment: (e) => dispatch(createEquipment(e)),
-    updateEquipment: (id, e) => dispatch(updateEquipment(id, e)),
-    deleteEquipment: (id) => dispatch(deleteEquipment(id))
+    create: (e) => dispatch(createEquipment(e)),
+    update: (id, e) => dispatch(updateEquipment(id, e)),
+    delete: (id) => dispatch(deleteEquipment(id))
   }
 }
 

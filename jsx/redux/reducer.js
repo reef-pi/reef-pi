@@ -68,6 +68,7 @@ export const rootReducer = (state, action) => {
     case 'DOSING_PUMPS_LOADED':
       return { ...state, dosers: action.payload }
     case 'CREDS_UPDATED':
+    case 'EQUIPMENT_UPDATED':
     case 'RELOADED':
     case 'REBOOTED':
     case 'POWER_OFFED':

@@ -14,20 +14,32 @@ const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('Equipment ui', () => {
-  const eqs = [{id: '1', outlet: '1', name: 'Foo'}]
+  const eqs = [{id: '1', outlet: '1', name: 'Foo', on: true}]
+  const outlets = [{id: '1', name: 'O1'}]
   it('<Main />', () => {
-    const outlets = [{id: '1', name: 'O1'}]
     const m = shallow(
       <Main store={mockStore({outlets: outlets, equipments: eqs})} />
     ).dive().instance()
     m.toggleAddEquipmentDiv()
-    m.setOutlet(0)
+    m.setOutlet(0)()
     m.addEquipment()
-    m.removeEquipment('1')()
+    m.remove('1')()
   })
 
   it('<Equipment />', () => {
-    shallow(<Equipment outlet={{}} hook={() => true} />).instance().update()
+    const eq = shallow(
+      <Equipment
+        outlet={{}}
+        on
+        name='foo'
+        equipment_id='1'
+        update={() => true}
+        remove={() => true}
+        outlets={outlets}
+      />).instance()
+    eq.setOutlet({name: 'foo', id: '1', pin: 1})()
+    eq.edit()
+    eq.control()
   })
 
   it('<Chart />', () => {
