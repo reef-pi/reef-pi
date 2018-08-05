@@ -37,6 +37,9 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/phprobes', [])
     fetchMock.getOnce('/api/tcs', [])
     fetchMock.getOnce('/api/lights', [])
+    fetchMock.getOnce('/api/inlets', [])
+    fetchMock.getOnce('/api/jacks', [])
+    fetchMock.getOnce('/api/outlets', [])
     const store = mockStore()
     return store.dispatch(fetchUIData(store.dispatch)).then(() => {
       expect(store.getActions()).not.toEqual([])
