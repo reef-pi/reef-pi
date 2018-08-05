@@ -2,9 +2,9 @@ language: go
 go:
   - "1.10"
 before_install:
-  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-  - sudo  apt-get install -y nodejs
-  - sudo npm install -g npm
+  - curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  - apt-get install -y nodejs
+  - npm install -g npm
 script:
   - make go-get
   - ./build/ci.sh
