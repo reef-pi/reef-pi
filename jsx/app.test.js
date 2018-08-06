@@ -25,7 +25,7 @@ describe('App', () => {
   it('<App />', () => {
     const m = shallow(
       <App store={mockStore({info: {}, capabilities: []})} />
-    ).dive().instance()
+    ).instance()
   })
 
   it('<JackSelector />', () => {

@@ -18,6 +18,11 @@ export default class Equipment extends React.Component {
     this.ui = this.ui.bind(this)
     this.outlets = this.outlets.bind(this)
     this.setOutlet = this.setOutlet.bind(this)
+    this.setName = this.setName.bind(this)
+  }
+
+  setName (ev) {
+    this.setState({name: ev.target.value})
   }
 
   setOutlet (i) {
@@ -31,9 +36,14 @@ export default class Equipment extends React.Component {
   outlets () {
     var items = []
     $.each(this.props.outlets, function (i, v) {
-      items.push(<a className='dropdown-item' href='#' onClick={this.setOutlet(v)} key={'outlet-' + i}>
-        <span id={'outlet-' + v.id}>{v.name}</span>
-      </a>)
+      items.push(
+        <a
+          className='dropdown-item'
+          href='#'
+          onClick={this.setOutlet(v)}
+          key={'outlet-' + i}>
+          <span id={'outlet-' + v.id}>{v.name}</span>
+        </a>)
     }.bind(this))
     return items
   }
@@ -69,6 +79,7 @@ export default class Equipment extends React.Component {
               id={'equipment-' + this.props.equipment_id + '-name'}
               className='form-control'
               defaultValue={this.state.name}
+              onChange={this.setName}
             />
           </div>
         </div>
