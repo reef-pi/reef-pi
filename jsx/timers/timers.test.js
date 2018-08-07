@@ -18,12 +18,23 @@ const mockStore = configureMockStore([thunk])
 describe('Timer ui', () => {
   it('<Main />', () => {
     const state = {
-      timers: [{id: '1', name: 'foo', equipment: {id: '1'}}],
+      timers: [{
+        id: '1',
+        name: 'foo',
+        enable: true,
+        type: 'equipment',
+        equipment: {id: '1', on: true, revert: true, duration: 10},
+        reminder: {},
+        day: '*',
+        hour: '*',
+        minute: '*',
+        second: '0',
+        duration: 10
+      }],
       equipments: [{id: '1', name: 'bar'}]
     }
     const m = shallow(<Main store={mockStore(state)} />).dive().instance()
     m.toggleAddTimerDiv()
-    m.pickEquipment('1')
     m.createTimer()
     m.removeTimer('1')()
     m.setType('reminder')()
@@ -31,16 +42,33 @@ describe('Timer ui', () => {
   })
 
   it('<Cron />', () => {
-    const m = shallow(<Cron />).instance()
+    const m = shallow(
+      <Cron
+        disabled={false}
+        update={() => true}
+        id_prefix=''
+        day='*'
+        hour='*'
+        minute='*'
+        second='0'
+      />).instance()
     m.update('foo')({target: {}})
   })
 
   it('<Equipment />', () => {
-    const m = shallow(<Equipment equipments={[{id: '1', name: 'foo'}]} updateHook={() => true} />).instance()
-    m.updateRevert({target: {checked: true}})
-    m.updateDuration({target: {value: '10'}})
-    m.setEquipment(0)
-    m.setEquipmentAction('off')
+    const m = shallow(
+      <Equipment
+        equipments={[{id: '1', name: 'foo'}]}
+        update={() => true}
+        id_prefix=''
+        disabled={false}
+        active_id=''
+        revert
+        on
+        duration={10}
+      />).instance()
+    m.set(0)
+    m.setAction('off')
   })
 
   it('<Reminder />', () => {
@@ -50,14 +78,26 @@ describe('Timer ui', () => {
   })
 
   it('<Timer />', () => {
-    const config = {
-      type: 'equipment',
-      equipment: {
-        on: true,
-        name: 'TestEquipment',
-        duration: 20
-      }
-    }
-    shallow(<Timer config={config} />).instance()
+    shallow(
+      <Timer
+        timer_id=''
+        name='foo'
+        type='equipment'
+        enable
+        equipment={{
+          on: true,
+          name: 'TestEquipment',
+          duration: 20
+        }}
+        reminder={{}}
+        day='*'
+        hour='*'
+        minute='*'
+        second='*'
+
+        remove={() => true}
+        update={() => true}
+        equipments={[]}
+      />).instance()
   })
 })

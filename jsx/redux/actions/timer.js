@@ -28,6 +28,14 @@ export const createTimer = (a) => {
   }))
 }
 
+export const updateTimer = (id, a) => {
+  return (reduxPost({
+    url: '/api/timers/'+id,
+    data: a,
+    success: fetchTimers
+  }))
+}
+
 export const deleteTimer = (id) => {
   return (reduxDelete({
     url: '/api/timers/' + id,

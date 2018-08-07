@@ -6,7 +6,7 @@ import Cron from './cron'
 import Equipment from './equipment'
 import {showAlert} from 'utils/alert'
 import {confirm} from 'utils/confirm'
-import {fetchTimers, createTimer, deleteTimer} from 'redux/actions/timer'
+import {updateTimer, fetchTimers, createTimer, deleteTimer} from 'redux/actions/timer'
 import {fetchEquipments} from 'redux/actions/equipment'
 import {connect} from 'react-redux'
 
@@ -17,7 +17,13 @@ class Main extends React.Component {
       addTimer: false,
       type: 'equipment',
       equipment: undefined,
-      reminder: undefined
+      reminder: undefined,
+      day: '*',
+      minute: '*',
+      hour: '*',
+      second: '0',
+      name: '',
+      enable: true
     }
     this.timerList = this.timerList.bind(this)
     this.createTimer = this.createTimer.bind(this)
@@ -26,16 +32,42 @@ class Main extends React.Component {
     this.setType = this.setType.bind(this)
     this.update = this.update.bind(this)
     this.trigger = this.trigger.bind(this)
-    this.pickEquipment = this.pickEquipment.bind(this)
     this.newTimer = this.newTimer.bind(this)
+    this.updateCron = this.updateCron.bind(this)
+  }
+
+  updateCron (p) {
+    this.setState({
+      day: p.day,
+      minute: p.minute,
+      hour: p.hour,
+      second: p.second
+    })
   }
 
   trigger () {
     switch (this.state.type) {
       case 'equipment':
-        return (<Equipment updateHook={this.update('equipment')} equipments={this.props.equipments} />)
+        return (
+          <Equipment
+            active_id=''
+            revert={false}
+            on
+            duration={2}
+
+            equipments={this.props.equipments}
+            disabled={false}
+            id_prefix='new-timer'
+            update={this.update('equipment')}
+          />)
       case 'reminder':
-        return (<Reminder updateHook={this.update('reminder')} />)
+        return (
+          <Reminder
+            update={this.update('reminder')}
+            disabled={false}
+            id_prefix='new-timer'
+          />
+        )
     }
   }
 
@@ -55,14 +87,7 @@ class Main extends React.Component {
 
   componentDidMount () {
     this.props.fetchEquipments()
-    this.props.fetchTimers()
-  }
-
-  pickEquipment (id) {
-    if (this.props.equipments === undefined) {
-      return ({})
-    }
-    return this.props.equipments.find((el) => { return el.id === id })
+    this.props.fetch()
   }
 
   timerList () {
@@ -70,14 +95,23 @@ class Main extends React.Component {
     $.each(this.props.timers, function (i, timer) {
       list.push(
         <li key={timer.name} className='list-group-item'>
-          <div className='row'>
-            <div className='col-lg-10 col-xs-10'>
-              <Timer config={timer} equipment={this.pickEquipment(timer.equipment.id)} />
-            </div>
-            <div className='col-lg-2 col-xs-2'>
-              <input type='button' onClick={this.removeTimer(timer.id)} id={'timer-' + timer.name} value='delete' className='btn btn-outline-danger' />
-            </div>
-          </div>
+          <Timer
+            name={timer.name}
+            timer_id={timer.id}
+            type={timer.type}
+            day={timer.day}
+            hour={timer.hour}
+            minute={timer.minute}
+            second={timer.second}
+            equipment={timer.equipment}
+            reminder={timer.reminder}
+            remove={this.removeTimer(timer.id)}
+            update={(p) => {
+              this.props.update(timer.id, p)
+            }}
+            enable={timer.enable}
+            equipments={this.props.equipments}
+          />
         </li>
       )
     }.bind(this))
@@ -88,29 +122,29 @@ class Main extends React.Component {
     return (function () {
       confirm('Are you sure ?')
         .then(function () {
-          this.props.deleteTimer(id)
+          this.props.delete(id)
         }.bind(this))
     }.bind(this))
   }
 
   createTimer () {
-    if ($('#name').val() === '') {
+    if (this.state.name === '') {
       showAlert('Specify timer name')
       return
     }
-    if ($('#day').val() === '') {
+    if (this.state.day === '') {
       showAlert('Specify a value for "day"')
       return
     }
-    if ($('#hour').val() === '') {
+    if (this.state.hour === '') {
       showAlert('Specify a value for "hour"')
       return
     }
-    if ($('#minute').val() === '') {
+    if (this.state.minute === '') {
       showAlert('Specify a value for "minute"')
       return
     }
-    if ($('#second').val() === '') {
+    if (this.state.second === '') {
       showAlert('Specify a value for "second"')
       return
     }
@@ -128,16 +162,17 @@ class Main extends React.Component {
         break
     }
     var payload = {
-      name: $('#name').val(),
-      day: $('#day').val(),
-      hour: $('#hour').val(),
-      minute: $('#minute').val(),
-      second: $('#second').val(),
+      name: this.state.name,
+      day: this.state.day,
+      hour: this.state.hour,
+      minute: this.state.minute,
+      second: this.state.second,
+      enable: this.state.enable,
       equipment: this.state.equipment,
       type: this.state.type,
       reminder: this.state.reminder
     }
-    this.props.createTimer(payload)
+    this.props.create(payload)
     this.toggleAddTimerDiv()
   }
 
@@ -145,23 +180,40 @@ class Main extends React.Component {
     this.setState({
       addTimer: !this.state.addTimer
     })
-    $('#name').val('')
-    $('#day').val('')
-    $('#hour').val('')
-    $('#minute').val('')
-    $('#second').val('')
   }
 
   newTimer () {
     return (
       <div className='container'>
         <div className='row'>
-          <label className='col-sm-1 text-secondary'>Name</label>
-          <input type='text' id='name' className='col-sm-3' />
+          <div className='col'>
+            <label className='text-secondary'>Name</label>
+            <input
+              type='text'
+              id='name'
+              onChange={(ev) => this.setState({name: ev.target.value})}
+            />
+          </div>
+          <div className='col'>
+            <label className='text-secondary'>Enable</label>
+            <input
+              type='checkbox'
+              id='new-timer-enable'
+              onClick={(ev) => this.setState({enable: ev.target.checked})}
+            />
+          </div>
         </div>
         <div className='row'>
           <div className='col'>
-            <Cron />
+            <Cron
+              update={this.updateCron}
+              disabled={false}
+              id_prefix='new-timer'
+              day={this.state.day}
+              hour={this.state.hour}
+              minute={this.state.minute}
+              second={this.state.second}
+            />
           </div>
           <div className='col'>
             <div className='btn-group'>
@@ -169,7 +221,14 @@ class Main extends React.Component {
                 <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
               </label>
               <label className='btn btn-secondary'>
-                <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} /> Equipment
+                <input
+                  type='radio'
+                  name='options'
+                  id='equipment'
+                  defaultChecked
+                  onClick={this.setType('equipment')}
+                />
+                Equipment
               </label>
             </div>
             {this.trigger()}
@@ -177,7 +236,13 @@ class Main extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <input id='createTimer' type='button' value='add' onClick={this.createTimer} className='btn btn-outline-primary float-right' />
+            <input
+              id='createTimer'
+              type='button'
+              value='add'
+              onClick={this.createTimer}
+              className='btn btn-outline-primary float-right'
+            />
           </div>
         </div>
       </div>
@@ -193,7 +258,13 @@ class Main extends React.Component {
       <div className='container'>
         <ul className='list-group list-group-flush'>{this.timerList()}</ul>
         <div className='container'>
-          <input type='button' id='add_timer' value={this.state.addTimer ? '-' : '+'} onClick={this.toggleAddTimerDiv} className='btn btn-outline-success' />
+          <input
+            type='button'
+            id='add_timer'
+            value={this.state.addTimer ? '-' : '+'}
+            onClick={this.toggleAddTimerDiv}
+            className='btn btn-outline-success'
+          />
           {nT}
         </div>
       </div>
@@ -210,10 +281,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTimers: () => dispatch(fetchTimers()),
+    fetch: () => dispatch(fetchTimers()),
     fetchEquipments: () => dispatch(fetchEquipments()),
-    createTimer: (t) => dispatch(createTimer(t)),
-    deleteTimer: (id) => dispatch(deleteTimer(id))
+    create: (t) => dispatch(createTimer(t)),
+    delete: (id) => dispatch(deleteTimer(id)),
+    update: (id, t) => dispatch(updateTimer(id, t))
   }
 }
 

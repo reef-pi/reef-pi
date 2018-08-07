@@ -128,8 +128,13 @@ class pump extends React.Component {
           />
         </div>
         <Cron
-          details={this.state.scheduleDetails}
-          updateHook={this.updateSchedule}
+          update={this.updateSchedule}
+          disabled={false}
+          id_prefix={'doser-' + this.props.data.id}
+          day={this.state.scheduleDetails.day}
+          hour={this.state.scheduleDetails.hour}
+          minute={this.state.scheduleDetails.minute}
+          second={this.state.scheduleDetails.second}
         />
         <div className='row'>
           <label className='col-sm-3'> Duration </label>
