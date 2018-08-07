@@ -29,7 +29,12 @@ describe('Doser ui', () => {
   it('<Pump />', () => {
     const pump = {
       regiment: {
-        schedule: {},
+        schedule: {
+          day: '*',
+          hour: '*',
+          minute: '*',
+          second: '0'
+        },
         duration: 10
       }
     }
@@ -37,7 +42,7 @@ describe('Doser ui', () => {
     m.schedule()
     m.calibrate()
     m.updateEnable({target: {checked: true}})
-    m.updateSchedule({})
+    m.updateSchedule(pump.regiment.schedule)
     m.update('hour')({target: {value: '8'}})
     m.setSchedule()
     m.onDemand()
