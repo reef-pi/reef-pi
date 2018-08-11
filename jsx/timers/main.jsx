@@ -52,9 +52,8 @@ class Main extends React.Component {
           <Equipment
             active_id=''
             revert={false}
-            on
+            on={false}
             duration={2}
-
             equipments={this.props.equipments}
             disabled={false}
             id_prefix='new-timer'
