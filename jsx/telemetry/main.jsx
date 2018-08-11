@@ -2,7 +2,11 @@ import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
 import {showAlert} from 'utils/alert'
-import {updateTelemetry, fetchTelemetry} from 'redux/actions/telemetry'
+import {
+  updateTelemetry,
+  fetchTelemetry,
+  sendTestMessage
+} from 'redux/actions/telemetry'
 import {connect} from 'react-redux'
 
 class telemetry extends React.Component {
@@ -19,11 +23,11 @@ class telemetry extends React.Component {
     this.enableMailer = this.enableMailer.bind(this)
     this.save = this.save.bind(this)
     this.updateThrottle = this.updateThrottle.bind(this)
-    this.test = this.test.bind(this)
+    this.testMessage = this.testMessage.bind(this)
   }
 
-  test () {
-    console.log('test it')
+  testMessage () {
+    this.props.sendTestMessage()
   }
 
   static getDerivedStateFromProps (props, state) {
@@ -132,7 +136,7 @@ class telemetry extends React.Component {
                 <input
                   type='button'
                   className='btn btn-outline-secondary'
-                  onClick={this.test}
+                  onClick={this.testMessage}
                   id='send-test-email'
                   value='Send test message'
                 />
@@ -207,6 +211,7 @@ class telemetry extends React.Component {
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     config: state.telemetry
@@ -216,7 +221,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetch: () => dispatch(fetchTelemetry()),
-    update: (s) => dispatch(updateTelemetry(s))
+    update: (s) => dispatch(updateTelemetry(s)),
+    sendTestMessage: () => dispatch(sendTestMessage())
   }
 }
 
