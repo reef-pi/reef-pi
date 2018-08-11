@@ -7,6 +7,12 @@ export const telemetryLoaded = (s) => {
   })
 }
 
+export const testMessageSent = () => {
+  return ({
+    type: 'TELEMETRY_TEST_MESSAGE_SENT'
+  })
+}
+
 export const fetchTelemetry = () => {
   return (reduxGet({
     url: '/api/telemetry',
@@ -19,5 +25,13 @@ export const updateTelemetry = (a) => {
     url: '/api/telemetry',
     data: a,
     success: fetchTelemetry
+  }))
+}
+
+export const sendTestMessage = () => {
+  return (reduxPost({
+    url: '/api/telemetry/test_message',
+    success: testMessageSent,
+    data: {}
   }))
 }

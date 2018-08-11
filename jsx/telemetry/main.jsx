@@ -2,7 +2,11 @@ import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
 import {showAlert} from 'utils/alert'
-import {updateTelemetry, fetchTelemetry} from 'redux/actions/telemetry'
+import {
+  updateTelemetry,
+  fetchTelemetry,
+  sendTestMessage
+} from 'redux/actions/telemetry'
 import {connect} from 'react-redux'
 
 class telemetry extends React.Component {
@@ -19,6 +23,11 @@ class telemetry extends React.Component {
     this.enableMailer = this.enableMailer.bind(this)
     this.save = this.save.bind(this)
     this.updateThrottle = this.updateThrottle.bind(this)
+    this.testMessage = this.testMessage.bind(this)
+  }
+
+  testMessage () {
+    this.props.sendTestMessage()
   }
 
   static getDerivedStateFromProps (props, state) {
@@ -42,7 +51,7 @@ class telemetry extends React.Component {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
-    this.props.updateTelemetry(c)
+    this.props.update(c)
     this.setState({updated: false, config: c})
   }
 
@@ -72,7 +81,7 @@ class telemetry extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchTelemetry()
+    this.props.fetch()
   }
 
   updateAio (adafruitio) {
@@ -106,14 +115,34 @@ class telemetry extends React.Component {
     }
     return (
       <div className='row'>
-        <div className='col-sm-4'>
+        <div className='col'>
           <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
         </div>
-        <div className='col-sm-2'>
-          limit per hour
-        </div>
-        <div className='col-sm-2'>
-          <input type='text' value={this.state.config.throttle} onChange={this.updateThrottle} id='' />
+        <div className='col'>
+          <div className='row'>
+            <div className='col'>
+              limit per hour
+            </div>
+            <input
+              type='text'
+              value={this.state.config.throttle}
+              onChange={this.updateThrottle}
+              className='col'
+            />
+          </div>
+          <div className='row'>
+            <div className='col'>
+              <div className='float-right'>
+                <input
+                  type='button'
+                  className='btn btn-outline-secondary'
+                  onClick={this.testMessage}
+                  id='send-test-email'
+                  value='Send test message'
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -141,9 +170,9 @@ class telemetry extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    var updateButtonClass = 'btn btn-outline-success'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+      updateButtonClass = 'btn btn-outline-danger'
     }
     return (
       <div className='container'>
@@ -163,15 +192,26 @@ class telemetry extends React.Component {
               <b>Email alerts</b>
             </label>
           </div>
-          {this.notification()}
         </div>
+        {this.notification()}
         <div className='row'>
-          <input type='button' className={updateButtonClass} onClick={this.save} id='updateTelemetry' value='update' />
+          <div className='col'>
+            <div className='float-right'>
+              <input
+                type='button'
+                className={updateButtonClass}
+                onClick={this.save}
+                id='updateTelemetry'
+                value='update'
+              />
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     config: state.telemetry
@@ -180,8 +220,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTelemetry: () => dispatch(fetchTelemetry()),
-    updateTelemetry: (s) => dispatch(updateTelemetry(s))
+    fetch: () => dispatch(fetchTelemetry()),
+    update: (s) => dispatch(updateTelemetry(s)),
+    sendTestMessage: () => dispatch(sendTestMessage())
   }
 }
 

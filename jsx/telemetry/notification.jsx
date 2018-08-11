@@ -24,24 +24,29 @@ export default class NotificationSettings extends React.Component {
 
   inputGroup (key) {
     return (
-      <div className='input-group'>
-        <label className='input-group-addon'>{key}</label>
-        <input type='text' id={'input-' + key} value={this.state.config[key]} onChange={this.update(key)} className='form-control' />
+      <div className='input-group row'>
+        <label className='input-group-addon col'>{key}</label>
+        <input type='text' id={'input-' + key} value={this.state.config[key]} onChange={this.update(key)} className='form-control col' />
       </div>
     )
   }
 
   render () {
     return (
-      <div className='container'>
-        <label><b>Email settings</b></label>
+      <div className='conta'>
         {this.inputGroup('server')}
         {this.inputGroup('port')}
         {this.inputGroup('from')}
         {this.inputGroup('to')}
-        <div className='input-group'>
-          <label className='input-group-addon'>Password</label>
-          <input type='password' id='password' value={this.state.config.password} onChange={this.update('password')} />
+        <div className='input-group row'>
+          <label className='input-group-addon col'>Password</label>
+          <input
+            type='password'
+            id='email-password'
+            value={this.state.config.password}
+            onChange={this.update('password')}
+            className='col'
+          />
         </div>
       </div>
     )
