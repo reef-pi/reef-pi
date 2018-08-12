@@ -65,6 +65,8 @@ class Main extends React.Component {
             update={this.update('reminder')}
             disabled={false}
             id_prefix='new-timer'
+            message=''
+            title=''
           />
         )
     }
