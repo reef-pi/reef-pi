@@ -64,7 +64,8 @@ export default class Timer extends React.Component {
             update={this.set('reminder')}
             disabled={!this.state.edit}
             id_prefix={'timer-' + this.props.timer_id}
-            equipments={this.props.equipments}
+            title={this.state.reminder.title}
+            message={this.state.reminder.message}
           />)
     }
   }
@@ -97,7 +98,8 @@ export default class Timer extends React.Component {
       hour: this.state.hour,
       second: this.state.second,
       enable: this.state.enable,
-      type: this.state.type
+      type: this.state.type,
+      reminder: this.state.reminder
     })
     this.setState({edit: false})
   }
