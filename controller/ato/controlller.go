@@ -15,7 +15,7 @@ const UsageBucket = types.ATOUsageBucket
 
 type Controller struct {
 	telemetry  types.Telemetry
-	statsMgr   *utils.StatsManager
+	statsMgr   types.StatsManager
 	store      types.Store
 	equipments *equipments.Controller
 	devMode    bool

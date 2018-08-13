@@ -19,7 +19,7 @@ type Controller struct {
 	devMode    bool
 	equipments *equipments.Controller
 	quitters   map[string]chan struct{}
-	statsMgr   *utils.StatsManager
+	statsMgr   types.StatsManager
 }
 
 func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller) (*Controller, error) {

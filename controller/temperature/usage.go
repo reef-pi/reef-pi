@@ -1,6 +1,7 @@
 package temperature
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -18,7 +19,7 @@ type Usage struct {
 	len         int
 }
 
-func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
+func (u1 Usage) Rollup(ux types.Metric) (types.Metric, bool) {
 	u2 := ux.(Usage)
 	u := Usage{
 		Heater:      u1.Heater,
@@ -39,6 +40,6 @@ func (u1 Usage) Rollup(ux utils.Metric) (utils.Metric, bool) {
 	return u2, true
 }
 
-func (u1 Usage) Before(u2 utils.Metric) bool {
+func (u1 Usage) Before(u2 types.Metric) bool {
 	return u1.Time.Before(u2.(Usage).Time)
 }

@@ -26,7 +26,7 @@ type HealthChecker struct {
 	telemetry types.Telemetry
 	Notify    HealthCheckNotify
 	store     types.Store
-	statsMgr  *utils.StatsManager
+	statsMgr  types.StatsManager
 }
 
 type HealthMetric struct {
@@ -38,7 +38,7 @@ type HealthMetric struct {
 	memorySum  float64
 }
 
-func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
+func (m1 HealthMetric) Rollup(mx types.Metric) (types.Metric, bool) {
 	m2 := mx.(HealthMetric)
 	m := HealthMetric{
 		Time:       m1.Time,
@@ -59,7 +59,7 @@ func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
 	return m2, true
 }
 
-func (m1 HealthMetric) Before(mx utils.Metric) bool {
+func (m1 HealthMetric) Before(mx types.Metric) bool {
 	m2 := mx.(HealthMetric)
 	return m1.Time.Before(m2.Time)
 }
