@@ -1,5 +1,6 @@
 import React from 'react'
-import $ from 'jquery'
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup'
 
 const outerStyle = {
   display: 'flex',
@@ -40,6 +41,13 @@ const passwordStyle = {
   borderBottomLeftRadius: 0
 }
 
+const loginSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('Username is required'),
+  password: Yup.string()
+    .required('Password is required')
+})
+
 export default class SignIn extends React.Component {
   constructor (props) {
     super(props)
@@ -74,24 +82,53 @@ export default class SignIn extends React.Component {
     SignIn.remove('reef-pi-user')
   }
 
-  saveCreds () {
-    SignIn.set('reef-pi-user', $('#reef-pi-user').val())
-    SignIn.set('reef-pi-pass', $('#reef-pi-pass').val())
+  saveCreds (creds) {
+    SignIn.set('reef-pi-user', creds.username)
+    SignIn.set('reef-pi-pass', creds.password)
     window.location.reload(true)
   }
-
+  
   render () {
     return (
-      <div className='container' style={outerStyle}>
-        <div className='form' style={formStyle}>
-          <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
-          <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
-          <input type='text' id='reef-pi-user' className='form-control' style={emailStyle} placeholder='Username' required='' autoFocus='' />
-          <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
-          <input type='password' id='reef-pi-pass' className='form-control mb-3' style={passwordStyle} placeholder='Password' required='' />
-          <button className='btn btn-lg btn-primary btn-block' type='submit' onClick={this.saveCreds} id='btnSaveCreds'>Sign in</button>
-        </div>
-      </div>
+      <Formik
+        initialValues ={{
+          username: '',
+          password: ''
+        }}
+        validationSchema = {loginSchema}
+        onSubmit={this.saveCreds}
+        render ={({touched, errors, isSubmitting}) => (
+          <Form>
+            <div className='container' style={outerStyle}>
+              <div className='form' style={formStyle}>
+                <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
+                <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
+                <Field type='text' id='reef-pi-user' className={'form-control ' + (errors.username && touched.username ? 'is-invalid' : '')} name='username'
+                  style={emailStyle} placeholder='Username' required='' autoFocus=''/>
+                {errors.username && touched.username && 
+                  (
+                    <div className="field-error invalid-feedback">{errors.username}</div>
+                  )
+                }
+                <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
+                <Field type='password' id='reef-pi-pass'  className={'form-control ' + (errors.username && touched.username ? 'is-invalid' : '')} name='password'
+                  style={passwordStyle} placeholder='Password' required='' />
+                {errors.password && touched.password && 
+                  (
+                    <div className="field-error invalid-feedback">{errors.password}</div>
+                  )
+                }
+                <button className='btn btn-lg btn-primary btn-block mt-3' 
+                  disabled={isSubmitting}
+                  type='submit' id='btnSaveCreds'>
+                  Sign in
+                </button>
+              </div>
+            </div>
+          </Form>
+        )}
+      />      
     )
   }
+
 }
