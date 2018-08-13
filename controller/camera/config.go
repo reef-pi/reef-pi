@@ -2,7 +2,7 @@ package camera
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"time"
 )
 
@@ -34,12 +34,12 @@ var Default = Config{
 	},
 }
 
-func loadConfig(store utils.Store) (Config, error) {
+func loadConfig(store types.Store) (Config, error) {
 	var conf Config
 	return conf, store.Get(Bucket, "config", &conf)
 }
 
-func saveConfig(store utils.Store, conf Config) error {
+func saveConfig(store types.Store, conf Config) error {
 	if conf.TickInterval <= 0 {
 		return fmt.Errorf("Tick Interval for camera controller must be greater than zero")
 	}

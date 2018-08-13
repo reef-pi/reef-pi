@@ -14,9 +14,9 @@ const Bucket = types.ATOBucket
 const UsageBucket = types.ATOUsageBucket
 
 type Controller struct {
-	telemetry  *utils.Telemetry
+	telemetry  types.Telemetry
 	statsMgr   *utils.StatsManager
-	store      utils.Store
+	store      types.Store
 	equipments *equipments.Controller
 	devMode    bool
 	quitters   map[string]chan struct{}
@@ -24,7 +24,7 @@ type Controller struct {
 	inlets     *connectors.Inlets
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller, inlets *connectors.Inlets) (*Controller, error) {
+func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller, inlets *connectors.Inlets) (*Controller, error) {
 	return &Controller{
 		devMode:    devMode,
 		mu:         &sync.Mutex{},

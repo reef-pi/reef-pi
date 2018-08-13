@@ -32,7 +32,7 @@ var DefaultTelemetryConfig = TelemetryConfig{
 	Throttle: 10,
 }
 
-type Telemetry struct {
+type telemetry struct {
 	client     *adafruitio.Client
 	dispatcher Mailer
 	config     TelemetryConfig
@@ -40,13 +40,13 @@ type Telemetry struct {
 	mu         *sync.Mutex
 }
 
-func NewTelemetry(config TelemetryConfig) *Telemetry {
+func NewTelemetry(config TelemetryConfig) *telemetry {
 	var mailer Mailer
 	mailer = &NoopMailer{}
 	if config.Notify {
 		mailer = config.Mailer.Mailer()
 	}
-	return &Telemetry{
+	return &telemetry{
 		client:     adafruitio.NewClient(config.AdafruitIO.Token),
 		config:     config,
 		dispatcher: mailer,
@@ -55,7 +55,7 @@ func NewTelemetry(config TelemetryConfig) *Telemetry {
 	}
 }
 
-func (t *Telemetry) updateAlertStats(subject string) AlertStats {
+func (t *telemetry) updateAlertStats(subject string) AlertStats {
 	now := time.Now()
 	t.mu.Lock()
 	defer t.mu.Unlock()
@@ -77,7 +77,7 @@ func (t *Telemetry) updateAlertStats(subject string) AlertStats {
 	return stat
 }
 
-func (t *Telemetry) Alert(subject, body string) (bool, error) {
+func (t *telemetry) Alert(subject, body string) (bool, error) {
 	stat := t.updateAlertStats(subject)
 	if (t.config.Throttle > 0) && (stat.Count > t.config.Throttle) {
 		log.Println("WARNING: Alert is above throttle limits. Skipping. Subject:", subject)
@@ -90,7 +90,7 @@ func (t *Telemetry) Alert(subject, body string) (bool, error) {
 	return true, nil
 }
 
-func (t *Telemetry) EmitMetric(feed string, v interface{}) {
+func (t *telemetry) EmitMetric(feed string, v interface{}) {
 	aio := t.config.AdafruitIO
 	feed = strings.ToLower(aio.Prefix + feed)
 	if !aio.Enable {
@@ -105,7 +105,7 @@ func (t *Telemetry) EmitMetric(feed string, v interface{}) {
 	}
 }
 
-func (t *Telemetry) CreateFeedIfNotExist(f string) {
+func (t *telemetry) CreateFeedIfNotExist(f string) {
 	aio := t.config.AdafruitIO
 	f = strings.ToLower(aio.Prefix + f)
 	if !aio.Enable {

@@ -1,7 +1,7 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 )
 
@@ -11,7 +11,7 @@ type Reminder struct {
 }
 
 type ReminderRunner struct {
-	telemetry   *utils.Telemetry
+	telemetry   types.Telemetry
 	title, body string
 }
 

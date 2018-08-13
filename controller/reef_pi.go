@@ -13,14 +13,14 @@ import (
 const Bucket = types.ReefPiBucket
 
 type ReefPi struct {
-	store   utils.Store
+	store   types.Store
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
 
 	subsystems map[string]types.Subsystem
 	settings   Settings
-	telemetry  *utils.Telemetry
+	telemetry  types.Telemetry
 	version    string
 	h          *HealthChecker
 	bus        i2c.Bus

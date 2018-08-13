@@ -3,7 +3,7 @@ package equipments
 import (
 	"github.com/kidoman/embd"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 )
 
@@ -13,13 +13,13 @@ type Config struct {
 type Check func(string) (bool, error)
 type Controller struct {
 	config    Config
-	telemetry *utils.Telemetry
-	store     utils.Store
+	telemetry types.Telemetry
+	store     types.Store
 	outlets   *connectors.Outlets
 	checks    []Check
 }
 
-func New(config Config, outlets *connectors.Outlets, store utils.Store, telemetry *utils.Telemetry) *Controller {
+func New(config Config, outlets *connectors.Outlets, store types.Store, telemetry types.Telemetry) *Controller {
 	return &Controller{
 		config:    config,
 		telemetry: telemetry,

@@ -2,6 +2,7 @@ package ph
 
 import (
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -31,7 +32,7 @@ func (m1 Measurement) Before(mx utils.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func notifyIfNeeded(t *utils.Telemetry, p Probe, reading float64) {
+func notifyIfNeeded(t types.Telemetry, p Probe, reading float64) {
 	if !p.Config.Notify.Enable {
 		return
 	}

@@ -47,3 +47,9 @@ type Store interface {
 	Delete(string, string) error
 	ReOpen() error
 }
+
+type Telemetry interface {
+	Alert(string, string) (bool, error)
+	EmitMetric(string, interface{})
+	CreateFeedIfNotExist(string)
+}
