@@ -13,14 +13,14 @@ const UsageBucket = types.MacroUsageBucket
 type Subsystem struct {
 	sync.Mutex
 	telemetry  *utils.Telemetry
-	store      utils.Store
+	store      types.Store
 	devMode    bool
 	quitters   map[string]chan struct{}
 	statsMgr   *utils.StatsManager
 	controller types.Controller
 }
 
-func New(devMode bool, c types.Controller, store utils.Store, telemetry *utils.Telemetry) (*Subsystem, error) {
+func New(devMode bool, c types.Controller, store types.Store, telemetry *utils.Telemetry) (*Subsystem, error) {
 	return &Subsystem{
 		telemetry:  telemetry,
 		store:      store,

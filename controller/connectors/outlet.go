@@ -63,11 +63,11 @@ func (o Outlet) IsValid() error {
 }
 
 type Outlets struct {
-	store   utils.Store
+	store   types.Store
 	DevMode bool
 }
 
-func NewOutlets(store utils.Store) *Outlets {
+func NewOutlets(store types.Store) *Outlets {
 	return &Outlets{store: store}
 }
 

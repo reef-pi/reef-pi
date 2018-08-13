@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +13,7 @@ import (
 	"sync"
 )
 
-func TestDB() (Store, error) {
+func TestDB() (types.Store, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
@@ -35,7 +36,7 @@ var DefaultSettings = Settings{
 	},
 }
 
-func loadSettings(store utils.Store) (Settings, error) {
+func loadSettings(store types.Store) (Settings, error) {
 	var s Settings
 	if err := store.Get(Bucket, "settings", &s); err != nil {
 		return s, err
@@ -43,7 +44,7 @@ func loadSettings(store utils.Store) (Settings, error) {
 	return s, nil
 }
 
-func initializeSettings(store utils.Store) (Settings, error) {
+func initializeSettings(store types.Store) (Settings, error) {
 	if os.Getenv("DEV_MODE") == "1" {
 		DefaultSettings.Capabilities.DevMode = true
 		DefaultSettings.Address = "localhost:8080"

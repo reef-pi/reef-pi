@@ -13,7 +13,7 @@ import (
 const Bucket = types.ReefPiBucket
 
 type ReefPi struct {
-	store   utils.Store
+	store   types.Store
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets

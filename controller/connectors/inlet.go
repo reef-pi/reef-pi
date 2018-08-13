@@ -21,7 +21,7 @@ type Inlet struct {
 	Reverse   bool   `json:"reverse"`
 }
 type Inlets struct {
-	store   utils.Store
+	store   types.Store
 	DevMode bool
 }
 
@@ -45,7 +45,7 @@ func (i Inlet) IsValid() error {
 	return nil
 }
 
-func NewInlets(store utils.Store) *Inlets {
+func NewInlets(store types.Store) *Inlets {
 	return &Inlets{store: store}
 }
 

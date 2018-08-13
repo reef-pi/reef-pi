@@ -22,7 +22,7 @@ var DefaultConfig = Config{
 }
 
 type Controller struct {
-	store     utils.Store
+	store     types.Store
 	jacks     *connectors.Jacks
 	stopCh    chan struct{}
 	telemetry *utils.Telemetry
@@ -31,7 +31,7 @@ type Controller struct {
 	mu        *sync.Mutex
 }
 
-func New(conf Config, jacks *connectors.Jacks, store utils.Store, bus i2c.Bus, telemetry *utils.Telemetry) (*Controller, error) {
+func New(conf Config, jacks *connectors.Jacks, store types.Store, bus i2c.Bus, telemetry *utils.Telemetry) (*Controller, error) {
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,

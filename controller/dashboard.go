@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
@@ -29,7 +30,7 @@ var DefaultDashboard = Dashboard{
 	Width:  500,
 }
 
-func loadDashboard(store utils.Store) (Dashboard, error) {
+func loadDashboard(store types.Store) (Dashboard, error) {
 	var d Dashboard
 	if err := store.Get(Bucket, "dashboard", &d); err != nil {
 		return d, err
@@ -37,7 +38,7 @@ func loadDashboard(store utils.Store) (Dashboard, error) {
 	return d, nil
 }
 
-func initializeDashboard(store utils.Store) (Dashboard, error) {
+func initializeDashboard(store types.Store) (Dashboard, error) {
 	if err := store.CreateBucket(Bucket); err != nil {
 		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
 		return DefaultDashboard, err

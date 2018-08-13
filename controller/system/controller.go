@@ -1,6 +1,7 @@
 package system
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -19,12 +20,12 @@ type Config struct {
 
 type Controller struct {
 	config                    Config
-	store                     utils.Store
+	store                     types.Store
 	telemetry                 *utils.Telemetry
 	PowerFile, BrightnessFile string
 }
 
-func New(conf Config, store utils.Store, telemetry *utils.Telemetry) *Controller {
+func New(conf Config, store types.Store, telemetry *utils.Telemetry) *Controller {
 	return &Controller{
 		config:         conf,
 		store:          store,

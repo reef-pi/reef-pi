@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"time"
 )
 
-func initializeTelemetry(store utils.Store, notify bool) *utils.Telemetry {
+func initializeTelemetry(store types.Store, notify bool) *utils.Telemetry {
 	t := utils.DefaultTelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")

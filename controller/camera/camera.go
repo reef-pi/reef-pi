@@ -18,11 +18,11 @@ type Controller struct {
 	config  Config
 	stopCh  chan struct{}
 	mu      sync.Mutex
-	store   utils.Store
+	store   types.Store
 	DevMode bool
 }
 
-func New(store utils.Store, devMode bool) (*Controller, error) {
+func New(store types.Store, devMode bool) (*Controller, error) {
 	return &Controller{
 		config:  Default,
 		store:   store,

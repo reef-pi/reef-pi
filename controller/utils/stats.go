@@ -4,6 +4,7 @@ import (
 	"container/ring"
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"sort"
 	"sync"
 )
@@ -35,11 +36,11 @@ type StatsManager struct {
 	bucket          string
 	CurrentLimit    int
 	HistoricalLimit int
-	store           Store
+	store           types.Store
 	SaveOnRollup    bool
 }
 
-func NewStatsManager(store Store, b string, c, h int) *StatsManager {
+func NewStatsManager(store types.Store, b string, c, h int) *StatsManager {
 	return &StatsManager{
 		inMemory:        make(map[string]Stats),
 		bucket:          b,
