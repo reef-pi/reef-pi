@@ -1,9 +1,5 @@
 package types
 
-import (
-	"github.com/gorilla/mux"
-)
-
 const (
 	ReefPiBucket           = "reef-pi"
 	ATOBucket              = "ato"
@@ -24,18 +20,6 @@ const (
 	TimerBucket            = "timers"
 )
 
-type Subsystem interface {
-	Setup() error
-	LoadAPI(*mux.Router)
-	Start()
-	Stop()
-	On(string, bool) error
-}
-
-type Controller interface {
-	Subsystem(string) (Subsystem, error)
-}
-
 type Store interface {
 	Get(string, string, interface{}) error
 	List(string, func([]byte) error) error
@@ -46,10 +30,4 @@ type Store interface {
 	Update(string, string, interface{}) error
 	Delete(string, string) error
 	ReOpen() error
-}
-
-type Telemetry interface {
-	Alert(string, string) (bool, error)
-	EmitMetric(string, interface{})
-	CreateFeedIfNotExist(string)
 }

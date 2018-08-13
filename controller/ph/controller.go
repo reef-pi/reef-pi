@@ -22,7 +22,7 @@ type Controller struct {
 	quitters  map[string]chan struct{}
 	bus       i2c.Bus
 	mu        *sync.Mutex
-	statsMgr  *utils.StatsManager
+	statsMgr  types.StatsManager
 }
 
 func New(config Config, bus i2c.Bus, store types.Store, telemetry types.Telemetry) *Controller {

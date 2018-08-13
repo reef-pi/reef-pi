@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"testing"
 )
 
@@ -9,11 +10,11 @@ type testMetric struct {
 	Value int
 }
 
-func (m1 *testMetric) Before(m Metric) bool {
+func (m1 *testMetric) Before(m types.Metric) bool {
 	return true
 }
 
-func (m1 *testMetric) Rollup(m Metric) (Metric, bool) {
+func (m1 *testMetric) Rollup(m types.Metric) (types.Metric, bool) {
 	return m1, true
 }
 
