@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"sync"
 	"time"
@@ -25,13 +24,13 @@ type Controller struct {
 	store     types.Store
 	jacks     *connectors.Jacks
 	stopCh    chan struct{}
-	telemetry *utils.Telemetry
+	telemetry types.Telemetry
 	config    Config
 	running   bool
 	mu        *sync.Mutex
 }
 
-func New(conf Config, jacks *connectors.Jacks, store types.Store, bus i2c.Bus, telemetry *utils.Telemetry) (*Controller, error) {
+func New(conf Config, jacks *connectors.Jacks, store types.Store, bus i2c.Bus, telemetry types.Telemetry) (*Controller, error) {
 	return &Controller{
 		telemetry: telemetry,
 		store:     store,

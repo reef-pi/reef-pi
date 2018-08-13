@@ -23,7 +23,7 @@ type HealthCheckNotify struct {
 type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
-	telemetry *utils.Telemetry
+	telemetry types.Telemetry
 	Notify    HealthCheckNotify
 	store     types.Store
 	statsMgr  *utils.StatsManager
@@ -64,7 +64,7 @@ func (m1 HealthMetric) Before(mx utils.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry, store types.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),

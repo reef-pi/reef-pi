@@ -53,13 +53,13 @@ func (t *TestRouter) Do(method, path string, body io.Reader, container interface
 
 }
 
-func TestTelemetry() *Telemetry {
+func TestTelemetry() *telemetry {
 	c := TelemetryConfig{
 		AdafruitIO: AdafruitIO{
 			User: "test-user",
 		},
 	}
-	return &Telemetry{
+	return &telemetry{
 		config:     c,
 		dispatcher: &NoopMailer{},
 		aStats:     make(map[string]AlertStats),

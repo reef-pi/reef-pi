@@ -20,7 +20,7 @@ type ReefPi struct {
 
 	subsystems map[string]types.Subsystem
 	settings   Settings
-	telemetry  *utils.Telemetry
+	telemetry  types.Telemetry
 	version    string
 	h          *HealthChecker
 	bus        i2c.Bus

@@ -3,7 +3,6 @@ package doser
 import (
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
@@ -12,14 +11,14 @@ import (
 type Controller struct {
 	DevMode   bool
 	store     types.Store
-	telemetry *utils.Telemetry
+	telemetry types.Telemetry
 	mu        *sync.Mutex
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
 	jacks     *connectors.Jacks
 }
 
-func New(devMode bool, store types.Store, jacks *connectors.Jacks, t *utils.Telemetry) (*Controller, error) {
+func New(devMode bool, store types.Store, jacks *connectors.Jacks, t types.Telemetry) (*Controller, error) {
 	return &Controller{
 		DevMode:   devMode,
 		store:     store,

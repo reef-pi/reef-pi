@@ -14,7 +14,7 @@ const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	telemetry  *utils.Telemetry
+	telemetry  types.Telemetry
 	store      types.Store
 	devMode    bool
 	equipments *equipments.Controller
@@ -22,7 +22,7 @@ type Controller struct {
 	statsMgr   *utils.StatsManager
 }
 
-func New(devMode bool, store types.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller) (*Controller, error) {
 	return &Controller{
 		telemetry:  telemetry,
 		store:      store,
