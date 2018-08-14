@@ -53,7 +53,7 @@ export default class Timer extends React.Component {
             duration={this.state.equipment.duration}
             on={this.state.equipment.on}
             update={this.set('equipment')}
-            equipment={this.props.equipment}
+            equipment={this.props.equipmentList}
             disabled={!this.state.edit}
             id_prefix={'timer-' + this.props.timer_id}
           />
@@ -110,7 +110,7 @@ export default class Timer extends React.Component {
       case 'equipment':
         var eqAction = this.state.equipment.on ? 'on' : 'off'
         var eqName = ''
-        this.props.equipment.forEach((eq) => {
+        this.props.equipmentList.forEach((eq) => {
           if (eq.id === this.props.active_id) {
             eqName = eq.name
           }
@@ -279,5 +279,5 @@ Timer.propTypes = {
 
   remove: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
-  equipment: PropTypes.array.isRequired
+  equipmentList: PropTypes.array.isRequired
 }

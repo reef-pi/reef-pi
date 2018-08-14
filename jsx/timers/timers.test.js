@@ -64,8 +64,8 @@ describe('Timer ui', () => {
         id_prefix=''
         disabled={false}
         active_id='1'
-        revert={true}
-        on={true}
+        revert
+        on
         duration={10}
       />).instance()
     m.set(0)()
@@ -98,7 +98,7 @@ describe('Timer ui', () => {
         timer_id=''
         name='foo'
         type='equipment'
-        enable={true}
+        enable
         equipment={{
           on: true,
           name: 'TestEquipment',
@@ -113,13 +113,13 @@ describe('Timer ui', () => {
         second='*'
         remove={() => true}
         update={() => true}
-        equipment={[]}
+        equipmentList={[]}
       />).instance()
     t.update()
-    t.details()
     t.setType('reminder')()
     t.trigger()
     t.set('foo')('bar')
+    t.details()
     t.updateCron({day: '*', minute: '*', hour: '*', second: '0'})
     t.update()
   })

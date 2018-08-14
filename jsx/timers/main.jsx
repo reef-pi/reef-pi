@@ -111,7 +111,7 @@ class Main extends React.Component {
               this.props.update(timer.id, p)
             }}
             enable={timer.enable}
-            equipment={this.props.equipment}
+            equipmentList={this.props.equipment}
           />
         </li>
       )
