@@ -1,7 +1,7 @@
 import React from 'react'
 import TempReadingsChart from 'temperature/readings_chart'
 import TempControlChart from 'temperature/control_chart'
-import EquipmentsChart from 'equipments/chart'
+import EquipmentChart from 'equipment/chart'
 import LightChart from 'lighting/chart'
 import ATOChart from 'ato/chart'
 import HealthChart from 'health_chart'
@@ -53,7 +53,7 @@ class dashboard extends React.Component {
           case 'equipment':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <EquipmentsChart width={config.width} height={config.height} />
+                <EquipmentChart width={config.width} height={config.height} />
               </div>
             )
             break

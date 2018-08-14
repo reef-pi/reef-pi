@@ -3,7 +3,7 @@ package ato
 import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
@@ -14,26 +14,26 @@ const Bucket = types.ATOBucket
 const UsageBucket = types.ATOUsageBucket
 
 type Controller struct {
-	telemetry  types.Telemetry
-	statsMgr   types.StatsManager
-	store      types.Store
-	equipments *equipments.Controller
-	devMode    bool
-	quitters   map[string]chan struct{}
-	mu         *sync.Mutex
-	inlets     *connectors.Inlets
+	telemetry types.Telemetry
+	statsMgr  types.StatsManager
+	store     types.Store
+	equipment *equipment.Controller
+	devMode   bool
+	quitters  map[string]chan struct{}
+	mu        *sync.Mutex
+	inlets    *connectors.Inlets
 }
 
-func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller, inlets *connectors.Inlets) (*Controller, error) {
+func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipment.Controller, inlets *connectors.Inlets) (*Controller, error) {
 	return &Controller{
-		devMode:    devMode,
-		mu:         &sync.Mutex{},
-		store:      store,
-		inlets:     inlets,
-		telemetry:  telemetry,
-		equipments: eqs,
-		quitters:   make(map[string]chan struct{}),
-		statsMgr:   utils.NewStatsManager(store, UsageBucket, 180, 24*7),
+		devMode:   devMode,
+		mu:        &sync.Mutex{},
+		store:     store,
+		inlets:    inlets,
+		telemetry: telemetry,
+		equipment: eqs,
+		quitters:  make(map[string]chan struct{}),
+		statsMgr:  utils.NewStatsManager(store, UsageBucket, 180, 24*7),
 	}, nil
 }
 

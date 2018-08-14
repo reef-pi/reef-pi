@@ -1,13 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import $ from 'jquery'
-import {fetchEquipments} from './redux/actions/equipment'
+import {fetchEquipment} from './redux/actions/equipment'
 
 class selectEquipment extends React.Component {
   constructor (props) {
     super(props)
     var equipment = {id: props.active, name: ''}
-    $.each(props.equipments, function (i, eq) {
+    $.each(props.equipment, function (i, eq) {
       if (eq.id === equipment.id) {
         equipment = eq
       }
@@ -20,7 +20,7 @@ class selectEquipment extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchEquipments()
+    this.props.fetchEquipment()
   }
 
   equipmentList () {
@@ -29,7 +29,7 @@ class selectEquipment extends React.Component {
         {'--'}
       </a>
     ]
-    $.each(this.props.equipments, function (k, v) {
+    $.each(this.props.equipment, function (k, v) {
       var cName = 'dropdown-item'
       var active = false
       if (this.state.equipment !== undefined) {
@@ -54,7 +54,7 @@ class selectEquipment extends React.Component {
         this.props.update('')
         return
       }
-      var eq = this.props.equipments[k]
+      var eq = this.props.equipment[k]
       this.setState({
         equipment: eq
       })
@@ -81,11 +81,11 @@ class selectEquipment extends React.Component {
   }
 }
 const mapStateToProps = (state) => {
-  return { equipments: state.equipments }
+  return { equipment: state.equipment }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {fetchEquipments: () => dispatch(fetchEquipments())}
+  return {fetchEquipment: () => dispatch(fetchEquipment())}
 }
 
 const SelectEquipment = connect(mapStateToProps, mapDispatchToProps)(selectEquipment)

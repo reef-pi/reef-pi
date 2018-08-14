@@ -1,27 +1,27 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 )
 
 type Controller struct {
-	store      types.Store
-	runner     *cron.Cron
-	cronIDs    map[string]cron.EntryID
-	telemetry  types.Telemetry
-	equipments *equipments.Controller
+	store     types.Store
+	runner    *cron.Cron
+	cronIDs   map[string]cron.EntryID
+	telemetry types.Telemetry
+	equipment *equipment.Controller
 }
 
-func New(store types.Store, telemetry types.Telemetry, e *equipments.Controller) *Controller {
+func New(store types.Store, telemetry types.Telemetry, e *equipment.Controller) *Controller {
 	return &Controller{
-		cronIDs:    make(map[string]cron.EntryID),
-		telemetry:  telemetry,
-		store:      store,
-		runner:     cron.New(),
-		equipments: e,
+		cronIDs:   make(map[string]cron.EntryID),
+		telemetry: telemetry,
+		store:     store,
+		runner:    cron.New(),
+		equipment: e,
 	}
 }
 

@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"github.com/gorilla/mux"
@@ -8,12 +8,12 @@ import (
 
 //API
 func (e *Controller) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/equipments/{id}", e.GetEquipment).Methods("GET")
-	r.HandleFunc("/api/equipments", e.ListEquipments).Methods("GET")
-	r.HandleFunc("/api/equipments", e.CreateEquipment).Methods("PUT")
-	r.HandleFunc("/api/equipments/{id}", e.UpdateEquipment).Methods("POST")
-	r.HandleFunc("/api/equipments/{id}", e.DeleteEquipment).Methods("DELETE")
-	r.HandleFunc("/api/equipments/{id}/control", e.control).Methods("POST")
+	r.HandleFunc("/api/equipment/{id}", e.GetEquipment).Methods("GET")
+	r.HandleFunc("/api/equipment", e.ListEquipment).Methods("GET")
+	r.HandleFunc("/api/equipment", e.CreateEquipment).Methods("PUT")
+	r.HandleFunc("/api/equipment/{id}", e.UpdateEquipment).Methods("POST")
+	r.HandleFunc("/api/equipment/{id}", e.DeleteEquipment).Methods("DELETE")
+	r.HandleFunc("/api/equipment/{id}/control", e.control).Methods("POST")
 }
 
 type EquipmentAction struct {
@@ -43,7 +43,7 @@ func (c *Controller) GetEquipment(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (c Controller) ListEquipments(w http.ResponseWriter, r *http.Request) {
+func (c Controller) ListEquipment(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
 	}

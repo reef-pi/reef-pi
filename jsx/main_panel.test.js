@@ -21,7 +21,7 @@ describe('MainPanel', () => {
     const state = {
       capabilities: {
         dashboard: true,
-        equipments: true,
+        equipment: true,
         timers: false
       }
     }

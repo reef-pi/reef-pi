@@ -51,7 +51,7 @@ export const rootReducer = (state, action) => {
     case 'OUTLETS_LOADED':
       return { ...state, outlets: action.payload }
     case 'EQUIPMENTS_LOADED':
-      return { ...state, equipments: action.payload }
+      return { ...state, equipment: action.payload }
     case 'HEALTH_STATS_LOADED':
       return { ...state, health_stats: action.payload }
     case 'DISPLAY_LOADED':

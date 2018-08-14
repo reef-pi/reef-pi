@@ -7,7 +7,7 @@ import {fetchJacks} from './jacks'
 import {fetchTCs} from './tcs'
 import {fetchLights} from './lights'
 import {fetchPhProbes} from './phprobes'
-import {fetchEquipments} from './equipment'
+import {fetchEquipment} from './equipment'
 import {capabilitiesLoaded} from './capabilities'
 
 export const fetchUIData = (dispatch) => {
@@ -36,8 +36,8 @@ export const fetchUIData = (dispatch) => {
           case 'lighting':
             dispatch(fetchLights())
             break
-          case 'equipments':
-            dispatch(fetchEquipments())
+          case 'equipment':
+            dispatch(fetchEquipment())
             break
         }
       })

@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"bytes"
@@ -43,13 +43,13 @@ func TestEquipmentController(t *testing.T) {
 		Outlet: "1",
 	}
 	if err := c.Setup(); err != nil {
-		t.Fatal("Failed to setup equipments subsystem. Error:", err)
+		t.Fatal("Failed to setup equipment subsystem. Error:", err)
 	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
 	enc.Encode(eq)
 
-	if err := tr.Do("PUT", "/api/equipments", body, nil); err != nil {
+	if err := tr.Do("PUT", "/api/equipment", body, nil); err != nil {
 		t.Fatal("Failed to create equipment using api")
 	}
 
@@ -58,28 +58,28 @@ func TestEquipmentController(t *testing.T) {
 	body.Reset()
 	ea := EquipmentAction{true}
 	enc.Encode(ea)
-	if err := tr.Do("POST", "/api/equipments/1/control", body, nil); err != nil {
+	if err := tr.Do("POST", "/api/equipment/1/control", body, nil); err != nil {
 		t.Fatal("Failed to control equipment using api")
 	}
 
 	var resp []Equipment
-	if err := tr.Do("GET", "/api/equipments", strings.NewReader("{}"), &resp); err != nil {
-		t.Fatal("GET /api/equipments API failure. Error:", err)
+	if err := tr.Do("GET", "/api/equipment", strings.NewReader("{}"), &resp); err != nil {
+		t.Fatal("GET /api/equipment API failure. Error:", err)
 	}
 	if len(resp) != 1 {
 		t.Fatal("Expected 1 equipment. Found:", len(resp))
 	}
 	id := resp[0].ID
 	var e1 Equipment
-	if err := tr.Do("GET", "/api/equipments/"+id, strings.NewReader("{}"), &e1); err != nil {
-		t.Fatal("GET '/api/equipments/<id>' API failure. Error:", err)
+	if err := tr.Do("GET", "/api/equipment/"+id, strings.NewReader("{}"), &e1); err != nil {
+		t.Fatal("GET '/api/equipment/<id>' API failure. Error:", err)
 	}
 	if err := c.outlets.Configure(eq.Outlet, true); err != nil {
 		t.Fatal("Failed to configure outlet. Error:", err)
 	}
 	es, err := c.List()
 	if err != nil {
-		t.Fatal("Failed to list equipments. Error:", err)
+		t.Fatal("Failed to list equipment. Error:", err)
 	}
 
 	if len(es) != 1 {
@@ -90,7 +90,7 @@ func TestEquipmentController(t *testing.T) {
 	body = new(bytes.Buffer)
 	enc = json.NewEncoder(body)
 	enc.Encode(eq)
-	if err := tr.Do("POST", "/api/equipments/"+eq.ID, body, nil); err != nil {
+	if err := tr.Do("POST", "/api/equipment/"+eq.ID, body, nil); err != nil {
 		t.Fatal("Failed to update  equipment using api. Error:", err)
 	}
 	var outletsList []connectors.Outlet
@@ -111,8 +111,8 @@ func TestEquipmentController(t *testing.T) {
 	if err := tr.Do("POST", "/api/outlets/1", buf, nil); err != nil {
 		t.Fatal("Failed to update individual outlet  using api. Error:", err)
 	}
-	c.synEquipments()
-	if err := tr.Do("DELETE", "/api/equipments/"+eq.ID, buf, nil); err != nil {
+	c.synEquipment()
+	if err := tr.Do("DELETE", "/api/equipment/"+eq.ID, buf, nil); err != nil {
 		t.Fatal("Failed to delete equipment using api. Error:", err)
 	}
 	eq.Outlet = "123"
