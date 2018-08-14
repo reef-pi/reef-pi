@@ -14,15 +14,15 @@ const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	telemetry  *utils.Telemetry
-	store      utils.Store
+	telemetry  types.Telemetry
+	store      types.Store
 	devMode    bool
 	equipments *equipments.Controller
 	quitters   map[string]chan struct{}
-	statsMgr   *utils.StatsManager
+	statsMgr   types.StatsManager
 }
 
-func New(devMode bool, store utils.Store, telemetry *utils.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller) (*Controller, error) {
 	return &Controller{
 		telemetry:  telemetry,
 		store:      store,

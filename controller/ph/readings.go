@@ -2,6 +2,7 @@ package ph
 
 import (
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -14,7 +15,7 @@ type Measurement struct {
 	len  int
 }
 
-func (m1 Measurement) Rollup(mx utils.Metric) (utils.Metric, bool) {
+func (m1 Measurement) Rollup(mx types.Metric) (types.Metric, bool) {
 	m2 := mx.(Measurement)
 	m := Measurement{Time: m1.Time, Ph: m1.Ph, sum: m1.sum, len: m1.len}
 	if m1.Time.Hour() == m2.Time.Hour() {
@@ -26,12 +27,12 @@ func (m1 Measurement) Rollup(mx utils.Metric) (utils.Metric, bool) {
 	return m2, true
 }
 
-func (m1 Measurement) Before(mx utils.Metric) bool {
+func (m1 Measurement) Before(mx types.Metric) bool {
 	m2 := mx.(Measurement)
 	return m1.Time.Before(m2.Time)
 }
 
-func notifyIfNeeded(t *utils.Telemetry, p Probe, reading float64) {
+func notifyIfNeeded(t types.Telemetry, p Probe, reading float64) {
 	if !p.Config.Notify.Enable {
 		return
 	}

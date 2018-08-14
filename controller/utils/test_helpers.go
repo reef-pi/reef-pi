@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +13,7 @@ import (
 	"sync"
 )
 
-func TestDB() (Store, error) {
+func TestDB() (types.Store, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -52,13 +53,13 @@ func (t *TestRouter) Do(method, path string, body io.Reader, container interface
 
 }
 
-func TestTelemetry() *Telemetry {
+func TestTelemetry() *telemetry {
 	c := TelemetryConfig{
 		AdafruitIO: AdafruitIO{
 			User: "test-user",
 		},
 	}
-	return &Telemetry{
+	return &telemetry{
 		config:     c,
 		dispatcher: &NoopMailer{},
 		aStats:     make(map[string]AlertStats),

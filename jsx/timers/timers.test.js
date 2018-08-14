@@ -24,7 +24,7 @@ describe('Timer ui', () => {
         enable: true,
         type: 'equipment',
         equipment: {id: '1', on: true, revert: true, duration: 10},
-        reminder: {},
+        reminder: {title: '', message: ''},
         day: '*',
         hour: '*',
         minute: '*',
@@ -35,10 +35,11 @@ describe('Timer ui', () => {
     }
     const m = shallow(<Main store={mockStore(state)} />).dive().instance()
     m.toggleAddTimerDiv()
-    m.createTimer()
     m.removeTimer('1')()
     m.setType('reminder')()
-    m.update('foo')('bar')
+    m.update('name')('foo')
+    m.updateCron({day: '*', minute: '*', hour: '*', second: '0'})
+    m.createTimer()
   })
 
   it('<Cron />', () => {
@@ -62,23 +63,37 @@ describe('Timer ui', () => {
         update={() => true}
         id_prefix=''
         disabled={false}
-        active_id=''
+        active_id='1'
         revert
         on
         duration={10}
       />).instance()
-    m.set(0)
-    m.setAction('off')
+    m.set(0)()
+    m.setAction('off')()
+    const ev = {
+      target: {
+        value: 20,
+        checked: true
+      }
+    }
+    m.setDuration(ev)
+    m.setRevert(ev)
   })
 
   it('<Reminder />', () => {
-    const m = shallow(<Reminder updateHook={() => true} />).instance()
-    m.updateTitle({target: {}})
-    m.updateMessage({target: {}})
+    const m = shallow(
+      <Reminder
+        update={() => true}
+        disabled={false}
+        title=''
+        id_prefix=''
+        message=''
+      />).instance()
+    m.update('title')({target: {value: 'test'}})
   })
 
   it('<Timer />', () => {
-    shallow(
+    const t = shallow(
       <Timer
         timer_id=''
         name='foo'
@@ -87,17 +102,25 @@ describe('Timer ui', () => {
         equipment={{
           on: true,
           name: 'TestEquipment',
-          duration: 20
+          duration: 20,
+          id: '1',
+          revert: false
         }}
-        reminder={{}}
+        reminder={{message: '', title: ''}}
         day='*'
         hour='*'
         minute='*'
         second='*'
-
         remove={() => true}
         update={() => true}
         equipments={[]}
       />).instance()
+    t.update()
+    t.details()
+    t.setType('reminder')()
+    t.trigger()
+    t.set('foo')('bar')
+    t.updateCron({day: '*', minute: '*', hour: '*', second: '0'})
+    t.update()
   })
 })

@@ -17,15 +17,15 @@ type Config struct {
 
 type Controller struct {
 	config    Config
-	telemetry *utils.Telemetry
-	store     utils.Store
+	telemetry types.Telemetry
+	store     types.Store
 	quitters  map[string]chan struct{}
 	bus       i2c.Bus
 	mu        *sync.Mutex
-	statsMgr  *utils.StatsManager
+	statsMgr  types.StatsManager
 }
 
-func New(config Config, bus i2c.Bus, store utils.Store, telemetry *utils.Telemetry) *Controller {
+func New(config Config, bus i2c.Bus, store types.Store, telemetry types.Telemetry) *Controller {
 	return &Controller{
 		config:    config,
 		telemetry: telemetry,

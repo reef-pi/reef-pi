@@ -1,9 +1,5 @@
 package types
 
-import (
-	"github.com/gorilla/mux"
-)
-
 const (
 	ReefPiBucket           = "reef-pi"
 	ATOBucket              = "ato"
@@ -23,18 +19,6 @@ const (
 	TemperatureUsageBucket = "temperature_usage"
 	TimerBucket            = "timers"
 )
-
-type Subsystem interface {
-	Setup() error
-	LoadAPI(*mux.Router)
-	Start()
-	Stop()
-	On(string, bool) error
-}
-
-type Controller interface {
-	Subsystem(string) (Subsystem, error)
-}
 
 type Store interface {
 	Get(string, string, interface{}) error

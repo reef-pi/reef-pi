@@ -21,6 +21,32 @@ export default class Equipment extends React.Component {
     this.list = this.list.bind(this)
     this.set = this.set.bind(this)
     this.setAction = this.setAction.bind(this)
+    this.setRevert = this.setRevert.bind(this)
+    this.setDuration = this.setDuration.bind(this)
+  }
+
+  setDuration (ev) {
+    this.setState({
+      duration: ev.target.value
+    })
+    this.props.update({
+      duration: ev.target.value,
+      revert: this.state.revert,
+      on: this.state.on,
+      id: this.state.id
+    })
+  }
+
+  setRevert (ev) {
+    this.setState({
+      revert: ev.target.checked
+    })
+    this.props.update({
+      duration: this.state.duration,
+      revert: ev.target.checked,
+      on: this.state.on,
+      id: this.state.id
+    })
   }
 
   set (k) {
@@ -81,7 +107,7 @@ export default class Equipment extends React.Component {
           <input
             id={this.props.id_prefix + '-equipment-action-duration'}
             type='text'
-            onChange={(ev) => this.setState({duration: ev.target.value})}
+            onChange={this.setDuration}
             className='col-lg-6'
             disabled={this.props.disabled}
             defaultValue={this.state.duration}
@@ -137,7 +163,7 @@ export default class Equipment extends React.Component {
             <input
               id={this.props.id_prefix + '-equipment-revert'}
               type='checkbox'
-              onClick={(ev) => this.setState({revert: ev.target.checked})}
+              onClick={this.setRevert}
               defaultChecked={this.state.revert}
               disabled={this.props.disabled}
             />

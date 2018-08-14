@@ -20,7 +20,7 @@ type Jack struct {
 }
 
 type Jacks struct {
-	store   utils.Store
+	store   types.Store
 	rpi     utils.PWM
 	pca9685 utils.PWM
 }
@@ -51,7 +51,7 @@ func (j Jack) IsValid() error {
 	return nil
 }
 
-func NewJacks(store utils.Store, r, p utils.PWM) *Jacks {
+func NewJacks(store types.Store, r, p utils.PWM) *Jacks {
 	return &Jacks{
 		store:   store,
 		rpi:     r,

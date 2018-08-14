@@ -4,23 +4,14 @@ import (
 	"container/ring"
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"sort"
 	"sync"
 )
 
-type Metric interface {
-	Rollup(Metric) (Metric, bool)
-	Before(Metric) bool
-}
-
 type Stats struct {
 	Current    *ring.Ring
 	Historical *ring.Ring
-}
-
-type StatsResponse struct {
-	Current    []Metric `json:"current"`
-	Historical []Metric `json:"historical"`
 }
 
 type StatsOnDisk struct {
@@ -35,11 +26,11 @@ type StatsManager struct {
 	bucket          string
 	CurrentLimit    int
 	HistoricalLimit int
-	store           Store
+	store           types.Store
 	SaveOnRollup    bool
 }
 
-func NewStatsManager(store Store, b string, c, h int) *StatsManager {
+func NewStatsManager(store types.Store, b string, c, h int) types.StatsManager {
 	return &StatsManager{
 		inMemory:        make(map[string]Stats),
 		bucket:          b,
@@ -50,12 +41,12 @@ func NewStatsManager(store Store, b string, c, h int) *StatsManager {
 	}
 }
 
-func (m *StatsManager) Get(id string) (StatsResponse, error) {
+func (m *StatsManager) Get(id string) (types.StatsResponse, error) {
 	m.Lock()
 	defer m.Unlock()
-	resp := StatsResponse{
-		Current:    []Metric{},
-		Historical: []Metric{},
+	resp := types.StatsResponse{
+		Current:    []types.Metric{},
+		Historical: []types.Metric{},
 	}
 	stats, ok := m.inMemory[id]
 	if !ok {
@@ -63,7 +54,7 @@ func (m *StatsManager) Get(id string) (StatsResponse, error) {
 	}
 	stats.Current.Do(func(i interface{}) {
 		if i != nil {
-			resp.Current = append(resp.Current, i.(Metric))
+			resp.Current = append(resp.Current, i.(types.Metric))
 		}
 	})
 	sort.Slice(resp.Current, func(i, j int) bool {
@@ -71,7 +62,7 @@ func (m *StatsManager) Get(id string) (StatsResponse, error) {
 	})
 	stats.Historical.Do(func(i interface{}) {
 		if i != nil {
-			resp.Historical = append(resp.Historical, i.(Metric))
+			resp.Historical = append(resp.Historical, i.(types.Metric))
 		}
 	})
 	sort.Slice(resp.Historical, func(i, j int) bool {
@@ -117,7 +108,7 @@ func (m *StatsManager) Save(id string) error {
 	return m.store.Update(m.bucket, id, stats)
 }
 
-func (m *StatsManager) Update(id string, metric Metric) {
+func (m *StatsManager) Update(id string, metric types.Metric) {
 	m.Lock()
 	defer m.Unlock()
 	stats, ok := m.inMemory[id]
@@ -131,7 +122,7 @@ func (m *StatsManager) Update(id string, metric Metric) {
 	}
 	stats.Current.Value = metric
 	stats.Current = stats.Current.Next()
-	m1, move := stats.Historical.Value.(Metric).Rollup(metric)
+	m1, move := stats.Historical.Value.(types.Metric).Rollup(metric)
 	if move {
 		stats.Historical = stats.Historical.Next()
 		if m.SaveOnRollup {

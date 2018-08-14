@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
@@ -22,10 +23,10 @@ type HealthCheckNotify struct {
 type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
-	telemetry *utils.Telemetry
+	telemetry types.Telemetry
 	Notify    HealthCheckNotify
-	store     utils.Store
-	statsMgr  *utils.StatsManager
+	store     types.Store
+	statsMgr  types.StatsManager
 }
 
 type HealthMetric struct {
@@ -37,7 +38,7 @@ type HealthMetric struct {
 	memorySum  float64
 }
 
-func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
+func (m1 HealthMetric) Rollup(mx types.Metric) (types.Metric, bool) {
 	m2 := mx.(HealthMetric)
 	m := HealthMetric{
 		Time:       m1.Time,
@@ -58,12 +59,12 @@ func (m1 HealthMetric) Rollup(mx utils.Metric) (utils.Metric, bool) {
 	return m2, true
 }
 
-func (m1 HealthMetric) Before(mx utils.Metric) bool {
+func (m1 HealthMetric) Before(mx types.Metric) bool {
 	m2 := mx.(HealthMetric)
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry *utils.Telemetry, store utils.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),

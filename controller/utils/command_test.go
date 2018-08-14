@@ -14,4 +14,9 @@ func TestCommand(t *testing.T) {
 	if _, err := Command("ls").CombinedOutput(); err != nil {
 		t.Error(err)
 	}
+	c := Command("ls")
+	c.DevMode = true
+	if err := c.Run(); err != nil {
+		t.Error(err)
+	}
 }
