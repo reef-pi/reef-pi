@@ -39,7 +39,7 @@ export default class Capabilities extends React.Component {
   render () {
     return (
       <div className='container'>
-        {this.toLi('equipments')}
+        {this.toLi('equipment')}
         {this.toLi('timers')}
         {this.toLi('lighting')}
         {this.toLi('ato')}

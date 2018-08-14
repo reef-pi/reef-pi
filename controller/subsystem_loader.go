@@ -6,7 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/camera"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/doser"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/macro"
 	"github.com/reef-pi/reef-pi/controller/ph"
@@ -42,7 +42,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	return nil
 }
 
-func (r *ReefPi) loadTimerSubsystem(eqs *equipments.Controller) error {
+func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller) error {
 	if !r.settings.Capabilities.Timers {
 		return nil
 	}
@@ -56,7 +56,7 @@ func (r *ReefPi) loadTimerSubsystem(eqs *equipments.Controller) error {
 	return nil
 }
 
-func (r *ReefPi) loadTemperatureSubsystem(eqs *equipments.Controller) error {
+func (r *ReefPi) loadTemperatureSubsystem(eqs *equipment.Controller) error {
 	if !r.settings.Capabilities.Temperature {
 		return nil
 	}
@@ -75,7 +75,7 @@ func (r *ReefPi) loadTemperatureSubsystem(eqs *equipments.Controller) error {
 	return nil
 }
 
-func (r *ReefPi) loadATOSubsystem(eqs *equipments.Controller) error {
+func (r *ReefPi) loadATOSubsystem(eqs *equipment.Controller) error {
 	if !r.settings.Capabilities.ATO {
 		return nil
 	}
@@ -153,13 +153,13 @@ func (r *ReefPi) loadSubsystems() error {
 		}
 		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
 	}
-	var eqs *equipments.Controller
-	if r.settings.Capabilities.Equipments {
-		conf := equipments.Config{
+	var eqs *equipment.Controller
+	if r.settings.Capabilities.Equipment {
+		conf := equipment.Config{
 			DevMode: r.settings.Capabilities.DevMode,
 		}
-		eqs = equipments.New(conf, r.outlets, r.store, r.telemetry)
-		r.subsystems[equipments.Bucket] = eqs
+		eqs = equipment.New(conf, r.outlets, r.store, r.telemetry)
+		r.subsystems[equipment.Bucket] = eqs
 	}
 	if err := r.loadTimerSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load timer subsystem. Error:", err)

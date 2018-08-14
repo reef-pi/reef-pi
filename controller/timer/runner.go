@@ -2,7 +2,7 @@ package timer
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"time"
@@ -15,22 +15,22 @@ type UpdateEquipment struct {
 	Duration time.Duration `json:"duration"`
 }
 type EquipmentRunner struct {
-	eq         equipments.Equipment
-	target     UpdateEquipment
-	equipments *equipments.Controller
+	eq        equipment.Equipment
+	target    UpdateEquipment
+	equipment *equipment.Controller
 }
 
 func (e *EquipmentRunner) Run() {
 	eq := e.eq
 	eq.On = e.target.On
-	if err := e.equipments.Update(e.eq.ID, eq); err != nil {
+	if err := e.equipment.Update(e.eq.ID, eq); err != nil {
 		log.Println("ERROR: timer sub-system, Failed to update equipment. Error:", err)
 	}
 	if e.target.Revert {
 		select {
 		case <-time.After(e.target.Duration * time.Second):
 			eq.On = !e.target.On
-			if err := e.equipments.Update(e.eq.ID, eq); err != nil {
+			if err := e.equipment.Update(e.eq.ID, eq); err != nil {
 				log.Println("ERROR: timer sub-system, Failed to revert equipment. Error:", err)
 			}
 		}
@@ -40,7 +40,7 @@ func (e *EquipmentRunner) Run() {
 func (c *Controller) Runner(j Job) (cron.Job, error) {
 	switch j.Type {
 	case "equipment":
-		eq, err := c.equipments.Get(j.Equipment.ID)
+		eq, err := c.equipment.Get(j.Equipment.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -48,9 +48,9 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 			return nil, fmt.Errorf("Equipment: %s does not have associated outlet", eq.Name)
 		}
 		return &EquipmentRunner{
-			eq:         eq,
-			target:     j.Equipment,
-			equipments: c.equipments,
+			eq:        eq,
+			target:    j.Equipment,
+			equipment: c.equipment,
 		}, nil
 	case "reminder":
 		return &ReminderRunner{

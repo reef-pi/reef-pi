@@ -1,6 +1,6 @@
 module.exports = {
   Create: function (n) {
-    n.click('a#tab-equipments')
+    n.click('a#tab-equipment')
       .wait(500)
       .click('input#add_equipment')
       .wait(500)

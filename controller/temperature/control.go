@@ -49,12 +49,12 @@ func (c *Controller) control(tc TC, u *Usage) error {
 
 func (c *Controller) warmUp(tc TC) error {
 	if tc.Cooler != "" {
-		if err := c.equipments.Control(tc.Cooler, false); err != nil {
+		if err := c.equipment.Control(tc.Cooler, false); err != nil {
 			return err
 		}
 	}
 	if tc.Heater != "" {
-		if err := c.equipments.Control(tc.Heater, true); err != nil {
+		if err := c.equipment.Control(tc.Heater, true); err != nil {
 			return err
 		}
 	}
@@ -63,12 +63,12 @@ func (c *Controller) warmUp(tc TC) error {
 
 func (c *Controller) coolDown(tc TC) error {
 	if tc.Heater != "" {
-		if err := c.equipments.Control(tc.Heater, false); err != nil {
+		if err := c.equipment.Control(tc.Heater, false); err != nil {
 			return err
 		}
 	}
 	if tc.Cooler != "" {
-		if err := c.equipments.Control(tc.Cooler, true); err != nil {
+		if err := c.equipment.Control(tc.Cooler, true); err != nil {
 			return err
 		}
 	}
@@ -77,10 +77,10 @@ func (c *Controller) coolDown(tc TC) error {
 
 func (c *Controller) switchOffAll(tc TC) {
 	if tc.Heater != "" {
-		c.equipments.Control(tc.Heater, false)
+		c.equipment.Control(tc.Heater, false)
 	}
 	if tc.Cooler != "" {
-		c.equipments.Control(tc.Cooler, false)
+		c.equipment.Control(tc.Cooler, false)
 	}
 }
 

@@ -21,7 +21,7 @@ func (m *mc) Subsystem(_ string) (types.Subsystem, error) {
 
 func TestStep(t *testing.T) {
 	s := Step{
-		Type:   "equipments",
+		Type:   "equipment",
 		Config: []byte("{}"),
 	}
 	if err := s.Run(new(mc)); err != nil {

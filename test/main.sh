@@ -9,7 +9,7 @@ done
 
 # simulate  a typical reef-pi setup
 # create outlets & jacks
-# create equipments
+# create equipment
 # create lighting and setup 24 hour cycle
 # enable temperature and setup control
 # enable ato and pump

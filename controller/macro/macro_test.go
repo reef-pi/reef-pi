@@ -28,7 +28,7 @@ func TestMacro(t *testing.T) {
 	tr := utils.NewTestRouter()
 	s.LoadAPI(tr.Router)
 	steps := []Step{
-		Step{Type: "equipments", Config: []byte("{}")},
+		Step{Type: "equipment", Config: []byte("{}")},
 	}
 	m := Macro{Name: "Foo", Steps: steps}
 	body := new(bytes.Buffer)

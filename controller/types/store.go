@@ -10,7 +10,7 @@ const (
 	JackBucket             = "jacks"
 	OutletBucket           = "outlets"
 	DoserBucket            = "doser"
-	EquipmentBucket        = "equipments"
+	EquipmentBucket        = "equipment"
 	LightingBucket         = "lightings"
 	MacroBucket            = "macro"
 	MacroUsageBucket       = "macro_usage"

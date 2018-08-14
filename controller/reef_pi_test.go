@@ -30,7 +30,7 @@ func TestReefPi(t *testing.T) {
 	r.settings.Capabilities.Doser = true
 	r.settings.Capabilities.Lighting = true
 	r.settings.Capabilities.Camera = true
-	r.settings.Capabilities.Equipments = true
+	r.settings.Capabilities.Equipment = true
 	r.settings.Capabilities.Timers = true
 	r.settings.Capabilities.Ph = true
 	if err := r.Start(); err != nil {

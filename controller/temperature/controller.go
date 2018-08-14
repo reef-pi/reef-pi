@@ -2,7 +2,7 @@ package temperature
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
@@ -14,22 +14,22 @@ const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	telemetry  types.Telemetry
-	store      types.Store
-	devMode    bool
-	equipments *equipments.Controller
-	quitters   map[string]chan struct{}
-	statsMgr   types.StatsManager
+	telemetry types.Telemetry
+	store     types.Store
+	devMode   bool
+	equipment *equipment.Controller
+	quitters  map[string]chan struct{}
+	statsMgr  types.StatsManager
 }
 
-func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipments.Controller) (*Controller, error) {
+func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipment.Controller) (*Controller, error) {
 	return &Controller{
-		telemetry:  telemetry,
-		store:      store,
-		devMode:    devMode,
-		equipments: eqs,
-		quitters:   make(map[string]chan struct{}),
-		statsMgr:   utils.NewStatsManager(store, UsageBucket, 180, 24*7),
+		telemetry: telemetry,
+		store:     store,
+		devMode:   devMode,
+		equipment: eqs,
+		quitters:  make(map[string]chan struct{}),
+		statsMgr:  utils.NewStatsManager(store, UsageBucket, 180, 24*7),
 	}, nil
 }
 
