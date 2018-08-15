@@ -37,6 +37,7 @@ go-get:
 	go get -u github.com/reef-pi/drivers
 	go get -u github.com/reef-pi/adafruitio
 	go get -u github.com/nfnt/resize
+	go get -u github.com/coreos/bbolt
 
 .PHONY: vet
 vet:
