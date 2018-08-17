@@ -19,11 +19,15 @@ func (r *ReefPi) listErrors(w http.ResponseWriter, req *http.Request) {
 
 func (r *ReefPi) getError(w http.ResponseWriter, req *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		return r.GetError(id)
+		var er Error
+		return er, c.store.Get(Bucket, id, &er)
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
 func (r *ReefPi) deleteError(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) error {
+		return e.store.Delete(Bucket, id)
+	}
 }
 
 func (r *ReefPi) GetError(id string) (Error, error) {
