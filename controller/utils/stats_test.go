@@ -35,4 +35,7 @@ func TestStatsManager(t *testing.T) {
 	if err := mgr.Load("foo", fn); err != nil {
 		t.Error(err)
 	}
+	if err := mgr.Delete("foo"); err != nil {
+		t.Error(err)
+	}
 }

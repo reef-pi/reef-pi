@@ -26,8 +26,9 @@ var GMailMailer = MailerConfig{
 func (c *MailerConfig) Mailer() Mailer {
 	auth := smtp.PlainAuth("", c.From, c.Password, c.Server)
 	return &mailer{
-		auth:   auth,
-		config: c,
+		auth:     auth,
+		config:   c,
+		sendMail: smtp.SendMail,
 	}
 }
 
@@ -39,8 +40,9 @@ func (n *NoopMailer) Email(s, _ string) error {
 }
 
 type mailer struct {
-	auth   smtp.Auth
-	config *MailerConfig
+	auth     smtp.Auth
+	config   *MailerConfig
+	sendMail func(string, smtp.Auth, string, []string, []byte) error
 }
 
 func (m *mailer) msg(subject, body string) string {
@@ -54,5 +56,5 @@ func (m *mailer) msg(subject, body string) string {
 func (m *mailer) Email(subject, body string) error {
 	msg := m.msg(subject, body)
 	log.Println("Sending email to:", m.config.To, " subject:", subject)
-	return smtp.SendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
+	return m.sendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
 }
