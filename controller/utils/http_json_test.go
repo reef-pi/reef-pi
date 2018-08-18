@@ -2,6 +2,8 @@ package utils
 
 import (
 	"bytes"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -40,19 +42,20 @@ func TestJSONResponses(t *testing.T) {
 	}
 	var payload map[string]string
 	JSONResponse(payload, resp, req)
-	fn := func(id string) (interface{}, error) {
-		return &payload, nil
-	}
-	JSONGetResponse(fn, resp, req)
-	fn1 := func() (interface{}, error) {
-		return &payload, nil
-	}
-	JSONListResponse(fn1, resp, req)
-	fn2 := func() error { return nil }
-	JSONCreateResponse(payload, fn2, resp, req)
-	fn3 := func(_ string) error { return nil }
-	JSONUpdateResponse(payload, fn3, resp, req)
-	JSONDeleteResponse(fn3, resp, req)
+	JSONGetResponse(func(_ string) (interface{}, error) { return nil, nil }, resp, req)
+	JSONGetResponse(func(_ string) (interface{}, error) { return nil, fmt.Errorf("test error") }, resp, req)
+	JSONListResponse(func() (interface{}, error) { return nil, fmt.Errorf("test error") }, resp, req)
+	JSONListResponse(func() (interface{}, error) { return nil, nil }, resp, req)
+	body := new(bytes.Buffer)
+	body.Write([]byte(`{"foo":"bar"}`))
+	req.Body = ioutil.NopCloser(body)
+	JSONCreateResponse(&payload, func() error { return fmt.Errorf("") }, resp, req)
+	JSONCreateResponse(payload, func() error { return fmt.Errorf("") }, resp, req)
+	body.Write([]byte(`{"foo":"bar"}`))
+	req.Body = ioutil.NopCloser(body)
+	JSONUpdateResponse(&payload, func(_ string) error { return fmt.Errorf("") }, resp, req)
+	JSONUpdateResponse(payload, func(_ string) error { return nil }, resp, req)
+	JSONDeleteResponse(func(_ string) error { return fmt.Errorf("") }, resp, req)
 }
 
 func TestBasicAuth(t *testing.T) {
@@ -72,13 +75,16 @@ func TestBasicAuth(t *testing.T) {
 	if rr.Code != 200 {
 		t.Error("Expected 200, Found:", rr.Code)
 	}
+	req.SetBasicAuth(a.user, "invalid")
+	handler.ServeHTTP(rr, req)
+	if rr.Code == 200 {
+		t.Error("Expected Not 200, Found:", rr.Code)
+	}
 }
 
-type testDoer struct {
-}
+type testDoer struct{}
 
-func (t *testDoer) Do(_ func(interface{})) {
-}
+func (t *testDoer) Do(_ func(interface{})) {}
 
 func Test_JSONGetUsage(t *testing.T) {
 	d := &testDoer{}
