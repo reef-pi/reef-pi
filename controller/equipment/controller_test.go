@@ -34,6 +34,11 @@ func TestEquipmentController(t *testing.T) {
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
+	o.Equipment = "1"
+	// Create another outlet thats in use
+	if err := outlets.Create(o); err != nil {
+		t.Fatal(err)
+	}
 
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
@@ -48,11 +53,16 @@ func TestEquipmentController(t *testing.T) {
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
 	enc.Encode(eq)
-
 	if err := tr.Do("PUT", "/api/equipment", body, nil); err != nil {
 		t.Fatal("Failed to create equipment using api")
 	}
 
+	body.Reset()
+	eq.Outlet = "2"
+	json.NewEncoder(body).Encode(eq)
+	if err := tr.Do("PUT", "/api/equipment", body, nil); err == nil {
+		t.Error("Equipment creation should fail due to outlet being in-use")
+	}
 	c.Start()
 
 	body.Reset()
@@ -97,8 +107,8 @@ func TestEquipmentController(t *testing.T) {
 	if err := tr.Do("GET", "/api/outlets", strings.NewReader("{}"), &outletsList); err != nil {
 		t.Fatal("Failed to list outlets  using api")
 	}
-	if len(outletsList) != 1 {
-		t.Fatal("Expected 1 outlet, found:", len(outletsList))
+	if len(outletsList) != 2 {
+		t.Fatal("Expected 2 outlets, found:", len(outletsList))
 	}
 	var outlet connectors.Outlet
 	if err := tr.Do("GET", "/api/outlets/1", strings.NewReader("{}"), &outlet); err != nil {
@@ -112,6 +122,9 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal("Failed to update individual outlet  using api. Error:", err)
 	}
 	c.synEquipment()
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
+	}
 	if err := tr.Do("DELETE", "/api/equipment/"+eq.ID, buf, nil); err != nil {
 		t.Fatal("Failed to delete equipment using api. Error:", err)
 	}
@@ -127,6 +140,9 @@ func TestEquipmentController(t *testing.T) {
 	c.IsEquipmentInUse("1")
 	if err := c.Delete("1"); err == nil {
 		t.Error("Equipment deletion should fail if rquipment is in use")
+	}
+	if err := c.On("-11", true); err == nil {
+		t.Error("Controlling invalid equipment should fail")
 	}
 
 }
