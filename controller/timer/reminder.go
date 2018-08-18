@@ -2,7 +2,6 @@ package timer
 
 import (
 	"github.com/reef-pi/reef-pi/controller/types"
-	"log"
 )
 
 type Reminder struct {
@@ -16,8 +15,5 @@ type ReminderRunner struct {
 }
 
 func (r ReminderRunner) Run() {
-	_, err := r.telemetry.Alert(r.title, r.body)
-	if err != nil {
-		log.Println("ERROR: Failed to send reminder. Error:", err)
-	}
+	r.telemetry.Alert(r.title, r.body)
 }

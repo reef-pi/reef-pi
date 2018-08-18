@@ -65,7 +65,9 @@ func TestTimerController(t *testing.T) {
 		Hour:      "*",
 		Day:       "*",
 		Type:      "equipment",
+		Enable:    true,
 	}
+
 	enc.Encode(&j)
 	if err := tr.Do("PUT", "/api/timers", body, nil); err != nil {
 		t.Fatal("Failed to create timer using api. Error:", err)
@@ -73,6 +75,9 @@ func TestTimerController(t *testing.T) {
 	var jobs []Job
 	if err := tr.Do("GET", "/api/timers", strings.NewReader("{}"), &jobs); err != nil {
 		t.Fatal("Failed to list timer jobs using api")
+	}
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
 	}
 	if len(jobs) != 1 {
 		t.Fatal("Total number of jobs expected:1, found:", len(jobs))
@@ -116,5 +121,30 @@ func TestTimerController(t *testing.T) {
 		eq:        eq,
 	}
 	r.Run()
+	j.Day = "X"
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if day is set to invalid value")
+	}
+	j.Day = "*"
+	j.Type = "reminder"
+	j.Reminder.Title = ""
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if reminder title is empty")
+	}
 
+	j.Type = "equipment"
+	j.Equipment.ID = ""
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if equipment id is empty")
+	}
+	j.Type = "invalid"
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if job type is not valid")
+	}
+	if err := c.On("-1", false); err == nil {
+		t.Error("Controlling invalid timer should fail")
+	}
+	if _, err := c.Runner(j); err == nil {
+		t.Error("Creating running for invalid job type should fail")
+	}
 }
