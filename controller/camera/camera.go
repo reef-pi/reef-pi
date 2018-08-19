@@ -47,10 +47,12 @@ func (c *Controller) run() {
 	img, err := c.Capture()
 	if err != nil {
 		log.Println("ERROR: camera subsystem: failed to capture image. Error:", err)
+		c.c.LogError("camera-capture", "Failed to capture image. Error:"+err.Error())
 		return
 	}
 	if err := c.Process(img); err != nil {
 		log.Println("ERROR: camera sub-system : Failed to process image. Error:", err)
+		c.c.LogError("camera-process", "Failed to process image. Error:"+err.Error())
 	}
 	if c.config.Upload {
 		c.uploadImage(img)

@@ -133,6 +133,7 @@ func (c *Controller) Check(a ATO) {
 	reading, err := c.Read(a)
 	if err != nil {
 		log.Println("ERROR: ato sub-system. Failed to read ato sensor. Error:", err)
+		c.c.LogError("ato-"+a.ID, "Failed to read ato sensor. Name:"+a.Name+". Error:"+err.Error())
 		return
 	}
 	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)

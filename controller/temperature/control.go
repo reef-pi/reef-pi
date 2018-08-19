@@ -17,6 +17,7 @@ func (c *Controller) Check(tc TC) {
 	reading, err := c.Read(tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
+		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		return
 	}
 	u.Temperature = reading
