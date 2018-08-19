@@ -47,7 +47,7 @@ func loadSettings(store types.Store) (Settings, error) {
 func initializeSettings(store types.Store) (Settings, error) {
 	if os.Getenv("DEV_MODE") == "1" {
 		DefaultSettings.Capabilities.DevMode = true
-		DefaultSettings.Address = "localhost:8080"
+		DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")
 	}
 	if err := store.CreateBucket(Bucket); err != nil {

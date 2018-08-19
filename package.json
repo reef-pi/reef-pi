@@ -12,7 +12,10 @@
     "create-react-class": "^15.6.3",
     "css-loader": "^0.28.11",
     "formik": "^1.0.2",
+    "immutability-helper": "^2.7.1",
     "jquery": "^3.3.1",
+    "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
     "react": "^16.3.2",
@@ -73,6 +76,8 @@
     ]
   },
   "jest": {
+    "verbose": true,
+    "testURL": "http://localhost:8080",
     "moduleDirectories": [
       "node_modules",
       "jsx"

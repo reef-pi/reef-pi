@@ -3,6 +3,7 @@ import ATO from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
 import Lighting from 'lighting/main'
+import NewLights from 'lights/main'
 import Configuration from 'configuration/main'
 import Temperature from 'temperature/main'
 import Timers from 'timers/main'
@@ -61,7 +62,7 @@ class mainPanel extends React.Component {
       var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
-          <a id={'tab-' + k}className={cname} onClick={this.setTab(k)}>{k}</a>
+          <a id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
         </li>
       )
     }.bind(this))
@@ -98,6 +99,7 @@ class mainPanel extends React.Component {
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     capabilities: state.capabilities,
