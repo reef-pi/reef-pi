@@ -26,7 +26,6 @@ js-lint:
 .PHONY: go-get
 go-get:
 	go get -u golang.org/x/sys/unix
-	go get -u github.com/boltdb/bolt/...
 	go get -u gopkg.in/yaml.v2
 	go get -u github.com/kidoman/embd
 	go get -u github.com/shirou/gopsutil
