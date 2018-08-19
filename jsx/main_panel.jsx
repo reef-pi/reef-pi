@@ -86,7 +86,6 @@ class mainPanel extends React.Component {
       <div className='container'>
         {this.navs(tab)}
         {body}
-        <hr />
         <Summary />
       </div>
     )

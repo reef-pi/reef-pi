@@ -17,7 +17,7 @@ class summary extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <nav className='navbar fixed-bottom navbar-light bg-light justify-content-center'>
         <ul className='list-inline'>
           <li className='list-inline-item'> <span className='h5'>{this.props.info.name} </span></li>
           <li className='list-inline-item'> | <a href='http://reef-pi.com'> Documentation</a> | </li>
@@ -26,7 +26,7 @@ class summary extends React.Component {
           <li className='list-inline-item'>, since {this.props.info.uptime}</li>
           <li className='list-inline-item'>IP <span className='text-primary'>{this.props.info.ip}</span></li>
         </ul>
-      </div>
+      </nav>
     )
   }
 }
