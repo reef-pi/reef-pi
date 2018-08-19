@@ -11,9 +11,9 @@ import (
 )
 
 func TestTimerController(t *testing.T) {
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
 
 	eConfig := equipment.Config{
@@ -23,12 +23,12 @@ func TestTimerController(t *testing.T) {
 		Name: "bar",
 		Pin:  24,
 	}
-	outlets := connectors.NewOutlets(store)
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	e := equipment.New(eConfig, outlets, store, utils.TestTelemetry())
+	e := equipment.New(eConfig, outlets, con.Store(), con.Telemetry())
 	e.Setup()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
@@ -47,7 +47,7 @@ func TestTimerController(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to list equipment. Error:", err)
 	}
-	c := New(store, utils.TestTelemetry(), e)
+	c := New(con, e)
 	c.Setup()
 	c.Start()
 	tr := utils.NewTestRouter()

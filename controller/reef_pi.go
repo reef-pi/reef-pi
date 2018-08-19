@@ -146,3 +146,12 @@ func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
 	}
 	return sub, nil
 }
+
+func (r *ReefPi) Controller() types.Controller {
+	return types.NewController(
+		r.telemetry,
+		r.store,
+		r.LogError,
+		r.Subsystem,
+	)
+}

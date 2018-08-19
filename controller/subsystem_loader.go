@@ -25,7 +25,7 @@ func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
 	c := ph.Config{
 		DevMode: r.settings.Capabilities.DevMode,
 	}
-	p := ph.New(c, bus, r.store, r.telemetry)
+	p := ph.New(c, bus, r.Controller())
 	r.subsystems[ph.Bucket] = p
 	return nil
 }
@@ -34,7 +34,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	if !r.settings.Capabilities.Macro {
 		return nil
 	}
-	m, err := macro.New(r.settings.Capabilities.DevMode, r, r.store, r.telemetry)
+	m, err := macro.New(r.settings.Capabilities.DevMode, r.Controller())
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.Timers = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	t := timer.New(r.store, r.telemetry, eqs)
+	t := timer.New(r.Controller(), eqs)
 	r.subsystems[timer.Bucket] = t
 	eqs.AddCheck(t.IsEquipmentInUse)
 	return nil

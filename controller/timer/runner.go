@@ -54,7 +54,7 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 		}, nil
 	case "reminder":
 		return &ReminderRunner{
-			telemetry: c.telemetry,
+			telemetry: c.c.Telemetry(),
 			title:     "[Reef-Pi Reminder]" + j.Reminder.Title,
 			body:      j.Reminder.Message,
 		}, nil

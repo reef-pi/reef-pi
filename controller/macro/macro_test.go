@@ -9,12 +9,11 @@ import (
 )
 
 func TestMacro(t *testing.T) {
-	store, err := utils.TestDB()
+	c, err := utils.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
-	telemetry := utils.TestTelemetry()
-	s, err := New(true, new(mc), store, telemetry)
+	s, err := New(true, c)
 	if err != nil {
 		t.Error(err)
 	}

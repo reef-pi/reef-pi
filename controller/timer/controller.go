@@ -8,20 +8,18 @@ import (
 )
 
 type Controller struct {
-	store     types.Store
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
-	telemetry types.Telemetry
 	equipment *equipment.Controller
+	c         types.Controller
 }
 
-func New(store types.Store, telemetry types.Telemetry, e *equipment.Controller) *Controller {
+func New(c types.Controller, e *equipment.Controller) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
-		telemetry: telemetry,
-		store:     store,
 		runner:    cron.New(),
 		equipment: e,
+		c:         c,
 	}
 }
 
@@ -39,7 +37,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	return c.c.Store().CreateBucket(Bucket)
 }
 
 func (c *Controller) Start() {

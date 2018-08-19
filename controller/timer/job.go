@@ -49,7 +49,7 @@ func (j *Job) Validate() error {
 
 func (c *Controller) Get(id string) (Job, error) {
 	var job Job
-	return job, c.store.Get(Bucket, id, &job)
+	return job, c.c.Store().Get(Bucket, id, &job)
 }
 
 func (c *Controller) List() ([]Job, error) {
@@ -62,7 +62,7 @@ func (c *Controller) List() ([]Job, error) {
 		jobs = append(jobs, job)
 		return nil
 	}
-	return jobs, c.store.List(Bucket, fn)
+	return jobs, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(job Job) error {
@@ -74,7 +74,7 @@ func (c *Controller) Create(job Job) error {
 		job.ID = id
 		return job
 	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 	if job.Enable {
@@ -95,7 +95,7 @@ func (c *Controller) Update(id string, payload Job) error {
 		}
 	}
 	payload.ID = id
-	if err := c.store.Update(Bucket, id, &payload); err != nil {
+	if err := c.c.Store().Update(Bucket, id, &payload); err != nil {
 		return err
 	}
 	if payload.Enable {
@@ -109,7 +109,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	if err := c.store.Delete(Bucket, id); err != nil {
+	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
 	if j.Enable {
