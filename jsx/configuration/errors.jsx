@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 
 class errors extends React.Component {
   componentDidMount () {
-	  this.props.fetch()
+    this.props.fetch()
   }
   render () {
     var items = []
@@ -36,7 +36,7 @@ class errors extends React.Component {
               className='btn btn-outline-secondary'
               defaultValue='clear'
               onClick={this.props.clear}
-					  />
+            />
           </div>
         </div>
       </div>

@@ -91,7 +91,7 @@ describe('Configuration ui', () => {
   })
 
   it('<Errors />', () => {
-    const m = shallow(
+    shallow(
       <Errors
         store={mockStore({
           errors: [{id: '1', time: 'dd', message: 'dd'}]
