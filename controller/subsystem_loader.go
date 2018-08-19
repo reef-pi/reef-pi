@@ -64,7 +64,7 @@ func (r *ReefPi) loadTemperatureSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.Temperature = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	temp, err := temperature.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
+	temp, err := temperature.New(r.settings.Capabilities.DevMode, r.Controller(), eqs)
 	if err != nil {
 		r.settings.Capabilities.Temperature = false
 		log.Println("ERROR: Failed to initialize temperature subsystem")
@@ -151,7 +151,7 @@ func (r *ReefPi) loadSubsystems() error {
 			PCA9685_PWMFreq: r.settings.PCA9685_PWMFreq,
 			Version:         r.version,
 		}
-		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
+		r.subsystems[system.Bucket] = system.New(conf, r.Controller())
 	}
 	var eqs *equipment.Controller
 	if r.settings.Capabilities.Equipment {

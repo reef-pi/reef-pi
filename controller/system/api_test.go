@@ -16,12 +16,11 @@ func TestSystemController(t *testing.T) {
 		Interface: "lo0",
 		Pprof:     true,
 	}
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	c := New(config, store, telemetry)
+	c := New(config, con)
 	c.Setup()
 	c.Start()
 	c.Stop()
