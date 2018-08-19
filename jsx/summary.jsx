@@ -20,9 +20,9 @@ export default class Summary extends React.Component {
           <li className='list-inline-item'> <span className='h5'>{this.props.info.name} </span></li>
           <li className='list-inline-item'> | <a href='http://reef-pi.com'> Documentation</a> | </li>
           <li className='list-inline-item'>{this.props.info.current_time},</li>
-          <li className='list-inline-item'>running <span className='text-primary'>{this.props.info.version}</span></li>
-          <li className='list-inline-item'>, since {this.props.info.uptime}</li>
-          <li className='list-inline-item'>IP <span className='text-primary'>{this.props.info.ip}</span></li>
+          <li className='list-inline-item'>running {this.props.info.version},</li>
+          <li className='list-inline-item'>since {this.props.info.uptime} | </li>
+          <li className='list-inline-item'>IP {this.props.info.ip} | </li>
           <li className='list-inline-item text-danger'>Errors({this.props.errors.length})</li>
         </ul>
       </nav>

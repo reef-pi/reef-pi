@@ -7,15 +7,19 @@ class errors extends React.Component {
     var items = []
     this.props.errors.forEach((el) => {
       items.push(
-        <div className='row'>
+        <div className='row' key={el.id}>
           <div className='col-lg-2'>
             {el.time}
           </div>
-          <div className='col-lg-2'>
+          <div className='col-lg-8'>
             {el.message}
           </div>
           <div className='col-lg-1'>
-            <input className='btn btn-primary' defaultValue='X' onClick={() => this.props.delete(el.id)} />
+            <input
+              className='btn btn-sm btn-outline-secondary'
+              defaultValue='X'
+              onClick={() => this.props.delete(el.id)}
+            />
           </div>
         </div>
       )
@@ -25,7 +29,7 @@ class errors extends React.Component {
         {items}
         <div className='row'>
           <div className='col-lg-2'>
-            <input className='btn btn-primary' defaultValue='clear' onClick={this.props.clear} />
+            <input className='btn btn-outline-secondary' defaultValue='clear' onClick={this.props.clear} />
           </div>
         </div>
       </div>

@@ -10,10 +10,10 @@ import (
 )
 
 type Error struct {
-	Message string    `json:"message"`
-	Time    time.Time `json:"time"`
-	Count   int       `json:"count"`
-	ID      string    `json:"id"`
+	Message string `json:"message"`
+	Time    string `json:"time"`
+	Count   int    `json:"count"`
+	ID      string `json:"id"`
 }
 
 func (r *ReefPi) setUpErrorBucket() error {
@@ -76,7 +76,7 @@ func (r *ReefPi) LogError(id, msg string) error {
 	e := Error{
 		Message: msg,
 		ID:      id,
-		Time:    time.Now(),
+		Time:    time.Now().Format("Jan 2 15:04:05"),
 	}
 	return r.store.Update(types.ErrorBucket, id, e)
 }
