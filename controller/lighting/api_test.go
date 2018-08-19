@@ -24,16 +24,15 @@ func TestLightingAPI(t *testing.T) {
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	jacks := connectors.NewJacks(store, rpi, pca9685)
+	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c, err := New(config, jacks, store, i2c.MockBus(), telemetry)
+	c, err := New(config, con, jacks, i2c.MockBus())
 	if err != nil {
 		t.Fatal(err)
 	}

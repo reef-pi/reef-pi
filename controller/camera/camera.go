@@ -18,17 +18,17 @@ type Controller struct {
 	config  Config
 	stopCh  chan struct{}
 	mu      sync.Mutex
-	store   types.Store
 	DevMode bool
+	c       types.Controller
 }
 
-func New(store types.Store, devMode bool) (*Controller, error) {
+func New(devMode bool, c types.Controller) (*Controller, error) {
 	return &Controller{
 		config:  Default,
-		store:   store,
 		mu:      sync.Mutex{},
 		DevMode: devMode,
 		stopCh:  make(chan struct{}),
+		c:       c,
 	}, nil
 }
 
@@ -77,14 +77,14 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(Bucket); err != nil {
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	conf, err := loadConfig(c.store)
+	conf, err := loadConfig(c.c.Store())
 	if err != nil {
 		log.Println("WARNING: camera config not found. Initializing default config")
 		conf = Default
-		if err := saveConfig(c.store, conf); err != nil {
+		if err := saveConfig(c.c.Store(), conf); err != nil {
 			log.Println("ERROR: Failed to save camera config. Error:", err)
 			return err
 		}
@@ -92,7 +92,7 @@ func (c *Controller) Setup() error {
 	c.mu.Lock()
 	c.config = conf
 	c.mu.Unlock()
-	if err := c.store.CreateBucket(ItemBucket); err != nil {
+	if err := c.c.Store().CreateBucket(ItemBucket); err != nil {
 		return err
 	}
 	return nil
@@ -117,7 +117,7 @@ func (c *Controller) Capture() (string, error) {
 	data := make(map[string]string)
 	data["image"] = imgName
 	log.Println("Camera subsystem: Image captured:", imgPath)
-	return imgName, c.store.Update(Bucket, "latest", data)
+	return imgName, c.c.Store().Update(Bucket, "latest", data)
 }
 
 func (c *Controller) uploadImage(imgName string) {

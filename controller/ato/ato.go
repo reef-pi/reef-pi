@@ -36,7 +36,7 @@ func (c *Controller) On(id string, b bool) error {
 
 func (c *Controller) Get(id string) (ATO, error) {
 	var a ATO
-	return a, c.store.Get(Bucket, id, &a)
+	return a, c.c.Store().Get(Bucket, id, &a)
 }
 func (c Controller) List() ([]ATO, error) {
 	atos := []ATO{}
@@ -48,7 +48,7 @@ func (c Controller) List() ([]ATO, error) {
 		atos = append(atos, a)
 		return nil
 	}
-	return atos, c.store.List(Bucket, fn)
+	return atos, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(a ATO) error {
@@ -61,7 +61,7 @@ func (c *Controller) Create(a ATO) error {
 		a.ID = id
 		return &a
 	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 	if a.Enable {
@@ -79,7 +79,7 @@ func (c *Controller) Update(id string, a ATO) error {
 	if a.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", a.Period)
 	}
-	if err := c.store.Update(Bucket, id, a); err != nil {
+	if err := c.c.Store().Update(Bucket, id, a); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[a.ID]
@@ -96,10 +96,10 @@ func (c *Controller) Update(id string, a ATO) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.store.Delete(Bucket, id); err != nil {
+	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
-	if err := c.store.Delete(UsageBucket, id); err != nil {
+	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
 		log.Println("ERROR:  ato sub-system: Failed to deleted usage details for ato:", id)
 	}
 	quit, ok := c.quitters[id]
@@ -136,7 +136,7 @@ func (c *Controller) Check(a ATO) {
 		return
 	}
 	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
-	c.telemetry.EmitMetric("ato", reading)
+	c.c.Telemetry().EmitMetric("ato", reading)
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
 			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
