@@ -20,18 +20,22 @@ func (r *ReefPi) setUpErrorBucket() error {
 	return r.store.CreateBucket(types.ErrorBucket)
 }
 
+func (r *ReefPi) DeleteErrors() error {
+	errors, err := r.ListErrors()
+	if err != nil {
+		return err
+	}
+	for _, e := range errors {
+		if err := r.DeleteError(e.ID); err != nil {
+			log.Println("ERROR: failed to delete error:", err)
+		}
+	}
+	return nil
+}
+
 func (r *ReefPi) clearErrors(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) error {
-		errors, err := r.ListErrors()
-		if err != nil {
-			return err
-		}
-		for _, e := range errors {
-			if err := r.DeleteError(e.ID); err != nil {
-				log.Println("ERROR: failed to delete error:", err)
-			}
-		}
-		return nil
+		return r.DeleteErrors()
 	}
 	utils.JSONDeleteResponse(fn, w, req)
 }

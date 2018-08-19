@@ -36,7 +36,17 @@ func TestReefPi(t *testing.T) {
 	if err := r.Start(); err != nil {
 		t.Fatal("Failed to load subsystem. Error:", err)
 	}
+	if err := r.LogError("test-error", "test message"); err != nil {
+		t.Error(err)
+	}
+	if _, err := r.ListErrors(); err != nil {
+		t.Error(err)
+	}
+	if err := r.DeleteErrors(); err != nil {
+		t.Error(err)
+	}
 	if err := r.Stop(); err != nil {
 		t.Fatal(err)
 	}
+
 }
