@@ -3,6 +3,9 @@ import {fetchErrors, deleteError, deleteErrors} from 'redux/actions/errors'
 import {connect} from 'react-redux'
 
 class errors extends React.Component {
+  componentDidMount () {
+	  this.props.fetch()
+  }
   render () {
     var items = []
     this.props.errors.forEach((el) => {
@@ -29,7 +32,11 @@ class errors extends React.Component {
         {items}
         <div className='row'>
           <div className='col-lg-2'>
-            <input className='btn btn-outline-secondary' defaultValue='clear' onClick={this.props.clear} />
+            <input
+              className='btn btn-outline-secondary'
+              defaultValue='clear'
+              onClick={this.props.clear}
+					  />
           </div>
         </div>
       </div>

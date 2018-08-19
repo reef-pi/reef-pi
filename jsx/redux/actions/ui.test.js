@@ -33,6 +33,7 @@ describe('ui actions', () => {
       equipment: false
     }
     fetchMock.getOnce('/api/capabilities', caps)
+    fetchMock.getOnce('/api/info', {})
     fetchMock.getOnce('/api/atos', [])
     fetchMock.getOnce('/api/phprobes', [])
     fetchMock.getOnce('/api/tcs', [])
@@ -40,6 +41,7 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/inlets', [])
     fetchMock.getOnce('/api/jacks', [])
     fetchMock.getOnce('/api/outlets', [])
+    fetchMock.getOnce('/api/errors', [])
     const store = mockStore()
     return store.dispatch(fetchUIData(store.dispatch)).then(() => {
       expect(store.getActions()).not.toEqual([])

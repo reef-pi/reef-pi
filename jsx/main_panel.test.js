@@ -19,6 +19,8 @@ describe('MainPanel', () => {
   })
   it('<MainPanel />', () => {
     const state = {
+      info: {},
+      errors: [],
       capabilities: {
         dashboard: true,
         equipment: true,
