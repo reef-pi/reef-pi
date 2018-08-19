@@ -1,11 +1,9 @@
 import React from 'react'
-import {fetchInfo} from './redux/actions/info'
-import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 
-class summary extends React.Component {
+export default class Summary extends React.Component {
   componentWillMount () {
-    this.props.fetchInfo()
-    var timer = window.setInterval(this.props.fetchInfo, 1800 * 1000)
+    var timer = window.setInterval(this.props.fetch, 1800 * 1000)
     this.setState({timer: timer})
   }
 
@@ -31,12 +29,9 @@ class summary extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { info: state.info }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchInfo: () => dispatch(fetchInfo())}
+Summary.propTypes = {
+  info: PropTypes.object.isRequired,
+  errors: PropTypes.array.isRequired,
+  fetch: PropTypes.func.isRequired
 }
-const Summary = connect(mapStateToProps, mapDispatchToProps)(summary)
-export default Summary
