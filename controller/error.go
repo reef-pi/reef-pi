@@ -16,6 +16,10 @@ type Error struct {
 	ID      string    `json:"id"`
 }
 
+func (r *ReefPi) setUpErrorBucket() error {
+	return r.store.CreateBucket(types.ErrorBucket)
+}
+
 func (r *ReefPi) clearErrors(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) error {
 		errors, err := r.ListErrors()

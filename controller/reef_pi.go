@@ -98,6 +98,9 @@ func New(version, database string) (*ReefPi, error) {
 }
 
 func (r *ReefPi) Start() error {
+	if err := r.setUpErrorBucket(); err != nil {
+		return err
+	}
 	if err := r.jacks.Setup(); err != nil {
 		return err
 	}
