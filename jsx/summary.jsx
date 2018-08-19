@@ -23,6 +23,7 @@ export default class Summary extends React.Component {
           <li className='list-inline-item'>running <span className='text-primary'>{this.props.info.version}</span></li>
           <li className='list-inline-item'>, since {this.props.info.uptime}</li>
           <li className='list-inline-item'>IP <span className='text-primary'>{this.props.info.ip}</span></li>
+          <li className='list-inline-item text-danger'>Errors({this.props.errors.length})</li>
         </ul>
       </nav>
     )

@@ -88,7 +88,7 @@ class mainPanel extends React.Component {
         <div className='row'>
           {this.navs(tab)}
         </div>
-        <div className='row'>
+        <div className='row' style={{paddingBottom: '70px'}}>
           {body}
         </div>
         <div className='row'>

@@ -4,6 +4,7 @@ import Settings from './settings'
 import Telemetry from 'telemetry/main'
 import Auth from 'auth'
 import Connectors from 'connectors/main'
+import Errors from './errors'
 import $ from 'jquery'
 
 const components = {
@@ -11,7 +12,8 @@ const components = {
   connectors: <Connectors />,
   telemetry: <Telemetry />,
   authentication: <Auth />,
-  admin: <Admin />
+  admin: <Admin />,
+  errors: <Errors />
 }
 
 export default class Configuration extends React.Component {
@@ -29,7 +31,7 @@ export default class Configuration extends React.Component {
 
   render () {
     var panels = [ ]
-    $.each(['settings', 'connectors', 'telemetry', 'authentication', 'admin'], (_, k) => {
+    $.each(['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin'], (_, k) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
         <li className={cname} key={k}>
