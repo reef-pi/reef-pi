@@ -66,29 +66,33 @@ export default class AutoProfile extends React.Component {
         values[i] = 0
       }
       list.push(
-        <div className='col-md-1 text-center' key={i + 1}>
-          <div className="d-block d-md-none d-lg-block">
-            <input type="text" name="value"
-              className="form-control form-control-sm mb-1 d-block d-md-none d-lg-block"
-              value={values[i]}
-              onChange={this.curry(i)}
-              disabled={this.props.readOnly} />
-          </div>
-          <div className="d-none d-md-inline d-lg-none">
-            {values[i]}
-          </div>
-          <input
-            className='d-none d-md-inline'
-            type='range'
-            style={rangeStyle}
-            onChange={this.curry(i)}
-            value={values[i]}
-            id={'intensity-' + i}
-            orient='vertical'
-            disabled={this.props.readOnly}
-          />
-          <div>
-            {labels[i]}
+        <div className="col-12 col-md-1 text-center" key={i + 1}>
+          <div className="row">
+            <div className="col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last">
+              <input type="text" name="value"
+                className="form-control form-control-sm mb-1 d-block d-md-none d-lg-block"
+                value={values[i]}
+                onChange={this.curry(i)}
+                disabled={this.props.readOnly} />
+            </div>
+            <div className="d-none d-md-inline d-lg-none col-12">
+              {values[i]}
+            </div>
+            <div className="col-12 col-sm-6 col-md-12 d-none d-md-inline">
+              <input
+                className='d-none d-md-inline'
+                type='range'
+                style={rangeStyle}
+                onChange={this.curry(i)}
+                value={values[i]}
+                id={'intensity-' + i}
+                orient='vertical'
+                disabled={this.props.readOnly}
+              />  
+            </div>
+            <div className="col-6 col-md-12 col-sm-6 order-md-last order-first">
+              {labels[i]}
+            </div>
           </div>
         </div>
       )

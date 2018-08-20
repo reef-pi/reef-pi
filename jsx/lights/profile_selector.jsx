@@ -13,7 +13,7 @@ const ProfileSelector = (props) => {
   }
 
   return (
-    <div>
+    <div className="d-sm-inline-flex">
       <div className='d-sm-none'>
         <select className="custom-select"
           name={props.name + uuid}

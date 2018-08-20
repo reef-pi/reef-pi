@@ -102,8 +102,11 @@ class Light extends Component {
     if(this.state.readOnly){
       editButton = (
         <button type="button" 
-          onClick={() => this.setState({readOnly: false, expand: true})}
-          className="btn btn-sm btn-link float-right">Edit</button>
+          onClick={(e) => {
+            e.stopPropagation()
+            this.setState({readOnly: false, expand: true})
+          }}
+          className="btn btn-sm btn-link float-right d-block d-sm-inline">Edit</button>
       )
     }
     else {
@@ -122,19 +125,21 @@ class Light extends Component {
     return (
       <form className="list-group-item" onSubmit={this.handleFormSubmit}>
         <div className="container">
-          <div className="row">
-            <div className="col"
-              style={cursorStyle}
-              onClick={() => this.setState({expand: !this.state.expand})}>
-              {this.state.expand ? FaAngleUp() : FaAngleDown()}
-              <b className="ml-2">{this.state.name}</b>
+          <div className="row"
+            style={cursorStyle}
+            onClick={() => this.setState({expand: !this.state.expand})}>
+            <div className="col-12 col-sm-6 col-md-3 order-sm-last">
               {editButton}
               <button type="button" 
                 onClick={(e) => {
                   e.stopPropagation()
                   alert('TODO')
                 }}
-                className="btn btn-sm btn-link float-right">Delete</button>
+                className="btn btn-sm btn-link float-right d-block d-sm-inline">Delete</button>
+            </div>
+            <div className="col-12 col-sm-6 col-md-9 order-sm-first">  
+              {this.state.expand ? FaAngleUp() : FaAngleDown()}
+              <b className="ml-2">{this.state.name}</b>              
             </div>
           </div>
           {channels}
