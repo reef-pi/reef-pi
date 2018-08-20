@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import LightChannel from './light_channel'
+import Light from './light'
 import update from 'immutability-helper'
 
 class FormContainer extends Component {
@@ -82,28 +82,18 @@ class FormContainer extends Component {
 
   render(){
     return (
-      <form className="list-group-item" onSubmit={this.handleFormSubmit}>
-        <pre>{ JSON.stringify(this.state, undefined, 2) }</pre>
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <b>{this.state.name}</b>
-            </div>
+      <div>
+        <div className="row">
+          <div className="col">
+            <div className="d-sm-none">xs</div>
+            <div className="d-none d-sm-block d-md-none">sm</div>
+            <div className="d-none d-md-block d-lg-none">md</div>
+            <div className="d-none d-lg-block d-xl-none">lg</div>
+            <div className="d-none d-xl-block">xl</div>
           </div>
-          {Object.keys(this.state.channels).map((item) => (
-            <LightChannel
-              key={item}
-              readOnly={this.state.readOnly}
-              onChangeHandler={this.handleChannelChange} 
-              channel={this.state.channels[item]}
-              channelNum={item}>
-            </LightChannel>
-          ))}          
         </div>
-        <div>
-          <input type="submit" value="Save"></input>
-        </div>
-      </form>
+        <Light />
+      </div>
     )
   }
 }
