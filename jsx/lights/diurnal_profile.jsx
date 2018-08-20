@@ -23,27 +23,28 @@ export default class DiurnalProfile extends React.Component{
 
   render(){
     return (
-      <div className='form-inline row align-items-start'>
-        <div className='form-group col-lg-4'>
-          <label className='col-form-label col-sm-5'>Start Time</label>
-          <input
-            type='text'
-            name='start'
-            readOnly={this.props.readOnly}
-            className='form-control col-lg-6'
-            value={this.state.start}
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className='form-group col-lg-5'>
-          <label className='col-form-label col-sm-5'>End Time</label>
-          <input type='text' name='end' required
-            className='form-control col-lg-6'
-            readOnly={this.props.readOnly}
-            value={this.state.end}
-            onChange={this.handleChange}
-          />
-        </div>
+      <div className="form-inline">
+        
+        <label className='mr-2'>Start Time</label>
+        <input
+          type='text'
+          name='start'
+          readOnly={this.props.readOnly}
+          className='form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-1'
+          value={this.state.start}
+          onChange={this.handleChange}
+        />
+      
+        <label className='mr-2'>End Time</label>
+        <input 
+          type='text' 
+          name='end' required
+          className='form-control col-12 col-sm-3 col-md-2 col-lg-1'
+          readOnly={this.props.readOnly}
+          value={this.state.end}
+          onChange={this.handleChange}
+        />
+      
       </div>
     )
   }
