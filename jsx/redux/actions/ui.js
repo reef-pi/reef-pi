@@ -1,6 +1,8 @@
 import {reduxGet} from 'utils/ajax'
 import $ from 'jquery'
 import {fetchATOs} from './ato'
+import {fetchInfo} from './info'
+import {fetchErrors} from './errors'
 import {fetchOutlets} from './outlets'
 import {fetchInlets} from './inlets'
 import {fetchJacks} from './jacks'
@@ -16,6 +18,8 @@ export const fetchUIData = (dispatch) => {
     success: (capabilities) => {
 
       dispatch(fetchInlets())
+      dispatch(fetchErrors())
+      dispatch(fetchInfo())
       dispatch(fetchJacks())
       dispatch(fetchOutlets())
 

@@ -5,6 +5,7 @@ import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
 import Capabilities from './capabilities'
 import Display from './display'
+import Errors from './errors'
 import HealthNotify from './health_notify'
 import Main from './main'
 import Settings from './settings'
@@ -87,5 +88,15 @@ describe('Configuration ui', () => {
     const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
     m.updateEnable({target: {}})
     m.update('foo')({target: {}})
+  })
+
+  it('<Errors />', () => {
+    shallow(
+      <Errors
+        store={mockStore({
+          errors: [{id: '1', time: 'dd', message: 'dd'}]
+        })}
+      />
+    ).dive().instance()
   })
 })

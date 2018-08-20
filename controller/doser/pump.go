@@ -9,7 +9,7 @@ import (
 
 func (c *Controller) Get(id string) (Pump, error) {
 	var p Pump
-	return p, c.store.Get(Bucket, id, &p)
+	return p, c.c.Store().Get(Bucket, id, &p)
 }
 
 func (c *Controller) Create(p Pump) error {
@@ -17,7 +17,7 @@ func (c *Controller) Create(p Pump) error {
 		p.ID = id
 		return &p
 	}
-	return c.store.Create(Bucket, fn)
+	return c.c.Store().Create(Bucket, fn)
 }
 
 func (c *Controller) List() ([]Pump, error) {
@@ -30,7 +30,7 @@ func (c *Controller) List() ([]Pump, error) {
 		pumps = append(pumps, p)
 		return nil
 	}
-	return pumps, c.store.List(Bucket, fn)
+	return pumps, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
@@ -51,7 +51,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 
 func (c *Controller) Update(id string, p Pump) error {
 	p.ID = id
-	if err := c.store.Update(Bucket, id, p); err != nil {
+	if err := c.c.Store().Update(Bucket, id, p); err != nil {
 		return err
 	}
 	// TODO cross check cron assignment
@@ -91,7 +91,7 @@ func (c *Controller) Delete(id string) error {
 		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 	}
-	return c.store.Delete(Bucket, id)
+	return c.c.Store().Delete(Bucket, id)
 }
 
 func (p *Pump) Runner(jacks *connectors.Jacks) cron.Job {

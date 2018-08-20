@@ -9,13 +9,12 @@ import (
 )
 
 func TestPhAPI(t *testing.T) {
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	r, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	conf := Config{DevMode: true}
-	c := New(conf, i2c.MockBus(), store, telemetry)
+	c := New(conf, i2c.MockBus(), r)
 	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
 		t.Error(err)

@@ -25,7 +25,7 @@ func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
 	c := ph.Config{
 		DevMode: r.settings.Capabilities.DevMode,
 	}
-	p := ph.New(c, bus, r.store, r.telemetry)
+	p := ph.New(c, bus, r.Controller())
 	r.subsystems[ph.Bucket] = p
 	return nil
 }
@@ -34,7 +34,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	if !r.settings.Capabilities.Macro {
 		return nil
 	}
-	m, err := macro.New(r.settings.Capabilities.DevMode, r, r.store, r.telemetry)
+	m, err := macro.New(r.settings.Capabilities.DevMode, r.Controller())
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.Timers = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	t := timer.New(r.store, r.telemetry, eqs)
+	t := timer.New(r.Controller(), eqs)
 	r.subsystems[timer.Bucket] = t
 	eqs.AddCheck(t.IsEquipmentInUse)
 	return nil
@@ -64,7 +64,7 @@ func (r *ReefPi) loadTemperatureSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.Temperature = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	temp, err := temperature.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs)
+	temp, err := temperature.New(r.settings.Capabilities.DevMode, r.Controller(), eqs)
 	if err != nil {
 		r.settings.Capabilities.Temperature = false
 		log.Println("ERROR: Failed to initialize temperature subsystem")
@@ -83,7 +83,7 @@ func (r *ReefPi) loadATOSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.ATO = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	a, err := ato.New(r.settings.Capabilities.DevMode, r.store, r.telemetry, eqs, r.inlets)
+	a, err := ato.New(r.settings.Capabilities.DevMode, r.Controller(), eqs, r.inlets)
 	if err != nil {
 		r.settings.Capabilities.ATO = false
 		log.Println("ERROR: Failed to initialize ato subsystem")
@@ -102,7 +102,7 @@ func (r *ReefPi) loadLightingSubsystem(bus i2c.Bus) error {
 		DevMode:  r.settings.Capabilities.DevMode,
 		Interval: 30 * time.Second,
 	}
-	l, err := lighting.New(conf, r.jacks, r.store, bus, r.telemetry)
+	l, err := lighting.New(conf, r.Controller(), r.jacks, bus)
 	if err != nil {
 		r.settings.Capabilities.Lighting = false
 		log.Println("ERROR: Failed to initialize lighting subsystem")
@@ -116,7 +116,7 @@ func (r *ReefPi) loadCameraSubsystem() error {
 	if !r.settings.Capabilities.Camera {
 		return nil
 	}
-	cam, err := camera.New(r.store, r.settings.Capabilities.DevMode)
+	cam, err := camera.New(r.settings.Capabilities.DevMode, r.Controller())
 	if err != nil {
 		r.settings.Capabilities.Camera = false
 		return nil
@@ -129,7 +129,7 @@ func (r *ReefPi) loadDoserSubsystem(jacks *connectors.Jacks) error {
 	if !r.settings.Capabilities.Doser {
 		return nil
 	}
-	d, err := doser.New(r.settings.Capabilities.DevMode, r.store, jacks, r.telemetry)
+	d, err := doser.New(r.settings.Capabilities.DevMode, r.Controller(), jacks)
 	if err != nil {
 		r.settings.Capabilities.Doser = false
 		log.Println("ERROR: Failed to initialize doser subsystem")
@@ -151,7 +151,7 @@ func (r *ReefPi) loadSubsystems() error {
 			PCA9685_PWMFreq: r.settings.PCA9685_PWMFreq,
 			Version:         r.version,
 		}
-		r.subsystems[system.Bucket] = system.New(conf, r.store, r.telemetry)
+		r.subsystems[system.Bucket] = system.New(conf, r.Controller())
 	}
 	var eqs *equipment.Controller
 	if r.settings.Capabilities.Equipment {

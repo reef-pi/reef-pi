@@ -17,6 +17,7 @@ func (c *Controller) Check(tc TC) {
 	reading, err := c.Read(tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
+		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		return
 	}
 	u.Temperature = reading
@@ -92,11 +93,11 @@ func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
 	format := "Current temperature (%f) is out of acceptable range ( %f -%f )"
 	body := fmt.Sprintf(format, reading, tc.Notify.Min, tc.Notify.Max)
 	if reading >= tc.Notify.Max {
-		c.telemetry.Alert(subject, "Tank is running hot."+body)
+		c.c.Telemetry().Alert(subject, "Tank is running hot."+body)
 		return
 	}
 	if reading <= tc.Notify.Min {
-		c.telemetry.Alert(subject, "Tank is running cold. "+body)
+		c.c.Telemetry().Alert(subject, "Tank is running cold. "+body)
 		return
 	}
 }

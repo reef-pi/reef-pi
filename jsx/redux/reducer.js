@@ -6,6 +6,8 @@ export const rootReducer = (state, action) => {
   var pHreadings = state.ph_readings
 
   switch (action.type) {
+    case 'ERRORS_LOADED':
+      return { ...state, errors: action.payload }
     case 'INFO_LOADED':
       return { ...state, info: action.payload }
     case 'TELEMETRY_LOADED':

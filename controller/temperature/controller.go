@@ -14,30 +14,28 @@ const UsageBucket = types.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	telemetry types.Telemetry
-	store     types.Store
+	c         types.Controller
 	devMode   bool
 	equipment *equipment.Controller
 	quitters  map[string]chan struct{}
 	statsMgr  types.StatsManager
 }
 
-func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipment.Controller) (*Controller, error) {
+func New(devMode bool, c types.Controller, eqs *equipment.Controller) (*Controller, error) {
 	return &Controller{
-		telemetry: telemetry,
-		store:     store,
+		c:         c,
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  utils.NewStatsManager(store, UsageBucket, 180, 24*7),
+		statsMgr:  utils.NewStatsManager(c.Store(), UsageBucket, 180, 24*7),
 	}, nil
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(Bucket); err != nil {
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	if err := c.store.CreateBucket(UsageBucket); err != nil {
+	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
 		return err
 	}
 	return nil

@@ -14,34 +14,32 @@ const Bucket = types.ATOBucket
 const UsageBucket = types.ATOUsageBucket
 
 type Controller struct {
-	telemetry types.Telemetry
 	statsMgr  types.StatsManager
-	store     types.Store
 	equipment *equipment.Controller
 	devMode   bool
 	quitters  map[string]chan struct{}
 	mu        *sync.Mutex
 	inlets    *connectors.Inlets
+	c         types.Controller
 }
 
-func New(devMode bool, store types.Store, telemetry types.Telemetry, eqs *equipment.Controller, inlets *connectors.Inlets) (*Controller, error) {
+func New(devMode bool, c types.Controller, eqs *equipment.Controller, inlets *connectors.Inlets) (*Controller, error) {
 	return &Controller{
 		devMode:   devMode,
 		mu:        &sync.Mutex{},
-		store:     store,
 		inlets:    inlets,
-		telemetry: telemetry,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  utils.NewStatsManager(store, UsageBucket, 180, 24*7),
+		statsMgr:  utils.NewStatsManager(c.Store(), UsageBucket, 180, 24*7),
+		c:         c,
 	}, nil
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(Bucket); err != nil {
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.store.CreateBucket(UsageBucket)
+	return c.c.Store().CreateBucket(UsageBucket)
 }
 
 func (c *Controller) Start() {

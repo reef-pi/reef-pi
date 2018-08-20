@@ -21,23 +21,21 @@ var DefaultConfig = Config{
 }
 
 type Controller struct {
-	store     types.Store
-	jacks     *connectors.Jacks
-	stopCh    chan struct{}
-	telemetry types.Telemetry
-	config    Config
-	running   bool
-	mu        *sync.Mutex
+	jacks   *connectors.Jacks
+	stopCh  chan struct{}
+	config  Config
+	running bool
+	mu      *sync.Mutex
+	c       types.Controller
 }
 
-func New(conf Config, jacks *connectors.Jacks, store types.Store, bus i2c.Bus, telemetry types.Telemetry) (*Controller, error) {
+func New(conf Config, c types.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
 	return &Controller{
-		telemetry: telemetry,
-		store:     store,
-		jacks:     jacks,
-		config:    conf,
-		stopCh:    make(chan struct{}),
-		mu:        &sync.Mutex{},
+		c:      c,
+		jacks:  jacks,
+		config: conf,
+		stopCh: make(chan struct{}),
+		mu:     &sync.Mutex{},
 	}, nil
 }
 
@@ -50,7 +48,7 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(Bucket); err != nil {
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
 	lights, err := c.List()
@@ -59,7 +57,7 @@ func (c *Controller) Setup() error {
 	}
 	for _, light := range lights {
 		for _, ch := range light.Channels {
-			c.telemetry.CreateFeedIfNotExist(light.Name + "-" + ch.Name)
+			c.c.Telemetry().CreateFeedIfNotExist(light.Name + "-" + ch.Name)
 		}
 	}
 	return nil

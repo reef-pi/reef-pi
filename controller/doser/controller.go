@@ -9,24 +9,22 @@ import (
 )
 
 type Controller struct {
-	DevMode   bool
-	store     types.Store
-	telemetry types.Telemetry
-	mu        *sync.Mutex
-	runner    *cron.Cron
-	cronIDs   map[string]cron.EntryID
-	jacks     *connectors.Jacks
+	DevMode bool
+	c       types.Controller
+	mu      *sync.Mutex
+	runner  *cron.Cron
+	cronIDs map[string]cron.EntryID
+	jacks   *connectors.Jacks
 }
 
-func New(devMode bool, store types.Store, jacks *connectors.Jacks, t types.Telemetry) (*Controller, error) {
+func New(devMode bool, c types.Controller, jacks *connectors.Jacks) (*Controller, error) {
 	return &Controller{
-		DevMode:   devMode,
-		store:     store,
-		jacks:     jacks,
-		cronIDs:   make(map[string]cron.EntryID),
-		telemetry: t,
-		mu:        &sync.Mutex{},
-		runner:    cron.New(),
+		DevMode: devMode,
+		jacks:   jacks,
+		cronIDs: make(map[string]cron.EntryID),
+		mu:      &sync.Mutex{},
+		runner:  cron.New(),
+		c:       c,
 	}, nil
 }
 
@@ -41,7 +39,7 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	return c.c.Store().CreateBucket(Bucket)
 }
 
 func (c *Controller) loadAllSchedule() error {

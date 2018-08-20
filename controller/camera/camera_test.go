@@ -10,12 +10,12 @@ import (
 )
 
 func TestCamera(t *testing.T) {
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	c, err := New(store, true)
+	c, err := New(true, con)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -73,12 +73,12 @@ func TestCamera(t *testing.T) {
 	c.run()
 	conf := c.config
 	conf.TickInterval = -1
-	if err := saveConfig(store, conf); err == nil {
+	if err := saveConfig(con.Store(), conf); err == nil {
 		t.Error("config should not be saved if period is negative")
 	}
 	conf = c.config
 	conf.ImageDirectory = ""
-	if err := saveConfig(store, conf); err == nil {
+	if err := saveConfig(con.Store(), conf); err == nil {
 		t.Error("config should not be saved if image directory is empty")
 	}
 }

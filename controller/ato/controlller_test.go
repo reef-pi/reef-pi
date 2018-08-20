@@ -10,23 +10,22 @@ import (
 )
 
 func TestController(t *testing.T) {
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
-	telemetry := utils.TestTelemetry()
 	conf := equipment.Config{DevMode: true}
-	outlets := connectors.NewOutlets(store)
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	inlets := connectors.NewInlets(store)
+	inlets := connectors.NewInlets(con.Store())
 	inlets.DevMode = true
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipment.New(conf, outlets, store, telemetry)
+	eqs := equipment.New(conf, outlets, con.Store(), con.Telemetry())
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
@@ -39,10 +38,10 @@ func TestController(t *testing.T) {
 	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16}); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, store, telemetry, eqs, inlets)
+	c, e := New(true, con, eqs, inlets)
 
-	if err != nil {
-		t.Error(err)
+	if e != nil {
+		t.Error(e)
 	}
 	if err := c.Setup(); err != nil {
 		t.Error(err)

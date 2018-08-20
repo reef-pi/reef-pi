@@ -32,7 +32,7 @@ type Notify struct {
 
 func (c *Controller) Get(id string) (TC, error) {
 	var tc TC
-	return tc, c.store.Get(Bucket, id, &tc)
+	return tc, c.c.Store().Get(Bucket, id, &tc)
 }
 
 func (c Controller) List() ([]TC, error) {
@@ -45,7 +45,7 @@ func (c Controller) List() ([]TC, error) {
 		tcs = append(tcs, tc)
 		return nil
 	}
-	return tcs, c.store.List(Bucket, fn)
+	return tcs, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(tc TC) error {
@@ -58,7 +58,7 @@ func (c *Controller) Create(tc TC) error {
 		tc.ID = id
 		return &tc
 	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 	if tc.Enable {
@@ -76,7 +76,7 @@ func (c *Controller) Update(id string, tc TC) error {
 	if tc.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", tc.Period)
 	}
-	if err := c.store.Update(Bucket, id, tc); err != nil {
+	if err := c.c.Store().Update(Bucket, id, tc); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[tc.ID]
@@ -93,10 +93,10 @@ func (c *Controller) Update(id string, tc TC) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.store.Delete(Bucket, id); err != nil {
+	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
-	if err := c.store.Delete(UsageBucket, id); err != nil {
+	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
 		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
 	}
 	quit, ok := c.quitters[id]

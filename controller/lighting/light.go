@@ -26,7 +26,7 @@ type Light struct {
 
 func (c *Controller) Get(id string) (Light, error) {
 	var l Light
-	return l, c.store.Get(Bucket, id, &l)
+	return l, c.c.Store().Get(Bucket, id, &l)
 }
 
 func (c Controller) List() ([]Light, error) {
@@ -39,7 +39,7 @@ func (c Controller) List() ([]Light, error) {
 		ls = append(ls, l)
 		return nil
 	}
-	return ls, c.store.List(Bucket, fn)
+	return ls, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(l Light) error {
@@ -71,18 +71,18 @@ func (c *Controller) Create(l Light) error {
 		l.ID = id
 		return &l
 	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return nil
 	}
 	for _, ch := range l.Channels {
-		c.telemetry.CreateFeedIfNotExist(l.Name + "-" + ch.Name)
+		c.c.Telemetry().CreateFeedIfNotExist(l.Name + "-" + ch.Name)
 	}
 	return nil
 }
 
 func (c *Controller) Update(id string, l Light) error {
 	l.ID = id
-	if err := c.store.Update(Bucket, id, l); err != nil {
+	if err := c.c.Store().Update(Bucket, id, l); err != nil {
 		return err
 	}
 	c.syncLight(l)
@@ -94,7 +94,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	return c.store.Delete(Bucket, id)
+	return c.c.Store().Delete(Bucket, id)
 }
 
 func (c *Controller) syncLight(light Light) {
@@ -108,6 +108,6 @@ func (c *Controller) syncLight(light Light) {
 			v = ch.Max
 		}
 		c.UpdateChannel(light.Jack, ch, v)
-		c.telemetry.EmitMetric(light.Name+"-"+ch.Name, v)
+		c.c.Telemetry().EmitMetric(light.Name+"-"+ch.Name, v)
 	}
 }

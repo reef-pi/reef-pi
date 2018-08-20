@@ -10,18 +10,17 @@ import (
 )
 
 func TestTemperatureAPI(t *testing.T) {
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	conf := equipment.Config{DevMode: true}
-	outlets := connectors.NewOutlets(store)
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipment.New(conf, outlets, store, telemetry)
+	eqs := equipment.New(conf, outlets, con.Store(), con.Telemetry())
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
@@ -43,7 +42,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := eqs.Create(eq); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, store, telemetry, eqs)
+	c, err := New(true, con, eqs)
 	if err != nil {
 		t.Fatal(err)
 	}

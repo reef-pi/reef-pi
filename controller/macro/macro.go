@@ -14,7 +14,7 @@ type Macro struct {
 
 func (s *Subsystem) Get(id string) (Macro, error) {
 	var m Macro
-	return m, s.store.Get(Bucket, id, &m)
+	return m, s.controller.Store().Get(Bucket, id, &m)
 }
 func (s *Subsystem) List() ([]Macro, error) {
 	ms := []Macro{}
@@ -26,7 +26,7 @@ func (s *Subsystem) List() ([]Macro, error) {
 		ms = append(ms, m)
 		return nil
 	}
-	return ms, s.store.List(Bucket, fn)
+	return ms, s.controller.Store().List(Bucket, fn)
 }
 
 func (s *Subsystem) Create(m Macro) error {
@@ -35,19 +35,19 @@ func (s *Subsystem) Create(m Macro) error {
 		m.Enable = false // macros are always enabled by run
 		return &m
 	}
-	return s.store.Create(Bucket, fn)
+	return s.controller.Store().Create(Bucket, fn)
 }
 
 func (s *Subsystem) Update(id string, m Macro) error {
 	m.ID = id
-	return s.store.Update(Bucket, id, m)
+	return s.controller.Store().Update(Bucket, id, m)
 }
 
 func (s *Subsystem) Delete(id string) error {
-	if err := s.store.Delete(Bucket, id); err != nil {
+	if err := s.controller.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
-	if err := s.store.Delete(UsageBucket, id); err != nil {
+	if err := s.controller.Store().Delete(UsageBucket, id); err != nil {
 		log.Println("ERROR:  macro subsystem: Failed to deleted usage details for macro:", id)
 	}
 	return nil
