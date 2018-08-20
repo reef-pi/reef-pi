@@ -1,6 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
-import Light from './light'
+import Light from '../lights/light'
 import {showAlert} from 'utils/alert'
 import {confirm} from 'utils/confirm'
 import {updateLight, fetchLights, createLight, deleteLight} from 'redux/actions/lights'
@@ -21,17 +21,7 @@ class main extends React.Component {
     this.addLight = this.addLight.bind(this)
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
-    this.removeLight = this.removeLight.bind(this)
     this.newLightUI = this.newLightUI.bind(this)
-  }
-
-  removeLight (id) {
-    return (function () {
-      confirm('Are you sure ?')
-        .then(function () {
-          this.props.deleteLight(id)
-        }.bind(this))
-    }.bind(this))
   }
 
   componentWillMount () {
@@ -82,7 +72,7 @@ class main extends React.Component {
     $.each(this.props.lights, function (i, light) {
       lights.push(
         <div key={'light-' + i} className='list-group-item'>
-          <Light config={light} hook={this.props.updateLight} remove={this.removeLight} />
+          <Light config={light} save={this.props.updateLight} remove={this.props.deleteLight} />
         </div>
       )
     }.bind(this))

@@ -88,8 +88,6 @@ class mainPanel extends React.Component {
         {this.navs(tab)}
         {body}
         <hr />
-        <NewLights />
-        <hr />
         <Summary />
       </div>
     )

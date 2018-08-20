@@ -6,7 +6,7 @@ export default class AutoProfile extends React.Component {
     super(props)
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
-    if (Array.isArray(props.config.values)){
+    if (props.config && props.config.values && Array.isArray(props.config.values)){
       this.state = {
         values: props.config.values
       }
@@ -90,7 +90,7 @@ export default class AutoProfile extends React.Component {
                 disabled={this.props.readOnly}
               />  
             </div>
-            <div className="col-6 col-md-12 col-sm-6 order-md-last order-first">
+            <div className="col-6 col-md-12 col-sm-6 order-md-last order-first px-0">
               {labels[i]}
             </div>
           </div>

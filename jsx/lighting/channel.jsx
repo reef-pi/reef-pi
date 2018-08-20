@@ -162,7 +162,7 @@ export default class Channel extends React.Component {
               className='form-control'
               disabled={this.props.readOnly}
             />
-            <span className='badge'>({this.state.channel.pin})</span>
+            <span className='badge badge-secondary'>({this.state.channel.pin})</span>
           </div>
           <input
             type='button'

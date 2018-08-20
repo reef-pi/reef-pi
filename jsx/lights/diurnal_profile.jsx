@@ -5,8 +5,8 @@ export default class DiurnalProfile extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      start: props.config.start || '',
-      end: props.config.end || ''
+      start: props.config && props.config.start || '',
+      end: props.config && props.config.end || ''
     }
     this.handleChange = this.handleChange.bind(this)
   }

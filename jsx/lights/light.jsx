@@ -1,59 +1,45 @@
 import React, {Component} from 'react'
 import LightChannel from './light_channel'
 import update from 'immutability-helper'
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import PropTypes from 'prop-types'
+import {confirm} from '../utils/confirm'
 
 class Light extends Component {
   constructor(props){
     super(props)
 
-    this.state={
+    this.state = {
+      id: props.config.id,
+      name: props.config.name,
+      channels: props.config.channels,
+      jack: props.config.jack,
       readOnly: true,
-      id: 4,
-      jack: 3,
-      name: 'Kessil',
-      channels: {
-        '5': {
-          name: 'channel-1',
-          color: '',
-          start_min: 0,
-          min: 0,
-          max: 100,
-          pin: 5,
-          reverse: false,
-          profile: {
-            type: 'auto',
-            config: {
-              values: [0,0,0,10,20,40,30,30,0,0,0,0]
-            }
-          }
-        },
-        '6': {
-          name: 'channel-2',
-          color: '',
-          start_min: 0,
-          min: 0,
-          max: 100,
-          pin: 5,
-          reverse: false,
-          profile: {
-            type: 'diurnal',
-            config: {
-              start: '11:44',
-              end: '20:00'
-            }
-          }
-        }
-      }
+      expand: false
     }
-
+   
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
     this.handleChannelChange = this.handleChannelChange.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.toggleExpand = this.toggleExpand.bind(this)
     
   }
 
-  handleFormSubmit(e){    
-    console.log('handling the form submit')
+  handleFormSubmit(e){
+    e.preventDefault()
+    //TODO: [ML] Validation
+    
+    const payload = {
+      name: this.props.config.name,
+      channels: this.state.channels,
+      jack: this.props.config.jack
+    }
+    for (let x in payload.channels) {
+      payload.channels[x].reverse = (payload.channels[x].reverse == 'true')
+    }
+    this.props.save(this.props.config.id, payload)
+    this.setState({readOnly: true, expand: false})
   }
 
   handleChannelChange(e, channelNum){
@@ -77,9 +63,28 @@ class Light extends Component {
     this.setState(change)
   }
 
-  /*
-  onChangeHandler={this.handleChannelChange.bind(this, this.state.channels[5])} 
-  */
+  handleEdit(e){
+    e.stopPropagation()
+    this.setState({readOnly: false, expand: true})
+  }
+
+  handleDelete(e){
+    e.stopPropagation()
+    const message = (
+      <div>
+        <p>This action will delete {this.props.config.name} and its configuration.</p>
+      </div>
+    )
+     
+    confirm('Delete ' + this.props.config.name, {description: message})
+      .then(function(){
+        this.props.remove(this.props.config.id)
+      }.bind(this))    
+  }
+
+  toggleExpand(){
+    this.setState({expand: !this.state.expand})
+  }
 
   render(){
 
@@ -102,11 +107,10 @@ class Light extends Component {
     if(this.state.readOnly){
       editButton = (
         <button type="button" 
-          onClick={(e) => {
-            e.stopPropagation()
-            this.setState({readOnly: false, expand: true})
-          }}
-          className="btn btn-sm btn-link float-right d-block d-sm-inline">Edit</button>
+          onClick={this.handleEdit}
+          className="btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2">
+          Edit
+        </button>
       )
     }
     else {
@@ -116,30 +120,28 @@ class Light extends Component {
         </div>
       )
     }
-
     
     const cursorStyle = {
       cursor: 'pointer'
     }
 
     return (
-      <form className="list-group-item" onSubmit={this.handleFormSubmit}>
+      <form className="todo" onSubmit={this.handleFormSubmit}>
         <div className="container">
-          <div className="row"
+          <div className="row mb-1"
             style={cursorStyle}
-            onClick={() => this.setState({expand: !this.state.expand})}>
+            onClick={this.toggleExpand}>
             <div className="col-12 col-sm-6 col-md-3 order-sm-last">
-              {editButton}
               <button type="button" 
-                onClick={(e) => {
-                  e.stopPropagation()
-                  alert('TODO')
-                }}
-                className="btn btn-sm btn-link float-right d-block d-sm-inline">Delete</button>
+                onClick={this.handleDelete}
+                className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
+                Delete
+              </button>
+              {editButton}
             </div>
             <div className="col-12 col-sm-6 col-md-9 order-sm-first">  
               {this.state.expand ? FaAngleUp() : FaAngleDown()}
-              <b className="ml-2">{this.state.name}</b>              
+              <b className="ml-2 align-middle">{this.state.name}</b>              
             </div>
           </div>
           {channels}
@@ -148,6 +150,12 @@ class Light extends Component {
       </form>
     )
   }
+}
+
+Light.propTypes = {
+  config: PropTypes.object.isRequired,
+  save: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired
 }
 
 export default Light

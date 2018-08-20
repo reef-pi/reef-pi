@@ -17,6 +17,7 @@ const ProfileSelector = (props) => {
       <div className='d-sm-none'>
         <select className="custom-select"
           name={props.name + uuid}
+          value={props.value}
           onChange={handleChange} >
           <option value="fixed">Fixed</option>
           <option value="auto">Auto</option>
