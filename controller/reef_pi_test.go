@@ -21,7 +21,6 @@ func TestReefPi(t *testing.T) {
 		t.Fatal(err)
 	}
 	store.Close()
-
 	r, err := New("0.1", conf.Database)
 	if err != nil {
 		t.Fatal("Failed to create new reef-pi controller. Error:", err)
@@ -39,19 +38,11 @@ func TestReefPi(t *testing.T) {
 	if err := r.API(); err != nil {
 		t.Error(err)
 	}
-
 	if _, err := r.Subsystem("timers"); err != nil {
 		t.Error(err)
 	}
-
-	if err := r.LogError("test-error", "test message"); err != nil {
-		t.Error(err)
-	}
-	if _, err := r.ListErrors(); err != nil {
-		t.Error(err)
-	}
-	if err := r.DeleteErrors(); err != nil {
-		t.Error(err)
+	if _, err := r.Subsystem("invalid"); err == nil {
+		t.Errorf("invalid subsystem fetch should fail")
 	}
 	if err := r.Stop(); err != nil {
 		t.Fatal(err)

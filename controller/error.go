@@ -62,8 +62,7 @@ func (r *ReefPi) listErrors(w http.ResponseWriter, req *http.Request) {
 
 func (r *ReefPi) getError(w http.ResponseWriter, req *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		var er Error
-		return er, r.store.Get(types.ErrorBucket, id, &er)
+		return r.GetError(id)
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
