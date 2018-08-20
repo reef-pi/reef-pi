@@ -2,6 +2,7 @@ import React from 'react'
 import ColorPicker from './color_picker'
 import ProfileSelector from './profile_selector'
 import Profile from './profile'
+import Percent from './percent'
 
 const Channel = (props) => {
 
@@ -19,7 +20,10 @@ const Channel = (props) => {
       <div className="row align-items-start">
         <div className="col-sm-6 col-md-4 col-xl-2">
           <div className="form-group">
-            <label>Channel Name</label>
+            <label className="w-100">
+              Name 
+              <small className="float-right badge badge-info mt-1">(pin {props.channel.pin})</small>
+            </label>
             <input type="text" className="form-control" 
               placeholder="Enter Channel Name"
               name="name"
@@ -43,7 +47,8 @@ const Channel = (props) => {
             <select className="custom-select"
               name="reverse"
               disabled={props.readOnly}
-              onChange={handleChange} >
+              onChange={handleChange}
+              value={props.channel.reverse}>
               <option value="false">Active High</option>
               <option value="true">Active Low</option>
             </select>
@@ -52,7 +57,7 @@ const Channel = (props) => {
         <div className="col-sm-6 col-md-4 col-xl-2">
           <div className="form-group">
             <label>Min</label>
-            <input type="text" className="form-control"
+            <Percent type="text" className="form-control"
               name="min" 
               disabled={props.readOnly}
               onChange={handleChange}
@@ -62,7 +67,7 @@ const Channel = (props) => {
         <div className="col-sm-6 col-md-4 col-xl-2">
           <div className="form-group">
             <label>Max</label>
-            <input type="text" className="form-control"
+            <Percent type="text" className="form-control"
               name="max"
               disabled={props.readOnly}
               onChange={handleChange}
@@ -72,7 +77,7 @@ const Channel = (props) => {
         <div className="col-sm-6 col-md-4 col-xl-2">
           <div className="form-group">
             <label>Start</label>
-            <input type="text" className="form-control"
+            <Percent type="text" className="form-control"
               name="start_min"
               disabled={props.readOnly}
               onChange={handleChange} 
