@@ -163,24 +163,31 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 	if err := r.loadTimerSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load timer subsystem. Error:", err)
+		r.LogError("subsystem-timer", "Failed to load timer subsystem. Error:"+err.Error())
 	}
 	if err := r.loadATOSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load ATO subsystem. Error:", err)
+		r.LogError("sub-system-ato", "Failed to load ATO subsystem. Error:"+err.Error())
 	}
 	if err := r.loadTemperatureSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load temperature subsystem. Error:", err)
+		r.LogError("subsystem-temperature", "Failed to load temperature subsystem. Error:"+err.Error())
 	}
 	if err := r.loadLightingSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load lighting subsystem. Error:", err)
+		r.LogError("subsystem-lighting", "Failed to load lighting subsystem. Error:"+err.Error())
 	}
 	if err := r.loadDoserSubsystem(r.jacks); err != nil {
 		log.Println("ERROR: Failed to load doser subsystem. Error:", err)
+		r.LogError("subsystem-doser", "Failed to load doser subsystem. Error:"+err.Error())
 	}
 	if err := r.loadCameraSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load camera subsystem. Error:", err)
+		r.LogError("subsystem-camera", "Failed to load camera subsystem. Error:"+err.Error())
 	}
 	if err := r.loadPhSubsystem(r.bus); err != nil {
 		log.Println("ERROR: Failed to load ph subsystem. Error:", err)
+		r.LogError("subsystem-ph", "Failed to load ph subsystem. Error:"+err.Error())
 	}
 	if err := r.loadMacroSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load macro subsystem. Error:", err)
@@ -188,6 +195,7 @@ func (r *ReefPi) loadSubsystems() error {
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {
 			log.Println("ERROR: Failed to setup subsystem:", sName)
+			r.LogError("subsystem-"+sName+"-setup", "Failed to setup subsystem: "+sName+". Error: "+err.Error())
 			return err
 		}
 		sController.Start()
