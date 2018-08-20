@@ -23,7 +23,7 @@ const ProfileSelector = (props) => {
           <option value="diurnal">Diurnal</option>
         </select>
       </div>
-      <div className='btn-group d-none d-sm-block'>
+      <div className='btn-group  d-none d-sm-inline'>
         <label className='btn btn-secondary'>
           <input type='radio' value='fixed'
             checked={props.value === 'fixed'}

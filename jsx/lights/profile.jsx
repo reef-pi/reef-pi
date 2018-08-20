@@ -6,37 +6,39 @@ import Auto from './auto_profile'
 
 const Profile = (props) => {
   
-  const handleChange = e => {
+  const handleConfigChange = e => {
     const event = {
       target: {
-        name: props.name + '.' + e.target.name,
-        value: e.target.value
+        name: props.name,
+        value: e
       }
     }
-
     props.onChangeHandler(event)
-  }
-
-  const handleConfigChange = e => {
-    debugger;
   }
 
   if (props.type == 'fixed'){
     return (
       <Fixed 
+        name="config"
+        readOnly={props.readOnly}
         config={props.config} 
-        onChangeHandler={handleChange} />
+        onChangeHandler={handleConfigChange} />
     )
   }
   else if (props.type == 'diurnal'){
     return (
-      <Diurnal config={props.config} 
-        onChangeHandler={handleChange} />
+      <Diurnal name="config"
+        readOnly={props.readOnly}
+        config={props.config} 
+        onChangeHandler={handleConfigChange} />
     )
   }
   else if (props.type == 'auto'){
     return (
-      <Auto config={props.config} 
+      <Auto
+        name="config" 
+        readOnly={props.readOnly}
+        config={props.config} 
         onChangeHandler={handleConfigChange} />
     )
   }
@@ -49,6 +51,7 @@ const Profile = (props) => {
 
 Profile.propTypes = {
   type: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
   config: PropTypes.object,
   onChangeHandler: PropTypes.func
 }

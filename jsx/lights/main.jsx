@@ -7,6 +7,7 @@ class FormContainer extends Component {
     super(props)
 
     this.state={
+      readOnly: true,
       id: 4,
       jack: 3,
       name: 'Kessil',
@@ -20,10 +21,9 @@ class FormContainer extends Component {
           pin: 5,
           reverse: false,
           profile: {
-            type: 'diurnal',
+            type: 'auto',
             config: {
-              start: '11:00',
-              end: '19:00'
+              values: [0,0,0,10,20,40,30,30,0,0,0,0]
             }
           }
         },
@@ -36,8 +36,11 @@ class FormContainer extends Component {
           pin: 5,
           reverse: false,
           profile: {
-            type: '',
-            config: {}
+            type: 'diurnal',
+            config: {
+              start: '11:44',
+              end: '20:00'
+            }
           }
         }
       }
@@ -90,6 +93,7 @@ class FormContainer extends Component {
           {Object.keys(this.state.channels).map((item) => (
             <LightChannel
               key={item}
+              readOnly={this.state.readOnly}
               onChangeHandler={this.handleChannelChange} 
               channel={this.state.channels[item]}
               channelNum={item}>
