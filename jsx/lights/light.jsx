@@ -10,10 +10,10 @@ class Light extends Component {
     super(props)
 
     this.state = {
-      id: props.config.id,
-      name: props.config.name,
-      channels: props.config.channels,
-      jack: props.config.jack,
+      id: props.values.config.id,
+      name: props.values.config.name,
+      //channels: props.values.config.channels,
+      jack: props.values.config.jack,
       readOnly: true,
       expand: false
     }
@@ -32,7 +32,7 @@ class Light extends Component {
     
     const payload = {
       name: this.props.config.name,
-      channels: this.state.channels,
+      channels: this.props.values.config.channels,
       jack: this.props.config.jack
     }
     for (let x in payload.channels) {
@@ -53,7 +53,7 @@ class Light extends Component {
       current[key] = current[key] || path.length == 0 ? {$set: e.target.value} : {}
       current = current[key]
     }
-    
+    /*
     let change = update(this.state, {
       'channels': {
         [channelNum]: target
@@ -61,6 +61,8 @@ class Light extends Component {
     })
 
     this.setState(change)
+    */
+    this.props.handleChange(e)
   }
 
   handleEdit(e){
@@ -93,12 +95,15 @@ class Light extends Component {
     let editButton = <span />
 
     if (this.state.expand){
-      channels = Object.keys(this.state.channels).map((item) => (
+      channels = Object.keys(this.props.values.config.channels).map((item) => (
         <LightChannel
+          {...this.props}
           key={item}
+          name={'config.channels.' + item}
           readOnly={this.state.readOnly}
+          onBlur={this.props.handleBlur}
           onChangeHandler={this.handleChannelChange} 
-          channel={this.state.channels[item]}
+          channel={this.props.values.config.channels[item]}
           channelNum={item}>
         </LightChannel>
       ))
@@ -126,12 +131,12 @@ class Light extends Component {
     }
 
     return (
-      <form className="todo" onSubmit={this.handleFormSubmit}>
+      <form onSubmit={this.handleFormSubmit}>
         <div className="container">
           <div className="row mb-1"
             style={cursorStyle}
             onClick={this.toggleExpand}>
-            <div className="col-12 col-sm-6 col-md-3 order-sm-last">
+            <div className="col-12 col-sm-6 col-md-4 order-sm-last">
               <button type="button" 
                 onClick={this.handleDelete}
                 className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
@@ -139,7 +144,7 @@ class Light extends Component {
               </button>
               {editButton}
             </div>
-            <div className="col-12 col-sm-6 col-md-9 order-sm-first">  
+            <div className="col-12 col-sm-6 col-md-8 order-sm-first">  
               {this.state.expand ? FaAngleUp() : FaAngleDown()}
               <b className="ml-2 align-middle">{this.state.name}</b>              
             </div>
