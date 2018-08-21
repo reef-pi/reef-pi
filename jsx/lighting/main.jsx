@@ -1,6 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
-import Light from '../lights/light'
+import Light from '../lights/light_form'
 import {showAlert} from 'utils/alert'
 import {confirm} from 'utils/confirm'
 import {updateLight, fetchLights, createLight, deleteLight} from 'redux/actions/lights'

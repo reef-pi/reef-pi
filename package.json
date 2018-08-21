@@ -16,6 +16,7 @@
     "jquery": "^3.3.1",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
+    "lodash.mapvalues": "^4.6.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
     "react": "^16.3.2",

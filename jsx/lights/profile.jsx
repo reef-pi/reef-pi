@@ -19,26 +19,27 @@ const Profile = (props) => {
   if (props.type == 'fixed'){
     return (
       <Fixed 
-        name="config"
+        {...props}
         readOnly={props.readOnly}
-        config={props.config} 
+        config={props.value} 
         onChangeHandler={handleConfigChange} />
     )
   }
   else if (props.type == 'diurnal'){
     return (
-      <Diurnal name="config"
+      <Diurnal
+        {...props}
+        value={props.value}
         readOnly={props.readOnly}
-        config={props.config} 
-        onChangeHandler={handleConfigChange} />
+        onChange={props.onChangeHandler} />
     )
   }
   else if (props.type == 'auto'){
     return (
       <Auto
-        name="config" 
+        {...props}
         readOnly={props.readOnly}
-        config={props.config} 
+        config={props.value} 
         onChangeHandler={handleConfigChange} />
     )
   }
