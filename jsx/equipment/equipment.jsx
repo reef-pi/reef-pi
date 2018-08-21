@@ -59,7 +59,7 @@ export default class Equipment extends React.Component {
     var payload = {
       name: this.state.name,
       outlet: this.state.outlet.id,
-      on: this.state.action === 'on'
+      on: this.state.action !== 'on'
     }
     this.props.update(payload)
     this.setState({
