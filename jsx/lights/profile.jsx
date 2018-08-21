@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Diurnal from './diurnal_profile'
 import Fixed from './fixed_profile'
 import Auto from './auto_profile'
+import {ErrorFor, NameFor, ShowError} from '../utils/validation_helper'   
 
 const Profile = (props) => {
   
