@@ -4,12 +4,9 @@ import PropTypes from 'prop-types'
 export const ErrorFor = (props) => {
   
   const getErrors = () => {
-    if (props.name == 'config.channels.4.profile.config.value') console.log('Getting Errors for ' + props.name)
     if (ShowError(props, props.name)){
-      if (props.name == 'config.channels.4.profile.config.value') console.log('Should show')
       return ErrorMessage(props, props.name)
     }
-    if (props.name == 'config.channels.4.profile.config.value') console.log('Should not show')
     return null
   }
 
@@ -34,16 +31,19 @@ export const NameFor = (props, name) => {
 export const ShowError = (props, name) => {
   var touched = PathToObject(name, props.touched)
   var err = PathToObject(name, props.errors)
-  if (props.name == 'config.channels.4.profile.config.value') console.log('Touched is ' + touched)
-  if (props.name == 'config.channels.4.profile.config.value') console.log('Err is ' + err)
   return touched && err
 }
 
 export const ErrorMessage = (props, name) => {
   var err = PathToObject(name, props.errors)
-  if (props.name == 'config.channels.4.profile.config.value') console.log('Error is ' + err)
-  if (typeof err === 'string' || err instanceof String)
+  if (typeof err === 'string' || err instanceof String){
     return err
+  }
+  else if (Array.isArray(err)){
+    for(let i = 0; i < err.length; i++){
+      if (err[i]) return err[i]
+    }
+  }
   return null
 }
 

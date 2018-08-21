@@ -34,8 +34,6 @@ const Channel = (props) => {
   }
 
   const handleConfigChange = e => {
-    console.log('config changed')
-    //props.onChangeHandler(e, props.channelNum)
     const event = {
       target: {
         name: e.target.name,
@@ -155,7 +153,6 @@ const Channel = (props) => {
             onChangeHandler={handleChange} />
         </div>
       </div>
-      <pre>({JSON.stringify(props.errors, null, 2)})</pre>
     </div>
   )
 }

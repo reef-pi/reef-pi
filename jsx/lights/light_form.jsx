@@ -40,7 +40,6 @@ const channelSchema = Yup.object().shape({
     .max(100, 'Start must be less than or equal to 100')
     .required('Start is required'),
   profile: Yup.lazy(value => {
-    console.log('Validation for ' + value.type)
     switch(value.type){
     case 'diurnal':
       return diurnalSchema
@@ -83,7 +82,19 @@ const fixedSchema = Yup.object().shape({
     })
 })
 
-const autoSchema = Yup.object()
+const autoSchema = Yup.object().shape({
+  type: Yup.string().required('Profile type is required'),
+  config: Yup.object()
+    .typeError('A profile must be configured')
+    .shape({
+      values: Yup.array().of(Yup.number()
+        .typeError('Value is required')
+        .min(0, 'Value must be greater than or equal to 0')
+        .max(100, 'Value must be less than or equal to 100')
+        .required('Value is required')
+      )
+    })
+})
 
 const LightForm = withFormik({
   mapPropsToValues: props => ({config: props.config, remove: props.remove}),
