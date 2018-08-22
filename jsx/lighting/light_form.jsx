@@ -12,7 +12,7 @@ const LightForm = withFormik({
       jack: values.config.jack
     }
     for (let x in payload.channels) {
-      payload.channels[x].reverse = (payload.channels[x].reverse == 'true')
+      payload.channels[x].reverse = (payload.channels[x].reverse === 'true' || payload.channels[x].reverse === true)
     }
     formikBag.props.save(values.config.id, payload)
   }

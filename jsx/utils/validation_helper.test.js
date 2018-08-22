@@ -63,13 +63,13 @@ describe('Validation Helper', () => {
     const errors = {field1: [null, null, 'some error', 'error 2']}
     const touched = {field1: true}
 
-    const m = shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
   })
 
   it('<ErrorFor /> without error', () => {
     const errors = {field2: [null, null, 'some error', 'error 2']}
     const touched = {field1: true}
 
-    const m = shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
   })
 })

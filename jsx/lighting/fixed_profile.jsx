@@ -6,7 +6,7 @@ export default class FixedProfile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: props.config && props.config.value || '0'
+      value: (props.config && props.config.value) || '0'
     }
 
     this.handleChange = this.handleChange.bind(this)

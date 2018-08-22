@@ -48,7 +48,7 @@ describe('Lighting ui', () => {
   })
 
   it('<LightForm />', () => {
-    const m = shallow(<LightForm />).instance()
+    shallow(<LightForm />).instance()
   })
 
   it('<Light />', () => {
@@ -62,7 +62,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    const m = shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
   })
 
   it('<Profile /> fixed', () => {
@@ -92,7 +92,7 @@ describe('Lighting ui', () => {
   })
 
   it('<DiurnalProfile />', () => {
-    const m = shallow(<DiurnalProfile onChangeHandler={() => true} />).instance()
+    shallow(<DiurnalProfile onChangeHandler={() => true} />).instance()
   })
 
   it('<FixedProfile />', () => {

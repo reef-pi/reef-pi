@@ -12,7 +12,7 @@ describe('ColorPicker', () => {
   }
 
   it('<ColorPicker />', () => {
-    const m = shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />)
+    shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />)
   })
 
   it('should start collapsed', () => {

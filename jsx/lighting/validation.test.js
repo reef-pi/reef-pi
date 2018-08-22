@@ -1,7 +1,4 @@
-import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
 import LightSchema from './light_schema'
-import * as Yup from 'yup'
 
 describe('Validation', () => {
   const value = {
