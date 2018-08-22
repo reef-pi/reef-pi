@@ -4,11 +4,13 @@ import Adapter from 'enzyme-adapter-react-16'
 import Channel from './channel'
 import Chart from './chart'
 import Main from './main'
+import LightForm from './light_form'
 import Light from './light'
 import AutoProfile from './auto_profile'
 import DiurnalProfile from './diurnal_profile'
 import FixedProfile from './fixed_profile'
-import Profile from './profile'
+import Profile from './profile' 
+import Percent from './percent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -29,6 +31,7 @@ describe('Lighting ui', () => {
     channels: {
       '1': {
         pin: 0,
+        color: '',
         profile: {
           type: 'auto',
           config: {values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
@@ -42,18 +45,16 @@ describe('Lighting ui', () => {
     m.setJack(0, {})
     m.toggleAddLightDiv()
     m.addLight()
-    m.removeLight('1')()
+  })
+
+  it('<LightForm />', () => {
+    const m = shallow(<LightForm />).instance()
   })
 
   it('<Light />', () => {
-    const m = shallow(<Light config={light} hook={() => {}} remove={() => true} />).instance()
-    m.expand()
-    m.updateValues('1', [])
-    m.getValues('1')()
-    m.setLightMode('1')({target: {}})
-    m.updateChannel('1')(light.channels['1'])
-    m.updateLight()
-    m.updateLight()
+    const values = { config: light }
+    const m = shallow(<Light values={values} config={light} save={() => {}} remove={() => true} />).instance()
+    m.toggleExpand()  
   })
 
   it('<Chart />', () => {
@@ -61,37 +62,48 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    const m = shallow(<Channel config={light.channels['1']} hook={() => {}} />).instance()
-    m.toggle()
-    m.updateMin({target: {}})
-    m.updateMax({target: {}})
-    m.updateReverse({target: {}})
-    m.updateName({target: {}})
-    m.updateStartMin(ev)
-    m.updateColor({hex: '#fff'})
+    const m = shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    
+  })
+
+  it('<Profile /> fixed', () => {
+    const wrapper = shallow(<Profile type='fixed' onChangeHandler={() => true} />)    
+    expect(wrapper.find(FixedProfile).length).toBe(1)
+    expect(wrapper.find(AutoProfile).length).toBe(0)
+    expect(wrapper.find(DiurnalProfile).length).toBe(0)
+  })
+  
+  it('<Profile /> auto', () => {
+    const wrapper = shallow(<Profile type='auto' onChangeHandler={() => true} />)    
+    expect(wrapper.find(FixedProfile).length).toBe(0)
+    expect(wrapper.find(AutoProfile).length).toBe(1)
+    expect(wrapper.find(DiurnalProfile).length).toBe(0)
+  })
+  
+  it('<Profile /> diurnal', () => {
+    const wrapper = shallow(<Profile type='diurnal' onChangeHandler={() => true} />)    
+    expect(wrapper.find(FixedProfile).length).toBe(0)
+    expect(wrapper.find(AutoProfile).length).toBe(0)
+    expect(wrapper.find(DiurnalProfile).length).toBe(1)
   })
 
   it('<AutoProfile />', () => {
-    const m = shallow(<AutoProfile hook={() => true} />).instance()
+    const m = shallow(<AutoProfile onChangeHandler={() => true} />).instance()
     m.curry(1)(ev)
   })
 
   it('<DiurnalProfile />', () => {
-    const m = shallow(<DiurnalProfile hook={() => true} />).instance()
-    m.update('foo')(ev)
+    const m = shallow(<DiurnalProfile onChangeHandler={() => true} />).instance()
   })
 
-  it('<FiexdProfile />', () => {
-    const m = shallow(<FixedProfile hook={() => true} />).instance()
-    m.update(ev)
+  it('<FixedProfile />', () => {
+    const m = shallow(<FixedProfile onChangeHandler={() => true} />).instance()
+    m.handleChange(ev)
   })
 
-  it('<Profile />', () => {
-    const m = shallow(<Profile hook={() => true} type='fixed' />).instance()
-    m.setConfig({})
-    m.setType('fixed')()
-    shallow(<Profile type='auto' />)
-    shallow(<Profile type='diurnal' />)
-    shallow(<Profile type='unknown' />)
+  it('<Percent />', () => {
+    const wrapper = shallow(<Percent value="4" onChange={() => true} />)
+    wrapper.find('input').simulate('change', {target: {value: 34}})
   })
+
 })

@@ -1,20 +1,14 @@
-import React, {Component} from 'react'
-import Light from './light'
-import update from 'immutability-helper'
-import PropTypes from 'prop-types'
-import {confirm} from '../utils/confirm'
-import { Formik, Form, Field, withFormik } from 'formik'
 import * as Yup from 'yup'
 import mapValues from 'lodash.mapvalues'
 
-const lightSchema = Yup.object().shape({
+const LightSchema = Yup.object().shape({
   config: Yup.object().shape({
     channels: Yup.lazy(obj =>
       Yup.object(
         mapValues(obj, () => {
           return channelSchema
-        })  
-      )    
+        })
+      )
     )
   })
 })
@@ -41,16 +35,16 @@ const channelSchema = Yup.object().shape({
     .required('Start is required'),
   profile: Yup.lazy(value => {
     switch(value.type){
-    case 'diurnal':
-      return diurnalSchema
-    case 'fixed':
-      return fixedSchema
-    case 'auto':
-      return autoSchema
-    default:
-      return Yup.object().shape({
-        type: Yup.string().required('Profile type is required')
-      })
+      case 'diurnal':
+        return diurnalSchema
+      case 'fixed':
+        return fixedSchema
+      case 'auto':
+        return autoSchema
+      default:
+        return Yup.object().shape({
+          type: Yup.string().required('Profile type is required')
+        })
     }
   })
 })
@@ -96,20 +90,4 @@ const autoSchema = Yup.object().shape({
     })
 })
 
-const LightForm = withFormik({
-  mapPropsToValues: props => ({config: props.config, remove: props.remove}),
-  validationSchema: lightSchema,
-  handleSubmit: (values, formikBag) => {
-    const payload = {
-      name: values.config.name,
-      channels: values.config.channels,
-      jack: values.config.jack
-    }
-    for (let x in payload.channels) {
-      payload.channels[x].reverse = (payload.channels[x].reverse == 'true')
-    }
-    formikBag.props.save(values.config.id, payload)
-  }
-})(Light)
-
-export default LightForm
+export default LightSchema

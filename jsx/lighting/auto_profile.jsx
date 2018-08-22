@@ -1,29 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
     super(props)
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
+    if (props.config && props.config.values && Array.isArray(props.config.values)){
+      this.state = {
+        values: props.config.values
+      }
+    }
+    else{
+      this.state = {
+        values: Array(12).fill(0)
+      }
+    }    
   }
 
   curry (i) {
     return (ev) => {
-      var values = []
-      if (this.props.config && this.props.config.values) {
-        values = this.props.config.values
+
+      if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)){
+        var val = parseInt(ev.target.value)
+        if (isNaN(val)) 
+          val = ''
+        
+        var values = Object.assign(this.state.values)
+        values[i] = val
+        this.props.onChangeHandler({values: values})
+        this.setState({values: values})
       }
-      values[i] = parseInt(ev.target.value)
-      this.props.hook({values: values})
     }
   }
 
   sliderList () {
-    var values = []
-    if (this.props.config && this.props.config.values) {
-      values = this.props.config.values
-    }
+    var values = Object.assign({}, this.state)
+    values = values.values
+   
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical',
       writingMode: 'bt-lr',
@@ -52,21 +67,35 @@ export default class AutoProfile extends React.Component {
         values[i] = 0
       }
       list.push(
-        <div className='col-sm-1' key={i + 1}>
-          <div className='row text-center'>
-            {values[i]}
-          </div>
-          <input
-            type='range'
-            style={rangeStyle}
-            onChange={this.curry(i)}
-            value={values[i]}
-            id={'intensity-' + i}
-            orient='vertical'
-            disabled={this.props.readOnly}
-          />
-          <div className='row text-center'>
-            {labels[i]}
+        <div className="col-12 col-md-1 text-center" key={i + 1}>
+          <div className="row">
+            <div className="col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last">
+              <input type="text" 
+                name={NameFor(this.props, 'values.'+i)}
+                onBlur={this.props.onBlur}
+                className={ShowError(this.props, NameFor(this.props, 'values.'+i)) ? 'is-invalid form-control form-control-sm mb-1 d-block d-md-none d-lg-block' : 'form-control form-control-sm mb-1 d-block d-md-none d-lg-block'}
+                value={values[i]}
+                onChange={this.curry(i)}
+                disabled={this.props.readOnly} />
+            </div>
+            <div className="d-none d-md-inline d-lg-none col-12">
+              {values[i]}
+            </div>
+            <div className="col-12 col-sm-6 col-md-12 d-none d-md-inline">
+              <input
+                className='d-none d-md-inline'
+                type='range'
+                style={rangeStyle}
+                onChange={this.curry(i)}
+                value={values[i]}
+                id={'intensity-' + i}
+                orient='vertical'
+                disabled={this.props.readOnly}
+              />  
+            </div>
+            <div className="col-6 col-md-12 col-sm-6 order-md-last order-first px-0">
+              {labels[i]}
+            </div>
           </div>
         </div>
       )
@@ -76,10 +105,14 @@ export default class AutoProfile extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='container'>        
         <div className='row'>
           {this.sliderList()}
-        </div>
+          <div className="col-12 order-last text-center">
+            <input className="d-none is-invalid form-control" />
+            <ErrorFor {...this.props} name={NameFor(this.props, 'values')} />
+          </div>
+        </div>  
       </div>
     )
   }
@@ -87,6 +120,6 @@ export default class AutoProfile extends React.Component {
 
 AutoProfile.propTypes = {
   config: PropTypes.object,
-  hook: PropTypes.func,
+  onChangehandler: PropTypes.func,
   readOnly: PropTypes.bool
 }
