@@ -78,8 +78,6 @@
     ]
   },
   "jest": {
-    "verbose": true,
-    "testURL": "http://localhost:8080",
     "moduleDirectories": [
       "node_modules",
       "jsx"
