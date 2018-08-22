@@ -1,56 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import {Field} from 'formik'
 
-export default class DiurnalProfile extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      config: {
-        start: props.config && props.config.start ? props.config.start : '',
-        end: props.config && props.config.end ? props.config.end : ''
-      }
-    }
-    this.update = this.update.bind(this)
-  }
+const DiurnalProfile = (props) => {
 
-  update (k) {
-    var s = this.state.config
-    return (ev) => {
-      s[k] = ev.target.value
-      this.props.hook(s)
-    }
-  }
+  return (
+    <div className="form-inline">
+      
+      <label className='mr-2'>Start Time</label>
+      <Field name={NameFor(props, 'start')}
+        readOnly={props.readOnly}
+        className={ShowError(props, NameFor(props, 'start')) ? 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2'}
+        placeholder="HH:mm"
+      />      
+      <label className='mr-2'>End Time</label>
+      <Field name={NameFor(props, 'end')}
+        readOnly={props.readOnly}
+        className={ShowError(props, NameFor(props, 'end')) ? 'form-control col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control col-12 col-sm-3 col-md-2 col-lg-2'}
+        placeholder="HH:mm"
+      />
+      <ErrorFor {...props} name={NameFor(props, 'start')} />
+      <ErrorFor {...props} name={NameFor(props, 'end')} />
+    </div>
+  )
+}
 
-  render () {
-    return (
-      <div className='form-inline row'>
-        <div className='form-group col-lg-3'>
-          <label>Start</label>
-          <input
-            type='text'
-            readOnly={this.props.readOnly}
-            className='form-control col-lg-6'
-            onChange={this.update('start')}
-            value={this.state.config.start}
-          />
-        </div>
-        <div className='form-group col-lg-3'>
-          <label>End</label>
-          <input
-            type='text'
-            className='form-control col-lg-6'
-            onChange={this.update('end')}
-            readOnly={this.props.readOnly}
-            value={this.state.config.end}
-          />
-        </div>
-      </div>
-    )
-  }
+DiurnalProfile.defaultProps = {
+  start: '',
+  end: ''
 }
 
 DiurnalProfile.propTypes = {
   config: PropTypes.object,
-  hook: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  onChangeHandler: PropTypes.func.isRequired
 }
+
+export default DiurnalProfile

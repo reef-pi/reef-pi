@@ -61,7 +61,7 @@ class mainPanel extends React.Component {
       var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
-          <a id={'tab-' + k}className={cname} onClick={this.setTab(k)}>{k}</a>
+          <a id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
         </li>
       )
     }.bind(this))
@@ -98,6 +98,7 @@ class mainPanel extends React.Component {
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     capabilities: state.capabilities,
