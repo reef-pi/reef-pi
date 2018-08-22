@@ -1,175 +1,139 @@
-import React from 'react'
-import Channel from './channel'
-import $ from 'jquery'
+import React, {Component} from 'react'
+import LightChannel from './channel'
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import PropTypes from 'prop-types'
+import {confirm} from 'utils/confirm'
+import {showAlert, clearAlert} from 'utils/alert'
 
-export default class Light extends React.Component {
-  constructor (props) {
+class Light extends Component {
+  constructor(props){
     super(props)
+
     this.state = {
-      channels: props.config.channels,
-      fixed: props.config.fixed,
-      updated: false,
-      jack: props.config.jack,
-      expand: false,
-      readOnly: true
+      id: props.values.config.id,
+      name: props.values.config.name,
+      jack: props.values.config.jack,
+      readOnly: true,
+      expand: false
     }
-    this.updateValues = this.updateValues.bind(this)
-    this.getValues = this.getValues.bind(this)
-    this.channelList = this.channelList.bind(this)
-    this.setLightMode = this.setLightMode.bind(this)
-    this.updateLight = this.updateLight.bind(this)
-    this.updateChannel = this.updateChannel.bind(this)
-    this.expand = this.expand.bind(this)
+   
+    this.handleEdit = this.handleEdit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.toggleExpand = this.toggleExpand.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    
   }
 
-  expand () {
+  handleFormSubmit(event){
+    event.preventDefault()
+    clearAlert()
+    
+    if (this.props.isValid){
+      this.props.submitForm()
+      this.setState({readOnly: true, expand: false})
+    }
+    else{
+      this.props.submitForm() //Calling submit form in order to show validation errors
+      showAlert('The light settings cannot be saved due to validation errors.  Please correct the errors and try again.')
+    }
+  }
+
+  handleEdit(e){
+    e.stopPropagation()
+    this.setState({readOnly: false, expand: true})
+  }
+
+  handleDelete(e){
+    e.stopPropagation()
+    const message = (
+      <div>
+        <p>This action will delete {this.props.config.name} and its configuration.</p>
+      </div>
+    )
+     
+    confirm('Delete ' + this.props.config.name, {description: message})
+      .then(function(){
+        this.props.remove(this.props.config.id)
+      }.bind(this))    
+  }
+
+  toggleExpand(){
     this.setState({expand: !this.state.expand})
   }
 
-  updateLight () {
-    if (this.state.readOnly) {
-      this.setState({readOnly: false})
-      return
+  render(){
+
+    let channels = <div />
+    let action = <div />
+    let editButton = <span />
+
+    if (this.state.expand){
+      channels = Object.keys(this.props.values.config.channels).map((item) => (
+        <LightChannel
+          {...this.props}
+          key={item}
+          name={'config.channels.' + item}
+          readOnly={this.state.readOnly}
+          onBlur={this.props.handleBlur}
+          onChangeHandler={this.props.handleChange} 
+          channel={this.props.values.config.channels[item]}
+          channelNum={item}>
+        </LightChannel>
+      ))
     }
-    var channels = this.state.channels
-    $.each(channels, function (k, v) {
-      v['min'] = parseInt(v['min'])
-      v['max'] = parseInt(v['max'])
-      v['start_min'] = parseInt(v['start_min'])
-      channels[k] = v
-    })
-    var payload = {
-      name: this.props.config.name,
-      channels: channels,
-      jack: this.props.config.jack
+
+    if(this.state.readOnly){
+      editButton = (
+        <button type="button" 
+          onClick={this.handleEdit}
+          className="btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2">
+          Edit
+        </button>
+      )
     }
-    this.props.hook(this.props.config.id, payload)
-    this.setState({updated: false, readOnly: true})
-  }
-
-  setLightMode (pin) {
-    return (function (ev) {
-      var channels = this.state.channels
-      channels[pin].auto = ev.target.checked
-      this.setState({
-        channels: channels,
-        updated: true
-      })
-    }.bind(this))
-  }
-
-  getValues (pin) {
-    return (
-      function () {
-        return this.state.channels[pin].values
-      }.bind(this)
-    )
-  }
-
-  updateValues (pin, values) {
-    var channels = this.state.channels
-    channels[pin].values = values
-    this.setState({
-      channels: channels,
-      updated: true
-    })
-  }
-
-  updateChannel (pin) {
-    return (
-      function (ch) {
-        var channels = this.state.channels
-        channels[pin] = ch
-        this.setState({
-          channels: channels,
-          updated: true
-        })
-      }.bind(this)
-    )
-  }
-
-  channelList () {
-    var lbl = 'edit'
-    if (!this.state.readOnly) {
-      lbl = 'save'
-    }
-    var updateButtonClass = 'btn btn-outline-success'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger'
-    }
-    var channelUIs = []
-    for (var pin in this.state.channels) {
-      var ch = this.state.channels[pin]
-      channelUIs.push(
-        <div className='row' key={this.props.config.name + '-' + ch.pin}>
-          <Channel
-            pin={pin}
-            config={ch}
-            hook={this.updateChannel(pin)}
-            light_id={this.props.config.id}
-            readOnly={this.state.readOnly}
-          />
+    else {
+      action = (
+        <div className="clearfix">
+          <input type="submit" value="Save" className="btn btn-primary float-right"></input>
         </div>
       )
     }
+    
+    const cursorStyle = {
+      cursor: 'pointer'
+    }
+
     return (
-      <div className='container'>
-        <ul className='list-group list-group-flush'>
-          {channelUIs}
-        </ul>
-        <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
-              <input
-                type='button'
-                id={'update-light-' + this.props.config.name}
-                onClick={this.updateLight}
-                value={lbl}
-                className={updateButtonClass}
-              />
+      <form onSubmit={this.handleFormSubmit}>
+        <div className="container">
+          <div className="row mb-1"
+            style={cursorStyle}
+            onClick={this.toggleExpand}>
+            <div className="col-12 col-sm-6 col-md-4 order-sm-last">
+              <button type="button" 
+                onClick={this.handleDelete}
+                className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
+                Delete
+              </button>
+              {editButton}
+            </div>
+            <div className="col-12 col-sm-6 col-md-8 order-sm-first">  
+              {this.state.expand ? FaAngleUp() : FaAngleDown()}
+              <b className="ml-2 align-middle">{this.state.name}</b>              
             </div>
           </div>
+          {channels}
         </div>
-      </div>
-    )
-  }
-
-  render () {
-    var channels = <div />
-    var expandLabel = 'expand'
-    if (this.state.expand) {
-      channels = this.channelList()
-      expandLabel = 'fold'
-    }
-    return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-8 col-xs-8'>
-            <b>{this.props.config.name}</b>
-          </div>
-          <div className='col-lg-2 col-xs-2'>
-            <input
-              type='button'
-              id={'expand-light-' + this.props.config.id}
-              onClick={this.expand}
-              value={expandLabel}
-              className='btn btn-outline-primary'
-            />
-          </div>
-          <div className='col-lg-2 col-xs-2'>
-            <input
-              type='button'
-              id={'remove-light-' + this.props.config.name}
-              onClick={this.props.remove(this.props.config.id)}
-              value='delete'
-              className='btn btn-outline-danger'
-            />
-          </div>
-        </div>
-        <div className='row'>
-          { channels }
-        </div>
-      </div>
+        {this.state.expand ? action : ''}
+      </form>
     )
   }
 }
+
+Light.propTypes = {
+  config: PropTypes.object.isRequired,
+  save: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired
+}
+
+export default Light
