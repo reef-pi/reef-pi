@@ -59,3 +59,7 @@ FixedProfile.propTypes = {
   readOnly: PropTypes.bool,
   onChangeHandler: PropTypes.func.isRequired
 }
+
+FixedProfile.defaultProps = {
+  value: 0
+}
