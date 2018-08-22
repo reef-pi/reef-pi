@@ -4,37 +4,37 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
 )
 
 func TestTimerController(t *testing.T) {
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
 
-	eConfig := equipments.Config{
+	eConfig := equipment.Config{
 		DevMode: true,
 	}
 	o := connectors.Outlet{
 		Name: "bar",
 		Pin:  24,
 	}
-	outlets := connectors.NewOutlets(store)
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	e := equipments.New(eConfig, outlets, store, utils.TestTelemetry())
+	e := equipment.New(eConfig, outlets, con.Store(), con.Telemetry())
 	e.Setup()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
 
-	eq := equipments.Equipment{
+	eq := equipment.Equipment{
 		Name:   "Foo",
 		Outlet: "1",
 	}
@@ -45,15 +45,15 @@ func TestTimerController(t *testing.T) {
 	eqs, err := e.List()
 
 	if err != nil {
-		t.Fatal("Failed to list equipments. Error:", err)
+		t.Fatal("Failed to list equipment. Error:", err)
 	}
-	c := New(store, utils.TestTelemetry(), e)
+	c := New(con, e)
 	c.Setup()
 	c.Start()
 	tr := utils.NewTestRouter()
 	c.LoadAPI(tr.Router)
 	if err := c.Setup(); err != nil {
-		t.Fatal("Failed to setup equipments subsystem. Error:", err)
+		t.Fatal("Failed to setup equipment subsystem. Error:", err)
 	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
@@ -65,7 +65,9 @@ func TestTimerController(t *testing.T) {
 		Hour:      "*",
 		Day:       "*",
 		Type:      "equipment",
+		Enable:    true,
 	}
+
 	enc.Encode(&j)
 	if err := tr.Do("PUT", "/api/timers", body, nil); err != nil {
 		t.Fatal("Failed to create timer using api. Error:", err)
@@ -73,6 +75,9 @@ func TestTimerController(t *testing.T) {
 	var jobs []Job
 	if err := tr.Do("GET", "/api/timers", strings.NewReader("{}"), &jobs); err != nil {
 		t.Fatal("Failed to list timer jobs using api")
+	}
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
 	}
 	if len(jobs) != 1 {
 		t.Fatal("Total number of jobs expected:1, found:", len(jobs))
@@ -111,10 +116,35 @@ func TestTimerController(t *testing.T) {
 	}
 	eq.ID = "1"
 	r := EquipmentRunner{
-		equipments: e,
-		target:     uq,
-		eq:         eq,
+		equipment: e,
+		target:    uq,
+		eq:        eq,
 	}
 	r.Run()
+	j.Day = "X"
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if day is set to invalid value")
+	}
+	j.Day = "*"
+	j.Type = "reminder"
+	j.Reminder.Title = ""
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if reminder title is empty")
+	}
 
+	j.Type = "equipment"
+	j.Equipment.ID = ""
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if equipment id is empty")
+	}
+	j.Type = "invalid"
+	if err := j.Validate(); err == nil {
+		t.Error("Job validation should fail if job type is not valid")
+	}
+	if err := c.On("-1", false); err == nil {
+		t.Error("Controlling invalid timer should fail")
+	}
+	if _, err := c.Runner(j); err == nil {
+		t.Error("Creating running for invalid job type should fail")
+	}
 }

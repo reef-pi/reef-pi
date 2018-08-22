@@ -6,7 +6,7 @@ export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
     var name = ''
-    props.equipments.forEach((eq) => {
+    props.equipment.forEach((eq) => {
       if (eq.id === props.active_id) {
         name = eq.name
       }
@@ -52,14 +52,14 @@ export default class Equipment extends React.Component {
   set (k) {
     return () => {
       this.setState({
-        id: this.props.equipments[k].id,
-        name: this.props.equipments[k].name
+        id: this.props.equipment[k].id,
+        name: this.props.equipment[k].name
       })
       this.props.update({
         duration: this.state.duration,
         revert: this.state.revert,
         on: this.state.on,
-        id: this.props.equipments[k].id
+        id: this.props.equipment[k].id
       })
     }
   }
@@ -80,7 +80,7 @@ export default class Equipment extends React.Component {
 
   list () {
     var menuItems = []
-    $.each(this.props.equipments, (k, v) => {
+    $.each(this.props.equipment, (k, v) => {
       var cls = 'dropdown-item'
       if (v.id === this.state.id) {
         cls += ' active'
@@ -181,7 +181,7 @@ Equipment.propTypes = {
   on: PropTypes.bool.isRequired,
   duration: PropTypes.number.isRequired,
 
-  equipments: PropTypes.array.isRequired,
+  equipment: PropTypes.array.isRequired,
   disabled: PropTypes.bool.isRequired,
   id_prefix: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired

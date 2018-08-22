@@ -9,12 +9,11 @@ import (
 )
 
 func TestMacro(t *testing.T) {
-	store, err := utils.TestDB()
+	c, err := utils.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
-	telemetry := utils.TestTelemetry()
-	s, err := New(true, new(mc), store, telemetry)
+	s, err := New(true, c)
 	if err != nil {
 		t.Error(err)
 	}
@@ -28,7 +27,7 @@ func TestMacro(t *testing.T) {
 	tr := utils.NewTestRouter()
 	s.LoadAPI(tr.Router)
 	steps := []Step{
-		Step{Type: "equipments", Config: []byte("{}")},
+		Step{Type: "equipment", Config: []byte("{}")},
 	}
 	m := Macro{Name: "Foo", Steps: steps}
 	body := new(bytes.Buffer)

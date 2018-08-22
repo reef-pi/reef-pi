@@ -12,11 +12,11 @@ func (c *Controller) Control(a ATO, reading int) error {
 		return nil
 	}
 	if reading == 1 { // Water is above the level
-		if err := c.equipments.Control(a.Pump, false); err != nil {
+		if err := c.equipment.Control(a.Pump, false); err != nil {
 			return err
 		}
 	} else { // water is below the level
-		if err := c.equipments.Control(a.Pump, true); err != nil {
+		if err := c.equipment.Control(a.Pump, true); err != nil {
 			return err
 		}
 	}

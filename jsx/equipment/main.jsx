@@ -3,7 +3,7 @@ import $ from 'jquery'
 import Equipment from './equipment'
 import {showAlert} from 'utils/alert'
 import {confirm} from 'utils/confirm'
-import {updateEquipment, fetchEquipments, createEquipment, deleteEquipment} from 'redux/actions/equipment'
+import {updateEquipment, fetchEquipment, createEquipment, deleteEquipment} from 'redux/actions/equipment'
 import {fetchOutlets} from 'redux/actions/outlets'
 import {connect} from 'react-redux'
 
@@ -34,7 +34,7 @@ class main extends React.Component {
       paddingLeft: '0px',
       paddingRight: '0px'
     }
-    $.each(this.props.equipments, function (k, v) {
+    $.each(this.props.equipment, function (k, v) {
       var outlet = {}
       $.each(this.props.outlets, function (x, o) {
         if (v.outlet === o.id) {
@@ -170,14 +170,14 @@ class main extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    equipments: state.equipments,
+    equipment: state.equipment,
     outlets: state.outlets
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetch: () => dispatch(fetchEquipments()),
+    fetch: () => dispatch(fetchEquipment()),
     fetchOutlets: () => dispatch(fetchOutlets()),
     create: (e) => dispatch(createEquipment(e)),
     update: (id, e) => dispatch(updateEquipment(id, e)),

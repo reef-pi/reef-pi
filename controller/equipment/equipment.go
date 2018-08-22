@@ -1,4 +1,4 @@
-package equipments
+package equipment
 
 import (
 	"encoding/json"
@@ -107,10 +107,10 @@ func (c *Controller) Delete(id string) error {
 	return c.outlets.Update(outlet.ID, outlet)
 }
 
-func (c *Controller) synEquipments() {
+func (c *Controller) synEquipment() {
 	eqs, err := c.List()
 	if err != nil {
-		log.Println("ERROR: Failed to list equipments.", err)
+		log.Println("ERROR: Failed to list equipment.", err)
 		return
 	}
 	for _, eq := range eqs {

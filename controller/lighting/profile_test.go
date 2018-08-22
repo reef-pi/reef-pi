@@ -14,7 +14,7 @@ func TestProfile(t *testing.T) {
 	}
 	d1, err := json.Marshal(&d)
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
 	t1, err := time.Parse(TimeFormat, "07:00")
 	if err != nil {
@@ -25,5 +25,23 @@ func TestProfile(t *testing.T) {
 	for i := 0; i <= 5*12*4; i++ {
 		ch.GetValue(t1)
 		t1 = t1.Add(time.Duration(5) * time.Minute)
+	}
+
+	ch.Profile.Config = []byte{}
+	if v := ch.GetValueDiurnal(time.Now()); v != 0 {
+		t.Error("Value calculation should return since config is incorrect")
+	}
+	d.Start = ""
+	d2, _ := json.Marshal(&d)
+	ch.Profile.Config = d2
+	if v := ch.GetValueDiurnal(time.Now()); v != 0 {
+		t.Error("Value calculation should return 0 since config is start time is incorrect")
+	}
+	d.Start = "07:30"
+	d.End = ""
+	d2, _ = json.Marshal(&d)
+	ch.Profile.Config = d2
+	if v := ch.GetValueDiurnal(time.Now()); v != 0 {
+		t.Error("Value calculation should return 0 since config is end time is incorrect")
 	}
 }

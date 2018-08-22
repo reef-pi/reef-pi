@@ -10,8 +10,7 @@ import (
 )
 
 func TestATOAPI(t *testing.T) {
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
@@ -22,7 +21,7 @@ func TestATOAPI(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	jacks := connectors.NewJacks(store, rpi, pca9685)
+	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
 	jacks.Setup()
 	j := connectors.Jack{
 		Name:   "Foo",
@@ -30,7 +29,7 @@ func TestATOAPI(t *testing.T) {
 		Driver: "pca9685",
 	}
 	jacks.Create(j)
-	c, err := New(true, store, jacks, telemetry)
+	c, err := New(true, con, jacks)
 	if err != nil {
 		t.Fatal(err)
 	}

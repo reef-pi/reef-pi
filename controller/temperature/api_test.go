@@ -4,24 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 )
 
 func TestTemperatureAPI(t *testing.T) {
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	conf := equipments.Config{DevMode: true}
-	outlets := connectors.NewOutlets(store)
+	conf := equipment.Config{DevMode: true}
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipments.New(conf, outlets, store, telemetry)
+	eqs := equipment.New(conf, outlets, con.Store(), con.Telemetry())
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
@@ -34,7 +33,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := outlets.Create(o1); err != nil {
 		t.Error(err)
 	}
-	eq := equipments.Equipment{Outlet: "1", Name: "Heater"}
+	eq := equipment.Equipment{Outlet: "1", Name: "Heater"}
 	if err := eqs.Create(eq); err != nil {
 		t.Error(err)
 	}
@@ -43,7 +42,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := eqs.Create(eq); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, store, telemetry, eqs)
+	c, err := New(true, con, eqs)
 	if err != nil {
 		t.Fatal(err)
 	}

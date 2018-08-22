@@ -14,13 +14,13 @@ func TestSystemController(t *testing.T) {
 		DevMode:   true,
 		Name:      "test-system",
 		Interface: "lo0",
+		Pprof:     true,
 	}
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	c := New(config, store, telemetry)
+	c := New(config, con)
 	c.Setup()
 	c.Start()
 	c.Stop()
@@ -68,9 +68,23 @@ func TestSystemController(t *testing.T) {
 	}
 	defer os.Remove(f.Name())
 	c.PowerFile = f.Name()
+	c.BrightnessFile = f.Name()
 	f.Write([]byte("1"))
 	_, err = c.currentDisplayState()
 	if err != nil {
+		t.Error(err)
+	}
+	if err := c.enableDisplay(); err != nil {
+		t.Error(err)
+	}
+	if err := c.disableDisplay(); err != nil {
+		t.Error(err)
+	}
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
+	}
+	c.config.DevMode = false
+	if _, err := c.currentDisplayState(); err != nil {
 		t.Error(err)
 	}
 	if err := c.enableDisplay(); err != nil {

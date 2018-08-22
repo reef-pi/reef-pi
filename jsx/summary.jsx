@@ -1,11 +1,9 @@
 import React from 'react'
-import {fetchInfo} from './redux/actions/info'
-import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 
-class summary extends React.Component {
+export default class Summary extends React.Component {
   componentWillMount () {
-    this.props.fetchInfo()
-    var timer = window.setInterval(this.props.fetchInfo, 1800 * 1000)
+    var timer = window.setInterval(this.props.fetch, 1800 * 1000)
     this.setState({timer: timer})
   }
 
@@ -17,26 +15,24 @@ class summary extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <nav className='navbar fixed-bottom navbar-light bg-light justify-content-center'>
         <ul className='list-inline'>
           <li className='list-inline-item'> <span className='h5'>{this.props.info.name} </span></li>
           <li className='list-inline-item'> | <a href='http://reef-pi.com'> Documentation</a> | </li>
           <li className='list-inline-item'>{this.props.info.current_time},</li>
-          <li className='list-inline-item'>running <span className='text-primary'>{this.props.info.version}</span></li>
-          <li className='list-inline-item'>, since {this.props.info.uptime}</li>
-          <li className='list-inline-item'>IP <span className='text-primary'>{this.props.info.ip}</span></li>
+          <li className='list-inline-item'>running {this.props.info.version},</li>
+          <li className='list-inline-item'>since {this.props.info.uptime} | </li>
+          <li className='list-inline-item'>IP {this.props.info.ip} | </li>
+          <li className='list-inline-item text-danger'>Errors({this.props.errors.length})</li>
         </ul>
-      </div>
+      </nav>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return { info: state.info }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchInfo: () => dispatch(fetchInfo())}
+Summary.propTypes = {
+  info: PropTypes.object.isRequired,
+  errors: PropTypes.array.isRequired,
+  fetch: PropTypes.func.isRequired
 }
-const Summary = connect(mapStateToProps, mapDispatchToProps)(summary)
-export default Summary

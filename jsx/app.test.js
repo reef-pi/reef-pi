@@ -39,7 +39,7 @@ describe('App', () => {
   it('<SelectEquipment />', () => {
     const eqs = [{id: '1', name: 'foo'}]
     const m = shallow(
-      <SelectEquipment store={mockStore({equipments: eqs})} active='1' update={() => {}} />
+      <SelectEquipment store={mockStore({equipment: eqs})} active='1' update={() => {}} />
     ).dive().instance()
     m.setEquipment(0)
   })

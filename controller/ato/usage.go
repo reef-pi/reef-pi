@@ -34,6 +34,6 @@ func (c *Controller) NotifyIfNeeded(a ATO, u Usage) {
 		subject := fmt.Sprintf("[Reef-Pi ALERT] ATO pump usage for '%s' out of range", a.Name)
 		format := "Current usage of ATO pump (%d) is for sensor '%s' above acceptable value (%d)"
 		body := fmt.Sprintf(format, u.Pump, a.Name, a.Notify.Max)
-		c.telemetry.Alert(subject, "Elevated ATO usage. "+body)
+		c.c.Telemetry().Alert(subject, "Elevated ATO usage. "+body)
 	}
 }

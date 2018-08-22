@@ -1,27 +1,25 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 )
 
 type Controller struct {
-	store      types.Store
-	runner     *cron.Cron
-	cronIDs    map[string]cron.EntryID
-	telemetry  types.Telemetry
-	equipments *equipments.Controller
+	runner    *cron.Cron
+	cronIDs   map[string]cron.EntryID
+	equipment *equipment.Controller
+	c         types.Controller
 }
 
-func New(store types.Store, telemetry types.Telemetry, e *equipments.Controller) *Controller {
+func New(c types.Controller, e *equipment.Controller) *Controller {
 	return &Controller{
-		cronIDs:    make(map[string]cron.EntryID),
-		telemetry:  telemetry,
-		store:      store,
-		runner:     cron.New(),
-		equipments: e,
+		cronIDs:   make(map[string]cron.EntryID),
+		runner:    cron.New(),
+		equipment: e,
+		c:         c,
 	}
 }
 
@@ -39,7 +37,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	return c.c.Store().CreateBucket(Bucket)
 }
 
 func (c *Controller) Start() {
