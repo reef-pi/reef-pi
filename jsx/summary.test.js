@@ -14,6 +14,12 @@ window.localStorage = mockLocalStorage()
 
 describe('Summary', () => {
   it('<Summary />', () => {
-    renderer.create(<Summary store={mockStore({info: {}})} info={{}} />)
+    renderer.create(
+      <Summary
+        info={{}}
+        fetch={()=> true}
+        errors={[]}
+      />
+    )
   })
 })

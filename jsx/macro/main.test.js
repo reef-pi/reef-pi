@@ -51,9 +51,9 @@ describe('Macro UI', () => {
     const n = shallow(
       <GenericStepConfig
         active='1'
-        store={mockStore({equipments: [{id: '1', name: 'foo'}]})}
+        store={mockStore({equipment: [{id: '1', name: 'foo'}]})}
         hook={() => true}
-        type='equipments'
+        type='equipment'
       />
     )
     const i = n.dive().instance()
@@ -75,7 +75,7 @@ describe('Macro UI', () => {
   })
 
   it('<SelectType />', () => {
-    const i = shallow(<SelectType type='equipments' hook={() => true} />).instance()
+    const i = shallow(<SelectType type='equipment' hook={() => true} />).instance()
     i.set('macros')()
   })
 

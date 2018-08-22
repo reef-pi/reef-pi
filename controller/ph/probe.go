@@ -21,7 +21,7 @@ type Probe struct {
 
 func (c *Controller) Get(id string) (Probe, error) {
 	var p Probe
-	return p, c.store.Get(Bucket, id, &p)
+	return p, c.controller.Store().Get(Bucket, id, &p)
 }
 
 func (c Controller) List() ([]Probe, error) {
@@ -34,7 +34,7 @@ func (c Controller) List() ([]Probe, error) {
 		probes = append(probes, p)
 		return nil
 	}
-	return probes, c.store.List(Bucket, fn)
+	return probes, c.controller.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(p Probe) error {
@@ -47,7 +47,7 @@ func (c *Controller) Create(p Probe) error {
 		p.ID = id
 		return &p
 	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	if err := c.controller.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 	if p.Enable {
@@ -63,7 +63,7 @@ func (c *Controller) Update(id string, p Probe) error {
 	if p.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied: %d", p.Period)
 	}
-	if err := c.store.Update(Bucket, id, p); err != nil {
+	if err := c.controller.Store().Update(Bucket, id, p); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[p.ID]
@@ -80,7 +80,7 @@ func (c *Controller) Update(id string, p Probe) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.store.Delete(Bucket, id); err != nil {
+	if err := c.controller.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
@@ -114,7 +114,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 				reading = v
 			}
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
-			notifyIfNeeded(c.telemetry, p, reading)
+			notifyIfNeeded(c.controller.Telemetry(), p, reading)
 			m := Measurement{
 				Time: utils.TeleTime(time.Now()),
 				Ph:   reading,

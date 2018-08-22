@@ -4,7 +4,8 @@ import {rootReducer} from './reducer'
 
 const initialState = {
   info: {},
-  equipments: [],
+  errors: [],
+  equipment: [],
   timers: [],
   lights: [],
   atos: [],

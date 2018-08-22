@@ -109,7 +109,7 @@ stepConfig.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    equipments: state.equipments,
+    equipment: state.equipment,
     timers: state.timers,
     ato: state.atos,
     temperature: state.tcs,

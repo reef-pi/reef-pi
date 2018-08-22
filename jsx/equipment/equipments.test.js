@@ -18,7 +18,7 @@ describe('Equipment ui', () => {
   const outlets = [{id: '1', name: 'O1'}]
   it('<Main />', () => {
     const m = shallow(
-      <Main store={mockStore({outlets: outlets, equipments: eqs})} />
+      <Main store={mockStore({outlets: outlets, equipment: eqs})} />
     ).dive().instance()
     m.toggleAddEquipmentDiv()
     m.setOutlet(0)()
@@ -43,6 +43,6 @@ describe('Equipment ui', () => {
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore({equipments: eqs})} />).dive()
+    shallow(<Chart store={mockStore({equipment: eqs})} />).dive()
   })
 })

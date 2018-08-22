@@ -1,7 +1,7 @@
 import {
-  equipmentsLoaded,
+  equipmentLoaded,
   equipmentUpdated,
-  fetchEquipments,
+  fetchEquipment,
   deleteEquipment,
   createEquipment,
   updateEquipment
@@ -24,39 +24,39 @@ describe('equipment actions', () => {
     fetchMock.restore()
   })
 
-  it('equipmentsLoaded', () => {
-    expect(equipmentsLoaded({}).type).toEqual('EQUIPMENTS_LOADED')
+  it('equipmentLoaded', () => {
+    expect(equipmentLoaded({}).type).toEqual('EQUIPMENTS_LOADED')
   })
 
-  it('fetchEquipments', () => {
-    fetchMock.getOnce('/api/equipments', {})
+  it('fetchEquipment', () => {
+    fetchMock.getOnce('/api/equipment', {})
     const store = mockStore()
-    return store.dispatch(fetchEquipments()).then(() => {
-      expect(store.getActions()).toEqual([equipmentsLoaded({})])
+    return store.dispatch(fetchEquipment()).then(() => {
+      expect(store.getActions()).toEqual([equipmentLoaded({})])
     })
   })
 
   it('deleteEquipment', () => {
-    fetchMock.deleteOnce('/api/equipments/1', {})
-    fetchMock.getOnce('/api/equipments', {})
+    fetchMock.deleteOnce('/api/equipment/1', {})
+    fetchMock.getOnce('/api/equipment', {})
     const store = mockStore()
     return store.dispatch(deleteEquipment('1')).then(() => {
-      expect(store.getActions()).toEqual([equipmentsLoaded({})])
+      expect(store.getActions()).toEqual([equipmentLoaded({})])
     })
   })
 
   it('createEquipment', () => {
-    fetchMock.putOnce('/api/equipments', {})
-    fetchMock.getOnce('/api/equipments', {})
+    fetchMock.putOnce('/api/equipment', {})
+    fetchMock.getOnce('/api/equipment', {})
     const store = mockStore()
     return store.dispatch(createEquipment({})).then(() => {
-      expect(store.getActions()).toEqual([equipmentsLoaded({})])
+      expect(store.getActions()).toEqual([equipmentLoaded({})])
     })
   })
 
   it('updateEquipment', () => {
-    fetchMock.postOnce('/api/equipments/1', {})
-    fetchMock.getOnce('/api/equipments', {})
+    fetchMock.postOnce('/api/equipment/1', {})
+    fetchMock.getOnce('/api/equipment', {})
     const store = mockStore()
     return store.dispatch(updateEquipment('1')).then(() => {
       expect(store.getActions()).toEqual([equipmentUpdated({})])

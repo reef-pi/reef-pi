@@ -24,16 +24,15 @@ func TestLightingAPI(t *testing.T) {
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	jacks := connectors.NewJacks(store, rpi, pca9685)
+	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c, err := New(config, jacks, store, i2c.MockBus(), telemetry)
+	c, err := New(config, con, jacks, i2c.MockBus())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,6 +65,7 @@ func TestLightingAPI(t *testing.T) {
 	}
 	channels[1] = Channel{
 		Name: "ch1",
+		Min:  12,
 		Profile: Profile{
 			Type:   "fixed",
 			Config: d,
@@ -97,9 +97,6 @@ func TestLightingAPI(t *testing.T) {
 	}
 	c.Setup()
 	body.Reset()
-	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
-		t.Fatal("Delete light using api")
-	}
 	ch, _ := channels[1]
 	ch.Profile.Type = "auto"
 	a, err := json.Marshal(&AutoConfig{
@@ -111,6 +108,35 @@ func TestLightingAPI(t *testing.T) {
 	}
 	ch.Profile.Config = a
 	ch.Profile.Type = "auto"
+	ch.Reverse = true
 	l.Channels[1] = ch
+	c.syncLights()
+	c.UpdateChannel("1", ch, 10)
+	if err := c.On("1", true); err == nil {
+		t.Error("On api is not implemented yet")
+	}
+	c.StopCycle()
+	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
+		t.Fatal("Delete light using api")
+	}
+
+	l.Name = ""
+	if err := c.Create(l); err == nil {
+		t.Error("Light with empty name should be failed to create")
+	}
+	l.Name = "xxx"
+	l.Jack = ""
+	if err := c.Create(l); err == nil {
+		t.Error("Light with empty jack should be failed to create")
+	}
+	l.Jack = "1"
+	l.Channels = nil
+	if err := c.Create(l); err != nil {
+		t.Error("Light with empty channels should be allowed to create")
+	}
+	ch.Min = 2
+	ch.Max = 8
+	channels[1] = ch
+	l.Channels = channels
 	c.syncLight(l)
 }

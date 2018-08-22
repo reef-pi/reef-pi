@@ -7,7 +7,7 @@ import Equipment from './equipment'
 import {showAlert} from 'utils/alert'
 import {confirm} from 'utils/confirm'
 import {updateTimer, fetchTimers, createTimer, deleteTimer} from 'redux/actions/timer'
-import {fetchEquipments} from 'redux/actions/equipment'
+import {fetchEquipment} from 'redux/actions/equipment'
 import {connect} from 'react-redux'
 
 class Main extends React.Component {
@@ -54,7 +54,7 @@ class Main extends React.Component {
             revert={false}
             on={false}
             duration={2}
-            equipments={this.props.equipments}
+            equipment={this.props.equipment}
             disabled={false}
             id_prefix='new-timer'
             update={this.update('equipment')}
@@ -87,7 +87,7 @@ class Main extends React.Component {
   }
 
   componentDidMount () {
-    this.props.fetchEquipments()
+    this.props.fetchEquipment()
     this.props.fetch()
   }
 
@@ -111,7 +111,7 @@ class Main extends React.Component {
               this.props.update(timer.id, p)
             }}
             enable={timer.enable}
-            equipments={this.props.equipments}
+            equipmentList={this.props.equipment}
           />
         </li>
       )
@@ -276,14 +276,14 @@ class Main extends React.Component {
 const mapStateToProps = (state) => {
   return {
     timers: state.timers,
-    equipments: state.equipments
+    equipment: state.equipment
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetch: () => dispatch(fetchTimers()),
-    fetchEquipments: () => dispatch(fetchEquipments()),
+    fetchEquipment: () => dispatch(fetchEquipment()),
     create: (t) => dispatch(createTimer(t)),
     delete: (id) => dispatch(deleteTimer(id)),
     update: (id, t) => dispatch(updateTimer(id, t))

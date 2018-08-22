@@ -19,16 +19,14 @@ type Config struct {
 
 type Controller struct {
 	config                    Config
-	store                     types.Store
-	telemetry                 types.Telemetry
+	c                         types.Controller
 	PowerFile, BrightnessFile string
 }
 
-func New(conf Config, store types.Store, telemetry types.Telemetry) *Controller {
+func New(conf Config, c types.Controller) *Controller {
 	return &Controller{
 		config:         conf,
-		store:          store,
-		telemetry:      telemetry,
+		c:              c,
 		PowerFile:      PowerFile,
 		BrightnessFile: BrightnessFile,
 	}
@@ -43,7 +41,7 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	return c.c.Store().CreateBucket(Bucket)
 }
 func (c *Controller) On(id string, on bool) error {
 	return nil

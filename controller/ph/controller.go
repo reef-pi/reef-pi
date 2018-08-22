@@ -16,32 +16,30 @@ type Config struct {
 }
 
 type Controller struct {
-	config    Config
-	telemetry types.Telemetry
-	store     types.Store
-	quitters  map[string]chan struct{}
-	bus       i2c.Bus
-	mu        *sync.Mutex
-	statsMgr  types.StatsManager
+	config     Config
+	controller types.Controller
+	quitters   map[string]chan struct{}
+	bus        i2c.Bus
+	mu         *sync.Mutex
+	statsMgr   types.StatsManager
 }
 
-func New(config Config, bus i2c.Bus, store types.Store, telemetry types.Telemetry) *Controller {
+func New(config Config, bus i2c.Bus, c types.Controller) *Controller {
 	return &Controller{
-		config:    config,
-		telemetry: telemetry,
-		store:     store,
-		bus:       bus,
-		quitters:  make(map[string]chan struct{}),
-		mu:        &sync.Mutex{},
-		statsMgr:  utils.NewStatsManager(store, ReadingsBucket, 180, 24*7),
+		config:     config,
+		bus:        bus,
+		quitters:   make(map[string]chan struct{}),
+		controller: c,
+		mu:         &sync.Mutex{},
+		statsMgr:   utils.NewStatsManager(c.Store(), ReadingsBucket, 180, 24*7),
 	}
 }
 
 func (c *Controller) Setup() error {
-	if err := c.store.CreateBucket(Bucket); err != nil {
+	if err := c.controller.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.store.CreateBucket(ReadingsBucket)
+	return c.controller.Store().CreateBucket(ReadingsBucket)
 }
 
 func (c *Controller) Start() {

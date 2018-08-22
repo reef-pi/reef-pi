@@ -4,45 +4,44 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/equipments"
+	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 )
 
 func TestController(t *testing.T) {
-	store, err := utils.TestDB()
+	con, err := utils.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
-	telemetry := utils.TestTelemetry()
-	conf := equipments.Config{DevMode: true}
-	outlets := connectors.NewOutlets(store)
+	conf := equipment.Config{DevMode: true}
+	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	inlets := connectors.NewInlets(store)
+	inlets := connectors.NewInlets(con.Store())
 	inlets.DevMode = true
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipments.New(conf, outlets, store, telemetry)
+	eqs := equipment.New(conf, outlets, con.Store(), con.Telemetry())
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
 	if err := outlets.Create(connectors.Outlet{Name: "ato-outlet", Pin: 21}); err != nil {
 		t.Error(err)
 	}
-	if err := eqs.Create(equipments.Equipment{Outlet: "1"}); err != nil {
+	if err := eqs.Create(equipment.Equipment{Outlet: "1"}); err != nil {
 		t.Error(err)
 	}
 	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16}); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, store, telemetry, eqs, inlets)
+	c, e := New(true, con, eqs, inlets)
 
-	if err != nil {
-		t.Error(err)
+	if e != nil {
+		t.Error(e)
 	}
 	if err := c.Setup(); err != nil {
 		t.Error(err)

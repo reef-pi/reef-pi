@@ -5,41 +5,41 @@ export const equipmentUpdated = () => {
     type: 'EQUIPMENT_UPDATED'
   })
 }
-export const equipmentsLoaded = (equipments) => {
+export const equipmentLoaded = (equipment) => {
   return ({
     type: 'EQUIPMENTS_LOADED',
-    payload: equipments
+    payload: equipment
   })
 }
 
-export const fetchEquipments = () => {
+export const fetchEquipment = () => {
   return (
     reduxGet({
-      url: '/api/equipments',
-      success: equipmentsLoaded
+      url: '/api/equipment',
+      success: equipmentLoaded
     }))
 }
 export const deleteEquipment = (id) => {
   return (
     reduxDelete({
-      url: '/api/equipments/' + id,
-      success: fetchEquipments
+      url: '/api/equipment/' + id,
+      success: fetchEquipment
     }))
 }
 
 export const createEquipment = (e) => {
   return (
     reduxPut({
-      url: '/api/equipments',
+      url: '/api/equipment',
       data: e,
-      success: fetchEquipments
+      success: fetchEquipment
     }))
 }
 
 export const updateEquipment = (id, e) => {
   return (
     reduxPost({
-      url: '/api/equipments/' + id,
+      url: '/api/equipment/' + id,
       data: e,
       success: equipmentUpdated
     }))

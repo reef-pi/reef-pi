@@ -31,7 +31,7 @@ describe('Timer ui', () => {
         second: '0',
         duration: 10
       }],
-      equipments: [{id: '1', name: 'bar'}]
+      equipment: [{id: '1', name: 'bar', on: false}]
     }
     const m = shallow(<Main store={mockStore(state)} />).dive().instance()
     m.toggleAddTimerDiv()
@@ -59,7 +59,7 @@ describe('Timer ui', () => {
   it('<Equipment />', () => {
     const m = shallow(
       <Equipment
-        equipments={[{id: '1', name: 'foo'}]}
+        equipment={[{id: '1', name: 'foo'}]}
         update={() => true}
         id_prefix=''
         disabled={false}
@@ -113,13 +113,13 @@ describe('Timer ui', () => {
         second='*'
         remove={() => true}
         update={() => true}
-        equipments={[]}
+        equipmentList={[]}
       />).instance()
     t.update()
-    t.details()
     t.setType('reminder')()
     t.trigger()
     t.set('foo')('bar')
+    t.details()
     t.updateCron({day: '*', minute: '*', hour: '*', second: '0'})
     t.update()
   })

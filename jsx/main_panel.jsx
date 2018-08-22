@@ -1,7 +1,7 @@
 import React from 'react'
 import ATO from 'ato/main'
 import Camera from 'camera/main'
-import Equipments from 'equipments/main'
+import Equipment from 'equipment/main'
 import Lighting from 'lighting/main'
 import Configuration from 'configuration/main'
 import Temperature from 'temperature/main'
@@ -12,13 +12,14 @@ import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
 import $ from 'jquery'
 import {fetchUIData} from 'redux/actions/ui'
+import {fetchInfo} from 'redux/actions/info'
 import {connect} from 'react-redux'
 import Summary from 'summary'
 import '../assets/reef_pi.css'
 
 const caps = {
   'dashboard': <Dashboard />,
-  'equipments': <Equipments />,
+  'equipment': <Equipment />,
   'timers': <Timers />,
   'lighting': <Lighting />,
   'temperature': <Temperature />,
@@ -84,21 +85,33 @@ class mainPanel extends React.Component {
     var body = caps[tab]
     return (
       <div className='container'>
-        {this.navs(tab)}
-        {body}
-        <hr />
-        <Summary />
+        <div className='row'>
+          {this.navs(tab)}
+        </div>
+        <div className='row' style={{paddingBottom: '70px'}}>
+          {body}
+        </div>
+        <div className='row'>
+          <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors}/>
+        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  return { capabilities: state.capabilities }
+  return {
+    capabilities: state.capabilities,
+    errors: state.errors,
+    info: state.info,
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {fetchUIData: () => dispatch(fetchUIData(dispatch))}
+  return {
+    fetchUIData: () => dispatch(fetchUIData(dispatch)),
+    fetchInfo: () => dispatch(fetchInfo(dispatch))
+  }
 }
 
 const MainPanel = connect(mapStateToProps, mapDispatchToProps)(mainPanel)

@@ -47,7 +47,7 @@ func (c *Controller) Process(name string) error {
 		i.ID = id
 		return &i
 	}
-	return c.store.Create(ItemBucket, fn)
+	return c.c.Store().Create(ItemBucket, fn)
 }
 
 func (c *Controller) List() ([]ImageItem, error) {
@@ -60,5 +60,5 @@ func (c *Controller) List() ([]ImageItem, error) {
 		items = append(items, i)
 		return nil
 	}
-	return items, c.store.List(ItemBucket, fn)
+	return items, c.c.Store().List(ItemBucket, fn)
 }

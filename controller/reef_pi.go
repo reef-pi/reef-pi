@@ -98,6 +98,9 @@ func New(version, database string) (*ReefPi, error) {
 }
 
 func (r *ReefPi) Start() error {
+	if err := r.setUpErrorBucket(); err != nil {
+		return err
+	}
 	if err := r.jacks.Setup(); err != nil {
 		return err
 	}
@@ -145,4 +148,13 @@ func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
 		return nil, fmt.Errorf("Subsystem not present: %s", s)
 	}
 	return sub, nil
+}
+
+func (r *ReefPi) Controller() types.Controller {
+	return types.NewController(
+		r.telemetry,
+		r.store,
+		r.LogError,
+		r.Subsystem,
+	)
 }
