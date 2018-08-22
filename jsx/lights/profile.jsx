@@ -45,9 +45,7 @@ const Profile = (props) => {
     )
   }
   else{
-    return (
-      <div>Please select a profile.</div>
-    )
+    return ''
   }  
 }
 

@@ -4,6 +4,7 @@ import update from 'immutability-helper'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import {confirm} from '../utils/confirm'
+import {showAlert, clearAlert} from 'utils/alert'
 
 class Light extends Component {
   constructor(props){
@@ -18,51 +19,25 @@ class Light extends Component {
       expand: false
     }
    
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
-    this.handleChannelChange = this.handleChannelChange.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.toggleExpand = this.toggleExpand.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
     
   }
 
-  handleFormSubmit(e){
-    e.preventDefault()
-    //TODO: [ML] Validation
+  handleFormSubmit(event){
+    event.preventDefault()
+    clearAlert()
     
-    const payload = {
-      name: this.props.config.name,
-      channels: this.props.values.config.channels,
-      jack: this.props.config.jack
+    if (this.props.isValid){
+      this.props.submitForm()
+      this.setState({readOnly: true, expand: false})
     }
-    for (let x in payload.channels) {
-      payload.channels[x].reverse = (payload.channels[x].reverse == 'true')
+    else{
+      this.props.submitForm() //Calling submit form in order to show validation errors
+      showAlert('The light settings cannot be saved due to validation errors.  Please correct the errors and try again.')
     }
-    this.props.save(this.props.config.id, payload)
-    this.setState({readOnly: true, expand: false})
-  }
-
-  handleChannelChange(e, channelNum){
-    //Create the change by transforming dot-notation into an object
-    
-    let target = {}
-    let current = target
-    const path = e.target.name.split('.')
-    while (path.length > 0){
-      const key = path.shift()
-      current[key] = current[key] || path.length == 0 ? {$set: e.target.value} : {}
-      current = current[key]
-    }
-    /*
-    let change = update(this.state, {
-      'channels': {
-        [channelNum]: target
-      }
-    })
-
-    this.setState(change)
-    */
-    this.props.handleChange(e)
   }
 
   handleEdit(e){
@@ -102,7 +77,7 @@ class Light extends Component {
           name={'config.channels.' + item}
           readOnly={this.state.readOnly}
           onBlur={this.props.handleBlur}
-          onChangeHandler={this.handleChannelChange} 
+          onChangeHandler={this.props.handleChange} 
           channel={this.props.values.config.channels[item]}
           channelNum={item}>
         </LightChannel>

@@ -132,12 +132,13 @@ const Channel = (props) => {
           <div className="form-group">
             <label className="mr-3">Profile</label>
             <ProfileSelector
-              className={ShowError(props, NameFor(props, 'profile')) ? 'form-control is-invalid' : 'form-control'} 
+              className={ShowError(props, NameFor(props, 'profile.type')) ? 'form-control is-invalid' : 'form-control'} 
               name={NameFor(props, 'profile')}
               readOnly={props.readOnly}
               onChangeHandler={handleConfigChange}
               value={props.channel.profile.type} />
-            <ErrorFor {...props} name={NameFor(props, 'profile')} />
+            <input className="d-none is-invalid form-control"/> 
+            <ErrorFor {...props} name={NameFor(props, 'profile.type')} />
           </div>          
         </div>
       </div>
