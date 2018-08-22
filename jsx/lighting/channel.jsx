@@ -7,7 +7,6 @@ import {ErrorFor, NameFor, ShowError, PathToObject} from '../utils/validation_he
 import {Field} from 'formik'
 
 const Channel = (props) => {
-
   const handleChange = e => {
     props.onChangeHandler(e, props.channelNum)
   }
@@ -16,14 +15,14 @@ const Channel = (props) => {
     let touched = props.touched
     let config = PathToObject(props.name + '.profile.config', touched)
 
-    switch(profileType){
-      case 'diurnal': {      
-        if (config){
+    switch (profileType) {
+      case 'diurnal': {
+        if (config) {
           config = {
             start: false,
             end: false
           }
-          props.setTouched(touched)      
+          props.setTouched(touched)
         }
 
         return {
@@ -32,7 +31,7 @@ const Channel = (props) => {
         }
       }
       case 'fixed': {
-        if (config){
+        if (config) {
           config = { value: false }
           props.setTouched(touched)
         }
@@ -40,20 +39,19 @@ const Channel = (props) => {
         return {value: 0}
       }
       case 'auto': {
-        if (config){
+        if (config) {
           config = { values: false }
           props.setTouched(touched)
         }
 
-        return {values: [0,0,0,0,0,0,0,0,0,0,0,0]}
+        return {values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
       }
-      default: 
+      default:
         return {}
     }
   }
 
   const handleConfigChange = e => {
-    console.log('config changing')
     const event = {
       target: {
         name: e.target.name,
@@ -66,111 +64,110 @@ const Channel = (props) => {
     props.onChangeHandler(event, props.channelNum)
   }
 
-
   return (
-    <div className="controls border-top">
-      <div className="row align-items-start">
-        <div className="col-sm-6 col-md-4 col-xl-2">
-          <div className="form-group">
-            <label className="w-100">
-              Name 
-              <small className="float-right badge badge-info mt-1">(pin {props.channel.pin})</small>
+    <div className='controls border-top'>
+      <div className='row align-items-start'>
+        <div className='col-sm-6 col-md-4 col-xl-2'>
+          <div className='form-group'>
+            <label className='w-100'>
+              Name
+              <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
             </label>
             <Field name={NameFor(props, 'name')}
-              className={ShowError(props, NameFor(props,'name')) ? 'form-control is-invalid' : 'form-control'} 
-              placeholder="Channel Name"
-              disabled={props.readOnly} />            
+              className={ShowError(props, NameFor(props, 'name')) ? 'form-control is-invalid' : 'form-control'}
+              placeholder='Channel Name'
+              disabled={props.readOnly} />
             <ErrorFor {...props}
-              name={NameFor(props, 'name')}  />
-          </div>          
+              name={NameFor(props, 'name')} />
+          </div>
         </div>
-        
-        <div className="form-group col-sm-6 col-md-4 col-xl-2 form-inline">
-          <label className="mb-2">Color</label>
+
+        <div className='form-group col-sm-6 col-md-4 col-xl-2 form-inline'>
+          <label className='mb-2'>Color</label>
           <ColorPicker name={NameFor(props, 'color')}
             readOnly={props.readOnly}
             color={props.channel.color}
             onChangeHandler={handleChange} />
         </div>
 
-        <div className="col-sm-6 col-md-4 col-xl-2">
-          <div className="form-group">
+        <div className='col-sm-6 col-md-4 col-xl-2'>
+          <div className='form-group'>
             <label>Behavior</label>
-            <select className="custom-select"
+            <select className='custom-select'
               name={NameFor(props, 'reverse')}
               disabled={props.readOnly}
               onChange={handleChange}
               onBlur={props.onBlur}
               value={props.channel.reverse}>
-              <option value="false">Active High</option>
-              <option value="true">Active Low</option>
+              <option value='false'>Active High</option>
+              <option value='true'>Active Low</option>
             </select>
           </div>
         </div>
-        <div className="col-sm-6 col-md-4 col-xl-2">
-          <div className="form-group">
+        <div className='col-sm-6 col-md-4 col-xl-2'>
+          <div className='form-group'>
             <label>Min</label>
-            <Percent type="text" 
-              className={ShowError(props, NameFor(props, 'min')) ? 'form-control is-invalid' : 'form-control'} 
-              name={NameFor(props, 'min')} 
+            <Percent type='text'
+              className={ShowError(props, NameFor(props, 'min')) ? 'form-control is-invalid' : 'form-control'}
+              name={NameFor(props, 'min')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
               onChange={handleChange}
               value={props.channel.min} />
             <ErrorFor {...props} name={NameFor(props, 'min')} />
-          </div>  
+          </div>
         </div>
-        <div className="col-sm-6 col-md-4 col-xl-2">
-          <div className="form-group">
+        <div className='col-sm-6 col-md-4 col-xl-2'>
+          <div className='form-group'>
             <label>Max</label>
-            <Percent type="text" 
-              className={ShowError(props, NameFor(props, 'max')) ? 'form-control is-invalid' : 'form-control'} 
+            <Percent type='text'
+              className={ShowError(props, NameFor(props, 'max')) ? 'form-control is-invalid' : 'form-control'}
               name={NameFor(props, 'max')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
               onChange={handleChange}
-              value={props.channel.max}  />
+              value={props.channel.max} />
             <ErrorFor {...props} name={NameFor(props, 'max')} />
-          </div>  
+          </div>
         </div>
-        <div className="col-sm-6 col-md-4 col-xl-2">
-          <div className="form-group">
+        <div className='col-sm-6 col-md-4 col-xl-2'>
+          <div className='form-group'>
             <label>Start</label>
-            <Percent type="text" 
-              className={ShowError(props, NameFor(props, 'start_min')) ? 'form-control is-invalid' : 'form-control'} 
+            <Percent type='text'
+              className={ShowError(props, NameFor(props, 'start_min')) ? 'form-control is-invalid' : 'form-control'}
               name={NameFor(props, 'start_min')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
-              onChange={handleChange} 
+              onChange={handleChange}
               value={props.channel.start_min} />
             <ErrorFor {...props} name={NameFor(props, 'start_min')} />
-          </div>  
+          </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col">
-          <div className="form-group">
-            <label className="mr-3">Profile</label>
+      <div className='row'>
+        <div className='col'>
+          <div className='form-group'>
+            <label className='mr-3'>Profile</label>
             <ProfileSelector
-              className={ShowError(props, NameFor(props, 'profile.type')) ? 'form-control is-invalid' : 'form-control'} 
+              className={ShowError(props, NameFor(props, 'profile.type')) ? 'form-control is-invalid' : 'form-control'}
               name={NameFor(props, 'profile')}
               readOnly={props.readOnly}
               onChangeHandler={handleConfigChange}
               value={props.channel.profile.type} />
-            <input className="d-none is-invalid form-control"/> 
+            <input className='d-none is-invalid form-control' />
             <ErrorFor {...props} name={NameFor(props, 'profile.type')} />
-          </div>          
+          </div>
         </div>
       </div>
-      <div className="row mb-3">
-        <div className="col">
-          <Profile 
+      <div className='row mb-3'>
+        <div className='col'>
+          <Profile
             {...props}
             name={NameFor(props, 'profile.config')}
             onBlur={props.onBlur}
             readOnly={props.readOnly}
             type={props.channel.profile.type}
-            value={props.channel.profile.config} 
+            value={props.channel.profile.config}
             onChangeHandler={handleChange} />
         </div>
       </div>

@@ -7,26 +7,23 @@ export default class AutoProfile extends React.Component {
     super(props)
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
-    if (props.config && props.config.values && Array.isArray(props.config.values)){
+    if (props.config && props.config.values && Array.isArray(props.config.values)) {
       this.state = {
         values: props.config.values
       }
-    }
-    else{
+    } else {
       this.state = {
         values: Array(12).fill(0)
       }
-    }    
+    }
   }
 
   curry (i) {
     return (ev) => {
-
-      if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)){
+      if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)) {
         var val = parseInt(ev.target.value)
-        if (isNaN(val)) 
-          val = ''
-        
+        if (isNaN(val)) { val = '' }
+
         var values = Object.assign(this.state.values)
         values[i] = val
         this.props.onChangeHandler({values: values})
@@ -38,7 +35,7 @@ export default class AutoProfile extends React.Component {
   sliderList () {
     var values = Object.assign({}, this.state)
     values = values.values
-   
+
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical',
       writingMode: 'bt-lr',
@@ -67,21 +64,21 @@ export default class AutoProfile extends React.Component {
         values[i] = 0
       }
       list.push(
-        <div className="col-12 col-md-1 text-center" key={i + 1}>
-          <div className="row">
-            <div className="col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last">
-              <input type="text" 
-                name={NameFor(this.props, 'values.'+i)}
+        <div className='col-12 col-md-1 text-center' key={i + 1}>
+          <div className='row'>
+            <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
+              <input type='text'
+                name={NameFor(this.props, 'values.' + i)}
                 onBlur={this.props.onBlur}
-                className={ShowError(this.props, NameFor(this.props, 'values.'+i)) ? 'is-invalid form-control form-control-sm mb-1 d-block d-md-none d-lg-block' : 'form-control form-control-sm mb-1 d-block d-md-none d-lg-block'}
+                className={ShowError(this.props, NameFor(this.props, 'values.' + i)) ? 'is-invalid form-control form-control-sm mb-1 d-block d-md-none d-lg-block' : 'form-control form-control-sm mb-1 d-block d-md-none d-lg-block'}
                 value={values[i]}
                 onChange={this.curry(i)}
                 disabled={this.props.readOnly} />
             </div>
-            <div className="d-none d-md-inline d-lg-none col-12">
+            <div className='d-none d-md-inline d-lg-none col-12'>
               {values[i]}
             </div>
-            <div className="col-12 col-sm-6 col-md-12 d-none d-md-inline">
+            <div className='col-12 col-sm-6 col-md-12 d-none d-md-inline'>
               <input
                 className='d-none d-md-inline'
                 type='range'
@@ -91,9 +88,9 @@ export default class AutoProfile extends React.Component {
                 id={'intensity-' + i}
                 orient='vertical'
                 disabled={this.props.readOnly}
-              />  
+              />
             </div>
-            <div className="col-6 col-md-12 col-sm-6 order-md-last order-first px-0">
+            <div className='col-6 col-md-12 col-sm-6 order-md-last order-first px-0'>
               {labels[i]}
             </div>
           </div>
@@ -105,14 +102,14 @@ export default class AutoProfile extends React.Component {
 
   render () {
     return (
-      <div className='container'>        
+      <div className='container'>
         <div className='row'>
           {this.sliderList()}
-          <div className="col-12 order-last text-center">
-            <input className="d-none is-invalid form-control" />
+          <div className='col-12 order-last text-center'>
+            <input className='d-none is-invalid form-control' />
             <ErrorFor {...this.props} name={NameFor(this.props, 'values')} />
           </div>
-        </div>  
+        </div>
       </div>
     )
   }

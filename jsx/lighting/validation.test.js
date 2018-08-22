@@ -4,11 +4,10 @@ import LightSchema from './light_schema'
 import * as Yup from 'yup'
 
 describe('Validation', () => {
-  
   const value = {
     config: {
       channels: {
-        '1':{
+        '1': {
           name: 'Channel 1',
           color: '',
           min: 0,
@@ -23,7 +22,6 @@ describe('Validation', () => {
   }
 
   it('should validate fixed when valid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'fixed',
       config: {
@@ -37,7 +35,6 @@ describe('Validation', () => {
   })
 
   it('should validate fixed when invalid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'fixed',
       config: {
@@ -51,11 +48,10 @@ describe('Validation', () => {
   })
 
   it('should validate auto when valid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'auto',
       config: {
-        values: [0,0,0,50,0,0,0,0,0]
+        values: [0, 0, 0, 50, 0, 0, 0, 0, 0]
       }
     }
     expect.assertions(1)
@@ -65,7 +61,6 @@ describe('Validation', () => {
   })
 
   it('should validate auto when invalid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'auto',
       config: {
@@ -79,7 +74,6 @@ describe('Validation', () => {
   })
 
   it('should validate diurnal when valid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'diurnal',
       config: {
@@ -93,9 +87,7 @@ describe('Validation', () => {
     )
   })
 
-
   it('should validate diurnal when invalid', () => {
-    
     value.config.channels['1'].profile = {
       type: 'diurnal',
       config: {
@@ -108,5 +100,4 @@ describe('Validation', () => {
       valid => expect(valid).toBe(false)
     )
   })
-  
 })

@@ -5,7 +5,6 @@ import Fixed from './fixed_profile'
 import Auto from './auto_profile'
 
 const Profile = (props) => {
-  
   const handleConfigChange = e => {
     const event = {
       target: {
@@ -16,13 +15,13 @@ const Profile = (props) => {
     props.onChangeHandler(event)
   }
 
-  switch(props.type){
+  switch (props.type) {
     case 'fixed': {
       return (
-        <Fixed 
+        <Fixed
           {...props}
           readOnly={props.readOnly}
-          config={props.value} 
+          config={props.value}
           onChangeHandler={handleConfigChange} />
       )
     }
@@ -40,7 +39,7 @@ const Profile = (props) => {
         <Auto
           {...props}
           readOnly={props.readOnly}
-          config={props.value} 
+          config={props.value}
           onChangeHandler={handleConfigChange} />
       )
     }

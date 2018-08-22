@@ -30,7 +30,6 @@ export default class Summary extends React.Component {
   }
 }
 
-
 Summary.propTypes = {
   info: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired,

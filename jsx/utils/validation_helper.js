@@ -2,18 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export const ErrorFor = (props) => {
-  
   const getErrors = () => {
-    if (ShowError(props, props.name)){
+    if (ShowError(props, props.name)) {
       return ErrorMessage(props, props.name)
     }
     return null
   }
 
   const err = getErrors()
-  if(err){
+  if (err) {
     return (
-      <div className="invalid-feedback">{err}</div>
+      <div className='invalid-feedback'>{err}</div>
     )
   }
   return ''
@@ -36,11 +35,10 @@ export const ShowError = (props, name) => {
 
 export const ErrorMessage = (props, name) => {
   var err = PathToObject(name, props.errors)
-  if (typeof err === 'string' || err instanceof String){
+  if (typeof err === 'string' || err instanceof String) {
     return err
-  }
-  else if (Array.isArray(err)){
-    for(let i = 0; i < err.length; i++){
+  } else if (Array.isArray(err)) {
+    for (let i = 0; i < err.length; i++) {
       if (err[i]) return err[i]
     }
   }
@@ -48,7 +46,7 @@ export const ErrorMessage = (props, name) => {
 }
 
 export const PathToObject = (path, obj) => {
-  return path.split('.').reduce((o,i) => o && o[i], obj)
+  return path.split('.').reduce((o, i) => o && o[i], obj)
 }
 
 export default {ErrorFor, NameFor, ShowError, ErrorMessage, PathToObject}

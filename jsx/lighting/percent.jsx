@@ -2,15 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Percent = props => {
+  let { value, ...other } = props
 
-  let { value, ...other } = props 
-
-  const handleChange = e =>{
-    
-    if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)){
+  const handleChange = e => {
+    if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
       let val = parseInt(e.target.value)
-      if (isNaN(e.target.value)) 
-        val = ''
+      if (isNaN(e.target.value)) { val = '' }
       const event = {
         target: {
           name: e.target.name,
@@ -22,13 +19,12 @@ const Percent = props => {
   }
 
   return (
-    <input 
+    <input
       {...other}
-      type="number" 
-      value={(isNaN(value)? '' : value)}
+      type='number'
+      value={(isNaN(value) ? '' : value)}
       onChange={handleChange} />
   )
-
 }
 
 Percent.propTypes = {

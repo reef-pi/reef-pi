@@ -87,38 +87,38 @@ export default class SignIn extends React.Component {
     SignIn.set('reef-pi-pass', creds.password)
     window.location.reload(true)
   }
-  
+
   render () {
     return (
       <Formik
-        initialValues ={{
+        initialValues={{
           username: '',
           password: ''
         }}
-        validationSchema = {loginSchema}
+        validationSchema={loginSchema}
         onSubmit={this.saveCreds}
-        render ={({touched, errors, isSubmitting}) => (
+        render={({touched, errors, isSubmitting}) => (
           <Form>
             <div className='container' style={outerStyle}>
               <div className='form' style={formStyle}>
                 <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
                 <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
                 <Field type='text' id='reef-pi-user' className={'form-control ' + (errors.username && touched.username ? 'is-invalid' : '')} name='username'
-                  style={emailStyle} placeholder='Username' required='' autoFocus=''/>
-                {errors.username && touched.username && 
+                  style={emailStyle} placeholder='Username' required='' autoFocus='' />
+                {errors.username && touched.username &&
                   (
-                    <div className="field-error invalid-feedback">{errors.username}</div>
+                    <div className='field-error invalid-feedback'>{errors.username}</div>
                   )
                 }
                 <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
-                <Field type='password' id='reef-pi-pass'  className={'form-control ' + (errors.username && touched.username ? 'is-invalid' : '')} name='password'
+                <Field type='password' id='reef-pi-pass' className={'form-control ' + (errors.username && touched.username ? 'is-invalid' : '')} name='password'
                   style={passwordStyle} placeholder='Password' required='' />
-                {errors.password && touched.password && 
+                {errors.password && touched.password &&
                   (
-                    <div className="field-error invalid-feedback">{errors.password}</div>
+                    <div className='field-error invalid-feedback'>{errors.password}</div>
                   )
                 }
-                <button className='btn btn-lg btn-primary btn-block mt-3' 
+                <button className='btn btn-lg btn-primary btn-block mt-3'
                   disabled={isSubmitting}
                   type='submit' id='btnSaveCreds'>
                   Sign in
@@ -127,8 +127,7 @@ export default class SignIn extends React.Component {
             </div>
           </Form>
         )}
-      />      
+      />
     )
   }
-
 }

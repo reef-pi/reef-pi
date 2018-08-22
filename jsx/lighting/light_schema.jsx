@@ -34,7 +34,7 @@ const channelSchema = Yup.object().shape({
     .max(100, 'Start must be less than or equal to 100')
     .required('Start is required'),
   profile: Yup.lazy(value => {
-    switch(value.type){
+    switch (value.type) {
       case 'diurnal':
         return diurnalSchema
       case 'fixed':

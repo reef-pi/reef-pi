@@ -91,15 +91,15 @@ class main extends React.Component {
       jack = j.name
     }
     return (
-      <div className="row">
-        <div className="col-12 col-sm-3 col-md-2 col-lg-1">
-          <label htmlFor="lightName">Name</label>
+      <div className='row'>
+        <div className='col-12 col-sm-3 col-md-2 col-lg-1'>
+          <label htmlFor='lightName'>Name</label>
         </div>
-        <div className="col-12 col-sm-9 col-md-3 col-lg-3 mb-1">
-          <input type="text" id="lightName" className="form-control" required />
+        <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
+          <input type='text' id='lightName' className='form-control' required />
         </div>
-        <div className="col-12 col-sm-3 col-md-1 col-lg-1">
-          <label htmlFor="jack">
+        <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
+          <label htmlFor='jack'>
             Jack
           </label>
         </div>

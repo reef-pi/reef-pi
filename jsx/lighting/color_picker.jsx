@@ -3,7 +3,7 @@ import { HuePicker } from 'react-color'
 import PropTypes from 'prop-types'
 
 class ColorPicker extends React.Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = {
       expand: false
@@ -12,8 +12,7 @@ class ColorPicker extends React.Component {
     this.handleColorChange = this.handleColorChange.bind(this)
   }
 
-  handleColorChange(e) {
-    
+  handleColorChange (e) {
     const event = {
       target: {
         name: this.props.name,
@@ -24,7 +23,7 @@ class ColorPicker extends React.Component {
     this.setState({expand: false})
   }
 
-  render(){
+  render () {
     if (this.state.expand === false) {
       return (
         <button
@@ -38,12 +37,11 @@ class ColorPicker extends React.Component {
     }
     return (
       <HuePicker name={this.props.name}
-        className="mt-2"
-        color={this.props.color} 
+        className='mt-2'
+        color={this.props.color}
         onChangeComplete={this.handleColorChange} />
     )
   }
-
 }
 
 ColorPicker.propTypes = {

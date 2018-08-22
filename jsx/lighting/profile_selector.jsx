@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const ProfileSelector = (props) => {
-
   const uuid = Math.floor((1 + Math.random()) * 0x10000)
     .toString(16)
     .substring(1)
@@ -13,15 +12,15 @@ const ProfileSelector = (props) => {
   }
 
   return (
-    <div className="d-sm-inline-flex">
+    <div className='d-sm-inline-flex'>
       <div className='d-sm-none'>
-        <select className="custom-select"
+        <select className='custom-select'
           name={props.name + uuid}
           value={props.value}
           onChange={handleChange} >
-          <option value="fixed">Fixed</option>
-          <option value="auto">Auto</option>
-          <option value="diurnal">Diurnal</option>
+          <option value='fixed'>Fixed</option>
+          <option value='auto'>Auto</option>
+          <option value='diurnal'>Diurnal</option>
         </select>
       </div>
       <div className='btn-group  d-none d-sm-inline'>
@@ -31,7 +30,7 @@ const ProfileSelector = (props) => {
             name={props.name + uuid}
             id={props.name + uuid + '-fixed'}
             onChange={handleChange}
-            disabled={props.readOnly}                  
+            disabled={props.readOnly}
           />
           Fixed
         </label>
@@ -41,7 +40,7 @@ const ProfileSelector = (props) => {
             name={props.name + uuid}
             id={props.name + uuid + '-auto'}
             onChange={handleChange}
-            disabled={props.readOnly}                    
+            disabled={props.readOnly}
           />
           Auto
         </label>

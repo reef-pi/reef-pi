@@ -6,7 +6,6 @@ import Adapter from 'enzyme-adapter-react-16'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('Validation Helper', () => {
-    
   it('NameFor', () => {
     const name = v.NameFor({name: 'prefix'}, 'name')
     expect(name).toBe('prefix.name')
@@ -26,7 +25,6 @@ describe('Validation Helper', () => {
     expect(result).toBeFalsy()
   })
 
-  
   it('ShowError should be truthy if error exists and touched', () => {
     const errors = {field1: 'some error'}
     const touched = {field1: true}
@@ -57,22 +55,21 @@ describe('Validation Helper', () => {
 
   it('Should resolve a path to object reference', () => {
     const obj = {a: {b: {c: 'got it'}}}
-    const actual  =v.PathToObject('a.b.c', obj)
+    const actual = v.PathToObject('a.b.c', obj)
     expect(actual).toBe('got it')
   })
 
-  it('<ErrorFor /> with error', () => {    
+  it('<ErrorFor /> with error', () => {
     const errors = {field1: [null, null, 'some error', 'error 2']}
     const touched = {field1: true}
-    
-    const m = shallow(<v.ErrorFor name="field1" touched={touched} errors={errors} />)
+
+    const m = shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
   })
 
-  it('<ErrorFor /> without error', () => {    
+  it('<ErrorFor /> without error', () => {
     const errors = {field2: [null, null, 'some error', 'error 2']}
     const touched = {field1: true}
-    
-    const m = shallow(<v.ErrorFor name="field1" touched={touched} errors={errors} />)
-  })
 
+    const m = shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+  })
 })
