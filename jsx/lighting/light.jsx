@@ -82,6 +82,7 @@ class Light extends Component {
       editButton = (
         <button type='button'
           onClick={this.handleEdit}
+          id={'edit-light-' + this.state.id}
           className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
           Edit
         </button>
@@ -89,7 +90,11 @@ class Light extends Component {
     } else {
       action = (
         <div className='clearfix'>
-          <input type='submit' value='Save' className='btn btn-primary float-right' />
+          <input
+            type='submit'
+            value='Save'
+            className='btn btn-primary float-right'
+            id={'save-light-' + this.state.id} />
         </div>
       )
     }
@@ -103,6 +108,7 @@ class Light extends Component {
         <div className='container'>
           <div className='row mb-1'
             style={cursorStyle}
+            id={'expand-light-' + this.state.id}
             onClick={this.toggleExpand}>
             <div className='col-12 col-sm-6 col-md-4 order-sm-last'>
               <button type='button'
@@ -113,6 +119,7 @@ class Light extends Component {
               {editButton}
             </div>
             <div className='col-12 col-sm-6 col-md-8 order-sm-first'>
+
               {this.state.expand ? FaAngleUp() : FaAngleDown()}
               <b className='ml-2 align-middle'>{this.state.name}</b>
             </div>
