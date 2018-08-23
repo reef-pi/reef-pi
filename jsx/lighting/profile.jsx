@@ -1,115 +1,59 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FixedProfile from 'lighting/fixed_profile'
-import AutoProfile from 'lighting/auto_profile'
-import DiurnalProfile from 'lighting/diurnal_profile'
+import Diurnal from './diurnal_profile'
+import Fixed from './fixed_profile'
+import Auto from './auto_profile'
 
-export default class Profile extends React.Component {
-  constructor (props) {
-    super(props)
-    this.setConfig = this.setConfig.bind(this)
-    this.setType = this.setType.bind(this)
-    this.ui = this.ui.bind(this)
-  }
-
-  setType (k) {
-    return () => {
-      var p = {
-        type: k,
-        config: this.props.config
+const Profile = (props) => {
+  const handleConfigChange = e => {
+    const event = {
+      target: {
+        name: props.name,
+        value: e
       }
-      this.props.hook(p)
     }
+    props.onChangeHandler(event)
   }
 
-  setConfig (c) {
-    var p = {
-      type: this.props.type,
-      config: c
+  switch (props.type) {
+    case 'fixed': {
+      return (
+        <Fixed
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange} />
+      )
     }
-    this.props.hook(p)
-  }
-
-  ui () {
-    switch (this.props.type) {
-      case 'fixed':
-        return (
-          <FixedProfile
-            config={this.props.config}
-            hook={this.setConfig}
-            readOnly={this.props.readOnly}
-          />
-        )
-      case 'auto':
-        return (
-          <AutoProfile
-            config={this.props.config}
-            hook={this.setConfig}
-            readOnly={this.props.readOnly}
-          />
-        )
-      case 'diurnal':
-        return (
-          <DiurnalProfile
-            config={this.props.config}
-            hook={this.setConfig}
-            readOnly={this.props.readOnly}
-          />
-        )
-      default:
-        return (<span> unknown profile{this.props.type}</span>)
+    case 'diurnal': {
+      return (
+        <Diurnal
+          {...props}
+          value={props.value}
+          readOnly={props.readOnly}
+          onChange={props.onChangeHandler} />
+      )
     }
-  }
-
-  render () {
-    return (
-      <div className='container'>
-        <label>Profile</label>
-        <div className='btn-group'>
-          <label className='btn btn-secondary'>
-            <input
-              type='radio'
-              name={this.props.name}
-              id={this.props.name + '-fixed'}
-              onClick={this.setType('fixed')}
-              defaultChecked={this.props.type === 'fixed'}
-              disabled={this.props.readOnly}
-            />
-            Fixed
-          </label>
-          <label className='btn btn-secondary'>
-            <input
-              type='radio'
-              name={this.props.name}
-              id={this.props.name + '-auto'}
-              onClick={this.setType('auto')}
-              defaultChecked={this.props.type === 'auto'}
-              disabled={this.props.readOnly}
-            />
-            Auto
-          </label>
-          <label className='btn btn-secondary'>
-            <input
-              type='radio'
-              name={this.props.name}
-              id={this.props.name + '-diurnal'}
-              onClick={this.setType('diurnal')}
-              defaultChecked={this.props.type === 'diurnal'}
-              disabled={this.props.readOnly}
-            />
-            Diurnal
-          </label>
-        </div>
-        {this.ui()}
-      </div>
-    )
+    case 'auto': {
+      return (
+        <Auto
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange} />
+      )
+    }
+    default: {
+      return (<span>Unknown Profile: {props.type}</span>)
+    }
   }
 }
 
 Profile.propTypes = {
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
   config: PropTypes.object,
-  hook: PropTypes.func,
-  name: PropTypes.string,
-  readOnly: PropTypes.bool
+  onChangeHandler: PropTypes.func
 }
+
+export default Profile

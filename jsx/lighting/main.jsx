@@ -1,8 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
-import Light from './light'
+import Light from './light_form'
 import {showAlert} from 'utils/alert'
-import {confirm} from 'utils/confirm'
 import {updateLight, fetchLights, createLight, deleteLight} from 'redux/actions/lights'
 import {fetchJacks} from 'redux/actions/jacks'
 import {connect} from 'react-redux'
@@ -21,17 +20,7 @@ class main extends React.Component {
     this.addLight = this.addLight.bind(this)
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
-    this.removeLight = this.removeLight.bind(this)
     this.newLightUI = this.newLightUI.bind(this)
-  }
-
-  removeLight (id) {
-    return (function () {
-      confirm('Are you sure ?')
-        .then(function () {
-          this.props.deleteLight(id)
-        }.bind(this))
-    }.bind(this))
   }
 
   componentWillMount () {
@@ -81,8 +70,8 @@ class main extends React.Component {
     var lights = []
     $.each(this.props.lights, function (i, light) {
       lights.push(
-        <div key={'light-' + i} className='list-group-item'>
-          <Light config={light} hook={this.props.updateLight} remove={this.removeLight} />
+        <div key={'light-' + light.id} className='list-group-item'>
+          <Light config={light} save={this.props.updateLight} remove={this.props.deleteLight} />
         </div>
       )
     }.bind(this))
@@ -103,21 +92,28 @@ class main extends React.Component {
     }
     return (
       <div className='row'>
-        <div className='col-lg-1'>Name</div>
-        <div className='col-lg-2'><input type='text' id='lightName' /></div>
-        <div className='col-lg-1' />
-        <div className='col-lg-1'>Jack</div>
-        <div className='col-lg-1'>
-          <div className='dropdown'>
-            <button className='btn btn-secondary dropdown-toggle' type='button' id='jack' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-              {jack}
+        <div className='col-12 col-sm-3 col-md-2 col-lg-1'>
+          <label htmlFor='lightName'>Name</label>
+        </div>
+        <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
+          <input type='text' id='lightName' className='form-control' required />
+        </div>
+        <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
+          <label htmlFor='jack'>
+            Jack
+          </label>
+        </div>
+        <div className='col-12 col-sm-9 col-md-4 col-lg-3 mb-1'>
+          <div className='dropdown w-100'>
+            <button className='btn btn-secondary dropdown-toggle w-100' type='button' id='jack' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+              {jack || 'Choose'}
             </button>
             <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
               {this.jacksList()}
             </div>
           </div>
         </div>
-        <div className='col-lg-1'>
+        <div className='col-12 col-sm-6 col-md-2 col-lg-1'>
           <input type='button' id='createLight' value='add' onClick={this.addLight} className='btn btn-outline-primary' />
         </div>
       </div>)

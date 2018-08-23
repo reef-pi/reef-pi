@@ -17,7 +17,7 @@ describe('Summary', () => {
     renderer.create(
       <Summary
         info={{}}
-        fetch={()=> true}
+        fetch={() => true}
         errors={[]}
       />
     )

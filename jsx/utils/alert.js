@@ -10,3 +10,7 @@ export function showAlert (msg) {
     </div>`
   )
 }
+
+export function clearAlert () {
+  $('#reef-pi-alert').html('')
+}

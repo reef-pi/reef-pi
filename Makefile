@@ -49,6 +49,10 @@ build: clean go-get test bin
 ui:
 	 ./node_modules/.bin/webpack --mode=production
 
+.PHONY: ui-dev
+ui-dev: 
+	./node_modules/.bin/webpack -d --watch
+
 .PHONY: deb
 deb: ui
 	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
@@ -76,3 +80,7 @@ standard:
 .PHONY: jest
 jest:
 	-./node_modules/.bin/jest --coverage --all
+
+.PHONY: start-dev
+start-dev:
+	DEV_MODE=1 ./bin/reef-pi

@@ -12,7 +12,7 @@ export default class App extends React.Component {
     }
     return (
       <div className='container'>
-        <div id='reef-pi-alert'/>
+        <div id='reef-pi-alert' />
         <div className='container'>
           <MainPanel />
         </div>

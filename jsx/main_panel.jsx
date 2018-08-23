@@ -61,7 +61,7 @@ class mainPanel extends React.Component {
       var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
-          <a id={'tab-' + k}className={cname} onClick={this.setTab(k)}>{k}</a>
+          <a id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
         </li>
       )
     }.bind(this))
@@ -74,9 +74,9 @@ class mainPanel extends React.Component {
 
   render () {
     var tab = this.state.tab
-    if(!this.props.capabilities['dashboard'] && tab === 'dashboard'){
-      for(var k in this.props.capabilities){
-        if(this.props.capabilities[k] && (caps[k]!== undefined)){
+    if (!this.props.capabilities['dashboard'] && tab === 'dashboard') {
+      for (var k in this.props.capabilities) {
+        if (this.props.capabilities[k] && (caps[k] !== undefined)) {
           tab = k
           break
         }
@@ -92,17 +92,18 @@ class mainPanel extends React.Component {
           {body}
         </div>
         <div className='row'>
-          <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors}/>
+          <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
         </div>
       </div>
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     capabilities: state.capabilities,
     errors: state.errors,
-    info: state.info,
+    info: state.info
   }
 }
 
