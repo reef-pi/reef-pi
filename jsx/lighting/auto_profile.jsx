@@ -5,17 +5,15 @@ import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
 export default class AutoProfile extends React.Component {
   constructor (props) {
     super(props)
+    
+    var values = Array(12).fill(0)
+    if (props.config && props.config.values && Array.isArray(props.config.values)) {
+      values = props.config.values
+    }
+    this.setState({values: values})
+
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
-    if (props.config && props.config.values && Array.isArray(props.config.values)) {
-      this.state = {
-        values: props.config.values
-      }
-    } else {
-      this.state = {
-        values: Array(12).fill(0)
-      }
-    }
   }
 
   curry (i) {
@@ -33,8 +31,7 @@ export default class AutoProfile extends React.Component {
   }
 
   sliderList () {
-    var values = Object.assign({}, this.state)
-    values = values.values
+    var values = Object.assign({}, this.state).values
 
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical',
