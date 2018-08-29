@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const OnOffButton = ({onChangeHandler, value}) => {
+const ToggleButton = ({onChangeHandler, value}) => {
 
   const on = () => {
     return (
@@ -19,14 +19,19 @@ const OnOffButton = ({onChangeHandler, value}) => {
     )
   }
 
+  const classes = ['switch', (on ? 'on ' : '')].join(' ')
+
   return (
-    value ? on() : off()
+    <div className={classes} onClick={(e) => onChangeHandler(e)}>
+      <div className="switch-toggle"></div>
+    </div>
   )
+
 }
 
-OnOffButton.propTypes = {
+ToggleButton.propTypes = {
   on: PropTypes.bool,
   onChangeHandler: PropTypes.func
 }
 
-export default OnOffButton
+export default ToggleButton

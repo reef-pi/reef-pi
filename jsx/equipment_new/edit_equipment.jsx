@@ -1,48 +1,91 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import OnOffButton from './on_off_button'
+import {ErrorFor, ShowError} from '../utils/validation_helper'
+import {showAlert, clearAlert} from 'utils/alert'
 
-const EditEquipment = ({equipment, outlets, onSubmit, onDelete}) => {
+const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid}) => {
 
-  return (
-    <form onSubmit={onSubmit}>
-      <div className='row text-center text-md-left'>
-        <div className='col-12 col-sm-6 col-md-4 col-lg-4 order-sm-4 order-lg-last'>
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    clearAlert()
+
+    if (isValid) {
+      submitForm()
+    } else {
+      submitForm() // Calling submit form in order to show validation errors
+      showAlert('The equipment settings cannot be saved due to validation errors.  Please correct the errors and try again.')
+    }
+  }
+
+  const deleteAction = () => {
+    if (values.id){
+      return (
+        <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
           <button type="button"
             onClick = {onDelete}
             className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
             Delete
           </button>
         </div>
-        <div className='col-12 col-sm-6 col-md-4 col-lg-4 order-sm-1 form-inline'>
+      )
+    }
+    return ''
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className='row align-items-start'>
+        {deleteAction()}
+        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>Name</label>
-          <input type='text' name='equipment.name'
-            onChange={() => {}}
-            className='form-control'
-            value={equipment.name}
+          <input type='text' name='name'
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={ShowError('name', touched, errors) ? 'form-control is-invalid' : 'form-control'}
+            value={values.name}
           />
+          <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='col-12 col-sm-6 col-md-4 col-lg-4 order-sm-2 form-inline'>
+        <div className='col-12 col-sm-5 col-lg-4 order-sm-2'>
           <label className='mr-2'>Outlet</label>
-          <select name='equipment.name'
-            className='form-control'
-            value={equipment.outlet} >
+          <select name='outlet'
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={ShowError('outlet', touched, errors) ? 'form-control is-invalid' : 'form-control'}
+            value={values.outlet} >
+            <option value='' className='d-none'>-- Select --</option>
             {outlets.map((item) => {
               return (
                 <option
+                  key={item.id}
                   value={item.id} >
                   {item.name}
                 </option>
               )
             })}
           </select>
+          <ErrorFor errors={errors} touched={touched} name='outlet' />
         </div>
       </div>
-      <div className='clearfix'>
-        <input type='submit' value='Save' className='btn btn-sm btn-primary float-right mt-1' />
+      <div className='row'>
+        <div className='col-12'>
+          <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-right mt-1' />
+        </div>
       </div>
     </form>
   )
+}
+
+EditEquipment.propTypes = {
+  actionLabel: PropTypes.string.isRequired,
+  values: PropTypes.object.isRequired,
+  errors: PropTypes.object,
+  touched: PropTypes.object,
+  outlets: PropTypes.array,
+  handleBlur: PropTypes.func.isRequired,
+  submitForm: PropTypes.func.isRequired,
+  onDelete: PropTypes.func,
+  handleChange: PropTypes.func
 }
 
 export default EditEquipment
