@@ -2,7 +2,6 @@ import React from 'react'
 import ATO from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
-import NewEquipment from 'equipment_new/main'
 import Lighting from 'lighting/main'
 import Configuration from 'configuration/main'
 import Temperature from 'temperature/main'
@@ -20,7 +19,6 @@ import '../assets/reef_pi.css'
 
 const caps = {
   'dashboard': <Dashboard />,
-  'test': <NewEquipment />,
   'equipment': <Equipment />,
   'timers': <Timers />,
   'lighting': <Lighting />,

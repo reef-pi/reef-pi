@@ -32,10 +32,3 @@ body{
     padding-bottom: 70px;
   }
 }
-
-@media screen and (min-width: 1140px) {
-  .body-panel {
-    padding-bottom: 70px;
-  }
-}
-
