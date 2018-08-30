@@ -8,19 +8,19 @@ const DiurnalProfile = (props) => {
     <div className='form-inline'>
 
       <label className='mr-2'>Start Time</label>
-      <Field name={NameFor(props, 'start')}
+      <Field name={NameFor(props.name, 'start')}
         readOnly={props.readOnly}
-        className={ShowError(props, NameFor(props, 'start')) ? 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2'}
+        className={ShowError(NameFor(props.name, 'start'), props.touched, props.errors) ? 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2'}
         placeholder='HH:mm'
       />
       <label className='mr-2'>End Time</label>
-      <Field name={NameFor(props, 'end')}
+      <Field name={NameFor(props.name, 'end')}
         readOnly={props.readOnly}
-        className={ShowError(props, NameFor(props, 'end')) ? 'form-control col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control col-12 col-sm-3 col-md-2 col-lg-2'}
+        className={ShowError(NameFor(props.name, 'end'), props.touched, props.errors) ? 'form-control col-12 col-sm-3 col-md-2 col-lg-2 is-invalid' : 'form-control col-12 col-sm-3 col-md-2 col-lg-2'}
         placeholder='HH:mm'
       />
-      <ErrorFor {...props} name={NameFor(props, 'start')} />
-      <ErrorFor {...props} name={NameFor(props, 'end')} />
+      <ErrorFor {...props} name={NameFor(props.name, 'start')} />
+      <ErrorFor {...props} name={NameFor(props.name, 'end')} />
     </div>
   )
 }

@@ -16,14 +16,13 @@ window.localStorage = mockLocalStorage()
 describe('Equipment ui', () => {
   const eqs = [{id: '1', outlet: '1', name: 'Foo', on: true}]
   const outlets = [{id: '1', name: 'O1'}]
+
   it('<Main />', () => {
     const m = shallow(
       <Main store={mockStore({outlets: outlets, equipment: eqs})} />
     ).dive().instance()
     m.toggleAddEquipmentDiv()
-    m.setOutlet(0)()
     m.addEquipment()
-    m.remove('1')()
   })
 
   it('<Equipment />', () => {
@@ -37,9 +36,6 @@ describe('Equipment ui', () => {
         remove={() => true}
         outlets={outlets}
       />).instance()
-    eq.setOutlet({name: 'foo', id: '1', pin: 1})()
-    eq.edit()
-    eq.control()
   })
 
   it('<Chart />', () => {
