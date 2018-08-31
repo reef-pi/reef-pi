@@ -21,7 +21,7 @@ test:
 
 .PHONY: js-lint
 js-lint:
-	./node_modules/.bin/standard  jsx/* --fix
+	npm run js-lint
 
 .PHONY: go-get
 go-get:
@@ -47,11 +47,11 @@ build: clean go-get test bin
 
 .PHONY: ui
 ui:
-	 ./node_modules/.bin/webpack --mode=production
+	npm run ui
 
 .PHONY: ui-dev
 ui-dev: 
-	./node_modules/.bin/webpack -d --watch
+	npm run ui-dev
 
 .PHONY: deb
 deb: ui
@@ -75,11 +75,11 @@ clean:
 
 .PHONY: standard
 standard:
-	-./node_modules/.bin/standard --fix jsx/**/**
+	npm run standard
 
 .PHONY: jest
 jest:
-	-./node_modules/.bin/jest --coverage --all
+	npm run jest
 
 .PHONY: start-dev
 start-dev:
