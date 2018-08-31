@@ -6,6 +6,7 @@ BINARY=bin/reef-pi
 .PHONY:bin
 bin:
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
+	npm run build
 
 .PHONY:pi
 pi:
@@ -22,6 +23,11 @@ test:
 .PHONY: js-lint
 js-lint:
 	npm run js-lint
+
+.PHONY: install
+install:
+	make go-get
+	npm install
 
 .PHONY: go-get
 go-get:
