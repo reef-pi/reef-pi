@@ -14,7 +14,6 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "classnames": "^2.2.6",
     "bootstrap": "^4.1.1",
     "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
@@ -53,6 +52,10 @@
     "sass-loader": "^7.1.0",
     "standard": "^11.0.1",
     "style-loader": "^0.21.0",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-livereload-plugin": "^2.1.1",
     "yup": "^0.26.2"
   },
   "scripts": {
