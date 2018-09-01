@@ -1,4 +1,5 @@
 import * as Yup from 'yup'
+import mapValues from 'lodash.mapvalues'
 
 const LightSchema = Yup.object().shape({
   config: Yup.object().shape({

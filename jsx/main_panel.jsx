@@ -51,14 +51,12 @@ class mainPanel extends React.Component {
   navs (tab) {
     var panels = [ ]
     $.each(caps, function (k, panel) {
-      /*
       if (this.props.capabilities[k] === undefined) {
         return
       }
       if (!this.props.capabilities[k]) {
         return
       }
-      */
       var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
