@@ -51,16 +51,18 @@ class mainPanel extends React.Component {
   navs (tab) {
     var panels = [ ]
     $.each(caps, function (k, panel) {
+      /*
       if (this.props.capabilities[k] === undefined) {
         return
       }
       if (!this.props.capabilities[k]) {
         return
       }
+      */
       var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
       panels.push(
         <li className='nav-item' key={k}>
-          <a id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
+          <a href='#' id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
         </li>
       )
     }.bind(this))
@@ -85,13 +87,19 @@ class mainPanel extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          {this.navs(tab)}
+          <div className='col-12'>
+            {this.navs(tab)}
+          </div>
         </div>
-        <div className='row' style={{paddingBottom: '70px'}}>
-          {body}
+        <div className='row' className='body-panel'>
+          <div className='col-12'>
+            {body}
+          </div>
         </div>
         <div className='row'>
-          <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+          <div className='col-12'>
+            <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+          </div>
         </div>
       </div>
     )

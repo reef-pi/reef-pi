@@ -15,6 +15,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^4.1.1",
+    "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "css-loader": "^0.28.11",
     "electron": "^2.0.2",
@@ -43,6 +44,7 @@
     "react-images": "^0.5.17",
     "react-redux": "^5.0.7",
     "react-test-renderer": "^16.4.0",
+    "react-toggle-switch": "^3.0.4",
     "recharts": "^1.0.0-beta.10",
     "redux": "^4.0.0",
     "redux-mock-store": "^1.5.3",
@@ -82,7 +84,9 @@
       "fetch",
       "expect",
       "Headers",
-      "afterEach"
+      "afterEach",
+      "jest",
+      "beforeEach"
     ]
   },
   "jest": {

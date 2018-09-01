@@ -41,6 +41,6 @@ export const updateEquipment = (id, e) => {
     reduxPost({
       url: '/api/equipment/' + id,
       data: e,
-      success: equipmentUpdated
+      success: fetchEquipment
     }))
 }

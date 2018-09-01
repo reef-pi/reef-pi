@@ -1,15 +1,13 @@
 module.exports = {
   Create: function (n) {
     n.click('a#tab-configuration')
-      .wait(500)
+      .wait('a#config-connectors')
       .click('a#config-connectors')
-      .wait(500)
+      .wait(('input#add_outlet')
       .click('input#add_outlet')
-      .wait(500)
+      .wait('input#outletName')
       .type('input#outletName', 'O1')
-      .wait(500)
       .type('input#outletPin', '6')
-      .wait(1000)
       .click('input#createOutlet')
       .wait(1500)
 
