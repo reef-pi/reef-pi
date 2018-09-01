@@ -75,7 +75,9 @@
       "fetch",
       "expect",
       "Headers",
-      "afterEach"
+      "afterEach",
+      "jest",
+      "beforeEach"
     ]
   },
   "jest": {

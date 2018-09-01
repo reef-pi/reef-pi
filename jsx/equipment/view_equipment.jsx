@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Switch from 'react-toggle-switch'
 
 const ViewEquipment = ({equipment, outletName, onStateChange, onDelete, onEdit}) => {
-
   const toggleState = (e) => {
     const payload = {
       name: equipment.name,
@@ -15,9 +14,9 @@ const ViewEquipment = ({equipment, outletName, onStateChange, onDelete, onEdit})
 
   return (
     <div className='row text-center text-md-left'>
-      <div className="col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last">
-        <button type="button" onClick={onDelete}
-          className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
+      <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
+        <button type='button' onClick={onDelete}
+          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
           Delete
         </button>
         <button type='button' onClick={onEdit}
@@ -33,7 +32,7 @@ const ViewEquipment = ({equipment, outletName, onStateChange, onDelete, onEdit})
       </div>
       <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3'>
         <Switch onClick={toggleState} on={equipment.on}>
-          <small className='ml-1 align-top'>{equipment.on ? 'on': 'off'}</small>
+          <small className='ml-1 align-top'>{equipment.on ? 'on' : 'off'}</small>
         </Switch>
       </div>
     </div>

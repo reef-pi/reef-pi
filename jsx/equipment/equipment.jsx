@@ -3,7 +3,6 @@ import ViewEquipment from './view_equipment'
 import EquipmentForm from './equipment_form'
 import {confirm} from 'utils/confirm'
 
-
 export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
@@ -17,11 +16,11 @@ export default class Equipment extends React.Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  selectedOutlet(){
-    for (let i = 0; i < this.props.outlets.length; i++){
-      if (this.props.outlets[i].id == this.props.equipment.outlet) return this.props.outlets[i]
+  selectedOutlet () {
+    for (let i = 0; i < this.props.outlets.length; i++) {
+      if (this.props.outlets[i].id === this.props.equipment.outlet) return this.props.outlets[i]
     }
-    return {name:''}
+    return {name: ''}
   }
 
   toggleEdit (e) {
@@ -29,7 +28,7 @@ export default class Equipment extends React.Component {
     this.setState({readOnly: false})
   }
 
-  onSubmit(values){
+  onSubmit (values) {
     const id = values.id
 
     const payload = {
@@ -43,7 +42,7 @@ export default class Equipment extends React.Component {
     })
   }
 
-  handleDelete(e){
+  handleDelete (e) {
     e.stopPropagation()
     const message = (
       <div>
@@ -58,21 +57,20 @@ export default class Equipment extends React.Component {
   }
 
   render () {
-
     return (
       <li className='list-group-item'>
-        {this.state.readOnly === true ?
-          <ViewEquipment equipment = {this.props.equipment}
-            outletName = {this.selectedOutlet().name}
-            onEdit = {this.toggleEdit}
-            onDelete = {this.handleDelete}
-            onStateChange = {this.props.update} /> :
-          <EquipmentForm equipment = {this.props.equipment}
-            outlets = {this.props.outlets}
-            actionLabel = 'Save'
-            onSubmit = {this.onSubmit}
-            onUpdate = {this.props.update}
-            onDelete = {this.handleDelete} />
+        {this.state.readOnly === true
+          ? <ViewEquipment equipment={this.props.equipment}
+            outletName={this.selectedOutlet().name}
+            onEdit={this.toggleEdit}
+            onDelete={this.handleDelete}
+            onStateChange={this.props.update} />
+          : <EquipmentForm equipment={this.props.equipment}
+            outlets={this.props.outlets}
+            actionLabel='Save'
+            onSubmit={this.onSubmit}
+            onUpdate={this.props.update}
+            onDelete={this.handleDelete} />
         }
       </li>
     )

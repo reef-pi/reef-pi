@@ -42,9 +42,9 @@ class main extends React.Component {
     var nEq = <div />
     if (this.state.addEquipment) {
       nEq = (<EquipmentForm
-        outlets = {this.props.outlets}
-        actionLabel = 'Add'
-        onSubmit = {this.addEquipment} />)
+        outlets={this.props.outlets}
+        actionLabel='Add'
+        onSubmit={this.addEquipment} />)
     }
     return (
       <div className='container'>
@@ -55,12 +55,12 @@ class main extends React.Component {
                 <Equipment key={item.id}
                   equipment={item}
                   outlets={this.props.outlets}
-                  update = {this.props.update}
-                  delete = {this.props.delete} />
+                  update={this.props.update}
+                  delete={this.props.delete} />
               )
             })
           }
-          <li className='list-group-item'>
+          <li className='list-group-item add-equipment'>
             <div className='row'>
               <div className='col'>
                 <input id='add_equipment' type='button'

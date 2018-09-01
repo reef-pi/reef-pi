@@ -34,21 +34,18 @@ describe('Validation Helper', () => {
 
   it('Should get the error that exists', () => {
     const errors = {field1: 'some error'}
-    const touched = {field1: true}
     const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBe('some error')
   })
 
   it('Should get null if there is no error', () => {
     const errors = {field2: 'some error'}
-    const touched = {field1: true}
     const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBeNull()
   })
 
   it('Should get the first error for an array', () => {
     const errors = {field1: [null, null, 'some error', 'error 2']}
-    const touched = {field1: true}
     const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBe('some error')
   })

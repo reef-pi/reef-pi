@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import {ErrorFor, ShowError} from '../utils/validation_helper'
 import {showAlert, clearAlert} from 'utils/alert'
 
-const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid}) => {
-
+const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid, dirty}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     clearAlert()
-
-    if (isValid) {
+    if (dirty === false || isValid === true) {
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
@@ -18,12 +16,12 @@ const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlet
   }
 
   const deleteAction = () => {
-    if (values.id){
+    if (values.id) {
       return (
         <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
-          <button type="button"
-            onClick = {onDelete}
-            className="btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2">
+          <button type='button'
+            onClick={onDelete}
+            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
             Delete
           </button>
         </div>
