@@ -16,6 +16,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "classnames": "^2.2.6",
     "bootstrap": "^4.1.1",
+    "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "css-loader": "^0.28.11",
     "electron": "^2.0.2",
