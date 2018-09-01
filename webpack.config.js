@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // var BUILD_DIR = path.resolve(__dirname, "assets/");
-var BUILD_DIR = path.resolve(__dirname, "dist", "ui");
+var BUILD_DIR = path.resolve(__dirname, "ui");
 var APP_DIR = path.resolve(__dirname, "jsx");
 
 var config = {
@@ -49,11 +49,11 @@ var config = {
   },
   output: {
     path: BUILD_DIR,
-    filename: '[name].js',
+    filename: 'assets/js/[name].js',
   },
   plugins:[
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      filename: 'home.html',
       template: './assets/home.html',
       inject: true
     }),

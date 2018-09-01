@@ -6,6 +6,7 @@ reef-pi.db
 *.db
 *.deb
 dist
+ui/
 .bundle
 server.crt
 server.key
