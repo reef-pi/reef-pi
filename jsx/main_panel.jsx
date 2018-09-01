@@ -15,7 +15,6 @@ import {fetchUIData} from 'redux/actions/ui'
 import {fetchInfo} from 'redux/actions/info'
 import {connect} from 'react-redux'
 import Summary from 'summary'
-import '../assets/reef_pi.css'
 
 const caps = {
   'dashboard': <Dashboard />,
