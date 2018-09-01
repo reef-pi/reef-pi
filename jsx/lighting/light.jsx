@@ -81,7 +81,6 @@ class Light extends Component {
     if (this.state.readOnly) {
       editButton = (
         <button type='button'
-          id={'edit-' + this.state.name}
           onClick={this.handleEdit}
           id={'edit-light-' + this.state.id}
           className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
@@ -108,7 +107,6 @@ class Light extends Component {
       <form onSubmit={this.handleFormSubmit}>
         <div className='container'>
           <div className='row mb-1'
-            id={'light-' + this.state.name}
             style={cursorStyle}
             id={'expand-light-' + this.state.id}
             onClick={this.toggleExpand}>
