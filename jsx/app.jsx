@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'style.scss'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
 export default class App extends React.Component {

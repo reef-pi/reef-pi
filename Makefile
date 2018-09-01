@@ -56,7 +56,7 @@ ui:
 	npm run ui
 
 .PHONY: ui-dev
-ui-dev: 
+ui-dev:
 	npm run ui-dev
 
 .PHONY: deb
@@ -64,8 +64,9 @@ deb: ui
 	mkdir -p dist/var/lib/reef-pi/assets dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp assets/favicon.ico dist/var/lib/reef-pi/assets/favicon.ico
-	cp assets/home.html dist/var/lib/reef-pi/assets/home.html
-	cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
+	# cp assets/home.html dist/var/lib/reef-pi/assets/home.html
+	# cp assets/ui.js dist/var/lib/reef-pi/assets/ui.js
+  cp dist/ui/**/*.* dist/var/lib/reef-pi/
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
 	mkdir dist/var/lib/reef-pi/images
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
