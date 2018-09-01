@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export const ErrorFor = (props) => {
+export const ErrorFor = ({name, errors, touched}) => {
   const getErrors = () => {
-    if (ShowError(props, props.name)) {
-      return ErrorMessage(props, props.name)
+    if (ShowError(name, touched, errors)) {
+      return ErrorMessage(errors, name)
     }
     return null
   }
@@ -23,18 +23,18 @@ ErrorFor.propTypes = {
   errors: PropTypes.object
 }
 
-export const NameFor = (props, name) => {
-  return props.name + '.' + name
+export const NameFor = (name, fieldName) => {
+  return name + '.' + fieldName
 }
 
-export const ShowError = (props, name) => {
-  var touched = PathToObject(name, props.touched)
-  var err = PathToObject(name, props.errors)
-  return touched && err
+export const ShowError = (name, touched, errors) => {
+  const fieldTouched = PathToObject(name, touched)
+  const err = PathToObject(name, errors)
+  return fieldTouched && err
 }
 
-export const ErrorMessage = (props, name) => {
-  var err = PathToObject(name, props.errors)
+export const ErrorMessage = (errors, name) => {
+  var err = PathToObject(name, errors)
   if (typeof err === 'string' || err instanceof String) {
     return err
   } else if (Array.isArray(err)) {

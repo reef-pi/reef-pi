@@ -1,11 +1,10 @@
 module.exports = {
   Create: function (n) {
     n.click('a#tab-lighting')
-      .wait(500)
+      .wait('input#add_light')
       .click('input#add_light')
-      .wait(500)
+      .wait('input#lightName')
       .type('input#lightName', 'A360')
-      .wait(500)
       .click('button#jack')
       .wait(500)
       .click('span#select-jack-J1')
