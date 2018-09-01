@@ -47,6 +47,16 @@ func loadSettings(store types.Store) (Settings, error) {
 func initializeSettings(store types.Store) (Settings, error) {
 	if os.Getenv("DEV_MODE") == "1" {
 		DefaultSettings.Capabilities.DevMode = true
+		DefaultSettings.Capabilities.Dashboard = true
+		DefaultSettings.Capabilities.Equipment = true
+		DefaultSettings.Capabilities.Timers = true
+		DefaultSettings.Capabilities.Lighting = true
+		DefaultSettings.Capabilities.Temperature = true
+		DefaultSettings.Capabilities.ATO = true
+		DefaultSettings.Capabilities.Macro = true
+		DefaultSettings.Capabilities.Doser = true
+		DefaultSettings.Capabilities.Ph = true
+
 		DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")
 	}
