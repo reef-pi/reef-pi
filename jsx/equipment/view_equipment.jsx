@@ -12,15 +12,6 @@ const ViewEquipment = ({equipment, outletName, onStateChange, onDelete, onEdit})
     onStateChange(equipment.id, payload)
   }
 
-  const toggleState = (e) => {
-    const payload = {
-      name: equipment.name,
-      on: !equipment.on,
-      outlet: equipment.outlet
-    }
-    onStateChange(equipment.id, payload)
-  }
-
   return (
     <div className='row text-center text-md-left'>
       <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>

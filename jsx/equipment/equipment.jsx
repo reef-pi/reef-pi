@@ -57,7 +57,6 @@ export default class Equipment extends React.Component {
   }
 
   render () {
-
     return (
       <li className='list-group-item'>
         {this.state.readOnly === true
