@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import classNames from 'classnames'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
@@ -67,7 +68,8 @@ export default class AutoProfile extends React.Component {
               <input type='text'
                 name={NameFor(this.props.name, 'values.' + i)}
                 onBlur={this.props.onBlur}
-                className={ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors) ? 'is-invalid form-control form-control-sm mb-1 d-block d-md-none d-lg-block' : 'form-control form-control-sm mb-1 d-block d-md-none d-lg-block'}
+                className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block',
+                  {'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors)})}
                 value={values[i]}
                 onChange={this.curry(i)}
                 disabled={this.props.readOnly} />

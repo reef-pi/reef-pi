@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {ErrorFor, ShowError} from '../utils/validation_helper'
 import {showAlert, clearAlert} from 'utils/alert'
+import classNames from 'classnames'
 
 const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid, dirty}) => {
   const handleSubmit = (event) => {
@@ -39,7 +40,7 @@ const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlet
           <input type='text' name='name'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={ShowError('name', touched, errors) ? 'form-control is-invalid' : 'form-control'}
+            className={classNames('form-control', {'is-invalid': ShowError('name', touched, errors)})}
             value={values.name}
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
@@ -49,7 +50,7 @@ const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlet
           <select name='outlet'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={ShowError('outlet', touched, errors) ? 'form-control is-invalid' : 'form-control'}
+            className={classNames('form-control', {'is-invalid': ShowError('outlet', touched, errors)})}
             value={values.outlet} >
             <option value='' className='d-none'>-- Select --</option>
             {outlets.map((item) => {

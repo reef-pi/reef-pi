@@ -5,6 +5,7 @@ import Profile from './profile'
 import Percent from './percent'
 import {ErrorFor, NameFor, ShowError, PathToObject} from '../utils/validation_helper'
 import {Field} from 'formik'
+import classNames from 'classnames'
 
 const Channel = (props) => {
   const handleChange = e => {
@@ -74,7 +75,8 @@ const Channel = (props) => {
               <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
             </label>
             <Field name={NameFor(props.name, 'name')}
-              className={ShowError(NameFor(props.name, 'name'), props.touched, props.errors) ? 'form-control is-invalid' : 'form-control'}
+              className={classNames('form-control',
+                {'is-invalid': ShowError(NameFor(props.name, 'name'), props.touched, props.errors)})}
               placeholder='Channel Name'
               disabled={props.readOnly} />
             <ErrorFor {...props}
@@ -108,7 +110,8 @@ const Channel = (props) => {
           <div className='form-group'>
             <label>Min</label>
             <Percent type='text'
-              className={ShowError(NameFor(props.name, 'min'), props.touched, props.errors) ? 'form-control is-invalid' : 'form-control'}
+              className={classNames('form-control',
+                {'is-invalid': ShowError(NameFor(props.name, 'min'), props.touched, props.errors)})}
               name={NameFor(props.name, 'min')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
@@ -121,7 +124,8 @@ const Channel = (props) => {
           <div className='form-group'>
             <label>Max</label>
             <Percent type='text'
-              className={ShowError(NameFor(props.name, 'max'), props.touched, props.errors) ? 'form-control is-invalid' : 'form-control'}
+              className={classNames('form-control',
+                {'is-invalid': ShowError(NameFor(props.name, 'max'), props.touched, props.errors)})}
               name={NameFor(props.name, 'max')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
@@ -134,7 +138,8 @@ const Channel = (props) => {
           <div className='form-group'>
             <label>Start</label>
             <Percent type='text'
-              className={ShowError(NameFor(props.name, 'start_min'), props.touched, props.errors) ? 'form-control is-invalid' : 'form-control'}
+              className={classNames('form-control',
+                {'is-invalid': ShowError(NameFor(props.name, 'start_min'), props.touched, props.errors)})}
               name={NameFor(props.name, 'start_min')}
               onBlur={props.onBlur}
               disabled={props.readOnly}
@@ -149,7 +154,8 @@ const Channel = (props) => {
           <div className='form-group'>
             <label className='mr-3'>Profile</label>
             <ProfileSelector
-              className={ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) ? 'form-control is-invalid' : 'form-control'}
+              className={classNames('form-control',
+                {'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors)})}
               name={NameFor(props.name, 'profile')}
               readOnly={props.readOnly}
               onChangeHandler={handleConfigChange}

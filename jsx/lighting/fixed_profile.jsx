@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import classNames from 'classnames'
 
 export default class FixedProfile extends React.Component {
   constructor (props) {
@@ -27,8 +28,8 @@ export default class FixedProfile extends React.Component {
         <div className='col-6 col-sm-3 col-md-2 col-xl-1 order-sm-2 mb-1 mb-sm-0'>
           <input type='text'
             name={NameFor(this.props.name, 'value')}
-
-            className={ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors) ? 'form-control is-invalid' : 'form-control'}
+            className={classNames('form-control',
+              {'is-invalid': ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors)})}
             value={this.state.value}
             onBlur={this.props.onBlur}
             onChange={this.handleChange}
