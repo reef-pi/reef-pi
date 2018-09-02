@@ -59,7 +59,7 @@ describe('equipment actions', () => {
     fetchMock.getOnce('/api/equipment', {})
     const store = mockStore()
     return store.dispatch(updateEquipment('1')).then(() => {
-      expect(store.getActions()).toEqual([equipmentUpdated({})])
+      expect(store.getActions()).toEqual([equipmentLoaded({})])
     })
   })
 })

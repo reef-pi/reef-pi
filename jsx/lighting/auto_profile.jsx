@@ -1,10 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import classNames from 'classnames'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
     super(props)
+
+    var values = Array(12).fill(0)
+    if (props.config && props.config.values && Array.isArray(props.config.values)) {
+      values = props.config.values
+    }
+    this.state = {values: values}
+
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
     if (props.config && props.config.values && Array.isArray(props.config.values)) {
@@ -33,8 +41,7 @@ export default class AutoProfile extends React.Component {
   }
 
   sliderList () {
-    var values = Object.assign({}, this.state)
-    values = values.values
+    var values = Object.assign({}, this.state).values
 
     var rangeStyle = {
       WebkitAppearance: 'slider-vertical',
@@ -68,9 +75,10 @@ export default class AutoProfile extends React.Component {
           <div className='row'>
             <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
               <input type='text'
-                name={NameFor(this.props, 'values.' + i)}
+                name={NameFor(this.props.name, 'values.' + i)}
                 onBlur={this.props.onBlur}
-                className={ShowError(this.props, NameFor(this.props, 'values.' + i)) ? 'is-invalid form-control form-control-sm mb-1 d-block d-md-none d-lg-block' : 'form-control form-control-sm mb-1 d-block d-md-none d-lg-block'}
+                className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block',
+                  {'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors)})}
                 value={values[i]}
                 onChange={this.curry(i)}
                 disabled={this.props.readOnly} />
@@ -107,7 +115,7 @@ export default class AutoProfile extends React.Component {
           {this.sliderList()}
           <div className='col-12 order-last text-center'>
             <input className='d-none is-invalid form-control' />
-            <ErrorFor {...this.props} name={NameFor(this.props, 'values')} />
+            <ErrorFor {...this.props} name={NameFor(this.props.name, 'values')} />
           </div>
         </div>
       </div>

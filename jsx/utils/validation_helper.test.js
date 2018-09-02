@@ -7,49 +7,46 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('Validation Helper', () => {
   it('NameFor', () => {
-    const name = v.NameFor({name: 'prefix'}, 'name')
+    const name = v.NameFor('prefix', 'name')
     expect(name).toBe('prefix.name')
   })
 
   it('ShowError should be falsy if there is no error', () => {
     const errors = {field2: 'some error'}
     const touched = {field1: true, field2: false}
-    const result = v.ShowError({touched, errors}, 'field1')
+    const result = v.ShowError('field1', touched, errors)
     expect(result).toBeFalsy()
   })
 
   it('ShowError should be falsy if not touched', () => {
     const errors = {field1: 'some error'}
     const touched = {field1: false, field2: false}
-    const result = v.ShowError({touched, errors}, 'field1')
+    const result = v.ShowError('field1', touched, errors)
     expect(result).toBeFalsy()
   })
 
   it('ShowError should be truthy if error exists and touched', () => {
     const errors = {field1: 'some error'}
     const touched = {field1: true}
-    const result = v.ShowError({touched, errors}, 'field1')
+    const result = v.ShowError('field1', touched, errors)
     expect(result).toBeTruthy()
   })
 
   it('Should get the error that exists', () => {
     const errors = {field1: 'some error'}
-    const touched = {field1: true}
-    const result = v.ErrorMessage({touched, errors}, 'field1')
+    const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBe('some error')
   })
 
   it('Should get null if there is no error', () => {
     const errors = {field2: 'some error'}
-    const touched = {field1: true}
-    const result = v.ErrorMessage({touched, errors}, 'field1')
+    const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBeNull()
   })
 
   it('Should get the first error for an array', () => {
     const errors = {field1: [null, null, 'some error', 'error 2']}
-    const touched = {field1: true}
-    const result = v.ErrorMessage({touched, errors}, 'field1')
+    const result = v.ErrorMessage(errors, 'field1')
     expect(result).toBe('some error')
   })
 
