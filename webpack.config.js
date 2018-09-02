@@ -10,7 +10,7 @@ var APP_DIR = path.resolve(__dirname, "jsx");
 var config = {
   entry: APP_DIR + "/entry",
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".mjs",".js", ".jsx"],
     modules: [
       "node_modules",
       path.resolve(__dirname, "jsx"),
@@ -24,7 +24,11 @@ var config = {
         include: APP_DIR,
         loader: "babel-loader",
         query: {
-          presets: ["es2015", "react", "stage-2"]
+          presets: [
+            ["es2015", {"modules": false}],
+            "react",
+            "stage-2"
+          ]
         }
       },
       {
