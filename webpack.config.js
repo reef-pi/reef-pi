@@ -3,7 +3,6 @@ var path = require("path");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-// var BUILD_DIR = path.resolve(__dirname, "assets/");
 var BUILD_DIR = path.resolve(__dirname, "ui");
 var APP_DIR = path.resolve(__dirname, "jsx");
 
@@ -62,8 +61,6 @@ var config = {
       inject: true
     }),
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
       filename: 'assets/css/[name].css',
       chunkFilename: 'assets/css/[id].css'
     })

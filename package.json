@@ -64,8 +64,8 @@
     "ui-dev": "./node_modules/.bin/webpack -d --watch",
     "js-lint": "./node_modules/.bin/standard  jsx/* --fix",
     "standard": "./node_modules/.bin/standard --fix jsx/**/**",
-    "jest": "./node_modules/.bin/jest --coverage --all",
-    "test": "jest --all --updateSnapshot --no-cache --coverage"
+    "jest": "export NODE_ENV=testing && ./node_modules/.bin/jest --coverage --all",
+    "test": "export NODE_ENV=testing && jest --all --updateSnapshot --no-cache --coverage"
   },
   "repository": {
     "type": "git",

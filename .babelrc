@@ -1,6 +1,21 @@
 {
-  "presets" : [
-    ["es2015", {"modules": false}],
-    "react",
-    ["env", {"modules": false}]]
+  "env" : {
+     "testing": {
+        "presets" : [
+          "es2015",
+          "react",
+          "env"
+        ],
+     "plugins": [
+        "transform-es2015-modules-commonjs",
+       ]
+     },
+     "production": {
+        "presets" : [
+          ["es2015", {"modules": false}],
+          "react",
+          ["env", {"modules": false}]
+        ]
+     }
+  }
 }
