@@ -36,13 +36,12 @@ reef-pi would not be possible without these awesome things:
 
   - [Raspberry Pi Foundation](https://www.raspberrypi.org/)
   - [Adafruit.com](https://www.adafruit.com/) for all peripheral boards, tutorials.
-  - [go](https://golang.org/), the programming language that powers feef-pi non-ui parts.
-  - [react](https://reactjs.org/), javascript framework for building UI.
-  - [github](https://github.com/), github, the social coding platform.
-  - [embd](http://embd.kidoman.io/), go based IoT library.
-  - [reef2reef](https://www.reef2reef.com/), worlds largets reef tank user forum.
-  - [nano reef](https://www.nano-reef.com/), a forum specific for nano reef tanks.
-  - [travis ci](https://travis-ci.org/), a continuous integration service
+  - [go](https://golang.org/), the programming language that powers reef-pi non-ui parts.
+  - [react](https://reactjs.org/), a javascript framework used by reef-pi user interface.
+  - [github](https://github.com/), the social coding platform that provide reef-pi code, website and release package hosting.
+  - [embd](http://embd.kidoman.io/), go based IoT library used by reef-pi.
+  - [reef2reef](https://www.reef2reef.com/), worlds largets reef tank user forum where reef-pi's original discussion thread is hosted.
+  - [travis ci](https://travis-ci.org/) for continuous integration service
 
 
 ## License
