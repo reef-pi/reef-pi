@@ -145,8 +145,8 @@ describe('Equipment ui', () => {
         update={() => true}
         delete={() => true}
         outlets={[{id: '1', name: 'O1'}]}
-        handleBlur={()=>true}
-        submitForm={()=>true}
+        handleBlur={() => true}
+        submitForm={() => true}
       />)
   })
 
@@ -158,8 +158,8 @@ describe('Equipment ui', () => {
         update={() => true}
         delete={() => true}
         outlets={[{id: '1', name: 'O1'}]}
-        handleBlur={()=>true}
-        submitForm={()=>true}
+        handleBlur={() => true}
+        submitForm={() => true}
       />)
   })
 
