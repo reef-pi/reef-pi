@@ -5,8 +5,8 @@ import {connect} from 'react-redux'
 
 class chart extends React.Component {
   componentDidMount () {
-    this.props.fetchTCUsage(this.props.sensor_id)
-    var timer = window.setInterval(() => { this.props.fetchTCUsage(this.props.sensor_id) }, 10 * 1000)
+    this.props.fetch(this.props.sensor_id)
+    var timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
     this.setState({timer: timer})
   }
 
@@ -25,9 +25,13 @@ class chart extends React.Component {
     }
     var min = this.props.config.chart_min
     var max = this.props.config.chart_max
+    var currentTemp = ''
+    if (this.props.usage.current.length > 1) {
+      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].temperature
+    }
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name} - Temperature</span>
+        <span className='h6'>{this.props.config.name} - Temperature ({currentTemp})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <AreaChart data={this.props.usage.current}>
             <defs>
@@ -39,7 +43,14 @@ class chart extends React.Component {
             <YAxis domain={[min, max]} dataKey='temperature' />
             <XAxis dataKey='time' />
             <Tooltip />
-            <Area type='linear' dataKey='temperature' stroke='#007E33' isAnimationActive={false} fillOpacity={1} fill='url(#gradient)' />
+            <Area
+              type='linear'
+              dataKey='temperature'
+              stroke='#007E33'
+              isAnimationActive={false}
+              fillOpacity={1}
+              fill='url(#gradient)'
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -56,7 +67,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTCUsage: (id) => dispatch(fetchTCUsage(id))
+    fetch: (id) => dispatch(fetchTCUsage(id))
   }
 }
 
