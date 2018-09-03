@@ -26,7 +26,10 @@ class chart extends React.Component {
       return (<div />)
     }
     var metrics = this.props.readings[this.props.type]
-    var current = metrics[metrics.length - 1].pH
+    var current = ''
+    if (metrics.length > 1) {
+      current = metrics[metrics.length - 1].pH
+    }
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}-{this.props.type} pH ({current})</span>

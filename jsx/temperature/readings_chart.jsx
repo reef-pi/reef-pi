@@ -25,7 +25,10 @@ class chart extends React.Component {
     }
     var min = this.props.config.chart_min
     var max = this.props.config.chart_max
-    var currentTemp = this.props.usage.current[this.props.usage.current.length - 1].temperature
+    var currentTemp = ''
+    if (this.props.usage.current.length > 1) {
+      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].temperature
+    }
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - Temperature ({currentTemp})</span>
