@@ -8,6 +8,10 @@ bin:
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 	npm run build
 
+.PHONY:go
+go:
+	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
+
 .PHONY:pi
 pi:
 	env GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
