@@ -70,7 +70,7 @@ func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry types
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
 		Notify:    notify,
-		statsMgr:  utils.NewStatsManager(store, Bucket, 180, 24*7),
+		statsMgr:  utils.NewStatsManager(store, Bucket, types.CurrentLimit, types.HistoricalLimit),
 		store:     store,
 	}
 }
