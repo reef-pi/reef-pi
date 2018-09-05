@@ -25,12 +25,18 @@ func (r *ReefPi) API() error {
 	if err != nil {
 		return err
 	}
-	r.loadAPI(router)
+  r.AuthenticatedAPI(router)
+  r.UnAuthenticatedAPI(router)
 	return nil
 }
 
-// API
-func (r *ReefPi) loadAPI(router *mux.Router) {
+func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
+	router.HandleFunc("/auth/signin", r.SignIn).Methods("POST")
+	router.HandleFunc("/auth/signout", r.SignOut).Methods("GET")
+}
+
+// Authenticated API using the BasicAuth middleware
+func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
@@ -74,6 +80,7 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 	http.Handle("/images/", http.StripPrefix("/images/", images))
 	a := utils.NewBasicAuth(creds.User, creds.Password)
 	http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
+	http.Handle("/auth/", router)
 	if https {
 		if err := utils.GenerateCerts(); err != nil {
 			return err, nil

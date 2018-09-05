@@ -5,8 +5,12 @@ BINARY=bin/reef-pi
 
 .PHONY:bin
 bin:
-	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
+	make build-go
 	npm run build
+
+.PHONY:build-go
+build-go:
+	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
 .PHONY:pi
 pi:
@@ -36,6 +40,7 @@ go-get:
 	go get -u github.com/kidoman/embd
 	go get -u github.com/shirou/gopsutil
 	go get -u github.com/gorilla/mux
+	go get -u github.com/gorilla/sessions
 	go get -u gopkg.in/robfig/cron.v2
 	go get -u github.com/dustin/go-humanize
 	go get -u github.com/reef-pi/rpi/pwm

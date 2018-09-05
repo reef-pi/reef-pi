@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+  "github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
@@ -23,11 +24,13 @@ type ReefPi struct {
 	telemetry  types.Telemetry
 	version    string
 	h          *HealthChecker
-	bus        i2c.Bus
+  bus        i2c.Bus
+	cookiejar  *sessions.CookieStore
 }
 
 func New(version, database string) (*ReefPi, error) {
-	store, err := utils.NewStore(database)
+  store, err := utils.NewStore(database)
+  cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
@@ -89,7 +92,8 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		inlets:     inlets,
 		subsystems: make(map[string]types.Subsystem),
-		version:    version,
+    version:    version,
+    cookiejar: cookiejar,
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry, store)
