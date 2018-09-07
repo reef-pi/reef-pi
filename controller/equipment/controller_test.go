@@ -3,10 +3,11 @@ package equipment
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestEquipmentController(t *testing.T) {
@@ -145,4 +146,53 @@ func TestEquipmentController(t *testing.T) {
 		t.Error("Controlling invalid equipment should fail")
 	}
 
+}
+
+func TestUpdateEquipment(t *testing.T) {
+	config := Config{
+		DevMode: true,
+	}
+	telemetry := utils.TestTelemetry()
+	store, err := utils.TestDB()
+	if err != nil {
+		t.Fatal("Failed to create test database. Error:", err)
+	}
+	outlets := connectors.NewOutlets(store)
+	outlets.DevMode = true
+	if err := outlets.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	c := New(config, outlets, store, telemetry)
+	c.Setup()
+
+	o1 := connectors.Outlet{
+		Name: "O1",
+		Pin:  23,
+	}
+	if err := outlets.Create(o1); err != nil {
+		t.Fatal(err)
+	}
+
+	o2 := connectors.Outlet{
+		Name: "O2",
+		Pin:  4,
+	}
+	if err := outlets.Create(o2); err != nil {
+		t.Fatal(err)
+	}
+
+	//create equipment
+	eq := Equipment{
+		Name:   "Equipment 1",
+		Outlet: "1",
+	}
+
+	if err := c.Create(eq); err != nil {
+		t.Fatal(err)
+	}
+
+	eq.Outlet = "2"
+	if err := c.Update("1", eq); err != nil {
+		t.Fatal(err)
+	}
 }

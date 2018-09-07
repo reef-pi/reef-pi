@@ -56,6 +56,7 @@ var config = {
   },
   plugins:[
     new HtmlWebpackPlugin({
+      favicon: './assets/favicon.ico',
       filename: 'home.html',
       template: './assets/home.html',
       inject: true
