@@ -17,6 +17,16 @@ body {
   cursor: pointer;
 }
 
+.cursor-pointer {
+  cursor: pointer
+}
+
+input[type=number].no-spinner::-webkit-inner-spin-button, 
+input[type=number].no-spinner::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 @media screen and (max-width: 576px) {
   .body-panel {
     padding-bottom: 155px;

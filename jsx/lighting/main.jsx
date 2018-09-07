@@ -125,13 +125,13 @@ class main extends React.Component {
       nLight = this.newLightUI()
     }
     return (
-      <div className='container'>
+      <div>
         <div className='list-group list-group-flush'>
-          { this.lightsList() }
-        </div>
-        <div className='container'>
-          <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />
-          {nLight}
+          { this.lightsList() }        
+          <div className='list-group-item add-equipment'>
+            <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />
+            {nLight}
+          </div>
         </div>
       </div>
     )

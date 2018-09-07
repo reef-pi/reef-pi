@@ -22,6 +22,7 @@ function SmokeTest () {
     .wait(500)
     .evaluate(S.SignIn(nightmare))
     .wait(1500)
+    
     .evaluate(outlet.Create(nightmare))
     .wait(1500)
     .evaluate(inlet.Create(nightmare))
@@ -38,6 +39,7 @@ function SmokeTest () {
     .wait(1500)
     .evaluate(ato.Create(nightmare))
     .wait(1500)
+    
     .evaluate(tc.Configure(nightmare))
     .wait(1500)
     .evaluate(ato.Configure(nightmare))

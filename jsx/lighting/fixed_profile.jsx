@@ -26,9 +26,9 @@ export default class FixedProfile extends React.Component {
     return (
       <div className='row form-group justify-content-center'>
         <div className='col-6 col-sm-3 col-md-2 col-xl-1 order-sm-2 mb-1 mb-sm-0'>
-          <input type='text'
+          <input type='number'
             name={NameFor(this.props.name, 'value')}
-            className={classNames('form-control',
+            className={classNames('form-control no-spinner',
               {'is-invalid': ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors)})}
             value={this.state.value}
             onBlur={this.props.onBlur}
