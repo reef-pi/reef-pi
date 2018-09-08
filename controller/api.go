@@ -81,8 +81,6 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 	images := http.FileServer(http.Dir("images"))
 	http.Handle("/images/", http.StripPrefix("/images/", images))
-	// a := utils.NewBasicAuth(creds.User, creds.Password)
-	// http.Handle("/api/", a.BasicAuth(router.ServeHTTP))
 	http.Handle("/auth/", router)
 	if https {
 		if err := utils.GenerateCerts(); err != nil {
