@@ -164,15 +164,6 @@ func (r *ReefPi) Controller() types.Controller {
 	)
 }
 
-// type Auth struct {
-// 	user string
-// 	pass string
-// }
-
-// func (r *ReefPi) check(user, pass string) bool {
-// 	return (a.user == user) && (a.pass == pass)
-// }
-
 func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
   return func(w http.ResponseWriter, req *http.Request) {
     authSession, err := r.cookiejar.Get(req, "auth")
