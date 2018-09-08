@@ -30,7 +30,8 @@ func TestAPI(t *testing.T) {
 	}
 	tr := utils.NewTestRouter()
 
-	r.loadAPI(tr.Router)
+	r.UnAuthenticatedAPI(tr.Router)
+	r.AuthenticatedAPI(tr.Router)
 	r.h.check()
 	if err := tr.Do("GET", "/api/health_stats", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to get per minute health data.Error:", err)
