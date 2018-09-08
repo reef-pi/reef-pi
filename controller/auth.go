@@ -16,22 +16,20 @@ func (r *ReefPi) SignIn(w http.ResponseWriter, req *http.Request) {
   var reqCredentials Credentials
   var bucketCredentials Credentials
   if req.Body == nil {
-      log.Println("DEBUG:", "No Body")
-      http.Error(w, "Please send a request body", 400)
-      return
+    http.Error(w, "No body request", 400)
+    return
   }
-  err := json.NewDecoder(req.Body).Decode(&reqCredentials)
-  if err != nil {
-      log.Println("DEBUG:", "Error while decoding")
-      http.Error(w, err.Error(), 400)
-      return
+  if err := json.NewDecoder(req.Body).Decode(&reqCredentials); err != nil {
+    log.Println("DEBUG:", "Error while decoding")
+    http.Error(w, err.Error(), 400)
+    return
   }
   session, _ := r.cookiejar.Get(req, "auth")
   if session.Values["user"] == reqCredentials.User {
     log.Println("DEBUG:", "Already logged")
     utils.JSONResponse(nil, w, req)
 	} else {
-    err = r.store.Get(Bucket, "credentials", &bucketCredentials)
+    r.store.Get(Bucket, "credentials", &bucketCredentials)
     if reqCredentials.User == bucketCredentials.User && reqCredentials.Password == bucketCredentials.Password {
       log.Println("DEBUG:", "Access Granted")
       session.Values["user"] = reqCredentials.User

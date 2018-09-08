@@ -7,6 +7,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
+	"net/http"
 	"log"
 	"time"
 )
@@ -161,4 +162,30 @@ func (r *ReefPi) Controller() types.Controller {
 		r.LogError,
 		r.Subsystem,
 	)
+}
+
+// type Auth struct {
+// 	user string
+// 	pass string
+// }
+
+// func (r *ReefPi) check(user, pass string) bool {
+// 	return (a.user == user) && (a.pass == pass)
+// }
+
+func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
+  return func(w http.ResponseWriter, req *http.Request) {
+    authSession, err := r.cookiejar.Get(req, "auth")
+    if err != nil {
+      log.Println("DEBUG:", "No session")
+      http.Error(w, "Unauthorized.", 401)
+      return
+    }
+    if user := authSession.Values["user"]; user == nil {
+      log.Println("DEBUG:", "No session")
+      http.Error(w, "Unauthorized.", 401)
+      return
+    }
+		fn(w, req)
+	}
 }
