@@ -5,7 +5,7 @@ BINARY=bin/reef-pi
 
 .PHONY:bin
 bin:
-	make build-go
+	make go
 	npm run build
 
 .PHONY:go
