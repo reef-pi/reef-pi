@@ -23,17 +23,17 @@ componentDidMount(){
   })
 }
 getComponent() {
-  if(this.state.logged === true){
-    return (
-      <div className='container'>
-        <div id='reef-pi-alert' />
-        <div className='container'>
-          <MainPanel />
-        </div>
-      </div>
-    )
-  }else{
+  if(!this.state.logged){
     return (<SignIn />)
+  }else{
+    return (
+    <div className='container'>
+      <div id='reef-pi-alert' />
+      <div className='container'>
+        <MainPanel />
+      </div>
+    </div>
+  )
   }
 }
   render () {
