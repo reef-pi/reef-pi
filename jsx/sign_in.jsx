@@ -75,7 +75,7 @@ export default class SignIn extends React.Component {
   }
 
   static isSignIned () {
-    return fetch('/api/errors', {method:'GET'})
+    return fetch('/api/me', {method:'GET'})
     .then((r) => {
      return r.ok
     })
@@ -100,9 +100,9 @@ export default class SignIn extends React.Component {
       user: this.state.user,
       password: this.state.password
     }
-  const setState = this.setState.bind(this)
-  return fetch('/auth/signin', {method: 'POST', body: JSON.stringify(creds)})
-    .then((response) => {
+    const setState = this.setState.bind(this)
+    return fetch('/auth/signin', {method: 'POST', body: JSON.stringify(creds)})
+      .then((response) => {
         switch(response.status) {
           case 500:
             console.log('Internal Server Error')
@@ -117,11 +117,11 @@ export default class SignIn extends React.Component {
             setState({invalidCredentials: true})
             break;
         }
-      return response
-    })
-    .catch((v) => {
-      console.log(v)
-    })
+        return response
+      })
+      .catch((v) => {
+        console.log(v)
+      })
   }
 
   saveCreds (creds) {

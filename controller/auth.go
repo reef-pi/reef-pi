@@ -12,6 +12,10 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+func (r *ReefPi) Me (w http.ResponseWriter, req *http.Request) {
+  utils.JSONResponse("you?", w, req)
+}
+
 func (r *ReefPi) SignIn(w http.ResponseWriter, req *http.Request) {
   var reqCredentials Credentials
   var bucketCredentials Credentials
