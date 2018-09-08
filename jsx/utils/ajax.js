@@ -101,8 +101,12 @@ export function reduxPost (params) {
     })
       .then((data) => dispatch(params.success(data)))
       .catch((v) => {
-        dispatch({ type: 'API_FAILURE', params: params })
-        showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+        if(params.error) {
+          params.error(v)
+        } else {
+          dispatch({ type: 'API_FAILURE', params: params })
+          showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+        }
       })
   }
 }

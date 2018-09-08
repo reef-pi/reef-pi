@@ -8,10 +8,22 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import 'react-toggle-switch/dist/css/switch.min.css'
 
 export default class App extends React.Component {
-  render () {
-    if (!SignIn.isSignIned()) {
-      return (<SignIn />)
+  constructor(props){
+    super(props);
+    this.state = {
+        loaded: false,
+        logged: false
     }
+}
+componentDidMount(){
+  const setState = this.setState.bind(this)
+  SignIn.isSignIned().then(r => {
+    setState({loaded: true})
+    setState({logged: r})
+  })
+}
+getComponent() {
+  if(this.state.logged === true){
     return (
       <div className='container'>
         <div id='reef-pi-alert' />
@@ -20,5 +32,17 @@ export default class App extends React.Component {
         </div>
       </div>
     )
+  }else{
+    return (<SignIn />)
+  }
+}
+  render () {
+    return (<div>
+      {!this.state.loaded ?
+          <div>Loading</div>
+      :
+          this.getComponent()
+      }
+  </div>)
   }
 }
