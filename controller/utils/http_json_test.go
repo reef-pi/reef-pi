@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-	"testing"
+  "testing"
 )
 
 type mockResponseWriter struct {
@@ -56,30 +56,6 @@ func TestJSONResponses(t *testing.T) {
 	JSONUpdateResponse(&payload, func(_ string) error { return fmt.Errorf("") }, resp, req)
 	JSONUpdateResponse(payload, func(_ string) error { return nil }, resp, req)
 	JSONDeleteResponse(func(_ string) error { return fmt.Errorf("") }, resp, req)
-}
-
-func TestBasicAuth(t *testing.T) {
-	a := NewBasicAuth("foo", "bar")
-	if !a.check(a.user, a.pass) {
-		t.Error("Basic auth against user password should pass")
-	}
-	fn := func(w http.ResponseWriter, r *http.Request) {}
-	req, err := http.NewRequest("GET", "http://localhost:8080/api", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	req.SetBasicAuth(a.user, a.pass)
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(a.BasicAuth(fn))
-	handler.ServeHTTP(rr, req)
-	if rr.Code != 200 {
-		t.Error("Expected 200, Found:", rr.Code)
-	}
-	req.SetBasicAuth(a.user, "invalid")
-	handler.ServeHTTP(rr, req)
-	if rr.Code == 200 {
-		t.Error("Expected Not 200, Found:", rr.Code)
-	}
 }
 
 type testDoer struct{}

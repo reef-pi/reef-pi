@@ -17,7 +17,8 @@ func Test_Capabilities(t *testing.T) {
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
 	r := &ReefPi{}
-	r.loadAPI(router)
+	r.UnAuthenticatedAPI(router)
+	r.AuthenticatedAPI(router)
 	router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatal(rr.Code)
