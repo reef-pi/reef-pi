@@ -101,7 +101,7 @@ export function reduxPost (params) {
     })
       .then((data) => dispatch(params.success(data)))
       .catch((v) => {
-        if(params.error) {
+        if (params.error) {
           params.error(v)
         } else {
           dispatch({ type: 'API_FAILURE', params: params })
