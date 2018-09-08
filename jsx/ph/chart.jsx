@@ -26,9 +26,13 @@ class chart extends React.Component {
       return (<div />)
     }
     var metrics = this.props.readings[this.props.type]
+    var current = ''
+    if (metrics.length > 1) {
+      current = metrics[metrics.length - 1].pH
+    }
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name}-{this.props.type} pH</span>
+        <span className='h6'>{this.props.config.name}-{this.props.type} pH ({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
             <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false} />

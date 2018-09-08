@@ -32,8 +32,14 @@ describe('pH ui', () => {
 
   it('<Chart />', () => {
     const probes = [{id: '1', name: 'foo'}]
-    const readings = {'1': {name: 'foo'}}
-    shallow(<Chart probe_id='1' store={mockStore({phprobes: probes, ph_readings: readings})} />).dive()
+    const readings = {'1': { name: 'foo', current: [] }}
+    shallow(
+      <Chart
+        probe_id='1'
+        store={mockStore({phprobes: probes, ph_readings: readings})}
+        type='current'
+      />
+    ).dive()
   })
 
   it('<Notify />', () => {

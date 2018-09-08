@@ -27,7 +27,11 @@ func New(devMode bool, c types.Controller, eqs *equipment.Controller) (*Controll
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  utils.NewStatsManager(c.Store(), UsageBucket, 180, 24*7),
+		statsMgr: utils.NewStatsManager(
+			c.Store(),
+			UsageBucket,
+			types.CurrentLimit,
+			types.HistoricalLimit),
 	}, nil
 }
 

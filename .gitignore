@@ -16,3 +16,4 @@ coverage.txt
 .idea/
 __snapshots__
 coverage
+.vscode

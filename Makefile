@@ -8,8 +8,8 @@ bin:
 	make build-go
 	npm run build
 
-.PHONY:build-go
-build-go:
+.PHONY:go
+go:
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  commands/*.go
 
 .PHONY:pi
