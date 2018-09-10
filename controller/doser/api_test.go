@@ -73,6 +73,10 @@ func TestATOAPI(t *testing.T) {
 	if err := tr.Do("POST", "/api/doser/pumps/1", body, nil); err != nil {
 		t.Fatal("Failed to update dosing pump using api. Error:", err)
 	}
+
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
+	}
 	if err := tr.Do("DELETE", "/api/doser/pumps/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete dosing pump using api. Error:", err)
 	}

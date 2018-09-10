@@ -81,4 +81,7 @@ func TestCamera(t *testing.T) {
 	if err := saveConfig(con.Store(), conf); err == nil {
 		t.Error("config should not be saved if image directory is empty")
 	}
+	if err := c.On("1", true); err == nil {
+		t.Error("Camera should return error to On API")
+	}
 }
