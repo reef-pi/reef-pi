@@ -1,5 +1,6 @@
 @import "~bootstrap/scss/bootstrap";
 @import './sign-in';
+@import './dashboard';
 
 .reef_pi_panel {
   border-style: none;
@@ -8,6 +9,7 @@ body {
   font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 .body-panel {
+  margin-top: 10px;
   padding-bottom: 70px;
 }
 .nav-item {

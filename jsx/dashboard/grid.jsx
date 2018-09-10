@@ -166,7 +166,7 @@ export default class Grid extends React.Component {
     }
 
     return (
-      <div className='container'>
+      <div className='col-12'>
         <label> Charts </label>
         {rows}
       </div>
