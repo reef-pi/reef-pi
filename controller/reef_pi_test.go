@@ -2,10 +2,12 @@ package controller
 
 import (
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"net/http"
 	"testing"
 )
 
 func TestReefPi(t *testing.T) {
+	http.DefaultServeMux = new(http.ServeMux)
 	conf, err := ParseConfig("../build/reef-pi.yml")
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)

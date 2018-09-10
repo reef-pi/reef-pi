@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/connectors"
   "github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/types"
@@ -9,6 +10,7 @@ import (
 	"github.com/reef-pi/rpi/i2c"
 	"net/http"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -25,13 +27,13 @@ type ReefPi struct {
 	telemetry  types.Telemetry
 	version    string
 	h          *HealthChecker
-  bus        i2c.Bus
+	bus        i2c.Bus
 	cookiejar  *sessions.CookieStore
 }
 
 func New(version, database string) (*ReefPi, error) {
-  store, err := utils.NewStore(database)
-  cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
+	store, err := utils.NewStore(database)
+	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
@@ -47,16 +49,17 @@ func New(version, database string) (*ReefPi, error) {
 		s = initialSettings
 	}
 
+	telemetry := initializeTelemetry(store, s.Notification)
 	bus := i2c.Bus(i2c.MockBus())
 	if !s.Capabilities.DevMode {
 		b, err := i2c.New()
 		if err != nil {
 			log.Println("ERROR: Failed to initialize i2c. Error:", err)
-			return nil, err
+			logError(store, "device-i2c", "Failed to initialize i2c. Error:"+err.Error())
+		} else {
+			bus = b
 		}
-		bus = b
 	}
-	telemetry := initializeTelemetry(store, s.Notification)
 	if s.RPI_PWMFreq <= 0 {
 		log.Println("ERROR: Invalid  RPI PWM frequency:", s.RPI_PWMFreq, " falling back on default 100Hz")
 		s.RPI_PWMFreq = 100
@@ -93,8 +96,8 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		inlets:     inlets,
 		subsystems: make(map[string]types.Subsystem),
-    version:    version,
-    cookiejar: cookiejar,
+		version:    version,
+		cookiejar:  cookiejar,
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry, store)
@@ -165,18 +168,18 @@ func (r *ReefPi) Controller() types.Controller {
 }
 
 func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
-  return func(w http.ResponseWriter, req *http.Request) {
-    authSession, err := r.cookiejar.Get(req, "auth")
-    if err != nil {
-      log.Println("DEBUG:", "No session")
-      http.Error(w, "Unauthorized.", 401)
-      return
-    }
-    if user := authSession.Values["user"]; user == nil {
-      log.Println("DEBUG:", "No session")
-      http.Error(w, "Unauthorized.", 401)
-      return
-    }
+	return func(w http.ResponseWriter, req *http.Request) {
+		authSession, err := r.cookiejar.Get(req, "auth")
+		if err != nil {
+			log.Println("DEBUG:", "No session")
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		if user := authSession.Values["user"]; user == nil {
+			log.Println("DEBUG:", "No session")
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
 		fn(w, req)
 	}
 }

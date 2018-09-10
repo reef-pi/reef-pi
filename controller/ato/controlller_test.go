@@ -61,6 +61,11 @@ func TestController(t *testing.T) {
 	if err := tr.Do("GET", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to get ato using api. Error:", err)
 	}
+
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
+	}
+
 	a.ID = "1"
 
 	c.Check(a)
