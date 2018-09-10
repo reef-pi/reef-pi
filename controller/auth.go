@@ -5,8 +5,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
-	"encoding/json"
-	"log"
 )
 
 type Credentials struct {
