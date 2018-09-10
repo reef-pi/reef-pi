@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/bootstrap";
 @import './sign-in';
 
 .reef_pi_panel {
@@ -8,6 +9,9 @@ body {
 }
 .body-panel {
   padding-bottom: 70px;
+}
+.nav-item {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 576px) {
