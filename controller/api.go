@@ -25,8 +25,8 @@ func (r *ReefPi) API() error {
 	if err != nil {
 		return err
 	}
-  r.AuthenticatedAPI(router)
-  r.UnAuthenticatedAPI(router)
+	r.AuthenticatedAPI(router)
+	r.UnAuthenticatedAPI(router)
 	return nil
 }
 
@@ -52,8 +52,8 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	router.HandleFunc("/api/errors/clear", r.clearErrors).Methods("DELETE")
 	router.HandleFunc("/api/errors/{id}", r.deleteError).Methods("DELETE")
 	router.HandleFunc("/api/errors/{id}", r.getError).Methods("GET")
-  router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
-  router.HandleFunc("/api/me", r.Me).Methods("GET")
+	router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
+	router.HandleFunc("/api/me", r.Me).Methods("GET")
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats", r.getHealthStats).Methods("GET")
 	}
