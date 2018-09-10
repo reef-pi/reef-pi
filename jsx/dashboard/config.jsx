@@ -32,7 +32,7 @@ class config extends React.Component {
   }
 
   save () {
-    var payload = this.state.config
+    let payload = this.state.config
     payload.width = parseInt(payload.width)
     payload.height = parseInt(payload.height)
     payload.column = parseInt(payload.column)
@@ -43,7 +43,7 @@ class config extends React.Component {
   }
 
   toRow (key, label) {
-    var fn = function (ev) {
+    let fn = function (ev) {
       var config = this.state.config
       config[key] = ev.target.value
       this.setState({
@@ -52,9 +52,9 @@ class config extends React.Component {
       })
     }.bind(this)
     return (
-      <div className='input-group'>
+      <div className='col-md-6 col-sm-12 form-group'>
         <label className='input-group-addon'> {label}</label>
-        <input type='text' onChange={fn} value={this.state.config[key]} id={'to-row-' + key} />
+        <input className="form-control" type='number' onChange={fn} value={this.state.config[key]} id={'to-row-' + key} />
       </div>
     )
   }
@@ -80,19 +80,23 @@ class config extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    var updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+      updateButtonClass = 'btn btn-outline-danger col-12'
     }
     if (this.state.config.grid_details === undefined) {
       return (<div />)
     }
     return (
-      <div className='container'>
-        {this.toRow('row', 'Rows')}
-        {this.toRow('column', 'Columns')}
-        {this.toRow('width', 'Width')}
-        {this.toRow('height', 'Height')}
+      <div className="col-12">
+        <div className="row">
+          {this.toRow('row', 'Rows')}
+          {this.toRow('column', 'Columns')}
+        </div>
+        <div className="row">
+          {this.toRow('width', 'Width')}
+          {this.toRow('height', 'Height')}
+        </div>
         <div className='row'>
           <Grid
             rows={this.state.config.row}
@@ -106,7 +110,9 @@ class config extends React.Component {
           />
         </div>
         <div className='row'>
-          <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value='update' />
+          <div className='col-12'>
+            <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value='update' />
+          </div>
         </div>
       </div>
     )

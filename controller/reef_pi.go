@@ -2,13 +2,13 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+  "github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
-	"log"
-	"net/http"
+  "net/http"
+  "log"
 	"time"
 )
 
