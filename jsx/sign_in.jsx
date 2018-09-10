@@ -1,52 +1,4 @@
 import React from 'react'
-import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
-
-const outerStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingTop: '40px',
-  paddingBottom: '40px',
-  height: '100%'
-}
-
-const formStyle = {
-  width: '100%',
-  maxWidth: '330px',
-  padding: '15px',
-  margin: '0 auto',
-  textAlign: 'center'
-}
-
-const formControl = {
-  position: 'relative',
-  boxSizing: 'border-box',
-  height: 'auto',
-  padding: '10px',
-  fontSize: '16px'
-}
-
-const emailStyle = {
-  formControl,
-  marginBottom: '-1px',
-  borderBottomRightRadius: 0,
-  borderBottomLeftRadius: 0
-}
-
-const passwordStyle = {
-  formControl,
-  marginBottom: '-1px',
-  borderBottomRightRadius: 0,
-  borderBottomLeftRadius: 0
-}
-
-const loginSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required'),
-  password: Yup.string()
-    .required('Password is required')
-})
 
 export default class SignIn extends React.Component {
   constructor (props) {
@@ -138,9 +90,9 @@ export default class SignIn extends React.Component {
 
   render () {
     return (
-      <form>
-        <div className='container' style={outerStyle}>
-          <div className='form' style={formStyle}>
+      <form id="sign-in-form">
+        <div className='container'>
+          <div className='form'>
             <h1 className='h3 mb-3 font-weight-normal'>reef-pi</h1>
             {this.state.invalidCredentials ?
             <div className="alert alert-danger" role="alert">
@@ -149,12 +101,9 @@ export default class SignIn extends React.Component {
             : <div></div>
             }
             <label htmlFor='reef-pi-user' className='sr-only'>Username</label>
-
-            <input onChange={this.handleUserChange} type='text' id='reef-pi-user' className="form-control" style={emailStyle} name='username' placeholder='Username' required='' autoFocus=''></input>
+            <input onChange={this.handleUserChange} type='text' id='reef-pi-user' className="form-control" name='username' placeholder='Username' required='' autoFocus=''></input>
             <label htmlFor='reef-pi-pass' className='sr-only'>Password</label>
-
-            <input onChange={this.handlePasswordChange} type='password' id='reef-pi-pass' className="form-control"  style={passwordStyle} name='password' placeholder='Password' required='' autoFocus=''></input>
-
+            <input onChange={this.handlePasswordChange} type='password' id='reef-pi-pass' className="form-control"  name='password' placeholder='Password' required='' autoFocus=''></input>
             <button className='btn btn-lg btn-primary btn-block mt-3'
               onClick={this.login}
               type='submit' id='btnSaveCreds'>
