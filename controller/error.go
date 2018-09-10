@@ -76,12 +76,16 @@ func (r *ReefPi) DeleteError(id string) error {
 }
 
 func (r *ReefPi) LogError(id, msg string) error {
+	return logError(r.store, id, msg)
+}
+
+func logError(store types.Store, id, msg string) error {
 	e := Error{
 		Message: msg,
 		ID:      id,
 		Time:    time.Now().Format("Jan 2 15:04:05"),
 	}
-	return r.store.Update(types.ErrorBucket, id, e)
+	return store.Update(types.ErrorBucket, id, e)
 }
 
 func (r *ReefPi) GetError(id string) (Error, error) {
