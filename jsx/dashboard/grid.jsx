@@ -143,7 +143,7 @@ export default class Grid extends React.Component {
         columns.push(
           <div className='col-md-6 grid-block' key={'chart-type-' + i + '-' + j}>
             <div className='row'>
-              <div className="col-12">
+              <div className='col-12'>
                 <div className='dropdown'>
                   <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     {cells[i][j].type}
@@ -155,7 +155,7 @@ export default class Grid extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className="col-12">
+              <div className='col-12'>
                 {cells[i][j].ui}
               </div>
             </div>
