@@ -26,6 +26,7 @@ const ProfileSelector = (props) => {
       <div className='btn-group  d-none d-sm-inline'>
         <label className='btn btn-secondary'>
           <input type='radio' value='fixed'
+            className='mr-1'
             checked={props.value === 'fixed'}
             name={props.name + uuid}
             id={props.name + uuid + '-fixed'}
@@ -36,6 +37,7 @@ const ProfileSelector = (props) => {
         </label>
         <label className='btn btn-secondary'>
           <input type='radio' value='auto'
+            className='mr-1'
             checked={props.value === 'auto'}
             name={props.name + uuid}
             id={props.name + uuid + '-auto'}
@@ -46,6 +48,7 @@ const ProfileSelector = (props) => {
         </label>
         <label className='btn btn-secondary'>
           <input type='radio' value='diurnal'
+            className='mr-1'
             checked={props.value === 'diurnal'}
             name={props.name + uuid}
             id={props.name + uuid + '-diurnal'}
