@@ -54,7 +54,7 @@ class config extends React.Component {
     return (
       <div className='col-md-6 col-sm-12 form-group'>
         <label className='input-group-addon'> {label}</label>
-        <input className="form-control" type='number' onChange={fn} value={this.state.config[key]} id={'to-row-' + key} />
+        <input className='form-control' type='number' onChange={fn} value={this.state.config[key]} id={'to-row-' + key} />
       </div>
     )
   }
@@ -88,12 +88,12 @@ class config extends React.Component {
       return (<div />)
     }
     return (
-      <div className="col-12">
-        <div className="row">
+      <div className='col-12'>
+        <div className='row'>
           {this.toRow('row', 'Rows')}
           {this.toRow('column', 'Columns')}
         </div>
-        <div className="row">
+        <div className='row'>
           {this.toRow('width', 'Width')}
           {this.toRow('height', 'Height')}
         </div>
