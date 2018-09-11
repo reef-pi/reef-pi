@@ -99,27 +99,22 @@ class Light extends Component {
       )
     }
 
-    const cursorStyle = {
-      cursor: 'pointer'
-    }
-
     return (
       <form onSubmit={this.handleFormSubmit}>
-        <div className='container'>
-          <div className='row mb-1'
-            style={cursorStyle}
+        <div>
+          <div className='row mb-1 cursor-pointer text-center text-md-left'
             id={'expand-light-' + this.state.id}
             onClick={this.toggleExpand}>
-            <div className='col-12 col-sm-6 col-md-4 order-sm-last'>
+            <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
               <button type='button'
+                id={'delete-light-' + this.state.id}
                 onClick={this.handleDelete}
                 className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
                 Delete
               </button>
               {editButton}
             </div>
-            <div className='col-12 col-sm-6 col-md-8 order-sm-first'>
-
+            <div className='col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first'>
               {this.state.expand ? FaAngleUp() : FaAngleDown()}
               <b className='ml-2 align-middle'>{this.state.name}</b>
             </div>

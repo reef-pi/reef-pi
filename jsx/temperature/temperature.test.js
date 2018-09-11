@@ -4,14 +4,14 @@ import Adapter from 'enzyme-adapter-react-16'
 import ControlChart from './control_chart'
 import Main from './main'
 import New from './new'
-import Notify from './notify'
 import ReadingsChart from './readings_chart'
 import Sensor from './sensor'
-import SelectSensor from './select_sensor'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
 import {mockLocalStorage} from '../utils/test_helper'
+import BooleanSelect from './boolean_select'
+import TemperatureForm from './temperature_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -27,18 +27,14 @@ describe('Temperature controller ui', () => {
   })
 
   it('<New />', () => {
-    const m = shallow(<New create={() => {}} />).instance()
-    m.toggle()
-    m.updateSensor('1')
-    m.update('name')({target: {value: 'foo'}})
-    m.updateCheckbox('foo')({target: {checked: true}})
-    m.add()
-  })
+    const fn = () => {}
+    const sensors = []
+    const equipment = []
+    const tc = {name: 'test', enable: true, sensor: 'sensor1'}
 
-  it('<Notify />', () => {
-    const m = shallow(<Notify config={{}} updateHook={() => {}} />).instance()
-    m.update('foo')({target: {value: '1.21'}})
-    m.updateEnable({target: {}})
+    const m = shallow(<New create={fn} sensors={sensors} equipment={equipment} />).instance()
+    m.toggle()
+    m.add(tc)
   })
 
   it('<Sensor />', () => {
@@ -48,22 +44,17 @@ describe('Temperature controller ui', () => {
       min: 78,
       max: 81
     }
-    const m = shallow(<Sensor data={tc} />).instance()
-    m.save()
+    const fn = () => {}
+    const m = shallow(
+      <Sensor data={tc}
+        save={fn}
+        sensors={[]}
+        equipment={[]}
+        remove={fn} />
+    ).instance()
+    m.save(tc)
     m.expand()
-    m.updateSensor({})
-    m.updateNotify({})
-    m.updateEquipment('foo')('var')
-    m.update('foo')({target: {value: 'var'}})
-    m.updateCheckBox('foo')({target: {checked: true}})
-    m.showCharts()
-    m.save()
-  })
-
-  it('<SelectSensor />', () => {
-    const m = shallow(<SelectSensor sensors={['a']} update={() => true} />).instance()
-    m.set('none')()
-    m.set(0)()
+    m.save(tc)
   })
 
   it('<ReadingsChart />', () => {
@@ -73,5 +64,69 @@ describe('Temperature controller ui', () => {
 
   it('<ControlChart />', () => {
     shallow(<ControlChart sensor_id='1' store={mockStore(state)} />).dive()
+  })
+
+  it('<BooleanSelect /> should bind true', () => {
+    let val = ''
+    const field = {
+      name: 'name',
+      onChange: (e) => {
+        val = e.target.value
+      }
+    }
+    const wrapper = shallow(
+      <BooleanSelect field={field}>
+        <option value='true'>Yes</option>
+        <option value='false'>No</option>
+      </BooleanSelect>
+    )
+    wrapper.find('select').simulate('change', { target: { value: 'true' } })
+    expect(val).toBe(true)
+  })
+
+  it('<BooleanSelect /> should bind false', () => {
+    let val = ''
+    const field = {
+      name: 'name',
+      onChange: (e) => {
+        val = e.target.value
+      }
+    }
+    const wrapper = shallow(
+      <BooleanSelect field={field}>
+        <option value='true'>Yes</option>
+        <option value='false'>No</option>
+      </BooleanSelect>
+    )
+    wrapper.find('select').simulate('change', { target: { value: 'false' } })
+    expect(val).toBe(false)
+  })
+
+  it('<TemperatureForm /> for create', () => {
+    const fn = jest.fn()
+    const wrapper = shallow(<TemperatureForm onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
+  })
+
+  it('<TemperatureForm /> for edit', () => {
+    const fn = jest.fn()
+
+    const tc = {
+      id: '4',
+      name: 'name',
+      sensor: 'sensor',
+      enable: true,
+      min: 70,
+      max: 85,
+      notify: {
+        enable: true,
+        min: 70,
+        max: 90
+      }
+    }
+    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
   })
 })
