@@ -47,7 +47,7 @@ class main extends React.Component {
         onSubmit={this.addEquipment} />)
     }
     return (
-      <div className='container'>
+      <div>
         <ul className='list-group list-group-flush'>
           {
             this.props.equipment.map((item) => {

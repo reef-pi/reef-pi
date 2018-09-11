@@ -26,13 +26,13 @@ getComponent() {
     return (<SignIn />)
   }else{
     return (
-    <div className='container'>
-      <div id='reef-pi-alert' />
-      <div className='container'>
-        <MainPanel />
+      <div>
+        <div id='reef-pi-alert' />
+        <div>
+          <MainPanel />
+        </div>
       </div>
-    </div>
-  )
+    )
   }
 }
   render () {

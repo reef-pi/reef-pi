@@ -74,10 +74,10 @@ export default class AutoProfile extends React.Component {
         <div className='col-12 col-md-1 text-center' key={i + 1}>
           <div className='row'>
             <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
-              <input type='text'
+              <input type='number'
                 name={NameFor(this.props.name, 'values.' + i)}
                 onBlur={this.props.onBlur}
-                className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block',
+                className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block px-0 px-sm-1 text-center no-spinner',
                   {'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors)})}
                 value={values[i]}
                 onChange={this.curry(i)}
