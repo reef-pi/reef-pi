@@ -43,7 +43,7 @@ export default class Configuration extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <ul className='nav nav-tabs'>
+          <ul className='conf-nav nav nav-tabs'>
             {panels}
           </ul>
         </div>

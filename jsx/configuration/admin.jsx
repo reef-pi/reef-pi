@@ -1,8 +1,8 @@
 import React from 'react'
 import SignIn from 'sign_in'
-import {confirm} from 'utils/confirm'
-import {reload, reboot, powerOff} from 'redux/actions/admin'
-import {connect} from 'react-redux'
+import { confirm } from 'utils/confirm'
+import { reload, reboot, powerOff } from 'redux/actions/admin'
+import { connect } from 'react-redux'
 
 class admin extends React.Component {
   constructor (props) {
@@ -31,19 +31,37 @@ class admin extends React.Component {
   }
 
   render () {
-    const btnClass = 'btn btn-outline-danger col-lg-1 col-xs-3'
+    const btnClass = 'btn btn-outline-danger btn-block'
     return (
       <div className='container'>
-        <button onClick={this.signout} type='button' className={btnClass}>Sign Out</button>
-        <button onClick={this.reload} type='button' className={btnClass}>Reload</button>
-        <button onClick={this.reboot} type='button' className={btnClass}>Reboot</button>
-        <button onClick={this.powerOff} type='button' className={btnClass}>PowerOff</button>
+        <div className='row'>
+          <div className='col-md-12 col-lg-3'>
+            <button onClick={this.signout} type='button' className={btnClass}>
+              Sign Out
+            </button>
+          </div>
+          <div className='col-md-12 col-lg-3'>
+            <button onClick={this.reload} type='button' className={btnClass}>
+              Reload
+            </button>
+          </div>
+          <div className='col-md-12 col-lg-3'>
+            <button onClick={this.reboot} type='button' className={btnClass}>
+              Reboot
+            </button>
+          </div>
+          <div className='col-md-12 col-lg-3'>
+            <button onClick={this.powerOff} type='button' className={btnClass}>
+              PowerOff
+            </button>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     reload: () => dispatch(reload()),
     reboot: () => dispatch(reboot()),
@@ -51,5 +69,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Admin = connect(null, mapDispatchToProps)(admin)
+const Admin = connect(
+  null,
+  mapDispatchToProps
+)(admin)
 export default Admin

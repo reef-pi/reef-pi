@@ -13,8 +13,9 @@ script:
   - bundle install
   - env
   - /usr/bin/npm install
-  - ./node_modules/.bin/webpack -d
+	- make build-ui
   - ./node_modules/.bin/standard jsx/**/*
+  - make sass-lint
   - npm test
   - bash <(curl -s https://codecov.io/bash) -cF javascript
   - make clean
