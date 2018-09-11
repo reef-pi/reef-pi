@@ -99,10 +99,6 @@ class Light extends Component {
       )
     }
 
-    const cursorStyle = {
-      cursor: 'pointer'
-    }
-
     return (
       <form onSubmit={this.handleFormSubmit}>
         <div>

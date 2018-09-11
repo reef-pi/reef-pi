@@ -127,7 +127,7 @@ class main extends React.Component {
     return (
       <div>
         <div className='list-group list-group-flush'>
-          { this.lightsList() }        
+          { this.lightsList() }
           <div className='list-group-item add-equipment'>
             <input id='add_light' type='button' value={this.state.addLight ? '-' : '+'} onClick={this.toggleAddLightDiv} className='btn btn-outline-success' />
             {nLight}

@@ -4,7 +4,6 @@ import Sensor from './sensor'
 import New from './new'
 import {fetchSensors, createTC, deleteTC, updateTC, fetchTCs} from 'redux/actions/tcs'
 import {connect} from 'react-redux'
-import {confirm} from 'utils/confirm'
 import {fetchEquipment} from 'redux/actions/equipment'
 
 class main extends React.Component {
@@ -31,10 +30,10 @@ class main extends React.Component {
     $.each(this.props.tcs, function (k, v) {
       list.push(
         <div key={v.id} className='list-group-item'>
-          <Sensor data={v} 
-            save={this.props.updateTC} 
-            sensors={this.props.sensors} 
-            equipment={this.props.equipment} 
+          <Sensor data={v}
+            save={this.props.updateTC}
+            sensors={this.props.sensors}
+            equipment={this.props.equipment}
             remove={this.props.deleteTC} />
         </div>
       )
@@ -48,8 +47,8 @@ class main extends React.Component {
       <div>
         <ul className='list-group list-group-flush'>
           {this.list()}
-          <New create={this.props.createTC} sensors={this.props.sensors} equipment={this.props.equipment}/>
-        </ul>        
+          <New create={this.props.createTC} sensors={this.props.sensors} equipment={this.props.equipment} />
+        </ul>
       </div>
     )
   }

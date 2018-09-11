@@ -21,12 +21,11 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
   }
 
   const temperatureUnit = () => {
-    return (values.fahrenheit === true || values.fahrenheit === 'true') ? '\u2109' : '\u2103' ;
+    return (values.fahrenheit === true || values.fahrenheit === 'true') ? '\u2109' : '\u2103'
   }
 
   const charts = () => {
-    if (!showChart || !values.enabled)
-      return
+    if (!showChart || !values.enabled) { return }
 
     let charts = (
       <div className='row'>
@@ -36,7 +35,7 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
       </div>
     )
 
-    if (values.heater != '' || values.cooler != ''){
+    if (values.heater !== '' || values.cooler !== '') {
       charts = (
         <div className='row'>
           <div className='col-lg-6'>
@@ -53,7 +52,7 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
       <div className='d-none d-sm-block'>
         {charts}
         <div className='form-inline'>
-          <label htmlFor='chart_min'>Chart Minimum</label>          
+          <label htmlFor='chart_min'>Chart Minimum</label>
           <Field name='chart_min' className='col-lg-1 form-control ml-2 mr-2' readOnly={readOnly} />
           <label htmlFor='chart_max'>Chart Maximum</label>
           <Field name='chart_max' className='col-lg-1 form-control ml-2' readOnly={readOnly} />
@@ -90,8 +89,8 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
           <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='name'>Name</label>
-              <Field name='name' disabled={readOnly} 
-                className={classNames('form-control', {'is-invalid': ShowError('name', touched, errors)})}/>
+              <Field name='name' disabled={readOnly}
+                className={classNames('form-control', {'is-invalid': ShowError('name', touched, errors)})} />
               <ErrorFor errors={errors} touched={touched} name='name' />
             </div>
           </div>
@@ -111,7 +110,7 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
             </div>
           </div>
 
-          <div className = 'col-12 col-sm-6 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='fahrenheit'>Unit</label>
               <Field name='fahrenheit' component={BooleanSelect} disabled={readOnly}
@@ -123,12 +122,12 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
             </div>
           </div>
 
-          <div className = 'col-12 col-sm-6 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='period'>Check Frequency</label>
               <div className='input-group'>
                 <Field name='period' readOnly={readOnly} type='number'
-                  className={classNames('form-control', {'is-invalid': ShowError('period', touched, errors)})}/>
+                  className={classNames('form-control', {'is-invalid': ShowError('period', touched, errors)})} />
                 <div className='input-group-append'>
                   <span className='input-group-text d-none d-lg-flex'>
                     second(s)
@@ -138,11 +137,11 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
                   </span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='period' />
-              </div>              
+              </div>
             </div>
           </div>
 
-          <div className = 'col-12 col-sm-6 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='enabled'>Sensor Status</label>
               <Field name='enabled' component={BooleanSelect} disabled={readOnly}
@@ -157,8 +156,8 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
         </div>
 
         <div className='row'>
-        
-          <div className = 'col-12 col-sm-6 col-md-3'>
+
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='alerts'>Alerts</label>
               <Field name='alerts' component={BooleanSelect} disabled={readOnly}
@@ -175,45 +174,45 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
               <label htmlFor='minAlert'>Alert Below</label>
               <div className='input-group'>
                 <Field name='minAlert' type='number'
-                  readOnly={readOnly || values.alerts === false} 
-                  className={classNames('form-control px-sm-1 px-md-2', {'is-invalid': ShowError('minAlert', touched, errors)})}/>
+                  readOnly={readOnly || values.alerts === false}
+                  className={classNames('form-control px-sm-1 px-md-2', {'is-invalid': ShowError('minAlert', touched, errors)})} />
                 <div className='input-group-append'>
                   <span className='input-group-text'>
                     {temperatureUnit()}
                   </span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='minAlert' />
-              </div>              
+              </div>
             </div>
           </div>
-                
+
           <div className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {'d-none': values.alerts === false})}>
             <div className='form-group'>
               <label htmlFor='maxAlert'>Alert Above</label>
               <div className='input-group'>
                 <Field name='maxAlert' type='number'
-                  readOnly={readOnly || values.alerts === false} 
-                  className={classNames('form-control', {'is-invalid': ShowError('maxAlert', touched, errors)})}/>
+                  readOnly={readOnly || values.alerts === false}
+                  className={classNames('form-control', {'is-invalid': ShowError('maxAlert', touched, errors)})} />
                 <div className='input-group-append'>
                   <span className='input-group-text'>
                     {temperatureUnit()}
                   </span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='maxAlert' />
-              </div>              
+              </div>
             </div>
           </div>
 
         </div>
-                
+
         <div className='row'>
-        
+
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='heater'>Control Heater</label>
               <Field name='heater' component='select' disabled={readOnly}
                 className={classNames('custom-select', {'is-invalid': ShowError('heater', touched, errors)})}>
-              <option key='' value=''>None</option>
+                <option key='' value=''>None</option>
                 {equipmentOptions()}
               </Field>
               <ErrorFor errors={errors} touched={touched} name='heater' />
@@ -224,15 +223,15 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
             <div className='form-group'>
               <label htmlFor='min'>Heater Threshold</label>
               <div className='input-group'>
-                <Field name='min' readOnly={readOnly || values.heater == ''} 
-                  className={classNames('form-control', {'is-invalid': ShowError('min', touched, errors)})}/>
+                <Field name='min' readOnly={readOnly || values.heater === ''}
+                  className={classNames('form-control', {'is-invalid': ShowError('min', touched, errors)})} />
                 <div className='input-group-append'>
                   <span className='input-group-text'>
                     {temperatureUnit()}
                   </span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='min' />
-              </div>              
+              </div>
             </div>
           </div>
 
@@ -252,26 +251,26 @@ const EditTemperature = ({values, errors, touched, sensors, equipment, submitFor
             <div className='form-group'>
               <label htmlFor='max'>Chiller Threshold</label>
               <div className='input-group'>
-                <Field name='max' readOnly={readOnly || values.cooler == ''} 
-                  className={classNames('form-control', {'is-invalid': ShowError('max', touched, errors)})}/>
+                <Field name='max' readOnly={readOnly || values.cooler === ''}
+                  className={classNames('form-control', {'is-invalid': ShowError('max', touched, errors)})} />
                 <div className='input-group-append'>
                   <span className='input-group-text'>
                     {temperatureUnit()}
                   </span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='max' />
-              </div>              
+              </div>
             </div>
           </div>
-          
+
         </div>
-        
+
         {charts()}
       </div>
 
       <div className={classNames('row', {'d-none': readOnly})}>
         <div className='col-12'>
-          <input type='submit' value='Save' 
+          <input type='submit' value='Save'
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1' />
         </div>

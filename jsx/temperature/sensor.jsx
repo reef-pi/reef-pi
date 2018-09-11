@@ -19,18 +19,17 @@ export default class Sensor extends React.Component {
   expand () {
     this.setState({expand: !this.state.expand})
   }
-  
+
   handleEdit (e) {
     e.stopPropagation()
     this.setState({readOnly: false, expand: true})
   }
 
   save (values) {
-    
     var payload = {
       name: values.name,
       enable: values.enabled,
-      control: (values.heater != '' || values.cooler != ''),
+      control: (values.heater !== '' || values.cooler !== ''),
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),
@@ -48,7 +47,7 @@ export default class Sensor extends React.Component {
     }
 
     this.props.save(this.props.data.id, payload)
-    
+
     this.setState({
       expand: false,
       readOnly: true
@@ -76,12 +75,12 @@ export default class Sensor extends React.Component {
 
     if (this.state.expand) {
       details = (
-        <TemperatureForm tc={this.props.data} 
+        <TemperatureForm tc={this.props.data}
           readOnly={this.state.readOnly}
-          showChart={true}
-          sensors={this.props.sensors} 
-          equipment={this.props.equipment} 
-          onSubmit={this.save}/>
+          showChart
+          sensors={this.props.sensors}
+          equipment={this.props.equipment}
+          onSubmit={this.save} />
       )
     }
 
@@ -114,7 +113,7 @@ export default class Sensor extends React.Component {
             <b className='ml-2 align-middle'>{this.props.data.name}</b>
           </div>
         </div>
-          {details}
+        {details}
       </div>
     )
   }

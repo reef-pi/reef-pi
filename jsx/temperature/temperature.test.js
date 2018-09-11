@@ -27,10 +27,9 @@ describe('Temperature controller ui', () => {
   })
 
   it('<New />', () => {
-    
     const fn = () => {}
     const sensors = []
-    const equipment =[]
+    const equipment = []
     const tc = {name: 'test', enable: true, sensor: 'sensor1'}
 
     const m = shallow(<New create={fn} sensors={sensors} equipment={equipment} />).instance()
@@ -48,9 +47,9 @@ describe('Temperature controller ui', () => {
     const fn = () => {}
     const m = shallow(
       <Sensor data={tc}
-        save={fn} 
-        sensors={[]} 
-        equipment={[]} 
+        save={fn}
+        sensors={[]}
+        equipment={[]}
         remove={fn} />
     ).instance()
     m.save(tc)
@@ -81,10 +80,9 @@ describe('Temperature controller ui', () => {
         <option value='false'>No</option>
       </BooleanSelect>
     )
-    wrapper.find('select').simulate('change', { target: { value: 'true' } });
+    wrapper.find('select').simulate('change', { target: { value: 'true' } })
     expect(val).toBe(true)
   })
-
 
   it('<BooleanSelect /> should bind false', () => {
     let val = ''
@@ -113,23 +111,22 @@ describe('Temperature controller ui', () => {
 
   it('<TemperatureForm /> for edit', () => {
     const fn = jest.fn()
-    
+
     const tc = {
       id: '4',
       name: 'name',
       sensor: 'sensor',
       enable: true,
-      min:70,
-      max:85,
+      min: 70,
+      max: 85,
       notify: {
         enable: true,
         min: 70,
-        max:90
+        max: 90
       }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
-
 })

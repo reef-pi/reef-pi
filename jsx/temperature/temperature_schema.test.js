@@ -46,10 +46,10 @@ describe('Validation', () => {
   })
 
   it('should be valid when heater and cooler to be different and have min/max', () => {
-    tc.heater='2'
-    tc.cooler='4'
-    tc.min=77
-    tc.max=80
+    tc.heater = '2'
+    tc.cooler = '4'
+    tc.min = 77
+    tc.max = 80
     expect.assertions(1)
     return TemperatureSchema.isValid(tc).then(
       valid => expect(valid).toBe(true)
@@ -57,18 +57,18 @@ describe('Validation', () => {
   })
 
   it('should be invalid when heater and cooler are the same', () => {
-    tc.heater='2'
-    tc.cooler='2'
-    tc.min=77
-    tc.max=80
+    tc.heater = '2'
+    tc.cooler = '2'
+    tc.min = 77
+    tc.max = 80
     expect.assertions(1)
     return TemperatureSchema.isValid(tc).then(
       valid => expect(valid).toBe(false)
     )
   })
-  
+
   it('should require min when a heater is selected', () => {
-    tc.heater='2'
+    tc.heater = '2'
     expect.assertions(1)
     return TemperatureSchema.isValid(tc).then(
       valid => expect(valid).toBe(false)
@@ -76,7 +76,7 @@ describe('Validation', () => {
   })
 
   it('should require max when a chiller is selected', () => {
-    tc.cooler='2'
+    tc.cooler = '2'
     expect.assertions(1)
     return TemperatureSchema.isValid(tc).then(
       valid => expect(valid).toBe(false)

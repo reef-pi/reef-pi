@@ -23,7 +23,7 @@ export default class New extends React.PureComponent {
       return
     }
     return (
-      <TemperatureForm sensors={this.props.sensors} equipment={this.props.equipment} onSubmit={this.add}/>
+      <TemperatureForm sensors={this.props.sensors} equipment={this.props.equipment} onSubmit={this.add} />
     )
   }
 
@@ -31,7 +31,7 @@ export default class New extends React.PureComponent {
     var payload = {
       name: values.name,
       enable: values.enabled,
-      control: (values.heater != '' || values.cooler != ''),
+      control: (values.heater !== '' || values.cooler !== ''),
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),
@@ -56,9 +56,9 @@ export default class New extends React.PureComponent {
       <li className='list-group-item add-temperature'>
         <div className='row'>
           <div className='col'>
-            <input id='add_tc' type='button' 
-              value={this.state.expanded ? '-' : '+'} 
-              onClick={this.toggle} 
+            <input id='add_tc' type='button'
+              value={this.state.expanded ? '-' : '+'}
+              onClick={this.toggle}
               className='btn btn-outline-success' />
             {this.ui()}
           </div>

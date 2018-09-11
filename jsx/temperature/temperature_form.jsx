@@ -6,7 +6,7 @@ const TemperatureForm = withFormik({
   displayName: 'TemperatureForm',
   mapPropsToValues: props => ({
     id: (props.tc && props.tc.id) || '',
-    name: (props.tc && props.tc.name) || '',    
+    name: (props.tc && props.tc.name) || '',
     sensor: (props.tc && props.tc.sensor) || '',
     fahrenheit: (props.tc && props.tc.fahrenheit) || true,
     period: (props.tc && props.tc.period) || '60',
