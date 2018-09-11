@@ -13,11 +13,16 @@ body {
 
 .body-panel {
   margin-top: 10px;
+  margin-bottom: 20px;
   padding-bottom: 70px;
 }
 
 .nav-item {
   cursor: pointer;
+}
+
+.conf-nav {
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 576px) {
