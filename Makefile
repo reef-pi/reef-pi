@@ -6,6 +6,10 @@ BINARY=bin/reef-pi
 .PHONY:bin
 bin:
 	make go
+	make build-ui
+
+.PHONY:build-ui
+build-ui:
 	npm run build
 
 .PHONY:go
@@ -27,6 +31,10 @@ test:
 .PHONY: js-lint
 js-lint:
 	npm run js-lint
+
+.PHONY: sass-lint
+sass-lint:
+	npm run sass-lint
 
 .PHONY: install
 install:
