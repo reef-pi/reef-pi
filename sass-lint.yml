@@ -1,0 +1,9 @@
+files:
+  include: 'assets/sass/**/*.s+(a|c)ss'
+rules:
+  no-ids: 0
+  property-sort-order: 0
+  indentation:
+    - 2
+    -
+      size: 2
