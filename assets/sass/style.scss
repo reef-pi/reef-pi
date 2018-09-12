@@ -25,10 +25,10 @@ body {
   margin-bottom: 10px;
 }
 
-input[type=number].no-spinner::-webkit-inner-spin-button, 
-input[type=number].no-spinner::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number].no-spinner::-webkit-inner-spin-button,
+input[type=number].no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 @media screen and (max-width: 576px) {
