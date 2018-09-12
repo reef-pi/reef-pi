@@ -108,7 +108,7 @@ export default class Sensor extends React.Component {
             </button>
             {editButton}
           </div>
-          <div className='col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline'>
+          <div className='pointer col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline'>
             {this.state.expand ? FaAngleUp() : FaAngleDown()}
             <b className='ml-2 align-middle'>{this.props.data.name}</b>
           </div>
