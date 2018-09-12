@@ -27,7 +27,10 @@ export default class SignIn extends React.Component {
   }
 
   static isSignIned() {
-    return fetch("/api/me", { method: "GET" }).then(r => {
+    return fetch("/api/me", {
+      method: "GET",
+      credentials: "same-origin"
+    }).then(r => {
       return r.ok;
     });
   }
@@ -54,6 +57,7 @@ export default class SignIn extends React.Component {
     const setState = this.setState.bind(this);
     return fetch("/auth/signin", {
       method: "POST",
+      credentials: "same-origin",
       body: JSON.stringify(creds)
     })
       .then(response => {
