@@ -83,7 +83,7 @@ class mainPanel extends React.Component {
     }
     var body = caps[tab]
     return (
-      <div className='container'>
+      <div>
         <div className='row'>
           <div className='col-12'>
             {this.navs(tab)}
