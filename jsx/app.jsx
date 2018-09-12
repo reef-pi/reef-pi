@@ -26,9 +26,9 @@ getComponent() {
     return (<SignIn />)
   }else{
     return (
-      <div>
-        <div id='reef-pi-alert' />
-        <div>
+      <div className="row">
+        <div className="col-12">
+          <div id='reef-pi-alert' />
           <MainPanel />
         </div>
       </div>

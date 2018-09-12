@@ -42,9 +42,17 @@ export default class SignIn extends React.Component {
     };
   }
 
-  static removeCreds() {
-    SignIn.remove("reef-pi-pass");
-    SignIn.remove("reef-pi-user");
+  static logout() {
+    return fetch("/auth/signout", {
+      method: "GET",
+      credentials: "same-origin"
+    })
+      .then(response => {
+        window.location.reload(true);
+      })
+      .catch(v => {
+        console.log(v);
+      });
   }
 
   login(e) {

@@ -14,8 +14,7 @@ class admin extends React.Component {
   }
 
   signout () {
-    SignIn.removeCreds()
-    window.location.reload(true)
+    SignIn.logout()
   }
 
   reload () {
