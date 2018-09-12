@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { ErrorFor, ShowError } from "../utils/validation_helper";
-import { showAlert, clearAlert } from "utils/alert";
-import classNames from "classnames";
-import { Field } from "formik";
-import BooleanSelect from "./boolean_select";
-import ReadingsChart from "./readings_chart";
-import ControlChart from "./control_chart";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { showAlert, clearAlert } from 'utils/alert'
+import classNames from 'classnames'
+import { Field } from 'formik'
+import BooleanSelect from './boolean_select'
+import ReadingsChart from './readings_chart'
+import ControlChart from './control_chart'
 
 const EditTemperature = ({
   values,
@@ -21,74 +21,74 @@ const EditTemperature = ({
   showChart
 }) => {
   const handleSubmit = event => {
-    event.preventDefault();
-    clearAlert();
+    event.preventDefault()
+    clearAlert()
     if (dirty === false || isValid === true) {
-      submitForm();
+      submitForm()
     } else {
-      submitForm(); // Calling submit form in order to show validation errors
+      submitForm() // Calling submit form in order to show validation errors
       showAlert(
-        "The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again."
-      );
+        'The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+      )
     }
-  };
+  }
 
   const temperatureUnit = () => {
-    return values.fahrenheit === true || values.fahrenheit === "true"
-      ? "\u2109"
-      : "\u2103";
-  };
+    return values.fahrenheit === true || values.fahrenheit === 'true'
+      ? '\u2109'
+      : '\u2103'
+  }
 
   const charts = () => {
     if (!showChart || !values.enabled) {
-      return;
+      return
     }
 
     let charts = (
-      <div className="row">
-        <div className="col">
+      <div className='row'>
+        <div className='col'>
           <ReadingsChart sensor_id={values.id} width={500} height={300} />
         </div>
       </div>
-    );
+    )
 
-    if (values.heater !== "" || values.cooler !== "") {
+    if (values.heater !== '' || values.cooler !== '') {
       charts = (
-        <div className="row">
-          <div className="col-lg-6">
+        <div className='row'>
+          <div className='col-lg-6'>
             <ReadingsChart sensor_id={values.id} width={500} height={300} />
           </div>
-          <div className="col-lg-6">
+          <div className='col-lg-6'>
             <ControlChart sensor_id={values.id} width={500} height={300} />
           </div>
         </div>
-      );
+      )
     }
 
     return (
-      <div className="d-none d-sm-block">
+      <div className='d-none d-sm-block'>
         {charts}
-        <div className="row">
-          <div className="col-sm-12 col-md-6">
-            <label htmlFor="chart_min">Chart Minimum</label>
+        <div className='row'>
+          <div className='col-sm-12 col-md-6'>
+            <label htmlFor='chart_min'>Chart Minimum</label>
             <Field
-              name="chart_min"
-              className="form-control"
+              name='chart_min'
+              className='form-control'
               readOnly={readOnly}
             />
           </div>
-          <div className="col-sm-12 col-md-6">
-            <label htmlFor="chart_max">Chart Maximum</label>
+          <div className='col-sm-12 col-md-6'>
+            <label htmlFor='chart_max'>Chart Maximum</label>
             <Field
-              name="chart_max"
-              className="form-control"
+              name='chart_max'
+              className='form-control'
               readOnly={readOnly}
             />
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const sensorOptions = () => {
     return sensors.map(item => {
@@ -96,9 +96,9 @@ const EditTemperature = ({
         <option key={item} value={item}>
           {item}
         </option>
-      );
-    });
-  };
+      )
+    })
+  }
 
   const equipmentOptions = () => {
     return equipment.map(item => {
@@ -106,261 +106,261 @@ const EditTemperature = ({
         <option key={item.id} value={item.id}>
           {item.name}
         </option>
-      );
-    });
-  };
+      )
+    })
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <div className={classNames("row", { "d-none": readOnly })}>
-          <div className="col col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
+        <div className={classNames('row', { 'd-none': readOnly })}>
+          <div className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='name'>Name</label>
               <Field
-                name="name"
+                name='name'
                 disabled={readOnly}
-                className={classNames("form-control", {
-                  "is-invalid": ShowError("name", touched, errors)
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('name', touched, errors)
                 })}
               />
-              <ErrorFor errors={errors} touched={touched} name="name" />
+              <ErrorFor errors={errors} touched={touched} name='name' />
             </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="sensor">Sensor</label>
+        <div className='row'>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='sensor'>Sensor</label>
               <Field
-                name="sensor"
-                component="select"
+                name='sensor'
+                component='select'
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("sensor", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('sensor', touched, errors)
                 })}
               >
-                <option value="" className="d-none">
+                <option value='' className='d-none'>
                   -- Select --
                 </option>
                 {sensorOptions()}
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="sensor" />
+              <ErrorFor errors={errors} touched={touched} name='sensor' />
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="fahrenheit">Unit</label>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='fahrenheit'>Unit</label>
               <Field
-                name="fahrenheit"
+                name='fahrenheit'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("fahrenheit", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('fahrenheit', touched, errors)
                 })}
               >
-                <option value="true">Fahrenheit</option>
-                <option value="false">Celcius</option>
+                <option value='true'>Fahrenheit</option>
+                <option value='false'>Celcius</option>
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="fahrenheit" />
+              <ErrorFor errors={errors} touched={touched} name='fahrenheit' />
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="period">Check Frequency</label>
-              <div className="input-group">
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='period'>Check Frequency</label>
+              <div className='input-group'>
                 <Field
-                  name="period"
+                  name='period'
                   readOnly={readOnly}
-                  type="number"
-                  className={classNames("form-control", {
-                    "is-invalid": ShowError("period", touched, errors)
+                  type='number'
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('period', touched, errors)
                   })}
                 />
-                <div className="input-group-append">
-                  <span className="input-group-text d-none d-lg-flex">
+                <div className='input-group-append'>
+                  <span className='input-group-text d-none d-lg-flex'>
                     second(s)
                   </span>
-                  <span className="input-group-text d-flex d-lg-none">sec</span>
+                  <span className='input-group-text d-flex d-lg-none'>sec</span>
                 </div>
-                <ErrorFor errors={errors} touched={touched} name="period" />
+                <ErrorFor errors={errors} touched={touched} name='period' />
               </div>
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="enabled">Sensor Status</label>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='enabled'>Sensor Status</label>
               <Field
-                name="enabled"
+                name='enabled'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("enabled", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('enabled', touched, errors)
                 })}
               >
-                <option value="true">Enabled</option>
-                <option value="false">Disabled</option>
+                <option value='true'>Enabled</option>
+                <option value='false'>Disabled</option>
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="enabled" />
+              <ErrorFor errors={errors} touched={touched} name='enabled' />
             </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="alerts">Alerts</label>
+        <div className='row'>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='alerts'>Alerts</label>
               <Field
-                name="alerts"
+                name='alerts'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("alerts", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('alerts', touched, errors)
                 })}
               >
-                <option value="true">Enabled</option>
-                <option value="false">Disabled</option>
+                <option value='true'>Enabled</option>
+                <option value='false'>Disabled</option>
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="alerts" />
+              <ErrorFor errors={errors} touched={touched} name='alerts' />
             </div>
           </div>
 
           <div
-            className={classNames("col-12 col-sm-3 col-md-3 d-sm-block", {
-              "d-none": values.alerts === false
+            className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
+              'd-none': values.alerts === false
             })}
           >
-            <div className="form-group">
-              <label htmlFor="minAlert">Alert Below</label>
-              <div className="input-group">
+            <div className='form-group'>
+              <label htmlFor='minAlert'>Alert Below</label>
+              <div className='input-group'>
                 <Field
-                  name="minAlert"
-                  type="number"
+                  name='minAlert'
+                  type='number'
                   readOnly={readOnly || values.alerts === false}
-                  className={classNames("form-control px-sm-1 px-md-2", {
-                    "is-invalid": ShowError("minAlert", touched, errors)
+                  className={classNames('form-control px-sm-1 px-md-2', {
+                    'is-invalid': ShowError('minAlert', touched, errors)
                   })}
                 />
-                <div className="input-group-append">
-                  <span className="input-group-text">{temperatureUnit()}</span>
+                <div className='input-group-append'>
+                  <span className='input-group-text'>{temperatureUnit()}</span>
                 </div>
-                <ErrorFor errors={errors} touched={touched} name="minAlert" />
+                <ErrorFor errors={errors} touched={touched} name='minAlert' />
               </div>
             </div>
           </div>
 
           <div
-            className={classNames("col-12 col-sm-3 col-md-3 d-sm-block", {
-              "d-none": values.alerts === false
+            className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
+              'd-none': values.alerts === false
             })}
           >
-            <div className="form-group">
-              <label htmlFor="maxAlert">Alert Above</label>
-              <div className="input-group">
+            <div className='form-group'>
+              <label htmlFor='maxAlert'>Alert Above</label>
+              <div className='input-group'>
                 <Field
-                  name="maxAlert"
-                  type="number"
+                  name='maxAlert'
+                  type='number'
                   readOnly={readOnly || values.alerts === false}
-                  className={classNames("form-control", {
-                    "is-invalid": ShowError("maxAlert", touched, errors)
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('maxAlert', touched, errors)
                   })}
                 />
-                <div className="input-group-append">
-                  <span className="input-group-text">{temperatureUnit()}</span>
+                <div className='input-group-append'>
+                  <span className='input-group-text'>{temperatureUnit()}</span>
                 </div>
-                <ErrorFor errors={errors} touched={touched} name="maxAlert" />
+                <ErrorFor errors={errors} touched={touched} name='maxAlert' />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="heater">Control Heater</label>
+        <div className='row'>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='heater'>Control Heater</label>
               <Field
-                name="heater"
-                component="select"
+                name='heater'
+                component='select'
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("heater", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('heater', touched, errors)
                 })}
               >
-                <option key="" value="">
+                <option key='' value=''>
                   None
                 </option>
                 {equipmentOptions()}
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="heater" />
+              <ErrorFor errors={errors} touched={touched} name='heater' />
             </div>
           </div>
 
           <div
-            className={classNames("col-12 col-sm-6 col-md-3 d-sm-block", {
-              "d-none": values.heater === ""
+            className={classNames('col-12 col-sm-6 col-md-3 d-sm-block', {
+              'd-none': values.heater === ''
             })}
           >
-            <div className="form-group">
-              <label htmlFor="min">Heater Threshold</label>
-              <div className="input-group">
+            <div className='form-group'>
+              <label htmlFor='min'>Heater Threshold</label>
+              <div className='input-group'>
                 <Field
-                  name="min"
-                  readOnly={readOnly || values.heater === ""}
-                  className={classNames("form-control", {
-                    "is-invalid": ShowError("min", touched, errors)
+                  name='min'
+                  readOnly={readOnly || values.heater === ''}
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('min', touched, errors)
                   })}
                 />
-                <div className="input-group-append">
-                  <span className="input-group-text">{temperatureUnit()}</span>
+                <div className='input-group-append'>
+                  <span className='input-group-text'>{temperatureUnit()}</span>
                 </div>
-                <ErrorFor errors={errors} touched={touched} name="min" />
+                <ErrorFor errors={errors} touched={touched} name='min' />
               </div>
             </div>
           </div>
 
-          <div className="col-12 col-sm-6 col-md-3">
-            <div className="form-group">
-              <label htmlFor="cooler">Control Chiller</label>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='cooler'>Control Chiller</label>
               <Field
-                name="cooler"
-                component="select"
+                name='cooler'
+                component='select'
                 disabled={readOnly}
-                className={classNames("custom-select", {
-                  "is-invalid": ShowError("cooler", touched, errors)
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('cooler', touched, errors)
                 })}
               >
-                <option key="" value="">
+                <option key='' value=''>
                   None
                 </option>
                 {equipmentOptions()}
               </Field>
-              <ErrorFor errors={errors} touched={touched} name="cooler" />
+              <ErrorFor errors={errors} touched={touched} name='cooler' />
             </div>
           </div>
 
           <div
-            className={classNames("col-12 col-sm-6 col-md-3 d-sm-block", {
-              "d-none": values.cooler === ""
+            className={classNames('col-12 col-sm-6 col-md-3 d-sm-block', {
+              'd-none': values.cooler === ''
             })}
           >
-            <div className="form-group">
-              <label htmlFor="max">Chiller Threshold</label>
-              <div className="input-group">
+            <div className='form-group'>
+              <label htmlFor='max'>Chiller Threshold</label>
+              <div className='input-group'>
                 <Field
-                  name="max"
-                  readOnly={readOnly || values.cooler === ""}
-                  className={classNames("form-control", {
-                    "is-invalid": ShowError("max", touched, errors)
+                  name='max'
+                  readOnly={readOnly || values.cooler === ''}
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('max', touched, errors)
                   })}
                 />
-                <div className="input-group-append">
-                  <span className="input-group-text">{temperatureUnit()}</span>
+                <div className='input-group-append'>
+                  <span className='input-group-text'>{temperatureUnit()}</span>
                 </div>
-                <ErrorFor errors={errors} touched={touched} name="max" />
+                <ErrorFor errors={errors} touched={touched} name='max' />
               </div>
             </div>
           </div>
@@ -369,19 +369,19 @@ const EditTemperature = ({
         {charts()}
       </div>
 
-      <div className={classNames("row", { "d-none": readOnly })}>
-        <div className="col-12">
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        <div className='col-12'>
           <input
-            type="submit"
-            value="Save"
+            type='submit'
+            value='Save'
             disabled={readOnly}
-            className="btn btn-sm btn-primary float-right mt-1"
+            className='btn btn-sm btn-primary float-right mt-1'
           />
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
 EditTemperature.propTypes = {
   values: PropTypes.object.isRequired,
@@ -392,6 +392,6 @@ EditTemperature.propTypes = {
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   handleChange: PropTypes.func
-};
+}
 
-export default EditTemperature;
+export default EditTemperature
