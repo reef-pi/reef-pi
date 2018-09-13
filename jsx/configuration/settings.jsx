@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { isEmptyObject } from 'jquery'
 
 class settings extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       capabilities: props.capabilities,
@@ -30,7 +30,7 @@ class settings extends React.Component {
     this.showHealthNotify = this.showHealthNotify.bind(this)
   }
 
-  showHealthNotify() {
+  showHealthNotify () {
     if (this.state.settings.health_check === undefined) {
       return
     }
@@ -40,7 +40,7 @@ class settings extends React.Component {
     return <HealthNotify update={this.updateHealthNotify} state={this.state.settings.health_check} />
   }
 
-  updateHealthNotify(notify) {
+  updateHealthNotify (notify) {
     if (notify !== undefined) {
       var settings = this.state.settings
       settings.health_check = notify
@@ -49,8 +49,8 @@ class settings extends React.Component {
     return this.state
   }
 
-  updateCheckbox(key) {
-    return function(ev) {
+  updateCheckbox (key) {
+    return function (ev) {
       var settings = this.state.settings
       settings[key] = ev.target.checked
       this.setState({
@@ -60,22 +60,22 @@ class settings extends React.Component {
     }.bind(this)
   }
 
-  showDisplay() {
+  showDisplay () {
     if (!this.state.settings.display) {
       return
     }
     return (
-      <div className="container">
+      <div className='container'>
         <Display />
       </div>
     )
   }
 
-  showCapabilities() {
+  showCapabilities () {
     return <Capabilities capabilities={this.state.capabilities} update={this.updateCapabilities} />
   }
 
-  updateCapabilities(capabilities) {
+  updateCapabilities (capabilities) {
     var settings = this.state.settings
     settings.capabilities = capabilities
     this.setState({
@@ -84,17 +84,17 @@ class settings extends React.Component {
     })
   }
 
-  update() {
+  update () {
     this.props.updateSettings(this.state.settings)
     this.setState({ updated: false })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchSettings()
   }
 
-  toRow(label, parse = false) {
-    var fn = function(ev) {
+  toRow (label, parse = false) {
+    var fn = function (ev) {
       var settings = this.state.settings
       settings[label] = ev.target.value
       if (parse) {
@@ -106,11 +106,11 @@ class settings extends React.Component {
       })
     }.bind(this)
     return (
-      <div className="form-group">
+      <div className='form-group'>
         <label htmlFor={'to-row-' + label}> {label}</label>
         <input
-          className="form-control"
-          type="text"
+          className='form-control'
+          type='text'
           onChange={fn}
           value={this.state.settings[label]}
           id={'to-row-' + label}
@@ -119,7 +119,7 @@ class settings extends React.Component {
     )
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps (props, state) {
     if (props.settings === undefined) {
       return null
     }
@@ -130,96 +130,96 @@ class settings extends React.Component {
     return state
   }
 
-  render() {
+  render () {
     var updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-12'
     }
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="row">
-              <div className="col-lg-6 col-sm-12">{this.toRow('name')}</div>
-              <div className="col-lg-6 col-sm-12">{this.toRow('interface')}</div>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-12'>
+            <div className='row'>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('name')}</div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('interface')}</div>
             </div>
-            <div className="row">
-              <div className="col-lg-6 col-sm-12">{this.toRow('address')}</div>
-              <div className="col-lg-6 col-sm-12">{this.toRow('rpi_pwm_freq', true)}</div>
+            <div className='row'>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('address')}</div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq', true)}</div>
             </div>
-            <div className="row">
-              <div className="col-lg-6 col-sm-12">{this.toRow('pca9685_pwm_freq', true)}</div>
-              <div className="col-lg-6 col-sm-12">
-                <div className="form-group">
-                  <label htmlFor="updateNotification">Notification</label>
+            <div className='row'>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq', true)}</div>
+              <div className='col-lg-6 col-sm-12'>
+                <div className='form-group'>
+                  <label htmlFor='updateNotification'>Notification</label>
                   <input
-                    type="checkbox"
-                    id="updateNotification"
+                    type='checkbox'
+                    id='updateNotification'
                     onClick={this.updateCheckbox('notification')}
                     defaultChecked={this.state.settings.notification}
-                    className="form-control"
+                    className='form-control'
                   />
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-6">
-                <div className="form-group">
-                  <label htmlFor="updateDisplay">Display</label>
+            <div className='row'>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='updateDisplay'>Display</label>
                   <input
-                    type="checkbox"
-                    id="updateDisplay"
+                    type='checkbox'
+                    id='updateDisplay'
                     onClick={this.updateCheckbox('display')}
                     defaultChecked={this.state.settings.display}
-                    className="form-control"
+                    className='form-control'
                   />
                   {this.showDisplay()}
                 </div>
               </div>
-              <div className="col-6">
-                <div className="form-group">
-                  <label htmlFor="use_https">Use HTTPS</label>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='use_https'>Use HTTPS</label>
                   <input
-                    type="checkbox"
-                    id="use_https"
+                    type='checkbox'
+                    id='use_https'
                     onClick={this.updateCheckbox('https')}
                     defaultChecked={this.state.settings.https}
-                    className="form-control"
+                    className='form-control'
                   />
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-6">
-                <div className="form-group">
-                  <label htmlFor="enable_pca9685">Enable PCA9685</label>
+            <div className='row'>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='enable_pca9685'>Enable PCA9685</label>
                   <input
-                    type="checkbox"
-                    id="enable_pca9685"
+                    type='checkbox'
+                    id='enable_pca9685'
                     onClick={this.updateCheckbox('pca9685')}
                     defaultChecked={this.state.settings.pca9685}
-                    className="form-control"
+                    className='form-control'
                   />
                 </div>
               </div>
-              <div className="col-6">
-                <div className="form-group">
-                  <label htmlFor="enable_pprof">Enable profiling</label>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='enable_pprof'>Enable profiling</label>
                   <input
-                    type="checkbox"
-                    id="enable_pprof"
+                    type='checkbox'
+                    id='enable_pprof'
                     onClick={this.updateCheckbox('pprof')}
                     defaultChecked={this.state.settings.pprof}
-                    className="form-control"
+                    className='form-control'
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-12">
+        <div className='row'>
+          <div className='col-12'>
             <label>
               {' '}
               <b>Capabilities</b>{' '}
@@ -227,14 +227,14 @@ class settings extends React.Component {
             {this.showCapabilities()}
           </div>
         </div>
-        <div className="row">{this.showHealthNotify()}</div>
-        <div className="row">
+        <div className='row'>{this.showHealthNotify()}</div>
+        <div className='row'>
           <input
-            type="button"
+            type='button'
             className={updateButtonClass}
             onClick={this.update}
-            id="systemUpdateSettings"
-            value="update"
+            id='systemUpdateSettings'
+            value='update'
           />
         </div>
       </div>
