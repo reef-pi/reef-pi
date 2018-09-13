@@ -56,7 +56,12 @@ func (c *Controller) Create(l Light) error {
 	for i, pin := range j.Pins {
 		ch, ok := l.Channels[pin]
 		if !ok {
-			ch = Channel{}
+			ch = Channel{
+				Profile: {
+					Type:   "fixed",
+					Config: []byte(`{"value": 0}`),
+				},
+			}
 		}
 		ch.Pin = pin
 		if ch.Name == "" {
