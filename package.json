@@ -8,6 +8,7 @@
     "example": "examples"
   },
   "devDependencies": {
+    "autoprefixer": "^9.1.5",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.0.1",
     "babel-loader": "^7.1.4",
@@ -37,6 +38,8 @@
     "node-sass": "^4.9.3",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
+    "postcss-loader": "^3.0.0",
+    "precss": "^3.1.2",
     "react": "^16.3.2",
     "react-color": "^2.14.1",
     "react-dom": "^16.3.2",

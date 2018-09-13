@@ -1,29 +1,25 @@
-var webpack = require("webpack");
-var path = require("path");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
-var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var webpack = require('webpack')
+var path = require('path')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-var BUILD_DIR = path.resolve(__dirname, "ui");
-var APP_DIR = path.resolve(__dirname, "jsx");
+var BUILD_DIR = path.resolve(__dirname, 'ui')
+var APP_DIR = path.resolve(__dirname, 'jsx')
 
 var config = {
-  entry: APP_DIR + "/entry",
+  entry: APP_DIR + '/entry',
   resolve: {
-    extensions: [".mjs", ".js", ".jsx"],
-    modules: [
-      "node_modules",
-      path.resolve(__dirname, "jsx"),
-      path.resolve(__dirname, "assets", "sass")
-    ]
+    extensions: ['.mjs', '.js', '.jsx'],
+    modules: ['node_modules', path.resolve(__dirname, 'jsx'), path.resolve(__dirname, 'assets', 'sass')]
   },
   module: {
     rules: [
       {
         test: /\.jsx?/,
         include: APP_DIR,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         query: {
-          presets: [["es2015", { modules: false }], "react", "stage-2"]
+          presets: [['es2015', { modules: false }], 'react', 'stage-2']
         }
       },
       {
@@ -33,35 +29,43 @@ var config = {
             loader: MiniCssExtractPlugin.loader
           },
           {
-            loader: "css-loader"
+            loader: 'css-loader'
           },
           {
-            loader: "sass-loader"
+            loader: 'postcss-loader',
+            options: {
+              plugins: function() {
+                return [require('precss'), require('autoprefixer')]
+              }
+            }
+          },
+          {
+            loader: 'sass-loader'
           }
         ]
       },
       {
         test: /\.css/,
-        loaders: ["style-loader", "css-loader"]
+        loaders: ['style-loader', 'css-loader']
       }
     ]
   },
   output: {
     path: BUILD_DIR,
-    filename: "assets/js/[name].js"
+    filename: 'assets/js/[name].js'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      favicon: "./assets/favicon.ico",
-      filename: "home.html",
-      template: "./assets/home.html",
+      favicon: './assets/favicon.ico',
+      filename: 'home.html',
+      template: './assets/home.html',
       inject: true
     }),
     new MiniCssExtractPlugin({
-      filename: "assets/css/[name].css",
-      chunkFilename: "assets/css/[id].css"
+      filename: 'assets/css/[name].[hash].css',
+      chunkFilename: 'assets/css/[id].[hash].css'
     })
   ]
-};
+}
 
-module.exports = config;
+module.exports = config
