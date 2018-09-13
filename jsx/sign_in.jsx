@@ -1,105 +1,105 @@
-import React from "react";
+import React from 'react'
 
 export default class SignIn extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      user: "",
-      password: "",
+      user: '',
+      password: '',
       invalidCredentials: false
-    };
-    this.saveCreds = this.saveCreds.bind(this);
-    this.login = this.login.bind(this);
-    this.handleUserChange = this.handleUserChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    }
+    this.saveCreds = this.saveCreds.bind(this)
+    this.login = this.login.bind(this)
+    this.handleUserChange = this.handleUserChange.bind(this)
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
   static set(k, v) {
-    window.localStorage.setItem(k, v);
+    window.localStorage.setItem(k, v)
   }
 
   static get(k) {
-    return window.localStorage.getItem(k);
+    return window.localStorage.getItem(k)
   }
 
   static remove(k) {
-    window.localStorage.removeItem(k);
+    window.localStorage.removeItem(k)
   }
 
   static isSignIned() {
-    return fetch("/api/me", {
-      method: "GET",
-      credentials: "same-origin"
+    return fetch('/api/me', {
+      method: 'GET',
+      credentials: 'same-origin'
     }).then(r => {
-      return r.ok;
-    });
+      return r.ok
+    })
   }
 
   static getCreds() {
     return {
-      user: SignIn.get("reef-pi-user"),
-      password: SignIn.get("reef-pi-pass")
-    };
+      user: SignIn.get('reef-pi-user'),
+      password: SignIn.get('reef-pi-pass')
+    }
   }
 
   static logout() {
-    return fetch("/auth/signout", {
-      method: "GET",
-      credentials: "same-origin"
+    return fetch('/auth/signout', {
+      method: 'GET',
+      credentials: 'same-origin'
     })
       .then(response => {
-        window.location.reload(true);
+        window.location.reload(true)
       })
       .catch(v => {
-        console.log(v);
-      });
+        console.log(v)
+      })
   }
 
   login(e) {
-    this.setState({ invalidCredentials: false });
-    e.preventDefault();
+    this.setState({ invalidCredentials: false })
+    e.preventDefault()
     let creds = {
       user: this.state.user,
       password: this.state.password
-    };
-    const setState = this.setState.bind(this);
-    return fetch("/auth/signin", {
-      method: "POST",
-      credentials: "same-origin",
+    }
+    const setState = this.setState.bind(this)
+    return fetch('/auth/signin', {
+      method: 'POST',
+      credentials: 'same-origin',
       body: JSON.stringify(creds)
     })
       .then(response => {
         switch (response.status) {
           case 500:
-            console.log("Internal Server Error");
-            console.log(response);
-            break;
+            console.log('Internal Server Error')
+            console.log(response)
+            break
           case 200:
-            console.log("Login succeeded");
-            window.location.reload(true);
-            break;
+            console.log('Login succeeded')
+            window.location.reload(true)
+            break
           default:
-            console.log("Invalid credentials");
-            setState({ invalidCredentials: true });
-            break;
+            console.log('Invalid credentials')
+            setState({ invalidCredentials: true })
+            break
         }
-        return response;
+        return response
       })
       .catch(v => {
-        console.log(v);
-      });
+        console.log(v)
+      })
   }
 
   saveCreds(creds) {
-    SignIn.set("reef-pi-user", creds.username);
-    SignIn.set("reef-pi-pass", creds.password);
-    window.location.reload(true);
+    SignIn.set('reef-pi-user', creds.username)
+    SignIn.set('reef-pi-pass', creds.password)
+    window.location.reload(true)
   }
   handleUserChange(e) {
-    this.setState({ user: e.target.value });
+    this.setState({ user: e.target.value })
   }
   handlePasswordChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({ password: e.target.value })
   }
 
   render() {
@@ -152,6 +152,6 @@ export default class SignIn extends React.Component {
           </div>
         </div>
       </form>
-    );
+    )
   }
 }
