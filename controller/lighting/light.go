@@ -57,7 +57,7 @@ func (c *Controller) Create(l Light) error {
 		ch, ok := l.Channels[pin]
 		if !ok {
 			ch = Channel{
-				Profile: {
+				Profile: Profile{
 					Type:   "fixed",
 					Config: []byte(`{"value": 0}`),
 				},
