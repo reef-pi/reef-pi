@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default class Capabilities extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       capabilities: props.capabilities
@@ -10,8 +10,8 @@ export default class Capabilities extends React.Component {
     this.toLi = this.toLi.bind(this)
   }
 
-  updateCapability (cap) {
-    return function (ev) {
+  updateCapability(cap) {
+    return function(ev) {
       var capabilities = this.state.capabilities
       capabilities[cap] = ev.target.checked
       this.setState({ capabilities: capabilities })
@@ -19,13 +19,13 @@ export default class Capabilities extends React.Component {
     }.bind(this)
   }
 
-  toLi (label) {
+  toLi(label) {
     return (
-      <div className='form-check'>
-        <label className='form-check-label'>
+      <div className="col-6 col-md-3 form-check">
+        <label className="form-check-label">
           <input
-            className='form-check-input'
-            type='checkbox'
+            className="form-check-input"
+            type="checkbox"
             id={'update-' + label}
             onClick={this.updateCapability(label)}
             defaultChecked={this.state.capabilities[label]}
@@ -36,21 +36,23 @@ export default class Capabilities extends React.Component {
     )
   }
 
-  render () {
+  render() {
     return (
-      <div className='container'>
-        {this.toLi('equipment')}
-        {this.toLi('timers')}
-        {this.toLi('lighting')}
-        {this.toLi('ato')}
-        {this.toLi('temperature')}
-        {this.toLi('camera')}
-        {this.toLi('doser')}
-        {this.toLi('ph')}
-        {this.toLi('macro')}
-        {this.toLi('health_check')}
-        {this.toLi('dashboard')}
-        {this.toLi('dev_mode')}
+      <div className="container">
+        <div className="row">
+          {this.toLi('equipment')}
+          {this.toLi('timers')}
+          {this.toLi('lighting')}
+          {this.toLi('ato')}
+          {this.toLi('temperature')}
+          {this.toLi('camera')}
+          {this.toLi('doser')}
+          {this.toLi('ph')}
+          {this.toLi('macro')}
+          {this.toLi('health_check')}
+          {this.toLi('dashboard')}
+          {this.toLi('dev_mode')}
+        </div>
       </div>
     )
   }

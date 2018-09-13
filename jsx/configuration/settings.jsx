@@ -141,9 +141,9 @@ class settings extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    var updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+      updateButtonClass = 'btn btn-outline-danger col-12'
     }
 
     return (
@@ -180,7 +180,7 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-sm-6 col-12'>
+              <div className='col-6'>
                 <div className='form-group'>
                   <label for='updateDisplay'>Display</label>
                   <input
@@ -193,7 +193,7 @@ class settings extends React.Component {
                   {this.showDisplay()}
                 </div>
               </div>
-              <div className='col-sm-6 col-12'>
+              <div className='col-6'>
                 <div className='form-group'>
                   <label for='use_https'>Use HTTPS</label>
                   <input
@@ -207,7 +207,7 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-sm-6 col-12'>
+              <div className='col-6'>
                 <div className='form-group'>
                   <label for='enable_pca9685'>Enable PCA9685</label>
                   <input
@@ -219,7 +219,7 @@ class settings extends React.Component {
                   />
                 </div>
               </div>
-              <div className='col-sm-6 col-12'>
+              <div className='col-6'>
                 <div className='form-group'>
                   <label for='enable_pprof'>Enable profiling</label>
                   <input
@@ -235,7 +235,7 @@ class settings extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-4'>
+          <div className='col-12'>
             <label>
               {' '}
               <b>Capabilities</b>{' '}
