@@ -1,7 +1,7 @@
 import React from 'react'
-import {fetchDisplay, switchDisplay, setBrightness} from '../redux/actions/display'
-import {isEmptyObject} from 'jquery'
-import {connect} from 'react-redux'
+import { fetchDisplay, switchDisplay, setBrightness } from '../redux/actions/display'
+import { isEmptyObject } from 'jquery'
+import { connect } from 'react-redux'
 
 class display extends React.Component {
   constructor (props) {
@@ -32,14 +32,14 @@ class display extends React.Component {
 
   toggle () {
     this.props.switchDisplay(this.state.on)
-    this.setState({on: !this.state.on})
+    this.setState({ on: !this.state.on })
     this.props.fetchDisplay()
   }
 
   setBrightness (ev) {
     var b = parseInt(ev.target.value)
     this.props.setBrightness(b)
-    this.setState({brightness: b})
+    this.setState({ brightness: b })
   }
 
   render () {
@@ -51,27 +51,44 @@ class display extends React.Component {
     }
     return (
       <div className='container'>
-        <div className='col-sm-1'><button onClick={this.toggle} type='button' className={style}> {action} </button> </div>
+        <div className='col-sm-1'>
+          <button onClick={this.toggle} type='button' className={style}>
+            {' '}
+            {action}{' '}
+          </button>{' '}
+        </div>
         <div className='col-sm-2'>Brightness</div>
-        <div className='col-sm-6'><input type='range' onChange={this.setBrightness} style={{width: '100%'}} min={0} max={255} value={this.state.brightness} /></div>
+        <div className='col-sm-6'>
+          <input
+            type='range'
+            onChange={this.setBrightness}
+            style={{ width: '100%' }}
+            min={0}
+            max={255}
+            value={this.state.brightness}
+          />
+        </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     config: state.display
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchDisplay: () => dispatch(fetchDisplay()),
     switchDisplay: () => dispatch(switchDisplay()),
-    setBrightness: (s) => dispatch(setBrightness(s))
+    setBrightness: s => dispatch(setBrightness(s))
   }
 }
 
-const Display = connect(mapStateToProps, mapDispatchToProps)(display)
+const Display = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(display)
 export default Display
