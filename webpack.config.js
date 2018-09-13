@@ -62,8 +62,8 @@ var config = {
       inject: true
     }),
     new MiniCssExtractPlugin({
-      filename: 'assets/css/[name].[hash].css',
-      chunkFilename: 'assets/css/[id].[hash].css'
+      filename: 'assets/css/[name].css',
+      chunkFilename: 'assets/css/[id].css'
     })
   ]
 }
