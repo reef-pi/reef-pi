@@ -43,10 +43,4 @@ describe('App', () => {
     ).dive().instance()
     m.setEquipment(0)
   })
-
-  it('<SignIn />', () => {
-    SignIn.removeCreds()
-    SignIn.set('a', 1)
-    const m = shallow(<SignIn />).instance()
-  })
 })
