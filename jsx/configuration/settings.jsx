@@ -180,7 +180,7 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-sm-6 col-12'>
                 <div className='form-group'>
                   <label for='updateDisplay'>Display</label>
                   <input
@@ -193,7 +193,7 @@ class settings extends React.Component {
                   {this.showDisplay()}
                 </div>
               </div>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-sm-6 col-12'>
                 <div className='form-group'>
                   <label for='use_https'>Use HTTPS</label>
                   <input
@@ -207,7 +207,7 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-sm-6 col-12'>
                 <div className='form-group'>
                   <label for='enable_pca9685'>Enable PCA9685</label>
                   <input
@@ -219,7 +219,7 @@ class settings extends React.Component {
                   />
                 </div>
               </div>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-sm-6 col-12'>
                 <div className='form-group'>
                   <label for='enable_pprof'>Enable profiling</label>
                   <input
