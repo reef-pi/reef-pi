@@ -37,12 +37,7 @@ class settings extends React.Component {
     if (this.state.settings.capabilities.health_check !== true) {
       return
     }
-    return (
-      <HealthNotify
-        update={this.updateHealthNotify}
-        state={this.state.settings.health_check}
-      />
-    )
+    return <HealthNotify update={this.updateHealthNotify} state={this.state.settings.health_check} />
   }
 
   updateHealthNotify (notify) {
@@ -77,12 +72,7 @@ class settings extends React.Component {
   }
 
   showCapabilities () {
-    return (
-      <Capabilities
-        capabilities={this.state.capabilities}
-        update={this.updateCapabilities}
-      />
-    )
+    return <Capabilities capabilities={this.state.capabilities} update={this.updateCapabilities} />
   }
 
   updateCapabilities (capabilities) {
@@ -117,7 +107,7 @@ class settings extends React.Component {
     }.bind(this)
     return (
       <div className='form-group'>
-        <label for={'to-row-' + label}> {label}</label>
+        <label htmlFor={'to-row-' + label}> {label}</label>
         <input
           className='form-control'
           type='text'
@@ -141,9 +131,9 @@ class settings extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-sm-2'
+    var updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-sm-2'
+      updateButtonClass = 'btn btn-outline-danger col-12'
     }
 
     return (
@@ -152,23 +142,17 @@ class settings extends React.Component {
           <div className='col-12'>
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>{this.toRow('name')}</div>
-              <div className='col-lg-6 col-sm-12'>
-                {this.toRow('interface')}
-              </div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('interface')}</div>
             </div>
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>{this.toRow('address')}</div>
-              <div className='col-lg-6 col-sm-12'>
-                {this.toRow('rpi_pwm_freq', true)}
-              </div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq', true)}</div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
-                {this.toRow('pca9685_pwm_freq', true)}
-              </div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq', true)}</div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
-                  <label for='updateNotification'>Notification</label>
+                  <label htmlFor='updateNotification'>Notification</label>
                   <input
                     type='checkbox'
                     id='updateNotification'
@@ -180,9 +164,9 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-6'>
                 <div className='form-group'>
-                  <label for='updateDisplay'>Display</label>
+                  <label htmlFor='updateDisplay'>Display</label>
                   <input
                     type='checkbox'
                     id='updateDisplay'
@@ -193,9 +177,9 @@ class settings extends React.Component {
                   {this.showDisplay()}
                 </div>
               </div>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-6'>
                 <div className='form-group'>
-                  <label for='use_https'>Use HTTPS</label>
+                  <label htmlFor='use_https'>Use HTTPS</label>
                   <input
                     type='checkbox'
                     id='use_https'
@@ -207,9 +191,9 @@ class settings extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-6'>
                 <div className='form-group'>
-                  <label for='enable_pca9685'>Enable PCA9685</label>
+                  <label htmlFor='enable_pca9685'>Enable PCA9685</label>
                   <input
                     type='checkbox'
                     id='enable_pca9685'
@@ -219,9 +203,9 @@ class settings extends React.Component {
                   />
                 </div>
               </div>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col-6'>
                 <div className='form-group'>
-                  <label for='enable_pprof'>Enable profiling</label>
+                  <label htmlFor='enable_pprof'>Enable profiling</label>
                   <input
                     type='checkbox'
                     id='enable_pprof'
@@ -235,7 +219,7 @@ class settings extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-sm-4'>
+          <div className='col-12'>
             <label>
               {' '}
               <b>Capabilities</b>{' '}

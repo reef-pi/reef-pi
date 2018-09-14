@@ -6,8 +6,8 @@ import LightChart from 'lighting/chart'
 import ATOChart from 'ato/chart'
 import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
-import {fetchDashboard} from 'redux/actions/dashboard'
-import {connect} from 'react-redux'
+import { fetchDashboard } from 'redux/actions/dashboard'
+import { connect } from 'react-redux'
 import Config from './config'
 
 class dashboard extends React.Component {
@@ -25,7 +25,7 @@ class dashboard extends React.Component {
   }
 
   toggle () {
-    this.setState({showConfig: !this.state.showConfig})
+    this.setState({ showConfig: !this.state.showConfig })
   }
 
   charts () {
@@ -104,10 +104,12 @@ class dashboard extends React.Component {
         }
       }
       rows.push(
-        <div className='row' key={'row-' + i}>{columns}</div>
+        <div className='row' key={'row-' + i}>
+          {columns}
+        </div>
       )
     }
-    return (<div className='container'>{rows}</div>)
+    return rows
   }
 
   render () {
@@ -117,40 +119,37 @@ class dashboard extends React.Component {
       content = this.charts()
       lbl = 'Configure'
     }
-    return (
-      <div className='container'>
-        <div className='row'>
-          {content}
-        </div>
-        <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
-              <button
-                className='btn btn-outline-dark btn-sm'
-                onClick={this.toggle}
-                id='configure-dashboard'
-              >
-                <label>{lbl}</label>
-              </button>
-            </div>
+    return [
+      <div className='row'>
+        <div className='col'>{content}</div>
+      </div>,
+      <div className='row'>
+        <div className='col'>
+          <div className='float-right'>
+            <button className='btn btn-outline-dark btn-sm' onClick={this.toggle} id='configure-dashboard'>
+              <label>{lbl}</label>
+            </button>
           </div>
         </div>
       </div>
-    )
+    ]
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     config: state.dashboard
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchDashboard: () => dispatch(fetchDashboard())
   }
 }
 
-const Dashboard = connect(mapStateToProps, mapDispatchToProps)(dashboard)
+const Dashboard = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(dashboard)
 export default Dashboard

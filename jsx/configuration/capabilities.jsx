@@ -21,7 +21,7 @@ export default class Capabilities extends React.Component {
 
   toLi (label) {
     return (
-      <div className='form-check'>
+      <div className='col-6 col-md-3 form-check'>
         <label className='form-check-label'>
           <input
             className='form-check-input'
@@ -39,18 +39,20 @@ export default class Capabilities extends React.Component {
   render () {
     return (
       <div className='container'>
-        {this.toLi('equipment')}
-        {this.toLi('timers')}
-        {this.toLi('lighting')}
-        {this.toLi('ato')}
-        {this.toLi('temperature')}
-        {this.toLi('camera')}
-        {this.toLi('doser')}
-        {this.toLi('ph')}
-        {this.toLi('macro')}
-        {this.toLi('health_check')}
-        {this.toLi('dashboard')}
-        {this.toLi('dev_mode')}
+        <div className='row'>
+          {this.toLi('equipment')}
+          {this.toLi('timers')}
+          {this.toLi('lighting')}
+          {this.toLi('ato')}
+          {this.toLi('temperature')}
+          {this.toLi('camera')}
+          {this.toLi('doser')}
+          {this.toLi('ph')}
+          {this.toLi('macro')}
+          {this.toLi('health_check')}
+          {this.toLi('dashboard')}
+          {this.toLi('dev_mode')}
+        </div>
       </div>
     )
   }

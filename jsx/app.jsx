@@ -7,41 +7,41 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import 'react-toggle-switch/dist/css/switch.min.css'
 
 export default class App extends React.Component {
-  constructor(props){
-    super(props);
+  constructor(props) {
+    super(props)
     this.state = {
-        loaded: false,
-        logged: false
+      loaded: false,
+      logged: false
     }
-}
-componentDidMount(){
-  const setState = this.setState.bind(this)
-  SignIn.isSignIned().then(r => {
-    setState({loaded: true})
-    setState({logged: r})
-  })
-}
-getComponent() {
-  if(!this.state.logged){
-    return (<SignIn />)
-  }else{
-    return (
-      <div className="row">
-        <div className="col-12">
-          <div id='reef-pi-alert' />
-          <MainPanel />
-        </div>
-      </div>
-    )
   }
-}
-  render () {
-    return (<div>
-      {!this.state.loaded ?
-          <div>Loading</div>
-      :
-          this.getComponent()
-      }
-  </div>)
+  componentDidMount() {
+    const setState = this.setState.bind(this)
+    SignIn.isSignIned().then(r => {
+      setState({ loaded: true })
+      setState({ logged: r })
+    })
+  }
+  getComponent() {
+    if (!this.state.logged) {
+      return <SignIn />
+    } else {
+      return (
+        <div className="row">
+          <div className="col-12">
+            <div id="reef-pi-alert" />
+          </div>
+          <div className="col-12">
+            <MainPanel />
+          </div>
+        </div>
+      )
+    }
+  }
+  render() {
+    if (!this.state.loaded) {
+      return <div>Loading</div>
+    } else {
+      return this.getComponent()
+    }
   }
 }
