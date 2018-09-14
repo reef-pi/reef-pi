@@ -13,7 +13,7 @@ script:
   - bundle install
   - env
   - /usr/bin/npm install
-	- make build-ui
+  - make build-ui
   - ./node_modules/.bin/standard jsx/**/*
   - make sass-lint
   - npm test
