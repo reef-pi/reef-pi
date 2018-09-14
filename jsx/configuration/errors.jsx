@@ -32,11 +32,12 @@ class errors extends React.Component {
         {items}
         <div className='row'>
           <div className='col-lg-2'>
-            <input
+            <button
               className='btn btn-outline-secondary'
-              defaultValue='clear'
               onClick={this.props.clear}
-            />
+            >
+            clear
+            </button>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ package temperature
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 	"time"
 )
@@ -61,6 +62,7 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	tc.CreateFeed(c.c.Telemetry())
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
@@ -84,6 +86,7 @@ func (c *Controller) Update(id string, tc TC) error {
 		close(quit)
 		delete(c.quitters, tc.ID)
 	}
+	tc.CreateFeed(c.c.Telemetry())
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
@@ -137,5 +140,21 @@ func (c *Controller) Run(t TC, quit chan struct{}) {
 			ticker.Stop()
 			return
 		}
+	}
+}
+
+func (tc TC) CreateFeed(telemetry types.Telemetry) {
+	if !tc.Enable {
+		return
+	}
+	telemetry.CreateFeedIfNotExist(tc.Name + "-reading")
+	if !tc.Control {
+		return
+	}
+	if tc.Heater != "" {
+		telemetry.CreateFeedIfNotExist(tc.Name + "-heater")
+	}
+	if tc.Cooler != "" {
+		telemetry.CreateFeedIfNotExist(tc.Name + "-cooler")
 	}
 }
