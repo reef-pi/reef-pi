@@ -26,4 +26,5 @@ type Telemetry interface {
 	Alert(string, string) (bool, error)
 	EmitMetric(string, interface{})
 	CreateFeedIfNotExist(string)
+	DeleteFeedIfExist(string)
 }

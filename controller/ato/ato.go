@@ -3,6 +3,7 @@ package ato
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
@@ -149,6 +150,7 @@ func (c *Controller) Check(a ATO) {
 	}
 	c.NotifyIfNeeded(a, usage)
 	c.statsMgr.Update(a.ID, usage)
+	c.c.Telemetry().EmitMetric("ato-"+a.Name, usage.Pump)
 }
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
@@ -177,4 +179,8 @@ func (c *Controller) Read(a ATO) (int, error) {
 		return v, nil
 	}
 	return c.inlets.Read(a.Inlet)
+}
+
+func (a ATO) CreateFeed(t types.Telemetry) {
+	t.CreateFeedIfNotExist("ato-" + a.Name)
 }

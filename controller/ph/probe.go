@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
@@ -51,6 +52,7 @@ func (c *Controller) Create(p Probe) error {
 		return err
 	}
 	if p.Enable {
+		p.CreateFeed(c.controller.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -72,6 +74,7 @@ func (c *Controller) Update(id string, p Probe) error {
 		delete(c.quitters, p.ID)
 	}
 	if p.Enable {
+		p.CreateFeed(c.controller.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -122,6 +125,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 				sum:  reading,
 			}
 			c.statsMgr.Update(p.ID, m)
+			c.controller.Telemetry().EmitMetric("ph-"+p.Name, reading)
 		case <-quit:
 			ticker.Stop()
 			return
@@ -156,4 +160,8 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	default:
 		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
 	}
+}
+
+func (p Probe) CreateFeed(t types.Telemetry) {
+	t.CreateFeedIfNotExist("ph-" + p.Name)
 }

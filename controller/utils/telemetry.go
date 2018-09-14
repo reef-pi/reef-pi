@@ -157,3 +157,17 @@ func (t *TeleTime) UnmarshalJSON(data []byte) error {
 	*t = TeleTime(t1)
 	return nil
 }
+
+func (t *telemetry) DeleteFeedIfExist(f string) {
+	aio := t.config.AdafruitIO
+	f = strings.ToLower(aio.Prefix + f)
+	if !aio.Enable {
+		//log.Println("Telemetry disabled. Skipping creating feed:", f)
+		return
+	}
+	log.Println("Telemetry sub-system: Deleting feed:", f)
+	if err := t.client.DeleteFeed(aio.User, f); err != nil {
+		log.Println("ERROR: Telemetry sub-system: Failed to delete feed:", f, "Error:", err)
+	}
+	return
+}
