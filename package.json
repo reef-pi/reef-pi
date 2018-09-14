@@ -94,6 +94,9 @@
       "afterEach",
       "jest",
       "beforeEach"
+    ],
+    "ignore": [
+      "*.js"
     ]
   },
   "jest": {
