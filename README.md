@@ -30,6 +30,13 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - On-demand or automatic tank photo capture with google drive upload using pi camera
 
 
+## Maintainers
+
+- [Ranjib Dey](https://github.com/ranjib). Author & project lead
+- [Vincent le Goff](https://github.com/zekth)
+- [Michael Lane](https://github.com/Ranthalion)
+
+
 ## Acknowledgments
 
 reef-pi would not be possible without these awesome things:
