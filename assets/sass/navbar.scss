@@ -1,0 +1,25 @@
+@import './colors';
+
+.navbar-reefpi {
+  background-color: $main-color;
+  a::first-letter{
+    text-transform: uppercase;
+  }
+}
+.navbar-reefpi .navbar-brand {
+  color: #FFF;
+}
+/* change the brand and text color */
+.navbar-reefpi
+.navbar-reefpi .navbar-text {
+  color: rgba(255,255,255,.8);
+}
+/* change the link color */
+.navbar-reefpi .navbar-nav .nav-link {
+  color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.navbar-reefpi .nav-item.active .nav-link,
+.navbar-reefpi .nav-item:hover .nav-link {
+  color: #ffffff;
+}
