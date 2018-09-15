@@ -11,27 +11,28 @@ import Ph from 'ph/main'
 import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
 import $ from 'jquery'
-import {fetchUIData} from 'redux/actions/ui'
-import {fetchInfo} from 'redux/actions/info'
-import {connect} from 'react-redux'
+import { fetchUIData } from 'redux/actions/ui'
+import { fetchInfo } from 'redux/actions/info'
+import { connect } from 'react-redux'
 import Summary from 'summary'
+import { configureStore } from 'redux/store'
 
 const caps = {
-  'dashboard': <Dashboard />,
-  'equipment': <Equipment />,
-  'timers': <Timers />,
-  'lighting': <Lighting />,
-  'temperature': <Temperature />,
-  'ato': <ATO />,
-  'ph': <Ph />,
-  'doser': <Doser />,
-  'macro': <Macro />,
-  'camera': <Camera />,
-  'configuration': <Configuration />
+  dashboard: <Dashboard />,
+  equipment: <Equipment />,
+  timers: <Timers />,
+  lighting: <Lighting />,
+  temperature: <Temperature />,
+  ato: <ATO />,
+  ph: <Ph />,
+  doser: <Doser />,
+  macro: <Macro />,
+  camera: <Camera />,
+  configuration: <Configuration />
 }
 
 class mainPanel extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       tab: 'dashboard'
@@ -39,43 +40,45 @@ class mainPanel extends React.Component {
     this.navs = this.navs.bind(this)
     this.setTab = this.setTab.bind(this)
   }
-
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchUIData()
   }
 
-  setTab (k) {
-    return () => { this.setState({tab: k}) }
+  setTab(k) {
+    return () => {
+      this.setState({ tab: k })
+    }
   }
 
-  navs (tab) {
-    var panels = [ ]
-    $.each(caps, function (k, panel) {
-      if (this.props.capabilities[k] === undefined) {
-        return
-      }
-      if (!this.props.capabilities[k]) {
-        return
-      }
-      var cname = k === tab ? 'nav-link active text-primary' : 'nav-link'
-      panels.push(
-        <li className='nav-item' key={k}>
-          <a href='#' id={'tab-' + k} className={cname} onClick={this.setTab(k)}>{k}</a>
-        </li>
-      )
-    }.bind(this))
-    return (
-      <ul className='nav nav-tabs'>
-        {panels}
-      </ul>
+  navs(tab) {
+    var panels = []
+    $.each(
+      caps,
+      function(k, panel) {
+        if (this.props.capabilities[k] === undefined) {
+          return
+        }
+        if (!this.props.capabilities[k]) {
+          return
+        }
+        var cname = k === tab ? 'nav-link active' : 'nav-link'
+        panels.push(
+          <li className="nav-item" key={k}>
+            <a href="#" id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
+              {k}
+            </a>
+          </li>
+        )
+      }.bind(this)
     )
+    return <ul className="navbar-nav">{panels}</ul>
   }
 
-  render () {
+  render() {
     var tab = this.state.tab
     if (!this.props.capabilities['dashboard'] && tab === 'dashboard') {
       for (var k in this.props.capabilities) {
-        if (this.props.capabilities[k] && (caps[k] !== undefined)) {
+        if (this.props.capabilities[k] && caps[k] !== undefined) {
           tab = k
           break
         }
@@ -83,20 +86,32 @@ class mainPanel extends React.Component {
     }
     var body = caps[tab]
     return (
-      <div>
-        <div className='row'>
-          <div className='col-12'>
+      <div id="content">
+        <nav className="navbar navbar-dark navbar-reefpi navbar-expand-lg">
+          <span className="navbar-brand mb-0 h1">reef-pi</span>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
             {this.navs(tab)}
           </div>
-        </div>
-        <div className='row body-panel'>
-          <div className='col-12'>
-            {body}
+        </nav>
+        <div className="container-fluid">
+          <div className="row body-panel">
+            <div className="col-12">{body}</div>
           </div>
-        </div>
-        <div className='row'>
-          <div className='col-12'>
-            <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+          <div className="row">
+            <div className="col-12">
+              <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+            </div>
           </div>
         </div>
       </div>
@@ -104,7 +119,7 @@ class mainPanel extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     capabilities: state.capabilities,
     errors: state.errors,
@@ -112,12 +127,15 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchUIData: () => dispatch(fetchUIData(dispatch)),
     fetchInfo: () => dispatch(fetchInfo(dispatch))
   }
 }
 
-const MainPanel = connect(mapStateToProps, mapDispatchToProps)(mainPanel)
+const MainPanel = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(mainPanel)
 export default MainPanel
