@@ -25,16 +25,9 @@ export default class App extends React.Component {
     if (!this.state.logged) {
       return <SignIn />
     } else {
-      return (
-        <div className="row">
-          <div className="col-12">
-            <div id="reef-pi-alert" />
-          </div>
-          <div className="col-12">
-            <MainPanel />
-          </div>
-        </div>
-      )
+      return [
+        <MainPanel />
+      ]
     }
   }
   render() {
