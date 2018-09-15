@@ -66,6 +66,7 @@ func (c *Controller) Create(a ATO) error {
 		return err
 	}
 	if a.Enable {
+		a.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
 		go c.Run(a, quit)
@@ -89,6 +90,7 @@ func (c *Controller) Update(id string, a ATO) error {
 		delete(c.quitters, a.ID)
 	}
 	if a.Enable {
+		a.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
 		go c.Run(a, quit)
@@ -138,7 +140,7 @@ func (c *Controller) Check(a ATO) {
 		return
 	}
 	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
-	c.c.Telemetry().EmitMetric("ato", reading)
+	c.c.Telemetry().EmitMetric("ato-"+a.Name+"-reading", reading)
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
 			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
@@ -150,7 +152,7 @@ func (c *Controller) Check(a ATO) {
 	}
 	c.NotifyIfNeeded(a, usage)
 	c.statsMgr.Update(a.ID, usage)
-	c.c.Telemetry().EmitMetric("ato-"+a.Name, usage.Pump)
+	c.c.Telemetry().EmitMetric("ato-"+a.Name+"-usage", usage.Pump)
 }
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
@@ -182,5 +184,6 @@ func (c *Controller) Read(a ATO) (int, error) {
 }
 
 func (a ATO) CreateFeed(t types.Telemetry) {
-	t.CreateFeedIfNotExist("ato-" + a.Name)
+	t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
+	t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
 }
