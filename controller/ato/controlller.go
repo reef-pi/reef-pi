@@ -39,7 +39,21 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.c.Store().CreateBucket(UsageBucket)
+	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
+		return err
+	}
+	atos, err := c.List()
+	if err != nil {
+		log.Println("ERROR: ato subsystem: Failed to list sensors. Error:", err)
+		return nil
+	}
+	for _, a := range atos {
+		if !a.Enable {
+			continue
+		}
+		a.CreateFeed(c.c.Telemetry())
+	}
+	return nil
 }
 
 func (c *Controller) Start() {
