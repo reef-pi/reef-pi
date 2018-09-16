@@ -8,22 +8,9 @@ export default class SignIn extends React.Component {
       password: '',
       invalidCredentials: false
     }
-    this.saveCreds = this.saveCreds.bind(this)
     this.login = this.login.bind(this)
     this.handleUserChange = this.handleUserChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
-  }
-
-  static set(k, v) {
-    window.localStorage.setItem(k, v)
-  }
-
-  static get(k) {
-    return window.localStorage.getItem(k)
-  }
-
-  static remove(k) {
-    window.localStorage.removeItem(k)
   }
 
   static isSignIned() {
@@ -37,8 +24,8 @@ export default class SignIn extends React.Component {
 
   static getCreds() {
     return {
-      user: SignIn.get('reef-pi-user'),
-      password: SignIn.get('reef-pi-pass')
+      user: '',
+      password: ''
     }
   }
 
@@ -90,14 +77,10 @@ export default class SignIn extends React.Component {
       })
   }
 
-  saveCreds(creds) {
-    SignIn.set('reef-pi-user', creds.username)
-    SignIn.set('reef-pi-pass', creds.password)
-    window.location.reload(true)
-  }
   handleUserChange(e) {
     this.setState({ user: e.target.value })
   }
+
   handlePasswordChange(e) {
     this.setState({ password: e.target.value })
   }
