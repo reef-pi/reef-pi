@@ -34,13 +34,20 @@ class auth extends React.Component {
     }
     if (!creds.user) {
       this.setState({ usernameError: true })
+      error = true
     }
     if (!creds.password) {
       this.setState({ passwordError: true })
+      error = true
     }
-    error = creds.password && creds.user
     if (!error) {
-      this.props.updateCreds(creds)
+      fetch('/api/credentials', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify(creds)
+      }).then(data => {
+        console.log('updated')
+      })
       this.setState({ updated: false })
     }
   }
