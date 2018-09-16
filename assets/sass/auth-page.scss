@@ -1,0 +1,17 @@
+@import './colors';
+
+body,html,#main-panel {
+  &.auth-page{
+    height: 100%;
+  }
+}
+#main-panel {
+  &.auth-page{
+    background-color: $main-alternate-color;
+  }
+}
+.auth-page{
+  .reef-pi-title{
+    color: white;
+  }
+}
