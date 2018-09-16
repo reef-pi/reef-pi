@@ -1,8 +1,10 @@
 import React from 'react'
-import ATO from './ato'
+import Ato from './ato'
 import New from './new'
-import { fetchATOs } from 'redux/actions/ato'
-import { connect } from 'react-redux'
+import {fetchATOs} from 'redux/actions/ato'
+import {connect} from 'react-redux'
+import {fetchEquipment} from 'redux/actions/equipment'
+import {fetchInlets} from 'redux/actions/inlets'
 
 class main extends React.Component {
   constructor (props) {
@@ -10,46 +12,50 @@ class main extends React.Component {
     this.state = {
       add: false
     }
-    this.list = this.list.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchATOs()
-  }
-
-  list () {
-    var list = []
-    this.props.atos.forEach((v, k) => {
-      list.push(
-        <div key={'ato-' + k} className='row list-group-item'>
-          <ATO data={v} upateHook={this.props.fetchATOs} />
-        </div>
-      )
-    })
-    return list
+    this.props.fetchEquipment()
+    this.props.fetchInlets()
   }
 
   render () {
     return (
-      <React.Fragment>
-        <ul className='list-group list-group-flush' key='ato_list'>
-          {this.list()}
-        </ul>
-        <New key='ato_new' />
-      </React.Fragment>
+      <div>
+        <ul className='list-group list-group-flush'>
+          {
+            this.props.atos.map(item => {
+              return (
+                <div key={item.id} className='list-group-item'>
+                  <Ato data={item}
+                    inlets={this.props.inlets}
+                    equipment={this.props.equipment} />
+                </div>
+              )
+            })
+          }
+          <New inlets={this.props.inlets}
+            equipment={this.props.equipment} />
+        </ul>        
+      </div>
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    atos: state.atos
+    atos: state.atos,
+    equipment: state.equipment,
+    inlets: state.inlets
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchATOs: () => dispatch(fetchATOs())
+    fetchATOs: () => dispatch(fetchATOs()),
+    fetchEquipment: () => dispatch(fetchEquipment()),
+    fetchInlets: () => dispatch(fetchInlets())
   }
 }
 
