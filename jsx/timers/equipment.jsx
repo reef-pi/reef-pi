@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export default class Equipment extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     var name = ''
     props.equipment.forEach(eq => {
@@ -24,7 +24,7 @@ export default class Equipment extends React.Component {
     this.setDuration = this.setDuration.bind(this)
   }
 
-  setDuration(ev) {
+  setDuration (ev) {
     this.setState({
       duration: ev.target.value
     })
@@ -36,7 +36,7 @@ export default class Equipment extends React.Component {
     })
   }
 
-  setRevert(ev) {
+  setRevert (ev) {
     this.setState({
       revert: ev.target.checked
     })
@@ -48,7 +48,7 @@ export default class Equipment extends React.Component {
     })
   }
 
-  set(k) {
+  set (k) {
     return () => {
       this.setState({
         id: this.props.equipment[k].id,
@@ -63,7 +63,7 @@ export default class Equipment extends React.Component {
     }
   }
 
-  setAction(k) {
+  setAction (k) {
     return () => {
       this.setState({
         on: k
@@ -77,7 +77,7 @@ export default class Equipment extends React.Component {
     }
   }
 
-  list() {
+  list () {
     var menuItems = []
     this.props.equipment.forEach((v, k) => {
       var cls = 'dropdown-item'
@@ -93,22 +93,22 @@ export default class Equipment extends React.Component {
     return menuItems
   }
 
-  render() {
+  render () {
     var eqName = this.state.name
     var eqAction = this.state.on ? 'on' : 'off'
     var durationUI = <div />
     if (this.state.revert) {
       durationUI = (
-        <div className="row">
-          <div className="col">
+        <div className='row'>
+          <div className='col'>
             <label> Duration</label>
           </div>
-          <div className="col">
+          <div className='col'>
             <input
               id={this.props.id_prefix + '-equipment-action-duration'}
-              type="text"
+              type='text'
               onChange={this.setDuration}
-              className="col-lg-6"
+              className='col-lg-6'
               disabled={this.props.disabled}
               defaultValue={this.state.duration}
             />
@@ -118,43 +118,43 @@ export default class Equipment extends React.Component {
       )
     }
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col">Equipment</div>
-          <div className="col">
-            <div className="dropdown">
+      <div className='container'>
+        <div className='row'>
+          <div className='col'>Equipment</div>
+          <div className='col'>
+            <div className='dropdown'>
               <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
+                className='btn btn-secondary dropdown-toggle'
+                type='button'
                 id={this.props.id_prefix + '-equipment'}
-                data-toggle="dropdown"
+                data-toggle='dropdown'
                 disabled={this.props.disabled}
               >
                 {eqName}
               </button>
-              <div className="dropdown-menu">{this.list()}</div>
+              <div className='dropdown-menu'>{this.list()}</div>
             </div>
           </div>
         </div>
-        <div className="row">
-          <label className="col"> Action</label>
-          <span className="col">
-            <div className="dropdown">
+        <div className='row'>
+          <label className='col'> Action</label>
+          <span className='col'>
+            <div className='dropdown'>
               <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
+                className='btn btn-secondary dropdown-toggle'
+                type='button'
                 id={this.props.id_prefix + '-equipmentAction'}
                 disabled={this.props.disabled}
-                data-toggle="dropdown"
+                data-toggle='dropdown'
               >
                 {eqAction}
               </button>
-              <div className="dropdown-menu">
-                <a className="dropdown-item" onClick={this.setAction(true)}>
+              <div className='dropdown-menu'>
+                <a className='dropdown-item' onClick={this.setAction(true)}>
                   {' '}
                   On{' '}
                 </a>
-                <a className="dropdown-item" onClick={this.setAction(false)}>
+                <a className='dropdown-item' onClick={this.setAction(false)}>
                   {' '}
                   Off{' '}
                 </a>
@@ -162,14 +162,14 @@ export default class Equipment extends React.Component {
             </div>
           </span>
         </div>
-        <div className="row">
-          <div className="col">
+        <div className='row'>
+          <div className='col'>
             <label> Revert </label>
           </div>
-          <div className="col">
+          <div className='col'>
             <input
               id={this.props.id_prefix + '-equipment-revert'}
-              type="checkbox"
+              type='checkbox'
               onClick={this.setRevert}
               defaultChecked={this.state.revert}
               disabled={this.props.disabled}

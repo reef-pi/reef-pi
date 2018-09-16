@@ -7,7 +7,7 @@ import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/ja
 import Jack from './jack'
 
 class jacks extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       add: false,
@@ -20,7 +20,7 @@ class jacks extends React.Component {
     this.setDriver = this.setDriver.bind(this)
   }
 
-  setDriver(k) {
+  setDriver (k) {
     return () => {
       this.setState({
         driver: k
@@ -28,21 +28,21 @@ class jacks extends React.Component {
     }
   }
 
-  remove(id) {
-    return function() {
+  remove (id) {
+    return function () {
       confirm('Are you sure ?').then(
-        function() {
+        function () {
           this.props.delete(id)
         }.bind(this)
       )
     }.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetch()
   }
 
-  add() {
+  add () {
     this.setState({
       add: !this.state.add
     })
@@ -50,7 +50,7 @@ class jacks extends React.Component {
     $('#jackPins').val('')
   }
 
-  save() {
+  save () {
     var pins = $('#jackPins')
       .val()
       .split(',')
@@ -72,7 +72,7 @@ class jacks extends React.Component {
     this.add()
   }
 
-  list() {
+  list () {
     var list = []
     this.props.jacks.forEach((j, i) => {
       list.push(
@@ -93,71 +93,71 @@ class jacks extends React.Component {
     return list
   }
 
-  render() {
+  render () {
     var dStyle = {
       display: this.state.add ? 'block' : 'none'
     }
     return (
-      <div className="container">
-        <div className="row">
-          <label className="h6">Jacks</label>
+      <div className='container'>
+        <div className='row'>
+          <label className='h6'>Jacks</label>
         </div>
-        <div className="row">
-          <div className="container">{this.list()}</div>
+        <div className='row'>
+          <div className='container'>{this.list()}</div>
         </div>
-        <div className="row">
+        <div className='row'>
           <input
-            id="add_jack"
-            type="button"
+            id='add_jack'
+            type='button'
             value={this.state.add ? '-' : '+'}
             onClick={this.add}
-            className="btn btn-outline-success"
+            className='btn btn-outline-success'
           />
-          <div className="container" style={dStyle}>
-            <div className="row">
-              <div className="col-sm-3">
-                <div className="input-group">
-                  <span className="input-group-addon"> Name </span>
-                  <input type="text" id="jackName" className="form-control" />
+          <div className='container' style={dStyle}>
+            <div className='row'>
+              <div className='col-sm-3'>
+                <div className='input-group'>
+                  <span className='input-group-addon'> Name </span>
+                  <input type='text' id='jackName' className='form-control' />
                 </div>
               </div>
-              <div className="col-sm-3">
-                <div className="input-group">
-                  <span className="input-group-addon"> Pins </span>
-                  <input type="text" id="jackPins" className="form-control" />
+              <div className='col-sm-3'>
+                <div className='input-group'>
+                  <span className='input-group-addon'> Pins </span>
+                  <input type='text' id='jackPins' className='form-control' />
                 </div>
               </div>
 
-              <div className="col-sm-3">
+              <div className='col-sm-3'>
                 Driver
-                <div className="dropdown">
+                <div className='dropdown'>
                   <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="jack-type-selection"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                    className='btn btn-secondary dropdown-toggle'
+                    type='button'
+                    id='jack-type-selection'
+                    data-toggle='dropdown'
+                    aria-haspopup='true'
+                    aria-expanded='false'
                   >
                     {this.state.driver}
                   </button>
-                  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a className="dropdown-item" href="#" onClick={this.setDriver('rpi')}>
+                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
                       rpi
                     </a>
-                    <a className="dropdown-item" href="#" onClick={this.setDriver('pca9685')}>
+                    <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
                       pca9685
                     </a>
                   </div>
                 </div>
               </div>
-              <div className="col-sm-1">
+              <div className='col-sm-1'>
                 <input
-                  type="button"
-                  id="createJack"
-                  value="add"
+                  type='button'
+                  id='createJack'
+                  value='add'
                   onClick={this.save}
-                  className="btn btn-outline-primary"
+                  className='btn btn-outline-primary'
                 />
               </div>
             </div>

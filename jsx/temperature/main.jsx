@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Sensor from './sensor'
 import New from './new'
 import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs } from 'redux/actions/tcs'
@@ -7,7 +6,7 @@ import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 
 class main extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       add: false
@@ -15,20 +14,20 @@ class main extends React.Component {
     this.list = this.list.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
   }
 
-  list() {
+  list () {
     if (this.props.tcs === undefined) {
       return
     }
     var list = []
     this.props.tcs.forEach((v, k) => {
       list.push(
-        <div key={v.id} className="list-group-item">
+        <div key={v.id} className='list-group-item'>
           <Sensor
             data={v}
             save={this.props.updateTC}
@@ -42,10 +41,10 @@ class main extends React.Component {
     return list
   }
 
-  render() {
+  render () {
     return (
       <div>
-        <ul className="list-group list-group-flush">
+        <ul className='list-group list-group-flush'>
           {this.list()}
           <New create={this.props.createTC} sensors={this.props.sensors} equipment={this.props.equipment} />
         </ul>

@@ -16,7 +16,7 @@ const components = {
 }
 
 export default class Configuration extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       body: 'settings'
@@ -24,20 +24,20 @@ export default class Configuration extends React.Component {
     this.setBody = this.setBody.bind(this)
   }
 
-  setBody(k) {
+  setBody (k) {
     return () => {
       this.setState({ body: k })
     }
   }
 
-  render() {
+  render () {
     var panels = []
     let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin']
-    tabs.forEach((k,_) => {
+    tabs.forEach((k, _) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
         <li className={cname} key={k}>
-          <a id={'config-' + k} className="nav-link" onClick={this.setBody(k)}>
+          <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>
             {k}{' '}
           </a>
         </li>
@@ -45,11 +45,11 @@ export default class Configuration extends React.Component {
     })
     var body = components[this.state.body]
     return (
-      <div className="container">
-        <div className="row">
-          <ul className="conf-nav nav nav-tabs">{panels}</ul>
+      <div className='container'>
+        <div className='row'>
+          <ul className='conf-nav nav nav-tabs'>{panels}</ul>
         </div>
-        <div className="row">{body}</div>
+        <div className='row'>{body}</div>
       </div>
     )
   }

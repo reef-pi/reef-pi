@@ -4,19 +4,19 @@ import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchEquipment()
     var timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
     this.setState({ timer: timer })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.state && this.state.timer) {
       window.clearInterval(this.state.timer)
     }
   }
 
-  render() {
+  render () {
     if (this.props.equipment === undefined) {
       return <div />
     }
@@ -27,13 +27,13 @@ class chart extends React.Component {
       equipment.push(eq)
     })
     return (
-      <div className="container">
-        <span className="h6">Equipment</span>
-        <ResponsiveContainer height={this.props.height} width="100%">
+      <div className='container'>
+        <span className='h6'>Equipment</span>
+        <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={equipment}>
-            <Bar dataKey="onstate" stackId="a" fill="#00c851" isAnimationActive={false} />
-            <Bar dataKey="offstate" stackId="a" fill="#ff4444" isAnimationActive={false} />
-            <XAxis dataKey="name" />
+            <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
+            <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
+            <XAxis dataKey='name' />
             <Tooltip />
           </BarChart>
         </ResponsiveContainer>

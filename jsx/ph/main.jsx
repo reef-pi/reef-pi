@@ -5,7 +5,7 @@ import { fetchPhProbes, createProbe } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 
 class ph extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       add: false
@@ -13,15 +13,15 @@ class ph extends React.Component {
     this.probeList = this.probeList.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchPhProbes()
   }
 
-  probeList() {
+  probeList () {
     var list = []
     this.props.probes.forEach((v, k) => {
       list.push(
-        <div key={k} className="list-group-item">
+        <div key={k} className='list-group-item'>
           <Probe data={v} upateHook={this.props.fetchPhProbes} />
         </div>
       )
@@ -29,10 +29,10 @@ class ph extends React.Component {
     return list
   }
 
-  render() {
+  render () {
     return (
-      <div className="container">
-        <ul className="list-group list-group-flush">{this.probeList()}</ul>
+      <div className='container'>
+        <ul className='list-group list-group-flush'>{this.probeList()}</ul>
         <New hook={this.props.createProbe} />
       </div>
     )

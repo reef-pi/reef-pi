@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import Motion from './motion'
 
 class camera extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       latest: {},
@@ -19,7 +19,7 @@ class camera extends React.Component {
     this.motion = this.motion.bind(this)
   }
 
-  motion() {
+  motion () {
     if (this.state.config.motion === undefined) {
       return
     }
@@ -32,16 +32,16 @@ class camera extends React.Component {
     )
   }
 
-  toggleConfig() {
+  toggleConfig () {
     this.setState({ showConfig: !this.state.showConfig })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchConfig()
     this.props.listImages()
   }
 
-  render() {
+  render () {
     var images = []
     this.props.images.forEach((d, i) => {
       images.push({
@@ -54,21 +54,21 @@ class camera extends React.Component {
       config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
     return (
-      <div className="container">
-        <div className="row">
+      <div className='container'>
+        <div className='row'>
           <input
-            type="button"
-            id="showConfig"
+            type='button'
+            id='showConfig'
             onClick={this.toggleConfig}
-            value="config"
-            className="btn btn-secondary"
+            value='config'
+            className='btn btn-secondary'
           />
           {config}
         </div>
-        <div className="row">
+        <div className='row'>
           <Gallery images={this.state.images} />
         </div>
-        <div className="row">
+        <div className='row'>
           <Capture />
         </div>
         {this.motion()}

@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 class stepConfig extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.set = this.set.bind(this)
     this.updateOn = this.updateOn.bind(this)
   }
 
-  updateOn(on) {
+  updateOn (on) {
     return () => {
       this.props.hook({
         id: this.props.active,
@@ -18,7 +18,7 @@ class stepConfig extends React.Component {
     }
   }
 
-  set(k) {
+  set (k) {
     return () => {
       this.props.hook({
         id: k,
@@ -27,7 +27,7 @@ class stepConfig extends React.Component {
     }
   }
 
-  render() {
+  render () {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var name = ''
     var items = []
@@ -39,34 +39,34 @@ class stepConfig extends React.Component {
         name = v.name
       }
       items.push(
-        <a className={cName} href="#" key={k} onClick={this.set(v.id)}>
+        <a className={cName} href='#' key={k} onClick={this.set(v.id)}>
           <span id={this.props.type + '-' + v.id}>{v.name}</span>
         </a>
       )
     })
 
     return (
-      <div className="row">
-        <div className="col">
-          <div className="dropdown">
+      <div className='row'>
+        <div className='col'>
+          <div className='dropdown'>
             <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
+              className='btn btn-secondary dropdown-toggle'
+              type='button'
+              data-toggle='dropdown'
               id={this.props.macro_id + '-' + this.props.index + '-step-state'}
               disabled={readOnly}
             >
               {name}
             </button>
-            <div className="dropdown-menu">{items}</div>
+            <div className='dropdown-menu'>{items}</div>
           </div>
         </div>
-        <div className="col">
-          <div className="row">
-            <div className="input-group col">
-              <div className="input-group-text">
+        <div className='col'>
+          <div className='row'>
+            <div className='input-group col'>
+              <div className='input-group-text'>
                 <input
-                  type="radio"
+                  type='radio'
                   name={this.props.macro_id + '-' + this.props.index + '-step-state'}
                   id={this.props.macro_id + '-' + this.props.index + '-step-on'}
                   defaultChecked={this.props.on}
@@ -76,10 +76,10 @@ class stepConfig extends React.Component {
               </div>
               <label>On</label>
             </div>
-            <div className="input-group col">
-              <div className="input-group-text">
+            <div className='input-group col'>
+              <div className='input-group-text'>
                 <input
-                  type="radio"
+                  type='radio'
                   name={this.props.macro_id + '-' + this.props.index + '-step-state'}
                   id={this.props.macro_id + '-' + this.props.index + '-step-off'}
                   defaultChecked={!this.props.on}

@@ -5,7 +5,7 @@ import { fetchDosingPumps } from 'redux/actions/doser'
 import { connect } from 'react-redux'
 
 class doser extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       add: false
@@ -13,26 +13,26 @@ class doser extends React.Component {
     this.pumpList = this.pumpList.bind(this)
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.fetchDosingPumps()
   }
 
-  pumpList() {
+  pumpList () {
     var pumps = []
     this.props.pumps.forEach((pump, i) => {
       pumps.push(
-        <div key={'pump-' + i} className="row list-group-item">
+        <div key={'pump-' + i} className='row list-group-item'>
           <Pump data={pump} />
         </div>
       )
     })
-    return <ul className="list-group list-group-flush"> {pumps} </ul>
+    return <ul className='list-group list-group-flush'> {pumps} </ul>
   }
 
-  render() {
+  render () {
     return (
-      <div className="container">
-        <div className="container">{this.pumpList()}</div>
+      <div className='container'>
+        <div className='container'>{this.pumpList()}</div>
         <New />
       </div>
     )

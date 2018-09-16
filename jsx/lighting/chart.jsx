@@ -3,14 +3,14 @@ import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'rec
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.channel2line = this.channel2line.bind(this)
   }
 
-  channel2line(ch, data) {
+  channel2line (ch, data) {
     if (ch.profile.type === 'auto' && ch.profile.config) {
-      ch.profile.config.values.forEach( (value,i) => {
+      ch.profile.config.values.forEach((value, i) => {
         if (data[i] === undefined) {
           data[i] = { time: i * 2 + 'h' }
         }
@@ -21,22 +21,22 @@ class chart extends React.Component {
     }
   }
 
-  render() {
+  render () {
     if (this.props.config === undefined) {
       return <div />
     }
-    var lines = [<Line dataKey="time" isAnimationActive={false} stroke="#000000" key="time" layout="vertical" />]
+    var lines = [<Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />]
     var data = []
     data['time'] = [12]
-    this.props.config.channels.forEach( (channel,name) => {
+    this.props.config.channels.forEach((channel, name) => {
       lines.push(this.channel2line(channel, data))
     })
     return (
-      <div className="container">
-        <span className="h6">Light - {this.props.config.name}</span>
-        <ResponsiveContainer height={this.props.height} width="100%">
+      <div className='container'>
+        <span className='h6'>Light - {this.props.config.name}</span>
+        <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={data}>
-            <XAxis dataKey="time" />
+            <XAxis dataKey='time' />
             <YAxis />
             <Tooltip />
             {lines}

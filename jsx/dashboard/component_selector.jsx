@@ -3,7 +3,7 @@ import React from 'react'
 // props: hook, selector_id, components, current_id
 
 export default class ComponentSelector extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       title: 'none',
@@ -12,7 +12,7 @@ export default class ComponentSelector extends React.Component {
     this.setID = this.setID.bind(this)
   }
 
-  setID(k, name) {
+  setID (k, name) {
     return ev => {
       this.setState({
         title: name,
@@ -22,7 +22,7 @@ export default class ComponentSelector extends React.Component {
     }
   }
 
-  render() {
+  render () {
     var items = []
     var title = this.state.title
     this.props.components.forEach((v, k) => {
@@ -36,24 +36,24 @@ export default class ComponentSelector extends React.Component {
         cName += ' active'
       }
       items.push(
-        <a className={cName} href="#" onClick={this.setID(v.id, v.name)} key={k}>
+        <a className={cName} href='#' onClick={this.setID(v.id, v.name)} key={k}>
           <span id={this.props.selector_id + '-' + v.id}>{v.name}</span>
         </a>
       )
     })
     return (
-      <div className="dropdown">
+      <div className='dropdown'>
         <button
           id={'ato-select-' + this.props.selector_idj}
-          className="btn btn-secondary dropdown-toggle"
-          type="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          data-toggle='dropdown'
+          aria-haspopup='true'
+          aria-expanded='false'
         >
           {title}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
           {items}
         </div>
       </div>

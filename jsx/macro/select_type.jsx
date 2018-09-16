@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export default class SelectType extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       type: props.type
@@ -11,16 +11,16 @@ export default class SelectType extends React.Component {
     this.set = this.set.bind(this)
   }
 
-  list() {
+  list () {
     var validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
     var items = []
-    validTypes.forEach( (v,k) => {
+    validTypes.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (this.state.type === v) {
         cName += ' active'
       }
       items.push(
-        <a className={cName} href="#" key={k} onClick={this.set(v)}>
+        <a className={cName} href='#' key={k} onClick={this.set(v)}>
           <span id={v + '-' + this.props.macro_id + '-' + this.props.index}>{v}</span>
         </a>
       )
@@ -28,7 +28,7 @@ export default class SelectType extends React.Component {
     return items
   }
 
-  set(k) {
+  set (k) {
     return () => {
       this.setState({
         type: k
@@ -37,20 +37,20 @@ export default class SelectType extends React.Component {
     }
   }
 
-  render() {
+  render () {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     return (
-      <div className="dropdown">
+      <div className='dropdown'>
         <button
-          className="btn btn-secondary dropdown-toggle"
-          type="button"
-          data-toggle="dropdown"
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          data-toggle='dropdown'
           disabled={readOnly}
           id={'select-type-' + this.props.macro_id + '-' + this.props.index}
         >
           {this.state.type}
         </button>
-        <div className="dropdown-menu">{this.list()}</div>
+        <div className='dropdown-menu'>{this.list()}</div>
       </div>
     )
   }

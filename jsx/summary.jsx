@@ -17,8 +17,7 @@ export default class Summary extends React.Component {
     return (
       <nav className='bottom-bar navbar fixed-bottom navbar-light bg-light justify-content-center'>
         <ul className='list-inline'>
-          <li className='list-inline-item'> <span className='h5'>{this.props.info.name} </span></li>
-          <li className='list-inline-item'> | <a href='http://reef-pi.com' target="_blank"> Documentation</a> | </li>
+          <li className='list-inline-item'><a href='http://reef-pi.com' target="_blank"> Documentation</a> | </li>
           <li className='list-inline-item'>{this.props.info.current_time},</li>
           <li className='list-inline-item'>running {this.props.info.version},</li>
           <li className='list-inline-item'>since {this.props.info.uptime} | </li>
