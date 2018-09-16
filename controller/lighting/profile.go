@@ -44,8 +44,11 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 		log.Println("ERROR: lighting subsystem, failed to parse end time in diurnal cycle. Error:", err)
 		return 0
 	}
-	s = s.AddDate(t.Year(), int(t.Month())-1, t.Day()-1)
-	e = e.AddDate(t.Year(), int(t.Month())-1, t.Day()-1)
+	s = time.Date(t.Year(), t.Month(), t.Day(), s.Hour(), s.Minute(), s.Second(), 0, t.Location())
+	e = time.Date(t.Year(), t.Month(), t.Day(), e.Hour(), e.Minute(), e.Second(), 0, t.Location())
+	if e.Before(s) {
+		s = s.Add(time.Hour * -24)
+	}
 	if t.Before(s) {
 		log.Println("Lighting sub-system: diurnal profile: before start time. Value: 0")
 		return 0
@@ -63,7 +66,6 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 	if v > ch.Max {
 		v = ch.Max
 	}
-	//log.Println("Time:", t, "V:", v+d.Min, "Total minutes:", totalMinutes, "Past minutes:", pastMinutes, "Percent:", percent, "K:", k)
 	return v
 }
 
