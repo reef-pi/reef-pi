@@ -1,13 +1,13 @@
 import React from 'react'
-import $, {isEmptyObject} from 'jquery'
-import {fetchInlets} from '../redux/actions/inlets'
-import {connect} from 'react-redux'
+import $, { isEmptyObject } from 'jquery'
+import { fetchInlets } from '../redux/actions/inlets'
+import { connect } from 'react-redux'
 
 class inletSelector extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     var inlet
-    $.each(props.inlets, function (k, v) {
+    props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
         inlet = v
       }
@@ -19,18 +19,18 @@ class inletSelector extends React.Component {
     this.set = this.set.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchInlets()
   }
 
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     if (props.inlets === undefined) {
       return null
     }
     if (isEmptyObject(props.inlets)) {
       return null
     }
-    $.each(props.inlets, function (k, v) {
+    props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
         state.inlet = v
       }
@@ -38,7 +38,7 @@ class inletSelector extends React.Component {
     return state
   }
 
-  inlets () {
+  inlets() {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var title = ''
     var id = this.props.active
@@ -47,30 +47,38 @@ class inletSelector extends React.Component {
       id = this.state.inlet.id
     }
     var items = []
-    $.each(this.props.inlets, function (k, v) {
+    this.props.inlets.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
       }
       items.push(
-        <a className={cName} href='#' onClick={this.set(k)} key={k}>
+        <a className={cName} href="#" onClick={this.set(k)} key={k}>
           <span id={this.props.name + '-' + v.id}>{v.name}</span>
         </a>
       )
-    }.bind(this))
+    })
     return (
-      <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.name + '-inlet'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id={this.props.name + '-inlet'}
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          disabled={readOnly}
+        >
           {title}
         </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {items}
         </div>
       </div>
     )
   }
 
-  set (k) {
+  set(k) {
     return () => {
       var i = this.props.inlets[k]
       if (i === undefined) {
@@ -83,28 +91,27 @@ class inletSelector extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-1'>
-            Inlet
-          </div>
-          <div className='col-lg-1'>
-            {this.inlets()}
-          </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-1">Inlet</div>
+          <div className="col-lg-1">{this.inlets()}</div>
         </div>
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return { inlets: state.inlets }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchInlets: () => dispatch(fetchInlets())}
+const mapDispatchToProps = dispatch => {
+  return { fetchInlets: () => dispatch(fetchInlets()) }
 }
 
-const InletSelector = connect(mapStateToProps, mapDispatchToProps)(inletSelector)
+const InletSelector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(inletSelector)
 export default InletSelector

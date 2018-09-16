@@ -1,13 +1,13 @@
 import React from 'react'
 import $ from 'jquery'
-import {fetchJacks} from './redux/actions/jacks'
-import {connect} from 'react-redux'
+import { fetchJacks } from './redux/actions/jacks'
+import { connect } from 'react-redux'
 
 class jackSelector extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     var jack
-    $.each(props.jacks, function (i, j) {
+    props.jacks.forEach((j, i) => {
       if (props.id === j.id) {
         jack = j
       }
@@ -23,11 +23,11 @@ class jackSelector extends React.Component {
     this.setPin = this.setPin.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchJacks()
   }
 
-  jacks () {
+  jacks() {
     var title = ''
     var id = ''
     if (this.state.jack !== undefined) {
@@ -35,28 +35,37 @@ class jackSelector extends React.Component {
       id = this.state.jack.id
     }
     var items = []
-    $.each(this.props.jacks, function (k, v) {
+    props.jacks.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
       }
-      items.push(<a className={cName} href='#' onClick={this.setJack(k)} key={k}>
-        <span id={this.props.id + '-' + v.name}>{v.name}</span>
-      </a>)
-    }.bind(this))
+      items.push(
+        <a className={cName} href="#" onClick={this.setJack(k)} key={k}>
+          <span id={this.props.id + '-' + v.name}>{v.name}</span>
+        </a>
+      )
+    })
     return (
-      <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id + 'jack'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id={this.props.id + 'jack'}
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
           {title}
         </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {items}
         </div>
       </div>
     )
   }
 
-  setJack (k) {
+  setJack(k) {
     return () => {
       var j = this.props.jacks[k]
       if (j === undefined) {
@@ -70,7 +79,7 @@ class jackSelector extends React.Component {
     }
   }
 
-  setPin (k) {
+  setPin(k) {
     return () => {
       this.setState({
         pin: k
@@ -79,57 +88,61 @@ class jackSelector extends React.Component {
     }
   }
 
-  pins () {
+  pins() {
     if (this.state.jack === undefined) {
       return
     }
     var items = []
-    $.each(this.state.jack.pins, function (k, v) {
+    this.state.jack.pins.forEach((v, k) => {
       items.push(
-        <a className='dropdown-item' href='#' key={k} onClick={this.setPin(v)}>{v}</a>
+        <a className="dropdown-item" href="#" key={k} onClick={this.setPin(v)}>
+          {v}
+        </a>
       )
-    }.bind(this))
+    })
     return (
-      <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id + '-pin'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id={this.props.id + '-pin'}
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
           {this.state.pin.toString()}
         </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {items}
         </div>
       </div>
     )
   }
 
-  render () {
+  render() {
     return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-1'>
-            Jack
-          </div>
-          <div className='col-lg-1'>
-            {this.jacks()}
-          </div>
-          <div className='col-lg-1'>
-            Pin
-          </div>
-          <div className='col-lg-1'>
-            {this.pins()}
-          </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-1">Jack</div>
+          <div className="col-lg-1">{this.jacks()}</div>
+          <div className="col-lg-1">Pin</div>
+          <div className="col-lg-1">{this.pins()}</div>
         </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return { jacks: state.jacks }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchJacks: () => dispatch(fetchJacks())}
+const mapDispatchToProps = dispatch => {
+  return { fetchJacks: () => dispatch(fetchJacks()) }
 }
 
-const JackSelector = connect(mapStateToProps, mapDispatchToProps)(jackSelector)
+const JackSelector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(jackSelector)
 export default JackSelector

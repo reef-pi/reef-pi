@@ -1,12 +1,12 @@
 import React from 'react'
-import {confirm} from 'utils/confirm'
+import { confirm } from 'utils/confirm'
 import $ from 'jquery'
-import {fetchOutlets, updateOutlet, deleteOutlet, createOutlet} from 'redux/actions/outlets'
-import {connect} from 'react-redux'
+import { fetchOutlets, updateOutlet, deleteOutlet, createOutlet } from 'redux/actions/outlets'
+import { connect } from 'react-redux'
 import Outlet from './outlet'
 
 class outlets extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       add: false
@@ -17,20 +17,21 @@ class outlets extends React.Component {
     this.save = this.save.bind(this)
   }
 
-  remove (id) {
-    return (function () {
-      confirm('Are you sure ?')
-        .then(function () {
+  remove(id) {
+    return function() {
+      confirm('Are you sure ?').then(
+        function() {
           this.props.delete(id)
-        }.bind(this))
-    }.bind(this))
+        }.bind(this)
+      )
+    }.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetch()
   }
 
-  add () {
+  add() {
     this.setState({
       add: !this.state.add
     })
@@ -38,7 +39,7 @@ class outlets extends React.Component {
     $('#outletPin').val('')
   }
 
-  save () {
+  save() {
     var payload = {
       name: $('#outletName').val(),
       pin: parseInt($('#outletPin').val()),
@@ -48,9 +49,9 @@ class outlets extends React.Component {
     this.add()
   }
 
-  list () {
+  list() {
     var list = []
-    $.each(this.props.outlets, function (i, o) {
+    this.props.outlets.forEach((o, i) => {
       list.push(
         <Outlet
           name={o.name}
@@ -60,53 +61,62 @@ class outlets extends React.Component {
           reverse={o.reverse}
           equipment={o.equipment}
           remove={this.remove(o.id)}
-          update={(p) => {
+          update={p => {
             this.props.update(o.id, p)
             this.props.fetch()
-          }
-          }
+          }}
         />
       )
-    }.bind(this))
-    return (list)
+    })
+    return list
   }
 
-  render () {
+  render() {
     var dStyle = {
       display: this.state.add ? 'block' : 'none'
     }
     return (
-      <div className='container'>
-        <label className='h6'>Outlets</label>
-        <div className='row'>
-          <div className='container'>
-            {this.list()}
-          </div>
+      <div className="container">
+        <label className="h6">Outlets</label>
+        <div className="row">
+          <div className="container">{this.list()}</div>
         </div>
-        <div className='row'>
-          <input id='add_outlet' type='button' value={this.state.add ? '-' : '+'} onClick={this.add} className='btn btn-outline-success' />
-          <div className='container' style={dStyle}>
-            <div className='row'>
-              <div className='col-sm-3'>
-                <div className='input-group'>
-                  <span className='input-group-addon'> Name </span>
-                  <input type='text' id='outletName' className='form-control' />
+        <div className="row">
+          <input
+            id="add_outlet"
+            type="button"
+            value={this.state.add ? '-' : '+'}
+            onClick={this.add}
+            className="btn btn-outline-success"
+          />
+          <div className="container" style={dStyle}>
+            <div className="row">
+              <div className="col-sm-3">
+                <div className="input-group">
+                  <span className="input-group-addon"> Name </span>
+                  <input type="text" id="outletName" className="form-control" />
                 </div>
               </div>
-              <div className='col-sm-3'>
-                <div className='input-group'>
-                  <span className='input-group-addon'> Pin </span>
-                  <input type='text' id='outletPin' className='form-control' />
+              <div className="col-sm-3">
+                <div className="input-group">
+                  <span className="input-group-addon"> Pin </span>
+                  <input type="text" id="outletPin" className="form-control" />
                 </div>
               </div>
-              <div className='col-sm-3'>
-                <div className='input-group'>
-                  <span className='input-group-addon'> Reverse </span>
-                  <input type='checkbox' id='outletReverse' />
+              <div className="col-sm-3">
+                <div className="input-group">
+                  <span className="input-group-addon"> Reverse </span>
+                  <input type="checkbox" id="outletReverse" />
                 </div>
               </div>
-              <div className='col-sm-1'>
-                <input type='button' id='createOutlet' value='add' onClick={this.save} className='btn btn-outline-primary' />
+              <div className="col-sm-1">
+                <input
+                  type="button"
+                  id="createOutlet"
+                  value="add"
+                  onClick={this.save}
+                  className="btn btn-outline-primary"
+                />
               </div>
             </div>
           </div>
@@ -116,18 +126,21 @@ class outlets extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return { outlets: state.outlets }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchOutlets()),
-    create: (outlet) => dispatch(createOutlet(outlet)),
-    delete: (id) => dispatch(deleteOutlet(id)),
+    create: outlet => dispatch(createOutlet(outlet)),
+    delete: id => dispatch(deleteOutlet(id)),
     update: (id, o) => dispatch(updateOutlet(id, o))
   }
 }
 
-const Outlets = connect(mapStateToProps, mapDispatchToProps)(outlets)
+const Outlets = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(outlets)
 export default Outlets
