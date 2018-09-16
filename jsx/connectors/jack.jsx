@@ -59,9 +59,9 @@ export default class Jack extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col-lg-3'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Name </span>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label htmlFor={'jack-' + this.props.jack_id + '-name'}> Name </label>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
@@ -70,9 +70,9 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col-lg-3'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Pin </span>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> Pin </label>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
@@ -81,13 +81,12 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='row'>
-            <div className='col'>Driver</div>
-            <div className='col'>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label>Driver</label>
               <div className='dropdown'>
                 <button
-                  className='btn btn-secondary dropdown-toggle'
+                  className='btn btn-secondary dropdown-toggle form-control'
                   type='button'
                   id={this.props.jack_id + '-driver-selection'}
                   data-toggle='dropdown'
@@ -99,7 +98,6 @@ export default class Jack extends React.Component {
                   <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
