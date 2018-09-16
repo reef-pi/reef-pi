@@ -1,26 +1,25 @@
 import React from 'react'
-import $ from 'jquery'
 import Gallery from './gallery'
 import Config from './config'
 import Capture from './capture'
-import {fetchConfig, updateConfig, listImages} from 'redux/actions/camera'
-import {connect} from 'react-redux'
+import { fetchConfig, updateConfig, listImages } from 'redux/actions/camera'
+import { connect } from 'react-redux'
 import Motion from './motion'
 
 class camera extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       latest: {},
       images: [],
       showConfig: false,
-      config: { }
+      config: {}
     }
     this.toggleConfig = this.toggleConfig.bind(this)
     this.motion = this.motion.bind(this)
   }
 
-  motion () {
+  motion() {
     if (this.state.config.motion === undefined) {
       return
     }
@@ -33,18 +32,18 @@ class camera extends React.Component {
     )
   }
 
-  toggleConfig () {
-    this.setState({showConfig: !this.state.showConfig})
+  toggleConfig() {
+    this.setState({ showConfig: !this.state.showConfig })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchConfig()
     this.props.listImages()
   }
 
-  render () {
+  render() {
     var images = []
-    $.each(this.props.images, function (i, d) {
+    this.props.images.forEach((d, i) => {
       images.push({
         src: '/images/' + d.name,
         thumbnail: '/images/thumbnail-' + d.name
@@ -55,15 +54,21 @@ class camera extends React.Component {
       config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
     return (
-      <div className='container'>
-        <div className='row'>
-          <input type='button' id='showConfig' onClick={this.toggleConfig} value='config' className='btn btn-secondary' />
+      <div className="container">
+        <div className="row">
+          <input
+            type="button"
+            id="showConfig"
+            onClick={this.toggleConfig}
+            value="config"
+            className="btn btn-secondary"
+          />
           {config}
         </div>
-        <div className='row'>
+        <div className="row">
           <Gallery images={this.state.images} />
         </div>
-        <div className='row'>
+        <div className="row">
           <Capture />
         </div>
         {this.motion()}
@@ -72,20 +77,23 @@ class camera extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     config: state.camera.config,
     images: state.camera.images
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchConfig: () => dispatch(fetchConfig()),
-    updateConfig: (c) => dispatch(updateConfig(c)),
+    updateConfig: c => dispatch(updateConfig(c)),
     listImages: () => dispatch(listImages())
   }
 }
 
-const Camera = connect(mapStateToProps, mapDispatchToProps)(camera)
+const Camera = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(camera)
 export default Camera

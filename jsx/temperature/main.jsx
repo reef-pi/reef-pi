@@ -2,12 +2,12 @@ import React from 'react'
 import $ from 'jquery'
 import Sensor from './sensor'
 import New from './new'
-import {fetchSensors, createTC, deleteTC, updateTC, fetchTCs} from 'redux/actions/tcs'
-import {connect} from 'react-redux'
-import {fetchEquipment} from 'redux/actions/equipment'
+import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs } from 'redux/actions/tcs'
+import { connect } from 'react-redux'
+import { fetchEquipment } from 'redux/actions/equipment'
 
 class main extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       add: false
@@ -15,37 +15,37 @@ class main extends React.Component {
     this.list = this.list.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
   }
 
-  list () {
+  list() {
     if (this.props.tcs === undefined) {
       return
     }
     var list = []
-    var index = 0
-    $.each(this.props.tcs, function (k, v) {
+    this.props.tcs.forEach((v, k) => {
       list.push(
-        <div key={v.id} className='list-group-item'>
-          <Sensor data={v}
+        <div key={v.id} className="list-group-item">
+          <Sensor
+            data={v}
             save={this.props.updateTC}
             sensors={this.props.sensors}
             equipment={this.props.equipment}
-            remove={this.props.deleteTC} />
+            remove={this.props.deleteTC}
+          />
         </div>
       )
-      index = index + 1
-    }.bind(this))
+    })
     return list
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <ul className='list-group list-group-flush'>
+        <ul className="list-group list-group-flush">
           {this.list()}
           <New create={this.props.createTC} sensors={this.props.sensors} equipment={this.props.equipment} />
         </ul>
@@ -54,7 +54,7 @@ class main extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     tcs: state.tcs,
     sensors: state.tc_sensors,
@@ -62,16 +62,19 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchTCs: () => dispatch(fetchTCs()),
     fetchSensors: () => dispatch(fetchSensors()),
     fetchEquipment: () => dispatch(fetchEquipment()),
-    createTC: (t) => dispatch(createTC(t)),
-    deleteTC: (id) => dispatch(deleteTC(id)),
+    createTC: t => dispatch(createTC(t)),
+    deleteTC: id => dispatch(deleteTC(id)),
     updateTC: (id, t) => dispatch(updateTC(id, t))
   }
 }
 
-const Main = connect(mapStateToProps, mapDispatchToProps)(main)
+const Main = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(main)
 export default Main
