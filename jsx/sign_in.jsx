@@ -87,9 +87,6 @@ export default class SignIn extends React.Component {
   }
 
   render() {
-    $('html').addClass('auth-page')
-    $('body').addClass('auth-page')
-    $('#main-panel').addClass('auth-page')
     return (
       <div class="container d-flex h-100">
         <div class="align-self-center w-100">
