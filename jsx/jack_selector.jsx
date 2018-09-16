@@ -35,7 +35,7 @@ class jackSelector extends React.Component {
       id = this.state.jack.id
     }
     var items = []
-    props.jacks.forEach((v, k) => {
+    this.props.jacks.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
