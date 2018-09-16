@@ -1,12 +1,12 @@
 import React from 'react'
 import Equipment from './equipment'
-import {updateEquipment, fetchEquipment, createEquipment, deleteEquipment} from 'redux/actions/equipment'
-import {fetchOutlets} from 'redux/actions/outlets'
-import {connect} from 'react-redux'
+import { updateEquipment, fetchEquipment, createEquipment, deleteEquipment } from 'redux/actions/equipment'
+import { fetchOutlets } from 'redux/actions/outlets'
+import { connect } from 'react-redux'
 import EquipmentForm from './equipment_form'
 
 class main extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -18,12 +18,12 @@ class main extends React.Component {
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetch()
     this.props.fetchOutlets()
   }
 
-  addEquipment (values) {
+  addEquipment(values) {
     var payload = {
       name: values.name,
       outlet: values.outlet
@@ -32,67 +32,68 @@ class main extends React.Component {
     this.toggleAddEquipmentDiv()
   }
 
-  toggleAddEquipmentDiv () {
+  toggleAddEquipmentDiv() {
     this.setState({
       addEquipment: !this.state.addEquipment
     })
   }
 
-  render () {
+  render() {
     var nEq = <div />
     if (this.state.addEquipment) {
-      nEq = (<EquipmentForm
-        outlets={this.props.outlets}
-        actionLabel='Add'
-        onSubmit={this.addEquipment} />)
+      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel="Add" onSubmit={this.addEquipment} />
     }
-    return (
-      <div>
-        <ul className='list-group list-group-flush'>
-          {
-            this.props.equipment.map((item) => {
-              return (
-                <Equipment key={item.id}
-                  equipment={item}
-                  outlets={this.props.outlets}
-                  update={this.props.update}
-                  delete={this.props.delete} />
-              )
-            })
-          }
-          <li className='list-group-item add-equipment'>
-            <div className='row'>
-              <div className='col'>
-                <input id='add_equipment' type='button'
-                  value={this.state.addEquipment ? '-' : '+'}
-                  onClick={this.toggleAddEquipmentDiv}
-                  className='btn btn-outline-success' />
-              </div>
+    return [
+      <ul className="list-group list-group-flush">
+        {this.props.equipment.map(item => {
+          return (
+            <Equipment
+              key={item.id}
+              equipment={item}
+              outlets={this.props.outlets}
+              update={this.props.update}
+              delete={this.props.delete}
+            />
+          )
+        })}
+        <li className="list-group-item add-equipment">
+          <div className="row">
+            <div className="col">
+              <input
+                id="add_equipment"
+                type="button"
+                value={this.state.addEquipment ? '-' : '+'}
+                onClick={this.toggleAddEquipmentDiv}
+                className="btn btn-outline-success"
+              />
             </div>
-            {nEq}
-          </li>
-        </ul>
-      </div>
-    )
+          </div>
+          {nEq}
+        </li>
+      </ul>
+    ]
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     equipment: state.equipment,
     outlets: state.outlets
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchEquipment()),
     fetchOutlets: () => dispatch(fetchOutlets()),
-    create: (e) => dispatch(createEquipment(e)),
+    create: e => dispatch(createEquipment(e)),
     update: (id, e) => dispatch(updateEquipment(id, e)),
-    delete: (id) => dispatch(deleteEquipment(id))
+    delete: id => dispatch(deleteEquipment(id))
   }
 }
 
-const Main = connect(mapStateToProps, mapDispatchToProps)(main)
+const Main = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(main)
 export default Main

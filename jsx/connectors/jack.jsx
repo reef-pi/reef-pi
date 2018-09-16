@@ -125,10 +125,10 @@ export default class Jack extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-lg-8'>
+        <div className='col-8'>
           {this.state.edit ? this.editUI() : this.ui() }
         </div>
-        <div className='col-lg-1'>
+        <div className='col-1'>
           <input
             type='button'
             className='btn btn-outline-secondary'
@@ -136,7 +136,7 @@ export default class Jack extends React.Component {
             onClick={this.edit}
           />
         </div>
-        <div className='col-lg-1'>
+        <div className='col-1'>
           <input
             type='button'
             className='btn btn-outline-danger'

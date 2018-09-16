@@ -63,7 +63,7 @@ class mainPanel extends React.Component {
         }
         var cname = k === tab ? 'nav-link active' : 'nav-link'
         panels.push(
-          <li className="nav-item" key={k}>
+          <li className="nav-item" key={'li-tab-' + k}>
             <a href="#" id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
               {k}
             </a>
@@ -105,6 +105,7 @@ class mainPanel extends React.Component {
           </div>
         </nav>
         <div className="container-fluid">
+          <div className="mt-3" id="reef-pi-alert" />
           <div className="row body-panel">
             <div className="col-12">{body}</div>
           </div>

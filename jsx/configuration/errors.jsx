@@ -1,26 +1,22 @@
 import React from 'react'
-import {fetchErrors, deleteError, deleteErrors} from 'redux/actions/errors'
-import {connect} from 'react-redux'
+import { fetchErrors, deleteError, deleteErrors } from 'redux/actions/errors'
+import { connect } from 'react-redux'
 
 class errors extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetch()
   }
-  render () {
+  render() {
     var items = []
-    this.props.errors.forEach((el) => {
+    this.props.errors.forEach(el => {
       items.push(
-        <div className='row' key={el.id}>
-          <div className='col-lg-2'>
-            {el.time}
-          </div>
-          <div className='col-lg-8'>
-            {el.message}
-          </div>
-          <div className='col-lg-1'>
+        <div className="row" key={'error-' + el.id}>
+          <div className="col-lg-2">{el.time}</div>
+          <div className="col-lg-8">{el.message}</div>
+          <div className="col-lg-1">
             <input
-              className='btn btn-sm btn-outline-secondary'
-              defaultValue='X'
+              className="btn btn-sm btn-outline-secondary"
+              defaultValue="X"
               onClick={() => this.props.delete(el.id)}
             />
           </div>
@@ -28,15 +24,12 @@ class errors extends React.Component {
       )
     })
     return (
-      <div className='container'>
+      <div className="container">
         {items}
-        <div className='row'>
-          <div className='col-lg-2'>
-            <button
-              className='btn btn-outline-secondary'
-              onClick={this.props.clear}
-            >
-            clear
+        <div className="row">
+          <div className="col-lg-2">
+            <button className="btn btn-outline-secondary" onClick={this.props.clear}>
+              clear
             </button>
           </div>
         </div>
@@ -45,19 +38,22 @@ class errors extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     errors: state.errors
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    delete: (id) => dispatch(deleteError(id)),
+    delete: id => dispatch(deleteError(id)),
     clear: () => dispatch(deleteErrors()),
     fetch: () => dispatch(fetchErrors())
   }
 }
 
-const Errors = connect(mapStateToProps, mapDispatchToProps)(errors)
+const Errors = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(errors)
 export default Errors

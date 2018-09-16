@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Lightbox from 'react-images'
 
 export default class Gallery extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isOpen: false,
@@ -18,7 +18,7 @@ export default class Gallery extends React.Component {
     this.onClick = this.onClick.bind(this)
   }
 
-  open (index, event) {
+  open(index, event) {
     event.preventDefault()
     this.setState({
       current: index,
@@ -26,51 +26,51 @@ export default class Gallery extends React.Component {
     })
   }
 
-  onClose () {
+  onClose() {
     this.setState({
       current: 0,
       isOpen: false
     })
   }
 
-  gotoPrevious () {
+  gotoPrevious() {
     this.setState({
       current: this.state.current - 1
     })
   }
 
-  gotoNext () {
+  gotoNext() {
     this.setState({
       current: this.state.current + 1
     })
   }
 
-  gotoImage (index) {
+  gotoImage(index) {
     this.setState({
       current: index
     })
   }
 
-  onClick () {
+  onClick() {
     if (this.state.current === this.props.images.length - 1) return
     this.gotoNext()
   }
 
-  render () {
+  render() {
     const { images } = this.props
     if (!images) return
 
     var gallery = []
     this.props.images.forEach((k, i) => {
       gallery.push(
-        <a href={k.src} key={i} onClick={e => this.open(i, e)}>
+        <a href={k.src} key={'gallery-' + i} onClick={e => this.open(i, e)}>
           <img src={k.thumbnail} />
         </a>
       )
     })
 
     return (
-      <div className='container'>
+      <div className="container">
         <Lightbox
           images={this.props.images}
           onClose={this.onClose}

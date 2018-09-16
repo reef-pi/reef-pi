@@ -1,16 +1,12 @@
 import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
-import {showAlert} from 'utils/alert'
-import {
-  updateTelemetry,
-  fetchTelemetry,
-  sendTestMessage
-} from 'redux/actions/telemetry'
-import {connect} from 'react-redux'
+import { showAlert } from 'utils/alert'
+import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
+import { connect } from 'react-redux'
 
 class telemetry extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       config: {},
@@ -26,11 +22,11 @@ class telemetry extends React.Component {
     this.testMessage = this.testMessage.bind(this)
   }
 
-  testMessage () {
+  testMessage() {
     this.props.sendTestMessage()
   }
 
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     if (props.config === undefined) {
       return null
     }
@@ -38,7 +34,7 @@ class telemetry extends React.Component {
     return state
   }
 
-  enableMailer (ev) {
+  enableMailer(ev) {
     var c = this.state.config
     c.notify = ev.target.checked
     this.setState({
@@ -47,15 +43,15 @@ class telemetry extends React.Component {
     })
   }
 
-  save () {
+  save() {
     var c = this.state.config
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
     this.props.update(c)
-    this.setState({updated: false, config: c})
+    this.setState({ updated: false, config: c })
   }
 
-  updateMailer (mailer) {
+  updateMailer(mailer) {
     if (mailer.server === '') {
       showAlert('Please set a valid mail server')
       return
@@ -80,11 +76,11 @@ class telemetry extends React.Component {
     })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetch()
   }
 
-  updateAio (adafruitio) {
+  updateAio(adafruitio) {
     if (adafruitio.enable) {
       if (adafruitio.user === '') {
         showAlert('Please set a valid adafruit.io user')
@@ -103,7 +99,7 @@ class telemetry extends React.Component {
     })
   }
 
-  notification () {
+  notification() {
     if (this.state.config === undefined) {
       return
     }
@@ -114,31 +110,32 @@ class telemetry extends React.Component {
       return
     }
     return (
-      <div className='row'>
-        <div className='col'>
+      <div className="row">
+        <div className="col-12 col-md-6">
           <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
         </div>
-        <div className='col'>
-          <div className='row'>
-            <div className='col'>
-              limit per hour
+        <div className="col-12 col-md-6">
+          <div className="row">
+            <div className="form-group col-12">
+              <label htmlFor="limit-per-hour">limit per hour</label>
+              <input
+                id="limit-per-hour"
+                type="text"
+                value={this.state.config.throttle}
+                onChange={this.updateThrottle}
+                className="form-control"
+              />
             </div>
-            <input
-              type='text'
-              value={this.state.config.throttle}
-              onChange={this.updateThrottle}
-              className='col'
-            />
           </div>
-          <div className='row'>
-            <div className='col'>
-              <div className='float-right'>
+          <div className="row">
+            <div className="col">
+              <div className="float-right">
                 <input
-                  type='button'
-                  className='btn btn-outline-secondary'
+                  type="button"
+                  className="btn btn-outline-secondary"
                   onClick={this.testMessage}
-                  id='send-test-email'
-                  value='Send test message'
+                  id="send-test-email"
+                  value="Send test message"
                 />
               </div>
             </div>
@@ -148,19 +145,17 @@ class telemetry extends React.Component {
     )
   }
 
-  showAdafruitIO () {
+  showAdafruitIO() {
     if (this.state.config === undefined) {
       return
     }
     if (this.state.config.adafruitio === undefined) {
       return
     }
-    return (
-      <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
-    )
+    return <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
   }
 
-  updateThrottle (ev) {
+  updateThrottle(ev) {
     var c = this.state.config
     c.throttle = ev.target.value
     this.setState({
@@ -169,23 +164,21 @@ class telemetry extends React.Component {
     })
   }
 
-  render () {
+  render() {
     var updateButtonClass = 'btn btn-outline-success'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger'
     }
     return (
-      <div className='container'>
-        <div className='row'>
-          {this.showAdafruitIO()}
-        </div>
-        <div className='row'>
-          <div className='form-check'>
-            <label className='form-check-label'>
+      <div className="container">
+        <div className="row">{this.showAdafruitIO()}</div>
+        <div className="row">
+          <div className="form-check">
+            <label className="form-check-label">
               <input
-                className='form-check-input'
-                type='checkbox'
-                id='enable-mailer'
+                className="form-check-input"
+                type="checkbox"
+                id="enable-mailer"
                 onClick={this.enableMailer}
                 defaultChecked={this.state.config.notify}
               />
@@ -194,15 +187,15 @@ class telemetry extends React.Component {
           </div>
         </div>
         {this.notification()}
-        <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
+        <div className="row mt-3">
+          <div className="col">
+            <div className="float-right">
               <input
-                type='button'
+                type="button"
                 className={updateButtonClass}
                 onClick={this.save}
-                id='updateTelemetry'
-                value='update'
+                id="updateTelemetry"
+                value="update"
               />
             </div>
           </div>
@@ -212,19 +205,22 @@ class telemetry extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     config: state.telemetry
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchTelemetry()),
-    update: (s) => dispatch(updateTelemetry(s)),
+    update: s => dispatch(updateTelemetry(s)),
     sendTestMessage: () => dispatch(sendTestMessage())
   }
 }
 
-const Telemetry = connect(mapStateToProps, mapDispatchToProps)(telemetry)
+const Telemetry = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(telemetry)
 export default Telemetry

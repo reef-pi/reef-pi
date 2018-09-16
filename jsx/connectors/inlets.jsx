@@ -92,19 +92,19 @@ class inlets extends React.Component {
           <div className='container' style={dStyle}>
             <div className='row'>
               <div className='col-sm-3'>
-                <div className='input-group'>
+                <div className='form-group'>
                   <span className='input-group-addon'> Name </span>
                   <input type='text' id='inletName' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
-                <div className='input-group'>
+                <div className='form-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='text' id='inletPin' className='form-control' />
+                  <input type='number' min="2" max="27" id='inletPin' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>
-                <div className='input-group'>
+                <div className='form-group'>
                   <span className='input-group-addon'> Reverse </span>
                   <input type='checkbox' id='inletReverse' />
                 </div>

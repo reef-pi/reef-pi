@@ -88,9 +88,9 @@ export default class SignIn extends React.Component {
 
   render() {
     return (
-      <div class="container d-flex h-100">
-        <div class="align-self-center w-100">
-          <div class="col-md-12 col-lg-6 mx-auto">
+      <div className="container d-flex h-100">
+        <div className="align-self-center w-100">
+          <div className="col-md-12 col-lg-6 mx-auto">
             <form id="sign-in-form">
                 <div className="form">
                   <h1 className="h3 mb-3 font-weight-normal reef-pi-title">reef-pi</h1>

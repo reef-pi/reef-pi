@@ -36,7 +36,7 @@ export default class Configuration extends React.Component {
     tabs.forEach((k, _) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
-        <li className={cname} key={k}>
+        <li className={cname} key={'conf-tabs-' + k}>
           <a id={'config-' + k} className="nav-link" onClick={this.setBody(k)}>
             {k}{' '}
           </a>

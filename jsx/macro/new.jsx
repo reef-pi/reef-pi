@@ -1,11 +1,11 @@
 import React from 'react'
-import {showAlert} from 'utils/alert'
-import {createMacro} from 'redux/actions/macro'
-import {connect} from 'react-redux'
+import { showAlert } from 'utils/alert'
+import { createMacro } from 'redux/actions/macro'
+import { connect } from 'react-redux'
 import Steps from './steps'
 
 class newMacro extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       name: '',
@@ -19,19 +19,19 @@ class newMacro extends React.Component {
     this.updateSteps = this.updateSteps.bind(this)
   }
 
-  updateSteps (steps) {
-    this.setState({steps: steps})
+  updateSteps(steps) {
+    this.setState({ steps: steps })
   }
 
-  update (k) {
-    return (function (ev) {
+  update(k) {
+    return function(ev) {
       var h = {}
       h[k] = ev.target.value
       this.setState(h)
-    }.bind(this))
+    }.bind(this)
   }
 
-  toggle () {
+  toggle() {
     this.setState({
       add: !this.state.add
     })
@@ -40,44 +40,33 @@ class newMacro extends React.Component {
     })
   }
 
-  ui () {
+  ui() {
     if (!this.state.add) {
       return
     }
-    return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col'>Name</div>
-          <div className='col'>
-            <input
-              type='text'
-              id='new_macro_name'
-              onChange={this.update('name')}
-              value={this.state.name}
-            />
-          </div>
+    return [
+      <div className="row">
+        <div className="col">Name</div>
+        <div className="col">
+          <input type="text" id="new_macro_name" onChange={this.update('name')} value={this.state.name} />
         </div>
-        <div className='row'>
-          <div className='col'><Steps steps={this.state.steps} hook={this.updateSteps} /></div>
+      </div>,
+      <div className="row">
+        <div className="col">
+          <Steps steps={this.state.steps} hook={this.updateSteps} />
         </div>
-        <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
-              <input
-                type='button'
-                id='create_macro'
-                value='add'
-                onClick={this.add}
-                className='btn btn-outline-primary'
-              />
-            </div>
+      </div>,
+      <div className="row">
+        <div className="col">
+          <div className="float-right">
+            <input type="button" id="create_macro" value="add" onClick={this.add} className="btn btn-outline-primary" />
           </div>
         </div>
       </div>
-    )
+    ]
   }
 
-  add () {
+  add() {
     if (this.state.name === '') {
       showAlert('Name can not be empty')
       return
@@ -90,27 +79,28 @@ class newMacro extends React.Component {
     this.toggle()
   }
 
-  render () {
-    return (
-      <div className='container'>
-        <input
-          id='add_new_macro'
-          type='button'
-          value={this.state.add ? '-' : '+'}
-          onClick={this.toggle}
-          className='btn btn-outline-success'
-        />
-        {this.ui()}
-      </div>
-    )
+  render() {
+    return [
+      <input
+        id="add_new_macro"
+        type="button"
+        value={this.state.add ? '-' : '+'}
+        onClick={this.toggle}
+        className="btn btn-outline-success"
+      />,
+      this.ui()
+    ]
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    create: (a) => dispatch(createMacro(a))
+    create: a => dispatch(createMacro(a))
   }
 }
 
-const New = connect(null, mapDispatchToProps)(newMacro)
+const New = connect(
+  null,
+  mapDispatchToProps
+)(newMacro)
 export default New
