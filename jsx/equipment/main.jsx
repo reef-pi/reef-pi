@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import EquipmentForm from './equipment_form'
 
 class main extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -18,12 +18,12 @@ class main extends React.Component {
     this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetch()
     this.props.fetchOutlets()
   }
 
-  addEquipment(values) {
+  addEquipment (values) {
     var payload = {
       name: values.name,
       outlet: values.outlet
@@ -32,19 +32,19 @@ class main extends React.Component {
     this.toggleAddEquipmentDiv()
   }
 
-  toggleAddEquipmentDiv() {
+  toggleAddEquipmentDiv () {
     this.setState({
       addEquipment: !this.state.addEquipment
     })
   }
 
-  render() {
+  render () {
     var nEq = <div />
     if (this.state.addEquipment) {
-      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel="Add" onSubmit={this.addEquipment} />
+      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.addEquipment} />
     }
     return [
-      <ul className="list-group list-group-flush">
+      <ul className='list-group list-group-flush'>
         {this.props.equipment.map(item => {
           return (
             <Equipment
@@ -56,15 +56,15 @@ class main extends React.Component {
             />
           )
         })}
-        <li className="list-group-item add-equipment">
-          <div className="row">
-            <div className="col">
+        <li className='list-group-item add-equipment'>
+          <div className='row'>
+            <div className='col'>
               <input
-                id="add_equipment"
-                type="button"
+                id='add_equipment'
+                type='button'
                 value={this.state.addEquipment ? '-' : '+'}
                 onClick={this.toggleAddEquipmentDiv}
-                className="btn btn-outline-success"
+                className='btn btn-outline-success'
               />
             </div>
           </div>

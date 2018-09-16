@@ -5,23 +5,23 @@ import New from './new'
 import Macro from './macro'
 
 class main extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetch()
     var timer = window.setInterval(this.props.fetch, 10 * 1000)
     this.setState({ timer: timer })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.state && this.state.timer) {
       window.clearInterval(this.state.timer)
     }
   }
 
-  render() {
+  render () {
     var list = []
     this.props.macros.forEach((v, k) => {
       list.push(
-        <div key={k} className="row list-group-item">
+        <div key={k} className='row list-group-item'>
           <Macro
             name={v.name}
             steps={v.steps}
@@ -42,7 +42,7 @@ class main extends React.Component {
       )
     })
 
-    return [<ul className="list-group list-group-flush">{list}</ul>, <New />]
+    return [<ul className='list-group list-group-flush'>{list}</ul>, <New />]
   }
 }
 

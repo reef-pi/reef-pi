@@ -84,20 +84,20 @@ export default class Jack extends React.Component {
         <div className='col-md-6 col-lg-3'>
           <div className='form-group'>
             <label>Driver</label>
-              <div className='dropdown'>
-                <button
-                  className='btn btn-secondary dropdown-toggle form-control'
-                  type='button'
-                  id={this.props.jack_id + '-driver-selection'}
-                  data-toggle='dropdown'
-                >
-                  {this.state.driver}
-                </button>
-                <div className='dropdown-menu'>
-                  <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
-                  <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
-                </div>
+            <div className='dropdown'>
+              <button
+                className='btn btn-secondary dropdown-toggle form-control'
+                type='button'
+                id={this.props.jack_id + '-driver-selection'}
+                data-toggle='dropdown'
+              >
+                {this.state.driver}
+              </button>
+              <div className='dropdown-menu'>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
               </div>
+            </div>
           </div>
         </div>
       </div>

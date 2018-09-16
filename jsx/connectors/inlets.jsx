@@ -100,7 +100,7 @@ class inlets extends React.Component {
               <div className='col-sm-3'>
                 <div className='form-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='number' min="2" max="27" id='inletPin' className='form-control' />
+                  <input type='number' min='2' max='27' id='inletPin' className='form-control' />
                 </div>
               </div>
               <div className='col-sm-3'>

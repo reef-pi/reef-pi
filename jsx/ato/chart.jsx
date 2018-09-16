@@ -4,28 +4,28 @@ import { fetchATOUsage } from '../redux/actions/ato'
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.updateUsage = this.updateUsage.bind(this)
   }
 
-  updateUsage() {
+  updateUsage () {
     this.props.fetchATOUsage(this.props.ato_id)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.updateUsage()
     var timer = window.setInterval(this.updateUsage, 10 * 1000)
     this.setState({ timer: timer })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.state && this.state.timer) {
       window.clearInterval(this.state.timer)
     }
   }
 
-  render() {
+  render () {
     if (this.props.usage === undefined) {
       return <div />
     }
@@ -33,12 +33,12 @@ class chart extends React.Component {
       return <div />
     }
     return [
-      <span className="h6">{this.props.config.name} - ATO Usage</span>,
-      <ResponsiveContainer height={this.props.height} width="100%">
+      <span className='h6'>{this.props.config.name} - ATO Usage</span>,
+      <ResponsiveContainer height={this.props.height} width='100%'>
         <BarChart data={this.props.usage.historical}>
-          <Bar dataKey="pump" fill="#33b5e5" isAnimationActive={false} />
-          <YAxis label="seconds" />
-          <XAxis dataKey="time" />
+          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
+          <YAxis label='seconds' />
+          <XAxis dataKey='time' />
           <Tooltip />
         </BarChart>
       </ResponsiveContainer>
