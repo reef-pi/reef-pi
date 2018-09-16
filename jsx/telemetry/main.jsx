@@ -173,20 +173,22 @@ class telemetry extends React.Component {
       <div className="container">
         <div className="row">{this.showAdafruitIO()}</div>
         <div className="row">
-          <div className="form-check">
-            <label className="form-check-label">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="enable-mailer"
-                onClick={this.enableMailer}
-                defaultChecked={this.state.config.notify}
-              />
-              <b>Email alerts</b>
-            </label>
+          <div className=" col-12">
+            <div className="form-group">
+              <label className="form-check-label">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="enable-mailer"
+                  onClick={this.enableMailer}
+                  defaultChecked={this.state.config.notify}
+                />
+                <b>Email alerts</b>
+              </label>
+            </div>
           </div>
+          {this.notification()}
         </div>
-        {this.notification()}
         <div className="row mt-3">
           <div className="col">
             <div className="float-right">
