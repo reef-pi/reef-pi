@@ -1,4 +1,5 @@
 import React from 'react'
+import $ from 'jquery'
 import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
 import { connect } from 'react-redux'
 
@@ -28,9 +29,9 @@ class chart extends React.Component {
     var lines = [<Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />]
     var data = []
     data['time'] = [12]
-    this.props.config.channels.forEach((channel, name) => {
+    $.each(this.props.config.channels, function (name, channel) {
       lines.push(this.channel2line(channel, data))
-    })
+    }.bind(this))
     return (
       <div className='container'>
         <span className='h6'>Light - {this.props.config.name}</span>

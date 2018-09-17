@@ -44,7 +44,7 @@ describe('ATO ui', () => {
   })
 
   it('<Main />', () => {
-    shallow(<Main store={mockStore()} />).dive()
+    shallow(<Main store={mockStore({atos: [{id: '1', period: 10}]})} />).dive()
   })
 
   it('<Chart />', () => {

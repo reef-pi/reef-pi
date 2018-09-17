@@ -5,7 +5,7 @@ import { fetchATOs } from 'redux/actions/ato'
 import { connect } from 'react-redux'
 
 class main extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       add: false
@@ -13,15 +13,15 @@ class main extends React.Component {
     this.list = this.list.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchATOs()
   }
 
-  list() {
+  list () {
     var list = []
     this.props.atos.forEach((v, k) => {
       list.push(
-        <div key={'ato-' + k} className="row list-group-item">
+        <div key={'ato-' + k} className='row list-group-item'>
           <ATO data={v} upateHook={this.props.fetchATOs} />
         </div>
       )
@@ -29,8 +29,8 @@ class main extends React.Component {
     return list
   }
 
-  render() {
-    return [<ul className="list-group list-group-flush">{this.list()}</ul>, <New />]
+  render () {
+    return [<ul className='list-group list-group-flush'>{this.list()}</ul>, <New />]
   }
 }
 

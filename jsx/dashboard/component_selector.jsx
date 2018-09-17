@@ -1,5 +1,5 @@
 import React from 'react'
-
+import $ from 'jquery'
 // props: hook, selector_id, components, current_id
 
 export default class ComponentSelector extends React.Component {
@@ -25,7 +25,7 @@ export default class ComponentSelector extends React.Component {
   render () {
     var items = []
     var title = this.state.title
-    this.props.components.forEach((v, k) => {
+    $.each(this.props.components, function (k, v) {
       if (v === undefined || v === null) {
         return
       }
@@ -40,7 +40,7 @@ export default class ComponentSelector extends React.Component {
           <span id={this.props.selector_id + '-' + v.id}>{v.name}</span>
         </a>
       )
-    })
+    }.bind(this))
     return (
       <div className='dropdown'>
         <button
