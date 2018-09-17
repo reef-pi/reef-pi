@@ -20,6 +20,8 @@ class doser extends React.Component {
 
   pumpList () {
     var pumps = []
+    console.log(this.props)
+    console.log(this.props.pumps)
     $.each(this.props.pumps, function (i, pump) {
       pumps.push(
         <div key={'pump-' + i} className='row list-group-item'>
@@ -52,8 +54,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const Doser = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(doser)
-export default Doser
+// const Doser = connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(doser)
+// export default Doser
+export default connect(mapStateToProps, mapDispatchToProps)(doser)
