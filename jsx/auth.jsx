@@ -45,8 +45,6 @@ class auth extends React.Component {
         method: 'POST',
         credentials: 'same-origin',
         body: JSON.stringify(creds)
-      }).then(data => {
-        console.log('updated')
       })
       this.setState({ updated: false })
     }
