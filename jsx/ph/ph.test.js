@@ -11,11 +11,9 @@ import ProbeConfig from './probe_config'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
-import {mockLocalStorage} from '../utils/test_helper'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('pH ui', () => {
   it('<Main />', () => {

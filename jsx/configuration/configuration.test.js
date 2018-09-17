@@ -9,7 +9,6 @@ import Errors from './errors'
 import HealthNotify from './health_notify'
 import Main from './main'
 import Settings from './settings'
-import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import renderer from 'react-test-renderer'
@@ -18,7 +17,6 @@ import fetchMock from 'fetch-mock'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Configuration ui', () => {
   afterEach(() => {

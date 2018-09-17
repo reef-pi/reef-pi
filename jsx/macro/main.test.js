@@ -8,7 +8,6 @@ import Step from './step'
 import Steps from './steps'
 import WaitStepConfig from './wait_step_config'
 import configureMockStore from 'redux-mock-store'
-import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
@@ -17,7 +16,6 @@ import SelectType from './select_type'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Macro UI', () => {
   afterEach(() => {

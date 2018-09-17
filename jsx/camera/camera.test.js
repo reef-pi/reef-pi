@@ -7,13 +7,11 @@ import Config from './config'
 import Gallery from './gallery'
 import Motion from './motion'
 import configureMockStore from 'redux-mock-store'
-import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Camera module', () => {
   it('<Main />', () => {

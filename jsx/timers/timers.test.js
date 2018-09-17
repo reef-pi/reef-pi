@@ -7,12 +7,10 @@ import Cron from './cron'
 import Equipment from './equipment'
 import Reminder from './reminder'
 import Timer from './timer'
-import {mockLocalStorage} from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
-window.localStorage = mockLocalStorage()
 const mockStore = configureMockStore([thunk])
 
 describe('Timer ui', () => {

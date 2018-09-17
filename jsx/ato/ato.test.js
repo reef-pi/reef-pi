@@ -6,13 +6,11 @@ import New from './new'
 import Main from './main'
 import Chart from './chart'
 import configureMockStore from 'redux-mock-store'
-import { mockLocalStorage } from '../utils/test_helper'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('ATO ui', () => {
   const state = {

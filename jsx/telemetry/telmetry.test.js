@@ -6,12 +6,10 @@ import Main from './main'
 import AdafruitIO from './adafruit_io'
 import Notification from './notification'
 import thunk from 'redux-thunk'
-import {mockLocalStorage} from '../utils/test_helper'
 import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Telemetry UI', () => {
   it('<Main />', () => {

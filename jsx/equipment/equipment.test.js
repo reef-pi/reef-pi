@@ -10,12 +10,10 @@ import Main from './main'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import {mockLocalStorage} from '../utils/test_helper'
 import * as Alert from '../utils/alert'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Equipment ui', () => {
   const eqs = [{id: '1', outlet: '1', name: 'Foo', on: true}]
