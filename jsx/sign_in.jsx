@@ -38,9 +38,6 @@ export default class SignIn extends React.Component {
       .then(response => {
         window.location.reload(true)
       })
-      .catch(v => {
-        console.log(v)
-      })
   }
 
   login(e) {
@@ -72,9 +69,6 @@ export default class SignIn extends React.Component {
             break
         }
         return response
-      })
-      .catch(v => {
-        console.log(v)
       })
   }
 
