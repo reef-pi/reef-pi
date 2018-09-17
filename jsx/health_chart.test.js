@@ -12,11 +12,21 @@ const mockStore = configureMockStore([thunk])
 window.localStorage = mockLocalStorage()
 
 describe('Health', () => {
-  const state = {
-    health_stats: {}
-  }
+
 
   it('<HealthChart />', () => {
-    const m = shallow(<HealthChart store={mockStore(state)} />).dive()
+    let state = {
+      health_stats: {},
+      timer: window.setInterval(()=>true,10)
+    }
+    const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()
+    m.componentWillUnmount()
+  })
+  it('<HealthChart />', () => {
+    let state = {
+      trend: 'current'
+    }
+    const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()
+    m.componentWillUnmount()
   })
 })

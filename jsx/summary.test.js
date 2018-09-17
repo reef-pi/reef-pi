@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Summary from './summary'
 import configureMockStore from 'redux-mock-store'
@@ -14,12 +14,14 @@ window.localStorage = mockLocalStorage()
 
 describe('Summary', () => {
   it('<Summary />', () => {
-    renderer.create(
+    const m = shallow(
       <Summary
         info={{}}
         fetch={() => true}
         errors={[]}
+        timer={window.setInterval(() => true, 1800 * 1000)}
       />
-    )
+      ).instance()
+      m.componentWillUnmount()
   })
 })

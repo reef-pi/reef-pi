@@ -46,15 +46,11 @@ class auth extends React.Component {
         credentials: 'same-origin',
         body: JSON.stringify(creds)
       })
-      this.setState({ updated: false })
     }
   }
 
   render() {
     var btnClass = 'btn btn-outline-success col-12'
-    if (this.state.updated) {
-      btnClass = 'btn btn-outline-danger col-12'
-    }
     return (
       <div className="container">
         <div className="row">
