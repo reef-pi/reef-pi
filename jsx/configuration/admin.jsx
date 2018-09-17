@@ -34,22 +34,22 @@ class admin extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-md-12 col-lg-3'>
+          <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.signout} type='button' className={btnClass}>
               Sign Out
             </button>
           </div>
-          <div className='col-md-12 col-lg-3'>
+          <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.reload} type='button' className={btnClass}>
               Reload
             </button>
           </div>
-          <div className='col-md-12 col-lg-3'>
+          <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.reboot} type='button' className={btnClass}>
               Reboot
             </button>
           </div>
-          <div className='col-md-12 col-lg-3'>
+          <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.powerOff} type='button' className={btnClass}>
               PowerOff
             </button>

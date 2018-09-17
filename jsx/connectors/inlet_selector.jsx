@@ -1,13 +1,13 @@
 import React from 'react'
-import $, {isEmptyObject} from 'jquery'
-import {fetchInlets} from '../redux/actions/inlets'
-import {connect} from 'react-redux'
+import { isEmptyObject } from 'jquery'
+import { fetchInlets } from '../redux/actions/inlets'
+import { connect } from 'react-redux'
 
 class inletSelector extends React.Component {
   constructor (props) {
     super(props)
     var inlet
-    $.each(props.inlets, function (k, v) {
+    props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
         inlet = v
       }
@@ -30,7 +30,7 @@ class inletSelector extends React.Component {
     if (isEmptyObject(props.inlets)) {
       return null
     }
-    $.each(props.inlets, function (k, v) {
+    props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
         state.inlet = v
       }
@@ -47,7 +47,7 @@ class inletSelector extends React.Component {
       id = this.state.inlet.id
     }
     var items = []
-    $.each(this.props.inlets, function (k, v) {
+    this.props.inlets.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
@@ -57,10 +57,18 @@ class inletSelector extends React.Component {
           <span id={this.props.name + '-' + v.id}>{v.name}</span>
         </a>
       )
-    }.bind(this))
+    })
     return (
       <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.name + '-inlet'} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+        <button
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          id={this.props.name + '-inlet'}
+          data-toggle='dropdown'
+          aria-haspopup='true'
+          aria-expanded='false'
+          disabled={readOnly}
+        >
           {title}
         </button>
         <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
@@ -87,24 +95,23 @@ class inletSelector extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-lg-1'>
-            Inlet
-          </div>
-          <div className='col-lg-1'>
-            {this.inlets()}
-          </div>
+          <div className='col-lg-1'>Inlet</div>
+          <div className='col-lg-1'>{this.inlets()}</div>
         </div>
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return { inlets: state.inlets }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchInlets: () => dispatch(fetchInlets())}
+const mapDispatchToProps = dispatch => {
+  return { fetchInlets: () => dispatch(fetchInlets()) }
 }
 
-const InletSelector = connect(mapStateToProps, mapDispatchToProps)(inletSelector)
+const InletSelector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(inletSelector)
 export default InletSelector

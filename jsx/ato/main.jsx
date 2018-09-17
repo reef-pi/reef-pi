@@ -1,9 +1,8 @@
 import React from 'react'
 import ATO from './ato'
 import New from './new'
-import {fetchATOs} from 'redux/actions/ato'
-import {connect} from 'react-redux'
-import $ from 'jquery'
+import { fetchATOs } from 'redux/actions/ato'
+import { connect } from 'react-redux'
 
 class main extends React.Component {
   constructor (props) {
@@ -20,41 +19,35 @@ class main extends React.Component {
 
   list () {
     var list = []
-    var index = 0
-    $.each(this.props.atos, function (k, v) {
+    this.props.atos.forEach((v, k) => {
       list.push(
-        <div key={k} className='row list-group-item'>
+        <div key={'ato-' + k} className='row list-group-item'>
           <ATO data={v} upateHook={this.props.fetchATOs} />
         </div>
       )
-      index = index + 1
-    }.bind(this))
+    })
     return list
   }
 
   render () {
-    return (
-      <div className='container'>
-        <ul className='list-group list-group-flush'>
-          {this.list()}
-        </ul>
-        <New />
-      </div>
-    )
+    return [<ul className='list-group list-group-flush'>{this.list()}</ul>, <New />]
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     atos: state.atos
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchATOs: () => dispatch(fetchATOs())
   }
 }
 
-const Main = connect(mapStateToProps, mapDispatchToProps)(main)
+const Main = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(main)
 export default Main

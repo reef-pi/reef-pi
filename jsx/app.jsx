@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
+import $ from 'jquery'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
 import 'style.scss'
@@ -23,8 +24,14 @@ export default class App extends React.Component {
   }
   getComponent() {
     if (!this.state.logged) {
+      $('html').addClass('auth-page')
+      $('body').addClass('auth-page')
+      $('#main-panel').addClass('auth-page')
       return <SignIn />
     } else {
+      $('html').removeClass('auth-page')
+      $('body').removeClass('auth-page')
+      $('#main-panel').removeClass('auth-page')
       return [
         <MainPanel />
       ]

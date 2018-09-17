@@ -1,6 +1,5 @@
 import React from 'react'
 import $ from 'jquery'
-
 // props: hook, selector_id, components, current_id
 
 export default class ComponentSelector extends React.Component {
@@ -14,7 +13,7 @@ export default class ComponentSelector extends React.Component {
   }
 
   setID (k, name) {
-    return (ev) => {
+    return ev => {
       this.setState({
         title: name,
         current_id: k
@@ -38,13 +37,20 @@ export default class ComponentSelector extends React.Component {
       }
       items.push(
         <a className={cName} href='#' onClick={this.setID(v.id, v.name)} key={k}>
-          <span id={this.props.selector_id + '-' + v.id}>{ v.name }</span>
+          <span id={this.props.selector_id + '-' + v.id}>{v.name}</span>
         </a>
       )
     }.bind(this))
     return (
       <div className='dropdown'>
-        <button id={'ato-select-' + this.props.selector_idj} className='btn btn-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+        <button
+          id={'ato-select-' + this.props.selector_idj}
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          data-toggle='dropdown'
+          aria-haspopup='true'
+          aria-expanded='false'
+        >
           {title}
         </button>
         <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>

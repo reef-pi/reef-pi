@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import SignIn from 'sign_in'
 import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
@@ -8,16 +7,21 @@ class auth extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      updated: false,
       passwordError: false,
-      usernameError: false
+      usernameError: false,
+      user: '',
+      password: ''
     }
     this.updateCreds = this.updateCreds.bind(this)
-    this.changed = this.changed.bind(this)
+    this.handleUserChange = this.handleUserChange.bind(this)
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
-  changed() {
-    this.setState({ updated: true })
+  handleUserChange(e) {
+    this.setState({ user: e.target.value })
+  }
+  handlePasswordChange(e) {
+    this.setState({ password: e.target.value })
   }
 
   updateCreds() {
@@ -25,18 +29,23 @@ class auth extends React.Component {
     this.setState({ usernameError: false })
     this.setState({ passwordError: false })
     var creds = {
-      user: $('#reef-pi-user').val(),
-      password: $('#reef-pi-pass').val()
+      user: this.state.user,
+      password: this.state.password
     }
     if (!creds.user) {
       this.setState({ usernameError: true })
+      error = true
     }
     if (!creds.password) {
       this.setState({ passwordError: true })
+      error = true
     }
-    error = creds.password && creds.user
     if (!error) {
-      this.props.updateCreds(creds)
+      fetch('/api/credentials', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify(creds)
+      })
       this.setState({ updated: false })
     }
   }
@@ -60,7 +69,7 @@ class auth extends React.Component {
             className={'form-control ' + (this.state.usernameError ? 'is-invalid' : '')}
             id="reef-pi-user"
             defaultValue={SignIn.getCreds().user}
-            onChange={this.changed}
+            onChange={this.handleUserChange}
           />
           <div className="invalid-feedback">You Must Provide a username</div>
         </div>
@@ -70,7 +79,7 @@ class auth extends React.Component {
             type="password"
             id="reef-pi-pass"
             className={'form-control ' + (this.state.passwordError ? 'is-invalid' : '')}
-            onChange={this.changed}
+            onChange={this.handlePasswordChange}
           />
           <div className="invalid-feedback">You Must Provide a password</div>
         </div>

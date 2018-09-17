@@ -1,12 +1,11 @@
 import React from 'react'
-import $ from 'jquery'
 import PropTypes from 'prop-types'
 
 export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
     var name = ''
-    props.equipment.forEach((eq) => {
+    props.equipment.forEach(eq => {
       if (eq.id === props.active_id) {
         name = eq.name
       }
@@ -80,7 +79,7 @@ export default class Equipment extends React.Component {
 
   list () {
     var menuItems = []
-    $.each(this.props.equipment, (k, v) => {
+    this.props.equipment.forEach((v, k) => {
       var cls = 'dropdown-item'
       if (v.id === this.state.id) {
         cls += ' active'
@@ -99,22 +98,24 @@ export default class Equipment extends React.Component {
     var eqAction = this.state.on ? 'on' : 'off'
     var durationUI = <div />
     if (this.state.revert) {
-      durationUI = <div className='row'>
-        <div className='col'>
-          <label > Duration</label>
+      durationUI = (
+        <div className='row'>
+          <div className='col'>
+            <label> Duration</label>
+          </div>
+          <div className='col'>
+            <input
+              id={this.props.id_prefix + '-equipment-action-duration'}
+              type='text'
+              onChange={this.setDuration}
+              className='col-lg-6'
+              disabled={this.props.disabled}
+              defaultValue={this.state.duration}
+            />
+            (seconds)
+          </div>
         </div>
-        <div className='col'>
-          <input
-            id={this.props.id_prefix + '-equipment-action-duration'}
-            type='text'
-            onChange={this.setDuration}
-            className='col-lg-6'
-            disabled={this.props.disabled}
-            defaultValue={this.state.duration}
-          />
-        (seconds)
-        </div>
-      </div>
+      )
     }
     return (
       <div className='container'>
@@ -127,12 +128,11 @@ export default class Equipment extends React.Component {
                 type='button'
                 id={this.props.id_prefix + '-equipment'}
                 data-toggle='dropdown'
-                disabled={this.props.disabled}>
+                disabled={this.props.disabled}
+              >
                 {eqName}
               </button>
-              <div className='dropdown-menu'>
-                {this.list()}
-              </div>
+              <div className='dropdown-menu'>{this.list()}</div>
             </div>
           </div>
         </div>
@@ -145,12 +145,19 @@ export default class Equipment extends React.Component {
                 type='button'
                 id={this.props.id_prefix + '-equipmentAction'}
                 disabled={this.props.disabled}
-                data-toggle='dropdown' >
+                data-toggle='dropdown'
+              >
                 {eqAction}
               </button>
               <div className='dropdown-menu'>
-                <a className='dropdown-item' onClick={this.setAction(true)}> On </a>
-                <a className='dropdown-item' onClick={this.setAction(false)}> Off </a>
+                <a className='dropdown-item' onClick={this.setAction(true)}>
+                  {' '}
+                  On{' '}
+                </a>
+                <a className='dropdown-item' onClick={this.setAction(false)}>
+                  {' '}
+                  Off{' '}
+                </a>
               </div>
             </div>
           </span>

@@ -1,9 +1,9 @@
-import $ from 'jquery'
 import React from 'react'
 import Pump from './pump'
 import New from './new'
-import {fetchDosingPumps} from 'redux/actions/doser'
-import {connect} from 'react-redux'
+import { fetchDosingPumps } from 'redux/actions/doser'
+import { connect } from 'react-redux'
+import $ from 'jquery'
 
 class doser extends React.Component {
   constructor (props) {
@@ -27,32 +27,33 @@ class doser extends React.Component {
         </div>
       )
     })
-    return (<ul className='list-group list-group-flush'> {pumps} </ul>)
+    return <ul className='list-group list-group-flush'> {pumps} </ul>
   }
 
   render () {
     return (
       <div className='container'>
-        <div className='container'>
-          { this.pumpList() }
-        </div>
+        <div className='container'>{this.pumpList()}</div>
         <New />
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     pumps: state.dosers
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchDosingPumps: () => dispatch(fetchDosingPumps())
   }
 }
 
-const Doser = connect(mapStateToProps, mapDispatchToProps)(doser)
+const Doser = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(doser)
 export default Doser

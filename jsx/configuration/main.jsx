@@ -5,7 +5,6 @@ import Telemetry from 'telemetry/main'
 import Auth from 'auth'
 import Connectors from 'connectors/main'
 import Errors from './errors'
-import $ from 'jquery'
 
 const components = {
   settings: <Settings />,
@@ -26,31 +25,30 @@ export default class Configuration extends React.Component {
   }
 
   setBody (k) {
-    return () => { this.setState({body: k}) }
+    return () => {
+      this.setState({ body: k })
+    }
   }
 
   render () {
-    var panels = [ ]
-    $.each(['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin'], (_, k) => {
+    var panels = []
+    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin']
+    tabs.forEach((k, _) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
-        <li className={cname} key={k}>
-          <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>{k} </a>
+        <li className={cname} key={'conf-tabs-' + k}>
+          <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>
+            {k}{' '}
+          </a>
         </li>
       )
     })
     var body = components[this.state.body]
-    return (
-      <div className='container'>
-        <div className='row'>
-          <ul className='conf-nav nav nav-tabs'>
-            {panels}
-          </ul>
-        </div>
-        <div className='row'>
-          {body}
-        </div>
-      </div>
-    )
+    return [
+      <div className='row'>
+        <ul className='conf-nav nav nav-tabs'>{panels}</ul>
+      </div>,
+      <div className='row'>{body}</div>
+    ]
   }
 }

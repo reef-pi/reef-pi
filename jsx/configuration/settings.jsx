@@ -131,7 +131,7 @@ class settings extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-12'
+    var updateButtonClass = 'btn btn-outline-success col-12 mt-3'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-12'
     }

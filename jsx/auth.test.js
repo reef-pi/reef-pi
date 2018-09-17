@@ -14,7 +14,11 @@ window.localStorage = mockLocalStorage()
 describe('Auth', () => {
   it('<Auth />', () => {
     const m = shallow(<Auth store={mockStore()} />).dive().instance()
-    m.changed()
+    m.handleUserChange({target: {value: 'foo'}})
+    m.handlePasswordChange({target: {value: 'bar'}})
+    m.updateCreds()
+    m.handleUserChange({target: {value: ''}})
+    m.handlePasswordChange({target: {value: ''}})
     m.updateCreds()
   })
 })

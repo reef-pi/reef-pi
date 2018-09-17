@@ -1,8 +1,7 @@
 import React from 'react'
-import {ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine} from 'recharts'
-import $ from 'jquery'
-import {fetchTCUsage} from '../redux/actions/tcs'
-import {connect} from 'react-redux'
+import { ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
+import { fetchTCUsage } from '../redux/actions/tcs'
+import { connect } from 'react-redux'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -10,7 +9,7 @@ class chart extends React.Component {
     var timer = window.setInterval(() => {
       this.props.fetchTCUsage(this.props.sensor_id)
     }, 10 * 1000)
-    this.setState({timer: timer})
+    this.setState({ timer: timer })
   }
 
   componentWillUnmount () {
@@ -21,13 +20,13 @@ class chart extends React.Component {
 
   render () {
     if (this.props.config === undefined) {
-      return (<div />)
+      return <div />
     }
     if (this.props.usage === undefined) {
-      return (<div />)
+      return <div />
     }
     var usage = []
-    $.each(this.props.usage.historical, function (i, v) {
+    this.props.usage.historical.forEach((v, i) => {
       v.cooler *= -1
       usage.push(v)
     })
@@ -52,7 +51,14 @@ class chart extends React.Component {
             <Tooltip />
             <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
-            <Line type='monotone' dataKey='temperature' stroke='#ce93d8' isAnimationActive={false} yAxisId='left' dot={false} />
+            <Line
+              type='monotone'
+              dataKey='temperature'
+              stroke='#ce93d8'
+              isAnimationActive={false}
+              yAxisId='left'
+              dot={false}
+            />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
@@ -62,16 +68,21 @@ class chart extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    config: state.tcs.find((el) => { return el.id === ownProps.sensor_id }),
+    config: state.tcs.find(el => {
+      return el.id === ownProps.sensor_id
+    }),
     usage: state.tc_usage[ownProps.sensor_id]
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    fetchTCUsage: (id) => dispatch(fetchTCUsage(id))
+    fetchTCUsage: id => dispatch(fetchTCUsage(id))
   }
 }
 
-const ControlChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+const ControlChart = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(chart)
 export default ControlChart

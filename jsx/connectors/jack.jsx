@@ -59,9 +59,9 @@ export default class Jack extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col-lg-3'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Name </span>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label htmlFor={'jack-' + this.props.jack_id + '-name'}> Name </label>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
@@ -70,9 +70,9 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col-lg-3'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Pin </span>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> Pin </label>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
@@ -81,23 +81,21 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='row'>
-            <div className='col'>Driver</div>
-            <div className='col'>
-              <div className='dropdown'>
-                <button
-                  className='btn btn-secondary dropdown-toggle'
-                  type='button'
-                  id={this.props.jack_id + '-driver-selection'}
-                  data-toggle='dropdown'
-                >
-                  {this.state.driver}
-                </button>
-                <div className='dropdown-menu'>
-                  <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
-                  <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
-                </div>
+        <div className='col-md-6 col-lg-3'>
+          <div className='form-group'>
+            <label>Driver</label>
+            <div className='dropdown'>
+              <button
+                className='btn btn-secondary dropdown-toggle form-control'
+                type='button'
+                id={this.props.jack_id + '-driver-selection'}
+                data-toggle='dropdown'
+              >
+                {this.state.driver}
+              </button>
+              <div className='dropdown-menu'>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
               </div>
             </div>
           </div>
@@ -125,10 +123,10 @@ export default class Jack extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-lg-8'>
+        <div className='col-8'>
           {this.state.edit ? this.editUI() : this.ui() }
         </div>
-        <div className='col-lg-1'>
+        <div className='col-1'>
           <input
             type='button'
             className='btn btn-outline-secondary'
@@ -136,7 +134,7 @@ export default class Jack extends React.Component {
             onClick={this.edit}
           />
         </div>
-        <div className='col-lg-1'>
+        <div className='col-1'>
           <input
             type='button'
             className='btn btn-outline-danger'

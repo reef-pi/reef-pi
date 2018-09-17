@@ -1,13 +1,12 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import $ from 'jquery'
-import {fetchEquipment} from './redux/actions/equipment'
+import { connect } from 'react-redux'
+import { fetchEquipment } from './redux/actions/equipment'
 
 class selectEquipment extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    var equipment = {id: props.active, name: ''}
-    $.each(props.equipment, function (i, eq) {
+    var equipment = { id: props.active, name: '' }
+    props.equipment.forEach((eq, i) => {
       if (eq.id === equipment.id) {
         equipment = eq
       }
@@ -19,17 +18,17 @@ class selectEquipment extends React.Component {
     this.setEquipment = this.setEquipment.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchEquipment()
   }
 
-  equipmentList () {
+  equipmentList() {
     var menuItems = [
-      <a className='dropdown-item' href='#' key='none' onClick={this.setEquipment('none')}>
+      <a className="dropdown-item" href="#" key="none" onClick={this.setEquipment('none')}>
         {'--'}
       </a>
     ]
-    $.each(this.props.equipment, function (k, v) {
+    this.props.equipment.forEach( (v,k )=> {
       var cName = 'dropdown-item'
       var active = false
       if (this.state.equipment !== undefined) {
@@ -38,14 +37,15 @@ class selectEquipment extends React.Component {
         }
       }
       menuItems.push(
-        <a className={cName} href='#' key={k} onClick={this.setEquipment(k)}>
+        <a className={cName} href="#" key={k} onClick={this.setEquipment(k)}>
           <span id={this.props.id + '-' + v.name}>{v.name}</span>
-        </a>)
-    }.bind(this))
+        </a>
+      )
+    })
     return menuItems
   }
 
-  setEquipment (k) {
+  setEquipment(k) {
     return () => {
       if (k === 'none') {
         this.setState({
@@ -62,31 +62,42 @@ class selectEquipment extends React.Component {
     }
   }
 
-  render () {
+  render() {
     var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
     var eqName = ''
     if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
     }
     return (
-      <div className='dropdown'>
-        <button className='btn btn-secondary dropdown-toggle' type='button' id={this.props.id} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' disabled={readOnly}>
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id={this.props.id}
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          disabled={readOnly}
+        >
           {eqName}
         </button>
-        <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {this.equipmentList()}
         </div>
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return { equipment: state.equipment }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {fetchEquipment: () => dispatch(fetchEquipment())}
+const mapDispatchToProps = dispatch => {
+  return { fetchEquipment: () => dispatch(fetchEquipment()) }
 }
 
-const SelectEquipment = connect(mapStateToProps, mapDispatchToProps)(selectEquipment)
+const SelectEquipment = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(selectEquipment)
 export default SelectEquipment

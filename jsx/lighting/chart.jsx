@@ -1,7 +1,7 @@
 import React from 'react'
-import {ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line} from 'recharts'
 import $ from 'jquery'
-import {connect} from 'react-redux'
+import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
+import { connect } from 'react-redux'
 
 class chart extends React.Component {
   constructor (props) {
@@ -11,21 +11,14 @@ class chart extends React.Component {
 
   channel2line (ch, data) {
     if (ch.profile.type === 'auto' && ch.profile.config) {
-      $.each(ch.profile.config.values, function (i, value) {
+      ch.profile.config.values.forEach((value, i) => {
         if (data[i] === undefined) {
-          data[i] = {time: (i * 2) + 'h'}
+          data[i] = { time: i * 2 + 'h' }
         }
         data[i][ch.name] = value
       })
       var stroke = ch.color === '' ? '#000' : ch.color
-      return (
-        <Line
-          dataKey={ch.name}
-          isAnimationActive={false}
-          stroke={stroke}
-          key={ch.pin}
-        />
-      )
+      return <Line dataKey={ch.name} isAnimationActive={false} stroke={stroke} key={ch.pin} />
     }
   }
 
@@ -33,14 +26,7 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var lines = [
-      <Line dataKey='time'
-        isAnimationActive={false}
-        stroke='#000000'
-        key='time'
-        layout='vertical'
-      />
-    ]
+    var lines = [<Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />]
     var data = []
     data['time'] = [12]
     $.each(this.props.config.channels, function (name, channel) {
@@ -63,11 +49,14 @@ class chart extends React.Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    config: state.lights.find((l) => {
+    config: state.lights.find(l => {
       return l.id === ownProps.light_id
     })
   }
 }
 
-const Chart = connect(mapStateToProps, null)(chart)
+const Chart = connect(
+  mapStateToProps,
+  null
+)(chart)
 export default Chart

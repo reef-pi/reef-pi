@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Lightbox from 'react-images'
-import $ from 'jquery'
 
 export default class Gallery extends React.Component {
   constructor (props) {
@@ -62,17 +61,19 @@ export default class Gallery extends React.Component {
     if (!images) return
 
     var gallery = []
-    $.each(this.props.images, function (i, k) {
+    this.props.images.forEach((k, i) => {
       gallery.push(
-        <a href={k.src} key={i} onClick={(e) => this.open(i, e)}>
+        <a href={k.src} key={'gallery-' + i} onClick={e => this.open(i, e)}>
           <img src={k.thumbnail} />
         </a>
       )
-    }.bind(this))
+    })
 
     return (
       <div className='container'>
-        <Lightbox images={this.props.images} onClose={this.onClose}
+        <Lightbox
+          images={this.props.images}
+          onClose={this.onClose}
           currentImage={this.state.current}
           isOpen={this.state.isOpen}
           onClickImage={this.onClick}

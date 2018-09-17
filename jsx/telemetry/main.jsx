@@ -1,13 +1,9 @@
 import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
-import {showAlert} from 'utils/alert'
-import {
-  updateTelemetry,
-  fetchTelemetry,
-  sendTestMessage
-} from 'redux/actions/telemetry'
-import {connect} from 'react-redux'
+import { showAlert } from 'utils/alert'
+import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
+import { connect } from 'react-redux'
 
 class telemetry extends React.Component {
   constructor (props) {
@@ -52,7 +48,7 @@ class telemetry extends React.Component {
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
     this.props.update(c)
-    this.setState({updated: false, config: c})
+    this.setState({ updated: false, config: c })
   }
 
   updateMailer (mailer) {
@@ -115,20 +111,21 @@ class telemetry extends React.Component {
     }
     return (
       <div className='row'>
-        <div className='col'>
+        <div className='col-12 col-md-6'>
           <NotificationSettings mailer={this.state.config.mailer} update={this.updateMailer} />
         </div>
-        <div className='col'>
+        <div className='col-12 col-md-6'>
           <div className='row'>
-            <div className='col'>
-              limit per hour
+            <div className='form-group col-12'>
+              <label htmlFor='limit-per-hour'>limit per hour</label>
+              <input
+                id='limit-per-hour'
+                type='text'
+                value={this.state.config.throttle}
+                onChange={this.updateThrottle}
+                className='form-control'
+              />
             </div>
-            <input
-              type='text'
-              value={this.state.config.throttle}
-              onChange={this.updateThrottle}
-              className='col'
-            />
           </div>
           <div className='row'>
             <div className='col'>
@@ -155,9 +152,7 @@ class telemetry extends React.Component {
     if (this.state.config.adafruitio === undefined) {
       return
     }
-    return (
-      <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
-    )
+    return <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
   }
 
   updateThrottle (ev) {
@@ -176,25 +171,25 @@ class telemetry extends React.Component {
     }
     return (
       <div className='container'>
+        <div className='row'>{this.showAdafruitIO()}</div>
         <div className='row'>
-          {this.showAdafruitIO()}
-        </div>
-        <div className='row'>
-          <div className='form-check'>
-            <label className='form-check-label'>
-              <input
-                className='form-check-input'
-                type='checkbox'
-                id='enable-mailer'
-                onClick={this.enableMailer}
-                defaultChecked={this.state.config.notify}
-              />
-              <b>Email alerts</b>
-            </label>
+          <div className=' col-12'>
+            <div className='form-group'>
+              <label className='form-check-label'>
+                <input
+                  className='form-check-input'
+                  type='checkbox'
+                  id='enable-mailer'
+                  onClick={this.enableMailer}
+                  defaultChecked={this.state.config.notify}
+                />
+                <b>Email alerts</b>
+              </label>
+            </div>
           </div>
+          {this.notification()}
         </div>
-        {this.notification()}
-        <div className='row'>
+        <div className='row mt-3'>
           <div className='col'>
             <div className='float-right'>
               <input
@@ -212,19 +207,22 @@ class telemetry extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     config: state.telemetry
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchTelemetry()),
-    update: (s) => dispatch(updateTelemetry(s)),
+    update: s => dispatch(updateTelemetry(s)),
     sendTestMessage: () => dispatch(sendTestMessage())
   }
 }
 
-const Telemetry = connect(mapStateToProps, mapDispatchToProps)(telemetry)
+const Telemetry = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(telemetry)
 export default Telemetry

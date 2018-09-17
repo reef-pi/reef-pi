@@ -1,14 +1,13 @@
 import React from 'react'
-import $ from 'jquery'
 import Reminder from './reminder'
 import Timer from './timer'
 import Cron from './cron'
 import Equipment from './equipment'
-import {showAlert} from 'utils/alert'
-import {confirm} from 'utils/confirm'
-import {updateTimer, fetchTimers, createTimer, deleteTimer} from 'redux/actions/timer'
-import {fetchEquipment} from 'redux/actions/equipment'
-import {connect} from 'react-redux'
+import { showAlert } from 'utils/alert'
+import { confirm } from 'utils/confirm'
+import { updateTimer, fetchTimers, createTimer, deleteTimer } from 'redux/actions/timer'
+import { fetchEquipment } from 'redux/actions/equipment'
+import { connect } from 'react-redux'
 
 class Main extends React.Component {
   constructor (props) {
@@ -58,32 +57,25 @@ class Main extends React.Component {
             disabled={false}
             id_prefix='new-timer'
             update={this.update('equipment')}
-          />)
-      case 'reminder':
-        return (
-          <Reminder
-            update={this.update('reminder')}
-            disabled={false}
-            id_prefix='new-timer'
-            message=''
-            title=''
           />
         )
+      case 'reminder':
+        return <Reminder update={this.update('reminder')} disabled={false} id_prefix='new-timer' message='' title='' />
     }
   }
 
   update (k) {
-    return (function (d) {
+    return function (d) {
       var h = {}
       h[k] = d
       this.setState(h)
-    }.bind(this))
+    }.bind(this)
   }
 
   setType (t) {
-    return (function () {
-      this.setState({type: t})
-    }.bind(this))
+    return function () {
+      this.setState({ type: t })
+    }.bind(this)
   }
 
   componentDidMount () {
@@ -93,7 +85,7 @@ class Main extends React.Component {
 
   timerList () {
     var list = []
-    $.each(this.props.timers, function (i, timer) {
+    this.props.timers.forEach((timer, i) => {
       list.push(
         <li key={timer.name} className='list-group-item'>
           <Timer
@@ -107,7 +99,7 @@ class Main extends React.Component {
             equipment={timer.equipment}
             reminder={timer.reminder}
             remove={this.removeTimer(timer.id)}
-            update={(p) => {
+            update={p => {
               this.props.update(timer.id, p)
             }}
             enable={timer.enable}
@@ -115,17 +107,18 @@ class Main extends React.Component {
           />
         </li>
       )
-    }.bind(this))
-    return (list)
+    })
+    return list
   }
 
   removeTimer (id) {
-    return (function () {
-      confirm('Are you sure ?')
-        .then(function () {
+    return function () {
+      confirm('Are you sure ?').then(
+        function () {
           this.props.delete(id)
-        }.bind(this))
-    }.bind(this))
+        }.bind(this)
+      )
+    }.bind(this)
   }
 
   createTimer () {
@@ -157,7 +150,7 @@ class Main extends React.Component {
         }
         var eq = this.state.equipment
         eq.duration = parseInt(eq.duration)
-        this.setState({equipment: eq})
+        this.setState({ equipment: eq })
         break
       case 'reminder':
         break
@@ -184,70 +177,55 @@ class Main extends React.Component {
   }
 
   newTimer () {
-    return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col'>
-            <label className='text-secondary'>Name</label>
-            <input
-              type='text'
-              id='name'
-              onChange={(ev) => this.setState({name: ev.target.value})}
-            />
-          </div>
-          <div className='col'>
-            <label className='text-secondary'>Enable</label>
-            <input
-              type='checkbox'
-              id='new-timer-enable'
-              onClick={(ev) => this.setState({enable: ev.target.checked})}
-            />
-          </div>
+    return [
+      <div className='row'>
+        <div className='col'>
+          <label className='text-secondary'>Name</label>
+          <input type='text' id='name' onChange={ev => this.setState({ name: ev.target.value })} />
         </div>
-        <div className='row'>
-          <div className='col'>
-            <Cron
-              update={this.updateCron}
-              disabled={false}
-              id_prefix='new-timer'
-              day={this.state.day}
-              hour={this.state.hour}
-              minute={this.state.minute}
-              second={this.state.second}
-            />
-          </div>
-          <div className='col'>
-            <div className='btn-group'>
-              <label className='btn btn-secondary'>
-                <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
-              </label>
-              <label className='btn btn-secondary'>
-                <input
-                  type='radio'
-                  name='options'
-                  id='equipment'
-                  defaultChecked
-                  onClick={this.setType('equipment')}
-                />
-                Equipment
-              </label>
-            </div>
-            {this.trigger()}
-          </div>
+        <div className='col'>
+          <label className='text-secondary'>Enable</label>
+          <input type='checkbox' id='new-timer-enable' onClick={ev => this.setState({ enable: ev.target.checked })} />
         </div>
-        <div className='row'>
-          <div className='col'>
-            <input
-              id='createTimer'
-              type='button'
-              value='add'
-              onClick={this.createTimer}
-              className='btn btn-outline-primary float-right'
-            />
+      </div>,
+      <div className='row'>
+        <div className='col'>
+          <Cron
+            update={this.updateCron}
+            disabled={false}
+            id_prefix='new-timer'
+            day={this.state.day}
+            hour={this.state.hour}
+            minute={this.state.minute}
+            second={this.state.second}
+          />
+        </div>
+        ,
+        <div className='col'>
+          <div className='btn-group'>
+            <label className='btn btn-secondary'>
+              <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
+            </label>
+            <label className='btn btn-secondary'>
+              <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} />
+              Equipment
+            </label>
           </div>
+          {this.trigger()}
+        </div>
+      </div>,
+      <div className='row'>
+        <div className='col'>
+          <input
+            id='createTimer'
+            type='button'
+            value='add'
+            onClick={this.createTimer}
+            className='btn btn-outline-primary float-right'
+          />
         </div>
       </div>
-    )
+    ]
   }
 
   render () {
@@ -273,22 +251,25 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     timers: state.timers,
     equipment: state.equipment
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchTimers()),
     fetchEquipment: () => dispatch(fetchEquipment()),
-    create: (t) => dispatch(createTimer(t)),
-    delete: (id) => dispatch(deleteTimer(id)),
+    create: t => dispatch(createTimer(t)),
+    delete: id => dispatch(deleteTimer(id)),
     update: (id, t) => dispatch(updateTimer(id, t))
   }
 }
 
-const Timers = connect(mapStateToProps, mapDispatchToProps)(Main)
+const Timers = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main)
 export default Timers

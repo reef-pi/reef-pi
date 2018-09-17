@@ -1,6 +1,5 @@
 import React from 'react'
-import $ from 'jquery'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 class stepConfig extends React.Component {
@@ -33,7 +32,7 @@ class stepConfig extends React.Component {
     var name = ''
     var items = []
     var elements = this.props[this.props.type]
-    $.each(elements, function (k, v) {
+    elements.forEach((v, k) => {
       var cName = 'dropdown-item'
       if (this.props.active === v.id) {
         cName += ' active'
@@ -42,8 +41,9 @@ class stepConfig extends React.Component {
       items.push(
         <a className={cName} href='#' key={k} onClick={this.set(v.id)}>
           <span id={this.props.type + '-' + v.id}>{v.name}</span>
-        </a>)
-    }.bind(this))
+        </a>
+      )
+    })
 
     return (
       <div className='row'>
@@ -54,12 +54,11 @@ class stepConfig extends React.Component {
               type='button'
               data-toggle='dropdown'
               id={this.props.macro_id + '-' + this.props.index + '-step-state'}
-              disabled={readOnly} >
+              disabled={readOnly}
+            >
               {name}
             </button>
-            <div className='dropdown-menu'>
-              {items}
-            </div>
+            <div className='dropdown-menu'>{items}</div>
           </div>
         </div>
         <div className='col'>
@@ -107,7 +106,7 @@ stepConfig.propTypes = {
   on: PropTypes.bool
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     equipment: state.equipment,
     timers: state.timers,
@@ -127,5 +126,8 @@ const mapStateToProps = (state) => {
     ]
   }
 }
-const GenericStepConfig = connect(mapStateToProps, null)(stepConfig)
+const GenericStepConfig = connect(
+  mapStateToProps,
+  null
+)(stepConfig)
 export default GenericStepConfig

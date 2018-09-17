@@ -1,8 +1,8 @@
 import React from 'react'
-import {showAlert} from 'utils/alert'
+import { showAlert } from 'utils/alert'
 import JackSelector from 'jack_selector'
-import {createDosingPump} from 'redux/actions/doser'
-import {connect} from 'react-redux'
+import { createDosingPump } from 'redux/actions/doser'
+import { connect } from 'react-redux'
 
 class newPump extends React.Component {
   constructor (props) {
@@ -21,15 +21,15 @@ class newPump extends React.Component {
   }
 
   setJack (j, p) {
-    this.setState({jack: j, pin: parseInt(p)})
+    this.setState({ jack: j, pin: parseInt(p) })
   }
 
   update (k) {
-    return (function (ev) {
+    return function (ev) {
       var h = {}
       h[k] = ev.target.value
       this.setState(h)
-    }.bind(this))
+    }.bind(this)
   }
 
   toggle () {
@@ -46,24 +46,24 @@ class newPump extends React.Component {
     if (!this.state.add) {
       return
     }
-    return (
-      <div className='container'>
-        <div className='row'>
-          <div className='col-sm-2'>Name</div>
-          <div className='col-sm-2'><input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name' /></div>
+    return [
+      <div className='row'>
+        <div className='col-sm-2'>Name</div>
+        <div className='col-sm-2'>
+          <input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name' />
         </div>
-        <div className='row'>
-          <JackSelector update={this.setJack} id='new_doser' />
-        </div>
-        <div className='row'>
-          <div className='col'>
-            <div className='float-right'>
-              <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
-            </div>
+      </div>,
+      <div className='row'>
+        <JackSelector update={this.setJack} id='new_doser' />
+      </div>,
+      <div className='row'>
+        <div className='col'>
+          <div className='float-right'>
+            <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
           </div>
         </div>
       </div>
-    )
+    ]
   }
 
   add () {
@@ -81,20 +81,27 @@ class newPump extends React.Component {
   }
 
   render () {
-    return (
-      <div className='container'>
-        <input id='add_doser' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
-        {this.ui()}
-      </div>
-    )
+    return [
+      <input
+        id='add_doser'
+        type='button'
+        value={this.state.add ? '-' : '+'}
+        onClick={this.toggle}
+        className='btn btn-outline-success'
+      />,
+      this.ui()
+    ]
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    createDosingPump: (s) => dispatch(createDosingPump(s))
+    createDosingPump: s => dispatch(createDosingPump(s))
   }
 }
 
-const New = connect(null, mapDispatchToProps)(newPump)
+const New = connect(
+  null,
+  mapDispatchToProps
+)(newPump)
 export default New

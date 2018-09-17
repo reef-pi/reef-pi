@@ -1,14 +1,13 @@
 import React from 'react'
-import {ResponsiveContainer, Tooltip, XAxis, BarChart, Bar} from 'recharts'
-import $ from 'jquery'
-import {fetchEquipment} from '../redux/actions/equipment'
-import {connect} from 'react-redux'
+import { ResponsiveContainer, Tooltip, XAxis, BarChart, Bar } from 'recharts'
+import { fetchEquipment } from '../redux/actions/equipment'
+import { connect } from 'react-redux'
 
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
     var timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
-    this.setState({timer: timer})
+    this.setState({ timer: timer })
   }
 
   componentWillUnmount () {
@@ -19,10 +18,10 @@ class chart extends React.Component {
 
   render () {
     if (this.props.equipment === undefined) {
-      return (<div />)
+      return <div />
     }
     var equipment = []
-    $.each(this.props.equipment, function (i, eq) {
+    this.props.equipment.forEach((eq, i) => {
       eq.onstate = eq.on ? 1 : 0
       eq.offstate = eq.on ? 0 : -1
       equipment.push(eq)
@@ -43,17 +42,20 @@ class chart extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     equipment: state.equipment
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchEquipment: () => dispatch(fetchEquipment())
   }
 }
 
-const Chart = connect(mapStateToProps, mapDispatchToProps)(chart)
+const Chart = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(chart)
 export default Chart
