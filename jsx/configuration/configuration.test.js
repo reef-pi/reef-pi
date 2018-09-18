@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
@@ -12,7 +12,7 @@ import Settings from './settings'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import renderer from 'react-test-renderer'
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import fetchMock from 'fetch-mock'
 
 Enzyme.configure({ adapter: new Adapter() })
@@ -26,14 +26,16 @@ describe('Configuration ui', () => {
 
   it('<Main />', () => {
     renderer.create(
-      <Provider store={mockStore({capabilities: []})} >
+      <Provider store={mockStore({ capabilities: [] })}>
         <Main />
       </Provider>
     )
   })
 
   it('<Admin />', () => {
-    const m = shallow(<Admin store={mockStore()} />).dive().instance()
+    const m = shallow(<Admin store={mockStore()} />)
+      .dive()
+      .instance()
     fetchMock.postOnce('/api/admin/reload', {})
     fetchMock.postOnce('/api/admin/reboot', {})
     fetchMock.postOnce('/api/admin/poweroff', {})
@@ -49,9 +51,11 @@ describe('Configuration ui', () => {
         on: true
       }
     }
-    const m = shallow(<Display store={mockStore(state)} />).dive().instance()
+    const m = shallow(<Display store={mockStore(state)} />)
+      .dive()
+      .instance()
     m.toggle()
-    m.setBrightness({target: {value: 10}})
+    m.setBrightness({ target: { value: 10 } })
   })
 
   it('<Capabilities />', () => {
@@ -61,7 +65,7 @@ describe('Configuration ui', () => {
       dashboard: true
     }
     const m = shallow(<Capabilities capabilities={caps} update={() => true} />).instance()
-    m.updateCapability('dashboard')({target: {checked: true}})
+    m.updateCapability('dashboard')({ target: { checked: true } })
   })
 
   it('<Settings />', () => {
@@ -73,28 +77,35 @@ describe('Configuration ui', () => {
       interface: 'en0',
       address: 'localhost:8080'
     }
-    const m = shallow(
-      <Settings store={mockStore({settings: settings, capabilities: capabilities})} />
-    ).dive().instance()
+    const m = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />)
+      .dive()
+      .instance()
     m.updateCapabilities(capabilities)
-    m.updateCheckbox('foo')({target: {checked: true}})
+    m.updateCheckbox('foo')({ target: { checked: true } })
     m.update()
     m.updateHealthNotify({})
   })
 
   it('<HealthNotify />', () => {
     const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
-    m.updateEnable({target: {}})
-    m.update('foo')({target: {}})
+    m.updateEnable({ target: {} })
+    m.update('foo')({ target: {} })
+    m.setState({
+      notify: {
+        enable: true
+      }
+    })
   })
 
   it('<Errors />', () => {
     shallow(
       <Errors
         store={mockStore({
-          errors: [{id: '1', time: 'dd', message: 'dd'}]
+          errors: [{ id: '1', time: 'dd', message: 'dd' }]
         })}
       />
-    ).dive().instance()
+    )
+      .dive()
+      .instance()
   })
 })
