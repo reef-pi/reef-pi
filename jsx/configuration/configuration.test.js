@@ -77,13 +77,34 @@ describe('Configuration ui', () => {
       interface: 'en0',
       address: 'localhost:8080'
     }
-    const m = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />)
+    let m = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />)
       .dive()
       .instance()
     m.updateCapabilities(capabilities)
     m.updateCheckbox('foo')({ target: { checked: true } })
     m.update()
     m.updateHealthNotify({})
+    m.updateCapabilities({
+      health_check: false
+    })
+
+    m = shallow(
+      <Settings
+        store={mockStore({
+          settings: {
+            name: 'foo',
+            interface: 'en0',
+            address: 'localhost:8080',
+            display: true
+          },
+          capabilities: {
+            health_check: true
+          }
+        })}
+      />
+    )
+      .dive()
+      .instance()
   })
 
   it('<HealthNotify />', () => {
