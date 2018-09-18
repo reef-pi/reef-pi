@@ -11,9 +11,7 @@ class chart extends React.Component {
   }
 
   componentWillUnmount () {
-    if (this.state && this.state.timer) {
-      window.clearInterval(this.state.timer)
-    }
+    window.clearInterval(this.state.timer)
   }
 
   render () {
