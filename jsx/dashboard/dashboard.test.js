@@ -44,7 +44,7 @@ describe('Dashboard', () => {
       c1: { id: '1', name: 'foo' },
       c2: undefined
     }
-    shallow(<ComponentSelector hook={() => {}} components={comps} current_id="1" />)
+    shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />)
   })
 
   it('<Config />', () => {

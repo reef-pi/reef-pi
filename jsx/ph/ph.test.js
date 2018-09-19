@@ -31,8 +31,8 @@ describe('pH ui', () => {
   it('<Chart />', () => {
     const probes = [{ id: '1', name: 'foo' }]
     const readings = { '1': { name: 'foo', current: [] } }
-    const m = shallow(<Chart probe_id="1" store={mockStore({ phprobes: probes, ph_readings: readings })} type="current" />).dive().instance()
-    m.state.ph_readings = [{ph:6},{ph:7}]
+    const m = shallow(<Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />).dive().instance()
+    m.state.ph_readings = [{ph: 6}, {ph: 7}]
     m.render()
     m.componentWillUnmount()
   })

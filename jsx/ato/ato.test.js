@@ -56,7 +56,7 @@ describe('ATO ui', () => {
   })
 
   it('<Chart />', () => {
-    shallow(<Chart ato_id="1 " store={mockStore(state)} />)
+    shallow(<Chart ato_id='1 ' store={mockStore(state)} />)
       .dive()
       .instance()
   })

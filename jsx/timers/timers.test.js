@@ -66,7 +66,7 @@ describe('Timer ui', () => {
 
   it('<Cron />', () => {
     const m = shallow(
-      <Cron disabled={false} update={() => true} id_prefix="" day="*" hour="*" minute="*" second="0" />
+      <Cron disabled={false} update={() => true} id_prefix='' day='*' hour='*' minute='*' second='0' />
     ).instance()
     m.update('foo')({ target: {} })
   })
@@ -76,9 +76,9 @@ describe('Timer ui', () => {
       <Equipment
         equipment={[{ id: '1', name: 'foo' }]}
         update={() => true}
-        id_prefix=""
+        id_prefix=''
         disabled={false}
-        active_id="1"
+        active_id='1'
         revert
         on
         duration={10}
@@ -97,16 +97,16 @@ describe('Timer ui', () => {
   })
 
   it('<Reminder />', () => {
-    const m = shallow(<Reminder update={() => true} disabled={false} title="" id_prefix="" message="" />).instance()
+    const m = shallow(<Reminder update={() => true} disabled={false} title='' id_prefix='' message='' />).instance()
     m.update('title')({ target: { value: 'test' } })
   })
 
   it('<Timer />', () => {
     const t = shallow(
       <Timer
-        timer_id=""
-        name="foo"
-        type="equipment"
+        timer_id=''
+        name='foo'
+        type='equipment'
         enable
         equipment={{
           on: true,
@@ -116,10 +116,10 @@ describe('Timer ui', () => {
           revert: false
         }}
         reminder={{ message: '', title: '' }}
-        day="*"
-        hour="*"
-        minute="*"
-        second="*"
+        day='*'
+        hour='*'
+        minute='*'
+        second='*'
         remove={() => true}
         update={() => true}
         equipmentList={[]}

@@ -54,7 +54,7 @@ describe('Equipment ui', () => {
       <Equipment
         equipment={eqs[0]}
         update={() => {
-          return { then: function() {} }
+          return { then: function () {} }
         }}
         delete={() => true}
         outlets={outlets}
@@ -116,7 +116,7 @@ describe('Equipment ui', () => {
   it('<EditEquipment />', () => {
     shallow(
       <EditEquipment
-        actionLabel="save"
+        actionLabel='save'
         values={{ id: 1 }}
         update={() => true}
         delete={() => true}
@@ -130,7 +130,7 @@ describe('Equipment ui', () => {
   it('<EditEquipment /> New Item', () => {
     shallow(
       <EditEquipment
-        actionLabel="save"
+        actionLabel='save'
         values={{ id: null }}
         update={() => true}
         delete={() => true}
@@ -144,7 +144,7 @@ describe('Equipment ui', () => {
   it('<EditEquipment /> should submit', () => {
     const wrapper = shallow(
       <EditEquipment
-        actionLabel="save"
+        actionLabel='save'
         values={{ id: null }}
         update={() => true}
         delete={() => true}
@@ -161,7 +161,7 @@ describe('Equipment ui', () => {
   it('<EditEquipment /> should show alert when invalid', () => {
     const wrapper = shallow(
       <EditEquipment
-        actionLabel="save"
+        actionLabel='save'
         values={{ id: null }}
         update={() => true}
         delete={() => true}
@@ -178,7 +178,7 @@ describe('Equipment ui', () => {
   it('<EquipmentForm />', () => {
     const wrapper = shallow(
       <EquipmentForm
-        actionLabel="save"
+        actionLabel='save'
         values={{ id: null }}
         update={() => true}
         delete={() => true}
@@ -199,5 +199,4 @@ describe('Equipment ui', () => {
   it('<Chart />', () => {
     shallow(<Chart store={mockStore()} />).dive()
   })
-
 })
