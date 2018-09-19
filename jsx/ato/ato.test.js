@@ -31,6 +31,13 @@ describe('ATO ui', () => {
     m.remove()
     m.expand()
     m.detailsUI()
+    const z = shallow(<ATO store={mockStore({ readOnly: false })} data={{ id: '1', period: 'foo', control: true }} />)
+      .dive()
+      .instance()
+    z.state.readOnly = false
+    z.state.ato = { id: '1', period: 'foo', control: true }
+    z.save()
+    z.showControl()
   })
 
   it('<New />', () => {
@@ -39,6 +46,7 @@ describe('ATO ui', () => {
       .instance()
     m.toggle()
     m.update('name')({ target: { value: 's' } })
+    m.updateEnable({ target: { checked: true } })
     m.setInlet('1')
     m.add()
   })
