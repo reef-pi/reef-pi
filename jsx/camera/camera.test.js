@@ -30,11 +30,14 @@ describe('Camera module', () => {
   })
 
   it('<Config />', () => {
-    const m = shallow(<Config config={{tick_interval: 1}} update={() => {}} />)
+    let m = shallow(<Config config={{tick_interval: 1}} update={() => {}} />)
     m.instance().updateBool('enable')({target: {checked: true}})
     m.instance().updateText('bar')({target: {}})
     m.update()
     m.instance().save()
+    m = m.instance()
+    m.state.config.tick_interval = 'foo'
+    m.save()
   })
 
   it('<Gallery />', () => {
@@ -48,6 +51,8 @@ describe('Camera module', () => {
     m.gotoPrevious()
     m.gotoNext()
     m.gotoImage(0)
+    m.onClick()
+    m.state.current = -1
     m.onClick()
   })
 
