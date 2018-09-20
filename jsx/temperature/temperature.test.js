@@ -9,13 +9,11 @@ import Sensor from './sensor'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
-import {mockLocalStorage} from '../utils/test_helper'
 import BooleanSelect from './boolean_select'
 import TemperatureForm from './temperature_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Temperature controller ui', () => {
   const state = {

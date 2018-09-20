@@ -7,15 +7,19 @@ import Main from './controller'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
-import { mockLocalStorage } from '../utils/test_helper'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-window.localStorage = mockLocalStorage()
 
 describe('Doser ui', () => {
   it('<Main />', () => {
-    shallow(<Main store={mockStore({ pumps: [] })} />).dive()
+    let mock = {
+      dosers: [{ foo: 'bar' }]
+    }
+    const m = shallow(<Main store={mockStore(mock)} />)
+      .dive()
+      .instance()
+    m.setState({ dosers: [{ foo: 'bar' }] })
   })
 
   it('<New />', () => {
@@ -25,6 +29,8 @@ describe('Doser ui', () => {
     m.toggle()
     m.setJack('1', 2)
     m.update('name')({ target: { value: 'foo' } })
+    m.add()
+    m.update('name')({ target: { value: '' } })
     m.add()
   })
 

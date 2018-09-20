@@ -4,12 +4,10 @@ import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
-import {mockLocalStorage} from '../../utils/test_helper'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-window.localStorage = mockLocalStorage()
 
 describe('probe actions', () => {
   afterEach(() => {
