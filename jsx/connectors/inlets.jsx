@@ -59,7 +59,7 @@ class inlets extends React.Component {
           reverse={i.reverse}
           equipment={i.equipment}
           inlet_id={i.id}
-          key={n}
+          key={i.id}
           remove={this.remove(i.id)}
           update={p => {
             this.props.update(i.id, p)
