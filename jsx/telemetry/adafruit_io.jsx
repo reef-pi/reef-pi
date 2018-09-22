@@ -32,7 +32,7 @@ export default class AdafruitIO extends React.Component {
       return
     }
     return (
-      <div className='form-group col-md-4 col-sm-12'>
+      <div className='form-group col-md-4 col-sm-12' key={'telemetry-' + label}>
         <label htmlFor={'telemetry-' + label}>{text}</label>
         <input
           type='text'
@@ -46,23 +46,25 @@ export default class AdafruitIO extends React.Component {
   }
 
   render () {
-    return [
-      <div className=' col-12'>
-        <div className='form-group'>
-          <label className='form-check-label'>
-            <input
-              className='form-check-input'
-              type='checkbox'
-              defaultChecked={this.state.adafruitio.enable}
-              onClick={this.updateEnable}
-            />
-            <b>Adafruit.IO</b>
-          </label>
+    return (
+      <React.Fragment>
+        <div className=' col-12' key='telemetry-enable'>
+          <div className='form-group'>
+            <label className='form-check-label'>
+              <input
+                className='form-check-input'
+                type='checkbox'
+                defaultChecked={this.state.adafruitio.enable}
+                onClick={this.updateEnable}
+              />
+              <b>Adafruit.IO</b>
+            </label>
+          </div>
         </div>
-      </div>,
-      this.toRow('user', 'Username'),
-      this.toRow('token', 'AIO Key'),
-      this.toRow('prefix', 'Prefix')
-    ]
+        {this.toRow('user', 'Username')}
+        {this.toRow('token', 'AIO Key')}
+        {this.toRow('prefix', 'Prefix')}
+      </React.Fragment>
+    )
   }
 }

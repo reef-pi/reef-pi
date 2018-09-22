@@ -32,9 +32,7 @@ export default class App extends React.Component {
       $('html').removeClass('auth-page')
       $('body').removeClass('auth-page')
       $('#main-panel').removeClass('auth-page')
-      return [
-        <MainPanel />
-      ]
+      return <MainPanel />
     }
   }
   render() {

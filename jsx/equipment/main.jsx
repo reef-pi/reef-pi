@@ -43,7 +43,7 @@ class main extends React.Component {
     if (this.state.addEquipment) {
       nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.addEquipment} />
     }
-    return [
+    return (
       <ul className='list-group list-group-flush'>
         {this.props.equipment.map(item => {
           return (
@@ -71,7 +71,7 @@ class main extends React.Component {
           {nEq}
         </li>
       </ul>
-    ]
+    )
   }
 }
 
