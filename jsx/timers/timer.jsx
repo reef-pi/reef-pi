@@ -230,7 +230,7 @@ export default class Timer extends React.Component {
       details = this.details()
     }
     return (
-      <div className='container'>
+      <li className='list-group-item'>
         <div className='row'>
           <div className='col'>
             <label className='text-primary'>
@@ -260,7 +260,7 @@ export default class Timer extends React.Component {
         <div className='row'>
           {details}
         </div>
-      </div>
+      </li>
     )
   }
 }

@@ -84,11 +84,11 @@ class Main extends React.Component {
   }
 
   timerList () {
-    var list = []
-    this.props.timers.forEach((timer, i) => {
-      list.push(
-        <li key={timer.name} className='list-group-item'>
+    return (
+      this.props.timers.map(timer => {
+        return (
           <Timer
+            key={Number(timer.id)}
             name={timer.name}
             timer_id={timer.id}
             type={timer.type}
@@ -104,11 +104,9 @@ class Main extends React.Component {
             }}
             enable={timer.enable}
             equipmentList={this.props.equipment}
-          />
-        </li>
-      )
-    })
-    return list
+          />)
+      })
+    )
   }
 
   removeTimer (id) {
@@ -236,19 +234,23 @@ class Main extends React.Component {
       nT = this.newTimer()
     }
     return (
-      <div className='container'>
-        <ul className='list-group list-group-flush'>{this.timerList()}</ul>
-        <div className='container'>
-          <input
-            type='button'
-            id='add_timer'
-            value={this.state.addTimer ? '-' : '+'}
-            onClick={this.toggleAddTimerDiv}
-            className='btn btn-outline-success'
-          />
+      <ul className='list-group list-group-flush'>
+        {this.timerList()}
+        <li className='list-group-item add-timer'>
+          <div className='row'>
+            <div className='col'>
+              <input
+                type='button'
+                id='add_timer'
+                value={this.state.addTimer ? '-' : '+'}
+                onClick={this.toggleAddTimerDiv}
+                className='btn btn-outline-success'
+              />
+            </div>
+          </div>
           {nT}
-        </div>
-      </div>
+        </li>
+      </ul>
     )
   }
 }
