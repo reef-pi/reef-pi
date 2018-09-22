@@ -75,9 +75,10 @@ describe('ato actions', () => {
 
   it('updateATO', () => {
     fetchMock.postOnce('/api/atos/1', {})
+    fetchMock.getOnce('/api/atos', {})
     const store = mockStore()
     return store.dispatch(updateATO('1', {})).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATO_UPDATED'}])
+      expect(store.getActions()).toEqual([{type: 'ATOS_LOADED', payload: {}}])
     })
   })
 

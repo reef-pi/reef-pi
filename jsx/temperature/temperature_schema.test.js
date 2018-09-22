@@ -82,45 +82,4 @@ describe('Validation', () => {
       valid => expect(valid).toBe(false)
     )
   })
-
-  /*
-  it('should validate fixed when invalid', () => {
-    value.config.channels['1'].profile = {
-      type: 'fixed',
-      config: {
-        value: null
-      }
-    }
-    expect.assertions(1)
-    return TemperatureSchema.isValid(tc).then(
-      valid => expect(valid).toBe(false)
-    )
-  })
-
-  it('should validate auto when valid', () => {
-    value.config.channels['1'].profile = {
-      type: 'auto',
-      config: {
-        values: [0, 0, 0, 50, 0, 0, 0, 0, 0]
-      }
-    }
-    expect.assertions(1)
-    return TemperatureSchema.isValid(tc).then(
-      valid => expect(valid).toBe(true)
-    )
-  })
-
-  it('should validate auto when invalid', () => {
-    value.config.channels['1'].profile = {
-      type: 'auto',
-      config: {
-        values: null
-      }
-    }
-    expect.assertions(1)
-    return TemperatureSchema.isValid(tc).then(
-      valid => expect(valid).toBe(false)
-    )
-  })
-  */
 })

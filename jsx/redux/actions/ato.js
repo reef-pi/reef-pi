@@ -62,7 +62,7 @@ export const updateATO = (id, a) => {
   return (reduxPost({
     url: '/api/atos/' + id,
     data: a,
-    success: atoUpdated
+    success: fetchATOs
   }))
 }
 

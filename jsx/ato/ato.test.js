@@ -2,62 +2,66 @@ import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import ATO from './ato'
-import New from './new'
 import Main from './main'
 import Chart from './chart'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+import AtoForm from './ato_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('ATO ui', () => {
   const state = {
-    ato_usage: { '1': {} },
-    atos: [{ name: 'foo', id: '1' }]
+    ato_usage: {'1': {}},
+    atos: [{name: 'foo', id: '1'}],
+    readOnly: false
   }
-  it('<ATO />', () => {
-    const n = shallow(<ATO store={mockStore()} data={{ id: '1', period: 10 }} />)
-    const m = n.dive().instance()
-    m.save()
-    m.state.readOnly = false
-    m.setInlet('1')
-    m.update('period')({ target: { value: 'abc' } })
-    m.update('period')({ target: { value: 10 } })
-    m.updateCheckBox('control')({ target: {} })
-    m.updatePump('1')
-    m.save()
-    m.remove()
-    m.expand()
-    m.detailsUI()
-    const z = shallow(<ATO store={mockStore({ readOnly: false })} data={{ id: '1', period: 'foo', control: true }} />)
-      .dive()
-      .instance()
-    z.state.readOnly = false
-    z.state.ato = { id: '1', period: 'foo', control: true }
-    z.save()
-    z.showControl()
-  })
 
-  it('<New />', () => {
-    const m = shallow(<New store={mockStore()} />)
-      .dive()
-      .instance()
-    m.toggle()
-    m.update('name')({ target: { value: 's' } })
-    m.updateEnable({ target: { checked: true } })
-    m.setInlet('1')
-    m.add()
-  })
+  const eqs = [{id: '1', outlet: '1', name: 'Foo', on: true}]
+  const inlets = [{id: '1', name: 'O1'}]
 
   it('<Main />', () => {
-    shallow(<Main store={mockStore({ atos: [{ id: '1', period: 10 }] })} />).dive()
+    shallow(
+      <Main store={mockStore({inlets: inlets, equipment: eqs, atos: state.atos})} />
+    ).dive().instance()
+  })
+
+  it('<ATO />', () => {
+    const n = shallow(
+      <ATO store={mockStore(state)} data={{id: '1', period: 10}} />
+    )
+    const m = n.dive().instance()
+    m.expand()
+    m.save({id: 2, name: 'ato', inlet: '5'})
+    m.state.readOnly = false
+  })
+
+  it('<ATO /> should hanlde delete', () => {
+    const wrapper = shallow(
+      <ATO store={mockStore(state)} data={{id: '1', period: 10}} />
+    )
+    const instance = wrapper.dive().instance()
+    instance.handleDelete({stopPropagation: () => {}})
+  })
+
+  it('AtoForm />', () => {
+    const wrapper = shallow(
+      <AtoForm
+        data={{enable: false, control: false}}
+        values={{id: null}}
+        update={() => true}
+        delete={() => true}
+        handleBlur={() => true}
+        onSubmit={() => true}
+        isValid={false}
+        inlets={[{id: '1', name: 'O1'}]}
+      />).instance()
+    wrapper.handleSubmit()
   })
 
   it('<Chart />', () => {
-    shallow(<Chart ato_id='1 ' store={mockStore(state)} />)
-      .dive()
-      .instance()
+    shallow(<Chart ato_id='1' store={mockStore(state)} />).dive().instance()
   })
 })

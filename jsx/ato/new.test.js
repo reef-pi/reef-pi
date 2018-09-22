@@ -16,7 +16,10 @@ describe('New ATO', () => {
     const wrapper = shallow(<New store={mockStore()} />)
     const component = wrapper.dive().instance()
     component.toggle()
-    component.add()
-    component.setInlet('1')
+    component.add({
+      name: 'test',
+      inlet: '3',
+      period: 60
+    })
   })
 })
