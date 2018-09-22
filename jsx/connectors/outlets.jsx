@@ -57,7 +57,7 @@ class outlets extends React.Component {
           name={o.name}
           outlet_id={o.id}
           pin={o.pin}
-          key={i}
+          key={o.id}
           reverse={o.reverse}
           equipment={o.equipment}
           remove={this.remove(o.id)}

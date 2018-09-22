@@ -78,7 +78,7 @@ class jacks extends React.Component {
       list.push(
         <Jack
           name={j.name}
-          key={i}
+          key={j.id}
           pins={j.pins}
           driver={j.driver}
           jack_id={j.id}
