@@ -177,55 +177,57 @@ class Main extends React.Component {
   }
 
   newTimer () {
-    return [
-      <div className='row' key='description'>
-        <div className='col'>
-          <label className='text-secondary'>Name</label>
-          <input type='text' id='name' onChange={ev => this.setState({ name: ev.target.value })} />
-        </div>
-        <div className='col'>
-          <label className='text-secondary'>Enable</label>
-          <input type='checkbox' id='new-timer-enable' onClick={ev => this.setState({ enable: ev.target.checked })} />
-        </div>
-      </div>,
-      <div className='row' key='cron'>
-        <div className='col'>
-          <Cron
-            update={this.updateCron}
-            disabled={false}
-            id_prefix='new-timer'
-            day={this.state.day}
-            hour={this.state.hour}
-            minute={this.state.minute}
-            second={this.state.second}
-          />
-        </div>
-        ,
-        <div className='col' key='trigger'>
-          <div className='btn-group'>
-            <label className='btn btn-secondary'>
-              <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
-            </label>
-            <label className='btn btn-secondary'>
-              <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} />
-              Equipment
-            </label>
+    return (
+      <React.Fragment>
+        <div className='row' key='description'>
+          <div className='col'>
+            <label className='text-secondary'>Name</label>
+            <input type='text' id='name' onChange={ev => this.setState({ name: ev.target.value })} />
           </div>
-          {this.trigger()}
+          <div className='col'>
+            <label className='text-secondary'>Enable</label>
+            <input type='checkbox' id='new-timer-enable' onClick={ev => this.setState({ enable: ev.target.checked })} />
+          </div>
         </div>
-      </div>,
-      <div className='row' key='create'>
-        <div className='col'>
-          <input
-            id='createTimer'
-            type='button'
-            value='add'
-            onClick={this.createTimer}
-            className='btn btn-outline-primary float-right'
-          />
+        <div className='row' key='cron'>
+          <div className='col'>
+            <Cron
+              update={this.updateCron}
+              disabled={false}
+              id_prefix='new-timer'
+              day={this.state.day}
+              hour={this.state.hour}
+              minute={this.state.minute}
+              second={this.state.second}
+            />
+          </div>
+
+          <div className='col' key='trigger'>
+            <div className='btn-group'>
+              <label className='btn btn-secondary'>
+                <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
+              </label>
+              <label className='btn btn-secondary'>
+                <input type='radio' name='options' id='equipment' defaultChecked onClick={this.setType('equipment')} />
+                Equipment
+              </label>
+            </div>
+            {this.trigger()}
+          </div>
         </div>
-      </div>
-    ]
+        <div className='row' key='create'>
+          <div className='col'>
+            <input
+              id='createTimer'
+              type='button'
+              value='add'
+              onClick={this.createTimer}
+              className='btn btn-outline-primary float-right'
+            />
+          </div>
+        </div>
+      </React.Fragment>
+    )
   }
 
   render () {

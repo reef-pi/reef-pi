@@ -119,20 +119,22 @@ class dashboard extends React.Component {
       content = this.charts()
       lbl = 'Configure'
     }
-    return [
-      <div className='row' key='content'>
-        <div className='col'>{content}</div>
-      </div>,
-      <div className='row' key='configure'>
-        <div className='col'>
-          <div className='float-right'>
-            <button className='btn btn-outline-dark btn-sm' onClick={this.toggle} id='configure-dashboard'>
-              <label>{lbl}</label>
-            </button>
+    return (
+      <React.Fragment>
+        <div className='row' key='content'>
+          <div className='col'>{content}</div>
+        </div>
+        <div className='row' key='configure'>
+          <div className='col'>
+            <div className='float-right'>
+              <button className='btn btn-outline-dark btn-sm' onClick={this.toggle} id='configure-dashboard'>
+                <label>{lbl}</label>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    ]
+      </React.Fragment>
+    )
   }
 }
 

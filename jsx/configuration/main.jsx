@@ -44,11 +44,15 @@ export default class Configuration extends React.Component {
       )
     })
     var body = components[this.state.body]
-    return [
-      <div className='row' key='panels'>
-        <ul className='conf-nav nav nav-tabs'>{panels}</ul>
-      </div>,
-      <div className='row' key='body'>{body}</div>
-    ]
+    return (
+      <React.Fragment>
+        <div className='row' key='panels'>
+          <ul className='conf-nav nav nav-tabs'>{panels}</ul>
+        </div>
+        <div className='row' key='body'>
+          {body}
+        </div>
+      </React.Fragment>
+    )
   }
 }

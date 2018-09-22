@@ -42,7 +42,14 @@ class main extends React.Component {
       )
     })
 
-    return [<ul key='macro_list' className='list-group list-group-flush'>{list}</ul>, <New key='macro_new' />]
+    return (
+      <React.Fragment>
+        <ul key='macro_list' className='list-group list-group-flush'>
+          {list}
+        </ul>{' '}
+        <New key='macro_new' />
+      </React.Fragment>
+    )
   }
 }
 

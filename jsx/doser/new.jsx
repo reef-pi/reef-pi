@@ -46,24 +46,32 @@ class newPump extends React.Component {
     if (!this.state.add) {
       return
     }
-    return [
-      <div className='row' key='doser_ui'>
-        <div className='col-sm-2'>Name</div>
-        <div className='col-sm-2'>
-          <input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name' />
-        </div>
-      </div>,
-      <div className='row' key='jackSelector'>
-        <JackSelector update={this.setJack} id='new_doser' />
-      </div>,
-      <div className='row' key='createPump'>
-        <div className='col'>
-          <div className='float-right'>
-            <input type='button' id='create_pump' value='add' onClick={this.add} className='btn btn-outline-primary' />
+    return (
+      <React.Fragment>
+        <div className='row' key='doser_ui'>
+          <div className='col-sm-2'>Name</div>
+          <div className='col-sm-2'>
+            <input type='text' onChange={this.update('name')} value={this.state.name} id='doser_name' />
           </div>
         </div>
-      </div>
-    ]
+        <div className='row' key='jackSelector'>
+          <JackSelector update={this.setJack} id='new_doser' />
+        </div>
+        <div className='row' key='createPump'>
+          <div className='col'>
+            <div className='float-right'>
+              <input
+                type='button'
+                id='create_pump'
+                value='add'
+                onClick={this.add}
+                className='btn btn-outline-primary'
+              />
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    )
   }
 
   add () {
@@ -81,17 +89,19 @@ class newPump extends React.Component {
   }
 
   render () {
-    return [
-      <input
-        key='input_doser_add'
-        id='add_doser'
-        type='button'
-        value={this.state.add ? '-' : '+'}
-        onClick={this.toggle}
-        className='btn btn-outline-success'
-      />,
-      this.ui()
-    ]
+    return (
+      <React.Fragment>
+        <input
+          key='input_doser_add'
+          id='add_doser'
+          type='button'
+          value={this.state.add ? '-' : '+'}
+          onClick={this.toggle}
+          className='btn btn-outline-success'
+        />
+        {this.ui()}
+      </React.Fragment>
+    )
   }
 }
 

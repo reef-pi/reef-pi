@@ -44,26 +44,34 @@ class newMacro extends React.Component {
     if (!this.state.add) {
       return
     }
-    return [
-      <div className='row' key='new_name'>
-        <div className='col'>Name</div>
-        <div className='col'>
-          <input type='text' id='new_macro_name' onChange={this.update('name')} value={this.state.name} />
-        </div>
-      </div>,
-      <div className='row' key='new_steps'>
-        <div className='col'>
-          <Steps steps={this.state.steps} hook={this.updateSteps} />
-        </div>
-      </div>,
-      <div className='row' key='new_create'>
-        <div className='col'>
-          <div className='float-right'>
-            <input type='button' id='create_macro' value='add' onClick={this.add} className='btn btn-outline-primary' />
+    return (
+      <React.Fragment>
+        <div className='row' key='new_name'>
+          <div className='col'>Name</div>
+          <div className='col'>
+            <input type='text' id='new_macro_name' onChange={this.update('name')} value={this.state.name} />
           </div>
         </div>
-      </div>
-    ]
+        <div className='row' key='new_steps'>
+          <div className='col'>
+            <Steps steps={this.state.steps} hook={this.updateSteps} />
+          </div>
+        </div>
+        <div className='row' key='new_create'>
+          <div className='col'>
+            <div className='float-right'>
+              <input
+                type='button'
+                id='create_macro'
+                value='add'
+                onClick={this.add}
+                className='btn btn-outline-primary'
+              />
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    )
   }
 
   add () {
@@ -80,17 +88,19 @@ class newMacro extends React.Component {
   }
 
   render () {
-    return [
-      <input
-        id='add_new_macro'
-        key='add_new_macro'
-        type='button'
-        value={this.state.add ? '-' : '+'}
-        onClick={this.toggle}
-        className='btn btn-outline-success'
-      />,
-      this.ui()
-    ]
+    return (
+      <React.Fragment>
+        <input
+          id='add_new_macro'
+          key='add_new_macro'
+          type='button'
+          value={this.state.add ? '-' : '+'}
+          onClick={this.toggle}
+          className='btn btn-outline-success'
+        />
+        {this.ui()}
+      </React.Fragment>
+    )
   }
 }
 

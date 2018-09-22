@@ -32,17 +32,19 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    return [
-      <span className='h6'>{this.props.config.name} - ATO Usage</span>,
-      <ResponsiveContainer height={this.props.height} width='100%'>
-        <BarChart data={this.props.usage.historical}>
-          <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-          <YAxis label='seconds' />
-          <XAxis dataKey='time' />
-          <Tooltip />
-        </BarChart>
-      </ResponsiveContainer>
-    ]
+    return (
+      <React.Fragment>
+        <span className='h6'>{this.props.config.name} - ATO Usage</span>
+        <ResponsiveContainer height={this.props.height} width='100%'>
+          <BarChart data={this.props.usage.historical}>
+            <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
+            <YAxis label='seconds' />
+            <XAxis dataKey='time' />
+            <Tooltip />
+          </BarChart>
+        </ResponsiveContainer>
+      </React.Fragment>
+    )
   }
 }
 
