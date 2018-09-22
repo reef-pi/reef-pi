@@ -37,7 +37,7 @@ class main extends React.Component {
           }
           <New inlets={this.props.inlets}
             equipment={this.props.equipment} />
-        </ul>        
+        </ul>
       </div>
     )
   }
