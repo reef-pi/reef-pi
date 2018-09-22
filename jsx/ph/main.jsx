@@ -31,10 +31,12 @@ class ph extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <ul className='list-group list-group-flush'>{this.probeList()}</ul>
-        <New hook={this.props.createProbe} />
-      </div>
+      <ul className='list-group list-group-flush'>
+        {this.probeList()}
+        <li className='list-group-item'>
+          <New hook={this.props.createProbe} />
+        </li>
+      </ul>
     )
   }
 }

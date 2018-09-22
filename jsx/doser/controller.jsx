@@ -3,7 +3,6 @@ import Pump from './pump'
 import New from './new'
 import { fetchDosingPumps } from 'redux/actions/doser'
 import { connect } from 'react-redux'
-import $ from 'jquery'
 
 class doser extends React.Component {
   constructor (props) {
@@ -19,23 +18,24 @@ class doser extends React.Component {
   }
 
   pumpList () {
-    var pumps = []
-    $.each(this.props.pumps, function (i, pump) {
-      pumps.push(
-        <div key={'pump-' + i} className='row list-group-item'>
-          <Pump data={pump} />
-        </div>
-      )
-    })
-    return <ul className='list-group list-group-flush'> {pumps} </ul>
+    return (
+      this.props.pumps.map((pump) => {
+        return (
+          <li key={Number(pump.id)} className='row list-group-item'>
+            <Pump data={pump} />
+          </li>)
+      })
+    )
   }
 
   render () {
     return (
-      <div className='container'>
-        <div className='container'>{this.pumpList()}</div>
-        <New />
-      </div>
+      <ul className='list-group list-group-flush'>
+        {this.pumpList()}
+        <li className='list-group-item'>
+          <New />
+        </li>
+      </ul>
     )
   }
 }
