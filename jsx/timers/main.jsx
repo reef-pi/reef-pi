@@ -178,7 +178,7 @@ class Main extends React.Component {
 
   newTimer () {
     return [
-      <div className='row'>
+      <div className='row' key='description'>
         <div className='col'>
           <label className='text-secondary'>Name</label>
           <input type='text' id='name' onChange={ev => this.setState({ name: ev.target.value })} />
@@ -188,7 +188,7 @@ class Main extends React.Component {
           <input type='checkbox' id='new-timer-enable' onClick={ev => this.setState({ enable: ev.target.checked })} />
         </div>
       </div>,
-      <div className='row'>
+      <div className='row' key='cron'>
         <div className='col'>
           <Cron
             update={this.updateCron}
@@ -201,7 +201,7 @@ class Main extends React.Component {
           />
         </div>
         ,
-        <div className='col'>
+        <div className='col' key='trigger'>
           <div className='btn-group'>
             <label className='btn btn-secondary'>
               <input type='radio' name='options' id='reminder' onClick={this.setType('reminder')} /> Reminder
@@ -214,7 +214,7 @@ class Main extends React.Component {
           {this.trigger()}
         </div>
       </div>,
-      <div className='row'>
+      <div className='row' key='create'>
         <div className='col'>
           <input
             id='createTimer'

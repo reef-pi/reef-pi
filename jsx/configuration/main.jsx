@@ -45,10 +45,10 @@ export default class Configuration extends React.Component {
     })
     var body = components[this.state.body]
     return [
-      <div className='row'>
+      <div className='row' key='panels'>
         <ul className='conf-nav nav nav-tabs'>{panels}</ul>
       </div>,
-      <div className='row'>{body}</div>
+      <div className='row' key='body'>{body}</div>
     ]
   }
 }

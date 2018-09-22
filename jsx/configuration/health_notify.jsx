@@ -32,8 +32,8 @@ export default class HealthNotify extends React.Component {
 
   render () {
     var ct = [
-      <div className='col-12'>
-        <div className='form-check' key='health_notify_enable'>
+      <div className='col-12' key='health_notify_enable'>
+        <div className='form-check'>
           <label className='form-check-label'>
             <input
               className='form-check-input'

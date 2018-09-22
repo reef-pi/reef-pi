@@ -42,7 +42,7 @@ class main extends React.Component {
       )
     })
 
-    return [<ul className='list-group list-group-flush'>{list}</ul>, <New />]
+    return [<ul key='macro_list' className='list-group list-group-flush'>{list}</ul>, <New key='macro_new' />]
   }
 }
 

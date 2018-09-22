@@ -120,10 +120,10 @@ class dashboard extends React.Component {
       lbl = 'Configure'
     }
     return [
-      <div className='row'>
+      <div className='row' key='content'>
         <div className='col'>{content}</div>
       </div>,
-      <div className='row'>
+      <div className='row' key='configure'>
         <div className='col'>
           <div className='float-right'>
             <button className='btn btn-outline-dark btn-sm' onClick={this.toggle} id='configure-dashboard'>

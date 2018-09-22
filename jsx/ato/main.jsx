@@ -30,7 +30,7 @@ class main extends React.Component {
   }
 
   render () {
-    return [<ul className='list-group list-group-flush'>{this.list()}</ul>, <New />]
+    return [<ul className='list-group list-group-flush' key='ato_list'>{this.list()}</ul>, <New key='ato_new' />]
   }
 }
 

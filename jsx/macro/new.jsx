@@ -45,18 +45,18 @@ class newMacro extends React.Component {
       return
     }
     return [
-      <div className='row'>
+      <div className='row' key='new_name'>
         <div className='col'>Name</div>
         <div className='col'>
           <input type='text' id='new_macro_name' onChange={this.update('name')} value={this.state.name} />
         </div>
       </div>,
-      <div className='row'>
+      <div className='row' key='new_steps'>
         <div className='col'>
           <Steps steps={this.state.steps} hook={this.updateSteps} />
         </div>
       </div>,
-      <div className='row'>
+      <div className='row' key='new_create'>
         <div className='col'>
           <div className='float-right'>
             <input type='button' id='create_macro' value='add' onClick={this.add} className='btn btn-outline-primary' />
@@ -83,6 +83,7 @@ class newMacro extends React.Component {
     return [
       <input
         id='add_new_macro'
+        key='add_new_macro'
         type='button'
         value={this.state.add ? '-' : '+'}
         onClick={this.toggle}

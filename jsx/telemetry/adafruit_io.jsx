@@ -32,7 +32,7 @@ export default class AdafruitIO extends React.Component {
       return
     }
     return (
-      <div className='form-group col-md-4 col-sm-12'>
+      <div className='form-group col-md-4 col-sm-12' key={'telemetry-' + label}>
         <label htmlFor={'telemetry-' + label}>{text}</label>
         <input
           type='text'
@@ -47,7 +47,7 @@ export default class AdafruitIO extends React.Component {
 
   render () {
     return [
-      <div className=' col-12'>
+      <div className=' col-12' key='telemetry-enable'>
         <div className='form-group'>
           <label className='form-check-label'>
             <input
