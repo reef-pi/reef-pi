@@ -56,7 +56,7 @@ func (c *Inlets) Setup() error {
 func (c *Inlets) Read(id string) (int, error) {
 	i, err := c.Get(id)
 	if err != nil {
-		return -1, fmt.Errorf("Inleet name: '%s' does noy exist", err)
+		return -1, fmt.Errorf("Inlet name: '%s' does not exist", err)
 	}
 	if c.DevMode {
 		log.Println("Dev mode on. Skipping:", i.Name)
