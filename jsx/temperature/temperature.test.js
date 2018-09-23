@@ -9,7 +9,6 @@ import Sensor from './sensor'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
-import BooleanSelect from './boolean_select'
 import TemperatureForm from './temperature_form'
 
 Enzyme.configure({ adapter: new Adapter() })
@@ -133,42 +132,6 @@ describe('Temperature controller ui', () => {
     shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [{ id: '1', min: 72, max: 78 }], tc_usage: [] })} />)
       .dive()
       .instance()
-  })
-
-  it('<BooleanSelect /> should bind true', () => {
-    let val = ''
-    const field = {
-      name: 'name',
-      onChange: e => {
-        val = e.target.value
-      }
-    }
-    const wrapper = shallow(
-      <BooleanSelect field={field}>
-        <option value='true'>Yes</option>
-        <option value='false'>No</option>
-      </BooleanSelect>
-    )
-    wrapper.find('select').simulate('change', { target: { value: 'true' } })
-    expect(val).toBe(true)
-  })
-
-  it('<BooleanSelect /> should bind false', () => {
-    let val = ''
-    const field = {
-      name: 'name',
-      onChange: e => {
-        val = e.target.value
-      }
-    }
-    const wrapper = shallow(
-      <BooleanSelect field={field}>
-        <option value='true'>Yes</option>
-        <option value='false'>No</option>
-      </BooleanSelect>
-    )
-    wrapper.find('select').simulate('change', { target: { value: 'false' } })
-    expect(val).toBe(false)
   })
 
   it('<TemperatureForm /> for create', () => {

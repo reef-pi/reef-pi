@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default class Cron extends React.Component {
+// Ignoring Cron for coverage metrics since it will be removed once Doser UI is updated
+export default /* istanbul ignore next */ class Cron extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

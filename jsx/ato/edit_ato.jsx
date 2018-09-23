@@ -4,7 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showAlert, clearAlert } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
-import BooleanSelect from '../temperature/boolean_select'
+import BooleanSelect from '../ui_components/boolean_select'
 
 const EditAto = ({
   values,
@@ -126,7 +126,7 @@ const EditAto = ({
               <option value='true'>Enabled</option>
               <option value='false'>Disabled</option>
             </Field>
-            <ErrorFor errors={errors} touched={touched} name='enabled' />
+            <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
 

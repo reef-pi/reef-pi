@@ -4,7 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showAlert, clearAlert } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
-import BooleanSelect from './boolean_select'
+import BooleanSelect from '../ui_components/boolean_select'
 import ReadingsChart from './readings_chart'
 import ControlChart from './control_chart'
 
