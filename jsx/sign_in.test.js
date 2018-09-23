@@ -8,7 +8,10 @@ const mockStore = configureMockStore([thunk])
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('Sign_In', () => {
-  it('<Sign_In />', () => {
+  beforeEach(() => {
+    Sign_In.refreshPage = jest.fn().mockImplementation(() => {
+      return true
+    })
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
@@ -18,14 +21,20 @@ describe('Sign_In', () => {
       })
       return p
     })
+  })
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+  it('<Sign_In />', async () => {
     const m = shallow(<Sign_In store={mockStore()} />).instance()
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
-    m.login({
+    await m.login({
       preventDefault: function() {
         return true
       }
     })
+    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
@@ -35,11 +44,13 @@ describe('Sign_In', () => {
       })
       return p
     })
-    m.login({
+    await m.login({
       preventDefault: function() {
         return true
       }
     })
+    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
+
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
@@ -49,15 +60,17 @@ describe('Sign_In', () => {
       })
       return p
     })
-    m.login({
+    await m.login({
       preventDefault: function() {
         return true
       }
     })
+    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
   })
-  it('Sign_In statics', () => {
-    Sign_In.logout()
+  it('Sign_In statics', async () => {
+    await Sign_In.logout()
+    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
     Sign_In.getCreds()
-    Sign_In.isSignIned()
+    Sign_In.isSignedIn()
   })
 })
