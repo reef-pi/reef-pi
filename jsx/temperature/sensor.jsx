@@ -28,7 +28,7 @@ export default class Sensor extends React.Component {
   save (values) {
     var payload = {
       name: values.name,
-      enable: values.enabled,
+      enable: values.enable,
       control: (values.heater !== '' || values.cooler !== ''),
       heater: values.heater,
       cooler: values.cooler,

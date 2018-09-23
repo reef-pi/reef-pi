@@ -12,7 +12,7 @@ const TemperatureSchema = Yup.object().shape({
     .integer()
     .typeError('Check Frequency must be a number')
     .min(1, 'Check Frequency must be 1 second or greater'),
-  enabled: Yup.bool()
+  enable: Yup.bool()
     .required('Sensor Status is required'),
   alerts: Yup.bool()
     .required('Alerts is required'),

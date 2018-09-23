@@ -4,7 +4,7 @@ describe('Validation', () => {
   var tc = {
     name: 'name',
     sensor: 'sensor',
-    enabled: true,
+    enable: true,
     fahrenheit: true,
     period: 60,
     alerts: false,
@@ -17,7 +17,7 @@ describe('Validation', () => {
     tc = {
       name: 'name',
       sensor: 'sensor',
-      enabled: true,
+      enable: true,
       fahrenheit: true,
       period: 60,
       alerts: false,

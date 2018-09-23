@@ -193,19 +193,19 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='enabled'>Sensor Status</label>
+              <label htmlFor='enable'>Sensor Status</label>
               <Field
-                name='enabled'
+                name='enable'
                 component={BooleanSelect}
                 disabled={readOnly}
                 className={classNames('custom-select', {
-                  'is-invalid': ShowError('enabled', touched, errors)
+                  'is-invalid': ShowError('enable', touched, errors)
                 })}
               >
                 <option value='true'>Enabled</option>
                 <option value='false'>Disabled</option>
               </Field>
-              <ErrorFor errors={errors} touched={touched} name='enabled' />
+              <ErrorFor errors={errors} touched={touched} name='enable' />
             </div>
           </div>
         </div>
