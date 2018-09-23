@@ -17,7 +17,7 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     const setState = this.setState.bind(this)
-    SignIn.isSignIned().then(r => {
+    SignIn.isSignedIn().then(r => {
       setState({ loaded: true, logged: r })
     })
   }
