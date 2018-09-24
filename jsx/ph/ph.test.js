@@ -26,15 +26,27 @@ describe('pH ui', () => {
     m.update('name')({ target: { value: 'Foo' } })
     m.updateEnable({ target: { checked: true } })
     m.add()
+    m.state.name = ''
+    m.add()
   })
 
   it('<Chart />', () => {
     const probes = [{ id: '1', name: 'foo' }]
     const readings = { '1': { name: 'foo', current: [] } }
-    const m = shallow(<Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />).dive().instance()
-    m.state.ph_readings = [{ph: 6}, {ph: 7}]
+    const m = shallow(
+      <Chart probe_id="1" store={mockStore({ phprobes: probes, ph_readings: readings })} type="current" />
+    )
+      .dive()
+      .instance()
+    m.state.ph_readings = [{ ph: 6 }, { ph: 7 }]
     m.render()
     m.componentWillUnmount()
+    shallow(<Chart probe_id="1" store={mockStore({ phprobes: [], ph_readings: readings })} type="current" />)
+      .dive()
+      .instance()
+    shallow(<Chart probe_id="1" store={mockStore({ phprobes: probes, ph_readings: [] })} type="current" />)
+      .dive()
+      .instance()
   })
 
   it('<Notify />', () => {
@@ -77,7 +89,7 @@ describe('pH ui', () => {
 
   it('<Calibrate />', () => {
     const m = shallow(<Calibrate hook={() => {}} />).instance()
-    m.setType('foo')
+    m.setType('foo')()
     m.updateValue({ target: { value: '1.2' } })
     m.calibrate()
   })
