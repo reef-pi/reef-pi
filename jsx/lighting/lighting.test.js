@@ -53,7 +53,9 @@ describe('Lighting ui', () => {
 
   it('<Light />', () => {
     const values = { config: light }
-    let m = shallow(<Light values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />).instance()
+    let m = shallow(
+      <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />
+    ).instance()
     m.toggleExpand()
     m.handleDelete({
       stopPropagation: () => {
@@ -70,7 +72,16 @@ describe('Lighting ui', () => {
         return true
       }
     })
-    m = shallow(<Light isValid={true} values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />).instance()
+    m = shallow(
+      <Light
+        isValid={true}
+        values={values}
+        config={light}
+        save={() => {}}
+        remove={() => true}
+        submitForm={() => true}
+      />
+    ).instance()
     m.handleFormSubmit({
       preventDefault: () => {
         return true
@@ -80,6 +91,14 @@ describe('Lighting ui', () => {
 
   it('<Chart />', () => {
     shallow(<Chart store={mockStore({ lights: [light] })} light_id="1" />).dive()
+    let m = shallow(<Chart store={mockStore({ lights: [] })} light_id="1" />)
+      .dive()
+      .instance()
+    m.channel2line({ profile: { type: 'foo' } }, {})
+    m.channel2line(
+      { name: 'bar', color: '#CCC', pin: '1', profile: { type: 'auto', config: { values: [{ foo: 'bar' }] } } },
+      { '0': { time: 'h' } }
+    )
   })
 
   it('<Channel />', () => {
@@ -122,8 +141,9 @@ describe('Lighting ui', () => {
   })
 
   it('<FixedProfile />', () => {
-    const m = shallow(<FixedProfile onChangeHandler={() => true} />).instance()
+    const m = shallow(<FixedProfile onChangeHandler={() => true} config={{ config: { value: '1' } }} />).instance()
     m.handleChange(ev)
+    m.handleChange({ target: { value: 'foo' } })
   })
 
   it('<Percent />', () => {
