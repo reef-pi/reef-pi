@@ -19,6 +19,7 @@ type Capabilities struct {
 	Ph            bool `json:"ph"`
 	Macro         bool `json:"macro"`
 	Configuration bool `json:"configuration"`
+	Notification  bool `json:"notification"`
 }
 
 var DefaultCapabilities = Capabilities{
@@ -32,6 +33,7 @@ var DefaultCapabilities = Capabilities{
 	ATO:           true,
 	Configuration: true,
 	Macro:         true,
+	Notification:  true,
 }
 
 func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {
