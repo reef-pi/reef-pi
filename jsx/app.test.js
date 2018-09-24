@@ -22,8 +22,8 @@ describe('App', () => {
   })
   it('<App />', () => {
     SignIn.isSignedIn = jest.fn().mockImplementation(() => {
-      return new Promise(function(res) {
-        return res(true)
+      return new Promise(function (resolve) {
+        return resolve(true)
       })
     })
     const m = shallow(<App store={mockStore({ info: {}, capabilities: [] })} />).instance()
@@ -36,7 +36,7 @@ describe('App', () => {
 
   it('<JackSelector />', () => {
     const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
-    const m = shallow(<JackSelector store={mockStore({ jacks: jacks })} id="1" update={() => {}} />)
+    const m = shallow(<JackSelector store={mockStore({ jacks: jacks })} id='1' update={() => {}} />)
       .dive()
       .instance()
     m.setJack(0)
@@ -44,7 +44,7 @@ describe('App', () => {
 
   it('<SelectEquipment />', () => {
     const eqs = [{ id: '1', name: 'foo' }]
-    const m = shallow(<SelectEquipment store={mockStore({ equipment: eqs })} active="1" update={() => {}} />)
+    const m = shallow(<SelectEquipment store={mockStore({ equipment: eqs })} active='1' update={() => {}} />)
       .dive()
       .instance()
     m.setEquipment(0)
