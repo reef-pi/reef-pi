@@ -53,8 +53,29 @@ describe('Lighting ui', () => {
 
   it('<Light />', () => {
     const values = { config: light }
-    const m = shallow(<Light values={values} config={light} save={() => {}} remove={() => true} />).instance()
+    let m = shallow(<Light values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />).instance()
     m.toggleExpand()
+    m.handleDelete({
+      stopPropagation: () => {
+        return true
+      }
+    })
+    m.handleEdit({
+      stopPropagation: () => {
+        return true
+      }
+    })
+    m.handleFormSubmit({
+      preventDefault: () => {
+        return true
+      }
+    })
+    m = shallow(<Light isValid={true} values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />).instance()
+    m.handleFormSubmit({
+      preventDefault: () => {
+        return true
+      }
+    })
   })
 
   it('<Chart />', () => {
