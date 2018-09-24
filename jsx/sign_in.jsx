@@ -34,12 +34,12 @@ export default class SignIn extends React.Component {
     return fetch('/auth/signout', {
       method: 'GET',
       credentials: 'same-origin'
-    }).then(response => {
-      // window.location.reload(true)
+    }).then(() => {
       SignIn.refreshPage()
     })
   }
 
+  /* istanbul ignore next */
   static refreshPage() {
     window.location.reload(true)
   }

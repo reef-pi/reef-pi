@@ -13,7 +13,7 @@ describe('Sign_In', () => {
       return true
     })
     global.fetch = jest.fn().mockImplementation(() => {
-      var p = new Promise((resolve, reject) => {
+      var p = new Promise((resolve) => {
         resolve({
           ok: true,
           status: 200
