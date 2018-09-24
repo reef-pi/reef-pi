@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Channel from './channel'
 import Chart from './chart'
@@ -20,7 +20,7 @@ const mockStore = configureMockStore([thunk])
 
 describe('Lighting ui', () => {
   const ev = {
-    target: {value: 10}
+    target: { value: 10 }
   }
   const light = {
     id: '1',
@@ -32,14 +32,16 @@ describe('Lighting ui', () => {
         color: '',
         profile: {
           type: 'auto',
-          config: {values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+          config: { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
         }
       }
     }
   }
   it('<Main />', () => {
-    const jacks = [{id: '1', name: 'foo'}]
-    const m = shallow(<Main store={mockStore({lights: [light], jacks: jacks})} />).dive().instance()
+    const jacks = [{ id: '1', name: 'foo' }]
+    const m = shallow(<Main store={mockStore({ lights: [light], jacks: jacks })} />)
+      .dive()
+      .instance()
     m.setJack(0, {})
     m.toggleAddLightDiv()
     m.addLight()
@@ -56,7 +58,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore({lights: [light]})} light_id='1' />).dive()
+    shallow(<Chart store={mockStore({ lights: [light] })} light_id="1" />).dive()
   })
 
   it('<Channel />', () => {
@@ -64,29 +66,34 @@ describe('Lighting ui', () => {
   })
 
   it('<Profile /> fixed', () => {
-    const wrapper = shallow(<Profile type='fixed' onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type="fixed" onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(1)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> auto', () => {
-    const wrapper = shallow(<Profile type='auto' onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type="auto" onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(1)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> diurnal', () => {
-    const wrapper = shallow(<Profile type='diurnal' onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type="diurnal" onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(1)
   })
 
   it('<AutoProfile />', () => {
-    const m = shallow(<AutoProfile onChangeHandler={() => true} />).instance()
+    let config = {
+      values: []
+    }
+    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />).instance()
     m.curry(1)(ev)
+    m = shallow(<AutoProfile store={mockStore()} onChangeHandler={() => true} />).instance()
+    m.curry(1)({ target: { value: 'foo' } })
   })
 
   it('<DiurnalProfile />', () => {
@@ -99,7 +106,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Percent />', () => {
-    const wrapper = shallow(<Percent value='4' onChange={() => true} />)
-    wrapper.find('input').simulate('change', {target: {value: 34}})
+    const wrapper = shallow(<Percent value="4" onChange={() => true} />)
+    wrapper.find('input').simulate('change', { target: { value: 34 } })
   })
 })
