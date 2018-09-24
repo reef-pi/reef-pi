@@ -3,19 +3,19 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 
-export function confirm (message, options) {
+export function confirm(message, options = {}) {
   var cleanup, component, props, wrapper
-  if (options == null) {
-    options = {}
-  }
-  props = $.extend({
-    message: message
-  }, options)
+  props = $.extend(
+    {
+      message: message
+    },
+    options
+  )
   wrapper = document.body.appendChild(document.createElement('div'))
   component = ReactDOM.render(<Confirm {...props} />, wrapper)
-  cleanup = function () {
+  cleanup = function() {
     ReactDOM.unmountComponentAtNode(wrapper)
-    return setTimeout(function () {
+    return setTimeout(function() {
       return wrapper.remove()
     })
   }
