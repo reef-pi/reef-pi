@@ -1,11 +1,7 @@
-import SignIn from 'sign_in'
 import { showAlert } from 'utils/alert'
 
 function makeHeaders () {
   let headers = new Headers()
-  let creds = SignIn.getCreds()
-  let authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
-  headers.append('Authorization', authHeader)
   headers.append('Content-Type', 'application/json')
   return headers
 }

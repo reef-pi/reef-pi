@@ -30,7 +30,7 @@ describe('Sign_In', () => {
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -45,7 +45,7 @@ describe('Sign_In', () => {
       return p
     })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -61,7 +61,7 @@ describe('Sign_In', () => {
       return p
     })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -70,7 +70,6 @@ describe('Sign_In', () => {
   it('Sign_In statics', async () => {
     await Sign_In.logout()
     expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
-    Sign_In.getCreds()
     Sign_In.isSignedIn()
   })
 })
