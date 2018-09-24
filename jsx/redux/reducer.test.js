@@ -2,7 +2,7 @@ import { rootReducer } from './reducer'
 
 describe('Redux Reducer', () => {
   it('reducer', () => {
-    function getPayload() {
+    function getPayload () {
       return {
         foo: 'bar',
         id: 1,
@@ -11,7 +11,7 @@ describe('Redux Reducer', () => {
         readings: 'foobar:readings'
       }
     }
-    function getState() {
+    function getState () {
       return {
         camera: {},
         ato_usage: [],

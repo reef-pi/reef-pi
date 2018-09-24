@@ -58,8 +58,8 @@ describe('Dashboard', () => {
       c1: { id: '1', name: 'foo' },
       c2: undefined
     }
-    let m=shallow(<ComponentSelector hook={() => {}} components={comps} current_id="1" />).instance()
-    m.setID(1,'foo')({})
+    let m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />).instance()
+    m.setID(1, 'foo')({})
   })
 
   it('<Config />', () => {

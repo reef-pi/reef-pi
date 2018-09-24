@@ -74,7 +74,7 @@ describe('Lighting ui', () => {
     })
     m = shallow(
       <Light
-        isValid={true}
+        isValid
         values={values}
         config={light}
         save={() => {}}
@@ -90,8 +90,8 @@ describe('Lighting ui', () => {
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore({ lights: [light] })} light_id="1" />).dive()
-    let m = shallow(<Chart store={mockStore({ lights: [] })} light_id="1" />)
+    shallow(<Chart store={mockStore({ lights: [light] })} light_id='1' />).dive()
+    let m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
       .dive()
       .instance()
     m.channel2line({ profile: { type: 'foo' } }, {})
@@ -106,21 +106,21 @@ describe('Lighting ui', () => {
   })
 
   it('<Profile /> fixed', () => {
-    const wrapper = shallow(<Profile type="fixed" onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type='fixed' onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(1)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> auto', () => {
-    const wrapper = shallow(<Profile type="auto" onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type='auto' onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(1)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> diurnal', () => {
-    const wrapper = shallow(<Profile type="diurnal" onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile type='diurnal' onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(1)
@@ -147,7 +147,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Percent />', () => {
-    const wrapper = shallow(<Percent value="4" onChange={() => true} />)
+    const wrapper = shallow(<Percent value='4' onChange={() => true} />)
     wrapper.find('input').simulate('change', { target: { value: 34 } })
   })
 })
