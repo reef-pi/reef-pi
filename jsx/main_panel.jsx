@@ -2,6 +2,7 @@ import React from 'react'
 import ATO from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
+import Notification from 'notificationCenter/main'
 import Lighting from 'lighting/main'
 import Configuration from 'configuration/main'
 import Temperature from 'temperature/main'
@@ -10,7 +11,6 @@ import Doser from 'doser/controller'
 import Ph from 'ph/main'
 import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
-import $ from 'jquery'
 import { fetchUIData } from 'redux/actions/ui'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
@@ -28,7 +28,8 @@ const caps = {
   doser: <Doser />,
   macro: <Macro />,
   camera: <Camera />,
-  configuration: <Configuration />
+  configuration: <Configuration />,
+  notification: <Notification />
 }
 
 class mainPanel extends React.Component {
@@ -52,25 +53,23 @@ class mainPanel extends React.Component {
 
   navs(tab) {
     var panels = []
-    $.each(
-      caps,
-      function(k, panel) {
-        if (this.props.capabilities[k] === undefined) {
-          return
-        }
-        if (!this.props.capabilities[k]) {
-          return
-        }
-        var cname = k === tab ? 'nav-link active' : 'nav-link'
-        panels.push(
-          <li className="nav-item" key={'li-tab-' + k}>
-            <a href="#" id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
-              {k}
-            </a>
-          </li>
-        )
-      }.bind(this)
-    )
+    for(let prop in caps) {
+      if (this.props.capabilities[prop] === undefined) {
+        continue
+      }
+      if (!this.props.capabilities[prop]) {
+        continue
+      }
+      let cname = prop === tab ? 'nav-link active' : 'nav-link'
+      let label = prop
+      panels.push(
+        <li className="nav-item" key={'li-tab-' + prop}>
+          <a href="#" id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
+            {label}
+          </a>
+        </li>
+      )
+    }
     return <ul className="navbar-nav">{panels}</ul>
   }
 
