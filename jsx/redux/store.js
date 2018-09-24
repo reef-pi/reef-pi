@@ -1,6 +1,6 @@
-import {createStore, applyMiddleware} from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import {rootReducer} from './reducer'
+import { rootReducer } from './reducer'
 
 const initialState = {
   info: {},
@@ -32,7 +32,8 @@ const initialState = {
     config: {},
     latest: undefined,
     images: []
-  }
+  },
+  notifications: [{ ts: 1, type: 'INFO', content: 'Initialization Complete' },{ ts: new Date().getTime(), type: 'INFO', content: 'Initialization Complete' }]
 }
 
 export const configureStore = () => {
