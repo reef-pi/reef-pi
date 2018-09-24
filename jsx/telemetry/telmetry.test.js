@@ -59,7 +59,8 @@ describe('Telemetry UI', () => {
     m.onChange('foo')({ target: { value: 1 } })
   })
 
-  it('<Main />', () => {
-    shallow(<Notification mailer={{}} />)
+  it('<Notification />', () => {
+    let m = shallow(<Notification update={() => true} mailer={{}} />).instance()
+    m.update(1)({ target: { value: 'foo' } })
   })
 })
