@@ -1,5 +1,5 @@
 import React from 'react'
-import { notifAdded, fetchNotifications } from 'redux/actions/notification'
+import { notifAdded } from 'redux/actions/notification'
 
 import { connect } from 'react-redux'
 
@@ -9,43 +9,43 @@ export const NotificationType = {
   alert: 'ALERT'
 }
 class NotificationCenter extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.pushInfo = this.pushInfo.bind(this)
     this.state = {
       notifications: this.props.notifications
     }
   }
-  componentDidMount() {
+  componentDidMount () {
     this.timerID = setInterval(() => this.tick(), 1000)
   }
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearInterval(this.timerID)
   }
-  tick() {
+  tick () {
     this.setState({ notifications: this.props.notifications })
   }
-  pushInfo(content) {
+  pushInfo (content) {
     content = 'foo'
     let n = NotificationCenter.setNotification(NotificationType.info, content)
     this.props.pushNotification(n)
   }
-  static setNotification(type, content) {
+  static setNotification (type, content) {
     return { type: type, content: content, read: false, ts: new Date().getTime() }
   }
-  render() {
+  render () {
     let n = []
     this.props.notifications.forEach(e => {
       n.push(
-        <li className="bg-success" key={e.ts}>
+        <li className='bg-success' key={e.ts}>
           {e.ts} : {e.type} / {e.content}
         </li>
       )
     })
     return (
       <React.Fragment>
-        <div className="row" key="content">
-          <div className="col">
+        <div className='row' key='content'>
+          <div className='col'>
             <button onClick={this.pushInfo}>Add Info</button>
             <ul>{n}</ul>
           </div>
