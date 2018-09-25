@@ -20,5 +20,6 @@ describe('Auth', () => {
     m.handleUserChange({ target: { value: '' } })
     m.handlePasswordChange({ target: { value: '' } })
     m.updateCreds()
+    m.props.updateCreds({})
   })
 })
