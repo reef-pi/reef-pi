@@ -11,7 +11,15 @@ import AtoForm from './ato_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('ATO ui', () => {
   const state = {
     ato_usage: {'1': {}},
@@ -43,7 +51,10 @@ describe('ATO ui', () => {
       <ATO store={mockStore(state)} data={{id: '1', period: 10}} />
     )
     const instance = wrapper.dive().instance()
+    instance.handleEdit({stopPropagation: () => {}})
     instance.handleDelete({stopPropagation: () => {}})
+    instance.state.readOnly = true
+    instance.render()
   })
 
   it('AtoForm />', () => {
