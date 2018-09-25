@@ -11,8 +11,6 @@ import Main from './main'
 import Settings from './settings'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import renderer from 'react-test-renderer'
-import { Provider } from 'react-redux'
 import fetchMock from 'fetch-mock'
 import SignIn from 'sign_in'
 

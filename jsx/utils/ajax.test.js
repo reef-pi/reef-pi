@@ -1,5 +1,5 @@
 import { reduxGet, reduxDelete, reduxPut, reduxPost } from './ajax'
-import iso from 'isomorphic-fetch'
+import 'isomorphic-fetch'
 
 let fecthOK = jest.fn().mockImplementation(() => {
   var p = new Promise(resolve => {
