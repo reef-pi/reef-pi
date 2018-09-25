@@ -1,6 +1,9 @@
 import { rootReducer } from './reducer'
-
+import { configureStore } from './store'
 describe('Redux Reducer', () => {
+  it('Store', () => {
+    configureStore()
+  })
   it('reducer', () => {
     function getPayload () {
       return {

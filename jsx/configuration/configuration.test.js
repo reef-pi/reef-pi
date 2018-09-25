@@ -26,11 +26,8 @@ describe('Configuration ui', () => {
   })
 
   it('<Main />', () => {
-    renderer.create(
-      <Provider store={mockStore({ capabilities: [] })}>
-        <Main />
-      </Provider>
-    )
+    const m = shallow(<Main store={mockStore()} />).instance()
+    m.setBody(1)()
   })
 
   it('<Admin />', () => {
@@ -64,6 +61,12 @@ describe('Configuration ui', () => {
       .instance()
     m.toggle()
     m.setBrightness({ target: { value: 10 } })
+    shallow(<Display store={mockStore({})} />)
+      .dive()
+      .instance()
+    shallow(<Display store={mockStore({ display: {} })} />)
+      .dive()
+      .instance()
   })
 
   it('<Capabilities />', () => {
@@ -127,7 +130,7 @@ describe('Configuration ui', () => {
   })
 
   it('<Errors />', () => {
-    shallow(
+    let m = shallow(
       <Errors
         store={mockStore({
           errors: [{ id: '1', time: 'dd', message: 'dd' }]
@@ -136,5 +139,8 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
+    m.props.delete('1')
+    m.props.clear()
+    m.props.fetch()
   })
 })

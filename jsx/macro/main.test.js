@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import Macro from './macro'
@@ -16,7 +16,15 @@ import SelectType from './select_type'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('Macro UI', () => {
   afterEach(() => {
     fetchMock.reset()
@@ -24,22 +32,27 @@ describe('Macro UI', () => {
   })
   const macro = {
     name: 'Foo',
-    steps: [
-      {type: 'wait', config: {duration: 10}}
-    ]
+    steps: [{ type: 'wait', config: { duration: 10 } }]
   }
   it('<Main />', () => {
     fetchMock.get('/api/macros', {})
-    const n = shallow(
-      <Main store={mockStore({macros: [macro]})} />
-    )
-    n.dive().instance()
+    fetchMock.post('/api/macros/1', {})
+    fetchMock.put('/api/macros/1', {})
+    fetchMock.post('/api/macros/1/run', {})
+    fetchMock.delete('/api/macros/1', {})
+    const n = shallow(<Main store={mockStore({ macros: [macro] })} />).dive().instance()
+    n.componentWillUnmount()
+    delete n.state.timer
+    n.componentWillUnmount()
+    n.props.update(1, {})
+    n.props.delete(1)
+    n.props.run(1)
   })
 
   it('<Macro />', () => {
     const i = shallow(<Macro steps={[]} update={() => true} />).instance()
     i.update()
-    i.setState({expand: true})
+    i.setState({ expand: true })
     i.updateSteps(macro.steps)
     i.update()
     i.remove()
@@ -49,7 +62,7 @@ describe('Macro UI', () => {
     const n = shallow(
       <GenericStepConfig
         active='1'
-        store={mockStore({equipment: [{id: '1', name: 'foo'}]})}
+        store={mockStore({ equipment: [{ id: '1', name: 'foo' }] })}
         hook={() => true}
         type='equipment'
       />
@@ -62,10 +75,13 @@ describe('Macro UI', () => {
   it('<New />', () => {
     fetchMock.get('/api/macros', {})
     fetchMock.putOnce('/api/macros', {})
-    const i = shallow(<New store={mockStore()} />).dive().instance()
+    const i = shallow(<New store={mockStore()} />)
+      .dive()
+      .instance()
     const ev = {
-      target: {value: 'foo'}
+      target: { value: 'foo' }
     }
+    i.add()
     i.toggle()
     i.updateSteps(macro.steps)
     i.update('name')(ev)
@@ -78,28 +94,27 @@ describe('Macro UI', () => {
   })
 
   it('<Step />', () => {
-    const i = shallow(
-      <Step
-        config={macro.steps[0].config}
-        type='wait'
-        hook={() => true}
-      />).instance()
+    let i = shallow(<Step config={macro.steps[0].config} type='wait' hook={() => true} />).instance()
     i.updateType('wait')
-    i.updateConfig({duration: 10})
+    i.updateConfig({ duration: 10 })
+    i.configUI()
+    i = shallow(<Step config={{ type: 'foo', config: { duration: 10 } }} type='foo' hook={() => true} />).instance()
     i.configUI()
   })
 
   it('<Steps />', () => {
     const i = shallow(<Steps steps={macro.steps} hook={() => {}} />).instance()
-    i.updateStep(0)({type: 'wait', config: {duration: 10}})
+    i.updateStep(0)({ type: 'wait', config: { duration: 10 } })
     i.add()
     i.deleteStep(0)()
+    let z = shallow(<Steps steps={macro.steps} readOnly hook={() => {}} />).instance()
+    z.addStepUI()
   })
 
   it('<WaitStepConfig />', () => {
     const i = shallow(<WaitStepConfig hook={() => true} />).instance()
     const ev = {
-      target: {value: 'foo'}
+      target: { value: 'foo' }
     }
     i.update(ev)
   })

@@ -17,7 +17,15 @@ import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('Lighting ui', () => {
   const ev = {
     target: { value: 10 }

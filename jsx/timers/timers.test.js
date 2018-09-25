@@ -12,7 +12,15 @@ import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('Timer ui', () => {
   it('<Main />', () => {
     const state = {
@@ -62,6 +70,8 @@ describe('Timer ui', () => {
     m.createTimer()
     m.state.equipment = { id: '1', on: true, revert: true, duration: 10 }
     m.createTimer()
+    m.props.delete(1)
+    m.props.update(1, {})
   })
 
   it('<Cron />', () => {
@@ -125,6 +135,7 @@ describe('Timer ui', () => {
         equipmentList={[]}
       />
     ).instance()
+    t.trigger()
     t.update()
     t.setType('reminder')()
     t.trigger()
@@ -132,5 +143,48 @@ describe('Timer ui', () => {
     t.details()
     t.updateCron({ day: '*', minute: '*', hour: '*', second: '0' })
     t.update()
+
+    const v = shallow(
+      <Timer
+        timer_id=''
+        name='foo'
+        type='equipment'
+        enable
+        active_id='1'
+        expand
+        equipment={{
+          on: true,
+          name: 'TestEquipment',
+          duration: 20,
+          id: '1',
+          revert: true
+        }}
+        reminder={{ message: '', title: '' }}
+        day='*'
+        hour='*'
+        minute='*'
+        second='*'
+        remove={() => true}
+        update={() => true}
+        equipmentList={[
+          {
+            on: true,
+            name: 'TestEquipment',
+            duration: 20,
+            id: '1',
+            revert: false
+          },
+          {
+            on: true,
+            name: 'TestEquipment',
+            duration: 20,
+            id: '2',
+            revert: false
+          }
+        ]}
+      />
+    )
+      .instance()
+    v.set('expand')(true)
   })
 })

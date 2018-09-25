@@ -14,11 +14,22 @@ import thunk from 'redux-thunk'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('pH ui', () => {
   it('<Main />', () => {
     const probes = [{ id: '1', name: 'foo' }]
-    shallow(<Main store={mockStore({ phprobes: probes })} />).dive()
+    let m = shallow(<Main store={mockStore({ phprobes: probes })} />)
+      .dive()
+      .instance()
+    m.props.createProbe({})
   })
 
   it('<New />', () => {
@@ -64,6 +75,7 @@ describe('pH ui', () => {
     const m = shallow(<Probe store={mockStore()} data={probe} />)
       .dive()
       .instance()
+    m.props.calibrateProbe(1, {})
     m.edit()
     m.calibrate()
     m.updateConfig(probe.config)
