@@ -14,7 +14,15 @@ import * as Alert from '../utils/alert'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('Equipment ui', () => {
   const eqs = [{ id: '1', outlet: '1', name: 'Foo', on: true }]
   const outlets = [{ id: '1', name: 'O1' }]
