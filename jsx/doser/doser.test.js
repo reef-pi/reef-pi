@@ -10,7 +10,15 @@ import thunk from 'redux-thunk'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest.fn().mockImplementation(() => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+  }
+})
 describe('Doser ui', () => {
   it('<Main />', () => {
     let mock = {
@@ -57,5 +65,6 @@ describe('Doser ui', () => {
     m.setSchedule()
     m.onDemand()
     m.remove()
+    m.props.deleteDosingPump(1)
   })
 })
