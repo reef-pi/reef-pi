@@ -1,11 +1,7 @@
-import SignIn from 'sign_in'
 import { showAlert } from 'utils/alert'
 
 function makeHeaders () {
   let headers = new Headers()
-  let creds = SignIn.getCreds()
-  let authHeader = 'Basic ' + window.btoa(creds.user + ':' + creds.password)
-  headers.append('Authorization', authHeader)
   headers.append('Content-Type', 'application/json')
   return headers
 }
@@ -36,11 +32,7 @@ export function reduxGet (params) {
       .then(data => dispatch(params.success(data)))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'GET API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('GET API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -66,11 +58,7 @@ export function reduxDelete (params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'DELETE API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('DELETE API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -97,11 +85,7 @@ export function reduxPut (params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'PUT API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('PUT API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -127,16 +111,8 @@ export function reduxPost (params) {
       })
       .then(data => dispatch(params.success(data)))
       .catch(v => {
-        if (params.error) {
-          params.error(v)
-        } else {
-          dispatch({ type: 'API_FAILURE', params: params })
-          showAlert(
-            'POST API call failure.\nDetails:' + JSON.stringify(params),
-            '\nError:\n',
-            v
-          )
-        }
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }

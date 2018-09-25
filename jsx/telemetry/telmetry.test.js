@@ -27,6 +27,10 @@ describe('Telemetry UI', () => {
       throttle: 10,
       adafruitio: aio
     }
+    shallow(<Main store={mockStore({})} />)
+      .dive()
+      .instance()
+
     const m = shallow(<Main store={mockStore({ telemetry: telemetry })} />)
       .dive()
       .instance()
@@ -38,6 +42,7 @@ describe('Telemetry UI', () => {
       m.updateMailer(t)
     })
     m.updateAio(aio)
+    m.updateAio({ enable: false })
     m.updateThrottle({ target: { value: 20 } })
     m.enableMailer({ target: { checked: true } })
     m.save()
@@ -59,7 +64,8 @@ describe('Telemetry UI', () => {
     m.onChange('foo')({ target: { value: 1 } })
   })
 
-  it('<Main />', () => {
-    shallow(<Notification mailer={{}} />)
+  it('<Notification />', () => {
+    let m = shallow(<Notification update={() => true} mailer={{}} />).instance()
+    m.update(1)({ target: { value: 'foo' } })
   })
 })

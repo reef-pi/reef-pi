@@ -30,7 +30,7 @@ export const createTimer = (a) => {
 
 export const updateTimer = (id, a) => {
   return (reduxPost({
-    url: '/api/timers/'+id,
+    url: '/api/timers/' + id,
     data: a,
     success: fetchTimers
   }))

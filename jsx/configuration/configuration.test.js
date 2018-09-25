@@ -11,9 +11,8 @@ import Main from './main'
 import Settings from './settings'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import renderer from 'react-test-renderer'
-import { Provider } from 'react-redux'
 import fetchMock from 'fetch-mock'
+import SignIn from 'sign_in'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -25,11 +24,8 @@ describe('Configuration ui', () => {
   })
 
   it('<Main />', () => {
-    renderer.create(
-      <Provider store={mockStore({ capabilities: [] })}>
-        <Main />
-      </Provider>
-    )
+    const m = shallow(<Main store={mockStore()} />).instance()
+    m.setBody(1)()
   })
 
   it('<Admin />', () => {
@@ -39,9 +35,16 @@ describe('Configuration ui', () => {
     fetchMock.postOnce('/api/admin/reload', {})
     fetchMock.postOnce('/api/admin/reboot', {})
     fetchMock.postOnce('/api/admin/poweroff', {})
+    SignIn.logout = jest.fn().mockImplementation(() => {
+      return true
+    })
     m.reload()
     m.powerOff()
     m.reboot()
+    m.signout()
+    m.props.reload()
+    m.props.reboot()
+    m.props.powerOff()
   })
 
   it('<Display />', () => {
@@ -56,6 +59,12 @@ describe('Configuration ui', () => {
       .instance()
     m.toggle()
     m.setBrightness({ target: { value: 10 } })
+    shallow(<Display store={mockStore({})} />)
+      .dive()
+      .instance()
+    shallow(<Display store={mockStore({ display: {} })} />)
+      .dive()
+      .instance()
   })
 
   it('<Capabilities />', () => {
@@ -119,7 +128,7 @@ describe('Configuration ui', () => {
   })
 
   it('<Errors />', () => {
-    shallow(
+    let m = shallow(
       <Errors
         store={mockStore({
           errors: [{ id: '1', time: 'dd', message: 'dd' }]
@@ -128,5 +137,8 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
+    m.props.delete('1')
+    m.props.clear()
+    m.props.fetch()
   })
 })

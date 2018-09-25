@@ -13,7 +13,7 @@ describe('Sign_In', () => {
       return true
     })
     global.fetch = jest.fn().mockImplementation(() => {
-      var p = new Promise((resolve, reject) => {
+      var p = new Promise((resolve) => {
         resolve({
           ok: true,
           status: 200
@@ -30,7 +30,7 @@ describe('Sign_In', () => {
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -38,14 +38,14 @@ describe('Sign_In', () => {
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
-          ok: true,
+          ok: false,
           status: 500
         })
       })
       return p
     })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -54,14 +54,14 @@ describe('Sign_In', () => {
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
-          ok: true,
+          ok: false,
           status: 401
         })
       })
       return p
     })
     await m.login({
-      preventDefault: function() {
+      preventDefault: function () {
         return true
       }
     })
@@ -70,7 +70,6 @@ describe('Sign_In', () => {
   it('Sign_In statics', async () => {
     await Sign_In.logout()
     expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
-    Sign_In.getCreds()
     Sign_In.isSignedIn()
   })
 })

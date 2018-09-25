@@ -1,10 +1,9 @@
 import React from 'react'
-import SignIn from 'sign_in'
 import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
 
 class auth extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       passwordError: false,
@@ -17,14 +16,14 @@ class auth extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
-  handleUserChange(e) {
+  handleUserChange (e) {
     this.setState({ user: e.target.value })
   }
-  handlePasswordChange(e) {
+  handlePasswordChange (e) {
     this.setState({ password: e.target.value })
   }
 
-  updateCreds() {
+  updateCreds () {
     let error = false
     this.setState({ usernameError: false })
     this.setState({ passwordError: false })
@@ -49,38 +48,38 @@ class auth extends React.Component {
     }
   }
 
-  render() {
+  render () {
     var btnClass = 'btn btn-outline-success col-12'
     return (
-      <div className="container">
-        <div className="row">
+      <div className='container'>
+        <div className='row'>
           <label>
             <b>Credentials</b>
           </label>
         </div>
-        <div className="form-group">
-          <label htmlFor="reef-pi-user">User</label>
+        <div className='form-group'>
+          <label htmlFor='reef-pi-user'>User</label>
           <input
-            type="text"
+            type='text'
             className={'form-control ' + (this.state.usernameError ? 'is-invalid' : '')}
-            id="reef-pi-user"
-            defaultValue={SignIn.getCreds().user}
+            id='reef-pi-user'
+            placeholder='Username'
             onChange={this.handleUserChange}
           />
-          <div className="invalid-feedback">You Must Provide a username</div>
+          <div className='invalid-feedback'>You Must Provide a username</div>
         </div>
-        <div className="form-group">
-          <label htmlFor="reef-pi-pass">Password</label>
+        <div className='form-group'>
+          <label htmlFor='reef-pi-pass'>Password</label>
           <input
-            type="password"
-            id="reef-pi-pass"
+            type='password'
+            id='reef-pi-pass'
             className={'form-control ' + (this.state.passwordError ? 'is-invalid' : '')}
             onChange={this.handlePasswordChange}
           />
-          <div className="invalid-feedback">You Must Provide a password</div>
+          <div className='invalid-feedback'>You Must Provide a password</div>
         </div>
-        <div className="row">
-          <input type="button" className={btnClass} value="update" onClick={this.updateCreds} />
+        <div className='row'>
+          <input type='button' className={btnClass} value='update' onClick={this.updateCreds} />
         </div>
       </div>
     )

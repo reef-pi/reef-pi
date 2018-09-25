@@ -32,7 +32,7 @@ const caps = {
 }
 
 class mainPanel extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       tab: 'dashboard'
@@ -40,21 +40,21 @@ class mainPanel extends React.Component {
     this.navs = this.navs.bind(this)
     this.setTab = this.setTab.bind(this)
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchUIData()
   }
 
-  setTab(k) {
+  setTab (k) {
     return () => {
       this.setState({ tab: k })
     }
   }
 
-  navs(tab) {
+  navs (tab) {
     var panels = []
     $.each(
       caps,
-      function(k, panel) {
+      function (k, panel) {
         if (this.props.capabilities[k] === undefined) {
           return
         }
@@ -63,18 +63,18 @@ class mainPanel extends React.Component {
         }
         var cname = k === tab ? 'nav-link active' : 'nav-link'
         panels.push(
-          <li className="nav-item" key={'li-tab-' + k}>
-            <a href="#" id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
+          <li className='nav-item' key={'li-tab-' + k}>
+            <a href='#' id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
               {k}
             </a>
           </li>
         )
       }.bind(this)
     )
-    return <ul className="navbar-nav">{panels}</ul>
+    return <ul className='navbar-nav'>{panels}</ul>
   }
 
-  render() {
+  render () {
     var tab = this.state.tab
     if (!this.props.capabilities['dashboard'] && tab === 'dashboard') {
       for (var k in this.props.capabilities) {
@@ -86,31 +86,31 @@ class mainPanel extends React.Component {
     }
     var body = caps[tab]
     return (
-      <div id="content">
-        <nav className="navbar navbar-dark navbar-reefpi navbar-expand-lg">
-          <span className="navbar-brand mb-0 h1">reef-pi</span>
+      <div id='content'>
+        <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
+          <span className='navbar-brand mb-0 h1'>reef-pi</span>
           <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            className='navbar-toggler'
+            type='button'
+            data-toggle='collapse'
+            data-target='#navbarNav'
+            aria-controls='navbarNav'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
           >
-            <span className="navbar-toggler-icon" />
+            <span className='navbar-toggler-icon' />
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
+          <div className='collapse navbar-collapse' id='navbarNav'>
             {this.navs(tab)}
           </div>
         </nav>
-        <div className="container-fluid">
-          <div className="mt-3" id="reef-pi-alert" />
-          <div className="row body-panel">
-            <div className="col-12">{body}</div>
+        <div className='container-fluid'>
+          <div className='mt-3' id='reef-pi-alert' />
+          <div className='row body-panel'>
+            <div className='col-12'>{body}</div>
           </div>
-          <div className="row">
-            <div className="col-12">
+          <div className='row'>
+            <div className='col-12'>
               <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
             </div>
           </div>
