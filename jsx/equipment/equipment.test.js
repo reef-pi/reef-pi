@@ -41,6 +41,8 @@ describe('Equipment ui', () => {
       .instance()
     m.toggleAddEquipmentDiv()
     m.addEquipment({ name: 'test', outlet: 1 })
+    m.props.update(1,{})
+    m.props.delete(1)
   })
 
   it('<Equipment />', () => {
