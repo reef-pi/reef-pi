@@ -32,11 +32,7 @@ export function reduxGet (params) {
       .then(data => dispatch(params.success(data)))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'GET API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('GET API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -62,11 +58,7 @@ export function reduxDelete (params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'DELETE API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('DELETE API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -93,11 +85,7 @@ export function reduxPut (params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert(
-          'PUT API call failure.\nDetails:' + JSON.stringify(params),
-          '\nError:\n',
-          v
-        )
+        showAlert('PUT API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
@@ -123,16 +111,8 @@ export function reduxPost (params) {
       })
       .then(data => dispatch(params.success(data)))
       .catch(v => {
-        if (params.error) {
-          params.error(v)
-        } else {
-          dispatch({ type: 'API_FAILURE', params: params })
-          showAlert(
-            'POST API call failure.\nDetails:' + JSON.stringify(params),
-            '\nError:\n',
-            v
-          )
-        }
+        dispatch({ type: 'API_FAILURE', params: params })
+        showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
       })
   }
 }
