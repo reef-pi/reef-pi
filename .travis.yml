@@ -16,7 +16,7 @@ script:
   - make build-ui
   - ./node_modules/.bin/standard jsx/**/*
   - make sass-lint
-  - cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage
+  - npm test
   - bash <(curl -s https://codecov.io/bash) -cF javascript
   - make clean
   - make deb
