@@ -16,11 +16,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
-    confirm: jest.fn().mockImplementation(() => {
-      return new Promise(resolve => {
-        return resolve(true)
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
       })
-    })
+      .bind(this)
   }
 })
 describe('pH ui', () => {
@@ -72,7 +75,15 @@ describe('pH ui', () => {
         notify: { min: 72, max: 87 }
       }
     }
-    const m = shallow(<Probe store={mockStore()} data={probe} />)
+    const m = shallow(
+      <Probe
+        updateHook={() => {
+          return true
+        }}
+        store={mockStore()}
+        data={probe}
+      />
+    )
       .dive()
       .instance()
     m.props.calibrateProbe(1, {})

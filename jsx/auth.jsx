@@ -1,5 +1,4 @@
 import React from 'react'
-import SignIn from 'sign_in'
 import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
 

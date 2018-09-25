@@ -19,11 +19,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
-    confirm: jest.fn().mockImplementation(() => {
-      return new Promise(resolve => {
-        return resolve(true)
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
       })
-    })
+      .bind(this)
   }
 })
 describe('Lighting ui', () => {
@@ -81,14 +84,7 @@ describe('Lighting ui', () => {
       }
     })
     m = shallow(
-      <Light
-        isValid
-        values={values}
-        config={light}
-        save={() => {}}
-        remove={() => true}
-        submitForm={() => true}
-      />
+      <Light isValid values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />
     ).instance()
     m.handleFormSubmit({
       preventDefault: () => {

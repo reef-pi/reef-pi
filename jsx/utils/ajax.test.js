@@ -66,39 +66,39 @@ describe('Ajax', () => {
     global.fetch = fecthOK
   })
   it('reduxGet', () => {
-    reduxGet({ url: '#', data: {} })(dispatch)
+    reduxGet({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch401
-    reduxGet({ url: '#', data: {} })(dispatch)
+    reduxGet({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch500
-    reduxGet({ url: '#', data: {} })(dispatch)
-    reduxGet({ url: '#', data: {}, suppressError: true })(dispatch)
-    reduxGet({ url: '#', data: {}, suppressError: false })(dispatch)
+    reduxGet({ url: '/foo', data: {} })(dispatch)
+    reduxGet({ url: '/foo', data: {}, suppressError: true })(dispatch)
+    reduxGet({ url: '/foo', data: {}, suppressError: false })(dispatch)
   })
   it('reduxDelete', () => {
-    reduxDelete({ url: '#', data: {} })(dispatch)
+    reduxDelete({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch401
-    reduxDelete({ url: '#', data: {} })(dispatch)
+    reduxDelete({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch500
-    reduxDelete({ url: '#', data: {} })(dispatch)
-    reduxDelete({ url: '#', data: {}, suppressError: true })(dispatch)
-    reduxDelete({ url: '#', data: {}, suppressError: false })(dispatch)
+    reduxDelete({ url: '/foo', data: {} })(dispatch)
+    reduxDelete({ url: '/foo', data: {}, suppressError: true })(dispatch)
+    reduxDelete({ url: '/foo', data: {}, suppressError: false })(dispatch)
   })
   it('reduxPut ', () => {
-    reduxPut({ url: '#', data: {} })(dispatch)
+    reduxPut({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch401
-    reduxPut({ url: '#', data: {} })(dispatch)
+    reduxPut({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch500
-    reduxPut({ url: '#', data: {} })(dispatch)
-    reduxPut({ url: '#', data: {}, suppressError: true })(dispatch)
-    reduxPut({ url: '#', data: {}, suppressError: false })(dispatch)
+    reduxPut({ url: '/foo', data: {} })(dispatch)
+    reduxPut({ url: '/foo', data: {}, suppressError: true })(dispatch)
+    reduxPut({ url: '/foo', data: {}, suppressError: false })(dispatch)
   })
   it('reduxPost ', () => {
-    reduxPost({ url: '#', data: {} })(dispatch)
+    reduxPost({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch401
-    reduxPost({ url: '#', data: {} })(dispatch)
+    reduxPost({ url: '/foo', data: {} })(dispatch)
     global.fetch = fetch500
-    reduxPost({ url: '#', data: {} })(dispatch)
-    reduxPost({ url: '#', data: {}, suppressError: true })(dispatch)
-    reduxPost({ url: '#', data: {}, suppressError: false })(dispatch)
+    reduxPost({ url: '/foo', data: {} })(dispatch)
+    reduxPost({ url: '/foo', data: {}, suppressError: true })(dispatch)
+    reduxPost({ url: '/foo', data: {}, suppressError: false })(dispatch)
   })
 })

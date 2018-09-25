@@ -12,11 +12,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
-    confirm: jest.fn().mockImplementation(() => {
-      return new Promise(resolve => {
-        return resolve(true)
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
       })
-    })
+      .bind(this)
   }
 })
 describe('Doser ui', () => {

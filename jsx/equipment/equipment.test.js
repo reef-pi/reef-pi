@@ -16,11 +16,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
-    confirm: jest.fn().mockImplementation(() => {
-      return new Promise(resolve => {
-        return resolve(true)
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
       })
-    })
+      .bind(this)
   }
 })
 describe('Equipment ui', () => {
@@ -202,7 +205,9 @@ describe('Equipment ui', () => {
   })
 
   it('<Chart />', () => {
-    const m = shallow(<Chart store={mockStore({ equipment: eqs })} />).dive().instance()
+    const m = shallow(<Chart store={mockStore({ equipment: eqs })} />)
+      .dive()
+      .instance()
     m.componentWillUnmount()
   })
 

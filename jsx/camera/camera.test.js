@@ -32,7 +32,7 @@ describe('Camera module', () => {
     d.state.config.motion = {
       width: 640,
       height: 480,
-      url: '#'
+      url: '/foo'
     }
     d.motion()
     d.props.updateConfig()
@@ -74,6 +74,6 @@ describe('Camera module', () => {
   })
 
   it('<Motion />', () => {
-    shallow(<Motion url='' width={300} height={600} />)
+    shallow(<Motion url='/foo' width={300} height={600} />)
   })
 })

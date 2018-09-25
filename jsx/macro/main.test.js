@@ -18,11 +18,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
-    confirm: jest.fn().mockImplementation(() => {
-      return new Promise(resolve => {
-        return resolve(true)
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
       })
-    })
+      .bind(this)
   }
 })
 describe('Macro UI', () => {
@@ -40,7 +43,9 @@ describe('Macro UI', () => {
     fetchMock.put('/api/macros/1', {})
     fetchMock.post('/api/macros/1/run', {})
     fetchMock.delete('/api/macros/1', {})
-    const n = shallow(<Main store={mockStore({ macros: [macro] })} />).dive().instance()
+    const n = shallow(<Main store={mockStore({ macros: [macro] })} />)
+      .dive()
+      .instance()
     n.componentWillUnmount()
     delete n.state.timer
     n.componentWillUnmount()
@@ -50,7 +55,7 @@ describe('Macro UI', () => {
   })
 
   it('<Macro />', () => {
-    const i = shallow(<Macro steps={[]} update={() => true} />).instance()
+    const i = shallow(<Macro steps={[]} update={() => true} delete={() => true} />).instance()
     i.update()
     i.setState({ expand: true })
     i.updateSteps(macro.steps)
