@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import Capture from './capture'
@@ -18,21 +18,37 @@ describe('Camera module', () => {
     const state = {
       camera: {
         config: {},
-        images: [{name: 'foo'}, {name: 'bar'}]
+        images: [{ name: 'foo' }, { name: 'bar' }]
       }
     }
-    const m = shallow(<Main store={mockStore(state)} />).dive().instance()
+    const m = shallow(<Main store={mockStore(state)} />)
+      .dive()
+      .instance()
     m.toggleConfig()
+
+    let d = shallow(<Main store={mockStore(state)} />)
+      .dive()
+      .instance()
+    d.state.config.motion = {
+      width: 640,
+      height: 480,
+      url: '#'
+    }
+    d.motion()
+    d.props.updateConfig()
   })
 
   it('<Capture />', () => {
-    shallow(<Capture store={mockStore({camera: {latest: ''}})} />).dive()
+    let d = shallow(<Capture store={mockStore({ camera: { latest: '' } })} />)
+      .dive()
+      .instance()
+    d.props.takeImage()
   })
 
   it('<Config />', () => {
-    let m = shallow(<Config config={{tick_interval: 1}} update={() => {}} />)
-    m.instance().updateBool('enable')({target: {checked: true}})
-    m.instance().updateText('bar')({target: {}})
+    let m = shallow(<Config config={{ tick_interval: 1 }} update={() => {}} />)
+    m.instance().updateBool('enable')({ target: { checked: true } })
+    m.instance().updateText('bar')({ target: {} })
     m.update()
     m.instance().save()
     m = m.instance()
@@ -41,7 +57,7 @@ describe('Camera module', () => {
   })
 
   it('<Gallery />', () => {
-    const images = [{thumbnail: '', src: ''}]
+    const images = [{ thumbnail: '', src: '' }]
     const m = shallow(<Gallery images={images} />).instance()
     const ev = {
       preventDefault: () => true
@@ -54,9 +70,10 @@ describe('Camera module', () => {
     m.onClick()
     m.state.current = -1
     m.onClick()
+    shallow(<Gallery />).instance()
   })
 
   it('<Motion />', () => {
-    shallow(<Motion url='' width={300} height={600} />)
+    shallow(<Motion url="" width={300} height={600} />)
   })
 })
