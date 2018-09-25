@@ -49,7 +49,7 @@ describe('App', () => {
       .instance()
     m.setEquipment(0)()
     m.setEquipment('none')()
-    shallow(<SelectEquipment store={mockStore({ equipment: eqs })} readOnly={true} active='1' update={() => {}} />)
+    shallow(<SelectEquipment store={mockStore({ equipment: eqs })} readOnly active='1' update={() => {}} />)
       .dive()
       .instance()
   })

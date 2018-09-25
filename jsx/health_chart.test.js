@@ -10,12 +10,10 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('Health', () => {
-
-
   it('<HealthChart />', () => {
     let state = {
       health_stats: {},
-      timer: window.setInterval(()=>true,10)
+      timer: window.setInterval(() => true, 10)
     }
     const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()
     m.componentWillUnmount()

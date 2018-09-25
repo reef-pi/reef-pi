@@ -79,28 +79,28 @@ describe('Temperature controller ui', () => {
   })
 
   it('<ReadingsChart />', () => {
-    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: { '1': { current: [] } } })} sensor_id="1" />)
-    let m = shallow(<ReadingsChart store={mockStore(state)} sensor_id="1" />)
+    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: { '1': { current: [] } } })} sensor_id='1' />)
+    let m = shallow(<ReadingsChart store={mockStore(state)} sensor_id='1' />)
       .dive()
       .instance()
     m.componentWillUnmount()
     delete m.state.timer
     m.componentWillUnmount()
-    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: {} })} sensor_id="9" />)
+    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: {} })} sensor_id='9' />)
       .dive()
       .instance()
     let stateCurrent = {
       tcs: [{ id: '1', chart_min: 76, min: 72, max: 78, chart_max: 89 }],
       tc_usage: { '1': { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
-    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id="1" />)
+    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
       .dive()
       .instance()
     stateCurrent = {
       tcs: [{ id: '2', chart_min: 76, min: 72, max: 78, chart_max: 89 }],
       tc_usage: { '1': { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
-    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id="1" />)
+    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
       .dive()
       .instance()
   })
@@ -108,14 +108,14 @@ describe('Temperature controller ui', () => {
   it('<ControlChart />', () => {
     shallow(
       <ControlChart
-        sensor_id="1"
+        sensor_id='1'
         store={mockStore({
           tcs: [{ id: '1', min: 72, max: 78 }],
           tc_usage: { '1': { historical: [{ cooler: 1 }], current: [] } }
         })}
       />
     ).dive()
-    let m = shallow(<ControlChart sensor_id="1" store={mockStore(state)} />)
+    let m = shallow(<ControlChart sensor_id='1' store={mockStore(state)} />)
       .dive()
       .instance()
     m.state.timer = window.setInterval(() => {
@@ -124,10 +124,10 @@ describe('Temperature controller ui', () => {
     m.componentWillUnmount()
     delete m.state.timer
     m.componentWillUnmount()
-    shallow(<ControlChart sensor_id="1" store={mockStore({ tcs: [], tc_usage: [] })} />)
+    shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [], tc_usage: [] })} />)
       .dive()
       .instance()
-    shallow(<ControlChart sensor_id="1" store={mockStore({ tcs: [{ id: '1', min: 72, max: 78 }], tc_usage: [] })} />)
+    shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [{ id: '1', min: 72, max: 78 }], tc_usage: [] })} />)
       .dive()
       .instance()
   })
@@ -142,8 +142,8 @@ describe('Temperature controller ui', () => {
     }
     const wrapper = shallow(
       <BooleanSelect field={field}>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
+        <option value='true'>Yes</option>
+        <option value='false'>No</option>
       </BooleanSelect>
     )
     wrapper.find('select').simulate('change', { target: { value: 'true' } })
@@ -160,8 +160,8 @@ describe('Temperature controller ui', () => {
     }
     const wrapper = shallow(
       <BooleanSelect field={field}>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
+        <option value='true'>Yes</option>
+        <option value='false'>No</option>
       </BooleanSelect>
     )
     wrapper.find('select').simulate('change', { target: { value: 'false' } })

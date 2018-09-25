@@ -35,8 +35,8 @@ export const createJack = (jack) => {
 export const updateJack = (id, jack) => {
   return (
     reduxPost({
-      url: '/api/jacks/'+id,
+      url: '/api/jacks/' + id,
       data: jack,
       success: fetchJacks
-  }))
+    }))
 }

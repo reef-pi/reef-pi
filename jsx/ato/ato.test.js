@@ -70,16 +70,16 @@ describe('ATO ui', () => {
   })
 
   it('<Chart />', () => {
-    let m = shallow(<Chart ato_id="1" store={mockStore(state)} />)
+    let m = shallow(<Chart ato_id='1' store={mockStore(state)} />)
       .dive()
       .instance()
     m.componentWillUnmount()
     delete m.state.timer
     m.componentWillUnmount()
-    shallow(<Chart ato_id="1" store={mockStore({ ato_usage: {}, atos: [] })} />)
+    shallow(<Chart ato_id='1' store={mockStore({ ato_usage: {}, atos: [] })} />)
       .dive()
       .instance()
-    shallow(<Chart ato_id="1" store={mockStore({ ato_usage: { '1': {} }, atos: [] })} />)
+    shallow(<Chart ato_id='1' store={mockStore({ ato_usage: { '1': {} }, atos: [] })} />)
       .dive()
       .instance()
   })

@@ -74,6 +74,6 @@ describe('Camera module', () => {
   })
 
   it('<Motion />', () => {
-    shallow(<Motion url="" width={300} height={600} />)
+    shallow(<Motion url='' width={300} height={600} />)
   })
 })

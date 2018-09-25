@@ -8,7 +8,6 @@ import 'isomorphic-fetch'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-
 describe('health actions', () => {
   afterEach(() => {
     fetchMock.reset()
