@@ -14,6 +14,7 @@ import 'isomorphic-fetch'
 import renderer from 'react-test-renderer'
 import { Provider } from 'react-redux'
 import fetchMock from 'fetch-mock'
+import SignIn from 'sign_in'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -39,9 +40,16 @@ describe('Configuration ui', () => {
     fetchMock.postOnce('/api/admin/reload', {})
     fetchMock.postOnce('/api/admin/reboot', {})
     fetchMock.postOnce('/api/admin/poweroff', {})
+    SignIn.logout = jest.fn().mockImplementation(() => {
+      return true
+    })
     m.reload()
     m.powerOff()
     m.reboot()
+    m.signout()
+    m.props.reload()
+    m.props.reboot()
+    m.props.powerOff()
   })
 
   it('<Display />', () => {
