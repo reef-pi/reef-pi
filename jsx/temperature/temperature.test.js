@@ -29,7 +29,15 @@ describe('Temperature controller ui', () => {
     tc_usage: { '1': { historical: [{ cooler: 1 }], current: [] } }
   }
   it('<Main />', () => {
-    shallow(<Main store={mockStore(state)} />).dive()
+    let m = shallow(<Main store={mockStore(state)} />)
+      .dive()
+      .instance()
+    m.props.createTC(1)
+    m.props.deleteTC(1)
+    m.props.updateTC(1, {})
+    m = shallow(<Main store={mockStore({})} />)
+      .dive()
+      .instance()
   })
 
   it('<New />', () => {
@@ -98,6 +106,15 @@ describe('Temperature controller ui', () => {
   })
 
   it('<ControlChart />', () => {
+    shallow(
+      <ControlChart
+        sensor_id="1"
+        store={mockStore({
+          tcs: [{ id: '1', min: 72, max: 78 }],
+          tc_usage: { '1': { historical: [{ cooler: 1 }], current: [] } }
+        })}
+      />
+    ).dive()
     let m = shallow(<ControlChart sensor_id="1" store={mockStore(state)} />)
       .dive()
       .instance()
@@ -105,15 +122,12 @@ describe('Temperature controller ui', () => {
       return true
     }, 10 * 1000)
     m.componentWillUnmount()
+    delete m.state.timer
+    m.componentWillUnmount()
     shallow(<ControlChart sensor_id="1" store={mockStore({ tcs: [], tc_usage: [] })} />)
       .dive()
       .instance()
-    shallow(
-      <ControlChart
-        sensor_id="1"
-        store={mockStore({ tcs: [{ id: '1', chart_min: 76, min: 72, max: 78, chart_max: 89 }], tc_usage: [] })}
-      />
-    )
+    shallow(<ControlChart sensor_id="1" store={mockStore({ tcs: [{ id: '1', min: 72, max: 78 }], tc_usage: [] })} />)
       .dive()
       .instance()
   })
