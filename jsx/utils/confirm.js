@@ -1,16 +1,10 @@
 import Confirm from 'confirm'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import $ from 'jquery'
 
 export function confirm (message, options = {}) {
-  var cleanup, component, props, wrapper
-  props = $.extend(
-    {
-      message: message
-    },
-    options
-  )
+  let cleanup, component, props, wrapper
+  props = Object.assign({ message: message }, options)
   wrapper = document.body.appendChild(document.createElement('div'))
   component = ReactDOM.render(<Confirm {...props} />, wrapper)
   cleanup = function () {
