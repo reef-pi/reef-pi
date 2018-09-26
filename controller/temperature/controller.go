@@ -39,18 +39,7 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
-		return err
-	}
-	tcs, err := c.List()
-	if err != nil {
-		log.Println("ERROR: temperature-subsystem: failed to list. Error:", err)
-		return nil
-	}
-	for _, tc := range tcs {
-		tc.CreateFeed(c.c.Telemetry())
-	}
-	return nil
+	return c.c.Store().CreateBucket(UsageBucket)
 }
 
 func (c *Controller) Start() {

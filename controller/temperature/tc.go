@@ -62,7 +62,6 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	tc.CreateFeed(c.c.Telemetry())
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
@@ -86,7 +85,6 @@ func (c *Controller) Update(id string, tc TC) error {
 		close(quit)
 		delete(c.quitters, tc.ID)
 	}
-	tc.CreateFeed(c.c.Telemetry())
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
@@ -127,6 +125,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Run(t TC, quit chan struct{}) {
+	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", t.Name, t.Period)
 		return
