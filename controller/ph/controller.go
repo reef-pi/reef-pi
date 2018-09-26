@@ -39,21 +39,7 @@ func (c *Controller) Setup() error {
 	if err := c.controller.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	if err := c.controller.Store().CreateBucket(ReadingsBucket); err != nil {
-		return err
-	}
-	probes, err := c.List()
-	if err != nil {
-		log.Println("ERROR: ph subsystem: Failed to list probes. Error:", err)
-		return err
-	}
-	for _, p := range probes {
-		if !p.Enable {
-			continue
-		}
-		p.CreateFeed(c.controller.Telemetry())
-	}
-	return nil
+	return c.controller.Store().CreateBucket(ReadingsBucket)
 }
 
 func (c *Controller) Start() {
