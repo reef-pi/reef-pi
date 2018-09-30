@@ -64,7 +64,7 @@ class mainPanel extends React.Component {
         var cname = k === tab ? 'nav-link active' : 'nav-link'
         panels.push(
           <li className='nav-item' key={'li-tab-' + k}>
-            <a href='#' id={'tab-' + k} className={cname} data-toggle="collapse" data-target="#navbarNav" onClick={this.setTab(k)}>
+            <a href='#' id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
               {k}
             </a>
           </li>
@@ -100,7 +100,7 @@ class mainPanel extends React.Component {
           >
             <span className='navbar-toggler-icon' />
           </button>
-          <div className='collapse navbar-collapse' id='navbarNav'>
+          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle="collapse" data-target=".navbar-collapse">
             {this.navs(tab)}
           </div>
         </nav>
