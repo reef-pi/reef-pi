@@ -1,0 +1,78 @@
+import React, { Children, cloneElement} from 'react'
+
+export default class CollapsibleList extends React.Component {
+  constructor (props) {
+    super(props)
+    let state = {
+      expanded: {},
+      readOnly: {}
+    }
+
+    Children.toArray(props.children).forEach(child => {
+      if (child) {
+        state.expanded[child.props.name] = !!child.props.defaultOpen
+        state.readOnly[child.props.name] = true
+      }
+    })
+
+    this.state = state
+
+    this.onToggle = this.onToggle.bind(this)
+    this.onEdit = this.onEdit.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onToggle (name) {
+    let expanded = {...this.state.expanded}
+    this.setState({expanded: {...expanded, [name]: !expanded[name]}})
+  }
+
+  onEdit (name) {
+    let readOnly = {...this.state.readOnly}
+    let expanded = {...this.state.expanded}
+    this.setState({
+      expanded: {...expanded, [name]: true},
+      readOnly: {...readOnly, [name]: false}
+    })
+  }
+
+  onSubmit (name) {
+    let readOnly = {...this.state.readOnly}
+    let expanded = {...this.state.expanded}
+    this.setState({
+      expanded: {...expanded, [name]: false},
+      readOnly: {...readOnly, [name]: true}
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    let expanded = {...this.state.expanded}
+    let readOnly = {...this.state.readOnly}
+
+    nextProps.children.forEach(child => {
+      if (this.state.expanded[child.props.name] == null) {
+        expanded[child.props.name] = !!child.props.defaultOpen
+        readOnly[child.props.name] = true
+      }
+    })
+    this.setState({expanded: expanded, readOnly: readOnly})
+  }
+
+  render () {
+    let children = Children.toArray(this.props.children)
+
+    return (
+      <React.Fragment>
+        {children.map(child => {
+          return cloneElement(child, {
+            expanded: this.state.expanded[child.props.name],
+            readOnly: this.state.readOnly[child.props.name],
+            onToggle: this.onToggle,
+            onEdit: this.onEdit,
+            onSubmit: this.onSubmit
+          })
+        })}
+      </React.Fragment>
+    )
+  }
+}

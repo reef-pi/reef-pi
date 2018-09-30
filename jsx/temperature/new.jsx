@@ -30,7 +30,7 @@ export default class New extends React.PureComponent {
   add (values) {
     var payload = {
       name: values.name,
-      enable: values.enabled,
+      enable: values.enable,
       control: (values.heater !== '' || values.cooler !== ''),
       heater: values.heater,
       cooler: values.cooler,
