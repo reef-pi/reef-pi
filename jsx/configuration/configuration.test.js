@@ -139,10 +139,10 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
-      m.props.fetchInfo()
-      m.componentWillUnmount()
-      delete m.state.timer
-      m.componentWillUnmount()
+    m.props.fetchInfo()
+    m.componentWillUnmount()
+    delete m.state.timer
+    m.componentWillUnmount()
   })
   it('<Errors />', () => {
     let m = shallow(

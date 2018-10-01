@@ -34,7 +34,7 @@ export default class Configuration extends React.Component {
 
   render () {
     var panels = []
-    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin','about']
+    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin', 'about']
     tabs.forEach((k, _) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
