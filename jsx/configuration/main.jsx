@@ -3,6 +3,7 @@ import Admin from './admin'
 import Settings from './settings'
 import Telemetry from 'telemetry/main'
 import Auth from 'auth'
+import About from './about'
 import Connectors from 'connectors/main'
 import Errors from './errors'
 
@@ -12,7 +13,8 @@ const components = {
   telemetry: <Telemetry />,
   authentication: <Auth />,
   admin: <Admin />,
-  errors: <Errors />
+  errors: <Errors />,
+  about: <About />
 }
 
 export default class Configuration extends React.Component {
@@ -32,7 +34,7 @@ export default class Configuration extends React.Component {
 
   render () {
     var panels = []
-    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin']
+    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'errors', 'admin','about']
     tabs.forEach((k, _) => {
       var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(

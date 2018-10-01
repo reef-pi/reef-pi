@@ -6,6 +6,7 @@ import Admin from './admin'
 import Capabilities from './capabilities'
 import Display from './display'
 import Errors from './errors'
+import About from './about'
 import HealthNotify from './health_notify'
 import Main from './main'
 import Settings from './settings'
@@ -127,6 +128,22 @@ describe('Configuration ui', () => {
     })
   })
 
+  it('<About />', () => {
+    let m = shallow(
+      <About
+        store={mockStore({
+          info: { current_time: new Date(), version: 'test', uptime: '5 minutes', ip: 'localhost' },
+          errors: []
+        })}
+      />
+    )
+      .dive()
+      .instance()
+      m.props.fetchInfo()
+      m.componentWillUnmount()
+      delete m.state.timer
+      m.componentWillUnmount()
+  })
   it('<Errors />', () => {
     let m = shallow(
       <Errors
