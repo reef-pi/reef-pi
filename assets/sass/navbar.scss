@@ -9,6 +9,13 @@
 .navbar-reefpi .navbar-brand {
   color: #FFF;
 }
+.current-tab{
+  border:none;
+  cursor:default;
+  &::first-letter{
+    text-transform: uppercase;
+  }
+}
 /* change the brand and text color */
 .navbar-reefpi
 .navbar-reefpi .navbar-text {

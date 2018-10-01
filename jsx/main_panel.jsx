@@ -89,6 +89,7 @@ class mainPanel extends React.Component {
       <div id='content'>
         <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
           <span className='navbar-brand mb-0 h1'>reef-pi</span>
+          <span className='navbar-brand mb-0 h1 navbar-toggler current-tab'>{tab}</span>
           <button
             className='navbar-toggler'
             type='button'
