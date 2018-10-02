@@ -44,18 +44,6 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
 }
 
 
-@media screen and (max-width: 576px) {
-  .body-panel {
-    margin-bottom: 155px;
-  }
-}
-
-@media screen and (min-width: 576px) {
-  .body-panel {
-    margin-bottom: 105px;
-  }
-}
-
 @media screen and (min-width: 768px) {
   .body-panel {
     margin-bottom: 85px;
