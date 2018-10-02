@@ -30,7 +30,6 @@ class selectEquipment extends React.Component {
     ]
     this.props.equipment.forEach((v, k) => {
       var cName = 'dropdown-item'
-      var active = false
       if (this.state.equipment !== undefined) {
         if (this.state.equipment.id === v.id) {
           cName += ' active'

@@ -1,9 +1,20 @@
+// +build !windows
+
 package utils
 
 import (
-	"github.com/kidoman/embd"
 	"log"
+
+	"github.com/kidoman/embd"
 )
+
+func InitGPIO() error {
+	return embd.InitGPIO()
+}
+
+func CloseGPIO() error {
+	return embd.CloseGPIO()
+}
 
 func SwitchOn(pinNumber int) error {
 	return setGPIO(pinNumber, embd.High)
