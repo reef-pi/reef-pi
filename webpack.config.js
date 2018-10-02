@@ -54,6 +54,11 @@ var config = {
     path: BUILD_DIR,
     filename: 'assets/js/[name].js'
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
   plugins: [
     new HtmlWebpackPlugin({
       favicon: './assets/favicon.ico',
