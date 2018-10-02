@@ -1,5 +1,5 @@
 import React from 'react'
-import {ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
+import {ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart} from 'recharts'
 import {fetchHealth} from './redux/actions/health'
 import {connect} from 'react-redux'
 
