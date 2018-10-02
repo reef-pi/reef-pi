@@ -3,6 +3,10 @@ SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
 VERSION=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 
+ifeq ($(OS), Windows_NT)
+	BINARY=./bin/reef=pi.exe
+endif
+
 .PHONY:bin
 bin:
 	make go
@@ -15,10 +19,6 @@ build-ui:
 .PHONY:go
 go:
 	go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  ./commands
-
-.PHONY:windows
-windows:
-	env GOOS=windows go build -o $(BINARY).exe .\commands
 
 .PHONY:pi
 pi:
@@ -60,23 +60,9 @@ go-get:
 	go get -u github.com/reef-pi/adafruitio
 	go get -u github.com/nfnt/resize
 	go get -u github.com/coreos/bbolt
-
-.PHONY: go-get-windows
-go-get-windows:
-	go get -u golang.org/x/sys/unix
-	go get -u gopkg.in/yaml.v2
-	go get -u github.com/kidoman/embd
-	go get -u github.com/shirou/gopsutil
-	go get -u github.com/gorilla/mux
-	go get -u github.com/gorilla/sessions
-	go get -u gopkg.in/robfig/cron.v2
-	go get -u github.com/dustin/go-humanize
-	go get -u github.com/reef-pi/rpi/pwm
-	go get -u github.com/reef-pi/drivers
-	go get -u github.com/reef-pi/adafruitio
-	go get -u github.com/nfnt/resize
-	go get -u github.com/coreos/bbolt
+ifeq ($(OS), Windows_NT)
 	go get -u github.com/StackExchange/wmi
+endif
 
 .PHONY: vet
 vet:
@@ -123,8 +109,4 @@ jest:
 
 .PHONY: start-dev
 start-dev:
-	DEV_MODE=1 ./bin/reef-pi
-
-.PHONY: start-windows
-start-windows:
-	DEV_MODE=1 ./bin/reef-pi.exe
+	DEV_MODE=1 $(BINARY)
