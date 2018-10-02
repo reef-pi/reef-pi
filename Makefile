@@ -109,4 +109,9 @@ jest:
 
 .PHONY: start-dev
 start-dev:
+ifeq ($(OS), Windows_NT)
+	set DEV_MODE=1
+	$(BINARY)
+else
 	DEV_MODE=1 $(BINARY)
+endif
