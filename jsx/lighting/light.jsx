@@ -27,7 +27,7 @@ class Light extends Component {
     event.preventDefault()
     clearAlert()
 
-    if (this.props.isValid) {
+    if (this.props.dirty === false || this.props.isValid) {
       this.props.submitForm()
       this.setState({readOnly: true, expand: false})
     } else {

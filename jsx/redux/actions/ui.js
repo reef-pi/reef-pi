@@ -16,7 +16,6 @@ export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-
       dispatch(fetchInlets())
       dispatch(fetchErrors())
       dispatch(fetchInfo())

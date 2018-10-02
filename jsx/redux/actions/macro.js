@@ -12,7 +12,6 @@ export const macroRun = () => {
   })
 }
 
-
 export const macrosLoaded = (s) => {
   return ({
     type: 'MACROS_LOADED',
@@ -68,7 +67,7 @@ export const deleteMacro = (id) => {
 
 export const runMacro = (id) => {
   return (reduxPost({
-    url: '/api/macros/' + id+'/run',
+    url: '/api/macros/' + id + '/run',
     success: macroRun
   }))
 }

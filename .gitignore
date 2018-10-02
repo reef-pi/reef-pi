@@ -4,6 +4,7 @@ assets/ui.js
 assets/ui.js.map
 reef-pi.db
 *.db
+*.lock
 *.deb
 dist
 ui/

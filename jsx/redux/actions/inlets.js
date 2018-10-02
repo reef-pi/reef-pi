@@ -35,8 +35,8 @@ export const createInlet = (inlet) => {
 export const updateInlet = (id, inlet) => {
   return (
     reduxPost({
-      url: '/api/inlets/'+id,
+      url: '/api/inlets/' + id,
       data: inlet,
       success: fetchInlets
-  }))
+    }))
 }

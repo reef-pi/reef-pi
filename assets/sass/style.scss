@@ -43,6 +43,7 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
   margin: 0;
 }
 
+
 @media screen and (max-width: 576px) {
   .body-panel {
     margin-bottom: 155px;
@@ -58,6 +59,12 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
 @media screen and (min-width: 768px) {
   .body-panel {
     margin-bottom: 85px;
+  }
+  .navHeaderCollapse.collapsing{
+    transition:none;
+    -webkit-transition:none;
+    -moz-transition:none;
+    overflow:visible;
   }
 }
 

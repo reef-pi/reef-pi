@@ -14,7 +14,18 @@ import * as Alert from '../utils/alert'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
+      })
+      .bind(this)
+  }
+})
 describe('Equipment ui', () => {
   const eqs = [{ id: '1', outlet: '1', name: 'Foo', on: true }]
   const outlets = [{ id: '1', name: 'O1' }]
@@ -33,6 +44,8 @@ describe('Equipment ui', () => {
       .instance()
     m.toggleAddEquipmentDiv()
     m.addEquipment({ name: 'test', outlet: 1 })
+    m.props.update(1, {})
+    m.props.delete(1)
   })
 
   it('<Equipment />', () => {
@@ -192,7 +205,9 @@ describe('Equipment ui', () => {
   })
 
   it('<Chart />', () => {
-    const m = shallow(<Chart store={mockStore({ equipment: eqs })} />).dive().instance()
+    const m = shallow(<Chart store={mockStore({ equipment: eqs })} />)
+      .dive()
+      .instance()
     m.componentWillUnmount()
   })
 

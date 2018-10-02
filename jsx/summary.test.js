@@ -19,7 +19,7 @@ describe('Summary', () => {
         errors={[]}
         timer={window.setInterval(() => true, 1800 * 1000)}
       />
-      ).instance()
-      m.componentWillUnmount()
+    ).instance()
+    m.componentWillUnmount()
   })
 })

@@ -13,7 +13,12 @@ const tc = require('./tc.js')
 const dashboard = require('./dashboard.js')
 
 const Nightmare = require('nightmare')
-const nightmare = Nightmare({ show: true, dock: true, typeInterval: 120 })
+const nightmare = Nightmare({ 
+  show: true, 
+  dock: true, 
+  typeInterval: 120, 
+  openDevTools: true
+})
 
 function SmokeTest () {
   nightmare
@@ -22,7 +27,6 @@ function SmokeTest () {
     .wait(500)
     .evaluate(S.SignIn(nightmare))
     .wait(1500)
-    
     .evaluate(outlet.Create(nightmare))
     .wait(1500)
     .evaluate(inlet.Create(nightmare))

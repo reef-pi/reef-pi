@@ -1,11 +1,14 @@
+// +build !windows
+
 package main
 
 import (
-	"github.com/reef-pi/reef-pi/controller"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 func daemonize(db string) {

@@ -5,6 +5,7 @@ import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 const mockStore = configureMockStore([thunk])
+
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('JackSelector', () => {

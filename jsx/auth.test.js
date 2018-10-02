@@ -8,7 +8,15 @@ import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
+global.fetch = jest.fn().mockImplementation(() => {
+  var p = new Promise((resolve) => {
+    resolve({
+      ok: true,
+      status: 200
+    })
+  })
+  return p
+})
 describe('Auth', () => {
   it('<Auth />', () => {
     const m = shallow(<Auth store={mockStore()} />)
@@ -20,5 +28,6 @@ describe('Auth', () => {
     m.handleUserChange({ target: { value: '' } })
     m.handlePasswordChange({ target: { value: '' } })
     m.updateCreds()
+    m.props.updateCreds({})
   })
 })

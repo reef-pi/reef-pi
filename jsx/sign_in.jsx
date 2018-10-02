@@ -1,8 +1,7 @@
 import React from 'react'
-import $ from 'jquery'
 
 export default class SignIn extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       user: '',
@@ -14,7 +13,7 @@ export default class SignIn extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
-  static isSignedIn() {
+  static isSignedIn () {
     return fetch('/api/me', {
       method: 'GET',
       credentials: 'same-origin'
@@ -23,28 +22,21 @@ export default class SignIn extends React.Component {
     })
   }
 
-  static getCreds() {
-    return {
-      user: '',
-      password: ''
-    }
-  }
-
-  static logout() {
+  static logout () {
     return fetch('/auth/signout', {
       method: 'GET',
       credentials: 'same-origin'
-    }).then(response => {
-      // window.location.reload(true)
+    }).then(() => {
       SignIn.refreshPage()
     })
   }
 
-  static refreshPage() {
+  /* istanbul ignore next */
+  static refreshPage () {
     window.location.reload(true)
   }
 
-  login(e) {
+  login (e) {
     this.setState({ invalidCredentials: false })
     e.preventDefault()
     let creds = {
@@ -73,60 +65,60 @@ export default class SignIn extends React.Component {
     })
   }
 
-  handleUserChange(e) {
+  handleUserChange (e) {
     this.setState({ user: e.target.value })
   }
 
-  handlePasswordChange(e) {
+  handlePasswordChange (e) {
     this.setState({ password: e.target.value })
   }
 
-  render() {
+  render () {
     return (
-      <div className="container d-flex h-100">
-        <div className="align-self-center w-100">
-          <div className="col-md-12 col-lg-6 mx-auto">
-            <form id="sign-in-form">
-              <div className="form">
-                <h1 className="h3 mb-3 font-weight-normal reef-pi-title">reef-pi</h1>
+      <div className='container d-flex h-100'>
+        <div className='align-self-center w-100'>
+          <div className='col-md-12 col-lg-6 mx-auto'>
+            <form id='sign-in-form'>
+              <div className='form'>
+                <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
                 {this.state.invalidCredentials ? (
-                  <div className="alert alert-danger" role="alert">
+                  <div className='alert alert-danger' role='alert'>
                     <strong>Oh snap!</strong> Invalid Credentials
                   </div>
                 ) : (
                   <div />
                 )}
-                <label htmlFor="reef-pi-user" className="sr-only">
+                <label htmlFor='reef-pi-user' className='sr-only'>
                   Username
                 </label>
                 <input
                   onChange={this.handleUserChange}
-                  type="text"
-                  id="reef-pi-user"
-                  className="form-control"
-                  name="username"
-                  placeholder="Username"
-                  required=""
-                  autoFocus=""
+                  type='text'
+                  id='reef-pi-user'
+                  className='form-control'
+                  name='username'
+                  placeholder='Username'
+                  required=''
+                  autoFocus=''
                 />
-                <label htmlFor="reef-pi-pass" className="sr-only">
+                <label htmlFor='reef-pi-pass' className='sr-only'>
                   Password
                 </label>
                 <input
                   onChange={this.handlePasswordChange}
-                  type="password"
-                  id="reef-pi-pass"
-                  className="form-control"
-                  name="password"
-                  placeholder="Password"
-                  required=""
-                  autoFocus=""
+                  type='password'
+                  id='reef-pi-pass'
+                  className='form-control'
+                  name='password'
+                  placeholder='Password'
+                  required=''
+                  autoFocus=''
                 />
                 <button
-                  className="btn btn-lg btn-success btn-block mt-3"
+                  className='btn btn-lg btn-success btn-block mt-3'
                   onClick={this.login}
-                  type="submit"
-                  id="btnSaveCreds"
+                  type='submit'
+                  id='btnSaveCreds'
                 >
                   Sign in
                 </button>

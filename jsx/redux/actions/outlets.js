@@ -35,8 +35,8 @@ export const createOutlet = (outlet) => {
 export const updateOutlet = (id, outlet) => {
   return (
     reduxPost({
-      url: '/api/outlets/'+id,
+      url: '/api/outlets/' + id,
       data: outlet,
       success: fetchOutlets
-  }))
+    }))
 }

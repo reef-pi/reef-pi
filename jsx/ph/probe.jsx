@@ -88,7 +88,7 @@ class probe extends React.Component {
     confirm('Are you sure ?')
       .then(function () {
         this.props.deleteProbe(this.props.data.id)
-        this.props.upateHook()
+        this.props.updateHook()
       }.bind(this))
   }
 

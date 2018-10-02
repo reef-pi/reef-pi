@@ -15,7 +15,6 @@ import 'isomorphic-fetch'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-
 describe('equipment actions', () => {
   afterEach(() => {
     fetchMock.reset()

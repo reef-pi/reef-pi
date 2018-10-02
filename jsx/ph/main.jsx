@@ -22,7 +22,7 @@ class ph extends React.Component {
     this.props.probes.forEach((v, k) => {
       list.push(
         <div key={k} className='list-group-item'>
-          <Probe data={v} upateHook={this.props.fetchPhProbes} />
+          <Probe data={v} updateHook={this.props.fetchPhProbes} />
         </div>
       )
     })
