@@ -15,6 +15,7 @@ import { fetchUIData } from 'redux/actions/ui'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
 import { configureStore } from 'redux/store'
+import Summary from 'summary'
 
 const caps = {
   dashboard: <Dashboard />,
@@ -108,6 +109,11 @@ class mainPanel extends React.Component {
           <div className='mt-3' id='reef-pi-alert' />
           <div className='row body-panel'>
             <div className='col-12'>{body}</div>
+          </div>
+          <div className='row d-none d-lg-block'>
+            <div className='col-12'>
+              <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+            </div>
           </div>
         </div>
       </div>
