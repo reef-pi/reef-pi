@@ -16,25 +16,31 @@ class about extends React.Component {
   render () {
     return (
       <div className='container'>
-        <div className='row'>
-          <div className='col-12'>
-            <ul className=''>
-              <li className=''>
-                <a href='http://reef-pi.com' target='_blank'>
-                  {' '}
-                  Documentation
-                </a>{' '}
-                |{' '}
-              </li>
-              <li className=''>{this.props.info.current_time},</li>
-              <li className=''>running {this.props.info.version},</li>
-              <li className=''>since {this.props.info.uptime} | </li>
-              <li className=''>IP {this.props.info.ip} | </li>
-              <li className=' text-danger'>
-                Errors(
-                {this.props.errors.length})
-              </li>
-            </ul>
+        <div className='row justify-content-md-center'>
+          <div class='card mb-4 box-shadow'>
+            <div class='card-header'>
+              <h4 class='my-0 font-weight-normal text-center'>reef-pi</h4>
+            </div>
+            <div class='card-body'>
+              <h2 class='card-title pricing-card-title'>
+                Version: <small class='text-muted'>{this.props.info.version}</small>
+              </h2>
+              <ul class='list-unstyled mt-3 mb-4'>
+                <li>
+                  Website: <a href='http://reef-pi.com'>http://reef-pi.com</a>
+                </li>
+                <li>
+                  Github: <a href='https://github.com/reef-pi/reef-pi'>https://github.com/reef-pi/reef-pi</a>
+                </li>
+                <li>Copyright © 2018 Ranjib Dey</li>
+              </ul>
+              <h2 class='card-title pricing-card-title'>Status</h2>
+              <ul class='list-unstyled mt-3 mb-4'>
+                <li>Current time: {this.props.info.current_time}</li>
+                <li>Uptime: {this.props.info.uptime}</li>
+                <li>IP: {this.props.info.ip}</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

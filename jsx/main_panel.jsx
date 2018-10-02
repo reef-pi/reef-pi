@@ -101,7 +101,7 @@ class mainPanel extends React.Component {
           >
             <span className='navbar-toggler-icon' />
           </button>
-          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle="collapse" data-target=".navbar-collapse">
+          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle='collapse' data-target='.navbar-collapse'>
             {this.navs(tab)}
           </div>
         </nav>
