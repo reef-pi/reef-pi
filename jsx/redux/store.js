@@ -33,7 +33,7 @@ const initialState = {
     latest: undefined,
     images: []
   },
-  notifications: [{ ts: 1, type: 'INFO', content: 'Initialization Complete' }, { ts: new Date().getTime(), type: 'INFO', content: 'Initialization Complete' }]
+  notifications: []
 }
 
 export const configureStore = () => {

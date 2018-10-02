@@ -6,9 +6,26 @@ export const rootReducer = (state, action) => {
   var pHreadings = state.ph_readings
 
   switch (action.type) {
+    case 'NOTIF_READ':
+      return {
+        ...state,
+        notifications: state.notifications.map(a => {
+          if (action.payload.ts !== a.ts) {
+            return a
+          }
+          a.read = true
+          return a
+        })
+      }
+    case 'NOTIF_DELETED':
+      return {
+        ...state,
+        notifications: state.notifications.filter(a => {
+          return action.payload.ts !== a.ts
+        })
+      }
     case 'NOTIF_ADDED':
-      state.notifications.unshift(action.payload)
-      return { ...state, notifications: state.notifications }
+      return { ...state, notifications: [action.payload].concat(state.notifications) }
     case 'ERRORS_LOADED':
       return { ...state, errors: action.payload }
     case 'INFO_LOADED':
