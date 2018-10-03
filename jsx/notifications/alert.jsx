@@ -1,7 +1,7 @@
 import React from 'react'
 import { displayedLog } from 'redux/actions/log'
 import { connect } from 'react-redux'
-import {LogType} from 'logCenter/main'
+import { LogType } from 'logCenter/log'
 class NotificationAlert extends React.Component {
   constructor (props) {
     super(props)

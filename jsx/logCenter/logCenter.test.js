@@ -1,5 +1,5 @@
 import LogCenter from './main'
-import { setAPILog, setUILog } from './main'
+import { setAPILog, setUILog } from './log'
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'

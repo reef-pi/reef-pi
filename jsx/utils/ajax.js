@@ -1,5 +1,5 @@
 import { addLog } from 'redux/actions/log'
-import { LogType, setUILog } from '../logCenter/main'
+import { LogType, setUILog } from '../logCenter/log'
 
 function makeHeaders () {
   let headers = new Headers()
