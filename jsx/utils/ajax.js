@@ -1,13 +1,13 @@
 import { addLog } from 'redux/actions/log'
 import { LogType, setUILog } from '../logCenter/main'
 
-function makeHeaders() {
+function makeHeaders () {
   let headers = new Headers()
   headers.append('Content-Type', 'application/json')
   return headers
 }
 
-export function reduxGet(params) {
+export function reduxGet (params) {
   return dispatch => {
     return fetch(params.url, {
       method: 'GET',
@@ -42,7 +42,7 @@ export function reduxGet(params) {
   }
 }
 
-export function reduxDelete(params) {
+export function reduxDelete (params) {
   return dispatch => {
     return fetch(params.url, {
       method: 'DELETE',
@@ -72,7 +72,7 @@ export function reduxDelete(params) {
   }
 }
 
-export function reduxPut(params) {
+export function reduxPut (params) {
   return dispatch => {
     return fetch(params.url, {
       method: 'PUT',
@@ -101,7 +101,7 @@ export function reduxPut(params) {
   }
 }
 
-export function reduxPost(params) {
+export function reduxPost (params) {
   return dispatch => {
     return fetch(params.url, {
       method: 'POST',
