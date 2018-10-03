@@ -14,8 +14,8 @@ import $ from 'jquery'
 import { fetchUIData } from 'redux/actions/ui'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
-import Summary from 'summary'
 import { configureStore } from 'redux/store'
+import Summary from 'summary'
 
 const caps = {
   dashboard: <Dashboard />,
@@ -89,6 +89,7 @@ class mainPanel extends React.Component {
       <div id='content'>
         <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
           <span className='navbar-brand mb-0 h1'>reef-pi</span>
+          <span className='navbar-brand mb-0 h1 navbar-toggler current-tab'>{tab}</span>
           <button
             className='navbar-toggler'
             type='button'
@@ -100,7 +101,7 @@ class mainPanel extends React.Component {
           >
             <span className='navbar-toggler-icon' />
           </button>
-          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle="collapse" data-target=".navbar-collapse">
+          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle='collapse' data-target='.navbar-collapse'>
             {this.navs(tab)}
           </div>
         </nav>
@@ -109,7 +110,7 @@ class mainPanel extends React.Component {
           <div className='row body-panel'>
             <div className='col-12'>{body}</div>
           </div>
-          <div className='row'>
+          <div className='row d-none d-lg-block'>
             <div className='col-12'>
               <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
             </div>
