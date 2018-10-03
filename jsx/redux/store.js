@@ -33,7 +33,7 @@ const initialState = {
     latest: undefined,
     images: []
   },
-  notifications: []
+  logs: []
 }
 
 export const configureStore = () => {

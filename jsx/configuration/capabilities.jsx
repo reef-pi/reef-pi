@@ -52,7 +52,7 @@ export default class Capabilities extends React.Component {
           {this.toLi('health_check')}
           {this.toLi('dashboard')}
           {this.toLi('dev_mode')}
-          {this.toLi('notification')}
+          {this.toLi('log')}
         </div>
       </div>
     )

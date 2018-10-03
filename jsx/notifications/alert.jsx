@@ -1,75 +1,75 @@
 import React from 'react'
-import { readNotification } from 'redux/actions/notification'
+import { displayedLog } from 'redux/actions/log'
 import { connect } from 'react-redux'
-import {NotificationType} from './main'
+import {LogType} from 'logCenter/main'
 class NotificationAlert extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleClose = this.handleClose.bind(this)
   }
-  handleClose(a) {
-    this.props.readNotification(a)
+  handleClose (a) {
+    this.props.displayedLog(a)
   }
-  createTimer(n) {
+  createTimer (n) {
     const AppearanceTime = 5000
     setTimeout(() => {
       this.handleClose(n)
     }, AppearanceTime)
   }
-  getAlertClass(a) {
+  getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {
-      case NotificationType.info:
+      case LogType.info:
         cssClass = 'alert-info'
         break
-      case NotificationType.error:
+      case LogType.error:
         cssClass = 'alert-danger'
         break
-      case NotificationType.success:
+      case LogType.success:
         cssClass = 'alert-success'
         break
-      case NotificationType.warning:
+      case LogType.warning:
         cssClass = 'alert-warning'
         break
     }
     return cssClass
   }
-  renderAlert(n) {
+  renderAlert (n) {
     this.createTimer(n)
 
     return (
       <div key={'alert-' + n.ts} className={`${this.getAlertClass(n)} alert alert-dismissible fade show`}>
-        <div className="font-weight-normal">{n.content}</div>
+        <div className='font-weight-normal'>{n.content}</div>
         <button
-          type="button"
+          type='button'
           onClick={() => {
             this.handleClose(n)
           }}
-          className="close"
+          className='close'
         >
           <span>&times;</span>
         </button>
       </div>
     )
   }
-  render() {
+  render () {
     let r = []
-    this.props.notifications.forEach(a => {
-      if (!a.read) {
+    this.props.logs.forEach(a => {
+      if (a.display) {
         r.push(this.renderAlert(a))
       }
     })
-    return <div id="rpi-alert-container">{r}</div>
+    return <div id='rpi-alert-container'>{r}</div>
   }
 }
 const mapStateToProps = state => {
   return {
-    notifications: state.notifications
+    logs: state.logs
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    readNotification: n => dispatch(readNotification(n))
+    displayedLog: n => dispatch(displayedLog(n))
   }
 }
 const notifalert = connect(

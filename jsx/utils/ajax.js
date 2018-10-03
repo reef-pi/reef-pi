@@ -1,7 +1,5 @@
-import { showAlert } from 'utils/alert'
-import { addNotification } from 'redux/actions/notification'
-import NotificationCenter from '../notificationCenter/main'
-import { NotificationType } from '../notificationCenter/main'
+import { addLog } from 'redux/actions/log'
+import { LogType, setUILog } from '../logCenter/main'
 
 function makeHeaders() {
   let headers = new Headers()
@@ -19,20 +17,14 @@ export function reduxGet(params) {
       .then(response => {
         if (!response.ok) {
           if (response.status === 401) {
-            dispatch(
-              addNotification(NotificationCenter.setNotification(NotificationType.error, 'Authentication failure'))
-            )
+            dispatch(addLog(setUILog(LogType.error, 'Authentication failure')))
             return
           }
           if (params.suppressError) {
             return
           }
           response.text().then(err => {
-            dispatch(
-              addNotification(
-                NotificationCenter.setNotification(NotificationType.error, err + ' | HTTP ' + response.status)
-              )
-            )
+            dispatch(addLog(setUILog(LogType.error, err + ' | HTTP ' + response.status)))
           })
         }
         return response
@@ -42,11 +34,8 @@ export function reduxGet(params) {
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
         dispatch(
-          addNotification(
-            NotificationCenter.setNotification(
-              NotificationType.error,
-              'GET API call failure.\nDetails:' + JSON.stringify(params) + JSON.stringify(v)
-            )
+          addLog(
+            setUILog(LogType.error, 'GET API call failure.\nDetails:' + JSON.stringify(params) + JSON.stringify(v))
           )
         )
       })
@@ -66,7 +55,7 @@ export function reduxDelete(params) {
             return
           }
           response.text().then(err => {
-            showAlert(err + ' | HTTP ' + response.status)
+            dispatch(addLog(setUILog(err + ' | HTTP ' + response.status)))
           })
         }
         return response
@@ -74,7 +63,11 @@ export function reduxDelete(params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert('DELETE API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+        dispatch(
+          addLog(
+            setUILog(LogType.error, 'DELETE API call failure.\nDetails:' + JSON.stringify(params) + '\nError:\n' + v)
+          )
+        )
       })
   }
 }
@@ -93,7 +86,7 @@ export function reduxPut(params) {
             return
           }
           response.text().then(err => {
-            showAlert(err + ' | HTTP ' + response.status)
+            dispatch(addLog(setUILog(LogType.error, err + ' | HTTP ' + response.status)))
           })
         }
         return response
@@ -101,7 +94,9 @@ export function reduxPut(params) {
       .then(() => dispatch(params.success()))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert('PUT API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+        dispatch(
+          addLog(setUILog(LogType.error, 'PUT API call failure.\nDetails:' + JSON.stringify(params) + '\nError:\n' + v))
+        )
       })
   }
 }
@@ -120,7 +115,7 @@ export function reduxPost(params) {
             return
           }
           response.text().then(err => {
-            showAlert(err + ' | HTTP ' + response.status)
+            dispatch(addLog(setUILog(LogType.error, err + ' | HTTP ' + response.status)))
           })
         }
         return response
@@ -128,7 +123,11 @@ export function reduxPost(params) {
       .then(data => dispatch(params.success(data)))
       .catch(v => {
         dispatch({ type: 'API_FAILURE', params: params })
-        showAlert('POST API call failure.\nDetails:' + JSON.stringify(params), '\nError:\n', v)
+        dispatch(
+          addLog(
+            setUILog(LogType.error, 'POST API call failure.\nDetails:' + JSON.stringify(params) + '\nError:\n' + v)
+          )
+        )
       })
   }
 }

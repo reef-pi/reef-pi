@@ -6,26 +6,26 @@ export const rootReducer = (state, action) => {
   var pHreadings = state.ph_readings
 
   switch (action.type) {
-    case 'NOTIF_READ':
+    case 'LOG_DISPLAYED':
       return {
         ...state,
-        notifications: state.notifications.map(a => {
+        logs: state.logs.map(a => {
           if (action.payload.ts !== a.ts) {
             return a
           }
-          a.read = true
+          a.display = false
           return a
         })
       }
-    case 'NOTIF_DELETED':
+    case 'LOG_DELETED':
       return {
         ...state,
-        notifications: state.notifications.filter(a => {
+        logs: state.logs.filter(a => {
           return action.payload.ts !== a.ts
         })
       }
-    case 'NOTIF_ADDED':
-      return { ...state, notifications: [action.payload].concat(state.notifications) }
+    case 'LOG_ADDED':
+      return { ...state, logs: [action.payload].concat(state.logs) }
     case 'ERRORS_LOADED':
       return { ...state, errors: action.payload }
     case 'INFO_LOADED':

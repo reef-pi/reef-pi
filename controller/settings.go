@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Settings struct {
@@ -56,7 +57,7 @@ func initializeSettings(store types.Store) (Settings, error) {
 		DefaultSettings.Capabilities.Macro = true
 		DefaultSettings.Capabilities.Doser = true
 		DefaultSettings.Capabilities.Ph = true
-		DefaultSettings.Capabilities.Notification = true
+		DefaultSettings.Capabilities.Log = true
 
 		DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")

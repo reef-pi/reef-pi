@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Capabilities struct {
@@ -19,7 +20,7 @@ type Capabilities struct {
 	Ph            bool `json:"ph"`
 	Macro         bool `json:"macro"`
 	Configuration bool `json:"configuration"`
-	Notification  bool `json:"notification"`
+	Log           bool `json:"log"`
 }
 
 var DefaultCapabilities = Capabilities{
@@ -33,7 +34,7 @@ var DefaultCapabilities = Capabilities{
 	ATO:           true,
 	Configuration: true,
 	Macro:         true,
-	Notification:  true,
+	Log:           true,
 }
 
 func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {
