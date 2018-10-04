@@ -35,7 +35,7 @@ const initialState = {
   },
   logs: []
 }
-
+const store = createStore(rootReducer, initialState, applyMiddleware(thunk))
 export const configureStore = () => {
-  return createStore(rootReducer, initialState, applyMiddleware(thunk))
+  return store
 }
