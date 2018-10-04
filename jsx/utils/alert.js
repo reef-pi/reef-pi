@@ -7,5 +7,5 @@ export function showAlert (msg) {
 }
 
 export function clearAlert () {
-  console.warning('clearAlert is deprecated.')
+  console.warn('clearAlert is deprecated.')
 }
