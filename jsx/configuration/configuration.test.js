@@ -145,15 +145,15 @@ describe('Configuration ui', () => {
     m.componentWillUnmount()
   })
   it('<Errors />', () => {
-    let m = shallow(
+    let wrapper = shallow(
       <Errors
         store={mockStore({
           errors: [{ id: '1', time: 'dd', message: 'dd' }]
         })}
       />
-    )
-      .dive()
-      .instance()
+    ).dive()
+    wrapper.find('.btn-outline-secondary').first().simulate('click')
+    let m = wrapper.instance()
     m.props.delete('1')
     m.props.clear()
     m.props.fetch()

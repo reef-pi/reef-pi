@@ -61,7 +61,7 @@ export default class Outlet extends React.Component {
             <input
               type='text'
               id={'outlet-' + this.props.outlet_id + '-name'}
-              className='form-control'
+              className='form-control outlet-name'
               onChange={this.handleNameChange}
               value={this.state.name}
             />
@@ -73,7 +73,7 @@ export default class Outlet extends React.Component {
             <input
               type='number'
               id={'outlet-' + this.props.outlet_id + '-pin'}
-              className='form-control'
+              className='form-control outlet-pin'
               onChange={this.handlePinChange}
               value={this.state.pin}
             />
@@ -85,6 +85,7 @@ export default class Outlet extends React.Component {
             <input
               type='checkbox'
               onChange={this.handleReverseChange}
+              className='outlet-reverse'
               id={'outlet-' + this.props.outlet_id + '-reverse'}
               checked={this.state.reverse}
             />
@@ -116,7 +117,7 @@ export default class Outlet extends React.Component {
       <div className='row'>
         <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
         <div className='col-1'>
-          <input type='button' className='btn btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
+          <input type='button' className='btn edit-outlet btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
         </div>
         <div className='col-1'>
           <input type='button' className='btn btn-outline-danger' value='X' onClick={this.props.remove} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import Inlets from './inlets'
@@ -16,6 +16,19 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
+      })
+      .bind(this)
+  }
+})
+
 describe('Connectors', () => {
   it('<Main />', () => {
     shallow(<Main />)
@@ -23,77 +36,89 @@ describe('Connectors', () => {
 
   it('<InletSelector />', () => {
     const state = {
-      inlets: [{id: '1', name: 'foo', pin: 1}]
+      inlets: [{ id: '1', name: 'foo', pin: 1 }, { id: '2', name: 'bar', pin: 2 }]
     }
-    const m = shallow(<InletSelector store={mockStore(state)} active='1' update={() => true} />).dive().instance()
-    m.set(0)
+    const m = shallow(<InletSelector store={mockStore(state)} active='1' update={() => true} />).dive()
+    m.find('a')
+      .first()
+      .simulate('click')
   })
 
   it('<Inlets />', () => {
     const state = {
-      inlets: [{id: '1', name: 'foo', pin: 1, reverse: true}]
+      inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true }]
     }
-    const m = shallow(<Inlets store={mockStore(state)} />).dive().instance()
-    m.add()
-    m.remove('1')()
+    const wrapper = shallow(<Inlets store={mockStore(state)} />).dive()
+    wrapper.find('#add_inlet').simulate('click')
+    wrapper.find('#inletName').simulate('change', { target: { value: 'foo' } })
+    wrapper.find('#inletPin').simulate('change', { target: { value: '4' } })
+    wrapper.find('#inletReverse').simulate('change')
+    wrapper.find('#createInlet').simulate('click')
+    expect(wrapper.find(Inlet).length).toBe(1)
   })
 
   it('<Inlet />', () => {
-    const m = shallow(
-      <Inlet
-        inlet_id='1'
-        name='foo'
-        pin={1}
-        reverse={false}
-        update={() => true}
-        remove={() => true}
-      />).instance()
-    m.edit()
+    let mockRemove = jest.fn()
+    const m = shallow(<Inlet inlet_id='1' name='foo' pin={1} reverse={false} update={() => true} remove={() => true} />)
+    m.find('.edit-inlet').simulate('click')
+    m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
+    m.find('.inlet-pin').simulate('change', { target: { value: '4' } })
+    m.find('.inlet-reverse').simulate('change')
+    m.find('.edit-inlet').simulate('click')
   })
 
   it('<Jacks />', () => {
     const state = {
-      jacks: [{id: '1', name: 'J2', pins: [0, 2]}]
+      jacks: [{ id: '1', name: 'J2', pins: [0, 2] }]
     }
-    const m = shallow(<Jacks store={mockStore(state)} />).dive().instance()
-    m.add()
-    m.setDriver('rpi')()
-    m.remove('1')()
+    const m = shallow(<Jacks store={mockStore(state)} />).dive()
+    m.find('#add_jack').simulate('click')
+    m.find('#jackName').simulate('change', { target: { value: 'foo' } })
+    m.find('#jackPins').simulate('change', { target: { value: '4,L' } })
+    m.find('#jack-type-selection').simulate('click')
+    m.find('a.dropdown-item')
+      .first()
+      .simulate('click')
+    m.find('#createJack').simulate('click')
+    m.find('#jackPins').simulate('change', { target: { value: '4' } })
+    m.find('#createJack').simulate('click')
   })
 
   it('<Jack />', () => {
     const m = shallow(
-      <Jack
-        jack_id='1'
-        name='foo'
-        pins={[1, 2]}
-        update={() => true}
-        remove={() => true}
-        driver='rpi'
-      />).instance()
-    m.edit()
-    m.setDriver('pca9685')()
+      <Jack jack_id='1' name='foo' pins={[1, 2]} update={() => true} remove={() => true} driver='rpi' />
+    )
+    m.find('.jack-edit').simulate('click')
+    m.find('.jack-name').simulate('change', { target: { value: 'foo' } })
+    m.find('.jack-pin').simulate('change', { target: { value: '4,L' } })
+    m.find('.jack-edit').simulate('click')
+    m.find('.jack-type').simulate('click')
+    m.find('a.dropdown-item')
+      .first()
+      .simulate('click')
+    m.find('.jack-pin').simulate('change', { target: { value: '4' } })
+    m.find('.jack-edit').simulate('click')
   })
 
   it('<Outlets />', () => {
     const state = {
-      outlets: [{id: '1', name: 'J2', pin: 2, reverse: true}]
+      outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true }]
     }
-    const m = shallow(<Outlets store={mockStore(state)} />).dive().instance()
-    m.add()
-    m.remove('1')()
+    const wrapper = shallow(<Outlets store={mockStore(state)} />).dive()
+    wrapper.find('#add_outlet').simulate('click')
+    wrapper.find('#outletName').simulate('change', { target: { value: 'foo' } })
+    wrapper.find('#outletPin').simulate('change', { target: { value: '4' } })
+    wrapper.find('#outletReverse').simulate('change')
+    wrapper.find('#createOutlet').simulate('click')
+    expect(wrapper.find(Outlet).length).toBe(1)
   })
 
   it('<Outlet />', () => {
-    const m = shallow(
-      <Outlet
-        name='foo'
-        reverse
-        pin={1}
-        outlet_id='1'
-        update={() => true}
-        remove={() => true}
-      />).instance()
-    m.edit()
+    const m = shallow(<Outlet name='foo' reverse pin={1} outlet_id='1' update={() => true} remove={() => true} />)
+    m.find('.edit-outlet').simulate('click')
+    m.find('.outlet-name').simulate('change', { target: { value: 'foo' } })
+    m.find('.outlet-pin').simulate('change', { target: { value: '4' } })
+    m.find('.outlet-reverse').simulate('change')
+    m.find('.edit-outlet').simulate('click')
   })
 })

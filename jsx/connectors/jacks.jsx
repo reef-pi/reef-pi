@@ -148,7 +148,7 @@ class jacks extends React.Component {
               </div>
 
               <div className='col-md-6 col-lg-3'>
-                <div className='form-group'>
+                <div className='jack-type form-group'>
                   <label htmlFor='jack-type-selection'>Driver</label>
                   <div className='dropdown'>
                     <button

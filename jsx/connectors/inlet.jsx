@@ -61,7 +61,7 @@ export default class Inlet extends React.Component {
             <input
               type='text'
               id={'inlet-' + this.props.inlet_id + '-name'}
-              className='form-control'
+              className='form-control inlet-name'
               onChange={this.handleNameChange}
               value={this.state.name}
             />
@@ -73,7 +73,7 @@ export default class Inlet extends React.Component {
             <input
               type='text'
               id={'inlet-' + this.props.inlet_id + '-pin'}
-              className='form-control'
+              className='form-control inlet-pin'
               onChange={this.handlePinChange}
               value={this.state.pin}
             />
@@ -83,6 +83,7 @@ export default class Inlet extends React.Component {
           <div className='input-group'>
             <span className='input-group-addon'> Reverse </span>
             <input
+              className='inlet-reverse'
               type='checkbox'
               onChange={this.handleReverseChange}
               id={'inlet-' + this.props.inlet_id + '-reverse'}
@@ -97,9 +98,7 @@ export default class Inlet extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col'>
-          {this.state.name}
-        </div>
+        <div className='col'>{this.state.name}</div>
         <div className='col'>
           <label className='small'>{this.state.pin}</label>
         </div>
@@ -107,7 +106,7 @@ export default class Inlet extends React.Component {
           <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
         </div>
         <div className='col'>
-          <label className='small'>{this.state.reverse ? 'reverse' : '' }</label>
+          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
         </div>
       </div>
     )
@@ -116,24 +115,17 @@ export default class Inlet extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-8'>
-          {this.state.edit ? this.editUI() : this.ui() }
-        </div>
+        <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
         <div className='col-1'>
           <input
             type='button'
-            className='btn btn-outline-secondary'
+            className='btn edit-inlet btn-outline-secondary'
             value={this.state.lbl}
             onClick={this.edit}
           />
         </div>
         <div className='col-1'>
-          <input
-            type='button'
-            className='btn btn-outline-danger'
-            value='X'
-            onClick={this.props.remove}
-          />
+          <input type='button' className='btn btn-outline-danger' value='X' onClick={this.props.remove} />
         </div>
       </div>
     )

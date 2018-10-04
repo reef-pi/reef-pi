@@ -99,7 +99,7 @@ export default class Jack extends React.Component {
             <label>Driver</label>
             <div className='dropdown'>
               <button
-                className='btn btn-secondary dropdown-toggle form-control'
+                className='jack-type btn btn-secondary dropdown-toggle form-control'
                 type='button'
                 id={this.props.jack_id + '-driver-selection'}
                 data-toggle='dropdown'
@@ -154,6 +154,6 @@ Jack.propTypes = {
   name: PropTypes.string.isRequired,
   pins: PropTypes.array.isRequired,
   jack_id: PropTypes.string.isRequired,
-  remove: PropTypes.func.isRequired,
+  remove: PropTypes.func,
   update: PropTypes.func
 }

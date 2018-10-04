@@ -67,7 +67,9 @@ describe('Equipment ui', () => {
       <Equipment
         equipment={eqs[0]}
         update={() => {
-          return { then: function () {} }
+          return new Promise(resolve => {
+            return resolve(true)
+          })
         }}
         delete={() => true}
         outlets={outlets}
