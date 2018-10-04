@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import { confirm } from 'utils/confirm'
 import { showAlert } from 'utils/alert'
 import { connect } from 'react-redux'
