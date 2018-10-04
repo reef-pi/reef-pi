@@ -58,7 +58,6 @@ describe('Connectors', () => {
   })
 
   it('<Inlet />', () => {
-    let mockRemove = jest.fn()
     const m = shallow(<Inlet inlet_id='1' name='foo' pin={1} reverse={false} update={() => true} remove={() => true} />)
     m.find('.edit-inlet').simulate('click')
     m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
