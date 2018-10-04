@@ -5,29 +5,36 @@ import { showAlert } from 'utils/alert'
 import { connect } from 'react-redux'
 import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/jacks'
 import Jack from './jack'
-
 class jacks extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      add: false,
-      driver: 'pca9685'
+      JackName: '',
+      JackPins: '',
+      JackDriver: 'pca9685',
+      add: false
     }
     this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
     this.setDriver = this.setDriver.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
   }
-
+  handleNameChange (e) {
+    this.setState({ JackName: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ JackPins: e.target.value })
+  }
   setDriver (k) {
     return () => {
       this.setState({
-        driver: k
+        JackDriver: k
       })
     }
   }
-
   remove (id) {
     return function () {
       confirm('Are you sure ?').then(
@@ -44,19 +51,16 @@ class jacks extends React.Component {
 
   add () {
     this.setState({
-      add: !this.state.add
+      add: !this.state.add,
+      JackName: '',
+      JackPins: ''
     })
-    $('#jackName').val('')
-    $('#jackPins').val('')
   }
 
   save () {
-    var pins = $('#jackPins')
-      .val()
-      .split(',')
-      .map(p => {
-        return parseInt(p)
-      })
+    var pins = this.state.JackPins.split(',').map(p => {
+      return parseInt(p)
+    })
     for (var i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
         showAlert('Use only comma separated numbers')
@@ -64,9 +68,9 @@ class jacks extends React.Component {
       }
     }
     var payload = {
-      name: $('#jackName').val(),
+      name: this.state.JackName,
       pins: pins,
-      driver: this.state.driver
+      driver: this.state.JackDriver
     }
     this.props.create(payload)
     this.add()
@@ -118,18 +122,29 @@ class jacks extends React.Component {
             </div>
           </div>
           <div className='col-12'>
-
             <div className='row' style={dStyle}>
               <div className='col-md-6 col-lg-3'>
                 <div className='form-group'>
                   <label htmlFor='jackName'> Name </label>
-                  <input type='text' id='jackName' className='form-control' />
+                  <input
+                    type='text'
+                    id='jackName'
+                    value={this.state.JackName}
+                    onChange={this.handleNameChange}
+                    className='form-control'
+                  />
                 </div>
               </div>
               <div className='col-md-6 col-lg-3'>
                 <div className='form-group'>
                   <label htmlFor='jackPins'> Pins </label>
-                  <input type='text' id='jackPins' className='form-control' />
+                  <input
+                    type='text'
+                    id='jackPins'
+                    value={this.state.JackPins}
+                    onChange={this.handlePinChange}
+                    className='form-control'
+                  />
                 </div>
               </div>
 
@@ -145,14 +160,14 @@ class jacks extends React.Component {
                       aria-haspopup='true'
                       aria-expanded='false'
                     >
-                      {this.state.driver}
+                      {this.state.JackDriver}
                     </button>
                     <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
                       <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
-                      rpi
+                        rpi
                       </a>
                       <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
-                      pca9685
+                        pca9685
                       </a>
                     </div>
                   </div>
