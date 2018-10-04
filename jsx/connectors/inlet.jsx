@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import $ from 'jquery'
 
 export default class Inlet extends React.Component {
   constructor (props) {
@@ -15,8 +14,20 @@ export default class Inlet extends React.Component {
     this.edit = this.edit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
+  handleNameChange (e) {
+    this.setState({ name: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ pin: e.target.value })
+  }
+  handleReverseChange () {
+    this.setState({ reverse: !this.state.reverse })
+  }
   edit () {
     if (!this.state.edit) {
       this.setState({
@@ -26,9 +37,9 @@ export default class Inlet extends React.Component {
       return
     }
     var payload = {
-      name: $('#inlet-' + this.props.inlet_id + '-name').val(),
-      pin: parseInt($('#inlet-' + this.props.inlet_id + '-pin').val()),
-      reverse: $('#inlet-' + this.props.inlet_id + '-reverse')[0].checked,
+      name: this.state.name,
+      pin: parseInt(this.state.pin),
+      reverse: this.state.reverse,
       equipment: this.props.equipment
     }
     this.props.update(payload)
@@ -51,7 +62,8 @@ export default class Inlet extends React.Component {
               type='text'
               id={'inlet-' + this.props.inlet_id + '-name'}
               className='form-control'
-              defaultValue={this.state.name}
+              onChange={this.handleNameChange}
+              value={this.state.name}
             />
           </div>
         </div>
@@ -62,7 +74,8 @@ export default class Inlet extends React.Component {
               type='text'
               id={'inlet-' + this.props.inlet_id + '-pin'}
               className='form-control'
-              defaultValue={this.state.pin}
+              onChange={this.handlePinChange}
+              value={this.state.pin}
             />
           </div>
         </div>
@@ -71,8 +84,9 @@ export default class Inlet extends React.Component {
             <span className='input-group-addon'> Reverse </span>
             <input
               type='checkbox'
+              onChange={this.handleReverseChange}
               id={'inlet-' + this.props.inlet_id + '-reverse'}
-              defaultChecked={this.state.reverse}
+              checked={this.state.reverse}
             />
           </div>
         </div>

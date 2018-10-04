@@ -77,7 +77,7 @@ export default class Jack extends React.Component {
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
               onChange={this.handleNameChange}
-              className='form-control'
+              className='jack-name form-control'
               value={this.state.name}
             />
           </div>
@@ -89,7 +89,7 @@ export default class Jack extends React.Component {
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
               onChange={this.handlePinChange}
-              className='form-control'
+              className='jack-pin form-control'
               value={this.state.pins}
             />
           </div>
@@ -140,10 +140,10 @@ export default class Jack extends React.Component {
       <div className='row'>
         <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
         <div className='col-1'>
-          <input type='button' className='btn btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
+          <input type='button' className='jack-edit btn btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
         </div>
         <div className='col-1'>
-          <input type='button' className='btn btn-outline-danger' value='X' onClick={this.props.remove} />
+          <input type='button' className='jack-remove btn btn-outline-danger' value='X' onClick={this.props.remove} />
         </div>
       </div>
     )
