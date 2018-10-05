@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import $ from 'jquery'
 
 export default class Outlet extends React.Component {
   constructor (props) {
@@ -15,8 +14,20 @@ export default class Outlet extends React.Component {
     this.edit = this.edit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
+  handleNameChange (e) {
+    this.setState({ name: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ pin: e.target.value })
+  }
+  handleReverseChange () {
+    this.setState({ reverse: !this.state.reverse })
+  }
   edit () {
     if (!this.state.edit) {
       this.setState({
@@ -26,9 +37,9 @@ export default class Outlet extends React.Component {
       return
     }
     var payload = {
-      name: $('#outlet-' + this.props.outlet_id + '-name').val(),
-      pin: parseInt($('#outlet-' + this.props.outlet_id + '-pin').val()),
-      reverse: $('#outlet-' + this.props.outlet_id + '-reverse')[0].checked,
+      name: this.state.name,
+      pin: parseInt(this.state.pin),
+      reverse: this.state.reverse,
       equipment: this.props.equipment
     }
     this.props.update(payload)
@@ -50,8 +61,9 @@ export default class Outlet extends React.Component {
             <input
               type='text'
               id={'outlet-' + this.props.outlet_id + '-name'}
-              className='form-control'
-              defaultValue={this.state.name}
+              className='form-control outlet-name'
+              onChange={this.handleNameChange}
+              value={this.state.name}
             />
           </div>
         </div>
@@ -59,10 +71,11 @@ export default class Outlet extends React.Component {
           <div className='input-group'>
             <span className='input-group-addon'> Pin </span>
             <input
-              type='text'
+              type='number'
               id={'outlet-' + this.props.outlet_id + '-pin'}
-              className='form-control'
-              defaultValue={this.state.pin}
+              className='form-control outlet-pin'
+              onChange={this.handlePinChange}
+              value={this.state.pin}
             />
           </div>
         </div>
@@ -71,8 +84,10 @@ export default class Outlet extends React.Component {
             <span className='input-group-addon'> Reverse </span>
             <input
               type='checkbox'
+              onChange={this.handleReverseChange}
+              className='outlet-reverse'
               id={'outlet-' + this.props.outlet_id + '-reverse'}
-              defaultChecked={this.state.reverse}
+              checked={this.state.reverse}
             />
           </div>
         </div>
@@ -83,9 +98,7 @@ export default class Outlet extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col'>
-          {this.state.name}
-        </div>
+        <div className='col'>{this.state.name}</div>
         <div className='col'>
           <label className='small'>{this.state.pin}</label>
         </div>
@@ -93,7 +106,7 @@ export default class Outlet extends React.Component {
           <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
         </div>
         <div className='col'>
-          <label className='small'>{this.state.reverse ? 'reverse' : '' }</label>
+          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
         </div>
       </div>
     )
@@ -102,24 +115,12 @@ export default class Outlet extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-8'>
-          {this.state.edit ? this.editUI() : this.ui() }
+        <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div className='col-1'>
+          <input type='button' className='btn edit-outlet btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
         </div>
         <div className='col-1'>
-          <input
-            type='button'
-            className='btn btn-outline-secondary'
-            value={this.state.lbl}
-            onClick={this.edit}
-          />
-        </div>
-        <div className='col-1'>
-          <input
-            type='button'
-            className='btn btn-outline-danger'
-            value='X'
-            onClick={this.props.remove}
-          />
+          <input type='button' className='btn btn-outline-danger' value='X' onClick={this.props.remove} />
         </div>
       </div>
     )

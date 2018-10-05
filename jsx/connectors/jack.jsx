@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import $ from 'jquery'
-import {showAlert} from 'utils/alert'
+import { showAlert } from 'utils/alert'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -17,8 +16,16 @@ export default class Jack extends React.Component {
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.setDriver = this.setDriver.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
   }
 
+  handleNameChange (e) {
+    this.setState({ name: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ pins: e.target.value })
+  }
   setDriver (k) {
     return () => {
       this.setState({
@@ -35,7 +42,11 @@ export default class Jack extends React.Component {
       })
       return
     }
-    var pins = $('#jack-' + this.props.jack_id + '-pins').val().split(',').map((p) => { return (parseInt(p)) })
+    var pins = this.state.pins
+      .split(',')
+      .map(p => {
+        return parseInt(p)
+      })
     for (var i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
         showAlert('Use only comma separated numbers')
@@ -43,7 +54,7 @@ export default class Jack extends React.Component {
       }
     }
     var payload = {
-      name: $('#jack-' + this.props.jack_id + '-name').val(),
+      name: this.state.name,
       pins: pins,
       driver: this.state.driver
     }
@@ -65,8 +76,9 @@ export default class Jack extends React.Component {
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
-              className='form-control'
-              defaultValue={this.state.name}
+              onChange={this.handleNameChange}
+              className='jack-name form-control'
+              value={this.state.name}
             />
           </div>
         </div>
@@ -76,8 +88,9 @@ export default class Jack extends React.Component {
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
-              className='form-control'
-              defaultValue={this.state.pins}
+              onChange={this.handlePinChange}
+              className='jack-pin form-control'
+              value={this.state.pins}
             />
           </div>
         </div>
@@ -86,7 +99,7 @@ export default class Jack extends React.Component {
             <label>Driver</label>
             <div className='dropdown'>
               <button
-                className='btn btn-secondary dropdown-toggle form-control'
+                className='jack-type btn btn-secondary dropdown-toggle form-control'
                 type='button'
                 id={this.props.jack_id + '-driver-selection'}
                 data-toggle='dropdown'
@@ -94,8 +107,12 @@ export default class Jack extends React.Component {
                 {this.state.driver}
               </button>
               <div className='dropdown-menu'>
-                <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>rpi</a>
-                <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>pca9685</a>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
+                  rpi
+                </a>
+                <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
+                  pca9685
+                </a>
               </div>
             </div>
           </div>
@@ -107,9 +124,7 @@ export default class Jack extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col'>
-          {this.state.name}
-        </div>
+        <div className='col'>{this.state.name}</div>
         <div className='col'>
           <label className='small'>{this.state.pins}</label>
         </div>
@@ -123,24 +138,12 @@ export default class Jack extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-8'>
-          {this.state.edit ? this.editUI() : this.ui() }
+        <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div className='col-1'>
+          <input type='button' className='jack-edit btn btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
         </div>
         <div className='col-1'>
-          <input
-            type='button'
-            className='btn btn-outline-secondary'
-            value={this.state.lbl}
-            onClick={this.edit}
-          />
-        </div>
-        <div className='col-1'>
-          <input
-            type='button'
-            className='btn btn-outline-danger'
-            value='X'
-            onClick={this.props.remove}
-          />
+          <input type='button' className='jack-remove btn btn-outline-danger' value='X' onClick={this.props.remove} />
         </div>
       </div>
     )
@@ -151,6 +154,6 @@ Jack.propTypes = {
   name: PropTypes.string.isRequired,
   pins: PropTypes.array.isRequired,
   jack_id: PropTypes.string.isRequired,
-  remove: PropTypes.func.isRequired,
+  remove: PropTypes.func,
   update: PropTypes.func
 }
