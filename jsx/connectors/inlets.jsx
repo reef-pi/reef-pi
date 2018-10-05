@@ -49,7 +49,7 @@ class inlets extends React.Component {
     this.setState({
       add: !this.state.add,
       inName: '',
-      inPins: '',
+      inPin: '',
       inReverse: false
     })
   }

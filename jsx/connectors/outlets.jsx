@@ -49,7 +49,7 @@ class outlets extends React.Component {
     this.setState({
       add: !this.state.add,
       outName: '',
-      outPins: '',
+      outPin: '',
       outReverse: false
     })
   }
