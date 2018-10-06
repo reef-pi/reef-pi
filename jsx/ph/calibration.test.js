@@ -1,0 +1,70 @@
+import React from 'react'
+import Enzyme, {shallow } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import CalibrateForm, {Calibrate} from './calibrate'
+import CalibrationWizard from './calibration_wizard'
+import 'isomorphic-fetch'
+import * as Alert from '../utils/alert'
+
+Enzyme.configure({ adapter: new Adapter() })
+
+describe('Ph Calibration', () => {
+  var values = {enable: true}
+  var fn = jest.fn()
+
+  beforeEach(() => {
+    jest.spyOn(Alert, 'showAlert')
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('<Calibrate />', () => {
+    shallow(
+      <Calibrate values={values}
+        errors={{}}
+        touched={{}}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn} />
+    )
+  })
+
+  it('<Calibrate /> should submit', () => {
+    const wrapper = shallow(
+      <Calibrate values={values}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn}
+        errors={{}}
+        touched={{}}
+        dirty
+        isValid />
+    )
+    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+  })
+
+  it('<CalibrateForm/>', () => {
+    const wrapper = shallow(<CalibrateForm onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
+  })
+
+  it('<CalibrationWizard />', () => {
+    const fn = jest.fn((id, obj) => {
+      return new Promise(resolve => {
+        return resolve(true)
+      })
+    })
+    const probe = {id: 1}
+    const wrapper = shallow(<CalibrationWizard probe={probe} calibrateProbe={fn} />)
+      .instance()
+
+    wrapper.cancel()
+    wrapper.confirm()
+    wrapper.calibrate('mid', 7)
+    wrapper.calibrate('low', 4)
+    wrapper.calibrate('high', 10)
+  })
+})

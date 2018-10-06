@@ -74,7 +74,9 @@ class ato extends React.Component {
             inlets={this.props.inlets}
             equipment={this.props.equipment}
             readOnly={this.state.readOnly} />
-          <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
+          <div className='d-none d-sm-flex'>
+            <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
+          </div>
         </div>
       )
     }

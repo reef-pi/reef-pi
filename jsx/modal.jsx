@@ -8,7 +8,7 @@ export default class Modal extends React.Component {
   }
 
   backdrop () {
-    return <div className='modal-backdrop in' />
+    return <div className='modal-backdrop show' />
   }
 
   modal () {
