@@ -140,19 +140,17 @@ func (r *ReefPi) loadDoserSubsystem(jacks *connectors.Jacks) error {
 }
 
 func (r *ReefPi) loadSubsystems() error {
-	if r.settings.Capabilities.Configuration {
-		conf := system.Config{
-			Interface:       r.settings.Interface,
-			Name:            r.settings.Name,
-			Display:         r.settings.Display,
-			DevMode:         r.settings.Capabilities.DevMode,
-			Pprof:           r.settings.Pprof,
-			RPI_PWMFreq:     r.settings.RPI_PWMFreq,
-			PCA9685_PWMFreq: r.settings.PCA9685_PWMFreq,
-			Version:         r.version,
-		}
-		r.subsystems[system.Bucket] = system.New(conf, r.Controller())
-	}
+    conf := system.Config{
+        Interface:       r.settings.Interface,
+        Name:            r.settings.Name,
+        Display:         r.settings.Display,
+        DevMode:         r.settings.Capabilities.DevMode,
+        Pprof:           r.settings.Pprof,
+        RPI_PWMFreq:     r.settings.RPI_PWMFreq,
+        PCA9685_PWMFreq: r.settings.PCA9685_PWMFreq,
+        Version:         r.version,
+    }
+    r.subsystems[system.Bucket] = system.New(conf, r.Controller())
 	var eqs *equipment.Controller
 	if r.settings.Capabilities.Equipment {
 		conf := equipment.Config{
