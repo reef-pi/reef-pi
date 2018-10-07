@@ -45,7 +45,7 @@ export const updateProbe = (id, a) => {
   return (reduxPost({
     url: '/api/phprobes/' + id,
     data: a,
-    success: probeUpdated
+    success: fetchPhProbes
   }))
 }
 

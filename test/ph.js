@@ -1,17 +1,12 @@
 module.exports = {
   Create: function (n) {
     n.click('a#tab-ph')
-      .wait(500)
+      .wait('input#add_probe')
       .click('input#add_probe')
       .wait(500)
-      .type('input#new_probe_name', 'Biocube29')
-      .wait(500)
-      .click('input#new_probe_enable')
-      .wait(500)
-      .type('input#new_probe_period')
-      .type('input#new_probe_period', 5)
-      .wait(500)
-      .click('input#create_probe')
+      .type('.add-probe input[name="name"]', 'Biocube29')
+      .type('.add-probe input[name="period"]', '5')
+      .click('.add-probe input[type*="submit"]')
       .wait(1500)
 
     return function () {

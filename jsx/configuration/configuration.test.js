@@ -164,6 +164,7 @@ describe('Configuration ui', () => {
         })}
       />
     ).dive()
+    wrapper.find('.btn-outline-secondary').first().simulate('click')
     let m = wrapper.instance()
     m.props.delete('1')
     m.props.clear()

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/reef-pi/adafruitio"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 	"strings"
 	"sync"
@@ -38,9 +39,10 @@ type telemetry struct {
 	config     TelemetryConfig
 	aStats     map[string]AlertStats
 	mu         *sync.Mutex
+	logError   types.ErrorLogger
 }
 
-func NewTelemetry(config TelemetryConfig) *telemetry {
+func NewTelemetry(config TelemetryConfig, lr types.ErrorLogger) *telemetry {
 	var mailer Mailer
 	mailer = &NoopMailer{}
 	if config.Notify {
@@ -52,6 +54,7 @@ func NewTelemetry(config TelemetryConfig) *telemetry {
 		dispatcher: mailer,
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
+		logError:   lr,
 	}
 }
 
@@ -85,6 +88,7 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 	}
 	if err := t.dispatcher.Email(subject, body); err != nil {
 		log.Println("ERROR: Failed to dispatch alert:", subject, "Error:", err)
+		t.logError("alert-failure", err.Error())
 		return false, err
 	}
 	return true, nil
@@ -102,6 +106,7 @@ func (t *telemetry) EmitMetric(feed string, v interface{}) {
 	}
 	if err := t.client.SubmitData(aio.User, feed, d); err != nil {
 		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
+		t.logError("telemtry-"+feed, err.Error())
 	}
 }
 

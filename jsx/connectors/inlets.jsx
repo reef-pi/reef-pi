@@ -1,6 +1,5 @@
 import React from 'react'
 import { confirm } from 'utils/confirm'
-import $ from 'jquery'
 import { fetchInlets, deleteInlet, createInlet, updateInlet } from 'redux/actions/inlets'
 import { connect } from 'react-redux'
 import Inlet from './inlet'
@@ -9,14 +8,29 @@ class inlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      inName: '',
+      inPin: '',
+      inReverse: false,
       add: false
     }
     this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
+  handleNameChange (e) {
+    this.setState({ inName: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ inPin: e.target.value })
+  }
+  handleReverseChange () {
+    this.setState({ inReverse: !this.state.outReverse })
+  }
   componentDidMount () {
     this.props.fetch()
   }
@@ -33,17 +47,18 @@ class inlets extends React.Component {
 
   add () {
     this.setState({
-      add: !this.state.add
+      add: !this.state.add,
+      inName: '',
+      inPin: '',
+      inReverse: false
     })
-    $('#inletName').val('')
-    $('#inletPin').val('')
   }
 
   save () {
     var payload = {
-      name: $('#inletName').val(),
-      pin: parseInt($('#inletPin').val()),
-      reverse: $('#inletReverse')[0].checked
+      name: this.state.inName,
+      pin: parseInt(this.state.inPin),
+      reverse: this.state.inReverse
     }
     this.props.create(payload)
     this.add()
@@ -94,19 +109,38 @@ class inlets extends React.Component {
               <div className='col-sm-3'>
                 <div className='form-group'>
                   <span className='input-group-addon'> Name </span>
-                  <input type='text' id='inletName' className='form-control' />
+                  <input
+                    type='text'
+                    id='inletName'
+                    value={this.state.inName}
+                    onChange={this.handleNameChange}
+                    className='form-control'
+                  />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='form-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='number' min='2' max='27' id='inletPin' className='form-control' />
+                  <input
+                    type='number'
+                    min='2'
+                    max='27'
+                    id='inletPin'
+                    value={this.state.inPin}
+                    onChange={this.handlePinChange}
+                    className='form-control'
+                  />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='form-group'>
                   <span className='input-group-addon'> Reverse </span>
-                  <input type='checkbox' id='inletReverse' />
+                  <input
+                    type='checkbox'
+                    id='inletReverse'
+                    onChange={this.handleReverseChange}
+                    checked={this.state.inReverse}
+                  />
                 </div>
               </div>
               <div className='col-sm-1'>

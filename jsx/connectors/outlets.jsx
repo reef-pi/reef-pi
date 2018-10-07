@@ -1,6 +1,5 @@
 import React from 'react'
 import { confirm } from 'utils/confirm'
-import $ from 'jquery'
 import { fetchOutlets, updateOutlet, deleteOutlet, createOutlet } from 'redux/actions/outlets'
 import { connect } from 'react-redux'
 import Outlet from './outlet'
@@ -9,14 +8,29 @@ class outlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      outName: '',
+      outPin: '',
+      outReverse: false,
       add: false
     }
     this.list = this.list.bind(this)
     this.add = this.add.bind(this)
     this.remove = this.remove.bind(this)
     this.save = this.save.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
+  handleNameChange (e) {
+    this.setState({ outName: e.target.value })
+  }
+  handlePinChange (e) {
+    this.setState({ outPin: e.target.value })
+  }
+  handleReverseChange () {
+    this.setState({ outReverse: !this.state.outReverse })
+  }
   remove (id) {
     return function () {
       confirm('Are you sure ?').then(
@@ -33,17 +47,18 @@ class outlets extends React.Component {
 
   add () {
     this.setState({
-      add: !this.state.add
+      add: !this.state.add,
+      outName: '',
+      outPin: '',
+      outReverse: false
     })
-    $('#outletName').val('')
-    $('#outletPin').val('')
   }
 
   save () {
     var payload = {
-      name: $('#outletName').val(),
-      pin: parseInt($('#outletPin').val()),
-      reverse: $('#outletReverse')[0].checked
+      name: this.state.outName,
+      pin: parseInt(this.state.outPin),
+      reverse: this.state.outReverse
     }
     this.props.create(payload)
     this.add()
@@ -94,19 +109,36 @@ class outlets extends React.Component {
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Name </span>
-                  <input type='text' id='outletName' className='form-control' />
+                  <input
+                    type='text'
+                    id='outletName'
+                    onChange={this.handleNameChange}
+                    value={this.state.outName}
+                    className='form-control'
+                  />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Pin </span>
-                  <input type='text' id='outletPin' className='form-control' />
+                  <input
+                    type='number'
+                    id='outletPin'
+                    onChange={this.handlePinChange}
+                    value={this.state.outPin}
+                    className='form-control'
+                  />
                 </div>
               </div>
               <div className='col-sm-3'>
                 <div className='input-group'>
                   <span className='input-group-addon'> Reverse </span>
-                  <input type='checkbox' id='outletReverse' />
+                  <input
+                    type='checkbox'
+                    id='outletReverse'
+                    onChange={this.handleReverseChange}
+                    checked={this.state.outReverse}
+                  />
                 </div>
               </div>
               <div className='col-sm-1'>
