@@ -3,10 +3,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 export function confirm (message, options = {}) {
-  let cleanup, component, props, wrapper
-  props = Object.assign({ message: message }, options)
+  let props = Object.assign({ message: message }, options)
+  return showModal(<Confirm {...props} />)
+}
+
+export function showModal (modal) {
+  let cleanup, component, wrapper
   wrapper = document.body.appendChild(document.createElement('div'))
-  component = ReactDOM.render(<Confirm {...props} />, wrapper)
+  component = ReactDOM.render(modal, wrapper)
+
   cleanup = function () {
     ReactDOM.unmountComponentAtNode(wrapper)
     return setTimeout(function () {

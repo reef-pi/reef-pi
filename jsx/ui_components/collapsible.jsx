@@ -47,6 +47,7 @@ class Collapsible extends React.Component {
               Delete
             </button>
             {readOnly ? editButton : null}
+            {this.props.buttons}
           </div>
           <div className='pointer col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline'>
             {expanded ? FaAngleUp() : FaAngleDown()}

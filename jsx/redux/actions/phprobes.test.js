@@ -57,9 +57,10 @@ describe('probe actions', () => {
 
   it('updateProbe', () => {
     fetchMock.postOnce('/api/phprobes/1', {})
+    fetchMock.getOnce('/api/phprobes', {})
     const store = mockStore()
     return store.dispatch(updateProbe('1')).then(() => {
-      expect(store.getActions()).toEqual([probeUpdated({})])
+      expect(store.getActions()).toEqual([phProbesLoaded({})])
     })
   })
 

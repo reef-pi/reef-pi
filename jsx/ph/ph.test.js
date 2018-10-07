@@ -1,13 +1,9 @@
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import Calibrate from './calibrate'
+import PhForm from './ph_form'
 import Chart from './chart'
 import Main from './main'
-import New from './new'
-import Notify from './notify'
-import Probe from './probe'
-import ProbeConfig from './probe_config'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
@@ -16,6 +12,14 @@ Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
+    showModal: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
+      })
+      .bind(this),
     confirm: jest
       .fn()
       .mockImplementation(() => {
@@ -26,22 +30,52 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
-describe('pH ui', () => {
+
+describe('Ph ui', () => {
   it('<Main />', () => {
-    const probes = [{ id: '1', name: 'foo' }]
-    let m = shallow(<Main store={mockStore({ phprobes: probes })} />)
+    const state = {
+      phprobes: [
+        {id: 1,
+          name: 'probe',
+          enable: false,
+          config: {
+            notify: false
+          }}
+      ]
+    }
+
+    const m = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    m.props.createProbe({})
+    m.toggleAddProbeDiv()
+
+    m.createProbe({name: 'test', type: 'reminder'})
+    m.updateProbe({id: '1', name: 'test', type: 'equipment'})
+    m.calibrateProbe({stopPropagation: jest.fn()}, {id: 1})
+    m.deleteProbe('1')
   })
 
-  it('<New />', () => {
-    const m = shallow(<New hook={() => {}} />).instance()
-    m.update('name')({ target: { value: 'Foo' } })
-    m.updateEnable({ target: { checked: true } })
-    m.add()
-    m.state.name = ''
-    m.add()
+  it('<PhForm/> for create', () => {
+    const fn = jest.fn()
+    const wrapper = shallow(<PhForm onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
+  })
+
+  it('<PhForm /> for edit', () => {
+    const fn = jest.fn()
+
+    const probe = {
+      name: 'name',
+      enable: true,
+      address: 99,
+      config: {
+        nofify: {enable: false}
+      }
+    }
+    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
   })
 
   it('<Chart />', () => {
@@ -61,59 +95,5 @@ describe('pH ui', () => {
     shallow(<Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: [] })} type='current' />)
       .dive()
       .instance()
-  })
-
-  it('<Notify />', () => {
-    const m = shallow(<Notify hook={() => {}} data={{}} />).instance()
-    m.updateEnable()
-    m.update('foo')({ target: {} })
-  })
-
-  it('<Probe />', () => {
-    const probe = {
-      config: {
-        notify: { min: 72, max: 87 }
-      }
-    }
-    const m = shallow(
-      <Probe
-        updateHook={() => {
-          return true
-        }}
-        store={mockStore()}
-        data={probe}
-      />
-    )
-      .dive()
-      .instance()
-    m.props.calibrateProbe(1, {})
-    m.edit()
-    m.calibrate()
-    m.updateConfig(probe.config)
-    m.update('name')({ target: { value: 'foo' } })
-    m.updateEnable({ target: { checked: true } })
-    m.edit()
-    m.remove()
-    m.expand()
-    m.state.enable = true
-    m.chart()
-    m.state.enable = false
-    m.chart()
-    m.state.readOnly = false
-    m.detailsUI()
-    m.state.readOnly = true
-    m.detailsUI()
-  })
-
-  it('<ProbeConfig />', () => {
-    const m = shallow(<ProbeConfig hook={() => {}} data={{}} />).instance()
-    m.updateConfig({})
-  })
-
-  it('<Calibrate />', () => {
-    const m = shallow(<Calibrate hook={() => {}} />).instance()
-    m.setType('foo')()
-    m.updateValue({ target: { value: '1.2' } })
-    m.calibrate()
   })
 })
