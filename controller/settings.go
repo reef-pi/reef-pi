@@ -1,12 +1,11 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Settings struct {

@@ -66,6 +66,7 @@ func (c *Controller) Create(a ATO) error {
 		return err
 	}
 	if a.Enable {
+		a.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
 		go c.Run(a, quit)
@@ -89,6 +90,7 @@ func (c *Controller) Update(id string, a ATO) error {
 		delete(c.quitters, a.ID)
 	}
 	if a.Enable {
+		a.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
 		go c.Run(a, quit)
@@ -158,7 +160,6 @@ func (c *Controller) Run(a ATO, quit chan struct{}) {
 		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", a.Name, a.Period)
 		return
 	}
-	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
 	for {
 		select {

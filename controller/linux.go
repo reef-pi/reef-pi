@@ -1,4 +1,4 @@
-// +build !darwin,!windows
+// +build !darwin
 
 package controller
 

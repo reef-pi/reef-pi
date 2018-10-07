@@ -102,7 +102,6 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected postive, found:%d\n", p.Name, p.Period)
 		return
 	}
-	p.CreateFeed(c.controller.Telemetry())
 	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
