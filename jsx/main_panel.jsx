@@ -2,6 +2,8 @@ import React from 'react'
 import ATO from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
+import Log from 'logCenter/main'
+import NotificationAlert from 'notifications/alert'
 import Lighting from 'lighting/main'
 import Configuration from 'configuration/main'
 import Temperature from 'temperature/main'
@@ -10,7 +12,6 @@ import Doser from 'doser/controller'
 import Ph from 'ph/main'
 import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
-import $ from 'jquery'
 import { fetchUIData } from 'redux/actions/ui'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
@@ -28,7 +29,8 @@ const caps = {
   doser: <Doser />,
   macro: <Macro />,
   camera: <Camera />,
-  configuration: <Configuration />
+  configuration: <Configuration />,
+  log: <Log />
 }
 
 class mainPanel extends React.Component {
@@ -51,26 +53,31 @@ class mainPanel extends React.Component {
   }
 
   navs (tab) {
+    let MandatoryTabs = {
+      log: true
+    }
+    let currentCaps = Object.assign(this.props.capabilities, MandatoryTabs)
     var panels = []
-    $.each(
-      caps,
-      function (k, panel) {
-        if (this.props.capabilities[k] === undefined) {
-          return
-        }
-        if (!this.props.capabilities[k]) {
-          return
-        }
-        var cname = k === tab ? 'nav-link active' : 'nav-link'
-        panels.push(
-          <li className='nav-item' key={'li-tab-' + k}>
-            <a href='#' id={'tab-' + k} className={cname} onClick={this.setTab(k)}>
-              {k}
-            </a>
-          </li>
-        )
-      }.bind(this)
-    )
+    for (let prop in caps) {
+      if (currentCaps[prop] === undefined) {
+        continue
+      }
+      if (!currentCaps[prop]) {
+        continue
+      }
+      let cname = prop === tab ? 'nav-link active' : 'nav-link'
+      let label = prop
+      if (label.toLowerCase() === 'ato') {
+        label = 'ATO'
+      }
+      panels.push(
+        <li className='nav-item' key={'li-tab-' + prop}>
+          <a href='#' id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
+            {label}
+          </a>
+        </li>
+      )
+    }
     return <ul className='navbar-nav'>{panels}</ul>
   }
 
@@ -101,12 +108,17 @@ class mainPanel extends React.Component {
           >
             <span className='navbar-toggler-icon' />
           </button>
-          <div className='collapse navbar-collapse navHeaderCollapse' id='navbarNav' data-toggle='collapse' data-target='.navbar-collapse'>
+          <div
+            className='collapse navbar-collapse navHeaderCollapse'
+            id='navbarNav'
+            data-toggle='collapse'
+            data-target='.navbar-collapse'
+          >
             {this.navs(tab)}
           </div>
         </nav>
         <div className='container-fluid'>
-          <div className='mt-3' id='reef-pi-alert' />
+          <NotificationAlert />
           <div className='row body-panel'>
             <div className='col-12'>{body}</div>
           </div>

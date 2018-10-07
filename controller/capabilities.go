@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Capabilities struct {

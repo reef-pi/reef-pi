@@ -58,11 +58,16 @@ describe('Camera module', () => {
 
   it('<Gallery />', () => {
     const images = [{ thumbnail: '', src: '' }]
-    const m = shallow(<Gallery images={images} />).instance()
     const ev = {
       preventDefault: () => true
     }
-    m.open(1, ev)
+    const wrapper = shallow(<Gallery images={images} />)
+    wrapper
+      .find('a')
+      .first()
+      .simulate('click', ev)
+    const m = wrapper.instance()
+
     m.onClose()
     m.gotoPrevious()
     m.gotoNext()

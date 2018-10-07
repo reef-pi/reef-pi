@@ -6,6 +6,26 @@ export const rootReducer = (state, action) => {
   var pHreadings = state.ph_readings
 
   switch (action.type) {
+    case 'LOG_DISPLAYED':
+      return {
+        ...state,
+        logs: state.logs.map(a => {
+          if (action.payload.ts !== a.ts) {
+            return a
+          }
+          a.display = false
+          return a
+        })
+      }
+    case 'LOG_DELETED':
+      return {
+        ...state,
+        logs: state.logs.filter(a => {
+          return action.payload.ts !== a.ts
+        })
+      }
+    case 'LOG_ADDED':
+      return { ...state, logs: [action.payload].concat(state.logs) }
     case 'ERRORS_LOADED':
       return { ...state, errors: action.payload }
     case 'INFO_LOADED':

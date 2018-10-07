@@ -1,6 +1,6 @@
-import {createStore, applyMiddleware} from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import {rootReducer} from './reducer'
+import { rootReducer } from './reducer'
 
 const initialState = {
   info: {},
@@ -32,9 +32,10 @@ const initialState = {
     config: {},
     latest: undefined,
     images: []
-  }
+  },
+  logs: []
 }
-
+const store = createStore(rootReducer, initialState, applyMiddleware(thunk))
 export const configureStore = () => {
-  return createStore(rootReducer, initialState, applyMiddleware(thunk))
+  return store
 }

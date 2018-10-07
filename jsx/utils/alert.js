@@ -1,16 +1,11 @@
-import $ from 'jquery'
-
+import { configureStore } from 'redux/store'
+import { setUILog } from 'logCenter/log'
+import { addLog } from 'redux/actions/log'
 export function showAlert (msg) {
-  $('#reef-pi-alert').html(
-    `<div class='alert alert-danger alert-dismissible fade show'>
-      <div class='font-weight-normal'>` + msg + `</div>
-      <button type='button' class='close' data-dismiss='alert'>
-        <span>&times;</span>
-      </button>
-    </div>`
-  )
+  console.warn('showAlert Method is deprecated. Please use notifications/alert')
+  configureStore().dispatch(addLog(setUILog('ERROR', msg)))
 }
 
 export function clearAlert () {
-  $('#reef-pi-alert').html('')
+  console.warn('clearAlert is deprecated.')
 }

@@ -94,6 +94,7 @@ describe('Configuration ui', () => {
     m.updateCheckbox('foo')({ target: { checked: true } })
     m.update()
     m.updateHealthNotify({})
+    m.updateHealthNotify()
     m.updateCapabilities({
       health_check: false
     })
@@ -115,6 +116,17 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
+    shallow(<Settings store={mockStore({})} />).dive()
+    shallow(<Settings store={mockStore({ settings: {} })} />).dive()
+
+    let d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    d.find('#to-row-interface')
+      .first()
+      .simulate('change', { target: { value: 'foo' } })
+    d.find('#to-row-pca9685_pwm_freq')
+      .first()
+      .simulate('change', { target: { value: '666' } })
   })
 
   it('<HealthNotify />', () => {
@@ -157,5 +169,6 @@ describe('Configuration ui', () => {
     m.props.delete('1')
     m.props.clear()
     m.props.fetch()
+    wrapper.find('input').simulate('click')
   })
 })

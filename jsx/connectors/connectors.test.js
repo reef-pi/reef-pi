@@ -15,7 +15,6 @@ import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -28,7 +27,6 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
-
 describe('Connectors', () => {
   it('<Main />', () => {
     shallow(<Main />)
