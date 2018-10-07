@@ -82,5 +82,6 @@ func TestTelemetry() *telemetry {
 		dispatcher: &NoopMailer{},
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
+		logError:   func(_, _ string) error { return nil },
 	}
 }

@@ -12,6 +12,8 @@ type Subsystem interface {
 	On(string, bool) error
 }
 
+type ErrorLogger func(string, string) error
+
 type Controller interface {
 	Subsystem(string) (Subsystem, error)
 	Telemetry() Telemetry
@@ -22,7 +24,7 @@ type Controller interface {
 type controller struct {
 	t        Telemetry
 	s        Store
-	logError func(string, string) error
+	logError ErrorLogger
 	subFn    func(s string) (Subsystem, error)
 }
 
