@@ -14,7 +14,8 @@ func initializeTelemetry(store types.Store, notify bool) types.Telemetry {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
 		store.Update(Bucket, "telemetry", t)
 	}
-	return utils.NewTelemetry(t)
+	fn := func(t, m string) error { return logError(store, t, m) }
+	return utils.NewTelemetry(t, fn)
 }
 
 func (r *ReefPi) getTelemetry(w http.ResponseWriter, req *http.Request) {
@@ -36,7 +37,8 @@ func (r *ReefPi) updateTelemetry(w http.ResponseWriter, req *http.Request) {
 		if err := r.store.Update(Bucket, "telemetry", t); err != nil {
 			return err
 		}
-		r.telemetry = utils.NewTelemetry(t)
+		fn := func(t, m string) error { return logError(r.store, t, m) }
+		r.telemetry = utils.NewTelemetry(t, fn)
 		return nil
 	}
 	utils.JSONUpdateResponse(&t, fn, w, req)
