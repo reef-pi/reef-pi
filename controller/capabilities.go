@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Capabilities struct {
@@ -18,7 +19,6 @@ type Capabilities struct {
 	Doser         bool `json:"doser"`
 	Ph            bool `json:"ph"`
 	Macro         bool `json:"macro"`
-	Configuration bool `json:"configuration"`
 }
 
 var DefaultCapabilities = Capabilities{
@@ -30,7 +30,6 @@ var DefaultCapabilities = Capabilities{
 	Lighting:      false,
 	Temperature:   true,
 	ATO:           true,
-	Configuration: true,
 	Macro:         true,
 }
 
