@@ -3,13 +3,14 @@ package doser
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
-	"testing"
 )
 
-func TestATOAPI(t *testing.T) {
+func TestDoserAPI(t *testing.T) {
 	con, err := utils.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
@@ -69,7 +70,18 @@ func TestATOAPI(t *testing.T) {
 		t.Fatal("Failed to list dosing pumps using api. Error:", err)
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&Pump{Name: "Foo", Pin: 1})
+	json.NewEncoder(body).Encode(&Pump{
+		Name: "Bar",
+		Pin:  1,
+		Regiment: DosingRegiment{
+			Schedule: Schedule{
+				Hour:   "*",
+				Minute: "*",
+				Day:    "*",
+				Second: "0",
+			},
+		},
+	})
 	if err := tr.Do("POST", "/api/doser/pumps/1", body, nil); err != nil {
 		t.Fatal("Failed to update dosing pump using api. Error:", err)
 	}

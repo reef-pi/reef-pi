@@ -47,7 +47,7 @@ export default class Confirm extends React.Component {
         {modalBody}
         <div className='modal-footer'>
           <div className='text-right'>
-            <button role='abort' type='button' className='btn btn-default' onClick={this.abort}>
+            <button role='abort' type='button' className='btn btn-light' onClick={this.abort}>
               {this.state.abortLabel}
             </button>
             {' '}

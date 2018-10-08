@@ -83,7 +83,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('div.cursor-pointer').simulate('click')
+    wrapper.find('div.row.pointer').simulate('click')
     expect(jestFn).toHaveBeenCalled()
   })
 

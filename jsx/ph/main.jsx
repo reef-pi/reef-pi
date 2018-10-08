@@ -58,19 +58,6 @@ class ph extends React.Component {
     showModal(<CalibrationWizard probe={probe} calibrateProbe={this.props.calibrateProbe} />)
   }
 
-  deleteProbe (probe) {
-    const message = (
-      <div>
-        <p>This action will delete {probe.name}.</p>
-      </div>
-    )
-
-    confirm('Delete ' + probe.name, {description: message})
-      .then(function () {
-        this.props.delete(probe.id)
-      }.bind(this))
-  }
-
   valuesToProbe (values) {
     var probe = {
       name: values.name,
@@ -99,6 +86,19 @@ class ph extends React.Component {
 
     this.props.create(payload)
     this.toggleAddProbeDiv()
+  }
+
+  deleteProbe (probe) {
+    const message = (
+      <div>
+        <p>This action will delete {probe.name}.</p>
+      </div>
+    )
+
+    confirm('Delete ' + probe.name, {description: message})
+      .then(function () {
+        this.props.delete(probe.id)
+      }.bind(this))
   }
 
   toggleAddProbeDiv () {

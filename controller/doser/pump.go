@@ -2,9 +2,10 @@ package doser
 
 import (
 	"encoding/json"
+	"log"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"gopkg.in/robfig/cron.v2"
-	"log"
 )
 
 func (c *Controller) Get(id string) (Pump, error) {
@@ -17,7 +18,14 @@ func (c *Controller) Create(p Pump) error {
 		p.ID = id
 		return &p
 	}
-	return c.c.Store().Create(Bucket, fn)
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
+		return err
+	}
+
+	if p.Regiment.Enable {
+		return c.addToCron(p)
+	}
+	return nil
 }
 
 func (c *Controller) List() ([]Pump, error) {
@@ -54,7 +62,15 @@ func (c *Controller) Update(id string, p Pump) error {
 	if err := c.c.Store().Update(Bucket, id, p); err != nil {
 		return err
 	}
-	// TODO cross check cron assignment
+	c.mu.Lock()
+	if cID, ok := c.cronIDs[id]; ok {
+		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
+		c.runner.Remove(cID)
+	}
+	c.mu.Unlock()
+	if p.Regiment.Enable {
+		return c.addToCron(p)
+	}
 	return nil
 }
 

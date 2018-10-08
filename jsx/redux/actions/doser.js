@@ -34,6 +34,14 @@ export const createDosingPump = (s) => {
   }))
 }
 
+export const updateDosingPump = (id, s) => {
+  return (reduxPost({
+    url: '/api/doser/pumps/' + id,
+    success: fetchDosingPumps,
+    data: s
+  }))
+}
+
 export const deleteDosingPump = (s) => {
   return (reduxDelete({
     url: '/api/doser/pumps/' + s,
