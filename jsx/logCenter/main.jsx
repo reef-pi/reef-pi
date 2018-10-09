@@ -1,20 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { LogType } from './log'
+import { MsgLevel } from 'utils/enums'
 class LogCenter extends React.Component {
   getTrClass (n) {
     let cssClass = ''
     switch (n.type) {
-      case LogType.info:
+      case MsgLevel.info:
         cssClass = 'table-info'
         break
-      case LogType.error:
+      case MsgLevel.error:
         cssClass = 'table-danger'
         break
-      case LogType.success:
+      case MsgLevel.success:
         cssClass = 'table-success'
         break
-      case LogType.warning:
+      case MsgLevel.warning:
         cssClass = 'table-warning'
         break
     }
