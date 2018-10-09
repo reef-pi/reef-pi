@@ -17,7 +17,7 @@ import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
 import { configureStore } from 'redux/store'
 import Summary from 'summary'
-
+import i18n from 'utils/i18n'
 const caps = {
   dashboard: <Dashboard />,
   equipment: <Equipment />,
