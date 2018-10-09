@@ -1,4 +1,7 @@
 export const rootReducer = (state, action) => {
+  if (action.type.startsWith('@@redux/INIT')) {
+    return state
+  }
   var camera = state.camera
   var atoUsage = state.ato_usage
   var macroUsage = state.macro_usage
