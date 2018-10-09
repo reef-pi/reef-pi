@@ -1,5 +1,5 @@
 import React from 'react'
-import {showAlert} from 'utils/alert'
+import {showError} from 'utils/alert'
 
 export default class Config extends React.Component {
   constructor (props) {
@@ -18,7 +18,7 @@ export default class Config extends React.Component {
     var config = this.state.config
     config.tick_interval = parseInt(config.tick_interval)
     if (isNaN(config.tick_interval)) {
-      showAlert('Tick interval has to be a positive integer')
+      showError('Tick interval has to be a positive integer')
       return
     }
     this.props.update(config)

@@ -13,7 +13,7 @@ describe('<EditPh />', () => {
   var fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('<EditPh />', () => {
         isValid />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditPh /> should show alert when invalid', () => {
@@ -60,6 +60,6 @@ describe('<EditPh />', () => {
         isValid={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 })

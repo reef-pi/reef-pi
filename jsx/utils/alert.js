@@ -18,7 +18,7 @@ function _showAlert (type, msg) {
   configureStore().dispatch(addAlert(setAlert(type, msg)))
 }
 export function showAlert (msg) {
-  console.warn('showAlert is deprecated. Please Use ')
+  console.warn('showAlert is deprecated. Please Use showError')
   showError(msg)
 }
 

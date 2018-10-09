@@ -14,7 +14,7 @@ describe('<EditAto />', () => {
   var fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('<EditAto />', () => {
         showChart={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditAto /> should show alert when invalid', () => {
@@ -63,6 +63,6 @@ describe('<EditAto />', () => {
         isValid={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 })

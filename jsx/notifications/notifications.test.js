@@ -10,44 +10,29 @@ Enzyme.configure({ adapter: new Adapter() })
 describe('Notifications', () => {
   it('<Alert />', () => {
     jest.useFakeTimers()
-    const logs = [
+    const alerts = [
       {
         ts: 1538562759,
-        emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'ERROR'
       },
       {
         ts: 1538562751,
-        emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'INFO'
       },
       {
         ts: 1538562752,
-        emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'SUCCESS'
       },
       {
         ts: 1538562753,
-        emitter: 'UI',
         content: 'foo',
-        display: true,
-        type: 'WARNING'
-      },
-      {
-        ts: 1538562754,
-        emitter: 'UI',
-        content: 'foo',
-        display: false,
         type: 'WARNING'
       }
     ]
-    let store = mockStore({ logs: logs })
+    let store = mockStore({ alerts: alerts })
     const wrapper = shallow(<Alert store={store} />).dive()
     expect(wrapper.find('button').length).toBe(4)
     wrapper

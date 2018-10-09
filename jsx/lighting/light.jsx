@@ -3,7 +3,7 @@ import LightChannel from './channel'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import {confirm} from 'utils/confirm'
-import {showAlert, clearAlert} from 'utils/alert'
+import {showError} from 'utils/alert'
 
 class Light extends Component {
   constructor (props) {
@@ -25,14 +25,12 @@ class Light extends Component {
 
   handleFormSubmit (event) {
     event.preventDefault()
-    clearAlert()
-
     if (this.props.dirty === false || this.props.isValid) {
       this.props.submitForm()
       this.setState({readOnly: true, expand: false})
     } else {
       this.props.submitForm() // Calling submit form in order to show validation errors
-      showAlert('The light settings cannot be saved due to validation errors.  Please correct the errors and try again.')
+      showError('The light settings cannot be saved due to validation errors.  Please correct the errors and try again.')
     }
   }
 

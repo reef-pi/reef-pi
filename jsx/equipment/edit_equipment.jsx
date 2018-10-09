@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {ErrorFor, ShowError} from '../utils/validation_helper'
-import {showAlert, clearAlert} from 'utils/alert'
+import {showError} from 'utils/alert'
 import classNames from 'classnames'
 
 const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid, dirty}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
-    clearAlert()
     if (dirty === false || isValid === true) {
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showAlert('The equipment settings cannot be saved due to validation errors.  Please correct the errors and try again.')
+      showError('The equipment settings cannot be saved due to validation errors.  Please correct the errors and try again.')
     }
   }
 

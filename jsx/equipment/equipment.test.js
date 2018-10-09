@@ -31,7 +31,7 @@ describe('Equipment ui', () => {
   const outlets = [{ id: '1', name: 'O1' }]
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
@@ -170,7 +170,7 @@ describe('Equipment ui', () => {
       />
     )
     wrapper.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditEquipment /> should show alert when invalid', () => {
@@ -187,7 +187,7 @@ describe('Equipment ui', () => {
       />
     )
     wrapper.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('<EquipmentForm />', () => {

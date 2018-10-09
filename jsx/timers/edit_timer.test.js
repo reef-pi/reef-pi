@@ -13,7 +13,7 @@ describe('<EditTimer />', () => {
   var fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('<EditTimer />', () => {
         showChart={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditTimer /> should show alert when invalid', () => {
@@ -66,6 +66,6 @@ describe('<EditTimer />', () => {
         isValid={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 })

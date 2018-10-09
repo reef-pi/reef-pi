@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import Light from './light_form'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import { updateLight, fetchLights, createLight, deleteLight } from 'redux/actions/lights'
 import { fetchJacks } from 'redux/actions/jacks'
 import { connect } from 'react-redux'
@@ -50,11 +50,11 @@ class main extends React.Component {
 
   addLight () {
     if (this.state.selectedJack === undefined) {
-      showAlert('Select a jack')
+      showError('Select a jack')
       return
     }
     if ($('#lightName').val() === '') {
-      showAlert('Specify light name')
+      showError('Specify light name')
       return
     }
     var jack = this.props.jacks[this.state.selectedJack].id

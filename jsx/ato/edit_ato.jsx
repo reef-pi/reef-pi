@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import { showAlert, clearAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
@@ -19,12 +19,11 @@ const EditAto = ({
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
-    clearAlert()
     if (dirty === false || isValid === true) {
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showAlert(
+      showError(
         'The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.'
       )
     }
