@@ -1,5 +1,5 @@
 import React from 'react'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import { createMacro } from 'redux/actions/macro'
 import { connect } from 'react-redux'
 import Steps from './steps'
@@ -76,7 +76,7 @@ class newMacro extends React.Component {
 
   add () {
     if (this.state.name === '') {
-      showAlert('Name can not be empty')
+      showError('Name can not be empty')
       return
     }
     var payload = {

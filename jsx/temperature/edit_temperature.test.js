@@ -16,7 +16,7 @@ describe('<EditTemperature />', () => {
   var fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
 
     values = {
       id: '1',
@@ -102,7 +102,7 @@ describe('<EditTemperature />', () => {
         isValid />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditEquipment /> should show alert when invalid', () => {
@@ -120,6 +120,6 @@ describe('<EditTemperature />', () => {
         isValid={false} />
     )
     wrapper.find('form').simulate('submit', {preventDefault: () => {}})
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -49,7 +49,7 @@ export default class Jack extends React.Component {
       })
     for (var i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        showAlert('Use only comma separated numbers')
+        showError('Use only comma separated numbers')
         return
       }
     }

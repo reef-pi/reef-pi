@@ -1,9 +1,3 @@
-export const LogType = {
-  info: 'INFO',
-  error: 'ERROR',
-  success: 'SUCCESS',
-  warning: 'WARNING'
-}
 export const LogEmitter = {
   api: 'API',
   ui: 'UI'
@@ -12,22 +6,20 @@ export const LogEmitter = {
  * Generate an UI Log object to dispatch to redux
  * @param {LogType} type Type of the log
  * @param {String} content Content of the log
- * @param {Boolean} [display=true] Display a notification on the UI
  * @returns {Log} Log ready to be dispatched to the redux store
  */
-export function setUILog (type, content, display = true) {
-  return _setLog(LogEmitter.ui, type, content, display)
+export function setUILog (type, content) {
+  return _setLog(LogEmitter.ui, type, content)
 }
 /**
  * Generate an API Log object to dispatch to redux
  * @param {LogType} type Type of the log
  * @param {String} content Content of the log
- * @param {Boolean} [display=true] Display a notification on the UI
  * @returns {Log} Log ready to be dispatched to the redux store
  */
-export function setAPILog (type, content, display = true) {
-  return _setLog(LogEmitter.api, type, content, display)
+export function setAPILog (type, content) {
+  return _setLog(LogEmitter.api, type, content)
 }
-function _setLog (emitter, type, content, display) {
-  return { type: type, emitter: emitter, content: content, display: display, ts: new Date().getTime() }
+function _setLog (emitter, type, content) {
+  return { type: type, emitter: emitter, content: content, ts: new Date().getTime() }
 }

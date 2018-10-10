@@ -1,5 +1,5 @@
 import React from 'react'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import JackSelector from 'jack_selector'
 import { createDosingPump } from 'redux/actions/doser'
 import { connect } from 'react-redux'
@@ -76,7 +76,7 @@ class newPump extends React.Component {
 
   add () {
     if (this.state.name === '') {
-      showAlert('Specify doser name')
+      showError('Specify doser name')
       return
     }
     var payload = {

@@ -1,7 +1,7 @@
 import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
 
@@ -53,19 +53,19 @@ class telemetry extends React.Component {
 
   updateMailer (mailer) {
     if (mailer.server === '') {
-      showAlert('Please set a valid mail server')
+      showError('Please set a valid mail server')
       return
     }
     if (mailer.password === '') {
-      showAlert('Please set a valid mail passowrd')
+      showError('Please set a valid mail passowrd')
       return
     }
     if (mailer.To === '') {
-      showAlert('Please set a valid mail recepient (To)')
+      showError('Please set a valid mail recepient (To)')
       return
     }
     if (mailer.From === '') {
-      showAlert('Please set a valid mail sender (From)')
+      showError('Please set a valid mail sender (From)')
       return
     }
     var c = this.state.config
@@ -83,11 +83,11 @@ class telemetry extends React.Component {
   updateAio (adafruitio) {
     if (adafruitio.enable) {
       if (adafruitio.user === '') {
-        showAlert('Please set a valid adafruit.io user')
+        showError('Please set a valid adafruit.io user')
         return
       }
       if (adafruitio.token === '') {
-        showAlert('Please set a valid adafruit.io key')
+        showError('Please set a valid adafruit.io key')
         return
       }
     }

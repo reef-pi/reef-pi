@@ -13,7 +13,7 @@ describe('Ph Calibration', () => {
   var fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
