@@ -19,21 +19,18 @@ describe('logCenter', () => {
       ts: 1538562752,
       emitter: 'UI',
       content: 'foo',
-      display: true,
       type: 'SUCCESS'
     }
     const expectUIFalse = {
       ts: 1538562752,
       emitter: 'UI',
       content: 'foo',
-      display: false,
       type: 'SUCCESS'
     }
     const expectAPI = {
       ts: 1538562752,
       emitter: 'API',
       content: 'foo',
-      display: true,
       type: 'WARNING'
     }
     let r = setAPILog('WARNING', 'foo')
@@ -49,28 +46,24 @@ describe('logCenter', () => {
         ts: 1538562759,
         emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'ERROR'
       },
       {
         ts: 1538562751,
         emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'INFO'
       },
       {
         ts: 1538562752,
         emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'SUCCESS'
       },
       {
         ts: 1538562753,
         emitter: 'UI',
         content: 'foo',
-        display: true,
         type: 'WARNING'
       }
     ]

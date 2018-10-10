@@ -1,4 +1,7 @@
 export const rootReducer = (state, action) => {
+  if (action.type.startsWith('@@redux/INIT')) {
+    return state
+  }
   var camera = state.camera
   var atoUsage = state.ato_usage
   var macroUsage = state.macro_usage
@@ -6,17 +9,6 @@ export const rootReducer = (state, action) => {
   var pHreadings = state.ph_readings
 
   switch (action.type) {
-    case 'LOG_DISPLAYED':
-      return {
-        ...state,
-        logs: state.logs.map(a => {
-          if (action.payload.ts !== a.ts) {
-            return a
-          }
-          a.display = false
-          return a
-        })
-      }
     case 'LOG_DELETED':
       return {
         ...state,
@@ -26,6 +18,15 @@ export const rootReducer = (state, action) => {
       }
     case 'LOG_ADDED':
       return { ...state, logs: [action.payload].concat(state.logs) }
+    case 'ALERT_DELETED':
+      return {
+        ...state,
+        alerts: state.alerts.filter(a => {
+          return action.payload.ts !== a.ts
+        })
+      }
+    case 'ALERT_ADDED':
+      return { ...state, alerts: [action.payload].concat(state.alerts) }
     case 'ERRORS_LOADED':
       return { ...state, errors: action.payload }
     case 'INFO_LOADED':

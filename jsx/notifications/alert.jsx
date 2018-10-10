@@ -1,14 +1,14 @@
 import React from 'react'
-import { displayedLog } from 'redux/actions/log'
+import { delAlert } from 'redux/actions/alert'
 import { connect } from 'react-redux'
-import { LogType } from 'logCenter/log'
+import { MsgLevel } from 'utils/enums'
 class NotificationAlert extends React.Component {
   constructor (props) {
     super(props)
     this.handleClose = this.handleClose.bind(this)
   }
   handleClose (a) {
-    this.props.displayedLog(a)
+    this.props.delAlert(a)
   }
   createTimer (n) {
     const AppearanceTime = 5000
@@ -19,16 +19,16 @@ class NotificationAlert extends React.Component {
   getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {
-      case LogType.info:
+      case MsgLevel.info:
         cssClass = 'alert-info'
         break
-      case LogType.error:
+      case MsgLevel.error:
         cssClass = 'alert-danger'
         break
-      case LogType.success:
+      case MsgLevel.success:
         cssClass = 'alert-success'
         break
-      case LogType.warning:
+      case MsgLevel.warning:
         cssClass = 'alert-warning'
         break
     }
@@ -36,7 +36,6 @@ class NotificationAlert extends React.Component {
   }
   renderAlert (n) {
     this.createTimer(n)
-
     return (
       <div key={'alert-' + n.ts} className={`${this.getAlertClass(n)} alert alert-dismissible fade show`}>
         <div className='font-weight-normal'>{n.content}</div>
@@ -54,22 +53,20 @@ class NotificationAlert extends React.Component {
   }
   render () {
     let r = []
-    this.props.logs.forEach(a => {
-      if (a.display) {
-        r.push(this.renderAlert(a))
-      }
+    this.props.alerts.forEach(a => {
+      r.push(this.renderAlert(a))
     })
     return <div id='rpi-alert-container'>{r}</div>
   }
 }
 const mapStateToProps = state => {
   return {
-    logs: state.logs
+    alerts: state.alerts
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    displayedLog: n => dispatch(displayedLog(n))
+    delAlert: n => dispatch(delAlert(n))
   }
 }
 const notifalert = connect(

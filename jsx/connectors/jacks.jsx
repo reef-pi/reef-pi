@@ -1,6 +1,6 @@
 import React from 'react'
 import { confirm } from 'utils/confirm'
-import { showAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import { connect } from 'react-redux'
 import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/jacks'
 import Jack from './jack'
@@ -62,7 +62,7 @@ class jacks extends React.Component {
     })
     for (var i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        showAlert('Use only comma separated numbers')
+        showError('Use only comma separated numbers')
         return
       }
     }

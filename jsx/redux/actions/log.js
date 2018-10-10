@@ -10,10 +10,3 @@ export const delLog = (log) => {
     payload: log
   })
 }
-
-export const displayedLog = (log) => {
-  return ({
-    type: 'LOG_DISPLAYED',
-    payload: log
-  })
-}
