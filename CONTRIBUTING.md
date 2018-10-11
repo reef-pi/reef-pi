@@ -12,3 +12,11 @@ Not every contribution comes in the form of code. Submitting, confirming, and tr
 - Create a Github Pull Request for your change
 - Perform a Code Review with the project maintainers on the pull request.
 - reef-pi using Travis CI to test all pull requests. reef-pi requires these test runs to succeed on every pull request before being merged.
+
+### Translation Contribution
+
+All the translations are located in assets/translations/*.csv
+
+- Do not change any key
+- Do not add any key
+- Follow the contribution process

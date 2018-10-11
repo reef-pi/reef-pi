@@ -6,6 +6,7 @@ An open source reef tank controller based on Raspberry Pi
 [![Build Status](https://travis-ci.org/reef-pi/reef-pi.png?branch=master)](https://travis-ci.org/reef-pi/reef-pi)
 [![Coverage Status](https://codecov.io/gh/reef-pi/reef-pi/branch/master/graph/badge.svg)](https://codecov.io/gh/reef-pi/reef-pi)
 [![Go Report Card](https://goreportcard.com/badge/reef-pi/reef-pi)](https://goreportcard.com/report/reef-pi/reef-pi)
+[![CodeFactor](https://www.codefactor.io/repository/github/reef-pi/reef-pi/badge)](https://www.codefactor.io/repository/github/reef-pi/reef-pi)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/reef-pi/reef-pi/blob/master/LICENSE.txt)
 [![GoDoc](https://godoc.org/github.com/reef-pi/reef-pi?status.svg)](https://godoc.org/github.com/reef-pi/reef-pi)
 
