@@ -127,7 +127,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 func (c *Controller) Run(t TC, quit chan struct{}) {
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
-		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", t.Name, t.Period)
+		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
 		return
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
