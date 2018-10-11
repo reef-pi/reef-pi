@@ -3,7 +3,9 @@ import thunk from 'redux-thunk'
 import { rootReducer } from './reducer'
 
 const initialState = {
-  info: {},
+  info: {
+    name: 'reef-pi'
+  },
   errors: [],
   equipment: [],
   timers: [],
