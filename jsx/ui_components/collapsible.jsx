@@ -1,6 +1,7 @@
 import React, { cloneElement } from 'react'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 class Collapsible extends React.Component {
   constructor (props) {
@@ -37,7 +38,10 @@ class Collapsible extends React.Component {
 
     return (
       <li className='list-group-item'>
-        <div className='row mb-1 cursor-pointer text-center text-md-left'
+        <div
+          className={classNames('row mb-1 text-center text-md-left', {
+            'pointer': readOnly
+          })}
           onClick={() => onToggle(name)}>
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
             <button type='button'
@@ -49,7 +53,9 @@ class Collapsible extends React.Component {
             {readOnly ? editButton : null}
             {this.props.buttons}
           </div>
-          <div className='pointer col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline'>
+          <div className={classNames('col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
+            'pointer': readOnly
+          })}>
             {expanded ? FaAngleUp() : FaAngleDown()}
             {this.props.title}
           </div>

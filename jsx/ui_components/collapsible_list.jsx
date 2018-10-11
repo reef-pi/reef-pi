@@ -23,8 +23,11 @@ export default class CollapsibleList extends React.Component {
   }
 
   onToggle (name) {
-    let expanded = {...this.state.expanded}
-    this.setState({expanded: {...expanded, [name]: !expanded[name]}})
+    // Don't collapse if editing
+    if (this.state.readOnly[name] === true) {
+      let expanded = {...this.state.expanded}
+      this.setState({expanded: {...expanded, [name]: !expanded[name]}})
+    }
   }
 
   onEdit (name) {

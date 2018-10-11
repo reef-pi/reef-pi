@@ -1,17 +1,25 @@
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import Pump from './pump'
-import New from './new'
-import Main from './controller'
+import Main from './main'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
+import DoserForm from './doser_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
+var fn = jest.fn()
 jest.mock('utils/confirm', () => {
   return {
+    showModal: jest
+      .fn()
+      .mockImplementation(() => {
+        return new Promise(resolve => {
+          return resolve(true)
+        })
+      })
+      .bind(this),
     confirm: jest
       .fn()
       .mockImplementation(() => {
@@ -22,6 +30,7 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
 describe('Doser ui', () => {
   it('<Main />', () => {
     let mock = {
@@ -30,44 +39,37 @@ describe('Doser ui', () => {
     const m = shallow(<Main store={mockStore(mock)} />)
       .dive()
       .instance()
-    m.setState({ dosers: [{ foo: 'bar' }] })
+
+    m.createDoser({name: 'test'})
+    m.updateDoser({name: 'renamed'})
+    m.deleteDoser({id: 1, name: 'renamed'})
+    m.calibrateDoser({stopPropagation: fn}, {})
   })
 
-  it('<New />', () => {
-    const m = shallow(<New store={mockStore()} />)
-      .dive()
-      .instance()
-    m.toggle()
-    m.setJack('1', 2)
-    m.update('name')({ target: { value: 'foo' } })
-    m.add()
-    m.update('name')({ target: { value: '' } })
-    m.add()
+  it('<DoserForm/> for create', () => {
+    const fn = jest.fn()
+    const wrapper = shallow(<DoserForm onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
   })
 
-  it('<Pump />', () => {
-    const pump = {
+  it('<DoserForm /> for edit', () => {
+    const fn = jest.fn()
+
+    const doser = {
+      name: 'name',
       regiment: {
+        enable: true,
         schedule: {
           day: '*',
-          hour: '*',
-          minute: '*',
+          hour: '17',
+          minute: '0',
           second: '0'
-        },
-        duration: 10
+        }
       }
     }
-    const m = shallow(<Pump data={pump} store={mockStore()} />)
-      .dive()
-      .instance()
-    m.schedule()
-    m.calibrate()
-    m.updateEnable({ target: { checked: true } })
-    m.updateSchedule(pump.regiment.schedule)
-    m.update('hour')({ target: { value: '8' } })
-    m.setSchedule()
-    m.onDemand()
-    m.remove()
-    m.props.deleteDosingPump(1)
+    const wrapper = shallow(<DoserForm doser={doser} onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
   })
 })

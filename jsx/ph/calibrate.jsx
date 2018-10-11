@@ -22,7 +22,7 @@ export const Calibrate = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='formg-group row'>
+      <div className='form-group row'>
         <label htmlFor='value' className='col-4 col-form-label'>{label}</label>
         <div className='col-4'>
           <div className='form-group'>

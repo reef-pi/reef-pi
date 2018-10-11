@@ -141,7 +141,7 @@ const EditPh = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Alert Below</label>
+            <label htmlFor='minAlert'>Alert Below</label>
             <Field
               name='minAlert'
               readOnly={readOnly || values.alerts === false}
@@ -155,7 +155,7 @@ const EditPh = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Alert Above</label>
+            <label htmlFor='maxAlert'>Alert Above</label>
             <Field
               name='maxAlert'
               readOnly={readOnly || values.alerts === false}
