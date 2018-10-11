@@ -32,8 +32,12 @@ function genTsObj(lineArray) {
   })
   return o
 }
+console.log('Generating Json resources files from CSV')
+console.log('----------------------------------------')
 files.forEach(f => {
+  console.log(`Parsing ${f}`)
   let lines = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8').match(/[^\r\n]+/g)
   lines.shift() // deleting titles
   fs.writeFileSync(`${PATH_JSON}${path.basename(f, '.csv')}.json`, JSON.stringify(genTsObj(lines)))
 })
+console.log('All translations have been successfully generated')

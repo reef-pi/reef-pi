@@ -70,9 +70,13 @@
     "yup": "^0.26.2"
   },
   "scripts": {
-    "build": "./node_modules/.bin/webpack -d",
-    "ui": "./node_modules/.bin/webpack --mode=production",
-    "ui-dev": "./node_modules/.bin/webpack -d --watch",
+    "translations":"node ./build/translations/csv-json.js",
+    "build": "npm run translations && npm run webpack:build:dev",
+    "webpack:build:dev": "./node_modules/.bin/webpack -d",
+    "webpack:build:dev:watch": "./node_modules/.bin/webpack -d --watch",
+    "webpack:build:prod": "./node_modules/.bin/webpack --mode=production",
+    "ui": "npm run translations && npm run webpack:build:prod",
+    "ui-dev": "npm run translations && npm run webpack:build:dev:watch",
     "js-lint": "./node_modules/.bin/standard  jsx/* --fix",
     "standard": "./node_modules/.bin/standard --fix jsx/**/**",
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
