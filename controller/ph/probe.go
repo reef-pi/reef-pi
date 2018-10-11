@@ -99,7 +99,7 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) Run(p Probe, quit chan struct{}) {
 	if p.Period <= 0 {
-		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected postive, found:%d\n", p.Name, p.Period)
+		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return
 	}
 	p.CreateFeed(c.controller.Telemetry())

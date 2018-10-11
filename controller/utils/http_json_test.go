@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-  "testing"
+	"testing"
 )
 
 type mockResponseWriter struct {

@@ -19,19 +19,20 @@ import { configureStore } from 'redux/store'
 import Summary from 'summary'
 
 const caps = {
-  dashboard: <Dashboard />,
-  equipment: <Equipment />,
-  timers: <Timers />,
-  lighting: <Lighting />,
-  temperature: <Temperature />,
-  ato: <ATO />,
-  ph: <Ph />,
-  doser: <Doser />,
-  macro: <Macro />,
-  camera: <Camera />,
-  configuration: <Configuration />,
-  log: <Log />
+  dashboard: { label: 'Dashboard', component: <Dashboard /> },
+  equipment: { label: 'Equipment', component: <Equipment /> },
+  timers: { label: 'Timers',  component: <Timers /> },
+  lighting: { label: 'Lights', component: <Lighting /> },
+  temperature: { label: 'Temperature', component: <Temperature /> },
+  ato: { label: 'ATO', component: <ATO /> },
+  ph: { label: 'pH', component: <Ph /> },
+  doser: { label: 'Dosing Pumps', component: <Doser /> },
+  macro: { label: 'Macros', component: <Macro /> },
+  camera: { label: 'Camera', component: <Camera /> },
+  configuration: { label: 'Configuration', component: <Configuration /> },
+  log: { label: 'Log', component: <Log /> }
 }
+
 
 class mainPanel extends React.Component {
   constructor (props) {
@@ -66,10 +67,7 @@ class mainPanel extends React.Component {
         continue
       }
       let cname = prop === tab ? 'nav-link active' : 'nav-link'
-      let label = prop
-      if (label.toLowerCase() === 'ato') {
-        label = 'ATO'
-      }
+      let label = caps[prop].label
       panels.push(
         <li className='nav-item' key={'li-tab-' + prop}>
           <a href='#' id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
@@ -91,7 +89,7 @@ class mainPanel extends React.Component {
         }
       }
     }
-    var body = caps[tab]
+    var body = caps[tab].component
     return (
       <div id='content'>
         <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>

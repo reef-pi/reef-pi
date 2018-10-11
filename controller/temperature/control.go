@@ -41,7 +41,7 @@ func (c *Controller) control(tc TC, u *Usage) error {
 		}
 		return c.coolDown(tc)
 	case u.Temperature < tc.Min:
-		log.Println("temparature subsystem: Current temperature is below minimum threshold. Executing warm up routine")
+		log.Println("temperature subsystem: Current temperature is below minimum threshold. Executing warm up routine")
 		if tc.Heater != "" {
 			u.Heater += int(tc.Period)
 		}

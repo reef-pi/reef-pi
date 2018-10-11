@@ -155,7 +155,7 @@ func (c *Controller) Check(a ATO) {
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
 	if a.Period <= 0 {
-		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected postive, found:%d\n", a.Name, a.Period)
+		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
 		return
 	}
 	a.CreateFeed(c.c.Telemetry())

@@ -2,9 +2,6 @@
 
 .navbar-reefpi {
   background-color: $main-color;
-  a::first-letter{
-    text-transform: uppercase;
-  }
 }
 .navbar-reefpi .navbar-brand {
   color: #FFF;
@@ -12,9 +9,6 @@
 .current-tab{
   border:none;
   cursor:default;
-  &::first-letter{
-    text-transform: uppercase;
-  }
 }
 /* change the brand and text color */
 .navbar-reefpi
