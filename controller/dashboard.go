@@ -21,7 +21,7 @@ type Chart struct {
 }
 
 var DefaultDashboard = Dashboard{
-	GridDetails: [][]Chart{[]Chart{Chart{
+	GridDetails: [][]Chart{{{
 		Type: "health",
 	}}},
 	Column: 1,
