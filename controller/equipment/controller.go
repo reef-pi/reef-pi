@@ -55,7 +55,6 @@ func (c *Controller) Stop() {
 		log.Println("Equipment subsystem is running in dev mode, skipping GPIO closing")
 		return
 	}
-	embd.CloseGPIO()
 }
 
 func (c *Controller) AddCheck(check Check) {
