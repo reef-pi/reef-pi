@@ -18,8 +18,9 @@ module.exports = {
       .type('.add-doser [name="duration"]',  '15')
       .type('.add-doser [name="speed"]')
       .type('.add-doser [name="speed"]',  '50')
+      .wait(1000)
       .click('.add-doser input[type*="submit"]')
-      .wait(1500)
+      .wait(500)
 
     return function () {
       return ('Doser created')
