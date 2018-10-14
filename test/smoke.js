@@ -20,9 +20,9 @@ const nightmare = Nightmare({
   openDevTools: true
 })
 
-function SmokeTest (url) {
+function SmokeTest () {
   nightmare
-    .goto(url)
+    .goto('http://localhost:8080/')
     .viewport(1100, 650)
     .wait(500)
     .evaluate(S.SignIn(nightmare))
@@ -43,6 +43,7 @@ function SmokeTest (url) {
     .wait(1500)
     .evaluate(ato.Create(nightmare))
     .wait(1500)
+    
     .evaluate(tc.Configure(nightmare))
     .wait(1500)
     .evaluate(ato.Configure(nightmare))
@@ -65,9 +66,4 @@ function SmokeTest (url) {
     })
 }
 
-let url = 'http://localhost:8080/'
-if (process.argv.length == 3){
-  url = process.argv[2]
-}
-
-SmokeTest(url)
+SmokeTest()

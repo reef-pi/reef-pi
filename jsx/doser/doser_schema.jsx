@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-const DoserSchema = Yup.object().shape({
+const PhSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required'),
   jack: Yup.string()
@@ -23,4 +23,4 @@ const DoserSchema = Yup.object().shape({
     .required('Second is required')
 })
 
-export default DoserSchema
+export default PhSchema

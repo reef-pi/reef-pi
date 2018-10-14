@@ -1,34 +1,65 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'formik'
 
-const SelectType = ({name, className, readOnly}) => {
-  const list = () => {
-    var validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
-    return validTypes.map(item => {
-      return (
-        <option key={item} value={item}>
-          {item}
-        </option>
-      )
-    })
+export default class SelectType extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      type: props.type
+    }
+    this.list = this.list.bind(this)
+    this.set = this.set.bind(this)
   }
 
-  return (
-    <Field name={name}
-      component='select'
-      className={`form-control ${className}`}
-      disabled={readOnly}>
-      <option value='' className='d-none'>-- Select Type --</option>
-      {list()}
-    </Field>
-  )
+  list () {
+    var validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
+    var items = []
+    validTypes.forEach((v, k) => {
+      var cName = 'dropdown-item'
+      if (this.state.type === v) {
+        cName += ' active'
+      }
+      items.push(
+        <a className={cName} href='#' key={k} onClick={this.set(v)}>
+          <span id={v + '-' + this.props.macro_id + '-' + this.props.index}>{v}</span>
+        </a>
+      )
+    })
+    return items
+  }
+
+  set (k) {
+    return () => {
+      this.setState({
+        type: k
+      })
+      this.props.hook(k)
+    }
+  }
+
+  render () {
+    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
+    return (
+      <div className='dropdown'>
+        <button
+          className='btn btn-secondary dropdown-toggle'
+          type='button'
+          data-toggle='dropdown'
+          disabled={readOnly}
+          id={'select-type-' + this.props.macro_id + '-' + this.props.index}
+        >
+          {this.state.type}
+        </button>
+        <div className='dropdown-menu'>{this.list()}</div>
+      </div>
+    )
+  }
 }
 
 SelectType.propTypes = {
+  hook: PropTypes.func,
   readOnly: PropTypes.bool,
-  name: PropTypes.string,
-  className: PropTypes.string
+  macro_id: PropTypes.string,
+  type: PropTypes.string,
+  index: PropTypes.number
 }
-
-export default SelectType
