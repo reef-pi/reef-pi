@@ -1,6 +1,6 @@
 #rpi-alert-container{
-  position: absolute;
-  width: 30%;
+  position: fixed;
   z-index: 100;
+  top: 10px;
   right:10px;
 }

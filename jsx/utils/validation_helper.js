@@ -39,7 +39,7 @@ export const ErrorMessage = (errors, name) => {
     return err
   } else if (Array.isArray(err)) {
     for (let i = 0; i < err.length; i++) {
-      if (err[i]) return err[i]
+      if (err[i] && (typeof err[i] === 'string' || err[i] instanceof String)) return err[i]
     }
   }
   return null
