@@ -56,7 +56,7 @@ class NotificationAlert extends React.Component {
     this.props.alerts.forEach(a => {
       r.push(this.renderAlert(a))
     })
-    return <div id='rpi-alert-container' className='col-12 col-sm-6 col-md-4'>{r}</div>
+    return <div id='rpi-alert-container'>{r}</div>
   }
 }
 const mapStateToProps = state => {
