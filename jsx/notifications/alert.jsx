@@ -1,72 +1,31 @@
 import React from 'react'
+import AlertItem from './alert_item'
 import { delAlert } from 'redux/actions/alert'
 import { connect } from 'react-redux'
-import { MsgLevel } from 'utils/enums'
 class NotificationAlert extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       containerFix: ''
     }
-    this.handleClose = this.handleClose.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
   }
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll)
   }
-
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
   }
   handleScroll() {
-    if(window.scrollY>56){
-      this.setState({containerFix:'fix'})
+    if (window.scrollY > 56) {
+      this.setState({ containerFix: 'fix' })
     } else {
-      this.setState({containerFix:''})
+      this.setState({ containerFix: '' })
     }
-  }
-  handleClose(a) {
-    this.props.delAlert(a)
-  }
-  createTimer(n) {
-    const AppearanceTime = 5000
-    setTimeout(() => {
-      this.handleClose(n)
-    }, AppearanceTime)
-  }
-  getAlertClass(a) {
-    let cssClass = ''
-    switch (a.type) {
-      case MsgLevel.info:
-        cssClass = 'alert-info'
-        break
-      case MsgLevel.error:
-        cssClass = 'alert-danger'
-        break
-      case MsgLevel.success:
-        cssClass = 'alert-success'
-        break
-      case MsgLevel.warning:
-        cssClass = 'alert-warning'
-        break
-    }
-    return cssClass
   }
   renderAlert(n) {
-    this.createTimer(n)
     return (
-      <div key={'alert-' + n.ts} className={`${this.getAlertClass(n)} alert alert-dismissible fade show`}>
-        <div className="font-weight-normal">{n.content}</div>
-        <button
-          type="button"
-          onClick={() => {
-            this.handleClose(n)
-          }}
-          className="close"
-        >
-          <span>&times;</span>
-        </button>
-      </div>
+      <AlertItem key={'alert-' + n.ts} notification={n} close={this.props.delAlert}/>
     )
   }
   render() {

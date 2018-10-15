@@ -6,4 +6,10 @@
     position: fixed;
     top: 10px;
   }
+  .notification-item{
+    &.closing{
+      opacity: 0;
+      transition: 0.5s all ease;
+    }
+  }
 }
