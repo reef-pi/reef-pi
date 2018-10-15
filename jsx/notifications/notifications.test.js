@@ -5,7 +5,6 @@ import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import { wrap } from 'module'
 const mockStore = configureMockStore([thunk])
 Enzyme.configure({ adapter: new Adapter() })
 
