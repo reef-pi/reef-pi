@@ -55,9 +55,9 @@ export default class Outlet extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Name </span>
+        <div className='col-12 col-md-6'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Name</span>
             <input
               type='text'
               id={'outlet-' + this.props.outlet_id + '-name'}
@@ -67,9 +67,9 @@ export default class Outlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Pin </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Pin</span>
             <input
               type='number'
               id={'outlet-' + this.props.outlet_id + '-pin'}
@@ -79,13 +79,13 @@ export default class Outlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Reverse </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Reverse</span>
             <input
               type='checkbox'
               onChange={this.handleReverseChange}
-              className='outlet-reverse'
+              className='form-control outlet-reverse'
               id={'outlet-' + this.props.outlet_id + '-reverse'}
               checked={this.state.reverse}
             />
@@ -98,8 +98,8 @@ export default class Outlet extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col'>{this.state.name}</div>
-        <div className='col'>
+        <div className='col-4'>{this.state.name}</div>
+        <div className='col-1'>
           <label className='small'>{this.state.pin}</label>
         </div>
         <div className='col'>
@@ -114,13 +114,21 @@ export default class Outlet extends React.Component {
 
   render () {
     return (
-      <div className='row'>
-        <div className='col-8'>{this.state.edit ? this.editUI() : this.ui()}</div>
-        <div className='col-1'>
-          <input type='button' className='btn edit-outlet btn-outline-secondary' value={this.state.lbl} onClick={this.edit} />
-        </div>
-        <div className='col-1'>
-          <input type='button' className='btn btn-outline-danger' value='X' onClick={this.props.remove} />
+      <div className='row border-bottom py-1'>
+        <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
+        <div className='col-4 col-md-3'>
+          <input
+            type='button'
+            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            value='X'
+            onClick={this.props.remove}
+          />
+          <input
+            type='button'
+            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            value={this.state.lbl}
+            onClick={this.edit}
+          />
         </div>
       </div>
     )

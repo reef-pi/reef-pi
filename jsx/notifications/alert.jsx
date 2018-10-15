@@ -13,6 +13,20 @@ class NotificationAlert extends React.Component {
   componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
   }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+  handleScroll () {
+    if (window.scrollY > 56) {
+      this.setState({containerFix: 'fix'})
+    } else {
+      this.setState({containerFix: ''})
+    }
+  }
+  componentDidMount () {
+    window.addEventListener('scroll', this.handleScroll)
+  }
   componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
   }
