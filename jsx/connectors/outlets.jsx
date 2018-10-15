@@ -92,18 +92,25 @@ class outlets extends React.Component {
     }
     return (
       <div className='container'>
-        <label className='h6'>Outlets</label>
-        <div className='row'>
-          <div className='container'>{this.list()}</div>
+        <div className='row mb-1'>
+          <div className='col-12'>
+            <label className='h6'>Outlets</label>
+            {this.list()}
+          </div>
         </div>
         <div className='row'>
-          <input
-            id='add_outlet'
-            type='button'
-            value={this.state.add ? '-' : '+'}
-            onClick={this.add}
-            className='btn btn-outline-success'
-          />
+          <div className='col-12'>
+            <input
+              id='add_outlet'
+              type='button'
+              value={this.state.add ? '-' : '+'}
+              onClick={this.add}
+              className='btn btn-sm btn-outline-success'
+            />
+          </div>
+        </div>
+
+        <div className='row'>
           <div className='container' style={dStyle}>
             <div className='row'>
               <div className='col-sm-3'>
