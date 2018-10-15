@@ -21,7 +21,7 @@ import Summary from 'summary'
 const caps = {
   dashboard: { label: 'Dashboard', component: <Dashboard /> },
   equipment: { label: 'Equipment', component: <Equipment /> },
-  timers: { label: 'Timers',  component: <Timers /> },
+  timers: { label: 'Timers', component: <Timers /> },
   lighting: { label: 'Lights', component: <Lighting /> },
   temperature: { label: 'Temperature', component: <Temperature /> },
   ato: { label: 'ATO', component: <ATO /> },
@@ -32,7 +32,6 @@ const caps = {
   configuration: { label: 'Configuration', component: <Configuration /> },
   log: { label: 'Log', component: <Log /> }
 }
-
 
 class mainPanel extends React.Component {
   constructor (props) {

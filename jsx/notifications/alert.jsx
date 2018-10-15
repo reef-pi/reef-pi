@@ -3,38 +3,38 @@ import AlertItem from './alert_item'
 import { delAlert } from 'redux/actions/alert'
 import { connect } from 'react-redux'
 class NotificationAlert extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       containerFix: ''
     }
     this.handleScroll = this.handleScroll.bind(this)
   }
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
   }
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
   }
-  handleScroll() {
+  handleScroll () {
     if (window.scrollY > 56) {
       this.setState({ containerFix: 'fix' })
     } else {
       this.setState({ containerFix: '' })
     }
   }
-  renderAlert(n) {
+  renderAlert (n) {
     return (
-      <AlertItem key={'alert-' + n.ts} notification={n} close={this.props.delAlert}/>
+      <AlertItem key={'alert-' + n.ts} notification={n} close={this.props.delAlert} />
     )
   }
-  render() {
+  render () {
     let r = []
     this.props.alerts.forEach(a => {
       r.push(this.renderAlert(a))
     })
     return (
-      <div id="rpi-alert-container" className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
+      <div id='rpi-alert-container' className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
         {r}
       </div>
     )

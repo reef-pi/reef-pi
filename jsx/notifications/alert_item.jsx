@@ -2,19 +2,19 @@ import React from 'react'
 import { MsgLevel } from 'utils/enums'
 const AppearanceTime = 5000
 class NotificationAlertItem extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       lifeStatus: '',
       notification: props.notification
     }
   }
-  componentDidMount() {
+  componentDidMount () {
     this.timer = setTimeout(() => {
       this.handleClose()
     }, AppearanceTime)
   }
-  getAlertClass(a) {
+  getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {
       case MsgLevel.info:
@@ -32,7 +32,7 @@ class NotificationAlertItem extends React.Component {
     }
     return cssClass
   }
-  handleClose() {
+  handleClose () {
     if (this.timer) {
       clearTimeout(this.timer)
     }
@@ -41,20 +41,20 @@ class NotificationAlertItem extends React.Component {
       this.props.close(this.props.notification)
     }, 1000)
   }
-  render() {
+  render () {
     return (
       <div
         className={`${this.getAlertClass(this.props.notification)} ${
           this.state.lifeStatus
         } alert alert-dismissible fade show notification-item`}
       >
-        <div className="font-weight-normal">{this.props.notification.content}</div>
+        <div className='font-weight-normal'>{this.props.notification.content}</div>
         <button
-          type="button"
+          type='button'
           onClick={() => {
             this.handleClose()
           }}
-          className="close"
+          className='close'
         >
           <span>&times;</span>
         </button>
