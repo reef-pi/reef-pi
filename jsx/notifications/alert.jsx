@@ -3,7 +3,7 @@ import { delAlert } from 'redux/actions/alert'
 import { connect } from 'react-redux'
 import { MsgLevel } from 'utils/enums'
 class NotificationAlert extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       containerFix: ''
@@ -11,30 +11,30 @@ class NotificationAlert extends React.Component {
     this.handleClose = this.handleClose.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
   }
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
   }
-  handleScroll() {
-    if(window.scrollY>56){
-      this.setState({containerFix:'fix'})
+  handleScroll () {
+    if (window.scrollY > 56) {
+      this.setState({containerFix: 'fix'})
     } else {
-      this.setState({containerFix:''})
+      this.setState({containerFix: ''})
     }
   }
-  handleClose(a) {
+  handleClose (a) {
     this.props.delAlert(a)
   }
-  createTimer(n) {
+  createTimer (n) {
     const AppearanceTime = 5000
     setTimeout(() => {
       this.handleClose(n)
     }, AppearanceTime)
   }
-  getAlertClass(a) {
+  getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {
       case MsgLevel.info:
@@ -52,30 +52,30 @@ class NotificationAlert extends React.Component {
     }
     return cssClass
   }
-  renderAlert(n) {
+  renderAlert (n) {
     this.createTimer(n)
     return (
       <div key={'alert-' + n.ts} className={`${this.getAlertClass(n)} alert alert-dismissible fade show`}>
-        <div className="font-weight-normal">{n.content}</div>
+        <div className='font-weight-normal'>{n.content}</div>
         <button
-          type="button"
+          type='button'
           onClick={() => {
             this.handleClose(n)
           }}
-          className="close"
+          className='close'
         >
           <span>&times;</span>
         </button>
       </div>
     )
   }
-  render() {
+  render () {
     let r = []
     this.props.alerts.forEach(a => {
       r.push(this.renderAlert(a))
     })
     return (
-      <div id="rpi-alert-container" className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
+      <div id='rpi-alert-container' className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
         {r}
       </div>
     )
