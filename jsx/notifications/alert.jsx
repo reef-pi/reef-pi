@@ -5,7 +5,25 @@ import { MsgLevel } from 'utils/enums'
 class NotificationAlert extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      containerFix: ''
+    }
     this.handleClose = this.handleClose.bind(this)
+    this.handleScroll = this.handleScroll.bind(this)
+  }
+  componentDidMount () {
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+  handleScroll () {
+    if (window.scrollY > 56) {
+      this.setState({containerFix: 'fix'})
+    } else {
+      this.setState({containerFix: ''})
+    }
   }
   handleClose (a) {
     this.props.delAlert(a)
@@ -56,7 +74,11 @@ class NotificationAlert extends React.Component {
     this.props.alerts.forEach(a => {
       r.push(this.renderAlert(a))
     })
-    return <div id='rpi-alert-container' className='col-12 col-sm-6 col-md-4'>{r}</div>
+    return (
+      <div id='rpi-alert-container' className={this.state.containerFix + ' col-12 col-sm-6 col-md-4'}>
+        {r}
+      </div>
+    )
   }
 }
 const mapStateToProps = state => {
