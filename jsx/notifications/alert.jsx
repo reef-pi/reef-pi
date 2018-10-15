@@ -24,19 +24,6 @@ class NotificationAlert extends React.Component {
       this.setState({containerFix: ''})
     }
   }
-  componentDidMount () {
-    window.addEventListener('scroll', this.handleScroll)
-  }
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this.handleScroll)
-  }
-  handleScroll () {
-    if (window.scrollY > 56) {
-      this.setState({ containerFix: 'fix' })
-    } else {
-      this.setState({ containerFix: '' })
-    }
-  }
   renderAlert (n) {
     return (
       <AlertItem key={'alert-' + n.ts} notification={n} close={this.props.delAlert} />
