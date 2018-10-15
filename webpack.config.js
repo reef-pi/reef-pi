@@ -1,7 +1,8 @@
-var webpack = require('webpack')
-var path = require('path')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 var BUILD_DIR = path.resolve(__dirname, 'ui')
 var APP_DIR = path.resolve(__dirname, 'jsx')
@@ -52,7 +53,7 @@ var config = {
   },
   output: {
     path: BUILD_DIR,
-    filename: 'assets/js/[name].js'
+    filename: 'assets/js/[name].[contenthash].js'
   },
   optimization: {
     splitChunks: {
@@ -60,6 +61,7 @@ var config = {
     }
   },
   plugins: [
+    new CleanWebpackPlugin([BUILD_DIR]),
     new HtmlWebpackPlugin({
       favicon: './assets/favicon.ico',
       filename: 'home.html',
@@ -67,7 +69,7 @@ var config = {
       inject: true
     }),
     new MiniCssExtractPlugin({
-      filename: 'assets/css/[name].css',
+      filename: 'assets/css/[name].[contenthash].css',
       chunkFilename: 'assets/css/[id].css'
     })
   ]
