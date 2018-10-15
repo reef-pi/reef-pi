@@ -68,7 +68,7 @@ export default class Jack extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col-md-6 col-lg-3'>
+        <div className='col-12 col-md-6'>
           <div className='form-group'>
             <label htmlFor={'jack-' + this.props.jack_id + '-name'}> Name </label>
             <input
@@ -80,7 +80,7 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col-md-6 col-lg-3'>
+        <div className='col-12 col-md-3'>
           <div className='form-group'>
             <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> Pin </label>
             <input
@@ -92,19 +92,19 @@ export default class Jack extends React.Component {
             />
           </div>
         </div>
-        <div className='col-md-6 col-lg-3'>
+        <div className='col-12 col-md-3'>
           <div className='form-group'>
             <label>Driver</label>
             <div className='dropdown'>
               <button
-                className='jack-type btn btn-secondary dropdown-toggle form-control'
+                className='jack-type btn btn-secondary dropdown-toggle form-control col-12'
                 type='button'
                 id={this.props.jack_id + '-driver-selection'}
                 data-toggle='dropdown'
               >
                 {this.state.driver}
               </button>
-              <div className='dropdown-menu'>
+              <div className='dropdown-menu col-12'>
                 <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
                   rpi
                 </a>

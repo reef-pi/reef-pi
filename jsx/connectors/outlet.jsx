@@ -55,9 +55,9 @@ export default class Outlet extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Name </span>
+        <div className='col-12 col-md-6'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Name</span>
             <input
               type='text'
               id={'outlet-' + this.props.outlet_id + '-name'}
@@ -67,9 +67,9 @@ export default class Outlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Pin </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Pin</span>
             <input
               type='number'
               id={'outlet-' + this.props.outlet_id + '-pin'}
@@ -79,13 +79,13 @@ export default class Outlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Reverse </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Reverse</span>
             <input
               type='checkbox'
               onChange={this.handleReverseChange}
-              className='outlet-reverse'
+              className='form-control outlet-reverse'
               id={'outlet-' + this.props.outlet_id + '-reverse'}
               checked={this.state.reverse}
             />

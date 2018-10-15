@@ -55,9 +55,9 @@ export default class Inlet extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Name </span>
+        <div className='col-12 col-md-6'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Name</span>
             <input
               type='text'
               id={'inlet-' + this.props.inlet_id + '-name'}
@@ -67,9 +67,9 @@ export default class Inlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Pin </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Pin</span>
             <input
               type='text'
               id={'inlet-' + this.props.inlet_id + '-pin'}
@@ -79,11 +79,11 @@ export default class Inlet extends React.Component {
             />
           </div>
         </div>
-        <div className='col'>
-          <div className='input-group'>
-            <span className='input-group-addon'> Reverse </span>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Reverse</span>
             <input
-              className='inlet-reverse'
+              className='form-control inlet-reverse'
               type='checkbox'
               onChange={this.handleReverseChange}
               id={'inlet-' + this.props.inlet_id + '-reverse'}

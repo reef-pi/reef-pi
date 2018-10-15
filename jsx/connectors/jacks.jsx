@@ -119,66 +119,68 @@ class jacks extends React.Component {
             />
           </div>
         </div>
-        <div className='col-12'>
-          <div className='row' style={dStyle}>
-            <div className='col-md-6 col-lg-3'>
-              <div className='form-group'>
-                <label htmlFor='jackName'> Name </label>
-                <input
-                  type='text'
-                  id='jackName'
-                  value={this.state.JackName}
-                  onChange={this.handleNameChange}
-                  className='form-control'
-                />
+        <div className='row'>
+          <div className='col-12'>
+            <div className='row' style={dStyle}>
+              <div className='col-12 col-md-5'>
+                <div className='form-group'>
+                  <label htmlFor='jackName'>Name</label>
+                  <input
+                    type='text'
+                    id='jackName'
+                    value={this.state.JackName}
+                    onChange={this.handleNameChange}
+                    className='form-control'
+                  />
+                </div>
               </div>
-            </div>
-            <div className='col-md-6 col-lg-3'>
-              <div className='form-group'>
-                <label htmlFor='jackPins'> Pins </label>
-                <input
-                  type='text'
-                  id='jackPins'
-                  value={this.state.JackPins}
-                  onChange={this.handlePinChange}
-                  className='form-control'
-                />
+              <div className='col-12 col-md-2'>
+                <div className='form-group'>
+                  <label htmlFor='jackPins'>Pins</label>
+                  <input
+                    type='text'
+                    id='jackPins'
+                    value={this.state.JackPins}
+                    onChange={this.handlePinChange}
+                    className='form-control'
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className='col-md-6 col-lg-3'>
-              <div className='jack-type form-group'>
-                <label htmlFor='jack-type-selection'>Driver</label>
-                <div className='dropdown'>
-                  <button
-                    className='btn btn-secondary dropdown-toggle'
-                    type='button'
-                    id='jack-type-selection'
-                    data-toggle='dropdown'
-                    aria-haspopup='true'
-                    aria-expanded='false'
-                  >
-                    {this.state.JackDriver}
-                  </button>
-                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                    <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
-                      rpi
-                    </a>
-                    <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
-                      pca9685
-                    </a>
+              <div className='col-12 col-md-2'>
+                <div className='jack-type form-group'>
+                  <label htmlFor='jack-type-selection'>Driver</label>
+                  <div className='dropdown'>
+                    <button
+                      className='btn btn-secondary dropdown-toggle col-12'
+                      type='button'
+                      id='jack-type-selection'
+                      data-toggle='dropdown'
+                      aria-haspopup='true'
+                      aria-expanded='false'
+                    >
+                      {this.state.JackDriver}
+                    </button>
+                    <div className='dropdown-menu col-12' aria-labelledby='dropdownMenuButton'>
+                      <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
+                        rpi
+                      </a>
+                      <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
+                        pca9685
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='col-md-6 col-lg-3'>
-              <input
-                type='button'
-                id='createJack'
-                value='add'
-                onClick={this.save}
-                className='btn btn-outline-primary'
-              />
+              <div className='col-12 col-md-3 text-right'>
+                <input
+                  type='button'
+                  id='createJack'
+                  value='add'
+                  onClick={this.save}
+                  className='btn btn-outline-primary col-12 col-md-4'
+                />
+              </div>
             </div>
           </div>
         </div>
