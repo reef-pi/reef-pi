@@ -1,4 +1,5 @@
 import Alert from './alert'
+import AlertItem from './alert_item'
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -34,12 +35,33 @@ describe('Notifications', () => {
     ]
     let store = mockStore({ alerts: alerts })
     const wrapper = shallow(<Alert store={store} />).dive()
-    expect(wrapper.find('button').length).toBe(4)
+    expect(wrapper.find(AlertItem).length).toBe(4)
+    const l = wrapper.instance()
+    expect(l.state.containerFix).toEqual('')
+    global.window.scrollY = 60
+    l.handleScroll()
+    expect(l.state.containerFix).toEqual('fix')
+    global.window.scrollY = 0
+    l.handleScroll()
+    expect(l.state.containerFix).toEqual('')
+  })
+  it('<AlertItem />', () => {
+    const close = jest.fn()
+    const alert = {
+      ts: 1538562753,
+      content: 'foo',
+      type: 'WARNING'
+    }
+    const wrapper = shallow(<AlertItem notification={alert} close={close} />)
+
     wrapper
       .find('button')
       .first()
       .simulate('click')
     jest.runAllTimers()
-    expect(store.getActions().length).toBe(5)
+    expect(close.mock.calls.length).toBe(1)
+    shallow(<AlertItem notification={alert} close={close} />)
+    jest.runAllTimers()
+    expect(close.mock.calls.length).toBe(2)
   })
 })
