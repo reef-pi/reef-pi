@@ -25,7 +25,7 @@ export default class FatalError extends React.Component {
       .then(r => {
         that.setState({ up: r.ok })
       })
-      .catch(err => {
+      .catch(() => {
         that.setState({ up: false })
       })
   }
