@@ -17,6 +17,7 @@ import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
 import { configureStore } from 'redux/store'
 import Summary from 'summary'
+import FatalError from './fatal_error'
 
 const caps = {
   dashboard: { label: 'Dashboard', component: <Dashboard /> },
@@ -115,6 +116,7 @@ class mainPanel extends React.Component {
           </div>
         </nav>
         <div className='container-fluid'>
+          <FatalError />
           <NotificationAlert />
           <div className='row body-panel'>
             <div className='col-12'>{body}</div>
