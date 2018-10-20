@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaGithub, FaGlobe } from 'react-icons/fa'
+import { FaMedkit } from 'react-icons/fa'
 const RefreshTime = 4000
 export default class FatalError extends React.Component {
   constructor (props) {
@@ -47,19 +47,15 @@ export default class FatalError extends React.Component {
                       <h5 className='card-title'>Connection Lost</h5>
                       <p className='card-text'>
                         Something went wrong and the UI cannot contact the server anymore. You may need to restart the
-                        webserver. If the problem still occurs you may ask on Reef2Reef or raise an issue on github.
+                        webserver or do some troubleshooting.
                       </p>
                       <p className='card-text'>
                         <a
                           target='_blank'
-                          href='https://www.reef2reef.com/threads/reef-pi-an-opensource-reef-tank-controller-based-on-raspberry-pi.289256/'
+                          href='http://reef-pi.com/additional-documentation/troubleshooting/'
                           className='btn btn-primary mr-2'
                         >
-                          {FaGlobe()} Ask on R2R
-                        </a>
-
-                        <a target='_blank' href='https://github.com/reef-pi/reef-pi/issues' className='btn btn-primary'>
-                          {FaGithub()} Ask on Github
+                          {FaMedkit()} Troubleshoot
                         </a>
                       </p>
                     </div>
