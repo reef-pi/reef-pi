@@ -39,7 +39,7 @@ const EditTemperature = ({
   }
 
   const charts = () => {
-    if (!showChart || !values.enabled) {
+    if (!showChart || !values.enable) {
       return
     }
 
