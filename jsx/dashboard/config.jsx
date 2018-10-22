@@ -110,7 +110,7 @@ class config extends React.Component {
           />
         </div>
         <div className='row'>
-          <div className='col-12'>
+          <div className='col-xs-12 col-md-3 offset-md-9'>
             <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value='update' />
           </div>
         </div>

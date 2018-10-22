@@ -165,9 +165,9 @@ class telemetry extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success'
+    var updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger'
+      updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
     }
     return (
       <div className='container'>
@@ -189,17 +189,15 @@ class telemetry extends React.Component {
           </div>
           {this.notification()}
         </div>
-        <div className='row mt-3'>
+        <div className='row'>
           <div className='col'>
-            <div className='float-right'>
-              <input
-                type='button'
-                className={updateButtonClass}
-                onClick={this.save}
-                id='updateTelemetry'
-                value='update'
-              />
-            </div>
+            <input
+              type='button'
+              className={updateButtonClass}
+              onClick={this.save}
+              id='updateTelemetry'
+              value='update'
+            />
           </div>
         </div>
       </div>
