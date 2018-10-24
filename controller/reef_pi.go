@@ -75,10 +75,11 @@ func New(version, database string) (*ReefPi, error) {
 		pConfig.DevMode = s.Capabilities.DevMode
 		p, err := utils.NewPCA9685(bus, pConfig)
 		if err != nil {
-			log.Println("ERROR: Failed to initialize pca9685 driver")
-			return nil, err
+			log.Println("ERROR: Failed to initialize pca9685 driver. Using mock bus, all PCA9685 PWM calls will be ignored")
+			logError(store, "device-pca9685", "Failed to initialize pca9685 driver. Error:"+err.Error())
+		} else {
+			pca9685 = p
 		}
-		pca9685 = p
 	}
 	jacks := connectors.NewJacks(store, pi, pca9685)
 	outlets := connectors.NewOutlets(store)
