@@ -24,6 +24,7 @@ func (c *Controller) StartCycle() {
 	c.mu.Lock()
 	c.running = true
 	c.mu.Unlock()
+	c.syncLights()
 	for {
 		select {
 		case <-c.stopCh:
