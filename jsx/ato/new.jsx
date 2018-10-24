@@ -48,7 +48,11 @@ class newATO extends React.Component {
       inlet: values.inlet,
       period: parseInt(values.period),
       control: (values.pump !== ''),
-      pump: values.pump
+      pump: values.pump,
+      notify: {
+        enable: values.notify,
+        max: values.maxAlert
+      }
     }
     this.props.createATO(payload)
     this.toggle()

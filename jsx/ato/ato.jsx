@@ -52,7 +52,11 @@ class ato extends React.Component {
       inlet: values.inlet,
       period: parseInt(values.period),
       control: (values.pump !== ''),
-      pump: values.pump
+      pump: values.pump,
+      notify: {
+        enable: values.notify,
+        max: values.maxAlert
+      }
     }
 
     this.props.updateATO(this.props.data.id, payload)

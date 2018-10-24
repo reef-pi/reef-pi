@@ -21,6 +21,7 @@ const AtoSchema = Yup.object().shape({
           .number()
           .required('Threshold is required when notification is enabled')
           .typeError('Threshold must be a number')
+          .min(1, 'Check Frequency must be 1 second or greater')
       } else { return schema }
     })
 

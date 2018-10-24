@@ -150,6 +150,54 @@ const EditAto = ({
         </div>
       </div>
 
+      <div className='row'>
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='notify'>Alerts</label>
+            <Field
+              name='notify'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('notify', touched, errors)
+              })}
+            >
+              <option value='true'>Enabled</option>
+              <option value='false'>Disabled</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='notify' />
+          </div>
+        </div>
+
+        <div
+          className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
+            'd-none': values.notify === false
+          })}
+        >
+          <div className='form-group'>
+            <label htmlFor='maxAlert'>Alert After</label>
+            <div className='input-group'>
+              <Field
+                title='Total number of seconds ato pump is on'
+                name='maxAlert'
+                type='number'
+                readOnly={readOnly || values.notify === false}
+                className={classNames('form-control px-sm-1 px-md-2', {
+                  'is-invalid': ShowError('maxAlert', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text d-none d-lg-flex'>
+                    second(s)
+                </span>
+                <span className='input-group-text d-flex d-lg-none'>sec</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='maxAlert' />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
           <input
