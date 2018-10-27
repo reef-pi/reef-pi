@@ -11,7 +11,7 @@ export const reload = () => {
     reduxPost({
       url: '/api/admin/reload',
       success: reloaded,
-      failure: ()=>{},
+      failure: () => {}
     }))
 }
 

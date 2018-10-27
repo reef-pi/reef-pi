@@ -12,7 +12,7 @@ module.exports = {
       .wait('.add-macro select[name="steps.0.id"] option[value="1"]')
       .select('.add-macro select[name="steps.0.id"]', '1')
       .select('.add-macro select[name="steps.0.on"]', false)
-      
+
       .click('.add-macro button#add-step')
       .wait('.add-macro select[name="steps.1.type"] option[value="wait"]')
       .select('.add-macro select[name="steps.1.type"]', 'wait')
@@ -25,7 +25,7 @@ module.exports = {
       .wait('.add-macro select[name="steps.2.id"] option[value="1"]')
       .select('.add-macro select[name="steps.2.id"]', '1')
       .select('.add-macro select[name="steps.2.on"]', true)
-      
+
       .wait(1500)
       .click('.add-macro input[type*="submit"]')
       .wait(500)

@@ -105,7 +105,7 @@ export function reduxPost (params) {
             return
           }
           response.text().then(err => {
-            if(params.failure){
+            if (params.failure) {
               params.failure(response)
               return
             }

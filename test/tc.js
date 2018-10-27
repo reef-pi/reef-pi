@@ -13,9 +13,9 @@ module.exports = {
       .type('.add-temperature input[name="min"]', 78.5)
       .select('.add-temperature select[name="cooler"]', '5')
       .type('.add-temperature input[name="max"]', 79.3)
-      .click('.add-temperature input[type*="submit"]')      
+      .click('.add-temperature input[type*="submit"]')
       .wait(500)
-      
+
     return function () {
       return ('Temperure controller configured')
     }

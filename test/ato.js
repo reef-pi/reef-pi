@@ -19,7 +19,7 @@ module.exports = {
       .wait(500)
       .click('button#edit-ato-1')
       .wait(500)
-      .evaluate(function() {
+      .evaluate(function () {
         document.querySelector('[name*="period"]').value = ''
       })
       .insert('[name*="period"]', '90')
