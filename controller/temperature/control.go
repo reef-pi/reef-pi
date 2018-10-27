@@ -34,18 +34,14 @@ func (c *Controller) Check(tc TC) {
 
 func (c *Controller) control(tc TC, u *Usage) error {
 	switch {
-	case u.Temperature > tc.Max:
+	case (u.Temperature > tc.Max) && (tc.Cooler != ""):
 		log.Println("temperature subsystem: Current temperature is above maximum threshold. Executing cool down routine")
-		if tc.Cooler != "" {
-			u.Cooler += int(tc.Period)
-		}
-		return c.coolDown(tc)
-	case u.Temperature < tc.Min:
+		u.Cooler += int(tc.Period)
+		c.coolDown(tc)
+	case (u.Temperature < tc.Min) && (tc.Heater != ""):
 		log.Println("temperature subsystem: Current temperature is below minimum threshold. Executing warm up routine")
-		if tc.Heater != "" {
-			u.Heater += int(tc.Period)
-		}
-		return c.warmUp(tc)
+		u.Heater += int(tc.Period)
+		c.warmUp(tc)
 	default:
 		log.Println("temperature subsystem: Current temperature is within range switching off heater/cooler")
 		c.switchOffAll(tc)
