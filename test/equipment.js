@@ -1,6 +1,6 @@
 module.exports = {
   Create: function (n) {
-    //Add equipment 1
+    // Add equipment 1
     n.click('a#tab-equipment')
       .wait('input#add_equipment')
       .click('input#add_equipment')
@@ -10,7 +10,7 @@ module.exports = {
       .click('.add-equipment input[type*="submit"]')
       .wait(1500)
 
-      //Add equipment 2
+      // Add equipment 2
       .click('input#add_equipment')
       .wait('.add-equipment [name*="name"]')
       .type('.add-equipment [name*="name"]', 'Light')
@@ -18,7 +18,7 @@ module.exports = {
       .click('.add-equipment input[type*="submit"]')
       .wait(1500)
 
-      //Add equipment 3
+      // Add equipment 3
       .click('input#add_equipment')
       .wait('.add-equipment [name*="name"]')
       .type('.add-equipment [name*="name"]', 'Heater')
@@ -26,7 +26,7 @@ module.exports = {
       .click('.add-equipment input[type*="submit"]')
       .wait(1500)
 
-      //Add equipment 4
+      // Add equipment 4
       .click('input#add_equipment')
       .wait('.add-equipment [name*="name"]')
       .type('.add-equipment [name*="name"]', 'Skimmer')
@@ -34,7 +34,7 @@ module.exports = {
       .click('.add-equipment input[type*="submit"]')
       .wait(1500)
 
-      //Add equipment 5
+      // Add equipment 5
       .click('input#add_equipment')
       .wait('.add-equipment [name*="name"]')
       .type('.add-equipment [name*="name"]', 'Fan')
@@ -42,7 +42,7 @@ module.exports = {
       .click('.add-equipment input[type*="submit"]')
       .wait(1500)
 
-      //Add equipment 6
+      // Add equipment 6
       .click('input#add_equipment')
       .wait('.add-equipment [name*="name"]')
       .type('.add-equipment [name*="name"]', 'ATOPump')

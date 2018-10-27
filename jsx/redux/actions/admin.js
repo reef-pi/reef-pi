@@ -10,7 +10,8 @@ export const reload = () => {
   return (
     reduxPost({
       url: '/api/admin/reload',
-      success: reloaded
+      success: reloaded,
+      failure: () => {}
     }))
 }
 

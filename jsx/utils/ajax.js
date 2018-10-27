@@ -105,6 +105,10 @@ export function reduxPost (params) {
             return
           }
           response.text().then(err => {
+            if (params.failure) {
+              params.failure(response)
+              return
+            }
             showError(err + ' | HTTP ' + response.status)
             logError(err + ' | HTTP ' + response.status)
           })

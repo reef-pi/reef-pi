@@ -1,6 +1,6 @@
 const S = require('./sign_in.js')
 const outlet = require('./outlet.js')
-const macro  = require('./macro.js')
+const macro = require('./macro.js')
 const inlet = require('./inlets.js')
 const jacks = require('./jacks.js')
 const ph = require('./ph.js')
@@ -13,10 +13,10 @@ const tc = require('./tc.js')
 const dashboard = require('./dashboard.js')
 
 const Nightmare = require('nightmare')
-const nightmare = Nightmare({ 
-  show: true, 
-  dock: true, 
-  typeInterval: 120, 
+const nightmare = Nightmare({
+  show: true,
+  dock: true,
+  typeInterval: 120,
   openDevTools: true
 })
 
@@ -66,7 +66,7 @@ function SmokeTest (url) {
 }
 
 let url = 'http://localhost:8080/'
-if (process.argv.length == 3){
+if (process.argv.length == 3) {
   url = process.argv[2]
 }
 
