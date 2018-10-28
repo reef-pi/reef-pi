@@ -11,12 +11,14 @@ module.exports = {
       .wait(1000)
       .click('input#createLight')
       .wait(500)
-      .click('div#expand-light-1')
-      .wait(500)
       .click('button#edit-light-1')
       .wait(500)
+      .type('#form-light-1 input[name="config.name"]', '')
+      .wait(500)
+      .type('#form-light-1 input[name="config.name"]', 'Kessil A360')
+      .wait(1000)
       .click('input#save-light-1')
-      .wait(1500)
+      .wait(500)
     return function () {
       return ('Light setup completed')
     }

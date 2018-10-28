@@ -3,6 +3,8 @@ import mapValues from 'lodash.mapvalues'
 
 const LightSchema = Yup.object().shape({
   config: Yup.object().shape({
+    name: Yup.string()
+      .required('Light Name is required'),
     channels: Yup.lazy(obj =>
       Yup.object(
         mapValues(obj, () => {
@@ -15,7 +17,7 @@ const LightSchema = Yup.object().shape({
 
 const channelSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Name is required'),
+    .required('Channel Name is required'),
   reverse: Yup.boolean()
     .required('Behavior is required'),
   min: Yup.number()

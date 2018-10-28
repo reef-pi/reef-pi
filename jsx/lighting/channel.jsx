@@ -71,7 +71,7 @@ const Channel = (props) => {
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
             <label className='w-100'>
-              Name
+              Channel Name
               <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
             </label>
             <Field name={NameFor(props.name, 'name')}

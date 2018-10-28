@@ -3,6 +3,7 @@ import LightSchema from './light_schema'
 describe('Validation', () => {
   const value = {
     config: {
+      name: 'testing',
       channels: {
         '1': {
           name: 'Channel 1',

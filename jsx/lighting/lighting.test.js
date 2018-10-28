@@ -59,38 +59,17 @@ describe('Lighting ui', () => {
   })
 
   it('<LightForm />', () => {
-    shallow(<LightForm />).instance()
+    const fn = jest.fn()
+    const wrapper = shallow(<LightForm onSubmit={fn} />)
+    wrapper.simulate('submit', {})
+    expect(fn).toHaveBeenCalled()
   })
 
   it('<Light />', () => {
     const values = { config: light }
-    let m = shallow(
+    shallow(
       <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />
-    ).instance()
-    m.toggleExpand()
-    m.handleDelete({
-      stopPropagation: () => {
-        return true
-      }
-    })
-    m.handleEdit({
-      stopPropagation: () => {
-        return true
-      }
-    })
-    m.handleFormSubmit({
-      preventDefault: () => {
-        return true
-      }
-    })
-    m = shallow(
-      <Light isValid values={values} config={light} save={() => {}} remove={() => true} submitForm={() => true} />
-    ).instance()
-    m.handleFormSubmit({
-      preventDefault: () => {
-        return true
-      }
-    })
+    )
   })
 
   it('<Chart />', () => {

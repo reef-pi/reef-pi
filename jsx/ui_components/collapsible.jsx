@@ -26,7 +26,7 @@ class Collapsible extends React.Component {
     const editButton = (
       <button type='button'
         onClick={this.handleEdit}
-        id={'edit-timer-' + name}
+        id={'edit-' + name}
         className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
         Edit
       </button>
@@ -46,7 +46,7 @@ class Collapsible extends React.Component {
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
             <button type='button'
               onClick={this.handleDelete}
-              id={'delete-timer-' + name}
+              id={'delete-' + name}
               className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
               Delete
             </button>
