@@ -2,9 +2,12 @@ import React from 'react'
 import $ from 'jquery'
 import Light from './light_form'
 import { showError } from 'utils/alert'
+import { confirm } from 'utils/confirm'
 import { updateLight, fetchLights, createLight, deleteLight } from 'redux/actions/lights'
 import { fetchJacks } from 'redux/actions/jacks'
 import { connect } from 'react-redux'
+import CollapsibleList from '../ui_components/collapsible_list'
+import Collapsible from '../ui_components/collapsible'
 
 class main extends React.Component {
   constructor (props) {
@@ -21,6 +24,8 @@ class main extends React.Component {
     this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
     this.newLightUI = this.newLightUI.bind(this)
+    this.deleteLight = this.deleteLight.bind(this)
+    this.updateLight = this.updateLight.bind(this)
   }
 
   componentWillMount () {
@@ -48,6 +53,18 @@ class main extends React.Component {
     return jacks
   }
 
+  updateLight (values) {
+    const payload = {
+      name: values.config.name,
+      channels: values.config.channels,
+      jack: values.config.jack
+    }
+    for (let x in payload.channels) {
+      payload.channels[x].reverse = (payload.channels[x].reverse === 'true' || payload.channels[x].reverse === true)
+    }
+    this.props.updateLight(values.config.id, payload)
+  }
+
   addLight () {
     if (this.state.selectedJack === undefined) {
       showError('Select a jack')
@@ -71,15 +88,21 @@ class main extends React.Component {
   }
 
   lightsList () {
-    var lights = []
-    this.props.lights.forEach((light, i) => {
-      lights.push(
-        <div key={'light-' + light.id} className='list-group-item'>
-          <Light config={light} save={this.props.updateLight} remove={this.props.deleteLight} />
-        </div>
-      )
-    })
-    return lights
+    return (
+      this.props.lights.map(light => {
+        return (
+          <Collapsible key={'light-' + light.id}
+            name={'light-' + light.id}
+            item={light}
+            title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
+            onDelete={this.deleteLight}>
+            <Light config={light}
+              onSubmit={this.updateLight}
+              remove={this.props.deleteLight} />
+          </Collapsible>
+        )
+      })
+    )
   }
 
   toggleAddLightDiv () {
@@ -88,6 +111,20 @@ class main extends React.Component {
     })
     $('#jackName').val('')
   }
+
+  deleteLight (light) {
+    const message = (
+      <div>
+        <p>This action will delete {light.name}.</p>
+      </div>
+    )
+
+    confirm('Delete ' + light.name, {description: message})
+      .then(function () {
+        this.props.deleteLight(light.id)
+      }.bind(this))
+  }
+
   newLightUI () {
     var jack = ''
     if (this.state.selectedJack !== undefined) {
@@ -141,21 +178,25 @@ class main extends React.Component {
       nLight = this.newLightUI()
     }
     return (
-      <div>
-        <div className='list-group list-group-flush'>
+      <ul className='list-group list-group-flush'>
+        <CollapsibleList>
           {this.lightsList()}
-          <div className='list-group-item add-equipment'>
-            <input
-              id='add_light'
-              type='button'
-              value={this.state.addLight ? '-' : '+'}
-              onClick={this.toggleAddLightDiv}
-              className='btn btn-outline-success'
-            />
-            {nLight}
+        </CollapsibleList>
+        <li className='list-group-item add-light'>
+          <div className='row'>
+            <div className='col'>
+              <input
+                id='add_light'
+                type='button'
+                value={this.state.addLight ? '-' : '+'}
+                onClick={this.toggleAddLightDiv}
+                className='btn btn-outline-success'
+              />
+            </div>
           </div>
-        </div>
-      </div>
+          {nLight}
+        </li>
+      </ul>
     )
   }
 }

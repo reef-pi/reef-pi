@@ -42,7 +42,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    expect(wrapper.find('#edit-timer-test').length).toBe(1)
+    expect(wrapper.find('#edit-test').length).toBe(1)
   })
 
   it('should not show Edit button when readOnly is false', () => {
@@ -51,7 +51,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    expect(wrapper.find('#edit-timer-test').length).toBe(0)
+    expect(wrapper.find('#edit-test').length).toBe(0)
   })
 
   it('should fire edit function', () => {
@@ -61,7 +61,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#edit-timer-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#edit-test').simulate('click', {stopPropagation: noop})
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -72,7 +72,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#delete-timer-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#delete-test').simulate('click', {stopPropagation: noop})
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -107,7 +107,7 @@ describe('Collapsible', () => {
       </CollapsibleList>
     )
 
-    wrapper.find('#edit-timer-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#edit-test').simulate('click', {stopPropagation: noop})
   })
 
   it('should add new panel as collapsed', () => {
