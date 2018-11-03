@@ -18,6 +18,7 @@ import { connect } from 'react-redux'
 import { configureStore } from 'redux/store'
 import Summary from 'summary'
 import FatalError from './fatal_error'
+import ErrorBoundary from './ui_components/error_boundary'
 
 const caps = {
   dashboard: { label: 'Dashboard', component: <Dashboard /> },
@@ -119,7 +120,11 @@ class mainPanel extends React.Component {
           <FatalError />
           <NotificationAlert />
           <div className='row body-panel'>
-            <div className='col-12'>{body}</div>
+            <div className='col-12'>
+              <ErrorBoundary tab={this.state.tab}>
+                {body}
+              </ErrorBoundary>              
+            </div>
           </div>
           <div className='row d-none d-lg-block'>
             <div className='col-12'>

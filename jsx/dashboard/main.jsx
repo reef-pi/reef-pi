@@ -9,6 +9,7 @@ import PhChart from 'ph/chart'
 import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
+import ErrorBoundary from '../ui_components/error_boundary'
 
 class dashboard extends React.Component {
   constructor (props) {
@@ -46,56 +47,72 @@ class dashboard extends React.Component {
           case 'light':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <LightChart width={config.width} height={config.height} light_id={ch.id} />
+                <ErrorBoundary>
+                  <LightChart width={config.width} height={config.height} light_id={ch.id} />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'equipment':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <EquipmentChart width={config.width} height={config.height} />
+                <ErrorBoundary>
+                  <EquipmentChart width={config.width} height={config.height} />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'ato':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
+                <ErrorBoundary>
+                  <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'ph-current':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current' />
+                <ErrorBoundary>
+                  <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current' />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'ph-historical':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
+                <ErrorBoundary>
+                  <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'health':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <HealthChart width={config.width} height={config.height} trend={ch.id} />
+                <ErrorBoundary>
+                  <HealthChart width={config.width} height={config.height} trend={ch.id} />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'temperature':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
+                <ErrorBoundary>
+                  <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
+                </ErrorBoundary>
               </div>
             )
             break
           case 'tc':
             columns.push(
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
-                <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
+                <ErrorBoundary>
+                  <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
+                </ErrorBoundary>
               </div>
             )
             break
@@ -119,6 +136,7 @@ class dashboard extends React.Component {
       content = this.charts()
       lbl = 'Configure'
     }
+
     return (
       <React.Fragment>
         <div className='row' key='content'>
