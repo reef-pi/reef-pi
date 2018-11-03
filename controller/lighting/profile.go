@@ -47,8 +47,9 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 	s = time.Date(t.Year(), t.Month(), t.Day(), s.Hour(), s.Minute(), s.Second(), 0, t.Location())
 	e = time.Date(t.Year(), t.Month(), t.Day(), e.Hour(), e.Minute(), e.Second(), 0, t.Location())
 	if e.Before(s) {
-		s = s.Add(time.Hour * -24)
+		e = e.Add(time.Hour * 24)
 	}
+	//log.Println("start:", s, "end:", e, "t:", t)
 	if t.Before(s) {
 		log.Println("Lighting sub-system: diurnal profile: before start time. Value: 0")
 		return 0

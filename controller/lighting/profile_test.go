@@ -44,4 +44,29 @@ func TestProfile(t *testing.T) {
 	if v := ch.GetValueDiurnal(time.Now()); v != 0 {
 		t.Error("Value calculation should return 0 since config is end time is incorrect")
 	}
+
+}
+
+func TestDiurnalProfile(t *testing.T) {
+	ch1 := Channel{
+		Name:     "Spectrum",
+		Min:      0,
+		StartMin: 0,
+		Max:      100,
+		Reverse:  true,
+		Profile: Profile{
+			Type: "diurnal",
+			Config: []byte(
+				`{"start":"19:00",
+		 "end":"04:30"}`),
+		},
+	}
+
+	s, err := time.Parse(TimeFormat, "20:00") // start: 19:00 , end: 04:30
+	if err != nil {
+		t.Error(err)
+	}
+	if v := ch1.GetValueDiurnal(s); v == 0 {
+		t.Error("value calculation should not zero since time provided is after start and before end time")
+	}
 }
