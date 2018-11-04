@@ -48,6 +48,9 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 	e = time.Date(t.Year(), t.Month(), t.Day(), e.Hour(), e.Minute(), e.Second(), 0, t.Location())
 	if e.Before(s) {
 		e = e.Add(time.Hour * 24)
+		if t.Before(s) {
+			t = t.Add(time.Hour * 24)
+		}
 	}
 	//log.Println("start:", s, "end:", e, "t:", t)
 	if t.Before(s) {
