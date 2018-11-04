@@ -39,6 +39,10 @@ html {
   margin-bottom: 10px;
 }
 
+div.dropdown-menu {
+  z-index: 1031;
+}
+
 input[type=number].no-spinner::-webkit-inner-spin-button,
 input[type=number].no-spinner::-webkit-outer-spin-button {
   -webkit-appearance: none;
