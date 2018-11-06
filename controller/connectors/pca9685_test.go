@@ -1,11 +1,11 @@
-package utils
+package connectors
 
 import (
 	"github.com/reef-pi/rpi/i2c"
 	"testing"
 )
 
-func TestPWM(t *testing.T) {
+func TestPCA9685(t *testing.T) {
 	config := DefaultPCA9685Config
 	config.DevMode = true
 	pwm, err := NewPCA9685(i2c.MockBus(), config)

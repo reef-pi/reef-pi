@@ -1,7 +1,9 @@
-package utils
+package connectors
 
 import (
+	"fmt"
 	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
@@ -25,7 +27,7 @@ var DefaultPCA9685Config = PCA9685Config{
 	Frequency: 1500,
 }
 
-func NewPCA9685(bus i2c.Bus, config PCA9685Config) (PWM, error) {
+func NewPCA9685(bus i2c.Bus, config PCA9685Config) (types.PWM, error) {
 	pwm := pca9685Driver{
 		values: make(map[int]int),
 		driver: drivers.NewPCA9685(byte(config.Address), bus),
@@ -45,10 +47,13 @@ func (p *pca9685Driver) Start() error {
 }
 
 // value should be within 0-99
-func (p *pca9685Driver) Set(pin int, value int) error {
+func (p *pca9685Driver) Set(pin int, value float64) error {
+	if (value > 100) || (value < 0) {
+		return fmt.Errorf("Invalid pwm range: %f, value should be within 0 to 100", value)
+	}
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	off := int(float32(value) * 40.96)
+	off := int(value * 40.96)
 	p.values[pin] = off
 	return p.driver.SetPwm(pin, 0, off)
 }

@@ -1,7 +1,8 @@
-package utils
+package connectors
 
 import (
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/rpi/pwm"
 )
 
@@ -11,7 +12,7 @@ type rpiDriver struct {
 	DevMode bool
 }
 
-func NewRPIPWMDriver(freq int, devMode bool) PWM {
+func NewRPIPWMDriver(freq int, devMode bool) types.PWM {
 	return &rpiDriver{
 		driver:  pwm.New(),
 		Freq:    freq * 100000, //1.5K Hhz (pca9685 max)
@@ -26,15 +27,17 @@ func (d *rpiDriver) Stop() error {
 	return nil
 }
 
-func (d *rpiDriver) Set(pin, percentage int) error {
-	if (percentage > 100) || (percentage < 0) {
-		return fmt.Errorf("Invalid percentage:%d. Valid range is between 0 to 100", percentage)
+func (d *rpiDriver) Set(pin int, v float64) error {
+	if (v > 100) || (v < 0) {
+		return fmt.Errorf("Invalid pwm range: %f, value should be within 0 to 100", v)
 	}
+	off := v
 	if d.DevMode {
 		return nil
 	}
-	return d.driver.DutyCycle(pin, (d.Freq/100)*percentage)
+	off = float64(d.Freq/100) * v
 
+	return d.driver.DutyCycle(pin, int(off))
 }
 func (d *rpiDriver) Get(pin int) (int, error) {
 	return 0, nil

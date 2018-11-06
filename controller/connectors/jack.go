@@ -21,8 +21,8 @@ type Jack struct {
 
 type Jacks struct {
 	store   types.Store
-	rpi     utils.PWM
-	pca9685 utils.PWM
+	rpi     types.PWM
+	pca9685 types.PWM
 }
 
 func (j Jack) IsValid() error {
@@ -51,7 +51,7 @@ func (j Jack) IsValid() error {
 	return nil
 }
 
-func NewJacks(store types.Store, r, p utils.PWM) *Jacks {
+func NewJacks(store types.Store, r, p types.PWM) *Jacks {
 	return &Jacks{
 		store:   store,
 		rpi:     r,
@@ -155,9 +155,9 @@ func (c *Jacks) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/jacks/{id}/control", c.control).Methods("POST")
 }
 
-type PinValues map[int]int
+type PinValues map[int]float64
 
-func (jacks *Jacks) DirectControl(driver string, pin, v int) error {
+func (jacks *Jacks) DirectControl(driver string, pin int, v float64) error {
 	switch driver {
 	case "rpi":
 		return jacks.rpi.Set(pin, v)
