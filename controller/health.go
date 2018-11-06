@@ -144,6 +144,11 @@ func (h *HealthChecker) Start() {
 		log.Println("ERROR: health checker. Failed to load usage. Error:", err)
 	}
 	log.Println("Starting health checker")
+	metric := HealthMetric{
+		len:  1,
+		Time: utils.TeleTime(time.Now()),
+	}
+	h.statsMgr.Update(HealthStatsKey, metric)
 	ticker := time.NewTicker(h.interval)
 	for {
 		select {
