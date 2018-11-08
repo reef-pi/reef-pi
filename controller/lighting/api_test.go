@@ -13,10 +13,10 @@ import (
 
 func TestLightingAPI(t *testing.T) {
 
-	rpi := utils.NewRPIPWMDriver(100, true)
-	conf := utils.DefaultPCA9685Config
+	rpi := connectors.NewRPIPWMDriver(100, true)
+	conf := connectors.DefaultPCA9685Config
 	conf.DevMode = true
-	pca9685, err := utils.NewPCA9685(i2c.MockBus(), conf)
+	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), conf)
 	if err != nil {
 		t.Error(err)
 	}

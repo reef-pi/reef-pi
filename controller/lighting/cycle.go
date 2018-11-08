@@ -59,12 +59,12 @@ func (c *Controller) StopCycle() {
 	log.Println("Stopped lighting cycle")
 }
 
-func (c *Controller) UpdateChannel(jack string, ch Channel, v int) {
+func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	if ch.Reverse {
 		v = 100 - v
 	}
 	log.Println("lighting-subsystem: Setting PWM value:", v, " at channel:", ch.Pin)
-	pv := make(map[int]int)
+	pv := make(map[int]float64)
 	pv[ch.Pin] = v
 	if err := c.jacks.Control(jack, pv); err != nil {
 		log.Println("ERROR: lighting-subsystem: Failed to set pwm value. Error:", err)

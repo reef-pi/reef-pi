@@ -27,7 +27,7 @@ type DiurnalConfig struct {
 
 const TimeFormat = "15:04"
 
-func (ch Channel) GetValueDiurnal(t time.Time) int {
+func (ch Channel) GetValueDiurnal(t time.Time) float64 {
 	var d DiurnalConfig
 	if err := json.Unmarshal(ch.Profile.Config, &d); err != nil {
 		log.Println("ERROR: lighting subsysten failed to typecast diurnal config. Error:", err)
@@ -65,10 +65,10 @@ func (ch Channel) GetValueDiurnal(t time.Time) int {
 	pastMinutes := int(t.Sub(s) / time.Minute)
 	percent := float64(pastMinutes) * 2 * math.Pi / float64(totalMinutes)
 	k := math.Pow(math.Cos(percent), 3)
-	v := int((1 - k) * float64(ch.Max-ch.Min))
-	v = v + ch.Min
-	if v > ch.Max {
-		v = ch.Max
+	v := (1 - k) * float64(ch.Max-ch.Min)
+	v = v + float64(ch.Min)
+	if v > float64(ch.Max) {
+		v = float64(ch.Max)
 	}
 	return v
 }
@@ -78,7 +78,7 @@ type FreeFormConfig struct {
 	Period int   `json:"period"`
 }
 
-func (ch Channel) GetValue(t time.Time) int {
+func (ch Channel) GetValue(t time.Time) float64 {
 	switch ch.Profile.Type {
 	case "diurnal":
 		return ch.GetValueDiurnal(t)
@@ -91,15 +91,15 @@ func (ch Channel) GetValue(t time.Time) int {
 	}
 }
 
-func (ch Channel) GetValueFixed() int {
+func (ch Channel) GetValueFixed() float64 {
 	var f FixedConfig
 	if err := json.Unmarshal(ch.Profile.Config, &f); err != nil {
 		log.Println("ERROR: lighting subsysten failed to typecast fixed config. Error", err)
 		return 0
 	}
-	return f.Value
+	return float64(f.Value)
 }
-func (ch Channel) GetValueAuto(t time.Time) int {
+func (ch Channel) GetValueAuto(t time.Time) float64 {
 	var a AutoConfig
 	if err := json.Unmarshal(ch.Profile.Config, &a); err != nil {
 		log.Println("ERROR: lighting subsysten failed to typecast auto config. Error", err)
@@ -120,6 +120,5 @@ func (ch Channel) GetValueAuto(t time.Time) int {
 	m := float64(t.Minute() + ((t.Hour() % 2) * 60))
 	from := float64(series[h1])
 	to := float64(series[h2])
-	f := from + ((to - from) / 120.0 * m)
-	return int(f)
+	return from + ((to - from) / 120.0 * m)
 }

@@ -14,10 +14,10 @@ func TestJacksAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	rpi := utils.NewRPIPWMDriver(100, true)
-	conf := utils.DefaultPCA9685Config
+	rpi := NewRPIPWMDriver(100, true)
+	conf := DefaultPCA9685Config
 	conf.DevMode = true
-	pca9685, err := utils.NewPCA9685(i2c.MockBus(), conf)
+	pca9685, err := NewPCA9685(i2c.MockBus(), conf)
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,7 +83,7 @@ func TestJacksAPI(t *testing.T) {
 	if err := jacks.DirectControl("bogus", 1, 100); err == nil {
 		t.Error("Expect to fail when driver is not rpi or pca9685")
 	}
-	pinValues := make(map[int]int)
+	pinValues := make(map[int]float64)
 	pinValues[0] = 73
 	body.Reset()
 	json.NewEncoder(body).Encode(pinValues)

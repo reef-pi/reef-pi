@@ -4,6 +4,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type PWM interface {
+	Start() error
+	Stop() error
+	Set(pin int, percentage float64) error
+	Get(pin int) (int, error)
+	On(pin int) error
+	Off(pin int) error
+}
+
 type Subsystem interface {
 	Setup() error
 	LoadAPI(*mux.Router)

@@ -10,12 +10,12 @@ type Runner struct {
 	pin      int
 	jack     string
 	duration time.Duration
-	speed    int
+	speed    float64
 	jacks    *connectors.Jacks
 }
 
 func (r *Runner) Run() {
-	v := make(map[int]int)
+	v := make(map[int]float64)
 	v[r.pin] = r.speed
 
 	log.Println("doser sub system: setting pwm pin:", r.pin, "at speed", r.speed)

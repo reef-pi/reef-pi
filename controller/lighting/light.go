@@ -105,12 +105,12 @@ func (c *Controller) Delete(id string) error {
 func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
 		v := ch.GetValue(time.Now())
-		if (ch.Min > 0) && (v < ch.Min) {
-			log.Printf("Lighting: Calculated value(%d) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.Min)
-			v = ch.StartMin
-		} else if (ch.Max > 0) && (v > ch.Max) {
-			log.Printf("Lighting: Calculated value(%d) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.Max, ch.Max)
-			v = ch.Max
+		if (ch.Min > 0) && (v < float64(ch.Min)) {
+			log.Printf("Lighting: Calculated value(%f) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.Min)
+			v = float64(ch.StartMin)
+		} else if (ch.Max > 0) && (v > float64(ch.Max)) {
+			log.Printf("Lighting: Calculated value(%f) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.Max, ch.Max)
+			v = float64(ch.Max)
 		}
 		c.UpdateChannel(light.Jack, ch, v)
 		c.c.Telemetry().EmitMetric(light.Name+"-"+ch.Name, v)
