@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
 )
@@ -62,6 +63,10 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	u := Usage{
+		Time: utils.TeleTime(time.Now()),
+	}
+	c.statsMgr.Update(tc.ID, u)
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit

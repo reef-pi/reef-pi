@@ -21,7 +21,6 @@ func (c *Controller) Create(p Pump) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-
 	if p.Regiment.Enable {
 		return c.addToCron(p)
 	}

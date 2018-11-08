@@ -51,6 +51,11 @@ func (c *Controller) Create(p Probe) error {
 	if err := c.controller.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	m := Measurement{
+		Time: utils.TeleTime(time.Now()),
+		len:  1,
+	}
+	c.statsMgr.Update(p.ID, m)
 	if p.Enable {
 		p.CreateFeed(c.controller.Telemetry())
 		quit := make(chan struct{})

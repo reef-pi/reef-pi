@@ -3,7 +3,6 @@ package macro
 import (
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"sync"
 )
 
@@ -14,7 +13,6 @@ type Subsystem struct {
 	sync.Mutex
 	devMode    bool
 	quitters   map[string]chan struct{}
-	statsMgr   *utils.StatsManager
 	controller types.Controller
 }
 
