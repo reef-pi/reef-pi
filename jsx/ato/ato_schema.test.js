@@ -1,16 +1,7 @@
 import AtoSchema from './ato_schema'
 
 describe('Validation', () => {
-  var ato = {
-    name: 'name',
-    enable: true,
-    control: false,
-    inlet: '2',
-    period: 60,
-    pump: 3,
-    notify: false,
-    maxAlert: ''
-  }
+  var ato = {}
 
   beforeEach(() => {
     ato = {

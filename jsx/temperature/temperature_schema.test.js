@@ -1,17 +1,7 @@
 import TemperatureSchema from './temperature_schema'
 
 describe('Validation', () => {
-  var tc = {
-    name: 'name',
-    sensor: 'sensor',
-    enable: true,
-    fahrenheit: true,
-    period: 60,
-    alerts: false,
-    notify: {enable: false},
-    heater: '',
-    cooler: ''
-  }
+  var tc = {}
 
   beforeEach(() => {
     tc = {
