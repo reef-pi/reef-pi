@@ -29,7 +29,23 @@ const initialState = {
   tc_usage: {},
   ph_readings: {},
   tc_sensors: [],
-  telemetry: {},
+  telemetry: {
+    adafruitio: {
+      enable: false,
+      token: '',
+      user: '',
+      prefix: '',
+    },
+    mailer: {
+      server: '',
+      port: 456,
+      from: '',
+      to: '',
+      password: ''
+    },
+    notify: false,
+    throttle: 10
+  },
   camera: {
     config: {},
     latest: undefined,
