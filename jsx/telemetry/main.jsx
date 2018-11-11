@@ -45,6 +45,32 @@ class telemetry extends React.Component {
 
   save () {
     var c = this.state.config
+    if (c.adafruitio.enable) {
+      if (c.adafruitio.user === '') {
+        showError('Please set a valid adafruit.io user')
+        return
+      }
+      if (c.adafruitio.token === '') {
+        showError('Please set a valid adafruit.io key')
+        return
+      }
+    }
+    if (c.mailer.server === '') {
+      showError('Please set a valid mail server')
+      return
+    }
+    if (c.mailer.password === '') {
+      showError('Please set a valid mail passowrd')
+      return
+    }
+    if (c.mailer.To === '') {
+      showError('Please set a valid mail recepient (To)')
+      return
+    }
+    if (c.mailer.From === '') {
+      showError('Please set a valid mail sender (From)')
+      return
+    }
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
     this.props.update(c)
@@ -52,22 +78,6 @@ class telemetry extends React.Component {
   }
 
   updateMailer (mailer) {
-    if (mailer.server === '') {
-      showError('Please set a valid mail server')
-      return
-    }
-    if (mailer.password === '') {
-      showError('Please set a valid mail passowrd')
-      return
-    }
-    if (mailer.To === '') {
-      showError('Please set a valid mail recepient (To)')
-      return
-    }
-    if (mailer.From === '') {
-      showError('Please set a valid mail sender (From)')
-      return
-    }
     var c = this.state.config
     c.mailer = mailer
     this.setState({
@@ -81,16 +91,6 @@ class telemetry extends React.Component {
   }
 
   updateAio (adafruitio) {
-    if (adafruitio.enable) {
-      if (adafruitio.user === '') {
-        showError('Please set a valid adafruit.io user')
-        return
-      }
-      if (adafruitio.token === '') {
-        showError('Please set a valid adafruit.io key')
-        return
-      }
-    }
     var c = this.state.config
     c.adafruitio = adafruitio
     this.setState({
