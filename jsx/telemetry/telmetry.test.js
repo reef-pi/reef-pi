@@ -25,12 +25,9 @@ describe('Telemetry UI', () => {
     const telemetry = {
       mailer: mailer,
       throttle: 10,
+      notify: true,
       adafruitio: aio
     }
-    shallow(<Main store={mockStore({})} />)
-      .dive()
-      .instance()
-
     const m = shallow(<Main store={mockStore({ telemetry: telemetry })} />)
       .dive()
       .instance()
@@ -46,11 +43,11 @@ describe('Telemetry UI', () => {
     m.updateThrottle({ target: { value: 20 } })
     m.enableMailer({ target: { checked: true } })
     m.save()
-    delete m.state.config.adafruitio
+    m.state.config.adafruitio.enable = false
     m.showAdafruitIO()
-    delete m.state.config.mailer
+    m.state.config.notify = false
     m.notification()
-    delete m.state.config
+    m.state.config.adafruitio.enable = true
     m.showAdafruitIO()
     m.notification()
     m.testMessage()
