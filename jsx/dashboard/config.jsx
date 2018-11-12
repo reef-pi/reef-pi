@@ -1,8 +1,8 @@
 import React from 'react'
 import Grid from './grid'
-import {connect} from 'react-redux'
-import {fetchDashboard, updateDashboard} from 'redux/actions/dashboard'
-import {isEmptyObject} from 'jquery'
+import { connect } from 'react-redux'
+import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
+import { isEmptyObject } from 'jquery'
 
 class config extends React.Component {
   constructor (props) {
@@ -32,29 +32,54 @@ class config extends React.Component {
   }
 
   save () {
+    let error = false
     let payload = this.state.config
     payload.width = parseInt(payload.width)
     payload.height = parseInt(payload.height)
     payload.column = parseInt(payload.column)
     payload.row = parseInt(payload.row)
-    payload.width = parseInt(payload.width)
-    this.props.updateDashboard(payload)
-    this.setState({updated: false})
+    const fieldsToCheck = ['width', 'height', 'column', 'row']
+    for (let prop of fieldsToCheck) {
+      if (payload[prop] <= 0) {
+        console.log('invalid input')
+        error = true
+      }
+    }
+    if (!error) {
+      this.props.updateDashboard(payload)
+      this.setState({ updated: false })
+    }
   }
 
-  toRow (key, label) {
+  toRow (key, label, Min, Max) {
     let fn = function (ev) {
       var config = this.state.config
-      config[key] = ev.target.value
-      this.setState({
-        updated: true,
-        config: config
-      })
+      let v
+      try {
+        v = parseInt(ev.target.value)
+        if (!isNaN(v) && v <= Max && v >= Min) {
+          config[key] = v
+          this.setState({
+            updated: true,
+            config: config
+          })
+        }
+      } catch (ex) {
+        console.log('invalid input')
+      }
     }.bind(this)
     return (
       <div className='col-md-6 col-sm-12 form-group'>
-        <label className='input-group-addon'> {label}</label>
-        <input className='form-control' type='number' onChange={fn} value={this.state.config[key]} id={'to-row-' + key} />
+        <label className='input-group-addon'>{label}</label>
+        <input
+          className='form-control'
+          type='number'
+          onChange={fn}
+          value={this.state.config[key]}
+          id={'to-row-' + key}
+          min={Min}
+          max={Max}
+        />
       </div>
     )
   }
@@ -85,17 +110,17 @@ class config extends React.Component {
       updateButtonClass = 'btn btn-outline-danger col-12'
     }
     if (this.state.config.grid_details === undefined) {
-      return (<div />)
+      return <div />
     }
     return (
       <div className='col-12'>
         <div className='row'>
-          {this.toRow('row', 'Rows')}
-          {this.toRow('column', 'Columns')}
+          {this.toRow('row', 'Rows', 1, 12)}
+          {this.toRow('column', 'Columns', 1, 12)}
         </div>
         <div className='row'>
-          {this.toRow('width', 'Width')}
-          {this.toRow('height', 'Height')}
+          {this.toRow('width', 'Width', 100, 1920)}
+          {this.toRow('height', 'Height', 100, 1080)}
         </div>
         <div className='row'>
           <Grid
@@ -119,7 +144,7 @@ class config extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     atos: state.atos,
     phs: state.phprobes,
@@ -129,12 +154,15 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     fetchDashboard: () => dispatch(fetchDashboard()),
-    updateDashboard: (d) => dispatch(updateDashboard(d))
+    updateDashboard: d => dispatch(updateDashboard(d))
   }
 }
 
-const Config = connect(mapStateToProps, mapDispatchToProps)(config)
+const Config = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(config)
 export default Config
