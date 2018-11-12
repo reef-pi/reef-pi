@@ -10,6 +10,7 @@ import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
 import ErrorBoundary from '../ui_components/error_boundary'
+import { showError } from 'utils/alert'
 
 class dashboard extends React.Component {
   constructor (props) {
@@ -34,9 +35,16 @@ class dashboard extends React.Component {
     if (config === undefined) {
       return
     }
+    if (config.grid_details === undefined) {
+      showError('Grid details are absent in dashboard configuration. Please reconfigure your dashboard')
+      return
+    }
     var i, j
     var rows = []
     for (i = 0; i < config.row; i++) {
+      if(config.grid_details[i] === undefined){
+        config.grid_details[i] = []
+      }
       var columns = []
       for (j = 0; j < config.column; j++) {
         var ch = config.grid_details[i][j]
