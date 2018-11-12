@@ -36,7 +36,6 @@ class dashboard extends React.Component {
       return
     }
     if (config.grid_details === undefined) {
-      showError('Grid details are absent in dashboard configuration. Please reconfigure your dashboard')
       return
     }
     var i, j
