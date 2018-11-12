@@ -10,7 +10,6 @@ import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
 import ErrorBoundary from '../ui_components/error_boundary'
-import { showError } from 'utils/alert'
 
 class dashboard extends React.Component {
   constructor (props) {
