@@ -27,14 +27,16 @@ class LogCenter extends React.Component {
   render () {
     let n = []
     this.props.logs.forEach(e => {
-      n.push(
-        <tr className={this.getTrClass(e) + ' log-entry'} key={e.ts}>
-          <td>{this.readableDate(e.ts)}</td>
-          <td>{e.emitter}</td>
-          <td>{e.type}</td>
-          <td>{e.content}</td>
-        </tr>
-      )
+      if (typeof e !== 'undefined') {
+        n.push(
+          <tr className={this.getTrClass(e) + ' log-entry'} key={e.ts}>
+            <td>{this.readableDate(e.ts)}</td>
+            <td>{e.emitter}</td>
+            <td>{e.type}</td>
+            <td>{e.content}</td>
+          </tr>
+        )
+      }
     })
     return (
       <React.Fragment>
