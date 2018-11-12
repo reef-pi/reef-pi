@@ -34,9 +34,15 @@ class dashboard extends React.Component {
     if (config === undefined) {
       return
     }
+    if (config.grid_details === undefined) {
+      return
+    }
     var i, j
     var rows = []
     for (i = 0; i < config.row; i++) {
+      if (config.grid_details[i] === undefined) {
+        config.grid_details[i] = []
+      }
       var columns = []
       for (j = 0; j < config.column; j++) {
         var ch = config.grid_details[i][j]
