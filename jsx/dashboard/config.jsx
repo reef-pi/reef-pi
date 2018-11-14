@@ -3,6 +3,7 @@ import Grid from './grid'
 import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
 import { isEmptyObject } from 'jquery'
+import { showError } from 'utils/alert'
 
 class config extends React.Component {
   constructor (props) {
@@ -41,7 +42,7 @@ class config extends React.Component {
     const fieldsToCheck = ['width', 'height', 'column', 'row']
     for (let prop of fieldsToCheck) {
       if (payload[prop] <= 0) {
-        console.log('invalid input')
+        showError('It seems like there is wrong data in your configuration. Please ensure you only have valid integers in fields.')
         error = true
       }
     }
@@ -55,17 +56,13 @@ class config extends React.Component {
     let fn = function (ev) {
       var config = this.state.config
       let v
-      try {
-        v = parseInt(ev.target.value)
-        if (!isNaN(v) && v <= Max && v >= Min) {
-          config[key] = v
-          this.setState({
-            updated: true,
-            config: config
-          })
-        }
-      } catch (ex) {
-        console.log('invalid input')
+      v = parseInt(ev.target.value)
+      if (!isNaN(v) && v <= Max && v >= Min) {
+        config[key] = v
+        this.setState({
+          updated: true,
+          config: config
+        })
       }
     }.bind(this)
     return (
