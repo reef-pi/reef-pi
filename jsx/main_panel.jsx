@@ -123,7 +123,7 @@ class mainPanel extends React.Component {
             <div className='col-12'>
               <ErrorBoundary tab={this.state.tab}>
                 {body}
-              </ErrorBoundary>              
+              </ErrorBoundary>
             </div>
           </div>
           <div className='row d-none d-lg-block'>
