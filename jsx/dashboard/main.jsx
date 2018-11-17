@@ -146,7 +146,9 @@ class dashboard extends React.Component {
     return (
       <React.Fragment>
         <div className='row' key='content'>
-          {content}
+          <div className='col'>
+            {content}
+          </div>
         </div>
         <div className='row' key='configure'>
           <div className='col-xs-12 col-md-3 offset-md-9'>
