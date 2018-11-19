@@ -18,6 +18,8 @@ func (c *Controller) Check(tc TC) {
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
+		subject := fmt.Sprintf("Temperature sensor '%s' failed", tc.Name)
+		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
 		return
 	}
 	u.Temperature = reading
