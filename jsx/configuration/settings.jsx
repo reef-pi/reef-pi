@@ -1,10 +1,12 @@
 import React from 'react'
+import { showError } from 'utils/alert'
 import Capabilities from './capabilities'
 import Display from './display'
 import HealthNotify from './health_notify'
 import { updateSettings, fetchSettings } from 'redux/actions/settings'
 import { connect } from 'react-redux'
 import { isEmptyObject } from 'jquery'
+import SettingsSchema from './settings_schema'
 
 class settings extends React.Component {
   constructor (props) {
@@ -85,21 +87,27 @@ class settings extends React.Component {
   }
 
   update () {
-    this.props.updateSettings(this.state.settings)
-    this.setState({ updated: false })
+    var settings = this.state.settings
+    if (SettingsSchema.isValidSync(settings)) {
+      settings = SettingsSchema.cast(settings)
+      console.log(settings)
+      this.setState({ updated: false, settings: settings })
+      this.props.updateSettings(settings)
+      return
+    }
+    SettingsSchema.validate(settings).catch(err => {
+      showError(err.errors.join(','))
+    })
   }
 
   componentDidMount () {
     this.props.fetchSettings()
   }
 
-  toRow (label, parse = false) {
+  toRow (label) {
     var fn = function (ev) {
       var settings = this.state.settings
       settings[label] = ev.target.value
-      if (parse) {
-        settings[label] = parseInt(settings[label])
-      }
       this.setState({
         settings: settings,
         updated: true
@@ -146,10 +154,10 @@ class settings extends React.Component {
             </div>
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>{this.toRow('address')}</div>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq', true)}</div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq')}</div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq', true)}</div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq')}</div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='updateNotification'>Notification</label>
