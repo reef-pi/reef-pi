@@ -66,7 +66,7 @@ class outlets extends React.Component {
 
   list () {
     var list = []
-    this.props.outlets.forEach((o, i) => {
+    this.props.outlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((o, i) => {
       list.push(
         <Outlet
           name={o.name}

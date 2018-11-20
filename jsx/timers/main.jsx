@@ -25,7 +25,7 @@ class Main extends React.Component {
 
   timerList () {
     return (
-      this.props.timers.map(timer => {
+      this.props.timers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(timer => {
         return (
           <Collapsible key={'panel-timer-' + timer.id}
             name={'panel-timer-' + timer.id}

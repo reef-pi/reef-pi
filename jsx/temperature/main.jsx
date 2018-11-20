@@ -25,7 +25,7 @@ class main extends React.Component {
       return
     }
     var list = []
-    this.props.tcs.forEach((v, k) => {
+    this.props.tcs.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((v, k) => {
       list.push(
         <div key={v.id} className='list-group-item'>
           <Sensor

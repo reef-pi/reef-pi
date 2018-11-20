@@ -25,7 +25,7 @@ class main extends React.Component {
       <div>
         <ul className='list-group list-group-flush'>
           {
-            this.props.atos.map(item => {
+            this.props.atos.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(item => {
               return (
                 <div key={item.id} className='list-group-item'>
                   <Ato data={item}
