@@ -42,7 +42,7 @@ class main extends React.Component {
 
   macroList () {
     return (
-      this.props.macros.map(macro => {
+      this.props.macros.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(macro => {
         const runButton = (
           <button type='button' name={'run-macro-' + macro.id}
             className='btn btn-sm btn-outline-info float-right'

@@ -77,7 +77,7 @@ class jacks extends React.Component {
 
   list () {
     var list = []
-    this.props.jacks.forEach((j, i) => {
+    this.props.jacks.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((j, i) => {
       list.push(
         <Jack
           name={j.name}

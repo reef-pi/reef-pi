@@ -66,7 +66,7 @@ class inlets extends React.Component {
 
   list () {
     var items = []
-    this.props.inlets.forEach((i, n) => {
+    this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
       items.push(
         <Inlet
           name={i.name}

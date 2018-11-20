@@ -89,7 +89,7 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.map(light => {
+      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
         return (
           <Collapsible key={'light-' + light.id}
             name={'light-' + light.id}

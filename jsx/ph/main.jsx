@@ -27,7 +27,7 @@ class ph extends React.Component {
 
   probeList () {
     return (
-      this.props.probes.map(probe => {
+      this.props.probes.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(probe => {
         const calibrationButton = (
           <button type='button' name={'calibrate-probe-' + probe.id}
             disabled={probe.enable}
