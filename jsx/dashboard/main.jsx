@@ -4,6 +4,7 @@ import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import LightChart from 'lighting/chart'
 import ATOChart from 'ato/chart'
+import DoserChart from 'doser/chart'
 import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
 import { fetchDashboard } from 'redux/actions/dashboard'
@@ -91,6 +92,15 @@ class dashboard extends React.Component {
               <div className='col-sm-6' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'doser':
+            columns.push(
+              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <DoserChart width={config.width} height={config.height} doser_id={ch.id} />
                 </ErrorBoundary>
               </div>
             )

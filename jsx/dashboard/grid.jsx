@@ -53,6 +53,9 @@ export default class Grid extends React.Component {
       case 'tc':
         data = this.props.tcs
         break
+      case 'doser':
+        data = this.props.dosers
+        break
     }
 
     return (
@@ -124,7 +127,8 @@ export default class Grid extends React.Component {
       this.menuItem('ph-current', false, i, j),
       this.menuItem('ph-historical', false, i, j),
       this.menuItem('tc', false, i, j),
-      this.menuItem('temperature', false, i, j)
+      this.menuItem('temperature', false, i, j),
+      this.menuItem('doser', false, i, j)
     ]
     return (types)
   }
