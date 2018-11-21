@@ -25,6 +25,7 @@ const initialState = {
   dashboard: {},
   display: {},
   ato_usage: {},
+  doser_usage: {},
   macro_usage: {},
   tc_usage: {},
   ph_readings: {},

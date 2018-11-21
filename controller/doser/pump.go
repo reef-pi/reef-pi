@@ -2,11 +2,19 @@ package doser
 
 import (
 	"encoding/json"
-	"log"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
+	"log"
 )
+
+type Pump struct {
+	ID       string         `json:"id"`
+	Name     string         `json:"name"`
+	Jack     string         `json:"jack"`
+	Pin      int            `json:"pin"`
+	Regiment DosingRegiment `json:"regiment"`
+}
 
 func (c *Controller) Get(id string) (Pump, error) {
 	var p Pump
@@ -46,11 +54,9 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 		return err
 	}
 	r := &Runner{
-		pin:      p.Pin,
-		duration: cal.Duration,
-		speed:    cal.Speed,
+		pump:     &p,
 		jacks:    c.jacks,
-		jack:     p.Jack,
+		statsMgr: c.statsMgr,
 	}
 	go r.Run()
 	return nil
@@ -109,12 +115,10 @@ func (c *Controller) Delete(id string) error {
 	return c.c.Store().Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(jacks *connectors.Jacks) cron.Job {
+func (p *Pump) Runner(jacks *connectors.Jacks, t types.StatsManager) cron.Job {
 	return &Runner{
-		pin:      p.Pin,
-		duration: p.Regiment.Duration,
-		speed:    p.Regiment.Speed,
+		pump:     p,
 		jacks:    jacks,
-		jack:     p.Jack,
+		statsMgr: t,
 	}
 }

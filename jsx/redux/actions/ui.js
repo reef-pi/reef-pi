@@ -2,6 +2,7 @@ import {reduxGet} from 'utils/ajax'
 import $ from 'jquery'
 import {fetchATOs} from './ato'
 import {fetchInfo} from './info'
+import {fetchDosingPumps} from './doser'
 import {fetchErrors} from './errors'
 import {fetchOutlets} from './outlets'
 import {fetchInlets} from './inlets'
@@ -41,6 +42,9 @@ export const fetchUIData = (dispatch) => {
             break
           case 'equipment':
             dispatch(fetchEquipment())
+            break
+          case 'doser':
+            dispatch(fetchDosingPumps())
             break
         }
       })

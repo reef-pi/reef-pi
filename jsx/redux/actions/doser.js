@@ -64,3 +64,20 @@ export const calibrateDosingPump = (id, s) => {
     data: s
   }))
 }
+
+export const fetchDoserUsage = (id) => {
+  return (reduxGet({
+    url: '/api/doser/pumps/' + id + '/usage',
+    success: doserUsageLoaded(id)
+  }))
+}
+
+export const doserUsageLoaded = (id) => {
+  return (s) => {
+    return ({
+      type: 'DOSER_USAGE_LOADED',
+      payload: {data: s, id: id}
+    })
+  }
+}
+

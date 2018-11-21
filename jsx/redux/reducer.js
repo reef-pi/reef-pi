@@ -4,6 +4,7 @@ export const rootReducer = (state, action) => {
   }
   var camera = state.camera
   var atoUsage = state.ato_usage
+  var doserUsage = state.doser_usage
   var macroUsage = state.macro_usage
   var tcUsage = state.tc_usage
   var pHreadings = state.ph_readings
@@ -42,6 +43,9 @@ export const rootReducer = (state, action) => {
     case 'ATO_USAGE_LOADED':
       atoUsage[action.payload.id] = action.payload.data
       return { ...state, ato_usage: atoUsage }
+    case 'DOSER_USAGE_LOADED':
+      doserUsage[action.payload.id] = action.payload.data
+      return { ...state, doser_usage: doserUsage }
     case 'MACROS_LOADED':
       return { ...state, macros: action.payload }
     case 'MACRO_USAGE_LOADED':

@@ -1,30 +1,37 @@
 package doser
 
 import (
+	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
 )
 
+const Bucket = types.DoserBucket
+const UsageBucket = types.DoserUsageBucket
+
 type Controller struct {
-	DevMode bool
-	c       types.Controller
-	mu      *sync.Mutex
-	runner  *cron.Cron
-	cronIDs map[string]cron.EntryID
-	jacks   *connectors.Jacks
+	DevMode  bool
+	statsMgr types.StatsManager
+	c        types.Controller
+	mu       *sync.Mutex
+	runner   *cron.Cron
+	cronIDs  map[string]cron.EntryID
+	jacks    *connectors.Jacks
 }
 
 func New(devMode bool, c types.Controller, jacks *connectors.Jacks) (*Controller, error) {
 	return &Controller{
-		DevMode: devMode,
-		jacks:   jacks,
-		cronIDs: make(map[string]cron.EntryID),
-		mu:      &sync.Mutex{},
-		runner:  cron.New(),
-		c:       c,
+		DevMode:  devMode,
+		jacks:    jacks,
+		cronIDs:  make(map[string]cron.EntryID),
+		mu:       &sync.Mutex{},
+		runner:   cron.New(),
+		statsMgr: utils.NewStatsManager(c.Store(), UsageBucket, types.CurrentLimit, types.HistoricalLimit),
+		c:        c,
 	}, nil
 }
 
@@ -39,7 +46,10 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.c.Store().CreateBucket(Bucket)
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
+		return err
+	}
+	return c.c.Store().CreateBucket(UsageBucket)
 }
 
 func (c *Controller) loadAllSchedule() error {
@@ -52,6 +62,14 @@ func (c *Controller) loadAllSchedule() error {
 			continue
 		}
 		c.addToCron(p)
+		fn := func(d json.RawMessage) interface{} {
+			u := Usage{}
+			json.Unmarshal(d, &u)
+			return u
+		}
+		if err := c.statsMgr.Load(p.ID, fn); err != nil {
+			log.Println("ERROR: dosing controller. Failed to load usage. Error:", err)
+		}
 	}
 	return nil
 }
@@ -59,7 +77,7 @@ func (c *Controller) loadAllSchedule() error {
 func (c *Controller) addToCron(p Pump) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.jacks))
+	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.jacks, c.statsMgr))
 	if err != nil {
 		return err
 	}

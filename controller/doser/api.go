@@ -12,6 +12,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/doser/pumps", c.create).Methods("PUT")
 	r.HandleFunc("/api/doser/pumps/{id}", c.update).Methods("POST")
 	r.HandleFunc("/api/doser/pumps/{id}", c.delete).Methods("DELETE")
+	r.HandleFunc("/api/doser/pumps/{id}/usage", c.getUsage).Methods("GET")
 	r.HandleFunc("/api/doser/pumps/{id}/calibrate", c.calibrate).Methods("POST")
 	r.HandleFunc("/api/doser/pumps/{id}/schedule", c.schedule).Methods("POST")
 }
@@ -67,4 +68,9 @@ func (c *Controller) schedule(w http.ResponseWriter, r *http.Request) {
 		return c.Schedule(id, reg)
 	}
 	utils.JSONUpdateResponse(&reg, fn, w, r)
+}
+
+func (c *Controller) getUsage(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) { return c.statsMgr.Get(id) }
+	utils.JSONGetResponse(fn, w, req)
 }
