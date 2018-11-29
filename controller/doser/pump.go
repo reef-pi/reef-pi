@@ -2,10 +2,11 @@ package doser
 
 import (
 	"encoding/json"
+	"log"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"gopkg.in/robfig/cron.v2"
-	"log"
 )
 
 type Pump struct {
@@ -53,10 +54,16 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 	if err != nil {
 		return err
 	}
+
+	//Overwrite regiment setting with calibration settings
+	p.Regiment.Duration = cal.Duration
+	p.Regiment.Speed = cal.Speed
+
+	//Not passing statsMgr since calibration should not be represented in usage stats
 	r := &Runner{
 		pump:     &p,
 		jacks:    c.jacks,
-		statsMgr: c.statsMgr,
+		statsMgr: nil,
 	}
 	go r.Run()
 	return nil

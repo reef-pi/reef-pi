@@ -1,11 +1,12 @@
 package doser
 
 import (
+	"log"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"time"
 )
 
 type Runner struct {
@@ -22,7 +23,10 @@ func (r *Runner) Run() {
 	usage := Usage{
 		Time: utils.TeleTime(time.Now()),
 	}
-	r.statsMgr.Update(r.pump.ID, usage)
+	//stasMgr can be nil during calibrations
+	if r.statsMgr != nil {
+		r.statsMgr.Update(r.pump.ID, usage)
+	}
 	if err := r.jacks.Control(r.pump.Jack, v); err != nil {
 		log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 		return
@@ -35,7 +39,8 @@ func (r *Runner) Run() {
 			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 		}
 	}
-	usage.Pump = int(r.pump.Regiment.Duration)
-	r.statsMgr.Update(r.pump.ID, usage)
-	//r.Telemetry().EmitMetric("doser"+r.pump.Name+"-usage", usage.Pump)
+	if r.statsMgr != nil {
+		usage.Pump = int(r.pump.Regiment.Duration)
+		r.statsMgr.Update(r.pump.ID, usage)
+	}
 }
