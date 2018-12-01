@@ -54,11 +54,11 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 		return err
 	}
 	r := &Runner{
-		pump:     &p,
-		jacks:    c.jacks,
-		statsMgr: c.statsMgr,
+		pump:  &p,
+		jacks: c.jacks,
 	}
-	go r.Run()
+	log.Println("doser subsystem: calibration run for:", p.Name)
+	go r.Dose(cal.Speed, cal.Duration)
 	return nil
 }
 

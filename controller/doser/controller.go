@@ -35,11 +35,6 @@ func New(devMode bool, c types.Controller, jacks *connectors.Jacks) (*Controller
 	}, nil
 }
 
-func (c *Controller) Start() {
-	c.loadAllSchedule()
-	c.runner.Start()
-}
-
 func (c *Controller) Stop() {
 	c.runner.Stop()
 	log.Println("Stopped dosing sub-system")
@@ -52,10 +47,11 @@ func (c *Controller) Setup() error {
 	return c.c.Store().CreateBucket(UsageBucket)
 }
 
-func (c *Controller) loadAllSchedule() error {
+func (c *Controller) Start() {
 	pumps, err := c.List()
 	if err != nil {
-		return err
+		log.Println("ERROR: Doser subsystem: Failed to list pumps. Error: ", err)
+		return
 	}
 	for _, p := range pumps {
 		if !p.Regiment.Enable {
@@ -71,7 +67,8 @@ func (c *Controller) loadAllSchedule() error {
 			log.Println("ERROR: dosing controller. Failed to load usage. Error:", err)
 		}
 	}
-	return nil
+	c.runner.Start()
+	return
 }
 
 func (c *Controller) addToCron(p Pump) error {

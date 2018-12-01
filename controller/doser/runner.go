@@ -14,28 +14,33 @@ type Runner struct {
 	statsMgr types.StatsManager
 }
 
-func (r *Runner) Run() {
+func (r *Runner) Dose(speed float64, duration time.Duration) error {
 	v := make(map[int]float64)
-	v[r.pump.Pin] = r.pump.Regiment.Speed
-
-	log.Println("doser sub system: setting pwm pin:", r.pump.Pin, "at speed", r.pump.Regiment.Speed)
-	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
-	}
-	r.statsMgr.Update(r.pump.ID, usage)
+	v[r.pump.Pin] = speed
 	if err := r.jacks.Control(r.pump.Jack, v); err != nil {
+		return err
+	}
+	select {
+	case <-time.After(duration * time.Second):
+		v[r.pump.Pin] = 0
+		if err := r.jacks.Control(r.pump.Jack, v); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (r *Runner) Run() {
+	log.Println("doser sub system: scheduled run ", r.pump.Name)
+	if err := r.Dose(r.pump.Regiment.Speed, r.pump.Regiment.Duration); err != nil {
 		log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 		return
 	}
-	select {
-	case <-time.After(r.pump.Regiment.Duration * time.Second):
-		v[r.pump.Pin] = 0
-		log.Println("doser sub system: setting pwm pin:", r.pump.Pin, "at speed", 0)
-		if err := r.jacks.Control(r.pump.Jack, v); err != nil {
-			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
-		}
+	usage := Usage{
+		Time: utils.TeleTime(time.Now()),
+		Pump: int(r.pump.Regiment.Duration),
 	}
-	usage.Pump = int(r.pump.Regiment.Duration)
 	r.statsMgr.Update(r.pump.ID, usage)
+	r.statsMgr.Save(r.pump.ID)
 	//r.Telemetry().EmitMetric("doser"+r.pump.Name+"-usage", usage.Pump)
 }
