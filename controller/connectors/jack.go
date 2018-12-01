@@ -158,6 +158,7 @@ func (c *Jacks) LoadAPI(r *mux.Router) {
 type PinValues map[int]float64
 
 func (jacks *Jacks) DirectControl(driver string, pin int, v float64) error {
+	log.Println("Setting pwm driver:", driver, "pin:", pin, "value:", v)
 	switch driver {
 	case "rpi":
 		return jacks.rpi.Set(pin, v)
