@@ -20,6 +20,7 @@ type Capabilities struct {
 }
 
 type Driver interface {
+	io.Closer
 	Metadata() Metadata
 }
 

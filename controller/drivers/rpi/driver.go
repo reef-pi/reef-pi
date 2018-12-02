@@ -25,6 +25,16 @@ func (r *rpiDriver) Metadata() drivers.Metadata {
 	}
 }
 
+func (r *rpiDriver) Close() error {
+	for _, pin := range r.pins {
+		err := pin.Close()
+		if err != nil {
+			return errors.Wrapf(err, "can't close rpi driver due to pin %s", pin.Name())
+		}
+	}
+	return nil
+}
+
 func NewRPiDriver() (drivers.Driver, error) {
 	var pins []*rpiPin
 
