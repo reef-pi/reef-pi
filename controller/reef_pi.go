@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
@@ -19,6 +20,7 @@ type ReefPi struct {
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
+	drivers *drivers.Drivers
 
 	subsystems map[string]types.Subsystem
 	settings   Settings
@@ -86,6 +88,7 @@ func New(version, database string) (*ReefPi, error) {
 	outlets.DevMode = s.Capabilities.DevMode
 	inlets := connectors.NewInlets(store)
 	inlets.DevMode = s.Capabilities.DevMode
+	drivers := drivers.NewDrivers(bus, store)
 	r := &ReefPi{
 		bus:        bus,
 		store:      store,
@@ -94,6 +97,7 @@ func New(version, database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
+		drivers:    drivers,
 		subsystems: make(map[string]types.Subsystem),
 		version:    version,
 		cookiejar:  cookiejar,
