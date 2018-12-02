@@ -60,3 +60,15 @@ type Output interface {
 	Driver
 	OutputPins() []OutputPin
 }
+
+//////////////////////////////////////////////////
+
+type PWMChannel interface {
+	Name() string
+	Set(value float64) error
+}
+
+type PWM interface {
+	Driver
+	PWMChannels() []PWMChannel
+}

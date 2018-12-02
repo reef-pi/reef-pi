@@ -56,7 +56,7 @@ func (p *rpiPin) Close() error {
 func (p *rpiPin) Read() (bool, error) {
 	err := p.digitalPin.SetDirection(embd.In)
 	if err != nil {
-		return false, errors.Wrapf(err, "can't read input from pin %d", p.pin)
+		return false, errors.Wrapf(err, "can't read input from channel %d", p.pin)
 	}
 
 	v, err := p.digitalPin.Read()
@@ -69,7 +69,7 @@ func (p *rpiPin) Read() (bool, error) {
 func (p *rpiPin) Write(state bool) error {
 	err := p.digitalPin.SetDirection(embd.Out)
 	if err != nil {
-		return errors.Wrapf(err, "can't set output on pin %d", p.pin)
+		return errors.Wrapf(err, "can't set output on channel %d", p.pin)
 	}
 	value := 0
 	if state {

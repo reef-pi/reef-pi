@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/reef-pi/reef-pi/controller"
+
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 	"github.com/reef-pi/reef-pi/controller/types"
@@ -16,7 +18,7 @@ type Drivers struct {
 	drivers map[string]Driver
 }
 
-func NewDrivers(bus i2c.Bus, store types.Store) *Drivers {
+func NewDrivers(settings controller.Settings, bus i2c.Bus, store types.Store) *Drivers {
 	d := &Drivers{
 		drivers: make(map[string]Driver),
 	}
@@ -43,8 +45,8 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	utils.JSONListResponse(fn, w, r)
 }
 
-func (d *Drivers) register(f func() (Driver, error)) error {
-	r, err := f()
+func (d *Drivers) register(s controller.Settings, f func(settings controller.Settings) (Driver, error)) error {
+	r, err := f(s)
 	if err != nil {
 		return err
 	}
