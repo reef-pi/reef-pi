@@ -11,22 +11,18 @@ import (
 type rpiPwmChannel struct {
 	channel int
 	name    string
-	pwm     *rpiPwm
-}
-
-type rpiPwm struct {
-	driver    pwm.Driver
-	channels  []*rpiPwmChannel
+	driver pwm.Driver
 	frequency int
 }
+
 
 func (p *rpiPwmChannel) Set(value float64) error {
 	if value < 0 || value > 100 {
 		return fmt.Errorf("value must be 0-100, got %f", value)
 	}
 
-	setting := float64(p.pwm.frequency/1000) * value
-	return p.pwm.driver.DutyCycle(p.channel, int(setting))
+	setting := float64(p.frequency/1000) * value
+	return p.driver.DutyCycle(p.channel, int(setting))
 }
 
 func (p *rpiPwmChannel) Name() string {
@@ -35,7 +31,7 @@ func (p *rpiPwmChannel) Name() string {
 
 func (r *rpiDriver) PWMChannels() []driver.PWMChannel {
 	var chs []driver.PWMChannel
-	for _, ch := range r.pwm.channels {
+	for _, ch := range r.pwmChannels {
 		chs = append(chs, ch)
 	}
 	return chs

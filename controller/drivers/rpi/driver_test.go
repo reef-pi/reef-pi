@@ -14,6 +14,7 @@ func newDriver(t *testing.T) (*rpiDriver, driverif.Driver) {
 
 	realDriver := &rpiDriver{
 		newDigitalPin: newMockDigitalPin,
+		newPwmDriver: newMockPWMDriver,
 	}
 
 	err := realDriver.init(s)
@@ -56,4 +57,27 @@ func TestRpiDriver_Close(t *testing.T) {
 		realPin := pin.digitalPin.(*mockDigitalPin)
 		assert.True(t, realPin.closed)
 	}
+}
+
+func TestRpiDriver_InputPins(t *testing.T) {
+	_, driver := newDriver(t)
+
+	input, ok := driver.(driverif.Input)
+	assert.True(t, ok)
+
+	output, ok := driver.(driverif.Output)
+	assert.True(t, ok)
+
+	ipins := input.InputPins()
+	opins := output.OutputPins()
+	assert.Equal(t, ipins[0].Name(), opins[0].Name())
+
+	v, err := ipins[0].Read()
+	assert.NoError(t, err)
+	assert.False(t, v)
+	assert.NoError(t, opins[0].Write(true))
+
+	v, err = ipins[0].Read()
+	assert.NoError(t, err)
+	assert.True(t, v)
 }

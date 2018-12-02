@@ -1,6 +1,10 @@
 package rpi
 
-import "github.com/kidoman/embd"
+import (
+	"fmt"
+	"github.com/kidoman/embd"
+	"github.com/reef-pi/rpi/pwm"
+)
 
 type mockDigitalPin struct {
 	embd.DigitalPin
@@ -31,4 +35,21 @@ func (m *mockDigitalPin) Close() error {
 
 func newMockDigitalPin(opt interface{}) (embd.DigitalPin, error) {
 	return &mockDigitalPin{}, nil
+}
+
+type mockPwmDriver struct {
+	pwm.Driver
+	setting int
+}
+
+func (m *mockPwmDriver) Set(value float64) error {
+	if value < 0 || value > 100 {
+		return fmt.Errorf("value must be 0-100, got %f", value)
+	}
+	m.setting = int(value)
+	return nil
+}
+
+func newMockPWMDriver() pwm.Driver {
+	return &mockPwmDriver{}
 }
