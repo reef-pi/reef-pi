@@ -13,11 +13,11 @@ import (
 )
 
 type rpiDriver struct {
-	pins []*rpiPin
-	pwmChannels  []*rpiPwmChannel
+	pins        []*rpiPin
+	pwmChannels []*rpiPwmChannel
 
 	newDigitalPin func(key interface{}) (embd.DigitalPin, error)
-	newPwmDriver func() pwmdriver.Driver
+	newPwmDriver  func() pwmdriver.Driver
 }
 
 func (r *rpiDriver) Metadata() driver.Metadata {
@@ -69,8 +69,8 @@ func (r *rpiDriver) init(s settings.Settings) error {
 
 	for _, pin := range []int{1, 2} {
 		pwmPin := &rpiPwmChannel{
-			channel: pin,
-			driver: pwmDriver,
+			channel:   pin,
+			driver:    pwmDriver,
 			frequency: s.RPI_PWMFreq * 100000,
 		}
 		r.pwmChannels = append(r.pwmChannels, pwmPin)

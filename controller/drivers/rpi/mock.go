@@ -2,6 +2,7 @@ package rpi
 
 import (
 	"fmt"
+
 	"github.com/kidoman/embd"
 	"github.com/reef-pi/rpi/pwm"
 )

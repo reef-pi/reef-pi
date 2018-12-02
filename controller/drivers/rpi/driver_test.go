@@ -14,7 +14,7 @@ func newDriver(t *testing.T) (*rpiDriver, driverif.Driver) {
 
 	realDriver := &rpiDriver{
 		newDigitalPin: newMockDigitalPin,
-		newPwmDriver: newMockPWMDriver,
+		newPwmDriver:  newMockPWMDriver,
 	}
 
 	err := realDriver.init(s)

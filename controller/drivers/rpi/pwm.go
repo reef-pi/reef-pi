@@ -9,12 +9,11 @@ import (
 )
 
 type rpiPwmChannel struct {
-	channel int
-	name    string
-	driver pwm.Driver
+	channel   int
+	name      string
+	driver    pwm.Driver
 	frequency int
 }
-
 
 func (p *rpiPwmChannel) Set(value float64) error {
 	if value < 0 || value > 100 {
