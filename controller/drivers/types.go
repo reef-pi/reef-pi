@@ -1,5 +1,7 @@
 package drivers
 
+import "io"
+
 // Metadata represents basic information about a driver
 // for the API response.
 type Metadata struct {
@@ -25,6 +27,8 @@ type Driver interface {
 
 // Pin represents a single-bit digital input or output
 type Pin interface {
+	io.Closer
+
 	Name() string
 }
 
@@ -47,7 +51,7 @@ type Input interface {
 
 type OutputPin interface {
 	Pin
-	Write(state bool)
+	Write(state bool) error
 	LastState() bool
 }
 

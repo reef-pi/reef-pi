@@ -38,14 +38,19 @@ var (
 )
 
 type rpiPin struct {
-	pin  int
-	name string
+	pin       int
+	name      string
+	lastState bool
 
 	digitalPin embd.DigitalPin
 }
 
 func (p *rpiPin) Name() string {
 	return p.name
+}
+
+func (p *rpiPin) Close() error {
+	return p.digitalPin.Close()
 }
 
 func (p *rpiPin) Read() (bool, error) {
@@ -61,8 +66,33 @@ func (p *rpiPin) Read() (bool, error) {
 	return v == 1, nil
 }
 
+func (p *rpiPin) Write(state bool) error {
+	err := p.digitalPin.SetDirection(embd.Out)
+	if err != nil {
+		return errors.Wrapf(err, "can't set output on pin %d", p.pin)
+	}
+	value := 0
+	if state {
+		value = 1
+	}
+	p.lastState = state
+	return p.digitalPin.Write(value)
+}
+
+func (p *rpiPin) LastState() bool {
+	return p.lastState
+}
+
 func (r *rpiDriver) InputPins() []drivers.InputPin {
 	var pins []drivers.InputPin
+	for _, pin := range r.pins {
+		pins = append(pins, pin)
+	}
+	return pins
+}
+
+func (r *rpiDriver) OutputPins() []drivers.OutputPin {
+	var pins []drivers.OutputPin
 	for _, pin := range r.pins {
 		pins = append(pins, pin)
 	}
