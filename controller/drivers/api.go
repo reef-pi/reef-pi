@@ -3,9 +3,9 @@ package drivers
 import (
 	"errors"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
 	"net/http"
-
-	"github.com/reef-pi/reef-pi/controller"
 
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
@@ -15,14 +15,14 @@ import (
 )
 
 type Drivers struct {
-	drivers map[string]Driver
+	drivers map[string]driver.Driver
 }
 
-func NewDrivers(settings controller.Settings, bus i2c.Bus, store types.Store) *Drivers {
+func NewDrivers(settings settings.Settings, bus i2c.Bus, store types.Store) *Drivers {
 	d := &Drivers{
-		drivers: make(map[string]Driver),
+		drivers: make(map[string]driver.Driver),
 	}
-	d.register(rpi.NewRPiDriver)
+	d.register(settings, rpi.NewRPiDriver)
 	return d
 }
 
@@ -30,8 +30,8 @@ func (d *Drivers) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/drivers", d.list).Methods("GET")
 }
 
-func (d *Drivers) List() ([]Metadata, error) {
-	var drivers []Metadata
+func (d *Drivers) List() ([]driver.Metadata, error) {
+	var drivers []driver.Metadata
 	for _, v := range d.drivers {
 		drivers = append(drivers, v.Metadata())
 	}
@@ -45,7 +45,7 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	utils.JSONListResponse(fn, w, r)
 }
 
-func (d *Drivers) register(s controller.Settings, f func(settings controller.Settings) (Driver, error)) error {
+func (d *Drivers) register(s settings.Settings, f func(settings settings.Settings) (driver.Driver, error)) error {
 	r, err := f(s)
 	if err != nil {
 		return err

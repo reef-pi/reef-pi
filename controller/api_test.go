@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 )
@@ -13,7 +14,7 @@ func TestAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	initializeSettings(store)
-	s := DefaultSettings
+	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	if err := store.Update(Bucket, "settings", s); err != nil {
 		t.Fatal(err)
@@ -45,7 +46,7 @@ func TestAPI(t *testing.T) {
 		t.Error("Failed to get settings via api")
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&DefaultSettings)
+	json.NewEncoder(body).Encode(&settings.DefaultSettings)
 	if err := tr.Do("POST", "/api/settings", body, nil); err != nil {
 		t.Error("Failed to update settings via api")
 	}

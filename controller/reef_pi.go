@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
@@ -23,7 +24,7 @@ type ReefPi struct {
 	drivers *drivers.Drivers
 
 	subsystems map[string]types.Subsystem
-	settings   Settings
+	settings   settings.Settings
 	telemetry  types.Telemetry
 	version    string
 	h          *HealthChecker
@@ -88,7 +89,7 @@ func New(version, database string) (*ReefPi, error) {
 	outlets.DevMode = s.Capabilities.DevMode
 	inlets := connectors.NewInlets(store)
 	inlets.DevMode = s.Capabilities.DevMode
-	drivers := drivers.NewDrivers(bus, store)
+	drivers := drivers.NewDrivers(s, bus, store)
 	r := &ReefPi{
 		bus:        bus,
 		store:      store,

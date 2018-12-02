@@ -2,8 +2,7 @@ package rpi
 
 import (
 	"fmt"
-
-	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
 
 	"github.com/reef-pi/rpi/pwm"
 )
@@ -33,8 +32,8 @@ func (p *rpiPwmChannel) Name() string {
 	return p.name
 }
 
-func (r *rpiDriver) PWMChannels() []drivers.PWMChannel {
-	var chs []drivers.PWMChannel
+func (r *rpiDriver) PWMChannels() []driver.PWMChannel {
+	var chs []driver.PWMChannel
 	for _, ch := range r.pwm.channels {
 		chs = append(chs, ch)
 	}

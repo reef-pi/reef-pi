@@ -3,7 +3,7 @@ package rpi
 import (
 	"github.com/kidoman/embd"
 	"github.com/pkg/errors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 
 var (
@@ -83,16 +83,16 @@ func (p *rpiPin) LastState() bool {
 	return p.lastState
 }
 
-func (r *rpiDriver) InputPins() []drivers.InputPin {
-	var pins []drivers.InputPin
+func (r *rpiDriver) InputPins() []driver.InputPin {
+	var pins []driver.InputPin
 	for _, pin := range r.pins {
 		pins = append(pins, pin)
 	}
 	return pins
 }
 
-func (r *rpiDriver) OutputPins() []drivers.OutputPin {
-	var pins []drivers.OutputPin
+func (r *rpiDriver) OutputPins() []driver.OutputPin {
+	var pins []driver.OutputPin
 	for _, pin := range r.pins {
 		pins = append(pins, pin)
 	}

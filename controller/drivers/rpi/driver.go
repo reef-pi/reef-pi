@@ -2,13 +2,13 @@ package rpi
 
 import (
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
 
-	"github.com/reef-pi/reef-pi/controller"
 	pwmdriver "github.com/reef-pi/rpi/pwm"
 
 	"github.com/kidoman/embd"
 	"github.com/pkg/errors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
 )
 
 type rpiDriver struct {
@@ -16,12 +16,12 @@ type rpiDriver struct {
 	pwm  *rpiPwm
 }
 
-func (r *rpiDriver) Metadata() drivers.Metadata {
+func (r *rpiDriver) Metadata() driver.Metadata {
 
-	return drivers.Metadata{
+	return driver.Metadata{
 		Name:        "rpi",
 		Description: "hardware peripherals and GPIO channels on the base raspberry pi hardware",
-		Capabilities: drivers.Capabilities{
+		Capabilities: driver.Capabilities{
 			Input:  true,
 			Output: true,
 			PWM:    true,
@@ -39,7 +39,7 @@ func (r *rpiDriver) Close() error {
 	return nil
 }
 
-func NewRPiDriver(s controller.Settings) (drivers.Driver, error) {
+func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
 	var pins []*rpiPin
 
 	for pin := range validGPIOPins {

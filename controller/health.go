@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/load"
@@ -14,17 +15,12 @@ import (
 
 const HealthStatsKey = "health_stats"
 
-type HealthCheckNotify struct {
-	Enable    bool    `json:"enable"`
-	MaxMemory float64 `json:"max_memory"`
-	MaxCPU    float64 `json:"max_cpu"`
-}
 
 type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
 	telemetry types.Telemetry
-	Notify    HealthCheckNotify
+	Notify    settings.HealthCheckNotify
 	store     types.Store
 	statsMgr  types.StatsManager
 }
@@ -64,7 +60,7 @@ func (m1 HealthMetric) Before(mx types.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
 	"testing"
@@ -17,7 +18,7 @@ func TestReefPi(t *testing.T) {
 		t.Fatal(err)
 	}
 	initializeSettings(store)
-	s := DefaultSettings
+	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	if err := store.Update(Bucket, "settings", s); err != nil {
 		t.Fatal(err)
