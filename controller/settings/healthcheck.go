@@ -1,6 +1,5 @@
 package settings
 
-
 type HealthCheckNotify struct {
 	Enable    bool    `json:"enable"`
 	MaxMemory float64 `json:"max_memory"`

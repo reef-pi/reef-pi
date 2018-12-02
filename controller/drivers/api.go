@@ -3,9 +3,10 @@ package drivers
 import (
 	"errors"
 	"fmt"
+	"net/http"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
-	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"

@@ -2,6 +2,7 @@ package rpi
 
 import (
 	"fmt"
+
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 
 	"github.com/reef-pi/rpi/pwm"
