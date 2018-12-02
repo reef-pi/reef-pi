@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/reef-pi/reef-pi/controller/drivers/mock"
+	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
+
+	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
+	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 )
 
@@ -19,12 +21,22 @@ type Drivers struct {
 	drivers map[string]driver.Driver
 }
 
-func NewDrivers(settings settings.Settings, bus i2c.Bus, store types.Store) *Drivers {
+func NewDrivers(settings settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, error) {
 	d := &Drivers{
 		drivers: make(map[string]driver.Driver),
 	}
-	d.register(settings, rpi.NewRPiDriver)
-	return d
+	if settings.Capabilities.DevMode {
+		err := d.register(settings, mock.NewMockDriver)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := d.register(settings, rpi.NewRPiDriver)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return d, nil
 }
 
 func (d *Drivers) LoadAPI(r *mux.Router) {

@@ -89,7 +89,8 @@ func New(version, database string) (*ReefPi, error) {
 	outlets.DevMode = s.Capabilities.DevMode
 	inlets := connectors.NewInlets(store)
 	inlets.DevMode = s.Capabilities.DevMode
-	drivers := drivers.NewDrivers(s, bus, store)
+	drvrs, err := drivers.NewDrivers(s, bus, store)
+
 	r := &ReefPi{
 		bus:        bus,
 		store:      store,
@@ -98,7 +99,7 @@ func New(version, database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
-		drivers:    drivers,
+		drivers:    drvrs,
 		subsystems: make(map[string]types.Subsystem),
 		version:    version,
 		cookiejar:  cookiejar,

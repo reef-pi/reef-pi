@@ -15,10 +15,11 @@ import (
 type rpiDriver struct {
 	pins []*rpiPin
 	pwm  *rpiPwm
+
+	newDigitalPin func(key interface{}) (embd.DigitalPin, error)
 }
 
 func (r *rpiDriver) Metadata() driver.Metadata {
-
 	return driver.Metadata{
 		Name:        "rpi",
 		Description: "hardware peripherals and GPIO channels on the base raspberry pi hardware",
@@ -40,14 +41,16 @@ func (r *rpiDriver) Close() error {
 	return nil
 }
 
-func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
-	var pins []*rpiPin
+func (r *rpiDriver) init(s settings.Settings) error {
+	if r.newDigitalPin == nil {
+		r.newDigitalPin = embd.NewDigitalPin
+	}
 
 	for pin := range validGPIOPins {
-		digitalPin, err := embd.NewDigitalPin(pin)
+		digitalPin, err := r.newDigitalPin(pin)
 
 		if err != nil {
-			return nil, errors.Wrapf(err, "can't build rpi channel %d", pin)
+			return errors.Wrapf(err, "can't build rpi channel %d", pin)
 		}
 
 		pin := rpiPin{
@@ -55,10 +58,10 @@ func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
 			pin:        pin,
 			digitalPin: digitalPin,
 		}
-		pins = append(pins, &pin)
+		r.pins = append(r.pins, &pin)
 	}
 
-	pwm := &rpiPwm{
+	r.pwm = &rpiPwm{
 		driver:    pwmdriver.New(),
 		frequency: s.RPI_PWMFreq * 100000,
 	}
@@ -66,11 +69,17 @@ func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
 		pwmPin := &rpiPwmChannel{
 			channel: pin,
 		}
-		pwm.channels = append(pwm.channels, pwmPin)
+		r.pwm.channels = append(r.pwm.channels, pwmPin)
 	}
 
-	return &rpiDriver{
-		pins: pins,
-		pwm:  pwm,
-	}, nil
+	return nil
+}
+
+func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
+	d := &rpiDriver{}
+	err := d.init(s)
+	if err != nil {
+		return nil, err
+	}
+	return d, nil
 }

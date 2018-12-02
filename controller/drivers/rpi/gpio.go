@@ -3,6 +3,7 @@ package rpi
 import (
 	"github.com/kidoman/embd"
 	"github.com/pkg/errors"
+
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 
