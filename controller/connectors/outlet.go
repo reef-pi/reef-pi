@@ -3,45 +3,18 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+
+	"github.com/pkg/errors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
+
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"net/http"
 )
 
 const OutletBucket = types.OutletBucket
-
-var (
-	ValidGPIOPins = map[int]bool{
-		2:  true,
-		3:  true,
-		4:  true,
-		5:  true,
-		6:  true,
-		7:  true,
-		8:  true,
-		9:  true,
-		10: true,
-		11: true,
-		12: true,
-		13: true,
-		14: true,
-		15: true,
-		16: true,
-		17: true,
-		18: true,
-		19: true,
-		20: true,
-		21: true,
-		22: true,
-		23: true,
-		24: true,
-		25: true,
-		26: true,
-		27: true,
-	}
-)
 
 type Outlet struct {
 	ID        string `json:"id"`
@@ -51,24 +24,43 @@ type Outlet struct {
 	Reverse   bool   `json:"reverse"`
 }
 
-func (o Outlet) IsValid() error {
+func (o Outlet) outputPin(drivers *drivers.Drivers) (driver.OutputPin, error) {
+	pindriver, err := drivers.Get("rpi")
+	if err != nil {
+		return nil, errors.Wrapf(err, "inlet %s driver lookup failure", o.Name)
+	}
+	outputDriver, ok := pindriver.(driver.Output)
+	if !ok {
+		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", o.Name)
+	}
+	outputPin, err := outputDriver.GetOutputPin(fmt.Sprintf("GP%d", o.Pin))
+	if err != nil {
+		return nil, errors.Wrapf(err, "no valid input pin %d", o.Pin)
+	}
+	return outputPin, nil
+}
+
+func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 	if o.Name == "" {
 		return fmt.Errorf("Outlet name can not be empty")
 	}
-	_, ok := ValidGPIOPins[o.Pin]
-	if !ok {
-		return fmt.Errorf("GPIO Pin %d is not valid", o.Pin)
+	if _, err := o.outputPin(drivers); err != nil {
+		return errors.Wrapf(err, "outlet %s did not get associated with a driver pin", o.Name)
 	}
 	return nil
 }
 
 type Outlets struct {
 	store   types.Store
+	drivers *drivers.Drivers
 	DevMode bool
 }
 
-func NewOutlets(store types.Store) *Outlets {
-	return &Outlets{store: store}
+func NewOutlets(drivers *drivers.Drivers, store types.Store) *Outlets {
+	return &Outlets{
+		store:   store,
+		drivers: drivers,
+	}
 }
 
 func (c *Outlets) Setup() error {
@@ -80,21 +72,20 @@ func (c *Outlets) Configure(id string, on bool) error {
 	if err != nil {
 		return fmt.Errorf("Outlet name: '%s' does not exist", err)
 	}
-	if c.DevMode {
-		log.Println("Dev mode on. Skipping:", o.Name, "On:", on)
-		return nil
+
+	pin, err := o.outputPin(c.drivers)
+	if err != nil {
+		return errors.Wrapf(err, "can't update %s - can't get output pin", id)
 	}
+
 	if o.Reverse {
 		on = !on
 	}
-	if on {
-		return utils.SwitchOn(o.Pin)
-	}
-	return utils.SwitchOff(o.Pin)
+	return pin.Write(on)
 }
 
 func (c *Outlets) Create(o Outlet) error {
-	if err := o.IsValid(); err != nil {
+	if err := o.IsValid(c.drivers); err != nil {
 		return err
 	}
 	fn := func(id string) interface{} {
@@ -106,7 +97,7 @@ func (c *Outlets) Create(o Outlet) error {
 
 func (c *Outlets) Update(id string, o Outlet) error {
 	o.ID = id
-	if err := o.IsValid(); err != nil {
+	if err := o.IsValid(c.drivers); err != nil {
 		return err
 	}
 	return c.store.Update(OutletBucket, id, o)

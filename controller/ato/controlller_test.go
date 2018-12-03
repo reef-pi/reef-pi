@@ -17,7 +17,7 @@ func TestController(t *testing.T) {
 	}
 	drvrs := drivers.TestDrivers(con.Store())
 	conf := equipment.Config{DevMode: true}
-	outlets := connectors.NewOutlets(con.Store())
+	outlets := connectors.NewOutlets(drvrs, con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)

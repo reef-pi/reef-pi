@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
@@ -23,7 +24,8 @@ func TestTimerController(t *testing.T) {
 		Name: "bar",
 		Pin:  24,
 	}
-	outlets := connectors.NewOutlets(con.Store())
+	drvrs := drivers.TestDrivers(con.Store())
+	outlets := connectors.NewOutlets(drvrs, con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)

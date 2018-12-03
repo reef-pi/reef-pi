@@ -96,6 +96,18 @@ func NewMockDriver(s settings.Settings) (driver.Driver, error) {
 		{
 			name: "GP16",
 		},
+		{
+			name: "GP23",
+		},
+		{
+			name: "GP4",
+		},
+		{
+			name: "GP19",
+		},
+		{
+			name: "GP24",
+		},
 	}
 
 	return &mockDriver{pins: pins}, nil

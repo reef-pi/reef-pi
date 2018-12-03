@@ -87,8 +87,7 @@ func New(version, database string) (*ReefPi, error) {
 	drvrs, err := drivers.NewDrivers(s, bus, store)
 
 	jacks := connectors.NewJacks(store, pi, pca9685)
-	outlets := connectors.NewOutlets(store)
-	outlets.DevMode = s.Capabilities.DevMode
+	outlets := connectors.NewOutlets(drvrs, store)
 	inlets := connectors.NewInlets(drvrs, store)
 
 	r := &ReefPi{
