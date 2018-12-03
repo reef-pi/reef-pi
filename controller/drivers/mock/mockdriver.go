@@ -1,21 +1,47 @@
 package mock
 
 import (
+	"log"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 
+type mockPin struct {
+	name   string
+	state  bool
+	closed bool
+}
+
+func (m *mockPin) Close() error {
+	m.closed = true
+	return nil
+}
+
+func (m *mockPin) Name() string { return m.name }
+func (m *mockPin) Read() (bool, error) {
+	log.Printf("mock: read %s value %v", m.name, m.state)
+	return m.state, nil
+}
+func (m *mockPin) Write(state bool) error {
+	log.Printf("mock: write %s value %v", m.name, m.state)
+	m.state = state
+	return nil
+}
+func (m *mockPin) LastState() bool { return m.state }
+
 type mockDriver struct {
 	closed bool
+	pins   []*mockPin
 }
 
 func (m *mockDriver) Metadata() driver.Metadata {
 	return driver.Metadata{
-		Name:        "mock",
+		Name:        "rpi",
 		Description: "Mock driver - no actual hardware",
 		Capabilities: driver.Capabilities{
-			Input:  false,
-			Output: false,
+			Input:  true,
+			Output: true,
 		},
 	}
 }
@@ -25,6 +51,31 @@ func (m *mockDriver) Close() error {
 	return nil
 }
 
+func (m *mockDriver) InputPins() []driver.InputPin {
+	var pins []driver.InputPin
+	for _, p := range m.pins {
+		pins = append(pins, p)
+	}
+	return pins
+}
+
+func (m *mockDriver) OutputPins() []driver.OutputPin {
+	var pins []driver.OutputPin
+	for _, p := range m.pins {
+		pins = append(pins, p)
+	}
+	return pins
+}
+
 func NewMockDriver(s settings.Settings) (driver.Driver, error) {
-	return &mockDriver{}, nil
+	pins := []*mockPin{
+		{
+			name: "GP1",
+		},
+		{
+			name: "GP2",
+		},
+	}
+
+	return &mockDriver{pins: pins}, nil
 }
