@@ -27,7 +27,7 @@ func newDrivers(t *testing.T) *Drivers {
 func TestNewDrivers(t *testing.T) {
 	driver := newDrivers(t)
 
-	assert.Len(t, driver.drivers, 1)
+	assert.Len(t, driver.drivers, 2)
 }
 
 func TestDrivers_List(t *testing.T) {
@@ -35,8 +35,8 @@ func TestDrivers_List(t *testing.T) {
 	meta, err := driver.List()
 	assert.NoError(t, err)
 
-	assert.Len(t, meta, 1)
-	assert.Equal(t, "rpi", meta[0].Name)
+	assert.Len(t, meta, 2)
+	assert.Equal(t, "pca9685", meta[0].Name)
 }
 
 func TestDrivers_Get(t *testing.T) {

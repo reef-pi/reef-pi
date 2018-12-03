@@ -4,9 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
+
+	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
+	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 
 	"github.com/reef-pi/reef-pi/controller/drivers/mock"
-	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
 
 	"github.com/reef-pi/reef-pi/controller/types"
@@ -17,21 +20,27 @@ import (
 	"github.com/reef-pi/rpi/i2c"
 )
 
+type driverBuilder func(settings settings.Settings) (driver.Driver, error)
+
 type Drivers struct {
 	drivers map[string]driver.Driver
 }
 
-func NewDrivers(settings settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, error) {
+func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, error) {
 	d := &Drivers{
 		drivers: make(map[string]driver.Driver),
 	}
-	if settings.Capabilities.DevMode {
-		err := d.register(settings, mock.NewMockDriver)
-		if err != nil {
-			return nil, err
+	var driverList []driverBuilder
+	if s.Capabilities.DevMode {
+		driverList = []driverBuilder{
+			mock.NewMockDriver,
+			mockpca9685.NewMockDriver,
 		}
 	} else {
-		err := d.register(settings, rpi.NewRPiDriver)
+		driverList = []driverBuilder{rpi.NewRPiDriver}
+	}
+	for _, entry := range driverList {
+		err := d.register(s, entry)
 		if err != nil {
 			return nil, err
 		}
@@ -48,6 +57,7 @@ func (d *Drivers) List() ([]driver.Metadata, error) {
 	for _, v := range d.drivers {
 		drivers = append(drivers, v.Metadata())
 	}
+	sort.Slice(drivers, func(i, j int) bool { return drivers[i].Name < drivers[j].Name })
 	return drivers, nil
 }
 
@@ -66,7 +76,7 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	utils.JSONListResponse(fn, w, r)
 }
 
-func (d *Drivers) register(s settings.Settings, f func(settings settings.Settings) (driver.Driver, error)) error {
+func (d *Drivers) register(s settings.Settings, f driverBuilder) error {
 	r, err := f(s)
 	if err != nil {
 		return err
