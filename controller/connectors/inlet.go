@@ -21,9 +21,8 @@ type Inlet struct {
 	Pin       int    `json:"pin"`
 	Equipment string `json:"equipment"`
 	Reverse   bool   `json:"reverse"`
-
-	inputPin driver.InputPin
 }
+
 type Inlets struct {
 	store   types.Store
 	drivers *drivers.Drivers
@@ -38,13 +37,28 @@ func (e *Inlets) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST")
 }
 
-func (i Inlet) IsValid() error {
+func (i Inlet) inputPin(drivers *drivers.Drivers) (driver.InputPin, error) {
+	pindriver, err := drivers.Get("rpi")
+	if err != nil {
+		return nil, errors.Wrapf(err, "inlet %s driver lookup failure", i.Name)
+	}
+	inputDriver, ok := pindriver.(driver.Input)
+	if !ok {
+		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", i.Name)
+	}
+	inputPin, err := inputDriver.GetInputPin(fmt.Sprintf("GP%d", i.Pin))
+	if err != nil {
+		return nil, errors.Wrapf(err, "no valid input pin %d", i.Pin)
+	}
+	return inputPin, nil
+}
+
+func (i Inlet) IsValid(drivers *drivers.Drivers) error {
 	if i.Name == "" {
 		return fmt.Errorf("Inlet name can not be empty")
 	}
-	_, ok := ValidGPIOPins[i.Pin]
-	if !ok {
-		return fmt.Errorf("GPIO Pin %d is not valid", i.Pin)
+	if _, err := i.inputPin(drivers); err != nil {
+		return errors.Wrapf(err, "inlet %s did not get associated with a driver pin", i.Name)
 	}
 	return nil
 }
@@ -66,7 +80,12 @@ func (c *Inlets) Read(id string) (int, error) {
 		return -1, fmt.Errorf("Inlet name: '%s' does not exist", err)
 	}
 
-	v, err := i.inputPin.Read()
+	inputPin, err := i.inputPin(c.drivers)
+	if err != nil {
+		return 0, errors.Wrap(err, "can't perform read")
+	}
+	v, err := inputPin.Read()
+
 	if i.Reverse {
 		v = !v
 	}
@@ -77,7 +96,7 @@ func (c *Inlets) Read(id string) (int, error) {
 }
 
 func (c *Inlets) Create(i Inlet) error {
-	if err := i.IsValid(); err != nil {
+	if err := i.IsValid(c.drivers); err != nil {
 		return err
 	}
 	fn := func(id string) interface{} {
@@ -89,7 +108,7 @@ func (c *Inlets) Create(i Inlet) error {
 
 func (c *Inlets) Update(id string, i Inlet) error {
 	i.ID = id
-	if err := i.IsValid(); err != nil {
+	if err := i.IsValid(c.drivers); err != nil {
 		return err
 	}
 	return c.store.Update(InletBucket, id, i)
@@ -121,24 +140,7 @@ func (c *Inlets) Delete(id string) error {
 
 func (c *Inlets) Get(id string) (Inlet, error) {
 	var i Inlet
-	err := c.store.Get(InletBucket, id, &i)
-	if err != nil {
-		return i, err
-	}
-	pindriver, err := c.drivers.Get("rpi")
-	if err != nil {
-		return i, errors.Wrapf(err, "inlet %s driver lookup failure", id)
-	}
-	inputDriver, ok := pindriver.(driver.Input)
-	if !ok {
-		return i, fmt.Errorf("driver for inlet %s is not an inlet driver", id)
-	}
-	inputPin, err := inputDriver.GetInputPin(fmt.Sprintf("GP%d", i.Pin))
-	if err != nil {
-		return i, errors.Wrapf(err, "no valid input pin %d", i.Pin)
-	}
-	i.inputPin = inputPin
-	return i, nil
+	return i, c.store.Get(InletBucket, id, &i)
 }
 
 func (c *Inlets) get(w http.ResponseWriter, r *http.Request) {

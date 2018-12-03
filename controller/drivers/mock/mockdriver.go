@@ -91,12 +91,6 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 func NewMockDriver(s settings.Settings) (driver.Driver, error) {
 	pins := []*mockPin{
 		{
-			name: "GP1",
-		},
-		{
-			name: "GP2",
-		},
-		{
 			name: "GP21",
 		},
 		{
