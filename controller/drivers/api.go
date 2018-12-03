@@ -51,6 +51,14 @@ func (d *Drivers) List() ([]driver.Metadata, error) {
 	return drivers, nil
 }
 
+func (d *Drivers) Get(name string) (driver.Driver, error) {
+	driver, ok := d.drivers[name]
+	if !ok {
+		return nil, fmt.Errorf("driver by name %s not available", name)
+	}
+	return driver, nil
+}
+
 func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return d.List()

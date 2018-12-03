@@ -46,6 +46,7 @@ type InputPin interface {
 type Input interface {
 	Driver
 	InputPins() []InputPin
+	GetInputPin(name string) (InputPin, error)
 }
 
 //////////////////////////////////////////////////
@@ -59,6 +60,7 @@ type OutputPin interface {
 type Output interface {
 	Driver
 	OutputPins() []OutputPin
+	GetOutputPin(name string) (OutputPin, error)
 }
 
 //////////////////////////////////////////////////

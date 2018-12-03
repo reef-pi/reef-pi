@@ -3,12 +3,14 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"math/rand"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const InletBucket = types.InletBucket
@@ -19,10 +21,12 @@ type Inlet struct {
 	Pin       int    `json:"pin"`
 	Equipment string `json:"equipment"`
 	Reverse   bool   `json:"reverse"`
+
+	inputPin driver.InputPin
 }
 type Inlets struct {
 	store   types.Store
-	DevMode bool
+	drivers *drivers.Drivers
 }
 
 func (e *Inlets) LoadAPI(r *mux.Router) {
@@ -45,8 +49,11 @@ func (i Inlet) IsValid() error {
 	return nil
 }
 
-func NewInlets(store types.Store) *Inlets {
-	return &Inlets{store: store}
+func NewInlets(drivers *drivers.Drivers, store types.Store) *Inlets {
+	return &Inlets{
+		store:   store,
+		drivers: drivers,
+	}
 }
 
 func (c *Inlets) Setup() error {
@@ -58,19 +65,15 @@ func (c *Inlets) Read(id string) (int, error) {
 	if err != nil {
 		return -1, fmt.Errorf("Inlet name: '%s' does not exist", err)
 	}
-	if c.DevMode {
-		log.Println("Dev mode on. Skipping:", i.Name)
-		return rand.Int() % 2, nil
+
+	v, err := i.inputPin.Read()
+	if i.Reverse {
+		v = !v
 	}
-	v, err := utils.ReadGPIO(i.Pin)
-	if !i.Reverse {
-		return v, err
-	}
-	if v == 1 {
-		return 0, err
-	} else {
+	if v {
 		return 1, err
 	}
+	return 0, err
 }
 
 func (c *Inlets) Create(i Inlet) error {
@@ -118,7 +121,24 @@ func (c *Inlets) Delete(id string) error {
 
 func (c *Inlets) Get(id string) (Inlet, error) {
 	var i Inlet
-	return i, c.store.Get(InletBucket, id, &i)
+	err := c.store.Get(InletBucket, id, &i)
+	if err != nil {
+		return i, err
+	}
+	pindriver, err := c.drivers.Get("rpi")
+	if err != nil {
+		return i, errors.Wrapf(err, "inlet %s driver lookup failure", id)
+	}
+	inputDriver, ok := pindriver.(driver.Input)
+	if !ok {
+		return i, fmt.Errorf("driver for inlet %s is not an inlet driver", id)
+	}
+	inputPin, err := inputDriver.GetInputPin(fmt.Sprintf("GP%d", i.Pin))
+	if err != nil {
+		return i, errors.Wrapf(err, "no valid input pin %d", i.Pin)
+	}
+	i.inputPin = inputPin
+	return i, nil
 }
 
 func (c *Inlets) get(w http.ResponseWriter, r *http.Request) {

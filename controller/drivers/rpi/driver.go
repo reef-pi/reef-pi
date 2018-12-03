@@ -13,8 +13,8 @@ import (
 )
 
 type rpiDriver struct {
-	pins        []*rpiPin
-	pwmChannels []*rpiPwmChannel
+	pins        map[string]*rpiPin
+	pwmChannels map[string]*rpiPwmChannel
 
 	newDigitalPin func(key interface{}) (embd.DigitalPin, error)
 	newPwmDriver  func() pwmdriver.Driver
@@ -49,6 +49,12 @@ func (r *rpiDriver) init(s settings.Settings) error {
 	if r.newPwmDriver == nil {
 		r.newPwmDriver = pwmdriver.New
 	}
+	if r.pins == nil {
+		r.pins = make(map[string]*rpiPin)
+	}
+	if r.pwmChannels == nil {
+		r.pwmChannels = make(map[string]*rpiPwmChannel)
+	}
 
 	for pin := range validGPIOPins {
 		digitalPin, err := r.newDigitalPin(pin)
@@ -62,7 +68,7 @@ func (r *rpiDriver) init(s settings.Settings) error {
 			pin:        pin,
 			digitalPin: digitalPin,
 		}
-		r.pins = append(r.pins, &pin)
+		r.pins[pin.name] = &pin
 	}
 
 	pwmDriver := pwmdriver.New()
@@ -73,7 +79,7 @@ func (r *rpiDriver) init(s settings.Settings) error {
 			driver:    pwmDriver,
 			frequency: s.RPI_PWMFreq * 100000,
 		}
-		r.pwmChannels = append(r.pwmChannels, pwmPin)
+		r.pwmChannels[pwmPin.name] = pwmPin
 	}
 
 	return nil

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
@@ -14,14 +15,14 @@ func TestController(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	drvrs := drivers.TestDrivers(con.Store())
 	conf := equipment.Config{DevMode: true}
 	outlets := connectors.NewOutlets(con.Store())
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	inlets := connectors.NewInlets(con.Store())
-	inlets.DevMode = true
+	inlets := connectors.NewInlets(drvrs, con.Store())
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}

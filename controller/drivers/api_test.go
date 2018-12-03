@@ -36,5 +36,13 @@ func TestDrivers_List(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Len(t, meta, 1)
-	assert.Equal(t, "mock", meta[0].Name)
+	assert.Equal(t, "rpi", meta[0].Name)
+}
+
+func TestDrivers_Get(t *testing.T) {
+	drivers := newDrivers(t)
+	driver, err := drivers.Get("rpi")
+	assert.NoError(t, err)
+
+	assert.Equal(t, "rpi", driver.Metadata().Name)
 }

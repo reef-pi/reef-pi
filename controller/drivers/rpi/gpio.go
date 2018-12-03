@@ -1,9 +1,11 @@
 package rpi
 
 import (
+	"fmt"
+	"sort"
+
 	"github.com/kidoman/embd"
 	"github.com/pkg/errors"
-
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 
@@ -89,7 +91,16 @@ func (r *rpiDriver) InputPins() []driver.InputPin {
 	for _, pin := range r.pins {
 		pins = append(pins, pin)
 	}
+	sort.Slice(pins, func(i, j int) bool { return pins[i].Name() < pins[j].Name() })
 	return pins
+}
+
+func (r *rpiDriver) GetInputPin(name string) (driver.InputPin, error) {
+	pin, ok := r.pins[name]
+	if !ok {
+		return nil, fmt.Errorf("pin %s unknown", name)
+	}
+	return pin, nil
 }
 
 func (r *rpiDriver) OutputPins() []driver.OutputPin {
@@ -97,5 +108,14 @@ func (r *rpiDriver) OutputPins() []driver.OutputPin {
 	for _, pin := range r.pins {
 		pins = append(pins, pin)
 	}
+	sort.Slice(pins, func(i, j int) bool { return pins[i].Name() < pins[j].Name() })
 	return pins
+}
+
+func (r *rpiDriver) GetOutputPin(name string) (driver.OutputPin, error) {
+	pin, ok := r.pins[name]
+	if !ok {
+		return nil, fmt.Errorf("pin %s unknown", name)
+	}
+	return pin, nil
 }

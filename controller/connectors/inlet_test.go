@@ -3,8 +3,10 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestInletsAPI(t *testing.T) {
@@ -12,10 +14,12 @@ func TestInletsAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	drvrs := drivers.TestDrivers(store)
+
 	tr := utils.NewTestRouter()
 	i := Inlet{Name: "Foo", Pin: 21}
-	inlets := NewInlets(store)
-	inlets.DevMode = true
+	inlets := NewInlets(drvrs, store)
+
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}

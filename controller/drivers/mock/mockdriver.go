@@ -1,7 +1,10 @@
 package mock
 
 import (
+	"fmt"
 	"log"
+
+	"github.com/pkg/errors"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
@@ -59,12 +62,30 @@ func (m *mockDriver) InputPins() []driver.InputPin {
 	return pins
 }
 
+func (m *mockDriver) GetInputPin(name string) (driver.InputPin, error) {
+	for _, pin := range m.pins {
+		if pin.name == name {
+			return pin, nil
+		}
+	}
+	return nil, fmt.Errorf("unknown input pin specified %s", name)
+}
+
 func (m *mockDriver) OutputPins() []driver.OutputPin {
 	var pins []driver.OutputPin
 	for _, p := range m.pins {
 		pins = append(pins, p)
 	}
 	return pins
+}
+
+func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
+	for _, pin := range m.pins {
+		if pin.name == name {
+			return pin, nil
+		}
+	}
+	return nil, errors.New("unknown output pin specified")
 }
 
 func NewMockDriver(s settings.Settings) (driver.Driver, error) {
@@ -74,6 +95,12 @@ func NewMockDriver(s settings.Settings) (driver.Driver, error) {
 		},
 		{
 			name: "GP2",
+		},
+		{
+			name: "GP21",
+		},
+		{
+			name: "GP16",
 		},
 	}
 
