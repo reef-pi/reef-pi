@@ -1,4 +1,4 @@
-package mock
+package mockrpi
 
 import (
 	"github.com/reef-pi/rpi/i2c"

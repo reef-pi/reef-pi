@@ -11,7 +11,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 
-	"github.com/reef-pi/reef-pi/controller/drivers/mock"
+	"github.com/reef-pi/reef-pi/controller/drivers/mockrpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
 
 	"github.com/reef-pi/reef-pi/controller/types"
@@ -36,7 +36,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, 
 	var driverList []driverBuilder
 	if s.Capabilities.DevMode {
 		driverList = []driverBuilder{
-			mock.NewMockDriver,
+			mockrpi.NewMockDriver,
 			mockpca9685.NewMockDriver,
 		}
 	} else {
