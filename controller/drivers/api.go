@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/reef-pi/reef-pi/controller/drivers/pca9685"
+
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 
@@ -20,7 +22,8 @@ import (
 	"github.com/reef-pi/rpi/i2c"
 )
 
-type driverBuilder func(settings settings.Settings) (driver.Driver, error)
+// TODO(theatrus): special casing i2c feels weird here
+type driverBuilder func(settings settings.Settings, bus i2c.Bus) (driver.Driver, error)
 
 type Drivers struct {
 	drivers map[string]driver.Driver
@@ -37,10 +40,13 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, 
 			mockpca9685.NewMockDriver,
 		}
 	} else {
-		driverList = []driverBuilder{rpi.NewRPiDriver}
+		driverList = []driverBuilder{
+			rpi.NewRPiDriver,
+			pca9685.NewPCA9685,
+		}
 	}
 	for _, entry := range driverList {
-		err := d.register(s, entry)
+		err := d.register(s, bus, entry)
 		if err != nil {
 			return nil, err
 		}
@@ -76,8 +82,8 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	utils.JSONListResponse(fn, w, r)
 }
 
-func (d *Drivers) register(s settings.Settings, f driverBuilder) error {
-	r, err := f(s)
+func (d *Drivers) register(s settings.Settings, b i2c.Bus, f driverBuilder) error {
+	r, err := f(s, b)
 	if err != nil {
 		return err
 	}

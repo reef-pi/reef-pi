@@ -5,6 +5,8 @@ import (
 	"log"
 	"sort"
 
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/pkg/errors"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -129,7 +131,7 @@ func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
 	return nil, fmt.Errorf("no channel named %s", name)
 }
 
-func NewMockDriver(s settings.Settings) (driver.Driver, error) {
+func NewMockDriver(s settings.Settings, b i2c.Bus) (driver.Driver, error) {
 	pins := []*mockPin{
 		{
 			name: "GP21",

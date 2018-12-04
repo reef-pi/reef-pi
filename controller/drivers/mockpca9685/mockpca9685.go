@@ -5,6 +5,8 @@ import (
 	"log"
 	"sort"
 
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
@@ -80,7 +82,7 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 	return pin, nil
 }
 
-func NewMockDriver(s settings.Settings) (driver.Driver, error) {
+func NewMockDriver(s settings.Settings, b i2c.Bus) (driver.Driver, error) {
 	d := &mockDriver{
 		channels: make(map[string]*mockPwmChannel),
 	}

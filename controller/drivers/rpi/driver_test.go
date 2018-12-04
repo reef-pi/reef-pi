@@ -25,7 +25,6 @@ func newDriver(t *testing.T) (*rpiDriver, driverif.Driver) {
 }
 
 func TestNewRPiDriver(t *testing.T) {
-
 	_, driver := newDriver(t)
 
 	meta := driver.Metadata()
@@ -44,7 +43,6 @@ func TestNewRPiDriver(t *testing.T) {
 	assert.True(t, ok)
 	outPins := output.OutputPins()
 	assert.Len(t, outPins, len(validGPIOPins))
-
 }
 
 func TestRpiDriver_Close(t *testing.T) {

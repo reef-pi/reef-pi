@@ -3,6 +3,8 @@ package rpi
 import (
 	"fmt"
 
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 
@@ -86,7 +88,7 @@ func (r *rpiDriver) init(s settings.Settings) error {
 	return nil
 }
 
-func NewRPiDriver(s settings.Settings) (driver.Driver, error) {
+func NewRPiDriver(s settings.Settings, b i2c.Bus) (driver.Driver, error) {
 	d := &rpiDriver{}
 	err := d.init(s)
 	if err != nil {

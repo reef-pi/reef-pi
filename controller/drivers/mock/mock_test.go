@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"github.com/reef-pi/rpi/i2c"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -9,7 +10,7 @@ import (
 )
 
 func TestNewMockDriver(t *testing.T) {
-	drvr, err := NewMockDriver(settings.DefaultSettings)
+	drvr, err := NewMockDriver(settings.DefaultSettings, i2c.MockBus())
 	assert.NoError(t, err)
 
 	_, ok := drvr.(driver.Input)
