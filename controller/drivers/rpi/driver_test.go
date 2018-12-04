@@ -63,10 +63,10 @@ func TestRpiDriver_InputPins(t *testing.T) {
 	_, driver := newDriver(t)
 
 	input, ok := driver.(driverif.Input)
-	assert.True(t, ok)
+	assert.True(t, ok, "not an input driver")
 
 	output, ok := driver.(driverif.Output)
-	assert.True(t, ok)
+	assert.True(t, ok, "not an output driver")
 
 	ipins := input.InputPins()
 	opins := output.OutputPins()
@@ -80,4 +80,33 @@ func TestRpiDriver_InputPins(t *testing.T) {
 	v, err = ipins[0].Read()
 	assert.NoError(t, err)
 	assert.True(t, v)
+}
+
+func TestRpiDriver_GetOutputPin(t *testing.T) {
+	_, driver := newDriver(t)
+	output, ok := driver.(driverif.Output)
+	assert.True(t, ok, "not an output driver")
+
+	pin, err := output.GetOutputPin("GP26")
+	assert.NoError(t, err)
+	assert.Equal(t, "GP26", pin.Name())
+}
+
+func TestRpiDriver_GetPWMChannel(t *testing.T) {
+	_, driver := newDriver(t)
+	pwmDriver, ok := driver.(driverif.PWM)
+	assert.True(t, ok)
+
+	ch, err := pwmDriver.GetPWMChannel("0")
+	assert.NoError(t, err)
+	assert.Equal(t, "0", ch.Name())
+
+	err = ch.Set(10)
+	assert.NoError(t, err)
+
+	backingChannel := ch.(*rpiPwmChannel)
+	backingDriver := backingChannel.driver.(*mockPwmDriver)
+
+	assert.Equal(t, 100000, backingDriver.setting[0])
+	assert.True(t, backingDriver.enabled[0])
 }

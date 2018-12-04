@@ -71,13 +71,14 @@ func (r *rpiDriver) init(s settings.Settings) error {
 		r.pins[pin.name] = &pin
 	}
 
-	pwmDriver := pwmdriver.New()
+	pwmDriver := r.newPwmDriver()
 
 	for _, pin := range []int{0, 1} {
 		pwmPin := &rpiPwmChannel{
 			channel:   pin,
 			driver:    pwmDriver,
 			frequency: s.RPI_PWMFreq * 100000,
+			name:      fmt.Sprintf("%d", pin),
 		}
 		r.pwmChannels[pwmPin.name] = pwmPin
 	}

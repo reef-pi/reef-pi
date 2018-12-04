@@ -1,9 +1,8 @@
 package rpi
 
 import (
-	"fmt"
-
 	"github.com/kidoman/embd"
+	"github.com/pkg/errors"
 	"github.com/reef-pi/rpi/pwm"
 )
 
@@ -40,16 +39,25 @@ func newMockDigitalPin(opt interface{}) (embd.DigitalPin, error) {
 
 type mockPwmDriver struct {
 	pwm.Driver
-	setting int
+
+	setting  [2]int
+	freq     [2]int
+	exported [2]bool
+	enabled  [2]bool
 }
 
-func (m *mockPwmDriver) Set(value float64) error {
-	if value < 0 || value > 100 {
-		return fmt.Errorf("value must be 0-100, got %f", value)
+func (m *mockPwmDriver) IsExported(ch int) (bool, error) { return m.exported[ch], nil }
+func (m *mockPwmDriver) Export(ch int) error {
+	if m.exported[ch] {
+		return errors.New("already exported")
 	}
-	m.setting = int(value)
+	m.exported[ch] = true
 	return nil
 }
+func (m *mockPwmDriver) DutyCycle(ch, duty int) error   { m.setting[ch] = duty; return nil }
+func (m *mockPwmDriver) Frequency(ch, freq int) error   { m.freq[ch] = freq; return nil }
+func (m *mockPwmDriver) Enable(ch int) error            { m.enabled[ch] = true; return nil }
+func (m *mockPwmDriver) IsEnabled(ch int) (bool, error) { return m.enabled[ch], nil }
 
 func newMockPWMDriver() pwm.Driver {
 	return &mockPwmDriver{}
