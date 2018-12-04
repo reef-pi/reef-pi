@@ -21,8 +21,24 @@ func (p *rpiPwmChannel) Set(value float64) error {
 		return fmt.Errorf("value must be 0-100, got %f", value)
 	}
 
+	exported, err := p.driver.IsExported(p.channel)
+	if err != nil {
+		return err
+	}
+	if !exported {
+		if err := p.driver.Export(p.channel); err != nil {
+			return err
+		}
+	}
+	if err := p.driver.Frequency(p.channel, p.frequency); err != nil {
+		return err
+	}
+
 	setting := float64(p.frequency/1000) * value
-	return p.driver.DutyCycle(p.channel, int(setting))
+	if err := p.driver.DutyCycle(p.channel, int(setting)); err != nil {
+		return err
+	}
+	return p.driver.Enable(p.channel)
 }
 
 func (p *rpiPwmChannel) Name() string {
