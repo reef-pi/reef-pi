@@ -1,8 +1,9 @@
 package mockrpi
 
 import (
-	"github.com/reef-pi/rpi/i2c"
 	"testing"
+
+	"github.com/reef-pi/rpi/i2c"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
