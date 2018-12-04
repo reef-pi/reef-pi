@@ -41,6 +41,8 @@ var DefaultPCA9685Config = PCA9685Config{
 
 func NewPCA9685(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
 	config := DefaultPCA9685Config
+	config.Frequency = s.PCA9685_PWMFreq
+
 	hwDriver := drivers.NewPCA9685(byte(config.Address), bus)
 	pwm := pca9685Driver{
 		config: config,

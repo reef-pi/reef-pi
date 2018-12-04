@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/reef-pi/reef-pi/controller/drivers/pca9685"
+
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockrpi"
-	"github.com/reef-pi/reef-pi/controller/drivers/pca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/rpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types"
@@ -39,7 +40,9 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, 
 	} else {
 		driverList = []driverBuilder{
 			rpi.NewRPiDriver,
-			pca9685.NewPCA9685,
+		}
+		if s.PCA9685 {
+			driverList = append(driverList, pca9685.NewPCA9685)
 		}
 	}
 	for _, entry := range driverList {
