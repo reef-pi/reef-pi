@@ -65,28 +65,10 @@ func New(version, database string) (*ReefPi, error) {
 		log.Println("ERROR: Invalid  RPI PWM frequency:", s.RPI_PWMFreq, " falling back on default 100Hz")
 		s.RPI_PWMFreq = 100
 	}
-	pi := connectors.NewRPIPWMDriver(s.RPI_PWMFreq, s.Capabilities.DevMode)
-	pConfig := connectors.DefaultPCA9685Config
-	pConfig.DevMode = true
 
-	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), pConfig)
-	if err != nil {
-		log.Println("ERROR: Failed to initialize pca9685 driver with mock i2c bus. Error:", err)
-		return nil, err
-	}
-	if s.PCA9685 {
-		pConfig.DevMode = s.Capabilities.DevMode
-		p, err := connectors.NewPCA9685(bus, pConfig)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize pca9685 driver. Using mock bus, all PCA9685 PWM calls will be ignored")
-			logError(store, "device-pca9685", "Failed to initialize pca9685 driver. Error:"+err.Error())
-		} else {
-			pca9685 = p
-		}
-	}
 	drvrs, err := drivers.NewDrivers(s, bus, store)
 
-	jacks := connectors.NewJacks(drvrs, store, pi, pca9685)
+	jacks := connectors.NewJacks(drvrs, store)
 	outlets := connectors.NewOutlets(drvrs, store)
 	inlets := connectors.NewInlets(drvrs, store)
 

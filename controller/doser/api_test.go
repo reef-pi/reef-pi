@@ -8,7 +8,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 )
 
 func TestDoserAPI(t *testing.T) {
@@ -16,15 +15,9 @@ func TestDoserAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
-	rpi := connectors.NewRPIPWMDriver(100, true)
-	conf := connectors.DefaultPCA9685Config
-	conf.DevMode = true
-	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), conf)
-	if err != nil {
-		t.Error(err)
-	}
+
 	drvrs := drivers.TestDrivers(con.Store())
-	jacks := connectors.NewJacks(drvrs, con.Store(), rpi, pca9685)
+	jacks := connectors.NewJacks(drvrs, con.Store())
 	jacks.Setup()
 	j := connectors.Jack{
 		Name:   "Foo",

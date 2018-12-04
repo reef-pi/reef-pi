@@ -14,14 +14,6 @@ import (
 
 func TestLightingAPI(t *testing.T) {
 
-	rpi := connectors.NewRPIPWMDriver(100, true)
-	conf := connectors.DefaultPCA9685Config
-	conf.DevMode = true
-	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), conf)
-	if err != nil {
-		t.Error(err)
-	}
-
 	config := DefaultConfig
 	config.DevMode = true
 	config.Interval = 1 * time.Second
@@ -30,7 +22,7 @@ func TestLightingAPI(t *testing.T) {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	drvrs := drivers.TestDrivers(con.Store())
-	jacks := connectors.NewJacks(drvrs, con.Store(), rpi, pca9685)
+	jacks := connectors.NewJacks(drvrs, con.Store())
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
