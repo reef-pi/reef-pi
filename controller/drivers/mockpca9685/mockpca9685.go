@@ -55,6 +55,14 @@ func (m *mockDriver) PWMChannels() []driver.PWMChannel {
 	return chs
 }
 
+func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
+	ch, ok := m.channels[name]
+	if !ok {
+		return nil, fmt.Errorf("unknown pwm channel %s", name)
+	}
+	return ch, nil
+}
+
 func (m *mockDriver) OutputPins() []driver.OutputPin {
 	var chs []driver.OutputPin
 	for _, ch := range m.channels {
@@ -73,14 +81,11 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 }
 
 func NewMockDriver(s settings.Settings) (driver.Driver, error) {
-	return &mockDriver{
-		channels: map[string]*mockPwmChannel{
-			"1": {
-				name: "1",
-			},
-			"2": {
-				name: "2",
-			},
-		},
-	}, nil
+	d := &mockDriver{
+		channels: make(map[string]*mockPwmChannel),
+	}
+	for i := 0; i < 8; i++ {
+		d.channels[fmt.Sprintf("%d", i)] = &mockPwmChannel{name: fmt.Sprintf("%d", i)}
+	}
+	return d, nil
 }

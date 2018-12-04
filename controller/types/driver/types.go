@@ -73,4 +73,5 @@ type PWMChannel interface {
 type PWM interface {
 	Driver
 	PWMChannels() []PWMChannel
+	GetPWMChannel(name string) (PWMChannel, error)
 }

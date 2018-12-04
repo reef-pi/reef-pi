@@ -2,6 +2,7 @@ package rpi
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 
@@ -33,5 +34,14 @@ func (r *rpiDriver) PWMChannels() []driver.PWMChannel {
 	for _, ch := range r.pwmChannels {
 		chs = append(chs, ch)
 	}
+	sort.Slice(chs, func(i, j int) bool { return chs[i].Name() < chs[j].Name() })
 	return chs
+}
+
+func (r *rpiDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
+	ch, ok := r.pwmChannels[name]
+	if !ok {
+		return nil, fmt.Errorf("unknown pwm channel %s", name)
+	}
+	return ch, nil
 }

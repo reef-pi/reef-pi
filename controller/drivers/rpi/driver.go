@@ -73,7 +73,7 @@ func (r *rpiDriver) init(s settings.Settings) error {
 
 	pwmDriver := pwmdriver.New()
 
-	for _, pin := range []int{1, 2} {
+	for _, pin := range []int{0, 1} {
 		pwmPin := &rpiPwmChannel{
 			channel:   pin,
 			driver:    pwmDriver,

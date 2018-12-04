@@ -3,11 +3,15 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/types/driver"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const JackBucket = types.JackBucket
@@ -21,41 +25,45 @@ type Jack struct {
 
 type Jacks struct {
 	store   types.Store
+	drivers *drivers.Drivers
 	rpi     types.PWM
 	pca9685 types.PWM
 }
 
-func (j Jack) IsValid() error {
+func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.PWMChannel, error) {
+	drvr, err := drvrs.Get(j.Driver)
+	if err != nil {
+		return nil, errors.Wrapf(err, "driver %s for jack %s not found", j.Driver, j.ID)
+	}
+	pwmDrvr, ok := drvr.(driver.PWM)
+	if !ok {
+		return nil, fmt.Errorf("driver %s is not a PWM driver", j.Driver)
+	}
+	return pwmDrvr.GetPWMChannel(fmt.Sprintf("%d", channel))
+}
+
+func (j Jack) IsValid(drvrs *drivers.Drivers) error {
 	if j.Name == "" {
 		return fmt.Errorf("Jack name can not be empty")
 	}
 	if len(j.Pins) == 0 {
 		return fmt.Errorf("Jack should have pins associated with it")
 	}
-	switch j.Driver {
-	case "pca9685":
-		for _, pin := range j.Pins {
-			if (pin > 15) || (pin < 0) {
-				return fmt.Errorf("Invalid pin:%d", pin)
-			}
+	for _, pin := range j.Pins {
+		_, err := j.pwmChannel(pin, drvrs)
+		if err != nil {
+			return errors.Wrapf(err, "invalid pin %d", pin)
 		}
-	case "rpi":
-		for _, pin := range j.Pins {
-			if (pin > 1) || (pin < 0) {
-				return fmt.Errorf("Invalid pin:%d", pin)
-			}
-		}
-	default:
-		return fmt.Errorf("Driver type can not be anything else other than rpi or pca9685")
 	}
 	return nil
 }
 
-func NewJacks(store types.Store, r, p types.PWM) *Jacks {
+func NewJacks(drivers *drivers.Drivers, store types.Store, r, p types.PWM) *Jacks {
 	return &Jacks{
 		store:   store,
 		rpi:     r,
 		pca9685: p,
+		drivers: drivers,
 	}
 }
 
@@ -99,7 +107,7 @@ func (c *Jacks) List() ([]Jack, error) {
 }
 
 func (c *Jacks) Create(j Jack) error {
-	if err := j.IsValid(); err != nil {
+	if err := j.IsValid(c.drivers); err != nil {
 		return err
 	}
 
@@ -121,7 +129,7 @@ func (c *Jacks) Create(j Jack) error {
 }
 
 func (c *Jacks) Update(id string, j Jack) error {
-	if err := j.IsValid(); err != nil {
+	if err := j.IsValid(c.drivers); err != nil {
 		return err
 	}
 	j.ID = id

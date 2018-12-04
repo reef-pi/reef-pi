@@ -3,12 +3,33 @@ package mock
 import (
 	"fmt"
 	"log"
+	"sort"
 
 	"github.com/pkg/errors"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
+
+type mockPwmChannel struct {
+	name string
+}
+
+func (m *mockPwmChannel) Name() string    { return m.name }
+func (m *mockPwmChannel) Close() error    { return nil }
+func (m *mockPwmChannel) LastState() bool { return false }
+
+func (m *mockPwmChannel) Set(value float64) error {
+	log.Printf("mockpca9685: setting pwm %s to %f", m.name, value)
+	return nil
+}
+
+func (m *mockPwmChannel) Write(on bool) error {
+	if on {
+		return m.Set(100)
+	}
+	return m.Set(0)
+}
 
 type mockPin struct {
 	name   string
@@ -34,8 +55,9 @@ func (m *mockPin) Write(state bool) error {
 func (m *mockPin) LastState() bool { return m.state }
 
 type mockDriver struct {
-	closed bool
-	pins   []*mockPin
+	closed   bool
+	pins     []*mockPin
+	channels []*mockPwmChannel
 }
 
 func (m *mockDriver) Metadata() driver.Metadata {
@@ -45,6 +67,7 @@ func (m *mockDriver) Metadata() driver.Metadata {
 		Capabilities: driver.Capabilities{
 			Input:  true,
 			Output: true,
+			PWM:    true,
 		},
 	}
 }
@@ -88,6 +111,24 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 	return nil, errors.New("unknown output pin specified")
 }
 
+func (m *mockDriver) PWMChannels() []driver.PWMChannel {
+	var chs []driver.PWMChannel
+	for _, ch := range m.channels {
+		chs = append(chs, ch)
+	}
+	sort.Slice(chs, func(i, j int) bool { return chs[i].Name() < chs[j].Name() })
+	return chs
+}
+
+func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
+	for _, ch := range m.channels {
+		if ch.name == name {
+			return ch, nil
+		}
+	}
+	return nil, fmt.Errorf("no channel named %s", name)
+}
+
 func NewMockDriver(s settings.Settings) (driver.Driver, error) {
 	pins := []*mockPin{
 		{
@@ -109,6 +150,17 @@ func NewMockDriver(s settings.Settings) (driver.Driver, error) {
 			name: "GP24",
 		},
 	}
+	chs := []*mockPwmChannel{
+		{
+			name: "0",
+		},
+		{
+			name: "1",
+		},
+	}
 
-	return &mockDriver{pins: pins}, nil
+	return &mockDriver{
+		pins:     pins,
+		channels: chs,
+	}, nil
 }

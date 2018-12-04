@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"strings"
@@ -28,7 +29,8 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
+	drvrs := drivers.TestDrivers(con.Store())
+	jacks := connectors.NewJacks(drvrs, con.Store(), rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}

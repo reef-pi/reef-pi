@@ -3,9 +3,11 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
-	"testing"
 )
 
 func TestJacksAPI(t *testing.T) {
@@ -21,8 +23,9 @@ func TestJacksAPI(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	drvrs := drivers.TestDrivers(store)
 	j := Jack{Name: "Foo", Pins: []int{0}, Driver: "rpi"}
-	jacks := NewJacks(store, rpi, pca9685)
+	jacks := NewJacks(drvrs, store, rpi, pca9685)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}

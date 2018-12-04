@@ -3,6 +3,7 @@ package doser
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
@@ -22,7 +23,8 @@ func TestDoserAPI(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
+	drvrs := drivers.TestDrivers(con.Store())
+	jacks := connectors.NewJacks(drvrs, con.Store(), rpi, pca9685)
 	jacks.Setup()
 	j := connectors.Jack{
 		Name:   "Foo",
