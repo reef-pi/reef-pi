@@ -45,8 +45,9 @@ func NewPCA9685(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
 
 	hwDriver := drivers.NewPCA9685(byte(config.Address), bus)
 	pwm := pca9685Driver{
-		config: config,
-		mu:     &sync.Mutex{},
+		config:   config,
+		mu:       &sync.Mutex{},
+		hwDriver: hwDriver,
 	}
 	if config.Frequency == 0 {
 		log.Println("WARNING: pca9685 driver pwm frequency set to 0. Falling back to 1500")
