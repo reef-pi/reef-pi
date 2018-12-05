@@ -22,6 +22,9 @@ func (m *mockPwmChannel) Close() error    { return nil }
 func (m *mockPwmChannel) LastState() bool { return false }
 
 func (m *mockPwmChannel) Set(value float64) error {
+	if value < 0 || value > 100 {
+		return fmt.Errorf("invalud pwm value %f", value)
+	}
 	log.Printf("mockpca9685: setting pwm %s to %f", m.name, value)
 	return nil
 }
