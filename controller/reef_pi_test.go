@@ -12,6 +12,7 @@ func TestReefPi(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
+	conf.Database = "reef-pi.db"
 	store, err := utils.NewStore(conf.Database)
 	if err != nil {
 		t.Fatal(err)
