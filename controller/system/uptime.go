@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/dustin/go-humanize"
+	humanize "github.com/dustin/go-humanize"
 )
 
 type TimeLog struct {

@@ -3,7 +3,7 @@ package timer
 import (
 	"log"
 
-	"gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v2"
 
 	"github.com/reef-pi/types"
 

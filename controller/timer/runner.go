@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v2"
 
 	"github.com/reef-pi/reef-pi/controller/equipment"
 )
