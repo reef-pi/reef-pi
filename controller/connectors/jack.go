@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
@@ -30,7 +29,7 @@ type Jacks struct {
 func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.PWMChannel, error) {
 	drvr, err := drvrs.Get(j.Driver)
 	if err != nil {
-		return nil, errors.Wrapf(err, "driver %s for jack %s not found", j.Driver, j.ID)
+		return nil, fmt.Errorf("driver %s for jack %s not found: %v", j.Driver, j.ID, err)
 	}
 	pwmDrvr, ok := drvr.(driver.PWM)
 	if !ok {
@@ -49,7 +48,7 @@ func (j Jack) IsValid(drvrs *drivers.Drivers) error {
 	for _, pin := range j.Pins {
 		_, err := j.pwmChannel(pin, drvrs)
 		if err != nil {
-			return errors.Wrapf(err, "invalid pin %d", pin)
+			return fmt.Errorf("invalid pin %d: %v", pin, err)
 		}
 	}
 	return nil
@@ -141,7 +140,7 @@ func (jacks *Jacks) Control(id string, values PinValues) error {
 	for _, pin := range j.Pins {
 		channel, err := j.pwmChannel(pin, jacks.drivers)
 		if err != nil {
-			return errors.Wrapf(err, "pin %d on jack %s has no driver", pin, id)
+			return fmt.Errorf("pin %d on jack %s has no driver: %v", pin, id, err)
 		}
 		v, ok := values[pin]
 		if ok {

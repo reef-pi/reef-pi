@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/pkg/errors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 
@@ -27,7 +26,7 @@ type Outlet struct {
 func (o Outlet) outputPin(drivers *drivers.Drivers) (driver.OutputPin, error) {
 	pindriver, err := drivers.Get("rpi")
 	if err != nil {
-		return nil, errors.Wrapf(err, "inlet %s driver lookup failure", o.Name)
+		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", o.Name, err)
 	}
 	outputDriver, ok := pindriver.(driver.Output)
 	if !ok {
@@ -35,7 +34,7 @@ func (o Outlet) outputPin(drivers *drivers.Drivers) (driver.OutputPin, error) {
 	}
 	outputPin, err := outputDriver.GetOutputPin(fmt.Sprintf("GP%d", o.Pin))
 	if err != nil {
-		return nil, errors.Wrapf(err, "no valid input pin %d", o.Pin)
+		return nil, fmt.Errorf("no valid input pin %d: %v", o.Pin, err)
 	}
 	return outputPin, nil
 }
@@ -45,7 +44,7 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 		return fmt.Errorf("Outlet name can not be empty")
 	}
 	if _, err := o.outputPin(drivers); err != nil {
-		return errors.Wrapf(err, "outlet %s did not get associated with a driver pin", o.Name)
+		return fmt.Errorf("outlet %s did not get associated with a driver pin", o.Name)
 	}
 	return nil
 }
@@ -75,7 +74,7 @@ func (c *Outlets) Configure(id string, on bool) error {
 
 	pin, err := o.outputPin(c.drivers)
 	if err != nil {
-		return errors.Wrapf(err, "can't update %s - can't get output pin", id)
+		return fmt.Errorf("can't update %s - can't get output pin", id)
 	}
 
 	if o.Reverse {

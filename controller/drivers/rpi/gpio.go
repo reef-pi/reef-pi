@@ -5,7 +5,6 @@ import (
 	"sort"
 
 	"github.com/kidoman/embd"
-	"github.com/pkg/errors"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 
@@ -59,7 +58,7 @@ func (p *rpiPin) Close() error {
 func (p *rpiPin) Read() (bool, error) {
 	err := p.digitalPin.SetDirection(embd.In)
 	if err != nil {
-		return false, errors.Wrapf(err, "can't read input from channel %d", p.pin)
+		return false, fmt.Errorf("can't read input from channel %d: %v", p.pin, err)
 	}
 
 	v, err := p.digitalPin.Read()
@@ -72,7 +71,7 @@ func (p *rpiPin) Read() (bool, error) {
 func (p *rpiPin) Write(state bool) error {
 	err := p.digitalPin.SetDirection(embd.Out)
 	if err != nil {
-		return errors.Wrapf(err, "can't set output on channel %d", p.pin)
+		return fmt.Errorf("can't set output on channel %d: %v", p.pin, err)
 	}
 	value := 0
 	if state {

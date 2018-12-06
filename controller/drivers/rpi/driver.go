@@ -11,7 +11,6 @@ import (
 	pwmdriver "github.com/reef-pi/rpi/pwm"
 
 	"github.com/kidoman/embd"
-	"github.com/pkg/errors"
 )
 
 type rpiDriver struct {
@@ -38,7 +37,7 @@ func (r *rpiDriver) Close() error {
 	for _, pin := range r.pins {
 		err := pin.Close()
 		if err != nil {
-			return errors.Wrapf(err, "can't close rpi driver due to channel %s", pin.Name())
+			return fmt.Errorf("can't close rpi driver due to channel %s", pin.Name())
 		}
 	}
 	return nil
@@ -62,7 +61,7 @@ func (r *rpiDriver) init(s settings.Settings) error {
 		digitalPin, err := r.newDigitalPin(pin)
 
 		if err != nil {
-			return errors.Wrapf(err, "can't build rpi channel %d", pin)
+			return fmt.Errorf("can't build rpi channel %d: %v", pin, err)
 		}
 
 		pin := rpiPin{

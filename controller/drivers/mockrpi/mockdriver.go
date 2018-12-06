@@ -1,13 +1,12 @@
 package mockrpi
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sort"
 
 	"github.com/reef-pi/rpi/i2c"
-
-	"github.com/pkg/errors"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types/driver"

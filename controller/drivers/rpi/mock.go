@@ -1,8 +1,9 @@
 package rpi
 
 import (
+	"errors"
+
 	"github.com/kidoman/embd"
-	"github.com/pkg/errors"
 	"github.com/reef-pi/rpi/pwm"
 )
 

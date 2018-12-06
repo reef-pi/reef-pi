@@ -2,11 +2,11 @@ package connectors
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
@@ -40,7 +40,7 @@ func (e *Inlets) LoadAPI(r *mux.Router) {
 func (i Inlet) inputPin(drivers *drivers.Drivers) (driver.InputPin, error) {
 	pindriver, err := drivers.Get("rpi")
 	if err != nil {
-		return nil, errors.Wrapf(err, "inlet %s driver lookup failure", i.Name)
+		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", i.Name, err)
 	}
 	inputDriver, ok := pindriver.(driver.Input)
 	if !ok {
@@ -48,17 +48,17 @@ func (i Inlet) inputPin(drivers *drivers.Drivers) (driver.InputPin, error) {
 	}
 	inputPin, err := inputDriver.GetInputPin(fmt.Sprintf("GP%d", i.Pin))
 	if err != nil {
-		return nil, errors.Wrapf(err, "no valid input pin %d", i.Pin)
+		return nil, fmt.Errorf("no valid input pin %d: %v", i.Pin, err)
 	}
 	return inputPin, nil
 }
 
 func (i Inlet) IsValid(drivers *drivers.Drivers) error {
 	if i.Name == "" {
-		return fmt.Errorf("Inlet name can not be empty")
+		return errors.New("Inlet name can not be empty")
 	}
 	if _, err := i.inputPin(drivers); err != nil {
-		return errors.Wrapf(err, "inlet %s did not get associated with a driver pin", i.Name)
+		return fmt.Errorf("inlet %s did not get associated with a driver pin: %v", i.Name, err)
 	}
 	return nil
 }
@@ -82,7 +82,7 @@ func (c *Inlets) Read(id string) (int, error) {
 
 	inputPin, err := i.inputPin(c.drivers)
 	if err != nil {
-		return 0, errors.Wrap(err, "can't perform read")
+		return 0, fmt.Errorf("can't perform read: %v", err)
 	}
 	v, err := inputPin.Read()
 
