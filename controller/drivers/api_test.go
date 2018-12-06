@@ -6,7 +6,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/types"
 	i2c2 "github.com/reef-pi/rpi/i2c"
-	"github.com/stretchr/testify/assert"
 )
 
 type mockStore struct {
@@ -19,30 +18,44 @@ func newDrivers(t *testing.T) *Drivers {
 	i2c := i2c2.MockBus()
 
 	driver, err := NewDrivers(s, i2c, &mockStore{})
-	assert.NoError(t, err)
+	if err != nil {
+		t.Fatalf("drivers store could not be built")
+	}
 
 	return driver
 }
 
 func TestNewDrivers(t *testing.T) {
 	driver := newDrivers(t)
-
-	assert.Len(t, driver.drivers, 2)
+	if len(driver.drivers) != 2 {
+		t.Error("unexpected number of mock drivers returned")
+	}
 }
 
 func TestDrivers_List(t *testing.T) {
 	driver := newDrivers(t)
 	meta, err := driver.List()
-	assert.NoError(t, err)
+	if err != nil {
+		t.Errorf("unexpected error returning drivers %v", err)
+	}
 
-	assert.Len(t, meta, 2)
-	assert.Equal(t, "pca9685", meta[0].Name)
+	if len(meta) != 2 {
+		t.Error("list API didn't return two drivers")
+	}
+
+	if meta[0].Name != "pca9685" {
+		t.Error("driver list did not return sorted results")
+	}
 }
 
 func TestDrivers_Get(t *testing.T) {
 	drivers := newDrivers(t)
 	driver, err := drivers.Get("rpi")
-	assert.NoError(t, err)
+	if err != nil {
+		t.Errorf("couldn't get rpi driver due to error %v", err)
+	}
 
-	assert.Equal(t, "rpi", driver.Metadata().Name)
+	if driver.Metadata().Name != "rpi" {
+		t.Error("rpi driver isn't called rpi")
+	}
 }
