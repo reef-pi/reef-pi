@@ -8,8 +8,9 @@ import (
 	"time"
 
 	"github.com/reef-pi/drivers"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Probe struct {

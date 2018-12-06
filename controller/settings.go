@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Settings struct {

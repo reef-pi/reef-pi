@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
 )
 
 const Bucket = types.EquipmentBucket

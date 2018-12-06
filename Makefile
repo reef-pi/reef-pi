@@ -61,6 +61,8 @@ go-get:
 	go get -u github.com/reef-pi/adafruitio
 	go get -u github.com/nfnt/resize
 	go get -u github.com/coreos/bbolt
+        # Tools for linting, development
+	go get -u golang.org/x/tools/cmd/goimports
 ifeq ($(OS), Windows_NT)
 	go get -u github.com/StackExchange/wmi
 endif
@@ -68,6 +70,10 @@ endif
 .PHONY: vet
 vet:
 	go vet ./...
+
+.PHONY: imports
+imports:
+	goimports -w -local "github.com/reef-pi" ./
 
 .PHONY: build
 build: clean go-get test bin

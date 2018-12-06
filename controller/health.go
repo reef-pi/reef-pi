@@ -7,10 +7,12 @@ import (
 	"math"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const HealthStatsKey = "health_stats"

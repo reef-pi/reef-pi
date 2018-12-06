@@ -3,9 +3,11 @@ package timer
 import (
 	"log"
 
-	"github.com/reef-pi/reef-pi/controller/equipment"
-	"github.com/reef-pi/types"
 	"gopkg.in/robfig/cron.v2"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/equipment"
 )
 
 type Controller struct {

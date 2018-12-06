@@ -5,10 +5,11 @@ import (
 	"log"
 	"sync"
 
+	"github.com/reef-pi/types"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
 )
 
 const Bucket = types.ATOBucket

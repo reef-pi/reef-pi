@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/types"
 	"gopkg.in/robfig/cron.v2"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
 )
 
 type Pump struct {

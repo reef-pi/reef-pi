@@ -7,6 +7,7 @@ import (
 	"net/http/pprof"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

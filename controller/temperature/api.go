@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

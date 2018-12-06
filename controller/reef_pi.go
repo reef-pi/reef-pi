@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
+
 	"github.com/reef-pi/rpi/i2c"
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = types.ReefPiBucket

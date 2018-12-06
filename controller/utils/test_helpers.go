@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/types"
 )
 

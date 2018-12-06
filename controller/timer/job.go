@@ -6,8 +6,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/reef-pi/types"
 	"gopkg.in/robfig/cron.v2"
+
+	"github.com/reef-pi/types"
 )
 
 const Bucket = types.TimerBucket

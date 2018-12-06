@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestPhAPI(t *testing.T) {

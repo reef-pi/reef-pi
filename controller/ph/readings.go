@@ -3,8 +3,9 @@ package ph
 import (
 	"fmt"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const ReadingsBucket = "ph_readings"

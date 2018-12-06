@@ -8,8 +8,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
+
 	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const InletBucket = types.InletBucket
