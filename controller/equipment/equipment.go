@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/types"
 )
 
 const Bucket = types.EquipmentBucket

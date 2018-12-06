@@ -3,9 +3,10 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
-	"testing"
 )
 
 func TestJacksAPI(t *testing.T) {

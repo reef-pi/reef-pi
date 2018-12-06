@@ -2,9 +2,10 @@ package macro
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"net/http"
 )
 
 func (t *Subsystem) LoadAPI(r *mux.Router) {

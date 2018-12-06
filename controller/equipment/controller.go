@@ -1,10 +1,11 @@
 package equipment
 
 import (
+	"log"
+
 	"github.com/kidoman/embd"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"log"
+	"github.com/reef-pi/types"
 )
 
 type Config struct {

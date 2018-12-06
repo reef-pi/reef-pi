@@ -2,10 +2,11 @@ package timer
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/equipment"
-	"gopkg.in/robfig/cron.v2"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/equipment"
+	"gopkg.in/robfig/cron.v2"
 )
 
 type UpdateEquipment struct {

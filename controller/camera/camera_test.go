@@ -3,10 +3,11 @@ package camera
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestCamera(t *testing.T) {

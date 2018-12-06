@@ -2,11 +2,12 @@ package lighting
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/rpi/i2c"
 	"sync"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/types"
 )
 
 const Bucket = types.LightingBucket

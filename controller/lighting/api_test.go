@@ -3,12 +3,13 @@ package lighting
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 )
 
 func TestLightingAPI(t *testing.T) {

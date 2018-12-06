@@ -2,8 +2,9 @@ package controller
 
 import (
 	"bytes"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAuth(t *testing.T) {

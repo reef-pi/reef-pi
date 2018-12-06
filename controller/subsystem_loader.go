@@ -2,6 +2,9 @@ package controller
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller/ato"
 	"github.com/reef-pi/reef-pi/controller/camera"
 	"github.com/reef-pi/reef-pi/controller/connectors"
@@ -14,8 +17,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/temperature"
 	"github.com/reef-pi/reef-pi/controller/timer"
 	"github.com/reef-pi/rpi/i2c"
-	"log"
-	"time"
 )
 
 func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {

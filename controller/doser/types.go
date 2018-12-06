@@ -1,9 +1,10 @@
 package doser
 
 import (
-	"gopkg.in/robfig/cron.v2"
 	"strings"
 	"time"
+
+	"gopkg.in/robfig/cron.v2"
 )
 
 type DosingRegiment struct {

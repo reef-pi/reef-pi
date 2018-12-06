@@ -1,8 +1,9 @@
 package macro
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestSubsystem(t *testing.T) {

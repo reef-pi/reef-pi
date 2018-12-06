@@ -1,10 +1,11 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/equipment"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"gopkg.in/robfig/cron.v2"
 	"log"
+
+	"github.com/reef-pi/reef-pi/controller/equipment"
+	"github.com/reef-pi/types"
+	"gopkg.in/robfig/cron.v2"
 )
 
 type Controller struct {

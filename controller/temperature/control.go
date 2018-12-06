@@ -2,9 +2,10 @@ package temperature
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (c *Controller) Check(tc TC) {

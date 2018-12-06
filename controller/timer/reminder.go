@@ -1,7 +1,7 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/types"
 )
 
 type Reminder struct {

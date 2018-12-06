@@ -1,8 +1,8 @@
 package temperature
 
 import (
-	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
 )
 
 type Measurement struct {

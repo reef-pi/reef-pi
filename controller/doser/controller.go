@@ -2,12 +2,13 @@ package doser
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
+	"gopkg.in/robfig/cron.v2"
 )
 
 const Bucket = types.DoserBucket

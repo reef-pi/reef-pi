@@ -2,10 +2,11 @@ package camera
 
 import (
 	"encoding/json"
-	"github.com/nfnt/resize"
 	"image/png"
 	"os"
 	"path/filepath"
+
+	"github.com/nfnt/resize"
 )
 
 type ImageItem struct {

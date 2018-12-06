@@ -3,10 +3,11 @@ package temperature
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
 )
 
 type TC struct {

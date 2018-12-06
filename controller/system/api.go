@@ -2,11 +2,12 @@ package system
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"net/http/pprof"
+
+	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {

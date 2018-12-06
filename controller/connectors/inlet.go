@@ -3,12 +3,13 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
 )
 
 const InletBucket = types.InletBucket

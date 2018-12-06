@@ -3,10 +3,11 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"gopkg.in/robfig/cron.v2"
 	"log"
 	"strings"
+
+	"github.com/reef-pi/types"
+	"gopkg.in/robfig/cron.v2"
 )
 
 const Bucket = types.TimerBucket
