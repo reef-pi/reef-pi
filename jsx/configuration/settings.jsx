@@ -18,7 +18,8 @@ class settings extends React.Component {
         interface: '',
         address: '',
         rpi_pwm_freq: 100,
-        pca9685_pwm_freq: 1500
+        pca9685_pwm_freq: 1500,
+        pca9685_address: 64,
       },
       updated: false
     }
@@ -158,6 +159,10 @@ class settings extends React.Component {
             </div>
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq')}</div>
+              <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_address')}</div>
+
+            </div>
+            <div className='row'>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='updateNotification'>Notification</label>

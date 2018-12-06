@@ -14,6 +14,7 @@ const SettingsSchema = Yup.object().shape({
   }),
   https: Yup.bool(),
   pca9685: Yup.bool(),
+  pca9685_address: Yup.number().positive().integer(),
   pprof: Yup.bool(),
   rpi_pwm_freq: Yup.number().positive().integer(),
   pca9685_pwm_freq: Yup.number().positive().integer()
