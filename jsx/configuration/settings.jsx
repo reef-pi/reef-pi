@@ -19,7 +19,7 @@ class settings extends React.Component {
         address: '',
         rpi_pwm_freq: 100,
         pca9685_pwm_freq: 1500,
-        pca9685_address: 64,
+        pca9685_address: 64
       },
       updated: false
     }
