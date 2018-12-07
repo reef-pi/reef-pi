@@ -1,8 +1,9 @@
 package connectors
 
 import (
-	"github.com/reef-pi/rpi/i2c"
 	"testing"
+
+	"github.com/reef-pi/rpi/i2c"
 )
 
 func TestPCA9685(t *testing.T) {

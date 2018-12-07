@@ -2,11 +2,12 @@ package connectors
 
 import (
 	"fmt"
-	"github.com/reef-pi/drivers"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
+
+	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/types"
 )
 
 type PCA9685Config struct {

@@ -4,9 +4,10 @@ import (
 	"container/ring"
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"sort"
 	"sync"
+
+	"github.com/reef-pi/types"
 )
 
 type Stats struct {

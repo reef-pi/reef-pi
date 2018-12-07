@@ -3,14 +3,16 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/types"
 )
 
 type mockSubsystem struct{}

@@ -1,9 +1,10 @@
 package system
 
 import (
-	"github.com/dustin/go-humanize"
 	"log"
 	"time"
+
+	humanize "github.com/dustin/go-humanize"
 )
 
 type TimeLog struct {

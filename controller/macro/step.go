@@ -3,8 +3,9 @@ package macro
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"time"
+
+	"github.com/reef-pi/types"
 )
 
 var stepTypes = []string{

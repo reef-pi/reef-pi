@@ -2,8 +2,9 @@ package camera
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"time"
+
+	"github.com/reef-pi/types"
 )
 
 const DefaulCaptureFlags = ""

@@ -2,8 +2,9 @@ package macro
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"sync"
+
+	"github.com/reef-pi/types"
 )
 
 const Bucket = types.MacroBucket

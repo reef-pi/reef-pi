@@ -2,11 +2,13 @@ package ph
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
+
+	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = types.PhBucket

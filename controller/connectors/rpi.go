@@ -2,8 +2,9 @@ package connectors
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
+
 	"github.com/reef-pi/rpi/pwm"
+	"github.com/reef-pi/types"
 )
 
 type rpiDriver struct {

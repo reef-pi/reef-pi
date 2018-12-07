@@ -2,9 +2,10 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Credentials struct {

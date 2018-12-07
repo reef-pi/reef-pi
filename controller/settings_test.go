@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"os"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestDevModeDetection(t *testing.T) {

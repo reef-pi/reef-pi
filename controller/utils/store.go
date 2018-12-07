@@ -3,10 +3,11 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	bolt "github.com/coreos/bbolt"
 	"log"
 	"strconv"
 	"time"
+
+	bolt "github.com/coreos/bbolt"
 )
 
 type store struct {

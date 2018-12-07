@@ -3,13 +3,16 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/shirou/gopsutil/load"
-	"github.com/shirou/gopsutil/mem"
 	"log"
 	"math"
 	"time"
+
+	"github.com/shirou/gopsutil/load"
+	"github.com/shirou/gopsutil/mem"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const HealthStatsKey = "health_stats"

@@ -2,11 +2,13 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Error struct {

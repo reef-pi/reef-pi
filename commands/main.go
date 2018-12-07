@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller"
 	"os"
 	"strings"
+
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 var Version string
