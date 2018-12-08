@@ -23,6 +23,7 @@ type Settings struct {
 	Pprof           bool              `json:"pprof"`
 	RPI_PWMFreq     int               `json:"rpi_pwm_freq"`
 	PCA9685_PWMFreq int               `json:"pca9685_pwm_freq"`
+	PCA9685_Address int               `json:"pca9685_address"`
 }
 
 var DefaultSettings = Settings{
@@ -32,6 +33,7 @@ var DefaultSettings = Settings{
 	Capabilities:    DefaultCapabilities,
 	RPI_PWMFreq:     100,
 	PCA9685_PWMFreq: 1500,
+	PCA9685_Address: 0x40,
 	HealthCheck: HealthCheckNotify{
 		MaxMemory: 500,
 		MaxCPU:    2,

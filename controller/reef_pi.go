@@ -76,6 +76,7 @@ func New(version, database string) (*ReefPi, error) {
 	}
 	if s.PCA9685 {
 		pConfig.DevMode = s.Capabilities.DevMode
+		pConfig.Address = s.PCA9685_Address
 		p, err := connectors.NewPCA9685(bus, pConfig)
 		if err != nil {
 			log.Println("ERROR: Failed to initialize pca9685 driver. Using mock bus, all PCA9685 PWM calls will be ignored")
