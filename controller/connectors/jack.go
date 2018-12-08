@@ -9,16 +9,9 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/reef-pi/reef-pi/controller/drivers"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/types/driver"
-
-	"net/http"
-
-	"github.com/gorilla/mux"
-
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
+	"github.com/reef-pi/types/driver"
 )
 
 const JackBucket = types.JackBucket
@@ -27,7 +20,7 @@ type Jack struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	Pins   []int  `json:"pins"`
-	Driver string `json:"driver"` // can be either rpi or pca9685
+	Driver string `json:"driver"` // can be either hal or pca9685
 }
 
 type Jacks struct {

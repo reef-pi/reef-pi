@@ -3,13 +3,11 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
-
-	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/utils"
-
 	"net/http"
+
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

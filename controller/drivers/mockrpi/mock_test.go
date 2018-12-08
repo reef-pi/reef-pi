@@ -6,7 +6,7 @@ import (
 	"github.com/reef-pi/rpi/i2c"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/types/driver"
+	"github.com/reef-pi/types/driver"
 )
 
 func TestNewMockDriver(t *testing.T) {

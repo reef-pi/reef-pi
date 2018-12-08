@@ -7,8 +7,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAPI(t *testing.T) {

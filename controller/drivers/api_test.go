@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/types"
 	i2c2 "github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/types"
 )
 
 type mockStore struct {

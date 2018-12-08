@@ -2,8 +2,8 @@ package drivers
 
 import (
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/types"
 )
 
 func TestDrivers(store types.Store) *Drivers {

@@ -9,16 +9,9 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/reef-pi/reef-pi/controller/drivers"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/types/driver"
-
-	"net/http"
-
-	"github.com/gorilla/mux"
-
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
+	"github.com/reef-pi/types/driver"
 )
 
 const InletBucket = types.InletBucket

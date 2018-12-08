@@ -6,8 +6,6 @@ import (
 
 	"net/http"
 	"testing"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestReefPi(t *testing.T) {
