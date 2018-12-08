@@ -12,6 +12,7 @@ import (
 
 func loadSettings(store types.Store) (settings.Settings, error) {
 	var s settings.Settings
+
 	if err := store.Get(Bucket, "settings", &s); err != nil {
 		return s, err
 	}
