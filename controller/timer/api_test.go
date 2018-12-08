@@ -3,12 +3,13 @@ package timer
 import (
 	"bytes"
 	"encoding/json"
+	"strings"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"strings"
-	"testing"
 )
 
 func TestTimerController(t *testing.T) {

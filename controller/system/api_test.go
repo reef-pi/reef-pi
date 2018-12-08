@@ -2,11 +2,12 @@ package system
 
 import (
 	"bytes"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestSystemController(t *testing.T) {

@@ -1,2 +1,2 @@
 ---
-database: "reef-pi.db"
+database: /var/lib/reef-pi/reef-pi.db

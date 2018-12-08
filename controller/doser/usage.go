@@ -1,7 +1,8 @@
 package doser
 
 import (
-	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/types"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

@@ -2,8 +2,9 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"testing"
+
+	"github.com/reef-pi/types"
 )
 
 type testMetric struct {

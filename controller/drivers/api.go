@@ -16,6 +16,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/rpi/i2c"
 )
 

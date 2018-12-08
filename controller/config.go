@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Config struct {

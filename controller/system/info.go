@@ -2,11 +2,12 @@ package system
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net"
 	"strings"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Summary struct {

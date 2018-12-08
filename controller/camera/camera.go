@@ -2,13 +2,15 @@ package camera
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = types.CameraBucket

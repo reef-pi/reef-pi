@@ -1,8 +1,9 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestReminderRunner(t *testing.T) {

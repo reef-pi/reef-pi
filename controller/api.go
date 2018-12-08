@@ -1,10 +1,12 @@
 package controller
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 var DefaultCredentials = Credentials{

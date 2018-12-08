@@ -1,9 +1,10 @@
 package temperature
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"testing"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestUsage(t *testing.T) {

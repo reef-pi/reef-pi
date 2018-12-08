@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestHealthChecker(t *testing.T) {

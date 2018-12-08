@@ -1,12 +1,17 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/reef-pi/controller/utils"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func loadSettings(store types.Store) (settings.Settings, error) {
@@ -55,4 +60,3 @@ func (r *ReefPi) UpdateSettings(w http.ResponseWriter, req *http.Request) {
 	}
 	utils.JSONUpdateResponse(&s, fn, w, req)
 }
-

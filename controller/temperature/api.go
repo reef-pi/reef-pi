@@ -1,10 +1,12 @@
 package temperature
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
 	"path/filepath"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (t *Controller) LoadAPI(r *mux.Router) {

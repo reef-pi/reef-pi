@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {
@@ -11,4 +12,3 @@ func (r *ReefPi) GetCapabilities(w http.ResponseWriter, req *http.Request) {
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
-

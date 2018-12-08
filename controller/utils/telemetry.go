@@ -1,12 +1,13 @@
 package utils
 
 import (
-	"github.com/reef-pi/adafruitio"
-	"github.com/reef-pi/reef-pi/controller/types"
 	"log"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/reef-pi/adafruitio"
+	"github.com/reef-pi/types"
 )
 
 type AlertStats struct {

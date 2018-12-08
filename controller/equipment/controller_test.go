@@ -3,9 +3,10 @@ package equipment
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/drivers"
 	"strings"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/drivers"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"

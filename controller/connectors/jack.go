@@ -3,12 +3,21 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
+
 	"net/http"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/reef-pi/controller/types/driver"
+
+	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/types"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

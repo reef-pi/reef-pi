@@ -3,11 +3,12 @@ package ato
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
 )
 
 func TestController(t *testing.T) {

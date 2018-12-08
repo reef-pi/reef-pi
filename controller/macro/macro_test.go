@@ -3,9 +3,10 @@ package macro
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"strings"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestMacro(t *testing.T) {

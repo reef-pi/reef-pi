@@ -9,7 +9,15 @@ import (
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/reef-pi/controller/types"
+
+	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/types"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/reef-pi/reef-pi/controller/types"
+	"github.com/reef-pi/types"
 )
 
 const Bucket = "system"

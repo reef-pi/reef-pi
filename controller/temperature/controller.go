@@ -2,11 +2,13 @@ package temperature
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/equipment"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/equipment"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = types.TemperatureBucket

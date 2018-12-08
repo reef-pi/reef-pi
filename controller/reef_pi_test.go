@@ -3,8 +3,11 @@ package controller
 import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
+
 	"net/http"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestReefPi(t *testing.T) {
@@ -13,6 +16,7 @@ func TestReefPi(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
+	conf.Database = "reef-pi.db"
 	store, err := utils.NewStore(conf.Database)
 	if err != nil {
 		t.Fatal(err)

@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/kidoman/embd"
+
 	"github.com/reef-pi/reef-pi/controller/types/driver"
 )
 

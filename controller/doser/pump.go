@@ -2,10 +2,13 @@ package doser
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/types"
-	"gopkg.in/robfig/cron.v2"
 	"log"
+
+	cron "gopkg.in/robfig/cron.v2"
+
+	"github.com/reef-pi/types"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
 )
 
 type Pump struct {

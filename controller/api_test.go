@@ -3,9 +3,12 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAPI(t *testing.T) {
