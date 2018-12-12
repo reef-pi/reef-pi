@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"sort"
 
+	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockrpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	rpihal "github.com/reef-pi/rpi/hal"
 	"github.com/reef-pi/types"
 	"github.com/reef-pi/types/driver"
 
@@ -37,10 +39,19 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, 
 		}
 	} else {
 		driverList = []driverBuilder{
-			//hal.NewRPiDriver,
+			func(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
+				return rpihal.New(rpihal.Settings{RPI_PWMFreq: s.RPI_PWMFreq}, bus)
+			},
 		}
 		if s.PCA9685 {
-			//driverList = append(driverList, pca9685.NewPCA9685)
+
+			driverList = append(driverList,
+				func(settings settings.Settings, bus i2c.Bus) (i driver.Driver, e error) {
+					config := pcahal.DefaultPCA9685Config
+					config.Address = s.PCA9685_Address
+					config.Frequency = s.PCA9685_PWMFreq
+					return pcahal.New(config, bus)
+				})
 		}
 	}
 	for _, entry := range driverList {
