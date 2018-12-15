@@ -104,6 +104,8 @@ func (d *Drivers) register(s settings.Settings, b i2c.Bus, f Factory) error {
 	if _, ok := d.drivers[meta.Name]; ok {
 		return fmt.Errorf("driver name already taken: %s", meta.Name)
 	}
+	d.Lock()
 	d.drivers[meta.Name] = r
+	d.Unlock()
 	return nil
 }
