@@ -67,8 +67,8 @@ func TestMockDriver_InputPins(t *testing.T) {
 
 	in := drvr.(driver.Input)
 	pins := in.InputPins()
-	if l := len(pins); l != 6 {
-		t.Errorf("unexpected number of pins, got %d", l)
+	if l := len(pins); l != 26 {
+		t.Errorf("unexpected number of pins, got %d, expected: %d", l, 26)
 	}
 }
 
@@ -102,8 +102,8 @@ func TestMockDriver_OutputPins(t *testing.T) {
 	in := drvr.(driver.Output)
 	pins := in.OutputPins()
 
-	if l := len(pins); l != 6 {
-		t.Errorf("expected 6 pins, got %d", l)
+	if l := len(pins); l != 26 {
+		t.Errorf("expected 26 pins, got %d", l)
 	}
 }
 
