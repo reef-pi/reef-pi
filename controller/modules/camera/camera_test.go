@@ -46,7 +46,7 @@ func TestCamera(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	p, err := filepath.Abs(cwd + "../../../test")
+	p, err := filepath.Abs(cwd + "../../../../test")
 	if err != nil {
 		t.Error(err)
 	}
