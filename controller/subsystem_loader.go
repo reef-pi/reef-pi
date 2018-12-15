@@ -8,12 +8,12 @@ import (
 	"github.com/reef-pi/rpi/i2c"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/doser"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/lighting"
 	"github.com/reef-pi/reef-pi/controller/macro"
 	"github.com/reef-pi/reef-pi/controller/modules/ato"
 	"github.com/reef-pi/reef-pi/controller/modules/camera"
+	"github.com/reef-pi/reef-pi/controller/modules/doser"
 	"github.com/reef-pi/reef-pi/controller/ph"
 	"github.com/reef-pi/reef-pi/controller/system"
 	"github.com/reef-pi/reef-pi/controller/temperature"
