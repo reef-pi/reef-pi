@@ -8,13 +8,13 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
-	"github.com/reef-pi/types/driver"
 )
 
-const InletBucket = types.InletBucket
+const InletBucket = storage.InletBucket
 
 type Inlet struct {
 	ID        string `json:"id"`
@@ -25,7 +25,7 @@ type Inlet struct {
 }
 
 type Inlets struct {
-	store   types.Store
+	store   storage.Store
 	drivers *drivers.Drivers
 }
 

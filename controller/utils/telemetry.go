@@ -7,8 +7,9 @@ import (
 	"time"
 
 	"github.com/reef-pi/adafruitio"
-	"github.com/reef-pi/types"
 )
+
+type ErrorLogger func(string, string) error
 
 type AlertStats struct {
 	Count        int       `json:"count"`
