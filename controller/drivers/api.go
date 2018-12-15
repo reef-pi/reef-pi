@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"sync"
 
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
@@ -21,9 +22,10 @@ import (
 )
 
 // TODO(theatrus): special casing i2c feels weird here
-type driverBuilder func(settings settings.Settings, bus i2c.Bus) (driver.Driver, error)
+type Factory func(settings settings.Settings, bus i2c.Bus) (driver.Driver, error)
 
 type Drivers struct {
+	sync.Mutex
 	drivers map[string]driver.Driver
 }
 
@@ -31,32 +33,31 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store types.Store) (*Drivers, 
 	d := &Drivers{
 		drivers: make(map[string]driver.Driver),
 	}
-	var driverList []driverBuilder
 	if s.Capabilities.DevMode {
-		driverList = []driverBuilder{
-			mockrpi.NewMockDriver,
-			mockpca9685.NewMockDriver,
+		if err := d.register(s, bus, mockrpi.NewMockDriver); err != nil {
+			return nil, err
 		}
-	} else {
-		driverList = []driverBuilder{
-			func(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
-				return rpihal.New(rpihal.Settings{RPI_PWMFreq: s.RPI_PWMFreq}, bus)
-			},
+		if err := d.register(s, bus, mockpca9685.NewMockDriver); err != nil {
+			return nil, err
 		}
-		if s.PCA9685 {
-
-			driverList = append(driverList,
-				func(settings settings.Settings, bus i2c.Bus) (i driver.Driver, e error) {
-					config := pcahal.DefaultPCA9685Config
-					config.Address = s.PCA9685_Address
-					config.Frequency = s.PCA9685_PWMFreq
-					return pcahal.New(config, bus)
-				})
-		}
+		return d, nil
 	}
-	for _, entry := range driverList {
-		err := d.register(s, bus, entry)
-		if err != nil {
+
+	rpiFactory := func(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
+		return rpihal.New(rpihal.Settings{RPI_PWMFreq: s.RPI_PWMFreq}, bus)
+	}
+
+	if err := d.register(s, bus, rpiFactory); err != nil {
+		return nil, err
+	}
+	if s.PCA9685 {
+		factory := func(settings settings.Settings, bus i2c.Bus) (i driver.Driver, e error) {
+			config := pcahal.DefaultPCA9685Config
+			config.Address = s.PCA9685_Address
+			config.Frequency = s.PCA9685_PWMFreq
+			return pcahal.New(config, bus)
+		}
+		if err := d.register(s, bus, factory); err != nil {
 			return nil, err
 		}
 	}
@@ -91,7 +92,7 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	utils.JSONListResponse(fn, w, r)
 }
 
-func (d *Drivers) register(s settings.Settings, b i2c.Bus, f driverBuilder) error {
+func (d *Drivers) register(s settings.Settings, b i2c.Bus, f Factory) error {
 	r, err := f(s, b)
 	if err != nil {
 		return err
@@ -103,6 +104,8 @@ func (d *Drivers) register(s settings.Settings, b i2c.Bus, f driverBuilder) erro
 	if _, ok := d.drivers[meta.Name]; ok {
 		return fmt.Errorf("driver name already taken: %s", meta.Name)
 	}
+	d.Lock()
 	d.drivers[meta.Name] = r
+	d.Unlock()
 	return nil
 }
