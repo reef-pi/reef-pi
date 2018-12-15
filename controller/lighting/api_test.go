@@ -7,21 +7,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/rpi/i2c"
 )
 
 func TestLightingAPI(t *testing.T) {
-
-	rpi := connectors.NewRPIPWMDriver(100, true)
-	conf := connectors.DefaultPCA9685Config
-	conf.DevMode = true
-	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), conf)
-	if err != nil {
-		t.Error(err)
-	}
 
 	config := DefaultConfig
 	config.DevMode = true
@@ -30,7 +22,8 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	jacks := connectors.NewJacks(con.Store(), rpi, pca9685)
+	drvrs := drivers.TestDrivers(con.Store())
+	jacks := connectors.NewJacks(drvrs, con.Store())
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}

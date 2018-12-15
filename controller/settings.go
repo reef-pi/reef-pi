@@ -5,82 +5,53 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/types"
 )
 
-type Settings struct {
-	Name            string            `json:"name"`
-	Interface       string            `json:"interface"`
-	Address         string            `json:"address"`
-	Display         bool              `json:"display"`
-	Notification    bool              `json:"notification"`
-	Capabilities    Capabilities      `json:"capabilities"`
-	HealthCheck     HealthCheckNotify `json:"health_check"`
-	HTTPS           bool              `json:"https"`
-	PCA9685         bool              `json:"pca9685"`
-	Pprof           bool              `json:"pprof"`
-	RPI_PWMFreq     int               `json:"rpi_pwm_freq"`
-	PCA9685_PWMFreq int               `json:"pca9685_pwm_freq"`
-	PCA9685_Address int               `json:"pca9685_address"`
-}
+func loadSettings(store types.Store) (settings.Settings, error) {
+	var s settings.Settings
 
-var DefaultSettings = Settings{
-	Name:            "reef-pi",
-	Interface:       "wlan0",
-	Address:         "0.0.0.0:80",
-	Capabilities:    DefaultCapabilities,
-	RPI_PWMFreq:     100,
-	PCA9685_PWMFreq: 1500,
-	PCA9685_Address: 0x40,
-	HealthCheck: HealthCheckNotify{
-		MaxMemory: 500,
-		MaxCPU:    2,
-	},
-}
-
-func loadSettings(store types.Store) (Settings, error) {
-	var s Settings
 	if err := store.Get(Bucket, "settings", &s); err != nil {
 		return s, err
 	}
 	return s, nil
 }
 
-func initializeSettings(store types.Store) (Settings, error) {
+func initializeSettings(store types.Store) (settings.Settings, error) {
 	if os.Getenv("DEV_MODE") == "1" {
-		DefaultSettings.Capabilities.DevMode = true
-		DefaultSettings.Capabilities.Dashboard = true
-		DefaultSettings.Capabilities.Equipment = true
-		DefaultSettings.Capabilities.Timers = true
-		DefaultSettings.Capabilities.Lighting = true
-		DefaultSettings.Capabilities.Temperature = true
-		DefaultSettings.Capabilities.ATO = true
-		DefaultSettings.Capabilities.Macro = true
-		DefaultSettings.Capabilities.Doser = true
-		DefaultSettings.Capabilities.Ph = true
+		settings.DefaultSettings.Capabilities.DevMode = true
+		settings.DefaultSettings.Capabilities.Dashboard = true
+		settings.DefaultSettings.Capabilities.Equipment = true
+		settings.DefaultSettings.Capabilities.Timers = true
+		settings.DefaultSettings.Capabilities.Lighting = true
+		settings.DefaultSettings.Capabilities.Temperature = true
+		settings.DefaultSettings.Capabilities.ATO = true
+		settings.DefaultSettings.Capabilities.Macro = true
+		settings.DefaultSettings.Capabilities.Doser = true
+		settings.DefaultSettings.Capabilities.Ph = true
 
-		DefaultSettings.Address = "0.0.0.0:8080"
+		settings.DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")
 	}
 	if err := store.CreateBucket(Bucket); err != nil {
 		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
-		return DefaultSettings, err
+		return settings.DefaultSettings, err
 	}
-	return DefaultSettings, store.Update(Bucket, "settings", DefaultSettings)
+	return settings.DefaultSettings, store.Update(Bucket, "settings", settings.DefaultSettings)
 }
 
 func (r *ReefPi) GetSettings(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
-		var s Settings
+		var s settings.Settings
 		return &s, r.store.Get(Bucket, "settings", &s)
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
 
 func (r *ReefPi) UpdateSettings(w http.ResponseWriter, req *http.Request) {
-	var s Settings
+	var s settings.Settings
 	fn := func(_ string) error {
 		return r.store.Update(Bucket, "settings", s)
 	}

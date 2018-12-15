@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -16,15 +16,13 @@ func TestJacksAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := utils.NewTestRouter()
-	rpi := NewRPIPWMDriver(100, true)
-	conf := DefaultPCA9685Config
-	conf.DevMode = true
-	pca9685, err := NewPCA9685(i2c.MockBus(), conf)
+
 	if err != nil {
 		t.Error(err)
 	}
+	drvrs := drivers.TestDrivers(store)
 	j := Jack{Name: "Foo", Pins: []int{0}, Driver: "rpi"}
-	jacks := NewJacks(store, rpi, pca9685)
+	jacks := NewJacks(drvrs, store)
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
@@ -81,9 +79,6 @@ func TestJacksAPI(t *testing.T) {
 	}
 	if err := tr.Do("GET", "/api/jacks", new(bytes.Buffer), nil); err != nil {
 		t.Error(err)
-	}
-	if err := jacks.DirectControl("bogus", 1, 100); err == nil {
-		t.Error("Expect to fail when driver is not rpi or pca9685")
 	}
 	pinValues := make(map[int]float64)
 	pinValues[0] = 73

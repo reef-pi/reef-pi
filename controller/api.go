@@ -62,6 +62,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	r.outlets.LoadAPI(router)
 	r.inlets.LoadAPI(router)
 	r.jacks.LoadAPI(router)
+	r.drivers.LoadAPI(router)
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}

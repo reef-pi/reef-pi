@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -13,9 +14,11 @@ func TestOutletsAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	drvrs := drivers.TestDrivers(store)
+
 	tr := utils.NewTestRouter()
 	o := Outlet{Name: "Foo", Pin: 21}
-	outlets := NewOutlets(store)
+	outlets := NewOutlets(drvrs, store)
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
@@ -63,12 +66,12 @@ func TestOutletsAPI(t *testing.T) {
 	}
 
 	o.Name = ""
-	if err := o.IsValid(); err == nil {
+	if err := o.IsValid(drvrs); err == nil {
 		t.Errorf("Outlet validation should fail if name is not set")
 	}
 	o.Name = "zsda"
 	o.Pin = 1
-	if err := o.IsValid(); err == nil {
+	if err := o.IsValid(drvrs); err == nil {
 		t.Errorf("Outlet validation should fail if GPIO pin is not valid")
 	}
 }
