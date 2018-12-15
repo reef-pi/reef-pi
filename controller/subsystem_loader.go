@@ -15,9 +15,9 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/lighting"
 	"github.com/reef-pi/reef-pi/controller/modules/macro"
 	"github.com/reef-pi/reef-pi/controller/modules/ph"
+	"github.com/reef-pi/reef-pi/controller/modules/system"
 	"github.com/reef-pi/reef-pi/controller/modules/temperature"
 	"github.com/reef-pi/reef-pi/controller/modules/timer"
-	"github.com/reef-pi/reef-pi/controller/system"
 )
 
 func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
