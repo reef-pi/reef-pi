@@ -1,6 +1,6 @@
 // +build !windows
 
-package utils
+package storage
 
 import (
 	"encoding/json"
