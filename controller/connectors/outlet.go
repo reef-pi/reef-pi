@@ -44,7 +44,7 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 		return fmt.Errorf("Outlet name can not be empty")
 	}
 	if _, err := o.outputPin(drivers); err != nil {
-		return fmt.Errorf("outlet %s did not get associated with a driver pin", o.Name)
+		return fmt.Errorf("outlet %s did not get associated with a driver pin. Error:%s", o.Name, err)
 	}
 	return nil
 }
