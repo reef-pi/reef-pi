@@ -7,7 +7,7 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/reef-pi/controller/equipment"
+	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
 
 type UpdateEquipment struct {
