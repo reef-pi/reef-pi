@@ -26,7 +26,7 @@ type Outlet struct {
 func (o Outlet) outputPin(drivers *drivers.Drivers) (driver.OutputPin, error) {
 	pindriver, err := drivers.Get("rpi")
 	if err != nil {
-		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", o.Name, err)
+		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
 	outputDriver, ok := pindriver.(driver.Output)
 	if !ok {
@@ -44,7 +44,7 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 		return fmt.Errorf("Outlet name can not be empty")
 	}
 	if _, err := o.outputPin(drivers); err != nil {
-		return fmt.Errorf("outlet %s did not get associated with a driver pin. Error:%s", o.Name, err)
+		return err
 	}
 	return nil
 }
