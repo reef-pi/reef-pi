@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Notify struct {
@@ -67,7 +66,7 @@ func (c *Controller) Create(a ATO) error {
 		return err
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	c.statsMgr.Update(a.ID, usage)
 	if a.Enable {
@@ -134,7 +133,7 @@ func (c *Controller) Check(a ATO) {
 		return
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	reading, err := c.Read(a)
 	if err != nil {

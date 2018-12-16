@@ -11,7 +11,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.DoserBucket
@@ -19,7 +18,7 @@ const UsageBucket = storage.DoserUsageBucket
 
 type Controller struct {
 	DevMode  bool
-	statsMgr storage.StatsManager
+	statsMgr telemetry.StatsManager
 	c        controller.Controller
 	mu       *sync.Mutex
 	runner   *cron.Cron

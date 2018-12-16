@@ -21,7 +21,7 @@ func (u1 Usage) Rollup(ux telemetry.Metric) (telemetry.Metric, bool) {
 	return u2, true
 }
 
-func (u1 Usage) Before(ux types.Metric) bool {
+func (u1 Usage) Before(ux telemetry.Metric) bool {
 	u2 := ux.(Usage)
 	return u1.Time.Before(u2.Time)
 }

@@ -7,8 +7,6 @@ import (
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type TC struct {
@@ -66,7 +64,7 @@ func (c *Controller) Create(tc TC) error {
 		return err
 	}
 	u := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	c.statsMgr.Update(tc.ID, u)
 	if tc.Enable {

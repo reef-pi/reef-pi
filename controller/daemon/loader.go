@@ -1,4 +1,4 @@
-package moodules
+package daemon
 
 import (
 	"fmt"

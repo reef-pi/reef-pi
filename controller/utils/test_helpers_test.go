@@ -16,7 +16,4 @@ func TestHelpers(t *testing.T) {
 	if err := tr.Do("GET", "/foo", strings.NewReader("{}"), &foo); err != nil {
 		t.Fatal("Failed to make http request using the test router. Error:", err)
 	}
-	if tele := TestTelemetry(); tele == nil {
-		t.Fatal("Test telemetry returns nil")
-	}
 }

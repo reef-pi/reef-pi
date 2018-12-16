@@ -4,19 +4,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func TestUsage(t *testing.T) {
 	t1 := time.Now()
 	u1 := Usage{
 		Pump: 2,
-		Time: utils.TeleTime(t1),
+		Time: telemetry.TeleTime(t1),
 	}
 
 	u2 := Usage{
 		Pump: 3,
-		Time: utils.TeleTime(t1.Add(2 * time.Hour)),
+		Time: telemetry.TeleTime(t1.Add(2 * time.Hour)),
 	}
 
 	if !u1.Before(u2) {

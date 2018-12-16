@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/daemon"
 )
 
 var Version string
@@ -77,10 +77,10 @@ func main() {
 	}
 }
 
-func loadConfig(file string) controller.Config {
-	config := controller.DefaultConfig
+func loadConfig(file string) daemon.Config {
+	config := daemon.DefaultConfig
 	if file != "" {
-		conf, err := controller.ParseConfig(file)
+		conf, err := daemon.ParseConfig(file)
 		if err != nil {
 			fmt.Println("Failed to parse config file", err)
 			os.Exit(1)

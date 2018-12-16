@@ -10,7 +10,6 @@ import (
 	"github.com/reef-pi/drivers"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Probe struct {
@@ -54,7 +53,7 @@ func (c *Controller) Create(p Probe) error {
 		return err
 	}
 	m := Measurement{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 		len:  1,
 	}
 	c.statsMgr.Update(p.ID, m)
@@ -115,7 +114,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	for {
 		select {
 		case <-ticker.C:
-			reading := utils.TwoDecimal(8 + rand.Float64()*2)
+			reading := telemetry.TwoDecimal(8 + rand.Float64()*2)
 			if !c.config.DevMode {
 				v, err := d.Read()
 				if err != nil {
@@ -127,7 +126,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
 			notifyIfNeeded(c.controller.Telemetry(), p, reading)
 			m := Measurement{
-				Time: utils.TeleTime(time.Now()),
+				Time: telemetry.TeleTime(time.Now()),
 				Ph:   reading,
 				len:  1,
 				sum:  reading,

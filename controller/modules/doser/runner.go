@@ -6,7 +6,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Runner struct {
@@ -38,7 +37,7 @@ func (r *Runner) Run() {
 		return
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 		Pump: int(r.pump.Regiment.Duration),
 	}
 	r.statsMgr.Update(r.pump.ID, usage)

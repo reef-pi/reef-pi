@@ -8,7 +8,6 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 

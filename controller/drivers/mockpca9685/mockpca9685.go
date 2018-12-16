@@ -48,7 +48,7 @@ func (m *mockDriver) Metadata() hal.Metadata {
 	}
 }
 
-func (m *mockDriver) PWMChannels() []hal.Channel {
+func (m *mockDriver) Channels() []hal.Channel {
 	var chs []hal.Channel
 	for _, ch := range m.channels {
 		chs = append(chs, ch)
@@ -57,7 +57,7 @@ func (m *mockDriver) PWMChannels() []hal.Channel {
 	return chs
 }
 
-func (m *mockDriver) GetPWMChannel(name string) (hal.Channel, error) {
+func (m *mockDriver) GetChannel(name string) (hal.Channel, error) {
 	ch, ok := m.channels[name]
 	if !ok {
 		return nil, fmt.Errorf("unknown pwm channel %s", name)

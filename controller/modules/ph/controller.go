@@ -10,7 +10,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.PhBucket
@@ -35,7 +34,7 @@ func New(config Config, bus i2c.Bus, c controller.Controller) *Controller {
 		quitters:   make(map[string]chan struct{}),
 		controller: c,
 		mu:         &sync.Mutex{},
-		statsMgr:   utils.NewStatsManager(c.Store(), ReadingsBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		statsMgr:   telemetry.NewStatsManager(c.Store(), ReadingsBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 	}
 }
 

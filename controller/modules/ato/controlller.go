@@ -10,7 +10,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.ATOBucket
@@ -33,7 +32,7 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller, inlet
 		inlets:    inlets,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  telemetry.NewStatsManager(c.Store(), UsageBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:  telemetry.NewStatsManager(c.Store(), UsageBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 		c:         c,
 	}, nil
 }

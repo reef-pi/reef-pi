@@ -10,10 +10,10 @@ type Reminder struct {
 }
 
 type ReminderRunner struct {
-	telemetry   telemetry.Telemetry
+	t           telemetry.Telemetry
 	title, body string
 }
 
 func (r ReminderRunner) Run() {
-	r.telemetry.Alert(r.title, r.body)
+	r.t.Alert(r.title, r.body)
 }

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestStep(t *testing.T) {

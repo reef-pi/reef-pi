@@ -146,7 +146,7 @@ func (m *mockDriver) GetOutputPin(name string) (hal.OutputPin, error) {
 	return nil, errors.New("unknown output pin specified")
 }
 
-func (m *mockDriver) PWMChannels() []hal.Channel {
+func (m *mockDriver) Channels() []hal.Channel {
 	var chs []hal.Channel
 	for _, ch := range m.channels {
 		chs = append(chs, ch)
@@ -155,7 +155,7 @@ func (m *mockDriver) PWMChannels() []hal.Channel {
 	return chs
 }
 
-func (m *mockDriver) GetPWMChannel(name string) (hal.Channel, error) {
+func (m *mockDriver) GetChannel(name string) (hal.Channel, error) {
 	for _, ch := range m.channels {
 		if ch.name == name {
 			return ch, nil

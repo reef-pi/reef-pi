@@ -1,4 +1,4 @@
-package controller
+package daemon
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/sessions"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -25,7 +26,7 @@ type ReefPi struct {
 	inlets  *connectors.Inlets
 	drivers *drivers.Drivers
 
-	subsystems map[string]Subsystem
+	subsystems map[string]controller.Subsystem
 	settings   settings.Settings
 	telemetry  telemetry.Telemetry
 	version    string
@@ -83,7 +84,7 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		inlets:     inlets,
 		drivers:    drvrs,
-		subsystems: make(map[string]Subsystem),
+		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
 		cookiejar:  cookiejar,
 	}
@@ -106,11 +107,9 @@ func (r *ReefPi) Start() error {
 	if err := r.inlets.Setup(); err != nil {
 		return err
 	}
-	/*
-		if err := r.loadSubsystems(); err != nil {
-			return err
-		}
-	*/
+	if err := r.loadSubsystems(); err != nil {
+		return err
+	}
 	if _, err := loadDashboard(r.store); err != nil {
 		initializeDashboard(r.store)
 	}
@@ -140,7 +139,7 @@ func (r *ReefPi) Stop() error {
 	return nil
 }
 
-func (r *ReefPi) Subsystem(s string) (Subsystem, error) {
+func (r *ReefPi) Subsystem(s string) (controller.Subsystem, error) {
 	sub, ok := r.subsystems[s]
 	if !ok {
 		return nil, fmt.Errorf("Subsystem not present: %s", s)
@@ -148,8 +147,8 @@ func (r *ReefPi) Subsystem(s string) (Subsystem, error) {
 	return sub, nil
 }
 
-func (r *ReefPi) Controller() Controller {
-	return NewController(
+func (r *ReefPi) Controller() controller.Controller {
+	return controller.NewController(
 		r.telemetry,
 		r.store,
 		r.LogError,

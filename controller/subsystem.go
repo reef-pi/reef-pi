@@ -5,15 +5,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-type PWMx interface {
-	Start() error
-	Stop() error
-	Set(pin int, percentage float64) error
-	Get(pin int) (int, error)
-	On(pin int) error
-	Off(pin int) error
-}
-
 type controller struct {
 	t        telemetry.Telemetry
 	s        storage.Store

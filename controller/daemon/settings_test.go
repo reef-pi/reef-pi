@@ -1,11 +1,10 @@
-package controller
+package daemon
 
 import (
 	"os"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestDevModeDetection(t *testing.T) {

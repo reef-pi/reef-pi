@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func detectTempSensorDevice() (string, error) {
@@ -29,9 +29,9 @@ func (c *Controller) Read(tc TC) (float64, error) {
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
-			return utils.TwoDecimal(78.0 + (3 * rand.Float64())), nil
+			return telemetry.TwoDecimal(78.0 + (3 * rand.Float64())), nil
 		} else {
-			return utils.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
+			return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 		}
 	}
 	log.Println("Reading temperature from device:", tc.Sensor)

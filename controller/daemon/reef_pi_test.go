@@ -1,8 +1,8 @@
-package controller
+package daemon
 
 import (
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/storage"
 
 	"net/http"
 	"testing"
@@ -10,12 +10,12 @@ import (
 
 func TestReefPi(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)
-	conf, err := ParseConfig("../build/reef-pi.yml")
+	conf, err := ParseConfig("../../build/reef-pi.yml")
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
 	conf.Database = "reef-pi.db"
-	store, err := utils.NewStore(conf.Database)
+	store, err := storage.NewStore(conf.Database)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -7,7 +7,12 @@ import (
 	"time"
 
 	"github.com/reef-pi/adafruitio"
+	"math"
 )
+
+func TwoDecimal(f float64) float64 {
+	return math.Round(f*100) / 100
+}
 
 type ErrorLogger func(string, string) error
 

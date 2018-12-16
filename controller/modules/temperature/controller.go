@@ -10,7 +10,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const Bucket = storage.TemperatureBucket
@@ -31,11 +30,11 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Con
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr: utils.NewStatsManager(
+		statsMgr: telemetry.NewStatsManager(
 			c.Store(),
 			UsageBucket,
-			types.CurrentLimit,
-			types.HistoricalLimit),
+			telemetry.CurrentLimit,
+			telemetry.HistoricalLimit),
 	}, nil
 }
 

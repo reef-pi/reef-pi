@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const ReadingsBucket = "ph_readings"
@@ -22,7 +21,7 @@ func (m1 Measurement) Rollup(mx telemetry.Metric) (telemetry.Metric, bool) {
 	if m1.Time.Hour() == m2.Time.Hour() {
 		m.sum += m2.Ph
 		m.len += 1
-		m.Ph = utils.TwoDecimal(m.sum / float64(m.len))
+		m.Ph = telemetry.TwoDecimal(m.sum / float64(m.len))
 		return m, false
 	}
 	return m2, true
