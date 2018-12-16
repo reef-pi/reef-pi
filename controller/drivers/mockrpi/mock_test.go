@@ -114,7 +114,7 @@ func TestMockDriver_PWMChannels(t *testing.T) {
 	}
 
 	pwm := drvr.(hal.PWM)
-	if l := len(pwm.PWMChannels()); l != 2 {
+	if l := len(pwm.Channels()); l != 2 {
 		t.Errorf("expected 2 PWM channels, got %d", l)
 	}
 }
@@ -126,7 +126,7 @@ func TestMockDriver_GetPWMChannel(t *testing.T) {
 	}
 
 	pwm := drvr.(hal.PWM)
-	ch, err := pwm.GetPWMChannel("0")
+	ch, err := pwm.GetChannel("0")
 	if err != nil {
 		t.Errorf("can't get PWM channel '0'")
 	}

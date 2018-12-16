@@ -34,7 +34,7 @@ func New(devMode bool, c controller.Controller, jacks *connectors.Jacks) (*Contr
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(),
-		statsMgr: utils.NewStatsManager(c.Store(), UsageBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		statsMgr: telemetry.NewStatsManager(c.Store(), UsageBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 		c:        c,
 	}, nil
 }

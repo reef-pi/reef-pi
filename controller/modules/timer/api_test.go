@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
@@ -13,7 +14,7 @@ import (
 )
 
 func TestTimerController(t *testing.T) {
-	con, err := utils.TestController()
+	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}

@@ -2,6 +2,7 @@ package telemetry
 
 import (
 	"encoding/json"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"testing"
 )
 
@@ -18,7 +19,7 @@ func (m1 *testMetric) Rollup(m Metric) (Metric, bool) {
 }
 
 func TestStatsManager(t *testing.T) {
-	store, err := TestDB()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Error(err)
 	}

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -16,7 +17,7 @@ func TestOutletsAPI(t *testing.T) {
 	}
 	drvrs := drivers.TestDrivers(store)
 
-	tr := storage.NewTestRouter()
+	tr := utils.NewTestRouter()
 	o := Outlet{Name: "Foo", Pin: 21}
 	outlets := NewOutlets(drvrs, store)
 	outlets.DevMode = true

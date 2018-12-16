@@ -7,11 +7,12 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestCamera(t *testing.T) {
-	con, err := utils.TestController()
+	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}

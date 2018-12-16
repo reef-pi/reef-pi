@@ -4,12 +4,11 @@ import (
 	"fmt"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Usage struct {
-	Pump int            `json:"pump"`
-	Time utils.TeleTime `json:"time"`
+	Pump int                `json:"pump"`
+	Time telemetry.TeleTime `json:"time"`
 }
 
 func (u1 Usage) Rollup(ux telemetry.Metric) (telemetry.Metric, bool) {

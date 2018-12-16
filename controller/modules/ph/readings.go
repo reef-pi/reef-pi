@@ -10,8 +10,8 @@ import (
 const ReadingsBucket = "ph_readings"
 
 type Measurement struct {
-	Ph   float64        `json:"pH"`
-	Time utils.TeleTime `json:"time"`
+	Ph   float64            `json:"pH"`
+	Time telemetry.TeleTime `json:"time"`
 	sum  float64
 	len  int
 }

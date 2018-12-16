@@ -24,7 +24,7 @@ type Controller struct {
 	c       controller.Controller
 }
 
-func New(devMode bool, c Controller) (*Controller, error) {
+func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		config:  Default,
 		mu:      sync.Mutex{},
