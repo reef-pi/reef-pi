@@ -5,24 +5,24 @@ import (
 	"log"
 	"sync"
 
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-const Bucket = types.ATOBucket
-const UsageBucket = types.ATOUsageBucket
+const Bucket = storage.ATOBucket
+const UsageBucket = storage.ATOUsageBucket
 
 type Controller struct {
-	statsMgr  types.StatsManager
+	statsMgr  telemetry.StatsManager
 	equipment *equipment.Controller
 	devMode   bool
 	quitters  map[string]chan struct{}
 	mu        *sync.Mutex
 	inlets    *connectors.Inlets
-	c         types.Controller
+	c         Controller
 }
 
 func New(devMode bool, c types.Controller, eqs *equipment.Controller, inlets *connectors.Inlets) (*Controller, error) {

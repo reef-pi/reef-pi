@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func initializeTelemetry(store types.Store, notify bool) types.Telemetry {
+func initializeTelemetry(store storage.Store, notify bool) telemetry.Telemetry {
 	t := utils.DefaultTelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")

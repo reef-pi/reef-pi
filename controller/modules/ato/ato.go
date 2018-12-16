@@ -7,8 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -188,7 +187,7 @@ func (c *Controller) Read(a ATO) (int, error) {
 	return c.inlets.Read(a.Inlet)
 }
 
-func (a ATO) CreateFeed(t types.Telemetry) {
+func (a ATO) CreateFeed(t telemetry.Telemetry) {
 	t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
 	t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
 }

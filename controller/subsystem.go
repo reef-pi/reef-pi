@@ -1,9 +1,5 @@
 package controller
 
-import (
-	"github.com/gorilla/mux"
-)
-
 type PWMx interface {
 	Start() error
 	Stop() error
@@ -11,21 +7,6 @@ type PWMx interface {
 	Get(pin int) (int, error)
 	On(pin int) error
 	Off(pin int) error
-}
-
-type Subsystem interface {
-	Setup() error
-	LoadAPI(*mux.Router)
-	Start()
-	Stop()
-	On(string, bool) error
-}
-
-type Controller interface {
-	Subsystem(string) (Subsystem, error)
-	Telemetry() Telemetry
-	Store() Store
-	LogError(string, string) error
 }
 
 type controller struct {

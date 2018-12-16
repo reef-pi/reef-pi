@@ -7,13 +7,13 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
-	"github.com/reef-pi/types/driver"
 )
 
-const OutletBucket = types.OutletBucket
+const OutletBucket = storage.OutletBucket
 
 type Outlet struct {
 	ID        string `json:"id"`
@@ -23,7 +23,7 @@ type Outlet struct {
 	Reverse   bool   `json:"reverse"`
 }
 
-func (o Outlet) outputPin(drivers *drivers.Drivers) (driver.OutputPin, error) {
+func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
 	pindriver, err := drivers.Get("rpi")
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)

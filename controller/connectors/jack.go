@@ -8,13 +8,13 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
-	"github.com/reef-pi/types/driver"
 )
 
-const JackBucket = types.JackBucket
+const JackBucket = storage.JackBucket
 
 type Jack struct {
 	ID     string `json:"id"`
@@ -24,11 +24,11 @@ type Jack struct {
 }
 
 type Jacks struct {
-	store   types.Store
+	store   storage.Store
 	drivers *drivers.Drivers
 }
 
-func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.PWMChannel, error) {
+func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.Channel, error) {
 	drvr, err := drvrs.Get(j.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("driver %s for jack %s not found: %v", j.Driver, j.ID, err)
@@ -37,7 +37,7 @@ func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.PWMChannel
 	if !ok {
 		return nil, fmt.Errorf("driver %s is not a PWM driver", j.Driver)
 	}
-	return pwmDrvr.GetPWMChannel(fmt.Sprintf("%d", channel))
+	return pwmDrvr.GetChannel(fmt.Sprintf("%d", channel))
 }
 
 func (j Jack) IsValid(drvrs *drivers.Drivers) error {

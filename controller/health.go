@@ -11,8 +11,9 @@ import (
 	"github.com/shirou/gopsutil/mem"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
 )
 
 const HealthStatsKey = "health_stats"
@@ -20,10 +21,10 @@ const HealthStatsKey = "health_stats"
 type HealthChecker struct {
 	stopCh    chan struct{}
 	interval  time.Duration
-	telemetry types.Telemetry
+	telemetry telemetry.Telemetry
 	Notify    settings.HealthCheckNotify
-	store     types.Store
-	statsMgr  types.StatsManager
+	store     storage.Store
+	statsMgr  telemetry.StatsManager
 }
 
 type HealthMetric struct {
@@ -35,7 +36,7 @@ type HealthMetric struct {
 	memorySum  float64
 }
 
-func (m1 HealthMetric) Rollup(mx types.Metric) (types.Metric, bool) {
+func (m1 HealthMetric) Rollup(mx telemetry.Metric) (telemetry.Metric, bool) {
 	m2 := mx.(HealthMetric)
 	m := HealthMetric{
 		Time:       m1.Time,
@@ -56,18 +57,18 @@ func (m1 HealthMetric) Rollup(mx types.Metric) (types.Metric, bool) {
 	return m2, true
 }
 
-func (m1 HealthMetric) Before(mx types.Metric) bool {
+func (m1 HealthMetric) Before(mx telemetry.Metric) bool {
 	m2 := mx.(HealthMetric)
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, telemetry telemetry.Telemetry, store storage.Store) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),
 		telemetry: telemetry,
 		Notify:    notify,
-		statsMgr:  utils.NewStatsManager(store, Bucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:  utils.NewStatsManager(store, Bucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 		store:     store,
 	}
 }

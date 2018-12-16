@@ -6,8 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -19,7 +18,7 @@ type Error struct {
 }
 
 func (r *ReefPi) setUpErrorBucket() error {
-	return r.store.CreateBucket(types.ErrorBucket)
+	return r.store.CreateBucket(storage.ErrorBucket)
 }
 
 func (r *ReefPi) DeleteErrors() error {

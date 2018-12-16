@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 const DefaulCaptureFlags = ""
@@ -35,7 +35,7 @@ var Default = Config{
 	},
 }
 
-func loadConfig(store types.Store) (Config, error) {
+func loadConfig(store storage.Store) (Config, error) {
 	var conf Config
 	return conf, store.Get(Bucket, "config", &conf)
 }
