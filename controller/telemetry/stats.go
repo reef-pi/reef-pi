@@ -1,4 +1,4 @@
-package utils
+package telemetry
 
 import (
 	"log"
@@ -11,6 +11,12 @@ import (
 
 type ErrorLogger func(string, string) error
 
+type Telemetry interface {
+	Alert(string, string) (bool, error)
+	EmitMetric(string, interface{})
+	CreateFeedIfNotExist(string)
+	DeleteFeedIfExist(string)
+}
 type AlertStats struct {
 	Count        int       `json:"count"`
 	FirstTrigger time.Time `json:"first_trigger"`
@@ -41,10 +47,10 @@ type telemetry struct {
 	config     TelemetryConfig
 	aStats     map[string]AlertStats
 	mu         *sync.Mutex
-	logError   types.ErrorLogger
+	logError   ErrorLogger
 }
 
-func NewTelemetry(config TelemetryConfig, lr types.ErrorLogger) *telemetry {
+func NewTelemetry(config TelemetryConfig, lr ErrorLogger) *telemetry {
 	var mailer Mailer
 	mailer = &NoopMailer{}
 	if config.Notify {

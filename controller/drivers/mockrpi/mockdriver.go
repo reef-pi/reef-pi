@@ -8,8 +8,8 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/types/driver"
 )
 
 var (
@@ -95,11 +95,11 @@ type mockDriver struct {
 	channels []*mockPwmChannel
 }
 
-func (m *mockDriver) Metadata() driver.Metadata {
-	return driver.Metadata{
+func (m *mockDriver) Metadata() hal.Metadata {
+	return hal.Metadata{
 		Name:        "rpi",
 		Description: "Mock driver - no actual hardware",
-		Capabilities: driver.Capabilities{
+		Capabilities: hal.Capabilities{
 			Input:  true,
 			Output: true,
 			PWM:    true,
@@ -112,15 +112,15 @@ func (m *mockDriver) Close() error {
 	return nil
 }
 
-func (m *mockDriver) InputPins() []driver.InputPin {
-	var pins []driver.InputPin
+func (m *mockDriver) InputPins() []hal.InputPin {
+	var pins []hal.InputPin
 	for _, p := range m.pins {
 		pins = append(pins, p)
 	}
 	return pins
 }
 
-func (m *mockDriver) GetInputPin(name string) (driver.InputPin, error) {
+func (m *mockDriver) GetInputPin(name string) (hal.InputPin, error) {
 	for _, pin := range m.pins {
 		if pin.name == name {
 			return pin, nil
@@ -129,15 +129,15 @@ func (m *mockDriver) GetInputPin(name string) (driver.InputPin, error) {
 	return nil, fmt.Errorf("unknown input pin specified %s", name)
 }
 
-func (m *mockDriver) OutputPins() []driver.OutputPin {
-	var pins []driver.OutputPin
+func (m *mockDriver) OutputPins() []hal.OutputPin {
+	var pins []hal.OutputPin
 	for _, p := range m.pins {
 		pins = append(pins, p)
 	}
 	return pins
 }
 
-func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
+func (m *mockDriver) GetOutputPin(name string) (hal.OutputPin, error) {
 	for _, pin := range m.pins {
 		if pin.name == name {
 			return pin, nil
@@ -146,8 +146,8 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 	return nil, errors.New("unknown output pin specified")
 }
 
-func (m *mockDriver) PWMChannels() []driver.PWMChannel {
-	var chs []driver.PWMChannel
+func (m *mockDriver) PWMChannels() []hal.Channel {
+	var chs []hal.Channel
 	for _, ch := range m.channels {
 		chs = append(chs, ch)
 	}
@@ -155,7 +155,7 @@ func (m *mockDriver) PWMChannels() []driver.PWMChannel {
 	return chs
 }
 
-func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
+func (m *mockDriver) GetPWMChannel(name string) (hal.Channel, error) {
 	for _, ch := range m.channels {
 		if ch.name == name {
 			return ch, nil
@@ -164,7 +164,7 @@ func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
 	return nil, fmt.Errorf("no channel named %s", name)
 }
 
-func NewMockDriver(s settings.Settings, b i2c.Bus) (driver.Driver, error) {
+func NewMockDriver(s settings.Settings, b i2c.Bus) (hal.Driver, error) {
 	var pins []*mockPin
 	for pin, _ := range validGPIOPins {
 		pins = append(pins, &mockPin{name: fmt.Sprintf("GP%d", pin)})

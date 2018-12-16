@@ -6,9 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
-	"path/filepath"
-	"sync"
 
 	"github.com/gorilla/mux"
 )
@@ -39,19 +36,4 @@ func (t *TestRouter) Do(method, path string, body io.Reader, container interface
 	fmt.Println(rr.Body.String())
 	return json.Unmarshal([]byte(rr.Body.String()), container)
 
-}
-
-func TestTelemetry() *telemetry {
-	c := TelemetryConfig{
-		AdafruitIO: AdafruitIO{
-			User: "test-user",
-		},
-	}
-	return &telemetry{
-		config:     c,
-		dispatcher: &NoopMailer{},
-		aStats:     make(map[string]AlertStats),
-		mu:         &sync.Mutex{},
-		logError:   func(_, _ string) error { return nil },
-	}
 }

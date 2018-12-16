@@ -1,21 +1,19 @@
-package utils
+package telemetry
 
 import (
 	"encoding/json"
 	"testing"
-
-	"github.com/reef-pi/types"
 )
 
 type testMetric struct {
 	Value int
 }
 
-func (m1 *testMetric) Before(m types.Metric) bool {
+func (m1 *testMetric) Before(m Metric) bool {
 	return true
 }
 
-func (m1 *testMetric) Rollup(m types.Metric) (types.Metric, bool) {
+func (m1 *testMetric) Rollup(m Metric) (Metric, bool) {
 	return m1, true
 }
 

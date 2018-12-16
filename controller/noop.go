@@ -1,5 +1,7 @@
 package controller
 
+import "github.com/gorilla/mux"
+
 type mockSubsystem struct{}
 
 func (m *mockSubsystem) Setup() error              { return nil }
