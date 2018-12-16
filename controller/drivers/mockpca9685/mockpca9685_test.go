@@ -5,8 +5,8 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/types/driver"
 )
 
 func TestNewMockDriver(t *testing.T) {
@@ -14,17 +14,17 @@ func TestNewMockDriver(t *testing.T) {
 	if err != nil {
 		t.Errorf("mock driver error %v", err)
 	}
-	pwmDriver, ok := drvr.(driver.PWM)
+	pwmDriver, ok := drvr.(hal.PWM)
 	if !ok {
 		t.Error("driver is now a PWM driver")
 	}
 
-	outputDriver, ok := drvr.(driver.Output)
+	outputDriver, ok := drvr.(hal.Output)
 	if !ok {
 		t.Error("driver is not an output driver")
 	}
 
-	if l := len(pwmDriver.PWMChannels()); l != 8 {
+	if l := len(pwmDriver.Channels()); l != 8 {
 		t.Errorf("unexpected number of mock channels: %d", l)
 	}
 
@@ -32,12 +32,12 @@ func TestNewMockDriver(t *testing.T) {
 		t.Errorf("unexpected number of mock pins: %d", l)
 	}
 
-	_, err = pwmDriver.GetPWMChannel("does not exist")
+	_, err = pwmDriver.GetChannel("does not exist")
 	if err == nil {
 		t.Error("expected error on non-existent channel")
 	}
 
-	_, err = pwmDriver.GetPWMChannel("1")
+	_, err = pwmDriver.GetChannel("1")
 	if err != nil {
 		t.Errorf("error getting valid channel %v", err)
 	}

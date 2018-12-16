@@ -51,7 +51,7 @@ func (r *ReefPi) ListErrors() ([]Error, error) {
 		errors = append(errors, a)
 		return nil
 	}
-	return errors, r.store.List(types.ErrorBucket, fn)
+	return errors, r.store.List(storage.ErrorBucket, fn)
 }
 
 func (r *ReefPi) listErrors(w http.ResponseWriter, req *http.Request) {
@@ -73,23 +73,23 @@ func (r *ReefPi) deleteError(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *ReefPi) DeleteError(id string) error {
-	return r.store.Delete(types.ErrorBucket, id)
+	return r.store.Delete(storage.ErrorBucket, id)
 }
 
 func (r *ReefPi) LogError(id, msg string) error {
 	return logError(r.store, id, msg)
 }
 
-func logError(store types.Store, id, msg string) error {
+func logError(store storage.Store, id, msg string) error {
 	e := Error{
 		Message: msg,
 		ID:      id,
 		Time:    time.Now().Format("Jan 2 15:04:05"),
 	}
-	return store.Update(types.ErrorBucket, id, e)
+	return store.Update(storage.ErrorBucket, id, e)
 }
 
 func (r *ReefPi) GetError(id string) (Error, error) {
 	var a Error
-	return a, r.store.Get(types.ErrorBucket, id, &a)
+	return a, r.store.Get(storage.ErrorBucket, id, &a)
 }

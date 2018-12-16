@@ -28,7 +28,7 @@ func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
-	outputDriver, ok := pindriver.(driver.Output)
+	outputDriver, ok := pindriver.(hal.Output)
 	if !ok {
 		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", o.Name)
 	}
@@ -50,12 +50,12 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 }
 
 type Outlets struct {
-	store   types.Store
+	store   storage.Store
 	drivers *drivers.Drivers
 	DevMode bool
 }
 
-func NewOutlets(drivers *drivers.Drivers, store types.Store) *Outlets {
+func NewOutlets(drivers *drivers.Drivers, store storage.Store) *Outlets {
 	return &Outlets{
 		store:   store,
 		drivers: drivers,

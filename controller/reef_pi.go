@@ -13,7 +13,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 )
 
@@ -36,7 +35,7 @@ type ReefPi struct {
 }
 
 func New(version, database string) (*ReefPi, error) {
-	store, err := utils.NewStore(database)
+	store, err := storage.NewStore(database)
 	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
@@ -107,9 +106,11 @@ func (r *ReefPi) Start() error {
 	if err := r.inlets.Setup(); err != nil {
 		return err
 	}
-	if err := r.loadSubsystems(); err != nil {
-		return err
-	}
+	/*
+		if err := r.loadSubsystems(); err != nil {
+			return err
+		}
+	*/
 	if _, err := loadDashboard(r.store); err != nil {
 		initializeDashboard(r.store)
 	}

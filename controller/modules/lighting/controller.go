@@ -6,12 +6,13 @@ import (
 	"time"
 
 	"github.com/reef-pi/rpi/i2c"
-	"github.com/reef-pi/types"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-const Bucket = types.LightingBucket
+const Bucket = storage.LightingBucket
 
 type Config struct {
 	DevMode  bool          `json:"dev_mode"`
@@ -28,10 +29,10 @@ type Controller struct {
 	config  Config
 	running bool
 	mu      *sync.Mutex
-	c       types.Controller
+	c       controller.Controller
 }
 
-func New(conf Config, c types.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
+func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
 	return &Controller{
 		c:      c,
 		jacks:  jacks,

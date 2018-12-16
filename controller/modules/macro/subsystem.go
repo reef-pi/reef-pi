@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-const Bucket = types.MacroBucket
-const UsageBucket = types.MacroUsageBucket
+const Bucket = storage.MacroBucket
+const UsageBucket = storage.MacroUsageBucket
 
 type Subsystem struct {
 	sync.Mutex
 	devMode    bool
 	quitters   map[string]chan struct{}
-	controller types.Controller
+	controller controller.Controller
 }
 
-func New(devMode bool, c types.Controller) (*Subsystem, error) {
+func New(devMode bool, c controller.Controller) (*Subsystem, error) {
 	return &Subsystem{
 		devMode:    devMode,
 		controller: c,

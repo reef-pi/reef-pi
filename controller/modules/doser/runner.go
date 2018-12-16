@@ -4,16 +4,15 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 type Runner struct {
 	pump     *Pump
 	jacks    *connectors.Jacks
-	statsMgr types.StatsManager
+	statsMgr telemetry.StatsManager
 }
 
 func (r *Runner) Dose(speed float64, duration time.Duration) error {

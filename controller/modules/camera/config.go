@@ -40,7 +40,7 @@ func loadConfig(store storage.Store) (Config, error) {
 	return conf, store.Get(Bucket, "config", &conf)
 }
 
-func saveConfig(store types.Store, conf Config) error {
+func saveConfig(store storage.Store, conf Config) error {
 	if conf.TickInterval <= 0 {
 		return fmt.Errorf("Tick Interval for camera controller must be greater than zero")
 	}

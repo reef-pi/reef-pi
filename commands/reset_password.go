@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func resetPassword(db, u, p string) {
-	store, err := utils.NewStore(db)
+	store, err := storage.NewStore(db)
 	if u == "" {
 		fmt.Println("username can not be empty")
 		os.Exit(1)

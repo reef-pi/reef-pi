@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -27,12 +28,12 @@ type Jacks struct {
 	drivers *drivers.Drivers
 }
 
-func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (driver.Channel, error) {
+func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (hal.Channel, error) {
 	drvr, err := drvrs.Get(j.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("driver %s for jack %s not found: %v", j.Driver, j.ID, err)
 	}
-	pwmDrvr, ok := drvr.(driver.PWM)
+	pwmDrvr, ok := drvr.(hal.PWM)
 	if !ok {
 		return nil, fmt.Errorf("driver %s is not a PWM driver", j.Driver)
 	}
@@ -55,7 +56,7 @@ func (j Jack) IsValid(drvrs *drivers.Drivers) error {
 	return nil
 }
 
-func NewJacks(drivers *drivers.Drivers, store types.Store) *Jacks {
+func NewJacks(drivers *drivers.Drivers, store storage.Store) *Jacks {
 	return &Jacks{
 		store:   store,
 		drivers: drivers,

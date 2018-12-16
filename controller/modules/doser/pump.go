@@ -6,9 +6,8 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Pump struct {
@@ -118,7 +117,7 @@ func (c *Controller) Delete(id string) error {
 	return c.c.Store().Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(jacks *connectors.Jacks, t types.StatsManager) cron.Job {
+func (p *Pump) Runner(jacks *connectors.Jacks, t telemetry.StatsManager) cron.Job {
 	return &Runner{
 		pump:     p,
 		jacks:    jacks,

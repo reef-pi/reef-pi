@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -149,7 +149,7 @@ func (c *Controller) Run(t TC, quit chan struct{}) {
 	}
 }
 
-func (tc TC) CreateFeed(telemetry types.Telemetry) {
+func (tc TC) CreateFeed(telemetry telemetry.Telemetry) {
 	if !tc.Enable {
 		return
 	}

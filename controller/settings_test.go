@@ -4,11 +4,12 @@ import (
 	"os"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestDevModeDetection(t *testing.T) {
-	store, err := utils.TestDB()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal(err)
 	}

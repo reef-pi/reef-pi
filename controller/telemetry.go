@@ -11,18 +11,18 @@ import (
 )
 
 func initializeTelemetry(store storage.Store, notify bool) telemetry.Telemetry {
-	t := utils.DefaultTelemetryConfig
+	t := telemetry.DefaultTelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
 		store.Update(Bucket, "telemetry", t)
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
-	return utils.NewTelemetry(t, fn)
+	return telemetry.NewTelemetry(t, fn)
 }
 
 func (r *ReefPi) getTelemetry(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
-		var t utils.TelemetryConfig
+		var t telemetry.TelemetryConfig
 		if err := r.store.Get(Bucket, "telemetry", &t); err != nil {
 			return nil, err
 		}
@@ -34,13 +34,13 @@ func (r *ReefPi) getTelemetry(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *ReefPi) updateTelemetry(w http.ResponseWriter, req *http.Request) {
-	var t utils.TelemetryConfig
+	var t telemetry.TelemetryConfig
 	fn := func(_ string) error {
 		if err := r.store.Update(Bucket, "telemetry", t); err != nil {
 			return err
 		}
 		fn := func(t, m string) error { return logError(r.store, t, m) }
-		r.telemetry = utils.NewTelemetry(t, fn)
+		r.telemetry = telemetry.NewTelemetry(t, fn)
 		return nil
 	}
 	utils.JSONUpdateResponse(&t, fn, w, req)

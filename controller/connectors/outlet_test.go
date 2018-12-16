@@ -10,13 +10,13 @@ import (
 )
 
 func TestOutletsAPI(t *testing.T) {
-	store, err := utils.TestDB()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal(err)
 	}
 	drvrs := drivers.TestDrivers(store)
 
-	tr := utils.NewTestRouter()
+	tr := storage.NewTestRouter()
 	o := Outlet{Name: "Foo", Pin: 21}
 	outlets := NewOutlets(drvrs, store)
 	outlets.DevMode = true

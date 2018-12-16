@@ -3,9 +3,9 @@ package macro
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"time"
-
-	"github.com/reef-pi/types"
 )
 
 var stepTypes = []string{
@@ -35,10 +35,10 @@ type Step struct {
 	Config json.RawMessage `json:"config"`
 }
 
-func (s *Step) Run(c types.Controller) error {
+func (s *Step) Run(c controller.Controller) error {
 	switch s.Type {
-	case types.EquipmentBucket, types.ATOBucket, types.TemperatureBucket,
-		types.DoserBucket, types.PhBucket, types.TimerBucket:
+	case storage.EquipmentBucket, storage.ATOBucket, storage.TemperatureBucket,
+		storage.DoserBucket, storage.PhBucket, storage.TimerBucket:
 		var g GenericStep
 		if err := json.Unmarshal(s.Config, &g); err != nil {
 			return err

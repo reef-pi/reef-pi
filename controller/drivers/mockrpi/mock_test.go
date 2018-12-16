@@ -5,8 +5,8 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/types/driver"
 )
 
 func TestNewMockDriver(t *testing.T) {
@@ -15,17 +15,17 @@ func TestNewMockDriver(t *testing.T) {
 		t.Errorf("unexpected error making mock driver %v", err)
 	}
 
-	_, ok := drvr.(driver.Input)
+	_, ok := drvr.(hal.Input)
 	if !ok {
 		t.Error("mock driver is not an input driver")
 	}
 
-	_, ok = drvr.(driver.Output)
+	_, ok = drvr.(hal.Output)
 	if !ok {
 		t.Error("mock driver is not an output driver")
 	}
 
-	_, ok = drvr.(driver.PWM)
+	_, ok = drvr.(hal.PWM)
 	if !ok {
 		t.Error("mock driver is not a PWM driver")
 	}
@@ -37,7 +37,7 @@ func TestMockDriver_GetInputPin(t *testing.T) {
 		t.Errorf("unexpected error making mock driver %v", err)
 	}
 
-	in, ok := drvr.(driver.Input)
+	in, ok := drvr.(hal.Input)
 	if !ok {
 		t.Error("mock driver is not an input driver")
 	}
@@ -65,7 +65,7 @@ func TestMockDriver_InputPins(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(driver.Input)
+	in := drvr.(hal.Input)
 	pins := in.InputPins()
 	if l := len(pins); l != 26 {
 		t.Errorf("unexpected number of pins, got %d, expected: %d", l, 26)
@@ -78,7 +78,7 @@ func TestMockDriver_GetOutputPin(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(driver.Output)
+	in := drvr.(hal.Output)
 
 	pin, err := in.GetOutputPin("GP21")
 	if err != nil {
@@ -99,7 +99,7 @@ func TestMockDriver_OutputPins(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(driver.Output)
+	in := drvr.(hal.Output)
 	pins := in.OutputPins()
 
 	if l := len(pins); l != 26 {
@@ -113,7 +113,7 @@ func TestMockDriver_PWMChannels(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	pwm := drvr.(driver.PWM)
+	pwm := drvr.(hal.PWM)
 	if l := len(pwm.PWMChannels()); l != 2 {
 		t.Errorf("expected 2 PWM channels, got %d", l)
 	}
@@ -125,7 +125,7 @@ func TestMockDriver_GetPWMChannel(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	pwm := drvr.(driver.PWM)
+	pwm := drvr.(hal.PWM)
 	ch, err := pwm.GetPWMChannel("0")
 	if err != nil {
 		t.Errorf("can't get PWM channel '0'")

@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -20,10 +21,10 @@ type Controller struct {
 	stopCh  chan struct{}
 	mu      sync.Mutex
 	DevMode bool
-	c       Controller
+	c       controller.Controller
 }
 
-func New(devMode bool, c types.Controller) (*Controller, error) {
+func New(devMode bool, c Controller) (*Controller, error) {
 	return &Controller{
 		config:  Default,
 		mu:      sync.Mutex{},

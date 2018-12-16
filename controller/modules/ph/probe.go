@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/reef-pi/drivers"
-	"github.com/reef-pi/types"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -170,6 +170,6 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	}
 }
 
-func (p Probe) CreateFeed(t types.Telemetry) {
+func (p Probe) CreateFeed(t telemetry.Telemetry) {
 	t.CreateFeedIfNotExist("ph-" + p.Name)
 }

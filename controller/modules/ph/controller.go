@@ -5,13 +5,15 @@ import (
 	"log"
 	"sync"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/rpi/i2c"
-	"github.com/reef-pi/types"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-const Bucket = types.PhBucket
+const Bucket = storage.PhBucket
 
 type Config struct {
 	DevMode bool `json:"dev_mode"`
@@ -19,21 +21,21 @@ type Config struct {
 
 type Controller struct {
 	config     Config
-	controller types.Controller
+	controller controller.Controller
 	quitters   map[string]chan struct{}
 	bus        i2c.Bus
 	mu         *sync.Mutex
-	statsMgr   types.StatsManager
+	statsMgr   telemetry.StatsManager
 }
 
-func New(config Config, bus i2c.Bus, c types.Controller) *Controller {
+func New(config Config, bus i2c.Bus, c controller.Controller) *Controller {
 	return &Controller{
 		config:     config,
 		bus:        bus,
 		quitters:   make(map[string]chan struct{}),
 		controller: c,
 		mu:         &sync.Mutex{},
-		statsMgr:   utils.NewStatsManager(c.Store(), ReadingsBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:   utils.NewStatsManager(c.Store(), ReadingsBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 	}
 }
 

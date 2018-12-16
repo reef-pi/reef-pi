@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Subsystem interface {
@@ -14,7 +16,7 @@ type Subsystem interface {
 
 type Controller interface {
 	Subsystem(string) (Subsystem, error)
-	Telemetry() Telemetry
-	Store() Store
+	Telemetry() telemetry.Telemetry
+	Store() storage.Store
 	LogError(string, string) error
 }

@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 const Bucket = "system"
@@ -19,11 +19,11 @@ type Config struct {
 
 type Controller struct {
 	config                    Config
-	c                         types.Controller
+	c                         controller.Controller
 	PowerFile, BrightnessFile string
 }
 
-func New(conf Config, c types.Controller) *Controller {
+func New(conf Config, c controller.Controller) *Controller {
 	return &Controller{
 		config:         conf,
 		c:              c,

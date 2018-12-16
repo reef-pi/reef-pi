@@ -1,5 +1,10 @@
 package controller
 
+import (
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
+)
+
 type PWMx interface {
 	Start() error
 	Stop() error
@@ -10,15 +15,15 @@ type PWMx interface {
 }
 
 type controller struct {
-	t        Telemetry
-	s        Store
-	logError ErrorLogger
+	t        telemetry.Telemetry
+	s        storage.Store
+	logError telemetry.ErrorLogger
 	subFn    func(s string) (Subsystem, error)
 }
 
 func NewController(
-	t Telemetry,
-	s Store,
+	t telemetry.Telemetry,
+	s storage.Store,
 	logError func(string, string) error,
 	subFn func(s string) (Subsystem, error),
 ) Controller {
@@ -30,11 +35,11 @@ func NewController(
 	}
 }
 
-func (c *controller) Telemetry() Telemetry {
+func (c *controller) Telemetry() telemetry.Telemetry {
 	return c.t
 }
 
-func (c *controller) Store() Store {
+func (c *controller) Store() storage.Store {
 	return c.s
 }
 

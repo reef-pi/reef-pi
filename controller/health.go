@@ -19,18 +19,18 @@ import (
 const HealthStatsKey = "health_stats"
 
 type HealthChecker struct {
-	stopCh    chan struct{}
-	interval  time.Duration
-	telemetry telemetry.Telemetry
-	Notify    settings.HealthCheckNotify
-	store     storage.Store
-	statsMgr  telemetry.StatsManager
+	stopCh   chan struct{}
+	interval time.Duration
+	t        telemetry.Telemetry
+	Notify   settings.HealthCheckNotify
+	store    storage.Store
+	statsMgr telemetry.StatsManager
 }
 
 type HealthMetric struct {
-	Load5      float64        `json:"cpu"`
-	UsedMemory float64        `json:"memory"`
-	Time       utils.TeleTime `json:"time"`
+	Load5      float64            `json:"cpu"`
+	UsedMemory float64            `json:"memory"`
+	Time       telemetry.TeleTime `json:"time"`
 	len        int
 	loadSum    float64
 	memorySum  float64
@@ -62,14 +62,14 @@ func (m1 HealthMetric) Before(mx telemetry.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, telemetry telemetry.Telemetry, store storage.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, t telemetry.Telemetry, store storage.Store) *HealthChecker {
 	return &HealthChecker{
-		interval:  i,
-		stopCh:    make(chan struct{}),
-		telemetry: telemetry,
-		Notify:    notify,
-		statsMgr:  utils.NewStatsManager(store, Bucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
-		store:     store,
+		interval: i,
+		stopCh:   make(chan struct{}),
+		t:        t,
+		Notify:   notify,
+		statsMgr: telemetry.NewStatsManager(store, Bucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		store:    store,
 	}
 }
 
@@ -79,7 +79,7 @@ func (h *HealthChecker) check() {
 		log.Println("ERROR: Failed to obtain load average. Error:", err)
 		return
 	}
-	h.telemetry.EmitMetric("system-load5", loadStat.Load5)
+	h.t.EmitMetric("system-load5", loadStat.Load5)
 
 	vmStat, err := mem.VirtualMemory()
 	if err != nil {
@@ -93,9 +93,9 @@ func (h *HealthChecker) check() {
 		len:        1,
 		loadSum:    loadStat.Load5,
 		memorySum:  usedMemory,
-		Time:       utils.TeleTime(time.Now()),
+		Time:       telemetry.TeleTime(time.Now()),
 	}
-	h.telemetry.EmitMetric("system-mem-used", usedMemory)
+	h.t.EmitMetric("system-mem-used", usedMemory)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
@@ -107,13 +107,13 @@ func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
 			subject := "[Reef-Pi ALERT] CPU Load high"
 			format := "Current cpu load (%f) is above threshold ( %f )"
 			body := fmt.Sprintf(format, load, h.Notify.MaxCPU)
-			h.telemetry.Alert(subject, body)
+			h.t.Alert(subject, body)
 		}
 		if memory >= h.Notify.MaxMemory {
 			subject := "[Reef-Pi ALERT] Memory consumption is high"
 			format := "Current memory consumption (%f) is above threshold ( %f )"
 			body := fmt.Sprintf(format, memory, h.Notify.MaxMemory)
-			h.telemetry.Alert(subject, body)
+			h.t.Alert(subject, body)
 		}
 	}
 }
@@ -127,8 +127,8 @@ func (h *HealthChecker) Stop() {
 }
 
 func (h *HealthChecker) setup() {
-	h.telemetry.CreateFeedIfNotExist("system-load5")
-	h.telemetry.CreateFeedIfNotExist("system-mem-used")
+	h.t.CreateFeedIfNotExist("system-load5")
+	h.t.CreateFeedIfNotExist("system-mem-used")
 }
 
 func (h *HealthChecker) Start() {
@@ -144,7 +144,7 @@ func (h *HealthChecker) Start() {
 	log.Println("Starting health checker")
 	metric := HealthMetric{
 		len:  1,
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	h.statsMgr.Update(HealthStatsKey, metric)
 	ticker := time.NewTicker(h.interval)

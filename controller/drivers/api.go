@@ -22,7 +22,7 @@ import (
 )
 
 // TODO(theatrus): special casing i2c feels weird here
-type Factory func(settings settings.Settings, bus i2c.Bus) (driver.Driver, error)
+type Factory func(settings settings.Settings, bus i2c.Bus) (hal.Driver, error)
 
 type Drivers struct {
 	sync.Mutex
@@ -43,15 +43,15 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		return d, nil
 	}
 
-	rpiFactory := func(s settings.Settings, bus i2c.Bus) (driver.Driver, error) {
-		return rpihal.New(rpihal.Settings{RPI_PWMFreq: s.RPI_PWMFreq}, bus)
+	rpiFactory := func(s settings.Settings, bus i2c.Bus) (hal.Driver, error) {
+		return rpihal.New(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, bus)
 	}
 
 	if err := d.register(s, bus, rpiFactory); err != nil {
 		return nil, err
 	}
 	if s.PCA9685 {
-		factory := func(settings settings.Settings, bus i2c.Bus) (i driver.Driver, e error) {
+		factory := func(settings settings.Settings, bus i2c.Bus) (i hal.Driver, e error) {
 			config := pcahal.DefaultPCA9685Config
 			config.Address = s.PCA9685_Address
 			config.Frequency = s.PCA9685_PWMFreq
@@ -68,8 +68,8 @@ func (d *Drivers) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/drivers", d.list).Methods("GET")
 }
 
-func (d *Drivers) List() ([]driver.Metadata, error) {
-	var drivers []driver.Metadata
+func (d *Drivers) List() ([]hal.Metadata, error) {
+	var drivers []hal.Metadata
 	for _, v := range d.drivers {
 		drivers = append(drivers, v.Metadata())
 	}
@@ -77,7 +77,7 @@ func (d *Drivers) List() ([]driver.Metadata, error) {
 	return drivers, nil
 }
 
-func (d *Drivers) Get(name string) (driver.Driver, error) {
+func (d *Drivers) Get(name string) (hal.Driver, error) {
 	driver, ok := d.drivers[name]
 	if !ok {
 		return nil, fmt.Errorf("driver by name %s not available", name)

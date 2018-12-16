@@ -1,4 +1,4 @@
-package controller
+package moodules
 
 import (
 	"fmt"
