@@ -6,8 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/reef-pi/adafruitio"
 	"math"
+
+	"github.com/reef-pi/adafruitio"
 )
 
 func TwoDecimal(f float64) float64 {

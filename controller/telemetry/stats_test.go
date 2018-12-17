@@ -2,8 +2,9 @@ package telemetry
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"testing"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 type testMetric struct {

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
