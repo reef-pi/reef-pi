@@ -6,9 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/types"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type TC struct {
@@ -66,7 +64,7 @@ func (c *Controller) Create(tc TC) error {
 		return err
 	}
 	u := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	c.statsMgr.Update(tc.ID, u)
 	if tc.Enable {
@@ -149,7 +147,7 @@ func (c *Controller) Run(t TC, quit chan struct{}) {
 	}
 }
 
-func (tc TC) CreateFeed(telemetry types.Telemetry) {
+func (tc TC) CreateFeed(telemetry telemetry.Telemetry) {
 	if !tc.Enable {
 		return
 	}

@@ -8,23 +8,23 @@ import (
 	"sync"
 	"time"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-const Bucket = types.CameraBucket
-const ItemBucket = types.CameraItemBucket
+const Bucket = storage.CameraBucket
+const ItemBucket = storage.CameraItemBucket
 
 type Controller struct {
 	config  Config
 	stopCh  chan struct{}
 	mu      sync.Mutex
 	DevMode bool
-	c       types.Controller
+	c       controller.Controller
 }
 
-func New(devMode bool, c types.Controller) (*Controller, error) {
+func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		config:  Default,
 		mu:      sync.Mutex{},

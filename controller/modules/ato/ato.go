@@ -7,9 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/reef-pi/types"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Notify struct {
@@ -68,7 +66,7 @@ func (c *Controller) Create(a ATO) error {
 		return err
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	c.statsMgr.Update(a.ID, usage)
 	if a.Enable {
@@ -135,7 +133,7 @@ func (c *Controller) Check(a ATO) {
 		return
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	reading, err := c.Read(a)
 	if err != nil {
@@ -188,7 +186,7 @@ func (c *Controller) Read(a ATO) (int, error) {
 	return c.inlets.Read(a.Inlet)
 }
 
-func (a ATO) CreateFeed(t types.Telemetry) {
+func (a ATO) CreateFeed(t telemetry.Telemetry) {
 	t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
 	t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
 }

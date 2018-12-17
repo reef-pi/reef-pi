@@ -4,16 +4,14 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Runner struct {
 	pump     *Pump
 	jacks    *connectors.Jacks
-	statsMgr types.StatsManager
+	statsMgr telemetry.StatsManager
 }
 
 func (r *Runner) Dose(speed float64, duration time.Duration) error {
@@ -39,7 +37,7 @@ func (r *Runner) Run() {
 		return
 	}
 	usage := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 		Pump: int(r.pump.Regiment.Duration),
 	}
 	r.statsMgr.Update(r.pump.ID, usage)

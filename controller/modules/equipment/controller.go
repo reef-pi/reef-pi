@@ -5,9 +5,9 @@ import (
 
 	"github.com/kidoman/embd"
 
-	"github.com/reef-pi/types"
-
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Config struct {
@@ -16,13 +16,13 @@ type Config struct {
 type Check func(string) (bool, error)
 type Controller struct {
 	config    Config
-	telemetry types.Telemetry
-	store     types.Store
+	telemetry telemetry.Telemetry
+	store     storage.Store
 	outlets   *connectors.Outlets
 	checks    []Check
 }
 
-func New(config Config, outlets *connectors.Outlets, store types.Store, telemetry types.Telemetry) *Controller {
+func New(config Config, outlets *connectors.Outlets, store storage.Store, telemetry telemetry.Telemetry) *Controller {
 	return &Controller{
 		config:    config,
 		telemetry: telemetry,

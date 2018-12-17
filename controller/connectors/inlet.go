@@ -8,13 +8,14 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
-	"github.com/reef-pi/types/driver"
 )
 
-const InletBucket = types.InletBucket
+const InletBucket = storage.InletBucket
 
 type Inlet struct {
 	ID        string `json:"id"`
@@ -25,7 +26,7 @@ type Inlet struct {
 }
 
 type Inlets struct {
-	store   types.Store
+	store   storage.Store
 	drivers *drivers.Drivers
 }
 
@@ -38,12 +39,12 @@ func (e *Inlets) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST")
 }
 
-func (i Inlet) inputPin(drivers *drivers.Drivers) (driver.InputPin, error) {
+func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.InputPin, error) {
 	pindriver, err := drivers.Get("rpi")
 	if err != nil {
 		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", i.Name, err)
 	}
-	inputDriver, ok := pindriver.(driver.Input)
+	inputDriver, ok := pindriver.(hal.Input)
 	if !ok {
 		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", i.Name)
 	}
@@ -64,7 +65,7 @@ func (i Inlet) IsValid(drivers *drivers.Drivers) error {
 	return nil
 }
 
-func NewInlets(drivers *drivers.Drivers, store types.Store) *Inlets {
+func NewInlets(drivers *drivers.Drivers, store storage.Store) *Inlets {
 	return &Inlets{
 		store:   store,
 		drivers: drivers,

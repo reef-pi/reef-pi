@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	i2c2 "github.com/reef-pi/rpi/i2c"
-	"github.com/reef-pi/types"
 )
 
 type mockStore struct {
-	types.Store
+	storage.Store
 }
 
 func newDrivers(t *testing.T) *Drivers {

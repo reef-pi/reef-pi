@@ -5,35 +5,36 @@ import (
 	"log"
 	"sync"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-const Bucket = types.TemperatureBucket
-const UsageBucket = types.TemperatureUsageBucket
+const Bucket = storage.TemperatureBucket
+const UsageBucket = storage.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	c         types.Controller
+	c         controller.Controller
 	devMode   bool
 	equipment *equipment.Controller
 	quitters  map[string]chan struct{}
-	statsMgr  types.StatsManager
+	statsMgr  telemetry.StatsManager
 }
 
-func New(devMode bool, c types.Controller, eqs *equipment.Controller) (*Controller, error) {
+func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Controller, error) {
 	return &Controller{
 		c:         c,
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr: utils.NewStatsManager(
+		statsMgr: telemetry.NewStatsManager(
 			c.Store(),
 			UsageBucket,
-			types.CurrentLimit,
-			types.HistoricalLimit),
+			telemetry.CurrentLimit,
+			telemetry.HistoricalLimit),
 	}, nil
 }
 

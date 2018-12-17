@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -17,7 +18,7 @@ func TestSystemController(t *testing.T) {
 		Interface: "lo0",
 		Pprof:     true,
 	}
-	con, err := utils.TestController()
+	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}

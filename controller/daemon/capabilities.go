@@ -1,4 +1,4 @@
-package controller
+package daemon
 
 import (
 	"net/http"

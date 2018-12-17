@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
@@ -12,7 +13,7 @@ import (
 )
 
 func TestController(t *testing.T) {
-	con, err := utils.TestController()
+	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}

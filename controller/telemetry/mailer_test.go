@@ -1,4 +1,4 @@
-package utils
+package telemetry
 
 import (
 	"net/smtp"

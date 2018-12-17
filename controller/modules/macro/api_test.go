@@ -3,11 +3,11 @@ package macro
 import (
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 func TestSubsystem(t *testing.T) {
-	c, err := utils.TestController()
+	c, err := controller.TestController()
 	if err != nil {
 		t.Error(err)
 	}

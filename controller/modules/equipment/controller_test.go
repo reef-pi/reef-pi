@@ -9,6 +9,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/drivers"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -16,8 +18,8 @@ func TestEquipmentController(t *testing.T) {
 	config := Config{
 		DevMode: true,
 	}
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	telemetry := telemetry.TestTelemetry()
+	store, err := storage.TestDB()
 	drvrs := drivers.TestDrivers(store)
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
@@ -155,8 +157,8 @@ func TestUpdateEquipment(t *testing.T) {
 	config := Config{
 		DevMode: true,
 	}
-	telemetry := utils.TestTelemetry()
-	store, err := utils.TestDB()
+	telemetry := telemetry.TestTelemetry()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}

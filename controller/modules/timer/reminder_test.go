@@ -3,15 +3,15 @@ package timer
 import (
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func TestReminderRunner(t *testing.T) {
-	telemetry := utils.TestTelemetry()
+	tele := telemetry.TestTelemetry()
 	r := ReminderRunner{
-		telemetry: telemetry,
-		title:     "Test title",
-		body:      "test body",
+		t:     tele,
+		title: "Test title",
+		body:  "test body",
 	}
 	r.Run()
 }

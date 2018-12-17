@@ -5,8 +5,7 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
 
@@ -14,10 +13,10 @@ type Controller struct {
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
 	equipment *equipment.Controller
-	c         types.Controller
+	c         controller.Controller
 }
 
-func New(c types.Controller, e *equipment.Controller) *Controller {
+func New(c controller.Controller, e *equipment.Controller) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
 		runner:    cron.New(),

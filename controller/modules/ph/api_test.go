@@ -7,11 +7,12 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestPhAPI(t *testing.T) {
-	r, err := utils.TestController()
+	r, err := controller.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}

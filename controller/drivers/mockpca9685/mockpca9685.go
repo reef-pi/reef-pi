@@ -7,8 +7,8 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/types/driver"
 )
 
 type mockPwmChannel struct {
@@ -37,19 +37,19 @@ type mockDriver struct {
 
 func (m *mockDriver) Close() error { return nil }
 
-func (m *mockDriver) Metadata() driver.Metadata {
-	return driver.Metadata{
+func (m *mockDriver) Metadata() hal.Metadata {
+	return hal.Metadata{
 		Name:        "pca9685",
 		Description: "Mock driver - no actual hardware",
-		Capabilities: driver.Capabilities{
+		Capabilities: hal.Capabilities{
 			PWM:    true,
 			Output: true,
 		},
 	}
 }
 
-func (m *mockDriver) PWMChannels() []driver.PWMChannel {
-	var chs []driver.PWMChannel
+func (m *mockDriver) Channels() []hal.Channel {
+	var chs []hal.Channel
 	for _, ch := range m.channels {
 		chs = append(chs, ch)
 	}
@@ -57,7 +57,7 @@ func (m *mockDriver) PWMChannels() []driver.PWMChannel {
 	return chs
 }
 
-func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
+func (m *mockDriver) GetChannel(name string) (hal.Channel, error) {
 	ch, ok := m.channels[name]
 	if !ok {
 		return nil, fmt.Errorf("unknown pwm channel %s", name)
@@ -65,8 +65,8 @@ func (m *mockDriver) GetPWMChannel(name string) (driver.PWMChannel, error) {
 	return ch, nil
 }
 
-func (m *mockDriver) OutputPins() []driver.OutputPin {
-	var chs []driver.OutputPin
+func (m *mockDriver) OutputPins() []hal.OutputPin {
+	var chs []hal.OutputPin
 	for _, ch := range m.channels {
 		chs = append(chs, ch)
 	}
@@ -74,7 +74,7 @@ func (m *mockDriver) OutputPins() []driver.OutputPin {
 	return chs
 }
 
-func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
+func (m *mockDriver) GetOutputPin(name string) (hal.OutputPin, error) {
 	pin, ok := m.channels[name]
 	if !ok {
 		return nil, fmt.Errorf("unknown pin with name %s", name)
@@ -82,7 +82,7 @@ func (m *mockDriver) GetOutputPin(name string) (driver.OutputPin, error) {
 	return pin, nil
 }
 
-func NewMockDriver(s settings.Settings, b i2c.Bus) (driver.Driver, error) {
+func NewMockDriver(s settings.Settings, b i2c.Bus) (hal.Driver, error) {
 	d := &mockDriver{
 		channels: make(map[string]*mockPwmChannel),
 	}

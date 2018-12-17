@@ -1,7 +1,7 @@
 package timer
 
 import (
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Reminder struct {
@@ -10,10 +10,10 @@ type Reminder struct {
 }
 
 type ReminderRunner struct {
-	telemetry   types.Telemetry
+	t           telemetry.Telemetry
 	title, body string
 }
 
 func (r ReminderRunner) Run() {
-	r.telemetry.Alert(r.title, r.body)
+	r.t.Alert(r.title, r.body)
 }

@@ -1,4 +1,4 @@
-package controller
+package daemon
 
 import (
 	"fmt"
@@ -8,26 +8,27 @@ import (
 
 	"github.com/gorilla/sessions"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/rpi/i2c"
-	"github.com/reef-pi/types"
 )
 
-const Bucket = types.ReefPiBucket
+const Bucket = storage.ReefPiBucket
 
 type ReefPi struct {
-	store   types.Store
+	store   storage.Store
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
 	drivers *drivers.Drivers
 
-	subsystems map[string]types.Subsystem
+	subsystems map[string]controller.Subsystem
 	settings   settings.Settings
-	telemetry  types.Telemetry
+	telemetry  telemetry.Telemetry
 	version    string
 	h          *HealthChecker
 	bus        i2c.Bus
@@ -35,7 +36,7 @@ type ReefPi struct {
 }
 
 func New(version, database string) (*ReefPi, error) {
-	store, err := utils.NewStore(database)
+	store, err := storage.NewStore(database)
 	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
@@ -83,7 +84,7 @@ func New(version, database string) (*ReefPi, error) {
 		outlets:    outlets,
 		inlets:     inlets,
 		drivers:    drvrs,
-		subsystems: make(map[string]types.Subsystem),
+		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
 		cookiejar:  cookiejar,
 	}
@@ -138,7 +139,7 @@ func (r *ReefPi) Stop() error {
 	return nil
 }
 
-func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
+func (r *ReefPi) Subsystem(s string) (controller.Subsystem, error) {
 	sub, ok := r.subsystems[s]
 	if !ok {
 		return nil, fmt.Errorf("Subsystem not present: %s", s)
@@ -146,8 +147,8 @@ func (r *ReefPi) Subsystem(s string) (types.Subsystem, error) {
 	return sub, nil
 }
 
-func (r *ReefPi) Controller() types.Controller {
-	return types.NewController(
+func (r *ReefPi) Controller() controller.Controller {
+	return controller.NewController(
 		r.telemetry,
 		r.store,
 		r.LogError,

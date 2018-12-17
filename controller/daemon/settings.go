@@ -1,4 +1,4 @@
-package controller
+package daemon
 
 import (
 	"log"
@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/types"
 )
 
-func loadSettings(store types.Store) (settings.Settings, error) {
+func loadSettings(store storage.Store) (settings.Settings, error) {
 	var s settings.Settings
 
 	if err := store.Get(Bucket, "settings", &s); err != nil {
@@ -19,7 +19,7 @@ func loadSettings(store types.Store) (settings.Settings, error) {
 	return s, nil
 }
 
-func initializeSettings(store types.Store) (settings.Settings, error) {
+func initializeSettings(store storage.Store) (settings.Settings, error) {
 	if os.Getenv("DEV_MODE") == "1" {
 		settings.DefaultSettings.Capabilities.DevMode = true
 		settings.DefaultSettings.Capabilities.Dashboard = true

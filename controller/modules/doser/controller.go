@@ -7,33 +7,33 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/types"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-const Bucket = types.DoserBucket
-const UsageBucket = types.DoserUsageBucket
+const Bucket = storage.DoserBucket
+const UsageBucket = storage.DoserUsageBucket
 
 type Controller struct {
 	DevMode  bool
-	statsMgr types.StatsManager
-	c        types.Controller
+	statsMgr telemetry.StatsManager
+	c        controller.Controller
 	mu       *sync.Mutex
 	runner   *cron.Cron
 	cronIDs  map[string]cron.EntryID
 	jacks    *connectors.Jacks
 }
 
-func New(devMode bool, c types.Controller, jacks *connectors.Jacks) (*Controller, error) {
+func New(devMode bool, c controller.Controller, jacks *connectors.Jacks) (*Controller, error) {
 	return &Controller{
 		DevMode:  devMode,
 		jacks:    jacks,
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(),
-		statsMgr: utils.NewStatsManager(c.Store(), UsageBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr: telemetry.NewStatsManager(c.Store(), UsageBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
 		c:        c,
 	}, nil
 }

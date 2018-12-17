@@ -3,38 +3,36 @@ package ph
 import (
 	"fmt"
 
-	"github.com/reef-pi/types"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 const ReadingsBucket = "ph_readings"
 
 type Measurement struct {
-	Ph   float64        `json:"pH"`
-	Time utils.TeleTime `json:"time"`
+	Ph   float64            `json:"pH"`
+	Time telemetry.TeleTime `json:"time"`
 	sum  float64
 	len  int
 }
 
-func (m1 Measurement) Rollup(mx types.Metric) (types.Metric, bool) {
+func (m1 Measurement) Rollup(mx telemetry.Metric) (telemetry.Metric, bool) {
 	m2 := mx.(Measurement)
 	m := Measurement{Time: m1.Time, Ph: m1.Ph, sum: m1.sum, len: m1.len}
 	if m1.Time.Hour() == m2.Time.Hour() {
 		m.sum += m2.Ph
 		m.len += 1
-		m.Ph = utils.TwoDecimal(m.sum / float64(m.len))
+		m.Ph = telemetry.TwoDecimal(m.sum / float64(m.len))
 		return m, false
 	}
 	return m2, true
 }
 
-func (m1 Measurement) Before(mx types.Metric) bool {
+func (m1 Measurement) Before(mx telemetry.Metric) bool {
 	m2 := mx.(Measurement)
 	return m1.Time.Before(m2.Time)
 }
 
-func notifyIfNeeded(t types.Telemetry, p Probe, reading float64) {
+func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 	if !p.Config.Notify.Enable {
 		return
 	}

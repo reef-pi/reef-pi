@@ -3,7 +3,7 @@ package macro
 import (
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 func TestStep(t *testing.T) {
@@ -11,7 +11,7 @@ func TestStep(t *testing.T) {
 		Type:   "equipment",
 		Config: []byte("{}"),
 	}
-	c, err := utils.TestController()
+	c, err := controller.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}

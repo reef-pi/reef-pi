@@ -8,10 +8,10 @@ import (
 
 	cron "gopkg.in/robfig/cron.v2"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-const Bucket = types.TimerBucket
+const Bucket = storage.TimerBucket
 
 type Job struct {
 	ID        string          `json:"id"`

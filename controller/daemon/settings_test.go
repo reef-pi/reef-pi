@@ -1,14 +1,14 @@
-package controller
+package daemon
 
 import (
 	"os"
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func TestDevModeDetection(t *testing.T) {
-	store, err := utils.TestDB()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal(err)
 	}

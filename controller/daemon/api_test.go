@@ -1,4 +1,4 @@
-package controller
+package daemon
 
 import (
 	"bytes"
@@ -6,11 +6,13 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAPI(t *testing.T) {
-	store, err := utils.NewStore("api-test.db")
+	store, err := storage.NewStore("api-test.db")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +57,7 @@ func TestAPI(t *testing.T) {
 		t.Error("Failed to get settings via api")
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&utils.TelemetryConfig{})
+	json.NewEncoder(body).Encode(&telemetry.TelemetryConfig{})
 	if err := tr.Do("POST", "/api/telemetry", body, nil); err != nil {
 		t.Error("Failed to update telemetry via api")
 	}

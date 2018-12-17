@@ -1,26 +1,26 @@
-package utils
+package telemetry
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/reef-pi/types"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 type testMetric struct {
 	Value int
 }
 
-func (m1 *testMetric) Before(m types.Metric) bool {
+func (m1 *testMetric) Before(m Metric) bool {
 	return true
 }
 
-func (m1 *testMetric) Rollup(m types.Metric) (types.Metric, bool) {
+func (m1 *testMetric) Rollup(m Metric) (Metric, bool) {
 	return m1, true
 }
 
 func TestStatsManager(t *testing.T) {
-	store, err := TestDB()
+	store, err := storage.TestDB()
 	if err != nil {
 		t.Error(err)
 	}

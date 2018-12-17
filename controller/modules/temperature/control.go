@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func (c *Controller) Check(tc TC) {
@@ -13,7 +13,7 @@ func (c *Controller) Check(tc TC) {
 		return
 	}
 	u := Usage{
-		Time: utils.TeleTime(time.Now()),
+		Time: telemetry.TeleTime(time.Now()),
 	}
 	reading, err := c.Read(tc)
 	if err != nil {

@@ -6,11 +6,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestMacro(t *testing.T) {
-	c, err := utils.TestController()
+	c, err := controller.TestController()
 	if err != nil {
 		t.Fatal(err)
 	}
