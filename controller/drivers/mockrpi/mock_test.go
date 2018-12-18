@@ -15,17 +15,17 @@ func TestNewMockDriver(t *testing.T) {
 		t.Errorf("unexpected error making mock driver %v", err)
 	}
 
-	_, ok := drvr.(hal.Input)
+	_, ok := drvr.(hal.InputDriver)
 	if !ok {
 		t.Error("mock driver is not an input driver")
 	}
 
-	_, ok = drvr.(hal.Output)
+	_, ok = drvr.(hal.OutputDriver)
 	if !ok {
 		t.Error("mock driver is not an output driver")
 	}
 
-	_, ok = drvr.(hal.PWM)
+	_, ok = drvr.(hal.PWMDriver)
 	if !ok {
 		t.Error("mock driver is not a PWM driver")
 	}
@@ -37,12 +37,12 @@ func TestMockDriver_GetInputPin(t *testing.T) {
 		t.Errorf("unexpected error making mock driver %v", err)
 	}
 
-	in, ok := drvr.(hal.Input)
+	in, ok := drvr.(hal.InputDriver)
 	if !ok {
 		t.Error("mock driver is not an input driver")
 	}
 
-	pin, err := in.GetInputPin("GP21")
+	pin, err := in.InputPin("GP21")
 	if err != nil {
 		t.Errorf("error getting mock pin GP21: %v", err)
 	}
@@ -65,7 +65,7 @@ func TestMockDriver_InputPins(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(hal.Input)
+	in := drvr.(hal.InputDriver)
 	pins := in.InputPins()
 	if l := len(pins); l != 26 {
 		t.Errorf("unexpected number of pins, got %d, expected: %d", l, 26)
@@ -78,9 +78,9 @@ func TestMockDriver_GetOutputPin(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(hal.Output)
+	in := drvr.(hal.OutputDriver)
 
-	pin, err := in.GetOutputPin("GP21")
+	pin, err := in.OutputPin("GP21")
 	if err != nil {
 		t.Errorf("can't get output pin GP21 %v", err)
 	}
@@ -99,7 +99,7 @@ func TestMockDriver_OutputPins(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	in := drvr.(hal.Output)
+	in := drvr.(hal.OutputDriver)
 	pins := in.OutputPins()
 
 	if l := len(pins); l != 26 {
@@ -113,8 +113,8 @@ func TestMockDriver_PWMChannels(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	pwm := drvr.(hal.PWM)
-	if l := len(pwm.Channels()); l != 2 {
+	pwm := drvr.(hal.PWMDriver)
+	if l := len(pwm.PWMChannels()); l != 2 {
 		t.Errorf("expected 2 PWM channels, got %d", l)
 	}
 }
@@ -125,8 +125,8 @@ func TestMockDriver_GetPWMChannel(t *testing.T) {
 		t.Errorf("error making mock driver %v", err)
 	}
 
-	pwm := drvr.(hal.PWM)
-	ch, err := pwm.GetChannel("0")
+	pwm := drvr.(hal.PWMDriver)
+	ch, err := pwm.PWMChannel("0")
 	if err != nil {
 		t.Errorf("can't get PWM channel '0'")
 	}

@@ -28,11 +28,11 @@ func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
-	outputDriver, ok := pindriver.(hal.Output)
+	outputDriver, ok := pindriver.(hal.OutputDriver)
 	if !ok {
 		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", o.Name)
 	}
-	outputPin, err := outputDriver.GetOutputPin(fmt.Sprintf("GP%d", o.Pin))
+	outputPin, err := outputDriver.OutputPin(fmt.Sprintf("GP%d", o.Pin))
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", o.Pin, err)
 	}

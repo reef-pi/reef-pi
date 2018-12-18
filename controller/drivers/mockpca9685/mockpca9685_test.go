@@ -14,17 +14,17 @@ func TestNewMockDriver(t *testing.T) {
 	if err != nil {
 		t.Errorf("mock driver error %v", err)
 	}
-	pwmDriver, ok := drvr.(hal.PWM)
+	pwmDriver, ok := drvr.(hal.PWMDriver)
 	if !ok {
 		t.Error("driver is now a PWM driver")
 	}
 
-	outputDriver, ok := drvr.(hal.Output)
+	outputDriver, ok := drvr.(hal.OutputDriver)
 	if !ok {
 		t.Error("driver is not an output driver")
 	}
 
-	if l := len(pwmDriver.Channels()); l != 8 {
+	if l := len(pwmDriver.PWMChannels()); l != 8 {
 		t.Errorf("unexpected number of mock channels: %d", l)
 	}
 
@@ -32,22 +32,22 @@ func TestNewMockDriver(t *testing.T) {
 		t.Errorf("unexpected number of mock pins: %d", l)
 	}
 
-	_, err = pwmDriver.GetChannel("does not exist")
+	_, err = pwmDriver.PWMChannel("does not exist")
 	if err == nil {
 		t.Error("expected error on non-existent channel")
 	}
 
-	_, err = pwmDriver.GetChannel("1")
+	_, err = pwmDriver.PWMChannel("1")
 	if err != nil {
 		t.Errorf("error getting valid channel %v", err)
 	}
 
-	_, err = outputDriver.GetOutputPin("does not exist either")
+	_, err = outputDriver.OutputPin("does not exist either")
 	if err == nil {
 		t.Error("expected error on non-existent pin")
 	}
 
-	_, err = outputDriver.GetOutputPin("1")
+	_, err = outputDriver.OutputPin("1")
 	if err != nil {
 		t.Errorf("error getting valid pin %v", err)
 	}

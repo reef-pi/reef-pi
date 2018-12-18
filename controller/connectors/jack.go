@@ -28,16 +28,16 @@ type Jacks struct {
 	drivers *drivers.Drivers
 }
 
-func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (hal.Channel, error) {
+func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (hal.PWMChannel, error) {
 	drvr, err := drvrs.Get(j.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("driver %s for jack %s not found: %v", j.Driver, j.ID, err)
 	}
-	pwmDrvr, ok := drvr.(hal.PWM)
+	pwmDrvr, ok := drvr.(hal.PWMDriver)
 	if !ok {
 		return nil, fmt.Errorf("driver %s is not a PWM driver", j.Driver)
 	}
-	return pwmDrvr.GetChannel(fmt.Sprintf("%d", channel))
+	return pwmDrvr.PWMChannel(fmt.Sprintf("%d", channel))
 }
 
 func (j Jack) IsValid(drvrs *drivers.Drivers) error {
