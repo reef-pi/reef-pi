@@ -7,6 +7,8 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/kidoman/embd"
+
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
@@ -15,6 +17,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 	rpihal "github.com/reef-pi/rpi/hal"
+	"github.com/reef-pi/rpi/pwm"
 
 	"github.com/gorilla/mux"
 
@@ -44,7 +47,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	}
 
 	rpiFactory := func(s settings.Settings, bus i2c.Bus) (hal.Driver, error) {
-		return rpihal.New(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, bus)
+		return rpihal.New(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.New(), embd.NewDigitalPin)
 	}
 
 	if err := d.register(s, bus, rpiFactory); err != nil {
