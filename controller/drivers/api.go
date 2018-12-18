@@ -3,10 +3,11 @@ package drivers
 import (
 	"errors"
 	"fmt"
-	"github.com/kidoman/embd"
 	"net/http"
 	"sort"
 	"sync"
+
+	"github.com/kidoman/embd"
 
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
