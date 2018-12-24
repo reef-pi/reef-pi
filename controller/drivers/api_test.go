@@ -1,7 +1,11 @@
 package drivers
 
 import (
+	"bytes"
 	"testing"
+
+	"github.com/reef-pi/hal"
+	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -48,6 +52,25 @@ func TestDrivers_List(t *testing.T) {
 	}
 }
 
+func TestDrivers_ListByCapabilities(t *testing.T) {
+	driver := newDrivers(t)
+	filter := hal.Capabilities{
+		Output: true,
+		Input:  true,
+	}
+	drivers, err := driver.ListByCapabilities(filter)
+	if err != nil {
+		t.Errorf("unexpected error returning drivers %v", err)
+	}
+	if len(drivers) != 1 {
+		t.Errorf("filtering didn't return a single mock driver")
+	}
+	if drivers[0].Name != "rpi" {
+		t.Errorf("expected to get the rpi driver back")
+	}
+
+}
+
 func TestDrivers_Get(t *testing.T) {
 	drivers := newDrivers(t)
 	driver, err := drivers.Get("rpi")
@@ -57,5 +80,28 @@ func TestDrivers_Get(t *testing.T) {
 
 	if driver.Metadata().Name != "rpi" {
 		t.Error("rpi driver isn't called rpi")
+	}
+}
+
+func TestDrivers_listInputs(t *testing.T) {
+	drivers := newDrivers(t)
+
+	tr := utils.NewTestRouter()
+	drivers.LoadAPI(tr.Router)
+	names := Names{}
+	if err := tr.Do("GET", "/api/drivers/rpi/inputs", new(bytes.Buffer), &names); err != nil {
+		t.Errorf("API response error %v", err)
+	}
+
+	if names.Capability != "input" {
+		t.Errorf("invalid capability %v", names.Capability)
+	}
+
+	if l := len(names.Names); l != 26 {
+		t.Errorf("unexpected driver length returned: %d", l)
+	}
+
+	if err := tr.Do("GET", "/api/drivers/nonexistant/inputs", new(bytes.Buffer), &names); err == nil {
+		t.Errorf("expected an error for a nonexistant driver")
 	}
 }

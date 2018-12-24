@@ -166,7 +166,7 @@ func (m *mockDriver) PWMChannel(name string) (hal.PWMChannel, error) {
 
 func NewMockDriver(s settings.Settings, b i2c.Bus) (hal.Driver, error) {
 	var pins []*mockPin
-	for pin, _ := range validGPIOPins {
+	for pin := range validGPIOPins {
 		pins = append(pins, &mockPin{name: fmt.Sprintf("GP%d", pin)})
 	}
 	chs := []*mockPwmChannel{
