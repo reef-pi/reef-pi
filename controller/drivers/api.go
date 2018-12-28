@@ -11,7 +11,6 @@ import (
 
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
-	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -35,6 +34,15 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	d := &Drivers{
 		drivers: make(map[string]hal.Driver),
 	}
+	factory := func(settings settings.Settings, bus i2c.Bus) (i hal.Driver, e error) {
+		config := pcahal.DefaultPCA9685Config
+		config.Address = s.PCA9685_Address
+		config.Frequency = s.PCA9685_PWMFreq
+		return pcahal.New(config, bus)
+	}
+	if err := d.register(s, bus, factory); err != nil {
+		return nil, err
+	}
 	if s.Capabilities.DevMode {
 		rpiFactory := func(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
 			return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.Noop(), rpihal.NoopPinFactory)
@@ -42,13 +50,10 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		if err := d.register(s, bus, rpiFactory); err != nil {
 			return nil, err
 		}
-		if err := d.register(s, bus, mockpca9685.NewMockDriver); err != nil {
-			return nil, err
-		}
 		return d, nil
 	}
 
-	rpiFactory := func(s settings.Settings, bus i2c.Bus) (hal.Driver, error) {
+	rpiFactory := func(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
 		pinFactory := func(k interface{}) (rpihal.DigitalPin, error) {
 			return embd.NewDigitalPin(k)
 		}
@@ -57,17 +62,6 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 
 	if err := d.register(s, bus, rpiFactory); err != nil {
 		return nil, err
-	}
-	if s.PCA9685 {
-		factory := func(settings settings.Settings, bus i2c.Bus) (i hal.Driver, e error) {
-			config := pcahal.DefaultPCA9685Config
-			config.Address = s.PCA9685_Address
-			config.Frequency = s.PCA9685_PWMFreq
-			return pcahal.New(config, bus)
-		}
-		if err := d.register(s, bus, factory); err != nil {
-			return nil, err
-		}
 	}
 	return d, nil
 }
