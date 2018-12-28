@@ -12,7 +12,6 @@ import (
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers/mockpca9685"
-	"github.com/reef-pi/reef-pi/controller/drivers/mockrpi"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -37,7 +36,10 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		drivers: make(map[string]hal.Driver),
 	}
 	if s.Capabilities.DevMode {
-		if err := d.register(s, bus, mockrpi.NewMockDriver); err != nil {
+		rpiFactory := func(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
+			return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.Noop(), rpihal.NoopPinFactory)
+		}
+		if err := d.register(s, bus, rpiFactory); err != nil {
 			return nil, err
 		}
 		if err := d.register(s, bus, mockpca9685.NewMockDriver); err != nil {
@@ -47,7 +49,10 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	}
 
 	rpiFactory := func(s settings.Settings, bus i2c.Bus) (hal.Driver, error) {
-		return rpihal.New(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.New(), embd.NewDigitalPin)
+		pinFactory := func(k interface{}) (rpihal.DigitalPin, error) {
+			return embd.NewDigitalPin(k)
+		}
+		return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.New(), pinFactory)
 	}
 
 	if err := d.register(s, bus, rpiFactory); err != nil {
