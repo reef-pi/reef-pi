@@ -45,7 +45,8 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	}
 	if s.Capabilities.DevMode {
 		rpiFactory := func(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
-			return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.Noop(), rpihal.NoopPinFactory)
+			pd, _ := pwm.Noop()
+			return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pd, rpihal.NoopPinFactory)
 		}
 		if err := d.register(s, bus, rpiFactory); err != nil {
 			return nil, err
