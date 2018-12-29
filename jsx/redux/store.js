@@ -15,6 +15,7 @@ const initialState = {
   phprobes: [],
   macros: [],
   dosers: [],
+  drivers: [],
   configuration: {},
   capabilities: [],
   health_stats: {},

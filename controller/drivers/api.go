@@ -79,12 +79,15 @@ func (d *Drivers) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/drivers/{id}/inputs", d.listDriverInputs).Methods("GET")
 }
 
-func (d *Drivers) ListByCapabilities(capability hal.Capabilities) ([]hal.Metadata, error) {
+func (d *Drivers) ListByCapabilities(capabilities []hal.Capability) ([]hal.Metadata, error) {
 	var drivers []hal.Metadata
-	for _, v := range d.drivers {
-		if v.Metadata().Capabilities.HasCapabilities(capability) {
-			drivers = append(drivers, v.Metadata())
+	drivers: for _, v := range d.drivers {
+		for _, cap := range capabilities {
+			if !v.Metadata().HasCapability(cap) {
+				continue drivers
+			}
 		}
+		drivers = append(drivers, v.Metadata())
 	}
 	sort.Slice(drivers, func(i, j int) bool { return drivers[i].Name < drivers[j].Name })
 	return drivers, nil
@@ -111,19 +114,19 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		query := r.URL.Query()
 		if textCapabilities, ok := query["capability"]; ok {
-			capabilities := hal.Capabilities{}
+			capabilities := []hal.Capability{}
 			for _, textCapability := range textCapabilities {
 				switch textCapability {
 				case "input":
-					capabilities.Input = true
+					capabilities = append(capabilities, hal.Input)
 				case "output":
-					capabilities.Output = true
+					capabilities = append(capabilities, hal.Output)
 				case "pwm":
-					capabilities.PWM = true
+					capabilities = append(capabilities, hal.PWM)
 				case "ph":
-					capabilities.PH = true
+					capabilities = append(capabilities, hal.PH)
 				case "temperature":
-					capabilities.Temperature = true
+					capabilities = append(capabilities, hal.Temperature)
 				}
 			}
 			return d.ListByCapabilities(capabilities)

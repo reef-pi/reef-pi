@@ -54,9 +54,9 @@ func TestDrivers_List(t *testing.T) {
 
 func TestDrivers_ListByCapabilities(t *testing.T) {
 	driver := newDrivers(t)
-	filter := hal.Capabilities{
-		Output: true,
-		Input:  true,
+	filter := []hal.Capability{
+		hal.Output,
+		hal.Input,
 	}
 	drivers, err := driver.ListByCapabilities(filter)
 	if err != nil {
