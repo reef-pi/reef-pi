@@ -5,23 +5,26 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
-	i2c2 "github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/rpi/i2c"
 )
 
 func newDrivers(t *testing.T) *Drivers {
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
-	i2c := i2c2.MockBus()
+	bus := i2c.MockBus()
 	store, err := storage.TestDB()
 	if err != nil {
 		t.Error(err)
 	}
 
-	driver, err := NewDrivers(s, i2c, store)
+	driver, err := NewDrivers(s, bus, store)
 	if err != nil {
 		t.Fatalf("drivers store could not be built")
 	}
 
+	if err := driver.load(s, bus); err != nil {
+		t.Fatal(err)
+	}
 	return driver
 }
 

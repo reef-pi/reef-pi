@@ -34,7 +34,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		drivers: make(map[string]hal.Driver),
 		store:   store,
 	}
-	return d, d.loadDrivers(s, bus)
+	return d, d.load(s, bus)
 }
 
 func (d *Drivers) Get(name string) (hal.Driver, error) {
