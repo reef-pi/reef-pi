@@ -22,8 +22,10 @@ type Driver struct {
 
 type Drivers struct {
 	sync.Mutex
-	drivers map[string]hal.Driver
-	store   storage.Store
+	drivers  map[string]hal.Driver
+	store    storage.Store
+	dev_mode bool
+	bus      i2c.Bus
 }
 
 func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers, error) {
@@ -31,10 +33,12 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		return nil, err
 	}
 	d := &Drivers{
-		drivers: make(map[string]hal.Driver),
-		store:   store,
+		drivers:  make(map[string]hal.Driver),
+		store:    store,
+		dev_mode: s.Capabilities.DevMode,
+		bus:      bus,
 	}
-	return d, d.load(s, bus)
+	return d, d.loadAll()
 }
 
 func (d *Drivers) Get(name string) (hal.Driver, error) {
@@ -50,7 +54,14 @@ func (d *Drivers) Create(d1 Driver) error {
 		d1.ID = id
 		return &d1
 	}
-	return d.store.Create(DriverBucket, fn)
+	factory, err := AbstractFactory(d1.Type, d.dev_mode)
+	if err != nil {
+		return err
+	}
+	if err := d.store.Create(DriverBucket, fn); err != nil {
+		return err
+	}
+	return d.register(d1.Config, factory)
 }
 func (d *Drivers) Update(id string, d1 Driver) error {
 	d1.ID = id
@@ -64,8 +75,8 @@ func (d *Drivers) Delete(id string) error {
 	return d.store.Delete(DriverBucket, id)
 }
 
-func (d *Drivers) register(s settings.Settings, b i2c.Bus, f Factory) error {
-	r, err := f(s, b)
+func (d *Drivers) register(config []byte, f Factory) error {
+	r, err := f(config, d.bus)
 	if err != nil {
 		return err
 	}
@@ -82,7 +93,11 @@ func (d *Drivers) register(s settings.Settings, b i2c.Bus, f Factory) error {
 	return nil
 }
 func (d *Drivers) List() ([]Driver, error) {
-	var ds []Driver
+	ds := []Driver{
+		Driver{
+			Name: "Raspberry Pi",
+			Type: "rpi",
+		}}
 	fn := func(v []byte) error {
 		var d1 Driver
 		if err := json.Unmarshal(v, &d1); err != nil {

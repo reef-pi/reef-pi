@@ -22,6 +22,14 @@ func TestJacksAPI(t *testing.T) {
 		t.Error(err)
 	}
 	drvrs := drivers.TestDrivers(store)
+	d1 := drivers.Driver{
+		Name:   "lighting",
+		Type:   "pca9685",
+		Config: []byte(`{"address":64, "frequency":1000}`),
+	}
+	if err := drvrs.Create(d1); err != nil {
+		t.Fatal(err)
+	}
 	j := Jack{Name: "Foo", Pins: []int{0}, Driver: "rpi"}
 	jacks := NewJacks(drvrs, store)
 	if err := jacks.Setup(); err != nil {

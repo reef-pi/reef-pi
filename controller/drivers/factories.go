@@ -1,18 +1,18 @@
 package drivers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/kidoman/embd"
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
-	"github.com/reef-pi/reef-pi/controller/settings"
 	rpihal "github.com/reef-pi/rpi/hal"
 	"github.com/reef-pi/rpi/i2c"
 	"github.com/reef-pi/rpi/pwm"
 	"log"
 )
 
-type Factory func(settings settings.Settings, bus i2c.Bus) (hal.Driver, error)
+type Factory func(config []byte, bus i2c.Bus) (hal.Driver, error)
 
 func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 	switch t {
@@ -29,45 +29,50 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 	}
 }
 
-func pca9685Factory(s settings.Settings, bus i2c.Bus) (i hal.Driver, e error) {
+func pca9685Factory(confData []byte, bus i2c.Bus) (hal.Driver, error) {
 	config := pcahal.DefaultPCA9685Config
-	config.Address = s.PCA9685_Address
-	config.Frequency = s.PCA9685_PWMFreq
+	if err := json.Unmarshal(confData, &config); err != nil {
+		return nil, err
+	}
 	return pcahal.New(config, bus)
 }
 
-func rpiNoopFactory(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
+func rpiNoopFactory(_ []byte, _ i2c.Bus) (hal.Driver, error) {
 	pd, _ := pwm.Noop()
-	return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pd, rpihal.NoopPinFactory)
+	return rpihal.NewAdapter(rpihal.Settings{PWMFreq: 150}, pd, rpihal.NoopPinFactory)
 }
 
-func rpiFactory(s settings.Settings, _ i2c.Bus) (hal.Driver, error) {
+func rpiFactory(confData []byte, _ i2c.Bus) (hal.Driver, error) {
 	pinFactory := func(k interface{}) (rpihal.DigitalPin, error) {
 		return embd.NewDigitalPin(k)
 	}
-	return rpihal.NewAdapter(rpihal.Settings{PWMFreq: s.RPI_PWMFreq}, pwm.New(), pinFactory)
+	var conf rpihal.Settings
+	if err := json.Unmarshal(confData, &conf); err != nil {
+		return nil, err
+	}
+	return rpihal.NewAdapter(conf, pwm.New(), pinFactory)
 }
 
-func (d *Drivers) load(s settings.Settings, bus i2c.Bus) error {
-	factory, err := AbstractFactory("rpi", s.Capabilities.DevMode)
+func (d *Drivers) loadAll() error {
+	factory, err := AbstractFactory("rpi", d.dev_mode)
 	if err != nil {
 		return err
 	}
-	if err := d.register(s, bus, factory); err != nil {
+	if err := d.register([]byte(`{"pwm_freq":150}`), factory); err != nil {
 		return err
 	}
 
-	configs, err := d.List()
+	ds, err := d.List()
 	if err != nil {
 		return err
 	}
-	for _, config := range configs {
-		f, err := AbstractFactory(config.Type, s.Capabilities.DevMode)
+	for _, d1 := range ds {
+		f, err := AbstractFactory(d1.Type, d.dev_mode)
 		if err != nil {
-			log.Println("ERROR: Failed to detect loader for driver type:", config.Type, "Error:", err)
+			log.Println("ERROR: Failed to detect loader for driver type:", d1.Type, "Error:", err)
 		}
-		if err := d.register(s, bus, f); err != nil {
-			log.Println("ERROR: Failed to initialize driver:", config.Name, "Error:", err)
+		if err := d.register(d1.Config, f); err != nil {
+			log.Println("ERROR: Failed to initialize driver:", d1.Name, "Error:", err)
 		}
 	}
 	return nil
