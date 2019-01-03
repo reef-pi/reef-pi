@@ -3,13 +3,15 @@ package drivers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+
 	"github.com/kidoman/embd"
+
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
 	"github.com/reef-pi/rpi/i2c"
 	"github.com/reef-pi/rpi/pwm"
-	"log"
 )
 
 type Factory func(config []byte, bus i2c.Bus) (hal.Driver, error)

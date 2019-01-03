@@ -1,9 +1,11 @@
 package drivers
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (d *Drivers) LoadAPI(r *mux.Router) {
