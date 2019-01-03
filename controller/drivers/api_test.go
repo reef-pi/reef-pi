@@ -8,16 +8,16 @@ import (
 	i2c2 "github.com/reef-pi/rpi/i2c"
 )
 
-type mockStore struct {
-	storage.Store
-}
-
 func newDrivers(t *testing.T) *Drivers {
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	i2c := i2c2.MockBus()
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Error(err)
+	}
 
-	driver, err := NewDrivers(s, i2c, &mockStore{})
+	driver, err := NewDrivers(s, i2c, store)
 	if err != nil {
 		t.Fatalf("drivers store could not be built")
 	}

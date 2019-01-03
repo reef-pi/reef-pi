@@ -20,6 +20,7 @@ const (
 	TemperatureUsageBucket = "temperature_usage"
 	TimerBucket            = "timers"
 	ErrorBucket            = "errors"
+	DriverBucket           = "drivers"
 )
 
 type Store interface {
