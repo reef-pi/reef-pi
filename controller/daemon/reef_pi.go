@@ -38,7 +38,7 @@ type ReefPi struct {
 func New(version, database string) (*ReefPi, error) {
 	store, err := storage.NewStore(database)
 	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
-	cookiejar.MaxAge(-1)
+	//	cookiejar.MaxAge(-1)
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
