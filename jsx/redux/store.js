@@ -7,6 +7,7 @@ const initialState = {
     name: 'reef-pi'
   },
   errors: [],
+  drivers: [],
   equipment: [],
   timers: [],
   lights: [],
