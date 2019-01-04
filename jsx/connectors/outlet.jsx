@@ -40,7 +40,8 @@ export default class Outlet extends React.Component {
       name: this.state.name,
       pin: parseInt(this.state.pin),
       reverse: this.state.reverse,
-      equipment: this.props.equipment
+      equipment: this.props.equipment,
+      driver: 'rpi'
     }
     this.props.update(payload)
     this.setState({

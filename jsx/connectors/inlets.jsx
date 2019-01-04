@@ -58,7 +58,8 @@ class inlets extends React.Component {
     var payload = {
       name: this.state.inName,
       pin: parseInt(this.state.inPin),
-      reverse: this.state.inReverse
+      reverse: this.state.inReverse,
+      driver: 'rpi'
     }
     this.props.create(payload)
     this.add()

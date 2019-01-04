@@ -58,7 +58,8 @@ class outlets extends React.Component {
     var payload = {
       name: this.state.outName,
       pin: parseInt(this.state.outPin),
-      reverse: this.state.outReverse
+      reverse: this.state.outReverse,
+      driver: "rpi"
     }
     this.props.create(payload)
     this.add()
