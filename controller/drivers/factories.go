@@ -60,16 +60,15 @@ func (d *Drivers) loadAll() error {
 	if err != nil {
 		return err
 	}
-	d1 := Driver{
+	r := Driver{
 		Name:   "Raspberry Pi",
 		ID:     "rpi",
 		Type:   "rpi",
 		Config: []byte(`{"pwm_freq": 150}`),
 	}
-	if err := d.register(d1, factory); err != nil {
+	if err := d.register(r, factory); err != nil {
 		return err
 	}
-
 	ds, err := d.List()
 	if err != nil {
 		return err

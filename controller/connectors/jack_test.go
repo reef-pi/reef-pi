@@ -43,7 +43,7 @@ func TestJacksAPI(t *testing.T) {
 	}
 
 	body.Reset()
-	j.Driver = "pca9685"
+	j.Driver = "1"
 	json.NewEncoder(body).Encode(j)
 	if err := tr.Do("POST", "/api/jacks/1", body, nil); err != nil {
 		t.Error(err)

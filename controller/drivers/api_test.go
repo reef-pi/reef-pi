@@ -21,13 +21,22 @@ func newDrivers(t *testing.T) *Drivers {
 	if err != nil {
 		t.Fatalf("drivers store could not be built")
 	}
+	d1 := Driver{
+		Name:   "foo",
+		ID:     "0",
+		Type:   "pca9685",
+		Config: []byte(`{}`),
+	}
+	if err := driver.Create(d1); err != nil {
+		t.Error(err)
+	}
 	return driver
 }
 
 func TestNewDrivers(t *testing.T) {
 	driver := newDrivers(t)
-	if len(driver.drivers) != 1 {
-		t.Error("unexpected number of mock drivers returned")
+	if len(driver.drivers) != 2 {
+		t.Error("unexpected number of drivers returned", len(driver.drivers))
 	}
 }
 
@@ -42,9 +51,6 @@ func TestDrivers_List(t *testing.T) {
 		t.Error("list API returned", len(meta), "drivers")
 	}
 
-	if meta[0].Name != "Raspberry Pi" {
-		t.Error("driver list did not return sorted results")
-	}
 }
 
 func TestDrivers_Get(t *testing.T) {

@@ -125,11 +125,7 @@ func (d *Drivers) Delete(id string) error {
 }
 
 func (d *Drivers) List() ([]Driver, error) {
-	ds := []Driver{
-		Driver{
-			Name: "Raspberry Pi",
-			Type: "rpi",
-		}}
+	ds := []Driver{}
 	fn := func(v []byte) error {
 		var d1 Driver
 		if err := json.Unmarshal(v, &d1); err != nil {
