@@ -60,7 +60,13 @@ func (d *Drivers) loadAll() error {
 	if err != nil {
 		return err
 	}
-	if err := d.register([]byte(`{"pwm_freq":150}`), factory); err != nil {
+	d1 := Driver{
+		Name:   "Raspberry Pi",
+		ID:     "rpi",
+		Type:   "rpi",
+		Config: []byte(`{"pwm_freq": 150}`),
+	}
+	if err := d.register(d1, factory); err != nil {
 		return err
 	}
 
@@ -73,9 +79,27 @@ func (d *Drivers) loadAll() error {
 		if err != nil {
 			log.Println("ERROR: Failed to detect loader for driver type:", d1.Type, "Error:", err)
 		}
-		if err := d.register(d1.Config, f); err != nil {
+		if err := d.register(d1, f); err != nil {
 			log.Println("ERROR: Failed to initialize driver:", d1.Name, "Error:", err)
 		}
 	}
+	return nil
+}
+
+func (d *Drivers) register(d1 Driver, f Factory) error {
+	d.Lock()
+	defer d.Unlock()
+	r, err := f(d1.Config, d.bus)
+	if err != nil {
+		return err
+	}
+	meta := r.Metadata()
+	if d1.ID == "" {
+		return fmt.Errorf("Empty id, Name:%s", meta.Name)
+	}
+	if alt, ok := d.drivers[d1.ID]; ok {
+		return fmt.Errorf("driver id already taken by %s", alt.Metadata().Name)
+	}
+	d.drivers[d1.ID] = r
 	return nil
 }

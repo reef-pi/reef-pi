@@ -138,6 +138,7 @@ func (r *ReefPi) Stop() error {
 	}
 	r.store.Close()
 	r.bus.Close()
+	r.drivers.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
 }

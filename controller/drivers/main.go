@@ -3,6 +3,7 @@ package drivers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"sync"
 
 	"github.com/reef-pi/hal"
@@ -109,7 +110,7 @@ func (d *Drivers) Create(d1 Driver) error {
 	if err := d.store.Create(DriverBucket, fn); err != nil {
 		return err
 	}
-	return d.register(d1.Config, factory)
+	return d.register(d1, factory)
 }
 func (d *Drivers) Update(id string, d1 Driver) error {
 	d1.ID = id
@@ -123,23 +124,6 @@ func (d *Drivers) Delete(id string) error {
 	return d.store.Delete(DriverBucket, id)
 }
 
-func (d *Drivers) register(config []byte, f Factory) error {
-	r, err := f(config, d.bus)
-	if err != nil {
-		return err
-	}
-	meta := r.Metadata()
-	if meta.Name == "" {
-		return fmt.Errorf("driver did not report a name")
-	}
-	if _, ok := d.drivers[meta.Name]; ok {
-		return fmt.Errorf("driver name already taken: %s", meta.Name)
-	}
-	d.Lock()
-	d.drivers[meta.Name] = r
-	d.Unlock()
-	return nil
-}
 func (d *Drivers) List() ([]Driver, error) {
 	ds := []Driver{
 		Driver{
@@ -155,4 +139,12 @@ func (d *Drivers) List() ([]Driver, error) {
 		return nil
 	}
 	return ds, d.store.List(DriverBucket, fn)
+}
+func (d *Drivers) Close() error {
+	for _, d1 := range d.drivers {
+		if err := d1.Close(); err != nil {
+			log.Println(err)
+		}
+	}
+	return nil
 }
