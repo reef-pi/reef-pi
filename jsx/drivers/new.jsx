@@ -44,7 +44,7 @@ export default class New extends React.Component {
 
   render () {
     return (
-      <div className='container'>
+      <div className='container add-driver'>
         <input id='add_new_driver' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
