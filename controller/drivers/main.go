@@ -49,6 +49,54 @@ func (d *Drivers) Get(name string) (hal.Driver, error) {
 	return driver, nil
 }
 
+func (d *Drivers) InputDriver(id string) (hal.InputDriver, error) {
+	driver, err := d.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	i, ok := driver.(hal.InputDriver)
+	if !ok {
+		return nil, fmt.Errorf("driver %s is not an input driver", driver.Metadata().Name)
+	}
+	return i, nil
+}
+
+func (d *Drivers) OutputDriver(id string) (hal.OutputDriver, error) {
+	driver, err := d.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	o, ok := driver.(hal.OutputDriver)
+	if !ok {
+		return nil, fmt.Errorf("driver %s is not an Output driver", driver.Metadata().Name)
+	}
+	return o, nil
+}
+
+func (d *Drivers) PWMDriver(id string) (hal.PWMDriver, error) {
+	driver, err := d.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	p, ok := driver.(hal.PWMDriver)
+	if !ok {
+		return nil, fmt.Errorf("driver %s is not an PWM driver", driver.Metadata().Name)
+	}
+	return p, nil
+}
+
+func (d *Drivers) ADCDriver(id string) (hal.ADCDriver, error) {
+	driver, err := d.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	p, ok := driver.(hal.ADCDriver)
+	if !ok {
+		return nil, fmt.Errorf("driver %s is not an ADC driver", driver.Metadata().Name)
+	}
+	return p, nil
+}
+
 func (d *Drivers) Create(d1 Driver) error {
 	fn := func(id string) interface{} {
 		d1.ID = id

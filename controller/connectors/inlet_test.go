@@ -18,7 +18,7 @@ func TestInletsAPI(t *testing.T) {
 	drvrs := drivers.TestDrivers(store)
 
 	tr := utils.NewTestRouter()
-	i := Inlet{Name: "Foo", Pin: 21}
+	i := Inlet{Name: "Foo", Pin: 21, Driver: "rpi"}
 	inlets := NewInlets(drvrs, store)
 
 	if err := inlets.Setup(); err != nil {

@@ -21,32 +21,27 @@ type Outlet struct {
 	Pin       int    `json:"pin"`
 	Equipment string `json:"equipment"`
 	Reverse   bool   `json:"reverse"`
+	Driver    string `json:"driver"`
 }
 
 func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
-	pindriver, err := drivers.Get("rpi")
+	d, err := drivers.OutputDriver(o.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
-	outputDriver, ok := pindriver.(hal.OutputDriver)
-	if !ok {
-		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", o.Name)
-	}
-	outputPin, err := outputDriver.OutputPin(fmt.Sprintf("GP%d", o.Pin))
+	pin, err := d.OutputPin(fmt.Sprintf("GP%d", o.Pin))
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", o.Pin, err)
 	}
-	return outputPin, nil
+	return pin, nil
 }
 
 func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 	if o.Name == "" {
 		return fmt.Errorf("Outlet name can not be empty")
 	}
-	if _, err := o.outputPin(drivers); err != nil {
-		return err
-	}
-	return nil
+	_, err := o.outputPin(drivers)
+	return err
 }
 
 type Outlets struct {

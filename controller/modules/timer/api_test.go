@@ -23,8 +23,9 @@ func TestTimerController(t *testing.T) {
 		DevMode: true,
 	}
 	o := connectors.Outlet{
-		Name: "bar",
-		Pin:  24,
+		Name:   "bar",
+		Pin:    24,
+		Driver: "rpi",
 	}
 	drvrs := drivers.TestDrivers(con.Store())
 	outlets := connectors.NewOutlets(drvrs, con.Store())
