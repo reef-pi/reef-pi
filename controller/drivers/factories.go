@@ -14,6 +14,13 @@ import (
 	"github.com/reef-pi/rpi/pwm"
 )
 
+var piDriver = Driver{
+	Name:   "Raspberry Pi",
+	ID:     "rpi",
+	Type:   "rpi",
+	Config: []byte(`{"pwm_freq": 150}`),
+}
+
 type Factory func(config []byte, bus i2c.Bus) (hal.Driver, error)
 
 func AbstractFactory(t string, dev_mode bool) (Factory, error) {
@@ -60,13 +67,7 @@ func (d *Drivers) loadAll() error {
 	if err != nil {
 		return err
 	}
-	r := Driver{
-		Name:   "Raspberry Pi",
-		ID:     "rpi",
-		Type:   "rpi",
-		Config: []byte(`{"pwm_freq": 150}`),
-	}
-	if err := d.register(r, factory); err != nil {
+	if err := d.register(piDriver, factory); err != nil {
 		return err
 	}
 	ds, err := d.List()

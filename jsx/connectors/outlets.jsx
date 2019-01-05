@@ -77,6 +77,8 @@ class outlets extends React.Component {
           reverse={o.reverse}
           equipment={o.equipment}
           remove={this.remove(o.id)}
+          drivers={this.props.drivers}
+          driver={o.driver}
           update={p => {
             this.props.update(o.id, p)
             this.props.fetch()
@@ -164,7 +166,10 @@ class outlets extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { outlets: state.outlets }
+  return {
+    outlets: state.outlets,
+    drivers: state.drivers
+  }
 }
 
 const mapDispatchToProps = dispatch => {

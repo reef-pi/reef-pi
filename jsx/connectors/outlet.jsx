@@ -9,7 +9,8 @@ export default class Outlet extends React.Component {
       name: props.name,
       pin: props.pin,
       reverse: props.reverse,
-      lbl: 'edit'
+      lbl: 'edit',
+      driver: props.driver,
     }
     this.edit = this.edit.bind(this)
     this.editUI = this.editUI.bind(this)
@@ -17,6 +18,22 @@ export default class Outlet extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
+    this.driverName = this.driverName.bind(this)
+    this.driverOptions = this.driverOptions.bind(this)
+  }
+
+  driverOptions() {
+    return(this.props.drivers.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
+  driverName(id) {
+    return this.props.drivers.filter(d => d.id === id)[0].name
   }
 
   handleNameChange (e) {
@@ -92,6 +109,11 @@ export default class Outlet extends React.Component {
             />
           </div>
         </div>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Driver</span>
+          </div>
+        </div>
       </div>
     )
   }
@@ -108,6 +130,12 @@ export default class Outlet extends React.Component {
         </div>
         <div className='col'>
           <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
+        </div>
+        <div className='col'>
+          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
+        </div>
+        <div className='col'>
+          <label className='small'>{this.driverName(this.state.driver)}</label>
         </div>
       </div>
     )
@@ -135,6 +163,7 @@ export default class Outlet extends React.Component {
     )
   }
 }
+
 Outlet.propTypes = {
   name: PropTypes.string.isRequired,
   pin: PropTypes.number.isRequired,
@@ -142,5 +171,6 @@ Outlet.propTypes = {
   outlet_id: PropTypes.string.isRequired,
   remove: PropTypes.func.isRequired,
   reverse: PropTypes.bool.isRequired,
-  update: PropTypes.func
+  update: PropTypes.func,
+  drivers: PropTypes.array.isRequired
 }

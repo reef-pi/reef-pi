@@ -18,7 +18,11 @@ func (d *Drivers) LoadAPI(r *mux.Router) {
 
 func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
-		return d.List()
+		ds, err := d.List()
+		if err == nil {
+			ds = append(ds, piDriver)
+		}
+		return ds, err
 	}
 	utils.JSONListResponse(fn, w, r)
 }

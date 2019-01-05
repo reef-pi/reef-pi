@@ -3,6 +3,7 @@ import $ from 'jquery'
 import {fetchATOs} from './ato'
 import {fetchInfo} from './info'
 import {fetchDosingPumps} from './doser'
+import {fetchDrivers} from './drivers'
 import {fetchErrors} from './errors'
 import {fetchOutlets} from './outlets'
 import {fetchInlets} from './inlets'
@@ -17,6 +18,7 @@ export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
+      dispatch(fetchDrivers())
       dispatch(fetchInlets())
       dispatch(fetchErrors())
       dispatch(fetchInfo())

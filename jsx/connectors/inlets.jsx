@@ -150,7 +150,13 @@ class inlets extends React.Component {
             </div>
           </div>
           <div className='col-12 col-md-3 text-right'>
-            <input type='button' id='createInlet' value='add' onClick={this.save} className='btn btn-outline-primary col-12 col-md-4' />
+            <input
+              type='button'
+              id='createInlet'
+              value='add'
+              onClick={this.save}
+              className='btn btn-outline-primary col-12 col-md-4'
+            />
           </div>
         </div>
       </div>
@@ -159,7 +165,10 @@ class inlets extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { inlets: state.inlets }
+  return {
+    inlets: state.inlets,
+    drivers: state.drivers
+  }
 }
 
 const mapDispatchToProps = dispatch => {
