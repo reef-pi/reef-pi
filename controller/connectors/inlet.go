@@ -45,7 +45,7 @@ func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.InputPin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", i.Name, err)
 	}
-	inputPin, err := d.InputPin(fmt.Sprintf("GP%d", i.Pin))
+	inputPin, err := d.InputPin(i.Pin)
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", i.Pin, err)
 	}

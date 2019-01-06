@@ -192,7 +192,7 @@ class jacks extends React.Component {
 const mapStateToProps = state => {
   return {
     jacks: state.jacks,
-    drivers: state.drivers,
+    drivers: state.drivers
   }
 }
 
@@ -201,7 +201,7 @@ const mapDispatchToProps = dispatch => {
     fetch: () => dispatch(fetchJacks()),
     create: j => dispatch(createJack(j)),
     delete: id => dispatch(deleteJack(id)),
-    update: (id, j) => dispatch(updateJack(id, j)),
+    update: (id, j) => dispatch(updateJack(id, j))
   }
 }
 

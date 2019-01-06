@@ -33,7 +33,7 @@ func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (hal.PWMChannel, e
 	if err != nil {
 		return nil, fmt.Errorf("driver %s for jack %s not found: %v", j.Driver, j.Name, err)
 	}
-	return d.PWMChannel(fmt.Sprintf("%d", channel))
+	return d.PWMChannel(channel)
 }
 
 func (j Jack) IsValid(drvrs *drivers.Drivers) error {

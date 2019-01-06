@@ -29,7 +29,7 @@ func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
-	pin, err := d.OutputPin(fmt.Sprintf("GP%d", o.Pin))
+	pin, err := d.OutputPin(o.Pin)
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", o.Pin, err)
 	}
