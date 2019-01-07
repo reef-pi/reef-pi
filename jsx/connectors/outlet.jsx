@@ -63,7 +63,6 @@ export default class Outlet extends React.Component {
   }
 
   editUI () {
-    console.log(this.state.driver_name)
     return (
       <div className='row'>
         <div className='col-12 col-md-6'>

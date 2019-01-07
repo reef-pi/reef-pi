@@ -10,7 +10,8 @@ export default class Jack extends React.Component {
       name: props.name,
       pins: props.pins.join(','),
       driver: props.driver,
-      lbl: 'edit'
+      lbl: 'edit',
+      driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
     }
     this.edit = this.edit.bind(this)
     this.editUI = this.editUI.bind(this)
@@ -26,12 +27,11 @@ export default class Jack extends React.Component {
   handlePinChange (e) {
     this.setState({ pins: e.target.value })
   }
-  setDriver (k) {
-    return () => {
-      this.setState({
-        driver: k
-      })
-    }
+  setDriver (e) {
+    this.setState({
+      JackDriver: e.target.value,
+      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+    })
   }
 
   edit () {
@@ -94,25 +94,19 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label>Driver</label>
-            <div className='dropdown'>
-              <button
-                className='jack-type btn btn-secondary dropdown-toggle form-control col-12'
-                type='button'
-                id={this.props.jack_id + '-driver-selection'}
-                data-toggle='dropdown'
-              >
-                {this.state.driver}
-              </button>
-              <div className='dropdown-menu col-12'>
-                <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
-                  rpi
-                </a>
-                <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
-                  pca9685
-                </a>
-              </div>
-            </div>
+            <label className='input-group-addon'>Driver</label>
+            <select
+              name='driver'
+              onChange={this.setDriver}
+              value={this.state.JackDriver}>
+              {this.props.drivers.map(item => {
+                return (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                )
+              })}
+            </select>
           </div>
         </div>
       </div>
@@ -127,7 +121,7 @@ export default class Jack extends React.Component {
           <label className='small'>{this.state.pins}</label>
         </div>
         <div className='col-7'>
-          <label className='small'>{this.state.driver}</label>
+          <label className='small'>{this.state.driver_name}</label>
         </div>
       </div>
     )
@@ -161,5 +155,7 @@ Jack.propTypes = {
   pins: PropTypes.array.isRequired,
   jack_id: PropTypes.string.isRequired,
   remove: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  driver: PropTypes.string,
+  drivers: PropTypes.array.isRequired
 }
