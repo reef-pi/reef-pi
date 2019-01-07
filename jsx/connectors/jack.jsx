@@ -102,7 +102,11 @@ export default class Jack extends React.Component {
               value={this.state.JackDriver}>
               {this.props.drivers.map(item => {
                 return (
-                  <option key={item.id} value={item.id}>
+                  <option
+                    key={item.id}
+                    value={item.id}
+                    id={'jack-' + this.props.jack_id + '-driver-' + item.id}
+                  >
                     {item.name}
                   </option>
                 )
