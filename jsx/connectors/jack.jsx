@@ -97,6 +97,7 @@ export default class Jack extends React.Component {
             <label className='input-group-addon'>Driver</label>
             <select
               name='driver'
+              id={'jack-' + this.props.jack_id + '-driver-select'}
               onChange={this.setDriver}
               value={this.state.JackDriver}>
               {this.props.drivers.map(item => {
