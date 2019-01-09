@@ -10,7 +10,7 @@ class jacks extends React.Component {
     this.state = {
       JackName: '',
       JackPins: '',
-      JackDriver: 'pca9685',
+      JackDriver: 'rpi',
       add: false
     }
     this.list = this.list.bind(this)
@@ -27,13 +27,13 @@ class jacks extends React.Component {
   handlePinChange (e) {
     this.setState({ JackPins: e.target.value })
   }
-  setDriver (k) {
-    return () => {
-      this.setState({
-        JackDriver: k
-      })
-    }
+  setDriver (e) {
+    this.setState({
+      JackDriver: e.target.value,
+      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+    })
   }
+
   remove (id) {
     return function () {
       confirm('Are you sure ?').then(
@@ -84,6 +84,7 @@ class jacks extends React.Component {
           key={j.id}
           pins={j.pins}
           driver={j.driver}
+          drivers={this.props.drivers}
           jack_id={j.id}
           remove={this.remove(j.id)}
           update={p => {
@@ -149,27 +150,19 @@ class jacks extends React.Component {
 
               <div className='col-12 col-md-2'>
                 <div className='jack-type form-group'>
-                  <label htmlFor='jack-type-selection'>Driver</label>
-                  <div className='dropdown'>
-                    <button
-                      className='btn btn-secondary dropdown-toggle col-12'
-                      type='button'
-                      id='jack-type-selection'
-                      data-toggle='dropdown'
-                      aria-haspopup='true'
-                      aria-expanded='false'
-                    >
-                      {this.state.JackDriver}
-                    </button>
-                    <div className='dropdown-menu col-12' aria-labelledby='dropdownMenuButton'>
-                      <a className='dropdown-item' href='#' onClick={this.setDriver('rpi')}>
-                        rpi
-                      </a>
-                      <a className='dropdown-item' href='#' onClick={this.setDriver('pca9685')}>
-                        pca9685
-                      </a>
-                    </div>
-                  </div>
+                  <label className='input-group-addon'>Driver</label>
+                  <select
+                    name='driver'
+                    onChange={this.setDriver}
+                    value={this.state.JackDriver}>
+                    {this.props.drivers.map(item => {
+                      return (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      )
+                    })}
+                  </select>
                 </div>
               </div>
               <div className='col-12 col-md-3 text-right'>
@@ -190,7 +183,10 @@ class jacks extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { jacks: state.jacks }
+  return {
+    jacks: state.jacks,
+    drivers: state.drivers
+  }
 }
 
 const mapDispatchToProps = dispatch => {

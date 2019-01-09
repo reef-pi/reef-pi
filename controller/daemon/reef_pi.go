@@ -70,6 +70,9 @@ func New(version, database string) (*ReefPi, error) {
 	}
 
 	drvrs, err := drivers.NewDrivers(s, bus, store)
+	if err != nil {
+		log.Println("ERROR: failed to initialize drivers. Error:", err)
+	}
 
 	jacks := connectors.NewJacks(drvrs, store)
 	outlets := connectors.NewOutlets(drvrs, store)
@@ -135,6 +138,7 @@ func (r *ReefPi) Stop() error {
 	}
 	r.store.Close()
 	r.bus.Close()
+	r.drivers.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
 }

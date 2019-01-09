@@ -32,13 +32,13 @@ func TestController(t *testing.T) {
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
-	if err := outlets.Create(connectors.Outlet{Name: "ato-outlet", Pin: 21}); err != nil {
+	if err := outlets.Create(connectors.Outlet{Name: "ato-outlet", Pin: 21, Driver: "rpi"}); err != nil {
 		t.Error(err)
 	}
 	if err := eqs.Create(equipment.Equipment{Outlet: "1"}); err != nil {
 		t.Error(err)
 	}
-	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16}); err != nil {
+	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16, Driver: "rpi"}); err != nil {
 		t.Error(err)
 	}
 	c, e := New(true, con, eqs, inlets)

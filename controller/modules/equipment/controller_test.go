@@ -34,8 +34,9 @@ func TestEquipmentController(t *testing.T) {
 	c.Setup()
 	c.Stop()
 	o := connectors.Outlet{
-		Name: "bar",
-		Pin:  23,
+		Name:   "bar",
+		Pin:    23,
+		Driver: "rpi",
 	}
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
@@ -172,16 +173,18 @@ func TestUpdateEquipment(t *testing.T) {
 	c.Setup()
 
 	o1 := connectors.Outlet{
-		Name: "O1",
-		Pin:  23,
+		Name:   "O1",
+		Pin:    23,
+		Driver: "rpi",
 	}
 	if err := outlets.Create(o1); err != nil {
 		t.Fatal(err)
 	}
 
 	o2 := connectors.Outlet{
-		Name: "O2",
-		Pin:  4,
+		Name:   "O2",
+		Pin:    4,
+		Driver: "rpi",
 	}
 	if err := outlets.Create(o2); err != nil {
 		t.Fatal(err)

@@ -23,6 +23,7 @@ type Inlet struct {
 	Pin       int    `json:"pin"`
 	Equipment string `json:"equipment"`
 	Reverse   bool   `json:"reverse"`
+	Driver    string `json:"driver"`
 }
 
 type Inlets struct {
@@ -40,15 +41,11 @@ func (e *Inlets) LoadAPI(r *mux.Router) {
 }
 
 func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.InputPin, error) {
-	pindriver, err := drivers.Get("rpi")
+	d, err := drivers.InputDriver(i.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", i.Name, err)
 	}
-	inputDriver, ok := pindriver.(hal.InputDriver)
-	if !ok {
-		return nil, fmt.Errorf("driver for inlet %s is not an inlet driver", i.Name)
-	}
-	inputPin, err := inputDriver.InputPin(fmt.Sprintf("GP%d", i.Pin))
+	inputPin, err := d.InputPin(i.Pin)
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", i.Pin, err)
 	}

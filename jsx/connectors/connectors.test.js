@@ -15,6 +15,10 @@ import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
+const stockDrivers = [
+  {id: 'rpi', name: 'Rasoverry Pi'},
+  {id: '1', name: 'PCA9685'}
+]
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -34,7 +38,8 @@ describe('Connectors', () => {
 
   it('<InletSelector />', () => {
     const state = {
-      inlets: [{ id: '1', name: 'foo', pin: 1 }, { id: '2', name: 'bar', pin: 2 }]
+      inlets: [{ id: '1', name: 'foo', pin: 1 }, { id: '2', name: 'bar', pin: 2 }],
+      drivers: stockDrivers
     }
     const m = shallow(<InletSelector store={mockStore(state)} active='1' update={() => true} />).dive()
     m.find('a')
@@ -44,7 +49,8 @@ describe('Connectors', () => {
 
   it('<Inlets />', () => {
     const state = {
-      inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true }]
+      inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true }],
+      drivers: stockDrivers
     }
     const wrapper = shallow(<Inlets store={mockStore(state)} />).dive()
     wrapper.find('#add_inlet').simulate('click')
@@ -56,7 +62,7 @@ describe('Connectors', () => {
   })
 
   it('<Inlet />', () => {
-    const m = shallow(<Inlet inlet_id='1' name='foo' pin={1} reverse={false} update={() => true} remove={() => true} />)
+    const m = shallow(<Inlet inlet_id='1' name='foo' pin={1} reverse={false} update={() => true} remove={() => true} drivers={stockDrivers} />)
     m.find('.edit-inlet').simulate('click')
     m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
     m.find('.inlet-pin').simulate('change', { target: { value: '4' } })
@@ -66,16 +72,14 @@ describe('Connectors', () => {
 
   it('<Jacks />', () => {
     const state = {
-      jacks: [{ id: '1', name: 'J2', pins: [0, 2] }]
+      jacks: [{ id: '1', name: 'J2', pins: [0, 2] }],
+      drivers: stockDrivers
     }
     const m = shallow(<Jacks store={mockStore(state)} />).dive()
     m.find('#add_jack').simulate('click')
     m.find('#jackName').simulate('change', { target: { value: 'foo' } })
     m.find('#jackPins').simulate('change', { target: { value: '4,L' } })
-    m.find('#jack-type-selection').simulate('click')
-    m.find('a.dropdown-item')
-      .first()
-      .simulate('click')
+    m.find('.jack-type [name*="driver"]').simulate('click')
     m.find('#createJack').simulate('click')
     m.find('#jackPins').simulate('change', { target: { value: '4' } })
     m.find('#createJack').simulate('click')
@@ -83,23 +87,22 @@ describe('Connectors', () => {
 
   it('<Jack />', () => {
     const m = shallow(
-      <Jack jack_id='1' name='foo' pins={[1, 2]} update={() => true} remove={() => true} driver='rpi' />
+      <Jack jack_id='1' name='foo' pins={[1, 2]} update={() => true} remove={() => true} driver='rpi' drivers={stockDrivers} />
     )
     m.find('.jack-edit').simulate('click')
     m.find('.jack-name').simulate('change', { target: { value: 'foo' } })
     m.find('.jack-pin').simulate('change', { target: { value: '4,L' } })
     m.find('.jack-edit').simulate('click')
-    m.find('.jack-type').simulate('click')
-    m.find('a.dropdown-item')
-      .first()
-      .simulate('click')
+    m.find('#jack-1-driver-select').simulate('click')
+    m.find('#jack-1-driver-1').simulate('click')
     m.find('.jack-pin').simulate('change', { target: { value: '4' } })
     m.find('.jack-edit').simulate('click')
   })
 
   it('<Outlets />', () => {
     const state = {
-      outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true }]
+      outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true }],
+      drivers: stockDrivers
     }
     const wrapper = shallow(<Outlets store={mockStore(state)} />).dive()
     wrapper.find('#add_outlet').simulate('click')
@@ -111,7 +114,16 @@ describe('Connectors', () => {
   })
 
   it('<Outlet />', () => {
-    const m = shallow(<Outlet name='foo' reverse pin={1} outlet_id='1' update={() => true} remove={() => true} />)
+    const m = shallow(
+      <Outlet
+        name='foo'
+        reverse pin={1}
+        outlet_id='1'
+        update={() => true}
+        remove={() => true}
+        driver='1'
+        drivers={stockDrivers}
+      />)
     m.find('.edit-outlet').simulate('click')
     m.find('.outlet-name').simulate('change', { target: { value: 'foo' } })
     m.find('.outlet-pin').simulate('change', { target: { value: '4' } })

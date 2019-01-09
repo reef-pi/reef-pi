@@ -7,7 +7,7 @@ module.exports = {
       .type('input#lightName', 'A360')
       .click('button#jack')
       .wait(500)
-      .click('span#select-jack-J1')
+      .click('span#select-jack-J0')
       .wait(1000)
       .click('input#createLight')
       .wait(500)

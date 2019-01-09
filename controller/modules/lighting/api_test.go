@@ -24,6 +24,14 @@ func TestLightingAPI(t *testing.T) {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	drvrs := drivers.TestDrivers(con.Store())
+	d1 := drivers.Driver{
+		Name:   "lighting",
+		Type:   "pca9685",
+		Config: []byte(`{"address":64, "frequency":1000}`),
+	}
+	if err := drvrs.Create(d1); err != nil {
+		t.Fatal(err)
+	}
 	jacks := connectors.NewJacks(drvrs, con.Store())
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
@@ -43,7 +51,7 @@ func TestLightingAPI(t *testing.T) {
 	j1 := connectors.Jack{
 		Name:   "J1",
 		Pins:   []int{3},
-		Driver: "pca9685",
+		Driver: "1",
 	}
 	if err := c.jacks.Create(j1); err != nil {
 		t.Fatal(err)

@@ -28,7 +28,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
-	o1 := connectors.Outlet{Name: "O1", Pin: 21}
+	o1 := connectors.Outlet{Name: "O1", Pin: 21, Driver: "rpi"}
 	if err := outlets.Create(o1); err != nil {
 		t.Error(err)
 	}
