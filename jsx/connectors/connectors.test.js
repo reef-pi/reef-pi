@@ -62,7 +62,17 @@ describe('Connectors', () => {
   })
 
   it('<Inlet />', () => {
-    const m = shallow(<Inlet inlet_id='1' name='foo' pin={1} reverse={false} update={() => true} remove={() => true} drivers={stockDrivers} />)
+    const m = shallow(
+      <Inlet
+        inlet_id='1'
+        name='foo'
+        pin={1}
+        reverse={false}
+        update={() => true}
+        remove={() => true}
+        drivers={stockDrivers}
+        driver='1'
+      />)
     m.find('.edit-inlet').simulate('click')
     m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
     m.find('.inlet-pin').simulate('change', { target: { value: '4' } })
