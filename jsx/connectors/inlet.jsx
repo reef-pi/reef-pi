@@ -9,6 +9,8 @@ export default class Inlet extends React.Component {
       name: props.name,
       pin: props.pin,
       reverse: props.reverse,
+      driver: props.driver,
+      driver_name: props.drivers.filter(d => d.id === props.driver)[0].name,
       lbl: 'edit'
     }
     this.edit = this.edit.bind(this)
@@ -17,17 +19,28 @@ export default class Inlet extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
+    this.handleDriverChange = this.handleDriverChange.bind(this)
+  }
+
+  handleDriverChange (e) {
+    this.setState({
+      driver: e.target.value,
+      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+    })
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ pin: e.target.value })
   }
+
   handleReverseChange () {
     this.setState({ reverse: !this.state.reverse })
   }
+
   edit () {
     if (!this.state.edit) {
       this.setState({
@@ -41,7 +54,7 @@ export default class Inlet extends React.Component {
       pin: parseInt(this.state.pin),
       reverse: this.state.reverse,
       equipment: this.props.equipment,
-      driver: 'rpi'
+      driver: this.state.driver
     }
     this.props.update(payload)
     this.setState({
@@ -92,6 +105,23 @@ export default class Inlet extends React.Component {
             />
           </div>
         </div>
+        <div className='col-12 col-md-2'>
+          <div className='driver-type form-group'>
+            <label className='input-group-addon'>Driver</label>
+            <select
+              name='driver'
+              onChange={this.handleDriverChange}
+              value={this.state.driver}>
+              {this.props.drivers.map(item => {
+                return (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                )
+              })}
+            </select>
+          </div>
+        </div>
       </div>
     )
   }
@@ -105,6 +135,9 @@ export default class Inlet extends React.Component {
         </div>
         <div className='col'>
           <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
+        </div>
+        <div className='col'>
+          <label className='small'>{this.state.driver_name}</label>
         </div>
         <div className='col'>
           <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
