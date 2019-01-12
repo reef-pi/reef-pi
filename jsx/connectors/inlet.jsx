@@ -131,13 +131,13 @@ export default class Inlet extends React.Component {
       <div className='row'>
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
-          <label className='small'>{this.state.pin}</label>
+          <label className='small'>
+            {this.state.driver_name}
+            ({this.state.pin})
+          </label>
         </div>
         <div className='col'>
           <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
-        </div>
-        <div className='col'>
-          <label className='small'>{this.state.driver_name}</label>
         </div>
         <div className='col'>
           <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
