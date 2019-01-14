@@ -10,8 +10,8 @@ class inlets extends React.Component {
     this.state = {
       inName: '',
       inPin: '',
-      inDriver: '',
-      driver_name: '',
+      inDriver: 'rpi',
+      driver_name: 'Raspberry Pi',
       inReverse: false,
       add: false
     }

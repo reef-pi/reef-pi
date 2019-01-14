@@ -123,10 +123,10 @@ export default class Jack extends React.Component {
       <div className='row'>
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
-          <label className='small'>{this.state.pins}</label>
-        </div>
-        <div className='col-7'>
-          <label className='small'>{this.state.driver_name}</label>
+          <label className='small'>
+            {this.state.driver_name}
+            ({this.state.pins})
+          </label>
         </div>
       </div>
     )
