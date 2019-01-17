@@ -23,6 +23,8 @@ class drivers extends React.Component {
           driver_id={d.id}
           type={d.type}
           key={d.id}
+          config={d.config}
+          remove={this.props.delete}
         />
       )
     })

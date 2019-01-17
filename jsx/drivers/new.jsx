@@ -38,6 +38,8 @@ export default class New extends React.Component {
       type: values.type,
       config: values.config
     }
+    payload.config.address = parseInt(payload.config.address)
+    payload.config.frequency = parseInt(payload.config.frequency)
     this.props.hook(payload)
     this.toggle()
   }

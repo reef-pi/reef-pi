@@ -42,10 +42,10 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	return d, d.loadAll()
 }
 
-func (d *Drivers) Get(name string) (hal.Driver, error) {
-	driver, ok := d.drivers[name]
+func (d *Drivers) Get(id string) (hal.Driver, error) {
+	driver, ok := d.drivers[id]
 	if !ok {
-		return nil, fmt.Errorf("driver by name %s not available", name)
+		return nil, fmt.Errorf("driver by id %s not available", id)
 	}
 	return driver, nil
 }
@@ -110,7 +110,10 @@ func (d *Drivers) Create(d1 Driver) error {
 	if err := d.store.Create(DriverBucket, fn); err != nil {
 		return err
 	}
-	return d.register(d1, factory)
+	if err := d.register(d1, factory); err != nil {
+		return err
+	}
+	return nil
 }
 func (d *Drivers) Update(id string, d1 Driver) error {
 	d1.ID = id
