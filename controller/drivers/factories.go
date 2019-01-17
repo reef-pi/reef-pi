@@ -100,6 +100,7 @@ func (d *Drivers) register(d1 Driver, f Factory) error {
 	if alt, ok := d.drivers[d1.ID]; ok {
 		return fmt.Errorf("driver id already taken by %s", alt.Metadata().Name)
 	}
+	log.Println("driver-subsystem: registering driver id:", d1.ID, "Name:", d1.Name)
 	d.drivers[d1.ID] = r
 	return nil
 }

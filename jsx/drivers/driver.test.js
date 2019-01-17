@@ -9,7 +9,14 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('driver UI', () => {
   it('<Driver />', () => {
-    shallow(<Driver name='foo' type='bar' />)
+    shallow(
+      <Driver
+        name='foo'
+        type='bar'
+        config={{}}
+        driver_id='2'
+        remove={() => true}
+      />)
   })
 
   it('<DriverForm />', () => {

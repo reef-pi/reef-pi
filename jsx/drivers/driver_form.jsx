@@ -9,8 +9,11 @@ const DriverForm = withFormik({
     if (data === undefined) {
       data = {
         name: '',
-        config: {},
-        type: ''
+        config: {
+          address: 68,
+          frequency: 1500
+        },
+        type: 'pca9685'
       }
     }
     return ({

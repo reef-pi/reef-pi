@@ -5,7 +5,7 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 
-const driverTypes = ['pca9685', 'mcp23017', 'ph-board']
+const driverTypes = ['pca9685']
 const EditDriver = ({
   values,
   errors,
@@ -23,6 +23,41 @@ const EditDriver = ({
       submitForm() // Calling submit form in order to show validation errors
       showError(
         'The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+      )
+    }
+  }
+
+  const driverConfig = () => {
+    if (values.type === 'pca9685') {
+      return (
+        <div className={classNames('row', { 'd-none': readOnly })}>
+          <div className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='name'>Address</label>
+              <Field
+                name='config.address'
+                disabled={readOnly}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('config.address', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='name' />
+            </div>
+          </div>
+          <div className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='name'>Frequency</label>
+              <Field
+                name='config.frequency'
+                disabled={readOnly}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('config.frequency', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='name' />
+            </div>
+          </div>
+        </div>
       )
     }
   }
@@ -75,6 +110,7 @@ const EditDriver = ({
           </div>
         </div>
       </div>
+      {driverConfig()}
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
           <input
