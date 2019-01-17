@@ -48,8 +48,12 @@ func (c *Controller) control(tc TC, u *Usage) error {
 		log.Println("temperature subsystem: Current temperature is within range switching off heater/cooler")
 		c.switchOffAll(tc)
 	}
-	c.c.Telemetry().EmitMetric(tc.Name+"-cooler", u.Cooler)
-	c.c.Telemetry().EmitMetric(tc.Name+"-heater", u.Heater)
+	if tc.Heater != "" {
+		c.c.Telemetry().EmitMetric(tc.Name+"-cooler", u.Cooler)
+	}
+	if tc.Cooler != "" {
+		c.c.Telemetry().EmitMetric(tc.Name+"-heater", u.Heater)
+	}
 	return nil
 }
 
