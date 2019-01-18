@@ -11,6 +11,7 @@ import {fetchTCs} from './tcs'
 import {fetchLights} from './lights'
 import {fetchPhProbes} from './phprobes'
 import {fetchEquipment} from './equipment'
+import {fetchTimers} from './timer'
 import {capabilitiesLoaded} from './capabilities'
 
 export const fetchUIData = (dispatch) => {
@@ -45,6 +46,9 @@ export const fetchUIData = (dispatch) => {
             break
           case 'doser':
             dispatch(fetchDosingPumps())
+            break
+          case 'timers':
+            dispatch(fetchTimers())
             break
         }
       })
