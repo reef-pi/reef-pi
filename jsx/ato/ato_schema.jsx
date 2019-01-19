@@ -14,6 +14,7 @@ const AtoSchema = Yup.object().shape({
     .min(1, 'Check Frequency must be 1 second or greater'),
   pump: Yup.number(),
   notify: Yup.bool(),
+  disable_on_alert: Yup.bool(),
   maxAlert: Yup.mixed()
     .when('notify', (notify, schema) => {
       if (notify === true) {
