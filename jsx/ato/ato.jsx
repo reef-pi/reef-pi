@@ -53,6 +53,7 @@ class ato extends React.Component {
       period: parseInt(values.period),
       control: (values.pump !== ''),
       pump: values.pump,
+      disable_on_alert: values.disable_on_alert,
       notify: {
         enable: values.notify,
         max: values.maxAlert

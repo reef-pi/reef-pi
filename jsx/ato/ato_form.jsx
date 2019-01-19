@@ -9,6 +9,7 @@ const AtoForm = withFormik({
     if (data === undefined) {
       data = {
         enable: true,
+        disable_on_alert: false,
         notify: {}
       }
     }
@@ -18,6 +19,7 @@ const AtoForm = withFormik({
       enable: (data.enable === undefined ? true : data.enable),
       control: data.control || false,
       inlet: data.inlet || '',
+      disable_on_alert: data.disable_on_alert || false,
       period: data.period || 120,
       pump: data.pump || '',
       notify: (data.notify && data.notify.enable) || false,
