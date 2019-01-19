@@ -16,14 +16,15 @@ type Notify struct {
 }
 
 type ATO struct {
-	ID      string        `json:"id"`
-	Inlet   string        `json:"inlet"`
-	Pump    string        `json:"pump"`
-	Period  time.Duration `json:"period"`
-	Control bool          `json:"control"`
-	Enable  bool          `json:"enable"`
-	Notify  Notify        `json:"notify"`
-	Name    string        `json:"name"`
+	ID             string        `json:"id"`
+	Inlet          string        `json:"inlet"`
+	Pump           string        `json:"pump"`
+	Period         time.Duration `json:"period"`
+	Control        bool          `json:"control"`
+	Enable         bool          `json:"enable"`
+	Notify         Notify        `json:"notify"`
+	Name           string        `json:"name"`
+	DisableOnAlert bool          `json:"disable_on_alert"`
 }
 
 func (c *Controller) On(id string, b bool) error {
@@ -152,7 +153,7 @@ func (c *Controller) Check(a ATO) {
 			usage.Pump = 0
 		}
 	}
-	c.NotifyIfNeeded(a, usage)
+	c.NotifyIfNeeded(a)
 	c.statsMgr.Update(a.ID, usage)
 	c.c.Telemetry().EmitMetric("ato-"+a.Name+"-usage", usage.Pump)
 }
@@ -187,6 +188,10 @@ func (c *Controller) Read(a ATO) (int, error) {
 }
 
 func (a ATO) CreateFeed(t telemetry.Telemetry) {
-	t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
-	t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
+	if a.Enable {
+		t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
+	}
+	if a.Pump != "" {
+		t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
+	}
 }

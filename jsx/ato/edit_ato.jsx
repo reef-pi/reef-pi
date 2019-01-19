@@ -168,6 +168,23 @@ const EditAto = ({
             <ErrorFor errors={errors} touched={touched} name='notify' />
           </div>
         </div>
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='disable_on_alert'>Disable on alert</label>
+            <Field
+              name='disable_on_alert'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('notify', touched, errors)
+              })}
+            >
+              <option value='true'>Enabled</option>
+              <option value='false'>Disabled</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
+          </div>
+        </div>
 
         <div
           className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
