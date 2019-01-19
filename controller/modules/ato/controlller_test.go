@@ -83,11 +83,10 @@ func TestController(t *testing.T) {
 		t.Error(err)
 	}
 	a.Notify.Enable = true
-	stats, err := c.statsMgr.Get("1")
-	if err != nil {
+	if _, err := c.statsMgr.Get("1"); err != nil {
 		t.Error(err)
 	}
-	c.NotifyIfNeeded(a, stats.Current[0].(Usage))
+	c.NotifyIfNeeded(a)
 
 	inUse, err := c.IsEquipmentInUse("-1")
 	if err != nil {
