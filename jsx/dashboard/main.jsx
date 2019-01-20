@@ -53,7 +53,7 @@ class dashboard extends React.Component {
         switch (ch.type) {
           case 'light':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <LightChart width={config.width} height={config.height} light_id={ch.id} />
                 </ErrorBoundary>
@@ -62,7 +62,7 @@ class dashboard extends React.Component {
             break
           case 'equipment':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <EquipmentChart width={config.width} height={config.height} />
                 </ErrorBoundary>
@@ -71,7 +71,7 @@ class dashboard extends React.Component {
             break
           case 'ato':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
                 </ErrorBoundary>
@@ -80,7 +80,7 @@ class dashboard extends React.Component {
             break
           case 'ph-current':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='current' />
                 </ErrorBoundary>
@@ -89,7 +89,7 @@ class dashboard extends React.Component {
             break
           case 'ph-historical':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
                 </ErrorBoundary>
@@ -98,7 +98,7 @@ class dashboard extends React.Component {
             break
           case 'doser':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <DoserChart width={config.width} height={config.height} doser_id={ch.id} />
                 </ErrorBoundary>
@@ -107,7 +107,7 @@ class dashboard extends React.Component {
             break
           case 'health':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <HealthChart width={config.width} height={config.height} trend={ch.id} />
                 </ErrorBoundary>
@@ -116,7 +116,7 @@ class dashboard extends React.Component {
             break
           case 'temperature':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <TempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
                 </ErrorBoundary>
@@ -125,7 +125,7 @@ class dashboard extends React.Component {
             break
           case 'tc':
             columns.push(
-              <div className='col-sm-6' key={'chart-' + i + '-' + j}>
+              <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
                 </ErrorBoundary>
