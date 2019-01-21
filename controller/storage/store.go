@@ -8,6 +8,7 @@ const (
 	CameraItemBucket       = "photos"
 	InletBucket            = "inlets"
 	JackBucket             = "jacks"
+	AnalogInputBucket      = "analog_inputs"
 	OutletBucket           = "outlets"
 	DoserBucket            = "doser"
 	DoserUsageBucket       = "doser_usage"

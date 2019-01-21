@@ -24,6 +24,7 @@ type ReefPi struct {
 	jacks   *connectors.Jacks
 	outlets *connectors.Outlets
 	inlets  *connectors.Inlets
+	ais     *connectors.AnalogInputs
 	drivers *drivers.Drivers
 
 	subsystems map[string]controller.Subsystem
@@ -77,6 +78,7 @@ func New(version, database string) (*ReefPi, error) {
 	jacks := connectors.NewJacks(drvrs, store)
 	outlets := connectors.NewOutlets(drvrs, store)
 	inlets := connectors.NewInlets(drvrs, store)
+	ais := connectors.NewAnalogInputs(drvrs, store)
 
 	r := &ReefPi{
 		bus:        bus,
@@ -86,6 +88,7 @@ func New(version, database string) (*ReefPi, error) {
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
+		ais:        ais,
 		drivers:    drvrs,
 		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
@@ -108,6 +111,9 @@ func (r *ReefPi) Start() error {
 		return err
 	}
 	if err := r.inlets.Setup(); err != nil {
+		return err
+	}
+	if err := r.ais.Setup(); err != nil {
 		return err
 	}
 	if err := r.loadSubsystems(); err != nil {
