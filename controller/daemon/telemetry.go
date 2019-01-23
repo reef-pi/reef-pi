@@ -11,9 +11,10 @@ import (
 )
 
 func initializeTelemetry(store storage.Store, notify bool) telemetry.Telemetry {
-	t := telemetry.DefaultTelemetryConfig
+	var t telemetry.TelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
+		t = telemetry.DefaultTelemetryConfig
 		store.Update(Bucket, "telemetry", t)
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }

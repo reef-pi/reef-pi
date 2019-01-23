@@ -67,7 +67,7 @@ func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, t tele
 		stopCh:   make(chan struct{}),
 		t:        t,
 		Notify:   notify,
-		statsMgr: telemetry.NewStatsManager(store, Bucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		statsMgr: t.NewStatsManager(store, Bucket),
 		store:    store,
 	}
 }

@@ -25,7 +25,7 @@ func TestStatsManager(t *testing.T) {
 		t.Error(err)
 	}
 	store.CreateBucket("test-subsystem")
-	mgr := NewStatsManager(store, "test-subsystem", 10, 10)
+	mgr := TestTelemetry().NewStatsManager(store, "test-subsystem")
 	metric := &testMetric{}
 	mgr.Update("foo", metric)
 	mgr.Update("foo", metric)
