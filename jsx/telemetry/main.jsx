@@ -9,7 +9,10 @@ class telemetry extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      config: {},
+      config: {
+        historical_limit: 720,
+        current_limit: 100
+      },
       updated: false
     }
     this.showAdafruitIO = this.showAdafruitIO.bind(this)
@@ -20,6 +23,15 @@ class telemetry extends React.Component {
     this.save = this.save.bind(this)
     this.updateThrottle = this.updateThrottle.bind(this)
     this.testMessage = this.testMessage.bind(this)
+    this.updateLimit = this.updateLimit.bind(this)
+  }
+
+  updateLimit (k) {
+    return (e) => {
+      var conf = this.state.config
+      conf[k] = e.target.value
+      this.setState({config: conf})
+    }
   }
 
   testMessage () {
@@ -73,6 +85,8 @@ class telemetry extends React.Component {
     }
     c.mailer.port = parseInt(c.mailer.port)
     c.throttle = parseInt(c.throttle)
+    c.current_limit = parseInt(c.current_limit)
+    c.historical_limit = parseInt(c.historical_limit)
     this.props.update(c)
     this.setState({ updated: false, config: c })
   }
@@ -188,6 +202,26 @@ class telemetry extends React.Component {
             </div>
           </div>
           {this.notification()}
+        </div>
+        <div className='row'>
+          <div className='col'>
+            <label> Current limit</label>
+            <input
+              type='text'
+              onChange={this.updateLimit('current_limit')}
+              id='updateCurrentLimit'
+              defaultValue={this.state.config.current_limit}
+            />
+          </div>
+          <div className='col'>
+            <label> Historical limit</label>
+            <input
+              type='text'
+              onChange={this.updateLimit('historical_limit')}
+              id='updatetLimit'
+              defaultValue={this.state.config.historical_limit}
+            />
+          </div>
         </div>
         <div className='row'>
           <div className='col'>
