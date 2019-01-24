@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"gopkg.in/robfig/cron.v2"
 	"log"
 	"sync"
@@ -30,7 +29,7 @@ func New(devMode bool, c types.Controller, jacks *connectors.Jacks) (*Controller
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(),
-		statsMgr: utils.NewStatsManager(c.Store(), UsageBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr: c.Telemetry().NewStatsManager(c.Store(), UsageBucket),
 		c:        c,
 	}, nil
 }

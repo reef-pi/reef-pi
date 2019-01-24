@@ -30,17 +30,6 @@ type StatsManager struct {
 	SaveOnRollup    bool
 }
 
-func NewStatsManager(store types.Store, b string, c, h int) types.StatsManager {
-	return &StatsManager{
-		inMemory:        make(map[string]Stats),
-		bucket:          b,
-		CurrentLimit:    c,
-		store:           store,
-		HistoricalLimit: h,
-		SaveOnRollup:    true,
-	}
-}
-
 func (m *StatsManager) Get(id string) (types.StatsResponse, error) {
 	m.Lock()
 	defer m.Unlock()

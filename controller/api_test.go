@@ -53,7 +53,7 @@ func TestAPI(t *testing.T) {
 		t.Error("Failed to get settings via api")
 	}
 	body.Reset()
-	json.NewEncoder(body).Encode(&utils.TelemetryConfig{})
+	json.NewEncoder(body).Encode(&utils.DefaultTelemetryConfig)
 	if err := tr.Do("POST", "/api/telemetry", body, nil); err != nil {
 		t.Error("Failed to update telemetry via api")
 	}

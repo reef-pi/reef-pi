@@ -3,7 +3,6 @@ package ph
 import (
 	"encoding/json"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
 	"sync"
@@ -31,7 +30,7 @@ func New(config Config, bus i2c.Bus, c types.Controller) *Controller {
 		quitters:   make(map[string]chan struct{}),
 		controller: c,
 		mu:         &sync.Mutex{},
-		statsMgr:   utils.NewStatsManager(c.Store(), ReadingsBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:   c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
 	}
 }
 

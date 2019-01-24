@@ -64,13 +64,13 @@ func (m1 HealthMetric) Before(mx types.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify HealthCheckNotify, telemetry types.Telemetry, store types.Store) *HealthChecker {
+func NewHealthChecker(i time.Duration, notify HealthCheckNotify, t types.Telemetry, store types.Store) *HealthChecker {
 	return &HealthChecker{
 		interval:  i,
 		stopCh:    make(chan struct{}),
-		telemetry: telemetry,
+		telemetry: t,
 		Notify:    notify,
-		statsMgr:  utils.NewStatsManager(store, Bucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:  t.NewStatsManager(store, Bucket),
 		store:     store,
 	}
 }

@@ -27,4 +27,5 @@ type Telemetry interface {
 	EmitMetric(string, interface{})
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
+	NewStatsManager(Store, string) StatsManager
 }

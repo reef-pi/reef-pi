@@ -9,10 +9,18 @@ import (
 )
 
 func initializeTelemetry(store types.Store, notify bool) types.Telemetry {
-	t := utils.DefaultTelemetryConfig
+	var t utils.TelemetryConfig
 	if err := store.Get(Bucket, "telemetry", &t); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
+		t = utils.DefaultTelemetryConfig
 		store.Update(Bucket, "telemetry", t)
+	}
+	// for upgrades, this value will be 0. Remove in 3.0
+	if t.HistoricalLimit < 1 {
+		t.HistoricalLimit = types.HistoricalLimit
+	}
+	if t.CurrentLimit < 1 {
+		t.CurrentLimit = types.CurrentLimit
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
 	return utils.NewTelemetry(t, fn)

@@ -9,6 +9,16 @@ import (
 	"time"
 )
 
+type ErrorLogger func(string, string) error
+
+type Telemetry interface {
+	Alert(string, string) (bool, error)
+	EmitMetric(string, interface{})
+	CreateFeedIfNotExist(string)
+	DeleteFeedIfExist(string)
+	NewStatsManager(types.Store, string) types.StatsManager
+}
+
 type AlertStats struct {
 	Count        int       `json:"count"`
 	FirstTrigger time.Time `json:"first_trigger"`
@@ -22,15 +32,19 @@ type AdafruitIO struct {
 }
 
 type TelemetryConfig struct {
-	AdafruitIO AdafruitIO   `json:"adafruitio"`
-	Mailer     MailerConfig `json:"mailer"`
-	Notify     bool         `json:"notify"`
-	Throttle   int          `json:"throttle"`
+	AdafruitIO      AdafruitIO   `json:"adafruitio"`
+	Mailer          MailerConfig `json:"mailer"`
+	Notify          bool         `json:"notify"`
+	Throttle        int          `json:"throttle"`
+	HistoricalLimit int          `json:"historical_limit"`
+	CurrentLimit    int          `json:"current_limit"`
 }
 
 var DefaultTelemetryConfig = TelemetryConfig{
-	Mailer:   GMailMailer,
-	Throttle: 10,
+	Mailer:          GMailMailer,
+	Throttle:        10,
+	CurrentLimit:    types.CurrentLimit,
+	HistoricalLimit: types.HistoricalLimit,
 }
 
 type telemetry struct {
@@ -55,6 +69,17 @@ func NewTelemetry(config TelemetryConfig, lr types.ErrorLogger) *telemetry {
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
 		logError:   lr,
+	}
+}
+
+func (t *telemetry) NewStatsManager(store types.Store, b string) types.StatsManager {
+	return &StatsManager{
+		inMemory:        make(map[string]Stats),
+		bucket:          b,
+		store:           store,
+		HistoricalLimit: t.config.HistoricalLimit,
+		CurrentLimit:    t.config.CurrentLimit,
+		SaveOnRollup:    true,
 	}
 }
 

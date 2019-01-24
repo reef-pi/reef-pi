@@ -5,7 +5,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/equipment"
 	"github.com/reef-pi/reef-pi/controller/types"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"sync"
 )
@@ -30,7 +29,7 @@ func New(devMode bool, c types.Controller, eqs *equipment.Controller, inlets *co
 		inlets:    inlets,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  utils.NewStatsManager(c.Store(), UsageBucket, types.CurrentLimit, types.HistoricalLimit),
+		statsMgr:  c.Telemetry().NewStatsManager(c.Store(), UsageBucket),
 		c:         c,
 	}, nil
 }
