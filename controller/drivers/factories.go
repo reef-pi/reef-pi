@@ -8,6 +8,7 @@ import (
 	"github.com/kidoman/embd"
 
 	pcahal "github.com/reef-pi/drivers/hal/pca9685"
+	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
 	"github.com/reef-pi/rpi/i2c"
@@ -33,6 +34,8 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		}
 	case "pca9685":
 		return pca9685Factory, nil
+	case "ph-board":
+		return ph_board.HalAdapter, nil
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
 	}
