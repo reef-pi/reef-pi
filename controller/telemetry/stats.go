@@ -1,11 +1,12 @@
 package telemetry
 
 import (
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"log"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 
 	"math"
 
