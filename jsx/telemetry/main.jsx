@@ -67,24 +67,30 @@ class telemetry extends React.Component {
         return
       }
     }
-    if (c.mailer.server === '') {
-      showError('Please set a valid mail server')
-      return
+    if (c.notify) {
+      var error = false
+      if (c.mailer.server === '') {
+        showError('Please set a valid mail server')
+        error = true
+      }
+      if (c.mailer.password === '') {
+        showError('Please set a valid mail password')
+        error = true
+      }
+      if (c.mailer.To === '') {
+        showError('Please set a valid mail recepient (To)')
+        error = true
+      }
+      if (c.mailer.From === '') {
+        showError('Please set a valid mail sender (From)')
+        error = true
+      }
+      if (error) {
+        return
+      }
+      c.mailer.port = parseInt(c.mailer.port)
+      c.throttle = parseInt(c.throttle)
     }
-    if (c.mailer.password === '') {
-      showError('Please set a valid mail passowrd')
-      return
-    }
-    if (c.mailer.To === '') {
-      showError('Please set a valid mail recepient (To)')
-      return
-    }
-    if (c.mailer.From === '') {
-      showError('Please set a valid mail sender (From)')
-      return
-    }
-    c.mailer.port = parseInt(c.mailer.port)
-    c.throttle = parseInt(c.throttle)
     c.current_limit = parseInt(c.current_limit)
     c.historical_limit = parseInt(c.historical_limit)
     this.props.update(c)
