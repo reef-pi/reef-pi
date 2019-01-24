@@ -31,7 +31,8 @@ const initialState = {
   tc_usage: {},
   ph_readings: {},
   tc_sensors: [],
-  telemetry: {},
+  telemetry: {
+  },
   camera: {
     config: {},
     latest: undefined,

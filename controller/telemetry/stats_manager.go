@@ -48,17 +48,6 @@ type mgr struct {
 	SaveOnRollup    bool
 }
 
-func NewStatsManager(store storage.Store, b string, c, h int) *mgr {
-	return &mgr{
-		inMemory:        make(map[string]Stats),
-		bucket:          b,
-		CurrentLimit:    c,
-		store:           store,
-		HistoricalLimit: h,
-		SaveOnRollup:    true,
-	}
-}
-
 func (m *mgr) Get(id string) (StatsResponse, error) {
 	m.Lock()
 	defer m.Unlock()

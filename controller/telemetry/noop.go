@@ -7,6 +7,8 @@ func TestTelemetry() *telemetry {
 		AdafruitIO: AdafruitIO{
 			User: "test-user",
 		},
+		CurrentLimit:    CurrentLimit,
+		HistoricalLimit: HistoricalLimit,
 	}
 	return &telemetry{
 		config:     c,

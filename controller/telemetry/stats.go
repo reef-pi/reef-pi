@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
+
 	"math"
 
 	"github.com/reef-pi/adafruitio"
@@ -22,7 +24,9 @@ type Telemetry interface {
 	EmitMetric(string, interface{})
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
+	NewStatsManager(storage.Store, string) StatsManager
 }
+
 type AlertStats struct {
 	Count        int       `json:"count"`
 	FirstTrigger time.Time `json:"first_trigger"`
@@ -36,15 +40,19 @@ type AdafruitIO struct {
 }
 
 type TelemetryConfig struct {
-	AdafruitIO AdafruitIO   `json:"adafruitio"`
-	Mailer     MailerConfig `json:"mailer"`
-	Notify     bool         `json:"notify"`
-	Throttle   int          `json:"throttle"`
+	AdafruitIO      AdafruitIO   `json:"adafruitio"`
+	Mailer          MailerConfig `json:"mailer"`
+	Notify          bool         `json:"notify"`
+	Throttle        int          `json:"throttle"`
+	HistoricalLimit int          `json:"historical_limit"`
+	CurrentLimit    int          `json:"current_limit"`
 }
 
 var DefaultTelemetryConfig = TelemetryConfig{
-	Mailer:   GMailMailer,
-	Throttle: 10,
+	Mailer:          GMailMailer,
+	Throttle:        10,
+	CurrentLimit:    CurrentLimit,
+	HistoricalLimit: HistoricalLimit,
 }
 
 type telemetry struct {
@@ -69,6 +77,17 @@ func NewTelemetry(config TelemetryConfig, lr ErrorLogger) *telemetry {
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
 		logError:   lr,
+	}
+}
+
+func (t *telemetry) NewStatsManager(store storage.Store, b string) StatsManager {
+	return &mgr{
+		inMemory:        make(map[string]Stats),
+		bucket:          b,
+		store:           store,
+		HistoricalLimit: t.config.HistoricalLimit,
+		CurrentLimit:    t.config.CurrentLimit,
+		SaveOnRollup:    true,
 	}
 }
 
