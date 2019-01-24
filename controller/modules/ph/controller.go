@@ -34,7 +34,7 @@ func New(config Config, bus i2c.Bus, c controller.Controller) *Controller {
 		quitters:   make(map[string]chan struct{}),
 		controller: c,
 		mu:         &sync.Mutex{},
-		statsMgr:   telemetry.NewStatsManager(c.Store(), ReadingsBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		statsMgr:   c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
 	}
 }
 

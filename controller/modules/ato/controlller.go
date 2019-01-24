@@ -32,7 +32,7 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller, inlet
 		inlets:    inlets,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  telemetry.NewStatsManager(c.Store(), UsageBucket, telemetry.CurrentLimit, telemetry.HistoricalLimit),
+		statsMgr:  c.Telemetry().NewStatsManager(c.Store(), UsageBucket),
 		c:         c,
 	}, nil
 }
