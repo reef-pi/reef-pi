@@ -5,7 +5,7 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 
-const driverTypes = ['pca9685']
+const driverTypes = ['pca9685', 'ph-board']
 const EditDriver = ({
   values,
   errors,
@@ -26,39 +26,65 @@ const EditDriver = ({
       )
     }
   }
-
-  const driverConfig = () => {
-    if (values.type === 'pca9685') {
-      return (
-        <div className={classNames('row', { 'd-none': readOnly })}>
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='name'>Address</label>
-              <Field
-                name='config.address'
-                disabled={readOnly}
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('config.address', touched, errors)
-                })}
-              />
-              <ErrorFor errors={errors} touched={touched} name='name' />
-            </div>
-          </div>
-          <div className='col col-sm-6 col-md-3'>
-            <div className='form-group'>
-              <label htmlFor='name'>Frequency</label>
-              <Field
-                name='config.frequency'
-                disabled={readOnly}
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('config.frequency', touched, errors)
-                })}
-              />
-              <ErrorFor errors={errors} touched={touched} name='name' />
-            </div>
+  const phBoardConfig = () => {
+    return (
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='name'>Address</label>
+            <Field
+              name='config.address'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('config.address', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
-      )
+      </div>
+    )
+  }
+
+  const pca9685Config = () => {
+    return (
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='name'>Address</label>
+            <Field
+              name='config.address'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('config.address', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='name' />
+          </div>
+        </div>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='name'>Frequency</label>
+            <Field
+              name='config.frequency'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('config.frequency', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='name' />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const driverConfig = () => {
+    switch (values.type) {
+      case 'pca9685':
+        return pca9685Config()
+      case 'ph-board':
+        return phBoardConfig()
     }
   }
 
