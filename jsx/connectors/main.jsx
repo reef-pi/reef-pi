@@ -1,6 +1,7 @@
 import React from 'react'
 import Outlets from './outlets'
 import Jacks from './jacks'
+import AnalogInputs from './analog_inputs'
 import Inlets from './inlets'
 
 export default class Connectors extends React.Component {
@@ -17,6 +18,9 @@ export default class Connectors extends React.Component {
         </div>
         <div className='row'>
           <Jacks />
+        </div>
+        <div className='row'>
+          <AnalogInputs />
         </div>
       </div>
     )

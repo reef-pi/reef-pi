@@ -21,6 +21,7 @@ const initialState = {
   health_stats: {},
   inlets: [],
   jacks: [],
+  analog_inputs: [],
   outlets: [],
   settings: {},
   dashboard: {},
