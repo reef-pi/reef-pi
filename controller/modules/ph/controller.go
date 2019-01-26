@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/rpi/i2c"
+	"github.com/reef-pi/reef-pi/controller/connectors"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -14,25 +14,20 @@ import (
 
 const Bucket = storage.PhBucket
 
-type Config struct {
-	DevMode bool `json:"dev_mode"`
-}
-
 type Controller struct {
-	config     Config
 	controller controller.Controller
 	quitters   map[string]chan struct{}
-	bus        i2c.Bus
 	mu         *sync.Mutex
 	statsMgr   telemetry.StatsManager
+	devMode    bool
+	ais        *connectors.AnalogInputs
 }
 
-func New(config Config, bus i2c.Bus, c controller.Controller) *Controller {
+func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *Controller {
 	return &Controller{
-		config:     config,
-		bus:        bus,
 		quitters:   make(map[string]chan struct{}),
 		controller: c,
+		devMode:    devMode,
 		mu:         &sync.Mutex{},
 		statsMgr:   c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
 	}

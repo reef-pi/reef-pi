@@ -20,14 +20,11 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/timer"
 )
 
-func (r *ReefPi) loadPhSubsystem(bus i2c.Bus) error {
+func (r *ReefPi) loadPhSubsystem() error {
 	if !r.settings.Capabilities.Ph {
 		return nil
 	}
-	c := ph.Config{
-		DevMode: r.settings.Capabilities.DevMode,
-	}
-	p := ph.New(c, bus, r.Controller())
+	p := ph.New(r.settings.Capabilities.DevMode, r.Controller(), r.ais)
 	r.subsystems[ph.Bucket] = p
 	return nil
 }
@@ -187,7 +184,7 @@ func (r *ReefPi) loadSubsystems() error {
 		log.Println("ERROR: Failed to load camera subsystem. Error:", err)
 		r.LogError("subsystem-camera", "Failed to load camera subsystem. Error:"+err.Error())
 	}
-	if err := r.loadPhSubsystem(r.bus); err != nil {
+	if err := r.loadPhSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load ph subsystem. Error:", err)
 		r.LogError("subsystem-ph", "Failed to load ph subsystem. Error:"+err.Error())
 	}
