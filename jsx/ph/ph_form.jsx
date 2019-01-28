@@ -16,7 +16,6 @@ const PhForm = withFormik({
       name: data.name || '',
       analog_input: data.analog_input || '',
       enable: (data.enable === undefined ? true : data.enable),
-      analogInputs: props.analogInputs || [],
       period: data.period || 60,
       notify: data.notify.enable || false,
       maxAlert: (data.notify && data.notify.max) || 0,

@@ -23,7 +23,6 @@ class ph extends React.Component {
 
   componentDidMount () {
     this.props.fetchPhProbes()
-    console.log(this.props.ais)
   }
 
   probeList () {
@@ -110,7 +109,10 @@ class ph extends React.Component {
   render () {
     var newProbe = null
     if (this.state.addProbe) {
-      newProbe = <PhForm onSubmit={this.createProbe} />
+      newProbe = <PhForm
+        analogInputs={this.props.ais}
+        onSubmit={this.createProbe}
+      />
     }
 
     return (
