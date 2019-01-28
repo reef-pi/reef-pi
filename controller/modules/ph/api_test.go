@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -16,8 +16,9 @@ func TestPhAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	conf := Config{DevMode: true}
-	c := New(conf, i2c.MockBus(), r)
+	drvrs := drivers.TestDrivers(r.Store())
+	ais := connectors.NewAnalogInputs(drvrs, r.Store())
+	c := New(true, r, ais)
 	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
 		t.Error(err)
@@ -27,7 +28,7 @@ func TestPhAPI(t *testing.T) {
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
 	p := &Probe{Name: "Foo", Period: 1, Enable: true}
-	p.Config.Notify.Enable = true
+	p.Notify.Enable = true
 	enc.Encode(p)
 	if err := tr.Do("PUT", "/api/phprobes", body, nil); err != nil {
 		t.Fatal("Failed to create ph probe using api. Error:", err)
@@ -54,6 +55,7 @@ func TestPhAPI(t *testing.T) {
 	if err := tr.Do("POST", "/api/phprobes/1", body, nil); err != nil {
 		t.Fatal("Failed to update ph probe using api. Error:", err)
 	}
+	/* TODO
 	calib := &CalibrationDetails{Type: "high", Value: 10}
 	body.Reset()
 	enc.Encode(calib)
@@ -80,6 +82,7 @@ func TestPhAPI(t *testing.T) {
 	if err := c.Calibrate("1", *calib); err == nil {
 		t.Error("invalid calibration type should throw error")
 	}
+	*/
 	p.Enable = true
 	if err := c.Update("1", *p); err != nil {
 		t.Error(err)
