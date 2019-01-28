@@ -5,17 +5,15 @@ const PhSchema = Yup.object().shape({
     .required('Name is required'),
   enable: Yup.bool()
     .required('Timer Status is required'),
-  address: Yup.number()
-    .required('Address is required'),
   period: Yup.number()
     .required('Check Frequency is required')
     .integer()
     .typeError('Check Frequency must be a number')
     .min(1, 'Check Frequency must be 1 second or greater'),
-  alerts: Yup.bool()
-    .required('Alerts is required'),
+  notify: Yup.bool(),
+  analog_input: Yup.string(),
   minAlert: Yup.number()
-    .when('alerts', (alert, schema) => {
+    .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
           .required('Threshold is required when alerts are enabled')
@@ -26,7 +24,7 @@ const PhSchema = Yup.object().shape({
       } else { return schema }
     }),
   maxAlert: Yup.number()
-    .when('alerts', (alert, schema) => {
+    .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
           .required('Threshold is required when alerts are enabled')

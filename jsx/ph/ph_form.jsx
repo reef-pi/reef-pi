@@ -8,21 +8,19 @@ const PhForm = withFormik({
     let data = props.probe
     if (data === undefined) {
       data = {
-        enable: true,
-        config: {
-          notify: {}
-        }
+        notify: {}
       }
     }
     return {
       id: data.id || '',
       name: data.name || '',
-      address: data.address || '99',
+      analog_input: data.analog_input || '',
       enable: (data.enable === undefined ? true : data.enable),
+      analogInputs: props.analogInputs || [],
       period: data.period || 60,
-      alerts: (data.config.notify && data.config.notify.enable) || false,
-      maxAlert: (data.config.notify && data.config.notify.max) || 0,
-      minAlert: (data.config.notify && data.config.notify.min) || 0
+      notify: data.notify.enable || false,
+      maxAlert: (data.notify && data.notify.max) || 0,
+      minAlert: (data.notify && data.notify.min) || 0
     }
   },
   validationSchema: PhSchema,

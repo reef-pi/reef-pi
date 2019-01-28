@@ -19,12 +19,9 @@ type Notify struct {
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
-	Address     int           `json:"address"`
 	Enable      bool          `json:"enable"`
 	Period      time.Duration `json:"period"`
 	AnalogInput string        `json:"analog_input"`
-	Min         float64       `json:"min"`
-	Max         float64       `json:"max"`
 	Control     bool          `json:"control"`
 	Notify      Notify        `json:"notify"`
 }
