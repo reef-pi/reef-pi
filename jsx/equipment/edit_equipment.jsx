@@ -4,7 +4,19 @@ import {ErrorFor, ShowError} from '../utils/validation_helper'
 import {showError} from 'utils/alert'
 import classNames from 'classnames'
 
-const EditEquipment = ({values, errors, touched, actionLabel, handleBlur, outlets, submitForm, onDelete, handleChange, isValid, dirty}) => {
+const EditEquipment = ({
+  values,
+  errors,
+  touched,
+  actionLabel,
+  handleBlur,
+  outlets,
+  submitForm,
+  onDelete,
+  handleChange,
+  isValid,
+  dirty
+}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     if (dirty === false || isValid === true) {

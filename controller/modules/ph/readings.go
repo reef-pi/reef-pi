@@ -33,17 +33,17 @@ func (m1 Measurement) Before(mx telemetry.Metric) bool {
 }
 
 func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
-	if !p.Config.Notify.Enable {
+	if !p.Notify.Enable {
 		return
 	}
 	subject := fmt.Sprintf("[Reef-Pi ALERT] ph of '%s' out of range", p.Name)
 	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
-	body := fmt.Sprintf(format, reading, p.Name, p.Config.Notify.Min, p.Config.Notify.Max)
-	if reading >= p.Config.Notify.Max {
+	body := fmt.Sprintf(format, reading, p.Name, p.Notify.Min, p.Notify.Max)
+	if reading >= p.Notify.Max {
 		t.Alert(subject, "Tank ph is high. "+body)
 		return
 	}
-	if reading <= p.Config.Notify.Min {
+	if reading <= p.Notify.Min {
 		t.Alert(subject, "Tank ph is low. "+body)
 		return
 	}

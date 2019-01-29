@@ -8,6 +8,7 @@ import {fetchErrors} from './errors'
 import {fetchOutlets} from './outlets'
 import {fetchInlets} from './inlets'
 import {fetchJacks} from './jacks'
+import {fetchAnalogInputs} from './analog_inputs'
 import {fetchTCs} from './tcs'
 import {fetchLights} from './lights'
 import {fetchPhProbes} from './phprobes'
@@ -25,6 +26,7 @@ export const fetchUIData = (dispatch) => {
       dispatch(fetchInfo())
       dispatch(fetchJacks())
       dispatch(fetchOutlets())
+      dispatch(fetchAnalogInputs())
 
       $.each(capabilities, (i, v) => {
         if (!v) {

@@ -7,18 +7,23 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/reef-pi/drivers"
-
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+type Notify struct {
+	Enable bool    `json:"enable"`
+	Min    float64 `json:"min"`
+	Max    float64 `json:"max"`
+}
+
 type Probe struct {
-	ID      string        `json:"id"`
-	Name    string        `json:"name"`
-	Address int           `json:"address"`
-	Enable  bool          `json:"enable"`
-	Period  time.Duration `json:"period"`
-	Config  ProbeConfig   `json:"config"`
+	ID          string        `json:"id"`
+	Name        string        `json:"name"`
+	Enable      bool          `json:"enable"`
+	Period      time.Duration `json:"period"`
+	AnalogInput string        `json:"analog_input"`
+	Control     bool          `json:"control"`
+	Notify      Notify        `json:"notify"`
 }
 
 func (c *Controller) Get(id string) (Probe, error) {
@@ -103,25 +108,27 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
+func (c *Controller) Read(p Probe) (float64, error) {
+	if c.devMode {
+		return telemetry.TwoDecimal(8 + rand.Float64()*2), nil
+	}
+	return c.ais.Read(p.AnalogInput)
+}
+
 func (c *Controller) Run(p Probe, quit chan struct{}) {
 	if p.Period <= 0 {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return
 	}
 	p.CreateFeed(c.controller.Telemetry())
-	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
 		select {
 		case <-ticker.C:
-			reading := telemetry.TwoDecimal(8 + rand.Float64()*2)
-			if !c.config.DevMode {
-				v, err := d.Read()
-				if err != nil {
-					log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
-					continue
-				}
-				reading = v
+			reading, err := c.Read(p)
+			if err != nil {
+				log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
+				continue
 			}
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
 			notifyIfNeeded(c.controller.Telemetry(), p, reading)
@@ -156,6 +163,7 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
+	/* TODO
 	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
 	switch details.Type {
 	case "high":
@@ -167,6 +175,8 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	default:
 		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
 	}
+	*/
+	return nil
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {

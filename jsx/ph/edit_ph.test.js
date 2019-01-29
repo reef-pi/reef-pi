@@ -26,6 +26,7 @@ describe('<EditPh />', () => {
         probe={probe}
         errors={{}}
         touched={{}}
+        analogInputs={[]}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn} />
@@ -40,6 +41,7 @@ describe('<EditPh />', () => {
         submitForm={fn}
         errors={{}}
         touched={{}}
+        analogInputs={[]}
         dirty
         isValid />
     )
@@ -56,6 +58,7 @@ describe('<EditPh />', () => {
         submitForm={fn}
         errors={{}}
         touched={{}}
+        analogInputs={[]}
         dirty
         isValid={false} />
     )

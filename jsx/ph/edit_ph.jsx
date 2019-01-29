@@ -11,6 +11,7 @@ const EditPh = ({
   values,
   errors,
   touched,
+  analogInputs,
   probe,
   submitForm,
   isValid,
@@ -27,6 +28,16 @@ const EditPh = ({
         'The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.'
       )
     }
+  }
+
+  const analogInputOptions = () => {
+    return analogInputs.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
   }
 
   const chart = () => {
@@ -61,22 +72,25 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
-
-        <div className='col col-sm-6 col-md-3'>
+        <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Address</label>
+            <label htmlFor='analog_input'>Analog Input</label>
             <Field
-              name='address'
-              type='number'
+              name='analog_input'
+              component='select'
               disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('address', touched, errors)
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('analog_input', touched, errors)
               })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='address' />
+            >
+              <option value='' className='d-none'>
+                  -- Select --
+              </option>
+              {analogInputOptions()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='analog_input' />
           </div>
         </div>
-
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='period'>Check Frequency</label>
@@ -190,7 +204,8 @@ EditPh.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  analogInputs: PropTypes.array
 }
 
 export default EditPh

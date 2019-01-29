@@ -46,6 +46,7 @@ class ph extends React.Component {
             onDelete={this.deleteProbe}>
             <PhForm onSubmit={this.updateProbe}
               key={Number(probe.id)}
+              analogInputs={this.props.ais}
               probe={probe} />
           </Collapsible>
         )
@@ -61,15 +62,13 @@ class ph extends React.Component {
   valuesToProbe (values) {
     var probe = {
       name: values.name,
-      address: parseInt(values.address),
       enable: values.enable,
       period: values.period,
-      config: {
-        notify: {
-          enable: values.alerts,
-          min: parseFloat(values.minAlert),
-          max: parseFloat(values.maxAlert)
-        }
+      analog_input: values.analog_input,
+      notify: {
+        enable: values.notify,
+        min: parseFloat(values.minAlert),
+        max: parseFloat(values.maxAlert)
       }
     }
     return probe
@@ -110,7 +109,10 @@ class ph extends React.Component {
   render () {
     var newProbe = null
     if (this.state.addProbe) {
-      newProbe = <PhForm onSubmit={this.createProbe} />
+      newProbe = <PhForm
+        analogInputs={this.props.ais}
+        onSubmit={this.createProbe}
+      />
     }
 
     return (
@@ -139,7 +141,8 @@ class ph extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    probes: state.phprobes
+    probes: state.phprobes,
+    ais: state.analog_inputs
   }
 }
 

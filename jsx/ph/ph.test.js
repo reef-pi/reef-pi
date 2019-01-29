@@ -38,9 +38,10 @@ describe('Ph ui', () => {
         {id: 1,
           name: 'probe',
           enable: false,
-          config: {
-            notify: false
-          }}
+          notify: {
+            enable: false
+          }
+        }
       ]
     }
 
@@ -69,9 +70,7 @@ describe('Ph ui', () => {
       name: 'name',
       enable: true,
       address: 99,
-      config: {
-        nofify: {enable: false}
-      }
+      notify: {enable: false}
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
