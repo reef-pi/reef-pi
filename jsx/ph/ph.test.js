@@ -69,9 +69,7 @@ describe('Ph ui', () => {
       name: 'name',
       enable: true,
       address: 99,
-      config: {
-        nofify: {enable: false}
-      }
+      nofify: {enable: false}
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
