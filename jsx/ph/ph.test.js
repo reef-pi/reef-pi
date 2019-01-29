@@ -39,7 +39,7 @@ describe('Ph ui', () => {
           name: 'probe',
           enable: false,
           notify: {
-					  enable: false
+            enable: false
           }
         }
       ]
