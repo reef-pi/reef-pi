@@ -46,7 +46,7 @@ describe('Doser Calibration', () => {
   })
 
   it('<CalibrateForm/>', () => {
-    const wrapper = shallow(<CalibrateForm onSubmit={fn} />)
+    const wrapper = shallow(<CalibrateForm onSubmit={fn} duration='15' speed='100' />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
@@ -57,7 +57,7 @@ describe('Doser Calibration', () => {
         return resolve(true)
       })
     })
-    const doser = {id: 1}
+    const doser = {id: 1, regiment: {speed: 100, duration: 15}}
     const wrapper = shallow(<CalibrationModal doser={doser} calibrateDoser={fn} />)
       .instance()
 
