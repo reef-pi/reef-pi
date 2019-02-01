@@ -43,9 +43,9 @@ export default class CalibrationModal extends React.Component {
           </h4>
         </div>
         <div className='modal-body'>
-          <CalibrateForm onSubmit={this.calibrate} 
-            speed={this.props.doser.regiment.speed} 
-            duration={this.props.doser.regiment.duration}/>
+          <CalibrateForm onSubmit={this.calibrate}
+            speed={this.props.doser.regiment.speed}
+            duration={this.props.doser.regiment.duration} />
         </div>
         <div className='modal-footer'>
           <div className='text-center'>

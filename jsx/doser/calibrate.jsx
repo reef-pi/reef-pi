@@ -73,7 +73,7 @@ const CalibrateForm = withFormik({
   mapPropsToValues: props => {
     return {
       duration: props.duration,
-      speed: props.speed,
+      speed: props.speed
     }
   },
   validationSchema: CalibrateSchema,
