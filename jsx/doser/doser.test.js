@@ -34,7 +34,7 @@ jest.mock('utils/confirm', () => {
 describe('Doser ui', () => {
   it('<Main />', () => {
     let mock = {
-      dosers: [{ foo: 'bar' }]
+      dosers: [{ name: 'bar', regiment: { duration: 10000000000} }]
     }
     const m = shallow(<Main store={mockStore(mock)} />)
       .dive()

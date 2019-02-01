@@ -1,6 +1,7 @@
 import React from 'react'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { secondsParseToNano } from 'utils/nano'
 import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
 
@@ -78,7 +79,7 @@ const CalibrateForm = withFormik({
   },
   validationSchema: CalibrateSchema,
   handleSubmit: (values, {props}) => {
-    props.onSubmit(parseInt(values.duration), parseInt(values.speed))
+    props.onSubmit(secondsParseToNano(values.duration), parseInt(values.speed))
   }
 })(Calibrate)
 

@@ -20,8 +20,15 @@ func (r *Runner) Dose(speed float64, duration time.Duration) error {
 	if err := r.jacks.Control(r.pump.Jack, v); err != nil {
 		return err
 	}
+
+	// Previously values were being stored in nano-seconds rather than seconds. 
+	// To handle backwards compatability I am going to convert nanos to seconds if the duration is small enough
+	if (time.Millisecond > duration) {
+		duration = duration * time.Second
+	}
+
 	select {
-	case <-time.After(duration * time.Second):
+	case <-time.After(duration):
 		v[r.pump.Pin] = 0
 		if err := r.jacks.Control(r.pump.Jack, v); err != nil {
 			return err

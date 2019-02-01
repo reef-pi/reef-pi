@@ -1,5 +1,6 @@
 import React from 'react'
 import { confirm, showModal } from 'utils/confirm'
+import { secondsParseToNano, secondsFromNano } from 'utils/nano'
 import DoserForm from './doser_form'
 import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump } from 'redux/actions/doser'
 import { connect } from 'react-redux'
@@ -64,7 +65,7 @@ class doser extends React.Component {
       pin: parseInt(values.pin),
       regiment: {
         enable: values.enable,
-        duration: parseInt(values.duration),
+        duration: secondsParseToNano(values.duration),
         speed: parseInt(values.speed),
         schedule: {
           day: values.day,
@@ -139,8 +140,10 @@ class doser extends React.Component {
 }
 
 const mapStateToProps = state => {
+  const dosers = state.dosers
+  dosers.forEach((doser) => doser.regiment.duration = secondsFromNano(doser.regiment.duration))
   return {
-    dosers: state.dosers,
+    dosers,
     jacks: state.jacks
   }
 }
