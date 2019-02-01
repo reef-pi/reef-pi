@@ -141,7 +141,9 @@ class doser extends React.Component {
 
 const mapStateToProps = state => {
   const dosers = state.dosers
-  dosers.forEach((doser) => doser.regiment.duration = secondsFromNano(doser.regiment.duration))
+  dosers.forEach((doser) => {
+    doser.regiment.duration = secondsFromNano(doser.regiment.duration)
+  })
   return {
     dosers,
     jacks: state.jacks
