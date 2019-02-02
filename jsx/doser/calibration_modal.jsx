@@ -27,7 +27,7 @@ export default class CalibrationModal extends React.Component {
 
   calibrate (duration, speed) {
     const payload = {
-      duration: parseInt(duration),
+      duration: parseFloat(duration),
       speed: parseInt(speed)
     }
 

@@ -64,7 +64,7 @@ class doser extends React.Component {
       pin: parseInt(values.pin),
       regiment: {
         enable: values.enable,
-        duration: parseInt(values.duration),
+        duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
         schedule: {
           day: values.day,
