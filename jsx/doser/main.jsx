@@ -79,7 +79,6 @@ class doser extends React.Component {
 
   updateDoser (values) {
     var payload = this.valuesToDoser(values)
-
     this.props.update(values.id, payload)
   }
 

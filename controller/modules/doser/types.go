@@ -7,15 +7,15 @@ import (
 )
 
 type DosingRegiment struct {
-	Enable   bool          `json:"enable"`
-	Schedule Schedule      `json:"schedule"`
-	Duration float64       `json:"duration"`
-	Speed    float64       `json:"speed"`
+	Enable   bool     `json:"enable"`
+	Schedule Schedule `json:"schedule"`
+	Duration float64  `json:"duration"`
+	Speed    float64  `json:"speed"`
 }
 
 type CalibrationDetails struct {
-	Speed    float64       `json:"speed"`
-	Duration float64       `json:"duration"`
+	Speed    float64 `json:"speed"`
+	Duration float64 `json:"duration"`
 }
 
 type Schedule struct {
