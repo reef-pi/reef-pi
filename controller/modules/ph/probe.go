@@ -28,7 +28,7 @@ type Probe struct {
 
 func (c *Controller) Get(id string) (Probe, error) {
 	var p Probe
-	return p, c.controller.Store().Get(Bucket, id, &p)
+	return p, c.c.Store().Get(Bucket, id, &p)
 }
 
 func (c Controller) List() ([]Probe, error) {
@@ -41,7 +41,7 @@ func (c Controller) List() ([]Probe, error) {
 		probes = append(probes, p)
 		return nil
 	}
-	return probes, c.controller.Store().List(Bucket, fn)
+	return probes, c.c.Store().List(Bucket, fn)
 }
 
 func (c *Controller) Create(p Probe) error {
@@ -54,7 +54,7 @@ func (c *Controller) Create(p Probe) error {
 		p.ID = id
 		return &p
 	}
-	if err := c.controller.Store().Create(Bucket, fn); err != nil {
+	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 	m := Measurement{
@@ -63,7 +63,7 @@ func (c *Controller) Create(p Probe) error {
 	}
 	c.statsMgr.Update(p.ID, m)
 	if p.Enable {
-		p.CreateFeed(c.controller.Telemetry())
+		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -76,7 +76,7 @@ func (c *Controller) Update(id string, p Probe) error {
 	if p.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied: %d", p.Period)
 	}
-	if err := c.controller.Store().Update(Bucket, id, p); err != nil {
+	if err := c.c.Store().Update(Bucket, id, p); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[p.ID]
@@ -85,7 +85,7 @@ func (c *Controller) Update(id string, p Probe) error {
 		delete(c.quitters, p.ID)
 	}
 	if p.Enable {
-		p.CreateFeed(c.controller.Telemetry())
+		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
 		go c.Run(p, quit)
@@ -94,7 +94,7 @@ func (c *Controller) Update(id string, p Probe) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.controller.Store().Delete(Bucket, id); err != nil {
+	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
@@ -120,7 +120,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return
 	}
-	p.CreateFeed(c.controller.Telemetry())
+	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
 	for {
 		select {
@@ -128,10 +128,11 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 			reading, err := c.Read(p)
 			if err != nil {
 				log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
+				c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
 				continue
 			}
 			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
-			notifyIfNeeded(c.controller.Telemetry(), p, reading)
+			notifyIfNeeded(c.c.Telemetry(), p, reading)
 			m := Measurement{
 				Time: telemetry.TeleTime(time.Now()),
 				Ph:   reading,
@@ -139,7 +140,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 				sum:  reading,
 			}
 			c.statsMgr.Update(p.ID, m)
-			c.controller.Telemetry().EmitMetric("ph-"+p.Name, reading)
+			c.c.Telemetry().EmitMetric("ph-"+p.Name, reading)
 		case <-quit:
 			ticker.Stop()
 			return

@@ -15,29 +15,30 @@ import (
 const Bucket = storage.PhBucket
 
 type Controller struct {
-	controller controller.Controller
-	quitters   map[string]chan struct{}
-	mu         *sync.Mutex
-	statsMgr   telemetry.StatsManager
-	devMode    bool
-	ais        *connectors.AnalogInputs
+	c        controller.Controller
+	quitters map[string]chan struct{}
+	mu       *sync.Mutex
+	statsMgr telemetry.StatsManager
+	devMode  bool
+	ais      *connectors.AnalogInputs
 }
 
 func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *Controller {
 	return &Controller{
-		quitters:   make(map[string]chan struct{}),
-		controller: c,
-		devMode:    devMode,
-		mu:         &sync.Mutex{},
-		statsMgr:   c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
+		quitters: make(map[string]chan struct{}),
+		c:        c,
+		devMode:  devMode,
+		mu:       &sync.Mutex{},
+		ais:      ais,
+		statsMgr: c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
 	}
 }
 
 func (c *Controller) Setup() error {
-	if err := c.controller.Store().CreateBucket(Bucket); err != nil {
+	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.controller.Store().CreateBucket(ReadingsBucket)
+	return c.c.Store().CreateBucket(ReadingsBucket)
 }
 
 func (c *Controller) Start() {
