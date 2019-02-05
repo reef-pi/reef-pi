@@ -2,6 +2,7 @@ package doser
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 
 	cron "gopkg.in/robfig/cron.v2"
@@ -24,6 +25,9 @@ func (c *Controller) Get(id string) (Pump, error) {
 }
 
 func (c *Controller) Create(p Pump) error {
+	if err := Validate(p); err != nil {
+		return err
+	}
 	fn := func(id string) interface{} {
 		p.ID = id
 		return &p
@@ -65,6 +69,9 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 }
 
 func (c *Controller) Update(id string, p Pump) error {
+	if err := Validate(p); err != nil {
+		return err
+	}
 	p.ID = id
 	if err := c.c.Store().Update(Bucket, id, p); err != nil {
 		return err
@@ -77,6 +84,13 @@ func (c *Controller) Update(id string, p Pump) error {
 	c.mu.Unlock()
 	if p.Regiment.Enable {
 		return c.addToCron(p)
+	}
+	return nil
+}
+
+func Validate(p Pump) error {
+	if p.Regiment.Duration <= 0 {
+		return errors.New("Duration must be greater than 0")
 	}
 	return nil
 }
