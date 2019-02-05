@@ -2,7 +2,7 @@ package doser
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"log"
 
 	cron "gopkg.in/robfig/cron.v2"
@@ -90,7 +90,7 @@ func (c *Controller) Update(id string, p Pump) error {
 
 func Validate(p Pump) error {
 	if p.Regiment.Duration < 0 {
-		return errors.New("Duration must be greater than 0")
+		return fmt.Errorf("Invalid Duration")
 	}
 	return nil
 }
