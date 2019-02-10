@@ -26,11 +26,17 @@ class Main extends React.Component {
   timerList () {
     return (
       this.props.timers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(timer => {
+        let tState = () => {
+          timer.enable = !timer.enable
+          this.props.update(timer.id, timer)
+        }
         return (
           <Collapsible key={'panel-timer-' + timer.id}
             name={'panel-timer-' + timer.id}
             item={timer}
-            title={<b className='ml-2 align-middle'>{timer.name} </b>}
+            onToggleState={tState}
+            enabled={timer.enable}
+            title={<b className='ml-2 align-middle'>{timer.name}</b>}
             onDelete={this.removeTimer}>
             <TimerForm readOnly={timer.readOnly}
               onSubmit={this.updateTimer}
