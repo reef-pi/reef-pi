@@ -2,6 +2,7 @@ import React, { cloneElement } from 'react'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import Switch from 'react-toggle-switch'
 
 class Collapsible extends React.Component {
   constructor (props) {
@@ -22,7 +23,7 @@ class Collapsible extends React.Component {
   }
 
   render () {
-    let {expanded, onToggle, name, children, readOnly} = this.props
+    let {expanded, onToggle, onToggleState, enabled, name, children, readOnly} = this.props
     const editButton = (
       <button type='button'
         onClick={this.handleEdit}
@@ -35,14 +36,19 @@ class Collapsible extends React.Component {
       this.props.onSubmit(this.props.name)
       children.props.onSubmit(values)
     }
+    let toggleStateButton = ''
+    if (onToggleState) {
+      toggleStateButton = (<Switch onClick={onToggleState} on={enabled}>
+        <small className='ml-1 align-top'>{enabled ? 'on' : 'off'}</small>
+      </Switch>)
+    }
 
     return (
       <li className='list-group-item'>
         <div
           className={classNames('row mb-1 text-center text-md-left', {
             'pointer': readOnly
-          })}
-          onClick={() => onToggle(name)}>
+          })}>
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
             <button type='button'
               onClick={this.handleDelete}
@@ -50,12 +56,13 @@ class Collapsible extends React.Component {
               className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
               Delete
             </button>
+            {readOnly ? toggleStateButton : null}
             {readOnly ? editButton : null}
             {this.props.buttons}
           </div>
-          <div className={classNames('col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
+          <div className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
             'pointer': readOnly
-          })}>
+          })} onClick={() => onToggle(name)}>
             {expanded ? FaAngleUp() : FaAngleDown()}
             {this.props.title}
           </div>
@@ -75,11 +82,13 @@ Collapsible.propTypes = {
   name: PropTypes.string.isRequired,
   title: PropTypes.node,
   expanded: PropTypes.bool,
+  enabled: PropTypes.bool,
   readOnly: PropTypes.bool,
   onToggle: PropTypes.func,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
   onSubmit: PropTypes.func,
+  onToggleState: PropTypes.func,
   children: PropTypes.element.isRequired
 }
 
