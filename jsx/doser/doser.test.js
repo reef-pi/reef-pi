@@ -34,16 +34,16 @@ jest.mock('utils/confirm', () => {
 describe('Doser ui', () => {
   it('<Main />', () => {
     let mock = {
-      dosers: [{ foo: 'bar' }]
+      dosers: [{ foo: 'bar', regiment: {} }]
     }
     const m = shallow(<Main store={mockStore(mock)} />)
       .dive()
       .instance()
 
-    m.createDoser({name: 'test'})
-    m.updateDoser({name: 'renamed'})
-    m.deleteDoser({id: 1, name: 'renamed'})
-    m.calibrateDoser({stopPropagation: fn}, {})
+    m.createDoser({ name: 'test' })
+    m.updateDoser({ name: 'renamed' })
+    m.deleteDoser({ id: 1, name: 'renamed' })
+    m.calibrateDoser({ stopPropagation: fn }, {})
   })
 
   it('<DoserForm/> for create', () => {

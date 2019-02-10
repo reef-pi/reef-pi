@@ -41,10 +41,16 @@ class doser extends React.Component {
             Calibrate
           </button>
         )
+        let tState = () => {
+          doser.regiment.enable = !doser.regiment.enable
+          this.props.update(doser.id, doser)
+        }
         return (
           <Collapsible key={'panel-doser-' + doser.id}
             name={'panel-doser-' + doser.id}
             item={doser}
+            onToggleState={tState}
+            enabled={doser.regiment.enable}
             buttons={calibrationButton}
             title={<b className='ml-2 align-middle'>{doser.name} </b>}
             onDelete={this.deleteDoser}>
