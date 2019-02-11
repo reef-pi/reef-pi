@@ -14,14 +14,14 @@ type Runner struct {
 	statsMgr telemetry.StatsManager
 }
 
-func (r *Runner) Dose(speed float64, duration time.Duration) error {
+func (r *Runner) Dose(speed float64, duration float64) error {
 	v := make(map[int]float64)
 	v[r.pump.Pin] = speed
 	if err := r.jacks.Control(r.pump.Jack, v); err != nil {
 		return err
 	}
 	select {
-	case <-time.After(duration * time.Second):
+	case <-time.After(time.Duration(duration * float64(time.Second))):
 		v[r.pump.Pin] = 0
 		if err := r.jacks.Control(r.pump.Jack, v); err != nil {
 			return err

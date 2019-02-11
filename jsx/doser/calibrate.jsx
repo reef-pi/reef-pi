@@ -78,7 +78,7 @@ const CalibrateForm = withFormik({
   },
   validationSchema: CalibrateSchema,
   handleSubmit: (values, {props}) => {
-    props.onSubmit(parseInt(values.duration), parseInt(values.speed))
+    props.onSubmit(parseFloat(values.duration), parseInt(values.speed))
   }
 })(Calibrate)
 
