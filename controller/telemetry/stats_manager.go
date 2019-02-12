@@ -123,7 +123,9 @@ func (m *mgr) Update(id string, metric Metric) {
 		stats.Historical.Value = metric
 		stats.Current.Value = metric
 		stats.Current = stats.Current.Next()
+		m.Lock()
 		m.inMemory[id] = stats
+		m.Unlock()
 		return
 	}
 	stats.Current.Value = metric
