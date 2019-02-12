@@ -179,6 +179,7 @@ func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "Unauthorized.", 401)
 			return
 		}
+		authSession.Save(req, w)
 		fn(w, req)
 	}
 }

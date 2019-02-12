@@ -70,7 +70,7 @@ class doser extends React.Component {
       pin: parseInt(values.pin),
       regiment: {
         enable: values.enable,
-        duration: parseInt(values.duration),
+        duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
         schedule: {
           day: values.day,
@@ -85,7 +85,6 @@ class doser extends React.Component {
 
   updateDoser (values) {
     var payload = this.valuesToDoser(values)
-
     this.props.update(values.id, payload)
   }
 
