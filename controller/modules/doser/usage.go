@@ -12,7 +12,7 @@ type Usage struct {
 func (u1 Usage) Rollup(ux telemetry.Metric) (telemetry.Metric, bool) {
 	u2 := ux.(Usage)
 	u := Usage{Time: u1.Time, Pump: u1.Pump}
-	if u1.Time.Hour() == u2.Time.Hour() {
+	if u1.Time.Day() == u2.Time.Day() {
 		u.Pump += u2.Pump
 		return u, false
 	}

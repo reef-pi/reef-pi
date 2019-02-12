@@ -87,7 +87,6 @@ func (t *telemetry) NewStatsManager(store storage.Store, b string) StatsManager 
 		store:           store,
 		HistoricalLimit: t.config.HistoricalLimit,
 		CurrentLimit:    t.config.CurrentLimit,
-		SaveOnRollup:    true,
 	}
 }
 
@@ -174,6 +173,10 @@ func (t TeleTime) Before(t2 TeleTime) bool {
 
 func (t TeleTime) Hour() int {
 	return time.Time(t).Hour()
+}
+
+func (t TeleTime) Day() int {
+	return time.Time(t).Day()
 }
 
 func (t TeleTime) MarshalJSON() ([]byte, error) {
