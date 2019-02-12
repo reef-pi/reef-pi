@@ -45,7 +45,6 @@ type mgr struct {
 	CurrentLimit    int
 	HistoricalLimit int
 	store           storage.Store
-	SaveOnRollup    bool
 }
 
 func (m *mgr) Get(id string) (StatsResponse, error) {
@@ -117,27 +116,32 @@ func (m *mgr) Save(id string) error {
 
 func (m *mgr) Update(id string, metric Metric) {
 	m.Lock()
-	defer m.Unlock()
 	stats, ok := m.inMemory[id]
+	m.Unlock()
 	if !ok {
 		stats = m.NewStats()
 		stats.Historical.Value = metric
 		stats.Current.Value = metric
 		stats.Current = stats.Current.Next()
+		m.Lock()
 		m.inMemory[id] = stats
+		m.Unlock()
 		return
 	}
 	stats.Current.Value = metric
 	stats.Current = stats.Current.Next()
 	m1, move := stats.Historical.Value.(Metric).Rollup(metric)
 	if move {
+		m.store.Update(m.bucket, id, stats)
 		stats.Historical = stats.Historical.Next()
-		if m.SaveOnRollup {
-			m.store.Update(m.bucket, id, stats)
-		}
 	}
 	stats.Historical.Value = m1
+	m.Lock()
 	m.inMemory[id] = stats
+	m.Unlock()
+	if move {
+		m.Save(id)
+	}
 }
 
 func (m *mgr) Delete(id string) error {
