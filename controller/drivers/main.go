@@ -111,7 +111,7 @@ func (d *Drivers) Create(d1 Driver) error {
 		return err
 	}
 	if err := d.register(d1, factory); err != nil {
-	    _ = d.store.Delete(DriverBucket, d1.ID)
+		_ = d.store.Delete(DriverBucket, d1.ID)
 		return err
 	}
 	return nil
