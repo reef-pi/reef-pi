@@ -21,18 +21,18 @@ import FatalError from './fatal_error'
 import ErrorBoundary from './ui_components/error_boundary'
 import i18n from 'utils/i18n'
 const caps = {
-  dashboard: { label: 'Dashboard', component: <Dashboard /> },
-  equipment: { label: 'Equipment', component: <Equipment /> },
-  timers: { label: 'Timers', component: <Timers /> },
-  lighting: { label: 'Lights', component: <Lighting /> },
-  temperature: { label: 'Temperature', component: <Temperature /> },
-  ato: { label: 'ATO', component: <ATO /> },
-  ph: { label: 'pH', component: <Ph /> },
-  doser: { label: 'Dosing Pumps', component: <Doser /> },
-  macro: { label: 'Macros', component: <Macro /> },
-  camera: { label: 'Camera', component: <Camera /> },
-  configuration: { label: 'Configuration', component: <Configuration /> },
-  log: { label: 'Log', component: <Log /> }
+  dashboard: { label: i18n.t('capabilities:dashboard'), component: <Dashboard /> },
+  equipment: { label: i18n.t('capabilities:equipment'), component: <Equipment /> },
+  timers: { label: i18n.t('capabilities:timers'), component: <Timers /> },
+  lighting: { label: i18n.t('capabilities:lights'), component: <Lighting /> },
+  temperature: { label: i18n.t('capabilities:temperature'), component: <Temperature /> },
+  ato: { label: i18n.t('capabilities:ato'), component: <ATO /> },
+  ph: { label: i18n.t('capabilities:ph'), component: <Ph /> },
+  doser: { label: i18n.t('capabilities:dosing_pumps'), component: <Doser /> },
+  macro: { label: i18n.t('capabilities:macros'), component: <Macro /> },
+  camera: { label: i18n.t('capabilities:camera'), component: <Camera /> },
+  configuration: { label: i18n.t('capabilities:configuration'), component: <Configuration /> },
+  log: { label: i18n.t('capabilities:log'), component: <Log /> }
 }
 
 class mainPanel extends React.Component {

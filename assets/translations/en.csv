@@ -7,3 +7,15 @@ configuration:errors,errors
 configuration:admin,admin
 configuration:about,about
 configuration:aboutNS:foobar,test1234
+capabilities:dashboard,Dashboard
+capabilities:equipment,Equipment
+capabilities:timers,Timers
+capabilities:lights,Lights
+capabilities:temperature,Temperature
+capabilities:ato,ATO
+capabilities:ph,pH
+capabilities:dosing_pumps,Dosing pumps
+capabilities:macros,Macros
+capabilities:camera,Camera
+capabilities:configuration,Configuration
+capabilities:log,Log
