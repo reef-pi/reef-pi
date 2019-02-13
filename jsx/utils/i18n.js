@@ -12,7 +12,7 @@ i18n
       fr: translations.fr
     },
     defaultNS: 'common',
-    debug: true,
+    debug: false,
     interpolation: {
       escapeValue: false
     },
