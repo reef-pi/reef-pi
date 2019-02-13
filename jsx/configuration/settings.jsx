@@ -7,6 +7,7 @@ import { updateSettings, fetchSettings } from 'redux/actions/settings'
 import { connect } from 'react-redux'
 import { isEmptyObject } from 'jquery'
 import SettingsSchema from './settings_schema'
+import i18n from 'utils/i18n'
 
 class settings extends React.Component {
   constructor (props) {
@@ -21,6 +22,7 @@ class settings extends React.Component {
         pca9685_pwm_freq: 1500,
         pca9685_address: 64
       },
+      currentLanguage: i18n.language,
       updated: false
     }
     this.updateCheckbox = this.updateCheckbox.bind(this)
@@ -31,6 +33,14 @@ class settings extends React.Component {
     this.toRow = this.toRow.bind(this)
     this.updateHealthNotify = this.updateHealthNotify.bind(this)
     this.showHealthNotify = this.showHealthNotify.bind(this)
+    this.setLang = this.setLang.bind(this)
+  }
+
+  setLang(ev) {
+      var lng = ev.target.value
+      console.log('change lang to ' + lng)
+      i18n.changeLanguage(lng)
+      window.location.reload();
   }
 
   showHealthNotify () {
@@ -160,9 +170,17 @@ class settings extends React.Component {
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_pwm_freq')}</div>
               <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_address')}</div>
-
             </div>
             <div className='row'>
+            <div className='col-lg-6 col-sm-12'>
+                <div className='form-group'>
+                  <label htmlFor='app-language'>Language</label>
+                  <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
+                    <option value="fr">Fr</option>
+                    <option value="en">En</option>
+                  </select>
+                </div>
+            </div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='updateNotification'>Notification</label>

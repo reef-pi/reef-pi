@@ -5,3 +5,17 @@ configuration:authentication,##
 configuration:errors,##
 configuration:admin,##
 configuration:about,##
+test,##
+configuration:aboutNS:foobar,##
+capabilities:dashboard,Tableau de bord
+capabilities:equipment,Equipement
+capabilities:timers,Minuteries
+capabilities:lights,Lumieres
+capabilities:temperature,Temperature
+capabilities:ato,Osmolateur
+capabilities:ph,pH
+capabilities:dosing_pumps,Pompes doseuses
+capabilities:macros,Macros
+capabilities:camera,Camera
+capabilities:configuration,Configuration
+capabilities:log,Log
