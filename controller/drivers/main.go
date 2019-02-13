@@ -107,12 +107,14 @@ func (d *Drivers) Create(d1 Driver) error {
 	if err != nil {
 		return err
 	}
-	if err := d.register(d1, factory); err != nil {
-		return err
-	}
     if err := d.store.Create(DriverBucket, fn); err != nil {
         return err
     }
+	if err := d.register(d1, factory); err != nil {
+	    // Registration has failed, we need to de-allocate the DB entry
+	    _ = d.store.Delete(DriverBucket, d1.ID)
+		return err
+	}
 	return nil
 }
 
