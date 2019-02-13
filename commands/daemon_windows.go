@@ -5,11 +5,11 @@ package main
 import (
 	"log"
 
-	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/daemon"
 )
 
 func daemonize(db string) {
-	c, err := controller.New(Version, db)
+	c, err := daemon.New(Version, db)
 	if err != nil {
 		log.Fatal("ERROR: Failed to initialize controller. Error:", err)
 	}
