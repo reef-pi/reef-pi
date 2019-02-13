@@ -1,0 +1,9 @@
+Key,Translation
+test,foo
+configuration:settings,settings
+configuration:connectors,connectors
+configuration:authentication,authentication
+configuration:errors,errors
+configuration:admin,admin
+configuration:about,about
+configuration:aboutNS:foobar,test1234
