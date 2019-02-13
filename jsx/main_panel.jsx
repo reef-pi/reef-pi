@@ -19,7 +19,7 @@ import { configureStore } from 'redux/store'
 import Summary from 'summary'
 import FatalError from './fatal_error'
 import ErrorBoundary from './ui_components/error_boundary'
-
+import i18n from 'utils/i18n'
 const caps = {
   dashboard: { label: 'Dashboard', component: <Dashboard /> },
   equipment: { label: 'Equipment', component: <Equipment /> },

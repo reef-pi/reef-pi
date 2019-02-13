@@ -46,6 +46,11 @@ var config = {
         ]
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader',
+        type: 'javascript/auto'
+      },
+      {
         test: /\.css/,
         loaders: ['style-loader', 'css-loader']
       }
