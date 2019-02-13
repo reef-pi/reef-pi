@@ -37,6 +37,10 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - [Michael Lane](https://github.com/Ranthalion)
 
 
+## Development
+
+To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](development_environment.md).
+
 ## Acknowledgments
 
 reef-pi would not be possible without these awesome things:
