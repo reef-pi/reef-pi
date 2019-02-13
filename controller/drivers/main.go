@@ -115,10 +115,12 @@ func (d *Drivers) Create(d1 Driver) error {
     }
 	return nil
 }
+
 func (d *Drivers) Update(id string, d1 Driver) error {
 	d1.ID = id
 	return d.store.Update(DriverBucket, id, d1)
 }
+
 func (d *Drivers) Delete(id string) error {
 	dri, err := d.Get(id)
 	if err == nil {
@@ -139,6 +141,7 @@ func (d *Drivers) List() ([]Driver, error) {
 	}
 	return ds, d.store.List(DriverBucket, fn)
 }
+
 func (d *Drivers) Close() error {
 	for _, d1 := range d.drivers {
 		if err := d1.Close(); err != nil {
