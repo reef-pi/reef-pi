@@ -36,7 +36,7 @@ const caps = {
 }
 
 class mainPanel extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       tab: 'dashboard'
@@ -44,17 +44,17 @@ class mainPanel extends React.Component {
     this.navs = this.navs.bind(this)
     this.setTab = this.setTab.bind(this)
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchUIData()
   }
 
-  setTab(k) {
+  setTab (k) {
     return () => {
       this.setState({ tab: k })
     }
   }
 
-  navs(tab) {
+  navs (tab) {
     let MandatoryTabs = {
       log: true
     }
@@ -70,17 +70,17 @@ class mainPanel extends React.Component {
       let cname = prop === tab ? 'nav-link active' : 'nav-link'
       let label = caps[prop].label
       panels.push(
-        <li className="nav-item" key={'li-tab-' + prop}>
-          <a href="#" id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
+        <li className='nav-item' key={'li-tab-' + prop}>
+          <a href='#' id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
             {label}
           </a>
         </li>
       )
     }
-    return <ul className="navbar-nav">{panels}</ul>
+    return <ul className='navbar-nav'>{panels}</ul>
   }
 
-  render() {
+  render () {
     var tab = this.state.tab
     if (!this.props.capabilities['dashboard'] && tab === 'dashboard') {
       for (var k in this.props.capabilities) {
@@ -92,40 +92,40 @@ class mainPanel extends React.Component {
     }
     var body = caps[tab].component
     return (
-      <div id="content">
-        <nav className="navbar navbar-dark navbar-reefpi navbar-expand-lg">
-          <span className="navbar-brand mb-0 h1">{this.props.info.name}</span>
-          <span className="navbar-brand mb-0 h1 navbar-toggler current-tab">{tab}</span>
+      <div id='content'>
+        <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
+          <span className='navbar-brand mb-0 h1'>{this.props.info.name}</span>
+          <span className='navbar-brand mb-0 h1 navbar-toggler current-tab'>{tab}</span>
           <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+            className='navbar-toggler'
+            type='button'
+            data-toggle='collapse'
+            data-target='#navbarNav'
+            aria-controls='navbarNav'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
           >
-            <span className="navbar-toggler-icon" />
+            <span className='navbar-toggler-icon' />
           </button>
           <div
-            className="collapse navbar-collapse navHeaderCollapse"
-            id="navbarNav"
-            data-toggle="collapse"
-            data-target=".navbar-collapse"
+            className='collapse navbar-collapse navHeaderCollapse'
+            id='navbarNav'
+            data-toggle='collapse'
+            data-target='.navbar-collapse'
           >
             {this.navs(tab)}
           </div>
         </nav>
-        <div className="container-fluid">
+        <div className='container-fluid'>
           <FatalError />
           <NotificationAlert />
-          <div className="row body-panel">
-            <div className="col-12">
+          <div className='row body-panel'>
+            <div className='col-12'>
               <ErrorBoundary tab={this.state.tab}>{body}</ErrorBoundary>
             </div>
           </div>
-          <div className="row d-none d-lg-block">
-            <div className="col-12">
+          <div className='row d-none d-lg-block'>
+            <div className='col-12'>
               <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
             </div>
           </div>

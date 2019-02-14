@@ -1,4 +1,5 @@
 import React from 'react'
+import i18n from 'utils/i18n'
 
 export default class SignIn extends React.Component {
   constructor (props) {
@@ -83,13 +84,13 @@ export default class SignIn extends React.Component {
                 <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
                 {this.state.invalidCredentials ? (
                   <div className='alert alert-danger' role='alert'>
-                    <strong>Oh snap!</strong> Invalid Credentials
+                    <strong>Oops!</strong> {i18n.t('signin:invalidcredentials')}
                   </div>
                 ) : (
                   <div />
                 )}
                 <label htmlFor='reef-pi-user' className='sr-only'>
-                  Username
+                  {i18n.t('signin:username')}
                 </label>
                 <input
                   onChange={this.handleUserChange}
@@ -102,7 +103,7 @@ export default class SignIn extends React.Component {
                   autoFocus=''
                 />
                 <label htmlFor='reef-pi-pass' className='sr-only'>
-                  Password
+                  {i18n.t('signin:password')}
                 </label>
                 <input
                   onChange={this.handlePasswordChange}
@@ -120,7 +121,7 @@ export default class SignIn extends React.Component {
                   type='submit'
                   id='btnSaveCreds'
                 >
-                  Sign in
+                  {i18n.t('signin:signin')}
                 </button>
               </div>
             </form>

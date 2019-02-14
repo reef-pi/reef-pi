@@ -36,11 +36,10 @@ class settings extends React.Component {
     this.setLang = this.setLang.bind(this)
   }
 
-  setLang(ev) {
-      var lng = ev.target.value
-      console.log('change lang to ' + lng)
-      i18n.changeLanguage(lng)
-      window.location.reload();
+  setLang (ev) {
+    var lng = ev.target.value
+    i18n.changeLanguage(lng)
+    window.location.reload()
   }
 
   showHealthNotify () {
@@ -172,15 +171,15 @@ class settings extends React.Component {
               <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_address')}</div>
             </div>
             <div className='row'>
-            <div className='col-lg-6 col-sm-12'>
+              <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
-                  <label htmlFor='app-language'>Language</label>
+                  <label htmlFor='app-language'>{i18n.t('language:language')}</label>
                   <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
-                    <option value="fr">Fr</option>
-                    <option value="en">En</option>
+                    <option value='fr'>{i18n.t('language:french')}</option>
+                    <option value='en'>{i18n.t('language:english')}</option>
                   </select>
                 </div>
-            </div>
+              </div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='updateNotification'>Notification</label>

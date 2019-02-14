@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
+import i18n from 'utils/i18n'
 
 class about extends React.Component {
   componentWillMount () {
@@ -17,27 +18,27 @@ class about extends React.Component {
     return (
       <div className='container'>
         <div className='row justify-content-md-center'>
-          <div class='card mb-4 box-shadow'>
-            <div class='card-header'>
-              <h4 class='my-0 font-weight-normal text-center'>reef-pi</h4>
+          <div className='card mb-4 box-shadow'>
+            <div className='card-header'>
+              <h4 className='my-0 font-weight-normal text-center'>reef-pi</h4>
             </div>
-            <div class='card-body'>
-              <h2 class='card-title pricing-card-title'>
-                Version: <small class='text-muted'>{this.props.info.version}</small>
+            <div className='card-body'>
+              <h2 className='card-title pricing-card-title'>
+                {i18n.t('configuration:about:version')}: <small className='text-muted'>{this.props.info.version}</small>
               </h2>
-              <ul class='list-unstyled mt-3 mb-4'>
+              <ul className='list-unstyled mt-3 mb-4'>
                 <li>
-                  Website: <a href='http://reef-pi.com'>http://reef-pi.com</a>
+                  {i18n.t('configuration:about:website')}: <a href='http://reef-pi.com'>http://reef-pi.com</a>
                 </li>
                 <li>
                   Github: <a href='https://github.com/reef-pi/reef-pi'>https://github.com/reef-pi/reef-pi</a>
                 </li>
-                <li>Copyright © 2018 Ranjib Dey</li>
+                <li>Copyright © {new Date().getFullYear()} Ranjib Dey</li>
               </ul>
-              <h2 class='card-title pricing-card-title'>Status</h2>
-              <ul class='list-unstyled mt-3 mb-4'>
-                <li>Current time: {this.props.info.current_time}</li>
-                <li>Uptime: {this.props.info.uptime}</li>
+              <h2 className='card-title pricing-card-title'>{i18n.t('configuration:about:status')}</h2>
+              <ul className='list-unstyled mt-3 mb-4'>
+                <li>{i18n.t('configuration:about:current_time')}: {this.props.info.current_time}</li>
+                <li>{i18n.t('configuration:about:uptime')}: {this.props.info.uptime}</li>
                 <li>IP: {this.props.info.ip}</li>
               </ul>
             </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchErrors, deleteError, deleteErrors } from 'redux/actions/errors'
 import { connect } from 'react-redux'
+import i18n from 'utils/i18n'
 
 class errors extends React.Component {
   componentDidMount () {
@@ -29,7 +30,7 @@ class errors extends React.Component {
         <div className='row'>
           <div className='col-lg-2'>
             <button className='btn btn-outline-secondary' onClick={this.props.clear}>
-              clear
+              {i18n.t('clear')}
             </button>
           </div>
         </div>

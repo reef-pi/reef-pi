@@ -3,6 +3,7 @@ import SignIn from 'sign_in'
 import { confirm } from 'utils/confirm'
 import { reload, reboot, powerOff } from 'redux/actions/admin'
 import { connect } from 'react-redux'
+import i18n from 'utils/i18n'
 
 class admin extends React.Component {
   constructor (props) {
@@ -18,15 +19,15 @@ class admin extends React.Component {
   }
 
   reload () {
-    confirm('Are you sure ?').then(this.props.reload)
+    confirm(i18n.t('are_you_sure')).then(this.props.reload)
   }
 
   powerOff () {
-    confirm('Are you sure ?').then(this.props.powerOff)
+    confirm(i18n.t('are_you_sure')).then(this.props.powerOff)
   }
 
   reboot () {
-    confirm('Are you sure ?').then(this.props.reboot)
+    confirm(i18n.t('are_you_sure')).then(this.props.reboot)
   }
 
   render () {
@@ -36,22 +37,22 @@ class admin extends React.Component {
         <div className='row'>
           <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.signout} type='button' className={btnClass}>
-              Sign Out
+              {i18n.t('configuration:admin:sign_out')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.reload} type='button' className={btnClass}>
-              Reload
+              {i18n.t('configuration:admin:reload')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.reboot} type='button' className={btnClass}>
-              Reboot
+              {i18n.t('configuration:admin:reboot')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
             <button onClick={this.powerOff} type='button' className={btnClass}>
-              PowerOff
+              {i18n.t('configuration:admin:poweroff')}
             </button>
           </div>
         </div>

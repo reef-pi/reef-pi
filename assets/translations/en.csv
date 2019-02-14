@@ -1,12 +1,35 @@
 Key,Translation
 test,foo
-configuration:settings,settings
-configuration:connectors,connectors
-configuration:authentication,authentication
-configuration:errors,errors
-configuration:admin,admin
-configuration:about,about
-configuration:aboutNS:foobar,test1234
+are_you_sure,Are you sure?
+clear,Clear
+update,Update
+language:language,Language
+language:french,French
+language:english,English
+configuration:authentication:credentials,Credentials
+configuration:authentication:error_user,You Must Provide a username
+configuration:authentication:error_pass,You Must Provide a password
+configuration:tab:settings,settings
+configuration:tab:connectors,connectors
+configuration:tab:authentication,authentication
+configuration:tab:drivers,drivers
+configuration:tab:errors,errors
+configuration:tab:telemetry,telemetry
+configuration:tab:admin,admin
+configuration:tab:about,about
+configuration:admin:sign_out,Sign Out
+configuration:admin:reload,Reload
+configuration:admin:reboot,Reboot
+configuration:admin:poweroff,Power Off
+configuration:about:version,Version
+configuration:about:website,Website
+configuration:about:status,Status
+configuration:about:current_time,Current time
+configuration:about:uptime,Uptime
+signin:username,Username
+signin:password,Password
+signin:signin,Sign In
+signin:invalidcredentials,Invalid Credentials
 capabilities:dashboard,Dashboard
 capabilities:equipment,Equipment
 capabilities:timers,Timers
