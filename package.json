@@ -71,6 +71,7 @@
   },
   "scripts": {
     "translations": "node ./build/translations/csv-json.js",
+    "translations:sync": "node ./build/translations/csv-sync.js",
     "build": "npm run translations && ./node_modules/.bin/webpack -d",
     "ui": "npm run translations && ./node_modules/.bin/webpack --mode=production",
     "ui-dev": "npm run translations && ./node_modules/.bin/webpack -d --watch",

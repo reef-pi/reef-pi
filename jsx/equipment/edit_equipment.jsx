@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {ErrorFor, ShowError} from '../utils/validation_helper'
 import {showError} from 'utils/alert'
 import classNames from 'classnames'
+import i18next from 'i18next'
 
 const EditEquipment = ({
   values,
@@ -47,7 +48,7 @@ const EditEquipment = ({
       <div className='row align-items-start'>
         {deleteAction()}
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>Name</label>
+          <label className='mr-2'>{i18next.t('name')}</label>
           <input type='text' name='name'
             onChange={handleChange}
             onBlur={handleBlur}
