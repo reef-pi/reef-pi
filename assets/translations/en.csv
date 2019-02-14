@@ -1,8 +1,11 @@
 Key,Translation
-test,foo
+loading,Loading
 are_you_sure,Are you sure?
 clear,Clear
 update,Update
+add,add
+save,Save
+configure,Configure
 language:language,Language
 language:french,French
 language:english,English
@@ -42,3 +45,4 @@ capabilities:macros,Macros
 capabilities:camera,Camera
 capabilities:configuration,Configuration
 capabilities:log,Log
+dashboard:back_to_dashboard,Back to dashboard

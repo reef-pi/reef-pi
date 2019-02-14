@@ -11,6 +11,7 @@ import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
 import ErrorBoundary from '../ui_components/error_boundary'
+import i18n from 'utils/i18n'
 
 class dashboard extends React.Component {
   constructor (props) {
@@ -147,10 +148,10 @@ class dashboard extends React.Component {
 
   render () {
     var content = <Config />
-    var lbl = 'Back to dashboard'
+    var lbl = i18n.t('dashboard:back_to_dashboard')
     if (!this.state.showConfig) {
       content = this.charts()
-      lbl = 'Configure'
+      lbl = i18n.t('configure')
     }
 
     return (

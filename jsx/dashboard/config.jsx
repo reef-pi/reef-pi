@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
 import { isEmptyObject } from 'jquery'
 import { showError } from 'utils/alert'
+import i18next from 'i18next'
 
 class config extends React.Component {
   constructor (props) {
@@ -134,7 +135,7 @@ class config extends React.Component {
         </div>
         <div className='row'>
           <div className='col-xs-12 col-md-3 offset-md-9'>
-            <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value='update' />
+            <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value={i18next.t('update')} />
           </div>
         </div>
       </div>

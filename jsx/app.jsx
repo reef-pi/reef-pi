@@ -6,6 +6,7 @@ import SignIn from 'sign_in'
 import 'style.scss'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'react-toggle-switch/dist/css/switch.min.css'
+import i18n from 'utils/i18n'
 
 export default class App extends React.Component {
   constructor (props) {
@@ -36,7 +37,7 @@ export default class App extends React.Component {
   }
   render () {
     if (!this.state.loaded) {
-      return <div>Loading</div>
+      return <div>{i18n.t('loading')}</div>
     } else {
       return this.getComponent()
     }
