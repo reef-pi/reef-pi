@@ -171,15 +171,15 @@ class settings extends React.Component {
               <div className='col-lg-6 col-sm-12'>{this.toRow('pca9685_address')}</div>
             </div>
             <div className='row'>
-            <div className='col-lg-6 col-sm-12'>
+              <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='app-language'>Language</label>
                   <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
-                    <option value="fr">Fr</option>
-                    <option value="en">En</option>
+                    <option value='fr'>Fr</option>
+                    <option value='en'>En</option>
                   </select>
                 </div>
-            </div>
+              </div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='app-language'>{i18n.t('language:language')}</label>
