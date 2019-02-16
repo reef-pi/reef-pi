@@ -1,6 +1,7 @@
 import React from 'react'
 import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
+import i18n from 'utils/i18n'
 
 class auth extends React.Component {
   constructor (props) {
@@ -54,32 +55,32 @@ class auth extends React.Component {
       <div className='container'>
         <div className='row'>
           <label>
-            <b>Credentials</b>
+            <b>{i18n.t('configuration:authentication:credentials')}</b>
           </label>
         </div>
         <div className='form-group'>
-          <label htmlFor='reef-pi-user'>User</label>
+          <label htmlFor='reef-pi-user'>{i18n.t('signin:username')}</label>
           <input
             type='text'
             className={'form-control ' + (this.state.usernameError ? 'is-invalid' : '')}
             id='reef-pi-user'
-            placeholder='Username'
+            placeholder={i18n.t('signin:username')}
             onChange={this.handleUserChange}
           />
-          <div className='invalid-feedback'>You Must Provide a username</div>
+          <div className='invalid-feedback'>{i18n.t('configuration:authentication:error_user')}</div>
         </div>
         <div className='form-group'>
-          <label htmlFor='reef-pi-pass'>Password</label>
+          <label htmlFor='reef-pi-pass'>{i18n.t('signin:password')}</label>
           <input
             type='password'
             id='reef-pi-pass'
             className={'form-control ' + (this.state.passwordError ? 'is-invalid' : '')}
             onChange={this.handlePasswordChange}
           />
-          <div className='invalid-feedback'>You Must Provide a password</div>
+          <div className='invalid-feedback'>{i18n.t('configuration:authentication:error_pass')}</div>
         </div>
         <div className='row'>
-          <input type='button' className={btnClass} value='update' onClick={this.updateCreds} />
+          <input type='button' className={btnClass} value={i18n.t('update')} onClick={this.updateCreds} />
         </div>
       </div>
     )

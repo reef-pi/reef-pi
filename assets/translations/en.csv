@@ -1,0 +1,53 @@
+Key,Translation
+loading,Loading
+are_you_sure,Are you sure?
+clear,Clear
+name,Name
+update,Update
+add,add
+save,Save
+configure,Configure
+language:language,Language
+language:french,French
+language:english,English
+configuration:authentication:credentials,Credentials
+configuration:authentication:error_user,You Must Provide a username
+configuration:authentication:error_pass,You Must Provide a password
+configuration:tab:settings,Settings
+configuration:tab:connectors,Connectors
+configuration:tab:authentication,Authentication
+configuration:tab:drivers,Drivers
+configuration:tab:errors,Errors
+configuration:tab:telemetry,Telemetry
+configuration:tab:admin,Admin
+configuration:tab:about,About
+configuration:admin:sign_out,Sign Out
+configuration:admin:reload,Reload
+configuration:admin:reboot,Reboot
+configuration:admin:poweroff,Power Off
+configuration:about:version,Version
+configuration:about:website,Website
+configuration:about:status,Status
+configuration:about:current_time,Current time
+configuration:about:uptime,Uptime
+signin:username,Username
+signin:password,Password
+signin:signin,Sign In
+signin:invalidcredentials,Invalid Credentials
+capabilities:dashboard,Dashboard
+capabilities:equipment,Equipment
+capabilities:timers,Timers
+capabilities:lights,Lights
+capabilities:temperature,Temperature
+capabilities:ato,ATO
+capabilities:ph,pH
+capabilities:dosing_pumps,Dosing pumps
+capabilities:macros,Macros
+capabilities:camera,Camera
+capabilities:configuration,Configuration
+capabilities:log,Log
+log:time,Time
+log:emitter,Emitter
+log:type,Type
+log:content,Content
+dashboard:back_to_dashboard,Back to dashboard

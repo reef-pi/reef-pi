@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { MsgLevel } from 'utils/enums'
+import i18next from 'i18next'
+
 class LogCenter extends React.Component {
   getTrClass (n) {
     let cssClass = ''
@@ -45,10 +47,10 @@ class LogCenter extends React.Component {
             <table className='table table-sm table-striped'>
               <thead>
                 <tr>
-                  <th scope='col'>Time</th>
-                  <th scope='col'>Emitter</th>
-                  <th scope='col'>Type</th>
-                  <th scope='col'>Content</th>
+                  <th scope='col'>{i18next.t('log:time')}</th>
+                  <th scope='col'>{i18next.t('log:emitter')}</th>
+                  <th scope='col'>{i18next.t('log:type')}</th>
+                  <th scope='col'>{i18next.t('log:content')}</th>
                 </tr>
               </thead>
               <tbody>{n}</tbody>

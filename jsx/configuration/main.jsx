@@ -7,6 +7,7 @@ import About from './about'
 import Connectors from 'connectors/main'
 import Drivers from 'drivers/main'
 import Errors from './errors'
+import i18n from 'utils/i18n'
 
 const components = {
   settings: <Settings />,
@@ -42,7 +43,7 @@ export default class Configuration extends React.Component {
       panels.push(
         <li className={cname} key={'conf-tabs-' + k}>
           <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>
-            {k}{' '}
+            {i18n.t(`configuration:tab:${k}`)}{' '}
           </a>
         </li>
       )
