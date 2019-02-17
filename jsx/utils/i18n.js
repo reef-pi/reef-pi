@@ -9,7 +9,12 @@ i18n
     fallbackLng: ['en', 'dev'],
     resources: {
       en: translations.en,
-      fr: translations.fr
+      fr: translations.fr,
+      de: translations.de,
+      it: translations.it,
+      fa: translations.fa,
+      hi: translations.hi,
+      es: translations.es
     },
     defaultNS: 'common',
     debug: false,

@@ -1,12 +1,10 @@
 Key,Translation
 configuration:settings,paramètres
-configuration:connectors,##
-configuration:authentication,##
-configuration:errors,##
-configuration:admin,##
-configuration:about,##
-test,##
-configuration:aboutNS:foobar,##
+configuration:connectors,Connecteurs
+configuration:authentication,Authentification
+configuration:errors,Erreurs
+configuration:admin,Administration
+configuration:about,À propos
 capabilities:dashboard,Tableau de bord
 capabilities:equipment,Equipement
 capabilities:timers,Minuteries
@@ -19,43 +17,69 @@ capabilities:macros,Macros
 capabilities:camera,Camera
 capabilities:configuration,Configuration
 capabilities:log,Log
-loading,##
-are_you_sure,##
-clear,##
-name,##
-update,##
-add,##
-save,##
-configure,##
-language:language,##
-language:french,##
-language:english,##
-configuration:authentication:credentials,##
-configuration:authentication:error_user,##
-configuration:authentication:error_pass,##
-configuration:tab:settings,##
-configuration:tab:connectors,##
-configuration:tab:authentication,##
-configuration:tab:drivers,##
-configuration:tab:errors,##
-configuration:tab:telemetry,##
-configuration:tab:admin,##
-configuration:tab:about,##
-configuration:admin:sign_out,##
-configuration:admin:reload,##
-configuration:admin:reboot,##
-configuration:admin:poweroff,##
-configuration:about:version,##
-configuration:about:website,##
-configuration:about:status,##
-configuration:about:current_time,##
-configuration:about:uptime,##
-signin:username,##
-signin:password,##
-signin:signin,##
-signin:invalidcredentials,##
-log:time,##
-log:emitter,##
-log:type,##
-log:content,##
-dashboard:back_to_dashboard,##
+loading,Chargement
+are_you_sure,Êtes-vous sur?
+clear,Vider
+name,Nom
+update,Mettre à jour
+add,Ajouter
+save,Sauvegarder
+configure,Configurer
+language:language,Langues
+language:fr,Français
+language:en,English
+language:de,Deutsch
+language:es,Español
+language:it,Italiano
+language:hi,हिन्दी
+language:fa,فارسی
+configuration:authentication:credentials,Informations d'identification
+configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
+configuration:authentication:error_pass,Vous devez fournir un mot de passe
+configuration:tab:settings,Paramètres
+configuration:tab:connectors,Connecteurs
+configuration:tab:authentication,Authentification
+configuration:tab:drivers,Drivers
+configuration:tab:errors,Erreurs
+configuration:tab:telemetry,Télémétrie
+configuration:tab:admin,Administration
+configuration:tab:about,À propos
+configuration:admin:sign_out,Déconnexion
+configuration:admin:reload,Rechargement
+configuration:admin:reboot,Rédémarrage
+configuration:admin:poweroff,Arrêt
+configuration:about:version,Version
+configuration:about:website,Site Web
+configuration:about:status,Statut
+configuration:about:current_time,Heure actuelle
+configuration:about:uptime,Durée de fonctionnement
+signin:username,Nom d'utilisateur
+signin:password,Mot de passe
+signin:signin,Connexion
+signin:invalidcredentials,Nom d'utilisateur ou mot de passe invalide
+log:time,Heure
+log:emitter,Émetteur
+log:type,Type
+log:content,Message
+dashboard:back_to_dashboard,Retour au Tableau de bord
+capabilities:lighting,Éclairage
+capabilities:doser,Pompe doseuse
+capabilities:macro,Macro
+capabilities:dev_mode,Mode développement
+capabilities:health_check,Santé du système
+configuration:settings:interface,Interface
+configuration:settings:name,Nom
+configuration:settings:address,Adresse
+configuration:settings:rpi_pwm_freq,Fréquence RPI PWM
+configuration:settings:notification,Notification
+configuration:settings:display,Affichage
+configuration:settings:use_https,Utiliser HTTPS
+configuration:settings:enable_profiling,Activer le profilage
+configuration:settings:capabilities,Capacités
+configuration:settings:alert_health_check,Alerte de santé du système
+configuration:settings:max_memory,Mémoire maximum
+configuration:settings:max_cpu,CPU maximum
+configuration:settings:name_required,Nom requis
+configuration:settings:network_interface_required,Interface réseau requise
+configuration:settings:network_address_required,Adresse réseau requise
+configuration:settings:capabilities_required,Capacité requise
