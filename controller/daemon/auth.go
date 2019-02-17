@@ -13,6 +13,25 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		authSession, err := r.cookiejar.Get(req, "auth")
+		if err != nil {
+			log.Println("DEBUG:", "No session (absent auth)")
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		log.Println(authSession.Values)
+		if user := authSession.Values["user"]; user == nil {
+			log.Println("DEBUG:", "No session (absent user)")
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		authSession.Save(req, w)
+		fn(w, req)
+	}
+}
+
 func (r *ReefPi) Me(w http.ResponseWriter, req *http.Request) {
 	utils.JSONResponse("you?", w, req)
 }
