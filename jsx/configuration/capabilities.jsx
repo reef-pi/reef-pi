@@ -1,4 +1,5 @@
 import React from 'react'
+import i18n from 'utils/i18n'
 
 export default class Capabilities extends React.Component {
   constructor (props) {
@@ -30,7 +31,7 @@ export default class Capabilities extends React.Component {
             onClick={this.updateCapability(label)}
             defaultChecked={this.state.capabilities[label]}
           />
-          {label}
+          {i18n.t(`capabilities:${label}`)}
         </label>
       </div>
     )

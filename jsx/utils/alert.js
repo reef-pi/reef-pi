@@ -2,6 +2,7 @@ import { configureStore } from 'redux/store'
 import { setAlert } from 'notifications/statics'
 import { addAlert } from 'redux/actions/alert'
 import { MsgLevel } from 'utils/enums'
+
 export function showInfo (msg) {
   _showAlert(MsgLevel.info, msg)
 }
@@ -21,7 +22,6 @@ export function showAlert (msg) {
   console.warn('showAlert is deprecated. Please Use showError')
   showError(msg)
 }
-
 export function clearAlert () {
   console.warn('clearAlert is deprecated.')
 }
