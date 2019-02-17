@@ -124,9 +124,6 @@ describe('Configuration ui', () => {
     d.find('#to-row-interface')
       .first()
       .simulate('change', { target: { value: 'foo' } })
-    d.find('#to-row-pca9685_pwm_freq')
-      .first()
-      .simulate('change', { target: { value: '666' } })
   })
 
   it('<HealthNotify />', () => {

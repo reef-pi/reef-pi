@@ -13,11 +13,8 @@ const SettingsSchema = Yup.object().shape({
     max_cpu: Yup.number().positive().integer()
   }),
   https: Yup.bool(),
-  pca9685: Yup.bool(),
-  pca9685_address: Yup.number().positive().integer(),
   pprof: Yup.bool(),
-  rpi_pwm_freq: Yup.number().positive().integer(),
-  pca9685_pwm_freq: Yup.number().positive().integer()
+  rpi_pwm_freq: Yup.number().positive().integer()
 })
 
 export default SettingsSchema
