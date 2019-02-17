@@ -45,6 +45,16 @@ To ensure a good development process please follow the Code Of Conduct and the P
 
 If you want to edit or provide translations to the project, please follow the (guide for internationalization)[internationalization_contributing.md].
 
+Currently available languages (but not completed):
+
+- English
+- French
+- Italian
+- German
+- Hindi
+- Persian
+- Spanish
+
 ## Acknowledgments
 
 reef-pi would not be possible without these awesome things:
