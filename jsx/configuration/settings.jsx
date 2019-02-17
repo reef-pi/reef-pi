@@ -98,7 +98,6 @@ class settings extends React.Component {
     var settings = this.state.settings
     if (SettingsSchema.isValidSync(settings)) {
       settings = SettingsSchema.cast(settings)
-      console.log(settings)
       this.setState({ updated: false, settings: settings })
       this.props.updateSettings(settings)
       return

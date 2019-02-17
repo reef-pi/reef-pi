@@ -1,10 +1,10 @@
 Key,Translation
 configuration:settings,paramètres
-configuration:connectors,##
-configuration:authentication,##
-configuration:errors,##
-configuration:admin,##
-configuration:about,##
+configuration:connectors,Connecteurs
+configuration:authentication,Authentification
+configuration:errors,Erreurs
+configuration:admin,Administration
+configuration:about,À propos
 capabilities:dashboard,Tableau de bord
 capabilities:equipment,Equipement
 capabilities:timers,Minuteries
@@ -19,7 +19,7 @@ capabilities:configuration,Configuration
 capabilities:log,Log
 loading,Chargement
 are_you_sure,Êtes-vous sur?
-clear,##
+clear,Vider
 name,Nom
 update,Mettre à jour
 add,Ajouter
@@ -33,9 +33,9 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
-configuration:authentication:credentials,##
-configuration:authentication:error_user,##
-configuration:authentication:error_pass,##
+configuration:authentication:credentials,Informations d'identification
+configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
+configuration:authentication:error_pass,Vous devez fournir un mot de passe
 configuration:tab:settings,Paramètres
 configuration:tab:connectors,Connecteurs
 configuration:tab:authentication,Authentification
@@ -62,20 +62,24 @@ log:emitter,Émetteur
 log:type,Type
 log:content,Message
 dashboard:back_to_dashboard,Retour au Tableau de bord
-capabilities:lighting,##
-capabilities:doser,##
-capabilities:macro,##
-capabilities:dev_mode,##
-capabilities:health_check,##
-configuration:settings:interface,##
-configuration:settings:name,##
-configuration:settings:address,##
-configuration:settings:rpi_pwm_freq,##
-configuration:settings:notification,##
-configuration:settings:display,##
-configuration:settings:use_https,##
-configuration:settings:enable_profiling,##
-configuration:settings:capabilities,##
-configuration:settings:alert_health_check,##
-configuration:settings:max_memory,##
-configuration:settings:max_cpu,##
+capabilities:lighting,Éclairage
+capabilities:doser,Pompe doseuse
+capabilities:macro,Macro
+capabilities:dev_mode,Mode développement
+capabilities:health_check,Santé du système
+configuration:settings:interface,Interface
+configuration:settings:name,Nom
+configuration:settings:address,Adresse
+configuration:settings:rpi_pwm_freq,Fréquence RPI PWM
+configuration:settings:notification,Notification
+configuration:settings:display,Affichage
+configuration:settings:use_https,Utiliser HTTPS
+configuration:settings:enable_profiling,Activer le profilage
+configuration:settings:capabilities,Capacités
+configuration:settings:alert_health_check,Alerte de santé du système
+configuration:settings:max_memory,Mémoire maximum
+configuration:settings:max_cpu,CPU maximum
+configuration:settings:name_required,Nom requis
+configuration:settings:network_interface_required,Interface réseau requise
+configuration:settings:network_address_required,Adresse réseau requise
+configuration:settings:capabilities_required,Capacité requise

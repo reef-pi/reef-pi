@@ -73,3 +73,7 @@ configuration:settings:capabilities,Capabilities
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:max_memory,Max memory
 configuration:settings:max_cpu,Max CPU
+configuration:settings:name_required,Name is required
+configuration:settings:network_interface_required,Network Interface is required
+configuration:settings:network_address_required,Network address is required
+configuration:settings:capabilities_required,Capabilities is required
