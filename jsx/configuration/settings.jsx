@@ -18,7 +18,7 @@ class settings extends React.Component {
         name: '',
         interface: '',
         address: '',
-        rpi_pwm_freq: 100,
+        rpi_pwm_freq: 100
       },
       currentLanguage: i18n.language,
       updated: false
