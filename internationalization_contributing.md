@@ -37,13 +37,13 @@ Just fork the project, make a branch for the completion of your translation and 
 
 If you're not familiar with all those aspects GitHub offers a web based csv editor. Here how you proceed from the reef-pi repository.
 
-- go on (https://github.com/reef-pi/reef-pi)[https://github.com/reef-pi/reef-pi]
+- go on [https://github.com/reef-pi/reef-pi](https://github.com/reef-pi/reef-pi)
 - Click on fork (you'll be redirected to your fork on your account)
 - Go on the CSV file you want to edit and click `Edit the file` with a pencil icon
 - Make your changes
 - Once you're done go to the bottom of the page and add a revelant commit message.
 - Click on `create a new branch for this commit and start a pull request`
-- go on (https://github.com/reef-pi/reef-pi)[https://github.com/reef-pi/reef-pi]
+- go on [https://github.com/reef-pi/reef-pi](https://github.com/reef-pi/reef-pi)
 - You'll see `compare & pull request` button appear at the top of the page, Click on it.
 - Accept the pull request
 - Wait for the review.
