@@ -41,6 +41,10 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](development_environment.md).
 
+## Internationalization
+
+If you want to edit or provide translations to the project, please follow the (guide for internationalization)[internationalization_contributing.md].
+
 ## Acknowledgments
 
 reef-pi would not be possible without these awesome things:
