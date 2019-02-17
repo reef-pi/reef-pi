@@ -26,8 +26,13 @@ add,Ajouter
 save,Sauvegarder
 configure,Configurer
 language:language,Langues
-language:french,Français
-language:english,Anglais
+language:fr,Français
+language:en,English
+language:de,Deutsch
+language:es,Español
+language:it,Italiano
+language:hi,हिन्दी
+language:fa,فارسی
 configuration:authentication:credentials,##
 configuration:authentication:error_user,##
 configuration:authentication:error_pass,##
@@ -57,3 +62,20 @@ log:emitter,Émetteur
 log:type,Type
 log:content,Message
 dashboard:back_to_dashboard,Retour au Tableau de bord
+capabilities:lighting,##
+capabilities:doser,##
+capabilities:macro,##
+capabilities:dev_mode,##
+capabilities:health_check,##
+configuration:settings:interface,##
+configuration:settings:name,##
+configuration:settings:address,##
+configuration:settings:rpi_pwm_freq,##
+configuration:settings:notification,##
+configuration:settings:display,##
+configuration:settings:use_https,##
+configuration:settings:enable_profiling,##
+configuration:settings:capabilities,##
+configuration:settings:alert_health_check,##
+configuration:settings:max_memory,##
+configuration:settings:max_cpu,##

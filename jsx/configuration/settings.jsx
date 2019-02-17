@@ -123,7 +123,7 @@ class settings extends React.Component {
     }.bind(this)
     return (
       <div className='form-group'>
-        <label htmlFor={'to-row-' + label}> {label}</label>
+        <label htmlFor={'to-row-' + label}> {i18n.t(`configuration:settings:${label}`)}</label>
         <input
           className='form-control'
           type='text'
@@ -167,25 +167,21 @@ class settings extends React.Component {
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
-                  <label htmlFor='app-language'>Language</label>
-                  <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
-                    <option value='fr'>Fr</option>
-                    <option value='en'>En</option>
-                  </select>
-                </div>
-              </div>
-              <div className='col-lg-6 col-sm-12'>
-                <div className='form-group'>
                   <label htmlFor='app-language'>{i18n.t('language:language')}</label>
                   <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
-                    <option value='fr'>{i18n.t('language:french')}</option>
-                    <option value='en'>{i18n.t('language:english')}</option>
+                    <option value='en'>{i18n.t('language:en')}</option>
+                    <option value='fr'>{i18n.t('language:fr')}</option>
+                    <option value='es'>{i18n.t('language:es')}</option>
+                    <option value='de'>{i18n.t('language:de')}</option>
+                    <option value='it'>{i18n.t('language:it')}</option>
+                    <option value='hi'>{i18n.t('language:hi')}</option>
+                    <option value='fa'>{i18n.t('language:fa')}</option>
                   </select>
                 </div>
               </div>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
-                  <label htmlFor='updateNotification'>Notification</label>
+                  <label htmlFor='updateNotification'>{i18n.t('configuration:settings:notification')}</label>
                   <input
                     type='checkbox'
                     id='updateNotification'
@@ -199,7 +195,7 @@ class settings extends React.Component {
             <div className='row'>
               <div className='col-6'>
                 <div className='form-group'>
-                  <label htmlFor='updateDisplay'>Display</label>
+                  <label htmlFor='updateDisplay'>{i18n.t('configuration:settings:display')}</label>
                   <input
                     type='checkbox'
                     id='updateDisplay'
@@ -212,7 +208,7 @@ class settings extends React.Component {
               </div>
               <div className='col-6'>
                 <div className='form-group'>
-                  <label htmlFor='use_https'>Use HTTPS</label>
+                  <label htmlFor='use_https'>{i18n.t('configuration:settings:use_https')}</label>
                   <input
                     type='checkbox'
                     id='use_https'
@@ -226,7 +222,7 @@ class settings extends React.Component {
             <div className='row'>
               <div className='col-6'>
                 <div className='form-group'>
-                  <label htmlFor='enable_pprof'>Enable profiling</label>
+                  <label htmlFor='enable_pprof'>{i18n.t('configuration:settings:enable_profiling')}</label>
                   <input
                     type='checkbox'
                     id='enable_pprof'
@@ -242,8 +238,7 @@ class settings extends React.Component {
         <div className='row'>
           <div className='col-12'>
             <label>
-              {' '}
-              <b>Capabilities</b>{' '}
+              <b>{i18n.t('configuration:settings:capabilities')}</b>
             </label>
             {this.showCapabilities()}
           </div>
@@ -255,7 +250,7 @@ class settings extends React.Component {
             className={updateButtonClass}
             onClick={this.update}
             id='systemUpdateSettings'
-            value='update'
+            value={i18n.t('update')}
           />
         </div>
       </div>

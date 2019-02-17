@@ -1,4 +1,5 @@
 import React from 'react'
+import i18n from 'utils/i18n';
 
 export default class HealthNotify extends React.Component {
   constructor (props) {
@@ -42,7 +43,7 @@ export default class HealthNotify extends React.Component {
               defaultChecked={this.state.notify.enable}
               onClick={this.updateEnable}
             />
-            <b>Alert on health check</b>
+            <b>{i18n.t('configuration:settings:alert_health_check')}</b>
           </label>
         </div>
       </div>
@@ -50,7 +51,7 @@ export default class HealthNotify extends React.Component {
     if (this.state.notify.enable) {
       ct.push(
         <div className='form-group col-md-6 col-12' key='health_notify_max_memory'>
-          <label htmlFor='health_max_memory'>Max Memory</label>
+          <label htmlFor='health_max_memory'>{i18n.t('configuration:settings:max_memory')}</label>
           <input
             type='text'
             className='form-control'
@@ -62,7 +63,7 @@ export default class HealthNotify extends React.Component {
       )
       ct.push(
         <div className='form-group col-md-6 col-12' key='health_notify_max_cpu'>
-          <label htmlFor='health_max_cpu'>Max CPU</label>
+          <label htmlFor='health_max_cpu'>{i18n.t('configuration:settings:max_cpu')}</label>
           <input
             type='text'
             className='form-control'

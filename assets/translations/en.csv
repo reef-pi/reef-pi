@@ -8,8 +8,13 @@ add,add
 save,Save
 configure,Configure
 language:language,Language
-language:french,French
-language:english,English
+language:fr,Français
+language:en,English
+language:de,Deutsch
+language:es,Español
+language:it,Italiano
+language:hi,हिन्दी
+language:fa,فارسی
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_user,You Must Provide a username
 configuration:authentication:error_pass,You Must Provide a password
@@ -38,16 +43,33 @@ capabilities:dashboard,Dashboard
 capabilities:equipment,Equipment
 capabilities:timers,Timers
 capabilities:lights,Lights
+capabilities:lighting,Lighting
 capabilities:temperature,Temperature
 capabilities:ato,ATO
 capabilities:ph,pH
 capabilities:dosing_pumps,Dosing pumps
+capabilities:doser,Doser
 capabilities:macros,Macros
+capabilities:macro,Macro
 capabilities:camera,Camera
 capabilities:configuration,Configuration
 capabilities:log,Log
+capabilities:dev_mode,Dev Mode
+capabilities:health_check,Health check
 log:time,Time
 log:emitter,Emitter
 log:type,Type
 log:content,Content
 dashboard:back_to_dashboard,Back to dashboard
+configuration:settings:interface,Interface
+configuration:settings:name,Name
+configuration:settings:address,Address
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
+configuration:settings:notification,Notification
+configuration:settings:display,Display
+configuration:settings:use_https,Use HTTPS
+configuration:settings:enable_profiling,Enable profiling
+configuration:settings:capabilities,Capabilities
+configuration:settings:alert_health_check,Alert on health check
+configuration:settings:max_memory,Max memory
+configuration:settings:max_cpu,Max CPU
