@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import i18next from 'i18next'
 
 export default class Equipment extends React.Component {
   constructor (props) {
@@ -112,7 +113,7 @@ export default class Equipment extends React.Component {
               disabled={this.props.disabled}
               defaultValue={this.state.duration}
             />
-            (seconds)
+            ({i18next.t('timers:equipment:seconds')})
           </div>
         </div>
       )
@@ -120,7 +121,7 @@ export default class Equipment extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col'>Equipment</div>
+          <div className='col'>{i18next.t('timers:equipment:equipment')}</div>
           <div className='col'>
             <div className='dropdown'>
               <button
@@ -137,7 +138,7 @@ export default class Equipment extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <label className='col'> Action</label>
+          <label className='col'> {i18next.t('timers:equipment:action')}</label>
           <span className='col'>
             <div className='dropdown'>
               <button
@@ -152,11 +153,11 @@ export default class Equipment extends React.Component {
               <div className='dropdown-menu'>
                 <a className='dropdown-item' onClick={this.setAction(true)}>
                   {' '}
-                  On{' '}
+                  {i18next.t('timers:equipment:on')}{' '}
                 </a>
                 <a className='dropdown-item' onClick={this.setAction(false)}>
                   {' '}
-                  Off{' '}
+                  {i18next.t('timers:equipment:off')}{' '}
                 </a>
               </div>
             </div>
@@ -164,7 +165,7 @@ export default class Equipment extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label> Revert </label>
+            <label> {i18next.t('timers:equipment:revert')} </label>
           </div>
           <div className='col'>
             <input

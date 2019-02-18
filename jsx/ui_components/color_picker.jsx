@@ -1,6 +1,7 @@
 import React from 'react'
 import { HuePicker } from 'react-color'
 import PropTypes from 'prop-types'
+import i18next from 'i18next'
 
 class ColorPicker extends React.Component {
   constructor (props) {
@@ -31,7 +32,7 @@ class ColorPicker extends React.Component {
           onClick={() => this.setState({expand: true})}
           style={{backgroundColor: this.props.color, color: this.props.color}}
           className='btn btn-secondary col-12'>
-          Choose
+          {i18next.t('color_picker:choose')}
         </button>
       )
     }

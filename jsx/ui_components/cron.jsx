@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
 import { Field } from 'formik'
+import i18next from 'i18next'
 
 const Cron = ({values, errors, touched, readOnly}) => {
   return (
     <div className='row'>
 
       <div className='form-group col-12 col-sm-6 col-md-3'>
-        <label htmlFor='day'>Day of month</label>
+        <label htmlFor='day'>{i18next.t('cron:day_of_month')}</label>
         <Field
           name='day'
           disabled={readOnly}
@@ -21,7 +22,7 @@ const Cron = ({values, errors, touched, readOnly}) => {
       </div>
 
       <div className='form-group col-12 col-sm-6 col-md-3'>
-        <label htmlFor='hour'>Hour</label>
+        <label htmlFor='hour'>{i18next.t('cron:hour')}</label>
         <Field
           name='hour'
           disabled={readOnly}
@@ -33,7 +34,7 @@ const Cron = ({values, errors, touched, readOnly}) => {
       </div>
 
       <div className='form-group col-12 col-sm-6 col-md-3'>
-        <label htmlFor='minute'>Minute</label>
+        <label htmlFor='minute'>{i18next.t('cron:minute')}</label>
         <Field
           name='minute'
           disabled={readOnly}
@@ -45,7 +46,7 @@ const Cron = ({values, errors, touched, readOnly}) => {
       </div>
 
       <div className='form-group col-12 col-sm-6 col-md-3'>
-        <label htmlFor='second'>Second</label>
+        <label htmlFor='second'>{i18next.t('cron:second')}</label>
         <Field
           name='second'
           disabled={readOnly}

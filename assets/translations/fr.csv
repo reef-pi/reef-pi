@@ -77,3 +77,27 @@ configuration:settings:name_required,Nom requis
 configuration:settings:network_interface_required,Interface réseau requise
 configuration:settings:network_address_required,Adresse réseau requise
 configuration:settings:capabilities_required,Capacité requise
+ok,##
+cancel,##
+documentation,##
+errors,##
+since,##
+running,##
+health_chart:cpu_memory,##
+fatal_error:fatal_error,##
+fatal_error:connection_lost,##
+fatal_error:troubleshoot,##
+fatal_error:message,##
+cron:day_of_month,##
+cron:hour,##
+cron:minute,##
+cron:second,##
+color_picker:choose,##
+collapsible:edit,##
+collapsible:delete,##
+timers:equipment:seconds,##
+timers:equipment:equipment,##
+timers:equipment:action,##
+timers:equipment:revert,##
+timers:equipment:on,##
+timers:equipment:off,##

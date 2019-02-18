@@ -2,6 +2,7 @@ import React from 'react'
 import {ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart} from 'recharts'
 import {fetchHealth} from './redux/actions/health'
 import {connect} from 'react-redux'
+import i18next from 'i18next'
 
 class healthChart extends React.Component {
   constructor (props) {
@@ -29,7 +30,7 @@ class healthChart extends React.Component {
     var healthStats = this.props.health_stats[this.state.trend]
     return (
       <div className='container'>
-        <span className='h6'>CPU/Memory ({this.props.trend})</span>
+        <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({this.props.trend})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={healthStats}>
             <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
