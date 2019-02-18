@@ -1,10 +1,4 @@
 Key,Translation
-configuration:settings,paramètres
-configuration:connectors,Connecteurs
-configuration:authentication,Authentification
-configuration:errors,Erreurs
-configuration:admin,Administration
-configuration:about,À propos
 capabilities:dashboard,Tableau de bord
 capabilities:equipment,Equipement
 capabilities:timers,Minuteries
