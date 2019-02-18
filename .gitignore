@@ -1,4 +1,5 @@
 bin
+api.txt
 node_modules
 assets/ui.js
 assets/ui.js.map
