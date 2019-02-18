@@ -1,5 +1,11 @@
 Key,Translation
+ok,Ok
+cancel,Cancel
 loading,Loading
+documentation,Documentation
+errors,Errors
+since,since
+running,running
 are_you_sure,Are you sure?
 clear,Clear
 name,Name
@@ -77,3 +83,21 @@ configuration:settings:name_required,Name is required
 configuration:settings:network_interface_required,Network Interface is required
 configuration:settings:network_address_required,Network address is required
 configuration:settings:capabilities_required,Capabilities is required
+health_chart:cpu_memory,CPU/Memory
+fatal_error:fatal_error,Fatal Error
+fatal_error:connection_lost,Connection Lost
+fatal_error:troubleshoot,Troubleshoot
+fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
+cron:day_of_month,Day of the month
+cron:hour,Hour
+cron:minute,Minute
+cron:second,Second
+color_picker:choose,Choose
+collapsible:edit,Edit
+collapsible:delete,Delete
+timers:equipment:seconds,seconds
+timers:equipment:equipment,Equipment
+timers:equipment:action,Action
+timers:equipment:revert,Revert
+timers:equipment:on,On
+timers:equipment:off,Off

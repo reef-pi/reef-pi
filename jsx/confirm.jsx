@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import Modal from 'modal'
-
+import i18next from 'i18next'
 export default class Confirm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      confirmLabel: props.confirmLabel === undefined ? 'OK' : props.confirmLabel,
-      abortLabel: props.abortLabel === undefined ? 'Cancel' : props.abortLabel
+      confirmLabel: props.confirmLabel === undefined ? i18next.t('ok') : props.confirmLabel,
+      abortLabel: props.abortLabel === undefined ? i18next.t('cancel') : props.abortLabel
     }
     this.abort = this.abort.bind(this)
     this.confirm = this.confirm.bind(this)
