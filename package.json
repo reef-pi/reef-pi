@@ -78,6 +78,7 @@
     "js-lint": "./node_modules/.bin/standard  jsx/* --fix",
     "standard": "./node_modules/.bin/standard --fix jsx/**/**",
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
+    "jest-update-snapshot": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
     "sass-lint": "./node_modules/.bin/sass-lint 'assets/sass/**/*.scss' --verbose"
   },

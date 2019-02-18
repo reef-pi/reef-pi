@@ -1,10 +1,14 @@
 package daemon
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
+
+	"os"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -12,6 +16,25 @@ import (
 var DefaultCredentials = Credentials{
 	User:     "reef-pi",
 	Password: "reef-pi",
+}
+
+func summarizeAPI(r *mux.Router) {
+	fi, err := os.Create("api.txt")
+	if err != nil {
+		log.Println("ERROR: Failed to open api.md file. Error:", err)
+		return
+	}
+	defer fi.Close()
+	walkFn := func(route *mux.Route, _ *mux.Router, _ []*mux.Route) error {
+		mts, _ := route.GetMethods()
+		p, _ := route.GetPathRegexp()
+		fi.WriteString(fmt.Sprintf("%6s\t%s\n", strings.Join(mts, ","), p))
+		return nil
+	}
+	if err := r.Walk(walkFn); err != nil {
+		log.Println("DEBUG: API List Error:", err)
+	}
+	log.Println("DEBUG: successfully written api.txt file")
 }
 
 func (r *ReefPi) API() error {
@@ -29,6 +52,9 @@ func (r *ReefPi) API() error {
 	}
 	r.AuthenticatedAPI(router)
 	r.UnAuthenticatedAPI(router)
+	if os.Getenv("REEF_PI_LIST_API") == "1" {
+		summarizeAPI(router)
+	}
 	return nil
 }
 

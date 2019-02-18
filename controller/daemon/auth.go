@@ -13,6 +13,24 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		authSession, err := r.cookiejar.Get(req, "auth")
+		if err != nil {
+			log.Println("unauthorized request.", req.Referer(), "error:", err)
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		if user := authSession.Values["user"]; user == nil {
+			log.Println("unauthorized request. user is not set.", req.Referer())
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		authSession.Save(req, w)
+		fn(w, req)
+	}
+}
+
 func (r *ReefPi) Me(w http.ResponseWriter, req *http.Request) {
 	utils.JSONResponse("you?", w, req)
 }
@@ -25,19 +43,18 @@ func (r *ReefPi) SignIn(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if err := json.NewDecoder(req.Body).Decode(&reqCredentials); err != nil {
-		log.Println("DEBUG:", "Error while decoding")
 		http.Error(w, err.Error(), 400)
 		return
 	}
 	session, _ := r.cookiejar.Get(req, "auth")
 	if session.Values["user"] == reqCredentials.User {
-		log.Println("DEBUG:", "Already logged")
+		log.Println("Already logged in.", req.Referer())
 		utils.JSONResponse(nil, w, req)
 		return
 	}
 	r.store.Get(Bucket, "credentials", &bucketCredentials)
 	if reqCredentials.User == bucketCredentials.User && reqCredentials.Password == bucketCredentials.Password {
-		log.Println("DEBUG:", "Access Granted")
+		log.Println("Access granted for:", req.Referer())
 		session.Values["user"] = reqCredentials.User
 		session.Save(req, w)
 		utils.JSONResponse(nil, w, req)

@@ -3,7 +3,6 @@ package daemon
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -164,22 +163,4 @@ func (r *ReefPi) Controller() controller.Controller {
 		r.LogError,
 		r.Subsystem,
 	)
-}
-
-func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		authSession, err := r.cookiejar.Get(req, "auth")
-		if err != nil {
-			log.Println("DEBUG:", "No session")
-			http.Error(w, "Unauthorized.", 401)
-			return
-		}
-		if user := authSession.Values["user"]; user == nil {
-			log.Println("DEBUG:", "No session")
-			http.Error(w, "Unauthorized.", 401)
-			return
-		}
-		authSession.Save(req, w)
-		fn(w, req)
-	}
 }
