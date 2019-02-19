@@ -19,6 +19,8 @@ update,Update
 add,add
 save,Save
 none,None
+alerts,Alerts
+unit,Unit
 configure,Configure
 language:language,Language
 language:fr,Français
@@ -102,7 +104,6 @@ cron:second,Second
 color_picker:choose,Choose
 collapsible:edit,Edit
 collapsible:delete,Delete
-timers:equipment:seconds,seconds
 timers:equipment:equipment,Equipment
 timers:equipment:action,Action
 timers:equipment:revert,Revert
@@ -124,8 +125,6 @@ ato:control_pump,Control Pump
 ato:control_pump,Control Pump
 ato:control_pump,Control Pump
 ato:alert_after,Alert After
-ato:alerts,Alerts
-ato:seconds,second(s)
 ato:disable_on_alert,Disable on alert
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
@@ -141,3 +140,30 @@ timers:on_required,On is required
 timers:duration_required,Duration is required
 timers:subject_required,Subject is required
 timers:message_required,Message is required
+timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+timers:turn_on,Turn On
+timers:turn_off,Turn Off
+timers:and_then,And Then
+timers:turn_back_on,Turn back on
+timers:turn_back_off,Turn back off
+timers:stay_on,Stay on
+timers:stay_off,Stay off
+second_s,second(s)
+sec,sec
+timers:sec,sec
+timers:after,After
+timers:subject,Subject
+timers:message,Message
+timers:timer_status,Timer Status
+timers:function,Function
+timers:equipment,Equipment
+timers:reminder,Reminder
+temperature:temperature,Temperature
+temperature:heater_cooler,Heater/Cooler
+temperature:chart_minimum,Chart Minimum
+temperature:chart_maximum,Chart Maximum
+temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
+temperature:sensor,Sensor
+temperature:sensor_status,Sensor Status
+temperature:celcius,Celcius
+temperature:fahrenheit,Fahrenheit

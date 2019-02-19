@@ -7,6 +7,7 @@ import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import ReadingsChart from './readings_chart'
 import ControlChart from './control_chart'
+import { t } from i18next
 
 const EditTemperature = ({
   values,
@@ -27,7 +28,7 @@ const EditTemperature = ({
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        'The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+        t('temperature:validation_error')
       )
     }
   }
@@ -69,7 +70,7 @@ const EditTemperature = ({
         {charts}
         <div className='row'>
           <div className='col-sm-12 col-md-6'>
-            <label htmlFor='chart_min'>Chart Minimum</label>
+            <label htmlFor='chart_min'>{t('temperature:chart_minimum')}</label>
             <Field
               name='chart_min'
               className='form-control'
@@ -77,7 +78,7 @@ const EditTemperature = ({
             />
           </div>
           <div className='col-sm-12 col-md-6'>
-            <label htmlFor='chart_max'>Chart Maximum</label>
+            <label htmlFor='chart_max'>{t('temperature:chart_maximum')}</label>
             <Field
               name='chart_max'
               className='form-control'
@@ -115,7 +116,7 @@ const EditTemperature = ({
         <div className={classNames('row', { 'd-none': readOnly })}>
           <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='name'>Name</label>
+              <label htmlFor='name'>{t('name')}</label>
               <Field
                 name='name'
                 disabled={readOnly}
@@ -131,7 +132,7 @@ const EditTemperature = ({
         <div className='row'>
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='sensor'>Sensor</label>
+              <label htmlFor='sensor'>{t('temperature:sensor')}</label>
               <Field
                 name='sensor'
                 component='select'
@@ -141,7 +142,7 @@ const EditTemperature = ({
                 })}
               >
                 <option value='' className='d-none'>
-                  -- Select --
+                  -- {t('select')} --
                 </option>
                 {sensorOptions()}
               </Field>
@@ -151,7 +152,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='fahrenheit'>Unit</label>
+              <label htmlFor='fahrenheit'>{t('unit')}</label>
               <Field
                 name='fahrenheit'
                 component={BooleanSelect}
@@ -160,8 +161,8 @@ const EditTemperature = ({
                   'is-invalid': ShowError('fahrenheit', touched, errors)
                 })}
               >
-                <option value='true'>Fahrenheit</option>
-                <option value='false'>Celcius</option>
+                <option value='true'>{t('temperature:fahrenheit')}</option>
+                <option value='false'>{t('temperature:celcius')}</option>
               </Field>
               <ErrorFor errors={errors} touched={touched} name='fahrenheit' />
             </div>
@@ -181,9 +182,9 @@ const EditTemperature = ({
                 />
                 <div className='input-group-append'>
                   <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                    {t('second_s')}
                   </span>
-                  <span className='input-group-text d-flex d-lg-none'>sec</span>
+                  <span className='input-group-text d-flex d-lg-none'>{t('sec')}</span>
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='period' />
               </div>
@@ -192,7 +193,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='enable'>Sensor Status</label>
+              <label htmlFor='enable'>{t('temperature:sensor_status')}</label>
               <Field
                 name='enable'
                 component={BooleanSelect}
@@ -201,8 +202,8 @@ const EditTemperature = ({
                   'is-invalid': ShowError('enable', touched, errors)
                 })}
               >
-                <option value='true'>Enabled</option>
-                <option value='false'>Disabled</option>
+                <option value='true'>{t('enabled')}</option>
+                <option value='false'>{t('disabled')}</option>
               </Field>
               <ErrorFor errors={errors} touched={touched} name='enable' />
             </div>
@@ -212,7 +213,7 @@ const EditTemperature = ({
         <div className='row'>
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='alerts'>Alerts</label>
+              <label htmlFor='alerts'>{t('alerts')}</label>
               <Field
                 name='alerts'
                 component={BooleanSelect}

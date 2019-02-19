@@ -104,7 +104,7 @@ const EditAto = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('ato:seconds')}
+                  {i18next.t('second_s')}
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>
@@ -155,7 +155,7 @@ const EditAto = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='notify'>{i18next.t('ato:alerts')}</label>
+            <label htmlFor='notify'>{i18next.t('alerts')}</label>
             <Field
               name='notify'
               component={BooleanSelect}
@@ -207,7 +207,7 @@ const EditAto = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('ato:seconds')}
+                  {i18next.t('second_s')}
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>

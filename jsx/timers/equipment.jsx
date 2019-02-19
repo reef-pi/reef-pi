@@ -113,7 +113,7 @@ export default class Equipment extends React.Component {
               disabled={this.props.disabled}
               defaultValue={this.state.duration}
             />
-            ({i18next.t('timers:equipment:seconds')})
+            ({i18next.t('second_s')})
           </div>
         </div>
       )
