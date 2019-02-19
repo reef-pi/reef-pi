@@ -95,7 +95,6 @@ cron:second,##
 color_picker:choose,##
 collapsible:edit,##
 collapsible:delete,##
-
 timers:equipment:equipment,##
 timers:equipment:action,##
 timers:equipment:revert,##
@@ -122,8 +121,6 @@ ato:ato_usage,##
 ato:ato_status,##
 ato:control_pump,##
 ato:alert_after,##
-
-
 ato:disable_on_alert,##
 ato:total_seconds_pump_on,##
 ato:validation_error,##
