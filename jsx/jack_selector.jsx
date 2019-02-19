@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import { fetchJacks } from './redux/actions/jacks'
 import { connect } from 'react-redux'
 
