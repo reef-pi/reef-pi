@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import Cron from '../ui_components/cron'
+import {t} from 'i18next'
 
 const EditTimer = ({
   values,
@@ -24,7 +25,7 @@ const EditTimer = ({
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        'The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+        t('timers:validation_error')
       )
     }
   }
@@ -44,7 +45,7 @@ const EditTimer = ({
       <React.Fragment>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='on'>Action</label>
+            <label htmlFor='on'>{t('timers:equipment:action')}</label>
             <Field
               name='on'
               component={BooleanSelect}
@@ -53,8 +54,8 @@ const EditTimer = ({
                 'is-invalid': ShowError('on', touched, errors)
               })}
             >
-              <option value='true'>Turn On</option>
-              <option value='false'>Turn Off</option>
+              <option value='true'>{t('timers:turn_on')}</option>
+              <option value='false'>{t('timers:turn_off')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='on' />
           </div>
@@ -62,7 +63,7 @@ const EditTimer = ({
 
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='revert'>And Then</label>
+            <label htmlFor='revert'>{t('timers:and_then')}</label>
             <Field
               name='revert'
               component={BooleanSelect}
@@ -71,8 +72,8 @@ const EditTimer = ({
                 'is-invalid': ShowError('revert', touched, errors)
               })}
             >
-              <option value='false'>Stay {values.on ? 'on' : 'off'}</option>
-              <option value='true'>Turn back {values.on ? 'off' : 'on'}</option>
+              <option value='false'>{values.on ? t('timers:stay_on') : t('timers:stay_off')}</option>
+              <option value='true'>{values.on ? t('timers:turn_back_off') : t('timers:turn_back_on')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='revert' />
           </div>
@@ -80,7 +81,7 @@ const EditTimer = ({
 
         <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', {'d-none': values.revert === false})}>
           <div className='form-group'>
-            <label htmlFor='period'>After</label>
+            <label htmlFor='period'>{t('timers:after')}</label>
             <div className='input-group'>
               <Field
                 name='duration'
@@ -92,9 +93,9 @@ const EditTimer = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                  {t('second_s')}
                 </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
+                <span className='input-group-text d-flex d-lg-none'>{t('timers:sec')}</span>
               </div>
               <ErrorFor errors={errors} touched={touched} name='duration' />
             </div>
@@ -109,7 +110,7 @@ const EditTimer = ({
       <React.Fragment>
         <div className='col-12 order-lg-7 col-xl-6'>
           <div className='form-group'>
-            <label htmlFor='title'>Subject</label>
+            <label htmlFor='title'>{t('timers:subject')}</label>
             <Field
               name='title'
               disabled={readOnly}
@@ -123,7 +124,7 @@ const EditTimer = ({
 
         <div className='col-12 order-lg-7 col-xl-6 offset-xl-6'>
           <div className='form-group'>
-            <label htmlFor='message'>Message</label>
+            <label htmlFor='message'>{t('timers:message')}</label>
             <Field
               component='textarea'
               name='message'
@@ -145,7 +146,7 @@ const EditTimer = ({
 
         <div className='col col-sm-6 col-lg-3 order-lg-1'>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+            <label htmlFor='name'>{t('name')}</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -159,7 +160,7 @@ const EditTimer = ({
 
         <div className='col-12 col-sm-6 col-lg-3 order-lg-2'>
           <div className='form-group'>
-            <label htmlFor='enable'>Timer Status</label>
+            <label htmlFor='enable'>{t('timers:timer_status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
@@ -168,8 +169,8 @@ const EditTimer = ({
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{t('enabled')}</option>
+              <option value='false'>{t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
@@ -185,7 +186,7 @@ const EditTimer = ({
 
         <div className='col-12 col-sm-6 col-lg-3 order-lg-3'>
           <div className='form-group'>
-            <label htmlFor='type'>Function</label>
+            <label htmlFor='type'>{t('timers:function')}</label>
             <Field
               name='type'
               component='select'
@@ -194,9 +195,9 @@ const EditTimer = ({
                 'is-invalid': ShowError('type', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- Select --</option>
-              <option value='equipment'>Equipment</option>
-              <option value='reminder'>Reminder</option>
+              <option value='' className='d-none'>-- {t('select')} --</option>
+              <option value='equipment'>{t('timers:equipment')}</option>
+              <option value='reminder'>{t('timers:reminder')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>
@@ -206,7 +207,7 @@ const EditTimer = ({
           'd-none': values.type === 'reminder'
         })}>
           <div className='form-group'>
-            <label htmlFor='equipment_id'>Equipment</label>
+            <label htmlFor='equipment_id'>{t('timers:equipment')}</label>
             <Field
               name='equipment_id'
               component='select'
@@ -215,7 +216,7 @@ const EditTimer = ({
                 'is-invalid': ShowError('equipment_id', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- Select --</option>
+              <option value='' className='d-none'>-- {t('select')} --</option>
               {equipmentOptions()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='equipment_id' />
@@ -230,7 +231,7 @@ const EditTimer = ({
         <div className='col-12'>
           <input
             type='submit'
-            value='Save'
+            value={t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />
