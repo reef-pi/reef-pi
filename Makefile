@@ -30,7 +30,7 @@ pi-zero:
 
 .PHONY: test
 test:
-	go test -cover -race ./...
+	go test -count=1 -cover -race ./...
 
 .PHONY: js-lint
 js-lint:
