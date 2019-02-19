@@ -2,10 +2,10 @@ import React from 'react'
 import { ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
-import { t } from 'i18next'
+import i18next from 'i18next'
 
 class chart extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchTCUsage(this.props.sensor_id)
     var timer = window.setInterval(() => {
       this.props.fetchTCUsage(this.props.sensor_id)
@@ -13,13 +13,13 @@ class chart extends React.Component {
     this.setState({ timer: timer })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.state && this.state.timer) {
       window.clearInterval(this.state.timer)
     }
   }
 
-  render() {
+  render () {
     if (this.props.config === undefined) {
       return <div />
     }
@@ -41,25 +41,25 @@ class chart extends React.Component {
     }
 
     return (
-      <div className="container">
-        <span className="h6">
-          {this.props.config.name} - {t('temperature:heater_cooler')}
+      <div className='container'>
+        <span className='h6'>
+          {this.props.config.name} - {i18next.t('temperature:heater_cooler')}
         </span>
-        <ResponsiveContainer height={this.props.height} width="100%">
+        <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
-            <YAxis yAxisId="left" orientation="left" domain={[min, max]} />
-            <YAxis yAxisId="right" orientation="right" />
-            <ReferenceLine yAxisId="right" y={0} />
-            <XAxis dataKey="time" />
+            <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
+            <YAxis yAxisId='right' orientation='right' />
+            <ReferenceLine yAxisId='right' y={0} />
+            <XAxis dataKey='time' />
             <Tooltip />
-            <Bar dataKey="heater" fill="#ffbb33" isAnimationActive={false} yAxisId="right" stackId="t" />
-            <Bar dataKey="cooler" fill="#33b5e5" isAnimationActive={false} yAxisId="right" stackId="t" />
+            <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
+            <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
-              type="monotone"
-              dataKey="temperature"
-              stroke="#ce93d8"
+              type='monotone'
+              dataKey='temperature'
+              stroke='#ce93d8'
               isAnimationActive={false}
-              yAxisId="left"
+              yAxisId='left'
               dot={false}
             />
           </ComposedChart>

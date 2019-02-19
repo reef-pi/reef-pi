@@ -7,7 +7,6 @@ import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import i18next from 'i18next'
 
-
 const EditAto = ({
   values,
   errors,
