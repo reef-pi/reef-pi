@@ -17,12 +17,12 @@ func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		authSession, err := r.cookiejar.Get(req, "auth")
 		if err != nil {
-			log.Println("unauthorized request.", req.Referer(), "error:", err)
+			log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
 			http.Error(w, "Unauthorized.", 401)
 			return
 		}
 		if user := authSession.Values["user"]; user == nil {
-			log.Println("unauthorized request. user is not set.", req.Referer())
+			log.Println("unauthorized request. user is not set.", req.RemoteAddr)
 			http.Error(w, "Unauthorized.", 401)
 			return
 		}
@@ -48,19 +48,19 @@ func (r *ReefPi) SignIn(w http.ResponseWriter, req *http.Request) {
 	}
 	session, _ := r.cookiejar.Get(req, "auth")
 	if session.Values["user"] == reqCredentials.User {
-		log.Println("Already logged in.", req.Referer())
+		log.Println("Already logged in.", req.RemoteAddr)
 		utils.JSONResponse(nil, w, req)
 		return
 	}
 	r.store.Get(Bucket, "credentials", &bucketCredentials)
 	if reqCredentials.User == bucketCredentials.User && reqCredentials.Password == bucketCredentials.Password {
-		log.Println("Access granted for:", req.Referer())
+		log.Println("Access granted for:", req.RemoteAddr)
 		session.Values["user"] = reqCredentials.User
 		session.Save(req, w)
 		utils.JSONResponse(nil, w, req)
 		return
 	}
-	log.Println("DEBUG:", "Access Denied")
+	log.Println("DEBUG:", "Access Denied for", req.RemoteAddr)
 	w.WriteHeader(401)
 	utils.JSONResponse(nil, w, req)
 }
@@ -69,6 +69,7 @@ func (r *ReefPi) SignOut(w http.ResponseWriter, req *http.Request) {
 	session, _ := r.cookiejar.Get(req, "auth")
 	defer session.Save(req, w)
 	session.Options.MaxAge = -1
+	log.Println("Sign out:", req.RemoteAddr)
 }
 
 func (r *ReefPi) GetCredentials() (Credentials, error) {
