@@ -98,7 +98,7 @@ export default class SignIn extends React.Component {
                   id='reef-pi-user'
                   className='form-control'
                   name='username'
-                  placeholder='Username'
+                  placeholder={i18n.t('signin:username')}
                   required=''
                   autoFocus=''
                 />
@@ -111,7 +111,7 @@ export default class SignIn extends React.Component {
                   id='reef-pi-pass'
                   className='form-control'
                   name='password'
-                  placeholder='Password'
+                  placeholder={i18n.t('signin:password')}
                   required=''
                   autoFocus=''
                 />

@@ -1,9 +1,15 @@
 Key,Translation
 ok,Ok
+select,Select
+enabled,Enabled
+disabled,Disabled
 cancel,Cancel
 loading,Loading
 documentation,Documentation
 errors,Errors
+edit,Edit
+inlet,Inlet
+delete,Delete
 since,since
 running,running
 are_you_sure,Are you sure?
@@ -12,6 +18,7 @@ name,Name
 update,Update
 add,add
 save,Save
+none,None
 configure,Configure
 language:language,Language
 language:fr,Français
@@ -101,3 +108,36 @@ timers:equipment:action,Action
 timers:equipment:revert,Revert
 timers:equipment:on,On
 timers:equipment:off,Off
+ato:name_required,Name is required
+ato:status_required,ATO Status is required
+ato:inlet_required,Inlet is required
+ato:chk_freq,Check Frequency
+ato:chk_freq_required,Check Frequency is required
+ato:chk_freq_number,Check Frequency must be a number
+ato:chk_freq_number_value,Check Frequency must be 1 second or greater
+ato:threshold_required,Threshold is required when notification is enabled
+ato:threshold_value,Threshold must be a number
+ato:warning_delete,This action will delete
+ato:ato_usage,ATO Usage
+ato:ato_status,ATO Status
+ato:control_pump,Control Pump
+ato:control_pump,Control Pump
+ato:control_pump,Control Pump
+ato:alert_after,Alert After
+ato:alerts,Alerts
+ato:seconds,second(s)
+ato:disable_on_alert,Disable on alert
+ato:total_seconds_pump_on,Total number of seconds ato pump is on
+ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
+timers:name_required,Name is required
+timers:timer_status_required,Timer Status is required
+timers:day_required,Day is required
+timers:hour_required,Hour is required
+timers:minute_required,Minute is required
+timers:second_required,Second is required
+timers:type_required,Type is required
+timers:equipment_required,Equipment is required
+timers:on_required,On is required
+timers:duration_required,Duration is required
+timers:subject_required,Subject is required
+timers:message_required,Message is required

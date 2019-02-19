@@ -5,6 +5,8 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
+import i18next from 'i18next'
+
 
 const EditAto = ({
   values,
@@ -24,7 +26,7 @@ const EditAto = ({
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        'The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+        i18next.t('ato:validation_error')
       )
     }
   }
@@ -54,7 +56,7 @@ const EditAto = ({
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+            <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -70,7 +72,7 @@ const EditAto = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='inlet'>Inlet</label>
+            <label htmlFor='inlet'>{i18next.t('inlet')}</label>
             <Field
               name='inlet'
               component='select'
@@ -80,7 +82,7 @@ const EditAto = ({
               })}
             >
               <option value='' className='d-none'>
-                  -- Select --
+                  -- {i18next.t('select')} --
               </option>
               {inletOptions()}
             </Field>
@@ -90,7 +92,7 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='period'>Check Frequency</label>
+            <label htmlFor='period'>{i18next.t('ato:chk_freq')}</label>
             <div className='input-group'>
               <Field
                 name='period'
@@ -102,7 +104,7 @@ const EditAto = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                  {i18next.t('ato:seconds')}
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>
@@ -113,7 +115,7 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>ATO Status</label>
+            <label htmlFor='enable'>{i18next.t('ato:ato_status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
@@ -122,8 +124,8 @@ const EditAto = ({
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
@@ -131,7 +133,7 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='pump'>Control Pump</label>
+            <label htmlFor='pump'>{i18next.t('ato:control_pump')}</label>
             <Field
               name='pump'
               component='select'
@@ -141,7 +143,7 @@ const EditAto = ({
               })}
             >
               <option key='' value=''>
-                  None
+                {i18next.t('none')}
               </option>
               {equipmentOptions()}
             </Field>
@@ -153,7 +155,7 @@ const EditAto = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='notify'>Alerts</label>
+            <label htmlFor='notify'>{i18next.t('ato:alerts')}</label>
             <Field
               name='notify'
               component={BooleanSelect}
@@ -162,15 +164,15 @@ const EditAto = ({
                 'is-invalid': ShowError('notify', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='notify' />
           </div>
         </div>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='disable_on_alert'>Disable on alert</label>
+            <label htmlFor='disable_on_alert'>{i18next.t('ato:disable_on_alert')}</label>
             <Field
               name='disable_on_alert'
               component={BooleanSelect}
@@ -179,8 +181,8 @@ const EditAto = ({
                 'is-invalid': ShowError('notify', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
           </div>
@@ -192,10 +194,10 @@ const EditAto = ({
           })}
         >
           <div className='form-group'>
-            <label htmlFor='maxAlert'>Alert After</label>
+            <label htmlFor='maxAlert'>{i18next.t('ato:alert_after')}</label>
             <div className='input-group'>
               <Field
-                title='Total number of seconds ato pump is on'
+                title={i18next.t('ato:total_seconds_pump_on')}
                 name='maxAlert'
                 type='number'
                 readOnly={readOnly || values.notify === false}
@@ -205,7 +207,7 @@ const EditAto = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                  {i18next.t('ato:seconds')}
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>
@@ -219,7 +221,7 @@ const EditAto = ({
         <div className='col-12'>
           <input
             type='submit'
-            value='Save'
+            value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />

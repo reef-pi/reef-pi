@@ -5,6 +5,7 @@ import {deleteATO, updateATO} from 'redux/actions/ato'
 import {connect} from 'react-redux'
 import {confirm} from 'utils/confirm'
 import AtoForm from './ato_form'
+import i18next from 'i18next'
 
 class ato extends React.Component {
   constructor (props) {
@@ -35,11 +36,11 @@ class ato extends React.Component {
 
     const message = (
       <div>
-        <p>This action will delete {this.props.data.name}.</p>
+        <p>{i18next.t('ato:warning_delete')} {this.props.data.name}.</p>
       </div>
     )
 
-    confirm('Delete ' + this.props.data.name, {description: message})
+    confirm(`${i18next.t('delete')} ${this.props.data.name}`, {description: message})
       .then(function () {
         this.props.deleteATO(this.props.data.id)
       }.bind(this))
@@ -92,7 +93,7 @@ class ato extends React.Component {
           onClick={this.handleEdit}
           id={'edit-ato-' + this.props.data.id}
           className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
-          Edit
+          {i18next.t('edit')}
         </button>
       )
     }
@@ -106,7 +107,7 @@ class ato extends React.Component {
             <button type='button'
               onClick={this.handleDelete}
               className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
-              Delete
+              {i18next.t('delete')}
             </button>
             {editButton}
           </div>
