@@ -1,17 +1,18 @@
 import * as Yup from 'yup'
+import i18next from 'i18next'
 
 const AtoSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Name is required'),
+    .required(i18next.t('ato:name_required')),
   enable: Yup.bool()
-    .required('ATO Status is required'),
+    .required(i18next.t('ato:status_required')),
   inlet: Yup.string()
-    .required('Inlet is required'),
+    .required(i18next.t('ato:inlet_required')),
   period: Yup.number()
-    .required('Check Frequency is required')
+    .required(i18next.t('ato:chk_freq_required'))
     .integer()
-    .typeError('Check Frequency must be a number')
-    .min(1, 'Check Frequency must be 1 second or greater'),
+    .typeError(i18next.t('ato:chk_freq_number'))
+    .min(1, i18next.t('ato:chk_freq_number_value')),
   pump: Yup.number(),
   notify: Yup.bool(),
   disable_on_alert: Yup.bool(),
@@ -20,9 +21,9 @@ const AtoSchema = Yup.object().shape({
       if (notify === true) {
         return Yup
           .number()
-          .required('Threshold is required when notification is enabled')
-          .typeError('Threshold must be a number')
-          .min(1, 'Check Frequency must be 1 second or greater')
+          .required(i18next.t('ato:threshold_required'))
+          .typeError(i18next.t('ato:threshold_value'))
+          .min(1, i18next.t('ato:chk_freq_number_value'))
       } else { return schema }
     })
 
