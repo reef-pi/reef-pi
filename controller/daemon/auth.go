@@ -27,6 +27,7 @@ func (r *ReefPi) BasicAuth(fn http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		authSession.Save(req, w)
+		log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
 		fn(w, req)
 	}
 }
