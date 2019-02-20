@@ -57,6 +57,10 @@ func main() {
 		args = os.Args[2:]
 	}
 	switch v {
+	case "manager":
+		cmd := flag.NewFlagSet("manager", flag.ExitOnError)
+		cmd.Parse(args)
+		mgr()
 	case "reset-password":
 		cmd := flag.NewFlagSet("reset-password", flag.ExitOnError)
 		user := cmd.String("user", "", "New reef-pi web ui username")
