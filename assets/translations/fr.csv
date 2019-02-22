@@ -82,10 +82,10 @@ cancel,annuler
 documentation,documentation
 errors,erreurs
 since,depuis
-running,fonctionne
-health_chart:cpu_memory,diagramme de santé
-fatal_error:fatal_error,erreur fatale:erreur fatale
-fatal_error:connection_lost,connection perdue
+running,en cours d'exécution
+health_chart:cpu_memory,memoire_du_cpu
+fatal_error:fatal_error,erreur fatale
+fatal_error:connection_lost,connexion perdue
 fatal_error:troubleshoot,troubleshoot
 fatal_error:message,message
 cron:day_of_month,jour du mois
