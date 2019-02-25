@@ -1,18 +1,19 @@
-package daemon
+package utils
 
 import (
 	"bytes"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"testing"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAuth(t *testing.T) {
-	r, err := New("1.0", "test.db")
+	store, err := storage.NewStore("auth-test.db")
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
+	store.CreateBucket("reef-pi")
+	r := NewAuth("reef-pi", store)
+	tr := NewTestRouter()
 	tr.Router.HandleFunc("/sign_in", r.SignIn).Methods("GET")
 	tr.Router.HandleFunc("/sign_out", r.SignOut).Methods("GET")
 	tr.Router.HandleFunc("/creds", r.UpdateCredentials).Methods("POST")

@@ -5,8 +5,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/gorilla/sessions"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
@@ -33,12 +31,11 @@ type ReefPi struct {
 	version    string
 	h          *utils.HealthChecker
 	bus        i2c.Bus
-	cookiejar  *sessions.CookieStore
+	a          utils.Auth
 }
 
 func New(version, database string) (*ReefPi, error) {
 	store, err := storage.NewStore(database)
-	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
@@ -92,7 +89,7 @@ func New(version, database string) (*ReefPi, error) {
 		drivers:    drvrs,
 		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
-		cookiejar:  cookiejar,
+		a:          utils.NewAuth(Bucket, store),
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = utils.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, telemetry, store)

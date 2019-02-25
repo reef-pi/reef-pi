@@ -13,7 +13,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-var DefaultCredentials = Credentials{
+var DefaultCredentials = utils.Credentials{
 	User:     "reef-pi",
 	Password: "reef-pi",
 }
@@ -38,7 +38,7 @@ func summarizeAPI(r *mux.Router) {
 }
 
 func (r *ReefPi) API() error {
-	creds, err := r.GetCredentials()
+	creds, err := r.a.GetCredentials()
 	if err != nil {
 		log.Println("ERROR: Failed to load credentials. Error", err)
 		if err := r.store.Update(Bucket, "credentials", DefaultCredentials); err != nil {
@@ -59,13 +59,13 @@ func (r *ReefPi) API() error {
 }
 
 func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
-	router.HandleFunc("/auth/signin", r.SignIn).Methods("POST")
-	router.HandleFunc("/auth/signout", r.SignOut).Methods("GET")
+	router.HandleFunc("/auth/signin", r.a.SignIn).Methods("POST")
+	router.HandleFunc("/auth/signout", r.a.SignOut).Methods("GET")
 }
 
 // Authenticated API using the BasicAuth middleware
 func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
-	http.Handle("/api/", r.BasicAuth(router.ServeHTTP))
+	http.Handle("/api/", r.a.Authenticate(router.ServeHTTP))
 
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
 	for _, sController := range r.subsystems {
@@ -73,7 +73,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	}
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
-	router.HandleFunc("/api/credentials", r.UpdateCredentials).Methods("POST")
+	router.HandleFunc("/api/credentials", r.a.UpdateCredentials).Methods("POST")
 	router.HandleFunc("/api/telemetry", r.getTelemetry).Methods("GET")
 	router.HandleFunc("/api/telemetry", r.updateTelemetry).Methods("POST")
 	router.HandleFunc("/api/telemetry/test_message", r.sendTestMessage).Methods("POST")
@@ -81,7 +81,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	router.HandleFunc("/api/errors/{id}", r.deleteError).Methods("DELETE")
 	router.HandleFunc("/api/errors/{id}", r.getError).Methods("GET")
 	router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
-	router.HandleFunc("/api/me", r.Me).Methods("GET")
+	router.HandleFunc("/api/me", r.a.Me).Methods("GET")
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats", r.getHealthStats).Methods("GET")
 	}
@@ -99,7 +99,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string, creds Credentials, https bool) (error, *mux.Router) {
+func startAPIServer(address string, creds utils.Credentials, https bool) (error, *mux.Router) {
 	assets := http.FileServer(http.Dir("ui/assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/home.html")
