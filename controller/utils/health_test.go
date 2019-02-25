@@ -1,4 +1,4 @@
-package daemon
+package utils
 
 import (
 	"testing"
@@ -14,7 +14,7 @@ func TestHealthChecker(t *testing.T) {
 		t.Error(err)
 	}
 	telemetry := telemetry.TestTelemetry()
-	h := NewHealthChecker(1, settings.HealthCheckNotify{}, telemetry, store)
+	h := NewHealthChecker("reef-pi", 1, settings.HealthCheckNotify{}, telemetry, store)
 	h.Notify.Enable = true
 	h.check()
 }

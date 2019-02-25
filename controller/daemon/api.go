@@ -134,6 +134,6 @@ func startAPIServer(address string, creds Credentials, https bool) (error, *mux.
 }
 
 func (r *ReefPi) getHealthStats(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) { return r.h.statsMgr.Get(HealthStatsKey) }
+	fn := func(id string) (interface{}, error) { return r.h.GetStats() }
 	utils.JSONGetResponse(fn, w, req)
 }
