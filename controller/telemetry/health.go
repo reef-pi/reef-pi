@@ -1,10 +1,11 @@
-package daemon
+package telemetry
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"math"
+	"net/http"
 	"time"
 
 	"github.com/shirou/gopsutil/load"
@@ -12,30 +13,37 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const HealthStatsKey = "health_stats"
 
-type HealthChecker struct {
+type HealthChecker interface {
+	Check()
+	Start()
+	Stop()
+	GetStats(http.ResponseWriter, *http.Request)
+}
+
+type hc struct {
 	stopCh   chan struct{}
 	interval time.Duration
-	t        telemetry.Telemetry
+	t        Telemetry
 	Notify   settings.HealthCheckNotify
 	store    storage.Store
-	statsMgr telemetry.StatsManager
+	statsMgr StatsManager
 }
 
 type HealthMetric struct {
-	Load5      float64            `json:"cpu"`
-	UsedMemory float64            `json:"memory"`
-	Time       telemetry.TeleTime `json:"time"`
+	Load5      float64  `json:"cpu"`
+	UsedMemory float64  `json:"memory"`
+	Time       TeleTime `json:"time"`
 	len        int
 	loadSum    float64
 	memorySum  float64
 }
 
-func (m1 HealthMetric) Rollup(mx telemetry.Metric) (telemetry.Metric, bool) {
+func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
 	m2 := mx.(HealthMetric)
 	m := HealthMetric{
 		Time:       m1.Time,
@@ -49,30 +57,30 @@ func (m1 HealthMetric) Rollup(mx telemetry.Metric) (telemetry.Metric, bool) {
 		m.loadSum += m2.Load5
 		m.memorySum += m2.UsedMemory
 		m.len += 1
-		m.Load5 = telemetry.TwoDecimal(m.loadSum / float64(m.len))
-		m.UsedMemory = telemetry.TwoDecimal(m.memorySum / float64(m.len))
+		m.Load5 = TwoDecimal(m.loadSum / float64(m.len))
+		m.UsedMemory = TwoDecimal(m.memorySum / float64(m.len))
 		return m, false
 	}
 	return m2, true
 }
 
-func (m1 HealthMetric) Before(mx telemetry.Metric) bool {
+func (m1 HealthMetric) Before(mx Metric) bool {
 	m2 := mx.(HealthMetric)
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, t telemetry.Telemetry, store storage.Store) *HealthChecker {
-	return &HealthChecker{
+func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNotify, t Telemetry, store storage.Store) HealthChecker {
+	return &hc{
 		interval: i,
 		stopCh:   make(chan struct{}),
 		t:        t,
 		Notify:   notify,
-		statsMgr: t.NewStatsManager(store, Bucket),
+		statsMgr: t.NewStatsManager(store, b),
 		store:    store,
 	}
 }
 
-func (h *HealthChecker) check() {
+func (h *hc) Check() {
 	loadStat, err := load.Avg()
 	if err != nil {
 		log.Println("ERROR: Failed to obtain load average. Error:", err)
@@ -92,7 +100,7 @@ func (h *HealthChecker) check() {
 		len:        1,
 		loadSum:    loadStat.Load5,
 		memorySum:  usedMemory,
-		Time:       telemetry.TeleTime(time.Now()),
+		Time:       TeleTime(time.Now()),
 	}
 	h.t.EmitMetric("system-mem-used", usedMemory)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
@@ -100,7 +108,7 @@ func (h *HealthChecker) check() {
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
 }
 
-func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
+func (h *hc) NotifyIfNeeded(memory, load float64) {
 	if h.Notify.Enable {
 		if load >= h.Notify.MaxCPU {
 			subject := "[Reef-Pi ALERT] CPU Load high"
@@ -117,7 +125,7 @@ func (h *HealthChecker) NotifyIfNeeded(memory, load float64) {
 	}
 }
 
-func (h *HealthChecker) Stop() {
+func (h *hc) Stop() {
 	log.Println("Stopping health checker")
 	h.stopCh <- struct{}{}
 	if err := h.statsMgr.Save(HealthStatsKey); err != nil {
@@ -125,12 +133,12 @@ func (h *HealthChecker) Stop() {
 	}
 }
 
-func (h *HealthChecker) setup() {
+func (h *hc) setup() {
 	h.t.CreateFeedIfNotExist("system-load5")
 	h.t.CreateFeedIfNotExist("system-mem-used")
 }
 
-func (h *HealthChecker) Start() {
+func (h *hc) Start() {
 	h.setup()
 	fn := func(d json.RawMessage) interface{} {
 		u := HealthMetric{}
@@ -143,17 +151,22 @@ func (h *HealthChecker) Start() {
 	log.Println("Starting health checker")
 	metric := HealthMetric{
 		len:  1,
-		Time: telemetry.TeleTime(time.Now()),
+		Time: TeleTime(time.Now()),
 	}
 	h.statsMgr.Update(HealthStatsKey, metric)
 	ticker := time.NewTicker(h.interval)
 	for {
 		select {
 		case <-ticker.C:
-			h.check()
+			h.Check()
 		case <-h.stopCh:
 			ticker.Stop()
 			return
 		}
 	}
+}
+
+func (h *hc) GetStats(res http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) { return h.statsMgr.Get(HealthStatsKey) }
+	utils.JSONGetResponse(fn, res, req)
 }

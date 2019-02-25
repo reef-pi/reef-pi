@@ -5,14 +5,13 @@ import (
 	"log"
 	"time"
 
-	"github.com/gorilla/sessions"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 )
 
@@ -30,14 +29,13 @@ type ReefPi struct {
 	settings   settings.Settings
 	telemetry  telemetry.Telemetry
 	version    string
-	h          *HealthChecker
+	h          telemetry.HealthChecker
 	bus        i2c.Bus
-	cookiejar  *sessions.CookieStore
+	a          utils.Auth
 }
 
 func New(version, database string) (*ReefPi, error) {
 	store, err := storage.NewStore(database)
-	cookiejar := sessions.NewCookieStore([]byte("reef-pi-key"))
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, err
@@ -52,8 +50,9 @@ func New(version, database string) (*ReefPi, error) {
 		}
 		s = initialSettings
 	}
+	fn := func(t, m string) error { return logError(store, t, m) }
 
-	telemetry := initializeTelemetry(store, s.Notification)
+	tele := telemetry.Initialize(Bucket, store, fn, s.Notification)
 	bus := i2c.Bus(i2c.MockBus())
 	if !s.Capabilities.DevMode {
 		b, err := i2c.New()
@@ -83,7 +82,7 @@ func New(version, database string) (*ReefPi, error) {
 		bus:        bus,
 		store:      store,
 		settings:   s,
-		telemetry:  telemetry,
+		telemetry:  tele,
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
@@ -91,10 +90,10 @@ func New(version, database string) (*ReefPi, error) {
 		drivers:    drvrs,
 		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
-		cookiejar:  cookiejar,
+		a:          utils.NewAuth(Bucket, store),
 	}
 	if s.Capabilities.HealthCheck {
-		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry, store)
+		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
 	}
 	return r, nil
 }
