@@ -1,4 +1,4 @@
-package daemon
+package utils
 
 import (
 	"encoding/json"
@@ -61,13 +61,13 @@ func (m1 HealthMetric) Before(mx telemetry.Metric) bool {
 	return m1.Time.Before(m2.Time)
 }
 
-func NewHealthChecker(i time.Duration, notify settings.HealthCheckNotify, t telemetry.Telemetry, store storage.Store) *HealthChecker {
+func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNotify, t telemetry.Telemetry, store storage.Store) *HealthChecker {
 	return &HealthChecker{
 		interval: i,
 		stopCh:   make(chan struct{}),
 		t:        t,
 		Notify:   notify,
-		statsMgr: t.NewStatsManager(store, Bucket),
+		statsMgr: t.NewStatsManager(store, b),
 		store:    store,
 	}
 }
@@ -156,4 +156,8 @@ func (h *HealthChecker) Start() {
 			return
 		}
 	}
+}
+
+func (h *HealthChecker) GetStats() (telemetry.StatsResponse, error) {
+	return h.statsMgr.Get(HealthStatsKey)
 }

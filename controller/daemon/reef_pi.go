@@ -13,6 +13,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/rpi/i2c"
 )
 
@@ -30,7 +31,7 @@ type ReefPi struct {
 	settings   settings.Settings
 	telemetry  telemetry.Telemetry
 	version    string
-	h          *HealthChecker
+	h          *utils.HealthChecker
 	bus        i2c.Bus
 	cookiejar  *sessions.CookieStore
 }
@@ -94,7 +95,7 @@ func New(version, database string) (*ReefPi, error) {
 		cookiejar:  cookiejar,
 	}
 	if s.Capabilities.HealthCheck {
-		r.h = NewHealthChecker(1*time.Minute, s.HealthCheck, telemetry, store)
+		r.h = utils.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, telemetry, store)
 	}
 	return r, nil
 }
