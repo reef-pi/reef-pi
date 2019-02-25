@@ -74,16 +74,16 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	router.HandleFunc("/api/settings", r.GetSettings).Methods("GET")
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
 	router.HandleFunc("/api/credentials", r.a.UpdateCredentials).Methods("POST")
-	router.HandleFunc("/api/telemetry", r.getTelemetry).Methods("GET")
-	router.HandleFunc("/api/telemetry", r.updateTelemetry).Methods("POST")
-	router.HandleFunc("/api/telemetry/test_message", r.sendTestMessage).Methods("POST")
+	router.HandleFunc("/api/telemetry", r.telemetry.GetConfig).Methods("GET")
+	router.HandleFunc("/api/telemetry", r.telemetry.UpdateConfig).Methods("POST")
+	router.HandleFunc("/api/telemetry/test_message", r.telemetry.SendTestMessage).Methods("POST")
 	router.HandleFunc("/api/errors/clear", r.clearErrors).Methods("DELETE")
 	router.HandleFunc("/api/errors/{id}", r.deleteError).Methods("DELETE")
 	router.HandleFunc("/api/errors/{id}", r.getError).Methods("GET")
 	router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
 	router.HandleFunc("/api/me", r.a.Me).Methods("GET")
 	if r.h != nil {
-		router.HandleFunc("/api/health_stats", r.getHealthStats).Methods("GET")
+		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
 	}
 	r.outlets.LoadAPI(router)
 	r.inlets.LoadAPI(router)
@@ -131,9 +131,4 @@ func startAPIServer(address string, creds utils.Credentials, https bool) (error,
 		}()
 	}
 	return nil, router
-}
-
-func (r *ReefPi) getHealthStats(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) { return r.h.GetStats() }
-	utils.JSONGetResponse(fn, w, req)
 }

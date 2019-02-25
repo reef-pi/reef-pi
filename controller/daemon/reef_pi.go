@@ -29,7 +29,7 @@ type ReefPi struct {
 	settings   settings.Settings
 	telemetry  telemetry.Telemetry
 	version    string
-	h          *utils.HealthChecker
+	h          telemetry.HealthChecker
 	bus        i2c.Bus
 	a          utils.Auth
 }
@@ -50,8 +50,9 @@ func New(version, database string) (*ReefPi, error) {
 		}
 		s = initialSettings
 	}
+	fn := func(t, m string) error { return logError(store, t, m) }
 
-	telemetry := initializeTelemetry(store, s.Notification)
+	tele := telemetry.Initialize(Bucket, store, fn, s.Notification)
 	bus := i2c.Bus(i2c.MockBus())
 	if !s.Capabilities.DevMode {
 		b, err := i2c.New()
@@ -81,7 +82,7 @@ func New(version, database string) (*ReefPi, error) {
 		bus:        bus,
 		store:      store,
 		settings:   s,
-		telemetry:  telemetry,
+		telemetry:  tele,
 		jacks:      jacks,
 		outlets:    outlets,
 		inlets:     inlets,
@@ -92,7 +93,7 @@ func New(version, database string) (*ReefPi, error) {
 		a:          utils.NewAuth(Bucket, store),
 	}
 	if s.Capabilities.HealthCheck {
-		r.h = utils.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, telemetry, store)
+		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
 	}
 	return r, nil
 }

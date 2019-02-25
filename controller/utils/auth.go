@@ -2,9 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	"github.com/gorilla/sessions"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/sessions"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
