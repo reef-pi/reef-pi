@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
-var BUILD_DIR = path.resolve(__dirname, 'front-end', 'dist')
+var BUILD_DIR = path.resolve(__dirname, 'bin', 'ui')
 var APP_DIR = path.resolve(__dirname, 'front-end', 'src')
 var ASSETS_DIR = path.resolve(__dirname, 'front-end', 'assets')
 
