@@ -4,14 +4,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
-var BUILD_DIR = path.resolve(__dirname, 'ui')
-var APP_DIR = path.resolve(__dirname, 'jsx')
+var BUILD_DIR = path.resolve(__dirname, 'front-end', 'dist')
+var APP_DIR = path.resolve(__dirname, 'front-end', 'src')
+var ASSETS_DIR = path.resolve(__dirname, 'front-end', 'assets')
 
 var config = {
   entry: APP_DIR + '/entry',
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
-    modules: ['node_modules', path.resolve(__dirname, 'jsx'), path.resolve(__dirname, 'assets', 'sass')]
+    modules: [
+      'node_modules',
+      path.resolve(__dirname, 'front-end', 'src'),
+      path.resolve(__dirname, 'front-end', 'assets', 'sass')
+    ]
   },
   module: {
     rules: [
@@ -35,7 +40,7 @@ var config = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: function () {
+              plugins: function() {
                 return [require('precss'), require('autoprefixer')]
               }
             }
@@ -68,9 +73,9 @@ var config = {
   plugins: [
     new CleanWebpackPlugin([BUILD_DIR]),
     new HtmlWebpackPlugin({
-      favicon: './assets/favicon.ico',
+      favicon: path.join(ASSETS_DIR, 'favicon.ico'),
       filename: 'home.html',
-      template: './assets/home.html',
+      template: path.join(ASSETS_DIR, 'home.html'),
       inject: true
     }),
     new MiniCssExtractPlugin({
