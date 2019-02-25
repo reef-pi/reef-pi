@@ -3,12 +3,11 @@
 package main
 
 import (
+	"github.com/reef-pi/manager"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
-
-	"github.com/reef-pi/manager"
 )
 
 func mgr() {

@@ -30,6 +30,9 @@ func main() {
           Configuration file path
     Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
 
+    manager: Run reef-pi manager
+		Example: reef-pi manager
+
     reset-password: Reset reef-pi web ui username and password
     Options:
       -user string
