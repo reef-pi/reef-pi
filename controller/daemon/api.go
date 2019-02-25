@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -100,12 +101,19 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 }
 
 func startAPIServer(address string, creds utils.Credentials, https bool) (error, *mux.Router) {
-	assets := http.FileServer(http.Dir("ui/assets"))
+	ex, errEx := os.Executable()
+	if errEx != nil {
+		log.Println("ERROR: Failed to get Executable. Error:", errEx)
+		panic(errEx)
+	}
+	exPath := filepath.Dir(ex)
+	baseFrontEndPath := exPath + "/ui"
+	assets := http.FileServer(http.Dir(baseFrontEndPath + "/assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui/home.html")
+		http.ServeFile(w, r, baseFrontEndPath+"/home.html")
 	})
 	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui/favicon.ico")
+		http.ServeFile(w, r, baseFrontEndPath+"/favicon.ico")
 	})
 	router := mux.NewRouter()
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
