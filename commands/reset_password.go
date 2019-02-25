@@ -6,6 +6,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/daemon"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func resetPassword(db, u, p string) {
@@ -23,7 +24,7 @@ func resetPassword(db, u, p string) {
 		os.Exit(1)
 	}
 	defer store.Close()
-	creds := daemon.Credentials{
+	creds := utils.Credentials{
 		User:     u,
 		Password: p,
 	}

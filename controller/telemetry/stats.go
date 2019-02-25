@@ -2,6 +2,7 @@ package telemetry
 
 import (
 	"log"
+	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -25,6 +26,9 @@ type Telemetry interface {
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
 	NewStatsManager(storage.Store, string) StatsManager
+	SendTestMessage(http.ResponseWriter, *http.Request)
+	GetConfig(http.ResponseWriter, *http.Request)
+	UpdateConfig(http.ResponseWriter, *http.Request)
 }
 
 type AlertStats struct {
@@ -62,9 +66,11 @@ type telemetry struct {
 	aStats     map[string]AlertStats
 	mu         *sync.Mutex
 	logError   ErrorLogger
+	store      storage.Store
+	bucket     string
 }
 
-func NewTelemetry(config TelemetryConfig, lr ErrorLogger) *telemetry {
+func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr ErrorLogger) *telemetry {
 	var mailer Mailer
 	mailer = &NoopMailer{}
 	if config.Notify {
@@ -77,6 +83,8 @@ func NewTelemetry(config TelemetryConfig, lr ErrorLogger) *telemetry {
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
 		logError:   lr,
+		store:      store,
+		bucket:     b,
 	}
 }
 
