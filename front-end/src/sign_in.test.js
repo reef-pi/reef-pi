@@ -1,4 +1,4 @@
-import SignIn from './SignIn'
+import SignIn from './sign_in'
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
