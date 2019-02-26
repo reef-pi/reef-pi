@@ -40,6 +40,58 @@ paths:
       responses:
         '200':
           description: "Successfully signed out"
+  /api/atos:
+    get:
+      tags:
+        - ATO
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "ATO"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfAtos'
+
+  /api/atos/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the selected ATO
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - ATO
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "ATO"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ato'
+    post:
+      tags:
+        - ATO
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "ATO successfully created"
+    delete:
+      tags:
+        - ATO
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "ATO successfully deleted"
+
 components:
   securitySchemes:
     cookieAuth:
@@ -47,6 +99,30 @@ components:
       in: cookie
       name: auth
   schemas:
+    ArrayOfAtos:
+      type: array
+      items:
+        $ref: '#/components/schemas/ato'
+    ato:
+      properties:
+        id:
+          type: string
+        inlet:
+          type: string
+        pump:
+          type: string
+        period:
+          type: integer
+        control:
+          type: boolean
+        enable:
+          type: boolean
+        notify:
+          type: object
+        name:
+          type: string
+        disable_on_alert:
+          type: boolean
     credentials:
       required:
         - username
