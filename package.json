@@ -74,7 +74,7 @@
     "build": "npm run translations && ./node_modules/.bin/webpack -d",
     "ui": "npm run translations && ./node_modules/.bin/webpack --mode=production",
     "ui-dev": "npm run translations && ./node_modules/.bin/webpack -d --watch",
-    "js-lint": "./node_modules/.bin/standard  front-end/src/* --fix",
+    "js-lint": "./node_modules/.bin/standard  front-end/src/**/*",
     "standard": "./node_modules/.bin/standard --fix front-end/src/**/**",
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
     "jest-update-snapshot": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all --updateSnapshot",
