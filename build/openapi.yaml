@@ -1,0 +1,58 @@
+openapi: "3.0.0"
+info:
+  version: "2.2"
+  title: reef-pi API
+  description: An opensource reef tank controller based on Raspberry Pi
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /auth/signin:
+    post:
+      tags:
+        - authentication
+      security: []
+      description: "sign in to application"
+      requestBody:
+        description: Credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/credentials'
+      responses:
+        '200':
+          description: "Authenticated"
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: auth=abcde12345; Path=/;
+        '401':
+          description: "Unauthorized"
+  /auth/signout:
+    get:
+      tags:
+        - authentication
+      security:
+        - cookieAuth: []
+      description: "sign out from application"
+      responses:
+        '200':
+          description: "Successfully signed out"
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth
+  schemas:
+    credentials:
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
