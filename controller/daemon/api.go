@@ -1,3 +1,24 @@
+// Package classification reef-pi API
+//
+// An opensource reef tank controller based on Raspberry Pi
+//
+//     Schemes: http, https
+//     Host: localhost
+//     BasePath: /
+//     Version: 2.2
+//     License: Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0.html
+//     Contact: Ranjib Dey<info@reef-pi.com> https://reef-pi.github.io/
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+//     Security:
+//     - cookieAuth:
+//
+// swagger:meta
 package daemon
 
 import (
@@ -52,9 +73,9 @@ func (r *ReefPi) API() error {
 	}
 	r.AuthenticatedAPI(router)
 	r.UnAuthenticatedAPI(router)
-	if os.Getenv("REEF_PI_LIST_API") == "1" {
-		summarizeAPI(router)
-	}
+	// if os.Getenv("REEF_PI_LIST_API") == "1" {
+	summarizeAPI(router)
+	// }
 	return nil
 }
 
