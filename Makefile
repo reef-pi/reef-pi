@@ -89,7 +89,6 @@ ui-dev:
 deb: ui
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
-	cp bin/ui/assets/favicon.ico dist/var/lib/reef-pi/ui/favicon.ico
 	cp -r bin/ui/* dist/var/lib/reef-pi/ui
 	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
 	mkdir dist/var/lib/reef-pi/images
