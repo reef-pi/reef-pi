@@ -40,6 +40,7 @@ func NewAuth(b string, store storage.Store) Auth {
 
 func (a *auth) Authenticate(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
 		authSession, err := a.cookiejar.Get(req, "auth")
 		if err != nil {
 			log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
