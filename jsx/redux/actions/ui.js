@@ -15,48 +15,61 @@ import {fetchPhProbes} from './phprobes'
 import {fetchEquipment} from './equipment'
 import {fetchTimers} from './timer'
 import {capabilitiesLoaded} from './capabilities'
+import {fetchInstances} from './instances'
+
+export const fetchControllerData = (dispatch, capabilities) => {
+  dispatch(fetchDrivers())
+  dispatch(fetchInlets())
+  dispatch(fetchErrors())
+  dispatch(fetchInfo())
+  dispatch(fetchJacks())
+  dispatch(fetchOutlets())
+  dispatch(fetchAnalogInputs())
+
+  $.each(capabilities, (i, v) => {
+    if (!v) {
+      return
+    }
+    switch (i) {
+      case 'ato':
+        dispatch(fetchATOs())
+        break
+      case 'ph':
+        dispatch(fetchPhProbes())
+        break
+      case 'temperature':
+        dispatch(fetchTCs())
+        break
+      case 'lighting':
+        dispatch(fetchLights())
+        break
+      case 'equipment':
+        dispatch(fetchEquipment())
+        break
+      case 'doser':
+        dispatch(fetchDosingPumps())
+        break
+      case 'timers':
+        dispatch(fetchTimers())
+        break
+    }
+  })
+}
+
+export const fetchManagerData = (dispatch) => {
+  dispatch(fetchInstances())
+}
 
 export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-      dispatch(fetchDrivers())
-      dispatch(fetchInlets())
-      dispatch(fetchErrors())
-      dispatch(fetchInfo())
-      dispatch(fetchJacks())
-      dispatch(fetchOutlets())
-      dispatch(fetchAnalogInputs())
-
-      $.each(capabilities, (i, v) => {
-        if (!v) {
-          return
-        }
-        switch (i) {
-          case 'ato':
-            dispatch(fetchATOs())
-            break
-          case 'ph':
-            dispatch(fetchPhProbes())
-            break
-          case 'temperature':
-            dispatch(fetchTCs())
-            break
-          case 'lighting':
-            dispatch(fetchLights())
-            break
-          case 'equipment':
-            dispatch(fetchEquipment())
-            break
-          case 'doser':
-            dispatch(fetchDosingPumps())
-            break
-          case 'timers':
-            dispatch(fetchTimers())
-            break
-        }
-      })
-      return (capabilitiesLoaded(capabilities))
+      if(capabilities['manager']) {
+        fetchManagerData(dispatch)
+      }else{
+        fetchControllerData(dispatch, capabilities)
+        return (capabilitiesLoaded(capabilities))
+      }
     }
   }))
 }
