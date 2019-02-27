@@ -1,4 +1,4 @@
-import Sign_In from './sign_in'
+import SignIn from './sign_in'
 import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -7,9 +7,9 @@ import thunk from 'redux-thunk'
 const mockStore = configureMockStore([thunk])
 Enzyme.configure({ adapter: new Adapter() })
 
-describe('Sign_In', () => {
+describe('SignIn', () => {
   beforeEach(() => {
-    Sign_In.refreshPage = jest.fn().mockImplementation(() => {
+    SignIn.refreshPage = jest.fn().mockImplementation(() => {
       return true
     })
     global.fetch = jest.fn().mockImplementation(() => {
@@ -25,8 +25,8 @@ describe('Sign_In', () => {
   afterEach(() => {
     jest.resetAllMocks()
   })
-  it('<Sign_In />', async () => {
-    const m = shallow(<Sign_In store={mockStore()} />).instance()
+  it('<SignIn />', async () => {
+    const m = shallow(<SignIn store={mockStore()} />).instance()
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
     await m.login({
@@ -34,7 +34,7 @@ describe('Sign_In', () => {
         return true
       }
     })
-    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
+    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
         resolve({
@@ -49,7 +49,7 @@ describe('Sign_In', () => {
         return true
       }
     })
-    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
+    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
 
     global.fetch = jest.fn().mockImplementation(() => {
       var p = new Promise((resolve, reject) => {
@@ -65,11 +65,11 @@ describe('Sign_In', () => {
         return true
       }
     })
-    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
+    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
   })
-  it('Sign_In statics', async () => {
-    await Sign_In.logout()
-    expect(Sign_In.refreshPage.mock.calls.length).toBe(1)
-    Sign_In.isSignedIn()
+  it('SignIn statics', async () => {
+    await SignIn.logout()
+    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
+    SignIn.isSignedIn()
   })
 })

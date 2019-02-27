@@ -16,8 +16,6 @@ An open source reef tank controller based on Raspberry Pi
 
 reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/), modular, do it yourself (DIY) project that aims to provide a hackable, affordable reef tank automation platform using easy to learn electronics. Apart from Raspberry Pi, reef-pi uses a handful of additional electronics boards from [adafruit](https://www.adafruit.com/), a open hardware, community-focused electronics company. reef-pi is under active development. Follow reef2reef [thread](http://www.reef2reef.com/threads/reef-pi-an-open-source-raspberry-pi-based-reef-tank-controller.289256/) if you want to stay up to date with reef-pi development. Use the build guides on reef-pi [website](http://reef-pi.com) if you just want to build a reef tank controller based on reef-pi. We use slack for developer communication. Click [here](https://join.slack.com/t/reef-pi/shared_invite/enQtNDI4NzM4MjEzNDk1LWQzMzMxN2I5MDhmNGFlNjdjZGEyYTAwYTBkN2Y5NjIzODkxMmNlYjFlYTk2ZDM0MjRmOGUwNzBhY2FmZTVhMjg) to join reef-pi slack channel.
 
-reef-pi development environment setup documentation can be found [here](https://reef-pi.github.io/additional-documentation/development/).
-
 
 ## Features
 
@@ -41,11 +39,11 @@ reef-pi development environment setup documentation can be found [here](https://
 
 ## Development
 
-To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](development_environment.md).
+To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](docs/development_environment.md).
 
 ## Internationalization
 
-If you want to edit or provide translations to the project, please follow the [guide for internationalization](internationalization_contributing.md).
+If you want to edit or provide translations to the project, please follow the [guide for internationalization](docs/internationalization_contributing.md).
 
 Currently available languages (but not completed):
 

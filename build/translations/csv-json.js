@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const PATH_CSV = './assets/translations/'
-const PATH_JSON = './jsx/utils/translations/'
+const PATH_CSV = './front-end/assets/translations/'
+const PATH_JSON = './front-end/src/utils/translations/'
 const files = fs.readdirSync(PATH_CSV)
 function namespaceNesting(o, k, v) {
   let namespace = ''
