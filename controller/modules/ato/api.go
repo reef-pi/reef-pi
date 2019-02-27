@@ -10,12 +10,6 @@ import (
 
 func (c *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/atos/{id}", c.get).Methods("GET")
-	// swagger:route GET /api/atos/ listAtos
-	//
-	// List all ATOs
-	//
-	// Security:
-	//  cookieAuth:
 	r.HandleFunc("/api/atos", c.list).Methods("GET")
 	r.HandleFunc("/api/atos", c.create).Methods("PUT")
 	r.HandleFunc("/api/atos/{id}", c.update).Methods("POST")
