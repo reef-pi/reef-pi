@@ -56,6 +56,7 @@
     "react-test-renderer": "^16.4.0",
     "react-toggle-switch": "^3.0.4",
     "recharts": "^1.4.3",
+    "redoc-cli": "^0.7.0",
     "redux": "^4.0.0",
     "redux-mock-store": "^1.5.3",
     "redux-thunk": "^2.3.0",
@@ -70,11 +71,12 @@
     "yup": "^0.26.2"
   },
   "scripts": {
+    "doc:api":"./node_modules/.bin/redoc-cli bundle build/openapi.yaml -o api-doc.html",
     "translations": "node ./build/translations/csv-json.js",
     "translations:sync": "node ./build/translations/csv-sync.js",
     "build": "npm run translations && ./node_modules/.bin/webpack -d",
     "ui": "npm run translations && ./node_modules/.bin/webpack --mode=production",
-    "ui-dev": "npm run translations && ./node_modules/.bin/webpack -d --watch",
+    "ui-dev": "npm run doc:api && npm run translations && ./node_modules/.bin/webpack -d --watch",
     "js-lint": "./node_modules/.bin/standard  jsx/* --fix",
     "standard": "./node_modules/.bin/standard --fix jsx/**/**",
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
