@@ -40,6 +40,60 @@ paths:
       responses:
         '200':
           description: "Successfully signed out"
+  /api/credentials:
+    post:
+      tags:
+        - authentication
+      security:
+        - cookieAuth: []
+      description: "Update credentials"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/credentials'
+      responses:
+        '200':
+          description: "credentials successfully updated"
+  /api/telemetry:
+    get:
+      tags:
+        - Telemetry
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "Telemetry config"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TelemetryConfig'
+    post:
+      tags:
+        - Telemetry
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryConfig'
+      responses:
+        '200':
+          description: "Telemetry successfully updated"
+  /api/telemetry/test_message:
+    post:
+      tags:
+        - Telemetry
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "Telemetry test message successfully sent"
   /api/errors:
     get:
       tags:
@@ -253,7 +307,29 @@ paths:
       responses:
         '200':
           description: "ATO successfully deleted"
-
+  /api/settings:
+    get:
+      description: "Get reef-pi settings"
+      tags:
+        - Settings
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "reef-pi Settings"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/settings'
+    post:
+      description: "Update reef-pi settings"
+      tags:
+        - Settings
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "Settings successfully updated"
 components:
   securitySchemes:
     cookieAuth:
@@ -261,6 +337,34 @@ components:
       in: cookie
       name: auth
   schemas:
+    settings:
+      properties:
+        name:
+          type: string
+        interface:
+          type: string
+        address:
+          type: string
+        display:
+          type: boolean
+        notification:
+          type: boolean
+        capabilities:
+          type: object
+        healthcheck:
+          $ref: '#/components/schemas/HealthCheckNotify'
+        https:
+          type: boolean
+        pprof:
+          type: boolean
+        rpi_pwm_freq:
+          type: integer
+    HealthCheckNotify:
+      properties:
+        maxmemory:
+          type: integer
+        maxcpu:
+          type: integer
     APIerror:
       properties:
         message:
@@ -271,6 +375,12 @@ components:
           type: integer
         id:
           type: string
+    atoNotify:
+      properties:
+        enable:
+          type: boolean
+        max:
+          type: integer
     ato:
       properties:
         id:
@@ -286,7 +396,7 @@ components:
         enable:
           type: boolean
         notify:
-          type: object
+          $ref: '#/components/schemas/atoNotify'
         name:
           type: string
         disable_on_alert:
@@ -305,6 +415,42 @@ components:
           type: boolean
         driver:
           type: string
+    AdafruiIO:
+      properties:
+        enable:
+          type: boolean
+        token:
+          type: string
+        user:
+          type: string
+        prefix:
+          type: string
+    MailerConfig:
+      properties:
+        server:
+          type: string
+        port:
+          type: integer
+        from:
+          type: string
+        password:
+          type: string
+        to:
+          type: string
+    TelemetryConfig:
+      properties:
+        adafruitio:
+          $ref: '#/components/schemas/AdafruiIO'
+        mailer:
+          $ref: '#/components/schemas/MailerConfig'
+        notify:
+          type: boolean
+        throttle:
+          type: integer
+        historical_limit:
+          type: integer
+        current_limit:
+          type: integer
     credentials:
       required:
         - username
