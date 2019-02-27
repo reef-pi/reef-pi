@@ -94,6 +94,76 @@ paths:
       responses:
         '200':
           description: "Telemetry test message successfully sent"
+  /api/camera/config:
+    get:
+      description: Get the camera configuration
+      tags:
+        - Camera
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Configuration of the camera
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraConfig'
+    post:
+      description: Update the camera configuration
+      tags:
+        - Camera
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CameraConfig'
+      responses:
+        '200':
+          description: Configuration successfully updated
+  /api/camera/latest:
+    get:
+      tags:
+        - Camera
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Latest captured image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraImage'
+  /api/camera/shoot:
+    post:
+      tags:
+        - Camera
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Captured image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraImage'
+  /api/camera/list:
+    get:
+      tags:
+        - Camera
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of captured images
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CameraImage'
   /api/errors:
     get:
       tags:
@@ -337,6 +407,34 @@ components:
       in: cookie
       name: auth
   schemas:
+    CameraImage:
+      properties:
+        image:
+          type: string
+    CameraConfig:
+      properties:
+        enable:
+          type: boolean
+        image_directory:
+          type: string
+        capture_flags:
+          type: string
+        tick_interval:
+          type: integer
+        upload:
+          type: boolean
+        motion:
+          $ref: '#/components/schemas/CameraMotionConfig'
+    CameraMotionConfig:
+      properties:
+        enable:
+          type: boolean
+        url:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
     settings:
       properties:
         name:
