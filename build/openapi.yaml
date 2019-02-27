@@ -10,7 +10,7 @@ paths:
   /auth/signin:
     post:
       tags:
-        - authentication
+        - Authentication
       security: []
       description: "Sign In"
       requestBody:
@@ -19,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/credentials'
+              $ref: '#/components/schemas/Credentials'
       responses:
         '200':
           description: "Authenticated"
@@ -33,7 +33,7 @@ paths:
   /auth/signout:
     get:
       tags:
-        - authentication
+        - Authentication
       security:
         - cookieAuth: []
       description: "Sign Out"
@@ -43,7 +43,7 @@ paths:
   /api/credentials:
     post:
       tags:
-        - authentication
+        - Authentication
       security:
         - cookieAuth: []
       description: "Update credentials"
@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/credentials'
+              $ref: '#/components/schemas/Credentials'
       responses:
         '200':
           description: "credentials successfully updated"
@@ -236,7 +236,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inlet'
+                  $ref: '#/components/schemas/Inlet'
     put:
       tags:
         - Inlets
@@ -248,7 +248,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/inlet'
+              $ref: '#/components/schemas/Inlet'
       responses:
         '200':
           description: "Inlet successfully created"
@@ -273,7 +273,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inlet'
+                $ref: '#/components/schemas/Inlet'
     post:
       tags:
         - Inlets
@@ -285,7 +285,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/inlet'
+              $ref: '#/components/schemas/Inlet'
       responses:
         '200':
           description: "Inlet Sucessfully updated"
@@ -335,7 +335,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ato'
+                  $ref: '#/components/schemas/Ato'
 
   /api/atos/{id}:
     parameters:
@@ -358,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ato'
+                $ref: '#/components/schemas/Ato'
     post:
       description: "Create ATO"
       tags:
@@ -390,7 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/settings'
+                $ref: '#/components/schemas/Settings'
     post:
       description: "Update reef-pi settings"
       tags:
@@ -435,7 +435,7 @@ components:
           type: integer
         height:
           type: integer
-    settings:
+    Settings:
       properties:
         name:
           type: string
@@ -473,13 +473,13 @@ components:
           type: integer
         id:
           type: string
-    atoNotify:
+    AtoNotify:
       properties:
         enable:
           type: boolean
         max:
           type: integer
-    ato:
+    Ato:
       properties:
         id:
           type: string
@@ -494,12 +494,12 @@ components:
         enable:
           type: boolean
         notify:
-          $ref: '#/components/schemas/atoNotify'
+          $ref: '#/components/schemas/AtoNotify'
         name:
           type: string
         disable_on_alert:
           type: boolean
-    inlet:
+    Inlet:
       properties:
         id:
           type: string
@@ -549,7 +549,7 @@ components:
           type: integer
         current_limit:
           type: integer
-    credentials:
+    Credentials:
       required:
         - username
         - password
