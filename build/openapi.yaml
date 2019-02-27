@@ -40,6 +40,162 @@ paths:
       responses:
         '200':
           description: "Successfully signed out"
+  /api/errors:
+    get:
+      tags:
+        - Errors
+      security:
+        - cookieAuth: []
+      description: "Get the complete error stack"
+      responses:
+        '200':
+          description: "Error stack"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/APIerror'
+  /api/errors/clear:
+    delete:
+      tags:
+        - Errors
+      security:
+        - cookieAuth: []
+      description: "Clear the error stack"
+      responses:
+        '200':
+          description: "Error stack successfully cleared"
+  /api/errors/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the selected error
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - Errors
+      security:
+        - cookieAuth: []
+      description: "Get the error"
+      responses:
+        '200':
+          description: "Selected error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIerror'
+    delete:
+      tags:
+        - Errors
+      security:
+        - cookieAuth: []
+      description: "Delete the error"
+      responses:
+        '200':
+          description: "Error successfully deleted"
+  /api/inlets:
+    get:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Get all inlets"
+      responses:
+        '200':
+          description: "inlet list"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inlet'
+    put:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Create inlet"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/inlet'
+      responses:
+        '200':
+          description: "Inlet successfully created"
+  /api/inlets/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the selected Inlet
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Get inlet"
+      responses:
+        '200':
+          description: "inlet list"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inlet'
+    post:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Update inlet"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/inlet'
+      responses:
+        '200':
+          description: "Inlet Sucessfully updated"
+    delete:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Delete inlet"
+      responses:
+        '200':
+          description: "Inlet Sucessfully deleted"
+  /api/inlets/{id}/read:
+    parameters:
+      - name: id
+        in: path
+        description: Id of the selected Inlet
+        required: true
+        schema:
+          type: integer
+          format: int64
+    post:
+      tags:
+        - Inlets
+      security:
+        - cookieAuth: []
+      description: "Read inlet"
+      responses:
+        '200':
+          description: "inlet list"
+          content:
+            application/json:
+              schema:
+                type: boolean
   /api/atos:
     get:
       description: "Get all ATOs"
@@ -49,7 +205,7 @@ paths:
         - cookieAuth: []
       responses:
         '200':
-          description: "ATO"
+          description: "ATO list"
           content:
             application/json:
               schema:
@@ -105,6 +261,16 @@ components:
       in: cookie
       name: auth
   schemas:
+    APIerror:
+      properties:
+        message:
+          type: string
+        time:
+          type: string
+        count:
+          type: integer
+        id:
+          type: string
     ato:
       properties:
         id:
@@ -125,6 +291,20 @@ components:
           type: string
         disable_on_alert:
           type: boolean
+    inlet:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        pin:
+          type: string
+        equipment:
+          type: string
+        reverse:
+          type: boolean
+        driver:
+          type: string
     credentials:
       required:
         - username
