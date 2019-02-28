@@ -4,8 +4,7 @@
   "description": "A Raspberry Pi based reeftank automation system",
   "main": "index.js",
   "directories": {
-    "doc": "doc",
-    "example": "examples"
+    "doc": "docs"
   },
   "devDependencies": {
     "autoprefixer": "^9.1.5",
@@ -82,7 +81,7 @@
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
     "jest-update-snapshot": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
-    "sass-lint": "./node_modules/.bin/sass-lint 'assets/sass/**/*.scss' --verbose"
+    "sass-lint": "./node_modules/.bin/sass-lint 'front-end/assets/sass/**/*.scss' --verbose"
   },
   "repository": {
     "type": "git",
@@ -110,10 +109,10 @@
   "jest": {
     "moduleDirectories": [
       "node_modules",
-      "jsx"
+      "front-end/src/"
     ],
     "moduleNameMapper": {
-      "\\.(css|less|sass|scss)$": "<rootDir>/test/jest_config.js"
+      "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js"
     }
   }
 }

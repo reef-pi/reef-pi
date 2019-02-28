@@ -1,5 +1,5 @@
 const fs = require('fs')
-const PATH_CSV = './assets/translations/'
+const PATH_CSV = './front-end/assets/translations/'
 const files = fs.readdirSync(PATH_CSV)
 const masterFile = 'en.csv'
 const MasterTranslations = fs.readFileSync(`${PATH_CSV}${masterFile}`, 'utf8').match(/[^\r\n]+/g)

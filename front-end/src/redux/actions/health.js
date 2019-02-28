@@ -1,4 +1,4 @@
-import {reduxGet, reduxPost, reduxPut, reduxDelete} from '../../utils/ajax'
+import {reduxGet} from '../../utils/ajax'
 
 export const healthStatsLoaded = (stats) => {
   return ({

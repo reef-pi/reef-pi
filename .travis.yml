@@ -14,7 +14,7 @@ script:
   - env
   - /usr/bin/npm install
   - make build-ui
-  - ./node_modules/.bin/standard jsx/**/*
+  - npm run js-lint
   - make sass-lint
   - npm test
   - bash <(curl -s https://codecov.io/bash) -cF javascript
