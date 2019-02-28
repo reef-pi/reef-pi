@@ -116,7 +116,7 @@ func startAPIServer(address string, creds utils.Credentials, https bool) (error,
 		http.ServeFile(w, r, baseFrontEndPath+"/favicon.ico")
 	})
 	http.HandleFunc("/api-doc", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "api-doc.html")
+		http.ServeFile(w, r, exPath+"/api-doc.html")
 	})
 	router := mux.NewRouter()
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))

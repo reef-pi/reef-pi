@@ -70,7 +70,7 @@
     "yup": "^0.26.2"
   },
   "scripts": {
-    "doc:api":"./node_modules/.bin/redoc-cli bundle build/openapi.yaml -o api-doc.html",
+    "doc:api":"./node_modules/.bin/redoc-cli bundle build/openapi.yaml -o bin/api-doc.html",
     "translations": "node ./build/translations/csv-json.js",
     "translations:sync": "node ./build/translations/csv-sync.js",
     "build": "npm run translations && ./node_modules/.bin/webpack -d",
