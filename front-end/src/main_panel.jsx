@@ -20,6 +20,8 @@ import Summary from 'summary'
 import FatalError from './fatal_error'
 import ErrorBoundary from './ui_components/error_boundary'
 import i18n from 'utils/i18n'
+import Instances from 'instances/main'
+
 const caps = {
   dashboard: { label: i18n.t('capabilities:dashboard'), component: <Dashboard /> },
   equipment: { label: i18n.t('capabilities:equipment'), component: <Equipment /> },
@@ -31,6 +33,7 @@ const caps = {
   doser: { label: i18n.t('capabilities:dosing_pumps'), component: <Doser /> },
   macro: { label: i18n.t('capabilities:macros'), component: <Macro /> },
   camera: { label: i18n.t('capabilities:camera'), component: <Camera /> },
+  manager: { label: i18n.t('capabilities:manager'), component: <Instances /> },
   configuration: { label: i18n.t('capabilities:configuration'), component: <Configuration /> },
   log: { label: i18n.t('capabilities:log'), component: <Log /> }
 }
@@ -44,6 +47,7 @@ class mainPanel extends React.Component {
     this.navs = this.navs.bind(this)
     this.setTab = this.setTab.bind(this)
   }
+
   componentDidMount () {
     this.props.fetchUIData()
   }
