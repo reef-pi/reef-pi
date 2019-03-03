@@ -134,6 +134,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:1784d89e1af3049705c45a4b35be9c4c6e658266158093ba87c560c879ce5476"
+  name = "github.com/reef-pi/manager"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ed005281590c7572738b733a7ef6d59ac32cbab6"
+
+[[projects]]
+  branch = "master"
   digest = "1:5238e7b1e6ff299cdd134df0f099e01ac751f694b6e7511d76a655ab7ead8739"
   name = "github.com/reef-pi/rpi"
   packages = [
@@ -197,6 +205,7 @@
     "github.com/reef-pi/drivers/hal/pca9685",
     "github.com/reef-pi/drivers/ph_board",
     "github.com/reef-pi/hal",
+    "github.com/reef-pi/manager",
     "github.com/reef-pi/rpi/hal",
     "github.com/reef-pi/rpi/i2c",
     "github.com/reef-pi/rpi/pwm",
