@@ -102,7 +102,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 func startAPIServer(address string, creds utils.Credentials, https bool) (error, *mux.Router) {
 	assets := http.FileServer(http.Dir("ui/assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui//home.html")
+		http.ServeFile(w, r, "ui/home.html")
 	})
 	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/favicon.ico")
