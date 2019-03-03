@@ -29,7 +29,6 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - Email alerts, charts, and dashboard capabilities. [Adafruit.io](https://io.adafruit.com/) based telemetry for monitoring.
 - On-demand or automatic tank photo capture with google drive upload using pi camera
 
-
 ## Maintainers
 
 - [Ranjib Dey](https://github.com/ranjib). Author & project lead
