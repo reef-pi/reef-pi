@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
@@ -12,7 +14,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 )
 
 const Bucket = storage.ReefPiBucket
