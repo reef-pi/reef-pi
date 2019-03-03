@@ -60,7 +60,7 @@ vet:
 
 .PHONY: imports
 imports:
-	goimports -w -local "github.com/reef-pi" ./controller
+	goimports -w -local github.com/reef-pi/reef-pi -d ./controller
 
 .PHONY: build
 build: clean go-get test bin

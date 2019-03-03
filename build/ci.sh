@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -n "$(goimports -local github.com/reef-pi/reef-pi/controller -d ./ | tee /dev/stderr)" ]; then
+if [ -n "$(goimports -local github.com/reef-pi/reef-pi ./controller -d ./ | tee /dev/stderr)" ]; then
   echo "Imports are not formatted. Please run 'make imports' to fix import formatting"
   exit 1
 fi
