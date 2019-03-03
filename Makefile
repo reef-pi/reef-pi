@@ -47,21 +47,9 @@ install:
 
 .PHONY: go-get
 go-get:
-	go get -u golang.org/x/sys/unix
-	go get -u gopkg.in/yaml.v2
-	go get -u github.com/kidoman/embd
-	go get -u github.com/shirou/gopsutil
-	go get -u github.com/gorilla/mux
-	go get -u github.com/gorilla/sessions
-	go get -u gopkg.in/robfig/cron.v2
-	go get -u github.com/dustin/go-humanize
-	go get -u github.com/reef-pi/rpi/pwm
-	go get -u github.com/reef-pi/drivers
-	go get -u github.com/reef-pi/hal
-	go get -u github.com/reef-pi/adafruitio
-	go get -u github.com/nfnt/resize
-	go get -u github.com/coreos/bbolt
+	go get -u github.com/golang/dep/cmd/dep
 	go get -u golang.org/x/tools/cmd/goimports
+	dep ensure
 ifeq ($(OS), Windows_NT)
 	go get -u github.com/StackExchange/wmi
 endif
@@ -72,7 +60,7 @@ vet:
 
 .PHONY: imports
 imports:
-	goimports -w -local "github.com/reef-pi" ./controller
+	goimports -w -local github.com/reef-pi/reef-pi -d ./controller
 
 .PHONY: build
 build: clean go-get test bin

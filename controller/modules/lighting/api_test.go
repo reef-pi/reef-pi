@@ -7,11 +7,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/reef-pi/rpi/i2c"
 )
 
 func TestLightingAPI(t *testing.T) {
