@@ -55,10 +55,6 @@ go-get:
 	go get -u github.com/gorilla/sessions
 	go get -u gopkg.in/robfig/cron.v2
 	go get -u github.com/dustin/go-humanize
-	go get -u github.com/reef-pi/rpi/pwm
-	go get -u github.com/reef-pi/drivers
-	go get -u github.com/reef-pi/hal
-	go get -u github.com/reef-pi/adafruitio
 	go get -u github.com/nfnt/resize
 	go get -u github.com/coreos/bbolt
 	go get -u golang.org/x/tools/cmd/goimports
