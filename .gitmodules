@@ -1,0 +1,12 @@
+[submodule "hal"]
+	path = hal
+	url = https://github.com/reef-pi/hal
+[submodule "rpi"]
+	path = rpi
+	url = https://github.com/reef-pi/rpi
+[submodule "drivers"]
+	path = drivers
+	url = https://github.com/reef-pi/drivers
+[submodule "adafruitio"]
+	path = adafruitio
+	url = https://github.com/reef-pi/adafruitio
