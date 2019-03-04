@@ -41,7 +41,7 @@ const initialState = {
   },
   logs: [],
   alerts: [],
-  instances: [],
+  instances: []
 }
 const store = createStore(rootReducer, initialState, applyMiddleware(thunk))
 export const configureStore = () => {

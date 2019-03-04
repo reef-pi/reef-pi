@@ -36,7 +36,7 @@ class main extends React.Component {
   render () {
     var nEq = <div />
     if (this.state.add) {
-      nEq = <InstanceForm onSubmit={this.create} actionLabel="Save" />
+      nEq = <InstanceForm onSubmit={this.create} actionLabel='Save' />
     }
     return (
       <ul className='list-group list-group-flush'>
