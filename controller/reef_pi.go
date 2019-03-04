@@ -63,23 +63,19 @@ func New(version, database string) (*ReefPi, error) {
 		s.RPI_PWMFreq = 100
 	}
 	pi := connectors.NewRPIPWMDriver(s.RPI_PWMFreq, s.Capabilities.DevMode)
-	pConfig := connectors.DefaultPCA9685Config
-	pConfig.DevMode = true
-
-	pca9685, err := connectors.NewPCA9685(i2c.MockBus(), pConfig)
+	pConfig := connectors.PCA9685Config{
+		Address:   connectors.DefaultPCA9685Config.Address,
+		DevMode:   s.Capabilities.DevMode,
+		Frequency: s.PCA9685_PWMFreq,
+	}
+	pBus := bus
+	if !s.PCA9685 { // fake i2cbus
+		pBus = i2c.MockBus()
+	}
+	pca9685, err := connectors.NewPCA9685(pBus, pConfig)
 	if err != nil {
 		log.Println("ERROR: Failed to initialize pca9685 driver with mock i2c bus. Error:", err)
 		return nil, err
-	}
-	if s.PCA9685 {
-		pConfig.DevMode = s.Capabilities.DevMode
-		p, err := connectors.NewPCA9685(bus, pConfig)
-		if err != nil {
-			log.Println("ERROR: Failed to initialize pca9685 driver. Using mock bus, all PCA9685 PWM calls will be ignored")
-			logError(store, "device-pca9685", "Failed to initialize pca9685 driver. Error:"+err.Error())
-		} else {
-			pca9685 = p
-		}
 	}
 	jacks := connectors.NewJacks(store, pi, pca9685)
 	outlets := connectors.NewOutlets(store)

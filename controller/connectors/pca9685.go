@@ -38,6 +38,7 @@ func NewPCA9685(bus i2c.Bus, config PCA9685Config) (types.PWM, error) {
 		log.Println("WARNING: pca9685 driver pwm frequency set to 0. Falling back to 1500")
 		config.Frequency = 1500
 	}
+	log.Println("Setting pca9685 frquency:", config.Frequency)
 	pwm.driver.Freq = config.Frequency // overriding default
 	return &pwm, pwm.Start()
 }
