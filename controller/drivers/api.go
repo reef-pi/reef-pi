@@ -28,8 +28,13 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *Drivers) get(w http.ResponseWriter, r *http.Request) {
+
+	var dr Driver
 	fn := func(id string) (interface{}, error) {
-		return d.Get(id)
+		if err := d.store.Get(DriverBucket, id, &dr); err != nil {
+			return nil, err
+		}
+		return dr, nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
