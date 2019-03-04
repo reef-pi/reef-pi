@@ -1,6 +1,6 @@
 import React from 'react'
 import Instance from './instance'
-import { updateInstance, fetchInstance, createInstance, deleteInstance } from 'redux/actions/instances'
+import { updateInstance, fetchInstances, createInstance, deleteInstance } from 'redux/actions/instances'
 import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
 
@@ -19,7 +19,7 @@ class main extends React.Component {
     this.props.fetch()
   }
 
-  createt (values) {
+  create (values) {
     var payload = {
       name: values.name
     }
@@ -27,7 +27,7 @@ class main extends React.Component {
     this.toggle()
   }
 
-  toggleAddEquipmentDiv () {
+  toggle () {
     this.setState({
       add: !this.state.add
     })
@@ -36,15 +36,16 @@ class main extends React.Component {
   render () {
     var nEq = <div />
     if (this.state.add) {
-      nEq = <InstanceForm onSubmit={this.create} />
+      nEq = <InstanceForm onSubmit={this.create} actionLabel="Save" />
     }
     return (
       <ul className='list-group list-group-flush'>
         {this.props.instances.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(item => {
+          console.log(item)
           return (
             <Instance
               key={item.id}
-              data={item}
+              instance={item}
               update={this.props.update}
               delete={this.props.delete}
             />
@@ -77,7 +78,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetch: () => dispatch(fetchInstance()),
+    fetch: () => dispatch(fetchInstances()),
     create: e => dispatch(createInstance(e)),
     update: (id, e) => dispatch(updateInstance(id, e)),
     delete: id => dispatch(deleteInstance(id))

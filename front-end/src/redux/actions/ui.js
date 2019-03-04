@@ -57,6 +57,7 @@ export const fetchControllerData = (dispatch, capabilities) => {
 }
 
 export const fetchManagerData = (dispatch) => {
+  console.log("Fetching manager data")
   dispatch(fetchInstances())
 }
 
@@ -66,6 +67,7 @@ export const fetchUIData = (dispatch) => {
     success: (capabilities) => {
       if(capabilities['manager']) {
         fetchManagerData(dispatch)
+        return (capabilitiesLoaded(capabilities))
       }else{
         fetchControllerData(dispatch, capabilities)
         return (capabilitiesLoaded(capabilities))

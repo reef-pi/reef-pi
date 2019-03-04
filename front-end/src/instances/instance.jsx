@@ -6,7 +6,6 @@ import {confirm} from 'utils/confirm'
 export default class Instance extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
       readOnly: true
     }

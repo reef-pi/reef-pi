@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/reef-pi/manager"
+	"github.com/reef-pi/reef-pi/manager"
 	"log"
 	"os"
 	"os/signal"
