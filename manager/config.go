@@ -2,25 +2,21 @@ package manager
 
 import (
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 )
 
 const Bucket = "config"
 
-type Credential struct {
-	User     string `json:"user"`
-	Password string `json:"passwoed"`
-}
-
 type Config struct {
-	Creds        Credential `json:"creds"`
-	Address      string     `json:"address"`
-	HTTPS        bool       `json:"https"`
-	Notification bool       `json:"notification"`
+	Creds        utils.Credentials `json:"creds"`
+	Address      string            `json:"address"`
+	HTTPS        bool              `json:"https"`
+	Notification bool              `json:"notification"`
 }
 
 var DefaultConfig = Config{
-	Creds: Credential{
+	Creds: utils.Credentials{
 		User:     "reef-pi",
 		Password: "reef-pi",
 	},
@@ -44,6 +40,9 @@ func loadConfiguration(store storage.Store) (Config, error) {
 func initializeConfiguration(store storage.Store) (Config, error) {
 	if err := store.CreateBucket(Bucket); err != nil {
 		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
+		return DefaultConfig, err
+	}
+	if err := store.Update(Bucket, "credentials", DefaultConfig.Creds); err != nil {
 		return DefaultConfig, err
 	}
 	return DefaultConfig, store.Update(Bucket, ConfigKey, DefaultConfig)

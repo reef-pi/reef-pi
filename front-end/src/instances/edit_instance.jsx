@@ -64,7 +64,29 @@ const EditInstance = ({
             className={classNames('form-control', {'is-invalid': ShowError('address', touched, errors)})}
             value={values.address}
           />
-          <ErrorFor errors={errors} touched={touched} name='name' />
+          <ErrorFor errors={errors} touched={touched} name='address' />
+        </div>
+      </div>
+      <div className='row'>
+        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
+          <label className='mr-2'>{i18next.t('user')}</label>
+          <input type='text' name='user'
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={classNames('form-control', {'is-invalid': ShowError('user', touched, errors)})}
+            value={values.user}
+          />
+          <ErrorFor errors={errors} touched={touched} name='user' />
+        </div>
+        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
+          <label className='mr-2'>{i18next.t('password')}</label>
+          <input type='password' name='password'
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={classNames('form-control', {'is-invalid': ShowError('password', touched, errors)})}
+            value={values.password}
+          />
+          <ErrorFor errors={errors} touched={touched} name='password' />
         </div>
       </div>
       <div className='row'>

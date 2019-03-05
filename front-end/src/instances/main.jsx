@@ -21,7 +21,11 @@ class main extends React.Component {
 
   create (values) {
     var payload = {
-      name: values.name
+      name: values.name,
+      address: values.address,
+      user: values.user,
+      password: values.password,
+      ignore_https: values.ignore_https
     }
     this.props.create(payload)
     this.toggle()

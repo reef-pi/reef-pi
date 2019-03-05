@@ -10,6 +10,7 @@ const EditInstanceForm = withFormik({
     address: (props.instance && props.instance.address) || '',
     user: (props.instance && props.instance.user) || '',
     password: (props.instance && props.instance.password) || '',
+    ignore_https: (props.instance && props.instance.ignore_https) || false,
     remove: props.remove
   }),
   validationSchema: InstanceSchema,
