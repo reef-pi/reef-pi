@@ -113,8 +113,8 @@
   revision = "a3cae37cdd642db938f1d3cb59cbd1da89e6fb79"
 
 [[projects]]
-  branch = "master"
-  digest = "1:d228235c733aedc5e8c26145d315ca134952f1b6e10ae14648ed8c2288bf8941"
+  branch = "ezo_hal"
+  digest = "1:d2d4990b7d08c392123591332931f384161fd05c06368b709ef4a6ba7bd18461"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
@@ -122,7 +122,7 @@
     "ph_board",
   ]
   pruneopts = "UT"
-  revision = "b59064ceb87f963fb815b14316e036c61503d2f5"
+  revision = "6ce40b504c569fc13f6071a752d5b4ec2dcaf0aa"
 
 [[projects]]
   branch = "master"
@@ -131,14 +131,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "59f71ac9bc122f79ae18df0d991cde8e33b40678"
-
-[[projects]]
-  branch = "master"
-  digest = "1:1784d89e1af3049705c45a4b35be9c4c6e658266158093ba87c560c879ce5476"
-  name = "github.com/reef-pi/manager"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ed005281590c7572738b733a7ef6d59ac32cbab6"
 
 [[projects]]
   branch = "master"
@@ -202,10 +194,10 @@
     "github.com/kidoman/embd",
     "github.com/nfnt/resize",
     "github.com/reef-pi/adafruitio",
+    "github.com/reef-pi/drivers",
     "github.com/reef-pi/drivers/hal/pca9685",
     "github.com/reef-pi/drivers/ph_board",
     "github.com/reef-pi/hal",
-    "github.com/reef-pi/manager",
     "github.com/reef-pi/rpi/hal",
     "github.com/reef-pi/rpi/i2c",
     "github.com/reef-pi/rpi/pwm",
