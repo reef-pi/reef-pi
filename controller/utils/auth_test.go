@@ -12,7 +12,12 @@ func TestAuth(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	creds := Credentials{
+		User:     "reef-pi",
+		Password: "reef-pi",
+	}
 	store.CreateBucket("reef-pi")
+	store.Update("reef-pi", "credentials", creds)
 	r := NewAuth("reef-pi", store)
 	tr := NewTestRouter()
 	tr.Router.HandleFunc("/sign_in", r.SignIn).Methods("GET")
@@ -20,7 +25,7 @@ func TestAuth(t *testing.T) {
 	tr.Router.HandleFunc("/creds", r.UpdateCredentials).Methods("POST")
 	tr.Router.HandleFunc("/me", r.Me).Methods("GET")
 	body := new(bytes.Buffer)
-	body.Write([]byte("{}"))
+	body.Write([]byte(`{"user":"reef-pi", "password":"reef-pi"}`))
 	if err := tr.Do("GET", "/sign_in", body, nil); err != nil {
 		t.Error("Failed to sign in:", err)
 	}
