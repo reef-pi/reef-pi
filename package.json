@@ -79,7 +79,8 @@
     "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
     "jest-update-snapshot": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
-    "sass-lint": "./node_modules/.bin/sass-lint 'front-end/assets/sass/**/*.scss' --verbose"
+    "sass-lint": "./node_modules/.bin/sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
+    "smoke": "node front-end/test/smoke.js"
   },
   "repository": {
     "type": "git",

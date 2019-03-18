@@ -30,6 +30,9 @@ func main() {
           Configuration file path
     Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
 
+    manager: Run reef-pi manager
+		Example: reef-pi manager
+
     reset-password: Reset reef-pi web ui username and password
     Options:
       -user string
@@ -57,6 +60,10 @@ func main() {
 		args = os.Args[2:]
 	}
 	switch v {
+	case "manager":
+		cmd := flag.NewFlagSet("manager", flag.ExitOnError)
+		cmd.Parse(args)
+		mgr()
 	case "reset-password":
 		cmd := flag.NewFlagSet("reset-password", flag.ExitOnError)
 		user := cmd.String("user", "", "New reef-pi web ui username")

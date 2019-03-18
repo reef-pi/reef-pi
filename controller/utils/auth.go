@@ -78,7 +78,12 @@ func (a *auth) SignIn(w http.ResponseWriter, req *http.Request) {
 		JSONResponse(nil, w, req)
 		return
 	}
-	a.store.Get(a.bucket, "credentials", &bucketCredentials)
+	if err := a.store.Get(a.bucket, "credentials", &bucketCredentials); err != nil {
+		log.Println("ERROR: Not able to fetch authentication creds. Error:", err)
+		w.WriteHeader(500)
+		JSONResponse(nil, w, req)
+		return
+	}
 	if reqCredentials.User == bucketCredentials.User && reqCredentials.Password == bucketCredentials.Password {
 		log.Println("Access granted for:", req.RemoteAddr)
 		session.Values["user"] = reqCredentials.User

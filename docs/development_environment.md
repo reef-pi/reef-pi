@@ -19,6 +19,7 @@ latest go. Ubuntu linux specific go installation instruction can be found [here]
 
 ```
 brew install go
+brew install tar
 ```
 
 Irrespective of how you install go, make sure you set GOPATH environment variable. I recommend setting GOPATH environment variable inside your home
@@ -114,6 +115,23 @@ make jest
 make start-dev
 node ./test/smoke.js
 ```
+
+### Using API with curl
+
+- Signin and save the cookie
+
+```
+curl -X POST -d '{"user":"reef-pi", "password":"reef-pi"}' -c cookie.txt  http://reef-pi.local/auth/signin
+
+```
+
+- Use cookie for all subsequent calls
+
+```
+curl -b cookie.txt http://reef-pi.local/api/equipment
+
+```
+
 
 
 ### Running reef-pi on a raspberry pi

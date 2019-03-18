@@ -67,6 +67,7 @@ capabilities:doser,Doser
 capabilities:macros,Macros
 capabilities:macro,Macro
 capabilities:camera,Camera
+capabilities:manager,Instances
 capabilities:configuration,Configuration
 capabilities:log,Log
 capabilities:dev_mode,Dev Mode
