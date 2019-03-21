@@ -46,7 +46,7 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) error {
 		return t.store.Update(t.bucket, DBKey, c)
 	}
-	utils.JSONUpdateResponse(&t, fn, w, req)
+	utils.JSONUpdateResponse(&c, fn, w, req)
 }
 
 func (t *telemetry) SendTestMessage(w http.ResponseWriter, req *http.Request) {
