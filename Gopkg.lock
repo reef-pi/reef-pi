@@ -113,7 +113,7 @@
   revision = "a3cae37cdd642db938f1d3cb59cbd1da89e6fb79"
 
 [[projects]]
-  branch = "ezo_hal"
+  branch = "master"
   digest = "1:d2d4990b7d08c392123591332931f384161fd05c06368b709ef4a6ba7bd18461"
   name = "github.com/reef-pi/drivers"
   packages = [
@@ -122,7 +122,7 @@
     "ph_board",
   ]
   pruneopts = "UT"
-  revision = "6ce40b504c569fc13f6071a752d5b4ec2dcaf0aa"
+  revision = "e6f57808bbb19bc300ad2a73ec0c4dacdb736f34"
 
 [[projects]]
   branch = "master"

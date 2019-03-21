@@ -27,7 +27,7 @@
   name = "github.com/reef-pi/adafruitio"
 
 [[constraint]]
-  branch = "ezo_hal"
+  branch = "master"
   name = "github.com/reef-pi/drivers"
 
 [[constraint]]
