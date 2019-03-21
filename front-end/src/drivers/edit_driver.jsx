@@ -5,7 +5,7 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 
-const driverTypes = ['pca9685', 'ph-board']
+const driverTypes = ['pca9685', 'ph-board', 'ph-ezo']
 const EditDriver = ({
   values,
   errors,
@@ -84,6 +84,8 @@ const EditDriver = ({
       case 'pca9685':
         return pca9685Config()
       case 'ph-board':
+        return phBoardConfig()
+      case 'ph-ezo':
         return phBoardConfig()
     }
   }

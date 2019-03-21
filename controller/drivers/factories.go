@@ -37,7 +37,7 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		return pca9685Factory, nil
 	case "ph-board":
 		return ph_board.HalAdapter, nil
-	case "ezo-ph":
+	case "ph-ezo":
 		return drivers.EzoHalAdapter, nil
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
