@@ -161,17 +161,19 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 }
 
 func (t *telemetry) EmitMetric(module, name string, v float64) {
-	feed := module + "-" + name
+	feed := module + "_" + name
 	aio := t.config.AdafruitIO
 	feed = strings.ToLower(aio.Prefix + feed)
+	feed = strings.Replace(feed, " ", "_", -1)
+	pName := strings.Replace(feed, "-", "_", -1)
 
 	if t.config.Prometheus {
 		t.mu.Lock()
 		g, ok := t.pMs[feed]
 		if !ok {
 			g = promauto.NewGauge(prometheus.GaugeOpts{
-				Name: feed,
-				Help: feed,
+				Name: pName,
+				Help: "Module:" + module + " Item:" + name,
 			})
 			t.pMs[feed] = g
 		}
