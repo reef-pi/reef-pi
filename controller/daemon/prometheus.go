@@ -1,10 +1,11 @@
 package daemon
 
 import (
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func (r ReefPi) prometheus() {
-	http.Handle("/api/metrics", promhttp.Handler())
+	http.Handle("/x/metrics", promhttp.Handler())
 }

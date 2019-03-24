@@ -1,32 +1,11 @@
 package telemetry
 
 import (
-	"log"
 	"net/http"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
-
-const DBKey = "telemetry"
-
-func Initialize(b string, store storage.Store, logError ErrorLogger, notify bool) Telemetry {
-	var c TelemetryConfig
-	if err := store.Get(b, DBKey, &c); err != nil {
-		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
-		c = DefaultTelemetryConfig
-		store.Update(b, DBKey, c)
-	}
-	// for upgrades, this value will be 0. Remove in 3.0
-	if c.HistoricalLimit < 1 {
-		c.HistoricalLimit = HistoricalLimit
-	}
-	if c.CurrentLimit < 1 {
-		c.CurrentLimit = CurrentLimit
-	}
-	return NewTelemetry(b, store, c, logError)
-}
 
 func (t *telemetry) GetConfig(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {

@@ -25,7 +25,7 @@ func (c *Controller) Check(tc TC) {
 	}
 	u.Temperature = reading
 	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
-	c.c.Telemetry().EmitMetric(tc.Name+"-reading", reading)
+	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)
 	if tc.Control {
 		if err := c.control(tc, &u); err != nil {
 			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
@@ -50,10 +50,10 @@ func (c *Controller) control(tc TC, u *Usage) error {
 		c.switchOffAll(tc)
 	}
 	if tc.Heater != "" {
-		c.c.Telemetry().EmitMetric(tc.Name+"-cooler", u.Cooler)
+		c.c.Telemetry().EmitMetric(tc.Name, "cooler", float64(u.Cooler))
 	}
 	if tc.Cooler != "" {
-		c.c.Telemetry().EmitMetric(tc.Name+"-heater", u.Heater)
+		c.c.Telemetry().EmitMetric(tc.Name, "heater", float64(u.Heater))
 	}
 	return nil
 }

@@ -52,6 +52,9 @@ func (r *ReefPi) API() error {
 	}
 	r.AuthenticatedAPI(router)
 	r.UnAuthenticatedAPI(router)
+	if r.settings.Prometheus {
+		r.prometheus()
+	}
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
 		summarizeAPI(router)
 	}
@@ -59,9 +62,6 @@ func (r *ReefPi) API() error {
 }
 
 func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
-	if r.settings.Prometheus {
-		r.prometheus()
-	}
 	router.HandleFunc("/auth/signin", r.a.SignIn).Methods("POST")
 	router.HandleFunc("/auth/signout", r.a.SignOut).Methods("GET")
 }

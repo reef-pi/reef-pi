@@ -1,15 +1,13 @@
 package telemetry
 
 import (
-	"math/rand"
 	"testing"
 	"time"
 )
 
 func TestEmitMetric(t *testing.T) {
 	telemetry := TestTelemetry()
-	rand.Seed(time.Now().Unix())
-	telemetry.EmitMetric("test", rand.Intn(100))
+	telemetry.EmitMetric("test", "foo", 1.23)
 	telemetry.config.Throttle = 2
 	sent, err := telemetry.Alert("test-alert", "")
 	if err != nil {

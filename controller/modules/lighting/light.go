@@ -113,6 +113,6 @@ func (c *Controller) syncLight(light Light) {
 			v = float64(ch.Max)
 		}
 		c.UpdateChannel(light.Jack, ch, v)
-		c.c.Telemetry().EmitMetric(light.Name+"-"+ch.Name, v)
+		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)
 	}
 }
