@@ -15,6 +15,7 @@ const SettingsSchema = Yup.object().shape({
   }),
   https: Yup.bool(),
   pprof: Yup.bool(),
+  prometheus: Yup.bool(),
   rpi_pwm_freq: Yup.number().positive().integer()
 })
 

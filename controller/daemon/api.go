@@ -59,6 +59,9 @@ func (r *ReefPi) API() error {
 }
 
 func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
+	if r.settings.Prometheus {
+		r.prometheus()
+	}
 	router.HandleFunc("/auth/signin", r.a.SignIn).Methods("POST")
 	router.HandleFunc("/auth/signout", r.a.SignOut).Methods("GET")
 }
