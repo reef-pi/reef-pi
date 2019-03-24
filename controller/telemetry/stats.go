@@ -161,7 +161,7 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 }
 
 func (t *telemetry) EmitMetric(module, name string, v float64) {
-	feed := module + "_" + name
+	feed := module + "-" + name
 	aio := t.config.AdafruitIO
 	feed = strings.ToLower(aio.Prefix + feed)
 	feed = strings.Replace(feed, " ", "_", -1)
