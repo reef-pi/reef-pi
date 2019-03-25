@@ -178,7 +178,7 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 			t.pMs[feed] = g
 		}
 		t.mu.Unlock()
-		g.Add(v)
+		g.Set(v)
 	}
 	if !aio.Enable {
 		//log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
