@@ -53,7 +53,7 @@ func New(version, database string) (*ReefPi, error) {
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
 
-	tele := telemetry.Initialize(Bucket, store, fn, s.Notification)
+	tele := telemetry.Initialize(Bucket, store, fn, s.Prometheus)
 	bus := i2c.Bus(i2c.MockBus())
 	if !s.Capabilities.DevMode {
 		b, err := i2c.New()

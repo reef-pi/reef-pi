@@ -85,6 +85,7 @@ configuration:settings:notification,Notification
 configuration:settings:display,Display
 configuration:settings:use_https,Use HTTPS
 configuration:settings:enable_profiling,Enable profiling
+configuration:settings:enable_prometheus,Enable prometheus
 configuration:settings:capabilities,Capabilities
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:max_memory,Max memory

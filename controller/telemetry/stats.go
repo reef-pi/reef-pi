@@ -7,12 +7,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+
 	"github.com/reef-pi/reef-pi/controller/storage"
 
 	"math"
 
 	"github.com/reef-pi/adafruitio"
 )
+
+const DBKey = "telemetry"
 
 func TwoDecimal(f float64) float64 {
 	return math.Round(f*100) / 100
@@ -22,7 +27,7 @@ type ErrorLogger func(string, string) error
 
 type Telemetry interface {
 	Alert(string, string) (bool, error)
-	EmitMetric(string, interface{})
+	EmitMetric(string, string, float64)
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
 	NewStatsManager(storage.Store, string) StatsManager
@@ -47,6 +52,7 @@ type TelemetryConfig struct {
 	AdafruitIO      AdafruitIO   `json:"adafruitio"`
 	Mailer          MailerConfig `json:"mailer"`
 	Notify          bool         `json:"notify"`
+	Prometheus      bool         `json:"prometheus"`
 	Throttle        int          `json:"throttle"`
 	HistoricalLimit int          `json:"historical_limit"`
 	CurrentLimit    int          `json:"current_limit"`
@@ -68,6 +74,25 @@ type telemetry struct {
 	logError   ErrorLogger
 	store      storage.Store
 	bucket     string
+	pMs        map[string]prometheus.Gauge
+}
+
+func Initialize(b string, store storage.Store, logError ErrorLogger, prom bool) Telemetry {
+	var c TelemetryConfig
+	if err := store.Get(b, DBKey, &c); err != nil {
+		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
+		c = DefaultTelemetryConfig
+		store.Update(b, DBKey, c)
+	}
+	c.Prometheus = prom
+	// for upgrades, this value will be 0. Remove in 3.0
+	if c.HistoricalLimit < 1 {
+		c.HistoricalLimit = HistoricalLimit
+	}
+	if c.CurrentLimit < 1 {
+		c.CurrentLimit = CurrentLimit
+	}
+	return NewTelemetry(b, store, c, logError)
 }
 
 func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr ErrorLogger) *telemetry {
@@ -85,6 +110,7 @@ func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr Erro
 		logError:   lr,
 		store:      store,
 		bucket:     b,
+		pMs:        make(map[string]prometheus.Gauge),
 	}
 }
 
@@ -134,9 +160,26 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 	return true, nil
 }
 
-func (t *telemetry) EmitMetric(feed string, v interface{}) {
+func (t *telemetry) EmitMetric(module, name string, v float64) {
+	feed := module + "-" + name
 	aio := t.config.AdafruitIO
 	feed = strings.ToLower(aio.Prefix + feed)
+	feed = strings.Replace(feed, " ", "_", -1)
+	pName := strings.Replace(feed, "-", "_", -1)
+
+	if t.config.Prometheus {
+		t.mu.Lock()
+		g, ok := t.pMs[feed]
+		if !ok {
+			g = promauto.NewGauge(prometheus.GaugeOpts{
+				Name: pName,
+				Help: "Module:" + module + " Item:" + name,
+			})
+			t.pMs[feed] = g
+		}
+		t.mu.Unlock()
+		g.Add(v)
+	}
 	if !aio.Enable {
 		//log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
 		return

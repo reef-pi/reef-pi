@@ -86,7 +86,7 @@ func (h *hc) Check() {
 		log.Println("ERROR: Failed to obtain load average. Error:", err)
 		return
 	}
-	h.t.EmitMetric("system-load5", loadStat.Load5)
+	h.t.EmitMetric("system", "load5", loadStat.Load5)
 
 	vmStat, err := mem.VirtualMemory()
 	if err != nil {
@@ -102,7 +102,7 @@ func (h *hc) Check() {
 		memorySum:  usedMemory,
 		Time:       TeleTime(time.Now()),
 	}
-	h.t.EmitMetric("system-mem-used", usedMemory)
+	h.t.EmitMetric("system", "mem-used", usedMemory)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)

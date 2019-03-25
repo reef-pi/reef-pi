@@ -140,7 +140,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 				sum:  reading,
 			}
 			c.statsMgr.Update(p.ID, m)
-			c.c.Telemetry().EmitMetric("ph-"+p.Name, reading)
+			c.c.Telemetry().EmitMetric("ph", p.Name, reading)
 		case <-quit:
 			ticker.Stop()
 			return

@@ -143,7 +143,7 @@ func (c *Controller) Check(a ATO) {
 		return
 	}
 	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
-	c.c.Telemetry().EmitMetric("ato-"+a.Name+"-reading", reading)
+	c.c.Telemetry().EmitMetric("ato", a.Name+"-reading", float64(reading))
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
 			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
@@ -155,7 +155,7 @@ func (c *Controller) Check(a ATO) {
 	}
 	c.NotifyIfNeeded(a)
 	c.statsMgr.Update(a.ID, usage)
-	c.c.Telemetry().EmitMetric("ato-"+a.Name+"-usage", usage.Pump)
+	c.c.Telemetry().EmitMetric("ato", a.Name+"-usage", float64(usage.Pump))
 }
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {

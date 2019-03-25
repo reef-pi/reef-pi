@@ -52,6 +52,9 @@ func (r *ReefPi) API() error {
 	}
 	r.AuthenticatedAPI(router)
 	r.UnAuthenticatedAPI(router)
+	if r.settings.Prometheus {
+		r.prometheus()
+	}
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
 		summarizeAPI(router)
 	}

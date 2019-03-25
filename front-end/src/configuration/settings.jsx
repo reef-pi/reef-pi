@@ -232,6 +232,20 @@ class settings extends React.Component {
                 </div>
               </div>
             </div>
+            <div className='row'>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='enable_prometheus'>{i18n.t('configuration:settings:enable_prometheus')}</label>
+                  <input
+                    type='checkbox'
+                    id='enable_pprof'
+                    onClick={this.updateCheckbox('prometheus')}
+                    defaultChecked={this.state.settings.prometheus}
+                    className='form-control'
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className='row'>

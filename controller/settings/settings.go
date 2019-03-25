@@ -11,6 +11,7 @@ type Settings struct {
 	HTTPS        bool              `json:"https"`
 	Pprof        bool              `json:"pprof"`
 	RPI_PWMFreq  int               `json:"rpi_pwm_freq"`
+	Prometheus   bool              `json:"prometheus"`
 }
 
 var DefaultSettings = Settings{
