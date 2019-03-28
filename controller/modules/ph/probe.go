@@ -123,10 +123,25 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
+	var calibrator hal.Calibrator
+	var ms []hal.Measurement
+	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err != nil {
+		log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
+	} else {
+		cal, err := hal.CalibratorFactory(ms)
+		if err != nil {
+			log.Println("ERROR: ph-subsystem: Failed to create calibration function for probe:", p.Name, "Error:", err)
+		} else {
+			calibrator = cal
+		}
+	}
 	for {
 		select {
 		case <-ticker.C:
 			reading, err := c.Read(p)
+			if calibrator != nil {
+				reading = calibrator.Calibrate(reading)
+			}
 			if err != nil {
 				log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 				c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
@@ -165,10 +180,7 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
-	if err := c.c.Store().Update(CalibrationBucket, p.ID, ms); err != nil {
-		return err
-	}
-	return c.ais.Calibrate(p.AnalogInput, ms)
+	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {
