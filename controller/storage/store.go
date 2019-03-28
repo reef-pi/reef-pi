@@ -17,6 +17,8 @@ const (
 	MacroBucket            = "macro"
 	MacroUsageBucket       = "macro_usage"
 	PhBucket               = "phprobes"
+	PhCalibrationBucket    = "phprobes"
+	PhReadingsBucket       = "ph_readings"
 	TemperatureBucket      = "temperature"
 	TemperatureUsageBucket = "temperature_usage"
 	TimerBucket            = "timers"

@@ -3,6 +3,7 @@ package ph
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/hal"
 	"log"
 	"math/rand"
 	"time"
@@ -148,14 +149,14 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	}
 }
 
-type CalibrationDetails struct {
-	Value float32 `json:"value"`
-	Type  string  `json:"type"`
-}
-
-func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
-	if details.Value > 14 || details.Value <= 0 {
-		return fmt.Errorf("Invalid calibration value %f. Valid values are above 0  and below 14", details.Value)
+func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
+	for _, m := range ms {
+		if m.Expected > 14 || m.Expected <= 0 {
+			return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", m.Expected)
+		}
+		if m.Observed > 14 || m.Observed <= 0 {
+			return fmt.Errorf("Invalid observed calibration value %f. Valid values are above 0  and below 14", m.Observed)
+		}
 	}
 	p, err := c.Get(id)
 	if err != nil {
@@ -164,20 +165,10 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
-	/* TODO
-	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
-	switch details.Type {
-	case "high":
-		return d.CalibrateHigh(details.Value)
-	case "mid":
-		return d.CalibrateMid(details.Value)
-	case "low":
-		return d.CalibrateLow(details.Value)
-	default:
-		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
+	if err := c.c.Store().Update(CalibrationBucket, p.ID, ms); err != nil {
+		return err
 	}
-	*/
-	return nil
+	return c.ais.Calibrate(p.AnalogInput, ms)
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {

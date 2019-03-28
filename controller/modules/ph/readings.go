@@ -3,10 +3,11 @@ package ph
 import (
 	"fmt"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-const ReadingsBucket = "ph_readings"
+const ReadingsBucket = storage.PhReadingsBucket
 
 type Measurement struct {
 	Ph   float64            `json:"pH"`

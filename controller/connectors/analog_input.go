@@ -135,6 +135,17 @@ func (ais *AnalogInputs) Read(id string) (float64, error) {
 	}
 	return ch.Read()
 }
+func (ais *AnalogInputs) Calibrate(id string, ms []hal.Measurement) error {
+	j, err := ais.Get(id)
+	if err != nil {
+		return err
+	}
+	ch, err := j.channel(ais.drivers)
+	if err != nil {
+		return fmt.Errorf("pin %d on analog input %s has no driver: %v", j.Pin, id, err)
+	}
+	return ch.Calibrate(ms)
+}
 
 type AnalogReading struct {
 	Value float64 `json:"value"`

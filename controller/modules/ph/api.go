@@ -1,6 +1,7 @@
 package ph
 
 import (
+	"github.com/reef-pi/hal"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -19,11 +20,11 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 }
 
 func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
-	var details CalibrationDetails
+	var ms []hal.Measurement
 	fn := func(id string) error {
-		return c.Calibrate(id, details)
+		return c.Calibrate(id, ms)
 	}
-	utils.JSONUpdateResponse(&details, fn, w, r)
+	utils.JSONUpdateResponse(&ms, fn, w, r)
 }
 
 func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {
