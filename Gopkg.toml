@@ -50,6 +50,11 @@
   name = "gopkg.in/yaml.v2"
   version = "2.2.2"
 
+[[override]]
+  name = "github.com/PaulSRock/kasalink"
+  branch = "test"
+  source = "https://github.com/theatrus/kasalink"
+
 [prune]
   go-tests = true
   unused-packages = true

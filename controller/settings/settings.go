@@ -17,7 +17,7 @@ type Settings struct {
 var DefaultSettings = Settings{
 	Name:         "reef-pi",
 	Interface:    "wlan0",
-	Address:      "0.0.0.0:80",
+	Address:      "0.0.0.0:8080",
 	Capabilities: DefaultCapabilities,
 	RPI_PWMFreq:  100,
 	HealthCheck: HealthCheckNotify{

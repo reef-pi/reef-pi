@@ -2,6 +2,18 @@
 
 
 [[projects]]
+  branch = "test"
+  digest = "1:d40e539405f56673bf894748a55eb7bfe11008bd4242d929fe82fd2075612d4f"
+  name = "github.com/PaulSRock/kasalink"
+  packages = [
+    ".",
+    "reefpihal",
+  ]
+  pruneopts = "UT"
+  revision = "80c65b849a54a34bf6e6bc0ec0fe17510ceb204b"
+  source = "https://github.com/theatrus/kasalink"
+
+[[projects]]
   digest = "1:e92f5581902c345eb4ceffdcd4a854fb8f73cf436d47d837d1ec98ef1fe0a214"
   name = "github.com/StackExchange/wmi"
   packages = ["."]
@@ -15,7 +27,7 @@
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   pruneopts = "UT"
-  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+  revision = "234731a4f01687625231ac651d6b2776e3f3142e"
 
 [[projects]]
   digest = "1:5f7414cf41466d4b4dd7ec52b2cd3e481e08cfd11e7e24fef730c0e483e88bb1"
@@ -77,12 +89,12 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:ca59b1175189b3f0e9f1793d2c350114be36eaabbe5b9f554b35edee1de50aea"
+  digest = "1:d5f97fc268267ec1b61c3453058c738246fc3e746f14b1ae25161513b7367b0c"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a7962380ca08b5a188038c69871b8d3fbdf31e89"
-  version = "v1.7.0"
+  revision = "c5c6c98bc25355028a63748a498942a6398ccd22"
+  version = "v1.7.1"
 
 [[projects]]
   digest = "1:e72d1ebb8d395cf9f346fd9cbc652e5ae222dd85e0ac842dc57f175abed6d195"
@@ -158,22 +170,16 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
-  version = "v0.2.0"
+  revision = "a82f4c12f983cc2649298185f296632953e50d3e"
+  version = "v0.3.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:c31163bd62461e0c5f7ddc7363e39ef8d9e929693e77b5c11c709b05f9cb9219"
+  digest = "1:5e412e2a03bd0cfdb102db97212be2e625df74fa8b2d4a8a51f107b1456e256b"
   name = "github.com/prometheus/procfs"
-  packages = [
-    ".",
-    "internal/util",
-    "iostats",
-    "nfs",
-    "xfs",
-  ]
+  packages = ["."]
   pruneopts = "UT"
-  revision = "55ae3d9d557340b5bc24cd8aa5f6fa2c2ab31352"
+  revision = "e22ddced71425e65e388b17b7d0289c5ea77d06e"
 
 [[projects]]
   branch = "master"
@@ -216,7 +222,7 @@
   revision = "9306e030a0640618d235e34c16d014ed10d04c1a"
 
 [[projects]]
-  digest = "1:c88b3d799b85c1401dda86c24881bff49188011ca563fd062fa0e557779e7df5"
+  digest = "1:df7e4b3c360a16505ffe2e040498d53745a873150067e4cd2169d7f2ee56298b"
   name = "github.com/shirou/gopsutil"
   packages = [
     "internal/common",
@@ -224,19 +230,19 @@
     "mem",
   ]
   pruneopts = "UT"
-  revision = "6c6abd6d1666d6b27f1c261e0f850441ba22aa3a"
-  version = "v2.19.02"
+  revision = "2cbc9195c892b304060269ef280375236d2fcac9"
+  version = "v2.19.03"
 
 [[projects]]
   branch = "master"
-  digest = "1:4331a1ccaa56cb90dba6ddd13797c221205af5ba719cbdbd701f44532dde19ea"
+  digest = "1:1057f217b8dc6524b1c44809fface8db9efdd7ed87f65c26c0b9ba21c50a54b8"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "c2f5717e611cf8e89a852a41081355194d80c943"
+  revision = "97732733099d6a942a73b889770774366de963ed"
 
 [[projects]]
   branch = "v2"
@@ -258,6 +264,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/PaulSRock/kasalink/reefpihal",
     "github.com/coreos/bbolt",
     "github.com/dustin/go-humanize",
     "github.com/gorilla/mux",

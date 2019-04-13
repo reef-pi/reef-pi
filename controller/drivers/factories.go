@@ -3,6 +3,7 @@ package drivers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/PaulSRock/kasalink/reefpihal"
 	"log"
 
 	"github.com/kidoman/embd"
@@ -39,8 +40,10 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		return ph_board.HalAdapter, nil
 	case "ph-ezo":
 		return drivers.EzoHalAdapter, nil
+	case "kasalink":
+		return kasalinkFactory, nil
 	default:
-		return nil, fmt.Errorf("Unknown driver type:%s", t)
+		return nil, fmt.Errorf("unknown driver type:%s", t)
 	}
 }
 
@@ -68,6 +71,23 @@ func rpiFactory(confData []byte, _ i2c.Bus) (hal.Driver, error) {
 	return rpihal.NewAdapter(conf, pwm.New(), pinFactory)
 }
 
+func kasalinkFactory(confData []byte, _ i2c.Bus) (hal.Driver, error) {
+	type kasaConfig struct {
+		Address string `json:"address"`
+	}
+	// TODO(@theatrus): The UI for drivers only uses one property list
+	// not allowing us to specify alternate types of configuration options
+	// - hard coding this to a test driver.
+	config := kasaConfig{
+		Address: "192.168.1.134:9999",
+	}
+	//if err := json.Unmarshal(confData, &config); err != nil {
+	//	return nil, err
+	//}
+	log.Printf("init new kasalink at host %s", config.Address)
+	return reefpihal.NewHS300(config.Address)
+}
+
 func (d *Drivers) loadAll() error {
 	factory, err := AbstractFactory("rpi", d.dev_mode)
 	if err != nil {
@@ -81,6 +101,7 @@ func (d *Drivers) loadAll() error {
 		return err
 	}
 	for _, d1 := range ds {
+		log.Println("loading driver %v", d1)
 		f, err := AbstractFactory(d1.Type, d.dev_mode)
 		if err != nil {
 			log.Println("ERROR: Failed to detect loader for driver type:", d1.Type, "Error:", err)

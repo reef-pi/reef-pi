@@ -5,7 +5,8 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 
-const driverTypes = ['pca9685', 'ph-board', 'ph-ezo']
+// TODO: This needs to come from the API
+const driverTypes = ['pca9685', 'ph-board', 'ph-ezo', 'kasalink']
 const EditDriver = ({
   values,
   errors,
@@ -37,6 +38,26 @@ const EditDriver = ({
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('config.address', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='name' />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const kasaLinkConfig = () => {
+    return (
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='name'>Address</label>
+            <Field
+              name='config.host'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('config.host', touched, errors)
               })}
             />
             <ErrorFor errors={errors} touched={touched} name='name' />
@@ -87,6 +108,8 @@ const EditDriver = ({
         return phBoardConfig()
       case 'ph-ezo':
         return phBoardConfig()
+      case 'kasalink':
+        return kasaLinkConfig()
     }
   }
 
