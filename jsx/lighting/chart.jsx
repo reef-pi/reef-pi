@@ -26,8 +26,8 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var data = []
-    var lines = []
+    let data = []
+    let lines = []
     $.each(this.props.config.channels, function (name, channel) {
       lines.push(this.channel2line(channel, data))
     }.bind(this))
