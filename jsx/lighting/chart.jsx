@@ -26,9 +26,8 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var lines = [<Line dataKey='time' isAnimationActive={false} stroke='#000000' key='time' layout='vertical' />]
     var data = []
-    data['time'] = [12]
+    var lines = []
     $.each(this.props.config.channels, function (name, channel) {
       lines.push(this.channel2line(channel, data))
     }.bind(this))
