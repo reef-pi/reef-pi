@@ -158,11 +158,11 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
 	switch details.Type {
 	case "high":
-		return d.CalibrateHigh(details.Value)
+		return d.CalibrateHigh(float64(details.Value))
 	case "mid":
-		return d.CalibrateMid(details.Value)
+		return d.CalibrateMid(float64(details.Value))
 	case "low":
-		return d.CalibrateLow(details.Value)
+		return d.CalibrateLow(float64(details.Value))
 	default:
 		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
 	}
