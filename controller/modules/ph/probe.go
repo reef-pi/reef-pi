@@ -3,10 +3,11 @@ package ph
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/hal"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/reef-pi/hal"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )

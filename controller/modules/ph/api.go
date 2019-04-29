@@ -1,8 +1,9 @@
 package ph
 
 import (
-	"github.com/reef-pi/hal"
 	"net/http"
+
+	"github.com/reef-pi/hal"
 
 	"github.com/gorilla/mux"
 
