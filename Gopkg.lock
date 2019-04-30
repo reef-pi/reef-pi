@@ -185,7 +185,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7db1f7f3ee79a9a254efba48834e47a0590440f17d080d1328deef9120ea2fd1"
+  digest = "1:e27264c068967c32c9a876ff60db7d43067789e1f5978da9c3a33a6fb6bda505"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
@@ -193,7 +193,7 @@
     "ph_board",
   ]
   pruneopts = "UT"
-  revision = "eee58afe260685fdaa3e2d55f7761ed822e3fa5b"
+  revision = "f60f40ae3f2ccafb38a1de0c9fa610e5f4cddecf"
 
 [[projects]]
   branch = "master"
