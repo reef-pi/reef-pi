@@ -15,26 +15,26 @@ add,Agregar
 save,Guardar
 configure,Configurar
 language:language,Idioma
-configuration:authentication:credentials,##
-configuration:authentication:error_user,##
-configuration:authentication:error_pass,##
-configuration:tab:settings,##
-configuration:tab:connectors,##
-configuration:tab:authentication,##
-configuration:tab:drivers,##
-configuration:tab:errors,##
-configuration:tab:telemetry,##
-configuration:tab:admin,##
-configuration:tab:about,##
-configuration:admin:sign_out,##
-configuration:admin:reload,##
-configuration:admin:reboot,##
-configuration:admin:poweroff,##
-configuration:about:version,##
-configuration:about:website,##
-configuration:about:status,##
-configuration:about:current_time,##
-configuration:about:uptime,##
+configuration:authentication:credentials,Credenciales
+configuration:authentication:error_user,Proporcione un nombre de usuario
+configuration:authentication:error_pass,Proporcione una contraseña
+configuration:tab:settings,Configuraciones
+configuration:tab:connectors,Conectores
+configuration:tab:authentication,Autenticacion
+configuration:tab:drivers,Drivers
+configuration:tab:errors,Errores
+configuration:tab:telemetry,Telemetria
+configuration:tab:admin,Admin
+configuration:tab:about,Acerca De
+configuration:admin:sign_out,Cerrar Sesion
+configuration:admin:reload,Recargar
+configuration:admin:reboot,Reiniciar
+configuration:admin:poweroff,Apagar
+configuration:about:version,Version
+configuration:about:website,Website
+configuration:about:status,Estado
+configuration:about:current_time,Fecha Actual
+configuration:about:uptime,Tiempo de Actividad
 signin:username,##
 signin:password,##
 signin:signin,##
