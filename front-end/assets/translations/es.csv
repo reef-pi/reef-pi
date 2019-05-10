@@ -6,15 +6,15 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
-loading,##
-are_you_sure,##
-clear,##
-name,##
-update,##
-add,##
-save,##
-configure,##
-language:language,##
+loading,Cargando
+are_you_sure,¿Estas Seguro?
+clear,Limpiar
+name,Nombre
+update,Actualizar
+add,Agregar
+save,Guardar
+configure,Configurar
+language:language,Idioma
 configuration:authentication:credentials,##
 configuration:authentication:error_user,##
 configuration:authentication:error_pass,##
