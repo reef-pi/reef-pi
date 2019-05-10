@@ -1,4 +1,28 @@
 Key,Translation
+ok,Ok
+select,Seleccionar
+enabled,Activar
+disabled,Desactivar
+cancel,Cancelar
+loading,Cargando
+documentation,Documentacion
+errors,Errores
+edit,Editar
+inlet,Entrada
+delete,Borrar
+since,Desde
+running,Ejecutando
+are_you_sure,¿Estas Seguro?
+clear,Limpiar
+name,Nombre
+update,Actualizar
+add,Agregar
+save,Guardar
+none,Nada
+alerts,Alertas
+unit,Unidad
+configure,Configurar
+language:language,Idioma
 language:fr,Français
 language:en,English
 language:de,Deutsch
@@ -6,15 +30,6 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
-loading,Cargando
-are_you_sure,¿Estas Seguro?
-clear,Limpiar
-name,Nombre
-update,Actualizar
-add,Agregar
-save,Guardar
-configure,Configurar
-language:language,Idioma
 configuration:authentication:credentials,Credenciales
 configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:authentication:error_pass,Proporcione una contraseña
@@ -32,136 +47,125 @@ configuration:admin:reboot,Reiniciar
 configuration:admin:poweroff,Apagar
 configuration:about:version,Version
 configuration:about:website,Website
-configuration:about:status,Estado
+configuration:about:status,Status
 configuration:about:current_time,Fecha Actual
-configuration:about:uptime,Tiempo de Actividad
-signin:username,##
-signin:password,##
-signin:signin,##
-signin:invalidcredentials,##
-capabilities:dashboard,##
-capabilities:equipment,##
-capabilities:timers,##
-capabilities:lights,##
-capabilities:lighting,##
-capabilities:temperature,##
-capabilities:ato,##
-capabilities:ph,##
-capabilities:dosing_pumps,##
-capabilities:doser,##
-capabilities:macros,##
-capabilities:macro,##
-capabilities:camera,##
-capabilities:configuration,##
-capabilities:log,##
-capabilities:dev_mode,##
-capabilities:health_check,##
-log:time,##
-log:emitter,##
-log:type,##
-log:content,##
-dashboard:back_to_dashboard,##
-configuration:settings:interface,##
-configuration:settings:name,##
-configuration:settings:address,##
-configuration:settings:rpi_pwm_freq,##
-configuration:settings:notification,##
-configuration:settings:display,##
-configuration:settings:use_https,##
-configuration:settings:enable_profiling,##
-configuration:settings:capabilities,##
-configuration:settings:alert_health_check,##
-configuration:settings:max_memory,##
-configuration:settings:max_cpu,##
-configuration:settings:name_required,##
-configuration:settings:network_interface_required,##
-configuration:settings:network_address_required,##
-configuration:settings:capabilities_required,##
-ok,##
-cancel,##
-documentation,##
-errors,##
-since,##
-running,##
-health_chart:cpu_memory,##
-fatal_error:fatal_error,##
-fatal_error:connection_lost,##
-fatal_error:troubleshoot,##
-fatal_error:message,##
-cron:day_of_month,##
-cron:hour,##
-cron:minute,##
-cron:second,##
-color_picker:choose,##
-collapsible:edit,##
-collapsible:delete,##
-timers:equipment:equipment,##
-timers:equipment:action,##
-timers:equipment:revert,##
-timers:equipment:on,##
-timers:equipment:off,##
-select,##
-enabled,##
-disabled,##
-edit,##
-inlet,##
-delete,##
-none,##
-ato:name_required,##
-ato:status_required,##
-ato:inlet_required,##
-ato:chk_freq,##
-ato:chk_freq_required,##
-ato:chk_freq_number,##
-ato:chk_freq_number_value,##
-ato:threshold_required,##
-ato:threshold_value,##
-ato:warning_delete,##
-ato:ato_usage,##
-ato:ato_status,##
-ato:control_pump,##
-ato:alert_after,##
-ato:disable_on_alert,##
-ato:total_seconds_pump_on,##
-ato:validation_error,##
-timers:name_required,##
-timers:timer_status_required,##
-timers:day_required,##
-timers:hour_required,##
-timers:minute_required,##
-timers:second_required,##
-timers:type_required,##
-timers:equipment_required,##
-timers:on_required,##
-timers:duration_required,##
-timers:subject_required,##
-timers:message_required,##
-alerts,##
-unit,##
-timers:validation_error,##
-timers:turn_on,##
-timers:turn_off,##
-timers:and_then,##
-timers:turn_back_on,##
-timers:turn_back_off,##
-timers:stay_on,##
-timers:stay_off,##
-second_s,##
-sec,##
-timers:sec,##
-timers:after,##
-timers:subject,##
-timers:message,##
-timers:timer_status,##
-timers:function,##
-timers:equipment,##
-timers:reminder,##
-temperature:temperature,##
-temperature:heater_cooler,##
-temperature:chart_minimum,##
-temperature:chart_maximum,##
-temperature:validation_error,##
-temperature:sensor,##
-temperature:sensor_status,##
-temperature:celcius,##
-temperature:fahrenheit,##
+configuration:about:uptime,Uptime
+signin:username,Usuario
+signin:password,Contraseña
+signin:signin,Iniciar Sesion
+signin:invalidcredentials,Usuario o Contraseña Incorrectos
+capabilities:dashboard,Dashboard
+capabilities:equipment,Equipos
+capabilities:timers,Temporizadores
+capabilities:lights,Luces
+capabilities:lighting,Iluminacion
+capabilities:temperature,Temperatura
+capabilities:ato,ATO
+capabilities:ph,pH
+capabilities:dosing_pumps,Dosificadores
+capabilities:doser,Dosificador
+capabilities:macros,Macros
+capabilities:macro,Macro
+capabilities:camera,Camara
+capabilities:manager,Instancias
+capabilities:configuration,Configuracion
+capabilities:log,Log
+capabilities:dev_mode,Dev Modo
+capabilities:health_check,Chequeo del Sistema
+log:time,Hora
+log:emitter,Emisor
+log:type,Tipo
+log:content,Contenido
+dashboard:back_to_dashboard,Volver al dashboard
+configuration:settings:interface,Interface
+configuration:settings:name,Nombre
+configuration:settings:address,Direccion
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
+configuration:settings:notification,Notificacion
+configuration:settings:display,Pantalla
+configuration:settings:use_https,Usar HTTPS
+configuration:settings:enable_profiling,Activar profiling
+configuration:settings:enable_prometheus,Activar prometheus
+configuration:settings:capabilities,Funciones
+configuration:settings:alert_health_check,Alerta de estado
+configuration:settings:max_memory,Memoria Maxima
+configuration:settings:max_cpu,Procesador Maximo
+configuration:settings:name_required,El nombre es requerido
+configuration:settings:network_interface_required,La interfaz de red es requerida
+configuration:settings:network_address_required,La direccion de red es requerida
+configuration:settings:capabilities_required,Al menos una Funcion es requerida
+health_chart:cpu_memory,Procesador/Memoria
+fatal_error:fatal_error,Error Fatal
+fatal_error:connection_lost,Conexion Perdida
+fatal_error:troubleshoot,Solucionar Problemas
+fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
+cron:day_of_month,Dia del Mes
+cron:hour,Hora
+cron:minute,Minuto
+cron:second,Segundo
+color_picker:choose,Elegir
+collapsible:edit,Editar
+collapsible:delete,Borrar
+timers:equipment:equipment,Equipo
+timers:equipment:action,Accion
+timers:equipment:revert,Revertir
+timers:equipment:on,On
+timers:equipment:off,Off
+ato:name_required,Escribe un Nombre
+ato:status_required,Selecciona un estado
+ato:inlet_required,Seleccion una entrada
+ato:chk_freq,Frecuencia de Chequeo
+ato:chk_freq_required,Escribe una frecuencia de chequeo
+ato:chk_freq_number,la frecuencia de chequeo debe ser un numero
+ato:chk_freq_number_value,La frecuencia de chequeo debe ser mayor a 1
+ato:threshold_required,Se requiere un umbral cuando la notificación está habilitada
+ato:threshold_value,El umbral debe ser un numero
+ato:warning_delete,Esta Accion Borrara
+ato:ato_usage,Uso del ATO
+ato:ato_status,ATO Status
+ato:control_pump,Control de Bomba
+ato:control_pump,Control de Bomba
+ato:control_pump,Control de Bomba
+ato:alert_after,Alertas despues de
+ato:disable_on_alert,Desactivar si ocurre la alerta
+ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
+ato:validation_error,La configuración de ATO no se puede guardar debido a errores de validación. Por favor, corrija los errores e inténtelo de nuevo.
+timers:name_required,Coloca un Nombre
+timers:timer_status_required,el estado del temporizador es requerido
+timers:day_required,coloca un dia
+timers:hour_required,coloca una hora
+timers:minute_required,coloca los minutos
+timers:second_required,coloca los segundos
+timers:type_required,Selecciona un tipo
+timers:equipment_required,Selecciona un Equipo
+timers:on_required,On es requerido
+timers:duration_required,Duracion es requerido
+timers:subject_required,Escribe un Asunto
+timers:message_required,Escribe un Mensaje
+timers:validation_error,La configuración del temporizador no se puede guardar debido a errores de validación. Por favor, corrija los errores e inténtelo de nuevo.
+timers:turn_on,Encender
+timers:turn_off,Apagar
+timers:and_then,Luego
+timers:turn_back_on,Regresar a Encendido
+timers:turn_back_off,Regresar a Apagado
+timers:stay_on,Mantener Encendido
+timers:stay_off,Mantener Apagado
+second_s,segundo(s)
+sec,sec
+timers:sec,sec
+timers:after,Despues
+timers:subject,Asunto
+timers:message,Mensaje
+timers:timer_status,Estatus del Temporizador
+timers:function,Funcion
+timers:equipment,Equipo
+timers:reminder,Recordatorio
+temperature:temperature,Temperatura
+temperature:heater_cooler,Calentador/Enfriador
+temperature:chart_minimum,Minimo para la grafica
+temperature:chart_maximum,Maximo para la grafica
+temperature:validation_error,Los ajustes de temperatura no se pueden guardar debido a errores de validación. Por favor, corrija los errores e inténtelo de nuevo.
+temperature:sensor,Sensor
+temperature:sensor_status,Estado del Sensor
+temperature:celcius,Celcius
+temperature:fahrenheit,Fahrenheit
