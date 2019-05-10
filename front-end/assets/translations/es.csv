@@ -129,7 +129,7 @@ ato:control_pump,Control de Bomba
 ato:alert_after,Alertas despues de
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
-ato:validation_error,La configuración de ATO no se puede guardar debido a errores de validación. Por favor, corrija los errores e inténtelo de nuevo.
+ato:validation_error,La configuración no se puede guardar debido a errores de validación. Por favor, corrija los errores e inténtelo de nuevo.
 timers:name_required,Coloca un Nombre
 timers:timer_status_required,el estado del temporizador es requerido
 timers:day_required,coloca un dia
