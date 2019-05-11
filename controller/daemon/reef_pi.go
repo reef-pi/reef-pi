@@ -54,7 +54,9 @@ func New(version, database string) (*ReefPi, error) {
 	fn := func(t, m string) error { return logError(store, t, m) }
 
 	tele := telemetry.Initialize(Bucket, store, fn, s.Prometheus)
-	bus := i2c.Bus(i2c.MockBus())
+	mbus := i2c.MockBus()
+	mbus.Bytes = make([]byte, 2) // ph sensor expects two bytes
+	bus := i2c.Bus(mbus)
 	if !s.Capabilities.DevMode {
 		b, err := i2c.New()
 		if err != nil {
