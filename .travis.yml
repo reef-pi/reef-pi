@@ -12,7 +12,7 @@ script:
   - make pi
   - bundle install
   - sudo chown -R $USER /home/travis/.npm
-  - /usr/bin/npm install
+  - /usr/bin/npm install --no-optional
   - make build-ui
   - npm run js-lint
   - make sass-lint
