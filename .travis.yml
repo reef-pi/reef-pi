@@ -11,8 +11,8 @@ script:
   - bash <(curl -s https://codecov.io/bash) -cF go
   - make pi
   - bundle install
-  - env
-  - /usr/bin/npm install
+  - sudo chown -R $USER /home/travis/.npm
+  - /usr/bin/npm install --no-optional
   - make build-ui
   - npm run js-lint
   - make sass-lint

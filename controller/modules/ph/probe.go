@@ -7,6 +7,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
@@ -122,10 +124,25 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
+	var calibrator hal.Calibrator
+	var ms []hal.Measurement
+	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err != nil {
+		log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
+	} else {
+		cal, err := hal.CalibratorFactory(ms)
+		if err != nil {
+			log.Println("ERROR: ph-subsystem: Failed to create calibration function for probe:", p.Name, "Error:", err)
+		} else {
+			calibrator = cal
+		}
+	}
 	for {
 		select {
 		case <-ticker.C:
 			reading, err := c.Read(p)
+			if calibrator != nil {
+				reading = calibrator.Calibrate(reading)
+			}
 			if err != nil {
 				log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 				c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
@@ -148,14 +165,14 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	}
 }
 
-type CalibrationDetails struct {
-	Value float32 `json:"value"`
-	Type  string  `json:"type"`
-}
-
-func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
-	if details.Value > 14 || details.Value <= 0 {
-		return fmt.Errorf("Invalid calibration value %f. Valid values are above 0  and below 14", details.Value)
+func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
+	for _, m := range ms {
+		if m.Expected > 14 || m.Expected <= 0 {
+			return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", m.Expected)
+		}
+		if m.Observed > 14 || m.Observed <= 0 {
+			return fmt.Errorf("Invalid observed calibration value %f. Valid values are above 0  and below 14", m.Observed)
+		}
 	}
 	p, err := c.Get(id)
 	if err != nil {
@@ -164,20 +181,7 @@ func (c *Controller) Calibrate(id string, details CalibrationDetails) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
-	/* TODO
-	d := drivers.NewAtlasEZO(byte(p.Address), c.bus)
-	switch details.Type {
-	case "high":
-		return d.CalibrateHigh(details.Value)
-	case "mid":
-		return d.CalibrateMid(details.Value)
-	case "low":
-		return d.CalibrateLow(details.Value)
-	default:
-		return fmt.Errorf("Invalid calibration type: %s. Valid types are 'high', 'mid' ir 'low'", details.Type)
-	}
-	*/
-	return nil
+	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {

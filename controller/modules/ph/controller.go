@@ -13,6 +13,7 @@ import (
 )
 
 const Bucket = storage.PhBucket
+const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
 	c        controller.Controller
@@ -36,6 +37,9 @@ func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *C
 
 func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
+		return err
+	}
+	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
 		return err
 	}
 	return c.c.Store().CreateBucket(ReadingsBucket)

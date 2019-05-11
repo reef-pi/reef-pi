@@ -10,7 +10,9 @@ import (
 func TestDrivers(store storage.Store) *Drivers {
 	setting := settings.DefaultSettings
 	setting.Capabilities.DevMode = true
-	driver, err := NewDrivers(setting, i2c.MockBus(), store)
+	bus := i2c.MockBus()
+	bus.Bytes = make([]byte, 2)
+	driver, err := NewDrivers(setting, bus, store)
 	if err != nil {
 		panic(err)
 	}
