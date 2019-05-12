@@ -185,7 +185,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e27264c068967c32c9a876ff60db7d43067789e1f5978da9c3a33a6fb6bda505"
+  digest = "1:21b7723fb77b6da96f6f3c79a05b5f7e0d2e676116f4da24d5ad656942eb1861"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
@@ -193,7 +193,7 @@
     "ph_board",
   ]
   pruneopts = "UT"
-  revision = "f60f40ae3f2ccafb38a1de0c9fa610e5f4cddecf"
+  revision = "e43d20a94ae0a687b8518840f71cf03e93f92b89"
 
 [[projects]]
   branch = "master"
@@ -201,11 +201,11 @@
   name = "github.com/reef-pi/hal"
   packages = ["."]
   pruneopts = "UT"
-  revision = "59f71ac9bc122f79ae18df0d991cde8e33b40678"
+  revision = "ff9ee5eb3c4692848323d466ce47090c223e8c60"
 
 [[projects]]
   branch = "master"
-  digest = "1:5238e7b1e6ff299cdd134df0f099e01ac751f694b6e7511d76a655ab7ead8739"
+  digest = "1:bd2c04cb25615a5125e267bfaea1cbccda1e4ff64e52d9c874703c94716c5640"
   name = "github.com/reef-pi/rpi"
   packages = [
     "hal",
@@ -213,7 +213,7 @@
     "pwm",
   ]
   pruneopts = "UT"
-  revision = "9306e030a0640618d235e34c16d014ed10d04c1a"
+  revision = "3bdf80463c4d7fac14081c0661cb0665333203ad"
 
 [[projects]]
   digest = "1:c88b3d799b85c1401dda86c24881bff49188011ca563fd062fa0e557779e7df5"
