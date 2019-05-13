@@ -185,12 +185,13 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:21b7723fb77b6da96f6f3c79a05b5f7e0d2e676116f4da24d5ad656942eb1861"
+  digest = "1:38fcbd1fdcc4701125afffbad8a7cfe21c6704406e0770eb7e999ecce1d425c9"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
     "hal/pca9685",
     "ph_board",
+    "pico_board",
   ]
   pruneopts = "UT"
   revision = "e43d20a94ae0a687b8518840f71cf03e93f92b89"
@@ -271,6 +272,7 @@
     "github.com/reef-pi/drivers",
     "github.com/reef-pi/drivers/hal/pca9685",
     "github.com/reef-pi/drivers/ph_board",
+    "github.com/reef-pi/drivers/pico_board",
     "github.com/reef-pi/hal",
     "github.com/reef-pi/rpi/hal",
     "github.com/reef-pi/rpi/i2c",
