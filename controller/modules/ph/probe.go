@@ -170,9 +170,6 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 		if m.Expected > 14 || m.Expected <= 0 {
 			return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", m.Expected)
 		}
-		if m.Observed > 14 || m.Observed <= 0 {
-			return fmt.Errorf("Invalid observed calibration value %f. Valid values are above 0  and below 14", m.Observed)
-		}
 	}
 	p, err := c.Get(id)
 	if err != nil {
