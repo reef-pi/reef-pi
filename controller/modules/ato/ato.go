@@ -171,6 +171,10 @@ func (c *Controller) Run(a ATO, quit chan struct{}) {
 			c.Check(a)
 		case <-quit:
 			ticker.Stop()
+			// always turn off pump befor quitting
+			if err := c.Control(a, 1); err != nil {
+				log.Println("ERROR: ato-subsystem: Failed to turn off pump during shutting down ", a.Name, "Error:", err)
+			}
 			return
 		}
 	}
