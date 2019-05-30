@@ -8,7 +8,7 @@ import (
 	"github.com/kidoman/embd"
 
 	"github.com/reef-pi/drivers"
-	"github.com/reef-pi/drivers/hal/pca9685"
+	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
 	"github.com/reef-pi/hal"
@@ -35,7 +35,7 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 			return rpiFactory, nil
 		}
 	case "pca9685":
-		return pca9685Factory, nil
+		return pca9685.HALAdapter, nil
 	case "ph-board":
 		return ph_board.HalAdapter, nil
 	case "pico-board":
@@ -45,14 +45,6 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
 	}
-}
-
-func pca9685Factory(confData []byte, bus i2c.Bus) (hal.Driver, error) {
-	config := pca9685.DefaultPCA9685Config
-	if err := json.Unmarshal(confData, &config); err != nil {
-		return nil, err
-	}
-	return pca9685.New(config, bus)
 }
 
 func rpiNoopFactory(_ []byte, _ i2c.Bus) (hal.Driver, error) {
