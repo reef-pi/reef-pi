@@ -185,16 +185,16 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:38fcbd1fdcc4701125afffbad8a7cfe21c6704406e0770eb7e999ecce1d425c9"
+  digest = "1:bd9749e2d226b2d78a4814a786ea0c237ac4210c39d94aaa536d0ff3e78fdef9"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
-    "hal/pca9685",
+    "pca9685",
     "ph_board",
     "pico_board",
   ]
   pruneopts = "UT"
-  revision = "e43d20a94ae0a687b8518840f71cf03e93f92b89"
+  revision = "f992526c1e8880133206e5e6134fd800bef5ce25"
 
 [[projects]]
   branch = "master"
@@ -270,7 +270,7 @@
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/reef-pi/adafruitio",
     "github.com/reef-pi/drivers",
-    "github.com/reef-pi/drivers/hal/pca9685",
+    "github.com/reef-pi/drivers/pca9685",
     "github.com/reef-pi/drivers/ph_board",
     "github.com/reef-pi/drivers/pico_board",
     "github.com/reef-pi/hal",
