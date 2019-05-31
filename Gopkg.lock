@@ -184,8 +184,8 @@
   revision = "a3cae37cdd642db938f1d3cb59cbd1da89e6fb79"
 
 [[projects]]
-  branch = "fix_100_percent"
-  digest = "1:ae49f6393a783d03f14a592ab84bb783450461a19080b3824b3309d67c76dfeb"
+  branch = "master"
+  digest = "1:bd9749e2d226b2d78a4814a786ea0c237ac4210c39d94aaa536d0ff3e78fdef9"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
@@ -194,7 +194,7 @@
     "pico_board",
   ]
   pruneopts = "UT"
-  revision = "999bd9a670fc79b3514cb78ee7b052423a0cd2a6"
+  revision = "f992526c1e8880133206e5e6134fd800bef5ce25"
 
 [[projects]]
   branch = "master"

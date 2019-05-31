@@ -27,7 +27,7 @@
   name = "github.com/reef-pi/adafruitio"
 
 [[constraint]]
-  branch = "fix_100_percent"
+  branch = "master"
   name = "github.com/reef-pi/drivers"
 
 [[constraint]]
