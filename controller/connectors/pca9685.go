@@ -2,7 +2,7 @@ package connectors
 
 import (
 	"fmt"
-	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/reef-pi/controller/types"
 	"github.com/reef-pi/rpi/i2c"
 	"log"
@@ -17,7 +17,7 @@ type PCA9685Config struct {
 
 type pca9685Driver struct {
 	values map[int]int
-	driver *drivers.PCA9685
+	driver *pca9685.PCA9685
 	config PCA9685Config
 	mu     *sync.Mutex
 }
@@ -30,7 +30,7 @@ var DefaultPCA9685Config = PCA9685Config{
 func NewPCA9685(bus i2c.Bus, config PCA9685Config) (types.PWM, error) {
 	pwm := pca9685Driver{
 		values: make(map[int]int),
-		driver: drivers.NewPCA9685(byte(config.Address), bus),
+		driver: pca9685.New(byte(config.Address), bus),
 		config: config,
 		mu:     &sync.Mutex{},
 	}
@@ -54,8 +54,8 @@ func (p *pca9685Driver) Set(pin int, value float64) error {
 	}
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	off := int(value * 40.96)
-	p.values[pin] = off
+	off := uint16(value * 40.96)
+	p.values[pin] = int(off)
 	return p.driver.SetPwm(pin, 0, off)
 }
 
@@ -69,7 +69,7 @@ func (p *pca9685Driver) On(pin int) error {
 		v = 4095
 		p.values[pin] = v
 	}
-	return p.driver.SetPwm(pin, 0, v)
+	return p.driver.SetPwm(pin, 0, uint16(v))
 }
 
 func (p *pca9685Driver) Off(pin int) error {
