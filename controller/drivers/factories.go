@@ -11,6 +11,7 @@ import (
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
+	"github.com/reef-pi/drivers/tplink"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
 	"github.com/reef-pi/rpi/i2c"
@@ -42,6 +43,8 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		return pico_board.HalAdapter, nil
 	case "ph-ezo":
 		return drivers.EzoHalAdapter, nil
+	case "hs1xx":
+		return tplink.HALAdapter, nil
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
 	}
