@@ -63,17 +63,12 @@ func TestLightingAPI(t *testing.T) {
 	}
 	channels := make(map[int]Channel)
 
-	d, err := json.Marshal(&FixedConfig{Value: 10})
-
-	if err != nil {
-		t.Fatal(err)
-	}
 	channels[1] = Channel{
 		Name: "ch1",
 		Min:  12,
 		Profile: Profile{
 			Type:   "fixed",
-			Config: d,
+			Config: []byte(`{"value":10}`),
 		},
 	}
 	l := Light{
@@ -104,15 +99,7 @@ func TestLightingAPI(t *testing.T) {
 	body.Reset()
 	ch, _ := channels[1]
 	ch.Profile.Type = "auto"
-	a, err := json.Marshal(&AutoConfig{
-		Values: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
-	})
-
-	if err != nil {
-		t.Fatal(err)
-	}
-	ch.Profile.Config = a
-	ch.Profile.Type = "auto"
+	ch.Profile.Config = []byte(`{"values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}`)
 	ch.Reverse = true
 	l.Channels[1] = ch
 	c.syncLights()
@@ -120,7 +107,7 @@ func TestLightingAPI(t *testing.T) {
 	if err := c.On("1", true); err == nil {
 		t.Error("On api is not implemented yet")
 	}
-	c.StopCycle()
+	c.Stop()
 	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
 		t.Fatal("Delete light using api")
 	}

@@ -2,6 +2,7 @@ package lighting
 
 import (
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -45,9 +46,34 @@ func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.
 func (c *Controller) Start() {
 	go c.StartCycle()
 }
+func (c *Controller) StartCycle() {
+	ticker := time.NewTicker(c.config.Interval)
+	log.Println("Starting lighting cycle")
+	c.mu.Lock()
+	c.running = true
+	c.mu.Unlock()
+	c.syncLights()
+	for {
+		select {
+		case <-c.stopCh:
+			ticker.Stop()
+			return
+		case <-ticker.C:
+			c.syncLights()
+		}
+	}
+}
 
 func (c *Controller) Stop() {
-	c.StopCycle()
+	c.mu.Lock()
+	if !c.running {
+		log.Println("lighting subsystem: controller is not running.")
+		return
+	}
+	c.mu.Unlock()
+	c.stopCh <- struct{}{}
+	c.running = false
+	log.Println("Stopped lighting cycle")
 }
 
 func (c *Controller) Setup() error {
