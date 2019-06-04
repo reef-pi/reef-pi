@@ -25,9 +25,6 @@ type Channel struct {
 	profile  pwm_profile.Profile
 }
 
-func (ch Channel) GetValue(t time.Time) float64 {
-	return ch.profile.Get(t)
-}
 func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	if ch.Reverse {
 		v = 100 - v
@@ -38,4 +35,27 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	if err := c.jacks.Control(jack, pv); err != nil {
 		log.Println("ERROR: lighting-subsystem: Failed to set pwm value. Error:", err)
 	}
+}
+
+func (ch *Channel) ProfileValue(t time.Time) (float64, error) {
+	if ch.profile == nil {
+		spec := pwm_profile.ProfileSpec{
+			Name:   ch.Name,
+			Type:   ch.Profile.Type,
+			Config: ch.Profile.Config,
+		}
+		p, err := spec.CreateProfile()
+		if err != nil {
+			return 0, err
+		}
+		ch.profile = p
+	}
+	v := ch.profile.Get(t)
+	if (ch.Min > 0) && (v < float64(ch.Min)) {
+		return float64(ch.StartMin), nil
+	}
+	if (ch.Max > 0) && (v > float64(ch.Max)) {
+		return float64(ch.Max), nil
+	}
+	return v, nil
 }

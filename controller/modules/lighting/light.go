@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"time"
-
-	"github.com/reef-pi/reef-pi/pwm_profile"
 )
 
 type Light struct {
@@ -96,35 +94,11 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
-		spec := pwm_profile.ProfileSpec{
-			Name:   ch.Name,
-			Type:   ch.Profile.Type,
-			Config: ch.Profile.Config,
-		}
-		p, err := spec.CreateProfile()
+		v, err := ch.ProfileValue(time.Now())
 		if err != nil {
-			log.Println("ERROR:lighting subystem. Profile creation failed for channel:", ch.Name, "light:", light.Name, "Error:", err)
-			continue
-		}
-		v := p.Get(time.Now())
-		if (ch.Min > 0) && (v < float64(ch.Min)) {
-			log.Printf("Lighting: Calculated value(%f) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.Min)
-			v = float64(ch.StartMin)
-		} else if (ch.Max > 0) && (v > float64(ch.Max)) {
-			log.Printf("Lighting: Calculated value(%f) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.Max, ch.Max)
-			v = float64(ch.Max)
+			log.Println("ERROR: lighting subsystem. Profile value computation error. Light:", light.Name, "channel:", ch.Name, "Error:", err)
 		}
 		c.UpdateChannel(light.Jack, ch, v)
 		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)
-	}
-}
-func (c *Controller) syncLights() {
-	lights, err := c.List()
-	if err != nil {
-		log.Println("ERROR: lighting sub-system:  Failed to list lights. Error:", err)
-		return
-	}
-	for _, light := range lights {
-		c.syncLight(light)
 	}
 }

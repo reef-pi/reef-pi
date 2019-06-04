@@ -95,3 +95,13 @@ func (c *Controller) Setup() error {
 func (c *Controller) On(id string, on bool) error {
 	return fmt.Errorf("lighting subsystem does not support 'on' api yet")
 }
+func (c *Controller) syncLights() {
+	lights, err := c.List()
+	if err != nil {
+		log.Println("ERROR: lighting sub-system:  Failed to list lights. Error:", err)
+		return
+	}
+	for _, light := range lights {
+		c.syncLight(light)
+	}
+}
