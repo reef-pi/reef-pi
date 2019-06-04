@@ -18,6 +18,8 @@ type ProfileSpec struct {
 
 func (p *ProfileSpec) CreateProfile() (Profile, error) {
 	switch p.Type {
+	case "fixed":
+		fallthrough
 	case "manual":
 		return Manual(p.Config)
 	case "loop":
