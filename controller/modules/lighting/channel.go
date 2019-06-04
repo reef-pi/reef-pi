@@ -2,9 +2,10 @@ package lighting
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/pwm_profile"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/pwm_profile"
 )
 
 type Profile struct {

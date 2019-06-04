@@ -3,9 +3,10 @@ package lighting
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/pwm_profile"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/pwm_profile"
 )
 
 type Light struct {
