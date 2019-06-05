@@ -24,6 +24,7 @@ const (
 	TimerBucket            = "timers"
 	ErrorBucket            = "errors"
 	DriverBucket           = "drivers"
+	PWMProfilesBucket      = "pwm_profiles"
 )
 
 type Store interface {

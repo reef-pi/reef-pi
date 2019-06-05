@@ -12,6 +12,8 @@ type Light struct {
 	Name     string          `json:"name"`
 	Channels map[int]Channel `json:"channels"`
 	Jack     string          `json:"jack"`
+	Enable   bool            `json:"enable"`
+	Profile  string          `json:"profile"`
 }
 
 func (c *Controller) Get(id string) (Light, error) {

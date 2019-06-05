@@ -14,17 +14,19 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/pwm_profile"
 )
 
 const Bucket = storage.ReefPiBucket
 
 type ReefPi struct {
-	store   storage.Store
-	jacks   *connectors.Jacks
-	outlets *connectors.Outlets
-	inlets  *connectors.Inlets
-	ais     *connectors.AnalogInputs
-	drivers *drivers.Drivers
+	store        storage.Store
+	jacks        *connectors.Jacks
+	outlets      *connectors.Outlets
+	inlets       *connectors.Inlets
+	ais          *connectors.AnalogInputs
+	drivers      *drivers.Drivers
+	pwm_profiles *pwm_profile.Manager
 
 	subsystems map[string]controller.Subsystem
 	settings   settings.Settings
@@ -75,6 +77,10 @@ func New(version, database string) (*ReefPi, error) {
 	if err != nil {
 		log.Println("ERROR: failed to initialize drivers. Error:", err)
 	}
+	profiles, err := pwm_profile.NewManager(store)
+	if err != nil {
+		log.Println("ERROR: failed to initialize pwm profile manager. Error:", err)
+	}
 
 	jacks := connectors.NewJacks(drvrs, store)
 	outlets := connectors.NewOutlets(drvrs, store)
@@ -82,18 +88,19 @@ func New(version, database string) (*ReefPi, error) {
 	ais := connectors.NewAnalogInputs(drvrs, store)
 
 	r := &ReefPi{
-		bus:        bus,
-		store:      store,
-		settings:   s,
-		telemetry:  tele,
-		jacks:      jacks,
-		outlets:    outlets,
-		inlets:     inlets,
-		ais:        ais,
-		drivers:    drvrs,
-		subsystems: make(map[string]controller.Subsystem),
-		version:    version,
-		a:          utils.NewAuth(Bucket, store),
+		bus:          bus,
+		store:        store,
+		settings:     s,
+		telemetry:    tele,
+		jacks:        jacks,
+		outlets:      outlets,
+		inlets:       inlets,
+		ais:          ais,
+		drivers:      drvrs,
+		pwm_profiles: profiles,
+		subsystems:   make(map[string]controller.Subsystem),
+		version:      version,
+		a:            utils.NewAuth(Bucket, store),
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
@@ -115,6 +122,9 @@ func (r *ReefPi) Start() error {
 		return err
 	}
 	if err := r.ais.Setup(); err != nil {
+		return err
+	}
+	if err := r.pwm_profiles.Setup(); err != nil {
 		return err
 	}
 	if err := r.loadSubsystems(); err != nil {
@@ -146,6 +156,7 @@ func (r *ReefPi) Stop() error {
 	r.store.Close()
 	r.bus.Close()
 	r.drivers.Close()
+	r.pwm_profiles.Close()
 	log.Println("reef-pi is shutting down")
 	return nil
 }

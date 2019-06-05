@@ -11,6 +11,7 @@ type Profile interface {
 }
 
 type ProfileSpec struct {
+	ID     string          `json:"id"`
 	Name   string          `json:"name"`
 	Type   string          `json:"type"`
 	Config json.RawMessage `json:"config"`
