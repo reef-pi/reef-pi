@@ -14,6 +14,8 @@ type ProfileSpec struct {
 	Name   string          `json:"name"`
 	Type   string          `json:"type"`
 	Config json.RawMessage `json:"config"`
+	Min    float64         `json:"min"`
+	Max    float64         `json:"max"`
 }
 
 func (p *ProfileSpec) CreateProfile() (Profile, error) {
@@ -27,7 +29,7 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 	case "auto":
 		return Auto(p.Config)
 	case "diurnal":
-		return Diurnal(p.Config)
+		return Diurnal(p.Config, p.Min, p.Max)
 	case "composite":
 		return Composite(p.Config)
 	default:

@@ -15,9 +15,9 @@ type Profile struct {
 
 type Channel struct {
 	Name     string  `json:"name"`
-	Min      int     `json:"min"`
+	Min      float64 `json:"min"`
 	StartMin int     `json:"start_min"`
-	Max      int     `json:"max"`
+	Max      float64 `json:"max"`
 	Reverse  bool    `json:"reverse"`
 	Pin      int     `json:"pin"`
 	Color    string  `json:"color"`
@@ -43,6 +43,8 @@ func (ch *Channel) ProfileValue(t time.Time) (float64, error) {
 			Name:   ch.Name,
 			Type:   ch.Profile.Type,
 			Config: ch.Profile.Config,
+			Min:    ch.Min,
+			Max:    ch.Max,
 		}
 		p, err := spec.CreateProfile()
 		if err != nil {

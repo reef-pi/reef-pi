@@ -10,12 +10,10 @@ func TestDiurnal(t *testing.T) {
 	conf := `
 {
 	"start":"10:00",
-	"end": "19:30",
-	"min":13,
-	"max":100
+	"end": "19:30"
 }
 `
-	d, err := Diurnal([]byte(conf))
+	d, err := Diurnal([]byte(conf), 13, 100)
 	if err != nil {
 		t.Error(err)
 	}
@@ -25,5 +23,13 @@ func TestDiurnal(t *testing.T) {
 	}
 	if d.Get(t1) != 0 {
 		t.Error("Exp")
+	}
+	t2, err := time.Parse(tFormat, "11:20")
+	if err != nil {
+		t.Error(err)
+	}
+	if d.Get(t2) != 77.64757951804073 {
+		t.Error(d.Get(t2))
+
 	}
 }
