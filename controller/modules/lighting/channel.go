@@ -1,17 +1,11 @@
 package lighting
 
 import (
-	"encoding/json"
 	"log"
 	"time"
 
 	"github.com/reef-pi/reef-pi/pwm_profile"
 )
-
-type Profile struct {
-	Type   string          `json:"type"`
-	Config json.RawMessage `json:"config"`
-}
 
 type Channel struct {
 	Name     string  `json:"name"`
@@ -21,7 +15,7 @@ type Channel struct {
 	Reverse  bool    `json:"reverse"`
 	Pin      int     `json:"pin"`
 	Color    string  `json:"color"`
-	Profile  Profile `json:"profile"`
+	Profile  string  `json:"profile"`
 	profile  pwm_profile.Profile
 }
 
@@ -37,22 +31,25 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	}
 }
 
-func (ch *Channel) ProfileValue(t time.Time) (float64, error) {
+func (c *Controller) ProfileValue(ch Channel, t time.Time) (float64, error) {
+	var v float64
+	if ch.Profile == "" {
+		return float64(ch.Min), nil
+	}
 	if ch.profile == nil {
-		spec := pwm_profile.ProfileSpec{
-			Name:   ch.Name,
-			Type:   ch.Profile.Type,
-			Config: ch.Profile.Config,
-			Min:    ch.Min,
-			Max:    ch.Max,
+		spec, err := c.pManager.Get(ch.Profile)
+		if err != nil {
+			return 0, err
 		}
+		spec.Min = ch.Min
+		spec.Max = ch.Max
 		p, err := spec.CreateProfile()
 		if err != nil {
 			return 0, err
 		}
 		ch.profile = p
 	}
-	v := ch.profile.Get(t)
+	v = ch.profile.Get(t)
 	if (ch.Min > 0) && (v < float64(ch.Min)) {
 		return float64(ch.StartMin), nil
 	}

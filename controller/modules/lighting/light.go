@@ -13,7 +13,6 @@ type Light struct {
 	Channels map[int]Channel `json:"channels"`
 	Jack     string          `json:"jack"`
 	Enable   bool            `json:"enable"`
-	Profile  string          `json:"profile"`
 }
 
 func (c *Controller) Get(id string) (Light, error) {
@@ -46,15 +45,7 @@ func (c *Controller) Create(l Light) error {
 		l.Channels = make(map[int]Channel)
 	}
 	for i, pin := range j.Pins {
-		ch, ok := l.Channels[pin]
-		if !ok {
-			ch = Channel{
-				Profile: Profile{
-					Type:   "fixed",
-					Config: []byte(`{"value": 0}`),
-				},
-			}
-		}
+		ch := l.Channels[pin]
 		ch.Pin = pin
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("channel-%d", i+1)
@@ -95,8 +86,11 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) syncLight(light Light) {
+	if !light.Enable {
+		return
+	}
 	for _, ch := range light.Channels {
-		v, err := ch.ProfileValue(time.Now())
+		v, err := c.ProfileValue(ch, time.Now())
 		if err != nil {
 			log.Println("ERROR: lighting subsystem. Profile value computation error. Light:", light.Name, "channel:", ch.Name, "Error:", err)
 		}

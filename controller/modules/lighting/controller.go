@@ -11,6 +11,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/pwm_profile"
 )
 
 const Bucket = storage.LightingBucket
@@ -25,21 +26,23 @@ var DefaultConfig = Config{
 }
 
 type Controller struct {
-	jacks   *connectors.Jacks
-	stopCh  chan struct{}
-	config  Config
-	running bool
-	mu      *sync.Mutex
-	c       controller.Controller
+	jacks    *connectors.Jacks
+	pManager *pwm_profile.Manager
+	stopCh   chan struct{}
+	config   Config
+	running  bool
+	mu       *sync.Mutex
+	c        controller.Controller
 }
 
-func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
+func New(conf Config, c controller.Controller, jacks *connectors.Jacks, pManager *pwm_profile.Manager, bus i2c.Bus) (*Controller, error) {
 	return &Controller{
-		c:      c,
-		jacks:  jacks,
-		config: conf,
-		stopCh: make(chan struct{}),
-		mu:     &sync.Mutex{},
+		c:        c,
+		jacks:    jacks,
+		pManager: pManager,
+		config:   conf,
+		stopCh:   make(chan struct{}),
+		mu:       &sync.Mutex{},
 	}, nil
 }
 

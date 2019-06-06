@@ -37,7 +37,8 @@ func TestLightingAPI(t *testing.T) {
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c, err := New(config, con, jacks, i2c.MockBus())
+
+	c, err := New(config, con, jacks, nil, i2c.MockBus())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,10 +67,6 @@ func TestLightingAPI(t *testing.T) {
 	channels[1] = Channel{
 		Name: "ch1",
 		Min:  12,
-		Profile: Profile{
-			Type:   "fixed",
-			Config: []byte(`{"value":10}`),
-		},
 	}
 	l := Light{
 		Jack:     jacksList[0].ID,
@@ -98,8 +95,6 @@ func TestLightingAPI(t *testing.T) {
 	c.Setup()
 	body.Reset()
 	ch, _ := channels[1]
-	ch.Profile.Type = "auto"
-	ch.Profile.Config = []byte(`{"values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}`)
 	ch.Reverse = true
 	l.Channels[1] = ch
 	c.syncLights()
