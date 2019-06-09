@@ -7,21 +7,12 @@ import (
 	"time"
 )
 
-type Channel struct {
-	Name     string  `json:"name"`
-	Min      int     `json:"min"`
-	StartMin int     `json:"start_min"`
-	Max      int     `json:"max"`
-	Reverse  bool    `json:"reverse"`
-	Pin      int     `json:"pin"`
-	Color    string  `json:"color"`
-	Profile  Profile `json:"profile"`
-}
 type Light struct {
 	ID       string          `json:"id"`
 	Name     string          `json:"name"`
 	Channels map[int]Channel `json:"channels"`
 	Jack     string          `json:"jack"`
+	Enable   bool            `json:"enable"`
 }
 
 func (c *Controller) Get(id string) (Light, error) {
@@ -54,15 +45,7 @@ func (c *Controller) Create(l Light) error {
 		l.Channels = make(map[int]Channel)
 	}
 	for i, pin := range j.Pins {
-		ch, ok := l.Channels[pin]
-		if !ok {
-			ch = Channel{
-				Profile: Profile{
-					Type:   "fixed",
-					Config: []byte(`{"value": 0}`),
-				},
-			}
-		}
+		ch := l.Channels[pin]
 		ch.Pin = pin
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("channel-%d", i+1)
@@ -103,14 +86,13 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) syncLight(light Light) {
+	if !light.Enable {
+		return
+	}
 	for _, ch := range light.Channels {
-		v := ch.GetValue(time.Now())
-		if (ch.Min > 0) && (v < float64(ch.Min)) {
-			log.Printf("Lighting: Calculated value(%f) for channel '%s' is below minimum threshold(%d). Resetting to 1\n", v, ch.Name, ch.Min)
-			v = float64(ch.StartMin)
-		} else if (ch.Max > 0) && (v > float64(ch.Max)) {
-			log.Printf("Lighting: Calculated value(%f) for channel '%s' is above maximum threshold(%d). Resetting to %d\n", v, ch.Name, ch.Max, ch.Max)
-			v = float64(ch.Max)
+		v, err := c.ProfileValue(ch, time.Now())
+		if err != nil {
+			log.Println("ERROR: lighting subsystem. Profile value computation error. Light:", light.Name, "channel:", ch.Name, "Error:", err)
 		}
 		c.UpdateChannel(light.Jack, ch, v)
 		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)

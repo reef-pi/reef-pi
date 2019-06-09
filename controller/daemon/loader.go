@@ -101,7 +101,7 @@ func (r *ReefPi) loadLightingSubsystem(bus i2c.Bus) error {
 		DevMode:  r.settings.Capabilities.DevMode,
 		Interval: 30 * time.Second,
 	}
-	l, err := lighting.New(conf, r.Controller(), r.jacks, bus)
+	l, err := lighting.New(conf, r.Controller(), r.jacks, r.pManager, bus)
 	if err != nil {
 		r.settings.Capabilities.Lighting = false
 		log.Println("ERROR: Failed to initialize lighting subsystem")
