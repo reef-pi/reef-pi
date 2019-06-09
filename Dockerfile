@@ -30,4 +30,4 @@ RUN make go-get
 COPY . /gopath/src/github.com/reef-pi/reef-pi/
 
 RUN make bin
-
+USER 9000
