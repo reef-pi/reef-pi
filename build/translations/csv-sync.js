@@ -8,7 +8,7 @@ function updateMissingTranslation(masterLine, slaveArray) {
   let masterKey = masterLine.split(',')[0]
   let sK = slaveArray.find(s => masterKey === s.split(',')[0])
   if (!sK) {
-    slaveArray.push(`${masterKey},##`)
+    slaveArray.push(`${masterKey},`)
   }
 }
 function deleteDeprecatedTranslations(slaveLine, masterArray) {

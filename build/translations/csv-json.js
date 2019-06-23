@@ -21,7 +21,9 @@ function namespaceNesting(o, k, v) {
     splittedKey.shift()
     namespaceNesting(o[namespace], splittedKey.join(':'), v)
   } else {
-    o[namespace][key] = v
+    if (v) {
+      o[namespace][key] = v
+    }
   }
 }
 function genTsObj(lineArray) {
