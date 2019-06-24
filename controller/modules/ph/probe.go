@@ -28,6 +28,12 @@ type Probe struct {
 	Notify      Notify        `json:"notify"`
 }
 
+type CalibrationPoint struct {
+	Type     string  `json:"type"`
+	Expected float64 `json:"expected"`
+	Observed float64 `json:"observed"`
+}
+
 func (c *Controller) Get(id string) (Probe, error) {
 	var p Probe
 	return p, c.c.Store().Get(Bucket, id, &p)
@@ -179,6 +185,34 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
 	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
+}
+
+func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
+	if point.Expected > 14 || point.Expected <= 0 {
+		return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", point.Expected)
+	}
+
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	if p.Enable {
+		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
+	}
+
+	var calibration []hal.Measurement
+
+	//Append to existing calibration unless the point is the mid point.
+	//Receiving a mid point calibration resets the calibration process.
+	if point.Type != "mid" {
+		if err := c.c.Store().Get(CalibrationBucket, p.ID, &calibration); err != nil {
+			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
+		}
+	}
+
+	calibration = append(calibration, hal.Measurement{Expected: point.Expected, Observed: point.Observed})
+
+	return c.c.Store().Update(CalibrationBucket, p.ID, calibration)
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {

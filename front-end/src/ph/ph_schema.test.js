@@ -7,7 +7,7 @@ describe('PhValidation', () => {
     probe = {
       name: 'name',
       enable: true,
-      address: '99',
+      analog_input: '1',
       period: 60,
       alerts: true,
       minAlert: 8.0,

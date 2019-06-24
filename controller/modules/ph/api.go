@@ -18,6 +18,8 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/phprobes/{id}", e.deleteProbe).Methods("DELETE")
 	r.HandleFunc("/api/phprobes/{id}/readings", e.getReadings).Methods("GET")
 	r.HandleFunc("/api/phprobes/{id}/calibrate", e.calibrate).Methods("POST")
+	r.HandleFunc("/api/phprobes/{id}/read", e.read).Methods("GET")
+	r.HandleFunc("/api/phprobes/{id}/calibratepoint", e.calibratePoint).Methods("POST")
 }
 
 func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +28,14 @@ func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
 		return c.Calibrate(id, ms)
 	}
 	utils.JSONUpdateResponse(&ms, fn, w, r)
+}
+
+func (c *Controller) calibratePoint(w http.ResponseWriter, r *http.Request) {
+	var calibrationPoint CalibrationPoint
+	fn := func(id string) error {
+		return c.CalibratePoint(id, calibrationPoint)
+	}
+	utils.JSONUpdateResponse(&calibrationPoint, fn, w, r)
 }
 
 func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +47,17 @@ func (c *Controller) getProbe(w http.ResponseWriter, r *http.Request) {
 
 func (c *Controller) getReadings(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) { return c.statsMgr.Get(id) }
+	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) read(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		probe, err := c.Get(id)
+		if err != nil {
+			return nil, err
+		}
+		return c.Read(probe)
+	}
 	utils.JSONGetResponse(fn, w, r)
 }
 

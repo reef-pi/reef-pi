@@ -2,6 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Modal from 'modal'
 import Calibrate from './calibrate'
+import i18next from 'i18next'
 
 export default class CalibrationWizard extends React.Component {
   constructor (props) {
@@ -9,14 +10,14 @@ export default class CalibrationWizard extends React.Component {
     this.state = {
       enableMid: true,
       midCalibrated: false,
-      enableLow: false,
-      lowCalibrated: false,
-      enableHigh: false,
-      highCalibrated: false
+      enableSecond: false,
+      secondCalibrated: false,
+      reading: null
     }
     this.confirm = this.confirm.bind(this)
     this.cancel = this.cancel.bind(this)
     this.calibrate = this.calibrate.bind(this)
+    this.readProbe = this.readProbe.bind(this)
   }
 
   confirm () {
@@ -29,20 +30,42 @@ export default class CalibrationWizard extends React.Component {
 
   componentDidMount () {
     this.promise = new $.Deferred()
+    this.timer = setInterval(() => {
+      this.readProbe()
+    }, 500)
   }
 
-  calibrate (point, value) {
+  componentWillUnmount () {
+    window.clearInterval(this.timer)
+  }
+
+  readProbe () {
+    let id = this.props.probe.id
+    let that = this
+
+    fetch('/api/phprobes/' + id + '/read', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+      .then(r => r.json())
+      .then(r => {
+        that.setState({ reading: r })
+      }).catch(() => {
+        that.setState({ reading: null })
+      })
+  }
+
+  calibrate (point, expected) {
     const payload = {
       type: point,
-      value: value
+      expected: expected,
+      observed: this.state.reading
     }
 
     if (point === 'mid') {
-      this.setState({ enableMid: false })
-    } else if (point === 'low') {
-      this.setState({lowCalibrated: true, enableLow: false})
-    } else {
-      this.setState({highCalibrated: true, enableHigh: false})
+      this.setState({ enableMid: false, enableSecond: true })
+    } else if (point === 'second') {
+      this.setState({secondCalibrated: true, enableSecond: false})
     }
 
     this.props.calibrateProbe(this.props.probe.id, payload).then(() => {
@@ -50,13 +73,10 @@ export default class CalibrationWizard extends React.Component {
         this.setState({
           midCalibrated: true,
           enableMid: false,
-          enableLow: true,
-          enableHigh: true
+          enableSecond: true
         })
-      } else if (point === 'low') {
-        this.setState({lowCalibrated: true, enableLow: false})
       } else {
-        this.setState({highCalibrated: true, enableHigh: false})
+        this.setState({secondCalibrated: true, enableSecond: false})
       }
     })
   }
@@ -66,7 +86,7 @@ export default class CalibrationWizard extends React.Component {
     if (this.state.midCalibrated === false) {
       cancelButton = (
         <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.cancel}>
-          Cancel
+          {i18next.t('cancel')}
         </button>
       )
     }
@@ -75,34 +95,32 @@ export default class CalibrationWizard extends React.Component {
       <Modal>
         <div className='modal-header'>
           <h4 className='modal-title'>
-            Calibrate {this.props.probe.name}
+            {i18next.t('ph:calibrate')} {this.props.probe.name}
           </h4>
         </div>
         <div className='modal-body'>
           <Calibrate point='mid'
-            label='Midpoint'
+            label={i18next.t('ph:midpoint')}
             defaultValue='7'
             complete={this.state.midCalibrated}
             readOnly={!this.state.enableMid}
             onSubmit={this.calibrate} />
-          <Calibrate point='low'
-            label='Low'
-            defaultValue='4'
-            complete={this.state.lowCalibrated}
-            readOnly={!this.state.enableLow}
-            onSubmit={this.calibrate} />
-          <Calibrate point='high'
-            label='High'
+          <Calibrate point='second'
+            label={i18next.t('ph:second_point')}
             defaultValue='10'
-            complete={this.state.highCalibrated}
-            readOnly={!this.state.enableHigh}
+            complete={this.state.secondCalibrated}
+            readOnly={!this.state.enableSecond}
             onSubmit={this.calibrate} />
+          <div className='row'>
+            <div className='col-4'>{i18next.t('ph:current_reading')}</div>
+            <div className='col-4'>{this.state.reading}</div>
+          </div>
         </div>
         <div className='modal-footer'>
           <div className='text-center'>
             {cancelButton}
             <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.confirm}>
-              Done
+              {i18next.t('done')}
             </button>
           </div>
         </div>

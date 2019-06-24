@@ -6,6 +6,7 @@ import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { confirm, showModal } from 'utils/confirm'
 import CalibrationWizard from './calibration_wizard'
+import i18next from 'i18next'
 
 class ph extends React.Component {
   constructor (props) {
@@ -34,7 +35,7 @@ class ph extends React.Component {
             title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
             className='btn btn-sm btn-outline-info float-right'
             onClick={(e) => this.calibrateProbe(e, probe)}>
-            Calibrate
+            {i18next.t('ph:calibrate')}
           </button>
         )
         return (
@@ -90,7 +91,7 @@ class ph extends React.Component {
   deleteProbe (probe) {
     const message = (
       <div>
-        <p>This action will delete {probe.name}.</p>
+        <p>{i18next.t('ph:warn_delete')} {probe.name}.</p>
       </div>
     )
 

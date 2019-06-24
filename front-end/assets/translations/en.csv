@@ -4,10 +4,12 @@ select,Select
 enabled,Enabled
 disabled,Disabled
 cancel,Cancel
+done,Done
 loading,Loading
 documentation,Documentation
 errors,Errors
 edit,Edit
+analog_input,Analog Input
 inlet,Inlet
 delete,Delete
 since,since
@@ -169,3 +171,24 @@ temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:celcius,Celcius
 temperature:fahrenheit,Fahrenheit
+ph:calibrate,Calibrate
+ph:midpoint,Midpoint
+ph:second_point,Second Point
+ph:current_reading,Current Reading
+ph:run_calibration,Run
+ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ph:status,Ph Status
+ph:check_frequency,Check Frequency
+ph:alert_below,Alert Below
+ph:alert_above,Alert Above
+ph:warn_delete,This action will delete
+ph:name_required,Name is required
+ph:status_required,Status is required
+ph:period_required,Check Frequency is required
+ph:period_type,Check Frequency must be a number
+ph:period_min,Check Frequency must be 1 second or greater
+ph:threshold_required,Threshold is required when alerts are enabled
+ph:threshold_type,Threshold must be a number
+ph:threshold_less_than,Alert Below must be less than Alert Above
+ph:threshold_greater_than,Alert Above must be greater than Alert Below
+ph:analog_input_required,Analog Input is required

@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
 import { FaCheck } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
+import i18next from 'i18next'
 
 export const Calibrate = ({
   values,
@@ -46,7 +47,7 @@ export const Calibrate = ({
             )
             : <input type='submit'
               disabled={readOnly}
-              value='Run'
+              value={i18next.t('ph:run_calibration')}
               className='btn btn-sm btn-outline-primary' />
           }
         </div>
