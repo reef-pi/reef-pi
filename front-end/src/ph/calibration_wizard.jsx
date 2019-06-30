@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import Modal from 'modal'
 import Calibrate from './calibrate'
 import i18next from 'i18next'
@@ -33,7 +32,6 @@ export default class CalibrationWizard extends React.Component {
   componentWillUnmount () {
     window.clearInterval(this.timer)
   }
-
 
   calibrate (point, expected) {
     const payload = {
@@ -111,5 +109,4 @@ export default class CalibrationWizard extends React.Component {
       </Modal>
     )
   }
-
 }

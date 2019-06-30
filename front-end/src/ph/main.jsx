@@ -61,7 +61,7 @@ class ph extends React.Component {
     this.setState({currentProbe: probe, showCalibrate: true})
   }
 
-  dismissModal(){
+  dismissModal () {
     this.setState({currentProbe: null, showCalibrate: false})
   }
 
