@@ -9,7 +9,7 @@ describe('PhValidation', () => {
       enable: true,
       analog_input: '1',
       period: 60,
-      alerts: true,
+      notify: true,
       minAlert: 8.0,
       maxAlert: 8.6
     }
@@ -23,7 +23,7 @@ describe('PhValidation', () => {
   })
 
   it('should be valid for no alerts', () => {
-    probe.alerts = false
+    probe.notify = false
     probe.minAlert = 0
     probe.maxAlert = 0
 
