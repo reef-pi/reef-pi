@@ -58,7 +58,7 @@ describe('Ph Calibration', () => {
       })
     })
     const probe = {id: 1}
-    const wrapper = shallow(<CalibrationWizard probe={probe} 
+    const wrapper = shallow(<CalibrationWizard probe={probe}
       currentReading={[8.7, 9.0, 7.5]}
       cancel={fn}
       confirm={fn}
