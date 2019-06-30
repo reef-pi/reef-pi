@@ -8,6 +8,7 @@ export const rootReducer = (state, action) => {
   var macroUsage = state.macro_usage
   var tcUsage = state.tc_usage
   var pHreadings = state.ph_readings
+  var phReading = []
 
   switch (action.type) {
     case 'LOG_DELETED':
@@ -67,6 +68,9 @@ export const rootReducer = (state, action) => {
     case 'PH_PROBE_READINGS_LOADED':
       pHreadings[action.payload.id] = action.payload.readings
       return { ...state, ph_readings: pHreadings }
+    case 'PH_PROBE_READING_COMPLETE':
+      phReading[action.payload.id] = action.payload.reading
+      return { ...state, ph_reading: {...phReading} }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
     case 'SETTINGS_LOADED':

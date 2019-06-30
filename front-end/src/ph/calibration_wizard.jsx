@@ -11,13 +11,9 @@ export default class CalibrationWizard extends React.Component {
       enableMid: true,
       midCalibrated: false,
       enableSecond: false,
-      secondCalibrated: false,
-      reading: null
+      secondCalibrated: false
     }
-    this.confirm = this.confirm.bind(this)
-    this.cancel = this.cancel.bind(this)
     this.calibrate = this.calibrate.bind(this)
-    this.readProbe = this.readProbe.bind(this)
   }
 
   confirm () {
@@ -29,9 +25,8 @@ export default class CalibrationWizard extends React.Component {
   }
 
   componentDidMount () {
-    this.promise = new $.Deferred()
     this.timer = setInterval(() => {
-      this.readProbe()
+      this.props.readProbe(this.props.probe.id)
     }, 500)
   }
 
@@ -39,21 +34,6 @@ export default class CalibrationWizard extends React.Component {
     window.clearInterval(this.timer)
   }
 
-  readProbe () {
-    let id = this.props.probe.id
-    let that = this
-
-    fetch('/api/phprobes/' + id + '/read', {
-      method: 'GET',
-      credentials: 'same-origin'
-    })
-      .then(r => r.json())
-      .then(r => {
-        that.setState({ reading: r })
-      }).catch(() => {
-        that.setState({ reading: null })
-      })
-  }
 
   calibrate (point, expected) {
     const payload = {
@@ -85,7 +65,7 @@ export default class CalibrationWizard extends React.Component {
     let cancelButton = null
     if (this.state.midCalibrated === false) {
       cancelButton = (
-        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.cancel}>
+        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.props.cancel}>
           {i18next.t('cancel')}
         </button>
       )
@@ -113,13 +93,17 @@ export default class CalibrationWizard extends React.Component {
             onSubmit={this.calibrate} />
           <div className='row'>
             <div className='col-4'>{i18next.t('ph:current_reading')}</div>
-            <div className='col-4'>{this.state.reading}</div>
+            <div className='col-4'>
+              {
+                this.props.currentReading[this.props.probe.id]
+              }
+            </div>
           </div>
         </div>
         <div className='modal-footer'>
           <div className='text-center'>
             {cancelButton}
-            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.confirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.props.confirm}>
               {i18next.t('done')}
             </button>
           </div>
@@ -127,4 +111,5 @@ export default class CalibrationWizard extends React.Component {
       </Modal>
     )
   }
+
 }

@@ -31,6 +31,7 @@ const initialState = {
   macro_usage: {},
   tc_usage: {},
   ph_readings: {},
+  ph_reading: [],
   tc_sensors: [],
   telemetry: {
   },

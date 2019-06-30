@@ -34,6 +34,22 @@ export const fetchPhProbes = () => {
   }))
 }
 
+export const readProbe = (id) => {
+  return (reduxGet({
+    url: '/api/phprobes/' + id + '/read',
+    success: probeReadComplete(id)
+  }))
+}
+
+export const probeReadComplete = (id) => {
+  return (s) => {
+    return ({
+      type: 'PH_PROBE_READING_COMPLETE',
+      payload: {reading: s, id: id}
+    })
+  }
+}
+
 export const fetchProbeReadings = (id) => {
   return (reduxGet({
     url: '/api/phprobes/' + id + '/readings',
