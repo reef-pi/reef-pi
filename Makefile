@@ -4,7 +4,7 @@ VERSION=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 
 ifeq ($(OS), Windows_NT)
-	BINARY=./bin/reef=pi.exe
+	BINARY=./bin/reef-pi.exe
 endif
 
 .PHONY:bin

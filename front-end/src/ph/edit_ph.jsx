@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import Chart from './chart'
+import i18next from 'i18next'
 
 const EditPh = ({
   values,
@@ -24,9 +25,7 @@ const EditPh = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(
-        'The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.'
-      )
+      showError(i18next.t('ph:validation_error'))
     }
   }
 
@@ -61,7 +60,7 @@ const EditPh = ({
       <div className='row'>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+            <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -74,7 +73,7 @@ const EditPh = ({
         </div>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='analog_input'>Analog Input</label>
+            <label htmlFor='analog_input'>{i18next.t('analog_input')}</label>
             <Field
               name='analog_input'
               component='select'
@@ -84,7 +83,7 @@ const EditPh = ({
               })}
             >
               <option value='' className='d-none'>
-                  -- Select --
+                  -- {i18next.t('select')} --
               </option>
               {analogInputOptions()}
             </Field>
@@ -93,7 +92,7 @@ const EditPh = ({
         </div>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='period'>Check Frequency</label>
+            <label htmlFor='period'>{i18next.t('ph:check_frequency')}</label>
             <div className='input-group'>
               <Field
                 name='period'
@@ -105,9 +104,9 @@ const EditPh = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                  {i18next.t('second_s')}
                 </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
+                <span className='input-group-text d-flex d-lg-none'>{i18next.t('sec')}</span>
               </div>
               <ErrorFor errors={errors} touched={touched} name='period' />
             </div>
@@ -116,7 +115,7 @@ const EditPh = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>Ph Status</label>
+            <label htmlFor='enable'>{i18next.t('ph:status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
@@ -125,8 +124,8 @@ const EditPh = ({
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
@@ -137,28 +136,28 @@ const EditPh = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='alerts'>Alerts</label>
+            <label htmlFor='notify'>{i18next.t('alerts')}</label>
             <Field
-              name='alerts'
+              name='notify'
               component={BooleanSelect}
               disabled={readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('alerts', touched, errors)
+                'is-invalid': ShowError('notify', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
-            <ErrorFor errors={errors} touched={touched} name='alerts' />
+            <ErrorFor errors={errors} touched={touched} name='notify' />
           </div>
         </div>
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='minAlert'>Alert Below</label>
+            <label htmlFor='minAlert'>{i18next.t('ph:alert_below')}</label>
             <Field
               name='minAlert'
-              readOnly={readOnly || values.alerts === false}
+              readOnly={readOnly || values.notify === false}
               className={classNames('form-control', {
                 'is-invalid': ShowError('minAlert', touched, errors)
               })}
@@ -169,10 +168,10 @@ const EditPh = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='maxAlert'>Alert Above</label>
+            <label htmlFor='maxAlert'>{i18next.t('ph:alert_above')}</label>
             <Field
               name='maxAlert'
-              readOnly={readOnly || values.alerts === false}
+              readOnly={readOnly || values.notify === false}
               className={classNames('form-control', {
                 'is-invalid': ShowError('maxAlert', touched, errors)
               })}
@@ -186,7 +185,7 @@ const EditPh = ({
         <div className='col-12'>
           <input
             type='submit'
-            value='Save'
+            value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />

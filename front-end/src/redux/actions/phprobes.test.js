@@ -65,7 +65,7 @@ describe('probe actions', () => {
   })
 
   it('calibrateProbe', () => {
-    fetchMock.postOnce('/api/phprobes/1/calibrate', {})
+    fetchMock.postOnce('/api/phprobes/1/calibratepoint', {})
     const store = mockStore()
     return store.dispatch(calibrateProbe('1')).then(() => {
       expect(store.getActions()).toEqual([probeCalibrated({})])

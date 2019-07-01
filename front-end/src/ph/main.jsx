@@ -1,24 +1,27 @@
 import React from 'react'
-import { fetchPhProbes, createProbe, updateProbe, deleteProbe, calibrateProbe } from 'redux/actions/phprobes'
+import { fetchPhProbes, createProbe, updateProbe, deleteProbe, calibrateProbe, readProbe } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 import PhForm from './ph_form'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
-import { confirm, showModal } from 'utils/confirm'
+import { confirm } from 'utils/confirm'
 import CalibrationWizard from './calibration_wizard'
+import i18next from 'i18next'
 
 class ph extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      addProbe: false
+      addProbe: false,
+      showCalibrate: false,
+      currentProbe: null
     }
     this.probeList = this.probeList.bind(this)
     this.toggleAddProbeDiv = this.toggleAddProbeDiv.bind(this)
     this.deleteProbe = this.deleteProbe.bind(this)
     this.createProbe = this.createProbe.bind(this)
     this.updateProbe = this.updateProbe.bind(this)
-    this.calibrateProbe = this.calibrateProbe.bind(this)
+    this.dismissModal = this.dismissModal.bind(this)
   }
 
   componentDidMount () {
@@ -34,7 +37,7 @@ class ph extends React.Component {
             title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
             className='btn btn-sm btn-outline-info float-right'
             onClick={(e) => this.calibrateProbe(e, probe)}>
-            Calibrate
+            {i18next.t('ph:calibrate')}
           </button>
         )
         return (
@@ -55,8 +58,11 @@ class ph extends React.Component {
   }
 
   calibrateProbe (e, probe) {
-    e.stopPropagation()
-    showModal(<CalibrationWizard probe={probe} calibrateProbe={this.props.calibrateProbe} />)
+    this.setState({currentProbe: probe, showCalibrate: true})
+  }
+
+  dismissModal () {
+    this.setState({currentProbe: null, showCalibrate: false})
   }
 
   valuesToProbe (values) {
@@ -90,7 +96,7 @@ class ph extends React.Component {
   deleteProbe (probe) {
     const message = (
       <div>
-        <p>This action will delete {probe.name}.</p>
+        <p>{i18next.t('ph:warn_delete')} {probe.name}.</p>
       </div>
     )
 
@@ -115,26 +121,39 @@ class ph extends React.Component {
       />
     }
 
+    var calibrationModal = null
+    if (this.state.showCalibrate) {
+      calibrationModal = <CalibrationWizard probe={this.state.currentProbe}
+        currentReading={this.props.currentReading}
+        readProbe={this.props.readProbe}
+        calibrateProbe={this.props.calibrateProbe}
+        confirm={this.dismissModal}
+        cancel={this.dismissModal} />
+    }
+
     return (
-      <ul className='list-group list-group-flush'>
-        <CollapsibleList>
-          {this.probeList()}
-        </CollapsibleList>
-        <li className='list-group-item add-probe'>
-          <div className='row'>
-            <div className='col'>
-              <input
-                type='button'
-                id='add_probe'
-                value={this.state.addProbe ? '-' : '+'}
-                onClick={this.toggleAddProbeDiv}
-                className='btn btn-outline-success'
-              />
+      <div>
+        {calibrationModal}
+        <ul className='list-group list-group-flush'>
+          <CollapsibleList>
+            {this.probeList()}
+          </CollapsibleList>
+          <li className='list-group-item add-probe'>
+            <div className='row'>
+              <div className='col'>
+                <input
+                  type='button'
+                  id='add_probe'
+                  value={this.state.addProbe ? '-' : '+'}
+                  onClick={this.toggleAddProbeDiv}
+                  className='btn btn-outline-success'
+                />
+              </div>
             </div>
-          </div>
-          {newProbe}
-        </li>
-      </ul>
+            {newProbe}
+          </li>
+        </ul>
+      </div>
     )
   }
 }
@@ -142,7 +161,8 @@ class ph extends React.Component {
 const mapStateToProps = state => {
   return {
     probes: state.phprobes,
-    ais: state.analog_inputs
+    ais: state.analog_inputs,
+    currentReading: state.ph_reading
   }
 }
 
@@ -152,7 +172,8 @@ const mapDispatchToProps = dispatch => {
     create: t => dispatch(createProbe(t)),
     delete: id => dispatch(deleteProbe(id)),
     update: (id, t) => dispatch(updateProbe(id, t)),
-    calibrateProbe: (id, p) => dispatch(calibrateProbe(id, p))
+    calibrateProbe: (id, p) => dispatch(calibrateProbe(id, p)),
+    readProbe: (id) => dispatch(readProbe(id))
   }
 }
 

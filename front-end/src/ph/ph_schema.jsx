@@ -1,24 +1,26 @@
 import * as Yup from 'yup'
+import i18next from 'i18next'
 
 const PhSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Name is required'),
+    .required(i18next.t('ph:name_required')),
   enable: Yup.bool()
-    .required('Timer Status is required'),
+    .required(i18next.t('ph:status_required')),
   period: Yup.number()
-    .required('Check Frequency is required')
+    .required(i18next.t('ph:period_required'))
     .integer()
-    .typeError('Check Frequency must be a number')
-    .min(1, 'Check Frequency must be 1 second or greater'),
+    .typeError(i18next.t('ph:period_type'))
+    .min(1, i18next.t('ph:period_min')),
   notify: Yup.bool(),
-  analog_input: Yup.string(),
+  analog_input: Yup.string()
+    .required(i18next.t('ph:analog_input_required')),
   minAlert: Yup.number()
     .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
-          .required('Threshold is required when alerts are enabled')
-          .typeError('Threshold must be a number')
-          .test('lessThan', 'Alert Below must be less than Alert Above', function (min) {
+          .required(i18next.t('ph:threshold_required'))
+          .typeError(i18next.t('ph:threshold_type'))
+          .test('lessThan', i18next.t('ph:threshold_less_than'), function (min) {
             return min < this.parent.maxAlert
           })
       } else { return schema }
@@ -27,9 +29,9 @@ const PhSchema = Yup.object().shape({
     .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
-          .required('Threshold is required when alerts are enabled')
-          .typeError('Threshold must be a number')
-          .test('greaterThan', 'Alert Above must be greater than Alert Below', function (max) {
+          .required(i18next.t('ph:threshold_required'))
+          .typeError(i18next.t('ph:threshold_type'))
+          .test('greaterThan', i18next.t('ph:threshold_greater_than'), function (max) {
             return max > this.parent.minAlert
           })
       } else { return schema }

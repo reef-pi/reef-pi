@@ -58,13 +58,14 @@ describe('Ph Calibration', () => {
       })
     })
     const probe = {id: 1}
-    const wrapper = shallow(<CalibrationWizard probe={probe} calibrateProbe={fn} />)
+    const wrapper = shallow(<CalibrationWizard probe={probe}
+      currentReading={[8.7, 9.0, 7.5]}
+      cancel={fn}
+      confirm={fn}
+      calibrateProbe={fn} />)
       .instance()
 
-    wrapper.cancel()
-    wrapper.confirm()
     wrapper.calibrate('mid', 7)
-    wrapper.calibrate('low', 4)
-    wrapper.calibrate('high', 10)
+    wrapper.calibrate('second', 4)
   })
 })
