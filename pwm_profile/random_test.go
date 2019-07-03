@@ -21,7 +21,7 @@ func TestRandom(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if d.Get(t1) != 0 {
-		t.Error("Exp")
+	if int(d.Get(t1)) != 85 {
+		t.Error("Expected 85, got:", d.Get(t1))
 	}
 }
