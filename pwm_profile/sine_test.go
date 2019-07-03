@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func TestDiurnal(t *testing.T) {
+func TestSine(t *testing.T) {
 	tFormat := "15:04"
 	conf := `
 {
@@ -13,7 +13,7 @@ func TestDiurnal(t *testing.T) {
 	"end": "19:30"
 }
 `
-	d, err := Diurnal([]byte(conf), 13, 100)
+	d, err := Sine([]byte(conf), 13, 100)
 	if err != nil {
 		t.Error(err)
 	}
@@ -22,13 +22,13 @@ func TestDiurnal(t *testing.T) {
 		t.Error(err)
 	}
 	if d.Get(t1) != 0 {
-		t.Error("Exp")
+		t.Error("Expected 0")
 	}
 	t2, err := time.Parse(tFormat, "11:20")
 	if err != nil {
 		t.Error(err)
 	}
-	if d.Get(t2) != 77.64757951804073 {
+	if d.Get(t2) != 50.129549888187114 {
 		t.Error(d.Get(t2))
 	}
 }
