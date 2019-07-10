@@ -6,7 +6,7 @@ disabled,desativar
 cancel,cancelar
 done,Feito
 loading,Carregar
-documentation,Documentação
+documentation,DocumentaÃ§Ã£o
 errors,Erros
 edit,Editar
 analog_input,Entrada Analogica
@@ -25,20 +25,20 @@ alerts,Alertas
 unit,Unidades
 configure,Configurar
 language:language,Lingua
-language:fr,FranÃ§ais
+language:fr,FranÃƒÂ§ais
 language:en,English
 language:de,Deutsch
-language:es,EspaÃ±ol
+language:es,EspaÃƒÂ±ol
 language:it,Italiano
-language:hi,à¤¹à¤¿à¤¨à¥à¤¦à¥€
-language:fa,ÙØ§Ø±Ø³ÛŒ
-language:pt,Português
+language:hi,Ã Â¤Â¹Ã Â¤Â¿Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¦Ã Â¥â‚¬
+language:fa,Ã™ÂÃ˜Â§Ã˜Â±Ã˜Â³Ã›Å’
+language:pt,PortuguÃªs
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
 configuration:authentication:error_pass,Tens que inserir uma password
-configuration:tab:settings,Configurações
-configuration:tab:connectors,Ligações
-configuration:tab:authentication,Autenticação
+configuration:tab:settings,ConfiguraÃ§Ãµes
+configuration:tab:connectors,LigaÃ§Ãµes
+configuration:tab:authentication,AutenticaÃ§Ã£o
 configuration:tab:drivers,Controladores
 configuration:tab:errors,Erros
 configuration:tab:telemetry,Telemetria
@@ -48,7 +48,7 @@ configuration:admin:sign_out,Desligar o Login
 configuration:admin:reload,Recarregar
 configuration:admin:reboot,Reninciar
 configuration:admin:poweroff,Desligar
-configuration:about:version,Versão
+configuration:about:version,VersÃ£o
 configuration:about:website,Site
 configuration:about:status,Estado
 configuration:about:current_time,Hora Atual
@@ -61,7 +61,7 @@ capabilities:dashboard,Painel Inicial
 capabilities:equipment,Equipamento
 capabilities:timers,Timers
 capabilities:lights,Luzes
-capabilities:lighting,Iluminação
+capabilities:lighting,IluminaÃ§Ã£o
 capabilities:temperature,Temperatura
 capabilities:ato,ATO
 capabilities:ph,pH
@@ -71,10 +71,10 @@ capabilities:macros,Macros
 capabilities:macro,Macro
 capabilities:camera,Camera
 capabilities:manager,Instancias
-capabilities:configuration,Configuração
+capabilities:configuration,ConfiguraÃ§Ã£o
 capabilities:log,Log
 capabilities:dev_mode,Dev Mode
-capabilities:health_check,Verificação de Estado
+capabilities:health_check,VerificaÃ§Ã£o de Estado
 log:time,Tempo
 log:emitter,Emissor
 log:type,Tipo
@@ -82,10 +82,10 @@ log:content,Conteudo
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 configuration:settings:interface,Interface
 configuration:settings:name,Nome
-configuration:settings:address,Endereço
+configuration:settings:address,EndereÃ§o
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frequencia
-configuration:settings:notification,Notificação
-configuration:settings:display,Ecrã
+configuration:settings:notification,NotificaÃ§Ã£o
+configuration:settings:display,EcrÃ£
 configuration:settings:use_https,Usar HTTPS
 configuration:settings:enable_profiling,Activar profiling
 configuration:settings:enable_prometheus,Activarprometheus
@@ -93,16 +93,16 @@ configuration:settings:capabilities,Capacidades
 configuration:settings:alert_health_check,Avisos de Estado Geral
 configuration:settings:max_memory,Maximo de Memoria
 configuration:settings:max_cpu,Maximo de CPU
-configuration:settings:name_required,Nome é obrigatório
-configuration:settings:network_interface_required,Nome do interface de rede é obrigatório
-configuration:settings:network_address_required,Endereço de rede é obrigatório
-configuration:settings:capabilities_required,Capabilities são requeridads
+configuration:settings:name_required,Nome Ã© obrigatÃ³rio
+configuration:settings:network_interface_required,Nome do interface de rede Ã© obrigatÃ³rio
+configuration:settings:network_address_required,EndereÃ§o de rede Ã© obrigatÃ³rio
+configuration:settings:capabilities_required,Capabilities sÃ£o requeridads
 health_chart:cpu_memory,CPU/Memory
 fatal_error:fatal_error,Fatal Error
-fatal_error:connection_lost,Ligação Perdida
+fatal_error:connection_lost,LigaÃ§Ã£o Perdida
 fatal_error:troubleshoot,Problemas
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
-cron:day_of_month,dias do mês
+cron:day_of_month,dias do mÃªs
 cron:hour,Horas
 cron:minute,Minutos
 cron:second,Segundos
@@ -110,43 +110,43 @@ color_picker:choose,Escolher
 collapsible:edit,Editar
 collapsible:delete,Apagar
 timers:equipment:equipment,Equipamentos
-timers:equipment:action,Acção
+timers:equipment:action,AcÃ§Ã£o
 timers:equipment:revert,Reverter
 timers:equipment:on,On
 timers:equipment:off,Off
-ato:name_required,Name é Obrigatório
-ato:status_required,ATO Status é Obrigatório
-ato:inlet_required,Inlet é Obrigatório
-ato:chk_freq,Verificar a frequência
-ato:chk_freq_required,Verificar a frequência é Obrigatório
-ato:chk_freq_number,Verificar a frequência tem que ser um número
-ato:chk_freq_number_value,Verificar a frequência must be 1 second or greater
-ato:threshold_required,Threshold é Obrigatório when notification is enabled
-ato:threshold_value,Threshold tem que ser um número
-ato:warning_delete,Esta acção vái ser removida
-ato:ato_usage,Utilização do ATO
+ato:name_required,Name Ã© ObrigatÃ³rio
+ato:status_required,ATO Status Ã© ObrigatÃ³rio
+ato:inlet_required,Inlet Ã© ObrigatÃ³rio
+ato:chk_freq,Verificar a frequÃªncia
+ato:chk_freq_required,Verificar a frequÃªncia Ã© ObrigatÃ³rio
+ato:chk_freq_number,Verificar a frequÃªncia tem que ser um nÃºmero
+ato:chk_freq_number_value,Verificar a frequÃªncia must be 1 second or greater
+ato:threshold_required,Threshold Ã© ObrigatÃ³rio when notification is enabled
+ato:threshold_value,Threshold tem que ser um nÃºmero
+ato:warning_delete,Esta acÃ§Ã£o vÃ¡i ser removida
+ato:ato_usage,UtilizaÃ§Ã£o do ATO
 ato:ato_status,Estado do ATO
 ato:control_pump,Controlo da Bomba
 ato:control_pump,Controlo da Bomba
 ato:control_pump,Controlo da Bomba
-ato:alert_after,Alertar após
+ato:alert_after,Alertar apÃ³s
 ato:disable_on_alert,Desativar alerta
-ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
-ato:validation_error,ATO Erro nas configurações, por favor corrija e tente novamente
-timers:name_required,Name é Obrigatório
-timers:timer_status_required,Estado do temporizador é Obrigatório
-timers:day_required,Dia é Obrigatório
-timers:hour_required,as horas é Obrigatórias
-timers:minute_required,Minutos  são Obrigatório
-timers:second_required,os Segundos são Obrigatório
-timers:type_required,Tipo é Obrigatório
-timers:equipment_required,Equipmento é Obrigatório
-timers:on_required,Ligar é Obrigatório
-timers:duration_required,Duração é Obrigatório
-timers:subject_required,o Assunto é Obrigatório
-timers:message_required,a Messagem é Obrigatório
-timers:validation_error,Erro nas configurações de timmer, por favor corrija e tente novamente
-timers:turn_on,Ligar é Obrigatório
+ato:total_seconds_pump_on,NÃºmero de segundos para ligar a a bomba
+ato:validation_error,ATO Erro nas configuraÃ§Ãµes, por favor corrija e tente novamente
+timers:name_required,Name Ã© ObrigatÃ³rio
+timers:timer_status_required,Estado do temporizador Ã© ObrigatÃ³rio
+timers:day_required,Dia Ã© ObrigatÃ³rio
+timers:hour_required,as horas Ã© ObrigatÃ³rias
+timers:minute_required,Minutos sÃ£o ObrigatÃ³rio
+timers:second_required,os Segundos sÃ£o ObrigatÃ³rio
+timers:type_required,Tipo Ã© ObrigatÃ³rio
+timers:equipment_required,Equipmento Ã© ObrigatÃ³rio
+timers:on_required,Ligar Ã© ObrigatÃ³rio
+timers:duration_required,DuraÃ§Ã£o Ã© ObrigatÃ³rio
+timers:subject_required,o Assunto Ã© ObrigatÃ³rio
+timers:message_required,a Messagem Ã© ObrigatÃ³rio
+timers:validation_error,Erro nas configuraÃ§Ãµes de timmer, por favor corrija e tente novamente
+timers:turn_on,Ligar Ã© ObrigatÃ³rio
 timers:turn_off,Desligar
 timers:and_then,e depois
 timers:turn_back_on,Voltar a Ligar
@@ -156,40 +156,40 @@ timers:stay_off,manter desligado
 second_s,segundos
 sec,sec
 timers:sec,sec
-timers:after,após
+timers:after,apÃ³s
 timers:subject,Assunto
 timers:message,Mensagem
 timers:timer_status,Estado do Temporizador
-timers:function,Função
-timers:equipment,Equipamento é Obrigatório
+timers:function,FunÃ§Ã£o
+timers:equipment,Equipamento Ã© ObrigatÃ³rio
 timers:reminder,Lembrete
 temperature:temperature,Temperatura
-temperature:heater_cooler,Aquecedor/refrigeração
-temperature:chart_minimum,Valor minimo gráfico
-temperature:chart_maximum,Valor Maximo gráfico
-temperature:validation_error,A Temperatura Erro nas configurações, por favor corrija e tente novamente
+temperature:heater_cooler,Aquecedor/refrigeraÃ§Ã£o
+temperature:chart_minimum,Valor minimo grÃ¡fico
+temperature:chart_maximum,Valor Maximo grÃ¡fico
+temperature:validation_error,A Temperatura Erro nas configuraÃ§Ãµes, por favor corrija e tente novamente
 temperature:sensor,Sensor
 temperature:sensor_status,Estado Sensor
 temperature:celcius,Celcius
 temperature:fahrenheit,Fahrenheit
 ph:calibrate,Calibrar
-ph:midpoint,Ponto médio
+ph:midpoint,Ponto mÃ©dio
 ph:second_point,Segundo ponto
 ph:current_reading,Leitura Atual
-ph:run_calibration,Correr Calibração
-ph:validation_error,Ph Erro nas configurações, por favor corrija e tente novamente
+ph:run_calibration,Correr CalibraÃ§Ã£o
+ph:validation_error,Ph Erro nas configuraÃ§Ãµes, por favor corrija e tente novamente
 ph:status,Estado do Ph
-ph:check_frequency,Verificar a frequência
+ph:check_frequency,Verificar a frequÃªncia
 ph:alert_below,Alerta inferior de
 ph:alert_above,Alerta superior de
-ph:warn_delete,Esta acção vái ser removida
-ph:name_required,Nome é Obrigatório
-ph:status_required,Estado é Obrigatório
-ph:period_required,Verificar a frequência é Obrigatório
-ph:period_type,Verificar a frequência tem que ser um número
-ph:period_min,Verificar a frequência tem que ser superior a 1
-ph:threshold_required,Threshold é Obrigatório os alertas estão ligados
-ph:threshold_type,Threshold tem que ser um número
+ph:warn_delete,Esta acÃ§Ã£o vai ser removida
+ph:name_required,Nome Ã© ObrigatÃ³rio
+ph:status_required,Estado Ã© ObrigatÃ³rio
+ph:period_required,Verificar a frequÃªncia Ã© ObrigatÃ³rio
+ph:period_type,Verificar a frequÃªncia tem que ser um nÃºmero
+ph:period_min,Verificar a frequÃªncia tem que ser superior a 1
+ph:threshold_required,Threshold Ã© ObrigatÃ³rio os alertas estÃ£o ligados
+ph:threshold_type,Threshold tem que ser um nÃºmero
 ph:threshold_less_than,O alerta inferior tem que ser inferior que o alerta superior
 ph:threshold_greater_than,O alerta superior tem que ser superior que o alerta inferior
-ph:analog_input_required,Entrada Analógica é Obrigatório
+ph:analog_input_required,Entrada AnalÃ³gica Ã© ObrigatÃ³rio
