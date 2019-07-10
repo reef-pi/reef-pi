@@ -25,13 +25,13 @@ alerts,Alertas
 unit,Unidades
 configure,Configurar
 language:language,Lingua
-language:fr,FranÃ§ais
+language:fr,Français
 language:en,English
 language:de,Deutsch
-language:es,EspaÃ±ol
+language:es,Español
 language:it,Italiano
-language:hi,à¤¹à¤¿à¤¨à¥à¤¦à¥€
-language:fa,ÙØ§Ø±Ø³ÛŒ
+language:hi,हिन्दी
+language:fa,فارسی
 language:pt,Português
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
