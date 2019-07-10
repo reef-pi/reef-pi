@@ -1,0 +1,195 @@
+Key;Translation
+ok;Ok
+select;Selecionar
+enabled;activar
+disabled;desativar
+cancel;cancelar
+done;Feito
+loading;Carregar
+documentation;DocumentaÁ„o
+errors;Erros
+edit;Editar
+analog_input;Entrada Analogica
+inlet;Inlet
+delete;Apagar
+since;Desde
+running;Correr
+are_you_sure;Como estas?
+clear;Limpar
+name;Nome
+update;Atualizar
+add;Adicionar
+save;Salvar
+none;nenhum
+alerts;Alertas
+unit;Unidades
+configure;Configurar
+language:language;Lingua
+language:fr;Fran√ßais
+language:en;English
+language:de;Deutsch
+language:es;Espa√±ol
+language:it;Italiano
+language:hi;‡§π‡§ø‡§®‡•ç‡§¶‡•Ä
+language:fa;ŸÅÿßÿ±ÿ≥€å
+language:pt;Portugu√™s
+configuration:authentication:credentials;Credenciais
+configuration:authentication:error_user;Tens que inserir um nome de utilizador
+configuration:authentication:error_pass;Tens que inserir uma password
+configuration:tab:settings;ConfiguraÁıes
+configuration:tab:connectors;LigaÁıes
+configuration:tab:authentication;AutenticaÁ„o
+configuration:tab:drivers;Controladores
+configuration:tab:errors;Erros
+configuration:tab:telemetry;Telemetria
+configuration:tab:admin;Admin
+configuration:tab:about;Sobre
+configuration:admin:sign_out;Desligar o Login
+configuration:admin:reload;Recarregar
+configuration:admin:reboot;Reninciar
+configuration:admin:poweroff;Desligar
+configuration:about:version;Vers„o
+configuration:about:website;Site
+configuration:about:status;Estado
+configuration:about:current_time;Hora Atual
+configuration:about:uptime;Uptime
+signin:username;Nome de utilizador
+signin:password;Password
+signin:signin;Entrar
+signin:invalidcredentials;Credenciais invalidas
+capabilities:dashboard;Painel Inicial
+capabilities:equipment;Equipamento
+capabilities:timers;Timers
+capabilities:lights;Luzes
+capabilities:lighting;IluminaÁ„o
+capabilities:temperature;Temperatura
+capabilities:ato;ATO
+capabilities:ph;pH
+capabilities:dosing_pumps;Bombas Doseadoras
+capabilities:doser;Dose
+capabilities:macros;Macros
+capabilities:macro;Macro
+capabilities:camera;Camera
+capabilities:manager;Instancias
+capabilities:configuration;ConfiguraÁ„o
+capabilities:log;Log
+capabilities:dev_mode;Dev Mode
+capabilities:health_check;VerificaÁ„o de Estado
+log:time;Tempo
+log:emitter;Emissor
+log:type;Tipo
+log:content;Conteudo
+dashboard:back_to_dashboard;Voltas ao  Painel Inicial
+configuration:settings:interface;Interface
+configuration:settings:name;Nome
+configuration:settings:address;EndereÁo
+configuration:settings:rpi_pwm_freq;Rpi Pwm Frequencia
+configuration:settings:notification;NotificaÁ„o
+configuration:settings:display;Ecr„
+configuration:settings:use_https;Usar HTTPS
+configuration:settings:enable_profiling;Activar profiling
+configuration:settings:enable_prometheus;Activarprometheus
+configuration:settings:capabilities;Capacidades
+configuration:settings:alert_health_check;Avisos de Estado Geral
+configuration:settings:max_memory;Maximo de Memoria
+configuration:settings:max_cpu;Maximo de CPU
+configuration:settings:name_required;Nome È obrigatÛrio
+configuration:settings:network_interface_required;Nome do interface de rede È obrigatÛrio
+configuration:settings:network_address_required;EndereÁo de rede È obrigatÛrio
+configuration:settings:capabilities_required;Capabilities s„o requeridads
+health_chart:cpu_memory;CPU/Memory
+fatal_error:fatal_error;Fatal Error
+fatal_error:connection_lost;LigaÁ„o Perdida
+fatal_error:troubleshoot;Problemas
+fatal_error:message;Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
+cron:day_of_month;Day of the month
+cron:hour;Hour
+cron:minute;Minute
+cron:second;Second
+color_picker:choose;Choose
+collapsible:edit;Edit
+collapsible:delete;Delete
+timers:equipment:equipment;Equipment
+timers:equipment:action;Action
+timers:equipment:revert;Revert
+timers:equipment:on;On
+timers:equipment:off;Off
+ato:name_required;Name is required
+ato:status_required;ATO Status is required
+ato:inlet_required;Inlet is required
+ato:chk_freq;Check Frequency
+ato:chk_freq_required;Check Frequency is required
+ato:chk_freq_number;Check Frequency must be a number
+ato:chk_freq_number_value;Check Frequency must be 1 second or greater
+ato:threshold_required;Threshold is required when notification is enabled
+ato:threshold_value;Threshold must be a number
+ato:warning_delete;This action will delete
+ato:ato_usage;ATO Usage
+ato:ato_status;ATO Status
+ato:control_pump;Control Pump
+ato:control_pump;Control Pump
+ato:control_pump;Control Pump
+ato:alert_after;Alert After
+ato:disable_on_alert;Disable on alert
+ato:total_seconds_pump_on;Total number of seconds ato pump is on
+ato:validation_error;The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
+timers:name_required;Name is required
+timers:timer_status_required;Timer Status is required
+timers:day_required;Day is required
+timers:hour_required;Hour is required
+timers:minute_required;Minute is required
+timers:second_required;Second is required
+timers:type_required;Type is required
+timers:equipment_required;Equipment is required
+timers:on_required;On is required
+timers:duration_required;Duration is required
+timers:subject_required;Subject is required
+timers:message_required;Message is required
+timers:validation_error;The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+timers:turn_on;Turn On
+timers:turn_off;Turn Off
+timers:and_then;And Then
+timers:turn_back_on;Turn back on
+timers:turn_back_off;Turn back off
+timers:stay_on;Stay on
+timers:stay_off;Stay off
+second_s;second(s)
+sec;sec
+timers:sec;sec
+timers:after;After
+timers:subject;Subject
+timers:message;Message
+timers:timer_status;Timer Status
+timers:function;Function
+timers:equipment;Equipment
+timers:reminder;Reminder
+temperature:temperature;Temperature
+temperature:heater_cooler;Heater/Cooler
+temperature:chart_minimum;Chart Minimum
+temperature:chart_maximum;Chart Maximum
+temperature:validation_error;The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
+temperature:sensor;Sensor
+temperature:sensor_status;Sensor Status
+temperature:celcius;Celcius
+temperature:fahrenheit;Fahrenheit
+ph:calibrate;Calibrate
+ph:midpoint;Midpoint
+ph:second_point;Second Point
+ph:current_reading;Current Reading
+ph:run_calibration;Run
+ph:validation_error;The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ph:status;Ph Status
+ph:check_frequency;Check Frequency
+ph:alert_below;Alert Below
+ph:alert_above;Alert Above
+ph:warn_delete;This action will delete
+ph:name_required;Name is required
+ph:status_required;Status is required
+ph:period_required;Check Frequency is required
+ph:period_type;Check Frequency must be a number
+ph:period_min;Check Frequency must be 1 second or greater
+ph:threshold_required;Threshold is required when alerts are enabled
+ph:threshold_type;Threshold must be a number
+ph:threshold_less_than;Alert Below must be less than Alert Above
+ph:threshold_greater_than;Alert Above must be greater than Alert Below
+ph:analog_input_required;Analog Input is required
