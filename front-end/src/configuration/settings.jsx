@@ -171,6 +171,7 @@ class settings extends React.Component {
                     <option value='en'>{i18n.t('language:en')}</option>
                     <option value='fr'>{i18n.t('language:fr')}</option>
                     <option value='es'>{i18n.t('language:es')}</option>
+                    <option value='pt'>{i18n.t('language:pt')}</option>
                     <option value='de'>{i18n.t('language:de')}</option>
                     <option value='it'>{i18n.t('language:it')}</option>
                     <option value='hi'>{i18n.t('language:hi')}</option>
