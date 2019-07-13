@@ -5,6 +5,7 @@ import translationsIT from './it.json'
 import translationsFA from './fa.json'
 import translationsHI from './hi.json'
 import translationsES from './es.json'
+import translationsZH from './zh.json'
 const ts = {
   en: translationsEN,
   fr: translationsFR,
@@ -12,6 +13,7 @@ const ts = {
   it: translationsIT,
   fa: translationsFA,
   hi: translationsHI,
-  es: translationsES
+  es: translationsES,
+  zh: translationsZH
 }
 export default ts
