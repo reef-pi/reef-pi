@@ -19,3 +19,4 @@ coverage.txt
 __snapshots__
 coverage
 .vscode
+front-end/src/utils/translations/
