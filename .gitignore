@@ -19,5 +19,4 @@ coverage.txt
 __snapshots__
 coverage
 .vscode
-jsx/utils/translations/*.json
 front-end/src/utils/translations/*.json
