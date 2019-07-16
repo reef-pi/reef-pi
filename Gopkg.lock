@@ -185,7 +185,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:89ad5276e0399eb6226dcdb71ee93597ebb2654df1cac9f2d42e2353ec65f877"
+  digest = "1:3e18f1fde520a67c4186609bd60f28d322aaacec35998d8d2747fdfe66cacd9a"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
@@ -195,7 +195,7 @@
     "tplink",
   ]
   pruneopts = "UT"
-  revision = "1ff7409a57aa164dce063234c64ee702483d5e8c"
+  revision = "8386717f2f3b1664df8aa24872ec4192f68de094"
 
 [[projects]]
   branch = "master"

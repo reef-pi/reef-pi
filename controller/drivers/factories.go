@@ -43,8 +43,12 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		return pico_board.HalAdapter, nil
 	case "ph-ezo":
 		return drivers.EzoHalAdapter, nil
-	case "hs1xx":
-		return tplink.HALAdapter, nil
+	case "hs103":
+		return tplink.HS103HALAdapter, nil
+	case "hs110":
+		return tplink.HS110HALAdapter, nil
+	case "hs300":
+		return tplink.HS300HALAdapter, nil
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
 	}
