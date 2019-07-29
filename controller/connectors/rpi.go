@@ -15,7 +15,7 @@ type rpiDriver struct {
 func NewRPIPWMDriver(freq int, devMode bool) types.PWM {
 	return &rpiDriver{
 		driver:  pwm.New(),
-		Freq:    freq * 100000, //1.5K Hhz (pca9685 max)
+		Freq:    freq,
 		DevMode: devMode,
 	}
 }
@@ -31,13 +31,11 @@ func (d *rpiDriver) Set(pin int, v float64) error {
 	if (v > 100) || (v < 0) {
 		return fmt.Errorf("Invalid pwm range: %f, value should be within 0 to 100", v)
 	}
-	off := v
 	if d.DevMode {
 		return nil
 	}
-	off = float64(d.Freq/100) * v
 
-	return d.driver.DutyCycle(pin, int(off))
+	return d.driver.DutyCycle(pin, int(v))
 }
 func (d *rpiDriver) Get(pin int) (int, error) {
 	return 0, nil
