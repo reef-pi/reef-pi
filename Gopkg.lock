@@ -114,9 +114,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2481747bc8722fb9dcbf640d9e65ebbc308862e728e629c0ead644c2a9a4a6ee"
+  digest = "1:45755ab24112b76f9d9d77dd286c86dde2b9d470c6487876516f6cd9e8cca762"
   name = "github.com/reef-pi/drivers"
-  packages = ["."]
+  packages = [
+    ".",
+    "pca9685",
+  ]
   pruneopts = "UT"
   revision = "f992526c1e8880133206e5e6134fd800bef5ce25"
 
@@ -191,6 +194,7 @@
     "github.com/nfnt/resize",
     "github.com/reef-pi/adafruitio",
     "github.com/reef-pi/drivers",
+    "github.com/reef-pi/drivers/pca9685",
     "github.com/reef-pi/rpi/i2c",
     "github.com/reef-pi/rpi/pwm",
     "github.com/shirou/gopsutil/load",
