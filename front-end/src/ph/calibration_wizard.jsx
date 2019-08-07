@@ -37,7 +37,7 @@ export default class CalibrationWizard extends React.Component {
     const payload = {
       type: point,
       expected: expected,
-      observed: this.state.reading
+      observed: this.props.currentReading[this.props.probe.id]
     }
 
     if (point === 'mid') {
