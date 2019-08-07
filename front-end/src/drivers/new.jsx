@@ -39,7 +39,7 @@ export default class New extends React.Component {
       type: values.type,
       config: values.config
     }
-    if( i2cDrivers.includes(payload.type) ){
+    if (i2cDrivers.includes(payload.type)) {
       payload.config.address = parseInt(payload.config.address)
     }
     payload.config.frequency = parseInt(payload.config.frequency)
