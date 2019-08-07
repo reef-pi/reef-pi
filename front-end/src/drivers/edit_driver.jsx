@@ -4,8 +4,8 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
+import {driverTypes} from './types'
 
-const driverTypes = ['pca9685', 'ph-board', 'ph-ezo', 'pico-board']
 const EditDriver = ({
   values,
   errors,
@@ -26,6 +26,7 @@ const EditDriver = ({
       )
     }
   }
+
   const phBoardConfig = () => {
     return (
       <div className={classNames('row', { 'd-none': readOnly })}>
@@ -84,10 +85,11 @@ const EditDriver = ({
       case 'pca9685':
         return pca9685Config()
       case 'ph-board':
-        return phBoardConfig()
       case 'ph-ezo':
-        return phBoardConfig()
       case 'pico-board':
+      case 'hs103':
+      case 'hs110':
+      case 'hs300':
         return phBoardConfig()
     }
   }
