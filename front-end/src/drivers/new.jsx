@@ -1,5 +1,6 @@
 import React from 'react'
 import DriverForm from './driver_form'
+import {i2cDrivers} from './types'
 
 export default class New extends React.Component {
   constructor (props) {
@@ -38,7 +39,9 @@ export default class New extends React.Component {
       type: values.type,
       config: values.config
     }
-    payload.config.address = parseInt(payload.config.address)
+    if (i2cDrivers.includes(payload.type)) {
+      payload.config.address = parseInt(payload.config.address)
+    }
     payload.config.frequency = parseInt(payload.config.frequency)
     this.props.hook(payload)
     this.toggle()
