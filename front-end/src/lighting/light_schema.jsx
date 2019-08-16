@@ -30,11 +30,6 @@ const channelSchema = Yup.object().shape({
     .min(0, 'Max must be greater than or equal to 0')
     .max(100, 'Max must be less than or equal to 100')
     .required('Max is required'),
-  start_min: Yup.number()
-    .typeError('Start is required')
-    .min(0, 'Start must be greater than or equal to 0')
-    .max(100, 'Start must be less than or equal to 100')
-    .required('Start is required'),
   profile: Yup.lazy(value => {
     switch (value.type) {
       case 'diurnal':

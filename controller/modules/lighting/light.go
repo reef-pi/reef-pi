@@ -33,7 +33,7 @@ func (c Controller) List() ([]Light, error) {
 	return ls, c.c.Store().List(Bucket, fn)
 }
 
-func (c *Controller) Create(l Light) error {
+func (c *Controller) validate(l *Light) error {
 	if l.Name == "" {
 		return fmt.Errorf("Light name can not be empty")
 	}
@@ -50,10 +50,20 @@ func (c *Controller) Create(l Light) error {
 		if ch.Name == "" {
 			ch.Name = fmt.Sprintf("channel-%d", i+1)
 		}
+		if err := ch.loadProfile(); err != nil {
+			log.Println("ERROR: lighting-subsystenL failed to load profile for channel", ch.Name, "light", l.Name, "Error:", err)
+		}
 		if ch.Max == 0 {
 			ch.Max = 100
 		}
 		l.Channels[pin] = ch
+	}
+	return nil
+}
+
+func (c *Controller) Create(l Light) error {
+	if err := c.validate(&l); err != nil {
+		return err
 	}
 	fn := func(id string) interface{} {
 		l.ID = id
@@ -70,6 +80,9 @@ func (c *Controller) Create(l Light) error {
 
 func (c *Controller) Update(id string, l Light) error {
 	l.ID = id
+	if err := c.validate(&l); err != nil {
+		return err
+	}
 	if err := c.c.Store().Update(Bucket, id, l); err != nil {
 		return err
 	}
