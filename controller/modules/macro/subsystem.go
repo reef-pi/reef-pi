@@ -1,7 +1,6 @@
 package macro
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/reef-pi/reef-pi/controller"
@@ -35,5 +34,9 @@ func (s *Subsystem) Start() {
 func (s *Subsystem) Stop() {
 }
 func (s *Subsystem) On(id string, b bool) error {
-	return fmt.Errorf("Macro sub system does not support 'on' API yet")
+	m, err := s.Get(id)
+	if err != nil {
+		return err
+	}
+	return s.Run(m)
 }

@@ -3,6 +3,7 @@ package timer
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -27,6 +28,7 @@ func TestTimerController(t *testing.T) {
 		Pin:    24,
 		Driver: "rpi",
 	}
+	m := controller.NoopSubsystem()
 	drvrs := drivers.TestDrivers(con.Store())
 	outlets := connectors.NewOutlets(drvrs, con.Store())
 	outlets.DevMode = true
@@ -52,7 +54,7 @@ func TestTimerController(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to list equipment. Error:", err)
 	}
-	c := New(con, e)
+	c := New(con, e, m)
 	c.Setup()
 	c.Start()
 	tr := utils.NewTestRouter()
@@ -62,15 +64,16 @@ func TestTimerController(t *testing.T) {
 	}
 	body := new(bytes.Buffer)
 	enc := json.NewEncoder(body)
+
 	j := Job{
-		Name:      "test-job",
-		Equipment: UpdateEquipment{ID: eqs[0].ID},
-		Second:    "0",
-		Minute:    "*",
-		Hour:      "*",
-		Day:       "*",
-		Type:      "equipment",
-		Enable:    true,
+		Name:   "test-job",
+		Target: []byte(fmt.Sprintf(`{"id":"%s"}`, eqs[0].ID)),
+		Second: "0",
+		Minute: "*",
+		Hour:   "*",
+		Day:    "*",
+		Type:   "equipment",
+		Enable: true,
 	}
 
 	enc.Encode(&j)
@@ -132,13 +135,13 @@ func TestTimerController(t *testing.T) {
 	}
 	j.Day = "*"
 	j.Type = "reminder"
-	j.Reminder.Title = ""
+	j.Target = []byte(`{"title":""}`)
 	if err := j.Validate(); err == nil {
 		t.Error("Job validation should fail if reminder title is empty")
 	}
 
 	j.Type = "equipment"
-	j.Equipment.ID = ""
+	j.Target = []byte(`{"id":""}`)
 	if err := j.Validate(); err == nil {
 		t.Error("Job validation should fail if equipment id is empty")
 	}

@@ -1,6 +1,7 @@
 package timer
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -41,8 +42,22 @@ func (e *EquipmentRunner) Run() {
 
 func (c *Controller) Runner(j Job) (cron.Job, error) {
 	switch j.Type {
+	case "reminder":
+		var reminder Reminder
+		if err := json.Unmarshal(j.Target, &reminder); err != nil {
+			return nil, err
+		}
+		return &ReminderRunner{
+			t:     c.c.Telemetry(),
+			title: "[Reef-Pi Reminder]" + reminder.Title,
+			body:  reminder.Message,
+		}, nil
 	case "equipment":
-		eq, err := c.equipment.Get(j.Equipment.ID)
+		var ue UpdateEquipment
+		if err := json.Unmarshal(j.Target, &ue); err != nil {
+			return nil, err
+		}
+		eq, err := c.equipment.Get(ue.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -51,16 +66,19 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 		}
 		return &EquipmentRunner{
 			eq:        eq,
-			target:    j.Equipment,
+			target:    ue,
 			equipment: c.equipment,
 		}, nil
-	case "reminder":
-		return &ReminderRunner{
-			t:     c.c.Telemetry(),
-			title: "[Reef-Pi Reminder]" + j.Reminder.Title,
-			body:  j.Reminder.Message,
+	case "macro":
+		var macro TriggerMacro
+		if err := json.Unmarshal(j.Target, &macro); err != nil {
+			return nil, err
+		}
+		return &MacroRunner{
+			c:      c.macro,
+			target: macro.ID,
 		}, nil
 	default:
+		return nil, fmt.Errorf("Failed to find suitable job runner")
 	}
-	return nil, fmt.Errorf("Failed to find suitable job runner")
 }

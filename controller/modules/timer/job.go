@@ -14,16 +14,15 @@ import (
 const Bucket = storage.TimerBucket
 
 type Job struct {
-	ID        string          `json:"id"`
-	Minute    string          `json:"minute"`
-	Day       string          `json:"day"`
-	Hour      string          `json:"hour"`
-	Second    string          `json:"second"`
-	Name      string          `json:"name"`
-	Type      string          `json:"type"`
-	Reminder  Reminder        `json:"reminder"`
-	Equipment UpdateEquipment `json:"equipment"`
-	Enable    bool            `json:"enable"`
+	ID     string          `json:"id"`
+	Minute string          `json:"minute"`
+	Day    string          `json:"day"`
+	Hour   string          `json:"hour"`
+	Second string          `json:"second"`
+	Name   string          `json:"name"`
+	Type   string          `json:"type"`
+	Target json.RawMessage `json:"target"`
+	Enable bool            `json:"enable"`
 }
 
 func (j *Job) CronSpec() string {
@@ -36,11 +35,27 @@ func (j *Job) Validate() error {
 	}
 	switch j.Type {
 	case "reminder":
-		if j.Reminder.Title == "" {
+		var reminder Reminder
+		if err := json.Unmarshal(j.Target, &reminder); err != nil {
+			return err
+		}
+		if reminder.Title == "" {
 			return fmt.Errorf("Missing reminder title")
 		}
 	case "equipment":
-		if j.Equipment.ID == "" {
+		var ue UpdateEquipment
+		if err := json.Unmarshal(j.Target, &ue); err != nil {
+			return err
+		}
+		if ue.ID == "" {
+			return fmt.Errorf("Missing equipment")
+		}
+	case "macro":
+		var macro TriggerMacro
+		if err := json.Unmarshal(j.Target, &macro); err != nil {
+			return err
+		}
+		if macro.ID == "" {
 			return fmt.Errorf("Missing equipment")
 		}
 	default:
