@@ -1,8 +1,9 @@
 package timer
 
 import (
-	"github.com/reef-pi/reef-pi/controller"
 	"log"
+
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 type TriggerMacro struct {
