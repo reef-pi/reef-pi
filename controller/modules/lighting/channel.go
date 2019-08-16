@@ -8,15 +8,27 @@ import (
 )
 
 type Channel struct {
-	Name     string  `json:"name"`
-	Min      float64 `json:"min"`
-	StartMin int     `json:"start_min"`
-	Max      float64 `json:"max"`
-	Reverse  bool    `json:"reverse"`
-	Pin      int     `json:"pin"`
-	Color    string  `json:"color"`
-	Profile  string  `json:"profile"`
-	profile  pwm_profile.Profile
+	Name        string                  `json:"name"`
+	Min         float64                 `json:"min"`
+	StartMin    int                     `json:"start_min"`
+	Max         float64                 `json:"max"`
+	Reverse     bool                    `json:"reverse"`
+	Pin         int                     `json:"pin"`
+	Color       string                  `json:"color"`
+	ProfileSpec pwm_profile.ProfileSpec `json:"profile"`
+	profile     pwm_profile.Profile
+}
+
+func (ch *Channel) loadProfile() error {
+	spec := ch.ProfileSpec
+	spec.Min = ch.Min
+	spec.Max = ch.Max
+	p, err := spec.CreateProfile()
+	if err != nil {
+		return err
+	}
+	ch.profile = p
+	return nil
 }
 
 func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
@@ -32,24 +44,7 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 }
 
 func (c *Controller) ProfileValue(ch Channel, t time.Time) (float64, error) {
-	var v float64
-	if ch.Profile == "" {
-		return float64(ch.Min), nil
-	}
-	if ch.profile == nil {
-		spec, err := c.pManager.Get(ch.Profile)
-		if err != nil {
-			return 0, err
-		}
-		spec.Min = ch.Min
-		spec.Max = ch.Max
-		p, err := spec.CreateProfile()
-		if err != nil {
-			return 0, err
-		}
-		ch.profile = p
-	}
-	v = ch.profile.Get(t)
+	v := ch.profile.Get(t)
 	if (ch.Min > 0) && (v < float64(ch.Min)) {
 		return float64(ch.StartMin), nil
 	}
