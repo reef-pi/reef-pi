@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"testing"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func TestHomestatis(t *testing.T) {

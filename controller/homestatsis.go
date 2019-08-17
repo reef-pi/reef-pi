@@ -1,8 +1,10 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"log"
+	"time"
+
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Observation struct {
@@ -26,6 +28,15 @@ func (o1 Observation) Rollup(o telemetry.Metric) (telemetry.Metric, bool) {
 		total:  o1.total + o2.Value,
 		len:    o1.len + 1,
 	}, false
+}
+
+func NewObservation(v float64) Observation {
+	return Observation{
+		Value: v,
+		total: v,
+		len:   1,
+		Time:  telemetry.TeleTime(time.Now()),
+	}
 }
 
 func (o1 Observation) Before(o2 telemetry.Metric) bool {
