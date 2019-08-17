@@ -7,6 +7,7 @@ import (
 
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/ato"
 	"github.com/reef-pi/reef-pi/controller/modules/camera"
@@ -41,7 +42,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	return nil
 }
 
-func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller) error {
+func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller, m controller.Subsystem) error {
 	if !r.settings.Capabilities.Timers {
 		return nil
 	}
@@ -49,7 +50,7 @@ func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller) error {
 		r.settings.Capabilities.Timers = false
 		return fmt.Errorf("equipment sub-system is not initialized")
 	}
-	t := timer.New(r.Controller(), eqs)
+	t := timer.New(r.Controller(), eqs, m)
 	r.subsystems[timer.Bucket] = t
 	eqs.AddCheck(t.IsEquipmentInUse)
 	return nil
@@ -159,10 +160,6 @@ func (r *ReefPi) loadSubsystems() error {
 		eqs = equipment.New(conf, r.outlets, r.store, r.telemetry)
 		r.subsystems[equipment.Bucket] = eqs
 	}
-	if err := r.loadTimerSubsystem(eqs); err != nil {
-		log.Println("ERROR: Failed to load timer subsystem. Error:", err)
-		r.LogError("subsystem-timer", "Failed to load timer subsystem. Error:"+err.Error())
-	}
 	if err := r.loadATOSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load ATO subsystem. Error:", err)
 		r.LogError("sub-system-ato", "Failed to load ATO subsystem. Error:"+err.Error())
@@ -189,6 +186,11 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 	if err := r.loadMacroSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load macro subsystem. Error:", err)
+	}
+	m := r.subsystems[macro.Bucket]
+	if err := r.loadTimerSubsystem(eqs, m); err != nil {
+		log.Println("ERROR: Failed to load timer subsystem. Error:", err)
+		r.LogError("subsystem-timer", "Failed to load timer subsystem. Error:"+err.Error())
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {

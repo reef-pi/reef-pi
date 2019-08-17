@@ -1,6 +1,7 @@
 package timer
 
 import (
+	"encoding/json"
 	"log"
 
 	cron "gopkg.in/robfig/cron.v2"
@@ -14,14 +15,16 @@ type Controller struct {
 	cronIDs   map[string]cron.EntryID
 	equipment *equipment.Controller
 	c         controller.Controller
+	macro     controller.Subsystem
 }
 
-func New(c controller.Controller, e *equipment.Controller) *Controller {
+func New(c controller.Controller, e *equipment.Controller, macro controller.Subsystem) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
 		runner:    cron.New(),
 		equipment: e,
 		c:         c,
+		macro:     macro,
 	}
 }
 
@@ -31,8 +34,12 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 		return false, err
 	}
 	for _, j := range jobs {
-		if (j.Type == "equipment") && (j.Equipment.ID == id) {
-			return true, nil
+		if j.Type == "equipment" {
+			var ue UpdateEquipment
+			if err := json.Unmarshal(j.Target, &ue); err != nil {
+				return false, err
+			}
+			return ue.ID == id, nil
 		}
 	}
 	return false, nil

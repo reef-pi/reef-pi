@@ -14,6 +14,9 @@ func (m *mockSubsystem) LoadAPI(r *mux.Router)     {}
 func (m *mockSubsystem) Start()                    {}
 func (m *mockSubsystem) Stop()                     {}
 func (m *mockSubsystem) On(_ string, _ bool) error { return nil }
+func NoopSubsystem() Subsystem {
+	return &mockSubsystem{}
+}
 
 func TestController() (Controller, error) {
 	store, err := storage.TestDB()
