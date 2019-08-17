@@ -88,17 +88,16 @@ func TestTemperatureAPI(t *testing.T) {
 	c.Stop()
 	c.Start()
 	c.Check(tc)
-	u := Usage{
-		Temperature: 67,
+	u := controller.Observation{
+		Value: 67,
 	}
-	c.control(tc, &u)
-	u.Temperature = 83
-	c.control(tc, &u)
-	u.Temperature = 70
-	c.control(tc, &u)
-	u.Temperature = 79
-	c.control(tc, &u)
-	c.switchOffAll(tc)
+	c.Check(tc)
+	u.Value = 83
+	c.Check(tc)
+	u.Value = 70
+	c.Check(tc)
+	u.Value = 79
+	c.Check(tc)
 
 	if err := tr.Do("GET", "/api/tcs/1/usage", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to get temperature controller usage using api")

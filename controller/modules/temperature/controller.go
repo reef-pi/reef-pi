@@ -54,7 +54,7 @@ func (c *Controller) Start() {
 			continue
 		}
 		fn := func(d json.RawMessage) interface{} {
-			u := Usage{}
+			var u controller.Observation
 			json.Unmarshal(d, &u)
 			return u
 		}
