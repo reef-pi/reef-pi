@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
@@ -63,7 +64,7 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	u := Usage{
+	u := &controller.Observation{
 		Time: telemetry.TeleTime(time.Now()),
 	}
 	c.statsMgr.Update(tc.ID, u)

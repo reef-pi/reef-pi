@@ -16,22 +16,24 @@ const Bucket = storage.PhBucket
 const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
-	c        controller.Controller
-	quitters map[string]chan struct{}
-	mu       *sync.Mutex
-	statsMgr telemetry.StatsManager
-	devMode  bool
-	ais      *connectors.AnalogInputs
+	c         controller.Controller
+	quitters  map[string]chan struct{}
+	mu        *sync.Mutex
+	statsMgr  telemetry.StatsManager
+	devMode   bool
+	ais       *connectors.AnalogInputs
+	equipment controller.Subsystem
 }
 
-func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *Controller {
+func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs, eq controller.Subsystem) *Controller {
 	return &Controller{
-		quitters: make(map[string]chan struct{}),
-		c:        c,
-		devMode:  devMode,
-		mu:       &sync.Mutex{},
-		ais:      ais,
-		statsMgr: c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
+		quitters:  make(map[string]chan struct{}),
+		c:         c,
+		devMode:   devMode,
+		mu:        &sync.Mutex{},
+		ais:       ais,
+		statsMgr:  c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
+		equipment: eq,
 	}
 }
 
@@ -56,7 +58,7 @@ func (c *Controller) Start() {
 			continue
 		}
 		fn := func(d json.RawMessage) interface{} {
-			u := Measurement{}
+			u := controller.Observation{}
 			json.Unmarshal(d, &u)
 			return u
 		}

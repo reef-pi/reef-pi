@@ -9,8 +9,13 @@ import (
 
 	"github.com/reef-pi/hal"
 
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
+
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
+
+const ReadingsBucket = storage.PhReadingsBucket
 
 type Notify struct {
 	Enable bool    `json:"enable"`
@@ -26,6 +31,10 @@ type Probe struct {
 	AnalogInput string        `json:"analog_input"`
 	Control     bool          `json:"control"`
 	Notify      Notify        `json:"notify"`
+	UpperEq     string        `json:"upper_eq"`
+	DownerEq    string        `json:"downer_eq"`
+	Min         float64       `json:"min"`
+	Max         float64       `json:"max"`
 }
 
 type CalibrationPoint struct {
@@ -65,11 +74,6 @@ func (c *Controller) Create(p Probe) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	m := Measurement{
-		Time: telemetry.TeleTime(time.Now()),
-		len:  1,
-	}
-	c.statsMgr.Update(p.ID, m)
 	if p.Enable {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
@@ -130,11 +134,27 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			c.checkAndControl(p)
+		case <-quit:
+			ticker.Stop()
+			return
+		}
+	}
+}
+
+func (c *Controller) checkAndControl(p Probe) {
+	reading, err := c.Read(p)
+	if err != nil {
+		log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
+		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
+		return
+	}
 	var calibrator hal.Calibrator
 	var ms []hal.Measurement
-	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err != nil {
-		log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
-	} else {
+	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err == nil {
 		cal, err := hal.CalibratorFactory(ms)
 		if err != nil {
 			log.Println("ERROR: ph-subsystem: Failed to create calibration function for probe:", p.Name, "Error:", err)
@@ -142,33 +162,29 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 			calibrator = cal
 		}
 	}
-	for {
-		select {
-		case <-ticker.C:
-			reading, err := c.Read(p)
-			if calibrator != nil {
-				reading = calibrator.Calibrate(reading)
-			}
-			if err != nil {
-				log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
-				c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
-				continue
-			}
-			log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
-			notifyIfNeeded(c.c.Telemetry(), p, reading)
-			m := Measurement{
-				Time: telemetry.TeleTime(time.Now()),
-				Ph:   reading,
-				len:  1,
-				sum:  reading,
-			}
-			c.statsMgr.Update(p.ID, m)
-			c.c.Telemetry().EmitMetric("ph", p.Name, reading)
-		case <-quit:
-			ticker.Stop()
-			return
+	if calibrator != nil {
+		reading = calibrator.Calibrate(reading)
+	}
+	log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
+	notifyIfNeeded(c.c.Telemetry(), p, reading)
+	u := controller.NewObservation(reading)
+	if p.Control {
+		h := controller.Homestatsis{
+			Name:     p.Name,
+			UpperEq:  p.UpperEq,
+			DownerEq: p.DownerEq,
+			Min:      p.Min,
+			Max:      p.Max,
+			Period:   int(p.Period),
+			T:        c.c.Telemetry(),
+			Eqs:      c.equipment,
+		}
+		if err := h.Sync(&u); err != nil {
+			log.Println("ERROR: Failed to execute ph control logic. Error:", err)
 		}
 	}
+	c.statsMgr.Update(p.ID, u)
+	c.c.Telemetry().EmitMetric("ph", p.Name, reading)
 }
 
 func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
@@ -217,4 +233,20 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {
 	t.CreateFeedIfNotExist("ph-" + p.Name)
+}
+func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
+	if !p.Notify.Enable {
+		return
+	}
+	subject := fmt.Sprintf("[Reef-Pi ALERT] ph of '%s' out of range", p.Name)
+	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
+	body := fmt.Sprintf(format, reading, p.Name, p.Notify.Min, p.Notify.Max)
+	if reading >= p.Notify.Max {
+		t.Alert(subject, "Tank ph is high. "+body)
+		return
+	}
+	if reading <= p.Notify.Min {
+		t.Alert(subject, "Tank ph is low. "+body)
+		return
+	}
 }

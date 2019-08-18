@@ -18,7 +18,7 @@ func TestPhAPI(t *testing.T) {
 	}
 	drvrs := drivers.TestDrivers(r.Store())
 	ais := connectors.NewAnalogInputs(drvrs, r.Store())
-	c := New(true, r, ais)
+	c := New(true, r, ais, controller.NoopSubsystem())
 	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
 		t.Error(err)
