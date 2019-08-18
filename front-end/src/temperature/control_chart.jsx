@@ -52,15 +52,15 @@ class chart extends React.Component {
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
             <Tooltip />
-            <Bar dataKey='heater' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
-            <Bar dataKey='cooler' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
+            <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
+            <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
               type='monotone'
-              dataKey='temperature'
               stroke='#ce93d8'
               isAnimationActive={false}
               yAxisId='left'
               dot={false}
+              dataKey='value'
             />
           </ComposedChart>
         </ResponsiveContainer>
