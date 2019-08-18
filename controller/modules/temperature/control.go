@@ -30,6 +30,7 @@ func (c *Controller) Check(tc TC) {
 	}
 	if tc.Control {
 		h := controller.Homestatsis{
+			Name:     tc.Name,
 			UpperEq:  tc.Heater,
 			DownerEq: tc.Cooler,
 			Min:      tc.Min,
