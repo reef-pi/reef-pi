@@ -41,12 +41,12 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis domain={[min, max]} dataKey='temperature' />
+            <YAxis domain={[min, max]} dataKey='value' />
             <XAxis dataKey='time' />
             <Tooltip />
             <Area
               type='linear'
-              dataKey='temperature'
+              dataKey='value'
               stroke='#007E33'
               isAnimationActive={false}
               fillOpacity={1}

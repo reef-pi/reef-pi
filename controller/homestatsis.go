@@ -8,11 +8,12 @@ import (
 )
 
 type Observation struct {
-	Value         float64
-	Upper, Downer int
-	Time          telemetry.TeleTime
-	total         float64
-	len           int
+	Value  float64            `json:"value"`
+	Upper  int                `json:"up"`
+	Downer int                `json:"down"`
+	Time   telemetry.TeleTime `json:"time"`
+	total  float64
+	len    int
 }
 
 func (o1 Observation) Rollup(o telemetry.Metric) (telemetry.Metric, bool) {
