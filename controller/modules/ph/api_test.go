@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
@@ -95,6 +97,47 @@ func TestPhAPI(t *testing.T) {
 	}
 	if err := c.On("-1", false); err == nil {
 		t.Error("Enabling invalid probe id should fail")
+	}
+	p.Enable = false
+	p.Control = true
+	if err := c.Update("1", *p); err != nil {
+		t.Error(err)
+	}
+	c.checkAndControl(*p)
+	ms := []hal.Measurement{
+		hal.Measurement{
+			Observed: 7.8,
+			Expected: 8.1,
+		},
+	}
+	if err := c.Calibrate("1", ms); err != nil {
+		t.Error(err)
+	}
+	cp := CalibrationPoint{
+		Observed: 7.8,
+		Expected: 8.1,
+		Type:     "low",
+	}
+	body.Reset()
+	if err := c.CalibratePoint("1", cp); err != nil {
+		t.Error(err)
+	}
+	body.Reset()
+	if err := json.NewEncoder(body).Encode(&ms); err != nil {
+		t.Error(err)
+	}
+	if err := tr.Do("POST", "/api/phprobes/1/calibrate", body, nil); err != nil {
+		t.Fatal("Failed to calibrate ph probe using api. Error:", err)
+	}
+	body.Reset()
+	if err := json.NewEncoder(body).Encode(&cp); err != nil {
+		t.Error(err)
+	}
+	if err := tr.Do("POST", "/api/phprobes/1/calibratepoint", body, nil); err != nil {
+		t.Fatal("Failed to calibratepoint ph probe using api. Error:", err)
+	}
+	if err := tr.Do("GET", "/api/phprobes/1/read", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to read ph probe using api. Error:", err)
 	}
 
 	if err := tr.Do("DELETE", "/api/phprobes/1", new(bytes.Buffer), nil); err != nil {
