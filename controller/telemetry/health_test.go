@@ -12,6 +12,13 @@ func TestHealthChecker(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	h := NewHealthChecker("reef-pi", 1, settings.HealthCheckNotify{}, TestTelemetry(), store)
+	c := settings.HealthCheckNotify{
+		Enable:    true,
+		MaxMemory: 100,
+		MaxCPU:    100,
+	}
+	h := NewHealthChecker("reef-pi", 1, c, TestTelemetry(store), store)
 	h.Check()
+	go h.Start()
+	h.Stop()
 }

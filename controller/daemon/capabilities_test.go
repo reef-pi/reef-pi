@@ -21,7 +21,7 @@ func Test_Capabilities(t *testing.T) {
 	}
 	r := &ReefPi{
 		a:         utils.NewAuth(Bucket, store),
-		telemetry: telemetry.TestTelemetry(),
+		telemetry: telemetry.TestTelemetry(store),
 	}
 	buf := new(bytes.Buffer)
 	buf.Write([]byte(`{}`))

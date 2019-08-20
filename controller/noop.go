@@ -25,5 +25,5 @@ func TestController() (Controller, error) {
 	}
 	logError := func(_, _ string) error { return nil }
 	subFn := func(_ string) (Subsystem, error) { return new(mockSubsystem), nil }
-	return NewController(telemetry.TestTelemetry(), store, logError, subFn), nil
+	return NewController(telemetry.TestTelemetry(store), store, logError, subFn), nil
 }

@@ -25,7 +25,7 @@ func TestStatsManager(t *testing.T) {
 		t.Error(err)
 	}
 	store.CreateBucket("test-subsystem")
-	mgr := TestTelemetry().NewStatsManager(store, "test-subsystem")
+	mgr := TestTelemetry(store).NewStatsManager("test-subsystem")
 	metric := &testMetric{}
 	mgr.Update("foo", metric)
 	mgr.Update("foo", metric)
@@ -39,4 +39,13 @@ func TestStatsManager(t *testing.T) {
 	if err := mgr.Delete("foo"); err != nil {
 		t.Error(err)
 	}
+}
+
+func TestInitialize(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Error(err)
+	}
+	logger := func(_, _ string) error { return nil }
+	Initialize("telemetry", store, logger, true)
 }

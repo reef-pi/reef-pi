@@ -3,11 +3,16 @@ package timer
 import (
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func TestReminderRunner(t *testing.T) {
-	tele := telemetry.TestTelemetry()
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(store)
+	}
+	tele := telemetry.TestTelemetry(store)
 	r := ReminderRunner{
 		t:     tele,
 		title: "Test title",
