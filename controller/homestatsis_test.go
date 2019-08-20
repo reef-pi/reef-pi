@@ -4,10 +4,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func TestHomestatis(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(store)
+	}
 	h := Homestatsis{
 		Name:     "test",
 		UpperEq:  "1",
@@ -15,7 +20,7 @@ func TestHomestatis(t *testing.T) {
 		Min:      10,
 		Max:      30,
 		Period:   2,
-		T:        telemetry.TestTelemetry(),
+		T:        telemetry.TestTelemetry(store),
 		Eqs:      &mockSubsystem{},
 	}
 	o := Observation{

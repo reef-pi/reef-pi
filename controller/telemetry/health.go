@@ -75,7 +75,7 @@ func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNoti
 		stopCh:   make(chan struct{}),
 		t:        t,
 		Notify:   notify,
-		statsMgr: t.NewStatsManager(store, b),
+		statsMgr: t.NewStatsManager(b),
 		store:    store,
 	}
 }

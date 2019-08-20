@@ -1,8 +1,11 @@
 package telemetry
 
-import "sync"
+import (
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"sync"
+)
 
-func TestTelemetry() *telemetry {
+func TestTelemetry(store storage.Store) *telemetry {
 	c := TelemetryConfig{
 		AdafruitIO: AdafruitIO{
 			User: "test-user",
@@ -16,5 +19,7 @@ func TestTelemetry() *telemetry {
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
 		logError:   func(_, _ string) error { return nil },
+		store:      store,
+		bucket:     "telemetry",
 	}
 }

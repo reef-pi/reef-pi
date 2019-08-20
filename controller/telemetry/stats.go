@@ -30,7 +30,7 @@ type Telemetry interface {
 	EmitMetric(string, string, float64)
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
-	NewStatsManager(storage.Store, string) StatsManager
+	NewStatsManager(string) StatsManager
 	SendTestMessage(http.ResponseWriter, *http.Request)
 	GetConfig(http.ResponseWriter, *http.Request)
 	UpdateConfig(http.ResponseWriter, *http.Request)
@@ -114,11 +114,11 @@ func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr Erro
 	}
 }
 
-func (t *telemetry) NewStatsManager(store storage.Store, b string) StatsManager {
+func (t *telemetry) NewStatsManager(b string) StatsManager {
 	return &mgr{
 		inMemory:        make(map[string]Stats),
 		bucket:          b,
-		store:           store,
+		store:           t.store,
 		HistoricalLimit: t.config.HistoricalLimit,
 		CurrentLimit:    t.config.CurrentLimit,
 	}
@@ -214,47 +214,10 @@ func (t *telemetry) CreateFeedIfNotExist(f string) {
 	return
 }
 
-type TeleTime time.Time
-
-const format = "Jan-02-15:04"
-
-func (t TeleTime) Before(t2 TeleTime) bool {
-	return time.Time(t).Before(time.Time(t2))
-}
-
-func (t TeleTime) Hour() int {
-	return time.Time(t).Hour()
-}
-
-func (t TeleTime) Day() int {
-	return time.Time(t).Day()
-}
-
-func (t TeleTime) MarshalJSON() ([]byte, error) {
-	b := make([]byte, 0, len(format)+2)
-	b = append(b, '"')
-	b = time.Time(t).AppendFormat(b, format)
-	b = append(b, '"')
-	return b, nil
-}
-
-func (t *TeleTime) UnmarshalJSON(data []byte) error {
-	if string(data) == "null" {
-		return nil
-	}
-	t1, err := time.Parse(`"`+format+`"`, string(data))
-	if err != nil {
-		return err
-	}
-	*t = TeleTime(t1)
-	return nil
-}
-
 func (t *telemetry) DeleteFeedIfExist(f string) {
 	aio := t.config.AdafruitIO
 	f = strings.ToLower(aio.Prefix + f)
 	if !aio.Enable {
-		//log.Println("Telemetry disabled. Skipping creating feed:", f)
 		return
 	}
 	log.Println("Telemetry sub-system: Deleting feed:", f)

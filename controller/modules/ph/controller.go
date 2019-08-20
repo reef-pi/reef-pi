@@ -32,7 +32,7 @@ func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs, eq
 		devMode:   devMode,
 		mu:        &sync.Mutex{},
 		ais:       ais,
-		statsMgr:  c.Telemetry().NewStatsManager(c.Store(), ReadingsBucket),
+		statsMgr:  c.Telemetry().NewStatsManager(ReadingsBucket),
 		equipment: eq,
 	}
 }

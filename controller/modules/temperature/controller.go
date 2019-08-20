@@ -30,7 +30,7 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Con
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
-		statsMgr:  c.Telemetry().NewStatsManager(c.Store(), UsageBucket),
+		statsMgr:  c.Telemetry().NewStatsManager(UsageBucket),
 	}, nil
 }
 

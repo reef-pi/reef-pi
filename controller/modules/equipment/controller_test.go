@@ -15,15 +15,15 @@ import (
 )
 
 func TestEquipmentController(t *testing.T) {
-	config := Config{
-		DevMode: true,
-	}
-	telemetry := telemetry.TestTelemetry()
 	store, err := storage.TestDB()
-	drvrs := drivers.TestDrivers(store)
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
+	config := Config{
+		DevMode: true,
+	}
+	telemetry := telemetry.TestTelemetry(store)
+	drvrs := drivers.TestDrivers(store)
 	outlets := connectors.NewOutlets(drvrs, store)
 	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
@@ -158,11 +158,11 @@ func TestUpdateEquipment(t *testing.T) {
 	config := Config{
 		DevMode: true,
 	}
-	telemetry := telemetry.TestTelemetry()
 	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
+	telemetry := telemetry.TestTelemetry(store)
 	drvrs := drivers.TestDrivers(store)
 	outlets := connectors.NewOutlets(drvrs, store)
 	outlets.DevMode = true

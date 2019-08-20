@@ -1,29 +1,34 @@
 package telemetry
 
 import (
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"testing"
 	"time"
 )
 
 func TestEmitMetric(t *testing.T) {
-	telemetry := TestTelemetry()
-	telemetry.EmitMetric("test", "foo", 1.23)
-	telemetry.config.Throttle = 2
-	sent, err := telemetry.Alert("test-alert", "")
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	tele := TestTelemetry(store)
+	tele.EmitMetric("test", "foo", 1.23)
+	tele.config.Throttle = 2
+	sent, err := tele.Alert("test-alert", "")
 	if err != nil {
 		t.Error(err)
 	}
 	if !sent {
 		t.Error("Test alert not sent")
 	}
-	sent, err = telemetry.Alert("test-alert", "")
+	sent, err = tele.Alert("test-alert", "")
 	if err != nil {
 		t.Error(err)
 	}
 	if !sent {
 		t.Error("Test alert not sent")
 	}
-	sent, err = telemetry.Alert("test-alert", "")
+	sent, err = tele.Alert("test-alert", "")
 	if err != nil {
 		t.Error(err)
 	}
