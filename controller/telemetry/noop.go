@@ -1,8 +1,9 @@
 package telemetry
 
 import (
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"sync"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func TestTelemetry(store storage.Store) *telemetry {

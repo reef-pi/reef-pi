@@ -1,9 +1,10 @@
 package telemetry
 
 import (
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"testing"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func TestEmitMetric(t *testing.T) {

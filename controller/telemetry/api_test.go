@@ -3,9 +3,10 @@ package telemetry
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
 )
 
 func TestAPI(t *testing.T) {
