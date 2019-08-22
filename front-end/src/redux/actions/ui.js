@@ -16,6 +16,7 @@ import {fetchEquipment} from './equipment'
 import {fetchTimers} from './timer'
 import {capabilitiesLoaded} from './capabilities'
 import {fetchInstances} from './instances'
+import {fetchMacros} from './macro'
 
 export const fetchControllerData = (dispatch, capabilities) => {
   dispatch(fetchDrivers())
@@ -51,6 +52,9 @@ export const fetchControllerData = (dispatch, capabilities) => {
         break
       case 'timers':
         dispatch(fetchTimers())
+        break
+      case 'macro':
+        dispatch(fetchMacros())
         break
     }
   })
