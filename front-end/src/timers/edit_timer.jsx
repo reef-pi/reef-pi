@@ -13,6 +13,7 @@ const EditTimer = ({
   errors,
   touched,
   equipment,
+  macros,
   submitForm,
   isValid,
   dirty,
@@ -40,6 +41,53 @@ const EditTimer = ({
     })
   }
 
+  const macroOptions = () => {
+    return macros.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
+  const buildAction = () => {
+    switch (values.type) {
+      case 'equipment':
+        return equipmentAction()
+      case 'reminder':
+        return reminderAction()
+      case 'macros':
+        return macroAction()
+      default:
+        return 'Unknown type:' + values.type
+    }
+  }
+
+  const macroAction = () => {
+    return (
+      <React.Fragment>
+        <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
+          <div className='form-group'>
+            <label htmlFor='macro_id'>{i18next.t('timers:macro')}</label>
+            <Field
+              name='macro_id'
+              component='select'
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('macro_id', touched, errors)
+              })}
+            >
+              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+              {macroOptions()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='macro_id' />
+          </div>
+        </div>
+      </React.Fragment>
+    )
+  }
+
   const equipmentAction = () => {
     return (
       <React.Fragment>
@@ -58,6 +106,23 @@ const EditTimer = ({
               <option value='false'>{i18next.t('timers:turn_off')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='on' />
+          </div>
+          <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
+            <div className='form-group'>
+              <label htmlFor='equipment_id'>{i18next.t('timers:equipment')}</label>
+              <Field
+                name='equipment_id'
+                component='select'
+                disabled={readOnly}
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('equipment_id', touched, errors)
+                })}
+              >
+                <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+                {equipmentOptions()}
+              </Field>
+              <ErrorFor errors={errors} touched={touched} name='equipment_id' />
+            </div>
           </div>
         </div>
 
@@ -198,33 +263,13 @@ const EditTimer = ({
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               <option value='equipment'>{i18next.t('timers:equipment')}</option>
               <option value='reminder'>{i18next.t('timers:reminder')}</option>
+              <option value='macros'>{i18next.t('timers:macros')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>
         </div>
 
-        <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4', {
-          'd-none': values.type === 'reminder'
-        })}>
-          <div className='form-group'>
-            <label htmlFor='equipment_id'>{i18next.t('timers:equipment')}</label>
-            <Field
-              name='equipment_id'
-              component='select'
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('equipment_id', touched, errors)
-              })}
-            >
-              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              {equipmentOptions()}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='equipment_id' />
-          </div>
-        </div>
-
-        {values.type === 'equipment' ? equipmentAction() : reminderAction()}
-
+        {buildAction()}
       </div>
 
       <div className={classNames('row', { 'd-none': readOnly })}>
@@ -247,6 +292,7 @@ EditTimer.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   equipment: PropTypes.array,
+  macros: PropTypes.array,
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,

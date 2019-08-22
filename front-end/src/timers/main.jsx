@@ -41,6 +41,7 @@ class Main extends React.Component {
             <TimerForm readOnly={timer.readOnly}
               onSubmit={this.updateTimer}
               equipment={this.props.equipment}
+              macros={this.props.macros}
               key={Number(timer.id)}
               timer={timer} />
           </Collapsible>
@@ -107,7 +108,11 @@ class Main extends React.Component {
   render () {
     var nT = <div />
     if (this.state.addTimer) {
-      nT = <TimerForm equipment={this.props.equipment} onSubmit={this.createTimer} />
+      nT = <TimerForm
+        equipment={this.props.equipment}
+        onSubmit={this.createTimer}
+        macros={this.props.macros}
+      />
     }
     return (
       <ul className='list-group list-group-flush'>
@@ -136,7 +141,8 @@ class Main extends React.Component {
 const mapStateToProps = state => {
   return {
     timers: state.timers,
-    equipment: state.equipment
+    equipment: state.equipment,
+    macros: state.macros
   }
 }
 

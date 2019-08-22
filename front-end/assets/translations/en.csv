@@ -162,6 +162,8 @@ timers:timer_status,Timer Status
 timers:function,Function
 timers:equipment,Equipment
 timers:reminder,Reminder
+timers:macros,Macros
+timers:macro,Macro Name
 temperature:temperature,Temperature
 temperature:heater_cooler,Heater/Cooler
 temperature:chart_minimum,Chart Minimum

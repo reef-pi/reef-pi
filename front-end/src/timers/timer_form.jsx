@@ -9,7 +9,8 @@ const TimerForm = withFormik({
     if (timer === undefined) {
       timer = {
         enable: true,
-        equipment: {}
+        equipment: {},
+        macros: {}
       }
     }
 

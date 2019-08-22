@@ -10,6 +10,7 @@ Enzyme.configure({ adapter: new Adapter() })
 describe('<EditTimer />', () => {
   var values = {type: 'equipment'}
   var equipment = [{id: '1', name: 'EQ'}]
+  var macros = [{id: '1', name: 'EQ'}]
   var fn = jest.fn()
 
   beforeEach(() => {
@@ -26,6 +27,7 @@ describe('<EditTimer />', () => {
         errors={{}}
         touched={{}}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn} />
@@ -36,6 +38,7 @@ describe('<EditTimer />', () => {
     const wrapper = shallow(
       <EditTimer values={values}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -59,6 +62,7 @@ describe('<EditTimer />', () => {
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
+        macros={macros}
         showChart
         errors={{}}
         touched={{}}
