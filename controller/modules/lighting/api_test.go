@@ -38,7 +38,7 @@ func TestLightingAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c, err := New(config, con, jacks, nil, i2c.MockBus())
+	c, err := New(config, con, jacks, i2c.MockBus())
 	if err != nil {
 		t.Fatal(err)
 	}
