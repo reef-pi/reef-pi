@@ -44,6 +44,11 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 }
 
 func (c *Controller) ProfileValue(ch Channel, t time.Time) (float64, error) {
+	if ch.profile == nil {
+		if err := ch.loadProfile(); err != nil {
+			return 0, err
+		}
+	}
 	v := ch.profile.Get(t)
 	if (ch.Min > 0) && (v < float64(ch.Min)) {
 		return float64(ch.StartMin), nil

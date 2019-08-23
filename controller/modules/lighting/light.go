@@ -99,14 +99,12 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) syncLight(light Light) {
-	if !light.Enable {
-		return
-	}
 	for _, ch := range light.Channels {
 		v, err := c.ProfileValue(ch, time.Now())
 		if err != nil {
 			log.Println("ERROR: lighting subsystem. Profile value computation error. Light:", light.Name, "channel:", ch.Name, "Error:", err)
 		}
+		log.Println("lighting subsystem: Setting Light: ", light.Name, "Channel:", ch.Name, "Value:", v)
 		c.UpdateChannel(light.Jack, ch, v)
 		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)
 	}
