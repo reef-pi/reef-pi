@@ -91,9 +91,6 @@ func (c *Controller) Create(p Probe) error {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
-		if p.Control {
-			p.loadHomeostasis(c.c)
-		}
 		go c.Run(p, quit)
 	}
 	return nil
@@ -116,7 +113,6 @@ func (c *Controller) Update(id string, p Probe) error {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
-		p.loadHomeostasis(c.c)
 		go c.Run(p, quit)
 	}
 	return nil
@@ -148,6 +144,9 @@ func (c *Controller) Run(p Probe, quit chan struct{}) {
 	if p.Period <= 0 {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return
+	}
+	if p.Control {
+		p.loadHomeostasis(c.c)
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)

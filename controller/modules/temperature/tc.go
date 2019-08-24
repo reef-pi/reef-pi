@@ -84,7 +84,6 @@ func (c *Controller) Create(tc TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		tc.loadHomeostasis(c.c)
 		go c.Run(tc, quit)
 	}
 	return nil
@@ -108,7 +107,6 @@ func (c *Controller) Update(id string, tc TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		tc.loadHomeostasis(c.c)
 		go c.Run(tc, quit)
 	}
 	return nil
@@ -152,6 +150,7 @@ func (c *Controller) Run(t TC, quit chan struct{}) {
 		return
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
+	t.loadHomeostasis(c.c)
 	for {
 		select {
 		case <-ticker.C:
