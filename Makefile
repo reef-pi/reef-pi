@@ -87,6 +87,7 @@ clean:
 	-rm -rf *.deb
 	-rm -rf dist
 	-rm -rf ui
+	-rm -rf bin/*
 	-find jsx -iname __snapshots__ -print | xargs rm -rf
 	-find . -name '*.db' -exec rm {} \;
 	-find . -name '*.crt' -exec rm {} \;

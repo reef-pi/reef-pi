@@ -48,7 +48,6 @@ func (c *Controller) Start() {
 }
 func (c *Controller) StartCycle() {
 	ticker := time.NewTicker(c.config.Interval)
-	log.Println("Starting lighting cycle")
 	c.mu.Lock()
 	c.running = true
 	c.mu.Unlock()
