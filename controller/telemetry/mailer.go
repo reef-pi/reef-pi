@@ -11,11 +11,11 @@ type Mailer interface {
 }
 
 type MailerConfig struct {
-	Server   string `json:"server"`
-	Port     int    `json:"port"`
-	From     string `json:"from"`
-	Password string `json:"password"`
-	To       string `json:"to"`
+	Server   string   `json:"server"`
+	Port     int      `json:"port"`
+	From     string   `json:"from"`
+	Password string   `json:"password"`
+	To       []string `json:"to"`
 }
 
 var GMailMailer = MailerConfig{
@@ -47,7 +47,10 @@ type mailer struct {
 
 func (m *mailer) msg(subject, body string) string {
 	msg := "From: " + m.config.From + "\n"
-	msg = msg + "To: " + m.config.To + "\n"
+	for _, to := range m.config.To {
+		msg = msg + "To: " + to + "\n"
+		break
+	}
 	msg = msg + "Subject: " + subject + "\n\n"
 	msg = msg + body
 	return msg
@@ -56,5 +59,5 @@ func (m *mailer) msg(subject, body string) string {
 func (m *mailer) Email(subject, body string) error {
 	msg := m.msg(subject, body)
 	log.Println("Sending email to:", m.config.To, " subject:", subject)
-	return m.sendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, []string{m.config.To}, []byte(msg))
+	return m.sendMail(m.config.Server+":"+strconv.Itoa(m.config.Port), m.auth, m.config.From, m.config.To, []byte(msg))
 }
