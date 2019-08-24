@@ -10,6 +10,12 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+type Notify struct {
+	Enable bool    `json:"enable"`
+	Max    float64 `json:"max"`
+	Min    float64 `json:"min"`
+}
+
 type TC struct {
 	ID         string        `json:"id"`
 	Name       string        `json:"name"`
@@ -25,12 +31,19 @@ type TC struct {
 	Fahrenheit bool          `json:"fahrenheit"`
 	ChartMin   float64       `json:"chart_min"`
 	ChartMax   float64       `json:"chart_max"`
+	h          *controller.Homeostasis
 }
 
-type Notify struct {
-	Enable bool    `json:"enable"`
-	Max    float64 `json:"max"`
-	Min    float64 `json:"min"`
+func (t *TC) loadHomeostasis(c controller.Controller) {
+	hConf := controller.HomeStasisConfig{
+		Name:   t.Name,
+		Upper:  t.Heater,
+		Downer: t.Cooler,
+		Min:    t.Min,
+		Max:    t.Max,
+		Period: int(t.Period),
+	}
+	t.h = controller.NewHomeostasis(c, hConf)
 }
 
 func (c *Controller) Get(id string) (TC, error) {
@@ -71,6 +84,7 @@ func (c *Controller) Create(tc TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
+		tc.loadHomeostasis(c.c)
 		go c.Run(tc, quit)
 	}
 	return nil
@@ -94,6 +108,7 @@ func (c *Controller) Update(id string, tc TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
+		tc.loadHomeostasis(c.c)
 		go c.Run(tc, quit)
 	}
 	return nil

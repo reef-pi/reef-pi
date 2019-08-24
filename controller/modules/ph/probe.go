@@ -35,6 +35,19 @@ type Probe struct {
 	DownerEq    string        `json:"downer_eq"`
 	Min         float64       `json:"min"`
 	Max         float64       `json:"max"`
+	h           *controller.Homeostasis
+}
+
+func (p *Probe) loadHomeostasis(c controller.Controller) {
+	hConf := controller.HomeStasisConfig{
+		Name:   p.Name,
+		Upper:  p.UpperEq,
+		Downer: p.DownerEq,
+		Min:    p.Min,
+		Max:    p.Max,
+		Period: int(p.Period),
+	}
+	p.h = controller.NewHomeostasis(c, hConf)
 }
 
 type CalibrationPoint struct {
@@ -78,6 +91,9 @@ func (c *Controller) Create(p Probe) error {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
+		if p.Control {
+			p.loadHomeostasis(c.c)
+		}
 		go c.Run(p, quit)
 	}
 	return nil
@@ -100,6 +116,7 @@ func (c *Controller) Update(id string, p Probe) error {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
 		c.quitters[p.ID] = quit
+		p.loadHomeostasis(c.c)
 		go c.Run(p, quit)
 	}
 	return nil
@@ -169,17 +186,7 @@ func (c *Controller) checkAndControl(p Probe) {
 	notifyIfNeeded(c.c.Telemetry(), p, reading)
 	u := controller.NewObservation(reading)
 	if p.Control {
-		h := controller.Homestatsis{
-			Name:     p.Name,
-			UpperEq:  p.UpperEq,
-			DownerEq: p.DownerEq,
-			Min:      p.Min,
-			Max:      p.Max,
-			Period:   int(p.Period),
-			T:        c.c.Telemetry(),
-			Eqs:      c.equipment,
-		}
-		if err := h.Sync(&u); err != nil {
+		if err := p.h.Sync(&u); err != nil {
 			log.Println("ERROR: Failed to execute ph control logic. Error:", err)
 		}
 	}

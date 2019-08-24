@@ -20,7 +20,7 @@ func TestPhAPI(t *testing.T) {
 	}
 	drvrs := drivers.TestDrivers(r.Store())
 	ais := connectors.NewAnalogInputs(drvrs, r.Store())
-	c := New(true, r, ais, controller.NoopSubsystem())
+	c := New(true, r, ais)
 	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
 		t.Error(err)
@@ -103,6 +103,7 @@ func TestPhAPI(t *testing.T) {
 	if err := c.Update("1", *p); err != nil {
 		t.Error(err)
 	}
+	p.loadHomeostasis(r)
 	c.checkAndControl(*p)
 	ms := []hal.Measurement{
 		hal.Measurement{
