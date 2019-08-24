@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
@@ -44,83 +45,112 @@ func (o1 Observation) Before(o2 telemetry.Metric) bool {
 	return o1.Time.Before(o2.(Observation).Time)
 }
 
-type Homestatsis struct {
-	UpperEq  string
-	DownerEq string
-	Min, Max float64
+type HomeStasisConfig struct {
 	Name     string
+	IsMacro  bool
 	Period   int
-	T        telemetry.Telemetry
-	Eqs      Subsystem
+	Upper    string
+	Downer   string
+	Min, Max float64
 }
 
-func (h *Homestatsis) EmitMetric(m string, v float64) {
-	h.T.EmitMetric(h.Name, m, v)
+type Homeostasis struct {
+	config HomeStasisConfig
+	t      telemetry.Telemetry
+	eqs    Subsystem
+	macros Subsystem
 }
 
-func (h *Homestatsis) Sync(o *Observation) error {
+func NewHomeostasis(c Controller, config HomeStasisConfig) *Homeostasis {
+	h := Homeostasis{
+		config: config,
+		t:      c.Telemetry(),
+		eqs:    NoopSubsystem(),
+		macros: NoopSubsystem(),
+	}
+	if sub, err := c.Subsystem(storage.MacroBucket); err == nil {
+		h.macros = sub
+	}
+	if sub, err := c.Subsystem(storage.EquipmentBucket); err == nil {
+		h.eqs = sub
+	}
+	return &h
+}
+
+func (h *Homeostasis) Sub() Subsystem {
+	if h.config.IsMacro {
+		return h.macros
+	}
+	return h.eqs
+}
+
+func (h *Homeostasis) EmitMetric(m string, v float64) {
+	h.t.EmitMetric(h.config.Name, m, v)
+}
+
+func (h *Homeostasis) Sync(o *Observation) error {
 	switch {
-	case (o.Value > h.Max) && (h.DownerEq != ""):
-		log.Printf("Current value of '%s' is above maximum threshold. Executing down routine\n", h.Name)
+	case (o.Value > h.config.Max) && (h.config.Downer != ""):
+		log.Printf("Current value of '%s' is above maximum threshold. Executing down routine\n", h.config.Name)
 		if err := h.down(); err != nil {
 			return err
 		}
-		o.Downer += h.Period
-	case (o.Value < h.Min) && (h.UpperEq != ""):
-		log.Printf("Current value of '%s' is below minimum threshold. Executing up routine\n", h.Name)
+		o.Downer += h.config.Period
+	case (o.Value < h.config.Min) && (h.config.Upper != ""):
+		log.Printf("Current value of '%s' is below minimum threshold. Executing up routine\n", h.config.Name)
 		if err := h.up(); err != nil {
 			return err
 		}
-		o.Upper += int(h.Period)
+		o.Upper += int(h.config.Period)
 	default:
-		log.Printf("Current value of '%s' within range switching off control equipments\n", h.Name)
+		log.Printf("Current value of '%s' within range switching off control equipments\n", h.config.Name)
 		h.switchOffAll()
 	}
-	if h.UpperEq != "" {
+	if h.config.Upper != "" {
 		h.EmitMetric("down", float64(o.Downer))
 	}
-	if h.DownerEq != "" {
+	if h.config.Downer != "" {
 		h.EmitMetric("up", float64(o.Upper))
 	}
 	return nil
 }
 
-func (h *Homestatsis) up() error {
-	if h.DownerEq != "" {
-		if err := h.Eqs.On(h.DownerEq, false); err != nil {
+func (h *Homeostasis) up() error {
+	if h.config.Downer != "" {
+		if err := h.Sub().On(h.config.Downer, false); err != nil {
 			return err
 		}
 	}
-	if h.UpperEq != "" {
-		if err := h.Eqs.On(h.UpperEq, true); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (h *Homestatsis) down() error {
-	if h.UpperEq != "" {
-		if err := h.Eqs.On(h.UpperEq, false); err != nil {
-			return err
-		}
-	}
-	if h.DownerEq != "" {
-		if err := h.Eqs.On(h.DownerEq, true); err != nil {
+	if h.config.Upper != "" {
+		if err := h.Sub().On(h.config.Upper, true); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (h *Homestatsis) switchOffAll() error {
-	if h.UpperEq != "" {
-		if err := h.Eqs.On(h.UpperEq, false); err != nil {
+func (h *Homeostasis) down() error {
+	if h.config.Upper != "" {
+		if err := h.Sub().On(h.config.Upper, false); err != nil {
 			return err
 		}
 	}
-	if h.DownerEq != "" {
-		if err := h.Eqs.On(h.DownerEq, false); err != nil {
+	if h.config.Downer != "" {
+		if err := h.Sub().On(h.config.Downer, true); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (h *Homeostasis) switchOffAll() error {
+	if h.config.Upper != "" {
+		if err := h.Sub().On(h.config.Upper, false); err != nil {
+			return err
+		}
+	}
+	if h.config.Downer != "" {
+		if err := h.Sub().On(h.config.Downer, false); err != nil {
 			return err
 		}
 	}

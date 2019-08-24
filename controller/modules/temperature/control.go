@@ -29,17 +29,7 @@ func (c *Controller) Check(tc TC) {
 		Value: reading,
 	}
 	if tc.Control {
-		h := controller.Homestatsis{
-			Name:     tc.Name,
-			UpperEq:  tc.Heater,
-			DownerEq: tc.Cooler,
-			Min:      tc.Min,
-			Max:      tc.Max,
-			Period:   int(tc.Period),
-			T:        c.c.Telemetry(),
-			Eqs:      c.equipment,
-		}
-		if err := h.Sync(&u); err != nil {
+		if err := tc.h.Sync(&u); err != nil {
 			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
 		}
 	}

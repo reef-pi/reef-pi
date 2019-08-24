@@ -87,6 +87,7 @@ func TestTemperatureAPI(t *testing.T) {
 	}
 	c.Stop()
 	c.Start()
+	tc.loadHomeostasis(con)
 	c.Check(tc)
 	u := controller.Observation{
 		Value: 67,

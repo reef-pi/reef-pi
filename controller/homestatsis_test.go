@@ -8,20 +8,24 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func TestHomestatis(t *testing.T) {
+func TestHomestasis(t *testing.T) {
 	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal(store)
 	}
-	h := Homestatsis{
-		Name:     "test",
-		UpperEq:  "1",
-		DownerEq: "2",
-		Min:      10,
-		Max:      30,
-		Period:   2,
-		T:        telemetry.TestTelemetry(store),
-		Eqs:      &mockSubsystem{},
+	config := HomeStasisConfig{
+		Name:   "test",
+		Upper:  "1",
+		Downer: "2",
+		Min:    10,
+		Max:    30,
+		Period: 2,
+	}
+	h := Homeostasis{
+		config: config,
+		t:      telemetry.TestTelemetry(store),
+		eqs:    &mockSubsystem{},
+		macros: &mockSubsystem{},
 	}
 	o := Observation{
 		Value: 21,

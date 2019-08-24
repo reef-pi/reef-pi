@@ -25,7 +25,7 @@ func (r *ReefPi) loadPhSubsystem(eq controller.Subsystem) error {
 	if !r.settings.Capabilities.Ph {
 		return nil
 	}
-	p := ph.New(r.settings.Capabilities.DevMode, r.Controller(), r.ais, eq)
+	p := ph.New(r.settings.Capabilities.DevMode, r.Controller(), r.ais)
 	r.subsystems[ph.Bucket] = p
 	return nil
 }
