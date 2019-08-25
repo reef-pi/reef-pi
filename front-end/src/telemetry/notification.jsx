@@ -9,6 +9,8 @@ export default class NotificationSettings extends React.Component {
     }
     this.update = this.update.bind(this)
     this.inputGroup = this.inputGroup.bind(this)
+    this.updateTo = this.updateTo.bind(this)
+    this.inputTo = this.inputTo.bind(this)
   }
 
   update (key) {
@@ -20,6 +22,32 @@ export default class NotificationSettings extends React.Component {
       })
       this.props.update(config)
     }.bind(this)
+  }
+
+  updateTo () {
+    return function (ev) {
+      var config = this.state.config
+      config.to = ev.taregt.value.split(',').map(s => s.trim())
+      this.setState({
+        config: config
+      })
+      this.props.update(config)
+    }.bind(this)
+  }
+
+  inputTo () {
+    return (
+      <div className='form-group col-12'>
+        <label htmlFor='input-to'>To</label>
+        <input
+          type='text'
+          id='input-to'
+          value={this.state.config.to.join()}
+          onChange={this.updateTo()}
+          className='form-control'
+        />
+      </div>
+    )
   }
 
   inputGroup (key) {
@@ -43,7 +71,7 @@ export default class NotificationSettings extends React.Component {
         {this.inputGroup('server')}
         {this.inputGroup('port')}
         {this.inputGroup('from')}
-        {this.inputGroup('to')}
+        {this.inputTo('to')}
         <div className='form-group col-12'>
           <label htmlFor='email-password'>Password</label>
           <input

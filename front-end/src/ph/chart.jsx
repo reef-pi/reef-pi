@@ -35,7 +35,7 @@ class chart extends React.Component {
         <span className='h6'>{this.props.config.name}-{this.props.type} pH ({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
-            <Line dataKey='pH' stroke='#33b5e5' isAnimationActive={false} dot={false} />
+            <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
             <Tooltip />
             <YAxis />
