@@ -72,6 +72,8 @@ func TestTimerController(t *testing.T) {
 		Minute: "*",
 		Hour:   "*",
 		Day:    "*",
+		Month:  "*",
+		Week:   "?",
 		Type:   "equipment",
 		Enable: true,
 	}
