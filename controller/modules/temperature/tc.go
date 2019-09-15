@@ -29,8 +29,6 @@ type TC struct {
 	Notify     Notify        `json:"notify"`
 	Sensor     string        `json:"sensor"`
 	Fahrenheit bool          `json:"fahrenheit"`
-	ChartMin   float64       `json:"chart_min"`
-	ChartMax   float64       `json:"chart_max"`
 	h          *controller.Homeostasis
 }
 
