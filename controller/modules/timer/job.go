@@ -18,6 +18,8 @@ type Job struct {
 	Name   string          `json:"name"`
 	Enable bool            `json:"enable"`
 	Type   string          `json:"type"`
+	Month  string          `json:"month"`
+	Week   string          `json:"week"`
 	Day    string          `json:"day"`
 	Hour   string          `json:"hour"`
 	Minute string          `json:"minute"`
@@ -26,11 +28,11 @@ type Job struct {
 }
 
 func (j *Job) CronSpec() string {
-	return strings.Join([]string{j.Second, j.Minute, j.Hour, j.Day, "*", "?"}, " ")
+	return strings.Join([]string{j.Second, j.Minute, j.Hour, j.Day, j.Month, j.Week}, " ")
 }
 
 func (j *Job) Validate() error {
-	parser := cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
+	parser := cron.NewParser(_cronParserSpec)
 	if _, err := parser.Parse(j.CronSpec()); err != nil {
 		return err
 	}

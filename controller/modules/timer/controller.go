@@ -10,6 +10,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
 
+const _cronParserSpec = cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor
+
 type Controller struct {
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
@@ -21,7 +23,7 @@ type Controller struct {
 func New(c controller.Controller, e *equipment.Controller, macro controller.Subsystem) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
-		runner:    cron.New(),
+		runner:    cron.New(cron.WithSeconds()),
 		equipment: e,
 		c:         c,
 		macro:     macro,
