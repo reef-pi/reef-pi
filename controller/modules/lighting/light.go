@@ -86,7 +86,9 @@ func (c *Controller) Update(id string, l Light) error {
 	if err := c.c.Store().Update(Bucket, id, l); err != nil {
 		return err
 	}
-	c.syncLight(l)
+	if l.Enable {
+		c.syncLight(l)
+	}
 	return nil
 }
 
@@ -100,7 +102,7 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) syncLight(light Light) {
 	for _, ch := range light.Channels {
-		v, err := c.ProfileValue(ch, time.Now())
+		v, err := ch.Value(time.Now())
 		if err != nil {
 			log.Println("ERROR: lighting subsystem. Profile value computation error. Light:", light.Name, "channel:", ch.Name, "Error:", err)
 		}

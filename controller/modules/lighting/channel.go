@@ -9,6 +9,7 @@ import (
 
 type Channel struct {
 	Name        string                  `json:"name"`
+	On          bool                    `json:"on"`
 	Min         float64                 `json:"min"`
 	StartMin    int                     `json:"start_min"`
 	Max         float64                 `json:"max"`
@@ -43,8 +44,12 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	}
 }
 
-func (c *Controller) ProfileValue(ch Channel, t time.Time) (float64, error) {
+func (ch *Channel) Value(t time.Time) (float64, error) {
+	if !ch.On {
+		return 0, nil
+	}
 	if ch.profile == nil {
+		log.Println("lighting-subsystem: Loading profile for channel", ch.Name)
 		if err := ch.loadProfile(); err != nil {
 			return 0, err
 		}
