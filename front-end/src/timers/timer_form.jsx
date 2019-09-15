@@ -23,12 +23,7 @@ const TimerForm = withFormik({
       minute: timer.minute || '*',
       second: timer.second || '0',
       type: timer.type || 'equipment',
-      equipment_id: (timer.equipment && timer.equipment.id) || '',
-      on: timer.equipment && (timer.equipment.on === undefined ? true : timer.equipment.on),
-      duration: (timer.equipment && timer.equipment.duration) || '60',
-      revert: (timer.equipment && timer.equipment.revert) || false,
-      title: (timer.reminder && timer.reminder.title) || '',
-      message: (timer.reminder && timer.reminder.message) || ''
+      target: timer.target || {},
     }
   },
   validationSchema: TimerSchema,
