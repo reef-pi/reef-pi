@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
@@ -15,22 +15,25 @@ const Bucket = storage.TimerBucket
 
 type Job struct {
 	ID     string          `json:"id"`
-	Minute string          `json:"minute"`
+	Name   string          `json:"name"`
+	Enable bool            `json:"enable"`
+	Type   string          `json:"type"`
+	Month  string          `json:"month"`
+	Week   string          `json:"week"`
 	Day    string          `json:"day"`
 	Hour   string          `json:"hour"`
+	Minute string          `json:"minute"`
 	Second string          `json:"second"`
-	Name   string          `json:"name"`
-	Type   string          `json:"type"`
 	Target json.RawMessage `json:"target"`
-	Enable bool            `json:"enable"`
 }
 
 func (j *Job) CronSpec() string {
-	return strings.Join([]string{j.Second, j.Minute, j.Hour, j.Day, "*", "?"}, " ")
+	return strings.Join([]string{j.Second, j.Minute, j.Hour, j.Day, j.Month, j.Week}, " ")
 }
 
 func (j *Job) Validate() error {
-	if _, err := cron.Parse(j.CronSpec()); err != nil {
+	parser := cron.NewParser(_cronParserSpec)
+	if _, err := parser.Parse(j.CronSpec()); err != nil {
 		return err
 	}
 	switch j.Type {

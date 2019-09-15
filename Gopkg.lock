@@ -139,10 +139,10 @@
   name = "github.com/prometheus/client_model"
   packages = ["go"]
   pruneopts = "UT"
-  revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
+  revision = "14fe0d1b01d4d5fc031dd4bec1823bd3ebbe8016"
 
 [[projects]]
-  digest = "1:8dcedf2e8f06c7f94e48267dea0bc0be261fa97b377f3ae3e87843a92a549481"
+  digest = "1:f119e3205d3a1f0f19dbd7038eb37528e2c6f0933269dc344e305951fb87d632"
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
@@ -150,19 +150,20 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "31bed53e4047fd6c510e43a941f90cb31be0972a"
-  version = "v0.6.0"
+  revision = "287d3e634a1e550c9e463dd7e5a75a422c614505"
+  version = "v0.7.0"
 
 [[projects]]
-  digest = "1:366f5aa02ff6c1e2eccce9ca03a22a6d983da89eecff8a89965401764534eb7c"
+  digest = "1:8232537905152d6a0b116b9af5a0868fcac0e84eb02ec5a150624c077bdedb0b"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
+    "internal/util",
   ]
   pruneopts = "UT"
-  revision = "3f98efb27840a48a7a2898ec80be07674d19f9c8"
-  version = "v0.0.3"
+  revision = "00ec24a6a2d86e7074629c8384715dbb05adccd8"
+  version = "v0.0.4"
 
 [[projects]]
   branch = "master"
@@ -215,27 +216,27 @@
     "mem",
   ]
   pruneopts = "UT"
-  revision = "d80c43f9c984a48783daf22f4bd9278006ae483a"
-  version = "v2.19.7"
+  revision = "e4ec7b275ada47ca32799106c2dba142d96aaf93"
+  version = "v2.19.8"
 
 [[projects]]
   branch = "master"
-  digest = "1:00d73f8175ba939718fdfc3d3ecab52270c6d801a1930fbca62100f9a4d8f4c1"
+  digest = "1:b81809747cfe3b745ecbb83859f2ac3566170d5a67aa96c458aa0afeefd93200"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "51ab0e2deafac1f46c46ad59cf0921be2f180c3d"
+  revision = "c3b328c6e5a763a2bfc82a48b4bd855037210934"
 
 [[projects]]
-  branch = "v2"
-  digest = "1:e8c48aa61ea272e211858e52979ad4d114c60bfe6900d12431ac697482100b0a"
-  name = "gopkg.in/robfig/cron.v2"
+  digest = "1:b778880d47d8544b11cd82b0d9731f9669d653489b400d0b5899b8a20934e7b4"
+  name = "gopkg.in/robfig/cron.v3"
   packages = ["."]
   pruneopts = "UT"
-  revision = "be2e0b0deed5a68ffee390b4583a13aff8321535"
+  revision = "45fbe1491cdd47d74d1bf1396286d67faee8b8b5"
+  version = "v3.0.0"
 
 [[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
@@ -270,7 +271,7 @@
     "github.com/reef-pi/rpi/pwm",
     "github.com/shirou/gopsutil/load",
     "github.com/shirou/gopsutil/mem",
-    "gopkg.in/robfig/cron.v2",
+    "gopkg.in/robfig/cron.v3",
     "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"

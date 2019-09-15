@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
@@ -13,8 +13,11 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-const Bucket = storage.DoserBucket
-const UsageBucket = storage.DoserUsageBucket
+const (
+	Bucket          = storage.DoserBucket
+	UsageBucket     = storage.DoserUsageBucket
+	_cronParserSpec = cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor
+)
 
 type Controller struct {
 	DevMode  bool
@@ -32,7 +35,7 @@ func New(devMode bool, c controller.Controller, jacks *connectors.Jacks) (*Contr
 		jacks:    jacks,
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
-		runner:   cron.New(),
+		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
 	}, nil

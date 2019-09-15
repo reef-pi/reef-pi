@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"log"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
+
+const _cronParserSpec = cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor
 
 type Controller struct {
 	runner    *cron.Cron
@@ -21,7 +23,7 @@ type Controller struct {
 func New(c controller.Controller, e *equipment.Controller, macro controller.Subsystem) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
-		runner:    cron.New(),
+		runner:    cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		equipment: e,
 		c:         c,
 		macro:     macro,

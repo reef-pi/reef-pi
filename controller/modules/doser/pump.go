@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/telemetry"

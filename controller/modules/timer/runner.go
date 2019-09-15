@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
@@ -49,7 +49,7 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 		}
 		return &ReminderRunner{
 			t:     c.c.Telemetry(),
-			title: "[Reef-Pi Reminder]" + reminder.Title,
+			title: "[reef-pi Reminder]" + reminder.Title,
 			body:  reminder.Message,
 		}, nil
 	case "equipment":

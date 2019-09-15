@@ -52,6 +52,8 @@ func TestDoserAPI(t *testing.T) {
 			Minute: "*",
 			Day:    "*",
 			Second: "0",
+			Month:  "*",
+			Week:   "?",
 		},
 		Enable: true,
 	})
@@ -76,6 +78,8 @@ func TestDoserAPI(t *testing.T) {
 				Minute: "*",
 				Day:    "*",
 				Second: "0",
+				Month:  "*",
+				Week:   "?",
 			},
 		},
 	})
