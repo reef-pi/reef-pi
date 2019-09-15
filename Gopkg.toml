@@ -43,12 +43,13 @@
   version = "2.19.2"
 
 [[constraint]]
-  branch = "v2"
-  name = "gopkg.in/robfig/cron.v2"
-
-[[constraint]]
   name = "gopkg.in/yaml.v2"
   version = "2.2.2"
+
+[[constraint]]
+  name = "gopkg.in/robfig/cron.v3"
+  version = "3.0.0"
+
 
 [prune]
   go-tests = true

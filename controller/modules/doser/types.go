@@ -3,7 +3,7 @@ package doser
 import (
 	"strings"
 
-	cron "gopkg.in/robfig/cron.v2"
+	cron "gopkg.in/robfig/cron.v3"
 )
 
 type DosingRegiment struct {
@@ -30,6 +30,7 @@ func (s Schedule) CronSpec() string {
 }
 
 func (s Schedule) Validate() error {
-	_, err := cron.Parse(s.CronSpec())
+	parser := cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
+	_, err := parser.Parse(s.CronSpec())
 	return err
 }
