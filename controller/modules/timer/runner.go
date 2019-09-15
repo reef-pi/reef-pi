@@ -24,7 +24,6 @@ type EquipmentRunner struct {
 }
 
 func (e *EquipmentRunner) Run() {
-	log.Println("Timer executing: Equipment:", e.target.ID, "state:", e.target.On)
 	eq := e.eq
 	eq.On = e.target.On
 	if err := e.equipment.Update(e.eq.ID, eq); err != nil {

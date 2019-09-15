@@ -23,7 +23,7 @@ type Controller struct {
 func New(c controller.Controller, e *equipment.Controller, macro controller.Subsystem) *Controller {
 	return &Controller{
 		cronIDs:   make(map[string]cron.EntryID),
-		runner:    cron.New(cron.WithSeconds()),
+		runner:    cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		equipment: e,
 		c:         c,
 		macro:     macro,
