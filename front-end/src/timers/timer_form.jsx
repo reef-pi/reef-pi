@@ -23,7 +23,7 @@ const TimerForm = withFormik({
       minute: timer.minute || '*',
       second: timer.second || '0',
       type: timer.type || 'equipment',
-      target: timer.target || {},
+      target: timer.target || {}
     }
   },
   validationSchema: TimerSchema,
