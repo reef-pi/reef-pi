@@ -44,7 +44,6 @@ const Target = (props) => {
     let touched = props.touched
     let errors = props.errors
     let readOnly = props.readOnly
-    let target = props.target
     let name = props.name
     return (
       <React.Fragment>
