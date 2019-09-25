@@ -85,7 +85,6 @@ class Main extends React.Component {
 
   createTimer (values) {
     var payload = this.valuesToTimer(values)
-
     this.props.create(payload)
     this.toggleAddTimerDiv()
   }

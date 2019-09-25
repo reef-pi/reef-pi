@@ -18,7 +18,10 @@ const EditTimer = ({
   submitForm,
   isValid,
   dirty,
-  readOnly
+  handleBlur,
+  handleChange,
+  readOnly,
+  ...props
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
@@ -96,13 +99,17 @@ const EditTimer = ({
           </div>
         </div>
         <Target
+          {...props}
+          name='target'
           type={values.type}
           target={values.target}
-          errors={errors}
-          touched={touched}
           macros={macros}
           equipment={equipment}
+          errors={errors}
+          touched={touched}
           readOnly={readOnly}
+          onBlur={handleBlur}
+          onChangeHandler={handleChange}
         />
       </div>
 

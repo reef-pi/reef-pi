@@ -7,17 +7,20 @@ describe('TimerValidation', () => {
     timer = {
       name: 'name',
       enable: true,
+      type: 'equipment',
       day: '*',
       hour: '*',
       minute: '*',
       second: '0',
-      type: 'equipment',
-      equipment_id: '2',
-      on: true,
-      duration: 60,
-      revert: false,
-      title: '',
-      message: ''
+      month: '*',
+      week: '?',
+      target: {
+        id: '2',
+        type: 'equipment',
+        on: true,
+        duration: 60,
+        revert: false
+      }
     }
   })
 
@@ -29,10 +32,9 @@ describe('TimerValidation', () => {
   })
 
   it('should be valid for reminder', () => {
-    timer.type = 'reminder'
-    timer.title = 'title'
-    timer.message = 'message'
-    timer.equipment_id = ''
+    timer.target.type = 'reminder'
+    timer.target.title = 'title'
+    timer.target.message = 'message'
 
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(
@@ -41,9 +43,9 @@ describe('TimerValidation', () => {
   })
 
   it('should require message for reminder', () => {
-    timer.type = 'reminder'
-    timer.title = 'title'
-    timer.message = ''
+    timer.target.type = 'reminder'
+    timer.target.title = 'title'
+    timer.target.message = ''
 
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(
@@ -52,8 +54,7 @@ describe('TimerValidation', () => {
   })
 
   it('should require equipment_id for equipment', () => {
-    timer.equipment_id = ''
-
+    timer.target.id = ''
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(
       valid => expect(valid).toBe(false)
@@ -61,8 +62,8 @@ describe('TimerValidation', () => {
   })
 
   it('should require duration for equipment with rever', () => {
-    timer.revert = true
-    timer.duration = ''
+    timer.target.revert = true
+    timer.target.duration = ''
 
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(

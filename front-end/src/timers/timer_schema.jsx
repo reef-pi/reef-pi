@@ -2,21 +2,19 @@ import * as Yup from 'yup'
 import i18next from 'i18next'
 
 const equipmentSchema = Yup.object().shape({
-  id: Yup.string(),
+  id: Yup.string().required(i18next.t('timers:equipment_required')).min(1),
   on: Yup.bool(),
   duration: Yup.number(),
-  revert: Yup.bool(),
-  title: Yup.string(),
-  message: Yup.string()
+  revert: Yup.bool()
 })
 
 const macroSchema = Yup.object().shape({
-  title: Yup.string(),
-  message: Yup.string()
+  id: Yup.string().required(i18next.t('timers:macro_required'))
 })
 
 const reminderSchema = Yup.object().shape({
-  id: Yup.string()
+  title: Yup.string().required(i18next.t('timers:reminder_title_required')),
+  message: Yup.string().required(i18next.t('timers:reminder_message_required'))
 })
 
 const TimerSchema = Yup.object().shape({
