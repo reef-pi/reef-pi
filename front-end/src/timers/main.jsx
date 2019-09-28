@@ -66,22 +66,13 @@ class Main extends React.Component {
   valuesToTimer (values) {
     var timer = {
       name: values.name,
+      type: values.type,
       day: values.day,
       hour: values.hour,
       minute: values.minute,
       second: values.second,
       enable: values.enable,
-      equipment: {
-        id: values.equipment_id,
-        revert: values.revert,
-        duration: parseInt(values.duration),
-        on: values.on
-      },
-      type: values.type,
-      reminder: {
-        title: values.title,
-        message: values.message
-      }
+      target: values.target
     }
     return timer
   }
@@ -94,7 +85,6 @@ class Main extends React.Component {
 
   createTimer (values) {
     var payload = this.valuesToTimer(values)
-
     this.props.create(payload)
     this.toggleAddTimerDiv()
   }
