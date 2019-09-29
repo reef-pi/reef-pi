@@ -8,6 +8,7 @@ import (
 	"github.com/kidoman/embd"
 
 	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/drivers/file"
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
@@ -49,6 +50,10 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 		return tplink.HS110HALAdapter, nil
 	case "hs300":
 		return tplink.HS300HALAdapter, nil
+	case "file-analog":
+		return file.HalAnalogAdapter, nil
+	case "file-digital":
+		return file.HalDigitalAdapter, nil
 	default:
 		return nil, fmt.Errorf("Unknown driver type:%s", t)
 	}
