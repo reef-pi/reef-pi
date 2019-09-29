@@ -38,5 +38,5 @@ func (s *Subsystem) On(id string, b bool) error {
 	if err != nil {
 		return err
 	}
-	return s.Run(m)
+	return s.Run(m, b)
 }

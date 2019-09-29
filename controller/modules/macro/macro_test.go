@@ -47,7 +47,7 @@ func TestMacro(t *testing.T) {
 		t.Error("Failed to get using api. Error:", err)
 	}
 	m.ID = "1"
-	if err := s.Run(m); err != nil {
+	if err := s.Run(m, false); err != nil {
 		t.Error(err)
 	}
 	if err := tr.Do("GET", "/api/macros", strings.NewReader(`{}`), nil); err != nil {
