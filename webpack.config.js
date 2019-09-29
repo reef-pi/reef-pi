@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 var BUILD_DIR = path.resolve(__dirname, 'ui')
 var APP_DIR = path.resolve(__dirname, 'front-end', 'src')
@@ -25,7 +25,7 @@ var config = {
         include: APP_DIR,
         loader: 'babel-loader',
         query: {
-          presets: [['es2015', { modules: false }], 'react', 'stage-2']
+          presets: [['@babel/preset-env', { modules: false }], '@babel/preset-react']
         }
       },
       {
@@ -71,7 +71,7 @@ var config = {
     }
   },
   plugins: [
-    new CleanWebpackPlugin([BUILD_DIR]),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       favicon: path.join(ASSETS_DIR, 'favicon.ico'),
       filename: 'home.html',
