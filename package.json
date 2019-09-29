@@ -72,15 +72,15 @@
   "scripts": {
     "translations": "node ./build/translations/csv-json.js",
     "translations:sync": "node ./build/translations/csv-sync.js",
-    "build": "npm run translations && ./node_modules/.bin/webpack -d",
-    "ui": "npm run translations && ./node_modules/.bin/webpack --mode=production",
-    "ui-dev": "npm run translations && ./node_modules/.bin/webpack -d --watch",
-    "js-lint": "./node_modules/.bin/standard  front-end/src/**/*",
-    "standard": "./node_modules/.bin/standard --fix front-end/src/**/**",
-    "jest": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all",
-    "jest-update-snapshot": "cross-env NODE_ENV=testing ./node_modules/.bin/jest --coverage --all --updateSnapshot",
+    "build": "npm run translations && webpack -d",
+    "ui": "npm run translations && webpack --mode=production",
+    "ui-dev": "npm run translations && webpack -d --watch",
+    "js-lint": "standard  front-end/src/**/*",
+    "standard": "standard --fix front-end/src/**/**",
+    "jest": "cross-env NODE_ENV=testing jest --coverage --all",
+    "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
-    "sass-lint": "./node_modules/.bin/sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
+    "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
     "smoke": "node front-end/test/smoke.js"
   },
   "repository": {
