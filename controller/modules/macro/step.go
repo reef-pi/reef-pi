@@ -9,19 +9,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-var stepTypes = []string{
-	"wait",
-	"subsystem",
-	"macro",
-	"equipment",
-	"ato",
-	"tc",
-	"lighting",
-	"ph",
-	"doser",
-	"timer",
-}
-
 type GenericStep struct {
 	ID string `json:"id"`
 	On bool   `json:"on"`
@@ -39,7 +26,7 @@ type Step struct {
 func (s *Step) Run(c controller.Controller, reverse bool) error {
 	switch s.Type {
 	case storage.EquipmentBucket, storage.ATOBucket, storage.TemperatureBucket,
-		storage.DoserBucket, storage.PhBucket, storage.TimerBucket, "subsystem":
+		storage.DoserBucket, storage.PhBucket, storage.TimerBucket, storage.MacroBucket, "subsystem":
 		var g GenericStep
 		if err := json.Unmarshal(s.Config, &g); err != nil {
 			return err
