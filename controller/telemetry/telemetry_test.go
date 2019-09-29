@@ -12,6 +12,8 @@ func TestEmitMetric(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer store.Close()
+
 	tele := TestTelemetry(store)
 	tele.EmitMetric("test", "foo", 1.23)
 	tele.config.Throttle = 2

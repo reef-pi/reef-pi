@@ -9,22 +9,20 @@ const DriverForm = withFormik({
     if (data === undefined) {
       data = {
         name: '',
-        config: {
-          address: 64,
-          frequency: 800
-        },
-        type: 'pca9685'
+        config: {},
+        type: ''
       }
     }
     return ({
       id: data.id || '',
       name: data.name || '',
+      type: data.type || '',
       config: data.config || {}
     })
   },
   validationSchema: DriverSchema,
-  handleSubmit: (values, { props }) => {
-    props.onSubmit(values)
+  handleSubmit: (values, formikBag) => {
+    formikBag.props.onSubmit(values, formikBag)
   }
 })(EditDriver)
 

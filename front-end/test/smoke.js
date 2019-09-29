@@ -24,13 +24,16 @@ const nightmare = Nightmare({
 
 function SmokeTest (url) {
   nightmare
+    .on('console', (log, msg) => {
+      console.log(msg)
+    })
     .goto(url)
     .viewport(1100, 650)
     .wait(500)
     .evaluate(S.SignIn(nightmare))
     .wait(1500)
-    .evaluate(drivers.Create(nightmare))
-    .wait(1500)
+    //.evaluate(drivers.Create(nightmare))
+    //.wait(1500)
     .evaluate(outlet.Create(nightmare))
     .wait(1500)
     .evaluate(inlet.Create(nightmare))

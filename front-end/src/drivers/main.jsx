@@ -1,5 +1,5 @@
 import React from 'react'
-import { fetchDrivers, deleteDriver, createDriver, updateDriver } from 'redux/actions/drivers'
+import { fetchDrivers, fetchDriverOptions, deleteDriver, createDriver, updateDriver } from 'redux/actions/drivers'
 import { connect } from 'react-redux'
 import Driver from './driver'
 import New from './new'
@@ -8,10 +8,23 @@ class drivers extends React.Component {
   constructor (props) {
     super(props)
     this.list = this.list.bind(this)
+    this.validate = this.validate.bind(this)
   }
 
   componentDidMount () {
     this.props.fetch()
+    this.props.fetchDriverOptions()
+  }
+
+  validate(payload) {
+    //This doesn't seem to belong in redux
+    // since it isn't really part of app state.
+    // It's here since I'm not sure where else it should belong.
+    return fetch('api/drivers/validate', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify(payload)
+    })
   }
 
   list () {
@@ -28,11 +41,10 @@ class drivers extends React.Component {
       }
       items.push(
         <Driver
-          name={d.name}
-          driver_id={d.id}
-          type={d.type}
           key={d.id}
-          config={d.config}
+          driver = {d}
+          validate = {this.validate}
+          driverOptions={this.props.driverOptions}
           remove={this.props.delete}
           update={this.props.update}
         />
@@ -49,19 +61,27 @@ class drivers extends React.Component {
             {this.list()}
           </div>
         </div>
-        <New drivers={this.props.drivers} hook={this.props.create} />
+        <New drivers={this.props.drivers}
+          hook={this.props.create}
+          driverOptions={this.props.driverOptions}
+          validate = {this.validate}
+        />
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  return { drivers: state.drivers }
+  return {
+    drivers: state.drivers,
+    driverOptions: state.driverOptions
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchDrivers()),
+    fetchDriverOptions: () => dispatch(fetchDriverOptions()),
     create: d => dispatch(createDriver(d)),
     delete: id => dispatch(deleteDriver(id)),
     update: (id, p) => dispatch(updateDriver(id, p))

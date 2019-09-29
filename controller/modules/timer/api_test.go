@@ -18,6 +18,8 @@ func TestTimerController(t *testing.T) {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
 
+	defer con.Store().Close()
+
 	eConfig := equipment.Config{
 		DevMode: true,
 	}

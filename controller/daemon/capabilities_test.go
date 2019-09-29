@@ -17,6 +17,8 @@ import (
 func Test_Capabilities(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)
 	store, err := storage.NewStore("capabilities-test.db")
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

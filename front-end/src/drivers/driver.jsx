@@ -2,21 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { confirm } from 'utils/confirm'
 import i18next from 'i18next'
+import DriverForm from './driver_form'
 
 export default class Driver extends React.Component {
   constructor (props) {
-    const config = props.config || { address: '' }
     super(props)
+
     this.state = {
-      name: props.name,
-      config: config,
       lbl: i18next.t('edit')
     }
+    this.handleSave = this.handleSave.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
-    this.handleNameChange = this.handleNameChange.bind(this)
-    this.handleAddressChange = this.handleAddressChange.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
   }
 
@@ -29,21 +27,11 @@ export default class Driver extends React.Component {
 
     confirm('Delete driver', { description: message })
       .then(function () {
-        this.props.remove(this.props.driver_id)
+        this.props.remove(this.props.driver.id)
       }.bind(this))
   }
 
-  handleNameChange (e) {
-    this.setState({ name: e.target.value })
-  }
-
-  handleAddressChange (e) {
-    const config = this.state.config
-    config.address = e.target.value
-    this.setState({ config: config })
-  }
-
-  handleEdit () {
+  handleEdit() {
     if (!this.state.edit) {
       this.setState({
         edit: true,
@@ -51,58 +39,58 @@ export default class Driver extends React.Component {
       })
       return
     }
-    const payload = {
-      name: this.state.name,
-      config: this.state.config,
-      type: this.props.type
+  }
+
+  handleSave (values, {setErrors}) {
+    const payload =
+    {
+      id: this.props.driver.id,
+      name: values.name,
+      config: values.config,
+      type: values.type
     }
-    this.props.update(this.props.driver_id, payload)
-    this.setState({
-      edit: false,
-      lbl: i18next.t('edit'),
-      name: payload.name,
-      config: payload.config
-    })
+
+    this.props.validate(payload)
+      .then(response => {
+        if (response.status == 400) {
+          response.json().then(data => {
+            const config = {}
+            Object.keys(data).map(item => {
+              if (item.startsWith('config.')) {
+                config[item.replace('config.', '')] = data[item]
+              }
+            })
+            data.config = config
+            setErrors(data)
+          })
+        }
+        else {
+          this.props.update(this.props.driver.id, payload)
+          this.setState({
+            edit: false,
+            lbl: i18next.t('edit'),
+          })
+        }
+      })
   }
 
   editUI () {
-    return (
-      <div className='row'>
-        <div className='col-12 col-md-6'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('name')}</span>
-            <input
-              type='text'
-              id={'outlet-' + this.props.driver_id + '-name'}
-              className='form-control driver-name'
-              onChange={this.handleNameChange}
-              value={this.state.name}
-            />
-          </div>
-        </div>
-        <div className='col-12 col-md-6'>
-          <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('address')}</span>
-            <input
-              type='text'
-              id={'outlet-' + this.props.driver_id + '-address'}
-              className='form-control driver-address'
-              onChange={this.handleAddressChange}
-              value={this.state.config.address}
-            />
-          </div>
-        </div>
-      </div>
-    )
+    return <DriverForm
+      data={this.props.driver}
+      mode='edit'
+      onSubmit={this.handleSave}
+      driverOptions={this.props.driverOptions}
+    />
+
   }
 
   ui () {
     return (
       <div className='row'>
-        <div className='col-4'>{this.state.name}</div>
-        <div className='col-1'>
+        <div className='col-4'>{this.props.driver.name}</div>
+        <div className='col-4'>
           <label className='small'>
-            {this.state.type}
+            {this.props.driver.type}
           </label>
         </div>
       </div>
@@ -110,6 +98,16 @@ export default class Driver extends React.Component {
   }
 
   render () {
+    let btnEdit = null
+    if (!this.state.edit) {
+      btnEdit = <input
+        type='button'
+        className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+        value={this.state.lbl}
+        onClick={this.handleEdit}
+      />
+    }
+
     return (
 
       <div className='row border-bottom py-1'>
@@ -121,12 +119,7 @@ export default class Driver extends React.Component {
             value='X'
             onClick={this.handleRemove}
           />
-          <input
-            type='button'
-            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-            value={this.state.lbl}
-            onClick={this.handleEdit}
-          />
+          {btnEdit}
         </div>
       </div>
     )
@@ -134,10 +127,8 @@ export default class Driver extends React.Component {
 }
 
 Driver.propTypes = {
-  driver_id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  config: PropTypes.object,
+  driver: PropTypes.object,
   remove: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  update: PropTypes.func.isRequired,
+  driverOptions: PropTypes.object
 }

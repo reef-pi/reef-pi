@@ -6,7 +6,7 @@ DETECT_RACE='-race'
 
 ifeq ($(OS), Windows_NT)
 	BINARY=./bin/reef-pi.exe
-	DETECT_RACE=''
+	DETECT_RACE=
 endif
 
 .PHONY:bin
