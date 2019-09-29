@@ -35,17 +35,19 @@ type Probe struct {
 	DownerEq    string        `json:"downer_eq"`
 	Min         float64       `json:"min"`
 	Max         float64       `json:"max"`
+	IsMacro     bool          `json:"is_macro"`
 	h           *controller.Homeostasis
 }
 
 func (p *Probe) loadHomeostasis(c controller.Controller) {
 	hConf := controller.HomeStasisConfig{
-		Name:   p.Name,
-		Upper:  p.UpperEq,
-		Downer: p.DownerEq,
-		Min:    p.Min,
-		Max:    p.Max,
-		Period: int(p.Period),
+		Name:    p.Name,
+		Upper:   p.UpperEq,
+		Downer:  p.DownerEq,
+		Min:     p.Min,
+		Max:     p.Max,
+		Period:  int(p.Period),
+		IsMacro: p.IsMacro,
 	}
 	p.h = controller.NewHomeostasis(c, hConf)
 }

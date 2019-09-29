@@ -29,17 +29,19 @@ type TC struct {
 	Notify     Notify        `json:"notify"`
 	Sensor     string        `json:"sensor"`
 	Fahrenheit bool          `json:"fahrenheit"`
+	IsMacro    bool          `json:"is_macro"`
 	h          *controller.Homeostasis
 }
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
 	hConf := controller.HomeStasisConfig{
-		Name:   t.Name,
-		Upper:  t.Heater,
-		Downer: t.Cooler,
-		Min:    t.Min,
-		Max:    t.Max,
-		Period: int(t.Period),
+		Name:    t.Name,
+		Upper:   t.Heater,
+		Downer:  t.Cooler,
+		Min:     t.Min,
+		Max:     t.Max,
+		Period:  int(t.Period),
+		IsMacro: t.IsMacro,
 	}
 	t.h = controller.NewHomeostasis(c, hConf)
 }
