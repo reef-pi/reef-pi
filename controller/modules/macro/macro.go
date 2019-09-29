@@ -2,14 +2,15 @@ package macro
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
 type Macro struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Steps  []Step `json:"steps"`
-	Enable bool   `json:"enable"`
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Steps      []Step `json:"steps"`
+	Reversible bool   `json:"reversible"`
 }
 
 func (s *Subsystem) Get(id string) (Macro, error) {
@@ -32,7 +33,6 @@ func (s *Subsystem) List() ([]Macro, error) {
 func (s *Subsystem) Create(m Macro) error {
 	fn := func(id string) interface{} {
 		m.ID = id
-		m.Enable = false // macros are always enabled by run
 		return &m
 	}
 	return s.controller.Store().Create(Bucket, fn)
@@ -53,18 +53,23 @@ func (s *Subsystem) Delete(id string) error {
 	return nil
 }
 
-func (s *Subsystem) Run(m Macro) error {
-	m.Enable = true
-	if err := s.Update(m.ID, m); err != nil {
-		return err
+func (s *Subsystem) Run(m Macro, reverse bool) error {
+	if reverse && !m.Reversible {
+		return fmt.Errorf("macro is not reversible")
 	}
 	log.Println("macro subsystem. Running:", m.Name)
-	for i, step := range m.Steps {
-		if err := step.Run(s.controller); err != nil {
+	steps := m.Steps
+	if reverse {
+		steps = []Step{}
+		for i := len(m.Steps); i > 0; i-- {
+			steps = append(steps, m.Steps[i-1])
+		}
+	}
+	for i, step := range steps {
+		if err := step.Run(s.controller, reverse); err != nil {
 			log.Println("ERROR: macro subsystem. Failed to execute step:", i, "of macro", m.Name, ". Error:", err)
 		}
 	}
 	log.Println("macro subsystem. Finished:", m.Name)
-	m.Enable = false
 	return s.Update(m.ID, m)
 }

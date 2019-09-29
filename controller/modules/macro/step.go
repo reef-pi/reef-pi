@@ -9,19 +9,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-var stepTypes = []string{
-	"wait",
-	"subsystem",
-	"macro",
-	"equipment",
-	"ato",
-	"tc",
-	"lighting",
-	"ph",
-	"doser",
-	"timer",
-}
-
 type GenericStep struct {
 	ID string `json:"id"`
 	On bool   `json:"on"`
@@ -36,35 +23,35 @@ type Step struct {
 	Config json.RawMessage `json:"config"`
 }
 
-func (s *Step) Run(c controller.Controller) error {
+func (s *Step) Run(c controller.Controller, reverse bool) error {
 	switch s.Type {
 	case storage.EquipmentBucket, storage.ATOBucket, storage.TemperatureBucket,
-		storage.DoserBucket, storage.PhBucket, storage.TimerBucket:
+		storage.DoserBucket, storage.PhBucket, storage.TimerBucket, storage.MacroBucket, "subsystem":
 		var g GenericStep
 		if err := json.Unmarshal(s.Config, &g); err != nil {
 			return err
+		}
+		state := g.On
+		if reverse {
+			state = !state
+		}
+		if s.Type == "subsystem" {
+			sub, err := c.Subsystem(g.ID)
+			if err != nil {
+				return err
+			}
+			if state {
+				sub.Start()
+				return nil
+			}
+			sub.Stop()
+			return nil
 		}
 		sub, err := c.Subsystem(s.Type)
 		if err != nil {
 			return err
 		}
-		return sub.On(g.ID, g.On)
-	case "subsystem":
-		var g GenericStep
-		if err := json.Unmarshal(s.Config, &g); err != nil {
-			return err
-		}
-		sub, err := c.Subsystem(g.ID)
-		if err != nil {
-			return err
-		}
-		if g.On {
-			sub.Start()
-			return nil
-		} else {
-			sub.Stop()
-			return nil
-		}
+		return sub.On(g.ID, state)
 	case "wait":
 		var w WaitStep
 		if err := json.Unmarshal(s.Config, &w); err != nil {
