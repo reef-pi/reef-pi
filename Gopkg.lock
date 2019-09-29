@@ -154,7 +154,7 @@
   version = "v0.7.0"
 
 [[projects]]
-  digest = "1:8232537905152d6a0b116b9af5a0868fcac0e84eb02ec5a150624c077bdedb0b"
+  digest = "1:a210815b437763623ecca8eb91e6a0bf4f2d6773c5a6c9aec0e28f19e5fd6deb"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
@@ -162,8 +162,8 @@
     "internal/util",
   ]
   pruneopts = "UT"
-  revision = "00ec24a6a2d86e7074629c8384715dbb05adccd8"
-  version = "v0.0.4"
+  revision = "499c85531f756d1129edd26485a5f73871eeb308"
+  version = "v0.0.5"
 
 [[projects]]
   branch = "master"
@@ -175,17 +175,18 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9717bb322744e12e3b9dab6008acb247ecffbdfd81d0dd5d2a4df4ddc6bb476e"
+  digest = "1:1399276695aa8657692ad2141169f3e998aca8f7780a37dd50d9073745eeaca8"
   name = "github.com/reef-pi/drivers"
   packages = [
     ".",
+    "file",
     "pca9685",
     "ph_board",
     "pico_board",
     "tplink",
   ]
   pruneopts = "UT"
-  revision = "973817be7af4273d63772002fc32a6b4c9bc87ed"
+  revision = "f39489b3889f1c9717e28558839b08cead535e90"
 
 [[projects]]
   branch = "master"
@@ -221,14 +222,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b81809747cfe3b745ecbb83859f2ac3566170d5a67aa96c458aa0afeefd93200"
+  digest = "1:7711a885664a85941a1d9d339f7f12c742cd8f88def90e74f89805508cfca97f"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "c3b328c6e5a763a2bfc82a48b4bd855037210934"
+  revision = "c990c680b611ac1aeb7d8f2af94a825f98d69720"
 
 [[projects]]
   digest = "1:b778880d47d8544b11cd82b0d9731f9669d653489b400d0b5899b8a20934e7b4"
@@ -261,6 +262,7 @@
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/reef-pi/adafruitio",
     "github.com/reef-pi/drivers",
+    "github.com/reef-pi/drivers/file",
     "github.com/reef-pi/drivers/pca9685",
     "github.com/reef-pi/drivers/ph_board",
     "github.com/reef-pi/drivers/pico_board",

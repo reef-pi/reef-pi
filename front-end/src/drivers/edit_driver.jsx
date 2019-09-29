@@ -90,6 +90,8 @@ const EditDriver = ({
       case 'hs103':
       case 'hs110':
       case 'hs300':
+      case 'file-analog':
+      case 'file-digital':
         return phBoardConfig()
     }
   }
