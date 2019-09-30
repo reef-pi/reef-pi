@@ -1,4 +1,4 @@
-import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
+import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
 
 export const jacksLoaded = (jacks) => {
   return ({

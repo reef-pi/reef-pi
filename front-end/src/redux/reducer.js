@@ -2,13 +2,13 @@ export const rootReducer = (state, action) => {
   if (action.type.startsWith('@@redux/INIT')) {
     return state
   }
-  var camera = state.camera
-  var atoUsage = state.ato_usage
-  var doserUsage = state.doser_usage
-  var macroUsage = state.macro_usage
-  var tcUsage = state.tc_usage
-  var pHreadings = state.ph_readings
-  var phReading = []
+  const camera = state.camera
+  const atoUsage = state.ato_usage
+  const doserUsage = state.doser_usage
+  const macroUsage = state.macro_usage
+  const tcUsage = state.tc_usage
+  const pHreadings = state.ph_readings
+  const phReading = []
 
   switch (action.type) {
     case 'LOG_DELETED':
@@ -70,7 +70,7 @@ export const rootReducer = (state, action) => {
       return { ...state, ph_readings: pHreadings }
     case 'PH_PROBE_READING_COMPLETE':
       phReading[action.payload.id] = action.payload.reading
-      return { ...state, ph_reading: {...phReading} }
+      return { ...state, ph_reading: { ...phReading } }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
     case 'SETTINGS_LOADED':

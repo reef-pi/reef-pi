@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
     super(props)
 
-    var values = Array(12).fill(0)
+    let values = Array(12).fill(0)
     if (props.config && props.config.values && Array.isArray(props.config.values)) {
       values = props.config.values
     }
-    this.state = {values: values}
+    this.state = { values: values }
 
     this.curry = this.curry.bind(this)
     this.sliderList = this.sliderList.bind(this)
@@ -29,29 +29,29 @@ export default class AutoProfile extends React.Component {
   curry (i) {
     return (ev) => {
       if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)) {
-        var val = parseInt(ev.target.value)
+        let val = parseInt(ev.target.value)
         if (isNaN(val)) { val = '' }
 
-        var values = Object.assign(this.state.values)
+        const values = Object.assign(this.state.values)
         values[i] = val
-        this.props.onChangeHandler({values: values})
-        this.setState({values: values})
+        this.props.onChangeHandler({ values: values })
+        this.setState({ values: values })
       }
     }
   }
 
   sliderList () {
-    var values = Object.assign({}, this.state).values
+    const values = Object.assign({}, this.state).values
 
-    var rangeStyle = {
+    const rangeStyle = {
       WebkitAppearance: 'slider-vertical',
       writingMode: 'bt-lr',
       padding: '0 5px',
       width: '8px',
       height: '175px'
     }
-    var list = []
-    var labels = [
+    const list = []
+    const labels = [
       '12 am',
       '2 am',
       '4 am',
@@ -66,7 +66,7 @@ export default class AutoProfile extends React.Component {
       '10 pm'
     ]
 
-    for (var i = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++) {
       if (values[i] === undefined) {
         values[i] = 0
       }
@@ -74,14 +74,16 @@ export default class AutoProfile extends React.Component {
         <div className='col-12 col-md-1 text-center' key={i + 1}>
           <div className='row'>
             <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
-              <input type='number'
+              <input
+                type='number'
                 name={NameFor(this.props.name, 'values.' + i)}
                 onBlur={this.props.onBlur}
                 className={classNames('form-control form-control-sm mb-1 d-block d-md-none d-lg-block px-0 px-sm-1 text-center no-spinner',
-                  {'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors)})}
+                  { 'is-invalid': ShowError(NameFor(this.props.name, 'values.' + i), this.props.touched, this.props.errors) })}
                 value={values[i]}
                 onChange={this.curry(i)}
-                disabled={this.props.readOnly} />
+                disabled={this.props.readOnly}
+              />
             </div>
             <div className='d-none d-md-inline d-lg-none col-12'>
               {values[i]}

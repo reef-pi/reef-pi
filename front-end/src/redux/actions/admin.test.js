@@ -7,7 +7,7 @@ import 'isomorphic-fetch'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-var storage = {}
+let storage = {}
 window.localStorage = {
   getItem: (k) => {
     return storage[k]

@@ -9,7 +9,7 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 global.fetch = jest.fn().mockImplementation(() => {
-  var p = new Promise((resolve) => {
+  let p = new Promise((resolve) => {
     resolve({
       ok: true,
       status: 200
@@ -24,10 +24,10 @@ describe('Auth', () => {
       .instance()
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
-    m.updateCreds()
+    m.handleUpdateCreds()
     m.handleUserChange({ target: { value: '' } })
     m.handlePasswordChange({ target: { value: '' } })
-    m.updateCreds()
+    m.handleUpdateCreds()
     m.props.updateCreds({})
   })
 })

@@ -1,4 +1,4 @@
-import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
+import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
 
 export const macroUpdated = () => {
   return ({
@@ -30,7 +30,7 @@ export const macroUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'MACRO_USAGE_LOADED',
-      payload: {data: s, id: id}
+      payload: { data: s, id: id }
     })
   }
 }

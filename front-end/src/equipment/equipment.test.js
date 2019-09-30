@@ -42,8 +42,8 @@ describe('Equipment ui', () => {
     const m = shallow(<Main store={mockStore({ outlets: outlets, equipment: eqs })} />)
       .dive()
       .instance()
-    m.toggleAddEquipmentDiv()
-    m.addEquipment({ name: 'test', outlet: 1 })
+    m.handleToggleAddEquipmentDiv()
+    m.handleAddEquipment({ name: 'test', outlet: 1 })
     m.props.update(1, {})
     m.props.delete(1)
   })
@@ -81,7 +81,7 @@ describe('Equipment ui', () => {
       outlet: 3,
       on: false
     }
-    instance.onSubmit(values)
+    instance.handleSubmit(values)
   })
 
   it('should handle an unrecognized outlet', () => {
@@ -98,7 +98,7 @@ describe('Equipment ui', () => {
     const e = {
       stopPropagation: () => {}
     }
-    instance.toggleEdit(e)
+    instance.handleToggleEdit(e)
   })
 
   it('<ViewEquipment />', () => {

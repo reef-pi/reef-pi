@@ -39,10 +39,10 @@ describe('Configuration ui', () => {
     SignIn.logout = jest.fn().mockImplementation(() => {
       return true
     })
-    m.reload()
-    m.powerOff()
-    m.reboot()
-    m.signout()
+    m.handleReload()
+    m.handlePowerOff()
+    m.handleReboot()
+    m.handleSignout()
     m.props.reload()
     m.props.reboot()
     m.props.powerOff()
@@ -58,8 +58,8 @@ describe('Configuration ui', () => {
     const m = shallow(<Display store={mockStore(state)} />)
       .dive()
       .instance()
-    m.toggle()
-    m.setBrightness({ target: { value: 10 } })
+    m.handleToggle()
+    m.handleSetBrightness({ target: { value: 10 } })
     shallow(<Display store={mockStore({})} />)
       .dive()
       .instance()
@@ -92,7 +92,7 @@ describe('Configuration ui', () => {
       .instance()
     m.updateCapabilities(capabilities)
     m.updateCheckbox('foo')({ target: { checked: true } })
-    m.update()
+    m.handleUpdate()
     m.updateHealthNotify({})
     m.updateHealthNotify()
     m.updateCapabilities({
@@ -119,7 +119,7 @@ describe('Configuration ui', () => {
     shallow(<Settings store={mockStore({})} />).dive()
     shallow(<Settings store={mockStore({ settings: {} })} />).dive()
 
-    let d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+    const d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
     d.find('#to-row-interface')
       .first()
@@ -128,7 +128,7 @@ describe('Configuration ui', () => {
 
   it('<HealthNotify />', () => {
     const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
-    m.updateEnable({ target: {} })
+    m.handleUpdateEnable({ target: {} })
     m.update('foo')({ target: {} })
     m.setState({
       notify: {
@@ -138,7 +138,7 @@ describe('Configuration ui', () => {
   })
 
   it('<About />', () => {
-    let m = shallow(
+    const m = shallow(
       <About
         store={mockStore({
           info: { current_time: new Date(), version: 'test', uptime: '5 minutes', ip: 'localhost' },
@@ -154,7 +154,7 @@ describe('Configuration ui', () => {
     m.componentWillUnmount()
   })
   it('<Errors />', () => {
-    let wrapper = shallow(
+    const wrapper = shallow(
       <Errors
         store={mockStore({
           errors: [{ id: '1', time: 'dd', message: 'dd' }]
@@ -162,7 +162,7 @@ describe('Configuration ui', () => {
       />
     ).dive()
     wrapper.find('.btn-outline-secondary').first().simulate('click')
-    let m = wrapper.instance()
+    const m = wrapper.instance()
     m.props.delete('1')
     m.props.clear()
     m.props.fetch()

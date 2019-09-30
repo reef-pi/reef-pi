@@ -22,12 +22,14 @@ class LogCenter extends React.Component {
     }
     return cssClass
   }
+
   readableDate (ts) {
     const d = new Date(ts)
     return d.toLocaleString()
   }
+
   render () {
-    let n = []
+    const n = []
     this.props.logs.forEach(e => {
       if (typeof e !== 'undefined') {
         n.push(
@@ -41,7 +43,7 @@ class LogCenter extends React.Component {
       }
     })
     return (
-      <React.Fragment>
+      <>
         <div className='row' key='content'>
           <div className='col'>
             <table className='table table-sm table-striped'>
@@ -57,7 +59,7 @@ class LogCenter extends React.Component {
             </table>
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 }

@@ -57,7 +57,8 @@ const EditMacro = ({
         <ErrorFor errors={errors} touched={touched} name='steps' />
       </div>
 
-      <FieldArray name='steps'
+      <FieldArray
+        name='steps'
         render={arrayHelpers => {
           return (
             <div className='ml-2'>
@@ -66,7 +67,8 @@ const EditMacro = ({
                   return (
                     <div className='row macro-step' name={`step-${index}`} key={index}>
                       <div className='col-12 col-sm-4 col-md-3'>
-                        <SelectType name={`steps.${index}.type`}
+                        <SelectType
+                          name={`steps.${index}.type`}
                           aria-label='Step Type'
                           title='Step Type'
                           className={classNames('form-control custom-select', {
@@ -76,13 +78,15 @@ const EditMacro = ({
                         />
                         <ErrorFor errors={errors} touched={touched} name={`steps.${index}.type`} />
                       </div>
-                      <StepSelector type={step.type}
+                      <StepSelector
+                        type={step.type}
                         name={`steps.${index}`}
                         errors={errors}
                         touched={touched}
-                        readOnly={readOnly} />
+                        readOnly={readOnly}
+                      />
 
-                      <div className={classNames('col-12 col-sm-1 col-md-3 ml-auto', {'d-none': readOnly})}>
+                      <div className={classNames('col-12 col-sm-1 col-md-3 ml-auto', { 'd-none': readOnly })}>
                         <button
                           aria-label='Remove Step'
                           title='Remove Step'
@@ -101,10 +105,11 @@ const EditMacro = ({
               }
               <div className={classNames('row', { 'd-none': readOnly })}>
                 <div className='col-12'>
-                  <button type='button'
+                  <button
+                    type='button'
                     className='btn btn-outline-success float-right'
                     value='+'
-                    onClick={() => arrayHelpers.push({duration: '', id: '', on: ''})}
+                    onClick={() => arrayHelpers.push({ duration: '', id: '', on: '' })}
                     id='add-step'
                   >
                 +

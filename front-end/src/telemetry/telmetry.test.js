@@ -34,15 +34,15 @@ describe('Telemetry UI', () => {
     m.updateMailer(mailer)
     const fields = ['server', 'password', 'To', 'From']
     fields.forEach(k => {
-      var t = {}
+      let t = {}
       t[k] = ''
       m.updateMailer(t)
     })
     m.updateAio(aio)
     m.updateAio({ enable: false })
-    m.updateThrottle({ target: { value: 20 } })
-    m.enableMailer({ target: { checked: true } })
-    m.save()
+    m.handleUpdateThrottle({ target: { value: 20 } })
+    m.handleEnableMailer({ target: { checked: true } })
+    m.handleSave()
     m.state.config.adafruitio.enable = false
     m.showAdafruitIO()
     m.state.config.notify = false
@@ -50,19 +50,19 @@ describe('Telemetry UI', () => {
     m.state.config.adafruitio.enable = true
     m.showAdafruitIO()
     m.notification()
-    m.testMessage()
+    m.handleTestMessage()
     m.updateAio({ enable: true, user: '' })
     m.updateAio({ enable: true, user: 'foo', token: '' })
   })
 
   it('<AdafruitIO />', () => {
     const m = shallow(<AdafruitIO adafruitio={{}} update={() => true} />).instance()
-    m.updateEnable({ target: { checked: true } })
+    m.handleUpdateEnable({ target: { checked: true } })
     m.onChange('foo')({ target: { value: 1 } })
   })
 
   it('<Notification />', () => {
-    let m = shallow(<Notification update={() => true} mailer={{ to: [] }} />).instance()
+    const m = shallow(<Notification update={() => true} mailer={{ to: [] }} />).instance()
     m.update(1)({ target: { value: 'foo' } })
   })
 })

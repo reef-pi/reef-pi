@@ -5,7 +5,7 @@ import i18next from 'i18next'
 export default class Equipment extends React.Component {
   constructor (props) {
     super(props)
-    var name = ''
+    let name = ''
     props.equipment.forEach(eq => {
       if (eq.id === props.active_id) {
         name = eq.name
@@ -25,7 +25,7 @@ export default class Equipment extends React.Component {
     this.setDuration = this.setDuration.bind(this)
   }
 
-  setDuration (ev) {
+  handleSetDuration (ev) {
     this.setState({
       duration: ev.target.value
     })
@@ -37,7 +37,7 @@ export default class Equipment extends React.Component {
     })
   }
 
-  setRevert (ev) {
+  handleSetRevert (ev) {
     this.setState({
       revert: ev.target.checked
     })
@@ -79,9 +79,9 @@ export default class Equipment extends React.Component {
   }
 
   list () {
-    var menuItems = []
+    const menuItems = []
     this.props.equipment.forEach((v, k) => {
-      var cls = 'dropdown-item'
+      let cls = 'dropdown-item'
       if (v.id === this.state.id) {
         cls += ' active'
       }
@@ -95,9 +95,9 @@ export default class Equipment extends React.Component {
   }
 
   render () {
-    var eqName = this.state.name
-    var eqAction = this.state.on ? 'on' : 'off'
-    var durationUI = <div />
+    const eqName = this.state.name
+    const eqAction = this.state.on ? 'on' : 'off'
+    let durationUI = <div />
     if (this.state.revert) {
       durationUI = (
         <div className='row'>
@@ -108,7 +108,7 @@ export default class Equipment extends React.Component {
             <input
               id={this.props.id_prefix + '-equipment-action-duration'}
               type='text'
-              onChange={this.setDuration}
+              onChange={this.handleSetDuration}
               className='col-lg-6'
               disabled={this.props.disabled}
               defaultValue={this.state.duration}
@@ -171,7 +171,7 @@ export default class Equipment extends React.Component {
             <input
               id={this.props.id_prefix + '-equipment-revert'}
               type='checkbox'
-              onClick={this.setRevert}
+              onClick={this.handleSetRevert}
               defaultChecked={this.state.revert}
               disabled={this.props.disabled}
             />

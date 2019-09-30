@@ -33,7 +33,7 @@ const TemperatureForm = withFormik({
     }
   },
   validationSchema: TemperatureSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditTemperature)

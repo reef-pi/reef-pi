@@ -1,4 +1,4 @@
-import {reduxPut, reduxDelete, reduxGet, reduxPost} from 'utils/ajax'
+import { reduxPut, reduxDelete, reduxGet, reduxPost } from 'utils/ajax'
 
 export const atoUpdated = () => {
   return ({
@@ -38,7 +38,7 @@ export const atoUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'ATO_USAGE_LOADED',
-      payload: {data: s, id: id}
+      payload: { data: s, id: id }
     })
   }
 }

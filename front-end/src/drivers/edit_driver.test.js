@@ -1,6 +1,6 @@
 import React from 'react'
 import * as Alert from '../utils/alert'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import EditDriver from './edit_driver'
 import 'isomorphic-fetch'
@@ -8,9 +8,9 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditDriver />', () => {
-  var values = {}
+  let values = {}
 
-  var fn = jest.fn()
+  let fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -22,7 +22,8 @@ describe('<EditDriver />', () => {
 
   it('<EditDriver />', () => {
     shallow(
-      <EditDriver values={values}
+      <EditDriver
+        values={values}
         handleBlur={fn}
         submitForm={fn}
       />

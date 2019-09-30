@@ -13,7 +13,7 @@ export default class Outlet extends React.Component {
       driver: props.driver,
       driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
     }
-    this.edit = this.edit.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
@@ -25,19 +25,23 @@ export default class Outlet extends React.Component {
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ pin: e.target.value })
   }
+
   handleReverseChange () {
     this.setState({ reverse: !this.state.reverse })
   }
+
   handleDriverChange (e) {
     this.setState({
       driver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
     })
   }
-  edit () {
+
+  handleEdit () {
     if (!this.state.edit) {
       this.setState({
         edit: true,
@@ -45,7 +49,7 @@ export default class Outlet extends React.Component {
       })
       return
     }
-    var payload = {
+    const payload = {
       name: this.state.name,
       pin: parseInt(this.state.pin),
       reverse: this.state.reverse,
@@ -108,7 +112,8 @@ export default class Outlet extends React.Component {
               name='driver'
               className='custom-select form-control'
               onChange={this.handleDriverChange}
-              value={this.state.driver}>
+              value={this.state.driver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option key={item.id} value={item.id}>
@@ -146,6 +151,10 @@ export default class Outlet extends React.Component {
     )
   }
 
+  handleRemove () {
+    this.props.remove()
+  }
+
   render () {
     return (
       <div className='row border-bottom py-1'>
@@ -155,13 +164,13 @@ export default class Outlet extends React.Component {
             type='button'
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
             value='X'
-            onClick={this.props.remove}
+            onClick={this.handleRemove}
           />
           <input
             type='button'
             className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
             value={this.state.lbl}
-            onClick={this.edit}
+            onClick={this.handleEdit}
           />
         </div>
       </div>

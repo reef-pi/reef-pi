@@ -4,9 +4,9 @@ import { withFormik } from 'formik'
 
 const LightForm = withFormik({
   displayName: 'LightForm',
-  mapPropsToValues: props => ({config: props.config}),
+  mapPropsToValues: props => ({ config: props.config }),
   validationSchema: LightSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(Light)

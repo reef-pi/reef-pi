@@ -1,7 +1,7 @@
 import SettingsSchema from './settings_schema'
 
 describe('Settings schema validation', () => {
-  var settings = { }
+  let settings = { }
 
   beforeEach(() => {
     settings = {

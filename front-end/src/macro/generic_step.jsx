@@ -6,7 +6,7 @@ import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
 
-const GenericStep = ({type, name, readOnly, touched, errors, ...props}) => {
+const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
   const options = () => {
     return props[type].map((item) => {
       return (
@@ -18,7 +18,7 @@ const GenericStep = ({type, name, readOnly, touched, errors, ...props}) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className='col-12 col-sm-4 col-md-3 form-group'>
         <Field
           name={`${name}.id`}
@@ -52,7 +52,7 @@ const GenericStep = ({type, name, readOnly, touched, errors, ...props}) => {
         </Field>
         <ErrorFor errors={errors} touched={touched} name={`${name}.on`} />
       </div>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -23,14 +23,14 @@ export default class ComponentSelector extends React.Component {
   }
 
   render () {
-    var items = []
-    var title = this.state.title
+    const items = []
+    let title = this.state.title
     $.each(this.props.components, function (k, v) {
       if (v === undefined || v === null) {
         return
       }
-      var active = v.id === this.state.current_id
-      var cName = 'dropdown-item'
+      const active = v.id === this.state.current_id
+      let cName = 'dropdown-item'
       if (active) {
         title = v.name
         cName += ' active'

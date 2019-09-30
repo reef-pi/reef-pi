@@ -15,7 +15,7 @@ class camera extends React.Component {
       showConfig: false,
       config: {}
     }
-    this.toggleConfig = this.toggleConfig.bind(this)
+    this.handleToggleConfig = this.handleToggleConfig.bind(this)
     this.motion = this.motion.bind(this)
   }
 
@@ -32,7 +32,7 @@ class camera extends React.Component {
     )
   }
 
-  toggleConfig () {
+  handleToggleConfig () {
     this.setState({ showConfig: !this.state.showConfig })
   }
 
@@ -42,14 +42,14 @@ class camera extends React.Component {
   }
 
   render () {
-    var images = []
+    const images = []
     this.props.images.forEach((d, i) => {
       images.push({
         src: '/images/' + d.name,
         thumbnail: '/images/thumbnail-' + d.name
       })
     })
-    var config = <div />
+    let config = <div />
     if (this.state.showConfig) {
       config = <Config config={this.props.config} update={this.props.updateConfig} />
     }
@@ -59,7 +59,7 @@ class camera extends React.Component {
           <input
             type='button'
             id='showConfig'
-            onClick={this.toggleConfig}
+            onClick={this.handleToggleConfig}
             value='config'
             className='btn btn-secondary'
           />

@@ -9,16 +9,19 @@ export default class FatalError extends React.Component {
       up: true
     }
   }
+
   componentDidMount () {
     this.timer = setInterval(() => {
       this.checkHealth()
     }, RefreshTime)
   }
+
   componentWillUnmount () {
     window.clearInterval(this.timer)
   }
+
   checkHealth () {
-    let that = this
+    const that = this
     fetch('/api/me', {
       method: 'GET',
       credentials: 'same-origin'
@@ -30,6 +33,7 @@ export default class FatalError extends React.Component {
         that.setState({ up: false })
       })
   }
+
   render () {
     if (this.state.up) {
       return null
@@ -51,7 +55,7 @@ export default class FatalError extends React.Component {
                       </p>
                       <p className='card-text'>
                         <a
-                          target='_blank'
+                          target='_blank' rel='noopener noreferrer'
                           href='http://reef-pi.com/additional-documentation/troubleshooting/'
                           className='btn btn-primary mr-2'
                         >

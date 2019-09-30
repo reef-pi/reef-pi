@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
-    var timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
+    const timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
     this.setState({ timer: timer })
   }
 
@@ -18,7 +18,7 @@ class chart extends React.Component {
     if (this.props.equipment === undefined) {
       return <div />
     }
-    var equipment = []
+    const equipment = []
     this.props.equipment.forEach((eq, i) => {
       eq.onstate = eq.on ? 1 : 0
       eq.offstate = eq.on ? 0 : -1

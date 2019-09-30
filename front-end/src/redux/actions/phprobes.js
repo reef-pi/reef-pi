@@ -1,4 +1,4 @@
-import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
+import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
 
 export const phProbesLoaded = (s) => {
   return ({
@@ -10,7 +10,7 @@ export const probeReadingsLoaded = (id) => {
   return (s) => {
     return ({
       type: 'PH_PROBE_READINGS_LOADED',
-      payload: {readings: s, id: id}
+      payload: { readings: s, id: id }
     })
   }
 }
@@ -45,7 +45,7 @@ export const probeReadComplete = (id) => {
   return (s) => {
     return ({
       type: 'PH_PROBE_READING_COMPLETE',
-      payload: {reading: s, id: id}
+      payload: { reading: s, id: id }
     })
   }
 }

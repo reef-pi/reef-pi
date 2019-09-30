@@ -24,12 +24,14 @@ class Collapsible extends React.Component {
   }
 
   render () {
-    let {expanded, onToggle, onToggleState, enabled, name, children, readOnly} = this.props
+    const { expanded, onToggle, onToggleState, enabled, name, children, readOnly } = this.props
     const editButton = (
-      <button type='button'
+      <button
+        type='button'
         onClick={this.handleEdit}
         id={'edit-' + name}
-        className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
+        className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+      >
         {i18next.t('collapsible:edit')}
       </button>
     )
@@ -39,31 +41,37 @@ class Collapsible extends React.Component {
     }
     let toggleStateButton = ''
     if (onToggleState) {
-      toggleStateButton = (<Switch onClick={onToggleState} on={enabled}>
-        <small className='ml-1 align-top'>{enabled ? 'on' : 'off'}</small>
-      </Switch>)
+      toggleStateButton = (
+        <Switch onClick={onToggleState} on={enabled}>
+          <small className='ml-1 align-top'>{enabled ? 'on' : 'off'}</small>
+        </Switch>)
     }
 
     return (
       <li className='list-group-item'>
         <div
           className={classNames('row mb-1 text-center text-md-left', {
-            'pointer': readOnly
-          })}>
+            pointer: readOnly
+          })}
+        >
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
-            <button type='button'
+            <button
+              type='button'
               onClick={this.handleDelete}
               id={'delete-' + name}
-              className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
+              className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            >
               {i18next.t('collapsible:delete')}
             </button>
             {readOnly ? toggleStateButton : null}
             {readOnly ? editButton : null}
             {this.props.buttons}
           </div>
-          <div className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
-            'pointer': readOnly
-          })} onClick={() => onToggle(name)}>
+          <div
+            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
+              pointer: readOnly
+            })} onClick={() => onToggle(name)}
+          >
             {expanded ? FaAngleUp() : FaAngleDown()}
             {this.props.title}
           </div>

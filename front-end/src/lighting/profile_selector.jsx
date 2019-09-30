@@ -14,10 +14,12 @@ const ProfileSelector = (props) => {
   return (
     <div className='d-sm-inline-flex'>
       <div className='d-sm-none'>
-        <select className='custom-select'
+        <select
+          className='custom-select'
           name={props.name + uuid}
           value={props.value}
-          onChange={handleChange} >
+          onChange={handleChange}
+        >
           <option value='fixed'>Fixed</option>
           <option value='auto'>Auto</option>
           <option value='diurnal'>Diurnal</option>
@@ -25,7 +27,8 @@ const ProfileSelector = (props) => {
       </div>
       <div className='btn-group  d-none d-sm-inline'>
         <label className='btn btn-secondary'>
-          <input type='radio' value='fixed'
+          <input
+            type='radio' value='fixed'
             className='mr-1'
             checked={props.value === 'fixed'}
             name={props.name + uuid}
@@ -36,7 +39,8 @@ const ProfileSelector = (props) => {
           Fixed
         </label>
         <label className='btn btn-secondary'>
-          <input type='radio' value='auto'
+          <input
+            type='radio' value='auto'
             className='mr-1'
             checked={props.value === 'auto'}
             name={props.name + uuid}
@@ -47,7 +51,8 @@ const ProfileSelector = (props) => {
           Auto
         </label>
         <label className='btn btn-secondary'>
-          <input type='radio' value='diurnal'
+          <input
+            type='radio' value='diurnal'
             className='mr-1'
             checked={props.value === 'diurnal'}
             name={props.name + uuid}

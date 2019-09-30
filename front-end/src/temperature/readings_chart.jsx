@@ -1,14 +1,14 @@
 import React from 'react'
 import { Area, Tooltip, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
-import {fetchTCUsage} from '../redux/actions/tcs'
-import {connect} from 'react-redux'
+import { fetchTCUsage } from '../redux/actions/tcs'
+import { connect } from 'react-redux'
 import i18next from 'i18next'
 
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetch(this.props.sensor_id)
-    var timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
-    this.setState({timer: timer})
+    const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
+    this.setState({ timer: timer })
   }
 
   componentWillUnmount () {
@@ -24,9 +24,9 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return (<div />)
     }
-    var min = this.props.config.chart_min
-    var max = this.props.config.chart_max
-    var currentTemp = ''
+    const min = this.props.config.chart_min
+    const max = this.props.config.chart_max
+    let currentTemp = ''
     if (this.props.usage.current.length > 1) {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].temperature
     }

@@ -106,7 +106,8 @@ const EditTimer = ({
         </div>
 
         <div className='col-12 order-lg-5 col-xl-6'>
-          <Cron values={values}
+          <Cron
+            values={values}
             touched={touched}
             errors={errors}
             readOnly={readOnly}

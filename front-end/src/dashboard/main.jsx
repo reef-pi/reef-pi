@@ -20,34 +20,34 @@ class dashboard extends React.Component {
       showConfig: false
     }
     this.charts = this.charts.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchDashboard()
   }
 
-  toggle () {
+  handleToggle () {
     this.setState({ showConfig: !this.state.showConfig })
   }
 
   charts () {
-    var config = this.props.config
+    const config = this.props.config
     if (config === undefined) {
       return
     }
     if (config.grid_details === undefined) {
       return
     }
-    var i, j
-    var rows = []
+    let i, j
+    const rows = []
     for (i = 0; i < config.row; i++) {
       if (config.grid_details[i] === undefined) {
         config.grid_details[i] = []
       }
-      var columns = []
+      const columns = []
       for (j = 0; j < config.column; j++) {
-        var ch = config.grid_details[i][j]
+        const ch = config.grid_details[i][j]
         if (ch === undefined) {
           continue
         }
@@ -147,15 +147,15 @@ class dashboard extends React.Component {
   }
 
   render () {
-    var content = <Config />
-    var lbl = i18n.t('dashboard:back_to_dashboard')
+    let content = <Config />
+    let lbl = i18n.t('dashboard:back_to_dashboard')
     if (!this.state.showConfig) {
       content = this.charts()
       lbl = i18n.t('configure')
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className='row' key='content'>
           <div className='col'>
             {content}
@@ -163,12 +163,12 @@ class dashboard extends React.Component {
         </div>
         <div className='row' key='configure'>
           <div className='col-xs-12 col-md-3 offset-md-9'>
-            <button className='btn btn-outline-dark btn-sm col-12' onClick={this.toggle} id='configure-dashboard'>
+            <button className='btn btn-outline-dark btn-sm col-12' onClick={this.handleToggle} id='configure-dashboard'>
               <label>{lbl}</label>
             </button>
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 }

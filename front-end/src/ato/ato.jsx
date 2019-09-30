@@ -1,9 +1,9 @@
 import React from 'react'
 import ATOChart from './chart'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
-import {deleteATO, updateATO} from 'redux/actions/ato'
-import {connect} from 'react-redux'
-import {confirm} from 'utils/confirm'
+import { deleteATO, updateATO } from 'redux/actions/ato'
+import { connect } from 'react-redux'
+import { confirm } from 'utils/confirm'
 import AtoForm from './ato_form'
 import i18next from 'i18next'
 
@@ -18,17 +18,17 @@ class ato extends React.Component {
     this.handleEdit = this.handleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
 
-    this.save = this.save.bind(this)
-    this.expand = this.expand.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleExpand = this.handleExpand.bind(this)
   }
 
-  expand () {
-    this.setState({expand: !this.state.expand})
+  handleExpand () {
+    this.setState({ expand: !this.state.expand })
   }
 
   handleEdit (e) {
     e.stopPropagation()
-    this.setState({readOnly: false, expand: true})
+    this.setState({ readOnly: false, expand: true })
   }
 
   handleDelete (e) {
@@ -40,14 +40,14 @@ class ato extends React.Component {
       </div>
     )
 
-    confirm(`${i18next.t('delete')} ${this.props.data.name}`, {description: message})
+    confirm(`${i18next.t('delete')} ${this.props.data.name}`, { description: message })
       .then(function () {
         this.props.deleteATO(this.props.data.id)
       }.bind(this))
   }
 
-  save (values) {
-    var payload = {
+  handleSubmit (values) {
+    const payload = {
       name: values.name,
       enable: values.enable,
       inlet: values.inlet,
@@ -69,17 +69,19 @@ class ato extends React.Component {
   }
 
   render () {
-    var details = <div />
+    let details = <div />
     let editButton = <span />
 
     if (this.state.expand) {
       details = (
         <div>
-          <AtoForm data={this.props.data}
-            onSubmit={this.save}
+          <AtoForm
+            data={this.props.data}
+            onSubmit={this.handleSubmit}
             inlets={this.props.inlets}
             equipment={this.props.equipment}
-            readOnly={this.state.readOnly} />
+            readOnly={this.state.readOnly}
+          />
           <div className='d-none d-sm-flex'>
             <ATOChart ato_id={this.props.data.id} width={500} height={300} ato_name={this.props.data.name} />
           </div>
@@ -89,10 +91,12 @@ class ato extends React.Component {
 
     if (this.state.readOnly) {
       editButton = (
-        <button type='button'
+        <button
+          type='button'
           onClick={this.handleEdit}
           id={'edit-ato-' + this.props.data.id}
-          className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
+          className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+        >
           {i18next.t('edit')}
         </button>
       )
@@ -100,13 +104,17 @@ class ato extends React.Component {
 
     return (
       <div>
-        <div className='row mb-1 cursor-pointer text-center text-md-left'
+        <div
+          className='row mb-1 cursor-pointer text-center text-md-left'
           id={'expand-ato-' + this.props.data.id}
-          onClick={this.expand}>
+          onClick={this.handleExpand}
+        >
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
-            <button type='button'
+            <button
+              type='button'
               onClick={this.handleDelete}
-              className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
+              className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            >
               {i18next.t('delete')}
             </button>
             {editButton}

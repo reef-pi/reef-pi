@@ -26,16 +26,16 @@ class settings extends React.Component {
     this.updateCheckbox = this.updateCheckbox.bind(this)
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
-    this.update = this.update.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.showDisplay = this.showDisplay.bind(this)
     this.toRow = this.toRow.bind(this)
     this.updateHealthNotify = this.updateHealthNotify.bind(this)
     this.showHealthNotify = this.showHealthNotify.bind(this)
-    this.setLang = this.setLang.bind(this)
+    this.handleSetLang = this.handleSetLang.bind(this)
   }
 
-  setLang (ev) {
-    var lng = ev.target.value
+  handleSetLang (ev) {
+    const lng = ev.target.value
     i18n.changeLanguage(lng)
     window.location.reload()
   }
@@ -52,7 +52,7 @@ class settings extends React.Component {
 
   updateHealthNotify (notify) {
     if (notify !== undefined) {
-      var settings = this.state.settings
+      const settings = this.state.settings
       settings.health_check = notify
       this.setState({ settings: settings, updated: true })
     }
@@ -61,7 +61,7 @@ class settings extends React.Component {
 
   updateCheckbox (key) {
     return function (ev) {
-      var settings = this.state.settings
+      const settings = this.state.settings
       settings[key] = ev.target.checked
       this.setState({
         settings: settings,
@@ -86,7 +86,7 @@ class settings extends React.Component {
   }
 
   updateCapabilities (capabilities) {
-    var settings = this.state.settings
+    const settings = this.state.settings
     settings.capabilities = capabilities
     this.setState({
       settings: settings,
@@ -94,8 +94,8 @@ class settings extends React.Component {
     })
   }
 
-  update () {
-    var settings = this.state.settings
+  handleUpdate () {
+    let settings = this.state.settings
     if (SettingsSchema.isValidSync(settings)) {
       settings = SettingsSchema.cast(settings)
       this.setState({ updated: false, settings: settings })
@@ -112,8 +112,8 @@ class settings extends React.Component {
   }
 
   toRow (label) {
-    var fn = function (ev) {
-      var settings = this.state.settings
+    const fn = function (ev) {
+      const settings = this.state.settings
       settings[label] = ev.target.value
       this.setState({
         settings: settings,
@@ -146,7 +146,7 @@ class settings extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
     }
@@ -167,7 +167,7 @@ class settings extends React.Component {
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='app-language'>{i18n.t('language:language')}</label>
-                  <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
+                  <select value={this.state.currentLanguage} onChange={this.handleSetLang} id='app-language' className='form-control'>
                     <option value='en'>{i18n.t('language:en')}</option>
                     <option value='fr'>{i18n.t('language:fr')}</option>
                     <option value='es'>{i18n.t('language:es')}</option>
@@ -263,7 +263,7 @@ class settings extends React.Component {
           <input
             type='button'
             className={updateButtonClass}
-            onClick={this.update}
+            onClick={this.handleUpdate}
             id='systemUpdateSettings'
             value={i18n.t('update')}
           />

@@ -7,7 +7,7 @@ import i18next from 'i18next'
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchTCUsage(this.props.sensor_id)
-    var timer = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       this.props.fetchTCUsage(this.props.sensor_id)
     }, 10 * 1000)
     this.setState({ timer: timer })
@@ -26,13 +26,13 @@ class chart extends React.Component {
     if (this.props.usage === undefined) {
       return <div />
     }
-    var usage = []
+    const usage = []
     this.props.usage.historical.forEach((v, i) => {
       v.cooler *= -1
       usage.push(v)
     })
-    var min = 72
-    var max = 86
+    let min = 72
+    let max = 86
     if (this.props.config.chart_min !== undefined) {
       min = this.props.config.chart_min
     }

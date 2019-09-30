@@ -16,8 +16,8 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 const stockDrivers = [
-  {id: 'rpi', name: 'Rasoverry Pi'},
-  {id: '1', name: 'PCA9685'}
+  { id: 'rpi', name: 'Rasoverry Pi' },
+  { id: '1', name: 'PCA9685' }
 ]
 jest.mock('utils/confirm', () => {
   return {

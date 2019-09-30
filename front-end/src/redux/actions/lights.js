@@ -1,4 +1,4 @@
-import {reduxDelete, reduxPut, reduxGet, reduxPost} from '../../utils/ajax'
+import { reduxDelete, reduxPut, reduxGet, reduxPost } from '../../utils/ajax'
 
 export const lightsLoaded = (s) => {
   return ({
@@ -11,7 +11,7 @@ export const lightLoaded = (id) => {
   return (l) => {
     return ({
       type: 'LIGHT_LOADED',
-      payload: {light: l, id: id}
+      payload: { light: l, id: id }
     })
   }
 }

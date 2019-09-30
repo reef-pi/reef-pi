@@ -1,4 +1,4 @@
-import {reduxGet} from '../../utils/ajax'
+import { reduxGet } from '../../utils/ajax'
 
 export const capabilitiesLoaded = (capabilities) => {
   return ({

@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import ColorPicker from './color_picker'
 import { HuePicker } from 'react-color'
 import Adapter from 'enzyme-adapter-react-16'
@@ -8,7 +8,7 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('ColorPicker', () => {
   const ev = {
-    target: {name: 'color', value: 10}
+    target: { name: 'color', value: 10 }
   }
 
   it('<ColorPicker />', () => {

@@ -20,12 +20,12 @@ class main extends React.Component {
     }
     this.lightsList = this.lightsList.bind(this)
     this.jacksList = this.jacksList.bind(this)
-    this.addLight = this.addLight.bind(this)
-    this.toggleAddLightDiv = this.toggleAddLightDiv.bind(this)
+    this.handleAddLight = this.handleAddLight.bind(this)
+    this.handleToggleAddLightDiv = this.handleToggleAddLightDiv.bind(this)
     this.setJack = this.setJack.bind(this)
     this.newLightUI = this.newLightUI.bind(this)
-    this.deleteLight = this.deleteLight.bind(this)
-    this.updateLight = this.updateLight.bind(this)
+    this.handleDeleteLight = this.handleDeleteLight.bind(this)
+    this.handleUpdateLight = this.handleUpdateLight.bind(this)
   }
 
   componentWillMount () {
@@ -42,7 +42,7 @@ class main extends React.Component {
   }
 
   jacksList () {
-    var jacks = []
+    const jacks = []
     this.props.jacks.forEach((jack, i) => {
       jacks.push(
         <a className='dropdown-item' key={i} onClick={this.setJack(i)}>
@@ -53,19 +53,19 @@ class main extends React.Component {
     return jacks
   }
 
-  updateLight (values) {
+  handleUpdateLight (values) {
     const payload = {
       name: values.config.name,
       channels: values.config.channels,
       jack: values.config.jack
     }
-    for (let x in payload.channels) {
+    for (const x in payload.channels) {
       payload.channels[x].reverse = (payload.channels[x].reverse === 'true' || payload.channels[x].reverse === true)
     }
     this.props.updateLight(values.config.id, payload)
   }
 
-  addLight () {
+  handleAddLight () {
     if (this.state.selectedJack === undefined) {
       showError('Select a jack')
       return
@@ -74,8 +74,8 @@ class main extends React.Component {
       showError('Specify light name')
       return
     }
-    var jack = this.props.jacks[this.state.selectedJack].id
-    var payload = {
+    const jack = this.props.jacks[this.state.selectedJack].id
+    const payload = {
       name: $('#lightName').val(),
       jack: String(jack)
     }
@@ -91,44 +91,48 @@ class main extends React.Component {
     return (
       this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
         return (
-          <Collapsible key={'light-' + light.id}
+          <Collapsible
+            key={'light-' + light.id}
             name={'light-' + light.id}
             item={light}
             title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
-            onDelete={this.deleteLight}>
-            <Light config={light}
-              onSubmit={this.updateLight}
-              remove={this.props.deleteLight} />
+            onDelete={this.handleDeleteLight}
+          >
+            <Light
+              config={light}
+              onSubmit={this.handleUpdateLight}
+              remove={this.props.deleteLight}
+            />
           </Collapsible>
         )
       })
     )
   }
 
-  toggleAddLightDiv () {
+  handleToggleAddLightDiv () {
     this.setState({
       addLight: !this.state.addLight
     })
     $('#jackName').val('')
   }
 
-  deleteLight (light) {
+  handleDeleteLight (light) {
     const message = (
       <div>
         <p>This action will delete {light.name}.</p>
       </div>
     )
 
-    confirm('Delete ' + light.name, {description: message})
+    confirm('Delete ' + light.name, { description: message })
       .then(function () {
         this.props.deleteLight(light.id)
       }.bind(this))
   }
 
   newLightUI () {
-    var jack = ''
+    let jack = ''
     if (this.state.selectedJack !== undefined) {
-      var j = this.props.jacks[this.state.selectedJack]
+      const j = this.props.jacks[this.state.selectedJack]
       jack = j.name
     }
     return (
@@ -164,7 +168,7 @@ class main extends React.Component {
             type='button'
             id='createLight'
             value='add'
-            onClick={this.addLight}
+            onClick={this.handleAddLight}
             className='btn btn-outline-primary'
           />
         </div>
@@ -173,7 +177,7 @@ class main extends React.Component {
   }
 
   render () {
-    var nLight = <div />
+    let nLight = <div />
     if (this.state.addLight) {
       nLight = this.newLightUI()
     }
@@ -189,7 +193,7 @@ class main extends React.Component {
                 id='add_light'
                 type='button'
                 value={this.state.addLight ? '-' : '+'}
-                onClick={this.toggleAddLightDiv}
+                onClick={this.handleToggleAddLightDiv}
                 className='btn btn-outline-success'
               />
             </div>

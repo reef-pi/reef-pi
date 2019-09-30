@@ -1,6 +1,6 @@
 import EditDriver from './edit_driver'
 import DriverSchema from './driver_schema'
-import {withFormik} from 'formik'
+import { withFormik } from 'formik'
 
 const DriverForm = withFormik({
   displayName: 'DriverFrom',
@@ -23,7 +23,7 @@ const DriverForm = withFormik({
     })
   },
   validationSchema: DriverSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditDriver)

@@ -49,10 +49,12 @@ export const Calibrate = ({
           </div>
         </div>
         <div className='col-2'>
-          <input type='submit'
+          <input
+            type='submit'
             disabled={readOnly}
             value='Run'
-            className='btn btn-sm btn-outline-primary' />
+            className='btn btn-sm btn-outline-primary'
+          />
         </div>
       </div>
     </form>
@@ -77,7 +79,7 @@ const CalibrateForm = withFormik({
     }
   },
   validationSchema: CalibrateSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(parseFloat(values.duration), parseInt(values.speed))
   }
 })(Calibrate)

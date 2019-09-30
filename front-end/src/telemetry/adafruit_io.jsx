@@ -6,22 +6,22 @@ export default class AdafruitIO extends React.Component {
     this.state = {
       adafruitio: this.props.adafruitio
     }
-    this.updateEnable = this.updateEnable.bind(this)
+    this.handleUpdateEnable = this.handleUpdateEnable.bind(this)
     this.toRow = this.toRow.bind(this)
     this.onChange = this.onChange.bind(this)
   }
 
   onChange (label) {
     return function (ev) {
-      var adafruitio = this.state.adafruitio
+      const adafruitio = this.state.adafruitio
       adafruitio[label] = ev.target.value
       this.setState({ adafruitio: adafruitio })
       this.props.update(this.state.adafruitio)
     }.bind(this)
   }
 
-  updateEnable (ev) {
-    var adafruitio = this.state.adafruitio
+  handleUpdateEnable (ev) {
+    const adafruitio = this.state.adafruitio
     adafruitio.enable = ev.target.checked
     this.setState({ adafruitio: adafruitio })
     this.props.update(this.state.adafruitio)
@@ -47,7 +47,7 @@ export default class AdafruitIO extends React.Component {
 
   render () {
     return (
-      <React.Fragment>
+      <>
         <div className=' col-12' key='telemetry-enable'>
           <div className='form-group'>
             <label className='form-check-label'>
@@ -55,7 +55,7 @@ export default class AdafruitIO extends React.Component {
                 className='form-check-input'
                 type='checkbox'
                 defaultChecked={this.state.adafruitio.enable}
-                onClick={this.updateEnable}
+                onClick={this.handleUpdateEnable}
               />
               <b>Adafruit.IO</b>
             </label>
@@ -64,7 +64,7 @@ export default class AdafruitIO extends React.Component {
         {this.toRow('user', 'Username')}
         {this.toRow('token', 'AIO Key')}
         {this.toRow('prefix', 'Prefix')}
-      </React.Fragment>
+      </>
     )
   }
 }

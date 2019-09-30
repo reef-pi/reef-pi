@@ -7,15 +7,7 @@ import { FaCheck } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import i18next from 'i18next'
 
-export const Calibrate = ({
-  values,
-  errors,
-  touched,
-  label,
-  submitForm,
-  complete,
-  readOnly
-}) => {
+export const Calibrate = ({ values, errors, touched, label, submitForm, complete, readOnly }) => {
   const handleSubmit = event => {
     event.preventDefault()
     submitForm()
@@ -24,7 +16,9 @@ export const Calibrate = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className='form-group row'>
-        <label htmlFor='value' className='col-4 col-form-label'>{label}</label>
+        <label htmlFor='value' className='col-4 col-form-label'>
+          {label}
+        </label>
         <div className='col-4'>
           <div className='form-group'>
             <Field
@@ -39,17 +33,18 @@ export const Calibrate = ({
           </div>
         </div>
         <div className='col-4'>
-          { complete
-            ? (
-              <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
-                <FaCheck />
-              </IconContext.Provider>
-            )
-            : <input type='submit'
+          {complete ? (
+            <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
+              <FaCheck />
+            </IconContext.Provider>
+          ) : (
+            <input
+              type='submit'
               disabled={readOnly}
               value={i18next.t('ph:run_calibration')}
-              className='btn btn-sm btn-outline-primary' />
-          }
+              className='btn btn-sm btn-outline-primary'
+            />
+          )}
         </div>
       </div>
     </form>
@@ -71,7 +66,7 @@ const CalibrateForm = withFormik({
     }
   },
   validationSchema: CalibrateSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(props.point, parseFloat(values.value))
   }
 })(Calibrate)

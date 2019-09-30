@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ErrorFor, ShowError} from '../utils/validation_helper'
-import {showError} from 'utils/alert'
+import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
 
@@ -31,9 +31,11 @@ const EditInstance = ({
     if (values.id) {
       return (
         <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
-          <button type='button'
+          <button
+            type='button'
             onClick={onDelete}
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
+            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+          >
             Delete
           </button>
         </div>
@@ -48,20 +50,22 @@ const EditInstance = ({
         {deleteAction()}
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>{i18next.t('name')}</label>
-          <input type='text' name='name'
+          <input
+            type='text' name='name'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('name', touched, errors)})}
+            className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
             value={values.name}
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>{i18next.t('address')}</label>
-          <input type='text' name='address'
+          <input
+            type='text' name='address'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('address', touched, errors)})}
+            className={classNames('form-control', { 'is-invalid': ShowError('address', touched, errors) })}
             value={values.address}
           />
           <ErrorFor errors={errors} touched={touched} name='address' />
@@ -70,20 +74,22 @@ const EditInstance = ({
       <div className='row'>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>{i18next.t('user')}</label>
-          <input type='text' name='user'
+          <input
+            type='text' name='user'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('user', touched, errors)})}
+            className={classNames('form-control', { 'is-invalid': ShowError('user', touched, errors) })}
             value={values.user}
           />
           <ErrorFor errors={errors} touched={touched} name='user' />
         </div>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>{i18next.t('password')}</label>
-          <input type='password' name='password'
+          <input
+            type='password' name='password'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('password', touched, errors)})}
+            className={classNames('form-control', { 'is-invalid': ShowError('password', touched, errors) })}
             value={values.password}
           />
           <ErrorFor errors={errors} touched={touched} name='password' />

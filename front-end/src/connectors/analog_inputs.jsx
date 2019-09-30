@@ -21,20 +21,23 @@ class analogInputs extends React.Component {
       add: false
     }
     this.list = this.list.bind(this)
-    this.add = this.add.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
-    this.save = this.save.bind(this)
-    this.setDriver = this.setDriver.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
   }
+
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ pin: e.target.value })
   }
-  setDriver (e) {
+
+  handleSetDriver (e) {
     this.setState({
       driver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
@@ -55,7 +58,7 @@ class analogInputs extends React.Component {
     this.props.fetch()
   }
 
-  add () {
+  handleAdd () {
     this.setState({
       add: !this.state.add,
       name: '',
@@ -63,13 +66,13 @@ class analogInputs extends React.Component {
     })
   }
 
-  save () {
-    var pin = parseInt(this.state.pin)
+  handleSave () {
+    const pin = parseInt(this.state.pin)
     if (isNaN(pin)) {
       showError('Use only comma separated numbers')
       return
     }
-    var payload = {
+    const payload = {
       name: this.state.name,
       pin: pin,
       driver: this.state.driver
@@ -79,7 +82,7 @@ class analogInputs extends React.Component {
   }
 
   list () {
-    var list = []
+    const list = []
     this.props.analog_inputs.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((j, i) => {
       list.push(
         <AnalogInput
@@ -101,7 +104,7 @@ class analogInputs extends React.Component {
   }
 
   render () {
-    var dStyle = {
+    const dStyle = {
       display: this.state.add ? '' : 'none'
     }
     return (
@@ -118,7 +121,7 @@ class analogInputs extends React.Component {
               id='add_analog_input'
               type='button'
               value={this.state.add ? '-' : '+'}
-              onClick={this.add}
+              onClick={this.handleAdd}
               className='btn btn-sm btn-outline-success'
             />
           </div>
@@ -156,7 +159,7 @@ class analogInputs extends React.Component {
                   <select
                     name='driver'
                     className='form-control custom-select'
-                    onChange={this.setDriver}
+                    onChange={this.handleSetDriver}
                     value={this.state.driver}>
                     {this.props.drivers.map(item => {
                       return (
@@ -173,7 +176,7 @@ class analogInputs extends React.Component {
                   type='button'
                   id='createAnalogInput'
                   value='add'
-                  onClick={this.save}
+                  onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />
               </div>

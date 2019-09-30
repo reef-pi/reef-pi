@@ -12,11 +12,11 @@ export default class HealthNotify extends React.Component {
       }
     }
     this.update = this.update.bind(this)
-    this.updateEnable = this.updateEnable.bind(this)
+    this.handleUpdateEnable = this.handleUpdateEnable.bind(this)
   }
 
-  updateEnable (ev) {
-    var h = this.state.notify
+  handleUpdateEnable (ev) {
+    const h = this.state.notify
     h.enable = ev.target.checked
     this.setState({ notify: h })
     this.props.update(h)
@@ -24,7 +24,7 @@ export default class HealthNotify extends React.Component {
 
   update (key) {
     return function (ev) {
-      var h = this.state.notify
+      const h = this.state.notify
       h[key] = parseInt(ev.target.value)
       this.setState({ notify: h })
       this.props.update(h)
@@ -32,7 +32,7 @@ export default class HealthNotify extends React.Component {
   }
 
   render () {
-    var ct = [
+    const ct = [
       <div className='col-12' key='health_notify_enable'>
         <div className='form-check'>
           <label className='form-check-label'>
@@ -41,7 +41,7 @@ export default class HealthNotify extends React.Component {
               type='checkbox'
               id='health_notify_enable'
               defaultChecked={this.state.notify.enable}
-              onClick={this.updateEnable}
+              onClick={this.handleUpdateEnable}
             />
             <b>{i18n.t('configuration:settings:alert_health_check')}</b>
           </label>

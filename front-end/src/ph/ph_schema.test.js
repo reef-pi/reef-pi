@@ -1,7 +1,7 @@
 import PhSchema from './ph_schema'
 
 describe('PhValidation', () => {
-  var probe = {}
+  let probe = {}
 
   beforeEach(() => {
     probe = {

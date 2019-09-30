@@ -1,4 +1,4 @@
-import {reduxGet, reduxPost, reduxPut, reduxDelete} from '../../utils/ajax'
+import { reduxGet, reduxPost, reduxPut, reduxDelete } from '../../utils/ajax'
 
 export const equipmentUpdated = () => {
   return ({

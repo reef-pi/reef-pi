@@ -8,12 +8,12 @@ export default class CalibrationModal extends React.Component {
     super(props)
     this.state = {
     }
-    this.confirm = this.confirm.bind(this)
+    this.handleConfirm = this.handleConfirm.bind(this)
     this.cancel = this.cancel.bind(this)
-    this.calibrate = this.calibrate.bind(this)
+    this.handleCalibrate = this.handleCalibrate.bind(this)
   }
 
-  confirm () {
+  handleConfirm () {
     return this.promise.resolve()
   }
 
@@ -25,7 +25,7 @@ export default class CalibrationModal extends React.Component {
     this.promise = new $.Deferred()
   }
 
-  calibrate (duration, speed) {
+  handleCalibrate (duration, speed) {
     const payload = {
       duration: parseFloat(duration),
       speed: parseInt(speed)
@@ -43,13 +43,15 @@ export default class CalibrationModal extends React.Component {
           </h4>
         </div>
         <div className='modal-body'>
-          <CalibrateForm onSubmit={this.calibrate}
+          <CalibrateForm
+            onSubmit={this.handleCalibrate}
             speed={this.props.doser.regiment.speed}
-            duration={this.props.doser.regiment.duration} />
+            duration={this.props.doser.regiment.duration}
+          />
         </div>
         <div className='modal-footer'>
           <div className='text-center'>
-            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.confirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.handleConfirm}>
               Done
             </button>
           </div>

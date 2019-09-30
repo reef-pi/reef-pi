@@ -24,7 +24,7 @@ class main extends React.Component {
     if (this.props.tcs === undefined) {
       return
     }
-    var list = []
+    const list = []
     this.props.tcs.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((v, k) => {
       list.push(
         <div key={v.id} className='list-group-item'>

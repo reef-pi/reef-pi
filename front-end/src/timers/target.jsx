@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ErrorFor, NameFor, ShowError} from '../utils/validation_helper'
-import {Field} from 'formik'
+import { ErrorFor, NameFor, ShowError } from '../utils/validation_helper'
+import { Field } from 'formik'
 import classNames from 'classnames'
 import i18next from 'i18next'
 import BooleanSelect from '../ui_components/boolean_select'
@@ -42,7 +42,7 @@ const Target = (props) => {
 
   const macroAction = () => {
     return (
-      <React.Fragment>
+      <>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
             <label htmlFor={NameFor(props.name, 'id')}>{i18next.t('timers:macro')}</label>
@@ -61,13 +61,13 @@ const Target = (props) => {
             <ErrorFor {...props} name={NameFor(props.name, 'id')} />
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 
   const equipmentAction = () => {
     return (
-      <React.Fragment>
+      <>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
             <label htmlFor='target.id'>{i18next.t('timers:equipment')}</label>
@@ -143,13 +143,13 @@ const Target = (props) => {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 
   const reminderAction = () => {
     return (
-      <React.Fragment>
+      <>
         <div className='col-12 order-lg-7 col-xl-6'>
           <div className='form-group'>
             <label htmlFor='title'>{i18next.t('timers:subject')}</label>
@@ -178,14 +178,14 @@ const Target = (props) => {
             <ErrorFor {...props} name={NameFor(props.name, 'message')} />
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 
   return (
-    <React.Fragment>
-      { buildAction() }
-    </React.Fragment>
+    <>
+      {buildAction()}
+    </>
   )
 }
 

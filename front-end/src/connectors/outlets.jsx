@@ -16,29 +16,34 @@ class outlets extends React.Component {
       driver_name: 'Raspberry Pi'
     }
     this.list = this.list.bind(this)
-    this.add = this.add.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
-    this.save = this.save.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
   }
+
   handleDriverChange (e) {
     this.setState({
       driver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
     })
   }
+
   handleNameChange (e) {
     this.setState({ outName: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ outPin: e.target.value })
   }
+
   handleReverseChange () {
     this.setState({ outReverse: !this.state.outReverse })
   }
+
   remove (id) {
     return function () {
       confirm('Are you sure ?').then(
@@ -53,7 +58,7 @@ class outlets extends React.Component {
     this.props.fetch()
   }
 
-  add () {
+  handleAdd () {
     this.setState({
       add: !this.state.add,
       outName: '',
@@ -62,43 +67,47 @@ class outlets extends React.Component {
     })
   }
 
-  save () {
-    var payload = {
+  handleSave () {
+    const payload = {
       name: this.state.outName,
       pin: parseInt(this.state.outPin),
       reverse: this.state.outReverse,
       driver: this.state.driver
     }
     this.props.create(payload)
-    this.add()
+    this.handleAdd()
   }
 
   list () {
-    var list = []
-    this.props.outlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((o, i) => {
-      list.push(
-        <Outlet
-          name={o.name}
-          outlet_id={o.id}
-          pin={o.pin}
-          key={o.id}
-          reverse={o.reverse}
-          equipment={o.equipment}
-          remove={this.remove(o.id)}
-          drivers={this.props.drivers}
-          driver={o.driver}
-          update={p => {
-            this.props.update(o.id, p)
-            this.props.fetch()
-          }}
-        />
-      )
-    })
+    const list = []
+    this.props.outlets
+      .sort((a, b) => {
+        return parseInt(a.id) < parseInt(b.id)
+      })
+      .forEach((o, i) => {
+        list.push(
+          <Outlet
+            name={o.name}
+            outlet_id={o.id}
+            pin={o.pin}
+            key={o.id}
+            reverse={o.reverse}
+            equipment={o.equipment}
+            remove={this.remove(o.id)}
+            drivers={this.props.drivers}
+            driver={o.driver}
+            update={p => {
+              this.props.update(o.id, p)
+              this.props.fetch()
+            }}
+          />
+        )
+      })
     return list
   }
 
   render () {
-    var dStyle = {
+    const dStyle = {
       display: this.state.add ? '' : 'none'
     }
     return (
@@ -115,7 +124,7 @@ class outlets extends React.Component {
               id='add_outlet'
               type='button'
               value={this.state.add ? '-' : '+'}
-              onClick={this.add}
+              onClick={this.handleAdd}
               className='btn btn-sm btn-outline-success'
             />
           </div>
@@ -181,7 +190,7 @@ class outlets extends React.Component {
               type='button'
               id='createOutlet'
               value='add'
-              onClick={this.save}
+              onClick={this.handleSave}
               className='btn btn-outline-primary col-12 col-md-4'
             />
           </div>

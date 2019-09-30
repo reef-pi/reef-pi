@@ -72,7 +72,7 @@ function SmokeTest (url) {
 }
 
 let url = 'http://localhost:8080/'
-if (process.argv.length == 3) {
+if (process.argv.length === 3) {
   url = process.argv[2]
 }
 

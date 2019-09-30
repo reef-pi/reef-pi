@@ -9,7 +9,7 @@ import { FieldArray } from 'formik'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditMacro />', () => {
-  var values = {
+  let values = {
     enable: true,
     name: 'test macro',
     steps: [
@@ -25,7 +25,7 @@ describe('<EditMacro />', () => {
     ]
   }
 
-  var fn = jest.fn()
+  let fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -37,44 +37,50 @@ describe('<EditMacro />', () => {
 
   it('<EditMacro />', () => {
     const wrapper = shallow(
-      <EditMacro values={values}
+      <EditMacro
+        values={values}
         errors={{}}
         touched={{}}
         handleBlur={fn}
         handleChange={fn}
-        submitForm={fn} />
+        submitForm={fn}
+      />
     )
-    var arrayField = wrapper.find(FieldArray).shallow()
+    let arrayField = wrapper.find(FieldArray).shallow()
     expect(arrayField.length).toBe(1)
   })
 
   it('<EditMacro /> should submit', () => {
     const wrapper = shallow(
-      <EditMacro values={values}
+      <EditMacro
+        values={values}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
         errors={{}}
         touched={{}}
         dirty
-        isValid />
+        isValid
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditMacro /> should show alert when invalid', () => {
     const wrapper = shallow(
-      <EditMacro values={values}
+      <EditMacro
+        values={values}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
         errors={{}}
         touched={{}}
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
 })

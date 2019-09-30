@@ -1,7 +1,7 @@
 import AtoSchema from './ato_schema'
 
 describe('Validation', () => {
-  var ato = {}
+  let ato = {}
 
   beforeEach(() => {
     ato = {

@@ -12,7 +12,7 @@ export default class CalibrationWizard extends React.Component {
       enableSecond: false,
       secondCalibrated: false
     }
-    this.calibrate = this.calibrate.bind(this)
+    this.handleCalibrate = this.handleCalibrate.bind(this)
   }
 
   confirm () {
@@ -33,7 +33,7 @@ export default class CalibrationWizard extends React.Component {
     window.clearInterval(this.timer)
   }
 
-  calibrate (point, expected) {
+  handleCalibrate (point, expected) {
     const payload = {
       type: point,
       expected: expected,
@@ -43,7 +43,7 @@ export default class CalibrationWizard extends React.Component {
     if (point === 'mid') {
       this.setState({ enableMid: false, enableSecond: true })
     } else if (point === 'second') {
-      this.setState({secondCalibrated: true, enableSecond: false})
+      this.setState({ secondCalibrated: true, enableSecond: false })
     }
 
     this.props.calibrateProbe(this.props.probe.id, payload).then(() => {
@@ -54,21 +54,28 @@ export default class CalibrationWizard extends React.Component {
           enableSecond: true
         })
       } else {
-        this.setState({secondCalibrated: true, enableSecond: false})
+        this.setState({ secondCalibrated: true, enableSecond: false })
       }
     })
+  }
+
+  handleCancel () {
+    this.props.cancel()
+  }
+
+  handleConfirm () {
+    this.props.confirm()
   }
 
   render () {
     let cancelButton = null
     if (this.state.midCalibrated === false) {
       cancelButton = (
-        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.props.cancel}>
+        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.handleCancel}>
           {i18next.t('cancel')}
         </button>
       )
     }
-
     return (
       <Modal>
         <div className='modal-header'>
@@ -77,31 +84,31 @@ export default class CalibrationWizard extends React.Component {
           </h4>
         </div>
         <div className='modal-body'>
-          <Calibrate point='mid'
+          <Calibrate
+            point='mid'
             label={i18next.t('ph:midpoint')}
             defaultValue='7'
             complete={this.state.midCalibrated}
             readOnly={!this.state.enableMid}
-            onSubmit={this.calibrate} />
-          <Calibrate point='second'
+            onSubmit={this.handleCalibrate}
+          />
+          <Calibrate
+            point='second'
             label={i18next.t('ph:second_point')}
             defaultValue='10'
             complete={this.state.secondCalibrated}
             readOnly={!this.state.enableSecond}
-            onSubmit={this.calibrate} />
+            onSubmit={this.handleCalibrate}
+          />
           <div className='row'>
             <div className='col-4'>{i18next.t('ph:current_reading')}</div>
-            <div className='col-4'>
-              {
-                this.props.currentReading[this.props.probe.id]
-              }
-            </div>
+            <div className='col-4'>{this.props.currentReading[this.props.probe.id]}</div>
           </div>
         </div>
         <div className='modal-footer'>
           <div className='text-center'>
             {cancelButton}
-            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.props.confirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.handleConfirm}>
               {i18next.t('done')}
             </button>
           </div>

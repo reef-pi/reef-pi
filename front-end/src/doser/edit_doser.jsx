@@ -139,7 +139,8 @@ const EditDoser = ({
 
       <div className='row'>
         <div className='col-12 col-xl-6'>
-          <Cron values={values}
+          <Cron
+            values={values}
             touched={touched}
             errors={errors}
             readOnly={readOnly}
@@ -173,7 +174,8 @@ const EditDoser = ({
           <div className='form-group'>
             <label htmlFor='speed'>Speed</label>
             <div className='input-group'>
-              <Percent type='number'
+              <Percent
+                type='number'
                 className={classNames('form-control', {
                   'is-invalid': ShowError('speed', touched, errors)
                 })}
@@ -181,7 +183,8 @@ const EditDoser = ({
                 onBlur={onBlur}
                 readOnly={readOnly}
                 onChange={handleChange}
-                value={values.speed} />
+                value={values.speed}
+              />
               <div className='input-group-append'>
                 <span className='input-group-text'>
                     %

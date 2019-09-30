@@ -1,7 +1,7 @@
 import { logError } from 'utils/log'
 import { showError } from 'utils/alert'
 function makeHeaders () {
-  let headers = new Headers()
+  const headers = new Headers()
   headers.append('Content-Type', 'application/json')
   return headers
 }

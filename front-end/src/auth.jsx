@@ -12,7 +12,7 @@ class auth extends React.Component {
       user: '',
       password: ''
     }
-    this.updateCreds = this.updateCreds.bind(this)
+    this.handleUpdateCreds = this.handleUpdateCreds.bind(this)
     this.handleUserChange = this.handleUserChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
@@ -20,15 +20,16 @@ class auth extends React.Component {
   handleUserChange (e) {
     this.setState({ user: e.target.value })
   }
+
   handlePasswordChange (e) {
     this.setState({ password: e.target.value })
   }
 
-  updateCreds () {
+  handleUpdateCreds () {
     let error = false
     this.setState({ usernameError: false })
     this.setState({ passwordError: false })
-    var creds = {
+    const creds = {
       user: this.state.user,
       password: this.state.password
     }
@@ -50,7 +51,7 @@ class auth extends React.Component {
   }
 
   render () {
-    var btnClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    const btnClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     return (
       <div className='container'>
         <div className='row'>
@@ -80,7 +81,7 @@ class auth extends React.Component {
           <div className='invalid-feedback'>{i18n.t('configuration:authentication:error_pass')}</div>
         </div>
         <div className='row'>
-          <input type='button' className={btnClass} value={i18n.t('update')} onClick={this.updateCreds} />
+          <input type='button' className={btnClass} value={i18n.t('update')} onClick={this.handleUpdateCreds} />
         </div>
       </div>
     )

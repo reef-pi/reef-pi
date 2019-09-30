@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ErrorFor, ShowError} from '../utils/validation_helper'
-import {showError} from 'utils/alert'
+import { ErrorFor, ShowError } from '../utils/validation_helper'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
 
@@ -32,9 +32,11 @@ const EditEquipment = ({
     if (values.id) {
       return (
         <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
-          <button type='button'
+          <button
+            type='button'
             onClick={onDelete}
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
+            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+          >
             Delete
           </button>
         </div>
@@ -49,27 +51,31 @@ const EditEquipment = ({
         {deleteAction()}
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
           <label className='mr-2'>{i18next.t('name')}</label>
-          <input type='text' name='name'
+          <input
+            type='text' name='name'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('name', touched, errors)})}
+            className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
             value={values.name}
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
         <div className='col-12 col-sm-5 col-lg-4 order-sm-2'>
           <label className='mr-2'>Outlet</label>
-          <select name='outlet'
+          <select
+            name='outlet'
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', {'is-invalid': ShowError('outlet', touched, errors)})}
-            value={values.outlet} >
+            className={classNames('form-control', { 'is-invalid': ShowError('outlet', touched, errors) })}
+            value={values.outlet}
+          >
             <option value='' className='d-none'>-- Select --</option>
             {outlets.map((item) => {
               return (
                 <option
                   key={item.id}
-                  value={item.id} >
+                  value={item.id}
+                >
                   {item.name}
                 </option>
               )

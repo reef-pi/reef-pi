@@ -29,7 +29,7 @@ const MacroForm = withFormik({
     }
   },
   validationSchema: MacroSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditMacro)

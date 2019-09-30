@@ -33,9 +33,9 @@ describe('logCenter', () => {
       content: 'foo',
       type: 'WARNING'
     }
-    let r = setAPILog('WARNING', 'foo')
-    let r2 = setUILog('SUCCESS', 'foo')
-    let r3 = setUILog('SUCCESS', 'foo', false)
+    const r = setAPILog('WARNING', 'foo')
+    const r2 = setUILog('SUCCESS', 'foo')
+    const r3 = setUILog('SUCCESS', 'foo', false)
     expect(r).toEqual(expectAPI)
     expect(r2).toEqual(expectUI)
     expect(r3).toEqual(expectUIFalse)
@@ -67,7 +67,7 @@ describe('logCenter', () => {
         type: 'WARNING'
       }
     ]
-    let store = mockStore({ logs: logs })
+    const store = mockStore({ logs: logs })
     const wrapper = shallow(<LogCenter store={store} />).dive()
     expect(wrapper.find('.log-entry').length).toBe(4)
   })
