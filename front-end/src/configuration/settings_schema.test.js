@@ -22,7 +22,7 @@ describe('Settings schema validation', () => {
       https: true,
       pca9685: false,
       pprof: true,
-      rpi_pwm_freq: '20s0',
+      rpi_pwm_freq: 1400,
       pca9685_pwm_freq: 1500
     }
   })
