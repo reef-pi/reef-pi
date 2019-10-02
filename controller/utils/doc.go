@@ -3,9 +3,10 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
 type container struct {
