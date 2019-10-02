@@ -4,12 +4,11 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (t *Controller) LoadAPI(r *mux.Router) {
+func (t *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/tcs", t.list).Methods("GET")
 	r.HandleFunc("/api/tcs/sensors", t.sensors).Methods("GET")
 	r.HandleFunc("/api/tcs", t.create).Methods("PUT")

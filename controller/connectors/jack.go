@@ -6,10 +6,9 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"github.com/reef-pi/hal"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -120,7 +119,7 @@ func (c *Jacks) Delete(id string) error {
 	return c.store.Delete(JackBucket, id)
 }
 
-func (c *Jacks) LoadAPI(r *mux.Router) {
+func (c *Jacks) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/jacks", c.list).Methods("GET")
 	r.HandleFunc("/api/jacks/{id}", c.get).Methods("GET")
 	r.HandleFunc("/api/jacks", c.create).Methods("PUT")

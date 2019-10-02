@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"net/http/pprof"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
+func (c *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/display/on", c.EnableDisplay).Methods("POST")
 	r.HandleFunc("/api/display/off", c.DisableDisplay).Methods("POST")
 	r.HandleFunc("/api/display", c.SetBrightness).Methods("POST")
@@ -25,7 +24,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	}
 }
 
-func (c *Controller) enablePprof(r *mux.Router) {
+func (c *Controller) enablePprof(r *controller.DocRouter) {
 	r.HandleFunc("/debug/pprof/", pprof.Index)
 	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
 	r.HandleFunc("/debug/pprof/profile", pprof.Profile)

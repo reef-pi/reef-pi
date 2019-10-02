@@ -1,40 +1,18 @@
 package daemon
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"strings"
-
-	"github.com/gorilla/mux"
 
 	"os"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 var DefaultCredentials = utils.Credentials{
 	User:     "reef-pi",
 	Password: "reef-pi",
-}
-
-func summarizeAPI(r *mux.Router) {
-	fi, err := os.Create("api.txt")
-	if err != nil {
-		log.Println("ERROR: Failed to open api.md file. Error:", err)
-		return
-	}
-	defer fi.Close()
-	walkFn := func(route *mux.Route, _ *mux.Router, _ []*mux.Route) error {
-		mts, _ := route.GetMethods()
-		p, _ := route.GetPathRegexp()
-		fi.WriteString(fmt.Sprintf("%6s\t%s\n", strings.Join(mts, ","), p))
-		return nil
-	}
-	if err := r.Walk(walkFn); err != nil {
-		log.Println("DEBUG: API List Error:", err)
-	}
-	log.Println("DEBUG: successfully written api.txt file")
 }
 
 func (r *ReefPi) API() error {
@@ -56,18 +34,18 @@ func (r *ReefPi) API() error {
 		r.prometheus()
 	}
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
-		summarizeAPI(router)
+		router.Summarize()
 	}
 	return nil
 }
 
-func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
+func (r *ReefPi) UnAuthenticatedAPI(router *controller.DocRouter) {
 	router.HandleFunc("/auth/signin", r.a.SignIn).Methods("POST")
 	router.HandleFunc("/auth/signout", r.a.SignOut).Methods("GET")
 }
 
 // Authenticated API using the BasicAuth middleware
-func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
+func (r *ReefPi) AuthenticatedAPI(router *controller.DocRouter) {
 	http.Handle("/api/", r.a.Authenticate(router.ServeHTTP))
 
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
@@ -102,7 +80,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string, creds utils.Credentials, https bool) (error, *mux.Router) {
+func startAPIServer(address string, creds utils.Credentials, https bool) (error, *controller.DocRouter) {
 	assets := http.FileServer(http.Dir("ui/assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/home.html")
@@ -110,7 +88,7 @@ func startAPIServer(address string, creds utils.Credentials, https bool) (error,
 	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/favicon.ico")
 	})
-	router := mux.NewRouter()
+	router := controller.NewDocRouter()
 	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
 	images := http.FileServer(http.Dir("images"))
 	http.Handle("/images/", http.StripPrefix("/images/", images))

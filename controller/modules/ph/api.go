@@ -5,12 +5,11 @@ import (
 
 	"github.com/reef-pi/hal"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (e *Controller) LoadAPI(r *mux.Router) {
+func (e *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/phprobes/{id}", e.getProbe).Methods("GET")
 	r.HandleFunc("/api/phprobes", e.listProbes).Methods("GET")
 	r.HandleFunc("/api/phprobes", e.createProbe).Methods("PUT")

@@ -3,13 +3,12 @@ package equipment
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 //API
-func (e *Controller) LoadAPI(r *mux.Router) {
+func (e *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/equipment/{id}", e.GetEquipment).Methods("GET")
 	r.HandleFunc("/api/equipment", e.ListEquipment).Methods("GET")
 	r.HandleFunc("/api/equipment", e.CreateEquipment).Methods("PUT")

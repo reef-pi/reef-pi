@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"github.com/reef-pi/hal"
+	"github.com/reef-pi/reef-pi/controller"
 
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -31,7 +30,7 @@ type Inlets struct {
 	drivers *drivers.Drivers
 }
 
-func (e *Inlets) LoadAPI(r *mux.Router) {
+func (e *Inlets) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/inlets/{id}", e.get).Methods("GET")
 	r.HandleFunc("/api/inlets", e.list).Methods("GET")
 	r.HandleFunc("/api/inlets", e.create).Methods("PUT")

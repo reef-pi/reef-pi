@@ -1,15 +1,13 @@
 package controller
 
 import (
-	"github.com/gorilla/mux"
-
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Subsystem interface {
 	Setup() error
-	LoadAPI(*mux.Router)
+	LoadAPI(*DocRouter)
 	Start()
 	Stop()
 	On(string, bool) error

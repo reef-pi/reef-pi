@@ -3,12 +3,11 @@ package macro
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (t *Subsystem) LoadAPI(r *mux.Router) {
+func (t *Subsystem) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/macros", t.list).Methods("GET")
 	r.HandleFunc("/api/macros", t.create).Methods("PUT")
 	r.HandleFunc("/api/macros/{id}", t.get).Methods("GET")

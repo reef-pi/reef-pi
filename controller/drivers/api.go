@@ -3,12 +3,11 @@ package drivers
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (d *Drivers) LoadAPI(r *mux.Router) {
+func (d *Drivers) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/drivers", d.list).Methods("GET")
 	r.HandleFunc("/api/drivers/{id}", d.get).Methods("GET")
 	r.HandleFunc("/api/drivers", d.create).Methods("PUT")

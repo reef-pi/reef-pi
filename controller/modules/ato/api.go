@@ -3,12 +3,11 @@ package ato
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
+func (c *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/atos/{id}", c.get).Methods("GET")
 	r.HandleFunc("/api/atos", c.list).Methods("GET")
 	r.HandleFunc("/api/atos", c.create).Methods("PUT")

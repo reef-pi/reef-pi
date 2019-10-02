@@ -3,12 +3,11 @@ package camera
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
+func (c *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/camera/config", c.get).Methods("GET")
 	r.HandleFunc("/api/camera/config", c.update).Methods("POST")
 	r.HandleFunc("/api/camera/shoot", c.shoot).Methods("POST")

@@ -6,10 +6,9 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"github.com/reef-pi/hal"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -115,7 +114,7 @@ func (c *AnalogInputs) Delete(id string) error {
 	return c.store.Delete(AnalogInputBucket, id)
 }
 
-func (c *AnalogInputs) LoadAPI(r *mux.Router) {
+func (c *AnalogInputs) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/analog_inputs", c.list).Methods("GET")
 	r.HandleFunc("/api/analog_inputs/{id}", c.get).Methods("GET")
 	r.HandleFunc("/api/analog_inputs", c.create).Methods("PUT")

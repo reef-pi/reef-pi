@@ -3,12 +3,11 @@ package lighting
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
+func (c *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/lights", c.ListLights).Methods("GET")
 	r.HandleFunc("/api/lights", c.CreateLight).Methods("PUT")
 	r.HandleFunc("/api/lights/{id}", c.GetLight).Methods("GET")

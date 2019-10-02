@@ -3,12 +3,11 @@ package timer
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r *mux.Router) {
+func (c *Controller) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/timers/{id}", c.GetJob).Methods("GET")
 	r.HandleFunc("/api/timers", c.ListJobs).Methods("GET")
 	r.HandleFunc("/api/timers", c.CreateJob).Methods("PUT")

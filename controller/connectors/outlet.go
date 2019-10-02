@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"github.com/reef-pi/hal"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -127,7 +126,7 @@ func (c *Outlets) Get(id string) (Outlet, error) {
 	return o, c.store.Get(OutletBucket, id, &o)
 }
 
-func (e *Outlets) LoadAPI(r *mux.Router) {
+func (e *Outlets) LoadAPI(r *controller.DocRouter) {
 	r.HandleFunc("/api/outlets/{id}", e.get).Methods("GET")
 	r.HandleFunc("/api/outlets", e.list).Methods("GET")
 	r.HandleFunc("/api/outlets", e.create).Methods("PUT")
