@@ -31,12 +31,12 @@ type Inlets struct {
 }
 
 func (e *Inlets) LoadAPI(r *controller.DocRouter) {
-	r.HandleFunc("/api/inlets/{id}", e.get).Methods("GET")
-	r.HandleFunc("/api/inlets", e.list).Methods("GET")
-	r.HandleFunc("/api/inlets", e.create).Methods("PUT")
+	r.HandleFunc("/api/inlets/{id}", e.get).Methods("GET").Doc(nil, new(Inlet))
+	r.HandleFunc("/api/inlets", e.list).Methods("GET").Doc(nil, []Inlet{Inlet{}})
+	r.HandleFunc("/api/inlets", e.create).Methods("PUT").Doc(new(Inlet), nil)
 	r.HandleFunc("/api/inlets/{id}", e.delete).Methods("DELETE")
-	r.HandleFunc("/api/inlets/{id}", e.update).Methods("POST")
-	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST")
+	r.HandleFunc("/api/inlets/{id}", e.update).Methods("POST").Doc(new(Inlet), nil)
+	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST").Doc(new(int), nil)
 }
 
 func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.InputPin, error) {

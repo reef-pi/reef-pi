@@ -115,7 +115,7 @@ func (c *AnalogInputs) Delete(id string) error {
 }
 
 func (c *AnalogInputs) LoadAPI(r *controller.DocRouter) {
-	r.HandleFunc("/api/analog_inputs", c.list).Methods("GET")
+	r.HandleFunc("/api/analog_inputs", c.list).Methods("GET").Doc(nil, []*AnalogInput{new(AnalogInput)})
 	r.HandleFunc("/api/analog_inputs/{id}", c.get).Methods("GET")
 	r.HandleFunc("/api/analog_inputs", c.create).Methods("PUT")
 	r.HandleFunc("/api/analog_inputs/{id}", c.update).Methods("POST")
