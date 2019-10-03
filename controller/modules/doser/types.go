@@ -3,7 +3,7 @@ package doser
 import (
 	"strings"
 
-	cron "gopkg.in/robfig/cron.v3"
+	cron "github.com/robfig/cron/v3"
 )
 
 type DosingRegiment struct {

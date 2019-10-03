@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	cron "gopkg.in/robfig/cron.v3"
+	cron "github.com/robfig/cron/v3"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"

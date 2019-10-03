@@ -6,9 +6,8 @@ import (
 	"log"
 	"time"
 
-	cron "gopkg.in/robfig/cron.v3"
-
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
+	cron "github.com/robfig/cron/v3"
 )
 
 type UpdateEquipment struct {
