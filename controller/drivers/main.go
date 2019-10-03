@@ -53,9 +53,14 @@ func (d *Drivers) Get(id string) (Driver, error) {
 	if !ok {
 		return dr, fmt.Errorf("driver by id %s not available", id)
 	}
+	dr.loadPinMap(driver)
+	return dr, nil
+}
+
+func (dr *Driver) loadPinMap(d hal.Driver) {
 	pinmap := make(map[string][]int)
-	for _, cap := range driver.Metadata().Capabilities {
-		pins, err := driver.Pins(cap)
+	for _, cap := range d.Metadata().Capabilities {
+		pins, err := d.Pins(cap)
 		if err != nil {
 			continue
 		}
@@ -66,7 +71,6 @@ func (d *Drivers) Get(id string) (Driver, error) {
 		pinmap[cap.String()] = ps
 	}
 	dr.PinMap = pinmap
-	return dr, nil
 }
 
 func (d *Drivers) DigitalInputDriver(id string) (hal.DigitalInputDriver, error) {
@@ -156,6 +160,10 @@ func (d *Drivers) List() ([]Driver, error) {
 		var d1 Driver
 		if err := json.Unmarshal(v, &d1); err != nil {
 			return err
+		}
+		dr, ok := d.drivers[d1.ID]
+		if ok {
+			d1.loadPinMap(dr)
 		}
 		ds = append(ds, d1)
 		return nil
