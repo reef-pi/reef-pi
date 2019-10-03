@@ -22,9 +22,9 @@ require (
 	github.com/prometheus/common v0.7.0
 	github.com/prometheus/procfs v0.0.5
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
-	github.com/reef-pi/drivers v0.0.0-20191003041937-19ebfef6fcd3
-	github.com/reef-pi/hal v0.0.0-20191003034943-5f8b350af537
-	github.com/reef-pi/rpi v0.0.0-20191003041351-6d5dcbb76e1d
+	github.com/reef-pi/drivers v0.0.0-20191003052004-87ed1a436be4
+	github.com/reef-pi/hal v0.0.0-20191003050343-8c77d92fe39a
+	github.com/reef-pi/rpi v0.0.0-20191003051100-f2908459e401
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/shirou/gopsutil v2.19.9+incompatible
 	golang.org/x/sys v0.0.0-20190927073244-c990c680b611

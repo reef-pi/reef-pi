@@ -16,10 +16,11 @@ import (
 const DriverBucket = storage.DriverBucket
 
 type Driver struct {
-	ID     string          `json:"id"`
-	Name   string          `json:"name"`
-	Type   string          `json:"type"`
-	Config json.RawMessage `json:"config"`
+	ID     string           `json:"id"`
+	Name   string           `json:"name"`
+	Type   string           `json:"type"`
+	Config json.RawMessage  `json:"config`
+	PinMap map[string][]int `json:"pinmap"`
 }
 
 type Drivers struct {
@@ -43,18 +44,35 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 	return d, d.loadAll()
 }
 
-func (d *Drivers) Get(id string) (hal.Driver, error) {
+func (d *Drivers) Get(id string) (Driver, error) {
+	var dr Driver
+	if err := d.store.Get(DriverBucket, id, &dr); err != nil {
+		return dr, err
+	}
 	driver, ok := d.drivers[id]
 	if !ok {
-		return nil, fmt.Errorf("driver by id %s not available", id)
+		return dr, fmt.Errorf("driver by id %s not available", id)
 	}
-	return driver, nil
+	pinmap := make(map[string][]int)
+	for _, cap := range driver.Metadata().Capabilities {
+		pins, err := driver.Pins(cap)
+		if err != nil {
+			continue
+		}
+		var ps []int
+		for _, pin := range pins {
+			ps = append(ps, pin.Number())
+		}
+		pinmap[cap.String()] = ps
+	}
+	dr.PinMap = pinmap
+	return dr, nil
 }
 
 func (d *Drivers) DigitalInputDriver(id string) (hal.DigitalInputDriver, error) {
-	driver, err := d.Get(id)
-	if err != nil {
-		return nil, err
+	driver, ok := d.drivers[id]
+	if !ok {
+		return nil, fmt.Errorf("driver by id %s not available", id)
 	}
 	i, ok := driver.(hal.DigitalInputDriver)
 	if !ok {
@@ -64,9 +82,9 @@ func (d *Drivers) DigitalInputDriver(id string) (hal.DigitalInputDriver, error) 
 }
 
 func (d *Drivers) DigitalOutputDriver(id string) (hal.DigitalOutputDriver, error) {
-	driver, err := d.Get(id)
-	if err != nil {
-		return nil, err
+	driver, ok := d.drivers[id]
+	if !ok {
+		return nil, fmt.Errorf("driver by id %s not available", id)
 	}
 	o, ok := driver.(hal.DigitalOutputDriver)
 	if !ok {
@@ -76,9 +94,9 @@ func (d *Drivers) DigitalOutputDriver(id string) (hal.DigitalOutputDriver, error
 }
 
 func (d *Drivers) PWMDriver(id string) (hal.PWMDriver, error) {
-	driver, err := d.Get(id)
-	if err != nil {
-		return nil, err
+	driver, ok := d.drivers[id]
+	if !ok {
+		return nil, fmt.Errorf("driver by id %s not available", id)
 	}
 	p, ok := driver.(hal.PWMDriver)
 	if !ok {
@@ -88,9 +106,9 @@ func (d *Drivers) PWMDriver(id string) (hal.PWMDriver, error) {
 }
 
 func (d *Drivers) AnalogInputDriver(id string) (hal.AnalogInputDriver, error) {
-	driver, err := d.Get(id)
-	if err != nil {
-		return nil, err
+	driver, ok := d.drivers[id]
+	if !ok {
+		return nil, fmt.Errorf("driver by id %s not available", id)
 	}
 	p, ok := driver.(hal.AnalogInputDriver)
 	if !ok {
@@ -125,9 +143,9 @@ func (d *Drivers) Update(id string, d1 Driver) error {
 }
 
 func (d *Drivers) Delete(id string) error {
-	dri, err := d.Get(id)
-	if err == nil {
-		_ = dri.Close()
+	driver, ok := d.drivers[id]
+	if ok {
+		driver.Close()
 	}
 	return d.store.Delete(DriverBucket, id)
 }
