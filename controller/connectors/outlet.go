@@ -25,12 +25,12 @@ type Outlet struct {
 	Driver    string `json:"driver"`
 }
 
-func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.OutputPin, error) {
-	d, err := drivers.OutputDriver(o.Driver)
+func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.DigitalOutputPin, error) {
+	d, err := drivers.DigitalOutputDriver(o.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("outlet %s driver lookup failure: %v", o.Name, err)
 	}
-	pin, err := d.OutputPin(o.Pin)
+	pin, err := d.DigitalOutputPin(o.Pin)
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", o.Pin, err)
 	}

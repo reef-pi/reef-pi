@@ -49,7 +49,6 @@ install:
 go-get:
 	go get -u github.com/golang/dep/cmd/dep
 	go get -u golang.org/x/tools/cmd/goimports
-	dep ensure
 ifeq ($(OS), Windows_NT)
 	go get -u github.com/StackExchange/wmi
 endif

@@ -29,12 +29,12 @@ type AnalogInputs struct {
 	drivers *drivers.Drivers
 }
 
-func (j AnalogInput) channel(drvrs *drivers.Drivers) (hal.ADCChannel, error) {
-	d, err := drvrs.ADCDriver(j.Driver)
+func (j AnalogInput) channel(drvrs *drivers.Drivers) (hal.AnalogInputPin, error) {
+	d, err := drvrs.AnalogInputDriver(j.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("driver %s for analog input %s not found: %v", j.Driver, j.Name, err)
 	}
-	return d.ADCChannel(j.Pin)
+	return d.AnalogInputPin(j.Pin)
 }
 
 func (j AnalogInput) IsValid(drvrs *drivers.Drivers) error {

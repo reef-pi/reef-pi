@@ -40,12 +40,12 @@ func (e *Inlets) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST")
 }
 
-func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.InputPin, error) {
-	d, err := drivers.InputDriver(i.Driver)
+func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.DigitalInputPin, error) {
+	d, err := drivers.DigitalInputDriver(i.Driver)
 	if err != nil {
 		return nil, fmt.Errorf("inlet %s driver lookup failure: %v", i.Name, err)
 	}
-	inputPin, err := d.InputPin(i.Pin)
+	inputPin, err := d.DigitalInputPin(i.Pin)
 	if err != nil {
 		return nil, fmt.Errorf("no valid input pin %d: %v", i.Pin, err)
 	}
