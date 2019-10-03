@@ -56,10 +56,10 @@ func TestDrivers_API(t *testing.T) {
 		t.Error("Failed to fetch driver using api. Error:", err)
 	}
 
-	if _, err := d.OutputDriver("rpi"); err != nil {
+	if _, err := d.DigitalOutputDriver("rpi"); err != nil {
 		t.Error(err)
 	}
-	if _, err := d.InputDriver("rpi"); err != nil {
+	if _, err := d.DigitalInputDriver("rpi"); err != nil {
 		t.Error(err)
 	}
 	if _, err := d.PWMDriver("rpi"); err != nil {

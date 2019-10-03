@@ -7,7 +7,7 @@ import (
 
 	"github.com/kidoman/embd"
 
-	"github.com/reef-pi/drivers"
+	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
@@ -43,7 +43,7 @@ func AbstractFactory(t string, dev_mode bool) (Factory, error) {
 	case "pico-board":
 		return pico_board.HalAdapter, nil
 	case "ph-ezo":
-		return drivers.EzoHalAdapter, nil
+		return ezo.EzoHalAdapter, nil
 	case "hs103":
 		return tplink.HS103HALAdapter, nil
 	case "hs110":
