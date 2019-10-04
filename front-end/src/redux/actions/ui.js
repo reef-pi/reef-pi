@@ -61,7 +61,7 @@ export const fetchControllerData = (dispatch, capabilities) => {
 }
 
 export const fetchManagerData = (dispatch) => {
-  console.log("Fetching manager data")
+  console.log('Fetching manager data')
   dispatch(fetchInstances())
 }
 
@@ -69,10 +69,10 @@ export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-      if(capabilities['manager']) {
+      if (capabilities['manager']) {
         fetchManagerData(dispatch)
         return (capabilitiesLoaded(capabilities))
-      }else{
+      } else {
         fetchControllerData(dispatch, capabilities)
         return (capabilitiesLoaded(capabilities))
       }

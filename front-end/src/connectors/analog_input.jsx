@@ -91,10 +91,11 @@ export default class AnalogInput extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label className='input-group-addon'>Driver</label>
+            <label>Driver</label>
             <select
               name='driver'
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}
+              className='custom-select form-control'
               onChange={this.setDriver}
               value={this.state.driver}>
               {this.props.drivers.map(item => {

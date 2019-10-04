@@ -33,7 +33,7 @@ const Target = (props) => {
         return equipmentAction()
       case 'reminder':
         return reminderAction()
-      case 'macros':
+      case 'macro':
         return macroAction()
       default:
         return 'Unknown type:' + props.type
@@ -41,28 +41,24 @@ const Target = (props) => {
   }
 
   const macroAction = () => {
-    let touched = props.touched
-    let errors = props.errors
-    let readOnly = props.readOnly
-    let name = props.name
     return (
       <React.Fragment>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='nsme'>{i18next.t('timers:macro')}</label>
+            <label htmlFor={NameFor(props.name, 'id')}>{i18next.t('timers:macro')}</label>
             <Field
-              name={NameFor(name, 'name')}
+              name={NameFor(props.name, 'id')}
               component='select'
-              disabled={readOnly}
+              disabled={props.readOnly}
               placeholder='Macro name'
               className={classNames('custom-select', {
-                'is-invalid': ShowError(NameFor(name, 'name'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'id'), props.touched, props.errors)
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {macroOptions()}
             </Field>
-            <ErrorFor {...props} name={NameFor(props.name, 'name')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'id')} />
           </div>
         </div>
       </React.Fragment>
@@ -70,45 +66,40 @@ const Target = (props) => {
   }
 
   const equipmentAction = () => {
-    let touched = props.touched
-    let errors = props.errors
-    let readOnly = props.readOnly
-    let target = props.target
-    let name = props.name
     return (
       <React.Fragment>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
             <label htmlFor='target.id'>{i18next.t('timers:equipment')}</label>
             <Field
-              name={NameFor(name, 'equipment')}
+              name={NameFor(props.name, 'id')}
               component='select'
-              disabled={readOnly}
+              disabled={props.readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError(NameFor(name, 'name'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'id'), props.touched, props.errors)
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {equipmentOptions()}
             </Field>
-            <ErrorFor {...props} name={NameFor(name, 'name')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'id')} />
           </div>
         </div>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
             <label htmlFor='on'>{i18next.t('timers:equipment:action')}</label>
             <Field
-              name={NameFor(name, 'on')}
+              name={NameFor(props.name, 'on')}
               component={BooleanSelect}
-              disabled={readOnly}
+              disabled={props.readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError(NameFor(name, 'on'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'on'), props.touched, props.errors)
               })}
             >
               <option value='true'>{i18next.t('timers:turn_on')}</option>
               <option value='false'>{i18next.t('timers:turn_off')}</option>
             </Field>
-            <ErrorFor {...props} name={NameFor(name, 'on')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'on')} />
           </div>
         </div>
 
@@ -116,30 +107,30 @@ const Target = (props) => {
           <div className='form-group'>
             <label htmlFor='target.revert'>{i18next.t('timers:and_then')}</label>
             <Field
-              name={NameFor(name, 'revert')}
+              name={NameFor(props.name, 'revert')}
               component={BooleanSelect}
-              disabled={readOnly}
+              disabled={props.readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError(NameFor(name, 'revert'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'revert'), props.touched, props.errors)
               })}
             >
-              <option value='false'>{target.on ? i18next.t('timers:stay_on') : i18next.t('timers:stay_off')}</option>
-              <option value='true'>{target.on ? i18next.t('timers:turn_back_off') : i18next.t('timers:turn_back_on')}</option>
+              <option value='false'>{props.target.on ? i18next.t('timers:stay_on') : i18next.t('timers:stay_off')}</option>
+              <option value='true'>{props.target.on ? i18next.t('timers:turn_back_off') : i18next.t('timers:turn_back_on')}</option>
             </Field>
-            <ErrorFor {...props} name={NameFor(name, 'revert')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'revert')} />
           </div>
         </div>
 
-        <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', {'d-none': target.revert === false})}>
+        <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', {'d-none': props.target.revert === false})}>
           <div className='form-group'>
             <label htmlFor='target.duration'>{i18next.t('timers:after')}</label>
             <div className='input-group'>
               <Field
-                name={NameFor(name, 'duration')}
-                readOnly={readOnly || target.revert === false}
+                name={NameFor(props.name, 'duration')}
+                readOnly={props.readOnly || props.target.revert === false}
 
                 className={classNames('form-control', {
-                  'is-invalid': ShowError(NameFor(name, 'duration'), touched, errors)
+                  'is-invalid': ShowError(NameFor(props.name, 'duration'), props.touched, props.errors)
                 })}
               />
               <div className='input-group-append'>
@@ -148,7 +139,7 @@ const Target = (props) => {
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>{i18next.t('timers:sec')}</span>
               </div>
-              <ErrorFor {...props} name={NameFor(name, 'duration')} />
+              <ErrorFor {...props} name={NameFor(props.name, 'duration')} />
             </div>
           </div>
         </div>
@@ -157,23 +148,19 @@ const Target = (props) => {
   }
 
   const reminderAction = () => {
-    let touched = props.touched
-    let errors = props.errors
-    let readOnly = props.readOnly
-    let name = props.name
     return (
       <React.Fragment>
         <div className='col-12 order-lg-7 col-xl-6'>
           <div className='form-group'>
             <label htmlFor='title'>{i18next.t('timers:subject')}</label>
             <Field
-              name={NameFor(name, 'title')}
-              disabled={readOnly}
+              name={NameFor(props.name, 'title')}
+              disabled={props.readOnly}
               className={classNames('form-control', {
-                'is-invalid': ShowError(NameFor(name, 'title'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'title'), props.touched, props.errors)
               })}
             />
-            <ErrorFor {...props} name={NameFor(name, 'title')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'title')} />
           </div>
         </div>
 
@@ -182,13 +169,13 @@ const Target = (props) => {
             <label htmlFor='message'>{i18next.t('timers:message')}</label>
             <Field
               component='textarea'
-              name={NameFor(name, 'message')}
-              disabled={readOnly}
+              name={NameFor(props.name, 'message')}
+              disabled={props.readOnly}
               className={classNames('form-control', {
-                'is-invalid': ShowError(NameFor(name, 'message'), touched, errors)
+                'is-invalid': ShowError(NameFor(props.name, 'message'), props.touched, props.errors)
               })}
             />
-            <ErrorFor {...props} name={NameFor(name, 'message')} />
+            <ErrorFor {...props} name={NameFor(props.name, 'message')} />
           </div>
         </div>
       </React.Fragment>

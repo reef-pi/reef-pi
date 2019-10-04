@@ -1,5 +1,4 @@
-import {inletsLoaded, fetchInlets, deleteInlet, createInlet} from './inlets'
-import { applyMiddleware } from 'redux'
+import { inletsLoaded, fetchInlets, deleteInlet, createInlet } from './inlets'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

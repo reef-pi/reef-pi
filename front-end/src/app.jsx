@@ -1,5 +1,4 @@
 import React from 'react'
-import { render } from 'react-dom'
 import $ from 'jquery'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'

@@ -1,5 +1,4 @@
-import {lightsLoaded, lightLoaded, fetchLights, fetchLight, createLight, deleteLight, updateLight} from './lights'
-import { applyMiddleware } from 'redux'
+import {lightsLoaded, lightLoaded, fetchLights, createLight, deleteLight, updateLight} from './lights'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

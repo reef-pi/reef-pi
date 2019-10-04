@@ -67,6 +67,8 @@ class Main extends React.Component {
     var timer = {
       name: values.name,
       type: values.type,
+      month: values.month,
+      week: values.week,
       day: values.day,
       hour: values.hour,
       minute: values.minute,

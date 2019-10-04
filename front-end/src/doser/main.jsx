@@ -73,6 +73,8 @@ class doser extends React.Component {
         duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
         schedule: {
+          month: values.month,
+          week: values.week,
           day: values.day,
           hour: values.hour,
           minute: values.minute,
