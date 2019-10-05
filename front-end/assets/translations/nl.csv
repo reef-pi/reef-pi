@@ -7,13 +7,13 @@ cancel,Annuleren
 done,Gereed
 loading,Laden
 documentation,Documentatie
-errors,Fouten
+errors,Foutmeldingen
 edit,Bewerken
 analog_input,Analoge Input
 inlet,Ingang
 delete,Verwijderen
-since,sinds
-running,running
+since,Sinds
+running,Actief
 are_you_sure,Ben je zeker?
 clear,Resetten
 name,Naam
@@ -40,7 +40,7 @@ configuration:tab:settings,Instellingen
 configuration:tab:connectors,Connectors
 configuration:tab:authentication,Authenticatie
 configuration:tab:drivers,Drivers
-configuration:tab:errors,Fouten
+configuration:tab:errors,Foutmeldingen
 configuration:tab:telemetry,Monitoring
 configuration:tab:admin,Admin
 configuration:tab:about,Over
@@ -55,7 +55,7 @@ configuration:about:current_time,Huidige tijd
 configuration:about:uptime,Uptime
 signin:username,Gebruikersnaam
 signin:password,Passwoord
-signin:signin,Login
+signin:signin,Log in
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 capabilities:dashboard,Dashboard
 capabilities:equipment,Uitrusting
@@ -65,56 +65,56 @@ capabilities:lighting,Belichting
 capabilities:temperature,Temperatuur
 capabilities:ato,ATO
 capabilities:ph,pH
-capabilities:dosing_pumps,Doseer pompen
-capabilities:doser,Doser
+capabilities:dosing_pumps,Doseerpompen
+capabilities:doser,Doseerpomp
 capabilities:macros,Macros
 capabilities:macro,Macro
 capabilities:camera,Camera
 capabilities:manager,Instances
-capabilities:configuration,Configuration
+capabilities:configuration,Configuratie
 capabilities:log,Log
 capabilities:dev_mode,Dev Mode
 capabilities:health_check,Health check
-log:time,Time
+log:time,Tijd
 log:emitter,Emitter
 log:type,Type
 log:content,Content
-dashboard:back_to_dashboard,Back to dashboard
+dashboard:back_to_dashboard,Terug naar dashboard
 configuration:settings:interface,Interface
-configuration:settings:name,Name
-configuration:settings:address,Address
-configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
-configuration:settings:notification,Notification
+configuration:settings:name,Naam
+configuration:settings:address,Adres
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frequencie
+configuration:settings:notification,Notificatie
 configuration:settings:display,Display
-configuration:settings:use_https,Use HTTPS
-configuration:settings:enable_profiling,Enable profiling
-configuration:settings:enable_prometheus,Enable prometheus
-configuration:settings:capabilities,Capabilities
-configuration:settings:alert_health_check,Alert on health check
-configuration:settings:max_memory,Max memory
+configuration:settings:use_https,Gebruik HTTPS
+configuration:settings:enable_profiling,Profiling inschakelen
+configuration:settings:enable_prometheus,Prometheus inschakelen
+configuration:settings:capabilities,Capaciteiten
+configuration:settings:alert_health_check,Alarm bij health check
+configuration:settings:max_memory,Max Geheugen
 configuration:settings:max_cpu,Max CPU
-configuration:settings:name_required,Name is required
-configuration:settings:network_interface_required,Network Interface is required
-configuration:settings:network_address_required,Network address is required
-configuration:settings:capabilities_required,Capabilities is required
-health_chart:cpu_memory,CPU/Memory
-fatal_error:fatal_error,Fatal Error
-fatal_error:connection_lost,Connection Lost
+configuration:settings:name_required,Naam is nodig
+configuration:settings:network_interface_required,Netwerk Interface is nodig
+configuration:settings:network_address_required,Netwerk adres is nodig
+configuration:settings:capabilities_required,Capaciteiten is nodig
+health_chart:cpu_memory,CPU/Geheugen
+fatal_error:fatal_error,Fatale Fout
+fatal_error:connection_lost,Connectie verloren
 fatal_error:troubleshoot,Troubleshoot
-fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
-cron:day_of_month,Day of the month
-cron:hour,Hour
-cron:minute,Minute
-cron:second,Second
-color_picker:choose,Choose
-collapsible:edit,Edit
-collapsible:delete,Delete
-timers:equipment:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:revert,Revert
-timers:equipment:on,On
-timers:equipment:off,Off
-ato:name_required,Name is required
+fatal_error:message,Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
+cron:day_of_month,Dag van de maand
+cron:hour,Uur
+cron:minute,Minuut
+cron:second,Seconde
+color_picker:choose,Kies
+collapsible:edit,Bewerken
+collapsible:delete,Verwijderen
+timers:equipment:equipment,Uitrusting
+timers:equipment:action,Actie
+timers:equipment:revert,Omkeren
+timers:equipment:on,Aan
+timers:equipment:off,Uit
+ato:name_required,Naam is nodig
 ato:status_required,ATO Status is required
 ato:inlet_required,Inlet is required
 ato:chk_freq,Check Frequency
