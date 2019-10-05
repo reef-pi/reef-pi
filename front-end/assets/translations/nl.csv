@@ -115,14 +115,14 @@ timers:equipment:revert,Omkeren
 timers:equipment:on,Aan
 timers:equipment:off,Uit
 ato:name_required,Naam is nodig
-ato:status_required,ATO Status is required
-ato:inlet_required,Inlet is required
-ato:chk_freq,Check Frequency
-ato:chk_freq_required,Check Frequency is required
-ato:chk_freq_number,Check Frequency must be a number
-ato:chk_freq_number_value,Check Frequency must be 1 second or greater
-ato:threshold_required,Threshold is required when notification is enabled
-ato:threshold_value,Threshold must be a number
+ato:status_required,ATO Status is nodig
+ato:inlet_required,Ingang is nodig
+ato:chk_freq,Controleer Frequentie
+ato:chk_freq_required,Controleer Frequentie is nodig
+ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
+ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
+ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
+ato:threshold_value,Limiet moet een nummer zijn
 ato:warning_delete,This action will delete
 ato:ato_usage,ATO Usage
 ato:ato_status,ATO Status
