@@ -123,29 +123,29 @@ ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
 ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
 ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
 ato:threshold_value,Limiet moet een nummer zijn
-ato:warning_delete,This action will delete
-ato:ato_usage,ATO Usage
+ato:warning_delete,Deze actie verwijderd
+ato:ato_usage,ATO Gebruik
 ato:ato_status,ATO Status
-ato:control_pump,Control Pump
-ato:control_pump,Control Pump
-ato:control_pump,Control Pump
-ato:alert_after,Alert After
-ato:disable_on_alert,Disable on alert
-ato:total_seconds_pump_on,Total number of seconds ato pump is on
-ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-timers:name_required,Name is required
-timers:timer_status_required,Timer Status is required
-timers:day_required,Day is required
-timers:hour_required,Hour is required
-timers:minute_required,Minute is required
-timers:second_required,Second is required
-timers:type_required,Type is required
-timers:equipment_required,Equipment is required
-timers:on_required,On is required
-timers:duration_required,Duration is required
-timers:subject_required,Subject is required
-timers:message_required,Message is required
-timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ato:control_pump,Controleert Pomp
+ato:control_pump,Controleert Pomp
+ato:control_pump,Controleert Pomp
+ato:alert_after,Alarm Na
+ato:disable_on_alert,Uitschakelen bij alarm
+ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
+ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+timers:name_required,Naam is nodig
+timers:timer_status_required,Timer Status is nodig
+timers:day_required,Dag is nodig
+timers:hour_required,Uur is nodig
+timers:minute_required,Minuut is nodig
+timers:second_required,Seconde is nodig
+timers:type_required,Type is nodig
+timers:equipment_required,Uitrusting is nodig
+timers:on_required,Ingeschakeld is nodig
+timers:duration_required,Tijdsduur is nodig
+timers:subject_required,Onderwerp is nodig
+timers:message_required,Bericht is nodig
+timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 timers:turn_on,Turn On
 timers:turn_off,Turn Off
 timers:and_then,And Then
