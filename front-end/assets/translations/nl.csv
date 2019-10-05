@@ -94,8 +94,8 @@ configuration:settings:alert_health_check,Alarm bij health check
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:max_cpu,Max CPU
 configuration:settings:name_required,Naam is nodig
-configuration:settings:network_interface_required,Netwerk Interface is nodig
-configuration:settings:network_address_required,Netwerk adres is nodig
+configuration:settings:network_interface_required,Netwerkinterface is nodig
+configuration:settings:network_address_required,Netwerkadres is nodig
 configuration:settings:capabilities_required,Capaciteiten is nodig
 health_chart:cpu_memory,CPU/Geheugen
 fatal_error:fatal_error,Fatale Fout
@@ -169,29 +169,29 @@ temperature:temperature,Temperatuur
 temperature:heater_cooler,Verwarming/Koeling
 temperature:chart_minimum,Grafiek Minimum
 temperature:chart_maximum,Grafiek Maximum
-temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
+temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:celcius,Celcius
 temperature:fahrenheit,Fahrenheit
-ph:calibrate,Calibrate
-ph:midpoint,Midpoint
-ph:second_point,Second Point
-ph:current_reading,Current Reading
-ph:run_calibration,Run
-ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ph:calibrate,Calibreren
+ph:midpoint,Middelpunt
+ph:second_point,Tweede punt 
+ph:current_reading,Huidige meting
+ph:run_calibration,Uitvoeren
+ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:status,Ph Status
-ph:check_frequency,Check Frequency
-ph:alert_below,Alert Below
-ph:alert_above,Alert Above
-ph:warn_delete,This action will delete
-ph:name_required,Name is required
-ph:status_required,Status is required
-ph:period_required,Check Frequency is required
-ph:period_type,Check Frequency must be a number
-ph:period_min,Check Frequency must be 1 second or greater
-ph:threshold_required,Threshold is required when alerts are enabled
-ph:threshold_type,Threshold must be a number
-ph:threshold_less_than,Alert Below must be less than Alert Above
-ph:threshold_greater_than,Alert Above must be greater than Alert Below
-ph:analog_input_required,Analog Input is required
+ph:check_frequency,Controleer frequentie
+ph:alert_below,Alarm onder
+ph:alert_above,Alarm boven
+ph:warn_delete,Deze actie verwijderd
+ph:name_required,Naam is nodig
+ph:status_required,Status is nodig
+ph:period_required,Controleer Frequency is nodig
+ph:period_type,Check Frequentie moet een nummer zijn
+ph:period_min,Check Frequenctie moet 1 seconde of meer zijn
+ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
+ph:threshold_type,Limiet moet een nummer zijn
+ph:threshold_less_than,Alarm onder moet minder zijn dan Alarm boven
+ph:threshold_greater_than,Alarm boven moet meer zijn dan Alarm onder
+ph:analog_input_required,Analoge Input is nodig
