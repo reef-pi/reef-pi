@@ -146,29 +146,29 @@ timers:duration_required,Tijdsduur is nodig
 timers:subject_required,Onderwerp is nodig
 timers:message_required,Bericht is nodig
 timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
-timers:turn_on,Turn On
-timers:turn_off,Turn Off
-timers:and_then,And Then
-timers:turn_back_on,Turn back on
-timers:turn_back_off,Turn back off
-timers:stay_on,Stay on
-timers:stay_off,Stay off
-second_s,second(s)
+timers:turn_on,Inschakelen
+timers:turn_off,Uitschakelen
+timers:and_then,AEn Daarna
+timers:turn_back_on,Terug inschakelen
+timers:turn_back_off,Terug uitschakelen
+timers:stay_on,Aan blijven
+timers:stay_off,Uit blijven
+second_s,second(en)
 sec,sec
 timers:sec,sec
-timers:after,After
-timers:subject,Subject
-timers:message,Message
+timers:after,Na
+timers:subject,Onderwerp
+timers:message,Bericht
 timers:timer_status,Timer Status
-timers:function,Function
-timers:equipment,Equipment
+timers:function,Functie
+timers:equipment,Uitrusting
 timers:reminder,Reminder
 timers:macros,Macros
-timers:macro,Macro Name
-temperature:temperature,Temperature
-temperature:heater_cooler,Heater/Cooler
-temperature:chart_minimum,Chart Minimum
-temperature:chart_maximum,Chart Maximum
+timers:macro,Macro Naam
+temperature:temperature,Temperatuur
+temperature:heater_cooler,Verwarming/Koeling
+temperature:chart_minimum,Grafiek Minimum
+temperature:chart_maximum,Grafiek Maximum
 temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
 temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
