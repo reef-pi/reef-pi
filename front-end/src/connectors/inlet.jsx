@@ -107,9 +107,10 @@ export default class Inlet extends React.Component {
         </div>
         <div className='col-12 col-md-2'>
           <div className='driver-type form-group'>
-            <label className='input-group-addon'>Driver</label>
+            <label htmlFor='driver'>Driver</label>
             <select
               name='driver'
+              className='custom-select form-control'
               onChange={this.handleDriverChange}
               value={this.state.driver}>
               {this.props.drivers.map(item => {

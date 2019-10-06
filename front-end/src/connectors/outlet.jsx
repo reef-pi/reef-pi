@@ -103,9 +103,10 @@ export default class Outlet extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>Driver</span>
+            <label>Driver</label>
             <select
               name='driver'
+              className='custom-select form-control'
               onChange={this.handleDriverChange}
               value={this.state.driver}>
               {this.props.drivers.map(item => {

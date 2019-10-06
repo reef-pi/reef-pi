@@ -122,7 +122,7 @@ class outlets extends React.Component {
         </div>
 
         <div className='row' style={dStyle}>
-          <div className='col-12 col-md-5'>
+          <div className='col-12 col-md-3'>
             <div className='form-group'>
               <span className='input-group-addon'>Name</span>
               <input
@@ -148,9 +148,10 @@ class outlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
-              <label className='input-group-addon'>Driver</label>
+              <span className='input-group-addon'>Driver</span>
               <select
                 name='driver'
+                className='form-control custom-select'
                 onChange={this.handleDriverChange}
                 value={this.state.driver}>
                 {this.props.drivers.map(item => {

@@ -1,5 +1,4 @@
-import {phProbesLoaded, probeReadingsLoaded, fetchPhProbes, fetchProbeReadings, probeUpdated, probeCalibrated, updateProbe, calibrateProbe, deleteProbe, createProbe} from './phprobes'
-import { applyMiddleware } from 'redux'
+import { phProbesLoaded, probeReadingsLoaded, fetchPhProbes, fetchProbeReadings, probeUpdated, probeCalibrated, updateProbe, calibrateProbe, deleteProbe, createProbe } from './phprobes'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

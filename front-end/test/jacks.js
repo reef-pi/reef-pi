@@ -13,8 +13,10 @@ module.exports = {
       .wait(500)
       .type('input#jackName', 'J1')
       .wait(500)
-      .type('input#jackPins', '1,2')
+      .type('input#jackPins', '0,1')
       .wait(1000)
+      .select('.add-jack [name*="driver"]', '1')
+      .wait(3000)
       .click('input#createJack')
       .wait(1500)
     return function () {

@@ -13,10 +13,9 @@ describe('TimerValidation', () => {
       minute: '*',
       second: '0',
       month: '*',
-      week: '?',
+      week: '*',
       target: {
         id: '2',
-        type: 'equipment',
         on: true,
         duration: 60,
         revert: false
@@ -32,7 +31,7 @@ describe('TimerValidation', () => {
   })
 
   it('should be valid for reminder', () => {
-    timer.target.type = 'reminder'
+    timer.type = 'reminder'
     timer.target.title = 'title'
     timer.target.message = 'message'
 
@@ -43,9 +42,9 @@ describe('TimerValidation', () => {
   })
 
   it('should require message for reminder', () => {
-    timer.target.type = 'reminder'
+    timer.type = 'reminder'
     timer.target.title = 'title'
-    timer.target.message = ''
+    timer.target.message = null
 
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(
@@ -61,9 +60,28 @@ describe('TimerValidation', () => {
     )
   })
 
-  it('should require duration for equipment with rever', () => {
+  it('should require duration for equipment with revert', () => {
     timer.target.revert = true
     timer.target.duration = ''
+
+    expect.assertions(1)
+    return TimerSchema.isValid(timer).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
+
+  it('should require a macro for macro', () => {
+    timer.type = 'macro'
+    timer.target.id = null
+
+    expect.assertions(1)
+    return TimerSchema.isValid(timer).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
+
+  it('should require a target type', () => {
+    timer.type = null
 
     expect.assertions(1)
     return TimerSchema.isValid(timer).then(

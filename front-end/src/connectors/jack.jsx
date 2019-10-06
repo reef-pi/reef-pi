@@ -94,10 +94,11 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label className='input-group-addon'>Driver</label>
+            <label>Driver</label>
             <select
               name='driver'
               id={'jack-' + this.props.jack_id + '-driver-select'}
+              className='custom-select form-control'
               onChange={this.setDriver}
               value={this.state.JackDriver}>
               {this.props.drivers.map(item => {

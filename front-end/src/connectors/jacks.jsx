@@ -122,7 +122,7 @@ class jacks extends React.Component {
         </div>
         <div className='row'>
           <div className='col-12'>
-            <div className='row' style={dStyle}>
+            <div className='row add-jack' style={dStyle}>
               <div className='col-12 col-md-5'>
                 <div className='form-group'>
                   <label htmlFor='jackName'>Name</label>
@@ -150,9 +150,10 @@ class jacks extends React.Component {
 
               <div className='col-12 col-md-2'>
                 <div className='jack-type form-group'>
-                  <label className='input-group-addon'>Driver</label>
+                  <label>Driver</label>
                   <select
                     name='driver'
+                    className='form-control custom-select'
                     onChange={this.setDriver}
                     value={this.state.JackDriver}>
                     {this.props.drivers.map(item => {

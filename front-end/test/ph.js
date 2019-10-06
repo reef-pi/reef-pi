@@ -6,6 +6,8 @@ module.exports = {
       .wait(500)
       .type('.add-probe input[name="name"]', 'Biocube29')
       .type('.add-probe input[name="period"]', '5')
+      .select('.add-probe [name="analog_input"', '1')
+      .wait(5000)
       .click('.add-probe input[type*="submit"]')
       .wait(1500)
 

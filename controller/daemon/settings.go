@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -16,7 +17,7 @@ func loadSettings(store storage.Store) (settings.Settings, error) {
 }
 
 func initializeSettings(store storage.Store) (settings.Settings, error) {
-	if os.Getenv("DEV_MODE") == "1" {
+	if os.Getenv("DEV_MODE") == "1" || runtime.GOOS == "Windows" {
 		settings.DefaultSettings.Capabilities.DevMode = true
 		settings.DefaultSettings.Capabilities.Dashboard = true
 		settings.DefaultSettings.Capabilities.Equipment = true

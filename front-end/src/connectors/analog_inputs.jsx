@@ -150,12 +150,12 @@ class analogInputs extends React.Component {
                   />
                 </div>
               </div>
-
               <div className='col-12 col-md-2'>
-                <div className='analog_input-type form-group'>
-                  <label className='input-group-addon'>Driver</label>
+                <div className='analog_input_type form-group'>
+                  <label>Driver</label>
                   <select
                     name='driver'
+                    className='form-control custom-select'
                     onChange={this.setDriver}
                     value={this.state.driver}>
                     {this.props.drivers.map(item => {

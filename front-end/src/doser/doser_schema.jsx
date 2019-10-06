@@ -13,6 +13,10 @@ const DoserSchema = Yup.object().shape({
     .required('Duration is required'),
   speed: Yup.number()
     .required('Speed is required'),
+  month: Yup.string()
+    .required('Month is required'),
+  week: Yup.string()
+    .required('Week is required'),
   day: Yup.string()
     .required('Day is required'),
   hour: Yup.string()

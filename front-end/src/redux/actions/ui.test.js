@@ -1,5 +1,4 @@
-import {fetchUIData } from './ui'
-import { applyMiddleware } from 'redux'
+import { fetchUIData } from './ui'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

@@ -1,12 +1,10 @@
 import {
   equipmentLoaded,
-  equipmentUpdated,
   fetchEquipment,
   deleteEquipment,
   createEquipment,
   updateEquipment
 } from './equipment'
-import { applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

@@ -12,6 +12,15 @@ module.exports = {
       .wait(500)
       .click('.add-driver input[type*="submit"]')
       .wait(1500)
+
+      .click('input#add_new_driver')
+      .wait(500)
+      .type('.add-driver [name*="name"]', 'ph')
+      .wait(500)
+      .select('.add-driver [name*="type"]', 'ph-board')
+      .wait(500)
+      .click('.add-driver input[type*="submit"]')
+      .wait(1500)
     return function () {
       return ('Outlets created')
     }
