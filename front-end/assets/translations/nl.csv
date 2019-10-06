@@ -1,0 +1,197 @@
+Key,Translation
+ok,Ok
+select,Selecteren
+enabled,Ingeschakeld
+disabled,Uitgeschakeld
+cancel,Annuleren
+done,Gereed
+loading,Laden
+documentation,Documentatie
+errors,Foutmeldingen
+edit,Bewerken
+analog_input,Analoge Input
+inlet,Ingang
+delete,Verwijderen
+since,Sinds
+running,Actief
+are_you_sure,Ben je zeker?
+clear,Resetten
+name,Naam
+update,Update
+add,Toevoegen
+save,Opslaan
+none,Niets
+alerts,Meldingen
+unit,Eenheid
+configure,Instellen
+language:language,Language
+language:fr,Français
+language:en,English
+language:de,Deutsch
+language:es,Español
+language:it,Italiano
+language:hi,हिन्दी
+language:fa,فارسی
+language:nl,Nederlands
+configuration:authentication:credentials,Aanmeldingsgegevens
+configuration:authentication:error_user,Geef een gebruikersnaam in
+configuration:authentication:error_pass,Geef een passwoord in
+configuration:tab:settings,Instellingen
+configuration:tab:connectors,Connectors
+configuration:tab:authentication,Authenticatie
+configuration:tab:drivers,Drivers
+configuration:tab:errors,Foutmeldingen
+configuration:tab:telemetry,Monitoring
+configuration:tab:admin,Admin
+configuration:tab:about,Over
+configuration:admin:sign_out,Log uit
+configuration:admin:reload,Herladen
+configuration:admin:reboot,Herstarten
+configuration:admin:poweroff,Uitschakelen
+configuration:about:version,Versie
+configuration:about:website,Website
+configuration:about:status,Status
+configuration:about:current_time,Huidige tijd
+configuration:about:uptime,Uptime
+signin:username,Gebruikersnaam
+signin:password,Passwoord
+signin:signin,Log in
+signin:invalidcredentials,Foutieve aanmeldingsgegevens
+capabilities:dashboard,Dashboard
+capabilities:equipment,Uitrusting
+capabilities:timers,Timers
+capabilities:lights,Lichten
+capabilities:lighting,Belichting
+capabilities:temperature,Temperatuur
+capabilities:ato,ATO
+capabilities:ph,pH
+capabilities:dosing_pumps,Doseerpompen
+capabilities:doser,Doseerpomp
+capabilities:macros,Macros
+capabilities:macro,Macro
+capabilities:camera,Camera
+capabilities:manager,Instances
+capabilities:configuration,Configuratie
+capabilities:log,Log
+capabilities:dev_mode,Dev Mode
+capabilities:health_check,Health check
+log:time,Tijd
+log:emitter,Emitter
+log:type,Type
+log:content,Content
+dashboard:back_to_dashboard,Terug naar dashboard
+configuration:settings:interface,Interface
+configuration:settings:name,Naam
+configuration:settings:address,Adres
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frequencie
+configuration:settings:notification,Notificatie
+configuration:settings:display,Display
+configuration:settings:use_https,Gebruik HTTPS
+configuration:settings:enable_profiling,Profiling inschakelen
+configuration:settings:enable_prometheus,Prometheus inschakelen
+configuration:settings:capabilities,Opties
+configuration:settings:alert_health_check,Alarm bij health check
+configuration:settings:max_memory,Max Geheugen
+configuration:settings:max_cpu,Max CPU
+configuration:settings:name_required,Naam is nodig
+configuration:settings:network_interface_required,Netwerkinterface is nodig
+configuration:settings:network_address_required,Netwerkadres is nodig
+configuration:settings:capabilities_required,Opties is nodig
+health_chart:cpu_memory,CPU/Geheugen
+fatal_error:fatal_error,Fatale Fout
+fatal_error:connection_lost,Connectie verloren
+fatal_error:troubleshoot,Troubleshoot
+fatal_error:message,Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
+cron:day_of_month,Dag van de maand
+cron:hour,Uur
+cron:minute,Minuut
+cron:second,Seconde
+color_picker:choose,Kies
+collapsible:edit,Bewerken
+collapsible:delete,Verwijderen
+timers:equipment:equipment,Uitrusting
+timers:equipment:action,Actie
+timers:equipment:revert,Omkeren
+timers:equipment:on,Aan
+timers:equipment:off,Uit
+ato:name_required,Naam is nodig
+ato:status_required,ATO Status is nodig
+ato:inlet_required,Ingang is nodig
+ato:chk_freq,Controleer Frequentie
+ato:chk_freq_required,Controleer Frequentie is nodig
+ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
+ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
+ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
+ato:threshold_value,Limiet moet een nummer zijn
+ato:warning_delete,Deze actie verwijderd
+ato:ato_usage,ATO Gebruik
+ato:ato_status,ATO Status
+ato:control_pump,Controleert Pomp
+ato:control_pump,Controleert Pomp
+ato:control_pump,Controleert Pomp
+ato:alert_after,Alarm Na
+ato:disable_on_alert,Uitschakelen bij alarm
+ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
+ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+timers:name_required,Naam is nodig
+timers:timer_status_required,Timer Status is nodig
+timers:day_required,Dag is nodig
+timers:hour_required,Uur is nodig
+timers:minute_required,Minuut is nodig
+timers:second_required,Seconde is nodig
+timers:type_required,Type is nodig
+timers:equipment_required,Uitrusting is nodig
+timers:on_required,Ingeschakeld is nodig
+timers:duration_required,Tijdsduur is nodig
+timers:subject_required,Onderwerp is nodig
+timers:message_required,Bericht is nodig
+timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+timers:turn_on,Inschakelen
+timers:turn_off,Uitschakelen
+timers:and_then,AEn Daarna
+timers:turn_back_on,Terug inschakelen
+timers:turn_back_off,Terug uitschakelen
+timers:stay_on,Aan blijven
+timers:stay_off,Uit blijven
+second_s,second(en)
+sec,sec
+timers:sec,sec
+timers:after,Na
+timers:subject,Onderwerp
+timers:message,Bericht
+timers:timer_status,Timer Status
+timers:function,Functie
+timers:equipment,Uitrusting
+timers:reminder,Reminder
+timers:macros,Macros
+timers:macro,Macro Naam
+temperature:temperature,Temperatuur
+temperature:heater_cooler,Verwarming/Koeling
+temperature:chart_minimum,Grafiek Minimum
+temperature:chart_maximum,Grafiek Maximum
+temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+temperature:sensor,Sensor
+temperature:sensor_status,Sensor Status
+temperature:celcius,Celcius
+temperature:fahrenheit,Fahrenheit
+ph:calibrate,Calibreren
+ph:midpoint,Middelpunt
+ph:second_point,Tweede punt 
+ph:current_reading,Huidige meting
+ph:run_calibration,Uitvoeren
+ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+ph:status,Ph Status
+ph:check_frequency,Controleer frequentie
+ph:alert_below,Alarm onder
+ph:alert_above,Alarm boven
+ph:warn_delete,Deze actie verwijderd
+ph:name_required,Naam is nodig
+ph:status_required,Status is nodig
+ph:period_required,Controleer Frequency is nodig
+ph:period_type,Check Frequentie moet een nummer zijn
+ph:period_min,Check Frequenctie moet 1 seconde of meer zijn
+ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
+ph:threshold_type,Limiet moet een nummer zijn
+ph:threshold_less_than,Alarm onder moet minder zijn dan Alarm boven
+ph:threshold_greater_than,Alarm boven moet meer zijn dan Alarm onder
+ph:analog_input_required,Analoge Input is nodig
