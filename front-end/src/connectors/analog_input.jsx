@@ -99,7 +99,8 @@ export default class AnalogInput extends React.Component {
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}
               className='custom-select form-control'
               onChange={this.handleSetDriver}
-              value={this.state.driver}>
+              value={this.state.driver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option

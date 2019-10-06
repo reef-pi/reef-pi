@@ -112,7 +112,8 @@ export default class Inlet extends React.Component {
               name='driver'
               className='custom-select form-control'
               onChange={this.handleDriverChange}
-              value={this.state.driver}>
+              value={this.state.driver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option key={item.id} value={item.id}>

@@ -158,7 +158,8 @@ class jacks extends React.Component {
                     name='driver'
                     className='form-control custom-select'
                     onChange={this.handleSetDriver}
-                    value={this.state.JackDriver}>
+                    value={this.state.JackDriver}
+                  >
                     {this.props.drivers.map(item => {
                       return (
                         <option key={item.id} value={item.id}>

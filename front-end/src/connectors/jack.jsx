@@ -102,7 +102,8 @@ export default class Jack extends React.Component {
               id={'jack-' + this.props.jack_id + '-driver-select'}
               className='custom-select form-control'
               onChange={this.handleSetDriver}
-              value={this.state.JackDriver}>
+              value={this.state.JackDriver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option

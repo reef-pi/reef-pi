@@ -69,7 +69,7 @@ export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-      if (capabilities['manager']) {
+      if (capabilities.manager) {
         fetchManagerData(dispatch)
         return (capabilitiesLoaded(capabilities))
       } else {

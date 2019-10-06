@@ -121,7 +121,7 @@ const Target = (props) => {
           </div>
         </div>
 
-        <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', {'d-none': props.target.revert === false})}>
+        <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', { 'd-none': props.target.revert === false })}>
           <div className='form-group'>
             <label htmlFor='target.duration'>{i18next.t('timers:after')}</label>
             <div className='input-group'>

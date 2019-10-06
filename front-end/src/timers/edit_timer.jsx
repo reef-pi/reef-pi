@@ -63,7 +63,7 @@ const EditTimer = ({
         target = { id: '', on: true, revert: false, duration: 60 }
         break
       case 'reminder':
-        target = {title: '', message: ''}
+        target = { title: '', message: '' }
         break
     }
     return target
