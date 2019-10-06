@@ -17,10 +17,10 @@ class ph extends React.Component {
       currentProbe: null
     }
     this.probeList = this.probeList.bind(this)
-    this.toggleAddProbeDiv = this.toggleAddProbeDiv.bind(this)
-    this.deleteProbe = this.deleteProbe.bind(this)
-    this.createProbe = this.createProbe.bind(this)
-    this.updateProbe = this.updateProbe.bind(this)
+    this.handleToggleAddProbeDiv = this.handleToggleAddProbeDiv.bind(this)
+    this.handleDeleteProbe = this.handleDeleteProbe.bind(this)
+    this.handleCreateProbe = this.handleCreateProbe.bind(this)
+    this.handleUpdateProbe = this.handleUpdateProbe.bind(this)
     this.dismissModal = this.dismissModal.bind(this)
   }
 
@@ -29,44 +29,53 @@ class ph extends React.Component {
   }
 
   probeList () {
-    return (
-      this.props.probes.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(probe => {
+    return this.props.probes
+      .sort((a, b) => {
+        return parseInt(a.id) < parseInt(b.id)
+      })
+      .map(probe => {
         const calibrationButton = (
-          <button type='button' name={'calibrate-probe-' + probe.id}
+          <button
+            type='button'
+            name={'calibrate-probe-' + probe.id}
             disabled={probe.enable}
             title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
             className='btn btn-sm btn-outline-info float-right'
-            onClick={(e) => this.calibrateProbe(e, probe)}>
+            onClick={e => this.calibrateProbe(e, probe)}
+          >
             {i18next.t('ph:calibrate')}
           </button>
         )
         return (
-          <Collapsible key={'panel-ph-' + probe.id}
+          <Collapsible
+            key={'panel-ph-' + probe.id}
             name={'panel-ph-' + probe.id}
             item={probe}
             buttons={calibrationButton}
             title={<b className='ml-2 align-middle'>{probe.name} </b>}
-            onDelete={this.deleteProbe}>
-            <PhForm onSubmit={this.updateProbe}
+            onDelete={this.handleDeleteProbe}
+          >
+            <PhForm
+              onSubmit={this.handleUpdateProbe}
               key={Number(probe.id)}
               analogInputs={this.props.ais}
-              probe={probe} />
+              probe={probe}
+            />
           </Collapsible>
         )
       })
-    )
   }
 
   calibrateProbe (e, probe) {
-    this.setState({currentProbe: probe, showCalibrate: true})
+    this.setState({ currentProbe: probe, showCalibrate: true })
   }
 
   dismissModal () {
-    this.setState({currentProbe: null, showCalibrate: false})
+    this.setState({ currentProbe: null, showCalibrate: false })
   }
 
   valuesToProbe (values) {
-    var probe = {
+    const probe = {
       name: values.name,
       enable: values.enable,
       period: values.period,
@@ -80,64 +89,64 @@ class ph extends React.Component {
     return probe
   }
 
-  updateProbe (values) {
-    var payload = this.valuesToProbe(values)
-
+  handleUpdateProbe (values) {
+    const payload = this.valuesToProbe(values)
     this.props.update(values.id, payload)
   }
 
-  createProbe (values) {
-    var payload = this.valuesToProbe(values)
-
+  handleCreateProbe (values) {
+    const payload = this.valuesToProbe(values)
     this.props.create(payload)
-    this.toggleAddProbeDiv()
+    this.handleToggleAddProbeDiv()
   }
 
-  deleteProbe (probe) {
+  handleDeleteProbe (probe) {
     const message = (
       <div>
-        <p>{i18next.t('ph:warn_delete')} {probe.name}.</p>
+        <p>
+          {i18next.t('ph:warn_delete')} {probe.name}.
+        </p>
       </div>
     )
 
-    confirm('Delete ' + probe.name, {description: message})
-      .then(function () {
+    confirm('Delete ' + probe.name, { description: message }).then(
+      function () {
         this.props.delete(probe.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
-  toggleAddProbeDiv () {
+  handleToggleAddProbeDiv () {
     this.setState({
       addProbe: !this.state.addProbe
     })
   }
 
   render () {
-    var newProbe = null
+    let newProbe = null
     if (this.state.addProbe) {
-      newProbe = <PhForm
-        analogInputs={this.props.ais}
-        onSubmit={this.createProbe}
-      />
+      newProbe = <PhForm analogInputs={this.props.ais} onSubmit={this.handleCreateProbe} />
     }
 
-    var calibrationModal = null
+    let calibrationModal = null
     if (this.state.showCalibrate) {
-      calibrationModal = <CalibrationWizard probe={this.state.currentProbe}
-        currentReading={this.props.currentReading}
-        readProbe={this.props.readProbe}
-        calibrateProbe={this.props.calibrateProbe}
-        confirm={this.dismissModal}
-        cancel={this.dismissModal} />
+      calibrationModal = (
+        <CalibrationWizard
+          probe={this.state.currentProbe}
+          currentReading={this.props.currentReading}
+          readProbe={this.props.readProbe}
+          calibrateProbe={this.props.calibrateProbe}
+          confirm={this.dismissModal}
+          cancel={this.dismissModal}
+        />
+      )
     }
 
     return (
       <div>
         {calibrationModal}
         <ul className='list-group list-group-flush'>
-          <CollapsibleList>
-            {this.probeList()}
-          </CollapsibleList>
+          <CollapsibleList>{this.probeList()}</CollapsibleList>
           <li className='list-group-item add-probe'>
             <div className='row'>
               <div className='col'>
@@ -145,7 +154,7 @@ class ph extends React.Component {
                   type='button'
                   id='add_probe'
                   value={this.state.addProbe ? '-' : '+'}
-                  onClick={this.toggleAddProbeDiv}
+                  onClick={this.handleToggleAddProbeDiv}
                   className='btn btn-outline-success'
                 />
               </div>
@@ -173,7 +182,7 @@ const mapDispatchToProps = dispatch => {
     delete: id => dispatch(deleteProbe(id)),
     update: (id, t) => dispatch(updateProbe(id, t)),
     calibrateProbe: (id, p) => dispatch(calibrateProbe(id, p)),
-    readProbe: (id) => dispatch(readProbe(id))
+    readProbe: id => dispatch(readProbe(id))
   }
 }
 

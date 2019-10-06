@@ -8,25 +8,25 @@ import i18n from 'utils/i18n'
 class admin extends React.Component {
   constructor (props) {
     super(props)
-    this.powerOff = this.powerOff.bind(this)
-    this.reboot = this.reboot.bind(this)
-    this.reload = this.reload.bind(this)
-    this.signout = this.signout.bind(this)
+    this.handlePowerOff = this.handlePowerOff.bind(this)
+    this.handleReboot = this.handleReboot.bind(this)
+    this.handleReload = this.handleReload.bind(this)
+    this.handleSignout = this.handleSignout.bind(this)
   }
 
-  signout () {
+  handleSignout () {
     SignIn.logout()
   }
 
-  reload () {
+  handleReload () {
     confirm(i18n.t('are_you_sure')).then(this.props.reload)
   }
 
-  powerOff () {
+  handlePowerOff () {
     confirm(i18n.t('are_you_sure')).then(this.props.powerOff)
   }
 
-  reboot () {
+  handleReboot () {
     confirm(i18n.t('are_you_sure')).then(this.props.reboot)
   }
 
@@ -36,22 +36,22 @@ class admin extends React.Component {
       <div className='container'>
         <div className='row'>
           <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.signout} type='button' className={btnClass}>
+            <button onClick={this.handleSignout} type='button' className={btnClass}>
               {i18n.t('configuration:admin:sign_out')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.reload} type='button' className={btnClass}>
+            <button onClick={this.handleReload} type='button' className={btnClass}>
               {i18n.t('configuration:admin:reload')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.reboot} type='button' className={btnClass}>
+            <button onClick={this.handleReboot} type='button' className={btnClass}>
               {i18n.t('configuration:admin:reboot')}
             </button>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
-            <button onClick={this.powerOff} type='button' className={btnClass}>
+            <button onClick={this.handlePowerOff} type='button' className={btnClass}>
               {i18n.t('configuration:admin:poweroff')}
             </button>
           </div>

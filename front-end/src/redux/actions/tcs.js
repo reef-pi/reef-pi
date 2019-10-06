@@ -1,4 +1,4 @@
-import {reduxGet, reduxPut, reduxDelete, reduxPost} from '../../utils/ajax'
+import { reduxGet, reduxPut, reduxDelete, reduxPost } from '../../utils/ajax'
 
 export const tcsLoaded = (s) => {
   return ({
@@ -18,7 +18,7 @@ export const tcUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'TC_USAGE_LOADED',
-      payload: {id: id, usage: s}
+      payload: { id: id, usage: s }
     })
   }
 }

@@ -51,7 +51,7 @@ const TimerForm = withFormik({
     }
   },
   validationSchema: TimerSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditTimer)

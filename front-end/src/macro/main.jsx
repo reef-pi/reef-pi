@@ -13,10 +13,10 @@ class main extends React.Component {
       addMacro: false
     }
     this.macroList = this.macroList.bind(this)
-    this.toggleAddMacroDiv = this.toggleAddMacroDiv.bind(this)
-    this.deleteMacro = this.deleteMacro.bind(this)
-    this.createMacro = this.createMacro.bind(this)
-    this.updateMacro = this.updateMacro.bind(this)
+    this.handleToggleAddMacroDiv = this.handleToggleAddMacroDiv.bind(this)
+    this.handleDeleteMacro = this.handleDeleteMacro.bind(this)
+    this.handleCreateMacro = this.handleCreateMacro.bind(this)
+    this.handleUpdateMacro = this.handleUpdateMacro.bind(this)
     this.runMacro = this.runMacro.bind(this)
   }
 
@@ -24,7 +24,7 @@ class main extends React.Component {
     this.props.fetch()
     // TODO: [ML] Consider Server Events, Long Polling, or Web Sockets after 2.0
     // Polling for macro status.
-    var timer = window.setInterval(this.props.fetch, 10 * 1000)
+    const timer = window.setInterval(this.props.fetch, 10 * 1000)
     this.setState({ timer: timer })
   }
 
@@ -34,7 +34,7 @@ class main extends React.Component {
     }
   }
 
-  toggleAddMacroDiv () {
+  handleToggleAddMacroDiv () {
     this.setState({
       addMacro: !this.state.addMacro
     })
@@ -44,23 +44,29 @@ class main extends React.Component {
     return (
       this.props.macros.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(macro => {
         const runButton = (
-          <button type='button' name={'run-macro-' + macro.id}
+          <button
+            type='button' name={'run-macro-' + macro.id}
             className='btn btn-sm btn-outline-info float-right'
             disabled={macro.enable}
-            onClick={(e) => this.runMacro(e, macro)}>
-            { macro.enable ? 'Running' : 'Run' }
+            onClick={(e) => this.runMacro(e, macro)}
+          >
+            {macro.enable ? 'Running' : 'Run'}
           </button>
         )
 
         return (
-          <Collapsible key={'panel-macro-' + macro.id}
+          <Collapsible
+            key={'panel-macro-' + macro.id}
             name={'panel-macro-' + macro.id}
             item={macro}
             buttons={runButton}
             title={<b className='ml-2 align-middle'>{macro.name} </b>}
-            onDelete={this.deleteMacro}>
-            <MacroForm onSubmit={this.updateMacro}
-              macro={macro} />
+            onDelete={this.handleDeleteMacro}
+          >
+            <MacroForm
+              onSubmit={this.handleUpdateMacro}
+              macro={macro}
+            />
           </Collapsible>
         )
       })
@@ -68,7 +74,7 @@ class main extends React.Component {
   }
 
   valuesToMacro (values) {
-    var macro = {
+    const macro = {
       name: values.name,
       enable: values.enable,
       steps: values.steps.map(step => {
@@ -85,27 +91,25 @@ class main extends React.Component {
     return macro
   }
 
-  updateMacro (values) {
-    var payload = this.valuesToMacro(values)
-
+  handleUpdateMacro (values) {
+    const payload = this.valuesToMacro(values)
     this.props.update(values.id, payload)
   }
 
-  createMacro (values) {
-    var payload = this.valuesToMacro(values)
-
+  handleCreateMacro (values) {
+    const payload = this.valuesToMacro(values)
     this.props.create(payload)
-    this.toggleAddMacroDiv()
+    this.handleToggleAddMacroDiv()
   }
 
-  deleteMacro (macro) {
+  handleDeleteMacro (macro) {
     const message = (
       <div>
         <p>This action will delete {macro.name}.</p>
       </div>
     )
 
-    confirm('Delete ' + macro.name, {description: message})
+    confirm('Delete ' + macro.name, { description: message })
       .then(function () {
         this.props.delete(macro.id)
       }.bind(this))
@@ -120,7 +124,7 @@ class main extends React.Component {
   render () {
     let newMacro = null
     if (this.state.addMacro) {
-      newMacro = <MacroForm onSubmit={this.createMacro} />
+      newMacro = <MacroForm onSubmit={this.handleCreateMacro} />
     }
 
     return (
@@ -135,7 +139,7 @@ class main extends React.Component {
                 type='button'
                 id='add_macro'
                 value={this.state.addMacro ? '-' : '+'}
-                onClick={this.toggleAddMacroDiv}
+                onClick={this.handleToggleAddMacroDiv}
                 className='btn btn-outline-success'
               />
             </div>

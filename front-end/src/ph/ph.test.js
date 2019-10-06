@@ -35,7 +35,8 @@ describe('Ph ui', () => {
   it('<Main />', () => {
     const state = {
       phprobes: [
-        {id: 1,
+        {
+          id: 1,
           name: 'probe',
           enable: false,
           notify: {
@@ -48,12 +49,12 @@ describe('Ph ui', () => {
     const m = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    m.toggleAddProbeDiv()
+    m.handleToggleAddProbeDiv()
 
-    m.createProbe({name: 'test', type: 'reminder'})
-    m.updateProbe({id: '1', name: 'test', type: 'equipment'})
-    m.calibrateProbe({stopPropagation: jest.fn()}, {id: 1})
-    m.deleteProbe('1')
+    m.handleCreateProbe({ name: 'test', type: 'reminder' })
+    m.handleUpdateProbe({ id: '1', name: 'test', type: 'equipment' })
+    m.calibrateProbe({ stopPropagation: jest.fn() }, { id: 1 })
+    m.handleDeleteProbe('1')
   })
 
   it('<PhForm/> for create', () => {
@@ -70,7 +71,7 @@ describe('Ph ui', () => {
       name: 'name',
       enable: true,
       address: 99,
-      notify: {enable: false}
+      notify: { enable: false }
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
@@ -79,7 +80,7 @@ describe('Ph ui', () => {
 
   it('<Chart />', () => {
     const probes = [{ id: '1', name: 'foo' }]
-    const readings = { '1': { name: 'foo', current: [] } }
+    const readings = { 1: { name: 'foo', current: [] } }
     const m = shallow(
       <Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />
     )

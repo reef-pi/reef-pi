@@ -9,11 +9,13 @@ class NotificationAlertItem extends React.Component {
       notification: props.notification
     }
   }
+
   componentDidMount () {
     this.timer = setTimeout(() => {
       this.handleClose()
     }, AppearanceTime)
   }
+
   getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {
@@ -32,6 +34,7 @@ class NotificationAlertItem extends React.Component {
     }
     return cssClass
   }
+
   handleClose () {
     if (this.timer) {
       clearTimeout(this.timer)
@@ -41,6 +44,7 @@ class NotificationAlertItem extends React.Component {
       this.props.close(this.props.notification)
     }, 1000)
   }
+
   render () {
     return (
       <div

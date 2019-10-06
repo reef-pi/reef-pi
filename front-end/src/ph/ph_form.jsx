@@ -23,7 +23,7 @@ const PhForm = withFormik({
     }
   },
   validationSchema: PhSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditPh)

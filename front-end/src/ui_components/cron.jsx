@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
 
-const Cron = ({values, errors, touched, readOnly}) => {
+const Cron = ({ values, errors, touched, readOnly }) => {
   return (
     <div className='row'>
 

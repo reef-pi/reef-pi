@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 class inletSelector extends React.Component {
   constructor (props) {
     super(props)
-    var inlet
+    let inlet
     props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
         inlet = v
@@ -39,16 +39,16 @@ class inletSelector extends React.Component {
   }
 
   inlets () {
-    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
-    var title = ''
-    var id = this.props.active
+    const readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
+    let title = ''
+    let id = this.props.active
     if (this.state.inlet !== undefined) {
       title = this.state.inlet.name
       id = this.state.inlet.id
     }
-    var items = []
+    const items = []
     this.props.inlets.forEach((v, k) => {
-      var cName = 'dropdown-item'
+      let cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
       }
@@ -80,7 +80,7 @@ class inletSelector extends React.Component {
 
   set (k) {
     return () => {
-      var i = this.props.inlets[k]
+      const i = this.props.inlets[k]
       if (i === undefined) {
         return
       }

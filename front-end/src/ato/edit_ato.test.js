@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import EditAto from './edit_ato'
 import 'isomorphic-fetch'
@@ -8,10 +8,10 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditAto />', () => {
-  var values = {}
-  var inlets = [{id: '1', name: 'inlet 1'}]
-  var equipment = [{id: '1', name: 'EQ'}]
-  var fn = jest.fn()
+  let values = {}
+  let inlets = [{ id: '1', name: 'inlet 1' }]
+  let equipment = [{ id: '1', name: 'EQ' }]
+  let fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -23,18 +23,21 @@ describe('<EditAto />', () => {
 
   it('<EditAto />', () => {
     shallow(
-      <EditAto values={values}
+      <EditAto
+        values={values}
         inlets={inlets}
         equipment={equipment}
         handleBlur={fn}
         handleChange={fn}
-        submitForm={fn} />
+        submitForm={fn}
+      />
     )
   })
 
   it('<EditATO /> should submit', () => {
     const wrapper = shallow(
-      <EditAto values={values}
+      <EditAto
+        values={values}
         inlets={inlets}
         equipment={equipment}
         handleBlur={fn}
@@ -42,9 +45,10 @@ describe('<EditAto />', () => {
         submitForm={fn}
         dirty
         isValid
-        showChart={false} />
+        showChart={false}
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
@@ -52,7 +56,8 @@ describe('<EditAto />', () => {
     values.name = ''
     values.fahrenheit = false
     const wrapper = shallow(
-      <EditAto values={values}
+      <EditAto
+        values={values}
         inlets={inlets}
         equipment={equipment}
         handleBlur={fn}
@@ -60,9 +65,10 @@ describe('<EditAto />', () => {
         submitForm={fn}
         showChart
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
 })

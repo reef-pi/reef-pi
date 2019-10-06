@@ -1,8 +1,8 @@
 import React from 'react'
 import LightChannel from './channel'
-import {showError} from 'utils/alert'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
-import {Field} from 'formik'
+import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 
 const EditLight = ({
@@ -42,7 +42,8 @@ const EditLight = ({
         onBlur={handleBlur}
         onChangeHandler={handleChange}
         channel={values.config.channels[item]}
-        channelNum={item} />
+        channelNum={item}
+      />
     ))
   }
 

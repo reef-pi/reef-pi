@@ -1,4 +1,3 @@
-const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -40,7 +39,7 @@ var config = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: function() {
+              plugins: function () {
                 return [require('precss'), require('autoprefixer')]
               }
             }

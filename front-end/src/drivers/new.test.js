@@ -1,6 +1,6 @@
 import React from 'react'
 import 'isomorphic-fetch'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import New from './new'
 import configureMockStore from 'redux-mock-store'

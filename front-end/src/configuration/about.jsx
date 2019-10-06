@@ -5,7 +5,7 @@ import i18n from 'utils/i18n'
 
 class about extends React.Component {
   componentWillMount () {
-    var timer = window.setInterval(this.props.fetchInfo, 1800 * 1000)
+    const timer = window.setInterval(this.props.fetchInfo, 1800 * 1000)
     this.setState({ timer: timer })
   }
 
@@ -14,6 +14,7 @@ class about extends React.Component {
       window.clearInterval(this.state.timer)
     }
   }
+
   render () {
     return (
       <div className='container'>

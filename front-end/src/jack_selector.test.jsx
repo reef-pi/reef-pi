@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('JackSelector', () => {
   it('<JackSelector />', () => {
-    let mock = {
+    const mock = {
       jacks: [
         {
           id: 1,

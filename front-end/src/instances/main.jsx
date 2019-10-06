@@ -19,8 +19,8 @@ class main extends React.Component {
     this.props.fetch()
   }
 
-  create (values) {
-    var payload = {
+  handleCreate (values) {
+    const payload = {
       name: values.name,
       address: values.address,
       user: values.user,
@@ -31,16 +31,16 @@ class main extends React.Component {
     this.toggle()
   }
 
-  toggle () {
+  handleToggle () {
     this.setState({
       add: !this.state.add
     })
   }
 
   render () {
-    var nEq = <div />
+    let nEq = <div />
     if (this.state.add) {
-      nEq = <InstanceForm onSubmit={this.create} actionLabel='Save' />
+      nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel='Save' />
     }
     return (
       <ul className='list-group list-group-flush'>
@@ -62,7 +62,7 @@ class main extends React.Component {
                 id='add_instance'
                 type='button'
                 value={this.state.add ? '-' : '+'}
-                onClick={this.toggle}
+                onClick={this.handleToggle}
                 className='btn btn-outline-success'
               />
             </div>

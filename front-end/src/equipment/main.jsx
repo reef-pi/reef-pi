@@ -14,8 +14,8 @@ class main extends React.Component {
       addEquipment: false
     }
 
-    this.addEquipment = this.addEquipment.bind(this)
-    this.toggleAddEquipmentDiv = this.toggleAddEquipmentDiv.bind(this)
+    this.handleAddEquipment = this.handleAddEquipment.bind(this)
+    this.handleToggleAddEquipmentDiv = this.handleToggleAddEquipmentDiv.bind(this)
   }
 
   componentDidMount () {
@@ -23,25 +23,25 @@ class main extends React.Component {
     this.props.fetchOutlets()
   }
 
-  addEquipment (values) {
-    var payload = {
+  handleAddEquipment (values) {
+    const payload = {
       name: values.name,
       outlet: values.outlet
     }
     this.props.create(payload)
-    this.toggleAddEquipmentDiv()
+    this.handleToggleAddEquipmentDiv()
   }
 
-  toggleAddEquipmentDiv () {
+  handleToggleAddEquipmentDiv () {
     this.setState({
       addEquipment: !this.state.addEquipment
     })
   }
 
   render () {
-    var nEq = <div />
+    let nEq = <div />
     if (this.state.addEquipment) {
-      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.addEquipment} />
+      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.handleAddEquipment} />
     }
     return (
       <ul className='list-group list-group-flush'>
@@ -63,7 +63,7 @@ class main extends React.Component {
                 id='add_equipment'
                 type='button'
                 value={this.state.addEquipment ? '-' : '+'}
-                onClick={this.toggleAddEquipmentDiv}
+                onClick={this.handleToggleAddEquipmentDiv}
                 className='btn btn-outline-success'
               />
             </div>

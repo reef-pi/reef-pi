@@ -32,7 +32,7 @@ const DoserForm = withFormik({
     }
   },
   validationSchema: DoserSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditDoser)

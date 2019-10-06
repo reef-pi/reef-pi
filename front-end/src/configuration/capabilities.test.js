@@ -8,7 +8,7 @@ describe('render capabilities component', () => {
       <Capabilities capabilities={[]} update={() => {}} />
     )
 
-    let tree = component.toJSON()
+    const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
   })
 })

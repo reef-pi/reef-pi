@@ -24,9 +24,9 @@ describe('Camera module', () => {
     const m = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    m.toggleConfig()
+    m.handleToggleConfig()
 
-    let d = shallow(<Main store={mockStore(state)} />)
+    const d = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
     d.state.config.motion = {
@@ -39,7 +39,7 @@ describe('Camera module', () => {
   })
 
   it('<Capture />', () => {
-    let d = shallow(<Capture store={mockStore({ camera: { latest: '' } })} />)
+    const d = shallow(<Capture store={mockStore({ camera: { latest: '' } })} />)
       .dive()
       .instance()
     d.props.takeImage()
@@ -50,10 +50,10 @@ describe('Camera module', () => {
     m.instance().updateBool('enable')({ target: { checked: true } })
     m.instance().updateText('bar')({ target: {} })
     m.update()
-    m.instance().save()
+    m.instance().handleSave()
     m = m.instance()
     m.state.config.tick_interval = 'foo'
-    m.save()
+    m.handleSave()
   })
 
   it('<Gallery />', () => {
@@ -68,13 +68,13 @@ describe('Camera module', () => {
       .simulate('click', ev)
     const m = wrapper.instance()
 
-    m.onClose()
-    m.gotoPrevious()
-    m.gotoNext()
-    m.gotoImage(0)
-    m.onClick()
+    m.handleClose()
+    m.handleGotoPrevious()
+    m.handleGotoNext()
+    m.handleGotoImage(0)
+    m.handleOnClick()
     m.state.current = -1
-    m.onClick()
+    m.handleOnClick()
     shallow(<Gallery />).instance()
   })
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow, mount} from 'enzyme'
+import Enzyme, { shallow, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import CollapsibleList from './collapsible_list'
 import Collapsible from './collapsible'
@@ -61,7 +61,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#edit-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -72,7 +72,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#delete-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#delete-test').simulate('click', { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -94,7 +94,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#submit').simulate('click', {stopPropagation: noop})
+    wrapper.find('#submit').simulate('click', { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -107,7 +107,7 @@ describe('Collapsible', () => {
       </CollapsibleList>
     )
 
-    wrapper.find('#edit-test').simulate('click', {stopPropagation: noop})
+    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
   })
 
   it('should add new panel as collapsed', () => {
@@ -118,9 +118,9 @@ describe('Collapsible', () => {
         </Collapsible>
       </CollapsibleList>
     )
-    wrapper.setProps({children: [<Collapsible name='another'><div /></Collapsible>]})
+    wrapper.setProps({ children: [<Collapsible name='another'><div /></Collapsible>] })
 
     const expanded = wrapper.state('expanded')
-    expect(expanded['another']).toBe(false)
+    expect(expanded.another).toBe(false)
   })
 })

@@ -1,5 +1,5 @@
 import React from 'react'
-import ATO from 'ato/main'
+import Ato from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
 import Log from 'logCenter/main'
@@ -27,7 +27,7 @@ const caps = {
   timers: { label: i18n.t('capabilities:timers'), component: <Timers /> },
   lighting: { label: i18n.t('capabilities:lights'), component: <Lighting /> },
   temperature: { label: i18n.t('capabilities:temperature'), component: <Temperature /> },
-  ato: { label: i18n.t('capabilities:ato'), component: <ATO /> },
+  ato: { label: i18n.t('capabilities:ato'), component: <Ato /> },
   ph: { label: i18n.t('capabilities:ph'), component: <Ph /> },
   doser: { label: i18n.t('capabilities:dosing_pumps'), component: <Doser /> },
   macro: { label: i18n.t('capabilities:macros'), component: <Macro /> },
@@ -58,20 +58,20 @@ class mainPanel extends React.Component {
   }
 
   navs (tab) {
-    let MandatoryTabs = {
+    const MandatoryTabs = {
       log: true
     }
-    let currentCaps = Object.assign(this.props.capabilities, MandatoryTabs)
-    var panels = []
-    for (let prop in caps) {
+    const currentCaps = Object.assign(this.props.capabilities, MandatoryTabs)
+    const panels = []
+    for (const prop in caps) {
       if (currentCaps[prop] === undefined) {
         continue
       }
       if (!currentCaps[prop]) {
         continue
       }
-      let cname = prop === tab ? 'nav-link active' : 'nav-link'
-      let label = caps[prop].label
+      const cname = prop === tab ? 'nav-link active' : 'nav-link'
+      const label = caps[prop].label
       panels.push(
         <li className='nav-item' key={'li-tab-' + prop}>
           <a href='#' id={'tab-' + prop} className={cname} onClick={this.setTab(prop)}>
@@ -84,16 +84,16 @@ class mainPanel extends React.Component {
   }
 
   render () {
-    var tab = this.state.tab
-    if (!this.props.capabilities['dashboard'] && tab === 'dashboard') {
-      for (var k in this.props.capabilities) {
+    let tab = this.state.tab
+    if (!this.props.capabilities.dashboard && tab === 'dashboard') {
+      for (const k in this.props.capabilities) {
         if (this.props.capabilities[k] && caps[k] !== undefined) {
           tab = k
           break
         }
       }
     }
-    var body = caps[tab].component
+    const body = caps[tab].component
     return (
       <div id='content'>
         <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>

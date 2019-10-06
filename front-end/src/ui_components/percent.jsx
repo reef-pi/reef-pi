@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Percent = props => {
-  let { value, ...other } = props
+  const { value, ...other } = props
 
   const handleChange = e => {
     if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
@@ -23,7 +23,8 @@ const Percent = props => {
       {...other}
       type='number'
       value={(isNaN(value) ? '' : value)}
-      onChange={handleChange} />
+      onChange={handleChange}
+    />
   )
 }
 

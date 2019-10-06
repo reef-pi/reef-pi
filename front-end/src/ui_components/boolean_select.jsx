@@ -1,10 +1,10 @@
 import React from 'react'
 
 const BooleanSelect = props => {
-  let { field, children, ...other } = props
+  const { field, children, ...other } = props
 
   const handleChange = e => {
-    let val = (e.target.value === true || e.target.value === 'true')
+    const val = (e.target.value === true || e.target.value === 'true')
     const event = {
       target: {
         name: e.target.name,
@@ -15,9 +15,11 @@ const BooleanSelect = props => {
   }
 
   return (
-    <select {...field}
+    <select
+      {...field}
       {...other}
-      onChange={handleChange}>
+      onChange={handleChange}
+    >
       {children}
     </select>
   )

@@ -13,7 +13,7 @@ class config extends React.Component {
       updated: false,
       config: {}
     }
-    this.save = this.save.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.toRow = this.toRow.bind(this)
     this.updateHook = this.updateHook.bind(this)
   }
@@ -33,15 +33,15 @@ class config extends React.Component {
     return state
   }
 
-  save () {
+  handleSave () {
     let error = false
-    let payload = this.state.config
+    const payload = this.state.config
     payload.width = parseInt(payload.width)
     payload.height = parseInt(payload.height)
     payload.column = parseInt(payload.column)
     payload.row = parseInt(payload.row)
     const fieldsToCheck = ['width', 'height', 'column', 'row']
-    for (let prop of fieldsToCheck) {
+    for (const prop of fieldsToCheck) {
       if (payload[prop] <= 0) {
         showError('It seems like there is wrong data in your configuration. Please ensure you only have valid integers in fields.')
         error = true
@@ -54,10 +54,9 @@ class config extends React.Component {
   }
 
   toRow (key, label, Min, Max) {
-    let fn = function (ev) {
-      var config = this.state.config
-      let v
-      v = parseInt(ev.target.value)
+    const fn = function (ev) {
+      const config = this.state.config
+      const v = parseInt(ev.target.value)
       if (!isNaN(v) && v <= Max && v >= Min) {
         config[key] = v
         this.setState({
@@ -83,8 +82,8 @@ class config extends React.Component {
   }
 
   updateHook (cells) {
-    var config = this.state.config
-    var i, j
+    const config = this.state.config
+    let i, j
     for (i = 0; i < config.row; i++) {
       if (config.grid_details[i] === undefined) {
         config.grid_details[i] = []
@@ -103,7 +102,7 @@ class config extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-12'
+    let updateButtonClass = 'btn btn-outline-success col-12'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-12'
     }
@@ -135,7 +134,7 @@ class config extends React.Component {
         </div>
         <div className='row'>
           <div className='col-xs-12 col-md-3 offset-md-9'>
-            <input type='button' className={updateButtonClass} onClick={this.save} id='save_dashboard' value={i18next.t('update')} />
+            <input type='button' className={updateButtonClass} onClick={this.handleSave} id='save_dashboard' value={i18next.t('update')} />
           </div>
         </div>
       </div>

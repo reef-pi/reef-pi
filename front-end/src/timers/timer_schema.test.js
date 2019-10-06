@@ -1,7 +1,7 @@
 import TimerSchema from './timer_schema'
 
 describe('TimerValidation', () => {
-  var timer = {}
+  let timer = {}
 
   beforeEach(() => {
     timer = {

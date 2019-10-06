@@ -7,12 +7,12 @@ export default class New extends React.PureComponent {
     this.state = {
       expanded: false
     }
-    this.add = this.add.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
     this.ui = this.ui.bind(this)
   }
 
-  toggle () {
+  handleToggle () {
     this.setState({
       expanded: !this.state.expanded
     })
@@ -23,12 +23,12 @@ export default class New extends React.PureComponent {
       return
     }
     return (
-      <TemperatureForm sensors={this.props.sensors} equipment={this.props.equipment} onSubmit={this.add} />
+      <TemperatureForm sensors={this.props.sensors} equipment={this.props.equipment} onSubmit={this.handleAdd} />
     )
   }
 
-  add (values) {
-    var payload = {
+  handleAdd (values) {
+    const payload = {
       name: values.name,
       enable: values.enable,
       control: (values.heater !== '' || values.cooler !== ''),
@@ -48,7 +48,7 @@ export default class New extends React.PureComponent {
       chart_max: parseFloat(values.chart_max)
     }
     this.props.create(payload)
-    this.toggle()
+    this.handleToggle()
   }
 
   render () {
@@ -56,10 +56,12 @@ export default class New extends React.PureComponent {
       <li className='list-group-item add-temperature'>
         <div className='row'>
           <div className='col'>
-            <input id='add_tc' type='button'
+            <input
+              id='add_tc' type='button'
               value={this.state.expanded ? '-' : '+'}
-              onClick={this.toggle}
-              className='btn btn-outline-success' />
+              onClick={this.handleToggle}
+              className='btn btn-outline-success'
+            />
             {this.ui()}
           </div>
         </div>

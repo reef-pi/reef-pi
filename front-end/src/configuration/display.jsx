@@ -10,8 +10,8 @@ class display extends React.Component {
       brightness: props.config ? props.config.brightness : 100,
       on: props.config ? props.config.on : undefined
     }
-    this.toggle = this.toggle.bind(this)
-    this.setBrightness = this.setBrightness.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
+    this.handleSetBrightness = this.handleSetBrightness.bind(this)
   }
 
   static getDerivedStateFromProps (props, state) {
@@ -30,21 +30,21 @@ class display extends React.Component {
     this.props.fetchDisplay()
   }
 
-  toggle () {
+  handleToggle () {
     this.props.switchDisplay(this.state.on)
     this.setState({ on: !this.state.on })
     this.props.fetchDisplay()
   }
 
-  setBrightness (ev) {
-    var b = parseInt(ev.target.value)
+  handleSetBrightness (ev) {
+    const b = parseInt(ev.target.value)
     this.props.setBrightness(b)
     this.setState({ brightness: b })
   }
 
   render () {
-    var style = 'btn btn-outline-success'
-    var action = 'on'
+    let style = 'btn btn-outline-success'
+    let action = 'on'
     if (this.state.on) {
       style = 'btn btn-outline-danger'
       action = 'off'
@@ -52,7 +52,7 @@ class display extends React.Component {
     return (
       <div className='container'>
         <div className='col-sm-1'>
-          <button onClick={this.toggle} type='button' className={style}>
+          <button onClick={this.handleToggle} type='button' className={style}>
             {' '}
             {action}{' '}
           </button>{' '}
@@ -61,7 +61,7 @@ class display extends React.Component {
         <div className='col-sm-6'>
           <input
             type='range'
-            onChange={this.setBrightness}
+            onChange={this.handleSetBrightness}
             style={{ width: '100%' }}
             min={0}
             max={255}

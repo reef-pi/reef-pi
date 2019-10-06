@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ErrorFor, NameFor, ShowError} from 'utils/validation_helper'
+import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 
 export default class FixedProfile extends React.Component {
@@ -15,10 +15,10 @@ export default class FixedProfile extends React.Component {
 
   handleChange (e) {
     if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
-      var val = parseInt(e.target.value)
+      let val = parseInt(e.target.value)
       if (isNaN(val)) { val = '' }
-      this.setState({value: val})
-      this.props.onChangeHandler({value: val})
+      this.setState({ value: val })
+      this.props.onChangeHandler({ value: val })
     }
   }
 
@@ -26,14 +26,16 @@ export default class FixedProfile extends React.Component {
     return (
       <div className='row form-group justify-content-center'>
         <div className='col-6 col-sm-3 col-md-2 col-xl-1 order-sm-2 mb-1 mb-sm-0'>
-          <input type='number'
+          <input
+            type='number'
             name={NameFor(this.props.name, 'value')}
             className={classNames('form-control no-spinner',
-              {'is-invalid': ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors)})}
+              { 'is-invalid': ShowError(NameFor(this.props.name, 'value'), this.props.touched, this.props.errors) })}
             value={this.state.value}
             onBlur={this.props.onBlur}
             onChange={this.handleChange}
-            disabled={this.props.readOnly} />
+            disabled={this.props.readOnly}
+          />
         </div>
         <input
           name={NameFor(this.props.name, 'value')}

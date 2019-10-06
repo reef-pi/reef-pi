@@ -25,7 +25,7 @@ jest.mock('utils/confirm', () => {
 })
 describe('ATO ui', () => {
   const state = {
-    ato_usage: { '1': {} },
+    ato_usage: { 1: {} },
     atos: [{ name: 'foo', id: '1' }],
     readOnly: false
   }
@@ -42,8 +42,8 @@ describe('ATO ui', () => {
   it('<ATO />', () => {
     const n = shallow(<ATO store={mockStore(state)} data={{ id: '1', period: 10 }} />)
     const m = n.dive().instance()
-    m.expand()
-    m.save({ id: 2, name: 'ato', inlet: '5' })
+    m.handleExpand()
+    m.handleSubmit({ id: 2, name: 'ato', inlet: '5' })
     m.state.readOnly = false
   })
 
@@ -73,7 +73,7 @@ describe('ATO ui', () => {
   })
 
   it('<Chart />', () => {
-    let m = shallow(<Chart ato_id='1' store={mockStore(state)} />)
+    const m = shallow(<Chart ato_id='1' store={mockStore(state)} />)
       .dive()
       .instance()
     m.componentWillUnmount()
@@ -82,7 +82,7 @@ describe('ATO ui', () => {
     shallow(<Chart ato_id='1' store={mockStore({ ato_usage: {}, atos: [] })} />)
       .dive()
       .instance()
-    shallow(<Chart ato_id='1' store={mockStore({ ato_usage: { '1': {} }, atos: [] })} />)
+    shallow(<Chart ato_id='1' store={mockStore({ ato_usage: { 1: {} }, atos: [] })} />)
       .dive()
       .instance()
   })

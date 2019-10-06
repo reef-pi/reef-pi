@@ -14,20 +14,23 @@ class jacks extends React.Component {
       add: false
     }
     this.list = this.list.bind(this)
-    this.add = this.add.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
-    this.save = this.save.bind(this)
-    this.setDriver = this.setDriver.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
   }
+
   handleNameChange (e) {
     this.setState({ JackName: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ JackPins: e.target.value })
   }
-  setDriver (e) {
+
+  handleSetDriver (e) {
     this.setState({
       JackDriver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
@@ -48,7 +51,7 @@ class jacks extends React.Component {
     this.props.fetch()
   }
 
-  add () {
+  handleAdd () {
     this.setState({
       add: !this.state.add,
       JackName: '',
@@ -56,27 +59,27 @@ class jacks extends React.Component {
     })
   }
 
-  save () {
-    var pins = this.state.JackPins.split(',').map(p => {
+  handleSave () {
+    const pins = this.state.JackPins.split(',').map(p => {
       return parseInt(p)
     })
-    for (var i = 0; i < pins.length; i++) {
+    for (let i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
         showError('Use only comma separated numbers')
         return
       }
     }
-    var payload = {
+    const payload = {
       name: this.state.JackName,
       pins: pins,
       driver: this.state.JackDriver
     }
     this.props.create(payload)
-    this.add()
+    this.handleAdd()
   }
 
   list () {
-    var list = []
+    const list = []
     this.props.jacks.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((j, i) => {
       list.push(
         <Jack
@@ -98,7 +101,7 @@ class jacks extends React.Component {
   }
 
   render () {
-    var dStyle = {
+    const dStyle = {
       display: this.state.add ? '' : 'none'
     }
     return (
@@ -115,7 +118,7 @@ class jacks extends React.Component {
               id='add_jack'
               type='button'
               value={this.state.add ? '-' : '+'}
-              onClick={this.add}
+              onClick={this.handleAdd}
               className='btn btn-sm btn-outline-success'
             />
           </div>
@@ -154,8 +157,9 @@ class jacks extends React.Component {
                   <select
                     name='driver'
                     className='form-control custom-select'
-                    onChange={this.setDriver}
-                    value={this.state.JackDriver}>
+                    onChange={this.handleSetDriver}
+                    value={this.state.JackDriver}
+                  >
                     {this.props.drivers.map(item => {
                       return (
                         <option key={item.id} value={item.id}>
@@ -171,7 +175,7 @@ class jacks extends React.Component {
                   type='button'
                   id='createJack'
                   value='add'
-                  onClick={this.save}
+                  onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />
               </div>

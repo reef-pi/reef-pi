@@ -19,22 +19,22 @@ class telemetry extends React.Component {
     this.notification = this.notification.bind(this)
     this.updateAio = this.updateAio.bind(this)
     this.updateMailer = this.updateMailer.bind(this)
-    this.enableMailer = this.enableMailer.bind(this)
-    this.save = this.save.bind(this)
-    this.updateThrottle = this.updateThrottle.bind(this)
-    this.testMessage = this.testMessage.bind(this)
+    this.handleEnableMailer = this.handleEnableMailer.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.handleUpdateThrottle = this.handleUpdateThrottle.bind(this)
+    this.handleTestMessage = this.handleTestMessage.bind(this)
     this.updateLimit = this.updateLimit.bind(this)
   }
 
   updateLimit (k) {
     return (e) => {
-      var conf = this.state.config
+      const conf = this.state.config
       conf[k] = e.target.value
-      this.setState({config: conf})
+      this.setState({ config: conf })
     }
   }
 
-  testMessage () {
+  handleTestMessage () {
     this.props.sendTestMessage()
   }
 
@@ -46,8 +46,8 @@ class telemetry extends React.Component {
     return state
   }
 
-  enableMailer (ev) {
-    var c = this.state.config
+  handleEnableMailer (ev) {
+    const c = this.state.config
     c.notify = ev.target.checked
     this.setState({
       config: c,
@@ -55,8 +55,8 @@ class telemetry extends React.Component {
     })
   }
 
-  save () {
-    var c = this.state.config
+  handleSave () {
+    const c = this.state.config
     if (c.adafruitio.enable) {
       if (c.adafruitio.user === '') {
         showError('Please set a valid adafruit.io user')
@@ -68,7 +68,7 @@ class telemetry extends React.Component {
       }
     }
     if (c.notify) {
-      var error = false
+      let error = false
       if (c.mailer.server === '') {
         showError('Please set a valid mail server')
         error = true
@@ -98,7 +98,7 @@ class telemetry extends React.Component {
   }
 
   updateMailer (mailer) {
-    var c = this.state.config
+    const c = this.state.config
     c.mailer = mailer
     this.setState({
       config: c,
@@ -111,7 +111,7 @@ class telemetry extends React.Component {
   }
 
   updateAio (adafruitio) {
-    var c = this.state.config
+    const c = this.state.config
     c.adafruitio = adafruitio
     this.setState({
       config: c,
@@ -142,7 +142,7 @@ class telemetry extends React.Component {
                 id='limit-per-hour'
                 type='text'
                 value={this.state.config.throttle}
-                onChange={this.updateThrottle}
+                onChange={this.handleUpdateThrottle}
                 className='form-control'
               />
             </div>
@@ -153,7 +153,7 @@ class telemetry extends React.Component {
                 <input
                   type='button'
                   className='btn btn-outline-secondary'
-                  onClick={this.testMessage}
+                  onClick={this.handleTestMessage}
                   id='send-test-email'
                   value='Send test message'
                 />
@@ -175,8 +175,8 @@ class telemetry extends React.Component {
     return <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
   }
 
-  updateThrottle (ev) {
-    var c = this.state.config
+  handleUpdateThrottle (ev) {
+    const c = this.state.config
     c.throttle = ev.target.value
     this.setState({
       config: c,
@@ -185,7 +185,7 @@ class telemetry extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
     }
@@ -200,7 +200,7 @@ class telemetry extends React.Component {
                   className='form-check-input'
                   type='checkbox'
                   id='enable-mailer'
-                  onClick={this.enableMailer}
+                  onClick={this.handleEnableMailer}
                   defaultChecked={this.state.config.notify}
                 />
                 <b>Email alerts</b>
@@ -234,7 +234,7 @@ class telemetry extends React.Component {
             <input
               type='button'
               className={updateButtonClass}
-              onClick={this.save}
+              onClick={this.handleSave}
               id='updateTelemetry'
               value='update'
             />

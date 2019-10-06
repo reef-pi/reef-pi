@@ -63,7 +63,7 @@ const EditTimer = ({
         target = { id: '', on: true, revert: false, duration: 60 }
         break
       case 'reminder':
-        target = {title: '', message: ''}
+        target = { title: '', message: '' }
         break
     }
     return target
@@ -106,7 +106,8 @@ const EditTimer = ({
         </div>
 
         <div className='col-12 order-lg-5 col-xl-6'>
-          <Cron values={values}
+          <Cron
+            values={values}
             touched={touched}
             errors={errors}
             readOnly={readOnly}

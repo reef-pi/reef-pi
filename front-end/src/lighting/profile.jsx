@@ -22,7 +22,8 @@ const Profile = (props) => {
           {...props}
           readOnly={props.readOnly}
           config={props.value}
-          onChangeHandler={handleConfigChange} />
+          onChangeHandler={handleConfigChange}
+        />
       )
     }
     case 'diurnal': {
@@ -31,7 +32,8 @@ const Profile = (props) => {
           {...props}
           value={props.value}
           readOnly={props.readOnly}
-          onChange={props.onChangeHandler} />
+          onChange={props.onChangeHandler}
+        />
       )
     }
     case 'auto': {
@@ -40,7 +42,8 @@ const Profile = (props) => {
           {...props}
           readOnly={props.readOnly}
           config={props.value}
-          onChangeHandler={handleConfigChange} />
+          onChangeHandler={handleConfigChange}
+        />
       )
     }
     default: {

@@ -10,15 +10,15 @@ export default class Confirm extends React.Component {
       confirmLabel: props.confirmLabel === undefined ? i18next.t('ok') : props.confirmLabel,
       abortLabel: props.abortLabel === undefined ? i18next.t('cancel') : props.abortLabel
     }
-    this.abort = this.abort.bind(this)
-    this.confirm = this.confirm.bind(this)
+    this.handleAbort = this.handleAbort.bind(this)
+    this.handleConfirm = this.handleConfirm.bind(this)
   }
 
-  abort () {
+  handleAbort () {
     return this.promise.reject()
   }
 
-  confirm () {
+  handleConfirm () {
     return this.promise.resolve()
   }
 
@@ -28,7 +28,7 @@ export default class Confirm extends React.Component {
   }
 
   render () {
-    var modalBody
+    let modalBody
     if (this.props.description) {
       modalBody = (
         <div className='modal-body'>
@@ -47,11 +47,11 @@ export default class Confirm extends React.Component {
         {modalBody}
         <div className='modal-footer'>
           <div className='text-right'>
-            <button role='abort' type='button' className='btn btn-light' onClick={this.abort}>
+            <button role='abort' type='button' className='btn btn-light' onClick={this.handleAbort}>
               {this.state.abortLabel}
             </button>
             {' '}
-            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.confirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.handleConfirm}>
               {this.state.confirmLabel}
             </button>
           </div>
