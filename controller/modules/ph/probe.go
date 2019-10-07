@@ -40,7 +40,7 @@ type Probe struct {
 }
 
 func (p *Probe) loadHomeostasis(c controller.Controller) {
-	hConf := controller.HomeStasisConfig{
+	hConf := controller.HomeoStasisConfig{
 		Name:    p.Name,
 		Upper:   p.UpperEq,
 		Downer:  p.DownerEq,
