@@ -13,6 +13,7 @@ export default class Equipment extends React.Component {
 
     this.handleToggleEdit = this.handleToggleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -56,8 +57,8 @@ export default class Equipment extends React.Component {
       }.bind(this))
   }
 
-  handleUpdate () {
-    this.props.update()
+  handleUpdate (id,values ) {
+    this.props.update(id, values)
   }
 
   render () {
