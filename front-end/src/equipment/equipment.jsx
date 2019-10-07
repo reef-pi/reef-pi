@@ -57,7 +57,7 @@ export default class Equipment extends React.Component {
       }.bind(this))
   }
 
-  handleUpdate (id,values ) {
+  handleUpdate (id, values) {
     this.props.update(id, values)
   }
 
