@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/reef-pi/pwm_profile"
+	"github.com/reef-pi/reef-pi/controller/pwm_profile"
 )
 
 type Channel struct {
