@@ -2,9 +2,11 @@ SOURCEDIR=.
 SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
 VERSION=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
+DETECT_RACE='-race'
 
 ifeq ($(OS), Windows_NT)
 	BINARY=./bin/reef-pi.exe
+	DETECT_RACE=''
 endif
 
 .PHONY:bin
@@ -30,7 +32,7 @@ pi-zero:
 
 .PHONY: test
 test:
-	go test -count=1 -cover -race ./...
+	go test -count=1 -cover $(DETECT_RACE) ./...
 
 .PHONY: js-lint
 js-lint:
@@ -47,7 +49,6 @@ install:
 
 .PHONY: go-get
 go-get:
-	go get -u github.com/golang/dep/cmd/dep
 	go get -u golang.org/x/tools/cmd/goimports
 ifeq ($(OS), Windows_NT)
 	go get -u github.com/StackExchange/wmi
