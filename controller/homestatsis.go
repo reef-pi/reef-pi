@@ -45,7 +45,7 @@ func (o1 Observation) Before(o2 telemetry.Metric) bool {
 	return o1.Time.Before(o2.(Observation).Time)
 }
 
-type HomeStasisConfig struct {
+type HomeoStasisConfig struct {
 	Name     string
 	IsMacro  bool
 	Period   int
@@ -55,13 +55,13 @@ type HomeStasisConfig struct {
 }
 
 type Homeostasis struct {
-	config HomeStasisConfig
+	config HomeoStasisConfig
 	t      telemetry.Telemetry
 	eqs    Subsystem
 	macros Subsystem
 }
 
-func NewHomeostasis(c Controller, config HomeStasisConfig) *Homeostasis {
+func NewHomeostasis(c Controller, config HomeoStasisConfig) *Homeostasis {
 	h := Homeostasis{
 		config: config,
 		t:      c.Telemetry(),

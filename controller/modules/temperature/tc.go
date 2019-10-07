@@ -34,7 +34,7 @@ type TC struct {
 }
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
-	hConf := controller.HomeStasisConfig{
+	hConf := controller.HomeoStasisConfig{
 		Name:    t.Name,
 		Upper:   t.Heater,
 		Downer:  t.Cooler,
