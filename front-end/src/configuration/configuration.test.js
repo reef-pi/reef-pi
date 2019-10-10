@@ -126,6 +126,58 @@ describe('Configuration ui', () => {
       .simulate('change', { target: { value: 'foo' } })
   })
 
+  it('<Settings /> should remove port 80 if choosing https', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost:80',
+      https: false
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:80'}})
+
+    wrapper.find('.dropdown-item[children="https://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
+  })
+
+  it('<Settings /> should remove port 443 if choosing http', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost:443',
+      https: true
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
+  })
+
+  it('<Settings /> should not change the port when changing protocol if not 80 or 443', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost',
+      https: true
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:1234'}})
+
+    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost:1234')
+  })
+
   it('<HealthNotify />', () => {
     const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
     m.handleUpdateEnable({ target: {} })
