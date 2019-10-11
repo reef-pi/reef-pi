@@ -33,6 +33,10 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 		return Diurnal(p.Config, p.Min, p.Max)
 	case "composite":
 		return Composite(p.Config)
+	case "lunar":
+		return Lunar(p.Config, p.Min, p.Max)
+	case "arbitrary_interval":
+		return Interval(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}

@@ -1,15 +1,15 @@
 package pwm_profile
 
-import(
+import (
+	"encoding/json"
 	"testing"
 	"time"
-	"encoding/json"
 )
 
 func TestManual(t *testing.T) {
-	spec:= ProfileSpec{
-		Name: "test",
-		Type: "manual",
+	spec := ProfileSpec{
+		Name:   "test",
+		Type:   "manual",
 		Config: json.RawMessage(`{"value":34}`),
 	}
 	p, err := spec.CreateProfile()

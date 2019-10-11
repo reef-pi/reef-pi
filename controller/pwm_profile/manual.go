@@ -1,6 +1,6 @@
 package pwm_profile
 
-import(
+import (
 	"encoding/json"
 	"time"
 )
