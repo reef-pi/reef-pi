@@ -7,15 +7,15 @@ import (
 )
 
 type sine struct {
-	diurnal
+	temporal
 }
 
 func Sine(conf json.RawMessage, min, max float64) (*sine, error) {
-	d, err := Diurnal(conf, min, max)
+	d, err := Temporal(conf, min, max)
 	if err != nil {
 		return nil, err
 	}
-	s := sine{*d}
+	s := sine{d}
 	return &s, nil
 }
 
