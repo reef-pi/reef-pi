@@ -71,6 +71,10 @@ class Main extends React.Component {
   }
 
   valuesToTimer (values) {
+    const target = values.target
+    if (values.type === 'equipment') {
+      target.duration = parseInt(target.duration)
+    }
     const timer = {
       name: values.name,
       type: values.type,
@@ -81,7 +85,7 @@ class Main extends React.Component {
       minute: values.minute,
       second: values.second,
       enable: values.enable,
-      target: values.target
+      target: target
     }
     return timer
   }

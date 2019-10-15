@@ -49,7 +49,7 @@ describe('Timer ui', () => {
     m.handleToggleAddTimerDiv()
 
     m.handleSubmit({ name: 'test', type: 'reminder' })
-    m.handleUpdateTimer({ id: '1', name: 'test', type: 'equipment' })
+    m.handleUpdateTimer({ id: '1', name: 'test', type: 'equipment', target: {} })
     m.handleRemoveTimer('1')
   })
 
@@ -71,10 +71,12 @@ describe('Timer ui', () => {
       minute: '*',
       second: '0',
       type: 'equipment',
-      equipment_id: '2',
-      on: true,
-      duration: 60,
-      revert: false,
+      target: {
+        equipment_id: '2',
+        on: true,
+        duration: 60,
+        revert: false,
+      },
       title: '',
       message: ''
     }
