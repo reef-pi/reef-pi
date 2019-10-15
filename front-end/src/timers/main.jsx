@@ -74,9 +74,7 @@ class Main extends React.Component {
     const target = values.target
     if (values.type === 'equipment') {
       target.duration = parseInt(target.duration)
-      console.log('inside', target)
     }
-    console.log('outside', target)
     const timer = {
       name: values.name,
       type: values.type,
