@@ -11,7 +11,10 @@ class telemetry extends React.Component {
     this.state = {
       config: {
         historical_limit: 720,
-        current_limit: 100
+        current_limit: 100,
+        mailer: {
+          to: [],
+        }
       },
       updated: false
     }
