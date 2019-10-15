@@ -13,7 +13,7 @@ class telemetry extends React.Component {
         historical_limit: 720,
         current_limit: 100,
         mailer: {
-          to: [],
+          to: []
         }
       },
       updated: false

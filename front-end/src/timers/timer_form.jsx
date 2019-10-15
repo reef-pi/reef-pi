@@ -17,7 +17,7 @@ const TimerForm = withFormik({
     target: {
       id: '',
       on: '',
-      duration: '',
+      duration: 0,
       revert: ''
     }
   },
