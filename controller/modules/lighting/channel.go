@@ -11,11 +11,11 @@ type Channel struct {
 	Name        string                  `json:"name"`
 	On          bool                    `json:"on"`
 	Min         float64                 `json:"min"`
-	StartMin    int                     `json:"start_min"`
 	Max         float64                 `json:"max"`
-	Reverse     bool                    `json:"reverse"`
 	Pin         int                     `json:"pin"`
 	Color       string                  `json:"color"`
+	Manual      bool                    `json:"manual"`
+	Value       float64                 `json:"value"`
 	ProfileSpec pwm_profile.ProfileSpec `json:"profile"`
 	profile     pwm_profile.Profile
 }
@@ -33,9 +33,6 @@ func (ch *Channel) loadProfile() error {
 }
 
 func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
-	if ch.Reverse {
-		v = 100 - v
-	}
 	log.Println("lighting-subsystem: Setting PWM value:", v, " at channel:", ch.Pin)
 	pv := make(map[int]float64)
 	pv[ch.Pin] = v
@@ -44,9 +41,12 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 	}
 }
 
-func (ch *Channel) Value(t time.Time) (float64, error) {
+func (ch *Channel) ValueAt(t time.Time) (float64, error) {
 	if !ch.On {
 		return 0, nil
+	}
+	if ch.Manual {
+		return ch.Value, nil
 	}
 	if ch.profile == nil {
 		log.Println("lighting-subsystem: Loading profile for channel", ch.Name)
@@ -56,10 +56,10 @@ func (ch *Channel) Value(t time.Time) (float64, error) {
 	}
 	v := ch.profile.Get(t)
 	if (ch.Min > 0) && (v < float64(ch.Min)) {
-		return float64(ch.StartMin), nil
+		return 0, nil
 	}
 	if (ch.Max > 0) && (v > float64(ch.Max)) {
-		return float64(ch.Max), nil
+		return ch.Max, nil
 	}
 	return v, nil
 }

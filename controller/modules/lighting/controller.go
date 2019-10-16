@@ -1,7 +1,6 @@
 package lighting
 
 import (
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -25,21 +24,23 @@ var DefaultConfig = Config{
 }
 
 type Controller struct {
+	sync.Mutex
 	jacks   *connectors.Jacks
 	stopCh  chan struct{}
 	config  Config
 	running bool
-	mu      *sync.Mutex
 	c       controller.Controller
+	lights  map[string]*Light
 }
 
 func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
 	return &Controller{
+		Mutex:  sync.Mutex{},
 		c:      c,
 		jacks:  jacks,
 		config: conf,
 		stopCh: make(chan struct{}),
-		mu:     &sync.Mutex{},
+		lights: make(map[string]*Light),
 	}, nil
 }
 
@@ -48,9 +49,6 @@ func (c *Controller) Start() {
 }
 func (c *Controller) StartCycle() {
 	ticker := time.NewTicker(c.config.Interval)
-	c.mu.Lock()
-	c.running = true
-	c.mu.Unlock()
 	c.syncLights()
 	for {
 		select {
@@ -64,18 +62,13 @@ func (c *Controller) StartCycle() {
 }
 
 func (c *Controller) Stop() {
-	c.mu.Lock()
-	if !c.running {
-		log.Println("lighting subsystem: controller is not running.")
-		return
-	}
-	c.mu.Unlock()
 	c.stopCh <- struct{}{}
-	c.running = false
 	log.Println("Stopped lighting cycle")
 }
 
 func (c *Controller) Setup() error {
+	c.Lock()
+	defer c.Unlock()
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
@@ -84,6 +77,8 @@ func (c *Controller) Setup() error {
 		return err
 	}
 	for _, light := range lights {
+		light.LoadChannels()
+		c.lights[light.ID] = &light
 		for _, ch := range light.Channels {
 			c.c.Telemetry().CreateFeedIfNotExist(light.Name + "-" + ch.Name)
 		}
@@ -92,15 +87,18 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) On(id string, on bool) error {
-	return fmt.Errorf("lighting subsystem does not support 'on' api yet")
+	l, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	for pin, ch := range l.Channels {
+		ch.On = on
+		l.Channels[pin] = ch
+	}
+	return c.Update(id, l)
 }
 func (c *Controller) syncLights() {
-	lights, err := c.List()
-	if err != nil {
-		log.Println("ERROR: lighting sub-system:  Failed to list lights. Error:", err)
-		return
-	}
-	for _, light := range lights {
+	for _, light := range c.lights {
 		c.syncLight(light)
 	}
 }
