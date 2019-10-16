@@ -62,9 +62,9 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	channels := make(map[int]Channel)
+	channels := make(map[int]*Channel)
 
-	channels[1] = Channel{
+	channels[1] = &Channel{
 		Name: "ch1",
 		Min:  12,
 	}
@@ -95,14 +95,12 @@ func TestLightingAPI(t *testing.T) {
 	c.Setup()
 	body.Reset()
 	ch, _ := channels[1]
-	ch.Reverse = true
 	l.Channels[1] = ch
 	c.syncLights()
-	c.UpdateChannel("1", ch, 10)
-	if err := c.On("1", true); err == nil {
-		t.Error("On api is not implemented yet")
+	c.UpdateChannel("1", *ch, 10)
+	if err := c.On("1", true); err != nil {
+		t.Error(err)
 	}
-	c.Stop()
 	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
 		t.Fatal("Delete light using api")
 	}
@@ -125,5 +123,5 @@ func TestLightingAPI(t *testing.T) {
 	ch.Max = 8
 	channels[1] = ch
 	l.Channels = channels
-	c.syncLight(l)
+	c.syncLight(&l)
 }
