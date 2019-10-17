@@ -22,6 +22,7 @@ type Controller struct {
 	equipment *equipment.Controller
 	quitters  map[string]chan struct{}
 	statsMgr  telemetry.StatsManager
+	tcs       map[string]*TC
 }
 
 func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Controller, error) {
@@ -30,6 +31,7 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Con
 		devMode:   devMode,
 		equipment: eqs,
 		quitters:  make(map[string]chan struct{}),
+		tcs:       make(map[string]*TC),
 		statsMgr:  c.Telemetry().NewStatsManager(UsageBucket),
 	}, nil
 }
@@ -38,18 +40,23 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	return c.c.Store().CreateBucket(UsageBucket)
+	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
+		return err
+	}
+	tcs, err := c.List()
+	if err != nil {
+		return err
+	}
+	for _, tc := range tcs {
+		c.tcs[tc.ID] = &tc
+	}
+	return nil
 }
 
 func (c *Controller) Start() {
 	c.Lock()
 	defer c.Unlock()
-	tcs, err := c.List()
-	if err != nil {
-		log.Println("ERROR: temperature subsystem: Failed to list sensors. Error:", err)
-		return
-	}
-	for _, t := range tcs {
+	for _, t := range c.tcs {
 		if !t.Enable {
 			continue
 		}
@@ -82,6 +89,8 @@ func (c *Controller) On(id string, on bool) error {
 	if err != nil {
 		return err
 	}
+	tc.Lock()
 	tc.Enable = on
+	tc.Unlock()
 	return c.Update(id, tc)
 }

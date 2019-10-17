@@ -9,12 +9,12 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func (c *Controller) Check(tc TC) {
+func (c *Controller) Check(tc *TC) {
 	if !tc.Enable {
 		return
 	}
 
-	reading, err := c.Read(tc)
+	reading, err := c.Read(*tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
@@ -22,6 +22,10 @@ func (c *Controller) Check(tc TC) {
 		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
 		return
 	}
+	if tc.calibrator != nil {
+		reading = tc.calibrator.Calibrate(reading)
+	}
+	tc.currentValue = reading
 	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
 	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)
 	u := controller.Observation{
@@ -33,7 +37,7 @@ func (c *Controller) Check(tc TC) {
 			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
 		}
 	}
-	c.NotifyIfNeeded(tc, reading)
+	c.NotifyIfNeeded(*tc, reading)
 	c.statsMgr.Update(tc.ID, u)
 }
 
