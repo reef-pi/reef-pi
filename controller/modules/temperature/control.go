@@ -22,6 +22,9 @@ func (c *Controller) Check(tc *TC) {
 		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
 		return
 	}
+	if tc.calibrator != nil {
+		reading = tc.calibrator.Calibrate(reading)
+	}
 	tc.currentValue = reading
 	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
 	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)

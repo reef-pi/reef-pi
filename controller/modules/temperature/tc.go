@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -17,21 +18,23 @@ type Notify struct {
 }
 
 type TC struct {
-	ID           string        `json:"id"`
-	Name         string        `json:"name"`
-	Max          float64       `json:"max"`
-	Min          float64       `json:"min"`
-	Heater       string        `json:"heater"`
-	Cooler       string        `json:"cooler"`
-	Period       time.Duration `json:"period"`
-	Control      bool          `json:"control"`
-	Enable       bool          `json:"enable"`
-	Notify       Notify        `json:"notify"`
-	Sensor       string        `json:"sensor"`
-	Fahrenheit   bool          `json:"fahrenheit"`
-	IsMacro      bool          `json:"is_macro"`
-	h            *controller.Homeostasis
-	currentValue float64
+	ID                string            `json:"id"`
+	Name              string            `json:"name"`
+	Max               float64           `json:"max"`
+	Min               float64           `json:"min"`
+	Heater            string            `json:"heater"`
+	Cooler            string            `json:"cooler"`
+	Period            time.Duration     `json:"period"`
+	Control           bool              `json:"control"`
+	Enable            bool              `json:"enable"`
+	Notify            Notify            `json:"notify"`
+	Sensor            string            `json:"sensor"`
+	Fahrenheit        bool              `json:"fahrenheit"`
+	IsMacro           bool              `json:"is_macro"`
+	CalibrationPoints []hal.Measurement `json:"calibration_points"`
+	h                 *controller.Homeostasis
+	currentValue      float64
+	calibrator        hal.Calibrator
 }
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
@@ -68,6 +71,17 @@ func (c Controller) List() ([]TC, error) {
 	return tcs, c.c.Store().List(Bucket, fn)
 }
 
+func (tc *TC) loadCalibrator() {
+	if len(tc.CalibrationPoints) > 0 {
+		cal, err := hal.CalibratorFactory(tc.CalibrationPoints)
+		if err != nil {
+			log.Println("ERROR: temperature-subsystem: Failed to create calibration function for sensor:", tc.Name, "Error:", err)
+		} else {
+			tc.calibrator = cal
+		}
+	}
+}
+
 func (c *Controller) Create(tc TC) error {
 	c.Lock()
 	defer c.Unlock()
@@ -81,6 +95,7 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	tc.loadCalibrator()
 	c.tcs[tc.ID] = &tc
 	u := &controller.Observation{
 		Time: telemetry.TeleTime(time.Now()),
@@ -109,6 +124,7 @@ func (c *Controller) Update(id string, tc TC) error {
 		close(quit)
 		delete(c.quitters, tc.ID)
 	}
+	tc.loadCalibrator()
 	c.tcs[tc.ID] = &tc
 	if tc.Enable {
 		quit := make(chan struct{})
