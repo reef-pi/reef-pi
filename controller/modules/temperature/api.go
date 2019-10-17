@@ -91,7 +91,7 @@ func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 	var t TC
 	fn := func(id string) error {
-		return c.Update(id, t)
+		return c.Update(id, &t)
 	}
 	utils.JSONUpdateResponse(&t, fn, w, r)
 }

@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -18,6 +20,7 @@ type Notify struct {
 }
 
 type TC struct {
+	sync.Mutex
 	ID                string            `json:"id"`
 	Name              string            `json:"name"`
 	Max               float64           `json:"max"`
@@ -50,12 +53,14 @@ func (t *TC) loadHomeostasis(c controller.Controller) {
 	t.h = controller.NewHomeostasis(c, hConf)
 }
 
-func (c *Controller) Get(id string) (TC, error) {
+func (c *Controller) Get(id string) (*TC, error) {
+	c.Lock()
 	tc, ok := c.tcs[id]
+	defer c.Unlock()
 	if !ok {
-		return TC{}, fmt.Errorf("temperature controller with id '%s' is not present", tc.ID)
+		return nil, fmt.Errorf("temperature controller with id '%s' is not present", tc.ID)
 	}
-	return *tc, nil
+	return tc, nil
 }
 
 func (c Controller) List() ([]TC, error) {
@@ -109,7 +114,7 @@ func (c *Controller) Create(tc TC) error {
 	return nil
 }
 
-func (c *Controller) Update(id string, tc TC) error {
+func (c *Controller) Update(id string, tc *TC) error {
 	tc.ID = id
 	if tc.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", tc.Period)
@@ -118,18 +123,18 @@ func (c *Controller) Update(id string, tc TC) error {
 		return err
 	}
 	c.Lock()
-	defer c.Unlock()
 	quit, ok := c.quitters[tc.ID]
 	if ok {
 		close(quit)
 		delete(c.quitters, tc.ID)
 	}
 	tc.loadCalibrator()
-	c.tcs[tc.ID] = &tc
+	c.tcs[tc.ID] = tc
+	defer c.Unlock()
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		go c.Run(&tc, quit)
+		go c.Run(tc, quit)
 	}
 	return nil
 }
@@ -153,6 +158,8 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
+	c.Lock()
+	defer c.Unlock()
 	tcs, err := c.List()
 	if err != nil {
 		return false, err
@@ -169,6 +176,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Run(t *TC, quit chan struct{}) {
+	c.Lock()
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
@@ -176,6 +184,7 @@ func (c *Controller) Run(t *TC, quit chan struct{}) {
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
 	t.loadHomeostasis(c.c)
+	c.Unlock()
 	for {
 		select {
 		case <-ticker.C:

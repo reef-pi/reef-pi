@@ -82,6 +82,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := tr.Do("GET", "/api/tcs/1", new(bytes.Buffer), &tc); err != nil {
 		t.Fatal("Failed to get temperature controller config using api")
 	}
+
 	if err := c.On("1", true); err != nil {
 		t.Error(err)
 	}
@@ -111,6 +112,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := tr.Do("GET", "/api/tcs", new(bytes.Buffer), &sensors); err != nil {
 		t.Fatal("Failed to list temperature controller config using api")
 	}
+
 	inUse, err := c.IsEquipmentInUse("1")
 	if err != nil {
 		t.Error(err)
