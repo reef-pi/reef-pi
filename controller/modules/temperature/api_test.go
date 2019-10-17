@@ -53,7 +53,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := c.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	tc := TC{
+	tc := &TC{
 		Control: true,
 		Enable:  true,
 		Heater:  "1",
