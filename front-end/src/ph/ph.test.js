@@ -41,7 +41,13 @@ describe('Ph ui', () => {
           enable: false,
           notify: {
             enable: false
-          }
+          },
+          control: true,
+          is_macro: true,
+          min: 7,
+          downer_eq: '3',
+          max: 8.6,
+          upper_eq: '1'
         }
       ]
     }
@@ -71,11 +77,43 @@ describe('Ph ui', () => {
       name: 'name',
       enable: true,
       address: 99,
-      notify: { enable: false }
+      notify: { enable: false },
+      control: true,
+      is_macro: false
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
+  })
+
+  it('<PhForm /> for edit with macro', () => {
+    const fn = jest.fn()
+
+    const probe = {
+      name: 'name',
+      enable: true,
+      address: 99,
+      notify: { enable: false },
+      control: true,
+      is_macro: true
+    }
+    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
+    expect(wrapper.instance().props.initialValues.control).toBe('macro')
+  })
+
+  it('<PhForm /> for edit without control', () => {
+    const fn = jest.fn()
+
+    const probe = {
+      name: 'name',
+      enable: true,
+      address: 99,
+      notify: { enable: false },
+      control: false,
+      is_macro: true
+    }
+    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
+    expect(wrapper.instance().props.initialValues.control).toBe('nothing')
   })
 
   it('<Chart />', () => {

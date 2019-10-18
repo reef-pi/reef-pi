@@ -60,6 +60,8 @@ class ph extends React.Component {
               key={Number(probe.id)}
               analogInputs={this.props.ais}
               probe={probe}
+              macros={this.props.macros}
+              equipment={this.props.equipment}
             />
           </Collapsible>
         )
@@ -84,7 +86,13 @@ class ph extends React.Component {
         enable: values.notify,
         min: parseFloat(values.minAlert),
         max: parseFloat(values.maxAlert)
-      }
+      },
+      control: (values.control === 'macro' || values.control === 'equipment'),
+      is_macro: (values.control === 'macro'),
+      min: parseFloat(values.lowerThreshold),
+      downer_eq: values.lowerFunction,
+      max: parseFloat(values.upperThreshold),
+      upper_eq: values.upperFunction
     }
     return probe
   }
@@ -125,7 +133,13 @@ class ph extends React.Component {
   render () {
     let newProbe = null
     if (this.state.addProbe) {
-      newProbe = <PhForm analogInputs={this.props.ais} onSubmit={this.handleCreateProbe} />
+      newProbe =
+        <PhForm
+          analogInputs={this.props.ais}
+          onSubmit={this.handleCreateProbe}
+          macros={this.props.macros}
+          equipment={this.props.equipment}
+        />
     }
 
     let calibrationModal = null
@@ -171,7 +185,9 @@ const mapStateToProps = state => {
   return {
     probes: state.phprobes,
     ais: state.analog_inputs,
-    currentReading: state.ph_reading
+    currentReading: state.ph_reading,
+    macros: state.macros,
+    equipment: state.equipment
   }
 }
 

@@ -13,10 +13,10 @@ export default class AnalogInput extends React.Component {
       lbl: 'edit',
       driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
     }
-    this.edit = this.edit.bind(this)
+    this.hanldeEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
-    this.setDriver = this.setDriver.bind(this)
+    this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
   }

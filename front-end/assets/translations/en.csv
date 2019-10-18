@@ -194,3 +194,20 @@ ph:threshold_type,Threshold must be a number
 ph:threshold_less_than,Alert Below must be less than Alert Above
 ph:threshold_greater_than,Alert Above must be greater than Alert Below
 ph:analog_input_required,Analog Input is required
+ph:control,Control
+ph:controlnothing,Nothing
+ph:controlmacro,Macro
+ph:controlequipment,Equipment
+ph:lower_threshold,Lower Threshold
+ph:lower_function,Lower Function
+ph:upper_threshold,Upper Threshold
+ph:upper_function,Upper Function
+ph:control_required,Control is requires
+ph:lower_threshold_required,Lower Threshold is required
+ph:lower_threshold_type,Lower Threshold must be a number
+ph:lower_threshold_less_than,Lower Threshold must be less than Upper Threshold
+ph:lower_function_required,Lower Function is required
+ph:upper_threshold_required,Upper Threshold is required
+ph:upper_threshold_type,Upper Threshold must be a number
+ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Threshold
+ph:upper_function_required,Upper Function is required

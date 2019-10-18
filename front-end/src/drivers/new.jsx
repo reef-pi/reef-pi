@@ -44,7 +44,7 @@ export default class New extends React.Component {
     }
     payload.config.frequency = parseInt(payload.config.frequency)
     this.props.hook(payload)
-    this.toggle()
+    this.handleToggle()
   }
 
   render () {

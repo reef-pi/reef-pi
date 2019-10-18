@@ -11,7 +11,7 @@ module.exports = {
       .select('.add-driver [name*="type"]', 'pca9685')
       .wait(500)
       .click('.add-driver input[type*="submit"]')
-      .wait(1500)
+      .wait(1000)
 
       .click('input#add_new_driver')
       .wait(500)
