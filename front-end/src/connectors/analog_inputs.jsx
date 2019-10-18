@@ -78,7 +78,7 @@ class analogInputs extends React.Component {
       driver: this.state.driver
     }
     this.props.create(payload)
-    this.add()
+    this.handleAdd()
   }
 
   list () {
