@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const (
+	tFormat = "15:04:06"
+)
+
 // a temporal profile has time bounds (start and end time, and the value at any given time is calculated considering those
 type temporal struct {
 	start    time.Time
@@ -26,10 +30,19 @@ func Temporal(conf json.RawMessage, min, max float64) (temporal, error) {
 	return t, nil
 }
 
+func NewTemporal(start, end string, min, max float64) (temporal, error) {
+	t := temporal{
+		Start: start, End: end,
+	}
+	if err := t.Build(min, max); err != nil {
+		return t, err
+	}
+	return t, nil
+}
+
 func (t *temporal) Build(min, max float64) error {
 	t.max = max
 	t.min = min
-	tFormat := "15:04"
 	start, err := time.Parse(tFormat, t.Start)
 	if err != nil {
 		return fmt.Errorf("Failed to parse start time. Error:%s", err)

@@ -23,9 +23,7 @@ func (d *diurnal) Get(t time.Time) float64 {
 	if d.IsOutside(t) {
 		return 0
 	}
-	totalMinutes := d.TotalMinutes()
-	pastMinutes := d.PastMinutes(t)
-	percent := float64(pastMinutes) * 2 * math.Pi / float64(totalMinutes)
+	percent := float64(d.PastSeconds(t)) * 2 * math.Pi / float64(d.TotalSeconds())
 	k := math.Pow(math.Cos(percent), 3)
 	v := (1 - k) * d.ValueRange()
 	v = v + float64(d.min)

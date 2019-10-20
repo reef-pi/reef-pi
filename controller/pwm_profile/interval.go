@@ -39,13 +39,20 @@ func Interval(conf json.RawMessage, min, max float64) (*interval, error) {
 	if err := i.Build(min, max); err != nil {
 		return nil, err
 	}
+	if err := i.Validate(); err != nil {
+		return nil, err
+	}
+	return &i, nil
+}
+
+func (i *interval) Validate() error {
 	if i.Interval <= 0 {
-		return nil, fmt.Errorf("interval has to be positive")
+		return fmt.Errorf("interval has to be positive")
 	}
 	l := len(i.Values)
 	e := (i.TotalMinutes() / i.Interval) + 1
 	if l != e {
-		return nil, fmt.Errorf("incorrect values. expected: %d provided:%d", e, l)
+		return fmt.Errorf("incorrect values. expected: %d provided:%d", e, l)
 	}
-	return &i, nil
+	return nil
 }

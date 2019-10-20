@@ -16,23 +16,26 @@ type random struct {
 const coeff = 0.1
 
 func Random(conf json.RawMessage, min, max float64) (*random, error) {
-	rand.Seed(154)
-	peakInterval := 360
 	t, err := Temporal(conf, min, max)
 	if err != nil {
 		return nil, err
 	}
+	return NewRandom(t), nil
+}
+
+func NewRandom(t temporal) *random {
+	rand.Seed(154)
+	peakInterval := 360
 	peaks := make([]float64, t.TotalSeconds()/peakInterval)
 	for i, _ := range peaks {
 		peaks[i] = rand.Float64()*t.ValueRange() + t.min
 	}
-	s := random{
+	return &random{
 		temporal:     t,
 		previous:     peaks[0],
 		peakInterval: peakInterval,
 		peaks:        peaks,
 	}
-	return &s, nil
 }
 
 func (s *random) Get(t time.Time) float64 {

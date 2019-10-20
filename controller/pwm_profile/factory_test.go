@@ -7,10 +7,9 @@ import (
 func TestCreateProfile(t *testing.T) {
 	specs := make(map[string][]byte)
 	specs["auto"] = []byte(`{"values":[0,0,0,0,0,0,0,0,0,0,0,0]}`)
-	specs["manual"] = []byte(`{"value":0}`)
-	specs["fixed"] = []byte(`{"value":0}`)
+	specs["fixed"] = []byte(`{"value":0, "start":"07:05:00","end":"16:00:00"}`)
 	specs["loop"] = []byte(`{"values":[0,12]}`)
-	specs["diurnal"] = []byte(`{"start": "07:05", "end":"16:00"}`)
+	specs["diurnal"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	for pType, pConf := range specs {
 		spec := ProfileSpec{
 			Name:   "test",
