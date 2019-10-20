@@ -12,11 +12,15 @@ type interval struct {
 	Values   []float64 `json:"values"`
 }
 
+func (i *interval) Name() string {
+	return _intervalProfileName
+}
+
 func (i *interval) Get(t time.Time) float64 {
-	if i.IsOutside(t) {
+	if i.IsOutside(t.Add(time.Second)) {
 		return 0
 	}
-	past := i.PastMinutes(t)
+	past := i.PastSeconds(t)
 	index := past / i.Interval
 	v1 := i.Values[index]
 	v2 := i.Values[index+1]
@@ -50,7 +54,7 @@ func (i *interval) Validate() error {
 		return fmt.Errorf("interval has to be positive")
 	}
 	l := len(i.Values)
-	e := (i.TotalMinutes() / i.Interval) + 1
+	e := (i.TotalSeconds() / i.Interval) + 1
 	if l != e {
 		return fmt.Errorf("incorrect values. expected: %d provided:%d", e, l)
 	}

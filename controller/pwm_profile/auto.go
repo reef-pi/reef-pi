@@ -11,6 +11,10 @@ type auto struct {
 	min, max float64
 }
 
+func (a *auto) Name() string {
+	return _autoProfileName
+}
+
 func Auto(conf json.RawMessage, min, max float64) (*auto, error) {
 	var a auto
 	if err := json.Unmarshal(conf, &a); err != nil {

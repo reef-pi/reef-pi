@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const coeff = 0.1
+
 type random struct {
 	temporal
 	previous     float64
@@ -13,7 +15,9 @@ type random struct {
 	peakInterval int
 }
 
-const coeff = 0.1
+func (r *random) Name() string {
+	return _randomProfileName
+}
 
 func Random(conf json.RawMessage, min, max float64) (*random, error) {
 	t, err := Temporal(conf, min, max)
@@ -26,7 +30,11 @@ func Random(conf json.RawMessage, min, max float64) (*random, error) {
 func NewRandom(t temporal) *random {
 	rand.Seed(154)
 	peakInterval := 360
-	peaks := make([]float64, t.TotalSeconds()/peakInterval)
+	numPeaks := t.TotalSeconds() / peakInterval
+	if numPeaks == 0 {
+		numPeaks = 1
+	}
+	peaks := make([]float64, numPeaks)
 	for i, _ := range peaks {
 		peaks[i] = rand.Float64()*t.ValueRange() + t.min
 	}

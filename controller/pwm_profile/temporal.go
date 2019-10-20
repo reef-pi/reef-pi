@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	tFormat = "15:04:06"
+	tFormat = "15:04:05"
 )
 
 // a temporal profile has time bounds (start and end time, and the value at any given time is calculated considering those

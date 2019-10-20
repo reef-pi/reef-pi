@@ -10,6 +10,10 @@ type fixed struct {
 	Value float64 `json:"value"`
 }
 
+func (f *fixed) Name() string {
+	return _fixedProfileName
+}
+
 func Fixed(conf json.RawMessage, min, max float64) (*fixed, error) {
 	var m fixed
 	if err := json.Unmarshal(conf, &m); err != nil {

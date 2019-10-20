@@ -10,7 +10,7 @@ func TestInterval(t *testing.T) {
 {
 	"start":"10:00:00",
 	"end": "19:30:00",
-	"interval": 60,
+	"interval": 3600,
 	"values": [0,10,30,40,50,60,80,40,20,10]
 }
 `

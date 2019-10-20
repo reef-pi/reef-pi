@@ -6,8 +6,21 @@ import (
 	"time"
 )
 
+const (
+	_loopProfileName      = "loop"
+	_fixedProfileName     = "fixed"
+	_autoProfileName      = "auto"
+	_diurnalProfileName   = "diurnal"
+	_compositeProfileName = "composite"
+	_lunarProfileName     = "lunar"
+	_intervalProfileName  = "interval"
+	_sineProfileName      = "sine"
+	_randomProfileName    = "random"
+)
+
 type Profile interface {
 	Get(time.Time) float64
+	Name() string
 }
 
 type TemporalProfile interface {
@@ -25,20 +38,24 @@ type ProfileSpec struct {
 
 func (p *ProfileSpec) CreateProfile() (Profile, error) {
 	switch p.Type {
-	case "loop":
+	case _loopProfileName:
 		return Loop(p.Config)
-	case "fixed":
+	case _fixedProfileName:
 		return Fixed(p.Config, p.Min, p.Max)
-	case "auto":
+	case _autoProfileName:
 		return Auto(p.Config, p.Min, p.Max)
-	case "diurnal":
+	case _diurnalProfileName:
 		return Diurnal(p.Config, p.Min, p.Max)
-	case "composite":
-		return Composite(p.Config, time.Now(), p.Min, p.Max)
-	case "lunar":
+	case _compositeProfileName:
+		return Composite(p.Config, time.Now())
+	case _lunarProfileName:
 		return Lunar(p.Config, p.Min, p.Max)
-	case "arbitrary_interval":
+	case _intervalProfileName:
 		return Interval(p.Config, p.Min, p.Max)
+	case _sineProfileName:
+		return Sine(p.Config, p.Min, p.Max)
+	case _randomProfileName:
+		return Random(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}

@@ -13,7 +13,7 @@ func TestComposite(t *testing.T) {
 	]
 }
 `
-	p, err := Composite([]byte(conf), time.Now(), 0, 100)
+	p, err := Composite([]byte(conf), time.Now())
 	if err != nil {
 		t.Error(err)
 	}

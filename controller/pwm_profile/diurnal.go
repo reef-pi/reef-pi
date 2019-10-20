@@ -10,6 +10,10 @@ type diurnal struct {
 	temporal
 }
 
+func (d *diurnal) Name() string {
+	return _diurnalProfileName
+}
+
 func Diurnal(conf json.RawMessage, min, max float64) (*diurnal, error) {
 	t, err := Temporal(conf, min, max)
 	if err != nil {
