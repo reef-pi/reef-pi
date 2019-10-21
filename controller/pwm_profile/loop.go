@@ -13,6 +13,9 @@ type loop struct {
 	i, l   int
 }
 
+func (l *loop) Name() string {
+	return _loopProfileName
+}
 func (l *loop) Get(_ time.Time) float64 {
 	v := l.Values[l.i]
 	l.i++

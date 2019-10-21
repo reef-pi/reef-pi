@@ -22,6 +22,10 @@ type lunar struct {
 	previousDay  string
 }
 
+func (l *lunar) Name() string {
+	return _lunarProfileName
+}
+
 func Lunar(conf json.RawMessage, min, max float64) (*lunar, error) {
 	var l lunar
 	if err := json.Unmarshal(conf, &l); err != nil {

@@ -7,12 +7,12 @@ import (
 
 func TestAuto(t *testing.T) {
 	conf := []byte(`{"values":[0,0,0]}`)
-	if _, err := Auto(conf); err == nil {
+	if _, err := Auto(conf, 0, 100); err == nil {
 		t.Error("should not be created when values are not exactly 12")
 	}
 	conf = []byte(`{"values":[0,0,0,0,0,5,40,79,62,13,8,0]}`)
 
-	a, err := Auto(conf)
+	a, err := Auto(conf, 0, 100)
 	if err != nil {
 		t.Error("should be created when values are not exactly 12")
 	}

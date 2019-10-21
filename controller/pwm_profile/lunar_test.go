@@ -8,8 +8,8 @@ import (
 func TestLunar(t *testing.T) {
 	conf := `
 {
-	"start":"10:00",
-	"end": "19:30",
+	"start":"10:00:00",
+	"end": "19:30:00",
 	"full_moon": "Feb 3 2013"
 }
 `
@@ -17,8 +17,8 @@ func TestLunar(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tFormat := "Jan 2 2006 15:04"
-	t1, err := time.Parse(tFormat, "Feb 10 2013 9:30")
+	format := "Jan 2 2006 15:04"
+	t1, err := time.Parse(format, "Feb 10 2013 9:30")
 	if err != nil {
 		t.Error(err)
 	}
