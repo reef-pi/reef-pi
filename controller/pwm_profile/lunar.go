@@ -53,7 +53,7 @@ func (l *lunar) Get(t time.Time) float64 {
 
 func (l *lunar) buildDailyProfile(t time.Time) error {
 	daysPast := math.Mod(t.Sub(l.fullMoon).Hours()/24, _lunarCycleSpan)
-	v := math.Sin(daysPast / _lunarCycleSpan * math.Pi)
+	v := 1 - math.Sin(daysPast/_lunarCycleSpan*math.Pi)
 	max := l.min + v*l.ValueRange()
 	temp, err := NewTemporal(l.start.Format(tFormat), l.end.Format(tFormat), l.min, max)
 	if err != nil {
