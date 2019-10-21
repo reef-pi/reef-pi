@@ -6,7 +6,11 @@ import (
 	"time"
 )
 
-const coeff = 0.1
+const (
+	coeff        = 0.1
+	seed         = 154
+	peakInterval = 360
+)
 
 type random struct {
 	temporal
@@ -28,8 +32,7 @@ func Random(conf json.RawMessage, min, max float64) (*random, error) {
 }
 
 func NewRandom(t temporal) *random {
-	rand.Seed(154)
-	peakInterval := 360
+	rand.Seed(seed)
 	numPeaks := t.TotalSeconds() / peakInterval
 	if numPeaks == 0 {
 		numPeaks = 1
