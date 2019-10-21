@@ -211,3 +211,11 @@ ph:upper_threshold_required,Upper Threshold is required
 ph:upper_threshold_type,Upper Threshold must be a number
 ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Threshold
 ph:upper_function_required,Upper Function is required
+temperature:control, Control
+temperatur:controlnothing, Nothing
+temperature:controlmacro, Macro
+temperature:controlequipment, Equipment
+temperature:lower_threshold, Heater Threshold
+temperature:lower_function, Heater
+temperature:upper_threshold, Chiller Threshold
+temperature:upper_function, Chiller

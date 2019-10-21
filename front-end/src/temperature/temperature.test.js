@@ -149,6 +149,8 @@ describe('Temperature controller ui', () => {
       name: 'name',
       sensor: 'sensor',
       enable: true,
+      control: false,
+      is_macro: false,
       min: 70,
       max: 85,
       notify: {
@@ -160,5 +162,48 @@ describe('Temperature controller ui', () => {
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
+  })
+
+  it('<TemperatureForm /> for edit with macro', () => {
+    const fn = jest.fn()
+
+    const tc = {
+      id: '4',
+      name: 'name',
+      sensor: 'sensor',
+      control: true,
+      is_macro: true,
+      min: 70,
+      max: 85,
+      notify: {
+        enable: true,
+        min: 70,
+        max: 90
+      }
+    }
+    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
+    expect(wrapper.instance().props.initialValues.control).toBe('macro')
+  })
+
+  it('<TemperatureForm /> for edit with equipment', () => {
+    const fn = jest.fn()
+
+    const tc = {
+      id: '4',
+      name: 'name',
+      sensor: 'sensor',
+      enable: true,
+      control: true,
+      is_macro: false,
+      min: 70,
+      max: 85,
+      notify: {
+        enable: true,
+        min: 70,
+        max: 90
+      }
+    }
+    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
+    expect(wrapper.instance().props.initialValues.control).toBe('equipment')
   })
 })

@@ -15,6 +15,7 @@ const EditTemperature = ({
   touched,
   sensors,
   equipment,
+  macros,
   submitForm,
   isValid,
   dirty,
@@ -68,24 +69,6 @@ const EditTemperature = ({
     return (
       <div className='d-none d-sm-block'>
         {charts}
-        <div className='row'>
-          <div className='col-sm-12 col-md-6'>
-            <label htmlFor='chart_min'>{i18next.t('temperature:chart_minimum')}</label>
-            <Field
-              name='chart_min'
-              className='form-control'
-              readOnly={readOnly}
-            />
-          </div>
-          <div className='col-sm-12 col-md-6'>
-            <label htmlFor='chart_max'>{i18next.t('temperature:chart_maximum')}</label>
-            <Field
-              name='chart_max'
-              className='form-control'
-              readOnly={readOnly}
-            />
-          </div>
-        </div>
       </div>
     )
   }
@@ -100,8 +83,12 @@ const EditTemperature = ({
     })
   }
 
-  const equipmentOptions = () => {
-    return equipment.map(item => {
+  const controlOptions = () => {
+    let opts = []
+
+    if (values.control === 'equipment') { opts = equipment } else if (values.control === 'macro') { opts = macros }
+
+    return opts.map(item => {
       return (
         <option key={item.id} value={item.id}>
           {item.name}
@@ -281,35 +268,33 @@ const EditTemperature = ({
         <div className='row'>
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='heater'>Control Heater</label>
+              <label htmlFor='control'>{i18next.t('temperature:control')}</label>
               <Field
-                name='heater'
+                name='control'
                 component='select'
                 disabled={readOnly}
                 className={classNames('custom-select', {
-                  'is-invalid': ShowError('heater', touched, errors)
+                  'is-invalid': ShowError('control', touched, errors)
                 })}
               >
-                <option key='' value=''>
-                  None
-                </option>
-                {equipmentOptions()}
+                <option value='nothing'>{i18next.t('temperatur:controlnothing')}</option>
+                <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
+                <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
               </Field>
-              <ErrorFor errors={errors} touched={touched} name='heater' />
+              <ErrorFor errors={errors} touched={touched} name='control' />
             </div>
           </div>
 
-          <div
-            className={classNames('col-12 col-sm-6 col-md-3 d-sm-block', {
-              'd-none': values.heater === ''
-            })}
-          >
+          {/* Wrap to next line on small */}
+          <div className='w-100 d-none d-sm-block d-md-none' />
+
+          <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='min'>Heater Threshold</label>
+              <label htmlFor='min'>{i18next.t('temperature:lower_threshold')}</label>
               <div className='input-group'>
                 <Field
                   name='min'
-                  readOnly={readOnly || values.heater === ''}
+                  readOnly={readOnly || values.control === 'nothing'}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('min', touched, errors)
                   })}
@@ -322,37 +307,33 @@ const EditTemperature = ({
             </div>
           </div>
 
-          <div className='col-12 col-sm-6 col-md-3'>
+          <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='cooler'>Control Chiller</label>
+              <label htmlFor='heater'>{i18next.t('temperature:lower_function')}</label>
               <Field
-                name='cooler'
+                name='heater'
                 component='select'
-                disabled={readOnly}
+                disabled={readOnly || values.control === 'nothing'}
                 className={classNames('custom-select', {
-                  'is-invalid': ShowError('cooler', touched, errors)
+                  'is-invalid': ShowError('heater', touched, errors)
                 })}
               >
-                <option key='' value=''>
-                  None
-                </option>
-                {equipmentOptions()}
+                <option key='' value=''>{i18next.t('none')}</option>
+                {controlOptions()}
               </Field>
-              <ErrorFor errors={errors} touched={touched} name='cooler' />
+              <ErrorFor errors={errors} touched={touched} name='heater' />
             </div>
           </div>
+        </div>
 
-          <div
-            className={classNames('col-12 col-sm-6 col-md-3 d-sm-block', {
-              'd-none': values.cooler === ''
-            })}
-          >
+        <div className='row'>
+          <div className='col col-sm-6 col-md-3 offset-md-3'>
             <div className='form-group'>
-              <label htmlFor='max'>Chiller Threshold</label>
+              <label htmlFor='max'>{i18next.t('temperature:upper_threshold')}</label>
               <div className='input-group'>
                 <Field
                   name='max'
-                  readOnly={readOnly || values.cooler === ''}
+                  readOnly={readOnly || values.control === 'nothing'}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('max', touched, errors)
                   })}
@@ -362,6 +343,24 @@ const EditTemperature = ({
                 </div>
                 <ErrorFor errors={errors} touched={touched} name='max' />
               </div>
+            </div>
+          </div>
+
+          <div className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='cooler'>{i18next.t('temperature:upper_function')}</label>
+              <Field
+                name='cooler'
+                component='select'
+                disabled={readOnly || values.control === 'nothing'}
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('cooler', touched, errors)
+                })}
+              >
+                <option key='' value=''>{i18next.t('none')}</option>
+                {controlOptions()}
+              </Field>
+              <ErrorFor errors={errors} touched={touched} name='cooler' />
             </div>
           </div>
         </div>
@@ -391,7 +390,9 @@ EditTemperature.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  equipment: PropTypes.array,
+  macros: PropTypes.array
 }
 
 export default EditTemperature
