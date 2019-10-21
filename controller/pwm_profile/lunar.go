@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	_lunarCycleSpan   = 30
+	_lunarCycleSpan   = 27
 	_lunarDailyFormat = "Jan 2"
 
 	FullMoonFormat = "Jan 2 2006"
@@ -44,23 +44,21 @@ func Lunar(conf json.RawMessage, min, max float64) (*lunar, error) {
 
 func (l *lunar) Get(t time.Time) float64 {
 	d := t.Format(_lunarDailyFormat)
-	if l.dailyProfile == nil || l.previousDay != d {
+	if l.dailyProfile == nil || (l.previousDay != d && l.IsOutside(t)) {
 		l.buildDailyProfile(t)
 		l.previousDay = d
 	}
 	return l.dailyProfile.Get(t)
 }
 
-func (l *lunar) buildDailyProfile(t time.Time) {
-	daysPast := int(t.Sub(l.fullMoon).Hours()/24) % _lunarCycleSpan
-	v := 1 - math.Sin(float64(daysPast)/float64(_lunarCycleSpan)*math.Pi)
+func (l *lunar) buildDailyProfile(t time.Time) error {
+	daysPast := math.Mod(t.Sub(l.fullMoon).Hours()/24, _lunarCycleSpan)
+	v := math.Sin(daysPast / _lunarCycleSpan * math.Pi)
 	max := l.min + v*l.ValueRange()
-	l.dailyProfile = &sine{
-		temporal{
-			min:   l.min,
-			max:   max,
-			start: l.start,
-			end:   l.end,
-		},
+	temp, err := NewTemporal(l.start.Format(tFormat), l.end.Format(tFormat), l.min, max)
+	if err != nil {
+		return err
 	}
+	l.dailyProfile = &sine{temp}
+	return nil
 }

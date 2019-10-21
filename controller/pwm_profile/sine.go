@@ -27,7 +27,6 @@ func (s *sine) Get(t time.Time) float64 {
 	if s.IsOutside(t) {
 		return 0
 	}
-	v := math.Sin(math.Pi * (float64(s.PastSeconds(t)) / float64(s.TotalSeconds())))
-
+	v := math.Sin(math.Pi * s.PastSeconds(t) / s.TotalSeconds())
 	return s.min + (v * (s.max - s.min))
 }
