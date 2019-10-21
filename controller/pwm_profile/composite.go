@@ -73,8 +73,8 @@ func Composite(conf json.RawMessage, t time.Time) (*composite, error) {
 }
 
 func (c *composite) Get(t time.Time) float64 {
-	reminder := math.Mod(t.Sub(c.start).Seconds(), float64(c.total))
-	aT := c.start.Add(time.Duration(reminder) * time.Second)
+	remainder := math.Mod(t.Sub(c.start).Seconds(), float64(c.total))
+	aT := c.start.Add(time.Duration(remainder) * time.Second)
 	for _, p := range c.profiles {
 		if p.IsOutside(aT) {
 			continue
