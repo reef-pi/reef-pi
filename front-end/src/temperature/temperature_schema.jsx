@@ -69,9 +69,7 @@ const TemperatureSchema = Yup.object().shape({
           if (this.parent.heater === undefined || this.parent.heater === '') { return true }
           return val > this.parent.min
         })
-    }),
-  minChart: Yup.number(),
-  maxChart: Yup.number()
+    })
 })
 
 export default TemperatureSchema

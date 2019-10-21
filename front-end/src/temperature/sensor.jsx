@@ -29,7 +29,8 @@ export default class Sensor extends React.Component {
     const payload = {
       name: values.name,
       enable: values.enable,
-      control: (values.heater !== '' || values.cooler !== ''),
+      control: (values.control === 'macro' || values.control === 'equipment'),
+      is_macro: (values.control === 'macro'),
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),
@@ -41,9 +42,7 @@ export default class Sensor extends React.Component {
         enable: values.alerts,
         min: parseFloat(values.minAlert),
         max: parseFloat(values.maxAlert)
-      },
-      chart_min: parseFloat(values.chart_min),
-      chart_max: parseFloat(values.chart_max)
+      }
     }
 
     this.props.save(this.props.data.id, payload)
@@ -81,6 +80,7 @@ export default class Sensor extends React.Component {
           showChart
           sensors={this.props.sensors}
           equipment={this.props.equipment}
+          macros={this.props.macros}
           onSubmit={this.handleSave}
         />
       )

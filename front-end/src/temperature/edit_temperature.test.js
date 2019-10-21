@@ -13,6 +13,7 @@ describe('<EditTemperature />', () => {
   let values = {}
   let sensors = [{ id: 'sensor' }]
   let equipment = [{ id: '1', name: 'EQ' }]
+  let macros = [{ id: '1', name: 'Macro' }]
   let fn = jest.fn()
 
   beforeEach(() => {
@@ -32,8 +33,7 @@ describe('<EditTemperature />', () => {
       heater: '',
       cooler: '',
       alerts: false,
-      minChart: 60,
-      maxChart: 90
+      control: 'macro'
     }
   })
 
@@ -47,6 +47,7 @@ describe('<EditTemperature />', () => {
         values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -64,6 +65,7 @@ describe('<EditTemperature />', () => {
         values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -84,6 +86,7 @@ describe('<EditTemperature />', () => {
         values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -101,6 +104,7 @@ describe('<EditTemperature />', () => {
         values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -121,6 +125,7 @@ describe('<EditTemperature />', () => {
         values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
@@ -132,4 +137,52 @@ describe('<EditTemperature />', () => {
     wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
+
+  it('<EditEquipment /> should disable inputs when controlling nothing', () => {
+
+    values.control = 'nothing'
+
+    const wrapper = shallow(
+      <EditTemperature
+        values={values}
+        sensors={sensors}
+        equipment={equipment}
+        macros={macros}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn}
+        showChart
+        dirty
+        isValid={false}
+      />
+    )
+
+    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    expect(upperFunction.prop('disabled')).toBe(true)
+  })
+
+
+  it('<EditEquipment /> should enable inputs when controlling equipment', () => {
+
+    values.control = 'equipment'
+
+    const wrapper = shallow(
+      <EditTemperature
+        values={values}
+        sensors={sensors}
+        equipment={equipment}
+        macros={macros}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn}
+        showChart
+        dirty
+        isValid={false}
+      />
+    )
+
+    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    expect(upperFunction.prop('disabled')).toBe(false)
+  })
+
 })
