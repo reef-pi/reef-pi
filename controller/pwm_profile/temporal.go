@@ -69,25 +69,30 @@ func (t *temporal) Build(min, max float64) error {
 }
 
 func remap(t1, t2 time.Time) time.Time {
-	return time.Date(t1.Year(), t1.Month(), t1.Day(), t2.Hour(), t2.Minute(), t2.Second(), 0, t1.Location())
+
+	t := time.Date(t1.Year(), t1.Month(), t1.Day(), t2.Hour(), t2.Minute(), t2.Second(), 0, t1.Location())
+	if t1.Sub(t) < 0 {
+		t = t.Add(time.Hour * -24)
+	}
+	return t
 }
 
 func (t *temporal) ValueRange() float64 {
 	return t.max - t.min
 }
 
-func (t *temporal) TotalMinutes() int {
-	return int(t.end.Sub(t.start) / time.Minute)
+func (t *temporal) TotalMinutes() float64 {
+	return t.end.Sub(t.start).Minutes()
 }
-func (t *temporal) TotalSeconds() int {
-	return int(t.end.Sub(t.start) / time.Second)
+func (t *temporal) TotalSeconds() float64 {
+	return t.end.Sub(t.start).Seconds()
 }
 
-func (t *temporal) PastMinutes(t1 time.Time) int {
-	return int(t1.Sub(remap(t1, t.start)) / time.Minute)
+func (t *temporal) PastMinutes(t1 time.Time) float64 {
+	return t1.Sub(remap(t1, t.start)).Minutes()
 }
-func (t *temporal) PastSeconds(t1 time.Time) int {
-	return int(t1.Sub(remap(t1, t.start)) / time.Second)
+func (t *temporal) PastSeconds(t1 time.Time) float64 {
+	return t1.Sub(remap(t1, t.start)).Seconds()
 }
 
 func (t *temporal) MapStartEnd(t1 time.Time) (time.Time, time.Time) {
