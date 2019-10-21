@@ -7,9 +7,8 @@ import (
 )
 
 const (
-	coeff        = 0.1
 	seed         = 154
-	peakInterval = 360
+	peakInterval = 160
 )
 
 type random struct {
@@ -54,6 +53,9 @@ func (s *random) Get(t time.Time) float64 {
 		return 0
 	}
 	i := int(s.PastSeconds(t) / s.peakInterval)
+	if i >= len(s.peaks) {
+		i = len(s.peaks) - 1
+	}
 	prevPeak := s.peaks[i]
 	nextPeak := s.peaks[0]
 	if (i + 1) < len(s.peaks) {
