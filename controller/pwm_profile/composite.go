@@ -26,7 +26,7 @@ func (c *composite) Name() string {
 	return _compositeProfileName
 }
 
-func Composite(conf json.RawMessage, t time.Time) (*composite, error) {
+func Composite(conf json.RawMessage, t time.Time, min, max float64) (*composite, error) {
 	var comp composite
 	if err := json.Unmarshal(conf, &comp); err != nil {
 		return nil, err
@@ -68,6 +68,9 @@ func Composite(conf json.RawMessage, t time.Time) (*composite, error) {
 			return nil, fmt.Errorf("unsupported sub-profile:%s", spec.Type)
 		}
 		start = end
+	}
+	for _, p := range comp.profiles {
+		p.AdjustBounds(min, max)
 	}
 	return &comp, nil
 }

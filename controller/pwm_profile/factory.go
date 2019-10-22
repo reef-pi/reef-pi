@@ -26,6 +26,7 @@ type Profile interface {
 type TemporalProfile interface {
 	Profile
 	IsOutside(time.Time) bool
+	AdjustBounds(min, max float64) (updated bool)
 }
 
 type ProfileSpec struct {
@@ -47,7 +48,7 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 	case _diurnalProfileName:
 		return Diurnal(p.Config, p.Min, p.Max)
 	case _compositeProfileName:
-		return Composite(p.Config, time.Now())
+		return Composite(p.Config, time.Now(), p.Min, p.Max)
 	case _lunarProfileName:
 		return Lunar(p.Config, p.Min, p.Max)
 	case _intervalProfileName:
