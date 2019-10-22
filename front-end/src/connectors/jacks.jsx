@@ -10,6 +10,7 @@ class jacks extends React.Component {
     this.state = {
       JackName: '',
       JackPins: '',
+      JackReverse: false,
       JackDriver: 'rpi',
       add: false
     }
@@ -20,6 +21,11 @@ class jacks extends React.Component {
     this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
+  }
+
+  handleReverseChange () {
+    this.setState({ JackReverse: !this.state.JackReverse })
   }
 
   handleNameChange (e) {
@@ -55,7 +61,8 @@ class jacks extends React.Component {
     this.setState({
       add: !this.state.add,
       JackName: '',
-      JackPins: ''
+      JackPins: '',
+      JackReverse: false
     })
   }
 
@@ -72,7 +79,8 @@ class jacks extends React.Component {
     const payload = {
       name: this.state.JackName,
       pins: pins,
-      driver: this.state.JackDriver
+      driver: this.state.JackDriver,
+      reverse: this.state.JackReverse
     }
     this.props.create(payload)
     this.handleAdd()
@@ -86,6 +94,7 @@ class jacks extends React.Component {
           name={j.name}
           key={j.id}
           pins={j.pins}
+          reverse={j.reverse}
           driver={j.driver}
           drivers={this.props.drivers}
           jack_id={j.id}
@@ -135,6 +144,18 @@ class jacks extends React.Component {
                     value={this.state.JackName}
                     onChange={this.handleNameChange}
                     className='form-control'
+                  />
+                </div>
+              </div>
+              <div className='col-12 col-md-2'>
+                <div className='form-group'>
+                  <span className='input-group-addon'>Reverse</span>
+                  <input
+                    type='checkbox'
+                    id='jackReverse'
+                    className='form-control'
+                    onChange={this.handleReverseChange}
+                    checked={this.state.JackReverse}
                   />
                 </div>
               </div>
