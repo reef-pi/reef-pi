@@ -115,3 +115,15 @@ func (t *temporal) IsOutside(t1 time.Time) bool {
 	}
 	return false
 }
+
+func (t *temporal) AdjustBounds(min, max float64) (updated bool) {
+	if t.min < min {
+		t.min = min
+		updated = true
+	}
+	if t.max > max {
+		t.max = max
+		updated = true
+	}
+	return
+}

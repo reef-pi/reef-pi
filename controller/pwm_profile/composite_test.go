@@ -18,7 +18,7 @@ func TestComposite(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	p, err := Composite([]byte(conf), start)
+	p, err := Composite([]byte(conf), start, 0, 100)
 	if err != nil {
 		t.Error(err)
 	}
