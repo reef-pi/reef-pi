@@ -10,6 +10,7 @@ export default class Jack extends React.Component {
       name: props.name,
       pins: props.pins.join(','),
       driver: props.driver,
+      reverse: props.reverse,
       lbl: 'edit',
       driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
     }
@@ -19,10 +20,15 @@ export default class Jack extends React.Component {
     this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
+  }
+
+  handleReverseChange () {
+    this.setState({ reverse: !this.state.reverse })
   }
 
   handlePinChange (e) {
@@ -56,13 +62,13 @@ export default class Jack extends React.Component {
     const payload = {
       name: this.state.name,
       pins: pins,
-      driver: this.state.driver
+      driver: this.state.driver,
+      reverse: this.state.reverse
     }
     this.props.update(payload)
     this.setState({
       edit: false,
       lbl: 'edit',
-      name: payload.name,
       pins: payload.pins.join(',')
     })
   }
@@ -79,6 +85,18 @@ export default class Jack extends React.Component {
               onChange={this.handleNameChange}
               className='jack-name form-control'
               value={this.state.name}
+            />
+          </div>
+        </div>
+        <div className='col-12 col-md-3'>
+          <div className='form-group'>
+            <span className='input-group-addon'>Reverse</span>
+            <input
+              className='form-control jack-reverse'
+              type='checkbox'
+              onChange={this.handleReverseChange}
+              id={'jack-' + this.props.jack_id + '-reverse'}
+              checked={this.state.reverse}
             />
           </div>
         </div>
@@ -130,6 +148,7 @@ export default class Jack extends React.Component {
           <label className='small'>
             {this.state.driver_name}
             ({this.state.pins})
+            ({this.state.reverse ? 'active high' : 'active low'})
           </label>
         </div>
       </div>
@@ -165,6 +184,7 @@ export default class Jack extends React.Component {
 
 Jack.propTypes = {
   name: PropTypes.string.isRequired,
+  reverse: PropTypes.bool.isRequired,
   pins: PropTypes.array.isRequired,
   jack_id: PropTypes.string.isRequired,
   remove: PropTypes.func,
