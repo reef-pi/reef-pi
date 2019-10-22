@@ -66,3 +66,19 @@ export const fetchTCUsage = (id) => {
     success: tcUsageLoaded(id)
   }))
 }
+
+export const readTC = (id) => {
+  return (reduxGet({
+    url: '/api/tcs/' + id + '/read',
+    success: tcReadComplete(id)
+  }))
+}
+
+export const tcReadComplete = (id) => {
+  return (s) => {
+    return ({
+      type: 'TC_READING_COMPLETE',
+      payload: { reading: s, id: id }
+    })
+  }
+}

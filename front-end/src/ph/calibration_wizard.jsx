@@ -13,6 +13,8 @@ export default class CalibrationWizard extends React.Component {
       secondCalibrated: false
     }
     this.handleCalibrate = this.handleCalibrate.bind(this)
+    this.handleCancel = this.handleCancel.bind(this)
+    this.handleConfirm = this.handleConfirm.bind(this)
   }
 
   confirm () {
