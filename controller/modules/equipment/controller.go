@@ -81,6 +81,7 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) On(id string, b bool) error {
+	log.Println("Euipment:", id, "On:", b)
 	e, err := c.Get(id)
 	if err != nil {
 		return err
