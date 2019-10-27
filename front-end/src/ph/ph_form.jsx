@@ -24,7 +24,8 @@ const PhForm = withFormik({
       lowerThreshold: data.min || 0,
       lowerFunction: data.downer_eq || '',
       upperThreshold: data.max || 0,
-      upperFunction: data.upper_eq || ''
+      upperFunction: data.upper_eq || '',
+      hysteresis: data.hysteresis || 0
     }
 
     if (data.control === true) {

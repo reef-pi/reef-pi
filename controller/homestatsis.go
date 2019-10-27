@@ -116,7 +116,7 @@ func (h *Homeostasis) Sync(o *Observation) error {
 		o.Upper += int(h.config.Period)
 		h.pastTarget = upperTarget
 	case o.Value > (h.config.Max - h.config.Hysteresis):
-		if h.pastTarget == DownerTarget {
+		if h.pastTarget == downerTarget {
 			o.Downer += int(h.config.Period)
 		}
 	case o.Value < (h.config.Min + h.config.Hysteresis):
