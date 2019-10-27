@@ -37,7 +37,6 @@ describe('PhValidation', () => {
 
   it('should require threshold if controlling macros', () => {
     probe.control = 'macro'
-
     expect.assertions(1)
     return PhSchema.isValid(probe).then(
       valid => expect(valid).toBe(false)
@@ -50,6 +49,7 @@ describe('PhValidation', () => {
     probe.lowerFunction = '2'
     probe.upperThreshold = 9
     probe.upperFunction = '5'
+    probe.hysteresis = 0.1
 
     expect.assertions(1)
     return PhSchema.isValid(probe).then(

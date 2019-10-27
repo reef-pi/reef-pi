@@ -66,6 +66,17 @@ const PhSchema = Yup.object().shape({
           })
       } else { return schema }
     }),
+  hysteresis: Yup.number()
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .required(i18next.t('ph:hysteresis_required'))
+          .typeError(i18next.t('ph:hysteresis_type'))
+          .test('lessThan', i18next.t('ph:hysteresis_less_than'), function (hysteresis) {
+            return hysteresis < (this.parent.upperThreshold - this.parent.lowerThreshold)
+          })
+      } else { return schema }
+    }),
   upperFunction: Yup.string()
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {

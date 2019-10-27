@@ -25,6 +25,7 @@ type TC struct {
 	Name              string            `json:"name"`
 	Max               float64           `json:"max"`
 	Min               float64           `json:"min"`
+	Hysteresis        float64           `json:"hysteresis"`
 	Heater            string            `json:"heater"`
 	Cooler            string            `json:"cooler"`
 	Period            time.Duration     `json:"period"`
@@ -42,13 +43,14 @@ type TC struct {
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
 	hConf := controller.HomeoStasisConfig{
-		Name:    t.Name,
-		Upper:   t.Heater,
-		Downer:  t.Cooler,
-		Min:     t.Min,
-		Max:     t.Max,
-		Period:  int(t.Period),
-		IsMacro: t.IsMacro,
+		Name:       t.Name,
+		Upper:      t.Heater,
+		Downer:     t.Cooler,
+		Min:        t.Min,
+		Max:        t.Max,
+		Period:     int(t.Period),
+		Hysteresis: t.Hysteresis,
+		IsMacro:    t.IsMacro,
 	}
 	t.h = controller.NewHomeostasis(c, hConf)
 }

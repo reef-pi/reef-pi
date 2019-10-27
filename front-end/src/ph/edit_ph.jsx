@@ -291,6 +291,22 @@ const EditPh = ({
         </div>
       </div>
 
+      <div className='row'>
+        <div className='col col-sm-6 col-md-3 offset-md-3'>
+          <div className='form-group'>
+            <label htmlFor='hysteresis'>{i18next.t('ph:hysteresis')}</label>
+            <Field
+              name='hysteresis'
+              readOnly={readOnly || values.control === 'nothing'}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('hysteresis', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='hysteresis' />
+          </div>
+        </div>
+      </div>
+
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
           <input
