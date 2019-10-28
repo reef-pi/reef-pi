@@ -1,8 +1,8 @@
 module.exports = {
   Configure: function (n) {
     n.click('a#tab-temperature')
-      .wait('input#add_tc')
-      .click('input#add_tc')
+      .wait('input#add_probe')
+      .click('input#add_probe')
       .wait('.add-temperature input[name="name"]')
       .type('.add-temperature input[name="name"]', 'Biocube29')
 

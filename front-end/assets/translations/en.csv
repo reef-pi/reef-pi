@@ -219,3 +219,8 @@ temperature:lower_threshold, Heater Threshold
 temperature:lower_function, Heater
 temperature:upper_threshold, Chiller Threshold
 temperature:upper_function, Chiller
+temperature:calibrate, Calibrate
+temperature:calibration:set_temperature, Set Temperature
+temperature:calibration:apply, Apply
+temperature:current_reading, Current Reading
+temperature:warn_delete: This action will delete

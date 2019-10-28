@@ -7,6 +7,7 @@ export const rootReducer = (state, action) => {
   const doserUsage = state.doser_usage
   const macroUsage = state.macro_usage
   const tcUsage = state.tc_usage
+  const tcReading = []
   const pHreadings = state.ph_readings
   const phReading = []
 
@@ -59,6 +60,9 @@ export const rootReducer = (state, action) => {
     case 'TC_USAGE_LOADED':
       tcUsage[action.payload.id] = action.payload.usage
       return { ...state, tc_usage: tcUsage }
+    case 'TC_READING_COMPLETE':
+      tcReading[action.payload.id] = action.payload.reading
+      return { ...state, tc_reading: { ...tcReading } }
     case 'LIGHTS_LOADED':
       return { ...state, lights: action.payload }
     case 'DASHBOARD_LOADED':

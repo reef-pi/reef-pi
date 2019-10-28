@@ -15,6 +15,7 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/tcs", t.create).Methods("PUT")
 	r.HandleFunc("/api/tcs/{id}", t.get).Methods("GET")
 	r.HandleFunc("/api/tcs/{id}/current_reading", t.currentReading).Methods("GET")
+	r.HandleFunc("/api/tcs/{id}/read", t.read).Methods("GET")
 	r.HandleFunc("/api/tcs/{id}", t.update).Methods("POST")
 	r.HandleFunc("/api/tcs/{id}", t.delete).Methods("DELETE")
 	r.HandleFunc("/api/tcs/{id}/usage", t.getUsage).Methods("GET")
@@ -32,12 +33,24 @@ func (t *Controller) currentReading(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
+func (t *Controller) read(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) (interface{}, error) {
+		tc, err := t.Get(id)
+		if err != nil {
+			return nil, err
+		}
+		return t.Read(*tc)
+	}
+	utils.JSONGetResponse(fn, w, r)
+}
+
 func (t *Controller) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return t.Get(id)
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
+
 func (c Controller) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
