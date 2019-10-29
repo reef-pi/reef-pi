@@ -50,7 +50,11 @@ func NewObservation(v float64) Observation {
 }
 
 func (o1 Observation) Before(o2 telemetry.Metric) bool {
-	return o1.Time.Before(o2.(Observation).Time)
+	o, ok := o2.(Observation)
+	if !ok {
+		return false
+	}
+	return o1.Time.Before(o.Time)
 }
 
 type HomeoStasisConfig struct {
