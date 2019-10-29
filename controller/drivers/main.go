@@ -156,7 +156,7 @@ func (d *Drivers) Delete(id string) error {
 
 func (d *Drivers) List() ([]Driver, error) {
 	ds := []Driver{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var d1 Driver
 		if err := json.Unmarshal(v, &d1); err != nil {
 			return err

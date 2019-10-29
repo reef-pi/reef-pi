@@ -28,7 +28,7 @@ const (
 
 type Store interface {
 	Get(string, string, interface{}) error
-	List(string, func([]byte) error) error
+	List(string, func(string, []byte) error) error
 	Create(string, func(string) interface{}) error
 	CreateBucket(string) error
 	Close() error

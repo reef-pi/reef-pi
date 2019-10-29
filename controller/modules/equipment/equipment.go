@@ -25,7 +25,7 @@ func (c *Controller) Get(id string) (Equipment, error) {
 
 func (c Controller) List() ([]Equipment, error) {
 	es := []Equipment{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var eq Equipment
 		if err := json.Unmarshal(v, &eq); err != nil {
 			return err

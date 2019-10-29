@@ -39,7 +39,7 @@ func TestStore(t *testing.T) {
 		t.Fatal("Fetched data is inconsitent with stored data. Expected: 'fake', Found: ", nData.Name)
 	}
 	var ls []testData
-	lsFn := func(bs []byte) error {
+	lsFn := func(_ string, bs []byte) error {
 		var d testData
 		if err := json.Unmarshal(bs, &d); err != nil {
 			return err

@@ -115,7 +115,7 @@ func (c *Inlets) Update(id string, i Inlet) error {
 
 func (c *Inlets) List() ([]Inlet, error) {
 	inlets := []Inlet{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var i Inlet
 		if err := json.Unmarshal(v, &i); err != nil {
 			return err

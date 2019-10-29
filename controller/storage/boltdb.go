@@ -52,7 +52,7 @@ func (s *store) CreateBucket(bucket string) error {
 	})
 }
 
-func (s *store) Get(bucket, id string, i interface{}) error {
+func (s *store) RawGet(bucket, id string) ([]byte, error) {
 	var data []byte
 	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
@@ -62,16 +62,21 @@ func (s *store) Get(bucket, id string, i interface{}) error {
 		data = b.Get([]byte(id))
 		return nil
 	})
+	return data, err
+}
+
+func (s *store) Get(bucket, id string, i interface{}) error {
+	data, err := s.RawGet(bucket, id)
 	if err != nil {
 		return err
 	}
-	if string(data) == "" {
+	if data == nil || len(data) == 0 {
 		return fmt.Errorf("Item '%s' does not exist in bucket '%s'", id, bucket)
 	}
 	return json.Unmarshal(data, i)
 }
 
-func (s *store) List(bucket string, extractor func([]byte) error) error {
+func (s *store) List(bucket string, extractor func(string, []byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		if b == nil {
@@ -79,7 +84,7 @@ func (s *store) List(bucket string, extractor func([]byte) error) error {
 		}
 		c := b.Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
-			if err := extractor(v); err != nil {
+			if err := extractor(string(k), v); err != nil {
 				return err
 			}
 		}
@@ -104,18 +109,21 @@ func (s *store) Create(bucket string, updateID func(string) interface{}) error {
 	})
 }
 
-func (s *store) Update(bucket, id string, i interface{}) error {
+func (s *store) RawUpdate(bucket, id string, buf []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		if b == nil {
 			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
 		}
-		data, err := json.Marshal(i)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(id), data)
+		return b.Put([]byte(id), buf)
 	})
+}
+func (s *store) Update(bucket, id string, i interface{}) error {
+	data, err := json.Marshal(i)
+	if err != nil {
+		return err
+	}
+	return s.RawUpdate(bucket, id, data)
 }
 
 func (s *store) Delete(bucket, id string) error {

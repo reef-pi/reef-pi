@@ -42,7 +42,7 @@ func (c *Controller) Get(id string) (ATO, error) {
 }
 func (c Controller) List() ([]ATO, error) {
 	atos := []ATO{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var a ATO
 		if err := json.Unmarshal(v, &a); err != nil {
 			return err

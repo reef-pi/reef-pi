@@ -19,7 +19,7 @@ func (s *Subsystem) Get(id string) (Macro, error) {
 }
 func (s *Subsystem) List() ([]Macro, error) {
 	ms := []Macro{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var m Macro
 		if err := json.Unmarshal(v, &m); err != nil {
 			return err

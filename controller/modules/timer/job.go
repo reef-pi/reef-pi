@@ -74,7 +74,7 @@ func (c *Controller) Get(id string) (Job, error) {
 
 func (c *Controller) List() ([]Job, error) {
 	jobs := []Job{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var job Job
 		if err := json.Unmarshal(v, &job); err != nil {
 			return err

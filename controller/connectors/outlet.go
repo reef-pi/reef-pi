@@ -100,7 +100,7 @@ func (c *Outlets) Update(id string, o Outlet) error {
 
 func (c *Outlets) List() ([]Outlet, error) {
 	outlets := []Outlet{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var o Outlet
 		if err := json.Unmarshal(v, &o); err != nil {
 			return err

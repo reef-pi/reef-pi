@@ -30,7 +30,7 @@ func (c *Controller) Get(id string) (Light, error) {
 
 func (c Controller) List() ([]Light, error) {
 	ls := []Light{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var l Light
 		if err := json.Unmarshal(v, &l); err != nil {
 			return err
