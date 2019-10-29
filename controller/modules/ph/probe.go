@@ -67,7 +67,7 @@ func (c *Controller) Get(id string) (Probe, error) {
 
 func (c Controller) List() ([]Probe, error) {
 	probes := []Probe{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var p Probe
 		if err := json.Unmarshal(v, &p); err != nil {
 			return err

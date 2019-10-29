@@ -83,7 +83,7 @@ func (is *instances) Get(id string) (Instance, error) {
 
 func (is *instances) List() ([]Instance, error) {
 	ii := []Instance{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var i Instance
 		if err := json.Unmarshal(v, &i); err != nil {
 			return err

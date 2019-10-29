@@ -53,7 +53,7 @@ func (c *Controller) Process(name string) error {
 
 func (c *Controller) List() ([]ImageItem, error) {
 	items := []ImageItem{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var i ImageItem
 		if err := json.Unmarshal(v, &i); err != nil {
 			return err

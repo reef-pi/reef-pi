@@ -43,7 +43,7 @@ func (r *ReefPi) clearErrors(w http.ResponseWriter, req *http.Request) {
 
 func (r *ReefPi) ListErrors() ([]Error, error) {
 	errors := []Error{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var a Error
 		if err := json.Unmarshal(v, &a); err != nil {
 			return err

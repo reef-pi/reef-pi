@@ -76,7 +76,7 @@ func (c *Jacks) Get(id string) (Jack, error) {
 
 func (c *Jacks) List() ([]Jack, error) {
 	jacks := []Jack{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var j Jack
 		if err := json.Unmarshal(v, &j); err != nil {
 			return err

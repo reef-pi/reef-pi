@@ -67,7 +67,7 @@ func (c *Controller) Get(id string) (*TC, error) {
 
 func (c Controller) List() ([]TC, error) {
 	tcs := []TC{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var tc TC
 		if err := json.Unmarshal(v, &tc); err != nil {
 			return err
