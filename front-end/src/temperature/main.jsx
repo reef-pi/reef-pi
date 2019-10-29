@@ -53,6 +53,7 @@ class main extends React.Component {
       cooler: values.cooler,
       min: parseFloat(values.min),
       max: parseFloat(values.max),
+      hysteresis: parseFloat(values.hysteresis),
       sensor: values.sensor,
       period: parseInt(values.period),
       fahrenheit: values.fahrenheit,

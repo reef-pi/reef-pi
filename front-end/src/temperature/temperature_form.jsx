@@ -26,6 +26,7 @@ const TemperatureForm = withFormik({
       maxAlert: (tc.notify && tc.notify.max) || '81',
       heater: tc.heater || '',
       min: tc.min || '',
+      hysteresis: tc.hysteresis || 0,
       cooler: tc.cooler || '',
       max: tc.max || '',
       control: 'nothing'
