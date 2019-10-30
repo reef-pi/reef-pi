@@ -40,6 +40,7 @@ func NewDBCmd(args []string) (*dbCmd, error) {
 		return nil, fmt.Errorf("Failed to open database. Check if reef-pi is already running. %w", err)
 	}
 	cmd.store = store
+	cmd.bucket = cmd.args[1]
 	return cmd, nil
 }
 
@@ -77,7 +78,7 @@ func (cmd *dbCmd) Output(payload []byte) error {
 
 func (cmd *dbCmd) Show() error {
 	if len(cmd.args) < 3 {
-		fmt.Errorf("must provide id of the item to show")
+		return fmt.Errorf("must provide id of the item to show")
 	}
 	id := cmd.args[2]
 	d, err := cmd.store.RawGet(cmd.bucket, id)
@@ -96,7 +97,7 @@ func (cmd *dbCmd) List() error {
 	if err := cmd.store.List(cmd.bucket, fn); err != nil {
 		return fmt.Errorf("failed to list items from storage. %w", err)
 	}
-	data, err := json.MarshalIndent(res, "", " ")
+	data, err := json.MarshalIndent(res, "", "  ")
 	if err != nil {
 		return err
 	}
