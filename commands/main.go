@@ -68,7 +68,16 @@ func main() {
 		cmd.Parse(args)
 		mgr()
 	case "db":
-		db(args)
+		cmd, err := NewDBCmd(args)
+		if err != nil {
+			fmt.Println("Failed to parse command line flags. Error:", err)
+			os.Exit(1)
+		}
+		if err := cmd.Execute(); err != nil {
+			fmt.Println("Failed due to error:", err)
+			os.Exit(1)
+		}
+		defer cmd.Close()
 	case "reset-password":
 		cmd := flag.NewFlagSet("reset-password", flag.ExitOnError)
 		user := cmd.String("user", "", "New reef-pi web ui username")

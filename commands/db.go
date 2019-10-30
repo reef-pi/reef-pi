@@ -11,150 +11,137 @@ import (
 	"os"
 )
 
-func db(args []string) {
-	cmd := flag.NewFlagSet("db", flag.ExitOnError)
-	input := cmd.String("input", "", "Input json file")
-	output := cmd.String("output", "", "Output json file")
-	sPath := cmd.String("store", "/var/lib/reef-pi/reef-pi.db", "Database storage file")
-	if err := cmd.Parse(args); err != nil {
-		fmt.Println("Failed to parse command line flags. Error:", err)
-		os.Exit(1)
-	}
-	if len(cmd.Args()) < 2 {
-		fmt.Println("Incorrect number of arguments at least action and module needs to be specified")
-		os.Exit(1)
-	}
-	store, err := storage.NewStore(*sPath)
-	if err != nil {
-		fmt.Println("Failed to open database. Check if reef-pi is already running. Error:", err)
-		os.Exit(1)
-	}
-	defer store.Close()
-	action := cmd.Args()[0]
-	bucket := cmd.Args()[1]
+type dbCmd struct {
+	input, output, sPath string
+	store                storage.Store
+	bucket               string
+	args                 []string
+}
 
+func (d *dbCmd) FlagSet() *flag.FlagSet {
+	cmd := flag.NewFlagSet("db", flag.ExitOnError)
+	cmd.StringVar(&d.input, "input", "", "Input json file")
+	cmd.StringVar(&d.output, "output", "", "Output json file")
+	cmd.StringVar(&d.sPath, "store", "/var/lib/reef-pi/reef-pi.db", "Database storage file")
+	return cmd
+}
+func NewDBCmd(args []string) (*dbCmd, error) {
+	cmd := &dbCmd{}
+	fs := cmd.FlagSet()
+	if err := fs.Parse(args); err != nil {
+		return nil, err
+	}
+	cmd.args = fs.Args()
+	if len(cmd.args) < 2 {
+		return nil, fmt.Errorf("incorrect number of arguments at least action and module needs to be specified")
+	}
+	store, err := storage.NewStore(cmd.sPath)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open database. Check if reef-pi is already running. %w", err)
+	}
+	cmd.store = store
+	cmd.bucket = cmd.args[1]
+	return cmd, nil
+}
+
+func (d *dbCmd) Close() error {
+	return d.store.Close()
+}
+
+func (cmd *dbCmd) Execute() error {
+	action := cmd.args[0]
 	switch action {
 	case "show":
-		if len(cmd.Args()) < 3 {
-			fmt.Println("ERROR: Must provide id of the item to show")
-			os.Exit(1)
-		}
-		id := cmd.Args()[2]
-		d, err := store.RawGet(bucket, id)
-		if err != nil {
-			fmt.Println("ERROR: Failed to get item", id, "from database. Error:", err)
-			os.Exit(1)
-		}
-		switch *output {
-		case "":
-			fmt.Println(string(d))
-		default:
-			if err := ioutil.WriteFile(*output, d, 0644); err != nil {
-				fmt.Println("Failed to write output file. Error:", err)
-				os.Exit(1)
-			}
-		}
+		return cmd.Show()
 	case "list":
-		res := make(map[string]json.RawMessage)
-		fn := func(id string, bs []byte) error {
-			res[id] = bs
-			return nil
-		}
-		if err := store.List(bucket, fn); err != nil {
-			fmt.Println("ERROR: Failed to list items from storage. Errod:", err)
-			os.Exit(1)
-		}
-		switch *output {
-		case "":
-			enc := json.NewEncoder(os.Stdout)
-			enc.SetIndent(" ", " ")
-			if err := enc.Encode(res); err != nil {
-				fmt.Println("ERROR: Failed to encode in json. Error:", err)
-				os.Exit(-1)
-			}
-		default:
-			fo, err := os.Create(*output)
-			if err != nil {
-				fmt.Println("ERROR: Failed to create output file. Error:", err)
-				os.Exit(-1)
-			}
-			defer fo.Close()
-			enc := json.NewEncoder(fo)
-			enc.SetIndent(" ", " ")
-			if err := enc.Encode(res); err != nil {
-				fmt.Println("ERROR: Failed to encode in json. Error:", err)
-				os.Exit(-1)
-			}
-		}
+		return cmd.List()
 	case "create":
-		switch *input {
-		case "":
-			data, err := ioutil.ReadFile(*input)
-			if err != nil {
-				fmt.Println("Failed to read input file. Error:", err)
-				os.Exit(1)
-			}
-			fn := func(_ string) interface{} {
-				return data
-			}
-			if err := store.Create(bucket, fn); err != nil {
-				fmt.Println("ERROR: Failed to create item. Error:", err)
-				os.Exit(-1)
-			}
-		default:
-			buf := new(bytes.Buffer)
-			if _, err := io.Copy(buf, os.Stdin); err != nil {
-				fmt.Println("Failed to read standard input. Error:", err)
-				os.Exit(1)
-			}
-			fn := func(_ string) interface{} {
-				return buf.Bytes()
-			}
-			if err := store.Create(bucket, fn); err != nil {
-				fmt.Println("ERROR: Failed to create item. Error:", err)
-				os.Exit(-1)
-			}
-		}
+		return cmd.Create()
 	case "update":
-		if len(cmd.Args()) < 3 {
-			fmt.Println("ERROR: Must provide id of the item to update")
-			os.Exit(1)
-		}
-		id := cmd.Args()[2]
-		switch *input {
-		case "":
-			data, err := ioutil.ReadFile(*input)
-			if err != nil {
-				fmt.Println("Failed to read input file. Error:", err)
-				os.Exit(1)
-			}
-			if err := store.RawUpdate(bucket, id, data); err != nil {
-				fmt.Println("ERROR: Failed to update item. Error:", err)
-				os.Exit(-1)
-			}
-		default:
-			buf := new(bytes.Buffer)
-			if _, err := io.Copy(buf, os.Stdin); err != nil {
-				fmt.Println("Failed to read standard input. Error:", err)
-				os.Exit(1)
-			}
-			if err := store.RawUpdate(bucket, id, buf.Bytes()); err != nil {
-				fmt.Println("Failed to save new data. Error:", err)
-				os.Exit(1)
-			}
-		}
+		return cmd.Update()
 	case "delete":
-		if len(cmd.Args()) < 3 {
-			fmt.Println("ERROR: Must provide id of the item to show")
-			os.Exit(1)
-		}
-		id := cmd.Args()[2]
-		if err := store.Delete(bucket, id); err != nil {
-			fmt.Println("Error: Failed to delete. Error:", err)
-			os.Exit(-1)
-		}
+		return cmd.Delete()
 	default:
-		fmt.Printf("Unknown action:'%s'\n", action)
-		os.Exit(1)
+		return fmt.Errorf("unknown action:'%s'", action)
 	}
+}
+
+func (cmd *dbCmd) Output(payload []byte) error {
+	switch cmd.output {
+	case "":
+		_, err := fmt.Println(string(payload))
+		return err
+	default:
+		return ioutil.WriteFile(cmd.output, payload, 0644)
+	}
+}
+
+func (cmd *dbCmd) Show() error {
+	if len(cmd.args) < 3 {
+		return fmt.Errorf("must provide id of the item to show")
+	}
+	id := cmd.args[2]
+	d, err := cmd.store.RawGet(cmd.bucket, id)
+	if err != nil {
+		return fmt.Errorf("failed to get item %s due database eror:%w", id, err)
+	}
+	return cmd.Output(d)
+}
+
+func (cmd *dbCmd) List() error {
+	res := make(map[string]json.RawMessage)
+	fn := func(id string, bs []byte) error {
+		res[id] = bs
+		return nil
+	}
+	if err := cmd.store.List(cmd.bucket, fn); err != nil {
+		return fmt.Errorf("failed to list items from storage. %w", err)
+	}
+	data, err := json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		return err
+	}
+	return cmd.Output(data)
+}
+
+func (cmd *dbCmd) Input() ([]byte, error) {
+	switch cmd.input {
+	case "":
+		buf := new(bytes.Buffer)
+		if _, err := io.Copy(buf, os.Stdin); err != nil {
+			return nil, fmt.Errorf("failed to read standard input. %w", err)
+		}
+		return buf.Bytes(), nil
+	default:
+		return ioutil.ReadFile(cmd.input)
+	}
+}
+func (cmd *dbCmd) Create() error {
+	data, err := cmd.Input()
+	if err != nil {
+		return err
+	}
+	fn := func(_ string) interface{} {
+		return data
+	}
+	return cmd.store.Create(cmd.bucket, fn)
+}
+
+func (cmd *dbCmd) Update() error {
+	if len(cmd.args) < 3 {
+		return fmt.Errorf("must provide id of the item to update")
+	}
+	id := cmd.args[2]
+	data, err := cmd.Input()
+	if err != nil {
+		return err
+	}
+	return cmd.store.RawUpdate(cmd.bucket, id, data)
+}
+func (cmd *dbCmd) Delete() error {
+	if len(cmd.args) < 3 {
+		return fmt.Errorf("must provide id of the item to show")
+	}
+	id := cmd.args[2]
+	return cmd.store.Delete(cmd.bucket, id)
 }
