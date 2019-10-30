@@ -27,6 +27,7 @@ const (
 )
 
 type Store interface {
+	RawGet(string, string) ([]byte, error)
 	Get(string, string, interface{}) error
 	List(string, func(string, []byte) error) error
 	Create(string, func(string) interface{}) error
@@ -34,6 +35,7 @@ type Store interface {
 	Close() error
 	CreateWithID(string, string, interface{}) error
 	Update(string, string, interface{}) error
+	RawUpdate(string, string, []byte) error
 	Delete(string, string) error
 	ReOpen() error
 }
