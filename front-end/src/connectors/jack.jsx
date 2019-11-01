@@ -21,6 +21,7 @@ export default class Jack extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   handleNameChange (e) {
