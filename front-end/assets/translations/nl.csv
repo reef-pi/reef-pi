@@ -101,7 +101,7 @@ health_chart:cpu_memory,CPU/Geheugen
 fatal_error:fatal_error,Fatale Fout
 fatal_error:connection_lost,Connectie verloren
 fatal_error:troubleshoot,Troubleshoot
-fatal_error:message,Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
+fatal_error:message,Er ging iets mis de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
 cron:day_of_month,Dag van de maand
 cron:hour,Uur
 cron:minute,Minuut
@@ -187,9 +187,9 @@ ph:alert_above,Alarm boven
 ph:warn_delete,Deze actie verwijderd
 ph:name_required,Naam is nodig
 ph:status_required,Status is nodig
-ph:period_required,Controleer Frequency is nodig
+ph:period_required,Controleer Frequentie is nodig
 ph:period_type,Check Frequentie moet een nummer zijn
-ph:period_min,Check Frequenctie moet 1 seconde of meer zijn
+ph:period_min,Check Frequentie moet 1 seconde of meer zijn
 ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
 ph:threshold_type,Limiet moet een nummer zijn
 ph:threshold_less_than,Alarm onder moet minder zijn dan Alarm boven
