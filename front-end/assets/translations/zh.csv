@@ -32,6 +32,7 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
+language:nl,Nederlands
 configuration:authentication:credentials,认证
 configuration:authentication:error_user,你必须提供一个用户名
 configuration:authentication:error_pass,你必须提供一个密码
