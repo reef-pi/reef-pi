@@ -18,6 +18,7 @@ const MacroForm = withFormik({
       id: data.id || '',
       name: data.name || '',
       enable: data.enable || false,
+      reversible: data.reversible || false,
       steps: data.steps.map(step => {
         return {
           type: step.type,

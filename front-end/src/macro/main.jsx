@@ -77,6 +77,7 @@ class main extends React.Component {
     const macro = {
       name: values.name,
       enable: values.enable,
+      reversible: values.reversible,
       steps: values.steps.map(step => {
         return {
           type: step.type,
