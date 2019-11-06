@@ -53,16 +53,16 @@
     "react-i18next": "10.13.1",
     "react-icons": "3.7.0",
     "react-images": "1.0.0",
-    "react-redux": "5.0.7",
+    "react-redux": "^5.1.2",
     "react-test-renderer": "16.10.1",
     "react-toggle-switch": "3.0.4",
     "recharts": "1.7.1",
-    "redux": "4.0.4",
+    "redux": "^4.0.4",
     "redux-mock-store": "1.5.3",
     "redux-thunk": "2.3.0",
     "sass-lint": "1.13.1",
     "sass-loader": "8.0.0",
-    "standard": "11.0.1",
+    "standard": "14.3.1",
     "style-loader": "1.0.0",
     "webpack": "4.41.0",
     "webpack-cli": "3.3.9",
@@ -105,6 +105,9 @@
       "afterEach",
       "jest",
       "beforeEach"
+    ],
+    "ignore": [
+      "*.test.js"
     ]
   },
   "jest": {

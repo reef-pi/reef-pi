@@ -1,5 +1,4 @@
-import {settingsLoaded, fetchSettings, settingsUpdated, updateSettings} from './settings'
-import { applyMiddleware } from 'redux'
+import { settingsLoaded, fetchSettings, settingsUpdated, updateSettings } from './settings'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

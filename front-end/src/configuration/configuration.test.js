@@ -39,10 +39,10 @@ describe('Configuration ui', () => {
     SignIn.logout = jest.fn().mockImplementation(() => {
       return true
     })
-    m.reload()
-    m.powerOff()
-    m.reboot()
-    m.signout()
+    m.handleReload()
+    m.handlePowerOff()
+    m.handleReboot()
+    m.handleSignout()
     m.props.reload()
     m.props.reboot()
     m.props.powerOff()
@@ -58,8 +58,8 @@ describe('Configuration ui', () => {
     const m = shallow(<Display store={mockStore(state)} />)
       .dive()
       .instance()
-    m.toggle()
-    m.setBrightness({ target: { value: 10 } })
+    m.handleToggle()
+    m.handleSetBrightness({ target: { value: 10 } })
     shallow(<Display store={mockStore({})} />)
       .dive()
       .instance()
@@ -92,7 +92,7 @@ describe('Configuration ui', () => {
       .instance()
     m.updateCapabilities(capabilities)
     m.updateCheckbox('foo')({ target: { checked: true } })
-    m.update()
+    m.handleUpdate()
     m.updateHealthNotify({})
     m.updateHealthNotify()
     m.updateCapabilities({
@@ -119,16 +119,68 @@ describe('Configuration ui', () => {
     shallow(<Settings store={mockStore({})} />).dive()
     shallow(<Settings store={mockStore({ settings: {} })} />).dive()
 
-    let d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+    const d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
     d.find('#to-row-interface')
       .first()
       .simulate('change', { target: { value: 'foo' } })
   })
 
+  it('<Settings /> should remove port 80 if choosing https', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost:80',
+      https: false
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:80'}})
+
+    wrapper.find('.dropdown-item[children="https://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
+  })
+
+  it('<Settings /> should remove port 443 if choosing http', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost:443',
+      https: true
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
+  })
+
+  it('<Settings /> should not change the port when changing protocol if not 80 or 443', () => {
+    const capabilities = {
+      health_check: true
+    }
+    const settings = {
+      name: 'reef-pi',
+      interface: 'wlan0',
+      address: 'localhost',
+      https: true
+    }
+    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+
+    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:1234'}})
+
+    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
+    expect(wrapper.find('#to-row-address').props().value).toBe('localhost:1234')
+  })
+
   it('<HealthNotify />', () => {
     const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
-    m.updateEnable({ target: {} })
+    m.handleUpdateEnable({ target: {} })
     m.update('foo')({ target: {} })
     m.setState({
       notify: {
@@ -138,7 +190,7 @@ describe('Configuration ui', () => {
   })
 
   it('<About />', () => {
-    let m = shallow(
+    const m = shallow(
       <About
         store={mockStore({
           info: { current_time: new Date(), version: 'test', uptime: '5 minutes', ip: 'localhost' },
@@ -154,7 +206,7 @@ describe('Configuration ui', () => {
     m.componentWillUnmount()
   })
   it('<Errors />', () => {
-    let wrapper = shallow(
+    const wrapper = shallow(
       <Errors
         store={mockStore({
           errors: [{ id: '1', time: 'dd', message: 'dd' }]
@@ -162,7 +214,7 @@ describe('Configuration ui', () => {
       />
     ).dive()
     wrapper.find('.btn-outline-secondary').first().simulate('click')
-    let m = wrapper.instance()
+    const m = wrapper.instance()
     m.props.delete('1')
     m.props.clear()
     m.props.fetch()

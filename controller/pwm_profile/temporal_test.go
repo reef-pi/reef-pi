@@ -8,8 +8,8 @@ import (
 func TestTemporal(t *testing.T) {
 	conf := `
 {
-	"start":"10:00",
-	"end": "19:30"
+	"start":"10:00:00",
+	"end": "19:30:00"
 }
 `
 	p, err := Temporal([]byte(conf), 13, 100)

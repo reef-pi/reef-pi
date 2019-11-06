@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export const ErrorFor = ({name, errors, touched}) => {
+export const ErrorFor = ({ name, errors, touched }) => {
   const getErrors = () => {
     if (ShowError(name, touched, errors)) {
       return ErrorMessage(errors, name)
@@ -34,7 +34,7 @@ export const ShowError = (name, touched, errors) => {
 }
 
 export const ErrorMessage = (errors, name) => {
-  var err = PathToObject(name, errors)
+  const err = PathToObject(name, errors)
   if (typeof err === 'string' || err instanceof String) {
     return err
   } else if (Array.isArray(err)) {
@@ -49,4 +49,4 @@ export const PathToObject = (path, obj) => {
   return path.split('.').reduce((o, i) => o && o[i], obj)
 }
 
-export default {ErrorFor, NameFor, ShowError, ErrorMessage, PathToObject}
+export default { ErrorFor, NameFor, ShowError, ErrorMessage, PathToObject }

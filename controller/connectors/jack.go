@@ -18,10 +18,11 @@ import (
 const JackBucket = storage.JackBucket
 
 type Jack struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Pins   []int  `json:"pins"`
-	Driver string `json:"driver"` // can be either hal or pca9685
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Pins    []int  `json:"pins"`
+	Driver  string `json:"driver"` // can be either hal or pca9685
+	Reverse bool   `json:"reverse"`
 }
 
 type Jacks struct {
@@ -75,7 +76,7 @@ func (c *Jacks) Get(id string) (Jack, error) {
 
 func (c *Jacks) List() ([]Jack, error) {
 	jacks := []Jack{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var j Jack
 		if err := json.Unmarshal(v, &j); err != nil {
 			return err
@@ -142,7 +143,13 @@ func (jacks *Jacks) Control(id string, values PinValues) error {
 			return fmt.Errorf("pin %d on jack %s has no driver: %v", pin, id, err)
 		}
 		v, ok := values[pin]
+		if v > 100 || v < 0 {
+			return fmt.Errorf("invalid value:%f for pin: %d", v, pin)
+		}
 		if ok {
+			if j.Reverse {
+				v = 100 - v
+			}
 			if err := channel.Set(v); err != nil {
 				return err
 			}

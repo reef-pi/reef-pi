@@ -101,7 +101,7 @@ health_chart:cpu_memory,CPU/Geheugen
 fatal_error:fatal_error,Fatale Fout
 fatal_error:connection_lost,Connectie verloren
 fatal_error:troubleshoot,Troubleshoot
-fatal_error:message,Er ging iets mis de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
+fatal_error:message,Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na.
 cron:day_of_month,Dag van de maand
 cron:hour,Uur
 cron:minute,Minuut

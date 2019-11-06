@@ -16,9 +16,9 @@ class inlets extends React.Component {
       add: false
     }
     this.list = this.list.bind(this)
-    this.add = this.add.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
-    this.save = this.save.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
@@ -28,15 +28,19 @@ class inlets extends React.Component {
   handleNameChange (e) {
     this.setState({ inName: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ inPin: e.target.value })
   }
+
   handleReverseChange () {
     this.setState({ inReverse: !this.state.outReverse })
   }
+
   componentDidMount () {
     this.props.fetch()
   }
+
   handleDriverChange (e) {
     this.setState({
       inDriver: e.target.value,
@@ -54,7 +58,7 @@ class inlets extends React.Component {
     }.bind(this)
   }
 
-  add () {
+  handleAdd () {
     this.setState({
       add: !this.state.add,
       inName: '',
@@ -63,19 +67,19 @@ class inlets extends React.Component {
     })
   }
 
-  save () {
-    var payload = {
+  handleSave () {
+    const payload = {
       name: this.state.inName,
       pin: parseInt(this.state.inPin),
       reverse: this.state.inReverse,
       driver: this.state.inDriver
     }
     this.props.create(payload)
-    this.add()
+    this.handleAdd()
   }
 
   list () {
-    var items = []
+    const items = []
     this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
       items.push(
         <Inlet
@@ -99,7 +103,7 @@ class inlets extends React.Component {
   }
 
   render () {
-    var dStyle = {
+    const dStyle = {
       display: this.state.add ? '' : 'none'
     }
     return (
@@ -116,13 +120,13 @@ class inlets extends React.Component {
               id='add_inlet'
               type='button'
               value={this.state.add ? '-' : '+'}
-              onClick={this.add}
+              onClick={this.handleAdd}
               className='btn btn-sm btn-outline-success'
             />
           </div>
         </div>
         <div className='row' style={dStyle}>
-          <div className='col-12 col-md-5'>
+          <div className='col-12 col-md-3'>
             <div className='form-group'>
               <span className='input-group-addon'>Name</span>
               <input
@@ -150,11 +154,13 @@ class inlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
-              <label className='input-group-addon'>Driver</label>
+              <span className='input-group-addon'>Driver</span>
               <select
                 name='driver'
+                className='form-control custom-select'
                 onChange={this.handleDriverChange}
-                value={this.state.inDriver}>
+                value={this.state.inDriver}
+              >
                 {this.props.drivers.map(item => {
                   return (
                     <option key={item.id} value={item.id}>
@@ -182,7 +188,7 @@ class inlets extends React.Component {
               type='button'
               id='createInlet'
               value='add'
-              onClick={this.save}
+              onClick={this.handleSave}
               className='btn btn-outline-primary col-12 col-md-4'
             />
           </div>

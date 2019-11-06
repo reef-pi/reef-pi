@@ -43,7 +43,7 @@ func (c *Controller) Create(p Pump) error {
 
 func (c *Controller) List() ([]Pump, error) {
 	pumps := []Pump{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var p Pump
 		if err := json.Unmarshal(v, &p); err != nil {
 			return err

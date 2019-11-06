@@ -17,7 +17,7 @@ class chart extends React.Component {
         }
         data[i][ch.name] = value
       })
-      var stroke = ch.color === '' ? '#000' : ch.color
+      const stroke = ch.color === '' ? '#000' : ch.color
       return <Line dataKey={ch.name} isAnimationActive={false} stroke={stroke} key={ch.pin} />
     }
   }
@@ -26,8 +26,8 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    var data = []
-    var lines = []
+    const data = []
+    const lines = []
     $.each(this.props.config.channels, function (name, channel) {
       lines.push(this.channel2line(channel, data))
     }.bind(this))

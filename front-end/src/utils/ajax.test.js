@@ -1,8 +1,8 @@
 import { reduxGet, reduxDelete, reduxPut, reduxPost } from './ajax'
 import 'isomorphic-fetch'
 
-let fecthOK = jest.fn().mockImplementation(() => {
-  var p = new Promise(resolve => {
+const fecthOK = jest.fn().mockImplementation(() => {
+  let p = new Promise(resolve => {
     resolve({
       ok: true,
       status: 200,
@@ -20,8 +20,8 @@ let fecthOK = jest.fn().mockImplementation(() => {
   })
   return p
 })
-let fetch401 = jest.fn().mockImplementation(() => {
-  var p = new Promise(resolve => {
+const fetch401 = jest.fn().mockImplementation(() => {
+  let p = new Promise(resolve => {
     resolve({
       ok: false,
       status: 401,
@@ -39,8 +39,8 @@ let fetch401 = jest.fn().mockImplementation(() => {
   })
   return p
 })
-let fetch500 = jest.fn().mockImplementation(() => {
-  var p = new Promise(resolve => {
+const fetch500 = jest.fn().mockImplementation(() => {
+  let p = new Promise(resolve => {
     resolve({
       ok: false,
       status: 500,
@@ -58,7 +58,7 @@ let fetch500 = jest.fn().mockImplementation(() => {
   })
   return p
 })
-let dispatch = () => {
+const dispatch = () => {
   return true
 }
 describe('Ajax', () => {

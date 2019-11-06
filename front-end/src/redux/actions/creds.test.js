@@ -1,5 +1,4 @@
-import {credsUpdated, updateCreds } from './creds'
-import { applyMiddleware } from 'redux'
+import { credsUpdated, updateCreds } from './creds'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

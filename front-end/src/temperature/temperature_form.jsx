@@ -14,7 +14,7 @@ const TemperatureForm = withFormik({
       }
     }
 
-    return {
+    const values = {
       id: tc.id || '',
       name: tc.name || '',
       sensor: tc.sensor || '',
@@ -26,14 +26,20 @@ const TemperatureForm = withFormik({
       maxAlert: (tc.notify && tc.notify.max) || '81',
       heater: tc.heater || '',
       min: tc.min || '',
+      hysteresis: tc.hysteresis || 0,
       cooler: tc.cooler || '',
       max: tc.max || '',
-      chart_min: tc.chart_min || '70',
-      chart_max: tc.chart_max || '90'
+      control: 'nothing'
     }
+
+    if (tc.control === true) {
+      if (tc.is_macro === true) { values.control = 'macro' } else { values.control = 'equipment' }
+    }
+
+    return values
   },
   validationSchema: TemperatureSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditTemperature)

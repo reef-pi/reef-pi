@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow} from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import HealthChart from './health_chart'
 import configureMockStore from 'redux-mock-store'
@@ -11,7 +11,7 @@ const mockStore = configureMockStore([thunk])
 
 describe('Health', () => {
   it('<HealthChart />', () => {
-    let state = {
+    const state = {
       health_stats: {},
       timer: window.setInterval(() => true, 10)
     }
@@ -19,7 +19,7 @@ describe('Health', () => {
     m.componentWillUnmount()
   })
   it('<HealthChart />', () => {
-    let state = {
+    const state = {
       trend: 'current'
     }
     const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()

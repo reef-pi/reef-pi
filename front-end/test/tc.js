@@ -1,14 +1,15 @@
 module.exports = {
   Configure: function (n) {
     n.click('a#tab-temperature')
-      .wait('input#add_tc')
-      .click('input#add_tc')
+      .wait('input#add_probe')
+      .click('input#add_probe')
       .wait('.add-temperature input[name="name"]')
       .type('.add-temperature input[name="name"]', 'Biocube29')
 
-      .type('.add-temperature input[name="period"]')
+      .type('.add-temperature input[name="period"]', '')
       .type('.add-temperature input[name="period"]', 120)
       .select('.add-temperature select[name="sensor"]', '28-04177049bcff')
+      .select('.add-temperature [name="control"]', 'equipment')
       .select('.add-temperature select[name="heater"]', '3')
       .type('.add-temperature input[name="min"]', 78.5)
       .select('.add-temperature select[name="cooler"]', '5')

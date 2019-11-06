@@ -6,18 +6,17 @@ import (
 )
 
 func TestRandom(t *testing.T) {
-	tFormat := "15:04"
 	conf := `
 {
-	"start":"10:00",
-	"end": "19:30"
+	"start":"10:00:00",
+	"end": "19:30:00"
 }
 `
 	d, err := Random([]byte(conf), 13, 100)
 	if err != nil {
 		t.Error(err)
 	}
-	t1, err := time.Parse(tFormat, "10:30")
+	t1, err := time.Parse(tFormat, "10:30:00")
 	if err != nil {
 		t.Error(err)
 	}

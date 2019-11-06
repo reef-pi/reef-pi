@@ -33,6 +33,9 @@ func main() {
     manager: Run reef-pi manager
 		Example: reef-pi manager
 
+    db: Interact with reef-pi database
+		Example: reef-pi db list atos
+
     reset-password: Reset reef-pi web ui username and password
     Options:
       -user string
@@ -64,6 +67,17 @@ func main() {
 		cmd := flag.NewFlagSet("manager", flag.ExitOnError)
 		cmd.Parse(args)
 		mgr()
+	case "db":
+		cmd, err := NewDBCmd(args)
+		if err != nil {
+			fmt.Println("Failed to parse command line flags. Error:", err)
+			os.Exit(1)
+		}
+		if err := cmd.Execute(); err != nil {
+			fmt.Println("Failed due to error:", err)
+			os.Exit(1)
+		}
+		defer cmd.Close()
 	case "reset-password":
 		cmd := flag.NewFlagSet("reset-password", flag.ExitOnError)
 		user := cmd.String("user", "", "New reef-pi web ui username")

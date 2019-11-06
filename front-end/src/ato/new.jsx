@@ -1,7 +1,7 @@
 import React from 'react'
-import {createATO} from 'redux/actions/ato'
+import { createATO } from 'redux/actions/ato'
 import AtoForm from './ato_form'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 class newATO extends React.Component {
   constructor (props) {
@@ -13,12 +13,12 @@ class newATO extends React.Component {
       period: 60,
       add: false
     }
-    this.add = this.add.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
     this.ui = this.ui.bind(this)
   }
 
-  toggle () {
+  handleToggle () {
     this.setState({
       add: !this.state.add
     })
@@ -35,14 +35,16 @@ class newATO extends React.Component {
       return
     }
     return (
-      <AtoForm onSubmit={this.add}
+      <AtoForm
+        onSubmit={this.handleSubmit}
         inlets={this.props.inlets}
-        equipment={this.props.equipment} />
+        equipment={this.props.equipment}
+      />
     )
   }
 
-  add (values) {
-    var payload = {
+  handleSubmit (values) {
+    const payload = {
       name: values.name,
       enable: values.enable,
       inlet: values.inlet,
@@ -56,13 +58,13 @@ class newATO extends React.Component {
       }
     }
     this.props.createATO(payload)
-    this.toggle()
+    this.handleToggle()
   }
 
   render () {
     return (
       <div className='list-group-item add-ato'>
-        <input id='add_new_ato_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+        <input id='add_new_ato_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )

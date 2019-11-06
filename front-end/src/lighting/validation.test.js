@@ -5,7 +5,7 @@ describe('Validation', () => {
     config: {
       name: 'testing',
       channels: {
-        '1': {
+        1: {
           name: 'Channel 1',
           color: '',
           min: 0,

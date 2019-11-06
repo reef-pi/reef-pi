@@ -5,9 +5,33 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
 
-const Cron = ({values, errors, touched, readOnly}) => {
+const Cron = ({ values, errors, touched, readOnly }) => {
   return (
     <div className='row'>
+
+      <div className='form-group col-12 col-sm-6 col-md-3'>
+        <label htmlFor='month'>{i18next.t('cron:month')}</label>
+        <Field
+          name='month'
+          disabled={readOnly}
+          className={classNames('col form-control', {
+            'is-invalid': ShowError('month', touched, errors)
+          })}
+        />
+        <ErrorFor errors={errors} touched={touched} name='month' />
+      </div>
+
+      <div className='form-group col-12 col-sm-6 col-md-3'>
+        <label htmlFor='week'>{i18next.t('cron:week')}</label>
+        <Field
+          name='week'
+          disabled={readOnly}
+          className={classNames('col form-control', {
+            'is-invalid': ShowError('week', touched, errors)
+          })}
+        />
+        <ErrorFor errors={errors} touched={touched} name='week' />
+      </div>
 
       <div className='form-group col-12 col-sm-6 col-md-3'>
         <label htmlFor='day'>{i18next.t('cron:day_of_month')}</label>

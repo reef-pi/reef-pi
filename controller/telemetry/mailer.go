@@ -21,6 +21,7 @@ type MailerConfig struct {
 var GMailMailer = MailerConfig{
 	Server: "smtp.gmail.com",
 	Port:   587,
+	To:     []string{},
 }
 
 func (c *MailerConfig) Mailer() Mailer {

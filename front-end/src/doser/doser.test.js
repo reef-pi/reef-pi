@@ -9,7 +9,7 @@ import DoserForm from './doser_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-var fn = jest.fn()
+let fn = jest.fn()
 jest.mock('utils/confirm', () => {
   return {
     showModal: jest
@@ -33,16 +33,16 @@ jest.mock('utils/confirm', () => {
 
 describe('Doser ui', () => {
   it('<Main />', () => {
-    let mock = {
+    const mock = {
       dosers: [{ foo: 'bar', regiment: {} }]
     }
     const m = shallow(<Main store={mockStore(mock)} />)
       .dive()
       .instance()
 
-    m.createDoser({ name: 'test' })
-    m.updateDoser({ name: 'renamed' })
-    m.deleteDoser({ id: 1, name: 'renamed' })
+    m.handleCreateDoser({ name: 'test' })
+    m.handleUpdateDoser({ name: 'renamed' })
+    m.handleDeleteDoser({ id: 1, name: 'renamed' })
     m.calibrateDoser({ stopPropagation: fn }, {})
   })
 

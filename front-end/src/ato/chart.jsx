@@ -16,7 +16,7 @@ class chart extends React.Component {
 
   componentDidMount () {
     this.updateUsage()
-    var timer = window.setInterval(this.updateUsage, 10 * 1000)
+    const timer = window.setInterval(this.updateUsage, 10 * 1000)
     this.setState({ timer: timer })
   }
 
@@ -34,7 +34,7 @@ class chart extends React.Component {
       return <div />
     }
     return (
-      <React.Fragment>
+      <>
         <span className='h6'>{this.props.config.name} - {i18next.t('ato:ato_usage')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={this.props.usage.historical}>
@@ -44,7 +44,7 @@ class chart extends React.Component {
             <Tooltip />
           </BarChart>
         </ResponsiveContainer>
-      </React.Fragment>
+      </>
     )
   }
 }

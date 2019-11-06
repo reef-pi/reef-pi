@@ -1,7 +1,7 @@
 import TemperatureSchema from './temperature_schema'
 
 describe('Validation', () => {
-  var tc = {}
+  let tc = {}
 
   beforeEach(() => {
     tc = {
@@ -11,7 +11,7 @@ describe('Validation', () => {
       fahrenheit: true,
       period: 60,
       alerts: false,
-      notify: {enable: false},
+      notify: { enable: false },
       heater: '',
       cooler: ''
     }

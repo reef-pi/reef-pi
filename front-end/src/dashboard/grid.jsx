@@ -5,13 +5,13 @@ import ComponentSelector from './component_selector'
 export default class Grid extends React.Component {
   constructor (props) {
     super(props)
-    var i, j
-    var cells = []
+    let i, j
+    const cells = []
     for (i = 0; i < props.rows; i++) {
       cells[i] = []
       for (j = 0; j < props.columns; j++) {
         if (props.cells[i] === undefined || props.cells[i][j] === undefined) {
-          cells[i][j] = {type: 'health'}
+          cells[i][j] = { type: 'health' }
           continue
         }
         cells[i][j] = {
@@ -32,7 +32,7 @@ export default class Grid extends React.Component {
   }
 
   cellUI (type, currentId, i, j) {
-    var data
+    let data
     switch (type) {
       case 'ato':
         data = this.props.atos
@@ -40,7 +40,7 @@ export default class Grid extends React.Component {
       case 'equipment':
         return (<span>-</span>)
       case 'health':
-        data = [{id: 'current', name: 'current'}, {id: 'historical', name: 'historical'}]
+        data = [{ id: 'current', name: 'current' }, { id: 'historical', name: 'historical' }]
         break
       case 'light':
         data = this.props.lights
@@ -69,7 +69,7 @@ export default class Grid extends React.Component {
   }
 
   initiatlizeCell (i, j) {
-    var cells = this.state.cells
+    let cells = this.state.cells
     if (cells === undefined) {
       cells = []
     }
@@ -89,25 +89,25 @@ export default class Grid extends React.Component {
 
   updateHook (i, j) {
     return (function (id) {
-      var cells = this.state.cells
+      const cells = this.state.cells
       cells[i][j].id = id
-      this.setState({cells: cells})
+      this.setState({ cells: cells })
       this.props.hook(cells)
     }.bind(this))
   }
 
   setType (i, j, type) {
     return (function () {
-      var cells = this.initiatlizeCell(i, j)
+      const cells = this.initiatlizeCell(i, j)
       cells[i][j].type = type
       cells[i][j].ui = this.cellUI(type, '', i, j)
-      this.setState({cells: cells})
+      this.setState({ cells: cells })
       this.props.hook(cells)
     }.bind(this))
   }
 
   menuItem (type, a, i, j) {
-    var cName = 'dropdown-item'
+    let cName = 'dropdown-item'
     if (a) {
       cName += ' active'
     }
@@ -119,7 +119,7 @@ export default class Grid extends React.Component {
   }
 
   menuItems (i, j) {
-    var types = [
+    const types = [
       this.menuItem('ato', false, i, j),
       this.menuItem('equipment', false, i, j),
       this.menuItem('health', false, i, j),
@@ -134,14 +134,14 @@ export default class Grid extends React.Component {
   }
 
   render () {
-    var rows = []
-    var i, j
-    var cells = this.state.cells
+    const rows = []
+    let i, j
+    let cells = this.state.cells
     if (cells === undefined) {
       cells = []
     }
     for (i = 0; i < this.props.rows; i++) {
-      var columns = []
+      const columns = []
       for (j = 0; j < this.props.columns; j++) {
         cells = this.initiatlizeCell(i, j)
         columns.push(

@@ -6,25 +6,24 @@ import (
 )
 
 func TestDiurnal(t *testing.T) {
-	tFormat := "15:04"
 	conf := `
 {
-	"start":"10:00",
-	"end": "19:30"
+	"start":"10:00:00",
+	"end": "19:30:00"
 }
 `
 	d, err := Diurnal([]byte(conf), 13, 100)
 	if err != nil {
 		t.Error(err)
 	}
-	t1, err := time.Parse(tFormat, "01:30")
+	t1, err := time.Parse(tFormat, "01:30:00")
 	if err != nil {
 		t.Error(err)
 	}
 	if d.Get(t1) != 0 {
 		t.Error("Exp")
 	}
-	t2, err := time.Parse(tFormat, "11:20")
+	t2, err := time.Parse(tFormat, "11:20:00")
 	if err != nil {
 		t.Error(err)
 	}

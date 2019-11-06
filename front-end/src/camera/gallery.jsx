@@ -11,11 +11,11 @@ export default class Gallery extends React.Component {
     }
 
     this.open = this.open.bind(this)
-    this.onClose = this.onClose.bind(this)
-    this.gotoPrevious = this.gotoPrevious.bind(this)
-    this.gotoNext = this.gotoNext.bind(this)
-    this.gotoImage = this.gotoImage.bind(this)
-    this.onClick = this.onClick.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.handleGotoPrevious = this.handleGotoPrevious.bind(this)
+    this.handleGotoNext = this.handleGotoNext.bind(this)
+    this.handleGotoImage = this.handleGotoImage.bind(this)
+    this.handleOnClick = this.handleOnClick.bind(this)
   }
 
   open (index, event) {
@@ -26,41 +26,41 @@ export default class Gallery extends React.Component {
     })
   }
 
-  onClose () {
+  handleClose () {
     this.setState({
       current: 0,
       isOpen: false
     })
   }
 
-  gotoPrevious () {
+  handleGotoPrevious () {
     this.setState({
       current: this.state.current - 1
     })
   }
 
-  gotoNext () {
+  handleGotoNext () {
     this.setState({
       current: this.state.current + 1
     })
   }
 
-  gotoImage (index) {
+  handleGotoImage (index) {
     this.setState({
       current: index
     })
   }
 
-  onClick () {
+  handleOnClick () {
     if (this.state.current === this.props.images.length - 1) return
-    this.gotoNext()
+    this.handleGotoNext()
   }
 
   render () {
     const { images } = this.props
     if (!images) return
 
-    var gallery = []
+    const gallery = []
     this.props.images.forEach((k, i) => {
       gallery.push(
         <a href={k.src} key={'gallery-' + i} onClick={e => this.open(i, e)}>
@@ -73,13 +73,13 @@ export default class Gallery extends React.Component {
       <div className='container'>
         <Lightbox
           images={this.props.images}
-          onClose={this.onClose}
+          onClose={this.handleClose}
           currentImage={this.state.current}
           isOpen={this.state.isOpen}
-          onClickImage={this.onClick}
-          onClickNext={this.gotoNext}
-          onClickPrev={this.gotoPrevious}
-          onClickThumbnail={this.gotoImage}
+          onClickImage={this.handleOnClick}
+          onClickNext={this.handleGotoNext}
+          onClickPrev={this.handleGotoPrevious}
+          onClickThumbnail={this.handleGotoImage}
           showThumbnails
         />
         {gallery}

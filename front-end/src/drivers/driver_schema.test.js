@@ -1,7 +1,7 @@
 import DriverSchema from './driver_schema'
 
 describe('Validation', () => {
-  var driver = {}
+  let driver = {}
   beforeEach(() => {
     driver = {
       name: 'foo',

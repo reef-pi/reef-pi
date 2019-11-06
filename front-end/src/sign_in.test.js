@@ -13,7 +13,7 @@ describe('SignIn', () => {
       return true
     })
     global.fetch = jest.fn().mockImplementation(() => {
-      var p = new Promise((resolve) => {
+      let p = new Promise((resolve) => {
         resolve({
           ok: true,
           status: 200
@@ -29,14 +29,14 @@ describe('SignIn', () => {
     const m = shallow(<SignIn store={mockStore()} />).instance()
     m.handleUserChange({ target: { value: 'foo' } })
     m.handlePasswordChange({ target: { value: 'bar' } })
-    await m.login({
+    await m.handleLogin({
       preventDefault: function () {
         return true
       }
     })
     expect(SignIn.refreshPage.mock.calls.length).toBe(1)
     global.fetch = jest.fn().mockImplementation(() => {
-      var p = new Promise((resolve, reject) => {
+      let p = new Promise((resolve, reject) => {
         resolve({
           ok: false,
           status: 500
@@ -44,7 +44,7 @@ describe('SignIn', () => {
       })
       return p
     })
-    await m.login({
+    await m.handleLogin({
       preventDefault: function () {
         return true
       }
@@ -52,7 +52,7 @@ describe('SignIn', () => {
     expect(SignIn.refreshPage.mock.calls.length).toBe(1)
 
     global.fetch = jest.fn().mockImplementation(() => {
-      var p = new Promise((resolve, reject) => {
+      let p = new Promise((resolve, reject) => {
         resolve({
           ok: false,
           status: 401
@@ -60,7 +60,7 @@ describe('SignIn', () => {
       })
       return p
     })
-    await m.login({
+    await m.handleLogin({
       preventDefault: function () {
         return true
       }

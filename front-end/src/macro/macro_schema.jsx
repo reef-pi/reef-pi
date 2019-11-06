@@ -38,6 +38,8 @@ const StepSchema = Yup.lazy(value => {
 const MacroSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required'),
+  reversible: Yup.bool()
+    .required('reversible is required'),
   steps: Yup.array().of(StepSchema)
     .required('Macros must have at least 1 step')
 })

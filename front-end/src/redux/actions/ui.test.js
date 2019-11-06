@@ -1,5 +1,4 @@
-import {fetchUIData } from './ui'
-import { applyMiddleware } from 'redux'
+import { fetchUIData } from './ui'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -8,7 +7,7 @@ import 'isomorphic-fetch'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-var storage = {}
+let storage = {}
 window.localStorage = {
   getItem: (k) => {
     return storage[k]

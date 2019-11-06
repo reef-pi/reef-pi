@@ -14,10 +14,10 @@ class doser extends React.Component {
       addDoser: false
     }
     this.doserList = this.doserList.bind(this)
-    this.toggleAddDoserDiv = this.toggleAddDoserDiv.bind(this)
-    this.deleteDoser = this.deleteDoser.bind(this)
-    this.createDoser = this.createDoser.bind(this)
-    this.updateDoser = this.updateDoser.bind(this)
+    this.handleToggleAddDoserDiv = this.handleToggleAddDoserDiv.bind(this)
+    this.handleDeleteDoser = this.handleDeleteDoser.bind(this)
+    this.handleCreateDoser = this.handleCreateDoser.bind(this)
+    this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
   }
 
@@ -25,7 +25,7 @@ class doser extends React.Component {
     this.props.fetchDosingPumps()
   }
 
-  toggleAddDoserDiv () {
+  handleToggleAddDoserDiv () {
     this.setState({
       addDoser: !this.state.addDoser
     })
@@ -35,28 +35,34 @@ class doser extends React.Component {
     return (
       this.props.dosers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(doser => {
         const calibrationButton = (
-          <button type='button' name={'calibrate-doser-' + doser.id}
+          <button
+            type='button' name={'calibrate-doser-' + doser.id}
             className='btn btn-sm btn-outline-info float-right'
-            onClick={(e) => this.calibrateDoser(e, doser)}>
+            onClick={(e) => this.calibrateDoser(e, doser)}
+          >
             Calibrate
           </button>
         )
-        let tState = () => {
+        const handleTState = () => {
           doser.regiment.enable = !doser.regiment.enable
           this.props.update(doser.id, doser)
         }
         return (
-          <Collapsible key={'panel-doser-' + doser.id}
+          <Collapsible
+            key={'panel-doser-' + doser.id}
             name={'panel-doser-' + doser.id}
             item={doser}
-            onToggleState={tState}
+            onToggleState={handleTState}
             enabled={doser.regiment.enable}
             buttons={calibrationButton}
             title={<b className='ml-2 align-middle'>{doser.name} </b>}
-            onDelete={this.deleteDoser}>
-            <DoserForm onSubmit={this.updateDoser}
+            onDelete={this.handleDeleteDoser}
+          >
+            <DoserForm
+              onSubmit={this.handleUpdateDoser}
               jacks={this.props.jacks}
-              doser={doser} />
+              doser={doser}
+            />
           </Collapsible>
         )
       })
@@ -64,7 +70,7 @@ class doser extends React.Component {
   }
 
   valuesToDoser (values) {
-    var doser = {
+    const doser = {
       name: values.name,
       jack: values.jack,
       pin: parseInt(values.pin),
@@ -73,6 +79,8 @@ class doser extends React.Component {
         duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
         schedule: {
+          month: values.month,
+          week: values.week,
           day: values.day,
           hour: values.hour,
           minute: values.minute,
@@ -83,26 +91,25 @@ class doser extends React.Component {
     return doser
   }
 
-  updateDoser (values) {
-    var payload = this.valuesToDoser(values)
+  handleUpdateDoser (values) {
+    const payload = this.valuesToDoser(values)
     this.props.update(values.id, payload)
   }
 
-  createDoser (values) {
-    var payload = this.valuesToDoser(values)
-
+  handleCreateDoser (values) {
+    const payload = this.valuesToDoser(values)
     this.props.create(payload)
-    this.toggleAddDoserDiv()
+    this.handleToggleAddDoserDiv()
   }
 
-  deleteDoser (doser) {
+  handleDeleteDoser (doser) {
     const message = (
       <div>
         <p>This action will delete {doser.name}.</p>
       </div>
     )
 
-    confirm('Delete ' + doser.name, {description: message})
+    confirm('Delete ' + doser.name, { description: message })
       .then(function () {
         this.props.delete(doser.id)
       }.bind(this))
@@ -116,7 +123,7 @@ class doser extends React.Component {
   render () {
     let newDoser = null
     if (this.state.addDoser) {
-      newDoser = <DoserForm onSubmit={this.createDoser} jacks={this.props.jacks} />
+      newDoser = <DoserForm onSubmit={this.handleCreateDoser} jacks={this.props.jacks} />
     }
 
     return (
@@ -131,7 +138,7 @@ class doser extends React.Component {
                 type='button'
                 id='add_doser'
                 value={this.state.addDoser ? '-' : '+'}
-                onClick={this.toggleAddDoserDiv}
+                onClick={this.handleToggleAddDoserDiv}
                 className='btn btn-outline-success'
               />
             </div>

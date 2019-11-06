@@ -15,7 +15,7 @@ class drivers extends React.Component {
   }
 
   list () {
-    var items = []
+    const items = []
     this.props.drivers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((d, n) => {
       items.push(
         <Driver

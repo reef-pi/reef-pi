@@ -4,7 +4,7 @@ import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
 
-const WaitStep = ({name, readOnly, touched, errors}) => {
+const WaitStep = ({ name, readOnly, touched, errors }) => {
   return (
     <div className='col-12 col-sm-4 col-md-3 form-group'>
       <div className='input-group'>

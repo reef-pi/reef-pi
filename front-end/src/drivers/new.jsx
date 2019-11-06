@@ -1,6 +1,6 @@
 import React from 'react'
 import DriverForm from './driver_form'
-import {i2cDrivers} from './types'
+import { i2cDrivers } from './types'
 
 export default class New extends React.Component {
   constructor (props) {
@@ -11,12 +11,12 @@ export default class New extends React.Component {
       config: {},
       add: false
     }
-    this.add = this.add.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
     this.ui = this.ui.bind(this)
   }
 
-  toggle () {
+  handleToggle () {
     this.setState({
       add: !this.state.add
     })
@@ -29,12 +29,12 @@ export default class New extends React.Component {
 
   ui () {
     if (this.state.add) {
-      return (<DriverForm onSubmit={this.add} />)
+      return (<DriverForm onSubmit={this.handleAdd} />)
     }
   }
 
-  add (values) {
-    var payload = {
+  handleAdd (values) {
+    const payload = {
       name: values.name,
       type: values.type,
       config: values.config
@@ -44,13 +44,13 @@ export default class New extends React.Component {
     }
     payload.config.frequency = parseInt(payload.config.frequency)
     this.props.hook(payload)
-    this.toggle()
+    this.handleToggle()
   }
 
   render () {
     return (
       <div className='container add-driver'>
-        <input id='add_new_driver' type='button' value={this.state.add ? '-' : '+'} onClick={this.toggle} className='btn btn-outline-success' />
+        <input id='add_new_driver' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )

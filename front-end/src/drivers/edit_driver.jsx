@@ -4,7 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
-import {driverTypes} from './types'
+import { driverTypes } from './types'
 
 const EditDriver = ({
   values,

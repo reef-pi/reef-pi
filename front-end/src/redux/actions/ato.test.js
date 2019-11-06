@@ -1,5 +1,4 @@
-import {atosLoaded, fetchATOs, atoLoaded, fetchATO, atoUsageLoaded, fetchATOUsage, createATO, atoUpdated, updateATO, deleteATO } from './ato'
-import { applyMiddleware } from 'redux'
+import { atosLoaded, fetchATOs, atoLoaded, fetchATO, atoUsageLoaded, fetchATOUsage, createATO, atoUpdated, updateATO, deleteATO } from './ato'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -8,7 +7,7 @@ import 'isomorphic-fetch'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
-var storage = {}
+let storage = {}
 window.localStorage = {
   getItem: (k) => {
     return storage[k]
@@ -44,7 +43,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos', {})
     const store = mockStore()
     return store.dispatch(fetchATOs()).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATOS_LOADED', payload: {}}])
+      expect(store.getActions()).toEqual([{ type: 'ATOS_LOADED', payload: {} }])
     })
   })
 
@@ -52,7 +51,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos/1', {})
     const store = mockStore()
     return store.dispatch(fetchATO('1')).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATO_LOADED', payload: {}}])
+      expect(store.getActions()).toEqual([{ type: 'ATO_LOADED', payload: {} }])
     })
   })
 
@@ -60,7 +59,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos/1/usage', {})
     const store = mockStore()
     return store.dispatch(fetchATOUsage('1')).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATO_USAGE_LOADED', payload: {data: {}, id: '1'}}])
+      expect(store.getActions()).toEqual([{ type: 'ATO_USAGE_LOADED', payload: { data: {}, id: '1' } }])
     })
   })
 
@@ -69,7 +68,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos', {})
     const store = mockStore()
     return store.dispatch(createATO({})).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATOS_LOADED', payload: {}}])
+      expect(store.getActions()).toEqual([{ type: 'ATOS_LOADED', payload: {} }])
     })
   })
 
@@ -78,7 +77,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos', {})
     const store = mockStore()
     return store.dispatch(updateATO('1', {})).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATOS_LOADED', payload: {}}])
+      expect(store.getActions()).toEqual([{ type: 'ATOS_LOADED', payload: {} }])
     })
   })
 
@@ -87,7 +86,7 @@ describe('ato actions', () => {
     fetchMock.getOnce('/api/atos', {})
     const store = mockStore()
     return store.dispatch(deleteATO('1')).then(() => {
-      expect(store.getActions()).toEqual([{type: 'ATOS_LOADED', payload: {}}])
+      expect(store.getActions()).toEqual([{ type: 'ATOS_LOADED', payload: {} }])
     })
   })
 })

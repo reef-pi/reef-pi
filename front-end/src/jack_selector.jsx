@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 class jackSelector extends React.Component {
   constructor (props) {
     super(props)
-    var jack
+    let jack
     props.jacks.forEach((j, i) => {
       if (props.id === j.id) {
         jack = j
@@ -27,15 +27,15 @@ class jackSelector extends React.Component {
   }
 
   jacks () {
-    var title = ''
-    var id = ''
+    let title = ''
+    let id = ''
     if (this.state.jack !== undefined) {
       title = this.state.jack.name
       id = this.state.jack.id
     }
-    var items = []
+    const items = []
     this.props.jacks.forEach((v, k) => {
-      var cName = 'dropdown-item'
+      let cName = 'dropdown-item'
       if (v.id === id) {
         cName += ' active'
       }
@@ -66,7 +66,7 @@ class jackSelector extends React.Component {
 
   setJack (k) {
     return () => {
-      var j = this.props.jacks[k]
+      const j = this.props.jacks[k]
       if (j === undefined) {
         return
       }
@@ -91,7 +91,7 @@ class jackSelector extends React.Component {
     if (this.state.jack === undefined) {
       return
     }
-    var items = []
+    const items = []
     this.state.jack.pins.forEach((v, k) => {
       items.push(
         <a className='dropdown-item' href='#' key={k} onClick={this.setPin(v)}>

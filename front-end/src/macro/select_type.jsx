@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'formik'
 
-const SelectType = ({name, className, readOnly}) => {
+const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
-    var validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
+    const validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
     return validTypes.map(item => {
       return (
         <option key={item} value={item}>
@@ -15,10 +15,12 @@ const SelectType = ({name, className, readOnly}) => {
   }
 
   return (
-    <Field name={name}
+    <Field
+      name={name}
       component='select'
       className={`form-control ${className}`}
-      disabled={readOnly}>
+      disabled={readOnly}
+    >
       <option value='' className='d-none'>-- Select Type --</option>
       {list()}
     </Field>

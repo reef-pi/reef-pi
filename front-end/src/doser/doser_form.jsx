@@ -23,6 +23,8 @@ const DoserForm = withFormik({
       enable: data.regiment.enable === undefined ? true : data.regiment.enable,
       duration: data.regiment.duration || 0,
       speed: data.regiment.speed || 0,
+      month: data.regiment.schedule.month || '*',
+      week: data.regiment.schedule.week || '*',
       day: data.regiment.schedule.day || '*',
       hour: data.regiment.schedule.hour || '0',
       minute: data.regiment.schedule.minute || '0',
@@ -30,7 +32,7 @@ const DoserForm = withFormik({
     }
   },
   validationSchema: DoserSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditDoser)

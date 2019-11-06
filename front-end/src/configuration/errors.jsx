@@ -7,8 +7,13 @@ class errors extends React.Component {
   componentDidMount () {
     this.props.fetch()
   }
+
+  handleClear () {
+    this.props.clear()
+  }
+
   render () {
-    var items = []
+    const items = []
     this.props.errors.forEach(el => {
       items.push(
         <div className='row' key={'error-' + el.id}>
@@ -29,7 +34,7 @@ class errors extends React.Component {
         {items}
         <div className='row'>
           <div className='col-lg-2'>
-            <button className='btn btn-outline-secondary' onClick={this.props.clear}>
+            <button className='btn btn-outline-secondary' onClick={this.handleClear}>
               {i18n.t('clear')}
             </button>
           </div>

@@ -1,5 +1,4 @@
-import {infoLoaded, fetchInfo} from './info'
-import { applyMiddleware } from 'redux'
+import { infoLoaded, fetchInfo } from './info'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

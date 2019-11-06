@@ -1,22 +1,22 @@
-import {reduxGet} from 'utils/ajax'
+import { reduxGet } from 'utils/ajax'
 import $ from 'jquery'
-import {fetchATOs} from './ato'
-import {fetchInfo} from './info'
-import {fetchDosingPumps} from './doser'
-import {fetchDrivers} from './drivers'
-import {fetchErrors} from './errors'
-import {fetchOutlets} from './outlets'
-import {fetchInlets} from './inlets'
-import {fetchJacks} from './jacks'
-import {fetchAnalogInputs} from './analog_inputs'
-import {fetchTCs} from './tcs'
-import {fetchLights} from './lights'
-import {fetchPhProbes} from './phprobes'
-import {fetchEquipment} from './equipment'
-import {fetchTimers} from './timer'
-import {capabilitiesLoaded} from './capabilities'
-import {fetchInstances} from './instances'
-import {fetchMacros} from './macro'
+import { fetchATOs } from './ato'
+import { fetchInfo } from './info'
+import { fetchDosingPumps } from './doser'
+import { fetchDrivers } from './drivers'
+import { fetchErrors } from './errors'
+import { fetchOutlets } from './outlets'
+import { fetchInlets } from './inlets'
+import { fetchJacks } from './jacks'
+import { fetchAnalogInputs } from './analog_inputs'
+import { fetchTCs } from './tcs'
+import { fetchLights } from './lights'
+import { fetchPhProbes } from './phprobes'
+import { fetchEquipment } from './equipment'
+import { fetchTimers } from './timer'
+import { capabilitiesLoaded } from './capabilities'
+import { fetchInstances } from './instances'
+import { fetchMacros } from './macro'
 
 export const fetchControllerData = (dispatch, capabilities) => {
   dispatch(fetchDrivers())
@@ -61,7 +61,7 @@ export const fetchControllerData = (dispatch, capabilities) => {
 }
 
 export const fetchManagerData = (dispatch) => {
-  console.log("Fetching manager data")
+  console.log('Fetching manager data')
   dispatch(fetchInstances())
 }
 
@@ -69,10 +69,10 @@ export const fetchUIData = (dispatch) => {
   return (reduxGet({
     url: '/api/capabilities',
     success: (capabilities) => {
-      if(capabilities['manager']) {
+      if (capabilities.manager) {
         fetchManagerData(dispatch)
         return (capabilitiesLoaded(capabilities))
-      }else{
+      } else {
         fetchControllerData(dispatch, capabilities)
         return (capabilitiesLoaded(capabilities))
       }

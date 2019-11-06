@@ -1,5 +1,4 @@
-import {tcsLoaded, sensorsLoaded, tcUsageLoaded, fetchTCs, createTC, updateTC, deleteTC, fetchSensors, fetchTCUsage} from './tcs'
-import { applyMiddleware } from 'redux'
+import { tcsLoaded, sensorsLoaded, tcUsageLoaded, fetchTCs, createTC, updateTC, deleteTC, fetchSensors, fetchTCUsage } from './tcs'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

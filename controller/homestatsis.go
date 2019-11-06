@@ -8,6 +8,14 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+type target uint
+
+const (
+	noTarget target = iota
+	upperTarget
+	downerTarget
+)
+
 type Observation struct {
 	Value  float64            `json:"value"`
 	Upper  int                `json:"up"`
@@ -42,31 +50,38 @@ func NewObservation(v float64) Observation {
 }
 
 func (o1 Observation) Before(o2 telemetry.Metric) bool {
-	return o1.Time.Before(o2.(Observation).Time)
+	o, ok := o2.(Observation)
+	if !ok {
+		return false
+	}
+	return o1.Time.Before(o.Time)
 }
 
-type HomeStasisConfig struct {
-	Name     string
-	IsMacro  bool
-	Period   int
-	Upper    string
-	Downer   string
-	Min, Max float64
+type HomeoStasisConfig struct {
+	Name       string
+	IsMacro    bool
+	Period     int
+	Upper      string
+	Downer     string
+	Min, Max   float64
+	Hysteresis float64
 }
 
 type Homeostasis struct {
-	config HomeStasisConfig
-	t      telemetry.Telemetry
-	eqs    Subsystem
-	macros Subsystem
+	config     HomeoStasisConfig
+	t          telemetry.Telemetry
+	eqs        Subsystem
+	macros     Subsystem
+	pastTarget target
 }
 
-func NewHomeostasis(c Controller, config HomeStasisConfig) *Homeostasis {
+func NewHomeostasis(c Controller, config HomeoStasisConfig) *Homeostasis {
 	h := Homeostasis{
-		config: config,
-		t:      c.Telemetry(),
-		eqs:    NoopSubsystem(),
-		macros: NoopSubsystem(),
+		config:     config,
+		t:          c.Telemetry(),
+		eqs:        NoopSubsystem(),
+		macros:     NoopSubsystem(),
+		pastTarget: noTarget,
 	}
 	if sub, err := c.Subsystem(storage.MacroBucket); err == nil {
 		h.macros = sub
@@ -96,15 +111,26 @@ func (h *Homeostasis) Sync(o *Observation) error {
 			return err
 		}
 		o.Downer += h.config.Period
+		h.pastTarget = downerTarget
 	case (o.Value < h.config.Min) && (h.config.Upper != ""):
 		log.Printf("Current value of '%s' is below minimum threshold. Executing up routine\n", h.config.Name)
 		if err := h.up(); err != nil {
 			return err
 		}
 		o.Upper += int(h.config.Period)
+		h.pastTarget = upperTarget
+	case o.Value > (h.config.Max - h.config.Hysteresis):
+		if h.pastTarget == downerTarget {
+			o.Downer += int(h.config.Period)
+		}
+	case o.Value < (h.config.Min + h.config.Hysteresis):
+		if h.pastTarget == upperTarget {
+			o.Upper += int(h.config.Period)
+		}
 	default:
 		log.Printf("Current value of '%s' within range switching off control equipments\n", h.config.Name)
 		h.switchOffAll()
+		h.pastTarget = noTarget
 	}
 	if h.config.Upper != "" {
 		h.EmitMetric("down", float64(o.Downer))

@@ -10,24 +10,33 @@ class jacks extends React.Component {
     this.state = {
       JackName: '',
       JackPins: '',
+      JackReverse: false,
       JackDriver: 'rpi',
       add: false
     }
     this.list = this.list.bind(this)
-    this.add = this.add.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
-    this.save = this.save.bind(this)
-    this.setDriver = this.setDriver.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
+    this.handleReverseChange = this.handleReverseChange.bind(this)
   }
+
+  handleReverseChange () {
+    this.setState({ JackReverse: !this.state.JackReverse })
+  }
+
   handleNameChange (e) {
     this.setState({ JackName: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ JackPins: e.target.value })
   }
-  setDriver (e) {
+
+  handleSetDriver (e) {
     this.setState({
       JackDriver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
@@ -48,41 +57,44 @@ class jacks extends React.Component {
     this.props.fetch()
   }
 
-  add () {
+  handleAdd () {
     this.setState({
       add: !this.state.add,
       JackName: '',
-      JackPins: ''
+      JackPins: '',
+      JackReverse: false
     })
   }
 
-  save () {
-    var pins = this.state.JackPins.split(',').map(p => {
+  handleSave () {
+    const pins = this.state.JackPins.split(',').map(p => {
       return parseInt(p)
     })
-    for (var i = 0; i < pins.length; i++) {
+    for (let i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
         showError('Use only comma separated numbers')
         return
       }
     }
-    var payload = {
+    const payload = {
       name: this.state.JackName,
       pins: pins,
-      driver: this.state.JackDriver
+      driver: this.state.JackDriver,
+      reverse: this.state.JackReverse
     }
     this.props.create(payload)
-    this.add()
+    this.handleAdd()
   }
 
   list () {
-    var list = []
+    const list = []
     this.props.jacks.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((j, i) => {
       list.push(
         <Jack
           name={j.name}
           key={j.id}
           pins={j.pins}
+          reverse={j.reverse}
           driver={j.driver}
           drivers={this.props.drivers}
           jack_id={j.id}
@@ -98,7 +110,7 @@ class jacks extends React.Component {
   }
 
   render () {
-    var dStyle = {
+    const dStyle = {
       display: this.state.add ? '' : 'none'
     }
     return (
@@ -115,14 +127,14 @@ class jacks extends React.Component {
               id='add_jack'
               type='button'
               value={this.state.add ? '-' : '+'}
-              onClick={this.add}
+              onClick={this.handleAdd}
               className='btn btn-sm btn-outline-success'
             />
           </div>
         </div>
         <div className='row'>
           <div className='col-12'>
-            <div className='row' style={dStyle}>
+            <div className='row add-jack' style={dStyle}>
               <div className='col-12 col-md-5'>
                 <div className='form-group'>
                   <label htmlFor='jackName'>Name</label>
@@ -132,6 +144,18 @@ class jacks extends React.Component {
                     value={this.state.JackName}
                     onChange={this.handleNameChange}
                     className='form-control'
+                  />
+                </div>
+              </div>
+              <div className='col-12 col-md-2'>
+                <div className='form-group'>
+                  <span className='input-group-addon'>Reverse</span>
+                  <input
+                    type='checkbox'
+                    id='jackReverse'
+                    className='form-control'
+                    onChange={this.handleReverseChange}
+                    checked={this.state.JackReverse}
                   />
                 </div>
               </div>
@@ -150,11 +174,13 @@ class jacks extends React.Component {
 
               <div className='col-12 col-md-2'>
                 <div className='jack-type form-group'>
-                  <label className='input-group-addon'>Driver</label>
+                  <label>Driver</label>
                   <select
                     name='driver'
-                    onChange={this.setDriver}
-                    value={this.state.JackDriver}>
+                    className='form-control custom-select'
+                    onChange={this.handleSetDriver}
+                    value={this.state.JackDriver}
+                  >
                     {this.props.drivers.map(item => {
                       return (
                         <option key={item.id} value={item.id}>
@@ -170,7 +196,7 @@ class jacks extends React.Component {
                   type='button'
                   id='createJack'
                   value='add'
-                  onClick={this.save}
+                  onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />
               </div>

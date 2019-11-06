@@ -13,10 +13,10 @@ export default class AnalogInput extends React.Component {
       lbl: 'edit',
       driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
     }
-    this.edit = this.edit.bind(this)
+    this.hanldeEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
-    this.setDriver = this.setDriver.bind(this)
+    this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handlePinChange = this.handlePinChange.bind(this)
   }
@@ -24,17 +24,19 @@ export default class AnalogInput extends React.Component {
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
+
   handlePinChange (e) {
     this.setState({ pin: e.target.value })
   }
-  setDriver (e) {
+
+  handleSetDriver (e) {
     this.setState({
       driver: e.target.value,
       driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
     })
   }
 
-  edit () {
+  handleEdit () {
     if (!this.state.edit) {
       this.setState({
         edit: true,
@@ -42,12 +44,12 @@ export default class AnalogInput extends React.Component {
       })
       return
     }
-    var pin = parseInt(this.state.pin)
+    const pin = parseInt(this.state.pin)
     if (isNaN(pin)) {
       showError('Use only comma separated numbers')
       return
     }
-    var payload = {
+    const payload = {
       name: this.state.name,
       pin: pin,
       driver: this.state.driver
@@ -91,12 +93,14 @@ export default class AnalogInput extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label className='input-group-addon'>Driver</label>
+            <label>Driver</label>
             <select
               name='driver'
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}
-              onChange={this.setDriver}
-              value={this.state.driver}>
+              className='custom-select form-control'
+              onChange={this.handleSetDriver}
+              value={this.state.driver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option
@@ -129,6 +133,10 @@ export default class AnalogInput extends React.Component {
     )
   }
 
+  handleRemove () {
+    this.props.remove()
+  }
+
   render () {
     return (
       <div className='row border-bottom py-1'>
@@ -138,13 +146,13 @@ export default class AnalogInput extends React.Component {
             type='button'
             className='analog_input-remove btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
             value='X'
-            onClick={this.props.remove}
+            onClick={this.handleRemove}
           />
           <input
             type='button'
             className='analog_input-edit btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
             value={this.state.lbl}
-            onClick={this.edit}
+            onClick={this.handleEdit}
           />
         </div>
       </div>

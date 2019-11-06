@@ -13,6 +13,8 @@ const EditPh = ({
   errors,
   touched,
   analogInputs,
+  equipment,
+  macros,
   probe,
   submitForm,
   isValid,
@@ -31,6 +33,20 @@ const EditPh = ({
 
   const analogInputOptions = () => {
     return analogInputs.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
+  const options = () => {
+    let opts = []
+
+    if (values.control === 'equipment') { opts = equipment } else if (values.control === 'macro') { opts = macros }
+
+    return opts.map(item => {
       return (
         <option key={item.id} value={item.id}>
           {item.name}
@@ -152,6 +168,9 @@ const EditPh = ({
           </div>
         </div>
 
+        {/* Wrap to next line on small */}
+        <div className='w-100 d-none d-sm-block d-md-none' />
+
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='minAlert'>{i18next.t('ph:alert_below')}</label>
@@ -181,6 +200,113 @@ const EditPh = ({
         </div>
       </div>
 
+      <div className='row'>
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='control'>{i18next.t('ph:control')}</label>
+            <Field
+              name='control'
+              component='select'
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('control', touched, errors)
+              })}
+            >
+              <option value='nothing'>{i18next.t('ph:controlnothing')}</option>
+              <option value='macro'>{i18next.t('ph:controlmacro')}</option>
+              <option value='equipment'>{i18next.t('ph:controlequipment')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='control' />
+          </div>
+        </div>
+
+        {/* Wrap to next line on small */}
+        <div className='w-100 d-none d-sm-block d-md-none' />
+
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='lowerThreshold'>{i18next.t('ph:lower_threshold')}</label>
+            <Field
+              name='lowerThreshold'
+              readOnly={readOnly || values.control === 'nothing'}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('lowerThreshold', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='lowerThreshold' />
+          </div>
+        </div>
+
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='lowerFunction'>{i18next.t('ph:lower_function')}</label>
+            <Field
+              name='lowerFunction'
+              component='select'
+              disabled={readOnly || values.control === 'nothing'}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('lowerFunction', touched, errors)
+              })}
+            >
+              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+              {options()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
+          </div>
+        </div>
+      </div>
+
+      <div className='row'>
+
+        <div className='col col-sm-6 col-md-3 offset-md-3'>
+          <div className='form-group'>
+            <label htmlFor='upperThreshold'>{i18next.t('ph:upper_threshold')}</label>
+            <Field
+              name='upperThreshold'
+              readOnly={readOnly || values.control === 'nothing'}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('upperThreshold', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='upperThreshold' />
+          </div>
+        </div>
+
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='upperFunction'>{i18next.t('ph:upper_function')}</label>
+            <Field
+              name='upperFunction'
+              component='select'
+              disabled={readOnly || values.control === 'nothing'}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('upperFunction', touched, errors)
+              })}
+            >
+              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+              {options()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='upperFunction' />
+          </div>
+        </div>
+      </div>
+
+      <div className='row'>
+        <div className='col col-sm-6 col-md-3 offset-md-3'>
+          <div className='form-group'>
+            <label htmlFor='hysteresis'>{i18next.t('ph:hysteresis')}</label>
+            <Field
+              name='hysteresis'
+              readOnly={readOnly || values.control === 'nothing'}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('hysteresis', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='hysteresis' />
+          </div>
+        </div>
+      </div>
+
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
           <input
@@ -204,7 +330,13 @@ EditPh.propTypes = {
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   handleChange: PropTypes.func,
-  analogInputs: PropTypes.array
+  analogInputs: PropTypes.array,
+  equipment: PropTypes.array,
+  macros: PropTypes.array,
+  probe: PropTypes.object,
+  isValid: PropTypes.bool,
+  dirty: PropTypes.bool,
+  readOnly: PropTypes.bool
 }
 
 export default EditPh

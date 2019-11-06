@@ -13,7 +13,7 @@ export default class Inlet extends React.Component {
       driver_name: props.drivers.filter(d => d.id === props.driver)[0].name,
       lbl: 'edit'
     }
-    this.edit = this.edit.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
@@ -41,7 +41,7 @@ export default class Inlet extends React.Component {
     this.setState({ reverse: !this.state.reverse })
   }
 
-  edit () {
+  handleEdit () {
     if (!this.state.edit) {
       this.setState({
         edit: true,
@@ -49,7 +49,7 @@ export default class Inlet extends React.Component {
       })
       return
     }
-    var payload = {
+    const payload = {
       name: this.state.name,
       pin: parseInt(this.state.pin),
       reverse: this.state.reverse,
@@ -107,11 +107,13 @@ export default class Inlet extends React.Component {
         </div>
         <div className='col-12 col-md-2'>
           <div className='driver-type form-group'>
-            <label className='input-group-addon'>Driver</label>
+            <label htmlFor='driver'>Driver</label>
             <select
               name='driver'
+              className='custom-select form-control'
               onChange={this.handleDriverChange}
-              value={this.state.driver}>
+              value={this.state.driver}
+            >
               {this.props.drivers.map(item => {
                 return (
                   <option key={item.id} value={item.id}>
@@ -132,8 +134,7 @@ export default class Inlet extends React.Component {
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
           <label className='small'>
-            {this.state.driver_name}
-            ({this.state.pin})
+            {this.state.driver_name}({this.state.pin})
           </label>
         </div>
         <div className='col'>
@@ -146,6 +147,10 @@ export default class Inlet extends React.Component {
     )
   }
 
+  handleRemove () {
+    this.props.remove()
+  }
+
   render () {
     return (
       <div className='row border-bottom py-1'>
@@ -155,13 +160,13 @@ export default class Inlet extends React.Component {
             type='button'
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
             value='X'
-            onClick={this.props.remove}
+            onClick={this.handleRemove}
           />
           <input
             type='button'
             className='edit-inlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
             value={this.state.lbl}
-            onClick={this.edit}
+            onClick={this.handleEdit}
           />
         </div>
       </div>

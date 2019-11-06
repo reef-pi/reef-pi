@@ -1,5 +1,4 @@
-import {dosingPumpsLoaded, dosingPumpScheduleUpdated, dosingPumpCalibrated, fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPumpSchedule, calibrateDosingPump} from './doser'
-import { applyMiddleware } from 'redux'
+import { dosingPumpsLoaded, dosingPumpScheduleUpdated, dosingPumpCalibrated, fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPumpSchedule, calibrateDosingPump } from './doser'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'

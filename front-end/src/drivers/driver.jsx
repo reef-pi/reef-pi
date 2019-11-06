@@ -1,23 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {confirm} from 'utils/confirm'
+import { confirm } from 'utils/confirm'
 
 export default class Driver extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
     }
-    this.remove = this.remove.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
-  remove () {
+  handleRemove () {
     const message = (
       <div>
         <p>This action will delete this driver.</p>
       </div>
     )
 
-    confirm('Delete driver', {description: message})
+    confirm('Delete driver', { description: message })
       .then(function () {
         this.props.remove(this.props.driver_id)
       }.bind(this))
@@ -31,7 +31,7 @@ export default class Driver extends React.Component {
           <label className='small'>{this.props.type}</label>
         </div>
         <div className='col'>
-          <input type='button' onClick={this.remove} value='X' className='btn btn-danger' />
+          <input type='button' onClick={this.handleRemove} value='X' className='btn btn-danger' />
         </div>
       </div>
     )

@@ -5,7 +5,7 @@ import { fetchEquipment } from './redux/actions/equipment'
 class selectEquipment extends React.Component {
   constructor (props) {
     super(props)
-    var equipment = { id: props.active, name: '' }
+    let equipment = { id: props.active, name: '' }
     props.equipment.forEach((eq, i) => {
       if (eq.id === equipment.id) {
         equipment = eq
@@ -23,13 +23,13 @@ class selectEquipment extends React.Component {
   }
 
   equipmentList () {
-    var menuItems = [
+    const menuItems = [
       <a className='dropdown-item' href='#' key='none' onClick={this.setEquipment('none')}>
         {'--'}
       </a>
     ]
     this.props.equipment.forEach((v, k) => {
-      var cName = 'dropdown-item'
+      let cName = 'dropdown-item'
       if (this.state.equipment !== undefined) {
         if (this.state.equipment.id === v.id) {
           cName += ' active'
@@ -53,7 +53,7 @@ class selectEquipment extends React.Component {
         this.props.update('')
         return
       }
-      var eq = this.props.equipment[k]
+      const eq = this.props.equipment[k]
       this.setState({
         equipment: eq
       })
@@ -62,8 +62,8 @@ class selectEquipment extends React.Component {
   }
 
   render () {
-    var readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
-    var eqName = ''
+    const readOnly = this.props.readOnly !== undefined ? this.props.readOnly : false
+    let eqName = ''
     if (this.state.equipment !== undefined) {
       eqName = this.state.equipment.name
     }

@@ -1,4 +1,4 @@
-import {reduxPost} from '../../utils/ajax'
+import { reduxPost } from '../../utils/ajax'
 
 export const reloaded = () => {
   return ({

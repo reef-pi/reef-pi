@@ -33,7 +33,7 @@ describe('Macro UI', () => {
     name: 'Foo',
     steps: [
       { type: 'wait', config: { duration: 10 } },
-      { type: 'equipment', config: {id: '1', on: true} }
+      { type: 'equipment', config: { id: '1', on: true } }
     ]
   }
 
@@ -51,11 +51,11 @@ describe('Macro UI', () => {
     n.componentWillUnmount()
     delete n.state.timer
     n.componentWillUnmount()
-    n.createMacro(macro)
-    n.updateMacro(macro)
-    n.deleteMacro(macro)
-    n.runMacro({stopPropagation: jest.fn()}, macro)
-    n.toggleAddMacroDiv()
+    n.handleCreateMacro(macro)
+    n.handleUpdateMacro(macro)
+    n.handleDeleteMacro(macro)
+    n.runMacro({ stopPropagation: jest.fn() }, macro)
+    n.handleToggleAddMacroDiv()
   })
 
   it('<MacroForm/> for create', () => {
@@ -74,7 +74,7 @@ describe('Macro UI', () => {
 
   it('<MacroForm /> for edit with bad macro', () => {
     const fn = jest.fn()
-    const badMacro = {name: 'bad'}
+    const badMacro = { name: 'bad' }
     const wrapper = shallow(<MacroForm macro={badMacro} onSubmit={fn} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
@@ -83,7 +83,7 @@ describe('Macro UI', () => {
   it('<MacroForm /> for diving', () => {
     const fn = jest.fn()
     const wrapper = mount(
-      <Provider store={mockStore({ macros: [macro], equipment: [{id: 1, name: 'test'}] })}>
+      <Provider store={mockStore({ macros: [macro], equipment: [{ id: 1, name: 'test' }] })}>
         <MacroForm macro={macro} onSubmit={fn} />
       </Provider>
     )

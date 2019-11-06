@@ -1,7 +1,8 @@
 import PhSchema from './ph_schema'
+import { powerSaveBlocker } from 'electron'
 
 describe('PhValidation', () => {
-  var probe = {}
+  let probe = {}
 
   beforeEach(() => {
     probe = {
@@ -11,7 +12,8 @@ describe('PhValidation', () => {
       period: 60,
       notify: true,
       minAlert: 8.0,
-      maxAlert: 8.6
+      maxAlert: 8.6,
+      control: 'nothing'
     }
   })
 
@@ -26,6 +28,28 @@ describe('PhValidation', () => {
     probe.notify = false
     probe.minAlert = 0
     probe.maxAlert = 0
+
+    expect.assertions(1)
+    return PhSchema.isValid(probe).then(
+      valid => expect(valid).toBe(true)
+    )
+  })
+
+  it('should require threshold if controlling macros', () => {
+    probe.control = 'macro'
+    expect.assertions(1)
+    return PhSchema.isValid(probe).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
+
+  it('should be valid if controlling equipment with required settings', () => {
+    probe.control = 'equipment'
+    probe.lowerThreshold = 8
+    probe.lowerFunction = '2'
+    probe.upperThreshold = 9
+    probe.upperFunction = '5'
+    probe.hysteresis = 0.1
 
     expect.assertions(1)
     return PhSchema.isValid(probe).then(

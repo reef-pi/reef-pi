@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import ControlChart from './control_chart'
 import EditTemperature from './edit_temperature'
@@ -10,10 +10,11 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditTemperature />', () => {
-  var values = {}
-  var sensors = [{id: 'sensor'}]
-  var equipment = [{id: '1', name: 'EQ'}]
-  var fn = jest.fn()
+  let values = {}
+  let sensors = [{ id: 'sensor' }]
+  let equipment = [{ id: '1', name: 'EQ' }]
+  let macros = [{ id: '1', name: 'Macro' }]
+  let fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -32,8 +33,7 @@ describe('<EditTemperature />', () => {
       heater: '',
       cooler: '',
       alerts: false,
-      minChart: 60,
-      maxChart: 90
+      control: 'macro'
     }
   })
 
@@ -43,13 +43,16 @@ describe('<EditTemperature />', () => {
 
   it('should not show charts when showChart is false', () => {
     const wrapper = shallow(
-      <EditTemperature values={values}
+      <EditTemperature
+        values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
-        showChart={false} />
+        showChart={false}
+      />
     )
 
     expect(wrapper.find(ReadingsChart).length).toBe(0)
@@ -58,13 +61,16 @@ describe('<EditTemperature />', () => {
 
   it('should show reading charts when showChart is true but hide control chart', () => {
     const wrapper = shallow(
-      <EditTemperature values={values}
+      <EditTemperature
+        values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
-        showChart />
+        showChart
+      />
     )
 
     expect(wrapper.find(ReadingsChart).length).toBe(1)
@@ -76,13 +82,16 @@ describe('<EditTemperature />', () => {
     values.cooler = '4'
 
     const wrapper = shallow(
-      <EditTemperature values={values}
+      <EditTemperature
+        values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
-        showChart />
+        showChart
+      />
     )
 
     expect(wrapper.find(ReadingsChart).length).toBe(1)
@@ -91,17 +100,20 @@ describe('<EditTemperature />', () => {
 
   it('<EditEquipment /> should submit', () => {
     const wrapper = shallow(
-      <EditTemperature values={values}
+      <EditTemperature
+        values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
         showChart
         dirty
-        isValid />
+        isValid
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
@@ -109,17 +121,68 @@ describe('<EditTemperature />', () => {
     values.name = ''
     values.fahrenheit = false
     const wrapper = shallow(
-      <EditTemperature values={values}
+      <EditTemperature
+        values={values}
         sensors={sensors}
         equipment={equipment}
+        macros={macros}
         handleBlur={fn}
         handleChange={fn}
         submitForm={fn}
         showChart
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
-    wrapper.find('form').simulate('submit', {preventDefault: () => {}})
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
+
+  it('<EditEquipment /> should disable inputs when controlling nothing', () => {
+
+    values.control = 'nothing'
+
+    const wrapper = shallow(
+      <EditTemperature
+        values={values}
+        sensors={sensors}
+        equipment={equipment}
+        macros={macros}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn}
+        showChart
+        dirty
+        isValid={false}
+      />
+    )
+
+    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    expect(upperFunction.prop('disabled')).toBe(true)
+  })
+
+
+  it('<EditEquipment /> should enable inputs when controlling equipment', () => {
+
+    values.control = 'equipment'
+
+    const wrapper = shallow(
+      <EditTemperature
+        values={values}
+        sensors={sensors}
+        equipment={equipment}
+        macros={macros}
+        handleBlur={fn}
+        handleChange={fn}
+        submitForm={fn}
+        showChart
+        dirty
+        isValid={false}
+      />
+    )
+
+    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    expect(upperFunction.prop('disabled')).toBe(false)
+  })
+
 })

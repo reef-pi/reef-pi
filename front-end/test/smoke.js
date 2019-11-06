@@ -3,6 +3,7 @@ const outlet = require('./outlet.js')
 const macro = require('./macro.js')
 const inlet = require('./inlets.js')
 const jacks = require('./jacks.js')
+const analogs = require('./analogInput')
 const drivers = require('./drivers.js')
 const ph = require('./ph.js')
 const ato = require('./ato.js')
@@ -36,11 +37,15 @@ function SmokeTest (url) {
     .wait(1500)
     .evaluate(jacks.Create(nightmare))
     .wait(1500)
+    .evaluate(analogs.Create(nightmare))
+    .wait(1500)
     .evaluate(equipment.Create(nightmare))
     .wait(1500)
     .evaluate(timer.Create(nightmare))
     .wait(1500)
     .evaluate(light.Create(nightmare))
+    .wait(1500)
+    .evaluate(macro.Create(nightmare))
     .wait(1500)
     .evaluate(ph.Create(nightmare))
     .wait(1500)
@@ -53,8 +58,6 @@ function SmokeTest (url) {
     .evaluate(doser.Create(nightmare))
     .wait(1500)
     .evaluate(dashboard.Configure(nightmare))
-    .wait(1500)
-    .evaluate(macro.Create(nightmare))
     .wait(1500)
     .click('a#tab-dashboard')
     .wait(1500)
@@ -69,7 +72,7 @@ function SmokeTest (url) {
 }
 
 let url = 'http://localhost:8080/'
-if (process.argv.length == 3) {
+if (process.argv.length === 3) {
   url = process.argv[2]
 }
 

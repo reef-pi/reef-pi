@@ -9,7 +9,7 @@ export default class SignIn extends React.Component {
       password: '',
       invalidCredentials: false
     }
-    this.login = this.login.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
     this.handleUserChange = this.handleUserChange.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
@@ -37,10 +37,10 @@ export default class SignIn extends React.Component {
     window.location.reload(true)
   }
 
-  login (e) {
+  handleLogin (e) {
     this.setState({ invalidCredentials: false })
     e.preventDefault()
-    let creds = {
+    const creds = {
       user: this.state.user,
       password: this.state.password
     }
@@ -117,7 +117,7 @@ export default class SignIn extends React.Component {
                 />
                 <button
                   className='btn btn-lg btn-success btn-block mt-3'
-                  onClick={this.login}
+                  onClick={this.handleLogin}
                   type='submit'
                   id='btnSaveCreds'
                 >

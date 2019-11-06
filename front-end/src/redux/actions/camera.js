@@ -1,4 +1,4 @@
-import {reduxPut, reduxDelete, reduxGet, reduxPost} from '../../utils/ajax'
+import { reduxGet, reduxPost } from '../../utils/ajax'
 
 export const configLoaded = (s) => {
   return ({

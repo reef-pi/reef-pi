@@ -70,7 +70,7 @@ func (c *AnalogInputs) Get(id string) (AnalogInput, error) {
 
 func (c *AnalogInputs) List() ([]AnalogInput, error) {
 	ais := []AnalogInput{}
-	fn := func(v []byte) error {
+	fn := func(_ string, v []byte) error {
 		var j AnalogInput
 		if err := json.Unmarshal(v, &j); err != nil {
 			return err

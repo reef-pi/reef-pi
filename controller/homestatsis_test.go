@@ -13,7 +13,7 @@ func TestHomestasis(t *testing.T) {
 	if err != nil {
 		t.Fatal(store)
 	}
-	config := HomeStasisConfig{
+	config := HomeoStasisConfig{
 		Name:   "test",
 		Upper:  "1",
 		Downer: "2",

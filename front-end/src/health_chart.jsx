@@ -1,7 +1,7 @@
 import React from 'react'
-import {ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart} from 'recharts'
-import {fetchHealth} from './redux/actions/health'
-import {connect} from 'react-redux'
+import { ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
+import { fetchHealth } from './redux/actions/health'
+import { connect } from 'react-redux'
 import i18next from 'i18next'
 
 class healthChart extends React.Component {
@@ -27,7 +27,7 @@ class healthChart extends React.Component {
     if (this.props.health_stats === undefined || this.props.health_stats.length <= 0) {
       return (<div />)
     }
-    var healthStats = this.props.health_stats[this.state.trend]
+    const healthStats = this.props.health_stats[this.state.trend]
     return (
       <div className='container'>
         <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({this.props.trend})</span>
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {fetchHealth: () => dispatch(fetchHealth())}
+  return { fetchHealth: () => dispatch(fetchHealth()) }
 }
 const HealthChart = connect(mapStateToProps, mapDispatchToProps)(healthChart)
 export default HealthChart

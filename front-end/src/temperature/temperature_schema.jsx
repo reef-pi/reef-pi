@@ -1,4 +1,5 @@
 import * as Yup from 'yup'
+import i18next from 'i18next'
 
 const TemperatureSchema = Yup.object().shape({
   name: Yup.string()
@@ -70,8 +71,17 @@ const TemperatureSchema = Yup.object().shape({
           return val > this.parent.min
         })
     }),
-  minChart: Yup.number(),
-  maxChart: Yup.number()
+  hysteresis: Yup.number()
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .required(i18next.t('temperature:hysteresis_required'))
+          .typeError(i18next.t('temperature:hysteresis_type'))
+          .test('lessThan', i18next.t('temperature:hysteresis_less_than'), function (hysteresis) {
+            return hysteresis < (this.parent.max - this.parent.min)
+          })
+      } else { return schema }
+    })
 })
 
 export default TemperatureSchema

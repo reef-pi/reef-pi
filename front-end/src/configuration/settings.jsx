@@ -26,16 +26,19 @@ class settings extends React.Component {
     this.updateCheckbox = this.updateCheckbox.bind(this)
     this.showCapabilities = this.showCapabilities.bind(this)
     this.updateCapabilities = this.updateCapabilities.bind(this)
-    this.update = this.update.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.showDisplay = this.showDisplay.bind(this)
     this.toRow = this.toRow.bind(this)
     this.updateHealthNotify = this.updateHealthNotify.bind(this)
     this.showHealthNotify = this.showHealthNotify.bind(this)
-    this.setLang = this.setLang.bind(this)
+    this.handleSetLang = this.handleSetLang.bind(this)
+    this.handleSetAddress = this.handleSetAddress.bind(this)
+    this.handleSetProtocolHttp = this.handleSetProtocolHttp.bind(this)
+    this.handleSetProtocolHttps = this.handleSetProtocolHttps.bind(this)
   }
 
-  setLang (ev) {
-    var lng = ev.target.value
+  handleSetLang (ev) {
+    const lng = ev.target.value
     i18n.changeLanguage(lng)
     window.location.reload()
   }
@@ -52,7 +55,7 @@ class settings extends React.Component {
 
   updateHealthNotify (notify) {
     if (notify !== undefined) {
-      var settings = this.state.settings
+      const settings = this.state.settings
       settings.health_check = notify
       this.setState({ settings: settings, updated: true })
     }
@@ -61,13 +64,52 @@ class settings extends React.Component {
 
   updateCheckbox (key) {
     return function (ev) {
-      var settings = this.state.settings
+      const settings = this.state.settings
       settings[key] = ev.target.checked
       this.setState({
         settings: settings,
         updated: true
       })
     }.bind(this)
+  }
+
+  handleSetAddress (ev) {
+    const settings = this.state.settings
+    settings.address = ev.target.value
+    this.setState({
+      settings: settings,
+      updated: true
+    })
+  }
+
+  handleSetProtocolHttp () {
+    this.handleSetProtocol(false)
+  }
+
+  handleSetProtocolHttps () {
+    this.handleSetProtocol(true)
+  }
+
+  handleSetProtocol (value) {
+    const settings = this.state.settings
+    const port = settings.address.split(':')[1]
+
+    // Technically redundant, but improves readability
+    // Remove the port if https and port 80
+    // Also remove the port if http and port 443
+    if (port === '80' && value === true) {
+      const address = settings.address.split(':')[0]
+      settings.address = address // Remove port
+    } else if (port === '443' && value === false) {
+      const address = settings.address.split(':')[0]
+      settings.address = address // Remove port
+    }
+
+    settings.https = value
+    this.setState({
+      settings: settings,
+      updated: true
+    })
   }
 
   showDisplay () {
@@ -86,7 +128,7 @@ class settings extends React.Component {
   }
 
   updateCapabilities (capabilities) {
-    var settings = this.state.settings
+    const settings = this.state.settings
     settings.capabilities = capabilities
     this.setState({
       settings: settings,
@@ -94,8 +136,8 @@ class settings extends React.Component {
     })
   }
 
-  update () {
-    var settings = this.state.settings
+  handleUpdate () {
+    let settings = this.state.settings
     if (SettingsSchema.isValidSync(settings)) {
       settings = SettingsSchema.cast(settings)
       this.setState({ updated: false, settings: settings })
@@ -112,8 +154,8 @@ class settings extends React.Component {
   }
 
   toRow (label) {
-    var fn = function (ev) {
-      var settings = this.state.settings
+    const fn = function (ev) {
+      const settings = this.state.settings
       settings[label] = ev.target.value
       this.setState({
         settings: settings,
@@ -146,7 +188,7 @@ class settings extends React.Component {
   }
 
   render () {
-    var updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
     }
@@ -160,14 +202,36 @@ class settings extends React.Component {
               <div className='col-lg-6 col-sm-12'>{this.toRow('interface')}</div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>{this.toRow('address')}</div>
+              <div className='col-lg-6 col-sm-12'>
+                <div className='form-group'>
+                  <label htmlFor='to-row-address'> {i18n.t('configuration:settings:address')}</label>
+                  <div className='input-group'>
+                    <div className='input-group-prepend'>
+                      <button className='btn btn-outline-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        {this.state.settings.https === true ? 'https' : 'http'}://
+                      </button>
+                      <div className='dropdown-menu'>
+                        <a className='dropdown-item' onClick={this.handleSetProtocolHttp}>http://</a>
+                        <a className='dropdown-item' onClick={this.handleSetProtocolHttps}>https://</a>
+                      </div>
+                    </div>
+                    <input
+                      className='form-control'
+                      type='text'
+                      onChange={this.handleSetAddress}
+                      value={this.state.settings.address}
+                      id='to-row-address'
+                    />
+                  </div>
+                </div>
+              </div>
               <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq')}</div>
             </div>
             <div className='row'>
               <div className='col-lg-6 col-sm-12'>
                 <div className='form-group'>
                   <label htmlFor='app-language'>{i18n.t('language:language')}</label>
-                  <select value={this.state.currentLanguage} onChange={this.setLang} id='app-language' className='form-control'>
+                  <select value={this.state.currentLanguage} onChange={this.handleSetLang} id='app-language' className='form-control'>
                     <option value='en'>{i18n.t('language:en')}</option>
                     <option value='fr'>{i18n.t('language:fr')}</option>
                     <option value='es'>{i18n.t('language:es')}</option>
@@ -178,6 +242,21 @@ class settings extends React.Component {
                     <option value='fa'>{i18n.t('language:fa')}</option>
                     <option value='zh'>{i18n.t('language:zh')}</option>
                   </select>
+                </div>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-6'>
+                <div className='form-group'>
+                  <label htmlFor='updateDisplay'>{i18n.t('configuration:settings:display')}</label>
+                  <input
+                    type='checkbox'
+                    id='updateDisplay'
+                    onClick={this.updateCheckbox('display')}
+                    defaultChecked={this.state.settings.display}
+                    className='form-control'
+                  />
+                  {this.showDisplay()}
                 </div>
               </div>
               <div className='col-lg-6 col-sm-12'>
@@ -196,33 +275,6 @@ class settings extends React.Component {
             <div className='row'>
               <div className='col-6'>
                 <div className='form-group'>
-                  <label htmlFor='updateDisplay'>{i18n.t('configuration:settings:display')}</label>
-                  <input
-                    type='checkbox'
-                    id='updateDisplay'
-                    onClick={this.updateCheckbox('display')}
-                    defaultChecked={this.state.settings.display}
-                    className='form-control'
-                  />
-                  {this.showDisplay()}
-                </div>
-              </div>
-              <div className='col-6'>
-                <div className='form-group'>
-                  <label htmlFor='use_https'>{i18n.t('configuration:settings:use_https')}</label>
-                  <input
-                    type='checkbox'
-                    id='use_https'
-                    onClick={this.updateCheckbox('https')}
-                    defaultChecked={this.state.settings.https}
-                    className='form-control'
-                  />
-                </div>
-              </div>
-            </div>
-            <div className='row'>
-              <div className='col-6'>
-                <div className='form-group'>
                   <label htmlFor='enable_pprof'>{i18n.t('configuration:settings:enable_profiling')}</label>
                   <input
                     type='checkbox'
@@ -233,8 +285,6 @@ class settings extends React.Component {
                   />
                 </div>
               </div>
-            </div>
-            <div className='row'>
               <div className='col-6'>
                 <div className='form-group'>
                   <label htmlFor='enable_prometheus'>{i18n.t('configuration:settings:enable_prometheus')}</label>
@@ -263,7 +313,7 @@ class settings extends React.Component {
           <input
             type='button'
             className={updateButtonClass}
-            onClick={this.update}
+            onClick={this.handleUpdate}
             id='systemUpdateSettings'
             value={i18n.t('update')}
           />

@@ -1,6 +1,6 @@
 import React from 'react'
 import 'isomorphic-fetch'
-import Enzyme, {shallow } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import New from './new'
 import configureMockStore from 'redux-mock-store'
@@ -15,8 +15,8 @@ describe('New ATO', () => {
     renderer.create(<New store={mockStore()} />)
     const wrapper = shallow(<New store={mockStore()} />)
     const component = wrapper.dive().instance()
-    component.toggle()
-    component.add({
+    component.handleToggle()
+    component.handleSubmit({
       name: 'test',
       inlet: '3',
       period: 60

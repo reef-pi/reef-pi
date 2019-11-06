@@ -14,7 +14,7 @@ const EditInstanceForm = withFormik({
     remove: props.remove
   }),
   validationSchema: InstanceSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditInstance)

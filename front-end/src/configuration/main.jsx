@@ -36,10 +36,10 @@ export default class Configuration extends React.Component {
   }
 
   render () {
-    var panels = []
-    let tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'drivers', 'errors', 'admin', 'about']
+    const panels = []
+    const tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'drivers', 'errors', 'admin', 'about']
     tabs.forEach((k, _) => {
-      var cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
+      const cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
       panels.push(
         <li className={cname} key={'conf-tabs-' + k}>
           <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>
@@ -48,16 +48,16 @@ export default class Configuration extends React.Component {
         </li>
       )
     })
-    var body = components[this.state.body]
+    const body = components[this.state.body]
     return (
-      <React.Fragment>
+      <>
         <div className='row' key='panels'>
           <ul className='conf-nav nav nav-tabs'>{panels}</ul>
         </div>
         <div className='row' key='body'>
           {body}
         </div>
-      </React.Fragment>
+      </>
     )
   }
 }

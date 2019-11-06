@@ -33,7 +33,7 @@ describe('Notifications', () => {
         type: 'WARNING'
       }
     ]
-    let store = mockStore({ alerts: alerts })
+    const store = mockStore({ alerts: alerts })
     const wrapper = shallow(<Alert store={store} />).dive()
     expect(wrapper.find(AlertItem).length).toBe(4)
     const l = wrapper.instance()

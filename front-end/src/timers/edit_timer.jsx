@@ -35,6 +35,40 @@ const EditTimer = ({
     }
   }
 
+  // handleConfigChange intercepts the change handler for type and also changes the target.
+  // This is required in order for Formik to know which fields may be in the validation
+  const handleConfigChange = e => {
+    const event = {
+      target: {
+        name: 'target',
+        value: targetFor(e.target.value)
+      }
+    }
+
+    // allow the original change of the type field to proceed
+    handleChange(e, props)
+    // notify the change of the target
+    handleChange(event, props)
+  }
+
+  const targetFor = targetType => {
+    let target = {}
+    switch (targetType) {
+      case 'macro':
+        target = {
+          id: ''
+        }
+        break
+      case 'equipment':
+        target = { id: '', on: true, revert: false, duration: 60 }
+        break
+      case 'reminder':
+        target = { title: '', message: '' }
+        break
+    }
+    return target
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='row'>
@@ -72,7 +106,8 @@ const EditTimer = ({
         </div>
 
         <div className='col-12 order-lg-5 col-xl-6'>
-          <Cron values={values}
+          <Cron
+            values={values}
             touched={touched}
             errors={errors}
             readOnly={readOnly}
@@ -86,6 +121,7 @@ const EditTimer = ({
               name='type'
               component='select'
               disabled={readOnly}
+              onChange={handleConfigChange}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}
@@ -93,7 +129,7 @@ const EditTimer = ({
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               <option value='equipment'>{i18next.t('timers:equipment')}</option>
               <option value='reminder'>{i18next.t('timers:reminder')}</option>
-              <option value='macros'>{i18next.t('timers:macros')}</option>
+              <option value='macro'>{i18next.t('timers:macros')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>

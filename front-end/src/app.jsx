@@ -1,5 +1,4 @@
 import React from 'react'
-import { render } from 'react-dom'
 import $ from 'jquery'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
@@ -16,12 +15,14 @@ export default class App extends React.Component {
       logged: false
     }
   }
+
   componentDidMount () {
     const setState = this.setState.bind(this)
     SignIn.isSignedIn().then(r => {
       setState({ loaded: true, logged: r })
     })
   }
+
   getComponent () {
     if (!this.state.logged) {
       $('html').addClass('auth-page')
@@ -35,6 +36,7 @@ export default class App extends React.Component {
       return <MainPanel />
     }
   }
+
   render () {
     if (!this.state.loaded) {
       return <div>{i18n.t('loading')}</div>

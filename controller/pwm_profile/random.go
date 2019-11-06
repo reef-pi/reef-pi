@@ -6,46 +6,62 @@ import (
 	"time"
 )
 
+const (
+	seed         = 154
+	peakInterval = 160
+)
+
 type random struct {
 	temporal
 	previous     float64
 	peaks        []float64
-	peakInterval int
+	peakInterval float64
 }
 
-const coeff = 0.1
+func (r *random) Name() string {
+	return _randomProfileName
+}
 
 func Random(conf json.RawMessage, min, max float64) (*random, error) {
-	rand.Seed(154)
-	peakInterval := 360
 	t, err := Temporal(conf, min, max)
 	if err != nil {
 		return nil, err
 	}
-	peaks := make([]float64, t.TotalSeconds()/peakInterval)
+	return NewRandom(t), nil
+}
+
+func NewRandom(t temporal) *random {
+	rand.Seed(seed)
+	numPeaks := int(t.TotalSeconds() / peakInterval)
+	if numPeaks == 0 {
+		numPeaks = 1
+	}
+	peaks := make([]float64, numPeaks)
 	for i, _ := range peaks {
 		peaks[i] = rand.Float64()*t.ValueRange() + t.min
 	}
-	s := random{
+	return &random{
 		temporal:     t,
 		previous:     peaks[0],
 		peakInterval: peakInterval,
 		peaks:        peaks,
 	}
-	return &s, nil
 }
 
 func (s *random) Get(t time.Time) float64 {
 	if s.IsOutside(t) {
 		return 0
 	}
-	i := s.PastSeconds(t) / s.peakInterval
+	i := int(s.PastSeconds(t) / s.peakInterval)
+	if i >= len(s.peaks) {
+		i = len(s.peaks) - 1
+	}
 	prevPeak := s.peaks[i]
 	nextPeak := s.peaks[0]
 	if (i + 1) < len(s.peaks) {
 		nextPeak = s.peaks[i+1]
 	}
-	f := (nextPeak - prevPeak) / float64(s.peakInterval)
+	f := (nextPeak - prevPeak) / s.peakInterval
 	inc := rand.NormFloat64() + f
 	s.previous += inc
 	if s.previous > s.max {

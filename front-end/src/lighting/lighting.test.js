@@ -38,7 +38,7 @@ describe('Lighting ui', () => {
     name: 'foo',
     jack: '1',
     channels: {
-      '1': {
+      1: {
         pin: 0,
         color: '',
         profile: {
@@ -54,8 +54,8 @@ describe('Lighting ui', () => {
       .dive()
       .instance()
     m.setJack(0, {})
-    m.toggleAddLightDiv()
-    m.addLight()
+    m.handleToggleAddLightDiv()
+    m.handleAddLight()
   })
 
   it('<LightForm />', () => {
@@ -74,13 +74,13 @@ describe('Lighting ui', () => {
 
   it('<Chart />', () => {
     shallow(<Chart store={mockStore({ lights: [light] })} light_id='1' />).dive()
-    let m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
+    const m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
       .dive()
       .instance()
     m.channel2line({ profile: { type: 'foo' } }, {})
     m.channel2line(
       { name: 'bar', color: '#CCC', pin: '1', profile: { type: 'auto', config: { values: [{ foo: 'bar' }] } } },
-      { '0': { time: 'h' } }
+      { 0: { time: 'h' } }
     )
   })
 
@@ -110,7 +110,7 @@ describe('Lighting ui', () => {
   })
 
   it('<AutoProfile />', () => {
-    let config = {
+    const config = {
       values: []
     }
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />).instance()

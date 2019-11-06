@@ -1,21 +1,25 @@
 import * as Yup from 'yup'
 import i18next from 'i18next'
 
-const equipmentSchema = Yup.object().shape({
-  id: Yup.string().required(i18next.t('timers:equipment_required')).min(1),
+const equipmentSchema = {
+  id: Yup.string().required(i18next.t('timers:equipment_required')),
   on: Yup.bool(),
-  duration: Yup.number(),
+  duration: Yup.number().when('revert', {
+    is: true,
+    then: Yup.number().min(1),
+    otherwise: Yup.number().default(0)
+  }),
   revert: Yup.bool()
-})
+}
 
-const macroSchema = Yup.object().shape({
+const macroSchema = {
   id: Yup.string().required(i18next.t('timers:macro_required'))
-})
+}
 
-const reminderSchema = Yup.object().shape({
+const reminderSchema = {
   title: Yup.string().required(i18next.t('timers:reminder_title_required')),
   message: Yup.string().required(i18next.t('timers:reminder_message_required'))
-})
+}
 
 const TimerSchema = Yup.object().shape({
   name: Yup.string()
@@ -36,21 +40,20 @@ const TimerSchema = Yup.object().shape({
     .required(i18next.t('timers:month_required')),
   week: Yup.string()
     .required(i18next.t('timers:week_required')),
-  target: Yup.lazy(value => {
-    switch (value.type) {
+  target: Yup.object().when('type', (type, schema) => {
+    switch (type) {
       case 'equipment':
-        return equipmentSchema
+        return schema.shape(equipmentSchema)
       case 'reminder':
-        return reminderSchema
+        return schema.shape(reminderSchema)
       case 'macro':
-        return macroSchema
+        return schema.shape(macroSchema)
       default:
-        return Yup.object().shape({
+        return schema.shape({
           type: Yup.string().required('Timer type is required')
         })
     }
-  }
-  )
+  })
 })
 
 export default TimerSchema

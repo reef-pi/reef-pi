@@ -1,4 +1,4 @@
-import {reduxDelete, reduxGet} from 'utils/ajax'
+import { reduxDelete, reduxGet } from 'utils/ajax'
 
 export const errorsLoaded = (s) => {
   return ({

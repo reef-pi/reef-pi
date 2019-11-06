@@ -13,7 +13,7 @@ const EditEquipmentForm = withFormik({
     remove: props.remove
   }),
   validationSchema: EquipmentSchema,
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, { props }) => {
     props.onSubmit(values)
   }
 })(EditEquipment)

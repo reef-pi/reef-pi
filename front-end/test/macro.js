@@ -29,6 +29,21 @@ module.exports = {
       .wait(1500)
       .click('.add-macro input[type*="submit"]')
       .wait(500)
+
+      .wait('input#add_macro')
+      .click('input#add_macro')
+      .wait('.add-macro input[name="name"]')
+      .type('.add-macro input[name="name"]', 'Water Change')
+
+      .click('.add-macro button#add-step')
+      .wait('.add-macro select[name="steps.0.type"] option[value="equipment"]')
+      .select('.add-macro select[name="steps.0.type"]', 'equipment')
+      .wait('.add-macro select[name="steps.0.id"] option[value="1"]')
+      .select('.add-macro select[name="steps.0.id"]', '1')
+      .select('.add-macro select[name="steps.0.on"]', false)
+
+      .wait(1500)
+      .click('.add-macro input[type*="submit"]')
     return function () {
       return ('macro setup completed')
     }

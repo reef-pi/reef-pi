@@ -24,17 +24,18 @@ const (
 	TimerBucket            = "timers"
 	ErrorBucket            = "errors"
 	DriverBucket           = "drivers"
-	PWMProfilesBucket      = "pwm_profiles"
 )
 
 type Store interface {
+	RawGet(string, string) ([]byte, error)
 	Get(string, string, interface{}) error
-	List(string, func([]byte) error) error
+	List(string, func(string, []byte) error) error
 	Create(string, func(string) interface{}) error
 	CreateBucket(string) error
 	Close() error
 	CreateWithID(string, string, interface{}) error
 	Update(string, string, interface{}) error
+	RawUpdate(string, string, []byte) error
 	Delete(string, string) error
 	ReOpen() error
 }

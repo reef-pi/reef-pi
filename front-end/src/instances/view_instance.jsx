@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const ViewInstance = ({instance, onStateChange, onDelete, onEdit}) => {
+const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
 /*
   const toggleState = (e) => {
     const payload = {
@@ -17,12 +17,16 @@ const ViewInstance = ({instance, onStateChange, onDelete, onEdit}) => {
   return (
     <div className='row text-center text-md-left'>
       <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
-        <button type='button' onClick={onDelete}
-          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'>
+        <button
+          type='button' onClick={onDelete}
+          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+        >
           Delete
         </button>
-        <button type='button' onClick={onEdit}
-          className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'>
+        <button
+          type='button' onClick={onEdit}
+          className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+        >
           Edit
         </button>
       </div>

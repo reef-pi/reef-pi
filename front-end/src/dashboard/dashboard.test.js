@@ -29,7 +29,7 @@ describe('Dashboard', () => {
     let m = shallow(<Main store={mockStore({ dashboard: config })} />)
       .dive()
       .instance()
-    m.toggle()
+    m.handleToggle()
     m = shallow(<Main store={mockStore({})} />)
       .dive()
       .instance()
@@ -58,17 +58,17 @@ describe('Dashboard', () => {
       c1: { id: '1', name: 'foo' },
       c2: undefined
     }
-    let m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />).instance()
+    const m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />).instance()
     m.setID(1, 'foo')({})
   })
 
   it('<Config />', () => {
     const cells = [[{ type: 'ato', id: '1' }]]
     const config = { row: 1, column: 1, grid_details: cells }
-    let m = shallow(<Config store={mockStore({ dashboard: config })} />)
+    const m = shallow(<Config store={mockStore({ dashboard: config })} />)
       .dive()
       .instance()
     m.updateHook(cells)
-    m.save()
+    m.handleSave()
   })
 })

@@ -10,6 +10,7 @@ class NotificationAlert extends React.Component {
     }
     this.handleScroll = this.handleScroll.bind(this)
   }
+
   componentDidMount () {
     window.addEventListener('scroll', this.handleScroll)
   }
@@ -17,20 +18,23 @@ class NotificationAlert extends React.Component {
   componentWillUnmount () {
     window.removeEventListener('scroll', this.handleScroll)
   }
+
   handleScroll () {
     if (window.scrollY > 56) {
-      this.setState({containerFix: 'fix'})
+      this.setState({ containerFix: 'fix' })
     } else {
-      this.setState({containerFix: ''})
+      this.setState({ containerFix: '' })
     }
   }
+
   renderAlert (n) {
     return (
       <AlertItem key={'alert-' + n.ts} notification={n} close={this.props.delAlert} />
     )
   }
+
   render () {
-    let r = []
+    const r = []
     this.props.alerts.forEach(a => {
       r.push(this.renderAlert(a))
     })
