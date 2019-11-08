@@ -30,6 +30,7 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
+language:nl,Nederlands
 configuration:authentication:credentials,Credenciales
 configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:authentication:error_pass,Proporcione una contraseña

@@ -27,6 +27,7 @@ language:es,Español
 language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
+language:nl,Nederlands
 configuration:authentication:credentials,Informations d'identification
 configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
 configuration:authentication:error_pass,Vous devez fournir un mot de passe

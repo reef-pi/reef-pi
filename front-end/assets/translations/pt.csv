@@ -33,6 +33,7 @@ language:it,Italiano
 language:hi,हिन्दी
 language:fa,فارسی
 language:pt,Português
+language:nl,Nederlands
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
 configuration:authentication:error_pass,Tens que inserir uma password
