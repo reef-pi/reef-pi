@@ -107,7 +107,7 @@ class main extends React.Component {
 
   calibrateProbe (e, probe) {
     let defaultValue = ''
-    if(probe.calibration_points && probe.calibration_points[0]) {
+    if (probe.calibration_points && probe.calibration_points[0]) {
       defaultValue = probe.calibration_points[0].expected
     }
 
