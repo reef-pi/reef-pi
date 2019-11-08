@@ -17,6 +17,11 @@ module.exports = {
       .wait(500)
       .type('#form-light-1 input[name="config.name"]', 'Kessil A360')
       .wait(1000)
+      .click('#form-light-1 input[value="diurnal"]')
+      .wait(500)
+      .type('#form-light-1 input[name="config.channels.0.profile.config.start"]', '10:00')
+      .type('#form-light-1 input[name="config.channels.0.profile.config.end"]', '14:00')
+      .wait(500)
       .click('input#save-light-1')
       .wait(500)
     return function () {

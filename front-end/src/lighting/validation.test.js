@@ -10,9 +10,7 @@ describe('Validation', () => {
           color: '',
           min: 0,
           max: 100,
-          start_min: 0,
           pin: 9,
-          reverse: false,
           profile: { }
         }
       }
@@ -23,6 +21,8 @@ describe('Validation', () => {
     value.config.channels['1'].profile = {
       type: 'fixed',
       config: {
+        start: '14:00',
+        end: '20:00',
         value: 50
       }
     }
@@ -36,6 +36,8 @@ describe('Validation', () => {
     value.config.channels['1'].profile = {
       type: 'fixed',
       config: {
+        start: '',
+        end: '',
         value: null
       }
     }
@@ -45,10 +47,12 @@ describe('Validation', () => {
     )
   })
 
-  it('should validate auto when valid', () => {
+  it('should validate interval when valid', () => {
     value.config.channels['1'].profile = {
-      type: 'auto',
+      type: 'interval',
       config: {
+        start: '14:00',
+        end: '20:00',
         values: [0, 0, 0, 50, 0, 0, 0, 0, 0]
       }
     }
@@ -58,10 +62,12 @@ describe('Validation', () => {
     )
   })
 
-  it('should validate auto when invalid', () => {
+  it('should validate interval when invalid', () => {
     value.config.channels['1'].profile = {
-      type: 'auto',
+      type: 'interval',
       config: {
+        start: '',
+        end: '',
         values: null
       }
     }
@@ -93,6 +99,14 @@ describe('Validation', () => {
         end: '19:00'
       }
     }
+    expect.assertions(1)
+    return LightSchema.isValid(value).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
+
+  it('should require a profile type', () => {
+    value.config.channels['1'].profile.type = ''
     expect.assertions(1)
     return LightSchema.isValid(value).then(
       valid => expect(valid).toBe(false)

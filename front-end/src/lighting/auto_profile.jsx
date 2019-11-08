@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
+import { Field } from 'formik'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
@@ -14,6 +15,8 @@ export default class AutoProfile extends React.Component {
     this.state = { values: values }
 
     this.curry = this.curry.bind(this)
+    this.handleAddPoint = this.handleAddPoint.bind(this)
+    this.handleRemovePoint = this.handleRemovePoint.bind(this)
     this.sliderList = this.sliderList.bind(this)
     if (props.config && props.config.values && Array.isArray(props.config.values)) {
       this.state = {
@@ -26,15 +29,39 @@ export default class AutoProfile extends React.Component {
     }
   }
 
+  handleAddPoint () {
+    const values = [...this.state.values, 0]
+    this.props.onChangeHandler({
+      start: this.props.config.start,
+      end: this.props.config.end,
+      values: values
+    })
+    this.setState({ values: values })
+  }
+
+  handleRemovePoint (x) {
+    const values = [...this.state.values]
+    values.splice(x, 1)
+    this.props.onChangeHandler({
+      start: this.props.config.start,
+      end: this.props.config.end,
+      values: values
+    })
+    this.setState({ values: values })
+  }
+
   curry (i) {
     return (ev) => {
       if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)) {
-        let val = parseInt(ev.target.value)
-        if (isNaN(val)) { val = '' }
+        const val = parseInt(ev.target.value)
 
-        const values = Object.assign(this.state.values)
+        const values = [...this.state.values]
         values[i] = val
-        this.props.onChangeHandler({ values: values })
+        this.props.onChangeHandler({
+          start: this.props.config.start,
+          end: this.props.config.end,
+          values: values
+        })
         this.setState({ values: values })
       }
     }
@@ -51,22 +78,38 @@ export default class AutoProfile extends React.Component {
       height: '175px'
     }
     const list = []
-    const labels = [
-      '12 am',
-      '2 am',
-      '4 am',
-      '6 am',
-      '8 am',
-      '10 am',
-      '12 pm',
-      '2 pm',
-      '4 pm',
-      '6 pm',
-      '8 pm',
-      '10 pm'
-    ]
 
-    for (let i = 0; i < 12; i++) {
+    const labels = new Array(values.length)
+    if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(this.props.config.start) &&
+      /^([01]\d|2[0-3]):([0-5]\d)$/.test(this.props.config.end)) {
+      const startHour = parseInt(this.props.config.start.split(':')[0])
+      const startMinute = parseInt(this.props.config.start.split(':')[1])
+      let endHour = parseInt(this.props.config.end.split(':')[0])
+      const endMinute = parseInt(this.props.config.end.split(':')[1])
+
+      const start = (startHour * 60 * 60) + (startMinute * 60)
+
+      if ((endHour < startHour) || (endHour === startHour && endMinute < startMinute)) { endHour += 24 }
+
+      const totalSeconds =
+        ((endHour * 60 * 60) + (endMinute * 60)) -
+        ((startHour * 60 * 60) + (startMinute * 60))
+
+      const interval = totalSeconds / (values.length - 1)
+
+      for (let i = 0; i < values.length; i++) {
+        const temp = start + (interval * i)
+        let hour = Math.floor(temp / 60 / 60)
+        if (hour > 23) { hour -= 24 }
+        hour = '0' + hour
+        let minute = '0' + Math.floor((temp % 3600) / 60)
+        hour = hour.substr(hour.length - 2, hour.length)
+        minute = minute.substr(minute.length - 2, minute.length)
+        labels[i] = hour + ':' + minute
+      }
+    }
+
+    for (let i = 0; i < values.length; i++) {
       if (values[i] === undefined) {
         values[i] = 0
       }
@@ -74,6 +117,13 @@ export default class AutoProfile extends React.Component {
         <div className='col-12 col-md-1 text-center' key={i + 1}>
           <div className='row'>
             <div className='col-6 col-sm-6 col-md-12 d-block d-md-none d-lg-block order-md-first order-sm-last'>
+              <button
+                type='button'
+                className='btn btn-link btn-sm btn-remove-point'
+                onClick={this.handleRemovePoint.bind(this, i)}
+              >
+                Remove
+              </button>
               <input
                 type='number'
                 name={NameFor(this.props.name, 'values.' + i)}
@@ -107,12 +157,41 @@ export default class AutoProfile extends React.Component {
         </div>
       )
     }
+    if (values.length < 12) {
+      list.push(
+        <div className='col-12 col-md-1 text-center' key={values.length + 1}>
+          <button type='button' className='btn btn-link btn-add-point' onClick={this.handleAddPoint}>Add Point</button>
+        </div>
+      )
+    }
     return (list)
   }
 
   render () {
     return (
       <div className='container'>
+        <div className='row mb-2'>
+          <div className='form-inline'>
+            <label className='mr-2'>Start Time</label>
+            <Field
+              name={NameFor(this.props.name, 'start')}
+              readOnly={this.props.readOnly}
+              className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
+                { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
+              placeholder='HH:mm'
+            />
+            <label className='mr-2'>End Time</label>
+            <Field
+              name={NameFor(this.props.name, 'end')}
+              readOnly={this.props.readOnly}
+              className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
+                { 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
+              placeholder='HH:mm'
+            />
+            <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
+            <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />
+          </div>
+        </div>
         <div className='row'>
           {this.sliderList()}
           <div className='col-12 order-last text-center'>

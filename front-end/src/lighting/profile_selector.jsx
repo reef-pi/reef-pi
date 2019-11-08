@@ -21,7 +21,7 @@ const ProfileSelector = (props) => {
           onChange={handleChange}
         >
           <option value='fixed'>Fixed</option>
-          <option value='auto'>Auto</option>
+          <option value='auto'>Interval</option>
           <option value='diurnal'>Diurnal</option>
         </select>
       </div>
@@ -40,15 +40,15 @@ const ProfileSelector = (props) => {
         </label>
         <label className='btn btn-secondary'>
           <input
-            type='radio' value='auto'
+            type='radio' value='interval'
             className='mr-1'
-            checked={props.value === 'auto'}
+            checked={props.value === 'interval'}
             name={props.name + uuid}
-            id={props.name + uuid + '-auto'}
+            id={props.name + uuid + '-interval'}
             onChange={handleChange}
             disabled={props.readOnly}
           />
-          Auto
+          Interval
         </label>
         <label className='btn btn-secondary'>
           <input

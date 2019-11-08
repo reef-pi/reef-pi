@@ -36,7 +36,7 @@ const Profile = (props) => {
         />
       )
     }
-    case 'auto': {
+    case 'interval': {
       return (
         <Auto
           {...props}
