@@ -18,8 +18,6 @@ const LightSchema = Yup.object().shape({
 const channelSchema = Yup.object().shape({
   name: Yup.string()
     .required('Channel Name is required'),
-  reverse: Yup.boolean()
-    .required('Behavior is required'),
   min: Yup.number()
     .typeError('Min is required')
     .min(0, 'Min must be greater than or equal to 0')
@@ -36,7 +34,7 @@ const channelSchema = Yup.object().shape({
         return diurnalSchema
       case 'fixed':
         return fixedSchema
-      case 'auto':
+      case 'interval':
         return autoSchema
       default:
         return Yup.object().shape({
@@ -69,7 +67,13 @@ const fixedSchema = Yup.object().shape({
         .typeError('Value is required')
         .min(0, 'Value must be greater than or equal to 0')
         .max(100, 'Value must be less than or equal to 100')
-        .required('Value is required')
+        .required('Value is required'),
+      start: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Start must be a valid time (HH:mm)')
+        .required('Start is required'),
+      end: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'End must be a valid time (HH:mm)')
+        .required('End is required')
     })
 })
 
@@ -78,6 +82,12 @@ const autoSchema = Yup.object().shape({
   config: Yup.object()
     .typeError('A profile must be configured')
     .shape({
+      start: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Start must be a valid time (HH:mm)')
+        .required('Start is required'),
+      end: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'End must be a valid time (HH:mm)')
+        .required('End is required'),
       values: Yup.array().of(Yup.number()
         .typeError('Value is required')
         .min(0, 'Value must be greater than or equal to 0')

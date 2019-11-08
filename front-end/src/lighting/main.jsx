@@ -53,15 +53,34 @@ class main extends React.Component {
     return jacks
   }
 
-  handleUpdateLight (values) {
+  handleUpdateLight (values) { // TEST
     const payload = {
+      id: values.config.id,
       name: values.config.name,
       channels: values.config.channels,
       jack: values.config.jack
     }
+
     for (const x in payload.channels) {
-      payload.channels[x].reverse = (payload.channels[x].reverse === 'true' || payload.channels[x].reverse === true)
+      if ((payload.channels[x].profile.type === 'auto') || (payload.channels[x].profile.type === 'interval')) {
+        payload.channels[x].profile.type = 'interval'
+        const startTime = payload.channels[x].profile.config.start.split(':')
+        const endTime = payload.channels[x].profile.config.end.split(':')
+        const startHour = parseInt(startTime[0])
+        const startMinute = parseInt(startTime[1])
+        let endHour = parseInt(endTime[0])
+        const endMinute = parseInt(endTime[1])
+        if ((endHour < startHour) || (endHour === startHour && endMinute < startMinute)) { endHour += 24 }
+
+        const totalSeconds =
+          (endHour * 60 * 60) + (endMinute * 60) -
+          (startHour * 60 * 60) + (startMinute * 60)
+
+        const interval = totalSeconds / (payload.channels[x].profile.config.values.length - 1)
+        payload.channels[x].profile.config.interval = Math.floor(interval)
+      }
     }
+
     this.props.updateLight(values.config.id, payload)
   }
 
@@ -89,7 +108,7 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
+      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => { // TEST
         return (
           <Collapsible
             key={'light-' + light.id}
@@ -132,8 +151,8 @@ class main extends React.Component {
   newLightUI () {
     let jack = ''
     if (this.state.selectedJack !== undefined) {
-      const j = this.props.jacks[this.state.selectedJack]
-      jack = j.name
+      const j = this.props.jacks[this.state.selectedJack] // TEST
+      jack = j.name // TEST
     }
     return (
       <div className='row'>
@@ -215,7 +234,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchLights: () => dispatch(fetchLights()),
     fetchJacks: () => dispatch(fetchJacks()),
-    createLight: l => dispatch(createLight(l)),
+    createLight: l => dispatch(createLight(l)), // TEST
     deleteLight: id => dispatch(deleteLight(id)),
     updateLight: (id, l) => dispatch(updateLight(id, l))
   }

@@ -6,6 +6,7 @@ import Percent from '../ui_components/percent'
 import { ErrorFor, NameFor, ShowError, PathToObject } from '../utils/validation_helper'
 import { Field } from 'formik'
 import classNames from 'classnames'
+import BooleanSelect from '../ui_components/boolean_select'
 
 const Channel = (props) => {
   const handleChange = e => {
@@ -33,19 +34,37 @@ const Channel = (props) => {
       }
       case 'fixed': {
         if (config) {
-          config = { value: false }
+          config = {
+            start: '',
+            end: '',
+            value: false
+          }
           props.setTouched(touched)
         }
 
-        return { value: 0 }
+        return {
+          start: '',
+          end: '',
+          value: 0
+        }
       }
-      case 'auto': {
+      case 'interval': {
         if (config) {
-          config = { values: false }
+          config = {
+            start: '00:00',
+            end: '22:00',
+            interval: 120,
+            values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          }
           props.setTouched(touched)
         }
 
-        return { values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+        return {
+          start: '00:00',
+          end: '22:00',
+          interval: 120,
+          values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
       }
       default:
         return {}
@@ -100,22 +119,6 @@ const Channel = (props) => {
 
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Behavior</label>
-            <select
-              className='custom-select'
-              name={NameFor(props.name, 'reverse')}
-              disabled={props.readOnly}
-              onChange={handleChange}
-              onBlur={props.onBlur}
-              value={props.channel.reverse}
-            >
-              <option value='false'>Active High</option>
-              <option value='true'>Active Low</option>
-            </select>
-          </div>
-        </div>
-        <div className='col-sm-6 col-md-4 col-xl-2'>
-          <div className='form-group'>
             <label>Min</label>
             <Percent
               type='text'
@@ -148,20 +151,21 @@ const Channel = (props) => {
         </div>
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Start</label>
-            <Percent
-              type='text'
-              className={classNames('form-control',
-                { 'is-invalid': ShowError(NameFor(props.name, 'start_min'), props.touched, props.errors) })}
-              name={NameFor(props.name, 'start_min')}
-              onBlur={props.onBlur}
+            <label>Channel Status</label>
+            <Field
+              name={NameFor(props.name, 'on')}
+              component={BooleanSelect}
               disabled={props.readOnly}
-              onChange={handleChange}
-              value={props.channel.start_min}
-            />
-            <ErrorFor {...props} name={NameFor(props.name, 'start_min')} />
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('enable', props.touched, props.errors)
+              })}
+            >
+              <option value='true'>On</option>
+              <option value='false'>Off</option>
+            </Field>
           </div>
         </div>
+
       </div>
       <div className='row'>
         <div className='col'>
