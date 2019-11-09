@@ -28,7 +28,7 @@ class chart extends React.Component {
     const max = this.props.config.chart_max
     let currentTemp = ''
     if (this.props.usage.current.length > 1) {
-      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].temperature
+      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
     }
     return (
       <div className='container'>
