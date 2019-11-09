@@ -421,4 +421,4 @@ temperature:calibrate, Calibrate
 temperature:calibration:set_temperature, Set Temperature
 temperature:calibration:apply, Apply
 temperature:current_reading, Current Reading
-temperature:warn_delete: This action will delete
+temperature:warn_delete, This action will delete

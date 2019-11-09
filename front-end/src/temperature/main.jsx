@@ -16,7 +16,8 @@ class main extends React.Component {
     this.state = {
       addProbe: false,
       showCalibrate: false,
-      currentProbe: null
+      currentProbe: null,
+      defaultCalibrationPoint: ''
     }
     this.probeList = this.probeList.bind(this)
     this.handleToggleAddProbeDiv = this.handleToggleAddProbeDiv.bind(this)
@@ -105,7 +106,16 @@ class main extends React.Component {
   }
 
   calibrateProbe (e, probe) {
-    this.setState({ currentProbe: probe, showCalibrate: true })
+    let defaultValue = ''
+    if (probe.calibration_points && probe.calibration_points[0]) {
+      defaultValue = probe.calibration_points[0].expected
+    }
+
+    this.setState({
+      currentProbe: probe,
+      showCalibrate: true,
+      defaultCalibrationPoint: defaultValue
+    })
   }
 
   dismissModal () {
@@ -167,7 +177,7 @@ class main extends React.Component {
         <CalibrationModal
           probe={this.state.currentProbe}
           currentReading={this.props.currentReading}
-          defaultValue={this.props.currentReading[this.state.currentProbe.id]}
+          defaultValue={this.state.defaultCalibrationPoint}
           readProbe={this.props.readTC}
           calibrateProbe={this.props.calibrateProbe}
           cancel={this.dismissModal}
