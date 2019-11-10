@@ -28,7 +28,7 @@ class main extends React.Component {
     this.handleUpdateLight = this.handleUpdateLight.bind(this)
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.fetchLights()
     this.props.fetchJacks()
   }
