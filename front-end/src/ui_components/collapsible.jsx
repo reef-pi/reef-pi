@@ -24,11 +24,13 @@ class Collapsible extends React.Component {
   }
 
   render () {
-    const { expanded, onToggle, onToggleState, enabled, name, children, readOnly } = this.props
+    const { expanded, onToggle, onToggleState, enabled, name, children, readOnly, disableEdit } = this.props
+
     const editButton = (
       <button
         type='button'
         onClick={this.handleEdit}
+        disabled={disableEdit}
         id={'edit-' + name}
         className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
       >
@@ -93,6 +95,7 @@ Collapsible.propTypes = {
   expanded: PropTypes.bool,
   enabled: PropTypes.bool,
   readOnly: PropTypes.bool,
+  disableEdit: PropTypes.bool,
   onToggle: PropTypes.func,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,
