@@ -27,8 +27,8 @@ class chart extends React.Component {
     }
     const metrics = this.props.readings[this.props.type]
     let current = ''
-    if (metrics.length > 1) {
-      current = metrics[metrics.length - 1].pH
+    if (metrics.length >= 1) {
+      current = metrics[metrics.length - 1].value
     }
     return (
       <div className='container'>
