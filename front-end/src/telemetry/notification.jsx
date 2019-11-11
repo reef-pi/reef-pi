@@ -27,7 +27,7 @@ export default class NotificationSettings extends React.Component {
   updateTo () {
     return function (ev) {
       const config = this.state.config
-      let recipients = ev.target.value.split(',')
+      const recipients = ev.target.value.split(',')
       config.to = recipients.map(s => s.trim())
       this.setState({
         config: config
