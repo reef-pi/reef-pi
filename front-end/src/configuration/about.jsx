@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
 class about extends React.Component {
-  componentDidMount () {
+  componentWillMount () {
     const timer = window.setInterval(this.props.fetchInfo, 1800 * 1000)
     this.setState({ timer: timer })
   }
