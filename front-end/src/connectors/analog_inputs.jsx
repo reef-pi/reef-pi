@@ -17,7 +17,7 @@ class analogInputs extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: '',
+      driver: 'rpi',
       add: false
     }
     this.list = this.list.bind(this)
