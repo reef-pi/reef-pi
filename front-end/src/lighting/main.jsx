@@ -8,6 +8,8 @@ import { fetchJacks } from 'redux/actions/jacks'
 import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
+import { IoMdSwitch } from 'react-icons/io'
+import ManualLight from './manual_light'
 
 class main extends React.Component {
   constructor (props) {
@@ -26,6 +28,7 @@ class main extends React.Component {
     this.newLightUI = this.newLightUI.bind(this)
     this.handleDeleteLight = this.handleDeleteLight.bind(this)
     this.handleUpdateLight = this.handleUpdateLight.bind(this)
+    this.handleChangeMode = this.handleChangeMode.bind(this)
   }
 
   componentWillMount () {
@@ -53,7 +56,7 @@ class main extends React.Component {
     return jacks
   }
 
-  handleUpdateLight (values) { // TEST
+  handleUpdateLight (values) {
     const payload = {
       id: values.config.id,
       name: values.config.name,
@@ -93,10 +96,33 @@ class main extends React.Component {
       showError('Specify light name')
       return
     }
-    const jack = this.props.jacks[this.state.selectedJack].id
+    const jack = this.props.jacks[this.state.selectedJack]
+    const channels = {}
+    jack.pins.map((pin, idx) => (
+      channels[idx] = {
+        color: '',
+        manual: false,
+        min: 0,
+        max: 100,
+        name: 'Channel-' + (idx + 1),
+        on: true,
+        pin: pin,
+        value: 0,
+        profile: {
+          type: 'fixed',
+          config: {
+            start: '00:00',
+            end: '23:59',
+            value: 0
+          }
+        }
+      }
+    ))
     const payload = {
       name: $('#lightName').val(),
-      jack: String(jack)
+      jack: String(jack.id),
+      enable: true,
+      channels: channels
     }
 
     this.props.createLight(payload)
@@ -108,24 +134,58 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => { // TEST
+      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
+        let panelContent =
+          <Light
+            config={light}
+            onSubmit={this.handleUpdateLight}
+            remove={this.props.deleteLight}
+          />
+        let modeContent = ''
+        const mode = this.getLightMode(light)
+        switch (mode) {
+          case 'auto':
+            modeContent = (<><IoMdSwitch /> Auto</>)
+            break
+          case 'manual':
+            modeContent = (<><IoMdSwitch /> Manual</>)
+            panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
+            break
+          default:
+            modeContent = (<><IoMdSwitch /> Mixed</>)
+        }
+
+        const modeButton = (
+          <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
+            {modeContent}
+          </button>
+        )
+
         return (
           <Collapsible
             key={'light-' + light.id}
             name={'light-' + light.id}
             item={light}
+            buttons={modeButton}
             title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
             onDelete={this.handleDeleteLight}
+            disableEdit={mode === 'manual'}
           >
-            <Light
-              config={light}
-              onSubmit={this.handleUpdateLight}
-              remove={this.props.deleteLight}
-            />
+            {panelContent}
           </Collapsible>
         )
       })
     )
+  }
+
+  getLightMode (light) {
+    if (Object.values(light.channels).every(x => { return x.manual === false })) {
+      return 'auto'
+    } else if (Object.values(light.channels).every(x => { return x.manual === true })) {
+      return 'manual'
+    } else {
+      return 'mixed'
+    }
   }
 
   handleToggleAddLightDiv () {
@@ -133,6 +193,32 @@ class main extends React.Component {
       addLight: !this.state.addLight
     })
     $('#jackName').val('')
+  }
+
+  handleChangeMode (light) {
+    const currentMode = this.getLightMode(light)
+    const fn = function () {
+      let newMode = 'auto'
+      if (currentMode === 'auto') {
+        newMode = 'manual'
+      }
+      const message = (
+        <div>
+          <p>This action will change the mode for {light.name} from {currentMode} to {newMode}.</p>
+        </div>
+      )
+
+      return confirm('Change Mode', { description: message })
+        .then(function () {
+          for (const x in light.channels) {
+            light.channels[x].manual = (newMode !== 'auto')
+          }
+
+          this.props.updateLight(light.id, light)
+        }.bind(this))
+    }.bind(this)
+
+    return fn
   }
 
   handleDeleteLight (light) {
@@ -151,8 +237,8 @@ class main extends React.Component {
   newLightUI () {
     let jack = ''
     if (this.state.selectedJack !== undefined) {
-      const j = this.props.jacks[this.state.selectedJack] // TEST
-      jack = j.name // TEST
+      const j = this.props.jacks[this.state.selectedJack]
+      jack = j.name
     }
     return (
       <div className='row'>
@@ -230,6 +316,7 @@ const mapStateToProps = state => {
   }
 }
 
+/* istanbul ignore next */
 const mapDispatchToProps = dispatch => {
   return {
     fetchLights: () => dispatch(fetchLights()),
@@ -245,3 +332,4 @@ const Main = connect(
   mapDispatchToProps
 )(main)
 export default Main
+export const TestMain = main

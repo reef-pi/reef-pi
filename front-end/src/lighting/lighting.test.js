@@ -3,7 +3,7 @@ import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Channel from './channel'
 import Chart from './chart'
-import Main from './main'
+import Main, {TestMain} from './main'
 import LightForm from './light_form'
 import Light from './light'
 import ProfileSelector from './profile_selector'
@@ -15,6 +15,7 @@ import Percent from '../ui_components/percent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+import { FaLightbulb } from 'react-icons/fa'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -34,7 +35,7 @@ describe('Lighting ui', () => {
   const ev = {
     target: { value: 10 }
   }
-  const light = {
+  let light = {
     id: '1',
     name: 'foo',
     jack: '1',
@@ -42,6 +43,7 @@ describe('Lighting ui', () => {
       1: {
         pin: 0,
         color: '',
+        manual: false,
         profile: {
           type: 'interval',
           config: {
@@ -53,18 +55,180 @@ describe('Lighting ui', () => {
       }
     }
   }
+
+  beforeEach(() => {
+    light = {
+      id: '1',
+      name: 'foo',
+      jack: '1',
+      channels: {
+        1: {
+          pin: 0,
+          color: '',
+          manual: false,
+          profile: {
+            type: 'interval',
+            config: {
+              start: '14:00',
+              end: '22:00',
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            }
+          }
+        }
+      }
+    }
+  })
+
   it('<Main />', () => {
-    const jacks = [{ id: '1', name: 'foo' }]
+    const jacks = [{ id: '1', name: 'foo', pins: [1,2] }]
     const m = shallow(<Main store={mockStore({ lights: [light, light], jacks: jacks })} />)
       .dive()
       .instance()
-    m.setJack(0, {})
+
+    m.setJack(0, {})()
     m.handleToggleAddLightDiv()
     m.handleAddLight()
     m.handleUpdateLight({config: {
       id: 3
     }})
     m.handleDeleteLight(light)
+
+  })
+
+  it('<Main /> should change mode from auto to manual', () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
+
+    const m = shallow(<TestMain
+      fetchLights = {fn}
+      fetchJacks = {fn}
+      lights = {[light, light]}
+      updateLight = {fnUpdateLight}
+    />).instance()
+
+    expect.assertions(2)
+    return (m.handleChangeMode(light)()).then(() => {
+
+      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+      const actualArgs = fnUpdateLight.mock.calls[0][1]
+      expect(actualArgs.channels[1].manual).toBe(true)
+    })
+  })
+
+  it('<Main /> should change mode from manual to auto', () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
+
+    light.channels[1].manual = true
+
+    const m = shallow(<TestMain
+      fetchLights = {fn}
+      fetchJacks = {fn}
+      lights = {[light, light]}
+      updateLight = {fnUpdateLight}
+    />).instance()
+
+    expect.assertions(2)
+    return (m.handleChangeMode(light)()).then(() => {
+      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+      const actualArgs = fnUpdateLight.mock.calls[0][1]
+      expect(actualArgs.channels[1].manual).toBe(false)
+    })
+  })
+
+  it('<Main /> should change mode from mixed to auto', () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
+
+    light.channels[2] = {
+      pin: 0,
+      color: '',
+      manual: true,
+      profile: {
+        type: 'interval',
+        config: {
+          start: '14:00',
+          end: '22:00',
+          values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        }
+      }
+    }
+
+    const m = shallow(<TestMain
+      fetchLights = {fn}
+      fetchJacks = {fn}
+      lights = {[light, light]}
+      updateLight = {fnUpdateLight}
+    />).instance()
+
+    expect.assertions(3)
+    return (m.handleChangeMode(light)()).then(() => {
+
+      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+      const actualArgs = fnUpdateLight.mock.calls[0][1]
+      expect(actualArgs.channels[1].manual).toBe(false)
+      expect(actualArgs.channels[2].manual).toBe(false)
+    })
+  })
+
+  it('<Main /> should set the interval when start is before end', () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
+
+    light.channels[1].profile.config.start = '14:00'
+    light.channels[1].profile.config.end = '16:00'
+    light.channels[1].profile.config.values = [1,2,3,4,5]
+    const m = shallow(<TestMain
+      fetchLights = {fn}
+      fetchJacks = {fn}
+      lights = {[light, light]}
+      updateLight = {fnUpdateLight}
+    />).instance()
+
+    const values = {
+      config: {
+        id: 1,
+        name: 'light',
+        channels: light.channels,
+        jack: light.jack
+      }
+    }
+    m.handleUpdateLight(values)
+
+    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+    const actualArgs = fnUpdateLight.mock.calls[0][1]
+    expect(actualArgs.channels[1].profile.config.interval).toBe(30 * 60)
+  })
+
+
+  it('<Main /> should set the interval when end is before start', () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
+
+    light.channels[1].profile.type = 'auto'
+    light.channels[1].profile.config.start = '23:00'
+    light.channels[1].profile.config.end = '01:00'
+    light.channels[1].profile.config.values = [1,2,3,4,5]
+    const m = shallow(<TestMain
+      fetchLights = {fn}
+      fetchJacks = {fn}
+      lights = {[light, light]}
+      updateLight = {fnUpdateLight}
+    />).instance()
+
+    const values = {
+      config: {
+        id: 1,
+        name: 'light',
+        channels: light.channels,
+        jack: light.jack
+      }
+    }
+    m.handleUpdateLight(values)
+
+    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+    const actualArgs = fnUpdateLight.mock.calls[0][1]
+    expect(actualArgs.channels[1].profile.config.interval).toBe(30 * 60)
   })
 
   it('<LightForm />', () => {
