@@ -74,9 +74,7 @@ func New(version, database string) (*ReefPi, error) {
 	drvrs, err := drivers.NewDrivers(s, bus, store)
 	if err != nil {
 		log.Println("ERROR: failed to initialize drivers. Error:", err)
-	}
-	if err != nil {
-		log.Println("ERROR: failed to initialize pwm profile manager. Error:", err)
+		logError(store, "driver-init", err.Error())
 	}
 
 	jacks := connectors.NewJacks(drvrs, store)
