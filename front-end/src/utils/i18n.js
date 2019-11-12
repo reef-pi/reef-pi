@@ -8,13 +8,16 @@ i18n
   .init({
     fallbackLng: ['en', 'dev'],
     resources: {
-      en: translations.en,
-      fr: translations.fr,
       de: translations.de,
-      it: translations.it,
+      en: translations.en,
+      es: translations.es,
       fa: translations.fa,
+      fr: translations.fr,
       hi: translations.hi,
-      es: translations.es
+      it: translations.it,
+      nl: translations.nl,
+      pt: translations.pt,
+      zh: translations.zh,
     },
     defaultNS: 'common',
     debug: false,
