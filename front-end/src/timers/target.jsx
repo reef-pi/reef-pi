@@ -70,7 +70,7 @@ const Target = (props) => {
       <>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
-            <label htmlFor='target.id'>{i18next.t('timers:equipment')}</label>
+            <label htmlFor='target.id'>{i18next.t('timers:equipment:equipment')}</label>
             <Field
               name={NameFor(props.name, 'id')}
               component='select'

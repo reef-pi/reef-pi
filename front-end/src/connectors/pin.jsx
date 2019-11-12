@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import i18next from 'i18next'
 
 export default class Pin extends React.Component {
   constructor (props) {
@@ -36,7 +37,7 @@ export default class Pin extends React.Component {
   render () {
     return (
       <div className='form-group'>
-        <span className='input-group-addon'>Pin</span>
+        <span className='input-group-addon'>{i18next.t('pin')}</span>
         <select
           name='pin'
           className='custom-select'

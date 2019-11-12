@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pin from './pin'
+import i18next from 'i18next'
 
 export default class AnalogInput extends React.Component {
   constructor (props) {
@@ -40,7 +41,7 @@ export default class AnalogInput extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: 'save'
+        lbl: i18next.t('save')
       })
       return
     }
@@ -52,7 +53,7 @@ export default class AnalogInput extends React.Component {
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: 'edit',
+      lbl: i18next.t('edit'),
       name: payload.name
     })
   }
@@ -62,7 +63,7 @@ export default class AnalogInput extends React.Component {
       <div className='row'>
         <div className='col-12 col-md-6'>
           <div className='form-group'>
-            <label htmlFor={'analog_input-' + this.props.analog_input_id + '-name'}> Name </label>
+            <label htmlFor={'analog_input-' + this.props.analog_input_id + '-name'}> {i18next.t('name')} </label>
             <input
               type='text'
               id={'analog_input-' + this.props.analog_input_id + '-name'}
@@ -82,7 +83,7 @@ export default class AnalogInput extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label>Driver</label>
+            <label>{i18next.t('driver')}</label>
             <select
               name='driver'
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}

@@ -2,6 +2,7 @@ import React from 'react'
 import { isEmptyObject } from 'jquery'
 import { fetchInlets } from '../redux/actions/inlets'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 
 class inletSelector extends React.Component {
   constructor (props) {
@@ -95,7 +96,7 @@ class inletSelector extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-lg-1'>Inlet</div>
+          <div className='col-lg-1'>{i18next.t('inlet')}</div>
           <div className='col-lg-1'>{this.inlets()}</div>
         </div>
       </div>

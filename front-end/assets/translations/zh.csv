@@ -193,3 +193,12 @@ ph:threshold_type,阈值必须是一个数字
 ph:threshold_less_than,告警下限必须小于告警上限
 ph:threshold_greater_than,告警上限必须大于告警下限
 ph:analog_input_required,必须填写模拟输入
+inlets,进水口
+outlets,分店
+pin,销
+pins,别针
+driver,司机
+reverse,相反
+jacks,千斤顶
+analog_inputs,模拟输入
+in-use,正在使用

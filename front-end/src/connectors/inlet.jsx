@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import i18next from 'i18next'
 import Pin from './pin'
 
 export default class Inlet extends React.Component {
@@ -11,7 +12,7 @@ export default class Inlet extends React.Component {
       pin: props.pin,
       reverse: props.reverse,
       driver: props.driver,
-      lbl: 'edit'
+      lbl: i18next.t('edit')
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
@@ -46,7 +47,7 @@ export default class Inlet extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: 'save'
+        lbl: i18next.t('save')
       })
       return
     }
@@ -60,7 +61,7 @@ export default class Inlet extends React.Component {
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: 'edit'
+      lbl: i18next.t('edit')
     })
   }
 
@@ -69,7 +70,7 @@ export default class Inlet extends React.Component {
       <div className='row'>
         <div className='col-12 col-md-6'>
           <div className='form-group'>
-            <span className='input-group-addon'>Name</span>
+            <span className='input-group-addon'>{i18next.t('name')}</span>
             <input
               type='text'
               id={'inlet-' + this.props.inlet_id + '-name'}
@@ -89,7 +90,7 @@ export default class Inlet extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>Reverse</span>
+            <span className='input-group-addon'>{i18next.t('reverse')}</span>
             <input
               className='form-control inlet-reverse'
               type='checkbox'
@@ -101,7 +102,7 @@ export default class Inlet extends React.Component {
         </div>
         <div className='col-12 col-md-2'>
           <div className='driver-type form-group'>
-            <label htmlFor='driver'>Driver</label>
+            <label htmlFor='driver'>{i18next.t('driver')}</label>
             <select
               name='driver'
               className='custom-select form-control'
@@ -132,10 +133,10 @@ export default class Inlet extends React.Component {
           </label>
         </div>
         <div className='col'>
-          <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
+          <label className='small'>{this.props.equipment === '' ? '' : i18next.t('in-use')}</label>
         </div>
         <div className='col'>
-          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
+          <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
         </div>
       </div>
     )

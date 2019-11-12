@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { showError } from 'utils/alert'
+import i18next from 'i18next'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -91,7 +92,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>Reverse</span>
+            <span className='input-group-addon'>{i18next.t('reverse')}</span>
             <input
               className='form-control jack-reverse'
               type='checkbox'
@@ -103,7 +104,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> Pin </label>
+            <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> {i18next.t('pins')} </label>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
@@ -115,7 +116,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label>Driver</label>
+            <label>{i18next.t('driver')}</label>
             <select
               name='driver'
               id={'jack-' + this.props.jack_id + '-driver-select'}

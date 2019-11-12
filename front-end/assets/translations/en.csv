@@ -25,14 +25,16 @@ alerts,Alerts
 unit,Unit
 configure,Configure
 language:language,Language
-language:fr,Français
-language:en,English
 language:de,Deutsch
+language:en,English
 language:es,Español
-language:it,Italiano
-language:hi,हिन्दी
 language:fa,فارسی
+language:fr,Français
+language:hi,हिन्दी
+language:it,Italiano
 language:nl,Nederlands
+language:pt,Portuguesa
+language:zh,中文
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_user,You Must Provide a username
 configuration:authentication:error_pass,You Must Provide a password
@@ -106,14 +108,11 @@ cron:day_of_month,Day of the month
 cron:hour,Hour
 cron:minute,Minute
 cron:second,Second
+cron:month,Month
+cron:week,Day of the week
 color_picker:choose,Choose
 collapsible:edit,Edit
 collapsible:delete,Delete
-timers:equipment:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:revert,Revert
-timers:equipment:on,On
-timers:equipment:off,Off
 ato:name_required,Name is required
 ato:status_required,ATO Status is required
 ato:inlet_required,Inlet is required
@@ -161,10 +160,14 @@ timers:subject,Subject
 timers:message,Message
 timers:timer_status,Timer Status
 timers:function,Function
-timers:equipment,Equipment
 timers:reminder,Reminder
 timers:macros,Macros
 timers:macro,Macro Name
+timers:equipment:equipment,Equipment
+timers:equipment:action,Action
+timers:equipment:revert,Revert
+timers:equipment:on,On
+timers:equipment:off,Off
 temperature:temperature,Temperature
 temperature:heater_cooler,Heater/Cooler
 temperature:chart_minimum,Chart Minimum
@@ -306,11 +309,6 @@ cron:second,Second
 color_picker:choose,Choose
 collapsible:edit,Edit
 collapsible:delete,Delete
-timers:equipment:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:revert,Revert
-timers:equipment:on,On
-timers:equipment:off,Off
 ato:name_required,Name is required
 ato:status_required,ATO Status is required
 ato:inlet_required,Inlet is required
@@ -358,10 +356,14 @@ timers:subject,Subject
 timers:message,Message
 timers:timer_status,Timer Status
 timers:function,Function
-timers:equipment,Equipment
 timers:reminder,Reminder
 timers:macros,Macros
 timers:macro,Macro Name
+timers:equipment:equipment,Equipment
+timers:equipment:action,Action
+timers:equipment:revert,Revert
+timers:equipment:on,On
+timers:equipment:off,Off
 temperature:temperature,Temperature
 temperature:heater_cooler,Heater/Cooler
 temperature:chart_minimum,Chart Minimum
@@ -422,3 +424,16 @@ temperature:calibration:set_temperature, Set Temperature
 temperature:calibration:apply, Apply
 temperature:current_reading, Current Reading
 temperature:warn_delete, This action will delete
+driver,Driver
+pin,Pin
+pins:Pins
+reverse,Reverse
+inlets,Inlets
+inlet,Inlet
+outlets,Outlets
+outlet,Outlet
+jacks,Jacks
+jack,Jack
+analog_inputs,Analog Inputs
+analog_input,Analog Input
+in-use,in-use

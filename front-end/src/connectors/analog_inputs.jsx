@@ -2,6 +2,7 @@ import React from 'react'
 import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import Pin from './pin'
+import i18next from 'i18next'
 
 import {
   fetchAnalogInputs,
@@ -106,7 +107,7 @@ class analogInputs extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h6'>Analog Inputs</label>
+            <label className='h6'>{i18next.t('analog_inputs')}</label>
             {this.list()}
           </div>
         </div>
@@ -126,7 +127,7 @@ class analogInputs extends React.Component {
             <div className='row' style={dStyle}>
               <div className='col-12 col-md-5'>
                 <div className='form-group'>
-                  <label htmlFor='analog_inputName'>Name</label>
+                  <label htmlFor='analog_inputName'>{i18next.t('name')}</label>
                   <input
                     type='text'
                     id='analog_inputName'
@@ -146,7 +147,7 @@ class analogInputs extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='analog_input_type form-group'>
-                  <label>Driver</label>
+                  <label>{i18next.t('driver')}</label>
                   <select
                     name='driver'
                     className='form-control custom-select'
@@ -167,7 +168,7 @@ class analogInputs extends React.Component {
                 <input
                   type='button'
                   id='createAnalogInput'
-                  value='add'
+                  value={i18next.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />

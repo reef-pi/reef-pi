@@ -4,6 +4,7 @@ import { fetchOutlets, updateOutlet, deleteOutlet, createOutlet } from 'redux/ac
 import { connect } from 'react-redux'
 import Outlet from './outlet'
 import Pin from './pin'
+import i18next from 'i18next'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -115,7 +116,7 @@ class outlets extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h6'>Outlets</label>
+            <label className='h6'>{i18next.t('outlets')}</label>
             {this.list()}
           </div>
         </div>
@@ -134,7 +135,7 @@ class outlets extends React.Component {
         <div className='row' style={dStyle}>
           <div className='col-12 col-md-3'>
             <div className='form-group'>
-              <span className='input-group-addon'>Name</span>
+              <span className='input-group-addon'>{i18next.t('name')}</span>
               <input
                 type='text'
                 id='outletName'
@@ -154,7 +155,7 @@ class outlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
-              <span className='input-group-addon'>Driver</span>
+              <span className='input-group-addon'>{i18next.t('driver')}</span>
               <select
                 name='driver'
                 className='form-control custom-select'
@@ -173,7 +174,7 @@ class outlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='form-group'>
-              <span className='input-group-addon'> Reverse </span>
+              <span className='input-group-addon'> {i18next.t('reverse')} </span>
               <input
                 type='checkbox'
                 id='outletReverse'
@@ -187,7 +188,7 @@ class outlets extends React.Component {
             <input
               type='button'
               id='createOutlet'
-              value='add'
+              value={i18next.t('add')}
               onClick={this.handleSave}
               className='btn btn-outline-primary col-12 col-md-4'
             />
