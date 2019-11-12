@@ -3,32 +3,33 @@ import { confirm } from 'utils/confirm'
 import { fetchOutlets, updateOutlet, deleteOutlet, createOutlet } from 'redux/actions/outlets'
 import { connect } from 'react-redux'
 import Outlet from './outlet'
+import Pin from './pin'
 
 class outlets extends React.Component {
   constructor (props) {
     super(props)
+    const d = props.drivers.filter(d => d.id === 'rpi')[0]
     this.state = {
       outName: '',
-      outPin: '',
+      outPin: 0,
       outReverse: false,
       add: false,
-      driver: 'rpi',
-      driver_name: 'Raspberry Pi'
+      driver: d
     }
     this.list = this.list.bind(this)
     this.handleAdd = this.handleAdd.bind(this)
     this.remove = this.remove.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
   }
 
   handleDriverChange (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -36,8 +37,8 @@ class outlets extends React.Component {
     this.setState({ outName: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ outPin: e.target.value })
+  onPinChange (v) {
+    this.setState({ outPin: v })
   }
 
   handleReverseChange () {
@@ -62,7 +63,7 @@ class outlets extends React.Component {
     this.setState({
       add: !this.state.add,
       outName: '',
-      outPin: '',
+      outPin: 0,
       outReverse: false
     })
   }
@@ -70,9 +71,9 @@ class outlets extends React.Component {
   handleSave () {
     const payload = {
       name: this.state.outName,
-      pin: parseInt(this.state.outPin),
+      pin: this.state.outPin,
       reverse: this.state.outReverse,
-      driver: this.state.driver
+      driver: this.state.driver.id
     }
     this.props.create(payload)
     this.handleAdd()
@@ -95,7 +96,7 @@ class outlets extends React.Component {
             equipment={o.equipment}
             remove={this.remove(o.id)}
             drivers={this.props.drivers}
-            driver={o.driver}
+            driver={this.props.drivers.filter(d => d.id === o.driver)[0]}
             update={p => {
               this.props.update(o.id, p)
               this.props.fetch()
@@ -144,16 +145,12 @@ class outlets extends React.Component {
             </div>
           </div>
           <div className='col-12 col-md-2'>
-            <div className='form-group'>
-              <span className='input-group-addon'>Pin</span>
-              <input
-                type='number'
-                id='outletPin'
-                onChange={this.handlePinChange}
-                value={this.state.outPin}
-                className='form-control'
-              />
-            </div>
+            <Pin
+              driver={this.state.driver}
+              update={this.onPinChange}
+              type='digital-output'
+              current={this.state.outPin}
+            />
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
@@ -162,7 +159,7 @@ class outlets extends React.Component {
                 name='driver'
                 className='form-control custom-select'
                 onChange={this.handleDriverChange}
-                value={this.state.driver}
+                value={this.state.driver.id}
               >
                 {this.props.drivers.map(item => {
                   return (
@@ -221,4 +218,5 @@ const Outlets = connect(
   mapStateToProps,
   mapDispatchToProps
 )(outlets)
+
 export default Outlets
