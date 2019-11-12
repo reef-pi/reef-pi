@@ -63,7 +63,7 @@ class inlets extends React.Component {
       add: !this.state.add,
       name: '',
       reverse: false,
-      pin: 0,
+      pin: 0
     })
   }
 
@@ -81,7 +81,7 @@ class inlets extends React.Component {
   list () {
     const items = []
     this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
-      const d =this.props.drivers.filter(d => d.id === i.driver)[0]
+      const d = this.props.drivers.filter(d => d.id === i.driver)[0]
       items.push(
         <Inlet
           name={i.name}
