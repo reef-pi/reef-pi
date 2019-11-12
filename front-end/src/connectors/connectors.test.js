@@ -50,12 +50,13 @@ describe('Connectors', () => {
   it('<Inlets />', () => {
     const state = {
       inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true }],
-      drivers: stockDrivers
+      drivers: stockDrivers,
+      driver: stockDrivers[0]
     }
     const wrapper = shallow(<Inlets store={mockStore(state)} />).dive()
     wrapper.find('#add_inlet').simulate('click')
     wrapper.find('#inletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('#inletPin').simulate('change', { target: { value: '4' } })
+    wrapper.find('.custom-select').simulate('change', { target: { value: 'rpi' } })
     wrapper.find('#inletReverse').simulate('change')
     wrapper.find('#createInlet').simulate('click')
     expect(wrapper.find(Inlet).length).toBe(1)
@@ -71,11 +72,11 @@ describe('Connectors', () => {
         update={() => true}
         remove={() => true}
         drivers={stockDrivers}
-        driver='1'
+        driver={stockDrivers[0]}
       />)
     m.find('.edit-inlet').simulate('click')
     m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.inlet-pin').simulate('change', { target: { value: '4' } })
+    m.find('.custom-select').simulate('change', { target: { value: 'rpi' } })
     m.find('.inlet-reverse').simulate('change')
     m.find('.edit-inlet').simulate('click')
   })

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Pin from './pin'
 
 export default class Inlet extends React.Component {
   constructor (props) {
@@ -10,22 +11,22 @@ export default class Inlet extends React.Component {
       pin: props.pin,
       reverse: props.reverse,
       driver: props.driver,
-      driver_name: props.drivers.filter(d => d.id === props.driver)[0].name,
       lbl: 'edit'
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   handleDriverChange (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -33,8 +34,8 @@ export default class Inlet extends React.Component {
     this.setState({ name: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ pin: e.target.value })
+  onPinChange (v) {
+    this.setState({ pin: v })
   }
 
   handleReverseChange () {
@@ -51,18 +52,15 @@ export default class Inlet extends React.Component {
     }
     const payload = {
       name: this.state.name,
-      pin: parseInt(this.state.pin),
+      pin: this.state.pin,
       reverse: this.state.reverse,
       equipment: this.props.equipment,
-      driver: this.state.driver
+      driver: this.state.driver.id
     }
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: 'edit',
-      name: payload.name,
-      pin: payload.pin,
-      reverse: payload.reverse
+      lbl: 'edit'
     })
   }
 
@@ -82,16 +80,12 @@ export default class Inlet extends React.Component {
           </div>
         </div>
         <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>Pin</span>
-            <input
-              type='text'
-              id={'inlet-' + this.props.inlet_id + '-pin'}
-              className='form-control inlet-pin'
-              onChange={this.handlePinChange}
-              value={this.state.pin}
-            />
-          </div>
+          <Pin
+            driver={this.state.driver}
+            current={this.state.pin}
+            update={this.onPinChange}
+            type='digital-input'
+          />
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
@@ -112,7 +106,7 @@ export default class Inlet extends React.Component {
               name='driver'
               className='custom-select form-control'
               onChange={this.handleDriverChange}
-              value={this.state.driver}
+              value={this.state.driver.id}
             >
               {this.props.drivers.map(item => {
                 return (
@@ -134,7 +128,7 @@ export default class Inlet extends React.Component {
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
           <label className='small'>
-            {this.state.driver_name}({this.state.pin})
+            {this.state.driver.name}({this.state.pin})
           </label>
         </div>
         <div className='col'>
@@ -180,5 +174,6 @@ Inlet.propTypes = {
   inlet_id: PropTypes.string.isRequired,
   remove: PropTypes.func.isRequired,
   reverse: PropTypes.bool.isRequired,
-  update: PropTypes.func
+  update: PropTypes.func,
+  driver: PropTypes.object.isRequired
 }

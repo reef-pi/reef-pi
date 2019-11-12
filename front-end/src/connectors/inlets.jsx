@@ -3,16 +3,16 @@ import { confirm } from 'utils/confirm'
 import { fetchInlets, deleteInlet, createInlet, updateInlet } from 'redux/actions/inlets'
 import { connect } from 'react-redux'
 import Inlet from './inlet'
+import Pin from './pin'
 
 class inlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      inName: '',
-      inPin: '',
-      inDriver: 'rpi',
-      driver_name: 'Raspberry Pi',
-      inReverse: false,
+      name: '',
+      pin: 0,
+      driver: props.drivers.filter(d => d.id === 'rpi')[0],
+      reverse: false,
       add: false
     }
     this.list = this.list.bind(this)
@@ -21,20 +21,20 @@ class inlets extends React.Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
   }
 
   handleNameChange (e) {
-    this.setState({ inName: e.target.value })
+    this.setState({ name: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ inPin: e.target.value })
+  onPinChange (v) {
+    this.setState({ pin: v })
   }
 
   handleReverseChange () {
-    this.setState({ inReverse: !this.state.outReverse })
+    this.setState({ reverse: !this.state.reverse })
   }
 
   componentDidMount () {
@@ -42,9 +42,9 @@ class inlets extends React.Component {
   }
 
   handleDriverChange (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      inDriver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -61,18 +61,18 @@ class inlets extends React.Component {
   handleAdd () {
     this.setState({
       add: !this.state.add,
-      inName: '',
-      inPin: '',
-      inReverse: false
+      name: '',
+      reverse: false,
+      pin: 0,
     })
   }
 
   handleSave () {
     const payload = {
-      name: this.state.inName,
-      pin: parseInt(this.state.inPin),
-      reverse: this.state.inReverse,
-      driver: this.state.inDriver
+      name: this.state.name,
+      pin: this.state.pin,
+      reverse: this.state.reverse,
+      driver: this.state.driver.id
     }
     this.props.create(payload)
     this.handleAdd()
@@ -81,6 +81,7 @@ class inlets extends React.Component {
   list () {
     const items = []
     this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
+      const d =this.props.drivers.filter(d => d.id === i.driver)[0]
       items.push(
         <Inlet
           name={i.name}
@@ -88,7 +89,7 @@ class inlets extends React.Component {
           reverse={i.reverse}
           equipment={i.equipment}
           inlet_id={i.id}
-          driver={i.driver}
+          driver={d}
           drivers={this.props.drivers}
           key={i.id}
           remove={this.remove(i.id)}
@@ -132,25 +133,19 @@ class inlets extends React.Component {
               <input
                 type='text'
                 id='inletName'
-                value={this.state.inName}
+                value={this.state.name}
                 onChange={this.handleNameChange}
                 className='form-control'
               />
             </div>
           </div>
           <div className='col-12 col-md-2'>
-            <div className='form-group'>
-              <span className='input-group-addon'>Pin</span>
-              <input
-                type='number'
-                min='2'
-                max='27'
-                id='inletPin'
-                value={this.state.inPin}
-                onChange={this.handlePinChange}
-                className='form-control'
-              />
-            </div>
+            <Pin
+              driver={this.state.driver}
+              current={this.state.pin}
+              update={this.onPinChange}
+              type='digital-input'
+            />
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
@@ -159,7 +154,7 @@ class inlets extends React.Component {
                 name='driver'
                 className='form-control custom-select'
                 onChange={this.handleDriverChange}
-                value={this.state.inDriver}
+                value={this.state.driver.id}
               >
                 {this.props.drivers.map(item => {
                   return (
@@ -179,7 +174,7 @@ class inlets extends React.Component {
                 id='inletReverse'
                 className='form-control'
                 onChange={this.handleReverseChange}
-                checked={this.state.inReverse}
+                checked={this.state.reverse}
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { showError } from 'utils/alert'
+import Pin from './pin'
 
 export default class AnalogInput extends React.Component {
   constructor (props) {
@@ -9,30 +9,30 @@ export default class AnalogInput extends React.Component {
       edit: false,
       name: props.name,
       pin: props.pin,
-      driver: props.driver,
       lbl: 'edit',
-      driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
+      driver: props.driver
     }
-    this.hanldeEdit = this.handleEdit.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ pin: e.target.value })
+  onPinChange (v) {
+    this.setState({ pin: v })
   }
 
   handleSetDriver (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -44,23 +44,16 @@ export default class AnalogInput extends React.Component {
       })
       return
     }
-    const pin = parseInt(this.state.pin)
-    if (isNaN(pin)) {
-      showError('Use only comma separated numbers')
-      return
-    }
     const payload = {
       name: this.state.name,
-      pin: pin,
-      driver: this.state.driver
+      pin: this.state.pin,
+      driver: this.state.driver.id
     }
     this.props.update(payload)
     this.setState({
       edit: false,
       lbl: 'edit',
-      name: payload.name,
-      driver: payload.driver,
-      pin: pin
+      name: payload.name
     })
   }
 
@@ -80,16 +73,12 @@ export default class AnalogInput extends React.Component {
           </div>
         </div>
         <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor={'analog_input-' + this.props.analog_input_id + '-pin'}> Pin </label>
-            <input
-              type='text'
-              id={'analog_input-' + this.props.analog_input_id + '-pin'}
-              onChange={this.handlePinChange}
-              className='analog_input-pin form-control'
-              value={this.state.pin}
-            />
-          </div>
+          <Pin
+            update={this.onPinChange}
+            driver={this.state.driver}
+            type='analog-input'
+            current={this.state.pin}
+          />
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
@@ -99,7 +88,7 @@ export default class AnalogInput extends React.Component {
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}
               className='custom-select form-control'
               onChange={this.handleSetDriver}
-              value={this.state.driver}
+              value={this.state.driver.id}
             >
               {this.props.drivers.map(item => {
                 return (
@@ -125,7 +114,7 @@ export default class AnalogInput extends React.Component {
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
           <label className='small'>
-            {this.state.driver_name}
+            {this.state.driver.name}
             ({this.state.pin})
           </label>
         </div>
@@ -166,6 +155,6 @@ AnalogInput.propTypes = {
   analog_input_id: PropTypes.string.isRequired,
   remove: PropTypes.func,
   update: PropTypes.func,
-  driver: PropTypes.string,
+  driver: PropTypes.object.isRequired,
   drivers: PropTypes.array.isRequired
 }
