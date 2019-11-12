@@ -4,6 +4,8 @@ import { showError } from 'utils/alert'
 import { connect } from 'react-redux'
 import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/jacks'
 import Jack from './jack'
+import i18next from 'i18next'
+
 class jacks extends React.Component {
   constructor (props) {
     super(props)
@@ -45,7 +47,7 @@ class jacks extends React.Component {
 
   remove (id) {
     return function () {
-      confirm('Are you sure ?').then(
+      confirm(i18next.t('are_you_sure')).then(
         function () {
           this.props.delete(id)
         }.bind(this)
@@ -117,7 +119,7 @@ class jacks extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h6'>Jacks</label>
+            <label className='h6'>{i18next.t('jacks')}</label>
             {this.list()}
           </div>
         </div>
@@ -137,7 +139,7 @@ class jacks extends React.Component {
             <div className='row add-jack' style={dStyle}>
               <div className='col-12 col-md-5'>
                 <div className='form-group'>
-                  <label htmlFor='jackName'>Name</label>
+                  <label htmlFor='jackName'>{i18next.t('name')}</label>
                   <input
                     type='text'
                     id='jackName'
@@ -149,7 +151,7 @@ class jacks extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='form-group'>
-                  <span className='input-group-addon'>Reverse</span>
+                  <span className='input-group-addon'>{i18next.t('reverse')}</span>
                   <input
                     type='checkbox'
                     id='jackReverse'
@@ -161,7 +163,7 @@ class jacks extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='form-group'>
-                  <label htmlFor='jackPins'>Pins</label>
+                  <label htmlFor='jackPins'>{i18next.t('pins')}</label>
                   <input
                     type='text'
                     id='jackPins'
@@ -174,7 +176,7 @@ class jacks extends React.Component {
 
               <div className='col-12 col-md-2'>
                 <div className='jack-type form-group'>
-                  <label>Driver</label>
+                  <label>{i18next.t('driver')}</label>
                   <select
                     name='driver'
                     className='form-control custom-select'
@@ -195,7 +197,7 @@ class jacks extends React.Component {
                 <input
                   type='button'
                   id='createJack'
-                  value='add'
+                  value={i18next.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />

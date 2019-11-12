@@ -17,7 +17,7 @@ i18n
       it: translations.it,
       nl: translations.nl,
       pt: translations.pt,
-      zh: translations.zh,
+      zh: translations.zh
     },
     defaultNS: 'common',
     debug: false,

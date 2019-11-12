@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pin from './pin'
+import i18next from 'i18next'
 
 export default class Outlet extends React.Component {
   constructor (props) {
@@ -10,7 +11,7 @@ export default class Outlet extends React.Component {
       name: props.name,
       pin: props.pin,
       reverse: props.reverse,
-      lbl: 'edit',
+      lbl: i18next.t('edit'),
       driver: props.driver
     }
     this.handleEdit = this.handleEdit.bind(this)
@@ -46,7 +47,7 @@ export default class Outlet extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: 'save'
+        lbl: i18next.t('save')
       })
       return
     }
@@ -60,7 +61,7 @@ export default class Outlet extends React.Component {
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: 'edit',
+      lbl: i18next.t('edit'),
       name: payload.name,
       pin: payload.pin,
       reverse: payload.reverse
@@ -72,7 +73,7 @@ export default class Outlet extends React.Component {
       <div className='row'>
         <div className='col-12 col-md-6'>
           <div className='form-group'>
-            <span className='input-group-addon'>Name</span>
+            <span className='input-group-addon'>{i18next.t('name')}</span>
             <input
               type='text'
               id={'outlet-' + this.props.outlet_id + '-name'}
@@ -92,7 +93,7 @@ export default class Outlet extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>Reverse</span>
+            <span className='input-group-addon'>{i18next.t('reverse')}</span>
             <input
               type='checkbox'
               onChange={this.handleReverseChange}
@@ -104,7 +105,7 @@ export default class Outlet extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label>Driver</label>
+            <label>{i18next.t('driver')}</label>
             <select
               name='driver'
               className='custom-select form-control'
@@ -136,13 +137,13 @@ export default class Outlet extends React.Component {
           </label>
         </div>
         <div className='col'>
-          <label className='small'>{this.props.equipment === '' ? '' : 'in-use'}</label>
+          <label className='small'>{this.props.equipment === '' ? '' : i18next.t('in-use')}</label>
         </div>
         <div className='col'>
-          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
+          <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
         </div>
         <div className='col'>
-          <label className='small'>{this.state.reverse ? 'reverse' : ''}</label>
+          <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
         </div>
       </div>
     )

@@ -424,3 +424,16 @@ temperature:calibration:set_temperature, Set Temperature
 temperature:calibration:apply, Apply
 temperature:current_reading, Current Reading
 temperature:warn_delete, This action will delete
+driver,Driver
+pin,Pin
+pins:Pins
+reverse,Reverse
+inlets,Inlets
+inlet,Inlet
+outlets,Outlets
+outlet,Outlet
+jacks,Jacks
+jack,Jack
+analog_inputs,Analog Inputs
+analog_input,Analog Input
+in-use,in-use
