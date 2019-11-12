@@ -1,7 +1,8 @@
 import React from 'react'
 import { confirm } from 'utils/confirm'
-import { showError } from 'utils/alert'
 import { connect } from 'react-redux'
+import Pin from './pin'
+
 import {
   fetchAnalogInputs,
   updateAnalogInput,
@@ -17,7 +18,7 @@ class analogInputs extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: 'rpi',
+      driver: props.drivers.filter(d => d.id === 'rpi')[0],
       add: false
     }
     this.list = this.list.bind(this)
@@ -26,21 +27,21 @@ class analogInputs extends React.Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleSetDriver = this.handleSetDriver.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ pin: e.target.value })
+  onPinChange (v) {
+    this.setState({ pin: v })
   }
 
   handleSetDriver (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -61,21 +62,15 @@ class analogInputs extends React.Component {
   handleAdd () {
     this.setState({
       add: !this.state.add,
-      name: '',
-      pin: ''
+      name: ''
     })
   }
 
   handleSave () {
-    const pin = parseInt(this.state.pin)
-    if (isNaN(pin)) {
-      showError('Use only comma separated numbers')
-      return
-    }
     const payload = {
       name: this.state.name,
-      pin: pin,
-      driver: this.state.driver
+      pin: this.state.pin,
+      driver: this.state.driver.id
     }
     this.props.create(payload)
     this.handleAdd()
@@ -89,7 +84,7 @@ class analogInputs extends React.Component {
           name={j.name}
           key={j.id}
           pin={j.pin}
-          driver={j.driver}
+          driver={this.props.drivers.filter(d => d.id === j.driver)[0]}
           drivers={this.props.drivers}
           analog_input_id={j.id}
           remove={this.remove(j.id)}
@@ -142,16 +137,12 @@ class analogInputs extends React.Component {
                 </div>
               </div>
               <div className='col-12 col-md-2'>
-                <div className='form-group'>
-                  <label htmlFor='analog_inputPins'>Pin</label>
-                  <input
-                    type='text'
-                    id='analog_inputPins'
-                    value={this.state.pin}
-                    onChange={this.handlePinChange}
-                    className='form-control'
-                  />
-                </div>
+                <Pin
+                  driver={this.state.driver}
+                  update={this.onPinChange}
+                  type='analog-input'
+                  current={this.state.pin}
+                />
               </div>
               <div className='col-12 col-md-2'>
                 <div className='analog_input_type form-group'>
@@ -160,7 +151,7 @@ class analogInputs extends React.Component {
                     name='driver'
                     className='form-control custom-select'
                     onChange={this.handleSetDriver}
-                    value={this.state.driver}
+                    value={this.state.driver.id}
                   >
                     {this.props.drivers.map(item => {
                       return (

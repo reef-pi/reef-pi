@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Pin from './pin'
 
 export default class Outlet extends React.Component {
   constructor (props) {
@@ -10,24 +11,24 @@ export default class Outlet extends React.Component {
       pin: props.pin,
       reverse: props.reverse,
       lbl: 'edit',
-      driver: props.driver,
-      driver_name: props.drivers.filter(d => d.id === props.driver)[0].name
+      driver: props.driver
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
-    this.handlePinChange = this.handlePinChange.bind(this)
+    this.onPinChange = this.onPinChange.bind(this)
     this.handleReverseChange = this.handleReverseChange.bind(this)
     this.handleDriverChange = this.handleDriverChange.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
   }
 
-  handlePinChange (e) {
-    this.setState({ pin: e.target.value })
+  onPinChange (v) {
+    this.setState({ pin: v })
   }
 
   handleReverseChange () {
@@ -35,9 +36,9 @@ export default class Outlet extends React.Component {
   }
 
   handleDriverChange (e) {
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: e.target.value,
-      driver_name: this.props.drivers.filter(d => d.id === e.target.value)[0].name
+      driver: driver
     })
   }
 
@@ -51,10 +52,10 @@ export default class Outlet extends React.Component {
     }
     const payload = {
       name: this.state.name,
-      pin: parseInt(this.state.pin),
+      pin: this.state.pin,
       reverse: this.state.reverse,
       equipment: this.props.equipment,
-      driver: this.state.driver
+      driver: this.state.driver.id
     }
     this.props.update(payload)
     this.setState({
@@ -82,16 +83,12 @@ export default class Outlet extends React.Component {
           </div>
         </div>
         <div className='col-12 col-md-3'>
-          <div className='form-group'>
-            <span className='input-group-addon'>Pin</span>
-            <input
-              type='number'
-              id={'outlet-' + this.props.outlet_id + '-pin'}
-              className='form-control outlet-pin'
-              onChange={this.handlePinChange}
-              value={this.state.pin}
-            />
-          </div>
+          <Pin
+            update={this.onPinChange}
+            driver={this.state.driver}
+            type='digital-output'
+            current={this.state.pin}
+          />
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
@@ -112,7 +109,7 @@ export default class Outlet extends React.Component {
               name='driver'
               className='custom-select form-control'
               onChange={this.handleDriverChange}
-              value={this.state.driver}
+              value={this.state.driver.id}
             >
               {this.props.drivers.map(item => {
                 return (
@@ -134,7 +131,7 @@ export default class Outlet extends React.Component {
         <div className='col-4'>{this.state.name}</div>
         <div className='col-1'>
           <label className='small'>
-            {this.state.driver_name}
+            {this.state.driver.name}
             ({this.state.pin})
           </label>
         </div>
@@ -186,5 +183,6 @@ Outlet.propTypes = {
   remove: PropTypes.func.isRequired,
   reverse: PropTypes.bool.isRequired,
   update: PropTypes.func,
-  drivers: PropTypes.array.isRequired
+  drivers: PropTypes.array.isRequired,
+  driver: PropTypes.object.isRequired
 }
