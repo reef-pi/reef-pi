@@ -16,8 +16,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile />', () => {
     const config = {
-      start: '14:00',
-      end: '20:00',
+      start: '14:00:00',
+      end: '20:00:00',
       values: []
     }
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />).instance()
@@ -28,8 +28,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> should default to 12 values', () => {
     const config = {
-      start: '14:00',
-      end: '20:00'
+      start: '14:00:00',
+      end: '20:00:00'
     }
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
     expect(m.find('input.no-spinner').length).toBe(12)
@@ -37,8 +37,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> should set labels based on start end and values', () => {
     const config = {
-      start: '14:00',
-      end: '15:00',
+      start: '14:00:00',
+      end: '15:00:00',
       values: [10, 20, 30]
     }
 
@@ -52,8 +52,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> should set add labels based when Add Point is clicked', () => {
     const config = {
-      start: '14:00',
-      end: '15:00',
+      start: '14:00:00',
+      end: '15:00:00',
       values: [10, 20, 30]
     }
 
@@ -73,8 +73,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> should set remove labels based when Remove Point is clicked', () => {
     const config = {
-      start: '14:00',
-      end: '15:00',
+      start: '14:00:00',
+      end: '15:00:00',
       values: [10, 20, 30]
     }
 
@@ -90,8 +90,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> Should allow end time before start time to represent overnight', () => {
     const config = {
-      start: '23:00',
-      end: '02:00',
+      start: '23:00:00',
+      end: '02:00:00',
       values: [10, 20, 30, 40]
     }
 
@@ -106,8 +106,8 @@ describe('Lighting ui - Auto Profile', () => {
 
   it('<AutoProfile /> Should allow end time before start time with same hour to represent overnight', () => {
     const config = {
-      start: '02:45',
-      end: '02:15',
+      start: '02:45:00',
+      end: '02:15:00',
       values: [10, 20, 30]
     }
 

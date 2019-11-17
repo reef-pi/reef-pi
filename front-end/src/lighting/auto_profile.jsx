@@ -80,8 +80,8 @@ export default class AutoProfile extends React.Component {
     const list = []
 
     const labels = new Array(values.length)
-    if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(this.props.config.start) &&
-      /^([01]\d|2[0-3]):([0-5]\d)$/.test(this.props.config.end)) {
+    if (/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(this.props.config.start) &&
+      /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(this.props.config.end)) {
       const startHour = parseInt(this.props.config.start.split(':')[0])
       const startMinute = parseInt(this.props.config.start.split(':')[1])
       let endHour = parseInt(this.props.config.end.split(':')[0])
@@ -178,7 +178,7 @@ export default class AutoProfile extends React.Component {
               readOnly={this.props.readOnly}
               className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
                 { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
-              placeholder='HH:mm'
+              placeholder='HH:mm:ss'
             />
             <label className='mr-2'>End Time</label>
             <Field
@@ -186,7 +186,7 @@ export default class AutoProfile extends React.Component {
               readOnly={this.props.readOnly}
               className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
                 { 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
-              placeholder='HH:mm'
+              placeholder='HH:mm:ss'
             />
             <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
             <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />

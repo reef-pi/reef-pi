@@ -99,7 +99,7 @@ class main extends React.Component {
     const jack = this.props.jacks[this.state.selectedJack]
     const channels = {}
     jack.pins.map((pin, idx) => (
-      channels[idx] = {
+      channels[pin] = {
         color: '',
         manual: false,
         min: 0,
@@ -111,8 +111,8 @@ class main extends React.Component {
         profile: {
           type: 'fixed',
           config: {
-            start: '00:00',
-            end: '23:59',
+            start: '00:00:00',
+            end: '23:59:59',
             value: 0
           }
         }

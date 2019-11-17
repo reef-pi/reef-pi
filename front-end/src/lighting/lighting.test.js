@@ -47,8 +47,8 @@ describe('Lighting ui', () => {
         profile: {
           type: 'interval',
           config: {
-            start: '14:00',
-            end: '22:00',
+            start: '14:00:00',
+            end: '22:00:00',
             values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
           }
         }
@@ -69,8 +69,8 @@ describe('Lighting ui', () => {
           profile: {
             type: 'interval',
             config: {
-              start: '14:00',
-              end: '22:00',
+              start: '14:00:00',
+              end: '22:00:00',
               values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
             }
           }
@@ -147,8 +147,8 @@ describe('Lighting ui', () => {
       profile: {
         type: 'interval',
         config: {
-          start: '14:00',
-          end: '22:00',
+          start: '14:00:00',
+          end: '22:00:00',
           values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         }
       }
@@ -175,8 +175,8 @@ describe('Lighting ui', () => {
     const fn = jest.fn()
     const fnUpdateLight = jest.fn()
 
-    light.channels[1].profile.config.start = '14:00'
-    light.channels[1].profile.config.end = '16:00'
+    light.channels[1].profile.config.start = '14:00:00'
+    light.channels[1].profile.config.end = '16:00:00'
     light.channels[1].profile.config.values = [1,2,3,4,5]
     const m = shallow(<TestMain
       fetchLights = {fn}
@@ -206,8 +206,8 @@ describe('Lighting ui', () => {
     const fnUpdateLight = jest.fn()
 
     light.channels[1].profile.type = 'auto'
-    light.channels[1].profile.config.start = '23:00'
-    light.channels[1].profile.config.end = '01:00'
+    light.channels[1].profile.config.start = '23:00:00'
+    light.channels[1].profile.config.end = '01:00:00'
     light.channels[1].profile.config.values = [1,2,3,4,5]
     const m = shallow(<TestMain
       fetchLights = {fn}
@@ -239,8 +239,8 @@ describe('Lighting ui', () => {
       profile: {
         type: 'interval',
         config: {
-          start: '14:00',
-          end: '22:00',
+          start: '14:00:00',
+          end: '22:00:00',
           values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         }
       }
