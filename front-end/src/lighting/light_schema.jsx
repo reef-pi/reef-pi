@@ -50,10 +50,10 @@ const diurnalSchema = Yup.object().shape({
     .typeError('A profile must be configured')
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Start must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
         .required('Start is required'),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'End must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
         .required('End is required')
     })
 })
@@ -69,10 +69,10 @@ const fixedSchema = Yup.object().shape({
         .max(100, 'Value must be less than or equal to 100')
         .required('Value is required'),
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Start must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
         .required('Start is required'),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'End must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
         .required('End is required')
     })
 })
@@ -83,10 +83,10 @@ const autoSchema = Yup.object().shape({
     .typeError('A profile must be configured')
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Start must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
         .required('Start is required'),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, 'End must be a valid time (HH:mm)')
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
         .required('End is required'),
       values: Yup.array().of(Yup.number()
         .typeError('Value is required')

@@ -51,8 +51,8 @@ const Channel = (props) => {
       case 'interval': {
         if (config) {
           config = {
-            start: '00:00',
-            end: '22:00',
+            start: '00:00:00',
+            end: '22:00:00',
             interval: 120,
             values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           }
@@ -60,8 +60,8 @@ const Channel = (props) => {
         }
 
         return {
-          start: '00:00',
-          end: '22:00',
+          start: '00:00:00',
+          end: '22:00:00',
           interval: 120,
           values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }

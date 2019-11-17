@@ -14,7 +14,7 @@ const DiurnalProfile = (props) => {
         readOnly={props.readOnly}
         className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
           { 'is-invalid': ShowError(NameFor(props.name, 'start'), props.touched, props.errors) })}
-        placeholder='HH:mm'
+        placeholder='HH:mm:ss'
       />
       <label className='mr-2'>End Time</label>
       <Field
@@ -22,7 +22,7 @@ const DiurnalProfile = (props) => {
         readOnly={props.readOnly}
         className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
           { 'is-invalid': ShowError(NameFor(props.name, 'end'), props.touched, props.errors) })}
-        placeholder='HH:mm'
+        placeholder='HH:mm:ss'
       />
       <ErrorFor {...props} name={NameFor(props.name, 'start')} />
       <ErrorFor {...props} name={NameFor(props.name, 'end')} />

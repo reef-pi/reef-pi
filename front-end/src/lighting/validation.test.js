@@ -21,8 +21,8 @@ describe('Validation', () => {
     value.config.channels['1'].profile = {
       type: 'fixed',
       config: {
-        start: '14:00',
-        end: '20:00',
+        start: '14:00:00',
+        end: '20:00:00',
         value: 50
       }
     }
@@ -51,8 +51,8 @@ describe('Validation', () => {
     value.config.channels['1'].profile = {
       type: 'interval',
       config: {
-        start: '14:00',
-        end: '20:00',
+        start: '14:00:00',
+        end: '20:00:00',
         values: [0, 0, 0, 50, 0, 0, 0, 0, 0]
       }
     }
@@ -81,8 +81,8 @@ describe('Validation', () => {
     value.config.channels['1'].profile = {
       type: 'diurnal',
       config: {
-        start: '11:00',
-        end: '19:00'
+        start: '11:00:00',
+        end: '19:00:00'
       }
     }
     expect.assertions(1)
@@ -96,7 +96,7 @@ describe('Validation', () => {
       type: 'diurnal',
       config: {
         start: '',
-        end: '19:00'
+        end: '19:00:00'
       }
     }
     expect.assertions(1)

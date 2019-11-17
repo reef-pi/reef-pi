@@ -39,7 +39,7 @@ export default class FixedProfile extends React.Component {
             readOnly={this.props.readOnly}
             className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
               { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
-            placeholder='HH:mm'
+            placeholder='HH:mm:ss'
           />
           <label className='mr-2'>End Time</label>
           <Field
@@ -47,7 +47,7 @@ export default class FixedProfile extends React.Component {
             readOnly={this.props.readOnly}
             className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
               { 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
-            placeholder='HH:mm'
+            placeholder='HH:mm:ss'
           />
           <ErrorFor {...this.props} name={NameFor(this.props.name, 'start')} />
           <ErrorFor {...this.props} name={NameFor(this.props.name, 'end')} />
