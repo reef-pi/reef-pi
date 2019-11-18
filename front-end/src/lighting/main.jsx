@@ -1,4 +1,4 @@
-import React from 'react'
+ifmport React from 'react'
 import $ from 'jquery'
 import Light from './light_form'
 import { showError } from 'utils/alert'
@@ -62,6 +62,7 @@ class main extends React.Component {
       name: values.config.name,
       channels: values.config.channels,
       jack: values.config.jack
+      enable: true,
     }
 
     for (const x in payload.channels) {
