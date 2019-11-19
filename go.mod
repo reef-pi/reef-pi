@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
-	github.com/coreos/bbolt v1.3.3
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
@@ -19,7 +18,7 @@ require (
 	github.com/reef-pi/rpi v0.0.0-20191003051100-f2908459e401
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/shirou/gopsutil v2.19.9+incompatible
-	go.etcd.io/bbolt v1.3.3 // indirect
-	golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c // indirect
+	go.etcd.io/bbolt v1.3.3
+	golang.org/x/sys v0.0.0-20191118133127-cf1e2d577169 // indirect
 	gopkg.in/yaml.v2 v2.2.4
 )
