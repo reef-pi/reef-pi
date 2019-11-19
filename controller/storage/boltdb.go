@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	bolt "github.com/coreos/bbolt"
+	bolt "go.etcd.io/bbolt"
 )
 
 type store struct {
