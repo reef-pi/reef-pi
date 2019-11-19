@@ -8,24 +8,33 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func TestHomestasis(t *testing.T) {
+func testH() (*Homeostasis, error) {
 	store, err := storage.TestDB()
 	if err != nil {
-		t.Fatal(store)
+		return nil, err
 	}
 	config := HomeoStasisConfig{
-		Name:   "test",
-		Upper:  "1",
-		Downer: "2",
-		Min:    10,
-		Max:    30,
-		Period: 2,
+		Name:       "test",
+		Upper:      "1",
+		Downer:     "2",
+		Min:        10,
+		Max:        30,
+		Period:     2,
+		Hysteresis: 0,
 	}
 	h := Homeostasis{
 		config: config,
 		t:      telemetry.TestTelemetry(store),
-		eqs:    &mockSubsystem{},
-		macros: &mockSubsystem{},
+		eqs:    NoopSubsystem(),
+		macros: NoopSubsystem(),
+	}
+	return &h, nil
+}
+
+func TestHomestasis(t *testing.T) {
+	h, err := testH()
+	if err != nil {
+		t.Fatal(err)
 	}
 	o := Observation{
 		Value: 21,
@@ -61,6 +70,39 @@ func TestHomestasis(t *testing.T) {
 	}
 	if o.Downer != 2 {
 		t.Error("Downer should not increase when value is below range")
+	}
+}
+
+func TestHysteresis(t *testing.T) {
+	h, err := testH()
+	if err != nil {
+		t.Fatal(err)
+	}
+	h.config.Min = 76
+	h.config.Max = 81
+	h.config.Downer = ""
+	h.config.Hysteresis = 0.2
+	eqs := NoopSubsystem()
+	h.eqs = eqs
+	o := Observation{
+		Value: 83,
+	}
+	if err := h.Sync(&o); err != nil {
+		t.Error(err)
+	}
+	if o.Upper != 0 {
+		t.Error("Upper should not increase when value is within range")
+
+	}
+	if o.Downer != 0 {
+		t.Error("Downer should not increase when value is within range")
+	}
+	b, err := eqs.Get(h.config.Upper)
+	if err != nil {
+		t.Error(err)
+	}
+	if b {
+		t.Error("Expected heater to be turned off")
 	}
 }
 
