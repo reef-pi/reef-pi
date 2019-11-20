@@ -13,13 +13,16 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-const DriverBucket = storage.DriverBucket
+const (
+	DriverBucket = storage.DriverBucket
+	_rpi         = "rpi"
+)
 
 type Driver struct {
 	ID     string           `json:"id"`
 	Name   string           `json:"name"`
 	Type   string           `json:"type"`
-	Config json.RawMessage  `json:"config`
+	Config json.RawMessage  `json:"config"`
 	PinMap map[string][]int `json:"pinmap"`
 }
 
@@ -142,11 +145,18 @@ func (d *Drivers) Create(d1 Driver) error {
 }
 
 func (d *Drivers) Update(id string, d1 Driver) error {
+	if id == _rpi {
+		return fmt.Errorf("rpi driver is readonly")
+	}
+
 	d1.ID = id
 	return d.store.Update(DriverBucket, id, d1)
 }
 
 func (d *Drivers) Delete(id string) error {
+	if id == _rpi {
+		return fmt.Errorf("rpi driver is readonly")
+	}
 	driver, ok := d.drivers[id]
 	if ok {
 		driver.Close()

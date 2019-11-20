@@ -20,7 +20,7 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		ds, err := d.List()
 		if err == nil {
-			dr, ok := d.drivers["rpi"]
+			dr, ok := d.drivers[_rpi]
 			if ok {
 				piDriver.loadPinMap(dr)
 			}
