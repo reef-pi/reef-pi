@@ -38,4 +38,5 @@ type Store interface {
 	RawUpdate(string, string, []byte) error
 	Delete(string, string) error
 	ReOpen() error
+	Buckets() ([]string, error)
 }
