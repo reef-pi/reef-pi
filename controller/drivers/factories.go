@@ -21,8 +21,8 @@ import (
 
 var piDriver = Driver{
 	Name:   "Raspberry Pi",
-	ID:     "rpi",
-	Type:   "rpi",
+	ID:     _rpi,
+	Type:   _rpi,
 	Config: []byte(`{"pwm_freq": 150}`),
 }
 
