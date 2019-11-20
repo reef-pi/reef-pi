@@ -22,7 +22,7 @@ type Driver struct {
 	ID     string           `json:"id"`
 	Name   string           `json:"name"`
 	Type   string           `json:"type"`
-	Config json.RawMessage  `json:"config`
+	Config json.RawMessage  `json:"config"`
 	PinMap map[string][]int `json:"pinmap"`
 }
 

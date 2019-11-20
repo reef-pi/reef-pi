@@ -17,6 +17,15 @@ class drivers extends React.Component {
   list () {
     const items = []
     this.props.drivers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((d, n) => {
+      if (d.type === 'rpi') {
+        items.push(
+          <div className='row ' key={d.id}>
+            <div className='col-4 col-md-6'>{d.name}</div>
+            <div className='col-4 col-md-6'>{d.type}</div>
+          </div>
+        )
+        return
+      }
       items.push(
         <Driver
           name={d.name}
@@ -25,6 +34,7 @@ class drivers extends React.Component {
           key={d.id}
           config={d.config}
           remove={this.props.delete}
+          update={this.props.update}
         />
       )
     })

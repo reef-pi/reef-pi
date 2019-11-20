@@ -76,7 +76,7 @@ func rpiFactory(confData []byte, _ i2c.Bus) (hal.Driver, error) {
 }
 
 func (d *Drivers) loadAll() error {
-	factory, err := AbstractFactory("rpi", d.dev_mode)
+	factory, err := AbstractFactory(_rpi, d.dev_mode)
 	if err != nil {
 		return err
 	}
