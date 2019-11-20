@@ -149,3 +149,13 @@ func (s *store) CreateWithID(bucket, id string, payload interface{}) error {
 		return b.Put([]byte(id), data)
 	})
 }
+func (s *store) Buckets() ([]string, error) {
+	var bs []string
+	err := s.db.View(func(tx *bolt.Tx) error {
+		return tx.ForEach(func(name []byte, _ *bolt.Bucket) error {
+			bs = append(bs, string(name))
+			return nil
+		})
+	})
+	return bs, err
+}

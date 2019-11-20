@@ -3,20 +3,23 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type dbCmd struct {
 	input, output, sPath string
 	store                storage.Store
-	bucket               string
 	args                 []string
 }
+
+var _wrongArguments = errors.New("incorrect number of arguments at least action and module needs to be specified")
 
 func (d *dbCmd) FlagSet() *flag.FlagSet {
 	cmd := flag.NewFlagSet("db", flag.ExitOnError)
@@ -32,15 +35,11 @@ func NewDBCmd(args []string) (*dbCmd, error) {
 		return nil, err
 	}
 	cmd.args = fs.Args()
-	if len(cmd.args) < 2 {
-		return nil, fmt.Errorf("incorrect number of arguments at least action and module needs to be specified")
-	}
 	store, err := storage.NewStore(cmd.sPath)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to open database. Check if reef-pi is already running. %w", err)
 	}
 	cmd.store = store
-	cmd.bucket = cmd.args[1]
 	return cmd, nil
 }
 
@@ -52,15 +51,32 @@ func (cmd *dbCmd) Execute() error {
 	action := cmd.args[0]
 	switch action {
 	case "show":
+		if len(cmd.args) < 2 {
+			return _wrongArguments
+		}
 		return cmd.Show()
 	case "list":
+		if len(cmd.args) < 2 {
+			return _wrongArguments
+		}
 		return cmd.List()
 	case "create":
+		if len(cmd.args) < 2 {
+			return _wrongArguments
+		}
 		return cmd.Create()
 	case "update":
+		if len(cmd.args) < 2 {
+			return _wrongArguments
+		}
 		return cmd.Update()
 	case "delete":
+		if len(cmd.args) < 2 {
+			return _wrongArguments
+		}
 		return cmd.Delete()
+	case "buckets":
+		return cmd.Buckets()
 	default:
 		return fmt.Errorf("unknown action:'%s'", action)
 	}
@@ -76,16 +92,27 @@ func (cmd *dbCmd) Output(payload []byte) error {
 	}
 }
 
+func (cmd *dbCmd) bucket() string {
+	return cmd.args[1]
+}
+
 func (cmd *dbCmd) Show() error {
 	if len(cmd.args) < 3 {
 		return fmt.Errorf("must provide id of the item to show")
 	}
 	id := cmd.args[2]
-	d, err := cmd.store.RawGet(cmd.bucket, id)
+	d, err := cmd.store.RawGet(cmd.bucket(), id)
 	if err != nil {
 		return fmt.Errorf("failed to get item %s due database eror:%w", id, err)
 	}
 	return cmd.Output(d)
+}
+func (cmd *dbCmd) Buckets() error {
+	buckets, err := cmd.store.Buckets()
+	if err != nil {
+		return fmt.Errorf("failed to get list buckets  due database eror:%w", err)
+	}
+	return cmd.Output([]byte(strings.Join(buckets, "\n")))
 }
 
 func (cmd *dbCmd) List() error {
@@ -94,7 +121,7 @@ func (cmd *dbCmd) List() error {
 		res[id] = bs
 		return nil
 	}
-	if err := cmd.store.List(cmd.bucket, fn); err != nil {
+	if err := cmd.store.List(cmd.bucket(), fn); err != nil {
 		return fmt.Errorf("failed to list items from storage. %w", err)
 	}
 	data, err := json.MarshalIndent(res, "", "  ")
@@ -124,7 +151,7 @@ func (cmd *dbCmd) Create() error {
 	fn := func(_ string) interface{} {
 		return data
 	}
-	return cmd.store.Create(cmd.bucket, fn)
+	return cmd.store.Create(cmd.bucket(), fn)
 }
 
 func (cmd *dbCmd) Update() error {
@@ -136,12 +163,12 @@ func (cmd *dbCmd) Update() error {
 	if err != nil {
 		return err
 	}
-	return cmd.store.RawUpdate(cmd.bucket, id, data)
+	return cmd.store.RawUpdate(cmd.bucket(), id, data)
 }
 func (cmd *dbCmd) Delete() error {
 	if len(cmd.args) < 3 {
 		return fmt.Errorf("must provide id of the item to show")
 	}
 	id := cmd.args[2]
-	return cmd.store.Delete(cmd.bucket, id)
+	return cmd.store.Delete(cmd.bucket(), id)
 }
