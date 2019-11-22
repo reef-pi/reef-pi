@@ -160,6 +160,7 @@ timers:subject,Subject
 timers:message,Message
 timers:timer_status,Timer Status
 timers:function,Function
+timers:equipment,Equipment
 timers:reminder,Reminder
 timers:macros,Macros
 timers:macro,Macro Name
