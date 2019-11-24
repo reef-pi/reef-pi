@@ -13,7 +13,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/prometheus/client_golang v1.2.1
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
-	github.com/reef-pi/drivers v0.0.0-20191030061238-929b929330b3
+	github.com/reef-pi/drivers v0.0.0-20191124084039-bd164636cb55
 	github.com/reef-pi/hal v0.0.0-20191003050343-8c77d92fe39a
 	github.com/reef-pi/rpi v0.0.0-20191003051100-f2908459e401
 	github.com/robfig/cron/v3 v3.0.0
