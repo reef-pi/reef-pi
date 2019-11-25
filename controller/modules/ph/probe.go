@@ -141,7 +141,8 @@ func (c *Controller) Read(p Probe) (float64, error) {
 	if c.devMode {
 		return telemetry.TwoDecimal(8 + rand.Float64()*2), nil
 	}
-	return c.ais.Read(p.AnalogInput)
+	v, err := c.ais.Read(p.AnalogInput)
+	return telemetry.TwoDecimal(v), err
 }
 
 func (c *Controller) Run(p Probe, quit chan struct{}) {
