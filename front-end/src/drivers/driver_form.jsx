@@ -10,8 +10,8 @@ const DriverForm = withFormik({
       data = {
         name: '',
         config: {
-          address: 68,
-          frequency: 1500
+          address: 64,
+          frequency: 800
         },
         type: 'pca9685'
       }
