@@ -74,11 +74,14 @@ class main extends React.Component {
         const startMinute = parseInt(startTime[1])
         let endHour = parseInt(endTime[0])
         const endMinute = parseInt(endTime[1])
-        if ((endHour < startHour) || (endHour === startHour && endMinute < startMinute)) { endHour += 24 }
+
+        if ((endHour < startHour) || (endHour === startHour && endMinute < startMinute)) {
+          endHour += 24
+        }
 
         const totalSeconds =
-          (endHour * 60 * 60) + (endMinute * 60) -
-          (startHour * 60 * 60) + (startMinute * 60)
+          ((endHour * 60 * 60) + (endMinute * 60)) -
+          ((startHour * 60 * 60) + (startMinute * 60))
 
         const interval = totalSeconds / (payload.channels[x].profile.config.values.length - 1)
         payload.channels[x].profile.config.interval = Math.floor(interval)
