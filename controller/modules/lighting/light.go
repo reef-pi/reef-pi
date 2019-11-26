@@ -65,7 +65,7 @@ func (c *Controller) validate(l *Light) error {
 			ch.Manual = true
 		}
 		if err := ch.loadProfile(); err != nil {
-			log.Println("ERROR: lighting-subsystenL failed to load profile for channel", ch.Name, "light", l.Name, "Error:", err)
+			return fmt.Errorf("invalid profile for channel: %s. Error: %w", ch.Name, err)
 		}
 		if ch.Max == 0 {
 			ch.Max = 100
