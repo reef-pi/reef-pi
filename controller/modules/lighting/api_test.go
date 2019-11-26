@@ -65,8 +65,9 @@ func TestLightingAPI(t *testing.T) {
 	channels := make(map[int]*Channel)
 
 	channels[1] = &Channel{
-		Name: "ch1",
-		Min:  12,
+		Name:   "ch1",
+		Min:    12,
+		Manual: true,
 	}
 	l := Light{
 		Jack:     jacksList[0].ID,
