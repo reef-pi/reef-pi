@@ -374,6 +374,9 @@ temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:celcius,Celcius
 temperature:fahrenheit,Fahrenheit
+temperature:hysteresis_required,Hysteresis value must be provided
+temperature:hysteresis_type,Hysteresis Type
+temperature:hysteresis_less_than,Hysteresis value is incorrect
 ph:calibrate,Calibrate
 ph:midpoint,Midpoint
 ph:second_point,Second Point
