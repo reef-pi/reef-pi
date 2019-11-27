@@ -26,6 +26,7 @@ func detectTempSensorDevice() (string, error) {
 }
 
 func (c *Controller) Read(tc TC) (float64, error) {
+	log.Println("Reading temperature from device:", tc.Sensor)
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
@@ -34,7 +35,6 @@ func (c *Controller) Read(tc TC) (float64, error) {
 			return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 		}
 	}
-	log.Println("Reading temperature from device:", tc.Sensor)
 	fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor, "w1_slave"))
 	if err != nil {
 		return -1, err

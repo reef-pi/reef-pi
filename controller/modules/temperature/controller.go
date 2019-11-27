@@ -37,6 +37,8 @@ func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Con
 }
 
 func (c *Controller) Setup() error {
+	c.Lock()
+	defer c.Unlock()
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
@@ -47,8 +49,9 @@ func (c *Controller) Setup() error {
 	if err != nil {
 		return err
 	}
-	for _, tc := range tcs {
-		c.tcs[tc.ID] = &tc
+	for i, tc := range tcs {
+		c.tcs[tc.ID] = &tcs[i]
+		log.Println("Setting up:", tc.ID, tc.Name, tc.Sensor)
 	}
 	return nil
 }
@@ -57,6 +60,7 @@ func (c *Controller) Start() {
 	c.Lock()
 	defer c.Unlock()
 	for _, t := range c.tcs {
+		log.Println("Starting:", t.ID, t.Name, t.Sensor)
 		if !t.Enable {
 			continue
 		}
