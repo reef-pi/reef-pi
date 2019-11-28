@@ -118,8 +118,6 @@ func TestController(t *testing.T) {
 	if err := c.Control(a1, 1); err != nil {
 		t.Error(err)
 	}
-	q := make(chan struct{})
-	c.Run(a1, q)
 	if err := c.Create(a1); err == nil {
 		t.Error("ATO creation should fail if period is set to zero")
 	}
