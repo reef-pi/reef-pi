@@ -133,7 +133,7 @@ ato:control_pump,Controlo da Bomba
 ato:alert_after,Alertar após
 ato:disable_on_alert,Desativar alerta
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
-ato:validation_error,ATO Erro nas configurações, por favor corrija e tente novamente
+ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
 timers:name_required,Name é Obrigatório
 timers:timer_status_required,Estado do temporizador é Obrigatório
 timers:day_required,Dia é Obrigatório
@@ -146,7 +146,7 @@ timers:on_required,Ligar é Obrigatório
 timers:duration_required,Duração é Obrigatório
 timers:subject_required,o Assunto é Obrigatório
 timers:message_required,a Messagem é Obrigatório
-timers:validation_error,Erro nas configurações de timmer, por favor corrija e tente novamente
+timers:validation_error,"Erro nas configurações de timmer, por favor corrija e tente novamente"
 timers:turn_on,Ligar é Obrigatório
 timers:turn_off,Desligar
 timers:and_then,e depois
@@ -168,7 +168,7 @@ temperature:temperature,Temperatura
 temperature:heater_cooler,Aquecedor/refrigeração
 temperature:chart_minimum,Valor minimo gráfico
 temperature:chart_maximum,Valor Maximo gráfico
-temperature:validation_error,A Temperatura Erro nas configurações, por favor corrija e tente novamente
+temperature:validation_error,"A Temperatura Erro nas configurações, por favor corrija e tente novamente"
 temperature:sensor,Sensor
 temperature:sensor_status,Estado Sensor
 temperature:celcius,Celcius
@@ -178,7 +178,7 @@ ph:midpoint,Ponto médio
 ph:second_point,Segundo ponto
 ph:current_reading,Leitura Atual
 ph:run_calibration,Correr Calibração
-ph:validation_error,Ph Erro nas configurações, por favor corrija e tente novamente
+ph:validation_error,"Ph Erro nas configurações, por favor corrija e tente novamente"
 ph:status,Estado do Ph
 ph:check_frequency,Verificar a frequência
 ph:alert_below,Alerta inferior de
@@ -194,3 +194,49 @@ ph:threshold_type,Threshold tem que ser um número
 ph:threshold_less_than,O alerta inferior tem que ser inferior que o alerta superior
 ph:threshold_greater_than,O alerta superior tem que ser superior que o alerta inferior
 ph:analog_input_required,Entrada Analógica é Obrigatório
+language:zh,
+cron:month,
+cron:week,
+timers:macros,
+timers:macro,
+ph:control,
+ph:controlnothing,
+ph:controlmacro,
+ph:controlequipment,
+ph:lower_threshold,
+ph:lower_function,
+ph:upper_threshold,
+ph:upper_function,
+ph:control_required,
+ph:lower_threshold_required,
+ph:lower_threshold_type,
+ph:lower_threshold_less_than,
+ph:lower_function_required,
+ph:upper_threshold_required,
+ph:upper_threshold_type,
+ph:upper_threshold_greater_than,
+ph:upper_function_required,
+temperature:control,
+temperatur:controlnothing,
+temperature:controlmacro,
+temperature:controlequipment,
+temperature:lower_threshold,
+temperature:lower_function,
+temperature:upper_threshold,
+temperature:upper_function,
+temperature:calibrate,
+temperature:calibration:set_temperature,
+temperature:calibration:apply,
+temperature:current_reading,
+temperature:warn_delete,
+driver,
+pin,
+reverse,
+inlets,
+outlets,
+outlet,
+jacks,
+jack,
+analog_inputs,
+in-use,
+pins:Pins,
