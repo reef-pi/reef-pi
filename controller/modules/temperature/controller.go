@@ -51,7 +51,6 @@ func (c *Controller) Setup() error {
 	}
 	for i, tc := range tcs {
 		c.tcs[tc.ID] = &tcs[i]
-		log.Println("Setting up:", tc.ID, tc.Name, tc.Sensor)
 	}
 	return nil
 }
@@ -60,7 +59,6 @@ func (c *Controller) Start() {
 	c.Lock()
 	defer c.Unlock()
 	for _, t := range c.tcs {
-		log.Println("Starting:", t.ID, t.Name, t.Sensor)
 		if !t.Enable {
 			continue
 		}
