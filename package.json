@@ -113,10 +113,12 @@
   "jest": {
     "moduleDirectories": [
       "node_modules",
-      "front-end/src/"
+      "front-end/src/",
+      "front-end/assets/translations/"
     ],
     "moduleNameMapper": {
-      "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js"
+      "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js",
+      "\\.csv$": "<rootDir>/build/translations/loader.js"
     }
   }
 }
