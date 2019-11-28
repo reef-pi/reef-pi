@@ -14,7 +14,8 @@ var config = {
     modules: [
       'node_modules',
       path.resolve(__dirname, 'front-end', 'src'),
-      path.resolve(__dirname, 'front-end', 'assets', 'sass')
+      path.resolve(__dirname, 'front-end', 'assets', 'sass'),
+      path.resolve(__dirname, 'front-end', 'assets', 'translations')
     ]
   },
   module: {
@@ -28,6 +29,10 @@ var config = {
         }
       },
       {
+        test: /\.csv/,
+        use: path.resolve('build/translations/loader.js')
+      },
+      {
         test: /\.(sass|scss)$/,
         use: [
           {
@@ -39,7 +44,7 @@ var config = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: function () {
+              plugins: function() {
                 return [require('precss'), require('autoprefixer')]
               }
             }
