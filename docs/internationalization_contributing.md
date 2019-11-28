@@ -50,6 +50,7 @@ If you're not familiar with all those aspects GitHub offers a web based csv edit
 
 :raised_hands: TADA :raised_hands:
 
+__Note__: If you want to add a sentence with a comma ',' you'll have to use quotes " around the string to escape the sentence with the comma; otherwise the CSV format will not be respected.
 
 ## :gift: I can provide a new language translation, how do i proceed?
 
