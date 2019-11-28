@@ -23,7 +23,7 @@ Using namespaces give us more readability of where the translation is, mainly fo
 
 If you want to dig into the code:
 
-Csv to json parsing: [build/translations/csv-json.js](build/translations/csv-json.js) (called with `npm run translations`)
+Csv to json parsing: [build/translations/csv-json.js](build/translations/csv-json.js) (called with `loader.js`)
 
 Csv synchronization: [build/translations/csv-sync.js](build/translations/csv-sync.js) (called with `translations:sync`)
 
