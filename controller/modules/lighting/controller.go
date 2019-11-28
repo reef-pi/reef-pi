@@ -76,9 +76,9 @@ func (c *Controller) Setup() error {
 	if err != nil {
 		return err
 	}
-	for _, light := range lights {
-		light.LoadChannels()
-		c.lights[light.ID] = &light
+	for i, light := range lights {
+		lights[i].LoadChannels()
+		c.lights[light.ID] = &lights[i]
 		for _, ch := range light.Channels {
 			c.c.Telemetry().CreateFeedIfNotExist(light.Name + "-" + ch.Name)
 		}
