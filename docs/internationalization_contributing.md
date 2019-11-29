@@ -23,7 +23,7 @@ Using namespaces give us more readability of where the translation is, mainly fo
 
 If you want to dig into the code:
 
-Csv to json parsing: [build/translations/csv-json.js](build/translations/csv-json.js) (called with `npm run translations`)
+Csv to json parsing: [build/translations/csv-json.js](build/translations/csv-json.js) (called with `loader.js`)
 
 Csv synchronization: [build/translations/csv-sync.js](build/translations/csv-sync.js) (called with `translations:sync`)
 
@@ -50,6 +50,7 @@ If you're not familiar with all those aspects GitHub offers a web based csv edit
 
 :raised_hands: TADA :raised_hands:
 
+__Note__: If you want to add a sentence with a comma ',' you'll have to use quotes " around the string to escape the sentence with the comma; otherwise the CSV format will not be respected.
 
 ## :gift: I can provide a new language translation, how do i proceed?
 

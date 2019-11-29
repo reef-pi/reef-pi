@@ -7,18 +7,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: ['en', 'dev'],
-    resources: {
-      de: translations.de,
-      en: translations.en,
-      es: translations.es,
-      fa: translations.fa,
-      fr: translations.fr,
-      hi: translations.hi,
-      it: translations.it,
-      nl: translations.nl,
-      pt: translations.pt,
-      zh: translations.zh
-    },
+    resources: translations,
     defaultNS: 'common',
     debug: false,
     interpolation: {

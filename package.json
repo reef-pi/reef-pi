@@ -22,6 +22,7 @@
     "create-react-class": "15.6.3",
     "cross-env": "6.0.0",
     "css-loader": "3.2.0",
+    "csv-parse": "^4.8.2",
     "electron": "^3.0.10",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
@@ -71,11 +72,10 @@
     "yup": "0.27.0"
   },
   "scripts": {
-    "translations": "node ./build/translations/csv-json.js",
     "translations:sync": "node ./build/translations/csv-sync.js",
-    "build": "npm run translations && webpack -d",
-    "ui": "npm run translations && webpack --mode=production",
-    "ui-dev": "npm run translations && webpack -d --watch",
+    "build": "webpack -d",
+    "ui": "webpack --mode=production",
+    "ui-dev": "webpack -d --watch",
     "js-lint": "standard  front-end/src/**/*",
     "standard": "standard --fix front-end/src/**/**",
     "jest": "cross-env NODE_ENV=testing jest --coverage --all",
@@ -113,10 +113,12 @@
   "jest": {
     "moduleDirectories": [
       "node_modules",
-      "front-end/src/"
+      "front-end/src/",
+      "front-end/assets/translations/"
     ],
     "moduleNameMapper": {
-      "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js"
+      "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js",
+      "\\.csv$": "<rootDir>/build/translations/loader.js"
     }
   }
 }

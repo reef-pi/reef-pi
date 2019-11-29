@@ -1,9 +1,4 @@
-const fs = require('fs')
-const path = require('path')
-const PATH_CSV = './front-end/assets/translations/'
-const PATH_JSON = './front-end/src/utils/translations/'
-const files = fs.readdirSync(PATH_CSV)
-function namespaceNesting (o, k, v) {
+function namespaceNesting(o, k, v) {
   let namespace = ''
   const splittedKey = k.split(':')
   let key = ''
@@ -26,20 +21,13 @@ function namespaceNesting (o, k, v) {
     }
   }
 }
-function genTsObj (lineArray) {
+function genTsObj(csvEntries) {
   const o = {}
-  lineArray.forEach(l => {
-    const kv = l.split(',')
-    namespaceNesting(o, kv[0], kv[1])
-  })
+  for (const item of csvEntries) {
+    namespaceNesting(o, item.Key, item.Translation)
+  }
   return o
 }
-console.log('Generating Json resources files from CSV')
-console.log('----------------------------------------')
-files.forEach(f => {
-  console.log(`Parsing ${f}`)
-  const lines = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8').match(/[^\r\n]+/g)
-  lines.shift() // deleting titles
-  fs.writeFileSync(`${PATH_JSON}${path.basename(f, '.csv')}.json`, JSON.stringify(genTsObj(lines)))
-})
-console.log('All translations have been successfully generated')
+module.exports = {
+  genTsObj
+}
