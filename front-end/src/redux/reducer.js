@@ -128,6 +128,7 @@ export const rootReducer = (state, action) => {
     case 'TIMER_CREATED':
     case 'TIMER_DELETED':
     case 'MACRO_RUN':
+    case 'MACRO_REVERT':
     case 'API_FAILURE':
     case 'TELEMETRY_TEST_MESSAGE_SENT':
       return state

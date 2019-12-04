@@ -3,6 +3,7 @@ package macro
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
@@ -51,12 +52,14 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 		if err != nil {
 			return err
 		}
+		log.Println("macro-subsystem: executing step: ", s.Type, "id:", g.ID, " state:", state)
 		return sub.On(g.ID, state)
 	case "wait":
 		var w WaitStep
 		if err := json.Unmarshal(s.Config, &w); err != nil {
 			return err
 		}
+		log.Println("macro-subsystem: executing step: sleep for", int(w.Duration), "seconds")
 		time.Sleep(w.Duration * time.Second)
 		return nil
 	default:
