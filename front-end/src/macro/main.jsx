@@ -1,5 +1,12 @@
 import React from 'react'
-import { runMacro, fetchMacros, createMacro, updateMacro, deleteMacro } from 'redux/actions/macro'
+import {
+  revertMacro,
+  runMacro,
+  fetchMacros,
+  createMacro,
+  updateMacro,
+  deleteMacro
+} from 'redux/actions/macro'
 import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
@@ -18,6 +25,7 @@ class main extends React.Component {
     this.handleCreateMacro = this.handleCreateMacro.bind(this)
     this.handleUpdateMacro = this.handleUpdateMacro.bind(this)
     this.runMacro = this.runMacro.bind(this)
+    this.revertMacro = this.revertMacro.bind(this)
   }
 
   componentDidMount () {
@@ -43,23 +51,38 @@ class main extends React.Component {
   macroList () {
     return (
       this.props.macros.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(macro => {
-        const runButton = (
+        const buttons = []
+        buttons.push(
           <button
             type='button' name={'run-macro-' + macro.id}
             className='btn btn-sm btn-outline-info float-right'
             disabled={macro.enable}
             onClick={(e) => this.runMacro(e, macro)}
+            key='run'
           >
             {macro.enable ? 'Running' : 'Run'}
           </button>
         )
+        if (macro.reversible) {
+          buttons.push(
+            <button
+              type='button' name={'reverse-macro-' + macro.id}
+              className='btn btn-sm btn-outline-info float-right'
+              disabled={macro.enable}
+              onClick={(e) => this.revertMacro(e, macro)}
+              key='revert'
+            >
+              {macro.enable ? 'Reverting' : 'Revert'}
+            </button>
+          )
+        }
 
         return (
           <Collapsible
             key={'panel-macro-' + macro.id}
             name={'panel-macro-' + macro.id}
             item={macro}
-            buttons={runButton}
+            buttons={buttons}
             title={<b className='ml-2 align-middle'>{macro.name} </b>}
             onDelete={this.handleDeleteMacro}
           >
@@ -122,6 +145,12 @@ class main extends React.Component {
     this.props.fetch()
   }
 
+  revertMacro (e, macro) {
+    e.stopPropagation()
+    this.props.revert(macro.id)
+    this.props.fetch()
+  }
+
   render () {
     let newMacro = null
     if (this.state.addMacro) {
@@ -164,7 +193,8 @@ const mapDispatchToProps = dispatch => {
     create: a => dispatch(createMacro(a)),
     update: (id, m) => dispatch(updateMacro(id, m)),
     delete: id => dispatch(deleteMacro(id)),
-    run: id => dispatch(runMacro(id))
+    run: id => dispatch(runMacro(id)),
+    revert: id => dispatch(revertMacro(id))
   }
 }
 

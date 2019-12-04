@@ -11,6 +11,11 @@ export const macroRun = () => {
     type: 'MACRO_RUN'
   })
 }
+export const macroRevert = () => {
+  return ({
+    type: 'MACRO_REVERT'
+  })
+}
 
 export const macrosLoaded = (s) => {
   return ({
@@ -69,5 +74,11 @@ export const runMacro = (id) => {
   return (reduxPost({
     url: '/api/macros/' + id + '/run',
     success: macroRun
+  }))
+}
+export const revertMacro = (id) => {
+  return (reduxPost({
+    url: '/api/macros/' + id + '/revert',
+    success: macroRevert
   }))
 }
