@@ -37,14 +37,29 @@ describe('Dashboard', () => {
   })
 
   it('<Grid />', () => {
+    const types = {
+      light: {
+        name: 'lights',
+        label: 'foo',
+        options: ['1', '2']
+      },
+      ato: {
+        name: 'ato',
+        label: 'foo',
+        options: ['1', '2']
+      },
+      equipment: {
+        name: 'equipment',
+        label: 'foo',
+        options: []
+      }
+    }
     const cells = [
-      [{ type: 'ato', id: '1' }, { type: 'light', id: '2' }],
-      [{ type: 'tc', id: '1' }, { type: 'temperature', id: '2' }],
-      [{ type: 'equipment', id: '1' }, { type: 'health', id: '2' }],
-      [{ type: 'ph-current', id: '1' }, { type: 'ph-historical', id: 'current' }]
+      [{ type: types.light, id: '1' }, { type: types.light, id: '2' }],
+      [{ type: types.equipment, id: '1' }, { type: types.ato, id: '2' }],
     ]
     const m = shallow(<Grid rows={4} columns={2} cells={cells} hook={() => {}} />).instance()
-    m.setType(0, 0)('equipment')
+    m.setType(0, 0, types.equipment)()
     m.updateHook(0, 0)('1')
     m.menuItem('ato', true, 0, 1)
     delete m.state.cells
