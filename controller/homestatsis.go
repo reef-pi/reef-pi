@@ -121,12 +121,12 @@ func (h *Homeostasis) Sync(o *Observation) error {
 		o.Upper += int(h.config.Period)
 		h.pastTarget = upperTarget
 	case h.pastTarget == downerTarget && math.Abs(o.Value-h.config.Max) < h.config.Hysteresis:
-		log.Printf("Current value of '%s' is within max threshold hysteresis, contuinue executing down routine\n", h.config.Name)
+		log.Printf("Current value of '%s' is within max threshold hysteresis, continue executing down routine\n", h.config.Name)
 		if h.pastTarget == downerTarget {
 			o.Downer += int(h.config.Period)
 		}
 	case h.pastTarget == upperTarget && math.Abs(o.Value-h.config.Min) < h.config.Hysteresis:
-		log.Printf("Current value of '%s' is within min threshold hysteresis, contuinue executing up routine\n", h.config.Name)
+		log.Printf("Current value of '%s' is within min threshold hysteresis, continue executing up routine\n", h.config.Name)
 		if h.pastTarget == upperTarget {
 			o.Upper += int(h.config.Period)
 		}
