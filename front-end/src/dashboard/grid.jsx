@@ -1,5 +1,6 @@
 import React from 'react'
 import ComponentSelector from './component_selector'
+import i18next from 'i18next'
 
 // props: rows, columns, hook, cells, tcs, atos
 export default class Grid extends React.Component {
@@ -23,6 +24,53 @@ export default class Grid extends React.Component {
     this.state = {
       cells: cells
     }
+    this.availableTypes = {
+      ato: {
+        name: 'ato',
+        label: i18next.t('ato'),
+        options: props.atos
+      },
+      equipment: {
+        name: 'equipment',
+        label: i18next.t('equipment'),
+        options: []
+      },
+      health: {
+        name: 'health',
+        label: i18next.t('health'),
+        options: [{ id: 'current', name: 'current' }, { id: 'historical', name: 'historical' }]
+      },
+      light: {
+        name: 'lights',
+        label: i18next.t('light'),
+        options: props.lights
+      },
+      ph_current: {
+        name: 'ph_current',
+        label: i18next.t('ph:chart:current'),
+        options: props.phs
+      },
+      ph_historical: {
+        name: 'ph_historical',
+        label: i18next.t('ph:chart:historical'),
+        options: props.phs
+      },
+      temp_current: {
+        name: 'temp_current',
+        label: i18next.t('temperature:chart:current'),
+        options: props.tcs
+      },
+      temp_historical: {
+        name: 'temp_historical',
+        label: i18next.t('temperature:chart:historical'),
+        options: props.tcs
+      },
+      doser: {
+        name: 'doser',
+        label: i18next.t('doser'),
+        options: props.dosers
+      }
+    }
     this.setType = this.setType.bind(this)
     this.updateHook = this.updateHook.bind(this)
     this.initiatlizeCell = this.initiatlizeCell.bind(this)
@@ -32,37 +80,11 @@ export default class Grid extends React.Component {
   }
 
   cellUI (type, currentId, i, j) {
-    let data
-    switch (type) {
-      case 'ato':
-        data = this.props.atos
-        break
-      case 'equipment':
-        return (<span>-</span>)
-      case 'health':
-        data = [{ id: 'current', name: 'current' }, { id: 'historical', name: 'historical' }]
-        break
-      case 'light':
-        data = this.props.lights
-        break
-      case 'ph-current':
-      case 'ph-historical':
-        data = this.props.phs
-        break
-      case 'temperature':
-      case 'tc':
-        data = this.props.tcs
-        break
-      case 'doser':
-        data = this.props.dosers
-        break
-    }
-
     return (
       <ComponentSelector
-        components={data}
+        components={type.options}
         hook={this.updateHook(i, j)}
-        selector_id={'component-' + type + '-' + i + '-' + j}
+        selector_id={'component-' + type.label + '-' + i + '-' + j}
         current_id={currentId}
       />
     )
@@ -112,23 +134,23 @@ export default class Grid extends React.Component {
       cName += ' active'
     }
     return (
-      <a className={cName} href='#' onClick={this.setType(i, j, type)} key={type + '-chart-' + i + '-' + j}>
-        <span id={type + '-chart-' + i + '-' + j}>{type}</span>
+      <a className={cName} href='#' onClick={this.setType(i, j, type)} key={type.name + i + '-' + j}>
+        <span id={type + '-chart-' + i + '-' + j}>{type.label}</span>
       </a>
     )
   }
 
   menuItems (i, j) {
     const types = [
-      this.menuItem('ato', false, i, j),
-      this.menuItem('equipment', false, i, j),
-      this.menuItem('health', false, i, j),
-      this.menuItem('light', false, i, j),
-      this.menuItem('ph-current', false, i, j),
-      this.menuItem('ph-historical', false, i, j),
-      this.menuItem('tc', false, i, j),
-      this.menuItem('temperature', false, i, j),
-      this.menuItem('doser', false, i, j)
+      this.menuItem(this.availableTypes.ato, false, i, j),
+      this.menuItem(this.availableTypes.equipment, false, i, j),
+      this.menuItem(this.availableTypes.health, false, i, j),
+      this.menuItem(this.availableTypes.light, false, i, j),
+      this.menuItem(this.availableTypes.ph_current, false, i, j),
+      this.menuItem(this.availableTypes.ph_historical, false, i, j),
+      this.menuItem(this.availableTypes.temp_current, false, i, j),
+      this.menuItem(this.availableTypes.temp_historical, false, i, j),
+      this.menuItem(this.availableTypes.doser, false, i, j)
     ]
     return (types)
   }
@@ -150,7 +172,7 @@ export default class Grid extends React.Component {
               <div className='col-12'>
                 <div className='dropdown'>
                   <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    {cells[i][j].type}
+                    {cells[i][j].type.label}
                   </button>
                   <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
                     {this.menuItems(i, j)}

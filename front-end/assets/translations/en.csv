@@ -9,6 +9,7 @@ loading,Loading
 documentation,Documentation
 errors,Errors
 edit,Edit
+health,Health
 analog_input,Analog Input
 inlet,Inlet
 delete,Delete
@@ -20,10 +21,27 @@ name,Name
 update,Update
 add,add
 save,Save
+doser,Doser
 none,None
 alerts,Alerts
 unit,Unit
 configure,Configure
+equipment,Equipment
+ato,ATO
+light,Light
+driver,Driver
+pin,Pin
+pins:Pins,Pins
+reverse,Reverse
+inlets,Inlets
+inlet,Inlet
+outlets,Outlets
+outlet,Outlet
+jacks,Jacks
+jack,Jack
+analog_inputs,Analog Inputs
+analog_input,Analog Input
+in-use,in-use
 language:language,Language
 language:de,Deutsch
 language:en,English
@@ -178,6 +196,8 @@ temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:celcius,Celcius
 temperature:fahrenheit,Fahrenheit
+temperature:chart:current,Current Temperature Readings
+temperature:chart:historical,Historical Temperature Readings
 ph:calibrate,Calibrate
 ph:midpoint,Midpoint
 ph:second_point,Second Point
@@ -229,16 +249,5 @@ temperature:calibration:set_temperature, Set Temperature
 temperature:calibration:apply, Apply
 temperature:current_reading, Current Reading
 temperature:warn_delete, This action will delete
-driver,Driver
-pin,Pin
-pins:Pins,Pins
-reverse,Reverse
-inlets,Inlets
-inlet,Inlet
-outlets,Outlets
-outlet,Outlet
-jacks,Jacks
-jack,Jack
-analog_inputs,Analog Inputs
-analog_input,Analog Input
-in-use,in-use
+ph:chart:current,Current Readings Chart
+ph:chart:historical,Historical Readings Chart
