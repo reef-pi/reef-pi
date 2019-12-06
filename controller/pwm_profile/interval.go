@@ -22,9 +22,13 @@ func (i *interval) Get(t time.Time) float64 {
 		return 0
 	}
 	past := i.PastSeconds(t)
-	index := int(past / i.Interval)
-	v1 := i.Values[index]
-	v2 := i.Values[index+1]
+	cIndex := int(past / i.Interval)
+	nIndex := cIndex + 1
+	if nIndex == len(i.Values) {
+		nIndex = 0
+	}
+	v1 := i.Values[cIndex]
+	v2 := i.Values[nIndex]
 	incr := (v2 - v1) / float64(i.Interval)
 	v := v1 + incr*math.Mod(past, i.Interval)
 	if v < i.min {
