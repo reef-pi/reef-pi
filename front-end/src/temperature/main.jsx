@@ -3,7 +3,6 @@ import TemperatureForm from './temperature_form'
 import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC } from 'redux/actions/tcs'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
-import { fetchMacros } from 'redux/actions/macro'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import CalibrationModal from './calibration_modal'
@@ -32,7 +31,6 @@ class main extends React.Component {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
-    this.props.fetchMacros()
     this.props.probes.map(probe => {
       this.props.readTC(probe.id)
     })
@@ -226,7 +224,6 @@ const mapDispatchToProps = dispatch => {
     fetchTCs: () => dispatch(fetchTCs()),
     fetchSensors: () => dispatch(fetchSensors()),
     fetchEquipment: () => dispatch(fetchEquipment()),
-    fetchMacros: () => dispatch(fetchMacros()),
     create: t => dispatch(createTC(t)),
     delete: id => dispatch(deleteTC(id)),
     update: (id, t) => dispatch(updateTC(id, t)),

@@ -167,23 +167,17 @@ export default class Grid extends React.Component {
       for (j = 0; j < this.props.columns; j++) {
         cells = this.initiatlizeCell(i, j)
         columns.push(
-          <div className='col-md-6 grid-block' key={'chart-type-' + i + '-' + j}>
-            <div className='row'>
-              <div className='col-12'>
-                <div className='dropdown'>
-                  <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    {cells[i][j].type.label}
-                  </button>
-                  <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-                    {this.menuItems(i, j)}
-                  </div>
-                </div>
+          <div className='col grid-block' key={'chart-type-' + i + '-' + j}>
+            <div className='dropdown'>
+              <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                {cells[i][j].type.label}
+              </button>
+              <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+                {this.menuItems(i, j)}
               </div>
             </div>
-            <div className='row'>
-              <div className='col-12'>
-                {cells[i][j].ui}
-              </div>
+            <div className='col-2 col-4 col-6'>
+              {cells[i][j].ui}
             </div>
           </div>
         )
