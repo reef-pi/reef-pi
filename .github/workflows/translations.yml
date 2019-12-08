@@ -1,0 +1,22 @@
+name: Check translation status
+on: [push, pull_request]
+
+jobs:
+  translations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 11.12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 11.12
+      - uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        run: npm i
+      - name: Check Translations
+        run: npm run translations:ci
