@@ -23,6 +23,7 @@
     "cross-env": "6.0.3",
     "css-loader": "3.2.1",
     "csv-parse": "^4.8.2",
+    "csv-stringify": "5.3.4",
     "electron": "^7.1.3",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
@@ -121,9 +122,5 @@
       "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js",
       "\\.csv$": "<rootDir>/build/translations/loader.js"
     }
-  },
-  "dependencies": {
-    "csv-generate": "^3.2.4",
-    "csv-stringify": "^5.3.4"
   }
 }

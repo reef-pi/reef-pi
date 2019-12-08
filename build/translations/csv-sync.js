@@ -1,9 +1,8 @@
 const fs = require('fs')
 const args = process.argv.slice(2)
 const PATH_CSV = './front-end/assets/translations/'
-const files = fs.readdirSync(PATH_CSV)
 const masterFile = 'en.csv'
-const generate = require('csv-generate')
+const files = fs.readdirSync(PATH_CSV).filter(f => f !== masterFile)
 const stringify = require('csv-stringify')
 const parse = require('csv-parse/lib/sync')
 
@@ -20,60 +19,50 @@ function readTranslation(filename) {
   return records
 }
 
-function updateMissingTranslation(masterLine, slaveArray) {
-  const masterKey = masterLine.split(',')[0]
-  const sK = slaveArray.find(s => masterKey === s.split(',')[0])
+function updateMissingTranslation(masterTranslation, slaveTranslationArray) {
+  const sK = slaveTranslationArray.find(s => masterTranslation.Key === s.Key)
   if (!sK) {
-    slaveArray.push(`${masterKey},`)
+    slaveTranslationArray.push({ Key: masterTranslation.Key, Translation: '' })
   }
 }
 
-function deleteDeprecatedTranslations(slaveLine, masterArray) {
-  const slaveKey = slaveLine.split(',')[0]
-  const found = masterArray.find(s => slaveKey === s.split(',')[0])
-  if (!found) {
-    console.log(`Deprecated key: ${slaveKey}`)
-    slaveLine = ''
-  }
-  return slaveLine
+function deleteDeprecatedTranslations(slaveArray, masterArray) {
+  const masterKeys = masterArray.map(x => x.Key)
+  slaveArray = slaveArray.filter(x => masterKeys.includes(x.Key))
+  return slaveArray
 }
 
 function syncTranslationFiles(masterTranslations) {
   files.forEach(f => {
-    if (f !== masterFile) {
-      let slave = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8')
-      const records = parse(slave, {
-        columns: true,
-        skip_empty_lines: true
-      })
-      masterTranslations.forEach(t => {
-        updateMissingTranslation(t, records)
-      })
-      for (const prop in records) {
-        records[prop] = deleteDeprecatedTranslations(records[prop], masterTranslations)
-      }
-      generate({})
+    let slave = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8')
+    let records = parse(slave, {
+      columns: true,
+      skip_empty_lines: true
+    })
+    masterTranslations.forEach(t => {
+      updateMissingTranslation(t, records)
+    })
+    records = deleteDeprecatedTranslations(records, masterTranslations)
+    stringify([{ Key: 'Key', Translation: 'Translation' }].concat(records), (err, csvOutput) => {
       fs.writeFileSync(`${PATH_CSV}${f}`, csvOutput)
-    }
+    })
   })
 }
 
 function checkTranslationFiles(masterTranslations) {
   let errors = {}
-  files
-    .filter(f => f !== masterFile)
-    .forEach(f => {
-      const slaveTranslations = readTranslation(f)
-      const slaveKeys = slaveTranslations.map(s => {
-        if (s.Translation) {
-          return s.Key
-        }
-      })
-      const missingTranslations = masterTranslations.filter(t => !slaveKeys.includes(t.Key))
-      if (missingTranslations.length > 0) {
-        errors[f] = missingTranslations.map(s => s.Key)
+  files.forEach(f => {
+    const slaveTranslations = readTranslation(f)
+    const slaveKeys = slaveTranslations.map(s => {
+      if (s.Translation) {
+        return s.Key
       }
     })
+    const missingTranslations = masterTranslations.filter(t => !slaveKeys.includes(t.Key))
+    if (missingTranslations.length > 0) {
+      errors[f] = missingTranslations.map(s => s.Key)
+    }
+  })
   if (Object.keys(errors).length > 0) {
     console.log('Missing translations found')
     console.log('')
