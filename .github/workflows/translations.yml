@@ -2,7 +2,7 @@ name: Check translation status
 on: [push, pull_request]
 
 jobs:
-  translations:
+  Translations:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
