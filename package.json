@@ -72,7 +72,8 @@
     "yup": "0.27.0"
   },
   "scripts": {
-    "translations:sync": "node ./build/translations/csv-sync.js",
+    "translations:sync": "node ./build/translations/csv-sync.js sync",
+    "translations:ci": "node ./build/translations/csv-sync.js ci",
     "build": "webpack -d",
     "ui": "webpack --mode=production",
     "ui-dev": "webpack -d --watch",
@@ -120,5 +121,9 @@
       "\\.(css|less|sass|scss)$": "<rootDir>/front-end/test/jest_config.js",
       "\\.csv$": "<rootDir>/build/translations/loader.js"
     }
+  },
+  "dependencies": {
+    "csv-generate": "^3.2.4",
+    "csv-stringify": "^5.3.4"
   }
 }
