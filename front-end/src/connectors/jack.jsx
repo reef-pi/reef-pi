@@ -145,14 +145,15 @@ export default class Jack extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col-4'>{this.state.name}</div>
-        <div className='col-1'>
+        <div className='col'>{this.state.name}</div>
+        <div className='col'>
           <label className='small'>
             {this.state.driver_name}
             ({this.state.pins})
             ({this.state.reverse ? 'active high' : 'active low'})
           </label>
         </div>
+        <div className='col' />
       </div>
     )
   }
