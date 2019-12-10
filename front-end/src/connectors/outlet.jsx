@@ -129,8 +129,8 @@ export default class Outlet extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col-4'>{this.state.name}</div>
-        <div className='col-1'>
+        <div className='col'>{this.state.name}</div>
+        <div className='col'>
           <label className='small'>
             {this.state.driver.name}
             ({this.state.pin})
@@ -138,11 +138,6 @@ export default class Outlet extends React.Component {
         </div>
         <div className='col'>
           <label className='small'>{this.props.equipment === '' ? '' : i18next.t('in-use')}</label>
-        </div>
-        <div className='col'>
-          <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
-        </div>
-        <div className='col'>
           <label className='small'>{this.state.reverse ? i18next.t('reverse') : ''}</label>
         </div>
       </div>

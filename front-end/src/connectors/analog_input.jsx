@@ -112,13 +112,14 @@ export default class AnalogInput extends React.Component {
   ui () {
     return (
       <div className='row'>
-        <div className='col-4'>{this.state.name}</div>
-        <div className='col-1'>
+        <div className='col'>{this.state.name}</div>
+        <div className='col'>
           <label className='small'>
             {this.state.driver.name}
             ({this.state.pin})
           </label>
         </div>
+        <div className='col' />
       </div>
     )
   }
