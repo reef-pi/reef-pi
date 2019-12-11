@@ -19,4 +19,4 @@ jobs:
       - name: Install
         run: npm i
       - name: Check Translations
-        run: npm run translations:ci
+        run: npm run translations:chk
