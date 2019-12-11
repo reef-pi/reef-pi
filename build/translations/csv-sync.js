@@ -1,13 +1,33 @@
 const fs = require('fs')
 const args = process.argv.slice(2)
 const PATH_CSV = './front-end/assets/translations/'
-const masterFile = 'en.csv'
-const files = fs.readdirSync(PATH_CSV).filter(f => f !== masterFile)
+const referenceFile = 'en.csv'
+const files = fs.readdirSync(PATH_CSV).filter(f => f !== referenceFile)
 const stringify = require('csv-stringify')
 const parse = require('csv-parse/lib/sync')
 
-function readMasterFile() {
-  return readTranslation(masterFile)
+function aggregateRecords(records) {
+  const common = records.filter(r => {
+    return r.Key.split(',')[0].indexOf(':') === -1
+  })
+  const others = records.filter(r => {
+    return r.Key.split(',')[0].indexOf(':') !== -1
+  })
+  return common.sort(sortKeys).concat(others.sort(sortKeys))
+}
+
+function sortKeys(a, b) {
+  if (a.Key < b.Key) {
+    return -1
+  }
+  if (a.Key > b.Key) {
+    return 1
+  }
+  return 0
+}
+
+function readReferenceFile() {
+  return readTranslation(referenceFile)
 }
 
 function readTranslation(filename) {
@@ -16,49 +36,53 @@ function readTranslation(filename) {
     columns: true,
     skip_empty_lines: true
   })
+  records.sort(sortKeys)
   return records
 }
 
-function updateMissingTranslation(masterTranslation, slaveTranslationArray) {
-  const sK = slaveTranslationArray.find(s => masterTranslation.Key === s.Key)
+function updateMissingTranslation(referenceTranslation, dialectTranslationArray) {
+  const sK = dialectTranslationArray.find(s => referenceTranslation.Key === s.Key)
   if (!sK) {
-    slaveTranslationArray.push({ Key: masterTranslation.Key, Translation: '' })
+    dialectTranslationArray.push({ Key: referenceTranslation.Key, Translation: '' })
   }
 }
 
-function deleteDeprecatedTranslations(slaveArray, masterArray) {
-  const masterKeys = masterArray.map(x => x.Key)
-  slaveArray = slaveArray.filter(x => masterKeys.includes(x.Key))
-  return slaveArray
+function deleteDeprecatedTranslations(dialectArray, referenceArray) {
+  const referenceKeys = referenceArray.map(x => x.Key)
+  dialectArray = dialectArray.filter(x => referenceKeys.includes(x.Key))
+  return dialectArray
 }
 
-function syncTranslationFiles(masterTranslations) {
+function syncTranslationFiles(referenceTranslations) {
   files.forEach(f => {
-    let slave = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8')
-    let records = parse(slave, {
+    let dialect = fs.readFileSync(`${PATH_CSV}${f}`, 'utf8')
+    let records = parse(dialect, {
       columns: true,
       skip_empty_lines: true
     })
-    masterTranslations.forEach(t => {
+    referenceTranslations.forEach(t => {
       updateMissingTranslation(t, records)
     })
-    records = deleteDeprecatedTranslations(records, masterTranslations)
-    stringify([{ Key: 'Key', Translation: 'Translation' }].concat(records), (err, csvOutput) => {
+    records = deleteDeprecatedTranslations(records, referenceTranslations)
+    stringify([{ Key: 'Key', Translation: 'Translation' }].concat(aggregateRecords(records)), (err, csvOutput) => {
       fs.writeFileSync(`${PATH_CSV}${f}`, csvOutput)
     })
   })
+  // Reordering the reference Translation
+  stringify(
+    [{ Key: 'Key', Translation: 'Translation' }].concat(aggregateRecords(referenceTranslations)),
+    (err, csvOutput) => {
+      fs.writeFileSync(`${PATH_CSV}en.csv`, csvOutput)
+    }
+  )
 }
 
-function checkTranslationFiles(masterTranslations) {
+function checkTranslationFiles(referenceTranslations) {
   let errors = {}
   files.forEach(f => {
-    const slaveTranslations = readTranslation(f)
-    const slaveKeys = slaveTranslations.map(s => {
-      if (s.Translation) {
-        return s.Key
-      }
-    })
-    const missingTranslations = masterTranslations.filter(t => !slaveKeys.includes(t.Key))
+    const dialectTranslations = readTranslation(f)
+    const dialectKeys = dialectTranslations.map(s => s.Key)
+    const missingTranslations = referenceTranslations.filter(t => !dialectKeys.includes(t.Key))
     if (missingTranslations.length > 0) {
       errors[f] = missingTranslations.map(s => s.Key)
     }
@@ -67,7 +91,7 @@ function checkTranslationFiles(masterTranslations) {
     console.log('Missing translations found')
     console.log('')
     Object.keys(errors).forEach(e => {
-      console.log(`Missing translations in ${e}`)
+      console.log(`Missing Keys in ${e}`)
       console.log('')
       console.log(errors[e].join('\n'))
       console.log('')
@@ -78,19 +102,19 @@ function checkTranslationFiles(masterTranslations) {
     })
     return false
   } else {
-    console.log('Everything is synchronised')
+    console.log('Everything is synchronized')
     return true
   }
 }
 
 function main() {
-  const master = readMasterFile()
+  const reference = readReferenceFile()
   switch (args[0]) {
     case 'sync':
-      syncTranslationFiles(master)
+      syncTranslationFiles(reference)
       break
-    case 'ci':
-      if (checkTranslationFiles(master)) {
+    case 'chk':
+      if (checkTranslationFiles(reference)) {
         process.exit(0)
       } else {
         process.exit(1)
