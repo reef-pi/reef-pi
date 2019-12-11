@@ -27,7 +27,7 @@ Csv to json parsing: [build/translations/csv-json.js](build/translations/csv-jso
 
 Csv synchronization: [build/translations/csv-sync.js](build/translations/csv-sync.js) (called with `translations:sync`)
 
-The CSV synchronization make sure the translations files are synchronized beetween each others. If there is a missing translation the key is created and the value is `##` which is easily spottable during development for a missing translation.
+The CSV synchronization make sure the translations files are synchronized beetween each others.
 
 Front-end integration: [jsx/utils/i18n.js](jsx/utils/i18n.js)
 
