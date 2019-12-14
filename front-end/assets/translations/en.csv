@@ -1,48 +1,137 @@
 Key,Translation
-ok,Ok
-select,Select
-enabled,Enabled
-disabled,Disabled
-cancel,Cancel
-done,Done
-loading,Loading
-documentation,Documentation
-errors,Errors
-edit,Edit
-health,Health
-analog_input,Analog Input
-inlet,Inlet
-delete,Delete
-since,since
-running,running
-are_you_sure,Are you sure?
-clear,Clear
-name,Name
-update,Update
 add,add
-save,Save
-doser,Doser
-none,None
 alerts,Alerts
-unit,Unit
-configure,Configure
-equipment,Equipment
-ato,ATO
-light,Light
-driver,Driver
-pin,Pin
-pins:Pins,Pins
-reverse,Reverse
-inlets,Inlets
-inlet,Inlet
-outlets,Outlets
-outlet,Outlet
-jacks,Jacks
-jack,Jack
-analog_inputs,Analog Inputs
 analog_input,Analog Input
+analog_input,Analog Input
+analog_inputs,Analog Inputs
+are_you_sure,Are you sure?
+ato,ATO
+cancel,Cancel
+clear,Clear
+configure,Configure
+delete,Delete
+disabled,Disabled
+documentation,Documentation
+done,Done
+doser,Doser
+driver,Driver
+edit,Edit
+enabled,Enabled
+equipment,Equipment
+errors,Errors
+health,Health
 in-use,in-use
-language:language,Language
+inlet,Inlet
+inlet,Inlet
+inlets,Inlets
+jack,Jack
+jacks,Jacks
+light,Light
+loading,Loading
+name,Name
+none,None
+ok,Ok
+outlet,Outlet
+outlets,Outlets
+pin,Pin
+reverse,Reverse
+running,running
+save,Save
+sec,sec
+second_s,second(s)
+select,Select
+since,since
+unit,Unit
+update,Update
+ato:alert_after,Alert After
+ato:ato_status,ATO Status
+ato:ato_usage,ATO Usage
+ato:chk_freq,Check Frequency
+ato:chk_freq_number,Check Frequency must be a number
+ato:chk_freq_number_value,Check Frequency must be 1 second or greater
+ato:chk_freq_required,Check Frequency is required
+ato:control_pump,Control Pump
+ato:control_pump,Control Pump
+ato:control_pump,Control Pump
+ato:disable_on_alert,Disable on alert
+ato:inlet_required,Inlet is required
+ato:name_required,Name is required
+ato:status_required,ATO Status is required
+ato:threshold_required,Threshold is required when notification is enabled
+ato:threshold_value,Threshold must be a number
+ato:total_seconds_pump_on,Total number of seconds ato pump is on
+ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ato:warning_delete,This action will delete
+capabilities:ato,ATO
+capabilities:camera,Camera
+capabilities:configuration,Configuration
+capabilities:dashboard,Dashboard
+capabilities:dev_mode,Dev Mode
+capabilities:doser,Doser
+capabilities:dosing_pumps,Dosing pumps
+capabilities:equipment,Equipment
+capabilities:health_check,Health check
+capabilities:lighting,Lighting
+capabilities:lights,Lights
+capabilities:log,Log
+capabilities:macro,Macro
+capabilities:macros,Macros
+capabilities:manager,Instances
+capabilities:ph,pH
+capabilities:temperature,Temperature
+capabilities:timers,Timers
+collapsible:delete,Delete
+collapsible:edit,Edit
+color_picker:choose,Choose
+configuration:about:current_time,Current time
+configuration:about:status,Status
+configuration:about:uptime,Uptime
+configuration:about:version,Version
+configuration:about:website,Website
+configuration:admin:poweroff,Power Off
+configuration:admin:reboot,Reboot
+configuration:admin:reload,Reload
+configuration:admin:sign_out,Sign Out
+configuration:authentication:credentials,Credentials
+configuration:authentication:error_pass,You Must Provide a password
+configuration:authentication:error_user,You Must Provide a username
+configuration:settings:address,Address
+configuration:settings:alert_health_check,Alert on health check
+configuration:settings:capabilities,Capabilities
+configuration:settings:capabilities_required,Capabilities is required
+configuration:settings:display,Display
+configuration:settings:enable_profiling,Enable profiling
+configuration:settings:enable_prometheus,Enable prometheus
+configuration:settings:interface,Interface
+configuration:settings:max_cpu,Max CPU
+configuration:settings:max_memory,Max memory
+configuration:settings:name,Name
+configuration:settings:name_required,Name is required
+configuration:settings:network_address_required,Network address is required
+configuration:settings:network_interface_required,Network Interface is required
+configuration:settings:notification,Notification
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
+configuration:settings:use_https,Use HTTPS
+configuration:tab:about,About
+configuration:tab:admin,Admin
+configuration:tab:authentication,Authentication
+configuration:tab:connectors,Connectors
+configuration:tab:drivers,Drivers
+configuration:tab:errors,Errors
+configuration:tab:settings,Settings
+configuration:tab:telemetry,Telemetry
+cron:day_of_month,Day of the month
+cron:hour,Hour
+cron:minute,Minute
+cron:month,Month
+cron:second,Second
+cron:week,Day of the week
+dashboard:back_to_dashboard,Back to dashboard
+fatal_error:connection_lost,Connection Lost
+fatal_error:fatal_error,Fatal Error
+fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
+fatal_error:troubleshoot,Troubleshoot
+health_chart:cpu_memory,CPU/Memory
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -50,204 +139,115 @@ language:fa,فارسی
 language:fr,Français
 language:hi,हिन्दी
 language:it,Italiano
+language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
-configuration:authentication:credentials,Credentials
-configuration:authentication:error_user,You Must Provide a username
-configuration:authentication:error_pass,You Must Provide a password
-configuration:tab:settings,Settings
-configuration:tab:connectors,Connectors
-configuration:tab:authentication,Authentication
-configuration:tab:drivers,Drivers
-configuration:tab:errors,Errors
-configuration:tab:telemetry,Telemetry
-configuration:tab:admin,Admin
-configuration:tab:about,About
-configuration:admin:sign_out,Sign Out
-configuration:admin:reload,Reload
-configuration:admin:reboot,Reboot
-configuration:admin:poweroff,Power Off
-configuration:about:version,Version
-configuration:about:website,Website
-configuration:about:status,Status
-configuration:about:current_time,Current time
-configuration:about:uptime,Uptime
-signin:username,Username
-signin:password,Password
-signin:signin,Sign In
-signin:invalidcredentials,Invalid Credentials
-capabilities:dashboard,Dashboard
-capabilities:equipment,Equipment
-capabilities:timers,Timers
-capabilities:lights,Lights
-capabilities:lighting,Lighting
-capabilities:temperature,Temperature
-capabilities:ato,ATO
-capabilities:ph,pH
-capabilities:dosing_pumps,Dosing pumps
-capabilities:doser,Doser
-capabilities:macros,Macros
-capabilities:macro,Macro
-capabilities:camera,Camera
-capabilities:manager,Instances
-capabilities:configuration,Configuration
-capabilities:log,Log
-capabilities:dev_mode,Dev Mode
-capabilities:health_check,Health check
-log:time,Time
-log:emitter,Emitter
-log:type,Type
 log:content,Content
-dashboard:back_to_dashboard,Back to dashboard
-configuration:settings:interface,Interface
-configuration:settings:name,Name
-configuration:settings:address,Address
-configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
-configuration:settings:notification,Notification
-configuration:settings:display,Display
-configuration:settings:use_https,Use HTTPS
-configuration:settings:enable_profiling,Enable profiling
-configuration:settings:enable_prometheus,Enable prometheus
-configuration:settings:capabilities,Capabilities
-configuration:settings:alert_health_check,Alert on health check
-configuration:settings:max_memory,Max memory
-configuration:settings:max_cpu,Max CPU
-configuration:settings:name_required,Name is required
-configuration:settings:network_interface_required,Network Interface is required
-configuration:settings:network_address_required,Network address is required
-configuration:settings:capabilities_required,Capabilities is required
-health_chart:cpu_memory,CPU/Memory
-fatal_error:fatal_error,Fatal Error
-fatal_error:connection_lost,Connection Lost
-fatal_error:troubleshoot,Troubleshoot
-fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
-cron:day_of_month,Day of the month
-cron:hour,Hour
-cron:minute,Minute
-cron:second,Second
-cron:month,Month
-cron:week,Day of the week
-color_picker:choose,Choose
-collapsible:edit,Edit
-collapsible:delete,Delete
-ato:name_required,Name is required
-ato:status_required,ATO Status is required
-ato:inlet_required,Inlet is required
-ato:chk_freq,Check Frequency
-ato:chk_freq_required,Check Frequency is required
-ato:chk_freq_number,Check Frequency must be a number
-ato:chk_freq_number_value,Check Frequency must be 1 second or greater
-ato:threshold_required,Threshold is required when notification is enabled
-ato:threshold_value,Threshold must be a number
-ato:warning_delete,This action will delete
-ato:ato_usage,ATO Usage
-ato:ato_status,ATO Status
-ato:control_pump,Control Pump
-ato:control_pump,Control Pump
-ato:control_pump,Control Pump
-ato:alert_after,Alert After
-ato:disable_on_alert,Disable on alert
-ato:total_seconds_pump_on,Total number of seconds ato pump is on
-ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-timers:name_required,Name is required
-timers:timer_status_required,Timer Status is required
-timers:day_required,Day is required
-timers:hour_required,Hour is required
-timers:minute_required,Minute is required
-timers:second_required,Second is required
-timers:type_required,Type is required
-timers:equipment_required,Equipment is required
-timers:on_required,On is required
-timers:duration_required,Duration is required
-timers:subject_required,Subject is required
-timers:message_required,Message is required
-timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
-timers:turn_on,Turn On
-timers:turn_off,Turn Off
-timers:and_then,And Then
-timers:turn_back_on,Turn back on
-timers:turn_back_off,Turn back off
-timers:stay_on,Stay on
-timers:stay_off,Stay off
-second_s,second(s)
-sec,sec
-timers:sec,sec
-timers:after,After
-timers:subject,Subject
-timers:message,Message
-timers:timer_status,Timer Status
-timers:function,Function
-timers:equipment,Equipment
-timers:reminder,Reminder
-timers:macros,Macros
-timers:macro,Macro Name
-timers:equipment:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:revert,Revert
-timers:equipment:on,On
-timers:equipment:off,Off
-temperature:temperature,Temperature
-temperature:heater_cooler,Heater/Cooler
-temperature:chart_minimum,Chart Minimum
-temperature:chart_maximum,Chart Maximum
-temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
-temperature:sensor,Sensor
-temperature:sensor_status,Sensor Status
-temperature:celcius,Celcius
-temperature:fahrenheit,Fahrenheit
-temperature:chart:current,Current Temperature Readings
-temperature:chart:historical,Historical Temperature Readings
-ph:calibrate,Calibrate
-ph:midpoint,Midpoint
-ph:second_point,Second Point
-ph:current_reading,Current Reading
-ph:run_calibration,Run
-ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ph:status,Ph Status
-ph:check_frequency,Check Frequency
-ph:alert_below,Alert Below
+log:emitter,Emitter
+log:time,Time
+log:type,Type
 ph:alert_above,Alert Above
-ph:warn_delete,This action will delete
-ph:name_required,Name is required
-ph:status_required,Status is required
-ph:period_required,Check Frequency is required
-ph:period_type,Check Frequency must be a number
-ph:period_min,Check Frequency must be 1 second or greater
-ph:threshold_required,Threshold is required when alerts are enabled
-ph:threshold_type,Threshold must be a number
-ph:threshold_less_than,Alert Below must be less than Alert Above
-ph:threshold_greater_than,Alert Above must be greater than Alert Below
+ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required
-ph:control,Control
-ph:controlnothing,Nothing
-ph:controlmacro,Macro
-ph:controlequipment,Equipment
-ph:lower_threshold,Lower Threshold
-ph:lower_function,Lower Function
-ph:upper_threshold,Upper Threshold
-ph:upper_function,Upper Function
-ph:control_required,Control is requires
-ph:lower_threshold_required,Lower Threshold is required
-ph:lower_threshold_type,Lower Threshold must be a number
-ph:lower_threshold_less_than,Lower Threshold must be less than Upper Threshold
-ph:lower_function_required,Lower Function is required
-ph:upper_threshold_required,Upper Threshold is required
-ph:upper_threshold_type,Upper Threshold must be a number
-ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Threshold
-ph:upper_function_required,Upper Function is required
-temperature:control, Control
-temperatur:controlnothing, Nothing
-temperature:controlmacro, Macro
-temperature:controlequipment, Equipment
-temperature:lower_threshold, Heater Threshold
-temperature:lower_function, Heater
-temperature:upper_threshold, Chiller Threshold
-temperature:upper_function, Chiller
-temperature:calibrate, Calibrate
-temperature:calibration:set_temperature, Set Temperature
-temperature:calibration:apply, Apply
-temperature:current_reading, Current Reading
-temperature:warn_delete, This action will delete
+ph:calibrate,Calibrate
 ph:chart:current,Current Readings Chart
 ph:chart:historical,Historical Readings Chart
+ph:check_frequency,Check Frequency
+ph:control,Control
+ph:control_required,Control is requires
+ph:controlequipment,Equipment
+ph:controlmacro,Macro
+ph:controlnothing,Nothing
+ph:current_reading,Current Reading
+ph:lower_function,Lower Function
+ph:lower_function_required,Lower Function is required
+ph:lower_threshold,Lower Threshold
+ph:lower_threshold_less_than,Lower Threshold must be less than Upper Threshold
+ph:lower_threshold_required,Lower Threshold is required
+ph:lower_threshold_type,Lower Threshold must be a number
+ph:midpoint,Midpoint
+ph:name_required,Name is required
+ph:period_min,Check Frequency must be 1 second or greater
+ph:period_required,Check Frequency is required
+ph:period_type,Check Frequency must be a number
+ph:run_calibration,Run
+ph:second_point,Second Point
+ph:status,Ph Status
+ph:status_required,Status is required
+ph:threshold_greater_than,Alert Above must be greater than Alert Below
+ph:threshold_less_than,Alert Below must be less than Alert Above
+ph:threshold_required,Threshold is required when alerts are enabled
+ph:threshold_type,Threshold must be a number
+ph:upper_function,Upper Function
+ph:upper_function_required,Upper Function is required
+ph:upper_threshold,Upper Threshold
+ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Threshold
+ph:upper_threshold_required,Upper Threshold is required
+ph:upper_threshold_type,Upper Threshold must be a number
+ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
+ph:warn_delete,This action will delete
+pins:Pins,Pins
+signin:invalidcredentials,Invalid Credentials
+signin:password,Password
+signin:signin,Sign In
+signin:username,Username
+temperatur:controlnothing, Nothing
+temperature:calibrate, Calibrate
+temperature:calibration:apply, Apply
+temperature:calibration:set_temperature, Set Temperature
+temperature:celcius,Celcius
+temperature:chart:current,Current Temperature Readings
+temperature:chart:historical,Historical Temperature Readings
+temperature:chart_maximum,Chart Maximum
+temperature:chart_minimum,Chart Minimum
+temperature:control, Control
+temperature:controlequipment, Equipment
+temperature:controlmacro, Macro
+temperature:current_reading, Current Reading
+temperature:fahrenheit,Fahrenheit
+temperature:heater_cooler,Heater/Cooler
+temperature:lower_function, Heater
+temperature:lower_threshold, Heater Threshold
+temperature:sensor,Sensor
+temperature:sensor_status,Sensor Status
+temperature:temperature,Temperature
+temperature:upper_function, Chiller
+temperature:upper_threshold, Chiller Threshold
+temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
+temperature:warn_delete, This action will delete
+timers:after,After
+timers:and_then,And Then
+timers:day_required,Day is required
+timers:duration_required,Duration is required
+timers:equipment,Equipment
+timers:equipment:action,Action
+timers:equipment:equipment,Equipment
+timers:equipment:off,Off
+timers:equipment:on,On
+timers:equipment:revert,Revert
+timers:equipment_required,Equipment is required
+timers:function,Function
+timers:hour_required,Hour is required
+timers:macro,Macro Name
+timers:macros,Macros
+timers:message,Message
+timers:message_required,Message is required
+timers:minute_required,Minute is required
+timers:name_required,Name is required
+timers:on_required,On is required
+timers:reminder,Reminder
+timers:sec,sec
+timers:second_required,Second is required
+timers:stay_off,Stay off
+timers:stay_on,Stay on
+timers:subject,Subject
+timers:subject_required,Subject is required
+timers:timer_status,Timer Status
+timers:timer_status_required,Timer Status is required
+timers:turn_back_off,Turn back off
+timers:turn_back_on,Turn back on
+timers:turn_off,Turn Off
+timers:turn_on,Turn On
+timers:type_required,Type is required
+timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.

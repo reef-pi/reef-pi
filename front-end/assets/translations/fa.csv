@@ -1,5 +1,133 @@
 Key,Translation
-language:language,Language
+add,اضافه کردن
+alerts,هشدار
+analog_input,ورودی آنالوگ
+analog_inputs,
+are_you_sure,شما مطمئن هستید
+ato,
+cancel,لغو
+clear,واضح
+configure,پیکربندی
+delete,حذف
+disabled,غیرفعال شده
+documentation,مستندات
+done,انجام شده
+doser,
+driver,
+edit,ویرایش کنید
+enabled,فعال شده
+equipment,
+errors,خطاها
+health,
+in-use,
+inlet,ورودی
+inlets,
+jack,
+jacks,
+light,
+loading,بارگذاری
+name,نام
+none,هیچ یک
+ok,خوب
+outlet,
+outlets,
+pin,
+reverse,
+running,دویدن
+save,ذخیره
+sec,
+second_s,
+select,انتخاب کنید
+since,از آنجا که
+unit,واحد
+update,به روز رسانی
+ato:alert_after,
+ato:ato_status,
+ato:ato_usage,
+ato:chk_freq,
+ato:chk_freq_number,
+ato:chk_freq_number_value,
+ato:chk_freq_required,
+ato:control_pump,
+ato:disable_on_alert,
+ato:inlet_required,
+ato:name_required,
+ato:status_required,
+ato:threshold_required,
+ato:threshold_value,
+ato:total_seconds_pump_on,
+ato:validation_error,
+ato:warning_delete,
+capabilities:ato,
+capabilities:camera,
+capabilities:configuration,
+capabilities:dashboard,
+capabilities:dev_mode,
+capabilities:doser,
+capabilities:dosing_pumps,
+capabilities:equipment,
+capabilities:health_check,
+capabilities:lighting,
+capabilities:lights,
+capabilities:log,
+capabilities:macro,
+capabilities:macros,
+capabilities:manager,
+capabilities:ph,
+capabilities:temperature,
+capabilities:timers,
+collapsible:delete,
+collapsible:edit,
+color_picker:choose,
+configuration:about:current_time,پیکربندی:در باره:
+configuration:about:status,پیکربندی:در باره: وضعیت
+configuration:about:uptime,پیکربندی:در باره: زمان فعلی
+configuration:about:version,پیکربندی:در باره: نسخه
+configuration:about:website,پیکربندی:در باره: سایت اینترنتی
+configuration:admin:poweroff,پیکربندی:مدیر: خاموش
+configuration:admin:reboot,پیکربندی:مدیر: راه اندازی مجدد
+configuration:admin:reload,پیکربندی:مدیر: بارگیری مجدد
+configuration:admin:sign_out,پیکربندی:مدیر: خروج
+configuration:authentication:credentials,پیکربندی: احراز هویت: اعتبارنامه
+configuration:authentication:error_pass,پیکربندی: احراز هویت:خطای عبور
+configuration:authentication:error_user,پیکربندی: احراز هویت :خطای کاربر
+configuration:settings:address,
+configuration:settings:alert_health_check,
+configuration:settings:capabilities,
+configuration:settings:capabilities_required,
+configuration:settings:display,
+configuration:settings:enable_profiling,
+configuration:settings:enable_prometheus,
+configuration:settings:interface,
+configuration:settings:max_cpu,
+configuration:settings:max_memory,
+configuration:settings:name,
+configuration:settings:name_required,
+configuration:settings:network_address_required,
+configuration:settings:network_interface_required,
+configuration:settings:notification,
+configuration:settings:rpi_pwm_freq,
+configuration:settings:use_https,
+configuration:tab:about,پیکربندی:برگه: در باره
+configuration:tab:admin,پیکربندی:برگه: مدیر
+configuration:tab:authentication,پیکربندی:برگه:
+configuration:tab:connectors,پیکربندی:برگه: مرتبط ها
+configuration:tab:drivers,پیکربندی:برگه: احراز هویت
+configuration:tab:errors,پیکربندی:برگه: خطاها
+configuration:tab:settings,پیکربندی:برگه: تنظیمات
+configuration:tab:telemetry,پیکربندی:برگه: تله متری
+cron:day_of_month,
+cron:hour,
+cron:minute,
+cron:month,
+cron:second,
+cron:week,
+dashboard:back_to_dashboard,
+fatal_error:connection_lost,
+fatal_error:fatal_error,
+fatal_error:message,
+fatal_error:troubleshoot,
+health_chart:cpu_memory,
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -7,243 +135,115 @@ language:fa,فارسی
 language:fr,Français
 language:hi,हिन्दी
 language:it,Italiano
+language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
-ok,خوب
-select,انتخاب کنید
-enabled,فعال شده
-disabled,غیرفعال شده
-cancel,لغو
-done,انجام شده
-loading,بارگذاری
-documentation,مستندات
-errors,خطاها
-edit,ویرایش کنید
-analog_input,ورودی آنالوگ
-inlet,ورودی
-delete,حذف
-since,از آنجا که
-running,دویدن
-are_you_sure,شما مطمئن هستید
-clear,واضح
-name,نام
-update,به روز رسانی
-add,اضافه کردن
-save,ذخیره
-none,هیچ یک
-alerts,هشدار
-unit,واحد
-configure,پیکربندی
-configuration:authentication:credentials,پیکربندی: احراز هویت: اعتبارنامه
-configuration:authentication:error_user,پیکربندی: احراز هویت :خطای کاربر
-configuration:authentication:error_pass,پیکربندی: احراز هویت:خطای عبور
-configuration:tab:settings,پیکربندی:برگه: تنظیمات
-configuration:tab:connectors,پیکربندی:برگه: مرتبط ها
-configuration:tab:authentication,پیکربندی:برگه:
-configuration:tab:drivers,پیکربندی:برگه: احراز هویت
-configuration:tab:errors,پیکربندی:برگه: خطاها
-configuration:tab:telemetry,پیکربندی:برگه: تله متری
-configuration:tab:admin,پیکربندی:برگه: مدیر
-configuration:tab:about,پیکربندی:برگه: در باره
-configuration:admin:sign_out,پیکربندی:مدیر: خروج
-configuration:admin:reload,پیکربندی:مدیر: بارگیری مجدد
-configuration:admin:reboot,پیکربندی:مدیر: راه اندازی مجدد
-configuration:admin:poweroff,پیکربندی:مدیر: خاموش
-configuration:about:version,پیکربندی:در باره: نسخه
-configuration:about:website,پیکربندی:در باره: سایت اینترنتی
-configuration:about:status,پیکربندی:در باره: وضعیت
-configuration:about:current_time,پیکربندی:در باره:
-configuration:about:uptime,پیکربندی:در باره: زمان فعلی
-signin:username,
-signin:password,
-signin:signin,
-signin:invalidcredentials,
-capabilities:dashboard,
-capabilities:equipment,
-capabilities:timers,
-capabilities:lights,
-capabilities:lighting,
-capabilities:temperature,
-capabilities:ato,
-capabilities:ph,
-capabilities:dosing_pumps,
-capabilities:doser,
-capabilities:macros,
-capabilities:macro,
-capabilities:camera,
-capabilities:manager,
-capabilities:configuration,
-capabilities:log,
-capabilities:dev_mode,
-capabilities:health_check,
-log:time,
-log:emitter,
-log:type,
 log:content,
-dashboard:back_to_dashboard,
-configuration:settings:interface,
-configuration:settings:name,
-configuration:settings:address,
-configuration:settings:rpi_pwm_freq,
-configuration:settings:notification,
-configuration:settings:display,
-configuration:settings:use_https,
-configuration:settings:enable_profiling,
-configuration:settings:enable_prometheus,
-configuration:settings:capabilities,
-configuration:settings:alert_health_check,
-configuration:settings:max_memory,
-configuration:settings:max_cpu,
-configuration:settings:name_required,
-configuration:settings:network_interface_required,
-configuration:settings:network_address_required,
-configuration:settings:capabilities_required,
-health_chart:cpu_memory,
-fatal_error:fatal_error,
-fatal_error:connection_lost,
-fatal_error:troubleshoot,
-fatal_error:message,
-cron:day_of_month,
-cron:hour,
-cron:minute,
-cron:second,
-cron:month,
-cron:week,
-color_picker:choose,
-collapsible:edit,
-collapsible:delete,
-ato:name_required,
-ato:status_required,
-ato:inlet_required,
-ato:chk_freq,
-ato:chk_freq_required,
-ato:chk_freq_number,
-ato:chk_freq_number_value,
-ato:threshold_required,
-ato:threshold_value,
-ato:warning_delete,
-ato:ato_usage,
-ato:ato_status,
-ato:control_pump,
-ato:alert_after,
-ato:disable_on_alert,
-ato:total_seconds_pump_on,
-ato:validation_error,
-timers:name_required,
-timers:timer_status_required,
-timers:day_required,
-timers:hour_required,
-timers:minute_required,
-timers:second_required,
-timers:type_required,
-timers:equipment_required,
-timers:on_required,
-timers:duration_required,
-timers:subject_required,
-timers:message_required,
-timers:validation_error,
-timers:turn_on,
-timers:turn_off,
-timers:and_then,
-timers:turn_back_on,
-timers:turn_back_off,
-timers:stay_on,
-timers:stay_off,
-second_s,
-sec,
-timers:sec,
-timers:after,
-timers:subject,
-timers:message,
-timers:timer_status,
-timers:function,
-timers:equipment,
-timers:reminder,
-timers:macros,
-timers:macro,
-timers:equipment:equipment,
-timers:equipment:action,
-timers:equipment:revert,
-timers:equipment:on,
-timers:equipment:off,
-temperature:temperature,
-temperature:heater_cooler,
-temperature:chart_minimum,
-temperature:chart_maximum,
-temperature:validation_error,
-temperature:sensor,
-temperature:sensor_status,
-temperature:celcius,
-temperature:fahrenheit,
-ph:calibrate,
-ph:midpoint,
-ph:second_point,
-ph:current_reading,
-ph:run_calibration,
-ph:validation_error,
-ph:status,
-ph:check_frequency,
-ph:alert_below,
+log:emitter,
+log:time,
+log:type,
 ph:alert_above,
-ph:warn_delete,
-ph:name_required,
-ph:status_required,
-ph:period_required,
-ph:period_type,
-ph:period_min,
-ph:threshold_required,
-ph:threshold_type,
-ph:threshold_less_than,
-ph:threshold_greater_than,
+ph:alert_below,
 ph:analog_input_required,
-ph:control,
-ph:controlnothing,
-ph:controlmacro,
-ph:controlequipment,
-ph:lower_threshold,
-ph:lower_function,
-ph:upper_threshold,
-ph:upper_function,
-ph:control_required,
-ph:lower_threshold_required,
-ph:lower_threshold_type,
-ph:lower_threshold_less_than,
-ph:lower_function_required,
-ph:upper_threshold_required,
-ph:upper_threshold_type,
-ph:upper_threshold_greater_than,
-ph:upper_function_required,
-temperature:control,
-temperatur:controlnothing,
-temperature:controlmacro,
-temperature:controlequipment,
-temperature:lower_threshold,
-temperature:lower_function,
-temperature:upper_threshold,
-temperature:upper_function,
-temperature:calibrate,
-temperature:calibration:set_temperature,
-temperature:calibration:apply,
-temperature:current_reading,
-temperature:warn_delete,
-driver,
-pin,
-reverse,
-inlets,
-outlets,
-outlet,
-jacks,
-jack,
-analog_inputs,
-in-use,
-pins:Pins,
-health,
-doser,
-equipment,
-ato,
-light,
-temperature:chart:current,
-temperature:chart:historical,
+ph:calibrate,
 ph:chart:current,
 ph:chart:historical,
+ph:check_frequency,
+ph:control,
+ph:control_required,
+ph:controlequipment,
+ph:controlmacro,
+ph:controlnothing,
+ph:current_reading,
+ph:lower_function,
+ph:lower_function_required,
+ph:lower_threshold,
+ph:lower_threshold_less_than,
+ph:lower_threshold_required,
+ph:lower_threshold_type,
+ph:midpoint,
+ph:name_required,
+ph:period_min,
+ph:period_required,
+ph:period_type,
+ph:run_calibration,
+ph:second_point,
+ph:status,
+ph:status_required,
+ph:threshold_greater_than,
+ph:threshold_less_than,
+ph:threshold_required,
+ph:threshold_type,
+ph:upper_function,
+ph:upper_function_required,
+ph:upper_threshold,
+ph:upper_threshold_greater_than,
+ph:upper_threshold_required,
+ph:upper_threshold_type,
+ph:validation_error,
+ph:warn_delete,
+pins:Pins,
+signin:invalidcredentials,
+signin:password,
+signin:signin,
+signin:username,
+temperatur:controlnothing,
+temperature:calibrate,
+temperature:calibration:apply,
+temperature:calibration:set_temperature,
+temperature:celcius,
+temperature:chart:current,
+temperature:chart:historical,
+temperature:chart_maximum,
+temperature:chart_minimum,
+temperature:control,
+temperature:controlequipment,
+temperature:controlmacro,
+temperature:current_reading,
+temperature:fahrenheit,
+temperature:heater_cooler,
+temperature:lower_function,
+temperature:lower_threshold,
+temperature:sensor,
+temperature:sensor_status,
+temperature:temperature,
+temperature:upper_function,
+temperature:upper_threshold,
+temperature:validation_error,
+temperature:warn_delete,
+timers:after,
+timers:and_then,
+timers:day_required,
+timers:duration_required,
+timers:equipment,
+timers:equipment:action,
+timers:equipment:equipment,
+timers:equipment:off,
+timers:equipment:on,
+timers:equipment:revert,
+timers:equipment_required,
+timers:function,
+timers:hour_required,
+timers:macro,
+timers:macros,
+timers:message,
+timers:message_required,
+timers:minute_required,
+timers:name_required,
+timers:on_required,
+timers:reminder,
+timers:sec,
+timers:second_required,
+timers:stay_off,
+timers:stay_on,
+timers:subject,
+timers:subject_required,
+timers:timer_status,
+timers:timer_status_required,
+timers:turn_back_off,
+timers:turn_back_on,
+timers:turn_off,
+timers:turn_on,
+timers:type_required,
+timers:validation_error,
