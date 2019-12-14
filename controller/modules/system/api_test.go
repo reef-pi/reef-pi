@@ -12,6 +12,7 @@ import (
 )
 
 func TestSystemController(t *testing.T) {
+	t.Parallel()
 	config := Config{
 		DevMode:   true,
 		Name:      "test-system",

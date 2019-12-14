@@ -79,8 +79,6 @@ func (c Controller) List() ([]Probe, error) {
 }
 
 func (c *Controller) Create(p Probe) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	if p.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied: %d", p.Period)
 	}

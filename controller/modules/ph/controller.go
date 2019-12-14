@@ -3,7 +3,6 @@ package ph
 import (
 	"encoding/json"
 	"log"
-	"sync"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
@@ -18,7 +17,6 @@ const CalibrationBucket = storage.PhCalibrationBucket
 type Controller struct {
 	c        controller.Controller
 	quitters map[string]chan struct{}
-	mu       *sync.Mutex
 	statsMgr telemetry.StatsManager
 	devMode  bool
 	ais      *connectors.AnalogInputs
@@ -29,7 +27,6 @@ func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *C
 		quitters: make(map[string]chan struct{}),
 		c:        c,
 		devMode:  devMode,
-		mu:       &sync.Mutex{},
 		ais:      ais,
 		statsMgr: c.Telemetry().NewStatsManager(ReadingsBucket),
 	}

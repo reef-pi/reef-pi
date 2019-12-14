@@ -117,6 +117,8 @@ func (c *Controller) Create(tc TC) error {
 }
 
 func (c *Controller) Update(id string, tc *TC) error {
+	c.Lock()
+	defer c.Unlock()
 	tc.ID = id
 	if tc.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", tc.Period)
@@ -124,7 +126,6 @@ func (c *Controller) Update(id string, tc *TC) error {
 	if err := c.c.Store().Update(Bucket, id, tc); err != nil {
 		return err
 	}
-	c.Lock()
 	quit, ok := c.quitters[tc.ID]
 	if ok {
 		close(quit)
@@ -132,7 +133,6 @@ func (c *Controller) Update(id string, tc *TC) error {
 	}
 	tc.loadCalibrator()
 	c.tcs[tc.ID] = tc
-	defer c.Unlock()
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit

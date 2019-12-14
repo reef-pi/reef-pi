@@ -109,3 +109,7 @@ ifeq ($(OS), Windows_NT)
 else
 	DEV_MODE=1 $(BINARY)
 endif
+
+.PHONY: race
+race-test:
+	./scripts/race.sh 12

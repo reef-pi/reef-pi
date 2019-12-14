@@ -13,6 +13,7 @@ import (
 )
 
 func TestDoserAPI(t *testing.T) {
+	t.Parallel()
 	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)
