@@ -15,6 +15,7 @@ import (
 )
 
 func TestEquipmentController(t *testing.T) {
+	t.Parallel()
 	store, err := storage.TestDB()
 	if err != nil {
 		t.Fatal("Failed to create test database. Error:", err)

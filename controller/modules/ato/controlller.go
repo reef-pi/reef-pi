@@ -71,6 +71,8 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) Stop() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	for id, quit := range c.quitters {
 		close(quit)
 		if err := c.statsMgr.Save(id); err != nil {

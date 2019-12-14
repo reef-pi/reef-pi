@@ -13,6 +13,7 @@ import (
 )
 
 func TestController(t *testing.T) {
+	t.Parallel()
 	con, err := controller.TestController()
 	if err != nil {
 		t.Fatal(err)

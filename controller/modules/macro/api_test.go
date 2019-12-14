@@ -7,6 +7,7 @@ import (
 )
 
 func TestSubsystem(t *testing.T) {
+	t.Parallel()
 	c, err := controller.TestController()
 	if err != nil {
 		t.Error(err)

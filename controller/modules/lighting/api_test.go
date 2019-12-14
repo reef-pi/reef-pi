@@ -16,6 +16,7 @@ import (
 )
 
 func TestLightingAPI(t *testing.T) {
+	t.Parallel()
 
 	config := DefaultConfig
 	config.DevMode = true

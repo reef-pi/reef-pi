@@ -91,8 +91,6 @@ func (c *Controller) On(id string, on bool) error {
 	if err != nil {
 		return err
 	}
-	tc.Lock()
 	tc.Enable = on
-	tc.Unlock()
 	return c.Update(id, tc)
 }
