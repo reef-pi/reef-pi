@@ -21,6 +21,7 @@ function namespaceNesting(o, k, v) {
     }
   }
 }
+
 function genTsObj(csvEntries) {
   const o = {}
   for (const item of csvEntries) {
@@ -28,6 +29,7 @@ function genTsObj(csvEntries) {
   }
   return o
 }
+
 module.exports = {
   genTsObj
 }
