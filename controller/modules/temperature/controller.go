@@ -76,6 +76,8 @@ func (c *Controller) Start() {
 	}
 }
 func (c *Controller) Stop() {
+	c.Lock()
+	defer c.Unlock()
 	for id, quit := range c.quitters {
 		close(quit)
 		if err := c.statsMgr.Save(id); err != nil {
@@ -91,6 +93,6 @@ func (c *Controller) On(id string, on bool) error {
 	if err != nil {
 		return err
 	}
-	tc.Enable = on
+	tc.SetEnable(on)
 	return c.Update(id, tc)
 }

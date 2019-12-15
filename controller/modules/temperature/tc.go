@@ -42,6 +42,8 @@ type TC struct {
 }
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
+	t.Lock()
+	defer t.Unlock()
 	hConf := controller.HomeoStasisConfig{
 		Name:       t.Name,
 		Upper:      t.Heater,
@@ -178,7 +180,6 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 }
 
 func (c *Controller) Run(t *TC, quit chan struct{}) {
-	c.Lock()
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
@@ -186,7 +187,6 @@ func (c *Controller) Run(t *TC, quit chan struct{}) {
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
 	t.loadHomeostasis(c.c)
-	c.Unlock()
 	for {
 		select {
 		case <-ticker.C:
@@ -198,7 +198,15 @@ func (c *Controller) Run(t *TC, quit chan struct{}) {
 	}
 }
 
-func (tc TC) CreateFeed(telemetry telemetry.Telemetry) {
+func (tc *TC) SetEnable(b bool) {
+	tc.Lock()
+	defer tc.Unlock()
+	tc.Enable = b
+}
+
+func (tc *TC) CreateFeed(telemetry telemetry.Telemetry) {
+	tc.Lock()
+	defer tc.Unlock()
 	if !tc.Enable {
 		return
 	}
