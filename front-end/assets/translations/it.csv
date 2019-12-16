@@ -1,4 +1,3 @@
-Key,Translation
 language:fr,Français
 language:en,English
 language:de,Deutsch
@@ -495,3 +494,4 @@ temperature:chart:current,attuale
 temperature:chart:historical,storico
 ph:chart:current,attuale
 ph:chart:historical,storico
+
