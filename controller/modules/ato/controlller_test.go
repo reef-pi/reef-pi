@@ -42,7 +42,7 @@ func TestController(t *testing.T) {
 	if err := inlets.Create(connectors.Inlet{Name: "ato-sensor", Pin: 16, Driver: "rpi"}); err != nil {
 		t.Error(err)
 	}
-	c, e := New(true, con, eqs, inlets)
+	c, e := New(true, con, inlets)
 
 	if e != nil {
 		t.Error(e)

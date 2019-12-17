@@ -13,11 +13,25 @@ const EditAto = ({
   touched,
   inlets,
   equipment,
+  macros,
   submitForm,
   isValid,
   dirty,
   readOnly
 }) => {
+  const controlOptions = () => {
+    let opts = []
+
+    if (values.control === 'equipment') { opts = equipment } else if (values.control === 'macro') { opts = macros }
+
+    return opts.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
   const handleSubmit = event => {
     event.preventDefault()
     if (dirty === false || isValid === true) {
@@ -32,16 +46,6 @@ const EditAto = ({
 
   const inletOptions = () => {
     return inlets.map(item => {
-      return (
-        <option key={item.id} value={item.id}>
-          {item.name}
-        </option>
-      )
-    })
-  }
-
-  const equipmentOptions = () => {
-    return equipment.map(item => {
       return (
         <option key={item.id} value={item.id}>
           {item.name}
@@ -129,6 +133,24 @@ const EditAto = ({
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='control'>{i18next.t('ato:control')}</label>
+            <Field
+              name='control'
+              component='select'
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('control', touched, errors)
+              })}
+            >
+              <option value='nothing'>{i18next.t('ato:controlnothing')}</option>
+              <option value='macro'>{i18next.t('ato:controlmacro')}</option>
+              <option value='equipment'>{i18next.t('ato:controlequipment')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='control' />
+          </div>
+        </div>
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
@@ -136,7 +158,7 @@ const EditAto = ({
             <Field
               name='pump'
               component='select'
-              disabled={readOnly}
+              disabled={readOnly || values.control === 'nothing'}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('pump', touched, errors)
               })}
@@ -144,7 +166,7 @@ const EditAto = ({
               <option key='' value=''>
                 {i18next.t('none')}
               </option>
-              {equipmentOptions()}
+              {controlOptions()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='pump' />
           </div>

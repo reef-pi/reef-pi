@@ -32,6 +32,7 @@ class main extends React.Component {
                     data={item}
                     inlets={this.props.inlets}
                     equipment={this.props.equipment}
+                    macros={this.props.macros}
                   />
                 </div>
               )
@@ -40,6 +41,7 @@ class main extends React.Component {
           <New
             inlets={this.props.inlets}
             equipment={this.props.equipment}
+            macros={this.props.macros}
           />
         </ul>
       </div>
@@ -51,7 +53,8 @@ const mapStateToProps = state => {
   return {
     atos: state.atos,
     equipment: state.equipment,
-    inlets: state.inlets
+    inlets: state.inlets,
+    macros: state.macros
   }
 }
 

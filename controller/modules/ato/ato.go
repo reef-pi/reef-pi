@@ -17,6 +17,7 @@ type Notify struct {
 
 type ATO struct {
 	ID             string        `json:"id"`
+	IsMacro        bool          `json:"is_macro"`
 	Inlet          string        `json:"inlet"`
 	Pump           string        `json:"pump"`
 	Period         time.Duration `json:"period"`

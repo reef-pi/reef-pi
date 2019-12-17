@@ -13,11 +13,11 @@ const AtoForm = withFormik({
         notify: {}
       }
     }
-    return {
+    const values = {
       id: data.id || '',
       name: data.name || '',
       enable: (data.enable === undefined ? true : data.enable),
-      control: data.control || false,
+      control: 'nothing',
       inlet: data.inlet || '',
       disable_on_alert: data.disable_on_alert || false,
       period: data.period || 120,
@@ -25,6 +25,10 @@ const AtoForm = withFormik({
       notify: (data.notify && data.notify.enable) || false,
       maxAlert: (data.notify && data.notify.max) || 0
     }
+    if (data.control === true) {
+      if (data.is_macro === true) { values.control = 'macro' } else { values.control = 'equipment' }
+    }
+    return values
   },
   validationSchema: AtoSchema,
   handleSubmit: (values, { props }) => {

@@ -49,8 +49,9 @@ ato:chk_freq_number,Verificar a frequência tem que ser um número
 ato:chk_freq_number_value,Verificar a frequência must be 1 second or greater
 ato:chk_freq_required,Verificar a frequência é Obrigatório
 ato:control_pump,Controlo da Bomba
-ato:control_pump,Controlo da Bomba
-ato:control_pump,Controlo da Bomba
+ato:controlequipment,
+ato:controlmacro,
+ato:controlnothing,
 ato:disable_on_alert,Desativar alerta
 ato:inlet_required,Inlet é Obrigatório
 ato:name_required,Name é Obrigatório

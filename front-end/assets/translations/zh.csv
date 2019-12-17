@@ -49,8 +49,9 @@ ato:chk_freq_number,检查频率必须是个数字
 ato:chk_freq_number_value,检查频率必须大于或等于1
 ato:chk_freq_required,必须填写检查频率
 ato:control_pump,控制泵
-ato:control_pump,控制泵
-ato:control_pump,控制泵
+ato:controlequipment,
+ato:controlmacro,
+ato:controlnothing,
 ato:disable_on_alert,禁用发生于告警
 ato:inlet_required,必须填写进口
 ato:name_required,必须填写名字
