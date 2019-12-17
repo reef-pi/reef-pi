@@ -49,8 +49,9 @@ ato:chk_freq_number,la frecuencia de chequeo debe ser un numero
 ato:chk_freq_number_value,La frecuencia de chequeo debe ser mayor a 1
 ato:chk_freq_required,Escribe una frecuencia de chequeo
 ato:control_pump,Control de Bomba
-ato:control_pump,Control de Bomba
-ato:control_pump,Control de Bomba
+ato:controlequipment,
+ato:controlmacro,
+ato:controlnothing,
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:inlet_required,Seleccion una entrada
 ato:name_required,Escribe un Nombre

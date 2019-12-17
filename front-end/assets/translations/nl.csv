@@ -49,8 +49,9 @@ ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
 ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
 ato:chk_freq_required,Controleer Frequentie is nodig
 ato:control_pump,Controleert Pomp
-ato:control_pump,Controleert Pomp
-ato:control_pump,Controleert Pomp
+ato:controlequipment,
+ato:controlmacro,
+ato:controlnothing,
 ato:disable_on_alert,Uitschakelen bij alarm
 ato:inlet_required,Ingang is nodig
 ato:name_required,Naam is nodig
