@@ -135,7 +135,7 @@ const EditAto = ({
         </div>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='control'>{i18next.t('ph:control')}</label>
+            <label htmlFor='control'>{i18next.t('ato:control')}</label>
             <Field
               name='control'
               component='select'
@@ -144,9 +144,9 @@ const EditAto = ({
                 'is-invalid': ShowError('control', touched, errors)
               })}
             >
-              <option value='nothing'>{i18next.t('ph:controlnothing')}</option>
-              <option value='macro'>{i18next.t('ph:controlmacro')}</option>
-              <option value='equipment'>{i18next.t('ph:controlequipment')}</option>
+              <option value='nothing'>{i18next.t('ato:controlnothing')}</option>
+              <option value='macro'>{i18next.t('ato:controlmacro')}</option>
+              <option value='equipment'>{i18next.t('ato:controlequipment')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='control' />
           </div>

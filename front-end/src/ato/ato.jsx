@@ -52,13 +52,14 @@ class ato extends React.Component {
       enable: values.enable,
       inlet: values.inlet,
       period: parseInt(values.period),
-      control: (values.pump !== ''),
+      control: (values.control === 'macro' || values.control === 'equipment'),
       pump: values.pump,
       disable_on_alert: values.disable_on_alert,
       notify: {
         enable: values.notify,
         max: values.maxAlert
-      }
+      },
+      is_macro: (values.control === 'macro')
     }
 
     this.props.updateATO(this.props.data.id, payload)

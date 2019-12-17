@@ -51,8 +51,9 @@ ato:chk_freq_number,Check Frequency must be a number
 ato:chk_freq_number_value,Check Frequency must be 1 second or greater
 ato:chk_freq_required,Check Frequency is required
 ato:control_pump,Control Pump
-ato:control_pump,Control Pump
-ato:control_pump,Control Pump
+ato:controlnothing,Nothing
+ato:controlmacro,Macro
+ato:controlequipment,Equipment
 ato:disable_on_alert,Disable on alert
 ato:inlet_required,Inlet is required
 ato:name_required,Name is required
