@@ -15,6 +15,7 @@ const AtoSchema = Yup.object().shape({
     .min(1, i18next.t('ato:chk_freq_number_value')),
   pump: Yup.number(),
   notify: Yup.bool(),
+  is_macro: Yup.bool(),
   disable_on_alert: Yup.bool(),
   maxAlert: Yup.mixed()
     .when('notify', (notify, schema) => {

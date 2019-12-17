@@ -7,7 +7,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -16,25 +15,30 @@ const Bucket = storage.ATOBucket
 const UsageBucket = storage.ATOUsageBucket
 
 type Controller struct {
-	statsMgr  telemetry.StatsManager
-	equipment *equipment.Controller
-	devMode   bool
-	quitters  map[string]chan struct{}
-	mu        *sync.Mutex
-	inlets    *connectors.Inlets
-	c         controller.Controller
+	statsMgr telemetry.StatsManager
+	devMode  bool
+	quitters map[string]chan struct{}
+	mu       *sync.Mutex
+	inlets   *connectors.Inlets
+	c        controller.Controller
 }
 
-func New(devMode bool, c controller.Controller, eqs *equipment.Controller, inlets *connectors.Inlets) (*Controller, error) {
-	return &Controller{
-		devMode:   devMode,
-		mu:        &sync.Mutex{},
-		inlets:    inlets,
-		equipment: eqs,
-		quitters:  make(map[string]chan struct{}),
-		statsMgr:  c.Telemetry().NewStatsManager(UsageBucket),
-		c:         c,
-	}, nil
+func New(devMode bool, c controller.Controller, inlets *connectors.Inlets) (*Controller, error) {
+	con := &Controller{
+		devMode:  devMode,
+		mu:       &sync.Mutex{},
+		inlets:   inlets,
+		quitters: make(map[string]chan struct{}),
+		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
+		c:        c,
+	}
+	return con, nil
+}
+func (c *Controller) sub(a ATO) (controller.Subsystem, error) {
+	if a.IsMacro {
+		return c.c.Subsystem(storage.MacroBucket)
+	}
+	return c.c.Subsystem(storage.EquipmentBucket)
 }
 
 func (c *Controller) Setup() error {
@@ -90,10 +94,14 @@ func (c *Controller) Control(a ATO, reading int) error {
 		log.Println("ato-subsystem: control enabled but pump not set. Skipping")
 		return nil
 	}
+	sub, err := c.sub(a)
+	if err != nil {
+		return err
+	}
 	switch reading {
 	case 1:
-		return c.equipment.Control(a.Pump, false)
+		return sub.On(a.Pump, false)
 	default:
-		return c.equipment.Control(a.Pump, true)
+		return sub.On(a.Pump, true)
 	}
 }

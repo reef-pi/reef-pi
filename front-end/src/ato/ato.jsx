@@ -80,6 +80,7 @@ class ato extends React.Component {
             onSubmit={this.handleSubmit}
             inlets={this.props.inlets}
             equipment={this.props.equipment}
+            macros={this.props.macros}
             readOnly={this.state.readOnly}
           />
           <div className='d-none d-sm-flex'>

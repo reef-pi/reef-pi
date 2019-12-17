@@ -39,6 +39,7 @@ class newATO extends React.Component {
         onSubmit={this.handleSubmit}
         inlets={this.props.inlets}
         equipment={this.props.equipment}
+        macros={this.props.macros}
       />
     )
   }
