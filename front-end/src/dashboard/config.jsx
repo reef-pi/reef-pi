@@ -91,7 +91,7 @@ class config extends React.Component {
       for (j = 0; j < config.column; j++) {
         config.grid_details[i][j] = {
           id: cells[i][j].id,
-          type: cells[i][j].type
+          type: cells[i][j].type.name
         }
       }
     }
