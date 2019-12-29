@@ -35,30 +35,35 @@ type hc struct {
 }
 
 type HealthMetric struct {
-	Load5      float64  `json:"cpu"`
-	UsedMemory float64  `json:"memory"`
-	Time       TeleTime `json:"time"`
-	len        int
-	loadSum    float64
-	memorySum  float64
+	Load5        float64  `json:"cpu"`
+	UsedMemory   float64  `json:"memory"`
+	Time         TeleTime `json:"time"`
+	len          int
+	loadSum      float64
+	memorySum    float64
+	UnderVoltage float64 `json:"throttle"`
 }
 
 func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
 	m2 := mx.(HealthMetric)
-	m := HealthMetric{
-		Time:       m1.Time,
-		Load5:      m1.Load5,
-		UsedMemory: m1.UsedMemory,
-		len:        m1.len,
-		loadSum:    m1.loadSum,
-		memorySum:  m1.memorySum,
-	}
 	if m1.Time.Hour() == m2.Time.Hour() {
+		m := HealthMetric{
+			Time:         m1.Time,
+			Load5:        m1.Load5,
+			UsedMemory:   m1.UsedMemory,
+			len:          m1.len,
+			loadSum:      m1.loadSum,
+			memorySum:    m1.memorySum,
+			UnderVoltage: m2.UnderVoltage,
+		}
 		m.loadSum += m2.Load5
 		m.memorySum += m2.UsedMemory
 		m.len += 1
 		m.Load5 = TwoDecimal(m.loadSum / float64(m.len))
 		m.UsedMemory = TwoDecimal(m.memorySum / float64(m.len))
+		if m.UnderVoltage == 0 {
+			m.UnderVoltage = m2.UnderVoltage
+		}
 		return m, false
 	}
 	return m2, true
@@ -102,7 +107,19 @@ func (h *hc) Check() {
 		memorySum:  usedMemory,
 		Time:       TeleTime(time.Now()),
 	}
+	throttles, err := VcgencmdGetThrottled()
+	if err != nil {
+		log.Println("ERROR: failed to get pi power throttle information. Error:", err)
+	} else {
+		for _, throttle := range throttles {
+			if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
+				metric.UnderVoltage = 1
+			}
+		}
+	}
+
 	h.t.EmitMetric("system", "mem-used", usedMemory)
+	h.t.EmitMetric("system", "under_voltage", metric.UnderVoltage)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
