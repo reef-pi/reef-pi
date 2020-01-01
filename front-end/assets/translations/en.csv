@@ -217,6 +217,7 @@ temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
 temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
 temperature:warn_delete, This action will delete
+temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 timers:after,After
 timers:and_then,And Then
 timers:day_required,Day is required
