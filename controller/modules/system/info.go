@@ -2,12 +2,17 @@ package system
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"strings"
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
+)
+
+const (
+	_modelFilePath = "/proc/device-tree/model"
 )
 
 type Summary struct {
@@ -17,6 +22,7 @@ type Summary struct {
 	Uptime         string `json:"uptime"`
 	CPUTemperature string `json:"cpu_temperature"`
 	Version        string `json:"version"`
+	Model          string `json:"model"`
 }
 
 func (c *Controller) ComputeSummary() Summary {
@@ -37,6 +43,7 @@ func (c *Controller) ComputeSummary() Summary {
 		Uptime:         c.Uptime(),
 		CPUTemperature: string(temp),
 		Version:        c.config.Version,
+		Model:          c.GetModel(),
 	}
 	return s
 }
@@ -71,4 +78,14 @@ func (c *Controller) CPUTemperature() (string, error) {
 		out = []byte("foo=23.23 ")
 	}
 	return strings.Split(string(out), "=")[1], nil
+}
+
+func (c *Controller) GetModel() string {
+	data, err := ioutil.ReadFile("/proc/device-tree/model")
+	if err != nil {
+		log.Println("Failed to detect Raspberry Pi version. Error:", err)
+		return "unknown"
+	}
+	return strings.TrimSpace(string(data))
+
 }
