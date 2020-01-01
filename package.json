@@ -65,7 +65,7 @@
     "sass-lint": "1.13.1",
     "sass-loader": "8.0.0",
     "standard": "14.3.1",
-    "style-loader": "1.0.1",
+    "style-loader": "1.1.2",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
