@@ -20,7 +20,7 @@ export default class Summary extends React.Component {
         <ul className='list-inline'>
           <li className='list-inline-item'><a href='http://reef-pi.com' target='_blank' rel='noopener noreferrer'> {i18n.t('documentation')}</a> | </li>
           <li className='list-inline-item'>{this.props.info.current_time},</li>
-          <li className='list-inline-item'>{i18n.t('running')} {this.props.info.version},</li>
+          <li className='list-inline-item'>{i18n.t('running')} {this.props.info.version}, on {this.props.info.model}</li>
           <li className='list-inline-item'>{i18n.t('since')} {this.props.info.uptime} | </li>
           <li className='list-inline-item'>IP {this.props.info.ip} | </li>
           <li className='list-inline-item text-danger'>{i18n.t('errors')}({this.props.errors.length})</li>
