@@ -137,7 +137,7 @@ class jacks extends React.Component {
         <div className='row'>
           <div className='col-12'>
             <div className='row add-jack' style={dStyle}>
-              <div className='col-12 col-md-5'>
+              <div className='col-12 col-md-3'>
                 <div className='form-group'>
                   <label htmlFor='jackName'>{i18next.t('name')}</label>
                   <input
