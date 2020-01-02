@@ -206,6 +206,7 @@ temperature:controlmacro,宏
 temperature:current_reading,当前读数
 temperature:fahrenheit,华氏的
 temperature:heater_cooler,加热器/冷水机
+temperature:hysteresis_less_than,
 temperature:lower_function,下层功能
 temperature:lower_threshold,下阈值
 temperature:sensor,传感器
