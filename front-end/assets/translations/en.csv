@@ -51,9 +51,9 @@ ato:chk_freq_number,Check Frequency must be a number
 ato:chk_freq_number_value,Check Frequency must be 1 second or greater
 ato:chk_freq_required,Check Frequency is required
 ato:control_pump,Control Pump
-ato:controlnothing,Nothing
-ato:controlmacro,Macro
 ato:controlequipment,Equipment
+ato:controlmacro,Macro
+ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
 ato:inlet_required,Inlet is required
 ato:name_required,Name is required
@@ -208,6 +208,7 @@ temperature:controlmacro, Macro
 temperature:current_reading, Current Reading
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heater/Cooler
+temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
 temperature:sensor,Sensor

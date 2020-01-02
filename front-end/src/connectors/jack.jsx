@@ -78,14 +78,14 @@ export default class Jack extends React.Component {
   editUI () {
     return (
       <div className='row'>
-        <div className='col-12 col-md-6'>
+        <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label htmlFor={'jack-' + this.props.jack_id + '-name'}> Name </label>
+            <span className='input-group-addon'>{i18next.t('name')}</span>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
               onChange={this.handleNameChange}
-              className='jack-name form-control'
+              className='form-control jack-name'
               value={this.state.name}
             />
           </div>
@@ -104,7 +104,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label htmlFor={'jack-' + this.props.jack_id + '-pins'}> {i18next.t('pins')} </label>
+            <span className='input-group-addon'>{i18next.t('pins')}</span>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
@@ -166,7 +166,7 @@ export default class Jack extends React.Component {
     return (
       <div className='row border-bottom py-1'>
         <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
-        <div className='col-4 col-md-3 mb-'>
+        <div className='col-4 col-md-3'>
           <input
             type='button'
             className='jack-remove btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'

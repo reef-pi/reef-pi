@@ -206,6 +206,7 @@ temperature:controlmacro,
 temperature:current_reading,
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Calentador/Enfriador
+temperature:hysteresis_less_than,
 temperature:lower_function,
 temperature:lower_threshold,
 temperature:sensor,Sensor
