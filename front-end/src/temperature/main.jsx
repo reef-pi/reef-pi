@@ -81,6 +81,10 @@ class main extends React.Component {
             {i18next.t('temperature:calibrate')}
           </button>
         )
+        const handleToggleState = () => {
+          probe.enable = !probe.enable
+          this.props.update(probe.id, probe)
+        }
         return (
           <Collapsible
             key={'panel-temperature-' + probe.id}
@@ -89,6 +93,8 @@ class main extends React.Component {
             buttons={calibrationButton}
             title={<b className='ml-2 align-middle'>{probe.name} </b>}
             onDelete={this.handleDelete}
+            onToggleState={handleToggleState}
+            enabled={probe.enable}
           >
             <TemperatureForm
               tc={probe}
