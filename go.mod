@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/dustin/go-humanize v1.0.0
+	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gorilla/mux v1.7.3
@@ -19,6 +20,5 @@ require (
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	go.etcd.io/bbolt v1.3.3
-	golang.org/x/sys v0.0.0-20191118133127-cf1e2d577169 // indirect
 	gopkg.in/yaml.v2 v2.2.7
 )

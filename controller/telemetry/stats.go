@@ -1,20 +1,17 @@
 package telemetry
 
 import (
+	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/reef-pi/adafruitio"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"log"
+	"math"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-
-	"github.com/reef-pi/reef-pi/controller/storage"
-
-	"math"
-
-	"github.com/reef-pi/adafruitio"
 )
 
 const DBKey = "telemetry"
@@ -180,17 +177,31 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 		t.mu.Unlock()
 		g.Set(v)
 	}
-	if !aio.Enable {
-		//log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
-		return
+	if aio.Enable {
+		if err := t.EmitAIO(feed, aio.User, v); err != nil {
+			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
+			t.logError("telemtry-"+feed, err.Error())
+		}
 	}
-	d := adafruitio.Data{
-		Value: v,
+	if err := t.EmitMQTT(v); err != nil {
+		log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
+		t.logError("telemtry-mqtt", err.Error())
 	}
-	if err := t.client.SubmitData(aio.User, feed, d); err != nil {
-		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
-		t.logError("telemtry-"+feed, err.Error())
+}
+
+func (t *telemetry) EmitMQTT(v float64) error {
+	c, err := NewMQTTClient(DefaultMQTTConfig)
+	if err != nil {
+		return err
 	}
+	return c.Publish("", fmt.Sprintf("%f", v))
+}
+
+func (t *telemetry) EmitAIO(user, feed string, v float64) error {
+	return t.client.SubmitData(user, feed,
+		adafruitio.Data{
+			Value: v,
+		})
 }
 
 func (t *telemetry) CreateFeedIfNotExist(f string) {
