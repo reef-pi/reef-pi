@@ -80,7 +80,7 @@
     "ui-dev": "webpack -d --watch",
     "js-lint": "standard  front-end/src/**/*",
     "standard": "standard --fix front-end/src/**/**",
-    "jest": "cross-env NODE_ENV=testing jest --coverage --all",
+    "jest": "cross-env NODE_ENV=testing jest",
     "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
     "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
