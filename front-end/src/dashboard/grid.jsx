@@ -6,24 +6,6 @@ import i18next from 'i18next'
 export default class Grid extends React.Component {
   constructor (props) {
     super(props)
-    let i, j
-    const cells = []
-    for (i = 0; i < props.rows; i++) {
-      cells[i] = []
-      for (j = 0; j < props.columns; j++) {
-        if (props.cells[i] === undefined || props.cells[i][j] === undefined) {
-          cells[i][j] = { type: 'health' }
-          continue
-        }
-        cells[i][j] = {
-          type: props.cells[i][j].type,
-          id: props.cells[i][j].id
-        }
-      }
-    }
-    this.state = {
-      cells: cells
-    }
     this.availableTypes = {
       ato: {
         name: 'ato',
@@ -70,6 +52,25 @@ export default class Grid extends React.Component {
         label: i18next.t('doser'),
         options: props.dosers
       }
+    }
+    let i, j
+    const cells = []
+    for (i = 0; i < props.rows; i++) {
+      cells[i] = []
+      for (j = 0; j < props.columns; j++) {
+        if (props.cells[i] === undefined || props.cells[i][j] === undefined) {
+          cells[i][j] = { type: 'health' }
+          continue
+        }
+        const cell = props.cells[i][j]
+        cells[i][j] = {
+          type: this.availableTypes[cell.type],
+          id: cell.id
+        }
+      }
+    }
+    this.state = {
+      cells: cells
     }
     this.setType = this.setType.bind(this)
     this.updateHook = this.updateHook.bind(this)
