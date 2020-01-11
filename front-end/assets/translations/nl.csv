@@ -195,7 +195,7 @@ temperatur:controlnothing,
 temperature:calibrate,
 temperature:calibration:apply,
 temperature:calibration:set_temperature,
-temperature:celcius,Celcius
+temperature:celsius,Celsius
 temperature:chart:current,
 temperature:chart:historical,
 temperature:chart_maximum,Grafiek Maximum

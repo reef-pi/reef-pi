@@ -195,7 +195,7 @@ temperatur:controlnothing,无
 temperature:calibrate,校准
 temperature:calibration:apply,应用
 temperature:calibration:set_temperature,设置温度
-temperature:celcius,摄氏的
+temperature:celsius,摄氏的
 temperature:chart:current,当前温度读数
 temperature:chart:historical,历史温度读数
 temperature:chart_maximum,图表最大值
