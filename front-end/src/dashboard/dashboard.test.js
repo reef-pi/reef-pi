@@ -22,8 +22,8 @@ describe('Dashboard', () => {
       grid_details: [
         [{ type: 'equipment' }, { type: 'ato', id: '1' }],
         [{ type: 'light', id: '1' }, { type: 'health', id: 'current' }],
-        [{ type: 'ph-current', id: '1' }, { type: 'ph-historical', id: 'current' }],
-        [{ type: 'tc', id: '1' }, { type: 'temperature', id: 'current' }]
+        [{ type: 'ph_current', id: '1' }, { type: 'ph_historical', id: 'current' }],
+        [{ type: 'temp_historical', id: '1' }, { type: 'temp_current', id: 'current' }]
       ]
     }
     let m = shallow(<Main store={mockStore({ dashboard: config })} />)
@@ -43,12 +43,9 @@ describe('Dashboard', () => {
     ]
     const m = shallow(<Grid rows={2} columns={2} cells={cells} hook={() => {}} />).instance()
     m.setType(0, 0, 'equipment')()
-    m.updateHook(0, 0)('1')
+    m.setID(0, 0)('1')
     m.menuItem('ato', true, 0, 1)
-    delete m.state.cells
     m.render()
-    delete m.state.cells
-    m.initiatlizeCell(1, 2)
   })
 
   it('<ComponentSelector />', () => {
