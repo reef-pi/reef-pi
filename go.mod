@@ -16,7 +16,7 @@ require (
 	github.com/reef-pi/drivers v0.0.0-20191124084039-bd164636cb55
 	github.com/reef-pi/hal v0.0.0-20191003050343-8c77d92fe39a
 	github.com/reef-pi/rpi v0.0.0-20191003051100-f2908459e401
-	github.com/robfig/cron/v3 v3.0.0
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	go.etcd.io/bbolt v1.3.3
 	gopkg.in/yaml.v2 v2.2.8
