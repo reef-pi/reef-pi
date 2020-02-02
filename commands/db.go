@@ -90,13 +90,16 @@ func (cmd *dbCmd) Execute() error {
 			return nil
 		}
 	}
+	if _, err := os.Stat(cmd.sPath); os.IsNotExist(err) {
+		return fmt.Errorf("Database file does not exist. %w", err)
+	}
 	store, err := storage.NewStore(cmd.sPath)
 	if err != nil {
-		return fmt.Errorf("Failed to open database. Check if reef-pi is already running. %w", err)
+		return fmt.Errorf("Failed to open database. Check if reef-pi is already running")
 	}
 	cmd.store = store
 
-	if len(cmd.args) < 0 {
+	if len(cmd.args) < 1 {
 		return errors.New("please specify a sub command [show|list|create|update|delete|buckets]")
 	}
 	action := cmd.args[0]
