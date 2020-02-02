@@ -53,34 +53,22 @@ export default class Grid extends React.Component {
         options: props.dosers
       }
     }
-    let i, j
-    const cells = []
-    for (i = 0; i < props.rows; i++) {
-      cells[i] = []
-      for (j = 0; j < props.columns; j++) {
-        if (props.cells[i] === undefined || props.cells[i][j] === undefined) {
-          cells[i][j] = { type: 'health' }
-          continue
-        }
-        const cell = props.cells[i][j]
-        cells[i][j] = {
-          type: this.availableTypes[cell.type],
-          id: cell.id
-        }
-      }
-    }
-    this.state = {
-      cells: cells
-    }
+    this.initiatlizeCells = this.initiatlizeCells.bind(this)
     this.setType = this.setType.bind(this)
     this.updateHook = this.updateHook.bind(this)
-    this.initiatlizeCell = this.initiatlizeCell.bind(this)
     this.cellUI = this.cellUI.bind(this)
     this.menuItem = this.menuItem.bind(this)
     this.menuItems = this.menuItems.bind(this)
+    this.state = {
+      cells: this.initiatlizeCells(undefined, props.rows, props.columns)
+    }
   }
 
   cellUI (type, currentId, i, j) {
+    if (type === undefined) {
+      return (<span>None</span>)
+    }
+		console.log("cellui",i, j, type)
     return (
       <ComponentSelector
         components={type.options}
@@ -91,8 +79,8 @@ export default class Grid extends React.Component {
     )
   }
 
-  initiatlizeCell (i, j) {
-    let cells = this.state.cells
+  initiatlizeCells (currentCells,i, j) {
+    let cells = currentCells
     if (cells === undefined) {
       cells = []
     }
@@ -102,7 +90,8 @@ export default class Grid extends React.Component {
     for (j = 0; j < this.props.columns; j++) {
       if (cells[i][j] === undefined) {
         cells[i][j] = {
-          type: 'health'
+          type: this.availableTypes.health,
+          label: i18next.t('health')
         }
       }
       cells[i][j].ui = this.cellUI(cells[i][j].type, cells[i][j].id, i, j)
@@ -121,7 +110,7 @@ export default class Grid extends React.Component {
 
   setType (i, j, type) {
     return (function () {
-      const cells = this.initiatlizeCell(i, j)
+      const cells = this.initiatlizeCells(this.state.cells, i, j)
       cells[i][j].type = type
       cells[i][j].ui = this.cellUI(type, '', i, j)
       this.setState({ cells: cells })
@@ -134,6 +123,11 @@ export default class Grid extends React.Component {
     if (a) {
       cName += ' active'
     }
+    if (type === undefined) {
+      return (<span>None</span>)
+    }
+		console.log("menuItem",i, j, type)
+
     return (
       <a className={cName} href='#' onClick={this.setType(i, j, type)} key={type.name + i + '-' + j}>
         <span id={type + '-chart-' + i + '-' + j}>{type.label}</span>
@@ -159,14 +153,12 @@ export default class Grid extends React.Component {
   render () {
     const rows = []
     let i, j
-    let cells = this.state.cells
-    if (cells === undefined) {
-      cells = []
-    }
+	  const	cells = this.initiatlizeCells(this.state.cells, this.props.rows, this.props.columns)
     for (i = 0; i < this.props.rows; i++) {
       const columns = []
       for (j = 0; j < this.props.columns; j++) {
-        cells = this.initiatlizeCell(i, j)
+				console.log("render",i, j, cells)
+				console.log("render",i, j, cells[i])
         columns.push(
           <div className='col grid-block' key={'chart-type-' + i + '-' + j}>
             <div className='dropdown'>
