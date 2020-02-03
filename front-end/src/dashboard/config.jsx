@@ -91,10 +91,12 @@ class config extends React.Component {
       for (j = 0; j < config.column; j++) {
         config.grid_details[i][j] = {
           id: cells[i][j].id,
-          type: cells[i][j].type.name
+          type: cells[i][j].type
         }
       }
+      config.grid_details[i].length = config.column
     }
+    config.grid_details.length = config.row
     this.setState({
       config: config,
       updated: true
