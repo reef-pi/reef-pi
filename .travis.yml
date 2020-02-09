@@ -6,8 +6,6 @@ before_install:
   - sudo apt-get install -y nodejs
   - sudo npm install -g npm
 script:
-  - chmod +x ./build/smoke.sh
-  - ./build/smoke.sh
   - ./build/ci.sh
   - bash <(curl -s https://codecov.io/bash) -cF go
   - make pi
@@ -22,3 +20,5 @@ script:
   - make clean
   - make go
   - make deb
+  - chmod +x ./build/smoke.sh
+  - ./build/smoke.sh
