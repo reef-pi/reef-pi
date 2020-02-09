@@ -1,6 +1,7 @@
 package equipment
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/kidoman/embd"
@@ -13,13 +14,11 @@ import (
 type Config struct {
 	DevMode bool `json:"dev_mode"`
 }
-type Check func(string) (bool, error)
 type Controller struct {
 	config    Config
 	telemetry telemetry.Telemetry
 	store     storage.Store
 	outlets   *connectors.Outlets
-	checks    []Check
 }
 
 func New(config Config, outlets *connectors.Outlets, store storage.Store, telemetry telemetry.Telemetry) *Controller {
@@ -28,7 +27,6 @@ func New(config Config, outlets *connectors.Outlets, store storage.Store, teleme
 		telemetry: telemetry,
 		store:     store,
 		outlets:   outlets,
-		checks:    []Check{},
 	}
 }
 
@@ -60,24 +58,23 @@ func (c *Controller) Stop() {
 	}
 }
 
-func (c *Controller) AddCheck(check Check) {
-	c.checks = append(c.checks, check)
-	return
-}
-
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	for i, checkFn := range c.checks {
-		inUse, err := checkFn(id)
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.OutletBucket:
+		eqs, err := c.List()
 		if err != nil {
-			log.Println("ERROR: equipment subsystem: Equipment in use check returned error. Error:", err)
-			return true, err
+			return deps, err
 		}
-		if inUse {
-			log.Println("DEBUG: equipment subsystem: Equipment in use returned true from:", i)
-			return true, nil
+		for _, eq := range eqs {
+			if eq.Outlet == id {
+				deps = append(deps, eq.Name)
+			}
 		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown error type:%s", depType)
 	}
-	return false, nil
 }
 
 func (c *Controller) On(id string, b bool) error {

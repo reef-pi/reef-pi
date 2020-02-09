@@ -117,19 +117,6 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	atos, err := c.List()
-	if err != nil {
-		return false, err
-	}
-	for _, a := range atos {
-		if a.Pump == id {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 func (c *Controller) Check(a ATO) {
 	if !a.Enable {
 		return

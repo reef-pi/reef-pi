@@ -2,6 +2,7 @@ package ph
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/reef-pi/reef-pi/controller"
@@ -84,4 +85,55 @@ func (c *Controller) On(id string, b bool) error {
 	}
 	p.Enable = b
 	return c.Update(id, p)
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.EquipmentBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.UpperEq == id && !p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		for _, p := range probes {
+			if p.DownerEq == id && !p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	case storage.AnalogInputBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.AnalogInput == id {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	case storage.MacroBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.UpperEq == id && p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		for _, p := range probes {
+			if p.DownerEq == id && p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown dependency type:%s", depType)
+	}
 }

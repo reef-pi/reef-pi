@@ -14,10 +14,11 @@ type mockSubsystem struct {
 	state map[string]bool
 }
 
-func (m *mockSubsystem) Setup() error          { return nil }
-func (m *mockSubsystem) LoadAPI(r *mux.Router) {}
-func (m *mockSubsystem) Start()                {}
-func (m *mockSubsystem) Stop()                 {}
+func (m *mockSubsystem) Setup() error                        { return nil }
+func (m *mockSubsystem) LoadAPI(r *mux.Router)               {}
+func (m *mockSubsystem) Start()                              {}
+func (m *mockSubsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }
+func (m *mockSubsystem) Stop()                               {}
 func (m *mockSubsystem) On(id string, b bool) error {
 	m.Lock()
 	defer m.Unlock()

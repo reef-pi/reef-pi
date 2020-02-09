@@ -89,14 +89,6 @@ func TestController(t *testing.T) {
 	}
 	c.NotifyIfNeeded(a)
 
-	inUse, err := c.IsEquipmentInUse("-1")
-	if err != nil {
-		t.Error(err)
-	}
-	if inUse == true {
-		t.Error("Imaginary equipment should not be in-use")
-	}
-
 	body = new(bytes.Buffer)
 	json.NewEncoder(body).Encode(a)
 	if err := tr.Do("POST", "/api/atos/1", body, nil); err != nil {

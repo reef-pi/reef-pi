@@ -31,7 +31,6 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal(err)
 	}
 	c := New(config, outlets, store, telemetry)
-	c.AddCheck(func(_ string) (bool, error) { return false, nil })
 	c.Setup()
 	c.Stop()
 	o := connectors.Outlet{
@@ -139,15 +138,6 @@ func TestEquipmentController(t *testing.T) {
 	eq.Outlet = "123"
 	if err := c.Create(eq); err == nil {
 		t.Error("Equipment creation should fail if outlet is not present")
-	}
-	eq.Outlet = "1"
-	if err := c.Create(eq); err != nil {
-		t.Error("Failed to create equipment. Error:", err)
-	}
-	c.AddCheck(func(_ string) (bool, error) { return true, nil })
-	c.IsEquipmentInUse("1")
-	if err := c.Delete("1"); err == nil {
-		t.Error("Equipment deletion should fail if rquipment is in use")
 	}
 	if err := c.On("-11", true); err == nil {
 		t.Error("Controlling invalid equipment should fail")

@@ -2,6 +2,7 @@ package doser
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync"
 
@@ -96,4 +97,23 @@ func (c *Controller) On(id string, b bool) error {
 	}
 	p.Regiment.Enable = b
 	return c.Update(id, p)
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.JackBucket:
+		ds, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, d := range ds {
+			if d.Jack == id {
+				deps = append(deps, id)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown deptype:%s", depType)
+	}
 }

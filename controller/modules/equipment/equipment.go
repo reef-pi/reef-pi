@@ -86,7 +86,6 @@ func (c *Controller) Update(id string, eq Equipment) error {
 		if err != nil {
 			return fmt.Errorf("Outlet name %s not present", eq.Outlet)
 		}
-		c.releaseOutlet(oldEq.Outlet)
 		c.claimOutlet(outlet, id)
 	}
 
@@ -97,19 +96,10 @@ func (c *Controller) Update(id string, eq Equipment) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	eq, err := c.Get(id)
+	_, err := c.Get(id)
 	if err != nil {
 		return err
 	}
-	inUse, err := c.IsEquipmentInUse(id)
-	if err != nil {
-		log.Println("ERROR: equipment subsystem: failed to determine if equipment is in use")
-		return err
-	}
-	if inUse {
-		return fmt.Errorf("equipment is in use")
-	}
-	c.releaseOutlet(eq.Outlet)
 	return c.store.Delete(Bucket, id)
 }
 
@@ -124,15 +114,6 @@ func (c *Controller) synEquipment() {
 			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
 		}
 	}
-}
-
-func (c *Controller) releaseOutlet(outletID string) error {
-	outlet, err := c.outlets.Get(outletID)
-	if err != nil {
-		return err
-	}
-	outlet.Equipment = ""
-	return c.outlets.Update(outlet.ID, outlet)
 }
 
 func (c *Controller) claimOutlet(outlet connectors.Outlet, equipmentID string) error {

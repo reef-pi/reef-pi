@@ -1,6 +1,7 @@
 package lighting
 
 import (
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -100,5 +101,24 @@ func (c *Controller) On(id string, on bool) error {
 func (c *Controller) syncLights() {
 	for _, light := range c.lights {
 		c.syncLight(light)
+	}
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.JackBucket:
+		lights, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, l := range lights {
+			if l.Jack == id {
+				deps = append(deps, id)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown dep type:%s", depType)
 	}
 }

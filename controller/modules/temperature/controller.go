@@ -96,3 +96,8 @@ func (c *Controller) On(id string, on bool) error {
 	tc.SetEnable(on)
 	return c.Update(id, tc)
 }
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	return deps, nil
+}

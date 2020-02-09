@@ -2,6 +2,7 @@ package ato
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync"
 
@@ -103,5 +104,46 @@ func (c *Controller) Control(a ATO, reading int) error {
 		return sub.On(a.Pump, false)
 	default:
 		return sub.On(a.Pump, true)
+	}
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.EquipmentBucket:
+		atos, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, a := range atos {
+			if a.Pump == id && !a.IsMacro {
+				deps = append(deps, a.Name)
+			}
+		}
+		return deps, nil
+	case storage.InletBucket:
+		atos, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, a := range atos {
+			if a.Inlet == id {
+				deps = append(deps, a.Name)
+			}
+		}
+		return deps, nil
+	case storage.MacroBucket:
+		atos, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, a := range atos {
+			if a.IsMacro && a.Pump == id {
+				deps = append(deps, a.Name)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown dependency type:%s", depType)
 	}
 }

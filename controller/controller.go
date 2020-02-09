@@ -13,6 +13,7 @@ type Subsystem interface {
 	Start()
 	Stop()
 	On(string, bool) error
+	InUse(string, string) ([]string, error)
 }
 
 type Controller interface {

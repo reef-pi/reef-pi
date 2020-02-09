@@ -52,7 +52,6 @@ func (r *ReefPi) loadTimerSubsystem(eqs *equipment.Controller, m controller.Subs
 	}
 	t := timer.New(r.Controller(), eqs, m)
 	r.subsystems[timer.Bucket] = t
-	eqs.AddCheck(t.IsEquipmentInUse)
 	return nil
 }
 
@@ -71,7 +70,6 @@ func (r *ReefPi) loadTemperatureSubsystem(eqs *equipment.Controller) error {
 		return err
 	}
 	r.subsystems[temperature.Bucket] = temp
-	eqs.AddCheck(temp.IsEquipmentInUse)
 	return nil
 }
 
@@ -90,7 +88,6 @@ func (r *ReefPi) loadATOSubsystem(eqs *equipment.Controller) error {
 		return err
 	}
 	r.subsystems[ato.Bucket] = a
-	eqs.AddCheck(a.IsEquipmentInUse)
 	return nil
 }
 
