@@ -22,3 +22,4 @@ script:
   - make deb
   - chmod +x ./build/smoke.sh
   - ./build/smoke.sh
+  - node front-end/test/smoke.js http://localhost:80/
