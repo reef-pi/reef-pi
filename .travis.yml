@@ -21,4 +21,6 @@ script:
   - make go
   - make deb
   - chmod +x ./build/smoke.sh
+  - echo $(date)
   - ./build/smoke.sh
+  - echo $(date)
