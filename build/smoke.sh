@@ -4,4 +4,4 @@ set -e
 
 make bin
 ./bin/reef-pi &
-npm run smoke
+node front-end/test/smoke.js
