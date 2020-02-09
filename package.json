@@ -66,6 +66,7 @@
     "sass-loader": "8.0.0",
     "standard": "14.3.1",
     "style-loader": "1.1.2",
+    "wait-on": "^4.0.0",
     "webpack": "4.41.5",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.10.2",
@@ -84,7 +85,8 @@
     "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage",
     "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
-    "smoke": "node front-end/test/smoke.js"
+    "smoke": "node front-end/test/smoke.js",
+    "smoke-ci": "wait-on http-get://localhost:8080/ && npm run smoke"
   },
   "repository": {
     "type": "git",

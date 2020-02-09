@@ -3,7 +3,7 @@ go:
   - "1.13"
 before_install:
   - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  - sudo  apt-get install -y nodejs
+  - sudo apt-get install -y nodejs
   - sudo npm install -g npm
 script:
   - ./build/ci.sh
@@ -20,3 +20,4 @@ script:
   - make clean
   - make go
   - make deb
+  - ./build/smoke.sh
