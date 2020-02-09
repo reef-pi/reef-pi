@@ -4,14 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strings"
-	"testing"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"strings"
+	"testing"
 )
 
 func TestTimerController(t *testing.T) {
@@ -28,14 +26,11 @@ func TestTimerController(t *testing.T) {
 		Pin:    24,
 		Driver: "rpi",
 	}
-	m := controller.NoopSubsystem()
-	drvrs := drivers.TestDrivers(con.Store())
-	outlets := connectors.NewOutlets(drvrs, con.Store())
-	outlets.DevMode = true
+	outlets := con.DM().Outlets()
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	e := equipment.New(eConfig, outlets, con.Store(), con.Telemetry())
+	e := equipment.New(eConfig, con)
 	e.Setup()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
@@ -54,7 +49,7 @@ func TestTimerController(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to list equipment. Error:", err)
 	}
-	c := New(con, e, m)
+	c := New(con)
 	c.Setup()
 	c.Start()
 	tr := utils.NewTestRouter()
@@ -108,9 +103,6 @@ func TestTimerController(t *testing.T) {
 	if err := tr.Do("POST", "/api/timers/"+j1.ID, body, nil); err != nil {
 		t.Fatal("Failed to update individual timer jobs using api")
 	}
-	if _, err := c.IsEquipmentInUse("1"); err != nil {
-		t.Error(err)
-	}
 	c.Stop()
 	c.Start()
 	c.Stop()
@@ -128,7 +120,6 @@ func TestTimerController(t *testing.T) {
 	r := EquipmentRunner{
 		equipment: e,
 		target:    uq,
-		eq:        eq,
 	}
 	r.Run()
 	j.Day = "X"

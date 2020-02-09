@@ -24,11 +24,11 @@ type Controller struct {
 	c        controller.Controller
 }
 
-func New(devMode bool, c controller.Controller, inlets *connectors.Inlets) (*Controller, error) {
+func New(devMode bool, c controller.Controller) (*Controller, error) {
 	con := &Controller{
 		devMode:  devMode,
 		mu:       &sync.Mutex{},
-		inlets:   inlets,
+		inlets:   c.DM().Inlets(),
 		quitters: make(map[string]chan struct{}),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,

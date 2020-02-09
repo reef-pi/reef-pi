@@ -30,10 +30,10 @@ type Controller struct {
 	jacks    *connectors.Jacks
 }
 
-func New(devMode bool, c controller.Controller, jacks *connectors.Jacks) (*Controller, error) {
+func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		DevMode:  devMode,
-		jacks:    jacks,
+		jacks:    c.DM().Jacks(),
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),

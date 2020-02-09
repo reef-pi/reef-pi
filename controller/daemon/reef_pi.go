@@ -2,37 +2,27 @@ package daemon
 
 import (
 	"fmt"
-	"log"
-	"time"
-
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
+	"time"
 )
 
 const Bucket = storage.ReefPiBucket
 
 type ReefPi struct {
-	store   storage.Store
-	jacks   *connectors.Jacks
-	outlets *connectors.Outlets
-	inlets  *connectors.Inlets
-	ais     *connectors.AnalogInputs
-	drivers *drivers.Drivers
-
-	subsystems map[string]controller.Subsystem
+	version    string
+	a          utils.Auth
+	store      storage.Store
 	settings   settings.Settings
 	telemetry  telemetry.Telemetry
-	version    string
 	h          telemetry.HealthChecker
-	bus        i2c.Bus
-	a          utils.Auth
+	dm         *device_manager.DeviceManager
+	subsystems map[string]controller.Subsystem
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -52,49 +42,15 @@ func New(version, database string) (*ReefPi, error) {
 		s = initialSettings
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
-
 	tele := telemetry.Initialize(Bucket, store, fn, s.Prometheus)
-	mbus := i2c.MockBus()
-	mbus.Bytes = make([]byte, 2) // ph sensor expects two bytes
-	bus := i2c.Bus(mbus)
-	if !s.Capabilities.DevMode {
-		b, err := i2c.New()
-		if err != nil {
-			log.Println("ERROR: Failed to initialize i2c. Error:", err)
-			logError(store, "device-i2c", "Failed to initialize i2c. Error:"+err.Error())
-		} else {
-			bus = b
-		}
-	}
-	if s.RPI_PWMFreq <= 0 {
-		log.Println("ERROR: Invalid  RPI PWM frequency:", s.RPI_PWMFreq, " falling back on default 100Hz")
-		s.RPI_PWMFreq = 100
-	}
-
-	drvrs, err := drivers.NewDrivers(s, bus, store)
-	if err != nil {
-		log.Println("ERROR: failed to initialize drivers. Error:", err)
-		logError(store, "driver-init", err.Error())
-	}
-
-	jacks := connectors.NewJacks(drvrs, store)
-	outlets := connectors.NewOutlets(drvrs, store)
-	inlets := connectors.NewInlets(drvrs, store)
-	ais := connectors.NewAnalogInputs(drvrs, store)
-
 	r := &ReefPi{
-		bus:        bus,
 		store:      store,
 		settings:   s,
 		telemetry:  tele,
-		jacks:      jacks,
-		outlets:    outlets,
-		inlets:     inlets,
-		ais:        ais,
-		drivers:    drvrs,
 		subsystems: make(map[string]controller.Subsystem),
 		version:    version,
 		a:          utils.NewAuth(Bucket, store),
+		dm:         device_manager.New(s, store),
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
@@ -106,16 +62,7 @@ func (r *ReefPi) Start() error {
 	if err := r.setUpErrorBucket(); err != nil {
 		return err
 	}
-	if err := r.jacks.Setup(); err != nil {
-		return err
-	}
-	if err := r.outlets.Setup(); err != nil {
-		return err
-	}
-	if err := r.inlets.Setup(); err != nil {
-		return err
-	}
-	if err := r.ais.Setup(); err != nil {
+	if err := r.dm.Setup(); err != nil {
 		return err
 	}
 	if err := r.loadSubsystems(); err != nil {
@@ -144,10 +91,9 @@ func (r *ReefPi) Stop() error {
 	if r.settings.Capabilities.HealthCheck {
 		r.h.Stop()
 	}
-	r.store.Close()
-	r.bus.Close()
-	r.drivers.Close()
+	r.dm.Close()
 	log.Println("reef-pi is shutting down")
+	r.store.Close()
 	return nil
 }
 
@@ -159,11 +105,14 @@ func (r *ReefPi) Subsystem(s string) (controller.Subsystem, error) {
 	return sub, nil
 }
 
-func (r *ReefPi) Controller() controller.Controller {
-	return controller.NewController(
-		r.telemetry,
-		r.store,
-		r.LogError,
-		r.Subsystem,
-	)
+func (r *ReefPi) DM() *device_manager.DeviceManager {
+	return r.dm
+}
+
+func (r *ReefPi) Store() storage.Store {
+	return r.store
+}
+
+func (r *ReefPi) Telemetry() telemetry.Telemetry {
+	return r.telemetry
 }

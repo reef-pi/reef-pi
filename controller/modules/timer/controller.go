@@ -8,7 +8,6 @@ import (
 	cron "github.com/robfig/cron/v3"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
@@ -17,39 +16,26 @@ const _cronParserSpec = cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.
 type Controller struct {
 	runner    *cron.Cron
 	cronIDs   map[string]cron.EntryID
-	equipment *equipment.Controller
+	equipment controller.Subsystem
 	c         controller.Controller
 	macro     controller.Subsystem
 }
 
-func New(c controller.Controller, e *equipment.Controller, macro controller.Subsystem) *Controller {
+func New(c controller.Controller) *Controller {
 	return &Controller{
-		cronIDs:   make(map[string]cron.EntryID),
-		runner:    cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
-		equipment: e,
-		c:         c,
-		macro:     macro,
+		cronIDs: make(map[string]cron.EntryID),
+		runner:  cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
+		c:       c,
 	}
-}
-
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	jobs, err := c.List()
-	if err != nil {
-		return false, err
-	}
-	for _, j := range jobs {
-		if j.Type == "equipment" {
-			var ue UpdateEquipment
-			if err := json.Unmarshal(j.Target, &ue); err != nil {
-				return false, err
-			}
-			return ue.ID == id, nil
-		}
-	}
-	return false, nil
 }
 
 func (c *Controller) Setup() error {
+	if macro, err := c.c.Subsystem(storage.MacroBucket); err == nil {
+		c.macro = macro
+	}
+	if eq, err := c.c.Subsystem(storage.EquipmentBucket); err == nil {
+		c.equipment = eq
+	}
 	return c.c.Store().CreateBucket(Bucket)
 }
 

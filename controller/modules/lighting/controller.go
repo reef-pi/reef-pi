@@ -2,15 +2,12 @@ package lighting
 
 import (
 	"fmt"
-	"log"
-	"sync"
-	"time"
-
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"log"
+	"sync"
+	"time"
 )
 
 const Bucket = storage.LightingBucket
@@ -34,11 +31,11 @@ type Controller struct {
 	lights  map[string]*Light
 }
 
-func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
+func New(conf Config, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		Mutex:  sync.Mutex{},
 		c:      c,
-		jacks:  jacks,
+		jacks:  c.DM().Jacks(),
 		config: conf,
 		stopCh: make(chan struct{}),
 		lights: make(map[string]*Light),

@@ -2,13 +2,12 @@ package equipment
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/kidoman/embd"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"log"
 )
 
 type Config struct {
@@ -21,12 +20,12 @@ type Controller struct {
 	outlets   *connectors.Outlets
 }
 
-func New(config Config, outlets *connectors.Outlets, store storage.Store, telemetry telemetry.Telemetry) *Controller {
+func New(config Config, c controller.Controller) *Controller {
 	return &Controller{
 		config:    config,
-		telemetry: telemetry,
-		store:     store,
-		outlets:   outlets,
+		telemetry: c.Telemetry(),
+		store:     c.Store(),
+		outlets:   c.DM().Outlets(),
 	}
 }
 

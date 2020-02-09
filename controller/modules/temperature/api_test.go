@@ -7,7 +7,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -19,13 +18,11 @@ func TestTemperatureAPI(t *testing.T) {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	conf := equipment.Config{DevMode: true}
-	drvrs := drivers.TestDrivers(con.Store())
-	outlets := connectors.NewOutlets(drvrs, con.Store())
-	outlets.DevMode = true
+	outlets := con.DM().Outlets()
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipment.New(conf, outlets, con.Store(), con.Telemetry())
+	eqs := equipment.New(conf, con)
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}
@@ -47,7 +44,7 @@ func TestTemperatureAPI(t *testing.T) {
 	if err := eqs.Create(eq); err != nil {
 		t.Error(err)
 	}
-	c, err := New(true, con, eqs)
+	c, err := New(true, con)
 	if err != nil {
 		t.Fatal(err)
 	}

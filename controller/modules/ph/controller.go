@@ -23,12 +23,12 @@ type Controller struct {
 	ais      *connectors.AnalogInputs
 }
 
-func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *Controller {
+func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
 		quitters: make(map[string]chan struct{}),
 		c:        c,
 		devMode:  devMode,
-		ais:      ais,
+		ais:      c.DM().AnalogInputs(),
 		statsMgr: c.Telemetry().NewStatsManager(ReadingsBucket),
 	}
 }
