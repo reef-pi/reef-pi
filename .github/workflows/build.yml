@@ -1,12 +1,11 @@
-name: Build
+name: Build and Package
 on:
   pull_request:
   push:
     branches:
       - master
 jobs:
-  build:
-    name: build
+  BuildPackage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
