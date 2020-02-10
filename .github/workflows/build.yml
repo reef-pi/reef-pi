@@ -1,0 +1,59 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  build-api:
+    name: build-api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13.6
+      - name: Test
+        run: ./build/ci.sh
+      - name: Coverage
+        run: bash <(curl -s https://codecov.io/bash) -cF go
+      - name: Make go
+        run: make go
+      - name: Make deb
+        run: make deb
+  build-ui:
+    name: build-ui
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Use Node.js 10.16.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.16.0
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm i
+      - name: Build
+        run: npm run build
+      - name: Build
+        run: npm run js-lint
+      - name: Sass lint
+        run: npm run sass-lint
+      - name: Test
+        run: npm run test
+      - name: Coverage check
+        run: bash <(curl -s https://codecov.io/bash) -cF javascript
