@@ -10,6 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/cache@v1
+        id: cache-gem
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - name: Install Ruby Dependencies
+        if: steps.cache-gem.outputs.cache-hit != 'true'
+        run: bundle install
+      - uses: actions/cache@v1
         id: cache-node
         with:
           path: node_modules
@@ -37,7 +50,7 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash) -cF go
       - name: Make go
         run: make go
-      - name: Install Dependencies
+      - name: Install Node Dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm i
       - name: Build
