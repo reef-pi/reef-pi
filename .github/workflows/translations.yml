@@ -6,16 +6,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 11.12
+      - name: Use Node.js 10.16.0
         uses: actions/setup-node@v1
         with:
-          node-version: 11.12
+          node-version: 10.16.0
       - uses: actions/cache@v1
         with:
           path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-10-node_modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node_modules-
+            ${{ runner.os }}-10-node_modules-
       - name: Install
         run: npm i
       - name: Check Translations
