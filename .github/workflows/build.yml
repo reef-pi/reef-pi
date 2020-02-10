@@ -1,4 +1,4 @@
-name: Build and Package
+name: Build-Package
 on:
   pull_request:
   push:
@@ -6,6 +6,7 @@ on:
       - master
 jobs:
   BuildPackage:
+    name: build-package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -52,4 +53,3 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash) -cF javascript
       - name: Package
         runs: make deb
-
