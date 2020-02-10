@@ -6,7 +6,6 @@ on:
       - master
 jobs:
   BuildPackage:
-    name: build-package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -52,4 +51,4 @@ jobs:
       - name: Coverage check
         run: bash <(curl -s https://codecov.io/bash) -cF javascript
       - name: Package
-        runs: make deb
+        run: make deb

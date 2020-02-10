@@ -1,6 +1,9 @@
 name: Check translation status
-on: [push, pull_request]
-
+on:
+  pull_request:
+  push:
+    branches:
+      - master
 jobs:
   Translations:
     runs-on: ubuntu-latest
