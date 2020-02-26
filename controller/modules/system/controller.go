@@ -46,3 +46,5 @@ func (c *Controller) Setup() error {
 func (c *Controller) On(id string, on bool) error {
 	return nil
 }
+
+func (c *Controller) InUse(_, _ string) ([]string, error) { return []string{}, nil }

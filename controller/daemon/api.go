@@ -1,15 +1,12 @@
 package daemon
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/gorilla/mux"
-
-	"os"
-
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
+	"net/http"
+	"os"
 )
 
 var DefaultCredentials = utils.Credentials{
@@ -68,11 +65,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
 	}
-	r.outlets.LoadAPI(router)
-	r.inlets.LoadAPI(router)
-	r.jacks.LoadAPI(router)
-	r.ais.LoadAPI(router)
-	r.drivers.LoadAPI(router)
+	r.dm.LoadAPI(router)
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}

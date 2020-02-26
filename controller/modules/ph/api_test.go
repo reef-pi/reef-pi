@@ -3,14 +3,10 @@ package ph
 import (
 	"bytes"
 	"encoding/json"
-	"testing"
-
 	"github.com/reef-pi/hal"
-
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"testing"
 )
 
 func TestPhAPI(t *testing.T) {
@@ -19,9 +15,7 @@ func TestPhAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	drvrs := drivers.TestDrivers(r.Store())
-	ais := connectors.NewAnalogInputs(drvrs, r.Store())
-	c := New(true, r, ais)
+	c := New(true, r)
 	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
 		t.Error(err)

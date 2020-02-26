@@ -1,15 +1,13 @@
 package lighting
 
 import (
-	"log"
-	"sync"
-	"time"
-
-	"github.com/reef-pi/rpi/i2c"
-
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"log"
+	"sync"
+	"time"
 )
 
 const Bucket = storage.LightingBucket
@@ -33,11 +31,11 @@ type Controller struct {
 	lights  map[string]*Light
 }
 
-func New(conf Config, c controller.Controller, jacks *connectors.Jacks, bus i2c.Bus) (*Controller, error) {
+func New(conf Config, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		Mutex:  sync.Mutex{},
 		c:      c,
-		jacks:  jacks,
+		jacks:  c.DM().Jacks(),
 		config: conf,
 		stopCh: make(chan struct{}),
 		lights: make(map[string]*Light),
@@ -100,5 +98,24 @@ func (c *Controller) On(id string, on bool) error {
 func (c *Controller) syncLights() {
 	for _, light := range c.lights {
 		c.syncLight(light)
+	}
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.JackBucket:
+		lights, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, l := range lights {
+			if l.Jack == id {
+				deps = append(deps, id)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown dep type:%s", depType)
 	}
 }
