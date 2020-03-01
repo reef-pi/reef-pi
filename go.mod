@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/sessions v1.2.0
 	github.com/kidoman/embd v0.0.0-20170508013040-d3d8c0c5c68d
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/prometheus/client_golang v1.4.0
+	github.com/prometheus/client_golang v1.4.1
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20191124084039-bd164636cb55
 	github.com/reef-pi/hal v0.0.0-20191003050343-8c77d92fe39a
