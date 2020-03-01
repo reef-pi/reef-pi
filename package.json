@@ -56,7 +56,7 @@
     "react-icons": "3.8.0",
     "react-images": "1.0.0",
     "react-redux": "^5.1.2",
-    "react-test-renderer": "16.12.0",
+    "react-test-renderer": "16.13.0",
     "react-toggle-switch": "3.0.4",
     "recharts": "1.8.5",
     "redux": "^4.0.4",
