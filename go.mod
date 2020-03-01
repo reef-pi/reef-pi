@@ -7,7 +7,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
-	github.com/gorilla/mux v1.7.3
+	github.com/gorilla/mux v1.7.4
 	github.com/gorilla/sessions v1.2.0
 	github.com/kidoman/embd v0.0.0-20170508013040-d3d8c0c5c68d
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
