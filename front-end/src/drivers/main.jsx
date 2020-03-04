@@ -16,8 +16,8 @@ class drivers extends React.Component {
     this.props.fetchDriverOptions()
   }
 
-  validate(payload) {
-    //This doesn't seem to belong in redux
+  validate (payload) {
+    // This doesn't seem to belong in redux
     // since it isn't really part of app state.
     // It's here since I'm not sure where else it should belong.
     return fetch('api/drivers/validate', {
@@ -42,8 +42,8 @@ class drivers extends React.Component {
       items.push(
         <Driver
           key={d.id}
-          driver = {d}
-          validate = {this.validate}
+          driver={d}
+          validate={this.validate}
           driverOptions={this.props.driverOptions}
           remove={this.props.delete}
           update={this.props.update}
@@ -61,10 +61,11 @@ class drivers extends React.Component {
             {this.list()}
           </div>
         </div>
-        <New drivers={this.props.drivers}
+        <New
+          drivers={this.props.drivers}
           hook={this.props.create}
           driverOptions={this.props.driverOptions}
-          validate = {this.validate}
+          validate={this.validate}
         />
       </div>
     )

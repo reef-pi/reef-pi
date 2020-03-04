@@ -32,7 +32,7 @@ export default class New extends React.Component {
     }
   }
 
-  handleAdd (values, {setErrors}) {
+  handleAdd (values, { setErrors }) {
     const payload = {
       name: values.name,
       type: values.type,
@@ -42,7 +42,7 @@ export default class New extends React.Component {
     const handleToggle = this.handleToggle
     this.props.validate(payload)
       .then(response => {
-        if (response.status == 400) {
+        if (response.status === 400) {
           response.json().then(data => {
             const config = {}
             Object.keys(data).map(item => {
@@ -53,8 +53,7 @@ export default class New extends React.Component {
             data.config = config
             setErrors(data)
           })
-        }
-        else {
+        } else {
           hook(payload)
           handleToggle()
         }

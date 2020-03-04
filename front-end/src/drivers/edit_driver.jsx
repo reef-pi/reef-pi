@@ -38,33 +38,36 @@ const EditDriver = ({
   }
 
   const driverConfig = () => {
-    let selectedType = driverOptions[values.type]
-    if (selectedType == null)
-      return null
+    const selectedType = driverOptions[values.type]
+    if (selectedType == null) { return null }
     const params = []
 
     selectedType.sort((a, b) => { return parseInt(a.order) < parseInt(b.order) })
       .forEach((item) => {
-        let param = <div key={item.name} className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor={'config.' + item.name.toLowerCase()}>{item.name}</label>
-            <Field
-              name={'config.' + item.name.toLowerCase()}
-              disabled={readOnly}
-              placeholder={item.default}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.' + item.name.toLowerCase(), touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name={'config.' + item.name.toLowerCase()} />
+        const param = (
+          <div key={item.name} className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor={'config.' + item.name.toLowerCase()}>{item.name}</label>
+              <Field
+                name={'config.' + item.name.toLowerCase()}
+                disabled={readOnly}
+                placeholder={item.default}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('config.' + item.name.toLowerCase(), touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name={'config.' + item.name.toLowerCase()} />
+            </div>
           </div>
-        </div>
+        )
         params.push(param)
       })
 
-    return <div className={classNames('row', { 'd-none': readOnly })}>
-      {params}
-    </div>
+    return (
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        {params}
+      </div>
+    )
   }
 
   const typeOptions = () => {
@@ -102,7 +105,7 @@ const EditDriver = ({
               name='type'
               component='select'
               onChange={driverTypeChangeHandler}
-              disabled={mode==='edit' || readOnly}
+              disabled={mode === 'edit' || readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}

@@ -31,17 +31,16 @@ export default class Driver extends React.Component {
       }.bind(this))
   }
 
-  handleEdit() {
+  handleEdit () {
     if (!this.state.edit) {
       this.setState({
         edit: true,
         lbl: i18next.t('save')
       })
-      return
     }
   }
 
-  handleSave (values, {setErrors}) {
+  handleSave (values, { setErrors }) {
     const payload =
     {
       id: this.props.driver.id,
@@ -52,7 +51,7 @@ export default class Driver extends React.Component {
 
     this.props.validate(payload)
       .then(response => {
-        if (response.status == 400) {
+        if (response.status === 400) {
           response.json().then(data => {
             const config = {}
             Object.keys(data).map(item => {
@@ -63,25 +62,25 @@ export default class Driver extends React.Component {
             data.config = config
             setErrors(data)
           })
-        }
-        else {
+        } else {
           this.props.update(this.props.driver.id, payload)
           this.setState({
             edit: false,
-            lbl: i18next.t('edit'),
+            lbl: i18next.t('edit')
           })
         }
       })
   }
 
   editUI () {
-    return <DriverForm
-      data={this.props.driver}
-      mode='edit'
-      onSubmit={this.handleSave}
-      driverOptions={this.props.driverOptions}
-    />
-
+    return (
+      <DriverForm
+        data={this.props.driver}
+        mode='edit'
+        onSubmit={this.handleSave}
+        driverOptions={this.props.driverOptions}
+      />
+    )
   }
 
   ui () {
@@ -100,12 +99,14 @@ export default class Driver extends React.Component {
   render () {
     let btnEdit = null
     if (!this.state.edit) {
-      btnEdit = <input
-        type='button'
-        className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-        value={this.state.lbl}
-        onClick={this.handleEdit}
-      />
+      btnEdit = (
+        <input
+          type='button'
+          className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+          value={this.state.lbl}
+          onClick={this.handleEdit}
+        />
+      )
     }
 
     return (

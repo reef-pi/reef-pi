@@ -15,7 +15,7 @@ export const fetchDrivers = () => {
     }))
 }
 
-export const fetchDriverOptions = ()  => {
+export const fetchDriverOptions = () => {
   return (
     reduxGet({
       url: '/api/drivers/options',
