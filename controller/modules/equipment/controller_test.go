@@ -8,7 +8,6 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -16,8 +15,7 @@ func TestEquipmentController(t *testing.T) {
 	t.Parallel()
 
 	con, err := controller.TestController()
-	store, err := storage.TestDB()
-	defer store.Close()
+	defer con.Store().Close()
 
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
@@ -141,9 +139,7 @@ func TestUpdateEquipment(t *testing.T) {
 	}
 
 	con, err := controller.TestController()
-
-	store, err := storage.TestDB()
-	defer store.Close()
+	defer con.Store().Close()
 
 	if err != nil {
 		t.Fatal("Failed to create test con. Error:", err)
