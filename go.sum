@@ -90,6 +90,8 @@ github.com/reef-pi/hal v0.0.0-20200226044219-163a37bab6d9 h1:OyeCPwOa5pUycf6zG/5
 github.com/reef-pi/hal v0.0.0-20200226044219-163a37bab6d9/go.mod h1:ymcJ0AbYfWXT1vyAbXOjKtWaFdCv1HHYmXDMWxJSWSM=
 github.com/reef-pi/rpi v0.0.0-20200229061810-6283c62b9e14 h1:N7F7b8D1bGUsePsEjJnqMKfjXpHViHz3egL0wXJgreM=
 github.com/reef-pi/rpi v0.0.0-20200229061810-6283c62b9e14/go.mod h1:5PNbwDvPaOVz4YBU0Lug4ynE+sI9Ma5tmJxBBvvJohI=
+github.com/reef-pi/rpi v0.0.0-20200302080122-e460902484d9 h1:LdRz76SZs9Qa+dEEnG07St8+nZ5SGf06Vd6ir45TSm8=
+github.com/reef-pi/rpi v0.0.0-20200302080122-e460902484d9/go.mod h1:5PNbwDvPaOVz4YBU0Lug4ynE+sI9Ma5tmJxBBvvJohI=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/shirou/gopsutil v2.19.11+incompatible h1:lJHR0foqAjI4exXqWsU3DbH7bX1xvdhGdnXTIARA9W4=
