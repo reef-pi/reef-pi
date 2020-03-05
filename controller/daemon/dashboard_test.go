@@ -8,6 +8,8 @@ import (
 
 func TestDashboard(t *testing.T) {
 	store, err := storage.TestDB()
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

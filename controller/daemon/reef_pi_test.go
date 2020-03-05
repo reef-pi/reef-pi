@@ -16,6 +16,8 @@ func TestReefPi(t *testing.T) {
 	}
 	conf.Database = "reef-pi.db"
 	store, err := storage.NewStore(conf.Database)
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -3,16 +3,20 @@ package equipment
 import (
 	"bytes"
 	"encoding/json"
+	"strings"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"strings"
-	"testing"
 )
 
 func TestEquipmentController(t *testing.T) {
 	t.Parallel()
+
 	con, err := controller.TestController()
+	defer con.Store().Close()
+
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
@@ -133,7 +137,10 @@ func TestUpdateEquipment(t *testing.T) {
 	config := Config{
 		DevMode: true,
 	}
+
 	con, err := controller.TestController()
+	defer con.Store().Close()
+
 	if err != nil {
 		t.Fatal("Failed to create test con. Error:", err)
 	}

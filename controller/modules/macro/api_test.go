@@ -9,6 +9,8 @@ import (
 func TestSubsystem(t *testing.T) {
 	t.Parallel()
 	c, err := controller.TestController()
+	defer c.Store().Close()
+
 	if err != nil {
 		t.Error(err)
 	}

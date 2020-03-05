@@ -8,10 +8,10 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func testH() (*Homeostasis, error) {
+func testH() (*Homeostasis, storage.Store, error) {
 	store, err := storage.TestDB()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	config := HomeoStasisConfig{
 		Name:       "test",
@@ -28,11 +28,12 @@ func testH() (*Homeostasis, error) {
 		eqs:    NoopSubsystem(),
 		macros: NoopSubsystem(),
 	}
-	return &h, nil
+	return &h, store, nil
 }
 
 func TestHomestasis(t *testing.T) {
-	h, err := testH()
+	h, store, err := testH()
+	defer store.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,10 +72,13 @@ func TestHomestasis(t *testing.T) {
 	if o.Downer != 2 {
 		t.Error("Downer should not increase when value is below range")
 	}
+
 }
 
 func TestHysteresis(t *testing.T) {
-	h, err := testH()
+	h, store, err := testH()
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

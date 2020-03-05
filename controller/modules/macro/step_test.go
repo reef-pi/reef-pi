@@ -12,6 +12,8 @@ func TestStep(t *testing.T) {
 		Config: []byte("{}"),
 	}
 	c, err := controller.TestController()
+	defer c.Store().Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

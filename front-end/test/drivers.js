@@ -10,6 +10,8 @@ module.exports = {
       .wait(500)
       .select('.add-driver [name*="type"]', 'pca9685')
       .wait(500)
+      .type('.add-driver [name*="config.address"]', '64')
+      .type('.add-driver [name*="config.frequency"]', '600')
       .click('.add-driver input[type*="submit"]')
       .wait(1000)
 
@@ -19,6 +21,7 @@ module.exports = {
       .wait(500)
       .select('.add-driver [name*="type"]', 'ph-board')
       .wait(500)
+      .type('.add-driver [name*="config.address"]', '64')
       .click('.add-driver input[type*="submit"]')
       .wait(1500)
     return function () {
