@@ -60,7 +60,7 @@ ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
 ato:threshold_value,Limiet moet een nummer zijn
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
 ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
-ato:warning_delete,Deze actie verwijderd
+ato:warn_delete,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuratie

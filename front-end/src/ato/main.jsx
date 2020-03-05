@@ -18,6 +18,7 @@ class main extends React.Component {
     }
     this.probeList = this.probeList.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount () {
@@ -48,7 +49,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('temperature:warn_delete')} {probe.name}.
+          {i18next.t('ato:warn_delete')} {probe.name}.
         </p>
       </div>
     )

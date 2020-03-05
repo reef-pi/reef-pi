@@ -24,7 +24,7 @@ const EditAto = ({
     if (!values.enable) {
       return
     }
-    if (values.id === "") { // new ATO
+    if (values.id === '') { // new ATO
       return
     }
     return (
