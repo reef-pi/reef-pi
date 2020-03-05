@@ -60,7 +60,7 @@ ato:threshold_required,Threshold é Obrigatório when notification is enabled
 ato:threshold_value,Threshold tem que ser um número
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
-ato:warning_delete,Esta acção vái ser removida
+ato:warn_delete,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuração

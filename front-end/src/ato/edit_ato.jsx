@@ -24,6 +24,9 @@ const EditAto = ({
     if (!values.enable) {
       return
     }
+    if (values.id === '') { // new ATO
+      return
+    }
     return (
       <div className='row'>
         <ATOChart ato_id={values.id} width={500} height={300} ato_name={values.name} />

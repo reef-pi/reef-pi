@@ -62,7 +62,7 @@ ato:threshold_required,Threshold is required when notification is enabled
 ato:threshold_value,Threshold must be a number
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ato:warning_delete,This action will delete
+ato:warn_delete,This action will delete
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuration
