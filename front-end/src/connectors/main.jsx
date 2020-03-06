@@ -8,18 +8,18 @@ export default class Connectors extends React.Component {
   render () {
     return (
       <div className='container'>
-        <div className='row'>
+        <div className='row inlets'>
           <Inlets />
           <hr />
         </div>
-        <div className='row'>
+        <div className='row outlets'>
           <Outlets />
           <hr />
         </div>
-        <div className='row'>
+        <div className='row jacks'>
           <Jacks />
         </div>
-        <div className='row'>
+        <div className='row analog-inputs'>
           <AnalogInputs />
         </div>
       </div>
