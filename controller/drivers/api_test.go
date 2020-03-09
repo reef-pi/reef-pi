@@ -83,14 +83,8 @@ func TestDrivers_API(t *testing.T) {
 		t.Error("Failed to delete driver using api. Error:", err)
 	}
 
-	options, err := d.ListOptions()
-
+	_, err := d.ListOptions()
 	if err != nil {
 		t.Error("Failed to list options")
 	}
-
-	if len(options) != 9 {
-		t.Error("There should be 9 driver options, but only found ", len(options))
-	}
-
 }

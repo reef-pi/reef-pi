@@ -9,6 +9,7 @@ import (
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
+	"github.com/reef-pi/drivers/shelly"
 	"github.com/reef-pi/drivers/tplink"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
@@ -25,6 +26,8 @@ var driversMap = map[string]hal.DriverFactory{
 	"hs300":        tplink.HS300Factory(),
 	"file-analog":  file.AnalogFactory(),
 	"file-digital": file.DigitalFactory(),
+	"shelly1":      shelly.Shelly1Adapter(false),
+	"shelly2.5":    shelly.Shelly25Adapter(false),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
