@@ -129,14 +129,20 @@ func (m *mgr) Update(id string, metric Metric) {
 		m.Unlock()
 		return
 	}
+	var move bool
 	stats.Current.Value = metric
 	stats.Current = stats.Current.Next()
-	m1, move := stats.Historical.Value.(Metric).Rollup(metric)
-	if move {
-		m.store.Update(m.bucket, id, stats)
-		stats.Historical = stats.Historical.Next()
+	if stats.Historical.Value == nil {
+		stats.Historical.Value = metric
+	} else {
+		m1, moved := stats.Historical.Value.(Metric).Rollup(metric)
+		move = moved
+		if moved {
+			m.store.Update(m.bucket, id, stats)
+			stats.Historical = stats.Historical.Next()
+		}
+		stats.Historical.Value = m1
 	}
-	stats.Historical.Value = m1
 	m.Lock()
 	m.inMemory[id] = stats
 	m.Unlock()

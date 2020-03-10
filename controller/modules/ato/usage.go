@@ -33,6 +33,9 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 		log.Println("ERROR: ato-subsystem. Failed to get usage statistics for ato:", a.Name, "Error:", err)
 		return
 	}
+	if len(resp.Historical) < 1 {
+		return
+	}
 	m := resp.Historical[0]
 	u, ok := m.(Usage)
 	if !ok {
