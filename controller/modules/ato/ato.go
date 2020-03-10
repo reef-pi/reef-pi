@@ -67,10 +67,7 @@ func (c *Controller) Create(a ATO) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	usage := Usage{
-		Time: telemetry.TeleTime(time.Now()),
-	}
-	c.statsMgr.Update(a.ID, usage)
+	c.statsMgr.Initialize(a.ID)
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit

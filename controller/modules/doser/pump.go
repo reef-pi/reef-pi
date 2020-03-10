@@ -35,6 +35,7 @@ func (c *Controller) Create(p Pump) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	c.statsMgr.Initialize(p.ID)
 	if p.Regiment.Enable {
 		return c.addToCron(p)
 	}

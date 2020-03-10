@@ -89,6 +89,7 @@ func (c *Controller) Create(p Probe) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	c.statsMgr.Initialize(p.ID)
 	if p.Enable {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})

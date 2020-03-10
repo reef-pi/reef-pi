@@ -31,6 +31,7 @@ type StatsOnDisk struct {
 
 type StatsManager interface {
 	Get(string) (StatsResponse, error)
+	Initialize(string) error
 	Load(string, func(json.RawMessage) interface{}) error
 	Save(string) error
 	Update(string, Metric)
@@ -144,6 +145,12 @@ func (m *mgr) Update(id string, metric Metric) {
 	}
 }
 
+func (m *mgr) Initialize(id string) error {
+	m.Lock()
+	m.inMemory[id] = m.NewStats()
+	m.Unlock()
+	return nil
+}
 func (m *mgr) Delete(id string) error {
 	m.Lock()
 	defer m.Unlock()
