@@ -43,7 +43,7 @@ func (c *Controller) Start() {
 		return
 	}
 	for _, eq := range eqs {
-		if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		if err := c.updateOutlet(eq); err != nil {
 			log.Println("ERROR: equipment subsystem: Failed to sync equipment", eq.Name, ". Error:", err)
 		}
 	}
@@ -84,4 +84,15 @@ func (c *Controller) On(id string, b bool) error {
 	}
 	e.On = b
 	return c.Update(id, e)
+}
+func (c *Controller) updateOutlet(eq Equipment) error {
+	if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		return err
+	}
+	m := 0.0
+	if eq.On {
+		m = 1.0
+	}
+	c.telemetry.EmitMetric("equipment_", eq.Name+"", m)
+	return nil
 }
