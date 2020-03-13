@@ -1,51 +1,71 @@
-module.exports = {
-  Create: function (n) {
-    n.click('a#tab-macro')
-      .wait('input#add_macro')
-      .click('input#add_macro')
-      .wait('.add-macro input[name="name"]')
-      .type('.add-macro input[name="name"]', 'Feed Start')
+import { Selector, t } from 'testcafe'
+import { clear, select } from './helpers'
 
-      .click('.add-macro button#add-step')
-      .wait('.add-macro select[name="steps.0.type"] option[value="equipment"]')
-      .select('.add-macro select[name="steps.0.type"]', 'equipment')
-      .wait('.add-macro select[name="steps.0.id"] option[value="1"]')
-      .select('.add-macro select[name="steps.0.id"]', '1')
-      .select('.add-macro select[name="steps.0.on"]', false)
+class Macro {
 
-      .click('.add-macro button#add-step')
-      .wait('.add-macro select[name="steps.1.type"] option[value="wait"]')
-      .select('.add-macro select[name="steps.1.type"]', 'wait')
-      .wait('.add-macro input[name="steps.1.duration"]')
-      .type('.add-macro input[name="steps.1.duration"]', '300')
+  constructor(){
+    this.type = Selector(value => {
+      return document.getElementsByName('steps.' + value + '.type')
+    });
+    this.system = Selector(value => {
+      return document.getElementsByName('steps.' + value + '.id')
+    })
+    this.action = Selector(value => {
+      return document.getElementsByName('steps.' + value + '.on')
+    })
+    this.duration = Selector(value => {
+      return document.getElementsByName('steps.' + value + '.duration')
+    })
+  }
 
-      .click('.add-macro button#add-step')
-      .wait('.add-macro select[name="steps.2.type"] option[value="equipment"]')
-      .select('.add-macro select[name="steps.2.type"]', 'equipment')
-      .wait('.add-macro select[name="steps.2.id"] option[value="1"]')
-      .select('.add-macro select[name="steps.2.id"]', '1')
-      .select('.add-macro select[name="steps.2.on"]', true)
+  async create() {
+    const macro1 = {
+      name: 'Feed Start',
+      steps: [
+        { type: 'equipment', system: 'Return', action: 'Turn Off'},
+        { type: 'wait', duration: 300},
+        { type: 'equipment', system: 'Return', action: 'Turn On'},
+      ]
+    }
 
-      .wait(1500)
-      .click('.add-macro input[type*="submit"]')
-      .wait(500)
+    const macro2 = {
+      name: 'Water Change',
+      steps: [
+        { type: 'equipment', system: 'Return', action: 'Turn Off'},
+        { type: 'wait', duration: 300},
+        { type: 'equipment', system: 'Return', action: 'Turn On'},
+      ]
+    }
 
-      .wait('input#add_macro')
-      .click('input#add_macro')
-      .wait('.add-macro input[name="name"]')
-      .type('.add-macro input[name="name"]', 'Water Change')
+    await t.click('a#tab-macro')
+    await this.addMacro(macro1)
+    await this.addMacro(macro2)
+  }
 
-      .click('.add-macro button#add-step')
-      .wait('.add-macro select[name="steps.0.type"] option[value="equipment"]')
-      .select('.add-macro select[name="steps.0.type"]', 'equipment')
-      .wait('.add-macro select[name="steps.0.id"] option[value="1"]')
-      .select('.add-macro select[name="steps.0.id"]', '1')
-      .select('.add-macro select[name="steps.0.on"]', false)
+  async addMacro(macro) {
+    await t
+    .click('input#add_macro')
+    .typeText('.add-macro input[name="name"]', macro.name)
 
-      .wait(1500)
-      .click('.add-macro input[type*="submit"]')
-    return function () {
-      return ('macro setup completed')
+    for (var idx = 0; idx < macro.steps.length; idx++) {
+      await this.addStep(idx, macro.steps[idx])
+    }
+
+    await t.click('.add-macro input[type*="submit"]')
+  }
+
+  async addStep(idx, step) {
+    await t.click('.add-macro button#add-step')
+    await select(Selector(this.type(idx)), step.type)
+    if (step.system !== undefined) {
+      await select(Selector(this.system(idx)), step.system)
+      await select(Selector(this.action(idx)), step.action)
+    }
+    else {
+      await t.typeText(this.duration(idx), step.duration.toString())
     }
   }
+
 }
+
+export default new Macro()

@@ -1,24 +1,37 @@
-module.exports = {
-  Create: function (n) {
-    n.click('a#tab-ph')
-      .wait('input#add_probe')
-      .click('input#add_probe')
-      .wait(500)
-      .type('.add-probe input[name="name"]', 'Biocube29')
-      .type('.add-probe input[name="period"]', '5')
-      .select('.add-probe [name="analog_input"]', '1')
-      .select('.add-probe [name="control"]', 'macro')
-      .wait(500)
-      .type('.add-probe input[name="lowerThreshold"]', '')
-      .type('.add-probe input[name="lowerThreshold"]', '7.5')
-      .type('.add-probe input[name="upperThreshold"]', '')
-      .type('.add-probe input[name="upperThreshold"]', '8.5')
-      .select('.add-probe [name="lowerFunction"]', '1')
-      .select('.add-probe [name="upperFunction"]', '2')
-      .click('.add-probe input[type*="submit"]')
-      .wait(1000)
-    return function () {
-      return ('pH setup completed')
-    }
+import { Selector, t } from 'testcafe'
+import { select } from './helpers'
+
+class Ph {
+
+  constructor(){
+    this.pinSelect = Selector('.outlets [name*="pin"]')
+    this.pinOption = this.pinSelect.find('option')
+  }
+
+  async create() {
+    await t.click('a#tab-ph')
+    await this.addPh('Biocube29', '5', 'AI1', 'Macro', '7.5', '8.5', 'Feed Start', 'Water Change')
+  }
+
+  async addPh(name, period, analogInput, control, lowerThreshold, upperThreshold, lowerFunction, upperFunction) {
+
+    await t
+    .click('input#add_probe')
+    .typeText('.add-probe input[name="name"]', name)
+    .typeText('.add-probe input[name="period"]', period)
+
+    await select(Selector('.add-probe [name="analog_input"]'), analogInput)
+    await select(Selector('.add-probe [name="control"]'), control)
+
+    await t
+    .typeText('.add-probe input[name="lowerThreshold"]', lowerThreshold)
+    .typeText('.add-probe input[name="upperThreshold"]', upperThreshold)
+
+    await select(Selector('.add-probe [name="lowerFunction"]'), lowerFunction)
+    await select(Selector('.add-probe [name="upperFunction"]'), upperFunction)
+    await t.click('.add-probe input[type*="submit"]')
+
   }
 }
+
+export default new Ph()

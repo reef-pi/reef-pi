@@ -1,29 +1,40 @@
-module.exports = {
-  Create: function (n) {
-    n.click('a#tab-doser')
-      .wait(500)
-      .click('input#add_doser')
-      .wait('.add-doser input[name="name"]')
-      .type('.add-doser input[name="name"]', 'Two Part - CaCO3')
-      .select('.add-doser [name="jack"]', '1')
-      .wait(250)
-      .select('.add-doser [name="pin"]', '0')
-      .type('.add-doser [name="hour"]')
-      .type('.add-doser [name="hour"]', '1,9,17')
-      .type('.add-doser [name="minute"]')
-      .type('.add-doser [name="minute"]', '1')
-      .type('.add-doser [name="second"]')
-      .type('.add-doser [name="second"]', '1')
-      .type('.add-doser [name="duration"]')
-      .type('.add-doser [name="duration"]', '15')
-      .type('.add-doser [name="speed"]')
-      .type('.add-doser [name="speed"]', '50')
-      .wait(1000)
-      .click('.add-doser input[type*="submit"]')
-      .wait(500)
+import { Selector, t } from 'testcafe'
+import { select, setText } from './helpers'
 
-    return function () {
-      return ('Doser created')
-    }
+class Doser {
+
+  constructor(){
+    this.name = Selector('.add-doser input[name="name"]')
+    this.jackSelect = Selector('.add-doser [name="jack"]')
+    this.pinSelect = Selector('.add-doser [name="pin"]')
+    this.hour = Selector('.add-doser [name="hour"]')
+    this.minute = Selector('.add-doser [name="minute"]')
+    this.second = Selector('.add-doser [name="second"]')
+    this.duration = Selector('.add-doser [name="duration"]')
+    this.speed = Selector('.add-doser [name="speed"]')
+    this.submit = Selector('.add-doser input[type*="submit"]')
+  }
+
+  async create() {
+    await t.click('a#tab-doser')
+    await this.addDoser('Two Part - CaCO3', 'J1', '0', '1,9,17', '1', '1', '15', '50')
+  }
+
+  async addDoser(name, jack, pin, hour, minute, second, duration, speed) {
+    await t
+      .click('input#add_doser')
+      .typeText(this.name, name)
+
+    await select(this.jackSelect, jack)
+    await select(this.pinSelect, pin)
+    await setText(this.hour, hour)
+    await setText(this.minute, minute)
+    await setText(this.second, second)
+    await setText(this.duration, duration)
+    await setText(this.speed, speed)
+
+    await t.click(this.submit)
   }
 }
+
+export default new Doser()
