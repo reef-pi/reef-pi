@@ -42,7 +42,7 @@ func (c *Controller) Create(eq Equipment) error {
 	if err := c.store.Create(Bucket, fn); err != nil {
 		return err
 	}
-	if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+	if err := c.updateOutlet(eq); err != nil {
 		log.Println("Failed to configure outlet")
 		return err
 	}
@@ -54,7 +54,7 @@ func (c *Controller) Update(id string, eq Equipment) error {
 	if err := c.store.Update(Bucket, id, eq); err != nil {
 		return err
 	}
-	return c.outlets.Configure(eq.Outlet, eq.On)
+	return c.updateOutlet(eq)
 }
 
 func (c *Controller) Delete(id string) error {
