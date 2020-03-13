@@ -1,57 +1,35 @@
-module.exports = {
-  Create: function (n) {
-    // Add equipment 1
-    n.click('a#tab-equipment')
-      .wait('input#add_equipment')
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'Return')
-      .select('.add-equipment select', '1')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+import { Selector, t } from 'testcafe'
+import { select } from './helpers'
 
-      // Add equipment 2
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'Light')
-      .select('.add-equipment select', '2')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+class Equipment {
 
-      // Add equipment 3
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'Heater')
-      .select('.add-equipment select', '3')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+  constructor(){
+    this.outletSelect = Selector('.add-equipment [name*="outlet"]')
+  }
 
-      // Add equipment 4
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'Skimmer')
-      .select('.add-equipment select', '4')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+  async create() {
 
-      // Add equipment 5
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'Fan')
-      .select('.add-equipment select', '5')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+    await t
+    .click('a#tab-equipment')
 
-      // Add equipment 6
-      .click('input#add_equipment')
-      .wait('.add-equipment [name*="name"]')
-      .type('.add-equipment [name*="name"]', 'ATOPump')
-      .select('.add-equipment select', '6')
-      .click('.add-equipment input[type*="submit"]')
-      .wait(1500)
+    await this.addEquipment('Return', 'O1')
+    await this.addEquipment('Light', 'O2')
+    await this.addEquipment('Heater', 'O3')
+    await this.addEquipment('Skimmer', 'O4')
+    await this.addEquipment('Fan', 'O5')
+    await this.addEquipment('ATO Pump', 'O6')
+  }
 
-    return function () {
-      return ('Equipment created')
-    }
+  async addEquipment(name, outlet) {
+    await t
+    .click('input#add_equipment')
+    .typeText('.add-equipment [name*="name"]', name)
+
+    await select(this.outletSelect, outlet)
+
+    await t
+    .click('.add-equipment input[type*="submit"]')
   }
 }
+
+export default new Equipment()

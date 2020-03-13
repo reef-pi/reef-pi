@@ -1,33 +1,48 @@
-module.exports = {
-  Create: function (n) {
-    n.click('a#tab-ato')
-      .wait(1000)
-      .click('input#add_new_ato_sensor')
-      .wait('.add-ato [name*="name"]')
-      .type('.add-ato [name*="name"]', 'Biocube29')
-      .select('.add-ato [name*="inlet"]', '1')
-      .type('.add-ato [name*="period"]', '90')
-      .select('.add-ato [name*="enable"]', 'true')
-      .click('.add-ato input[type*="submit"]')
-      .wait(1500)
-    return function () {
-      return ('ato setup completed')
-    }
-  },
-  Configure: function (n) {
-    n.click('a#tab-ato')
-      .wait(500)
-      .click('button#edit-ato-1')
-      .wait(500)
-      .evaluate(function () {
-        document.querySelector('[name*="period"]').value = ''
-      })
-      .insert('[name*="period"]', '90')
-      .select('select[name*="pump"]', '5')
-      .click('input[type*="submit"]')
-      .wait(1000)
-    return function () {
-      return ('ATO configured')
-    }
+import { Selector, t } from 'testcafe'
+import { select, clear, setText } from './helpers'
+
+class Ato {
+
+  constructor(){
+    this.name = Selector('input[name*="name"]')
+    this.inlet = Selector('select[name*="inlet"]')
+    this.pinSelect = Selector('select[name*="pin"]')
+    this.period = Selector('input[name*="period"]')
+    this.enable = Selector('select[name*="enable"]')
+    this.control = Selector('select[name*="control"]')
+    this.pump = Selector('select[name*="pump"]')
+  }
+
+  async create() {
+    await t.click('a#tab-ato')
+    await this.addAto('Biocube29', '1', '90', 'Enabled')
+  }
+
+  async edit() {
+    await t.click('a#tab-ato')
+    .click('button#edit-panel-ato-1')
+
+    await this.editAto(90, 'Enabled', 'Equipment', 'Skimmer')
+  }
+
+  async addAto(name, inlet, period, enable) {
+    await t
+    .click('input#add_new_ato_sensor')
+    .typeText('.add-ato [name*="name"]', name)
+
+    await select(this.inlet, inlet)
+    await setText(this.period, period)
+    await select(this.enable, enable)
+
+    await t.click('input[type*="submit"]')
+  }
+
+  async editAto(period, enable, control, pump) {
+    await setText(this.period, period)
+    await select(this.enable, enable)
+    await select(this.control, control)
+    await select(this.pump, pump)
+    await t.click('input[type*="submit"]')
   }
 }
+export default new Ato()

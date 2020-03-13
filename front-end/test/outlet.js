@@ -1,88 +1,38 @@
-module.exports = {
-  Create: function (n) {
-    n.click('a#tab-configuration')
-      .wait('a#config-connectors')
-      .click('a#config-connectors')
-      .wait('input#add_outlet')
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O1')
-      .wait('select[name*="pin"]')
-      .type('select[name*="pin"]', '6')
+import { Selector, t } from 'testcafe'
+import { select } from './helpers'
 
-      .wait(3000)
-      .wait('select[name*="driver"]')
-      .select('select[name*="driver"]', '1')
-      .wait(2000)
-      .select('select[name*="driver"]', 'rpi')
-      .evaluate(() => {
-        console.log('selected')
-      })
-      .wait(3000)
-      .click('input#createOutlet')
-      .wait(500)
+class Outlet {
 
-      .evaluate(() => {
-        console.log('clicked')
-      })
+  constructor(){
+    this.pinSelect = Selector('.outlets [name*="pin"]')
+    this.pinOption = this.pinSelect.find('option')
+  }
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O2')
-      .select('select[name*="pin"]', '12')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
+  async create() {
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O3')
-      .select('select[name*="pin"]', '13')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
+    await t
+    .click('a#tab-configuration')
+    .click('a#config-connectors')
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O4')
-      .select('select[name*="pin"]', '19')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
+    await this.addOutlet('O1', '6')
+    await this.addOutlet('O2', '12')
+    await this.addOutlet('O3', '13')
+    await this.addOutlet('O4', '19')
+    await this.addOutlet('O5', '16')
+    await this.addOutlet('O6', '26')
+    await this.addOutlet('O7', '20')
+    await this.addOutlet('O8', '21')
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O5')
-      .select('select[name*="pin"]', '16')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
+  }
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O6')
-      .select('select[name*="pin"]', '26')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
+  async addOutlet(name, pin) {
+    await t
+    .click('input#add_outlet')
+    .typeText('input#outletName', name)
 
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O7')
-      .select('select[name*="pin"]', '20')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
-
-      .click('input#add_outlet')
-      .wait('input#outletName')
-      .type('input#outletName', 'O8')
-      .select('select[name*="pin"]', '21')
-      .select('select[name*="driver"]', 'rpi')
-      .click('input#createOutlet')
-      .wait(500)
-    return function () {
-      return ('Outlets created')
-    }
+    await select(this.pinSelect, pin)
+    await t.click('input#createOutlet')
   }
 }
+
+export default new Outlet()
