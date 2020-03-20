@@ -11,7 +11,7 @@ import (
 
 const (
 	_version    = "Version"
-	_targetName = "reef-pi-test.service"
+	_targetName = "reef-pi-upgrade.service"
 )
 
 /*// set 1 mb memory limit
