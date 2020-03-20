@@ -8,6 +8,7 @@ const initialState = {
   },
   errors: [],
   drivers: [],
+  driverOptions: {},
   equipment: [],
   timers: [],
   lights: [],

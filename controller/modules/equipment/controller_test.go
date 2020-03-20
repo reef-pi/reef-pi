@@ -6,32 +6,25 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/drivers"
-
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestEquipmentController(t *testing.T) {
 	t.Parallel()
-	store, err := storage.TestDB()
+
+	con, err := controller.TestController()
+	defer con.Store().Close()
+
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test controller. Error:", err)
 	}
+	con.DM().Outlets().Setup()
 	config := Config{
 		DevMode: true,
 	}
-	telemetry := telemetry.TestTelemetry(store)
-	drvrs := drivers.TestDrivers(store)
-	outlets := connectors.NewOutlets(drvrs, store)
-	outlets.DevMode = true
-	if err := outlets.Setup(); err != nil {
-		t.Fatal(err)
-	}
-	c := New(config, outlets, store, telemetry)
-	c.AddCheck(func(_ string) (bool, error) { return false, nil })
+	c := New(config, con)
 	c.Setup()
 	c.Stop()
 	o := connectors.Outlet{
@@ -39,6 +32,7 @@ func TestEquipmentController(t *testing.T) {
 		Pin:    23,
 		Driver: "rpi",
 	}
+	outlets := con.DM().Outlets()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)
 	}
@@ -65,14 +59,7 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal("Failed to create equipment using api")
 	}
 
-	body.Reset()
-	eq.Outlet = "2"
-	json.NewEncoder(body).Encode(eq)
-	if err := tr.Do("PUT", "/api/equipment", body, nil); err == nil {
-		t.Error("Equipment creation should fail due to outlet being in-use")
-	}
 	c.Start()
-
 	body.Reset()
 	ea := EquipmentAction{true}
 	enc.Encode(ea)
@@ -140,15 +127,6 @@ func TestEquipmentController(t *testing.T) {
 	if err := c.Create(eq); err == nil {
 		t.Error("Equipment creation should fail if outlet is not present")
 	}
-	eq.Outlet = "1"
-	if err := c.Create(eq); err != nil {
-		t.Error("Failed to create equipment. Error:", err)
-	}
-	c.AddCheck(func(_ string) (bool, error) { return true, nil })
-	c.IsEquipmentInUse("1")
-	if err := c.Delete("1"); err == nil {
-		t.Error("Equipment deletion should fail if rquipment is in use")
-	}
 	if err := c.On("-11", true); err == nil {
 		t.Error("Controlling invalid equipment should fail")
 	}
@@ -159,18 +137,18 @@ func TestUpdateEquipment(t *testing.T) {
 	config := Config{
 		DevMode: true,
 	}
-	store, err := storage.TestDB()
+
+	con, err := controller.TestController()
+	defer con.Store().Close()
+
 	if err != nil {
-		t.Fatal("Failed to create test database. Error:", err)
+		t.Fatal("Failed to create test con. Error:", err)
 	}
-	telemetry := telemetry.TestTelemetry(store)
-	drvrs := drivers.TestDrivers(store)
-	outlets := connectors.NewOutlets(drvrs, store)
-	outlets.DevMode = true
+	outlets := con.DM().Outlets()
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c := New(config, outlets, store, telemetry)
+	c := New(config, con)
 	c.Setup()
 
 	o1 := connectors.Outlet{

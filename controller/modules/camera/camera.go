@@ -138,3 +138,7 @@ func (c *Controller) uploadImage(imgName string) {
 		log.Println("ERROR: Failed to upload image. Command:", command, "Error:", err)
 	}
 }
+
+func (c *Controller) InUse(_, _ string) ([]string, error) {
+	return []string{}, nil
+}

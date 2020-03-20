@@ -60,7 +60,7 @@ ato:threshold_required,当启用通知时必须填写阈值
 ato:threshold_value,阈值必须是一个数字
 ato:total_seconds_pump_on,补水泵开启秒数
 ato:validation_error,补水器设置因为验证错误而无法存储。请纠正错误后重试。
-ato:warning_delete,这个动作将会删除
+ato:warn_delete,
 capabilities:ato,补水器
 capabilities:camera,摄像头
 capabilities:configuration,配置
@@ -195,7 +195,7 @@ temperatur:controlnothing,无
 temperature:calibrate,校准
 temperature:calibration:apply,应用
 temperature:calibration:set_temperature,设置温度
-temperature:celcius,摄氏的
+temperature:celsius,摄氏的
 temperature:chart:current,当前温度读数
 temperature:chart:historical,历史温度读数
 temperature:chart_maximum,图表最大值
@@ -206,6 +206,7 @@ temperature:controlmacro,宏
 temperature:current_reading,当前读数
 temperature:fahrenheit,华氏的
 temperature:heater_cooler,加热器/冷水机
+temperature:hysteresis_less_than,
 temperature:lower_function,下层功能
 temperature:lower_threshold,下阈值
 temperature:sensor,传感器

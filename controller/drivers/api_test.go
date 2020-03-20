@@ -11,10 +11,11 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
-func newDrivers(t *testing.T) *Drivers {
+func newDrivers(t *testing.T) (*Drivers, storage.Store) {
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	store, err := storage.TestDB()
+
 	if err != nil {
 		t.Error(err)
 	}
@@ -24,15 +25,21 @@ func newDrivers(t *testing.T) *Drivers {
 		ID:     "0",
 		Type:   "pca9685",
 		Config: []byte(`{}`),
+		Parameters: map[string]interface{}{
+			"Address":   0x40,
+			"Frequency": 1100,
+		},
 	}
 	if err := driver.Create(d1); err != nil {
 		t.Error(err)
 	}
-	return driver
+	return driver, store
 }
 
 func TestDrivers_API(t *testing.T) {
-	d := newDrivers(t)
+	d, s := newDrivers(t)
+	defer s.Close()
+
 	tr := utils.NewTestRouter()
 	d.LoadAPI(tr.Router)
 	body := new(bytes.Buffer)
@@ -41,6 +48,10 @@ func TestDrivers_API(t *testing.T) {
 	}
 	json.NewEncoder(body).Encode(&Driver{
 		Type: "pca9685",
+		Parameters: map[string]interface{}{
+			"Address":   0x40,
+			"Frequency": 1200,
+		},
 	})
 	if err := tr.Do("PUT", "/api/drivers", body, nil); err != nil {
 		t.Error("Failed to create driver using api. Error:", err)
@@ -72,4 +83,8 @@ func TestDrivers_API(t *testing.T) {
 		t.Error("Failed to delete driver using api. Error:", err)
 	}
 
+	_, err := d.ListOptions()
+	if err != nil {
+		t.Error("Failed to list options")
+	}
 }

@@ -23,9 +23,6 @@ const TemperatureSchema = Yup.object().shape({
         return schema
           .required('Threshold is required when alerts are enabled')
           .typeError('Threshold must be a number')
-          .test('lessThan', 'Alert Below must be less than Alert Above', function (min) {
-            return min < this.parent.maxAlert
-          })
       } else { return schema }
     }),
   maxAlert: Yup.number()
@@ -77,9 +74,6 @@ const TemperatureSchema = Yup.object().shape({
         return schema
           .required(i18next.t('temperature:hysteresis_required'))
           .typeError(i18next.t('temperature:hysteresis_type'))
-          .test('lessThan', i18next.t('temperature:hysteresis_less_than'), function (hysteresis) {
-            return hysteresis < (this.parent.max - this.parent.min)
-          })
       } else { return schema }
     })
 })

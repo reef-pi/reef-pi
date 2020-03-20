@@ -13,14 +13,13 @@ require (
 	github.com/gorilla/sessions v1.2.0
 	github.com/kidoman/embd v0.0.0-20170508013040-d3d8c0c5c68d
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/prometheus/client_golang v1.2.1
+	github.com/prometheus/client_golang v1.4.0
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
-	github.com/reef-pi/drivers v0.0.0-20191124084039-bd164636cb55
-	github.com/reef-pi/hal v0.0.0-20191003050343-8c77d92fe39a
-	github.com/reef-pi/rpi v0.0.0-20191003051100-f2908459e401
-	github.com/robfig/cron/v3 v3.0.0
+	github.com/reef-pi/drivers v0.0.0-20200309094201-bebaeb960204
+	github.com/reef-pi/hal v0.0.0-20200226044219-163a37bab6d9
+	github.com/reef-pi/rpi v0.0.0-20200302080122-e460902484d9
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	go.etcd.io/bbolt v1.3.3
-	golang.org/x/sys v0.0.0-20191118133127-cf1e2d577169 // indirect
-	gopkg.in/yaml.v2 v2.2.7
+	gopkg.in/yaml.v2 v2.2.8
 )

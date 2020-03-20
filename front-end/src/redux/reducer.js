@@ -81,6 +81,8 @@ export const rootReducer = (state, action) => {
       return { ...state, settings: action.payload }
     case 'DRIVERS_LOADED':
       return { ...state, drivers: action.payload }
+    case 'DRIVER_OPTIONS_LOADED':
+      return { ...state, driverOptions: action.payload }
     case 'JACKS_LOADED':
       return { ...state, jacks: action.payload }
     case 'ANALOG_INPUTS_LOADED':

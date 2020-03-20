@@ -6,6 +6,8 @@ import (
 
 func TestSubsystem(t *testing.T) {
 	c, err := TestController()
+	defer c.Store().Close()
+
 	if err != nil {
 		t.Error(err)
 	}

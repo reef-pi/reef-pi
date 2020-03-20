@@ -4,16 +4,18 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
-import { driverTypes } from './types'
 
 const EditDriver = ({
   values,
   errors,
   touched,
   submitForm,
+  handleChange,
+  mode,
   isValid,
   dirty,
-  readOnly
+  readOnly,
+  driverOptions
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
@@ -22,82 +24,54 @@ const EditDriver = ({
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        'The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.'
+        'The Driver settings cannot be saved due to validation errors.  Please correct the errors and try again.'
       )
     }
   }
 
-  const phBoardConfig = () => {
-    return (
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>Address</label>
-            <Field
-              name='config.address'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.address', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const pca9685Config = () => {
-    return (
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>Address</label>
-            <Field
-              name='config.address'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.address', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='name'>Frequency</label>
-            <Field
-              name='config.frequency'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('config.frequency', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='name' />
-          </div>
-        </div>
-      </div>
-    )
+  const driverTypeChangeHandler = (e) => {
+    values.config = {}
+    driverOptions[e.target.value].map(item => {
+      values.config[item.name.toLowerCase()] = ''
+    })
+    handleChange(e)
   }
 
   const driverConfig = () => {
-    switch (values.type) {
-      case 'pca9685':
-        return pca9685Config()
-      case 'ph-board':
-      case 'ph-ezo':
-      case 'pico-board':
-      case 'hs103':
-      case 'hs110':
-      case 'hs300':
-      case 'file-analog':
-      case 'file-digital':
-        return phBoardConfig()
-    }
+    const selectedType = driverOptions[values.type]
+    if (selectedType == null) { return null }
+    const params = []
+
+    selectedType.sort((a, b) => { return parseInt(a.order) < parseInt(b.order) })
+      .forEach((item) => {
+        const param = (
+          <div key={item.name} className='col col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor={'config.' + item.name.toLowerCase()}>{item.name}</label>
+              <Field
+                name={'config.' + item.name.toLowerCase()}
+                disabled={readOnly}
+                placeholder={item.default}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('config.' + item.name.toLowerCase(), touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name={'config.' + item.name.toLowerCase()} />
+            </div>
+          </div>
+        )
+        params.push(param)
+      })
+
+    return (
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        {params}
+      </div>
+    )
   }
 
   const typeOptions = () => {
-    return driverTypes.map(item => {
+    return Object.keys(driverOptions).map(item => {
       return (
         <option key={item} value={item}>
           {item}
@@ -130,7 +104,8 @@ const EditDriver = ({
             <Field
               name='type'
               component='select'
-              disabled={readOnly}
+              onChange={driverTypeChangeHandler}
+              disabled={mode === 'edit' || readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}
@@ -140,7 +115,7 @@ const EditDriver = ({
               </option>
               {typeOptions()}
             </Field>
-            <ErrorFor errors={errors} touched={touched} name='inlet' />
+            <ErrorFor errors={errors} touched={touched} name='type' />
           </div>
         </div>
       </div>
@@ -166,7 +141,8 @@ EditDriver.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  driverOptions: PropTypes.object
 }
 
 export default EditDriver

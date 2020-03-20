@@ -60,7 +60,7 @@ ato:threshold_required,Threshold é Obrigatório when notification is enabled
 ato:threshold_value,Threshold tem que ser um número
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
-ato:warning_delete,Esta acção vái ser removida
+ato:warn_delete,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuração
@@ -195,7 +195,7 @@ temperatur:controlnothing,
 temperature:calibrate,
 temperature:calibration:apply,
 temperature:calibration:set_temperature,
-temperature:celcius,Celcius
+temperature:celsius,Celsius
 temperature:chart:current,
 temperature:chart:historical,
 temperature:chart_maximum,Valor Maximo gráfico
@@ -206,6 +206,7 @@ temperature:controlmacro,
 temperature:current_reading,
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
+temperature:hysteresis_less_than,
 temperature:lower_function,
 temperature:lower_threshold,
 temperature:sensor,Sensor

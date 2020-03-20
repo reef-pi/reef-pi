@@ -35,6 +35,16 @@ func JSONResponse(payload interface{}, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func JSONResponseWithStatus(httpStatus int, payload interface{}, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(httpStatus)
+	w.Header().Set("Content-Type", "application/json")
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(payload); err != nil {
+		ErrorResponse(http.StatusInternalServerError, "Failed to json decode. Error: "+err.Error(), w)
+		return
+	}
+}
+
 func JSONGetResponse(fn func(string) (interface{}, error), w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	vars := mux.Vars(r)

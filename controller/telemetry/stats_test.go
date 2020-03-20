@@ -24,6 +24,8 @@ func TestStatsManager(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer store.Close()
+
 	store.CreateBucket("test-subsystem")
 	mgr := TestTelemetry(store).NewStatsManager("test-subsystem")
 	metric := &testMetric{}
@@ -46,6 +48,8 @@ func TestInitialize(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer store.Close()
+
 	logger := func(_, _ string) error { return nil }
 	Initialize("telemetry", store, logger, true)
 }

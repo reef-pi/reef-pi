@@ -3,16 +3,13 @@ package lighting
 import (
 	"bytes"
 	"encoding/json"
-	"strings"
-	"testing"
-	"time"
-
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"strings"
+	"testing"
+	"time"
 )
 
 func TestLightingAPI(t *testing.T) {
@@ -25,21 +22,19 @@ func TestLightingAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	drvrs := drivers.TestDrivers(con.Store())
 	d1 := drivers.Driver{
 		Name:   "lighting",
 		Type:   "pca9685",
 		Config: []byte(`{"address":64, "frequency":1000}`),
 	}
-	if err := drvrs.Create(d1); err != nil {
+	if err := con.DM().Drivers().Create(d1); err != nil {
 		t.Fatal(err)
 	}
-	jacks := connectors.NewJacks(drvrs, con.Store())
+	jacks := con.DM().Jacks()
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-
-	c, err := New(config, con, jacks, i2c.MockBus())
+	c, err := New(config, con)
 	if err != nil {
 		t.Fatal(err)
 	}

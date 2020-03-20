@@ -35,7 +35,7 @@ class chart extends React.Component {
     }
     return (
       <>
-        <span className='h6'>{this.props.config.name} - {i18next.t('ato:ato_usage')}</span>
+        <span className='h6'>{i18next.t('ato:ato_usage')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={this.props.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />

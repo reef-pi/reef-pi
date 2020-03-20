@@ -41,7 +41,7 @@ type HealthMetric struct {
 	len          int
 	loadSum      float64
 	memorySum    float64
-	UnderVoltage bool `json:"throttle"`
+	UnderVoltage float64 `json:"throttle"`
 }
 
 func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
@@ -61,7 +61,7 @@ func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
 		m.len += 1
 		m.Load5 = TwoDecimal(m.loadSum / float64(m.len))
 		m.UsedMemory = TwoDecimal(m.memorySum / float64(m.len))
-		if !m.UnderVoltage {
+		if m.UnderVoltage == 0 {
 			m.UnderVoltage = m2.UnderVoltage
 		}
 		return m, false
@@ -113,12 +113,13 @@ func (h *hc) Check() {
 	} else {
 		for _, throttle := range throttles {
 			if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
-				metric.UnderVoltage = true
+				metric.UnderVoltage = 1
 			}
 		}
 	}
 
 	h.t.EmitMetric("system", "mem-used", usedMemory)
+	h.t.EmitMetric("system", "under_voltage", metric.UnderVoltage)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)

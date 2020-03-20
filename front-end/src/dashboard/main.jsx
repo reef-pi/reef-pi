@@ -79,7 +79,7 @@ class dashboard extends React.Component {
               </div>
             )
             break
-          case 'ph-current':
+          case 'ph_current':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -88,7 +88,7 @@ class dashboard extends React.Component {
               </div>
             )
             break
-          case 'ph-historical':
+          case 'ph_historical':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -115,7 +115,7 @@ class dashboard extends React.Component {
               </div>
             )
             break
-          case 'temperature':
+          case 'temp_current':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -124,7 +124,7 @@ class dashboard extends React.Component {
               </div>
             )
             break
-          case 'tc':
+          case 'temp_historical':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>

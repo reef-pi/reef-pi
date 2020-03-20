@@ -9,6 +9,8 @@ import (
 
 func TestReminderRunner(t *testing.T) {
 	store, err := storage.TestDB()
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(store)
 	}

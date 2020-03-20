@@ -8,8 +8,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-
-	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
 
 const Bucket = storage.TemperatureBucket
@@ -17,22 +15,20 @@ const UsageBucket = storage.TemperatureUsageBucket
 
 type Controller struct {
 	sync.Mutex
-	c         controller.Controller
-	devMode   bool
-	equipment *equipment.Controller
-	quitters  map[string]chan struct{}
-	statsMgr  telemetry.StatsManager
-	tcs       map[string]*TC
+	c        controller.Controller
+	devMode  bool
+	quitters map[string]chan struct{}
+	statsMgr telemetry.StatsManager
+	tcs      map[string]*TC
 }
 
-func New(devMode bool, c controller.Controller, eqs *equipment.Controller) (*Controller, error) {
+func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
-		c:         c,
-		devMode:   devMode,
-		equipment: eqs,
-		quitters:  make(map[string]chan struct{}),
-		tcs:       make(map[string]*TC),
-		statsMgr:  c.Telemetry().NewStatsManager(UsageBucket),
+		c:        c,
+		devMode:  devMode,
+		quitters: make(map[string]chan struct{}),
+		tcs:      make(map[string]*TC),
+		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 	}, nil
 }
 
@@ -95,4 +91,9 @@ func (c *Controller) On(id string, on bool) error {
 	}
 	tc.SetEnable(on)
 	return c.Update(id, tc)
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	return deps, nil
 }

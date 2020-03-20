@@ -67,10 +67,7 @@ func (c *Controller) Create(a ATO) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	usage := Usage{
-		Time: telemetry.TeleTime(time.Now()),
-	}
-	c.statsMgr.Update(a.ID, usage)
+	c.statsMgr.Initialize(a.ID)
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
@@ -115,19 +112,6 @@ func (c *Controller) Delete(id string) error {
 		delete(c.quitters, id)
 	}
 	return nil
-}
-
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	atos, err := c.List()
-	if err != nil {
-		return false, err
-	}
-	for _, a := range atos {
-		if a.Pump == id {
-			return true, nil
-		}
-	}
-	return false, nil
 }
 
 func (c *Controller) Check(a ATO) {

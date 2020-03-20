@@ -13,6 +13,8 @@ import (
 
 func TestAPI(t *testing.T) {
 	store, err := storage.NewStore("api-test.db")
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

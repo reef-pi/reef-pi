@@ -9,7 +9,7 @@ export default class CollapsibleList extends React.Component {
     }
 
     Children.toArray(props.children).forEach(child => {
-      if (child) {
+      if (child && child.props) {
         state.expanded[child.props.name] = !!child.props.defaultOpen
         state.readOnly[child.props.name] = true
       }

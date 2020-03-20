@@ -106,10 +106,7 @@ func (c *Controller) Create(tc TC) error {
 	}
 	tc.loadCalibrator()
 	c.tcs[tc.ID] = &tc
-	u := &controller.Observation{
-		Time: telemetry.TeleTime(time.Now()),
-	}
-	c.statsMgr.Update(tc.ID, u)
+	c.statsMgr.Initialize(tc.ID)
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit

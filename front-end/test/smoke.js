@@ -1,79 +1,45 @@
-const S = require('./sign_in.js')
-const outlet = require('./outlet.js')
-const macro = require('./macro.js')
-const inlet = require('./inlets.js')
-const jacks = require('./jacks.js')
-const analogs = require('./analogInput')
-const drivers = require('./drivers.js')
-const ph = require('./ph.js')
-const ato = require('./ato.js')
-const doser = require('./doser.js')
-const equipment = require('./equipment.js')
-const light = require('./light.js')
-const timer = require('./timer.js')
-const tc = require('./tc.js')
-const dashboard = require('./dashboard.js')
+import { Selector } from 'testcafe'
+import driver from './driver'
+import outlet from './outlet'
+import inlet from './inlet'
+import jack from './jack'
+import analog from './analog'
+import equipment from './equipment'
+import timer from './timer'
+import light from './light'
+import macro from './macro'
+import ph from './ph'
+import ato from './ato'
+import doser from './doser'
+import tc from './tc'
+//TODO: Restore dashboard test while addressing dashboard issues
+//import dashboard from './dashboard'
 
-const Nightmare = require('nightmare')
-const nightmare = Nightmare({
-  show: true,
-  dock: true,
-  typeInterval: 120,
-  openDevTools: true
+fixture `Getting Started`
+    .page `http://localhost:8080/`
+
+test('Smoke Test', async t => {
+
+  await t
+    .typeText('#reef-pi-user', 'reef-pi')
+    .typeText('#reef-pi-pass', 'reef-pi')
+    .click('#btnSaveCreds')
+    .expect(Selector('#tab-dashboard').innerText).eql('Dashboard')
+
+  await driver.create()
+  await outlet.create()
+  await inlet.create()
+  await jack.create()
+  await analog.create()
+  await equipment.create()
+  await timer.create()
+  await light.create()
+  await macro.create()
+  await ph.create()
+  await ato.create()
+  await doser.create()
+  await tc.create()
+  await ato.edit()
+  //TODO: Restore dashboard test while addressing dashboard issues
+  //await dashboard.configure()
 })
-
-function SmokeTest (url) {
-  nightmare
-    .goto(url)
-    .viewport(1100, 650)
-    .wait(500)
-    .evaluate(S.SignIn(nightmare))
-    .wait(1500)
-    .evaluate(drivers.Create(nightmare))
-    .wait(1500)
-    .evaluate(outlet.Create(nightmare))
-    .wait(1500)
-    .evaluate(inlet.Create(nightmare))
-    .wait(1500)
-    .evaluate(jacks.Create(nightmare))
-    .wait(1500)
-    .evaluate(analogs.Create(nightmare))
-    .wait(1500)
-    .evaluate(equipment.Create(nightmare))
-    .wait(1500)
-    .evaluate(timer.Create(nightmare))
-    .wait(1500)
-    .evaluate(light.Create(nightmare))
-    .wait(1500)
-    .evaluate(macro.Create(nightmare))
-    .wait(1500)
-    .evaluate(ph.Create(nightmare))
-    .wait(1500)
-    .evaluate(ato.Create(nightmare))
-    .wait(1500)
-    .evaluate(tc.Configure(nightmare))
-    .wait(1500)
-    .evaluate(ato.Configure(nightmare))
-    .wait(1500)
-    .evaluate(doser.Create(nightmare))
-    .wait(1500)
-    .evaluate(dashboard.Configure(nightmare))
-    .wait(1500)
-    .click('a#tab-dashboard')
-    .wait(1500)
-    .end()
-    .then(function () {
-      console.log('Smoking Hot!')
-    })
-    .catch(function (error) {
-      console.error('Error:', error)
-      process.exit(-1)
-    })
-}
-
-let url = 'http://localhost:8080/'
-if (process.argv.length === 3) {
-  url = process.argv[2]
-}
-
-SmokeTest(url)

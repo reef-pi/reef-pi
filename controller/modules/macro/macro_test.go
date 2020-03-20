@@ -12,6 +12,8 @@ import (
 
 func TestMacro(t *testing.T) {
 	c, err := controller.TestController()
+	defer c.Store().Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -9,7 +9,10 @@ Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditDriver />', () => {
   let values = {}
-
+  let options = {
+    ezo: {},
+    pca9685: {}
+  }
   let fn = jest.fn()
 
   beforeEach(() => {
@@ -26,6 +29,7 @@ describe('<EditDriver />', () => {
         values={values}
         handleBlur={fn}
         submitForm={fn}
+        driverOptions={options}
       />
     )
   })

@@ -3,12 +3,11 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	cron "github.com/robfig/cron/v3"
 	"log"
 	"time"
-
-	cron "github.com/robfig/cron/v3"
-
-	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 )
 
 type UpdateEquipment struct {
@@ -18,22 +17,18 @@ type UpdateEquipment struct {
 	Duration time.Duration `json:"duration"`
 }
 type EquipmentRunner struct {
-	eq        equipment.Equipment
 	target    UpdateEquipment
-	equipment *equipment.Controller
+	equipment controller.Subsystem
 }
 
 func (e *EquipmentRunner) Run() {
-	eq := e.eq
-	eq.On = e.target.On
-	if err := e.equipment.Update(e.eq.ID, eq); err != nil {
+	if err := e.equipment.On(e.target.ID, e.target.On); err != nil {
 		log.Println("ERROR: timer sub-system, Failed to update equipment. Error:", err)
 	}
 	if e.target.Revert {
 		select {
 		case <-time.After(e.target.Duration * time.Second):
-			eq.On = !e.target.On
-			if err := e.equipment.Update(e.eq.ID, eq); err != nil {
+			if err := e.equipment.On(e.target.ID, !e.target.On); err != nil {
 				log.Println("ERROR: timer sub-system, Failed to revert equipment. Error:", err)
 			}
 		}
@@ -52,24 +47,16 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 			title: "[reef-pi Reminder]" + reminder.Title,
 			body:  reminder.Message,
 		}, nil
-	case "equipment":
+	case storage.EquipmentBucket:
 		var ue UpdateEquipment
 		if err := json.Unmarshal(j.Target, &ue); err != nil {
 			return nil, err
 		}
-		eq, err := c.equipment.Get(ue.ID)
-		if err != nil {
-			return nil, err
-		}
-		if eq.Outlet == "" {
-			return nil, fmt.Errorf("Equipment: %s does not have associated outlet", eq.Name)
-		}
 		return &EquipmentRunner{
-			eq:        eq,
 			target:    ue,
 			equipment: c.equipment,
 		}, nil
-	case "macro":
+	case storage.MacroBucket:
 		var macro TriggerMacro
 		if err := json.Unmarshal(j.Target, &macro); err != nil {
 			return nil, err
