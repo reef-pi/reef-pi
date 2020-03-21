@@ -4,8 +4,10 @@ go 1.13
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/coreos/go-systemd/v22 v22.0.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
+	github.com/godbus/dbus/v5 v5.0.3
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
