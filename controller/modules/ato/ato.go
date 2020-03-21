@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -104,7 +103,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR:  ato sub-system: Failed to deleted usage details for ato:", id)
+		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id)
 	}
 	quit, ok := c.quitters[id]
 	if ok {
@@ -123,12 +122,12 @@ func (c *Controller) Check(a ATO) {
 	}
 	reading, err := c.Read(a)
 	if err != nil {
-		log.Println("ERROR: ato sub-system. Failed to read ato sensor. Error:", err)
+		log.Println("ERROR: ato-subsystem. Failed to read ato sensor. Error:", err)
 		c.c.LogError("ato-"+a.ID, "Failed to read ato sensor. Name:"+a.Name+". Error:"+err.Error())
 		return
 	}
-	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
-	c.c.Telemetry().EmitMetric("ato", a.Name+"-reading", float64(reading))
+	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
+	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
 			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
@@ -138,14 +137,13 @@ func (c *Controller) Check(a ATO) {
 			usage.Pump = 0
 		}
 	}
-	c.NotifyIfNeeded(a)
 	c.statsMgr.Update(a.ID, usage)
-	c.c.Telemetry().EmitMetric("ato", a.Name+"-usage", float64(usage.Pump))
+	c.NotifyIfNeeded(a)
 }
 
 func (c *Controller) Run(a ATO, quit chan struct{}) {
 	if a.Period <= 0 {
-		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
+		log.Printf("ERROR: ato-subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
 		return
 	}
 	a.CreateFeed(c.c.Telemetry())
@@ -166,13 +164,6 @@ func (c *Controller) Run(a ATO, quit chan struct{}) {
 }
 
 func (c *Controller) Read(a ATO) (int, error) {
-	if c.devMode {
-		v := 0
-		if rand.Int()%2 == 0 {
-			v = 1
-		}
-		return v, nil
-	}
 	return c.inlets.Read(a.Inlet)
 }
 
