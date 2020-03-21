@@ -93,6 +93,6 @@ func (c *Controller) updateOutlet(eq Equipment) error {
 	if eq.On {
 		m = 1.0
 	}
-	c.telemetry.EmitMetric("equipment_", eq.Name+"", m)
+	c.telemetry.EmitMetric("equipment", eq.Name+"-state", m)
 	return nil
 }
