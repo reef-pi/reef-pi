@@ -4,6 +4,11 @@ import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
 class errors extends React.Component {
+  constructor (props) {
+    super(props)
+    this.handleClear = this.handleClear.bind(this)
+  }
+
   componentDidMount () {
     this.props.fetch()
   }
