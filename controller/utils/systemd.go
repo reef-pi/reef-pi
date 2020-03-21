@@ -66,7 +66,7 @@ func start(command string, conn *systemd.Conn) error {
 	}
 	done := <-statusCh
 	if done != "done" {
-		return fmt.Errorf("Failed to enqueue transiet unit. Status: %s\n", done)
+		return fmt.Errorf("Failed to enqueue transient unit. Status: %s\n", done)
 	}
 	fmt.Println("started unit")
 	return nil
