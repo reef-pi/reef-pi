@@ -6,7 +6,7 @@ import (
 
 type TeleTime time.Time
 
-const format = "Jan-02-15:04"
+const format = "Jan-02-15:04, 2006"
 
 func (t TeleTime) Before(t2 TeleTime) bool {
 	return time.Time(t).Before(time.Time(t2))
