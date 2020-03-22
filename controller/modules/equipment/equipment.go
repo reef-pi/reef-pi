@@ -72,7 +72,7 @@ func (c *Controller) synEquipment() {
 		return
 	}
 	for _, eq := range eqs {
-		if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		if err := c.updateOutlet(eq); err != nil {
 			log.Printf("ERROR: Failed to sync equipment:%s . Error:%s\n", eq.Name, err.Error())
 		}
 	}

@@ -42,6 +42,8 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 		log.Println("ERROR: ato-subsystem: failed to convert generic metric to ato usage")
 		return
 	}
+	c.c.Telemetry().EmitMetric("ato", a.Name+"-usage", float64(u.Pump))
+	log.Println("ato-subsystem: sensor:", a.Name, " usage:", float64(u.Pump))
 	if !a.Notify.Enable {
 		return
 	}
