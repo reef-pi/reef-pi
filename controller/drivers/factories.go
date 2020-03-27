@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/reef-pi/drivers/dli"
 	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
 	"github.com/reef-pi/drivers/pca9685"
@@ -28,6 +29,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"file-digital": file.DigitalFactory(),
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
+	"dli-wpsp":     dli.Adapter(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
