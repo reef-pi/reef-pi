@@ -42,7 +42,7 @@ const EditDriver = ({
     if (selectedType == null) { return null }
     const params = []
 
-    selectedType.sort((a, b) => { return parseInt(a.order) < parseInt(b.order) })
+    selectedType.sort((a, b) => { return parseInt(a.order) > parseInt(b.order) })
       .forEach((item) => {
         const param = (
           <div key={item.name} className='col col-sm-6 col-md-3'>

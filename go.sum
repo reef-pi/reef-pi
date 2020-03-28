@@ -87,8 +87,8 @@ github.com/prometheus/procfs v0.0.8 h1:+fpWZdT24pJBiqJdAwYBjPSk+5YmQzYNPYzQsdzLk
 github.com/prometheus/procfs v0.0.8/go.mod h1:7Qr8sr6344vo1JqZ6HhLceV9o3AJ1Ff+GxbHq6oeK9A=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64 h1:pv5kOD9OkP5vntO6lAtFLUyGpyfZtu8QkaZ5sIabh8k=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64/go.mod h1:UBHNdzbwzKriDbmPAr34k4hdd+x/VYKO6xJ4ebDztEo=
-github.com/reef-pi/drivers v0.0.0-20200327184403-ee1cad148972 h1:af29rA+/8uxeB34Ql+h6G2KyiF1rDasFpyKhZmHUz0c=
-github.com/reef-pi/drivers v0.0.0-20200327184403-ee1cad148972/go.mod h1:nhG3QXPHHCA3icVSkap2Ctunsmlx9s72raXviEhHkMY=
+github.com/reef-pi/drivers v0.0.0-20200327222241-ae1328552d50 h1:ozovTh8TajyuDSMpV/VqlT8VBkLZ4X/qfRJMz3iPcso=
+github.com/reef-pi/drivers v0.0.0-20200327222241-ae1328552d50/go.mod h1:nhG3QXPHHCA3icVSkap2Ctunsmlx9s72raXviEhHkMY=
 github.com/reef-pi/hal v0.0.0-20200226044219-163a37bab6d9 h1:OyeCPwOa5pUycf6zG/5Jb8SWAeK1Irux1Ufyhd8bRPg=
 github.com/reef-pi/hal v0.0.0-20200226044219-163a37bab6d9/go.mod h1:ymcJ0AbYfWXT1vyAbXOjKtWaFdCv1HHYmXDMWxJSWSM=
 github.com/reef-pi/rpi v0.0.0-20200229061810-6283c62b9e14/go.mod h1:5PNbwDvPaOVz4YBU0Lug4ynE+sI9Ma5tmJxBBvvJohI=
