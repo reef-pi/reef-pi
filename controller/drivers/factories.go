@@ -7,6 +7,7 @@ import (
 	"github.com/reef-pi/drivers/dli"
 	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
+	"github.com/reef-pi/drivers/mp3"
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
@@ -30,6 +31,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
 	"dli-wpsp":     dli.Adapter(),
+	"mp3":          mp3.Factory(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
