@@ -51,7 +51,8 @@ const EditDriver = ({
               <Field
                 name={'config.' + item.name.toLowerCase()}
                 disabled={readOnly}
-                placeholder={item.default}
+                type={item.type == 4 ? 'checkbox' : 'text'}
+                placeholder={item.default.toString()}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('config.' + item.name.toLowerCase(), touched, errors)
                 })}
