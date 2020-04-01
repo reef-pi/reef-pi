@@ -70,7 +70,7 @@
     "webpack": "4.41.5",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.10.2",
-    "webpack-livereload-plugin": "2.2.0",
+    "webpack-livereload-plugin": "2.3.0",
     "yup": "0.28.0"
   },
   "scripts": {
