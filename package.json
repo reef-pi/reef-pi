@@ -60,7 +60,7 @@
     "react-toggle-switch": "3.0.4",
     "recharts": "1.8.5",
     "redux": "^4.0.5",
-    "redux-mock-store": "1.5.3",
+    "redux-mock-store": "1.5.4",
     "redux-thunk": "2.3.0",
     "sass-lint": "1.13.1",
     "sass-loader": "8.0.0",
