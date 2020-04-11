@@ -250,7 +250,7 @@ func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 	}
 	subject := fmt.Sprintf("[Reef-Pi ALERT] ph of '%s' out of range", p.Name)
 	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
-	body := fmt.Sprintf(format, reading, p.Name, p.Notify.Min, p.Notify.Max)
+	body := fmt.Sprintf(format, p.Name, reading, p.Notify.Min, p.Notify.Max)
 	if reading >= p.Notify.Max {
 		t.Alert(subject, "Tank ph is high. "+body)
 		return
