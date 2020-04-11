@@ -12,26 +12,28 @@ import (
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
 	"github.com/reef-pi/drivers/shelly"
+	"github.com/reef-pi/drivers/sht3x"
 	"github.com/reef-pi/drivers/tplink"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
 )
 
 var driversMap = map[string]hal.DriverFactory{
-	"rpi":          rpihal.RpiFactory(),
-	"pca9685":      pca9685.Factory(),
-	"ph-board":     ph_board.Factory(),
-	"pico-board":   pico_board.Factory(),
-	"ph-ezo":       ezo.Factory(),
+	"dli-wpsp":     dli.Adapter(),
+	"file-analog":  file.AnalogFactory(),
+	"file-digital": file.DigitalFactory(),
 	"hs103":        tplink.HS103Factory(),
 	"hs110":        tplink.HS110Factory(),
 	"hs300":        tplink.HS300Factory(),
-	"file-analog":  file.AnalogFactory(),
-	"file-digital": file.DigitalFactory(),
+	"mp3":          mp3.Factory(),
+	"pca9685":      pca9685.Factory(),
+	"ph-board":     ph_board.Factory(),
+	"ph-ezo":       ezo.Factory(),
+	"pico-board":   pico_board.Factory(),
+	"rpi":          rpihal.RpiFactory(),
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
-	"dli-wpsp":     dli.Adapter(),
-	"mp3":          mp3.Factory(),
+	"sht31d":       sht3x.Factory(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
