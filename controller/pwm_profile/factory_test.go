@@ -10,6 +10,10 @@ func TestCreateProfile(t *testing.T) {
 	specs["fixed"] = []byte(`{"value":0, "start":"07:05:00","end":"16:00:00"}`)
 	specs["loop"] = []byte(`{"values":[0,12]}`)
 	specs["diurnal"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
+	specs["composite"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
+	specs["lunar"] = []byte(`{"start": "07:05:00", "end":"16:00:00", "full_moon":"Jan 2 2024"}`)
+	specs["sine"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
+	specs["random"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	for pType, pConf := range specs {
 		spec := ProfileSpec{
 			Name:   "test",
@@ -18,10 +22,11 @@ func TestCreateProfile(t *testing.T) {
 			Type:   pType,
 			Config: pConf,
 		}
-		_, err := spec.CreateProfile()
+		prof, err := spec.CreateProfile()
 		if err != nil {
-			t.Error(err)
+			t.Error("Error creating ", pType, "profile", err)
 		}
+		prof.Name()
 	}
 	spec := ProfileSpec{
 		Name: "test",

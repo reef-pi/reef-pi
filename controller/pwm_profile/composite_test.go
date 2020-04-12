@@ -9,7 +9,10 @@ func TestComposite(t *testing.T) {
 	conf := `
 {
   "profiles":[
-	  {"type": "diurnal", "span": 300}, {"type": "fixed", "span": 150, "config":{"value": 13}}
+	  {"type": "diurnal", "span": 300},
+	  {"type": "random", "span": 300},
+	  {"type": "interval", "span": 300,"config":{"interval":7200, "values":[0]}},
+		{"type": "fixed", "span": 150, "config":{"value": 13}}
 	]
 }
 `
@@ -31,7 +34,7 @@ func TestComposite(t *testing.T) {
 		t.Error("Expected 97.04915028125262. found:", v)
 	}
 	v = p.Get(start.Add(6 * time.Minute))
-	if v != 13 {
+	if v != 85.31 {
 		t.Error("Expected 13. found:", v)
 	}
 }
