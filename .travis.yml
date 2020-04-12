@@ -3,12 +3,11 @@ go:
   - "1.13"
 before_install:
   - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  - sudo  apt-get install -y nodejs
+  - sudo  apt-get install -y nodejs libasound2-dev
   - sudo npm install -g npm
 script:
   - ./build/ci.sh
   - bash <(curl -s https://codecov.io/bash) -cF go
-  - make pi
   - bundle install
   - sudo chown -R $USER /home/travis/.npm
   - /usr/bin/npm install --no-optional
