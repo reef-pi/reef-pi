@@ -6,15 +6,25 @@ import (
 )
 
 func TestTemporal(t *testing.T) {
-	conf := `
-{
-	"start":"10:00:00",
-	"end": "19:30:00"
-}
-`
+	if _, err := Temporal([]byte(""), 13, 100); err == nil {
+		t.Error("bogus config should fail")
+	}
+
+	conf := `{"start":"10:00:00","end": "19:00"}`
+	if _, err := Temporal([]byte(conf), 13, 100); err == nil {
+		t.Error("bogus config should fail")
+	}
+	conf = `{"start":"10:00:00","end": "19:30:00"}`
+	if _, err := Temporal([]byte(conf), -1, 100); err == nil {
+		t.Error("bogus config should fail")
+	}
+	if _, err := Temporal([]byte(conf), 13, 110); err == nil {
+		t.Error("bogus config should fail")
+	}
+
 	p, err := Temporal([]byte(conf), 13, 100)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if p.ValueRange() != 87 {
@@ -27,5 +37,9 @@ func TestTemporal(t *testing.T) {
 
 	if n := p.PastMinutes(time.Now()); n == 0 {
 		t.Error("Expected non-zero, found:", n)
+	}
+
+	if !p.AdjustBounds(14, 90) {
+		t.Error("Bounds should be updated")
 	}
 }

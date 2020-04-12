@@ -6,6 +6,17 @@ import (
 )
 
 func TestInterval(t *testing.T) {
+	badConf := `
+{
+	"start":"10:00:00",
+	"end": "19:30:00",
+	"interval": -10,
+	"values": [0,,80,40,20,10]
+}
+`
+	if _, err := Interval([]byte(badConf), 13, 100); err == nil {
+		t.Error("bogus config should fail")
+	}
 	conf := `
 {
 	"start":"10:00:00",
@@ -31,6 +42,10 @@ func TestInterval(t *testing.T) {
 	}
 	if int(i.Get(t2)) != 60 {
 		t.Error("Expected 60, got:", i.Get(t2))
+	}
+	outside := time.Date(2024, 1, 1, 21, 0, 0, 0, time.UTC)
+	if i.Get(outside) != 0 {
+		t.Error("Expected 0, got:", i.Get(outside))
 	}
 }
 
@@ -59,5 +74,8 @@ func TestPanicAtMidnight(t *testing.T) {
 	}
 	if int(i.Get(t1)) < 98 {
 		t.Error("Expected 99, got:", i.Get(t1))
+	}
+	if i.Name() != "interval" {
+		t.Error("expected interval, found:", i.Name())
 	}
 }

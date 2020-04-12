@@ -66,7 +66,26 @@ func TestDrivers_API(t *testing.T) {
 	if err := tr.Do("GET", "/api/drivers/1", body, nil); err != nil {
 		t.Error("Failed to fetch driver using api. Error:", err)
 	}
+	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{"address":68}, "name":"foo"}`))
+	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err != nil {
+		t.Error("Failed to validate driver using api. Error:", err)
+	}
+	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{}, "name":"foo"}`))
+	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
+		t.Error("Failed to validate driver using api. Expected error found none:")
+	}
 
+	body = bytes.NewBuffer([]byte(``))
+	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
+		t.Error("Failed to validate driver using api. Expected error found none:")
+	}
+	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{"address":68}}`))
+	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
+		t.Error("Failed to validate driver using api. Expected error found none:")
+	}
+	if err := tr.Do("GET", "/api/drivers/options", body, nil); err != nil {
+		t.Error("Failed to list driver options using api. Error:", err)
+	}
 	if _, err := d.DigitalOutputDriver("rpi"); err != nil {
 		t.Error(err)
 	}
