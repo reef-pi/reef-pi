@@ -43,8 +43,18 @@ func TestFactory(t *testing.T) {
 	d.Parameters = map[string]interface{}{
 		"Address": 64,
 	}
+	if _, err := AbstractFactory("foo"); err == nil {
+		t.Error("Expected error")
+	}
 
 	if err := mgr.Create(d); err != nil {
+		t.Error(err)
+	}
+	if _, err := mgr.Get("1"); err != nil {
+		t.Error(err)
+	}
+
+	if _, err := mgr.AnalogInputDriver("1"); err != nil {
 		t.Error(err)
 	}
 }
