@@ -36,7 +36,8 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 	if len(resp.Historical) < 1 {
 		return
 	}
-	m := resp.Historical[0]
+
+	m := resp.Historical[len(resp.Historical)-1]
 	u, ok := m.(Usage)
 	if !ok {
 		log.Println("ERROR: ato-subsystem: failed to convert generic metric to ato usage")
