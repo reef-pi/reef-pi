@@ -8,7 +8,6 @@ import (
 
 func TestLoop(t *testing.T) {
 	spec := ProfileSpec{
-		Name:   "test",
 		Type:   "loop",
 		Config: json.RawMessage(`{"values":[21, 31, 34]}`),
 	}
