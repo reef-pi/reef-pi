@@ -16,7 +16,6 @@ func TestCreateProfile(t *testing.T) {
 	specs["random"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	for pType, pConf := range specs {
 		spec := ProfileSpec{
-			Name:   "test",
 			Min:    12,
 			Max:    89,
 			Type:   pType,
@@ -29,7 +28,6 @@ func TestCreateProfile(t *testing.T) {
 		prof.Name()
 	}
 	spec := ProfileSpec{
-		Name: "test",
 		Min:  12,
 		Max:  89,
 		Type: "bogus",

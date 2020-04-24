@@ -30,7 +30,6 @@ type TemporalProfile interface {
 }
 
 type ProfileSpec struct {
-	Name   string          `json:"name"`
 	Type   string          `json:"type"`
 	Config json.RawMessage `json:"config"`
 	Min    float64         `json:"min"`
