@@ -24,6 +24,7 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
             <Field
               name='value'
               type='number'
+              step='any'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('value', touched, errors)
