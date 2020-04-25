@@ -23,6 +23,7 @@ type Notify struct {
 	Max    float64 `json:"max"`
 }
 
+//swagger:model phProbe
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`

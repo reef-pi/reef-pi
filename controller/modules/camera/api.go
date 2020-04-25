@@ -9,10 +9,49 @@ import (
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
+
+	// swagger:route GET /api/camera/config Camera cameraConfig
+	// Get the camera configuration.
+	// Get the camera configuration.
+	// responses:
+	// 	200: body:cameraConfig
 	r.HandleFunc("/api/camera/config", c.get).Methods("GET")
+
+	// swagger:operation POST /api/camera/config Camera cameraConfig
+	// Save camera configuration.
+	// Save camera configuration.
+	// ---
+	// parameters:
+	//  - in: body
+	//    name: config
+	//    description: camera configuration
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/cameraConfig'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/camera/config", c.update).Methods("POST")
+
+	// swagger:route POST /api/camera/shoot Camera cameraConfig
+	// Shoot a picture.
+	// Shoot a picture.
+	// responses:
+	// 	200:
 	r.HandleFunc("/api/camera/shoot", c.shoot).Methods("POST")
+
+	// swagger:route GET /api/camera/latest Camera cameraLatest
+	// Get latest picture.
+	// Get latest picture.
+	// responses:
+	// 	200:
 	r.HandleFunc("/api/camera/latest", c.latest).Methods("GET")
+
+	// swagger:route GET /api/camera/list Camera cameraList
+	// List images.
+	// List all images.
+	// responses:
+	// 	200:
 	r.HandleFunc("/api/camera/list", c.list).Methods("GET")
 
 }

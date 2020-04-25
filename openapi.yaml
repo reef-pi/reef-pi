@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: reef-pi
+  description: reef-pi API
+servers: []
+paths: {}
+components:
+  schemas:
+    Inlet:
+      type: object
+      properties:
+        driver:
+          type: string
+        equipment:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        pin:
+          type: integer
+        reverse:
+          type: boolean

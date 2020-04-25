@@ -113,3 +113,15 @@ endif
 .PHONY: race
 race-test:
 	./scripts/race.sh 12
+
+.PHONY: spec
+spec:
+	swagger generate spec /w ./commands/ -i swagger.yml -o swagger.json -m
+
+.PHONY: serve-swagger
+serve-swagger:
+	swagger serve /flavor:swagger .\swagger.json
+
+.PHONY: serve-doc
+serve-doc:
+	npx redoc-cli serve .\swagger.json -p 8888

@@ -18,6 +18,7 @@ const (
 	_rpi         = "rpi"
 )
 
+// swagger:model driver
 type Driver struct {
 	ID         string                 `json:"id"`
 	Name       string                 `json:"name"`

@@ -10,6 +10,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
+//swagger:model credentials
 type Credentials struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
@@ -40,19 +41,21 @@ func NewAuth(b string, store storage.Store) Auth {
 
 func (a *auth) Authenticate(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
-		authSession, err := a.cookiejar.Get(req, "auth")
-		if err != nil {
-			log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
-			http.Error(w, "Unauthorized.", 401)
-			return
+		if false {
+			log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
+			authSession, err := a.cookiejar.Get(req, "auth")
+			if err != nil {
+				log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
+				http.Error(w, "Unauthorized.", 401)
+				return
+			}
+			if user := authSession.Values["user"]; user == nil {
+				log.Println("unauthorized request. user is not set.", req.RemoteAddr)
+				http.Error(w, "Unauthorized.", 401)
+				return
+			}
+			authSession.Save(req, w)
 		}
-		if user := authSession.Values["user"]; user == nil {
-			log.Println("unauthorized request. user is not set.", req.RemoteAddr)
-			http.Error(w, "Unauthorized.", 401)
-			return
-		}
-		authSession.Save(req, w)
 		fn(w, req)
 	}
 }

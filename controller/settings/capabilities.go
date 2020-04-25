@@ -1,5 +1,6 @@
 package settings
 
+//swagger:model capabilities
 type Capabilities struct {
 	DevMode       bool `json:"dev_mode"`
 	Dashboard     bool `json:"dashboard"`
