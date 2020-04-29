@@ -41,9 +41,9 @@ export const buildTypeMap = (props) => {
       label: i18next.t('health'),
       options: [{ id: 'current', name: 'current' }, { id: 'historical', name: 'historical' }]
     },
-    light: {
+    lights: {
       name: 'lights',
-      label: i18next.t('light'),
+      label: i18next.t('lights'),
       options: props.lights || []
     },
     ph_current: {

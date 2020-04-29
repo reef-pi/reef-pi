@@ -52,7 +52,7 @@ class dashboard extends React.Component {
           continue
         }
         switch (ch.type) {
-          case 'light':
+          case 'lights':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -129,6 +129,15 @@ class dashboard extends React.Component {
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <TempControlChart width={config.width} height={config.height} sensor_id={ch.id} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'lights':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <LightChart width={config.width} height={config.height} sensor_id={ch.id} />
                 </ErrorBoundary>
               </div>
             )
