@@ -1,5 +1,4 @@
 import React from 'react'
-import $ from 'jquery'
 import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
 import { connect } from 'react-redux'
 
@@ -10,15 +9,27 @@ class chart extends React.Component {
   }
 
   channel2line (ch, data) {
-    if (ch.profile.type === 'auto' && ch.profile.config) {
-      ch.profile.config.values.forEach((value, i) => {
-        if (data[i] === undefined) {
-          data[i] = { time: i * 2 + 'h' }
+    const stroke = ch.color === '' ? '#000' : ch.color
+    switch (ch.profile.type) {
+      case 'interval':
+        if (ch.profile.config) {
+          ch.profile.config.values.forEach((value, i) => {
+            if (data[i] === undefined) {
+              data[i] = { time: i * 2 + 'h' }
+            }
+            data[i][ch.name] = value
+          })
+          return <Line dataKey={ch.name} stroke={stroke} key={ch.pin} isAnimationActive={false} />
         }
-        data[i][ch.name] = value
-      })
-      const stroke = ch.color === '' ? '#000' : ch.color
-      return <Line dataKey={ch.name} isAnimationActive={false} stroke={stroke} key={ch.pin} />
+        break
+      case 'fixed':
+        data[0] = {
+          time: 'Always'
+        }
+        data[0][ch.name] = ch.profile.config.value
+        return <Line dataKey={ch.name} stroke={stroke} key={ch.pin} isAnimationActive={false} />
+      default:
+        console.log('supported chart ', ch.profile.type)
     }
   }
 
@@ -27,10 +38,9 @@ class chart extends React.Component {
       return <div />
     }
     const data = []
-    const lines = []
-    $.each(this.props.config.channels, function (name, channel) {
-      lines.push(this.channel2line(channel, data))
-    }.bind(this))
+    const lines = Object.keys(this.props.config.channels).map((ch) =>
+      this.channel2line(this.props.config.channels[ch], data)
+    )
     return (
       <div className='container'>
         <span className='h6'>Light - {this.props.config.name}</span>
