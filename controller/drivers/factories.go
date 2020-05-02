@@ -7,7 +7,6 @@ import (
 	"github.com/reef-pi/drivers/dli"
 	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
-	"github.com/reef-pi/drivers/mp3"
 	"github.com/reef-pi/drivers/pca9685"
 	"github.com/reef-pi/drivers/ph_board"
 	"github.com/reef-pi/drivers/pico_board"
@@ -25,7 +24,6 @@ var driversMap = map[string]hal.DriverFactory{
 	"hs103":        tplink.HS103Factory(),
 	"hs110":        tplink.HS110Factory(),
 	"hs300":        tplink.HS300Factory(),
-	"mp3":          mp3.Factory(),
 	"pca9685":      pca9685.Factory(),
 	"ph-board":     ph_board.Factory(),
 	"ph-ezo":       ezo.Factory(),

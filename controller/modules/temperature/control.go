@@ -39,6 +39,22 @@ func (c *Controller) Check(tc *TC) {
 	}
 	c.NotifyIfNeeded(*tc, reading)
 	c.statsMgr.Update(tc.ID, u)
+	resp, err := c.statsMgr.Get(tc.ID)
+	if err != nil {
+		log.Println("ERROR: temperature-subsystem. Failed to get usage statistics for sensor:", tc.Name, "Error:", err)
+		return
+	}
+	if len(resp.Historical) < 1 {
+		return
+	}
+	m := resp.Historical[len(resp.Historical)-1]
+	u, ok := m.(controller.Observation)
+	if !ok {
+		log.Println("ERROR: temperature-subsystem: failed to convert generic metric to temperature controller usage")
+		return
+	}
+	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_heater", float64(u.Upper))
+	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_cooler", float64(u.Upper))
 }
 
 func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
