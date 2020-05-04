@@ -3,6 +3,7 @@ package system
 import (
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -60,7 +61,7 @@ func (c *Controller) getBrightness() (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return strconv.Atoi(string(data))
+	return strconv.Atoi(strings.TrimSpace(string(data)))
 }
 func (c *Controller) setBrightness(b int) error {
 	if c.config.DevMode {
