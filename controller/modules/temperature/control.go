@@ -54,7 +54,7 @@ func (c *Controller) Check(tc *TC) {
 		return
 	}
 	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_heater", float64(u.Upper))
-	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_cooler", float64(u.Upper))
+	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_cooler", float64(u.Downer))
 }
 
 func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
