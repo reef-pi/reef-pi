@@ -11,7 +11,7 @@ export default class Inlet extends React.Component {
       name: props.name,
       pin: props.pin,
       reverse: props.reverse,
-      driver: props.driver,
+      driver: props.driver || {},
       lbl: i18next.t('edit')
     }
     this.handleEdit = this.handleEdit.bind(this)
@@ -25,7 +25,7 @@ export default class Inlet extends React.Component {
   }
 
   handleDriverChange (e) {
-    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0] || {}
     this.setState({
       driver: driver
     })
