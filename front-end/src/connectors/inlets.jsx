@@ -12,7 +12,7 @@ class inlets extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: props.drivers.filter(d => d.id === 'rpi')[0],
+      driver: props.drivers.filter(d => d.id === 'rpi')[0] || {},
       reverse: false,
       add: false
     }
@@ -43,7 +43,7 @@ class inlets extends React.Component {
   }
 
   handleDriverChange (e) {
-    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
+    const driver = this.props.drivers.filter(d => d.id === e.target.value)[0] || {}
     this.setState({
       driver: driver
     })
@@ -82,7 +82,7 @@ class inlets extends React.Component {
   list () {
     const items = []
     this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
-      const d = this.props.drivers.filter(d => d.id === i.driver)[0]
+      const d = this.props.drivers.filter(d => d.id === i.driver)[0] || {}
       items.push(
         <Inlet
           name={i.name}
