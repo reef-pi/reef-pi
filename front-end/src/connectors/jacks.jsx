@@ -41,7 +41,7 @@ class jacks extends React.Component {
   handleSetDriver (e) {
     this.setState({
       JackDriver: e.target.value,
-      driver_name: (this.props.drivers.filter(d => d.id === e.target.value)[0]||{}).name
+      driver_name: (this.props.drivers.filter(d => d.id === e.target.value)[0] || {}).name
     })
   }
 
