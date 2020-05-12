@@ -31,11 +31,6 @@ class main extends React.Component {
     this.handleChangeMode = this.handleChangeMode.bind(this)
   }
 
-  componentWillMount () {
-    this.props.fetchLights()
-    this.props.fetchJacks()
-  }
-
   setJack (i) {
     return () => {
       this.setState({
