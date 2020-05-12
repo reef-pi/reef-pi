@@ -2,7 +2,6 @@ import React from 'react'
 import Grid from './grid'
 import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
-import { isEmptyObject } from 'jquery'
 import { showError } from 'utils/alert'
 import i18next from 'i18next'
 
@@ -23,10 +22,10 @@ class config extends React.Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-    if (props.config === undefined) {
+    if (props.config === undefined || props.config === null) {
       return null
     }
-    if (isEmptyObject(props.config)) {
+    if (Object.keys(props.config).length === 0) {
       return null
     }
     state.config = props.config
@@ -89,9 +88,11 @@ class config extends React.Component {
         config.grid_details[i] = []
       }
       for (j = 0; j < config.column; j++) {
+        const row = cells[i] ? cells[i] : []
+        const cell = row[j] ? row[j] : { id: 'current', type: 'health' }
         config.grid_details[i][j] = {
-          id: cells[i][j].id,
-          type: cells[i][j].type
+          id: cell.id,
+          type: cell.type
         }
       }
       config.grid_details[i].length = config.column

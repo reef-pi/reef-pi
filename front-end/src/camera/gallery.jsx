@@ -57,8 +57,9 @@ export default class Gallery extends React.Component {
   }
 
   render () {
-    const { images } = this.props
-    if (!images) return
+    if (!this.props.images || this.props.images.length === 0) {
+      return <div />
+    }
 
     const gallery = []
     this.props.images.forEach((k, i) => {

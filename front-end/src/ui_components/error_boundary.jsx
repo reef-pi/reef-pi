@@ -7,10 +7,14 @@ class ErrorBoundary extends React.Component {
     this.state = { error: null, errorInfo: null, currentTab: props.tab }
   }
 
-  componentWillReceiveProps ({ tab }) {
-    if (tab !== this.state.currentTab) {
-      this.setState({ error: null, errorInfo: null, currentTab: tab })
+  static getDerivedStateFromProps (props, state) {
+    if (props.tab === state.currentTab) {
+      return null
     }
+    state.error = null
+    state.errorInfo = null
+    state.currentTab = props.tab
+    return state
   }
 
   componentDidCatch (error, errorInfo) {
