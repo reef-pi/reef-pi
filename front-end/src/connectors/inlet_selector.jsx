@@ -1,5 +1,4 @@
 import React from 'react'
-import { isEmptyObject } from 'jquery'
 import { fetchInlets } from '../redux/actions/inlets'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -25,10 +24,10 @@ class inletSelector extends React.Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-    if (props.inlets === undefined) {
+    if (props.inlets === undefined || props.inlets === null) {
       return null
     }
-    if (isEmptyObject(props.inlets)) {
+    if (Object.keys(props.inlets).length === 0) {
       return null
     }
     props.inlets.forEach((v, k) => {

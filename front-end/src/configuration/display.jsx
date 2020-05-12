@@ -1,6 +1,5 @@
 import React from 'react'
 import { fetchDisplay, switchDisplay, setBrightness } from '../redux/actions/display'
-import { isEmptyObject } from 'jquery'
 import { connect } from 'react-redux'
 
 class display extends React.Component {
@@ -15,10 +14,10 @@ class display extends React.Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-    if (props.config === undefined) {
+    if (props.config === undefined || props.config === null) {
       return null
     }
-    if (isEmptyObject(props.config)) {
+    if (Object.keys(props.config).length === 0) {
       return null
     }
     state.on = props.config.on
