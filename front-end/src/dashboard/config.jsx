@@ -89,9 +89,11 @@ class config extends React.Component {
         config.grid_details[i] = []
       }
       for (j = 0; j < config.column; j++) {
+        const row = cells[i] ? cells[i] : []
+        const cell = row[j] ? row[j] : { id: 'current', type: 'health' }
         config.grid_details[i][j] = {
-          id: cells[i][j].id,
-          type: cells[i][j].type
+          id: cell.id,
+          type: cell.type
         }
       }
       config.grid_details[i].length = config.column
