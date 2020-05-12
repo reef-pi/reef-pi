@@ -52,7 +52,11 @@ export default class CollapsibleList extends React.Component {
     const expanded = { ...state.expanded }
     const readOnly = { ...state.readOnly }
 
-    props.children.forEach(child => {
+    Object.keys(props.children).forEach(k => {
+      const child = props.children[k]
+      if (!child || !child.props) {
+        return
+      }
       if (state.expanded[child.props.name] == null) {
         expanded[child.props.name] = !!child.props.defaultOpen
         readOnly[child.props.name] = true
