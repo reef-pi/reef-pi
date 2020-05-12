@@ -1,7 +1,5 @@
 import { reduxGet } from 'utils/ajax'
-import $ from 'jquery'
 import { fetchATOs } from './ato'
-import { fetchInfo } from './info'
 import { fetchDosingPumps } from './doser'
 import { fetchDrivers } from './drivers'
 import { fetchErrors } from './errors'
@@ -17,6 +15,7 @@ import { fetchTimers } from './timer'
 import { capabilitiesLoaded } from './capabilities'
 import { fetchInstances } from './instances'
 import { fetchMacros } from './macro'
+import { fetchInfo } from './info'
 
 export const fetchControllerData = (dispatch, capabilities) => {
   dispatch(fetchDrivers())
@@ -27,11 +26,11 @@ export const fetchControllerData = (dispatch, capabilities) => {
   dispatch(fetchOutlets())
   dispatch(fetchAnalogInputs())
 
-  $.each(capabilities, (i, v) => {
-    if (!v) {
+  Object.keys(capabilities).forEach((k) => {
+    if (!capabilities[k]) {
       return
     }
-    switch (i) {
+    switch (k) {
       case 'ato':
         dispatch(fetchATOs())
         break
@@ -61,7 +60,6 @@ export const fetchControllerData = (dispatch, capabilities) => {
 }
 
 export const fetchManagerData = (dispatch) => {
-  console.log('Fetching manager data')
   dispatch(fetchInstances())
 }
 
