@@ -48,7 +48,7 @@ export default class CollapsibleList extends React.Component {
     })
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps (props, state) {
     const expanded = { ...state.expanded }
     const readOnly = { ...state.readOnly }
 
