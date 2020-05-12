@@ -37,7 +37,7 @@
     "immutability-helper": "^3.0.2",
     "jest": "24.9.0",
     "jest-date-mock": "1.0.8",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "json-loader": "0.5.7",
     "lodash.debounce": "4.0.8",
     "lodash.isequal": "4.5.0",
