@@ -40,7 +40,7 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	r.HandleFunc("/api/phprobes", e.listProbes).Methods("GET")
 
 	// swagger:operation PUT /api/phprobes PhProbes phProbeCreate
-	// Create an ph probe.
+	// Create a ph probe.
 	// Create a new ph probe.
 	// ---
 	// parameters:
@@ -112,8 +112,76 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 	//   schema:
 	//    $ref: '#/definitions/statsResponse'
 	r.HandleFunc("/api/phprobes/{id}/readings", e.getReadings).Methods("GET")
+
+	// swagger:operation POST /api/phprobes/{id}/calibrate PhProbes phProbeCalibrate
+	// Calibrate a ph probe.
+	// Set calibration points for one or two point calibration
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the ph probe to calibrate
+	//    required: true
+	//    schema:
+	//     type: integer
+	//  - in: body
+	//    name: measurements
+	//    description: The calibration measurements
+	//    required: true
+	//    schema:
+	//     type: array
+	//     items:
+	//      type: object
+	//      properties:
+	//       expected:
+	//        type: float64
+	//        format: float
+	//        description: The expected value
+	//       observed:
+	//        type: float64
+	//        format: float
+	//        description: The actual value observed
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/phprobes/{id}/calibrate", e.calibrate).Methods("POST")
+
+	// swagger:operation GET /api/phprobes/{id}/read PhProbes phProbeRead
+	// Get ph probe reading.
+	// Get ph probe reading.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the ph probe to read
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/phprobes/{id}/read", e.read).Methods("GET")
+
+	// swagger:operation POST /api/phprobes/{id}/calibratepoint PhProbes phProbeCalibrateSingle
+	// Calibrate a ph probe.
+	// Set a calibration point for one or two point calibration
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the ph probe to calibrate
+	//    required: true
+	//    schema:
+	//     type: integer
+	//  - in: body
+	//    name: measurements
+	//    description: The calibration measurement
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/calibrationPoint'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/phprobes/{id}/calibratepoint", e.calibratePoint).Methods("POST")
 }
 

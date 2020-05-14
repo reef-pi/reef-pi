@@ -11,11 +11,13 @@ const (
 	BrightnessFile = "/sys/class/backlight/rpi_backlight/brightness"
 )
 
+//swagger:model displayState
 type DisplayState struct {
 	On         bool `json:"on"`
 	Brightness int  `json:"brightness"`
 }
 
+//swagger:model displayConfig
 type DisplayConfig struct {
 	Enable     bool `json:"enable"`
 	Brightness int  `json:"brightness"`

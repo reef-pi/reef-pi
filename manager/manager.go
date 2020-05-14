@@ -1,12 +1,13 @@
 package manager
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"net/http"
 )
 
 type mgr struct {

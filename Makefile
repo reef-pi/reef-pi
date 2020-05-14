@@ -118,10 +118,6 @@ race-test:
 spec:
 	swagger generate spec /w ./commands/ -i swagger.yml -o swagger.json -m
 
-.PHONY: serve-swagger
-serve-swagger:
-	swagger serve /flavor:swagger .\swagger.json
-
-.PHONY: serve-doc
-serve-doc:
+.PHONY: serve-spec
+serve-spec:
 	npx redoc-cli serve .\swagger.json -p 8888

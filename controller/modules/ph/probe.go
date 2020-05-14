@@ -55,6 +55,7 @@ func (p *Probe) loadHomeostasis(c controller.Controller) {
 	p.h = controller.NewHomeostasis(c, hConf)
 }
 
+//swagger:model calibrationPoint
 type CalibrationPoint struct {
 	Type     string  `json:"type"`
 	Expected float64 `json:"expected"`

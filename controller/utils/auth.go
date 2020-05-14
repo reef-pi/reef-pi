@@ -41,21 +41,19 @@ func NewAuth(b string, store storage.Store) Auth {
 
 func (a *auth) Authenticate(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		if false {
-			log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
-			authSession, err := a.cookiejar.Get(req, "auth")
-			if err != nil {
-				log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
-				http.Error(w, "Unauthorized.", 401)
-				return
-			}
-			if user := authSession.Values["user"]; user == nil {
-				log.Println("unauthorized request. user is not set.", req.RemoteAddr)
-				http.Error(w, "Unauthorized.", 401)
-				return
-			}
-			authSession.Save(req, w)
+		log.Printf("API Request:'%6s %s' from: %s\n", req.Method, req.URL.String(), req.RemoteAddr)
+		authSession, err := a.cookiejar.Get(req, "auth")
+		if err != nil {
+			log.Println("unauthorized request.", req.RemoteAddr, "error:", err)
+			http.Error(w, "Unauthorized.", 401)
+			return
 		}
+		if user := authSession.Values["user"]; user == nil {
+			log.Println("unauthorized request. user is not set.", req.RemoteAddr)
+			http.Error(w, "Unauthorized.", 401)
+			return
+		}
+		authSession.Save(req, w)
 		fn(w, req)
 	}
 }
