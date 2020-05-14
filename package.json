@@ -61,6 +61,7 @@
     "recharts": "^2.0.0-beta.6",
     "redux": "^4.0.5",
     "redux-mock-store": "1.5.4",
+    "redoc-cli": "^0.9.8",
     "redux-thunk": "2.3.0",
     "sass-lint": "1.13.1",
     "sass-loader": "8.0.0",

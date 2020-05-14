@@ -23,6 +23,7 @@ type Notify struct {
 	Max    float64 `json:"max"`
 }
 
+//swagger:model phProbe
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
@@ -54,6 +55,7 @@ func (p *Probe) loadHomeostasis(c controller.Controller) {
 	p.h = controller.NewHomeostasis(c, hConf)
 }
 
+//swagger:model calibrationPoint
 type CalibrationPoint struct {
 	Type     string  `json:"type"`
 	Expected float64 `json:"expected"`

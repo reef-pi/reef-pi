@@ -9,6 +9,7 @@ import (
 
 const Bucket = storage.EquipmentBucket
 
+//swagger:model equipment
 type Equipment struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`

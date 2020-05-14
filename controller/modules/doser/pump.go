@@ -11,6 +11,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+// swagger:model pump
 type Pump struct {
 	ID       string         `json:"id"`
 	Name     string         `json:"name"`

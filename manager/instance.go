@@ -2,12 +2,14 @@ package manager
 
 import (
 	"encoding/json"
-	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
+
 	"log"
+
+	"github.com/gorilla/mux"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -16,6 +18,7 @@ const (
 	InstancesBucket = "instances"
 )
 
+//swagger:model instance
 type Instance struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`

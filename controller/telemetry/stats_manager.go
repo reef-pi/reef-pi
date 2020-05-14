@@ -15,6 +15,7 @@ type Metric interface {
 	Before(Metric) bool
 }
 
+// swagger:model statsResponse
 type StatsResponse struct {
 	Current    []Metric `json:"current"`
 	Historical []Metric `json:"historical"`

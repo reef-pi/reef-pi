@@ -14,6 +14,7 @@ type Notify struct {
 	Max    int  `json:"max"`
 }
 
+// swagger:model ato
 type ATO struct {
 	ID             string        `json:"id"`
 	IsMacro        bool          `json:"is_macro"`

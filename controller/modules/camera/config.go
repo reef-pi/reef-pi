@@ -16,6 +16,7 @@ type MotionConfig struct {
 	Height int    `json:"height"`
 }
 
+// swagger:model cameraConfig
 type Config struct {
 	Enable         bool          `json:"enable"`
 	ImageDirectory string        `json:"image_directory"`

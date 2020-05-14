@@ -13,6 +13,7 @@ import (
 
 const Bucket = storage.TimerBucket
 
+//swagger:model timerJob
 type Job struct {
 	ID     string          `json:"id"`
 	Name   string          `json:"name"`

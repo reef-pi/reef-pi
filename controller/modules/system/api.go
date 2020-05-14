@@ -12,14 +12,82 @@ import (
 )
 
 func (c *Controller) LoadAPI(r *mux.Router) {
+
+	// swagger:route POST /api/display/on Display systemDisplayOn
+	// Turn display on.
+	// Turn display on.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/display/on", c.EnableDisplay).Methods("POST")
+
+	// swagger:route POST /api/display/off Display systemDisplayOff
+	// Turn display off.
+	// Turn display off.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/display/off", c.DisableDisplay).Methods("POST")
+
+	// swagger:operation POST /api/display Display systemDisplayPost
+	// Set display brigthness
+	// Set display brightness
+	// ---
+	// parameters:
+	//  - in: body
+	//    name: displayconfig
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/displayConfig'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/display", c.SetBrightness).Methods("POST")
+
+	// swagger:route GET /api/display Display systemDisplayGet
+	// Get current display state.
+	// Get current display state.
+	// responses:
+	//  200: displayState
 	r.HandleFunc("/api/display", c.GetDisplayState).Methods("GET")
+
+	// swagger:route POST /api/admin/poweroff Admin adminPowerOff
+	// Shut down the raspberry pi.
+	// Shut down the raspberry pi.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/admin/poweroff", c.Poweroff).Methods("POST")
+
+	// swagger:route POST /api/admin/reboot Admin adminReboot
+	// Reboot the raspberry pi.
+	// Reboot the raspberry pi.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/admin/reboot", c.Reboot).Methods("POST")
+
+	// swagger:route POST /api/admin/reload Admin adminReload
+	// Reload reef-pi.
+	// Reload reef-pi to apply any capability changes or other modules that are registered at startup.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/admin/reload", c.reload).Methods("POST")
+
+	// swagger:route POST /api/admin/upgrade Admin adminUpgrade
+	// Upgrade reef-pi.
+	// Upgrade reef-pi.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
+
+	// swagger:route GET /api/info Admin adminInfo
+	// Get system summary.
+	// Get system summary.
+	// responses:
+	//  200: systemSummary
 	r.HandleFunc("/api/info", c.GetSummary).Methods("GET")
 	if c.config.Pprof {
 		c.enablePprof(r)
