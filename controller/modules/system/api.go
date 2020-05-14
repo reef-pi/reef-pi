@@ -75,7 +75,12 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//   description: OK
 	r.HandleFunc("/api/admin/reload", c.reload).Methods("POST")
 
-	//TODO: [ML] Add api documentation for upgrade
+	// swagger:route POST /api/admin/upgrade Admin adminUpgrade
+	// Upgrade reef-pi.
+	// Upgrade reef-pi.
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
 
 	// swagger:route GET /api/info Admin adminInfo
