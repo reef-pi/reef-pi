@@ -14,6 +14,7 @@ type Capabilities struct {
 	Ph            bool `json:"ph"`
 	Macro         bool `json:"macro"`
 	Configuration bool `json:"configuration"`
+	Journal       bool `json:"journal"`
 }
 
 var DefaultCapabilities = Capabilities{

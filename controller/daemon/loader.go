@@ -6,6 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/camera"
 	"github.com/reef-pi/reef-pi/controller/modules/doser"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
+	"github.com/reef-pi/reef-pi/controller/modules/journal"
 	"github.com/reef-pi/reef-pi/controller/modules/lighting"
 	"github.com/reef-pi/reef-pi/controller/modules/macro"
 	"github.com/reef-pi/reef-pi/controller/modules/ph"
@@ -43,6 +44,14 @@ func (r *ReefPi) loadTimerSubsystem() error {
 	}
 	t := timer.New(r)
 	r.subsystems[timer.Bucket] = t
+	return nil
+}
+
+func (r *ReefPi) loadJournalSubsystem() error {
+	if !r.settings.Capabilities.Journal {
+		return nil
+	}
+	r.subsystems[journal.Bucket] = journal.New(r)
 	return nil
 }
 
@@ -174,6 +183,10 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadTimerSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load timer subsystem. Error:", err)
 		r.LogError("subsystem-timer", "Failed to load timer subsystem. Error:"+err.Error())
+	}
+	if err := r.loadJournalSubsystem(); err != nil {
+		log.Println("ERROR: Failed to load journal subsystem. Error:", err)
+		r.LogError("subsystem-journal", "Failed to load journal subsystem. Error:"+err.Error())
 	}
 	for sName, sController := range r.subsystems {
 		if err := sController.Setup(); err != nil {
