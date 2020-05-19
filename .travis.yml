@@ -8,6 +8,7 @@ before_install:
 script:
   - ./build/ci.sh
   - bash <(curl -s https://codecov.io/bash) -cF go
+  - make pi
   - bundle install
   - sudo chown -R $USER /home/travis/.npm
   - /usr/bin/npm install --no-optional
