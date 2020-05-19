@@ -72,6 +72,7 @@ capabilities:doser,Doser
 capabilities:dosing_pumps,Dosing pumps
 capabilities:equipment,Equipment
 capabilities:health_check,Health check
+capabilities:journal,Journal
 capabilities:lighting,Lighting
 capabilities:lights,Lights
 capabilities:log,Log
