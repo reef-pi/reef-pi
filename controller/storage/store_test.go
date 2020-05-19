@@ -64,6 +64,4 @@ func TestStore(t *testing.T) {
 		t.Fatal("Failed to store with explicit ID. Error:", err)
 	}
 	store.Close()
-	store.ReOpen()
-	store.Close()
 }

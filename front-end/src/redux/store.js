@@ -35,6 +35,8 @@ const initialState = {
   ph_reading: [],
   tc_sensors: [],
   tc_reading: [],
+  journals: [],
+  journal_usage: {},
   telemetry: {
   },
   camera: {
