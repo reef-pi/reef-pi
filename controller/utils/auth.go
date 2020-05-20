@@ -10,6 +10,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
+//swagger:model credentials
 type Credentials struct {
 	User     string `json:"user"`
 	Password string `json:"password"`

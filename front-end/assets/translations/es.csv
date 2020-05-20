@@ -70,6 +70,7 @@ capabilities:doser,Dosificador
 capabilities:dosing_pumps,Dosificadores
 capabilities:equipment,Equipos
 capabilities:health_check,Chequeo del Sistema
+capabilities:journal,
 capabilities:lighting,Iluminacion
 capabilities:lights,Luces
 capabilities:log,Log

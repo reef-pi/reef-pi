@@ -24,19 +24,25 @@ const (
 	TimerBucket            = "timers"
 	ErrorBucket            = "errors"
 	DriverBucket           = "drivers"
+	JournalBucket          = "journal"
+	JournalUsageBucket     = "journal_usage"
 )
 
-type Store interface {
+type ObjectStore interface {
 	RawGet(string, string) ([]byte, error)
 	Get(string, string, interface{}) error
 	List(string, func(string, []byte) error) error
 	Create(string, func(string) interface{}) error
-	CreateBucket(string) error
-	Close() error
 	CreateWithID(string, string, interface{}) error
 	Update(string, string, interface{}) error
 	RawUpdate(string, string, []byte) error
 	Delete(string, string) error
-	ReOpen() error
+}
+
+type Store interface {
+	ObjectStore
+	Close() error
 	Buckets() ([]string, error)
+	SubBucket(string, string) ObjectStore
+	CreateBucket(string) error
 }

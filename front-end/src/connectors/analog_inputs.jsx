@@ -19,7 +19,7 @@ class analogInputs extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: props.drivers.filter(d => d.id === 'rpi')[0],
+      driver: props.drivers.filter(d => d.id === 'rpi')[0] || {},
       add: false
     }
     this.list = this.list.bind(this)
@@ -42,7 +42,7 @@ class analogInputs extends React.Component {
   handleSetDriver (e) {
     const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: driver
+      driver: driver || {}
     })
   }
 
@@ -85,7 +85,7 @@ class analogInputs extends React.Component {
           name={j.name}
           key={j.id}
           pin={j.pin}
-          driver={this.props.drivers.filter(d => d.id === j.driver)[0]}
+          driver={this.props.drivers.filter(d => d.id === j.driver)[0] || {}}
           drivers={this.props.drivers}
           analog_input_id={j.id}
           remove={this.remove(j.id)}

@@ -17,6 +17,7 @@ import (
 
 const InletBucket = storage.InletBucket
 
+// swagger:model inlet
 type Inlet struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
@@ -32,11 +33,107 @@ type Inlets struct {
 }
 
 func (e *Inlets) LoadAPI(r *mux.Router) {
+
+	// swagger:operation GET /api/inlets/{id} Inlet inletGet
+	// Get an Inlet by id.
+	// Get an existing Inlet.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the inlet
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	//   schema:
+	//    $ref: '#/definitions/inlet'
+	//  404:
+	//   description: Not Found
 	r.HandleFunc("/api/inlets/{id}", e.get).Methods("GET")
+
+	// swagger:route GET /api/inlets Inlet inletList
+	// List all Inlets.
+	// List all inlets in reef-pi.
+	// responses:
+	// 	200: body:[]inlet
 	r.HandleFunc("/api/inlets", e.list).Methods("GET")
+
+	// swagger:operation PUT /api/inlets Inlet inletCreate
+	// Create an Inlet.
+	// Create a new Inlet.
+	// ---
+	// parameters:
+	//  - in: body
+	//    name: inlet
+	//    description: The inlet to create
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/inlet'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/inlets", e.create).Methods("PUT")
+
+	// swagger:operation DELETE /api/inlets/{id} Inlet inletDelete
+	// Delete an Inlet.
+	// Delete an existing Inlet.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the inlet to delete
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/inlets/{id}", e.delete).Methods("DELETE")
+
+	//swagger:operation POST /api/inlets/{id} Inlet inletUpdate
+	//Update an Inlet.
+	//Update an existing Inlet.
+	//
+	//---
+	//parameters:
+	// - in: path
+	//   name: id
+	//   description: The Id of the inlet to update
+	//   required: true
+	//   schema:
+	//    type: integer
+	// - in: body
+	//   name: inlet
+	//   description: The inlet to update
+	//   required: true
+	//   schema:
+	//    $ref: '#/definitions/inlet'
+	//responses:
+	// 200:
+	//  description: OK
+	// 404:
+	//  description: Not Found
 	r.HandleFunc("/api/inlets/{id}", e.update).Methods("POST")
+
+	// swagger:operation POST /api/inlets/{id}/read Inlet inletRead
+	// Read an Inlet.
+	// Read an Inlet.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the inlet to read
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	//  404:
+	//   description: Not Found
 	r.HandleFunc("/api/inlets/{id}/read", e.read).Methods("POST")
 }
 

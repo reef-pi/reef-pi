@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import i18n from 'utils/i18n'
 
 export default class Summary extends React.Component {
-  componentWillMount () {
-    const timer = window.setInterval(this.props.fetch, 1800 * 1000)
-    this.setState({ timer: timer })
+  constructor (props) {
+    super(props)
+    this.state = {
+      timer: window.setInterval(props.fetch, 1800 * 1000)
+    }
   }
 
   componentWillUnmount () {

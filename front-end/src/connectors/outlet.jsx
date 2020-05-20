@@ -12,7 +12,7 @@ export default class Outlet extends React.Component {
       pin: props.pin,
       reverse: props.reverse,
       lbl: i18next.t('edit'),
-      driver: props.driver
+      driver: props.driver || {}
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
@@ -39,7 +39,7 @@ export default class Outlet extends React.Component {
   handleDriverChange (e) {
     const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: driver
+      driver: driver || {}
     })
   }
 

@@ -70,6 +70,7 @@ capabilities:doser,Doseerpomp
 capabilities:dosing_pumps,Doseerpompen
 capabilities:equipment,Uitrusting
 capabilities:health_check,Health check
+capabilities:journal,
 capabilities:lighting,Belichting
 capabilities:lights,Lichten
 capabilities:log,Log

@@ -3,6 +3,7 @@ package system
 import (
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -10,11 +11,13 @@ const (
 	BrightnessFile = "/sys/class/backlight/rpi_backlight/brightness"
 )
 
+//swagger:model displayState
 type DisplayState struct {
 	On         bool `json:"on"`
 	Brightness int  `json:"brightness"`
 }
 
+//swagger:model displayConfig
 type DisplayConfig struct {
 	Enable     bool `json:"enable"`
 	Brightness int  `json:"brightness"`
@@ -60,7 +63,7 @@ func (c *Controller) getBrightness() (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return strconv.Atoi(string(data))
+	return strconv.Atoi(strings.TrimSpace(string(data)))
 }
 func (c *Controller) setBrightness(b int) error {
 	if c.config.DevMode {

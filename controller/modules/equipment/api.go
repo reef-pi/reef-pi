@@ -10,14 +10,114 @@ import (
 
 //API
 func (e *Controller) LoadAPI(r *mux.Router) {
+
+	// swagger:operation GET /api/equipment/{id} Equipment equipmentGet
+	// Get an equipment by id.
+	// Get an existing equipment by id.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the equipment
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	//   schema:
+	//    $ref: '#/definitions/equipment'
+	//  404:
+	//   description: Not Found
 	r.HandleFunc("/api/equipment/{id}", e.GetEquipment).Methods("GET")
+
+	// swagger:route GET /api/equipment Equipment equipmentList
+	// List all equipment.
+	// List all equipment in reef-pi.
+	// responses:
+	// 	200: body:[]equipment
 	r.HandleFunc("/api/equipment", e.ListEquipment).Methods("GET")
+
+	// swagger:operation PUT /api/equipment Equipment equipmentCreate
+	// Create an equipment.
+	// Create a new equipment.
+	// ---
+	// parameters:
+	//  - in: body
+	//    name: equipment
+	//    description: The equipment to create
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/equipment'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/equipment", e.CreateEquipment).Methods("PUT")
+
+	// swagger:operation POST /api/equipment Equipment equipmentUpdate
+	// Update an equipment.
+	// Update an existing equipment.
+	//---
+	//parameters:
+	// - in: path
+	//   name: id
+	//   description: The Id of the equipment to update
+	//   required: true
+	//   schema:
+	//    type: integer
+	// - in: body
+	//   name: equipment
+	//   description: The equipment to update
+	//   required: true
+	//   schema:
+	//    $ref: '#/definitions/equipment'
+	//responses:
+	// 200:
+	//  description: OK
+	// 404:
+	//  description: Not Found
 	r.HandleFunc("/api/equipment/{id}", e.UpdateEquipment).Methods("POST")
+
+	// swagger:operation DELETE /api/equipment/{id} Equipment equipmentDelete
+	// Delete an equipment.
+	// Delete an existing equipment.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the equipment to delete
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/equipment/{id}", e.DeleteEquipment).Methods("DELETE")
+
+	// swagger:operation POST /api/equipment/{id}/control Equipment equipmentControl
+	// Control an equipment.
+	// Control an equipment.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the equipment to control
+	//    required: true
+	//    schema:
+	//     type: integer
+	//  - in: body
+	//    name: action
+	//    description: The action to take
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/equipmentAction'
+	// responses:
+	//  200:
+	//   description: OK
 	r.HandleFunc("/api/equipment/{id}/control", e.control).Methods("POST")
 }
 
+//swagger:model equipmentAction
 type EquipmentAction struct {
 	On bool `json:"on"`
 }

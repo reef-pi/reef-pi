@@ -21,10 +21,6 @@ class doser extends React.Component {
     this.calibrateDoser = this.calibrateDoser.bind(this)
   }
 
-  componentWillMount () {
-    this.props.fetchDosingPumps()
-  }
-
   handleToggleAddDoserDiv () {
     this.setState({
       addDoser: !this.state.addDoser

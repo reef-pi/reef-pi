@@ -10,6 +10,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
+//swagger:model error
 type Error struct {
 	Message string `json:"message"`
 	Time    string `json:"time"`

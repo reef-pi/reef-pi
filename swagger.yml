@@ -1,0 +1,20 @@
+definitions:
+  light:
+    properties:
+      channels:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/channel'
+        x-go-name: Channels
+      enable:
+        type: boolean
+        x-go-name: Enable
+      id:
+        type: string
+        x-go-name: ID
+      jack:
+        type: string
+        x-go-name: Jack
+      name:
+        type: string
+        x-go-name: Name

@@ -19,6 +19,7 @@ type Notify struct {
 	Min    float64 `json:"min"`
 }
 
+//swagger:model temperatureController
 type TC struct {
 	sync.Mutex
 	ID                string            `json:"id"`

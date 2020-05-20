@@ -7,6 +7,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/pwm_profile"
 )
 
+//swagger:model channel
 type Channel struct {
 	Name        string                  `json:"name"`
 	On          bool                    `json:"on"`

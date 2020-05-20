@@ -70,6 +70,7 @@ capabilities:doser,Pompe doseuse
 capabilities:dosing_pumps,Pompes doseuses
 capabilities:equipment,Equipement
 capabilities:health_check,Santé du système
+capabilities:journal,
 capabilities:lighting,Éclairage
 capabilities:lights,Lumieres
 capabilities:log,Log

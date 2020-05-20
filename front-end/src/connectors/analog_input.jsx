@@ -11,7 +11,7 @@ export default class AnalogInput extends React.Component {
       name: props.name,
       pin: props.pin,
       lbl: 'edit',
-      driver: props.driver
+      driver: props.driver || {}
     }
     this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
@@ -33,7 +33,7 @@ export default class AnalogInput extends React.Component {
   handleSetDriver (e) {
     const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: driver
+      driver: driver || {}
     })
   }
 

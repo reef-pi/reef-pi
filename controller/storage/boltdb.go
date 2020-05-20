@@ -11,8 +11,8 @@ import (
 )
 
 type store struct {
-	db    *bolt.DB
-	fname string
+	parent string
+	db     *bolt.DB
 }
 
 type Extractor func([]byte) (interface{}, error)
@@ -23,22 +23,29 @@ func NewStore(fname string) (*store, error) {
 		return nil, err
 	}
 	return &store{
-		db:    db,
-		fname: fname,
+		db: db,
 	}, nil
-}
-
-func (s *store) ReOpen() error {
-	db, err := bolt.Open(s.fname, 0600, &bolt.Options{Timeout: 3 * time.Second})
-	if err != nil {
-		return err
-	}
-	s.db = db
-	return nil
 }
 
 func (s *store) Close() error {
 	return s.db.Close()
+}
+
+func (s *store) bucket(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
+	var b *bolt.Bucket
+	if s.parent == "" {
+		b = tx.Bucket([]byte(name))
+	} else {
+		p := tx.Bucket([]byte(s.parent))
+		if p == nil {
+			return nil, fmt.Errorf("Parent bucket: '%s' does not exist.", s.parent)
+		}
+		b = p.Bucket([]byte(name))
+	}
+	if b == nil {
+		return nil, fmt.Errorf("Bucket: '%s' does not exist.", name)
+	}
+	return b, nil
 }
 
 func (s *store) CreateBucket(bucket string) error {
@@ -78,9 +85,9 @@ func (s *store) Get(bucket, id string, i interface{}) error {
 
 func (s *store) List(bucket string, extractor func(string, []byte) error) error {
 	return s.db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
+		b, err := s.bucket(tx, bucket)
+		if err != nil {
+			return err
 		}
 		c := b.Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
@@ -94,9 +101,9 @@ func (s *store) List(bucket string, extractor func(string, []byte) error) error 
 
 func (s *store) Create(bucket string, updateID func(string) interface{}) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
+		b, err := s.bucket(tx, bucket)
+		if err != nil {
+			return err
 		}
 		id, _ := b.NextSequence()
 		idString := strconv.Itoa(int(id))
@@ -111,9 +118,9 @@ func (s *store) Create(bucket string, updateID func(string) interface{}) error {
 
 func (s *store) RawUpdate(bucket, id string, buf []byte) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
+		b, err := s.bucket(tx, bucket)
+		if err != nil {
+			return err
 		}
 		return b.Put([]byte(id), buf)
 	})
@@ -128,9 +135,9 @@ func (s *store) Update(bucket, id string, i interface{}) error {
 
 func (s *store) Delete(bucket, id string) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
+		b, err := s.bucket(tx, bucket)
+		if err != nil {
+			return err
 		}
 		return b.Delete([]byte(id))
 	})
@@ -138,9 +145,9 @@ func (s *store) Delete(bucket, id string) error {
 
 func (s *store) CreateWithID(bucket, id string, payload interface{}) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket))
-		if b == nil {
-			return fmt.Errorf("Bucket: '%s' does not exist.", bucket)
+		b, err := s.bucket(tx, bucket)
+		if err != nil {
+			return err
 		}
 		data, err := json.Marshal(payload)
 		if err != nil {
@@ -149,6 +156,7 @@ func (s *store) CreateWithID(bucket, id string, payload interface{}) error {
 		return b.Put([]byte(id), data)
 	})
 }
+
 func (s *store) Buckets() ([]string, error) {
 	var bs []string
 	err := s.db.View(func(tx *bolt.Tx) error {
@@ -158,4 +166,22 @@ func (s *store) Buckets() ([]string, error) {
 		})
 	})
 	return bs, err
+}
+
+func (s *store) CreateSubBucket(parent, child string) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		p := tx.Bucket([]byte(parent))
+		if p == nil {
+			return fmt.Errorf("Bucket: '%s' does not exist.", parent)
+		}
+		_, err := p.CreateBucketIfNotExists([]byte(child))
+		return err
+	})
+}
+
+func (s *store) SubBucket(parent, child string) ObjectStore {
+	return &store{
+		db:     s.db,
+		parent: parent,
+	}
 }

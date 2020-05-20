@@ -70,6 +70,7 @@ capabilities:doser,滴定
 capabilities:dosing_pumps,滴定泵
 capabilities:equipment,设备
 capabilities:health_check,健康检查
+capabilities:journal,
 capabilities:lighting,灯光
 capabilities:lights,灯具
 capabilities:log,日志
