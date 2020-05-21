@@ -176,3 +176,10 @@ Note, if theres an already installed reef-pi, you have to remove it first. To do
 ```
 sudo apt-get remove -y --purge reef-pi
 ```
+
+
+### Generating API doc using swagger
+
+- Install [go-swagger](https://github.com/go-swagger/go-swagger) command line toold
+- Invoke `make spec` to generate API documention
+- Invoke `make serve-spec` to get API documentation using local server

@@ -275,11 +275,6 @@ describe('Lighting ui', () => {
     const m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
       .dive()
       .instance()
-    m.channel2line({ profile: { type: 'foo' } }, {})
-    m.channel2line(
-      { name: 'bar', color: '#CCC', pin: '1', profile: { type: 'auto', config: { values: [{ foo: 'bar' }] } } },
-      { 0: { time: 'h' } }
-    )
   })
 
   it('<Channel />', () => {

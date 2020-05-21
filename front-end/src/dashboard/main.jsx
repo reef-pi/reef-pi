@@ -52,7 +52,7 @@ class dashboard extends React.Component {
           continue
         }
         switch (ch.type) {
-          case 'light':
+          case 'lights':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>

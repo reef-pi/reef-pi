@@ -120,4 +120,4 @@ spec:
 
 .PHONY: serve-spec
 serve-spec:
-	npx redoc-cli serve .\swagger.json -p 8888
+	npx redoc-cli serve swagger.json -p 8888

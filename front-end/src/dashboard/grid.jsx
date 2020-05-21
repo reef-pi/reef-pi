@@ -99,7 +99,7 @@ export default class Grid extends React.Component {
       this.menuItem(this.state.types.ato, false, i, j),
       this.menuItem(this.state.types.equipment, false, i, j),
       this.menuItem(this.state.types.health, false, i, j),
-      this.menuItem(this.state.types.light, false, i, j),
+      this.menuItem(this.state.types.lights, false, i, j),
       this.menuItem(this.state.types.ph_current, false, i, j),
       this.menuItem(this.state.types.ph_historical, false, i, j),
       this.menuItem(this.state.types.temp_current, false, i, j),

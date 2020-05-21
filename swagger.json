@@ -44,6 +44,19 @@
         }
       }
     },
+    "/api/admin/upgrade": {
+      "post": {
+        "description": "Upgrade reef-pi.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Upgrade reef-pi.",
+        "operationId": "adminUpgrade",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
     "/api/analog_inputs": {
       "get": {
         "description": "List all Analog Inputs in reef-pi.",
@@ -3039,17 +3052,12 @@
           "x-go-name": "Enable"
         },
         "max": {
-          "type": "number",
-          "format": "double",
+          "type": "integer",
+          "format": "int64",
           "x-go-name": "Max"
-        },
-        "min": {
-          "type": "number",
-          "format": "double",
-          "x-go-name": "Min"
         }
       },
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/temperature"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ato"
     },
     "ProfileSpec": {
       "type": "object",
@@ -3067,10 +3075,6 @@
           "type": "number",
           "format": "double",
           "x-go-name": "Min"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
         },
         "type": {
           "type": "string",
@@ -3276,6 +3280,10 @@
         "health_check": {
           "type": "boolean",
           "x-go-name": "HealthCheck"
+        },
+        "journal": {
+          "type": "boolean",
+          "x-go-name": "Journal"
         },
         "lighting": {
           "type": "boolean",
