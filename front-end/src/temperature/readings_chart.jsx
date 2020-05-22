@@ -41,7 +41,7 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis domain={[min, max]} dataKey='value' />
+            <YAxis dataKey='value' />
             <XAxis dataKey='time' />
             <Tooltip />
             <Area
