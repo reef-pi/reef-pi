@@ -24,8 +24,6 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return (<div />)
     }
-    const min = this.props.config.chart_min
-    const max = this.props.config.chart_max
     let currentTemp = ''
     if (this.props.usage.current.length > 1) {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
