@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import LightChannel from './channel'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
@@ -14,7 +15,6 @@ const EditLight = ({
   isValid,
   handleBlur,
   handleChange,
-  setFieldValue,
   dirty,
   readOnly,
   ...props
@@ -80,6 +80,19 @@ const EditLight = ({
       </div>
     </form>
   )
+}
+
+EditLight.propTypes = {
+  values: PropTypes.array,
+  config: PropTypes.object,
+  submitForm: PropTypes.func,
+  isValid: PropTypes.bool,
+  handleBlur: PropTypes.func,
+  handleChange: PropTypes.func,
+  dirty: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  touched: PropTypes.array,
+  errors: PropTypes.array
 }
 
 export default EditLight

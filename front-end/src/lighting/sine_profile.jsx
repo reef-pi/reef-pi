@@ -4,7 +4,7 @@ import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import { Field } from 'formik'
 import classNames from 'classnames'
 
-const DiurnalProfile = (props) => {
+const SineProfile = (props) => {
   return (
     <div className='form-inline'>
 
@@ -30,18 +30,18 @@ const DiurnalProfile = (props) => {
   )
 }
 
-DiurnalProfile.defaultProps = {
+SineProfile.defaultProps = {
   start: '',
   end: ''
 }
 
-DiurnalProfile.propTypes = {
+SineProfile.propTypes = {
   name: PropTypes.string.isRequired,
   config: PropTypes.object,
   readOnly: PropTypes.bool,
   onChangeHandler: PropTypes.func.isRequired,
-  touched: PropTypes.array,
-  errors: PropTypes.array
+  touched: PropTypes.object,
+  errors: PropTypes.object
 }
 
-export default DiurnalProfile
+export default SineProfile

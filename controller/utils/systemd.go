@@ -1,12 +1,15 @@
+// +build !windows
+
 package utils
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	systemd "github.com/coreos/go-systemd/v22/dbus"
 	"github.com/coreos/go-systemd/v22/util"
 	"github.com/godbus/dbus/v5"
-	"strings"
-	"time"
 )
 
 const (

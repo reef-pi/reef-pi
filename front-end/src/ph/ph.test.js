@@ -98,7 +98,7 @@ describe('Ph ui', () => {
       is_macro: true
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.instance().props.initialValues.control).toBe('macro')
+    expect(wrapper.props().value.values.control).toBe('macro')
   })
 
   it('<PhForm /> for edit without control', () => {
@@ -113,7 +113,7 @@ describe('Ph ui', () => {
       is_macro: true
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.instance().props.initialValues.control).toBe('nothing')
+    expect(wrapper.props().value.values.control).toBe('nothing')
   })
 
   it('<Chart />', () => {

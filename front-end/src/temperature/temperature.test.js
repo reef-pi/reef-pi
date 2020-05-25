@@ -36,9 +36,7 @@ describe('Temperature controller ui', () => {
     let wrapper = shallow(<Main store={mockStore(state)} />)
       .dive()
 
-    console.log(wrapper.debug())
     let m = wrapper.instance()
-    console.log(m)
     m.handleToggleAddProbeDiv()
     m.handleCreate({ name: 'test', type: 'reminder' })
     m.handleUpdate({ id: '1', name: 'test', type: 'equipment' })
@@ -148,7 +146,7 @@ describe('Temperature controller ui', () => {
       }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
-    expect(wrapper.instance().props.initialValues.control).toBe('macro')
+    expect(wrapper.props().value.values.control).toBe('macro')
   })
 
   it('<TemperatureForm /> for edit with equipment', () => {
@@ -170,7 +168,7 @@ describe('Temperature controller ui', () => {
       }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
-    expect(wrapper.instance().props.initialValues.control).toBe('equipment')
+    expect(wrapper.props().value.values.control).toBe('equipment')
   })
 
 })

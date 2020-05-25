@@ -1,6 +1,14 @@
 import { reduxDelete, reduxPut, reduxGet, reduxPost } from '../../utils/ajax'
 
 export const lightsLoaded = (s) => {
+  for (const i in s) {
+    for (const x in s[i].channels) {
+      if (s[i].channels[x].profile.type === 'lunar') {
+        s[i].channels[x].profile.config.full_moon = Date.parse(s[i].channels[x].profile.config.full_moon)
+      }
+    }
+  }
+
   return ({
     type: 'LIGHTS_LOADED',
     payload: s

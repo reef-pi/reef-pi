@@ -11,7 +11,7 @@ func TestCreateProfile(t *testing.T) {
 	specs["loop"] = []byte(`{"values":[0,12]}`)
 	specs["diurnal"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	specs["composite"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
-	specs["lunar"] = []byte(`{"start": "07:05:00", "end":"16:00:00", "full_moon":"Jan 2 2000"}`)
+	specs["lunar"] = []byte(`{"start": "07:05:00", "end":"16:00:00", "full_moon":"2000-01-02"}`)
 	specs["sine"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	specs["random"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	for pType, pConf := range specs {

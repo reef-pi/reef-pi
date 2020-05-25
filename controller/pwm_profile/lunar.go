@@ -12,7 +12,7 @@ const (
 	_lunarCycleSpan   = 27
 	_lunarDailyFormat = "Jan 2"
 
-	FullMoonFormat = "Jan 2 2006"
+	FullMoonFormat = "2006-01-02"
 )
 
 type lunar struct {
