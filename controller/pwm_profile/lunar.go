@@ -3,6 +3,7 @@ package pwm_profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math"
 	"time"
 )
@@ -48,6 +49,7 @@ func (l *lunar) Get(t time.Time) float64 {
 	d := t.Format(_lunarDailyFormat)
 	if l.dailyProfile == nil || (l.previousDay != d && l.IsOutside(t)) {
 		if err := l.buildDailyProfile(t); err != nil {
+			log.Println("ERROR: pwm profile: Failed to build lunar profile. Error:", err)
 			return 0
 		}
 		l.previousDay = d
