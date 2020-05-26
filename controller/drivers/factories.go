@@ -74,6 +74,7 @@ func (d *Drivers) loadAll() error {
 		f, err := AbstractFactory(d1.Type)
 		if err != nil {
 			log.Println("ERROR: Failed to detect loader for driver type: ", d1.Type, " Error: ", err)
+			continue
 		}
 		if err := d.register(d1, f); err != nil {
 			log.Println("ERROR: Failed to initialize driver: ", d1.Name, " Error:", err)
