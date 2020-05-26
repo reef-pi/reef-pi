@@ -32,20 +32,24 @@ func Lunar(conf json.RawMessage, min, max float64) (*lunar, error) {
 		return nil, err
 	}
 	if err := l.Build(min, max); err != nil {
-		return nil, err
 	}
 	fullMoon, err := time.Parse(FullMoonFormat, l.FullMoon)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse full moon date. Error:%s", err)
 	}
 	l.fullMoon = fullMoon
+	if err := l.buildDailyProfile(time.Now()); err != nil {
+		return nil, err
+	}
 	return &l, nil
 }
 
 func (l *lunar) Get(t time.Time) float64 {
 	d := t.Format(_lunarDailyFormat)
 	if l.dailyProfile == nil || (l.previousDay != d && l.IsOutside(t)) {
-		l.buildDailyProfile(t)
+		if err := l.buildDailyProfile(t); err != nil {
+			return 0
+		}
 		l.previousDay = d
 	}
 	return l.dailyProfile.Get(t)
