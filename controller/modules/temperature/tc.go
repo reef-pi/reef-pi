@@ -63,7 +63,7 @@ func (c *Controller) Get(id string) (*TC, error) {
 	tc, ok := c.tcs[id]
 	defer c.Unlock()
 	if !ok {
-		return nil, fmt.Errorf("temperature controller with id '%s' is not present", tc.ID)
+		return nil, fmt.Errorf("temperature controller with id '%s' is not present", id)
 	}
 	return tc, nil
 }
