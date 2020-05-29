@@ -3,6 +3,22 @@ import { ResponsiveContainer, Tooltip, XAxis, BarChart, Bar } from 'recharts'
 import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 
+class CustomToolTip extends React.Component {
+  render () {
+    if (this.props.payload === undefined) {
+      return <span />
+    }
+    const el = this.props.payload[0]
+    if (el === undefined) {
+      return <span />
+    }
+    if (el.dataKey === 'onstate') {
+      return (<span> On</span>)
+    }
+    return (<span> Off</span>)
+  }
+}
+
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
@@ -20,8 +36,11 @@ class chart extends React.Component {
     }
     const equipment = []
     this.props.equipment.forEach((eq, i) => {
-      eq.onstate = eq.on ? 1 : 0
-      eq.offstate = eq.on ? 0 : -1
+      if (eq.on) {
+        eq.onstate = 1
+      } else {
+        eq.offstate = 1
+      }
       equipment.push(eq)
     })
     return (
@@ -29,10 +48,10 @@ class chart extends React.Component {
         <span className='h6'>Equipment</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={equipment}>
-            <Bar dataKey='onstate' stackId='a' fill='#00c851' isAnimationActive={false} />
-            <Bar dataKey='offstate' stackId='a' fill='#ff4444' isAnimationActive={false} />
+            <Bar dataKey='onstate' fill='#00c851' isAnimationActive={false} stackId='a' />
+            <Bar dataKey='offstate' fill='#ff4444' isAnimationActive={false} stackId='a' />
             <XAxis dataKey='name' />
-            <Tooltip />
+            <Tooltip content={<CustomToolTip />} />
           </BarChart>
         </ResponsiveContainer>
       </div>
