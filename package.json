@@ -22,7 +22,7 @@
     "create-react-class": "15.6.3",
     "cross-env": "7.0.2",
     "css-loader": "3.2.1",
-    "csv-parse": "^4.9.1",
+    "csv-parse": "^4.10.1",
     "csv-stringify": "5.3.6",
     "electron": "^8.3.0",
     "enzyme": "3.10.0",
