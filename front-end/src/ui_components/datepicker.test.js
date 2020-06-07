@@ -2,7 +2,7 @@ import React from 'react'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import { Form, Formik } from 'formik'
-import Datepicker from './Datepicker'
+import Datepicker from './datepicker'
 
 Enzyme.configure({ adapter: new Adapter() })
 
