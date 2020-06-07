@@ -4,17 +4,17 @@ import DatePicker, { registerLocale } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import i18n from 'i18next'
 
-import { en, fr, es, pt, de, it, hi, fa, zh } from 'date-fns/locale'
+import { enUS, fr, es, pt, de, it, hi, faIR, zhCN } from 'date-fns/locale'
 
-registerLocale('en', en)
+registerLocale('en', enUS)
 registerLocale('fr', fr)
 registerLocale('es', es)
 registerLocale('pt', pt)
 registerLocale('de', de)
 registerLocale('it', it)
 registerLocale('hi', hi)
-registerLocale('fa', fa)
-registerLocale('zh', zh)
+registerLocale('fa', faIR)
+registerLocale('zh', zhCN)
 
 const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext()
