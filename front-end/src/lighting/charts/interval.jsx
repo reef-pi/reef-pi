@@ -1,21 +1,18 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
 
 export default class IntervalChart extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render(){
+  render () {
     const ch = this.props.channel
-    if(ch === undefined) {
+    if (ch === undefined) {
       return (<span> loading ...</span>)
     }
     const stroke = ch.color === undefined || ch.color === '' ? '#000' : ch.color
-    let dt = new Date('1970-01-01T'+ ch.profile.config.start)
-    let data = []
+    const dt = new Date('1970-01-01T' + ch.profile.config.start)
+    const data = []
     ch.profile.config.values.forEach((value, i) => {
-      data[i] = { time: dt.getHours() + ':'+dt.getMinutes()+':'+dt.getSeconds()}
+      data[i] = { time: dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds() }
       data[i][ch.name] = value
       dt.setSeconds(dt.getSeconds() + Number(ch.profile.config.interval))
     })
@@ -34,4 +31,9 @@ export default class IntervalChart extends React.Component {
       </div>
     )
   }
+}
+
+IntervalChart.propTypes = {
+  channel: PropTypes.object,
+  height: PropTypes.number
 }

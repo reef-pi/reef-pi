@@ -75,7 +75,7 @@ export const deleteJournal = (id) => {
 
 export const recordJournal = (id, j) => {
   return (reduxPost({
-    url: '/api/journal/' + id +'/record',
+    url: '/api/journal/' + id + '/record',
     data: j,
     success: journalRecorded(id)
   }))

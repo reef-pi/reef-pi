@@ -10,7 +10,7 @@ func TestLunar(t *testing.T) {
 {
 	"start":"10:00:00",
 	"end": "19:30:00",
-	"full_moon": "Feb 3 2013"
+	"full_moon": "2013-02-03"
 }
 `
 	l, err := Lunar([]byte(conf), 13, 100)

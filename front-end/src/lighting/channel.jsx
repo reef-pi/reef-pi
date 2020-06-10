@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ColorPicker from '../ui_components/color_picker'
 import ProfileSelector from './profile_selector'
 import Profile from './profile'
@@ -64,6 +65,50 @@ const Channel = (props) => {
           end: '22:00:00',
           interval: 120,
           values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
+      }
+      case 'lunar': {
+        if (config) {
+          config = {
+            start: false,
+            end: false,
+            full_moon: null
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          start: '',
+          end: '',
+          full_moon: null
+        }
+      }
+      case 'random': {
+        if (config) {
+          config = {
+            start: false,
+            end: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          start: '',
+          end: ''
+        }
+      }
+      case 'sine': {
+        if (config) {
+          config = {
+            start: false,
+            end: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          start: '',
+          end: ''
         }
       }
       default:
@@ -199,6 +244,18 @@ const Channel = (props) => {
       </div>
     </div>
   )
+}
+
+Channel.propTypes = {
+  onChangeHandler: PropTypes.func,
+  readOnly: PropTypes.bool,
+  onBlur: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  channel: PropTypes.object.isRequired,
+  channelNum: PropTypes.number,
+  setTouched: PropTypes.func,
+  errors: PropTypes.array,
+  touched: PropTypes.array
 }
 
 export default Channel

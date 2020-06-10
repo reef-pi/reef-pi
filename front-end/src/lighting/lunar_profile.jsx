@@ -3,11 +3,22 @@ import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import { Field } from 'formik'
 import classNames from 'classnames'
+import Datepicker from 'ui_components/datepicker'
 
-const DiurnalProfile = (props) => {
+const LunarProfile = (props) => {
   return (
     <div className='form-inline'>
-
+      <label className='mr-2'>Full Moon</label>
+      <div className='col-12 col-sm-3 col-md-2 col-lg-2 mr-3' style={{ padding: 0 }}>
+        <Datepicker
+          name={NameFor(props.name, 'full_moon')}
+          readOnly={props.readOnly}
+          placeholderText='YYYY-MM-DD'
+          maxDate={new Date()}
+          className={classNames('form-control',
+            { 'is-invalid': ShowError(NameFor(props.name, 'full_moon'), props.touched, props.errors) })}
+        />
+      </div>
       <label className='mr-2'>Start Time</label>
       <Field
         name={NameFor(props.name, 'start')}
@@ -24,24 +35,26 @@ const DiurnalProfile = (props) => {
           { 'is-invalid': ShowError(NameFor(props.name, 'end'), props.touched, props.errors) })}
         placeholder='HH:mm:ss'
       />
+      <ErrorFor {...props} name={NameFor(props.name, 'full_moon')} />
       <ErrorFor {...props} name={NameFor(props.name, 'start')} />
       <ErrorFor {...props} name={NameFor(props.name, 'end')} />
     </div>
   )
 }
 
-DiurnalProfile.defaultProps = {
+LunarProfile.defaultProps = {
   start: '',
-  end: ''
+  end: '',
+  full_moon: ''
 }
 
-DiurnalProfile.propTypes = {
-  name: PropTypes.string.isRequired,
+LunarProfile.propTypes = {
   config: PropTypes.object,
   readOnly: PropTypes.bool,
   onChangeHandler: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
   touched: PropTypes.array,
   errors: PropTypes.array
 }
 
-export default DiurnalProfile
+export default LunarProfile

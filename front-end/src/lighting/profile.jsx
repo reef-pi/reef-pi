@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import Diurnal from './diurnal_profile'
 import Fixed from './fixed_profile'
 import Auto from './auto_profile'
+import Random from './random_profile'
+import Lunar from './lunar_profile'
+import Sine from './sine_profile'
 
 const Profile = (props) => {
   const handleConfigChange = e => {
@@ -39,6 +42,36 @@ const Profile = (props) => {
     case 'interval': {
       return (
         <Auto
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange}
+        />
+      )
+    }
+    case 'random': {
+      return (
+        <Random
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange}
+        />
+      )
+    }
+    case 'sine': {
+      return (
+        <Sine
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange}
+        />
+      )
+    }
+    case 'lunar': {
+      return (
+        <Lunar
           {...props}
           readOnly={props.readOnly}
           config={props.value}

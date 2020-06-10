@@ -10,12 +10,14 @@ import ProfileSelector from './profile_selector'
 import AutoProfile from './auto_profile'
 import DiurnalProfile from './diurnal_profile'
 import FixedProfile from './fixed_profile'
+import SineProfile from './sine_profile'
+import RandomProfile from './random_profile'
+import LunarProfile from './lunar_profile'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import { FaLightbulb } from 'react-icons/fa'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -272,13 +274,14 @@ describe('Lighting ui', () => {
 
   it('<Chart />', () => {
     shallow(<Chart store={mockStore({ lights: [light] })} light_id='1' />).dive()
-    const m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
+    shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
       .dive()
       .instance()
   })
 
   it('<Channel />', () => {
-    shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    const m = shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    expect(m).toBeDefined()
   })
 
   it('<Profile /> fixed', () => {
@@ -304,7 +307,7 @@ describe('Lighting ui', () => {
   })
 
   it('<DiurnalProfile />', () => {
-    shallow(<DiurnalProfile onChangeHandler={() => true} />).instance()
+    shallow(<DiurnalProfile name='testDiurnal' onChangeHandler={() => true} />).instance()
   })
 
   it('<FixedProfile />', () => {
@@ -319,6 +322,42 @@ describe('Lighting ui', () => {
     m.handleChange({ target: { value: '' } })
   })
 
+  it('<SineProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <SineProfile
+        name='testsine'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('<RandomProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <RandomProfile
+        name='testrandom'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('<LunarProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <LunarProfile
+        name='testLunar'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
   it('<Percent />', () => {
     const wrapper = shallow(<Percent value='4' onChange={() => true} />)
     wrapper.find('input').simulate('change', { target: { value: 34 } })
@@ -327,7 +366,7 @@ describe('Lighting ui', () => {
   it('<ProfileSelector />', () => {
     const fn = jest.fn()
     const wrapper = shallow(<ProfileSelector name='name' value='fixed' onChangeHandler={fn} />)
-    expect(wrapper.find('input').length).toBe(3)
+    expect(wrapper.find('input').length).toBe(6)
     wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
   })
 
