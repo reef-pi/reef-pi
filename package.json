@@ -35,7 +35,7 @@
     "i18next": "19.0.1",
     "i18next-browser-languagedetector": "4.2.0",
     "immutability-helper": "^3.0.2",
-    "jest": "24.9.0",
+    "jest": "26.0.1",
     "jest-date-mock": "1.0.8",
     "jquery": "^3.5.1",
     "json-loader": "0.5.7",
