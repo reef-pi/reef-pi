@@ -74,7 +74,7 @@
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.11.0",
     "webpack-livereload-plugin": "2.3.0",
-    "yup": "0.28.0"
+    "yup": "0.29.1"
   },
   "scripts": {
     "translations:sync": "node ./build/translations/csv-sync.js sync",
