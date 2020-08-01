@@ -28,7 +28,7 @@
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
     "eslint": "6.7.2",
-    "eslint-plugin-react": "7.17.0",
+    "eslint-plugin-react": "7.20.5",
     "fetch-mock": "9.4.0",
     "formik": "2.1.4",
     "html-webpack-plugin": "4.3.0",
