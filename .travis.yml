@@ -21,7 +21,7 @@ matrix:
 
     - language: node_js
       node_js: 
-        - "latest"
+        - "lts/*"
       install:
         - sudo npm install -g npm
       script:
