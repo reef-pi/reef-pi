@@ -23,7 +23,7 @@ matrix:
       node_js: 
         - "lts/*"
       install:
-        - sudo npm install -g npm
+        - npm install
       script:
         - npm run js-lint
         - make sass-lint
