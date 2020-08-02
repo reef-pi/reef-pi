@@ -1,23 +1,31 @@
-language: go
-go:
-  - "1.13"
-before_install:
-  - curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-  - sudo  apt-get install -y nodejs libasound2-dev
-  - sudo npm install -g npm
-script:
-  - ./build/ci.sh
-  - bash <(curl -s https://codecov.io/bash) -cF go
-  - make pi
-  - bundle install
-  - sudo chown -R $USER /home/travis/.npm
-  - /usr/bin/npm install --no-optional
-  - make build-ui
-  - npm run js-lint
-  - make sass-lint
-  - node -v
-  - npm test
-  - bash <(curl -s https://codecov.io/bash) -cF javascript
-  - make clean
-  - make go
-  - make deb
+matrix:
+  include:
+    - language: go
+      go:
+        - "1.13"
+      before_install:
+        - curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+        - sudo  apt-get install -y nodejs libasound2-dev
+        - sudo npm install -g npm
+      script:
+        - ./build/ci.sh
+        - bash <(curl -s https://codecov.io/bash) -cF go
+        - make pi
+        - bundle install
+        - sudo chown -R $USER /home/travis/.npm
+        - /usr/bin/npm install --no-optional
+        - make build-ui        
+        - make clean
+        - make go
+        - make deb
+
+    - language: node_js
+      node_js: 
+        - "latest"
+      install:
+        - sudo npm install -g npm
+      script:
+        - npm run js-lint
+        - make sass-lint
+        - npm test
+        - bash <(curl -s https://codecov.io/bash) -cF javascript 
