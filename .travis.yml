@@ -15,6 +15,7 @@ script:
   - make build-ui
   - npm run js-lint
   - make sass-lint
+  - node -v
   - npm test
   - bash <(curl -s https://codecov.io/bash) -cF javascript
   - make clean
