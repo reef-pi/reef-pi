@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/reef-pi/drivers/ads1x15"
 	"github.com/reef-pi/drivers/dli"
 	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
@@ -32,6 +33,8 @@ var driversMap = map[string]hal.DriverFactory{
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
 	"sht31d":       sht3x.Factory(),
+	"ads1015":      ads1x15.Ads1015Factory(),
+	"ads1115":      ads1x15.Ads1115Factory(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
