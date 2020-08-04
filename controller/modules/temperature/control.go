@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -14,7 +15,8 @@ func (c *Controller) Check(tc *TC) {
 		return
 	}
 
-	reading, err := c.Read(*tc)
+	//TODO: [ML] Consider adding a retry loop to validate the temperature is in the expected range
+	reading, err := c.Read(tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
@@ -22,9 +24,21 @@ func (c *Controller) Check(tc *TC) {
 		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
 		return
 	}
-	if tc.calibrator != nil {
-		reading = tc.calibrator.Calibrate(reading)
+
+	var calibrator hal.Calibrator
+	var ms []hal.Measurement
+	if err := c.c.Store().Get(CalibrationBucket, tc.Sensor, &ms); err == nil {
+		cal, err := hal.CalibratorFactory(ms)
+		if err != nil {
+			log.Println("ERROR: temperature-subsystem: Failed to create calibration function for sensor:", tc.Sensor, "Error:", err)
+		} else {
+			calibrator = cal
+		}
 	}
+	if calibrator != nil {
+		reading = calibrator.Calibrate(reading)
+	}
+
 	tc.currentValue = reading
 	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
 	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)

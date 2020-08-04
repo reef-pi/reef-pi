@@ -12,6 +12,7 @@ import (
 
 const Bucket = storage.TemperatureBucket
 const UsageBucket = storage.TemperatureUsageBucket
+const CalibrationBucket = storage.TemperatureCalibrationBucket
 
 type Controller struct {
 	sync.Mutex
@@ -71,6 +72,7 @@ func (c *Controller) Start() {
 		go c.Run(t, quit)
 	}
 }
+
 func (c *Controller) Stop() {
 	c.Lock()
 	defer c.Unlock()

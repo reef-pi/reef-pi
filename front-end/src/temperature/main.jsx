@@ -132,6 +132,7 @@ class main extends React.Component {
       observed: this.props.currentReading[probe.id]
     }]
 
+    //TODO: [ML] This needs to change
     this.props.update(probe.id, probe)
     this.setState({ currentProbe: null, showCalibrate: false })
   }
@@ -233,7 +234,8 @@ const mapDispatchToProps = dispatch => {
     create: t => dispatch(createTC(t)),
     delete: id => dispatch(deleteTC(id)),
     update: (id, t) => dispatch(updateTC(id, t)),
-    readTC: id => dispatch(readTC(id))
+    readTC: id => dispatch(readTC(id)),
+    calibrateSensor: (id, t) => dispatch(calibrateTemperature(id, t))
   }
 }
 

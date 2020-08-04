@@ -174,6 +174,7 @@ func (c *Controller) checkAndControl(p Probe) {
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
 		return
 	}
+
 	var calibrator hal.Calibrator
 	var ms []hal.Measurement
 	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err == nil {

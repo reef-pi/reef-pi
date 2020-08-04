@@ -14,6 +14,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+/*
 func detectTempSensorDevice() (string, error) {
 	files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
 	if err != nil {
@@ -24,16 +25,16 @@ func detectTempSensorDevice() (string, error) {
 	}
 	return filepath.Join(files[0], "w1_slave"), nil
 }
-
-func (c *Controller) Read(tc TC) (float64, error) {
+*/
+func (c *Controller) Read(tc *TC) (float64, error) {
 	log.Println("Reading temperature from device:", tc.Sensor)
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
 			return telemetry.TwoDecimal(78.0 + (3 * rand.Float64())), nil
-		} else {
-			return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 		}
+
+		return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 	}
 
 	var v float64
