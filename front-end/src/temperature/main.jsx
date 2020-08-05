@@ -1,6 +1,6 @@
 import React from 'react'
 import TemperatureForm from './temperature_form'
-import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC } from 'redux/actions/tcs'
+import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC, calibrateTemperature } from 'redux/actions/tcs'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 import Collapsible from '../ui_components/collapsible'
@@ -127,13 +127,12 @@ class main extends React.Component {
   }
 
   handleCalibrate (probe, value) {
-    probe.calibration_points = [{
+    const calibrationPoints = [{
       expected: value,
       observed: this.props.currentReading[probe.id]
     }]
 
-    //TODO: [ML] This needs to change
-    this.props.update(probe.id, probe)
+    this.props.calibrateSensor(probe.id, calibrationPoints)
     this.setState({ currentProbe: null, showCalibrate: false })
   }
 

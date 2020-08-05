@@ -22,27 +22,24 @@ type Notify struct {
 //swagger:model temperatureController
 type TC struct {
 	sync.Mutex
-	ID         string        `json:"id"`
-	Name       string        `json:"name"`
-	Max        float64       `json:"max"`
-	Min        float64       `json:"min"`
-	Hysteresis float64       `json:"hysteresis"`
-	Heater     string        `json:"heater"`
-	Cooler     string        `json:"cooler"`
-	Period     time.Duration `json:"period"`
-	Control    bool          `json:"control"`
-	Enable     bool          `json:"enable"`
-	Notify     Notify        `json:"notify"`
-	Sensor     string        `json:"sensor"`
-	Fahrenheit bool          `json:"fahrenheit"`
-	IsMacro    bool          `json:"is_macro"`
-	//CalibrationPoints []hal.Measurement `json:"calibration_points"`
+	ID           string        `json:"id"`
+	Name         string        `json:"name"`
+	Max          float64       `json:"max"`
+	Min          float64       `json:"min"`
+	Hysteresis   float64       `json:"hysteresis"`
+	Heater       string        `json:"heater"`
+	Cooler       string        `json:"cooler"`
+	Period       time.Duration `json:"period"`
+	Control      bool          `json:"control"`
+	Enable       bool          `json:"enable"`
+	Notify       Notify        `json:"notify"`
+	Sensor       string        `json:"sensor"`
+	Fahrenheit   bool          `json:"fahrenheit"`
+	IsMacro      bool          `json:"is_macro"`
 	h            *controller.Homeostasis
 	currentValue float64
 	calibrator   hal.Calibrator
 }
-
-//TODO: [ML] Consider making this somehow backward compatible?
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
 	t.Lock()
@@ -82,19 +79,6 @@ func (c Controller) List() ([]TC, error) {
 	}
 	return tcs, c.c.Store().List(Bucket, fn)
 }
-
-/*
-func (tc *TC) loadCalibrator() {
-	if len(tc.CalibrationPoints) > 0 {
-		cal, err := hal.CalibratorFactory(tc.CalibrationPoints)
-		if err != nil {
-			log.Println("ERROR: temperature-subsystem: Failed to create calibration function for sensor:", tc.Name, "Error:", err)
-		} else {
-			tc.calibrator = cal
-		}
-	}
-}
-*/
 
 func (c *Controller) Create(tc TC) error {
 	c.Lock()
@@ -145,8 +129,28 @@ func (c *Controller) Update(id string, tc *TC) error {
 	return nil
 }
 
-//TODO: [ML] Also delete any calibration data for the tc sensor if it is no longer in use
 func (c *Controller) Delete(id string) error {
+	tc, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+
+	tcs, err := c.List()
+	if err != nil {
+		return err
+	}
+
+	deleteCalibration := true
+	for _, t := range tcs {
+		if t.ID != tc.ID && t.Sensor == tc.Sensor {
+			deleteCalibration = false
+		}
+	}
+
+	if deleteCalibration {
+		c.c.Store().Delete(CalibrationBucket, tc.Sensor)
+	}
+
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}

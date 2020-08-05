@@ -14,18 +14,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-/*
-func detectTempSensorDevice() (string, error) {
-	files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
-	if err != nil {
-		return "", err
-	}
-	if len(files) != 1 {
-		return "", fmt.Errorf("Only one temperature device expected, found: %d", len(files))
-	}
-	return filepath.Join(files[0], "w1_slave"), nil
-}
-*/
 func (c *Controller) Read(tc *TC) (float64, error) {
 	log.Println("Reading temperature from device:", tc.Sensor)
 	if c.devMode {

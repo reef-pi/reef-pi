@@ -15,7 +15,6 @@ func (c *Controller) Check(tc *TC) {
 		return
 	}
 
-	//TODO: [ML] Consider adding a retry loop to validate the temperature is in the expected range
 	reading, err := c.Read(tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)

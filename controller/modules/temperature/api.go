@@ -161,9 +161,9 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	//   description: Not Found
 	r.HandleFunc("/api/tcs/{id}/usage", t.getUsage).Methods("GET")
 
-	// swagger:operation POST /api/tcs/{id}/calibratepoint Temperature tcsCalibrateSingle
+	// swagger:operation POST /api/tcs/{id}/calibrate Temperature tcsCalibrate
 	// Calibrate a temperature sensor.
-	// Set a calibration point for one or two point calibration
+	// Set calibration points for one or two point calibration
 	// ---
 	// parameters:
 	//  - in: path
@@ -194,6 +194,7 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	//   description: OK
 	r.HandleFunc("/api/tcs/{id}/calibrate", t.calibrate).Methods("POST")
 }
+
 func (t *Controller) currentReading(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		tc, err := t.Get(id)

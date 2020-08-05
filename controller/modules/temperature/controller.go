@@ -39,6 +39,9 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
+	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
+		return err
+	}
 	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
 		return err
 	}
