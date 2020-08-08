@@ -130,6 +130,10 @@ func (c *Controller) Delete(id string) error {
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
 	}
+
+	c.c.Store().Delete(CalibrationBucket, id)
+	delete(c.calibrators, id)
+
 	quit, ok := c.quitters[id]
 	if ok {
 		close(quit)
@@ -174,19 +178,12 @@ func (c *Controller) checkAndControl(p Probe) {
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
 		return
 	}
-	var calibrator hal.Calibrator
-	var ms []hal.Measurement
-	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err == nil {
-		cal, err := hal.CalibratorFactory(ms)
-		if err != nil {
-			log.Println("ERROR: ph-subsystem: Failed to create calibration function for probe:", p.Name, "Error:", err)
-		} else {
-			calibrator = cal
-		}
-	}
-	if calibrator != nil {
+
+	calibrator, exists := c.calibrators[p.ID]
+	if exists {
 		reading = calibrator.Calibrate(reading)
 	}
+
 	log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
 	notifyIfNeeded(c.c.Telemetry(), p, reading)
 	u := controller.NewObservation(reading)
@@ -212,6 +209,12 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
+	//TODO: [ML] Save the calibrator in the controller map
+	cal, err := hal.CalibratorFactory(ms)
+	if err != nil {
+		return err
+	}
+	c.calibrators[p.ID] = cal
 	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
 }
 
@@ -239,7 +242,11 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 	}
 
 	calibration = append(calibration, hal.Measurement{Expected: point.Expected, Observed: point.Observed})
-
+	cal, err := hal.CalibratorFactory(calibration)
+	if err != nil {
+		return err
+	}
+	c.calibrators[p.ID] = cal
 	return c.c.Store().Update(CalibrationBucket, p.ID, calibration)
 }
 

@@ -5,7 +5,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -24,17 +23,8 @@ func (c *Controller) Check(tc *TC) {
 		return
 	}
 
-	var calibrator hal.Calibrator
-	var ms []hal.Measurement
-	if err := c.c.Store().Get(CalibrationBucket, tc.Sensor, &ms); err == nil {
-		cal, err := hal.CalibratorFactory(ms)
-		if err != nil {
-			log.Println("ERROR: temperature-subsystem: Failed to create calibration function for sensor:", tc.Sensor, "Error:", err)
-		} else {
-			calibrator = cal
-		}
-	}
-	if calibrator != nil {
+	calibrator, exists := c.calibrators[tc.Sensor]
+	if exists {
 		reading = calibrator.Calibrate(reading)
 	}
 

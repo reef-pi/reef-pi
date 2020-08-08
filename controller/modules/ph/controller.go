@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 
@@ -16,20 +17,22 @@ const Bucket = storage.PhBucket
 const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
-	c        controller.Controller
-	quitters map[string]chan struct{}
-	statsMgr telemetry.StatsManager
-	devMode  bool
-	ais      *connectors.AnalogInputs
+	c           controller.Controller
+	quitters    map[string]chan struct{}
+	statsMgr    telemetry.StatsManager
+	devMode     bool
+	ais         *connectors.AnalogInputs
+	calibrators map[string]hal.Calibrator
 }
 
 func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
-		quitters: make(map[string]chan struct{}),
-		c:        c,
-		devMode:  devMode,
-		ais:      c.DM().AnalogInputs(),
-		statsMgr: c.Telemetry().NewStatsManager(ReadingsBucket),
+		quitters:    make(map[string]chan struct{}),
+		c:           c,
+		devMode:     devMode,
+		ais:         c.DM().AnalogInputs(),
+		statsMgr:    c.Telemetry().NewStatsManager(ReadingsBucket),
+		calibrators: make(map[string]hal.Calibrator),
 	}
 }
 
@@ -40,6 +43,22 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
 		return err
 	}
+
+	err := c.c.Store().List(CalibrationBucket, func(k string, v []byte) error {
+		var ms []hal.Measurement
+		if err := json.Unmarshal(v, &ms); err != nil {
+			return err
+		}
+		calibrator, err := hal.CalibratorFactory(ms)
+		if err == nil {
+			c.calibrators[k] = calibrator
+		}
+		return err
+	})
+	if err != nil {
+		return err
+	}
+
 	return c.c.Store().CreateBucket(ReadingsBucket)
 }
 
