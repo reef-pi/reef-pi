@@ -82,3 +82,17 @@ export const tcReadComplete = (id) => {
     })
   }
 }
+
+export const calibrateTemperature = (id, c) => {
+  return (reduxPost({
+    url: '/api/tcs/' + id + '/calibrate',
+    data: c,
+    success: tcCalibrated
+  }))
+}
+
+export const tcCalibrated = () => {
+  return ({
+    type: 'TC_CALIBRATED'
+  })
+}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -159,7 +160,41 @@ func (t *Controller) LoadAPI(r *mux.Router) {
 	//  404:
 	//   description: Not Found
 	r.HandleFunc("/api/tcs/{id}/usage", t.getUsage).Methods("GET")
+
+	// swagger:operation POST /api/tcs/{id}/calibrate Temperature tcsCalibrate
+	// Calibrate a temperature sensor.
+	// Set calibration points for one or two point calibration
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the temperature controller with a sensor to calibrate
+	//    required: true
+	//    schema:
+	//     type: integer
+	//  - in: body
+	//    name: measurements
+	//    description: The calibration measurements
+	//    required: true
+	//    schema:
+	//     type: array
+	//     items:
+	//      type: object
+	//      properties:
+	//       expected:
+	//        type: float64
+	//        format: float
+	//        description: The expected value
+	//       observed:
+	//        type: float64
+	//        format: float
+	//        description: The actual value observed
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/tcs/{id}/calibrate", t.calibrate).Methods("POST")
 }
+
 func (t *Controller) currentReading(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		tc, err := t.Get(id)
@@ -179,7 +214,7 @@ func (t *Controller) read(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			return nil, err
 		}
-		return t.Read(*tc)
+		return t.Read(tc)
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
@@ -243,4 +278,12 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 		return c.Update(id, &t)
 	}
 	utils.JSONUpdateResponse(&t, fn, w, r)
+}
+
+func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
+	var ms []hal.Measurement
+	fn := func(id string) error {
+		return c.Calibrate(id, ms)
+	}
+	utils.JSONUpdateResponse(&ms, fn, w, r)
 }
