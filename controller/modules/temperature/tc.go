@@ -146,10 +146,11 @@ func (c *Controller) Delete(id string) error {
 			deleteCalibration = false
 		}
 	}
+	c.Lock()
+	defer c.Unlock()
 
 	if deleteCalibration {
-		c.Lock()
-		defer c.Unlock()
+
 		c.c.Store().Delete(CalibrationBucket, tc.Sensor)
 		delete(c.calibrators, tc.Sensor)
 	}
@@ -160,8 +161,7 @@ func (c *Controller) Delete(id string) error {
 	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
 		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
 	}
-	c.Lock()
-	defer c.Unlock()
+
 	quit, ok := c.quitters[id]
 	if ok {
 		close(quit)
