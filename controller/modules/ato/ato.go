@@ -26,6 +26,7 @@ type ATO struct {
 	Notify         Notify        `json:"notify"`
 	Name           string        `json:"name"`
 	DisableOnAlert bool          `json:"disable_on_alert"`
+	OneShot        bool          `json:"one_shot"`
 }
 
 func (c *Controller) On(id string, b bool) error {
@@ -34,6 +35,12 @@ func (c *Controller) On(id string, b bool) error {
 		return err
 	}
 	a.Enable = b
+	if b && a.OneShot {
+		q := make(chan struct{})
+		c.Run(a, q)
+		close(q)
+		return nil
+	}
 	return c.Update(id, a)
 }
 
@@ -114,9 +121,9 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
-func (c *Controller) Check(a ATO) {
+func (c *Controller) Check(a ATO) (int, error) {
 	if !a.Enable {
-		return
+		return 0, nil
 	}
 	usage := Usage{
 		Time: telemetry.TeleTime(time.Now()),
@@ -125,7 +132,7 @@ func (c *Controller) Check(a ATO) {
 	if err != nil {
 		log.Println("ERROR: ato-subsystem. Failed to read ato sensor. Error:", err)
 		c.c.LogError("ato-"+a.ID, "Failed to read ato sensor. Name:"+a.Name+". Error:"+err.Error())
-		return
+		return 0, err
 	}
 	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
 	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
@@ -140,26 +147,32 @@ func (c *Controller) Check(a ATO) {
 	}
 	c.statsMgr.Update(a.ID, usage)
 	c.NotifyIfNeeded(a)
+	return reading, nil
 }
 
-func (c *Controller) Run(a ATO, quit chan struct{}) {
+func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	if a.Period <= 0 {
 		log.Printf("ERROR: ato-subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
-		return
+		return fmt.Errorf("invalid check period:%d", a.Period)
 	}
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			c.Check(a)
-		case <-quit:
-			ticker.Stop()
-			// always turn off pump befor quitting
-			if err := c.Control(a, 1); err != nil {
-				log.Println("ERROR: ato-subsystem: Failed to turn off pump during shutting down ", a.Name, "Error:", err)
+			reading, err := c.Check(a)
+			if a.OneShot {
+				if err != nil {
+					return err
+				}
+				if reading == 1 {
+					return nil
+				}
 			}
-			return
+		case <-quit:
+			// always turn off pump befor quitting
+			return c.Control(a, 1)
 		}
 	}
 }
