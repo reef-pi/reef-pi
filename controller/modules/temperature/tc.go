@@ -148,6 +148,8 @@ func (c *Controller) Delete(id string) error {
 	}
 
 	if deleteCalibration {
+		c.Lock()
+		defer c.Unlock()
 		c.c.Store().Delete(CalibrationBucket, tc.Sensor)
 		delete(c.calibrators, tc.Sensor)
 	}
@@ -239,6 +241,9 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	if err != nil {
 		return err
 	}
+	c.Lock()
+	defer c.Unlock()
+
 	c.calibrators[tc.Sensor] = cal
 	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
 }

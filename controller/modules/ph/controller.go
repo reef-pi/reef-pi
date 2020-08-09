@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
 
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
@@ -17,6 +18,7 @@ const Bucket = storage.PhBucket
 const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
+	sync.Mutex
 	c           controller.Controller
 	quitters    map[string]chan struct{}
 	statsMgr    telemetry.StatsManager
@@ -49,6 +51,9 @@ func (c *Controller) Setup() error {
 		if err := json.Unmarshal(v, &ms); err != nil {
 			return err
 		}
+		c.Lock()
+		defer c.Unlock()
+
 		calibrator, err := hal.CalibratorFactory(ms)
 		if err == nil {
 			c.calibrators[k] = calibrator

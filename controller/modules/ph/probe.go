@@ -124,6 +124,8 @@ func (c *Controller) Update(id string, p Probe) error {
 }
 
 func (c *Controller) Delete(id string) error {
+	c.Lock()
+	defer c.Unlock()
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
@@ -178,6 +180,8 @@ func (c *Controller) checkAndControl(p Probe) {
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
 		return
 	}
+	c.Lock()
+	defer c.Unlock()
 
 	calibrator, exists := c.calibrators[p.ID]
 	if exists {
@@ -209,11 +213,14 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
-	//TODO: [ML] Save the calibrator in the controller map
+
 	cal, err := hal.CalibratorFactory(ms)
 	if err != nil {
 		return err
 	}
+	c.Lock()
+	defer c.Unlock()
+
 	c.calibrators[p.ID] = cal
 	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
 }
@@ -240,6 +247,8 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
 		}
 	}
+	c.Lock()
+	defer c.Unlock()
 
 	calibration = append(calibration, hal.Measurement{Expected: point.Expected, Observed: point.Observed})
 	cal, err := hal.CalibratorFactory(calibration)
