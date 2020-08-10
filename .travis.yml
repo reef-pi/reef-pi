@@ -28,3 +28,17 @@ matrix:
         - npm run sass-lint
         - npm test
         - bash <(curl -s https://codecov.io/bash) -cF javascript
+
+    - language: go
+      go:
+        - "1.13"
+      before_install:
+        - nvm use node
+      install:
+        - npm ci
+      script:
+        - make bin
+        - make start-dev &
+        - npm run ci-smoke
+      addons:
+        chrome: stable
