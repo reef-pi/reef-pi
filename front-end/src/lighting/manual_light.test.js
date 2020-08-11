@@ -54,7 +54,7 @@ describe('Lighting ui - Manual Control', () => {
     const e = {
       target: {
         name: '0',
-        value: '44'
+        value: '44.5'
       }
     }
 
@@ -66,7 +66,7 @@ describe('Lighting ui - Manual Control', () => {
     let instance = wrapper.instance()
 
     instance.handleValueChange(e)
-    expect(instance.state.channels[0].value).toBe('44')
+    expect(instance.state.channels[0].value).toBe('44.5')
   })
 
 })

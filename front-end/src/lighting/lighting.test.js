@@ -35,7 +35,7 @@ jest.mock('utils/confirm', () => {
 })
 describe('Lighting ui', () => {
   const ev = {
-    target: { value: 10 }
+    target: { value: 10.5 }
   }
   let light = {
     id: '1',
@@ -51,7 +51,7 @@ describe('Lighting ui', () => {
           config: {
             start: '14:00:00',
             end: '22:00:00',
-            values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            values: [1, 2, 3, 4, 5, 6.4, 7, 8, 9, 10, 11, 12]
           }
         }
       }
@@ -179,7 +179,7 @@ describe('Lighting ui', () => {
 
     light.channels[1].profile.config.start = '14:00:00'
     light.channels[1].profile.config.end = '16:00:00'
-    light.channels[1].profile.config.values = [1,2,3,4,5]
+    light.channels[1].profile.config.values = [1,2,3.6,4,5]
     const m = shallow(<TestMain
       fetchLights = {fn}
       fetchJacks = {fn}
