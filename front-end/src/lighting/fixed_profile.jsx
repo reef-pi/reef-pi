@@ -15,8 +15,9 @@ export default class FixedProfile extends React.Component {
   }
 
   handleChange (e) {
-    if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
-      let value = parseInt(e.target.value)
+    // TODO: [ML] Allow decimal in regex
+    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
+      let value = parseFloat(e.target.value)
       if (isNaN(value)) {
         value = ''
       }

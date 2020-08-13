@@ -23,7 +23,7 @@ describe('Validation', () => {
       config: {
         start: '14:00:00',
         end: '20:00:00',
-        value: 50
+        value: 50.4
       }
     }
     expect.assertions(1)
@@ -53,7 +53,7 @@ describe('Validation', () => {
       config: {
         start: '14:00:00',
         end: '20:00:00',
-        values: [0, 0, 0, 50, 0, 0, 0, 0, 0]
+        values: [0, 0, 0, 50, 0.5, 0, 0, 0, 0]
       }
     }
     expect.assertions(1)
