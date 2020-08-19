@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
@@ -127,6 +129,16 @@ func (c *Controller) Check(a ATO) {
 		c.c.LogError("ato-"+a.ID, "Failed to read ato sensor. Name:"+a.Name+". Error:"+err.Error())
 		return
 	}
+
+	topic := "ato." + a.Name + ".reading"
+	payload := make([]byte, 1)
+	payload[0] = byte(reading)
+	msg := message.NewMessage(watermill.NewUUID(), payload)
+
+	if err := c.c.PubSub().Publish(topic, msg); err != nil {
+		c.c.LogError("ato-"+a.ID, "Failed to publish reading. Name:"+a.Name+". Error:"+err.Error())
+	}
+
 	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
 	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
 	if a.Control {

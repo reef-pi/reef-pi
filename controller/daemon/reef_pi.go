@@ -2,14 +2,18 @@ package daemon
 
 import (
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"time"
 )
 
 const Bucket = storage.ReefPiBucket
@@ -23,6 +27,7 @@ type ReefPi struct {
 	h          telemetry.HealthChecker
 	dm         *device_manager.DeviceManager
 	subsystems map[string]controller.Subsystem
+	pubsub     *gochannel.GoChannel
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -41,6 +46,12 @@ func New(version, database string) (*ReefPi, error) {
 		}
 		s = initialSettings
 	}
+
+	pubsub := gochannel.NewGoChannel(
+		gochannel.Config{},
+		watermill.NewStdLogger(false, false),
+	)
+
 	fn := func(t, m string) error { return logError(store, t, m) }
 	tele := telemetry.Initialize(Bucket, store, fn, s.Prometheus)
 	r := &ReefPi{
@@ -51,6 +62,7 @@ func New(version, database string) (*ReefPi, error) {
 		version:    version,
 		a:          utils.NewAuth(Bucket, store),
 		dm:         device_manager.New(s, store),
+		pubsub:     pubsub,
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
@@ -115,4 +127,8 @@ func (r *ReefPi) Store() storage.Store {
 
 func (r *ReefPi) Telemetry() telemetry.Telemetry {
 	return r.telemetry
+}
+
+func (r *ReefPi) PubSub() *gochannel.GoChannel {
+	return r.pubsub
 }

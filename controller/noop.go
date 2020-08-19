@@ -4,6 +4,9 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -23,6 +26,7 @@ type (
 		logError telemetry.ErrorLogger
 		subFn    func(s string) (Subsystem, error)
 		dm       *device_manager.DeviceManager
+		pubsub   *gochannel.GoChannel
 	}
 )
 
@@ -61,12 +65,19 @@ func TestController() (Controller, error) {
 	logError := func(_, _ string) error { return nil }
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
+
+	pubsub := gochannel.NewGoChannel(
+		gochannel.Config{},
+		watermill.NewStdLogger(false, false),
+	)
+
 	return &controller{
 		t:        telemetry.TestTelemetry(store),
 		s:        store,
 		logError: logError,
 		subFn:    func(_ string) (Subsystem, error) { return NoopSubsystem(), nil },
 		dm:       device_manager.New(s, store),
+		pubsub:   pubsub,
 	}, nil
 }
 func (c *controller) Telemetry() telemetry.Telemetry {
@@ -86,4 +97,8 @@ func (c *controller) LogError(id, msg string) error {
 }
 func (c *controller) Subsystem(s string) (Subsystem, error) {
 	return c.subFn(s)
+}
+
+func (c *controller) PubSub() *gochannel.GoChannel {
+	return c.pubsub
 }

@@ -3,7 +3,9 @@ module github.com/reef-pi/reef-pi
 go 1.14
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/ThreeDotsLabs/watermill v1.1.1
 	github.com/coreos/go-systemd/v22 v22.1.0
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
@@ -14,7 +16,9 @@ require (
 	github.com/kidoman/embd v0.0.0-20170508013040-d3d8c0c5c68d
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
+	github.com/lithammer/shortuuid/v3 v3.0.4
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
+	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.7.1
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20200802000004-54a37e45c923
