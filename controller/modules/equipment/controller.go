@@ -2,7 +2,6 @@ package equipment
 
 import (
 	"fmt"
-	"github.com/kidoman/embd"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -34,9 +33,6 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
-	if !c.config.DevMode {
-		embd.InitGPIO()
-	}
 	eqs, err := c.List()
 	if err != nil {
 		log.Println("ERROR: equipment subsystem: failed to list equipment. Error:", err)
