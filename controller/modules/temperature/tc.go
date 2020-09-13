@@ -36,6 +36,7 @@ type TC struct {
 	Sensor       string        `json:"sensor"`
 	Fahrenheit   bool          `json:"fahrenheit"`
 	IsMacro      bool          `json:"is_macro"`
+	OneShot      bool          `json:"one_shot"`
 	h            *controller.Homeostasis
 	currentValue float64
 	calibrator   hal.Calibrator
@@ -189,21 +190,30 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	return false, nil
 }
 
-func (c *Controller) Run(t *TC, quit chan struct{}) {
+func (c *Controller) Run(t *TC, quit chan struct{}) error {
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
-		return
+		return nil
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
 	t.loadHomeostasis(c.c)
 	for {
 		select {
 		case <-ticker.C:
-			c.Check(t)
+			reading, err := c.Check(t)
+			if t.OneShot {
+				if err != nil {
+					return err
+				}
+				if t.WithinRange(reading) {
+					t.SetEnable(false)
+					return c.Update(t.ID, t)
+				}
+			}
 		case <-quit:
 			ticker.Stop()
-			return
+			return nil
 		}
 	}
 }
@@ -246,4 +256,8 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 
 	c.calibrators[tc.Sensor] = cal
 	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
+}
+
+func (t TC) WithinRange(v float65) bool {
+	return v >= t.Min && v <= t.Max
 }

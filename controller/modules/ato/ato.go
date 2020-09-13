@@ -37,8 +37,10 @@ func (c *Controller) On(id string, b bool) error {
 	a.Enable = b
 	if b && a.OneShot {
 		q := make(chan struct{})
-		c.Run(a, q)
-		close(q)
+		defer close(q)
+		if err := c.Run(a, q); err != nil {
+			return err
+		}
 		return nil
 	}
 	return c.Update(id, a)
