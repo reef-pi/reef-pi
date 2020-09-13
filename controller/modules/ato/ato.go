@@ -167,7 +167,8 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 					return err
 				}
 				if reading == 1 {
-					return nil
+					a.Enable = false
+					return c.Update(a.ID, a)
 				}
 			}
 		case <-quit:
