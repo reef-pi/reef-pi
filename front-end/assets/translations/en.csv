@@ -56,9 +56,9 @@ ato:controlequipment,Equipment
 ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
-ato:one_shot,One Shot
 ato:inlet_required,Inlet is required
 ato:name_required,Name is required
+ato:one_shot,One Shot
 ato:status_required,ATO Status is required
 ato:threshold_required,Threshold is required when notification is enabled
 ato:threshold_value,Threshold must be a number
