@@ -74,7 +74,7 @@ ui-dev:
 	npm run ui-dev
 
 .PHONY: deb
-deb: ui
+deb: ui api-doc
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
@@ -121,3 +121,5 @@ spec:
 .PHONY: serve-spec
 serve-spec:
 	npx redoc-cli serve swagger.json -p 8888
+api-doc:
+	npx redoc-cli bundle swagger.json -o ui/assets/api.html
