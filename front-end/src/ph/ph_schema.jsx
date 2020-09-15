@@ -12,6 +12,7 @@ const PhSchema = Yup.object().shape({
     .typeError(i18next.t('ph:period_type'))
     .min(1, i18next.t('ph:period_min')),
   notify: Yup.bool(),
+  one_shot: Yup.bool(),
   analog_input: Yup.string()
     .required(i18next.t('ph:analog_input_required')),
   minAlert: Yup.number()

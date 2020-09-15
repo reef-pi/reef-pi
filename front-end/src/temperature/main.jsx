@@ -48,6 +48,7 @@ class main extends React.Component {
       enable: values.enable,
       control: (values.control === 'macro' || values.control === 'equipment'),
       is_macro: (values.control === 'macro'),
+      one_shot: values.one_shot,
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),

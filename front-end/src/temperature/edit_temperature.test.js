@@ -23,6 +23,7 @@ describe('<EditTemperature />', () => {
       id: '1',
       name: 'tc1',
       enable: true,
+      one_shot: false,
       sensor: 'sensor',
       fahrenheit: true,
       period: 60,

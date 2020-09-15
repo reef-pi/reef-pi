@@ -36,6 +36,7 @@ class main extends React.Component {
       control: (values.control === 'macro' || values.control === 'equipment'),
       pump: values.pump,
       disable_on_alert: values.disable_on_alert,
+      one_shot: values.one_shot,
       notify: {
         enable: values.notify,
         max: values.maxAlert
