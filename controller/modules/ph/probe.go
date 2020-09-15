@@ -38,6 +38,7 @@ type Probe struct {
 	Max         float64       `json:"max"`
 	Hysteresis  float64       `json:"hysteresis"`
 	IsMacro     bool          `json:"is_macro"`
+	OneShot     bool          `json:"one_shot"`
 	h           *controller.Homeostasis
 }
 
@@ -152,33 +153,42 @@ func (c *Controller) Read(p Probe) (float64, error) {
 	return telemetry.TwoDecimal(v), err
 }
 
-func (c *Controller) Run(p Probe, quit chan struct{}) {
+func (c *Controller) Run(p Probe, quit chan struct{}) error {
 	if p.Period <= 0 {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
-		return
+		return fmt.Errorf("invalid period: %d for probe: %s", p.Period, p.Name)
 	}
 	if p.Control {
 		p.loadHomeostasis(c.c)
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			c.checkAndControl(p)
+			reading, err := c.checkAndControl(p)
+			if p.OneShot {
+				if err != nil {
+					return err
+				}
+				if p.WithinRange(reading) {
+					p.Enable = false
+					return c.Update(p.ID, p)
+				}
+			}
 		case <-quit:
-			ticker.Stop()
-			return
+			return nil
 		}
 	}
 }
 
-func (c *Controller) checkAndControl(p Probe) {
+func (c *Controller) checkAndControl(p Probe) (float64, error) {
 	reading, err := c.Read(p)
 	if err != nil {
 		log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
-		return
+		return 0, err
 	}
 	c.Lock()
 	defer c.Unlock()
@@ -198,6 +208,7 @@ func (c *Controller) checkAndControl(p Probe) {
 	}
 	c.statsMgr.Update(p.ID, u)
 	c.c.Telemetry().EmitMetric("ph", p.Name, reading)
+	return reading, nil
 }
 
 func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
@@ -277,4 +288,8 @@ func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 		t.Alert(subject, "Tank ph is low. "+body)
 		return
 	}
+}
+
+func (p Probe) WithinRange(v float64) bool {
+	return v >= p.Min && v <= p.Max
 }

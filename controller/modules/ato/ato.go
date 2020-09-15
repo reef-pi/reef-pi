@@ -38,10 +38,7 @@ func (c *Controller) On(id string, b bool) error {
 	if b && a.OneShot {
 		q := make(chan struct{})
 		defer close(q)
-		if err := c.Run(a, q); err != nil {
-			return err
-		}
-		return nil
+		return c.Run(a, q)
 	}
 	return c.Update(id, a)
 }
