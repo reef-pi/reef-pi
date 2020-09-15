@@ -14,6 +14,14 @@ const WaitSchema = Yup.object().shape({
     .typeError('Duration is required')
     .min(1, 'Duration must be 1 second or greater')
 })
+const AlertSchema = Yup.object().shape({
+  type: Yup.string()
+    .required('Step Type is required'),
+  title: Yup.string()
+    .required('Step title is required'),
+  message: Yup.string()
+    .required('Step message is required')
+})
 
 const GenericSchema = Yup.object().shape({
   type: Yup.string()
@@ -26,12 +34,15 @@ const GenericSchema = Yup.object().shape({
 })
 
 const StepSchema = Yup.lazy(value => {
-  if (value.type === undefined) {
-    return EmptySchema
-  } else if (value.type === 'wait') {
-    return WaitSchema
-  } else {
-    return GenericSchema
+  switch (value.type) {
+    case undefined:
+      return EmptySchema
+    case 'wait':
+      return WaitSchema
+    case 'alert':
+      return AlertSchema
+    default:
+      return GenericSchema
   }
 })
 

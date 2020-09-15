@@ -4,7 +4,7 @@ import { Field } from 'formik'
 
 const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
-    const validTypes = ['wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
+    const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
     return validTypes.map(item => {
       return (
         <option key={item} value={item}>

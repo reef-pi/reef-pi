@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import WaitStep from './wait_step'
+import AlertStep from './alert_step'
 import GenericStep from './generic_step'
 
 const StepSelector = ({
@@ -11,11 +12,21 @@ const StepSelector = ({
   readOnly
 }) => {
   const configUI = () => {
-    if (type === undefined) return null
     switch (type) {
+      case undefined:
+        return null
       case 'wait':
         return (
           <WaitStep
+            name={name}
+            errors={errors}
+            touched={touched}
+            readOnly={readOnly}
+          />
+        )
+      case 'alert':
+        return (
+          <AlertStep
             name={name}
             errors={errors}
             touched={touched}
