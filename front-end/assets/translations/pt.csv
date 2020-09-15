@@ -30,6 +30,7 @@ loading,Carregar
 name,Nome
 none,nenhum
 ok,Ok
+one_shot,
 outlet,
 outlets,
 pin,
@@ -56,7 +57,6 @@ ato:controlnothing,
 ato:disable_on_alert,Desativar alerta
 ato:inlet_required,Inlet é Obrigatório
 ato:name_required,Name é Obrigatório
-ato:one_shot,
 ato:status_required,ATO Status é Obrigatório
 ato:threshold_required,Threshold é Obrigatório when notification is enabled
 ato:threshold_value,Threshold tem que ser um número

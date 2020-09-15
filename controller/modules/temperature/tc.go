@@ -258,6 +258,6 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
 }
 
-func (t TC) WithinRange(v float65) bool {
+func (t TC) WithinRange(v float64) bool {
 	return v >= t.Min && v <= t.Max
 }

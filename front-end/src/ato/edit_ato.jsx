@@ -213,7 +213,7 @@ const EditAto = ({
               component={BooleanSelect}
               disabled={readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('notify', touched, errors)
+                'is-invalid': ShowError('disable_on_alert', touched, errors)
               })}
             >
               <option value='true'>{i18next.t('enabled')}</option>
@@ -225,13 +225,13 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='one_shot'>{i18next.t('ato:one_shot')}</label>
+            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
             <Field
               name='one_shot'
               component={BooleanSelect}
               disabled={readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('notify', touched, errors)
+                'is-invalid': ShowError('one_shot', touched, errors)
               })}
             >
               <option value='true'>{i18next.t('enabled')}</option>

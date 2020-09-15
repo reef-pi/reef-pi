@@ -30,6 +30,7 @@ loading,Laden
 name,Naam
 none,Niets
 ok,Ok
+one_shot,
 outlet,
 outlets,
 pin,
@@ -56,7 +57,6 @@ ato:controlnothing,
 ato:disable_on_alert,Uitschakelen bij alarm
 ato:inlet_required,Ingang is nodig
 ato:name_required,Naam is nodig
-ato:one_shot,
 ato:status_required,ATO Status is nodig
 ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
 ato:threshold_value,Limiet moet een nummer zijn
