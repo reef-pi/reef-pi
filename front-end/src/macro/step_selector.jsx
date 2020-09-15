@@ -12,8 +12,9 @@ const StepSelector = ({
   readOnly
 }) => {
   const configUI = () => {
-    if (type === undefined) return null
     switch (type) {
+      case undefined:
+        return null
       case 'wait':
         return (
           <WaitStep

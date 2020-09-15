@@ -128,7 +128,7 @@ const EditMacro = ({
                     type='button'
                     className='btn btn-outline-success float-right'
                     value='+'
-                    onClick={() => arrayHelpers.push({ duration: '', id: '', on: '' })}
+                    onClick={() => arrayHelpers.push({ duration: '', id: '', on: '', title: '', message: '' })}
                     id='add-step'
                   >
                 +
