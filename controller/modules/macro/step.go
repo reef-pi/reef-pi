@@ -18,6 +18,10 @@ type GenericStep struct {
 type WaitStep struct {
 	Duration time.Duration `json:"duration"`
 }
+type AlertStep struct {
+	Title   string `json:"title"`
+	Message string `json:"message"`
+}
 
 type Step struct {
 	Type   string          `json:"type"`
@@ -62,6 +66,14 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 		log.Println("macro-subsystem: executing step: sleep for", int(w.Duration), "seconds")
 		time.Sleep(w.Duration * time.Second)
 		return nil
+	case "alert":
+		var a AlertStep
+		if err := json.Unmarshal(s.Config, &a); err != nil {
+			return err
+		}
+		log.Println("macro-subsystem: executing step: alert")
+		_, err := c.Telemetry().Alert(a.Title, a.Message)
+		return err
 	default:
 		return fmt.Errorf("Unknown step type:%s", s.Type)
 	}

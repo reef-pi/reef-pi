@@ -106,6 +106,8 @@ class main extends React.Component {
           type: step.type,
           config: {
             duration: step.duration,
+            title: '',
+            message: '',
             on: step.on,
             id: step.id
           }
