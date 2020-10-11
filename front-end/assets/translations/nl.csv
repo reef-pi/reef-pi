@@ -1,10 +1,10 @@
 Key,Translation
 add,Toevoegen
 alerts,Meldingen
-analog_input,Analoge Input
-analog_inputs,
+analog_input,Analoge Ingang
+analog_inputs,Analoge Ingangen
 are_you_sure,Ben je zeker?
-ato,
+ato,ato
 cancel,Annuleren
 clear,Resetten
 configure,Instellen
@@ -12,29 +12,29 @@ delete,Verwijderen
 disabled,Uitgeschakeld
 documentation,Documentatie
 done,Gereed
-doser,
-driver,
+doser,doseerder
+driver,Driver
 edit,Bewerken
 enabled,Ingeschakeld
-equipment,
+equipment,Apparatuur
 errors,Foutmeldingen
-health,
-in-use,
-inlet,Ingang
-inlets,
-jack,
-jacks,
-light,
-lights,
+health,gezondheid
+in-use,In gebruik
+inlet,Ingang (inlet)
+inlets,Ingangen (inlets)
+jack,Ingang (jack)
+jacks,Ingangen (jacks)
+light,Light
+lights,Lichten
 loading,Laden
 name,Naam
 none,Niets
 ok,Ok
-one_shot,
-outlet,
-outlets,
-pin,
-reverse,
+one_shot,Eenmalig
+outlet,Uitgang
+outlets,Uitgangen
+pin,pin
+reverse,omkeren
 running,Actief
 save,Opslaan
 sec,sec
@@ -49,20 +49,20 @@ ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
 ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
 ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
-ato:chk_freq_required,Controleer Frequentie is nodig
+ato:chk_freq_required,Controleer Frequentie deze is verplicht
 ato:control_pump,Controleert Pomp
-ato:controlequipment,
-ato:controlmacro,
-ato:controlnothing,
+ato:controlequipment,Apparatuur
+ato:controlmacro,Macro
+ato:controlnothing,Niets
 ato:disable_on_alert,Uitschakelen bij alarm
 ato:inlet_required,Ingang is nodig
 ato:name_required,Naam is nodig
 ato:status_required,ATO Status is nodig
-ato:threshold_required,Limiet is nodig als notificatie is ingeschakeld
-ato:threshold_value,Limiet moet een nummer zijn
+ato:threshold_required,Drempelwaarde is nodig wanneer een notificatie is ingeschakeld
+ato:threshold_value,Drempelwaarde moet numeriek zijn
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
 ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
-ato:warn_delete,
+ato:warn_delete,Deze actie verwijderd
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuratie
@@ -70,9 +70,9 @@ capabilities:dashboard,Dashboard
 capabilities:dev_mode,Dev Mode
 capabilities:doser,Doseerpomp
 capabilities:dosing_pumps,Doseerpompen
-capabilities:equipment,Uitrusting
+capabilities:equipment,Apparatuur
 capabilities:health_check,Health check
-capabilities:journal,
+capabilities:journal,Dagboek
 capabilities:lighting,Belichting
 capabilities:lights,Lichten
 capabilities:log,Log
@@ -125,9 +125,9 @@ configuration:tab:telemetry,Monitoring
 cron:day_of_month,Dag van de maand
 cron:hour,Uur
 cron:minute,Minuut
-cron:month,
+cron:month,Maand
 cron:second,Seconde
-cron:week,
+cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
 fatal_error:connection_lost,Connectie verloren
 fatal_error:fatal_error,Fatale Fout
@@ -143,8 +143,8 @@ language:hi,हिन्दी
 language:it,Italiano
 language:language,Language
 language:nl,Nederlands
-language:pt,
-language:zh,
+language:pt,Portugees
+language:zh,Chinees
 log:content,Content
 log:emitter,Emitter
 log:time,Tijd
@@ -153,21 +153,21 @@ ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
 ph:analog_input_required,Analoge Input is nodig
 ph:calibrate,Calibreren
-ph:chart:current,
-ph:chart:historical,
+ph:chart:current,huidig
+ph:chart:historical,historiek
 ph:check_frequency,Controleer frequentie
-ph:control,
-ph:control_required,
-ph:controlequipment,
-ph:controlmacro,
-ph:controlnothing,
+ph:control_required,Bediening is verplicht
+ph:controlequipment,Apparatuur
+ph:controlmacro,Macro
+ph:controlnothing,Niets
+ph:lower_function,Laagste functie
 ph:current_reading,Huidige meting
-ph:lower_function,
-ph:lower_function_required,
-ph:lower_threshold,
-ph:lower_threshold_less_than,
-ph:lower_threshold_required,
-ph:lower_threshold_type,
+ph:lower_function_required,Laagste functie is vereist
+ph:lower_threshold,Laagste drempelwaarde
+ph:lower_threshold_less_than,Laagste drempelwaarde moet lager zijn dan de hoogste drempelwaarde
+ph:lower_threshold_required,Laagste drempelwaarde is vereist
+ph:lower_threshold_type,Laagste drempelwaarde moet numeriek zijn
+ph:upper_function,Hoogste Functie
 ph:midpoint,Middelpunt
 ph:name_required,Naam is nodig
 ph:period_min,Check Frequentie moet 1 seconde of meer zijn
@@ -177,59 +177,59 @@ ph:run_calibration,Uitvoeren
 ph:second_point,Tweede punt
 ph:status,Ph Status
 ph:status_required,Status is nodig
-ph:threshold_greater_than,Alarm boven moet meer zijn dan Alarm onder
-ph:threshold_less_than,Alarm onder moet minder zijn dan Alarm boven
+ph:threshold_greater_than,Alarm bovengrens moet groter zijn dan Alarm ondergrens
+ph:threshold_less_than,Alarm ondergrens moet kleiner zijn dan Alarm bovengrens
 ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
 ph:threshold_type,Limiet moet een nummer zijn
-ph:upper_function,
-ph:upper_function_required,
-ph:upper_threshold,
-ph:upper_threshold_greater_than,
-ph:upper_threshold_required,
-ph:upper_threshold_type,
+ph:upper_function_required,Drempel is verplicht wanneer alarm zjn ingeschakeld
+ph:upper_threshold,Hoogste drempelwaarde
+ph:upper_threshold_greater_than,Hoogste drempelwaarde moet groter zijn dan de laagste drempelwaarde
+ph:upper_threshold_required,Hoogste drempelwaarde is vereist
+ph:upper_threshold_type,Hoogste drempelwaarde moet numeriek zijn
+temperatur:controlnothing,Niets
 ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
-pins:Pins,
+temperature:controlequipment,Apparatuur
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
 signin:username,Gebruikersnaam
-temperatur:controlnothing,
-temperature:calibrate,
-temperature:calibration:apply,
-temperature:calibration:set_temperature,
+temperature:controlmacro,Macro
+temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
+temperature:lower_function,Verwarming
+temperature:upper_function,Koeler
 temperature:celsius,Celsius
-temperature:chart:current,
-temperature:chart:historical,
-temperature:chart_maximum,Grafiek Maximum
-temperature:chart_minimum,Grafiek Minimum
-temperature:control,
-temperature:controlequipment,
-temperature:controlmacro,
-temperature:current_reading,
+temperature:chart:current,huidig
+temperature:chart:historical,historiek
+temperature:chart_maximum,Maximum Grafiek
+temperature:chart_minimum,Minimum Grafiek
+temperature:upper_threshold,Koeler drempelwaarde
+temperature:lower_threshold,Verwarming drempelwaarde
+ph:control,Bedien
+temperature:current_reading,Huidige uitlezing
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Verwarming/Koeling
-temperature:hysteresis_less_than,
-temperature:lower_function,
-temperature:lower_threshold,
+temperature:control,Bedien
+temperature:calibration:apply,Bevestigen
+temperature:calibrate,Kalibreer
 temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:temperature,Temperatuur
-temperature:upper_function,
-temperature:upper_threshold,
+temperature:calibration:set_temperature,Overschrijf temperatuur
+pins:Pins,Pins
 temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
-temperature:warn_delete,
+temperature:warn_delete,Deze actie verwijderd
 timers:after,Na
 timers:and_then,AEn Daarna
 timers:day_required,Dag is nodig
 timers:duration_required,Tijdsduur is nodig
-timers:equipment,Uitrusting
+timers:equipment,Apparatuur
 timers:equipment:action,Actie
-timers:equipment:equipment,Uitrusting
+timers:equipment:equipment,Apparatuur
 timers:equipment:off,Uit
 timers:equipment:on,Aan
 timers:equipment:revert,Omkeren
-timers:equipment_required,Uitrusting is nodig
+timers:equipment_required,Apparatuur is nodig
 timers:function,Functie
 timers:hour_required,Uur is nodig
 timers:macro,Macro Naam
