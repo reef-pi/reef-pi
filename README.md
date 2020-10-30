@@ -39,11 +39,11 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 ## Development
 
-To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](docs/development_environment.md).
+To ensure a good development process please follow the Code Of Conduct and the Pull Request Template. To setup your development environment please read [this document](https://reef-pi.github.io/additional-documentation/development/).
 
 ## Internationalization
 
-If you want to edit or provide translations to the project, please follow the [guide for internationalization](docs/internationalization_contributing.md).
+If you want to edit or provide translations to the project, please follow the [guide for internationalization](i18n.md).
 
 Currently available languages (but not completed):
 
