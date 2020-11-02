@@ -39,7 +39,7 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis dataKey='value' />
+            <YAxis dataKey='value' type="number" domain={[75, 90]}/>  // *** Changed from default JFR 20201030
             <XAxis dataKey='time' />
             <Tooltip />
             <Area

@@ -38,7 +38,7 @@ class chart extends React.Component {
             <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
             <Tooltip />
-            <YAxis />
+            <YAxis type="number" domain={[7,13]} /> // *** Changed from default JFR 20201030
           </LineChart>
         </ResponsiveContainer>
       </div>
