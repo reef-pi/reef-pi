@@ -43,3 +43,18 @@ export const powerOff = () => {
       data: {}
     }))
 }
+
+export const dbImported = () => {
+  return ({
+    type: 'DB_IMPORTED`'
+  })
+}
+
+export const dbImport = (formData) => {
+  return (
+    reduxPost({
+      url: '/api/admin/db',
+      success: dbImported,
+      failure: () => {}
+    }))
+}
