@@ -56,6 +56,16 @@ class admin extends React.Component {
             </button>
           </div>
         </div>
+        <div className='row'>
+          <div className='col-md-12 mt-3 col-lg-3'>
+            <a href='/api/admin/db' download={true}>{i18n.t('configuration:admin:db_export')}</a>
+          </div>
+          <div className='col-md-12 mt-3 col-lg-3'>
+            <button onClick={()=> true} type='button' className={btnClass}>
+              {i18n.t('configuration:admin:db_import')}
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

@@ -83,6 +83,22 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//   description: OK
 	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
 
+	// swagger:route GET /api/admin/db Admin dbExport
+	// Export reef-pi database.
+	// Export reef-pi database.
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/admin/db", c.dbExport).Methods("GET")
+
+	// swagger:route POST /api/admin/db Admin dbImport
+	// Import reef-pi database.
+	// Import reef-pi database.
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/admin/db", c.dbImport).Methods("POST")
+
 	// swagger:route GET /api/info Admin adminInfo
 	// Get system summary.
 	// Get system summary.
@@ -185,4 +201,10 @@ func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
 		return "", nil
 	}
 	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
+}
+func (c *Controller) dbExport(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, c.c.Store().File())
 }

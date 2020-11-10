@@ -30,6 +30,9 @@ func NewStore(fname string) (*store, error) {
 func (s *store) Close() error {
 	return s.db.Close()
 }
+func (s *store) File() string {
+	return s.db.Path()
+}
 
 func (s *store) bucket(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	var b *bolt.Bucket

@@ -96,6 +96,8 @@ configuration:admin:poweroff,Power Off
 configuration:admin:reboot,Reboot
 configuration:admin:reload,Reload
 configuration:admin:sign_out,Sign Out
+configuration:admin:db_export,Export database
+configuration:admin:db_import,Import database
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
