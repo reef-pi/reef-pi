@@ -25,45 +25,42 @@ var _wrongArguments = errors.New("incorrect number of arguments at least action 
 const dbHelpText = `
     Usage: reef-pi db [sub-command] [OPTIONS]
 
-		A command line tool to introspect and manipulate objects in reef-pi databse. reef-pi
-		controller must be stopped before using this tool. It is intended to for diagnostic
-		and troubleshooting purpoose.
+    A command line tool to introspect and manipulate objects in reef-pi databse. reef-pi
+    controller must be stopped before using this tool. It is intended to for diagnostic
+    and troubleshooting purpoose.
 
-		valid sub-commands: buckets |  list | show | create | update | delete
+    valid sub-commands: buckets |  list | show | create | update | delete
 
-		Options:
-		 -input string
-			    Input file path
-		 -output string
-		      Output file path
-     -store string
-		      Path to reef-pi database (default: /var/lib/reef-pi/reef-pi.db)
-
-		Example:
-		 List all buckets in the database:
-			 reef-pi db buckets
+    Example:
+     List all buckets in the database:
+       reef-pi db buckets
 
      List items from a bucket
-			   reef-pi db list atos
+         reef-pi db list atos
 
-		 Show an individual entry with given id from a bucket
-		     reef-pi db show atos 1
+     Show an individual entry with given id from a bucket
+         reef-pi db show atos 1
 
      Crate an item in a bucket from a json input file
-		     reef-pi db create atos -input sample_ato.json
+         reef-pi db create atos -input sample_ato.json
 
      Update an item in a bucket from a json input file
-		     reef-pi db update atos 1 -input sample_ato.json
+         reef-pi db update atos 1 -input sample_ato.json
 
      Delete an item in a bucket
-		     reef-pi db delete atos 1
-		`
+         reef-pi db delete atos 1
+    `
 
 func (d *dbCmd) FlagSet() *flag.FlagSet {
 	fs := flag.NewFlagSet("db", flag.ExitOnError)
 	fs.StringVar(&d.input, "input", "", "Input json file")
 	fs.StringVar(&d.output, "output", "", "Output json file")
 	fs.StringVar(&d.sPath, "store", "/var/lib/reef-pi/reef-pi.db", "Database storage file")
+	fs.Usage = func() {
+		fmt.Println(strings.TrimSpace(dbHelpText))
+		fmt.Println("\nOptions:\n")
+		fs.PrintDefaults()
+	}
 	return fs
 }
 func NewDBCmd(args []string) (*dbCmd, error) {

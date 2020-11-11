@@ -209,25 +209,25 @@ func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(10 << 20)
 	fi, _, err := r.FormFile("dbImport")
 	if err != nil {
-		log.Println("ERROR: Failed to import database file. Details:", err)
+		log.Println("ERROR: Failed to import database file:", err)
 		return
 	}
 	defer fi.Close()
 	fo, fErr := os.Create(c.c.Store().Path() + ".new")
 	if fErr != nil {
-		log.Println("ERROR: Failed to create new database file. Details:", fErr)
+		log.Println("ERROR: Failed to create new database file:", fErr)
 		return
 	}
 	if _, err := io.Copy(fo, fi); err != nil {
-		log.Println("ERROR: Failed to copy new database file. Details:", err)
+		log.Println("ERROR: Failed to copy new database file:", err)
 		return
 	}
 
 	if _, err := io.Copy(fo, fi); err != nil {
-		log.Println("ERROR: Failed to copy new database file. Details:", err)
+		log.Println("ERROR: Failed to copy new database file:", err)
 		return
 	}
-	if err := utils.SystemdExecute("reef-pi-restore-db.service", "/usr/bin/reef-pi restore-db -config /etc/reef-pi/config.yaml", true); err != nil {
+	if err := utils.SystemdExecute("reef-pi-restore-db.service", "/usr/bin/reef-pi restore-db", true); err != nil {
 		log.Println("ERROR: Failed to invoke `reef-pi restore-db`. Details:", err)
 		return
 	}
