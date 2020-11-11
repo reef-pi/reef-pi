@@ -71,6 +71,7 @@ const EditPh = ({
     )
   }
 
+  // *** added chartYminScale/chartYmaxScale - JFR 20201111
   return (
     <form onSubmit={handleSubmit}>
       <div className='row'>
@@ -162,6 +163,37 @@ const EditPh = ({
               <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='one_shot' />
+          </div>
+        </div>
+
+        <div className='row'>
+          <div className='col col-sm-6 col-md-3 offset-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart_y_min'>{i18next.t('ph:chart_y_min')}</label>
+              <div className='input-group'>
+                <Field
+                  name='chart_y_min'
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('chart_y_min', touched, errors)
+                  })}
+                />
+                <ErrorFor errors={errors} touched={touched} name='chart_y_min' />
+              </div>
+            </div>
+          </div>
+          <div className='col col-sm-6 col-md-3 offset-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart_y_max'>{i18next.t('ph:chart_y_max')}</label>
+              <div className='input-group'>
+                <Field
+                  name='chart_y_max'
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('chart_y_max', touched, errors)
+                  })}
+                />
+                <ErrorFor errors={errors} touched={touched} name='chart_y_max' />
+              </div>
+            </div>
           </div>
         </div>
 

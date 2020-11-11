@@ -4,6 +4,7 @@ import { powerSaveBlocker } from 'electron'
 describe('PhValidation', () => {
   let probe = {}
 
+  // *** added chart_y_min, chart_y_max - JFR 20201111
   beforeEach(() => {
     probe = {
       name: 'name',
@@ -13,7 +14,9 @@ describe('PhValidation', () => {
       notify: true,
       minAlert: 8.0,
       maxAlert: 8.6,
-      control: 'nothing'
+      control: 'nothing',
+      chart_y_min: 0,
+      chart_y_max: 14
     }
   })
 

@@ -73,13 +73,16 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit', () => {
     const fn = jest.fn()
 
+    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,
       address: 99,
       notify: { enable: false },
       control: true,
-      is_macro: false
+      is_macro: false,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
@@ -89,13 +92,16 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit with macro', () => {
     const fn = jest.fn()
 
+    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,
       address: 99,
       notify: { enable: false },
       control: true,
-      is_macro: true
+      is_macro: true,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('macro')
@@ -104,13 +110,16 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit without control', () => {
     const fn = jest.fn()
 
+    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,
       address: 99,
       notify: { enable: false },
       control: false,
-      is_macro: true
+      is_macro: true,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('nothing')

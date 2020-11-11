@@ -14,6 +14,7 @@ const TemperatureForm = withFormik({
       }
     }
 
+    // *** added chart Y min/max values - JFR 20201110
     const values = {
       id: tc.id || '',
       name: tc.name || '',
@@ -30,7 +31,9 @@ const TemperatureForm = withFormik({
       hysteresis: tc.hysteresis || 0,
       cooler: tc.cooler || '',
       max: tc.max || '',
-      control: 'nothing'
+      control: 'nothing',
+      chart_y_min: tc.chart_y_min || 0,
+      chart_y_max: tc.chart_y_max || 100
     }
 
     if (tc.control === true) {

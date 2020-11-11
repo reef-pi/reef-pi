@@ -84,7 +84,21 @@ const PhSchema = Yup.object().shape({
         return schema
           .required(i18next.t('ph:upper_function_required'))
       } else { return schema }
-    })
+    }),
+      // *** added chart_y_min, chart_y_max - JFR 20201111
+      chart_y_min: Yup.number()
+      .integer()
+      .typeError('Chart Y scale minimum value must be a number')
+      .min(0, 'Chart Y scale minimum value must be 0 or greater')
+      .max(100, 'Chart Y scale minimum value must be 14 or lower')
+      .default(0),
+    chart_y_max: Yup.number()
+      .integer()
+      .typeError('Chart Y scale maximum value must be a number')
+      .min(0, 'Chart Y scale maximum value must be 0 or greater')
+      .max(100, 'Chart Y scale maximum value must be 14 or lower')
+      .default(100),
+
 })
 
 export default PhSchema

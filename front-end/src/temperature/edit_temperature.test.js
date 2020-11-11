@@ -19,6 +19,7 @@ describe('<EditTemperature />', () => {
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
 
+    // *** added chart_y_min, chart_y_max - JFR 20201110
     values = {
       id: '1',
       name: 'tc1',
@@ -34,7 +35,9 @@ describe('<EditTemperature />', () => {
       heater: '',
       cooler: '',
       alerts: false,
-      control: 'macro'
+      control: 'macro',
+      chart_y_min: 0,
+      chart_y_max: 100
     }
   })
 

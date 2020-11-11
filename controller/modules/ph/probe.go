@@ -25,6 +25,7 @@ type Notify struct {
 }
 
 //swagger:model phProbe
+// *** added ChartYMax, ChartYMin - JFR 20201110
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
@@ -40,6 +41,8 @@ type Probe struct {
 	Hysteresis  float64       `json:"hysteresis"`
 	IsMacro     bool          `json:"is_macro"`
 	OneShot     bool          `json:"one_shot"`
+	ChartYMax	float64	   	  `json:"chart_y_max"`
+	ChartYMin	float64	   	  `json:"chart_y_min"`
 	h           *controller.Homeostasis
 }
 

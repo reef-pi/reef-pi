@@ -20,6 +20,7 @@ type Notify struct {
 }
 
 //swagger:model temperatureController
+// *** added ChartYMax, ChartYMin - JFR 20201110
 type TC struct {
 	sync.Mutex
 	ID           string        `json:"id"`
@@ -37,6 +38,8 @@ type TC struct {
 	Fahrenheit   bool          `json:"fahrenheit"`
 	IsMacro      bool          `json:"is_macro"`
 	OneShot      bool          `json:"one_shot"`
+	ChartYMax	 float64	   `json:"chart_y_max"`
+	ChartYMin	 float64	   `json:"chart_y_min"`
 	h            *controller.Homeostasis
 	currentValue float64
 	calibrator   hal.Calibrator

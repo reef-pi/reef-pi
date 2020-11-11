@@ -42,6 +42,7 @@ class main extends React.Component {
     })
   }
 
+  // *** added chart_y_min, chart_y_max - JFR 20201110
   valuesToProbe (values) {
     const payload = {
       name: values.name,
@@ -61,7 +62,9 @@ class main extends React.Component {
         enable: values.alerts,
         min: parseFloat(values.minAlert),
         max: parseFloat(values.maxAlert)
-      }
+      },
+      chart_y_min: parseInt(values.chart_y_min),
+      chart_y_max: parseInt(values.chart_y_max)
     }
     return payload
   }

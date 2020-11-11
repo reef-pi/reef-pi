@@ -4,6 +4,12 @@ import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
+
+  // constructor(props) {
+  //   super(props);
+  //   this.strRound2Decimals = this.strRound2Decimals.bind(this);
+  // }
+
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {
@@ -30,6 +36,11 @@ class chart extends React.Component {
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
     }
+    // *** display only 2 decimals - JFR 20201101
+    if (current !== '') {
+      current = parseFloat(current).toFixed(2);
+    }
+
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}-{this.props.type} pH ({current})</span>
@@ -37,8 +48,15 @@ class chart extends React.Component {
           <LineChart data={metrics}>
             <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip />
-            <YAxis type="number" domain={[7,13]} /> // *** Changed from default JFR 20201030
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(2)} />    // *** display only 2 decimals - JFR 20201031
+            // *** Y scale adjustments JFR 20201111
+            <YAxis dataKey='value' 
+                    type='number'
+                    allowDecimals={false}
+                    domain={[(value) => parseFloat(this.props.config.chart_y_min).toFixed(0), (value) => parseFloat(this.props.config.chart_y_max).toFixed(0)]}
+                    allowDataOverflow={true}
+                    tickFormatter={(value) => parseFloat(value).toFixed(0)}
+            />  
           </LineChart>
         </ResponsiveContainer>
       </div>

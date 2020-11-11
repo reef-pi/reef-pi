@@ -76,6 +76,7 @@ class ph extends React.Component {
     this.setState({ currentProbe: null, showCalibrate: false })
   }
 
+  // *** added chart_y_min, chart_y_max - JFR 20201111
   valuesToProbe (values) {
     const probe = {
       name: values.name,
@@ -95,6 +96,8 @@ class ph extends React.Component {
       max: parseFloat(values.upperThreshold),
       upper_eq: values.upperFunction,
       hysteresis: parseFloat(values.hysteresis)
+      chart_y_min: parseInt(values.chart_y_min),
+      chart_y_max: parseInt(values.chart_y_max)
     }
     return probe
   }

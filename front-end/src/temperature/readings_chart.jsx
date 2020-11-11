@@ -30,7 +30,7 @@ class chart extends React.Component {
     }
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
+        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({parseFloat(currentTemp).toFixed(1)})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <AreaChart data={this.props.usage.current}>
             <defs>
@@ -39,9 +39,16 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis dataKey='value' type="number" domain={[75, 90]}/>  // *** Changed from default JFR 20201030
+            // *** Y scale adjustments JFR 20201111
+            <YAxis dataKey='value' 
+                    type='number'
+                    allowDecimals={false}
+                    domain={[(value) => parseFloat(this.props.config.chart_y_min).toFixed(0), (value) => parseFloat(this.props.config.chart_y_max).toFixed(0)]}
+                    allowDataOverflow={true}
+                    tickFormatter={(value) => parseFloat(value).toFixed(0)}
+            />  
             <XAxis dataKey='time' />
-            <Tooltip />
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />    // *** display only 1 decimal - JFR 20201107
             <Area
               type='linear'
               dataKey='value'

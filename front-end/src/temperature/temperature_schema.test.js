@@ -3,6 +3,7 @@ import TemperatureSchema from './temperature_schema'
 describe('Validation', () => {
   let tc = {}
 
+  // *** added chart_y_min, chart_y_max - JFR 20201110
   beforeEach(() => {
     tc = {
       name: 'name',
@@ -13,7 +14,9 @@ describe('Validation', () => {
       alerts: false,
       notify: { enable: false },
       heater: '',
-      cooler: ''
+      cooler: '',
+      chart_y_min: 0,
+      chart_y_max: 100
     }
   })
 

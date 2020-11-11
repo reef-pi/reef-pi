@@ -195,6 +195,8 @@ ph:upper_threshold_required,
 ph:upper_threshold_type,
 ph:validation_error,
 ph:warn_delete,
+ph:chart_y_max, Maximo para la grafica
+ph:chart_y_min, Minimo para la grafica
 pins:Pins,
 signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
@@ -214,6 +216,8 @@ temperature:chart:current,
 temperature:chart:historical,
 temperature:chart_maximum,Maximo para la grafica
 temperature:chart_minimum,Minimo para la grafica
+temperature:chart_y_max, Maximo para la grafica
+temperature:chart_y_min, Minimo para la grafica
 temperature:control,
 temperature:controlequipment,
 temperature:controlmacro,

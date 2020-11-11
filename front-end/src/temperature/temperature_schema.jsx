@@ -76,7 +76,20 @@ const TemperatureSchema = Yup.object().shape({
           .required(i18next.t('temperature:hysteresis_required'))
           .typeError(i18next.t('temperature:hysteresis_type'))
       } else { return schema }
-    })
+    }),
+    // *** added chart_y_min, chart_y_max - JFR 20201110
+    chart_y_min: Yup.number()
+      .integer()
+      .typeError('Chart Y scale minimum value must be a number')
+      .min(0, 'Chart Y scale minimum value must be 0 degrees or greater')
+      .max(100, 'Chart Y scale minimum value must be 100 degrees or lower')
+      .default(0),
+    chart_y_max: Yup.number()
+      .integer()
+      .typeError('Chart Y scale maximum value must be a number')
+      .min(0, 'Chart Y scale maximum value must be 0 degrees or greater')
+      .max(100, 'Chart Y scale maximum value must be 100 degrees or lower')
+      .default(100),
 })
 
 export default TemperatureSchema
