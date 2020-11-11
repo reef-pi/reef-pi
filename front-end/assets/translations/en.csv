@@ -92,6 +92,8 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
+configuration:admin:db_export,Download current database
+configuration:admin:db_import,Import an existing database
 configuration:admin:poweroff,Power Off
 configuration:admin:reboot,Reboot
 configuration:admin:reload,Reload

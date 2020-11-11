@@ -43,3 +43,19 @@ export const powerOff = () => {
       data: {}
     }))
 }
+
+export const dbImported = () => {
+  return ({
+    type: 'DB_IMPORTED'
+  })
+}
+
+export const dbImport = (formData) => {
+  return (
+    reduxPost({
+      url: '/api/admin/reef-pi.db',
+      success: dbImported,
+      raw: formData,
+      failure: () => {}
+    }))
+}

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"os"
 	"os/exec"
 )
 
@@ -34,4 +35,17 @@ func Command(bin string, args ...string) *ExecCommand {
 		bin:  bin,
 		args: args,
 	}
+}
+
+func (e *ExecCommand) RunDetached() error {
+	attr := os.ProcAttr{
+		Dir:   "/var/lib/reef-pi",
+		Env:   os.Environ(),
+		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
+	}
+	p, err := os.StartProcess(e.bin, e.args, &attr)
+	if err != nil {
+		return err
+	}
+	return p.Release()
 }

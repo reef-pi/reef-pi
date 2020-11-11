@@ -90,6 +90,8 @@ configuration:about:status,پیکربندی:در باره: وضعیت
 configuration:about:uptime,پیکربندی:در باره: زمان فعلی
 configuration:about:version,پیکربندی:در باره: نسخه
 configuration:about:website,پیکربندی:در باره: سایت اینترنتی
+configuration:admin:db_export,
+configuration:admin:db_import,
 configuration:admin:poweroff,پیکربندی:مدیر: خاموش
 configuration:admin:reboot,پیکربندی:مدیر: راه اندازی مجدد
 configuration:admin:reload,پیکربندی:مدیر: بارگیری مجدد

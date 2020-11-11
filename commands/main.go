@@ -18,34 +18,16 @@ func main() {
 		text := `
     Usage: reef-pi [command] [OPTIONS]
 
-    valid commands: daemon, reset-password
+    valid commands: daemon, reset-password, db, restore-db
+
+    reset-password: Reset reef-pi web ui username and password
+    daemon: Run reef-pi controller
+    db: Interact with reef-pi database
+    restore-db: Restore and imported database
+
     Options:
       -version
           Print version information
-
-
-    daemon: Run reef-pi controller
-    Options:
-      -config string
-          Configuration file path
-    Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
-
-    manager: Run reef-pi manager
-		Example: reef-pi manager
-
-    db: Interact with reef-pi database
-		Example: reef-pi db list atos
-
-    reset-password: Reset reef-pi web ui username and password
-    Options:
-      -user string
-          New username
-      -password
-          New password
-      -config string
-          Configuration file path
-    Example: reef-pi reset-password -user foo -password bar  -config /etc/reef-pi/reef-pi.yml
-
     `
 		fmt.Println(strings.TrimSpace(text))
 	}
@@ -63,10 +45,6 @@ func main() {
 		args = os.Args[2:]
 	}
 	switch v {
-	case "manager":
-		cmd := flag.NewFlagSet("manager", flag.ExitOnError)
-		cmd.Parse(args)
-		mgr()
 	case "db":
 		cmd, err := NewDBCmd(args)
 		if err != nil {
@@ -83,12 +61,47 @@ func main() {
 		user := cmd.String("user", "", "New reef-pi web ui username")
 		password := cmd.String("password", "", "New reef-pi web ui password")
 		configFile := cmd.String("config", "", "reef-pi configuration file path")
+		cmd.Usage = func() {
+			text := `
+    reset-password: Reset reef-pi web ui username and password
+    Example: reef-pi reset-password -user foo -password bar  -config /etc/reef-pi/reef-pi.yml
+    `
+			fmt.Println(strings.TrimSpace(text))
+			fmt.Println("\nOptions:\n")
+			cmd.PrintDefaults()
+		}
 		cmd.Parse(args)
 		config := loadConfig(*configFile)
 		resetPassword(config.Database, *user, *password)
+	case "restore-db":
+		cmd := flag.NewFlagSet("restore-db", flag.ExitOnError)
+		cPath := cmd.String("current", "/var/lib/reef-pi/reef-pi.db", "Current database file path")
+		oPath := cmd.String("backup", "/var/lib/reef-pi/reef-pi.db.old", "Backup database file path")
+		nPath := cmd.String("new", "/var/lib/reef-pi/reef-pi.db.new", "New database file path")
+		cmd.Usage = func() {
+			text := `
+    restore-db: Restore and imported database
+    Example: reef-pi restore-db
+    `
+			fmt.Println(strings.TrimSpace(text))
+			fmt.Println("\nOptions:\n")
+			cmd.PrintDefaults()
+		}
+		cmd.Parse(args)
+		restoreDb(*cPath, *oPath, *nPath)
 	case "", "daemon":
 		cmd := flag.NewFlagSet("daemon", flag.ExitOnError)
 		configFile := cmd.String("config", "", "reef-pi configuration file path")
+		cmd.Usage = func() {
+			text := `
+    daemon: Run reef-pi controller
+    Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
+
+    `
+			fmt.Println(strings.TrimSpace(text))
+			fmt.Println("\nOptions:\n")
+			cmd.PrintDefaults()
+		}
 		cmd.Parse(args)
 		config := loadConfig(*configFile)
 		daemonize(config.Database)

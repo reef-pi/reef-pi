@@ -90,6 +90,8 @@ configuration:about:status,Statut
 configuration:about:uptime,Durée de fonctionnement
 configuration:about:version,Version
 configuration:about:website,Site Web
+configuration:admin:db_export,
+configuration:admin:db_import,
 configuration:admin:poweroff,Arrêt
 configuration:admin:reboot,Rédémarrage
 configuration:admin:reload,Rechargement

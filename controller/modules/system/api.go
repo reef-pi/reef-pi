@@ -2,9 +2,11 @@ package system
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/http/pprof"
+	"os"
 
 	"github.com/gorilla/mux"
 
@@ -82,6 +84,22 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//  200:
 	//   description: OK
 	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
+
+	// swagger:route GET /api/admin/reef-pi.db Admin dbExport
+	// Download current reef-pi database.
+	// Download current reef-pi database.
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/admin/reef-pi.db", c.dbExport).Methods("GET")
+
+	// swagger:route POST /api/admin/reef-pi.db Admin dbImport
+	// Import reef-pi database.
+	// Import reef-pi database.
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/admin/reef-pi.db", c.dbImport).Methods("POST")
 
 	// swagger:route GET /api/info Admin adminInfo
 	// Get system summary.
@@ -178,11 +196,43 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
 	fn := func(string) (interface{}, error) {
 		log.Println("Upgrading reef-pi controller")
-		err := utils.SystemdExecute("/usr/bin/apt-get update -y")
+		err := utils.SystemdExecute("reef-pi-system-upgrade.service", "/usr/bin/apt-get update -y", false)
 		if err != nil {
 			return "", fmt.Errorf("Failed to update. Error: " + err.Error())
 		}
 		return "", nil
 	}
 	utils.JSONGetResponse(fn, w, r)
+}
+
+func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(10 << 20)
+	fi, _, err := r.FormFile("dbImport")
+	if err != nil {
+		log.Println("ERROR: Failed to import database file:", err)
+		return
+	}
+	defer fi.Close()
+	fo, fErr := os.Create(c.c.Store().Path() + ".new")
+	if fErr != nil {
+		log.Println("ERROR: Failed to create new database file:", fErr)
+		return
+	}
+	if _, err := io.Copy(fo, fi); err != nil {
+		log.Println("ERROR: Failed to copy new database file:", err)
+		return
+	}
+
+	if _, err := io.Copy(fo, fi); err != nil {
+		log.Println("ERROR: Failed to copy new database file:", err)
+		return
+	}
+	if err := utils.SystemdExecute("reef-pi-restore-db.service", "/usr/bin/reef-pi restore-db", true); err != nil {
+		log.Println("ERROR: Failed to invoke `reef-pi restore-db`. Details:", err)
+		return
+	}
+
+}
+func (c *Controller) dbExport(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, c.c.Store().Path())
 }
