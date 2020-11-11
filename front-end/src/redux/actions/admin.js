@@ -46,7 +46,7 @@ export const powerOff = () => {
 
 export const dbImported = () => {
   return ({
-    type: 'DB_IMPORTED`'
+    type: 'DB_IMPORTED'
   })
 }
 
@@ -55,6 +55,7 @@ export const dbImport = (formData) => {
     reduxPost({
       url: '/api/admin/db',
       success: dbImported,
+      raw: formData,
       failure: () => {}
     }))
 }

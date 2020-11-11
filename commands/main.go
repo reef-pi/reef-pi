@@ -36,6 +36,9 @@ func main() {
     db: Interact with reef-pi database
 		Example: reef-pi db list atos
 
+		restore-db: Restore and imported database
+		Example: reef-pi restore-db
+
     reset-password: Reset reef-pi web ui username and password
     Options:
       -user string
@@ -86,6 +89,12 @@ func main() {
 		cmd.Parse(args)
 		config := loadConfig(*configFile)
 		resetPassword(config.Database, *user, *password)
+	case "restore-db":
+		cmd := flag.NewFlagSet("restore-db", flag.ExitOnError)
+		configFile := cmd.String("config", "", "reef-pi configuration file path")
+		cmd.Parse(args)
+		config := loadConfig(*configFile)
+		restoreDb(config.Database)
 	case "", "daemon":
 		cmd := flag.NewFlagSet("daemon", flag.ExitOnError)
 		configFile := cmd.String("config", "", "reef-pi configuration file path")

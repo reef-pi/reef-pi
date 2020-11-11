@@ -98,7 +98,7 @@ const mapDispatchToProps = dispatch => {
     reload: () => dispatch(reload()),
     reboot: () => dispatch(reboot()),
     powerOff: () => dispatch(powerOff()),
-    dbImport: () => dispatch(dbImport())
+    dbImport: (fd) => dispatch(dbImport(fd))
   }
 }
 
