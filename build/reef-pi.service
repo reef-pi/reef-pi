@@ -2,7 +2,7 @@
 Description=raspberry pi based reef tank controller
 
 [Service]
-ExecStart=/usr/bin/reef-pi daemon -config /etc/reef-pi/config.yml
+ExecStart=/usr/bin/reef-pi daemon -config /etc/reef-pi/config.yaml
 WorkingDirectory=/var/lib/reef-pi
 Restart=always
 RestartSec=90

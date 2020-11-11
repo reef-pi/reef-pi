@@ -196,7 +196,7 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
 	fn := func(string) (interface{}, error) {
 		log.Println("Upgrading reef-pi controller")
-		err := utils.SystemdExecute("/usr/bin/apt-get update -y")
+		err := utils.SystemdExecute("reef-pi-system-upgrade.service", "/usr/bin/apt-get update -y", false)
 		if err != nil {
 			return "", fmt.Errorf("Failed to update. Error: " + err.Error())
 		}
@@ -227,7 +227,7 @@ func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR: Failed to copy new database file. Details:", err)
 		return
 	}
-	if err := utils.Command("/usr/bin/reef-pi", "restore-db").RunDetached(); err != nil {
+	if err := utils.SystemdExecute("reef-pi-restore-db.service", "/usr/bin/reef-pi restore-db -config /etc/reef-pi/config.yaml", true); err != nil {
 		log.Println("ERROR: Failed to invoke `reef-pi restore-db`. Details:", err)
 		return
 	}

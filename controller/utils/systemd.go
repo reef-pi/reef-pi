@@ -13,8 +13,7 @@ import (
 )
 
 const (
-	_version    = "Version"
-	_targetName = "reef-pi-upgrade.service"
+	_version = "Version"
 )
 
 /*// set 1 mb memory limit
@@ -33,7 +32,7 @@ const (
 	}
 */
 
-func SystemdExecute(command string) error {
+func SystemdExecute(name, command string, w bool) error {
 	var conn *systemd.Conn
 	if !util.IsRunningSystemd() {
 		return fmt.Errorf("systemd is not running")
@@ -48,23 +47,23 @@ func SystemdExecute(command string) error {
 		return err
 	}
 	fmt.Println("systemd version:", v)
-	if err := start(command, conn); err != nil {
-		fmt.Printf("Failed to start transient unit %s. Error: %s\n", _targetName, err)
+	if err := start(name, command, conn); err != nil {
+		fmt.Printf("Failed to start transient unit %s. Error: %s\n", name, err)
 		return err
 	}
-	if err := wait(conn); err != nil {
-		return err
+	if w {
+		return wait(name, conn)
 	}
 	return nil
 }
 
-func start(command string, conn *systemd.Conn) error {
+func start(name, command string, conn *systemd.Conn) error {
 	statusCh := make(chan string, 1)
 	props := []systemd.Property{
 		systemd.PropExecStart(strings.Fields(command), false),
 		systemd.Property{Name: "DefaultDependencies", Value: dbus.MakeVariant(false)},
 	}
-	if _, err := conn.StartTransientUnit(_targetName, "replace", props, statusCh); err != nil {
+	if _, err := conn.StartTransientUnit(name, "replace", props, statusCh); err != nil {
 		return err
 	}
 	done := <-statusCh
@@ -75,13 +74,13 @@ func start(command string, conn *systemd.Conn) error {
 	return nil
 }
 
-func wait(conn *systemd.Conn) error {
+func wait(name string, conn *systemd.Conn) error {
 	statusCh, errCh := conn.SubscribeUnits(5 * time.Second)
 	for {
 		select {
 		case units := <-statusCh:
 			for k, u := range units {
-				if k == _targetName {
+				if k == name {
 					if u == nil {
 						fmt.Printf("Unit finished: %s\n", k)
 						return nil
