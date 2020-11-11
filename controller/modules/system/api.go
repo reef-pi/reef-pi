@@ -85,15 +85,15 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//   description: OK
 	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
 
-	// swagger:route GET /api/admin/db Admin dbExport
-	// Export reef-pi database.
-	// Export reef-pi database.
+	// swagger:route GET /api/admin/reef-pi.db Admin dbExport
+	// Download current reef-pi database.
+	// Download current reef-pi database.
 	// responses:
 	//  200:
 	//   description: OK
 	r.HandleFunc("/api/admin/reef-pi.db", c.dbExport).Methods("GET")
 
-	// swagger:route POST /api/admin/db Admin dbImport
+	// swagger:route POST /api/admin/reef-pi.db Admin dbImport
 	// Import reef-pi database.
 	// Import reef-pi database.
 	// responses:
