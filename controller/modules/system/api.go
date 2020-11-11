@@ -91,7 +91,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	// responses:
 	//  200:
 	//   description: OK
-	r.HandleFunc("/api/admin/db", c.dbExport).Methods("GET")
+	r.HandleFunc("/api/admin/reef-pi.db", c.dbExport).Methods("GET")
 
 	// swagger:route POST /api/admin/db Admin dbImport
 	// Import reef-pi database.
@@ -99,7 +99,7 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	// responses:
 	//  200:
 	//   description: OK
-	r.HandleFunc("/api/admin/db", c.dbImport).Methods("POST")
+	r.HandleFunc("/api/admin/reef-pi.db", c.dbImport).Methods("POST")
 
 	// swagger:route GET /api/info Admin adminInfo
 	// Get system summary.

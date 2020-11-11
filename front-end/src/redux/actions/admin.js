@@ -53,7 +53,7 @@ export const dbImported = () => {
 export const dbImport = (formData) => {
   return (
     reduxPost({
-      url: '/api/admin/db',
+      url: '/api/admin/reef-pi.db',
       success: dbImported,
       raw: formData,
       failure: () => {}

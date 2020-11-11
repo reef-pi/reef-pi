@@ -30,9 +30,6 @@ func main() {
           Configuration file path
     Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
 
-    manager: Run reef-pi manager
-		Example: reef-pi manager
-
     db: Interact with reef-pi database
 		Example: reef-pi db list atos
 

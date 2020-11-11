@@ -79,7 +79,7 @@ class admin extends React.Component {
         </div>
         <div className='row'>
           <div className='col-md-12 mt-3 col-lg-3'>
-            <a href='/api/admin/db' download>{i18n.t('configuration:admin:db_export')}</a>
+            <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
           </div>
           <div className='col-md-12 mt-3 col-lg-3'>
             <input type='file' onChange={this.handleDBFileChange} />
