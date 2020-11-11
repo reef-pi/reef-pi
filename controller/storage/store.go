@@ -46,5 +46,5 @@ type Store interface {
 	Buckets() ([]string, error)
 	SubBucket(string, string) ObjectStore
 	CreateBucket(string) error
-	File() string
+	Path() string
 }

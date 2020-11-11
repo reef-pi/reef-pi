@@ -30,7 +30,8 @@ func NewStore(fname string) (*store, error) {
 func (s *store) Close() error {
 	return s.db.Close()
 }
-func (s *store) File() string {
+
+func (s *store) Path() string {
 	return s.db.Path()
 }
 

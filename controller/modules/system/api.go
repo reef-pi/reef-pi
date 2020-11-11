@@ -2,9 +2,11 @@ package system
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/http/pprof"
+	"os"
 
 	"github.com/gorilla/mux"
 
@@ -204,7 +206,24 @@ func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(10 << 20)
+	fi, _, err := r.FormFile("dbImport")
+	if err != nil {
+		log.Println("ERROR: Failed to import database file. Details:", err)
+		return
+	}
+	defer fi.Close()
+	fo, fErr := os.Create(c.c.Store().Path() + ".new")
+	if fErr != nil {
+		log.Println("ERROR: Failed to create new database file. Details:", fErr)
+		return
+	}
+	if _, err := io.Copy(fo, fi); err != nil {
+		log.Println("ERROR: Failed to copy new database file. Details:", err)
+		return
+	}
+
 }
 func (c *Controller) dbExport(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, c.c.Store().File())
+	http.ServeFile(w, r, c.c.Store().Path())
 }
