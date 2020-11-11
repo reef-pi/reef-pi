@@ -90,6 +90,8 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Versie
 configuration:about:website,Website
+configuration:admin:db_export,
+configuration:admin:db_import,
 configuration:admin:poweroff,Uitschakelen
 configuration:admin:reboot,Herstarten
 configuration:admin:reload,Herladen
@@ -156,18 +158,18 @@ ph:calibrate,Calibreren
 ph:chart:current,huidig
 ph:chart:historical,historiek
 ph:check_frequency,Controleer frequentie
+ph:control,Bedien
 ph:control_required,Bediening is verplicht
 ph:controlequipment,Apparatuur
 ph:controlmacro,Macro
 ph:controlnothing,Niets
-ph:lower_function,Laagste functie
 ph:current_reading,Huidige meting
+ph:lower_function,Laagste functie
 ph:lower_function_required,Laagste functie is vereist
 ph:lower_threshold,Laagste drempelwaarde
 ph:lower_threshold_less_than,Laagste drempelwaarde moet lager zijn dan de hoogste drempelwaarde
 ph:lower_threshold_required,Laagste drempelwaarde is vereist
 ph:lower_threshold_type,Laagste drempelwaarde moet numeriek zijn
-ph:upper_function,Hoogste Functie
 ph:midpoint,Middelpunt
 ph:name_required,Naam is nodig
 ph:period_min,Check Frequentie moet 1 seconde of meer zijn
@@ -181,42 +183,42 @@ ph:threshold_greater_than,Alarm bovengrens moet groter zijn dan Alarm ondergrens
 ph:threshold_less_than,Alarm ondergrens moet kleiner zijn dan Alarm bovengrens
 ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
 ph:threshold_type,Limiet moet een nummer zijn
+ph:upper_function,Hoogste Functie
 ph:upper_function_required,Drempel is verplicht wanneer alarm zjn ingeschakeld
 ph:upper_threshold,Hoogste drempelwaarde
 ph:upper_threshold_greater_than,Hoogste drempelwaarde moet groter zijn dan de laagste drempelwaarde
 ph:upper_threshold_required,Hoogste drempelwaarde is vereist
 ph:upper_threshold_type,Hoogste drempelwaarde moet numeriek zijn
-temperatur:controlnothing,Niets
 ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
-temperature:controlequipment,Apparatuur
+pins:Pins,Pins
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
 signin:username,Gebruikersnaam
-temperature:controlmacro,Macro
-temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
-temperature:lower_function,Verwarming
-temperature:upper_function,Koeler
+temperatur:controlnothing,Niets
+temperature:calibrate,Kalibreer
+temperature:calibration:apply,Bevestigen
+temperature:calibration:set_temperature,Overschrijf temperatuur
 temperature:celsius,Celsius
 temperature:chart:current,huidig
 temperature:chart:historical,historiek
 temperature:chart_maximum,Maximum Grafiek
 temperature:chart_minimum,Minimum Grafiek
-temperature:upper_threshold,Koeler drempelwaarde
-temperature:lower_threshold,Verwarming drempelwaarde
-ph:control,Bedien
+temperature:control,Bedien
+temperature:controlequipment,Apparatuur
+temperature:controlmacro,Macro
 temperature:current_reading,Huidige uitlezing
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Verwarming/Koeling
-temperature:control,Bedien
-temperature:calibration:apply,Bevestigen
-temperature:calibrate,Kalibreer
+temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
+temperature:lower_function,Verwarming
+temperature:lower_threshold,Verwarming drempelwaarde
 temperature:sensor,Sensor
 temperature:sensor_status,Sensor Status
 temperature:temperature,Temperatuur
-temperature:calibration:set_temperature,Overschrijf temperatuur
-pins:Pins,Pins
+temperature:upper_function,Koeler
+temperature:upper_threshold,Koeler drempelwaarde
 temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 temperature:warn_delete,Deze actie verwijderd
 timers:after,Na
