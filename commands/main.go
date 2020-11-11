@@ -31,10 +31,10 @@ func main() {
     Example: reef-pi daemon -config /etc/reef-pi/reef-pi.yml
 
     db: Interact with reef-pi database
-		Example: reef-pi db list atos
+    Example: reef-pi db list atos
 
-		restore-db: Restore and imported database
-		Example: reef-pi restore-db
+    restore-db: Restore and imported database
+    Example: reef-pi restore-db
 
     reset-password: Reset reef-pi web ui username and password
     Options:

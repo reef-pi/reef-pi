@@ -223,6 +223,15 @@ func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if _, err := io.Copy(fo, fi); err != nil {
+		log.Println("ERROR: Failed to copy new database file. Details:", err)
+		return
+	}
+	if err := utils.Command("/usr/bin/reef-pi", "restore-db").RunDetached(); err != nil {
+		log.Println("ERROR: Failed to invoke `reef-pi restore-db`. Details:", err)
+		return
+	}
+
 }
 func (c *Controller) dbExport(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, c.c.Store().Path())
