@@ -67,7 +67,7 @@ func main() {
     Example: reef-pi reset-password -user foo -password bar  -config /etc/reef-pi/reef-pi.yml
     `
 			fmt.Println(strings.TrimSpace(text))
-			fmt.Println("\nOptions:\n")
+			fmt.Println("\nOptions:")
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
@@ -84,7 +84,7 @@ func main() {
     Example: reef-pi restore-db
     `
 			fmt.Println(strings.TrimSpace(text))
-			fmt.Println("\nOptions:\n")
+			fmt.Println("\nOptions:")
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
@@ -99,7 +99,7 @@ func main() {
 
     `
 			fmt.Println(strings.TrimSpace(text))
-			fmt.Println("\nOptions:\n")
+			fmt.Println("\nOptions:")
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)

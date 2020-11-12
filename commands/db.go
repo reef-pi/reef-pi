@@ -58,7 +58,7 @@ func (d *dbCmd) FlagSet() *flag.FlagSet {
 	fs.StringVar(&d.sPath, "store", "/var/lib/reef-pi/reef-pi.db", "Database storage file")
 	fs.Usage = func() {
 		fmt.Println(strings.TrimSpace(dbHelpText))
-		fmt.Println("\nOptions:\n")
+		fmt.Println("\nOptions:")
 		fs.PrintDefaults()
 	}
 	return fs
