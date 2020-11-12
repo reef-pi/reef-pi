@@ -10,7 +10,7 @@ import (
 
 func TestReefPi(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)
-	conf, err := ParseConfig("../../build/reef-pi.yml")
+	conf, err := ParseConfig("../../build/config.yaml")
 	if err != nil {
 		t.Fatal("Failed to parse example config file. Error:", err)
 	}
