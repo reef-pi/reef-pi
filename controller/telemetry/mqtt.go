@@ -10,7 +10,6 @@ import (
 type MQTTConfig struct {
 	Enable   bool   `json:"enable"`
 	Server   string `json:"server"`
-	Topic    string `json:"topic"`
 	Username string `json:"username"`
 	ClientID string `json:"client_id"`
 	Password string `json:"password"`
