@@ -1,20 +1,18 @@
 package telemetry
 
 import (
+	"errors"
+	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/reef-pi/adafruitio"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"log"
+	"math"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-
-	"github.com/reef-pi/reef-pi/controller/storage"
-
-	"math"
-
-	"github.com/reef-pi/adafruitio"
 )
 
 const DBKey = "telemetry"
@@ -51,6 +49,7 @@ type AdafruitIO struct {
 //swagger:model telemetryConfig
 type TelemetryConfig struct {
 	AdafruitIO      AdafruitIO   `json:"adafruitio"`
+	MQTT            MQTTConfig   `json:"mqtt"`
 	Mailer          MailerConfig `json:"mailer"`
 	Notify          bool         `json:"notify"`
 	Prometheus      bool         `json:"prometheus"`
@@ -64,10 +63,12 @@ var DefaultTelemetryConfig = TelemetryConfig{
 	Throttle:        10,
 	CurrentLimit:    CurrentLimit,
 	HistoricalLimit: HistoricalLimit,
+	MQTT:            DefaultMQTTConfig,
 }
 
 type telemetry struct {
-	client     *adafruitio.Client
+	aClient    *adafruitio.Client
+	mClient    *MQTTClient
 	dispatcher Mailer
 	config     TelemetryConfig
 	aStats     map[string]AlertStats
@@ -102,8 +103,7 @@ func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr Erro
 	if config.Notify {
 		mailer = config.Mailer.Mailer()
 	}
-	return &telemetry{
-		client:     adafruitio.NewClient(config.AdafruitIO.Token),
+	t := &telemetry{
 		config:     config,
 		dispatcher: mailer,
 		aStats:     make(map[string]AlertStats),
@@ -113,6 +113,18 @@ func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr Erro
 		bucket:     b,
 		pMs:        make(map[string]prometheus.Gauge),
 	}
+	if config.AdafruitIO.Enable {
+		t.aClient = adafruitio.NewClient(config.AdafruitIO.Token)
+	}
+	if config.MQTT.Enable {
+		mClient, err := NewMQTTClient(config.MQTT)
+		if err != nil {
+			lr("telemety-subsystem", "Failed to initialize mqtt client:"+err.Error())
+		} else {
+			t.mClient = mClient
+		}
+	}
+	return t
 }
 
 func (t *telemetry) NewStatsManager(b string) StatsManager {
@@ -181,17 +193,32 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 		t.mu.Unlock()
 		g.Set(v)
 	}
-	if !aio.Enable {
-		//log.Println("Telemetry disabled. Skipping emitting", v, "on", feed)
-		return
+	if aio.Enable {
+		if err := t.EmitAIO(feed, aio.User, v); err != nil {
+			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
+			t.logError("telemtry-"+feed, err.Error())
+		}
 	}
-	d := adafruitio.Data{
-		Value: v,
+	if t.config.MQTT.Enable {
+		if err := t.EmitMQTT(v); err != nil {
+			log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
+			t.logError("telemtry-mqtt", err.Error())
+		}
 	}
-	if err := t.client.SubmitData(aio.User, feed, d); err != nil {
-		log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
-		t.logError("telemtry-"+feed, err.Error())
+}
+
+func (t *telemetry) EmitMQTT(v float64) error {
+	if t.mClient == nil {
+		return errors.New("mqtt client is not initialized")
 	}
+	return t.mClient.Publish("", fmt.Sprintf("%f", v))
+}
+
+func (t *telemetry) EmitAIO(user, feed string, v float64) error {
+	return t.aClient.SubmitData(user, feed,
+		adafruitio.Data{
+			Value: v,
+		})
 }
 
 func (t *telemetry) CreateFeedIfNotExist(f string) {
@@ -206,9 +233,9 @@ func (t *telemetry) CreateFeedIfNotExist(f string) {
 		Key:     f,
 		Enabled: true,
 	}
-	if _, err := t.client.GetFeed(aio.User, f); err != nil {
+	if _, err := t.aClient.GetFeed(aio.User, f); err != nil {
 		log.Println("Telemetry sub-system: Creating missing feed:", f)
-		if e := t.client.CreateFeed(aio.User, feed); e != nil {
+		if e := t.aClient.CreateFeed(aio.User, feed); e != nil {
 			log.Println("ERROR: Telemetry sub-system: Failed to create feed:", f, "Error:", e)
 		}
 	}
@@ -222,7 +249,7 @@ func (t *telemetry) DeleteFeedIfExist(f string) {
 		return
 	}
 	log.Println("Telemetry sub-system: Deleting feed:", f)
-	if err := t.client.DeleteFeed(aio.User, f); err != nil {
+	if err := t.aClient.DeleteFeed(aio.User, f); err != nil {
 		log.Println("ERROR: Telemetry sub-system: Failed to delete feed:", f, "Error:", err)
 	}
 	return

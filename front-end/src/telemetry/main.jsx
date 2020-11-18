@@ -1,6 +1,7 @@
 import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
+import Mqtt from './mqtt'
 import { showError } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
@@ -19,8 +20,10 @@ class telemetry extends React.Component {
       updated: false
     }
     this.showAdafruitIO = this.showAdafruitIO.bind(this)
+    this.showMqtt = this.showMqtt.bind(this)
     this.notification = this.notification.bind(this)
     this.updateAio = this.updateAio.bind(this)
+    this.updateMqtt = this.updateMqtt.bind(this)
     this.updateMailer = this.updateMailer.bind(this)
     this.handleEnableMailer = this.handleEnableMailer.bind(this)
     this.handleSave = this.handleSave.bind(this)
@@ -122,6 +125,15 @@ class telemetry extends React.Component {
     })
   }
 
+  updateMqtt (m) {
+    const c = this.state.config
+    c.mqtt = m
+    this.setState({
+      config: c,
+      updated: true
+    })
+  }
+
   notification () {
     if (this.state.config === undefined) {
       return
@@ -178,6 +190,16 @@ class telemetry extends React.Component {
     return <AdafruitIO adafruitio={this.state.config.adafruitio} update={this.updateAio} />
   }
 
+  showMqtt () {
+    if (this.state.config === undefined) {
+      return
+    }
+    if (this.state.config.mqtt === undefined) {
+      return
+    }
+    return <Mqtt config={this.state.config.mqtt} update={this.updateMqtt} />
+  }
+
   handleUpdateThrottle (ev) {
     const c = this.state.config
     c.throttle = ev.target.value
@@ -195,6 +217,7 @@ class telemetry extends React.Component {
     return (
       <div className='container'>
         <div className='row'>{this.showAdafruitIO()}</div>
+        <div className='row'>{this.showMqtt()}</div>
         <div className='row'>
           <div className=' col-12'>
             <div className='form-group'>
