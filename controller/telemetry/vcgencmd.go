@@ -77,7 +77,7 @@ func GetThrottled(ctx context.Context, cf Factory) ([]ThrottleType, error) {
 		return nil, fmt.Errorf("failed to parse output. output: %s", string(out))
 	}
 	data := strings.TrimSpace(parts[1])
-	v, err := strconv.ParseInt(data, 0, 20)
+	v, err := strconv.ParseInt(data, 0, 64)
 	if err != nil {
 		return nil, err
 	}
