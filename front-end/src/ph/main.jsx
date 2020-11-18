@@ -93,7 +93,8 @@ class ph extends React.Component {
       min: parseFloat(values.lowerThreshold),
       downer_eq: values.lowerFunction,
       max: parseFloat(values.upperThreshold),
-      upper_eq: values.upperFunction
+      upper_eq: values.upperFunction,
+      hysteresis: parseFloat(values.hysteresis),
     }
     return probe
   }
