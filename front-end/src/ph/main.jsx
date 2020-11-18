@@ -28,10 +28,11 @@ class ph extends React.Component {
     this.props.fetchPhProbes()
   }
 
+  // *** sort pH probes by name instead of id - JFR 20201118
   probeList () {
     return this.props.probes
       .sort((a, b) => {
-        return parseInt(a.id) < parseInt(b.id)
+        return a.name.localeCompare(b.name)
       })
       .map(probe => {
         const calibrationButton = (

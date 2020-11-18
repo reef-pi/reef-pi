@@ -75,7 +75,7 @@ capabilities:configuration,Configuration
 capabilities:dashboard,Dashboard
 capabilities:dev_mode,Dev Mode
 capabilities:doser,Doser
-capabilities:dosing_pumps,Dosing pumps
+capabilities:dosing_pumps,Dosing
 capabilities:equipment,Equipment
 capabilities:health_check,Health check
 capabilities:journal,Journal

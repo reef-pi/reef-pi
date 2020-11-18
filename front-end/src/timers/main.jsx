@@ -23,10 +23,12 @@ class Main extends React.Component {
     this.props.fetch()
   }
 
+  // *** sort timers by name instead of id - JFR 20201118
   timerList () {
     return this.props.timers
       .sort((a, b) => {
-        return parseInt(a.id) < parseInt(b.id)
+//        return parseInt(a.id) < parseInt(b.id)
+        return a.name.localeCompare(b.name)
       })
       .map(timer => {
         const handleToggleState = () => {

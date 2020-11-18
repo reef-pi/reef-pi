@@ -62,8 +62,9 @@ class main extends React.Component {
     )
   }
 
+  // *** sort ato probes by name instead of id - JFR 20201118
   probeList () {
-    return this.props.atos.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(probe => {
+    return this.props.atos.sort((a, b) => { return a.name.localeCompare(b.name) }).map(probe => {
       const handleToggleState = () => {
         probe.enable = !probe.enable
         this.props.update(probe.id, probe)

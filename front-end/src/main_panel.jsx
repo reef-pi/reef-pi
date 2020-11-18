@@ -39,6 +39,8 @@ const caps = {
   log: { label: i18n.t('capabilities:log'), component: <Log /> }
 }
 
+  // *** add dev mode flag to name - JFR 20201117
+
 class mainPanel extends React.Component {
   constructor (props) {
     super(props)

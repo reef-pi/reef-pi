@@ -136,9 +136,10 @@ class main extends React.Component {
     $('#lightName').val('')
   }
 
+  // *** sort lights by name instead of id - JFR 20201118
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
+      this.props.lights.sort((a, b) => { return a.name.localeCompare(b.name) }).map(light => {
         let panelContent =
           <Light
             config={light}
