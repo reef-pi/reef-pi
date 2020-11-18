@@ -28,7 +28,7 @@ func TestDoserAPI(t *testing.T) {
 		Driver: "pca9685",
 	}
 	jacks.Create(j)
-	c, err := New(true, con, jacks)
+	c, err := New(true, con)
 	if err != nil {
 		t.Fatal(err)
 	}

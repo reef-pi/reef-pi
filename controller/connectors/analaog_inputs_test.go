@@ -3,16 +3,17 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
-	"testing"
-
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/drivers"
-
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"testing"
 )
 
 func TestAnalogInputsAPI(t *testing.T) {
 	store, err := storage.TestDB()
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,6 +70,9 @@ func TestAnalogInputsAPI(t *testing.T) {
 	}
 
 	if err := tr.Do("GET", "/api/analog_inputs/1", body, nil); err != nil {
+		t.Error(err)
+	}
+	if err := ais.Calibrate("1", []hal.Measurement{}); err != nil {
 		t.Error(err)
 	}
 	if err := tr.Do("GET", "/api/analog_inputs", new(bytes.Buffer), nil); err != nil {

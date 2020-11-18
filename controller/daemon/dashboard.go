@@ -8,6 +8,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
+//swagger:model dashboard
 type Dashboard struct {
 	Column      int       `json:"column"`
 	Row         int       `json:"row"`

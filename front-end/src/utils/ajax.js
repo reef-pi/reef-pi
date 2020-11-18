@@ -93,28 +93,32 @@ export function reduxPut (params) {
 
 export function reduxPost (params) {
   return dispatch => {
-    return fetch(params.url, {
+    const fParams = {
       method: 'POST',
-      headers: makeHeaders(),
-      credentials: 'same-origin',
-      body: JSON.stringify(params.data)
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (params.suppressError) {
+      credentials: 'same-origin'
+    }
+    if (params.raw) {
+      fParams.body = params.raw
+    } else {
+      fParams.body = JSON.stringify(params.data)
+      fParams.headers = makeHeaders
+    }
+    return fetch(params.url, fParams).then(response => {
+      if (!response.ok) {
+        if (params.suppressError) {
+          return
+        }
+        response.text().then(err => {
+          if (params.failure) {
+            params.failure(response)
             return
           }
-          response.text().then(err => {
-            if (params.failure) {
-              params.failure(response)
-              return
-            }
-            showError(err + ' | HTTP ' + response.status)
-            logError(err + ' | HTTP ' + response.status)
-          })
-        }
-        return response
-      })
+          showError(err + ' | HTTP ' + response.status)
+          logError(err + ' | HTTP ' + response.status)
+        })
+      }
+      return response
+    })
       .then(data => dispatch(params.success(data)))
       .catch(() => {
         dispatch({ type: 'API_FAILURE', params: params })

@@ -147,6 +147,24 @@ const EditPh = ({
           </div>
         </div>
 
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
+            <Field
+              name='one_shot'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('one_shot', touched, errors)
+              })}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='one_shot' />
+          </div>
+        </div>
+
       </div>
 
       <div className='row'>

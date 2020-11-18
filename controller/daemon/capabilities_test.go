@@ -7,6 +7,7 @@ import (
 
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -16,12 +17,15 @@ import (
 func Test_Capabilities(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)
 	store, err := storage.NewStore("capabilities-test.db")
+	defer store.Close()
+
 	if err != nil {
 		t.Fatal(err)
 	}
 	r := &ReefPi{
 		a:         utils.NewAuth(Bucket, store),
 		telemetry: telemetry.TestTelemetry(store),
+		dm:        device_manager.New(settings.DefaultSettings, store),
 	}
 	buf := new(bytes.Buffer)
 	buf.Write([]byte(`{}`))

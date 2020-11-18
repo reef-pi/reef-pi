@@ -30,7 +30,7 @@ class outlets extends React.Component {
   handleDriverChange (e) {
     const driver = this.props.drivers.filter(d => d.id === e.target.value)[0]
     this.setState({
-      driver: driver
+      driver: driver || {}
     })
   }
 
@@ -97,7 +97,7 @@ class outlets extends React.Component {
             equipment={o.equipment}
             remove={this.remove(o.id)}
             drivers={this.props.drivers}
-            driver={this.props.drivers.filter(d => d.id === o.driver)[0]}
+            driver={this.props.drivers.filter(d => d.id === o.driver)[0] || {}}
             update={p => {
               this.props.update(o.id, p)
               this.props.fetch()

@@ -31,11 +31,6 @@ class main extends React.Component {
     this.handleChangeMode = this.handleChangeMode.bind(this)
   }
 
-  componentWillMount () {
-    this.props.fetchLights()
-    this.props.fetchJacks()
-  }
-
   setJack (i) {
     return () => {
       this.setState({
@@ -85,6 +80,11 @@ class main extends React.Component {
 
         const interval = totalSeconds / (payload.channels[x].profile.config.values.length - 1)
         payload.channels[x].profile.config.interval = Math.floor(interval)
+      } else if (payload.channels[x].profile.type === 'lunar') {
+        const date = payload.channels[x].profile.config.full_moon
+        const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        const [{ value: month },, { value: day },, { value: year }] = dateTimeFormat.formatToParts(date)
+        payload.channels[x].profile.config.full_moon = `${year}-${month}-${day}`
       }
     }
 

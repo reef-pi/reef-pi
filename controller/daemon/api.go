@@ -3,11 +3,9 @@ package daemon
 import (
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
-
 	"os"
 
+	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -50,34 +48,173 @@ func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
 func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	http.Handle("/api/", r.a.Authenticate(router.ServeHTTP))
 
+	// swagger:route GET /api/capabilities Capabilities capabilitiesList
+	// List all capabilities.
+	// List all capabilities in reef-pi.
+	// responses:
+	// 	200: body:capabilities
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
+
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}
+
+	// swagger:route GET /api/settings Settings settingsList
+	// List all settings.
+	// List all settings in reef-pi.
+	// responses:
+	// 	200: body:settings
 	utils.APIDoc(router.HandleFunc("/api/settings", r.GetSettings).Methods("GET"), nil, &settings.DefaultSettings)
+
+	// swagger:operation POST /api/settings Settings settingsUpdate
+	// Update settings.
+	// Update settings.
+	//---
+	//parameters:
+	// - in: body
+	//   name: settings
+	//   description: The settings to update
+	//   required: true
+	//   schema:
+	//    $ref: '#/definitions/settings'
+	//responses:
+	// 200:
+	//  description: OK
 	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
+
+	// swagger:operation POST /api/credentials Credentials credentialsUpdate
+	// Update credentials.
+	// Update username and password.
+	//---
+	//parameters:
+	// - in: body
+	//   name: credentials
+	//   description: The new credentials
+	//   required: true
+	//   schema:
+	//    $ref: '#/definitions/credentials'
+	//responses:
+	// 200:
+	//  description: OK
 	router.HandleFunc("/api/credentials", r.a.UpdateCredentials).Methods("POST")
+
+	// swagger:route GET /api/telemetry Telemetry telemetryGet
+	// List telemetry configuration.
+	// List telemetry configuration.
+	// responses:
+	// 	200: body:telemetryConfig
 	router.HandleFunc("/api/telemetry", r.telemetry.GetConfig).Methods("GET")
+
+	// swagger:operation POST /api/telemetry Telemetry telemetryUpdate
+	// Update telemetry configuration.
+	// Update telemetry configuration.
+	//---
+	//parameters:
+	// - in: body
+	//   name: telemetryConfig
+	//   description: The telemetry configuration
+	//   required: true
+	//   schema:
+	//    $ref: '#/definitions/telemetryConfig'
+	//responses:
+	// 200:
+	//  description: OK
 	router.HandleFunc("/api/telemetry", r.telemetry.UpdateConfig).Methods("POST")
+
+	// swagger:route POST /api/telemetry/test_message Telemetry telemetryTest
+	// Test telemetry.
+	// Send a telemetry test message.
+	// responses:
+	//  200:
 	router.HandleFunc("/api/telemetry/test_message", r.telemetry.SendTestMessage).Methods("POST")
+
+	// swagger:route DELETE /api/errors/clear Errors errorsClear
+	// Clear errors.
+	// Clear errors.
+	// responses:
+	//  200:
 	router.HandleFunc("/api/errors/clear", r.clearErrors).Methods("DELETE")
+
+	// swagger:operation DELETE /api/errors/{id} Errors errorsDelete
+	// Delete an error.
+	// Delete an error.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the error to delete
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
 	router.HandleFunc("/api/errors/{id}", r.deleteError).Methods("DELETE")
+
+	// swagger:operation GET /api/errors/{id} Errors errorGet
+	// Get an error by id.
+	// Get an existing error.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the error
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	//   schema:
+	//    $ref: '#/definitions/error'
+	//  404:
+	//   description: Not Found
 	router.HandleFunc("/api/errors/{id}", r.getError).Methods("GET")
+
+	// swagger:route GET /api/errors Errors errorsList
+	// List errors.
+	// List errors.
+	// responses:
+	// 	200: body:[]error
 	router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
+
+	// swagger:route GET /api/me Me meGet
+	// Ping API.
+	// Ping API to determine if server is running.
+	// responses:
+	// 	200:
 	router.HandleFunc("/api/me", r.a.Me).Methods("GET")
+
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
 	}
-	r.outlets.LoadAPI(router)
-	r.inlets.LoadAPI(router)
-	r.jacks.LoadAPI(router)
-	r.ais.LoadAPI(router)
-	r.drivers.LoadAPI(router)
+	r.dm.LoadAPI(router)
 	for _, sController := range r.subsystems {
 		sController.LoadAPI(router)
 	}
 	if r.settings.Capabilities.Dashboard {
+
+		// swagger:route GET /api/dashboard Dashboard dashboardGet
+		// Get dashboard.
+		// Get dashboard.
+		// responses:
+		// 	200: body:dashboard
 		router.HandleFunc("/api/dashboard", r.GetDashboard).Methods("GET")
+
+		// swagger:operation POST /api/dashboard Dashboard dashboardUpdate
+		// Update dasboard configuration.
+		// Update dasboard configuration.
+		//---
+		//parameters:
+		// - in: body
+		//   name: dashboardConfiguration
+		//   description: The dashboard configuration
+		//   required: true
+		//   schema:
+		//    $ref: '#/definitions/dashboard'
+		//responses:
+		// 200:
+		//  description: OK
 		router.HandleFunc("/api/dashboard", r.UpdateDashboard).Methods("POST")
 	}
 }

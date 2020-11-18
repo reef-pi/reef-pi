@@ -20,6 +20,7 @@ import FatalError from './fatal_error'
 import ErrorBoundary from './ui_components/error_boundary'
 import i18n from 'utils/i18n'
 import Instances from 'instances/main'
+import Journal from 'journal/main'
 
 const caps = {
   dashboard: { label: i18n.t('capabilities:dashboard'), component: <Dashboard /> },
@@ -33,6 +34,7 @@ const caps = {
   macro: { label: i18n.t('capabilities:macros'), component: <Macro /> },
   camera: { label: i18n.t('capabilities:camera'), component: <Camera /> },
   manager: { label: i18n.t('capabilities:manager'), component: <Instances /> },
+  journal: { label: i18n.t('capabilities:journal'), component: <Journal /> },
   configuration: { label: i18n.t('capabilities:configuration'), component: <Configuration /> },
   log: { label: i18n.t('capabilities:log'), component: <Log /> }
 }

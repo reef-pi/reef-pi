@@ -25,10 +25,12 @@ inlets,
 jack,
 jacks,
 light,
+lights,
 loading,Carregar
 name,Nome
 none,nenhum
 ok,Ok
+one_shot,
 outlet,
 outlets,
 pin,
@@ -60,7 +62,7 @@ ato:threshold_required,Threshold é Obrigatório when notification is enabled
 ato:threshold_value,Threshold tem que ser um número
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
-ato:warning_delete,Esta acção vái ser removida
+ato:warn_delete,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuração
@@ -70,6 +72,7 @@ capabilities:doser,Dose
 capabilities:dosing_pumps,Bombas Doseadoras
 capabilities:equipment,Equipamento
 capabilities:health_check,Verificação de Estado
+capabilities:journal,
 capabilities:lighting,Iluminação
 capabilities:lights,Luzes
 capabilities:log,Log
@@ -87,6 +90,8 @@ configuration:about:status,Estado
 configuration:about:uptime,Uptime
 configuration:about:version,Versão
 configuration:about:website,Site
+configuration:admin:db_export,
+configuration:admin:db_import,
 configuration:admin:poweroff,Desligar
 configuration:admin:reboot,Reninciar
 configuration:admin:reload,Recarregar
@@ -195,7 +200,7 @@ temperatur:controlnothing,
 temperature:calibrate,
 temperature:calibration:apply,
 temperature:calibration:set_temperature,
-temperature:celcius,Celcius
+temperature:celsius,Celsius
 temperature:chart:current,
 temperature:chart:historical,
 temperature:chart_maximum,Valor Maximo gráfico

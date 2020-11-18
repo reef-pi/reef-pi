@@ -28,7 +28,7 @@ export default class CalibrationWizard extends React.Component {
   componentDidMount () {
     this.timer = setInterval(() => {
       this.props.readProbe(this.props.probe.id)
-    }, 500)
+    }, 1500)
   }
 
   componentWillUnmount () {

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 
 	"github.com/reef-pi/hal"
-	"github.com/reef-pi/rpi/i2c"
-
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/rpi/i2c"
 )
 
 const (
@@ -18,12 +18,14 @@ const (
 	_rpi         = "rpi"
 )
 
+// swagger:model driver
 type Driver struct {
-	ID     string           `json:"id"`
-	Name   string           `json:"name"`
-	Type   string           `json:"type"`
-	Config json.RawMessage  `json:"config"`
-	PinMap map[string][]int `json:"pinmap"`
+	ID         string                 `json:"id"`
+	Name       string                 `json:"name"`
+	Type       string                 `json:"type"`
+	Config     json.RawMessage        `json:"config"`
+	PinMap     map[string][]int       `json:"pinmap"`
+	Parameters map[string]interface{} `json:"parameters"`
 }
 
 type Drivers struct {
@@ -31,6 +33,7 @@ type Drivers struct {
 	drivers  map[string]hal.Driver
 	store    storage.Store
 	dev_mode bool
+	pwm_freq int
 	bus      i2c.Bus
 }
 
@@ -42,6 +45,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		drivers:  make(map[string]hal.Driver),
 		store:    store,
 		dev_mode: s.Capabilities.DevMode,
+		pwm_freq: s.RPI_PWMFreq,
 		bus:      bus,
 	}
 	return d, d.loadAll()
@@ -124,18 +128,40 @@ func (d *Drivers) AnalogInputDriver(id string) (hal.AnalogInputDriver, error) {
 	return p, nil
 }
 
+func parseParams(data json.RawMessage) map[string]interface{} {
+	var objmap map[string]interface{}
+	json.Unmarshal(data, &objmap)
+	params := make(map[string]interface{})
+	for k, v := range objmap {
+		if val, ok := hal.ConvertToInt(v); ok {
+			params[strings.Title(k)] = val
+		} else {
+			params[strings.Title(k)] = v
+		}
+	}
+
+	return params
+}
+
 func (d *Drivers) Create(d1 Driver) error {
 	fn := func(id string) interface{} {
 		d1.ID = id
 		return &d1
 	}
-	factory, err := AbstractFactory(d1.Type, d.dev_mode)
+	factory, err := AbstractFactory(d1.Type)
 	if err != nil {
 		return err
 	}
+
+	if d1.Parameters == nil {
+		d1.Parameters = parseParams(d1.Config)
+	}
+	factory.ValidateParameters(d1.Parameters)
+
 	if err := d.store.Create(DriverBucket, fn); err != nil {
 		return err
 	}
+
 	if err := d.register(d1, factory); err != nil {
 		// Registration has failed, we need to de-allocate the DB entry
 		_ = d.store.Delete(DriverBucket, d1.ID)
@@ -179,6 +205,30 @@ func (d *Drivers) List() ([]Driver, error) {
 		return nil
 	}
 	return ds, d.store.List(DriverBucket, fn)
+}
+
+func (d *Drivers) ListOptions() (map[string][]hal.ConfigParameter, error) {
+	options := make(map[string][]hal.ConfigParameter)
+
+	for k, v := range driversMap {
+		if k != "rpi" {
+			options[k] = v.GetParameters()
+		}
+	}
+	return options, nil
+}
+
+func (d *Drivers) ValidateParameters(d1 Driver) (map[string][]string, error) {
+	factory, err := AbstractFactory(d1.Type)
+	if err != nil {
+		return nil, err
+	}
+	if d1.Parameters == nil {
+		d1.Parameters = parseParams(d1.Config)
+	}
+
+	_, failures := factory.ValidateParameters(d1.Parameters)
+	return failures, nil
 }
 
 func (d *Drivers) Close() error {

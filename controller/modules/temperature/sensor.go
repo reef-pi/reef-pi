@@ -14,33 +14,33 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func detectTempSensorDevice() (string, error) {
-	files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
-	if err != nil {
-		return "", err
-	}
-	if len(files) != 1 {
-		return "", fmt.Errorf("Only one temperature device expected, found: %d", len(files))
-	}
-	return filepath.Join(files[0], "w1_slave"), nil
-}
-
-func (c *Controller) Read(tc TC) (float64, error) {
+func (c *Controller) Read(tc *TC) (float64, error) {
 	log.Println("Reading temperature from device:", tc.Sensor)
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
 			return telemetry.TwoDecimal(78.0 + (3 * rand.Float64())), nil
-		} else {
-			return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
+		}
+
+		return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
+	}
+
+	var v float64
+	var err error
+
+	for attempt := 0; attempt <= 3; attempt++ {
+		fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor, "w1_slave"))
+		if err != nil {
+			return -1, err
+		}
+		v, err = tc.readTemperature(fi)
+		fi.Close()
+		if err == nil {
+			return v, err
 		}
 	}
-	fi, err := os.Open(filepath.Join("/sys/bus/w1/devices", tc.Sensor, "w1_slave"))
-	if err != nil {
-		return -1, err
-	}
-	defer fi.Close()
-	return tc.readTemperature(fi)
+
+	return v, err
 }
 
 func (t *TC) readTemperature(fi io.Reader) (float64, error) {
@@ -65,6 +65,11 @@ func (t *TC) readTemperature(fi io.Reader) (float64, error) {
 		return -1, err
 	}
 	temp := float64(v) / 1000.0
+
+	if temp < -55 || temp > 125 {
+		return -1, fmt.Errorf("temperature reading out of range: -55 < %v < 125", temp)
+	}
+
 	if t.Fahrenheit {
 		temp = ((temp * 9.0) / 5.0) + 32.0
 	}

@@ -2,8 +2,11 @@ package ph
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"sync"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 
@@ -15,20 +18,23 @@ const Bucket = storage.PhBucket
 const CalibrationBucket = storage.PhCalibrationBucket
 
 type Controller struct {
-	c        controller.Controller
-	quitters map[string]chan struct{}
-	statsMgr telemetry.StatsManager
-	devMode  bool
-	ais      *connectors.AnalogInputs
+	sync.Mutex
+	c           controller.Controller
+	quitters    map[string]chan struct{}
+	statsMgr    telemetry.StatsManager
+	devMode     bool
+	ais         *connectors.AnalogInputs
+	calibrators map[string]hal.Calibrator
 }
 
-func New(devMode bool, c controller.Controller, ais *connectors.AnalogInputs) *Controller {
+func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
-		quitters: make(map[string]chan struct{}),
-		c:        c,
-		devMode:  devMode,
-		ais:      ais,
-		statsMgr: c.Telemetry().NewStatsManager(ReadingsBucket),
+		quitters:    make(map[string]chan struct{}),
+		c:           c,
+		devMode:     devMode,
+		ais:         c.DM().AnalogInputs(),
+		statsMgr:    c.Telemetry().NewStatsManager(ReadingsBucket),
+		calibrators: make(map[string]hal.Calibrator),
 	}
 }
 
@@ -39,6 +45,25 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
 		return err
 	}
+
+	err := c.c.Store().List(CalibrationBucket, func(k string, v []byte) error {
+		var ms []hal.Measurement
+		if err := json.Unmarshal(v, &ms); err != nil {
+			return err
+		}
+		c.Lock()
+		defer c.Unlock()
+
+		calibrator, err := hal.CalibratorFactory(ms)
+		if err == nil {
+			c.calibrators[k] = calibrator
+		}
+		return err
+	})
+	if err != nil {
+		return err
+	}
+
 	return c.c.Store().CreateBucket(ReadingsBucket)
 }
 
@@ -83,5 +108,61 @@ func (c *Controller) On(id string, b bool) error {
 		return err
 	}
 	p.Enable = b
+	if b && p.OneShot {
+		q := make(chan struct{})
+		defer close(q)
+		return c.Run(p, q)
+	}
 	return c.Update(id, p)
+}
+
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.EquipmentBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.UpperEq == id && !p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		for _, p := range probes {
+			if p.DownerEq == id && !p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	case storage.AnalogInputBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.AnalogInput == id {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	case storage.MacroBucket:
+		probes, err := c.List()
+		if err != nil {
+			return deps, err
+		}
+		for _, p := range probes {
+			if p.UpperEq == id && p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		for _, p := range probes {
+			if p.DownerEq == id && p.IsMacro {
+				deps = append(deps, p.Name)
+			}
+		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown dependency type:%s", depType)
+	}
 }

@@ -24,7 +24,9 @@ const MacroForm = withFormik({
           type: step.type,
           duration: step.config.duration,
           id: step.config.id,
-          on: step.config.on
+          on: step.config.on,
+          title: step.config.title,
+          message: step.config.message
         }
       })
     }

@@ -1,0 +1,4113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "@openapi:info",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/api/admin/poweroff": {
+      "post": {
+        "description": "Shut down the raspberry pi.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Shut down the raspberry pi.",
+        "operationId": "adminPowerOff",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/admin/reboot": {
+      "post": {
+        "description": "Reboot the raspberry pi.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Reboot the raspberry pi.",
+        "operationId": "adminReboot",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/admin/reload": {
+      "post": {
+        "description": "Reload reef-pi to apply any capability changes or other modules that are registered at startup.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Reload reef-pi.",
+        "operationId": "adminReload",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/admin/upgrade": {
+      "post": {
+        "description": "Upgrade reef-pi.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Upgrade reef-pi.",
+        "operationId": "adminUpgrade",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/analog_inputs": {
+      "get": {
+        "description": "List all Analog Inputs in reef-pi.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "List all Analog Inputs.",
+        "operationId": "analogInputList",
+        "responses": {
+          "200": {
+            "description": "analogInput",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/analogInput"
+              }
+            }
+          },
+          "500": {}
+        }
+      }
+    },
+    "/api/analog_inputs/{id}": {
+      "get": {
+        "description": "Get an existing Analog Input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Get an Analog Input by id.",
+        "operationId": "analogInputGet",
+        "parameters": [
+          {
+            "description": "The Id of the analog input",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/analogInput"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing Analog Input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Update an Analog Input.",
+        "operationId": "analogInputUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the analog input to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The analog input to update",
+            "name": "analog input",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/analogInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing Analog Input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Delete an Analog Input.",
+        "operationId": "analogInputDelete",
+        "parameters": [
+          {
+            "description": "The Id of the analog input to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/analog_inputs/{id}/read": {
+      "post": {
+        "description": "Read an Analog Input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Read an Analog Input.",
+        "operationId": "analogInputRead",
+        "parameters": [
+          {
+            "description": "The Id of the analog input to read",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/analog_inuputs": {
+      "put": {
+        "description": "Create a new analog input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Create an analog input.",
+        "operationId": "analogInputCreate",
+        "parameters": [
+          {
+            "description": "The analog input to create",
+            "name": "analog input",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/analogInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/atos": {
+      "get": {
+        "description": "List all ATOs in reef-pi.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "List all ATOs.",
+        "operationId": "atoList",
+        "responses": {
+          "200": {
+            "description": "ato",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ato"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new ATO.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "Create an ATO.",
+        "operationId": "atoCreate",
+        "parameters": [
+          {
+            "x-go-name": "ATO",
+            "description": "The ato to create",
+            "name": "ato",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ato"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/atos/{id}": {
+      "get": {
+        "description": "Get an existing ATO.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "Get an ATO by id.",
+        "operationId": "atoGet",
+        "parameters": [
+          {
+            "description": "The Id of the ATO",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ato"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing ATO.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "Update an ATO.",
+        "operationId": "atoUpdate",
+        "parameters": [
+          {
+            "x-go-name": "ATO",
+            "description": "The Id of the ato to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ato to update",
+            "name": "ato",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ato"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing ATO.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "Delete an ATO.",
+        "operationId": "atoDelete",
+        "parameters": [
+          {
+            "description": "The Id of the ato to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/atos/{id}/usage": {
+      "get": {
+        "description": "Get usage history for a given ATO.",
+        "tags": [
+          "ATO"
+        ],
+        "summary": "Get usage history.",
+        "operationId": "atoUsage",
+        "parameters": [
+          {
+            "description": "The Id of the ato",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/camera/config": {
+      "get": {
+        "description": "Get the camera configuration.",
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get the camera configuration.",
+        "operationId": "cameraConfig",
+        "responses": {
+          "200": {
+            "description": "cameraConfig",
+            "schema": {
+              "$ref": "#/definitions/cameraConfig"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Save camera configuration.",
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Save camera configuration.",
+        "operationId": "cameraConfig",
+        "parameters": [
+          {
+            "description": "camera configuration",
+            "name": "config",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cameraConfig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/camera/latest": {
+      "get": {
+        "description": "Get latest picture.",
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get latest picture.",
+        "operationId": "cameraLatest",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/camera/list": {
+      "get": {
+        "description": "List all images.",
+        "tags": [
+          "Camera"
+        ],
+        "summary": "List images.",
+        "operationId": "cameraList",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/camera/shoot": {
+      "post": {
+        "description": "Shoot a picture.",
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Shoot a picture.",
+        "operationId": "cameraConfig",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/capabilities": {
+      "get": {
+        "description": "List all capabilities in reef-pi.",
+        "tags": [
+          "Capabilities"
+        ],
+        "summary": "List all capabilities.",
+        "operationId": "capabilitiesList",
+        "responses": {
+          "200": {
+            "description": "capabilities",
+            "schema": {
+              "$ref": "#/definitions/capabilities"
+            }
+          }
+        }
+      }
+    },
+    "/api/credentials": {
+      "post": {
+        "description": "Update username and password.",
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Update credentials.",
+        "operationId": "credentialsUpdate",
+        "parameters": [
+          {
+            "description": "The new credentials",
+            "name": "credentials",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/credentials"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "description": "Get dashboard.",
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get dashboard.",
+        "operationId": "dashboardGet",
+        "responses": {
+          "200": {
+            "description": "dashboard",
+            "schema": {
+              "$ref": "#/definitions/dashboard"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update dasboard configuration.",
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Update dasboard configuration.",
+        "operationId": "dashboardUpdate",
+        "parameters": [
+          {
+            "description": "The dashboard configuration",
+            "name": "dashboardConfiguration",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dashboard"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/display": {
+      "get": {
+        "description": "Get current display state.",
+        "tags": [
+          "Display"
+        ],
+        "summary": "Get current display state.",
+        "operationId": "systemDisplayGet",
+        "responses": {
+          "200": {
+            "description": "displayState",
+            "schema": {
+              "$ref": "#/definitions/displayState"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Set display brigthness\nSet display brightness",
+        "tags": [
+          "Display"
+        ],
+        "operationId": "systemDisplayPost",
+        "parameters": [
+          {
+            "name": "displayconfig",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/displayConfig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/display/off": {
+      "post": {
+        "description": "Turn display off.",
+        "tags": [
+          "Display"
+        ],
+        "summary": "Turn display off.",
+        "operationId": "systemDisplayOff",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/display/on": {
+      "post": {
+        "description": "Turn display on.",
+        "tags": [
+          "Display"
+        ],
+        "summary": "Turn display on.",
+        "operationId": "systemDisplayOn",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/doser/pumps": {
+      "get": {
+        "description": "List all dosers in reef-pi.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "List all dosers.",
+        "operationId": "doserList",
+        "responses": {
+          "200": {
+            "description": "pump",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/pump"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Create a doser.",
+        "operationId": "doserCreate",
+        "parameters": [
+          {
+            "description": "The doser to create",
+            "name": "doser",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pump"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/doser/pumps/{id}": {
+      "get": {
+        "description": "Get an existing doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Get a doser by id.",
+        "operationId": "doserGet",
+        "parameters": [
+          {
+            "description": "The Id of the doser",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pump"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Update a doser.",
+        "operationId": "doserUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the doser to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The doser to update",
+            "name": "doser",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pump"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Delete a doser.",
+        "operationId": "doserDelete",
+        "parameters": [
+          {
+            "description": "The Id of the doser to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/doser/pumps/{id}/calibrate": {
+      "post": {
+        "description": "Calibrate a doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Calibrate a doser.",
+        "operationId": "doserCalibrate",
+        "parameters": [
+          {
+            "description": "The Id of the doser",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/doserCalibrationDetails"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/doser/pumps/{id}/schedule": {
+      "post": {
+        "description": "Schedule dosing.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Schedule dosing.",
+        "operationId": "doserSchedule",
+        "parameters": [
+          {
+            "description": "The Id of the doser",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dosingRegiment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/doser/pumps/{id}/usage": {
+      "get": {
+        "description": "Get usage history for a given Doser.",
+        "tags": [
+          "Doser"
+        ],
+        "summary": "Get usage history.",
+        "operationId": "doserUsage",
+        "parameters": [
+          {
+            "description": "The Id of the doser",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/drivers": {
+      "get": {
+        "description": "List all Drivers in reef-pi.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "List all Drivers.",
+        "operationId": "driverList",
+        "responses": {
+          "200": {
+            "description": "driver",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/driver"
+              }
+            }
+          },
+          "500": {}
+        }
+      },
+      "put": {
+        "description": "Create a new Driver.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "Create a Driver.",
+        "operationId": "driverCreate",
+        "parameters": [
+          {
+            "description": "The driver to create",
+            "name": "driver",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/driver"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/drivers/options": {
+      "get": {
+        "description": "Get driver parametres\nList all drivers with configuration options.",
+        "tags": [
+          "Driver"
+        ],
+        "operationId": "driverListOptions",
+        "responses": {
+          "200": {
+            "description": "Map of drivers and parameters",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "default": {
+                      "description": "The recommended default value",
+                      "type": "object",
+                      "example": "192.168.1.23:9999"
+                    },
+                    "name": {
+                      "description": "The name of the parameter",
+                      "type": "string",
+                      "example": "address"
+                    },
+                    "order": {
+                      "description": "The order in which to display the parameter",
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "type": {
+                      "description": "The data type of the parameter",
+                      "type": "string",
+                      "example": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/drivers/validate": {
+      "post": {
+        "description": "Validate a driver configuration.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "Validate a driver configuration.",
+        "operationId": "driverValidate",
+        "parameters": [
+          {
+            "description": "The driver to validate",
+            "name": "outlet",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/driver"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Not Valid"
+          }
+        }
+      }
+    },
+    "/api/drivers/{id}": {
+      "get": {
+        "description": "Get an existing driver.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "Get a driver by id.",
+        "operationId": "driverGet",
+        "parameters": [
+          {
+            "description": "The Id of the driver",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/driver"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing Driver.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "Update a Driver.",
+        "operationId": "driverUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the driver to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The driver to update",
+            "name": "driver",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/driver"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing Driver.",
+        "tags": [
+          "Driver"
+        ],
+        "summary": "Delete an Driver.",
+        "operationId": "driverDelete",
+        "parameters": [
+          {
+            "description": "The Id of the driver to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/equipment": {
+      "get": {
+        "description": "List all equipment in reef-pi.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "List all equipment.",
+        "operationId": "equipmentList",
+        "responses": {
+          "200": {
+            "description": "equipment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/equipment"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new equipment.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Create an equipment.",
+        "operationId": "equipmentCreate",
+        "parameters": [
+          {
+            "description": "The equipment to create",
+            "name": "equipment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing equipment.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Update an equipment.",
+        "operationId": "equipmentUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the equipment to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The equipment to update",
+            "name": "equipment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/equipment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/equipment/{id}": {
+      "get": {
+        "description": "Get an existing equipment by id.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Get an equipment by id.",
+        "operationId": "equipmentGet",
+        "parameters": [
+          {
+            "description": "The Id of the equipment",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/equipment"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing equipment.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Delete an equipment.",
+        "operationId": "equipmentDelete",
+        "parameters": [
+          {
+            "description": "The Id of the equipment to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/equipment/{id}/control": {
+      "post": {
+        "description": "Control an equipment.",
+        "tags": [
+          "Equipment"
+        ],
+        "summary": "Control an equipment.",
+        "operationId": "equipmentControl",
+        "parameters": [
+          {
+            "description": "The Id of the equipment to control",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The action to take",
+            "name": "action",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/equipmentAction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/errors": {
+      "get": {
+        "description": "List errors.",
+        "tags": [
+          "Errors"
+        ],
+        "summary": "List errors.",
+        "operationId": "errorsList",
+        "responses": {
+          "200": {
+            "description": "error",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/errors/clear": {
+      "delete": {
+        "description": "Clear errors.",
+        "tags": [
+          "Errors"
+        ],
+        "summary": "Clear errors.",
+        "operationId": "errorsClear",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/errors/{id}": {
+      "get": {
+        "description": "Get an existing error.",
+        "tags": [
+          "Errors"
+        ],
+        "summary": "Get an error by id.",
+        "operationId": "errorGet",
+        "parameters": [
+          {
+            "description": "The Id of the error",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an error.",
+        "tags": [
+          "Errors"
+        ],
+        "summary": "Delete an error.",
+        "operationId": "errorsDelete",
+        "parameters": [
+          {
+            "description": "The Id of the error to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/info": {
+      "get": {
+        "description": "Get system summary.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get system summary.",
+        "operationId": "adminInfo",
+        "responses": {
+          "200": {
+            "description": "systemSummary",
+            "schema": {
+              "$ref": "#/definitions/systemSummary"
+            }
+          }
+        }
+      }
+    },
+    "/api/inlets": {
+      "get": {
+        "description": "List all inlets in reef-pi.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "List all Inlets.",
+        "operationId": "inletList",
+        "responses": {
+          "200": {
+            "description": "inlet",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/inlet"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new Inlet.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "Create an Inlet.",
+        "operationId": "inletCreate",
+        "parameters": [
+          {
+            "description": "The inlet to create",
+            "name": "inlet",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/inlet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/inlets/{id}": {
+      "get": {
+        "description": "Get an existing Inlet.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "Get an Inlet by id.",
+        "operationId": "inletGet",
+        "parameters": [
+          {
+            "description": "The Id of the inlet",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/inlet"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing Inlet.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "Update an Inlet.",
+        "operationId": "inletUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the inlet to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The inlet to update",
+            "name": "inlet",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/inlet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing Inlet.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "Delete an Inlet.",
+        "operationId": "inletDelete",
+        "parameters": [
+          {
+            "description": "The Id of the inlet to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/inlets/{id}/read": {
+      "post": {
+        "description": "Read an Inlet.",
+        "tags": [
+          "Inlet"
+        ],
+        "summary": "Read an Inlet.",
+        "operationId": "inletRead",
+        "parameters": [
+          {
+            "description": "The Id of the inlet to read",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/jacks": {
+      "get": {
+        "description": "List all jacks in reef-pi.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "List all jacks.",
+        "operationId": "jackList",
+        "responses": {
+          "200": {
+            "description": "jack",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/jack"
+              }
+            }
+          },
+          "500": {}
+        }
+      },
+      "put": {
+        "description": "Create a new Jack.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "Create a Jack.",
+        "operationId": "jackCreate",
+        "parameters": [
+          {
+            "description": "The jack to create",
+            "name": "jack",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/jack"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/jacks/{id}": {
+      "get": {
+        "description": "Get an existing Jack.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "Get a Jack by id.",
+        "operationId": "jackGet",
+        "parameters": [
+          {
+            "description": "The Id of the jack",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/jack"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing Jack.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "Update a Jack.",
+        "operationId": "jackUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the jack to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The jack to update",
+            "name": "jack",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/jack"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing Jack.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "Delete a Jack.",
+        "operationId": "jackDelete",
+        "parameters": [
+          {
+            "description": "The Id of the jack to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/jacks/{id}/control": {
+      "post": {
+        "description": "Control a Jack.",
+        "tags": [
+          "Jack"
+        ],
+        "summary": "Control a Jack.",
+        "operationId": "jackControl",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/light/{id}": {
+      "delete": {
+        "description": "Delete an existing light.",
+        "tags": [
+          "Lights"
+        ],
+        "summary": "Delete a light.",
+        "operationId": "lightDelete",
+        "parameters": [
+          {
+            "description": "The Id of the light to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lights": {
+      "get": {
+        "description": "List all lights in reef-pi.",
+        "tags": [
+          "Lights"
+        ],
+        "summary": "List all lights.",
+        "operationId": "lightsList",
+        "responses": {
+          "200": {
+            "description": "light",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/light"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new light.",
+        "tags": [
+          "Lights"
+        ],
+        "summary": "Create a light.",
+        "operationId": "lightsCreate",
+        "parameters": [
+          {
+            "description": "The light to create",
+            "name": "light",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/light"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing light.",
+        "tags": [
+          "Lights"
+        ],
+        "summary": "Update a light.",
+        "operationId": "lightUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the light to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The light to update",
+            "name": "light",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/light"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/lights/{id}": {
+      "get": {
+        "description": "Get an existing light by id.",
+        "tags": [
+          "Lights"
+        ],
+        "summary": "Get a light by id.",
+        "operationId": "lightsGet",
+        "parameters": [
+          {
+            "description": "The Id of the light",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/light"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/macros": {
+      "get": {
+        "description": "List all macros in reef-pi.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "List all macros.",
+        "operationId": "macroList",
+        "responses": {
+          "200": {
+            "description": "macro",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/macro"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new macro.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Create a macro.",
+        "operationId": "macroCreate",
+        "parameters": [
+          {
+            "description": "The macro to create",
+            "name": "macro",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/macro"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/macros/{id}": {
+      "get": {
+        "description": "Get an existing macro by id.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Get a macro by id.",
+        "operationId": "macroGet",
+        "parameters": [
+          {
+            "description": "The Id of the macro",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/macro"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing macro.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Update a macro.",
+        "operationId": "macroUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the macro to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The macro to update",
+            "name": "macro",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/macro"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing macro.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Delete a macro.",
+        "operationId": "macroDelete",
+        "parameters": [
+          {
+            "description": "The Id of the macro to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/macros/{id}/revert": {
+      "post": {
+        "description": "Revert a macro in reverse.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Reverse a macro.",
+        "operationId": "macroRevert",
+        "parameters": [
+          {
+            "description": "The Id of the macro to revert",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/macros/{id}/run": {
+      "post": {
+        "description": "Run a macro.",
+        "tags": [
+          "Macros"
+        ],
+        "summary": "Run a macro.",
+        "operationId": "macroRun",
+        "parameters": [
+          {
+            "description": "The Id of the macro to run",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/me": {
+      "get": {
+        "description": "Ping API to determine if server is running.",
+        "tags": [
+          "Me"
+        ],
+        "summary": "Ping API.",
+        "operationId": "meGet",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/outlets": {
+      "get": {
+        "description": "List all Outlets in reef-pi.",
+        "tags": [
+          "Outlet"
+        ],
+        "summary": "List all Outlets.",
+        "operationId": "outletList",
+        "responses": {
+          "200": {
+            "description": "outlet",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/outlet"
+              }
+            }
+          },
+          "500": {}
+        }
+      },
+      "put": {
+        "description": "Create a new Outlet.",
+        "tags": [
+          "Outlet"
+        ],
+        "summary": "Create an Outlet.",
+        "operationId": "outletCreate",
+        "parameters": [
+          {
+            "description": "The outlet to create",
+            "name": "outlet",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/outlet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/outlets/{id}": {
+      "get": {
+        "description": "Get an existing Outlet.",
+        "tags": [
+          "Outlet"
+        ],
+        "summary": "Get an Outlet by id.",
+        "operationId": "outletGet",
+        "parameters": [
+          {
+            "description": "The Id of the outlet",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/outlet"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing Outlet.",
+        "tags": [
+          "Outlet"
+        ],
+        "summary": "Update an Outlet.",
+        "operationId": "outletUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the outlet to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The outlet to update",
+            "name": "outlet",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/outlet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing Outlet.",
+        "tags": [
+          "Outlet"
+        ],
+        "summary": "Delete an Outlet.",
+        "operationId": "outletDelete",
+        "parameters": [
+          {
+            "description": "The Id of the outlet to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes": {
+      "get": {
+        "description": "List all ph probes in reef-pi.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "List all ph probes.",
+        "operationId": "phProbeList",
+        "responses": {
+          "200": {
+            "description": "phProbe",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/phProbe"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new ph probe.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Create a ph probe.",
+        "operationId": "phProbeCreate",
+        "parameters": [
+          {
+            "description": "The ph probe to create",
+            "name": "phProbe",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phProbe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes/{id}": {
+      "get": {
+        "description": "Get an existing ph probe by id.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Get an ph probe by id.",
+        "operationId": "phProbeGet",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/phProbe"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing ph probe.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Update a ph probe.",
+        "operationId": "phProbeUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ph probe to update",
+            "name": "phProbe",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phProbe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing ph probe.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Delete a ph probe.",
+        "operationId": "phProbeDelete",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes/{id}/calibrate": {
+      "post": {
+        "description": "Set calibration points for one or two point calibration",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Calibrate a ph probe.",
+        "operationId": "phProbeCalibrate",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to calibrate",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The calibration measurements",
+            "name": "measurements",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "expected": {
+                    "description": "The expected value",
+                    "type": "float64",
+                    "format": "float"
+                  },
+                  "observed": {
+                    "description": "The actual value observed",
+                    "type": "float64",
+                    "format": "float"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes/{id}/calibratepoint": {
+      "post": {
+        "description": "Set a calibration point for one or two point calibration",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Calibrate a ph probe.",
+        "operationId": "phProbeCalibrateSingle",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to calibrate",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The calibration measurement",
+            "name": "measurements",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/calibrationPoint"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes/{id}/read": {
+      "get": {
+        "description": "Get ph probe reading.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Get ph probe reading.",
+        "operationId": "phProbeRead",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to read",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/phprobes/{id}/readings": {
+      "get": {
+        "description": "Get ph probe readings.",
+        "tags": [
+          "PhProbes"
+        ],
+        "summary": "Get ph probe readings.",
+        "operationId": "phProbeReadings",
+        "parameters": [
+          {
+            "description": "The Id of the ph probe to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/statsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "description": "List all settings in reef-pi.",
+        "tags": [
+          "Settings"
+        ],
+        "summary": "List all settings.",
+        "operationId": "settingsList",
+        "responses": {
+          "200": {
+            "description": "settings",
+            "schema": {
+              "$ref": "#/definitions/settings"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update settings.",
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Update settings.",
+        "operationId": "settingsUpdate",
+        "parameters": [
+          {
+            "description": "The settings to update",
+            "name": "settings",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/settings"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tcs": {
+      "get": {
+        "description": "List all temperature controllers in reef-pi.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "List all temperature controllers.",
+        "operationId": "tcsList",
+        "responses": {
+          "200": {
+            "description": "temperatureController",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/temperatureController"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new temperature controller.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Create a temperature controller.",
+        "operationId": "tcsCreate",
+        "parameters": [
+          {
+            "description": "The temperature controller to create",
+            "name": "temperatureController",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/temperatureController"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tcs/sensors": {
+      "get": {
+        "description": "List all temperature sensors detected by the OS.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "List all temperature sensors.",
+        "operationId": "tcsList",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/tcs/{id}": {
+      "get": {
+        "description": "Get an existing temperature controller by id.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Get an temperature controller by id.",
+        "operationId": "tcsGet",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/temperatureController"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing temperature controller.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Update a temperature controller.",
+        "operationId": "tcsUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The temperature controller to update",
+            "name": "temperatureController",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/temperatureController"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing temperature controller.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Delete a temperature controller.",
+        "operationId": "tcsDelete",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tcs/{id}/current_reading": {
+      "get": {
+        "description": "Get temperature controller reading.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Get temperature controller reading.",
+        "operationId": "tcsRead",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller to read",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tcs/{id}/read": {
+      "get": {
+        "description": "Get temperature controller reading.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Get temperature controller reading.",
+        "operationId": "tcsRead",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller to read",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/tcs/{id}/usage": {
+      "get": {
+        "description": "Get usage history for a given temperature controller.",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Get usage history.",
+        "operationId": "tcsUsage",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/telemetry": {
+      "get": {
+        "description": "List telemetry configuration.",
+        "tags": [
+          "Telemetry"
+        ],
+        "summary": "List telemetry configuration.",
+        "operationId": "telemetryGet",
+        "responses": {
+          "200": {
+            "description": "telemetryConfig",
+            "schema": {
+              "$ref": "#/definitions/telemetryConfig"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update telemetry configuration.",
+        "tags": [
+          "Telemetry"
+        ],
+        "summary": "Update telemetry configuration.",
+        "operationId": "telemetryUpdate",
+        "parameters": [
+          {
+            "description": "The telemetry configuration",
+            "name": "telemetryConfig",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/telemetryConfig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/telemetry/test_message": {
+      "post": {
+        "description": "Send a telemetry test message.",
+        "tags": [
+          "Telemetry"
+        ],
+        "summary": "Test telemetry.",
+        "operationId": "telemetryTest",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/api/timers": {
+      "get": {
+        "description": "List all timer jobs in reef-pi.",
+        "tags": [
+          "Timers"
+        ],
+        "summary": "List all timer jobs.",
+        "operationId": "timerList",
+        "responses": {
+          "200": {
+            "description": "timerJob",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/timerJob"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Create a new timer job.",
+        "tags": [
+          "Timers"
+        ],
+        "summary": "Create a timer job.",
+        "operationId": "timerCreate",
+        "parameters": [
+          {
+            "description": "The timer job to create",
+            "name": "timer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/timerJob"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/timers/{id}": {
+      "get": {
+        "description": "Get timer.",
+        "tags": [
+          "Timers"
+        ],
+        "summary": "Get timer.",
+        "operationId": "timerGet",
+        "parameters": [
+          {
+            "description": "The Id of the timer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/timerJob"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update an existing timer job.",
+        "tags": [
+          "Timers"
+        ],
+        "summary": "Update a timer job.",
+        "operationId": "timerUpdate",
+        "parameters": [
+          {
+            "description": "The Id of the timer job to update",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The timer job to update",
+            "name": "timer",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/timerJob"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing timer job.",
+        "tags": [
+          "Timers"
+        ],
+        "summary": "Delete a timer job.",
+        "operationId": "timerDelete",
+        "parameters": [
+          {
+            "description": "The Id of the timer job to delete",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AdafruitIO": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "prefix": {
+          "type": "string",
+          "x-go-name": "Prefix"
+        },
+        "token": {
+          "type": "string",
+          "x-go-name": "Token"
+        },
+        "user": {
+          "type": "string",
+          "x-go-name": "User"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
+    },
+    "Chart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/daemon"
+    },
+    "Duration": {
+      "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
+      "type": "integer",
+      "format": "int64",
+      "x-go-package": "time"
+    },
+    "HealthCheckNotify": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "max_cpu": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "MaxCPU"
+        },
+        "max_memory": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "MaxMemory"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/settings"
+    },
+    "MailerConfig": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "x-go-name": "From"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Port"
+        },
+        "server": {
+          "type": "string",
+          "x-go-name": "Server"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "To"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
+    },
+    "Measurement": {
+      "type": "object",
+      "properties": {
+        "expected": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Expected"
+        },
+        "observed": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Observed"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/hal"
+    },
+    "Metric": {
+      "type": "object",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
+    },
+    "MotionConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Height"
+        },
+        "url": {
+          "type": "string",
+          "x-go-name": "URL"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Width"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/camera"
+    },
+    "Mutex": {
+      "description": "A Mutex must not be copied after first use.",
+      "type": "object",
+      "title": "A Mutex is a mutual exclusion lock.\nThe zero value for a Mutex is an unlocked mutex.",
+      "x-go-package": "sync"
+    },
+    "Notify": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "max": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Max"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ato"
+    },
+    "ProfileSpec": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "x-go-name": "Config"
+        },
+        "max": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Max"
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Min"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/pwm_profile"
+    },
+    "Schedule": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "string",
+          "x-go-name": "Day"
+        },
+        "hour": {
+          "type": "string",
+          "x-go-name": "Hour"
+        },
+        "minute": {
+          "type": "string",
+          "x-go-name": "Minute"
+        },
+        "month": {
+          "type": "string",
+          "x-go-name": "Month"
+        },
+        "second": {
+          "type": "string",
+          "x-go-name": "Second"
+        },
+        "week": {
+          "type": "string",
+          "x-go-name": "Week"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
+    },
+    "Step": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "x-go-name": "Config"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/macro"
+    },
+    "analogInput": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "x-go-name": "Driver"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Pin"
+        }
+      },
+      "x-go-name": "AnalogInput",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+    },
+    "ato": {
+      "type": "object",
+      "properties": {
+        "control": {
+          "type": "boolean",
+          "x-go-name": "Control"
+        },
+        "disable_on_alert": {
+          "type": "boolean",
+          "x-go-name": "DisableOnAlert"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "inlet": {
+          "type": "string",
+          "x-go-name": "Inlet"
+        },
+        "is_macro": {
+          "type": "boolean",
+          "x-go-name": "IsMacro"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "notify": {
+          "$ref": "#/definitions/Notify"
+        },
+        "period": {
+          "$ref": "#/definitions/Duration"
+        },
+        "pump": {
+          "type": "string",
+          "x-go-name": "Pump"
+        }
+      },
+      "x-go-name": "ATO",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ato"
+    },
+    "calibrationPoint": {
+      "type": "object",
+      "properties": {
+        "expected": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Expected"
+        },
+        "observed": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Observed"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-name": "CalibrationPoint",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ph"
+    },
+    "cameraConfig": {
+      "type": "object",
+      "properties": {
+        "capture_flags": {
+          "type": "string",
+          "x-go-name": "CaptureFlags"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "image_directory": {
+          "type": "string",
+          "x-go-name": "ImageDirectory"
+        },
+        "motion": {
+          "$ref": "#/definitions/MotionConfig"
+        },
+        "tick_interval": {
+          "$ref": "#/definitions/Duration"
+        },
+        "upload": {
+          "type": "boolean",
+          "x-go-name": "Upload"
+        }
+      },
+      "x-go-name": "Config",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/camera"
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "ato": {
+          "type": "boolean",
+          "x-go-name": "ATO"
+        },
+        "camera": {
+          "type": "boolean",
+          "x-go-name": "Camera"
+        },
+        "configuration": {
+          "type": "boolean",
+          "x-go-name": "Configuration"
+        },
+        "dashboard": {
+          "type": "boolean",
+          "x-go-name": "Dashboard"
+        },
+        "dev_mode": {
+          "type": "boolean",
+          "x-go-name": "DevMode"
+        },
+        "doser": {
+          "type": "boolean",
+          "x-go-name": "Doser"
+        },
+        "equipment": {
+          "type": "boolean",
+          "x-go-name": "Equipment"
+        },
+        "health_check": {
+          "type": "boolean",
+          "x-go-name": "HealthCheck"
+        },
+        "journal": {
+          "type": "boolean",
+          "x-go-name": "Journal"
+        },
+        "lighting": {
+          "type": "boolean",
+          "x-go-name": "Lighting"
+        },
+        "macro": {
+          "type": "boolean",
+          "x-go-name": "Macro"
+        },
+        "ph": {
+          "type": "boolean",
+          "x-go-name": "Ph"
+        },
+        "temperature": {
+          "type": "boolean",
+          "x-go-name": "Temperature"
+        },
+        "timers": {
+          "type": "boolean",
+          "x-go-name": "Timers"
+        }
+      },
+      "x-go-name": "Capabilities",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/settings"
+    },
+    "channel": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "x-go-name": "Color"
+        },
+        "manual": {
+          "type": "boolean",
+          "x-go-name": "Manual"
+        },
+        "max": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Max"
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Min"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "on": {
+          "type": "boolean",
+          "x-go-name": "On"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Pin"
+        },
+        "profile": {
+          "$ref": "#/definitions/ProfileSpec"
+        },
+        "value": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-name": "Channel",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/lighting"
+    },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "user": {
+          "type": "string",
+          "x-go-name": "User"
+        }
+      },
+      "x-go-name": "Credentials",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/utils"
+    },
+    "dashboard": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Column"
+        },
+        "grid_details": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Chart"
+            }
+          },
+          "x-go-name": "GridDetails"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Height"
+        },
+        "row": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Row"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Width"
+        }
+      },
+      "x-go-name": "Dashboard",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/daemon"
+    },
+    "displayConfig": {
+      "type": "object",
+      "properties": {
+        "brightness": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Brightness"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        }
+      },
+      "x-go-name": "DisplayConfig",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/system"
+    },
+    "displayState": {
+      "type": "object",
+      "properties": {
+        "brightness": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Brightness"
+        },
+        "on": {
+          "type": "boolean",
+          "x-go-name": "On"
+        }
+      },
+      "x-go-name": "DisplayState",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/system"
+    },
+    "doserCalibrationDetails": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Duration"
+        },
+        "speed": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Speed"
+        }
+      },
+      "x-go-name": "CalibrationDetails",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
+    },
+    "dosingRegiment": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Duration"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "schedule": {
+          "$ref": "#/definitions/Schedule"
+        },
+        "speed": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Speed"
+        }
+      },
+      "x-go-name": "DosingRegiment",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
+    },
+    "driver": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "x-go-name": "Config"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          },
+          "x-go-name": "Parameters"
+        },
+        "pinmap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "x-go-name": "PinMap"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-name": "Driver",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/drivers"
+    },
+    "equipment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "on": {
+          "type": "boolean",
+          "x-go-name": "On"
+        },
+        "outlet": {
+          "type": "string",
+          "x-go-name": "Outlet"
+        }
+      },
+      "x-go-name": "Equipment",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/equipment"
+    },
+    "equipmentAction": {
+      "type": "object",
+      "properties": {
+        "on": {
+          "type": "boolean",
+          "x-go-name": "On"
+        }
+      },
+      "x-go-name": "EquipmentAction",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/equipment"
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Count"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "time": {
+          "type": "string",
+          "x-go-name": "Time"
+        }
+      },
+      "x-go-name": "Error",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/daemon"
+    },
+    "inlet": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "x-go-name": "Driver"
+        },
+        "equipment": {
+          "type": "string",
+          "x-go-name": "Equipment"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Pin"
+        },
+        "reverse": {
+          "type": "boolean",
+          "x-go-name": "Reverse"
+        }
+      },
+      "x-go-name": "Inlet",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+    },
+    "instance": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "x-go-name": "Addr"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "ignore_https": {
+          "type": "boolean",
+          "x-go-name": "IgnoreHTTPS"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "user": {
+          "type": "string",
+          "x-go-name": "User"
+        }
+      },
+      "x-go-name": "Instance",
+      "x-go-package": "github.com/reef-pi/reef-pi/manager"
+    },
+    "jack": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "x-go-name": "Driver"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "pins": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "x-go-name": "Pins"
+        },
+        "reverse": {
+          "type": "boolean",
+          "x-go-name": "Reverse"
+        }
+      },
+      "x-go-name": "Jack",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+    },
+    "light": {
+      "properties": {
+        "channels": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/channel"
+          },
+          "x-go-name": "Channels"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "jack": {
+          "type": "string",
+          "x-go-name": "Jack"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      }
+    },
+    "macro": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "reversible": {
+          "type": "boolean",
+          "x-go-name": "Reversible"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Step"
+          },
+          "x-go-name": "Steps"
+        }
+      },
+      "x-go-name": "Macro",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/macro"
+    },
+    "outlet": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "x-go-name": "Driver"
+        },
+        "equipment": {
+          "type": "string",
+          "x-go-name": "Equipment"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Pin"
+        },
+        "reverse": {
+          "type": "boolean",
+          "x-go-name": "Reverse"
+        }
+      },
+      "x-go-name": "Outlet",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+    },
+    "phProbe": {
+      "type": "object",
+      "properties": {
+        "analog_input": {
+          "type": "string",
+          "x-go-name": "AnalogInput"
+        },
+        "control": {
+          "type": "boolean",
+          "x-go-name": "Control"
+        },
+        "downer_eq": {
+          "type": "string",
+          "x-go-name": "DownerEq"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "hysteresis": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Hysteresis"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "is_macro": {
+          "type": "boolean",
+          "x-go-name": "IsMacro"
+        },
+        "max": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Max"
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Min"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "notify": {
+          "$ref": "#/definitions/Notify"
+        },
+        "period": {
+          "$ref": "#/definitions/Duration"
+        },
+        "upper_eq": {
+          "type": "string",
+          "x-go-name": "UpperEq"
+        }
+      },
+      "x-go-name": "Probe",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ph"
+    },
+    "pump": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "jack": {
+          "type": "string",
+          "x-go-name": "Jack"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "pin": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Pin"
+        },
+        "regiment": {
+          "$ref": "#/definitions/dosingRegiment"
+        }
+      },
+      "x-go-name": "Pump",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "x-go-name": "Address"
+        },
+        "capabilities": {
+          "$ref": "#/definitions/capabilities"
+        },
+        "display": {
+          "type": "boolean",
+          "x-go-name": "Display"
+        },
+        "health_check": {
+          "$ref": "#/definitions/HealthCheckNotify"
+        },
+        "https": {
+          "type": "boolean",
+          "x-go-name": "HTTPS"
+        },
+        "interface": {
+          "type": "string",
+          "x-go-name": "Interface"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "notification": {
+          "type": "boolean",
+          "x-go-name": "Notification"
+        },
+        "pprof": {
+          "type": "boolean",
+          "x-go-name": "Pprof"
+        },
+        "prometheus": {
+          "type": "boolean",
+          "x-go-name": "Prometheus"
+        },
+        "rpi_pwm_freq": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RPI_PWMFreq"
+        }
+      },
+      "x-go-name": "Settings",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/settings"
+    },
+    "statsResponse": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Metric"
+          },
+          "x-go-name": "Current"
+        },
+        "historical": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Metric"
+          },
+          "x-go-name": "Historical"
+        }
+      },
+      "x-go-name": "StatsResponse",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
+    },
+    "systemSummary": {
+      "type": "object",
+      "properties": {
+        "cpu_temperature": {
+          "type": "string",
+          "x-go-name": "CPUTemperature"
+        },
+        "current_time": {
+          "type": "string",
+          "x-go-name": "CurrentTime"
+        },
+        "ip": {
+          "type": "string",
+          "x-go-name": "IP"
+        },
+        "model": {
+          "type": "string",
+          "x-go-name": "Model"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "uptime": {
+          "type": "string",
+          "x-go-name": "Uptime"
+        },
+        "version": {
+          "type": "string",
+          "x-go-name": "Version"
+        }
+      },
+      "x-go-name": "Summary",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/system"
+    },
+    "telemetryConfig": {
+      "type": "object",
+      "properties": {
+        "adafruitio": {
+          "$ref": "#/definitions/AdafruitIO"
+        },
+        "current_limit": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CurrentLimit"
+        },
+        "historical_limit": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "HistoricalLimit"
+        },
+        "mailer": {
+          "$ref": "#/definitions/MailerConfig"
+        },
+        "notify": {
+          "type": "boolean",
+          "x-go-name": "Notify"
+        },
+        "prometheus": {
+          "type": "boolean",
+          "x-go-name": "Prometheus"
+        },
+        "throttle": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Throttle"
+        }
+      },
+      "x-go-name": "TelemetryConfig",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
+    },
+    "temperatureController": {
+      "type": "object",
+      "properties": {
+        "calibration_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Measurement"
+          },
+          "x-go-name": "CalibrationPoints"
+        },
+        "control": {
+          "type": "boolean",
+          "x-go-name": "Control"
+        },
+        "cooler": {
+          "type": "string",
+          "x-go-name": "Cooler"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "fahrenheit": {
+          "type": "boolean",
+          "x-go-name": "Fahrenheit"
+        },
+        "heater": {
+          "type": "string",
+          "x-go-name": "Heater"
+        },
+        "hysteresis": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Hysteresis"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "is_macro": {
+          "type": "boolean",
+          "x-go-name": "IsMacro"
+        },
+        "max": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Max"
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Min"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "notify": {
+          "$ref": "#/definitions/Notify"
+        },
+        "period": {
+          "$ref": "#/definitions/Duration"
+        },
+        "sensor": {
+          "type": "string",
+          "x-go-name": "Sensor"
+        }
+      },
+      "x-go-name": "TC",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/temperature"
+    },
+    "timerJob": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "string",
+          "x-go-name": "Day"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "hour": {
+          "type": "string",
+          "x-go-name": "Hour"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "minute": {
+          "type": "string",
+          "x-go-name": "Minute"
+        },
+        "month": {
+          "type": "string",
+          "x-go-name": "Month"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "second": {
+          "type": "string",
+          "x-go-name": "Second"
+        },
+        "target": {
+          "type": "object",
+          "x-go-name": "Target"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        },
+        "week": {
+          "type": "string",
+          "x-go-name": "Week"
+        }
+      },
+      "x-go-name": "Job",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/timer"
+    }
+  }
+}

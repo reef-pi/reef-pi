@@ -1,5 +1,6 @@
 package settings
 
+//swagger:model settings
 type Settings struct {
 	Name         string            `json:"name"`
 	Interface    string            `json:"interface"`

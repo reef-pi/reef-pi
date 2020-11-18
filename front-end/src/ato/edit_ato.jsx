@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
 import i18next from 'i18next'
+import ATOChart from './chart'
 
 const EditAto = ({
   values,
@@ -19,6 +20,19 @@ const EditAto = ({
   dirty,
   readOnly
 }) => {
+  const charts = () => {
+    if (!values.enable) {
+      return
+    }
+    if (values.id === '') { // new ATO
+      return
+    }
+    return (
+      <div className='row'>
+        <ATOChart ato_id={values.id} width={500} height={300} ato_name={values.name} />
+      </div>
+    )
+  }
   const controlOptions = () => {
     let opts = []
 
@@ -199,13 +213,31 @@ const EditAto = ({
               component={BooleanSelect}
               disabled={readOnly}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('notify', touched, errors)
+                'is-invalid': ShowError('disable_on_alert', touched, errors)
               })}
             >
               <option value='true'>{i18next.t('enabled')}</option>
               <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
+          </div>
+        </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
+            <Field
+              name='one_shot'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('one_shot', touched, errors)
+              })}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='one_shot' />
           </div>
         </div>
 
@@ -237,6 +269,7 @@ const EditAto = ({
           </div>
         </div>
       </div>
+      {charts()}
 
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>

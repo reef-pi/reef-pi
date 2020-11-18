@@ -18,6 +18,7 @@ const TemperatureForm = withFormik({
       id: tc.id || '',
       name: tc.name || '',
       sensor: tc.sensor || '',
+      one_shot: tc.one_shot || false,
       fahrenheit: (tc.fahrenheit === undefined ? true : tc.fahrenheit),
       period: tc.period || '60',
       enable: (tc.enable === undefined ? true : tc.enable),

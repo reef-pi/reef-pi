@@ -31,14 +31,6 @@ class chart extends React.Component {
       v.cooler *= -1
       usage.push(v)
     })
-    let min = 72
-    let max = 86
-    if (this.props.config.chart_min !== undefined) {
-      min = this.props.config.chart_min
-    }
-    if (this.props.config.chart_max !== undefined) {
-      max = this.props.config.chart_max
-    }
 
     return (
       <div className='container'>
@@ -47,7 +39,7 @@ class chart extends React.Component {
         </span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
-            <YAxis yAxisId='left' orientation='left' domain={[min, max]} />
+            <YAxis yAxisId='left' orientation='left' />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />

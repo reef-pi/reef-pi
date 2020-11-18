@@ -15,6 +15,7 @@ const (
 	_modelFilePath = "/proc/device-tree/model"
 )
 
+//swagger:model systemSummary
 type Summary struct {
 	Name           string `json:"name"`
 	IP             string `json:"ip"`

@@ -5,8 +5,9 @@ const Percent = props => {
   const { value, ...other } = props
 
   const handleChange = e => {
-    if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
-      let val = parseInt(e.target.value)
+    // TODO: [ML] Allow decimal in regex
+    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
+      let val = parseFloat(e.target.value)
       if (isNaN(e.target.value)) { val = '' }
       const event = {
         target: {

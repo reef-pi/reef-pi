@@ -5,7 +5,6 @@ import Display from './display'
 import HealthNotify from './health_notify'
 import { updateSettings, fetchSettings } from 'redux/actions/settings'
 import { connect } from 'react-redux'
-import { isEmptyObject } from 'jquery'
 import SettingsSchema from './settings_schema'
 import i18n from 'utils/i18n'
 
@@ -177,10 +176,10 @@ class settings extends React.Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-    if (props.settings === undefined) {
+    if (props.settings === undefined || props.settings === null) {
       return null
     }
-    if (isEmptyObject(props.settings)) {
+    if (Object.keys(props.settings).length === 0) {
       return null
     }
     state.settings = props.settings

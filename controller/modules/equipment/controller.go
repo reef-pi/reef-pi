@@ -1,34 +1,30 @@
 package equipment
 
 import (
-	"log"
-
-	"github.com/kidoman/embd"
-
+	"fmt"
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"log"
 )
 
 type Config struct {
 	DevMode bool `json:"dev_mode"`
 }
-type Check func(string) (bool, error)
 type Controller struct {
 	config    Config
 	telemetry telemetry.Telemetry
 	store     storage.Store
 	outlets   *connectors.Outlets
-	checks    []Check
 }
 
-func New(config Config, outlets *connectors.Outlets, store storage.Store, telemetry telemetry.Telemetry) *Controller {
+func New(config Config, c controller.Controller) *Controller {
 	return &Controller{
 		config:    config,
-		telemetry: telemetry,
-		store:     store,
-		outlets:   outlets,
-		checks:    []Check{},
+		telemetry: c.Telemetry(),
+		store:     c.Store(),
+		outlets:   c.DM().Outlets(),
 	}
 }
 
@@ -37,16 +33,13 @@ func (c *Controller) Setup() error {
 }
 
 func (c *Controller) Start() {
-	if !c.config.DevMode {
-		embd.InitGPIO()
-	}
 	eqs, err := c.List()
 	if err != nil {
 		log.Println("ERROR: equipment subsystem: failed to list equipment. Error:", err)
 		return
 	}
 	for _, eq := range eqs {
-		if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		if err := c.updateOutlet(eq); err != nil {
 			log.Println("ERROR: equipment subsystem: Failed to sync equipment", eq.Name, ". Error:", err)
 		}
 	}
@@ -60,24 +53,23 @@ func (c *Controller) Stop() {
 	}
 }
 
-func (c *Controller) AddCheck(check Check) {
-	c.checks = append(c.checks, check)
-	return
-}
-
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	for i, checkFn := range c.checks {
-		inUse, err := checkFn(id)
+func (c *Controller) InUse(depType, id string) ([]string, error) {
+	var deps []string
+	switch depType {
+	case storage.OutletBucket:
+		eqs, err := c.List()
 		if err != nil {
-			log.Println("ERROR: equipment subsystem: Equipment in use check returned error. Error:", err)
-			return true, err
+			return deps, err
 		}
-		if inUse {
-			log.Println("DEBUG: equipment subsystem: Equipment in use returned true from:", i)
-			return true, nil
+		for _, eq := range eqs {
+			if eq.Outlet == id {
+				deps = append(deps, eq.Name)
+			}
 		}
+		return deps, nil
+	default:
+		return deps, fmt.Errorf("unknown error type:%s", depType)
 	}
-	return false, nil
 }
 
 func (c *Controller) On(id string, b bool) error {
@@ -88,4 +80,15 @@ func (c *Controller) On(id string, b bool) error {
 	}
 	e.On = b
 	return c.Update(id, e)
+}
+func (c *Controller) updateOutlet(eq Equipment) error {
+	if err := c.outlets.Configure(eq.Outlet, eq.On); err != nil {
+		return err
+	}
+	m := 0.0
+	if eq.On {
+		m = 1.0
+	}
+	c.telemetry.EmitMetric("equipment", eq.Name+"-state", m)
+	return nil
 }

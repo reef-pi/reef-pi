@@ -45,6 +45,7 @@ type AdafruitIO struct {
 	Prefix string `json:"prefix"`
 }
 
+//swagger:model telemetryConfig
 type TelemetryConfig struct {
 	AdafruitIO      AdafruitIO   `json:"adafruitio"`
 	Mailer          MailerConfig `json:"mailer"`

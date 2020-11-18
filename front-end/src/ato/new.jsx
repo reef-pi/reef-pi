@@ -57,7 +57,8 @@ class newATO extends React.Component {
         enable: values.notify,
         max: values.maxAlert
       },
-      is_macro: values.control === 'macro'
+      is_macro: values.control === 'macro',
+      one_shot: values.one_shot
     }
     this.props.createATO(payload)
     this.handleToggle()

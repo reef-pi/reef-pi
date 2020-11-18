@@ -10,12 +10,14 @@ import ProfileSelector from './profile_selector'
 import AutoProfile from './auto_profile'
 import DiurnalProfile from './diurnal_profile'
 import FixedProfile from './fixed_profile'
+import SineProfile from './sine_profile'
+import RandomProfile from './random_profile'
+import LunarProfile from './lunar_profile'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import { FaLightbulb } from 'react-icons/fa'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -33,7 +35,7 @@ jest.mock('utils/confirm', () => {
 })
 describe('Lighting ui', () => {
   const ev = {
-    target: { value: 10 }
+    target: { value: 10.5 }
   }
   let light = {
     id: '1',
@@ -49,7 +51,7 @@ describe('Lighting ui', () => {
           config: {
             start: '14:00:00',
             end: '22:00:00',
-            values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            values: [1, 2, 3, 4, 5, 6.4, 7, 8, 9, 10, 11, 12]
           }
         }
       }
@@ -177,7 +179,7 @@ describe('Lighting ui', () => {
 
     light.channels[1].profile.config.start = '14:00:00'
     light.channels[1].profile.config.end = '16:00:00'
-    light.channels[1].profile.config.values = [1,2,3,4,5]
+    light.channels[1].profile.config.values = [1,2,3.6,4,5]
     const m = shallow(<TestMain
       fetchLights = {fn}
       fetchJacks = {fn}
@@ -272,18 +274,14 @@ describe('Lighting ui', () => {
 
   it('<Chart />', () => {
     shallow(<Chart store={mockStore({ lights: [light] })} light_id='1' />).dive()
-    const m = shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
+    shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
       .dive()
       .instance()
-    m.channel2line({ profile: { type: 'foo' } }, {})
-    m.channel2line(
-      { name: 'bar', color: '#CCC', pin: '1', profile: { type: 'auto', config: { values: [{ foo: 'bar' }] } } },
-      { 0: { time: 'h' } }
-    )
   })
 
   it('<Channel />', () => {
-    shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    const m = shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    expect(m).toBeDefined()
   })
 
   it('<Profile /> fixed', () => {
@@ -309,7 +307,7 @@ describe('Lighting ui', () => {
   })
 
   it('<DiurnalProfile />', () => {
-    shallow(<DiurnalProfile onChangeHandler={() => true} />).instance()
+    shallow(<DiurnalProfile name='testDiurnal' onChangeHandler={() => true} />).instance()
   })
 
   it('<FixedProfile />', () => {
@@ -324,6 +322,42 @@ describe('Lighting ui', () => {
     m.handleChange({ target: { value: '' } })
   })
 
+  it('<SineProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <SineProfile
+        name='testsine'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('<RandomProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <RandomProfile
+        name='testrandom'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('<LunarProfile />', () => {
+    const config = { config: { value: '1'} }
+    const wrapper = shallow(
+      <LunarProfile
+        name='testLunar'
+        config={config}
+        readOnly={false}
+        onChangeHandler={() => {}}
+      />)
+    expect(wrapper).toBeDefined()
+  })
+
   it('<Percent />', () => {
     const wrapper = shallow(<Percent value='4' onChange={() => true} />)
     wrapper.find('input').simulate('change', { target: { value: 34 } })
@@ -332,7 +366,7 @@ describe('Lighting ui', () => {
   it('<ProfileSelector />', () => {
     const fn = jest.fn()
     const wrapper = shallow(<ProfileSelector name='name' value='fixed' onChangeHandler={fn} />)
-    expect(wrapper.find('input').length).toBe(3)
+    expect(wrapper.find('input').length).toBe(6)
     wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
   })
 

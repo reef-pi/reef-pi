@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -15,6 +14,7 @@ type Notify struct {
 	Max    int  `json:"max"`
 }
 
+// swagger:model ato
 type ATO struct {
 	ID             string        `json:"id"`
 	IsMacro        bool          `json:"is_macro"`
@@ -26,6 +26,7 @@ type ATO struct {
 	Notify         Notify        `json:"notify"`
 	Name           string        `json:"name"`
 	DisableOnAlert bool          `json:"disable_on_alert"`
+	OneShot        bool          `json:"one_shot"`
 }
 
 func (c *Controller) On(id string, b bool) error {
@@ -34,6 +35,11 @@ func (c *Controller) On(id string, b bool) error {
 		return err
 	}
 	a.Enable = b
+	if b && a.OneShot {
+		q := make(chan struct{})
+		defer close(q)
+		return c.Run(a, q)
+	}
 	return c.Update(id, a)
 }
 
@@ -67,10 +73,7 @@ func (c *Controller) Create(a ATO) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	usage := Usage{
-		Time: telemetry.TeleTime(time.Now()),
-	}
-	c.statsMgr.Update(a.ID, usage)
+	c.statsMgr.Initialize(a.ID)
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
@@ -107,7 +110,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR:  ato sub-system: Failed to deleted usage details for ato:", id)
+		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id)
 	}
 	quit, ok := c.quitters[id]
 	if ok {
@@ -117,34 +120,21 @@ func (c *Controller) Delete(id string) error {
 	return nil
 }
 
-func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
-	atos, err := c.List()
-	if err != nil {
-		return false, err
-	}
-	for _, a := range atos {
-		if a.Pump == id {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
-func (c *Controller) Check(a ATO) {
+func (c *Controller) Check(a ATO) (int, error) {
 	if !a.Enable {
-		return
+		return 0, nil
 	}
 	usage := Usage{
 		Time: telemetry.TeleTime(time.Now()),
 	}
 	reading, err := c.Read(a)
 	if err != nil {
-		log.Println("ERROR: ato sub-system. Failed to read ato sensor. Error:", err)
+		log.Println("ERROR: ato-subsystem. Failed to read ato sensor. Error:", err)
 		c.c.LogError("ato-"+a.ID, "Failed to read ato sensor. Name:"+a.Name+". Error:"+err.Error())
-		return
+		return 0, err
 	}
-	log.Println("ato sub-system:  sensor", a.Name, "value:", reading)
-	c.c.Telemetry().EmitMetric("ato", a.Name+"-reading", float64(reading))
+	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
+	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
 	if a.Control {
 		if err := c.Control(a, reading); err != nil {
 			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
@@ -154,41 +144,40 @@ func (c *Controller) Check(a ATO) {
 			usage.Pump = 0
 		}
 	}
-	c.NotifyIfNeeded(a)
 	c.statsMgr.Update(a.ID, usage)
-	c.c.Telemetry().EmitMetric("ato", a.Name+"-usage", float64(usage.Pump))
+	c.NotifyIfNeeded(a)
+	return reading, nil
 }
 
-func (c *Controller) Run(a ATO, quit chan struct{}) {
+func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	if a.Period <= 0 {
-		log.Printf("ERROR: ato sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
-		return
+		log.Printf("ERROR: ato-subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", a.Name, a.Period)
+		return fmt.Errorf("invalid check period:%d", a.Period)
 	}
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			c.Check(a)
-		case <-quit:
-			ticker.Stop()
-			// always turn off pump befor quitting
-			if err := c.Control(a, 1); err != nil {
-				log.Println("ERROR: ato-subsystem: Failed to turn off pump during shutting down ", a.Name, "Error:", err)
+			reading, err := c.Check(a)
+			if a.OneShot {
+				if err != nil {
+					return err
+				}
+				if reading == 1 {
+					a.Enable = false
+					return c.Update(a.ID, a)
+				}
 			}
-			return
+		case <-quit:
+			// always turn off pump befor quitting
+			return c.Control(a, 1)
 		}
 	}
 }
 
 func (c *Controller) Read(a ATO) (int, error) {
-	if c.devMode {
-		v := 0
-		if rand.Int()%2 == 0 {
-			v = 1
-		}
-		return v, nil
-	}
 	return c.inlets.Read(a.Inlet)
 }
 

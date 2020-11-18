@@ -23,6 +23,7 @@ type Notify struct {
 	Max    float64 `json:"max"`
 }
 
+//swagger:model phProbe
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
@@ -37,6 +38,7 @@ type Probe struct {
 	Max         float64       `json:"max"`
 	Hysteresis  float64       `json:"hysteresis"`
 	IsMacro     bool          `json:"is_macro"`
+	OneShot     bool          `json:"one_shot"`
 	h           *controller.Homeostasis
 }
 
@@ -54,6 +56,7 @@ func (p *Probe) loadHomeostasis(c controller.Controller) {
 	p.h = controller.NewHomeostasis(c, hConf)
 }
 
+//swagger:model calibrationPoint
 type CalibrationPoint struct {
 	Type     string  `json:"type"`
 	Expected float64 `json:"expected"`
@@ -89,6 +92,7 @@ func (c *Controller) Create(p Probe) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
+	c.statsMgr.Initialize(p.ID)
 	if p.Enable {
 		p.CreateFeed(c.c.Telemetry())
 		quit := make(chan struct{})
@@ -121,12 +125,18 @@ func (c *Controller) Update(id string, p Probe) error {
 }
 
 func (c *Controller) Delete(id string) error {
+	c.Lock()
+	defer c.Unlock()
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
 	}
+
+	c.c.Store().Delete(CalibrationBucket, id)
+	delete(c.calibrators, id)
+
 	quit, ok := c.quitters[id]
 	if ok {
 		close(quit)
@@ -143,47 +153,51 @@ func (c *Controller) Read(p Probe) (float64, error) {
 	return telemetry.TwoDecimal(v), err
 }
 
-func (c *Controller) Run(p Probe, quit chan struct{}) {
+func (c *Controller) Run(p Probe, quit chan struct{}) error {
 	if p.Period <= 0 {
 		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
-		return
+		return fmt.Errorf("invalid period: %d for probe: %s", p.Period, p.Name)
 	}
 	if p.Control {
 		p.loadHomeostasis(c.c)
 	}
 	p.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(p.Period * time.Second)
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			c.checkAndControl(p)
+			reading, err := c.checkAndControl(p)
+			if p.OneShot {
+				if err != nil {
+					return err
+				}
+				if p.WithinRange(reading) {
+					p.Enable = false
+					return c.Update(p.ID, p)
+				}
+			}
 		case <-quit:
-			ticker.Stop()
-			return
+			return nil
 		}
 	}
 }
 
-func (c *Controller) checkAndControl(p Probe) {
+func (c *Controller) checkAndControl(p Probe) (float64, error) {
 	reading, err := c.Read(p)
 	if err != nil {
 		log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
-		return
+		return 0, err
 	}
-	var calibrator hal.Calibrator
-	var ms []hal.Measurement
-	if err := c.c.Store().Get(CalibrationBucket, p.ID, &ms); err == nil {
-		cal, err := hal.CalibratorFactory(ms)
-		if err != nil {
-			log.Println("ERROR: ph-subsystem: Failed to create calibration function for probe:", p.Name, "Error:", err)
-		} else {
-			calibrator = cal
-		}
-	}
-	if calibrator != nil {
+	c.Lock()
+	defer c.Unlock()
+
+	calibrator, exists := c.calibrators[p.ID]
+	if exists {
 		reading = calibrator.Calibrate(reading)
 	}
+
 	log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
 	notifyIfNeeded(c.c.Telemetry(), p, reading)
 	u := controller.NewObservation(reading)
@@ -194,6 +208,7 @@ func (c *Controller) checkAndControl(p Probe) {
 	}
 	c.statsMgr.Update(p.ID, u)
 	c.c.Telemetry().EmitMetric("ph", p.Name, reading)
+	return reading, nil
 }
 
 func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
@@ -209,6 +224,15 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	if p.Enable {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
+
+	cal, err := hal.CalibratorFactory(ms)
+	if err != nil {
+		return err
+	}
+	c.Lock()
+	defer c.Unlock()
+
+	c.calibrators[p.ID] = cal
 	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
 }
 
@@ -234,9 +258,15 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
 		}
 	}
+	c.Lock()
+	defer c.Unlock()
 
 	calibration = append(calibration, hal.Measurement{Expected: point.Expected, Observed: point.Observed})
-
+	cal, err := hal.CalibratorFactory(calibration)
+	if err != nil {
+		return err
+	}
+	c.calibrators[p.ID] = cal
 	return c.c.Store().Update(CalibrationBucket, p.ID, calibration)
 }
 
@@ -249,7 +279,7 @@ func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 	}
 	subject := fmt.Sprintf("[Reef-Pi ALERT] ph of '%s' out of range", p.Name)
 	format := "Current ph value from probe '%s' (%f) is out of acceptable range ( %f -%f )"
-	body := fmt.Sprintf(format, reading, p.Name, p.Notify.Min, p.Notify.Max)
+	body := fmt.Sprintf(format, p.Name, reading, p.Notify.Min, p.Notify.Max)
 	if reading >= p.Notify.Max {
 		t.Alert(subject, "Tank ph is high. "+body)
 		return
@@ -258,4 +288,8 @@ func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 		t.Alert(subject, "Tank ph is low. "+body)
 		return
 	}
+}
+
+func (p Probe) WithinRange(v float64) bool {
+	return v >= p.Min && v <= p.Max
 }

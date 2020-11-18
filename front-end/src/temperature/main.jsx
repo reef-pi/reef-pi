@@ -1,6 +1,6 @@
 import React from 'react'
 import TemperatureForm from './temperature_form'
-import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC } from 'redux/actions/tcs'
+import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC, calibrateTemperature } from 'redux/actions/tcs'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 import Collapsible from '../ui_components/collapsible'
@@ -48,6 +48,7 @@ class main extends React.Component {
       enable: values.enable,
       control: (values.control === 'macro' || values.control === 'equipment'),
       is_macro: (values.control === 'macro'),
+      one_shot: values.one_shot,
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),
@@ -127,12 +128,12 @@ class main extends React.Component {
   }
 
   handleCalibrate (probe, value) {
-    probe.calibration_points = [{
+    const calibrationPoints = [{
       expected: value,
       observed: this.props.currentReading[probe.id]
     }]
 
-    this.props.update(probe.id, probe)
+    this.props.calibrateSensor(probe.id, calibrationPoints)
     this.setState({ currentProbe: null, showCalibrate: false })
   }
 
@@ -233,7 +234,8 @@ const mapDispatchToProps = dispatch => {
     create: t => dispatch(createTC(t)),
     delete: id => dispatch(deleteTC(id)),
     update: (id, t) => dispatch(updateTC(id, t)),
-    readTC: id => dispatch(readTC(id))
+    readTC: id => dispatch(readTC(id)),
+    calibrateSensor: (id, t) => dispatch(calibrateTemperature(id, t))
   }
 }
 

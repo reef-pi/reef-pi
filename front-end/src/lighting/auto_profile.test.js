@@ -39,7 +39,7 @@ describe('Lighting ui - Auto Profile', () => {
     const config = {
       start: '14:00:00',
       end: '15:00:00',
-      values: [10, 20, 30]
+      values: [10, 20.3, 30]
     }
 
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
@@ -54,7 +54,7 @@ describe('Lighting ui - Auto Profile', () => {
     const config = {
       start: '14:00:00',
       end: '15:00:00',
-      values: [10, 20, 30]
+      values: [10, 20.3, 30]
     }
 
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)

@@ -19,26 +19,27 @@ type Notify struct {
 	Min    float64 `json:"min"`
 }
 
+//swagger:model temperatureController
 type TC struct {
 	sync.Mutex
-	ID                string            `json:"id"`
-	Name              string            `json:"name"`
-	Max               float64           `json:"max"`
-	Min               float64           `json:"min"`
-	Hysteresis        float64           `json:"hysteresis"`
-	Heater            string            `json:"heater"`
-	Cooler            string            `json:"cooler"`
-	Period            time.Duration     `json:"period"`
-	Control           bool              `json:"control"`
-	Enable            bool              `json:"enable"`
-	Notify            Notify            `json:"notify"`
-	Sensor            string            `json:"sensor"`
-	Fahrenheit        bool              `json:"fahrenheit"`
-	IsMacro           bool              `json:"is_macro"`
-	CalibrationPoints []hal.Measurement `json:"calibration_points"`
-	h                 *controller.Homeostasis
-	currentValue      float64
-	calibrator        hal.Calibrator
+	ID           string        `json:"id"`
+	Name         string        `json:"name"`
+	Max          float64       `json:"max"`
+	Min          float64       `json:"min"`
+	Hysteresis   float64       `json:"hysteresis"`
+	Heater       string        `json:"heater"`
+	Cooler       string        `json:"cooler"`
+	Period       time.Duration `json:"period"`
+	Control      bool          `json:"control"`
+	Enable       bool          `json:"enable"`
+	Notify       Notify        `json:"notify"`
+	Sensor       string        `json:"sensor"`
+	Fahrenheit   bool          `json:"fahrenheit"`
+	IsMacro      bool          `json:"is_macro"`
+	OneShot      bool          `json:"one_shot"`
+	h            *controller.Homeostasis
+	currentValue float64
+	calibrator   hal.Calibrator
 }
 
 func (t *TC) loadHomeostasis(c controller.Controller) {
@@ -62,7 +63,7 @@ func (c *Controller) Get(id string) (*TC, error) {
 	tc, ok := c.tcs[id]
 	defer c.Unlock()
 	if !ok {
-		return nil, fmt.Errorf("temperature controller with id '%s' is not present", tc.ID)
+		return nil, fmt.Errorf("temperature controller with id '%s' is not present", id)
 	}
 	return tc, nil
 }
@@ -80,17 +81,6 @@ func (c Controller) List() ([]TC, error) {
 	return tcs, c.c.Store().List(Bucket, fn)
 }
 
-func (tc *TC) loadCalibrator() {
-	if len(tc.CalibrationPoints) > 0 {
-		cal, err := hal.CalibratorFactory(tc.CalibrationPoints)
-		if err != nil {
-			log.Println("ERROR: temperature-subsystem: Failed to create calibration function for sensor:", tc.Name, "Error:", err)
-		} else {
-			tc.calibrator = cal
-		}
-	}
-}
-
 func (c *Controller) Create(tc TC) error {
 	c.Lock()
 	defer c.Unlock()
@@ -104,12 +94,9 @@ func (c *Controller) Create(tc TC) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
-	tc.loadCalibrator()
+
 	c.tcs[tc.ID] = &tc
-	u := &controller.Observation{
-		Time: telemetry.TeleTime(time.Now()),
-	}
-	c.statsMgr.Update(tc.ID, u)
+	c.statsMgr.Initialize(tc.ID)
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
@@ -133,7 +120,7 @@ func (c *Controller) Update(id string, tc *TC) error {
 		close(quit)
 		delete(c.quitters, tc.ID)
 	}
-	tc.loadCalibrator()
+
 	c.tcs[tc.ID] = tc
 	if tc.Enable {
 		quit := make(chan struct{})
@@ -144,14 +131,38 @@ func (c *Controller) Update(id string, tc *TC) error {
 }
 
 func (c *Controller) Delete(id string) error {
+	tc, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+
+	tcs, err := c.List()
+	if err != nil {
+		return err
+	}
+
+	deleteCalibration := true
+	for _, t := range tcs {
+		if t.ID != tc.ID && t.Sensor == tc.Sensor {
+			deleteCalibration = false
+		}
+	}
+	c.Lock()
+	defer c.Unlock()
+
+	if deleteCalibration {
+
+		c.c.Store().Delete(CalibrationBucket, tc.Sensor)
+		delete(c.calibrators, tc.Sensor)
+	}
+
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
 	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
 		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
 	}
-	c.Lock()
-	defer c.Unlock()
+
 	quit, ok := c.quitters[id]
 	if ok {
 		close(quit)
@@ -179,21 +190,30 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 	return false, nil
 }
 
-func (c *Controller) Run(t *TC, quit chan struct{}) {
+func (c *Controller) Run(t *TC, quit chan struct{}) error {
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
-		return
+		return nil
 	}
 	ticker := time.NewTicker(t.Period * time.Second)
 	t.loadHomeostasis(c.c)
 	for {
 		select {
 		case <-ticker.C:
-			c.Check(t)
+			reading, err := c.Check(t)
+			if t.OneShot {
+				if err != nil {
+					return err
+				}
+				if t.WithinRange(reading) {
+					t.SetEnable(false)
+					return c.Update(t.ID, t)
+				}
+			}
 		case <-quit:
 			ticker.Stop()
-			return
+			return nil
 		}
 	}
 }
@@ -220,4 +240,24 @@ func (tc *TC) CreateFeed(telemetry telemetry.Telemetry) {
 	if tc.Cooler != "" {
 		telemetry.CreateFeedIfNotExist(tc.Name + "-cooler")
 	}
+}
+
+func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
+	tc, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	cal, err := hal.CalibratorFactory(ms)
+	if err != nil {
+		return err
+	}
+	c.Lock()
+	defer c.Unlock()
+
+	c.calibrators[tc.Sensor] = cal
+	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
+}
+
+func (t TC) WithinRange(v float64) bool {
+	return v >= t.Min && v <= t.Max
 }

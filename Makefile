@@ -6,7 +6,7 @@ DETECT_RACE='-race'
 
 ifeq ($(OS), Windows_NT)
 	BINARY=./bin/reef-pi.exe
-	DETECT_RACE=''
+	DETECT_RACE=
 endif
 
 .PHONY:bin
@@ -74,11 +74,11 @@ ui-dev:
 	npm run ui-dev
 
 .PHONY: deb
-deb: ui
+deb: ui api-doc
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
-	cp build/reef-pi.yml dist/etc/reef-pi/config.yml
+	cp build/config.yaml dist/etc/reef-pi/config.yaml
 	mkdir dist/var/lib/reef-pi/images
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
@@ -113,3 +113,17 @@ endif
 .PHONY: race
 race-test:
 	./scripts/race.sh 12
+
+.PHONY: spec
+spec:
+	swagger generate spec /w ./commands/ -i swagger.yml -o swagger.json -m
+
+.PHONY: serve-spec
+serve-spec:
+	npx redoc-cli serve swagger.json -p 8888
+api-doc:
+	npx redoc-cli bundle swagger.json -o ui/assets/api.html
+
+.PHONY: smoke
+smoke:
+	npm run ci-smoke

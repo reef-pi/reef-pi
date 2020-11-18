@@ -22,19 +22,20 @@ export default class ManualLight extends React.Component {
   }
 
   updateLight (name, value) {
-    this.props.light.channels[name].value = parseInt(value)
+    this.props.light.channels[name].value = parseFloat(value)
     this.props.light.enable = true
     this.props.handleChange(this.props.light.id, this.props.light)
   }
 
   handleValueChange (e) {
-    if (/^([0-9]{0,2}$)|(100)$/.test(e.target.value)) {
+    // TODO: [ML] Allow decimal in regex
+    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
       const channels = Object.assign({}, this.state.channels)
       channels[e.target.name].value = e.target.value
       this.setState({ channels: channels })
 
-      if (isNaN(parseInt(e.target.value)) === false) {
-        this.debouncedChange(e.target.name, parseInt(e.target.value))
+      if (isNaN(parseFloat(e.target.value)) === false) {
+        this.debouncedChange(e.target.name, parseFloat(e.target.value))
       }
     }
   }

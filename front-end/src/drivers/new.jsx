@@ -1,6 +1,5 @@
 import React from 'react'
 import DriverForm from './driver_form'
-import { i2cDrivers } from './types'
 
 export default class New extends React.Component {
   constructor (props) {
@@ -29,22 +28,36 @@ export default class New extends React.Component {
 
   ui () {
     if (this.state.add) {
-      return (<DriverForm onSubmit={this.handleAdd} />)
+      return (<DriverForm onSubmit={this.handleAdd} driverOptions={this.props.driverOptions} />)
     }
   }
 
-  handleAdd (values) {
+  handleAdd (values, { setErrors }) {
     const payload = {
       name: values.name,
       type: values.type,
       config: values.config
     }
-    if (i2cDrivers.includes(payload.type)) {
-      payload.config.address = parseInt(payload.config.address)
-    }
-    payload.config.frequency = parseInt(payload.config.frequency)
-    this.props.hook(payload)
-    this.handleToggle()
+    const hook = this.props.hook
+    const handleToggle = this.handleToggle
+    this.props.validate(payload)
+      .then(response => {
+        if (response.status === 400) {
+          response.json().then(data => {
+            const config = {}
+            Object.keys(data).map(item => {
+              if (item.startsWith('config.')) {
+                config[item.replace('config.', '')] = data[item]
+              }
+            })
+            data.config = config
+            setErrors(data)
+          })
+        } else {
+          hook(payload)
+          handleToggle()
+        }
+      })
   }
 
   render () {

@@ -27,10 +27,12 @@ inlets,Inlets
 jack,Jack
 jacks,Jacks
 light,Light
+lights,Lights
 loading,Loading
 name,Name
 none,None
 ok,Ok
+one_shot,One Shot
 outlet,Outlet
 outlets,Outlets
 pin,Pin
@@ -62,7 +64,7 @@ ato:threshold_required,Threshold is required when notification is enabled
 ato:threshold_value,Threshold must be a number
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ato:warning_delete,This action will delete
+ato:warn_delete,This action will delete
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuration
@@ -72,6 +74,7 @@ capabilities:doser,Doser
 capabilities:dosing_pumps,Dosing pumps
 capabilities:equipment,Equipment
 capabilities:health_check,Health check
+capabilities:journal,Journal
 capabilities:lighting,Lighting
 capabilities:lights,Lights
 capabilities:log,Log
@@ -89,6 +92,8 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
+configuration:admin:db_export,Download current database
+configuration:admin:db_import,Import an existing database
 configuration:admin:poweroff,Power Off
 configuration:admin:reboot,Reboot
 configuration:admin:reload,Reload
@@ -152,8 +157,8 @@ ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required
 ph:calibrate,Calibrate
-ph:chart:current,Current Readings Chart
-ph:chart:historical,Historical Readings Chart
+ph:chart:current,pH(latest)
+ph:chart:historical,pH(historical)
 ph:check_frequency,Check Frequency
 ph:control,Control
 ph:control_required,Control is requires
@@ -197,9 +202,9 @@ temperatur:controlnothing, Nothing
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
 temperature:calibration:set_temperature, Set Temperature
-temperature:celcius,Celcius
-temperature:chart:current,Current Temperature Readings
-temperature:chart:historical,Historical Temperature Readings
+temperature:celsius,Celsius
+temperature:chart:current, Temperature(recent)
+temperature:chart:historical,Temperature(historical)
 temperature:chart_maximum,Chart Maximum
 temperature:chart_minimum,Chart Minimum
 temperature:control, Control

@@ -36,6 +36,12 @@ const channelSchema = Yup.object().shape({
         return fixedSchema
       case 'interval':
         return autoSchema
+      case 'lunar':
+        return lunarSchema
+      case 'random':
+        return randomSchema
+      case 'sine':
+        return sineSchema
       default:
         return Yup.object().shape({
           type: Yup.string().required('Profile type is required')
@@ -94,6 +100,52 @@ const autoSchema = Yup.object().shape({
         .max(100, 'Value must be less than or equal to 100')
         .required('Value is required')
       )
+    })
+})
+
+const randomSchema = Yup.object().shape({
+  type: Yup.string().required('Profile type is required'),
+  config: Yup.object()
+    .typeError('A profile must be configured')
+    .shape({
+      start: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
+        .required('Start is required'),
+      end: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
+        .required('End is required')
+    })
+})
+
+const sineSchema = Yup.object().shape({
+  type: Yup.string().required('Profile type is required'),
+  config: Yup.object()
+    .typeError('A profile must be configured')
+    .shape({
+      start: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
+        .required('Start is required'),
+      end: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
+        .required('End is required')
+    })
+})
+
+const lunarSchema = Yup.object().shape({
+  type: Yup.string().required('Profile type is required'),
+  config: Yup.object()
+    .typeError('A profile must be configured')
+    .shape({
+      start: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
+        .required('Start is required'),
+      end: Yup.string()
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
+        .required('End is required'),
+      full_moon: Yup.date()
+        .max(new Date(), 'Full Moon must be in the past')
+        .required('Date of the full moon is required')
+        .typeError('Full Moon is required')
     })
 })
 

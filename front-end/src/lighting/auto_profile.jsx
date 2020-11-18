@@ -52,8 +52,9 @@ export default class AutoProfile extends React.Component {
 
   curry (i) {
     return (ev) => {
-      if (/^([0-9]{0,2}$)|(100)$/.test(ev.target.value)) {
-        const val = parseInt(ev.target.value)
+      // TODO: [ML] Allow decimal in regex
+      if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(ev.target.value)) {
+        const val = parseFloat(ev.target.value)
 
         const values = [...this.state.values]
         values[i] = val

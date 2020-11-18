@@ -25,10 +25,12 @@ inlets,
 jack,
 jacks,
 light,
+lights,
 loading,Chargement
 name,Nom
 none,
 ok,
+one_shot,
 outlet,
 outlets,
 pin,
@@ -60,7 +62,7 @@ ato:threshold_required,
 ato:threshold_value,
 ato:total_seconds_pump_on,
 ato:validation_error,
-ato:warning_delete,
+ato:warn_delete,
 capabilities:ato,Osmolateur
 capabilities:camera,Camera
 capabilities:configuration,Configuration
@@ -70,6 +72,7 @@ capabilities:doser,Pompe doseuse
 capabilities:dosing_pumps,Pompes doseuses
 capabilities:equipment,Equipement
 capabilities:health_check,Santé du système
+capabilities:journal,
 capabilities:lighting,Éclairage
 capabilities:lights,Lumieres
 capabilities:log,Log
@@ -87,6 +90,8 @@ configuration:about:status,Statut
 configuration:about:uptime,Durée de fonctionnement
 configuration:about:version,Version
 configuration:about:website,Site Web
+configuration:admin:db_export,
+configuration:admin:db_import,
 configuration:admin:poweroff,Arrêt
 configuration:admin:reboot,Rédémarrage
 configuration:admin:reload,Rechargement
@@ -195,7 +200,7 @@ temperatur:controlnothing,
 temperature:calibrate,
 temperature:calibration:apply,
 temperature:calibration:set_temperature,
-temperature:celcius,
+temperature:celsius,
 temperature:chart:current,
 temperature:chart:historical,
 temperature:chart_maximum,

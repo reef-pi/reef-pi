@@ -81,6 +81,8 @@ export const rootReducer = (state, action) => {
       return { ...state, settings: action.payload }
     case 'DRIVERS_LOADED':
       return { ...state, drivers: action.payload }
+    case 'DRIVER_OPTIONS_LOADED':
+      return { ...state, driverOptions: action.payload }
     case 'JACKS_LOADED':
       return { ...state, jacks: action.payload }
     case 'ANALOG_INPUTS_LOADED':
@@ -108,6 +110,12 @@ export const rootReducer = (state, action) => {
       return { ...state, dosers: action.payload }
     case 'INSTANCES_LOADED':
       return { ...state, instances: action.payload }
+    case 'JOURNALS_LOADED':
+      return { ...state, journals: action.payload }
+    case 'JOURNAL_UPDATED':
+    case 'JOURNAL_LOADED':
+    case 'JOURNAL_USAGE_LOADED':
+    case 'JOURNAL_RECORDED':
     case 'CREDS_UPDATED':
     case 'EQUIPMENT_UPDATED':
     case 'RELOADED':
@@ -131,6 +139,7 @@ export const rootReducer = (state, action) => {
     case 'MACRO_REVERT':
     case 'API_FAILURE':
     case 'TELEMETRY_TEST_MESSAGE_SENT':
+    case 'DB_IMPORTED':
       return state
     default:
       console.log('Unknown action in redux-reducer:|' + action.type + '|')

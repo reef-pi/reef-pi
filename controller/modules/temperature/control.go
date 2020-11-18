@@ -9,22 +9,25 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
-func (c *Controller) Check(tc *TC) {
+func (c *Controller) Check(tc *TC) (float64, error) {
 	if !tc.Enable {
-		return
+		return 0, nil
 	}
 
-	reading, err := c.Read(*tc)
+	reading, err := c.Read(tc)
 	if err != nil {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		subject := fmt.Sprintf("Temperature sensor '%s' failed", tc.Name)
 		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
-		return
+		return reading, err
 	}
-	if tc.calibrator != nil {
-		reading = tc.calibrator.Calibrate(reading)
+
+	calibrator, exists := c.calibrators[tc.Sensor]
+	if exists {
+		reading = calibrator.Calibrate(reading)
 	}
+
 	tc.currentValue = reading
 	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
 	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)
@@ -39,6 +42,23 @@ func (c *Controller) Check(tc *TC) {
 	}
 	c.NotifyIfNeeded(*tc, reading)
 	c.statsMgr.Update(tc.ID, u)
+	resp, err := c.statsMgr.Get(tc.ID)
+	if err != nil {
+		log.Println("ERROR: temperature-subsystem. Failed to get usage statistics for sensor:", tc.Name, "Error:", err)
+		return reading, err
+	}
+	if len(resp.Historical) < 1 {
+		return reading, nil
+	}
+	m := resp.Historical[len(resp.Historical)-1]
+	u, ok := m.(controller.Observation)
+	if !ok {
+		log.Println("ERROR: temperature-subsystem: failed to convert generic metric to temperature controller usage")
+		return reading, nil
+	}
+	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_heater", float64(u.Upper))
+	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_cooler", float64(u.Downer))
+	return reading, nil
 }
 
 func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {

@@ -23,6 +23,9 @@ const ProfileSelector = (props) => {
           <option value='fixed'>Fixed</option>
           <option value='auto'>Interval</option>
           <option value='diurnal'>Diurnal</option>
+          <option value='random'>Random</option>
+          <option value='sine'>Sine</option>
+          <option value='lunar'>Lunar</option>
         </select>
       </div>
       <div className='btn-group  d-none d-sm-inline'>
@@ -61,6 +64,42 @@ const ProfileSelector = (props) => {
             disabled={props.readOnly}
           />
           Diurnal
+        </label>
+        <label className='btn btn-secondary'>
+          <input
+            type='radio' value='random'
+            className='mr-1'
+            checked={props.value === 'random'}
+            name={props.name + uuid}
+            id={props.name + uuid + '-random'}
+            onChange={handleChange}
+            disabled={props.readOnly}
+          />
+          Random
+        </label>
+        <label className='btn btn-secondary'>
+          <input
+            type='radio' value='sine'
+            className='mr-1'
+            checked={props.value === 'sine'}
+            name={props.name + uuid}
+            id={props.name + uuid + '-sine'}
+            onChange={handleChange}
+            disabled={props.readOnly}
+          />
+          Sine
+        </label>
+        <label className='btn btn-secondary'>
+          <input
+            type='radio' value='lunar'
+            className='mr-1'
+            checked={props.value === 'lunar'}
+            name={props.name + uuid}
+            id={props.name + uuid + '-lunar'}
+            onChange={handleChange}
+            disabled={props.readOnly}
+          />
+          Lunar
         </label>
       </div>
     </div>

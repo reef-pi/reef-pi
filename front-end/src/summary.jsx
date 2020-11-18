@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import i18n from 'utils/i18n'
 
 export default class Summary extends React.Component {
-  componentWillMount () {
-    const timer = window.setInterval(this.props.fetch, 1800 * 1000)
-    this.setState({ timer: timer })
+  constructor (props) {
+    super(props)
+    this.state = {
+      timer: window.setInterval(props.fetch, 1800 * 1000)
+    }
   }
 
   componentWillUnmount () {
@@ -23,6 +25,7 @@ export default class Summary extends React.Component {
           <li className='list-inline-item'>{i18n.t('running')} {this.props.info.version}, on {this.props.info.model}</li>
           <li className='list-inline-item'>{i18n.t('since')} {this.props.info.uptime} | </li>
           <li className='list-inline-item'>IP {this.props.info.ip} | </li>
+          <li className='list-inline-item'><a href='/assets/api.html'>API</a> | </li>
           <li className='list-inline-item text-danger'>{i18n.t('errors')}({this.props.errors.length})</li>
         </ul>
       </nav>

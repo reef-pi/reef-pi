@@ -106,7 +106,6 @@ describe('Collapsible', () => {
         </Collapsible>
       </CollapsibleList>
     )
-
     wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
   })
 

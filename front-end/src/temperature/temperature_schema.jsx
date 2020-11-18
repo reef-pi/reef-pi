@@ -17,6 +17,7 @@ const TemperatureSchema = Yup.object().shape({
     .required('Sensor Status is required'),
   alerts: Yup.bool()
     .required('Alerts is required'),
+  one_shot: Yup.bool(),
   minAlert: Yup.number()
     .when('alerts', (alert, schema) => {
       if (alert === true || alert === 'true') {

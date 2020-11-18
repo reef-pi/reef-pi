@@ -89,10 +89,12 @@ class ph extends React.Component {
       },
       control: (values.control === 'macro' || values.control === 'equipment'),
       is_macro: (values.control === 'macro'),
+      one_shot: values.one_shot || false,
       min: parseFloat(values.lowerThreshold),
       downer_eq: values.lowerFunction,
       max: parseFloat(values.upperThreshold),
-      upper_eq: values.upperFunction
+      upper_eq: values.upperFunction,
+      hysteresis: parseFloat(values.hysteresis),
     }
     return probe
   }

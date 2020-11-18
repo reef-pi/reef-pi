@@ -1,22 +1,44 @@
-language: go
-go:
-  - "1.13"
-before_install:
-  - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  - sudo  apt-get install -y nodejs
-  - sudo npm install -g npm
-script:
-  - ./build/ci.sh
-  - bash <(curl -s https://codecov.io/bash) -cF go
-  - make pi
-  - bundle install
-  - sudo chown -R $USER /home/travis/.npm
-  - /usr/bin/npm install --no-optional
-  - make build-ui
-  - npm run js-lint
-  - make sass-lint
-  - npm test
-  - bash <(curl -s https://codecov.io/bash) -cF javascript
-  - make clean
-  - make go
-  - make deb
+matrix:
+  include:
+    - language: go
+      go:
+        - "1.13"
+      before_install:
+        - sudo apt-get install -y libasound2-dev
+        - nvm use node
+      install:
+        - npm ci
+      script:
+        - ./build/ci.sh
+        - bash <(curl -s https://codecov.io/bash) -cF go
+        - make pi
+        - bundle install
+        - make clean
+        - make go
+        - make deb
+
+    - language: node_js
+      node_js:
+        - "lts/*"
+      install:
+        - npm ci
+      script:
+        - npm run build
+        - npm run js-lint
+        - npm run sass-lint
+        - npm test
+        - bash <(curl -s https://codecov.io/bash) -cF javascript
+
+    - language: go
+      go:
+        - "1.13"
+      before_install:
+        - nvm use node
+      install:
+        - npm ci
+      script:
+        - make bin
+        - make start-dev &
+        - npm run ci-smoke
+      addons:
+        chrome: stable

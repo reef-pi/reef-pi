@@ -15,6 +15,15 @@ export const fetchDrivers = () => {
     }))
 }
 
+export const fetchDriverOptions = () => {
+  return (
+    reduxGet({
+      url: '/api/drivers/options',
+      success: driverOptionsLoaded
+    })
+  )
+}
+
 export const deleteDriver = (id) => {
   return (
     reduxDelete({
@@ -39,4 +48,11 @@ export const updateDriver = (id, driver) => {
       data: driver,
       success: fetchDrivers
     }))
+}
+
+export const driverOptionsLoaded = (options) => {
+  return ({
+    type: 'DRIVER_OPTIONS_LOADED',
+    payload: options
+  })
 }

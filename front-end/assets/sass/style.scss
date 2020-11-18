@@ -49,6 +49,9 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
   margin: 0;
 }
 
+.react-datepicker__input-container .form-control {
+  width: 100%;
+}
 
 @media screen and (min-width: 768px) {
   .body-panel {

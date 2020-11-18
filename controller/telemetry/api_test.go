@@ -12,6 +12,7 @@ import (
 func TestAPI(t *testing.T) {
 	tr := utils.NewTestRouter()
 	store, err := storage.TestDB()
+	defer store.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
