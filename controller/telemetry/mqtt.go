@@ -8,23 +8,23 @@ import (
 )
 
 type MQTTConfig struct {
-	server   string
-	topic    string
-	username string
-	clientid string
-	password string
-	qos      int
-	retained bool
+	Enable   bool   `json:"enable"`
+	Server   string `json:"server"`
+	Topic    string `json:"topic"`
+	Username string `json:"username"`
+	ClientID string `json:"client_id"`
+	Password string `json:"password"`
+	QoS      int    `json:"qos"`
+	Retained bool   `json:"retained"`
 }
 
 var DefaultMQTTConfig = MQTTConfig{
-	server:   "tcp://127.0.0.1:1883", // "The full URL of the MQTT server to connect to
-	topic:    "reef-pi",              // Topic to publish the messages on
-	qos:      0,                      // The QoS to send the messages at
-	retained: false,                  // Are the messages sent with the retained flag
-	username: "",                     // A username to authenticate to the MQTT server
-	password: "",                     //Password to match username
-	clientid: "reef-pi.local",
+	Server:   "tcp://127.0.0.1:1883", // "The full URL of the MQTT server to connect to
+	QoS:      0,                      // The QoS to send the messages at
+	Retained: false,                  // Are the messages sent with the retained flag
+	Username: "",                     // A username to authenticate to the MQTT server
+	Password: "",                     //Password to match username
+	ClientID: "reef-pi.local",
 }
 
 type MQTTClient struct {
@@ -34,11 +34,11 @@ type MQTTClient struct {
 
 func NewMQTTClient(conf MQTTConfig) (*MQTTClient, error) {
 	mqtt.ERROR = log.New(os.Stdout, "", 0)
-	connOpts := mqtt.NewClientOptions().AddBroker(conf.server).SetClientID(conf.clientid).SetCleanSession(true)
-	if conf.username != "" {
-		connOpts.SetUsername(conf.username)
-		if conf.password != "" {
-			connOpts.SetPassword(conf.password)
+	connOpts := mqtt.NewClientOptions().AddBroker(conf.Server).SetClientID(conf.ClientID).SetCleanSession(true)
+	if conf.Username != "" {
+		connOpts.SetUsername(conf.Username)
+		if conf.Password != "" {
+			connOpts.SetPassword(conf.Password)
 		}
 	}
 	tlsConfig := &tls.Config{InsecureSkipVerify: true, ClientAuth: tls.NoClientCert}
@@ -55,6 +55,6 @@ func NewMQTTClient(conf MQTTConfig) (*MQTTClient, error) {
 }
 
 func (m *MQTTClient) Publish(topic, msg string) error {
-	t := m.client.Publish(topic, byte(m.config.qos), m.config.retained, msg)
+	t := m.client.Publish(topic, byte(m.config.QoS), m.config.Retained, msg)
 	return t.Error()
 }
