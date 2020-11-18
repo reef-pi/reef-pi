@@ -18,6 +18,14 @@ class admin extends React.Component {
     this.handleSignout = this.handleSignout.bind(this)
     this.handleDBFileImport = this.handleDBFileImport.bind(this)
     this.handleDBFileChange = this.handleDBFileChange.bind(this)
+    this.dbFileName = this.dbFileName.bind(this)
+  }
+
+  dbFileName () {
+    if (this.state.dbFile === null) {
+      return ('Select new databse file')
+    }
+    return (this.state.dbFile.name)
   }
 
   handleDBFileChange (event) {
@@ -78,14 +86,27 @@ class admin extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
+
+          <div className='col-md-12 mt-3 col-lg-4'>
+            <div className='input-group'>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>Import</span>
+              </div>
+              <div classiName='custom-file'>
+                <input type='file' className='custom-file-input' id='dbImportFile' onChange={this.handleDBFileChange} />
+                <label className='custom-file-label' for='dbImportFile'>{this.dbFileName()}</label>
+              </div>
+            </div>
           </div>
-          <div className='col-md-12 mt-3 col-lg-3'>
-            <input type='file' onChange={this.handleDBFileChange} />
-            <button onClick={this.handleDBFileImport}>
-              {i18n.t('configuration:admin:db_import')}
+
+          <div className='col-md-12 mt-3 col-lg-2'>
+            <button onClick={this.handleDBFileImport} className='btn btn-primary'>
+              Upload
             </button>
+          </div>
+
+          <div className='col-md-12 mt-3 col-lg-6'>
+            <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
           </div>
         </div>
       </div>
