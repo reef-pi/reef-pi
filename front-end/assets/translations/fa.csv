@@ -19,6 +19,7 @@ enabled,فعال شده
 equipment,
 errors,خطاها
 health,
+import_db,
 in-use,
 inlet,ورودی
 inlets,
@@ -40,6 +41,7 @@ save,ذخیره
 sec,
 second_s,
 select,انتخاب کنید
+select_file,
 since,از آنجا که
 unit,واحد
 update,به روز رسانی
