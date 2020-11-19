@@ -174,44 +174,44 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 }
 
 func (t *telemetry) EmitMetric(module, name string, v float64) {
-	feed := module + "-" + name
+	mName := strings.ToLower(module + "_" + name)
+	mName = strings.Replace(mName, " ", "_", -1)
+	mName = strings.Replace(mName, "-", "_", -1)
 	aio := t.config.AdafruitIO
-	feed = strings.ToLower(aio.Prefix + feed)
-	feed = strings.Replace(feed, " ", "_", -1)
-	pName := strings.Replace(feed, "-", "_", -1)
 
 	if t.config.Prometheus {
 		t.mu.Lock()
-		g, ok := t.pMs[feed]
+		g, ok := t.pMs[mName]
 		if !ok {
 			g = promauto.NewGauge(prometheus.GaugeOpts{
-				Name: pName,
+				Name: mName,
 				Help: "Module:" + module + " Item:" + name,
 			})
-			t.pMs[feed] = g
+			t.pMs[mName] = g
 		}
 		t.mu.Unlock()
 		g.Set(v)
 	}
 	if aio.Enable {
-		if err := t.EmitAIO(feed, aio.User, v); err != nil {
-			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", feed, "Error:", err)
-			t.logError("telemtry-"+feed, err.Error())
+		aFeed := aio.Prefix + mName
+		if err := t.EmitAIO(aFeed, aio.User, v); err != nil {
+			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", aFeed, "Error:", err)
+			t.logError("telemtry-"+aFeed, err.Error())
 		}
 	}
 	if t.config.MQTT.Enable {
-		if err := t.EmitMQTT(v); err != nil {
+		if err := t.EmitMQTT(mName, v); err != nil {
 			log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
 			t.logError("telemtry-mqtt", err.Error())
 		}
 	}
 }
 
-func (t *telemetry) EmitMQTT(v float64) error {
+func (t *telemetry) EmitMQTT(topic string, v float64) error {
 	if t.mClient == nil {
 		return errors.New("mqtt client is not initialized")
 	}
-	return t.mClient.Publish("", fmt.Sprintf("%f", v))
+	return t.mClient.Publish(topic, fmt.Sprintf("%f", v))
 }
 
 func (t *telemetry) EmitAIO(user, feed string, v float64) error {
