@@ -19,6 +19,7 @@ enabled,已启用
 equipment,设备
 errors,错误
 health,健康
+import_db,
 in-use,正在使用
 inlet,入口
 inlets,进水口
@@ -40,6 +41,7 @@ save,保存
 sec,秒
 second_s,秒
 select,选择
+select_file,
 since,since
 unit,单位
 update,更新

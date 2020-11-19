@@ -19,6 +19,7 @@ enabled,activar
 equipment,
 errors,Erros
 health,
+import_db,
 in-use,
 inlet,Inlet
 inlets,
@@ -40,6 +41,7 @@ save,Salvar
 sec,sec
 second_s,segundos
 select,Selecionar
+select_file,
 since,Desde
 unit,Unidades
 update,Atualizar

@@ -19,6 +19,7 @@ enabled,Ingeschakeld
 equipment,Apparatuur
 errors,Foutmeldingen
 health,gezondheid
+import_db,
 in-use,In gebruik
 inlet,Ingang (inlet)
 inlets,Ingangen (inlets)
@@ -40,6 +41,7 @@ save,Opslaan
 sec,sec
 second_s,second(en)
 select,Selecteren
+select_file,
 since,Sinds
 unit,Eenheid
 update,Update

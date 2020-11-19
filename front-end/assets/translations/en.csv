@@ -20,6 +20,7 @@ enabled,Enabled
 equipment,Equipment
 errors,Errors
 health,Health
+import_db,Import Database
 in-use,in-use
 inlet,Inlet
 inlet,Inlet
@@ -42,6 +43,7 @@ save,Save
 sec,sec
 second_s,second(s)
 select,Select
+select_file,Please select a file
 since,since
 unit,Unit
 update,Update

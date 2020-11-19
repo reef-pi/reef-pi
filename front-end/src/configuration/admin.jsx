@@ -2,6 +2,7 @@ import React from 'react'
 import FormData from 'form-data'
 import SignIn from 'sign_in'
 import { confirm } from 'utils/confirm'
+import { showError } from 'utils/alert'
 import { reload, reboot, powerOff, dbImport } from 'redux/actions/admin'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
@@ -23,7 +24,7 @@ class admin extends React.Component {
 
   dbFileName () {
     if (this.state.dbFile === null) {
-      return ('Select new databse file')
+      return (i18n.t('select_file'))
     }
     return (this.state.dbFile.name)
   }
@@ -33,6 +34,10 @@ class admin extends React.Component {
   }
 
   handleDBFileImport () {
+    if (this.state.dbFile === null) {
+      showError(i18n.t('select_file'))
+      return
+    }
     const formData = new FormData()
     // Update the formData object
     formData.append(
@@ -40,7 +45,7 @@ class admin extends React.Component {
       this.state.dbFile,
       this.state.dbFile.name
     )
-    this.props.dbImport(formData)
+    confirm(i18n.t('are_you_sure')).then(this.props.dbImport(formData))
   }
 
   handleSignout () {
@@ -86,27 +91,21 @@ class admin extends React.Component {
           </div>
         </div>
         <div className='row'>
-
+          <div className='col-md-12 mt-3 col-lg-6'>
+            <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
+          </div>
           <div className='col-md-12 mt-3 col-lg-4'>
             <div className='input-group'>
-              <div className='input-group-prepend'>
-                <span className='input-group-text'>Import</span>
-              </div>
-              <div classiName='custom-file'>
+              <div className='custom-file'>
                 <input type='file' className='custom-file-input' id='dbImportFile' onChange={this.handleDBFileChange} />
-                <label className='custom-file-label' for='dbImportFile'>{this.dbFileName()}</label>
+                <label className='custom-file-label' form='dbImportFile'>{this.dbFileName()}</label>
               </div>
             </div>
           </div>
-
           <div className='col-md-12 mt-3 col-lg-2'>
-            <button onClick={this.handleDBFileImport} className='btn btn-primary'>
-              Upload
+            <button onClick={this.handleDBFileImport} className='btn btn-danger'>
+              {i18n.t('import_db')}
             </button>
-          </div>
-
-          <div className='col-md-12 mt-3 col-lg-6'>
-            <a href='/api/admin/reef-pi.db' download>{i18n.t('configuration:admin:db_export')}</a>
           </div>
         </div>
       </div>
