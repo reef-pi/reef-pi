@@ -75,6 +75,9 @@ func (c *Controller) Setup() error {
 		return err
 	}
 	for i, light := range lights {
+		if !light.Enable {
+			continue
+		}
 		lights[i].LoadChannels()
 		c.lights[light.ID] = &lights[i]
 		for _, ch := range light.Channels {
@@ -97,6 +100,9 @@ func (c *Controller) On(id string, on bool) error {
 }
 func (c *Controller) syncLights() {
 	for _, light := range c.lights {
+		if !light.Enable {
+			continue
+		}
 		c.syncLight(light)
 	}
 }

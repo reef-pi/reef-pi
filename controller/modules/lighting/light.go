@@ -24,8 +24,11 @@ func (l *Light) LoadChannels() {
 }
 
 func (c *Controller) Get(id string) (Light, error) {
-	var l Light
-	return l, c.c.Store().Get(Bucket, id, &l)
+	l, ok := c.lights[id]
+	if ok {
+		return *l, nil
+	}
+	return *l, c.c.Store().Get(Bucket, id, l)
 }
 
 func (c Controller) List() ([]Light, error) {
@@ -89,9 +92,11 @@ func (c *Controller) Create(l Light) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return nil
 	}
-	c.Lock()
-	c.lights[l.ID] = &l
-	c.Unlock()
+	if l.Enable {
+		c.Lock()
+		c.lights[l.ID] = &l
+		c.Unlock()
+	}
 	for _, ch := range l.Channels {
 		c.c.Telemetry().CreateFeedIfNotExist(l.Name + "-" + ch.Name)
 	}
@@ -106,10 +111,10 @@ func (c *Controller) Update(id string, l Light) error {
 	if err := c.c.Store().Update(Bucket, id, l); err != nil {
 		return err
 	}
-	c.Lock()
-	c.lights[l.ID] = &l
-	c.Unlock()
 	if l.Enable {
+		c.Lock()
+		c.lights[l.ID] = &l
+		c.Unlock()
 		c.syncLight(&l)
 	}
 	return nil
@@ -137,6 +142,7 @@ func (c *Controller) syncLight(light *Light) {
 		}
 		log.Println("lighting subsystem: Setting Light: ", light.Name, "Channel:", ch.Name, "Value:", v)
 		c.UpdateChannel(light.Jack, *ch, v)
+		ch.Value = v
 		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)
 	}
 }
