@@ -240,21 +240,22 @@ func (jacks *Jacks) Control(id string, values PinValues) error {
 		return err
 	}
 	for _, pin := range j.Pins {
+		v, ok := values[pin]
+		if !ok {
+			continue
+		}
 		channel, err := j.pwmChannel(pin, jacks.drivers)
 		if err != nil {
 			return fmt.Errorf("pin %d on jack %s has no driver: %v", pin, id, err)
 		}
-		v, ok := values[pin]
 		if v > 100 || v < 0 {
 			return fmt.Errorf("invalid value:%f for pin: %d", v, pin)
 		}
-		if ok {
-			if j.Reverse {
-				v = 100 - v
-			}
-			if err := channel.Set(v); err != nil {
-				return err
-			}
+		if j.Reverse {
+			v = 100 - v
+		}
+		if err := channel.Set(v); err != nil {
+			return err
 		}
 	}
 	return nil
