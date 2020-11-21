@@ -2,6 +2,7 @@ package doser
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"sync"
@@ -85,7 +86,7 @@ func (c *Controller) addToCron(p Pump) error {
 	if err != nil {
 		return err
 	}
-	log.Println("Successfully added cron entry. ID:", cronID)
+	log.Println("doser-subsystem: Successfully added cron entry. ID:", cronID)
 	c.cronIDs[p.ID] = cronID
 	return nil
 }
@@ -95,8 +96,16 @@ func (c *Controller) On(id string, b bool) error {
 	if err != nil {
 		return err
 	}
-	p.Regiment.Enable = b
-	return c.Update(id, p)
+	if p.Regiment.Enable {
+		return errors.New("enabled doser can not be On/Off -ed")
+	}
+	log.Println("doser-subsystem: Switching doser :", p.Name, "to", b)
+	v := make(map[int]float64)
+	v[p.Pin] = 0
+	if b {
+		v[p.Pin] = p.Regiment.Speed
+	}
+	return c.jacks.Control(p.Jack, v)
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {

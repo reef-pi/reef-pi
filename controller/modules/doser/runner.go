@@ -23,9 +23,7 @@ func (r *Runner) Dose(speed float64, duration float64) error {
 	select {
 	case <-time.After(time.Duration(duration * float64(time.Second))):
 		v[r.pump.Pin] = 0
-		if err := r.jacks.Control(r.pump.Jack, v); err != nil {
-			return err
-		}
+		return r.jacks.Control(r.pump.Jack, v)
 	}
 	return nil
 }
