@@ -24,5 +24,7 @@ jobs:
         run: npm i
       - name: go
         run: make go
+      - name: bundler
+        run: gem install bundler -v 2.1.4 --no-document
       - name: deb
         run: make deb
