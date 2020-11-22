@@ -1,9 +1,5 @@
 name: jest
-on:
-  - push
-  - pull_request
-  - schedule:
-    cron: '0 0 * * 0'
+on: [push, pull_request]
 jobs:
   builds:
     runs-on: ubuntu-latest
