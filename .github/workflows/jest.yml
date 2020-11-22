@@ -1,8 +1,11 @@
-name: translation
-on: [push, pull_request]
-
+name: jest
+on:
+  - push
+  - pull_request
+  - schedule:
+    cron: '0 0 * * 0'
 jobs:
-  Translations:
+  builds:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -18,5 +21,5 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: npm i
-      - name: Check Translations
-        run: npm run translations:chk
+      - name: jest
+        run: npm run jest

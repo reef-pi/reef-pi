@@ -1,13 +1,18 @@
-name: translation
-on: [push, pull_request]
-
+name: deb
+on:
+  - push
+  - pull_request
+  - schedule:
+    cron: '0 0 * * 0'
 jobs:
-  Translations:
+  builds:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 11.12
-        uses: actions/setup-node@v1
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.13.1'
+      - uses: actions/setup-node@v1
         with:
           node-version: 11.12
       - uses: actions/cache@v1
@@ -18,5 +23,7 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: npm i
-      - name: Check Translations
-        run: npm run translations:chk
+      - name: go
+        run: make go
+      - name: deb
+        run: make deb
