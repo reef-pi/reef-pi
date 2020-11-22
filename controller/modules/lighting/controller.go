@@ -13,7 +13,6 @@ import (
 const Bucket = storage.LightingBucket
 
 type Config struct {
-	DevMode  bool          `json:"dev_mode"`
 	Interval time.Duration `json:"interval"`
 }
 
