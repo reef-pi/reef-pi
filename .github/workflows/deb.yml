@@ -26,5 +26,7 @@ jobs:
         run: make go
       - name: bundler
         run: gem install bundler -v 2.1.4 --no-document
+      - name: fpm
+        run: bundle install
       - name: deb
         run: make deb
