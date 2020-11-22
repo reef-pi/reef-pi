@@ -2,6 +2,8 @@ Key,Translation
 add,add
 alerts,Alerts
 analog_input,Analog Input
+upgrade_reef_pi,Upgrade reef-pi to version
+install,Install
 analog_input,Analog Input
 analog_inputs,Analog Inputs
 are_you_sure,Are you sure?

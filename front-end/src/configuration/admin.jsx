@@ -3,7 +3,7 @@ import FormData from 'form-data'
 import SignIn from 'sign_in'
 import { confirm } from 'utils/confirm'
 import { showError } from 'utils/alert'
-import { reload, reboot, powerOff, dbImport } from 'redux/actions/admin'
+import { upgrade, reload, reboot, powerOff, dbImport } from 'redux/actions/admin'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
@@ -11,7 +11,8 @@ class admin extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      dbFile: null
+      dbFile: null,
+      version: null
     }
     this.handlePowerOff = this.handlePowerOff.bind(this)
     this.handleReboot = this.handleReboot.bind(this)
@@ -20,6 +21,17 @@ class admin extends React.Component {
     this.handleDBFileImport = this.handleDBFileImport.bind(this)
     this.handleDBFileChange = this.handleDBFileChange.bind(this)
     this.dbFileName = this.dbFileName.bind(this)
+    this.handleInstall = this.handleInstall.bind(this)
+    this.handleVersionChange = this.handleVersionChange.bind(this)
+  }
+
+  handleInstall () {
+    this.props.upgrade(this.state.version)
+  }
+
+  handleVersionChange (ev) {
+    this.setState({ version: ev.target.value })
+    console.log(this.state.version)
   }
 
   dbFileName () {
@@ -108,6 +120,20 @@ class admin extends React.Component {
             </button>
           </div>
         </div>
+
+        <div className='row'>
+          <div className='col-md-6 mt-3 col-lg-4'>
+            {i18n.t('upgrade_reef_pi')}
+          </div>
+          <div className='col-md-2 mt-3 col-lg-1'>
+            <input onChange={this.handleVersionChange} type='text' />
+          </div>
+          <div className='col-md-12 mt-3 col-lg-2'>
+            <button onClick={this.handleInstall} className='btn btn-danger'>
+              {i18n.t('install')}
+            </button>
+          </div>
+        </div>
       </div>
     )
   }
@@ -118,7 +144,8 @@ const mapDispatchToProps = dispatch => {
     reload: () => dispatch(reload()),
     reboot: () => dispatch(reboot()),
     powerOff: () => dispatch(powerOff()),
-    dbImport: (fd) => dispatch(dbImport(fd))
+    dbImport: (fd) => dispatch(dbImport(fd)),
+    upgrade: (v) => dispatch(upgrade(v))
   }
 }
 
