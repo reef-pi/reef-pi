@@ -24,6 +24,10 @@ jobs:
         run: npm i
       - name: go
         run: make go
+      - name: pi
+        run: make pi
+      - name: pi-zero
+        run: make pi-zero
       - name: bundler
         run: gem install bundler -v 2.1.4 --no-document
       - name: fpm
