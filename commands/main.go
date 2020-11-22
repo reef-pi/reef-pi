@@ -24,6 +24,7 @@ func main() {
     daemon: Run reef-pi controller
     db: Interact with reef-pi database
     restore-db: Restore and imported database
+    install: Install another reef-pi version
 
     Options:
       -version
@@ -89,6 +90,23 @@ func main() {
 		}
 		cmd.Parse(args)
 		restoreDb(*cPath, *oPath, *nPath)
+	case "install":
+		cmd := flag.NewFlagSet("install", flag.ExitOnError)
+		version := cmd.String("version", "", "Version to be installed")
+		cmd.Usage = func() {
+			text := `
+    install: install a reef-pi version
+    Example: reef-pi install -version 4.0
+    `
+			fmt.Println(strings.TrimSpace(text))
+			fmt.Println("\nOptions:")
+			cmd.PrintDefaults()
+		}
+		cmd.Parse(args)
+		if err := install(*version); err != nil {
+			fmt.Println("reef-pi installed failed. Error:", err)
+			os.Exit(1)
+		}
 	case "", "daemon":
 		cmd := flag.NewFlagSet("daemon", flag.ExitOnError)
 		configFile := cmd.String("config", "", "reef-pi configuration file path")

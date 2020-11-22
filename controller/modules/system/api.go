@@ -13,6 +13,10 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
+type InstallReq struct {
+	Version string `json:"version"`
+}
+
 func (c *Controller) LoadAPI(r *mux.Router) {
 
 	// swagger:route POST /api/display/on Display systemDisplayOn
@@ -194,15 +198,12 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
-	fn := func(string) (interface{}, error) {
+	var v InstallReq
+	fn := func(string) error {
 		log.Println("Upgrading reef-pi controller")
-		err := utils.SystemdExecute("reef-pi-system-upgrade.service", "/usr/bin/apt-get update -y", false)
-		if err != nil {
-			return "", fmt.Errorf("Failed to update. Error: " + err.Error())
-		}
-		return "", nil
+		return utils.SystemdExecute("reef-pi-install.service", "/usr/bin/reef-pi install -version "+v.Version, false)
 	}
-	utils.JSONGetResponse(fn, w, r)
+	utils.JSONUpdateResponse(&v, fn, w, r)
 }
 
 func (c *Controller) dbImport(w http.ResponseWriter, r *http.Request) {
