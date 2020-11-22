@@ -21,10 +21,7 @@ func TestEquipmentController(t *testing.T) {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
 	con.DM().Outlets().Setup()
-	config := Config{
-		DevMode: true,
-	}
-	c := New(config, con)
+	c := New(con)
 	c.Setup()
 	c.Stop()
 	o := connectors.Outlet{
@@ -134,10 +131,6 @@ func TestEquipmentController(t *testing.T) {
 }
 
 func TestUpdateEquipment(t *testing.T) {
-	config := Config{
-		DevMode: true,
-	}
-
 	con, err := controller.TestController()
 	defer con.Store().Close()
 
@@ -148,7 +141,7 @@ func TestUpdateEquipment(t *testing.T) {
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c := New(config, con)
+	c := New(con)
 	c.Setup()
 
 	o1 := connectors.Outlet{

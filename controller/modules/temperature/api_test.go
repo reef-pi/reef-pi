@@ -17,12 +17,11 @@ func TestTemperatureAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create test controller. Error:", err)
 	}
-	conf := equipment.Config{DevMode: true}
 	outlets := con.DM().Outlets()
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipment.New(conf, con)
+	eqs := equipment.New(con)
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}

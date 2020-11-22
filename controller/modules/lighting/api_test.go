@@ -16,7 +16,6 @@ func TestLightingAPI(t *testing.T) {
 	t.Parallel()
 
 	config := DefaultConfig
-	config.DevMode = true
 	config.Interval = 1 * time.Second
 	con, err := controller.TestController()
 	if err != nil {
