@@ -140,6 +140,7 @@ export const rootReducer = (state, action) => {
     case 'API_FAILURE':
     case 'TELEMETRY_TEST_MESSAGE_SENT':
     case 'DB_IMPORTED':
+    case 'UPGRADED':
       return state
     default:
       console.log('Unknown action in redux-reducer:|' + action.type + '|')

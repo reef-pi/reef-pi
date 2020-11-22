@@ -56,6 +56,21 @@ export const dbImport = (formData) => {
       url: '/api/admin/reef-pi.db',
       success: dbImported,
       raw: formData,
-      failure: () => {}
+    }))
+}
+
+
+export const upgraded = () => {
+  return ({
+    type: 'UPGRADED'
+  })
+}
+
+export const upgrade = (version) => {
+  return (
+    reduxPost({
+      url: '/api/admin/upgrade',
+      success: upgraded,
+      data: {version: version},
     }))
 }
