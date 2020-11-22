@@ -92,7 +92,6 @@ func (r *ReefPi) loadLightingSubsystem() error {
 		return nil
 	}
 	conf := lighting.Config{
-		DevMode:  r.settings.Capabilities.DevMode,
 		Interval: 30 * time.Second,
 	}
 	l, err := lighting.New(conf, r)
@@ -147,10 +146,7 @@ func (r *ReefPi) loadSubsystems() error {
 	}
 	var eqs *equipment.Controller
 	if r.settings.Capabilities.Equipment {
-		conf := equipment.Config{
-			DevMode: r.settings.Capabilities.DevMode,
-		}
-		eqs = equipment.New(conf, r)
+		eqs = equipment.New(r)
 		r.subsystems[equipment.Bucket] = eqs
 	}
 	if err := r.loadATOSubsystem(eqs); err != nil {

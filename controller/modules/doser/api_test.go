@@ -3,6 +3,7 @@ package doser
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/drivers"
@@ -19,15 +20,26 @@ func TestDoserAPI(t *testing.T) {
 		t.Fatal("Failed to create test database. Error:", err)
 	}
 
-	drvrs := drivers.TestDrivers(con.Store())
-	jacks := connectors.NewJacks(drvrs, con.Store())
-	jacks.Setup()
+	d1 := drivers.Driver{
+		Name:   "lighting",
+		Type:   "pca9685",
+		Config: []byte(`{"address":64, "frequency":1000}`),
+	}
+	if err := con.DM().Drivers().Create(d1); err != nil {
+		t.Fatal(err)
+	}
+	jacks := con.DM().Jacks()
+	if err := jacks.Setup(); err != nil {
+		t.Fatal(err)
+	}
 	j := connectors.Jack{
 		Name:   "Foo",
 		Pins:   []int{1},
-		Driver: "pca9685",
+		Driver: "1",
 	}
-	jacks.Create(j)
+	if err := jacks.Create(j); err != nil {
+		t.Fatal(err)
+	}
 	c, err := New(true, con)
 	if err != nil {
 		t.Fatal(err)
@@ -38,6 +50,12 @@ func TestDoserAPI(t *testing.T) {
 	}
 	c.LoadAPI(tr.Router)
 	body := new(bytes.Buffer)
+
+	js, err := jacks.List()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(js)
 	json.NewEncoder(body).Encode(&Pump{Name: "Foo", Pin: 0, Jack: "1"})
 	if err := tr.Do("PUT", "/api/doser/pumps", body, nil); err != nil {
 		t.Fatal("Failed to create dosing pump using api. Error:", err)
@@ -47,7 +65,7 @@ func TestDoserAPI(t *testing.T) {
 	}
 	c.Start()
 	body.Reset()
-	json.NewEncoder(body).Encode(&DosingRegiment{
+	regiment := DosingRegiment{
 		Schedule: Schedule{
 			Hour:   "*",
 			Minute: "*",
@@ -57,7 +75,8 @@ func TestDoserAPI(t *testing.T) {
 			Week:   "?",
 		},
 		Enable: true,
-	})
+	}
+	json.NewEncoder(body).Encode(&regiment)
 	if err := tr.Do("POST", "/api/doser/pumps/1/schedule", body, nil); err != nil {
 		t.Fatal("Failed to schedule dosing pump using api. Error:", err)
 	}
@@ -73,6 +92,7 @@ func TestDoserAPI(t *testing.T) {
 	json.NewEncoder(body).Encode(&Pump{
 		Name: "Bar",
 		Pin:  1,
+		Jack: "1",
 		Regiment: DosingRegiment{
 			Schedule: Schedule{
 				Hour:   "*",

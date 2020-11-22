@@ -23,6 +23,7 @@ import_db,
 in-use,正在使用
 inlet,入口
 inlets,进水口
+install,
 jack,插口
 jacks,千斤顶
 light,灯光
@@ -45,6 +46,7 @@ select_file,
 since,since
 unit,单位
 update,更新
+upgrade_reef_pi,
 ato:alert_after,告警发生于
 ato:ato_status,补水器状态
 ato:ato_usage,补水器使用情况

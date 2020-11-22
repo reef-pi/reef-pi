@@ -28,7 +28,8 @@ func (c *Controller) Get(id string) (Light, error) {
 	if ok {
 		return *l, nil
 	}
-	return *l, c.c.Store().Get(Bucket, id, l)
+	var nL Light
+	return nL, c.c.Store().Get(Bucket, id, &nL)
 }
 
 func (c Controller) List() ([]Light, error) {

@@ -9,19 +9,14 @@ import (
 	"log"
 )
 
-type Config struct {
-	DevMode bool `json:"dev_mode"`
-}
 type Controller struct {
-	config    Config
 	telemetry telemetry.Telemetry
 	store     storage.Store
 	outlets   *connectors.Outlets
 }
 
-func New(config Config, c controller.Controller) *Controller {
+func New(c controller.Controller) *Controller {
 	return &Controller{
-		config:    config,
 		telemetry: c.Telemetry(),
 		store:     c.Store(),
 		outlets:   c.DM().Outlets(),
@@ -47,10 +42,6 @@ func (c *Controller) Start() {
 }
 
 func (c *Controller) Stop() {
-	if c.config.DevMode {
-		log.Println("Equipment subsystem is running in dev mode, skipping GPIO closing")
-		return
-	}
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {

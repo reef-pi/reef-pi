@@ -49,7 +49,6 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 type Outlets struct {
 	store   storage.Store
 	drivers *drivers.Drivers
-	DevMode bool
 }
 
 func NewOutlets(drivers *drivers.Drivers, store storage.Store) *Outlets {

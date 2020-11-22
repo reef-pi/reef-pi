@@ -19,9 +19,7 @@ func TestController(t *testing.T) {
 		t.Fatal(err)
 	}
 	drvrs := drivers.TestDrivers(con.Store())
-	conf := equipment.Config{DevMode: true}
 	outlets := connectors.NewOutlets(drvrs, con.Store())
-	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +27,7 @@ func TestController(t *testing.T) {
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	eqs := equipment.New(conf, con)
+	eqs := equipment.New(con)
 	if err := eqs.Setup(); err != nil {
 		t.Error(err)
 	}

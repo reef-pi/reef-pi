@@ -20,9 +20,6 @@ func TestTimerController(t *testing.T) {
 
 	defer con.Store().Close()
 
-	eConfig := equipment.Config{
-		DevMode: true,
-	}
 	o := connectors.Outlet{
 		Name:   "bar",
 		Pin:    24,
@@ -32,7 +29,7 @@ func TestTimerController(t *testing.T) {
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	e := equipment.New(eConfig, con)
+	e := equipment.New(con)
 	e.Setup()
 	if err := outlets.Create(o); err != nil {
 		t.Fatal(err)

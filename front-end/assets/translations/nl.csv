@@ -23,6 +23,7 @@ import_db,
 in-use,In gebruik
 inlet,Ingang (inlet)
 inlets,Ingangen (inlets)
+install,
 jack,Ingang (jack)
 jacks,Ingangen (jacks)
 light,Light
@@ -45,6 +46,7 @@ select_file,
 since,Sinds
 unit,Eenheid
 update,Update
+upgrade_reef_pi,
 ato:alert_after,Alarm Na
 ato:ato_status,ATO Status
 ato:ato_usage,ATO Gebruik
