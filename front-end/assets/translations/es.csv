@@ -23,6 +23,7 @@ import_db,
 in-use,
 inlet,Entrada
 inlets,
+install,
 jack,
 jacks,
 light,
@@ -45,6 +46,7 @@ select_file,
 since,Desde
 unit,Unidad
 update,Actualizar
+upgrade_reef_pi,
 ato:alert_after,Alertas despues de
 ato:ato_status,ATO Status
 ato:ato_usage,Uso del ATO
