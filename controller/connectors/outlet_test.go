@@ -22,7 +22,6 @@ func TestOutletsAPI(t *testing.T) {
 	tr := utils.NewTestRouter()
 	o := Outlet{Name: "Foo", Pin: 21, Driver: "rpi"}
 	outlets := NewOutlets(drvrs, store)
-	outlets.DevMode = true
 	if err := outlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
