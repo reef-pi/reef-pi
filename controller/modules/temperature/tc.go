@@ -68,20 +68,20 @@ func (c *Controller) Get(id string) (*TC, error) {
 	return tc, nil
 }
 
-func (c Controller) List() ([]TC, error) {
-	tcs := []TC{}
+func (c *Controller) List() ([]*TC, error) {
+	tcs := []*TC{}
 	fn := func(_ string, v []byte) error {
 		var tc TC
 		if err := json.Unmarshal(v, &tc); err != nil {
 			return err
 		}
-		tcs = append(tcs, tc)
+		tcs = append(tcs, &tc)
 		return nil
 	}
 	return tcs, c.c.Store().List(Bucket, fn)
 }
 
-func (c *Controller) Create(tc TC) error {
+func (c *Controller) Create(tc *TC) error {
 	c.Lock()
 	defer c.Unlock()
 	if tc.Period <= 0 {
@@ -89,18 +89,18 @@ func (c *Controller) Create(tc TC) error {
 	}
 	fn := func(id string) interface{} {
 		tc.ID = id
-		return &tc
+		return tc
 	}
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return err
 	}
 
-	c.tcs[tc.ID] = &tc
+	c.tcs[tc.ID] = tc
 	c.statsMgr.Initialize(tc.ID)
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		go c.Run(&tc, quit)
+		go c.Run(tc, quit)
 	}
 	return nil
 }
@@ -258,6 +258,6 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
 }
 
-func (t TC) WithinRange(v float64) bool {
+func (t *TC) WithinRange(v float64) bool {
 	return v >= t.Min && v <= t.Max
 }

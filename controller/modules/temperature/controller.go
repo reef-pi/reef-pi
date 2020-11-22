@@ -52,8 +52,8 @@ func (c *Controller) Setup() error {
 	if err != nil {
 		return err
 	}
-	for i, tc := range tcs {
-		c.tcs[tc.ID] = &tcs[i]
+	for _, tc := range tcs {
+		c.tcs[tc.ID] = tc
 	}
 
 	err = c.c.Store().List(CalibrationBucket, func(k string, v []byte) error {

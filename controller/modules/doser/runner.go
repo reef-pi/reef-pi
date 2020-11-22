@@ -25,7 +25,6 @@ func (r *Runner) Dose(speed float64, duration float64) error {
 		v[r.pump.Pin] = 0
 		return r.jacks.Control(r.pump.Jack, v)
 	}
-	return nil
 }
 
 func (r *Runner) Run() {

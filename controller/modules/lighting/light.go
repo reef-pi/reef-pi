@@ -32,7 +32,7 @@ func (c *Controller) Get(id string) (Light, error) {
 	return nL, c.c.Store().Get(Bucket, id, &nL)
 }
 
-func (c Controller) List() ([]Light, error) {
+func (c *Controller) List() ([]Light, error) {
 	ls := []Light{}
 	fn := func(_ string, v []byte) error {
 		var l Light

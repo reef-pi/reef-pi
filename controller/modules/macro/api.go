@@ -138,7 +138,7 @@ func (t *Subsystem) get(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (c Subsystem) list(w http.ResponseWriter, r *http.Request) {
+func (c *Subsystem) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
 	}
