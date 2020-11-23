@@ -202,7 +202,7 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 	}
 	if aio.Enable {
 		aFeed := SanitizeAdafruitIOFeedName(aio.Prefix + module + "-" + name)
-		if err := t.EmitAIO(aFeed, aio.User, v); err != nil {
+		if err := t.EmitAIO(aio.User, aFeed, v); err != nil {
 			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", aFeed, "Error:", err)
 			t.logError("telemtry-"+aFeed, err.Error())
 		}
