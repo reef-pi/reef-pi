@@ -15,5 +15,5 @@ jobs:
       - run: make go
       - run: make ui
       - run: |
-        make start-dev &
-        make smoke
+          make start-dev &
+          make smoke
