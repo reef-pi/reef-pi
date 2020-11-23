@@ -17,4 +17,4 @@ jobs:
       - name: Install
         run: npm i
       - name: jest
-        run: npm run jest
+        run: npm run jest -u
