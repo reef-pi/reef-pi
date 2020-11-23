@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
-          node-version: 10.20
+          node-version: '14.15.1'
       - uses: actions/cache@v1
         with:
           path: node_modules
