@@ -173,34 +173,42 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 	return true, nil
 }
 
+func SanitizeAdafruitIOFeedName(name string) string {
+	name = strings.ToLower(name)
+	return strings.Replace(name, " ", "_", -1)
+}
+func SanitizePrometheusMetricName(name string) string {
+	name = strings.ToLower(name)
+	name = strings.Replace(name, " ", "_", -1)
+	return strings.Replace(name, "-", "_", -1)
+}
+
 func (t *telemetry) EmitMetric(module, name string, v float64) {
-	mName := strings.ToLower(module + "_" + name)
-	mName = strings.Replace(mName, " ", "_", -1)
-	mName = strings.Replace(mName, "-", "_", -1)
 	aio := t.config.AdafruitIO
+	pName := SanitizePrometheusMetricName(module + "_" + name)
 
 	if t.config.Prometheus {
 		t.mu.Lock()
-		g, ok := t.pMs[mName]
+		g, ok := t.pMs[pName]
 		if !ok {
 			g = promauto.NewGauge(prometheus.GaugeOpts{
-				Name: mName,
+				Name: pName,
 				Help: "Module:" + module + " Item:" + name,
 			})
-			t.pMs[mName] = g
+			t.pMs[pName] = g
 		}
 		t.mu.Unlock()
 		g.Set(v)
 	}
 	if aio.Enable {
-		aFeed := aio.Prefix + mName
+		aFeed := SanitizeAdafruitIOFeedName(aio.Prefix + module + "-" + name)
 		if err := t.EmitAIO(aFeed, aio.User, v); err != nil {
 			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", aFeed, "Error:", err)
 			t.logError("telemtry-"+aFeed, err.Error())
 		}
 	}
 	if t.config.MQTT.Enable {
-		if err := t.EmitMQTT(mName, v); err != nil {
+		if err := t.EmitMQTT(pName, v); err != nil {
 			log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
 			t.logError("telemtry-mqtt", err.Error())
 		}
@@ -223,11 +231,11 @@ func (t *telemetry) EmitAIO(user, feed string, v float64) error {
 
 func (t *telemetry) CreateFeedIfNotExist(f string) {
 	aio := t.config.AdafruitIO
-	f = strings.ToLower(aio.Prefix + f)
 	if !aio.Enable {
 		//log.Println("Telemetry disabled. Skipping creating feed:", f)
 		return
 	}
+	f = SanitizeAdafruitIOFeedName(aio.Prefix + f)
 	feed := adafruitio.Feed{
 		Name:    f,
 		Key:     f,

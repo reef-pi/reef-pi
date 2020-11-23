@@ -119,7 +119,7 @@ func (h *hc) Check() {
 	}
 
 	h.t.EmitMetric("system", "mem-used", usedMemory)
-	h.t.EmitMetric("system", "under_voltage", metric.UnderVoltage)
+	h.t.EmitMetric("system", "under-voltage", metric.UnderVoltage)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
@@ -153,6 +153,7 @@ func (h *hc) Stop() {
 func (h *hc) setup() {
 	h.t.CreateFeedIfNotExist("system-load5")
 	h.t.CreateFeedIfNotExist("system-mem-used")
+	h.t.CreateFeedIfNotExist("system-under-voltage")
 }
 
 func (h *hc) Start() {

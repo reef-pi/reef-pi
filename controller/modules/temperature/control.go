@@ -56,8 +56,12 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 		log.Println("ERROR: temperature-subsystem: failed to convert generic metric to temperature controller usage")
 		return reading, nil
 	}
-	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_heater", float64(u.Upper))
-	c.c.Telemetry().EmitMetric("tc_", tc.Name+"_cooler", float64(u.Downer))
+	if tc.Heater != "" {
+		c.c.Telemetry().EmitMetric(tc.Name, "heater", float64(u.Upper))
+	}
+	if tc.Cooler != "" {
+		c.c.Telemetry().EmitMetric(tc.Name, "cooler", float64(u.Downer))
+	}
 	return reading, nil
 }
 
