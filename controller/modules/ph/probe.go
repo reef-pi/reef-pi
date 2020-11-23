@@ -68,7 +68,7 @@ func (c *Controller) Get(id string) (Probe, error) {
 	return p, c.c.Store().Get(Bucket, id, &p)
 }
 
-func (c Controller) List() ([]Probe, error) {
+func (c *Controller) List() ([]Probe, error) {
 	probes := []Probe{}
 	fn := func(_ string, v []byte) error {
 		var p Probe

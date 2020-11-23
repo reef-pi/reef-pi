@@ -111,7 +111,7 @@ else
 endif
 
 .PHONY: race
-race-test:
+race:
 	./scripts/race.sh 12
 
 .PHONY: spec

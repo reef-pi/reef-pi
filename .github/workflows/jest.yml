@@ -1,15 +1,13 @@
-name: translation
+name: jest
 on: [push, pull_request]
-
 jobs:
-  Translations:
+  builds:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 11.12
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
-          node-version: 11.12
+          node-version: '14.15.1'
       - uses: actions/cache@v1
         with:
           path: node_modules
@@ -18,5 +16,5 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: npm i
-      - name: Check Translations
-        run: npm run translations:chk
+      - name: jest
+        run: npm run jest-update-snapshot

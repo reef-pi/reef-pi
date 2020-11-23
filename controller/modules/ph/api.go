@@ -224,7 +224,7 @@ func (c *Controller) read(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (c Controller) listProbes(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) listProbes(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
 	}

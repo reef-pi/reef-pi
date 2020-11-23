@@ -226,7 +226,7 @@ func (t *Controller) get(w http.ResponseWriter, r *http.Request) {
 	utils.JSONGetResponse(fn, w, r)
 }
 
-func (c Controller) list(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {
 		return c.List()
 	}
@@ -255,7 +255,7 @@ func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) create(w http.ResponseWriter, r *http.Request) {
 	var t TC
 	fn := func() error {
-		return c.Create(t)
+		return c.Create(&t)
 	}
 	utils.JSONCreateResponse(&t, fn, w, r)
 }

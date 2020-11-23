@@ -40,7 +40,7 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
 		}
 	}
-	c.NotifyIfNeeded(*tc, reading)
+	c.NotifyIfNeeded(tc, reading)
 	c.statsMgr.Update(tc.ID, u)
 	resp, err := c.statsMgr.Get(tc.ID)
 	if err != nil {
@@ -61,7 +61,7 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 	return reading, nil
 }
 
-func (c *Controller) NotifyIfNeeded(tc TC, reading float64) {
+func (c *Controller) NotifyIfNeeded(tc *TC, reading float64) {
 	if !tc.Notify.Enable {
 		return
 	}
