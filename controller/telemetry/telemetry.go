@@ -175,7 +175,7 @@ func (t *telemetry) Alert(subject, body string) (bool, error) {
 
 func SanitizeAdafruitIOFeedName(name string) string {
 	name = strings.ToLower(name)
-	return strings.Replace(name, " ", "_", -1)
+	return strings.Replace(name, " ", "-", -1)
 }
 func SanitizePrometheusMetricName(name string) string {
 	name = strings.ToLower(name)
