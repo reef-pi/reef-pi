@@ -183,7 +183,7 @@ func (c *Controller) Read(a ATO) (int, error) {
 
 func (a ATO) CreateFeed(t telemetry.Telemetry) {
 	if a.Enable {
-		t.CreateFeedIfNotExist("ato-" + a.Name + "-reading")
+		t.CreateFeedIfNotExist("ato-" + a.Name + "-state")
 	}
 	if a.Pump != "" {
 		t.CreateFeedIfNotExist("ato-" + a.Name + "-usage")
