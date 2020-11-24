@@ -33,6 +33,7 @@ name,名字
 none,空
 ok,确定
 one_shot,
+optional,
 outlet,出口
 outlets,分店
 pin,销
@@ -205,6 +206,7 @@ telemetry:notification:password,
 telemetry:notification:port,
 telemetry:notification:server,
 telemetry:notification:to,
+telemetry:notification:username,
 temperatur:controlnothing,无
 temperature:calibrate,校准
 temperature:calibration:apply,应用

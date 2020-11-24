@@ -35,6 +35,7 @@ name,Name
 none,None
 ok,Ok
 one_shot,One Shot
+optional,Optional
 outlet,Outlet
 outlets,Outlets
 pin,Pin
@@ -207,6 +208,7 @@ telemetry:notification:password,Password
 telemetry:notification:port,Port
 telemetry:notification:server,Server
 telemetry:notification:to,To
+telemetry:notification:username,Username
 temperatur:controlnothing, Nothing
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
