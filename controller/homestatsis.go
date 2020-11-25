@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math"
 	"time"
@@ -35,7 +36,7 @@ func (o1 Observation) Rollup(o telemetry.Metric) (telemetry.Metric, bool) {
 		Upper:  o1.Upper + o2.Upper,
 		Downer: o1.Downer + o2.Downer,
 		Time:   o1.Time,
-		Value:  telemetry.TwoDecimal((o1.total + o2.Value) / float64(o1.len+1)),
+		Value:  utils.RoundToTwoDecimal((o1.total + o2.Value) / float64(o1.len+1)),
 		total:  o1.total + o2.Value,
 		len:    o1.len + 1,
 	}, false

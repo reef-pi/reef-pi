@@ -3,6 +3,7 @@ package ph
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
 	"time"
@@ -147,10 +148,10 @@ func (c *Controller) Delete(id string) error {
 
 func (c *Controller) Read(p Probe) (float64, error) {
 	if c.devMode {
-		return telemetry.TwoDecimal(8 + rand.Float64()*2), nil
+		return utils.RoundToTwoDecimal(8 + rand.Float64()*2), nil
 	}
 	v, err := c.ais.Read(p.AnalogInput)
-	return telemetry.TwoDecimal(v), err
+	return utils.RoundToTwoDecimal(v), err
 }
 
 func (c *Controller) Run(p Probe, quit chan struct{}) error {

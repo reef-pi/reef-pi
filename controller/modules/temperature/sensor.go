@@ -3,6 +3,7 @@ package temperature
 import (
 	"bufio"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/utils"
 	"io"
 	"log"
 	"math/rand"
@@ -10,8 +11,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 func (c *Controller) Read(tc *TC) (float64, error) {
@@ -19,10 +18,10 @@ func (c *Controller) Read(tc *TC) (float64, error) {
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
-			return telemetry.TwoDecimal(78.0 + (3 * rand.Float64())), nil
+			return utils.RoundToTwoDecimal(78.0 + (3 * rand.Float64())), nil
 		}
 
-		return telemetry.TwoDecimal(24.4 + (1.5 * rand.Float64())), nil
+		return utils.RoundToTwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 	}
 
 	var v float64
@@ -73,5 +72,5 @@ func (t *TC) readTemperature(fi io.Reader) (float64, error) {
 	if t.Fahrenheit {
 		temp = ((temp * 9.0) / 5.0) + 32.0
 	}
-	return telemetry.TwoDecimal(temp), nil
+	return utils.RoundToTwoDecimal(temp), nil
 }
