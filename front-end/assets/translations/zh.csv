@@ -200,6 +200,11 @@ signin:invalidcredentials,认证无效
 signin:password,密码
 signin:signin,登录
 signin:username,用户名
+telemetry:notification:from,
+telemetry:notification:password,
+telemetry:notification:port,
+telemetry:notification:server,
+telemetry:notification:to,
 temperatur:controlnothing,无
 temperature:calibrate,校准
 temperature:calibration:apply,应用
