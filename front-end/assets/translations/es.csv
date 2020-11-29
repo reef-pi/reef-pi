@@ -96,6 +96,7 @@ configuration:about:version,Version
 configuration:about:website,Website
 configuration:admin:db_export,
 configuration:admin:db_import,
+configuration:about:modifications,Modificaciones por
 configuration:admin:poweroff,Apagar
 configuration:admin:reboot,Reiniciar
 configuration:admin:reload,Recargar

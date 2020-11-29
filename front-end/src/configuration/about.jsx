@@ -31,6 +31,18 @@ class about extends React.Component {
               </h2>
               <ul className='list-unstyled mt-3 mb-4'>
                 <li>
+                  {i18n.t('configuration:about:modifications')}: <a href="mailto:jose.reyes@prswservices.com">Jos&eacute; F. Reyes</a>
+                </li>
+                <li>
+                  Github: <a href='https://github.com/prsws/reef-pi' target='_blank'>https://github.com/prsws/reef-pi</a><br/>
+                </li>
+                <li>
+                  <hr />
+                </li>
+                <li>
+                  <h5 className='my-0 font-weight-normal text-center'>Upstream Original Source</h5>
+                </li>
+                <li>
                   {i18n.t('configuration:about:website')}: <a href='http://reef-pi.com'>http://reef-pi.com</a>
                 </li>
                 <li>
