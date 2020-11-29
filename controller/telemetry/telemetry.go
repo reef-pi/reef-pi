@@ -1,25 +1,20 @@
 package telemetry
 
 import (
-	"errors"
-	"fmt"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/reef-pi/adafruitio"
-	"github.com/reef-pi/reef-pi/controller/storage"
-	"log"
-	"math"
-	"net/http"
-	"strings"
-	"sync"
-	"time"
+    "errors"
+    "fmt"
+    "github.com/prometheus/client_golang/prometheus"
+    "github.com/prometheus/client_golang/prometheus/promauto"
+    "github.com/reef-pi/adafruitio"
+    "github.com/reef-pi/reef-pi/controller/storage"
+    "log"
+    "net/http"
+    "strings"
+    "sync"
+    "time"
 )
 
 const DBKey = "telemetry"
-
-func TwoDecimal(f float64) float64 {
-	return math.Round(f*100) / 100
-}
 
 type ErrorLogger func(string, string) error
 

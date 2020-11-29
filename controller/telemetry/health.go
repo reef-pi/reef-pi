@@ -59,8 +59,8 @@ func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
 		m.loadSum += m2.Load5
 		m.memorySum += m2.UsedMemory
 		m.len += 1
-		m.Load5 = TwoDecimal(m.loadSum / float64(m.len))
-		m.UsedMemory = TwoDecimal(m.memorySum / float64(m.len))
+		m.Load5 = utils.RoundToTwoDecimal(m.loadSum / float64(m.len))
+		m.UsedMemory = utils.RoundToTwoDecimal(m.memorySum / float64(m.len))
 		if m.UnderVoltage == 0 {
 			m.UnderVoltage = m2.UnderVoltage
 		}
