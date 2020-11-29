@@ -200,6 +200,11 @@ signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
 signin:signin,Iniciar Sesion
 signin:username,Usuario
+telemetry:notification:from,Desde
+telemetry:notification:password,Contraseña
+telemetry:notification:port,Puerto
+telemetry:notification:server,Servidor
+telemetry:notification:to,Para
 temperatur:controlnothing,
 temperature:calibrate,
 temperature:calibration:apply,

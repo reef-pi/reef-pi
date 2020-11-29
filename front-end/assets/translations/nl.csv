@@ -200,6 +200,11 @@ signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
 signin:username,Gebruikersnaam
+telemetry:notification:from,
+telemetry:notification:password,
+telemetry:notification:port,
+telemetry:notification:server,
+telemetry:notification:to,
 temperatur:controlnothing,Niets
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen

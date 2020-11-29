@@ -1,4 +1,5 @@
 import React from 'react'
+import i18n from '../utils/i18n'
 
 export default class NotificationSettings extends React.Component {
   constructor (props) {
@@ -39,7 +40,7 @@ export default class NotificationSettings extends React.Component {
   inputTo () {
     return (
       <div className='form-group col-12'>
-        <label htmlFor='input-to'>To</label>
+        <label htmlFor='input-to'>{i18n.t('telemetry:notification:to')}</label>
         <input
           type='text'
           id='input-to'
@@ -54,7 +55,7 @@ export default class NotificationSettings extends React.Component {
   inputGroup (key) {
     return (
       <div className='form-group col-12'>
-        <label htmlFor={'input-' + key}>{key}</label>
+        <label htmlFor={'input-' + key}>{i18n.t('telemetry:notification:' + key)}</label>
         <input
           type='text'
           id={'input-' + key}
@@ -74,7 +75,7 @@ export default class NotificationSettings extends React.Component {
         {this.inputGroup('from')}
         {this.inputTo('to')}
         <div className='form-group col-12'>
-          <label htmlFor='email-password'>Password</label>
+          <label htmlFor='email-password'>{i18n.t('telemetry:notification:password')}</label>
           <input
             type='password'
             id='email-password'

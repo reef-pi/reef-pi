@@ -202,6 +202,11 @@ signin:invalidcredentials,Invalid Credentials
 signin:password,Password
 signin:signin,Sign In
 signin:username,Username
+telemetry:notification:from,From
+telemetry:notification:password,Password
+telemetry:notification:port,Port
+telemetry:notification:server,Server
+telemetry:notification:to,To
 temperatur:controlnothing, Nothing
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
