@@ -96,7 +96,7 @@ class ph extends React.Component {
       downer_eq: values.lowerFunction,
       max: parseFloat(values.upperThreshold),
       upper_eq: values.upperFunction,
-      hysteresis: parseFloat(values.hysteresis)
+      hysteresis: parseFloat(values.hysteresis),
       chart_y_min: parseInt(values.chart_y_min),
       chart_y_max: parseInt(values.chart_y_max)
     }
