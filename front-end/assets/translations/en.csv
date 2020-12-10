@@ -138,6 +138,8 @@ cron:month,Month
 cron:second,Second
 cron:week,Day of the week
 dashboard:back_to_dashboard,Back to dashboard
+equipment:chart:barchart,Equipment(Bar Chart)
+equipment:chart:ctrlpanel,Equipment(Control Panel)
 fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.

@@ -5,11 +5,6 @@ import { connect } from 'react-redux'
 
 class chart extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.strRound2Decimals = this.strRound2Decimals.bind(this);
-  // }
-
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {

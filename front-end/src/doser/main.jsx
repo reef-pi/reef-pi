@@ -27,10 +27,13 @@ class doser extends React.Component {
     })
   }
 
-  // *** sort dosers by name instead of id - JFR 20201118
+  // *** sort dosers by name instead of id - JFR 20201118 modified 20201201
   doserList () {
     return (
-      this.props.dosers.sort((a, b) => { return a.name.localeCompare(b.name) }).map(doser => {
+      this.props.dosers.sort((a, b) => { return a.name.localeCompare(b.name, 
+                                                navigator.languages[0] || navigator.language, 
+                                                {numeric: true, ignorePunctuation: true}) 
+      }).map(doser => {
         const calibrationButton = (
           <button
             type='button' name={'calibrate-doser-' + doser.id}

@@ -69,11 +69,13 @@ class main extends React.Component {
     return payload
   }
 
-// *** sort temp probes by name instead of id - JFR 20201118
+// *** sort temp probes by name instead of id - JFR 20201118 modified 20201201
   probeList () {
     return this.props.probes
       .sort((a, b) => {
-        return a.name.localeCompare(b.name)
+        return a.name.localeCompare(b.name, 
+                                    navigator.languages[0] || navigator.language, 
+                                    {numeric: true, ignorePunctuation: true})
       })
       .map(probe => {
         const calibrationButton = (

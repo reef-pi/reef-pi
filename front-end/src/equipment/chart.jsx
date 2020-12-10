@@ -71,8 +71,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const Chart = connect(
+// *** changed to include control panel - JFR 20201201
+const EquipmentChart = connect(
   mapStateToProps,
   mapDispatchToProps
 )(chart)
-export default Chart
+export default EquipmentChart

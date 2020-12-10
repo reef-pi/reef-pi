@@ -133,6 +133,7 @@ class config extends React.Component {
             phs={this.props.phs}
             lights={this.props.lights}
             dosers={this.props.dosers}
+            equips={this.props.equips}
           />
         </div>
         <div className='row'>
@@ -145,6 +146,7 @@ class config extends React.Component {
   }
 }
 
+// *** added equips props for new equipment charts - JFR 20201201
 const mapStateToProps = state => {
   return {
     atos: state.atos,
@@ -152,7 +154,8 @@ const mapStateToProps = state => {
     tcs: state.tcs,
     lights: state.lights,
     dosers: state.dosers,
-    config: state.dashboard
+    config: state.dashboard,
+    equips: state.equipment
   }
 }
 

@@ -136,6 +136,8 @@ cron:month,
 cron:second,Segundo
 cron:week,
 dashboard:back_to_dashboard,Volver al dashboard
+equipment:chart:barchart,Equipo(Gráfica de Barras)
+equipment:chart:ctrlpanel,Equipo(Panel de Control)
 fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.

@@ -48,10 +48,13 @@ class main extends React.Component {
     })
   }
 
-  // *** sort macros by name instead of id - JFR 20201118
+  // *** sort macros by name instead of id - JFR 20201118 modified 20201201
   macroList () {
     return (
-      this.props.macros.sort((a, b) => { return a.name.localeCompare(b.name) }).map(macro => {
+      this.props.macros.sort((a, b) => { return a.name.localeCompare(b.name, 
+                                                navigator.languages[0] || navigator.language, 
+                                                {numeric: true, ignorePunctuation: true}) 
+        }).map(macro => {
         const buttons = []
         buttons.push(
           <button
