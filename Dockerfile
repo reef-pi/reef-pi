@@ -9,8 +9,8 @@ RUN apt-get update -y && \
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm
-RUN curl https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz > /tmp/go1.13.4.linux-amd64.tar.gz && \
-    tar xvzf /tmp/go1.13.4.linux-amd64.tar.gz -C /usr/local
+RUN curl https://dl.google.com/go/go1.12.4.linux-amd64.tar.gz > /tmp/go1.12.4.linux-amd64.tar.gz && \
+    tar xvzf /tmp/go1.12.4.linux-amd64.tar.gz -C /usr/local
 
 
 ENV GOPATH=/gopath
@@ -23,10 +23,11 @@ WORKDIR /gopath/src/github.com/reef-pi/reef-pi
 COPY Makefile package.json package-lock.json /gopath/src/github.com/reef-pi/reef-pi/
 RUN npm install
 
-COPY controller/ /gopath/src/github.com/reef-pi/reef-pi/
+COPY Gopkg.lock Gopkg.toml controller/ /gopath/src/github.com/reef-pi/reef-pi/
 RUN make go-get
 
 # Copy the rest of the code base for building
 COPY . /gopath/src/github.com/reef-pi/reef-pi/
 
 RUN make bin
+USER 9000
