@@ -66,7 +66,7 @@
     "redux-mock-store": "1.5.4",
     "redux-thunk": "2.3.0",
     "sass-lint": "1.13.1",
-    "sass-loader": "8.0.0",
+    "sass-loader": "10.1.0",
     "standard": "14.3.1",
     "style-loader": "2.0.0",
     "testcafe": "^1.9.1",
