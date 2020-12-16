@@ -25,5 +25,5 @@ require (
 	github.com/shirou/gopsutil v2.20.9+incompatible
 	go.etcd.io/bbolt v1.3.4
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 )
