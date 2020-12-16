@@ -201,6 +201,11 @@ signin:invalidcredentials,认证无效
 signin:password,密码
 signin:signin,登录
 signin:username,用户名
+telemetry:main:current-limit,
+telemetry:main:email-alerts,
+telemetry:main:historical-limit,
+telemetry:main:limit-per-hour,
+telemetry:main:send-test-message,
 telemetry:notification:from,
 telemetry:notification:password,
 telemetry:notification:port,

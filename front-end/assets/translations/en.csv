@@ -203,6 +203,11 @@ signin:invalidcredentials,Invalid Credentials
 signin:password,Password
 signin:signin,Sign In
 signin:username,Username
+telemetry:main:current-limit,Current limit
+telemetry:main:email-alerts,Email alerts
+telemetry:main:historical-limit,Historical limit
+telemetry:main:limit-per-hour,Limit per hour
+telemetry:main:send-test-message,Send test message
 telemetry:notification:from,From
 telemetry:notification:password,Password
 telemetry:notification:port,Port

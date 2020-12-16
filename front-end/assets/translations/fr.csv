@@ -201,6 +201,11 @@ signin:invalidcredentials,Nom d'utilisateur ou mot de passe invalide
 signin:password,Mot de passe
 signin:signin,Connexion
 signin:username,Nom d'utilisateur
+telemetry:main:current-limit,
+telemetry:main:email-alerts,
+telemetry:main:historical-limit,
+telemetry:main:limit-per-hour,
+telemetry:main:send-test-message,
 telemetry:notification:from,
 telemetry:notification:password,
 telemetry:notification:port,

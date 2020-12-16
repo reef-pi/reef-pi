@@ -1,84 +1,84 @@
 Key,Translation
 add,Agregar
 alerts,Alertas
-analog_input,
-analog_inputs,
-are_you_sure,¿Estas Seguro?
+analog_input,Entrada Análoga
+analog_inputs,Entradas Análoga
+are_you_sure,¿Esta Seguro?
 ato,
 cancel,Cancelar
 clear,Limpiar
 configure,Configurar
-delete,Borrar
+delete,Eliminar
 disabled,Desactivar
-documentation,Documentacion
-done,
-doser,
+documentation,Documentación
+done,Listo
+doser,Dosificador
 driver,
 edit,Editar
 enabled,Activar
-equipment,
+equipment,Equipo
 errors,Errores
 health,
-import_db,
-in-use,
+import_db,Extraer Base de Datos
+in-use,en-uso
 inlet,Entrada
-inlets,
-install,
+inlets,Entradas
+install,Instalar
 jack,
 jacks,
-light,
-lights,
+light,Luz
+lights,Luces
 loading,Cargando
 name,Nombre
-none,Nada
+none,Ninguno
 ok,Ok
-one_shot,
+one_shot,Un Intento
 optional,Opcional
-outlet,
-outlets,
-pin,
-reverse,
+outlet,Caja de Salida
+outlets,Caja de Salidas
+pin,Aguja
+reverse,Reversa
 running,Ejecutando
 save,Guardar
-sec,sec
+sec,seg
 second_s,segundo(s)
 select,Seleccionar
-select_file,
+select_file,Por favor seleccione un archivo
 since,Desde
 unit,Unidad
 update,Actualizar
-upgrade_reef_pi,
-ato:alert_after,Alertas despues de
-ato:ato_status,ATO Status
+upgrade_reef_pi,Actualizar reef-pi a version
+ato:alert_after,Alerta despues de
+ato:ato_status,ATO Estado
 ato:ato_usage,Uso del ATO
-ato:chk_freq,Frecuencia de Chequeo
-ato:chk_freq_number,la frecuencia de chequeo debe ser un numero
-ato:chk_freq_number_value,La frecuencia de chequeo debe ser mayor a 1
-ato:chk_freq_required,Escribe una frecuencia de chequeo
+ato:chk_freq,Frecuencia de Revisión
+ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
+ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
+ato:chk_freq_required,Frecuencia de Revisión es requerida
 ato:control_pump,Control de Bomba
-ato:controlequipment,
+ato:controlequipment,Equipo
 ato:controlmacro,
-ato:controlnothing,
+ato:controlnothing,Nada
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:inlet_required,Seleccion una entrada
 ato:name_required,Escribe un Nombre
-ato:status_required,Selecciona un estado
-ato:threshold_required,Se requiere un umbral cuando la notificación está habilitada
-ato:threshold_value,El umbral debe ser un numero
+ato:status_required,Selecciona un estado de ATO
+ato:threshold_required,Se requiere un límite cuando la notificación está habilitada
+ato:threshold_value,El límite debe ser un numero
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
-ato:validation_error,La configuración no se puede guardar debido a errores de validación. corrija los errores e inténtelo de nuevo.
+ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,
 capabilities:ato,ATO
 capabilities:camera,Camara
-capabilities:configuration,Configuracion
-capabilities:dashboard,Dashboard
+capabilities:configuration,Configuración
+capabilities:dashboard,Panel
 capabilities:dev_mode,Dev Modo
 capabilities:doser,Dosificador
 capabilities:dosing_pumps,Dosificadores
 capabilities:equipment,Equipos
 capabilities:health_check,Chequeo del Sistema
 capabilities:journal,
-capabilities:lighting,Iluminacion
+capabilities:lighting,Iluminación
 capabilities:lights,Luces
 capabilities:log,Log
 capabilities:macro,Macro
@@ -86,8 +86,8 @@ capabilities:macros,Macros
 capabilities:manager,Instancias
 capabilities:ph,pH
 capabilities:temperature,Temperatura
-capabilities:timers,Temporizadores
-collapsible:delete,Borrar
+capabilities:timers,Cronómetro
+collapsible:delete,Eliminar
 collapsible:edit,Editar
 color_picker:choose,Elegir
 configuration:about:current_time,Fecha Actual
@@ -95,8 +95,8 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
-configuration:admin:db_export,
-configuration:admin:db_import,
+configuration:admin:db_export,Descargue Base de Datos
+configuration:admin:db_import,Importar una Base de Datos existente
 configuration:admin:poweroff,Apagar
 configuration:admin:reboot,Reiniciar
 configuration:admin:reload,Recargar
@@ -109,7 +109,7 @@ configuration:settings:alert_health_check,Alerta de estado
 configuration:settings:capabilities,Funciones
 configuration:settings:capabilities_required,Al menos una Funcion es requerida
 configuration:settings:display,Pantalla
-configuration:settings:enable_profiling,Activar profiling
+configuration:settings:enable_profiling,Activar perfilado
 configuration:settings:enable_prometheus,Activar prometheus
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
@@ -119,7 +119,7 @@ configuration:settings:name_required,El nombre es requerido
 configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_interface_required,La interfaz de red es requerida
 configuration:settings:notification,Notificacion
-configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
+configuration:settings:rpi_pwm_freq,Rpi Pwm Frecuencia
 configuration:settings:use_https,Usar HTTPS
 configuration:tab:about,Acerca De
 configuration:tab:admin,Admin
@@ -132,10 +132,10 @@ configuration:tab:telemetry,Telemetria
 cron:day_of_month,Dia del Mes
 cron:hour,Hora
 cron:minute,Minuto
-cron:month,
+cron:month,Mes
 cron:second,Segundo
-cron:week,
-dashboard:back_to_dashboard,Volver al dashboard
+cron:week,Semana
+dashboard:back_to_dashboard,Volver al panel
 fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
@@ -156,114 +156,119 @@ log:content,Contenido
 log:emitter,Emisor
 log:time,Hora
 log:type,Tipo
-ph:alert_above,
-ph:alert_below,
-ph:analog_input_required,
-ph:calibrate,
-ph:chart:current,
-ph:chart:historical,
-ph:check_frequency,
-ph:control,
-ph:control_required,
-ph:controlequipment,
-ph:controlmacro,
-ph:controlnothing,
-ph:current_reading,
-ph:lower_function,
-ph:lower_function_required,
-ph:lower_threshold,
-ph:lower_threshold_less_than,
-ph:lower_threshold_required,
-ph:lower_threshold_type,
-ph:midpoint,
-ph:name_required,
-ph:period_min,
-ph:period_required,
-ph:period_type,
-ph:run_calibration,
-ph:second_point,
-ph:status,
-ph:status_required,
-ph:threshold_greater_than,
-ph:threshold_less_than,
-ph:threshold_required,
-ph:threshold_type,
-ph:upper_function,
-ph:upper_function_required,
-ph:upper_threshold,
-ph:upper_threshold_greater_than,
-ph:upper_threshold_required,
-ph:upper_threshold_type,
-ph:validation_error,
-ph:warn_delete,
-pins:Pins,
+ph:alert_above,Alerta Sobre
+ph:alert_below,Alerta Bajo
+ph:analog_input_required,Entrada Analogica es requerida
+ph:calibrate,Calibrar
+ph:chart:current,pH(ultima)
+ph:chart:historical,pH(histórico)
+ph:check_frequency,Revisar Frecuencia
+ph:control,Control
+ph:control_required,Control requerido
+ph:controlequipment,Equipo
+ph:controlmacro,Macro
+ph:controlnothing,Nada
+ph:current_reading,Lectura Actual
+ph:lower_function,Inferior Función
+ph:lower_function_required,Función requerido
+ph:lower_threshold,Límite Inferior
+ph:lower_threshold_less_than,Límite Inferior debe ser menos que Límite Superior
+ph:lower_threshold_required,Límite Inferior requerido
+ph:lower_threshold_type,Límite Inferior debe ser un nùmero
+ph:midpoint,Punto Medio
+ph:name_required,Nombre requerido
+ph:period_min,Revsión de Frecuencia debe ser mayor o igual a 1 segundo
+ph:period_required,Revsión de Frecuencia requerido
+ph:period_type,Revsión de Frecuencia debe ser un nùmero
+ph:run_calibration,Correr
+ph:second_point,Segundo Punto
+ph:status,Ph Estatus
+ph:status_required,Estatus requerido
+ph:threshold_greater_than,Alerta Superior debe ser mayor a Alerta Inferior
+ph:threshold_less_than,Alerta Inferior debe ser menor a Alerta Superior
+ph:threshold_required,Límites son requeridos cuando las alertas estan activadas
+ph:threshold_type,Límite debe ser un nùmero
+ph:upper_function,Superior Función
+ph:upper_function_required,Superior Función requerido
+ph:upper_threshold,Límite Superior 
+ph:upper_threshold_greater_than,Límite Superior debe ser mayor Límite Inferior
+ph:upper_threshold_required,Límite Superior requerido
+ph:upper_threshold_type,Límite Superior debe ser un nùmero
+ph:validation_error,Los ajustes de Ph no puede ser guardada por errores de validación. Corija los errores y intente de nuevo. 
+ph:warn_delete,Esta acción sera eliminada
+pins:Pins,Agujas
 signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
 signin:signin,Iniciar Sesion
 signin:username,Usuario
+telemetry:main:current-limit,Límite actual
+telemetry:main:email-alerts,Alertas por email
+telemetry:main:historical-limit,Límite del histórico
+telemetry:main:limit-per-hour,Límite por hora
+telemetry:main:send-test-message,Enviar mensaje de prueba
 telemetry:notification:from,Desde
 telemetry:notification:password,Contraseña
 telemetry:notification:port,Puerto
 telemetry:notification:server,Servidor
 telemetry:notification:to,Para
 telemetry:notification:username,Usuario
-temperatur:controlnothing,
-temperature:calibrate,
-temperature:calibration:apply,
-temperature:calibration:set_temperature,
+temperatur:controlnothing,Nada
+temperature:calibrate,Calibración
+temperature:calibration:apply,Aplicar
+temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
-temperature:chart:current,
-temperature:chart:historical,
+temperature:chart:current,Temperatura(ultima)
+temperature:chart:historical,Temperatura(Historico)
 temperature:chart_maximum,Maximo para la grafica
 temperature:chart_minimum,Minimo para la grafica
-temperature:control,
-temperature:controlequipment,
-temperature:controlmacro,
-temperature:current_reading,
+temperature:control,Control
+temperature:controlequipment,Equipo
+temperature:controlmacro,Macro
+temperature:current_reading,Lectura Actual
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Calentador/Enfriador
-temperature:hysteresis_less_than,
-temperature:lower_function,
-temperature:lower_threshold,
+temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
+temperature:lower_function,Calentador
+temperature:lower_threshold,Límite de Calentador
 temperature:sensor,Sensor
 temperature:sensor_status,Estado del Sensor
 temperature:temperature,Temperatura
-temperature:upper_function,
-temperature:upper_threshold,
-temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. corrija los errores e inténtelo de nuevo.
-temperature:warn_delete,
+temperature:upper_function,Enfriador
+temperature:upper_threshold,Límite de Enfriador
+temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
+temperature:warn_delete,Esta accion ser à eliminada
 timers:after,Despues
 timers:and_then,Luego
-timers:day_required,coloca un dia
+timers:day_required,Coloca un dia
 timers:duration_required,Duracion es requerido
 timers:equipment,Equipo
 timers:equipment:action,Accion
 timers:equipment:equipment,Equipo
-timers:equipment:off,Off
-timers:equipment:on,On
+timers:equipment:off,Apagado
+timers:equipment:on,Encendido
 timers:equipment:revert,Revertir
 timers:equipment_required,Selecciona un Equipo
 timers:function,Funcion
-timers:hour_required,coloca una hora
-timers:macro,
-timers:macros,
+timers:hour_required,Coloca una hora
+timers:macro,Nombre del Macro
+timers:macros,Macros
 timers:message,Mensaje
 timers:message_required,Escribe un Mensaje
-timers:minute_required,coloca los minutos
+timers:minute_required,Coloca los minutos
 timers:name_required,Coloca un Nombre
-timers:on_required,On es requerido
+timers:on_required,Encendido es requerido
 timers:reminder,Recordatorio
-timers:sec,sec
-timers:second_required,coloca los segundos
+timers:sec,seg
+timers:second_required,Coloca los segundos
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
 timers:subject_required,Escribe un Asunto
-timers:timer_status,Estatus del Temporizador
-timers:timer_status_required,el estado del temporizador es requerido
+timers:timer_status,Estatus del Cronometro
+timers:timer_status_required,el estado del Cronometro es requerido
 timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
-timers:validation_error,La configuración no se puede guardar debido a errores de validación. corrija los errores e inténtelo de nuevo.
+timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
