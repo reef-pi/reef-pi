@@ -55,7 +55,7 @@ const EditJournal = ({
                 'is-invalid': ShowError('description', touched, errors)
               })}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
+            <ErrorFor errors={errors} touched={touched} name='description' />
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ const EditJournal = ({
                 'is-invalid': ShowError('unit', touched, errors)
               })}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
+            <ErrorFor errors={errors} touched={touched} name='unit' />
           </div>
         </div>
       </div>
