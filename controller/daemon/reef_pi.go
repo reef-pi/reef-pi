@@ -79,6 +79,7 @@ func (r *ReefPi) Start() error {
 		go r.h.Start()
 	}
 	go r.watchdog.Start()
+	log.Println("reef-pi is up and running")
 
 	return nil
 }
