@@ -2,6 +2,8 @@
 Description=raspberry pi based reef tank controller
 
 [Service]
+Type=notify
+WatchdogSec=60s
 ExecStart=/usr/bin/reef-pi daemon -config /etc/reef-pi/config.yaml
 WorkingDirectory=/var/lib/reef-pi
 Restart=always

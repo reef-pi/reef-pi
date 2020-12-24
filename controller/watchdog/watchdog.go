@@ -1,33 +1,42 @@
 package watchdog
 
 import (
-	"net"
-	"github.com/coreos/go-systemd/daemon"
 	"log"
+	"net"
 	"time"
+
+	"github.com/coreos/go-systemd/daemon"
 )
 
-type Watchdog interface {
-	watch()
+type wd struct {
+	address string
 }
 
-func watch() {
+type Watchdog interface {
+	Start()
+}
+
+func (w *wd) Start() {
 	interval, err := daemon.SdWatchdogEnabled(false)
 	if err != nil || interval == 0 {
 		log.Println("Warning: Watchdog not running, Error:", err)
 		return
 	}
 	for {
-		address := "127.0.0.1:80"
-		conn, err := net.Dial("tcp", address)
-		defer conn.Close()
+		daemon.SdNotify(false, daemon.SdNotifyReady)
+		conn, err := net.Dial("tcp", w.address)
 		if err == nil {
-			log.Println("INFO: notifiying watchdog")
 			daemon.SdNotify(false, daemon.SdNotifyWatchdog)
-			//conn.Close()
+			conn.Close()
 		} else {
 			log.Println("Warning: Failed watchdog health check, Error:", err)
 		}
 		time.Sleep(interval / 3)
+	}
+}
+
+func NewWatchdog(address string) *wd {
+        return &wd{
+		address,
 	}
 }

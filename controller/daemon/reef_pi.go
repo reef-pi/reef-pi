@@ -2,14 +2,16 @@ package daemon
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"time"
+	"github.com/reef-pi/reef-pi/controller/watchdog"
 )
 
 const Bucket = storage.ReefPiBucket
@@ -23,6 +25,7 @@ type ReefPi struct {
 	h          telemetry.HealthChecker
 	dm         *device_manager.DeviceManager
 	subsystems map[string]controller.Subsystem
+	watchdog   watchdog.Watchdog
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -51,6 +54,7 @@ func New(version, database string) (*ReefPi, error) {
 		version:    version,
 		a:          utils.NewAuth(Bucket, store),
 		dm:         device_manager.New(s, store),
+		watchdog:   watchdog.NewWatchdog(s.Address),
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)
@@ -74,7 +78,8 @@ func (r *ReefPi) Start() error {
 	if r.settings.Capabilities.HealthCheck {
 		go r.h.Start()
 	}
-	log.Println("reef-pi is up and running")
+	go r.watchdog.Start()
+
 	return nil
 }
 
