@@ -11,4 +11,4 @@ Not every contribution comes in the form of code. Submitting, confirming, and tr
 - Commit changes to a git branch
 - Create a Github Pull Request for your change
 - Perform a Code Review with the project maintainers on the pull request.
-- reef-pi using Travis CI to test all pull requests. reef-pi requires these test runs to succeed on every pull request before being merged.
+- reef-pi uses Github actions to test all pull requests. reef-pi requires these test runs to succeed on every pull request before being merged.
