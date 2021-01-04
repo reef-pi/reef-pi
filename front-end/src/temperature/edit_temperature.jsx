@@ -195,6 +195,9 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='enable' />
             </div>
           </div>
+        </div>
+
+        <div className='row'>
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
@@ -212,6 +215,52 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='one_shot' />
             </div>
           </div>
+        </div>
+
+        <div className='row'>
+          <div className='col-lg-1 col-sm-2 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.ymin'>{i18next.t('temperature:chart_ymin')}</label>
+              <Field
+                name='chart.ymin'
+                readOnly={readOnly}
+                type='number'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('chart.ymin', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
+            </div>
+          </div>
+          <div className='col-lg-1 col-sm-2 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.ymax'>{i18next.t('temperature:chart_ymax')}</label>
+              <Field
+                name='chart.ymax'
+                readOnly={readOnly}
+                type='number'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('chart.ymax', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
+            </div>
+          </div>
+          <div className='col-lg-1 col-sm-2 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.color'>{i18next.t('temperature:chart_color')}</label>
+              <Field
+                name='chart.color'
+                readOnly={readOnly}
+                type='string'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('chart.color', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='chart.color' />
+            </div>
+          </div>
+
         </div>
 
         <div className='row'>

@@ -61,6 +61,11 @@ class main extends React.Component {
         enable: values.alerts,
         min: parseFloat(values.minAlert),
         max: parseFloat(values.maxAlert)
+      },
+      chart: {
+        color: values.chart.color,
+        ymin: parseFloat(values.chart.ymin),
+        ymax: parseFloat(values.chart.ymax)
       }
     }
     return payload
