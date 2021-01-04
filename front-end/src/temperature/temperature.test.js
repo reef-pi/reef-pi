@@ -38,8 +38,8 @@ describe('Temperature controller ui', () => {
 
     let m = wrapper.instance()
     m.handleToggleAddProbeDiv()
-    m.handleCreate({ name: 'test', type: 'reminder' })
-    m.handleUpdate({ id: '1', name: 'test', type: 'equipment' })
+    m.handleCreate({ name: 'test', chart: {} })
+    m.handleUpdate({ id: '1', name: 'test',  chart: {} })
     m.handleCalibrate({ stopPropagation: jest.fn() }, { id: 1 })
     m.handleDelete('1')
   })
@@ -63,7 +63,7 @@ describe('Temperature controller ui', () => {
       .dive()
       .instance()
     stateCurrent = {
-      tcs: [{ id: '2', min: 72, max: 78}],
+      tcs: [{ id: '2', min: 72, max: 78, chart:{}}],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
