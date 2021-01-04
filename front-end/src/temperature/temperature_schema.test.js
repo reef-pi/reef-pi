@@ -13,7 +13,8 @@ describe('Validation', () => {
       alerts: false,
       notify: { enable: false },
       heater: '',
-      cooler: ''
+      cooler: '',
+      chart: {ymin: 0, ymax: 100, color: '#000'}
     }
   })
 
