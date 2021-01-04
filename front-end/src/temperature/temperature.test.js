@@ -25,7 +25,7 @@ jest.mock('utils/confirm', () => {
 })
 describe('Temperature controller ui', () => {
   const state = {
-    tcs: [{ id: '1', name: 'Water' }, { id: '2', name: 'Air' } ],
+    tcs: [{ id: '1', name: 'Water', chart:{} }, { id: '2', name: 'Air' } ],
     tc_usage: { 1: { historical: [{ cooler: 1 }], current: [] } },
     tc_reading: [],
     equipment: [{ id: '1', name: 'bar', on: false }],
@@ -56,14 +56,14 @@ describe('Temperature controller ui', () => {
       .dive()
       .instance()
     let stateCurrent = {
-      tcs: [{ id: '1', chart_min: 76, min: 72, max: 78, chart_max: 89 }],
+      tcs: [{ id: '1', min: 72, max: 78}],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
       .dive()
       .instance()
     stateCurrent = {
-      tcs: [{ id: '2', chart_min: 76, min: 72, max: 78, chart_max: 89 }],
+      tcs: [{ id: '2', min: 72, max: 78}],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
