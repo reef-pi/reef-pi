@@ -3,8 +3,9 @@ package temperature
 import (
 	"net/http"
 	"path/filepath"
+    "strings"
 
-	"github.com/gorilla/mux"
+    "github.com/gorilla/mux"
 
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -247,7 +248,17 @@ func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 		for _, f := range fs {
 			sensors = append(sensors, filepath.Base(f))
 		}
-		return sensors, nil
+        if !t.devMode {
+            files, err := filepath.Glob("/tmp/devices/platform/i2c@*/*/*/hwmon/hwmon0/temp1_input")
+            if err != nil {
+                return nil, err
+            }
+
+            for _, f := range files {
+                sensors = append(sensors, "i2c/" + filepath.Base(strings.Replace(f, "/hwmon/hwmon0/temp1_input", "", -1)))
+            }
+        }
+        return sensors, nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
