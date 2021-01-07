@@ -1,13 +1,14 @@
 package temperature
 
 import (
-	"net/http"
-	"path/filepath"
+    "net/http"
+    "path/filepath"
+    "strings"
 
-	"github.com/gorilla/mux"
+    "github.com/gorilla/mux"
 
-	"github.com/reef-pi/hal"
-	"github.com/reef-pi/reef-pi/controller/utils"
+    "github.com/reef-pi/hal"
+    "github.com/reef-pi/reef-pi/controller/utils"
 )
 
 var (
@@ -247,7 +248,18 @@ func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 		for _, f := range fs {
 			sensors = append(sensors, filepath.Base(f))
 		}
-		return sensors, nil
+        if !t.devMode {
+            files, err := filepath.Glob("/sys/devices/platform/i2c@*/*/*/hwmon/hwmon*/temp1_input")
+            if err != nil {
+                return nil, err
+            }
+
+            for _, f := range files {
+                index := strings.Index(f, "/hwmon")
+                sensors = append(sensors, "i2c/" + filepath.Base(f[:index]))
+            }
+        }
+        return sensors, nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
