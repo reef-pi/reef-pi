@@ -88,7 +88,7 @@ func (t *TC) read9808(fi io.Reader) (float64, error) {
     if t.Fahrenheit {
         temp = ((temp * 9.0) / 5.0) + 32.0
     }
-    return telemetry.TwoDecimal(temp), nil
+    return utils.RoundToTwoDecimal(temp), nil
 }
 
 func (t *TC) readTemperature(fi io.Reader) (float64, error) {
