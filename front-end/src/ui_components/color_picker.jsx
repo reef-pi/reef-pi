@@ -7,7 +7,8 @@ class ColorPicker extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expand: false
+      expand: false,
+      color: props.color
     }
 
     this.handleColorChange = this.handleColorChange.bind(this)
@@ -21,7 +22,7 @@ class ColorPicker extends React.Component {
       }
     }
     this.props.onChangeHandler(event)
-    this.setState({ expand: false })
+    this.setState({ expand: false, color: e.hex })
   }
 
   render () {
@@ -30,7 +31,7 @@ class ColorPicker extends React.Component {
         <button
           disabled={this.props.readOnly}
           onClick={() => this.setState({ expand: true })}
-          style={{ backgroundColor: this.props.color, color: this.props.color }}
+          style={{ backgroundColor: this.state.color, color: this.state.color }}
           className='btn btn-secondary col-12'
         >
           {i18next.t('color_picker:choose')}
@@ -41,7 +42,7 @@ class ColorPicker extends React.Component {
       <HuePicker
         name={this.props.name}
         className='mt-2'
-        color={this.props.color}
+        color={this.state.color}
         onChangeComplete={this.handleColorChange}
       />
     )

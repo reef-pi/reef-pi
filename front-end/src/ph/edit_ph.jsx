@@ -42,6 +42,10 @@ const EditPh = ({
     })
   }
 
+  const updateChartColor = (e) => {
+    values.chart.color = e.target.value
+  }
+
   const options = () => {
     let opts = []
 
@@ -196,17 +200,7 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
           </div>
         </div>
-        <div className='col-lg-1 col-sm-2 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='chart.color'>{i18next.t('ph:chart_color')}</label>
-            <ColorPicker
-              name={NameFor(values.name, 'chart.color')}
-              readOnly={readOnly}
-              color={values.chart.color}
-              onChangeHandler={(e) => {values.chart.color = e.value}}
-            />
-          </div>
-        </div>
+
         <div className='col-lg-1 col-sm-2 col-md-3'>
           <div className='form-group'>
             <label htmlFor='chart.unit'>{i18next.t('ph:chart_unit')}</label>
@@ -219,6 +213,18 @@ const EditPh = ({
               })}
             />
             <ErrorFor errors={errors} touched={touched} name='chart.unit' />
+          </div>
+        </div>
+
+        <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.color'>{i18next.t('ph:chart_color')}</label>
+            <ColorPicker
+              name={NameFor(values.name, 'chart.color')}
+              readOnly={readOnly}
+              color={values.chart.color}
+              onChangeHandler={updateChartColor}
+            />
           </div>
         </div>
       </div>
