@@ -1,7 +1,7 @@
 import React from 'react'
 import ColorPicker from '../ui_components/color_picker'
 import PropTypes from 'prop-types'
-import {NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
+import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
@@ -203,7 +203,7 @@ const EditPh = ({
               name={NameFor(values.name, 'chart.color')}
               readOnly={readOnly}
               color={values.chart.color}
-              onChangeHandler={(v) =>{}}
+              onChangeHandler={(e) => {values.chart.color = e.value}}
             />
           </div>
         </div>

@@ -90,7 +90,7 @@ const PhSchema = Yup.object().shape({
     ymax: Yup.number().required(i18next.t('ph:y_axis_maximum_required')),
     color: Yup.string().required(i18next.t('ph:chart_color')),
     unit: Yup.string().required(i18next.t('ph:chart_unit'))
-   })
+  })
 })
 
 export default PhSchema
