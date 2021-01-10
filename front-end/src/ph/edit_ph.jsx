@@ -1,6 +1,7 @@
 import React from 'react'
+import ColorPicker from '../ui_components/color_picker'
 import PropTypes from 'prop-types'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import {NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
@@ -164,7 +165,62 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='one_shot' />
           </div>
         </div>
+      </div>
 
+      <div className='row'>
+        <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.ymin'>{i18next.t('ph:chart_ymin')}</label>
+            <Field
+              name='chart.ymin'
+              readOnly={readOnly}
+              type='number'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('chart.ymin', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
+          </div>
+        </div>
+        <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.ymax'>{i18next.t('ph:chart_ymax')}</label>
+            <Field
+              name='chart.ymax'
+              readOnly={readOnly}
+              type='number'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('chart.ymax', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
+          </div>
+        </div>
+        <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.color'>{i18next.t('ph:chart_color')}</label>
+            <ColorPicker
+              name={NameFor(values.name, 'chart.color')}
+              readOnly={readOnly}
+              color={values.chart.color}
+              onChangeHandler={(v) =>{}}
+            />
+          </div>
+        </div>
+        <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.unit'>{i18next.t('ph:chart_unit')}</label>
+            <Field
+              name='chart.unit'
+              readOnly={readOnly}
+              type='string'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('chart.unit', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='chart.unit' />
+          </div>
+        </div>
       </div>
 
       <div className='row'>
