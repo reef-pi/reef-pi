@@ -24,6 +24,13 @@ type Notify struct {
 	Max    float64 `json:"max"`
 }
 
+type ChartConfig struct {
+	YMin  float64 `json:"ymin"`
+	YMax  float64 `json:"ymax"`
+	Color string  `json:"color"`
+	Unit  string  `json:"unit"`
+}
+
 //swagger:model phProbe
 type Probe struct {
 	ID          string        `json:"id"`
@@ -40,6 +47,7 @@ type Probe struct {
 	Hysteresis  float64       `json:"hysteresis"`
 	IsMacro     bool          `json:"is_macro"`
 	OneShot     bool          `json:"one_shot"`
+	Chart       ChartConfig   `json:"chart"`
 	h           *controller.Homeostasis
 }
 
