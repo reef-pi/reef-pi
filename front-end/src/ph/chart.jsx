@@ -30,15 +30,16 @@ class chart extends React.Component {
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
     }
+    const c = this.props.config.chart
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name}-{this.props.type} pH ({current})</span>
+        <span className='h6'>{this.props.config.name}-{this.props.type} ({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
-            <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
+            <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
             <Tooltip />
-            <YAxis />
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} lable={c.unit} />
           </LineChart>
         </ResponsiveContainer>
       </div>

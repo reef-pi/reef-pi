@@ -83,7 +83,7 @@ describe('Connectors', () => {
 
   it('<Jacks />', () => {
     const state = {
-      jacks: [{ id: '1', name: 'J2', pins: [0, 2] }],
+      jacks: [{ id: '1', name: 'J2', pins: [0, 2], reverse: false }],
       drivers: stockDrivers
     }
     const m = shallow(<Jacks store={mockStore(state)} />).dive()

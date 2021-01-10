@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import ColorPicker from '../ui_components/color_picker'
+import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
@@ -32,6 +33,10 @@ const EditTemperature = ({
         i18next.t('temperature:validation_error')
       )
     }
+  }
+
+  const updateChartColor = (e) => {
+    values.chart.color = e.target.value
   }
 
   const temperatureUnit = () => {
@@ -249,15 +254,12 @@ const EditTemperature = ({
           <div className='col-lg-1 col-sm-2 col-md-3'>
             <div className='form-group'>
               <label htmlFor='chart.color'>{i18next.t('temperature:chart_color')}</label>
-              <Field
-                name='chart.color'
+              <ColorPicker
+                name={NameFor(values.name, 'chart.color')}
                 readOnly={readOnly}
-                type='string'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('chart.color', touched, errors)
-                })}
+                color={values.chart.color}
+                onChangeHandler={updateChartColor}
               />
-              <ErrorFor errors={errors} touched={touched} name='chart.color' />
             </div>
           </div>
 

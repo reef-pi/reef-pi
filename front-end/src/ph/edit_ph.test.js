@@ -8,8 +8,8 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditPh />', () => {
-  let values = { enable: true, control: 'macro' }
-  let probe = { id: 1}
+  let values = { enable: true, control: 'macro', chart: {color: '#000'} }
+  let probe = { id: 1, chart: {color: '#000'}}
   let fn = jest.fn()
   let analogInputs = [{
     id:'1',
@@ -28,7 +28,7 @@ describe('<EditPh />', () => {
     jest.clearAllMocks()
   })
 
-  it('<EditPh />', () => {
+  it('<EditPh /> mount', () => {
     shallow(
       <EditPh
         values={values}

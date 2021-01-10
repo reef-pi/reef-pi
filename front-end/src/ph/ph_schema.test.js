@@ -13,7 +13,8 @@ describe('PhValidation', () => {
       notify: true,
       minAlert: 8.0,
       maxAlert: 8.6,
-      control: 'nothing'
+      control: 'nothing',
+      chart: {ymin:0, ymax:100, color: '#000'}
     }
   })
 

@@ -84,7 +84,13 @@ const PhSchema = Yup.object().shape({
         return schema
           .required(i18next.t('ph:upper_function_required'))
       } else { return schema }
-    })
+    }),
+  chart: Yup.object({
+    ymin: Yup.number().required(i18next.t('ph:y_axis_minimum_required')),
+    ymax: Yup.number().required(i18next.t('ph:y_axis_maximum_required')),
+    color: Yup.string().required(i18next.t('ph:chart_color_required')),
+    unit: Yup.string()
+  })
 })
 
 export default PhSchema
