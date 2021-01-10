@@ -88,8 +88,8 @@ const PhSchema = Yup.object().shape({
   chart: Yup.object({
     ymin: Yup.number().required(i18next.t('ph:y_axis_minimum_required')),
     ymax: Yup.number().required(i18next.t('ph:y_axis_maximum_required')),
-    color: Yup.string().required(i18next.t('ph:chart_color')),
-    unit: Yup.string().required(i18next.t('ph:chart_unit'))
+    color: Yup.string().required(i18next.t('ph:chart_color_required')),
+    unit: Yup.string()
   })
 })
 
