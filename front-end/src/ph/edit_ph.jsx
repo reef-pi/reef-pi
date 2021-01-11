@@ -136,7 +136,7 @@ const EditPh = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>{i18next.t('ph:status')}</label>
+            <label htmlFor='enable'>{i18next.t('status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}

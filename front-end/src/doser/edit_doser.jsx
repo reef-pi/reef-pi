@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
+import i18next from 'i18next'
 import { showAlert, clearAlert } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
@@ -119,7 +120,7 @@ const EditDoser = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>Doser Status</label>
+            <label htmlFor='enable'>{i18next.t('status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
