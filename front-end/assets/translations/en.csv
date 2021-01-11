@@ -279,3 +279,4 @@ timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+
