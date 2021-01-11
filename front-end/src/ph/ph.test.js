@@ -39,6 +39,7 @@ describe('Ph ui', () => {
           id: 1,
           name: 'probe',
           enable: false,
+          chart: {},
           notify: {
             enable: false
           },
@@ -126,7 +127,7 @@ describe('Ph ui', () => {
   })
 
   it('<Chart />', () => {
-    const probes = [{ id: '1', name: 'foo' }]
+    const probes = [{ id: '1', name: 'foo' , chart: {}}]
     const readings = { 1: { name: 'foo', current: [] } }
     const m = shallow(
       <Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />

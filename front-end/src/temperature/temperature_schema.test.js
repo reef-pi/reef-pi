@@ -4,6 +4,7 @@ describe('Validation', () => {
   let tc = {}
 
   // *** added chart_y_min, chart_y_max - JFR 20201110
+  // *** removed above after upstream change - JFR 20210111
   beforeEach(() => {
     tc = {
       name: 'name',
@@ -15,8 +16,7 @@ describe('Validation', () => {
       notify: { enable: false },
       heater: '',
       cooler: '',
-      chart_y_min: 0,
-      chart_y_max: 100
+      chart: {ymin: 0, ymax: 100, color: '#000'}
     }
   })
 

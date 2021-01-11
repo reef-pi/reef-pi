@@ -28,6 +28,7 @@ class chart extends React.Component {
     if (this.props.usage.current.length > 1) {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
     }
+    const c = this.props.config.chart
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({parseFloat(currentTemp).toFixed(1)})</span>
@@ -39,14 +40,7 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            // *** Y scale adjustments JFR 20201111
-            <YAxis dataKey='value' 
-                    type='number'
-                    allowDecimals={false}
-                    domain={[(value) => parseFloat(this.props.config.chart_y_min).toFixed(0), (value) => parseFloat(this.props.config.chart_y_max).toFixed(0)]}
-                    allowDataOverflow={true}
-                    tickFormatter={(value) => parseFloat(value).toFixed(0)}
-            />  
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
             <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />    // *** display only 1 decimal - JFR 20201107
             <Area

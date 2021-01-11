@@ -10,11 +10,13 @@ const TemperatureForm = withFormik({
       tc = {
         enable: true,
         fahrenheit: true,
-        notify: {}
+        notify: {},
+        chart: { ymax: 86, ymin: 74, color: '#000' }
       }
     }
 
     // *** added chart Y min/max values - JFR 20201110
+    // *** removed above after upstream change - JFR 20210111
     const values = {
       id: tc.id || '',
       name: tc.name || '',
@@ -32,8 +34,7 @@ const TemperatureForm = withFormik({
       cooler: tc.cooler || '',
       max: tc.max || '',
       control: 'nothing',
-      chart_y_min: tc.chart_y_min || 0,
-      chart_y_max: tc.chart_y_max || 100
+      chart: tc.chart || { ymax: 86, ymin: 74, color: '#000' }
     }
 
     if (tc.control === true) {

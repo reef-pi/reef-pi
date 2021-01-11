@@ -3,10 +3,11 @@ package ph
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/reef-pi/hal"
 
@@ -24,8 +25,16 @@ type Notify struct {
 	Max    float64 `json:"max"`
 }
 
+type ChartConfig struct {
+	YMin  float64 `json:"ymin"`
+	YMax  float64 `json:"ymax"`
+	Color string  `json:"color"`
+	Unit  string  `json:"unit"`
+}
+
 //swagger:model phProbe
 // *** added ChartYMax, ChartYMin - JFR 20201110
+// *** removed above after upstream changes - JFR 20210111
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`
@@ -41,8 +50,7 @@ type Probe struct {
 	Hysteresis  float64       `json:"hysteresis"`
 	IsMacro     bool          `json:"is_macro"`
 	OneShot     bool          `json:"one_shot"`
-	ChartYMax	float64	   	  `json:"chart_y_max"`
-	ChartYMin	float64	   	  `json:"chart_y_min"`
+	Chart       ChartConfig   `json:"chart"`
 	h           *controller.Homeostasis
 }
 

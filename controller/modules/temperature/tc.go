@@ -13,6 +13,12 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+type ChartConfig struct {
+	YMin  float64 `json:"ymin"`
+	YMax  float64 `json:"ymax"`
+	Color string  `json:"color"`
+}
+
 type Notify struct {
 	Enable bool    `json:"enable"`
 	Max    float64 `json:"max"`
@@ -21,6 +27,7 @@ type Notify struct {
 
 //swagger:model temperatureController
 // *** added ChartYMax, ChartYMin - JFR 20201110
+// *** removed above after upstream changes - JFR 20210111
 type TC struct {
 	sync.Mutex
 	ID           string        `json:"id"`
@@ -38,8 +45,7 @@ type TC struct {
 	Fahrenheit   bool          `json:"fahrenheit"`
 	IsMacro      bool          `json:"is_macro"`
 	OneShot      bool          `json:"one_shot"`
-	ChartYMax	 float64	   `json:"chart_y_max"`
-	ChartYMin	 float64	   `json:"chart_y_min"`
+	Chart        ChartConfig   `json:"chart"`
 	h            *controller.Homeostasis
 	currentValue float64
 	calibrator   hal.Calibrator

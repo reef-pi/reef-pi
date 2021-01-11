@@ -200,6 +200,11 @@ signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
 signin:username,Gebruikersnaam
+telemetry:main:current-limit,
+telemetry:main:email-alerts,
+telemetry:main:historical-limit,
+telemetry:main:limit-per-hour,
+telemetry:main:send-test-message,
 telemetry:notification:from,
 telemetry:notification:password,
 telemetry:notification:port,

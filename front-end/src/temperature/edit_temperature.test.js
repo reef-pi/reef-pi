@@ -10,7 +10,7 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditTemperature />', () => {
-  let values = {}
+  let values = {chart: {}}
   let sensors = [{ id: 'sensor' }]
   let equipment = [{ id: '1', name: 'EQ' }]
   let macros = [{ id: '1', name: 'Macro' }]
@@ -20,6 +20,7 @@ describe('<EditTemperature />', () => {
     jest.spyOn(Alert, 'showError')
 
     // *** added chart_y_min, chart_y_max - JFR 20201110
+    // *** removed above after upstream change - JFR 20210111
     values = {
       id: '1',
       name: 'tc1',
@@ -28,16 +29,13 @@ describe('<EditTemperature />', () => {
       sensor: 'sensor',
       fahrenheit: true,
       period: 60,
-      chart_min: 76,
       min: 72,
       max: 78,
-      chart_max: 89,
       heater: '',
       cooler: '',
       alerts: false,
       control: 'macro',
-      chart_y_min: 0,
-      chart_y_max: 100
+      chart: { color: '#000'}
     }
   })
 

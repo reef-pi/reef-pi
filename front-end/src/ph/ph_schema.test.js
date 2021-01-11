@@ -5,6 +5,7 @@ describe('PhValidation', () => {
   let probe = {}
 
   // *** added chart_y_min, chart_y_max - JFR 20201111
+  // *** removed above after upstream change - JFR 20210111
   beforeEach(() => {
     probe = {
       name: 'name',
@@ -15,8 +16,7 @@ describe('PhValidation', () => {
       minAlert: 8.0,
       maxAlert: 8.6,
       control: 'nothing',
-      chart_y_min: 0,
-      chart_y_max: 14
+      chart: {ymin:0, ymax:100, color: '#000'}
     }
   })
 

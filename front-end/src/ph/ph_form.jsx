@@ -13,6 +13,7 @@ const PhForm = withFormik({
     }
 
     // *** added chart Y min/max values - JFR 20201111
+    // *** removed above after upstream change - JFR 20210111
     const value = {
       id: data.id || '',
       name: data.name || '',
@@ -29,8 +30,7 @@ const PhForm = withFormik({
       upperThreshold: data.max || 0,
       upperFunction: data.upper_eq || '',
       hysteresis: data.hysteresis || 0,
-      chart_y_min: data.chart_y_min || 0,
-      chart_y_max: data.chart_y_max || 14
+      chart: data.chart || { ymin: 0, ymax: 100, color: '#000', unit: '' }
     }
 
     if (data.control === true) {

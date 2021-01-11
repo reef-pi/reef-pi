@@ -5,6 +5,7 @@ import Mqtt from './mqtt'
 import { showError } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
+import i18n from '../utils/i18n'
 
 class telemetry extends React.Component {
   constructor (props) {
@@ -152,7 +153,7 @@ class telemetry extends React.Component {
         <div className='col-12 col-md-6'>
           <div className='row'>
             <div className='form-group col-12'>
-              <label htmlFor='limit-per-hour'>limit per hour</label>
+              <label htmlFor='limit-per-hour'>{i18n.t('telemetry:main:limit-per-hour')}</label>
               <input
                 id='limit-per-hour'
                 type='text'
@@ -170,7 +171,7 @@ class telemetry extends React.Component {
                   className='btn btn-outline-secondary'
                   onClick={this.handleTestMessage}
                   id='send-test-email'
-                  value='Send test message'
+                  value={i18n.t('telemetry:main:send-test-message')}
                 />
               </div>
             </div>
@@ -219,7 +220,7 @@ class telemetry extends React.Component {
         <div className='row'>{this.showAdafruitIO()}</div>
         <div className='row'>{this.showMqtt()}</div>
         <div className='row'>
-          <div className=' col-12'>
+          <div className='col-12'>
             <div className='form-group'>
               <label className='form-check-label'>
                 <input
@@ -229,7 +230,7 @@ class telemetry extends React.Component {
                   onClick={this.handleEnableMailer}
                   defaultChecked={this.state.config.notify}
                 />
-                <b>Email alerts</b>
+                <b>{i18n.t('telemetry:main:email-alerts')}</b>
               </label>
             </div>
           </div>
@@ -237,7 +238,7 @@ class telemetry extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label> Current limit</label>
+            <label>{i18n.t('telemetry:main:current-limit')}</label>
             <input
               type='text'
               onChange={this.updateLimit('current_limit')}
@@ -246,7 +247,7 @@ class telemetry extends React.Component {
             />
           </div>
           <div className='col'>
-            <label> Historical limit</label>
+            <label>{i18n.t('telemetry:main:historical-limit')}</label>
             <input
               type='text'
               onChange={this.updateLimit('historical_limit')}
@@ -262,7 +263,7 @@ class telemetry extends React.Component {
               className={updateButtonClass}
               onClick={this.handleSave}
               id='updateTelemetry'
-              value='update'
+              value={i18n.t('update')}
             />
           </div>
         </div>
