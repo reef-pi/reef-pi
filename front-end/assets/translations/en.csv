@@ -247,8 +247,7 @@ timers:and_then,And Then
 timers:day_required,Day is required
 timers:duration_required,Duration is required
 timers:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:equipment,Equipment
+timers:equipment_action,Action
 timers:equipment:off,Off
 timers:equipment:on,On
 timers:equipment:revert,Revert
