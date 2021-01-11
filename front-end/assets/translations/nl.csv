@@ -161,6 +161,10 @@ ph:analog_input_required,Analoge Input is nodig
 ph:calibrate,Calibreren
 ph:chart:current,huidig
 ph:chart:historical,historiek
+ph:chart_color,
+ph:chart_unit,
+ph:chart_ymax,
+ph:chart_ymin,
 ph:check_frequency,Controleer frequentie
 ph:control,Bedien
 ph:control_required,Bediening is verplicht
@@ -217,8 +221,9 @@ temperature:calibration:set_temperature,Overschrijf temperatuur
 temperature:celsius,Celsius
 temperature:chart:current,huidig
 temperature:chart:historical,historiek
-temperature:chart_maximum,Maximum Grafiek
-temperature:chart_minimum,Minimum Grafiek
+temperature:chart_color,
+temperature:chart_ymax,
+temperature:chart_ymin,
 temperature:control,Bedien
 temperature:controlequipment,Apparatuur
 temperature:controlmacro,Macro

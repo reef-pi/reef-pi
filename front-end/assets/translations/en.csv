@@ -163,6 +163,10 @@ ph:analog_input_required,Analog Input is required
 ph:calibrate,Calibrate
 ph:chart:current,pH(latest)
 ph:chart:historical,pH(historical)
+ph:chart_color, Chart color
+ph:chart_unit, Chart unit
+ph:chart_ymax, Chart maximum
+ph:chart_ymin, Chart minimum
 ph:check_frequency,Check Frequency
 ph:control,Control
 ph:control_required,Control is requires
@@ -219,8 +223,9 @@ temperature:calibration:set_temperature, Set Temperature
 temperature:celsius,Celsius
 temperature:chart:current, Temperature(recent)
 temperature:chart:historical,Temperature(historical)
-temperature:chart_maximum,Chart Maximum
-temperature:chart_minimum,Chart Minimum
+temperature:chart_color, Chart Color
+temperature:chart_ymax, Chart maximum
+temperature:chart_ymin, Chart minimum
 temperature:control, Control
 temperature:controlequipment, Equipment
 temperature:controlmacro, Macro

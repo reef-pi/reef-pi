@@ -161,6 +161,10 @@ ph:analog_input_required,必须填写模拟输入
 ph:calibrate,校正
 ph:chart:current,当前读数图表
 ph:chart:historical,历史读数图表
+ph:chart_color,
+ph:chart_unit,
+ph:chart_ymax,
+ph:chart_ymin,
 ph:check_frequency,检查频率
 ph:control,控制
 ph:control_required,需要控制
@@ -217,8 +221,9 @@ temperature:calibration:set_temperature,设置温度
 temperature:celsius,摄氏的
 temperature:chart:current,当前温度读数
 temperature:chart:historical,历史温度读数
-temperature:chart_maximum,图表最大值
-temperature:chart_minimum,图表最小值
+temperature:chart_color,
+temperature:chart_ymax,
+temperature:chart_ymin,
 temperature:control,控制
 temperature:controlequipment,设备
 temperature:controlmacro,宏
