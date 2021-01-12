@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ColorPicker from '../ui_components/color_picker'
 import ProfileSelector from './profile_selector'
+import i18next from 'i18next'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
 import { ErrorFor, NameFor, ShowError, PathToObject } from '../utils/validation_helper'
@@ -196,7 +197,7 @@ const Channel = (props) => {
         </div>
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Channel Status</label>
+            <label>{i18next.t('status')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}

@@ -185,7 +185,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='enable'>{i18next.t('temperature:sensor_status')}</label>
+              <label htmlFor='enable'>{i18next.t('status')}</label>
               <Field
                 name='enable'
                 component={BooleanSelect}
@@ -223,7 +223,7 @@ const EditTemperature = ({
         </div>
 
         <div className='row'>
-          <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='chart.ymin'>{i18next.t('temperature:chart_ymin')}</label>
               <Field
@@ -237,7 +237,7 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
             </div>
           </div>
-          <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='chart.ymax'>{i18next.t('temperature:chart_ymax')}</label>
               <Field
@@ -251,7 +251,7 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
             </div>
           </div>
-          <div className='col-lg-1 col-sm-2 col-md-3'>
+          <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='chart.color'>{i18next.t('temperature:chart_color')}</label>
               <ColorPicker
@@ -262,7 +262,6 @@ const EditTemperature = ({
               />
             </div>
           </div>
-
         </div>
 
         <div className='row'>

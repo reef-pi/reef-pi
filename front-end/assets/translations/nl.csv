@@ -44,17 +44,19 @@ second_s,second(en)
 select,Selecteren
 select_file,
 since,Sinds
+status,Status
 unit,Eenheid
 update,Update
 upgrade_reef_pi,
 ato:alert_after,Alarm Na
-ato:ato_status,ATO Status
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
 ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
 ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
 ato:chk_freq_required,Controleer Frequentie deze is verplicht
+ato:control,
 ato:control_pump,Controleert Pomp
+ato:control_target,
 ato:controlequipment,Apparatuur
 ato:controlmacro,Macro
 ato:controlnothing,Niets
@@ -161,6 +163,10 @@ ph:analog_input_required,Analoge Input is nodig
 ph:calibrate,Calibreren
 ph:chart:current,huidig
 ph:chart:historical,historiek
+ph:chart_color,
+ph:chart_unit,
+ph:chart_ymax,
+ph:chart_ymin,
 ph:check_frequency,Controleer frequentie
 ph:control,Bedien
 ph:control_required,Bediening is verplicht
@@ -181,7 +187,6 @@ ph:period_required,Controleer Frequentie is nodig
 ph:period_type,Check Frequentie moet een nummer zijn
 ph:run_calibration,Uitvoeren
 ph:second_point,Tweede punt
-ph:status,Ph Status
 ph:status_required,Status is nodig
 ph:threshold_greater_than,Alarm bovengrens moet groter zijn dan Alarm ondergrens
 ph:threshold_less_than,Alarm ondergrens moet kleiner zijn dan Alarm bovengrens
@@ -217,8 +222,9 @@ temperature:calibration:set_temperature,Overschrijf temperatuur
 temperature:celsius,Celsius
 temperature:chart:current,huidig
 temperature:chart:historical,historiek
-temperature:chart_maximum,Maximum Grafiek
-temperature:chart_minimum,Minimum Grafiek
+temperature:chart_color,
+temperature:chart_ymax,
+temperature:chart_ymin,
 temperature:control,Bedien
 temperature:controlequipment,Apparatuur
 temperature:controlmacro,Macro
@@ -229,7 +235,6 @@ temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelw
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
 temperature:sensor,Sensor
-temperature:sensor_status,Sensor Status
 temperature:temperature,Temperatuur
 temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
@@ -240,11 +245,10 @@ timers:and_then,AEn Daarna
 timers:day_required,Dag is nodig
 timers:duration_required,Tijdsduur is nodig
 timers:equipment,Apparatuur
-timers:equipment:action,Actie
-timers:equipment:equipment,Apparatuur
 timers:equipment:off,Uit
 timers:equipment:on,Aan
 timers:equipment:revert,Omkeren
+timers:equipment_action,
 timers:equipment_required,Apparatuur is nodig
 timers:function,Functie
 timers:hour_required,Uur is nodig
@@ -262,7 +266,6 @@ timers:stay_off,Uit blijven
 timers:stay_on,Aan blijven
 timers:subject,Onderwerp
 timers:subject_required,Onderwerp is nodig
-timers:timer_status,Timer Status
 timers:timer_status_required,Timer Status is nodig
 timers:turn_back_off,Terug uitschakelen
 timers:turn_back_on,Terug inschakelen
