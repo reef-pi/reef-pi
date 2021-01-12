@@ -6,7 +6,10 @@ analog_inputs,Analog Inputs
 are_you_sure,Are you sure?
 ato,ATO
 cancel,Cancel
+charts,Charts
 clear,Clear
+color,Color
+columns,Columns
 configure,Configure
 delete,Delete
 disabled,Disabled
@@ -16,9 +19,12 @@ doser,Doser
 driver,Driver
 edit,Edit
 enabled,Enabled
+end_time,End Time
 equipment,Equipment
 errors,Errors
+full_moon,Full Moon
 health,Health
+height,Height
 import_db,Import Database
 in-use,in-use
 inlet,Inlet
@@ -30,14 +36,20 @@ jacks,Jacks
 light,Light
 lights,Lights
 loading,Loading
+maximum,Maximum
+minimum,Minimum
 name,Name
 none,None
+off,Off
 ok,Ok
+on,On
 one_shot,One Shot
 outlet,Outlet
 outlets,Outlets
 pin,Pin
+profile,Profile
 reverse,Reverse
+rows,Rows
 running,running
 save,Save
 schedule,Schedule
@@ -46,10 +58,12 @@ second_s,second(s)
 select,Select
 select_file,Please select a file
 since,since
+start_time,Start Time
 status,Status
 unit,Unit
 update,Update
 upgrade_reef_pi,Upgrade reef-pi to version
+width,Width
 ato:alert_after,Alert After
 ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
@@ -155,6 +169,7 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:channel_name,Channel Name
 log:content,Content
 log:emitter,Emitter
 log:time,Time

@@ -6,7 +6,10 @@ analog_inputs,Analoge Ingangen
 are_you_sure,Ben je zeker?
 ato,ato
 cancel,Annuleren
+charts,
 clear,Resetten
+color,
+columns,
 configure,Instellen
 delete,Verwijderen
 disabled,Uitgeschakeld
@@ -16,9 +19,12 @@ doser,doseerder
 driver,Driver
 edit,Bewerken
 enabled,Ingeschakeld
+end_time,
 equipment,Apparatuur
 errors,Foutmeldingen
+full_moon,
 health,gezondheid
+height,
 import_db,
 in-use,In gebruik
 inlet,Ingang (inlet)
@@ -29,14 +35,20 @@ jacks,Ingangen (jacks)
 light,Light
 lights,Lichten
 loading,Laden
+maximum,
+minimum,
 name,Naam
 none,Niets
+off,
 ok,Ok
+on,
 one_shot,Eenmalig
 outlet,Uitgang
 outlets,Uitgangen
 pin,pin
+profile,
 reverse,omkeren
+rows,
 running,Actief
 save,Opslaan
 schedule,
@@ -45,10 +57,12 @@ second_s,second(en)
 select,Selecteren
 select_file,
 since,Sinds
+start_time,
 status,Status
 unit,Eenheid
 update,Update
 upgrade_reef_pi,
+width,
 ato:alert_after,Alarm Na
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
@@ -154,6 +168,7 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portugees
 language:zh,Chinees
+lighting:channel_name,
 log:content,Content
 log:emitter,Emitter
 log:time,Tijd
