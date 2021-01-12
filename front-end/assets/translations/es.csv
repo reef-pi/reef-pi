@@ -6,7 +6,10 @@ analog_inputs,Entradas Análoga
 are_you_sure,¿Esta Seguro?
 ato,
 cancel,Cancelar
+charts,
 clear,Limpiar
+color,
+columns,
 configure,Configurar
 delete,Eliminar
 disabled,Desactivar
@@ -16,9 +19,12 @@ doser,Dosificador
 driver,
 edit,Editar
 enabled,Activar
+end_time,
 equipment,Equipo
 errors,Errores
+full_moon,
 health,
+height,
 import_db,Extraer Base de Datos
 in-use,en-uso
 inlet,Entrada
@@ -29,32 +35,43 @@ jacks,
 light,Luz
 lights,Luces
 loading,Cargando
+maximum,
+minimum,
 name,Nombre
 none,Ninguno
+off,
 ok,Ok
+on,
 one_shot,Un Intento
 outlet,Caja de Salida
 outlets,Caja de Salidas
 pin,Aguja
+profile,
 reverse,Reversa
+rows,
 running,Ejecutando
 save,Guardar
+schedule,
 sec,seg
 second_s,segundo(s)
 select,Seleccionar
 select_file,Por favor seleccione un archivo
 since,Desde
+start_time,
+status,Estado
 unit,Unidad
 update,Actualizar
 upgrade_reef_pi,Actualizar reef-pi a version
+width,
 ato:alert_after,Alerta despues de
-ato:ato_status,ATO Estado
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
 ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
 ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
 ato:chk_freq_required,Frecuencia de Revisión es requerida
+ato:control,
 ato:control_pump,Control de Bomba
+ato:control_target,
 ato:controlequipment,Equipo
 ato:controlmacro,
 ato:controlnothing,Nada
@@ -155,6 +172,7 @@ language:language,Idioma
 language:nl,Nederlands
 language:pt,
 language:zh,
+lighting:channel_name,
 log:content,Contenido
 log:emitter,Emisor
 log:time,Hora
@@ -165,6 +183,10 @@ ph:analog_input_required,Entrada Analogica es requerida
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
+ph:chart_color,
+ph:chart_unit,
+ph:chart_ymax,
+ph:chart_ymin,
 ph:check_frequency,Revisar Frecuencia
 ph:control,Control
 ph:control_required,Control requerido
@@ -185,7 +207,6 @@ ph:period_required,Revsión de Frecuencia requerido
 ph:period_type,Revsión de Frecuencia debe ser un nùmero
 ph:run_calibration,Correr
 ph:second_point,Segundo Punto
-ph:status,Ph Estatus
 ph:status_required,Estatus requerido
 ph:threshold_greater_than,Alerta Superior debe ser mayor a Alerta Inferior
 ph:threshold_less_than,Alerta Inferior debe ser menor a Alerta Superior
@@ -221,8 +242,9 @@ temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
 temperature:chart:current,Temperatura(ultima)
 temperature:chart:historical,Temperatura(Historico)
-temperature:chart_maximum,Maximo para la grafica
-temperature:chart_minimum,Minimo para la grafica
+temperature:chart_color,
+temperature:chart_ymax,
+temperature:chart_ymin,
 temperature:control,Control
 temperature:controlequipment,Equipo
 temperature:controlmacro,Macro
@@ -233,7 +255,6 @@ temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
 temperature:lower_function,Calentador
 temperature:lower_threshold,Límite de Calentador
 temperature:sensor,Sensor
-temperature:sensor_status,Estado del Sensor
 temperature:temperature,Temperatura
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
@@ -244,11 +265,10 @@ timers:and_then,Luego
 timers:day_required,Coloca un dia
 timers:duration_required,Duracion es requerido
 timers:equipment,Equipo
-timers:equipment:action,Accion
-timers:equipment:equipment,Equipo
 timers:equipment:off,Apagado
 timers:equipment:on,Encendido
 timers:equipment:revert,Revertir
+timers:equipment_action,
 timers:equipment_required,Selecciona un Equipo
 timers:function,Funcion
 timers:hour_required,Coloca una hora
@@ -266,7 +286,6 @@ timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
 timers:subject_required,Escribe un Asunto
-timers:timer_status,Estatus del Cronometro
 timers:timer_status_required,el estado del Cronometro es requerido
 timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido

@@ -1,6 +1,7 @@
 import React from 'react'
 import ComponentSelector from './component_selector'
 import { buildTypeMap, buildCells } from './types'
+import i18next from 'i18next'
 
 // props: rows, columns, hook, cells, tcs, atos
 export default class Grid extends React.Component {
@@ -130,7 +131,7 @@ export default class Grid extends React.Component {
     }
     return (
       <div className='col-12 reef-pi-grid'>
-        <label> Charts </label>
+        <label> {i18next.t('charts')} </label>
         {rows}
       </div>
     )

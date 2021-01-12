@@ -132,7 +132,7 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>{i18next.t('ato:ato_status')}</label>
+            <label htmlFor='enable'>{i18next.t('status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
@@ -147,6 +147,8 @@ const EditAto = ({
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
+      </div>
+      <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='control'>{i18next.t('ato:control')}</label>
@@ -168,7 +170,7 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='pump'>{i18next.t('ato:control_pump')}</label>
+            <label htmlFor='pump'>{i18next.t('ato:control_target')}</label>
             <Field
               name='pump'
               component='select'

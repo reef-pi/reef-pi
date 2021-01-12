@@ -138,7 +138,7 @@ const EditPh = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='enable'>{i18next.t('ph:status')}</label>
+            <label htmlFor='enable'>{i18next.t('status')}</label>
             <Field
               name='enable'
               component={BooleanSelect}
@@ -174,7 +174,7 @@ const EditPh = ({
       </div>
 
       <div className='row'>
-        <div className='col-lg-1 col-sm-2 col-md-3'>
+        <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='chart.ymin'>{i18next.t('ph:chart_ymin')}</label>
             <Field
@@ -188,7 +188,7 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
           </div>
         </div>
-        <div className='col-lg-1 col-sm-2 col-md-3'>
+        <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='chart.ymax'>{i18next.t('ph:chart_ymax')}</label>
             <Field
@@ -203,7 +203,7 @@ const EditPh = ({
           </div>
         </div>
 
-        <div className='col-lg-1 col-sm-2 col-md-3'>
+        <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='chart.unit'>{i18next.t('ph:chart_unit')}</label>
             <Field
@@ -218,7 +218,7 @@ const EditPh = ({
           </div>
         </div>
 
-        <div className='col-lg-1 col-sm-2 col-md-3'>
+        <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='chart.color'>{i18next.t('ph:chart_color')}</label>
             <ColorPicker

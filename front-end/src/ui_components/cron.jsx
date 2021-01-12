@@ -9,7 +9,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
   return (
     <div className='row'>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='month'>{i18next.t('cron:month')}</label>
         <Field
           name='month'
@@ -21,7 +21,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <ErrorFor errors={errors} touched={touched} name='month' />
       </div>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='week'>{i18next.t('cron:week')}</label>
         <Field
           name='week'
@@ -33,7 +33,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <ErrorFor errors={errors} touched={touched} name='week' />
       </div>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='day'>{i18next.t('cron:day_of_month')}</label>
         <Field
           name='day'
@@ -45,7 +45,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <ErrorFor errors={errors} touched={touched} name='day' />
       </div>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='hour'>{i18next.t('cron:hour')}</label>
         <Field
           name='hour'
@@ -57,7 +57,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <ErrorFor errors={errors} touched={touched} name='hour' />
       </div>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='minute'>{i18next.t('cron:minute')}</label>
         <Field
           name='minute'
@@ -69,7 +69,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <ErrorFor errors={errors} touched={touched} name='minute' />
       </div>
 
-      <div className='form-group col-12 col-sm-6 col-md-3'>
+      <div className='form-group col-12 col-sm-4 col-md-2'>
         <label htmlFor='second'>{i18next.t('cron:second')}</label>
         <Field
           name='second'
