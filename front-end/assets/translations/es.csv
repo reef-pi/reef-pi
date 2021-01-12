@@ -6,7 +6,10 @@ analog_inputs,Entradas Análoga
 are_you_sure,¿Esta Seguro?
 ato,
 cancel,Cancelar
+charts,
 clear,Limpiar
+color,
+columns,
 configure,Configurar
 delete,Eliminar
 disabled,Desactivar
@@ -16,9 +19,12 @@ doser,Dosificador
 driver,
 edit,Editar
 enabled,Activar
+end_time,
 equipment,Equipo
 errors,Errores
+full_moon,
 health,
+height,
 import_db,Extraer Base de Datos
 in-use,en-uso
 inlet,Entrada
@@ -29,25 +35,34 @@ jacks,
 light,Luz
 lights,Luces
 loading,Cargando
+maximum,
+minimum,
 name,Nombre
 none,Ninguno
+off,
 ok,Ok
+on,
 one_shot,Un Intento
 outlet,Caja de Salida
 outlets,Caja de Salidas
 pin,Aguja
+profile,
 reverse,Reversa
+rows,
 running,Ejecutando
 save,Guardar
+schedule,
 sec,seg
 second_s,segundo(s)
 select,Seleccionar
 select_file,Por favor seleccione un archivo
 since,Desde
+start_time,
 status,Estado
 unit,Unidad
 update,Actualizar
 upgrade_reef_pi,Actualizar reef-pi a version
+width,
 ato:alert_after,Alerta despues de
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
@@ -153,6 +168,7 @@ language:language,Idioma
 language:nl,Nederlands
 language:pt,
 language:zh,
+lighting:channel_name,
 log:content,Contenido
 log:emitter,Emisor
 log:time,Hora

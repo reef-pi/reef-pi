@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 import { Field } from 'formik'
+import i18next from 'i18next'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
@@ -173,7 +174,7 @@ export default class AutoProfile extends React.Component {
       <div className='container'>
         <div className='row mb-2'>
           <div className='form-inline'>
-            <label className='mr-2'>Start Time</label>
+            <label className='mr-2'>{i18next.t('start_time')}</label>
             <Field
               name={NameFor(this.props.name, 'start')}
               readOnly={this.props.readOnly}
@@ -181,7 +182,7 @@ export default class AutoProfile extends React.Component {
                 { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
               placeholder='HH:mm:ss'
             />
-            <label className='mr-2'>End Time</label>
+            <label className='mr-2'>{i18next.t('end_time')}</label>
             <Field
               name={NameFor(this.props.name, 'end')}
               readOnly={this.props.readOnly}

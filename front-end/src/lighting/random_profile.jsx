@@ -1,4 +1,5 @@
 import React from 'react'
+import i18next from 'i18next'
 import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import { Field } from 'formik'
@@ -8,7 +9,7 @@ const RandomProfile = (props) => {
   return (
     <div className='form-inline'>
 
-      <label className='mr-2'>Start Time</label>
+      <label className='mr-2'>{i18next.t('start_time')}</label>
       <Field
         name={NameFor(props.name, 'start')}
         readOnly={props.readOnly}
@@ -16,7 +17,7 @@ const RandomProfile = (props) => {
           { 'is-invalid': ShowError(NameFor(props.name, 'start'), props.touched, props.errors) })}
         placeholder='HH:mm:ss'
       />
-      <label className='mr-2'>End Time</label>
+      <label className='mr-2'>{i18next.t('end_time')}</label>
       <Field
         name={NameFor(props.name, 'end')}
         readOnly={props.readOnly}
