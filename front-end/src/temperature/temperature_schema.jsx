@@ -18,6 +18,11 @@ const TemperatureSchema = Yup.object().shape({
   alerts: Yup.bool()
     .required('Alerts is required'),
   one_shot: Yup.bool(),
+  chart: Yup.object({
+    ymin: Yup.number().required('y axis minimum'),
+    ymax: Yup.number().required('y axis maximum'),
+    color: Yup.string().required('color')
+  }),
   minAlert: Yup.number()
     .when('alerts', (alert, schema) => {
       if (alert === true || alert === 'true') {

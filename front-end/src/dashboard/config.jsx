@@ -115,12 +115,12 @@ class config extends React.Component {
     return (
       <div className='col-12'>
         <div className='row'>
-          {this.toRow('row', 'Rows', 1, 12)}
-          {this.toRow('column', 'Columns', 1, 12)}
+          {this.toRow('row', i18next.t('rows'), 1, 12)}
+          {this.toRow('column', i18next.t('columns'), 1, 12)}
         </div>
         <div className='row'>
-          {this.toRow('width', 'Width', 100, 1920)}
-          {this.toRow('height', 'Height', 100, 1080)}
+          {this.toRow('width', i18next.t('width'), 100, 1920)}
+          {this.toRow('height', i18next.t('height'), 100, 1080)}
         </div>
         <div className='row'>
           <Grid

@@ -2,12 +2,14 @@ Key,Translation
 add,add
 alerts,Alerts
 analog_input,Analog Input
-analog_input,Analog Input
 analog_inputs,Analog Inputs
 are_you_sure,Are you sure?
 ato,ATO
 cancel,Cancel
+charts,Charts
 clear,Clear
+color,Color
+columns,Columns
 configure,Configure
 delete,Delete
 disabled,Disabled
@@ -17,9 +19,12 @@ doser,Doser
 driver,Driver
 edit,Edit
 enabled,Enabled
+end_time,End Time
 equipment,Equipment
 errors,Errors
+full_moon,Full Moon
 health,Health
+height,Height
 import_db,Import Database
 in-use,in-use
 inlet,Inlet
@@ -31,33 +36,44 @@ jacks,Jacks
 light,Light
 lights,Lights
 loading,Loading
+maximum,Maximum
+minimum,Minimum
 name,Name
 none,None
+off,Off
 ok,Ok
+on,On
 one_shot,One Shot
 optional,Optional
 outlet,Outlet
 outlets,Outlets
 pin,Pin
+profile,Profile
 reverse,Reverse
+rows,Rows
 running,running
 save,Save
+schedule,Schedule
 sec,sec
 second_s,second(s)
 select,Select
 select_file,Please select a file
 since,since
+start_time,Start Time
+status,Status
 unit,Unit
 update,Update
 upgrade_reef_pi,Upgrade reef-pi to version
+width,Width
 ato:alert_after,Alert After
-ato:ato_status,ATO Status
 ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
 ato:chk_freq_number,Check Frequency must be a number
 ato:chk_freq_number_value,Check Frequency must be 1 second or greater
 ato:chk_freq_required,Check Frequency is required
+ato:control,Control
 ato:control_pump,Control Pump
+ato:control_target,Target
 ato:controlequipment,Equipment
 ato:controlmacro,Macro
 ato:controlnothing,Nothing
@@ -154,6 +170,7 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:channel_name,Channel Name
 log:content,Content
 log:emitter,Emitter
 log:time,Time
@@ -164,6 +181,10 @@ ph:analog_input_required,Analog Input is required
 ph:calibrate,Calibrate
 ph:chart:current,pH(latest)
 ph:chart:historical,pH(historical)
+ph:chart_color, Chart color
+ph:chart_unit, Chart unit
+ph:chart_ymax, Chart maximum
+ph:chart_ymin, Chart minimum
 ph:check_frequency,Check Frequency
 ph:control,Control
 ph:control_required,Control is requires
@@ -184,7 +205,6 @@ ph:period_required,Check Frequency is required
 ph:period_type,Check Frequency must be a number
 ph:run_calibration,Run
 ph:second_point,Second Point
-ph:status,Ph Status
 ph:status_required,Status is required
 ph:threshold_greater_than,Alert Above must be greater than Alert Below
 ph:threshold_less_than,Alert Below must be less than Alert Above
@@ -221,8 +241,9 @@ temperature:calibration:set_temperature, Set Temperature
 temperature:celsius,Celsius
 temperature:chart:current, Temperature(recent)
 temperature:chart:historical,Temperature(historical)
-temperature:chart_maximum,Chart Maximum
-temperature:chart_minimum,Chart Minimum
+temperature:chart_color, Chart Color
+temperature:chart_ymax, Chart maximum
+temperature:chart_ymin, Chart minimum
 temperature:control, Control
 temperature:controlequipment, Equipment
 temperature:controlmacro, Macro
@@ -233,7 +254,6 @@ temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
 temperature:sensor,Sensor
-temperature:sensor_status,Sensor Status
 temperature:temperature,Temperature
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
@@ -244,11 +264,10 @@ timers:and_then,And Then
 timers:day_required,Day is required
 timers:duration_required,Duration is required
 timers:equipment,Equipment
-timers:equipment:action,Action
-timers:equipment:equipment,Equipment
 timers:equipment:off,Off
 timers:equipment:on,On
 timers:equipment:revert,Revert
+timers:equipment_action,Action
 timers:equipment_required,Equipment is required
 timers:function,Function
 timers:hour_required,Hour is required
@@ -266,7 +285,6 @@ timers:stay_off,Stay off
 timers:stay_on,Stay on
 timers:subject,Subject
 timers:subject_required,Subject is required
-timers:timer_status,Timer Status
 timers:timer_status_required,Timer Status is required
 timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ErrorFor, ShowError } from '../utils/validation_helper'
+import ColorPicker from '../ui_components/color_picker'
+import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
@@ -32,6 +33,10 @@ const EditTemperature = ({
         i18next.t('temperature:validation_error')
       )
     }
+  }
+
+  const updateChartColor = (e) => {
+    values.chart.color = e.target.value
   }
 
   const temperatureUnit = () => {
@@ -180,7 +185,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='enable'>{i18next.t('temperature:sensor_status')}</label>
+              <label htmlFor='enable'>{i18next.t('status')}</label>
               <Field
                 name='enable'
                 component={BooleanSelect}
@@ -195,6 +200,9 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='enable' />
             </div>
           </div>
+        </div>
+
+        <div className='row'>
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
@@ -210,6 +218,48 @@ const EditTemperature = ({
                 <option value='false'>{i18next.t('disabled')}</option>
               </Field>
               <ErrorFor errors={errors} touched={touched} name='one_shot' />
+            </div>
+          </div>
+        </div>
+
+        <div className='row'>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.ymin'>{i18next.t('temperature:chart_ymin')}</label>
+              <Field
+                name='chart.ymin'
+                readOnly={readOnly}
+                type='number'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('chart.ymin', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='chart.ymin' />
+            </div>
+          </div>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.ymax'>{i18next.t('temperature:chart_ymax')}</label>
+              <Field
+                name='chart.ymax'
+                readOnly={readOnly}
+                type='number'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('chart.ymax', touched, errors)
+                })}
+              />
+              <ErrorFor errors={errors} touched={touched} name='chart.ymax' />
+            </div>
+          </div>
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='chart.color'>{i18next.t('temperature:chart_color')}</label>
+              <ColorPicker
+                name={NameFor(values.name, 'chart.color')}
+                readOnly={readOnly}
+                color={values.chart.color}
+                onChangeHandler={updateChartColor}
+              />
             </div>
           </div>
         </div>

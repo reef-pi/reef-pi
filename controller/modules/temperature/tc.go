@@ -13,6 +13,12 @@ import (
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
+type ChartConfig struct {
+	YMin  float64 `json:"ymin"`
+	YMax  float64 `json:"ymax"`
+	Color string  `json:"color"`
+}
+
 type Notify struct {
 	Enable bool    `json:"enable"`
 	Max    float64 `json:"max"`
@@ -37,6 +43,7 @@ type TC struct {
 	Fahrenheit   bool          `json:"fahrenheit"`
 	IsMacro      bool          `json:"is_macro"`
 	OneShot      bool          `json:"one_shot"`
+	Chart        ChartConfig   `json:"chart"`
 	h            *controller.Homeostasis
 	currentValue float64
 	calibrator   hal.Calibrator

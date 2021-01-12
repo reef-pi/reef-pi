@@ -6,7 +6,10 @@ analog_inputs,
 are_you_sure,Como estas?
 ato,
 cancel,cancelar
+charts,
 clear,Limpar
+color,
+columns,
 configure,Configurar
 delete,Apagar
 disabled,desativar
@@ -16,9 +19,12 @@ doser,
 driver,
 edit,Editar
 enabled,activar
+end_time,
 equipment,
 errors,Erros
+full_moon,
 health,
+height,
 import_db,
 in-use,
 inlet,Inlet
@@ -29,33 +35,44 @@ jacks,
 light,
 lights,
 loading,Carregar
+maximum,
+minimum,
 name,Nome
 none,nenhum
+off,
 ok,Ok
+on,
 one_shot,
 optional,
 outlet,
 outlets,
 pin,
+profile,
 reverse,
+rows,
 running,Correr
 save,Salvar
+schedule,
 sec,sec
 second_s,segundos
 select,Selecionar
 select_file,
 since,Desde
+start_time,
+status,Estado
 unit,Unidades
 update,Atualizar
 upgrade_reef_pi,
+width,
 ato:alert_after,Alertar após
-ato:ato_status,Estado do ATO
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
 ato:chk_freq_number,Verificar a frequência tem que ser um número
 ato:chk_freq_number_value,Verificar a frequência must be 1 second or greater
 ato:chk_freq_required,Verificar a frequência é Obrigatório
+ato:control,
 ato:control_pump,Controlo da Bomba
+ato:control_target,
 ato:controlequipment,
 ato:controlmacro,
 ato:controlnothing,
@@ -152,6 +169,7 @@ language:language,Lingua
 language:nl,Nederlands
 language:pt,Português
 language:zh,
+lighting:channel_name,
 log:content,Conteudo
 log:emitter,Emissor
 log:time,Tempo
@@ -162,6 +180,10 @@ ph:analog_input_required,Entrada Analógica é Obrigatório
 ph:calibrate,Calibrar
 ph:chart:current,
 ph:chart:historical,
+ph:chart_color,
+ph:chart_unit,
+ph:chart_ymax,
+ph:chart_ymin,
 ph:check_frequency,Verificar a frequência
 ph:control,
 ph:control_required,
@@ -182,7 +204,6 @@ ph:period_required,Verificar a frequência é Obrigatório
 ph:period_type,Verificar a frequência tem que ser um número
 ph:run_calibration,Correr Calibração
 ph:second_point,Segundo ponto
-ph:status,Estado do Ph
 ph:status_required,Estado é Obrigatório
 ph:threshold_greater_than,O alerta superior tem que ser superior que o alerta inferior
 ph:threshold_less_than,O alerta inferior tem que ser inferior que o alerta superior
@@ -219,8 +240,9 @@ temperature:calibration:set_temperature,
 temperature:celsius,Celsius
 temperature:chart:current,
 temperature:chart:historical,
-temperature:chart_maximum,Valor Maximo gráfico
-temperature:chart_minimum,Valor minimo gráfico
+temperature:chart_color,
+temperature:chart_ymax,
+temperature:chart_ymin,
 temperature:control,
 temperature:controlequipment,
 temperature:controlmacro,
@@ -231,7 +253,6 @@ temperature:hysteresis_less_than,
 temperature:lower_function,
 temperature:lower_threshold,
 temperature:sensor,Sensor
-temperature:sensor_status,Estado Sensor
 temperature:temperature,Temperatura
 temperature:upper_function,
 temperature:upper_threshold,
@@ -242,11 +263,10 @@ timers:and_then,e depois
 timers:day_required,Dia é Obrigatório
 timers:duration_required,Duração é Obrigatório
 timers:equipment,Equipamento é Obrigatório
-timers:equipment:action,Acção
-timers:equipment:equipment,Equipamentos
 timers:equipment:off,Off
 timers:equipment:on,On
 timers:equipment:revert,Reverter
+timers:equipment_action,
 timers:equipment_required,Equipmento é Obrigatório
 timers:function,Função
 timers:hour_required,as horas é Obrigatórias
@@ -264,7 +284,6 @@ timers:stay_off,manter desligado
 timers:stay_on,Manter ligado
 timers:subject,Assunto
 timers:subject_required,o Assunto é Obrigatório
-timers:timer_status,Estado do Temporizador
 timers:timer_status_required,Estado do temporizador é Obrigatório
 timers:turn_back_off,Voltar a desligar
 timers:turn_back_on,Voltar a Ligar

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ColorPicker from '../ui_components/color_picker'
 import ProfileSelector from './profile_selector'
+import i18next from 'i18next'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
 import { ErrorFor, NameFor, ShowError, PathToObject } from '../utils/validation_helper'
@@ -135,7 +136,7 @@ const Channel = (props) => {
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
             <label className='w-100'>
-              Channel Name
+              {i18next.t('lighting:channel_name')}
               <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
             </label>
             <Field
@@ -153,7 +154,7 @@ const Channel = (props) => {
         </div>
 
         <div className='form-group col-sm-6 col-md-4 col-xl-2 form-inline'>
-          <label className='mb-2'>Color</label>
+          <label className='mb-2'>{i18next.t('color')}</label>
           <ColorPicker
             name={NameFor(props.name, 'color')}
             readOnly={props.readOnly}
@@ -164,7 +165,7 @@ const Channel = (props) => {
 
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Min</label>
+            <label>{i18next.t('minimum')}</label>
             <Percent
               type='text'
               className={classNames('form-control',
@@ -180,7 +181,7 @@ const Channel = (props) => {
         </div>
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Max</label>
+            <label>{i18next.t('maximum')}</label>
             <Percent
               type='text'
               className={classNames('form-control',
@@ -196,7 +197,7 @@ const Channel = (props) => {
         </div>
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label>Channel Status</label>
+            <label>{i18next.t('status')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
@@ -215,7 +216,7 @@ const Channel = (props) => {
       <div className='row'>
         <div className='col'>
           <div className='form-group'>
-            <label className='mr-3'>Profile</label>
+            <label className='mr-3'>{i18next.t('profile')}</label>
             <ProfileSelector
               className={classNames('form-control',
                 { 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}

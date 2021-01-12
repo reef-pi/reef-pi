@@ -28,6 +28,7 @@ class chart extends React.Component {
     if (this.props.usage.current.length > 1) {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
     }
+    const c = this.props.config.chart
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
@@ -39,7 +40,7 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis dataKey='value' />
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
             <Tooltip />
             <Area
