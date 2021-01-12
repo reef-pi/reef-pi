@@ -105,13 +105,8 @@ const EditTimer = ({
           </div>
         </div>
       </div>
-      <Cron
-        values={values}
-        touched={touched}
-        errors={errors}
-        readOnly={readOnly}
-      />
-      <div className="row">
+
+      <div className='row'>
         <div className='col-12 col-sm-6 col-lg-3 order-lg-3'>
           <div className='form-group'>
             <label htmlFor='type'>{i18next.t('timers:function')}</label>
@@ -145,6 +140,19 @@ const EditTimer = ({
           onBlur={handleBlur}
           onChangeHandler={handleChange}
         />
+      </div>
+      <div className='row'>
+        <div className='col'>
+          <div className='row form-group'>
+            <label htmlFor='enable'>{i18next.t('schedule')}</label>
+          </div>
+          <Cron
+            values={values}
+            touched={touched}
+            errors={errors}
+            readOnly={readOnly}
+          />
+        </div>
       </div>
 
       <div className={classNames('row', { 'd-none': readOnly })}>
