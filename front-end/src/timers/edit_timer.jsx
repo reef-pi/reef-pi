@@ -104,16 +104,14 @@ const EditTimer = ({
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
-
-        <div className='col-12 order-lg-5 col-xl-6'>
-          <Cron
-            values={values}
-            touched={touched}
-            errors={errors}
-            readOnly={readOnly}
-          />
-        </div>
-
+      </div>
+      <Cron
+        values={values}
+        touched={touched}
+        errors={errors}
+        readOnly={readOnly}
+      />
+      <div className="row">
         <div className='col-12 col-sm-6 col-lg-3 order-lg-3'>
           <div className='form-group'>
             <label htmlFor='type'>{i18next.t('timers:function')}</label>
