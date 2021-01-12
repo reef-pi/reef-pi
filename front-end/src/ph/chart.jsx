@@ -30,6 +30,11 @@ class chart extends React.Component {
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
+      // *** display only 2 decimals - JFR 20201101 
+      // *** restored 20210112 after upstream update
+      if (current !== '') {
+        current = parseFloat(current).toFixed(2);
+      }
     }
     const c = this.props.config.chart
     return (
@@ -39,8 +44,8 @@ class chart extends React.Component {
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip />
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} lable={c.unit} />
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(2)} />    // *** display only 2 decimals - JFR 20201031 restored 20210112 after upstream update
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} label={c.unit} />
           </LineChart>
         </ResponsiveContainer>
       </div>
