@@ -4,11 +4,12 @@ import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import { Field } from 'formik'
 import classNames from 'classnames'
 import Datepicker from 'ui_components/datepicker'
+import i18next from 'i18next'
 
 const LunarProfile = (props) => {
   return (
     <div className='form-inline'>
-      <label className='mr-2'>Full Moon</label>
+      <label className='mr-2'>{i18next.t('full_moon')}</label>
       <div className='col-12 col-sm-3 col-md-2 col-lg-2 mr-3' style={{ padding: 0 }}>
         <Datepicker
           name={NameFor(props.name, 'full_moon')}
@@ -19,7 +20,7 @@ const LunarProfile = (props) => {
             { 'is-invalid': ShowError(NameFor(props.name, 'full_moon'), props.touched, props.errors) })}
         />
       </div>
-      <label className='mr-2'>Start Time</label>
+      <label className='mr-2'>{i18next.t('start_time')}</label>
       <Field
         name={NameFor(props.name, 'start')}
         readOnly={props.readOnly}
@@ -27,7 +28,7 @@ const LunarProfile = (props) => {
           { 'is-invalid': ShowError(NameFor(props.name, 'start'), props.touched, props.errors) })}
         placeholder='HH:mm:ss'
       />
-      <label className='mr-2'>End Time</label>
+      <label className='mr-2'>{i18next.t('end_time')}</label>
       <Field
         name={NameFor(props.name, 'end')}
         readOnly={props.readOnly}
