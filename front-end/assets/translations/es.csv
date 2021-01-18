@@ -6,7 +6,7 @@ analog_inputs,Entradas Análoga
 are_you_sure,¿Esta Seguro?
 ato,
 cancel,Cancelar
-charts,
+charts,Gráficas
 clear,Limpiar
 color,Color
 columns,Columnas
@@ -16,14 +16,14 @@ disabled,Desactivar
 documentation,Documentación
 done,Listo
 doser,Dosificador
-driver,
+driver,Controlador
 edit,Editar
 enabled,Activar
 end_time,
 equipment,Equipo
 errors,Errores
 full_moon,
-health,
+health,Estado
 height,Altura
 import_db,Extraer Base de Datos
 in-use,en-uso
@@ -51,7 +51,7 @@ reverse,Reversa
 rows,Filas
 running,Ejecutando
 save,Guardar
-schedule,
+schedule,Horario
 sec,seg
 second_s,segundo(s)
 select,Seleccionar
@@ -93,7 +93,7 @@ capabilities:doser,Dosificador
 capabilities:dosing_pumps,Dosificadores
 capabilities:equipment,Equipos
 capabilities:health_check,Chequeo del Sistema
-capabilities:journal,
+capabilities:journal,Diario
 capabilities:lighting,Iluminación
 capabilities:lights,Luces
 capabilities:log,Log
@@ -179,7 +179,7 @@ ph:analog_input_required,Entrada Analogica es requerida
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
-ph:chart_color,
+ph:chart_color,Color
 ph:chart_unit,
 ph:chart_ymax,
 ph:chart_ymin,
@@ -238,7 +238,7 @@ temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
 temperature:chart:current,Temperatura(ultima)
 temperature:chart:historical,Temperatura(Historico)
-temperature:chart_color,
+temperature:chart_color,Color
 temperature:chart_ymax,
 temperature:chart_ymin,
 temperature:control,Control
