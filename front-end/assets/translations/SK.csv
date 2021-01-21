@@ -1,0 +1,291 @@
+Key,Translation
+add,Prida
+alerts,Upozornenie
+analog_input,Analogovı vstup
+analog_inputs,Analogové vstupy
+are_you_sure,Ste si isty ?
+ato,ATO
+cancel,Zruši
+charts,Grafy
+clear,Vymaza
+color,Farba
+columns,Stlpec
+configure,Konfigurácia
+delete,Vymaza
+disabled,Vypnuté
+documentation,Dokumentácia
+done,Hotovo
+doser,Dávkovaè
+driver,Ovladaè
+edit,Upravi
+enabled,Zapnuté
+end_time,Èas ukonèenia
+equipment,Vybavenie
+errors,Chyba
+full_moon,Úplne
+health,Stav
+height,Vıška
+import_db,Import databázy
+in-use,Pouíva sa
+inlet,Vstup
+inlets,Vstupy
+install,Instalácia
+jack,Konektor
+jacks,Konektory
+light,Svetlo
+lights,Svetlá
+loading,Naèítavam
+maximum,Maximum
+minimum,Minimum
+name,Názov
+none,iadny
+off,Vypnuté
+ok,Ok
+on,Zapnuté
+one_shot,Jednorazovı
+outlet,Zásuvka
+outlets,Zásuvky
+pin,Pin
+profile,Plán
+reverse,Opaène
+rows,Riadok
+running,Beiaci
+save,Uloi
+schedule,Plán
+sec,Sekunda
+second_s,Druhı
+select,Vybra
+select_file,-vyberte poloku
+since,Odkedy
+start_time,Èas spustenia
+status,Funkcia
+unit,Jednotka
+update,Aktualizácia
+upgrade_reef_pi,Aktualizácia reef-pi
+width,Šírka
+ato:alert_after,Upozornenie
+ato:ato_usage,Vyuitie ATO
+ato:chk_freq,Skontrolova frekvenciu
+ato:chk_freq_number,Kontrola frekvencie musí by èíslo
+ato:chk_freq_number_value,Frekvencia kontroly musí by 1 sekunda alebo väèšia
+ato:chk_freq_required,Vyaduje sa frekvencia kontroly
+ato:control,Kontrola
+ato:control_pump,Èerpadlo
+ato:control_target,Najvyšší vıkon
+ato:control_equipment,Zariadenie
+ato:control:macro,Makro
+ato:control_nothing,iadne
+ato:disable_on_alert,Zakáza v upozornení
+ato:inlet_required,Vyaduje sa vstup
+ato:name_required,Vyaduje sa názov
+ato:status_required,Vyaduje sa stav ATO
+ato:threshold_required,Prahová hodnota sa vyaduje, keï je povolené upozornenie
+ato:threshold_value,Prah musí by èíslo
+ato:total_seconds_pump_on,Celkom zapnuté èerpadlo
+ato:validation_error,Nastavenia ATO nie je moné uloi z dôvodu chıb overenia. Opravte chyby a skúste to znova.
+ato:warn_delete,Táto akcia sa odstráni
+capabilities:ato,ATO
+capabilities:camera,Kamera
+capabilities:configuration,Konfigurácia
+capabilities:dashboard,Panel
+capabilities:dev_mode,Reím pre vıvojarov
+capabilities:doser,Dávkovaè
+capabilities:dosing_pumps,Davkovacia pumpa
+capabilities:equipment,Vybavennie
+capabilities:health_check,Kontrola stavu
+capabilities:journal,Denník
+capabilities:lighting,Osvetlenie
+capabilities:lights,Svetlá
+capabilities:log,Logy
+capabilities:macro,Makro
+capabilities:macros,Makra
+capabilities:manager,Inštanca
+capabilities:ph,PH
+capabilities:temperature,Teplota
+capabilities:timers,Èasovaè
+collapsible:delete,Vymaza
+collapsible:edit,Upravi
+color_picker:choose,Vybra
+configuration:about:Aktuálny èas
+configuration:about:Stav
+configuration:about:uptime,Èas
+configuration:about:version,Verzia
+configuration:about:website,Weová lokalita
+configuration:admin:db_export,Stiahnu aktuálnu databázu
+configuration:admin:db_import,Import existujúcej databázy
+configuration:admin:poweroff,Vypnút
+configuration:admin:reboot,Reštartova
+configuration:admin:reload,Odhlási sa
+configuration:admin:sign_out,Prihlási sa
+configuration:authentication:Prihlásenie
+configuration:authentication:error_pass,Musíte zada heslo
+configuration:authentication:error_user,Musíte zada pouívate¾ské meno
+configuration:settings:address,Adresa
+configuration:settings:alert_health_check,Alerta de estado
+configuration:settings:capabilities,Monosti
+configuration:settings:capabilities_required,Upozornenie na kontrolu stavu
+configuration:settings:display,Display
+configuration:settings:enable_profiling,Povoli profil
+configuration:settings:enable_prometheus,Povoli
+configuration:settings:interface,Rozhranie
+configuration:settings:max_cpu,Maximálny procesor
+configuration:settings:max_memory,Maximálna pamä
+configuration:settings:name,Názov
+configuration:settings:name_required,Vyaduje sa názov
+configuration:settings:network_address_required,Vyaduje sa sieová adresa
+configuration:settings:network_interface_required,Vyaduje sa sieové rozhranie
+configuration:settings:notification,Oznámenie
+configuration:settings:rpi_pwm_freq,PWM frekvencia
+configuration:settings:use_https,Poui HTTPS
+configuration:tab:about,Naèíta
+configuration:tab:admin,Správca
+configuration:tab:authentication,Overenie
+configuration:tab:connectors,Konektor
+configuration:tab:drivers,Ovládaè
+configuration:tab:errors,Chyba
+configuration:tab:settings,Nastavenie
+configuration:tab:telemetry,Grafy
+cron:day_of_month,Deò v mesiaci
+cron:hour,Hodina
+cron:minute,Minúta
+cron:month,Mesiac
+cron:second,Sekundy
+cron:week,Tıdeò
+dashboard:back_to_dashboard,Spä na panel
+fatal_error:connection_lost,Pripojenie stratené
+fatal_error:fatal_error,Závaná chyba
+fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Mono bude potrebné reštartova webovı server alebo urobi nejaké riešenie.
+fatal_error:troubleshoot,Riešenie problémov
+health_chart:cpu_memory,CPU/Pamä
+language:de,Nemèina
+language:en,Angliètina
+language:es,Španielèina
+language:fa,Èínština
+language:fr,Francuština
+language:hi,Korejèina
+language:it,Talianèina
+language:language,Jazyk
+language:nl,Norština
+language:pt,
+language:zh,
+lighting:channel_name,Názov kanála
+log:content,Obsah
+log:emitter,Zariadenie
+log:time,Èas
+log:type,Typ
+ph:alert_above,Upozornenie vyššie
+ph:alert_below,Upozornenie nišie
+ph:analog_input_required,Vyaduje sa analógovı vstup
+ph:calibrate,Kalibrácia
+ph:chart:current,pH(ultima) PH(aktuálne)
+ph:chart:historical,PH(Priemerné)
+ph:chart_color,Farba
+ph:chart_unit,Jednotka
+ph:chart_ymax,Max
+ph:chart_ymin,Min
+ph:check_frequency,Kontrola frekvencie
+ph:control,Kontrola
+ph:control_required,Kontrola
+ph:controlequipment,Vybavenie
+ph:controlmacro,Makro
+ph:controlnothing,iadne
+ph:current_reading,Aktuálne èítanie
+ph:lower_function,Dolná funkcia
+ph:lower_function_required,Vyaduje sa nišia funkcia
+ph:lower_threshold,Dolná hranica
+ph:lower_threshold_less_than,Dolná hranica musí by menšia ako horná hranica
+ph:lower_threshold_required,Vyaduje sa dolná prahová hodnota
+ph:lower_threshold_type,Dolná hranica musí by èíslo
+ph:midpoint,Strednı bod
+ph:name_required,Vyaduje sa názov
+ph:period_min,Frekvencia kontroly musí by 1 sekunda alebo väèšia
+ph:period_required,Vyaduje sa frekvencia kontroly
+ph:period_type,Kontrola frekvencie musí by èíslo
+ph:run_calibration,Spus kalibráciu
+ph:second_point,Druhı bod
+ph:status_required,Vyaduje sa stav
+ph:threshold_greater_than,Prahová hodnota musí by vyššia ako, vıstraha vyššie
+ph:threshold_less_than,Alerta Inferior debe ser menor a Alerta Superior
+ph:threshold_required,Límites son requeridos cuando las alertas estan activadas
+ph:threshold_type,Upozornenie nišie musí by menšia ako upozornenie vyššie
+ph:upper_function,Horná funkcia
+ph:upper_function_required,Vyaduje sa horná funkcia
+ph:upper_threshold,Horná hranica
+ph:upper_threshold_greater_than,Vyaduje sa horná hranica
+ph:upper_threshold_required,Vyaduje sa hornı prah
+ph:upper_threshold_type,Horná hranica musí by èíslo
+ph:validation_error,Nastavenia Ph nie je moné uloi z dôvodu chıb overenia. Opravte chyby a skúste to znova.
+ph:warn_delete,Odstránenie nastavenia
+pins:Pins,Piny
+signin:invalidcredentials,Neplatné poverenie
+signin:password,Heslo
+signin:signin,Prihlási sa
+signin:username,Meno pouivate¾a
+telemetry:main:current-limit,Aktuálny limit
+telemetry:main:email-alerts,Odosielanie limitov cez email
+telemetry:main:historical-limit,Historickı limit
+telemetry:main:limit-per-hour,Limit za hodinu
+telemetry:main:send-test-message,Odosla testovaciu správu
+telemetry:notification:from,Od
+telemetry:notification:password,Heslo
+telemetry:notification:port,Port
+telemetry:notification:server,Server
+telemetry:notification:to,Notifikácia
+temperatur:controlnothing,iadne kontrola
+temperature:calibrate,Kalibrácia
+temperature:calibration:apply,Poui
+temperature:calibration:set_temperature,Nastavte teplotu
+temperature:celsius,Celzia
+temperature:chart:current,Teplota(aktuálna)
+temperature:chart:historical,Teplota(Priemerná)
+temperature:chart_color,Farba grafu
+temperature:chart_ymax,Maximálna hodnota grafu
+temperature:chart_ymin,Minimálny graf
+temperature:control,Ovládanie
+temperature:controlequipment,Pouitie
+temperature:controlmacro,Makro
+temperature:current_reading,Aktuálne dáta
+temperature:fahrenheit,Fahrenheit
+temperature:heater_cooler,Ohrievaè/Chladenie
+temperature:hysteresis_less_than,Hysteréza je menšia ako prijate¾ná prahová hodnota
+temperature:lower_function,Ohrievaè
+temperature:lower_threshold,Prahová hodnota ohrievaèa
+temperature:sensor,Senzor
+temperature:temperature,Templota
+temperature:upper_function,Chladenie
+temperature:upper_threshold,Limit chladenia
+temperature:validation_error,Nastavenia teploty nie je moné uloi z dôvodu chıb overenia. Opravte chyby a skúste to znova.vvuevo.
+temperature:warn_delete,Táto akcia odstráni
+timers:after,Neskôr
+timers:and_then,A potom
+timers:day_required,Vyaduje sa deò
+timers:duration_required,Trvanie
+timers:equipment,Pouitie
+timers:equipment:off,Vypnuté
+timers:equipment:on,Zapnuté
+timers:equipment:revert,Spä
+timers:equipment_action,Akcia
+timers:equipment_required,Vyaduje sa vybavenie
+timers:function,Funkcia
+timers:hour_required,Vyaduje sa hodina
+timers:macro,Názov makra
+timers:macros,Makro
+timers:message,Správa
+timers:message_required,Vyaduje sa hlásenie
+timers:minute_required,Vyaduje sa minúta
+timers:name_required,Zada názov
+timers:on_required,Vyaduje sa
+timers:reminder,Upozornenie
+timers:sec,Sekunda
+timers:second_required,Vyaduje sa druhá
+timers:stay_off,Vypnuté
+timers:stay_on,Zapnuté
+timers:subject,Názov
+timers:subject_required,Zada názov
+timers:timer_status_required,Stav èasovaèa
+timers:turn_back_off,Regresar a Apagado
+timers:turn_back_on,Regresar a Encendido
+timers:turn_off,Vypnuté
+timers:turn_on,Zapnuté
+timers:type_required,Zada typ
+timers:validation_error,Nastavenia èasovaèa nie je moné uloi z dôvodu chıb overenia. Opravte chyby a skúste to znova.
