@@ -36,8 +36,8 @@ class chart extends React.Component {
           <AreaChart data={this.props.usage.current}>
             <defs>
               <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='5%' stopColor='#00C851' stopOpacity={0.8} />
-                <stop offset='95%' stopColor='#007E33' stopOpacity={0} />
+                <stop offset='5%' stopColor={c.color} stopOpacity={0.8} />
+                <stop offset='95%' stopColor={c.color} stopOpacity={0} />
               </linearGradient>
             </defs>
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
@@ -46,7 +46,7 @@ class chart extends React.Component {
             <Area
               type='linear'
               dataKey='value'
-              stroke='#007E33'
+              stroke={c.color}
               isAnimationActive={false}
               fillOpacity={1}
               fill='url(#gradient)'
