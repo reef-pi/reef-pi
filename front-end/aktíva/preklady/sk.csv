@@ -20,7 +20,7 @@ driver,	Ovladač
 edit,	Upraviť
 enabled,	Zapnuté
 end_time,	Čas ukončenia
-equipment,	Vybavenie
+equipment,	Zásuvky
 errors,	Chyba
 full_moon,	Úplne
 health,	Stav
@@ -91,7 +91,7 @@ capabilities:dashboard,	Panel
 capabilities:dev_mode,	Režím pre vývojarov
 capabilities:doser,	Dávkovač
 capabilities:dosing_pumps,	Davkovacia pumpa
-capabilities:equipment,	Vybavennie
+capabilities:equipment,	Zásuvky
 capabilities:health_check,	Kontrola stavu
 capabilities:journal,	Denník
 capabilities:lighting,	Osvetlenie
@@ -186,7 +186,7 @@ ph:chart_ymin,	Min
 ph:check_frequency,	Kontrola frekvencie
 ph:control,	Kontrola
 ph:control_required,	Kontrola
-ph:controlequipment,	Vybavenie
+ph:controlequipment,	Zásuvky
 ph:controlmacro,	Makro
 ph:controlnothing,	Žiadne
 ph:current_reading,	Aktuálne čítanie
@@ -214,7 +214,7 @@ ph:upper_threshold,	Horná hranica
 ph:upper_threshold_greater_than,	Vyžaduje sa horná hranica
 ph:upper_threshold_required,	Vyžaduje sa horný prah
 ph:upper_threshold_type,	Horná hranica musí byť číslo
-ph:validation_error,	Nastavenia Ph nie je možné uložiť z dôvodu chýb overenia. Opravte chyby a skúste to znova.
+ph:validation_error,	Nastavenia Ph nie je možné uložiť z dôvodu chýb overenia opravte chyby a skúste to znova.
 ph:warn_delete,	Odstránenie nastavenia
 pins:Pins,	Piny
 signin:invalidcredentials,	Neplatné poverenie
@@ -265,11 +265,11 @@ timers:equipment:off,	Vypnuté
 timers:equipment:on,	Zapnuté
 timers:equipment:revert,	Späť
 timers:equipment_action,	Akcia
-timers:equipment_required,	Vyžaduje sa vybavenie
+timers:equipment_required,	Vyžaduju sa zásuvky
 timers:function,	Funkcia
 timers:hour_required,	Vyžaduje sa hodina
 timers:macro,	Názov makra
-timers:macros,	Makro
+timers:macros, Makro
 timers:message,	Správa
 timers:message_required,	Vyžaduje sa hlásenie
 timers:minute_required,	Vyžaduje sa minúta
@@ -287,5 +287,5 @@ timers:turn_back_off,	Vráťte sa do vypnutia
 timers:turn_back_on,	Vrátiť späť
 timers:turn_off,	Vypnuté
 timers:turn_on,	Zapnuté
-timers:type_required	Zadať typ
-timers:validation_error	Nastavenia časovača nie je možné uložiť z dôvodu chýb overenia. Opravte chyby a skúste to znova.
+timers:type_required,	Zadať typ
+timers:validation_error,	Nastavenia časovača nie je možné uložiť z dôvodu chýb overenia opravte chyby a skúste to znova.
