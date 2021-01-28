@@ -220,8 +220,6 @@ ph:upper_threshold_required,Upper Threshold is required
 ph:upper_threshold_type,Upper Threshold must be a number
 ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ph:warn_delete,This action will delete
-ph:chart_y_max, Max Y Scale Value
-ph:chart_y_min, Min Y Scale Value
 pins:Pins,Pins
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password

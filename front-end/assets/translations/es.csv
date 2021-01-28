@@ -107,6 +107,7 @@ collapsible:delete,Eliminar
 collapsible:edit,Editar
 color_picker:choose,Elegir
 configuration:about:current_time,Fecha Actual
+configuration:about:modifications,
 configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version

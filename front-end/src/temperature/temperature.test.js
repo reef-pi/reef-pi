@@ -109,6 +109,7 @@ describe('Temperature controller ui', () => {
     const fn = jest.fn()
 
     // *** added chart_y_min, chart_y_max - JFR 20201110
+    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',
@@ -122,9 +123,7 @@ describe('Temperature controller ui', () => {
         enable: true,
         min: 70,
         max: 90
-      },
-      chart_y_min: 0,
-      chart_y_max: 100
+      }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />)
     wrapper.simulate('submit', {})
@@ -135,6 +134,7 @@ describe('Temperature controller ui', () => {
     const fn = jest.fn()
 
     // *** added chart_y_min, chart_y_max - JFR 20201110
+    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',
@@ -147,9 +147,7 @@ describe('Temperature controller ui', () => {
         enable: true,
         min: 70,
         max: 90
-      },
-      chart_y_min: 0,
-      chart_y_max: 100
+      }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('macro')
@@ -159,6 +157,7 @@ describe('Temperature controller ui', () => {
     const fn = jest.fn()
 
     // *** added chart_y_min, chart_y_max - JFR 20201110
+    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',
@@ -172,9 +171,7 @@ describe('Temperature controller ui', () => {
         enable: true,
         min: 70,
         max: 90
-      },
-      chart_y_min: 0,
-      chart_y_max: 100
+      }
     }
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('equipment')
