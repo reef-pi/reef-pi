@@ -6,52 +6,52 @@ analog_inputs,Entradas Análoga
 are_you_sure,¿Esta Seguro?
 ato,
 cancel,Cancelar
-charts,
+charts,Gráficas
 clear,Limpiar
-color,
-columns,
+color,Color
+columns,Columnas
 configure,Configurar
 delete,Eliminar
 disabled,Desactivar
 documentation,Documentación
 done,Listo
 doser,Dosificador
-driver,
+driver,Controlador
 edit,Editar
 enabled,Activar
 end_time,
 equipment,Equipo
 errors,Errores
 full_moon,
-health,
-height,
+health,Estado
+height,Altura
 import_db,Extraer Base de Datos
 in-use,en-uso
 inlet,Entrada
 inlets,Entradas
 install,Instalar
-jack,
-jacks,
+jack,Enchufe
+jacks,Enchufes
 light,Luz
 lights,Luces
 loading,Cargando
-maximum,
-minimum,
+maximum,Máximo
+minimum,Mínimo
 name,Nombre
 none,Ninguno
-off,
+off,Apagado
 ok,Ok
-on,
+on,Encendido
 one_shot,Un Intento
 outlet,Caja de Salida
 outlets,Caja de Salidas
 pin,Aguja
-profile,
+profile,Perfil
 reverse,Reversa
-rows,
+rows,Filas
 running,Ejecutando
 save,Guardar
-schedule,
+schedule,Horario
 sec,seg
 second_s,segundo(s)
 select,Seleccionar
@@ -62,14 +62,14 @@ status,Estado
 unit,Unidad
 update,Actualizar
 upgrade_reef_pi,Actualizar reef-pi a version
-width,
+width,Anchura
 ato:alert_after,Alerta despues de
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
 ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
 ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
 ato:chk_freq_required,Frecuencia de Revisión es requerida
-ato:control,
+ato:control,Control
 ato:control_pump,Control de Bomba
 ato:control_target,
 ato:controlequipment,Equipo
@@ -93,7 +93,7 @@ capabilities:doser,Dosificador
 capabilities:dosing_pumps,Dosificadores
 capabilities:equipment,Equipos
 capabilities:health_check,Chequeo del Sistema
-capabilities:journal,
+capabilities:journal,Diario
 capabilities:lighting,Iluminación
 capabilities:lights,Luces
 capabilities:log,Log
@@ -183,7 +183,7 @@ ph:analog_input_required,Entrada Analogica es requerida
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
-ph:chart_color,
+ph:chart_color,Color
 ph:chart_unit,
 ph:chart_ymax,
 ph:chart_ymin,
@@ -242,7 +242,7 @@ temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
 temperature:chart:current,Temperatura(ultima)
 temperature:chart:historical,Temperatura(Historico)
-temperature:chart_color,
+temperature:chart_color,Color
 temperature:chart_ymax,
 temperature:chart_ymin,
 temperature:control,Control

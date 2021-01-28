@@ -57,7 +57,7 @@ class chart extends React.Component {
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
               type='monotone'
-              stroke='#ce93d8'
+              stroke={this.props.config.chart.color}
               isAnimationActive={false}
               yAxisId='left'
               dot={false}
