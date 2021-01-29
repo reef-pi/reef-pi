@@ -36,7 +36,6 @@ export const buildTypeMap = (props) => {
       label: i18next.t('equipment'),
       options: []
     },
-    // *** added equipment control panel as chart - JFR 20201201
     equipment_barchart: {
       name: 'equipment_barchart',
       label: i18next.t('equipment:chart:barchart'),

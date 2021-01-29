@@ -108,8 +108,6 @@ describe('Temperature controller ui', () => {
   it('<TemperatureForm /> for edit', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201110
-    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',
@@ -133,8 +131,6 @@ describe('Temperature controller ui', () => {
   it('<TemperatureForm /> for edit with macro', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201110
-    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',
@@ -156,8 +152,6 @@ describe('Temperature controller ui', () => {
   it('<TemperatureForm /> for edit with equipment', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201110
-    // *** removed above after upstream update - JFR 20210128
     const tc = {
       id: '4',
       name: 'name',

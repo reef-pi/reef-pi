@@ -1,4 +1,3 @@
-// *** new equipment control panel- JFR 20201214
 import React from 'react'
 import { fetchEquipment, updateEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
@@ -24,7 +23,6 @@ class ctrl_panel extends React.Component {
     window.clearInterval(this.state.timer)
   }
 
-  // *** Toggles the equipment outlet on/off 
   toggleState(e, equipment_id, equipment_name, equipment_on, equipment_outlet) {
     e.preventDefault();
     const values = {

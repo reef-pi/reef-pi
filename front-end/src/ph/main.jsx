@@ -28,7 +28,6 @@ class ph extends React.Component {
     this.props.fetchPhProbes()
   }
 
-  // *** sort pH probes by name instead of id - JFR 20201118 - modified 20201201
   probeList () {
     return this.props.probes
       .sort((a, b) => {
@@ -79,7 +78,6 @@ class ph extends React.Component {
     this.setState({ currentProbe: null, showCalibrate: false })
   }
 
-  // *** added chart_y_min, chart_y_max - JFR 20201111
   valuesToProbe (values) {
     const probe = {
       name: values.name,

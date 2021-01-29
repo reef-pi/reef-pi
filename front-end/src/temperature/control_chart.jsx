@@ -39,7 +39,6 @@ class chart extends React.Component {
         </span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
-          // *** Y scale adjustments JFR 20201112
             <YAxis dataKey='value' 
                     type='number'
                     yAxisId='left'
@@ -52,7 +51,7 @@ class chart extends React.Component {
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />    // *** display only 1 decimal - JFR 20201112
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line

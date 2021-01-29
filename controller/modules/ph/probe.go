@@ -33,8 +33,6 @@ type ChartConfig struct {
 }
 
 //swagger:model phProbe
-// *** added ChartYMax, ChartYMin - JFR 20201110
-// *** removed above after upstream changes - JFR 20210111
 type Probe struct {
 	ID          string        `json:"id"`
 	Name        string        `json:"name"`

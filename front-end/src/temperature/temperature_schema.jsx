@@ -82,8 +82,6 @@ const TemperatureSchema = Yup.object().shape({
           .typeError(i18next.t('temperature:hysteresis_type'))
       } else { return schema }
     }),
-    // *** added chart_y_min, chart_y_max - JFR 20201110
-    // *** removed above after upstream update - JFR 20210128
 })
 
 export default TemperatureSchema

@@ -82,7 +82,6 @@ class outlets extends React.Component {
 
   list () {
     const list = []
-    // *** natural sort - JFR 20201215
     this.props.outlets
       .sort((a, b) => {
         return a.name.localeCompare(b.name,

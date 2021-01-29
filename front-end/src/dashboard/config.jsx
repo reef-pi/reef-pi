@@ -146,7 +146,6 @@ class config extends React.Component {
   }
 }
 
-// *** added equips props for new equipment charts - JFR 20201201
 const mapStateToProps = state => {
   return {
     atos: state.atos,

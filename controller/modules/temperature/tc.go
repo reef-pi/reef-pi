@@ -26,8 +26,6 @@ type Notify struct {
 }
 
 //swagger:model temperatureController
-// *** added ChartYMax, ChartYMin - JFR 20201110
-// *** removed above after upstream changes - JFR 20210111
 type TC struct {
 	sync.Mutex
 	ID           string        `json:"id"`

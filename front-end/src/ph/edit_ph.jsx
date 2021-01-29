@@ -76,8 +76,6 @@ const EditPh = ({
     )
   }
 
-  // *** added chartYminScale/chartYmaxScale - JFR 20201111
-  // *** removed above after upstream change - JFR 20210111
   return (
     <form onSubmit={handleSubmit}>
       <div className='row'>

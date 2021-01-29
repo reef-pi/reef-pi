@@ -42,7 +42,7 @@ class chart extends React.Component {
             </defs>
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />    // *** display only 1 decimal - JFR 20201107
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
             <Area
               type='linear'
               dataKey='value'

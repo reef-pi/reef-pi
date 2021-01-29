@@ -90,7 +90,6 @@ class jacks extends React.Component {
 
   list () {
     const list = []
-    // *** natural sort - JFR 20201215
     this.props.jacks.sort((a, b) => { return a.name.localeCompare(b.name,
                                       navigator.languages[0] || navigator.language,
                                       {numeric:true, ignorePunctuation:true})

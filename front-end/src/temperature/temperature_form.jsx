@@ -15,8 +15,6 @@ const TemperatureForm = withFormik({
       }
     }
 
-    // *** added chart Y min/max values - JFR 20201110
-    // *** removed above after upstream change - JFR 20210111
     const values = {
       id: tc.id || '',
       name: tc.name || '',

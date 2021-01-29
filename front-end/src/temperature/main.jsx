@@ -42,8 +42,6 @@ class main extends React.Component {
     })
   }
 
-  // *** added chart_y_min, chart_y_max - JFR 20201110
-  // *** removed above after upstream change - JFR 20210111
   valuesToProbe (values) {
     const payload = {
       name: values.name,
@@ -73,7 +71,6 @@ class main extends React.Component {
     return payload
   }
 
-// *** sort temp probes by name instead of id - JFR 20201118 modified 20201201
   probeList () {
     return this.props.probes
       .sort((a, b) => {

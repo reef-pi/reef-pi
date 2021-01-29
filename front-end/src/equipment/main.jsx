@@ -43,7 +43,6 @@ class main extends React.Component {
     if (this.state.addEquipment) {
       nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.handleAddEquipment} />
     }
-    // *** sort equipment by name instead of id - JFR 20201118 - modified 20201201
     return (
       <ul className='list-group list-group-flush'>
         {this.props.equipment.sort((a, b) => { return a.name.localeCompare(b.name,

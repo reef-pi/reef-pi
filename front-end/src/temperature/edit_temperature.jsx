@@ -102,8 +102,6 @@ const EditTemperature = ({
     })
   }
 
-  // *** added chartYminScale/chartYmaxScale - JFR 20201109
-  // *** removed above after upstream change - JFR 20210111
   return (
     <form onSubmit={handleSubmit}>
       <div>

@@ -62,7 +62,6 @@ class main extends React.Component {
     )
   }
 
-  // *** sort ato probes by name instead of id - JFR 20201118 modified 20201201
   probeList () {
     return this.props.atos.sort((a, b) => { return a.name.localeCompare(b.name, 
                                                     navigator.languages[0] || navigator.language, 

@@ -74,7 +74,6 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,
@@ -93,7 +92,6 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit with macro', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,
@@ -111,7 +109,6 @@ describe('Ph ui', () => {
   it('<PhForm /> for edit without control', () => {
     const fn = jest.fn()
 
-    // *** added chart_y_min, chart_y_max - JFR 20201111
     const probe = {
       name: 'name',
       enable: true,

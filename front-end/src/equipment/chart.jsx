@@ -71,7 +71,6 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-// *** changed to include control panel - JFR 20201201
 const EquipmentChart = connect(
   mapStateToProps,
   mapDispatchToProps

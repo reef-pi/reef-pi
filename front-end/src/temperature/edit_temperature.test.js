@@ -19,8 +19,6 @@ describe('<EditTemperature />', () => {
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
 
-    // *** added chart_y_min, chart_y_max - JFR 20201110
-    // *** removed above after upstream change - JFR 20210111
     values = {
       id: '1',
       name: 'tc1',

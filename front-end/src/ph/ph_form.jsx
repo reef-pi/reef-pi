@@ -12,8 +12,6 @@ const PhForm = withFormik({
       }
     }
 
-    // *** added chart Y min/max values - JFR 20201111
-    // *** removed above after upstream change - JFR 20210111
     const value = {
       id: data.id || '',
       name: data.name || '',

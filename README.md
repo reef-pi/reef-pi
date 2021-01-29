@@ -13,8 +13,6 @@ An open source reef tank controller based on Raspberry Pi
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/reef-pi/reef-pi/blob/master/LICENSE.txt)
 [![GoDoc](https://godoc.org/github.com/reef-pi/reef-pi?status.svg)](https://godoc.org/github.com/reef-pi/reef-pi)
 
-## This a fork of reef-pi by PRSWS
-
 ## Introduction
 
 [reef-pi](http://reef-pi.com) is an opensource [reef tank](https://en.wikipedia.org/wiki/Reef_aquarium) controller based on  [Raspberry Pi](https://www.raspberrypi.org/). This is the software repository for reef-pi. If you are trying to build a physical controller to automate your reef tank, use reef-pi [website](http://reef-pi.com). If you are new to reef keeping and want to know about the hobby use one of the online forums such as [reef2reef](https://www.reef2reef.com/) or [nano-reef](https://www.nano-reef.com/)(for smaller reef tanks).

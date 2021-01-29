@@ -3,7 +3,6 @@ import TempReadingsChart from 'temperature/readings_chart'
 import MultiTempReadingsChart from 'temperature/multi_readings_chart'
 import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
-// *** added equipment control panel - JFR 20201201
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
 import LightChart from 'lighting/chart'
 import ATOChart from 'ato/chart'
@@ -73,7 +72,6 @@ class dashboard extends React.Component {
               </div>
             )
             break
-            // *** added equipment control panel - JFR 20201201
             case 'equipment_ctrlpanel':
               columns.push(
                 <div className='col' key={'chart-' + i + '-' + j}>

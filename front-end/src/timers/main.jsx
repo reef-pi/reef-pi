@@ -23,7 +23,6 @@ class Main extends React.Component {
     this.props.fetch()
   }
 
-  // *** sort timers by name instead of id - JFR 20201118 modified 20201201
   timerList () {
     return this.props.timers
       .sort((a, b) => {

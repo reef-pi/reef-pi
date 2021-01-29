@@ -81,7 +81,6 @@ class inlets extends React.Component {
 
   list () {
     const items = []
-    // *** natural sort - JFR 20201215
     this.props.inlets.sort((a, b) => { return a.name.localeCompare(b.name,
                                         navigator.languages[0] || navigator.language,
                                         {numeric:true, ignorePunctuation:true})
