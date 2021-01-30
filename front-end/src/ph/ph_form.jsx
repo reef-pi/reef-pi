@@ -11,6 +11,7 @@ const PhForm = withFormik({
         notify: {}
       }
     }
+
     const value = {
       id: data.id || '',
       name: data.name || '',

@@ -129,7 +129,11 @@
     }
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
     "form-data": "^3.0.0",
-    "formdata-polyfill": "^3.0.20"
+    "formdata-polyfill": "^3.0.20",
+    "konva": "^7.2.0",
+    "material-ui": "^0.20.2",
+    "react-konva": "^17.0.0-0"
   }
 }

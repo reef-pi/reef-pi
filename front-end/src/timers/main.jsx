@@ -26,7 +26,9 @@ class Main extends React.Component {
   timerList () {
     return this.props.timers
       .sort((a, b) => {
-        return parseInt(a.id) < parseInt(b.id)
+        return a.name.localeCompare(b.name, 
+                                    navigator.languages[0] || navigator.language, 
+                                    {numeric: true, ignorePunctuation: true})
       })
       .map(timer => {
         const handleToggleState = () => {

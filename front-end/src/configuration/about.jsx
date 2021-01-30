@@ -26,9 +26,6 @@ class about extends React.Component {
               <h4 className='my-0 font-weight-normal text-center'>reef-pi</h4>
             </div>
             <div className='card-body'>
-              <h2 className='card-title pricing-card-title'>
-                {i18n.t('configuration:about:version')}: <small className='text-muted'>{this.props.info.version}</small>
-              </h2>
               <ul className='list-unstyled mt-3 mb-4'>
                 <li>
                   {i18n.t('configuration:about:website')}: <a href='http://reef-pi.com'>http://reef-pi.com</a>

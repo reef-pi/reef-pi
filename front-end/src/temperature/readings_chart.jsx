@@ -31,7 +31,7 @@ class chart extends React.Component {
     const c = this.props.config.chart
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
+        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({parseFloat(currentTemp).toFixed(1)})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <AreaChart data={this.props.usage.current}>
             <defs>
@@ -42,7 +42,7 @@ class chart extends React.Component {
             </defs>
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
-            <Tooltip />
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
             <Area
               type='linear'
               dataKey='value'

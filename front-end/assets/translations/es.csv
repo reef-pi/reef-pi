@@ -107,6 +107,7 @@ collapsible:delete,Eliminar
 collapsible:edit,Editar
 color_picker:choose,Elegir
 configuration:about:current_time,Fecha Actual
+configuration:about:modifications,
 configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
@@ -150,6 +151,10 @@ cron:hour,Hora
 cron:minute,Minuto
 cron:month,Mes
 cron:second,Segundo
+cron:week,Semana
+dashboard:back_to_dashboard,Volver al dashboard
+equipment:chart:barchart,Equipo(Gráfica de Barras)
+equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
 cron:week,Semana
 dashboard:back_to_dashboard,Volver al panel
 fatal_error:connection_lost,Conexion Perdida
