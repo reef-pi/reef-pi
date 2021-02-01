@@ -46,7 +46,14 @@ func (j *Job) Validate() error {
 		if reminder.Title == "" {
 			return fmt.Errorf("Missing reminder title")
 		}
-	case storage.MacroBucket, storage.EquipmentBucket:
+	case storage.MacroBucket,
+		storage.EquipmentBucket,
+		storage.ATOBucket,
+		storage.CameraBucket,
+		storage.DoserBucket,
+		storage.LightingBucket,
+		storage.PhBucket,
+		storage.TemperatureBucket:
 		var m Trigger
 		if err := json.Unmarshal(j.Target, &m); err != nil {
 			return err

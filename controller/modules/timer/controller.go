@@ -54,7 +54,14 @@ func (c *Controller) On(id string, on bool) error {
 func (c *Controller) InUse(depType, id string) ([]string, error) {
 	var deps []string
 	switch depType {
-	case storage.MacroBucket, storage.EquipmentBucket, storage.ATOBucket, storage.CameraBucket, storage.DoserBucket, storage.LightingBucket, storage.PhBucket, storage.TemperatureBucket:
+	case storage.MacroBucket,
+		storage.EquipmentBucket,
+		storage.ATOBucket,
+		storage.CameraBucket,
+		storage.DoserBucket,
+		storage.LightingBucket,
+		storage.PhBucket,
+		storage.TemperatureBucket:
 		ts, err := c.List()
 		if err != nil {
 			return deps, err
