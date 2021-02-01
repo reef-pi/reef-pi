@@ -1,20 +1,24 @@
 package telemetry
 
 import (
-    "errors"
-    "fmt"
-    "github.com/prometheus/client_golang/prometheus"
-    "github.com/prometheus/client_golang/prometheus/promauto"
-    "github.com/reef-pi/adafruitio"
-    "github.com/reef-pi/reef-pi/controller/storage"
-    "log"
-    "net/http"
-    "strings"
-    "sync"
-    "time"
+	"errors"
+	"fmt"
+	"log"
+	"net/http"
+	"regexp"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/reef-pi/adafruitio"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 const DBKey = "telemetry"
+
+var sanitizePrometheusMetricRegex = regexp.MustCompile("[^a-zA-Z0-9_]")
 
 type ErrorLogger func(string, string) error
 
@@ -174,8 +178,8 @@ func SanitizeAdafruitIOFeedName(name string) string {
 }
 func SanitizePrometheusMetricName(name string) string {
 	name = strings.ToLower(name)
-	name = strings.Replace(name, " ", "_", -1)
-	return strings.Replace(name, "-", "_", -1)
+	name = sanitizePrometheusMetricRegex.ReplaceAllString(name, "_")
+	return name
 }
 
 func (t *telemetry) EmitMetric(module, name string, v float64) {

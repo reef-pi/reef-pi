@@ -76,7 +76,7 @@ describe('Temperature controller ui', () => {
       <ControlChart
         sensor_id='1'
         store={mockStore({
-          tcs: [{ id: '1', min: 72, max: 78 }],
+          tcs: [{ id: '1', min: 72, max: 78, chart:{} }],
           tc_usage: { 1: { historical: [{ cooler: 1 }], current: [] } }
         })}
       />

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Area, Tooltip, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
+import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
 class chart extends React.Component {
+
   componentDidMount () {
     this.props.fetch(this.props.sensor_id)
     const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
@@ -18,6 +19,7 @@ class chart extends React.Component {
   }
 
   render () {
+
     if (this.props.usage === undefined) {
       return (<div />)
     }
@@ -28,30 +30,17 @@ class chart extends React.Component {
     if (this.props.usage.current.length > 1) {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
     }
-    const c = this.props.config.chart
+
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({parseFloat(currentTemp).toFixed(1)})</span>
-        <ResponsiveContainer height={this.props.height} width='100%'>
-          <AreaChart data={this.props.usage.current}>
-            <defs>
-              <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='5%' stopColor={c.color} stopOpacity={0.8} />
-                <stop offset='95%' stopColor={c.color} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
+        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
+        <ResponsiveContainer height={this.props.height}>
+          <LineChart data={metrics}>
+            <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
-            <Area
-              type='linear'
-              dataKey='value'
-              stroke={c.color}
-              isAnimationActive={false}
-              fillOpacity={1}
-              fill='url(#gradient)'
-            />
-          </AreaChart>
+            <Tooltip />
+            <YAxis type="number" domain={[75,85]} />
+          </LineChart>
         </ResponsiveContainer>
       </div>
     )
@@ -71,5 +60,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const ReadingsChart = connect(mapStateToProps, mapDispatchToProps)(chart)
-export default ReadingsChart
+const MultiReadingsChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+export default MultiReadingsChart

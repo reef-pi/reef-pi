@@ -39,16 +39,24 @@ class chart extends React.Component {
         </span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
-            <YAxis yAxisId='left' orientation='left' />
+            <YAxis dataKey='value' 
+                    type='number'
+                    yAxisId='left'
+                    orientation='left'
+                    allowDecimals={false}
+                    domain={[(value) => parseFloat(this.props.config.chart_y_min).toFixed(0), (value) => parseFloat(this.props.config.chart_y_max).toFixed(0)]}
+                    allowDataOverflow={true}
+                    tickFormatter={(value) => parseFloat(value).toFixed(0)}
+            />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip />
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
               type='monotone'
-              stroke='#ce93d8'
+              stroke={this.props.config.chart.color}
               isAnimationActive={false}
               yAxisId='left'
               dot={false}

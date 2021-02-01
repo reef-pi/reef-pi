@@ -4,6 +4,7 @@ import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
+
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {
@@ -29,6 +30,9 @@ class chart extends React.Component {
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
+      if (current !== '') {
+        current = parseFloat(current).toFixed(2);
+      }
     }
     const c = this.props.config.chart
     return (
@@ -38,8 +42,8 @@ class chart extends React.Component {
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip />
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} lable={c.unit} />
+            <Tooltip formatter={(value) => parseFloat(value).toFixed(2)} />
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} label={c.unit} />
           </LineChart>
         </ResponsiveContainer>
       </div>

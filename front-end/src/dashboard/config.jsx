@@ -133,6 +133,7 @@ class config extends React.Component {
             phs={this.props.phs}
             lights={this.props.lights}
             dosers={this.props.dosers}
+            equips={this.props.equips}
           />
         </div>
         <div className='row'>
@@ -152,7 +153,8 @@ const mapStateToProps = state => {
     tcs: state.tcs,
     lights: state.lights,
     dosers: state.dosers,
-    config: state.dashboard
+    config: state.dashboard,
+    equips: state.equipment
   }
 }
 

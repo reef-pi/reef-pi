@@ -71,8 +71,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const Chart = connect(
+const EquipmentChart = connect(
   mapStateToProps,
   mapDispatchToProps
 )(chart)
-export default Chart
+export default EquipmentChart

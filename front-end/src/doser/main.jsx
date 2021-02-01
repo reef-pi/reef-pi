@@ -29,7 +29,10 @@ class doser extends React.Component {
 
   doserList () {
     return (
-      this.props.dosers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(doser => {
+      this.props.dosers.sort((a, b) => { return a.name.localeCompare(b.name, 
+                                                navigator.languages[0] || navigator.language, 
+                                                {numeric: true, ignorePunctuation: true}) 
+      }).map(doser => {
         const calibrationButton = (
           <button
             type='button' name={'calibrate-doser-' + doser.id}

@@ -107,6 +107,7 @@ collapsible:delete,
 collapsible:edit,
 color_picker:choose,
 configuration:about:current_time,Heure actuelle
+configuration:about:modifications,
 configuration:about:status,Statut
 configuration:about:uptime,Durée de fonctionnement
 configuration:about:version,Version
@@ -152,6 +153,8 @@ cron:month,
 cron:second,
 cron:week,
 dashboard:back_to_dashboard,Retour au Tableau de bord
+equipment:chart:barchart,
+equipment:chart:ctrlpanel,
 fatal_error:connection_lost,
 fatal_error:fatal_error,
 fatal_error:message,

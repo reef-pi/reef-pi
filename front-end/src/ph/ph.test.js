@@ -80,7 +80,9 @@ describe('Ph ui', () => {
       address: 99,
       notify: { enable: false },
       control: true,
-      is_macro: false
+      is_macro: false,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
     wrapper.simulate('submit', {})
@@ -96,7 +98,9 @@ describe('Ph ui', () => {
       address: 99,
       notify: { enable: false },
       control: true,
-      is_macro: true
+      is_macro: true,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('macro')
@@ -111,7 +115,9 @@ describe('Ph ui', () => {
       address: 99,
       notify: { enable: false },
       control: false,
-      is_macro: true
+      is_macro: true,
+      chart_y_min: 0,
+      chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('nothing')

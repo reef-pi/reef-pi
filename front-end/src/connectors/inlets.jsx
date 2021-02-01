@@ -81,7 +81,10 @@ class inlets extends React.Component {
 
   list () {
     const items = []
-    this.props.inlets.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((i, n) => {
+    this.props.inlets.sort((a, b) => { return a.name.localeCompare(b.name,
+                                        navigator.languages[0] || navigator.language,
+                                        {numeric:true, ignorePunctuation:true})
+    }).forEach((i, n) => {
       const d = this.props.drivers.filter(d => d.id === i.driver)[0] || {}
       items.push(
         <Inlet

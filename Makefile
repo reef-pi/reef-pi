@@ -1,6 +1,6 @@
 SOURCEDIR=.
 SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
-VERSION=$(shell git describe --always --tags)
+VERSION:=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 DETECT_RACE='-race'
 

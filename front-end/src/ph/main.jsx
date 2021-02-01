@@ -31,7 +31,9 @@ class ph extends React.Component {
   probeList () {
     return this.props.probes
       .sort((a, b) => {
-        return parseInt(a.id) < parseInt(b.id)
+        return a.name.localeCompare(b.name, 
+                                    navigator.languages[0] || navigator.language, 
+                                    {numeric: true, ignorePunctuation: true})
       })
       .map(probe => {
         const calibrationButton = (
@@ -95,7 +97,9 @@ class ph extends React.Component {
       downer_eq: values.lowerFunction,
       max: parseFloat(values.upperThreshold),
       upper_eq: values.upperFunction,
-      hysteresis: parseFloat(values.hysteresis)
+      hysteresis: parseFloat(values.hysteresis),
+      chart_y_min: parseInt(values.chart_y_min),
+      chart_y_max: parseInt(values.chart_y_max)
     }
     return probe
   }

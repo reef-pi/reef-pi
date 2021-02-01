@@ -138,7 +138,10 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
+      this.props.lights.sort((a, b) => { return a.name.localeCompare(b.name,
+                                                                    navigator.languages[0] || navigator.language, 
+                                                                    {numeric: true, ignorePunctuation: true}) 
+      }).map(light => {
         let panelContent =
           <Light
             config={light}
