@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from 'react-toggle-switch'
 
-class ctrl_panel extends React.Component {
+class CtrlPanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -22,15 +22,15 @@ class ctrl_panel extends React.Component {
     window.clearInterval(this.state.timer)
   }
 
-  toggleState (e, equipment_id, equipment_name, equipment_on, equipment_outlet) {
+  toggleState (e, equipmentId, equipmentName, equipmentOn, equipmentOutlet) {
     e.preventDefault()
     const values = {
-      id: equipment_id,
-      name: equipment_name,
-      on: !equipment_on,
-      outlet: equipment_outlet
+      id: equipmentId,
+      name: equipmentName,
+      on: !equipmentOn,
+      outlet: equipmentOutlet
     }
-    this.props.updateEquipment(parseInt(equipment_id), values)
+    this.props.updateEquipment(parseInt(equipmentId), values)
   }
 
   render () {
@@ -40,13 +40,12 @@ class ctrl_panel extends React.Component {
 
     return (
       <div className='container'>
-        <span className='h6'>Equipment Switch Panel</span><br /><br />
         <div className='row'>
           {this.props.equipment.sort((a, b) => {
             return a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true })
           }).map(item => {
             return (
-              <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3'>
+              <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                 <FormControlLabel
                   control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet) }} />}
                   label={item.name}
@@ -77,6 +76,6 @@ const mapDispatchToProps = dispatch => {
 const EquipmentCtrlPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ctrl_panel)
+)(CtrlPanel)
 
 export default EquipmentCtrlPanel

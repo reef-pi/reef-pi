@@ -138,7 +138,7 @@ export default class Subsystem extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <label className='col'> {i18next.t('timers:' + entity + ':action')}</label>
+          <label className='col'> {i18next.t('action')}</label>
           <span className='col'>
             <div className='dropdown'>
               <button

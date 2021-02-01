@@ -1,5 +1,5 @@
 import React from 'react'
-import { ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
+import { ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -44,15 +44,12 @@ class chart extends React.Component {
               type='number'
               yAxisId='left'
               orientation='left'
-              allowDecimals={false}
-              domain={[(value) => parseFloat(this.props.config.chart_y_min).toFixed(0), (value) => parseFloat(this.props.config.chart_y_max).toFixed(0)]}
+              domain={[this.props.config.chart_y_min, this.props.config.chart_y_max]}
               allowDataOverflow
-              tickFormatter={(value) => parseFloat(value).toFixed(0)}
             />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value) => parseFloat(value).toFixed(1)} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line

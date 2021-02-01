@@ -14,11 +14,6 @@ class PowerButton extends Component {
   }
 
   toggleOnOff () {
-    if (this.state.on === true) {
-      alert('id: ' + this.state.id + ' Toggle On->Off')
-    } else {
-      alert('id: ' + this.state.id + ' Toggle Off->On')
-    }
     this.setState({
       on: !this.state.on
     })
