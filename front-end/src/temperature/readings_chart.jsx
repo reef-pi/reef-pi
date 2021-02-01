@@ -1,5 +1,5 @@
 import React from 'react'
-import { Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
+import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -29,6 +29,7 @@ class chart extends React.Component {
       currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
     }
     const c = this.props.config.chart
+    const unit = this.props.config.fahrenheit ? 'F' : 'C'
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
@@ -42,6 +43,7 @@ class chart extends React.Component {
             </defs>
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
+            <Tooltip formatter={(value, name) => [value, unit]} />
             <Area
               type='linear'
               dataKey='value'

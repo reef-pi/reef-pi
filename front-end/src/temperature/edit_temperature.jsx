@@ -431,6 +431,27 @@ const EditTemperature = ({
             </div>
           </div>
         </div>
+        <div className='row'>
+          <div className='col col-sm-6 col-md-3 offset-md-3'>
+            <div className='form-group'>
+              <label htmlFor='hysteresis'>{i18next.t('temperature:hysteresis')}</label>
+              <div className='input-group'>
+                <Field
+                  name='hysteresis'
+                  readOnly={readOnly || values.control === 'nothing'}
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('hysteresis', touched, errors)
+                  })}
+                />
+                <div className='input-group-append'>
+                  <span className='input-group-text'>{temperatureUnit()}</span>
+                </div>
+                <ErrorFor errors={errors} touched={touched} name='hysteresis' />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {charts()}
       </div>
 

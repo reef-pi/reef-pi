@@ -36,6 +36,16 @@ func (r *ReefPi) API() error {
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
 		utils.SummarizeAPI()
 	}
+	if r.settings.CORS {
+		router.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Access-Control-Allow-Origin", "*")
+				w.Header().Set("Access-Control-Allow-Methods", "*")
+				w.Header().Set("Access-Control-Allow-Headers", "*")
+				next.ServeHTTP(w, r)
+			})
+		})
+	}
 	return nil
 }
 
