@@ -41,8 +41,8 @@ class chart extends React.Component {
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value) => parseFloat(value).toFixed(2)} />
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} label={c.unit} />
+            <Tooltip formatter={(value, name) => [parseFloat(value).toFixed(2), c.unit]} />
+            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
           </LineChart>
         </ResponsiveContainer>
       </div>
