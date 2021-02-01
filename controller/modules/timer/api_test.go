@@ -109,16 +109,11 @@ func TestTimerController(t *testing.T) {
 		t.Fatal("Failed to delete timer job using api. Error:", err)
 	}
 
-	uq := UpdateEquipment{
-		Revert:   true,
-		ID:       "1",
-		On:       true,
-		Duration: 1,
-	}
+	trigger := json.RawMessage(`{"revert":true, "id":"1", "on":true, "duration":1}`)
 	eq.ID = "1"
-	r := EquipmentRunner{
-		equipment: e,
-		target:    uq,
+	r, err := NewSubSystemRunner(j.Type, con, trigger)
+	if err != nil {
+		t.Error(err)
 	}
 	r.Run()
 	j.Day = "X"

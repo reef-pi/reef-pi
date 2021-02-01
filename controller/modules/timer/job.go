@@ -46,21 +46,13 @@ func (j *Job) Validate() error {
 		if reminder.Title == "" {
 			return fmt.Errorf("Missing reminder title")
 		}
-	case storage.EquipmentBucket:
-		var ue UpdateEquipment
-		if err := json.Unmarshal(j.Target, &ue); err != nil {
+	case storage.MacroBucket, storage.EquipmentBucket:
+		var m Trigger
+		if err := json.Unmarshal(j.Target, &m); err != nil {
 			return err
 		}
-		if ue.ID == "" {
-			return fmt.Errorf("Missing equipment")
-		}
-	case storage.MacroBucket:
-		var macro TriggerMacro
-		if err := json.Unmarshal(j.Target, &macro); err != nil {
-			return err
-		}
-		if macro.ID == "" {
-			return fmt.Errorf("Missing equipment")
+		if m.ID == "" {
+			return fmt.Errorf("Missing %s ID", j.Type)
 		}
 	default:
 		return fmt.Errorf("Invalid timer type: %s", j.Type)
