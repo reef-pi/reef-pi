@@ -16,7 +16,10 @@ type MacroRunner struct {
 }
 
 func (m *MacroRunner) Run() {
+	if err := m.c.On(m.target, false); err != nil {
+		log.Println("ERROR: timer sub-system, Failed to complete macro. Error:", err)
+	}
 	if err := m.c.On(m.target, true); err != nil {
-		log.Println("ERROR: timer sub-system, Failed to trigger macro. Error:", err)
+		log.Println("ERROR: timer sub-system, Failed to revert macro. Error:", err)
 	}
 }
