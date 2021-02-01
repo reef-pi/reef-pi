@@ -9,8 +9,8 @@ import BooleanSelect from '../ui_components/boolean_select'
 
 const target = (props) => {
   const subsystemOptions = (sub) => {
-    if(props[sub] === undefined) {
-     return
+    if (props[sub] === undefined) {
+      return
     }
     return props[sub].map(item => {
       return (
@@ -171,7 +171,7 @@ const mapStateToProps = state => {
     ph: state.phprobes,
     temperature: state.tcs,
     doser: state.dosers,
-    light: state.lights,
+    light: state.lights
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -187,6 +187,6 @@ target.propTypes = {
 
 const Target = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(target)
 export default Target

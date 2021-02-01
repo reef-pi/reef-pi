@@ -4,7 +4,6 @@ import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 
 class chart extends React.Component {
-
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {
@@ -31,7 +30,7 @@ class chart extends React.Component {
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
       if (current !== '') {
-        current = parseFloat(current).toFixed(2);
+        current = parseFloat(current).toFixed(2)
       }
     }
     const c = this.props.config.chart

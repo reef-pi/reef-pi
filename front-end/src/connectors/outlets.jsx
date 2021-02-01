@@ -86,7 +86,7 @@ class outlets extends React.Component {
       .sort((a, b) => {
         return a.name.localeCompare(b.name,
           navigator.languages[0] || navigator.language,
-          {numeric:true, ignorePunctuation:true})
+          { numeric: true, ignorePunctuation: true })
       })
       .forEach((o, i) => {
         list.push(

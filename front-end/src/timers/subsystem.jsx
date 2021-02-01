@@ -138,7 +138,7 @@ export default class Subsystem extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <label className='col'> {i18next.t('timers:'+entity+':action')}</label>
+          <label className='col'> {i18next.t('timers:' + entity + ':action')}</label>
           <span className='col'>
             <div className='dropdown'>
               <button
@@ -153,11 +153,11 @@ export default class Subsystem extends React.Component {
               <div className='dropdown-menu'>
                 <a className='dropdown-item' onClick={this.setAction(true)}>
                   {' '}
-                  {i18next.t('timers:'+this.props.kind+':on')}{' '}
+                  {i18next.t('timers:' + this.props.kind + ':on')}{' '}
                 </a>
                 <a className='dropdown-item' onClick={this.setAction(false)}>
                   {' '}
-                  {i18next.t('timers:'+this.props.kind+':off')}{' '}
+                  {i18next.t('timers:' + this.props.kind + ':off')}{' '}
                 </a>
               </div>
             </div>
@@ -165,7 +165,7 @@ export default class Subsystem extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label> {i18next.t('timers:'+this.props.kind+':revert')} </label>
+            <label> {i18next.t('timers:' + this.props.kind + ':revert')} </label>
           </div>
           <div className='col'>
             <input

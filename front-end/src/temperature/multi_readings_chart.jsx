@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import i18next from 'i18next'
 
 class chart extends React.Component {
-
   componentDidMount () {
     this.props.fetch(this.props.sensor_id)
     const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
@@ -19,7 +18,6 @@ class chart extends React.Component {
   }
 
   render () {
-
     if (this.props.usage === undefined) {
       return (<div />)
     }
@@ -39,7 +37,7 @@ class chart extends React.Component {
             <Line dataKey='value' stroke='#33b5e5' isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
             <Tooltip />
-            <YAxis type="number" domain={[75,85]} />
+            <YAxis type='number' domain={[75, 85]} />
           </LineChart>
         </ResponsiveContainer>
       </div>

@@ -72,16 +72,16 @@ class dashboard extends React.Component {
               </div>
             )
             break
-            case 'equipment_ctrlpanel':
-              columns.push(
-                <div className='col' key={'chart-' + i + '-' + j}>
-                  <ErrorBoundary>
-                    <EquipmentCtrlPanel width={config.width} height={config.height} />
-                  </ErrorBoundary>
-                </div>
-              )
-              break    
-            case 'ato':
+          case 'equipment_ctrlpanel':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <EquipmentCtrlPanel width={config.width} height={config.height} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'ato':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -135,16 +135,16 @@ class dashboard extends React.Component {
               </div>
             )
             break
-            case 'multi_temp_current':
-              columns.push(
-                <div className='col' key={'chart-' + i + '-' + j}>
-                  <ErrorBoundary>
-                    <MultiTempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
-                  </ErrorBoundary>
-                </div>
-              )
+          case 'multi_temp_current':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <MultiTempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
+                </ErrorBoundary>
+              </div>
+            )
             break
-            case 'temp_historical':
+          case 'temp_historical':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>

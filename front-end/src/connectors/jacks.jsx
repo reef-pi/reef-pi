@@ -90,9 +90,10 @@ class jacks extends React.Component {
 
   list () {
     const list = []
-    this.props.jacks.sort((a, b) => { return a.name.localeCompare(b.name,
-                                      navigator.languages[0] || navigator.language,
-                                      {numeric:true, ignorePunctuation:true})
+    this.props.jacks.sort((a, b) => {
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
     }).forEach((j, i) => {
       list.push(
         <Jack
