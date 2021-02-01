@@ -16,5 +16,7 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: npm i
+      - name: standard
+        run: make standard
       - name: jest
         run: npm run jest-update-snapshot
