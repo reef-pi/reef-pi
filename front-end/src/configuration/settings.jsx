@@ -13,7 +13,7 @@ class settings extends React.Component {
     super(props)
     this.state = {
       capabilities: props.capabilities,
-      settings: {
+      settings: props.settings || {
         name: '',
         interface: '',
         address: '',
@@ -34,6 +34,24 @@ class settings extends React.Component {
     this.handleSetAddress = this.handleSetAddress.bind(this)
     this.handleSetProtocolHttp = this.handleSetProtocolHttp.bind(this)
     this.handleSetProtocolHttps = this.handleSetProtocolHttps.bind(this)
+    this.checkBoxComponent = this.checkBoxComponent.bind(this)
+  }
+
+  checkBoxComponent (attr) {
+    return (
+      <div className='col-6 col-md-3 form-check'>
+        <label htmlFor={attr} className='form-check-label'>
+          <input
+            type='checkbox'
+            id={attr}
+            onClick={this.updateCheckbox(attr)}
+            defaultChecked={this.state.settings[attr]}
+            className='form-check-input'
+          />
+          {i18n.t(attr)}
+        </label>
+      </div>
+    )
   }
 
   handleSetLang (ev) {
@@ -227,7 +245,7 @@ class settings extends React.Component {
               <div className='col-lg-6 col-sm-12'>{this.toRow('rpi_pwm_freq')}</div>
             </div>
             <div className='row'>
-              <div className='col-lg-6 col-sm-12'>
+              <div className='col'>
                 <div className='form-group'>
                   <label htmlFor='app-language'>{i18n.t('language:language')}</label>
                   <select value={this.state.currentLanguage} onChange={this.handleSetLang} id='app-language' className='form-control'>
@@ -240,83 +258,30 @@ class settings extends React.Component {
                     <option value='hi'>{i18n.t('language:hi')}</option>
                     <option value='fa'>{i18n.t('language:fa')}</option>
                     <option value='zh'>{i18n.t('language:zh')}</option>
+                    <option value='sk'>{i18n.t('language:sk')}</option>
                   </select>
                 </div>
               </div>
             </div>
-            <div className='row'>
-              <div className='col-6'>
-                <div className='form-group'>
-                  <label htmlFor='updateDisplay'>{i18n.t('configuration:settings:display')}</label>
-                  <input
-                    type='checkbox'
-                    id='updateDisplay'
-                    onClick={this.updateCheckbox('display')}
-                    defaultChecked={this.state.settings.display}
-                    className='form-control'
-                  />
-                  {this.showDisplay()}
-                </div>
-              </div>
-              <div className='col-lg-6 col-sm-12'>
-                <div className='form-group'>
-                  <label htmlFor='updateNotification'>{i18n.t('configuration:settings:notification')}</label>
-                  <input
-                    type='checkbox'
-                    id='updateNotification'
-                    onClick={this.updateCheckbox('notification')}
-                    defaultChecked={this.state.settings.notification}
-                    className='form-control'
-                  />
-                </div>
-              </div>
-            </div>
-            <div className='row'>
-              <div className='col-6'>
-                <div className='form-group'>
-                  <label htmlFor='enable_pprof'>{i18n.t('configuration:settings:enable_profiling')}</label>
-                  <input
-                    type='checkbox'
-                    id='enable_pprof'
-                    onClick={this.updateCheckbox('pprof')}
-                    defaultChecked={this.state.settings.pprof}
-                    className='form-control'
-                  />
-                </div>
-              </div>
-              <div className='col-6'>
-                <div className='form-group'>
-                  <label htmlFor='enable_prometheus'>{i18n.t('configuration:settings:enable_prometheus')}</label>
-                  <input
-                    type='checkbox'
-                    id='enable_prometheus'
-                    onClick={this.updateCheckbox('prometheus')}
-                    defaultChecked={this.state.settings.prometheus}
-                    className='form-control'
-                  />
-                </div>
-              </div>
-
-              <div className='col-6'>
-                <div className='form-group'>
-                  <label htmlFor='enable_cors'>{i18n.t('configuration:settings:enable_cors')}</label>
-                  <input
-                    type='checkbox'
-                    id='enable_cors'
-                    onClick={this.updateCheckbox('cors')}
-                    defaultChecked={this.state.settings.cors}
-                    className='form-control'
-                  />
-                </div>
-              </div>
-
-            </div>
           </div>
         </div>
+
+        <div className='row'>
+          {this.checkBoxComponent('display')}
+          {this.showDisplay()}
+        </div>
+
+        <div className='row'>
+          {this.checkBoxComponent('notification')}
+          {this.checkBoxComponent('pprof')}
+          {this.checkBoxComponent('prometheus')}
+          {this.checkBoxComponent('cors')}
+        </div>
+
         <div className='row'>
           <div className='col-12'>
-            <label>
-              <b>{i18n.t('configuration:settings:capabilities')}</b>
+            <label className='h5 font-weight-normal'>
+              {i18n.t('capabilities')}
             </label>
             {this.showCapabilities()}
           </div>
