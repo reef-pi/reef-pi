@@ -79,9 +79,9 @@
   "scripts": {
     "translations:sync": "node ./build/translations/csv-sync.js sync",
     "translations:chk": "node ./build/translations/csv-sync.js chk",
-    "build": "webpack -d",
+    "build": "webpack",
     "ui": "webpack --mode=production",
-    "ui-dev": "webpack -d --watch",
+    "ui-dev": "webpack --watch",
     "js-lint": "standard  front-end/src/**/*",
     "standard": "standard --fix front-end/src/**/**",
     "jest": "cross-env NODE_ENV=testing jest",

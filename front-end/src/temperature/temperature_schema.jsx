@@ -81,7 +81,7 @@ const TemperatureSchema = Yup.object().shape({
           .required(i18next.t('temperature:hysteresis_required'))
           .typeError(i18next.t('temperature:hysteresis_type'))
       } else { return schema }
-    }),
+    })
 })
 
 export default TemperatureSchema

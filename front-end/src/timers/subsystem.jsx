@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import i18next from 'i18next'
 
-export default class Equipment extends React.Component {
+export default class Subsystem extends React.Component {
   constructor (props) {
     super(props)
     let name = ''
-    props.equipment.forEach(eq => {
+    props.entities.forEach(eq => {
       if (eq.id === props.active_id) {
         name = eq.name
       }
@@ -52,14 +52,14 @@ export default class Equipment extends React.Component {
   set (k) {
     return () => {
       this.setState({
-        id: this.props.equipment[k].id,
-        name: this.props.equipment[k].name
+        id: this.props.entities[k].id,
+        name: this.props.entities[k].name
       })
       this.props.update({
         duration: this.state.duration,
         revert: this.state.revert,
         on: this.state.on,
-        id: this.props.equipment[k].id
+        id: this.props.entities[k].id
       })
     }
   }
@@ -80,14 +80,14 @@ export default class Equipment extends React.Component {
 
   list () {
     const menuItems = []
-    this.props.equipment.forEach((v, k) => {
+    this.props.entities.forEach((v, k) => {
       let cls = 'dropdown-item'
       if (v.id === this.state.id) {
         cls += ' active'
       }
       menuItems.push(
         <a key={k} className={cls} onClick={this.set(k)}>
-          <span id={this.props.id_prefix + '-equipment-' + v.id}>{v.name}</span>
+          <span id={this.props.id_prefix + '-entity-' + v.id}>{v.name}</span>
         </a>
       )
     })
@@ -106,7 +106,7 @@ export default class Equipment extends React.Component {
           </div>
           <div className='col'>
             <input
-              id={this.props.id_prefix + '-equipment-action-duration'}
+              id={this.props.id_prefix + '-entity-action-duration'}
               type='text'
               onChange={this.handleSetDuration}
               className='col-lg-6'
@@ -121,13 +121,13 @@ export default class Equipment extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col'>{i18next.t('timers:equipment:equipment')}</div>
+          <div className='col'>{i18next.t(this.props.kind)}</div>
           <div className='col'>
             <div className='dropdown'>
               <button
                 className='btn btn-secondary dropdown-toggle'
                 type='button'
-                id={this.props.id_prefix + '-equipment'}
+                id={this.props.id_prefix + '-entity'}
                 data-toggle='dropdown'
                 disabled={this.props.disabled}
               >
@@ -138,13 +138,13 @@ export default class Equipment extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <label className='col'> {i18next.t('timers:equipment:action')}</label>
+          <label className='col'> {i18next.t('action')}</label>
           <span className='col'>
             <div className='dropdown'>
               <button
                 className='btn btn-secondary dropdown-toggle'
                 type='button'
-                id={this.props.id_prefix + '-equipmentAction'}
+                id={this.props.id_prefix + '-entity-action'}
                 disabled={this.props.disabled}
                 data-toggle='dropdown'
               >
@@ -153,11 +153,11 @@ export default class Equipment extends React.Component {
               <div className='dropdown-menu'>
                 <a className='dropdown-item' onClick={this.setAction(true)}>
                   {' '}
-                  {i18next.t('timers:equipment:on')}{' '}
+                  {i18next.t('timers:' + this.props.kind + ':on')}{' '}
                 </a>
                 <a className='dropdown-item' onClick={this.setAction(false)}>
                   {' '}
-                  {i18next.t('timers:equipment:off')}{' '}
+                  {i18next.t('timers:' + this.props.kind + ':off')}{' '}
                 </a>
               </div>
             </div>
@@ -165,11 +165,11 @@ export default class Equipment extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label> {i18next.t('timers:equipment:revert')} </label>
+            <label> {i18next.t('timers:' + this.props.kind + ':revert')} </label>
           </div>
           <div className='col'>
             <input
-              id={this.props.id_prefix + '-equipment-revert'}
+              id={this.props.id_prefix + '-entity-revert'}
               type='checkbox'
               onClick={this.handleSetRevert}
               defaultChecked={this.state.revert}
@@ -183,13 +183,14 @@ export default class Equipment extends React.Component {
   }
 }
 
-Equipment.propTypes = {
+Subsystem.propTypes = {
   active_id: PropTypes.string.isRequired,
   revert: PropTypes.bool.isRequired,
   on: PropTypes.bool.isRequired,
   duration: PropTypes.number.isRequired,
+  kind: PropTypes.string.isRequired,
 
-  equipment: PropTypes.array.isRequired,
+  entities: PropTypes.array.isRequired,
   disabled: PropTypes.bool.isRequired,
   id_prefix: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired

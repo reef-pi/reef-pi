@@ -120,9 +120,15 @@ const EditTimer = ({
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              <option value='equipment'>{i18next.t('timers:equipment')}</option>
-              <option value='reminder'>{i18next.t('timers:reminder')}</option>
-              <option value='macro'>{i18next.t('timers:macros')}</option>
+              <option value='equipment'>{i18next.t('equipment')}</option>
+              <option value='reminder'>{i18next.t('reminder')}</option>
+              <option value='macro'>{i18next.t('macro')}</option>
+              <option value='ato'>{i18next.t('ato')}</option>
+              <option value='camera'>{i18next.t('camera')}</option>
+              <option value='doser'>{i18next.t('doser')}</option>
+              <option value='light'>{i18next.t('light')}</option>
+              <option value='ph'>{i18next.t('ph')}</option>
+              <option value='temperature'>{i18next.t('temperature')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>

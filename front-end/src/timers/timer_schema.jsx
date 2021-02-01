@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import i18next from 'i18next'
 
-const equipmentSchema = {
+const triggerSchema = {
   id: Yup.string().required(i18next.t('timers:equipment_required')),
   on: Yup.bool(),
   duration: Yup.number().when('revert', {
@@ -10,10 +10,6 @@ const equipmentSchema = {
     otherwise: Yup.number().default(0)
   }),
   revert: Yup.bool()
-}
-
-const macroSchema = {
-  id: Yup.string().required(i18next.t('timers:macro_required'))
 }
 
 const reminderSchema = {
@@ -42,12 +38,16 @@ const TimerSchema = Yup.object().shape({
     .required(i18next.t('timers:week_required')),
   target: Yup.object().when('type', (type, schema) => {
     switch (type) {
+      case 'ato':
       case 'equipment':
-        return schema.shape(equipmentSchema)
+      case 'macro':
+      case 'ph':
+      case 'temperature':
+      case 'doser':
+      case 'light':
+        return schema.shape(triggerSchema)
       case 'reminder':
         return schema.shape(reminderSchema)
-      case 'macro':
-        return schema.shape(macroSchema)
       default:
         return schema.shape({
           type: Yup.string().required('Timer type is required')

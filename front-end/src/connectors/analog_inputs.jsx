@@ -79,9 +79,10 @@ class analogInputs extends React.Component {
 
   list () {
     const list = []
-    this.props.analog_inputs.sort((a, b) => { return a.name.localeCompare(b.name,
-                                              navigator.languages[0] || navigator.language,
-                                              {numeric:true, ignorePunctuation:true}) 
+    this.props.analog_inputs.sort((a, b) => {
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
     }).forEach((j, i) => {
       list.push(
         <AnalogInput

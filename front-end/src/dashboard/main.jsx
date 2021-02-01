@@ -1,6 +1,5 @@
 import React from 'react'
 import TempReadingsChart from 'temperature/readings_chart'
-import MultiTempReadingsChart from 'temperature/multi_readings_chart'
 import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
@@ -72,16 +71,16 @@ class dashboard extends React.Component {
               </div>
             )
             break
-            case 'equipment_ctrlpanel':
-              columns.push(
-                <div className='col' key={'chart-' + i + '-' + j}>
-                  <ErrorBoundary>
-                    <EquipmentCtrlPanel width={config.width} height={config.height} />
-                  </ErrorBoundary>
-                </div>
-              )
-              break    
-            case 'ato':
+          case 'equipment_ctrlpanel':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <EquipmentCtrlPanel width={config.width} height={config.height} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'ato':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
@@ -135,16 +134,7 @@ class dashboard extends React.Component {
               </div>
             )
             break
-            case 'multi_temp_current':
-              columns.push(
-                <div className='col' key={'chart-' + i + '-' + j}>
-                  <ErrorBoundary>
-                    <MultiTempReadingsChart width={config.width} height={config.height} sensor_id={ch.id} />
-                  </ErrorBoundary>
-                </div>
-              )
-            break
-            case 'temp_historical':
+          case 'temp_historical':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>

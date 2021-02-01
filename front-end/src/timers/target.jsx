@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from '../utils/validation_helper'
 import { Field } from 'formik'
@@ -6,19 +7,12 @@ import classNames from 'classnames'
 import i18next from 'i18next'
 import BooleanSelect from '../ui_components/boolean_select'
 
-const Target = (props) => {
-  const equipmentOptions = () => {
-    return props.equipment.map(item => {
-      return (
-        <option key={item.id} value={item.id}>
-          {item.name}
-        </option>
-      )
-    })
-  }
-
-  const macroOptions = () => {
-    return props.macros.map(item => {
+const target = (props) => {
+  const subsystemOptions = (sub) => {
+    if (props[sub] === undefined) {
+      return
+    }
+    return props[sub].map(item => {
       return (
         <option key={item.id} value={item.id}>
           {item.name}
@@ -30,47 +24,27 @@ const Target = (props) => {
   const buildAction = () => {
     switch (props.type) {
       case 'equipment':
-        return equipmentAction()
+      case 'ato':
+      case 'macro':
+      case 'ph':
+      case 'light':
+      case 'doser':
+      case 'camera':
+      case 'temperature':
+        return subsystemAction(props.type)
       case 'reminder':
         return reminderAction()
-      case 'macro':
-        return macroAction()
       default:
         return 'Unknown type:' + props.type
     }
   }
 
-  const macroAction = () => {
-    return (
-      <>
-        <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
-          <div className='form-group'>
-            <label htmlFor={NameFor(props.name, 'id')}>{i18next.t('timers:macro')}</label>
-            <Field
-              name={NameFor(props.name, 'id')}
-              component='select'
-              disabled={props.readOnly}
-              placeholder='Macro name'
-              className={classNames('custom-select', {
-                'is-invalid': ShowError(NameFor(props.name, 'id'), props.touched, props.errors)
-              })}
-            >
-              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              {macroOptions()}
-            </Field>
-            <ErrorFor {...props} name={NameFor(props.name, 'id')} />
-          </div>
-        </div>
-      </>
-    )
-  }
-
-  const equipmentAction = () => {
+  const subsystemAction = (kind) => {
     return (
       <>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
-            <label htmlFor='target.id'>{i18next.t('timers:equipment')}</label>
+            <label htmlFor='target.id'>{i18next.t(kind)}</label>
             <Field
               name={NameFor(props.name, 'id')}
               component='select'
@@ -80,14 +54,14 @@ const Target = (props) => {
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              {equipmentOptions()}
+              {subsystemOptions(kind)}
             </Field>
             <ErrorFor {...props} name={NameFor(props.name, 'id')} />
           </div>
         </div>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='on'>{i18next.t('timers:equipment_action')}</label>
+            <label htmlFor='on'>{i18next.t('timers:action')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
@@ -189,10 +163,30 @@ const Target = (props) => {
   )
 }
 
-Target.propTypes = {
+const mapStateToProps = state => {
+  return {
+    ato: state.atos,
+    equipment: state.equipment,
+    macro: state.macros,
+    ph: state.phprobes,
+    temperature: state.tcs,
+    doser: state.dosers,
+    light: state.lights
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {}
+}
+
+target.propTypes = {
   target: PropTypes.object.isRequired,
   errors: PropTypes.object,
   touched: PropTypes.object,
   name: PropTypes.string
 }
+
+const Target = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(target)
 export default Target

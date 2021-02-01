@@ -74,9 +74,9 @@ class main extends React.Component {
   probeList () {
     return this.props.probes
       .sort((a, b) => {
-        return a.name.localeCompare(b.name, 
-                                    navigator.languages[0] || navigator.language, 
-                                    {numeric: true, ignorePunctuation: true})
+        return a.name.localeCompare(b.name,
+          navigator.languages[0] || navigator.language,
+          { numeric: true, ignorePunctuation: true })
       })
       .map(probe => {
         const calibrationButton = (
