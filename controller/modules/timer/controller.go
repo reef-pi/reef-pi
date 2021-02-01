@@ -95,7 +95,7 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 			body:  reminder.Message,
 		}, nil
 	case storage.MacroBucket, storage.EquipmentBucket, storage.ATOBucket, storage.CameraBucket, storage.DoserBucket, storage.LightingBucket, storage.PhBucket, storage.TemperatureBucket:
-		return NewSubSystemRunner(j.Type, c.c, j.Target)
+		return NewSubSystemRunner(j, c.c)
 	default:
 		return nil, fmt.Errorf("Failed to find suitable job runner")
 	}

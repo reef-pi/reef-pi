@@ -22,23 +22,24 @@ type SubSystemRunner struct {
 	trigger Trigger
 }
 
-func NewSubSystemRunner(name string, c controller.Controller, config json.RawMessage) (cron.Job, error) {
+func NewSubSystemRunner(j Job, c controller.Controller) (cron.Job, error) {
 	var trigger Trigger
-	if err := json.Unmarshal(config, &trigger); err != nil {
+	if err := json.Unmarshal(j.Target, &trigger); err != nil {
 		return nil, err
 	}
-	sub, err := c.Subsystem(name)
+	sub, err := c.Subsystem(j.Type)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load target subsyetm %s error: %w", name, err)
+		return nil, fmt.Errorf("failed to load target subsyetm %s error: %w", j.Type, err)
 	}
 	return &SubSystemRunner{
-		Type:    name,
+		Type:    j.Type,
 		sub:     sub,
 		trigger: trigger,
 	}, nil
 }
 
 func (m *SubSystemRunner) Run() {
+	log.Println("timer subsystem. Executing module ", m.Type, "element", m.trigger.ID)
 	if err := m.sub.On(m.trigger.ID, m.trigger.On); err != nil {
 		log.Println("ERROR:", m.Type, "sub-system, Failed to trigger. Error:", err)
 	}
@@ -48,6 +49,7 @@ func (m *SubSystemRunner) Run() {
 			if err := m.sub.On(m.trigger.ID, !m.trigger.On); err != nil {
 				log.Println("ERROR:", m.Type, "sub-system, Failed to revert. Error:", err)
 			}
+			log.Println("timer subsystem. Executing module ", m.Type, "element", m.trigger.ID, "reversed")
 		}
 	}
 }
