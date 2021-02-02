@@ -55,10 +55,9 @@ export const dbImport = (formData) => {
     reduxPost({
       url: '/api/admin/reef-pi.db',
       success: dbImported,
-      raw: formData,
+      raw: formData
     }))
 }
-
 
 export const upgraded = () => {
   return ({
@@ -71,6 +70,6 @@ export const upgrade = (version) => {
     reduxPost({
       url: '/api/admin/upgrade',
       success: upgraded,
-      data: {version: version},
+      data: { version: version }
     }))
 }
