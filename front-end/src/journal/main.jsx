@@ -45,7 +45,11 @@ class main extends React.Component {
   }
 
   list () {
-    return this.props.journals.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(j => {
+    return this.props.journals.sort((a, b) => { 
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
+    }).map(j => {
       return (
         <Collapsible
           key={'panel-journal-' + j.id}
