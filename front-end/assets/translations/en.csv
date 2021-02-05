@@ -154,6 +154,7 @@ cron:month,Month
 cron:second,Second
 cron:week,Day of the week
 dashboard:back_to_dashboard,Back to dashboard
+dashboard:blank_panel, Unassigned (Blank)
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 fatal_error:connection_lost,Connection Lost

@@ -7,12 +7,12 @@ export const buildCells = (rows, columns, cells) => {
     const row = []
     for (j = 0; j < columns; j++) {
       const cell = {
-        type: 'health',
-        id: 'current'
+        type: 'blank_panel',
+        id: 'none'
       }
       if (cells[i] !== undefined && cells[i][j] !== undefined) {
-        cell.type = cells[i][j].type || 'health'
-        cell.id = cells[i][j].id || 'current'
+        cell.type = cells[i][j].type || 'blank_panel'
+        cell.id = cells[i][j].id || 'none'
       }
       row.push(cell)
     }
@@ -45,6 +45,11 @@ export const buildTypeMap = (props) => {
       name: 'equipment_ctrlpanel',
       label: i18next.t('equipment:chart:ctrlpanel'),
       options: props.equipment || []
+    },
+    blank_panel: {
+      name: 'blank_panel',
+      label: i18next.t('dashboard:blank_panel'),
+      options: [{ id: 'none', name: 'none' }]
     },
     health: {
       name: 'health',

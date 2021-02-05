@@ -40,6 +40,8 @@ class CtrlPanel extends React.Component {
 
     return (
       <div className='container'>
+        <span className='h6'>Equipment Switch Panel</span>
+        <br />
         <div className='row'>
           {this.props.equipment.sort((a, b) => {
             return a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true })

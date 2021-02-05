@@ -89,7 +89,7 @@ class config extends React.Component {
       }
       for (j = 0; j < config.column; j++) {
         const row = cells[i] ? cells[i] : []
-        const cell = row[j] ? row[j] : { id: 'current', type: 'health' }
+        const cell = row[j] ? row[j] : { id: 'none', type: 'blank_panel' }
         config.grid_details[i][j] = {
           id: cell.id,
           type: cell.type
@@ -134,6 +134,7 @@ class config extends React.Component {
             lights={this.props.lights}
             dosers={this.props.dosers}
             equips={this.props.equips}
+            blank={this.props.blank}
           />
         </div>
         <div className='row'>
@@ -154,7 +155,8 @@ const mapStateToProps = state => {
     lights: state.lights,
     dosers: state.dosers,
     config: state.dashboard,
-    equips: state.equipment
+    equips: state.equipment,
+    blank: state.blank
   }
 }
 
