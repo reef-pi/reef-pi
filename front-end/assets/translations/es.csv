@@ -153,7 +153,7 @@ cron:month,Mes
 cron:second,Segundo
 cron:week,Semana
 dashboard:back_to_dashboard,Volver al dashboard
-dashboard:blank_panel, Sin Asignar (En Blanco)
+dashboard:blank_panel,Sin Asignar (En Blanco)
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
 cron:week,Semana
