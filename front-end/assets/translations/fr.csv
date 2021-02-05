@@ -153,6 +153,7 @@ cron:month,
 cron:second,
 cron:week,
 dashboard:back_to_dashboard,Retour au Tableau de bord
+dashboard:blank_panel,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,
