@@ -26,7 +26,7 @@ class chart extends React.Component {
     }
     let currentTemp = ''
     if (this.props.usage.current.length > 1) {
-      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
+      currentTemp = parseFloat(this.props.usage.current[this.props.usage.current.length - 1].value).toFixed(2)
     }
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? 'F' : 'C'
@@ -41,9 +41,9 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor={c.color} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
+            <YAxis dataKey='value' allowDecimals='false' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => [value, unit]} />
+            <Tooltip formatter={(value, name) => [parseFloat(value).toFixed(2), unit]} />
             <Area
               type='linear'
               dataKey='value'
