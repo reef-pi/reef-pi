@@ -1,4 +1,3 @@
-import { data } from 'autoprefixer'
 import { reduxGet, reduxPost, reduxPut, reduxDelete } from '../../utils/ajax'
 
 export const equipmentUpdated = () => {

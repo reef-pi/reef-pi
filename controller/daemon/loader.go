@@ -22,7 +22,7 @@ func (r *ReefPi) loadPhSubsystem() error {
 		return nil
 	}
 	p := ph.New(r.settings.Capabilities.DevMode, r)
-	r.subsystems[ph.Bucket] = p
+	r.subsystems.Load(ph.Bucket, p)
 	return nil
 }
 
@@ -34,7 +34,7 @@ func (r *ReefPi) loadMacroSubsystem() error {
 	if err != nil {
 		return err
 	}
-	r.subsystems[macro.Bucket] = m
+	r.subsystems.Load(macro.Bucket, m)
 	return nil
 }
 
@@ -43,7 +43,7 @@ func (r *ReefPi) loadTimerSubsystem() error {
 		return nil
 	}
 	t := timer.New(r)
-	r.subsystems[timer.Bucket] = t
+	r.subsystems.Load(timer.Bucket, t)
 	return nil
 }
 
@@ -51,7 +51,7 @@ func (r *ReefPi) loadJournalSubsystem() error {
 	if !r.settings.Capabilities.Journal {
 		return nil
 	}
-	r.subsystems[journal.Bucket] = journal.New(r)
+	r.subsystems.Load(journal.Bucket, journal.New(r))
 	return nil
 }
 
@@ -65,7 +65,7 @@ func (r *ReefPi) loadTemperatureSubsystem() error {
 		log.Println("ERROR: Failed to initialize temperature subsystem")
 		return err
 	}
-	r.subsystems[temperature.Bucket] = temp
+	r.subsystems.Load(temperature.Bucket, temp)
 	return nil
 }
 
@@ -83,7 +83,7 @@ func (r *ReefPi) loadATOSubsystem(eqs *equipment.Controller) error {
 		log.Println("ERROR: Failed to initialize ato subsystem")
 		return err
 	}
-	r.subsystems[ato.Bucket] = a
+	r.subsystems.Load(ato.Bucket, a)
 	return nil
 }
 
@@ -100,7 +100,7 @@ func (r *ReefPi) loadLightingSubsystem() error {
 		log.Println("ERROR: Failed to initialize lighting subsystem")
 		return err
 	}
-	r.subsystems[lighting.Bucket] = l
+	r.subsystems.Load(lighting.Bucket, l)
 	return nil
 }
 
@@ -113,7 +113,7 @@ func (r *ReefPi) loadCameraSubsystem() error {
 		r.settings.Capabilities.Camera = false
 		return nil
 	}
-	r.subsystems[camera.Bucket] = cam
+	r.subsystems.Load(camera.Bucket, cam)
 	return nil
 }
 
@@ -127,7 +127,7 @@ func (r *ReefPi) loadDoserSubsystem() error {
 		log.Println("ERROR: Failed to initialize doser subsystem")
 		return err
 	}
-	r.subsystems[doser.Bucket] = d
+	r.subsystems.Load(doser.Bucket, d)
 	return nil
 }
 
@@ -142,12 +142,12 @@ func (r *ReefPi) loadSubsystems() error {
 			RPI_PWMFreq: r.settings.RPI_PWMFreq,
 			Version:     r.version,
 		}
-		r.subsystems[system.Bucket] = system.New(conf, r)
+		r.subsystems.Load(system.Bucket, system.New(conf, r))
 	}
 	var eqs *equipment.Controller
 	if r.settings.Capabilities.Equipment {
 		eqs = equipment.New(r)
-		r.subsystems[equipment.Bucket] = eqs
+		r.subsystems.Load(equipment.Bucket, eqs)
 	}
 	if err := r.loadATOSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load ATO subsystem. Error:", err)
@@ -184,14 +184,8 @@ func (r *ReefPi) loadSubsystems() error {
 		log.Println("ERROR: Failed to load journal subsystem. Error:", err)
 		r.LogError("subsystem-journal", "Failed to load journal subsystem. Error:"+err.Error())
 	}
-	for sName, sController := range r.subsystems {
-		if err := sController.Setup(); err != nil {
-			log.Println("ERROR: Failed to setup subsystem:", sName)
-			r.LogError("subsystem-"+sName+"-setup", "Failed to setup subsystem: "+sName+". Error: "+err.Error())
-			return err
-		}
-		sController.Start()
-		log.Println("Successfully started subsystem:", sName)
+	if err := r.subsystems.Setup(); err != nil {
+		r.LogError("subsystem-setup", err.Error())
 	}
 	return nil
 }

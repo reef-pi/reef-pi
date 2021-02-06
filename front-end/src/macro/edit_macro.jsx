@@ -115,7 +115,7 @@ const EditMacro = ({
                           onClick={() => arrayHelpers.remove(index)}
                           disabled={readOnly}
                         >
-                        X
+                          X
                         </button>
                       </div>
                     </div>
@@ -131,11 +131,12 @@ const EditMacro = ({
                     onClick={() => arrayHelpers.push({ duration: '', id: '', on: '', title: '', message: '' })}
                     id='add-step'
                   >
-                +
+                    +
                   </button>
                 </div>
               </div>
-            </div>)
+            </div>
+          )
         }}
       />
 

@@ -152,7 +152,7 @@ const EditDoser = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                    second(s)
+                  second(s)
                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>
@@ -178,7 +178,7 @@ const EditDoser = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text'>
-                    %
+                  %
                 </span>
               </div>
               <ErrorFor errors={errors} touched={touched} name='speed' />

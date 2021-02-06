@@ -99,7 +99,7 @@ const EditAto = ({
               })}
             >
               <option value='' className='d-none'>
-                  -- {i18next.t('select')} --
+                -- {i18next.t('select')} --
               </option>
               {inletOptions()}
             </Field>
