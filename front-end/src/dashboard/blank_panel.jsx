@@ -19,8 +19,8 @@ class BlankPanel extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <span className='h6'>Unassigned Panel</span>
+      <div className='container' style={{ border: '1px solid gray', marginBottom: '3px' }}>
+        <span className='h6' style={{ color: 'gray' }}>Unassigned Panel</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <p>&nbsp;</p>
         </ResponsiveContainer>
@@ -28,6 +28,5 @@ class BlankPanel extends React.Component {
     )
   }
 }
-
 
 export default BlankPanel

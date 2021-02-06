@@ -45,7 +45,7 @@ class main extends React.Component {
   }
 
   list () {
-    return this.props.journals.sort((a, b) => { 
+    return this.props.journals.sort((a, b) => {
       return a.name.localeCompare(b.name,
         navigator.languages[0] || navigator.language,
         { numeric: true, ignorePunctuation: true })

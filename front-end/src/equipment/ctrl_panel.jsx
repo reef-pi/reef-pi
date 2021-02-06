@@ -39,7 +39,7 @@ class CtrlPanel extends React.Component {
     }
 
     return (
-      <div className='container'>
+      <div className='container' style={{ border: '1px solid black' }}>
         <span className='h6'>Equipment Switch Panel</span>
         <br />
         <div className='row'>
