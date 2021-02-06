@@ -143,12 +143,13 @@ class main extends React.Component {
           navigator.languages[0] || navigator.language,
           { numeric: true, ignorePunctuation: true })
       }).map(light => {
-        let panelContent =
+        let panelContent = (
           <Light
             config={light}
             onSubmit={this.handleUpdateLight}
             remove={this.props.deleteLight}
           />
+        )
         let modeContent = ''
         const mode = this.getLightMode(light)
         switch (mode) {

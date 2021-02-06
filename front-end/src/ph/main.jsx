@@ -140,13 +140,14 @@ class ph extends React.Component {
   render () {
     let newProbe = null
     if (this.state.addProbe) {
-      newProbe =
+      newProbe = (
         <PhForm
           analogInputs={this.props.ais}
           onSubmit={this.handleCreateProbe}
           macros={this.props.macros}
           equipment={this.props.equipment}
         />
+      )
     }
 
     let calibrationModal = null

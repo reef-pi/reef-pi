@@ -31,7 +31,7 @@ const EditDriver = ({
 
   const driverTypeChangeHandler = (e) => {
     values.config = {}
-    driverOptions[e.target.value].map(item => {
+    driverOptions[e.target.value].forEach(item => {
       values.config[item.name.toLowerCase()] = ''
     })
     handleChange(e)
@@ -112,7 +112,7 @@ const EditDriver = ({
               })}
             >
               <option value='' className='d-none'>
-                  -- Select --
+                -- Select --
               </option>
               {typeOptions()}
             </Field>
