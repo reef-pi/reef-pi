@@ -29,7 +29,7 @@ class chart extends React.Component {
       currentTemp = parseFloat(this.props.usage.current[this.props.usage.current.length - 1].value).toFixed(2)
     }
     const c = this.props.config.chart
-    const unit = this.props.config.fahrenheit ? 'F' : 'C'
+    const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>

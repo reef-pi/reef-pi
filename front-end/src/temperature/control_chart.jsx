@@ -33,6 +33,7 @@ class chart extends React.Component {
     })
 
     const c = this.props.config.chart
+    const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
       <div className='container'>
         <span className='h6'>
