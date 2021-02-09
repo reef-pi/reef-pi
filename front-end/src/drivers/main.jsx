@@ -29,7 +29,11 @@ class drivers extends React.Component {
 
   list () {
     const items = []
-    this.props.drivers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((d, n) => {
+    this.props.drivers.sort((a, b) => {
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
+    }).forEach((d, n) => {
       if (d.type === 'rpi') {
         items.push(
           <div className='row ' key={d.id}>
