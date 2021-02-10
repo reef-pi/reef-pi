@@ -7,7 +7,7 @@ const DriverSchema = Yup.object().shape({
     .required('Type is required'),
   config: Yup.lazy(value => {
     const shape = {}
-    Object.keys(value).map(prop => {
+    Object.keys(value).forEach(prop => {
       shape[prop] = Yup.string().required(prop + ' is required')
     })
     return Yup.object().shape(shape)

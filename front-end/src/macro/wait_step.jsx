@@ -21,7 +21,7 @@ const WaitStep = ({ name, readOnly, touched, errors }) => {
         />
         <div className='input-group-append'>
           <span className='input-group-text d-none d-lg-flex'>
-              second(s)
+            second(s)
           </span>
           <span className='input-group-text d-flex d-lg-none'>sec</span>
         </div>

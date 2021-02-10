@@ -31,7 +31,7 @@ class main extends React.Component {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
-    this.props.probes.map(probe => {
+    this.props.probes.forEach(probe => {
       this.props.readTC(probe.id)
     })
   }
@@ -174,13 +174,14 @@ class main extends React.Component {
   render () {
     let newProbe = null
     if (this.state.addProbe) {
-      newProbe =
+      newProbe = (
         <TemperatureForm
           sensors={this.props.sensors}
           equipment={this.props.equipment}
           macros={this.props.macros}
           onSubmit={this.handleCreate}
         />
+      )
     }
 
     let calibrationModal = null
