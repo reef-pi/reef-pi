@@ -1,7 +1,6 @@
 package daemon
 
 import (
-	"fmt"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -22,7 +21,7 @@ type ReefPi struct {
 	telemetry  telemetry.Telemetry
 	h          telemetry.HealthChecker
 	dm         *device_manager.DeviceManager
-	subsystems map[string]controller.Subsystem
+	subsystems *controller.SubsystemComposite
 }
 
 func New(version, database string) (*ReefPi, error) {
@@ -47,7 +46,7 @@ func New(version, database string) (*ReefPi, error) {
 		store:      store,
 		settings:   s,
 		telemetry:  tele,
-		subsystems: make(map[string]controller.Subsystem),
+		subsystems: controller.NewSubsystemComposite(),
 		version:    version,
 		a:          utils.NewAuth(Bucket, store),
 		dm:         device_manager.New(s, store),
@@ -78,16 +77,8 @@ func (r *ReefPi) Start() error {
 	return nil
 }
 
-func (r *ReefPi) unloadSubsystems() {
-	for sName, sController := range r.subsystems {
-		sController.Stop()
-		delete(r.subsystems, sName)
-		log.Println("Successfully unloaded", sName, " subsystem:")
-	}
-}
-
 func (r *ReefPi) Stop() error {
-	r.unloadSubsystems()
+	r.subsystems.UnloadAll()
 	if r.settings.Capabilities.HealthCheck {
 		r.h.Stop()
 	}
@@ -98,11 +89,7 @@ func (r *ReefPi) Stop() error {
 }
 
 func (r *ReefPi) Subsystem(s string) (controller.Subsystem, error) {
-	sub, ok := r.subsystems[s]
-	if !ok {
-		return nil, fmt.Errorf("Subsystem not present: %s", s)
-	}
-	return sub, nil
+	return r.subsystems.Sub(s)
 }
 
 func (r *ReefPi) DM() *device_manager.DeviceManager {
