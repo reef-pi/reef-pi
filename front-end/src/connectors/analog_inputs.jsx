@@ -3,6 +3,7 @@ import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import Pin from './pin'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 import {
   fetchAnalogInputs,
@@ -79,27 +80,24 @@ class analogInputs extends React.Component {
 
   list () {
     const list = []
-    this.props.analog_inputs.sort((a, b) => {
-      return a.name.localeCompare(b.name,
-        navigator.languages[0] || navigator.language,
-        { numeric: true, ignorePunctuation: true })
-    }).forEach((j, i) => {
-      list.push(
-        <AnalogInput
-          name={j.name}
-          key={j.id}
-          pin={j.pin}
-          driver={this.props.drivers.filter(d => d.id === j.driver)[0] || {}}
-          drivers={this.props.drivers}
-          analog_input_id={j.id}
-          remove={this.remove(j.id)}
-          update={p => {
-            this.props.update(j.id, p)
-            this.props.fetch()
-          }}
-        />
-      )
-    })
+    this.props.analog_inputs.sort((a, b) => SortByName(a, b))
+      .forEach((j, i) => {
+        list.push(
+          <AnalogInput
+            name={j.name}
+            key={j.id}
+            pin={j.pin}
+            driver={this.props.drivers.filter(d => d.id === j.driver)[0] || {}}
+            drivers={this.props.drivers}
+            analog_input_id={j.id}
+            remove={this.remove(j.id)}
+            update={p => {
+              this.props.update(j.id, p)
+              this.props.fetch()
+            }}
+          />
+        )
+      })
     return list
   }
 

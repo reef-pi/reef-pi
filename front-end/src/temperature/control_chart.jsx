@@ -3,6 +3,7 @@ import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, R
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -52,7 +53,7 @@ class chart extends React.Component {
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => [parseFloat(value).toFixed(2), unit]} />
+            <Tooltip formatter={(value, name) => [TwoDecimalParse(value), unit]} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line

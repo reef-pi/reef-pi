@@ -4,6 +4,7 @@ import { updateEquipment, fetchEquipment, createEquipment, deleteEquipment } fro
 import { fetchOutlets } from 'redux/actions/outlets'
 import { connect } from 'react-redux'
 import EquipmentForm from './equipment_form'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -45,21 +46,18 @@ class main extends React.Component {
     }
     return (
       <ul className='list-group list-group-flush'>
-        {this.props.equipment.sort((a, b) => {
-          return a.name.localeCompare(b.name,
-            navigator.languages[0] || navigator.language,
-            { numeric: true, ignorePunctuation: true })
-        }).map(item => {
-          return (
-            <Equipment
-              key={item.id}
-              equipment={item}
-              outlets={this.props.outlets}
-              update={this.props.update}
-              delete={this.props.delete}
-            />
-          )
-        })}
+        {this.props.equipment.sort((a, b) => SortByName(a, b))
+          .map(item => {
+            return (
+              <Equipment
+                key={item.id}
+                equipment={item}
+                outlets={this.props.outlets}
+                update={this.props.update}
+                delete={this.props.delete}
+              />
+            )
+          })}
         <li className='list-group-item add-equipment'>
           <div className='row'>
             <div className='col'>
