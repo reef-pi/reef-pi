@@ -44,9 +44,8 @@ class CtrlPanel extends React.Component {
         <span className='h6'>Equipment Switch Panel</span>
         <br />
         <div className='row'>
-          {this.props.equipment.sort((a, b) => {
-            SortByName(a, b)
-          }).map(item => {
+          {this.props.equipment.sort((a, b) => SortByName(a, b))
+          .map(item => {
             return (
               <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                 <FormControlLabel
