@@ -6,12 +6,15 @@ import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import CalibrationModal from './calibration_modal'
+import { SortByName } from 'utils/sort_by_name'
 
 class doser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      addDoser: false
+      addDoser: false,
+      showCalibrate: false,
+      currentDoser: null
     }
     this.doserList = this.doserList.bind(this)
     this.handleToggleAddDoserDiv = this.handleToggleAddDoserDiv.bind(this)
@@ -19,6 +22,10 @@ class doser extends React.Component {
     this.handleCreateDoser = this.handleCreateDoser.bind(this)
     this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
+  }
+
+  dismissModal () {
+    this.setState({ currentDoser: null, showCalibrate: false })
   }
 
   handleToggleAddDoserDiv () {
@@ -29,43 +36,40 @@ class doser extends React.Component {
 
   doserList () {
     return (
-      this.props.dosers.sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      }).map(doser => {
-        const calibrationButton = (
-          <button
-            type='button' name={'calibrate-doser-' + doser.id}
-            className='btn btn-sm btn-outline-info float-right'
-            onClick={(e) => this.calibrateDoser(e, doser)}
-          >
+      this.props.dosers.sort((a, b) => SortByName(a, b))
+        .map(doser => {
+          const calibrationButton = (
+            <button
+              type='button' name={'calibrate-doser-' + doser.id}
+              className='btn btn-sm btn-outline-info float-right'
+              onClick={(e) => this.calibrateDoser(e, doser)}
+            >
             Calibrate
-          </button>
-        )
-        const handleTState = () => {
-          doser.regiment.enable = !doser.regiment.enable
-          this.props.update(doser.id, doser)
-        }
-        return (
-          <Collapsible
-            key={'panel-doser-' + doser.id}
-            name={'panel-doser-' + doser.id}
-            item={doser}
-            onToggleState={handleTState}
-            enabled={doser.regiment.enable}
-            buttons={calibrationButton}
-            title={<b className='ml-2 align-middle'>{doser.name} </b>}
-            onDelete={this.handleDeleteDoser}
-          >
-            <DoserForm
-              onSubmit={this.handleUpdateDoser}
-              jacks={this.props.jacks}
-              doser={doser}
-            />
-          </Collapsible>
-        )
-      })
+            </button>
+          )
+          const handleTState = () => {
+            doser.regiment.enable = !doser.regiment.enable
+            this.props.update(doser.id, doser)
+          }
+          return (
+            <Collapsible
+              key={'panel-doser-' + doser.id}
+              name={'panel-doser-' + doser.id}
+              item={doser}
+              onToggleState={handleTState}
+              enabled={doser.regiment.enable}
+              buttons={calibrationButton}
+              title={<b className='ml-2 align-middle'>{doser.name} </b>}
+              onDelete={this.handleDeleteDoser}
+            >
+              <DoserForm
+                onSubmit={this.handleUpdateDoser}
+                jacks={this.props.jacks}
+                doser={doser}
+              />
+            </Collapsible>
+          )
+        })
     )
   }
 
@@ -117,7 +121,13 @@ class doser extends React.Component {
 
   calibrateDoser (e, doser) {
     e.stopPropagation()
-    showModal(<CalibrationModal doser={doser} calibrateDoser={this.props.calibrateDoser} />)
+    showModal(
+      <CalibrationModal
+        doser={doser}
+        calibrateDoser={this.props.calibrateDoser}
+        confirm={this.dismissModal}
+      />
+    )
   }
 
   render () {

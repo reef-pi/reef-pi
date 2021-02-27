@@ -102,7 +102,6 @@ const target = (props) => {
               <Field
                 name={NameFor(props.name, 'duration')}
                 readOnly={props.readOnly || props.target.revert === false}
-
                 className={classNames('form-control', {
                   'is-invalid': ShowError(NameFor(props.name, 'duration'), props.touched, props.errors)
                 })}

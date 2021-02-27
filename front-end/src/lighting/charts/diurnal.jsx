@@ -17,7 +17,7 @@ export default class DiurnalChart extends React.Component {
     }
     const step = totalSeconds / 100
     const data = []
-    var i = 0
+    let i = 0
     const dt = dStart
     const range = ch.max - ch.min
     for (i = 0; i < 100; i++) {

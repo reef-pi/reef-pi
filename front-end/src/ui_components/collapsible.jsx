@@ -46,7 +46,8 @@ class Collapsible extends React.Component {
       toggleStateButton = (
         <Switch onClick={onToggleState} on={enabled}>
           <small className='ml-1 align-top'>{enabled ? i18next.t('on') : i18next.t('off')}</small>
-        </Switch>)
+        </Switch>
+      )
     }
 
     return (

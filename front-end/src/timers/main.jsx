@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import TimerForm from './timer_form'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
+import { SortByName } from 'utils/sort_by_name'
 
 class Main extends React.Component {
   constructor (props) {
@@ -24,12 +25,7 @@ class Main extends React.Component {
   }
 
   timerList () {
-    return this.props.timers
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      })
+    return this.props.timers.sort((a, b) => SortByName(a, b))
       .map(timer => {
         const handleToggleState = () => {
           timer.enable = !timer.enable

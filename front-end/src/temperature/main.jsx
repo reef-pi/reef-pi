@@ -8,6 +8,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import CalibrationModal from './calibration_modal'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -31,7 +32,7 @@ class main extends React.Component {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
-    this.props.probes.map(probe => {
+    this.props.probes.forEach(probe => {
       this.props.readTC(probe.id)
     })
   }
@@ -73,11 +74,7 @@ class main extends React.Component {
 
   probeList () {
     return this.props.probes
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      })
+      .sort((a, b) => SortByName(a, b))
       .map(probe => {
         const calibrationButton = (
           <button
@@ -174,13 +171,14 @@ class main extends React.Component {
   render () {
     let newProbe = null
     if (this.state.addProbe) {
-      newProbe =
+      newProbe = (
         <TemperatureForm
           sensors={this.props.sensors}
           equipment={this.props.equipment}
           macros={this.props.macros}
           onSubmit={this.handleCreate}
         />
+      )
     }
 
     let calibrationModal = null

@@ -3,6 +3,7 @@ import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'rec
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -26,7 +27,7 @@ class chart extends React.Component {
     }
     let currentTemp = ''
     if (this.props.usage.current.length > 1) {
-      currentTemp = parseFloat(this.props.usage.current[this.props.usage.current.length - 1].value).toFixed(2)
+      currentTemp = TwoDecimalParse(this.props.usage.current[this.props.usage.current.length - 1].value)
     }
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
@@ -43,7 +44,7 @@ class chart extends React.Component {
             </defs>
             <YAxis dataKey='value' allowDecimals='false' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => [parseFloat(value).toFixed(2), unit]} />
+            <Tooltip formatter={(value, name) => [TwoDecimalParse(value), unit]} />
             <Area
               type='linear'
               dataKey='value'

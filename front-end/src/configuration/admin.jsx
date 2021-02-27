@@ -125,10 +125,10 @@ class admin extends React.Component {
           <div className='col-md-4 mt-3 col-lg-3'>
             <label for='reef-pi-version'>{i18n.t('upgrade_reef_pi')}</label>
           </div>
-          <div className='col-md-2 col-lg-1 mt-3'>
+          <div className='col-md-4 col-lg-3 mt-3'>
             <input onChange={this.handleVersionChange} type='text' id='reef-pi-version' className='form-control' />
           </div>
-          <div className='col-md-2 mt-3 col-lg-1'>
+          <div className='col-md-4 mt-3 col-lg-3'>
             <button onClick={this.handleInstall} className='btn btn-danger form-control'>
               {i18n.t('install')}
             </button>

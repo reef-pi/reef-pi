@@ -34,18 +34,20 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
           </div>
         </div>
         <div className='col-4'>
-          {complete ? (
-            <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
-              <FaCheck />
-            </IconContext.Provider>
-          ) : (
-            <input
-              type='submit'
-              disabled={readOnly}
-              value={i18next.t('ph:run_calibration')}
-              className='btn btn-sm btn-outline-primary'
-            />
-          )}
+          {complete
+            ? (
+              <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
+                <FaCheck />
+              </IconContext.Provider>
+            )
+            : (
+              <input
+                type='submit'
+                disabled={readOnly}
+                value={i18next.t('ph:run_calibration')}
+                className='btn btn-sm btn-outline-primary'
+              />
+            )}
         </div>
       </div>
     </form>

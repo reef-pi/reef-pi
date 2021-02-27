@@ -9,6 +9,7 @@ import { fetchEquipment } from 'redux/actions/equipment'
 import { fetchInlets } from 'redux/actions/inlets'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -63,35 +64,32 @@ class main extends React.Component {
   }
 
   probeList () {
-    return this.props.atos.sort((a, b) => {
-      return a.name.localeCompare(b.name,
-        navigator.languages[0] || navigator.language,
-        { numeric: true, ignorePunctuation: true })
-    }).map(probe => {
-      const handleToggleState = () => {
-        probe.enable = !probe.enable
-        this.props.update(probe.id, probe)
-      }
-      return (
-        <Collapsible
-          key={'panel-ato-' + probe.id}
-          name={'panel-ato-' + probe.id}
-          item={probe}
-          title={<b className='ml-2 align-middle'>{probe.name} </b>}
-          onDelete={this.handleDelete}
-          onToggleState={handleToggleState}
-          enabled={probe.enable}
-        >
-          <AtoForm
-            data={probe}
-            onSubmit={this.handleSubmit}
-            inlets={this.props.inlets}
-            equipment={this.props.equipment}
-            macros={this.props.macros}
-          />
-        </Collapsible>
-      )
-    })
+    return this.props.atos.sort((a, b) => SortByName(a, b))
+      .map(probe => {
+        const handleToggleState = () => {
+          probe.enable = !probe.enable
+          this.props.update(probe.id, probe)
+        }
+        return (
+          <Collapsible
+            key={'panel-ato-' + probe.id}
+            name={'panel-ato-' + probe.id}
+            item={probe}
+            title={<b className='ml-2 align-middle'>{probe.name} </b>}
+            onDelete={this.handleDelete}
+            onToggleState={handleToggleState}
+            enabled={probe.enable}
+          >
+            <AtoForm
+              data={probe}
+              onSubmit={this.handleSubmit}
+              inlets={this.props.inlets}
+              equipment={this.props.equipment}
+              macros={this.props.macros}
+            />
+          </Collapsible>
+        )
+      })
   }
 
   render () {
