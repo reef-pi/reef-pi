@@ -138,13 +138,18 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(light => {
-        let panelContent =
+      this.props.lights.sort((a, b) => {
+        return a.name.localeCompare(b.name,
+          navigator.languages[0] || navigator.language,
+          { numeric: true, ignorePunctuation: true })
+      }).map(light => {
+        let panelContent = (
           <Light
             config={light}
             onSubmit={this.handleUpdateLight}
             remove={this.props.deleteLight}
           />
+        )
         let modeContent = ''
         const mode = this.getLightMode(light)
         switch (mode) {

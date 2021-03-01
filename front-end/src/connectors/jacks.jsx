@@ -90,7 +90,11 @@ class jacks extends React.Component {
 
   list () {
     const list = []
-    this.props.jacks.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((j, i) => {
+    this.props.jacks.sort((a, b) => {
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
+    }).forEach((j, i) => {
       list.push(
         <Jack
           name={j.name}

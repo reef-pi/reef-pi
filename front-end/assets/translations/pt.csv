@@ -108,6 +108,7 @@ collapsible:delete,Apagar
 collapsible:edit,Editar
 color_picker:choose,Escolher
 configuration:about:current_time,Hora Atual
+configuration:about:modifications,
 configuration:about:status,Estado
 configuration:about:uptime,Uptime
 configuration:about:version,Versão
@@ -153,6 +154,8 @@ cron:month,
 cron:second,Segundos
 cron:week,
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
+equipment:chart:barchart,
+equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Ligação Perdida
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.

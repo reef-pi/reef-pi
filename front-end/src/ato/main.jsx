@@ -63,7 +63,11 @@ class main extends React.Component {
   }
 
   probeList () {
-    return this.props.atos.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(probe => {
+    return this.props.atos.sort((a, b) => {
+      return a.name.localeCompare(b.name,
+        navigator.languages[0] || navigator.language,
+        { numeric: true, ignorePunctuation: true })
+    }).map(probe => {
       const handleToggleState = () => {
         probe.enable = !probe.enable
         this.props.update(probe.id, probe)

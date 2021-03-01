@@ -6,6 +6,7 @@ const SettingsSchema = Yup.object().shape({
   interface: Yup.string().required(i18n.t('configuration:settings:network_interface_required')),
   address: Yup.string().required(i18n.t('configuration:settings:network_address_required')),
   display: Yup.bool(),
+  cors: Yup.bool(),
   notification: Yup.bool(),
   capabilities: Yup.object().required(i18n.t('configuration:settings:capabilities_required')),
   health_check: Yup.object().shape({

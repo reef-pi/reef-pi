@@ -104,7 +104,7 @@ const EditPh = ({
               })}
             >
               <option value='' className='d-none'>
-                  -- {i18next.t('select')} --
+                -- {i18next.t('select')} --
               </option>
               {analogInputOptions()}
             </Field>

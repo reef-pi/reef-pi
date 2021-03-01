@@ -50,7 +50,11 @@ class main extends React.Component {
 
   macroList () {
     return (
-      this.props.macros.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(macro => {
+      this.props.macros.sort((a, b) => {
+        return a.name.localeCompare(b.name,
+          navigator.languages[0] || navigator.language,
+          { numeric: true, ignorePunctuation: true })
+      }).map(macro => {
         const buttons = []
         buttons.push(
           <button

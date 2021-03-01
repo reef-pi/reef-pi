@@ -18,6 +18,7 @@ var config = {
       path.resolve(__dirname, 'front-end', 'assets', 'translations')
     ]
   },
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {

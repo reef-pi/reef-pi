@@ -108,6 +108,7 @@ collapsible:delete,Verwijderen
 collapsible:edit,Bewerken
 color_picker:choose,Kies
 configuration:about:current_time,Huidige tijd
+configuration:about:modifications,
 configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Versie
@@ -153,6 +154,8 @@ cron:month,Maand
 cron:second,Seconde
 cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
+equipment:chart:barchart,
+equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Connectie verloren
 fatal_error:fatal_error,Fatale Fout
 fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na."

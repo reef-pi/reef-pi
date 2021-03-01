@@ -451,6 +451,7 @@ const EditTemperature = ({
             </div>
           </div>
         </div>
+
         {charts()}
       </div>
 

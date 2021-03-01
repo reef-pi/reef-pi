@@ -108,6 +108,7 @@ collapsible:delete,
 collapsible:edit,
 color_picker:choose,
 configuration:about:current_time,پیکربندی:در باره:
+configuration:about:modifications,
 configuration:about:status,پیکربندی:در باره: وضعیت
 configuration:about:uptime,پیکربندی:در باره: زمان فعلی
 configuration:about:version,پیکربندی:در باره: نسخه
@@ -153,6 +154,8 @@ cron:month,
 cron:second,
 cron:week,
 dashboard:back_to_dashboard,
+equipment:chart:barchart,
+equipment:chart:ctrlpanel,
 fatal_error:connection_lost,
 fatal_error:fatal_error,
 fatal_error:message,

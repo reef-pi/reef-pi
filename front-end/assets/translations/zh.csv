@@ -108,6 +108,7 @@ collapsible:delete,删除
 collapsible:edit,编辑
 color_picker:choose,选择
 configuration:about:current_time,当前时间
+configuration:about:modifications,
 configuration:about:status,状态
 configuration:about:uptime,运行时间
 configuration:about:version,版本
@@ -153,6 +154,8 @@ cron:month,月
 cron:second,秒
 cron:week,周
 dashboard:back_to_dashboard,回到面板
+equipment:chart:barchart,
+equipment:chart:ctrlpanel,
 fatal_error:connection_lost,连接丢失
 fatal_error:fatal_error,致命错误
 fatal_error:message,无法连接服务器，你需要重启服务器或者排除故障。

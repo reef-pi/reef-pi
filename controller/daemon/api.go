@@ -36,6 +36,16 @@ func (r *ReefPi) API() error {
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
 		utils.SummarizeAPI()
 	}
+	if r.settings.CORS {
+		router.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Access-Control-Allow-Origin", "*")
+				w.Header().Set("Access-Control-Allow-Methods", "*")
+				w.Header().Set("Access-Control-Allow-Headers", "*")
+				next.ServeHTTP(w, r)
+			})
+		})
+	}
 	return nil
 }
 
@@ -55,9 +65,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	// 	200: body:capabilities
 	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
 
-	for _, sController := range r.subsystems {
-		sController.LoadAPI(router)
-	}
+	r.subsystems.LoadAPI(router)
 
 	// swagger:route GET /api/settings Settings settingsList
 	// List all settings.
@@ -189,9 +197,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
 	}
 	r.dm.LoadAPI(router)
-	for _, sController := range r.subsystems {
-		sController.LoadAPI(router)
-	}
+	r.subsystems.LoadAPI(router)
 	if r.settings.Capabilities.Dashboard {
 
 		// swagger:route GET /api/dashboard Dashboard dashboardGet

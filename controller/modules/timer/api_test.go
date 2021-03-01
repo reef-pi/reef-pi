@@ -61,7 +61,7 @@ func TestTimerController(t *testing.T) {
 
 	j := Job{
 		Name:   "test-job",
-		Target: []byte(fmt.Sprintf(`{"id":"%s"}`, eqs[0].ID)),
+		Target: []byte(fmt.Sprintf(`{"id":"%s", "revert":true,"on":true, "duration":1}`, eqs[0].ID)),
 		Second: "0",
 		Minute: "*",
 		Hour:   "*",
@@ -109,16 +109,10 @@ func TestTimerController(t *testing.T) {
 		t.Fatal("Failed to delete timer job using api. Error:", err)
 	}
 
-	uq := UpdateEquipment{
-		Revert:   true,
-		ID:       "1",
-		On:       true,
-		Duration: 1,
-	}
 	eq.ID = "1"
-	r := EquipmentRunner{
-		equipment: e,
-		target:    uq,
+	r, err := NewSubSystemRunner(j, con)
+	if err != nil {
+		t.Error(err)
 	}
 	r.Run()
 	j.Day = "X"

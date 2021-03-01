@@ -45,7 +45,7 @@ export default class New extends React.Component {
         if (response.status === 400) {
           response.json().then(data => {
             const config = {}
-            Object.keys(data).map(item => {
+            Object.keys(data).forEach(item => {
               if (item.startsWith('config.')) {
                 config[item.replace('config.', '')] = data[item]
               }

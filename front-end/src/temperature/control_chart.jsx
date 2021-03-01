@@ -1,5 +1,5 @@
 import React from 'react'
-import { ResponsiveContainer, ComposedChart, Line, Tooltip, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
+import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -39,7 +39,14 @@ class chart extends React.Component {
         </span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
-            <YAxis yAxisId='left' orientation='left' />
+            <YAxis
+              dataKey='value'
+              type='number'
+              yAxisId='left'
+              orientation='left'
+              domain={[this.props.config.chart_y_min, this.props.config.chart_y_max]}
+              allowDataOverflow
+            />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
@@ -48,7 +55,7 @@ class chart extends React.Component {
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
               type='monotone'
-              stroke='#ce93d8'
+              stroke={this.props.config.chart.color}
               isAnimationActive={false}
               yAxisId='left'
               dot={false}

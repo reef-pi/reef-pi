@@ -7,6 +7,7 @@ import (
 
 	"testing"
 
+	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -23,9 +24,10 @@ func Test_Capabilities(t *testing.T) {
 		t.Fatal(err)
 	}
 	r := &ReefPi{
-		a:         utils.NewAuth(Bucket, store),
-		telemetry: telemetry.TestTelemetry(store),
-		dm:        device_manager.New(settings.DefaultSettings, store),
+		a:          utils.NewAuth(Bucket, store),
+		telemetry:  telemetry.TestTelemetry(store),
+		dm:         device_manager.New(settings.DefaultSettings, store),
+		subsystems: controller.NewSubsystemComposite(),
 	}
 	buf := new(bytes.Buffer)
 	buf.Write([]byte(`{}`))
