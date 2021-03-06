@@ -3,6 +3,7 @@ import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, R
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -32,6 +33,8 @@ class chart extends React.Component {
       usage.push(v)
     })
 
+    const c = this.props.config.chart
+    const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
       <div className='container'>
         <span className='h6'>
@@ -44,13 +47,13 @@ class chart extends React.Component {
               type='number'
               yAxisId='left'
               orientation='left'
-              domain={[this.props.config.chart_y_min, this.props.config.chart_y_max]}
-              allowDataOverflow
+              domain={[c.ymin, c.ymax]}
+              allowDecimals='false'
             />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip />
+            <Tooltip formatter={(value, name) => [TwoDecimalParse(value), unit]} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line

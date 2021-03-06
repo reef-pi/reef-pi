@@ -3,6 +3,7 @@ import TempReadingsChart from 'temperature/readings_chart'
 import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
+import BlankPanel from 'dashboard/blank_panel'
 import LightChart from 'lighting/chart'
 import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
@@ -76,6 +77,15 @@ class dashboard extends React.Component {
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <EquipmentCtrlPanel width={config.width} height={config.height} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'blank_panel':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <BlankPanel width={config.width} height={config.height} />
                 </ErrorBoundary>
               </div>
             )

@@ -10,6 +10,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import { IoMdSwitch } from 'react-icons/io'
 import ManualLight from './manual_light'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -138,52 +139,49 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      }).map(light => {
-        let panelContent = (
-          <Light
-            config={light}
-            onSubmit={this.handleUpdateLight}
-            remove={this.props.deleteLight}
-          />
-        )
-        let modeContent = ''
-        const mode = this.getLightMode(light)
-        switch (mode) {
-          case 'auto':
-            modeContent = (<><IoMdSwitch /> Auto</>)
-            break
-          case 'manual':
-            modeContent = (<><IoMdSwitch /> Manual</>)
-            panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
-            break
-          default:
-            modeContent = (<><IoMdSwitch /> Mixed</>)
-        }
+      this.props.lights.sort((a, b) => SortByName(a, b))
+        .map(light => {
+          let panelContent = (
+            <Light
+              config={light}
+              onSubmit={this.handleUpdateLight}
+              remove={this.props.deleteLight}
+            />
+          )
+          let modeContent = ''
+          const mode = this.getLightMode(light)
+          switch (mode) {
+            case 'auto':
+              modeContent = (<><IoMdSwitch /> Auto</>)
+              break
+            case 'manual':
+              modeContent = (<><IoMdSwitch /> Manual</>)
+              panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
+              break
+            default:
+              modeContent = (<><IoMdSwitch /> Mixed</>)
+          }
 
-        const modeButton = (
-          <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
-            {modeContent}
-          </button>
-        )
+          const modeButton = (
+            <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
+              {modeContent}
+            </button>
+          )
 
-        return (
-          <Collapsible
-            key={'light-' + light.id}
-            name={'light-' + light.id}
-            item={light}
-            buttons={modeButton}
-            title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
-            onDelete={this.handleDeleteLight}
-            disableEdit={mode === 'manual'}
-          >
-            {panelContent}
-          </Collapsible>
-        )
-      })
+          return (
+            <Collapsible
+              key={'light-' + light.id}
+              name={'light-' + light.id}
+              item={light}
+              buttons={modeButton}
+              title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
+              onDelete={this.handleDeleteLight}
+              disableEdit={mode === 'manual'}
+            >
+              {panelContent}
+            </Collapsible>
+          )
+        })
     )
   }
 

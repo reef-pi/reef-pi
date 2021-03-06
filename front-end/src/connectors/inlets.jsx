@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Inlet from './inlet'
 import Pin from './pin'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 class inlets extends React.Component {
   constructor (props) {
@@ -81,30 +82,27 @@ class inlets extends React.Component {
 
   list () {
     const items = []
-    this.props.inlets.sort((a, b) => {
-      return a.name.localeCompare(b.name,
-        navigator.languages[0] || navigator.language,
-        { numeric: true, ignorePunctuation: true })
-    }).forEach((i, n) => {
-      const d = this.props.drivers.filter(d => d.id === i.driver)[0] || {}
-      items.push(
-        <Inlet
-          name={i.name}
-          pin={i.pin}
-          reverse={i.reverse}
-          equipment={i.equipment}
-          inlet_id={i.id}
-          driver={d}
-          drivers={this.props.drivers}
-          key={i.id}
-          remove={this.remove(i.id)}
-          update={p => {
-            this.props.update(i.id, p)
-            this.props.fetch()
-          }}
-        />
-      )
-    })
+    this.props.inlets.sort((a, b) => SortByName(a, b))
+      .forEach((i, n) => {
+        const d = this.props.drivers.filter(d => d.id === i.driver)[0] || {}
+        items.push(
+          <Inlet
+            name={i.name}
+            pin={i.pin}
+            reverse={i.reverse}
+            equipment={i.equipment}
+            inlet_id={i.id}
+            driver={d}
+            drivers={this.props.drivers}
+            key={i.id}
+            remove={this.remove(i.id)}
+            update={p => {
+              this.props.update(i.id, p)
+              this.props.fetch()
+            }}
+          />
+        )
+      })
     return items
   }
 

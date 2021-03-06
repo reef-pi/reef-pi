@@ -3,6 +3,7 @@ import { fetchDrivers, fetchDriverOptions, deleteDriver, createDriver, updateDri
 import { connect } from 'react-redux'
 import Driver from './driver'
 import New from './new'
+import { SortByName } from 'utils/sort_by_name'
 
 class drivers extends React.Component {
   constructor (props) {
@@ -29,27 +30,28 @@ class drivers extends React.Component {
 
   list () {
     const items = []
-    this.props.drivers.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).forEach((d, n) => {
-      if (d.type === 'rpi') {
+    this.props.drivers.sort((a, b) => SortByName(a, b))
+      .forEach((d, n) => {
+        if (d.type === 'rpi') {
+          items.push(
+            <div className='row ' key={d.id}>
+              <div className='col-4 col-md-6'>{d.name}</div>
+              <div className='col-4 col-md-6'>{d.type}</div>
+            </div>
+          )
+          return
+        }
         items.push(
-          <div className='row ' key={d.id}>
-            <div className='col-4 col-md-6'>{d.name}</div>
-            <div className='col-4 col-md-6'>{d.type}</div>
-          </div>
+          <Driver
+            key={d.id}
+            driver={d}
+            validate={this.validate}
+            driverOptions={this.props.driverOptions}
+            remove={this.props.delete}
+            update={this.props.update}
+          />
         )
-        return
-      }
-      items.push(
-        <Driver
-          key={d.id}
-          driver={d}
-          validate={this.validate}
-          driverOptions={this.props.driverOptions}
-          remove={this.props.delete}
-          update={this.props.update}
-        />
-      )
-    })
+      })
     return items
   }
 

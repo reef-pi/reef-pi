@@ -7,6 +7,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import { confirm } from 'utils/confirm'
 import CalibrationWizard from './calibration_wizard'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 class ph extends React.Component {
   constructor (props) {
@@ -30,11 +31,7 @@ class ph extends React.Component {
 
   probeList () {
     return this.props.probes
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      })
+      .sort((a, b) => SortByName(a, b))
       .map(probe => {
         const calibrationButton = (
           <button

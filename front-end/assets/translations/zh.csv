@@ -153,6 +153,7 @@ cron:month,月
 cron:second,秒
 cron:week,周
 dashboard:back_to_dashboard,回到面板
+dashboard:blank_panel,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,连接丢失

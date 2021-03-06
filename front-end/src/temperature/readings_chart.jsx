@@ -3,6 +3,7 @@ import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'rec
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -26,10 +27,10 @@ class chart extends React.Component {
     }
     let currentTemp = ''
     if (this.props.usage.current.length > 1) {
-      currentTemp = this.props.usage.current[this.props.usage.current.length - 1].value
+      currentTemp = TwoDecimalParse(this.props.usage.current[this.props.usage.current.length - 1].value)
     }
     const c = this.props.config.chart
-    const unit = this.props.config.fahrenheit ? 'F' : 'C'
+    const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
@@ -41,9 +42,9 @@ class chart extends React.Component {
                 <stop offset='95%' stopColor={c.color} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
+            <YAxis dataKey='value' allowDecimals='false' domain={[c.ymin, c.ymax]} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => [value, unit]} />
+            <Tooltip formatter={(value, name) => [TwoDecimalParse(value), unit]} />
             <Area
               type='linear'
               dataKey='value'

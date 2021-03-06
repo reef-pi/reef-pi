@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Outlet from './outlet'
 import Pin from './pin'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -83,11 +84,7 @@ class outlets extends React.Component {
   list () {
     const list = []
     this.props.outlets
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      })
+      .sort((a, b) => SortByName(a, b))
       .forEach((o, i) => {
         list.push(
           <Outlet

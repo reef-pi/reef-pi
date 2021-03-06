@@ -7,6 +7,7 @@ import { fetchJournals, deleteJournal, updateJournal } from 'redux/actions/journ
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -45,22 +46,23 @@ class main extends React.Component {
   }
 
   list () {
-    return this.props.journals.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(j => {
-      return (
-        <Collapsible
-          key={'panel-journal-' + j.id}
-          name={'panel-journal-' + j.id}
-          item={j}
-          title={<b className='ml-2 align-middle'>{j.name} </b>}
-          onDelete={this.handleDelete}
-        >
-          <JournalForm
-            data={j}
-            onSubmit={this.handleSubmit}
-          />
-        </Collapsible>
-      )
-    })
+    return this.props.journals.sort((a, b) => SortByName(a, b))
+      .map(j => {
+        return (
+          <Collapsible
+            key={'panel-journal-' + j.id}
+            name={'panel-journal-' + j.id}
+            item={j}
+            title={<b className='ml-2 align-middle'>{j.name} </b>}
+            onDelete={this.handleDelete}
+          >
+            <JournalForm
+              data={j}
+              onSubmit={this.handleSubmit}
+            />
+          </Collapsible>
+        )
+      })
   }
 
   render () {

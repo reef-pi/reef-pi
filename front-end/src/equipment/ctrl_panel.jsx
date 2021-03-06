@@ -3,6 +3,7 @@ import { fetchEquipment, updateEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from 'react-toggle-switch'
+import { SortByName } from 'utils/sort_by_name'
 
 class CtrlPanel extends React.Component {
   constructor (props) {
@@ -39,11 +40,12 @@ class CtrlPanel extends React.Component {
     }
 
     return (
-      <div className='container'>
+      <div className='container' style={{ border: '1px solid black', marginBottom: '3px' }}>
+        <span className='h6'>Equipment Switch Panel</span>
+        <br />
         <div className='row'>
-          {this.props.equipment.sort((a, b) => {
-            return a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true })
-          }).map(item => {
+          {this.props.equipment.sort((a, b) => SortByName(a, b))
+          .map(item => {
             return (
               <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                 <FormControlLabel

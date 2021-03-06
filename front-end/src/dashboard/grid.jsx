@@ -19,11 +19,11 @@ export default class Grid extends React.Component {
   }
 
   cellUI (i, j, cell) {
-    let label = this.state.types.health.label
-    let options = this.state.types.health.options
+    let label = this.state.types.blank_panel.label
+    let options = this.state.types.blank_panel.options
     let id = 'current'
     if (cell === undefined) {
-      cell = { type: 'health', id: 'current' }
+      cell = { type: 'blank_panel', id: 'none' }
     }
 
     if (this.state.types[cell.type] !== undefined) {
@@ -107,7 +107,8 @@ export default class Grid extends React.Component {
       this.menuItem(this.state.types.ph_historical, false, i, j),
       this.menuItem(this.state.types.temp_current, false, i, j),
       this.menuItem(this.state.types.temp_historical, false, i, j),
-      this.menuItem(this.state.types.doser, false, i, j)
+      this.menuItem(this.state.types.doser, false, i, j),
+      this.menuItem(this.state.types.blank_panel, false, i, j)
     ]
     return (types)
   }

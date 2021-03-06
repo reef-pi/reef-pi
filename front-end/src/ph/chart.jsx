@@ -2,6 +2,7 @@ import React from 'react'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
+import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -30,7 +31,7 @@ class chart extends React.Component {
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
       if (current !== '') {
-        current = parseFloat(current).toFixed(2)
+        current = TwoDecimalParse(current)
       }
     }
     const c = this.props.config.chart
@@ -41,7 +42,7 @@ class chart extends React.Component {
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => [parseFloat(value).toFixed(2), c.unit]} />
+            <Tooltip formatter={(value, name) => [TwoDecimalParse(value), c.unit]} />
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
           </LineChart>
         </ResponsiveContainer>

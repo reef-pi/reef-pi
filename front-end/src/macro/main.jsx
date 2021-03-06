@@ -12,6 +12,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import MacroForm from './macro_form'
 import { confirm } from 'utils/confirm'
+import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
   constructor (props) {
@@ -50,53 +51,50 @@ class main extends React.Component {
 
   macroList () {
     return (
-      this.props.macros.sort((a, b) => {
-        return a.name.localeCompare(b.name,
-          navigator.languages[0] || navigator.language,
-          { numeric: true, ignorePunctuation: true })
-      }).map(macro => {
-        const buttons = []
-        buttons.push(
-          <button
-            type='button' name={'run-macro-' + macro.id}
-            className='btn btn-sm btn-outline-info float-right'
-            disabled={macro.enable}
-            onClick={(e) => this.runMacro(e, macro)}
-            key='run'
-          >
-            {macro.enable ? 'Running' : 'Run'}
-          </button>
-        )
-        if (macro.reversible) {
+      this.props.macros.sort((a, b) => SortByName(a, b))
+        .map(macro => {
+          const buttons = []
           buttons.push(
             <button
-              type='button' name={'reverse-macro-' + macro.id}
+              type='button' name={'run-macro-' + macro.id}
               className='btn btn-sm btn-outline-info float-right'
               disabled={macro.enable}
-              onClick={(e) => this.revertMacro(e, macro)}
-              key='revert'
+              onClick={(e) => this.runMacro(e, macro)}
+              key='run'
             >
-              {macro.enable ? 'Reverting' : 'Revert'}
+              {macro.enable ? 'Running' : 'Run'}
             </button>
           )
-        }
+          if (macro.reversible) {
+            buttons.push(
+              <button
+                type='button' name={'reverse-macro-' + macro.id}
+                className='btn btn-sm btn-outline-info float-right'
+                disabled={macro.enable}
+                onClick={(e) => this.revertMacro(e, macro)}
+                key='revert'
+              >
+                {macro.enable ? 'Reverting' : 'Revert'}
+              </button>
+            )
+          }
 
-        return (
-          <Collapsible
-            key={'panel-macro-' + macro.id}
-            name={'panel-macro-' + macro.id}
-            item={macro}
-            buttons={buttons}
-            title={<b className='ml-2 align-middle'>{macro.name} </b>}
-            onDelete={this.handleDeleteMacro}
-          >
-            <MacroForm
-              onSubmit={this.handleUpdateMacro}
-              macro={macro}
-            />
-          </Collapsible>
-        )
-      })
+          return (
+            <Collapsible
+              key={'panel-macro-' + macro.id}
+              name={'panel-macro-' + macro.id}
+              item={macro}
+              buttons={buttons}
+              title={<b className='ml-2 align-middle'>{macro.name} </b>}
+              onDelete={this.handleDeleteMacro}
+            >
+              <MacroForm
+                onSubmit={this.handleUpdateMacro}
+                macro={macro}
+              />
+            </Collapsible>
+          )
+        })
     )
   }
 
