@@ -71,7 +71,7 @@
     "style-loader": "2.0.0",
     "testcafe": "^1.10.1",
     "webpack": "4.44.2",
-    "webpack-cli": "4.3.1",
+    "webpack-cli": "4.5.0",
     "webpack-dev-server": "3.11.0",
     "webpack-livereload-plugin": "2.3.0",
     "yup": "0.28.0"
