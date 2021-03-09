@@ -22,4 +22,5 @@ coverage
 front-end/src/utils/translations/*.json
 test-data
 .vendor-new/*
+package-lock.json
 
