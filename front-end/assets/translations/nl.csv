@@ -58,6 +58,7 @@ select,Selecteren
 select_file,
 since,Sinds
 start_time,
+stayoffonboot,
 status,Status
 unit,Eenheid
 update,Update

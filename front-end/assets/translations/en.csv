@@ -59,6 +59,7 @@ select,Select
 select_file,Please select a file
 since,since
 start_time,Start Time
+stayoffonboot,Stay Off On Boot?
 status,Status
 unit,Unit
 update,Update

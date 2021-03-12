@@ -10,7 +10,8 @@ const EditEquipmentForm = withFormik({
     id: (props.equipment && props.equipment.id) || '',
     on: (props.equipment && props.equipment.on) || false,
     outlets: props.outlets,
-    remove: props.remove
+    remove: props.remove,
+    stay_off_on_boot: (props.equipment && props.equipment.stay_off_on_boot) || false
   }),
   validationSchema: EquipmentSchema,
   handleSubmit: (values, { props }) => {

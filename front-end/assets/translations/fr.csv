@@ -58,6 +58,7 @@ select,
 select_file,
 since,
 start_time,
+stayoffonboot,
 status,Statut
 unit,
 update,Mettre à jour

@@ -58,6 +58,7 @@ select,Seleccionar
 select_file,Por favor seleccione un archivo
 since,Desde
 start_time,Hora de inicio
+stayoffonboot,¿Apagado al reiniciar?
 status,Estado
 unit,Unidad
 update,Actualizar

@@ -35,7 +35,8 @@ export default class Equipment extends React.Component {
     const payload = {
       name: values.name,
       outlet: values.outlet,
-      on: values.on
+      on: values.on,
+      stay_off_on_boot: values.stay_off_on_boot
     }
 
     this.props.update(id, payload).then(() => {

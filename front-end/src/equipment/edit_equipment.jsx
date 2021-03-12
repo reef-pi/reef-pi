@@ -4,6 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 const EditEquipment = ({
   values,
@@ -70,18 +71,31 @@ const EditEquipment = ({
             value={values.outlet}
           >
             <option value='' className='d-none'>-- Select --</option>
-            {outlets.map((item) => {
-              return (
-                <option
-                  key={item.id}
-                  value={item.id}
-                >
-                  {item.name}
-                </option>
-              )
-            })}
+            {outlets.sort((a, b) => SortByName(a, b))
+              .map((item) => {
+                return (
+                  <option
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.name}
+                  </option>
+                )
+              })}
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
+        </div>
+        <div className='col-12 col-sm-3 col-lg-3 order-sm-1'>
+          <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
+          <input
+            type='checkbox'
+            name='stayoffonboot'
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={classNames('form-control', { 'is-invalid': ShowError('stayoffonboot', touched, errors) })}
+            value={values.stay_off_on_boot}
+          />
+          <ErrorFor errors={errors} touched={touched} name='stayoffonboot' />
         </div>
       </div>
       <div className='row'>
