@@ -41,7 +41,7 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
           <small className='ml-1 align-top'>{equipment.on ? 'on' : 'off'}</small>
         </Switch>
       </div>
-      <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3'>
+      <div className='col-12 col-sm-6 col-md-2 col-lg-2 order-sm-4'>
         <div className='form-group'>
           <span className='input-group-addon'> {i18next.t('stayoffonboot')} </span>
           <input

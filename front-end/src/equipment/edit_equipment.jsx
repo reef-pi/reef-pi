@@ -50,10 +50,11 @@ const EditEquipment = ({
     <form onSubmit={handleSubmit}>
       <div className='row align-items-start'>
         {deleteAction()}
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-1'>
           <label className='mr-2'>{i18next.t('name')}</label>
           <input
-            type='text' name='name'
+            type='text'
+            name='name'
             onChange={handleChange}
             onBlur={handleBlur}
             className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
@@ -61,7 +62,7 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='col-12 col-sm-5 col-lg-4 order-sm-2'>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-2'>
           <label className='mr-2'>Outlet</label>
           <select
             name='outlet'
@@ -85,17 +86,18 @@ const EditEquipment = ({
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
         </div>
-        <div className='col-12 col-sm-3 col-lg-3 order-sm-1'>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-3'>
           <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
           <input
             type='checkbox'
-            name='stayoffonboot'
+            name='stay_off_on_boot'
+            checked={values.stay_off_on_boot}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={classNames('form-control', { 'is-invalid': ShowError('stayoffonboot', touched, errors) })}
+            className={classNames('form-control', { 'is-invalid': ShowError('stay_off_on_boot', touched, errors) })}
             value={values.stay_off_on_boot}
           />
-          <ErrorFor errors={errors} touched={touched} name='stayoffonboot' />
+          <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
       </div>
       <div className='row'>
