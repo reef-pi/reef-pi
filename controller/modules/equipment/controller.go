@@ -2,11 +2,12 @@ package equipment
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"log"
 )
 
 type Controller struct {
@@ -24,6 +25,16 @@ func New(c controller.Controller) *Controller {
 }
 
 func (c *Controller) Setup() error {
+	eqs, err := c.List()
+	if err != nil {
+		log.Println("ERROR: equipment subsystem: failed to list equipment outlets during Setup. Error:", err)
+	}
+	for _, eq := range eqs {
+		if eq.StayOffOnBoot && eq.On {
+			eq.On = false
+			c.Update(eq.ID, eq)
+		}
+	}
 	return c.store.CreateBucket(Bucket)
 }
 
