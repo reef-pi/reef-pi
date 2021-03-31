@@ -58,7 +58,7 @@ func TestEquipmentController(t *testing.T) {
 
 	c.Start()
 	body.Reset()
-	ea := EquipmentAction{true}
+	ea := EquipmentAction{true, true}
 	enc.Encode(ea)
 	if err := tr.Do("POST", "/api/equipment/1/control", body, nil); err != nil {
 		t.Fatal("Failed to control equipment using api")

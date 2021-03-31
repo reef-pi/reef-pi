@@ -8,7 +8,8 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
     const payload = {
       name: equipment.name,
       on: !equipment.on,
-      outlet: equipment.outlet
+      outlet: equipment.outlet,
+      stay_off_on_boot: equipment.stay_off_on_boot
     }
     onStateChange(equipment.id, payload)
   }
@@ -39,6 +40,18 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
         <Switch onClick={toggleState} on={equipment.on}>
           <small className='ml-1 align-top'>{equipment.on ? 'on' : 'off'}</small>
         </Switch>
+      </div>
+      <div className='col-12 col-sm-6 col-md-2 col-lg-2 order-sm-4'>
+        <div className='form-group'>
+          <span className='input-group-addon'> {i18next.t('stayoffonboot')} </span>
+          <input
+            type='checkbox'
+            id='stayOffOnBoot'
+            className='form-control'
+            checked={equipment.stay_off_on_boot}
+            readOnly='true'
+          />
+        </div>
       </div>
     </div>
   )

@@ -45,16 +45,16 @@ class CtrlPanel extends React.Component {
         <br />
         <div className='row'>
           {this.props.equipment.sort((a, b) => SortByName(a, b))
-          .map(item => {
-            return (
-              <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
-                <FormControlLabel
-                  control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet) }} />}
-                  label={item.name}
-                />
-              </div>
-            )
-          })}
+            .map(item => {
+              return (
+                <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
+                  <FormControlLabel
+                    control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet) }} />}
+                    label={item.name}
+                  />
+                </div>
+              )
+            })}
         </div>
       </div>
     )

@@ -11,10 +11,11 @@ const Bucket = storage.EquipmentBucket
 
 //swagger:model equipment
 type Equipment struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Outlet string `json:"outlet"`
-	On     bool   `json:"on"`
+	ID            string `json:"id"`
+	Name          string `json:"name"`
+	Outlet        string `json:"outlet"`
+	On            bool   `json:"on"`
+	StayOffOnBoot bool   `json:"stay_off_on_boot"`
 }
 
 func (c *Controller) Get(id string) (Equipment, error) {

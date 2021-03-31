@@ -4,6 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
+import { SortByName } from 'utils/sort_by_name'
 
 const EditEquipment = ({
   values,
@@ -49,10 +50,11 @@ const EditEquipment = ({
     <form onSubmit={handleSubmit}>
       <div className='row align-items-start'>
         {deleteAction()}
-        <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-1'>
           <label className='mr-2'>{i18next.t('name')}</label>
           <input
-            type='text' name='name'
+            type='text'
+            name='name'
             onChange={handleChange}
             onBlur={handleBlur}
             className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
@@ -60,7 +62,7 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='col-12 col-sm-5 col-lg-4 order-sm-2'>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-2'>
           <label className='mr-2'>Outlet</label>
           <select
             name='outlet'
@@ -70,18 +72,32 @@ const EditEquipment = ({
             value={values.outlet}
           >
             <option value='' className='d-none'>-- Select --</option>
-            {outlets.map((item) => {
-              return (
-                <option
-                  key={item.id}
-                  value={item.id}
-                >
-                  {item.name}
-                </option>
-              )
-            })}
+            {outlets.sort((a, b) => SortByName(a, b))
+              .map((item) => {
+                return (
+                  <option
+                    key={item.id}
+                    value={item.id}
+                  >
+                    {item.name}
+                  </option>
+                )
+              })}
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
+        </div>
+        <div className='col-12 col-sm-4 col-lg-4 order-sm-3'>
+          <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
+          <input
+            type='checkbox'
+            name='stay_off_on_boot'
+            checked={values.stay_off_on_boot}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={classNames('form-control', { 'is-invalid': ShowError('stay_off_on_boot', touched, errors) })}
+            value={values.stay_off_on_boot}
+          />
+          <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
       </div>
       <div className='row'>
