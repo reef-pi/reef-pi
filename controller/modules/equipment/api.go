@@ -119,8 +119,7 @@ func (e *Controller) LoadAPI(r *mux.Router) {
 
 //swagger:model equipmentAction
 type EquipmentAction struct {
-	On            bool `json:"on"`
-	StayOffOnBoot bool `json:"stay_off_on_boot"`
+	On bool `json:"on"`
 }
 
 func (c *Controller) Control(id string, on bool) error {
