@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: css-loader
+    versions:
+    - "> 3.2.1, < 4"
+  - dependency-name: enzyme
+    versions:
+    - "> 3.10.0, < 4"
+  - dependency-name: i18next
+    versions:
+    - "> 19.0.1, < 20"
+  - dependency-name: react-redux
+    versions:
+    - 7.2.2
+  - dependency-name: bootstrap
+    versions:
+    - 4.6.0
+  - dependency-name: webpack-cli
+    versions:
+    - 4.4.0
+  - dependency-name: eslint-plugin-react
+    versions:
+    - 7.22.0
+  - dependency-name: babel-jest
+    versions:
+    - 26.6.3
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
