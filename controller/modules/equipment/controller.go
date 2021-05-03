@@ -2,11 +2,12 @@ package equipment
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"log"
 )
 
 type Controller struct {
@@ -34,6 +35,12 @@ func (c *Controller) Start() {
 		return
 	}
 	for _, eq := range eqs {
+		if eq.StayOffOnBoot {
+			eq.On = false
+			if err := c.Update(eq.ID, eq); err != nil {
+				log.Println("ERROR: equipment subsystem: Failed to turn off ", eq.Name, " which is set up to stay off upon boot. Error:", err)
+			}
+		}
 		if err := c.updateOutlet(eq); err != nil {
 			log.Println("ERROR: equipment subsystem: Failed to sync equipment", eq.Name, ". Error:", err)
 		}

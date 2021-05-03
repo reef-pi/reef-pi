@@ -58,6 +58,7 @@ select,选择
 select_file,
 since,since
 start_time,
+stayoffonboot,
 status,状态
 unit,单位
 update,更新

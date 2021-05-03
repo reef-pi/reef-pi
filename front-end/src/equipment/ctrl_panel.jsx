@@ -23,13 +23,14 @@ class CtrlPanel extends React.Component {
     window.clearInterval(this.state.timer)
   }
 
-  toggleState (e, equipmentId, equipmentName, equipmentOn, equipmentOutlet) {
+  toggleState (e, equipmentId, equipmentName, equipmentOn, equipmentOutlet, equipmentStayOffOnBoot) {
     e.preventDefault()
     const values = {
       id: equipmentId,
       name: equipmentName,
       on: !equipmentOn,
-      outlet: equipmentOutlet
+      outlet: equipmentOutlet,
+      stay_off_on_boot: equipmentStayOffOnBoot
     }
     this.props.updateEquipment(parseInt(equipmentId), values)
   }
@@ -45,16 +46,16 @@ class CtrlPanel extends React.Component {
         <br />
         <div className='row'>
           {this.props.equipment.sort((a, b) => SortByName(a, b))
-          .map(item => {
-            return (
-              <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
-                <FormControlLabel
-                  control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet) }} />}
-                  label={item.name}
-                />
-              </div>
-            )
-          })}
+            .map(item => {
+              return (
+                <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
+                  <FormControlLabel
+                    control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet, item.stay_off_on_boot) }} />}
+                    label={item.name}
+                  />
+                </div>
+              )
+            })}
         </div>
       </div>
     )

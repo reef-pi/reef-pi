@@ -12,9 +12,7 @@ class doser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      addDoser: false,
-      showCalibrate: false,
-      currentDoser: null
+      addDoser: false
     }
     this.doserList = this.doserList.bind(this)
     this.handleToggleAddDoserDiv = this.handleToggleAddDoserDiv.bind(this)
@@ -22,10 +20,6 @@ class doser extends React.Component {
     this.handleCreateDoser = this.handleCreateDoser.bind(this)
     this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
-  }
-
-  dismissModal () {
-    this.setState({ currentDoser: null, showCalibrate: false })
   }
 
   handleToggleAddDoserDiv () {
@@ -125,7 +119,6 @@ class doser extends React.Component {
       <CalibrationModal
         doser={doser}
         calibrateDoser={this.props.calibrateDoser}
-        confirm={this.dismissModal}
       />
     )
   }

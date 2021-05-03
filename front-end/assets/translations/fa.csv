@@ -58,6 +58,7 @@ select,انتخاب کنید
 select_file,
 since,از آنجا که
 start_time,
+stayoffonboot,
 status,
 unit,واحد
 update,به روز رسانی
