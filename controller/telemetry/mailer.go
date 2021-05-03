@@ -14,6 +14,7 @@ type MailerConfig struct {
 	Server   string   `json:"server"`
 	Port     int      `json:"port"`
 	From     string   `json:"from"`
+	Username string   `json:"username"`
 	Password string   `json:"password"`
 	To       []string `json:"to"`
 }
@@ -24,13 +25,32 @@ var GMailMailer = MailerConfig{
 	To:     []string{},
 }
 
-func (c *MailerConfig) Mailer() Mailer {
-	auth := smtp.PlainAuth("", c.From, c.Password, c.Server)
-	return &mailer{
-		auth:     auth,
-		config:   c,
-		sendMail: smtp.SendMail,
-	}
+type MailerCustomizer func(m *mailer)
+
+func (c *MailerConfig) Mailer(opts ...MailerCustomizer) Mailer {
+    m :=  &mailer{
+        config: c,
+    }
+
+    for _, opt := range opts {
+        opt(m)
+    }
+
+    if m.auth == nil {
+        var username string
+        if c.Username != "" {
+            username = c.Username
+        } else {
+            username = c.From
+        }
+        m.auth = smtp.PlainAuth("", username, c.Password, c.Server)
+    }
+
+    if m.sendMail == nil {
+        m.sendMail = smtp.SendMail
+    }
+
+    return m
 }
 
 type NoopMailer struct{}

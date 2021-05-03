@@ -75,6 +75,16 @@ export default class NotificationSettings extends React.Component {
         {this.inputGroup('from')}
         {this.inputTo('to')}
         <div className='form-group col-12'>
+          <label htmlFor='input-username'>{i18n.t('telemetry:notification:username')} ({i18n.t('optional')})</label>
+          <input
+            type='text'
+            id='input-username'
+            value={this.state.config.username}
+            onChange={this.update('username')}
+            className='form-control'
+          />
+        </div>
+        <div className='form-group col-12'>
           <label htmlFor='email-password'>{i18n.t('telemetry:notification:password')}</label>
           <input
             type='password'

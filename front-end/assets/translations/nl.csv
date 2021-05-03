@@ -43,6 +43,7 @@ off,
 ok,Ok
 on,
 one_shot,Eenmalig
+optional,
 outlet,Uitgang
 outlets,Uitgangen
 pin,pin
@@ -236,6 +237,7 @@ telemetry:notification:password,
 telemetry:notification:port,
 telemetry:notification:server,
 telemetry:notification:to,
+telemetry:notification:username,
 temperatur:controlnothing,Niets
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen
