@@ -38,7 +38,7 @@ const EditEquipment = ({
             onClick={onDelete}
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
           >
-          {i18next.t('delete')}
+            {i18next.t('delete')}
           </button>
         </div>
       )

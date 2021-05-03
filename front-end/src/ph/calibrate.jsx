@@ -39,7 +39,7 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
               <IconContext.Provider value={{ color: 'blue', className: 'align-bottom' }}>
                 <FaCheck />
               </IconContext.Provider>
-            )
+              )
             : (
               <input
                 type='submit'
@@ -47,7 +47,7 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
                 value={i18next.t('ph:run_calibration')}
                 className='btn btn-sm btn-outline-primary'
               />
-            )}
+              )}
         </div>
       </div>
     </form>

@@ -38,7 +38,7 @@ class doser extends React.Component {
               className='btn btn-sm btn-outline-info float-right'
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
-            Calibrate
+              Calibrate
             </button>
           )
           const handleTState = () => {
