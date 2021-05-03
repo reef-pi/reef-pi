@@ -6,7 +6,7 @@ require (
 	github.com/StackExchange/wmi v0.0.0-20210224194228-fe8f1750fd46 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.0
 	github.com/dustin/go-humanize v1.0.0
-	github.com/eclipse/paho.mqtt.golang v1.3.2
+	github.com/eclipse/paho.mqtt.golang v1.3.3
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/godbus/dbus/v5 v5.0.4
 	github.com/google/go-querystring v1.1.0 // indirect
@@ -14,7 +14,7 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/prometheus/client_golang v1.10.0
-	github.com/prometheus/common v0.20.0
+	github.com/prometheus/common v0.20.0 // indirect
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20210110203223-b6fe7eebbe43
 	github.com/reef-pi/hal v0.0.0-20210110194416-096527efd4a0
