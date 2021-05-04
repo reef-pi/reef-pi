@@ -32,13 +32,13 @@ const EditEquipment = ({
   const deleteAction = () => {
     if (values.id) {
       return (
-        <div className='col-12 col-sm-2 col-lg-3 order-sm-4 order-lg-last'>
+        <div className='col-12 col-sm-2 col-md-1'>
           <button
             type='button'
             onClick={onDelete}
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
           >
-            Delete
+            {i18next.t('delete')}
           </button>
         </div>
       )
@@ -48,9 +48,8 @@ const EditEquipment = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row align-items-start'>
-        {deleteAction()}
-        <div className='col-12 col-sm-4 col-lg-4 order-sm-1'>
+      <div className='row'>
+        <div className='col-12 col-sm-4 col-md-3'>
           <label className='mr-2'>{i18next.t('name')}</label>
           <input
             type='text'
@@ -62,8 +61,8 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='col-12 col-sm-4 col-lg-4 order-sm-2'>
-          <label className='mr-2'>Outlet</label>
+        <div className='col-12 col-sm-4 col-md-3'>
+          <label className='mr-2'>{i18next.t('outlet')}</label>
           <select
             name='outlet'
             onChange={handleChange}
@@ -86,7 +85,7 @@ const EditEquipment = ({
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
         </div>
-        <div className='col-12 col-sm-4 col-lg-4 order-sm-3'>
+        <div className='col-12 col-sm-3 col-md-2'>
           <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
           <input
             type='checkbox'
@@ -99,11 +98,10 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
-      </div>
-      <div className='row'>
-        <div className='col-12'>
+        <div className='col-12 col-md-1 col-sm-2'>
           <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-right mt-1' />
         </div>
+        {deleteAction()}
       </div>
     </form>
   )
