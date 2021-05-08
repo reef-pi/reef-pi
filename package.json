@@ -56,7 +56,7 @@
     "react-dom": "16.12.0",
     "react-i18next": "11.8.8",
     "react-icons": "4.2.0",
-    "react-images": "1.0.0",
+    "react-images": "1.1.7",
     "react-redux": "^5.1.2",
     "react-test-renderer": "16.12.0",
     "react-toggle-switch": "3.0.4",
