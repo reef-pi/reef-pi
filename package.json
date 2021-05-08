@@ -72,7 +72,7 @@
     "testcafe": "^1.10.1",
     "webpack": "4.44.2",
     "webpack-cli": "4.6.0",
-    "webpack-dev-server": "3.11.0",
+    "webpack-dev-server": "3.11.2",
     "webpack-livereload-plugin": "2.3.0",
     "yup": "0.32.9"
   },
