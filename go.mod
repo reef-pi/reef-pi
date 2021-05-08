@@ -20,7 +20,7 @@ require (
 	github.com/reef-pi/hal v0.0.0-20210110194416-096527efd4a0
 	github.com/reef-pi/rpi v0.0.0-20210110201913-52ed585757e0
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/shirou/gopsutil v3.21.2+incompatible
+	github.com/shirou/gopsutil v3.21.4+incompatible
 	go.etcd.io/bbolt v1.3.5
 	golang.org/x/net v0.0.0-20210330230544-e57232859fb2 // indirect
 	gopkg.in/yaml.v2 v2.4.0
