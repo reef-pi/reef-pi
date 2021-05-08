@@ -45,7 +45,7 @@
     "lodash.omit": "^4.5.0",
     "mini-css-extract-plugin": "1.6.0",
     "nightmare": "^3.0.1",
-    "node-sass": "4.13.1",
+    "node-sass": "5.0.0",
     "popper": "^1.0.1",
     "popper.js": "^1.16.1",
     "postcss-loader": "3.0.0",
