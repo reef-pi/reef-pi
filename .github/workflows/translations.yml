@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Use Node.js 11.12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: 11.12
+          node-version: 14
       - uses: actions/cache@v2.1.6
         with:
           path: node_modules
