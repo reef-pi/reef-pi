@@ -22,6 +22,6 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.4+incompatible
 	go.etcd.io/bbolt v1.3.5
-	golang.org/x/net v0.0.0-20210330230544-e57232859fb2 // indirect
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
