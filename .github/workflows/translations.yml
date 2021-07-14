@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js 11.12
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.2.0
         with:
           node-version: 11.12
       - uses: actions/cache@v1
