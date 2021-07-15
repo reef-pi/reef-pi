@@ -1,4 +1,5 @@
 Key,Translation
+action,Acción
 add,Agregar
 alerts,Alertas
 analog_input,Entrada Análoga
@@ -6,6 +7,7 @@ analog_inputs,Entradas Análoga
 are_you_sure,¿Esta Seguro?
 ato,ATO
 cancel,Cancelar
+capabilities,
 charts,Gráficas
 clear,Limpiar
 color,Color
@@ -25,7 +27,6 @@ errors,Errores
 full_moon,Luna Llena
 health,Estado
 height,Altura
-import_db,Extraer Base de Datos
 in-use,en-uso
 inlet,Entrada
 inlets,Entradas
@@ -38,6 +39,7 @@ loading,Cargando
 maximum,Máximo
 minimum,Mínimo
 name,Nombre
+no,
 none,Ninguno
 off,Apagado
 ok,Ok
@@ -47,6 +49,7 @@ optional,Opcional
 outlet,Caja de Salida
 outlets,Caja de Salidas
 pin,Aguja
+pins,Agujas
 profile,Perfil
 reverse,Reversa
 rows,Filas
@@ -59,12 +62,12 @@ select,Seleccionar
 select_file,Por favor seleccione un archivo
 since,Desde
 start_time,Hora de inicio
-stayoffonboot,¿Apagado al reiniciar?
 status,Estado
-unit,Unidad
+stayoffonboot,¿Apagado al reiniciar?
 update,Actualizar
 upgrade_reef_pi,Actualizar reef-pi a version
 width,Anchura
+yes,
 ato:alert_after,Alerta despues de
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
@@ -72,7 +75,6 @@ ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
 ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
 ato:chk_freq_required,Frecuencia de Revisión es requerida
 ato:control,Control
-ato:control_pump,Control de Bomba
 ato:control_target,Objetivo
 ato:controlequipment,Equipo
 ato:controlmacro,Macro
@@ -86,6 +88,12 @@ ato:threshold_value,El límite debe ser un numero
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
 ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,Esta acción eliminará
+camera:capture_flags,
+camera:enable,
+camera:take_photo,
+camera:target_dir,
+camera:tick_interval,
+camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camara
 capabilities:configuration,Configuración
@@ -115,7 +123,7 @@ configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
 configuration:admin:db_export,Descargue Base de Datos
-configuration:admin:db_import,Importar una Base de Datos existente
+configuration:admin:db_import,Importar una Base de Datos
 configuration:admin:poweroff,Apagar
 configuration:admin:reboot,Reiniciar
 configuration:admin:reload,Recargar
@@ -127,9 +135,8 @@ configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
 configuration:settings:capabilities,Funciones
 configuration:settings:capabilities_required,Al menos una Funcion es requerida
+configuration:settings:cors,Activar cors
 configuration:settings:display,Pantalla
-configuration:settings:enable_profiling,Activar perfilado
-configuration:settings:enable_prometheus,Activar prometheus
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
 configuration:settings:max_memory,Memoria Maxima
@@ -138,6 +145,8 @@ configuration:settings:name_required,El nombre es requerido
 configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_interface_required,La interfaz de red es requerida
 configuration:settings:notification,Notificacion
+configuration:settings:pprof,Activar perfilado
+configuration:settings:prometheus,Activar prometheus
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frecuencia
 configuration:settings:use_https,Usar HTTPS
 configuration:tab:about,Acerca De
@@ -156,15 +165,20 @@ cron:second,Segundo
 cron:week,Semana
 dashboard:back_to_dashboard,Volver al dashboard
 dashboard:blank_panel,Sin Asignar (En Blanco)
+doser:calibration:run,
+doser:doser_usage,
+doser:duration,
+doser:speed,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
-cron:week,Semana
-dashboard:back_to_dashboard,Volver al panel
 fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
 fatal_error:troubleshoot,Solucionar Problemas
 health_chart:cpu_memory,Procesador/Memoria
+journal:description,
+journal:unit,Unidad
+journal:warn_delete,
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -181,6 +195,17 @@ log:content,Contenido
 log:emitter,Emisor
 log:time,Hora
 log:type,Tipo
+macro:alert:message,
+macro:alert:title,
+macro:reversible,
+macro:revert,
+macro:reverting,
+macro:run,
+macro:running,
+macro:steps,
+macro:turn_off,Apagar
+macro:turn_on,Encender
+macro:wait:duration,
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
 ph:analog_input_required,Entrada Analogica es requerida
@@ -198,6 +223,7 @@ ph:controlequipment,Equipo
 ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Lectura Actual
+ph:hysteresis,
 ph:lower_function,Inferior Función
 ph:lower_function_required,Función requerido
 ph:lower_threshold,Límite Inferior
@@ -224,7 +250,6 @@ ph:upper_threshold_required,Límite Superior requerido
 ph:upper_threshold_type,Límite Superior debe ser un nùmero
 ph:validation_error,Los ajustes de Ph no puede ser guardada por errores de validación. Corija los errores y intente de nuevo.
 ph:warn_delete,Esta acción sera eliminada
-pins:Pins,Agujas
 signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
 signin:signin,Iniciar Sesion
@@ -240,27 +265,34 @@ telemetry:notification:port,Puerto
 telemetry:notification:server,Servidor
 telemetry:notification:to,Para
 telemetry:notification:username,Usuario
-temperatur:controlnothing,Nada
+temperature:alert_above,Alerta Sobre
+temperature:alert_below,Alerta Bajo
 temperature:calibrate,Calibración
 temperature:calibration:apply,Aplicar
 temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
 temperature:chart:current,Temperatura(ultima)
+temperature:chart:down,Enfriador
 temperature:chart:historical,Temperatura(Historico)
+temperature:chart:up,Calentador
 temperature:chart_color,Color
 temperature:chart_ymax,
 temperature:chart_ymin,
+temperature:check_frequency,Revisar Frecuencia
 temperature:control,Control
 temperature:controlequipment,Equipo
 temperature:controlmacro,Macro
+temperature:controlnothing,Nada
 temperature:current_reading,Lectura Actual
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Calentador/Enfriador
+temperature:hysteresis,Histéresis
 temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
 temperature:lower_function,Calentador
 temperature:lower_threshold,Límite de Calentador
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
+temperature:unit,Unidad
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
 temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.

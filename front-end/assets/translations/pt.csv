@@ -1,4 +1,5 @@
 Key,Translation
+action,
 add,Adicionar
 alerts,Alertas
 analog_input,Entrada Analogica
@@ -6,6 +7,7 @@ analog_inputs,
 are_you_sure,Como estas?
 ato,
 cancel,cancelar
+capabilities,
 charts,
 clear,Limpar
 color,
@@ -25,7 +27,6 @@ errors,Erros
 full_moon,
 health,
 height,
-import_db,
 in-use,
 inlet,Inlet
 inlets,
@@ -38,6 +39,7 @@ loading,Carregar
 maximum,
 minimum,
 name,Nome
+no,
 none,nenhum
 off,
 ok,Ok
@@ -47,6 +49,7 @@ optional,
 outlet,
 outlets,
 pin,
+pins,
 profile,
 reverse,
 rows,
@@ -59,12 +62,12 @@ select,Selecionar
 select_file,
 since,Desde
 start_time,
-stayoffonboot,
 status,Estado
-unit,Unidades
+stayoffonboot,
 update,Atualizar
 upgrade_reef_pi,
 width,
+yes,
 ato:alert_after,Alertar após
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
@@ -72,7 +75,6 @@ ato:chk_freq_number,Verificar a frequência tem que ser um número
 ato:chk_freq_number_value,Verificar a frequência must be 1 second or greater
 ato:chk_freq_required,Verificar a frequência é Obrigatório
 ato:control,
-ato:control_pump,Controlo da Bomba
 ato:control_target,
 ato:controlequipment,
 ato:controlmacro,
@@ -86,6 +88,12 @@ ato:threshold_value,Threshold tem que ser um número
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
 ato:warn_delete,
+camera:capture_flags,
+camera:enable,
+camera:take_photo,
+camera:target_dir,
+camera:tick_interval,
+camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuração
@@ -127,9 +135,8 @@ configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
 configuration:settings:capabilities,Capacidades
 configuration:settings:capabilities_required,Capabilities são requeridads
+configuration:settings:cors,Activar cors
 configuration:settings:display,Ecrã
-configuration:settings:enable_profiling,Activar profiling
-configuration:settings:enable_prometheus,Activarprometheus
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Maximo de CPU
 configuration:settings:max_memory,Maximo de Memoria
@@ -138,6 +145,8 @@ configuration:settings:name_required,Nome é obrigatório
 configuration:settings:network_address_required,Endereço de rede é obrigatório
 configuration:settings:network_interface_required,Nome do interface de rede é obrigatório
 configuration:settings:notification,Notificação
+configuration:settings:pprof,Activar profiling
+configuration:settings:prometheus,Activar prometheus
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frequencia
 configuration:settings:use_https,Usar HTTPS
 configuration:tab:about,Sobre
@@ -156,6 +165,10 @@ cron:second,Segundos
 cron:week,
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,
+doser:calibration:run,
+doser:doser_usage,
+doser:duration,
+doser:speed,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Ligação Perdida
@@ -163,6 +176,9 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
 health_chart:cpu_memory,CPU/Memory
+journal:description,
+journal:unit,Unidades
+journal:warn_delete,
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -179,6 +195,17 @@ log:content,Conteudo
 log:emitter,Emissor
 log:time,Tempo
 log:type,Tipo
+macro:alert:message,
+macro:alert:title,
+macro:reversible,
+macro:revert,
+macro:reverting,
+macro:run,
+macro:running,
+macro:steps,
+macro:turn_off,Desligar
+macro:turn_on,Ligar é Obrigatório
+macro:wait:duration,
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:analog_input_required,Entrada Analógica é Obrigatório
@@ -196,6 +223,7 @@ ph:controlequipment,
 ph:controlmacro,
 ph:controlnothing,
 ph:current_reading,Leitura Atual
+ph:hysteresis,
 ph:lower_function,
 ph:lower_function_required,
 ph:lower_threshold,
@@ -222,7 +250,6 @@ ph:upper_threshold_required,
 ph:upper_threshold_type,
 ph:validation_error,"Ph Erro nas configurações, por favor corrija e tente novamente"
 ph:warn_delete,Esta acção vai ser removida
-pins:Pins,
 signin:invalidcredentials,Credenciais invalidas
 signin:password,Password
 signin:signin,Entrar
@@ -238,27 +265,34 @@ telemetry:notification:port,
 telemetry:notification:server,
 telemetry:notification:to,
 telemetry:notification:username,
-temperatur:controlnothing,
+temperature:alert_above,
+temperature:alert_below,
 temperature:calibrate,
 temperature:calibration:apply,
 temperature:calibration:set_temperature,
 temperature:celsius,Celsius
 temperature:chart:current,
+temperature:chart:down,Refrigeração
 temperature:chart:historical,
+temperature:chart:up,Aquecedor
 temperature:chart_color,
 temperature:chart_ymax,
 temperature:chart_ymin,
+temperature:check_frequency,Verificar a frequência
 temperature:control,
 temperature:controlequipment,
 temperature:controlmacro,
+temperature:controlnothing,
 temperature:current_reading,
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
+temperature:hysteresis,
 temperature:hysteresis_less_than,
 temperature:lower_function,
 temperature:lower_threshold,
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
+temperature:unit,Unidades
 temperature:upper_function,
 temperature:upper_threshold,
 temperature:validation_error,"A Temperatura Erro nas configurações, por favor corrija e tente novamente"

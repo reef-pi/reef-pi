@@ -61,7 +61,7 @@ const target = (props) => {
         </div>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='on'>{i18next.t('timers:action')}</label>
+            <label htmlFor='on'>{i18next.t('timers:equipment_action')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}

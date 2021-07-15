@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
+import i18next from 'i18next'
 
 const AlertStep = ({ name, readOnly, touched, errors }) => {
   return (
@@ -11,7 +12,7 @@ const AlertStep = ({ name, readOnly, touched, errors }) => {
         <Field
           name={`${name}.title`}
           aria-label='Title'
-          title='Title'
+          title={i18next.t('macro:alert:title')}
           type='string'
           readOnly={readOnly}
           placeholder='Title'
@@ -25,7 +26,7 @@ const AlertStep = ({ name, readOnly, touched, errors }) => {
         <Field
           name={`${name}.message`}
           aria-label='Message'
-          title='Message'
+          title={i18next.t('macro:alert:message')}
           type='string'
           readOnly={readOnly}
           placeholder='Message'

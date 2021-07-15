@@ -70,7 +70,7 @@ const EditEquipment = ({
             className={classNames('form-control', { 'is-invalid': ShowError('outlet', touched, errors) })}
             value={values.outlet}
           >
-            <option value='' className='d-none'>-- Select --</option>
+            <option value='' className='d-none'>-- {i18next.t('select')} --</option>
             {outlets.sort((a, b) => SortByName(a, b))
               .map((item) => {
                 return (
