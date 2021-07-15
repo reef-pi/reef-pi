@@ -16,13 +16,14 @@ require (
 	github.com/prometheus/client_golang v1.10.0
 	github.com/prometheus/common v0.20.0 // indirect
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
-	github.com/reef-pi/drivers v0.0.0-20210110203223-b6fe7eebbe43
+	github.com/reef-pi/drivers v0.0.0-20210715072316-2c20e1a2abeb
 	github.com/reef-pi/hal v0.0.0-20210110194416-096527efd4a0
-	github.com/reef-pi/rpi v0.0.0-20210110201913-52ed585757e0
+	github.com/reef-pi/rpi v0.0.0-20210710185807-7b552751ba13
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.4+incompatible
 	go.etcd.io/bbolt v1.3.5
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )

@@ -23,6 +23,7 @@ func TestFactory(t *testing.T) {
 		"hs103",
 		"hs110",
 		"hs300",
+        "tasmota-http",
 	}
 	for _, p := range providers {
 		_, err := AbstractFactory(p)
