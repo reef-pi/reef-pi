@@ -92,6 +92,7 @@ class chart extends React.Component {
 //    return [PercentOf(value,3600) + '%', i18next.t('temperature:chart:' + name)]
 //  }
 //}
+
 const mapStateToProps = (state, ownProps) => {
   return {
     config: state.tcs.find(el => {
