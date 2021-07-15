@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '14.15.1'
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2.1.6
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
