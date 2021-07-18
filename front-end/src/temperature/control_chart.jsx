@@ -83,7 +83,7 @@ class chart extends React.Component {
 }
 
 const formatLegend = (value, name, unit) => {
-  if (name=='value') {
+  if (name==='value') {
     return [TwoDecimalParse(value), unit]
   }
   else {
