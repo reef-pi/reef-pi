@@ -13,6 +13,7 @@ import Collapsible from '../ui_components/collapsible'
 import MacroForm from './macro_form'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
+import i18next from 'i18next'
 
 class main extends React.Component {
   constructor (props) {
@@ -62,7 +63,7 @@ class main extends React.Component {
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
             >
-              {macro.enable ? 'Running' : 'Run'}
+              {macro.enable ? i18next.t('macro:running') : i18next.t('macro:run')}
             </button>
           )
           if (macro.reversible) {
@@ -74,7 +75,7 @@ class main extends React.Component {
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
               >
-                {macro.enable ? 'Reverting' : 'Revert'}
+                {macro.enable ? i18next.t('macro:reverting') : i18next.t('macro:revert')}
               </button>
             )
           }

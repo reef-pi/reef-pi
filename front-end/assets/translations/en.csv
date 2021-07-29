@@ -1,4 +1,5 @@
 Key,Translation
+action,Action
 add,add
 alerts,Alerts
 analog_input,Analog Input
@@ -6,6 +7,7 @@ analog_inputs,Analog Inputs
 are_you_sure,Are you sure?
 ato,ATO
 cancel,Cancel
+capabilities,Capabilities
 charts,Charts
 clear,Clear
 color,Color
@@ -25,9 +27,7 @@ errors,Errors
 full_moon,Full Moon
 health,Health
 height,Height
-import_db,Import Database
 in-use,in-use
-inlet,Inlet
 inlet,Inlet
 inlets,Inlets
 install,Install
@@ -39,6 +39,7 @@ loading,Loading
 maximum,Maximum
 minimum,Minimum
 name,Name
+no,No
 none,None
 off,Off
 ok,Ok
@@ -48,6 +49,7 @@ optional,Optional
 outlet,Outlet
 outlets,Outlets
 pin,Pin
+pins,Pins
 profile,Profile
 reverse,Reverse
 rows,Rows
@@ -60,12 +62,12 @@ select,Select
 select_file,Please select a file
 since,since
 start_time,Start Time
-stayoffonboot,Stay Off On Boot?
 status,Status
-unit,Unit
+stayoffonboot,Stay Off On Boot?
 update,Update
 upgrade_reef_pi,Upgrade reef-pi to version
 width,Width
+yes,Yes
 ato:alert_after,Alert After
 ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
@@ -73,7 +75,6 @@ ato:chk_freq_number,Check Frequency must be a number
 ato:chk_freq_number_value,Check Frequency must be 1 second or greater
 ato:chk_freq_required,Check Frequency is required
 ato:control,Control
-ato:control_pump,Control Pump
 ato:control_target,Target
 ato:controlequipment,Equipment
 ato:controlmacro,Macro
@@ -87,6 +88,12 @@ ato:threshold_value,Threshold must be a number
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ato:warn_delete,This action will delete
+camera:capture_flags,Capture flags
+camera:enable,Enable
+camera:take_photo,Take Photo!
+camera:target_dir,Image Directory
+camera:tick_interval,Tick Interval (in minutes)
+camera:to_gdrive,Upload to gDrive
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuration
@@ -110,13 +117,13 @@ collapsible:delete,Delete
 collapsible:edit,Edit
 color_picker:choose,Choose
 configuration:about:current_time,Current time
+configuration:about:modifications,Modifications by
 configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
 configuration:admin:db_export,Download current database
-configuration:admin:db_import,Import an existing database
-configuration:about:modifications,Modifications by
+configuration:admin:db_import,Import database
 configuration:admin:poweroff,Power Off
 configuration:admin:reboot,Reboot
 configuration:admin:reload,Reload
@@ -128,9 +135,8 @@ configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:capabilities,Capabilities
 configuration:settings:capabilities_required,Capabilities is required
+configuration:settings:cors,Enable cors
 configuration:settings:display,Display
-configuration:settings:enable_profiling,Enable profiling
-configuration:settings:enable_prometheus,Enable prometheus
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max memory
@@ -139,6 +145,8 @@ configuration:settings:name_required,Name is required
 configuration:settings:network_address_required,Network address is required
 configuration:settings:network_interface_required,Network Interface is required
 configuration:settings:notification,Notification
+configuration:settings:pprof,Enable profiling
+configuration:settings:prometheus,Enable Prometheus
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
 configuration:settings:use_https,Use HTTPS
 configuration:tab:about,About
@@ -157,6 +165,10 @@ cron:second,Second
 cron:week,Day of the week
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
+doser:calibration:run,Run
+doser:doser_usage,Pump Usage
+doser:duration,Duration
+doser:speed,Speed
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 fatal_error:connection_lost,Connection Lost
@@ -164,6 +176,9 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
+journal:description,Description
+journal:unit,Unit
+journal:warn_delete,This action will delete
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -180,6 +195,17 @@ log:content,Content
 log:emitter,Emitter
 log:time,Time
 log:type,Type
+macro:alert:message,message
+macro:alert:title,title
+macro:reversible,Reversible
+macro:revert,Revert
+macro:reverting,Reverting
+macro:run,Run
+macro:running,Running
+macro:steps,Steps
+macro:turn_off,Turn Off
+macro:turn_on,Turn On
+macro:wait:duration,Duration
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required
@@ -197,6 +223,7 @@ ph:controlequipment,Equipment
 ph:controlmacro,Macro
 ph:controlnothing,Nothing
 ph:current_reading,Current Reading
+ph:hysteresis,Hysteresis
 ph:lower_function,Lower Function
 ph:lower_function_required,Lower Function is required
 ph:lower_threshold,Lower Threshold
@@ -223,7 +250,6 @@ ph:upper_threshold_required,Upper Threshold is required
 ph:upper_threshold_type,Upper Threshold must be a number
 ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ph:warn_delete,This action will delete
-pins:Pins,Pins
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password
 signin:signin,Sign In
@@ -239,27 +265,34 @@ telemetry:notification:port,Port
 telemetry:notification:server,Server
 telemetry:notification:to,To
 telemetry:notification:username,Username
-temperatur:controlnothing, Nothing
+temperature:alert_above,Alert Above
+temperature:alert_below,Alert Below
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
 temperature:calibration:set_temperature, Set Temperature
 temperature:celsius,Celsius
 temperature:chart:current, Temperature(recent)
+temperature:chart:down,Cooler
 temperature:chart:historical,Temperature(historical)
+temperature:chart:up,Heater
 temperature:chart_color, Chart Color
 temperature:chart_ymax, Chart maximum
 temperature:chart_ymin, Chart minimum
+temperature:check_frequency,Check Frequency
 temperature:control, Control
 temperature:controlequipment, Equipment
 temperature:controlmacro, Macro
+temperature:controlnothing, Nothing
 temperature:current_reading, Current Reading
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heater/Cooler
+temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
 temperature:sensor,Sensor
 temperature:temperature,Temperature
+temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
 temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
@@ -297,4 +330,3 @@ timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
-

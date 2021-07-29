@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'formik'
+import i18next from 'i18next'
 
 const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
@@ -21,7 +22,7 @@ const SelectType = ({ name, className, readOnly }) => {
       className={`form-control ${className}`}
       disabled={readOnly}
     >
-      <option value='' className='d-none'>-- Select Type --</option>
+      <option value='' className='d-none'>-- {i18next.t('select')} --</option>
       {list()}
     </Field>
   )

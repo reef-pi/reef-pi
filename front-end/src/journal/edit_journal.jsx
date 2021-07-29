@@ -47,7 +47,7 @@ const EditJournal = ({
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='description'>{i18next.t('Description')}</label>
+            <label htmlFor='description'>{i18next.t('journal:description')}</label>
             <Field
               name='description'
               disabled={readOnly}
@@ -62,7 +62,7 @@ const EditJournal = ({
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='unit'>{i18next.t('unit')}</label>
+            <label htmlFor='unit'>{i18next.t('journal:unit')}</label>
             <Field
               name='unit'
               disabled={readOnly}
