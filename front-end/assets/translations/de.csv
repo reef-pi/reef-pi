@@ -165,6 +165,7 @@ cron:second,Sekunde
 cron:week,Wochentag (0=So - 7=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
+doser:calibrate,Kalibrieren
 doser:calibration:run,Start
 doser:doser_usage,Pumpennutzung
 doser:duration,Dauer

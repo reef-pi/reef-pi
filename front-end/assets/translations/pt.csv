@@ -165,6 +165,7 @@ cron:second,Segundos
 cron:week,
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,
+doser:calibrate,
 doser:calibration:run,
 doser:doser_usage,
 doser:duration,
