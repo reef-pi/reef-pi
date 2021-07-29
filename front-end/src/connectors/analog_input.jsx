@@ -10,7 +10,7 @@ export default class AnalogInput extends React.Component {
       edit: false,
       name: props.name,
       pin: props.pin,
-      lbl: 'edit',
+      lbl: i18next.t('edit'),
       driver: props.driver || {}
     }
     this.handleEdit = this.handleEdit.bind(this)

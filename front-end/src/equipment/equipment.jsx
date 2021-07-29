@@ -2,6 +2,7 @@ import React from 'react'
 import ViewEquipment from './view_equipment'
 import EquipmentForm from './equipment_form'
 import { confirm } from 'utils/confirm'
+import i18next from 'i18next'
 
 export default class Equipment extends React.Component {
   constructor (props) {
@@ -67,7 +68,7 @@ export default class Equipment extends React.Component {
       <li className='list-group-item'>
         {this.state.readOnly === true
           ? <ViewEquipment equipment={this.props.equipment} outletName={this.selectedOutlet().name} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleUpdate} />
-          : <EquipmentForm equipment={this.props.equipment} outlets={this.props.outlets} actionLabel='Save' onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
+          : <EquipmentForm equipment={this.props.equipment} outlets={this.props.outlets} actionLabel={i18next.t('save')} onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
       </li>
     )
   }

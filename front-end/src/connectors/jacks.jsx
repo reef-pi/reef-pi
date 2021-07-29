@@ -121,7 +121,7 @@ class jacks extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h6'>{i18next.t('jacks')}</label>
+            <label className='h5'>{i18next.t('jacks')}</label>
             {this.list()}
           </div>
         </div>

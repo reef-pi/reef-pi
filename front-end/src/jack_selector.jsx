@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchJacks } from './redux/actions/jacks'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 
 class jackSelector extends React.Component {
   constructor (props) {
@@ -122,9 +123,9 @@ class jackSelector extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col-lg-1'>Jack</div>
+          <div className='col-lg-1'>{i18next.t('jack')}</div>
           <div className='col-lg-1'>{this.jacks()}</div>
-          <div className='col-lg-1'>Pin</div>
+          <div className='col-lg-1'>{i18next.t('pin')}</div>
           <div className='col-lg-1'>{this.pins()}</div>
         </div>
       </div>

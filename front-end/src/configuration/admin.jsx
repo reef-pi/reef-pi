@@ -116,7 +116,7 @@ class admin extends React.Component {
           </div>
           <div className='col-md-12 mt-3 col-lg-2'>
             <button onClick={this.handleDBFileImport} className='btn btn-danger'>
-              {i18n.t('import_db')}
+              {i18n.t('configuration:admin:db_import')}
             </button>
           </div>
         </div>

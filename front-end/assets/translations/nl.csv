@@ -1,4 +1,5 @@
 Key,Translation
+action,
 add,Toevoegen
 alerts,Meldingen
 analog_input,Analoge Ingang
@@ -6,6 +7,7 @@ analog_inputs,Analoge Ingangen
 are_you_sure,Ben je zeker?
 ato,ato
 cancel,Annuleren
+capabilities,
 charts,
 clear,Resetten
 color,
@@ -25,7 +27,6 @@ errors,Foutmeldingen
 full_moon,
 health,gezondheid
 height,
-import_db,
 in-use,In gebruik
 inlet,Ingang (inlet)
 inlets,Ingangen (inlets)
@@ -38,6 +39,7 @@ loading,Laden
 maximum,
 minimum,
 name,Naam
+no,
 none,Niets
 off,
 ok,Ok
@@ -47,6 +49,7 @@ optional,
 outlet,Uitgang
 outlets,Uitgangen
 pin,pin
+pins,Pins
 profile,
 reverse,omkeren
 rows,
@@ -59,12 +62,12 @@ select,Selecteren
 select_file,
 since,Sinds
 start_time,
-stayoffonboot,
 status,Status
-unit,Eenheid
+stayoffonboot,
 update,Update
 upgrade_reef_pi,
 width,
+yes,
 ato:alert_after,Alarm Na
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
@@ -72,7 +75,6 @@ ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
 ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
 ato:chk_freq_required,Controleer Frequentie deze is verplicht
 ato:control,
-ato:control_pump,Controleert Pomp
 ato:control_target,
 ato:controlequipment,Apparatuur
 ato:controlmacro,Macro
@@ -86,6 +88,12 @@ ato:threshold_value,Drempelwaarde moet numeriek zijn
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
 ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ato:warn_delete,Deze actie verwijderd
+camera:capture_flags,
+camera:enable,
+camera:take_photo,
+camera:target_dir,
+camera:tick_interval,
+camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuratie
@@ -127,9 +135,8 @@ configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
 configuration:settings:capabilities,Opties
 configuration:settings:capabilities_required,Opties is nodig
+configuration:settings:cors,cors inschakelen
 configuration:settings:display,Display
-configuration:settings:enable_profiling,Profiling inschakelen
-configuration:settings:enable_prometheus,Prometheus inschakelen
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max Geheugen
@@ -138,6 +145,8 @@ configuration:settings:name_required,Naam is nodig
 configuration:settings:network_address_required,Netwerkadres is nodig
 configuration:settings:network_interface_required,Netwerkinterface is nodig
 configuration:settings:notification,Notificatie
+configuration:settings:pprof,Profiling inschakelen
+configuration:settings:prometheus,Prometheus inschakelen
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frequencie
 configuration:settings:use_https,Gebruik HTTPS
 configuration:tab:about,Over
@@ -156,6 +165,10 @@ cron:second,Seconde
 cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
 dashboard:blank_panel,
+doser:calibration:run,
+doser:doser_usage,
+doser:duration,
+doser:speed,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Connectie verloren
@@ -163,6 +176,9 @@ fatal_error:fatal_error,Fatale Fout
 fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na."
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
+journal:description,
+journal:unit,Eenheid
+journal:warn_delete,
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -179,6 +195,17 @@ log:content,Content
 log:emitter,Emitter
 log:time,Tijd
 log:type,Type
+macro:alert:message,
+macro:alert:title,
+macro:reversible,
+macro:revert,
+macro:reverting,
+macro:run,
+macro:running,
+macro:steps,
+macro:turn_off,Uitschakelen
+macro:turn_on,Inschakelen
+macro:wait:duration,
 ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
 ph:analog_input_required,Analoge Input is nodig
@@ -196,6 +223,7 @@ ph:controlequipment,Apparatuur
 ph:controlmacro,Macro
 ph:controlnothing,Niets
 ph:current_reading,Huidige meting
+ph:hysteresis,Hysteresis
 ph:lower_function,Laagste functie
 ph:lower_function_required,Laagste functie is vereist
 ph:lower_threshold,Laagste drempelwaarde
@@ -222,7 +250,6 @@ ph:upper_threshold_required,Hoogste drempelwaarde is vereist
 ph:upper_threshold_type,Hoogste drempelwaarde moet numeriek zijn
 ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
-pins:Pins,Pins
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
@@ -238,27 +265,34 @@ telemetry:notification:port,
 telemetry:notification:server,
 telemetry:notification:to,
 telemetry:notification:username,
-temperatur:controlnothing,Niets
+temperature:alert_above,Alarm boven
+temperature:alert_below,Alarm onder
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen
 temperature:calibration:set_temperature,Overschrijf temperatuur
 temperature:celsius,Celsius
 temperature:chart:current,huidig
+temperature:chart:down,Koeling
 temperature:chart:historical,historiek
+temperature:chart:up,Verwarming
 temperature:chart_color,
 temperature:chart_ymax,
 temperature:chart_ymin,
+temperature:check_frequency,Controleer frequentie
 temperature:control,Bedien
 temperature:controlequipment,Apparatuur
 temperature:controlmacro,Macro
+temperature:controlnothing,Niets
 temperature:current_reading,Huidige uitlezing
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Verwarming/Koeling
+temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
 temperature:sensor,Sensor
 temperature:temperature,Temperatuur
+temperature:unit,Eenheid
 temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
 temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.

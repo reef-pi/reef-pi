@@ -49,12 +49,12 @@ export const buildTypeMap = (props) => {
     blank_panel: {
       name: 'blank_panel',
       label: i18next.t('dashboard:blank_panel'),
-      options: [{ id: 'none', name: 'none' }]
+      options: [{ id: 'none', name: i18next.t('none') }]
     },
     health: {
       name: 'health',
       label: i18next.t('health'),
-      options: [{ id: 'current', name: 'current' }, { id: 'historical', name: 'historical' }]
+      options: [{ id: 'current', name: i18next.t('health_chart:current') }, { id: 'historical', name: i18next.t('health_chart:historical') }]
     },
     lights: {
       name: 'lights',
