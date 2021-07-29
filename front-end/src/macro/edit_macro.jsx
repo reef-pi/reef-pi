@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import * as Alert from 'utils/alert'
 import classNames from 'classnames'
-import i18next from 'i18next'
 import { Field, FieldArray } from 'formik'
 import StepSelector from './step_selector'
 import SelectType from './select_type'
@@ -39,7 +38,7 @@ const EditMacro = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('name')}</label>
+            <label htmlFor='name'>Name</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -52,7 +51,7 @@ const EditMacro = ({
         </div>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('macro:reversible')}</label>
+            <label htmlFor='name'>Reversible</label>
             <Field
               name='reversible'
               component={BooleanSelect}
@@ -61,9 +60,9 @@ const EditMacro = ({
                 'is-invalid': ShowError('reversible', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              <option value='true'>{i18next.t('yes')}</option>
-              <option value='false'>{i18next.t('no')}</option>
+              <option value='' className='d-none'>-- Select Action --</option>
+              <option value='true'>Yes</option>
+              <option value='false'>No</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='reversible' />
           </div>
@@ -72,7 +71,7 @@ const EditMacro = ({
       </div>
 
       <div className='form-group'>
-        <h6>{i18next.t('macro:steps')}</h6>
+        <h6>Steps</h6>
         <input className='d-none form-control is-invalid' />
         <ErrorFor errors={errors} touched={touched} name='steps' />
       </div>
@@ -145,7 +144,7 @@ const EditMacro = ({
         <div className='col-12'>
           <input
             type='submit'
-            value={i18next.t('save')}
+            value='Save'
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />

@@ -1,7 +1,6 @@
 import React from 'react'
 import { takeImage, getLatestImage } from '../redux/actions/camera'
 import { connect } from 'react-redux'
-import i18next from 'i18next'
 
 class capture extends React.Component {
   componentDidMount () {
@@ -29,7 +28,7 @@ class capture extends React.Component {
             type='button'
             id='captureImage'
             onClick={this.handleTakeImage}
-            value={i18next.t('camera:take_photo')}
+            value='Take Photo'
             className='btn btn-outline-primary'
           />
         </div>

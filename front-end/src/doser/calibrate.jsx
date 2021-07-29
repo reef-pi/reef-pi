@@ -1,7 +1,6 @@
 import React from 'react'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import i18next from 'i18next'
 import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
 
@@ -21,7 +20,7 @@ export const Calibrate = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className='form-group row'>
-        <label htmlFor='speed' className='col-2 col-form-label'>{i18next.t('doser:speed')}</label>
+        <label htmlFor='speed' className='col-2 col-form-label'>Speed</label>
         <div className='col-3'>
           <div className='form-group'>
             <Field
@@ -35,7 +34,7 @@ export const Calibrate = ({
             <ErrorFor errors={errors} touched={touched} name='speed' />
           </div>
         </div>
-        <label htmlFor='duration' className='col-2 col-form-label'>{i18next.t('doser:duration')}</label>
+        <label htmlFor='duration' className='col-2 col-form-label'>Duration</label>
         <div className='col-3'>
           <div className='form-group'>
             <Field
@@ -53,7 +52,7 @@ export const Calibrate = ({
           <input
             type='submit'
             disabled={readOnly}
-            value={i18next.t('doser:calibration:run')}
+            value='Run'
             className='btn btn-sm btn-outline-primary'
           />
         </div>

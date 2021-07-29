@@ -144,7 +144,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='fahrenheit'>{i18next.t('temperature:unit')}</label>
+              <label htmlFor='fahrenheit'>{i18next.t('unit')}</label>
               <Field
                 name='fahrenheit'
                 component={BooleanSelect}
@@ -154,7 +154,7 @@ const EditTemperature = ({
                 })}
               >
                 <option value='true'>{i18next.t('temperature:fahrenheit')}</option>
-                <option value='false'>{i18next.t('temperature:celsius')}</option>
+                <option value='false'>{i18next.t('temperature:celcius')}</option>
               </Field>
               <ErrorFor errors={errors} touched={touched} name='fahrenheit' />
             </div>
@@ -162,7 +162,7 @@ const EditTemperature = ({
 
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
-              <label htmlFor='period'>{i18next.t('temperature:check_frequency')}</label>
+              <label htmlFor='period'>Check Frequency</label>
               <div className='input-group'>
                 <Field
                   name='period'
@@ -276,8 +276,8 @@ const EditTemperature = ({
                   'is-invalid': ShowError('alerts', touched, errors)
                 })}
               >
-                <option value='true'>{i18next.t('enabled')}</option>
-                <option value='false'>{i18next.t('disabled')}</option>
+                <option value='true'>Enabled</option>
+                <option value='false'>Disabled</option>
               </Field>
               <ErrorFor errors={errors} touched={touched} name='alerts' />
             </div>
@@ -289,7 +289,7 @@ const EditTemperature = ({
             })}
           >
             <div className='form-group'>
-              <label htmlFor='minAlert'>{i18next.t('temperature:alert_below')}</label>
+              <label htmlFor='minAlert'>Alert Below</label>
               <div className='input-group'>
                 <Field
                   name='minAlert'
@@ -313,7 +313,7 @@ const EditTemperature = ({
             })}
           >
             <div className='form-group'>
-              <label htmlFor='maxAlert'>{i18next.t('temperature:alert_above')}</label>
+              <label htmlFor='maxAlert'>Alert Above</label>
               <div className='input-group'>
                 <Field
                   name='maxAlert'
@@ -344,7 +344,7 @@ const EditTemperature = ({
                   'is-invalid': ShowError('control', touched, errors)
                 })}
               >
-                <option value='nothing'>{i18next.t('temperature:controlnothing')}</option>
+                <option value='nothing'>{i18next.t('temperatur:controlnothing')}</option>
                 <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
                 <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
               </Field>
@@ -459,7 +459,7 @@ const EditTemperature = ({
         <div className='col-12'>
           <input
             type='submit'
-            value={i18next.t('save')}
+            value='Save'
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />

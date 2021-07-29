@@ -5,7 +5,6 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import i18next from 'i18next'
 
 const EditLight = ({
   values,
@@ -54,7 +53,7 @@ const EditLight = ({
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='config.name'>{i18next.t('name')}</label>
+            <label htmlFor='config.name'>Light Name</label>
             <Field
               name='config.name'
               disabled={readOnly}
@@ -72,7 +71,7 @@ const EditLight = ({
         <div className='col-12'>
           <input
             type='submit'
-            value={i18next.t('save')}
+            value='Save'
             id={'save-light-' + config.id}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

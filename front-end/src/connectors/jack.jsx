@@ -12,7 +12,7 @@ export default class Jack extends React.Component {
       pins: props.pins.join(','),
       driver: props.driver,
       reverse: props.reverse,
-      lbl: i18next.t('edit'),
+      lbl: 'edit',
       driver_name: (props.drivers.filter(d => d.id === props.driver)[0] || {}).name
     }
     this.handleEdit = this.handleEdit.bind(this)
@@ -48,7 +48,7 @@ export default class Jack extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: i18next.t('save')
+        lbl: 'save'
       })
       return
     }
@@ -70,7 +70,7 @@ export default class Jack extends React.Component {
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: i18next.t('edit'),
+      lbl: 'edit',
       pins: payload.pins.join(',')
     })
   }

@@ -11,7 +11,6 @@ import Collapsible from '../ui_components/collapsible'
 import { IoMdSwitch } from 'react-icons/io'
 import ManualLight from './manual_light'
 import { SortByName } from 'utils/sort_by_name'
-import i18next from 'i18next'
 
 class main extends React.Component {
   constructor (props) {
@@ -251,13 +250,13 @@ class main extends React.Component {
     return (
       <div className='row'>
         <div className='col-12 col-sm-3 col-md-2 col-lg-1'>
-          <label htmlFor='lightName'>{i18next.t('name')}</label>
+          <label htmlFor='lightName'>Name</label>
         </div>
         <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
           <input type='text' id='lightName' className='form-control' required />
         </div>
         <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
-          <label htmlFor='jack'>{i18next.t('jack')}</label>
+          <label htmlFor='jack'>Jack</label>
         </div>
         <div className='col-12 col-sm-9 col-md-4 col-lg-3 mb-1'>
           <div className='dropdown w-100'>
@@ -269,7 +268,7 @@ class main extends React.Component {
               aria-haspopup='true'
               aria-expanded='false'
             >
-              {jack || i18next.t('select')}
+              {jack || 'Choose'}
             </button>
             <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
               {this.jacksList()}
@@ -280,7 +279,7 @@ class main extends React.Component {
           <input
             type='button'
             id='createLight'
-            value={i18next.t('add')}
+            value='add'
             onClick={this.handleAddLight}
             className='btn btn-outline-primary'
           />
