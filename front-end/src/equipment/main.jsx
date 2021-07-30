@@ -5,6 +5,7 @@ import { fetchOutlets } from 'redux/actions/outlets'
 import { connect } from 'react-redux'
 import EquipmentForm from './equipment_form'
 import { SortByName } from 'utils/sort_by_name'
+import i18next from 'i18next'
 
 class main extends React.Component {
   constructor (props) {
@@ -42,7 +43,7 @@ class main extends React.Component {
   render () {
     let nEq = <div />
     if (this.state.addEquipment) {
-      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel='Add' onSubmit={this.handleAddEquipment} />
+      nEq = <EquipmentForm outlets={this.props.outlets} actionLabel={i18next.t('add')} onSubmit={this.handleAddEquipment} />
     }
     return (
       <ul className='list-group list-group-flush'>

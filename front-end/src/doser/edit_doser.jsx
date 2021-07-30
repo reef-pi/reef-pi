@@ -69,7 +69,7 @@ const EditDoser = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+            <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -83,7 +83,7 @@ const EditDoser = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='jack'>Jack</label>
+            <label htmlFor='jack'>{i18next.t('jack')}</label>
             <Field
               name='jack'
               component='select'
@@ -93,7 +93,7 @@ const EditDoser = ({
                 'is-invalid': ShowError('jack', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- Select --</option>
+              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {jackOptions()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='jack' />
@@ -102,7 +102,7 @@ const EditDoser = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='pin'>Pin</label>
+            <label htmlFor='pin'>{i18next.t('pin')}</label>
             <Field
               name='pin'
               component='select'
@@ -111,7 +111,7 @@ const EditDoser = ({
                 'is-invalid': ShowError('pin', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- Select --</option>
+              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {pinOptions()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='pin' />
@@ -129,8 +129,8 @@ const EditDoser = ({
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
-              <option value='true'>Enabled</option>
-              <option value='false'>Disabled</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
@@ -140,7 +140,7 @@ const EditDoser = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='duration'>Duration</label>
+            <label htmlFor='duration'>{i18next.t('doser:duration')}</label>
             <div className='input-group'>
               <Field
                 name='duration'
@@ -163,7 +163,7 @@ const EditDoser = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='speed'>Speed</label>
+            <label htmlFor='speed'>{i18next.t('doser:speed')}</label>
             <div className='input-group'>
               <Percent
                 type='number'
@@ -205,7 +205,7 @@ const EditDoser = ({
         <div className='col-12'>
           <input
             type='submit'
-            value='Save'
+            value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />
