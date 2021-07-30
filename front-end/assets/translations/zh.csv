@@ -165,6 +165,7 @@ cron:second,秒
 cron:week,周
 dashboard:back_to_dashboard,回到面板
 dashboard:blank_panel,
+doser:calibrate,
 doser:calibration:run,
 doser:doser_usage,
 doser:duration,
