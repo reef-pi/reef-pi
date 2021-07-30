@@ -1,333 +1,333 @@
 Key,Translation
-action,
-add,
-alerts,
-analog_input,
-analog_inputs,
-are_you_sure,
-ato,
-cancel,
-capabilities,
-charts,
-clear,
-color,
-columns,
-configure,
-delete,
-disabled,
-documentation,
-done,
-doser,
-driver,
-edit,
-enabled,
-end_time,
-equipment,
-errors,
-full_moon,
-health,
-height,
-in-use,
-inlet,
-inlets,
-install,
-jack,
-jacks,
-light,
-lights,
-loading,
-maximum,
-minimum,
-name,
-no,
-none,
-off,
-ok,
-on,
-one_shot,
-optional,
-outlet,
-outlets,
-pin,
-pins,
-profile,
-reverse,
-rows,
-running,
-save,
-schedule,
-sec,
-second_s,
-select,
-select_file,
-since,
-start_time,
-status,
-stayoffonboot,
-update,
-upgrade_reef_pi,
-width,
-yes,
-ato:alert_after,
-ato:ato_usage,
-ato:chk_freq,
-ato:chk_freq_number,
-ato:chk_freq_number_value,
-ato:chk_freq_required,
-ato:control,
-ato:control_target,
-ato:controlequipment,
-ato:controlmacro,
-ato:controlnothing,
-ato:disable_on_alert,
-ato:inlet_required,
-ato:name_required,
-ato:status_required,
-ato:threshold_required,
-ato:threshold_value,
-ato:total_seconds_pump_on,
-ato:validation_error,
-ato:warn_delete,
-camera:capture_flags,
-camera:enable,
-camera:take_photo,
-camera:target_dir,
-camera:tick_interval,
-camera:to_gdrive,
-capabilities:ato,
-capabilities:camera,
-capabilities:configuration,
-capabilities:dashboard,
-capabilities:dev_mode,
-capabilities:doser,
-capabilities:dosing_pumps,
-capabilities:equipment,
-capabilities:health_check,
-capabilities:journal,
-capabilities:lighting,
-capabilities:lights,
-capabilities:log,
-capabilities:macro,
-capabilities:macros,
-capabilities:manager,
-capabilities:ph,
-capabilities:temperature,
-capabilities:timers,
-collapsible:delete,
-collapsible:edit,
-color_picker:choose,
-configuration:about:current_time,
-configuration:about:modifications,
-configuration:about:status,
-configuration:about:uptime,
-configuration:about:version,
-configuration:about:website,
-configuration:admin:db_export,
-configuration:admin:db_import,
-configuration:admin:poweroff,
-configuration:admin:reboot,
-configuration:admin:reload,
-configuration:admin:sign_out,
-configuration:authentication:credentials,
-configuration:authentication:error_pass,
-configuration:authentication:error_user,
-configuration:settings:address,
-configuration:settings:alert_health_check,
-configuration:settings:capabilities,
-configuration:settings:capabilities_required,
-configuration:settings:cors,
-configuration:settings:display,
-configuration:settings:interface,
-configuration:settings:max_cpu,
-configuration:settings:max_memory,
-configuration:settings:name,
-configuration:settings:name_required,
-configuration:settings:network_address_required,
-configuration:settings:network_interface_required,
-configuration:settings:notification,
-configuration:settings:pprof,
-configuration:settings:prometheus,
-configuration:settings:rpi_pwm_freq,
-configuration:settings:use_https,
-configuration:tab:about,
-configuration:tab:admin,
-configuration:tab:authentication,
-configuration:tab:connectors,
-configuration:tab:drivers,
-configuration:tab:errors,
-configuration:tab:settings,
-configuration:tab:telemetry,
-cron:day_of_month,
-cron:hour,
-cron:minute,
-cron:month,
-cron:second,
-cron:week,
-dashboard:back_to_dashboard,
-dashboard:blank_panel,
-doser:calibrate,
-doser:calibration:run,
-doser:doser_usage,
-doser:duration,
-doser:speed,
-equipment:chart:barchart,
-equipment:chart:ctrlpanel,
-fatal_error:connection_lost,
-fatal_error:fatal_error,
-fatal_error:message,
-fatal_error:troubleshoot,
-health_chart:cpu_memory,
-journal:description,
-journal:unit,
-journal:warn_delete,
-language:de,
-language:en,
-language:es,
-language:fa,
-language:fr,
-language:hi,
-language:it,
-language:language,
-language:nl,
-language:pt,
-language:zh,
-lighting:channel_name,
-log:content,
-log:emitter,
-log:time,
-log:type,
-macro:alert:message,
-macro:alert:title,
-macro:reversible,
-macro:revert,
-macro:reverting,
-macro:run,
-macro:running,
-macro:steps,
-macro:turn_off,
-macro:turn_on,
-macro:wait:duration,
-ph:alert_above,
-ph:alert_below,
-ph:analog_input_required,
-ph:calibrate,
-ph:chart:current,
-ph:chart:historical,
-ph:chart_color,
-ph:chart_unit,
-ph:chart_ymax,
-ph:chart_ymin,
-ph:check_frequency,
-ph:control,
-ph:control_required,
-ph:controlequipment,
-ph:controlmacro,
-ph:controlnothing,
-ph:current_reading,
-ph:hysteresis,
-ph:lower_function,
-ph:lower_function_required,
-ph:lower_threshold,
-ph:lower_threshold_less_than,
-ph:lower_threshold_required,
-ph:lower_threshold_type,
-ph:midpoint,
-ph:name_required,
-ph:period_min,
-ph:period_required,
-ph:period_type,
-ph:run_calibration,
-ph:second_point,
-ph:status_required,
-ph:threshold_greater_than,
-ph:threshold_less_than,
-ph:threshold_required,
-ph:threshold_type,
-ph:upper_function,
-ph:upper_function_required,
-ph:upper_threshold,
-ph:upper_threshold_greater_than,
-ph:upper_threshold_required,
-ph:upper_threshold_type,
-ph:validation_error,
-ph:warn_delete,
-signin:invalidcredentials,
-signin:password,
-signin:signin,
-signin:username,
-telemetry:main:current-limit,
-telemetry:main:email-alerts,
-telemetry:main:historical-limit,
-telemetry:main:limit-per-hour,
-telemetry:main:send-test-message,
-telemetry:notification:from,
-telemetry:notification:password,
-telemetry:notification:port,
-telemetry:notification:server,
-telemetry:notification:to,
-telemetry:notification:username,
-temperature:alert_above,
-temperature:alert_below,
-temperature:calibrate,
-temperature:calibration:apply,
-temperature:calibration:set_temperature,
-temperature:celsius,
-temperature:chart:current,
-temperature:chart:down,
-temperature:chart:historical,
-temperature:chart:up,
-temperature:chart_color,
-temperature:chart_ymax,
-temperature:chart_ymin,
-temperature:check_frequency,
-temperature:control,
-temperature:controlequipment,
-temperature:controlmacro,
-temperature:controlnothing,
-temperature:current_reading,
-temperature:fahrenheit,
-temperature:heater_cooler,
-temperature:hysteresis,
-temperature:hysteresis_less_than,
-temperature:lower_function,
-temperature:lower_threshold,
-temperature:sensor,
-temperature:temperature,
-temperature:unit,
-temperature:upper_function,
-temperature:upper_threshold,
-temperature:validation_error,
-temperature:warn_delete,
-timers:after,
-timers:and_then,
-timers:day_required,
-timers:duration_required,
-timers:equipment,
-timers:equipment:off,
-timers:equipment:on,
-timers:equipment:revert,
-timers:equipment_action,
-timers:equipment_required,
-timers:function,
-timers:hour_required,
-timers:macro,
-timers:macros,
-timers:message,
-timers:message_required,
-timers:minute_required,
-timers:name_required,
-timers:on_required,
-timers:reminder,
-timers:sec,
-timers:second_required,
-timers:stay_off,
-timers:stay_on,
-timers:subject,
-timers:subject_required,
-timers:timer_status_required,
-timers:turn_back_off,
-timers:turn_back_on,
-timers:turn_off,
-timers:turn_on,
-timers:type_required,
-timers:validation_error,
+action,Aktion
+add,Hinzufügen
+alerts,Warnungen
+analog_input,analoger Eingang
+analog_inputs,analoge Eingänge
+are_you_sure,Bist du sicher?
+ato,ATO
+cancel,Abbrechen
+capabilities,Funktionen
+charts,Diagramme
+clear,Löschen
+color,Farbe
+columns,Spalten
+configure,Konfigurieren
+delete,Löschen
+disabled,aus
+documentation,Dokumentation (engl.)
+done,Fertig
+doser,Dosierpumpe
+driver,Treiber
+edit,Ändern
+enabled,ein
+end_time,Ende
+equipment,Gerät
+errors,Fehler
+full_moon,Vollmond
+health,Auslastung
+height,Höhe
+in-use,in Benutzung
+inlet,Eingang
+inlets,digitale Eingänge
+install,Installieren
+jack,analoger Ausgang (PWM)
+jacks,analoge Ausgänge (PWM)
+light,Lampe
+lights,Beleuchtung
+loading,Lade ...
+maximum,Maximum
+minimum,Minimum
+name,Name
+no,Nein
+none,-keine-
+off,Aus
+ok,Ok
+on,Ein
+one_shot,nur einmal ausführen
+optional,optional
+outlet,Ausgang
+outlets,digitale Ausgänge
+pin,Pin
+pins,Pins
+profile,Profil
+reverse,Invers
+rows,Zeilen
+running,Version
+save,Speichern
+schedule,Zeitplan
+sec,s
+second_s,Sekunden
+select,auswählen
+select_file,-Datei wählen-
+since,seit
+start_time,Beginn
+status,Status
+stayoffonboot,Bei Neustart ausschalten
+update,Übernehmen
+upgrade_reef_pi,Aktualisiere reef-pi auf Version
+width,Breite
+yes,Ja
+ato:alert_after,Alarmverzögerung
+ato:ato_usage,ATO Nutzung
+ato:chk_freq,Prüfintervall
+ato:chk_freq_number,Das muss eine Zahl sein!
+ato:chk_freq_number_value,Das muss 1s oder größer sein!
+ato:chk_freq_required,Eine Frequenz wird benötigt!
+ato:control,Funktion
+ato:control_target,Steuerung durch
+ato:controlequipment,Gerät schalten
+ato:controlmacro,Makro ausführen
+ato:controlnothing,-keine Steuerung-
+ato:disable_on_alert,ATO nach Alarm ausschalten
+ato:inlet_required,Ein Eingang wird benötigt!
+ato:name_required,Ein Name ist erforderlich!
+ato:status_required,Ein Status wird benötigt!
+ato:threshold_required,Ein Schwellwert wird benötigt!
+ato:threshold_value,Schwellwert
+ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
+ato:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
+ato:warn_delete,Wirklich löschen:
+camera:capture_flags,Aufnahmeoptionen
+camera:enable,Aktiv
+camera:take_photo,Aufnahme!
+camera:target_dir,Zielverzeichnis
+camera:tick_interval,Aufnahmeintervall (min)
+camera:to_gdrive,nach gDrive kopieren
+capabilities:ato,ATO
+capabilities:camera,Kamera
+capabilities:configuration,Konfiguration
+capabilities:dashboard,Übersicht
+capabilities:dev_mode,Entwickler-Modus
+capabilities:doser,Dosierpumpe
+capabilities:dosing_pumps,Dosierpumpen
+capabilities:equipment,Geräte
+capabilities:health_check,Auslastung
+capabilities:journal,Notizen
+capabilities:lighting,Beleuchtung
+capabilities:lights,Beleuchtung
+capabilities:log,Protokoll
+capabilities:macro,Makro
+capabilities:macros,Makros
+capabilities:manager,Instanzen
+capabilities:ph,pH
+capabilities:temperature,Temperatur
+capabilities:timers,Schaltuhr
+collapsible:delete,Löschen
+collapsible:edit,Ändern
+color_picker:choose,Auswählen
+configuration:about:current_time,aktuelle Uhrzeit
+configuration:about:modifications,Änderungen
+configuration:about:status,Status
+configuration:about:uptime,Letzter Neustart
+configuration:about:version,Version
+configuration:about:website,Web Site
+configuration:admin:db_export,DB Exportieren
+configuration:admin:db_import,DB Importieren
+configuration:admin:poweroff,Ausschalten
+configuration:admin:reboot,Neustart
+configuration:admin:reload,Neu laden
+configuration:admin:sign_out,Abmelden
+configuration:authentication:credentials,Benutzer
+configuration:authentication:error_pass,falsches Passwort
+configuration:authentication:error_user,falscher Benutzername
+configuration:settings:address,Protokoll / IP-Adresse und Port
+configuration:settings:alert_health_check,Überlastwarnung
+configuration:settings:capabilities,Funktionen
+configuration:settings:capabilities_required,Eine Auswahl ist erforderlich!
+configuration:settings:cors,cors
+configuration:settings:display,Display
+configuration:settings:interface,Netzwerkinterface
+configuration:settings:max_cpu,CPU Nutzung % größer
+configuration:settings:max_memory,Speicherbelegung MB größer
+configuration:settings:name,Netzwerkname
+configuration:settings:name_required,Ein Name ist erforderlich!
+configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
+configuration:settings:network_interface_required,Eine Netzwerk-Schnittstelle wird benötigt!
+configuration:settings:notification,Email-Benachrichtigung
+configuration:settings:pprof,Profiling
+configuration:settings:prometheus,Prometheus
+configuration:settings:rpi_pwm_freq,PWM Fequenz (RPi)
+configuration:settings:use_https,Verwende HTTPS
+configuration:tab:about,Über ...
+configuration:tab:admin,Administration
+configuration:tab:authentication,Anmeldung
+configuration:tab:connectors,Anschlüsse
+configuration:tab:drivers,Treiber
+configuration:tab:errors,Fehler
+configuration:tab:settings,Einstellungen
+configuration:tab:telemetry,Telemetrie
+cron:day_of_month,Kalendertag
+cron:hour,Stunde
+cron:minute,Minute
+cron:month,Monat
+cron:second,Sekunde
+cron:week,Wochentag (0=So - 7=Sa)
+dashboard:back_to_dashboard,zurück zur Übersicht
+dashboard:blank_panel,-leer-
+doser:calibrate,Kalibrieren
+doser:calibration:run,Start
+doser:doser_usage,Pumpennutzung
+doser:duration,Dauer
+doser:speed,Geschwindigkeit
+equipment:chart:barchart,Geräte (Balken)
+equipment:chart:ctrlpanel,Geräte (Schalter)
+fatal_error:connection_lost,Verbindung verloren
+fatal_error:fatal_error,Fataler Fehler
+fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
+fatal_error:troubleshoot,Fehlersuche
+health_chart:cpu_memory,CPU / Speicher
+journal:description,Beschreibung
+journal:unit,Einheit
+journal:warn_delete,Wirklich löschen:
+language:de,Deutsch
+language:en,English
+language:es,Español
+language:fa,فارسی
+language:fr,Français
+language:hi,हिन्दी
+language:it,Italiano
+language:language,Sprache
+language:nl,Nederlands
+language:pt,Portuguesa
+language:zh,中文
+lighting:channel_name,Kanalname
+log:content,Beschreibung
+log:emitter,Sender
+log:time,Zeit
+log:type,Typ
+macro:alert:message,Nachricht
+macro:alert:title,Titel
+macro:reversible,Umkehrbar
+macro:revert,Umgekehrt
+macro:reverting,Umkehr
+macro:run,Ausführen
+macro:running,Läuft
+macro:steps,Schritte
+macro:turn_off,Ausschalten
+macro:turn_on,Einschalten
+macro:wait:duration,Dauer
+ph:alert_above,obere Warnschwelle
+ph:alert_below,untere Warnschwelle
+ph:analog_input_required,Ein Eingang wird benötigt!
+ph:calibrate,Kalibrieren
+ph:chart:current,ph (aktuell)
+ph:chart:historical,pH (Verlauf)
+ph:chart_color,Diagrammfarbe
+ph:chart_unit,Diagrammeinheit
+ph:chart_ymax,Achsenmaximum
+ph:chart_ymin,Achsenminimum
+ph:check_frequency,Messintervall
+ph:control,Funktion
+ph:control_required,Ein Steuerelement wird benötigt!
+ph:controlequipment,Gerät schalten
+ph:controlmacro,Makro ausführen
+ph:controlnothing,-keine Steuerung-
+ph:current_reading,aktueller Wert
+ph:hysteresis,Hysterese
+ph:lower_function,pH anheben durch
+ph:lower_function_required,Ein Eintrag muss gewählt werden!
+ph:lower_threshold,unterer Schwellwert
+ph:lower_threshold_less_than,Wert muss unter der oberen Schwelle liegen!
+ph:lower_threshold_required,Ein Schwellwert ist erforderlich!
+ph:lower_threshold_type,Das muss eine Zahl sein!
+ph:midpoint,Mittenwert
+ph:name_required,Ein Name wird benötigt!
+ph:period_min,Minuten
+ph:period_required,Ein WErt wird benötigt!
+ph:period_type,Das muss eine Zahl sein!
+ph:run_calibration,Kalibrieren
+ph:second_point,zweiter Messpunkt
+ph:status_required,Ein Status ist erforderlich!
+ph:threshold_greater_than,Wert muss über der unteren Schwelle liegen!
+ph:threshold_less_than,Wert muss unter der oberen Schwelle liegen!
+ph:threshold_required,Ein Schwellwert ist erforderlich!
+ph:threshold_type,Das muss eine Zahl sein!
+ph:upper_function,pH senken durch
+ph:upper_function_required,Ein Eintrag muss gewählt werden!
+ph:upper_threshold,oberer Schwellwert
+ph:upper_threshold_greater_than,Wert muss über der unteren Schwelle liegen!
+ph:upper_threshold_required,Ein Schwellwert ist erforderlich!
+ph:upper_threshold_type,Das muss eine Zahl sein!
+ph:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
+ph:warn_delete,Wirklich löschen: 
+signin:invalidcredentials,Anmeldefehler!
+signin:password,Passwort
+signin:signin,Anmelden
+signin:username,Name
+telemetry:main:current-limit,Einträge im Verlauf
+telemetry:main:email-alerts,Email Alarme
+telemetry:main:historical-limit,Einträge in Aktuell
+telemetry:main:limit-per-hour,max. Nachritchen pro Std.
+telemetry:main:send-test-message,Sende Testnachricht
+telemetry:notification:from,Absender
+telemetry:notification:password,Passwort
+telemetry:notification:port,Port
+telemetry:notification:server,Email-Server (Versand)
+telemetry:notification:to,Empfänger
+telemetry:notification:username,Emailkonto
+temperature:alert_above,obere Warnschwelle
+temperature:alert_below,untere Warnschwelle
+temperature:calibrate,Kalibrieren
+temperature:calibration:apply,Übernehmen
+temperature:calibration:set_temperature,korr. Messwert
+temperature:celsius,Celsius
+temperature:chart:current,Temperatur (aktuell)
+temperature:chart:down,Kühler
+temperature:chart:historical,Temperatur (Verlauf)
+temperature:chart:up,Heizung
+temperature:chart_color,Diagrammfarbe
+temperature:chart_ymax,Achsenmaximum
+temperature:chart_ymin,Achsenminimum
+temperature:check_frequency,Messintervall
+temperature:control,Funktion
+temperature:controlequipment,Gerät schalten
+temperature:controlmacro,Makro ausführen
+temperature:controlnothing,-keine Steuerung-
+temperature:current_reading,Messwert
+temperature:fahrenheit,Fahrenheit
+temperature:heater_cooler,Heizung/Kühler
+temperature:hysteresis,Hysterese
+temperature:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
+temperature:lower_function,Heizungssteuerung durch
+temperature:lower_threshold,unterer Schwellwert
+temperature:sensor,Sensor
+temperature:temperature,Temperatur
+temperature:unit,Einheit
+temperature:upper_function,Kühlungssteuerung durch
+temperature:upper_threshold,oberer Schwellwert
+temperature:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
+temperature:warn_delete,Wirklich löschen:
+timers:after,... nach
+timers:and_then,... danach
+timers:day_required,Eine Zahl oder * wird benötigt!
+timers:duration_required,Eine Dauer wird benötigt!
+timers:equipment,Gerät
+timers:equipment:off,Aus
+timers:equipment:on,Ein
+timers:equipment:revert,Umkehren
+timers:equipment_action,Aktion
+timers:equipment_required,Ein Eintrag muss ausgewählt sein!
+timers:function,Funktion
+timers:hour_required,Eine Zahl oder * wird benötigt!
+timers:macro,Makro-Name
+timers:macros,Makros
+timers:message,Nachricht
+timers:message_required,Eine Nachricht wird benötigt!
+timers:minute_required,Eine Zahl oder * wird benötigt!
+timers:name_required,Ein Name wird benötigt!
+timers:on_required,Das ist erforderlich!
+timers:reminder,Erinnerung
+timers:sec,s
+timers:second_required,Eine Zahl wird benötigt!
+timers:stay_off,aus lassen
+timers:stay_on,an lassen
+timers:subject,Betreff
+timers:subject_required,Ein Betreff wird benötig!
+timers:timer_status_required,Ein Status ist erforderlich!
+timers:turn_back_off,wieder ausschalten
+timers:turn_back_on,wieder einschalten
+timers:turn_off,Ausschalten
+timers:turn_on,Einschalten
+timers:type_required,Ein Typ ist erforderlich!
+timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
