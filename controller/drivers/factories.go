@@ -26,6 +26,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"hs103":        tplink.HS103Factory(),
 	"hs110":        tplink.HS110Factory(),
 	"hs300":        tplink.HS300Factory(),
+	"hs303":        tplink.HS303Factory(),
 	"pca9685":      pca9685.Factory(),
 	"ph-board":     ph_board.Factory(),
 	"ph-ezo":       ezo.Factory(),
