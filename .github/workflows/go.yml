@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v2.3.0
         with:
           node-version: 14
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v2.0.2
       - run: make install
       - run: make vet
       - run: make imports
