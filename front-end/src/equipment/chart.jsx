@@ -2,6 +2,7 @@ import React from 'react'
 import { ResponsiveContainer, Tooltip, XAxis, BarChart, Bar } from 'recharts'
 import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 
 class CustomToolTip extends React.Component {
   render () {
@@ -45,7 +46,7 @@ class chart extends React.Component {
     })
     return (
       <div className='container'>
-        <span className='h6'>Equipment</span>
+        <span className='h6'>{i18next.t('capabilities:equipment')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={equipment}>
             <Bar dataKey='onstate' fill='#00c851' isAnimationActive={false} stackId='a' />

@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'
+import i18next from 'i18next'  //TODO: several i18next mappings!
 
 const TemperatureSchema = Yup.object().shape({
   name: Yup.string()

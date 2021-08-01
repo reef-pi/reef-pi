@@ -5,6 +5,7 @@ import Capture from './capture'
 import { fetchConfig, updateConfig, listImages } from 'redux/actions/camera'
 import { connect } from 'react-redux'
 import Motion from './motion'
+import i18next from 'i18next'
 
 class camera extends React.Component {
   constructor (props) {
@@ -60,7 +61,7 @@ class camera extends React.Component {
             type='button'
             id='showConfig'
             onClick={this.handleToggleConfig}
-            value='config'
+            value={i18next.t('configure')}
             className='btn btn-secondary'
           />
           {config}

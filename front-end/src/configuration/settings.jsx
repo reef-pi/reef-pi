@@ -48,7 +48,7 @@ class settings extends React.Component {
             defaultChecked={this.state.settings[attr]}
             className='form-check-input'
           />
-          {i18n.t(attr)}
+          {i18n.t('configuration:settings:' + attr)}
         </label>
       </div>
     )
@@ -255,6 +255,7 @@ class settings extends React.Component {
                     <option value='pt'>{i18n.t('language:pt')}</option>
                     <option value='de'>{i18n.t('language:de')}</option>
                     <option value='it'>{i18n.t('language:it')}</option>
+                    <option value='nl'>{i18n.t('language:nl')}</option>
                     <option value='hi'>{i18n.t('language:hi')}</option>
                     <option value='fa'>{i18n.t('language:fa')}</option>
                     <option value='zh'>{i18n.t('language:zh')}</option>

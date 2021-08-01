@@ -5,6 +5,7 @@ import BooleanSelect from '../ui_components/boolean_select'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
+import i18next from 'i18next'
 
 const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
   const options = () => {
@@ -30,7 +31,7 @@ const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
             'is-invalid': ShowError(`${name}.id`, touched, errors)
           })}
         >
-          <option value='' className='d-none'>-- Select System --</option>
+          <option value='' className='d-none'>-- {i18next.t('select')} --</option>
           {options()}
         </Field>
         <ErrorFor errors={errors} touched={touched} name={`${name}.id`} />
@@ -46,9 +47,9 @@ const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
             'is-invalid': ShowError(`${name}.id`, touched, errors)
           })}
         >
-          <option value='' className='d-none'>-- Select Action --</option>
-          <option value='true'>Turn On</option>
-          <option value='false'>Turn Off</option>
+          <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+          <option value='true'>{i18next.t('macro:turn_on')}</option>
+          <option value='false'>{i18next.t('macro:turn_off')}</option>
         </Field>
         <ErrorFor errors={errors} touched={touched} name={`${name}.on`} />
       </div>

@@ -24,7 +24,7 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
       </div>
       <div className='col-12 col-sm-2 col-md-1'>
         <Switch onClick={toggleState} on={equipment.on}>
-          <small className='ml-1 align-top'>{equipment.on ? 'on' : 'off'}</small>
+          <small className='ml-1 align-top'>{equipment.on ? i18next.t('on') : i18next.t('off')}</small>
         </Switch>
       </div>
       <div className='col-12 col-sm-2 col-md-1'>

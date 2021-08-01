@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
+import i18next from 'i18next'
 
 const WaitStep = ({ name, readOnly, touched, errors }) => {
   return (
@@ -11,7 +12,7 @@ const WaitStep = ({ name, readOnly, touched, errors }) => {
         <Field
           name={`${name}.duration`}
           aria-label='Duration'
-          title='Duration'
+          title={i18next.t('macro:wait:duration')}
           type='number'
           readOnly={readOnly}
           placeholder='Duration'
@@ -21,7 +22,7 @@ const WaitStep = ({ name, readOnly, touched, errors }) => {
         />
         <div className='input-group-append'>
           <span className='input-group-text d-none d-lg-flex'>
-            second(s)
+            {i18next.t('second_s')}
           </span>
           <span className='input-group-text d-flex d-lg-none'>sec</span>
         </div>
