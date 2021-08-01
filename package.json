@@ -32,7 +32,7 @@
     "fetch-mock": "9.11.0",
     "formik": "2.2.6",
     "html-webpack-plugin": "4.5.2",
-    "i18next": "20.3.3",
+    "i18next": "20.3.5",
     "i18next-browser-languagedetector": "4.2.0",
     "immutability-helper": "^3.1.1",
     "jest": "26.1.0",
