@@ -28,7 +28,7 @@ class Equipment {
     await select(this.outletSelect, outlet)
 
     await t
-    .click('.add-equipment input[type*="submit"]')
+    .click('.add-equipment button[type*="submit"]')
   }
 }
 
