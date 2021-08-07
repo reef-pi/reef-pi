@@ -34,7 +34,7 @@ const EditEquipment = ({
     if (values.id) {
       return (
         <div className='d-inline p-2' onClick={onDelete}>
-         {FaTrashAlt()}
+          {FaTrashAlt()}
         </div>
       )
     }
@@ -94,7 +94,7 @@ const EditEquipment = ({
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
         <div className='p-2 mr-auto'>
-          <button type='submit' >
+          <button type='submit' id='add_equipment'>
             {FaSave()}
           </button>
         </div>

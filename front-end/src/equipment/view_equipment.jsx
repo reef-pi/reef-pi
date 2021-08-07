@@ -26,11 +26,11 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
         </Switch>
       </div>
       <div className='p2'>
-         <div className='d-inline p-2' onClick={onEdit}>
+        <div className='d-inline p-2' onClick={onEdit}>
           {FaEdit()}
         </div>
-         <div className='d-inline p-2' onClick={onDelete}>
-         {FaTrashAlt()}
+        <div className='d-inline p-2' onClick={onDelete}>
+          {FaTrashAlt()}
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React, { cloneElement } from 'react'
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Switch from 'react-toggle-switch'
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+
 import i18next from 'i18next'
 
 class Collapsible extends React.Component {
@@ -35,7 +35,7 @@ class Collapsible extends React.Component {
         id={'edit-' + name}
         className='btn btn-sm float-right d-block d-sm-inline ml-2'
       >
-      {FaEdit()}
+        {FaEdit()}
       </button>
     )
     const handleSubmit = (values) => {
@@ -73,7 +73,7 @@ class Collapsible extends React.Component {
               id={'delete-' + name}
               className='btn btn-sm float-right d-block d-sm-inline ml-2'
             >
-            {FaTrashAlt()}
+              {FaTrashAlt()}
             </button>
             {readOnly ? toggleStateButton : null}
             {readOnly ? editButton : null}
