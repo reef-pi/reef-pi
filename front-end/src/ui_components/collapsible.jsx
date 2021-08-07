@@ -58,6 +58,14 @@ class Collapsible extends React.Component {
             pointer: readOnly
           })}
         >
+          <div
+            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
+              pointer: readOnly
+            })} onClick={() => onToggle(name)}
+          >
+            {expanded ? FaAngleUp() : FaAngleDown()}
+            {this.props.title}
+          </div>
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
             <button
               type='button'
@@ -70,14 +78,6 @@ class Collapsible extends React.Component {
             {readOnly ? toggleStateButton : null}
             {readOnly ? editButton : null}
             {this.props.buttons}
-          </div>
-          <div
-            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
-              pointer: readOnly
-            })} onClick={() => onToggle(name)}
-          >
-            {expanded ? FaAngleUp() : FaAngleDown()}
-            {this.props.title}
           </div>
         </div>
         {expanded
