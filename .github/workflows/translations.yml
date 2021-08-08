@@ -17,6 +17,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install
-        run: npm i
+        run: yarn
       - name: Check Translations
-        run: npm run translations:chk
+        run: yarn run translations:chk

@@ -15,8 +15,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install
-        run: npm i
+        run: yarn
       - name: standard
         run: make standard
       - name: jest
-        run: npm run jest-update-snapshot
+        run: yarn run jest-update-snapshot

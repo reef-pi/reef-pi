@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install
-        run: npm i
+        run: yarn
       - name: go
         run: make go
       - name: pi
