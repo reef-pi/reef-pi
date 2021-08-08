@@ -16,7 +16,7 @@ bin:
 
 .PHONY:build-ui
 build-ui:
-	npm run build
+	yarn run build
 
 .PHONY:go
 go:
@@ -36,16 +36,16 @@ test:
 
 .PHONY: js-lint
 js-lint:
-	npm run js-lint
+	yarn run js-lint
 
 .PHONY: sass-lint
 sass-lint:
-	npm run sass-lint
+	yarn run sass-lint
 
 .PHONY: install
 install:
 	make go-get
-	npm install
+	yarn
 
 .PHONY: go-get
 go-get:
@@ -67,11 +67,11 @@ build: clean go-get test bin
 
 .PHONY: ui
 ui:
-	npm run ui
+	yarn run ui
 
 .PHONY: ui-dev
 ui-dev:
-	npm run ui-dev
+	yarn run ui-dev
 
 .PHONY: deb
 deb: ui api-doc
@@ -95,11 +95,11 @@ clean:
 
 .PHONY: standard
 standard:
-	npm run standard
+	yarn run standard
 
 .PHONY: jest
 jest:
-	npm run jest
+	yarn run jest
 
 .PHONY: start-dev
 start-dev:
@@ -126,4 +126,4 @@ api-doc:
 
 .PHONY: smoke
 smoke:
-	npm run ci-smoke
+	yarn run ci-smoke
