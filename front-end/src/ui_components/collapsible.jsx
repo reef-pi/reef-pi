@@ -1,8 +1,9 @@
 import React, { cloneElement } from 'react'
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import { FaAngleDown, FaAngleUp, FaEdit, FaTrashAlt } from 'react-icons/fa'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Switch from 'react-toggle-switch'
+
 import i18next from 'i18next'
 
 class Collapsible extends React.Component {
@@ -32,9 +33,9 @@ class Collapsible extends React.Component {
         onClick={this.handleEdit}
         disabled={disableEdit}
         id={'edit-' + name}
-        className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+        className='btn btn-sm float-right d-block d-sm-inline ml-2'
       >
-        {i18next.t('collapsible:edit')}
+        {FaEdit()}
       </button>
     )
     const handleSubmit = (values) => {
@@ -57,19 +58,6 @@ class Collapsible extends React.Component {
             pointer: readOnly
           })}
         >
-          <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
-            <button
-              type='button'
-              onClick={this.handleDelete}
-              id={'delete-' + name}
-              className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-            >
-              {i18next.t('collapsible:delete')}
-            </button>
-            {readOnly ? toggleStateButton : null}
-            {readOnly ? editButton : null}
-            {this.props.buttons}
-          </div>
           <div
             className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
               pointer: readOnly
@@ -77,6 +65,19 @@ class Collapsible extends React.Component {
           >
             {expanded ? FaAngleUp() : FaAngleDown()}
             {this.props.title}
+          </div>
+          <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
+            <button
+              type='button'
+              onClick={this.handleDelete}
+              id={'delete-' + name}
+              className='btn btn-sm float-right d-block d-sm-inline ml-2'
+            >
+              {FaTrashAlt()}
+            </button>
+            {readOnly ? toggleStateButton : null}
+            {readOnly ? editButton : null}
+            {this.props.buttons}
           </div>
         </div>
         {expanded
