@@ -49,7 +49,7 @@ func New(version, database string) (*ReefPi, error) {
 		subsystems: controller.NewSubsystemComposite(),
 		version:    version,
 		a:          utils.NewAuth(Bucket, store),
-		dm:         device_manager.New(s, store),
+		dm:         device_manager.New(s, store, tele),
 	}
 	if s.Capabilities.HealthCheck {
 		r.h = telemetry.NewHealthChecker(Bucket, 1*time.Minute, s.HealthCheck, tele, store)

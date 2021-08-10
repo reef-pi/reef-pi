@@ -23,10 +23,11 @@ func Test_Capabilities(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	tele := telemetry.TestTelemetry(store)
 	r := &ReefPi{
 		a:          utils.NewAuth(Bucket, store),
-		telemetry:  telemetry.TestTelemetry(store),
-		dm:         device_manager.New(settings.DefaultSettings, store),
+		telemetry:  tele,
+		dm:         device_manager.New(settings.DefaultSettings, store, tele),
 		subsystems: controller.NewSubsystemComposite(),
 	}
 	buf := new(bytes.Buffer)
