@@ -114,6 +114,7 @@ func (h *hc) Check() {
 		for _, throttle := range throttles {
 			if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
 				metric.UnderVoltage = 1
+				h.t.LogError("health-check", "under voltage detected")
 			}
 		}
 	}

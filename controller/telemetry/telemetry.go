@@ -31,6 +31,7 @@ type Telemetry interface {
 	SendTestMessage(http.ResponseWriter, *http.Request)
 	GetConfig(http.ResponseWriter, *http.Request)
 	UpdateConfig(http.ResponseWriter, *http.Request)
+	LogError(string, string) error
 }
 
 type AlertStats struct {
@@ -156,6 +157,10 @@ func (t *telemetry) updateAlertStats(subject string) AlertStats {
 	stat.Count = 1
 	t.aStats[subject] = stat
 	return stat
+}
+
+func (t *telemetry) LogError(a, b string) error {
+	return t.logError(a, b)
 }
 
 func (t *telemetry) Alert(subject, body string) (bool, error) {
