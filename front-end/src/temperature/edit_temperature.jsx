@@ -50,7 +50,7 @@ const EditTemperature = ({
       return
     }
 
-    let charts = (
+    let chs = (
       <div className='row'>
         <div className='col'>
           <ReadingsChart sensor_id={values.id} width={500} height={300} />
@@ -59,7 +59,7 @@ const EditTemperature = ({
     )
 
     if (values.heater !== '' || values.cooler !== '') {
-      charts = (
+      chs = (
         <div className='row'>
           <div className='col-lg-6'>
             <ReadingsChart sensor_id={values.id} width={500} height={300} />
@@ -71,11 +71,7 @@ const EditTemperature = ({
       )
     }
 
-    return (
-      <div className='d-none d-sm-block'>
-        {charts}
-      </div>
-    )
+    return chs
   }
 
   const sensorOptions = () => {
@@ -351,9 +347,6 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='control' />
             </div>
           </div>
-
-          {/* Wrap to next line on small */}
-          <div className='w-100 d-none d-sm-block d-md-none' />
 
           <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>

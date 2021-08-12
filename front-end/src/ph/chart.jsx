@@ -37,7 +37,7 @@ class chart extends React.Component {
     const c = this.props.config.chart
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name}-{this.props.type} ({current})</span>
+        <span className='h6'>{this.props.config.name}({current})</span>
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
