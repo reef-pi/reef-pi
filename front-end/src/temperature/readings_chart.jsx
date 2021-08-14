@@ -2,7 +2,6 @@ import React from 'react'
 import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
-import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
@@ -33,7 +32,7 @@ class chart extends React.Component {
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
     return (
       <div className='container'>
-        <span className='h6'>{this.props.config.name} - {i18next.t('temperature:temperature')} ({currentTemp})</span>
+        <span className='h6'>{this.props.config.name}({currentTemp})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <AreaChart data={this.props.usage.current}>
             <defs>

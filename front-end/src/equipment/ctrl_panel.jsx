@@ -41,9 +41,7 @@ class CtrlPanel extends React.Component {
     }
 
     return (
-      <div className='container' style={{ border: '1px solid black', marginBottom: '3px' }}>
-        <span className='h6'>Equipment Switch Panel</span>
-        <br />
+      <div className='container' style={{ marginBottom: '3px' }}>
         <div className='row'>
           {this.props.equipment.sort((a, b) => SortByName(a, b))
             .map(item => {
