@@ -110,7 +110,7 @@ export default class CalibrationWizard extends React.Component {
         <div className='modal-footer'>
           <div className='text-center'>
             {cancelButton}
-            <button role='confirm' type='button' className='btn btn-primary' ref={this.props.confirm} onClick={this.handleConfirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.handleConfirm}> // eslint-disable-line no-eval
               {i18next.t('done')}
             </button>
           </div>
