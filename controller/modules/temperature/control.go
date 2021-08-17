@@ -19,7 +19,7 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		subject := fmt.Sprintf("Temperature sensor '%s' failed", tc.Name)
-		c.c.Telemetry().Alert(subject, "Temperature sensor failure. Error:"+err.Error())
+		c.c.Telemetry().Alert(subject, "Error:"+err.Error())
 		return reading, err
 	}
 
@@ -69,14 +69,15 @@ func (c *Controller) NotifyIfNeeded(tc *TC, reading float64) {
 	if !tc.Notify.Enable {
 		return
 	}
-	subject := fmt.Sprintf("[Reef-Pi ALERT] temperature of '%s' out of range", tc.Name)
-	format := "Current temperature (%f) is out of acceptable range ( %f -%f )"
+	format := "Current value (%f) is out of acceptable range ( %f -%f )"
 	body := fmt.Sprintf(format, reading, tc.Notify.Min, tc.Notify.Max)
 	if reading >= tc.Notify.Max {
-		c.c.Telemetry().Alert(subject, "Tank is running hot."+body)
+		subject := fmt.Sprintf("temperature sensor '%s' is above acceptable range", tc.Name)
+		c.c.Telemetry().Alert(subject, body)
 		return
 	}
 	if reading <= tc.Notify.Min {
+		subject := fmt.Sprintf("temperature sensor '%s' is below acceptable range", tc.Name)
 		c.c.Telemetry().Alert(subject, "Tank is running cold. "+body)
 		return
 	}

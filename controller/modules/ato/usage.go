@@ -50,10 +50,10 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 	}
 	if u.Pump >= a.Notify.Max {
 		log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' usage is higher than threshold. Sending alert")
-		subject := fmt.Sprintf("[Reef-Pi ALERT] ATO pump usage for '%s' out of range", a.Name)
-		format := "Current usage of ATO pump (%d) is for sensor '%s' above acceptable value (%d)"
+		subject := fmt.Sprintf("ATO '%s' elevated usage", a.Name)
+		format := "Current usage(%d) of '%s' is above maximu threshold (%d)"
 		body := fmt.Sprintf(format, u.Pump, a.Name, a.Notify.Max)
-		c.c.Telemetry().Alert(subject, "Elevated ATO usage. "+body)
+		c.c.Telemetry().Alert(subject, body)
 		if a.DisableOnAlert {
 			log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' usage is higher than threshold. Disabling ATO")
 			sub, err := c.sub(a)
