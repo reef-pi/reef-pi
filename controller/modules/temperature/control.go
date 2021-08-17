@@ -69,14 +69,15 @@ func (c *Controller) NotifyIfNeeded(tc *TC, reading float64) {
 	if !tc.Notify.Enable {
 		return
 	}
-	subject := fmt.Sprintf("temperature sensor '%s' is out of range", tc.Name)
-	format := "Current temperature (%f) is out of acceptable range ( %f -%f )"
+	format := "Current value (%f) is out of acceptable range ( %f -%f )"
 	body := fmt.Sprintf(format, reading, tc.Notify.Min, tc.Notify.Max)
 	if reading >= tc.Notify.Max {
-		c.c.Telemetry().Alert(subject, "Tank is running hot."+body)
+		subject := fmt.Sprintf("temperature sensor '%s' is above acceptable range", tc.Name)
+		c.c.Telemetry().Alert(subject, body)
 		return
 	}
 	if reading <= tc.Notify.Min {
+		subject := fmt.Sprintf("temperature sensor '%s' is below acceptable range", tc.Name)
 		c.c.Telemetry().Alert(subject, "Tank is running cold. "+body)
 		return
 	}

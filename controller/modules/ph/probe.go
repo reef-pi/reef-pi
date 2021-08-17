@@ -287,8 +287,8 @@ func notifyIfNeeded(t telemetry.Telemetry, p Probe, reading float64) {
 	if !p.Notify.Enable {
 		return
 	}
-	subject := fmt.Sprintf("'%s' out of range", p.Name)
-	format := "Current alue from probe '%s' (%f) is out of acceptable range ( %f -%f )"
+	subject := fmt.Sprintf("sensor '%s' out of range", p.Name)
+	format := "Current value of probe '%s' (%f) is out of acceptable range ( %f -%f )"
 	body := fmt.Sprintf(format, p.Name, reading, p.Notify.Min, p.Notify.Max)
 	if reading >= p.Notify.Max {
 		t.Alert(subject, p.Name+" is high. "+body)
