@@ -71,11 +71,11 @@ func (c *Controller) InUse(depType, id string) ([]string, error) {
 }
 
 func (c *Controller) On(id string, b bool) error {
-	log.Println("Euipment:", id, "On:", b)
 	e, err := c.Get(id)
 	if err != nil {
 		return err
 	}
+	log.Println("Euipment:", e.Name, "On:", b)
 	e.On = b
 	return c.Update(id, e)
 }
