@@ -41,7 +41,7 @@ func New(version, database string) (*ReefPi, error) {
 		s = initialSettings
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
-	tele := telemetry.Initialize(Bucket, store, fn, s.Prometheus)
+	tele := telemetry.Initialize(s.Name, Bucket, store, fn, s.Prometheus)
 	r := &ReefPi{
 		store:      store,
 		settings:   s,
