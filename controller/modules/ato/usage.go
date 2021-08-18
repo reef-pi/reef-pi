@@ -56,13 +56,6 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 		c.c.Telemetry().Alert(subject, body)
 		if a.DisableOnAlert {
 			log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' usage is higher than threshold. Disabling ATO")
-			sub, err := c.sub(a)
-			if err != nil {
-				log.Println("ERROR:ato-subsystem: Failed to get target subsystem:", a.ID, "Error:", err)
-			}
-			if err := sub.On(a.Pump, false); err != nil {
-				log.Println("ERROR:ato-subsystem: Failed to get switch off target", a.ID, "Error:", err)
-			}
 			a.Enable = false
 			if err := c.Update(a.ID, a); err != nil {
 				log.Println("ERROR:ato-subsystem: Failed to disable ato:", a.ID, "Error:", err)
