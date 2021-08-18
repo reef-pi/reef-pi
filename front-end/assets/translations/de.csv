@@ -225,7 +225,7 @@ ph:controlmacro,Makro ausführen
 ph:controlnothing,-keine Steuerung-
 ph:current_reading,aktueller Wert
 ph:hysteresis,Hysterese
-ph:lower_function,pH anheben durch
+ph:lower_function,pH senken durch
 ph:lower_function_required,Ein Eintrag muss gewählt werden!
 ph:lower_threshold,unterer Schwellwert
 ph:lower_threshold_less_than,Wert muss unter der oberen Schwelle liegen!
@@ -243,7 +243,7 @@ ph:threshold_greater_than,Wert muss über der unteren Schwelle liegen!
 ph:threshold_less_than,Wert muss unter der oberen Schwelle liegen!
 ph:threshold_required,Ein Schwellwert ist erforderlich!
 ph:threshold_type,Das muss eine Zahl sein!
-ph:upper_function,pH senken durch
+ph:upper_function,pH anheben durch
 ph:upper_function_required,Ein Eintrag muss gewählt werden!
 ph:upper_threshold,oberer Schwellwert
 ph:upper_threshold_greater_than,Wert muss über der unteren Schwelle liegen!
