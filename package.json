@@ -2,7 +2,6 @@
   "name": "reef-pi",
   "version": "1.0.0",
   "description": "A Raspberry Pi based reeftank automation system",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
