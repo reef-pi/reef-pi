@@ -99,7 +99,11 @@
     "type": "git",
     "url": "git+https://github.com/reef-pi/reef-pi.git"
   },
-  "author": "",
+  "author": {
+    "name": "Ranjib Dey",
+    "email": "ranjib@linux.com",
+    "url": "http://ranjib.com/"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/reef-pi/reef-pi/issues"
