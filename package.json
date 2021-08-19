@@ -2,9 +2,6 @@
   "name": "reef-pi",
   "version": "1.0.0",
   "description": "A Raspberry Pi based reeftank automation system",
-  "directories": {
-    "doc": "docs"
-  },
   "dependencies": {
     "@babel/core": "7.14.8",
     "@babel/plugin-transform-modules-commonjs": "7.15.0",
