@@ -104,7 +104,7 @@
   "bugs": {
     "url": "https://github.com/reef-pi/reef-pi/issues"
   },
-  "homepage": "https://github.com/reef-pi/reef-pi#readme",
+  "homepage": "https://reef-pi.github.io",
   "sasslintConfig": "sass-lint.yml",
   "standard": {
     "globals": [
