@@ -51,7 +51,7 @@ func (c *Controller) NotifyIfNeeded(a ATO) {
 	if u.Pump >= a.Notify.Max {
 		log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' usage is higher than threshold. Sending alert")
 		subject := fmt.Sprintf("ATO '%s' elevated usage", a.Name)
-		format := "Current usage(%d) of '%s' is above maximu threshold (%d)"
+		format := "Current usage(%d) of '%s' is above maximum threshold (%d)"
 		body := fmt.Sprintf(format, u.Pump, a.Name, a.Notify.Max)
 		c.c.Telemetry().Alert(subject, body)
 		if a.DisableOnAlert {
