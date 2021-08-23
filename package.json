@@ -37,7 +37,6 @@
     "json-loader": "0.5.7",
     "lodash.debounce": "4.0.8",
     "lodash.mapvalues": "4.6.0",
-    "material-ui": "^0.20.2",
     "mini-css-extract-plugin": "1.6.2",
     "popper": "^1.0.1",
     "popper.js": "^1.16.1",
