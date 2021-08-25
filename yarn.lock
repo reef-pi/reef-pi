@@ -3422,10 +3422,10 @@ csv-parse@^4.15.4:
   resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.0.tgz#b4c875e288a41f7ff917cb0d7d45880d563034f6"
   integrity sha512-Zb4tGPANH4SW0LgC9+s9Mnequs9aqn7N3/pCqNbVjs2XhEF6yWNU2Vm4OGl1v2Go9nw8rXt87Cm2QN/o6Vpqgg==
 
-csv-stringify@5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-5.6.1.tgz#d790bca20f20ed5a8887a3dce3ac458d611cd2e0"
-  integrity sha512-JlQlNZMiuRGSFbLXFNGoBtsORXlkqf4Dfq8Ee0Jo4RVJj3YAUzevagUx24mDrQJLDF7aYz6Ne8kqA8WWBaYt2A==
+csv-stringify@5.6.2:
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-5.6.2.tgz#e653783e2189c4c797fbb12abf7f4943c787caa9"
+  integrity sha512-n3rIVbX6ylm1YsX2NEug9IaPV8xRnT+9/NNZbrA/bcHgOSSeqtWla6XnI/xmyu57wIw+ASCAoX1oM6EZtqJV0A==
 
 cuint@^0.2.2:
   version "0.2.2"
