@@ -25,7 +25,7 @@ var config = {
         test: /\.jsx?/,
         include: APP_DIR,
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: [['@babel/preset-env', { modules: false }], '@babel/preset-react']
         }
       },
@@ -36,23 +36,20 @@ var config = {
       {
         test: /\.(sass|scss)$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader
-          },
-          {
-            loader: 'css-loader'
-          },
+          MiniCssExtractPlugin.loader,
+          'css-loader',
           {
             loader: 'postcss-loader',
             options: {
-              plugins: function() {
-                return [require('precss'), require('autoprefixer')]
+              postcssOptions: {
+                plugins: [
+                  'precss',
+                  'autoprefixer'
+                ]
               }
             }
           },
-          {
-            loader: 'sass-loader'
-          }
+          'sass-loader'
         ]
       },
       {
@@ -62,7 +59,10 @@ var config = {
       },
       {
         test: /\.css/,
-        loaders: ['style-loader', 'css-loader']
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       }
     ]
   },
