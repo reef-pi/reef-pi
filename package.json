@@ -15,7 +15,7 @@
     "babel-jest": "27.0.6",
     "babel-loader": "8.2.2",
     "bootstrap": "4.5.3",
-    "classnames": "2.2.6",
+    "classnames": "2.3.1",
     "clean-webpack-plugin": "4.0.0-alpha.0",
     "core-js": "^3.16.3",
     "cross-env": "7.0.2",
