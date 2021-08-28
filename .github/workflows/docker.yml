@@ -1,0 +1,5 @@
+name: docker
+on: [push, pull_request]
+runs:
+  using: docker
+  image: Dockerfile
