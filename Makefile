@@ -99,7 +99,7 @@ standard:
 
 .PHONY: jest
 jest:
-	yarn run jest
+	yarn test
 
 .PHONY: start-dev
 start-dev:
