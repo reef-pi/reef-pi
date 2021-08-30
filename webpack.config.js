@@ -3,11 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-var BUILD_DIR = path.resolve(__dirname, 'ui')
-var APP_DIR = path.resolve(__dirname, 'front-end', 'src')
-var ASSETS_DIR = path.resolve(__dirname, 'front-end', 'assets')
+const BUILD_DIR = path.resolve(__dirname, 'ui')
+const APP_DIR = path.resolve(__dirname, 'front-end', 'src')
+const ASSETS_DIR = path.resolve(__dirname, 'front-end', 'assets')
 
-var config = {
+const config = {
   entry: APP_DIR + '/entry',
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],

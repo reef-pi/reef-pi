@@ -78,8 +78,8 @@
     "build": "webpack",
     "ui": "webpack --mode=production",
     "ui-dev": "webpack --watch --mode=development",
-    "js-lint": "standard  front-end/src/**/*",
-    "standard": "standard --fix front-end/src/**/**",
+    "js-lint": "standard",
+    "standard": "standard --fix",
     "test": "jest --all --no-cache --coverage",
     "test:update-snapshot": "jest --all --updateSnapshot",
     "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
@@ -110,10 +110,9 @@
       "Headers",
       "afterEach",
       "jest",
-      "beforeEach"
-    ],
-    "ignore": [
-      "*.test.js"
+      "beforeEach",
+      "fixture",
+      "test"
     ]
   },
   "jest": {
