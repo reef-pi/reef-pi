@@ -138,7 +138,7 @@ describe('Configuration ui', () => {
     }
     const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:80'}})
+    wrapper.find('#to-row-address').simulate('change', { target: { value: 'localhost:80' } })
 
     wrapper.find('.dropdown-item[children="https://"]').simulate('click')
     expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
@@ -172,7 +172,7 @@ describe('Configuration ui', () => {
     }
     const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:1234'}})
+    wrapper.find('#to-row-address').simulate('change', { target: { value: 'localhost:1234' } })
 
     wrapper.find('.dropdown-item[children="http://"]').simulate('click')
     expect(wrapper.find('#to-row-address').props().value).toBe('localhost:1234')

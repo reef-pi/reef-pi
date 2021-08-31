@@ -8,9 +8,9 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditPh />', () => {
-  let values = { enable: true }
-  let doser = { id: 1 }
-  let fn = jest.fn()
+  const values = { enable: true }
+  const doser = { id: 1 }
+  const fn = jest.fn()
   const jacks = [{ id: 1, name: 'jack 1', pins: [1, 2, 3] }]
 
   beforeEach(() => {

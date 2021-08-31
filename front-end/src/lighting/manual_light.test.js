@@ -2,29 +2,25 @@ import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import ManualLight from './manual_light'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
 Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
 
 describe('Lighting ui - Manual Control', () => {
-
   const light = {
     channels: {
-      '0': { value: 10 },
-      '1': { value: 20 }
+      0: { value: 10 },
+      1: { value: 20 }
     }
   }
 
   it('<ManualLight /> should show a slider for each channel', () => {
     const fn = jest.fn()
 
-    let m = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
+    const m = shallow(<ManualLight
+      light={light}
+      handleChange={fn}
+                      />)
 
     expect(m.find('input[type="range"]').length).toBe(2)
   })
@@ -38,12 +34,12 @@ describe('Lighting ui - Manual Control', () => {
       }
     }
 
-    let wrapper = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
+    const wrapper = shallow(<ManualLight
+      light={light}
+      handleChange={fn}
+                            />)
 
-    let instance = wrapper.instance()
+    const instance = wrapper.instance()
 
     instance.handleValueChange(e)
     expect(instance.state.channels[0].value).toBe(10)
@@ -58,15 +54,14 @@ describe('Lighting ui - Manual Control', () => {
       }
     }
 
-    let wrapper = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
+    const wrapper = shallow(<ManualLight
+      light={light}
+      handleChange={fn}
+                            />)
 
-    let instance = wrapper.instance()
+    const instance = wrapper.instance()
 
     instance.handleValueChange(e)
     expect(instance.state.channels[0].value).toBe('44.5')
   })
-
 })

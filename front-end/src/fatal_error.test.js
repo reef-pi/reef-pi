@@ -15,7 +15,7 @@ describe('Sign_In', () => {
   it('<FatalError />', async () => {
     jest.useFakeTimers()
     global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise(resolve => {
+      const p = new Promise(resolve => {
         resolve({
           ok: true,
           status: 200
@@ -28,7 +28,7 @@ describe('Sign_In', () => {
     jest.advanceTimersByTime(5000)
     expect(m.state.up).toBe(true)
     global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
+      const p = new Promise((resolve, reject) => {
         reject(Error)
       })
       return p

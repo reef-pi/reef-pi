@@ -9,7 +9,7 @@ import DoserForm from './doser_form'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
-let fn = jest.fn()
+const fn = jest.fn()
 jest.mock('utils/confirm', () => {
   return {
     showModal: jest

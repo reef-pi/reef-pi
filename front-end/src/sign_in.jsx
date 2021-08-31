@@ -82,13 +82,15 @@ export default class SignIn extends React.Component {
             <form id='sign-in-form'>
               <div className='form'>
                 <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
-                {this.state.invalidCredentials ? (
-                  <div className='alert alert-danger' role='alert'>
-                    <strong>Oops!</strong> {i18n.t('signin:invalidcredentials')}
-                  </div>
-                ) : (
-                  <div />
-                )}
+                {this.state.invalidCredentials
+                  ? (
+                    <div className='alert alert-danger' role='alert'>
+                      <strong>Oops!</strong> {i18n.t('signin:invalidcredentials')}
+                    </div>
+                    )
+                  : (
+                    <div />
+                    )}
                 <label htmlFor='reef-pi-user' className='sr-only'>
                   {i18n.t('signin:username')}
                 </label>

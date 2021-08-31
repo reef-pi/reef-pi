@@ -3,7 +3,7 @@ import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Channel from './channel'
 import Chart from './chart'
-import Main, {TestMain} from './main'
+import Main, { TestMain } from './main'
 import LightForm from './light_form'
 import Light from './light'
 import ProfileSelector from './profile_selector'
@@ -82,7 +82,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Main />', () => {
-    const jacks = [{ id: '1', name: 'foo', pins: [1,2] }]
+    const jacks = [{ id: '1', name: 'foo', pins: [1, 2] }]
     const m = shallow(<Main store={mockStore({ lights: [light, light], jacks: jacks })} />)
       .dive()
       .instance()
@@ -90,11 +90,12 @@ describe('Lighting ui', () => {
     m.setJack(0, {})()
     m.handleToggleAddLightDiv()
     m.handleAddLight()
-    m.handleUpdateLight({config: {
-      id: 3
-    }})
+    m.handleUpdateLight({
+      config: {
+        id: 3
+      }
+    })
     m.handleDeleteLight(light)
-
   })
 
   it('<Main /> should change mode from auto to manual', () => {
@@ -102,15 +103,14 @@ describe('Lighting ui', () => {
     const fnUpdateLight = jest.fn()
 
     const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+      fetchLights={fn}
+      fetchJacks={fn}
+      lights={[light, light]}
+      updateLight={fnUpdateLight}
+                      />).instance()
 
     expect.assertions(2)
     return (m.handleChangeMode(light)()).then(() => {
-
       expect(fnUpdateLight).toHaveBeenCalledTimes(1)
       const actualArgs = fnUpdateLight.mock.calls[0][1]
       expect(actualArgs.channels[1].manual).toBe(true)
@@ -124,11 +124,11 @@ describe('Lighting ui', () => {
     light.channels[1].manual = true
 
     const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+      fetchLights={fn}
+      fetchJacks={fn}
+      lights={[light, light]}
+      updateLight={fnUpdateLight}
+                      />).instance()
 
     expect.assertions(2)
     return (m.handleChangeMode(light)()).then(() => {
@@ -157,15 +157,14 @@ describe('Lighting ui', () => {
     }
 
     const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+      fetchLights={fn}
+      fetchJacks={fn}
+      lights={[light, light]}
+      updateLight={fnUpdateLight}
+                      />).instance()
 
     expect.assertions(3)
     return (m.handleChangeMode(light)()).then(() => {
-
       expect(fnUpdateLight).toHaveBeenCalledTimes(1)
       const actualArgs = fnUpdateLight.mock.calls[0][1]
       expect(actualArgs.channels[1].manual).toBe(false)
@@ -179,13 +178,13 @@ describe('Lighting ui', () => {
 
     light.channels[1].profile.config.start = '14:00:00'
     light.channels[1].profile.config.end = '16:00:00'
-    light.channels[1].profile.config.values = [1,2,3.6,4,5]
+    light.channels[1].profile.config.values = [1, 2, 3.6, 4, 5]
     const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+      fetchLights={fn}
+      fetchJacks={fn}
+      lights={[light, light]}
+      updateLight={fnUpdateLight}
+                      />).instance()
 
     const values = {
       config: {
@@ -202,7 +201,6 @@ describe('Lighting ui', () => {
     expect(actualArgs.channels[1].profile.config.interval).toBe(30 * 60)
   })
 
-
   it('<Main /> should set the interval when end is before start', () => {
     const fn = jest.fn()
     const fnUpdateLight = jest.fn()
@@ -210,13 +208,13 @@ describe('Lighting ui', () => {
     light.channels[1].profile.type = 'auto'
     light.channels[1].profile.config.start = '23:00:00'
     light.channels[1].profile.config.end = '01:00:00'
-    light.channels[1].profile.config.values = [1,2,3,4,5]
+    light.channels[1].profile.config.values = [1, 2, 3, 4, 5]
     const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+      fetchLights={fn}
+      fetchJacks={fn}
+      lights={[light, light]}
+      updateLight={fnUpdateLight}
+                      />).instance()
 
     const values = {
       config: {
@@ -256,7 +254,7 @@ describe('Lighting ui', () => {
     const fn = jest.fn()
     const values = { config: light }
     const m = shallow(
-      <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={fn} isValid={true} />
+      <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={fn} isValid />
     )
     m.find('form').simulate('submit', { preventDefault: () => {} })
     expect(fn).toHaveBeenCalled()
@@ -323,7 +321,7 @@ describe('Lighting ui', () => {
   })
 
   it('<SineProfile />', () => {
-    const config = { config: { value: '1'} }
+    const config = { config: { value: '1' } }
     const wrapper = shallow(
       <SineProfile
         name='testsine'
@@ -335,7 +333,7 @@ describe('Lighting ui', () => {
   })
 
   it('<RandomProfile />', () => {
-    const config = { config: { value: '1'} }
+    const config = { config: { value: '1' } }
     const wrapper = shallow(
       <RandomProfile
         name='testrandom'
@@ -347,7 +345,7 @@ describe('Lighting ui', () => {
   })
 
   it('<LunarProfile />', () => {
-    const config = { config: { value: '1'} }
+    const config = { config: { value: '1' } }
     const wrapper = shallow(
       <LunarProfile
         name='testLunar'
@@ -369,5 +367,4 @@ describe('Lighting ui', () => {
     expect(wrapper.find('input').length).toBe(6)
     wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
   })
-
 })

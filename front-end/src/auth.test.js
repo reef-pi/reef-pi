@@ -9,7 +9,7 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 global.fetch = jest.fn().mockImplementation(() => {
-  let p = new Promise((resolve) => {
+  const p = new Promise((resolve) => {
     resolve({
       ok: true,
       status: 200

@@ -2,26 +2,24 @@ import { Selector, t } from 'testcafe'
 import { select } from './helpers'
 
 class Analog {
-
-  constructor(){
+  constructor () {
     this.pinSelect = Selector('.analog-inputs [name*="pin"]')
     this.driverSelect = Selector('.analog-inputs [name*="driver"]')
   }
 
-  async create() {
-
+  async create () {
     await t
-    .click('a#tab-configuration')
-    .click('a#config-connectors')
+      .click('a#tab-configuration')
+      .click('a#config-connectors')
 
     await this.addAnalog('AI1', '0', 'ph')
     await this.addAnalog('AI2', '0', 'ph')
   }
 
-  async addAnalog(name, pin, driver) {
+  async addAnalog (name, pin, driver) {
     await t
-    .click('input#add_analog_input')
-    .typeText('input#analog_inputName', name)
+      .click('input#add_analog_input')
+      .typeText('input#analog_inputName', name)
 
     await select(this.driverSelect, driver)
     await select(this.pinSelect, pin)

@@ -8,10 +8,10 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditTimer />', () => {
-  let values = { type: 'equipment' }
-  let equipment = [{ id: '1', name: 'EQ' }]
-  let macros = [{ id: '1', name: 'EQ' }]
-  let fn = jest.fn()
+  const values = { type: 'equipment' }
+  const equipment = [{ id: '1', name: 'EQ' }]
+  const macros = [{ id: '1', name: 'EQ' }]
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -85,7 +85,8 @@ describe('<EditTimer />', () => {
     const changeHandler = jest.fn()
 
     const wrapper = shallow(
-      <EditTimer values={values}
+      <EditTimer
+        values={values}
         equipment={equipment}
         handleBlur={fn}
         handleChange={changeHandler}
@@ -95,13 +96,14 @@ describe('<EditTimer />', () => {
         errors={{}}
         touched={{}}
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
 
-    wrapper.find({component: 'select', name: 'type'}).simulate('change', {target: {name: 'type', value: 'macro'}})
+    wrapper.find({ component: 'select', name: 'type' }).simulate('change', { target: { name: 'type', value: 'macro' } })
 
     expect(changeHandler.mock.calls.length).toBe(2)
-    expect(changeHandler.mock.calls[1][0].target.value).toEqual({id: ''})
+    expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '' })
   })
 
   it('EditTimer /> should set equipment target when equipment is selected', () => {
@@ -110,7 +112,8 @@ describe('<EditTimer />', () => {
     const changeHandler = jest.fn()
 
     const wrapper = shallow(
-      <EditTimer values={values}
+      <EditTimer
+        values={values}
         equipment={equipment}
         handleBlur={fn}
         handleChange={changeHandler}
@@ -120,10 +123,11 @@ describe('<EditTimer />', () => {
         errors={{}}
         touched={{}}
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
 
-    wrapper.find({component: 'select', name: 'type'}).simulate('change', {target: {name: 'type', value: 'equipment'}})
+    wrapper.find({ component: 'select', name: 'type' }).simulate('change', { target: { name: 'type', value: 'equipment' } })
 
     expect(changeHandler.mock.calls.length).toBe(2)
     expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '', on: true, revert: false, duration: 60 })
@@ -133,7 +137,8 @@ describe('<EditTimer />', () => {
     const changeHandler = jest.fn()
 
     const wrapper = shallow(
-      <EditTimer values={values}
+      <EditTimer
+        values={values}
         equipment={equipment}
         handleBlur={fn}
         handleChange={changeHandler}
@@ -143,12 +148,13 @@ describe('<EditTimer />', () => {
         errors={{}}
         touched={{}}
         dirty
-        isValid={false} />
+        isValid={false}
+      />
     )
 
-    wrapper.find({component: 'select', name: 'type'}).simulate('change', {target: {name: 'type', value: 'reminder'}})
+    wrapper.find({ component: 'select', name: 'type' }).simulate('change', { target: { name: 'type', value: 'reminder' } })
 
     expect(changeHandler.mock.calls.length).toBe(2)
-    expect(changeHandler.mock.calls[1][0].target.value).toEqual({title: '', message: ''})
+    expect(changeHandler.mock.calls[1][0].target.value).toEqual({ title: '', message: '' })
   })
 })

@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() })
 const FormikWrapper = ({ children }) => (
   <Formik
     initialValues={{
-      mydatepicker: '',
+      mydatepicker: ''
     }}
   >
     <Form>
@@ -20,7 +20,6 @@ const FormikWrapper = ({ children }) => (
 )
 
 describe('<Datepicker />', () => {
-
   it('should render', () => {
     const wrapper = mount(
       <FormikWrapper>
@@ -30,5 +29,4 @@ describe('<Datepicker />', () => {
 
     expect(wrapper).toBeDefined()
   })
-
 })

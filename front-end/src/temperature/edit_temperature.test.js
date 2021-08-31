@@ -10,11 +10,11 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditTemperature />', () => {
-  let values = {chart: {}}
-  let sensors = [{ id: 'sensor' }]
-  let equipment = [{ id: '1', name: 'EQ' }]
-  let macros = [{ id: '1', name: 'Macro' }]
-  let fn = jest.fn()
+  let values = { chart: {} }
+  const sensors = [{ id: 'sensor' }]
+  const equipment = [{ id: '1', name: 'EQ' }]
+  const macros = [{ id: '1', name: 'Macro' }]
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -33,7 +33,7 @@ describe('<EditTemperature />', () => {
       cooler: '',
       alerts: false,
       control: 'macro',
-      chart: { color: '#000'}
+      chart: { color: '#000' }
     }
   })
 
@@ -139,7 +139,6 @@ describe('<EditTemperature />', () => {
   })
 
   it('<EditEquipment /> should disable inputs when controlling nothing', () => {
-
     values.control = 'nothing'
 
     const wrapper = shallow(
@@ -157,13 +156,11 @@ describe('<EditTemperature />', () => {
       />
     )
 
-    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    const upperFunction = wrapper.find({ name: 'heater', className: 'custom-select' })
     expect(upperFunction.prop('disabled')).toBe(true)
   })
 
-
   it('<EditEquipment /> should enable inputs when controlling equipment', () => {
-
     values.control = 'equipment'
 
     const wrapper = shallow(
@@ -181,8 +178,7 @@ describe('<EditTemperature />', () => {
       />
     )
 
-    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
+    const upperFunction = wrapper.find({ name: 'heater', className: 'custom-select' })
     expect(upperFunction.prop('disabled')).toBe(false)
   })
-
 })

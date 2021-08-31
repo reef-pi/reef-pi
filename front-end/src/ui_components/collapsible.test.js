@@ -117,7 +117,7 @@ describe('Collapsible', () => {
         </Collapsible>
       </CollapsibleList>
     )
-    wrapper.setProps({ children: [<Collapsible name='another'><div /></Collapsible>] })
+    wrapper.setProps({ children: [<Collapsible key='0' name='another'><div /></Collapsible>] })
 
     const expanded = wrapper.state('expanded')
     expect(expanded.another).toBe(false)

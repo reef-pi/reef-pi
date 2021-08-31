@@ -8,12 +8,12 @@ import 'isomorphic-fetch'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditDriver />', () => {
-  let values = {}
-  let options = {
+  const values = {}
+  const options = {
     ezo: {},
     pca9685: {}
   }
-  let fn = jest.fn()
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')

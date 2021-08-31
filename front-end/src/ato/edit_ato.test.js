@@ -8,10 +8,10 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditAto />', () => {
-  let values = {}
-  let inlets = [{ id: '1', name: 'inlet 1' }]
-  let equipment = [{ id: '1', name: 'EQ' }]
-  let fn = jest.fn()
+  const values = {}
+  const inlets = [{ id: '1', name: 'inlet 1' }]
+  const equipment = [{ id: '1', name: 'EQ' }]
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')

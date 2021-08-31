@@ -1,9 +1,8 @@
 import { Selector, t } from 'testcafe'
-import { select, clear, setText } from './helpers'
+import { select, setText } from './helpers'
 
 class Ato {
-
-  constructor(){
+  constructor () {
     this.name = Selector('input[name*="name"]')
     this.inlet = Selector('select[name*="inlet"]')
     this.pinSelect = Selector('select[name*="pin"]')
@@ -13,22 +12,22 @@ class Ato {
     this.pump = Selector('select[name*="pump"]')
   }
 
-  async create() {
+  async create () {
     await t.click('a#tab-ato')
     await this.addAto('Biocube29', '1', '90', 'Enabled')
   }
 
-  async edit() {
+  async edit () {
     await t.click('a#tab-ato')
-    .click('button#edit-panel-ato-1')
+      .click('button#edit-panel-ato-1')
 
     await this.editAto(90, 'Enabled', 'Equipment', 'Skimmer')
   }
 
-  async addAto(name, inlet, period, enable) {
+  async addAto (name, inlet, period, enable) {
     await t
-    .click('input#add_new_ato_sensor')
-    .typeText('.add-ato [name*="name"]', name)
+      .click('input#add_new_ato_sensor')
+      .typeText('.add-ato [name*="name"]', name)
 
     await select(this.inlet, inlet)
     await setText(this.period, period)
@@ -37,7 +36,7 @@ class Ato {
     await t.click('input[type*="submit"]')
   }
 
-  async editAto(period, enable, control, pump) {
+  async editAto (period, enable, control, pump) {
     await setText(this.period, period)
     await select(this.enable, enable)
     await select(this.control, control)

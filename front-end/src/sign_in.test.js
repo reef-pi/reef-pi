@@ -13,7 +13,7 @@ describe('SignIn', () => {
       return true
     })
     global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve) => {
+      const p = new Promise((resolve) => {
         resolve({
           ok: true,
           status: 200
@@ -36,7 +36,7 @@ describe('SignIn', () => {
     })
     expect(SignIn.refreshPage.mock.calls.length).toBe(1)
     global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
+      const p = new Promise((resolve, reject) => {
         resolve({
           ok: false,
           status: 500
@@ -52,7 +52,7 @@ describe('SignIn', () => {
     expect(SignIn.refreshPage.mock.calls.length).toBe(1)
 
     global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
+      const p = new Promise((resolve, reject) => {
         resolve({
           ok: false,
           status: 401

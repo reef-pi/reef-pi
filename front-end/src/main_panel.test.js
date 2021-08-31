@@ -37,6 +37,6 @@ describe('MainPanel', () => {
         timers: false
       }
     })}
-    />).dive().instance()
+            />).dive().instance()
   })
 })

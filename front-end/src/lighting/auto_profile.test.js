@@ -31,7 +31,7 @@ describe('Lighting ui - Auto Profile', () => {
       start: '14:00:00',
       end: '20:00:00'
     }
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
     expect(m.find('input.no-spinner').length).toBe(12)
   })
 
@@ -42,8 +42,8 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20.3, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const labels = m.find('div.px-0')
     expect(labels.length).toBe(3)
     expect(labels.at(0).text()).toBe('14:00')
     expect(labels.at(1).text()).toBe('14:30')
@@ -57,7 +57,7 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20.3, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
 
     m.find('.btn-add-point').simulate('click')
     m.find('.btn-add-point').simulate('click')
@@ -78,7 +78,7 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
 
     m.find('.btn-remove-point').at(1).simulate('click')
 
@@ -95,8 +95,8 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30, 40]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const labels = m.find('div.px-0')
     expect(labels.length).toBe(4)
     expect(labels.at(0).text()).toBe('23:00')
     expect(labels.at(1).text()).toBe('00:00')
@@ -111,8 +111,8 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const labels = m.find('div.px-0')
     expect(labels.length).toBe(3)
     expect(labels.at(0).text()).toBe('02:45')
     expect(labels.at(1).text()).toBe('14:30')

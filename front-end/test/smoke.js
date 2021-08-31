@@ -12,14 +12,13 @@ import ph from './ph'
 import ato from './ato'
 import doser from './doser'
 import tc from './tc'
-//TODO: Restore dashboard test while addressing dashboard issues
-//import dashboard from './dashboard'
+// TODO: Restore dashboard test while addressing dashboard issues
+// import dashboard from './dashboard'
 
-fixture `Getting Started`
-    .page `http://localhost:8080/`
+fixture`Getting Started`
+  .page`http://localhost:8080/`
 
 test('Smoke Test', async t => {
-
   await t
     .typeText('#reef-pi-user', 'reef-pi')
     .typeText('#reef-pi-pass', 'reef-pi')
@@ -40,6 +39,6 @@ test('Smoke Test', async t => {
   await doser.create()
   await tc.create()
   await ato.edit()
-  //TODO: Restore dashboard test while addressing dashboard issues
-  //await dashboard.configure()
+  // TODO: Restore dashboard test while addressing dashboard issues
+  // await dashboard.configure()
 })

@@ -37,9 +37,9 @@ describe('Dashboard', () => {
   })
 
   it('<Grid />', () => {
-    var cells = [
+    const cells = [
       [{ id: '1', type: 'light' }, { id: '2', type: 'light' }],
-      [{ id: '1', type:'equipment' }, { id: '2',type: 'ato' }],
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'ato' }]
     ]
     const m = shallow(<Grid rows={2} columns={2} cells={cells} hook={() => {}} />).instance()
     m.setType(0, 0, 'equipment')()

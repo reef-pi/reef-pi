@@ -34,7 +34,7 @@ describe('Telemetry UI', () => {
     m.updateMailer(mailer)
     const fields = ['server', 'password', 'To', 'From']
     fields.forEach(k => {
-      let t = {}
+      const t = {}
       t[k] = ''
       m.updateMailer(t)
     })

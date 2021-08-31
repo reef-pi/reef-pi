@@ -25,21 +25,21 @@ jest.mock('utils/confirm', () => {
 })
 describe('Temperature controller ui', () => {
   const state = {
-    tcs: [{ id: '1', name: 'Water', chart:{} }, { id: '2', name: 'Air', chart:{} } ],
+    tcs: [{ id: '1', name: 'Water', chart: {} }, { id: '2', name: 'Air', chart: {} }],
     tc_usage: { 1: { historical: [{ cooler: 1 }], current: [] } },
     tc_reading: [],
     equipment: [{ id: '1', name: 'bar', on: false }],
-    macros: [{id: '1', name: 'macro'}]
+    macros: [{ id: '1', name: 'macro' }]
   }
 
   it('<Main />', () => {
-    let wrapper = shallow(<Main store={mockStore(state)} />)
+    const wrapper = shallow(<Main store={mockStore(state)} />)
       .dive()
 
-    let m = wrapper.instance()
+    const m = wrapper.instance()
     m.handleToggleAddProbeDiv()
     m.handleCreate({ name: 'test', chart: {} })
-    m.handleUpdate({ id: '1', name: 'test',  chart: {} })
+    m.handleUpdate({ id: '1', name: 'test', chart: {} })
     m.handleCalibrate({ stopPropagation: jest.fn() }, { id: 1 })
     m.handleDelete('1')
   })
@@ -56,14 +56,14 @@ describe('Temperature controller ui', () => {
       .dive()
       .instance()
     let stateCurrent = {
-      tcs: [{ id: '1', min: 72, max: 78, chart: {}}],
+      tcs: [{ id: '1', min: 72, max: 78, chart: {} }],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
       .dive()
       .instance()
     stateCurrent = {
-      tcs: [{ id: '2', min: 72, max: 78, chart:{}}],
+      tcs: [{ id: '2', min: 72, max: 78, chart: {} }],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
@@ -76,7 +76,7 @@ describe('Temperature controller ui', () => {
       <ControlChart
         sensor_id='1'
         store={mockStore({
-          tcs: [{ id: '1', min: 72, max: 78, chart:{} }],
+          tcs: [{ id: '1', min: 72, max: 78, chart: {} }],
           tc_usage: { 1: { historical: [{ cooler: 1 }], current: [] } }
         })}
       />
@@ -170,5 +170,4 @@ describe('Temperature controller ui', () => {
     const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
     expect(wrapper.props().value.values.control).toBe('equipment')
   })
-
 })

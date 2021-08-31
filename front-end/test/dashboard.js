@@ -1,18 +1,17 @@
 import { Selector, t } from 'testcafe'
-import { select, clear, setText } from './helpers'
+import { setText } from './helpers'
 
 class Dashboard {
-
-  constructor(){
+  constructor () {
     this.rows = Selector('input#to-row-row')
     this.columns = Selector('input#to-row-column')
     this.width = Selector('input#to-row-width')
     this.height = Selector('input#to-row-height')
   }
 
-  async configure() {
+  async configure () {
     await t.click('a#tab-dashboard')
-    .click('button#configure-dashboard')
+      .click('button#configure-dashboard')
 
     await setText(this.rows, 3)
     await setText(this.columns, 2)

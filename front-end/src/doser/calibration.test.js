@@ -9,8 +9,8 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('Doser Calibration', () => {
-  let values = { enable: true }
-  let fn = jest.fn()
+  const values = { enable: true }
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showAlert')

@@ -2,8 +2,7 @@ import { Selector, t } from 'testcafe'
 import { select, setText } from './helpers'
 
 class Doser {
-
-  constructor(){
+  constructor () {
     this.name = Selector('.add-doser input[name="name"]')
     this.jackSelect = Selector('.add-doser [name="jack"]')
     this.pinSelect = Selector('.add-doser [name="pin"]')
@@ -15,12 +14,12 @@ class Doser {
     this.submit = Selector('.add-doser input[type*="submit"]')
   }
 
-  async create() {
+  async create () {
     await t.click('a#tab-doser')
     await this.addDoser('Two Part - CaCO3', 'J1', '0', '1,9,17', '1', '1', '15', '50')
   }
 
-  async addDoser(name, jack, pin, hour, minute, second, duration, speed) {
+  async addDoser (name, jack, pin, hour, minute, second, duration, speed) {
     await t
       .click('input#add_doser')
       .typeText(this.name, name)

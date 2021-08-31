@@ -75,7 +75,7 @@ describe('Timer ui', () => {
         equipment_id: '2',
         on: true,
         duration: 60,
-        revert: false,
+        revert: false
       },
       title: '',
       message: ''

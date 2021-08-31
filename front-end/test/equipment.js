@@ -2,15 +2,13 @@ import { Selector, t } from 'testcafe'
 import { select } from './helpers'
 
 class Equipment {
-
-  constructor(){
+  constructor () {
     this.outletSelect = Selector('.add-equipment [name*="outlet"]')
   }
 
-  async create() {
-
+  async create () {
     await t
-    .click('a#tab-equipment')
+      .click('a#tab-equipment')
 
     await this.addEquipment('Return', 'O1')
     await this.addEquipment('Light', 'O2')
@@ -20,15 +18,15 @@ class Equipment {
     await this.addEquipment('ATO Pump', 'O6')
   }
 
-  async addEquipment(name, outlet) {
+  async addEquipment (name, outlet) {
     await t
-    .click('input#add_equipment')
-    .typeText('.add-equipment [name*="name"]', name)
+      .click('input#add_equipment')
+      .typeText('.add-equipment [name*="name"]', name)
 
     await select(this.outletSelect, outlet)
 
     await t
-    .click('.add-equipment button[type*="submit"]')
+      .click('.add-equipment button[type*="submit"]')
   }
 }
 

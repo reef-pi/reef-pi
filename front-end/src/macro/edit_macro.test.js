@@ -9,7 +9,7 @@ import { FieldArray } from 'formik'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditMacro />', () => {
-  let values = {
+  const values = {
     enable: true,
     name: 'test macro',
     steps: [
@@ -25,7 +25,7 @@ describe('<EditMacro />', () => {
     ]
   }
 
-  let fn = jest.fn()
+  const fn = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -46,7 +46,7 @@ describe('<EditMacro />', () => {
         submitForm={fn}
       />
     )
-    let arrayField = wrapper.find(FieldArray).shallow()
+    const arrayField = wrapper.find(FieldArray).shallow()
     expect(arrayField.length).toBe(1)
   })
 

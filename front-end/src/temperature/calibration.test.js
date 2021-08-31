@@ -8,14 +8,13 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('Temperature Calibration', () => {
-  let values = { enable: true }
-  let fn = jest.fn()
-  const probe={
+  const values = { enable: true }
+  const fn = jest.fn()
+  const probe = {
     id: 1,
     name: 'probe'
   }
-  const currentReading = [ 77, 76 ]
-
+  const currentReading = [77, 76]
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -60,7 +59,6 @@ describe('Temperature Calibration', () => {
   })
 
   it('<CalibrationForm /> should submit', () => {
-
     const submitFn = jest.fn()
 
     const wrapper = shallow(
@@ -77,11 +75,9 @@ describe('Temperature Calibration', () => {
 
     wrapper.find('form').simulate('submit', {})
     expect(submitFn).toHaveBeenCalled()
-
   })
 
   it('<CalibrationForm /> should cancel', () => {
-
     const cancelFn = jest.fn()
 
     const wrapper = shallow(
@@ -99,11 +95,9 @@ describe('Temperature Calibration', () => {
     wrapper.find('button[role="abort"]').simulate('click', () => {})
     expect(cancelFn).toHaveBeenCalled()
     wrapper.unmount()
-
   })
 
   it('<CalibrationForm /> should update readings', () => {
-
     const readFn = jest.fn()
     jest.useFakeTimers()
 
@@ -122,7 +116,5 @@ describe('Temperature Calibration', () => {
     jest.runOnlyPendingTimers()
     expect(readFn).toHaveBeenCalled()
     wrapper.unmount()
-
   })
-
 })

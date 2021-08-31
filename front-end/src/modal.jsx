@@ -14,7 +14,7 @@ export default class Modal extends React.Component {
   modal () {
     const style = { display: 'block' }
     return (
-      <div className='modal in' tabIndex='-1' role='dialog' aria-hidden='false' ref='modal' style={style}>
+      <div className='modal in' tabIndex='-1' role='dialog' aria-hidden='false' style={style}>
         <div className='modal-dialog'>
           <div className='modal-content'>
             {this.props.children}

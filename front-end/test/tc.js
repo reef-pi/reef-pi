@@ -2,8 +2,7 @@ import { Selector, t } from 'testcafe'
 import { select, setText } from './helpers'
 
 class Tc {
-
-  constructor(){
+  constructor () {
     this.name = Selector('.add-temperature input[name="name"]')
     this.sensor = Selector('.add-temperature select[name="sensor"]')
     this.period = Selector('.add-temperature input[name="period"]')
@@ -15,7 +14,7 @@ class Tc {
     this.submit = Selector('.add-temperature input[type*="submit"]')
   }
 
-  async create() {
+  async create () {
     const tc = {
       name: 'Biocube29',
       sensor: '28-04177049bcff',
@@ -31,7 +30,7 @@ class Tc {
     await this.addTc(tc)
   }
 
-  async addTc(tc) {
+  async addTc (tc) {
     await t
       .click('input#add_probe')
       .typeText(this.name, tc.name)

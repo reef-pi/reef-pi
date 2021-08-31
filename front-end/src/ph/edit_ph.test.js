@@ -8,17 +8,17 @@ import * as Alert from '../utils/alert'
 Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditPh />', () => {
-  let values = { enable: true, control: 'macro', chart: {color: '#000'} }
-  let probe = { id: 1, chart: {color: '#000'}}
-  let fn = jest.fn()
-  let analogInputs = [{
-    id:'1',
-    name:'AI1',
-    pin:0,
-    driver:'2'
+  const values = { enable: true, control: 'macro', chart: { color: '#000' } }
+  const probe = { id: 1, chart: { color: '#000' } }
+  const fn = jest.fn()
+  const analogInputs = [{
+    id: '1',
+    name: 'AI1',
+    pin: 0,
+    driver: '2'
   }]
-  let equipment = [{id: 1, name: 'equipment'}]
-  let macros = [{id: 1, name: 'macro'}]
+  const equipment = [{ id: 1, name: 'equipment' }]
+  const macros = [{ id: 1, name: 'macro' }]
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -66,7 +66,6 @@ describe('<EditPh />', () => {
   })
 
   it('<EditPh /> should show alert when invalid', () => {
-
     const wrapper = shallow(
       <EditPh
         values={values}
@@ -88,7 +87,6 @@ describe('<EditPh />', () => {
   })
 
   it('<EditPh /> should disable inputs when controlling nothing', () => {
-
     values.control = 'nothing'
 
     const wrapper = shallow(
@@ -108,13 +106,11 @@ describe('<EditPh />', () => {
       />
     )
 
-    const upperFunction = wrapper.find({name: 'upperFunction', className: 'custom-select'})
+    const upperFunction = wrapper.find({ name: 'upperFunction', className: 'custom-select' })
     expect(upperFunction.prop('disabled')).toBe(true)
   })
 
-
   it('<EditPh /> should enable inputs when controlling equipment', () => {
-
     values.control = 'equipment'
 
     const wrapper = shallow(
@@ -134,9 +130,8 @@ describe('<EditPh />', () => {
       />
     )
 
-    const upperFunction = wrapper.find({name: 'upperFunction', className: 'custom-select'})
-    //upperFunction.dive()
+    const upperFunction = wrapper.find({ name: 'upperFunction', className: 'custom-select' })
+    // upperFunction.dive()
     expect(upperFunction.prop('disabled')).toBe(false)
   })
-
 })
