@@ -72,7 +72,7 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 			return err
 		}
 		log.Println("macro-subsystem: executing step: alert")
-		_, err := c.Telemetry().Alert(a.Title, a.Message)
+		_, err := c.Telemetry().Mail(a.Title, a.Message)
 		return err
 	default:
 		return fmt.Errorf("Unknown step type:%s", s.Type)

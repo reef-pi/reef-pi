@@ -2,9 +2,9 @@ import React from 'react'
 import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
-import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
-import { PercentOf } from 'utils/percent_of'
+// import { PercentOf } from 'utils/percent_of'
+import humanizeDuration from 'humanize-duration'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -39,7 +39,7 @@ class chart extends React.Component {
     return (
       <div className='container'>
         <span className='h6'>
-          {this.props.config.name} - {i18next.t('temperature:heater_cooler')}
+          {this.props.config.name}
         </span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={usage}>
@@ -54,7 +54,18 @@ class chart extends React.Component {
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
             <XAxis dataKey='time' />
-            <Tooltip formatter={(value, name) => formatLegend(value, name, unit)} />
+            <Tooltip
+              formatter={(value, name) => {
+                switch (name) {
+                  case 'value':
+                    return [TwoDecimalParse(value), unit]
+                  case 'up':
+                    return humanizeDuration(value * 1000)
+                  case 'down':
+                    return humanizeDuration(value * 1000)
+                }
+              }}
+            />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Line
@@ -72,14 +83,15 @@ class chart extends React.Component {
   }
 }
 
-const formatLegend = (value, name, unit) => {
-  if (name==='value') {
-    return [TwoDecimalParse(value), unit]
-  }
-  else {
-    return [PercentOf(value,3600) + '%', i18next.t('temperature:chart:' + name)]
-  }
-}
+//      <Tooltip formatter={(value, name) => formatLegend(value, name, unit)} />
+//const formatLegend = (value, name, unit) => {
+//  if (name==='value') {
+//    return [TwoDecimalParse(value), unit]
+//  }
+//  else {
+//    return [PercentOf(value,3600) + '%', i18next.t('temperature:chart:' + name)]
+//  }
+//}
 const mapStateToProps = (state, ownProps) => {
   return {
     config: state.tcs.find(el => {

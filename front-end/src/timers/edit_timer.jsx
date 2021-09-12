@@ -126,8 +126,8 @@ const EditTimer = ({
               <option value='ato'>{i18next.t('ato')}</option>
               <option value='camera'>{i18next.t('camera')}</option>
               <option value='doser'>{i18next.t('doser')}</option>
-              <option value='light'>{i18next.t('light')}</option>
-              <option value='ph'>{i18next.t('ph')}</option>
+              <option value='lightings'>{i18next.t('light')}</option>
+              <option value='phprobes'>{i18next.t('ph')}</option>
               <option value='temperature'>{i18next.t('temperature')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />

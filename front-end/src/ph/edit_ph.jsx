@@ -65,7 +65,7 @@ const EditPh = ({
       return (<div />)
     }
     return (
-      <div className='row d-none d-sm-flex'>
+      <div className='row'>
         <div className='col-lg-6'>
           <Chart probe_id={probe.id} width={500} height={300} type='current' />
         </div>

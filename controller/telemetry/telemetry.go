@@ -24,6 +24,7 @@ type ErrorLogger func(string, string) error
 
 type Telemetry interface {
 	Alert(string, string) (bool, error)
+	Mail(string, string) (bool, error)
 	EmitMetric(string, string, float64)
 	CreateFeedIfNotExist(string)
 	DeleteFeedIfExist(string)
@@ -31,6 +32,7 @@ type Telemetry interface {
 	SendTestMessage(http.ResponseWriter, *http.Request)
 	GetConfig(http.ResponseWriter, *http.Request)
 	UpdateConfig(http.ResponseWriter, *http.Request)
+	LogError(string, string) error
 }
 
 type AlertStats struct {
@@ -66,6 +68,7 @@ var DefaultTelemetryConfig = TelemetryConfig{
 }
 
 type telemetry struct {
+	name       string
 	aClient    *adafruitio.Client
 	mClient    *MQTTClient
 	dispatcher Mailer
@@ -78,12 +81,12 @@ type telemetry struct {
 	pMs        map[string]prometheus.Gauge
 }
 
-func Initialize(b string, store storage.Store, logError ErrorLogger, prom bool) Telemetry {
+func Initialize(name, bucket string, store storage.Store, logError ErrorLogger, prom bool) Telemetry {
 	var c TelemetryConfig
-	if err := store.Get(b, DBKey, &c); err != nil {
+	if err := store.Get(bucket, DBKey, &c); err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
 		c = DefaultTelemetryConfig
-		store.Update(b, DBKey, c)
+		store.Update(bucket, DBKey, c)
 	}
 	c.Prometheus = prom
 	// for upgrades, this value will be 0. Remove in 3.0
@@ -93,23 +96,24 @@ func Initialize(b string, store storage.Store, logError ErrorLogger, prom bool) 
 	if c.CurrentLimit < 1 {
 		c.CurrentLimit = CurrentLimit
 	}
-	return NewTelemetry(b, store, c, logError)
+	return NewTelemetry(name, bucket, store, c, logError)
 }
 
-func NewTelemetry(b string, store storage.Store, config TelemetryConfig, lr ErrorLogger) *telemetry {
+func NewTelemetry(name, bucket string, store storage.Store, config TelemetryConfig, lr ErrorLogger) *telemetry {
 	var mailer Mailer
 	mailer = &NoopMailer{}
 	if config.Notify {
 		mailer = config.Mailer.Mailer()
 	}
 	t := &telemetry{
+		name:       name,
 		config:     config,
 		dispatcher: mailer,
 		aStats:     make(map[string]AlertStats),
 		mu:         &sync.Mutex{},
 		logError:   lr,
 		store:      store,
-		bucket:     b,
+		bucket:     bucket,
 		pMs:        make(map[string]prometheus.Gauge),
 	}
 	if config.AdafruitIO.Enable {
@@ -158,7 +162,16 @@ func (t *telemetry) updateAlertStats(subject string) AlertStats {
 	return stat
 }
 
+func (t *telemetry) LogError(a, b string) error {
+	return t.logError(a, b)
+}
+
 func (t *telemetry) Alert(subject, body string) (bool, error) {
+	prefix := "[" + t.name + ":Alert]"
+	return t.Mail(prefix+subject, body)
+}
+
+func (t *telemetry) Mail(subject, body string) (bool, error) {
 	stat := t.updateAlertStats(subject)
 	if (t.config.Throttle > 0) && (stat.Count > t.config.Throttle) {
 		log.Println("WARNING: Alert is above throttle limits. Skipping. Subject:", subject)

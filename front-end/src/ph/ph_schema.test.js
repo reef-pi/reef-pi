@@ -1,5 +1,4 @@
 import PhSchema from './ph_schema'
-import { powerSaveBlocker } from 'electron'
 
 describe('PhValidation', () => {
   let probe = {}
