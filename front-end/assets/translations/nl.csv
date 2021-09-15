@@ -69,6 +69,7 @@ update,Update
 upgrade_reef_pi,
 width,
 yes,
+ato:alert,
 ato:alert_after,Alarm Na
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
@@ -130,14 +131,12 @@ configuration:authentication:error_user,Geef een gebruikersnaam in
 configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
 configuration:settings:capabilities,Opties
-configuration:settings:capabilities_required,
 configuration:settings:cors,cors inschakelen
 configuration:settings:display,Display
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:name,Naam
-configuration:settings:name_required,
 configuration:settings:network_address_required,Netwerkadres is nodig
 configuration:settings:network_interface_required,Netwerkinterface is nodig
 configuration:settings:notification,Notificatie

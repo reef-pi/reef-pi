@@ -69,6 +69,7 @@ update,Atualizar
 upgrade_reef_pi,
 width,
 yes,
+ato:alert,
 ato:alert_after,Alertar após
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
@@ -130,14 +131,12 @@ configuration:authentication:error_user,Tens que inserir um nome de utilizador
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
 configuration:settings:capabilities,Capacidades
-configuration:settings:capabilities_required,
 configuration:settings:cors,Activar cors
 configuration:settings:display,Ecrã
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Maximo de CPU
 configuration:settings:max_memory,Maximo de Memoria
 configuration:settings:name,Nome
-configuration:settings:name_required,
 configuration:settings:network_address_required,Endereço de rede é obrigatório
 configuration:settings:network_interface_required,Nome do interface de rede é obrigatório
 configuration:settings:notification,Notificação

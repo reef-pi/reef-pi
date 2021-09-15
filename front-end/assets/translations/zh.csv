@@ -69,6 +69,7 @@ update,更新
 upgrade_reef_pi,
 width,
 yes,
+ato:alert,
 ato:alert_after,告警发生于
 ato:ato_usage,补水器使用情况
 ato:chk_freq,检查频率
@@ -130,14 +131,12 @@ configuration:authentication:error_user,你必须提供一个用户名
 configuration:settings:address,日志
 configuration:settings:alert_health_check,健康检查警告
 configuration:settings:capabilities,功能
-configuration:settings:capabilities_required,
 configuration:settings:cors,
 configuration:settings:display,显示
 configuration:settings:interface,接口
 configuration:settings:max_cpu,最大CPU
 configuration:settings:max_memory,最大内存
 configuration:settings:name,名字
-configuration:settings:name_required,
 configuration:settings:network_address_required,必须填写网络地址
 configuration:settings:network_interface_required,必须填写网络接口
 configuration:settings:notification,通知

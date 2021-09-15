@@ -69,6 +69,7 @@ update,Übernehmen
 upgrade_reef_pi,Aktualisiere reef-pi auf Version
 width,Breite
 yes,Ja
+ato:alert,Alarm
 ato:alert_after,Alarm nach Laufzeit von
 ato:ato_usage,ATO Nutzung
 ato:chk_freq,Prüfintervall
@@ -130,14 +131,12 @@ configuration:authentication:error_user,falscher Benutzername
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:capabilities,Funktionen
-configuration:settings:capabilities_required,Eine Auswahl ist erforderlich!
 configuration:settings:cors,cors
 configuration:settings:display,Display
 configuration:settings:interface,Netzwerkinterface
 configuration:settings:max_cpu,CPU Nutzung % größer
 configuration:settings:max_memory,Speicherbelegung MB größer
 configuration:settings:name,Netzwerkname
-configuration:settings:name_required,Ein Name ist erforderlich!
 configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
 configuration:settings:network_interface_required,Eine Netzwerk-Schnittstelle wird benötigt!
 configuration:settings:notification,Email-Benachrichtigung

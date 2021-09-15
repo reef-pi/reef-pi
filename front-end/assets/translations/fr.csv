@@ -69,6 +69,7 @@ update,Mettre à jour
 upgrade_reef_pi,
 width,
 yes,
+ato:alert,
 ato:alert_after,
 ato:ato_usage,
 ato:chk_freq,
@@ -130,14 +131,12 @@ configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
 configuration:settings:address,Adresse
 configuration:settings:alert_health_check,Alerte de santé du système
 configuration:settings:capabilities,Capacités
-configuration:settings:capabilities_required,
 configuration:settings:cors,
 configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
 configuration:settings:max_memory,Mémoire maximum
 configuration:settings:name,Nom
-configuration:settings:name_required,
 configuration:settings:network_address_required,Adresse réseau requise
 configuration:settings:network_interface_required,Interface réseau requise
 configuration:settings:notification,Notification
