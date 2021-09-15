@@ -49,7 +49,7 @@
     "react-i18next": "11.11.2",
     "react-icons": "4.2.0",
     "react-images": "1.1.7",
-    "react-redux": "^5.1.2",
+    "react-redux": "^7.2.5",
     "react-test-renderer": "16.12.0",
     "react-toggle-switch": "3.0.4",
     "recharts": "^2.0.10",
