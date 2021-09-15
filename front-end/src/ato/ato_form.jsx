@@ -16,15 +16,15 @@ const AtoForm = withFormik({
     const values = {
       id: data.id || '',
       name: data.name || '',
-      enable: (data.enable === undefined ? true : data.enable),
-      control: 'nothing',
       inlet: data.inlet || '',
+      enable: (data.enable === undefined ? true : data.enable),
+      period: data.period || 120,
       one_shot: data.one_shot || false,
       disable_on_alert: data.disable_on_alert || false,
-      period: data.period || 120,
+      control: 'nothing',
       pump: data.pump || '',
       notify: (data.notify && data.notify.enable) || false,
-      maxAlert: (data.notify && data.notify.max) || 0
+      maxAlert: (data.notify && data.notify.max) || 10
     }
     if (data.control === true) {
       if (data.is_macro === true) { values.control = 'macro' } else { values.control = 'equipment' }

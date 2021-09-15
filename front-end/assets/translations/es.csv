@@ -1,9 +1,10 @@
 Key,Translation
 action,Acción
 add,Agregar
-alerts,Alertas
+alerts,
 analog_input,Entrada Análoga
 analog_inputs,Entradas Análoga
+apply,
 are_you_sure,¿Esta Seguro?
 ato,ATO
 cancel,Cancelar
@@ -73,18 +74,13 @@ ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
 ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
 ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
-ato:chk_freq_required,Frecuencia de Revisión es requerida
 ato:control,Control
 ato:control_target,Objetivo
 ato:controlequipment,Equipo
 ato:controlmacro,Macro
 ato:controlnothing,Nada
 ato:disable_on_alert,Desactivar si ocurre la alerta
-ato:inlet_required,Seleccion una entrada
-ato:name_required,Escribe un Nombre
-ato:status_required,Selecciona un estado de ATO
-ato:threshold_required,Se requiere un límite cuando la notificación está habilitada
-ato:threshold_value,El límite debe ser un numero
+ato:title_delete,
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
 ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,Esta acción eliminará
@@ -134,14 +130,14 @@ configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
 configuration:settings:capabilities,Funciones
-configuration:settings:capabilities_required,Al menos una Funcion es requerida
+configuration:settings:capabilities_required,
 configuration:settings:cors,Activar cors
 configuration:settings:display,Pantalla
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
 configuration:settings:max_memory,Memoria Maxima
 configuration:settings:name,Nombre
-configuration:settings:name_required,El nombre es requerido
+configuration:settings:name_required,
 configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_interface_required,La interfaz de red es requerida
 configuration:settings:notification,Notificacion
@@ -209,7 +205,7 @@ macro:turn_on,Encender
 macro:wait:duration,
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
-ph:analog_input_required,Entrada Analogica es requerida
+ph:analog_input_required,
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
@@ -219,36 +215,36 @@ ph:chart_ymax,
 ph:chart_ymin,
 ph:check_frequency,Revisar Frecuencia
 ph:control,Control
-ph:control_required,Control requerido
+ph:control_required,
 ph:controlequipment,Equipo
 ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Lectura Actual
 ph:hysteresis,
 ph:lower_function,Inferior Función
-ph:lower_function_required,Función requerido
+ph:lower_function_required,
 ph:lower_threshold,Límite Inferior
 ph:lower_threshold_less_than,Límite Inferior debe ser menos que Límite Superior
-ph:lower_threshold_required,Límite Inferior requerido
-ph:lower_threshold_type,Límite Inferior debe ser un nùmero
+ph:lower_threshold_required,
+ph:lower_threshold_type,
 ph:midpoint,Punto Medio
-ph:name_required,Nombre requerido
+ph:name_required,
 ph:period_min,Revsión de Frecuencia debe ser mayor o igual a 1 segundo
-ph:period_required,Revsión de Frecuencia requerido
-ph:period_type,Revsión de Frecuencia debe ser un nùmero
+ph:period_required,
+ph:period_type,
 ph:run_calibration,Correr
 ph:second_point,Segundo Punto
-ph:status_required,Estatus requerido
+ph:status_required,
 ph:threshold_greater_than,Alerta Superior debe ser mayor a Alerta Inferior
 ph:threshold_less_than,Alerta Inferior debe ser menor a Alerta Superior
-ph:threshold_required,Límites son requeridos cuando las alertas estan activadas
-ph:threshold_type,Límite debe ser un nùmero
+ph:threshold_required,
+ph:threshold_type,
 ph:upper_function,Superior Función
-ph:upper_function_required,Superior Función requerido
+ph:upper_function_required,
 ph:upper_threshold,Límite Superior
 ph:upper_threshold_greater_than,Límite Superior debe ser mayor Límite Inferior
-ph:upper_threshold_required,Límite Superior requerido
-ph:upper_threshold_type,Límite Superior debe ser un nùmero
+ph:upper_threshold_required,
+ph:upper_threshold_type,
 ph:validation_error,Los ajustes de Ph no puede ser guardada por errores de validación. Corija los errores y intente de nuevo.
 ph:warn_delete,Esta acción sera eliminada
 signin:invalidcredentials,Usuario o Contraseña Incorrectos
@@ -269,7 +265,7 @@ telemetry:notification:username,Usuario
 temperature:alert_above,Alerta Sobre
 temperature:alert_below,Alerta Bajo
 temperature:calibrate,Calibración
-temperature:calibration:apply,Aplicar
+temperature:calibration:apply,
 temperature:calibration:set_temperature,Configurar Temperatura
 temperature:celsius,Celsius
 temperature:chart:current,Temperatura(ultima)
@@ -300,7 +296,7 @@ temperature:validation_error,Los ajustes no se pueden guardar debido a errores d
 temperature:warn_delete,Esta accion ser à eliminada
 timers:after,Despues
 timers:and_then,Luego
-timers:day_required,Coloca un dia
+timers:day_required,
 timers:duration_required,Duracion es requerido
 timers:equipment,Equipo
 timers:equipment:off,Apagado
@@ -309,17 +305,17 @@ timers:equipment:revert,Revertir
 timers:equipment_action,Acción
 timers:equipment_required,Selecciona un Equipo
 timers:function,Funcion
-timers:hour_required,Coloca una hora
+timers:hour_required,
 timers:macro,Nombre del Macro
 timers:macros,Macros
 timers:message,Mensaje
 timers:message_required,Escribe un Mensaje
-timers:minute_required,Coloca los minutos
+timers:minute_required,
 timers:name_required,Coloca un Nombre
 timers:on_required,Encendido es requerido
 timers:reminder,Recordatorio
 timers:sec,seg
-timers:second_required,Coloca los segundos
+timers:second_required,
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
@@ -331,3 +327,13 @@ timers:turn_off,Apagar
 timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
 timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
+validation:cron_nojoker_required,
+validation:cron_required,
+validation:entry_required,
+validation:integer_max_required,
+validation:integer_min_required,
+validation:last_full_moon_required,
+validation:name_required,
+validation:number_required,
+validation:selection_required,
+validation:time_required,

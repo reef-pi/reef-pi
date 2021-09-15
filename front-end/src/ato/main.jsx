@@ -1,14 +1,14 @@
 import React from 'react'
-import New from './new'
 import AtoForm from './ato_form'
-import CollapsibleList from '../ui_components/collapsible_list'
+import New from './new'
 import Collapsible from '../ui_components/collapsible'
-import { fetchATOs, deleteATO, updateATO } from 'redux/actions/ato'
+import CollapsibleList from '../ui_components/collapsible_list'
 import { connect } from 'react-redux'
+import { fetchATOs, deleteATO, updateATO } from 'redux/actions/ato'
 import { fetchEquipment } from 'redux/actions/equipment'
 import { fetchInlets } from 'redux/actions/inlets'
-import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
+import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 
 class main extends React.Component {
@@ -51,12 +51,12 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_delete')} {probe.name}.
+          {i18n.t('ato:warn_delete').replace('${name}', probe.name)}
         </p>
       </div>
     )
 
-    confirm('Delete ' + probe.name, { description: message }).then(
+    confirm(i18n.t('ato:title_delete').replace('${name}', probe.name), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)

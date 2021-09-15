@@ -4,6 +4,7 @@ add,add
 alerts,Alerts
 analog_input,Analog Input
 analog_inputs,Analog Inputs
+apply, Apply
 are_you_sure,Are you sure?
 ato,ATO
 cancel,Cancel
@@ -73,21 +74,16 @@ ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
 ato:chk_freq_number,Check Frequency must be a number
 ato:chk_freq_number_value,Check Frequency must be 1 second or greater
-ato:chk_freq_required,Check Frequency is required
 ato:control,Control
 ato:control_target,Target
 ato:controlequipment,Equipment
 ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
-ato:inlet_required,Inlet is required
-ato:name_required,Name is required
-ato:status_required,ATO Status is required
-ato:threshold_required,Threshold is required when notification is enabled
-ato:threshold_value,Threshold must be a number
+ato:title_delete,Delete ${name} ?
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ato:warn_delete,This action will delete
+ato:warn_delete,Do you really want to delete ${name}?
 camera:capture_flags,Capture flags
 camera:enable,Enable
 camera:take_photo,Take Photo!
@@ -331,3 +327,13 @@ timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
+validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
+validation:entry_required,This may not be empty
+validation:integer_max_required,An integer number <= ${max} is required!
+validation:integer_min_required,An integer number >= ${min} is required!
+validation:last_full_moon_required,The date of last full moon is required!
+validation:name_required,Name is required
+validation:number_required,A number is required
+validation:selection_required,Select one entry
+validation:time_required,Enter a time as HH:mm:ss

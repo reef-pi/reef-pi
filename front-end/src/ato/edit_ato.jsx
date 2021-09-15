@@ -5,8 +5,8 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
-import i18next from 'i18next'
 import ATOChart from './chart'
+import i18next from 'i18next'
 
 const EditAto = ({
   values,
@@ -20,19 +20,26 @@ const EditAto = ({
   dirty,
   readOnly
 }) => {
-  const charts = () => {
-    if (!values.enable) {
-      return
+  const handleSubmit = event => {
+    event.preventDefault()
+    if (dirty === false || isValid === true) {
+      submitForm()
+    } else {
+      submitForm() // Calling submit form in order to show validation errors
+      showError(i18next.t('ato:validation_error'))
     }
-    if (values.id === '') { // new ATO
-      return
-    }
-    return (
-      <div className='row'>
-        <ATOChart ato_id={values.id} width={500} height={300} ato_name={values.name} />
-      </div>
-    )
   }
+
+  const inletOptions = () => {
+    return inlets.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
   const controlOptions = () => {
     let opts = []
 
@@ -46,26 +53,19 @@ const EditAto = ({
       )
     })
   }
-  const handleSubmit = event => {
-    event.preventDefault()
-    if (dirty === false || isValid === true) {
-      submitForm()
-    } else {
-      submitForm() // Calling submit form in order to show validation errors
-      showError(
-        i18next.t('ato:validation_error')
-      )
-    }
-  }
 
-  const inletOptions = () => {
-    return inlets.map(item => {
-      return (
-        <option key={item.id} value={item.id}>
-          {item.name}
-        </option>
-      )
-    })
+  const charts = () => {
+    if (!values.enable) {
+      return
+    }
+    if (values.id === '') { // new ATO
+      return
+    }
+    return (
+      <div className='row'>
+        <ATOChart ato_id={values.id} width={500} height={300} ato_name={values.name} />
+      </div>
+    )
   }
 
   return (
@@ -147,7 +147,26 @@ const EditAto = ({
             <ErrorFor errors={errors} touched={touched} name='enable' />
           </div>
         </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
+            <Field
+              name='one_shot'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('one_shot', touched, errors)
+              })}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='one_shot' />
+          </div>
+        </div>
       </div>
+
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
@@ -179,8 +198,8 @@ const EditAto = ({
                 'is-invalid': ShowError('pump', touched, errors)
               })}
             >
-              <option key='' value=''>
-                {i18next.t('none')}
+              <option value='' className='d-none'>
+                -- {i18next.t('select')} --
               </option>
               {controlOptions()}
             </Field>
@@ -192,7 +211,7 @@ const EditAto = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='notify'>{i18next.t('alerts')}</label>
+            <label htmlFor='notify'>{i18next.t('ato:alert')}</label>
             <Field
               name='notify'
               component={BooleanSelect}
@@ -222,24 +241,6 @@ const EditAto = ({
               <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
-            <Field
-              name='one_shot'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('one_shot', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='one_shot' />
           </div>
         </div>
 

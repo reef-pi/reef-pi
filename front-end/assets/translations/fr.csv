@@ -4,6 +4,7 @@ add,Ajouter
 alerts,
 analog_input,
 analog_inputs,
+apply,
 are_you_sure,Êtes-vous sur?
 ato,
 cancel,
@@ -73,18 +74,13 @@ ato:ato_usage,
 ato:chk_freq,
 ato:chk_freq_number,
 ato:chk_freq_number_value,
-ato:chk_freq_required,
 ato:control,
 ato:control_target,
 ato:controlequipment,
 ato:controlmacro,
 ato:controlnothing,
 ato:disable_on_alert,
-ato:inlet_required,
-ato:name_required,
-ato:status_required,
-ato:threshold_required,
-ato:threshold_value,
+ato:title_delete,
 ato:total_seconds_pump_on,
 ato:validation_error,
 ato:warn_delete,
@@ -134,14 +130,14 @@ configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
 configuration:settings:address,Adresse
 configuration:settings:alert_health_check,Alerte de santé du système
 configuration:settings:capabilities,Capacités
-configuration:settings:capabilities_required,Capacité requise
+configuration:settings:capabilities_required,
 configuration:settings:cors,
 configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
 configuration:settings:max_memory,Mémoire maximum
 configuration:settings:name,Nom
-configuration:settings:name_required,Nom requis
+configuration:settings:name_required,
 configuration:settings:network_address_required,Adresse réseau requise
 configuration:settings:network_interface_required,Interface réseau requise
 configuration:settings:notification,Notification
@@ -331,3 +327,13 @@ timers:turn_off,
 timers:turn_on,
 timers:type_required,
 timers:validation_error,
+validation:cron_nojoker_required,
+validation:cron_required,
+validation:entry_required,
+validation:integer_max_required,
+validation:integer_min_required,
+validation:last_full_moon_required,
+validation:name_required,
+validation:number_required,
+validation:selection_required,
+validation:time_required,
