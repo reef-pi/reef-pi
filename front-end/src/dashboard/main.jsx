@@ -130,7 +130,7 @@ class dashboard extends React.Component {
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
-                  <HealthChart width={config.width} height={config.height} trend={ch.id} />
+                  <HealthChart width={config.width} height={config.height} trend={i18n.t('health_chart:' + ch.id)} />
                 </ErrorBoundary>
               </div>
             )

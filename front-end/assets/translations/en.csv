@@ -172,6 +172,8 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
+health_chart:current,current
+health_chart:historical,historical
 journal:description,Description
 journal:unit,Unit
 journal:warn_delete,This action will delete

@@ -172,6 +172,8 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
 health_chart:cpu_memory,CPU/Memory
+health_chart:current,
+health_chart:historical,
 journal:description,
 journal:unit,Unidades
 journal:warn_delete,

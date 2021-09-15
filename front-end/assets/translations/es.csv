@@ -172,6 +172,8 @@ fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
 fatal_error:troubleshoot,Solucionar Problemas
 health_chart:cpu_memory,Procesador/Memoria
+health_chart:current,
+health_chart:historical,
 journal:description,
 journal:unit,Unidad
 journal:warn_delete,

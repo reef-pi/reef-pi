@@ -172,6 +172,8 @@ fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
 fatal_error:troubleshoot,Fehlersuche
 health_chart:cpu_memory,CPU / Speicher
+health_chart:current,aktuell
+health_chart:historical,Verlauf
 journal:description,Beschreibung
 journal:unit,Einheit
 journal:warn_delete,Wirklich löschen:

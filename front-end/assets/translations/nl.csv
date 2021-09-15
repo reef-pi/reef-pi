@@ -172,6 +172,8 @@ fatal_error:fatal_error,Fatale Fout
 fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na."
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
+health_chart:current,
+health_chart:historical,
 journal:description,
 journal:unit,Eenheid
 journal:warn_delete,
