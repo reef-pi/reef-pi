@@ -11,6 +11,12 @@ jobs:
       - uses: actions/setup-node@v2.4.0
         with:
           node-version: '16'
+      - uses: actions/cache@v2.1.6
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
       - run: make install
       - run: make go
       - run: make ui
