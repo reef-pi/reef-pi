@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.17'
-      - uses: codecov/codecov-action@v2.0.3
+      - uses: codecov/codecov-action@v2.1.0
       - run: make go-get
       - run: make vet
       - run: make imports
