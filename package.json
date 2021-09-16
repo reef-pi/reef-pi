@@ -50,7 +50,7 @@
     "react-icons": "4.2.0",
     "react-images": "1.1.7",
     "react-redux": "^5.1.2",
-    "react-test-renderer": "16.12.0",
+    "react-test-renderer": "16.14.0",
     "react-toggle-switch": "3.0.4",
     "recharts": "^2.0.10",
     "redoc-cli": "^0.10.3",
