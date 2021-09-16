@@ -5,7 +5,7 @@
   "description": "A Raspberry Pi based reeftank automation system",
   "dependencies": {
     "@babel/core": "7.14.8",
-    "@babel/plugin-transform-modules-commonjs": "7.15.0",
+    "@babel/plugin-transform-modules-commonjs": "7.15.4",
     "@babel/plugin-transform-runtime": "^7.13.15",
     "@babel/preset-env": "7.15.4",
     "@babel/preset-react": "7.12.7",
