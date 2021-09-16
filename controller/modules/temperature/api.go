@@ -12,9 +12,7 @@ import (
 
 var (
 	mockSensors = []string{
-		"/sys/bus/w1/devices/28-04177049bcff",
-		"/sys/bus/w1/devices/28-2392abcabcabc",
-		"/sys/bus/w1/devices/28-f0a0a0abbd4f",
+		"/sys/bus/w1/devices/28-devmodeenable",
 	}
 )
 
