@@ -18,7 +18,7 @@ class Tc {
   async create() {
     const tc = {
       name: 'Biocube29',
-      sensor: '28-04177049bcff',
+      sensor: '28-devmodeenable',
       period: 120,
       control: 'Equipment',
       heater: 'Heater',
