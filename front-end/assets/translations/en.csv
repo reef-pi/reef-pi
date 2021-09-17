@@ -165,6 +165,7 @@ doser:speed,Speed
 doser:title_delete,Delete ${name} ?
 doser:warn_delete,Do you really want to delete doser ${name}?
 driver:title_delete,Remove driver ${name}?
+driver:type,Type
 driver:warn_delete,This action will remove driver ${name}.
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)

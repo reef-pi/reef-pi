@@ -165,6 +165,7 @@ doser:speed,
 doser:title_delete,
 doser:warn_delete,
 driver:title_delete,
+driver:type,
 driver:warn_delete,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)

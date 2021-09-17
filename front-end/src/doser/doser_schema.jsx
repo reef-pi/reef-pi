@@ -21,22 +21,22 @@ const DoserSchema = Yup.object().shape({
     .max(100, i18n.t('validation:integer_max_required')),
   month: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    .matches(/^(\*|(\d+(\-\d+)?))$/, i18n.t('validation:cron_required')),
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   week: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    .matches(/^(\*|(\d+(\-\d+)?))$/, i18n.t('validation:cron_required')),
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   day: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    .matches(/^(\*|(\d+(\-\d+)?))$/, i18n.t('validation:cron_required')),
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   hour: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    .matches(/^(\*|(\d+(\-\d+)?))$/, i18n.t('validation:cron_required')),
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   minute: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    .matches(/^(\*|(\d+(\-\d+)?))$/, i18n.t('validation:cron_required')),
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   second: Yup.string()
     .required(i18n.t('validation:cron_nojoker_required'))
-    .matches(/^(\d+(\-\d+)?)$/, i18n.t('validation:cron_nojoker_required'))
+    .matches(/^(\d+(-\d+)?)$/, i18n.t('validation:cron_nojoker_required'))
 })
 
 export default DoserSchema

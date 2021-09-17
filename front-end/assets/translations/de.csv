@@ -165,6 +165,7 @@ doser:speed,Geschwindigkeit
 doser:title_delete,${name} löschen?
 doser:warn_delete,Wollen Sie die Dosierpumpe ${name} wirklich löschen?
 driver:title_delete,${name} entfernen?
+driver:type,Typ
 driver:warn_delete,Wollen Sie den Treiber ${name} wirklich entfernen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)

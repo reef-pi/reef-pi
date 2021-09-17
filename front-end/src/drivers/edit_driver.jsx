@@ -4,6 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
+import i18n from 'utils/i18n'
 
 const EditDriver = ({
   values,
@@ -23,7 +24,7 @@ const EditDriver = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(i18next.t('validation:error'))
+      showError(i18n.t('validation:error'))
     }
   }
 
@@ -84,7 +85,7 @@ const EditDriver = ({
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>Name</label>
+            <label htmlFor='name'>{i18n.t('name')}</label>
             <Field
               name='name'
               disabled={readOnly}
@@ -99,7 +100,7 @@ const EditDriver = ({
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='inlet'>Type</label>
+            <label htmlFor='inlet'>{i18n.t('driver:type')}</label>
             <Field
               name='type'
               component='select'
@@ -110,7 +111,7 @@ const EditDriver = ({
               })}
             >
               <option value='' className='d-none'>
-                -- Select --
+                -- {i18n.t('select')} --
               </option>
               {typeOptions()}
             </Field>
@@ -123,7 +124,7 @@ const EditDriver = ({
         <div className='col-12'>
           <input
             type='submit'
-            value='Save'
+            value={i18n.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />
