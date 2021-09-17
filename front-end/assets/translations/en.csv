@@ -73,8 +73,6 @@ ato:alert,Alert
 ato:alert_after,Alert After
 ato:ato_usage,ATO Usage
 ato:chk_freq,Check Frequency
-ato:chk_freq_number,Check Frequency must be a number
-ato:chk_freq_number_value,Check Frequency must be 1 second or greater
 ato:control,Control
 ato:control_target,Target
 ato:controlequipment,Equipment
@@ -83,7 +81,6 @@ ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
 ato:title_delete,Delete ${name} ?
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
-ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ato:warn_delete,Do you really want to delete ${name}?
 camera:capture_flags,Capture flags
 camera:enable,Enable
@@ -165,6 +162,8 @@ doser:calibration:run,Run
 doser:doser_usage,Pump Usage
 doser:duration,Duration
 doser:speed,Speed
+doser:title_delete,Delete ${name} ?
+doser:warn_delete,Do you really want to delete ${name}?
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 fatal_error:connection_lost,Connection Lost
@@ -246,7 +245,6 @@ ph:upper_threshold,Upper Threshold
 ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Threshold
 ph:upper_threshold_required,Upper Threshold is required
 ph:upper_threshold_type,Upper Threshold must be a number
-ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ph:warn_delete,This action will delete
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password
@@ -293,7 +291,6 @@ temperature:temperature,Temperature
 temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
-temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
 temperature:warn_delete, This action will delete
 timers:after,After
 timers:and_then,And Then
@@ -327,10 +324,10 @@ timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:type_required,Type is required
-timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
 validation:entry_required,This may not be empty
+validation:error,The settings cannot be saved due to validation errors.  Please correct the errors and try again.
 validation:integer_max_required,An integer number <= ${max} is required!
 validation:integer_min_required,An integer number >= ${min} is required!
 validation:last_full_moon_required,The date of last full moon is required!

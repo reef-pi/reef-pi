@@ -73,8 +73,6 @@ ato:alert,
 ato:alert_after,Alertar após
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
-ato:chk_freq_number,Verificar a frequência tem que ser um número
-ato:chk_freq_number_value,Verificar a frequência must be 1 second or greater
 ato:control,
 ato:control_target,
 ato:controlequipment,
@@ -83,7 +81,6 @@ ato:controlnothing,
 ato:disable_on_alert,Desativar alerta
 ato:title_delete,
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
-ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
 ato:warn_delete,
 camera:capture_flags,
 camera:enable,
@@ -165,6 +162,8 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
+doser:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Ligação Perdida
@@ -246,7 +245,6 @@ ph:upper_threshold,
 ph:upper_threshold_greater_than,
 ph:upper_threshold_required,
 ph:upper_threshold_type,
-ph:validation_error,"Ph Erro nas configurações, por favor corrija e tente novamente"
 ph:warn_delete,Esta acção vai ser removida
 signin:invalidcredentials,Credenciais invalidas
 signin:password,Password
@@ -293,7 +291,6 @@ temperature:temperature,Temperatura
 temperature:unit,Unidades
 temperature:upper_function,
 temperature:upper_threshold,
-temperature:validation_error,"A Temperatura Erro nas configurações, por favor corrija e tente novamente"
 temperature:warn_delete,
 timers:after,após
 timers:and_then,e depois
@@ -327,10 +324,10 @@ timers:turn_back_on,Voltar a Ligar
 timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
 timers:type_required,Tipo é Obrigatório
-timers:validation_error,"Erro nas configurações de timmer, por favor corrija e tente novamente"
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
+validation:error,
 validation:integer_max_required,
 validation:integer_min_required,
 validation:last_full_moon_required,

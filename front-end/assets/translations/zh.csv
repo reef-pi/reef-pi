@@ -73,8 +73,6 @@ ato:alert,
 ato:alert_after,告警发生于
 ato:ato_usage,补水器使用情况
 ato:chk_freq,检查频率
-ato:chk_freq_number,检查频率必须是个数字
-ato:chk_freq_number_value,检查频率必须大于或等于1
 ato:control,
 ato:control_target,
 ato:controlequipment,
@@ -83,7 +81,6 @@ ato:controlnothing,
 ato:disable_on_alert,禁用发生于告警
 ato:title_delete,
 ato:total_seconds_pump_on,补水泵开启秒数
-ato:validation_error,补水器设置因为验证错误而无法存储。请纠正错误后重试。
 ato:warn_delete,
 camera:capture_flags,
 camera:enable,
@@ -165,6 +162,8 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
+doser:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,连接丢失
@@ -246,7 +245,6 @@ ph:upper_threshold,上阈值
 ph:upper_threshold_greater_than,上阈值必须大于下阈值
 ph:upper_threshold_required,
 ph:upper_threshold_type,
-ph:validation_error,PH值设置因为验证错误而无法存储，请纠正错误后重试。
 ph:warn_delete,这个动作将会被删除
 signin:invalidcredentials,认证无效
 signin:password,密码
@@ -293,7 +291,6 @@ temperature:temperature,温度
 temperature:unit,单位
 temperature:upper_function,上层功能
 temperature:upper_threshold,上阈值
-temperature:validation_error,温度设置因为验证错误而无法存储，请纠正错误后重试。
 temperature:warn_delete,这个动作将要删除
 timers:after,后于
 timers:and_then,然后
@@ -327,10 +324,10 @@ timers:turn_back_on,重新开启
 timers:turn_off,关闭
 timers:turn_on,开启
 timers:type_required,必须填写类型
-timers:validation_error,计时器设置因为验证错误而无法存储。请纠正错误后重试。
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
+validation:error,
 validation:integer_max_required,
 validation:integer_min_required,
 validation:last_full_moon_required,

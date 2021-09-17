@@ -73,8 +73,6 @@ ato:alert,
 ato:alert_after,Alerta despues de
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
-ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
-ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
 ato:control,Control
 ato:control_target,Objetivo
 ato:controlequipment,Equipo
@@ -83,7 +81,6 @@ ato:controlnothing,Nada
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:title_delete,
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
-ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,Esta acción eliminará
 camera:capture_flags,
 camera:enable,
@@ -165,6 +162,8 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
+doser:warn_delete,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
 fatal_error:connection_lost,Conexion Perdida
@@ -246,7 +245,6 @@ ph:upper_threshold,Límite Superior
 ph:upper_threshold_greater_than,Límite Superior debe ser mayor Límite Inferior
 ph:upper_threshold_required,
 ph:upper_threshold_type,
-ph:validation_error,Los ajustes de Ph no puede ser guardada por errores de validación. Corija los errores y intente de nuevo.
 ph:warn_delete,Esta acción sera eliminada
 signin:invalidcredentials,Usuario o Contraseña Incorrectos
 signin:password,Contraseña
@@ -293,7 +291,6 @@ temperature:temperature,Temperatura
 temperature:unit,Unidad
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
-temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 temperature:warn_delete,Esta accion ser à eliminada
 timers:after,Despues
 timers:and_then,Luego
@@ -327,10 +324,10 @@ timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
-timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
+validation:error,
 validation:integer_max_required,
 validation:integer_min_required,
 validation:last_full_moon_required,

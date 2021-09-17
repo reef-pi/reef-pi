@@ -73,8 +73,6 @@ ato:alert,Alarm
 ato:alert_after,Alarm nach Laufzeit von
 ato:ato_usage,ATO Nutzung
 ato:chk_freq,Prüfintervall
-ato:chk_freq_number,Das muss eine Zahl sein!
-ato:chk_freq_number_value,Das muss 1s oder größer sein!
 ato:control,Funktion
 ato:control_target,Steuerung durch
 ato:controlequipment,Gerät schalten
@@ -83,7 +81,6 @@ ato:controlnothing,-keine Steuerung-
 ato:disable_on_alert,ATO nach Alarm ausschalten
 ato:title_delete,${name} löschen?
 ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
-ato:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 ato:warn_delete,Wollen Sie ${name} wirklich löschen?
 camera:capture_flags,Aufnahmeoptionen
 camera:enable,Aktiv
@@ -165,6 +162,8 @@ doser:calibration:run,Start
 doser:doser_usage,Pumpennutzung
 doser:duration,Dauer
 doser:speed,Geschwindigkeit
+doser:title_delete,${name} löschen?
+doser:warn_delete,Wollen Sie ${name} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
 fatal_error:connection_lost,Verbindung verloren
@@ -246,7 +245,6 @@ ph:upper_threshold,oberer Schwellwert
 ph:upper_threshold_greater_than,Wert muss über der unteren Schwelle liegen!
 ph:upper_threshold_required,Ein Schwellwert ist erforderlich!
 ph:upper_threshold_type,Das muss eine Zahl sein!
-ph:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 ph:warn_delete,Wirklich löschen: 
 signin:invalidcredentials,Anmeldefehler!
 signin:password,Passwort
@@ -293,7 +291,6 @@ temperature:temperature,Temperatur
 temperature:unit,Einheit
 temperature:upper_function,Kühlungssteuerung durch
 temperature:upper_threshold,oberer Schwellwert
-temperature:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 temperature:warn_delete,Wirklich löschen:
 timers:after,... nach
 timers:and_then,... danach
@@ -327,10 +324,10 @@ timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
 timers:type_required,Ein Typ ist erforderlich!
-timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:entry_required,Das Feld darf nicht leer sein!
+validation:error,Die Angaben sind unvollständig oder fehlerhaft!
 validation:integer_max_required,Das muss eine Zahl <= ${max} sein!
 validation:integer_min_required,Das muss eine Zahl >= ${min} sein!
 validation:last_full_moon_required,Das Datum des letzten Vollmonds ist erforderlich!

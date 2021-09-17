@@ -73,8 +73,6 @@ ato:alert,
 ato:alert_after,Alarm Na
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
-ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
-ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
 ato:control,
 ato:control_target,
 ato:controlequipment,Apparatuur
@@ -83,7 +81,6 @@ ato:controlnothing,Niets
 ato:disable_on_alert,Uitschakelen bij alarm
 ato:title_delete,
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
-ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ato:warn_delete,Deze actie verwijderd
 camera:capture_flags,
 camera:enable,
@@ -165,6 +162,8 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
+doser:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Connectie verloren
@@ -246,7 +245,6 @@ ph:upper_threshold,Hoogste drempelwaarde
 ph:upper_threshold_greater_than,Hoogste drempelwaarde moet groter zijn dan de laagste drempelwaarde
 ph:upper_threshold_required,
 ph:upper_threshold_type,
-ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
@@ -293,7 +291,6 @@ temperature:temperature,Temperatuur
 temperature:unit,Eenheid
 temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
-temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 temperature:warn_delete,Deze actie verwijderd
 timers:after,Na
 timers:and_then,AEn Daarna
@@ -327,10 +324,10 @@ timers:turn_back_on,Terug inschakelen
 timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
 timers:type_required,Type is nodig
-timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
+validation:error,
 validation:integer_max_required,
 validation:integer_min_required,
 validation:last_full_moon_required,
