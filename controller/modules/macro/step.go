@@ -30,8 +30,8 @@ type Step struct {
 
 func (s *Step) Run(c controller.Controller, reverse bool) error {
 	switch s.Type {
-	case storage.EquipmentBucket, storage.ATOBucket, storage.TemperatureBucket,
-		storage.DoserBucket, storage.PhBucket, storage.TimerBucket, storage.MacroBucket, "subsystem":
+	case storage.EquipmentBucket, storage.ATOBucket, storage.TemperatureBucket, storage.LightingBucket,
+		storage.DoserBucket, storage.PhBucket, storage.TimerBucket, storage.MacroBucket:
 		var g GenericStep
 		if err := json.Unmarshal(s.Config, &g); err != nil {
 			return err
@@ -40,24 +40,23 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 		if reverse {
 			state = !state
 		}
-		if s.Type == "subsystem" {
-			sub, err := c.Subsystem(g.ID)
-			if err != nil {
-				return err
-			}
-			if state {
-				sub.Start()
-				return nil
-			}
-			sub.Stop()
-			return nil
-		}
 		sub, err := c.Subsystem(s.Type)
 		if err != nil {
 			return err
 		}
 		log.Println("macro-subsystem: executing step: ", s.Type, "id:", g.ID, " state:", state)
 		return sub.On(g.ID, state)
+	case "subsystem":
+		sub, err := c.Subsystem(g.ID)
+		if err != nil {
+			return err
+		}
+		if state {
+			sub.Start()
+			return nil
+		}
+		sub.Stop()
+		return nil
 	case "wait":
 		var w WaitStep
 		if err := json.Unmarshal(s.Config, &w); err != nil {
