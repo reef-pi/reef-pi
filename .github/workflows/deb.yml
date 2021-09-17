@@ -28,6 +28,8 @@ jobs:
         run: make pi
       - name: pi-zero
         run: make pi-zero
+      - name: jetson
+        run: make jetson
       - name: bundler
         run: gem install bundler -v 2.1.4 --no-document
       - name: fpm

@@ -30,6 +30,11 @@ pi:
 pi-zero:
 	env GOARM=6 GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  ./commands
 
+.PHONY: jetson
+jetson:
+	env GOOS=linux GOARCH=arm64 go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  ./commands
+
+
 .PHONY: test
 test:
 	go test -count=1 -cover $(DETECT_RACE) ./...
