@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { confirm } from 'utils/confirm'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import DriverForm from './driver_form'
 
 export default class Driver extends React.Component {
@@ -9,34 +9,39 @@ export default class Driver extends React.Component {
     super(props)
 
     this.state = {
-      lbl: i18next.t('edit')
+      lbl: i18n.t('edit')
     }
     this.handleSave = this.handleSave.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
     this.editUI = this.editUI.bind(this)
     this.ui = this.ui.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.handleRemove = this.handleRemove.bind(this)
   }
 
   handleRemove () {
     const message = (
       <div>
-        <p>This action will delete this driver.</p>
+        <p>
+          {i18n.t('driver:warn_delete').replace('${name}', this.props.driver.name)}
+        </p>
       </div>
     )
 
-    confirm('Delete driver', { description: message })
-      .then(function () {
+    confirm(i18n.t('driver:title_delete').replace('${name}', this.props.driver.name), { description: message }).then(
+      function () {
         this.props.remove(this.props.driver.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   handleEdit () {
-    if (!this.state.edit) {
-      this.setState({
-        edit: true,
-        lbl: i18next.t('save')
-      })
+    if (this.props.read_only !== true) {
+      if (!this.state.edit) {
+        this.setState({
+          edit: true,
+          lbl: i18n.t('save')
+        })
+      }
     }
   }
 
@@ -66,7 +71,7 @@ export default class Driver extends React.Component {
           this.props.update(this.props.driver.id, payload)
           this.setState({
             edit: false,
-            lbl: i18next.t('edit')
+            lbl: i18n.t('edit')
           })
         }
       })
@@ -98,28 +103,34 @@ export default class Driver extends React.Component {
 
   render () {
     let btnEdit = null
-    if (!this.state.edit) {
-      btnEdit = (
+    let btnDelete = null
+
+    if (this.props.read_only !== true) {
+      if (!this.state.edit) {
+        btnEdit = (
+          <input
+            type='button'
+            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            value={this.state.lbl}
+            onClick={this.handleEdit}
+          />
+        )
+      }
+      btnDelete = (
         <input
           type='button'
-          className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
-          value={this.state.lbl}
-          onClick={this.handleEdit}
+          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+          value='X'
+          onClick={this.handleRemove}
         />
       )
     }
 
     return (
-
       <div className='row border-bottom py-1'>
         <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
         <div className='col-4 col-md-3'>
-          <input
-            type='button'
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-            value='X'
-            onClick={this.handleRemove}
-          />
+          {btnDelete}
           {btnEdit}
         </div>
       </div>

@@ -81,7 +81,7 @@ ato:controlnothing,-keine Steuerung-
 ato:disable_on_alert,ATO nach Alarm ausschalten
 ato:title_delete,${name} löschen?
 ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
-ato:warn_delete,Wollen Sie ${name} wirklich löschen?
+ato:warn_delete,Wollen Sie ATO ${name} wirklich löschen?
 camera:capture_flags,Aufnahmeoptionen
 camera:enable,Aktiv
 camera:take_photo,Aufnahme!
@@ -163,7 +163,9 @@ doser:doser_usage,Pumpennutzung
 doser:duration,Dauer
 doser:speed,Geschwindigkeit
 doser:title_delete,${name} löschen?
-doser:warn_delete,Wollen Sie ${name} wirklich löschen?
+doser:warn_delete,Wollen Sie die Dosierpumpe ${name} wirklich löschen?
+driver:title_delete,${name} entfernen?
+driver:warn_delete,Wollen Sie den Treiber ${name} wirklich entfernen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
 fatal_error:connection_lost,Verbindung verloren

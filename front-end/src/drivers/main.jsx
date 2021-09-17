@@ -34,10 +34,11 @@ class drivers extends React.Component {
       .forEach((d, n) => {
         if (d.type === 'rpi') {
           items.push(
-            <div className='row ' key={d.id}>
-              <div className='col-4'>{d.name}</div>
-              <div className='col-4'><small>{d.type}</small></div>
-            </div>
+            <Driver 
+              driver={d} 
+              driverOptions={this.props.driverOptions} 
+              read_only={true} 
+            />
           )
           return
         }

@@ -80,8 +80,8 @@ ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
 ato:title_delete,Delete ${name} ?
-ato:total_seconds_pump_on,Total number of seconds ato pump is on
-ato:warn_delete,Do you really want to delete ${name}?
+ato:total_seconds_pump_on,Total number of seconds ATO pump is on
+ato:warn_delete,Do you really want to delete ATO ${name}?
 camera:capture_flags,Capture flags
 camera:enable,Enable
 camera:take_photo,Take Photo!
@@ -163,7 +163,9 @@ doser:doser_usage,Pump Usage
 doser:duration,Duration
 doser:speed,Speed
 doser:title_delete,Delete ${name} ?
-doser:warn_delete,Do you really want to delete ${name}?
+doser:warn_delete,Do you really want to delete doser ${name}?
+driver:title_delete,Remove driver ${name}?
+driver:warn_delete,This action will remove driver ${name}.
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 fatal_error:connection_lost,Connection Lost

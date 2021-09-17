@@ -164,6 +164,8 @@ doser:duration,
 doser:speed,
 doser:title_delete,
 doser:warn_delete,
+driver:title_delete,
+driver:warn_delete,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
 fatal_error:connection_lost,Conexion Perdida

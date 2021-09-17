@@ -164,6 +164,8 @@ doser:duration,
 doser:speed,
 doser:title_delete,
 doser:warn_delete,
+driver:title_delete,
+driver:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 fatal_error:connection_lost,Ligação Perdida
