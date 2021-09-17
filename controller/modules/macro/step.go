@@ -47,6 +47,14 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 		log.Println("macro-subsystem: executing step: ", s.Type, "id:", g.ID, " state:", state)
 		return sub.On(g.ID, state)
 	case "subsystem":
+		var g GenericStep
+		if err := json.Unmarshal(s.Config, &g); err != nil {
+			return err
+		}
+		state := g.On
+		if reverse {
+			state = !state
+		}
 		sub, err := c.Subsystem(g.ID)
 		if err != nil {
 			return err
