@@ -20,7 +20,7 @@ class newJournal extends React.Component {
   handleToggle () {
     this.setState({
       add: !this.state.add,
-      name: '',
+      name: '543',
       description: '',
       unit: ''
     })

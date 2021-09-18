@@ -33,18 +33,19 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('journal:warn_delete')} {j.name}.
+          {i18next.t('journal:warn_delete').replace('$[name]', j.name)}
         </p>
       </div>
     )
 
-    confirm('Delete ' + j.name, { description: message }).then(
+    confirm(i18next.t('journal:title_delete').replace('$[name]', j.name), { description: message }).then(
       function () {
         this.props.delete(j.id)
       }.bind(this)
     )
   }
 
+  //TODO: CollapsibleList only for edits, else table of name,unit,substr(description)
   list () {
     return this.props.journals.sort((a, b) => SortByName(a, b))
       .map(j => {

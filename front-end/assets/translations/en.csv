@@ -182,8 +182,10 @@ health_chart:historical,historical
 instance:title_delete,Delete $[name] ?
 instance:warn_delete,Do you really want to delete $[name]?
 journal:description,Description
+journal:title_delete,Delete journal?
 journal:unit,Unit
 journal:warn_delete,This action will delete
+journal:warn_delete,This action will delete the entry '$[name]'
 language:de,Deutsch
 language:en,English
 language:es,Español

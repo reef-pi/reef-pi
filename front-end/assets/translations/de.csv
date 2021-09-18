@@ -182,8 +182,9 @@ health_chart:historical,Verlauf
 instance:title_delete,$[name] löschen?
 instance:warn_delete,Wollen Sie $[name] wirklich löschen?
 journal:description,Beschreibung
+journal:title_delete,Notiz löschen?
 journal:unit,Einheit
-journal:warn_delete,Wirklich löschen:
+journal:warn_delete,Wollen Sie den Eintrag '$[name]' wirklich löschen?
 language:de,Deutsch
 language:en,English
 language:es,Español

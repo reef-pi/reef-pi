@@ -7,8 +7,11 @@ const JournalForm = withFormik({
   mapPropsToValues: props => {
     let data = props.data
     if (data === undefined) {
+      let now = new Date()
+      let ansi = now.getFullYear() + '-' + ('0'+now.getMonth()).substr(-2) + '-' + ('0'+now.getDate()).substr(-2)
       data = {
-        name: '',
+        //name: '',  //TODO: preset with ANSI-date for proper sorting?
+        name: ansi + ': ',
         description: '',
         unit: ''
       }

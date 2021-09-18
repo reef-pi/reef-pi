@@ -182,6 +182,7 @@ health_chart:historical,
 instance:title_delete,
 instance:warn_delete,
 journal:description,
+journal:title_delete,
 journal:unit,واحد
 journal:warn_delete,
 language:de,Deutsch
