@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchDisplay, switchDisplay, setBrightness } from '../redux/actions/display'
 import { connect } from 'react-redux'
+import i18n from 'utils/i18n'
 
 class display extends React.Component {
   constructor (props) {
@@ -43,10 +44,10 @@ class display extends React.Component {
 
   render () {
     let style = 'btn btn-outline-success'
-    let action = 'on'
+    let action = i18n.t('on')
     if (this.state.on) {
       style = 'btn btn-outline-danger'
-      action = 'off'
+      action = i18n.t('off')
     }
     return (
       <div className='container'>
@@ -56,7 +57,7 @@ class display extends React.Component {
             {action}{' '}
           </button>{' '}
         </div>
-        <div className='col-sm-2'>Brightness</div>
+        <div className='col-sm-2'>{i18n.t('configuration:settings:brightness')}</div>
         <div className='col-sm-6'>
           <input
             type='range'

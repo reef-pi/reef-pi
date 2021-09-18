@@ -127,6 +127,7 @@ configuration:authentication:error_pass,Vous devez fournir un mot de passe
 configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
 configuration:settings:address,Adresse
 configuration:settings:alert_health_check,Alerte de santé du système
+configuration:settings:brightness,
 configuration:settings:capabilities,Capacités
 configuration:settings:cors,
 configuration:settings:display,Affichage
@@ -169,6 +170,8 @@ driver:type,
 driver:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:title_delete,
+equipment:warn_delete,
 fatal_error:connection_lost,
 fatal_error:fatal_error,
 fatal_error:message,

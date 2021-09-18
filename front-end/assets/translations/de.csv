@@ -127,6 +127,7 @@ configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
+configuration:settings:brightness,Brightness
 configuration:settings:capabilities,Funktionen
 configuration:settings:cors,cors
 configuration:settings:display,Display
@@ -169,6 +170,8 @@ driver:type,Typ
 driver:warn_delete,Wollen Sie den Treiber ${name} wirklich entfernen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:title_delete,${name} löschen?
+equipment:warn_delete,Wollen Sie das Gerät ${name} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.

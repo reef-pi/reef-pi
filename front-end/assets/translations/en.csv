@@ -127,6 +127,7 @@ configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
+configuration:settings:brightness,Brightness
 configuration:settings:capabilities,Capabilities
 configuration:settings:cors,Enable cors
 configuration:settings:display,Display
@@ -169,6 +170,8 @@ driver:type,Type
 driver:warn_delete,This action will remove driver ${name}.
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
+equipment:title_delete,Delete ${name} ?
+equipment:warn_delete,Do you really want to delete ${name}?
 fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.

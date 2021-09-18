@@ -127,6 +127,7 @@ configuration:authentication:error_pass,你必须提供一个密码
 configuration:authentication:error_user,你必须提供一个用户名
 configuration:settings:address,日志
 configuration:settings:alert_health_check,健康检查警告
+configuration:settings:brightness,
 configuration:settings:capabilities,功能
 configuration:settings:cors,
 configuration:settings:display,显示
@@ -169,6 +170,8 @@ driver:type,
 driver:warn_delete,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:title_delete,
+equipment:warn_delete,
 fatal_error:connection_lost,连接丢失
 fatal_error:fatal_error,致命错误
 fatal_error:message,无法连接服务器，你需要重启服务器或者排除故障。
