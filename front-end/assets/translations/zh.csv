@@ -179,6 +179,8 @@ fatal_error:troubleshoot,排除故障
 health_chart:cpu_memory,CPU/内存
 health_chart:current,
 health_chart:historical,
+instance:title_delete,
+instance:warn_delete,
 journal:description,
 journal:unit,单位
 journal:warn_delete,

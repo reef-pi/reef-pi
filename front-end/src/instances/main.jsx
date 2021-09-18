@@ -3,6 +3,7 @@ import Instance from './instance'
 import { updateInstance, fetchInstances, createInstance, deleteInstance } from 'redux/actions/instances'
 import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
+import i18n from 'utils/i18n'
 
 class main extends React.Component {
   constructor (props) {
@@ -40,7 +41,7 @@ class main extends React.Component {
   render () {
     let nEq = <div />
     if (this.state.add) {
-      nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel='Save' />
+      nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel={i18n.t('save')} />
     }
     return (
       <ul className='list-group list-group-flush'>

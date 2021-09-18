@@ -49,11 +49,11 @@ export default class Equipment extends React.Component {
     e.stopPropagation()
     const message = (
       <div>
-        <p>i{i18next.t('equipment:warn_delete').replace('${name}', this.props.equipment.name)}</p>
+        <p>i{i18next.t('equipment:warn_delete').replace('$[name]', this.props.equipment.name)}</p>
       </div>
     )
 
-    confirm(i18next.t('equipment:title_delete').replace('${name}', this.props.equipment.name), { description: message }).then(
+    confirm(i18next.t('equipment:title_delete').replace('$[name]', this.props.equipment.name), { description: message }).then(
       function () {
         this.props.delete(this.props.equipment.id)
       }.bind(this)

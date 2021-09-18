@@ -14,7 +14,7 @@ describe('<EditPh />', () => {
   const jacks = [{ id: 1, name: 'jack 1', pins: [1, 2, 3] }]
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
+    jest.spyOn(Alert, 'showError')
   })
 
   afterEach(() => {
@@ -69,7 +69,7 @@ describe('<EditPh />', () => {
       />
     )
     wrapper.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(Alert.showAlert).not.toHaveBeenCalled()
+    expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditDoser /> should show alert when invalid', () => {
@@ -88,6 +88,6 @@ describe('<EditPh />', () => {
       />
     )
     wrapper.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(Alert.showAlert).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 })

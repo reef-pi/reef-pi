@@ -8,7 +8,7 @@ class healthChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      trend: this.props.trend !== undefined ? this.props.trend : 'current',
+      trend: this.props.trend !== undefined ? this.props.trend : i18next.t('health_chart:current'),
       timer: window.setInterval(props.fetchHealth, 60 * 1000)
     }
   }

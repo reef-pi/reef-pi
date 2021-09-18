@@ -105,12 +105,12 @@ class doser extends React.Component {
     const message = (
       <div>
         <p>
-          {i18n.t('doser:warn_delete').replace('${name}', doser.name)}
+          {i18n.t('doser:warn_delete').replace('$[name]', doser.name)}
 	</p>
       </div>
     )
 
-    confirm(i18n.t('doser:title_delete').replace('${name}', doser.name), { description: message }).then(
+    confirm(i18n.t('doser:title_delete').replace('$[name]', doser.name), { description: message }).then(
       function () {
         this.props.delete(doser.id)
       }.bind(this)

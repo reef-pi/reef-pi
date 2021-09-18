@@ -2,6 +2,7 @@ import React from 'react'
 import ViewInstance from './view_instance'
 import InstanceForm from './instance_form'
 import { confirm } from 'utils/confirm'
+import i18n from 'utils/i18n'
 
 export default class Instance extends React.Component {
   constructor (props) {
@@ -39,14 +40,15 @@ export default class Instance extends React.Component {
     e.stopPropagation()
     const message = (
       <div>
-        <p>This action will delete {this.props.instance.name}.</p>
+        <p>{i18n.t('instance:warn_delete').replace('$[name]', this.props.instance.name)}.</p>
       </div>
     )
 
-    confirm('Delete ' + this.props.instance.name, { description: message })
-      .then(function () {
+    confirm(i18n.t('instance:title_delete').replace('$[name]', this.props.instance.name), { description: message }).then(
+      function () {
         this.props.delete(this.props.instance.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   handleUpdate () {

@@ -51,12 +51,12 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18n.t('ato:warn_delete').replace('${name}', probe.name)}
+          {i18n.t('ato:warn_delete').replace('$[name]', probe.name)}
         </p>
       </div>
     )
 
-    confirm(i18n.t('ato:title_delete').replace('${name}', probe.name), { description: message }).then(
+    confirm(i18n.t('ato:title_delete').replace('$[name]', probe.name), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)

@@ -36,7 +36,7 @@ jack,Jack
 jacks,Jacks
 light,Light
 lights,Lights
-loading,Loading
+loading,Loading ...
 maximum,Maximum
 minimum,Minimum
 name,Name
@@ -79,9 +79,9 @@ ato:controlequipment,Equipment
 ato:controlmacro,Macro
 ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
-ato:title_delete,Delete ${name} ?
+ato:title_delete,Delete $[name] ?
 ato:total_seconds_pump_on,Total number of seconds ATO pump is on
-ato:warn_delete,Do you really want to delete ATO ${name}?
+ato:warn_delete,Do you really want to delete ATO $[name]?
 camera:capture_flags,Capture flags
 camera:enable,Enable
 camera:take_photo,Take Photo!
@@ -163,11 +163,11 @@ doser:calibration:run,Run
 doser:doser_usage,Pump Usage
 doser:duration,Duration
 doser:speed,Speed
-doser:title_delete,Delete ${name} ?
-doser:warn_delete,Do you really want to delete doser ${name}?
-driver:title_delete,Remove driver ${name}?
+doser:title_delete,Delete $[name] ?
+doser:warn_delete,Do you really want to delete doser $[name]?
+driver:title_delete,Remove driver $[name]?
 driver:type,Type
-driver:warn_delete,This action will remove driver ${name}.
+driver:warn_delete,This action will remove driver $[name].
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 equipment:title_delete,Delete $[name] ?
@@ -179,6 +179,8 @@ fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,current
 health_chart:historical,historical
+instance:title_delete,Delete $[name] ?
+instance:warn_delete,Do you really want to delete $[name]?
 journal:description,Description
 journal:unit,Unit
 journal:warn_delete,This action will delete

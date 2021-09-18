@@ -179,6 +179,8 @@ fatal_error:troubleshoot,Problemas
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,
 health_chart:historical,
+instance:title_delete,
+instance:warn_delete,
 journal:description,
 journal:unit,Unidades
 journal:warn_delete,

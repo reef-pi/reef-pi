@@ -179,6 +179,8 @@ fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
 health_chart:current,
 health_chart:historical,
+instance:title_delete,
+instance:warn_delete,
 journal:description,
 journal:unit,Eenheid
 journal:warn_delete,
