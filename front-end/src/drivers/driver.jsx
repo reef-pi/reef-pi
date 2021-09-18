@@ -22,12 +22,12 @@ export default class Driver extends React.Component {
     const message = (
       <div>
         <p>
-          {i18n.t('driver:warn_delete').replace('${name}', this.props.driver.name)}
+          {i18n.t('driver:warn_delete').replace('$[name]', this.props.driver.name)}
         </p>
       </div>
     )
 
-    confirm(i18n.t('driver:title_delete').replace('${name}', this.props.driver.name), { description: message }).then(
+    confirm(i18n.t('driver:title_delete').replace('$[name]', this.props.driver.name), { description: message }).then(
       function () {
         this.props.remove(this.props.driver.id)
       }.bind(this)
