@@ -34,7 +34,6 @@ inlets,Ingangen (inlets)
 install,
 jack,Ingang (jack)
 jacks,Ingangen (jacks)
-light,Light
 lights,Lichten
 loading,Laden
 maximum,
@@ -99,7 +98,7 @@ capabilities:equipment,Apparatuur
 capabilities:health_check,Health check
 capabilities:journal,Dagboek
 capabilities:lighting,Belichting
-capabilities:lights,Lichten
+capabilities:lights,
 capabilities:log,Log
 capabilities:macro,Macro
 capabilities:macros,Macros
@@ -303,36 +302,31 @@ temperature:upper_threshold,Koeler drempelwaarde
 temperature:warn_delete,Deze actie verwijderd
 timers:after,Na
 timers:and_then,AEn Daarna
-timers:day_required,
-timers:duration_required,Tijdsduur is nodig
+timers:ato,
+timers:camera,
+timers:doser,
 timers:equipment,Apparatuur
 timers:equipment:off,Uit
 timers:equipment:on,Aan
 timers:equipment:revert,Omkeren
 timers:equipment_action,
-timers:equipment_required,Apparatuur is nodig
 timers:function,Functie
-timers:hour_required,
+timers:lightings,
 timers:macro,Macro Naam
-timers:macros,Macros
 timers:message,Bericht
-timers:message_required,Bericht is nodig
-timers:minute_required,
-timers:name_required,Naam is nodig
-timers:on_required,Ingeschakeld is nodig
+timers:ph,
 timers:reminder,Reminder
 timers:sec,sec
-timers:second_required,
 timers:stay_off,Uit blijven
 timers:stay_on,Aan blijven
 timers:subject,Onderwerp
-timers:subject_required,Onderwerp is nodig
-timers:timer_status_required,Timer Status is nodig
+timers:temperature,
+timers:title_delete,
 timers:turn_back_off,Terug uitschakelen
 timers:turn_back_on,Terug inschakelen
 timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
-timers:type_required,Type is nodig
+timers:warn_delete,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,

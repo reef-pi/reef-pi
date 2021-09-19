@@ -34,7 +34,6 @@ inlets,Entradas
 install,Instalar
 jack,Enchufe
 jacks,Enchufes
-light,Luz
 lights,Luces
 loading,Cargando
 maximum,Máximo
@@ -303,36 +302,31 @@ temperature:upper_threshold,Límite de Enfriador
 temperature:warn_delete,Esta accion ser à eliminada
 timers:after,Despues
 timers:and_then,Luego
-timers:day_required,
-timers:duration_required,Duracion es requerido
+timers:ato,ATO
+timers:camera,Camara
+timers:doser,Dosificador
 timers:equipment,Equipo
 timers:equipment:off,Apagado
 timers:equipment:on,Encendido
 timers:equipment:revert,Revertir
 timers:equipment_action,Acción
-timers:equipment_required,Selecciona un Equipo
 timers:function,Funcion
-timers:hour_required,
-timers:macro,Nombre del Macro
-timers:macros,Macros
+timers:lightings,Iluminación
+timers:macro,Macro
 timers:message,Mensaje
-timers:message_required,Escribe un Mensaje
-timers:minute_required,
-timers:name_required,Coloca un Nombre
-timers:on_required,Encendido es requerido
+timers:ph,pH
 timers:reminder,Recordatorio
 timers:sec,seg
-timers:second_required,
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
-timers:subject_required,Escribe un Asunto
-timers:timer_status_required,el estado del Cronometro es requerido
+timers:temperature,Temperatura
+timers:title_delete,
 timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
-timers:type_required,Selecciona un tipo
+timers:warn_delete,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,

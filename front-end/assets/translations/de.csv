@@ -34,7 +34,6 @@ inlets,digitale Eingänge
 install,Installieren
 jack,analoger Ausgang (PWM)
 jacks,analoge Ausgänge (PWM)
-light,Lampe
 lights,Beleuchtung
 loading,Lade ...
 maximum,Maximum
@@ -303,36 +302,32 @@ temperature:upper_threshold,oberer Schwellwert
 temperature:warn_delete,Wirklich löschen:
 timers:after,... nach
 timers:and_then,... danach
-timers:day_required,Eine Zahl oder * wird benötigt!
-timers:duration_required,Eine Dauer wird benötigt!
+timers:ato,ATO
+timers:camera,Kamera
+timers:doser,Dosierpumpe
 timers:equipment,Gerät
 timers:equipment:off,Aus
 timers:equipment:on,Ein
 timers:equipment:revert,Umkehren
 timers:equipment_action,Aktion
-timers:equipment_required,Ein Eintrag muss ausgewählt sein!
 timers:function,Funktion
-timers:hour_required,Eine Zahl oder * wird benötigt!
-timers:macro,Makro-Name
-timers:macros,Makros
+timers:lightings,Beleuchtung
+timers:macro,Makro
 timers:message,Nachricht
-timers:message_required,Eine Nachricht wird benötigt!
-timers:minute_required,Eine Zahl oder * wird benötigt!
-timers:name_required,Ein Name wird benötigt!
-timers:on_required,Das ist erforderlich!
+timers:ph,pH
+timers:reminder,Erinnerung
 timers:reminder,Erinnerung
 timers:sec,s
-timers:second_required,Eine Zahl wird benötigt!
 timers:stay_off,aus lassen
 timers:stay_on,an lassen
 timers:subject,Betreff
-timers:subject_required,Ein Betreff wird benötig!
-timers:timer_status_required,Ein Status ist erforderlich!
+timers:temperature,Temperatur
+timers:title_delete,$[name] löschen?
 timers:turn_back_off,wieder ausschalten
 timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
-timers:type_required,Ein Typ ist erforderlich!
+timers:warn_delete,Wollen Sie $[name] wirklich löschen?
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:entry_required,Das Feld darf nicht leer sein!

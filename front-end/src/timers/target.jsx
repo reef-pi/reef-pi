@@ -44,7 +44,7 @@ const target = (props) => {
       <>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
-            <label htmlFor='target.id'>{i18next.t(kind)}</label>
+            <label htmlFor='target.id'>{i18next.t('timers:' + kind)}</label>
             <Field
               name={NameFor(props.name, 'id')}
               component='select'

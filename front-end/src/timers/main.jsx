@@ -6,6 +6,7 @@ import TimerForm from './timer_form'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
+import i18n from 'utils/i18n'
 
 class Main extends React.Component {
   constructor (props) {
@@ -57,11 +58,11 @@ class Main extends React.Component {
   handleRemoveTimer (timer) {
     const message = (
       <div>
-        <p>This action will delete {timer.name}.</p>
+        <p>{i18n.t('timers:warn_delete').replace('$[name]', timer.name)}.</p>
       </div>
     )
 
-    confirm('Delete ' + timer.name, { description: message }).then(
+    confirm(i18n.t('timers:title_delete').replace('$[name]', timer.name), { description: message }).then(
       function () {
         this.props.delete(timer.id)
       }.bind(this)

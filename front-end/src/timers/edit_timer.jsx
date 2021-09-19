@@ -29,9 +29,7 @@ const EditTimer = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(
-        i18next.t('timers:validation_error')
-      )
+      showError(i18next.t('validation:error'))
     }
   }
 
@@ -54,6 +52,7 @@ const EditTimer = ({
   const targetFor = targetType => {
     let target = {}
     switch (targetType) {
+      // TODO: some types missing, intentionally?
       case 'macro':
         target = {
           id: ''
@@ -120,15 +119,15 @@ const EditTimer = ({
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-              <option value='equipment'>{i18next.t('equipment')}</option>
-              <option value='reminder'>{i18next.t('reminder')}</option>
-              <option value='macro'>{i18next.t('macro')}</option>
-              <option value='ato'>{i18next.t('ato')}</option>
-              <option value='camera'>{i18next.t('camera')}</option>
-              <option value='doser'>{i18next.t('doser')}</option>
-              <option value='lightings'>{i18next.t('light')}</option>
-              <option value='phprobes'>{i18next.t('ph')}</option>
-              <option value='temperature'>{i18next.t('temperature')}</option>
+              <option value='equipment'>{i18next.t('timers:equipment')}</option>
+              <option value='reminder'>{i18next.t('timers:reminder')}</option>
+              <option value='macro'>{i18next.t('timers:macro')}</option>
+              <option value='ato'>{i18next.t('timers:ato')}</option>
+              <option value='camera'>{i18next.t('timers:camera')}</option>
+              <option value='doser'>{i18next.t('timers:doser')}</option>
+              <option value='lightings'>{i18next.t('timers:lightings')}</option>
+              <option value='phprobes'>{i18next.t('timers:ph')}</option>
+              <option value='temperature'>{i18next.t('timers:temperature')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>

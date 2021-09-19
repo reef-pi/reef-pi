@@ -34,7 +34,6 @@ inlets,
 install,
 jack,
 jacks,
-light,
 lights,
 loading,Carregar
 maximum,
@@ -303,36 +302,31 @@ temperature:upper_threshold,
 temperature:warn_delete,
 timers:after,após
 timers:and_then,e depois
-timers:day_required,
-timers:duration_required,Duração é Obrigatório
+timers:ato,
+timers:camera,
+timers:doser,
 timers:equipment,Equipamento é Obrigatório
 timers:equipment:off,Off
 timers:equipment:on,On
 timers:equipment:revert,Reverter
 timers:equipment_action,
-timers:equipment_required,Equipmento é Obrigatório
 timers:function,Função
-timers:hour_required,
+timers:lightings,
 timers:macro,
-timers:macros,
 timers:message,Mensagem
-timers:message_required,a Messagem é Obrigatório
-timers:minute_required,
-timers:name_required,Name é Obrigatório
-timers:on_required,Ligar é Obrigatório
+timers:ph,
 timers:reminder,Lembrete
 timers:sec,sec
-timers:second_required,
 timers:stay_off,manter desligado
 timers:stay_on,Manter ligado
 timers:subject,Assunto
-timers:subject_required,o Assunto é Obrigatório
-timers:timer_status_required,Estado do temporizador é Obrigatório
+timers:temperature,
+timers:title_delete,
 timers:turn_back_off,Voltar a desligar
 timers:turn_back_on,Voltar a Ligar
 timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
-timers:type_required,Tipo é Obrigatório
+timers:warn_delete,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,

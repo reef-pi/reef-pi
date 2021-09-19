@@ -1,56 +1,67 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 const triggerSchema = {
-  id: Yup.string().required(i18next.t('timers:equipment_required')),
+  id: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   on: Yup.bool(),
-  duration: Yup.number().when('revert', {
-    is: true,
-    then: Yup.number().min(1),
-    otherwise: Yup.number().default(0)
-  }),
+  duration: Yup.number()
+    .when('revert', {
+      is: true,
+      then: Yup.number().min(1, i18n.t('validation:integer_min_required')),
+      otherwise: Yup.number().default(0)
+    }),
   revert: Yup.bool()
 }
 
 const reminderSchema = {
-  title: Yup.string().required(i18next.t('timers:reminder_title_required')),
-  message: Yup.string().required(i18next.t('timers:reminder_message_required'))
+  title: Yup.string()
+    .required(i18n.t('validation:entry_required')),
+  message: Yup.string()
+    .required(i18n.t('validation:entry_required'))
 }
 
 const TimerSchema = Yup.object().shape({
   name: Yup.string()
-    .required(i18next.t('timers:name_required')),
+    .required(i18n.t('validation:name_required')),
   enable: Yup.bool()
-    .required(i18next.t('timers:timer_status_required')),
+    .required(i18n.t('timers:timer_status_required')),
   type: Yup.string()
-    .required(i18next.t('timers:type_required')),
+    .required(i18n.t('timers:type_required')),
   day: Yup.string()
-    .required(i18next.t('timers:day_required')),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   hour: Yup.string()
-    .required(i18next.t('timers:hour_required')),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   minute: Yup.string()
-    .required(i18next.t('timers:minute_required')),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   second: Yup.string()
-    .required(i18next.t('timers:second_required')),
+    .required(i18n.t('validation:cron_nojoker_required'))
+    .matches(/^(\d+(-\d+)?)$/, i18n.t('validation:cron_nojoker_required')),
   month: Yup.string()
-    .required(i18next.t('timers:month_required')),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   week: Yup.string()
-    .required(i18next.t('timers:week_required')),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|(\d+(-\d+)?))$/, i18n.t('validation:cron_required')),
   target: Yup.object().when('type', (type, schema) => {
     switch (type) {
       case 'ato':
       case 'equipment':
       case 'macro':
-      case 'ph':
+      case 'phprobes':
       case 'temperature':
       case 'doser':
-      case 'light':
+      case 'lightings':
         return schema.shape(triggerSchema)
       case 'reminder':
         return schema.shape(reminderSchema)
       default:
         return schema.shape({
-          type: Yup.string().required('Timer type is required')
+          type: Yup.string()
+            .required(i18n.t('validation:selection_required'))
         })
     }
   })

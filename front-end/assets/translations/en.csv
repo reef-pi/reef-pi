@@ -34,7 +34,6 @@ inlets,Inlets
 install,Install
 jack,Jack
 jacks,Jacks
-light,Light
 lights,Lights
 loading,Loading ...
 maximum,Maximum
@@ -184,7 +183,6 @@ instance:warn_delete,Do you really want to delete $[name]?
 journal:description,Description
 journal:title_delete,Delete journal?
 journal:unit,Unit
-journal:warn_delete,This action will delete
 journal:warn_delete,This action will delete the entry '$[name]'
 language:de,Deutsch
 language:en,English
@@ -304,36 +302,31 @@ temperature:upper_threshold, Chiller Threshold
 temperature:warn_delete, This action will delete
 timers:after,After
 timers:and_then,And Then
-timers:day_required,Day is required
-timers:duration_required,Duration is required
+timers:ato,ATO
+timers:camera,Camera
+timers:doser,Doser
 timers:equipment,Equipment
 timers:equipment:off,Off
 timers:equipment:on,On
 timers:equipment:revert,Revert
 timers:equipment_action,Action
-timers:equipment_required,Equipment is required
 timers:function,Function
-timers:hour_required,Hour is required
-timers:macro,Macro Name
-timers:macros,Macros
+timers:lightings,Lighting
+timers:macro,Macro
 timers:message,Message
-timers:message_required,Message is required
-timers:minute_required,Minute is required
-timers:name_required,Name is required
-timers:on_required,On is required
+timers:ph,pH
 timers:reminder,Reminder
 timers:sec,sec
-timers:second_required,Second is required
 timers:stay_off,Stay off
 timers:stay_on,Stay on
 timers:subject,Subject
-timers:subject_required,Subject is required
-timers:timer_status_required,Timer Status is required
+timers:temperature,Temperature
+timers:title_delete,Delete $[name] ?
 timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
-timers:type_required,Type is required
+timers:warn_delete,Do you really want to delete $[name]?
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
 validation:entry_required,This may not be empty
