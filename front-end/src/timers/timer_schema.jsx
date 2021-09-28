@@ -41,10 +41,10 @@ const TimerSchema = Yup.object().shape({
       case 'ato':
       case 'equipment':
       case 'macro':
-      case 'ph':
+      case 'phprobes':
       case 'temperature':
       case 'doser':
-      case 'light':
+      case 'lightings':
         return schema.shape(triggerSchema)
       case 'reminder':
         return schema.shape(reminderSchema)
