@@ -25,9 +25,6 @@ updates:
   - dependency-name: bootstrap
     versions:
     - 4.6.0
-  - dependency-name: webpack-cli
-    versions:
-    - 4.4.0
   - dependency-name: eslint-plugin-react
     versions:
     - 7.22.0
