@@ -17,7 +17,7 @@
     "classnames": "2.2.6",
     "clean-webpack-plugin": "4.0.0",
     "cross-env": "7.0.2",
-    "css-loader": "6.2.0",
+    "css-loader": "6.3.0",
     "csv-parse": "^4.15.4",
     "csv-stringify": "5.6.5",
     "enzyme": "3.10.0",
