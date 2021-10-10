@@ -11,13 +11,13 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.17'
-      - uses: actions/setup-node@v2.4.0
+      - uses: actions/setup-node@v2.4.1
         with:
           node-version: 16
       - uses: actions/cache@v2.1.6
         with:
           path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install
