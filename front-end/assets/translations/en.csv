@@ -202,15 +202,18 @@ log:time,Time
 log:type,Type
 macro:alert:message,message
 macro:alert:title,title
+macro:one_step_required,At least one step is required!
 macro:reversible,Reversible
 macro:revert,Revert
 macro:reverting,Reverting
 macro:run,Run
 macro:running,Running
 macro:steps,Steps
+macro:title_delete,Delete $[name] ?
 macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration
+macro:warn_delete,Do you really want to delete macro $[name]?
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required

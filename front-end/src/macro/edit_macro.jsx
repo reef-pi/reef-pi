@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import * as Alert from 'utils/alert'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
 import { Field, FieldArray } from 'formik'
@@ -28,9 +28,7 @@ const EditMacro = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      Alert.showError(
-        'The Macro settings cannot be saved due to validation errors.  Please correct the errors and try again.'
-      )
+      showError(i18next.t('validation:error'))
     }
   }
 
@@ -61,7 +59,6 @@ const EditMacro = ({
                 'is-invalid': ShowError('reversible', touched, errors)
               })}
             >
-              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               <option value='true'>{i18next.t('yes')}</option>
               <option value='false'>{i18next.t('no')}</option>
             </Field>

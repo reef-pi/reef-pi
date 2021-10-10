@@ -202,15 +202,18 @@ log:time,Tempo
 log:type,Tipo
 macro:alert:message,
 macro:alert:title,
+macro:one_step_required,
 macro:reversible,
 macro:revert,
 macro:reverting,
 macro:run,
 macro:running,
 macro:steps,
+macro:title_delete,
 macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
 macro:wait:duration,
+macro:warn_delete,
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:analog_input_required,

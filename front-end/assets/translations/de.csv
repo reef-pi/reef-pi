@@ -202,15 +202,18 @@ log:time,Zeit
 log:type,Typ
 macro:alert:message,Nachricht
 macro:alert:title,Titel
+macro:one_step_required,Mindestens ein Schritt ist erforderlich!
 macro:reversible,Umkehrbar
 macro:revert,Umgekehrt
 macro:reverting,Umkehr
 macro:run,Ausführen
 macro:running,Läuft
 macro:steps,Schritte
+macro:title_delete,$[name] löschen?
 macro:turn_off,Ausschalten
 macro:turn_on,Einschalten
 macro:wait:duration,Dauer
+macro:warn_delete,Wollen Sie das Makro $[name] wirklich löschen?
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
 ph:analog_input_required,Ein Eingang wird benötigt!

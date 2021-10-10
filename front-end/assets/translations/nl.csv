@@ -202,15 +202,18 @@ log:time,Tijd
 log:type,Type
 macro:alert:message,
 macro:alert:title,
+macro:one_step_required,
 macro:reversible,
 macro:revert,
 macro:reverting,
 macro:run,
 macro:running,
 macro:steps,
+macro:title_delete,
 macro:turn_off,Uitschakelen
 macro:turn_on,Inschakelen
 macro:wait:duration,
+macro:warn_delete,
 ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
 ph:analog_input_required,
