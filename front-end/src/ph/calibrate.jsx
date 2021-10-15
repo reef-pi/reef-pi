@@ -57,8 +57,6 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
 const CalibrateSchema = Yup.object().shape({
   value: Yup.number()
     .required()
-    .min(0)
-    .max(14)
 })
 
 const CalibrateForm = withFormik({
