@@ -1,16 +1,20 @@
 package lighting
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/reef-pi/reef-pi/controller"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"log"
 	"sync"
 	"time"
 )
 
 const Bucket = storage.LightingBucket
+const UsageBucket = storage.LightingUsageBucket
 
 type Config struct {
 	Interval time.Duration `json:"interval"`
@@ -22,45 +26,58 @@ var DefaultConfig = Config{
 
 type Controller struct {
 	sync.Mutex
-	jacks   *connectors.Jacks
-	stopCh  chan struct{}
-	config  Config
-	running bool
-	c       controller.Controller
-	lights  map[string]*Light
+	jacks    *connectors.Jacks
+	config   Config
+	c        controller.Controller
+	quitters map[string]chan struct{}
+	statsMgr telemetry.StatsManager
 }
 
 func New(conf Config, c controller.Controller) (*Controller, error) {
 	return &Controller{
-		Mutex:  sync.Mutex{},
-		c:      c,
-		jacks:  c.DM().Jacks(),
-		config: conf,
-		stopCh: make(chan struct{}),
-		lights: make(map[string]*Light),
+		Mutex:    sync.Mutex{},
+		c:        c,
+		jacks:    c.DM().Jacks(),
+		config:   conf,
+		quitters: make(map[string]chan struct{}),
+		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 	}, nil
 }
 
 func (c *Controller) Start() {
-	go c.StartCycle()
-}
-func (c *Controller) StartCycle() {
-	ticker := time.NewTicker(c.config.Interval)
-	c.syncLights()
-	for {
-		select {
-		case <-c.stopCh:
-			ticker.Stop()
-			return
-		case <-ticker.C:
-			c.syncLights()
+	c.Lock()
+	defer c.Unlock()
+	lights, err := c.List()
+	if err != nil {
+		log.Println("ERROR: light subsystem: Failed to list lights. Error:", err)
+		return
+	}
+	for _, l := range lights {
+		if !l.Enable {
+			continue
 		}
+		fn := func(d json.RawMessage) interface{} {
+			u := Usage{}
+			json.Unmarshal(d, &u)
+			return u
+		}
+		if err := c.statsMgr.Load(l.ID, fn); err != nil {
+			log.Println("ERROR: lighting subsystem. Failed to load usage. Error:", err)
+		}
+		quit := make(chan struct{})
+		c.quitters[l.ID] = quit
+		go c.Run(l, quit)
 	}
 }
 
 func (c *Controller) Stop() {
-	c.stopCh <- struct{}{}
-	log.Println("Stopped lighting cycle")
+	c.Lock()
+	defer c.Unlock()
+	for id, quit := range c.quitters {
+		close(quit)
+		delete(c.quitters, id)
+	}
+	log.Println("Stopped lighting subsystem")
 }
 
 func (c *Controller) Setup() error {
@@ -69,21 +86,7 @@ func (c *Controller) Setup() error {
 	if err := c.c.Store().CreateBucket(Bucket); err != nil {
 		return err
 	}
-	lights, err := c.List()
-	if err != nil {
-		return err
-	}
-	for i, light := range lights {
-		if !light.Enable {
-			continue
-		}
-		lights[i].LoadChannels()
-		c.lights[light.ID] = &lights[i]
-		for _, ch := range light.Channels {
-			c.c.Telemetry().CreateFeedIfNotExist(light.Name + "-" + ch.Name)
-		}
-	}
-	return nil
+	return c.c.Store().CreateBucket(UsageBucket)
 }
 
 func (c *Controller) On(id string, on bool) error {
@@ -91,19 +94,8 @@ func (c *Controller) On(id string, on bool) error {
 	if err != nil {
 		return err
 	}
-	for pin, ch := range l.Channels {
-		ch.On = on
-		l.Channels[pin] = ch
-	}
+	l.Enable = on
 	return c.Update(id, l)
-}
-func (c *Controller) syncLights() {
-	for _, light := range c.lights {
-		if !light.Enable {
-			continue
-		}
-		c.syncLight(light)
-	}
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {

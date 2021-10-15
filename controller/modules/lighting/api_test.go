@@ -92,7 +92,6 @@ func TestLightingAPI(t *testing.T) {
 	body.Reset()
 	ch, _ := channels[1]
 	l.Channels[1] = ch
-	c.syncLights()
 	c.UpdateChannel("1", *ch, 10)
 	if err := c.On("1", true); err != nil {
 		t.Error(err)
@@ -119,5 +118,5 @@ func TestLightingAPI(t *testing.T) {
 	ch.Max = 8
 	channels[1] = ch
 	l.Channels = channels
-	c.syncLight(&l)
+	c.syncLight(l)
 }
