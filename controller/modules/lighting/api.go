@@ -92,6 +92,24 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//  200:
 	//   description: OK
 	r.HandleFunc("/api/lights/{id}", c.DeleteLight).Methods("DELETE")
+
+	// swagger:operation GET /api/lights/{id}/usage light usage
+	// Get usage history.
+	// Get usage history for a given light.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the light
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	//  404:
+	//   description: Not Found
+	r.HandleFunc("/api/lights/{id}/usage", c.getUsage).Methods("GET")
 }
 
 func (c *Controller) GetLight(w http.ResponseWriter, r *http.Request) {
@@ -126,4 +144,9 @@ func (c *Controller) DeleteLight(w http.ResponseWriter, r *http.Request) {
 		return c.Delete(id)
 	}
 	utils.JSONDeleteResponse(fn, w, r)
+}
+
+func (c *Controller) getUsage(w http.ResponseWriter, req *http.Request) {
+	fn := func(id string) (interface{}, error) { return c.statsMgr.Get(id) }
+	utils.JSONGetResponse(fn, w, req)
 }

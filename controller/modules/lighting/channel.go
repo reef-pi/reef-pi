@@ -10,7 +10,6 @@ import (
 //swagger:model channel
 type Channel struct {
 	Name        string                  `json:"name"`
-	On          bool                    `json:"on"`
 	Min         float64                 `json:"min"`
 	Max         float64                 `json:"max"`
 	Pin         int                     `json:"pin"`
@@ -43,9 +42,6 @@ func (c *Controller) UpdateChannel(jack string, ch Channel, v float64) {
 }
 
 func (ch *Channel) ValueAt(t time.Time) (float64, error) {
-	if !ch.On {
-		return 0, nil
-	}
 	if ch.Manual {
 		return ch.Value, nil
 	}
