@@ -34,7 +34,7 @@ const AtoForm = withFormik({
   validationSchema: AtoSchema,
   handleSubmit: (values, { props }) => {
     props.onSubmit(values)
-  }
+  },
 })(EditAto)
 
 export default AtoForm
