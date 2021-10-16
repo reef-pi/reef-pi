@@ -108,9 +108,9 @@ class main extends React.Component {
                 type='button'
                 value={i18next.t('reset')}
                 className='btn btn-sm btn-primary float-right mt-1'
-                onClick={() => { this.handleReset(probe.id) }}
+                onClick={ () => { this.handleReset(probe.id) }}
               />
-            </div>
+            </div>  
           </Collapsible>
         )
       })
