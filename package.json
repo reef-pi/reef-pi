@@ -81,7 +81,7 @@
     "translations:chk": "node ./build/translations/csv-sync.js chk",
     "build": "webpack",
     "ui": "webpack --mode=production",
-    "ui-dev": "webpack --watch",
+    "ui-dev": "webpack --watch --mode=development",
     "js-lint": "standard  front-end/src/**/*",
     "standard": "standard --fix front-end/src/**/**",
     "jest": "cross-env NODE_ENV=testing jest",

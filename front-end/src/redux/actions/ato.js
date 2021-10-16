@@ -72,3 +72,10 @@ export const deleteATO = (id) => {
     success: fetchATOs
   }))
 }
+
+export const resetATO = (id) => {
+  return (reduxPost({
+    url: '/api/atos/' + id+"/reset",
+    success: fetchATOs
+  }))
+}
