@@ -2,7 +2,7 @@ import React from 'react'
 import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import Pin from './pin'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 
 import {
@@ -47,11 +47,19 @@ class analogInputs extends React.Component {
     })
   }
 
-  remove (id) {
+  remove (conn) {
     return function () {
-      confirm('Are you sure ?').then(
+      const message = (
+        <div>
+          <p>
+            {i18n.t('configuration:connectors:warn_delete').replace('$[name]', conn.name)}
+          </p>
+        </div>
+      )
+
+      confirm(i18n.t('configuration:connectors:title_delete').replace('$[name]', conn.name), { description: message }).then(
         function () {
-          this.props.delete(id)
+          this.props.delete(conn.id)
         }.bind(this)
       )
     }.bind(this)
@@ -90,7 +98,7 @@ class analogInputs extends React.Component {
             driver={this.props.drivers.filter(d => d.id === j.driver)[0] || {}}
             drivers={this.props.drivers}
             analog_input_id={j.id}
-            remove={this.remove(j.id)}
+            remove={this.remove(j)}
             update={p => {
               this.props.update(j.id, p)
               this.props.fetch()
@@ -109,7 +117,7 @@ class analogInputs extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h5'>{i18next.t('analog_inputs')}</label>
+            <label className='h5'>{i18n.t('analog_inputs')}</label>
             {this.list()}
           </div>
         </div>
@@ -129,7 +137,7 @@ class analogInputs extends React.Component {
             <div className='row' style={dStyle}>
               <div className='col-12 col-md-5'>
                 <div className='form-group'>
-                  <label htmlFor='analog_inputName'>{i18next.t('name')}</label>
+                  <label htmlFor='analog_inputName'>{i18n.t('name')}</label>
                   <input
                     type='text'
                     id='analog_inputName'
@@ -149,7 +157,7 @@ class analogInputs extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='analog_input_type form-group'>
-                  <label>{i18next.t('driver')}</label>
+                  <label>{i18n.t('driver')}</label>
                   <select
                     name='driver'
                     className='form-control custom-select'
@@ -170,7 +178,7 @@ class analogInputs extends React.Component {
                 <input
                   type='button'
                   id='createAnalogInput'
-                  value={i18next.t('add')}
+                  value={i18n.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />

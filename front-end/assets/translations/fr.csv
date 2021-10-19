@@ -124,6 +124,8 @@ configuration:admin:sign_out,Déconnexion
 configuration:authentication:credentials,Informations d'identification
 configuration:authentication:error_pass,Vous devez fournir un mot de passe
 configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
+configuration:connectors:title_delete,
+configuration:connectors:warn_delete,
 configuration:settings:address,Adresse
 configuration:settings:alert_health_check,Alerte de santé du système
 configuration:settings:brightness,

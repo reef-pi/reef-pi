@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { showError } from 'utils/alert'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -12,7 +12,7 @@ export default class Jack extends React.Component {
       pins: props.pins.join(','),
       driver: props.driver,
       reverse: props.reverse,
-      lbl: i18next.t('edit'),
+      lbl: i18n.t('edit'),
       driver_name: (props.drivers.filter(d => d.id === props.driver)[0] || {}).name
     }
     this.handleEdit = this.handleEdit.bind(this)
@@ -48,7 +48,7 @@ export default class Jack extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: i18next.t('save')
+        lbl: i18n.t('save')
       })
       return
     }
@@ -57,7 +57,7 @@ export default class Jack extends React.Component {
     })
     for (let i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        showError('Use only comma separated numbers')
+        showError(i18n.t('validation:comma_sep_numbers'))
         return
       }
     }
@@ -70,7 +70,7 @@ export default class Jack extends React.Component {
     this.props.update(payload)
     this.setState({
       edit: false,
-      lbl: i18next.t('edit'),
+      lbl: i18n.t('edit'),
       pins: payload.pins.join(',')
     })
   }
@@ -80,7 +80,7 @@ export default class Jack extends React.Component {
       <div className='row'>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('name')}</span>
+            <span className='input-group-addon'>{i18n.t('name')}</span>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-name'}
@@ -92,7 +92,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('reverse')}</span>
+            <span className='input-group-addon'>{i18n.t('reverse')}</span>
             <input
               className='form-control jack-reverse'
               type='checkbox'
@@ -104,7 +104,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <span className='input-group-addon'>{i18next.t('pins')}</span>
+            <span className='input-group-addon'>{i18n.t('pins')}</span>
             <input
               type='text'
               id={'jack-' + this.props.jack_id + '-pins'}
@@ -116,7 +116,7 @@ export default class Jack extends React.Component {
         </div>
         <div className='col-12 col-md-3'>
           <div className='form-group'>
-            <label>{i18next.t('driver')}</label>
+            <label>{i18n.t('driver')}</label>
             <select
               name='driver'
               id={'jack-' + this.props.jack_id + '-driver-select'}

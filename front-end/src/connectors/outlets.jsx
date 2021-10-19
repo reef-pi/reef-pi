@@ -4,7 +4,7 @@ import { fetchOutlets, updateOutlet, deleteOutlet, createOutlet } from 'redux/ac
 import { connect } from 'react-redux'
 import Outlet from './outlet'
 import Pin from './pin'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 
 class outlets extends React.Component {
@@ -47,11 +47,19 @@ class outlets extends React.Component {
     this.setState({ outReverse: !this.state.outReverse })
   }
 
-  remove (id) {
+  remove (conn) {
     return function () {
-      confirm('Are you sure ?').then(
+      const message = (
+        <div>
+          <p>
+            {i18n.t('configuration:connectors:warn_delete').replace('$[name]', conn.name)}
+          </p>
+        </div>
+      )
+
+      confirm(i18n.t('configuration:connectors:title_delete').replace('$[name]', conn.name), { description: message }).then(
         function () {
-          this.props.delete(id)
+          this.props.delete(conn.id)
         }.bind(this)
       )
     }.bind(this)
@@ -94,7 +102,7 @@ class outlets extends React.Component {
             key={o.id}
             reverse={o.reverse}
             equipment={o.equipment}
-            remove={this.remove(o.id)}
+            remove={this.remove(o)}
             drivers={this.props.drivers}
             driver={this.props.drivers.filter(d => d.id === o.driver)[0] || {}}
             update={p => {
@@ -115,7 +123,7 @@ class outlets extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h5'>{i18next.t('outlets')}</label>
+            <label className='h5'>{i18n.t('outlets')}</label>
             {this.list()}
           </div>
         </div>
@@ -134,7 +142,7 @@ class outlets extends React.Component {
         <div className='row' style={dStyle}>
           <div className='col-12 col-md-3'>
             <div className='form-group'>
-              <span className='input-group-addon'>{i18next.t('name')}</span>
+              <span className='input-group-addon'>{i18n.t('name')}</span>
               <input
                 type='text'
                 id='outletName'
@@ -154,7 +162,7 @@ class outlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='driver-type form-group'>
-              <span className='input-group-addon'>{i18next.t('driver')}</span>
+              <span className='input-group-addon'>{i18n.t('driver')}</span>
               <select
                 name='driver'
                 className='form-control custom-select'
@@ -173,7 +181,7 @@ class outlets extends React.Component {
           </div>
           <div className='col-12 col-md-2'>
             <div className='form-group'>
-              <span className='input-group-addon'> {i18next.t('reverse')} </span>
+              <span className='input-group-addon'> {i18n.t('reverse')} </span>
               <input
                 type='checkbox'
                 id='outletReverse'
@@ -187,7 +195,7 @@ class outlets extends React.Component {
             <input
               type='button'
               id='createOutlet'
-              value={i18next.t('add')}
+              value={i18n.t('add')}
               onClick={this.handleSave}
               className='btn btn-outline-primary col-12 col-md-4'
             />

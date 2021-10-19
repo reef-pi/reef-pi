@@ -124,6 +124,8 @@ configuration:admin:sign_out,Sign Out
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
+configuration:connectors:title_delete,Delete $[name] ?
+configuration:connectors:warn_delete,Do you really want to delete connector $[name]?
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:brightness,Brightness

@@ -124,6 +124,8 @@ configuration:admin:sign_out,Abmelden
 configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
+configuration:connectors:title_delete,$[name] löschen?
+configuration:connectors:warn_delete,Wollen Sie den Anschluss $[name] wirklich löschen?
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:brightness,Brightness

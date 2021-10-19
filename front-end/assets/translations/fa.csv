@@ -124,6 +124,8 @@ configuration:admin:sign_out,پیکربندی:مدیر: خروج
 configuration:authentication:credentials,پیکربندی: احراز هویت: اعتبارنامه
 configuration:authentication:error_pass,پیکربندی: احراز هویت:خطای عبور
 configuration:authentication:error_user,پیکربندی: احراز هویت :خطای کاربر
+configuration:connectors:title_delete,
+configuration:connectors:warn_delete,
 configuration:settings:address,
 configuration:settings:alert_health_check,
 configuration:settings:brightness,
