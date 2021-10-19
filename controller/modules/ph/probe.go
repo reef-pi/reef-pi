@@ -222,11 +222,6 @@ func (c *Controller) checkAndControl(p Probe) (float64, error) {
 }
 
 func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
-	for _, m := range ms {
-		if m.Expected > 14 || m.Expected <= 0 {
-			return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", m.Expected)
-		}
-	}
 	p, err := c.Get(id)
 	if err != nil {
 		return err
@@ -247,10 +242,6 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 }
 
 func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
-	if point.Expected > 14 || point.Expected <= 0 {
-		return fmt.Errorf("Invalid expected calibration value %f. Valid values are above 0  and below 14", point.Expected)
-	}
-
 	p, err := c.Get(id)
 	if err != nil {
 		return err

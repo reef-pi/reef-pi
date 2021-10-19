@@ -14,6 +14,7 @@ const (
 	DoserUsageBucket             = "doser_usage"
 	EquipmentBucket              = "equipment"
 	LightingBucket               = "lightings"
+	LightingUsageBucket          = "lightings_usage"
 	MacroBucket                  = "macro"
 	MacroUsageBucket             = "macro_usage"
 	PhBucket                     = "phprobes"

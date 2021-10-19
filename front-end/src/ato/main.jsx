@@ -3,6 +3,7 @@ import AtoForm from './ato_form'
 import New from './new'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
+import { fetchATOs, deleteATO, updateATO, resetATO } from 'redux/actions/ato'
 import { connect } from 'react-redux'
 import { fetchATOs, deleteATO, updateATO } from 'redux/actions/ato'
 import { fetchEquipment } from 'redux/actions/equipment'
@@ -20,6 +21,7 @@ class main extends React.Component {
     this.probeList = this.probeList.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleReset = this.handleReset.bind(this)
   }
 
   componentDidMount () {
@@ -45,6 +47,11 @@ class main extends React.Component {
       is_macro: (values.control === 'macro')
     }
     this.props.update(values.id, payload)
+  }
+
+  handleReset (id) {
+    console.log('restting ato')
+    this.props.reset(id)
   }
 
   handleDelete (probe) {
@@ -80,13 +87,21 @@ class main extends React.Component {
             onToggleState={handleToggleState}
             enabled={probe.enable}
           >
-            <AtoForm
-              data={probe}
-              onSubmit={this.handleSubmit}
-              inlets={this.props.inlets}
-              equipment={this.props.equipment}
-              macros={this.props.macros}
-            />
+            <div className='container'>
+              <AtoForm
+                data={probe}
+                onSubmit={this.handleSubmit}
+                inlets={this.props.inlets}
+                equipment={this.props.equipment}
+                macros={this.props.macros}
+              />
+              <input
+                type='button'
+                value={i18next.t('reset')}
+                className='btn btn-sm btn-primary float-right mt-1'
+                onClick={ () => { this.handleReset(probe.id) }}
+              />
+            </div>  
           </Collapsible>
         )
       })
@@ -123,7 +138,8 @@ const mapDispatchToProps = dispatch => {
     fetchEquipment: () => dispatch(fetchEquipment()),
     fetchInlets: () => dispatch(fetchInlets()),
     delete: id => dispatch(deleteATO(id)),
-    update: (id, a) => dispatch(updateATO(id, a))
+    update: (id, a) => dispatch(updateATO(id, a)),
+    reset: (id) => dispatch(resetATO(id))
   }
 }
 

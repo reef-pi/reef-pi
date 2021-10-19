@@ -74,6 +74,7 @@ const mapStateToProps = state => {
     phprobes: state.phprobes,
     doser: state.dosers,
     macro: state.macros,
+    lightings: state.lights,
     subsystem: [
       { id: 'timers', name: 'timer' },
       { id: 'phprobes', name: 'pH' },

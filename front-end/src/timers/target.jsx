@@ -26,8 +26,8 @@ const target = (props) => {
       case 'equipment':
       case 'ato':
       case 'macro':
-      case 'ph':
-      case 'light':
+      case 'phprobes':
+      case 'lightings':
       case 'doser':
       case 'camera':
       case 'temperature':
@@ -167,10 +167,10 @@ const mapStateToProps = state => {
     ato: state.atos,
     equipment: state.equipment,
     macro: state.macros,
-    ph: state.phprobes,
+    phprobes: state.phprobes,
     temperature: state.tcs,
     doser: state.dosers,
-    light: state.lights
+    lightings: state.lights
   }
 }
 const mapDispatchToProps = dispatch => {

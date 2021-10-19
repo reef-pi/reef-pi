@@ -52,34 +52,6 @@ func TestPhAPI(t *testing.T) {
 	if err := tr.Do("POST", "/api/phprobes/1", body, nil); err != nil {
 		t.Fatal("Failed to update ph probe using api. Error:", err)
 	}
-	/* TODO
-	calib := &CalibrationDetails{Type: "high", Value: 10}
-	body.Reset()
-	enc.Encode(calib)
-	if err := tr.Do("POST", "/api/phprobes/1/calibrate", body, nil); err != nil {
-		t.Fatal("Failed to calibrate ph probe using api. Error:", err)
-	}
-	calib.Type = "mid"
-	calib.Value = 17
-	if err := c.Calibrate("1", *calib); err == nil {
-		t.Error("Calibration should fail if value is above 14")
-	}
-	calib.Value = 10
-	if err := c.Calibrate("-11", *calib); err == nil {
-		t.Error("Calibration of invalid probe id should fail")
-	}
-	if err := c.Calibrate("1", *calib); err != nil {
-		t.Error("Mid point calibration failed", err)
-	}
-	calib.Type = "low"
-	if err := c.Calibrate("1", *calib); err != nil {
-		t.Error("Low point calibration failed", err)
-	}
-	calib.Type = "invalid"
-	if err := c.Calibrate("1", *calib); err == nil {
-		t.Error("invalid calibration type should throw error")
-	}
-	*/
 	p.Enable = true
 	if err := c.Update("1", *p); err != nil {
 		t.Error(err)

@@ -30,6 +30,7 @@ const EditAto = ({
     }
   }
 
+
   const inletOptions = () => {
     return inlets.map(item => {
       return (
@@ -287,6 +288,7 @@ const EditAto = ({
     </form>
   )
 }
+
 
 EditAto.propTypes = {
   values: PropTypes.object.isRequired,
