@@ -104,6 +104,32 @@ func (c *Controller) Update(id string, a ATO) error {
 	}
 	return nil
 }
+func (c *Controller) Reset(id string) error {
+	a, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	log.Println("ato-subsystem: resetting ato ", a.Name)
+	quit, ok := c.quitters[id]
+	if ok {
+		close(quit)
+		delete(c.quitters, id)
+	}
+	if err := c.statsMgr.Delete(id); err != nil {
+		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
+	}
+	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
+		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if a.Enable {
+		quit := make(chan struct{})
+		c.quitters[a.ID] = quit
+		go c.Run(a, quit)
+	}
+	return nil
+}
 
 func (c *Controller) Delete(id string) error {
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
