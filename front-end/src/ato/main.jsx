@@ -96,7 +96,7 @@ class main extends React.Component {
               />
               <input
                 type='button'
-                value={i18next.t('reset')}
+                value={i18n.t('reset')}
                 className='btn btn-sm btn-primary float-right mt-1'
                 onClick={ () => { this.handleReset(probe.id) }}
               />
