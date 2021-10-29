@@ -319,19 +319,19 @@ const EditPh = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='lowerFunction'>{i18next.t('ph:lower_function')}</label>
+            <label htmlFor='upperFunction'>{i18next.t('ph:upper_function')}</label>
             <Field
-              name='lowerFunction'
+              name='upperFunction'
               component='select'
               disabled={readOnly || values.control === 'nothing'}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('lowerFunction', touched, errors)
+                'is-invalid': ShowError('upperFunction', touched, errors)
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {options()}
             </Field>
-            <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
+            <ErrorFor errors={errors} touched={touched} name='upperFunction' />
           </div>
         </div>
       </div>
@@ -354,19 +354,19 @@ const EditPh = ({
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='upperFunction'>{i18next.t('ph:upper_function')}</label>
+            <label htmlFor='lowerFunction'>{i18next.t('ph:lower_function')}</label>
             <Field
-              name='upperFunction'
+              name='lowerFunction'
               component='select'
               disabled={readOnly || values.control === 'nothing'}
               className={classNames('custom-select', {
-                'is-invalid': ShowError('upperFunction', touched, errors)
+                'is-invalid': ShowError('lowerFunction', touched, errors)
               })}
             >
               <option value='' className='d-none'>-- {i18next.t('select')} --</option>
               {options()}
             </Field>
-            <ErrorFor errors={errors} touched={touched} name='upperFunction' />
+            <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
           </div>
         </div>
       </div>
