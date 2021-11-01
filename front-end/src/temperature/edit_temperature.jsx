@@ -58,7 +58,7 @@ const EditTemperature = ({
       </div>
     )
 
-    if (values.heater !== '' || values.cooler !== '') {
+    if ((values.heater !== undefined && values.heater !== 'nothing') || (values.cooler !== undefined && values.cooler !== 'nothing')) {
       chs = (
         <div className='row'>
           <div className='col-lg-6'>
@@ -279,6 +279,9 @@ const EditTemperature = ({
             </div>
           </div>
 
+          {/* Wrap to next line on small */}
+          <div className='w-100 d-none d-sm-block d-md-none' />
+
           <div
             className={classNames('col-12 col-sm-3 col-md-3 d-sm-block', {
               'd-none': values.alerts === false
@@ -347,6 +350,9 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='control' />
             </div>
           </div>
+
+          {/* Wrap to next line on small */}
+          <div className='w-100 d-none d-sm-block d-md-none' />
 
           <div className='col col-sm-6 col-md-3'>
             <div className='form-group'>

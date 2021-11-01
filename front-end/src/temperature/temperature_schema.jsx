@@ -49,7 +49,7 @@ const TemperatureSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .test('match', 'Heater and Chiller must be different', function (heater) {
-            if (heater === undefined || heater === '') { return true }
+            if (heater === undefined) { return true }
             return heater !== this.parent.cooler
           })
       } else { return schema }
@@ -75,7 +75,7 @@ const TemperatureSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .test('match', 'Heater and Chiller must be different', function (chiller) {
-            if (chiller === undefined || chiller === '') { return true }
+            if (chiller === undefined) { return true }
             return chiller !== this.parent.heater
           })
       } else { return schema }
