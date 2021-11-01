@@ -111,6 +111,22 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='analog_input' />
           </div>
         </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='chart.unit'>{i18next.t('ph:chart_unit')}</label>
+            <Field
+              name='chart.unit'
+              readOnly={readOnly}
+              type='string'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('chart.unit', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='chart.unit' />
+          </div>
+        </div>
+
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='period'>{i18next.t('ph:check_frequency')}</label>
@@ -203,21 +219,6 @@ const EditPh = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='chart.unit'>{i18next.t('ph:chart_unit')}</label>
-            <Field
-              name='chart.unit'
-              readOnly={readOnly}
-              type='string'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('chart.unit', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='chart.unit' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
             <label htmlFor='chart.color'>{i18next.t('ph:chart_color')}</label>
             <ColorPicker
               name={NameFor(values.name, 'chart.color')}
@@ -254,28 +255,38 @@ const EditPh = ({
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='minAlert'>{i18next.t('ph:alert_below')}</label>
-            <Field
-              name='minAlert'
-              readOnly={readOnly || values.notify === false}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('minAlert', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='minAlert' />
+            <div className='input-group'>
+              <Field
+                name='minAlert'
+                readOnly={readOnly || values.notify === false}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('minAlert', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='minAlert' />
+            </div>
           </div>
         </div>
 
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='maxAlert'>{i18next.t('ph:alert_above')}</label>
-            <Field
-              name='maxAlert'
-              readOnly={readOnly || values.notify === false}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('maxAlert', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='maxAlert' />
+            <div className='input-group'>
+              <Field
+                name='maxAlert'
+                readOnly={readOnly || values.notify === false}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('maxAlert', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='maxAlert' />
+            </div>
           </div>
         </div>
       </div>
@@ -323,14 +334,19 @@ const EditPh = ({
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='lowerThreshold'>{i18next.t('ph:lower_threshold')}</label>
-            <Field
-              name='lowerThreshold'
-              readOnly={readOnly || values.control === 'nothing' || values.upperFunction === undefined || values.upperFunction === 'nothing'}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('lowerThreshold', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='lowerThreshold' />
+            <div className='input-group'>
+              <Field
+                name='lowerThreshold'
+                readOnly={readOnly || values.control === 'nothing' || values.upperFunction === undefined || values.upperFunction === 'nothing'}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('lowerThreshold', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='lowerThreshold' />
+            </div>
           </div>
         </div>
       </div>
@@ -358,14 +374,19 @@ const EditPh = ({
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='upperThreshold'>{i18next.t('ph:upper_threshold')}</label>
-            <Field
-              name='upperThreshold'
-              readOnly={readOnly || values.control === 'nothing' || values.lowerFunction === undefined || values.lowerFunction === 'nothing'}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('upperThreshold', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='upperThreshold' />
+            <div className='input-group'>
+              <Field
+                name='upperThreshold'
+                readOnly={readOnly || values.control === 'nothing' || values.lowerFunction === undefined || values.lowerFunction === 'nothing'}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('upperThreshold', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='upperThreshold' />
+            </div>
           </div>
         </div>
       </div>
@@ -374,14 +395,19 @@ const EditPh = ({
         <div className='col col-sm-6 col-md-3 offset-md-3'>
           <div className='form-group'>
             <label htmlFor='hysteresis'>{i18next.t('ph:hysteresis')}</label>
-            <Field
-              name='hysteresis'
-              readOnly={readOnly || values.control === 'nothing'}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('hysteresis', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='hysteresis' />
+            <div className='input-group'>
+              <Field
+                name='hysteresis'
+                readOnly={readOnly || values.control === 'nothing'}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('hysteresis', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='hysteresis' />
+            </div>
           </div>
         </div>
       </div>
