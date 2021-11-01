@@ -78,7 +78,7 @@ const EditPh = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
+      <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='name'>{i18next.t('name')}</label>
@@ -92,6 +92,9 @@ const EditPh = ({
             <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
+      </div>
+
+      <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='analog_input'>{i18next.t('analog_input')}</label>
