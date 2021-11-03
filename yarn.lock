@@ -5964,10 +5964,10 @@ i18next-browser-languagedetector@6.1.2:
   dependencies:
     "@babel/runtime" "^7.14.6"
 
-i18next@21.2.1:
-  version "21.2.1"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.2.1.tgz#e040bcfcbeb5c6f9991b2c0bbd468e969ffe20c3"
-  integrity sha512-LxT9L/y+aLdt5e3bXKpxq16i22AL5aYmGW+Za/8/PRQl2v9ARvGUPhDrbHreQq9rbh7G8Wv6YKcYgjkIfXRDTQ==
+i18next@21.4.0:
+  version "21.4.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.4.0.tgz#59d0129e9e3974313300b0f60a0e01812ba5689e"
+  integrity sha512-H8QwhJXxnPWDvRlLn3nqDvbry7PM7i3UYa0+5EHWvlVkvNNy5WJVTzZe2tZH+HnaGVAE5MaujasyOca8mbQN+w==
   dependencies:
     "@babel/runtime" "^7.12.0"
 
