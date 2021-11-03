@@ -54,7 +54,7 @@
     "react-toggle-switch": "3.0.4",
     "recharts": "^2.1.6",
     "redoc-cli": "^0.10.3",
-    "redux": "^4.1.0",
+    "redux": "^4.1.2",
     "redux-mock-store": "1.5.4",
     "redux-thunk": "2.4.0",
     "sass": "^1.42.1",
