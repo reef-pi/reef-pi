@@ -9,6 +9,7 @@ import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
 import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
+import PhUsageChart from 'ph/control_chart'
 import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
@@ -113,6 +114,15 @@ class dashboard extends React.Component {
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'ph_usage':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <PhUsageChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
                 </ErrorBoundary>
               </div>
             )
