@@ -49,8 +49,18 @@ class main extends React.Component {
   }
 
   handleReset (id) {
-    console.log('restting ato')
-    this.props.reset(id)
+    const message = (
+      <div>
+        <p>
+          {i18next.t('ato:warn_reset')}
+        </p>
+      </div>
+    )
+    confirm('Reset', { description: message }).then(
+      function () {
+        this.props.reset(id)
+      }.bind(this)
+    )
   }
 
   handleDelete (probe) {
