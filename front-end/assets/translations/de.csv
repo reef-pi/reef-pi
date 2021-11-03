@@ -88,6 +88,7 @@ ato:threshold_value,Schwellwert
 ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
 ato:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 ato:warn_delete,Wirklich löschen:
+ato:warn_reset,
 camera:capture_flags,Aufnahmeoptionen
 camera:enable,Aktiv
 camera:take_photo,Aufnahme!

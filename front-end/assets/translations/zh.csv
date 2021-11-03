@@ -88,6 +88,7 @@ ato:threshold_value,阈值必须是一个数字
 ato:total_seconds_pump_on,补水泵开启秒数
 ato:validation_error,补水器设置因为验证错误而无法存储。请纠正错误后重试。
 ato:warn_delete,
+ato:warn_reset,
 camera:capture_flags,
 camera:enable,
 camera:take_photo,
