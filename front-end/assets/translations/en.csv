@@ -88,6 +88,7 @@ ato:threshold_value,Threshold must be a number
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
 ato:warn_delete,This action will delete
+ato:warn_reset,This action will reset usage data
 camera:capture_flags,Capture flags
 camera:enable,Enable
 camera:take_photo,Take Photo!

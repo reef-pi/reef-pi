@@ -88,6 +88,7 @@ ato:threshold_value,Drempelwaarde moet numeriek zijn
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
 ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ato:warn_delete,Deze actie verwijderd
+ato:warn_reset,
 camera:capture_flags,
 camera:enable,
 camera:take_photo,
