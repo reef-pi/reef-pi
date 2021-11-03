@@ -9612,12 +9612,7 @@ react-images@1.1.7:
     react-transition-group "^2.9.0"
     react-view-pager "^0.6.0"
 
-react-is@16.10.2:
-  version "16.10.2"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
-  integrity sha512-INBT1QEgtcCCgvccr5/86CfD71fw9EPmDxgiJX4I2Ddr6ZsV6iFXsuby+qWJPtmNuMY0zByTsG4468P7nHuNWA==
-
-react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
+react-is@^16.10.2, react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -9878,10 +9873,10 @@ recharts-scale@^0.4.4:
   dependencies:
     decimal.js-light "^2.4.1"
 
-recharts@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.4.tgz#8d21750e3bb01a909e01ebe5573c48d813c25287"
-  integrity sha512-ZKaLgUo4g84FhIiLeRq0uWMqe5GTjjJk+5fxmIt2H4cn279QZCMEsuVFmBqYedJcmX1URYEII5qb9pOppr5fJA==
+recharts@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.6.tgz#04b96233a30be27ae08a20795a980853397046ec"
+  integrity sha512-KnRNnCum1hL27DYhUfcdcKUEQkYnda6G+KDN4n/nCiTKp7UzJSgHfFHQvCkBujPi/U98dGd430DA2/8RJpkPlg==
   dependencies:
     "@types/d3-interpolate" "^2.0.0"
     "@types/d3-scale" "^3.0.0"
@@ -9892,7 +9887,7 @@ recharts@^2.1.4:
     d3-shape "^2.0.0"
     eventemitter3 "^4.0.1"
     lodash "^4.17.19"
-    react-is "16.10.2"
+    react-is "^16.10.2"
     react-resize-detector "^6.6.3"
     react-smooth "^2.0.0"
     recharts-scale "^0.4.4"
