@@ -1434,6 +1434,11 @@
     prop-types "^15.7.2"
     react-is "^16.8.0 || ^17.0.0"
 
+"@miherlosev/esm@3.2.26":
+  version "3.2.26"
+  resolved "https://registry.yarnpkg.com/@miherlosev/esm/-/esm-3.2.26.tgz#a516b35d8b8b4eac29598f1c2c23e30a4d260200"
+  integrity sha512-TaW4jTGVE1/ln2VGFChnheMh589QCAZy1MVnLvjjSzZ4pEAa4WYAWPwFkDVZbSdPQdLfZy7LuTyZjWRkhX9/Gg==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -4747,11 +4752,6 @@ eslint@~7.13.0:
     table "^5.2.3"
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
-
-esm@^3.2.25:
-  version "3.2.25"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
-  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
 
 esotope-hammerhead@0.6.1:
   version "0.6.1"
@@ -11280,10 +11280,10 @@ testcafe-browser-tools@2.0.16:
     read-file-relative "^1.2.0"
     which-promise "^1.0.0"
 
-testcafe-hammerhead@24.5.1:
-  version "24.5.1"
-  resolved "https://registry.yarnpkg.com/testcafe-hammerhead/-/testcafe-hammerhead-24.5.1.tgz#31caf40ad3d877f9b63d10ae8971ab3dfbe85122"
-  integrity sha512-upLFJbEH3unQ8dq65AZdevYgWaJtWiALKW5YO5uWbx7lLvMMeQbyA7gnwrlGbIaepUdi+PlW4dORjncrU+lY/Q==
+testcafe-hammerhead@24.5.7, testcafe-hammerhead@>=19.4.0:
+  version "24.5.7"
+  resolved "https://registry.yarnpkg.com/testcafe-hammerhead/-/testcafe-hammerhead-24.5.7.tgz#8d4efb45ee7543841c88452de17cd5929418bff0"
+  integrity sha512-4pY6GQQaCZAlOolWB2vaYZ/MIpgtmOrZeh4BVbENkbh6DDiPeOxvC0K6yZS5JfINRau5S9mzuNkm2FS7G0urSA==
   dependencies:
     acorn-hammerhead "0.5.0"
     asar "^2.0.1"
@@ -11311,41 +11311,10 @@ testcafe-hammerhead@24.5.1:
     tunnel-agent "0.6.0"
     webauth "^1.1.0"
 
-testcafe-hammerhead@>=19.4.0:
-  version "24.5.2"
-  resolved "https://registry.yarnpkg.com/testcafe-hammerhead/-/testcafe-hammerhead-24.5.2.tgz#8446926e4d8e092acbfc15a239e49742196b90c4"
-  integrity sha512-kBU89dxle6JeapXPdHDkUIPZUv9Wg/4OwlceRsu4T+str4n8Im3GGeF8J38p1ewwsqTGPKWrpI61eqg+FR8IWw==
-  dependencies:
-    acorn-hammerhead "0.5.0"
-    asar "^2.0.1"
-    bowser "1.6.0"
-    brotli "^1.3.1"
-    crypto-md5 "^1.0.0"
-    css "2.2.3"
-    debug "4.3.1"
-    esotope-hammerhead "0.6.1"
-    http-cache-semantics "^4.1.0"
-    iconv-lite "0.5.1"
-    lodash "^4.17.20"
-    lru-cache "2.6.3"
-    match-url-wildcard "0.0.4"
-    merge-stream "^1.0.1"
-    mime "~1.4.1"
-    mustache "^2.1.1"
-    nanoid "^3.1.12"
-    os-family "^1.0.0"
-    parse5 "2.2.3"
-    pinkie "2.0.4"
-    read-file-relative "^1.2.0"
-    semver "5.5.0"
-    tough-cookie "2.3.3"
-    tunnel-agent "0.6.0"
-    webauth "^1.1.0"
-
-testcafe-legacy-api@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/testcafe-legacy-api/-/testcafe-legacy-api-5.0.2.tgz#7b7e1345a2f700494e995d270aac7ce6a343807c"
-  integrity sha512-2BWjCIN5YOUOTyOT4B0wy2TiaJgV8dWhIGpKqE3S34RjNEH62WR+JNhcnh4BSE+btp6H8n1TefcP/AObqSDSDQ==
+testcafe-legacy-api@5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/testcafe-legacy-api/-/testcafe-legacy-api-5.1.2.tgz#a030719a43684f03fea723b4bea2e0b5fead2dde"
+  integrity sha512-vc9A4rFUdijlBFnNOVMk0hFfxnrAmtA7FMz1P/LtvNyui5JfkLmbyIQcJbxR2rjTINp0owZ2c+xQvYms/us7Fw==
   dependencies:
     async "0.2.6"
     dedent "^0.6.0"
@@ -11387,16 +11356,17 @@ testcafe-reporter-xunit@^2.1.0:
   resolved "https://registry.yarnpkg.com/testcafe-reporter-xunit/-/testcafe-reporter-xunit-2.1.0.tgz#e6d66c572ce15af266706af0fd610b2a841dd443"
   integrity sha1-5tZsVyzhWvJmcGrw/WELKoQd1EM=
 
-testcafe@^1.10.1:
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/testcafe/-/testcafe-1.16.0.tgz#fba3c804e69129237ff49749b5ac5d320c2220b4"
-  integrity sha512-Fkx4gcCb7fxKVnLIEOGD89/qneB8hiQO0jmX8+XmfP89xo3JBBshA5ihO9rhSILxdJvd0ii/EqTDUKE7CFvHfg==
+testcafe@^1.17.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/testcafe/-/testcafe-1.17.0.tgz#aff87b50217463a8954fd110539fa44ec3cfe4e9"
+  integrity sha512-kf/y3XxuAHjQ46WbaPyZPaHOlf6c0LiEK86UI6vovnLdHknzcQoVaFSouKrCy2yt1/e4RHrFqmKBSHP8Frnhfg==
   dependencies:
     "@babel/core" "^7.12.1"
     "@babel/plugin-proposal-async-generator-functions" "^7.12.1"
     "@babel/plugin-proposal-class-properties" "^7.12.1"
     "@babel/plugin-proposal-decorators" "^7.12.1"
     "@babel/plugin-proposal-object-rest-spread" "^7.12.1"
+    "@babel/plugin-proposal-private-methods" "^7.14.5"
     "@babel/plugin-syntax-dynamic-import" "^7.8.3"
     "@babel/plugin-syntax-import-meta" "^7.10.4"
     "@babel/plugin-transform-async-to-generator" "^7.12.1"
@@ -11407,6 +11377,7 @@ testcafe@^1.10.1:
     "@babel/preset-flow" "^7.12.1"
     "@babel/preset-react" "^7.12.1"
     "@babel/runtime" "^7.12.5"
+    "@miherlosev/esm" "3.2.26"
     "@types/node" "^12.20.10"
     async-exit-hook "^1.1.2"
     babel-plugin-module-resolver "^4.0.0"
@@ -11429,7 +11400,6 @@ testcafe@^1.10.1:
     emittery "^0.4.1"
     endpoint-utils "^1.0.2"
     error-stack-parser "^1.3.6"
-    esm "^3.2.25"
     execa "^4.0.3"
     globby "^11.0.4"
     graceful-fs "^4.1.11"
@@ -11467,8 +11437,8 @@ testcafe@^1.10.1:
     source-map-support "^0.5.16"
     strip-bom "^2.0.0"
     testcafe-browser-tools "2.0.16"
-    testcafe-hammerhead "24.5.1"
-    testcafe-legacy-api "5.0.2"
+    testcafe-hammerhead "24.5.7"
+    testcafe-legacy-api "5.1.2"
     testcafe-reporter-json "^2.1.0"
     testcafe-reporter-list "^2.1.0"
     testcafe-reporter-minimal "^2.1.0"
