@@ -3691,10 +3691,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@^2.0.1:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.23.0.tgz#4e886c941659af0cf7b30fafdd1eaa37e88788a9"
-  integrity sha512-5ycpauovVyAk0kXNZz6ZoB9AYMZB4DObse7P3BPWmyEjXNORTI8EJ6X0uaSAq4sCHzM1uajzrkr6HnsLQpxGXA==
+date-fns@^2.24.0:
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.25.0.tgz#8c5c8f1d958be3809a9a03f4b742eba894fc5680"
+  integrity sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==
 
 debug@2.6.9, debug@^2.1.1, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
@@ -9510,16 +9510,16 @@ react-color@2.19.3:
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
 
-react-datepicker@^4.1.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.2.1.tgz#72caf5055bc7c4eb0279c1f6d7624ded053edc4c"
-  integrity sha512-0gcvHMnX8rS1fV90PjjsB7MQdsWNU77JeVHf6bbwK9HnFxgwjVflTx40ebKmHV+leqe+f+FgUP9Nvqbe5RGyfA==
+react-datepicker@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.3.0.tgz#f2e2fc652b7ed3c231663d858da4a3c67f470784"
+  integrity sha512-cg+gp4YnPcZc6iZ0+v7VuRgcFG22KL7izHYrCxXeSLOn5VGkyxTfcu5qA/cGIsngurCt/u0NtgVTlHB1Fwap1g==
   dependencies:
     "@popperjs/core" "^2.9.2"
     classnames "^2.2.6"
-    date-fns "^2.0.1"
+    date-fns "^2.24.0"
     prop-types "^15.7.2"
-    react-onclickoutside "^6.10.0"
+    react-onclickoutside "^6.12.0"
     react-popper "^2.2.5"
 
 react-dom@16.12.0:
@@ -9641,10 +9641,10 @@ react-motion@^0.5.0:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-onclickoutside@^6.10.0:
-  version "6.11.2"
-  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.11.2.tgz#790e2100b9a3589eefca1404ecbf0476b81b7928"
-  integrity sha512-640486eSwU/t5iD6yeTlefma8dI3bxPXD93hM9JGKyYITAd0P1JFkkcDeyHZRqNpY/fv1YW0Fad9BXr44OY8wQ==
+react-onclickoutside@^6.12.0:
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.12.0.tgz#c63db2e3c2c852b288160cdb6cff443604e28db4"
+  integrity sha512-oPlOTYcISLHfpMog2lUZMFSbqOs4LFcA4+vo7fpfevB5v9Z0D5VBDBkfeO5lv+hpEcGoaGk67braLT+QT+eICA==
 
 react-popper@^2.2.5:
   version "2.2.5"
