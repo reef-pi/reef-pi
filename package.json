@@ -66,7 +66,7 @@
     "webpack": "5.61.0",
     "webpack-cli": "4.8.0",
     "webpack-dev-server": "4.2.0",
-    "yup": "0.32.9"
+    "yup": "0.32.11"
   },
   "scripts": {
     "translations:sync": "node ./build/translations/csv-sync.js sync",
