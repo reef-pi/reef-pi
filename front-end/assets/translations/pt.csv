@@ -88,6 +88,7 @@ ato:threshold_value,Threshold tem que ser um número
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
 ato:validation_error,"ATO Erro nas configurações, por favor corrija e tente novamente"
 ato:warn_delete,
+ato:warn_reset,
 camera:capture_flags,
 camera:enable,
 camera:take_photo,

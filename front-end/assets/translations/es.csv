@@ -88,6 +88,7 @@ ato:threshold_value,El límite debe ser un numero
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
 ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,Esta acción eliminará
+ato:warn_reset,
 camera:capture_flags,
 camera:enable,
 camera:take_photo,
