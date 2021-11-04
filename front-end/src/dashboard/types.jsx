@@ -71,6 +71,11 @@ export const buildTypeMap = (props) => {
       label: i18next.t('ph:chart:historical'),
       options: props.phs || []
     },
+    ph_usage: {
+      name: 'ph_usage',
+      label: i18next.t('ph:chart:usage'),
+      options: props.phs || []
+    },
     temp_current: {
       name: 'temp_current',
       label: i18next.t('temperature:chart:current'),

@@ -98,13 +98,13 @@ export default class Grid extends React.Component {
   menuItems (i, j) {
     const types = [
       this.menuItem(this.state.types.ato, false, i, j),
-      // this.menuItem(this.state.types.equipment, false, i, j),
       this.menuItem(this.state.types.equipment_barchart, false, i, j),
       this.menuItem(this.state.types.equipment_ctrlpanel, false, i, j),
       this.menuItem(this.state.types.health, false, i, j),
       this.menuItem(this.state.types.lights, false, i, j),
       this.menuItem(this.state.types.ph_current, false, i, j),
       this.menuItem(this.state.types.ph_historical, false, i, j),
+      this.menuItem(this.state.types.ph_usage, false, i, j),
       this.menuItem(this.state.types.temp_current, false, i, j),
       this.menuItem(this.state.types.temp_historical, false, i, j),
       this.menuItem(this.state.types.doser, false, i, j),
