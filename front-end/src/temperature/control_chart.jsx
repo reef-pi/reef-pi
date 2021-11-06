@@ -83,14 +83,6 @@ class chart extends React.Component {
   }
 }
 
-const formatLegend = (value, name, unit) => {
-  if (name==='value') {
-    return [TwoDecimalParse(value), unit]
-  }
-  else {
-    return [PercentOf(value,3600) + '%', i18next.t('temperature:chart:' + name)]
-  }
-}
 const mapStateToProps = (state, ownProps) => {
   return {
     config: state.tcs.find(el => {
