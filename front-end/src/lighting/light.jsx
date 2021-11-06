@@ -84,7 +84,7 @@ const EditLight = ({
 }
 
 EditLight.propTypes = {
-  values: PropTypes.array,
+  values: PropTypes.object,
   config: PropTypes.object,
   submitForm: PropTypes.func,
   isValid: PropTypes.bool,
@@ -92,8 +92,8 @@ EditLight.propTypes = {
   handleChange: PropTypes.func,
   dirty: PropTypes.bool,
   readOnly: PropTypes.bool,
-  touched: PropTypes.array,
-  errors: PropTypes.array
+  touched: PropTypes.object,
+  errors: PropTypes.object
 }
 
 export default EditLight

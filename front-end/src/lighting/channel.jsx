@@ -253,10 +253,10 @@ Channel.propTypes = {
   onBlur: PropTypes.func,
   name: PropTypes.string.isRequired,
   channel: PropTypes.object.isRequired,
-  channelNum: PropTypes.number,
+  channelNum: PropTypes.string,
   setTouched: PropTypes.func,
-  errors: PropTypes.array,
-  touched: PropTypes.array
+  errors: PropTypes.object,
+  touched: PropTypes.object
 }
 
 export default Channel
