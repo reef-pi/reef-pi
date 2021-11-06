@@ -31,6 +31,7 @@ const initialState = {
   doser_usage: {},
   macro_usage: {},
   tc_usage: {},
+  light_usage: {},
   ph_readings: {},
   ph_reading: [],
   tc_sensors: [],

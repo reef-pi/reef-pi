@@ -24,6 +24,15 @@ export const lightLoaded = (id) => {
   }
 }
 
+export const lightUsageLoaded = (id) => {
+  return (u) => {
+    return ({
+      type: 'LIGHT_USAGE_LOADED',
+      payload: { usage: u, id: id }
+    })
+  }
+}
+
 export const fetchLights = () => {
   return (reduxGet({
     url: '/api/lights',
@@ -58,5 +67,12 @@ export const deleteLight = (s) => {
   return (reduxDelete({
     url: '/api/lights/' + s,
     success: fetchLights
+  }))
+}
+
+export const fetchLightUsage = (id) => {
+  return (reduxGet({
+    url: '/api/lights/' + id + '/usage',
+    success: lightUsageLoaded(id)
   }))
 }

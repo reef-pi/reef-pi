@@ -4,7 +4,7 @@ import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
 import BlankPanel from 'dashboard/blank_panel'
-import LightChart from 'lighting/chart'
+import GenericLightChart from 'lighting/charts/generic'
 import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
 import HealthChart from 'health_chart'
@@ -59,7 +59,7 @@ class dashboard extends React.Component {
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
-                  <LightChart width={config.width} height={config.height} light_id={ch.id} />
+                  <GenericLightChart width={config.width} height={config.height} light_id={ch.id} />
                 </ErrorBoundary>
               </div>
             )
