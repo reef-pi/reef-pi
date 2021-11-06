@@ -13,12 +13,7 @@ class settings extends React.Component {
     super(props)
     this.state = {
       capabilities: props.capabilities,
-      settings: props.settings || {
-        name: '',
-        interface: '',
-        address: '',
-        rpi_pwm_freq: 100
-      },
+      settings: props.settings,
       currentLanguage: i18n.language,
       updated: false
     }
