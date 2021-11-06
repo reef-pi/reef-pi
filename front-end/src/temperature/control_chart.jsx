@@ -3,6 +3,7 @@ import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, R
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
+// import { PercentOf } from 'utils/percent_of'
 import humanizeDuration from 'humanize-duration'
 
 class chart extends React.Component {
