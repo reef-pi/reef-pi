@@ -24,7 +24,16 @@ const initialState = {
   jacks: [],
   analog_inputs: [],
   outlets: [],
-  settings: {},
+  settings: {
+    name: '',
+    interface: '',
+    address: '',
+    notification: false,
+    pprof: false,
+    prometheus: false,
+    cors: false,
+    rpi_pwm_freq: 100
+  },
   dashboard: {},
   display: {},
   ato_usage: {},

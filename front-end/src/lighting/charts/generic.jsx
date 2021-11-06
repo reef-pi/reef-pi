@@ -28,7 +28,15 @@ class chart extends React.Component {
 
     const lines = []
     Object.entries(l.channels).forEach(([k, ch]) => {
-      lines.push(<Line type='monotone' dataKey={ch.name} stroke={ch.color} />)
+      lines.push(
+        <Line
+          type='monotone'
+          dataKey={ch.name}
+          stroke={ch.color}
+          key={ch.name}
+          isAnimationActive={false}
+          dot={false}
+        />)
     })
 
     const usage = this.props.usage.current
