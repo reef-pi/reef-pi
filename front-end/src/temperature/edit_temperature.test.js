@@ -29,8 +29,8 @@ describe('<EditTemperature />', () => {
       period: 60,
       min: 72,
       max: 78,
-      heater: '',
-      cooler: '',
+      heater: 'nothing',
+      cooler: 'nothing',
       alerts: false,
       control: 'macro',
       chart: { color: '#000'}
