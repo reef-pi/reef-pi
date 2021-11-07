@@ -4,7 +4,7 @@ import { showError } from 'utils/alert'
 import { connect } from 'react-redux'
 import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/jacks'
 import Jack from './jack'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 
 class jacks extends React.Component {
@@ -46,11 +46,19 @@ class jacks extends React.Component {
     })
   }
 
-  remove (id) {
+  remove (conn) {
     return function () {
-      confirm(i18next.t('are_you_sure')).then(
+      const message = (
+        <div>
+          <p>
+            {i18n.t('configuration:connectors:warn_delete').replace('$[name]', conn.name)}
+          </p>
+        </div>
+      )
+ 
+      confirm(i18n.t('delete'), { description: message }).then(
         function () {
-          this.props.delete(id)
+          this.props.delete(conn.id)
         }.bind(this)
       )
     }.bind(this)
@@ -102,7 +110,7 @@ class jacks extends React.Component {
             driver={j.driver}
             drivers={this.props.drivers}
             jack_id={j.id}
-            remove={this.remove(j.id)}
+            remove={this.remove(j)}
             update={p => {
               this.props.update(j.id, p)
               this.props.fetch()
@@ -121,7 +129,7 @@ class jacks extends React.Component {
       <div className='container'>
         <div className='row mb-1'>
           <div className='col-12'>
-            <label className='h5'>{i18next.t('jacks')}</label>
+            <label className='h5'>{i18n.t('jacks')}</label>
             {this.list()}
           </div>
         </div>
@@ -141,7 +149,7 @@ class jacks extends React.Component {
             <div className='row add-jack' style={dStyle}>
               <div className='col-12 col-md-3'>
                 <div className='form-group'>
-                  <label htmlFor='jackName'>{i18next.t('name')}</label>
+                  <label htmlFor='jackName'>{i18n.t('name')}</label>
                   <input
                     type='text'
                     id='jackName'
@@ -153,7 +161,7 @@ class jacks extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='form-group'>
-                  <span className='input-group-addon'>{i18next.t('reverse')}</span>
+                  <span className='input-group-addon'>{i18n.t('reverse')}</span>
                   <input
                     type='checkbox'
                     id='jackReverse'
@@ -165,7 +173,7 @@ class jacks extends React.Component {
               </div>
               <div className='col-12 col-md-2'>
                 <div className='form-group'>
-                  <label htmlFor='jackPins'>{i18next.t('pins')}</label>
+                  <label htmlFor='jackPins'>{i18n.t('pins')}</label>
                   <input
                     type='text'
                     id='jackPins'
@@ -178,7 +186,7 @@ class jacks extends React.Component {
 
               <div className='col-12 col-md-2'>
                 <div className='jack-type form-group'>
-                  <label>{i18next.t('driver')}</label>
+                  <label>{i18n.t('driver')}</label>
                   <select
                     name='driver'
                     className='form-control custom-select'
@@ -199,7 +207,7 @@ class jacks extends React.Component {
                 <input
                   type='button'
                   id='createJack'
-                  value={i18next.t('add')}
+                  value={i18n.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'
                 />
