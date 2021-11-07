@@ -134,7 +134,7 @@ configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
 configuration:connectors:warn_delete,Wollen Sie den Anschluss $[name] wirklich löschen?
-configuration:drivers:warn_delete,Wollen Sie den Treiber $[name] wirklich entfernen?
+configuration:drivers:warn_delete,Wollen Sie den Treiber für $[name] wirklich entfernen?
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:capabilities,Funktionen

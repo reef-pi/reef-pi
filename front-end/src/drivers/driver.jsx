@@ -18,17 +18,19 @@ export default class Driver extends React.Component {
     this.handleRemove = this.handleRemove.bind(this)
   }
 
-  handleRemove () {
+  handleRemove (driver) {
     const message = (
       <div>
-        <p>This action will delete this driver.</p>
+        <p>
+          {i18next.t('configuration:drivers:warn_delete').replace('$[name]', driver.name)}
+        </p>
       </div>
     )
-
-    confirm('Delete driver', { description: message })
-      .then(function () {
-        this.props.remove(this.props.driver.id)
-      }.bind(this))
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
+        this.props.remove(driver.id)
+      }.bind(this)
+    )
   }
 
   handleEdit () {
@@ -118,7 +120,7 @@ export default class Driver extends React.Component {
             type='button'
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
             value='X'
-            onClick={this.handleRemove}
+            onClick={ () => { this.handleRemove(this.props.driver) }}
           />
           {btnEdit}
         </div>
