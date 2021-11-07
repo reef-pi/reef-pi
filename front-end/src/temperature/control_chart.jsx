@@ -3,7 +3,6 @@ import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, R
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
-// import { PercentOf } from 'utils/percent_of'
 import humanizeDuration from 'humanize-duration'
 
 class chart extends React.Component {
@@ -83,14 +82,6 @@ class chart extends React.Component {
   }
 }
 
-const formatLegend = (value, name, unit) => {
-  if (name==='value') {
-    return [TwoDecimalParse(value), unit]
-  }
-  else {
-    return [PercentOf(value,3600) + '%', i18next.t('temperature:chart:' + name)]
-  }
-}
 const mapStateToProps = (state, ownProps) => {
   return {
     config: state.tcs.find(el => {
