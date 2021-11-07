@@ -232,14 +232,16 @@ class main extends React.Component {
   handleDeleteLight (light) {
     const message = (
       <div>
-        <p>This action will delete {light.name}.</p>
+        <p>
+          {i18next.t('lighting:warn_delete').replace('$[name]', light.name)}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + light.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.deleteLight(light.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   newLightUI () {
