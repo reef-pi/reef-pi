@@ -49,14 +49,16 @@ export default class Equipment extends React.Component {
     e.stopPropagation()
     const message = (
       <div>
-        <p>This action will delete {this.props.equipment.name}.</p>
+        <p>
+          {i18next.t('equipment:warn_delete').replace('$[name]', this.props.equipment.name)}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + this.props.equipment.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.delete(this.props.equipment.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   handleUpdate (id, values) {
