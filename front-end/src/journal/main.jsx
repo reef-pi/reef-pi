@@ -33,12 +33,11 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('journal:warn_delete')} {j.name}.
+          {i18next.t('journal:warn_delete').replace('$[name]', j.name)}
         </p>
       </div>
     )
-
-    confirm('Delete ' + j.name, { description: message }).then(
+    confirm(i18next.t('delete'), { description: message }).then(
       function () {
         this.props.delete(j.id)
       }.bind(this)
