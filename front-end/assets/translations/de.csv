@@ -51,6 +51,7 @@ outlets,digitale Ausgänge
 pin,Pin
 pins,Pins
 profile,Profil
+reset,Historie löschen
 reverse,Invers
 rows,Zeilen
 running,Version
@@ -87,8 +88,8 @@ ato:threshold_required,Ein Schwellwert wird benötigt!
 ato:threshold_value,Schwellwert
 ato:total_seconds_pump_on,gesamte Laufzeit der Pumpe
 ato:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
-ato:warn_delete,Wirklich löschen:
-ato:warn_reset,
+ato:warn_delete,Wollen Sie ATO $[name] wirklich löschen?
+ato:warn_reset,Wollen Sie die Historie von $[name] wirklich löschen?
 camera:capture_flags,Aufnahmeoptionen
 camera:enable,Aktiv
 camera:take_photo,Aufnahme!
@@ -132,6 +133,8 @@ configuration:admin:sign_out,Abmelden
 configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
+configuration:connectors:warn_delete,Wollen Sie den Anschluss $[name] wirklich löschen?
+configuration:drivers:warn_delete,Wollen Sie den Treiber $[name] wirklich entfernen?
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:capabilities,Funktionen
@@ -171,16 +174,20 @@ doser:calibration:run,Start
 doser:doser_usage,Pumpennutzung
 doser:duration,Dauer
 doser:speed,Geschwindigkeit
+doser:warn_delete,Wollen Sie die Dosierpumpe $[name] wirklich löschen?
+doser:warn_reset,Wollen Sie die Historie von $[name] wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:warn_delete,Wollen Sie das Gerät $[name] wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
 fatal_error:troubleshoot,Fehlersuche
 health_chart:cpu_memory,CPU / Speicher
+instances:warn_delete,Wollen Sie die Instanz $[name] wirklich löschen?
 journal:description,Beschreibung
 journal:unit,Einheit
-journal:warn_delete,Wirklich löschen:
+journal:warn_delete,Wollen Sie die Notiz $[name] wirklich löschen?
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -193,6 +200,7 @@ language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
 lighting:channel_name,Kanalname
+lighting:warn_delete,Wollen Sie die Beleuchtung $[name] wirklich löschen?
 log:content,Beschreibung
 log:emitter,Sender
 log:time,Zeit
@@ -208,6 +216,7 @@ macro:steps,Schritte
 macro:turn_off,Ausschalten
 macro:turn_on,Einschalten
 macro:wait:duration,Dauer
+macro:warn_delete,Wollen Sie das Makro $[name] wirklich löschen?
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
 ph:analog_input_required,Ein Eingang wird benötigt!
@@ -251,7 +260,8 @@ ph:upper_threshold_greater_than,Wert muss über der unteren Schwelle liegen!
 ph:upper_threshold_required,Ein Schwellwert ist erforderlich!
 ph:upper_threshold_type,Das muss eine Zahl sein!
 ph:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
-ph:warn_delete,Wirklich löschen: 
+ph:warn_delete,Wollen Sie die Sonde $[name] wirklich löschen?
+ph:warn_reset,Wollen Sie die Historie von $[name] wirklich löschen?
 signin:invalidcredentials,Anmeldefehler!
 signin:password,Passwort
 signin:signin,Anmelden
@@ -298,7 +308,8 @@ temperature:unit,Einheit
 temperature:upper_function,Kühlungssteuerung durch
 temperature:upper_threshold,oberer Schwellwert
 temperature:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
-temperature:warn_delete,Wirklich löschen:
+temperature:warn_delete,Wollen Sie die Regelung $[name] wirklich löschen?
+temperature:warn_reset,Wollen Sie die Historie von $[name] wirklich löschen?
 timers:after,... nach
 timers:and_then,... danach
 timers:day_required,Eine Zahl oder * wird benötigt!
@@ -332,3 +343,4 @@ timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
 timers:type_required,Ein Typ ist erforderlich!
 timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
+timers:warn_delete,Wollen Sie die Schaltuhr $[name] wirklich löschen?

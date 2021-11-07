@@ -51,6 +51,7 @@ outlets,Outlets
 pin,Pin
 pins,Pins
 profile,Profile
+reset,Reset history
 reverse,Reverse
 rows,Rows
 running,running
@@ -87,8 +88,8 @@ ato:threshold_required,Threshold is required when notification is enabled
 ato:threshold_value,Threshold must be a number
 ato:total_seconds_pump_on,Total number of seconds ato pump is on
 ato:validation_error,The ATO settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ato:warn_delete,This action will delete
-ato:warn_reset,This action will reset usage data
+ato:warn_delete,This action will delete ATO $[name]
+ato:warn_reset,This action will reset usage data for ATO $[name]
 camera:capture_flags,Capture flags
 camera:enable,Enable
 camera:take_photo,Take Photo!
@@ -132,6 +133,8 @@ configuration:admin:sign_out,Sign Out
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
+configuration:connectors:warn_delete,This action will delete connector $[name]
+configuration:drivers:warn_delete,This action will remove driver $[name]
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:capabilities,Capabilities
@@ -171,16 +174,20 @@ doser:calibration:run,Run
 doser:doser_usage,Pump Usage
 doser:duration,Duration
 doser:speed,Speed
+doser:warn_delete,This action will delete doser $[name]
+doser:warn_reset,This action will reset usage data for doser $[name]
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
+equipment:warn_delete,This action will delete equipment $[name]
 fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
+instances:warn_delete,This action will delete instance $[name]
 journal:description,Description
 journal:unit,Unit
-journal:warn_delete,This action will delete
+journal:warn_delete,This action will delete journal entry $[name]
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -193,6 +200,7 @@ language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
 lighting:channel_name,Channel Name
+lighting:warn_delete,This action will delete lighting $[name]
 log:content,Content
 log:emitter,Emitter
 log:time,Time
@@ -208,6 +216,7 @@ macro:steps,Steps
 macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration
+macro:warn_delete,This action will delete macro $[name]
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required
@@ -251,7 +260,8 @@ ph:upper_threshold_greater_than,Upper Threshold must be greater than Lower Thres
 ph:upper_threshold_required,Upper Threshold is required
 ph:upper_threshold_type,Upper Threshold must be a number
 ph:validation_error,The Ph settings cannot be saved due to validation errors.  Please correct the errors and try again.
-ph:warn_delete,This action will delete
+ph:warn_delete,This action will delete probe $[name]
+ph:warn_reset,This action will reset usage data for probe $[name]
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password
 signin:signin,Sign In
@@ -298,7 +308,8 @@ temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
 temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
-temperature:warn_delete, This action will delete
+temperature:warn_delete,This action will delete controller $[name]
+temperature:warn_reset,This action will reset usage data for $[name]
 timers:after,After
 timers:and_then,And Then
 timers:day_required,Day is required
@@ -332,3 +343,4 @@ timers:turn_off,Turn Off
 timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
+timers:warn_delete,This action will delete timer $[name]

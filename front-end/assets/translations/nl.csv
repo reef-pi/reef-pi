@@ -51,6 +51,7 @@ outlets,Uitgangen
 pin,pin
 pins,Pins
 profile,
+reset,
 reverse,omkeren
 rows,
 running,Actief
@@ -132,6 +133,8 @@ configuration:admin:sign_out,Log uit
 configuration:authentication:credentials,Aanmeldingsgegevens
 configuration:authentication:error_pass,Geef een passwoord in
 configuration:authentication:error_user,Geef een gebruikersnaam in
+configuration:connectors:warn_delete,
+configuration:drivers:warn_delete,
 configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
 configuration:settings:capabilities,Opties
@@ -171,13 +174,17 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:warn_delete,
+doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:warn_delete,
 fatal_error:connection_lost,Connectie verloren
 fatal_error:fatal_error,Fatale Fout
 fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na."
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
+instances:warn_delete,
 journal:description,
 journal:unit,Eenheid
 journal:warn_delete,
@@ -193,6 +200,7 @@ language:nl,Nederlands
 language:pt,Portugees
 language:zh,Chinees
 lighting:channel_name,
+lighting:warn_delete,
 log:content,Content
 log:emitter,Emitter
 log:time,Tijd
@@ -208,6 +216,7 @@ macro:steps,
 macro:turn_off,Uitschakelen
 macro:turn_on,Inschakelen
 macro:wait:duration,
+macro:warn_delete,
 ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
 ph:analog_input_required,Analoge Input is nodig
@@ -252,6 +261,7 @@ ph:upper_threshold_required,Hoogste drempelwaarde is vereist
 ph:upper_threshold_type,Hoogste drempelwaarde moet numeriek zijn
 ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
+ph:warn_reset,
 signin:invalidcredentials,Foutieve aanmeldingsgegevens
 signin:password,Passwoord
 signin:signin,Log in
@@ -299,6 +309,7 @@ temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
 temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 temperature:warn_delete,Deze actie verwijderd
+temperature:warn_reset,
 timers:after,Na
 timers:and_then,AEn Daarna
 timers:day_required,Dag is nodig
@@ -332,3 +343,4 @@ timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
 timers:type_required,Type is nodig
 timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
+timers:warn_delete,
