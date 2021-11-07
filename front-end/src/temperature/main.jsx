@@ -22,6 +22,8 @@ class main extends React.Component {
     this.probeList = this.probeList.bind(this)
     this.handleToggleAddProbeDiv = this.handleToggleAddProbeDiv.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    // for future use
+    //this.handleReset = this.handleReset.bind(this)
     this.handleCreate = this.handleCreate.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.dismissModal = this.dismissModal.bind(this)
@@ -152,16 +154,31 @@ class main extends React.Component {
     this.handleToggleAddProbeDiv()
   }
 
+// for future use :-)
+//  handleReset (probe) {
+//    const message = (
+//      <div>
+//        <p>
+//          {i18next.t('temperature:warn_reset').replace('$[name]', probe.name)}
+//        </p>
+//      </div>
+//    )
+//    confirm(i18next.t('reset'), { description: message }).then(
+//      function () {
+//        this.props.reset(probe.id)
+//      }.bind(this)
+//    )
+//  }
+
   handleDelete (probe) {
     const message = (
       <div>
         <p>
-          {i18next.t('temperature:warn_delete')} {probe.name}.
+          {i18next.t('temperature:warn_delete').replace('$[name]', probe.name)}
         </p>
       </div>
     )
-
-    confirm('Delete ' + probe.name, { description: message }).then(
+    confirm(i18next.t('delete'), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)
