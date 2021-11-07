@@ -199,7 +199,9 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:change_mode,Modus ändern
 lighting:channel_name,Channel Name
+lighting:warn_change,Wollen Sie für $[name] den Modus von $[oldmode] nach $[newmode] ändern?
 lighting:warn_delete,This action will delete lighting $[name]
 log:content,Content
 log:emitter,Emitter

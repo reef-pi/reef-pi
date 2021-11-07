@@ -11,7 +11,7 @@ import Collapsible from '../ui_components/collapsible'
 import { IoMdSwitch } from 'react-icons/io'
 import ManualLight from './manual_light'
 import { SortByName } from 'utils/sort_by_name'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 class main extends React.Component {
   constructor (props) {
@@ -212,18 +212,20 @@ class main extends React.Component {
       }
       const message = (
         <div>
-          <p>This action will change the mode for {light.name} from {currentMode} to {newMode}.</p>
+          <p>
+            {i18n.t('lighting:warn_change').replace('$[name]',light.name).replace('$[oldmode]',currentMode).replace('$[newmode]',newMode)}
+          </p>
         </div>
       )
-
-      return confirm('Change Mode', { description: message })
-        .then(function () {
+      return confirm(i18n.t('lighting:change_mode'), { description: message }).then(
+        function () {
           for (const x in light.channels) {
             light.channels[x].manual = (newMode !== 'auto')
           }
 
           this.props.updateLight(light.id, light)
-        }.bind(this))
+        }.bind(this)
+      )
     }.bind(this)
 
     return fn
@@ -233,11 +235,11 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('lighting:warn_delete').replace('$[name]', light.name)}
+          {i18n.t('lighting:warn_delete').replace('$[name]', light.name)}
         </p>
       </div>
     )
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18n.t('delete'), { description: message }).then(
       function () {
         this.props.deleteLight(light.id)
       }.bind(this)
@@ -253,13 +255,13 @@ class main extends React.Component {
     return (
       <div className='row'>
         <div className='col-12 col-sm-3 col-md-2 col-lg-1'>
-          <label htmlFor='lightName'>{i18next.t('name')}</label>
+          <label htmlFor='lightName'>{i18n.t('name')}</label>
         </div>
         <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
           <input type='text' id='lightName' className='form-control' required />
         </div>
         <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
-          <label htmlFor='jack'>{i18next.t('jack')}</label>
+          <label htmlFor='jack'>{i18n.t('jack')}</label>
         </div>
         <div className='col-12 col-sm-9 col-md-4 col-lg-3 mb-1'>
           <div className='dropdown w-100'>
@@ -271,7 +273,7 @@ class main extends React.Component {
               aria-haspopup='true'
               aria-expanded='false'
             >
-              {jack || i18next.t('select')}
+              {jack || i18n.t('select')}
             </button>
             <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
               {this.jacksList()}
@@ -282,7 +284,7 @@ class main extends React.Component {
           <input
             type='button'
             id='createLight'
-            value={i18next.t('add')}
+            value={i18n.t('add')}
             onClick={this.handleAddLight}
             className='btn btn-outline-primary'
           />

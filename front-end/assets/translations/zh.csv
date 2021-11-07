@@ -199,7 +199,9 @@ language:language,语言
 language:nl,Nederlands
 language:pt,葡萄牙语
 language:zh,中文
+lighting:change_mode,
 lighting:channel_name,
+lighting:warn_change,
 lighting:warn_delete,
 log:content,内容
 log:emitter,记录者
