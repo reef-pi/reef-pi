@@ -42,7 +42,7 @@ export default class Instance extends React.Component {
       <div>
         <p>This action will delete {this.props.instance.name}.</p>
         <p>
-          {i18next.t('instances:warn_delete').replace('$[name]', this.props.instance.name)}
+          {i18next.t('instances:warn_delete', {name: this.props.instance.name})}
         </p>
       </div>
     )

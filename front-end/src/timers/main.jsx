@@ -59,7 +59,7 @@ class Main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('timers:warn_delete').replace('$[name]', timer.name)}
+          {i18next.t('timers:warn_delete', {name: timer.name})}
         </p>
       </div>
     )

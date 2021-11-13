@@ -55,7 +55,7 @@ class inlets extends React.Component {
       const message = (
         <div>
           <p>
-            {i18n.t('configuration:connectors:warn_delete').replace('$[name]', conn.name)}
+            {i18n.t('configuration:connectors:warn_delete', {name: conn.name})}
           </p>
         </div>
       )

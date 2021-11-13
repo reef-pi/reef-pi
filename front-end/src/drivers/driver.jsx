@@ -22,7 +22,7 @@ export default class Driver extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('configuration:drivers:warn_delete').replace('$[name]', driver.name)}
+          {i18next.t('configuration:drivers:warn_delete', {name: driver.name})}
         </p>
       </div>
     )

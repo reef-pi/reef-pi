@@ -159,7 +159,7 @@ class main extends React.Component {
 //    const message = (
 //      <div>
 //        <p>
-//          {i18next.t('temperature:warn_reset').replace('$[name]', probe.name)}
+//          {i18next.t('temperature:warn_reset', {name: probe.name})}
 //        </p>
 //      </div>
 //    )
@@ -174,7 +174,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('temperature:warn_delete').replace('$[name]', probe.name)}
+          {i18next.t('temperature:warn_delete', {name: probe.name})}
         </p>
       </div>
     )

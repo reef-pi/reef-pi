@@ -213,7 +213,7 @@ class main extends React.Component {
       const message = (
         <div>
           <p>
-            {i18n.t('lighting:warn_change').replace('$[name]',light.name).replace('$[oldmode]',currentMode).replace('$[newmode]',newMode)}
+            {i18n.t('lighting:warn_change', {name: light.name, oldmode: currentMode, newmode: newMode})}
           </p>
         </div>
       )
@@ -235,7 +235,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18n.t('lighting:warn_delete').replace('$[name]', light.name)}
+          {i18n.t('lighting:warn_delete', {name: light.name})}
         </p>
       </div>
     )

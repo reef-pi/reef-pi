@@ -119,7 +119,7 @@ class ph extends React.Component {
 //    const message = (
 //      <div>
 //        <p>
-//          {i18next.t('ph:warn_reset').replace('$[name]', probe.name)}
+//          {i18next.t('ph:warn_reset', {name: probe.name})}
 //        </p>
 //      </div>
 //    )
@@ -134,7 +134,7 @@ class ph extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ph:warn_delete').replace('$[name]', probe.name)}
+          {i18next.t('ph:warn_delete', {name: probe.name})}
         </p>
       </div>
     )
