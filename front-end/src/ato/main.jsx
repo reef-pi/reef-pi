@@ -93,7 +93,7 @@ class main extends React.Component {
             className='btn btn-sm btn-outline-info float-right'
             onClick={() => { this.handleReset(probe.id) }}
           >
-            {i18next.t('reset')}
+            {i18next.t('ato:reset_usage')}
           </button>
         )
         return (
