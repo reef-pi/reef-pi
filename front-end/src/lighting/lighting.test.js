@@ -280,7 +280,7 @@ describe('Lighting ui', () => {
   })
 
   it('<Channel />', () => {
-    const m = shallow(<Channel channel={light.channels['1']} onChangeHandler={() => {}} />)
+    const m = shallow(<Channel name='' channel={light.channels['1']} onChangeHandler={() => {}} />)
     expect(m).toBeDefined()
   })
 
