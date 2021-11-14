@@ -82,6 +82,7 @@ ato:controlnothing,
 ato:disable_on_alert,禁用发生于告警
 ato:inlet_required,必须填写进口
 ato:name_required,必须填写名字
+ato:reset_usage,
 ato:status_required,必须填写补水器状态
 ato:threshold_required,当启用通知时必须填写阈值
 ato:threshold_value,阈值必须是一个数字
