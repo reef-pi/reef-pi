@@ -15,6 +15,7 @@ describe('Validation', () => {
       control: 'nothing',
       heater: 'nothing',
       cooler: 'nothing',
+      hysteresis: 0,
       chart: {ymin: 0, ymax: 100, color: '#000'}
     }
   })
@@ -56,6 +57,11 @@ describe('Validation', () => {
     tc.min = 77
     tc.max = 80
     expect.assertions(1)
+    //TemperatureSchema.validate(tc).then(
+    //  value => console.log(value)
+    //).catch(
+    //  err => console.log(err)
+    //)
     return TemperatureSchema.isValid(tc).then(
       valid => expect(valid).toBe(false)
     )
