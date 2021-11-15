@@ -3,7 +3,7 @@ import New from './new'
 import JournalForm from './form'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
-import { fetchJournals, deleteJournal, updateJournal } from 'redux/actions/journal'
+import { fetchJournals, deleteJournal, updateJournal, fetchJournalUsage, recordJournal } from 'redux/actions/journal'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
@@ -17,7 +17,17 @@ class main extends React.Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleRecord = this.handleRecord.bind(this)
     this.list = this.list.bind(this)
+  }
+
+  handleRecord (values) {
+    const payload = {
+      value: values.value,
+      comment: values.comment,
+      timestamp: values.timestamp
+    }
+    this.props.record(values.id, payload)
   }
 
   handleSubmit (values) {
@@ -58,6 +68,7 @@ class main extends React.Component {
             <JournalForm
               data={j}
               onSubmit={this.handleSubmit}
+              onRecord={this.handleRecord}
             />
           </Collapsible>
         )
@@ -86,7 +97,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchJournals: () => dispatch(fetchJournals()),
     delete: id => dispatch(deleteJournal(id)),
-    update: (id, a) => dispatch(updateJournal(id, a))
+    update: (id, a) => dispatch(updateJournal(id, a)),
+    record: (id, a) => dispatch(recordJournal(id, a))
   }
 }
 

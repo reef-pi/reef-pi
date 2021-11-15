@@ -24,6 +24,9 @@ const JournalForm = withFormik({
   validationSchema: JournalSchema,
   handleSubmit: (values, { props }) => {
     props.onSubmit(values)
+  },
+  handleRecord: (values, { props }) => {
+    props.onRecord(values.id, values)
   }
 })(EditJournal)
 
