@@ -14,3 +14,8 @@ updates:
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
+- package-ecosystem: 'bundler'
+  directory: '/'
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
