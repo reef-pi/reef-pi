@@ -134,6 +134,8 @@ configuration:admin:sign_out,Desligar o Login
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Tens que inserir uma password
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
+configuration:connectors:warn_delete,
+configuration:drivers:warn_delete,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
 configuration:settings:capabilities,Capacidades
@@ -173,13 +175,17 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:warn_delete,
+doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:warn_delete,
 fatal_error:connection_lost,Ligação Perdida
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
 health_chart:cpu_memory,CPU/Memory
+instances:warn_delete,
 journal:description,
 journal:unit,Unidades
 journal:warn_delete,
@@ -194,7 +200,10 @@ language:language,Lingua
 language:nl,Nederlands
 language:pt,Português
 language:zh,
+lighting:change_mode,
 lighting:channel_name,
+lighting:warn_change,
+lighting:warn_delete,
 log:content,Conteudo
 log:emitter,Emissor
 log:time,Tempo
@@ -210,6 +219,7 @@ macro:steps,
 macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
 macro:wait:duration,
+macro:warn_delete,
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:analog_input_required,Entrada Analógica é Obrigatório
@@ -254,6 +264,7 @@ ph:upper_threshold_required,
 ph:upper_threshold_type,
 ph:validation_error,"Ph Erro nas configurações, por favor corrija e tente novamente"
 ph:warn_delete,Esta acção vai ser removida
+ph:warn_reset,
 signin:invalidcredentials,Credenciais invalidas
 signin:password,Password
 signin:signin,Entrar
@@ -301,6 +312,7 @@ temperature:upper_function,
 temperature:upper_threshold,
 temperature:validation_error,"A Temperatura Erro nas configurações, por favor corrija e tente novamente"
 temperature:warn_delete,
+temperature:warn_reset,
 timers:after,após
 timers:and_then,e depois
 timers:day_required,Dia é Obrigatório
@@ -334,3 +346,4 @@ timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
 timers:type_required,Tipo é Obrigatório
 timers:validation_error,"Erro nas configurações de timmer, por favor corrija e tente novamente"
+timers:warn_delete,

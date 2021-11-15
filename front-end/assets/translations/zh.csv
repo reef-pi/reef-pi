@@ -134,6 +134,8 @@ configuration:admin:sign_out,登出
 configuration:authentication:credentials,认证
 configuration:authentication:error_pass,你必须提供一个密码
 configuration:authentication:error_user,你必须提供一个用户名
+configuration:connectors:warn_delete,
+configuration:drivers:warn_delete,
 configuration:settings:address,日志
 configuration:settings:alert_health_check,健康检查警告
 configuration:settings:capabilities,功能
@@ -173,13 +175,17 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:warn_delete,
+doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:warn_delete,
 fatal_error:connection_lost,连接丢失
 fatal_error:fatal_error,致命错误
 fatal_error:message,无法连接服务器，你需要重启服务器或者排除故障。
 fatal_error:troubleshoot,排除故障
 health_chart:cpu_memory,CPU/内存
+instances:warn_delete,
 journal:description,
 journal:unit,单位
 journal:warn_delete,
@@ -194,7 +200,10 @@ language:language,语言
 language:nl,Nederlands
 language:pt,葡萄牙语
 language:zh,中文
+lighting:change_mode,
 lighting:channel_name,
+lighting:warn_change,
+lighting:warn_delete,
 log:content,内容
 log:emitter,记录者
 log:time,时间
@@ -210,6 +219,7 @@ macro:steps,
 macro:turn_off,关闭
 macro:turn_on,开启
 macro:wait:duration,
+macro:warn_delete,
 ph:alert_above,告警上限
 ph:alert_below,告警下限
 ph:analog_input_required,必须填写模拟输入
@@ -254,6 +264,7 @@ ph:upper_threshold_required,必须填写上阈值
 ph:upper_threshold_type,上阈值必须是一个数字
 ph:validation_error,PH值设置因为验证错误而无法存储，请纠正错误后重试。
 ph:warn_delete,这个动作将会被删除
+ph:warn_reset,
 signin:invalidcredentials,认证无效
 signin:password,密码
 signin:signin,登录
@@ -301,6 +312,7 @@ temperature:upper_function,上层功能
 temperature:upper_threshold,上阈值
 temperature:validation_error,温度设置因为验证错误而无法存储，请纠正错误后重试。
 temperature:warn_delete,这个动作将要删除
+temperature:warn_reset,
 timers:after,后于
 timers:and_then,然后
 timers:day_required,必须填写日期
@@ -334,3 +346,4 @@ timers:turn_off,关闭
 timers:turn_on,开启
 timers:type_required,必须填写类型
 timers:validation_error,计时器设置因为验证错误而无法存储。请纠正错误后重试。
+timers:warn_delete,

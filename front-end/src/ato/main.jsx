@@ -48,17 +48,17 @@ class main extends React.Component {
     this.props.update(values.id, payload)
   }
 
-  handleReset (id) {
+  handleReset (probe) {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_reset')}
+          {i18next.t('ato:warn_reset', {name: probe.name})}
         </p>
       </div>
     )
-    confirm('Reset', { description: message }).then(
+    confirm(i18next.t('reset'), { description: message }).then(
       function () {
-        this.props.reset(id)
+        this.props.reset(probe.id)
       }.bind(this)
     )
   }
@@ -67,12 +67,11 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_delete')} {probe.name}.
+          {i18next.t('ato:warn_delete', {name: probe.name})}
         </p>
       </div>
     )
-
-    confirm('Delete ' + probe.name, { description: message }).then(
+    confirm(i18next.t('delete'), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)

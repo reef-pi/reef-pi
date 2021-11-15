@@ -104,12 +104,13 @@ class doser extends React.Component {
   handleDeleteDoser (doser) {
     const message = (
       <div>
-        <p>This action will delete {doser.name}.</p>
+        <p>
+          {i18next.t('doser:warn_delete', {name: doser.name})}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + doser.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.delete(doser.id)
       }.bind(this))
   }

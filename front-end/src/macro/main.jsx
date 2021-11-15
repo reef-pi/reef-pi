@@ -134,14 +134,16 @@ class main extends React.Component {
   handleDeleteMacro (macro) {
     const message = (
       <div>
-        <p>This action will delete {macro.name}.</p>
+        <p>
+          {i18next.t('macro:warn_delete', {name: macro.name})}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + macro.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.delete(macro.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   runMacro (e, macro) {
