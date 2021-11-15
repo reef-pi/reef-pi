@@ -8,6 +8,7 @@ export const rootReducer = (state, action) => {
   const macroUsage = state.macro_usage
   const tcUsage = state.tc_usage
   const lightUsage = state.light_usage
+  const jUsage = state.journal_usage
   const tcReading = []
   const pHreadings = state.ph_readings
   const phReading = []
@@ -119,6 +120,8 @@ export const rootReducer = (state, action) => {
     case 'JOURNAL_UPDATED':
     case 'JOURNAL_LOADED':
     case 'JOURNAL_USAGE_LOADED':
+      jUsage[action.payload.id] = action.payload.data
+      return { ...state, journal_usage: jUsage }
     case 'JOURNAL_RECORDED':
     case 'CREDS_UPDATED':
     case 'EQUIPMENT_UPDATED':

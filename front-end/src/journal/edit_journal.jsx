@@ -5,16 +5,26 @@ import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
+import { useSelector} from 'react-redux'
 
 const EditJournal = ({
   values,
   errors,
   touched,
   submitForm,
+	fetchEntries,
   isValid,
   dirty,
   readOnly
 }) => {
+
+	React.useEffect(() => {
+    console.log('values in edit:', values, fetchEntries)
+		fetchEntries(values.id)
+	}, []);
+
+	const entries = useSelector((state) => state.journal_usage[values.id]) 
+
   const handleSubmit = event => {
     event.preventDefault()
     if (dirty === false || isValid === true) {
@@ -28,9 +38,11 @@ const EditJournal = ({
   }
 
 
+	console.log("Entries:", entries)
+
   return (
     <form onSubmit={handleSubmit}>
-      <div className={classNames('row', { 'd-none': readOnly })}>
+      <div className='row'>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='name'>{i18next.t('name')}</label>
@@ -44,8 +56,6 @@ const EditJournal = ({
             <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
-      </div>
-      <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='description'>{i18next.t('journal:description')}</label>
@@ -59,8 +69,6 @@ const EditJournal = ({
             <ErrorFor errors={errors} touched={touched} name='name' />
           </div>
         </div>
-      </div>
-      <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='unit'>{i18next.t('journal:unit')}</label>

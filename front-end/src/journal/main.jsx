@@ -69,6 +69,7 @@ class main extends React.Component {
               data={j}
               onSubmit={this.handleSubmit}
               onRecord={this.handleRecord}
+              fetchEntries={this.props.fetchEntries}
             />
           </Collapsible>
         )
@@ -98,7 +99,8 @@ const mapDispatchToProps = dispatch => {
     fetchJournals: () => dispatch(fetchJournals()),
     delete: id => dispatch(deleteJournal(id)),
     update: (id, a) => dispatch(updateJournal(id, a)),
-    record: (id, a) => dispatch(recordJournal(id, a))
+    record: (id, a) => dispatch(recordJournal(id, a)),
+    fetchEntries: (id) => dispatch(fetchJournalUsage(id))
   }
 }
 
