@@ -33,6 +33,7 @@ const Profile = (props) => {
       return (
         <Diurnal
           {...props}
+          name={props.name}
           value={props.value}
           readOnly={props.readOnly}
           onChange={props.onChangeHandler}
