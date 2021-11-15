@@ -116,14 +116,14 @@ class admin extends React.Component {
           </div>
           <div className='col-md-12 mt-3 col-lg-2'>
             <button onClick={this.handleDBFileImport} className='btn btn-danger'>
-              {i18n.t('import_db')}
+              {i18n.t('configuration:admin:db_import')}
             </button>
           </div>
         </div>
 
         <div className='row form-group'>
           <div className='col-md-4 mt-3 col-lg-3'>
-            <label for='reef-pi-version'>{i18n.t('upgrade_reef_pi')}</label>
+            <label>{i18n.t('upgrade_reef_pi')}</label>
           </div>
           <div className='col-md-4 col-lg-3 mt-3'>
             <input onChange={this.handleVersionChange} type='text' id='reef-pi-version' className='form-control' />

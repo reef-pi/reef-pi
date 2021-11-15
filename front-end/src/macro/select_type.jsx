@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'formik'
+import i18next from 'i18next'
 
 const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
-    const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
+    const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'lightings', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
     return validTypes.map(item => {
       return (
         <option key={item} value={item}>
@@ -21,7 +22,7 @@ const SelectType = ({ name, className, readOnly }) => {
       className={`form-control ${className}`}
       disabled={readOnly}
     >
-      <option value='' className='d-none'>-- Select Type --</option>
+      <option value='' className='d-none'>-- {i18next.t('select')} --</option>
       {list()}
     </Field>
   )

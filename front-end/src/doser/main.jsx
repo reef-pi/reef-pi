@@ -7,6 +7,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import CalibrationModal from './calibration_modal'
 import { SortByName } from 'utils/sort_by_name'
+import i18next from 'i18next'
 
 class doser extends React.Component {
   constructor (props) {
@@ -38,7 +39,7 @@ class doser extends React.Component {
               className='btn btn-sm btn-outline-info float-right'
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
-              Calibrate
+              {i18next.t('doser:calibrate')}
             </button>
           )
           const handleTState = () => {
@@ -103,12 +104,13 @@ class doser extends React.Component {
   handleDeleteDoser (doser) {
     const message = (
       <div>
-        <p>This action will delete {doser.name}.</p>
+        <p>
+          {i18next.t('doser:warn_delete', {name: doser.name})}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + doser.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.delete(doser.id)
       }.bind(this))
   }

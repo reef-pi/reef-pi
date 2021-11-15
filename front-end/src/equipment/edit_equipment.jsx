@@ -4,6 +4,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
+import { FaTrashAlt, FaSave } from 'react-icons/fa'
 import { SortByName } from 'utils/sort_by_name'
 
 const EditEquipment = ({
@@ -32,14 +33,8 @@ const EditEquipment = ({
   const deleteAction = () => {
     if (values.id) {
       return (
-        <div className='col-12 col-sm-2 col-md-1'>
-          <button
-            type='button'
-            onClick={onDelete}
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
-          >
-            {i18next.t('delete')}
-          </button>
+        <div className='d-inline p-2' onClick={onDelete}>
+          {FaTrashAlt()}
         </div>
       )
     }
@@ -48,8 +43,8 @@ const EditEquipment = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='row'>
-        <div className='col-12 col-sm-4 col-md-3'>
+      <div className='d-flex flex-wrap'>
+        <div className='p-2 mr-auto'>
           <label className='mr-2'>{i18next.t('name')}</label>
           <input
             type='text'
@@ -61,7 +56,7 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='col-12 col-sm-4 col-md-3'>
+        <div className='p-2 mr-auto'>
           <label className='mr-2'>{i18next.t('outlet')}</label>
           <select
             name='outlet'
@@ -70,7 +65,7 @@ const EditEquipment = ({
             className={classNames('form-control', { 'is-invalid': ShowError('outlet', touched, errors) })}
             value={values.outlet}
           >
-            <option value='' className='d-none'>-- Select --</option>
+            <option value='' className='d-none'>-- {i18next.t('select')} --</option>
             {outlets.sort((a, b) => SortByName(a, b))
               .map((item) => {
                 return (
@@ -85,7 +80,7 @@ const EditEquipment = ({
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
         </div>
-        <div className='col-12 col-sm-3 col-md-2'>
+        <div className='p-2 mr-auto'>
           <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
           <input
             type='checkbox'
@@ -98,8 +93,10 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
-        <div className='col-12 col-md-1 col-sm-2'>
-          <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-right mt-1' />
+        <div className='p-2 mr-auto'>
+          <button type='submit' id='add_equipment'>
+            {FaSave()}
+          </button>
         </div>
         {deleteAction()}
       </div>

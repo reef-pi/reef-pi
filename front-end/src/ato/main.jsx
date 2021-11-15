@@ -3,7 +3,7 @@ import New from './new'
 import AtoForm from './ato_form'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
-import { fetchATOs, deleteATO, updateATO } from 'redux/actions/ato'
+import { fetchATOs, deleteATO, updateATO, resetATO } from 'redux/actions/ato'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 import { fetchInlets } from 'redux/actions/inlets'
@@ -20,6 +20,7 @@ class main extends React.Component {
     this.probeList = this.probeList.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleReset = this.handleReset.bind(this)
   }
 
   componentDidMount () {
@@ -47,16 +48,30 @@ class main extends React.Component {
     this.props.update(values.id, payload)
   }
 
+  handleReset (probe) {
+    const message = (
+      <div>
+        <p>
+          {i18next.t('ato:warn_reset', {name: probe.name})}
+        </p>
+      </div>
+    )
+    confirm(i18next.t('reset'), { description: message }).then(
+      function () {
+        this.props.reset(probe.id)
+      }.bind(this)
+    )
+  }
+
   handleDelete (probe) {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_delete')} {probe.name}.
+          {i18next.t('ato:warn_delete', {name: probe.name})}
         </p>
       </div>
     )
-
-    confirm('Delete ' + probe.name, { description: message }).then(
+    confirm(i18next.t('delete'), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)
@@ -70,6 +85,16 @@ class main extends React.Component {
           probe.enable = !probe.enable
           this.props.update(probe.id, probe)
         }
+        const resetButton = (
+          <button
+            type='button'
+            name={'reset-ato-' + probe.id}
+            className='btn btn-sm btn-outline-info float-right'
+            onClick={() => { this.handleReset(probe.id) }}
+          >
+            {i18next.t('ato:reset_usage')}
+          </button>
+        )
         return (
           <Collapsible
             key={'panel-ato-' + probe.id}
@@ -79,6 +104,7 @@ class main extends React.Component {
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}
+            buttons={resetButton}
           >
             <AtoForm
               data={probe}
@@ -87,6 +113,7 @@ class main extends React.Component {
               equipment={this.props.equipment}
               macros={this.props.macros}
             />
+
           </Collapsible>
         )
       })
@@ -123,7 +150,8 @@ const mapDispatchToProps = dispatch => {
     fetchEquipment: () => dispatch(fetchEquipment()),
     fetchInlets: () => dispatch(fetchInlets()),
     delete: id => dispatch(deleteATO(id)),
-    update: (id, a) => dispatch(updateATO(id, a))
+    update: (id, a) => dispatch(updateATO(id, a)),
+    reset: (id) => dispatch(resetATO(id))
   }
 }
 

@@ -4,11 +4,12 @@ import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
 import BlankPanel from 'dashboard/blank_panel'
-import LightChart from 'lighting/chart'
+import GenericLightChart from 'lighting/charts/generic'
 import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
 import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
+import PhUsageChart from 'ph/control_chart'
 import { fetchDashboard } from 'redux/actions/dashboard'
 import { connect } from 'react-redux'
 import Config from './config'
@@ -58,7 +59,7 @@ class dashboard extends React.Component {
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
-                  <LightChart width={config.width} height={config.height} light_id={ch.id} />
+                  <GenericLightChart width={config.width} height={config.height} light_id={ch.id} />
                 </ErrorBoundary>
               </div>
             )
@@ -113,6 +114,15 @@ class dashboard extends React.Component {
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <PhChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'ph_usage':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <PhUsageChart width={config.width} height={config.height} probe_id={ch.id} type='historical' />
                 </ErrorBoundary>
               </div>
             )

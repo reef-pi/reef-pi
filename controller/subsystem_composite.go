@@ -29,7 +29,7 @@ func (s *SubsystemComposite) UnloadAll() {
 	for sName, sController := range s.components {
 		sController.Stop()
 		s.Unload(sName)
-		log.Println("Successfully unloaded", sName, " subsystem")
+		log.Println("Successfully unloaded module:", sName)
 	}
 }
 

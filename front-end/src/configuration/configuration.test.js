@@ -78,7 +78,7 @@ describe('Configuration ui', () => {
     m.updateCapability('dashboard')({ target: { checked: true } })
   })
 
-  it('<Settings />', () => {
+  it('<Settings /> ui', () => {
     const capabilities = {
       health_check: true
     }
@@ -116,9 +116,7 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
-    shallow(<Settings store={mockStore({})} />).dive()
     shallow(<Settings store={mockStore({ settings: {} })} />).dive()
-
     const d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
     d.find('#to-row-interface')

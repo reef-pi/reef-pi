@@ -3,9 +3,24 @@ package lighting
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"log"
 	"time"
 )
+
+type Usage struct {
+	Channels map[string]float64 `json:"channels"`
+	Time     telemetry.TeleTime `json:"time"`
+}
+
+func (u1 Usage) Rollup(ux telemetry.Metric) (telemetry.Metric, bool) {
+	return u1, true // TODO
+}
+
+func (u1 Usage) Before(ux telemetry.Metric) bool {
+	u2 := ux.(Usage)
+	return u1.Time.Before(u2.Time)
+}
 
 type Light struct {
 	ID       string           `json:"id"`
@@ -15,21 +30,20 @@ type Light struct {
 	Enable   bool             `json:"enable"`
 }
 
-func (l *Light) LoadChannels() {
+func (l *Light) LoadChannels() error {
 	for _, ch := range l.Channels {
 		if !ch.Manual {
-			ch.loadProfile()
+			if err := ch.loadProfile(); err != nil {
+				return fmt.Errorf("failed to load profile for light:%s, channel:%s, error:%w", l.Name, ch.Name, err)
+			}
 		}
 	}
+	return nil
 }
 
 func (c *Controller) Get(id string) (Light, error) {
-	l, ok := c.lights[id]
-	if ok {
-		return *l, nil
-	}
-	var nL Light
-	return nL, c.c.Store().Get(Bucket, id, &nL)
+	var l Light
+	return l, c.c.Store().Get(Bucket, id, &l)
 }
 
 func (c *Controller) List() ([]Light, error) {
@@ -93,18 +107,18 @@ func (c *Controller) Create(l Light) error {
 	if err := c.c.Store().Create(Bucket, fn); err != nil {
 		return nil
 	}
+	c.statsMgr.Initialize(l.ID)
 	if l.Enable {
-		c.Lock()
-		c.lights[l.ID] = &l
-		c.Unlock()
-	}
-	for _, ch := range l.Channels {
-		c.c.Telemetry().CreateFeedIfNotExist(l.Name + "-" + ch.Name)
+		quit := make(chan struct{})
+		c.quitters[l.ID] = quit
+		go c.Run(l, quit)
 	}
 	return nil
 }
 
 func (c *Controller) Update(id string, l Light) error {
+	c.Lock()
+	defer c.Unlock()
 	l.ID = id
 	if err := c.validate(&l); err != nil {
 		return err
@@ -112,11 +126,15 @@ func (c *Controller) Update(id string, l Light) error {
 	if err := c.c.Store().Update(Bucket, id, l); err != nil {
 		return err
 	}
+	quit, ok := c.quitters[l.ID]
+	if ok {
+		close(quit)
+		delete(c.quitters, l.ID)
+	}
 	if l.Enable {
-		c.Lock()
-		c.lights[l.ID] = &l
-		c.Unlock()
-		c.syncLight(&l)
+		quit := make(chan struct{})
+		c.quitters[l.ID] = quit
+		go c.Run(l, quit)
 	}
 	return nil
 }
@@ -129,13 +147,16 @@ func (c *Controller) Delete(id string) error {
 	if err := c.c.Store().Delete(Bucket, id); err != nil {
 		return err
 	}
-	c.Lock()
-	delete(c.lights, id)
-	c.Unlock()
+	quit, ok := c.quitters[id]
+	if ok {
+		close(quit)
+		delete(c.quitters, id)
+	}
 	return nil
 }
 
-func (c *Controller) syncLight(light *Light) {
+func (c *Controller) syncLight(light Light) {
+	vals := make(map[string]float64)
 	for _, ch := range light.Channels {
 		v, err := ch.ValueAt(time.Now())
 		if err != nil {
@@ -144,6 +165,29 @@ func (c *Controller) syncLight(light *Light) {
 		log.Println("lighting subsystem: Setting Light: ", light.Name, "Channel:", ch.Name, "Value:", v)
 		c.UpdateChannel(light.Jack, *ch, v)
 		ch.Value = v
+		vals[ch.Name] = v
 		c.c.Telemetry().EmitMetric(light.Name, ch.Name, v)
+	}
+	c.statsMgr.Update(light.ID, Usage{
+		Time:     telemetry.TeleTime(time.Now()),
+		Channels: vals,
+	})
+}
+func (c *Controller) Run(l Light, quit chan struct{}) {
+	if err := l.LoadChannels(); err != nil {
+		log.Println("ERROR:lighting subsystem: ", err)
+	}
+	for _, ch := range l.Channels {
+		c.c.Telemetry().CreateFeedIfNotExist(l.Name + "-" + ch.Name)
+	}
+	ticker := time.NewTicker(c.config.Interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			c.syncLight(l)
+		case <-quit:
+			return
+		}
 	}
 }

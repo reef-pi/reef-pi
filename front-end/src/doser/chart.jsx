@@ -2,6 +2,7 @@ import React from 'react'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar } from 'recharts'
 import { fetchDoserUsage } from '../redux/actions/doser'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 
 class chart extends React.Component {
   constructor (props) {
@@ -34,11 +35,11 @@ class chart extends React.Component {
     }
     return (
       <>
-        <span className='h6'>{this.props.config.name} - Doser Usage</span>
+        <span className='h6'>{this.props.config.name} - {i18next.t('doser:doser_usage')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={this.props.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label='seconds' />
+            <YAxis label={i18next.t('sec')} />
             <XAxis dataKey='time' />
             <Tooltip />
           </BarChart>

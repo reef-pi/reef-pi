@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import IntervalChart from './charts/interval'
 import FixedChart from './charts/fixed'
 import DiurnalChart from './charts/diurnal'
+import GenericLightChart from './charts/generic'
 
 class chart extends React.Component {
   render () {
@@ -22,7 +23,7 @@ class chart extends React.Component {
       case 'diurnal':
         return <DiurnalChart channel={ch} width={this.props.width} height={this.props.height} />
       default:
-        return (<span>Unsupported light chart for profile: <b>{ch.profile.type}</b></span>)
+        return <GenericLightChart light={this.props.config} width={this.props.width} height={this.props.height} />
     }
   }
 }

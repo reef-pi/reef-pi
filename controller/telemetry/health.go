@@ -114,6 +114,7 @@ func (h *hc) Check() {
 		for _, throttle := range throttles {
 			if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
 				metric.UnderVoltage = 1
+				h.t.LogError("health-check", "under voltage detected")
 			}
 		}
 	}
@@ -128,14 +129,14 @@ func (h *hc) Check() {
 func (h *hc) NotifyIfNeeded(memory, load float64) {
 	if h.Notify.Enable {
 		if load >= h.Notify.MaxCPU {
-			subject := "[Reef-Pi ALERT] CPU Load high"
-			format := "Current cpu load (%f) is above threshold ( %f )"
+			subject := "CPU Load is high"
+			format := "Current cpu load is %f is above threshold ( %f )"
 			body := fmt.Sprintf(format, load, h.Notify.MaxCPU)
 			h.t.Alert(subject, body)
 		}
 		if memory >= h.Notify.MaxMemory {
-			subject := "[Reef-Pi ALERT] Memory consumption is high"
-			format := "Current memory consumption (%f) is above threshold ( %f )"
+			subject := "Memory consumption is high"
+			format := "Current memory consumption %f is above threshold ( %f )"
 			body := fmt.Sprintf(format, memory, h.Notify.MaxMemory)
 			h.t.Alert(subject, body)
 		}

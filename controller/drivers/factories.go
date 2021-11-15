@@ -2,6 +2,7 @@ package drivers
 
 import (
 	"fmt"
+	"github.com/reef-pi/drivers/tasmota"
 	"log"
 
 	"github.com/reef-pi/drivers/ads1x15"
@@ -25,6 +26,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"hs103":        tplink.HS103Factory(),
 	"hs110":        tplink.HS110Factory(),
 	"hs300":        tplink.HS300Factory(),
+	"hs303":        tplink.HS303Factory(),
 	"pca9685":      pca9685.Factory(),
 	"ph-board":     ph_board.Factory(),
 	"ph-ezo":       ezo.Factory(),
@@ -35,6 +37,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"sht31d":       sht3x.Factory(),
 	"ads1015":      ads1x15.Ads1015Factory(),
 	"ads1115":      ads1x15.Ads1115Factory(),
+	"tasmota-http": tasmota.HttpDriverFactory(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {

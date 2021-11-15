@@ -19,8 +19,7 @@ class BlankPanel extends React.Component {
 
   render () {
     return (
-      <div className='container' style={{ border: '1px solid gray', marginBottom: '3px' }}>
-        <span className='h6' style={{ color: 'gray' }}>Unassigned Panel</span>
+      <div className='container'>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <p>&nbsp;</p>
         </ResponsiveContainer>

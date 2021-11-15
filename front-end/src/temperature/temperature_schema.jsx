@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'
+import i18next from 'i18next'  //TODO: several i18next mappings!
 
 const TemperatureSchema = Yup.object().shape({
   name: Yup.string()
@@ -42,37 +42,59 @@ const TemperatureSchema = Yup.object().shape({
           })
       } else { return schema }
     }),
+  control: Yup.string()
+    .required('A selection is required!'),
   heater: Yup.string()
-    .test('match', 'Heater and Chiller must be different', function (heater) {
-      if (heater === undefined || heater === '') { return true }
-      return heater !== this.parent.cooler
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .test('match', 'Heater and Chiller must be different', function (heater) {
+            if (heater === undefined) { return true }
+            return heater !== this.parent.cooler
+          })
+      } else { return schema }
     }),
   min: Yup.number()
-    .when('heater', (heater, schema) => {
-      if (heater === undefined || heater === '') { return schema }
-      return schema
-        .required('Threshold is required when a heater is selected')
-        .typeError('Threshold must be a number')
-        .test('lessThan', 'Threshold must be less than Chiller Threshold', function (val) {
-          if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
-          return val < this.parent.max
-        })
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .when('heater', (heater, schema) => {
+            if (heater === undefined || heater === 'nothing') { return schema }
+              return schema
+                .required('Threshold is required when a heater is selected')
+                .typeError('Threshold must be a number')
+                .test('lessThan', 'Threshold must be less than Chiller Threshold', function (val) {
+                  if (this.parent.cooler === undefined || this.parent.cooler === 'nothing') { return true }
+                  return val < this.parent.max
+                })
+          })
+      } else { return schema }
     }),
   cooler: Yup.string()
-    .test('match', 'Heater and Chiller must be different', function (chiller) {
-      if (chiller === undefined || chiller === '') { return true }
-      return chiller !== this.parent.heater
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .test('match', 'Heater and Chiller must be different', function (chiller) {
+            if (chiller === undefined) { return true }
+            return chiller !== this.parent.heater
+          })
+      } else { return schema }
     }),
   max: Yup.number()
-    .when('cooler', (cooler, schema) => {
-      if (cooler === undefined || cooler === '') { return schema }
-      return schema
-        .required('Threshold is required when a chiller is selected')
-        .typeError('Threshold must be a number')
-        .test('greaterThan', 'Threshold must be greater than Heater Threshold', function (val) {
-          if (this.parent.heater === undefined || this.parent.heater === '') { return true }
-          return val > this.parent.min
-        })
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .when('cooler', (cooler, schema) => {
+            if (cooler === undefined || cooler === 'nothing') { return schema }
+            return schema
+              .required('Threshold is required when a chiller is selected')
+              .typeError('Threshold must be a number')
+              .test('greaterThan', 'Threshold must be greater than Heater Threshold', function (val) {
+                if (this.parent.heater === undefined || this.parent.heater === 'nothing') { return true }
+                return val > this.parent.min
+              })
+          })
+      } else { return schema }
     }),
   hysteresis: Yup.number()
     .when('control', (control, schema) => {

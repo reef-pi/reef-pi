@@ -4,12 +4,12 @@ jobs:
   builds:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.4.0
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.13.1'
-      - uses: codecov/codecov-action@v1
-      - run: make install
+          go-version: '^1.17'
+      - uses: codecov/codecov-action@v2.1.0
+      - run: make go-get
       - run: make vet
       - run: make imports
       - run: make race

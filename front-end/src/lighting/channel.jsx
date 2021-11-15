@@ -206,8 +206,8 @@ const Channel = (props) => {
                 'is-invalid': ShowError('enable', props.touched, props.errors)
               })}
             >
-              <option value='true'>On</option>
-              <option value='false'>Off</option>
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
             </Field>
           </div>
         </div>
@@ -253,10 +253,10 @@ Channel.propTypes = {
   onBlur: PropTypes.func,
   name: PropTypes.string.isRequired,
   channel: PropTypes.object.isRequired,
-  channelNum: PropTypes.number,
+  channelNum: PropTypes.string,
   setTouched: PropTypes.func,
-  errors: PropTypes.array,
-  touched: PropTypes.array
+  errors: PropTypes.object,
+  touched: PropTypes.object
 }
 
 export default Channel

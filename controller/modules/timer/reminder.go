@@ -15,5 +15,5 @@ type ReminderRunner struct {
 }
 
 func (r ReminderRunner) Run() {
-	r.t.Alert(r.title, r.body)
+	r.t.Mail(r.title, r.body)
 }

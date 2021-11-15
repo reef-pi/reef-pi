@@ -110,6 +110,22 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//  404:
 	//   description: Not Found
 	r.HandleFunc("/api/atos/{id}/usage", c.getUsage).Methods("GET")
+
+	// swagger:operation RESET /api/atos/{id} ATO atoDelete
+	// Reset an ATO.
+	// Reset an ATO by deleting usage data and restarting
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the ato to reset
+	//    required: true
+	//    schema:
+	//     type: integer
+	// responses:
+	//  200:
+	//   description: OK
+	r.HandleFunc("/api/atos/{id}/reset", c.reset).Methods("POST")
 }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
@@ -141,6 +157,13 @@ func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 		return c.Update(id, a)
 	}
 	utils.JSONUpdateResponse(&a, fn, w, r)
+}
+
+func (c *Controller) reset(w http.ResponseWriter, r *http.Request) {
+	fn := func(id string) error {
+		return c.Reset(id)
+	}
+	utils.JSONDeleteResponse(fn, w, r)
 }
 
 func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {

@@ -35,11 +35,11 @@ class chart extends React.Component {
     }
     return (
       <>
-        <span className='h6'>{i18next.t('ato:ato_usage')}</span>
+        <span className='h6'>{this.props.config.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={this.props.usage.historical}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label='seconds' />
+            <YAxis label={i18next.t('sec')} />
             <XAxis dataKey='time' />
             <Tooltip />
           </BarChart>

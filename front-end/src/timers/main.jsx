@@ -1,4 +1,5 @@
 import React from 'react'
+import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { updateTimer, fetchTimers, createTimer, deleteTimer } from 'redux/actions/timer'
 import { connect } from 'react-redux'
@@ -57,11 +58,13 @@ class Main extends React.Component {
   handleRemoveTimer (timer) {
     const message = (
       <div>
-        <p>This action will delete {timer.name}.</p>
+        <p>
+          {i18next.t('timers:warn_delete', {name: timer.name})}
+        </p>
       </div>
     )
 
-    confirm('Delete ' + timer.name, { description: message }).then(
+    confirm(i18next.t('delete'), { description: message }).then(
       function () {
         this.props.delete(timer.id)
       }.bind(this)

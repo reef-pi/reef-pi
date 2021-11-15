@@ -5,18 +5,18 @@ jobs:
   Translations:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Use Node.js 11.12
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2.4.0
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2.4.1
         with:
-          node-version: 11.12
+          node-version: 16
       - uses: actions/cache@v2.1.6
         with:
           path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install
-        run: npm i
+        run: yarn
       - name: Check Translations
-        run: npm run translations:chk
+        run: yarn run translations:chk

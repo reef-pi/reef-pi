@@ -61,12 +61,13 @@ func TestController() (Controller, error) {
 	logError := func(_, _ string) error { return nil }
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
+	t := telemetry.TestTelemetry(store)
 	return &controller{
-		t:        telemetry.TestTelemetry(store),
+		t:        t,
 		s:        store,
 		logError: logError,
 		subFn:    func(_ string) (Subsystem, error) { return NoopSubsystem(), nil },
-		dm:       device_manager.New(s, store),
+		dm:       device_manager.New(s, store, t),
 	}, nil
 }
 func (c *controller) Telemetry() telemetry.Telemetry {

@@ -26,8 +26,8 @@ const target = (props) => {
       case 'equipment':
       case 'ato':
       case 'macro':
-      case 'ph':
-      case 'light':
+      case 'phprobes':
+      case 'lightings':
       case 'doser':
       case 'camera':
       case 'temperature':
@@ -61,7 +61,7 @@ const target = (props) => {
         </div>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='on'>{i18next.t('timers:action')}</label>
+            <label htmlFor='on'>{i18next.t('timers:equipment_action')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
@@ -167,10 +167,10 @@ const mapStateToProps = state => {
     ato: state.atos,
     equipment: state.equipment,
     macro: state.macros,
-    ph: state.phprobes,
+    phprobes: state.phprobes,
     temperature: state.tcs,
     doser: state.dosers,
-    light: state.lights
+    lightings: state.lights
   }
 }
 const mapDispatchToProps = dispatch => {

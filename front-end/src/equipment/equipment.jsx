@@ -2,6 +2,7 @@ import React from 'react'
 import ViewEquipment from './view_equipment'
 import EquipmentForm from './equipment_form'
 import { confirm } from 'utils/confirm'
+import i18next from 'i18next'
 
 export default class Equipment extends React.Component {
   constructor (props) {
@@ -48,14 +49,16 @@ export default class Equipment extends React.Component {
     e.stopPropagation()
     const message = (
       <div>
-        <p>This action will delete {this.props.equipment.name}.</p>
+        <p>
+          {i18next.t('equipment:warn_delete', {name: this.props.equipment.name})}
+        </p>
       </div>
     )
-
-    confirm('Delete ' + this.props.equipment.name, { description: message })
-      .then(function () {
+    confirm(i18next.t('delete'), { description: message }).then(
+      function () {
         this.props.delete(this.props.equipment.id)
-      }.bind(this))
+      }.bind(this)
+    )
   }
 
   handleUpdate (id, values) {
@@ -67,7 +70,7 @@ export default class Equipment extends React.Component {
       <li className='list-group-item'>
         {this.state.readOnly === true
           ? <ViewEquipment equipment={this.props.equipment} outletName={this.selectedOutlet().name} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleUpdate} />
-          : <EquipmentForm equipment={this.props.equipment} outlets={this.props.outlets} actionLabel='Save' onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
+          : <EquipmentForm equipment={this.props.equipment} outlets={this.props.outlets} actionLabel={i18next.t('save')} onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
       </li>
     )
   }
