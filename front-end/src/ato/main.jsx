@@ -86,6 +86,16 @@ class main extends React.Component {
           probe.enable = !probe.enable
           this.props.update(probe.id, probe)
         }
+        const resetButton = (
+          <button
+            type='button'
+            name={'reset-ato-' + probe.id}
+            className='btn btn-sm btn-outline-info float-right'
+            onClick={() => { this.handleReset(probe.id) }}
+          >
+            {i18next.t('ato:reset_usage')}
+          </button>
+        )
         return (
           <Collapsible
             key={'panel-ato-' + probe.id}
@@ -95,22 +105,15 @@ class main extends React.Component {
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}
+            buttons={resetButton}
           >
-            <div className='container'>
-              <AtoForm
-                data={probe}
-                onSubmit={this.handleSubmit}
-                inlets={this.props.inlets}
-                equipment={this.props.equipment}
-                macros={this.props.macros}
-              />
-              <input
-                type='button'
-                value={i18next.t('reset')}
-                className='btn btn-sm btn-primary float-right mt-1'
-                onClick={() => { this.handleReset(probe.id) }}
-              />
-            </div>
+            <AtoForm
+              data={probe}
+              onSubmit={this.handleSubmit}
+              inlets={this.props.inlets}
+              equipment={this.props.equipment}
+              macros={this.props.macros}
+            />
           </Collapsible>
         )
       })
