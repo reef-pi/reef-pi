@@ -83,6 +83,7 @@ ato:controlnothing,Niets
 ato:disable_on_alert,Uitschakelen bij alarm
 ato:inlet_required,Ingang is nodig
 ato:name_required,Naam is nodig
+ato:reset_usage,
 ato:status_required,ATO Status is nodig
 ato:threshold_required,Drempelwaarde is nodig wanneer een notificatie is ingeschakeld
 ato:threshold_value,Drempelwaarde moet numeriek zijn

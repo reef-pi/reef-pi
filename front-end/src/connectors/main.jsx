@@ -16,12 +16,13 @@ export default class Connectors extends React.Component {
           <Outlets />
           <hr />
         </div>
-        <div className='row jacks'>
-          <Jacks />
-        </div>
         <div className='row analog-inputs'>
           <AnalogInputs />
         </div>
+        <div className='row jacks'>
+          <Jacks />
+        </div>
+
       </div>
     )
   }

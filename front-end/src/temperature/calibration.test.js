@@ -43,7 +43,7 @@ describe('Temperature Calibration', () => {
     wrapper.find(CalibrationForm).dive().find('form').simulate('submit', {})
   })
 
-  it('<CalibrationModal /> should default to 0', () => {
+  it('<CalibrationModal /> should default to currentReading', () => {
     const submitFn = jest.fn()
 
     const wrapper = shallow(
@@ -56,7 +56,7 @@ describe('Temperature Calibration', () => {
         onSubmit={submitFn}
       />).dive()
 
-    expect(wrapper.find(CalibrationForm).prop('values').value).toEqual(0)
+    expect(wrapper.find(CalibrationForm).prop('values').value).toEqual(currentReading[1])
   })
 
   it('<CalibrationForm /> should submit', () => {

@@ -83,6 +83,7 @@ ato:controlnothing,-keine Steuerung-
 ato:disable_on_alert,ATO nach Alarm ausschalten
 ato:inlet_required,Ein Eingang wird benötigt!
 ato:name_required,Ein Name ist erforderlich!
+ato:reset_usage,
 ato:status_required,Ein Status wird benötigt!
 ato:threshold_required,Ein Schwellwert wird benötigt!
 ato:threshold_value,Schwellwert

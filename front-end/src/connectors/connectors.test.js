@@ -98,7 +98,16 @@ describe('Connectors', () => {
 
   it('<Jack />', () => {
     const m = shallow(
-      <Jack jack_id='1' name='foo' pins={[1, 2]} update={() => true} remove={() => true} driver='rpi' drivers={stockDrivers} />
+      <Jack
+        jack_id='1'
+        name='foo'
+        pins={[1, 2]}
+        update={() => true}
+        remove={() => true}
+        driver='rpi'
+        drivers={stockDrivers}
+        reverse={false}
+      />
     )
     m.find('.jack-edit').simulate('click')
     m.find('.jack-name').simulate('change', { target: { value: 'foo' } })

@@ -83,6 +83,7 @@ ato:controlnothing,Nada
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:inlet_required,Seleccion una entrada
 ato:name_required,Escribe un Nombre
+ato:reset_usage,
 ato:status_required,Selecciona un estado de ATO
 ato:threshold_required,Se requiere un límite cuando la notificación está habilitada
 ato:threshold_value,El límite debe ser un numero

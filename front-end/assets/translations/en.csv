@@ -51,7 +51,7 @@ outlets,Outlets
 pin,Pin
 pins,Pins
 profile,Profile
-reset,Reset history
+reset,Reset
 reverse,Reverse
 rows,Rows
 running,running
@@ -83,6 +83,7 @@ ato:controlnothing,Nothing
 ato:disable_on_alert,Disable on alert
 ato:inlet_required,Inlet is required
 ato:name_required,Name is required
+ato:reset_usage,Reset
 ato:status_required,ATO Status is required
 ato:threshold_required,Threshold is required when notification is enabled
 ato:threshold_value,Threshold must be a number
