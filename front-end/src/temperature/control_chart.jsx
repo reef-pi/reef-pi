@@ -4,6 +4,7 @@ import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 import { PercentOf } from 'utils/percent_of'
+import i18next from 'i18next'
 
 class chart extends React.Component {
   componentDidMount () {
