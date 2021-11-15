@@ -37,15 +37,31 @@ const PhSchema = Yup.object().shape({
           })
       } else { return schema }
     }),
-  control: Yup.string().required(i18next.t('ph:control_required')),
+  control: Yup.string()
+    .required(i18next.t('ph:control_required')),
+  upperFunction: Yup.string()
+    .when('control', (control, schema) => {
+      if (control === 'macro' || control === 'equipment') {
+        return schema
+          .test('match', 'Lower Function must be different from Upper Function!', function (upperFunc) {
+            if (upperFunc === undefined) { return true }
+            return upperFunc !== this.parent.lowerFunction
+          })
+      } else { return schema }
+    }),
   lowerThreshold: Yup.number()
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
-          .required(i18next.t('ph:lower_threshold_required'))
-          .typeError(i18next.t('ph:lower_threshold_type'))
-          .test('lessThan', i18next.t('ph:lower_threshold_less_than'), function (min) {
-            return min < this.parent.upperThreshold
+          .when('upperFunction', (upperFunc, schema) => {
+            if (upperFunc === undefined || upperFunc === 'nothing') { return schema }
+            return schema
+              .required(i18next.t('ph:lower_threshold_required'))
+              .typeError(i18next.t('ph:lower_threshold_type'))
+              .test('lessThan', i18next.t('ph:lower_threshold_less_than'), function (min) {
+                if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === 'nothing') { return true }
+                return min < this.parent.upperThreshold
+              })
           })
       } else { return schema }
     }),
@@ -53,6 +69,10 @@ const PhSchema = Yup.object().shape({
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
+          .test('match', 'Lower Function must be different from Upper Function!', function (lowerFunc) {
+            if (lowerFunc === undefined) { return true }
+            return lowerFunc !== this.parent.upperFunction
+          })
           .required(i18next.t('ph:lower_function_required'))
       } else { return schema }
     }),
@@ -60,10 +80,15 @@ const PhSchema = Yup.object().shape({
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
-          .required(i18next.t('ph:upper_threshold_required'))
-          .typeError(i18next.t('ph:upper_threshold_type'))
-          .test('greaterThan', i18next.t('ph:upper_threshold_greater_than'), function (max) {
-            return max > this.parent.lowerThreshold
+          .when('lowerFunction', (lowerFunc, schema) => {
+            if (lowerFunc === undefined || lowerFunc === 'nothing') { return schema }
+            return schema
+              .required(i18next.t('ph:upper_threshold_required'))
+              .typeError(i18next.t('ph:upper_threshold_type'))
+              .test('greaterThan', i18next.t('ph:upper_threshold_less_than'), function (max) {
+                if (this.parent.upperFunction === undefined || this.parent.upperFunction === 'nothing') { return true }
+                return max > this.parent.lowerThreshold
+              })
           })
       } else { return schema }
     }),
@@ -76,13 +101,6 @@ const PhSchema = Yup.object().shape({
           .test('lessThan', i18next.t('ph:hysteresis_less_than'), function (hysteresis) {
             return hysteresis < (this.parent.upperThreshold - this.parent.lowerThreshold)
           })
-      } else { return schema }
-    }),
-  upperFunction: Yup.string()
-    .when('control', (control, schema) => {
-      if (control === 'macro' || control === 'equipment') {
-        return schema
-          .required(i18next.t('ph:upper_function_required'))
       } else { return schema }
     }),
   chart: Yup.object({

@@ -114,6 +114,7 @@ class main extends React.Component {
               equipment={this.props.equipment}
               macros={this.props.macros}
             />
+
           </Collapsible>
         )
       })
