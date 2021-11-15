@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
 
-const EditJournal = ({
+const EditEntry = ({
   values,
   errors,
   touched,
@@ -27,51 +27,50 @@ const EditJournal = ({
     }
   }
 
-
   return (
     <form onSubmit={handleSubmit}>
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('name')}</label>
+            <label htmlFor='value'>{i18next.t('journal:value')}</label>
             <Field
-              name='name'
+              name='value'
               disabled={readOnly}
               className={classNames('form-control', {
-                'is-invalid': ShowError('name', touched, errors)
+                'is-invalid': ShowError('value', touched, errors)
               })}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
+            <ErrorFor errors={errors} touched={touched} name='value' />
           </div>
         </div>
       </div>
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='description'>{i18next.t('journal:description')}</label>
+            <label htmlFor='comment'>{i18next.t('journal:comment')}</label>
             <Field
-              name='description'
+              name='comment'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('description', touched, errors)
               })}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
+            <ErrorFor errors={errors} touched={touched} name='comment' />
           </div>
         </div>
       </div>
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='unit'>{i18next.t('journal:unit')}</label>
+            <label htmlFor='time'>{i18next.t('journal:time')}</label>
             <Field
-              name='unit'
+              name='time'
               disabled={readOnly}
               className={classNames('form-control', {
-                'is-invalid': ShowError('unit', touched, errors)
+                'is-invalid': ShowError('time', touched, errors)
               })}
             />
-            <ErrorFor errors={errors} touched={touched} name='name' />
+            <ErrorFor errors={errors} touched={touched} name='time' />
           </div>
         </div>
       </div>
@@ -80,7 +79,7 @@ const EditJournal = ({
         <div className='col-12'>
           <input
             type='submit'
-            value={i18next.t('save')}
+            value={i18next.t('add')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
           />
@@ -90,7 +89,7 @@ const EditJournal = ({
   )
 }
 
-EditJournal.propTypes = {
+EditEntry.propTypes = {
   values: PropTypes.object.isRequired,
   errors: PropTypes.object,
   touched: PropTypes.object,
@@ -100,4 +99,4 @@ EditJournal.propTypes = {
   handleChange: PropTypes.func
 }
 
-export default EditJournal
+export default EditEntry
