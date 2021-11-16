@@ -135,7 +135,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('macro:warn_delete', {name: macro.name})}
+          {i18next.t('macro:warn_delete', { name: macro.name })}
         </p>
       </div>
     )
