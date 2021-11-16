@@ -105,7 +105,7 @@ class doser extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('doser:warn_delete', {name: doser.name})}
+          {i18next.t('doser:warn_delete', { name: doser.name })}
         </p>
       </div>
     )

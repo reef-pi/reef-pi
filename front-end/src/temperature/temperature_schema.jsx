@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'  //TODO: several i18next mappings!
+import i18next from 'i18next' // TODO: several i18next mappings!
 
 const TemperatureSchema = Yup.object().shape({
   name: Yup.string()
@@ -60,13 +60,13 @@ const TemperatureSchema = Yup.object().shape({
         return schema
           .when('heater', (heater, schema) => {
             if (heater === undefined || heater === 'nothing') { return schema }
-              return schema
-                .required('Threshold is required when a heater is selected')
-                .typeError('Threshold must be a number')
-                .test('lessThan', 'Threshold must be less than Chiller Threshold', function (val) {
-                  if (this.parent.cooler === undefined || this.parent.cooler === 'nothing') { return true }
-                  return val < this.parent.max
-                })
+            return schema
+              .required('Threshold is required when a heater is selected')
+              .typeError('Threshold must be a number')
+              .test('lessThan', 'Threshold must be less than Chiller Threshold', function (val) {
+                if (this.parent.cooler === undefined || this.parent.cooler === 'nothing') { return true }
+                return val < this.parent.max
+              })
           })
       } else { return schema }
     }),

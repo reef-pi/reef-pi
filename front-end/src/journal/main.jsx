@@ -43,7 +43,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('journal:warn_delete', {name: j.name})}
+          {i18next.t('journal:warn_delete', { name: j.name })}
         </p>
       </div>
     )

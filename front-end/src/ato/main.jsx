@@ -52,7 +52,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_reset', {name: probe.name})}
+          {i18next.t('ato:warn_reset', { name: probe.name })}
         </p>
       </div>
     )
@@ -67,7 +67,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_delete', {name: probe.name})}
+          {i18next.t('ato:warn_delete', { name: probe.name })}
         </p>
       </div>
     )
