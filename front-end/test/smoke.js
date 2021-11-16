@@ -25,7 +25,6 @@ test('Smoke Test', async t => {
     .typeText('#reef-pi-pass', 'reef-pi')
     .click('#btnSaveCreds')
     .expect(Selector('#tab-dashboard').innerText).eql('Dashboard')
-
   await driver.create()
   await outlet.create()
   await inlet.create()
