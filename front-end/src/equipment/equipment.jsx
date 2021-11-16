@@ -50,7 +50,7 @@ export default class Equipment extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('equipment:warn_delete', {name: this.props.equipment.name})}
+          {i18next.t('equipment:warn_delete', { name: this.props.equipment.name })}
         </p>
       </div>
     )

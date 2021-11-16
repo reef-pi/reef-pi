@@ -21,7 +21,7 @@ class ph extends React.Component {
     this.handleToggleAddProbeDiv = this.handleToggleAddProbeDiv.bind(this)
     this.handleDeleteProbe = this.handleDeleteProbe.bind(this)
     // for future use
-    //this.handleResetProbe = this.handleResetProbe.bind(this)
+    // this.handleResetProbe = this.handleResetProbe.bind(this)
     this.handleCreateProbe = this.handleCreateProbe.bind(this)
     this.handleUpdateProbe = this.handleUpdateProbe.bind(this)
     this.dismissModal = this.dismissModal.bind(this)
@@ -114,27 +114,27 @@ class ph extends React.Component {
     this.handleToggleAddProbeDiv()
   }
 
-// for future use :-)
-//  handleResetProbe (probe) {
-//    const message = (
-//      <div>
-//        <p>
-//          {i18next.t('ph:warn_reset', {name: probe.name})}
-//        </p>
-//      </div>
-//    )
-//    confirm(i18next.t('reset'), { description: message }).then(
-//      function () {
-//        this.props.reset(probe.id)
-//      }.bind(this)
-//    )
-//  }
+  // for future use :-)
+  //  handleResetProbe (probe) {
+  //    const message = (
+  //      <div>
+  //        <p>
+  //          {i18next.t('ph:warn_reset', {name: probe.name})}
+  //        </p>
+  //      </div>
+  //    )
+  //    confirm(i18next.t('reset'), { description: message }).then(
+  //      function () {
+  //        this.props.reset(probe.id)
+  //      }.bind(this)
+  //    )
+  //  }
 
   handleDeleteProbe (probe) {
     const message = (
       <div>
         <p>
-          {i18next.t('ph:warn_delete', {name: probe.name})}
+          {i18next.t('ph:warn_delete', { name: probe.name })}
         </p>
       </div>
     )
