@@ -25,7 +25,7 @@ GEM
       ruby-xz
     hashie (4.1.0)
     insist (1.0.0)
-    json (2.3.1)
+    json (2.6.1)
     minitar (0.8)
     minitar-cli (0.8)
       minitar (~> 0.8.0)
