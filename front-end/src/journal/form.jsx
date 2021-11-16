@@ -28,8 +28,8 @@ const JournalForm = withFormik({
   handleRecord: (values, { props }) => {
     props.onRecord(values.id, values)
   },
-  fetchEntries: (id) => {
-    console.log('values  in form:', id)
+  fetchEntries: (id, {props}) => {
+    console.log('id form:', id)
     props.fetchEntries(id)
   }
 })(EditJournal)
