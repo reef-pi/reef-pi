@@ -17,12 +17,13 @@ const EditEntry = ({
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
+    values.timestamp = new Date().toISOString()
     if (dirty === false || isValid === true) {
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        i18next.t('journal:validation_error')
+        i18next.t('journal:validation_error', errors)
       )
     }
   }
@@ -35,6 +36,7 @@ const EditEntry = ({
             <label htmlFor='value'>{i18next.t('journal:value')}</label>
             <Field
               name='value'
+              type='number'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('value', touched, errors)
@@ -43,8 +45,6 @@ const EditEntry = ({
             <ErrorFor errors={errors} touched={touched} name='value' />
           </div>
         </div>
-      </div>
-      <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='comment'>{i18next.t('journal:comment')}</label>
@@ -56,21 +56,6 @@ const EditEntry = ({
               })}
             />
             <ErrorFor errors={errors} touched={touched} name='comment' />
-          </div>
-        </div>
-      </div>
-      <div className={classNames('row', { 'd-none': readOnly })}>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='time'>{i18next.t('journal:time')}</label>
-            <Field
-              name='time'
-              disabled={readOnly}
-              className={classNames('form-control', {
-                'is-invalid': ShowError('time', touched, errors)
-              })}
-            />
-            <ErrorFor errors={errors} touched={touched} name='time' />
           </div>
         </div>
       </div>

@@ -1,29 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
-import { useSelector} from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { fetchJournalUsage } from 'redux/actions/journal'
 
 const EditJournal = ({
   values,
   errors,
   touched,
   submitForm,
-	fetchEntries,
   isValid,
   dirty,
   readOnly
 }) => {
+  const dispatch = useDispatch()
 
-	React.useEffect(() => {
-    console.log('values in edit:', values, fetchEntries)
-		fetchEntries(values.id)
-	}, []);
-
-	const entries = useSelector((state) => state.journal_usage[values.id]) 
+  useEffect(() => {
+    if (values.id !== undefined) {
+      dispatch(fetchJournalUsage(values.id))
+    }
+  }, [])
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -36,9 +36,6 @@ const EditJournal = ({
       )
     }
   }
-
-
-	console.log("Entries:", entries)
 
   return (
     <form onSubmit={handleSubmit}>

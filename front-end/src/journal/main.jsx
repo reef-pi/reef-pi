@@ -1,9 +1,11 @@
 import React from 'react'
 import New from './new'
 import JournalForm from './form'
+import Chart from './chart'
+import EntryForm from './entry_form'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
-import { fetchJournals, deleteJournal, updateJournal, fetchJournalUsage, recordJournal } from 'redux/actions/journal'
+import { fetchJournals, deleteJournal, updateJournal, recordJournal } from 'redux/actions/journal'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
@@ -21,13 +23,8 @@ class main extends React.Component {
     this.list = this.list.bind(this)
   }
 
-  handleRecord (values) {
-    const payload = {
-      value: values.value,
-      comment: values.comment,
-      timestamp: values.timestamp
-    }
-    this.props.record(values.id, payload)
+  handleRecord (id, payload) {
+    this.props.record(id, payload)
   }
 
   handleSubmit (values) {
@@ -65,12 +62,14 @@ class main extends React.Component {
             title={<b className='ml-2 align-middle'>{j.name} </b>}
             onDelete={this.handleDelete}
           >
-            <JournalForm
-              data={j}
-              onSubmit={this.handleSubmit}
-              onRecord={this.handleRecord}
-              fetchEntries={this.props.fetchEntries}
-            />
+            <>
+              <JournalForm
+                data={j}
+                onSubmit={this.handleSubmit}
+              />
+              <Chart journal_id={j.id} width={500} height={300} />
+              <EntryForm journal={j} onSubmit={this.handleRecord} />:
+            </>
           </Collapsible>
         )
       })
@@ -99,8 +98,7 @@ const mapDispatchToProps = dispatch => {
     fetchJournals: () => dispatch(fetchJournals()),
     delete: id => dispatch(deleteJournal(id)),
     update: (id, a) => dispatch(updateJournal(id, a)),
-    record: (id, a) => dispatch(recordJournal(id, a)),
-    fetchEntries: (id) => dispatch(fetchJournalUsage(id))
+    record: (id, a) => dispatch(recordJournal(id, a))
   }
 }
 

@@ -1,5 +1,5 @@
 import EditEntry from './edit_entry'
-import EntrySchema from './schema'
+import EntrySchema from './entry_schema'
 import { withFormik } from 'formik'
 
 const EntryForm = withFormik({
@@ -14,7 +14,6 @@ const EntryForm = withFormik({
       }
     }
     const values = {
-      id: data.id || '',
       value: data.value || '',
       comment: data.comment || '',
       timestamp: data.timestamp || ''
@@ -23,7 +22,7 @@ const EntryForm = withFormik({
   },
   validationSchema: EntrySchema,
   handleSubmit: (values, { props }) => {
-    props.onSubmit(values)
+    props.onSubmit(props.journal.id, values)
   }
 })(EditEntry)
 
