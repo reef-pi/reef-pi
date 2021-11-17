@@ -12,12 +12,10 @@ const EditEntry = ({
   touched,
   submitForm,
   isValid,
-  dirty,
-  readOnly
+  dirty
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
-    values.timestamp = new Date().toISOString()
     if (dirty === false || isValid === true) {
       submitForm()
     } else {
@@ -30,14 +28,13 @@ const EditEntry = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className={classNames('row', { 'd-none': readOnly })}>
+      <div className={classNames('d-flex row')}>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='value'>{i18next.t('journal:value')}</label>
             <Field
               name='value'
               type='number'
-              disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('value', touched, errors)
               })}
@@ -50,7 +47,6 @@ const EditEntry = ({
             <label htmlFor='comment'>{i18next.t('journal:comment')}</label>
             <Field
               name='comment'
-              disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('description', touched, errors)
               })}
@@ -58,14 +54,25 @@ const EditEntry = ({
             <ErrorFor errors={errors} touched={touched} name='comment' />
           </div>
         </div>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='comment'>{i18next.t('journal:timestamp')}</label>
+            <Field
+              name='timestamp'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('timestamp', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='timestamp' />
+          </div>
+        </div>
       </div>
 
-      <div className={classNames('row', { 'd-none': readOnly })}>
+      <div className={classNames('row')}>
         <div className='col-12'>
           <input
             type='submit'
-            value={i18next.t('add')}
-            disabled={readOnly}
+            value={i18next.t('journal:add_entry')}
             className='btn btn-sm btn-primary float-right mt-1'
           />
         </div>

@@ -10,19 +10,19 @@ const EntryForm = withFormik({
       data = {
         value: '',
         comment: '',
-        timestamp: ''
+        timestamp: new Date().toDateString()
       }
     }
     const values = {
       value: data.value || '',
       comment: data.comment || '',
-      timestamp: data.timestamp || ''
+      timestamp: data.timestamp || new Date().toDateString()
     }
     return values
   },
   validationSchema: EntrySchema,
   handleSubmit: (values, { props }) => {
-    props.onSubmit(props.journal.id, values)
+    props.onSubmit(values)
   }
 })(EditEntry)
 
