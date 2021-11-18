@@ -4170,10 +4170,10 @@ csv-parse@^4.15.4:
   resolved "https://registry.npmjs.org/csv-parse/-/csv-parse-4.15.4.tgz"
   integrity sha512-OdBbFc0yZhOm17lSxqkirrHlFFVpKRT0wp4DAGoJelsP3LbGzV9LNr7XmM/lrr0uGkCtaqac9UhP8PDHXOAbMg==
 
-csv-stringify@5.6.5:
-  version "5.6.5"
-  resolved "https://registry.npmjs.org/csv-stringify/-/csv-stringify-5.6.5.tgz"
-  integrity sha512-PjiQ659aQ+fUTQqSrd1XEDnOr52jh30RBurfzkscaE2tPaFsDH5wOAHJiw8XAHphRknCwMUE9KRayc4K/NbO8A==
+csv-stringify@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-6.0.1.tgz#de812cb1be1f2931ca7d71f1279ce4d43fb0fc7a"
+  integrity sha512-w9XpZZxOPa79s27DqIOI1xH/8SE6gRiQLZrTavD0DummNyTAWDR/teLKlaujpcz7ZlUaYFfu7THP57ArOqnY3A==
 
 cuint@^0.2.2:
   version "0.2.2"

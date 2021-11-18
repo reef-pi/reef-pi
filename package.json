@@ -19,7 +19,7 @@
     "cross-env": "7.0.2",
     "css-loader": "6.3.0",
     "csv-parse": "^4.15.4",
-    "csv-stringify": "5.6.5",
+    "csv-stringify": "6.0.1",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.5",
     "eslint": "7.32.0",
