@@ -41,7 +41,6 @@ const Journal = (props) => {
     )
   }
 
-  console.log(addEntry, newEntry)
   return (
     <ul className='list-group list-group-flush'>
       <li className='list-group-item'>
