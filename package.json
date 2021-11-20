@@ -77,7 +77,7 @@
     "js-lint": "standard  front-end/src/**/*",
     "standard": "standard --fix front-end/src/**/**",
     "jest": "cross-env NODE_ENV=testing jest --env=jsdom",
-    "jest-update-snapshot": "cross-env NODE_EN`V=testing jest --coverage --all --updateSnapshot --env=jsdom",
+    "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot --env=jsdom",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage --env=jsdom",
     "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
     "smoke": "testcafe chrome front-end/test/* --skip-js-errors",
