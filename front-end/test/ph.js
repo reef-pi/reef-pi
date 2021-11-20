@@ -18,17 +18,18 @@ class Ph {
     await t
     .click('input#add_probe')
     .typeText('.add-probe input[name="name"]', name)
-    .typeText('.add-probe input[name="period"]', period)
+    .typeText('.add-probe input[name="period"]', period, {replace: true})
 
     await select(Selector('.add-probe [name="analog_input"]'), analogInput)
     await select(Selector('.add-probe [name="control"]'), control)
 
-    await t
-    .typeText('.add-probe input[name="lowerThreshold"]', lowerThreshold)
-    .typeText('.add-probe input[name="upperThreshold"]', upperThreshold)
-
     await select(Selector('.add-probe [name="lowerFunction"]'), lowerFunction)
     await select(Selector('.add-probe [name="upperFunction"]'), upperFunction)
+
+    await t
+    .typeText('.add-probe input[name="lowerThreshold"]', lowerThreshold, { replace: true })
+    .typeText('.add-probe input[name="upperThreshold"]', upperThreshold, { replace: true })
+
     await t.click('.add-probe input[type*="submit"]')
 
   }
