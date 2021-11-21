@@ -24,9 +24,9 @@ const PhForm = withFormik({
       minAlert: (data.notify && data.notify.min) || 0,
       control: 'nothing',
       lowerThreshold: data.min || 0,
-      lowerFunction: data.downer_eq || 'nothing',
+      lowerFunction: data.downer_eq || '',
       upperThreshold: data.max || 0,
-      upperFunction: data.upper_eq || 'nothing',
+      upperFunction: data.upper_eq || '',
       hysteresis: data.hysteresis || 0,
       chart: data.chart || { ymin: 0, ymax: 100, color: '#000', unit: '' }
     }
