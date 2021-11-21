@@ -49,7 +49,6 @@ install:
 
 .PHONY: go-get
 go-get:
-	go get -d -u golang.org/x/tools/cmd/goimports
 ifeq ($(OS), Windows_NT)
 	go get -d -u github.com/StackExchange/wmi
 endif
