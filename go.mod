@@ -16,7 +16,7 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/prometheus/client_golang v1.11.0
-	github.com/prometheus/common v0.31.1 // indirect
+	github.com/prometheus/common v0.31.1
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20210801215622-71f48a2819a3
@@ -26,7 +26,7 @@ require (
 	github.com/shirou/gopsutil v3.21.10+incompatible
 	go.etcd.io/bbolt v1.3.6
 	golang.org/x/net v0.0.0-20211014222326-fd004c51d1d6 // indirect
-	golang.org/x/sys v0.0.0-20211013075003-97ac67df715c // indirect
+	golang.org/x/sys v0.0.0-20211117180635-dee7805ff2e1 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
