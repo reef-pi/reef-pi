@@ -226,6 +226,7 @@ ph:analog_input_required,Entrada Analógica é Obrigatório
 ph:calibrate,Calibrar
 ph:chart:current,
 ph:chart:historical,
+ph:chart:usage,
 ph:chart_color,
 ph:chart_unit,
 ph:chart_ymax,
