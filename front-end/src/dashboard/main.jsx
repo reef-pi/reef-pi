@@ -4,6 +4,7 @@ import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
 import BlankPanel from 'dashboard/blank_panel'
+import JournalChart from 'journal/chart'
 import GenericLightChart from 'lighting/charts/generic'
 import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
@@ -96,6 +97,15 @@ class dashboard extends React.Component {
               <div className='col' key={'chart-' + i + '-' + j}>
                 <ErrorBoundary>
                   <ATOChart width={config.width} height={config.height} ato_id={ch.id} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
+          case 'journal':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <JournalChart width={config.width} height={config.height} journal_id={ch.id} />
                 </ErrorBoundary>
               </div>
             )
