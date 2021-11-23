@@ -77,6 +77,18 @@ func (s *Subsystem) Delete(id string) error {
 }
 
 func (s *Subsystem) AddEntry(id string, e Entry) error {
+	if !s.statsMgr.IsLoaded(id) {
+		dec := func(d json.RawMessage) interface{} {
+			var u Entry
+			if err := json.Unmarshal(d, &u); err != nil {
+				log.Println("ERROR:[journal-subsystem] Failed to unmarshal usage value. ", err)
+			}
+			return u
+		}
+		if err := s.statsMgr.Load(id, dec); err != nil {
+			log.Println("ERROR:[journal-subsystem] Failed to load usage value. ", err)
+		}
+	}
 	s.statsMgr.Update(id, e)
 	return s.statsMgr.Save(id)
 }
