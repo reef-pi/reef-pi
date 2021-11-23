@@ -1,4 +1,5 @@
-// +build windows, !test
+//go:build (windows && ignore) || !test
+// +build windows,ignore !test
 
 package utils
 

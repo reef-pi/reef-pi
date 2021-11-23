@@ -28,29 +28,29 @@ var GMailMailer = MailerConfig{
 type MailerCustomizer func(m *mailer)
 
 func (c *MailerConfig) Mailer(opts ...MailerCustomizer) Mailer {
-    m :=  &mailer{
-        config: c,
-    }
+	m := &mailer{
+		config: c,
+	}
 
-    for _, opt := range opts {
-        opt(m)
-    }
+	for _, opt := range opts {
+		opt(m)
+	}
 
-    if m.auth == nil {
-        var username string
-        if c.Username != "" {
-            username = c.Username
-        } else {
-            username = c.From
-        }
-        m.auth = smtp.PlainAuth("", username, c.Password, c.Server)
-    }
+	if m.auth == nil {
+		var username string
+		if c.Username != "" {
+			username = c.Username
+		} else {
+			username = c.From
+		}
+		m.auth = smtp.PlainAuth("", username, c.Password, c.Server)
+	}
 
-    if m.sendMail == nil {
-        m.sendMail = smtp.SendMail
-    }
+	if m.sendMail == nil {
+		m.sendMail = smtp.SendMail
+	}
 
-    return m
+	return m
 }
 
 type NoopMailer struct{}
