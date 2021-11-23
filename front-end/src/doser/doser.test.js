@@ -1,11 +1,12 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
+import Enzyme, { shallow, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
 import DoserForm from './doser_form'
+import { Provider } from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -36,9 +37,11 @@ describe('Doser ui', () => {
     const mock = {
       dosers: [{ foo: 'bar', regiment: {} }]
     }
-    const m = shallow(<Main store={mockStore(mock)} />)
-      .dive()
-      .instance()
+    const m = mount(
+      <Provider store={mockStore(mock)}>
+        <Main />
+      </Provider>  
+      )
 
     m.handleCreateDoser({ name: 'test' })
     m.handleUpdateDoser({ name: 'renamed' })
