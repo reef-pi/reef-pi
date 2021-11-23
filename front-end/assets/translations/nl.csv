@@ -226,6 +226,7 @@ ph:analog_input_required,Analoge Input is nodig
 ph:calibrate,Calibreren
 ph:chart:current,huidig
 ph:chart:historical,historiek
+ph:chart:usage,
 ph:chart_color,
 ph:chart_unit,
 ph:chart_ymax,

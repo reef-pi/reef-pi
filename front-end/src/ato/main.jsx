@@ -56,7 +56,7 @@ class main extends React.Component {
         </p>
       </div>
     )
-    confirm(i18next.t('reset'), { description: message }).then(
+    confirm(i18next.t('ato:reset_usage'), { description: message }).then(
       function () {
         this.props.reset(probe.id)
       }.bind(this)

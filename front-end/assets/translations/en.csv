@@ -224,8 +224,9 @@ ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:analog_input_required,Analog Input is required
 ph:calibrate,Calibrate
-ph:chart:current,pH(latest)
-ph:chart:historical,pH(historical)
+ph:chart:current,pH (latest)
+ph:chart:historical,pH (historical)
+ph:chart:usage,pH (hist.& usage)
 ph:chart_color, Chart color
 ph:chart_unit, Chart unit
 ph:chart_ymax, Chart maximum

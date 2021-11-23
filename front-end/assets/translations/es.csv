@@ -226,6 +226,7 @@ ph:analog_input_required,Entrada Analogica es requerida
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
+ph:chart:usage,
 ph:chart_color,Color
 ph:chart_unit,
 ph:chart_ymax,
