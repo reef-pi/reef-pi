@@ -43,10 +43,6 @@ describe('Doser ui', () => {
       </Provider>  
       )
 
-    m.handleCreateDoser({ name: 'test' })
-    m.handleUpdateDoser({ name: 'renamed' })
-    m.handleDeleteDoser({ id: 1, name: 'renamed' })
-    m.calibrateDoser({ stopPropagation: fn }, {})
   })
 
   it('<DoserForm/> for create', () => {

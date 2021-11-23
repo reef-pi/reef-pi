@@ -24,25 +24,16 @@ describe('Camera module', () => {
     const m = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    m.handleToggleConfig()
 
     const d = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    d.state.config.motion = {
-      width: 640,
-      height: 480,
-      url: '/foo'
-    }
-    d.motion()
-    d.props.updateConfig()
   })
 
   it('<Capture />', () => {
     const d = shallow(<Capture store={mockStore({ camera: { latest: '' } })} />)
       .dive()
       .instance()
-    d.props.takeImage()
   })
 
   it('<Config />', () => {
