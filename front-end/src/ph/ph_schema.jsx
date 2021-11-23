@@ -54,12 +54,12 @@ const PhSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .when('upperFunction', (upperFunc, schema) => {
-            if (upperFunc === undefined || upperFunc === 'nothing') { return schema }
+            if (upperFunc === undefined || upperFunc === '') { return schema }
             return schema
               .required(i18next.t('ph:lower_threshold_required'))
               .typeError(i18next.t('ph:lower_threshold_type'))
               .test('lessThan', i18next.t('ph:lower_threshold_less_than'), function (min) {
-                if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === 'nothing') { return true }
+                if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === '') { return true }
                 return min < this.parent.upperThreshold
               })
           })
@@ -73,7 +73,6 @@ const PhSchema = Yup.object().shape({
             if (lowerFunc === undefined) { return true }
             return lowerFunc !== this.parent.upperFunction
           })
-          .required(i18next.t('ph:lower_function_required'))
       } else { return schema }
     }),
   upperThreshold: Yup.number()
@@ -81,12 +80,12 @@ const PhSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .when('lowerFunction', (lowerFunc, schema) => {
-            if (lowerFunc === undefined || lowerFunc === 'nothing') { return schema }
+            if (lowerFunc === undefined || lowerFunc === '') { return schema }
             return schema
               .required(i18next.t('ph:upper_threshold_required'))
               .typeError(i18next.t('ph:upper_threshold_type'))
               .test('greaterThan', i18next.t('ph:upper_threshold_less_than'), function (max) {
-                if (this.parent.upperFunction === undefined || this.parent.upperFunction === 'nothing') { return true }
+                if (this.parent.upperFunction === undefined || this.parent.upperFunction === '') { return true }
                 return max > this.parent.lowerThreshold
               })
           })

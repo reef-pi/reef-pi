@@ -1,3 +1,4 @@
+
 import React from 'react'
 import Enzyme, { mount, shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -14,23 +15,16 @@ import {Provider} from 'react-redux'
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
-describe('App', () => {
+describe('Equipment select', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
-  it('<App />', () => {
-    SignIn.isSignedIn = jest.fn().mockImplementation(() => {
-      return new Promise(function (resolve) {
-        return resolve(true)
-      })
-    })
-    const m = shallow(<App />).instance()
-    m.setState({loaded: true})
-    m.render()
-    m.state.logged = true
-    m.getComponent()
-    m.componentDidMount()
+  it('<SelectEquipment />', () => {
+    const eqs = [{ id: '1', name: 'foo' }]
+    const m = shallow(
+      <Provider store={mockStore({ equipment: eqs })} active='1' update={() => {}} >
+        <SelectEquipment/>
+      </Provider>)
   })
-
 })

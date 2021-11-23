@@ -226,6 +226,7 @@ ph:analog_input_required,必须填写模拟输入
 ph:calibrate,校正
 ph:chart:current,当前读数图表
 ph:chart:historical,历史读数图表
+ph:chart:usage,
 ph:chart_color,
 ph:chart_unit,
 ph:chart_ymax,

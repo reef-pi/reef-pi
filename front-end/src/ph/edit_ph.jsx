@@ -328,7 +328,7 @@ const EditPh = ({
                 'is-invalid': ShowError('upperFunction', touched, errors)
               })}
             >
-              <option value='nothing'>{i18next.t('ph:controlnothing')}</option>
+              <option value=''>{i18next.t('ph:controlnothing')}</option>
               {options()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='upperFunction' />
@@ -340,7 +340,7 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='lowerThreshold'
-                readOnly={readOnly || values.control === 'nothing' || values.upperFunction === undefined || values.upperFunction === 'nothing'}
+                readOnly={readOnly || values.control === 'nothing' || values.upperFunction === undefined || values.upperFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('lowerThreshold', touched, errors)
                 })}
@@ -367,7 +367,7 @@ const EditPh = ({
                 'is-invalid': ShowError('lowerFunction', touched, errors)
               })}
             >
-              <option value='nothing'>{i18next.t('ph:controlnothing')}</option>
+              <option value=''>{i18next.t('ph:controlnothing')}</option>
               {options()}
             </Field>
             <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
@@ -380,7 +380,7 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='upperThreshold'
-                readOnly={readOnly || values.control === 'nothing' || values.lowerFunction === undefined || values.lowerFunction === 'nothing'}
+                readOnly={readOnly || values.control === 'nothing' || values.lowerFunction === undefined || values.lowerFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('upperThreshold', touched, errors)
                 })}

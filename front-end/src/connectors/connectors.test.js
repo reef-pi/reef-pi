@@ -1,5 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
+import Enzyme, { shallow, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Main from './main'
 import Inlets from './inlets'
@@ -12,6 +12,7 @@ import Outlets from './outlets'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+import { Provider } from 'react-redux'
 
 Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
@@ -41,7 +42,11 @@ describe('Connectors', () => {
       inlets: [{ id: '1', name: 'foo', pin: 1 }, { id: '2', name: 'bar', pin: 2 }],
       drivers: stockDrivers
     }
-    const m = shallow(<InletSelector store={mockStore(state)} active='1' update={() => true} />).dive()
+    const m = mount(
+      <Provider store={mockStore(state)}>
+        <InletSelector active='1' update={() => true} />
+      </Provider>
+    )
     m.find('a')
       .first()
       .simulate('click')
@@ -53,10 +58,13 @@ describe('Connectors', () => {
       drivers: stockDrivers,
       driver: stockDrivers[0]
     }
-    const wrapper = shallow(<Inlets store={mockStore(state)} />).dive()
+    const wrapper = mount(<Provider store={mockStore(state)}>
+        <Inlets />
+      </Provider>
+    )
     wrapper.find('#add_inlet').simulate('click')
     wrapper.find('#inletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').simulate('change', { target: { value: 'rpi' } })
+    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: 'rpi' } })
     wrapper.find('#inletReverse').simulate('change')
     wrapper.find('#createInlet').simulate('click')
     expect(wrapper.find(Inlet).length).toBe(1)
@@ -86,7 +94,11 @@ describe('Connectors', () => {
       jacks: [{ id: '1', name: 'J2', pins: [0, 2], reverse: false }],
       drivers: stockDrivers
     }
-    const m = shallow(<Jacks store={mockStore(state)} />).dive()
+    //const m = shallow(<Jacks store={mockStore(state)} />).dive()
+    const m = mount(<Provider store={mockStore(state)}>
+      <Jacks />
+    </Provider>
+    )
     m.find('#add_jack').simulate('click')
     m.find('#jackName').simulate('change', { target: { value: 'foo' } })
     m.find('#jackPins').simulate('change', { target: { value: '4,L' } })
@@ -123,10 +135,14 @@ describe('Connectors', () => {
       outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true }],
       drivers: stockDrivers
     }
-    const wrapper = shallow(<Outlets store={mockStore(state)} />).dive()
+    //const wrapper = shallow(<Outlets store={mockStore(state)} />).dive()
+    const wrapper = mount(<Provider store={mockStore(state)}>
+      <Outlets />
+    </Provider>
+    )
     wrapper.find('#add_outlet').simulate('click')
     wrapper.find('#outletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').simulate('change', { target: { value: '1' } })
+    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: '1' } })
     wrapper.find('#outletReverse').simulate('change')
     wrapper.find('#createOutlet').simulate('click')
     expect(wrapper.find(Outlet).length).toBe(1)

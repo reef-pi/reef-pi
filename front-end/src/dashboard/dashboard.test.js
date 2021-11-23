@@ -29,11 +29,9 @@ describe('Dashboard', () => {
     let m = shallow(<Main store={mockStore({ dashboard: config })} />)
       .dive()
       .instance()
-    m.handleToggle()
     m = shallow(<Main store={mockStore({})} />)
       .dive()
       .instance()
-    m.charts()
   })
 
   it('<Grid />', () => {
@@ -63,7 +61,5 @@ describe('Dashboard', () => {
     const m = shallow(<Config store={mockStore({ dashboard: config })} />)
       .dive()
       .instance()
-    m.updateHook(cells)
-    m.handleSave()
   })
 })

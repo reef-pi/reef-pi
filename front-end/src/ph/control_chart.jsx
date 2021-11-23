@@ -28,12 +28,17 @@ class chart extends React.Component {
       return <div />
     }
     const metrics = this.props.readings.historical
+    let current = ''
+    if (metrics.length >= 1) {
+      current = metrics[metrics.length - 1].value
+      if (current !== '') {
+        current = TwoDecimalParse(current)
+      }
+    }
     const c = this.props.config.chart
     return (
       <div className='container'>
-        <span className='h6'>
-          {this.props.config.name}
-        </span>
+        <span className='h6'>{this.props.config.name}({current})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <ComposedChart data={metrics}>
             <YAxis

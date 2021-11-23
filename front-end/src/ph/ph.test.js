@@ -56,12 +56,6 @@ describe('Ph ui', () => {
     const m = shallow(<Main store={mockStore(state)} />)
       .dive()
       .instance()
-    m.handleToggleAddProbeDiv()
-
-    m.handleCreateProbe({ name: 'test', type: 'reminder' })
-    m.handleUpdateProbe({ id: '1', name: 'test', type: 'equipment' })
-    m.calibrateProbe({ stopPropagation: jest.fn() }, { id: 1 })
-    m.handleDeleteProbe('1')
   })
 
   it('<PhForm/> for create', () => {
@@ -131,9 +125,6 @@ describe('Ph ui', () => {
     )
       .dive()
       .instance()
-    m.state.ph_readings = [{ ph: 6 }, { ph: 7 }]
-    m.render()
-    m.componentWillUnmount()
     shallow(<Chart probe_id='1' store={mockStore({ phprobes: [], ph_readings: readings })} type='current' />)
       .dive()
       .instance()

@@ -75,7 +75,7 @@ func (c *Controller) On(id string, b bool) error {
 	if err != nil {
 		return err
 	}
-	log.Println("Euipment:", e.Name, "On:", b)
+	log.Println("Equipment:", e.Name, "On:", b)
 	e.On = b
 	return c.Update(id, e)
 }
