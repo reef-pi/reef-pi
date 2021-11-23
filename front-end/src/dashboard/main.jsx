@@ -196,13 +196,13 @@ class dashboard extends React.Component {
 
     return (
       <>
-        <div className='row' key='content'>
+        <div className='container' key='content'>
           <div className='col'>
             {content}
           </div>
         </div>
         <div className='row' key='configure'>
-          <div className='col-xs-12 col-md-3 offset-md-9'>
+          <div className='col-sm-2 offset-md-9'>
             <button className='btn btn-outline-dark btn-sm col-12' onClick={this.handleToggle} id='configure-dashboard'>
               <label>{lbl}</label>
             </button>
