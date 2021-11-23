@@ -26,6 +26,11 @@ export const buildTypeMap = (props) => {
     props = {}
   }
   const validTypes = {
+    journal: {
+      name: 'journal',
+      label: i18next.t('journal'),
+      options: props.journals || []
+    },
     ato: {
       name: 'ato',
       label: i18next.t('ato'),

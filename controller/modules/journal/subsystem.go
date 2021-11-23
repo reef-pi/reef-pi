@@ -28,6 +28,7 @@ func (s *Subsystem) Setup() error {
 	return s.c.Store().CreateBucket(UsageBucket)
 }
 
-func (s *Subsystem) Start()                              {}
-func (s *Subsystem) Stop()                               {}
+func (s *Subsystem) Start() {}
+func (s *Subsystem) Stop() {
+}
 func (s *Subsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }

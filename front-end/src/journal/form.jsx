@@ -14,7 +14,6 @@ const JournalForm = withFormik({
       }
     }
     const values = {
-      id: data.id || '',
       name: data.name || '',
       description: data.description || '',
       unit: data.unit || ''

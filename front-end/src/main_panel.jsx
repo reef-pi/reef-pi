@@ -125,12 +125,12 @@ class mainPanel extends React.Component {
           <FatalError />
           <NotificationAlert />
           <div className='row body-panel'>
-            <div className='col-12'>
+            <div className='col'>
               <ErrorBoundary tab={this.state.tab}>{body}</ErrorBoundary>
             </div>
           </div>
           <div className='row d-none d-lg-block'>
-            <div className='col-12'>
+            <div className='col'>
               <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
             </div>
           </div>

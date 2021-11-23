@@ -25,7 +25,7 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return (<div />)
     }
-    const metrics = this.props.readings.current
+    const metrics = this.props.readings.historical
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value

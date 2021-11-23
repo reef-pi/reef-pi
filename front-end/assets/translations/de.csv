@@ -33,6 +33,7 @@ inlets,digitale Eingänge
 install,Installieren
 jack,analoger Ausgang (PWM)
 jacks,analoge Ausgänge (PWM)
+journal,
 light,Lampe
 lights,Beleuchtung
 loading,Lade ...

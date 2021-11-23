@@ -4,6 +4,7 @@ import TempControlChart from 'temperature/control_chart'
 import EquipmentChart from 'equipment/chart'
 import EquipmentCtrlPanel from 'equipment/ctrl_panel'
 import BlankPanel from 'dashboard/blank_panel'
+import JournalChart from 'journal/chart'
 import GenericLightChart from 'lighting/charts/generic'
 import ATOChart from 'ato/chart'
 import DoserChart from 'doser/chart'
@@ -100,6 +101,15 @@ class dashboard extends React.Component {
               </div>
             )
             break
+          case 'journal':
+            columns.push(
+              <div className='col' key={'chart-' + i + '-' + j}>
+                <ErrorBoundary>
+                  <JournalChart width={config.width} height={config.height} journal_id={ch.id} />
+                </ErrorBoundary>
+              </div>
+            )
+            break
           case 'ph_current':
             columns.push(
               <div className='col' key={'chart-' + i + '-' + j}>
@@ -186,13 +196,13 @@ class dashboard extends React.Component {
 
     return (
       <>
-        <div className='row' key='content'>
+        <div className='container' key='content'>
           <div className='col'>
             {content}
           </div>
         </div>
         <div className='row' key='configure'>
-          <div className='col-xs-12 col-md-3 offset-md-9'>
+          <div className='col-sm-2 offset-md-9'>
             <button className='btn btn-outline-dark btn-sm col-12' onClick={this.handleToggle} id='configure-dashboard'>
               <label>{lbl}</label>
             </button>
