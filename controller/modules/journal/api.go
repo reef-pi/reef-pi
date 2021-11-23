@@ -1,8 +1,10 @@
 package journal
 
 import (
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"log"
 	"net/http"
 )
 
@@ -53,7 +55,21 @@ func (s *Subsystem) delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Subsystem) getUsage(w http.ResponseWriter, req *http.Request) {
-	fn := func(id string) (interface{}, error) { return s.statsMgr.Get(id) }
+	dec := func(d json.RawMessage) interface{} {
+		var u Entry
+		if err := json.Unmarshal(d, &u); err != nil {
+			log.Println("ERROR:[journal-subsystem] Failed to unmarshal usage value. ", err)
+		}
+		return u
+	}
+	fn := func(id string) (interface{}, error) {
+		if !s.statsMgr.IsLoaded(id) {
+			if err := s.statsMgr.Load(id, dec); err != nil {
+				log.Println("ERROR:[journal-subsystem] Failed to load usage value. ", err)
+			}
+		}
+		return s.statsMgr.Get(id)
+	}
 	utils.JSONGetResponse(fn, w, req)
 }
 

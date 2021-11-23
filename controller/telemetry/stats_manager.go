@@ -32,6 +32,7 @@ type StatsOnDisk struct {
 
 type StatsManager interface {
 	Get(string) (StatsResponse, error)
+	IsLoaded(string) bool
 	Initialize(string) error
 	Load(string, func(json.RawMessage) interface{}) error
 	Save(string) error
@@ -47,6 +48,11 @@ type mgr struct {
 	CurrentLimit    int
 	HistoricalLimit int
 	store           storage.Store
+}
+
+func (m *mgr) IsLoaded(id string) bool {
+	_, ok := m.inMemory[id]
+	return ok
 }
 
 func (m *mgr) Get(id string) (StatsResponse, error) {
