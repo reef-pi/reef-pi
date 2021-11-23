@@ -30,29 +30,6 @@ describe('Telemetry UI', () => {
     }
     const m = shallow(<Main store={mockStore({ telemetry: telemetry })} />)
       .dive()
-      .instance()
-    m.updateMailer(mailer)
-    const fields = ['server', 'password', 'To', 'From']
-    fields.forEach(k => {
-      let t = {}
-      t[k] = ''
-      m.updateMailer(t)
-    })
-    m.updateAio(aio)
-    m.updateAio({ enable: false })
-    m.handleUpdateThrottle({ target: { value: 20 } })
-    m.handleEnableMailer({ target: { checked: true } })
-    m.handleSave()
-    m.state.config.adafruitio.enable = false
-    m.showAdafruitIO()
-    m.state.config.notify = false
-    m.notification()
-    m.state.config.adafruitio.enable = true
-    m.showAdafruitIO()
-    m.notification()
-    m.handleTestMessage()
-    m.updateAio({ enable: true, user: '' })
-    m.updateAio({ enable: true, user: 'foo', token: '' })
   })
 
   it('<AdafruitIO />', () => {

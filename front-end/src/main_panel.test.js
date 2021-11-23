@@ -26,8 +26,6 @@ describe('MainPanel', () => {
       }
     }
     const m = shallow(<MainPanel store={mockStore(state)} />).dive().instance()
-    m.setTab('ato')()
-    m.props.fetchInfo()
     shallow(<MainPanel store={mockStore({
       info: {},
       errors: [],

@@ -14,12 +14,13 @@ export default class App extends React.Component {
       loaded: false,
       logged: false
     }
+    this.getComponent = this.getComponent.bind(this)
   }
 
   componentDidMount () {
     const setState = this.setState.bind(this)
     SignIn.isSignedIn().then(r => {
-      setState({ loaded: true, logged: r })
+      this.setState({ loaded: true, logged: r })
     })
   }
 

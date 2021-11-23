@@ -16,13 +16,11 @@ describe('Health', () => {
       timer: window.setInterval(() => true, 10)
     }
     const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()
-    m.componentWillUnmount()
   })
   it('<HealthChart />', () => {
     const state = {
       trend: 'current'
     }
     const m = shallow(<HealthChart store={mockStore(state)} />).dive().instance()
-    m.componentWillUnmount()
   })
 })

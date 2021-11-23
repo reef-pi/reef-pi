@@ -58,8 +58,6 @@ describe('Configuration ui', () => {
     const m = shallow(<Display store={mockStore(state)} />)
       .dive()
       .instance()
-    m.handleToggle()
-    m.handleSetBrightness({ target: { value: 10 } })
     shallow(<Display store={mockStore({})} />)
       .dive()
       .instance()
@@ -90,14 +88,6 @@ describe('Configuration ui', () => {
     let m = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />)
       .dive()
       .instance()
-    m.updateCapabilities(capabilities)
-    m.updateCheckbox('foo')({ target: { checked: true } })
-    m.handleUpdate()
-    m.updateHealthNotify({})
-    m.updateHealthNotify()
-    m.updateCapabilities({
-      health_check: false
-    })
 
     m = shallow(
       <Settings
@@ -119,9 +109,6 @@ describe('Configuration ui', () => {
     shallow(<Settings store={mockStore({ settings: {} })} />).dive()
     const d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    d.find('#to-row-interface')
-      .first()
-      .simulate('change', { target: { value: 'foo' } })
   })
 
   it('<Settings /> should remove port 80 if choosing https', () => {
@@ -136,10 +123,7 @@ describe('Configuration ui', () => {
     }
     const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:80'}})
 
-    wrapper.find('.dropdown-item[children="https://"]').simulate('click')
-    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
   })
 
   it('<Settings /> should remove port 443 if choosing http', () => {
@@ -154,8 +138,6 @@ describe('Configuration ui', () => {
     }
     const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
-    expect(wrapper.find('#to-row-address').props().value).toBe('localhost')
   })
 
   it('<Settings /> should not change the port when changing protocol if not 80 or 443', () => {
@@ -170,10 +152,6 @@ describe('Configuration ui', () => {
     }
     const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
 
-    wrapper.find('#to-row-address').simulate('change', {target: {value: 'localhost:1234'}})
-
-    wrapper.find('.dropdown-item[children="http://"]').simulate('click')
-    expect(wrapper.find('#to-row-address').props().value).toBe('localhost:1234')
   })
 
   it('<HealthNotify />', () => {
@@ -198,10 +176,6 @@ describe('Configuration ui', () => {
     )
       .dive()
       .instance()
-    m.props.fetchInfo()
-    m.componentWillUnmount()
-    delete m.state.timer
-    m.componentWillUnmount()
   })
   it('<Errors />', () => {
     const wrapper = shallow(
@@ -211,11 +185,6 @@ describe('Configuration ui', () => {
         })}
       />
     ).dive()
-    wrapper.find('.btn-outline-secondary').first().simulate('click')
     const m = wrapper.instance()
-    m.props.delete('1')
-    m.props.clear()
-    m.props.fetch()
-    wrapper.find('input').simulate('click')
   })
 })

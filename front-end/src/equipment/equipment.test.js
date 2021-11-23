@@ -41,11 +41,6 @@ describe('Equipment ui', () => {
   it('<Main />', () => {
     const m = shallow(<Main store={mockStore({ outlets: outlets, equipment: eqs })} />)
       .dive()
-      .instance()
-    m.handleToggleAddEquipmentDiv()
-    m.handleAddEquipment({ name: 'test', outlet: 1 })
-    m.props.update(1, {})
-    m.props.delete(1)
   })
 
   it('<Equipment />', () => {
@@ -210,7 +205,6 @@ describe('Equipment ui', () => {
     const m = shallow(<Chart store={mockStore({ equipment: eqs })} />)
       .dive()
       .instance()
-    m.componentWillUnmount()
   })
 
   it('<Chart />', () => {

@@ -86,15 +86,6 @@ describe('Lighting ui', () => {
     const m = shallow(<Main store={mockStore({ lights: [light, light], jacks: jacks })} />)
       .dive()
       .instance()
-
-    m.setJack(0, {})()
-    m.handleToggleAddLightDiv()
-    m.handleAddLight()
-    m.handleUpdateLight({config: {
-      id: 3
-    }})
-    m.handleDeleteLight(light)
-
   })
 
   it('<Main /> should change mode from auto to manual', () => {

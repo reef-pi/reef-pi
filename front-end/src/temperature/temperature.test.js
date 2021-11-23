@@ -34,14 +34,8 @@ describe('Temperature controller ui', () => {
 
   it('<Main />', () => {
     let wrapper = shallow(<Main store={mockStore(state)} />)
-      .dive()
+      .dive().instance()
 
-    let m = wrapper.instance()
-    m.handleToggleAddProbeDiv()
-    m.handleCreate({ name: 'test', chart: {} })
-    m.handleUpdate({ id: '1', name: 'test',  chart: {} })
-    m.handleCalibrate({ stopPropagation: jest.fn() }, { id: 1 })
-    m.handleDelete('1')
   })
 
   it('<ReadingsChart />', () => {
@@ -49,9 +43,6 @@ describe('Temperature controller ui', () => {
     const m = shallow(<ReadingsChart store={mockStore(state)} sensor_id='1' />)
       .dive()
       .instance()
-    m.componentWillUnmount()
-    delete m.state.timer
-    m.componentWillUnmount()
     shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: {} })} sensor_id='9' />)
       .dive()
       .instance()
@@ -84,12 +75,6 @@ describe('Temperature controller ui', () => {
     const m = shallow(<ControlChart sensor_id='1' store={mockStore(state)} />)
       .dive()
       .instance()
-    m.state.timer = window.setInterval(() => {
-      return true
-    }, 10 * 1000)
-    m.componentWillUnmount()
-    delete m.state.timer
-    m.componentWillUnmount()
     shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [], tc_usage: [] })} />)
       .dive()
       .instance()

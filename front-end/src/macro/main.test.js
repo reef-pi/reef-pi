@@ -48,14 +48,6 @@ describe('Macro UI', () => {
     const wrapper = shallow(<Main store={mockStore({ macros: [macro] })} />)
     const n = wrapper.dive()
       .instance()
-    n.componentWillUnmount()
-    delete n.state.timer
-    n.componentWillUnmount()
-    n.handleCreateMacro(macro)
-    n.handleUpdateMacro(macro)
-    n.handleDeleteMacro(macro)
-    n.runMacro({ stopPropagation: jest.fn() }, macro)
-    n.handleToggleAddMacroDiv()
   })
 
   it('<MacroForm/> for create', () => {

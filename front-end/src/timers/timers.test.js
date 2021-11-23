@@ -45,12 +45,6 @@ describe('Timer ui', () => {
     }
     const m = shallow(<Main store={mockStore(state)} />)
       .dive()
-      .instance()
-    m.handleToggleAddTimerDiv()
-
-    m.handleSubmit({ name: 'test', type: 'reminder' })
-    m.handleUpdateTimer({ id: '1', name: 'test', type: 'equipment', target: {} })
-    m.handleRemoveTimer('1')
   })
 
   it('<TimerForm /> for create', () => {
