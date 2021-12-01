@@ -56,7 +56,7 @@
     "redoc-cli": "^0.13.0",
     "redux": "^4.1.2",
     "redux-mock-store": "1.5.4",
-    "redux-thunk": "2.4.0",
+    "redux-thunk": "2.4.1",
     "sass": "^1.42.1",
     "sass-lint": "1.13.1",
     "sass-loader": "12.1.0",
