@@ -37,8 +37,7 @@ const PhSchema = Yup.object().shape({
           })
       } else { return schema }
     }),
-  control: Yup.string()
-    .required(i18next.t('ph:control_required')),
+  control: Yup.string(),
   upperFunction: Yup.string()
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {

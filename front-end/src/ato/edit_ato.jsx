@@ -160,7 +160,7 @@ const EditAto = ({
                 'is-invalid': ShowError('control', touched, errors)
               })}
             >
-              <option value='nothing'>{i18next.t('ato:controlnothing')}</option>
+              <option value=''>{i18next.t('ato:controlnothing')}</option>
               <option value='macro'>{i18next.t('ato:controlmacro')}</option>
               <option value='equipment'>{i18next.t('ato:controlequipment')}</option>
             </Field>
@@ -174,7 +174,7 @@ const EditAto = ({
             <Field
               name='pump'
               component='select'
-              disabled={readOnly || values.control === 'nothing'}
+              disabled={readOnly || values.control === ''}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('pump', touched, errors)
               })}

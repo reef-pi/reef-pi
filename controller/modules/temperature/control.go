@@ -37,7 +37,8 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 	}
 	if tc.Control {
 		if err := tc.h.Sync(&u); err != nil {
-			log.Println("ERROR: Failed to execute temperature control logic. Error:", err)
+			log.Println("temperature sub-system: ERROR: Failed to execute:", err)
+			c.c.LogError("tc-"+tc.ID, "Failed to execute temperature control logic for:"+tc.Name+". Error:"+err.Error())
 		}
 	}
 	c.NotifyIfNeeded(tc, reading)

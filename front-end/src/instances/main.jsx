@@ -45,7 +45,6 @@ class main extends React.Component {
     return (
       <ul className='list-group list-group-flush'>
         {this.props.instances.sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(item => {
-          console.log(item)
           return (
             <Instance
               key={item.id}

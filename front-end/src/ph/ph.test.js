@@ -114,7 +114,7 @@ describe('Ph ui', () => {
       chart_y_max: 14
     }
     const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('nothing')
+    expect(wrapper.props().value.values.control).toBe('')
   })
 
   it('<Chart />', () => {

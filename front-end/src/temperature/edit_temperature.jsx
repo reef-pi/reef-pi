@@ -58,7 +58,7 @@ const EditTemperature = ({
       </div>
     )
 
-    if ((values.heater !== undefined && values.heater !== 'nothing') || (values.cooler !== undefined && values.cooler !== 'nothing')) {
+    if ((values.heater !== undefined && values.heater !== '') || (values.cooler !== undefined && values.cooler !== '')) {
       chs = (
         <div className='row'>
           <div className='col-lg-6'>
@@ -343,7 +343,7 @@ const EditTemperature = ({
                   'is-invalid': ShowError('control', touched, errors)
                 })}
               >
-                <option value='nothing'>{i18next.t('temperature:controlnothing')}</option>
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
                 <option value='macro'>{i18next.t('temperature:controlmacro')}</option>
                 <option value='equipment'>{i18next.t('temperature:controlequipment')}</option>
               </Field>
@@ -360,12 +360,12 @@ const EditTemperature = ({
               <Field
                 name='heater'
                 component='select'
-                disabled={readOnly || values.control === 'nothing'}
+                disabled={readOnly || values.control === ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('heater', touched, errors)
                 })}
               >
-                <option value='nothing'>{i18next.t('temperature:controlnothing')}</option>
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
                 {controlOptions()}
               </Field>
               <ErrorFor errors={errors} touched={touched} name='heater' />
@@ -377,7 +377,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='min'
-                  readOnly={readOnly || values.control === 'nothing' || values.heater === undefined || values.heater === 'nothing'}
+                  readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('min', touched, errors)
                   })}
@@ -398,12 +398,12 @@ const EditTemperature = ({
               <Field
                 name='cooler'
                 component='select'
-                disabled={readOnly || values.control === 'nothing'}
+                disabled={readOnly || values.control === ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('cooler', touched, errors)
                 })}
               >
-                <option value='nothing'>{i18next.t('temperature:controlnothing')}</option>
+                <option value=''>{i18next.t('temperature:controlnothing')}</option>
                 {controlOptions()}
               </Field>
               <ErrorFor errors={errors} touched={touched} name='cooler' />
@@ -415,7 +415,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='max'
-                  readOnly={readOnly || values.control === 'nothing' || values.cooler === undefined || values.cooler === 'nothing'}
+                  readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('max', touched, errors)
                   })}
@@ -436,7 +436,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='hysteresis'
-                  readOnly={readOnly || values.control === 'nothing'}
+                  readOnly={readOnly || values.control === ''}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('hysteresis', touched, errors)
                   })}
