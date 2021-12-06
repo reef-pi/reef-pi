@@ -22,7 +22,7 @@ const PhForm = withFormik({
       notify: data.notify.enable || false,
       maxAlert: (data.notify && data.notify.max) || 0,
       minAlert: (data.notify && data.notify.min) || 0,
-      control: 'nothing',
+      control: '',
       lowerThreshold: data.min || 0,
       lowerFunction: data.downer_eq || '',
       upperThreshold: data.max || 0,

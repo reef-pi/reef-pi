@@ -17,7 +17,7 @@ const AtoForm = withFormik({
       id: data.id || '',
       name: data.name || '',
       enable: (data.enable === undefined ? true : data.enable),
-      control: 'nothing',
+      control: '',
       inlet: data.inlet || '',
       one_shot: data.one_shot || false,
       disable_on_alert: data.disable_on_alert || false,

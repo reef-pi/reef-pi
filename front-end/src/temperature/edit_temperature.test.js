@@ -29,8 +29,8 @@ describe('<EditTemperature />', () => {
       period: 60,
       min: 72,
       max: 78,
-      heater: 'nothing',
-      cooler: 'nothing',
+      heater: '',
+      cooler: '',
       alerts: false,
       control: 'macro',
       chart: { color: '#000'}
@@ -140,7 +140,7 @@ describe('<EditTemperature />', () => {
 
   it('<EditEquipment /> should disable inputs when controlling nothing', () => {
 
-    values.control = 'nothing'
+    values.control = ''
 
     const wrapper = shallow(
       <EditTemperature

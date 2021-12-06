@@ -89,7 +89,7 @@ describe('<EditPh />', () => {
 
   it('<EditPh /> should disable inputs when controlling nothing', () => {
 
-    values.control = 'nothing'
+    values.control = ''
 
     const wrapper = shallow(
       <EditPh

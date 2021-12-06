@@ -42,8 +42,7 @@ const TemperatureSchema = Yup.object().shape({
           })
       } else { return schema }
     }),
-  control: Yup.string()
-    .required('A selection is required!'),
+  control: Yup.string(),
   heater: Yup.string()
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
@@ -59,12 +58,12 @@ const TemperatureSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .when('heater', (heater, schema) => {
-            if (heater === undefined || heater === 'nothing') { return schema }
+            if (heater === undefined || heater === '') { return schema }
             return schema
               .required('Threshold is required when a heater is selected')
               .typeError('Threshold must be a number')
               .test('lessThan', 'Threshold must be less than Chiller Threshold', function (val) {
-                if (this.parent.cooler === undefined || this.parent.cooler === 'nothing') { return true }
+                if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
                 return val < this.parent.max
               })
           })
@@ -85,12 +84,12 @@ const TemperatureSchema = Yup.object().shape({
       if (control === 'macro' || control === 'equipment') {
         return schema
           .when('cooler', (cooler, schema) => {
-            if (cooler === undefined || cooler === 'nothing') { return schema }
+            if (cooler === undefined || cooler === '') { return schema }
             return schema
               .required('Threshold is required when a chiller is selected')
               .typeError('Threshold must be a number')
               .test('greaterThan', 'Threshold must be greater than Heater Threshold', function (val) {
-                if (this.parent.heater === undefined || this.parent.heater === 'nothing') { return true }
+                if (this.parent.heater === undefined || this.parent.heater === '') { return true }
                 return val > this.parent.min
               })
           })

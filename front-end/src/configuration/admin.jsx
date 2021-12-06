@@ -31,7 +31,6 @@ class admin extends React.Component {
 
   handleVersionChange (ev) {
     this.setState({ version: ev.target.value })
-    console.log(this.state.version)
   }
 
   dbFileName () {
