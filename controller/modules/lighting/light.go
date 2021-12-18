@@ -180,6 +180,7 @@ func (c *Controller) Run(l Light, quit chan struct{}) {
 	for _, ch := range l.Channels {
 		c.c.Telemetry().CreateFeedIfNotExist(l.Name + "-" + ch.Name)
 	}
+	c.syncLight(l)
 	ticker := time.NewTicker(c.config.Interval)
 	defer ticker.Stop()
 	for {
