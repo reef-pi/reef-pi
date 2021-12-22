@@ -187,8 +187,17 @@ fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de serve
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
 instances:warn_delete,
+journal:add_entry,
+journal:comment,
 journal:description,
+journal:description_required,
+journal:timestamp,
+journal:timestamp_required,
 journal:unit,Eenheid
+journal:unit_required,
+journal:validation_error,
+journal:value,
+journal:value_required,
 journal:warn_delete,
 language:de,Deutsch
 language:en,English

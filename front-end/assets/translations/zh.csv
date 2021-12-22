@@ -187,8 +187,17 @@ fatal_error:message,无法连接服务器，你需要重启服务器或者排除
 fatal_error:troubleshoot,排除故障
 health_chart:cpu_memory,CPU/内存
 instances:warn_delete,
+journal:add_entry,
+journal:comment,
 journal:description,
+journal:description_required,
+journal:timestamp,
+journal:timestamp_required,
 journal:unit,单位
+journal:unit_required,
+journal:validation_error,
+journal:value,
+journal:value_required,
 journal:warn_delete,
 language:de,Deutsch
 language:en,English

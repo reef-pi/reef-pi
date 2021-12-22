@@ -33,7 +33,7 @@ inlets,digitale Eingänge
 install,Installieren
 jack,analoger Ausgang (PWM)
 jacks,analoge Ausgänge (PWM)
-journal,
+journal,Notizen
 light,Lampe
 lights,Beleuchtung
 loading,Lade ...
@@ -187,8 +187,17 @@ fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichb
 fatal_error:troubleshoot,Fehlersuche
 health_chart:cpu_memory,CPU / Speicher
 instances:warn_delete,Wollen Sie die Instanz {{name}} wirklich löschen?
+journal:add_entry,Neuer Eintrag
+journal:comment,Kommentar
 journal:description,Beschreibung
+journal:description_required,Eine Beschreibung wird benötigt!
+journal:timestamp,Datum
+journal:timestamp_required,Ein Datum wird benötigt!
 journal:unit,Einheit
+journal:unit_required,Eine Maßeinheit wird benötigt!
+journal:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
+journal:value,Messwert
+journal:value_required,Ein wert wird benötigt!
 journal:warn_delete,Wollen Sie die Notiz {{name}} wirklich löschen?
 language:de,Deutsch
 language:en,English
@@ -201,9 +210,9 @@ language:language,Sprache
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
-lighting:change_mode,Change Mode
+lighting:change_mode,Modus ändern
 lighting:channel_name,Kanalname
-lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
+lighting:warn_change,Wollen Sie für {{name}} den Modus von {{oldmode}} nach {{newmode}} ändern?
 lighting:warn_delete,Wollen Sie die Beleuchtung {{name}} wirklich löschen?
 log:content,Beschreibung
 log:emitter,Sender
