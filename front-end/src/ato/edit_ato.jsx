@@ -53,7 +53,7 @@ const EditAto = ({
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(
-        i18next.t('ato:validation_error')
+        i18next.t('validation:error')
       )
     }
   }
@@ -148,6 +148,7 @@ const EditAto = ({
           </div>
         </div>
       </div>
+
       <div className='row'>
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
@@ -187,6 +188,24 @@ const EditAto = ({
             <ErrorFor errors={errors} touched={touched} name='pump' />
           </div>
         </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
+            <Field
+              name='one_shot'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('one_shot', touched, errors)
+              })}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='one_shot' />
+          </div>
+        </div>
       </div>
 
       <div className='row'>
@@ -205,41 +224,6 @@ const EditAto = ({
               <option value='false'>{i18next.t('disabled')}</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='notify' />
-          </div>
-        </div>
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='disable_on_alert'>{i18next.t('ato:disable_on_alert')}</label>
-            <Field
-              name='disable_on_alert'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('disable_on_alert', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
-          </div>
-        </div>
-
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='one_shot'>{i18next.t('one_shot')}</label>
-            <Field
-              name='one_shot'
-              component={BooleanSelect}
-              disabled={readOnly}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('one_shot', touched, errors)
-              })}
-            >
-              <option value='true'>{i18next.t('enabled')}</option>
-              <option value='false'>{i18next.t('disabled')}</option>
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='one_shot' />
           </div>
         </div>
 
@@ -270,8 +254,25 @@ const EditAto = ({
             </div>
           </div>
         </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='disable_on_alert'>{i18next.t('ato:disable_on_alert')}</label>
+            <Field
+              name='disable_on_alert'
+              component={BooleanSelect}
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('disable_on_alert', touched, errors)
+              })}
+            >
+              <option value='true'>{i18next.t('enabled')}</option>
+              <option value='false'>{i18next.t('disabled')}</option>
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='disable_on_alert' />
+          </div>
+        </div>
       </div>
-      {charts()}
 
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
@@ -283,6 +284,8 @@ const EditAto = ({
           />
         </div>
       </div>
+
+      {charts()}
     </form>
   )
 }

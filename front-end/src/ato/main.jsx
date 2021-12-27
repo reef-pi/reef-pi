@@ -7,7 +7,7 @@ import { fetchATOs, deleteATO, updateATO, resetATO } from 'redux/actions/ato'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 import { fetchInlets } from 'redux/actions/inlets'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
 
@@ -52,11 +52,11 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_reset', { name: probe.name })}
+          {i18n.t('ato:warn_reset', { name: probe.name })}
         </p>
       </div>
     )
-    confirm(i18next.t('ato:reset_usage'), { description: message }).then(
+    confirm(i18n.t('ato:reset_usage'), { description: message }).then(
       function () {
         this.props.reset(probe.id)
       }.bind(this)
@@ -67,11 +67,11 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('ato:warn_delete', { name: probe.name })}
+          {i18n.t('ato:warn_delete', { name: probe.name })}
         </p>
       </div>
     )
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18n.t('ato:title_delete', { name: probe.name }), { description: message }).then(
       function () {
         this.props.delete(probe.id)
       }.bind(this)
@@ -90,9 +90,9 @@ class main extends React.Component {
             type='button'
             name={'reset-ato-' + probe.id}
             className='btn btn-sm btn-outline-info float-right'
-            onClick={() => { this.handleReset(probe.id) }}
+            onClick={() => { this.handleReset(probe) }}
           >
-            {i18next.t('ato:reset_usage')}
+            {i18n.t('ato:reset_usage')}
           </button>
         )
         return (
