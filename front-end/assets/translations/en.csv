@@ -187,8 +187,17 @@ fatal_error:message,Something went wrong and the UI cannot contact the server an
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
 instances:warn_delete,This action will delete instance {{name}}
+journal:add_entry,Add entry
+journal:comment,Comment
 journal:description,Description
+journal:description_required,Description is required!
+journal:timestamp,Date
+journal:timestamp_required,Date is required!
 journal:unit,Unit
+journal:unit_required,A unit is required!
+journal:validation_error,The settings cannot be saved due to validation errors.  Please correct the errors and try again.
+journal:value,Value
+journal:value_required,A value is required!
 journal:warn_delete,This action will delete journal entry {{name}}
 language:de,Deutsch
 language:en,English
@@ -201,9 +210,9 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
-lighting:change_mode,Modus ändern
+lighting:change_mode,Change Mode
 lighting:channel_name,Channel Name
-lighting:warn_change,Wollen Sie für {{name}} den Modus von {{oldmode}} nach {{newmode}} ändern?
+lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
 log:content,Content
 log:emitter,Emitter
