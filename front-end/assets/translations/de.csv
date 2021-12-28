@@ -182,15 +182,11 @@ instances:warn_delete,Wollen Sie die Instanz {{name}} wirklich löschen?
 journal:add_entry,Neuer Eintrag
 journal:comment,Kommentar
 journal:description,Beschreibung
-journal:description_required,Eine Beschreibung wird benötigt!
 journal:timestamp,Datum
-journal:timestamp_required,Ein Datum wird benötigt!
+journal:title_delete,Notiz {{name}} löschen?
 journal:unit,Einheit
-journal:unit_required,Eine Maßeinheit wird benötigt!
-journal:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 journal:value,Messwert
-journal:value_required,Ein wert wird benötigt!
-journal:warn_delete,Wollen Sie die Notiz {{name}} wirklich löschen?
+journal:warn_delete,Wollen Sie den Eintrag {{name}} wirklich löschen?
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -352,6 +348,7 @@ timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
+validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!
 validation:integer_max_required,Das muss eine Zahl <= ${max} sein!

@@ -182,14 +182,10 @@ instances:warn_delete,
 journal:add_entry,
 journal:comment,
 journal:description,
-journal:description_required,
 journal:timestamp,
-journal:timestamp_required,
+journal:title_delete,
 journal:unit,واحد
-journal:unit_required,
-journal:validation_error,
 journal:value,
-journal:value_required,
 journal:warn_delete,
 language:de,Deutsch
 language:en,English
