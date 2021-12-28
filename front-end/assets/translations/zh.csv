@@ -348,6 +348,7 @@ timers:validation_error,计时器设置因为验证错误而无法存储。请�
 timers:warn_delete,
 validation:cron_nojoker_required,
 validation:cron_required,
+validation:date_required,
 validation:entry_required,
 validation:error,
 validation:integer_max_required,
