@@ -44,7 +44,7 @@ export default class ComponentSelector extends React.Component {
     return (
       <div className='dropdown'>
         <button
-          id={'ato-select-' + this.props.selector_idj}
+          id={'select-' + this.props.selector_id}
           className='btn btn-secondary dropdown-toggle'
           type='button'
           data-toggle='dropdown'

@@ -19,24 +19,34 @@ class Dashboard {
 
     await t
       .click('button#db-0-0')
-      .click('span#temp_current-chart-0-0')
-      .click('#select-component-temp_current-0-0')
-      .click('#component-temp_current-0-0-1')
-      .debug()
+      .click('span#temp_current-0-0')
+      .click('button#select-component-0-0')
+      .click('span#component-0-0-1')
+
       .click('button#db-0-1')
-      .click('span#ph-current-chart-0-1')
-      .click('span#component-ph-current-0-1-1')
+      .click('span#ph_current-0-1')
+      .click('button#select-component-0-1')
+      .click('span#component-0-1-1')
+
       .click('button#db-1-0')
-      .click('span#ato-chart-1-0')
-      .click('span#component-ato-1-0-1')
+      .click('span#ato-1-0')
+      .click('button#select-component-1-0')
+      .click('span#component-1-0-1')
+
       .click('button#db-1-1')
-      .click('span#equipment-chart-1-1')
+      .click('span#equipment_ctrlpanel-1-1')
+
       .click('button#db-2-0')
-      .click('span#light-chart-2-0')
-      .click('span#component-light-2-0-1')
+      .click('span#lights-2-0')
+      .click('button#select-component-2-0')
+      .click('span#component-2-0-1')
+
+
       .click('button#db-2-1')
-      .click('span#health-chart-2-1')
-      .click('span#component-health-2-1-current')
+      .click('span#health-2-1')
+      .click('button#select-component-2-1')
+      .click('span#component-2-1-current')
+
       .click('input#save_dashboard')
       .click('button#configure-dashboard')
   }
