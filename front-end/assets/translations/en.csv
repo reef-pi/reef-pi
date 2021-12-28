@@ -182,14 +182,10 @@ instances:warn_delete,This action will delete instance {{name}}
 journal:add_entry,Add entry
 journal:comment,Comment
 journal:description,Description
-journal:description_required,Description is required!
 journal:timestamp,Date
-journal:timestamp_required,Date is required!
+journal:title_delete,Delete journal {{name}} ?
 journal:unit,Unit
-journal:unit_required,A unit is required!
-journal:validation_error,The settings cannot be saved due to validation errors.  Please correct the errors and try again.
 journal:value,Value
-journal:value_required,A value is required!
 journal:warn_delete,This action will delete journal entry {{name}}
 language:de,Deutsch
 language:en,English
