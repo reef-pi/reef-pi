@@ -4,6 +4,7 @@ add,添加
 alerts,警告
 analog_input,模拟输入
 analog_inputs,模拟输入
+apply,
 are_you_sure,你确定吗?
 ato,ATO
 cancel,取消
@@ -168,6 +169,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,

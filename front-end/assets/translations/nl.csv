@@ -4,6 +4,7 @@ add,Toevoegen
 alerts,Meldingen
 analog_input,Analoge Ingang
 analog_inputs,Analoge Ingangen
+apply,
 are_you_sure,Ben je zeker?
 ato,ato
 cancel,Annuleren
@@ -168,6 +169,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,

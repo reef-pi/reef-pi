@@ -4,6 +4,7 @@ add,add
 alerts,Alerts
 analog_input,Analog Input
 analog_inputs,Analog Inputs
+apply, Apply
 are_you_sure,Are you sure?
 ato,ATO
 cancel,Cancel
@@ -36,7 +37,7 @@ jacks,Jacks
 journal,Journal
 light,Light
 lights,Lights
-loading,Loading
+loading,Loading ...
 maximum,Maximum
 minimum,Minimum
 name,Name
@@ -160,7 +161,7 @@ cron:hour,Hour
 cron:minute,Minute
 cron:month,Month
 cron:second,Second
-cron:week,Day of the week
+cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
 doser:calibrate,Calibrate
@@ -168,6 +169,7 @@ doser:calibration:run,Run
 doser:doser_usage,Pump Usage
 doser:duration,Duration
 doser:speed,Speed
+doser:title_delete,Delete {{name}} ?
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)
