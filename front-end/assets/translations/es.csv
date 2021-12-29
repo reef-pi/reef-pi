@@ -10,7 +10,6 @@ cancel,Cancelar
 capabilities,
 charts,Gráficas
 clear,Limpiar
-color,Color
 columns,Columnas
 configure,Configurar
 delete,Eliminar
@@ -202,8 +201,15 @@ language:language,Idioma
 language:nl,Nederlands
 language:pt,
 language:zh,
+lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,Nombre del Canal
+lighting:chart_color,Color
+lighting:mode_auto,
+lighting:mode_manual,
+lighting:mode_mixed,
+lighting:remove,
+lighting:title_delete,
 lighting:warn_change,
 lighting:warn_delete,
 log:content,Contenido
@@ -352,6 +358,7 @@ timers:validation_error,La configuración no se puede guardar debido a errores d
 timers:warn_delete,
 validation:cron_nojoker_required,
 validation:cron_required,
+validation:date_required,
 validation:entry_required,
 validation:error,
 validation:integer_max_required,

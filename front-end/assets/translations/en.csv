@@ -10,7 +10,6 @@ cancel,Cancel
 capabilities,Capabilities
 charts,Charts
 clear,Clear
-color,Color
 columns,Columns
 configure,Configure
 delete,Delete
@@ -36,7 +35,7 @@ jacks,Jacks
 journal,Journal
 light,Light
 lights,Lights
-loading,Loading
+loading,Loading ...
 maximum,Maximum
 minimum,Minimum
 name,Name
@@ -202,8 +201,15 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel_name,Channel Name
+lighting:chart_color,Color
+lighting:mode_auto,Auto
+lighting:mode_manual,Manual
+lighting:mode_mixed,Mixed
+lighting:remove,Remove
+lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
 log:content,Content
@@ -352,6 +358,7 @@ timers:validation_error,The Timer settings cannot be saved due to validation err
 timers:warn_delete,This action will delete timer {{name}}
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
+validation:date_required,A date is required!
 validation:entry_required,This may not be empty
 validation:error,The settings cannot be saved due to validation errors.  Please correct the errors and try again.
 validation:integer_max_required,An integer number <= ${max} is required!
