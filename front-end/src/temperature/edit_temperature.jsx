@@ -29,9 +29,7 @@ const EditTemperature = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(
-        i18next.t('temperature:validation_error')
-      )
+      showError(i18next.t('validation:error'))
     }
   }
 

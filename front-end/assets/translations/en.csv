@@ -313,7 +313,6 @@ temperature:temperature,Temperature
 temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
-temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
 timers:after,After
@@ -350,6 +349,9 @@ timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
 timers:warn_delete,This action will delete timer {{name}}
+validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
+validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
+validation:a_must_differ_from_b,{{a}} and {{b}} must be different
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
 validation:entry_required,This may not be empty

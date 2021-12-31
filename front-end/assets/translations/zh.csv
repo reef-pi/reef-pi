@@ -313,7 +313,6 @@ temperature:temperature,温度
 temperature:unit,单位
 temperature:upper_function,上层功能
 temperature:upper_threshold,上阈值
-temperature:validation_error,温度设置因为验证错误而无法存储，请纠正错误后重试。
 temperature:warn_delete,这个动作将要删除
 temperature:warn_reset,
 timers:after,后于
@@ -350,6 +349,9 @@ timers:turn_on,开启
 timers:type_required,必须填写类型
 timers:validation_error,计时器设置因为验证错误而无法存储。请纠正错误后重试。
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,

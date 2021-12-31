@@ -306,14 +306,13 @@ temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heizung/Kühler
 temperature:hysteresis,Hysterese
 temperature:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
-temperature:lower_function,Heizungssteuerung durch
+temperature:lower_function,Heizungssteuerung
 temperature:lower_threshold,unterer Schwellwert
 temperature:sensor,Sensor
 temperature:temperature,Temperatur
 temperature:unit,Einheit
-temperature:upper_function,Kühlungssteuerung durch
+temperature:upper_function,Kühlungssteuerung
 temperature:upper_threshold,oberer Schwellwert
-temperature:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 timers:after,... nach
@@ -350,6 +349,9 @@ timers:turn_on,Einschalten
 timers:type_required,Ein Typ ist erforderlich!
 timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
+validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
+validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
+validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:entry_required,Das Feld darf nicht leer sein!

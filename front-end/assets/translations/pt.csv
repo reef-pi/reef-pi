@@ -313,7 +313,6 @@ temperature:temperature,Temperatura
 temperature:unit,Unidades
 temperature:upper_function,
 temperature:upper_threshold,
-temperature:validation_error,"A Temperatura Erro nas configurações, por favor corrija e tente novamente"
 temperature:warn_delete,
 temperature:warn_reset,
 timers:after,após
@@ -350,6 +349,9 @@ timers:turn_on,Ligar é Obrigatório
 timers:type_required,Tipo é Obrigatório
 timers:validation_error,"Erro nas configurações de timmer, por favor corrija e tente novamente"
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
