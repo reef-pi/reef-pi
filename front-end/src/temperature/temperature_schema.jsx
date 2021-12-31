@@ -60,11 +60,11 @@ const TemperatureSchema = Yup.object().shape({
           .when('heater', (heater, schema) => {
             if (heater === undefined || heater === '') { return schema }
               return schema
-		.required(i18n.t('validation:number_required'))
-		.typeError(i18n.t('validation:number_required'))
-		.test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('temperature:lower_threshold'), b: i18n.t('temperature:upper_threshold') }), function (val) {
-		  if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
-		  return val < this.parent.max
+                .required(i18n.t('validation:number_required'))
+                .typeError(i18n.t('validation:number_required'))
+                .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('temperature:lower_threshold'), b: i18n.t('temperature:upper_threshold') }), function (val) {
+                  if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
+                  return val < this.parent.max
                 })
           })
       } else { return schema }
