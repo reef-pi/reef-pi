@@ -101,6 +101,10 @@ const TemperatureSchema = Yup.object().shape({
         return schema
           .required(i18n.t('validation:number_required'))
           .typeError(i18n.t('validation:number_required'))
+          .test('lessThan', i18n.t('temperature:hysteresis_less_than'), function (hyst) {
+            if (this.parent.heater === undefined || this.parent.heater === '') { return true }
+              return hyst < (this.parent.max - this.parent.min)
+            })
       } else { return schema }
     })
 })
