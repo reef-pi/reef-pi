@@ -188,18 +188,14 @@ class main extends React.Component {
   }
 
   getModeLabel (mode) {
-    let label = ''
     switch (mode) {
       case 'auto':
-        label = i18n.t('lighting:mode_auto')
-        break
+        return i18n.t('lighting:mode_auto')
       case 'manual':
-        label = i18n.t('lighting:mode_manual')
-        break
+        return i18n.t('lighting:mode_manual')
       default:
-        label = i18n.t('lighting:mode_mixed')
+        return i18n.t('lighting:mode_mixed')
     }
-    return label
   }
 
   handleToggleAddLightDiv () {
