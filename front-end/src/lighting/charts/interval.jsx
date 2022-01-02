@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
+import i18next from 'i18next'
 
 export default class IntervalChart extends React.Component {
   render () {
     const ch = this.props.channel
     if (ch === undefined) {
-      return (<span> loading ...</span>)
+      return (<span>{i18next.t('loading')}</span>)
     }
     const stroke = ch.color === undefined || ch.color === '' ? '#000' : ch.color
     const dt = new Date('1970-01-01T' + ch.profile.config.start)

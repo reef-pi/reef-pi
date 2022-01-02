@@ -10,7 +10,6 @@ cancel,取消
 capabilities,
 charts,
 clear,清除
-color,
 columns,
 configure,配置
 delete,删除
@@ -172,6 +171,7 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,连接丢失
 fatal_error:fatal_error,致命错误
@@ -198,8 +198,15 @@ language:language,语言
 language:nl,Nederlands
 language:pt,葡萄牙语
 language:zh,中文
+lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
+lighting:chart_color,
+lighting:mode_auto,
+lighting:mode_manual,
+lighting:mode_mixed,
+lighting:remove,
+lighting:title_delete,
 lighting:warn_change,
 lighting:warn_delete,
 log:content,内容
@@ -309,7 +316,6 @@ temperature:temperature,温度
 temperature:unit,单位
 temperature:upper_function,上层功能
 temperature:upper_threshold,上阈值
-temperature:validation_error,温度设置因为验证错误而无法存储，请纠正错误后重试。
 temperature:warn_delete,这个动作将要删除
 temperature:warn_reset,
 timers:after,后于
@@ -346,6 +352,9 @@ timers:turn_on,开启
 timers:type_required,必须填写类型
 timers:validation_error,计时器设置因为验证错误而无法存储。请纠正错误后重试。
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,

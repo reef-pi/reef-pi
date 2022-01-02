@@ -10,7 +10,6 @@ cancel,Cancel
 capabilities,Capabilities
 charts,Charts
 clear,Clear
-color,Color
 columns,Columns
 configure,Configure
 delete,Delete
@@ -36,7 +35,7 @@ jacks,Jacks
 journal,Journal
 light,Light
 lights,Lights
-loading,Loading
+loading,Loading ...
 maximum,Maximum
 minimum,Minimum
 name,Name
@@ -172,6 +171,7 @@ doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
+equipment:title_delete,Delete {{name}} ?
 equipment:warn_delete,This action will delete equipment {{name}}
 fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
@@ -198,8 +198,15 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel_name,Channel Name
+lighting:chart_color,Color
+lighting:mode_auto,Auto
+lighting:mode_manual,Manual
+lighting:mode_mixed,Mixed
+lighting:remove,Remove
+lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
 log:content,Content
@@ -309,7 +316,6 @@ temperature:temperature,Temperature
 temperature:unit,Unit
 temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
-temperature:validation_error,The temperature settings cannot be saved due to validation errors.  Please correct the errors and try again.
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
 timers:after,After
@@ -346,6 +352,9 @@ timers:turn_on,Turn On
 timers:type_required,Type is required
 timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
 timers:warn_delete,This action will delete timer {{name}}
+validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
+validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
+validation:a_must_differ_from_b,{{a}} and {{b}} must be different
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
 validation:date_required,A date is required!

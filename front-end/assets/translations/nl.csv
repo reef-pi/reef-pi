@@ -10,7 +10,6 @@ cancel,Annuleren
 capabilities,
 charts,
 clear,Resetten
-color,
 columns,
 configure,Instellen
 delete,Verwijderen
@@ -172,6 +171,7 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,Connectie verloren
 fatal_error:fatal_error,Fatale Fout
@@ -198,8 +198,15 @@ language:language,Language
 language:nl,Nederlands
 language:pt,Portugees
 language:zh,Chinees
+lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
+lighting:chart_color,
+lighting:mode_auto,
+lighting:mode_manual,
+lighting:mode_mixed,
+lighting:remove,
+lighting:title_delete,
 lighting:warn_change,
 lighting:warn_delete,
 log:content,Content
@@ -309,7 +316,6 @@ temperature:temperature,Temperatuur
 temperature:unit,Eenheid
 temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
-temperature:validation_error,De temperatuur instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 temperature:warn_delete,Deze actie verwijderd
 temperature:warn_reset,
 timers:after,Na
@@ -346,6 +352,9 @@ timers:turn_on,Inschakelen
 timers:type_required,Type is nodig
 timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,

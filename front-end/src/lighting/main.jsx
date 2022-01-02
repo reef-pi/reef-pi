@@ -95,18 +95,18 @@ class main extends React.Component {
 
   handleAddLight () {
     if (this.state.selectedJack === undefined) {
-      showError('Select a jack')
+      showError(i18n.t('validation:selection_required'))
       return
     }
     if ($('#lightName').val() === '') {
-      showError('Specify light name')
+      showError(i18n.t('validation:name_required'))
       return
     }
     const jack = this.props.jacks[this.state.selectedJack]
     const channels = {}
     jack.pins.map((pin, idx) => (
       channels[pin] = {
-        color: '',
+        color: '#000000',  // FIXME this avoids undefined color
         manual: false,
         min: 0,
         max: 100,
@@ -149,23 +149,14 @@ class main extends React.Component {
               remove={this.props.deleteLight}
             />
           )
-          let modeContent = ''
           const mode = this.getLightMode(light)
-          switch (mode) {
-            case 'auto':
-              modeContent = (<><IoMdSwitch /> Auto</>)
-              break
-            case 'manual':
-              modeContent = (<><IoMdSwitch /> Manual</>)
-              panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
-              break
-            default:
-              modeContent = (<><IoMdSwitch /> Mixed</>)
+          if (mode === 'manual') {
+            panelContent = (<ManualLight light={light} handleChange={this.props.updateLight} />)
           }
 
           const modeButton = (
             <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
-              {modeContent}
+              <><IoMdSwitch /> {this.getModeLabel(mode)}</>
             </button>
           )
 
@@ -196,6 +187,17 @@ class main extends React.Component {
     }
   }
 
+  getModeLabel (mode) {
+    switch (mode) {
+      case 'auto':
+        return i18n.t('lighting:mode_auto')
+      case 'manual':
+        return i18n.t('lighting:mode_manual')
+      default:
+        return i18n.t('lighting:mode_mixed')
+    }
+  }
+
   handleToggleAddLightDiv () {
     this.setState({
       addLight: !this.state.addLight
@@ -210,10 +212,12 @@ class main extends React.Component {
       if (currentMode === 'auto') {
         newMode = 'manual'
       }
+      let oldLabel = this.getModeLabel(currentMode)
+      let newLabel = this.getModeLabel(newMode)
       const message = (
         <div>
           <p>
-            {i18n.t('lighting:warn_change', { name: light.name, oldmode: currentMode, newmode: newMode })}
+            {i18n.t('lighting:warn_change', { name: light.name, oldmode: oldLabel, newmode: newLabel })}
           </p>
         </div>
       )
@@ -239,7 +243,7 @@ class main extends React.Component {
         </p>
       </div>
     )
-    confirm(i18n.t('delete'), { description: message }).then(
+    confirm(i18n.t('lighting:title_delete', { name: light.name }), { description: message }).then(
       function () {
         this.props.deleteLight(light.id)
       }.bind(this)

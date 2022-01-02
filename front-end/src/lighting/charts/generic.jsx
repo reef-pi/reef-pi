@@ -2,6 +2,7 @@ import React from 'react'
 import { ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts'
 import { fetchLightUsage } from 'redux/actions/lights'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
 class chart extends React.Component {
@@ -19,11 +20,11 @@ class chart extends React.Component {
 
   render () {
     if (this.props.usage === undefined) {
-      return (<span> loading ...</span>)
+      return (<span>{i18next.t('loading')}</span>)
     }
     const l = this.props.light
     if (l === undefined) {
-      return (<span> loading ...</span>)
+      return (<span>{i18next.t('loading')}</span>)
     }
 
     const lines = []

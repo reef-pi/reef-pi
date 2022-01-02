@@ -143,7 +143,7 @@ const Channel = (props) => {
               name={NameFor(props.name, 'name')}
               className={classNames('form-control',
                 { 'is-invalid': ShowError(NameFor(props.name, 'name'), props.touched, props.errors) })}
-              placeholder='Channel Name'
+              placeholder={i18next.t('lighting:channel_name')}
               disabled={props.readOnly}
             />
             <ErrorFor
@@ -154,7 +154,7 @@ const Channel = (props) => {
         </div>
 
         <div className='form-group col-sm-6 col-md-4 col-xl-2 form-inline'>
-          <label className='mb-2'>{i18next.t('color')}</label>
+          <label className='mb-2'>{i18next.t('lighting:chart_color')}</label>
           <ColorPicker
             name={NameFor(props.name, 'color')}
             readOnly={props.readOnly}
