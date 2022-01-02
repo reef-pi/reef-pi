@@ -73,23 +73,15 @@ yes,
 ato:alert_after,Alerta despues de
 ato:ato_usage,Uso del ATO
 ato:chk_freq,Frecuencia de Revisión
-ato:chk_freq_number,La Frecuencia de Revisión debe ser en numero
-ato:chk_freq_number_value,La Frecuencia de Revisión debe ser igual o mayor a 1 segundo
-ato:chk_freq_required,Frecuencia de Revisión es requerida
 ato:control,Control
 ato:control_target,Objetivo
 ato:controlequipment,Equipo
 ato:controlmacro,Macro
 ato:controlnothing,Nada
 ato:disable_on_alert,Desactivar si ocurre la alerta
-ato:inlet_required,Seleccion una entrada
-ato:name_required,Escribe un Nombre
 ato:reset_usage,
-ato:status_required,Selecciona un estado de ATO
-ato:threshold_required,Se requiere un límite cuando la notificación está habilitada
-ato:threshold_value,El límite debe ser un numero
+ato:title_delete,
 ato:total_seconds_pump_on,Tiempo en segundos que el ATO tenga encendido
-ato:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 ato:warn_delete,Esta acción eliminará
 ato:warn_reset,
 camera:capture_flags,
@@ -358,3 +350,14 @@ timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
 timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 timers:warn_delete,
+validation:cron_nojoker_required,
+validation:cron_required,
+validation:entry_required,
+validation:error,
+validation:integer_max_required,
+validation:integer_min_required,
+validation:last_full_moon_required,
+validation:name_required,
+validation:number_required,
+validation:selection_required,
+validation:time_required,

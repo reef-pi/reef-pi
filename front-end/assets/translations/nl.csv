@@ -73,23 +73,15 @@ yes,
 ato:alert_after,Alarm Na
 ato:ato_usage,ATO Gebruik
 ato:chk_freq,Controleer Frequentie
-ato:chk_freq_number,Controleer Frequentie moet een nummer zijn
-ato:chk_freq_number_value,Controleer Frequentie moet 1 seconde or meer zijn
-ato:chk_freq_required,Controleer Frequentie deze is verplicht
 ato:control,
 ato:control_target,
 ato:controlequipment,Apparatuur
 ato:controlmacro,Macro
 ato:controlnothing,Niets
 ato:disable_on_alert,Uitschakelen bij alarm
-ato:inlet_required,Ingang is nodig
-ato:name_required,Naam is nodig
 ato:reset_usage,
-ato:status_required,ATO Status is nodig
-ato:threshold_required,Drempelwaarde is nodig wanneer een notificatie is ingeschakeld
-ato:threshold_value,Drempelwaarde moet numeriek zijn
+ato:title_delete,
 ato:total_seconds_pump_on,Tijdsduur ATO pomp ingeschakeld in seconden
-ato:validation_error,De ATO instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ato:warn_delete,Deze actie verwijderd
 ato:warn_reset,
 camera:capture_flags,
@@ -358,3 +350,14 @@ timers:turn_on,Inschakelen
 timers:type_required,Type is nodig
 timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 timers:warn_delete,
+validation:cron_nojoker_required,
+validation:cron_required,
+validation:entry_required,
+validation:error,
+validation:integer_max_required,
+validation:integer_min_required,
+validation:last_full_moon_required,
+validation:name_required,
+validation:number_required,
+validation:selection_required,
+validation:time_required,

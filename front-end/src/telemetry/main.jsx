@@ -238,7 +238,7 @@ class telemetry extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label>{i18n.t('telemetry:main:current-limit')}</label>
+            <label>{i18n.t('telemetry:main:current-limit')} </label>
             <input
               type='text'
               onChange={this.updateLimit('current_limit')}
@@ -247,7 +247,7 @@ class telemetry extends React.Component {
             />
           </div>
           <div className='col'>
-            <label>{i18n.t('telemetry:main:historical-limit')}</label>
+            <label>{i18n.t('telemetry:main:historical-limit')} </label>
             <input
               type='text'
               onChange={this.updateLimit('historical_limit')}
