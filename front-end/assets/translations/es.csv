@@ -313,7 +313,6 @@ temperature:temperature,Temperatura
 temperature:unit,Unidad
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
-temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
 timers:after,Despues
@@ -350,6 +349,9 @@ timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
 timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:entry_required,
