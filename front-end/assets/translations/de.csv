@@ -11,7 +11,6 @@ cancel,Abbrechen
 capabilities,Funktionen
 charts,Diagramme
 clear,Löschen
-color,Farbe
 columns,Spalten
 configure,Konfigurieren
 delete,Löschen
@@ -174,6 +173,7 @@ doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:title_delete,{{name}} löschen?
 equipment:warn_delete,Wollen Sie das Gerät {{name}} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler
@@ -204,9 +204,16 @@ language:language,Sprache
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:add_point,Neuer Punkt
 lighting:change_mode,Modus ändern
 lighting:channel_name,Kanalname
-lighting:warn_change,Wollen Sie für {{name}} den Modus von {{oldmode}} nach {{newmode}} ändern?
+lighting:chart_color,Diagrammfarbe
+lighting:mode_auto,Auto
+lighting:mode_manual,Manuell
+lighting:mode_mixed,Mix
+lighting:remove,Entfernen
+lighting:title_delete,Beleuchtung {{name}} löschen?
+lighting:warn_change,Wollen Sie '{{name}}' vom Modus {{oldmode}} auf {{newmode}} umschalten?
 lighting:warn_delete,Wollen Sie die Beleuchtung {{name}} wirklich löschen?
 log:content,Beschreibung
 log:emitter,Sender
@@ -308,14 +315,13 @@ temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heizung/Kühler
 temperature:hysteresis,Hysterese
 temperature:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
-temperature:lower_function,Heizungssteuerung durch
+temperature:lower_function,Heizungssteuerung
 temperature:lower_threshold,unterer Schwellwert
 temperature:sensor,Sensor
 temperature:temperature,Temperatur
 temperature:unit,Einheit
-temperature:upper_function,Kühlungssteuerung durch
+temperature:upper_function,Kühlungssteuerung
 temperature:upper_threshold,oberer Schwellwert
-temperature:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 timers:after,... nach
@@ -354,6 +360,10 @@ timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:cron_nojoker_required,"CRON: eine Zahl, ein Bereich (1-5), oder eine Liste (1,3,6) sind erlaubt."
 validation:cron_required,"CRON: eine Zahl, ein Bereich (1-5), eine Liste (1,3,6) oder * sind erlaubt."
+validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
+validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
+validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
+validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!
 validation:integer_max_required,Das muss eine Zahl <= ${max} sein!

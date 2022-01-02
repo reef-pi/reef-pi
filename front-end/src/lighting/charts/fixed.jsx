@@ -13,7 +13,7 @@ export default class FixedChart extends React.Component {
     }
     const fill = ch.color === undefined || ch.color === '' ? '#000' : ch.color
     const data = [
-      { time: ch.profile.config.start + 'to ' + ch.profile.config.end }
+      { time: ch.profile.config.start + ' - ' + ch.profile.config.end }
     ]
     data[0][ch.name] = ch.profile.config.value
 

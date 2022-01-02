@@ -54,7 +54,7 @@ export default class Equipment extends React.Component {
         </p>
       </div>
     )
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18next.t('equipment:title_delete', { name: this.props.equipment.name }), { description: message }).then(
       function () {
         this.props.delete(this.props.equipment.id)
       }.bind(this)

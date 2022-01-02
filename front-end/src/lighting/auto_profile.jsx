@@ -124,7 +124,7 @@ export default class AutoProfile extends React.Component {
                 className='btn btn-link btn-sm btn-remove-point'
                 onClick={this.handleRemovePoint.bind(this, i)}
               >
-                Remove
+                {i18next.t('lighting:remove')}
               </button>
               <input
                 type='number'
@@ -162,7 +162,9 @@ export default class AutoProfile extends React.Component {
     if (values.length < 12) {
       list.push(
         <div className='col-12 col-md-1 text-center' key={values.length + 1}>
-          <button type='button' className='btn btn-link btn-add-point' onClick={this.handleAddPoint}>Add Point</button>
+          <button type='button' className='btn btn-link btn-add-point' onClick={this.handleAddPoint}>
+            {i18next.t('lighting:add_point')}
+          </button>
         </div>
       )
     }

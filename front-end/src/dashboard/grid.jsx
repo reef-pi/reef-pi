@@ -45,7 +45,7 @@ export default class Grid extends React.Component {
           <ComponentSelector
             components={options}
             hook={this.setID(i, j)}
-            selector_id={'component-' + label + '-' + i + '-' + j}
+            selector_id={'component-' + i + '-' + j}
             current_id={id}
           />
         </div>
@@ -90,7 +90,7 @@ export default class Grid extends React.Component {
     const label = type.label || '-'
     return (
       <a className={cName} href='#' onClick={this.setType(i, j, type.name)} key={type.name + '-' + i + '-' + j}>
-        <span id={'menu-chart-' + i + '-' + j}>{label}</span>
+        <span id={type.name + '-' + i + '-' + j}>{label}</span>
       </a>
     )
   }

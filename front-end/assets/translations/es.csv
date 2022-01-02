@@ -11,7 +11,6 @@ cancel,Cancelar
 capabilities,
 charts,Gráficas
 clear,Limpiar
-color,Color
 columns,Columnas
 configure,Configurar
 delete,Eliminar
@@ -174,6 +173,7 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
+equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
@@ -204,8 +204,15 @@ language:language,Idioma
 language:nl,Nederlands
 language:pt,
 language:zh,
+lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,Nombre del Canal
+lighting:chart_color,Color
+lighting:mode_auto,
+lighting:mode_manual,
+lighting:mode_mixed,
+lighting:remove,
+lighting:title_delete,
 lighting:warn_change,
 lighting:warn_delete,
 log:content,Contenido
@@ -315,7 +322,6 @@ temperature:temperature,Temperatura
 temperature:unit,Unidad
 temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
-temperature:validation_error,Los ajustes no se pueden guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
 timers:after,Despues
@@ -352,8 +358,12 @@ timers:turn_on,Encender
 timers:type_required,Selecciona un tipo
 timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 timers:warn_delete,
+validation:a_must_be_greater_than_b,
+validation:a_must_be_less_than_b,
+validation:a_must_differ_from_b,
 validation:cron_nojoker_required,
 validation:cron_required,
+validation:date_required,
 validation:entry_required,
 validation:error,
 validation:integer_max_required,
