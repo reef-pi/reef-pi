@@ -14,9 +14,9 @@ class CustomToolTip extends React.Component {
       return <span />
     }
     if (el.dataKey === 'onstate') {
-      return (<span> On</span>)
+      return (<span>{i18next.t('on')}</span>)
     }
-    return (<span> Off</span>)
+    return (<span>{i18next.t('off')}</span>)
   }
 }
 

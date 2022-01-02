@@ -171,6 +171,7 @@ doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:title_delete,{{name}} löschen?
 equipment:warn_delete,Wollen Sie das Gerät {{name}} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler

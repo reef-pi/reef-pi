@@ -171,6 +171,7 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
 equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
+equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
