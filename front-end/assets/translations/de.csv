@@ -10,7 +10,6 @@ cancel,Abbrechen
 capabilities,Funktionen
 charts,Diagramme
 clear,Löschen
-color,Farbe
 columns,Spalten
 configure,Konfigurieren
 delete,Löschen
@@ -202,9 +201,16 @@ language:language,Sprache
 language:nl,Nederlands
 language:pt,Portuguesa
 language:zh,中文
+lighting:add_point,Neuer Punkt
 lighting:change_mode,Modus ändern
 lighting:channel_name,Kanalname
-lighting:warn_change,Wollen Sie für {{name}} den Modus von {{oldmode}} nach {{newmode}} ändern?
+lighting:chart_color,Diagrammfarbe
+lighting:mode_auto,Auto
+lighting:mode_manual,Manuell
+lighting:mode_mixed,Mix
+lighting:remove,Entfernen
+lighting:title_delete,Beleuchtung {{name}} löschen?
+lighting:warn_change,Wollen Sie '{{name}}' vom Modus {{oldmode}} auf {{newmode}} umschalten?
 lighting:warn_delete,Wollen Sie die Beleuchtung {{name}} wirklich löschen?
 log:content,Beschreibung
 log:emitter,Sender
@@ -354,6 +360,7 @@ validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
+validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!
 validation:integer_max_required,Das muss eine Zahl <= ${max} sein!

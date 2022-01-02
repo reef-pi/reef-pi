@@ -1,10 +1,11 @@
 import * as Yup from 'yup'
 import mapValues from 'lodash.mapvalues'
+import i18n from 'utils/i18n'
 
 const LightSchema = Yup.object().shape({
   config: Yup.object().shape({
     name: Yup.string()
-      .required('Light Name is required'),
+      .required(i18n.t('validation:name_required')),
     channels: Yup.lazy(obj =>
       Yup.object(
         mapValues(obj, () => {
@@ -17,17 +18,19 @@ const LightSchema = Yup.object().shape({
 
 const channelSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Channel Name is required'),
+    .required(i18n.t('validation:name_required')),
   min: Yup.number()
-    .typeError('Min is required')
-    .min(0, 'Min must be greater than or equal to 0')
-    .max(100, 'Min must be less than or equal to 100')
-    .required('Min is required'),
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(0, i18n.t('validation:integer_min_required'))
+    .max(100, i18n.t('validation:integer_max_required')),
   max: Yup.number()
-    .typeError('Max is required')
-    .min(0, 'Max must be greater than or equal to 0')
-    .max(100, 'Max must be less than or equal to 100')
-    .required('Max is required'),
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(0, i18n.t('validation:integer_min_required'))
+    .max(100, i18n.t('validation:integer_max_required')),
+  // FIXME this is not touched when created and thus never shows the error
+  // color: Yup.string().required(i18n.t('validation:selection_required')),
   profile: Yup.lazy(value => {
     switch (value.type) {
       case 'diurnal':
@@ -44,108 +47,114 @@ const channelSchema = Yup.object().shape({
         return sineSchema
       default:
         return Yup.object().shape({
-          type: Yup.string().required('Profile type is required')
+          type: Yup.string().required(i18n.t('validation:selection_required'))
         })
     }
   })
 })
 
 const diurnalSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required')
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required'))
     })
 })
 
 const fixedSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       value: Yup.number()
-        .typeError('Value is required')
-        .min(0, 'Value must be greater than or equal to 0')
-        .max(100, 'Value must be less than or equal to 100')
-        .required('Value is required'),
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0, i18n.t('validation:integer_min_required'))
+        .max(100, i18n.t('validation:integer_max_required')),
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required')
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required'))
     })
 })
 
 const autoSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       values: Yup.array().of(Yup.number()
-        .typeError('Value is required')
-        .min(0, 'Value must be greater than or equal to 0')
-        .max(100, 'Value must be less than or equal to 100')
-        .required('Value is required')
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0, i18n.t('validation:integer_min_required'))
+        .max(100, i18n.t('validation:integer_max_required'))
       )
     })
 })
 
 const randomSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required')
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required'))
     })
 })
 
 const sineSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required')
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required'))
     })
 })
 
 const lunarSchema = Yup.object().shape({
-  type: Yup.string().required('Profile type is required'),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   config: Yup.object()
-    .typeError('A profile must be configured')
+    .typeError(i18n.t('validation:selection_required'))
     .shape({
       start: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'Start must be a valid time (HH:mm:ss)')
-        .required('Start is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       end: Yup.string()
-        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, 'End must be a valid time (HH:mm:ss)')
-        .required('End is required'),
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
       full_moon: Yup.date()
-        .max(new Date(), 'Full Moon must be in the past')
-        .required('Date of the full moon is required')
-        .typeError('Full Moon is required')
+        .required(i18n.t('validation:last_full_moon_required'))
+        .typeError(i18n.t('validation:last_full_moon_required'))
+        .max(new Date(), i18n.t('validation:last_full_moon_required'))
     })
 })
 

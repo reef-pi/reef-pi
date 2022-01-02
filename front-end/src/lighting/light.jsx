@@ -26,7 +26,7 @@ const EditLight = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError('The light settings cannot be saved due to validation errors.  Please correct the errors and try again.')
+      showError(i18next.t('validation:error'))
     }
   }
 
