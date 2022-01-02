@@ -7462,12 +7462,12 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mini-css-extract-plugin@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.3.0.tgz#87515f185533752944d753ac7216fc876779dafe"
-  integrity sha512-uzWaOwC+gJrnKbr23J1ZRWx/Wd9W9Ce1mKPlsBGBV/r8zG7/G7oKMxGmxbI65pVGbae2cR7CUx9Ulk0HQt8BfQ==
+mini-css-extract-plugin@2.4.5:
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.4.5.tgz#191d6c170226037212c483af1180b4010b7b9eef"
+  integrity sha512-oEIhRucyn1JbT/1tU2BhnwO6ft1jjH1iCX9Gc59WFMg0n5773rQU0oyQ0zzeYFFuBfONaRbQJyGoPtuNseMxjA==
   dependencies:
-    schema-utils "^3.1.0"
+    schema-utils "^4.0.0"
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
