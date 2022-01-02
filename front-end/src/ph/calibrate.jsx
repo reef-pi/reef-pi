@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
 import { FaCheck } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 export const Calibrate = ({ values, errors, touched, label, submitForm, complete, readOnly }) => {
   const handleSubmit = event => {
@@ -44,7 +44,7 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
               <input
                 type='submit'
                 disabled={readOnly}
-                value={i18next.t('ph:run_calibration')}
+                value={i18n.t('ph:run_calibration')}
                 className='btn btn-sm btn-outline-primary'
               />
               )}
@@ -56,7 +56,8 @@ export const Calibrate = ({ values, errors, touched, label, submitForm, complete
 
 const CalibrateSchema = Yup.object().shape({
   value: Yup.number()
-    .required()
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
 })
 
 const CalibrateForm = withFormik({

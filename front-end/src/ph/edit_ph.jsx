@@ -28,7 +28,7 @@ const EditPh = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(i18next.t('ph:validation_error'))
+      showError(i18next.t('validation:error'))
     }
   }
 
@@ -402,6 +402,8 @@ const EditPh = ({
               <Field
                 name='hysteresis'
                 readOnly={readOnly || values.control === ''}
+                readOnly={readOnly || values.lowerFunction === undefined || values.lowerFunction === ''}
+                readOnly={readOnly || values.upperFunction === undefined || values.upperFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('hysteresis', touched, errors)
                 })}

@@ -231,7 +231,6 @@ macro:wait:duration,
 macro:warn_delete,
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
-ph:analog_input_required,Entrada Analógica é Obrigatório
 ph:calibrate,Calibrar
 ph:chart:current,
 ph:chart:historical,
@@ -242,37 +241,19 @@ ph:chart_ymax,
 ph:chart_ymin,
 ph:check_frequency,Verificar a frequência
 ph:control,
-ph:control_required,
 ph:controlequipment,
 ph:controlmacro,
 ph:controlnothing,
 ph:current_reading,Leitura Atual
 ph:hysteresis,
+ph:hysteresis_less_than,
 ph:lower_function,
-ph:lower_function_required,
 ph:lower_threshold,
-ph:lower_threshold_less_than,
-ph:lower_threshold_required,
-ph:lower_threshold_type,
 ph:midpoint,Ponto médio
-ph:name_required,Nome é Obrigatório
-ph:period_min,Verificar a frequência tem que ser superior a 1
-ph:period_required,Verificar a frequência é Obrigatório
-ph:period_type,Verificar a frequência tem que ser um número
 ph:run_calibration,Correr Calibração
 ph:second_point,Segundo ponto
-ph:status_required,Estado é Obrigatório
-ph:threshold_greater_than,O alerta superior tem que ser superior que o alerta inferior
-ph:threshold_less_than,O alerta inferior tem que ser inferior que o alerta superior
-ph:threshold_required,Threshold é Obrigatório os alertas estão ligados
-ph:threshold_type,Threshold tem que ser um número
 ph:upper_function,
-ph:upper_function_required,
 ph:upper_threshold,
-ph:upper_threshold_greater_than,
-ph:upper_threshold_required,
-ph:upper_threshold_type,
-ph:validation_error,"Ph Erro nas configurações, por favor corrija e tente novamente"
 ph:warn_delete,Esta acção vai ser removida
 ph:warn_reset,
 signin:invalidcredentials,Credenciais invalidas
