@@ -56,7 +56,7 @@ class jacks extends React.Component {
         </div>
       )
 
-      confirm(i18n.t('delete'), { description: message }).then(
+      confirm(i18n.t('configuration:connectors:title_delete', { name: conn.name }), { description: message }).then(
         function () {
           this.props.delete(conn.id)
         }.bind(this)
@@ -83,7 +83,7 @@ class jacks extends React.Component {
     })
     for (let i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        showError('Use only comma separated numbers')
+        showError(i18n.t('validation:comma_separated_numbers'))
         return
       }
     }

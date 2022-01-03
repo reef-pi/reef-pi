@@ -126,6 +126,7 @@ configuration:admin:sign_out,Abmelden
 configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
+configuration:connectors:title_delete,{{name}} löschen?
 configuration:connectors:warn_delete,Wollen Sie den Anschluss {{name}} wirklich löschen?
 configuration:drivers:warn_delete,Wollen Sie den Treiber für {{name}} wirklich entfernen?
 configuration:settings:address,Protokoll / IP-Adresse und Port
@@ -359,6 +360,7 @@ timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
+validation:comma_separated_numbers,"Eine Liste von Zahlen, durch Komma getrennt"
 validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
 validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:date_required,Ein Datum ist erforderlich!

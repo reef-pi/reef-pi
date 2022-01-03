@@ -126,6 +126,7 @@ configuration:admin:sign_out,پیکربندی:مدیر: خروج
 configuration:authentication:credentials,پیکربندی: احراز هویت: اعتبارنامه
 configuration:authentication:error_pass,پیکربندی: احراز هویت:خطای عبور
 configuration:authentication:error_user,پیکربندی: احراز هویت :خطای کاربر
+configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:warn_delete,
 configuration:settings:address,
@@ -359,6 +360,7 @@ timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,
+validation:comma_separated_numbers,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,

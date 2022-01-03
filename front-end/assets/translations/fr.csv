@@ -126,6 +126,7 @@ configuration:admin:sign_out,Déconnexion
 configuration:authentication:credentials,Informations d'identification
 configuration:authentication:error_pass,Vous devez fournir un mot de passe
 configuration:authentication:error_user,Vous devez fournir un nom d'utilisateur
+configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:warn_delete,
 configuration:settings:address,Adresse
@@ -359,6 +360,7 @@ timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,
+validation:comma_separated_numbers,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,

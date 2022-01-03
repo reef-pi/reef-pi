@@ -57,7 +57,7 @@ class outlets extends React.Component {
         </div>
       )
 
-      confirm(i18n.t('delete'), { description: message }).then(
+      confirm(i18n.t('configuration:connectors:title_delete', { name: conn.name }), { description: message }).then(
         function () {
           this.props.delete(conn.id)
         }.bind(this)
