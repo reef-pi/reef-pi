@@ -127,6 +127,8 @@ configuration:authentication:credentials,Credenciales
 configuration:authentication:error_pass,Proporcione una contraseña
 configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:connectors:warn_delete,
+configuration:drivers:title_delete,
+configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
