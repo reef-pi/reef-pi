@@ -57,7 +57,7 @@ export default class Jack extends React.Component {
     })
     for (let i = 0; i < pins.length; i++) {
       if (isNaN(pins[i])) {
-        showError('Use only comma separated numbers')
+        showError(i18next.t('validation:comma_separated_numbers'))
         return
       }
     }

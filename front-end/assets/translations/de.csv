@@ -127,6 +127,7 @@ configuration:admin:sign_out,Abmelden
 configuration:authentication:credentials,Benutzer
 configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
+configuration:connectors:title_delete,{{name}} löschen?
 configuration:connectors:warn_delete,Wollen Sie den Anschluss {{name}} wirklich löschen?
 configuration:drivers:title_delete,{{name}} entfernen?
 configuration:drivers:type,Typ
@@ -342,6 +343,9 @@ validation:cron_required,"CRON: eine Zahl, ein Bereich (1-5), eine Liste (1,3,6)
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
+validation:comma_separated_numbers,"Eine Liste von Zahlen, durch Komma getrennt"
+validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
+validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!

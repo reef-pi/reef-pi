@@ -127,6 +127,7 @@ configuration:admin:sign_out,Sign Out
 configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
+configuration:connectors:title_delete,Delete {{name}} ?
 configuration:connectors:warn_delete,This action will delete connector {{name}}
 configuration:drivers:title_delete,Remove driver {{name}}?
 configuration:drivers:type,Type
@@ -340,6 +341,7 @@ timers:warn_delete,This action will delete timer {{name}}
 validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
 validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
 validation:a_must_differ_from_b,{{a}} and {{b}} must be different
+validation:comma_separated_numbers,Use only comma separated numbers
 validation:cron_nojoker_required,An integer or a range (e.g. 1-5) is required!
 validation:cron_required,"An integer, a range (e.g. 1-5) or * is required!"
 validation:date_required,A date is required!

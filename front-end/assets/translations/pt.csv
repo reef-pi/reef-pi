@@ -127,6 +127,7 @@ configuration:admin:sign_out,Desligar o Login
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Tens que inserir uma password
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
+configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:title_delete,
 configuration:drivers:type,
@@ -340,6 +341,7 @@ timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,
+validation:comma_separated_numbers,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,

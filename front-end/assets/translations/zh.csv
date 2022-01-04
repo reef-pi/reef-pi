@@ -127,6 +127,7 @@ configuration:admin:sign_out,登出
 configuration:authentication:credentials,认证
 configuration:authentication:error_pass,你必须提供一个密码
 configuration:authentication:error_user,你必须提供一个用户名
+configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
 configuration:drivers:title_delete,
 configuration:drivers:type,
@@ -340,6 +341,7 @@ timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
 validation:a_must_differ_from_b,
+validation:comma_separated_numbers,
 validation:cron_nojoker_required,
 validation:cron_required,
 validation:date_required,
