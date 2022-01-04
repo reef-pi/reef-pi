@@ -128,6 +128,8 @@ configuration:authentication:credentials,Credentials
 configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
 configuration:connectors:warn_delete,This action will delete connector {{name}}
+configuration:drivers:title_delete,Remove driver {{name}}?
+configuration:drivers:type,Type
 configuration:drivers:warn_delete,This action will remove the driver for {{name}}
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check

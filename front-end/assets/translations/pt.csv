@@ -128,6 +128,8 @@ configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Tens que inserir uma password
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
 configuration:connectors:warn_delete,
+configuration:drivers:title_delete,
+configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral

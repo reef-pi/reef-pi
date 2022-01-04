@@ -128,6 +128,8 @@ configuration:authentication:credentials,Aanmeldingsgegevens
 configuration:authentication:error_pass,Geef een passwoord in
 configuration:authentication:error_user,Geef een gebruikersnaam in
 configuration:connectors:warn_delete,
+configuration:drivers:title_delete,
+configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
