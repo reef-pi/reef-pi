@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Yup from 'yup'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import classNames from 'classnames'
 import { withFormik, Field } from 'formik'
 
@@ -21,7 +21,7 @@ export const Calibrate = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className='form-group row'>
-        <label htmlFor='speed' className='col-2 col-form-label'>{i18next.t('doser:speed')}</label>
+        <label htmlFor='speed' className='col-2 col-form-label'>{i18n.t('doser:speed')}</label>
         <div className='col-3'>
           <div className='form-group'>
             <Field
@@ -35,7 +35,7 @@ export const Calibrate = ({
             <ErrorFor errors={errors} touched={touched} name='speed' />
           </div>
         </div>
-        <label htmlFor='duration' className='col-2 col-form-label'>{i18next.t('doser:duration')}</label>
+        <label htmlFor='duration' className='col-2 col-form-label'>{i18n.t('doser:duration')}</label>
         <div className='col-3'>
           <div className='form-group'>
             <Field
@@ -53,7 +53,7 @@ export const Calibrate = ({
           <input
             type='submit'
             disabled={readOnly}
-            value={i18next.t('doser:calibration:run')}
+            value={i18n.t('doser:calibration:run')}
             className='btn btn-sm btn-outline-primary'
           />
         </div>
@@ -64,11 +64,14 @@ export const Calibrate = ({
 
 const CalibrateSchema = Yup.object().shape({
   duration: Yup.number()
-    .required(),
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(1, i18n.t('validation:integer_min_required')),
   speed: Yup.number()
-    .required()
-    .min(0)
-    .max(100)
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(1, i18n.t('validation:integer_min_required'))
+    .max(100, i18n.t('validation:integer_max_required'))
 })
 
 const CalibrateForm = withFormik({

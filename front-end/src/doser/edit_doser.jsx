@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import i18next from 'i18next'
-import { showAlert, clearAlert } from 'utils/alert'
+import { showError } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
@@ -25,14 +25,11 @@ const EditDoser = ({
 }) => {
   const handleSubmit = event => {
     event.preventDefault()
-    clearAlert()
     if (dirty === false || isValid === true) {
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showAlert(
-        'The Doser settings cannot be saved due to validation errors.  Please correct the errors and try again.'
-      )
+      showError(i18next.t('validation:error'))
     }
   }
 
@@ -152,8 +149,8 @@ const EditDoser = ({
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                  second(s)
-                </span>
+                  {i18next.t('second_s')}
+                 </span>
                 <span className='input-group-text d-flex d-lg-none'>sec</span>
               </div>
               <ErrorFor errors={errors} touched={touched} name='duration' />

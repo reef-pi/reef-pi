@@ -4,6 +4,7 @@ add,اضافه کردن
 alerts,هشدار
 analog_input,ورودی آنالوگ
 analog_inputs,
+apply,
 are_you_sure,شما مطمئن هستید
 ato,
 cancel,لغو
@@ -167,6 +168,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,

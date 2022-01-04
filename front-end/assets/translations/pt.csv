@@ -4,6 +4,7 @@ add,Adicionar
 alerts,Alertas
 analog_input,Entrada Analogica
 analog_inputs,
+apply,
 are_you_sure,Como estas?
 ato,
 cancel,cancelar
@@ -167,6 +168,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,

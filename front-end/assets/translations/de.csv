@@ -4,6 +4,7 @@ add,Hinzufügen
 alerts,Warnungen
 analog_input,analoger Eingang
 analog_inputs,analoge Eingänge
+apply,Übernehmen
 are_you_sure,Bist du sicher?
 ato,ATO
 cancel,Abbrechen
@@ -159,7 +160,7 @@ cron:hour,Stunde
 cron:minute,Minute
 cron:month,Monat
 cron:second,Sekunde
-cron:week,Wochentag (0=So - 7=Sa)
+cron:week,Wochentag (0=So - 6=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
 doser:calibrate,Kalibrieren
@@ -167,6 +168,7 @@ doser:calibration:run,Start
 doser:doser_usage,Pumpennutzung
 doser:duration,Dauer
 doser:speed,Geschwindigkeit
+doser:title_delete,{{name}} löschen?
 doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
@@ -356,11 +358,11 @@ timers:turn_on,Einschalten
 timers:type_required,Ein Typ ist erforderlich!
 timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
+validation:cron_nojoker_required,"CRON: eine Zahl, ein Bereich (1-5), oder eine Liste (1,3,6) sind erlaubt."
+validation:cron_required,"CRON: eine Zahl, ein Bereich (1-5), eine Liste (1,3,6) oder * sind erlaubt."
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
-validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
-validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
 validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!

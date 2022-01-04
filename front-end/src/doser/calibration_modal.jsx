@@ -2,6 +2,7 @@ import React from 'react'
 import $ from 'jquery'
 import Modal from 'modal'
 import CalibrateForm from './calibrate'
+import i18n from 'utils/i18n'
 
 export default class CalibrationModal extends React.Component {
   constructor (props) {
@@ -39,7 +40,7 @@ export default class CalibrationModal extends React.Component {
       <Modal>
         <div className='modal-header'>
           <h4 className='modal-title'>
-            Calibrate {this.props.doser.name}
+            {i18n.t('doser:calibrate')}: {this.props.doser.name}
           </h4>
         </div>
         <div className='modal-body'>
@@ -52,7 +53,7 @@ export default class CalibrationModal extends React.Component {
         <div className='modal-footer'>
           <div className='text-center'>
             <button role='confirm' type='button' className='btn btn-primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
-              Done
+              {i18n.t('apply')}
             </button>
           </div>
         </div>

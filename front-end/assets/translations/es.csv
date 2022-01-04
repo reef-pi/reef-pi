@@ -4,6 +4,7 @@ add,Agregar
 alerts,Alertas
 analog_input,Entrada Análoga
 analog_inputs,Entradas Análoga
+apply,
 are_you_sure,¿Esta Seguro?
 ato,ATO
 cancel,Cancelar
@@ -167,6 +168,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
