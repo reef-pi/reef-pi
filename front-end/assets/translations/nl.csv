@@ -233,7 +233,6 @@ macro:wait:duration,
 macro:warn_delete,
 ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
-ph:analog_input_required,Analoge Input is nodig
 ph:calibrate,Calibreren
 ph:chart:current,huidig
 ph:chart:historical,historiek
@@ -244,37 +243,19 @@ ph:chart_ymax,
 ph:chart_ymin,
 ph:check_frequency,Controleer frequentie
 ph:control,Bedien
-ph:control_required,Bediening is verplicht
 ph:controlequipment,Apparatuur
 ph:controlmacro,Macro
 ph:controlnothing,Niets
 ph:current_reading,Huidige meting
 ph:hysteresis,Hysteresis
+ph:hysteresis_less_than,
 ph:lower_function,Laagste functie
-ph:lower_function_required,Laagste functie is vereist
 ph:lower_threshold,Laagste drempelwaarde
-ph:lower_threshold_less_than,Laagste drempelwaarde moet lager zijn dan de hoogste drempelwaarde
-ph:lower_threshold_required,Laagste drempelwaarde is vereist
-ph:lower_threshold_type,Laagste drempelwaarde moet numeriek zijn
 ph:midpoint,Middelpunt
-ph:name_required,Naam is nodig
-ph:period_min,Check Frequentie moet 1 seconde of meer zijn
-ph:period_required,Controleer Frequentie is nodig
-ph:period_type,Check Frequentie moet een nummer zijn
 ph:run_calibration,Uitvoeren
 ph:second_point,Tweede punt
-ph:status_required,Status is nodig
-ph:threshold_greater_than,Alarm bovengrens moet groter zijn dan Alarm ondergrens
-ph:threshold_less_than,Alarm ondergrens moet kleiner zijn dan Alarm bovengrens
-ph:threshold_required,Limiet is nodig als meldingen zijn ingeschakeld.
-ph:threshold_type,Limiet moet een nummer zijn
 ph:upper_function,Hoogste Functie
-ph:upper_function_required,Drempel is verplicht wanneer alarm zjn ingeschakeld
 ph:upper_threshold,Hoogste drempelwaarde
-ph:upper_threshold_greater_than,Hoogste drempelwaarde moet groter zijn dan de laagste drempelwaarde
-ph:upper_threshold_required,Hoogste drempelwaarde is vereist
-ph:upper_threshold_type,Hoogste drempelwaarde moet numeriek zijn
-ph:validation_error,De Ph instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 ph:warn_delete,Deze actie verwijderd
 ph:warn_reset,
 signin:invalidcredentials,Foutieve aanmeldingsgegevens

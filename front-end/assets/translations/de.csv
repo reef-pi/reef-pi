@@ -233,7 +233,6 @@ macro:wait:duration,Dauer
 macro:warn_delete,Wollen Sie das Makro {{name}} wirklich löschen?
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
-ph:analog_input_required,Ein Eingang wird benötigt!
 ph:calibrate,Kalibrieren
 ph:chart:current,pH (aktuell)
 ph:chart:historical,pH (Verlauf)
@@ -244,37 +243,19 @@ ph:chart_ymax,Achsenmaximum
 ph:chart_ymin,Achsenminimum
 ph:check_frequency,Messintervall
 ph:control,Funktion
-ph:control_required,Ein Steuerelement wird benötigt!
 ph:controlequipment,Gerät schalten
 ph:controlmacro,Makro ausführen
 ph:controlnothing,-keine Steuerung-
 ph:current_reading,aktueller Wert
 ph:hysteresis,Hysterese
-ph:lower_function,pH senken durch
-ph:lower_function_required,Ein Eintrag muss gewählt werden!
+ph:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
+ph:lower_function,pH senken
 ph:lower_threshold,unterer Schwellwert
-ph:lower_threshold_less_than,Wert muss unter der oberen Schwelle liegen!
-ph:lower_threshold_required,Ein Schwellwert ist erforderlich!
-ph:lower_threshold_type,Das muss eine Zahl sein!
 ph:midpoint,Mittenwert
-ph:name_required,Ein Name wird benötigt!
-ph:period_min,Minuten
-ph:period_required,Ein WErt wird benötigt!
-ph:period_type,Das muss eine Zahl sein!
 ph:run_calibration,Kalibrieren
 ph:second_point,zweiter Messpunkt
-ph:status_required,Ein Status ist erforderlich!
-ph:threshold_greater_than,Wert muss über der unteren Schwelle liegen!
-ph:threshold_less_than,Wert muss unter der oberen Schwelle liegen!
-ph:threshold_required,Ein Schwellwert ist erforderlich!
-ph:threshold_type,Das muss eine Zahl sein!
-ph:upper_function,pH anheben durch
-ph:upper_function_required,Ein Eintrag muss gewählt werden!
+ph:upper_function,pH anheben
 ph:upper_threshold,oberer Schwellwert
-ph:upper_threshold_greater_than,Wert muss über der unteren Schwelle liegen!
-ph:upper_threshold_required,Ein Schwellwert ist erforderlich!
-ph:upper_threshold_type,Das muss eine Zahl sein!
-ph:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 ph:warn_delete,Wollen Sie die Sonde {{name}} wirklich löschen?
 ph:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 signin:invalidcredentials,Anmeldefehler!

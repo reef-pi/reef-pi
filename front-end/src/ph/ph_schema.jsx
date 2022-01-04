@@ -1,27 +1,26 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 const PhSchema = Yup.object().shape({
   name: Yup.string()
-    .required(i18next.t('ph:name_required')),
+    .required(i18n.t('validation:name_required')),
   enable: Yup.bool()
-    .required(i18next.t('ph:status_required')),
+    .required(i18n.t('validation:selection_required')),
   period: Yup.number()
-    .required(i18next.t('ph:period_required'))
-    .integer()
-    .typeError(i18next.t('ph:period_type'))
-    .min(1, i18next.t('ph:period_min')),
+    .required(i18n.t('validation:number_required'))
+    .integer(i18n.t('validation:number_required'))
+    .min(1, i18n.t('validation:integer_min_required')),
   notify: Yup.bool(),
   one_shot: Yup.bool(),
   analog_input: Yup.string()
-    .required(i18next.t('ph:analog_input_required')),
+    .required(i18n.t('validation:selection_required')),
   minAlert: Yup.number()
     .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
-          .required(i18next.t('ph:threshold_required'))
-          .typeError(i18next.t('ph:threshold_type'))
-          .test('lessThan', i18next.t('ph:threshold_less_than'), function (min) {
+          .required(i18n.t('validation:number_required'))
+          .typeError(i18n.t('validation:number_required'))
+          .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('ph:alert_below'), b: i18n.t('ph:alert_above')}), function (min) {
             return min < this.parent.maxAlert
           })
       } else { return schema }
@@ -30,9 +29,9 @@ const PhSchema = Yup.object().shape({
     .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {
         return schema
-          .required(i18next.t('ph:threshold_required'))
-          .typeError(i18next.t('ph:threshold_type'))
-          .test('greaterThan', i18next.t('ph:threshold_greater_than'), function (max) {
+          .required(i18n.t('validation:number_required'))
+          .typeError(i18n.t('validation:number_required'))
+          .test('greaterThan', i18n.t('validation:a_must_be_greater_than_b', { a: i18n.t('ph:alert_above'), b: i18n.t('ph:alert_below')}), function (max) {
             return max > this.parent.minAlert
           })
       } else { return schema }
@@ -42,7 +41,7 @@ const PhSchema = Yup.object().shape({
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
-          .test('match', 'Lower Function must be different from Upper Function!', function (upperFunc) {
+          .test('match', i18n.t('validation:a_must_differ_from_b', { a: i18n.t('ph:lower_function'), b: i18n.t('ph:upper_function') }), function (upperFunc) {
             if (upperFunc === undefined) { return true }
             return upperFunc !== this.parent.lowerFunction
           })
@@ -55,9 +54,9 @@ const PhSchema = Yup.object().shape({
           .when('upperFunction', (upperFunc, schema) => {
             if (upperFunc === undefined || upperFunc === '') { return schema }
             return schema
-              .required(i18next.t('ph:lower_threshold_required'))
-              .typeError(i18next.t('ph:lower_threshold_type'))
-              .test('lessThan', i18next.t('ph:lower_threshold_less_than'), function (min) {
+              .required(i18n.t('validation:number_required'))
+              .typeError(i18n.t('validation:number_required'))
+              .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('ph:lower_threshold'), b: i18n.t('ph:upper_threshold') }), function (min) {
                 if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === '') { return true }
                 return min < this.parent.upperThreshold
               })
@@ -68,7 +67,7 @@ const PhSchema = Yup.object().shape({
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
-          .test('match', 'Lower Function must be different from Upper Function!', function (lowerFunc) {
+          .test('match', i18n.t('validation:a_must_differ_from_b', { a: i18n.t('ph:lower_function'), b: i18n.t('ph:upper_function') }), function (lowerFunc) {
             if (lowerFunc === undefined) { return true }
             return lowerFunc !== this.parent.upperFunction
           })
@@ -81,9 +80,9 @@ const PhSchema = Yup.object().shape({
           .when('lowerFunction', (lowerFunc, schema) => {
             if (lowerFunc === undefined || lowerFunc === '') { return schema }
             return schema
-              .required(i18next.t('ph:upper_threshold_required'))
-              .typeError(i18next.t('ph:upper_threshold_type'))
-              .test('greaterThan', i18next.t('ph:upper_threshold_less_than'), function (max) {
+              .required(i18n.t('validation:number_required'))
+              .typeError(i18n.t('validation:number_required'))
+              .test('greaterThan', i18n.t('validation:a_must_be_greater_than_b', { a: i18n.t('ph:upper_threshold'), b: i18n.t('ph:lower_threshold') }), function (max) {
                 if (this.parent.upperFunction === undefined || this.parent.upperFunction === '') { return true }
                 return max > this.parent.lowerThreshold
               })
@@ -94,17 +93,23 @@ const PhSchema = Yup.object().shape({
     .when('control', (control, schema) => {
       if (control === 'macro' || control === 'equipment') {
         return schema
-          .required(i18next.t('ph:hysteresis_required'))
-          .typeError(i18next.t('ph:hysteresis_type'))
-          .test('lessThan', i18next.t('ph:hysteresis_less_than'), function (hysteresis) {
+          .required(i18n.t('validation:number_required'))
+          .typeError(i18n.t('validation:number_required'))
+          .min(0,i18n.t('validation:integer_min_required'))
+          .test('lessThan', i18n.t('ph:hysteresis_less_than'), function (hysteresis) {
+            if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === '') { return true }
+            if (this.parent.upperFunction === undefined || this.parent.upperFunction === '') { return true }
             return hysteresis < (this.parent.upperThreshold - this.parent.lowerThreshold)
           })
       } else { return schema }
     }),
   chart: Yup.object({
-    ymin: Yup.number().required(i18next.t('ph:y_axis_minimum_required')),
-    ymax: Yup.number().required(i18next.t('ph:y_axis_maximum_required')),
-    color: Yup.string().required(i18next.t('ph:chart_color_required')),
+    ymin: Yup.number()
+      .required(i18n.t('validation:number_required')),
+    ymax: Yup.number()
+      .required(i18n.t('validation:number_required')),
+    color: Yup.string()
+      .required(i18n.t('validation:selection_required')),
     unit: Yup.string()
   })
 })
