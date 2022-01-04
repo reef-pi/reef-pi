@@ -4,6 +4,7 @@ add,Agregar
 alerts,Alertas
 analog_input,Entrada Análoga
 analog_inputs,Entradas Análoga
+apply,
 are_you_sure,¿Esta Seguro?
 ato,ATO
 cancel,Cancelar
@@ -128,6 +129,8 @@ configuration:authentication:error_pass,Proporcione una contraseña
 configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
+configuration:drivers:title_delete,
+configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
@@ -168,6 +171,7 @@ doser:calibration:run,
 doser:doser_usage,
 doser:duration,
 doser:speed,
+doser:title_delete,
 doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,Equipo(Gráfica de Barras)
@@ -183,14 +187,10 @@ instances:warn_delete,
 journal:add_entry,
 journal:comment,
 journal:description,
-journal:description_required,
 journal:timestamp,
-journal:timestamp_required,
+journal:title_delete,
 journal:unit,Unidad
-journal:unit_required,
-journal:validation_error,
 journal:value,
-journal:value_required,
 journal:warn_delete,
 language:de,Deutsch
 language:en,English
@@ -232,7 +232,6 @@ macro:wait:duration,
 macro:warn_delete,
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
-ph:analog_input_required,Entrada Analogica es requerida
 ph:calibrate,Calibrar
 ph:chart:current,pH(ultima)
 ph:chart:historical,pH(histórico)
@@ -243,37 +242,19 @@ ph:chart_ymax,
 ph:chart_ymin,
 ph:check_frequency,Revisar Frecuencia
 ph:control,Control
-ph:control_required,Control requerido
 ph:controlequipment,Equipo
 ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Lectura Actual
 ph:hysteresis,
+ph:hysteresis_less_than,
 ph:lower_function,Inferior Función
-ph:lower_function_required,Función requerido
 ph:lower_threshold,Límite Inferior
-ph:lower_threshold_less_than,Límite Inferior debe ser menos que Límite Superior
-ph:lower_threshold_required,Límite Inferior requerido
-ph:lower_threshold_type,Límite Inferior debe ser un nùmero
 ph:midpoint,Punto Medio
-ph:name_required,Nombre requerido
-ph:period_min,Revsión de Frecuencia debe ser mayor o igual a 1 segundo
-ph:period_required,Revsión de Frecuencia requerido
-ph:period_type,Revsión de Frecuencia debe ser un nùmero
 ph:run_calibration,Correr
 ph:second_point,Segundo Punto
-ph:status_required,Estatus requerido
-ph:threshold_greater_than,Alerta Superior debe ser mayor a Alerta Inferior
-ph:threshold_less_than,Alerta Inferior debe ser menor a Alerta Superior
-ph:threshold_required,Límites son requeridos cuando las alertas estan activadas
-ph:threshold_type,Límite debe ser un nùmero
 ph:upper_function,Superior Función
-ph:upper_function_required,Superior Función requerido
 ph:upper_threshold,Límite Superior
-ph:upper_threshold_greater_than,Límite Superior debe ser mayor Límite Inferior
-ph:upper_threshold_required,Límite Superior requerido
-ph:upper_threshold_type,Límite Superior debe ser un nùmero
-ph:validation_error,Los ajustes de Ph no puede ser guardada por errores de validación. Corija los errores y intente de nuevo.
 ph:warn_delete,Esta acción sera eliminada
 ph:warn_reset,
 signin:invalidcredentials,Usuario o Contraseña Incorrectos

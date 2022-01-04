@@ -1,30 +1,48 @@
 import * as Yup from 'yup'
+import i18n from 'utils/i18n'
 
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Name is required'),
+    .required(i18n.t('validation:name_required')),
   jack: Yup.string()
-    .required('Jack is required'),
+    .required(i18n.t('validation:selection_required')),
   pin: Yup.string()
-    .required('Pin is required'),
+    .required(i18n.t('validation:selection_required')),
   enable: Yup.bool()
-    .required('Doser Status is required'),
+    .required(i18n.t('validation:selection_required')),
   duration: Yup.number()
-    .required('Duration is required'),
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(1, i18n.t('validation:integer_min_required')),
   speed: Yup.number()
-    .required('Speed is required'),
+    .required(i18n.t('validation:number_required'))
+    .typeError(i18n.t('validation:number_required'))
+    .min(1, i18n.t('validation:integer_min_required'))
+    .max(100, i18n.t('validation:integer_max_required')),
   month: Yup.string()
-    .required('Month is required'),
+    .required(i18n.t('validation:cron_required'))
+    // cron expression: 
+    // either a joker '*'
+    // or a number (range depends on field, some accept slightly too much)
+    //    optionally followed by a single range '-' or increment '/', and same digits
+    //    or optionally followed by a comma separated list of same digits
+    .matches(/^(\*|[1]?\d([-/][1]?\d)?|[1]?\d(,[1]?\d)*)$/, i18n.t('validation:cron_required')),
   week: Yup.string()
-    .required('Week is required'),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|[0-6]([-/][0-6])?|[0-6](,[0-6])*)$/, i18n.t('validation:cron_required')),
   day: Yup.string()
-    .required('Day is required'),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|[123]?\d([-/][123]?\d)?|[123]?\d(,[123]?\d)*)$/, i18n.t('validation:cron_required')),
   hour: Yup.string()
-    .required('Hour is required'),
+  // 6,12,19
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|[12]?\d([-/][12]?\d)?|[12]?\d(,[12]?\d)*)$/, i18n.t('validation:cron_required')),
   minute: Yup.string()
-    .required('Minute is required'),
+    .required(i18n.t('validation:cron_required'))
+    .matches(/^(\*|[1-5]?\d([-/][1-5]?\d)?|[1-5]?\d(,[1-5]?\d)*)$/, i18n.t('validation:cron_required')),
   second: Yup.string()
-    .required('Second is required')
+    .required(i18n.t('validation:cron_nojoker_required'))
+    .matches(/^([1-5]?\d([-/][1-5]?\d)?|[1-5]?\d(,[1-5]?\d)*)$/, i18n.t('validation:cron_nojoker_required')),
 })
 
 export default DoserSchema

@@ -20,9 +20,7 @@ const EditEntry = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError(
-        i18next.t('journal:validation_error', errors)
-      )
+      showError(i18next.t('validation:error'))
     }
   }
 

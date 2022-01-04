@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { confirm } from 'utils/confirm'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import DriverForm from './driver_form'
 
 export default class Driver extends React.Component {
@@ -9,7 +9,7 @@ export default class Driver extends React.Component {
     super(props)
 
     this.state = {
-      lbl: i18next.t('edit')
+      lbl: i18n.t('edit')
     }
     this.handleSave = this.handleSave.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
@@ -22,11 +22,11 @@ export default class Driver extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('configuration:drivers:warn_delete', { name: driver.name })}
+          {i18n.t('configuration:drivers:warn_delete', { name: driver.name })}
         </p>
       </div>
     )
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18n.t('configuration:drivers:title_delete', { name: driver.name }), { description: message }).then(
       function () {
         this.props.remove(driver.id)
       }.bind(this)
@@ -37,7 +37,7 @@ export default class Driver extends React.Component {
     if (!this.state.edit) {
       this.setState({
         edit: true,
-        lbl: i18next.t('save')
+        lbl: i18n.t('save')
       })
     }
   }
@@ -68,7 +68,7 @@ export default class Driver extends React.Component {
           this.props.update(this.props.driver.id, payload)
           this.setState({
             edit: false,
-            lbl: i18next.t('edit')
+            lbl: i18n.t('edit')
           })
         }
       })
@@ -112,7 +112,6 @@ export default class Driver extends React.Component {
     }
 
     return (
-
       <div className='row border-bottom py-1'>
         <div className='col-8 col-md-9'>{this.state.edit ? this.editUI() : this.ui()}</div>
         <div className='col-4 col-md-3'>

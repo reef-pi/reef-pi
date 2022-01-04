@@ -1,13 +1,13 @@
 import * as Yup from 'yup'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 const JournalSchema = Yup.object().shape({
   name: Yup.string()
-    .required(i18next.t('journal:name_required')),
+    .required(i18n.t('validation:name_required')),
   description: Yup.string()
-    .required(i18next.t('journal:description_required')),
+    .required(i18n.t('validation:entry_required')),
   unit: Yup.string()
-    .required(i18next.t('journal:unit_required'))
+    .required(i18n.t('validation:entry_required'))   //TODO: really required?
 })
 
 export default JournalSchema
