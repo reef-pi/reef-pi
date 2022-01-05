@@ -89,6 +89,7 @@ camera:enable,
 camera:take_photo,
 camera:target_dir,
 camera:tick_interval,
+camera:tick_must_be_positive,
 camera:to_gdrive,
 capabilities:ato,Osmolateur
 capabilities:camera,Camera
@@ -134,15 +135,14 @@ configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Adresse
 configuration:settings:alert_health_check,Alerte de santé du système
+configuration:settings:brightness,
 configuration:settings:capabilities,Capacités
-configuration:settings:capabilities_required,Capacité requise
 configuration:settings:cors,
 configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
 configuration:settings:max_memory,Mémoire maximum
 configuration:settings:name,Nom
-configuration:settings:name_required,Nom requis
 configuration:settings:network_address_required,Adresse réseau requise
 configuration:settings:network_interface_required,Interface réseau requise
 configuration:settings:notification,Notification
@@ -183,6 +183,8 @@ fatal_error:fatal_error,
 fatal_error:message,
 fatal_error:troubleshoot,
 health_chart:cpu_memory,
+health_chart:current,
+health_chart:historical,
 instances:warn_delete,
 journal:add_entry,
 journal:comment,

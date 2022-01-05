@@ -89,6 +89,7 @@ camera:enable,Enable
 camera:take_photo,Take Photo!
 camera:target_dir,Image Directory
 camera:tick_interval,Tick Interval (in minutes)
+camera:tick_must_be_positive,Tick interval has to be a positive integer
 camera:to_gdrive,Upload to gDrive
 capabilities:ato,ATO
 capabilities:camera,Camera
@@ -134,15 +135,14 @@ configuration:drivers:type,Type
 configuration:drivers:warn_delete,This action will remove the driver for {{name}}
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
+configuration:settings:brightness,Brightness
 configuration:settings:capabilities,Capabilities
-configuration:settings:capabilities_required,Capabilities is required
 configuration:settings:cors,Enable cors
 configuration:settings:display,Display
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max memory
 configuration:settings:name,Name
-configuration:settings:name_required,Name is required
 configuration:settings:network_address_required,Network address is required
 configuration:settings:network_interface_required,Network Interface is required
 configuration:settings:notification,Notification
@@ -183,6 +183,8 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Memory
+health_chart:current,current
+health_chart:historical,historical
 instances:warn_delete,This action will delete instance {{name}}
 journal:add_entry,Add entry
 journal:comment,Comment

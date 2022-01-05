@@ -20,6 +20,7 @@ class capture extends React.Component {
     }
     let img = <div className='container' />
     if (this.props.latest !== undefined) {
+      // FIXME: very likely '/images/' should be this.props.config.image_path
       img = <img src={'/images/' + this.props.latest.image} style={imgStyle} />
     }
     return (

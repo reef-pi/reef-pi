@@ -89,7 +89,8 @@ camera:enable,Aktiv
 camera:take_photo,Aufnahme!
 camera:target_dir,Zielverzeichnis
 camera:tick_interval,Aufnahmeintervall (min)
-camera:to_gdrive,nach gDrive kopieren
+camera:tick_must_be_positive,Das Intervall muss eine Zahl größer gleich 1 sein!
+camera:to_gdrive,nach Google Drive kopieren
 capabilities:ato,ATO
 capabilities:camera,Kamera
 capabilities:configuration,Konfiguration
@@ -134,15 +135,14 @@ configuration:drivers:type,Typ
 configuration:drivers:warn_delete,Wollen Sie den Treiber für {{name}} wirklich entfernen?
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
+configuration:settings:brightness,Brightness
 configuration:settings:capabilities,Funktionen
-configuration:settings:capabilities_required,Eine Auswahl ist erforderlich!
 configuration:settings:cors,cors
 configuration:settings:display,Display
 configuration:settings:interface,Netzwerkinterface
 configuration:settings:max_cpu,CPU Nutzung % größer
 configuration:settings:max_memory,Speicherbelegung MB größer
 configuration:settings:name,Netzwerkname
-configuration:settings:name_required,Ein Name ist erforderlich!
 configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
 configuration:settings:network_interface_required,Eine Netzwerk-Schnittstelle wird benötigt!
 configuration:settings:notification,Email-Benachrichtigung
@@ -183,6 +183,8 @@ fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
 fatal_error:troubleshoot,Fehlersuche
 health_chart:cpu_memory,CPU / Speicher
+health_chart:current,aktuell
+health_chart:historical,Verlauf
 instances:warn_delete,Wollen Sie die Instanz {{name}} wirklich löschen?
 journal:add_entry,Neuer Eintrag
 journal:comment,Kommentar
@@ -338,14 +340,12 @@ timers:turn_on,Einschalten
 timers:type_required,Ein Typ ist erforderlich!
 timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
-validation:cron_nojoker_required,"CRON: eine Zahl, ein Bereich (1-5), oder eine Liste (1,3,6) sind erlaubt."
-validation:cron_required,"CRON: eine Zahl, ein Bereich (1-5), eine Liste (1,3,6) oder * sind erlaubt."
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!
 validation:a_must_differ_from_b,{{a}} und {{b}} dürfen nicht gleich sein!
 validation:comma_separated_numbers,"Eine Liste von Zahlen, durch Komma getrennt"
-validation:cron_nojoker_required,Eine Zahl oder ein Bereich (z.B. 1-5) wird benötigt!
-validation:cron_required,"Eine Zahl, ein Bereich (z.B. 1-5) oder * wird benötigt!"
+validation:cron_nojoker_required,"CRON: eine Zahl, ein Bereich (1-5), oder eine Liste (1,3,6) sind erlaubt."
+validation:cron_required,"CRON: eine Zahl, ein Bereich (1-5), eine Liste (1,3,6) oder * sind erlaubt."
 validation:date_required,Ein Datum ist erforderlich!
 validation:entry_required,Das Feld darf nicht leer sein!
 validation:error,Die Angaben sind unvollständig oder fehlerhaft!

@@ -46,6 +46,7 @@ class camera extends React.Component {
     const images = []
     this.props.images.forEach((d, i) => {
       images.push({
+        // FIXME: very likely '/images/' should be this.props.config.image_path
         src: '/images/' + d.name,
         thumbnail: '/images/thumbnail-' + d.name
       })

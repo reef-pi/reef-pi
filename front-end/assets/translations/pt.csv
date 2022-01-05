@@ -89,6 +89,7 @@ camera:enable,
 camera:take_photo,
 camera:target_dir,
 camera:tick_interval,
+camera:tick_must_be_positive,
 camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camera
@@ -134,15 +135,14 @@ configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
+configuration:settings:brightness,
 configuration:settings:capabilities,Capacidades
-configuration:settings:capabilities_required,Capabilities são requeridads
 configuration:settings:cors,Activar cors
 configuration:settings:display,Ecrã
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Maximo de CPU
 configuration:settings:max_memory,Maximo de Memoria
 configuration:settings:name,Nome
-configuration:settings:name_required,Nome é obrigatório
 configuration:settings:network_address_required,Endereço de rede é obrigatório
 configuration:settings:network_interface_required,Nome do interface de rede é obrigatório
 configuration:settings:notification,Notificação
@@ -183,6 +183,8 @@ fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
 health_chart:cpu_memory,CPU/Memory
+health_chart:current,
+health_chart:historical,
 instances:warn_delete,
 journal:add_entry,
 journal:comment,

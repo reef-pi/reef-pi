@@ -89,6 +89,7 @@ camera:enable,
 camera:take_photo,
 camera:target_dir,
 camera:tick_interval,
+camera:tick_must_be_positive,
 camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camera
@@ -134,15 +135,14 @@ configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Adres
 configuration:settings:alert_health_check,Alarm bij health check
+configuration:settings:brightness,
 configuration:settings:capabilities,Opties
-configuration:settings:capabilities_required,Opties is nodig
 configuration:settings:cors,cors inschakelen
 configuration:settings:display,Display
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:name,Naam
-configuration:settings:name_required,Naam is nodig
 configuration:settings:network_address_required,Netwerkadres is nodig
 configuration:settings:network_interface_required,Netwerkinterface is nodig
 configuration:settings:notification,Notificatie
@@ -183,6 +183,8 @@ fatal_error:fatal_error,Fatale Fout
 fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de server. Probeer de webserver te herstarten of kijk de logs na."
 fatal_error:troubleshoot,Troubleshoot
 health_chart:cpu_memory,CPU/Geheugen
+health_chart:current,
+health_chart:historical,
 instances:warn_delete,
 journal:add_entry,
 journal:comment,

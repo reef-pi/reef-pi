@@ -89,6 +89,7 @@ camera:enable,
 camera:take_photo,
 camera:target_dir,
 camera:tick_interval,
+camera:tick_must_be_positive,
 camera:to_gdrive,
 capabilities:ato,ATO
 capabilities:camera,Camara
@@ -134,15 +135,14 @@ configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
+configuration:settings:brightness,
 configuration:settings:capabilities,Funciones
-configuration:settings:capabilities_required,Al menos una Funcion es requerida
 configuration:settings:cors,Activar cors
 configuration:settings:display,Pantalla
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
 configuration:settings:max_memory,Memoria Maxima
 configuration:settings:name,Nombre
-configuration:settings:name_required,El nombre es requerido
 configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_interface_required,La interfaz de red es requerida
 configuration:settings:notification,Notificacion
@@ -183,6 +183,8 @@ fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
 fatal_error:troubleshoot,Solucionar Problemas
 health_chart:cpu_memory,Procesador/Memoria
+health_chart:current,
+health_chart:historical,
 instances:warn_delete,
 journal:add_entry,
 journal:comment,

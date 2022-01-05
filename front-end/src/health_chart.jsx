@@ -30,7 +30,7 @@ class healthChart extends React.Component {
     const healthStats = this.props.health_stats[this.state.trend]
     return (
       <div className='container'>
-        <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({this.props.trend})</span>
+        <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({i18next.t('health_chart:' + this.props.trend)})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={healthStats}>
             <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
