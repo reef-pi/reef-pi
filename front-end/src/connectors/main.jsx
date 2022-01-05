@@ -10,15 +10,16 @@ export default class Connectors extends React.Component {
       <div className='container'>
         <div className='row inlets'>
           <Inlets />
-          <hr />
         </div>
+        <hr />
         <div className='row outlets'>
           <Outlets />
-          <hr />
         </div>
+        <hr />
         <div className='row analog-inputs'>
           <AnalogInputs />
         </div>
+        <hr />
         <div className='row jacks'>
           <Jacks />
         </div>
