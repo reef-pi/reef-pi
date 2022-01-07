@@ -67,6 +67,7 @@ export default class Mqtt extends React.Component {
         {this.toRow('client_id', 'Client ID', 'text')}
         {this.toRow('password', 'Password', 'password')}
         {this.toRow('qos', 'QoS', 'number')}
+        {this.toRow('prefix', 'Topic Prefix', 'text')}
         {this.toRow('retained', 'Retained', 'checkbox')}
       </>
     )
