@@ -89,6 +89,7 @@ camera:enable,
 camera:take_photo,
 camera:target_dir,
 camera:tick_interval,
+camera:tick_must_be_positive,
 camera:to_gdrive,
 capabilities:ato,补水器
 capabilities:camera,摄像头
@@ -134,15 +135,14 @@ configuration:drivers:type,
 configuration:drivers:warn_delete,
 configuration:settings:address,日志
 configuration:settings:alert_health_check,健康检查警告
+configuration:settings:brightness,
 configuration:settings:capabilities,功能
-configuration:settings:capabilities_required,必须填写功能
 configuration:settings:cors,
 configuration:settings:display,显示
 configuration:settings:interface,接口
 configuration:settings:max_cpu,最大CPU
 configuration:settings:max_memory,最大内存
 configuration:settings:name,名字
-configuration:settings:name_required,必须填写名字
 configuration:settings:network_address_required,必须填写网络地址
 configuration:settings:network_interface_required,必须填写网络接口
 configuration:settings:notification,通知
@@ -183,6 +183,8 @@ fatal_error:fatal_error,致命错误
 fatal_error:message,无法连接服务器，你需要重启服务器或者排除故障。
 fatal_error:troubleshoot,排除故障
 health_chart:cpu_memory,CPU/内存
+health_chart:current,
+health_chart:historical,
 instances:warn_delete,
 journal:add_entry,
 journal:comment,

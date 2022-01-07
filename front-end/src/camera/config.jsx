@@ -19,7 +19,7 @@ export default class Config extends React.Component {
     const config = this.state.config
     config.tick_interval = parseInt(config.tick_interval)
     if (isNaN(config.tick_interval)) {
-      showError('Tick interval has to be a positive integer')
+      showError(i18next.t('camera:tick_must_be_positive'))
       return
     }
     this.props.update(config)
@@ -53,7 +53,7 @@ export default class Config extends React.Component {
     if (this.state.config.enable === undefined) {
       return (
         <div className='container'>
-          Loading...
+          {i18next.t('loading')}
         </div>
       )
     }
