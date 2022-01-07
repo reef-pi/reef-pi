@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import i18next from 'i18next'
 
 const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
 /*
@@ -21,13 +22,13 @@ const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
           type='button' onClick={onDelete}
           className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
         >
-          Delete
+          {i18next.t('delete')}
         </button>
         <button
           type='button' onClick={onEdit}
           className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
         >
-          Edit
+          {i18next.t('edit')}
         </button>
       </div>
       <div className='col-12 col-sm-6 col-md-3 order-sm-1'>

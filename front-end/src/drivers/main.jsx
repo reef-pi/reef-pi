@@ -38,7 +38,7 @@ class drivers extends React.Component {
             driver={d}
             validate={this.validate}
             driverOptions={this.props.driverOptions}
-            read_only={(d.type === 'rpi')} 
+            read_only={(d.type === 'rpi')}
             remove={this.props.delete}
             update={this.props.update}
           />

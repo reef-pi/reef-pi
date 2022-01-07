@@ -40,7 +40,6 @@ export default class Instance extends React.Component {
     e.stopPropagation()
     const message = (
       <div>
-        <p>This action will delete {this.props.instance.name}.</p>
         <p>
           {i18next.t('instances:warn_delete', { name: this.props.instance.name })}
         </p>
@@ -62,7 +61,7 @@ export default class Instance extends React.Component {
       <li className='list-group-item'>
         {this.state.readOnly === true
           ? <ViewInstance instance={this.props.instance} onEdit={this.handleToggleEdit} onDelete={this.handleDelete} onStateChange={this.handleUpdate} />
-          : <InstanceForm instance={this.props.instance} actionLabel='Save' onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
+          : <InstanceForm instance={this.props.instance} actionLabel={i18next.t('save')} onSubmit={this.handleSubmit} onUpdate={this.handleUpdate} onDelete={this.handleDelete} />}
       </li>
     )
   }
