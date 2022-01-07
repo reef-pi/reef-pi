@@ -262,18 +262,22 @@ class settings extends React.Component {
           </div>
         </div>
 
-        <div className='row'>
-          {this.checkBoxComponent('display')}
-          {this.showDisplay()}
+        <div className='col-12'>
+          <div className='row'>
+            {this.checkBoxComponent('display')}
+            {this.showDisplay()}
+          </div>
         </div>
 
-        <div className='row'>
-          {this.checkBoxComponent('notification')}
-          {this.checkBoxComponent('pprof')}
-          {this.checkBoxComponent('prometheus')}
-          {this.checkBoxComponent('cors')}
+        <div className='col-12'>
+          <div className='row'>
+            {this.checkBoxComponent('notification')}
+            {this.checkBoxComponent('pprof')}
+            {this.checkBoxComponent('prometheus')}
+            {this.checkBoxComponent('cors')}
+          </div>
         </div>
-
+        <hr />
         <div className='row'>
           <div className='col-12'>
             <label className='h5 font-weight-normal'>

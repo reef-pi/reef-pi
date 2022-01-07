@@ -32,21 +32,13 @@ class drivers extends React.Component {
     const items = []
     this.props.drivers.sort((a, b) => SortByName(a, b))
       .forEach((d, n) => {
-        if (d.type === 'rpi') {
-          items.push(
-            <div className='row ' key={d.id}>
-              <div className='col-4'>{d.name}</div>
-              <div className='col-4'><small>{d.type}</small></div>
-            </div>
-          )
-          return
-        }
         items.push(
           <Driver
             key={d.id}
             driver={d}
             validate={this.validate}
             driverOptions={this.props.driverOptions}
+            read_only={(d.type === 'rpi')} 
             remove={this.props.delete}
             update={this.props.update}
           />
