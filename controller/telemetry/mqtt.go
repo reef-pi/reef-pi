@@ -15,6 +15,7 @@ type MQTTConfig struct {
 	Password string `json:"password"`
 	QoS      int    `json:"qos"`
 	Retained bool   `json:"retained"`
+	Prefix   string `json:"prefix"`
 }
 
 var DefaultMQTTConfig = MQTTConfig{
@@ -24,6 +25,7 @@ var DefaultMQTTConfig = MQTTConfig{
 	Username: "",                     // A username to authenticate to the MQTT server
 	Password: "",                     //Password to match username
 	ClientID: "reef-pi.local",
+	Prefix:   "reef-pi",
 }
 
 type MQTTClient struct {
@@ -54,6 +56,9 @@ func NewMQTTClient(conf MQTTConfig) (*MQTTClient, error) {
 }
 
 func (m *MQTTClient) Publish(topic, msg string) error {
+	if m.config.Prefix != "" {
+		topic = m.config.Prefix + "/" + topic
+	}
 	t := m.client.Publish(topic, byte(m.config.QoS), m.config.Retained, msg)
 	return t.Error()
 }
