@@ -10,7 +10,6 @@ import (
 	cron "github.com/robfig/cron/v3"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -28,13 +27,11 @@ type Controller struct {
 	mu       *sync.Mutex
 	runner   *cron.Cron
 	cronIDs  map[string]cron.EntryID
-	jacks    *connectors.Jacks
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		DevMode:  devMode,
-		jacks:    c.DM().Jacks(),
 		cronIDs:  make(map[string]cron.EntryID),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
@@ -82,7 +79,7 @@ func (c *Controller) Start() {
 func (c *Controller) addToCron(p Pump) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.jacks, c.statsMgr))
+	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.c.DM(), c.statsMgr))
 	if err != nil {
 		return err
 	}
@@ -105,7 +102,7 @@ func (c *Controller) On(id string, b bool) error {
 	if b {
 		v[p.Pin] = p.Regiment.Speed
 	}
-	return c.jacks.Control(p.Jack, v)
+	return c.c.DM().Jacks().Control(p.Jack, v)
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {

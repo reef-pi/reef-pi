@@ -26,6 +26,15 @@ type Outlet struct {
 	Driver    string `json:"driver"`
 }
 
+func (c *Outlets) HalPin(id string) (hal.DigitalOutputPin, error) {
+	o, err := c.Get(id)
+	if err != nil {
+		return nil, fmt.Errorf("Outlet name: '%s' does not exist", err)
+	}
+
+	return o.outputPin(c.drivers)
+}
+
 func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.DigitalOutputPin, error) {
 	d, err := drivers.DigitalOutputDriver(o.Driver)
 	if err != nil {
@@ -67,10 +76,9 @@ func (c *Outlets) Configure(id string, on bool) error {
 	if err != nil {
 		return fmt.Errorf("Outlet name: '%s' does not exist", err)
 	}
-
 	pin, err := o.outputPin(c.drivers)
 	if err != nil {
-		return fmt.Errorf("can't update %s - can't get output pin", id)
+		return fmt.Errorf("can't update %s - can't get output pin", err)
 	}
 
 	if o.Reverse {
