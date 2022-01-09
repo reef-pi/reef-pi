@@ -91,13 +91,13 @@ camera:target_dir,Zielverzeichnis
 camera:tick_interval,Aufnahmeintervall (min)
 camera:tick_must_be_positive,Das Intervall muss eine Zahl größer gleich 1 sein!
 camera:to_gdrive,nach Google Drive kopieren
-capabilities:ato,ATO
+capabilities:ato,ATO/Pegel
 capabilities:camera,Kamera
 capabilities:configuration,Konfiguration
 capabilities:dashboard,Übersicht
 capabilities:dev_mode,Entwickler-Modus
 capabilities:doser,Dosierpumpe
-capabilities:dosing_pumps,Dosierpumpen
+capabilities:dosing_pumps,Dosierer
 capabilities:equipment,Geräte
 capabilities:health_check,Auslastung
 capabilities:journal,Notizen
@@ -108,8 +108,10 @@ capabilities:macro,Makro
 capabilities:macros,Makros
 capabilities:manager,Instanzen
 capabilities:ph,pH
-capabilities:temperature,Temperatur
-capabilities:timers,Schaltuhr
+capabilities:phprobes,Sonden (pH)
+capabilities:system,System
+capabilities:temperature,Temperaturen
+capabilities:timers,Schaltuhren
 collapsible:delete,Löschen
 collapsible:edit,Ändern
 color_picker:choose,Auswählen
@@ -182,6 +184,17 @@ fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
 fatal_error:troubleshoot,Fehlersuche
+function:alert,Alarm
+function:ato,ATO (Pegel)
+function:doser,Dosierpumpe
+function:equipment,Gerät
+function:lightings,Lampe
+function:macro,Makro
+function:phprobes,pH Sonde
+function:subsystem,Funktionsgruppe
+function:temperature,Temperatur
+function:timers,Schaltuhr
+function:wait,Pause
 health_chart:cpu_memory,CPU / Speicher
 health_chart:current,aktuell
 health_chart:historical,Verlauf
@@ -220,14 +233,18 @@ log:content,Beschreibung
 log:emitter,Sender
 log:time,Zeit
 log:type,Typ
+macro:action,Aktion
 macro:alert:message,Nachricht
 macro:alert:title,Titel
+macro:one_step_required,Mindestens ein Schritt ist erforderlich!
 macro:reversible,Umkehrbar
 macro:revert,Umgekehrt
 macro:reverting,Umkehr
 macro:run,Ausführen
 macro:running,Läuft
 macro:steps,Schritte
+macro:system,System
+macro:title_delete,{{name}} löschen?
 macro:turn_off,Ausschalten
 macro:turn_on,Einschalten
 macro:wait:duration,Dauer

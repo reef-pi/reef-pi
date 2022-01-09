@@ -108,6 +108,8 @@ capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instancias
 capabilities:ph,pH
+capabilities:phprobes,pH
+capabilities:system,
 capabilities:temperature,Temperatura
 capabilities:timers,Cronómetro
 collapsible:delete,Eliminar
@@ -182,6 +184,17 @@ fatal_error:connection_lost,Conexion Perdida
 fatal_error:fatal_error,Error Fatal
 fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contactar con el servidor. Es posible que deba reiniciar el servidor web o solucionar algunos problemas.
 fatal_error:troubleshoot,Solucionar Problemas
+function:alert,alerta
+function:ato,ATO
+function:doser,dosificador
+function:equipment,equipo
+function:lightings,luz
+function:macro,macro
+function:phprobes,pH
+function:subsystem,
+function:temperature,temperatura
+function:timers,cronómetro
+function:wait,
 health_chart:cpu_memory,Procesador/Memoria
 health_chart:current,
 health_chart:historical,
@@ -220,14 +233,18 @@ log:content,Contenido
 log:emitter,Emisor
 log:time,Hora
 log:type,Tipo
+macro:action,
 macro:alert:message,
 macro:alert:title,
+macro:one_step_required,
 macro:reversible,
 macro:revert,
 macro:reverting,
 macro:run,
 macro:running,
 macro:steps,
+macro:system,
+macro:title_delete,
 macro:turn_off,Apagar
 macro:turn_on,Encender
 macro:wait:duration,

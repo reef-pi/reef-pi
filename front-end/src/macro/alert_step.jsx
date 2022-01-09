@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 const AlertStep = ({ name, readOnly, touched, errors }) => {
   return (
@@ -12,10 +12,10 @@ const AlertStep = ({ name, readOnly, touched, errors }) => {
         <Field
           name={`${name}.title`}
           aria-label='Title'
-          title={i18next.t('macro:alert:title')}
+          title={i18n.t('macro:alert:title')}
           type='string'
           readOnly={readOnly}
-          placeholder='Title'
+          placeholder={i18n.t('macro:alert:title')}
           className={classNames('form-control', {
             'is-invalid': ShowError(`${name}.title`, touched, errors)
           })}
@@ -25,11 +25,10 @@ const AlertStep = ({ name, readOnly, touched, errors }) => {
       <div className='input-group'>
         <Field
           name={`${name}.message`}
-          aria-label='Message'
-          title={i18next.t('macro:alert:message')}
+          title={i18n.t('macro:alert:message')}
           type='string'
           readOnly={readOnly}
-          placeholder='Message'
+          placeholder={i18n.t('macro:alert:message')}
           className={classNames('form-control', {
             'is-invalid': ShowError(`${name}.message`, touched, errors)
           })}

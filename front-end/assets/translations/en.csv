@@ -96,8 +96,8 @@ capabilities:camera,Camera
 capabilities:configuration,Configuration
 capabilities:dashboard,Dashboard
 capabilities:dev_mode,Dev Mode
-capabilities:doser,Doser
-capabilities:dosing_pumps,Dosing
+capabilities:doser,Dosers
+capabilities:dosing_pumps,Dosers
 capabilities:equipment,Equipment
 capabilities:health_check,Health check
 capabilities:journal,Journal
@@ -108,7 +108,9 @@ capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instances
 capabilities:ph,pH
-capabilities:temperature,Temperature
+capabilities:phprobes,Probes (pH)
+capabilities:system,System
+capabilities:temperature,Temperatures
 capabilities:timers,Timers
 collapsible:delete,Delete
 collapsible:edit,Edit
@@ -182,6 +184,17 @@ fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
+function:alert,alert
+function:ato,ATO
+function:doser,doser
+function:equipment,equipment
+function:lightings,light
+function:macro,macro
+function:phprobes,pH probe
+function:subsystem,subsystem
+function:temperature,temperature
+function:timers,timer
+function:wait,wait
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,current
 health_chart:historical,historical
@@ -220,14 +233,18 @@ log:content,Content
 log:emitter,Emitter
 log:time,Time
 log:type,Type
+macro:action,Action
 macro:alert:message,message
 macro:alert:title,title
+macro:one_step_required,At least one step is required!
 macro:reversible,Reversible
 macro:revert,Revert
 macro:reverting,Reverting
 macro:run,Run
 macro:running,Running
 macro:steps,Steps
+macro:system,System
+macro:title_delete,Delete {{name}} ?
 macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration

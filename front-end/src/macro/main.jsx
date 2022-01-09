@@ -13,7 +13,7 @@ import Collapsible from '../ui_components/collapsible'
 import MacroForm from './macro_form'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 class main extends React.Component {
   constructor (props) {
@@ -63,7 +63,7 @@ class main extends React.Component {
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
             >
-              {macro.enable ? i18next.t('macro:running') : i18next.t('macro:run')}
+              {macro.enable ? i18n.t('macro:running') : i18n.t('macro:run')}
             </button>
           )
           if (macro.reversible) {
@@ -75,7 +75,7 @@ class main extends React.Component {
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
               >
-                {macro.enable ? i18next.t('macro:reverting') : i18next.t('macro:revert')}
+                {macro.enable ? i18n.t('macro:reverting') : i18n.t('macro:revert')}
               </button>
             )
           }
@@ -135,7 +135,7 @@ class main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('macro:warn_delete', { name: macro.name })}
+          {i18n.t('macro:warn_delete', { name: macro.name })}
         </p>
       </div>
     )
