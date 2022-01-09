@@ -139,7 +139,7 @@ class main extends React.Component {
         </p>
       </div>
     )
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18n.t('macro:title_delete', { name: macro.name }), { description: message }).then(
       function () {
         this.props.delete(macro.id)
       }.bind(this)

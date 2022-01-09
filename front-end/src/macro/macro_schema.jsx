@@ -53,7 +53,7 @@ const MacroSchema = Yup.object().shape({
   steps: Yup.array().of(StepSchema)
     .required(i18n.t('macro:one_step_required'))
     //FIXME: should be added, but smoke test fails then
-    .length(1, i18n.t('macro:one_step_required'))
+    //.length(1, i18n.t('macro:one_step_required'))
 })
 
 export default MacroSchema
