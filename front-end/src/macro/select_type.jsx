@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'formik'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
     const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'lightings', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
-    return validTypes.map(item => {
+    // capabilities:..  are the subsytem names (plural or cathegory), correspinding to the tab pages, whereas
+    // function:... are individual devices in these cathegories
+    return validTypes.map((item) => {
       return (
         <option key={item} value={item}>
-          {item}
+          {i18n.t('function:' + item)}
         </option>
       )
     })
@@ -22,7 +24,7 @@ const SelectType = ({ name, className, readOnly }) => {
       className={`form-control ${className}`}
       disabled={readOnly}
     >
-      <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+      <option value='' className='d-none'>-- {i18n.t('select')} --</option>
       {list()}
     </Field>
   )

@@ -108,6 +108,8 @@ capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instancias
 capabilities:ph,pH
+capabilities:phprobes,
+capabilities:system,
 capabilities:temperature,Temperatura
 capabilities:timers,Timers
 collapsible:delete,Apagar
@@ -182,6 +184,17 @@ fatal_error:connection_lost,Ligação Perdida
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
+function:alert,
+function:ato,
+function:doser,
+function:equipment,
+function:lightings,
+function:macro,
+function:phprobes,
+function:subsystem,
+function:temperature,
+function:timers,
+function:wait,
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,
 health_chart:historical,
@@ -220,14 +233,18 @@ log:content,Conteudo
 log:emitter,Emissor
 log:time,Tempo
 log:type,Tipo
+macro:action,
 macro:alert:message,
 macro:alert:title,
+macro:one_step_required,
 macro:reversible,
 macro:revert,
 macro:reverting,
 macro:run,
 macro:running,
 macro:steps,
+macro:system,
+macro:title_delete,
 macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
 macro:wait:duration,
