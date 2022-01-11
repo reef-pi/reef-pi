@@ -13,8 +13,8 @@ type DRV8322 struct {
 	SPR           uint    `json:"spr"`                 // steps per revolution
 	VPR           float64 `json:"volume_per_rotation"` // steps per revolution
 	MSPinA        string  `json:"ms_pin_a"`
-	MSPinB        string  `json:"ms_pin_a"`
-	MSPinC        string  `json:"ms_pin_a"`
+	MSPinB        string  `json:"ms_pin_b"`
+	MSPinC        string  `json:"ms_pin_c"`
 	Direction     bool    `json:"direction"`
 	MicroStepping string  `json:"microstepping"`
 	Delay         float64 `json:"delay"`
