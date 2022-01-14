@@ -186,11 +186,13 @@ fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichb
 fatal_error:troubleshoot,Fehlersuche
 function:alert,Alarm
 function:ato,ATO (Pegel)
+function:camera,Kamera
 function:doser,Dosierpumpe
 function:equipment,Gerät
 function:lightings,Lampe
 function:macro,Makro
 function:phprobes,pH Sonde
+function:reminder,Email-Erinnerung
 function:subsystem,Funktionsgruppe
 function:temperature,Temperatur
 function:timers,Schaltuhr
@@ -323,39 +325,22 @@ temperature:upper_function,Kühlungssteuerung
 temperature:upper_threshold,oberer Schwellwert
 temperature:warn_delete,Wollen Sie die Regelung {{name}} wirklich löschen?
 temperature:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
+timers:action,Aktion
 timers:after,... nach
 timers:and_then,... danach
-timers:day_required,Eine Zahl oder * wird benötigt!
-timers:duration_required,Eine Dauer wird benötigt!
-timers:equipment,Gerät
-timers:equipment:off,Aus
-timers:equipment:on,Ein
-timers:equipment:revert,Umkehren
-timers:equipment_action,Aktion
-timers:equipment_required,Ein Eintrag muss ausgewählt sein!
+timers:duration,Dauer
 timers:function,Funktion
-timers:hour_required,Eine Zahl oder * wird benötigt!
-timers:macro,Makro-Name
-timers:macros,Makros
 timers:message,Nachricht
-timers:message_required,Eine Nachricht wird benötigt!
-timers:minute_required,Eine Zahl oder * wird benötigt!
-timers:name_required,Ein Name wird benötigt!
-timers:on_required,Das ist erforderlich!
-timers:reminder,Erinnerung
+timers:revert,Umgekehrt
 timers:sec,s
-timers:second_required,Eine Zahl wird benötigt!
 timers:stay_off,aus lassen
 timers:stay_on,an lassen
 timers:subject,Betreff
-timers:subject_required,Ein Betreff wird benötig!
-timers:timer_status_required,Ein Status ist erforderlich!
+timers:title_delete,{{name}} löschen?
 timers:turn_back_off,wieder ausschalten
 timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
-timers:type_required,Ein Typ ist erforderlich!
-timers:validation_error,Die Angaben sind unvollständig oder fehlerhaft!
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!

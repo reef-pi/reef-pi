@@ -186,11 +186,13 @@ fatal_error:message,Something went wrong and the UI cannot contact the server an
 fatal_error:troubleshoot,Troubleshoot
 function:alert,alert
 function:ato,ATO
+function:camera,camera
 function:doser,doser
 function:equipment,equipment
 function:lightings,light
 function:macro,macro
 function:phprobes,pH probe
+function:reminder,email reminder
 function:subsystem,subsystem
 function:temperature,temperature
 function:timers,timer
@@ -323,39 +325,22 @@ temperature:upper_function, Chiller
 temperature:upper_threshold, Chiller Threshold
 temperature:warn_delete,This action will delete controller {{name}}
 temperature:warn_reset,This action will reset usage data for {{name}}
+timers:action,Action
 timers:after,After
 timers:and_then,And Then
-timers:day_required,Day is required
-timers:duration_required,Duration is required
-timers:equipment,Equipment
-timers:equipment:off,Off
-timers:equipment:on,On
-timers:equipment:revert,Revert
-timers:equipment_action,Action
-timers:equipment_required,Equipment is required
+timers:duration,Duration
 timers:function,Function
-timers:hour_required,Hour is required
-timers:macro,Macro Name
-timers:macros,Macros
 timers:message,Message
-timers:message_required,Message is required
-timers:minute_required,Minute is required
-timers:name_required,Name is required
-timers:on_required,On is required
-timers:reminder,Reminder
+timers:revert,Revert
 timers:sec,sec
-timers:second_required,Second is required
 timers:stay_off,Stay off
 timers:stay_on,Stay on
 timers:subject,Subject
-timers:subject_required,Subject is required
-timers:timer_status_required,Timer Status is required
+timers:title_delete,Delete {{name}} ?
 timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
-timers:type_required,Type is required
-timers:validation_error,The Timer settings cannot be saved due to validation errors.  Please correct the errors and try again.
 timers:warn_delete,This action will delete timer {{name}}
 validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
 validation:a_must_be_less_than_b,{{a}} must be less than {{b}}

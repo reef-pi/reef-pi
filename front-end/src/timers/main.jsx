@@ -1,5 +1,4 @@
 import React from 'react'
-import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { updateTimer, fetchTimers, createTimer, deleteTimer } from 'redux/actions/timer'
 import { connect } from 'react-redux'
@@ -7,6 +6,7 @@ import TimerForm from './timer_form'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
+import i18n from 'utils/i18n'
 
 class Main extends React.Component {
   constructor (props) {
@@ -59,12 +59,12 @@ class Main extends React.Component {
     const message = (
       <div>
         <p>
-          {i18next.t('timers:warn_delete', { name: timer.name })}
+          {i18n.t('timers:warn_delete', { name: timer.name })}
         </p>
       </div>
     )
 
-    confirm(i18next.t('delete'), { description: message }).then(
+    confirm(i18n.t('timers:title_delete', { name: timer.name }), { description: message }).then(
       function () {
         this.props.delete(timer.id)
       }.bind(this)
