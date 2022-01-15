@@ -20,10 +20,19 @@ type DRV8322 struct {
 	Delay         float64 `json:"delay"`
 }
 
+const _defaultDelay = 208000
+
 //	go r.Dose(cal.Speed, cal.Duration)
 func (d *DRV8322) Step(outlets *connectors.Outlets, count int) error {
 	delay := d.Delay
+	if delay == 0 {
+		delay = _defaultDelay
+	}
 	dPin, err := outlets.HalPin(d.DirectionPin)
+	if err != nil {
+		return err
+	}
+	sPin, err := outlets.HalPin(d.StepPin)
 	if err != nil {
 		return err
 	}
@@ -61,12 +70,15 @@ func (d *DRV8322) Step(outlets *connectors.Outlets, count int) error {
 		}
 	}
 
+	if err := dPin.Write(d.Direction); err != nil {
+		return err
+	}
 	for i := 0; i < count; i++ {
-		if err := dPin.Write(true); err != nil {
+		if err := sPin.Write(true); err != nil {
 			return err
 		}
 		time.Sleep(time.Duration(delay))
-		if err := dPin.Write(false); err != nil {
+		if err := sPin.Write(false); err != nil {
 			return err
 		}
 		time.Sleep(time.Duration(delay))

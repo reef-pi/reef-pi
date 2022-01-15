@@ -20,14 +20,14 @@ func (r *Runner) Run() {
 		Time: telemetry.TeleTime(time.Now()),
 	}
 	if r.pump.Stepper != nil {
-		if err := r.PWMDose(r.pump.Regiment.Speed, r.pump.Regiment.Duration); err != nil {
-			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
+		if err := r.pump.Stepper.Dose(r.dm.Outlets(), r.pump.Regiment.Volume); err != nil {
+			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
 			return
 		}
 		usage.Pump = int(r.pump.Regiment.Duration)
 	} else {
-		if err := r.pump.Stepper.Dose(r.dm.Outlets(), r.pump.Regiment.Volume); err != nil {
-			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
+		if err := r.PWMDose(r.pump.Regiment.Speed, r.pump.Regiment.Duration); err != nil {
+			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 			return
 		}
 		usage.Pump = int(r.pump.Regiment.Duration)
