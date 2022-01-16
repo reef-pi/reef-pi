@@ -15,11 +15,11 @@ type Runner struct {
 }
 
 func (r *Runner) Run() {
-	log.Println("doser sub system: scheduled run ", r.pump.Name)
+	log.Println("doser sub system: beginning scheduled run ", r.pump.Name)
 	usage := Usage{
 		Time: telemetry.TeleTime(time.Now()),
 	}
-	if r.pump.Stepper != nil {
+	if r.pump.Type == "stepper" && r.pump.Stepper != nil {
 		if err := r.pump.Stepper.Dose(r.dm.Outlets(), r.pump.Regiment.Volume); err != nil {
 			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
 			return
@@ -35,6 +35,7 @@ func (r *Runner) Run() {
 	r.statsMgr.Update(r.pump.ID, usage)
 	r.statsMgr.Save(r.pump.ID)
 	//r.c.Telemetry().EmitMetric("doser_"+r.pump.Name+"_usage", usage.Pump)
+	log.Println("dosing sub system: finished scheduled run for:", r.pump.Name)
 }
 
 func (r *Runner) PWMDose(speed float64, duration float64) error {

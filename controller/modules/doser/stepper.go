@@ -2,6 +2,7 @@ package doser
 
 import (
 	"github.com/reef-pi/reef-pi/controller/connectors"
+	"log"
 	"time"
 )
 
@@ -10,8 +11,8 @@ import (
 type DRV8322 struct {
 	StepPin       string  `json:"step_pin"`
 	DirectionPin  string  `json:"direction_pin"`
-	SPR           uint    `json:"spr"`                 // steps per revolution
-	VPR           float64 `json:"volume_per_rotation"` // steps per revolution
+	SPR           uint    `json:"spr"` // steps per revolution
+	VPR           float64 `json:"vpr"` // steps per revolution
 	MSPinA        string  `json:"ms_pin_a"`
 	MSPinB        string  `json:"ms_pin_b"`
 	MSPinC        string  `json:"ms_pin_c"`
@@ -113,5 +114,6 @@ func (d *DRV8322) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
 
 func (d *DRV8322) Dose(outlets *connectors.Outlets, volume float64) error {
 	steps := (volume / d.VPR) * float64(d.SPR)
+	log.Println("doser sub system: Executing stepper driver. Volume: ", volume, "SPR:", d.SPR, "vpr:", d.VPR, "steps:", steps)
 	return d.Step(outlets, int(steps))
 }

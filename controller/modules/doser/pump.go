@@ -28,6 +28,7 @@ type Pump struct {
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
 	Stepper  *DRV8322       `json:"stepper"`
+	Type     string         `json:"type"`
 }
 
 func (c *Controller) Get(id string) (Pump, error) {
