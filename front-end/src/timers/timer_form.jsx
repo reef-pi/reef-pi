@@ -18,7 +18,7 @@ const TimerForm = withFormik({
       id: '',
       on: '',
       duration: 0,
-      revert: ''
+      revert: true
     }
   },
   mapPropsToValues: props => {

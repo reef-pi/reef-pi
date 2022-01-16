@@ -186,11 +186,13 @@ fatal_error:message,"Er ging iets mis, de UI kan geen contact maken met de serve
 fatal_error:troubleshoot,Troubleshoot
 function:alert,
 function:ato,
+function:camera,
 function:doser,
 function:equipment,
 function:lightings,
 function:macro,
 function:phprobes,
+function:reminder,
 function:subsystem,
 function:temperature,
 function:timers,
@@ -323,39 +325,22 @@ temperature:upper_function,Koeler
 temperature:upper_threshold,Koeler drempelwaarde
 temperature:warn_delete,Deze actie verwijderd
 temperature:warn_reset,
+timers:action,
 timers:after,Na
 timers:and_then,AEn Daarna
-timers:day_required,Dag is nodig
-timers:duration_required,Tijdsduur is nodig
-timers:equipment,Apparatuur
-timers:equipment:off,Uit
-timers:equipment:on,Aan
-timers:equipment:revert,Omkeren
-timers:equipment_action,
-timers:equipment_required,Apparatuur is nodig
+timers:duration,
 timers:function,Functie
-timers:hour_required,Uur is nodig
-timers:macro,Macro Naam
-timers:macros,Macros
 timers:message,Bericht
-timers:message_required,Bericht is nodig
-timers:minute_required,Minuut is nodig
-timers:name_required,Naam is nodig
-timers:on_required,Ingeschakeld is nodig
-timers:reminder,Reminder
+timers:revert,
 timers:sec,sec
-timers:second_required,Seconde is nodig
 timers:stay_off,Uit blijven
 timers:stay_on,Aan blijven
 timers:subject,Onderwerp
-timers:subject_required,Onderwerp is nodig
-timers:timer_status_required,Timer Status is nodig
+timers:title_delete,
 timers:turn_back_off,Terug uitschakelen
 timers:turn_back_on,Terug inschakelen
 timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
-timers:type_required,Type is nodig
-timers:validation_error,De Timer instellingen kunnen niet opgeslaan worden door validatiefouten. Gelieve deze te corrigeren en opnieuw te proberen.
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,

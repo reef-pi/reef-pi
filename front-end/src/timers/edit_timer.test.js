@@ -126,7 +126,7 @@ describe('<EditTimer />', () => {
     wrapper.find({component: 'select', name: 'type'}).simulate('change', {target: {name: 'type', value: 'equipment'}})
 
     expect(changeHandler.mock.calls.length).toBe(2)
-    expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '', on: true, revert: false, duration: 60 })
+    expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '', on: true, revert: true, duration: 60 })
   })
 
   it('EditTimer /> should set reminder target when reminder is selected', () => {

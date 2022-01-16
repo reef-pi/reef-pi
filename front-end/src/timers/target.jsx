@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { ErrorFor, NameFor, ShowError } from '../utils/validation_helper'
 import { Field } from 'formik'
 import classNames from 'classnames'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 import BooleanSelect from '../ui_components/boolean_select'
 
 const target = (props) => {
@@ -44,7 +44,7 @@ const target = (props) => {
       <>
         <div className={classNames('col-12 col-sm-6 col-lg-3 order-lg-4')}>
           <div className='form-group'>
-            <label htmlFor='target.id'>{i18next.t(kind)}</label>
+            <label htmlFor='target.id'>{i18n.t('function:' + kind)}</label>
             <Field
               name={NameFor(props.name, 'id')}
               component='select'
@@ -53,7 +53,7 @@ const target = (props) => {
                 'is-invalid': ShowError(NameFor(props.name, 'id'), props.touched, props.errors)
               })}
             >
-              <option value='' className='d-none'>-- {i18next.t('select')} --</option>
+              <option value='' className='d-none'>-- {i18n.t('select')} --</option>
               {subsystemOptions(kind)}
             </Field>
             <ErrorFor {...props} name={NameFor(props.name, 'id')} />
@@ -61,7 +61,7 @@ const target = (props) => {
         </div>
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='on'>{i18next.t('timers:equipment_action')}</label>
+            <label htmlFor='on'>{i18n.t('timers:action')}</label>
             <Field
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
@@ -70,8 +70,8 @@ const target = (props) => {
                 'is-invalid': ShowError(NameFor(props.name, 'on'), props.touched, props.errors)
               })}
             >
-              <option value='true'>{i18next.t('timers:turn_on')}</option>
-              <option value='false'>{i18next.t('timers:turn_off')}</option>
+              <option value='true'>{i18n.t('timers:turn_on')}</option>
+              <option value='false'>{i18n.t('timers:turn_off')}</option>
             </Field>
             <ErrorFor {...props} name={NameFor(props.name, 'on')} />
           </div>
@@ -79,7 +79,7 @@ const target = (props) => {
 
         <div className='col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2'>
           <div className='form-group'>
-            <label htmlFor='target.revert'>{i18next.t('timers:and_then')}</label>
+            <label htmlFor='target.revert'>{i18n.t('timers:and_then')}</label>
             <Field
               name={NameFor(props.name, 'revert')}
               component={BooleanSelect}
@@ -88,8 +88,8 @@ const target = (props) => {
                 'is-invalid': ShowError(NameFor(props.name, 'revert'), props.touched, props.errors)
               })}
             >
-              <option value='false'>{props.target.on ? i18next.t('timers:stay_on') : i18next.t('timers:stay_off')}</option>
-              <option value='true'>{props.target.on ? i18next.t('timers:turn_back_off') : i18next.t('timers:turn_back_on')}</option>
+              <option value='false'>{props.target.on ? i18n.t('timers:stay_on') : i18n.t('timers:stay_off')}</option>
+              <option value='true'>{props.target.on ? i18n.t('timers:turn_back_off') : i18n.t('timers:turn_back_on')}</option>
             </Field>
             <ErrorFor {...props} name={NameFor(props.name, 'revert')} />
           </div>
@@ -97,7 +97,7 @@ const target = (props) => {
 
         <div className={classNames('col-12 col-sm-4 col-lg-3 order-lg-6 col-xl-2', { 'd-none': props.target.revert === false })}>
           <div className='form-group'>
-            <label htmlFor='target.duration'>{i18next.t('timers:after')}</label>
+            <label htmlFor='target.duration'>{i18n.t('timers:after')}</label>
             <div className='input-group'>
               <Field
                 name={NameFor(props.name, 'duration')}
@@ -108,9 +108,9 @@ const target = (props) => {
               />
               <div className='input-group-append'>
                 <span className='input-group-text d-none d-lg-flex'>
-                  {i18next.t('second_s')}
+                  {i18n.t('second_s')}
                 </span>
-                <span className='input-group-text d-flex d-lg-none'>{i18next.t('timers:sec')}</span>
+                <span className='input-group-text d-flex d-lg-none'>{i18n.t('timers:sec')}</span>
               </div>
               <ErrorFor {...props} name={NameFor(props.name, 'duration')} />
             </div>
@@ -125,7 +125,7 @@ const target = (props) => {
       <>
         <div className='col-12 order-lg-7 col-xl-6'>
           <div className='form-group'>
-            <label htmlFor='title'>{i18next.t('timers:subject')}</label>
+            <label htmlFor='title'>{i18n.t('timers:subject')}</label>
             <Field
               name={NameFor(props.name, 'title')}
               disabled={props.readOnly}
@@ -139,7 +139,7 @@ const target = (props) => {
 
         <div className='col-12 order-lg-7 col-xl-6 offset-xl-6'>
           <div className='form-group'>
-            <label htmlFor='message'>{i18next.t('timers:message')}</label>
+            <label htmlFor='message'>{i18n.t('timers:message')}</label>
             <Field
               component='textarea'
               name={NameFor(props.name, 'message')}

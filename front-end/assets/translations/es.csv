@@ -186,11 +186,13 @@ fatal_error:message,Algo salió mal y la interfaz de usuario ya no puede contact
 fatal_error:troubleshoot,Solucionar Problemas
 function:alert,alerta
 function:ato,ATO
+function:camera,
 function:doser,dosificador
 function:equipment,equipo
 function:lightings,luz
 function:macro,macro
 function:phprobes,pH
+function:reminder,
 function:subsystem,
 function:temperature,temperatura
 function:timers,cronómetro
@@ -323,39 +325,22 @@ temperature:upper_function,Enfriador
 temperature:upper_threshold,Límite de Enfriador
 temperature:warn_delete,Esta accion ser à eliminada
 temperature:warn_reset,
+timers:action,
 timers:after,Despues
 timers:and_then,Luego
-timers:day_required,Coloca un dia
-timers:duration_required,Duracion es requerido
-timers:equipment,Equipo
-timers:equipment:off,Apagado
-timers:equipment:on,Encendido
-timers:equipment:revert,Revertir
-timers:equipment_action,Acción
-timers:equipment_required,Selecciona un Equipo
+timers:duration,
 timers:function,Funcion
-timers:hour_required,Coloca una hora
-timers:macro,Nombre del Macro
-timers:macros,Macros
 timers:message,Mensaje
-timers:message_required,Escribe un Mensaje
-timers:minute_required,Coloca los minutos
-timers:name_required,Coloca un Nombre
-timers:on_required,Encendido es requerido
-timers:reminder,Recordatorio
+timers:revert,
 timers:sec,seg
-timers:second_required,Coloca los segundos
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
 timers:subject,Asunto
-timers:subject_required,Escribe un Asunto
-timers:timer_status_required,el estado del Cronometro es requerido
+timers:title_delete,
 timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
-timers:type_required,Selecciona un tipo
-timers:validation_error,La configuración no se puede guardar debido a errores de validación. Corrija los errores e inténtelo de nuevo.
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,

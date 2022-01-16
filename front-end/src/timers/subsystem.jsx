@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import i18next from 'i18next'
+import i18n from 'utils/i18n'
 
 export default class Subsystem extends React.Component {
   constructor (props) {
@@ -96,13 +96,13 @@ export default class Subsystem extends React.Component {
 
   render () {
     const eqName = this.state.name
-    const eqAction = this.state.on ? 'on' : 'off'
+    const eqAction = i18n.t((this.state.on) ? 'on' : 'off')
     let durationUI = <div />
     if (this.state.revert) {
       durationUI = (
         <div className='row'>
           <div className='col'>
-            <label> Duration</label>
+            <label>{i18n.t('timers:duration')}</label>
           </div>
           <div className='col'>
             <input
@@ -113,7 +113,7 @@ export default class Subsystem extends React.Component {
               disabled={this.props.disabled}
               defaultValue={this.state.duration}
             />
-            ({i18next.t('second_s')})
+            ({i18n.t('second_s')})
           </div>
         </div>
       )
@@ -121,7 +121,7 @@ export default class Subsystem extends React.Component {
     return (
       <div className='container'>
         <div className='row'>
-          <div className='col'>{i18next.t(this.props.kind)}</div>
+          <div className='col'>{i18n.t(this.props.kind)}</div>
           <div className='col'>
             <div className='dropdown'>
               <button
@@ -138,7 +138,7 @@ export default class Subsystem extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <label className='col'> {i18next.t('action')}</label>
+          <label className='col'>{i18n.t('timers:action')}</label>
           <span className='col'>
             <div className='dropdown'>
               <button
@@ -152,12 +152,10 @@ export default class Subsystem extends React.Component {
               </button>
               <div className='dropdown-menu'>
                 <a className='dropdown-item' onClick={this.setAction(true)}>
-                  {' '}
-                  {i18next.t('timers:' + this.props.kind + ':on')}{' '}
+                  {i18n.t('on')}
                 </a>
                 <a className='dropdown-item' onClick={this.setAction(false)}>
-                  {' '}
-                  {i18next.t('timers:' + this.props.kind + ':off')}{' '}
+                  {i18n.t('off')}
                 </a>
               </div>
             </div>
@@ -165,7 +163,7 @@ export default class Subsystem extends React.Component {
         </div>
         <div className='row'>
           <div className='col'>
-            <label> {i18next.t('timers:' + this.props.kind + ':revert')} </label>
+            <label>{i18n.t('timers:revert')}</label>
           </div>
           <div className='col'>
             <input
