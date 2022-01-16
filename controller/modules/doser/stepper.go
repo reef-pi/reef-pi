@@ -7,8 +7,8 @@ import (
 )
 
 //https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/
-//swagger:model drv8322
-type DRV8322 struct {
+//swagger:model drv8825
+type DRV8825 struct {
 	StepPin       string  `json:"step_pin"`
 	DirectionPin  string  `json:"direction_pin"`
 	SPR           uint    `json:"spr"` // steps per revolution
@@ -24,7 +24,7 @@ type DRV8322 struct {
 const _defaultDelay = 208000
 
 //	go r.Dose(cal.Speed, cal.Duration)
-func (d *DRV8322) Step(outlets *connectors.Outlets, count int) error {
+func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
 	delay := d.Delay
 	if delay == 0 {
 		delay = _defaultDelay
@@ -87,7 +87,7 @@ func (d *DRV8322) Step(outlets *connectors.Outlets, count int) error {
 	return nil
 }
 
-func (d *DRV8322) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
+func (d *DRV8825) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
 	msPinA, err := outlets.HalPin(d.MSPinA)
 	if err != nil {
 		return err
@@ -112,7 +112,7 @@ func (d *DRV8322) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
 	return nil
 }
 
-func (d *DRV8322) Dose(outlets *connectors.Outlets, volume float64) error {
+func (d *DRV8825) Dose(outlets *connectors.Outlets, volume float64) error {
 	steps := (volume / d.VPR) * float64(d.SPR)
 	log.Println("doser sub system: Executing stepper driver. Volume: ", volume, "SPR:", d.SPR, "vpr:", d.VPR, "steps:", steps)
 	return d.Step(outlets, int(steps))

@@ -27,7 +27,7 @@ type Pump struct {
 	Jack     string         `json:"jack"`
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
-	Stepper  *DRV8322       `json:"stepper"`
+	Stepper  *DRV8825       `json:"stepper"`
 	Type     string         `json:"type"`
 }
 
