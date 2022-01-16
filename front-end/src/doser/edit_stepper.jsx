@@ -29,12 +29,6 @@ const EditStepper = ({
   }
   return (
     <div className='row'>
-      <div className='row'>
-        <div className='row form-group'>
-          <label htmlFor='stepper'>{i18next.t('stepper')}</label>
-        </div>
-      </div>
-
       <div className='col'>
         <div className='form-group'>
           <label htmlFor='step_pin'>{i18next.t('doser:step_pin')}</label>
@@ -177,7 +171,6 @@ const EditStepper = ({
             name='stepper.direction'
             disabled={readOnly}
             component={BooleanSelect}
-            disabled={readOnly}
             className={classNames('custom-select', {
               'is-invalid': ShowError('stepper.direction', touched, errors)
             })}

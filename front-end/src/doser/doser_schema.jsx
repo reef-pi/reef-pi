@@ -17,6 +17,7 @@ const Stepperchema = Yup.object().shape({
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
     .required(i18n.t('validation:name_required')),
+  type: Yup.string(),
   jack: Yup.string()
     .required(i18n.t('validation:selection_required')),
   pin: Yup.string()
