@@ -1,6 +1,19 @@
 import * as Yup from 'yup'
 import i18n from 'utils/i18n'
 
+const Stepperchema = Yup.object().shape({
+  direction_pin: Yup.string().required(i18n.t('validation:selection_required')),
+  step_pin: Yup.string().required(i18n.t('validation:selection_required')),
+  ms_pin_a: Yup.string().required(i18n.t('validation:selection_required')),
+  ms_pin_b: Yup.string().required(i18n.t('validation:selection_required')),
+  ms_pin_c: Yup.string().required(i18n.t('validation:selection_required')),
+  spr: Yup.number().required(i18n.t('validation:number_required')),
+  delay: Yup.number().required(i18n.t('validation:number_required')),
+  vpr: Yup.number().required(i18n.t('validation:number_required')),
+  direction: Yup.bool().required(i18n.t('validation:selection_required')),
+  microstepping: Yup.string().required(i18n.t('validation:selection_required'))
+})
+
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
     .required(i18n.t('validation:name_required')),
@@ -8,6 +21,7 @@ const DoserSchema = Yup.object().shape({
     .required(i18n.t('validation:selection_required')),
   pin: Yup.string()
     .required(i18n.t('validation:selection_required')),
+  stepper: Stepperchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
   duration: Yup.number()
@@ -21,7 +35,7 @@ const DoserSchema = Yup.object().shape({
     .max(100, i18n.t('validation:integer_max_required')),
   month: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    // cron expression: 
+    // cron expression:
     // either a joker '*'
     // or a number (range depends on field, some accept slightly too much)
     //    optionally followed by a single range '-' or increment '/', and same digits
@@ -42,7 +56,7 @@ const DoserSchema = Yup.object().shape({
     .matches(/^(\*|[1-5]?\d([-/][1-5]?\d)?|[1-5]?\d(,[1-5]?\d)*)$/, i18n.t('validation:cron_required')),
   second: Yup.string()
     .required(i18n.t('validation:cron_nojoker_required'))
-    .matches(/^([1-5]?\d([-/][1-5]?\d)?|[1-5]?\d(,[1-5]?\d)*)$/, i18n.t('validation:cron_nojoker_required')),
+    .matches(/^([1-5]?\d([-/][1-5]?\d)?|[1-5]?\d(,[1-5]?\d)*)$/, i18n.t('validation:cron_nojoker_required'))
 })
 
 export default DoserSchema

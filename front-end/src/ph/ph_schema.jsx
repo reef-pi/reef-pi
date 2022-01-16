@@ -20,7 +20,7 @@ const PhSchema = Yup.object().shape({
         return schema
           .required(i18n.t('validation:number_required'))
           .typeError(i18n.t('validation:number_required'))
-          .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('ph:alert_below'), b: i18n.t('ph:alert_above')}), function (min) {
+          .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('ph:alert_below'), b: i18n.t('ph:alert_above') }), function (min) {
             return min < this.parent.maxAlert
           })
       } else { return schema }
@@ -31,7 +31,7 @@ const PhSchema = Yup.object().shape({
         return schema
           .required(i18n.t('validation:number_required'))
           .typeError(i18n.t('validation:number_required'))
-          .test('greaterThan', i18n.t('validation:a_must_be_greater_than_b', { a: i18n.t('ph:alert_above'), b: i18n.t('ph:alert_below')}), function (max) {
+          .test('greaterThan', i18n.t('validation:a_must_be_greater_than_b', { a: i18n.t('ph:alert_above'), b: i18n.t('ph:alert_below') }), function (max) {
             return max > this.parent.minAlert
           })
       } else { return schema }
@@ -95,7 +95,7 @@ const PhSchema = Yup.object().shape({
         return schema
           .required(i18n.t('validation:number_required'))
           .typeError(i18n.t('validation:number_required'))
-          .min(0,i18n.t('validation:integer_min_required'))
+          .min(0, i18n.t('validation:integer_min_required'))
           .test('lessThan', i18n.t('ph:hysteresis_less_than'), function (hysteresis) {
             if (this.parent.lowerFunction === undefined || this.parent.lowerFunction === '') { return true }
             if (this.parent.upperFunction === undefined || this.parent.upperFunction === '') { return true }

@@ -21,6 +21,7 @@ class doser extends React.Component {
     this.handleCreateDoser = this.handleCreateDoser.bind(this)
     this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
+    this.valuesToDoser = this.valuesToDoser.bind(this)
   }
 
   handleToggleAddDoserDiv () {
@@ -60,6 +61,7 @@ class doser extends React.Component {
               <DoserForm
                 onSubmit={this.handleUpdateDoser}
                 jacks={this.props.jacks}
+                outlets={this.props.outlets}
                 doser={doser}
               />
             </Collapsible>
@@ -73,10 +75,12 @@ class doser extends React.Component {
       name: values.name,
       jack: values.jack,
       pin: parseInt(values.pin),
+      stepper: values.stepper,
       regiment: {
         enable: values.enable,
         duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
+        volume: parseFloat(values.volume),
         schedule: {
           month: values.month,
           week: values.week,
@@ -129,7 +133,7 @@ class doser extends React.Component {
   render () {
     let newDoser = null
     if (this.state.addDoser) {
-      newDoser = <DoserForm onSubmit={this.handleCreateDoser} jacks={this.props.jacks} />
+      newDoser = <DoserForm onSubmit={this.handleCreateDoser} jacks={this.props.jacks} outlets={this.props.outlets} />
     }
 
     return (
@@ -159,7 +163,8 @@ class doser extends React.Component {
 const mapStateToProps = state => {
   return {
     dosers: state.dosers,
-    jacks: state.jacks
+    jacks: state.jacks,
+    outlets: state.outlets
   }
 }
 
