@@ -51,7 +51,7 @@ describe('<EditPh />', () => {
         isValid
       />
     )
-    wrapper.find('[component][name="jack"]').simulate('change', { target: { value: 1 } })
+    wrapper.find('[component][name="type"]').simulate('change', { target: { value: 'dcpump' } })
   })
 
   it('<EditDoser /> should submit', () => {

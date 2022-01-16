@@ -170,10 +170,28 @@ dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
 doser:calibrate,Kalibrieren
 doser:calibration:run,Start
+doser:delay,
+doser:direction,
+doser:direction_pin,
 doser:doser_usage,Pumpennutzung
 doser:duration,Dauer
+doser:microstep:1/16,
+doser:microstep:1/2,
+doser:microstep:1/32,
+doser:microstep:1/4,
+doser:microstep:1/8,
+doser:microstep:full,
+doser:microstepping,
+doser:ms_pin_a,
+doser:ms_pin_b,
+doser:ms_pin_c,
 doser:speed,Geschwindigkeit
+doser:spr,
+doser:step_pin,
 doser:title_delete,{{name}} löschen?
+doser:type,
+doser:volume,
+doser:vpr,
 doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)

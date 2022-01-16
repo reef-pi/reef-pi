@@ -6,20 +6,7 @@ import (
 	cron "github.com/robfig/cron/v3"
 )
 
-//swagger:model dosingRegiment
-type DosingRegiment struct {
-	Enable   bool     `json:"enable"`
-	Schedule Schedule `json:"schedule"`
-	Duration float64  `json:"duration"`
-	Speed    float64  `json:"speed"`
-}
-
-//swagger:model doserCalibrationDetails
-type CalibrationDetails struct {
-	Speed    float64 `json:"speed"`
-	Duration float64 `json:"duration"`
-}
-
+//swagger:model doserSchedule
 type Schedule struct {
 	Day    string `json:"day"`
 	Hour   string `json:"hour"`

@@ -7,9 +7,18 @@ import (
 
 	cron "github.com/robfig/cron/v3"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
+
+//swagger:model dosingRegiment
+type DosingRegiment struct {
+	Enable   bool     `json:"enable"`
+	Schedule Schedule `json:"schedule"`
+	Duration float64  `json:"duration"`
+	Speed    float64  `json:"speed"`
+	Volume   float64  `json:"volume"`
+}
 
 // swagger:model pump
 type Pump struct {
@@ -18,6 +27,8 @@ type Pump struct {
 	Jack     string         `json:"jack"`
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
+	Stepper  *DRV8825       `json:"stepper"`
+	Type     string         `json:"type"`
 }
 
 func (c *Controller) Get(id string) (Pump, error) {
@@ -56,17 +67,28 @@ func (c *Controller) List() ([]Pump, error) {
 	return pumps, c.c.Store().List(Bucket, fn)
 }
 
+//swagger:model doserCalibrationDetails
+type CalibrationDetails struct {
+	Speed    float64 `json:"speed"`
+	Duration float64 `json:"duration"`
+	Volume   float64 `json:"volume"`
+}
+
 func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 	p, err := c.Get(id)
 	if err != nil {
 		return err
 	}
 	r := &Runner{
-		pump:  &p,
-		jacks: c.jacks,
+		pump: &p,
+		dm:   c.c.DM(),
 	}
 	log.Println("doser subsystem: calibration run for:", p.Name)
-	go r.Dose(cal.Speed, cal.Duration)
+	if p.Stepper != nil {
+		go p.Stepper.Dose(c.c.DM().Outlets(), cal.Volume)
+	} else {
+		go r.PWMDose(cal.Speed, cal.Duration)
+	}
 	return nil
 }
 
@@ -133,10 +155,10 @@ func (c *Controller) Delete(id string) error {
 	return c.c.Store().Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(jacks *connectors.Jacks, t telemetry.StatsManager) cron.Job {
+func (p *Pump) Runner(dm *device_manager.DeviceManager, t telemetry.StatsManager) cron.Job {
 	return &Runner{
-		pump:     p,
-		jacks:    jacks,
+		dm:       dm,
 		statsMgr: t,
+		pump:     p,
 	}
 }

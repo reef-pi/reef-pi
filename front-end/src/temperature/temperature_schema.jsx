@@ -59,13 +59,13 @@ const TemperatureSchema = Yup.object().shape({
         return schema
           .when('heater', (heater, schema) => {
             if (heater === undefined || heater === '') { return schema }
-              return schema
-                .required(i18n.t('validation:number_required'))
-                .typeError(i18n.t('validation:number_required'))
-                .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('temperature:lower_threshold'), b: i18n.t('temperature:upper_threshold') }), function (val) {
-                  if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
-                  return val < this.parent.max
-                })
+            return schema
+              .required(i18n.t('validation:number_required'))
+              .typeError(i18n.t('validation:number_required'))
+              .test('lessThan', i18n.t('validation:a_must_be_less_than_b', { a: i18n.t('temperature:lower_threshold'), b: i18n.t('temperature:upper_threshold') }), function (val) {
+                if (this.parent.cooler === undefined || this.parent.cooler === '') { return true }
+                return val < this.parent.max
+              })
           })
       } else { return schema }
     }),
@@ -103,8 +103,8 @@ const TemperatureSchema = Yup.object().shape({
           .typeError(i18n.t('validation:number_required'))
           .test('lessThan', i18n.t('temperature:hysteresis_less_than'), function (hyst) {
             if (this.parent.heater === undefined || this.parent.heater === '') { return true }
-              return hyst < (this.parent.max - this.parent.min)
-            })
+            return hyst < (this.parent.max - this.parent.min)
+          })
       } else { return schema }
     })
 })

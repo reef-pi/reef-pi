@@ -401,9 +401,9 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='hysteresis'
-                readOnly={readOnly || values.control === ''
-                         || values.lowerFunction === undefined || values.lowerFunction === ''
-                         || values.upperFunction === undefined || values.upperFunction === ''}
+                readOnly={readOnly || values.control === '' ||
+                         values.lowerFunction === undefined || values.lowerFunction === '' ||
+                         values.upperFunction === undefined || values.upperFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('hysteresis', touched, errors)
                 })}

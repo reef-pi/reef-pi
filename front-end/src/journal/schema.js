@@ -7,7 +7,7 @@ const JournalSchema = Yup.object().shape({
   description: Yup.string()
     .required(i18n.t('validation:entry_required')),
   unit: Yup.string()
-    .required(i18n.t('validation:entry_required'))   //TODO: really required?
+    .required(i18n.t('validation:entry_required')) // TODO: really required?
 })
 
 export default JournalSchema

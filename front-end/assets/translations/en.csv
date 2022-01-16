@@ -58,7 +58,7 @@ rows,Rows
 running,running
 save,Save
 schedule,Schedule
-sec,sec
+sec,second
 second_s,second(s)
 select,Select
 select_file,Please select a file
@@ -170,10 +170,28 @@ dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
 doser:calibrate,Calibrate
 doser:calibration:run,Run
+doser:delay,Delay
+doser:direction, Direction
+doser:direction_pin,Direction Pin
 doser:doser_usage,Pump Usage
 doser:duration,Duration
+doser:microstep:1/16,1/16
+doser:microstep:1/2,Half
+doser:microstep:1/32,1/32
+doser:microstep:1/4,1/4
+doser:microstep:1/8,1/8
+doser:microstep:full,Full
+doser:microstepping,Microstepping
+doser:ms_pin_a,MicroStepping Pin A
+doser:ms_pin_b,MicroStepping Pin B
+doser:ms_pin_c,MicroStepping Pin C 
 doser:speed,Speed
+doser:spr,Steps Per Rotation
+doser:step_pin,Step Pin
 doser:title_delete,Delete {{name}} ?
+doser:type,Type
+doser:volume,Volume
+doser:vpr,Volume Per Rotation
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)

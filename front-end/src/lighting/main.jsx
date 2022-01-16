@@ -106,7 +106,7 @@ class main extends React.Component {
     const channels = {}
     jack.pins.map((pin, idx) => (
       channels[pin] = {
-        color: '#000000',  // FIXME this avoids undefined color
+        color: '#000000', // FIXME this avoids undefined color
         manual: false,
         min: 0,
         max: 100,
@@ -212,8 +212,8 @@ class main extends React.Component {
       if (currentMode === 'auto') {
         newMode = 'manual'
       }
-      let oldLabel = this.getModeLabel(currentMode)
-      let newLabel = this.getModeLabel(newMode)
+      const oldLabel = this.getModeLabel(currentMode)
+      const newLabel = this.getModeLabel(newMode)
       const message = (
         <div>
           <p>
