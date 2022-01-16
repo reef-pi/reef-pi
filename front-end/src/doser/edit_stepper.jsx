@@ -136,7 +136,7 @@ const EditStepper = ({
 
       <div className='col'>
         <div className='form-group'>
-          <label htmlFor='vpr'>{i18n.t('stepper:vpr')}</label>
+          <label htmlFor='vpr'>{i18n.t('doser:vpr')}</label>
           <Field
             name='stepper.vpr'
             disabled={readOnly}
@@ -151,7 +151,7 @@ const EditStepper = ({
 
       <div className='col'>
         <div className='form-group'>
-          <label htmlFor='delay'>{i18n.t('stepper:delay')}</label>
+          <label htmlFor='delay'>{i18n.t('doser:delay')}</label>
           <Field
             name='stepper.delay'
             disabled={readOnly}
@@ -193,12 +193,12 @@ const EditStepper = ({
               'is-invalid': ShowError('stepper.microstepping', touched, errors)
             })}
           >
-            <option value='Full'>{i18n.t('stepper:microstep:full')}</option>
-            <option value='Half'>{i18n.t('stepper:microstep:1/2')}</option>
-            <option value='1/4'>{i18n.t('stepper:microstep:1/4')}</option>
-            <option value='1/8'>{i18n.t('stepper:microstep:1/8')}</option>
-            <option value='1/16'>{i18n.t('stepper:microstep:1/16')}</option>
-            <option value='1/32'>{i18n.t('stepper:microstep:1/32')}</option>
+            <option value='Full'>{i18n.t('doser:microstep:full')}</option>
+            <option value='Half'>{i18n.t('doser:microstep:1/2')}</option>
+            <option value='1/4'>{i18n.t('doser:microstep:1/4')}</option>
+            <option value='1/8'>{i18n.t('doser:microstep:1/8')}</option>
+            <option value='1/16'>{i18n.t('doser:microstep:1/16')}</option>
+            <option value='1/32'>{i18n.t('doser:microstep:1/32')}</option>
           </Field>
           <ErrorFor errors={errors} touched={touched} name='stepper.microstepping' />
         </div>
