@@ -22,7 +22,7 @@ type DRV8825 struct {
 	Delay         float64 `json:"delay"`
 }
 
-const _defaultDelay = 208000
+const _defaultDelay = 20800000
 
 func (d *DRV8825) IsValid() error {
 	if d.StepPin == "" {
@@ -66,6 +66,10 @@ func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
 	if err != nil {
 		return err
 	}
+	if err := dPin.Write(d.Direction); err != nil {
+		return err
+	}
+
 	switch d.MicroStepping {
 	case "Full":
 		if err := d.Microstep(outlets, false, false, false); err != nil {
@@ -73,21 +77,25 @@ func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
 		}
 	case "Half":
 		delay = delay / 2
+		count = count * 2
 		if err := d.Microstep(outlets, true, false, false); err != nil {
 			return err
 		}
 	case "1/4":
 		delay = delay / 4
+		count = count * 4
 		if err := d.Microstep(outlets, false, true, false); err != nil {
 			return err
 		}
 	case "1/8":
 		delay = delay / 8
+		count = count * 8
 		if err := d.Microstep(outlets, true, true, false); err != nil {
 			return err
 		}
 	case "1/16":
 		delay = delay / 16
+		count = count * 16
 		if err := d.Microstep(outlets, false, false, true); err != nil {
 			return err
 		}
@@ -95,14 +103,12 @@ func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
 		fallthrough
 	default:
 		delay = delay / 32
+		count = count * 32
 		if err := d.Microstep(outlets, true, false, true); err != nil {
 			return err
 		}
 	}
 
-	if err := dPin.Write(d.Direction); err != nil {
-		return err
-	}
 	for i := 0; i < count; i++ {
 		if err := sPin.Write(true); err != nil {
 			return err
@@ -121,11 +127,11 @@ func (d *DRV8825) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
 	if err != nil {
 		return err
 	}
-	msPinB, err := outlets.HalPin(d.MSPinA)
+	msPinB, err := outlets.HalPin(d.MSPinB)
 	if err != nil {
 		return err
 	}
-	msPinC, err := outlets.HalPin(d.MSPinA)
+	msPinC, err := outlets.HalPin(d.MSPinC)
 	if err != nil {
 		return err
 	}
@@ -142,7 +148,7 @@ func (d *DRV8825) Microstep(outlets *connectors.Outlets, a, b, c bool) error {
 }
 
 func (d *DRV8825) Dose(outlets *connectors.Outlets, volume float64) error {
-	steps := (volume / d.VPR) * float64(d.SPR)
+	steps := (volume / d.VPR) * float64(d.SPR) * 4
 	log.Println("doser sub system: Executing stepper driver. Volume: ", volume, "SPR:", d.SPR, "vpr:", d.VPR, "steps:", steps)
 	return d.Step(outlets, int(steps))
 }
