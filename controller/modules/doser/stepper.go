@@ -1,6 +1,7 @@
 package doser
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"log"
 	"time"
@@ -22,6 +23,34 @@ type DRV8825 struct {
 }
 
 const _defaultDelay = 208000
+
+func (d *DRV8825) IsValid() error {
+	if d.StepPin == "" {
+		return fmt.Errorf("step pin is not defined")
+	}
+	if d.DirectionPin == "" {
+		return fmt.Errorf("direction pin is not defined")
+	}
+	if d.SPR <= 0 {
+		return fmt.Errorf("steps per rotaion must be positive")
+	}
+	if d.VPR <= 0 {
+		return fmt.Errorf("volume per rotation must be positive")
+	}
+	if d.MSPinA == "" {
+		return fmt.Errorf("micro stepping pin A is not defined")
+	}
+	if d.MSPinB == "" {
+		return fmt.Errorf("micro stepping pin B is not defined")
+	}
+	if d.MSPinC == "" {
+		return fmt.Errorf("micro stepping pin C is not defined")
+	}
+	if d.Delay <= 0 {
+		return fmt.Errorf("delay must be positive")
+	}
+	return nil
+}
 
 //	go r.Dose(cal.Speed, cal.Duration)
 func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
