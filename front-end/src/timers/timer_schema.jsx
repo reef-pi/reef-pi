@@ -30,7 +30,7 @@ const TimerSchema = Yup.object().shape({
     .required(i18n.t('validation:selection_required')),
   month: Yup.string()
     .required(i18n.t('validation:cron_required'))
-    // cron expression: 
+    // cron expression:
     // either a joker '*'
     // or a number (range depends on field, some accept slightly too much)
     //    optionally followed by a single range '-' or increment '/', and same digits

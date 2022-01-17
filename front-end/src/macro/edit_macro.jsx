@@ -33,8 +33,7 @@ const EditMacro = ({
   }
 
   const nosteps = (len) => {
-    if (len < 1)
-      return ( <div className='alert text-danger'> {i18n.t('none')}</div> )
+    if (len < 1) { return (<div className='alert text-danger'> {i18n.t('none')}</div>) }
   }
 
   return (

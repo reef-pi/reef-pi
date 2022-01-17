@@ -31,13 +31,39 @@ type Pump struct {
 	Type     string         `json:"type"`
 }
 
+func (p *Pump) IsValid() error {
+	if p.Name == "" {
+		return fmt.Errorf("name can not be empty")
+	}
+	switch p.Type {
+	case "stepper":
+		if p.Regiment.Volume <= 0 {
+			return fmt.Errorf("dosing volume must be positive")
+		}
+		if p.Stepper == nil {
+			return fmt.Errorf("stepper configuration is not defined")
+		}
+		if err := p.Stepper.IsValid(); err != nil {
+			return err
+		}
+	default:
+		if p.Jack == "" {
+			return fmt.Errorf("jack is not defined")
+		}
+		if p.Regiment.Duration < 0 {
+			return fmt.Errorf("Invalid Duration")
+		}
+	}
+	return p.Regiment.Schedule.Validate()
+}
+
 func (c *Controller) Get(id string) (Pump, error) {
 	var p Pump
 	return p, c.c.Store().Get(Bucket, id, &p)
 }
 
 func (c *Controller) Create(p Pump) error {
-	if err := Validate(p); err != nil {
+	if err := p.IsValid(); err != nil {
 		return err
 	}
 	fn := func(id string) interface{} {
@@ -93,7 +119,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 }
 
 func (c *Controller) Update(id string, p Pump) error {
-	if err := Validate(p); err != nil {
+	if err := p.IsValid(); err != nil {
 		return err
 	}
 	p.ID = id
@@ -112,19 +138,7 @@ func (c *Controller) Update(id string, p Pump) error {
 	return nil
 }
 
-func Validate(p Pump) error {
-	if p.Regiment.Duration < 0 {
-		return fmt.Errorf("Invalid Duration")
-	}
-	return nil
-}
-
 func (c *Controller) Schedule(id string, r DosingRegiment) error {
-	log.Println(r)
-	if err := r.Schedule.Validate(); err != nil {
-		log.Printf("CronSpec:'%s'\n", r.Schedule.CronSpec())
-		return err
-	}
 	p, err := c.Get(id)
 	if err != nil {
 		return err

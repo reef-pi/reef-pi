@@ -22,6 +22,7 @@ const DoserForm = withFormik({
       pin: data.pin === undefined ? '' : data.pin,
       enable: data.regiment.enable === undefined ? true : data.regiment.enable,
       duration: data.regiment.duration || 0,
+      volume: data.regiment.volume || 0,
       speed: data.regiment.speed || 0,
       month: data.regiment.schedule.month || '*',
       week: data.regiment.schedule.week || '*',
