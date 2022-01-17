@@ -2,35 +2,31 @@ import * as Yup from 'yup'
 import i18n from 'utils/i18n'
 
 const Stepperchema = Yup.object().shape({
-  direction_pin: Yup.string().required(i18n.t('validation:selection_required')),
-  step_pin: Yup.string().required(i18n.t('validation:selection_required')),
-  ms_pin_a: Yup.string().required(i18n.t('validation:selection_required')),
-  ms_pin_b: Yup.string().required(i18n.t('validation:selection_required')),
-  ms_pin_c: Yup.string().required(i18n.t('validation:selection_required')),
-  spr: Yup.number().required(i18n.t('validation:number_required')),
-  delay: Yup.number().required(i18n.t('validation:number_required')),
-  vpr: Yup.number().required(i18n.t('validation:number_required')),
-  direction: Yup.bool().required(i18n.t('validation:selection_required')),
-  microstepping: Yup.string().required(i18n.t('validation:selection_required'))
+  direction_pin: Yup.string(),
+  step_pin: Yup.string(),
+  ms_pin_a: Yup.string(),
+  ms_pin_b: Yup.string(),
+  ms_pin_c: Yup.string(),
+  spr: Yup.number(),
+  delay: Yup.number(),
+  vpr: Yup.number(),
+  direction: Yup.bool(),
+  microstepping: Yup.string()
 })
 
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
     .required(i18n.t('validation:name_required')),
   type: Yup.string(),
-  jack: Yup.string()
-    .required(i18n.t('validation:selection_required')),
-  pin: Yup.string()
-    .required(i18n.t('validation:selection_required')),
+  jack: Yup.string(),
+  pin: Yup.string(),
   stepper: Stepperchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
   duration: Yup.number()
-    .required(i18n.t('validation:number_required'))
     .typeError(i18n.t('validation:number_required'))
     .min(1, i18n.t('validation:integer_min_required')),
   speed: Yup.number()
-    .required(i18n.t('validation:number_required'))
     .typeError(i18n.t('validation:number_required'))
     .min(1, i18n.t('validation:integer_min_required'))
     .max(100, i18n.t('validation:integer_max_required')),
