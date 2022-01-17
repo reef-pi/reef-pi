@@ -76,6 +76,7 @@ class doser extends React.Component {
       jack: values.jack,
       pin: parseInt(values.pin),
       stepper: values.stepper,
+      type: values.type,
       regiment: {
         volume: parseFloat(values.volume),
         enable: values.enable,
