@@ -105,7 +105,7 @@ func TestHysteresis(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if b {
+	if b.State {
 		t.Error("Expected heater to be turned off")
 	}
 }
