@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/gorilla/mux"
@@ -21,7 +20,7 @@ type (
 		state map[string]*mockEntity
 	}
 
-	controller struct {
+	noopController struct {
 		t        telemetry.Telemetry
 		s        storage.Store
 		logError telemetry.ErrorLogger
@@ -52,13 +51,7 @@ func (m *mockSubsystem) On(id string, b bool) error {
 }
 
 func (m *mockSubsystem) Get(id string) (*mockEntity, error) {
-	m.Lock()
-	defer m.Unlock()
-	b, ok := m.state[id]
-	if ok {
-		return b, nil
-	}
-	return nil, errors.New("not found")
+	return new(mockEntity), nil
 }
 
 func NoopSubsystem() *mockSubsystem {
@@ -77,7 +70,7 @@ func TestController() (Controller, error) {
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	t := telemetry.TestTelemetry(store)
-	return &controller{
+	return &noopController{
 		t:        t,
 		s:        store,
 		logError: logError,
@@ -85,21 +78,21 @@ func TestController() (Controller, error) {
 		dm:       device_manager.New(s, store, t),
 	}, nil
 }
-func (c *controller) Telemetry() telemetry.Telemetry {
+func (c *noopController) Telemetry() telemetry.Telemetry {
 	return c.t
 }
 
-func (c *controller) Store() storage.Store {
+func (c *noopController) Store() storage.Store {
 	return c.s
 }
 
-func (c *controller) DM() *device_manager.DeviceManager {
+func (c *noopController) DM() *device_manager.DeviceManager {
 	return c.dm
 }
 
-func (c *controller) LogError(id, msg string) error {
+func (c *noopController) LogError(id, msg string) error {
 	return c.logError(id, msg)
 }
-func (c *controller) Subsystem(s string) (Subsystem, error) {
+func (c *noopController) Subsystem(s string) (Subsystem, error) {
 	return c.subFn(s)
 }
