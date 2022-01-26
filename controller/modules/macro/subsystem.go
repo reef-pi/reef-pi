@@ -81,3 +81,6 @@ func (s *Subsystem) InUse(depType, id string) ([]string, error) {
 		return deps, fmt.Errorf("unknown dep type:%s", depType)
 	}
 }
+func (s *Subsystem) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("macro subsystem does not support 'GetEntity' interface")
+}

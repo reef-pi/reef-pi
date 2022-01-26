@@ -116,3 +116,6 @@ func (c *Controller) InUse(depType, id string) ([]string, error) {
 		return deps, fmt.Errorf("unknown dep type:%s", depType)
 	}
 }
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("journal subsystem does not support 'GetEntity' interface")
+}

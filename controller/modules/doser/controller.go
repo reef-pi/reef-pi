@@ -39,6 +39,9 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		c:        c,
 	}, nil
 }
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("doser subsystem does not support 'GetEntity' interface")
+}
 
 func (c *Controller) Stop() {
 	c.runner.Stop()

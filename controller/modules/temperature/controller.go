@@ -2,6 +2,7 @@ package temperature
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync"
 
@@ -122,4 +123,8 @@ func (c *Controller) On(id string, on bool) error {
 func (c *Controller) InUse(depType, id string) ([]string, error) {
 	var deps []string
 	return deps, nil
+}
+
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("temperature subsystem does not support 'GetEntity' interface")
 }

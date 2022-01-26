@@ -38,6 +38,10 @@ func (c *Controller) On(id string, b bool) error {
 	return fmt.Errorf("Camera subsystem does not support 'on' interface")
 }
 
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("Camera subsystem does not support 'GetEntity' interface")
+}
+
 func (c *Controller) Start() {
 	go c.runPeriodically()
 }

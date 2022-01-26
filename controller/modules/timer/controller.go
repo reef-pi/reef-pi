@@ -100,3 +100,6 @@ func (c *Controller) Runner(j Job) (cron.Job, error) {
 		return nil, fmt.Errorf("Failed to find suitable job runner")
 	}
 }
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("journal subsystem does not support 'GetEntity' interface")
+}

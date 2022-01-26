@@ -12,9 +12,13 @@ import (
 )
 
 type (
+	mockEntity struct {
+		name  string
+		State bool
+	}
 	mockSubsystem struct {
 		sync.Mutex
-		state map[string]bool
+		state map[string]*mockEntity
 	}
 
 	controller struct {
@@ -26,30 +30,41 @@ type (
 	}
 )
 
+func (e *mockEntity) EName() string                { return e.name }
+func (e *mockEntity) Status() (interface{}, error) { return e.State, nil }
+
 func (m *mockSubsystem) Setup() error                        { return nil }
 func (m *mockSubsystem) LoadAPI(r *mux.Router)               {}
 func (m *mockSubsystem) Start()                              {}
 func (m *mockSubsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }
 func (m *mockSubsystem) Stop()                               {}
+func (m *mockSubsystem) GetEntity(id string) (Entity, error) { return m.Get(id) }
 func (m *mockSubsystem) On(id string, b bool) error {
+	e, err := m.Get(id)
+	if err != nil {
+		return err
+	}
+	e.State = b
 	m.Lock()
-	defer m.Unlock()
-	m.state[id] = b
+	m.state[id] = e
+	m.Unlock()
 	return nil
 }
 
-func (m *mockSubsystem) Get(id string) (bool, error) {
+func (m *mockSubsystem) Get(id string) (*mockEntity, error) {
+	m.Lock()
+	defer m.Unlock()
 	b, ok := m.state[id]
 	if ok {
 		return b, nil
 	}
-	return false, errors.New("not found")
+	return nil, errors.New("not found")
 }
 
 func NoopSubsystem() *mockSubsystem {
 	return &mockSubsystem{
 		Mutex: sync.Mutex{},
-		state: make(map[string]bool),
+		state: make(map[string]*mockEntity),
 	}
 }
 
