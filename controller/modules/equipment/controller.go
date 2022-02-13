@@ -90,3 +90,6 @@ func (c *Controller) updateOutlet(eq Equipment) error {
 	c.telemetry.EmitMetric("equipment", eq.Name+"-state", m)
 	return nil
 }
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("equipment subsystem does not support 'GetEntity' interface")
+}

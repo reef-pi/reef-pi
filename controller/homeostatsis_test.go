@@ -22,11 +22,12 @@ func testH() (*Homeostasis, storage.Store, error) {
 		Period:     2,
 		Hysteresis: 0,
 	}
+	sub := NoopSubsystem()
 	h := Homeostasis{
 		config: config,
 		t:      telemetry.TestTelemetry(store),
-		eqs:    NoopSubsystem(),
-		macros: NoopSubsystem(),
+		eqs:    sub,
+		macros: sub,
 	}
 	return &h, store, nil
 }
@@ -101,12 +102,8 @@ func TestHysteresis(t *testing.T) {
 	if o.Downer != 0 {
 		t.Error("Downer should not increase when value is within range")
 	}
-	b, err := eqs.Get(h.config.Upper)
-	if err != nil {
+	if _, err := eqs.Get(h.config.Upper); err != nil {
 		t.Error(err)
-	}
-	if b {
-		t.Error("Expected heater to be turned off")
 	}
 }
 

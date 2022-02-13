@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/gorilla/mux"
@@ -12,12 +11,16 @@ import (
 )
 
 type (
+	mockEntity struct {
+		name  string
+		State bool
+	}
 	mockSubsystem struct {
 		sync.Mutex
-		state map[string]bool
+		state map[string]*mockEntity
 	}
 
-	controller struct {
+	noopController struct {
 		t        telemetry.Telemetry
 		s        storage.Store
 		logError telemetry.ErrorLogger
@@ -26,30 +29,35 @@ type (
 	}
 )
 
+func (e *mockEntity) EName() string                { return e.name }
+func (e *mockEntity) Status() (interface{}, error) { return e.State, nil }
+
 func (m *mockSubsystem) Setup() error                        { return nil }
 func (m *mockSubsystem) LoadAPI(r *mux.Router)               {}
 func (m *mockSubsystem) Start()                              {}
 func (m *mockSubsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }
 func (m *mockSubsystem) Stop()                               {}
+func (m *mockSubsystem) GetEntity(id string) (Entity, error) { return m.Get(id) }
 func (m *mockSubsystem) On(id string, b bool) error {
+	e, err := m.Get(id)
+	if err != nil {
+		return err
+	}
+	e.State = b
 	m.Lock()
-	defer m.Unlock()
-	m.state[id] = b
+	m.state[id] = e
+	m.Unlock()
 	return nil
 }
 
-func (m *mockSubsystem) Get(id string) (bool, error) {
-	b, ok := m.state[id]
-	if ok {
-		return b, nil
-	}
-	return false, errors.New("not found")
+func (m *mockSubsystem) Get(id string) (*mockEntity, error) {
+	return new(mockEntity), nil
 }
 
 func NoopSubsystem() *mockSubsystem {
 	return &mockSubsystem{
 		Mutex: sync.Mutex{},
-		state: make(map[string]bool),
+		state: make(map[string]*mockEntity),
 	}
 }
 
@@ -62,7 +70,7 @@ func TestController() (Controller, error) {
 	s := settings.DefaultSettings
 	s.Capabilities.DevMode = true
 	t := telemetry.TestTelemetry(store)
-	return &controller{
+	return &noopController{
 		t:        t,
 		s:        store,
 		logError: logError,
@@ -70,21 +78,21 @@ func TestController() (Controller, error) {
 		dm:       device_manager.New(s, store, t),
 	}, nil
 }
-func (c *controller) Telemetry() telemetry.Telemetry {
+func (c *noopController) Telemetry() telemetry.Telemetry {
 	return c.t
 }
 
-func (c *controller) Store() storage.Store {
+func (c *noopController) Store() storage.Store {
 	return c.s
 }
 
-func (c *controller) DM() *device_manager.DeviceManager {
+func (c *noopController) DM() *device_manager.DeviceManager {
 	return c.dm
 }
 
-func (c *controller) LogError(id, msg string) error {
+func (c *noopController) LogError(id, msg string) error {
 	return c.logError(id, msg)
 }
-func (c *controller) Subsystem(s string) (Subsystem, error) {
+func (c *noopController) Subsystem(s string) (Subsystem, error) {
 	return c.subFn(s)
 }

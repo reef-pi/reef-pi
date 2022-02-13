@@ -56,7 +56,14 @@ func TestDoserAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Println(js)
-	json.NewEncoder(body).Encode(&Pump{Name: "Foo", Pin: 0, Jack: "1"})
+	json.NewEncoder(body).Encode(&Pump{
+		Name: "Foo",
+		Pin:  0,
+		Jack: "1",
+		Regiment: DosingRegiment{
+			Schedule: Schedule{"*", "*", "*", "*", "*", "*"},
+		},
+	})
 	if err := tr.Do("PUT", "/api/doser/pumps", body, nil); err != nil {
 		t.Fatal("Failed to create dosing pump using api. Error:", err)
 	}

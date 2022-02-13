@@ -14,6 +14,7 @@ type Subsystem interface {
 	Stop()
 	On(string, bool) error
 	InUse(string, string) ([]string, error)
+	GetEntity(string) (Entity, error)
 }
 
 type Controller interface {
@@ -22,4 +23,9 @@ type Controller interface {
 	Store() storage.Store
 	LogError(string, string) error
 	DM() *device_manager.DeviceManager
+}
+
+type Entity interface {
+	EName() string
+	Status() (interface{}, error)
 }

@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller"
 )
 
@@ -48,3 +49,6 @@ func (c *Controller) On(id string, on bool) error {
 }
 
 func (c *Controller) InUse(_, _ string) ([]string, error) { return []string{}, nil }
+func (c *Controller) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("system subsystem does not support 'GetEntity' interface")
+}

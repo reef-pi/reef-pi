@@ -1,6 +1,7 @@
 package journal
 
 import (
+	"fmt"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -32,3 +33,7 @@ func (s *Subsystem) Start() {}
 func (s *Subsystem) Stop() {
 }
 func (s *Subsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }
+
+func (s *Subsystem) GetEntity(id string) (controller.Entity, error) {
+	return nil, fmt.Errorf("journal subsystem does not support 'GetEntity' interface")
+}

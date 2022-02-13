@@ -29,6 +29,9 @@ type ATO struct {
 	OneShot        bool          `json:"one_shot"`
 }
 
+func (a ATO) EName() string                { return a.Name }
+func (a ATO) Status() (interface{}, error) { return ATO{}, nil }
+
 func (c *Controller) On(id string, b bool) error {
 	a, err := c.Get(id)
 	if err != nil {
