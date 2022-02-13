@@ -23,7 +23,7 @@ const EditInstance = ({
       submitForm()
     } else {
       submitForm() // Calling submit form in order to show validation errors
-      showError('The instance details cannot be saved due to validation errors.  Please correct the errors and try again.')
+      showError(i18next.t('validation:error'))
     }
   }
 
@@ -36,7 +36,7 @@ const EditInstance = ({
             onClick={onDelete}
             className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
           >
-            Delete
+            {i18next.t('delete')}
           </button>
         </div>
       )

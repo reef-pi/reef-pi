@@ -3,6 +3,7 @@ import Instance from './instance'
 import { updateInstance, fetchInstances, createInstance, deleteInstance } from 'redux/actions/instances'
 import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
+import i18next from 'i18next'
 
 class main extends React.Component {
   constructor (props) {
@@ -11,8 +12,8 @@ class main extends React.Component {
       add: false
     }
 
-    this.create = this.create.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.handleCreate = this.handleCreate.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
   }
 
   componentDidMount () {
@@ -40,7 +41,7 @@ class main extends React.Component {
   render () {
     let nEq = <div />
     if (this.state.add) {
-      nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel='Save' />
+      nEq = <InstanceForm onSubmit={this.handleCreate} actionLabel={i18next.t('save')} />
     }
     return (
       <ul className='list-group list-group-flush'>
