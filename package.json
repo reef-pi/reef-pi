@@ -38,7 +38,7 @@
     "lodash.debounce": "4.0.8",
     "lodash.mapvalues": "4.6.0",
     "marked": "^4.0.10",
-    "mini-css-extract-plugin": "2.4.5",
+    "mini-css-extract-plugin": "2.5.3",
     "popper.js": "^1.16.1",
     "postcss": "^8.4.5",
     "postcss-loader": "6.2.1",
