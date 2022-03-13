@@ -32,6 +32,21 @@ class settings extends React.Component {
     this.checkBoxComponent = this.checkBoxComponent.bind(this)
   }
 
+  static getDerivedStateFromProps (props, oldState) {
+    if (props.settings === undefined || props.settings === null) {
+      return null
+    }
+    if (Object.keys(props.settings).length === 0) {
+      return null
+    }
+    return ({
+      capabilities: props.capabilities,
+      settings: props.settings,
+      currentLanguage: oldState.currentLanguage,
+      updated: false
+    })
+  }
+
   checkBoxComponent (attr) {
     return (
       <div className='col-6 col-md-3 form-check'>
@@ -186,17 +201,6 @@ class settings extends React.Component {
         />
       </div>
     )
-  }
-
-  static getDerivedStateFromProps (props, state) {
-    if (props.settings === undefined || props.settings === null) {
-      return null
-    }
-    if (Object.keys(props.settings).length === 0) {
-      return null
-    }
-    state.settings = props.settings
-    return state
   }
 
   render () {
