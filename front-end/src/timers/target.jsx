@@ -101,6 +101,7 @@ const target = (props) => {
             <div className='input-group'>
               <Field
                 name={NameFor(props.name, 'duration')}
+                type='number'
                 readOnly={props.readOnly || props.target.revert === false}
                 className={classNames('form-control', {
                   'is-invalid': ShowError(NameFor(props.name, 'duration'), props.touched, props.errors)
