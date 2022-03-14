@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaMedkit } from 'react-icons/fa'
 import i18next from 'i18next'
-const RefreshTime = 4000
+const RefreshTime = 10000
 export default class FatalError extends React.Component {
   constructor (props) {
     super(props)
@@ -9,8 +9,8 @@ export default class FatalError extends React.Component {
       up: true
     }
   }
-
   componentDidMount () {
+
     this.timer = setInterval(() => {
       this.checkHealth()
     }, RefreshTime)
