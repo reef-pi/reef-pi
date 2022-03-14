@@ -35,6 +35,10 @@ class ph extends React.Component {
     return this.props.probes
       .sort((a, b) => SortByName(a, b))
       .map(probe => {
+        const handleToggleState = () => {
+          probe.enable = !probe.enable
+          this.props.update(probe.id, probe)
+        }
         const calibrationButton = (
           <button
             type='button'
@@ -55,6 +59,8 @@ class ph extends React.Component {
             buttons={calibrationButton}
             title={<b className='ml-2 align-middle'>{probe.name} </b>}
             onDelete={this.handleDeleteProbe}
+            onToggleState={handleToggleState}
+            enabled={probe.enable}
           >
             <PhForm
               onSubmit={this.handleUpdateProbe}
