@@ -6,6 +6,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
+	"sort"
 )
 
 func (s *Subsystem) LoadAPI(r *mux.Router) {
@@ -68,7 +69,14 @@ func (s *Subsystem) getUsage(w http.ResponseWriter, req *http.Request) {
 				log.Println("ERROR:[journal-subsystem] Failed to load usage value. ", err)
 			}
 		}
-		return s.statsMgr.Get(id)
+		stats, err := s.statsMgr.Get(id)
+		if err != nil {
+			return nil, err
+		}
+		sort.Slice(stats.Current, func(i, j int) bool {
+			return stats.Current[i].Before(stats.Current[j])
+		})
+		return stats, nil
 	}
 	utils.JSONGetResponse(fn, w, req)
 }

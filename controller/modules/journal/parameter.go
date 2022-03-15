@@ -15,13 +15,14 @@ type Parameter struct {
 }
 
 type Entry struct {
-	Value     float64 `json:"value"`
-	Timestamp string  `json:"timestamp"`
-	Comment   string  `json:"comment"`
+	Value     float64            `json:"value"`
+	Timestamp telemetry.TeleTime `json:"timestamp"`
+	Comment   string             `json:"comment"`
 }
 
-func (e Entry) Before(_ telemetry.Metric) bool {
-	return false
+func (e Entry) Before(e1 telemetry.Metric) bool {
+	et := e1.(Entry)
+	return e.Timestamp.Before(et.Timestamp)
 }
 
 func (e Entry) Rollup(m telemetry.Metric) (telemetry.Metric, bool) {
