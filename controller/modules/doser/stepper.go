@@ -13,7 +13,7 @@ type DRV8825 struct {
 	StepPin       string  `json:"step_pin"`
 	DirectionPin  string  `json:"direction_pin"`
 	SPR           uint    `json:"spr"` // steps per revolution
-	VPR           float64 `json:"vpr"` // steps per revolution
+	VPR           float64 `json:"vpr"` // volume per revolution
 	MSPinA        string  `json:"ms_pin_a"`
 	MSPinB        string  `json:"ms_pin_b"`
 	MSPinC        string  `json:"ms_pin_c"`

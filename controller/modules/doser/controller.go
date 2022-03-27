@@ -82,7 +82,10 @@ func (c *Controller) Start() {
 func (c *Controller) addToCron(p Pump) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	cronID, err := c.runner.AddJob(p.Regiment.Schedule.CronSpec(), p.Runner(c.c.DM(), c.statsMgr))
+	cronID, err := c.runner.AddJob(
+		p.Regiment.Schedule.CronSpec(),
+		p.Runner(c.c.DM(), c.c.Telemetry(), c.statsMgr),
+	)
 	if err != nil {
 		return err
 	}

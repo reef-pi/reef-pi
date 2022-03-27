@@ -28,6 +28,9 @@ class about extends React.Component {
             <div className='card-body'>
               <ul className='list-unstyled mt-3 mb-4'>
                 <li>
+                  {i18n.t('configuration:about:version')}: {this.props.info.version}
+                </li>
+                <li>
                   {i18n.t('configuration:about:website')}: <a href='http://reef-pi.com'>http://reef-pi.com</a>
                 </li>
                 <li>
@@ -40,6 +43,9 @@ class about extends React.Component {
                 <li>{i18n.t('configuration:about:current_time')}: {this.props.info.current_time}</li>
                 <li>{i18n.t('configuration:about:uptime')}: {this.props.info.uptime}</li>
                 <li>IP: {this.props.info.ip}</li>
+                <li>
+                  {i18n.t('configuration:about:pi')}: {this.props.info.model}
+                </li>
               </ul>
             </div>
           </div>

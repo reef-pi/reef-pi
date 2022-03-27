@@ -16,13 +16,9 @@ const SettingsSchema = Yup.object().shape({
   health_check: Yup.object().shape({
     enable: Yup.bool(),
     max_memory: Yup.number()
-      .required(i18n.t('validation:number_required'))
-      .integer(i18n.t('validation:number_required'))
-      .min(1, i18n.t('validation:integer_min_required')),
+      .required(i18n.t('validation:number_required')),
     max_cpu: Yup.number()
       .required(i18n.t('validation:number_required'))
-      .integer(i18n.t('validation:number_required'))
-      .min(1, i18n.t('validation:integer_min_required'))
   }),
   https: Yup.bool(),
   pprof: Yup.bool(),

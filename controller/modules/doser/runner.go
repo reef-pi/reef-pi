@@ -12,6 +12,7 @@ type Runner struct {
 	pump     *Pump
 	dm       *device_manager.DeviceManager
 	statsMgr telemetry.StatsManager
+	t        telemetry.Telemetry
 }
 
 func (r *Runner) Run() {
@@ -34,7 +35,7 @@ func (r *Runner) Run() {
 	}
 	r.statsMgr.Update(r.pump.ID, usage)
 	r.statsMgr.Save(r.pump.ID)
-	//r.c.Telemetry().EmitMetric("doser_"+r.pump.Name+"_usage", usage.Pump)
+	r.t.EmitMetric("doser", r.pump.Name+"-usage", float64(usage.Pump))
 	log.Println("dosing sub system: finished scheduled run for:", r.pump.Name)
 }
 
