@@ -17,8 +17,11 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
 
   return (
     <div className='d-flex'>
-      <div className='p-2 mr-auto'>
+      <div className='p-2'>
         {equipment.name}
+      </div>
+      <div className='p-2 mr-auto font-italic'>
+        <small>{outletName}</small>
       </div>
       <div className='p-2'>
         <Switch onClick={toggleState} on={equipment.on}>
