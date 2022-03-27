@@ -25,7 +25,7 @@ export default class HealthNotify extends React.Component {
   update (key) {
     return function (ev) {
       const h = this.state.notify
-      h[key] = parseInt(ev.target.value)
+      h[key] = Number(ev.target.value)
       this.setState({ notify: h })
       this.props.update(h)
     }.bind(this)
@@ -53,7 +53,7 @@ export default class HealthNotify extends React.Component {
         <div className='form-group col-md-6 col-12' key='health_notify_max_memory'>
           <label htmlFor='health_max_memory'>{i18n.t('configuration:settings:max_memory')}</label>
           <input
-            type='text'
+            type='number'
             className='form-control'
             id='health_max_memory'
             value={this.state.notify.max_memory}
@@ -65,7 +65,7 @@ export default class HealthNotify extends React.Component {
         <div className='form-group col-md-6 col-12' key='health_notify_max_cpu'>
           <label htmlFor='health_max_cpu'>{i18n.t('configuration:settings:max_cpu')}</label>
           <input
-            type='text'
+            type='number'
             className='form-control'
             id='health_max_cpu'
             value={this.state.notify.max_cpu}

@@ -169,10 +169,11 @@ func (c *Controller) Delete(id string) error {
 	return c.c.Store().Delete(Bucket, id)
 }
 
-func (p *Pump) Runner(dm *device_manager.DeviceManager, t telemetry.StatsManager) cron.Job {
+func (p *Pump) Runner(dm *device_manager.DeviceManager, t telemetry.Telemetry, sm telemetry.StatsManager) cron.Job {
 	return &Runner{
 		dm:       dm,
-		statsMgr: t,
+		statsMgr: sm,
+		t:        t,
 		pump:     p,
 	}
 }
