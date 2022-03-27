@@ -39,7 +39,7 @@ func (c *Controller) ComputeSummary() Summary {
 	}
 	s := Summary{
 		Name:           c.config.Name,
-		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05"),
+		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05, 2006"),
 		IP:             ip,
 		Uptime:         c.Uptime(),
 		CPUTemperature: string(temp),
