@@ -12,7 +12,7 @@ GEM
     clamp (1.0.1)
     dotenv (2.7.6)
     ffi (1.13.1)
-    fpm (1.6.1)
+    fpm (1.14.1)
       archive-tar-minitar
       arr-pm (~> 0.0.10)
       backports (>= 2.6.2)
