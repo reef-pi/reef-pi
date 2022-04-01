@@ -60,7 +60,7 @@
     "redux-thunk": "2.4.1",
     "sass": "^1.42.1",
     "sass-lint": "1.13.1",
-    "sass-loader": "12.4.0",
+    "sass-loader": "12.6.0",
     "standard": "16.0.3",
     "style-loader": "3.3.1",
     "testcafe": "^1.18.4",
