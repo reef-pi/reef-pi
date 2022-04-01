@@ -1,46 +1,36 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    archive-tar-minitar (0.8)
-      minitar (~> 0.8)
-      minitar-cli (~> 0.8)
-    arr-pm (0.0.10)
+    arr-pm (0.0.11)
       cabin (> 0)
-    backports (3.18.2)
+    backports (3.23.0)
     cabin (0.9.0)
-    childprocess (4.0.0)
     clamp (1.0.1)
     dotenv (2.7.6)
-    ffi (1.13.1)
-    fpm (1.6.1)
-      archive-tar-minitar
-      arr-pm (~> 0.0.10)
+    fpm (1.14.2)
+      arr-pm (~> 0.0.11)
       backports (>= 2.6.2)
       cabin (>= 0.6.0)
-      childprocess
       clamp (~> 1.0.0)
-      ffi
-      json (>= 1.7.7)
-      pleaserun (~> 0.0.24)
-      ruby-xz
-    hashie (4.1.0)
+      git (>= 1.3.0, < 2.0)
+      json (>= 1.7.7, < 3.0)
+      pleaserun (~> 0.0.29)
+      rexml
+      stud
+    git (1.10.2)
+      rchardet (~> 1.8)
     insist (1.0.0)
     json (2.6.1)
-    minitar (0.8)
-    minitar-cli (0.8)
-      minitar (~> 0.8.0)
-      powerbar (~> 1.0)
     mustache (0.99.8)
-    pleaserun (0.0.31)
+    pleaserun (0.0.32)
       cabin (> 0)
       clamp
       dotenv
       insist
       mustache (= 0.99.8)
       stud
-    powerbar (1.0.18)
-      hashie (>= 1.1.0)
-    ruby-xz (1.0.0)
+    rchardet (1.8.0)
+    rexml (3.2.5)
     stud (0.0.23)
 
 PLATFORMS
@@ -51,4 +41,4 @@ DEPENDENCIES
   json (>= 2.3.0)
 
 BUNDLED WITH
-   2.1.4
+   2.2.26
