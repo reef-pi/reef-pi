@@ -40,7 +40,7 @@
     "marked": "^4.0.10",
     "mini-css-extract-plugin": "2.6.0",
     "popper.js": "^1.16.1",
-    "postcss": "^8.4.5",
+    "postcss": "^8.4.13",
     "postcss-loader": "6.2.1",
     "precss": "4.0.0",
     "react": "16.14.0",
