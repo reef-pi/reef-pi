@@ -2,9 +2,10 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"sync"
+
+	"github.com/gorilla/mux"
 )
 
 type SubsystemComposite struct {

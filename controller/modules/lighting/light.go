@@ -3,9 +3,10 @@ package lighting
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Usage struct {

@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"math"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"

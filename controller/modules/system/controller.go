@@ -2,6 +2,7 @@ package system
 
 import (
 	"fmt"
+
 	"github.com/reef-pi/reef-pi/controller"
 )
 

@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"strings"
-	"testing"
 )
 
 func TestTimerController(t *testing.T) {

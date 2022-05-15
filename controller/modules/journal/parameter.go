@@ -3,8 +3,9 @@ package journal
 import (
 	"encoding/json"
 	"errors"
-	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"log"
+
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 type Parameter struct {

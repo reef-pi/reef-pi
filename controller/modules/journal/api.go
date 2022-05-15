@@ -2,11 +2,13 @@ package journal
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"net/http"
 	"sort"
+
+	"github.com/gorilla/mux"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (s *Subsystem) LoadAPI(r *mux.Router) {

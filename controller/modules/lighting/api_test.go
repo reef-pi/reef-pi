@@ -3,13 +3,14 @@ package lighting
 import (
 	"bytes"
 	"encoding/json"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"strings"
-	"testing"
-	"time"
 )
 
 func TestLightingAPI(t *testing.T) {

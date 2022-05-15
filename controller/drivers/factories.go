@@ -2,8 +2,9 @@ package drivers
 
 import (
 	"fmt"
-	"github.com/reef-pi/drivers/tasmota"
 	"log"
+
+	"github.com/reef-pi/drivers/tasmota"
 
 	"github.com/reef-pi/drivers/ads1x15"
 	"github.com/reef-pi/drivers/dli"

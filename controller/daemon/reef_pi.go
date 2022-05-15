@@ -1,14 +1,15 @@
 package daemon
 
 import (
+	"log"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"log"
-	"time"
 )
 
 const Bucket = storage.ReefPiBucket

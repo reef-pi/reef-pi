@@ -3,7 +3,6 @@ package temperature
 import (
 	"bufio"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"io"
 	"log"
 	"math/rand"
@@ -11,6 +10,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (c *Controller) Read(tc *TC) (float64, error) {

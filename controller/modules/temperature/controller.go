@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"

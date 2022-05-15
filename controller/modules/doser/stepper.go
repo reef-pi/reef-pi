@@ -2,9 +2,10 @@ package doser
 
 import (
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller/connectors"
 	"log"
 	"time"
+
+	"github.com/reef-pi/reef-pi/controller/connectors"
 )
 
 //https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/

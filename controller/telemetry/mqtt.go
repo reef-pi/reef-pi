@@ -2,9 +2,10 @@ package telemetry
 
 import (
 	"crypto/tls"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"os"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 type MQTTConfig struct {

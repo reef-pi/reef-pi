@@ -2,6 +2,9 @@ package daemon
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/reef-pi/reef-pi/controller/modules/ato"
 	"github.com/reef-pi/reef-pi/controller/modules/camera"
 	"github.com/reef-pi/reef-pi/controller/modules/doser"
@@ -13,8 +16,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/system"
 	"github.com/reef-pi/reef-pi/controller/modules/temperature"
 	"github.com/reef-pi/reef-pi/controller/modules/timer"
-	"log"
-	"time"
 )
 
 func (r *ReefPi) loadPhSubsystem() error {
