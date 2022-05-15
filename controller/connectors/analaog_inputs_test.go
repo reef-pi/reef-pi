@@ -3,11 +3,13 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
 )
 
 func TestAnalogInputsAPI(t *testing.T) {

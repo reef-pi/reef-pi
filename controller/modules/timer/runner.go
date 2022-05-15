@@ -3,10 +3,12 @@ package timer
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/reef-pi/reef-pi/controller"
-	cron "github.com/robfig/cron/v3"
 	"log"
 	"time"
+
+	cron "github.com/robfig/cron/v3"
+
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 type Trigger struct {

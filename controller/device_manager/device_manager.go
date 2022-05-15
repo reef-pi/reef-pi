@@ -1,14 +1,16 @@
 package device_manager
 
 import (
+	"log"
+
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/rpi/i2c"
+
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/reef-pi/rpi/i2c"
-	"log"
 )
 
 type DeviceManager struct {

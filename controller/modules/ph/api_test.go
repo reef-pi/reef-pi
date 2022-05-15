@@ -3,10 +3,12 @@ package ph
 import (
 	"bytes"
 	"encoding/json"
+	"testing"
+
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"testing"
 )
 
 func TestPhAPI(t *testing.T) {

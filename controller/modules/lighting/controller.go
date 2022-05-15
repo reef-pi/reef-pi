@@ -3,14 +3,16 @@ package lighting
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/reef-pi/reef-pi/controller"
+
+	"log"
+	"sync"
+	"time"
 
 	"github.com/reef-pi/reef-pi/controller/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"log"
-	"sync"
-	"time"
 )
 
 const Bucket = storage.LightingBucket
