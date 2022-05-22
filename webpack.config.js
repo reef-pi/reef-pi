@@ -68,7 +68,8 @@ var config = {
   },
   output: {
     path: BUILD_DIR,
-    filename: 'assets/js/[name].[contenthash].js'
+    filename: 'assets/js/[name].[contenthash].js',
+    publicPath: '/'
   },
   optimization: {
     splitChunks: {

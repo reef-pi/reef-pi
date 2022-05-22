@@ -6,7 +6,7 @@ import Equipment from 'equipment/main'
 import Log from 'logCenter/main'
 import NotificationAlert from 'notifications/alert'
 import Lighting from 'lighting/main'
-import Configuration from 'configuration/main'
+import {default as Configuration, configRoutes} from 'configuration/main'
 import Temperature from 'temperature/main'
 import Timers from 'timers/main'
 import Doser from 'doser/main'
@@ -37,7 +37,9 @@ const routes = [
   <Route key="camera" path="/camera" element={<Camera />} label={i18n.t('capabilities:camera')} />,
   <Route key="manager" path="/manager" element={<Instances />} label={i18n.t('capabilities:manager')} />,
   <Route key="journal" path="/journal" element={<Journal />} label={i18n.t('capabilities:journal')} />,
-  <Route key="configuration" path="/configuration" element={<Configuration />} label={i18n.t('capabilities:configuration')} />,
+  <Route key="configuration" path="/configuration" element={<Configuration />} label={i18n.t('capabilities:configuration')} >
+    {configRoutes}
+  </Route>,
   <Route key="log" path="/log" element={<Log />} label={i18n.t('capabilities:log')} />
 ]
 
