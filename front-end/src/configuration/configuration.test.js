@@ -26,7 +26,6 @@ describe('Configuration ui', () => {
 
   it('<Main />', () => {
     const m = shallow(<Main store={mockStore()} />).instance()
-    m.setBody(1)()
   })
 
   it('<Admin />', () => {

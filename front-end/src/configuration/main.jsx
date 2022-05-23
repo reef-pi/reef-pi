@@ -1,4 +1,5 @@
 import React from 'react'
+import { Route, Routes, NavLink } from 'react-router-dom'
 import Admin from './admin'
 import Settings from './settings'
 import Telemetry from 'telemetry/main'
@@ -9,55 +10,44 @@ import Drivers from 'drivers/main'
 import Errors from './errors'
 import i18n from 'utils/i18n'
 
-const components = {
-  settings: <Settings />,
-  connectors: <Connectors />,
-  drivers: <Drivers />,
-  telemetry: <Telemetry />,
-  authentication: <Auth />,
-  admin: <Admin />,
-  errors: <Errors />,
-  about: <About />
-}
+const configRoutes = [
+  <Route key="settings" index element={<Settings />} label={i18n.t(`configuration:tab:settings`)} />,
+  <Route key="connectors" path="connectors" element={<Connectors />} label={i18n.t(`configuration:tab:connectors`)} />,
+  <Route key="telemetry" path="telemetry" element={<Telemetry />} label={i18n.t(`configuration:tab:telemetry`)} />,
+  <Route key="authentication" path="authentication" element={<Auth />} label={i18n.t(`configuration:tab:authentication`)} />,
+  <Route key="drivers" path="drivers" element={<Drivers />} label={i18n.t(`configuration:tab:drivers`)} />,
+  <Route key="errors" path="errors" element={<Errors />} label={i18n.t(`configuration:tab:errors`)} />,
+  <Route key="admin" path="admin" element={<Admin />} label={i18n.t(`configuration:tab:admin`)} />,
+  <Route key="about" path="about" element={<About />} label={i18n.t(`configuration:tab:about`)} />
+]
 
-export default class Configuration extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      body: 'settings'
-    }
-    this.setBody = this.setBody.bind(this)
-  }
-
-  setBody (k) {
-    return () => {
-      this.setState({ body: k })
-    }
-  }
-
+class Configuration extends React.Component {
   render () {
     const panels = []
-    const tabs = ['settings', 'connectors', 'telemetry', 'authentication', 'drivers', 'errors', 'admin', 'about']
-    tabs.forEach((k, _) => {
-      const cname = this.state.body === k ? 'nav-item active text-info' : 'nav-item'
+    for (const route of configRoutes) {
       panels.push(
-        <li className={cname} key={'conf-tabs-' + k}>
-          <a id={'config-' + k} className='nav-link' onClick={this.setBody(k)}>
-            {i18n.t(`configuration:tab:${k}`)}{' '}
-          </a>
+        <li key={'conf-tabs' + route.key}>
+          <NavLink id={'config-' + route.key} className='nav-link' to={route.props.path || ''}>
+            {route.props.label}
+          </NavLink>
         </li>
       )
-    })
-    const body = components[this.state.body]
+    }
+
     return (
       <>
         <div className='row' key='panels'>
           <ul className='conf-nav nav nav-tabs'>{panels}</ul>
         </div>
+
         <div className='row' key='body'>
-          {body}
+          <Routes>
+            {configRoutes}
+          </Routes>
         </div>
       </>
     )
   }
 }
+
+export {Configuration as default, configRoutes as configRoutes }
