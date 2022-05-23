@@ -151,7 +151,7 @@ class settings extends React.Component {
   }
 
   showCapabilities () {
-    return <Capabilities capabilities={this.state.capabilities} onChange={this.updateCapabilities} />
+    return <Capabilities capabilities={this.state.capabilities} update={this.updateCapabilities} />
   }
 
   updateCapabilities (capabilities) {
@@ -204,9 +204,9 @@ class settings extends React.Component {
   }
 
   render () {
-    if (this.state.settings == undefined ||
-          this.state.settings.capabilities == undefined ||
-          Object.keys(this.state.capabilities).length == 0) {
+    if (this.state.settings === undefined ||
+          this.state.settings.capabilities === undefined ||
+          Object.keys(this.state.capabilities).length === 0) {
       return (
         <div className='container'>
           {i18n.t('loading')}
