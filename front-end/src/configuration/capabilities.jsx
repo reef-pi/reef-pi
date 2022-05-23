@@ -16,7 +16,7 @@ export default class Capabilities extends React.Component {
       const capabilities = this.state.capabilities
       capabilities[cap] = ev.target.checked
       this.setState({ capabilities: capabilities })
-      this.props.update(this.state.capabilities)
+      this.props.onChange(this.state.capabilities)
     }.bind(this)
   }
 
@@ -28,8 +28,8 @@ export default class Capabilities extends React.Component {
             className='form-check-input'
             type='checkbox'
             id={'update-' + label}
-            onClick={this.updateCapability(label)}
-            defaultChecked={this.state.capabilities[label]}
+            onChange={this.updateCapability(label)}
+            checked={!!this.state.capabilities[label]}
           />
           {i18n.t(`capabilities:${label}`)}
         </label>
