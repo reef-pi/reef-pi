@@ -34,7 +34,7 @@ jest.mock('utils/confirm', () => {
 })
 describe('Connectors', () => {
   it('<Main />', () => {
-    shallow(<Main />)
+    shallow(<Provider store={mockStore({})}><Main /></Provider>)
   })
 
   it('<InletSelector />', () => {

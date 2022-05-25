@@ -39,6 +39,8 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/lights', [])
     fetchMock.getOnce('/api/inlets', [])
     fetchMock.getOnce('/api/jacks', [])
+    fetchMock.getOnce('/api/drivers', [])
+    fetchMock.getOnce('/api/analog_inputs', [])
     fetchMock.getOnce('/api/outlets', [])
     fetchMock.getOnce('/api/errors', [])
     const store = mockStore()
