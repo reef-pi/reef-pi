@@ -50,6 +50,28 @@ describe('Validation', () => {
     )
   })
 
+  it('should be valid when cooler < heater and either is disabled', () => {
+    tc.control = 'macro'
+    tc.heater = '2'
+    tc.cooler = '4'
+    tc.min = 77
+    tc.max = 50
+
+    expect.assertions(2)
+
+    const tc1 = Object.assign(tc, { heater: '' })
+    const valid1 = TemperatureSchema.isValid(tc1).then(
+      valid => expect(valid).toBe(true)
+    )
+
+    const tc2 = Object.assign(tc, { cooler: '' })
+    const valid2 = TemperatureSchema.isValid(tc2).then(
+      valid => expect(valid).toBe(true)
+    )
+
+    return Promise.all([valid1, valid2])
+  })
+
   it('should be invalid when heater and cooler are the same', () => {
     tc.control = 'macro'
     tc.heater = '2'
