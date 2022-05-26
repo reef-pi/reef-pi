@@ -53,8 +53,7 @@ describe('DoserValidation', () => {
     DoserSchema.validate(doserUpdateWithW, {abortEarly: false})
 
     const doserUpdateWithMultiComplicated = { ...repeatedDoser,  day: '1,12W' }
-    // TODO: regex doesn't support this yet
-    // DoserSchema.validate(doserUpdateWithMultiComplicated, {abortEarly: false})
+    DoserSchema.validate(doserUpdateWithMultiComplicated, {abortEarly: false})
   })
 
   it('allows * for timings', () => {
