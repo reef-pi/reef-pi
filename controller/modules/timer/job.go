@@ -104,6 +104,9 @@ func (c *Controller) Create(job Job) error {
 }
 
 func (c *Controller) Update(id string, payload Job) error {
+	if err := job.Validate(); err != nil {
+		return err
+	}
 	j, err := c.Get(id)
 	if err != nil {
 		return err
