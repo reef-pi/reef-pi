@@ -28,8 +28,8 @@ export default class Capabilities extends React.Component {
             className='form-check-input'
             type='checkbox'
             id={'update-' + label}
-            onClick={this.updateCapability(label)}
-            defaultChecked={this.state.capabilities[label]}
+            onChange={this.updateCapability(label)}
+            checked={!!this.state.capabilities[label]}
           />
           {i18n.t(`capabilities:${label}`)}
         </label>

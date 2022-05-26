@@ -54,8 +54,8 @@ class settings extends React.Component {
           <input
             type='checkbox'
             id={attr}
-            onClick={this.updateCheckbox(attr)}
-            defaultChecked={this.state.settings[attr]}
+            onChange={this.updateCheckbox(attr)}
+            checked={!!this.state.settings[attr]}
             className='form-check-input'
           />
           {i18n.t('configuration:settings:' + attr)}
@@ -204,6 +204,16 @@ class settings extends React.Component {
   }
 
   render () {
+    if (this.state.settings === undefined ||
+          this.state.settings.capabilities === undefined ||
+          Object.keys(this.state.capabilities).length === 0) {
+      return (
+        <div className='container'>
+          {i18n.t('loading')}
+        </div>
+      )
+    }
+
     let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
     if (this.state.updated) {
       updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'

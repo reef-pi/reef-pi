@@ -1,9 +1,12 @@
 import { reduxGet } from '../../utils/ajax'
 
 export const capabilitiesLoaded = (capabilities) => {
+  const MandatoryCapabilities = {
+    log: true
+  }
   return ({
     type: 'CAPABILITIES_LOADED',
-    payload: capabilities
+    payload: Object.assign(capabilities, MandatoryCapabilities)
   })
 }
 

@@ -89,10 +89,7 @@ class mainPanel extends React.Component {
   }
 
   render () {
-    const MandatoryTabs = {
-      log: true
-    }
-    const currentCaps = Object.assign(this.props.capabilities, MandatoryTabs)
+    const currentCaps = this.props.capabilities
 
     return (
       <BrowserRouter>
