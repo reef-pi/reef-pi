@@ -37,19 +37,38 @@ describe('DoserValidation', () => {
     DoserSchema.validate(basicDoser, {abortEarly: false})
   })
 
+  it('allows for some complicated invocations', () => {
+    const doserUpdates = {
+      month: 'SEP',
+      week: '2',
+      day: 'L',
+      hour: '4',
+      minute: '49',
+      second: '0',
+    }
+    const repeatedDoser = { ...basicDoser, doserUpdates }
+    DoserSchema.validate(repeatedDoser, {abortEarly: false})
+
+    const doserUpdateWithW = { ...repeatedDoser, day: '12W' }
+    DoserSchema.validate(doserUpdateWithW, {abortEarly: false})
+
+    const doserUpdateWithMultiComplicated = { ...repeatedDoser,  day: '1,12W' }
+    // TODO: regex doesn't support this yet
+    // DoserSchema.validate(doserUpdateWithMultiComplicated, {abortEarly: false})
+  })
+
   it('allows * for timings', () => {
     const doserUpdates = {
-      month: '*',
-      week: '*',
-      day: '*',
-      hour: '*',
-      minute: '*',
-      second: '*',
+      month: '1',
+      week: '1',
+      day: '1',
+      hour: '0',
+      minute: '0',
+      second: '0',
     }
-    const repeatedDoser = Object.assign(basicDoser, doserUpdates)
+    const repeatedDoser = { ...basicDoser, ...doserUpdates }
 
-    // TODO: enable this after fixing the regex
-    // DoserSchema.validate(repeatedDoser, {abortEarly: false})
+    DoserSchema.validate(repeatedDoser, {abortEarly: false})
   })
 
 })
