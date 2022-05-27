@@ -277,21 +277,21 @@ describe('Lighting ui', () => {
 
   it('<Profile /> fixed', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<Profile type='fixed' onChangeHandler={fn} />)
+    const wrapper = shallow(<Profile name="name" type='fixed' onChangeHandler={fn} />)
     expect(wrapper.find(FixedProfile).length).toBe(1)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> interval', () => {
-    const wrapper = shallow(<Profile type='interval' onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile name="name" type='interval' onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(1)
     expect(wrapper.find(DiurnalProfile).length).toBe(0)
   })
 
   it('<Profile /> diurnal', () => {
-    const wrapper = shallow(<Profile type='diurnal' onChangeHandler={() => true} />)
+    const wrapper = shallow(<Profile name="name" type='diurnal' onChangeHandler={() => true} />)
     expect(wrapper.find(FixedProfile).length).toBe(0)
     expect(wrapper.find(AutoProfile).length).toBe(0)
     expect(wrapper.find(DiurnalProfile).length).toBe(1)
