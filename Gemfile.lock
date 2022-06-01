@@ -20,7 +20,7 @@ GEM
     git (1.10.2)
       rchardet (~> 1.8)
     insist (1.0.0)
-    json (2.6.1)
+    json (2.6.2)
     mustache (0.99.8)
     pleaserun (0.0.32)
       cabin (> 0)
