@@ -22,7 +22,7 @@
     "csv-stringify": "6.0.5",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",
-    "eslint": "8.8.0",
+    "eslint": "8.16.0",
     "eslint-plugin-react": "7.29.4",
     "fetch-mock": "9.11.0",
     "form-data": "^4.0.0",
