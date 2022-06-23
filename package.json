@@ -29,7 +29,7 @@
     "formik": "2.2.9",
     "html-webpack-plugin": "5.5.0",
     "humanize-duration": "^3.27.0",
-    "i18next": "21.6.14",
+    "i18next": "21.8.5",
     "i18next-browser-languagedetector": "6.1.2",
     "jest": "27.4.5",
     "jest-date-mock": "1.0.8",
