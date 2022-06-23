@@ -64,7 +64,7 @@
     "sass-loader": "12.6.0",
     "standard": "16.0.3",
     "style-loader": "3.3.1",
-    "testcafe": "^1.18.4",
+    "testcafe": "^1.19.0",
     "webpack": "5.72.1",
     "webpack-cli": "4.9.1",
     "webpack-dev-server": "4.9.1",
