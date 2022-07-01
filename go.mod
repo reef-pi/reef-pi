@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/coreos/go-systemd/v22 v22.3.2
 	github.com/dustin/go-humanize v1.0.0
-	github.com/eclipse/paho.mqtt.golang v1.3.5
+	github.com/eclipse/paho.mqtt.golang v1.4.1
 	github.com/godbus/dbus/v5 v5.1.0
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
