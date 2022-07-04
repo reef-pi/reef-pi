@@ -49,3 +49,9 @@ type Store interface {
 	CreateBucket(string) error
 	Path() string
 }
+
+type DoesNotExistError struct { text string }
+
+func (e DoesNotExistError) Error() string {
+	return e.text
+}
