@@ -5,7 +5,7 @@ import AnalogInputs from './analog_inputs'
 import Inlets from './inlets'
 import i18n from 'utils/i18n'
 import { connect } from 'react-redux'
-import { fetchDrivers } from 'redux/actions/jacks'
+import { fetchDrivers } from 'redux/actions/drivers'
 
 class connectors extends React.Component {
   render () {

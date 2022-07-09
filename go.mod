@@ -3,6 +3,7 @@ module github.com/reef-pi/reef-pi
 go 1.16
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/coreos/go-systemd/v22 v22.3.2
 	github.com/dustin/go-humanize v1.0.0
 	github.com/eclipse/paho.mqtt.golang v1.4.1

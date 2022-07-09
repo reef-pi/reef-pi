@@ -28,6 +28,7 @@ const PhForm = withFormik({
       upperThreshold: data.max || 0,
       upperFunction: data.upper_eq || '',
       hysteresis: data.hysteresis || 0,
+      transformer: data.transformer || '',
       chart: data.chart || { ymin: 0, ymax: 100, color: '#000', unit: '' }
     }
 

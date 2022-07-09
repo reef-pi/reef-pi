@@ -415,6 +415,20 @@ const EditPh = ({
             </div>
           </div>
         </div>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='name'>{i18next.t('transformer')}</label>
+            <Field
+              name='transformer'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('transformer', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='name' />
+          </div>
+        </div>
+
       </div>
 
       <div className={classNames('row', { 'd-none': readOnly })}>
