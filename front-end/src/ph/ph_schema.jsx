@@ -14,6 +14,7 @@ const PhSchema = Yup.object().shape({
   one_shot: Yup.bool(),
   analog_input: Yup.string()
     .required(i18n.t('validation:selection_required')),
+  transformer: Yup.string(),
   minAlert: Yup.number()
     .when('notify', (alert, schema) => {
       if (alert === true || alert === 'true') {

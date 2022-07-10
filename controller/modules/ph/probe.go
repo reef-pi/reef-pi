@@ -7,6 +7,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/Knetic/govaluate"
+
 	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/reef-pi/hal"
@@ -49,6 +51,7 @@ type Probe struct {
 	IsMacro     bool          `json:"is_macro"`
 	OneShot     bool          `json:"one_shot"`
 	Chart       ChartConfig   `json:"chart"`
+	Transformer string        `json:"transformer"`
 	h           *controller.Homeostasis
 }
 
@@ -156,11 +159,32 @@ func (c *Controller) Delete(id string) error {
 }
 
 func (c *Controller) Read(p Probe) (float64, error) {
+	var v float64
 	if c.devMode {
-		return utils.RoundToTwoDecimal(8 + rand.Float64()*2), nil
+		v = 8 + rand.Float64()*2
+	} else {
+		v1, err := c.ais.Read(p.AnalogInput)
+		if err != nil {
+			return 0, nil
+		}
+		v = v1
 	}
-	v, err := c.ais.Read(p.AnalogInput)
-	return utils.RoundToTwoDecimal(v), err
+	if p.Transformer != "" {
+		expr, err := govaluate.NewEvaluableExpression(p.Transformer)
+		parameters := make(map[string]interface{}, 1)
+		parameters["v"] = v
+		result, err := expr.Evaluate(parameters)
+		if err != nil {
+			return -1, err
+		}
+		log.Println("ph subsystem executing transform:", p.Transformer, "with value:", v, "result:", result)
+		v1, ok := result.(float64)
+		if !ok {
+			return -1, fmt.Errorf("failed to typecast '%v' into float64", result)
+		}
+		v = v1
+	}
+	return utils.RoundToTwoDecimal(v), nil
 }
 
 func (c *Controller) Run(p Probe, quit chan struct{}) error {
