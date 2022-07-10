@@ -42,7 +42,7 @@ const DoserSchema = Yup.object().shape({
   minute: Yup.string()
     .required(i18n.t('validation:cron_required')),
   second: Yup.string()
-    .required(i18n.t('validation:cron_nojoker_required')),
+    .required(i18n.t('validation:cron_nojoker_required'))
 })
 
 export default DoserSchema

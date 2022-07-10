@@ -131,7 +131,12 @@ class mainPanel extends React.Component {
             </div>
             <div className='row d-none d-lg-block'>
               <div className='col'>
-                <Summary fetch={this.props.fetchInfo} info={this.props.info} errors={this.props.errors} />
+                <Summary
+                  fetch={this.props.fetchInfo}
+                  info={this.props.info}
+                  errors={this.props.errors}
+                  devMode={this.props.capabilities.dev_mode}
+                />
               </div>
             </div>
           </div>
