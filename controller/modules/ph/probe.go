@@ -94,9 +94,29 @@ func (c *Controller) List() ([]Probe, error) {
 	return probes, c.c.Store().List(Bucket, fn)
 }
 
-func (c *Controller) Create(p Probe) error {
+func (p Probe) Validate() error {
 	if p.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied: %d", p.Period)
+	}
+	if p.Transformer != "" {
+		expr, err := govaluate.NewEvaluableExpression(p.Transformer)
+		parameters := make(map[string]interface{}, 1)
+		parameters["v"] = 0.0
+		result, err := expr.Evaluate(parameters)
+		if err != nil {
+			return fmt.Errorf("invalid transformer expresssion '%s'. Failed to parse:%w", p.Transformer, err)
+		}
+		_, ok := result.(float64)
+		if !ok {
+			return fmt.Errorf("invalid transformer expression '%s'. failed to typecast result '%v' into float64", p.Transformer, result)
+		}
+	}
+	return nil
+}
+
+func (c *Controller) Create(p Probe) error {
+	if err := p.Validate(); err != nil {
+		return err
 	}
 	fn := func(id string) interface{} {
 		p.ID = id
@@ -117,8 +137,8 @@ func (c *Controller) Create(p Probe) error {
 
 func (c *Controller) Update(id string, p Probe) error {
 	p.ID = id
-	if p.Period <= 0 {
-		return fmt.Errorf("Period should be positive. Supplied: %d", p.Period)
+	if err := p.Validate(); err != nil {
+		return err
 	}
 	if err := c.c.Store().Update(Bucket, id, p); err != nil {
 		return err
