@@ -288,13 +288,13 @@ ph:controlnothing,Nothing
 ph:current_reading,Current Reading
 ph:hysteresis,Hysteresis
 ph:hysteresis_less_than,Hysteresis is less than acceptable threshold
-ph:lower_function,Lower Function
+ph:lower_function,Raising mechanism
 ph:lower_threshold,Lower Threshold
 ph:midpoint,Midpoint
 ph:run_calibration,Run
 ph:second_point,Second Point
 ph:transformer,Transform function
-ph:upper_function,Upper Function
+ph:upper_function, Lowering mechanism
 ph:upper_threshold,Upper Threshold
 ph:warn_delete,This action will delete probe {{name}}
 ph:warn_reset,This action will reset usage data for probe {{name}}
