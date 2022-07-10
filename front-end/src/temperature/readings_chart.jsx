@@ -3,6 +3,7 @@ import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'rec
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
+import { ParseTimestamp } from 'utils/timestamp'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -30,11 +31,16 @@ class chart extends React.Component {
     }
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
+    const readings = this.props.usage.current
+    readings.sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
+
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}({currentTemp})</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
-          <AreaChart data={this.props.usage.current}>
+          <AreaChart data={readings}>
             <defs>
               <linearGradient id='gradient' x1='0' y1='0' x2='0' y2='1'>
                 <stop offset='5%' stopColor={c.color} stopOpacity={0.8} />

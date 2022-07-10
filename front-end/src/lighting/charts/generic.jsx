@@ -4,6 +4,7 @@ import { fetchLightUsage } from 'redux/actions/lights'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
+import { ParseTimestamp } from 'utils/timestamp'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -41,6 +42,10 @@ class chart extends React.Component {
     })
 
     const usage = this.props.usage.current
+
+    usage.sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
 
     usage.forEach((v, i) => {
       Object.entries(v.channels).forEach(([ch, v]) => {

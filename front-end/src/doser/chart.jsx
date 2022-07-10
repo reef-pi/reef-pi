@@ -1,6 +1,7 @@
 import React from 'react'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar } from 'recharts'
 import { fetchDoserUsage } from '../redux/actions/doser'
+import { ParseTimestamp } from 'utils/timestamp'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
@@ -33,11 +34,15 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
+    const metrics = this.props.usage.historical
+    metrics.sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
     return (
       <>
         <span className='h6'>{this.props.config.name} - {i18n.t('doser:doser_usage')}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
-          <BarChart data={this.props.usage.historical}>
+          <BarChart data={metrics}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
             <YAxis label={i18n.t('sec')} />
             <XAxis dataKey='time' />
