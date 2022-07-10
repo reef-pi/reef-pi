@@ -18,7 +18,9 @@ const initialState = {
   macros: [],
   dosers: [],
   configuration: {},
-  capabilities: {},
+  capabilities: {
+    dev_mode: false
+  },
   health_stats: {},
   inlets: [],
   jacks: [],

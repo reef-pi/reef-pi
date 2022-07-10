@@ -18,6 +18,10 @@ export default class Summary extends React.Component {
   }
 
   render () {
+    let devModeWarning = <React.Fragment />
+    if(this.props.devMode){
+      devModeWarning = <li className='list-inline-item text-danger'>{i18n.t('devmode_warning')}| </li>
+    }
     return (
       <nav className='bottom-bar navbar fixed-bottom navbar-light bg-light justify-content-center'>
         <ul className='list-inline'>
@@ -27,6 +31,7 @@ export default class Summary extends React.Component {
           <li className='list-inline-item'>{i18n.t('since')} {this.props.info.uptime} | </li>
           <li className='list-inline-item'>IP {this.props.info.ip} | </li>
           <li className='list-inline-item'><a href='/assets/api.html'>API</a> | </li>
+          {devModeWarning}
           <li className='list-inline-item'>
             <a href="/configuration/errors" className="text-danger">
               {i18n.t('errors')}({this.props.errors.length})
@@ -40,6 +45,7 @@ export default class Summary extends React.Component {
 
 Summary.propTypes = {
   info: PropTypes.object.isRequired,
+  devMode: PropTypes.bool.isRequired,
   errors: PropTypes.array.isRequired,
   fetch: PropTypes.func.isRequired
 }
