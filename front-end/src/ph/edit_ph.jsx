@@ -417,7 +417,7 @@ const EditPh = ({
         </div>
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
-            <label htmlFor='name'>{i18next.t('transformer')}</label>
+            <label htmlFor='name'>{i18next.t('ph:transformer')}</label>
             <Field
               name='transformer'
               disabled={readOnly}
