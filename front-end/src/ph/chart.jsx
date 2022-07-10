@@ -1,4 +1,5 @@
 import React from 'react'
+import { ParseTimestamp } from 'utils/timestamp'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
@@ -27,6 +28,9 @@ class chart extends React.Component {
       return (<div />)
     }
     const metrics = this.props.readings[this.props.type]
+    metrics.sort((a, b) => {
+      return ParseTimestamp(a.time) < ParseTimestamp(b.time) ? 1 : -1
+    })
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value

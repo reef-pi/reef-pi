@@ -1,4 +1,5 @@
 import React from 'react'
+import { ParseTimestamp } from 'utils/timestamp'
 import { ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
 import { fetchHealth } from './redux/actions/health'
 import { connect } from 'react-redux'
@@ -28,6 +29,11 @@ class healthChart extends React.Component {
       return (<div />)
     }
     const healthStats = this.props.health_stats[this.state.trend]
+    if(healthStats){
+      healthStats.sort((a, b) => {
+        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+      })
+    }
     return (
       <div className='container'>
         <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({i18next.t('health_chart:' + this.props.trend)})</span>
