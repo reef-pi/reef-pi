@@ -314,66 +314,6 @@ const EditPh = ({
           </div>
         </div>
 
-        {/* Wrap to next line on small */}
-        <div className='w-100 d-none d-sm-block d-md-none' />
-
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='upperFunction'>{i18next.t('ph:upper_function')}</label>
-            <Field
-              name='upperFunction'
-              component='select'
-              disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('upperFunction', touched, errors)
-              })}
-            >
-              <option value=''>{i18next.t('ph:controlnothing')}</option>
-              {options()}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='upperFunction' />
-          </div>
-        </div>
-        <div className='col col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='lowerThreshold'>{i18next.t('ph:lower_threshold')}</label>
-            <div className='input-group'>
-              <Field
-                name='lowerThreshold'
-                readOnly={readOnly || values.control === '' || values.upperFunction === undefined || values.upperFunction === ''}
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('lowerThreshold', touched, errors)
-                })}
-              />
-              <div className='input-group-append'>
-                <span className='input-group-text'>{values.chart.unit}</span>
-              </div>
-              <ErrorFor errors={errors} touched={touched} name='lowerThreshold' />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className='row'>
-
-        <div className='col col-sm-6 col-md-3 offset-md-3'>
-          <div className='form-group'>
-            <label htmlFor='lowerFunction'>{i18next.t('ph:lower_function')}</label>
-            <Field
-              name='lowerFunction'
-              component='select'
-              disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
-                'is-invalid': ShowError('lowerFunction', touched, errors)
-              })}
-            >
-              <option value=''>{i18next.t('ph:controlnothing')}</option>
-              {options()}
-            </Field>
-            <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
-          </div>
-        </div>
-
         <div className='col col-sm-6 col-md-3'>
           <div className='form-group'>
             <label htmlFor='upperThreshold'>{i18next.t('ph:upper_threshold')}</label>
@@ -392,6 +332,63 @@ const EditPh = ({
             </div>
           </div>
         </div>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='upperFunction'>{i18next.t('ph:upper_function')}</label>
+            <Field
+              name='upperFunction'
+              component='select'
+              disabled={readOnly || values.control === ''}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('upperFunction', touched, errors)
+              })}
+            >
+              <option value=''>{i18next.t('ph:controlnothing')}</option>
+              {options()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='upperFunction' />
+          </div>
+        </div>
+
+      </div>
+
+      <div className='row'>
+        <div className='col col-sm-6 col-md-3 offset-md-3'>
+          <div className='form-group'>
+            <label htmlFor='lowerThreshold'>{i18next.t('ph:lower_threshold')}</label>
+            <div className='input-group'>
+              <Field
+                name='lowerThreshold'
+                readOnly={readOnly || values.control === '' || values.upperFunction === undefined || values.upperFunction === ''}
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('lowerThreshold', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text'>{values.chart.unit}</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='lowerThreshold' />
+            </div>
+          </div>
+        </div>
+        <div className='col col-sm-6 col-md-3 '>
+          <div className='form-group'>
+            <label htmlFor='lowerFunction'>{i18next.t('ph:lower_function')}</label>
+            <Field
+              name='lowerFunction'
+              component='select'
+              disabled={readOnly || values.control === ''}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('lowerFunction', touched, errors)
+              })}
+            >
+              <option value=''>{i18next.t('ph:controlnothing')}</option>
+              {options()}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='lowerFunction' />
+          </div>
+        </div>
+
       </div>
 
       <div className='row'>
