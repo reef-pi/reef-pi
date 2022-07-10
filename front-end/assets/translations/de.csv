@@ -14,6 +14,7 @@ clear,Löschen
 columns,Spalten
 configure,Konfigurieren
 delete,Löschen
+devmode_warning,
 disabled,aus
 documentation,Dokumentation (engl.)
 done,Fertig
@@ -292,6 +293,7 @@ ph:lower_threshold,unterer Schwellwert
 ph:midpoint,Mittenwert
 ph:run_calibration,Kalibrieren
 ph:second_point,zweiter Messpunkt
+ph:transformer,
 ph:upper_function,pH anheben
 ph:upper_threshold,oberer Schwellwert
 ph:warn_delete,Wollen Sie die Sonde {{name}} wirklich löschen?

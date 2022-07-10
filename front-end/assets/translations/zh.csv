@@ -14,6 +14,7 @@ clear,清除
 columns,
 configure,配置
 delete,删除
+devmode_warning,
 disabled,已禁用
 documentation,文档
 done,已完成
@@ -292,6 +293,7 @@ ph:lower_threshold,下阈值
 ph:midpoint,正中央
 ph:run_calibration,运行
 ph:second_point,第二点
+ph:transformer,
 ph:upper_function,上层功能
 ph:upper_threshold,上阈值
 ph:warn_delete,这个动作将会被删除

@@ -14,6 +14,7 @@ clear,Limpiar
 columns,Columnas
 configure,Configurar
 delete,Eliminar
+devmode_warning,
 disabled,Desactivar
 documentation,Documentación
 done,Listo
@@ -292,6 +293,7 @@ ph:lower_threshold,Límite Inferior
 ph:midpoint,Punto Medio
 ph:run_calibration,Correr
 ph:second_point,Segundo Punto
+ph:transformer,
 ph:upper_function,Superior Función
 ph:upper_threshold,Límite Superior
 ph:warn_delete,Esta acción sera eliminada

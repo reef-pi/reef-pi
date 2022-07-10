@@ -14,6 +14,7 @@ clear,Resetten
 columns,
 configure,Instellen
 delete,Verwijderen
+devmode_warning,
 disabled,Uitgeschakeld
 documentation,Documentatie
 done,Gereed
@@ -292,6 +293,7 @@ ph:lower_threshold,Laagste drempelwaarde
 ph:midpoint,Middelpunt
 ph:run_calibration,Uitvoeren
 ph:second_point,Tweede punt
+ph:transformer,
 ph:upper_function,Hoogste Functie
 ph:upper_threshold,Hoogste drempelwaarde
 ph:warn_delete,Deze actie verwijderd
