@@ -168,6 +168,7 @@ cron:second,Second
 cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
+devmode_warning,In DevMode
 doser:calibrate,Calibrate
 doser:calibration:run,Run
 doser:delay,Delay
@@ -296,6 +297,7 @@ ph:upper_function,Upper Function
 ph:upper_threshold,Upper Threshold
 ph:warn_delete,This action will delete probe {{name}}
 ph:warn_reset,This action will reset usage data for probe {{name}}
+ph:transformer,Transform function
 signin:invalidcredentials,Invalid Credentials
 signin:password,Password
 signin:signin,Sign In
