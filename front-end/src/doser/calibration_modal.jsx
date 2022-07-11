@@ -26,10 +26,17 @@ export default class CalibrationModal extends React.Component {
     this.promise = new $.Deferred()
   }
 
-  handleCalibrate (duration, speed) {
-    const payload = {
-      duration: parseFloat(duration),
-      speed: parseInt(speed)
+  handleCalibrate (duration, speed, volume) {
+    let payload = {}
+    if (this.props.doser.type === 'stepper') {
+      payload = {
+        volume: parseFloat(volume)
+      }
+    } else {
+      payload = {
+        duration: parseFloat(duration),
+        speed: parseInt(speed)
+      }
     }
 
     this.props.calibrateDoser(this.props.doser.id, payload)
@@ -48,12 +55,14 @@ export default class CalibrationModal extends React.Component {
             onSubmit={this.handleCalibrate}
             speed={this.props.doser.regiment.speed}
             duration={this.props.doser.regiment.duration}
+            volume={this.props.doser.regiment.volume}
+            pumpType={this.props.doser.type}
           />
         </div>
         <div className='modal-footer'>
           <div className='text-center'>
             <button role='confirm' type='button' className='btn btn-primary' ref={(r) => { this.confirm = r }} onClick={this.handleConfirm}>
-              {i18n.t('apply')}
+              {i18n.t('close')}
             </button>
           </div>
         </div>

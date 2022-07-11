@@ -3,6 +3,7 @@ package connectors
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"net/http"
 
@@ -234,6 +235,13 @@ func (c *Jacks) LoadAPI(r *mux.Router) {
 
 type PinValues map[int]float64
 
+func (pv PinValues) String() (res string) {
+	for p, v := range pv {
+		res += fmt.Sprintf("%d:%f ", p, v)
+	}
+	return
+}
+
 func (jacks *Jacks) Control(id string, values PinValues) error {
 	j, err := jacks.Get(id)
 	if err != nil {
@@ -258,6 +266,7 @@ func (jacks *Jacks) Control(id string, values PinValues) error {
 			return err
 		}
 	}
+	log.Println("connectors: jack", j.Name, "updated pwm values:", values)
 	return nil
 }
 
