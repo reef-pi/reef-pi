@@ -16,17 +16,18 @@ type Runner struct {
 }
 
 func (r *Runner) Run() {
-	log.Println("doser sub system: beginning scheduled run ", r.pump.Name)
 	usage := Usage{
 		Time: telemetry.TeleTime(time.Now()),
 	}
 	if r.pump.Type == "stepper" && r.pump.Stepper != nil {
+		log.Println("doser sub system: running doser(stepper)", r.pump.Name, "for", r.pump.Regiment.Volume, "(ml)")
 		if err := r.pump.Stepper.Dose(r.dm.Outlets(), r.pump.Regiment.Volume); err != nil {
 			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
 			return
 		}
 		usage.Pump = int(r.pump.Regiment.Duration)
 	} else {
+		log.Println("doser sub system: running doser(dcmotor)", r.pump.Name, "at", r.pump.Regiment.Speed, "%speed for", r.pump.Regiment.Duration, "(s)")
 		if err := r.PWMDose(r.pump.Regiment.Speed, r.pump.Regiment.Duration); err != nil {
 			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 			return

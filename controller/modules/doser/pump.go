@@ -110,7 +110,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 		dm:   c.c.DM(),
 	}
 	log.Println("doser subsystem: calibration run for:", p.Name)
-	if p.Stepper != nil {
+	if p.Type == "stepper" && p.Stepper != nil {
 		go p.Stepper.Dose(c.c.DM().Outlets(), cal.Volume)
 	} else {
 		go r.PWMDose(cal.Speed, cal.Duration)

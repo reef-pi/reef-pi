@@ -18,9 +18,9 @@ export const Calibrate = ({
     submitForm()
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className='form-group row'>
+  const dcPump = () => {
+    return (
+      <>
         <label htmlFor='speed' className='col-2 col-form-label'>{i18n.t('doser:speed')}</label>
         <div className='col-3'>
           <div className='form-group'>
@@ -49,6 +49,35 @@ export const Calibrate = ({
             <ErrorFor errors={errors} touched={touched} name='duration' />
           </div>
         </div>
+      </>
+    )
+  }
+
+  const stepper = () => {
+    return (
+      <>
+        <label htmlFor='volume' className='col-2 col-form-label'>{i18n.t('doser:volume')}</label>
+        <div className='col-3'>
+          <div className='form-group'>
+            <Field
+              name='volume'
+              type='number'
+              disabled={readOnly}
+              className={classNames('form-control', {
+                'is-invalid': ShowError('volume', touched, errors)
+              })}
+            />
+            <ErrorFor errors={errors} touched={touched} name='duration' />
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className='form-group row'>
+        {values.pumpType === 'stepper' ? stepper() : dcPump()}
         <div className='col-2'>
           <input
             type='submit'
@@ -63,15 +92,9 @@ export const Calibrate = ({
 }
 
 const CalibrateSchema = Yup.object().shape({
-  duration: Yup.number()
-    .required(i18n.t('validation:number_required'))
-    .typeError(i18n.t('validation:number_required'))
-    .min(1, i18n.t('validation:integer_min_required')),
-  speed: Yup.number()
-    .required(i18n.t('validation:number_required'))
-    .typeError(i18n.t('validation:number_required'))
-    .min(1, i18n.t('validation:integer_min_required'))
-    .max(100, i18n.t('validation:integer_max_required'))
+  duration: Yup.number(),
+  speed: Yup.number(),
+  volume: Yup.number()
 })
 
 const CalibrateForm = withFormik({
@@ -79,12 +102,14 @@ const CalibrateForm = withFormik({
   mapPropsToValues: props => {
     return {
       duration: props.duration,
-      speed: props.speed
+      speed: props.speed,
+      volume: props.volume,
+      pumpType: props.pumpType
     }
   },
   validationSchema: CalibrateSchema,
   handleSubmit: (values, { props }) => {
-    props.onSubmit(parseFloat(values.duration), parseInt(values.speed))
+    props.onSubmit(parseFloat(values.duration), parseInt(values.speed), parseFloat(values.volume))
   }
 })(Calibrate)
 
