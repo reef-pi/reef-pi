@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes, NavLink, useLocation } from 'react-router
 import Ato from 'ato/main'
 import Camera from 'camera/main'
 import Equipment from 'equipment/main'
-import Log from 'logCenter/main'
 import NotificationAlert from 'notifications/alert'
 import Lighting from 'lighting/main'
 import Configuration from 'configuration/main'
@@ -38,7 +37,6 @@ const routes = [
   <Route key="manager" path="/manager" element={<Instances />} label={i18n.t('capabilities:manager')} />,
   <Route key="journal" path="/journal" element={<Journal />} label={i18n.t('capabilities:journal')} />,
   <Route key="configuration" path="/configuration/*" element={<Configuration />} label={i18n.t('capabilities:configuration')} />,
-  <Route key="log" path="/log" element={<Log />} label={i18n.t('capabilities:log')} />
 ]
 
 
