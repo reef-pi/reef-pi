@@ -42,7 +42,7 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 		s.RPI_PWMFreq = 100
 	}
 
-	drvrs, err := drivers.NewDrivers(s, bus, store)
+	drvrs, err := drivers.NewDrivers(s, bus, store, t)
 	if err != nil {
 		log.Println("ERROR: failed to initialize drivers. Error:", err)
 		t.LogError("device-manager", "failed to initialize drivers:"+err.Error())

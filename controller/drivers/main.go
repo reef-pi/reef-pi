@@ -12,6 +12,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 const (
@@ -36,9 +37,10 @@ type Drivers struct {
 	dev_mode bool
 	pwm_freq int
 	bus      i2c.Bus
+	t        telemetry.Telemetry
 }
 
-func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers, error) {
+func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemetry.Telemetry) (*Drivers, error) {
 	if err := store.CreateBucket(DriverBucket); err != nil {
 		return nil, err
 	}
@@ -48,6 +50,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store) (*Drivers
 		dev_mode: s.Capabilities.DevMode,
 		pwm_freq: s.RPI_PWMFreq,
 		bus:      bus,
+		t:        t,
 	}
 	return d, d.loadAll()
 }
