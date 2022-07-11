@@ -1,4 +1,3 @@
-import { logError } from 'utils/log'
 import { showError } from 'utils/alert'
 function makeHeaders () {
   const headers = new Headers()
@@ -17,7 +16,6 @@ export function reduxGet (params) {
         if (!response.ok) {
           if (response.status === 401) {
             showError('Authentication failure')
-            logError('Authentication failure')
             return
           }
           if (params.suppressError) {
@@ -25,7 +23,6 @@ export function reduxGet (params) {
           }
           response.text().then(err => {
             showError(err + ' | HTTP ' + response.status)
-            logError(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -52,7 +49,6 @@ export function reduxDelete (params) {
           }
           response.text().then(err => {
             showError(err + ' | HTTP ' + response.status)
-            logError(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -79,7 +75,6 @@ export function reduxPut (params) {
           }
           response.text().then(err => {
             showError(err + ' | HTTP ' + response.status)
-            logError(err + ' | HTTP ' + response.status)
           })
         }
         return response
@@ -114,7 +109,6 @@ export function reduxPost (params) {
             return
           }
           showError(err + ' | HTTP ' + response.status)
-          logError(err + ' | HTTP ' + response.status)
         })
       }
       return response

@@ -1,5 +1,4 @@
 import React from 'react'
-import { logError } from '../utils/log'
 
 class ErrorBoundary extends React.Component {
   constructor (props) {
@@ -22,7 +21,6 @@ class ErrorBoundary extends React.Component {
       error: error,
       errorInfo: errorInfo
     })
-    logError(error)
   }
 
   render () {
