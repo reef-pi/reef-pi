@@ -18,7 +18,8 @@ const configRoutes = [
   <Route key='drivers' path='drivers' element={<Drivers />} label={i18n.t('configuration:tab:drivers')} />,
   <Route key='errors' path='errors' element={<Errors />} label={i18n.t('configuration:tab:errors')} />,
   <Route key='admin' path='admin' element={<Admin />} label={i18n.t('configuration:tab:admin')} />,
-  <Route key='about' path='about' element={<About />} label={i18n.t('configuration:tab:about')} />
+  <Route key='about' path='about' element={<About />} label={i18n.t('configuration:tab:about')} />,
+  <Route key='nomatch' path='*' element={<Settings />} label={i18n.t('configuration:tab:settings')} />
 ]
 
 class Configuration extends React.Component {

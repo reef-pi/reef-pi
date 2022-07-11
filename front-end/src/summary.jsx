@@ -20,7 +20,7 @@ export default class Summary extends React.Component {
   render () {
     let devModeWarning = <React.Fragment />
     if(this.props.devMode){
-      devModeWarning = <li className='list-inline-item text-danger'>{i18n.t('devmode_warning')}| </li>
+      devModeWarning = <li className='list-inline-item'><span className='text-danger'>{i18n.t('devmode_warning')} </span>| </li>
     }
     return (
       <nav className='bottom-bar navbar fixed-bottom navbar-light bg-light justify-content-center'>
