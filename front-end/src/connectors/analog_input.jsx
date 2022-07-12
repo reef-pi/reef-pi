@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Pin from './pin'
 import i18next from 'i18next'
+import { byCapability } from './driver_filter'
 
 export default class AnalogInput extends React.Component {
   constructor (props) {
@@ -91,7 +92,7 @@ export default class AnalogInput extends React.Component {
               onChange={this.handleSetDriver}
               value={this.state.driver.id}
             >
-              {this.props.drivers.map(item => {
+              {this.props.drivers.filter(byCapability('analog-input')).map(item => {
                 return (
                   <option
                     key={item.id}

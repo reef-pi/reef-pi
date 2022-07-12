@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { showError } from 'utils/alert'
 import i18next from 'i18next'
+import { byCapability } from './driver_filter'
 
 export default class Jack extends React.Component {
   constructor (props) {
@@ -124,7 +125,7 @@ export default class Jack extends React.Component {
               onChange={this.handleSetDriver}
               value={this.state.JackDriver}
             >
-              {this.props.drivers.map(item => {
+              {this.props.drivers.filter(byCapability('pwm')).map(item => {
                 return (
                   <option
                     key={item.id}

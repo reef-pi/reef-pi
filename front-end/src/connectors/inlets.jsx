@@ -1,3 +1,4 @@
+import { byCapability } from './driver_filter'
 import React from 'react'
 import { confirm } from 'utils/confirm'
 import { fetchInlets, deleteInlet, createInlet, updateInlet } from 'redux/actions/inlets'
@@ -13,7 +14,7 @@ class inlets extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: props.drivers.filter(d => d.id === 'rpi')[0] || {},
+      driver: props.drivers.filter(byCapability('digital-input'))[0] || {},
       reverse: false,
       add: false
     }
@@ -167,7 +168,7 @@ class inlets extends React.Component {
                 onChange={this.handleDriverChange}
                 value={this.state.driver.id}
               >
-                {this.props.drivers.map(item => {
+                {this.props.drivers.filter(byCapability('digital-input')).map(item => {
                   return (
                     <option key={item.id} value={item.id}>
                       {item.name}

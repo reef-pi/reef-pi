@@ -6,6 +6,7 @@ import Outlet from './outlet'
 import Pin from './pin'
 import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
+import { byCapability } from './driver_filter'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -169,7 +170,7 @@ class outlets extends React.Component {
                 onChange={this.handleDriverChange}
                 value={this.state.driver.id}
               >
-                {this.props.drivers.map(item => {
+                {this.props.drivers.filter(byCapability('digital-output')).map(item => {
                   return (
                     <option key={item.id} value={item.id}>
                       {item.name}
