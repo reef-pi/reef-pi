@@ -21,7 +21,7 @@ class analogInputs extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: props.drivers.filter(d => d.id === 'rpi')[0] || {},
+      driver: props.drivers.filter(byCapability('analog-input'))[0] || {},
       add: false
     }
     this.list = this.list.bind(this)

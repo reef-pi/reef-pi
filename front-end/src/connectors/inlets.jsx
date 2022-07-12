@@ -14,7 +14,7 @@ class inlets extends React.Component {
     this.state = {
       name: '',
       pin: 0,
-      driver: props.drivers.filter(d => d.id === 'rpi')[0] || {},
+      driver: props.drivers.filter(byCapability('digital-input'))[0] || {},
       reverse: false,
       add: false
     }
