@@ -6,6 +6,7 @@ import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/ja
 import Jack from './jack'
 import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
+import { byCapability } from './driver_filter'
 
 class jacks extends React.Component {
   constructor (props) {
@@ -193,7 +194,7 @@ class jacks extends React.Component {
                     onChange={this.handleSetDriver}
                     value={this.state.JackDriver}
                   >
-                    {this.props.drivers.map(item => {
+                    {this.props.drivers.filter(byCapability('pwm')).map(item => {
                       return (
                         <option key={item.id} value={item.id}>
                           {item.name}

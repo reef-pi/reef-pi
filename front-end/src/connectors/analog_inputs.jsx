@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Pin from './pin'
 import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
+import { byCapability } from './driver_filter'
 
 import {
   fetchAnalogInputs,
@@ -164,7 +165,7 @@ class analogInputs extends React.Component {
                     onChange={this.handleSetDriver}
                     value={this.state.driver.id}
                   >
-                    {this.props.drivers.map(item => {
+                    {this.props.drivers.filter(byCapability('analog-input')).map(item => {
                       return (
                         <option key={item.id} value={item.id}>
                           {item.name}
