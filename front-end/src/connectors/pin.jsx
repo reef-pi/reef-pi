@@ -14,7 +14,6 @@ export default class Pin extends React.Component {
   }
 
   options () {
-    console.log(this.props.driver)
     if (this.props.driver === undefined) {
       return
     }

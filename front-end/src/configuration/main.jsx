@@ -11,15 +11,14 @@ import Errors from './errors'
 import i18n from 'utils/i18n'
 
 const configRoutes = [
-  <Route key='settings' index element={<Settings />} label={i18n.t('configuration:tab:settings')} />,
+  <Route key='nomatch' index path='*' element={<Settings />} label={i18n.t('configuration:tab:settings')} />,
   <Route key='connectors' path='connectors' element={<Connectors />} label={i18n.t('configuration:tab:connectors')} />,
   <Route key='telemetry' path='telemetry' element={<Telemetry />} label={i18n.t('configuration:tab:telemetry')} />,
   <Route key='authentication' path='authentication' element={<Auth />} label={i18n.t('configuration:tab:authentication')} />,
   <Route key='drivers' path='drivers' element={<Drivers />} label={i18n.t('configuration:tab:drivers')} />,
   <Route key='errors' path='errors' element={<Errors />} label={i18n.t('configuration:tab:errors')} />,
   <Route key='admin' path='admin' element={<Admin />} label={i18n.t('configuration:tab:admin')} />,
-  <Route key='about' path='about' element={<About />} label={i18n.t('configuration:tab:about')} />,
-  <Route key='nomatch' path='*' element={<Settings />} label={i18n.t('configuration:tab:settings')} />
+  <Route key='about' path='about' element={<About />} label={i18n.t('configuration:tab:about')} />
 ]
 
 class Configuration extends React.Component {
