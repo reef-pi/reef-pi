@@ -30,7 +30,7 @@ class chart extends React.Component {
     }
     const metrics = this.props.readings.historical
     metrics.sort((a, b) => {
-      return ParseTimestamp(a.time) < ParseTimestamp(b.time) ? 1 : -1
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
     })
     let current = ''
     if (metrics.length >= 1) {
