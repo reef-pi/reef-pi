@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 

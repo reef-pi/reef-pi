@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 )
 
 //https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/
