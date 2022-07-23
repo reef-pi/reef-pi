@@ -6,8 +6,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/rpi/i2c"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
-	"github.com/reef-pi/reef-pi/controller/drivers"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"

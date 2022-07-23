@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
