@@ -1,5 +1,5 @@
 import React from 'react'
-import { HuePicker } from 'react-color'
+import { SketchPicker } from 'react-color'
 import PropTypes from 'prop-types'
 import i18next from 'i18next'
 
@@ -39,7 +39,7 @@ class ColorPicker extends React.Component {
       )
     }
     return (
-      <HuePicker
+      <SketchPicker
         name={this.props.name}
         className='mt-2'
         color={this.state.color}

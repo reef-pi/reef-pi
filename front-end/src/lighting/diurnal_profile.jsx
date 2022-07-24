@@ -40,8 +40,8 @@ DiurnalProfile.propTypes = {
   config: PropTypes.object,
   readOnly: PropTypes.bool,
   onChangeHandler: PropTypes.func.isRequired,
-  touched: PropTypes.array,
-  errors: PropTypes.array
+  touched: PropTypes.object,
+  errors: PropTypes.object
 }
 
 export default DiurnalProfile
