@@ -74,7 +74,7 @@ func (r *ReefPi) Start() error {
 	if r.settings.Capabilities.HealthCheck {
 		go r.h.Start()
 	}
-	log.Println("reef-pi is up and running")
+	log.Println("reef-pi version", r.version, "is up and running")
 	return nil
 }
 

@@ -200,7 +200,7 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) upgrade(w http.ResponseWriter, r *http.Request) {
 	var v InstallReq
 	fn := func(string) error {
-		log.Println("Upgrading reef-pi controller")
+		log.Println("Upgrading reef-pi controller to version:", v.Version)
 		return utils.SystemdExecute("reef-pi-install.service", "/usr/bin/reef-pi install -version "+v.Version, false)
 	}
 	utils.JSONUpdateResponse(&v, fn, w, r)
