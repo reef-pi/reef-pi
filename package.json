@@ -67,7 +67,7 @@
     "testcafe": "^1.19.0",
     "webpack": "5.72.1",
     "webpack-cli": "4.10.0",
-    "webpack-dev-server": "4.9.1",
+    "webpack-dev-server": "4.10.1",
     "yup": "0.32.11"
   },
   "scripts": {
