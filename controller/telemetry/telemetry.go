@@ -164,6 +164,7 @@ func (t *telemetry) updateAlertStats(subject string) AlertStats {
 }
 
 func (t *telemetry) LogError(a, b string) error {
+	t.EmitMetric(a, "error", 1)
 	return t.logError(a, b)
 }
 
