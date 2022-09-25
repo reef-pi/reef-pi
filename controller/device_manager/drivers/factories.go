@@ -8,6 +8,7 @@ import (
 
 	"github.com/reef-pi/drivers/ads1x15"
 	"github.com/reef-pi/drivers/dli"
+	"github.com/reef-pi/drivers/esp32"
 	"github.com/reef-pi/drivers/ezo"
 	"github.com/reef-pi/drivers/file"
 	"github.com/reef-pi/drivers/pca9685"
@@ -21,7 +22,10 @@ import (
 )
 
 var driversMap = map[string]hal.DriverFactory{
+	"ads1015":      ads1x15.Ads1015Factory(),
+	"ads1115":      ads1x15.Ads1115Factory(),
 	"dli-wpsp":     dli.Adapter(),
+	"esp32":        esp32.Factory(),
 	"file-analog":  file.AnalogFactory(),
 	"file-digital": file.DigitalFactory(),
 	"hs103":        tplink.HS103Factory(),
@@ -36,8 +40,6 @@ var driversMap = map[string]hal.DriverFactory{
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
 	"sht31d":       sht3x.Factory(),
-	"ads1015":      ads1x15.Ads1015Factory(),
-	"ads1115":      ads1x15.Ads1115Factory(),
 	"tasmota-http": tasmota.HttpDriverFactory(),
 }
 
