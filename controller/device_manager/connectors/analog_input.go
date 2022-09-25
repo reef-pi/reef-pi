@@ -230,7 +230,7 @@ func (ais *AnalogInputs) Read(id string) (float64, error) {
 	if err != nil {
 		return -1, fmt.Errorf("pin %d on analog input %s has no driver: %v", j.Pin, id, err)
 	}
-	return ch.Read()
+	return ch.Value()
 }
 func (ais *AnalogInputs) Calibrate(id string, ms []hal.Measurement) error {
 	j, err := ais.Get(id)

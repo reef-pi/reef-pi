@@ -14,9 +14,10 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/prometheus/client_golang v1.13.0
+	github.com/prometheus/common v0.37.0
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
-	github.com/reef-pi/drivers v0.0.0-20211221085126-4ac6234bb9c4
-	github.com/reef-pi/hal v0.0.0-20210801213209-e1fdd03d558f
+	github.com/reef-pi/drivers v0.0.0-20220925082952-302fe70531b7
+	github.com/reef-pi/hal v0.0.0-20220925063527-7d44144f7cf4
 	github.com/reef-pi/rpi v0.0.0-20220116071804-9ab406e54060
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
