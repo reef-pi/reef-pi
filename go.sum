@@ -223,8 +223,8 @@ github.com/prometheus/procfs v0.8.0 h1:ODq8ZFEaYeCaZOJlZZdJA2AbQR98dSHSM1KW/You5
 github.com/prometheus/procfs v0.8.0/go.mod h1:z7EfXMXOkbkqb9IINtpCn86r/to3BnA0uaxHdg830/4=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64 h1:pv5kOD9OkP5vntO6lAtFLUyGpyfZtu8QkaZ5sIabh8k=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64/go.mod h1:UBHNdzbwzKriDbmPAr34k4hdd+x/VYKO6xJ4ebDztEo=
-github.com/reef-pi/drivers v0.0.0-20220925082952-302fe70531b7 h1:BN4ALfXyXY/JXVLACmq0sastvK7CrjR+rjWAYkrjTOM=
-github.com/reef-pi/drivers v0.0.0-20220925082952-302fe70531b7/go.mod h1:eT0bcpPH+oFenb651d6ZiOxCVMXJIBz/San2NSOovS4=
+github.com/reef-pi/drivers v0.0.0-20220927012018-4c603148e1bf h1:frfSZWSGFz6o8jvDd515fCVUWKwUAySZKBE0aOi2TAs=
+github.com/reef-pi/drivers v0.0.0-20220927012018-4c603148e1bf/go.mod h1:eT0bcpPH+oFenb651d6ZiOxCVMXJIBz/San2NSOovS4=
 github.com/reef-pi/embd v0.0.0-20200823212911-23a8c07341dd h1:7C2RnXExMPkAgq+OhGTivaTz0icwlo/3T+eJ8rGt0CM=
 github.com/reef-pi/embd v0.0.0-20200823212911-23a8c07341dd/go.mod h1:vLR1mLVXpivVlbXyVJ4CdsUpOoyDWas+xjikOIzVV0g=
 github.com/reef-pi/hal v0.0.0-20210801213209-e1fdd03d558f/go.mod h1:ymcJ0AbYfWXT1vyAbXOjKtWaFdCv1HHYmXDMWxJSWSM=
