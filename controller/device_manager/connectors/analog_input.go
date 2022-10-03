@@ -146,7 +146,7 @@ func (c *AnalogInputs) LoadAPI(r *mux.Router) {
 	//   description: Not Found
 	r.HandleFunc("/api/analog_inputs/{id}", c.get).Methods("GET")
 
-	// swagger:operation PUT /api/analog_inuputs AnalogInput analogInputCreate
+	// swagger:operation PUT /api/analog_inputs AnalogInput analogInputCreate
 	// Create an analog input.
 	// Create a new analog input.
 	// ---

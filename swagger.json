@@ -31,6 +31,30 @@
         }
       }
     },
+    "/api/admin/reef-pi.db": {
+      "get": {
+        "description": "Download current reef-pi database.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Download current reef-pi database.",
+        "operationId": "dbExport",
+        "responses": {
+          "200": {}
+        }
+      },
+      "post": {
+        "description": "Import reef-pi database.",
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Import reef-pi database.",
+        "operationId": "dbImport",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
     "/api/admin/reload": {
       "post": {
         "description": "Reload reef-pi to apply any capability changes or other modules that are registered at startup.",
@@ -76,6 +100,30 @@
             }
           },
           "500": {}
+        }
+      },
+      "put": {
+        "description": "Create a new analog input.",
+        "tags": [
+          "AnalogInput"
+        ],
+        "summary": "Create an analog input.",
+        "operationId": "analogInputCreate",
+        "parameters": [
+          {
+            "description": "The analog input to create",
+            "name": "analog input",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/analogInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
       }
     },
@@ -196,32 +244,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/analog_inuputs": {
-      "put": {
-        "description": "Create a new analog input.",
-        "tags": [
-          "AnalogInput"
-        ],
-        "summary": "Create an analog input.",
-        "operationId": "analogInputCreate",
-        "parameters": [
-          {
-            "description": "The analog input to create",
-            "name": "analog input",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/analogInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -1815,6 +1837,35 @@
         }
       }
     },
+    "/api/lights/{id}/usage": {
+      "get": {
+        "description": "Get usage history for a given light.",
+        "tags": [
+          "light"
+        ],
+        "summary": "Get usage history.",
+        "operationId": "usage",
+        "parameters": [
+          {
+            "description": "The Id of the light",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/macros": {
       "get": {
         "description": "List all macros in reef-pi.",
@@ -2630,6 +2681,56 @@
         }
       }
     },
+    "/api/tcs/{id}/calibrate": {
+      "post": {
+        "description": "Set calibration points for one or two point calibration",
+        "tags": [
+          "Temperature"
+        ],
+        "summary": "Calibrate a temperature sensor.",
+        "operationId": "tcsCalibrate",
+        "parameters": [
+          {
+            "description": "The Id of the temperature controller with a sensor to calibrate",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The calibration measurements",
+            "name": "measurements",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "expected": {
+                    "description": "The expected value",
+                    "type": "float64",
+                    "format": "float"
+                  },
+                  "observed": {
+                    "description": "The actual value observed",
+                    "type": "float64",
+                    "format": "float"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/tcs/{id}/current_reading": {
       "get": {
         "description": "Get temperature controller reading.",
@@ -2938,6 +3039,26 @@
       },
       "x-go-package": "github.com/reef-pi/reef-pi/controller/daemon"
     },
+    "ChartConfig": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "x-go-name": "Color"
+        },
+        "ymax": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "YMax"
+        },
+        "ymin": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "YMin"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/temperature"
+    },
     "Duration": {
       "description": "A Duration represents the elapsed time between two instants\nas an int64 nanosecond count. The representation limits the\nlargest representable duration to approximately 290 years.",
       "type": "integer",
@@ -2963,6 +3084,45 @@
         }
       },
       "x-go-package": "github.com/reef-pi/reef-pi/controller/settings"
+    },
+    "MQTTConfig": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "string",
+          "x-go-name": "ClientID"
+        },
+        "enable": {
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "prefix": {
+          "type": "string",
+          "x-go-name": "Prefix"
+        },
+        "qos": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "QoS"
+        },
+        "retained": {
+          "type": "boolean",
+          "x-go-name": "Retained"
+        },
+        "server": {
+          "type": "string",
+          "x-go-name": "Server"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
     },
     "MailerConfig": {
       "type": "object",
@@ -2990,25 +3150,13 @@
             "type": "string"
           },
           "x-go-name": "To"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
         }
       },
       "x-go-package": "github.com/reef-pi/reef-pi/controller/telemetry"
-    },
-    "Measurement": {
-      "type": "object",
-      "properties": {
-        "expected": {
-          "type": "number",
-          "format": "double",
-          "x-go-name": "Expected"
-        },
-        "observed": {
-          "type": "number",
-          "format": "double",
-          "x-go-name": "Observed"
-        }
-      },
-      "x-go-package": "github.com/reef-pi/hal"
     },
     "Metric": {
       "type": "object",
@@ -3052,12 +3200,17 @@
           "x-go-name": "Enable"
         },
         "max": {
-          "type": "integer",
-          "format": "int64",
+          "type": "number",
+          "format": "double",
           "x-go-name": "Max"
+        },
+        "min": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Min"
         }
       },
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ato"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/ph"
     },
     "ProfileSpec": {
       "type": "object",
@@ -3082,36 +3235,6 @@
         }
       },
       "x-go-package": "github.com/reef-pi/reef-pi/controller/pwm_profile"
-    },
-    "Schedule": {
-      "type": "object",
-      "properties": {
-        "day": {
-          "type": "string",
-          "x-go-name": "Day"
-        },
-        "hour": {
-          "type": "string",
-          "x-go-name": "Hour"
-        },
-        "minute": {
-          "type": "string",
-          "x-go-name": "Minute"
-        },
-        "month": {
-          "type": "string",
-          "x-go-name": "Month"
-        },
-        "second": {
-          "type": "string",
-          "x-go-name": "Second"
-        },
-        "week": {
-          "type": "string",
-          "x-go-name": "Week"
-        }
-      },
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
     },
     "Step": {
       "type": "object",
@@ -3149,7 +3272,7 @@
         }
       },
       "x-go-name": "AnalogInput",
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/device_manager/connectors"
     },
     "ato": {
       "type": "object",
@@ -3184,6 +3307,10 @@
         },
         "notify": {
           "$ref": "#/definitions/Notify"
+        },
+        "one_shot": {
+          "type": "boolean",
+          "x-go-name": "OneShot"
         },
         "period": {
           "$ref": "#/definitions/Duration"
@@ -3334,10 +3461,6 @@
           "type": "string",
           "x-go-name": "Name"
         },
-        "on": {
-          "type": "boolean",
-          "x-go-name": "On"
-        },
         "pin": {
           "type": "integer",
           "format": "int64",
@@ -3451,9 +3574,45 @@
           "type": "number",
           "format": "double",
           "x-go-name": "Speed"
+        },
+        "volume": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Volume"
         }
       },
       "x-go-name": "CalibrationDetails",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
+    },
+    "doserSchedule": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "string",
+          "x-go-name": "Day"
+        },
+        "hour": {
+          "type": "string",
+          "x-go-name": "Hour"
+        },
+        "minute": {
+          "type": "string",
+          "x-go-name": "Minute"
+        },
+        "month": {
+          "type": "string",
+          "x-go-name": "Month"
+        },
+        "second": {
+          "type": "string",
+          "x-go-name": "Second"
+        },
+        "week": {
+          "type": "string",
+          "x-go-name": "Week"
+        }
+      },
+      "x-go-name": "Schedule",
       "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
     },
     "dosingRegiment": {
@@ -3469,12 +3628,17 @@
           "x-go-name": "Enable"
         },
         "schedule": {
-          "$ref": "#/definitions/Schedule"
+          "$ref": "#/definitions/doserSchedule"
         },
         "speed": {
           "type": "number",
           "format": "double",
           "x-go-name": "Speed"
+        },
+        "volume": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Volume"
         }
       },
       "x-go-name": "DosingRegiment",
@@ -3519,7 +3683,58 @@
         }
       },
       "x-go-name": "Driver",
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/drivers"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/device_manager/drivers"
+    },
+    "drv8825": {
+      "type": "object",
+      "title": "https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/",
+      "properties": {
+        "delay": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Delay"
+        },
+        "direction": {
+          "type": "boolean",
+          "x-go-name": "Direction"
+        },
+        "direction_pin": {
+          "type": "string",
+          "x-go-name": "DirectionPin"
+        },
+        "microstepping": {
+          "type": "string",
+          "x-go-name": "MicroStepping"
+        },
+        "ms_pin_a": {
+          "type": "string",
+          "x-go-name": "MSPinA"
+        },
+        "ms_pin_b": {
+          "type": "string",
+          "x-go-name": "MSPinB"
+        },
+        "ms_pin_c": {
+          "type": "string",
+          "x-go-name": "MSPinC"
+        },
+        "spr": {
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "SPR"
+        },
+        "step_pin": {
+          "type": "string",
+          "x-go-name": "StepPin"
+        },
+        "vpr": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "VPR"
+        }
+      },
+      "x-go-name": "DRV8825",
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/modules/doser"
     },
     "equipment": {
       "type": "object",
@@ -3539,6 +3754,10 @@
         "outlet": {
           "type": "string",
           "x-go-name": "Outlet"
+        },
+        "stay_off_on_boot": {
+          "type": "boolean",
+          "x-go-name": "StayOffOnBoot"
         }
       },
       "x-go-name": "Equipment",
@@ -3609,38 +3828,7 @@
         }
       },
       "x-go-name": "Inlet",
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
-    },
-    "instance": {
-      "type": "object",
-      "properties": {
-        "address": {
-          "type": "string",
-          "x-go-name": "Addr"
-        },
-        "id": {
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "ignore_https": {
-          "type": "boolean",
-          "x-go-name": "IgnoreHTTPS"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "password": {
-          "type": "string",
-          "x-go-name": "Password"
-        },
-        "user": {
-          "type": "string",
-          "x-go-name": "User"
-        }
-      },
-      "x-go-name": "Instance",
-      "x-go-package": "github.com/reef-pi/reef-pi/manager"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/device_manager/connectors"
     },
     "jack": {
       "type": "object",
@@ -3671,7 +3859,7 @@
         }
       },
       "x-go-name": "Jack",
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/device_manager/connectors"
     },
     "light": {
       "properties": {
@@ -3756,7 +3944,7 @@
         }
       },
       "x-go-name": "Outlet",
-      "x-go-package": "github.com/reef-pi/reef-pi/controller/connectors"
+      "x-go-package": "github.com/reef-pi/reef-pi/controller/device_manager/connectors"
     },
     "phProbe": {
       "type": "object",
@@ -3764,6 +3952,9 @@
         "analog_input": {
           "type": "string",
           "x-go-name": "AnalogInput"
+        },
+        "chart": {
+          "$ref": "#/definitions/ChartConfig"
         },
         "control": {
           "type": "boolean",
@@ -3807,8 +3998,16 @@
         "notify": {
           "$ref": "#/definitions/Notify"
         },
+        "one_shot": {
+          "type": "boolean",
+          "x-go-name": "OneShot"
+        },
         "period": {
           "$ref": "#/definitions/Duration"
+        },
+        "transformer": {
+          "type": "string",
+          "x-go-name": "Transformer"
         },
         "upper_eq": {
           "type": "string",
@@ -3840,6 +4039,13 @@
         },
         "regiment": {
           "$ref": "#/definitions/dosingRegiment"
+        },
+        "stepper": {
+          "$ref": "#/definitions/drv8825"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
         }
       },
       "x-go-name": "Pump",
@@ -3854,6 +4060,10 @@
         },
         "capabilities": {
           "$ref": "#/definitions/capabilities"
+        },
+        "cors": {
+          "type": "boolean",
+          "x-go-name": "CORS"
         },
         "display": {
           "type": "boolean",
@@ -3970,6 +4180,9 @@
         "mailer": {
           "$ref": "#/definitions/MailerConfig"
         },
+        "mqtt": {
+          "$ref": "#/definitions/MQTTConfig"
+        },
         "notify": {
           "type": "boolean",
           "x-go-name": "Notify"
@@ -3990,12 +4203,8 @@
     "temperatureController": {
       "type": "object",
       "properties": {
-        "calibration_points": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Measurement"
-          },
-          "x-go-name": "CalibrationPoints"
+        "chart": {
+          "$ref": "#/definitions/ChartConfig"
         },
         "control": {
           "type": "boolean",
@@ -4046,6 +4255,10 @@
         },
         "notify": {
           "$ref": "#/definitions/Notify"
+        },
+        "one_shot": {
+          "type": "boolean",
+          "x-go-name": "OneShot"
         },
         "period": {
           "$ref": "#/definitions/Duration"
