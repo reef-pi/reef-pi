@@ -30,6 +30,10 @@ pi:
 pi-zero:
 	env GOARM=6 GOOS=linux GOARCH=arm go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  ./commands
 
+.PHONY:x86
+x86:
+	env GOOS=linux GOARCH=amd64 go build -o $(BINARY) -ldflags "-s -w -X main.Version=$(VERSION)"  ./commands
+
 .PHONY: test
 test:
 	go test -count=1 -cover $(DETECT_RACE) ./...
@@ -72,14 +76,21 @@ ui:
 ui-dev:
 	yarn run ui-dev
 
-.PHONY: deb
-deb: ui api-doc
+.PHONY: common_deb
+common_deb: ui api-doc
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
 	cp build/config.yaml dist/etc/reef-pi/config.yaml
 	mkdir dist/var/lib/reef-pi/images
+
+.PHONY: pi_deb
+pi_deb: common_deb
 	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
+
+.PHONY: x86_deb
+x86_deb: common_deb
+	bundle exec fpm -t deb -s dir -a all -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
 .PHONY: clean
 clean:

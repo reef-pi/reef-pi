@@ -33,4 +33,4 @@ jobs:
       - name: fpm
         run: bundle install
       - name: deb
-        run: make deb
+        run: make pi_deb
