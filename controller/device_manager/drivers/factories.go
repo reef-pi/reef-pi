@@ -64,7 +64,6 @@ func (d *Drivers) loadRpi() error {
 		return err
 	}
 	piDriver.Parameters = parseParams(piDriver.Config)
-	piDriver.Parameters["Dev Mode"] = d.dev_mode
 	if d.pwm_freq > 0 {
 		piDriver.Parameters["Frequency"] = d.pwm_freq
 	}
@@ -72,9 +71,11 @@ func (d *Drivers) loadRpi() error {
 }
 
 func (d *Drivers) loadAll() error {
-	if err := d.loadRpi(); err != nil {
-		d.t.LogError("driver-subsystem", "Failed load raspberry pi driver. Error:"+err.Error())
-		log.Println("driver-subsystem: Failed load raspberry pi driver. Error:", err.Error())
+	if d.isRaspberryPi {
+		if err := d.loadRpi(); err != nil {
+			d.t.LogError("driver-subsystem", "Failed load raspberry pi driver. Error:"+err.Error())
+			log.Println("driver-subsystem: Failed load raspberry pi driver. Error:", err.Error())
+		}
 	}
 
 	ds, err := d.List()
