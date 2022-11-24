@@ -2,8 +2,10 @@ package system
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 const Bucket = "system"
@@ -23,15 +25,24 @@ type Controller struct {
 	config                    Config
 	c                         controller.Controller
 	PowerFile, BrightnessFile string
+	isRaspberryPi             bool
+	model, ip                 string
 }
 
 func New(conf Config, c controller.Controller) *Controller {
-	return &Controller{
+	con := &Controller{
 		config:         conf,
 		c:              c,
 		PowerFile:      PowerFile,
 		BrightnessFile: BrightnessFile,
 	}
+	stats, err := host.Info()
+	if err == nil && strings.HasPrefix(stats.KernelArch, "arm") {
+		con.isRaspberryPi = true
+	}
+	con.ip = HostIP(conf.Interface)
+	con.model = GetModel()
+	return con
 }
 
 func (c *Controller) Start() {

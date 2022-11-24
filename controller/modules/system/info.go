@@ -1,7 +1,6 @@
 package system
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net"
@@ -9,6 +8,7 @@ import (
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 const (
@@ -27,46 +27,48 @@ type Summary struct {
 }
 
 func (c *Controller) ComputeSummary() Summary {
-	ip, err := c.HostIP(c.config.Interface)
-	if err != nil {
-		log.Println("ERROR: Failed to detect ip for interface '"+c.config.Interface+". Error:", err)
-		ip = "unknown"
-	}
-	temp, err := c.CPUTemperature()
-	if err != nil {
-		log.Println("ERROR:Failed to get controller temperature. Error:", err)
-		temp = "unknown"
-	}
 	s := Summary{
-		Name:           c.config.Name,
-		CurrentTime:    time.Now().Format("Mon Jan 2 15:04:05, 2006"),
-		IP:             ip,
-		Uptime:         c.Uptime(),
-		CPUTemperature: string(temp),
-		Version:        c.config.Version,
-		Model:          c.GetModel(),
+		Name:        c.config.Name,
+		CurrentTime: time.Now().Format("Mon Jan 2 15:04:05, 2006"),
+		IP:          c.ip,
+		Uptime:      c.Uptime(),
+		Version:     c.config.Version,
+		Model:       c.model,
+	}
+	if c.isRaspberryPi {
+		temp, err := c.CPUTemperature()
+		if err != nil {
+			log.Println("ERROR:Failed to get controller temperature. Error:", err)
+			temp = "unknown"
+		}
+		s.CPUTemperature = temp
 	}
 	return s
 }
 
-func (c *Controller) HostIP(i string) (string, error) {
+const _unknwonIface = "unknown"
+
+func HostIP(i string) string {
 	iface, err := net.InterfaceByName(i)
 	if err != nil {
-		return "", err
+		log.Println("WARN: Failed to obatin interface details: "+i+". Error:", err)
+		return _unknwonIface
 	}
 	addrs, err := iface.Addrs()
 	if err != nil {
-		return "", err
+		log.Println("WARN: Failed to fetch address for interface: "+i+". Error:", err)
+		return _unknwonIface
 	}
 	for _, v := range addrs {
 		switch s := v.(type) {
 		case *net.IPNet:
 			if s.IP.To4() != nil {
-				return s.IP.To4().String(), nil
+				return s.IP.To4().String()
 			}
 		}
 	}
-	return "", fmt.Errorf("Cant detect IP of interface:%s", i)
+	log.Println("WARN: interface " + i + " has no associated ip")
+	return _unknwonIface
 }
 
 // temp=36.9'C
@@ -81,12 +83,15 @@ func (c *Controller) CPUTemperature() (string, error) {
 	return strings.Split(string(out), "=")[1], nil
 }
 
-func (c *Controller) GetModel() string {
+func GetModel() string {
+	stats, err := host.Info()
+	if err == nil && !strings.HasPrefix(stats.KernelArch, "arm") {
+		return stats.Platform + ", " + stats.PlatformVersion + "(" + stats.KernelArch + ")"
+	}
 	data, err := ioutil.ReadFile("/proc/device-tree/model")
 	if err != nil {
 		log.Println("Failed to detect Raspberry Pi version. Error:", err)
 		return "unknown"
 	}
 	return strings.TrimSpace(string(data))
-
 }
