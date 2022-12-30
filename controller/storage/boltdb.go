@@ -42,12 +42,12 @@ func (s *store) bucket(tx *bolt.Tx, name string) (*bolt.Bucket, error) {
 	} else {
 		p := tx.Bucket([]byte(s.parent))
 		if p == nil {
-			return nil, &DoesNotExistError{fmt.Sprintf("Parent bucket: '%s' does not exist.", s.parent)}
+			return nil, fmt.Errorf(fmt.Sprintf("Parent bucket: '%s' does not exist.", s.parent), ErrDoesNotExist)
 		}
 		b = p.Bucket([]byte(name))
 	}
 	if b == nil {
-		return nil, &DoesNotExistError{fmt.Sprintf("Bucket: '%s' does not exist.", name)}
+		return nil, fmt.Errorf(fmt.Sprintf("Bucket: '%s' does not exist.", name), ErrDoesNotExist)
 	}
 	return b, nil
 }
@@ -68,7 +68,7 @@ func (s *store) RawGet(bucket, id string) ([]byte, error) {
 	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		if b == nil {
-			return &DoesNotExistError{fmt.Sprintf("Bucket: '%s' does not exist.", bucket)}
+			return fmt.Errorf(fmt.Sprintf("Bucket: '%s' does not exist.", bucket), ErrDoesNotExist)
 		}
 		data = b.Get([]byte(id))
 		return nil
@@ -82,7 +82,7 @@ func (s *store) Get(bucket, id string, i interface{}) error {
 		return err
 	}
 	if data == nil || len(data) == 0 {
-		return &DoesNotExistError{fmt.Sprintf("Item '%s' does not exist in bucket '%s'", id, bucket)}
+		return fmt.Errorf(fmt.Sprintf("Item '%s' does not exist in bucket '%s'", id, bucket), ErrDoesNotExist)
 	}
 	return json.Unmarshal(data, i)
 }
@@ -176,7 +176,7 @@ func (s *store) CreateSubBucket(parent, child string) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		p := tx.Bucket([]byte(parent))
 		if p == nil {
-			return &DoesNotExistError{fmt.Sprintf("Bucket: '%s' does not exist.", parent)}
+			return fmt.Errorf(fmt.Sprintf("Bucket: '%s' does not exist.", parent), ErrDoesNotExist)
 		}
 		_, err := p.CreateBucketIfNotExists([]byte(child))
 		return err

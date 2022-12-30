@@ -1,11 +1,12 @@
 package telemetry
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 // TODO: translate these
@@ -38,12 +39,9 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 	var existingConfig TelemetryConfig
 	var readErr = t.store.Get(t.bucket, DBKey, &existingConfig)
 	if readErr != nil {
-		switch readErr.(type) {
-			case storage.DoesNotExistError:
-				// no-op
-			default:
-				utils.ErrorResponse(http.StatusInternalServerError, "Failed to update. Error: "+readErr.Error(), w)
-				return
+		if errors.Is(readErr, storage.ErrDoesNotExist) {
+			utils.ErrorResponse(http.StatusInternalServerError, "Failed to update. Error: "+readErr.Error(), w)
+			return
 		}
 	}
 
