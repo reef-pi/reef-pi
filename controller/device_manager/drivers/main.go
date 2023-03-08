@@ -56,6 +56,9 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 	if sErr == nil && strings.HasPrefix(stats.KernelArch, "arm") {
 		d.isRaspberryPi = true
 	}
+	if s.Capabilities.DevMode {
+		d.isRaspberryPi = true
+	}
 	return d, d.loadAll()
 }
 
