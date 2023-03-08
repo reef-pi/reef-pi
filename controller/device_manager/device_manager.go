@@ -2,6 +2,7 @@ package device_manager
 
 import (
 	"log"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/rpi/i2c"
@@ -11,6 +12,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 type DeviceManager struct {
@@ -28,7 +30,8 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 	mbus := i2c.MockBus()
 	mbus.Bytes = make([]byte, 2) // ph sensor expects two bytes
 	bus := i2c.Bus(mbus)
-	if !s.Capabilities.DevMode {
+	stats, err := host.Info()
+	if err == nil && strings.HasPrefix(stats.KernelArch, "arm") {
 		b, err := i2c.New()
 		if err != nil {
 			log.Println("ERROR: Failed to initialize i2c. Error:", err)

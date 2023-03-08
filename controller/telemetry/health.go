@@ -6,6 +6,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/shirou/gopsutil/load"
@@ -14,6 +15,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 const HealthStatsKey = "health_stats"
@@ -26,12 +28,13 @@ type HealthChecker interface {
 }
 
 type hc struct {
-	stopCh   chan struct{}
-	interval time.Duration
-	t        Telemetry
-	Notify   settings.HealthCheckNotify
-	store    storage.Store
-	statsMgr StatsManager
+	stopCh        chan struct{}
+	interval      time.Duration
+	t             Telemetry
+	Notify        settings.HealthCheckNotify
+	store         storage.Store
+	statsMgr      StatsManager
+	isRaspberryPi bool
 }
 
 type HealthMetric struct {
@@ -75,7 +78,7 @@ func (m1 HealthMetric) Before(mx Metric) bool {
 }
 
 func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNotify, t Telemetry, store storage.Store) HealthChecker {
-	return &hc{
+	h := &hc{
 		interval: i,
 		stopCh:   make(chan struct{}),
 		t:        t,
@@ -83,6 +86,11 @@ func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNoti
 		statsMgr: t.NewStatsManager(b),
 		store:    store,
 	}
+	stats, err := host.Info()
+	if err == nil && strings.HasPrefix(stats.KernelArch, "arm") {
+		h.isRaspberryPi = true
+	}
+	return h
 }
 
 func (h *hc) Check() {
@@ -107,14 +115,16 @@ func (h *hc) Check() {
 		memorySum:  usedMemory,
 		Time:       TeleTime(time.Now()),
 	}
-	throttles, err := VcgencmdGetThrottled()
-	if err != nil {
-		log.Println("ERROR: failed to get pi power throttle information. Error:", err)
-	} else {
-		for _, throttle := range throttles {
-			if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
-				metric.UnderVoltage = 1
-				h.t.LogError("health-check", "under voltage detected")
+	if h.isRaspberryPi {
+		throttles, err := VcgencmdGetThrottled()
+		if err != nil {
+			log.Println("ERROR: failed to get pi power throttle information. Error:", err)
+		} else {
+			for _, throttle := range throttles {
+				if throttle == UnderVoltage || throttle == UnderVoltageHasOccurred {
+					metric.UnderVoltage = 1
+					h.t.LogError("health-check", "under voltage detected")
+				}
 			}
 		}
 	}

@@ -154,8 +154,8 @@ func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 			dr, ok := d.drivers[_rpi]
 			if ok {
 				piDriver.loadPinMap(dr)
+				ds = append(ds, piDriver)
 			}
-			ds = append(ds, piDriver)
 		}
 		return ds, err
 	}

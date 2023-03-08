@@ -13,6 +13,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 const (
@@ -32,12 +33,12 @@ type Driver struct {
 
 type Drivers struct {
 	sync.Mutex
-	drivers  map[string]hal.Driver
-	store    storage.Store
-	dev_mode bool
-	pwm_freq int
-	bus      i2c.Bus
-	t        telemetry.Telemetry
+	drivers       map[string]hal.Driver
+	store         storage.Store
+	pwm_freq      int
+	bus           i2c.Bus
+	t             telemetry.Telemetry
+	isRaspberryPi bool
 }
 
 func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemetry.Telemetry) (*Drivers, error) {
@@ -47,10 +48,16 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 	d := &Drivers{
 		drivers:  make(map[string]hal.Driver),
 		store:    store,
-		dev_mode: s.Capabilities.DevMode,
 		pwm_freq: s.RPI_PWMFreq,
 		bus:      bus,
 		t:        t,
+	}
+	stats, sErr := host.Info()
+	if sErr == nil && strings.HasPrefix(stats.KernelArch, "arm") {
+		d.isRaspberryPi = true
+	}
+	if s.Capabilities.DevMode {
+		d.isRaspberryPi = true
 	}
 	return d, d.loadAll()
 }
