@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/coreos/go-systemd/v22 v22.5.0
-	github.com/dustin/go-humanize v1.0.0
+	github.com/dustin/go-humanize v1.0.1
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/godbus/dbus/v5 v5.1.0
 	github.com/golang/glog v1.0.0 // indirect
@@ -21,6 +21,6 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.22.10
-	go.etcd.io/bbolt v1.3.6
+	go.etcd.io/bbolt v1.3.7
 	gopkg.in/yaml.v2 v2.4.0
 )

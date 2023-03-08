@@ -4,14 +4,14 @@ jobs:
   builds:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.3.0
       - uses: actions/setup-go@v3
         with:
           go-version: '^1.19'
       - uses: actions/setup-node@v3
         with:
           node-version: 18.13.0
-      - uses: actions/cache@v3.0.11
+      - uses: actions/cache@v3.2.6
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
