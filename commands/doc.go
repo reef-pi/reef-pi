@@ -23,7 +23,8 @@
 // swagger:meta
 
 // @openapi:info
-// 	version: 0.0.1
-// 	title: reef-pi
-// 	description: reef-pi API
+//
+//	version: 0.0.1
+//	title: reef-pi
+//	description: reef-pi API
 package main

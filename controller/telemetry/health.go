@@ -12,10 +12,11 @@ import (
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 
+	"github.com/shirou/gopsutil/v3/host"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"github.com/shirou/gopsutil/v3/host"
 )
 
 const HealthStatsKey = "health_stats"

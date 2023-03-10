@@ -8,7 +8,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 )
 
-//https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/
+// https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/
+//
 //swagger:model drv8825
 type DRV8825 struct {
 	StepPin       string  `json:"step_pin"`
@@ -53,7 +54,7 @@ func (d *DRV8825) IsValid() error {
 	return nil
 }
 
-//	go r.Dose(cal.Speed, cal.Duration)
+// go r.Dose(cal.Speed, cal.Duration)
 func (d *DRV8825) Step(outlets *connectors.Outlets, count int) error {
 	delay := d.Delay
 	if delay == 0 {

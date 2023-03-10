@@ -10,10 +10,11 @@ import (
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/rpi/i2c"
 
+	"github.com/shirou/gopsutil/v3/host"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
-	"github.com/shirou/gopsutil/v3/host"
 )
 
 const (

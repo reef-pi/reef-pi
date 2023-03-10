@@ -8,7 +8,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-//API
+// API
 func (e *Controller) LoadAPI(r *mux.Router) {
 
 	// swagger:operation GET /api/equipment/{id} Equipment equipmentGet

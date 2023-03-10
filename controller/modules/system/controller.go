@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/reef-pi/reef-pi/controller"
 	"github.com/shirou/gopsutil/v3/host"
+
+	"github.com/reef-pi/reef-pi/controller"
 )
 
 const Bucket = "system"
