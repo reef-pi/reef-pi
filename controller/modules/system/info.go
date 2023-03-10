@@ -7,8 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"github.com/shirou/gopsutil/v3/host"
+
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 const (

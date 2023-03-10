@@ -4,11 +4,6 @@ VERSION:=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 DETECT_RACE='-race'
 
-ifeq ($(OS), Windows_NT)
-	BINARY=./bin/reef-pi.exe
-	DETECT_RACE=
-endif
-
 .PHONY:bin
 bin:
 	make go
@@ -48,22 +43,13 @@ sass-lint:
 
 .PHONY: install
 install:
-	make go-get
 	yarn
 
-.PHONY: go-get
-go-get:
-ifeq ($(OS), Windows_NT)
-	go get -d -u github.com/StackExchange/wmi
-endif
-
-.PHONY: vet
-vet:
-	go vet ./...
-
-.PHONY: imports
-imports:
+.PHONY: lint
+lint:
+	go fmt ./...
 	goimports -w -local github.com/reef-pi/reef-pi -d ./controller
+	go vet ./...
 
 .PHONY: build
 build: clean go-get test bin
