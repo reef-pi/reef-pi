@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
 import i18next from 'i18next'
 import { FaTrashAlt, FaSave } from 'react-icons/fa'
@@ -24,6 +24,7 @@ const EditEquipment = ({
     event.preventDefault()
     if (dirty === false || isValid === true) {
       submitForm()
+      showUpdateSuccessful()
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(i18next.t('validation:error'))

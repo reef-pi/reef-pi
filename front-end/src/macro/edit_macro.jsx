@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
 import i18n from 'utils/i18n'
 import { Field, FieldArray } from 'formik'
@@ -26,6 +26,7 @@ const EditMacro = ({
 
     if (dirty === false || isValid === true) {
       submitForm()
+      showUpdateSuccessful()
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(i18n.t('validation:error'))

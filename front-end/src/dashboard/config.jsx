@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from './grid'
 import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
-import { showError, showSuccess} from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import i18next from 'i18next'
 
 class config extends React.Component {
@@ -49,7 +49,7 @@ class config extends React.Component {
     if (!error) {
       this.props.updateDashboard(payload)
       this.setState({ updated: false })
-      showSuccess("Update successful")
+      showUpdateSuccessful()
     }
   }
 

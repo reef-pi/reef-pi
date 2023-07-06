@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import LightChannel from './channel'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
@@ -24,6 +24,7 @@ const EditLight = ({
     event.preventDefault()
     if (dirty === false || isValid) {
       submitForm()
+      showUpdateSuccessful()
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(i18next.t('validation:error'))
