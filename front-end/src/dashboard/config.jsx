@@ -107,9 +107,6 @@ class config extends React.Component {
 
   render () {
     let updateButtonClass = 'btn btn-outline-success col-12'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-12'
-    }
     if (this.state.config.grid_details === undefined) {
       return <div />
     }
