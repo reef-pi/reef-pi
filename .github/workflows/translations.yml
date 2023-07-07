@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.13.0
-      - uses: actions/cache@v3.2.6
+      - uses: actions/cache@v3.3.1
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
