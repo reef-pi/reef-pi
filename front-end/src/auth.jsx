@@ -1,6 +1,7 @@
 import React from 'react'
 import { updateCreds } from 'redux/actions/creds'
 import { connect } from 'react-redux'
+import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 
 class auth extends React.Component {
@@ -47,6 +48,7 @@ class auth extends React.Component {
         credentials: 'same-origin',
         body: JSON.stringify(creds)
       })
+      showUpdateSuccessful()
     }
   }
 

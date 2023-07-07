@@ -1,5 +1,5 @@
 import React from 'react'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import Capabilities from './capabilities'
 import Display from './display'
 import HealthNotify from './health_notify'
@@ -169,6 +169,7 @@ class settings extends React.Component {
       settings = SettingsSchema.cast(settings)
       this.setState({ updated: false, settings: settings })
       this.props.updateSettings(settings)
+      showUpdateSuccessful()
       return
     }
     SettingsSchema.validate(settings).catch(err => {

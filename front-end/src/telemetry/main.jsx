@@ -2,7 +2,7 @@ import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
 import Mqtt from './mqtt'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
 import i18n from '../utils/i18n'
@@ -101,6 +101,7 @@ class telemetry extends React.Component {
     c.current_limit = parseInt(c.current_limit)
     c.historical_limit = parseInt(c.historical_limit)
     this.props.update(c)
+    showUpdateSuccessful()
     this.setState({ updated: false, config: c })
   }
 
