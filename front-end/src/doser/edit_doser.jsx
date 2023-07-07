@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ErrorMessage, ErrorFor, ShowError } from '../utils/validation_helper'
 import i18next from 'i18next'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import Cron from '../ui_components/cron'
@@ -28,6 +28,7 @@ const EditDoser = ({
     event.preventDefault()
     if (dirty === false || isValid === true) {
       submitForm()
+      showUpdateSuccessful()
     } else {
       submitForm()
       showError(i18next.t('validation:error') + ErrorMessage(errors, ''))

@@ -2,7 +2,7 @@ import React from 'react'
 import Grid from './grid'
 import { connect } from 'react-redux'
 import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import i18next from 'i18next'
 
 class config extends React.Component {
@@ -49,6 +49,7 @@ class config extends React.Component {
     if (!error) {
       this.props.updateDashboard(payload)
       this.setState({ updated: false })
+      showUpdateSuccessful()
     }
   }
 
@@ -106,9 +107,6 @@ class config extends React.Component {
 
   render () {
     let updateButtonClass = 'btn btn-outline-success col-12'
-    if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-12'
-    }
     if (this.state.config.grid_details === undefined) {
       return <div />
     }
@@ -139,7 +137,7 @@ class config extends React.Component {
           />
         </div>
         <div className='row'>
-          <div className='col-xs-12 col-md-3 offset-md-9'>
+          <div className='col-xs-12'>
             <input type='button' className={updateButtonClass} onClick={this.handleSave} id='save_dashboard' value={i18next.t('update')} />
           </div>
         </div>

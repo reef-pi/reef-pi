@@ -3,6 +3,19 @@ import ComponentSelector from './component_selector'
 import { buildTypeMap, buildCells } from './types'
 import i18next from 'i18next'
 
+export const numColsToColSize = (numCols) => {
+  /*
+  Given a number of columns, returns the maximum bootstrap column size in order
+  to fit all columns on one row
+  
+  i.e. 1->12, 2->6, 3->4, 4->3, 5->2, 6->2, 7->1, 8->1, 9->1, 10->1, 11->1, 12->1
+  */
+  let colSize = 1;
+  if (numCols <= 12)
+    colSize = Math.floor(12 / numCols);
+  return colSize;
+}
+
 // props: rows, columns, hook, cells, tcs, atos
 export default class Grid extends React.Component {
   constructor (props) {
@@ -31,23 +44,28 @@ export default class Grid extends React.Component {
       options = this.state.types[cell.type].options
       id = cell.id
     }
+
+    let colSize = numColsToColSize(this.props.columns);
+
     return (
-      <div className='col grid-block' key={'chart-type-' + i + '-' + j}>
-        <div className='dropdown'>
-          <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-            {label}
-          </button>
-          <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-            {this.menuItems(i, j)}
+      <div className={'col-xs-12 col-md-' + colSize + ' grid-cell-container'} key={'chart-type-' + i + '-' + j}>
+        <div className='grid-cell'>
+          <div className='col-12 dropdown'>
+            <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+              {label}
+            </button>
+            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+              {this.menuItems(i, j)}
+            </div>
           </div>
-        </div>
-        <div className='col-2 col-4 col-6'>
-          <ComponentSelector
-            components={options}
-            hook={this.setID(i, j)}
-            selector_id={'component-' + i + '-' + j}
-            current_id={id}
-          />
+          <div className='col-12 mt-2'>
+            <ComponentSelector
+              components={options}
+              hook={this.setID(i, j)}
+              selector_id={'component-' + i + '-' + j}
+              current_id={id}
+            />
+          </div>
         </div>
       </div>
     )
@@ -125,7 +143,8 @@ export default class Grid extends React.Component {
         columns.push(this.cellUI(i, j, cell))
       }
       rows.push(
-        <div className='row' key={'chart-row-' + i}>
+        <div className='row grid-row' key={'chart-row-' + i}>
+          <label className='d-block d-md-none'>Row {i+1}</label>
           {columns}
         </div>
       )

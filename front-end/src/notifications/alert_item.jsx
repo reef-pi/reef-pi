@@ -16,6 +16,13 @@ class NotificationAlertItem extends React.Component {
     }, AppearanceTime)
   }
 
+  componentWillUnmount () {
+    if (this.timer) {
+      // prevent interacting with already unmounted component
+      clearTimeout(this.timer)
+    }
+  }
+
   getAlertClass (a) {
     let cssClass = ''
     switch (a.type) {

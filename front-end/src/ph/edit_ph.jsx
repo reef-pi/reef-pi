@@ -2,7 +2,7 @@ import React from 'react'
 import ColorPicker from '../ui_components/color_picker'
 import PropTypes from 'prop-types'
 import { NameFor, ErrorFor, ShowError } from '../utils/validation_helper'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import BooleanSelect from '../ui_components/boolean_select'
@@ -26,6 +26,7 @@ const EditPh = ({
     event.preventDefault()
     if (dirty === false || isValid === true) {
       submitForm()
+      showUpdateSuccessful()
     } else {
       submitForm() // Calling submit form in order to show validation errors
       showError(i18next.t('validation:error'))

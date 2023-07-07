@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import i18next from 'i18next'
 import Pin from './pin'
 import { byCapability } from './driver_filter'
+import { showUpdateSuccessful } from 'utils/alert'
 
 export default class Inlet extends React.Component {
   constructor (props) {
@@ -60,6 +61,7 @@ export default class Inlet extends React.Component {
       driver: this.state.driver.id
     }
     this.props.update(payload)
+    showUpdateSuccessful()
     this.setState({
       edit: false,
       lbl: i18next.t('edit')

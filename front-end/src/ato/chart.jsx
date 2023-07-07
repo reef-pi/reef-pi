@@ -1,6 +1,6 @@
 import React from 'react'
 import { ParseTimestamp } from 'utils/timestamp'
-import { ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar } from 'recharts'
+import { ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar, Label } from 'recharts'
 import { fetchATOUsage } from '../redux/actions/ato'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -44,7 +44,14 @@ class chart extends React.Component {
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={metrics}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis label={i18next.t('sec')} />
+            <YAxis type="number">
+                <Label
+                    value={i18next.t('sec')}
+                    position="insideLeft"
+                    angle={-90}
+                    style={{ textAnchor: 'middle' }}
+                    />
+            </YAxis>
             <XAxis dataKey='time' />
             <Tooltip />
           </BarChart>
