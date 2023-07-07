@@ -2,6 +2,7 @@ import { configureStore } from 'redux/store'
 import { setAlert } from 'notifications/statics'
 import { addAlert, delAlert} from 'redux/actions/alert'
 import { MsgLevel } from 'utils/enums'
+import i18n from 'utils/i18n'
 
 export function showInfo (msg) {
   _showAlert(MsgLevel.info, msg)
@@ -16,7 +17,7 @@ export function showWarning (msg) {
   _showAlert(MsgLevel.warning, msg)
 }
 export function showUpdateSuccessful () {
-  let alert = _showAlert(MsgLevel.success, "Update successful")
+  let alert = _showAlert(MsgLevel.success, i18n.t("save_successful"))
   setTimeout(() => {
     // only show alert for a second to not block page content
     configureStore().dispatch(delAlert(alert))

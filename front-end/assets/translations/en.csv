@@ -58,6 +58,7 @@ reverse,Reverse
 rows,Rows
 running,running
 save,Save
+save_successful,Save sucessful
 schedule,Schedule
 sec,second
 second_s,second(s)
