@@ -1,5 +1,9 @@
 package storage
 
+import (
+	"errors"
+)
+
 const (
 	ReefPiBucket                 = "reef-pi"
 	ATOBucket                    = "ato"
@@ -49,3 +53,5 @@ type Store interface {
 	CreateBucket(string) error
 	Path() string
 }
+
+var ErrDoesNotExist = errors.New("entity does not exist")
