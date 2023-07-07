@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"time"
@@ -95,6 +96,15 @@ func NewHomeostasis(c Controller, config HomeoStasisConfig) *Homeostasis {
 	return &h
 }
 
+// a very basic equivalent of errors.Join, but works for go < 1.2
+func BasicErrJoin(prevErr error, newErr error) error {
+	if prevErr != nil {
+		return fmt.Errorf("%w; %v", newErr, prevErr.Error())
+	} else {
+		return newErr
+	}
+}
+
 func (h *Homeostasis) Sub() Subsystem {
 	if h.config.IsMacro {
 		return h.macros
@@ -147,43 +157,49 @@ func (h *Homeostasis) Sync(o *Observation) error {
 }
 
 func (h *Homeostasis) up() error {
+	var result error
+
 	if h.config.Downer != "" {
 		if err := h.Sub().On(h.config.Downer, false); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
 	if h.config.Upper != "" {
 		if err := h.Sub().On(h.config.Upper, true); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
-	return nil
+	return result
 }
 
 func (h *Homeostasis) down() error {
+	var result error
+
 	if h.config.Upper != "" {
 		if err := h.Sub().On(h.config.Upper, false); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
 	if h.config.Downer != "" {
 		if err := h.Sub().On(h.config.Downer, true); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
-	return nil
+	return result
 }
 
 func (h *Homeostasis) switchOffAll() error {
+	var result error
+
 	if h.config.Upper != "" {
 		if err := h.Sub().On(h.config.Upper, false); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
 	if h.config.Downer != "" {
 		if err := h.Sub().On(h.config.Downer, false); err != nil {
-			return err
+			result = BasicErrJoin(result, err)
 		}
 	}
-	return nil
+	return result
 }
