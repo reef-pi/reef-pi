@@ -1,5 +1,7 @@
 [Unit]
 Description=raspberry pi based reef tank controller
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 ExecStart=/usr/bin/reef-pi daemon -config /etc/reef-pi/config.yaml
