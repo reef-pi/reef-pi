@@ -1,98 +1,98 @@
 Key,Translation
-action,
+action,acção
 add,Adicionar
 alerts,Alertas
 analog_input,Entrada Analogica
-analog_inputs,
-apply,
-are_you_sure,Como estas?
-ato,
+analog_inputs,Entradas Analogicas
+apply,Aplicar
+are_you_sure,Tem a certeza?
+ato,acção
 cancel,cancelar
 capabilities,
-charts,
+charts,tabelas
 clear,Limpar
-columns,
+columns,Colunas
 configure,Configurar
 delete,Apagar
-devmode_warning,
+devmode_warning,Aviso
 disabled,desativar
 documentation,Documentação
 done,Feito
-doser,
-driver,
+doser,doseador
+driver,controlador
 edit,Editar
 enabled,activar
-end_time,
-equipment,
+end_time,Fim de Tempo
+equipment,Equipamento
 errors,Erros
-full_moon,
-health,
-height,
-in-use,
-inlet,Inlet
-inlets,
-install,
-jack,
-jacks,
-journal,
-light,
-lights,
+full_moon,Lua Cheia
+health,Sáude
+height,Altura
+in-use,Em Uso
+inlet,entrada
+inlets,entradas
+install,instalação
+jack,jack
+jacks,jacks
+journal,diario
+light,luz
+lights,luzes
 loading,Carregar
-maximum,
-minimum,
+maximum,maximo
+minimum,minimo
 name,Nome
-no,
+no,Não
 none,nenhum
-off,
+off,desligar
 ok,Ok
-on,
-one_shot,
-optional,
-outlet,
-outlets,
-pin,
-pins,
-profile,
-reset,
-reverse,
-rows,
+on,ligar
+one_shot,uma vez
+optional,opcional
+outlet,tomada
+outlets,tomadas
+pin,pin
+pins,pins
+profile,perfil
+reset,reset
+reverse,inverter
+rows,linhas
 running,Correr
 save,Salvar
 save_successful,Salvo com sucesso
-schedule,
+schedule,agendar
 sec,sec
 second_s,segundos
 select,Selecionar
-select_file,
+select_file,selecionar ficheiro
 since,Desde
-start_time,
+start_time,Comecou em
 status,Estado
-stayoffonboot,
+stayoffonboot,Está ligado
 update,Atualizar
-upgrade_reef_pi,
-width,
-yes,
+upgrade_reef_pi,Upgrade
+width,largura
+yes,sim
 ato:alert_after,Alertar após
 ato:ato_usage,Utilização do ATO
 ato:chk_freq,Verificar a frequência
-ato:control,
-ato:control_target,
-ato:controlequipment,
-ato:controlmacro,
-ato:controlnothing,
+ato:control,Comando
+ato:control_target, objectivo
+ato:controlequipment,Controlo do equipamento
+ato:controlmacro,Macro do equipamento
+ato:controlnothing,Não controlar
 ato:disable_on_alert,Desativar alerta
-ato:reset_usage,
-ato:title_delete,
+ato:reset_usage,Reninciar o uso
+ato:title_delete,Apagar
 ato:total_seconds_pump_on,Número de segundos para ligar a a bomba
-ato:warn_delete,
-ato:warn_reset,
-camera:capture_flags,
-camera:enable,
-camera:take_photo,
-camera:target_dir,
-camera:tick_interval,
-camera:tick_must_be_positive,
-camera:to_gdrive,
+ato:warn_delete,Avisar apagar
+ato:warn_reset,Avisar reninciar
+camera:capture_flags,Apanhar a bandeira
+camera:enable,Activar
+camera:take_photo,Tirar Foto
+camera:target_dir,Directoria
+camera:tick_interval,Tempo de intervalo
+camera:tick_must_be_positive,Tempo tem que ser um valor positivo
+camera:to_gdrive,para Gdrive
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuração
@@ -102,29 +102,29 @@ capabilities:doser,Dose
 capabilities:dosing_pumps,Bombas Doseadoras
 capabilities:equipment,Equipamento
 capabilities:health_check,Verificação de Estado
-capabilities:journal,
+capabilities:journal,diario
 capabilities:lighting,Iluminação
 capabilities:lights,Luzes
-capabilities:log,Log
+capabilities:log,Registo
 capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instancias
 capabilities:ph,pH
-capabilities:phprobes,
-capabilities:system,
+capabilities:phprobes,Sondas
+capabilities:system,sistema
 capabilities:temperature,Temperatura
 capabilities:timers,Timers
 collapsible:delete,Apagar
 collapsible:edit,Editar
 color_picker:choose,Escolher
 configuration:about:current_time,Hora Atual
-configuration:about:modifications,
+configuration:about:modifications,Modificações
 configuration:about:status,Estado
 configuration:about:uptime,Uptime
 configuration:about:version,Versão
 configuration:about:website,Site
-configuration:admin:db_export,
-configuration:admin:db_import,
+configuration:admin:db_export,Exportar DB
+configuration:admin:db_import,Importar DB
 configuration:admin:poweroff,Desligar
 configuration:admin:reboot,Reninciar
 configuration:admin:reload,Recarregar
@@ -132,14 +132,14 @@ configuration:admin:sign_out,Desligar o Login
 configuration:authentication:credentials,Credenciais
 configuration:authentication:error_pass,Tens que inserir uma password
 configuration:authentication:error_user,Tens que inserir um nome de utilizador
-configuration:connectors:title_delete,
-configuration:connectors:warn_delete,
-configuration:drivers:title_delete,
-configuration:drivers:type,
-configuration:drivers:warn_delete,
+configuration:connectors:title_delete,Apagar
+configuration:connectors:warn_delete,Aviso Apagar
+configuration:drivers:title_delete,Apaga
+configuration:drivers:type,Tipo
+configuration:drivers:warn_delete, Aviso apagar
 configuration:settings:address,Endereço
 configuration:settings:alert_health_check,Avisos de Estado Geral
-configuration:settings:brightness,
+configuration:settings:brightness,Brilho
 configuration:settings:capabilities,Capacidades
 configuration:settings:cors,Activar cors
 configuration:settings:display,Ecrã
@@ -165,70 +165,70 @@ configuration:tab:telemetry,Telemetria
 cron:day_of_month,dias do mês
 cron:hour,Horas
 cron:minute,Minutos
-cron:month,
+cron:month,Meses
 cron:second,Segundos
-cron:week,
+cron:week,Semana
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
-dashboard:blank_panel,
-doser:calibrate,
-doser:calibration:run,
-doser:delay,
-doser:direction,
-doser:direction_pin,
-doser:doser_usage,
-doser:duration,
-doser:microstep:1/16,
-doser:microstep:1/2,
-doser:microstep:1/32,
-doser:microstep:1/4,
-doser:microstep:1/8,
-doser:microstep:full,
-doser:microstepping,
-doser:ms_pin_a,
-doser:ms_pin_b,
-doser:ms_pin_c,
-doser:speed,
-doser:spr,
-doser:step_pin,
-doser:title_delete,
-doser:type,
-doser:volume,
-doser:vpr,
-doser:warn_delete,
-doser:warn_reset,
-equipment:chart:barchart,
-equipment:chart:ctrlpanel,
-equipment:title_delete,
-equipment:warn_delete,
+dashboard:blank_panel,Painel em branco
+doser:calibrate,calibrar
+doser:calibration:run,correr calibração
+doser:delay,espera
+doser:direction,direcção
+doser:direction_pin,pin de direcção
+doser:doser_usage,Utilização do doseador
+doser:duration,duração
+doser:microstep:1/16,1/16
+doser:microstep:1/2,1/2
+doser:microstep:1/32,1/32
+doser:microstep:1/4,1/4
+doser:microstep:1/8,1/8
+doser:microstep:full,Total
+doser:microstepping,micropassos
+doser:ms_pin_a,Pin A
+doser:ms_pin_b,Pin B
+doser:ms_pin_c,Pin C
+doser:speed,Velocidade
+doser:spr,spr
+doser:step_pin,Pin de Passo
+doser:title_delete,Apagar
+doser:type,Tipo
+doser:volume,Volume
+doser:vpr,vpr
+doser:warn_delete,Aviso Apagar
+doser:warn_reset,Aviso Reninciar
+equipment:chart:barchart,Grafico
+equipment:chart:ctrlpanel,Painel de Control
+equipment:title_delete,Apagar
+equipment:warn_delete,Aviso Apagar
 fatal_error:connection_lost,Ligação Perdida
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Algo correu mal pode favor renincie o servidor.
 fatal_error:troubleshoot,Problemas
-function:alert,
-function:ato,
-function:camera,
-function:doser,
-function:equipment,
-function:lightings,
-function:macro,
-function:phprobes,
-function:reminder,
-function:subsystem,
-function:temperature,
-function:timers,
-function:wait,
+function:alert,Alerta
+function:ato,Acto
+function:camera,Camera
+function:doser,Doseador
+function:equipment,Equipamento
+function:lightings,Luzes
+function:macro,Macro
+function:phprobes,Sonda de PH
+function:reminder,Lembretes
+function:subsystem,Subsistema
+function:temperature,Temperatura
+function:timers,Temporizadores
+function:wait,Aguarda
 health_chart:cpu_memory,CPU/Memory
-health_chart:current,
-health_chart:historical,
-instances:warn_delete,
-journal:add_entry,
-journal:comment,
-journal:description,
-journal:timestamp,
-journal:title_delete,
+health_chart:current,Atual
+health_chart:historical,Historico
+instances:warn_delete,Aviso apagar
+journal:add_entry,Adicionar entrada
+journal:comment,Comentário
+journal:description,descrição
+journal:timestamp,selo temporal
+journal:title_delete,Apagar
 journal:unit,Unidades
-journal:value,
-journal:warn_delete,
+journal:value,Valor
+journal:warn_delete,Aviso Apagar
 language:de,Deutsch
 language:en,English
 language:es,Español
@@ -240,142 +240,142 @@ language:language,Lingua
 language:nl,Nederlands
 language:pt,Português
 language:zh,
-lighting:add_point,
-lighting:change_mode,
-lighting:channel_name,
-lighting:chart_color,
-lighting:mode_auto,
-lighting:mode_manual,
-lighting:mode_mixed,
-lighting:remove,
-lighting:title_delete,
-lighting:warn_change,
-lighting:warn_delete,
+lighting:add_point,Adicionar Ponto
+lighting:change_mode,Mudar Modo
+lighting:channel_name,Nome do Canal
+lighting:chart_color,Cor
+lighting:mode_auto,Modo Automatico
+lighting:mode_manual,Modo Manual
+lighting:mode_mixed,Modo Misto
+lighting:remove,Remover
+lighting:title_delete,Apagar
+lighting:warn_change,Mudar
+lighting:warn_delete,Apagar
 log:content,Conteudo
 log:emitter,Emissor
 log:time,Tempo
 log:type,Tipo
-macro:action,
-macro:alert:message,
-macro:alert:title,
-macro:one_step_required,
-macro:reversible,
-macro:revert,
-macro:reverting,
-macro:run,
-macro:running,
-macro:steps,
-macro:system,
-macro:title_delete,
+macro:action,Acção
+macro:alert:message,Mensagem
+macro:alert:title,Titulo
+macro:one_step_required,Um passo é necessáio
+macro:reversible,Reversivel
+macro:revert,Reverter
+macro:reverting,Revertendo
+macro:run,Correr
+macro:running,A Correr
+macro:steps,Passo
+macro:system,Sistema
+macro:title_delete,Apagar
 macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
-macro:wait:duration,
-macro:warn_delete,
+macro:wait:duration,Duração
+macro:warn_delete,Apagar
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:calibrate,Calibrar
-ph:chart:current,
-ph:chart:historical,
-ph:chart:usage,
-ph:chart_color,
-ph:chart_unit,
-ph:chart_ymax,
-ph:chart_ymin,
+ph:chart:current,Atualmente
+ph:chart:historical,historico
+ph:chart:usage,Uso
+ph:chart_color,cor
+ph:chart_unit,unidade
+ph:chart_ymax,Y maximo
+ph:chart_ymin,Y minimo
 ph:check_frequency,Verificar a frequência
-ph:control,
-ph:controlequipment,
-ph:controlmacro,
-ph:controlnothing,
+ph:control,Controlo
+ph:controlequipment,Equipamento
+ph:controlmacro,Macro
+ph:controlnothing,Nada
 ph:current_reading,Leitura Atual
-ph:hysteresis,
-ph:hysteresis_less_than,
-ph:lower_function,
-ph:lower_threshold,
+ph:hysteresis,hysteresis
+ph:hysteresis_less_than, hysteresis Menos de 
+ph:lower_function,Função em baixo
+ph:lower_threshold,Função na zona
 ph:midpoint,Ponto médio
 ph:run_calibration,Correr Calibração
 ph:second_point,Segundo ponto
-ph:transformer,
-ph:upper_function,
-ph:upper_threshold,
+ph:transformer,Transformador
+ph:upper_function,Função
+ph:upper_threshold,Ponto
 ph:warn_delete,Esta acção vai ser removida
-ph:warn_reset,
+ph:warn_reset,Reset
 signin:invalidcredentials,Credenciais invalidas
 signin:password,Password
 signin:signin,Entrar
 signin:username,Nome de utilizador
-telemetry:main:current-limit,
-telemetry:main:email-alerts,
-telemetry:main:historical-limit,
-telemetry:main:limit-per-hour,
-telemetry:main:send-test-message,
-telemetry:notification:from,
-telemetry:notification:password,
-telemetry:notification:port,
-telemetry:notification:server,
-telemetry:notification:to,
-telemetry:notification:username,
-temperature:alert_above,
-temperature:alert_below,
-temperature:calibrate,
-temperature:calibration:apply,
-temperature:calibration:set_temperature,
+telemetry:main:current-limit,Corrente Limite
+telemetry:main:email-alerts,Alertas via email
+telemetry:main:historical-limit,Historico limite
+telemetry:main:limit-per-hour,Limite por hora
+telemetry:main:send-test-message,Senvia uma mensagem de texto
+telemetry:notification:from,de
+telemetry:notification:password,senha
+telemetry:notification:port,porta
+telemetry:notification:server,servidor
+telemetry:notification:to,para
+telemetry:notification:username,nome de utilizador
+temperature:alert_above,alerta sobre
+temperature:alert_below,alerta abaixo
+temperature:calibrate,calibrar
+temperature:calibration:apply,aplicar
+temperature:calibration:set_temperature,Definir temperatura
 temperature:celsius,Celsius
-temperature:chart:current,
+temperature:chart:current,Atualmente
 temperature:chart:down,Refrigeração
-temperature:chart:historical,
+temperature:chart:historical,histórico
 temperature:chart:up,Aquecedor
-temperature:chart_color,
-temperature:chart_ymax,
-temperature:chart_ymin,
+temperature:chart_color,cor
+temperature:chart_ymax,y maximo 
+temperature:chart_ymin,y minimo
 temperature:check_frequency,Verificar a frequência
-temperature:control,
-temperature:controlequipment,
-temperature:controlmacro,
-temperature:controlnothing,
-temperature:current_reading,
+temperature:control,controlo
+temperature:controlequipment,controlar equipamento
+temperature:controlmacro,controlar macro
+temperature:controlnothing,não controlar
+temperature:current_reading,Leitura atual
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
-temperature:hysteresis,
-temperature:hysteresis_less_than,
-temperature:lower_function,
-temperature:lower_threshold,
+temperature:hysteresis,hysteresis
+temperature:hysteresis_less_than,hysteresis menos de 
+temperature:lower_function,função caso seja menor
+temperature:lower_threshold,Abaixo do desejado
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades
-temperature:upper_function,
-temperature:upper_threshold,
-temperature:warn_delete,
-temperature:warn_reset,
-timers:action,
+temperature:upper_function,função caso seja maior
+temperature:upper_threshold,a cima do desejado
+temperature:warn_delete,apagar
+temperature:warn_reset,reset
+timers:action,acção
 timers:after,após
 timers:and_then,e depois
-timers:duration,
+timers:duration,duração
 timers:function,Função
 timers:message,Mensagem
-timers:revert,
+timers:revert,reverter
 timers:sec,sec
 timers:stay_off,manter desligado
 timers:stay_on,Manter ligado
 timers:subject,Assunto
-timers:title_delete,
+timers:title_delete,apagar
 timers:turn_back_off,Voltar a desligar
 timers:turn_back_on,Voltar a Ligar
 timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
-timers:warn_delete,
-validation:a_must_be_greater_than_b,
-validation:a_must_be_less_than_b,
-validation:a_must_differ_from_b,
-validation:comma_separated_numbers,
-validation:cron_nojoker_required,
-validation:cron_required,
-validation:date_required,
-validation:entry_required,
-validation:error,
-validation:integer_max_required,
-validation:integer_min_required,
-validation:last_full_moon_required,
-validation:name_required,
-validation:number_required,
-validation:selection_required,
-validation:time_required,
+timers:warn_delete,apagar
+validation:a_must_be_greater_than_b, A tem que ser maior do que B
+validation:a_must_be_less_than_b,A tem que ser menos do que B
+validation:a_must_differ_from_b,A tem de ser diferente de B
+validation:comma_separated_numbers,Virgulas separam os números
+validation:cron_nojoker_required,crob job
+validation:cron_required,cron job é necessário
+validation:date_required,data é obrigatória
+validation:entry_required,entidade é obrigatória
+validation:error,erro
+validation:integer_max_required,Número maximo é obrigatório
+validation:integer_min_required,Número Minimo é obrigatório
+validation:last_full_moon_required,A Última lua cheia é obrigatória
+validation:name_required,nome é obrigatório
+validation:number_required,numero é obrigatória
+validation:selection_required,Selecção é obrigatória
+validation:time_required,Tempo é obrigatória
