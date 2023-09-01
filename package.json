@@ -45,7 +45,7 @@
     "precss": "4.0.0",
     "react": "16.14.0",
     "react-color": "2.19.3",
-    "react-datepicker": "^4.8.0",
+    "react-datepicker": "^4.16.0",
     "react-dom": "16.12.0",
     "react-i18next": "12.0.0",
     "react-icons": "4.3.1",
