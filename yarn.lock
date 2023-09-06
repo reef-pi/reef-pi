@@ -4029,10 +4029,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-csv-parse@^4.15.4:
-  version "4.16.3"
-  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.3.tgz#7ca624d517212ebc520a36873c3478fa66efbaf7"
-  integrity sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==
+csv-parse@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.0.tgz#2313421e69b650dae32a79ac884b20b21ca1d9da"
+  integrity sha512-RxruSK3M4XgzcD7Trm2wEN+SJ26ChIb903+IWxNOcB5q4jT2Cs+hFr6QP39J05EohshRFEvyzEBoZ/466S2sbw==
 
 csv-stringify@6.4.0:
   version "6.4.0"
