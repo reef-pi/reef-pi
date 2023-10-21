@@ -83,8 +83,8 @@ func (r *ReefPi) LogError(id, msg string) error {
 
 func logError(store storage.Store, id, msg string) error {
 	e := Error{
-		Message: msg,
 		ID:      id,
+		Message: msg,
 		Time:    time.Now().Format("Jan 2 15:04:05"),
 	}
 	return store.Update(storage.ErrorBucket, id, e)
