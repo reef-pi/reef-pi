@@ -11,8 +11,9 @@ import (
 
 // TODO: translate these
 // TODO: this is a bit of a hack in that it means someone can't have their
-// 			 actual token/password be the string "<stored>", but that seems rare
-//			 enough a reasonable trade-off for a quick fix to unsaveable form bugs
+//
+//	actual token/password be the string "<stored>", but that seems rare
+//	enough a reasonable trade-off for a quick fix to unsaveable form bugs
 const PasswordStoredPlaceholder = "<stored>"
 const AdafruitIOTokenStoredPlaceholder = "<stored>"
 
@@ -22,10 +23,10 @@ func (t *telemetry) GetConfig(w http.ResponseWriter, req *http.Request) {
 		if err := t.store.Get(t.bucket, DBKey, &c); err != nil {
 			return nil, err
 		}
-		if (c.AdafruitIO.Token != "") {
+		if c.AdafruitIO.Token != "" {
 			c.AdafruitIO.Token = AdafruitIOTokenStoredPlaceholder
 		}
-		if (c.Mailer.Password != "") {
+		if c.Mailer.Password != "" {
 			c.Mailer.Password = PasswordStoredPlaceholder
 		}
 		return &c, nil
@@ -48,10 +49,10 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) error {
 		if readErr != nil {
 			if c.AdafruitIO.Token == AdafruitIOTokenStoredPlaceholder {
-				c.AdafruitIO.Token = existingConfig.AdafruitIO.Token;
+				c.AdafruitIO.Token = existingConfig.AdafruitIO.Token
 			}
 			if c.Mailer.Password == PasswordStoredPlaceholder {
-				c.Mailer.Password = existingConfig.Mailer.Password;
+				c.Mailer.Password = existingConfig.Mailer.Password
 			}
 		}
 		return t.store.Update(t.bucket, DBKey, c)
