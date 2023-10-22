@@ -161,9 +161,9 @@ github.com/gorilla/sessions v1.2.1 h1:DHd3rPN5lE3Ts3D8rKkQ8x/0kqfeNmBAaiSi+o7Fsg
 github.com/gorilla/sessions v1.2.1/go.mod h1:dk2InVEVJ0sfLlnXv9EAgkf6ecYs/i80K/zI+bUmuGM=
 github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
 github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
-github.com/hajimehoshi/go-mp3 v0.3.3/go.mod h1:qMJj/CSDxx6CGHiZeCgbiq2DSUkbK0UbtXShQcnfyMM=
-github.com/hajimehoshi/oto v0.6.1/go.mod h1:0QXGEkbuJRohbJaxr7ZQSxnju7hEhseiPx2hrh6raOI=
+github.com/hajimehoshi/go-mp3 v0.3.4/go.mod h1:fRtZraRFcWb0pu7ok0LqyFhCUrPeMsGRSVop0eemFmo=
 github.com/hajimehoshi/oto v1.0.1/go.mod h1:wovJ8WWMfFKvP587mhHgot/MBr4DnNy9m6EepeVGnos=
+github.com/hajimehoshi/oto/v2 v2.3.1/go.mod h1:seWLbgHH7AyUMYKfKYT9pg7PhUu9/SisyJvNTT+ASQo=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
@@ -246,8 +246,8 @@ github.com/prometheus/procfs v0.11.1 h1:xRC8Iq1yyca5ypa9n1EZnWZkt7dwcoRPQwX/5gwa
 github.com/prometheus/procfs v0.11.1/go.mod h1:eesXgaPo1q7lBpVMoMy0ZOFTth9hBn4W/y0/p/ScXhY=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64 h1:pv5kOD9OkP5vntO6lAtFLUyGpyfZtu8QkaZ5sIabh8k=
 github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64/go.mod h1:UBHNdzbwzKriDbmPAr34k4hdd+x/VYKO6xJ4ebDztEo=
-github.com/reef-pi/drivers v0.0.0-20220927012018-4c603148e1bf h1:frfSZWSGFz6o8jvDd515fCVUWKwUAySZKBE0aOi2TAs=
-github.com/reef-pi/drivers v0.0.0-20220927012018-4c603148e1bf/go.mod h1:eT0bcpPH+oFenb651d6ZiOxCVMXJIBz/San2NSOovS4=
+github.com/reef-pi/drivers v0.0.0-20231021060129-e13db339949d h1:QBLboODKdFd13hV+PM5cajTlVpPpQcMrw9+zi2tsppc=
+github.com/reef-pi/drivers v0.0.0-20231021060129-e13db339949d/go.mod h1:8/4IqQbJq1chTn+t6DLYhRdQipKtdMTHRTO9/zmjEv0=
 github.com/reef-pi/embd v0.0.0-20200823212911-23a8c07341dd h1:7C2RnXExMPkAgq+OhGTivaTz0icwlo/3T+eJ8rGt0CM=
 github.com/reef-pi/embd v0.0.0-20200823212911-23a8c07341dd/go.mod h1:vLR1mLVXpivVlbXyVJ4CdsUpOoyDWas+xjikOIzVV0g=
 github.com/reef-pi/hal v0.0.0-20210801213209-e1fdd03d558f/go.mod h1:ymcJ0AbYfWXT1vyAbXOjKtWaFdCv1HHYmXDMWxJSWSM=
@@ -449,6 +449,7 @@ golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220114195835-da31bd327af9/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220712014510-0a85c31ab51e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.3.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.4.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
