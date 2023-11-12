@@ -1,9 +1,8 @@
 package daemon
 
 import (
-	"io/ioutil"
-
 	yaml "gopkg.in/yaml.v2"
+	"os"
 )
 
 type Config struct {
@@ -16,7 +15,7 @@ var DefaultConfig = Config{
 
 func ParseConfig(filename string) (Config, error) {
 	c := DefaultConfig
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		return c, err
 	}
