@@ -1,9 +1,0 @@
-name: Manual Trigger Workflow
-
-# Configure Manual Trigger
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
