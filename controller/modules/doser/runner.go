@@ -39,7 +39,7 @@ func (r *Runner) Run() {
 	    log.Println(r.pump.Restdoser.Url)
 		log.Println("doser sub system: running doser(REST Doser)", r.pump.Name, "for", r.pump.Regiment.Volume, "(ml)",  r.pump.Regiment.Duration, "(s)")
 	    if err := r.RESTDose(r.pump.Restdoser.Url, r.pump.Regiment.Volume, r.pump.Regiment.Duration, r.pump.Regiment.Speed); err != nil {
-	        log.Printf("ERROR: dosing sub-system. Failed to control REST pump. Error:", err)
+	        log.Println("ERROR: dosing sub-system. Failed to control REST pump. Error:", err)
 	    }
 		usage.Pump = int(r.pump.Regiment.Duration)
 	} else {
