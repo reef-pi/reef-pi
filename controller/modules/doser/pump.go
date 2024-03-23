@@ -20,6 +20,10 @@ type DosingRegiment struct {
 	Volume   float64  `json:"volume"`
 }
 
+type Restdoser struct {
+	url      string   `json:"url"`
+}
+
 // swagger:model pump
 type Pump struct {
 	ID       string         `json:"id"`
@@ -28,6 +32,7 @@ type Pump struct {
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
 	Stepper  *DRV8825       `json:"stepper"`
+	Restdoser Restdoser     `json:"url"`
 	Type     string         `json:"type"`
 }
 
@@ -35,8 +40,12 @@ func (p *Pump) IsValid() error {
 	if p.Name == "" {
 		return fmt.Errorf("name can not be empty")
 	}
+	log.Println("Type Case ", p)
+
 	switch p.Type {
 	case "stepper":
+	    log.Println("Adding as Stepper ", p)
+
 		if p.Regiment.Volume <= 0 {
 			return fmt.Errorf("dosing volume must be positive")
 		}
@@ -45,6 +54,20 @@ func (p *Pump) IsValid() error {
 		}
 		if err := p.Stepper.IsValid(); err != nil {
 			return err
+		}
+	case "restdoser":
+	    log.Println("Adding as Restdoser ", p)
+	    log.Println("URL ", p.restdoser.url)
+	    log.Println("Volume",p.Volume)
+	    log.Println("Duration",p.Duration)
+	    log.Println("Speed",p.Speed)
+
+
+		if p.Regiment.Volume <= 0 {
+			return fmt.Errorf("dosing volume must be positive")
+		}
+		if p.Regiment.Duration <= 0 {
+			return fmt.Errorf("dosing duration must be positive")
 		}
 	default:
 		if p.Jack == "" {

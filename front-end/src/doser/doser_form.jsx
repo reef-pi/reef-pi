@@ -31,7 +31,8 @@ const DoserForm = withFormik({
       minute: data.regiment.schedule.minute || '0',
       second: data.regiment.schedule.second || '0',
       type: data.type || '',
-      stepper: data.stepper || {}
+      stepper: data.stepper || {},
+      restdoser: data.restdoser || {}
     }
   },
   validationSchema: DoserSchema,

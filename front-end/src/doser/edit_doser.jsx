@@ -52,14 +52,14 @@ const EditDoser = ({
           dirty={dirty}
         />
       )
-    } else if (values.type === 'dcpump') {
+    } else if (values.type === 'restdoser') {
       return (
-        <EditDcPump
+        <EditRestDoser
           values={values}
           readOnly={readOnly}
           errors={errors}
           touched={touched}
-          jacks={jacks}
+          outlets={outlets}
           isValid={isValid}
           onBlur={onBlur}
           handleChange={handleChange}
@@ -69,12 +69,12 @@ const EditDoser = ({
       )
     } else {
       return (
-        <EditRestDoser
+        <EditDcPump
           values={values}
           readOnly={readOnly}
           errors={errors}
           touched={touched}
-          outlets={outlets}
+          jacks={jacks}
           isValid={isValid}
           onBlur={onBlur}
           handleChange={handleChange}
@@ -124,6 +124,7 @@ const EditDoser = ({
             <Field
               name='type'
               component='select'
+              defaultValue='dcpump'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('type', touched, errors)
