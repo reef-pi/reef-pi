@@ -17,6 +17,7 @@ delete,Delete
 devmode_warning,In DevMode
 disabled,Disabled
 documentation,Documentation
+doser:calUrl,Calibration URL
 done,Done
 doser,Doser
 driver,Driver
@@ -186,7 +187,7 @@ doser:microstep:full,Full
 doser:microstepping,Microstepping
 doser:ms_pin_a,MicroStepping Pin A
 doser:ms_pin_b,MicroStepping Pin B
-doser:ms_pin_c,MicroStepping Pin C 
+doser:ms_pin_c,MicroStepping Pin C
 doser:speed,Speed
 doser:spr,Steps Per Rotation
 doser:step_pin,Step Pin
