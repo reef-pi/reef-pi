@@ -20,10 +20,6 @@ type DosingRegiment struct {
 	Volume   float64  `json:"volume"`
 }
 
-type Restdoser struct {
-	url      string   `json:"url"`
-}
-
 // swagger:model pump
 type Pump struct {
 	ID       string         `json:"id"`
@@ -32,7 +28,7 @@ type Pump struct {
 	Pin      int            `json:"pin"`
 	Regiment DosingRegiment `json:"regiment"`
 	Stepper  *DRV8825       `json:"stepper"`
-	Restdoser Restdoser     `json:"url"`
+	Restdoser *Restdoser    `json:"restdoser"`
 	Type     string         `json:"type"`
 }
 
@@ -57,10 +53,10 @@ func (p *Pump) IsValid() error {
 		}
 	case "restdoser":
 	    log.Println("Adding as Restdoser ", p)
-	    log.Println("URL ", p.restdoser.url)
-	    log.Println("Volume",p.Volume)
-	    log.Println("Duration",p.Duration)
-	    log.Println("Speed",p.Speed)
+	    log.Println("URL ",  p.Restdoser.Url)
+	    log.Println("Volume", p.Regiment.Volume)
+	    log.Println("Duration", p.Regiment.Duration)
+	    log.Println("Speed", p.Regiment.Speed)
 
 
 		if p.Regiment.Volume <= 0 {
@@ -135,6 +131,8 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 	log.Println("doser subsystem: calibration run for:", p.Name)
 	if p.Type == "stepper" && p.Stepper != nil {
 		go p.Stepper.Dose(c.c.DM().Outlets(), cal.Volume)
+	} else if p.Type == "restdoser" && p.Restdoser != nil {
+	    go r.RESTDose(p.Restdoser.Url, p.Regiment.Volume, cal.Duration, cal.Speed)
 	} else {
 		go r.PWMDose(cal.Speed, cal.Duration)
 	}

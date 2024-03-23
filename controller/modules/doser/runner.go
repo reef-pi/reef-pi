@@ -3,7 +3,9 @@ package doser
 import (
 	"log"
 	"time"
-
+	"bytes"
+    "fmt"
+    "text/template"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -15,7 +17,12 @@ type Runner struct {
 	t        telemetry.Telemetry
 }
 
+type Restdoser struct {
+	Url      string   `json:"url"`
+}
+
 func (r *Runner) Run() {
+
 	usage := Usage{
 		Time: telemetry.TeleTime(time.Now()),
 	}
@@ -25,6 +32,13 @@ func (r *Runner) Run() {
 			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
 			return
 		}
+		usage.Pump = int(r.pump.Regiment.Duration)
+	} else if r.pump.Type == "restdoser" {
+	    log.Println(r.pump.Restdoser.Url)
+		log.Println("doser sub system: running doser(REST Doser)", r.pump.Name, "for", r.pump.Regiment.Volume, "(ml)",  r.pump.Regiment.Duration, "(s)")
+	    if err := r.RESTDose(r.pump.Restdoser.Url, r.pump.Regiment.Volume, r.pump.Regiment.Duration, r.pump.Regiment.Speed); err != nil {
+	        log.Printf("ERROR: dosing sub-system. Failed to control REST pump. Error:", err)
+	    }
 		usage.Pump = int(r.pump.Regiment.Duration)
 	} else {
 		log.Println("doser sub system: running doser(dcmotor)", r.pump.Name, "at", r.pump.Regiment.Speed, "%speed for", r.pump.Regiment.Duration, "(s)")
@@ -51,4 +65,47 @@ func (r *Runner) PWMDose(speed float64, duration float64) error {
 		v[r.pump.Pin] = 0
 		return r.dm.Jacks().Control(r.pump.Jack, v)
 	}
+}
+
+
+func (r *Runner) RESTDose(urlTemplate string, volume float64, duration float64, speed float64) error {
+    // Define a template with placeholders
+    tmpl, err := template.New("urlTemplate").Parse(urlTemplate)
+    if err != nil {
+        return fmt.Errorf("error parsing URL template: %v", err)
+    }
+
+    // Prepare data to be injected into the template
+    data := struct {
+        Volume   float64
+        Duration float64
+        Speed float64
+    }{
+        Volume:   volume,
+        Duration: duration,
+        Speed:    speed,
+    }
+
+    // Execute the template to generate the final URL
+    var buf bytes.Buffer
+    if err := tmpl.Execute(&buf, data); err != nil {
+        return fmt.Errorf("error executing URL template: %v", err)
+    }
+
+    // Extract the URL from the buffer
+    url := buf.String()
+
+    // Now use the generated URL to make the GET request
+    log.Printf("Send REST command to Doser %s", url)
+
+    // Here, you would make the GET request using the generated URL
+    // For example:
+    // resp, err := http.Get(url)
+    // if err != nil {
+    //     return fmt.Errorf("error making GET request: %v", err)
+    // }
+    // defer resp.Body.Close()
+    // (Handle response as needed)
+
+    return nil
 }
