@@ -8,6 +8,7 @@ import { Field } from 'formik'
 import Cron from '../ui_components/cron'
 import EditStepper from './edit_stepper'
 import EditDcPump from './edit_dcpump'
+import EditRestDoser from './edit_restdoser'
 
 const EditDoser = ({
   values,
@@ -51,7 +52,7 @@ const EditDoser = ({
           dirty={dirty}
         />
       )
-    } else {
+    } else if (values.type === 'dcpump') {
       return (
         <EditDcPump
           values={values}
@@ -59,6 +60,21 @@ const EditDoser = ({
           errors={errors}
           touched={touched}
           jacks={jacks}
+          isValid={isValid}
+          onBlur={onBlur}
+          handleChange={handleChange}
+          setFieldValue={setFieldValue}
+          dirty={dirty}
+        />
+      )
+    } else {
+      return (
+        <EditRestDoser
+          values={values}
+          readOnly={readOnly}
+          errors={errors}
+          touched={touched}
+          outlets={outlets}
           isValid={isValid}
           onBlur={onBlur}
           handleChange={handleChange}
@@ -115,6 +131,7 @@ const EditDoser = ({
             >
               <option value='dcpump' key='dcpump'> DC motor </option>
               <option value='stepper' key='stepper'> Stepper</option>
+              <option value='restdoser' key='restdoser'> REST API</option>
             </Field>
             <ErrorFor errors={errors} touched={touched} name='type' />
           </div>
