@@ -8,6 +8,7 @@ import (
     "text/template"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"net/http"
 )
 
 type Runner struct {
@@ -19,6 +20,7 @@ type Runner struct {
 
 type Restdoser struct {
 	Url      string   `json:"url"`
+	CalUrl   string   `json:"calUrl"`
 }
 
 func (r *Runner) Run() {
@@ -98,14 +100,16 @@ func (r *Runner) RESTDose(urlTemplate string, volume float64, duration float64, 
     // Now use the generated URL to make the GET request
     log.Printf("Send REST command to Doser %s", url)
 
-    // Here, you would make the GET request using the generated URL
-    // For example:
-    // resp, err := http.Get(url)
-    // if err != nil {
-    //     return fmt.Errorf("error making GET request: %v", err)
-    // }
-    // defer resp.Body.Close()
-    // (Handle response as needed)
+    resp, err := http.Get(url)
+    if err != nil {
+        return fmt.Errorf("error making GET request: %v", err)
+    }
+    defer resp.Body.Close()
+
+    // Check the response status code
+    if resp.StatusCode != http.StatusOK {
+        return fmt.Errorf("unexpected status code: %v", resp.StatusCode)
+    }
 
     return nil
 }

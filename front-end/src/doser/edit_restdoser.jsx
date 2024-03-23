@@ -24,7 +24,7 @@ const EditRestDoser = ({
     <div className='row'>
       <div className='col-12 col-sm-6 col-md-3'>
         <div className='form-group'>
-          <label htmlFor='URL'>{i18next.t('doser:url')}</label>
+          <label htmlFor='restdoser.url'>URL</label>
           <Field
             name='restdoser.url'
             disabled={readOnly}
@@ -33,6 +33,19 @@ const EditRestDoser = ({
             })}
           />
           <ErrorFor errors={errors} touched={touched} name='restdoser.url' />
+        </div>
+      </div>
+      <div className='col-12 col-sm-6 col-md-3'>
+        <div className='form-group'>
+          <label htmlFor='restdoser.calUrl'>{i18next.t('doser:calibrate')} URL</label>
+          <Field
+            name='restdoser.calUrl'
+            disabled={readOnly}
+            className={classNames('form-control', {
+              'is-invalid': ShowError('restdoser.calUrl', touched, errors)
+            })}
+          />
+          <ErrorFor errors={errors} touched={touched} name='restdoser.calUrl' />
         </div>
       </div>
       <div className='col-12 col-sm-6 col-md-3'>

@@ -132,7 +132,7 @@ func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
 	if p.Type == "stepper" && p.Stepper != nil {
 		go p.Stepper.Dose(c.c.DM().Outlets(), cal.Volume)
 	} else if p.Type == "restdoser" && p.Restdoser != nil {
-	    go r.RESTDose(p.Restdoser.Url, p.Regiment.Volume, cal.Duration, cal.Speed)
+	    go r.RESTDose(p.Restdoser.CalUrl, p.Regiment.Volume, cal.Duration, cal.Speed)
 	} else {
 		go r.PWMDose(cal.Speed, cal.Duration)
 	}

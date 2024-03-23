@@ -15,7 +15,8 @@ const Stepperchema = Yup.object().shape({
 })
 
 const Restdoserchema = Yup.object().shape({
-  url: Yup.string()
+  url: Yup.string(),
+  calUrl: Yup.string()
 })
 
 const DoserSchema = Yup.object().shape({
