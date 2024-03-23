@@ -170,6 +170,7 @@ cron:second,Sekunde
 cron:week,Wochentag (0=So - 6=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
+doser:calUrl,Kalibrierungs-URL
 doser:calibrate,Kalibrieren
 doser:calibration:run,Start
 doser:delay,

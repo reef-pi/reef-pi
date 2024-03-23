@@ -170,6 +170,7 @@ cron:second,Segundos
 cron:week,Semana
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,Painel em branco
+doser:calUrl,Kalibracja URl
 doser:calibrate,calibrar
 doser:calibration:run,correr calibração
 doser:delay,espera
@@ -288,7 +289,7 @@ ph:controlmacro,Macro
 ph:controlnothing,Nada
 ph:current_reading,Leitura Atual
 ph:hysteresis,hysteresis
-ph:hysteresis_less_than, hysteresis Menos de 
+ph:hysteresis_less_than, hysteresis Menos de
 ph:lower_function,Função em baixo
 ph:lower_threshold,Função na zona
 ph:midpoint,Ponto médio
@@ -325,7 +326,7 @@ temperature:chart:down,Refrigeração
 temperature:chart:historical,histórico
 temperature:chart:up,Aquecedor
 temperature:chart_color,cor
-temperature:chart_ymax,y maximo 
+temperature:chart_ymax,y maximo
 temperature:chart_ymin,y minimo
 temperature:check_frequency,Verificar a frequência
 temperature:control,controlo
@@ -336,7 +337,7 @@ temperature:current_reading,Leitura atual
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
 temperature:hysteresis,hysteresis
-temperature:hysteresis_less_than,hysteresis menos de 
+temperature:hysteresis_less_than,hysteresis menos de
 temperature:lower_function,função caso seja menor
 temperature:lower_threshold,Abaixo do desejado
 temperature:sensor,Sensor
