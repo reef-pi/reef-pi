@@ -170,6 +170,7 @@ cron:second,秒
 cron:week,周
 dashboard:back_to_dashboard,回到面板
 dashboard:blank_panel,
+doser:calUrl,校准 URL
 doser:calibrate,
 doser:calibration:run,
 doser:delay,
