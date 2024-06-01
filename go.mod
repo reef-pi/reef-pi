@@ -19,7 +19,7 @@ require (
 	github.com/reef-pi/rpi v0.0.0-20220116071804-9ab406e54060
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/shirou/gopsutil/v3 v3.24.3
+	github.com/shirou/gopsutil/v3 v3.24.5
 	go.etcd.io/bbolt v1.3.9
 	gopkg.in/yaml.v2 v2.4.0
 )
