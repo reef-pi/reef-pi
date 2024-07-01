@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '^1.20'
-      - uses: codecov/codecov-action@v3.1.4
+      - uses: codecov/codecov-action@v4.5.0
       - run: go install golang.org/x/tools/cmd/goimports@latest
       - run: make lint
       - run: make race
