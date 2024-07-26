@@ -1,7 +1,8 @@
 name: deb
 on: [push, pull_request]
 jobs:
-  builds:
+  pi:
+    name: "Build deb package for Rasspberry Pi"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.2
@@ -26,6 +27,36 @@ jobs:
         run: make go
       - name: pi
         run: make pi
+      - name: bundler
+        run: gem install bundler -v 2.4 --no-document
+      - name: fpm
+        run: bundle install
+      - name: deb
+        run: make pi_deb
+  zero:
+    name: "Build deb package for Rasspberry Pi Zero"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.20'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.13.0
+      - uses: actions/cache@v3.3.2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        run: yarn
+      - name: go
+        run: make go
       - name: pi-zero
         run: make pi-zero
       - name: bundler
