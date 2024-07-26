@@ -33,7 +33,13 @@ jobs:
         run: bundle install
       - name: deb
         run: make x86_deb
-      - run: ls
+      - name: "Upload x86 deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: x86-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30
   pi:
     name: "Build deb package for Rasspberry Pi"
     runs-on: ubuntu-latest
@@ -66,6 +72,13 @@ jobs:
         run: bundle install
       - name: deb
         run: make pi_deb
+      - name: "Upload pi deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30
   zero:
     name: "Build deb package for Rasspberry Pi Zero"
     runs-on: ubuntu-latest
@@ -98,4 +111,10 @@ jobs:
         run: bundle install
       - name: deb
         run: make pi_deb
-      - run: ls
+      - name: "Upload pi zero deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-zero-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30
