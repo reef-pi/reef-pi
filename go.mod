@@ -23,3 +23,5 @@ require (
 	go.etcd.io/bbolt v1.3.9
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+replace github.com/reef-pi/drivers => github.com/hectorespert/drivers v0.0.0-20240726191549-ca5a2aa08adf
