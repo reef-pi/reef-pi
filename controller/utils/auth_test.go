@@ -36,7 +36,7 @@ func TestAuth(t *testing.T) {
 	}
 
 	body.Reset()
-	body.Write([]byte("{}"))
+	body.Write([]byte(`{"user":"reef-pi", "password":"123456789"}`))
 	if err := tr.Do("POST", "/creds", body, nil); err != nil {
 		t.Error("Failed to update creds:", err)
 	}
@@ -45,5 +45,11 @@ func TestAuth(t *testing.T) {
 	body.Write([]byte("{}"))
 	if err := tr.Do("GET", "/me", body, nil); err != nil {
 		t.Error("Failed to hit /me:", err)
+	}
+
+	body.Reset()
+	body.Write([]byte(`{"user":"reef-pi", "password":"123456789"}`))
+	if err := tr.Do("GET", "/sign_in", body, nil); err != nil {
+		t.Error("Failed to sign in after change credentials:", err)
 	}
 }
