@@ -64,6 +64,7 @@ type Auth interface {
 	UpdateCredentials(http.ResponseWriter, *http.Request)
 	Me(http.ResponseWriter, *http.Request)
 	Authenticate(http.HandlerFunc) http.HandlerFunc
+	DefaultCredentials() error
 }
 
 type auth struct {
@@ -154,4 +155,11 @@ func (a *auth) UpdateCredentials(w http.ResponseWriter, req *http.Request) {
 		return a.credentialsManager.Update(credentials)
 	}
 	JSONUpdateResponse(&credentials, fn, w, req)
+}
+
+func (a *auth) DefaultCredentials() error {
+	return a.credentialsManager.Update(Credentials{
+		User:     "reef-pi",
+		Password: "reef-pi",
+	})
 }
