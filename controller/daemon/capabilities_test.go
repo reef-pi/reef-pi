@@ -19,13 +19,24 @@ func Test_Capabilities(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)
 	store, err := storage.NewStore("capabilities-test.db")
 	defer store.Close()
-
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	err = store.CreateBucket(Bucket)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	tele := telemetry.TestTelemetry(store)
+
+	auth, err := utils.NewAuth(Bucket, store)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	r := &ReefPi{
-		a:          utils.NewAuth(Bucket, store),
+		a:          auth,
 		telemetry:  tele,
 		dm:         device_manager.New(settings.DefaultSettings, store, tele),
 		subsystems: controller.NewSubsystemComposite(),

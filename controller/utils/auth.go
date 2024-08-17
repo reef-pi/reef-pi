@@ -60,11 +60,9 @@ func (cs *CredentialsManager) Validate(credentials Credentials) (bool, error) {
 type Auth interface {
 	SignIn(http.ResponseWriter, *http.Request)
 	SignOut(http.ResponseWriter, *http.Request)
-	GetCredentials() (Credentials, error)
 	UpdateCredentials(http.ResponseWriter, *http.Request)
 	Me(http.ResponseWriter, *http.Request)
 	Authenticate(http.HandlerFunc) http.HandlerFunc
-	DefaultCredentials() error
 }
 
 type auth struct {
@@ -72,11 +70,23 @@ type auth struct {
 	cookiejar          *sessions.CookieStore
 }
 
-func NewAuth(b string, store storage.Store) Auth {
-	return &auth{
+func NewAuth(b string, store storage.Store) (Auth, error) {
+	a := &auth{
 		credentialsManager: NewCredentialsManager(store, b),
 		cookiejar:          sessions.NewCookieStore([]byte("reef-pi-key")),
 	}
+
+	_, err := a.getCredentials()
+	if err != nil {
+		log.Println("ERROR: Failed to load credentials. Error", err)
+		log.Println("WARNING: Setting default credentials")
+		if err := a.defaultCredentials(); err != nil {
+			log.Println("ERROR: Failed to set default credentials. Error", err)
+			return nil, err
+		}
+	}
+
+	return a, nil
 }
 
 func (a *auth) Authenticate(fn http.HandlerFunc) http.HandlerFunc {
@@ -145,7 +155,7 @@ func (a *auth) SignOut(w http.ResponseWriter, req *http.Request) {
 	log.Println("Sign out:", req.RemoteAddr)
 }
 
-func (a *auth) GetCredentials() (Credentials, error) {
+func (a *auth) getCredentials() (Credentials, error) {
 	return a.credentialsManager.Get()
 }
 
@@ -157,7 +167,7 @@ func (a *auth) UpdateCredentials(w http.ResponseWriter, req *http.Request) {
 	JSONUpdateResponse(&credentials, fn, w, req)
 }
 
-func (a *auth) DefaultCredentials() error {
+func (a *auth) defaultCredentials() error {
 	return a.credentialsManager.Update(Credentials{
 		User:     "reef-pi",
 		Password: "reef-pi",
