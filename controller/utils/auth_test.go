@@ -18,7 +18,10 @@ func TestAuth(t *testing.T) {
 	}
 	store.CreateBucket("reef-pi")
 	store.Update("reef-pi", "credentials", creds)
-	r := NewAuth("reef-pi", store)
+	r, err := NewAuth("reef-pi", store)
+	if err != nil {
+		t.Fatal(err)
+	}
 	tr := NewTestRouter()
 	tr.Router.HandleFunc("/sign_in", r.SignIn).Methods("GET")
 	tr.Router.HandleFunc("/sign_out", r.SignOut).Methods("GET")

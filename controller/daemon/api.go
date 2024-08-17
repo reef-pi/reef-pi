@@ -12,13 +12,6 @@ import (
 )
 
 func (r *ReefPi) API() error {
-	_, err := r.a.GetCredentials()
-	if err != nil {
-		log.Println("ERROR: Failed to load credentials. Error", err)
-		if err := r.a.DefaultCredentials(); err != nil {
-			return err
-		}
-	}
 	err, router := startAPIServer(r.settings.Address, r.settings.HTTPS)
 	if err != nil {
 		return err

@@ -43,7 +43,10 @@ func TestAPI(t *testing.T) {
 		t.Error("Failed to get per minute health data.Error:", err)
 	}
 	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(&DefaultCredentials)
+	json.NewEncoder(body).Encode(utils.Credentials{
+		User:     "reef-pi",
+		Password: "reef-pi",
+	})
 	if err := tr.Do("POST", "/api/credentials", body, nil); err != nil {
 		t.Error("Failed to update creds via api")
 	}
