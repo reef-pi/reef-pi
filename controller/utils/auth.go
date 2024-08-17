@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/sessions"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 //swagger:model credentials
@@ -16,27 +18,75 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+type CredentialsManager struct {
+	store  storage.Store
+	bucket string
+}
+
+func NewCredentialsManager(store storage.Store, bucket string) *CredentialsManager {
+	return &CredentialsManager{
+		store:  store,
+		bucket: bucket,
+	}
+}
+
+func (cs *CredentialsManager) Get() (Credentials, error) {
+	var c Credentials
+	return c, cs.store.Get(cs.bucket, "credentials", &c)
+}
+
+func (cs *CredentialsManager) Update(credentials Credentials) error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), 14)
+	if err != nil {
+		return err
+	}
+	return cs.store.Update(cs.bucket, "credentials", Credentials{
+		User:     credentials.User,
+		Password: string(hash),
+	})
+}
+
+func (cs *CredentialsManager) Validate(credentials Credentials) (bool, error) {
+	bucketCredentials, err := cs.Get()
+	if err != nil {
+		return false, err
+	}
+	return credentials.User == bucketCredentials.User &&
+		(credentials.Password == bucketCredentials.Password ||
+			bcrypt.CompareHashAndPassword([]byte(bucketCredentials.Password), []byte(credentials.Password)) == nil), nil
+
+}
+
 type Auth interface {
 	SignIn(http.ResponseWriter, *http.Request)
 	SignOut(http.ResponseWriter, *http.Request)
-	GetCredentials() (Credentials, error)
 	UpdateCredentials(http.ResponseWriter, *http.Request)
 	Me(http.ResponseWriter, *http.Request)
 	Authenticate(http.HandlerFunc) http.HandlerFunc
 }
 
 type auth struct {
-	store     storage.Store
-	cookiejar *sessions.CookieStore
-	bucket    string
+	credentialsManager *CredentialsManager
+	cookiejar          *sessions.CookieStore
 }
 
-func NewAuth(b string, store storage.Store) Auth {
-	return &auth{
-		bucket:    b,
-		store:     store,
-		cookiejar: sessions.NewCookieStore([]byte("reef-pi-key")),
+func NewAuth(b string, store storage.Store) (Auth, error) {
+	a := &auth{
+		credentialsManager: NewCredentialsManager(store, b),
+		cookiejar:          sessions.NewCookieStore([]byte("reef-pi-key")),
 	}
+
+	_, err := a.getCredentials()
+	if err != nil {
+		log.Println("ERROR: Failed to load credentials. Error", err)
+		log.Println("WARNING: Setting default credentials")
+		if err := a.defaultCredentials(); err != nil {
+			log.Println("ERROR: Failed to set default credentials. Error", err)
+			return nil, err
+		}
+	}
+
+	return a, nil
 }
 
 func (a *auth) Authenticate(fn http.HandlerFunc) http.HandlerFunc {
@@ -64,7 +114,6 @@ func (a *auth) Me(w http.ResponseWriter, req *http.Request) {
 
 func (a *auth) SignIn(w http.ResponseWriter, req *http.Request) {
 	var reqCredentials Credentials
-	var bucketCredentials Credentials
 	if req.Body == nil {
 		http.Error(w, "No body request", 400)
 		return
@@ -79,13 +128,15 @@ func (a *auth) SignIn(w http.ResponseWriter, req *http.Request) {
 		JSONResponse(nil, w, req)
 		return
 	}
-	if err := a.store.Get(a.bucket, "credentials", &bucketCredentials); err != nil {
+
+	validCredentials, err := a.credentialsManager.Validate(reqCredentials)
+	if err != nil {
 		log.Println("ERROR: Not able to fetch authentication creds. Error:", err)
 		w.WriteHeader(500)
 		JSONResponse(nil, w, req)
 		return
 	}
-	if reqCredentials.User == bucketCredentials.User && reqCredentials.Password == bucketCredentials.Password {
+	if validCredentials {
 		log.Println("Access granted for:", req.RemoteAddr)
 		session.Values["user"] = reqCredentials.User
 		session.Save(req, w)
@@ -104,15 +155,21 @@ func (a *auth) SignOut(w http.ResponseWriter, req *http.Request) {
 	log.Println("Sign out:", req.RemoteAddr)
 }
 
-func (a *auth) GetCredentials() (Credentials, error) {
-	var c Credentials
-	return c, a.store.Get(a.bucket, "credentials", &c)
+func (a *auth) getCredentials() (Credentials, error) {
+	return a.credentialsManager.Get()
 }
 
 func (a *auth) UpdateCredentials(w http.ResponseWriter, req *http.Request) {
-	var creds Credentials
+	var credentials Credentials
 	fn := func(_ string) error {
-		return a.store.Update(a.bucket, "credentials", creds)
+		return a.credentialsManager.Update(credentials)
 	}
-	JSONUpdateResponse(&creds, fn, w, req)
+	JSONUpdateResponse(&credentials, fn, w, req)
+}
+
+func (a *auth) defaultCredentials() error {
+	return a.credentialsManager.Update(Credentials{
+		User:     "reef-pi",
+		Password: "reef-pi",
+	})
 }

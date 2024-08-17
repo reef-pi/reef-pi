@@ -18,7 +18,10 @@ func TestAuth(t *testing.T) {
 	}
 	store.CreateBucket("reef-pi")
 	store.Update("reef-pi", "credentials", creds)
-	r := NewAuth("reef-pi", store)
+	r, err := NewAuth("reef-pi", store)
+	if err != nil {
+		t.Fatal(err)
+	}
 	tr := NewTestRouter()
 	tr.Router.HandleFunc("/sign_in", r.SignIn).Methods("GET")
 	tr.Router.HandleFunc("/sign_out", r.SignOut).Methods("GET")
@@ -36,7 +39,7 @@ func TestAuth(t *testing.T) {
 	}
 
 	body.Reset()
-	body.Write([]byte("{}"))
+	body.Write([]byte(`{"user":"reef-pi", "password":"123456789"}`))
 	if err := tr.Do("POST", "/creds", body, nil); err != nil {
 		t.Error("Failed to update creds:", err)
 	}
@@ -45,5 +48,11 @@ func TestAuth(t *testing.T) {
 	body.Write([]byte("{}"))
 	if err := tr.Do("GET", "/me", body, nil); err != nil {
 		t.Error("Failed to hit /me:", err)
+	}
+
+	body.Reset()
+	body.Write([]byte(`{"user":"reef-pi", "password":"123456789"}`))
+	if err := tr.Do("GET", "/sign_in", body, nil); err != nil {
+		t.Error("Failed to sign in after change credentials:", err)
 	}
 }

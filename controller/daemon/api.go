@@ -11,21 +11,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-var DefaultCredentials = utils.Credentials{
-	User:     "reef-pi",
-	Password: "reef-pi",
-}
-
 func (r *ReefPi) API() error {
-	creds, err := r.a.GetCredentials()
-	if err != nil {
-		log.Println("ERROR: Failed to load credentials. Error", err)
-		if err := r.store.Update(Bucket, "credentials", DefaultCredentials); err != nil {
-			return err
-		}
-		creds = DefaultCredentials
-	}
-	err, router := startAPIServer(r.settings.Address, creds, r.settings.HTTPS)
+	err, router := startAPIServer(r.settings.Address, r.settings.HTTPS)
 	if err != nil {
 		return err
 	}
@@ -226,7 +213,7 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string, creds utils.Credentials, https bool) (error, *mux.Router) {
+func startAPIServer(address string, https bool) (error, *mux.Router) {
 	assets := http.FileServer(http.Dir("ui/assets"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/home.html")
