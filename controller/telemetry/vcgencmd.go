@@ -85,7 +85,7 @@ func GetThrottled(ctx context.Context, cf Factory) ([]ThrottleType, error) {
 }
 
 func GetThrottleTypes(v int) (tTypes []ThrottleType) {
-	for tType, _ := range tTypesMap {
+	for tType := range tTypesMap {
 		mask := 1 << tType
 		b := int(v) & mask
 		if b != 0 {
