@@ -4,7 +4,7 @@ jobs:
   builds:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.2
+      - uses: actions/checkout@v4.1.7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
