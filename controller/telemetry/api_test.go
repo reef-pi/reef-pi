@@ -12,10 +12,10 @@ import (
 func TestAPI(t *testing.T) {
 	tr := utils.NewTestRouter()
 	store, err := storage.TestDB()
-	defer store.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer store.Close()
 	store.CreateBucket("telemetry")
 	store.Update("telemetry", DBKey, DefaultTelemetryConfig)
 	tele := TestTelemetry(store)

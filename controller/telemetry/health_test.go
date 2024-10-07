@@ -9,11 +9,11 @@ import (
 
 func TestHealthChecker(t *testing.T) {
 	store, err := storage.TestDB()
-	defer store.Close()
-
 	if err != nil {
 		t.Error(err)
 	}
+	defer store.Close()
+
 	c := settings.HealthCheckNotify{
 		Enable:    true,
 		MaxMemory: 100,
