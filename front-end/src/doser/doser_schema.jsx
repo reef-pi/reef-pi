@@ -14,6 +14,11 @@ const Stepperchema = Yup.object().shape({
   microstepping: Yup.string()
 })
 
+const Restdoserchema = Yup.object().shape({
+  url: Yup.string(),
+  calUrl: Yup.string()
+})
+
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
     .required(i18n.t('validation:name_required')),
@@ -21,6 +26,7 @@ const DoserSchema = Yup.object().shape({
   jack: Yup.string(),
   pin: Yup.string(),
   stepper: Stepperchema,
+  restdoser: Restdoserchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
   duration: Yup.number()
