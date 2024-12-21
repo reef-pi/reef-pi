@@ -10,6 +10,8 @@ jobs:
     uses: ./.github/workflows/jest.yml
   translations:
     uses: ./.github/workflows/translations.yml
+  smoke:
+    uses: ./.github/workflows/smoke.yml
   deb:
     uses: ./.github/workflows/deb.yml
   release:
@@ -18,6 +20,7 @@ jobs:
       - deb
       - go
       - translations
+      - smoke
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
