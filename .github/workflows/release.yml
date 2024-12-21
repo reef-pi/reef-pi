@@ -1,8 +1,8 @@
 name: Release
 on:
-  push:
-    branches:
-      - planted
+  release:
+    types:
+      - created
 jobs:
   go:
     uses: ./.github/workflows/go.yml
@@ -50,4 +50,8 @@ jobs:
       - name: deb
         run: make pi_deb
 
-      - run: ls *.deb
+      - name: Upload deb package
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: "*.deb"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
