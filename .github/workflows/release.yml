@@ -1,10 +1,14 @@
-name: deb
+name: Release
 on:
   push:
     branches:
       - planted
 jobs:
-  builds:
+  deb:
+    uses: .github/workflows/deb.yml
+  release:
+    needs:
+      - deb
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
