@@ -1,5 +1,8 @@
 name: smoke
-on: [push, pull_request]
+on:
+  workflow_call:
+  push:
+  pull_request:
 jobs:
   builds:
     runs-on: ubuntu-latest
