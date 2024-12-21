@@ -5,7 +5,7 @@ on:
       - planted
 jobs:
   deb:
-    uses: .github/workflows/deb.yml
+    uses: ./.github/workflows/deb.yml
   release:
     needs:
       - deb
