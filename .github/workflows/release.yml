@@ -4,11 +4,20 @@ on:
     branches:
       - planted
 jobs:
+  go:
+    uses: ./.github/workflows/go.yml
+  jest:
+    uses: ./.github/workflows/jest.yml
+  translations:
+    uses: ./.github/workflows/translations.yml
   deb:
     uses: ./.github/workflows/deb.yml
   release:
     needs:
+      - jest
       - deb
+      - go
+      - translations
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7

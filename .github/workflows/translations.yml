@@ -1,6 +1,8 @@
 name: translation
-on: [push, pull_request]
-
+on:
+  workflow_call:
+  push:
+  pull_request:
 jobs:
   Translations:
     runs-on: ubuntu-latest

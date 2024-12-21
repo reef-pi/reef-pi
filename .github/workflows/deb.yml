@@ -27,8 +27,6 @@ jobs:
         run: yarn
       - name: go
         run: make go
-      - name: pi
-        run: make pi
       - name: pi-zero
         run: make pi-zero
       - name: bundler
