@@ -32,10 +32,14 @@ type auth struct {
 }
 
 func NewAuth(b string, store storage.Store) Auth {
+	cookieStore := sessions.NewCookieStore([]byte("reef-pi-key"))
+	cookieStore.Options.SameSite = http.SameSiteDefaultMode
+	cookieStore.Options.Secure = false
+
 	return &auth{
 		bucket:    b,
 		store:     store,
-		cookiejar: sessions.NewCookieStore([]byte("reef-pi-key")),
+		cookiejar: cookieStore,
 	}
 }
 
