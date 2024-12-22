@@ -24,11 +24,11 @@ func resetPassword(db, u, p string) {
 		os.Exit(1)
 	}
 	defer store.Close()
-	creds := utils.Credentials{
+	credentials := utils.Credentials{
 		User:     u,
 		Password: p,
 	}
-	if err := store.Update(daemon.Bucket, "credentials", creds); err != nil {
+	if err := utils.NewCredentialsManager(store, daemon.Bucket).Update(credentials); err != nil {
 		fmt.Println("Failed to save new credential. Error:", err)
 		os.Exit(1)
 	}

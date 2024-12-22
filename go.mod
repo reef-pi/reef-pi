@@ -21,5 +21,6 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.24.5
 	go.etcd.io/bbolt v1.3.9
+	golang.org/x/crypto v0.26.0
 	gopkg.in/yaml.v2 v2.4.0
 )

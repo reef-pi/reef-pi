@@ -43,13 +43,19 @@ func New(version, database string) (*ReefPi, error) {
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
 	tele := telemetry.Initialize(s.Name, Bucket, store, fn, s.Prometheus)
+
+	auth, err := utils.NewAuth(Bucket, store)
+	if err != nil {
+		return nil, err
+	}
+
 	r := &ReefPi{
 		store:      store,
 		settings:   s,
 		telemetry:  tele,
 		subsystems: controller.NewSubsystemComposite(),
 		version:    version,
-		a:          utils.NewAuth(Bucket, store),
+		a:          auth,
 		dm:         device_manager.New(s, store, tele),
 	}
 	if s.Capabilities.HealthCheck {
