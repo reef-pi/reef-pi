@@ -2,7 +2,9 @@ name: translation
 on:
   workflow_call:
   push:
+    branches: [ planted ]
   pull_request:
+    branches: [ planted ]
 jobs:
   Translations:
     runs-on: ubuntu-latest
