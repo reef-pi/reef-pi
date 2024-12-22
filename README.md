@@ -1,6 +1,10 @@
-# reef-pi
+# Planted Pi
 
-An open source reef tank controller based on Raspberry Pi
+A forked project of the [reef-pi](https://reef-pi.github.io/) open source reef tank controller that I use in my planted tank.
+
+This provides an updated version of the [reef-pi](https://reef-pi.github.io/) controller with additional features.
+
+This is not intended to be a replacement for the original [reef-pi](https://reef-pi.github.io/) project.
 
 [![GitHub release](https://img.shields.io/github/release/reef-pi/reef-pi.svg)](https://github.com/reef-pi/reef-pi/releases)
 ![Build Status(backend)](https://github.com/reef-pi/reef-pi/workflows/go/badge.svg?branch=master)
