@@ -33,7 +33,7 @@
     "i18next-browser-languagedetector": "8.0.0",
     "jest": "27.4.5",
     "jest-date-mock": "1.0.8",
-    "jquery": "^3.6.1",
+    "jquery": "^3.7.1",
     "json-loader": "0.5.7",
     "lodash.debounce": "4.0.8",
     "lodash.mapvalues": "4.6.0",
