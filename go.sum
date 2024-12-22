@@ -837,8 +837,8 @@ github.com/hajimehoshi/oto v1.0.1/go.mod h1:wovJ8WWMfFKvP587mhHgot/MBr4DnNy9m6Ee
 github.com/hajimehoshi/oto/v2 v2.3.1/go.mod h1:seWLbgHH7AyUMYKfKYT9pg7PhUu9/SisyJvNTT+ASQo=
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
-github.com/hectorespert/drivers v0.0.0-20240726191549-ca5a2aa08adf h1:TaNIF8NC9UsIollfvb5MJh97ITbH53dxZTd2B+NmPUk=
-github.com/hectorespert/drivers v0.0.0-20240726191549-ca5a2aa08adf/go.mod h1:8/4IqQbJq1chTn+t6DLYhRdQipKtdMTHRTO9/zmjEv0=
+github.com/hectorespert/drivers v0.0.0-20241222162909-dfadf08a0eaf h1:OEoGaU4MGNonyW8ICfC8u8wl8zUvjpoK/I+/s4UzYg0=
+github.com/hectorespert/drivers v0.0.0-20241222162909-dfadf08a0eaf/go.mod h1:8/4IqQbJq1chTn+t6DLYhRdQipKtdMTHRTO9/zmjEv0=
 github.com/iancoleman/strcase v0.2.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=

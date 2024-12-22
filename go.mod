@@ -25,4 +25,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-replace github.com/reef-pi/drivers => github.com/hectorespert/drivers v0.0.0-20240726191549-ca5a2aa08adf
+replace github.com/reef-pi/drivers => github.com/hectorespert/drivers v0.0.0-20241222162909-dfadf08a0eaf
