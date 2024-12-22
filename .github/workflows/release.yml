@@ -1,10 +1,26 @@
-name: deb
+name: Release
 on:
-  workflow_call:
-  push:
-  pull_request:
+  release:
+    types:
+      - created
 jobs:
-  builds:
+  go:
+    uses: ./.github/workflows/go.yml
+  jest:
+    uses: ./.github/workflows/jest.yml
+  translations:
+    uses: ./.github/workflows/translations.yml
+  smoke:
+    uses: ./.github/workflows/smoke_.yml
+  deb:
+    uses: ./.github/workflows/deb.yml
+  release:
+    needs:
+      - jest
+      - deb
+      - go
+      - translations
+      - smoke
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -25,8 +41,6 @@ jobs:
             ${{ runner.os }}-node_modules-
       - name: Install
         run: yarn
-      - name: go
-        run: make go
       - name: pi-zero
         run: make pi-zero
       - name: bundler
@@ -35,3 +49,9 @@ jobs:
         run: bundle install
       - name: deb
         run: make pi_deb
+
+      - name: Upload deb package
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: "*.deb"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
