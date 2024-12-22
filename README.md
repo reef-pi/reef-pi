@@ -23,6 +23,7 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 ## Features
 
+### Default reef-pi features
 - Web browser based user interface
 - On-demand & timer based control of equipment
 - Sunrise to sunset LED lighting automation
@@ -33,6 +34,8 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - Email alerts, charts, and dashboard capabilities. [Adafruit.io](https://io.adafruit.com/) based telemetry for monitoring.
 - On-demand or automatic tank photo capture with google drive upload using pi camera
 
+### Extended planted-pi features
+- Improve security
 
 ## Maintainers
 
