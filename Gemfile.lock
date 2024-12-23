@@ -1,27 +1,21 @@
-GIT
-  remote: https://github.com/NicholasBHubbard/fpm.git
-  revision: 992a7138c5059c851ad5f94c8101f71600a3ff97
-  branch: replace-deprecated-methods
-  specs:
-    fpm (1.15.0)
-      arr-pm (~> 0.0.11)
-      backports (>= 2.6.2)
-      cabin (>= 0.6.0)
-      clamp (~> 1.0.0)
-      pleaserun (~> 0.0.29)
-      rexml
-      stud
-
 GEM
   remote: https://rubygems.org/
   specs:
     arr-pm (0.0.12)
-    backports (3.23.0)
+    backports (3.25.0)
     cabin (0.9.0)
-    clamp (1.0.1)
-    dotenv (2.8.1)
+    clamp (1.3.2)
+    dotenv (3.1.7)
+    fpm (1.16.0)
+      arr-pm (~> 0.0.11)
+      backports (>= 2.6.2)
+      cabin (>= 0.6.0)
+      clamp (>= 1.0.0)
+      pleaserun (~> 0.0.29)
+      rexml
+      stud
     insist (1.0.0)
-    json (2.8.2)
+    json (2.9.1)
     mustache (0.99.8)
     pleaserun (0.0.32)
       cabin (> 0)
@@ -30,15 +24,16 @@ GEM
       insist
       mustache (= 0.99.8)
       stud
-    rexml (3.3.9)
+    rexml (3.4.0)
     stud (0.0.23)
 
 PLATFORMS
+  arm64-darwin-23
   ruby
 
 DEPENDENCIES
-  fpm!
-  json (>= 2.3.0)
+  fpm
+  json
 
 BUNDLED WITH
-   2.2.26
+   2.6.1
