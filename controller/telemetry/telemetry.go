@@ -170,7 +170,7 @@ func (t *telemetry) LogError(a, b string) error {
 
 func (t *telemetry) Alert(subject, body string) (bool, error) {
 	prefix := "[" + t.name + ":Alert]"
-	t.logError(prefix,subject)
+	t.logError(prefix, subject)
 	return t.Mail(prefix+subject, body)
 }
 
@@ -262,7 +262,6 @@ func (t *telemetry) CreateFeedIfNotExist(f string) {
 			log.Println("ERROR: Telemetry sub-system: Failed to create feed:", f, "Error:", e)
 		}
 	}
-	return
 }
 
 func (t *telemetry) DeleteFeedIfExist(f string) {
@@ -275,5 +274,4 @@ func (t *telemetry) DeleteFeedIfExist(f string) {
 	if err := t.aClient.DeleteFeed(aio.User, f); err != nil {
 		log.Println("ERROR: Telemetry sub-system: Failed to delete feed:", f, "Error:", err)
 	}
-	return
 }

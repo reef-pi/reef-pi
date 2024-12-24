@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/sessions v1.3.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/prometheus/client_golang v1.18.0
+	github.com/prometheus/client_golang v1.20.5
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20231021060129-e13db339949d
 	github.com/reef-pi/hal v0.0.0-20220925063527-7d44144f7cf4
@@ -21,7 +21,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.24.5
 	go.etcd.io/bbolt v1.3.9
-	golang.org/x/crypto v0.26.0
+	golang.org/x/crypto v0.31.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

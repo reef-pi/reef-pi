@@ -10,7 +10,7 @@ jobs:
     name: "Build deb package for x86"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.2
+      - uses: actions/checkout@v4.2.2
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
