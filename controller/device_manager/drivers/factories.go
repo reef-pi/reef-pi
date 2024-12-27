@@ -67,6 +67,9 @@ func (d *Drivers) loadRpi() error {
     if d.pwm_freq > 0 {
         piDriver.Parameters["Frequency"] = d.pwm_freq
     }
+    if d.devMode {
+        piDriver.Parameters["Dev Mode"] = true
+    }
     return d.register(piDriver, factory)
 }
 
