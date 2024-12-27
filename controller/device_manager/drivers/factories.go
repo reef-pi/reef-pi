@@ -55,7 +55,7 @@ var piDriver = Driver{
 	Name:   "Raspberry Pi",
 	ID:     _rpi,
 	Type:   _rpi,
-	Config: []byte(`{"frequency": 150, "Dev Mode": true}`),
+	Config: []byte(`{"frequency": 150, "Dev Mode": false}`),
 }
 
 func (d *Drivers) loadRpi() error {
