@@ -29,12 +29,13 @@ func daemonize(db string) {
 	for {
 		select {
 		case s := <-ch:
+			log.Println("Received signal:", s)
 			switch s {
-			case syscall.SIGTERM:
-				c.Stop()
-				return
-			case os.Interrupt:
-				c.Stop()
+			case os.Interrupt, syscall.SIGTERM:
+				err := c.Stop()
+				if err != nil {
+					log.Println("ERROR: Failed to stop controller. Error:", err)
+				}
 				return
 			case syscall.SIGUSR2:
 			}
