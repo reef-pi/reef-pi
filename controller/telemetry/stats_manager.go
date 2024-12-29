@@ -4,6 +4,7 @@ import (
 	"container/ring"
 	"encoding/json"
 	"fmt"
+	"log"
 	"sort"
 	"sync"
 
@@ -123,6 +124,7 @@ func (m *mgr) Save(id string) error {
 }
 
 func (m *mgr) Update(id string, metric Metric) {
+	log.Println("Updating stats for id:", id)
 	m.Lock()
 	defer m.Unlock()
 	stats, ok := m.inMemory[id]
@@ -143,14 +145,20 @@ func (m *mgr) Update(id string, metric Metric) {
 		m1, moved := stats.Historical.Value.(Metric).Rollup(metric)
 		move = moved
 		if moved {
-			m.store.Update(m.bucket, id, stats)
+			err := m.store.Update(m.bucket, id, stats)
+			if err != nil {
+				log.Println("ERROR: Failed to update stats for id:", id, "Error:", err)
+			}
 			stats.Historical = stats.Historical.Next()
 		}
 		stats.Historical.Value = m1
 	}
 	m.inMemory[id] = stats
 	if move {
-		m.Save(id)
+		err := m.Save(id)
+		if err != nil {
+			log.Println("ERROR: Failed to save stats for id:", id, "Error:", err)
+		}
 	}
 }
 

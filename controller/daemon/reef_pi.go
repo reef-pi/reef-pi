@@ -85,13 +85,14 @@ func (r *ReefPi) Start() error {
 }
 
 func (r *ReefPi) Stop() error {
+	log.Println("Shutting down reef-pi")
 	r.subsystems.UnloadAll()
 	if r.settings.Capabilities.HealthCheck {
 		r.h.Stop()
 	}
 	r.dm.Close()
-	log.Println("reef-pi is shutting down")
 	r.store.Close()
+	log.Println("reef-pi is shutting down")
 	return nil
 }
 
