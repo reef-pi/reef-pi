@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/rpi/i2c"
 
-	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v4/host"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
@@ -51,6 +51,8 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 		log.Println("ERROR: failed to initialize drivers. Error:", err)
 		t.LogError("device-manager", "failed to initialize drivers:"+err.Error())
 	}
+	log.Println("device-manager subsystem initialized with", drvrs.Size(), "drivers")
+
 	return &DeviceManager{
 		bus:       bus,
 		drivers:   drvrs,
