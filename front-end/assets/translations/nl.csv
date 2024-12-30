@@ -170,6 +170,7 @@ cron:second,Seconde
 cron:week,Week
 dashboard:back_to_dashboard,Terug naar dashboard
 dashboard:blank_panel,
+doser:calUrl,Kalibratie-URl
 doser:calibrate,
 doser:calibration:run,
 doser:delay,
