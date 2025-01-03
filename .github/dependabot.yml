@@ -19,3 +19,7 @@ updates:
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
+ - package-ecosystem: "devcontainers"
+   directory: "/"
+   schedule:
+     interval: weekly
