@@ -1,29 +1,29 @@
 package controller
 
 import (
-	"fmt"
-	"log"
-	"sync"
+    "fmt"
+    "log"
+    "sync"
 
-	"github.com/gorilla/mux"
+    "github.com/gorilla/mux"
 )
 
 type SubsystemComposite struct {
-	mu         *sync.RWMutex
-	components map[string]Subsystem
+    mu         *sync.RWMutex
+    components map[string]Subsystem
 }
 
 func NewSubsystemComposite() *SubsystemComposite {
-	return &SubsystemComposite{
-		mu:         new(sync.RWMutex),
-		components: make(map[string]Subsystem),
-	}
+    return &SubsystemComposite{
+        mu:         new(sync.RWMutex),
+        components: make(map[string]Subsystem),
+    }
 }
 
 func (s *SubsystemComposite) Unload(name string) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	delete(s.components, name)
+    s.mu.Lock()
+    defer s.mu.Unlock()
+    delete(s.components, name)
 }
 
 func (s *SubsystemComposite) UnloadAll() {
@@ -36,9 +36,9 @@ func (s *SubsystemComposite) UnloadAll() {
 }
 
 func (s *SubsystemComposite) Load(name string, sub Subsystem) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.components[name] = sub
+    s.mu.Lock()
+    defer s.mu.Unlock()
+    s.components[name] = sub
 }
 
 func (s *SubsystemComposite) Sub(name string) (Subsystem, error) {
@@ -52,9 +52,9 @@ func (s *SubsystemComposite) Sub(name string) (Subsystem, error) {
 }
 
 func (s *SubsystemComposite) LoadAPI(router *mux.Router) {
-	for _, sController := range s.components {
-		sController.LoadAPI(router)
-	}
+    for _, sController := range s.components {
+        sController.LoadAPI(router)
+    }
 }
 
 func (s *SubsystemComposite) Setup() error {

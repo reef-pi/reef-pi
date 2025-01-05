@@ -36,6 +36,7 @@ type Drivers struct {
 	sync.Mutex
 	drivers       map[string]hal.Driver
 	store         storage.Store
+	devMode       bool
 	pwm_freq      int
 	bus           i2c.Bus
 	t             telemetry.Telemetry
@@ -49,6 +50,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 	d := &Drivers{
 		drivers:  make(map[string]hal.Driver),
 		store:    store,
+		devMode:  false,
 		pwm_freq: s.RPI_PWMFreq,
 		bus:      bus,
 		t:        t,
@@ -59,6 +61,7 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 	}
 	if s.Capabilities.DevMode {
 		d.isRaspberryPi = true
+		d.devMode = true
 	}
 	return d, d.loadAll()
 }

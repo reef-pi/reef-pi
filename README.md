@@ -1,6 +1,10 @@
-# reef-pi
+# Planted Pi
 
-An open source reef tank controller based on Raspberry Pi
+A forked project of the [reef-pi](https://reef-pi.github.io/) open source reef tank controller that I use in my planted tank.
+
+This provides an updated version of the [reef-pi](https://reef-pi.github.io/) controller with additional features.
+
+This is not intended to be a replacement for the original [reef-pi](https://reef-pi.github.io/) project.
 
 [![GitHub release](https://img.shields.io/github/release/reef-pi/reef-pi.svg)](https://github.com/reef-pi/reef-pi/releases)
 ![Build Status(backend)](https://github.com/reef-pi/reef-pi/workflows/go/badge.svg?branch=master)
@@ -23,6 +27,7 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 ## Features
 
+### Default reef-pi features
 - Web browser based user interface
 - On-demand & timer based control of equipment
 - Sunrise to sunset LED lighting automation
@@ -33,6 +38,8 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - Email alerts, charts, and dashboard capabilities. [Adafruit.io](https://io.adafruit.com/) based telemetry for monitoring.
 - On-demand or automatic tank photo capture with google drive upload using pi camera
 
+### Extended planted-pi features
+- Improve security
 
 ## Maintainers
 

@@ -1,7 +1,52 @@
 name: deb
-on: [push, pull_request]
+on:
+  workflow_call:
+  push:
+    branches: [ planted ]
+  pull_request:
+    branches: [ planted ]
 jobs:
-  builds:
+  x86:
+    name: "Build deb package for x86"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.20'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.13.0
+      - uses: actions/cache@v4.2.0
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        run: yarn
+      - name: go
+        run: make go
+      - name: pi
+        run: make x86
+      - name: bundler
+        run: gem install bundler -v 2.4 --no-document
+      - name: fpm
+        run: bundle install
+      - name: deb
+        run: make x86_deb
+      - name: "Upload x86 deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: x86-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30
+  pi:
+    name: "Build deb package for Rasspberry Pi"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -26,6 +71,43 @@ jobs:
         run: make go
       - name: pi
         run: make pi
+      - name: bundler
+        run: gem install bundler -v 2.4 --no-document
+      - name: fpm
+        run: bundle install
+      - name: deb
+        run: make pi_deb
+      - name: "Upload pi deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30
+  zero:
+    name: "Build deb package for Rasspberry Pi Zero"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.20'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.13.0
+      - uses: actions/cache@v4.2.0
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        run: yarn
+      - name: go
+        run: make go
       - name: pi-zero
         run: make pi-zero
       - name: bundler
@@ -34,3 +116,10 @@ jobs:
         run: bundle install
       - name: deb
         run: make pi_deb
+      - name: "Upload pi zero deb package"
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-zero-deb
+          path: 'reef-pi-*.deb'
+          if-no-files-found: error
+          retention-days: 30

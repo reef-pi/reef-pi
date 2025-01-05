@@ -1,5 +1,10 @@
 name: jest
-on: [push, pull_request]
+on:
+  workflow_call:
+  push:
+    branches: [ planted ]
+  pull_request:
+    branches: [ planted ]
 jobs:
   builds:
     runs-on: ubuntu-latest
