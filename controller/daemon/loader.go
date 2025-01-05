@@ -186,6 +186,7 @@ func (r *ReefPi) loadSubsystems() error {
 		r.LogError("subsystem-journal", "Failed to load journal subsystem. Error:"+err.Error())
 	}
 	if err := r.subsystems.Setup(); err != nil {
+		log.Println("ERROR: Failed to setup subsystems. Error:", err)
 		r.LogError("subsystem-setup", err.Error())
 	}
 	return nil
