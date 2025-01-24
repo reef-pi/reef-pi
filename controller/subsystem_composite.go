@@ -28,6 +28,7 @@ func (s *SubsystemComposite) Unload(name string) {
 
 func (s *SubsystemComposite) UnloadAll() {
 	for sName, sController := range s.components {
+		log.Println("Unloading module:", sName)
 		sController.Stop()
 		s.Unload(sName)
 		log.Println("Successfully unloaded module:", sName)
@@ -45,7 +46,7 @@ func (s *SubsystemComposite) Sub(name string) (Subsystem, error) {
 	defer s.mu.RUnlock()
 	sub, ok := s.components[name]
 	if !ok {
-		return nil, fmt.Errorf("Subsystem not present: %s", name)
+		return nil, fmt.Errorf("subsystem not present: %s", name)
 	}
 	return sub, nil
 }
@@ -58,6 +59,7 @@ func (s *SubsystemComposite) LoadAPI(router *mux.Router) {
 
 func (s *SubsystemComposite) Setup() error {
 	for sName, sController := range s.components {
+		log.Println("Starting subsystem:", sName)
 		if err := sController.Setup(); err != nil {
 			log.Println("ERROR: Failed to setup subsystem:", sName)
 			return fmt.Errorf("%s:%w", sName, err)
