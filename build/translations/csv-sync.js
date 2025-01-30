@@ -3,8 +3,8 @@ const args = process.argv.slice(2)
 const PATH_CSV = './front-end/assets/translations/'
 const referenceFile = 'en.csv'
 const files = fs.readdirSync(PATH_CSV).filter(f => f !== referenceFile)
-const {stringify} = require('csv-stringify')
-const parse = require('csv-parse/lib/sync')
+const {stringify} = require('csv-stringify/sync')
+const {parse} = require('csv-parse/sync')
 
 function aggregateRecords(records) {
   const common = records.filter(r => {
