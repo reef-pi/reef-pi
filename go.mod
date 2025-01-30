@@ -17,7 +17,7 @@ require (
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20250128072720-92eb51c1f19f
 	github.com/reef-pi/hal v0.0.0-20241230081938-0bb4bbd0e03a
-	github.com/reef-pi/rpi v0.0.0-20250128071619-614c4ae80b22
+	github.com/reef-pi/rpi v0.0.0-20250130173510-47fda5a629dd
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v4 v4.24.11

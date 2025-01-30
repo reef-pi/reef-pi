@@ -71,8 +71,8 @@ github.com/reef-pi/drivers v0.0.0-20250128072720-92eb51c1f19f h1:26wSgU7CWQ2sLa6
 github.com/reef-pi/drivers v0.0.0-20250128072720-92eb51c1f19f/go.mod h1:xCag7VFtKOAc65mBt1CsSFkNwJ3ITAU5yLWN8k12uGI=
 github.com/reef-pi/hal v0.0.0-20241230081938-0bb4bbd0e03a h1:I4MRPsobJgpj1LaJ28Ren+++FrrwnGQ+/HRK9FSc9ic=
 github.com/reef-pi/hal v0.0.0-20241230081938-0bb4bbd0e03a/go.mod h1:ymcJ0AbYfWXT1vyAbXOjKtWaFdCv1HHYmXDMWxJSWSM=
-github.com/reef-pi/rpi v0.0.0-20250128071619-614c4ae80b22 h1:zADJD26yhQMt1zynabIR6UmzDp82ayJoYkZ2dNCkuP4=
-github.com/reef-pi/rpi v0.0.0-20250128071619-614c4ae80b22/go.mod h1:BLELpJr78REDz8n+NKRYQyTif7+uBzBC24NKohCufWg=
+github.com/reef-pi/rpi v0.0.0-20250130173510-47fda5a629dd h1:qfofVzhWrYZJuekxBuCs0pyjTbZC5e42sXhHI1f33Fg=
+github.com/reef-pi/rpi v0.0.0-20250130173510-47fda5a629dd/go.mod h1:BLELpJr78REDz8n+NKRYQyTif7+uBzBC24NKohCufWg=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjRBZyWFQ=
