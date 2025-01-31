@@ -8,29 +8,12 @@ import (
 	"sync"
 
 	"github.com/reef-pi/hal"
-	"github.com/reef-pi/rpi/i2c"
-
-	"github.com/shirou/gopsutil/v3/host"
-
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/rpi/i2c"
+	"github.com/shirou/gopsutil/v4/host"
 )
-
-const (
-	DriverBucket = storage.DriverBucket
-	_rpi         = "rpi"
-)
-
-// swagger:model driver
-type Driver struct {
-	ID         string                 `json:"id"`
-	Name       string                 `json:"name"`
-	Type       string                 `json:"type"`
-	Config     json.RawMessage        `json:"config"`
-	PinMap     map[string][]int       `json:"pinmap"`
-	Parameters map[string]interface{} `json:"parameters"`
-}
 
 type Drivers struct {
 	sync.Mutex
@@ -56,7 +39,8 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 		t:        t,
 	}
 	stats, sErr := host.Info()
-	if sErr == nil && strings.HasPrefix(stats.KernelArch, "arm") {
+	log.Println("Debug: host arch:", stats.KernelArch)
+	if sErr == nil && isPiArch(stats.KernelArch) {
 		d.isRaspberryPi = true
 	}
 	if s.Capabilities.DevMode {
@@ -64,6 +48,15 @@ func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemet
 		d.devMode = true
 	}
 	return d, d.loadAll()
+}
+func isPiArch(a string) bool {
+	if strings.HasPrefix(a, "arm") {
+		return true
+	}
+	if strings.HasPrefix(a, "aarch64") {
+		return true
+	}
+	return false
 }
 
 func (d *Drivers) Get(id string) (Driver, error) {
@@ -77,22 +70,6 @@ func (d *Drivers) Get(id string) (Driver, error) {
 	}
 	dr.loadPinMap(driver)
 	return dr, nil
-}
-
-func (dr *Driver) loadPinMap(d hal.Driver) {
-	pinmap := make(map[string][]int)
-	for _, cap := range d.Metadata().Capabilities {
-		pins, err := d.Pins(cap)
-		if err != nil {
-			continue
-		}
-		var ps []int
-		for _, pin := range pins {
-			ps = append(ps, pin.Number())
-		}
-		pinmap[cap.String()] = ps
-	}
-	dr.PinMap = pinmap
 }
 
 func (d *Drivers) DigitalInputDriver(id string) (hal.DigitalInputDriver, error) {
@@ -205,6 +182,9 @@ func (d *Drivers) Delete(id string) error {
 	return d.store.Delete(DriverBucket, id)
 }
 
+func (d *Drivers) Size() int {
+	return len(d.drivers)
+}
 func (d *Drivers) List() ([]Driver, error) {
 	ds := []Driver{}
 	fn := func(_ string, v []byte) error {
@@ -249,7 +229,7 @@ func (d *Drivers) ValidateParameters(d1 Driver) (map[string][]string, error) {
 func (d *Drivers) Close() error {
 	for _, d1 := range d.drivers {
 		if err := d1.Close(); err != nil {
-			log.Println(err)
+			log.Println("device-manager: Failed to close driver. Error:", err)
 		}
 	}
 	return nil
