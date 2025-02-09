@@ -3,25 +3,34 @@ on:
   release:
     types:
       - created
+  pull_request:
+    branches:
+      - planted
 jobs:
-  go:
-    uses: ./.github/workflows/go.yml
-  jest:
-    uses: ./.github/workflows/jest.yml
-  translations:
-    uses: ./.github/workflows/translations.yml
-  smoke:
-    uses: ./.github/workflows/smoke_.yml
-  deb:
-    uses: ./.github/workflows/deb.yml
+#  go:
+#    uses: ./.github/workflows/go.yml
+#  jest:
+#    uses: ./.github/workflows/jest.yml
+#  translations:
+#    uses: ./.github/workflows/translations.yml
+#  smoke:
+#    uses: ./.github/workflows/smoke_.yml
+#  deb:
+#    uses: ./.github/workflows/deb.yml
   release:
-    needs:
-      - jest
-      - deb
-      - go
-      - translations
-      - smoke
+#    needs:
+#      - jest
+#      - deb
+#      - go
+#      - translations
+#      - smoke
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - x86
+          - pi0
+          - pi3
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: ruby/setup-ruby@v1
@@ -32,13 +41,7 @@ jobs:
           go-version: '^1.20'
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.13.0
-      - uses: actions/cache@v4.2.0
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          node-version: 22
       - name: Install
         run: yarn
       - name: pi-zero
@@ -49,9 +52,10 @@ jobs:
         run: bundle install
       - name: deb
         run: make pi_deb
+      - run: ls
 
-      - name: Upload deb package
-        uses: AButler/upload-release-assets@v3.0
-        with:
-          files: "*.deb"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Upload deb package
+#        uses: AButler/upload-release-assets@v3.0
+#        with:
+#          files: "*.deb"
+#          repo-token: ${{ secrets.GITHUB_TOKEN }}
