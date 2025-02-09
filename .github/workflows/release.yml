@@ -7,69 +7,13 @@ on:
     branches:
       - planted
 jobs:
-#  go:
-#    uses: ./.github/workflows/go.yml
-#  jest:
-#    uses: ./.github/workflows/jest.yml
-#  translations:
-#    uses: ./.github/workflows/translations.yml
-#  smoke:
-#    uses: ./.github/workflows/smoke_.yml
-#  deb:
-#    uses: ./.github/workflows/deb.yml
+  build:
+    uses: ./.github/workflows/deb.yml
   release:
-#    needs:
-#      - jest
-#      - deb
-#      - go
-#      - translations
-#      - smoke
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target:
-          - x86
-          - pi0
-          - pi3
+    needs: build
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.0
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '^1.20'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install
-        run: yarn
-      - name: x86
-        if: matrix.target == 'x86'
-        run: make x86
-      - name: pi-zero
-        if: matrix.target == 'pi0'
-        run: make pi-zero
-      - name: pi
-        if: matrix.target == 'pi3'
-        run: make pi
-      - name: bundler
-        run: gem install bundler -v 2.4 --no-document
-      - name: fpm
-        run: bundle install
-      - name: pi_deb
-        if: matrix.target != 'x86'
-        run: make pi_deb
-      - name: x86_deb
-        if: matrix.target == 'x86'
-        run: make x86_deb
-      - name: Rename deb package
-        run: |
-          VERSION=$(git describe --always --tags)
-          echo "Version: $VERSION"
-          mv reef-pi-${VERSION}.deb reef-pi-${VERSION}-${{ matrix.target }}.deb
-      - run: ls *.deb
-
+      - run: ls -l
 #      - name: Upload deb package
 #        uses: AButler/upload-release-assets@v3.0
 #        with:
