@@ -44,14 +44,25 @@ jobs:
           node-version: 22
       - name: Install
         run: yarn
+      - name: x86
+        if: matrix.target == 'x86'
+        run: make x86
       - name: pi-zero
+        if: matrix.target == 'pi0'
         run: make pi-zero
+      - name: pi
+        if: matrix.target == 'pi3'
+        run: make pi
       - name: bundler
         run: gem install bundler -v 2.4 --no-document
       - name: fpm
         run: bundle install
-      - name: deb
+      - name: pi_deb
+        if: matrix.target != 'x86'
         run: make pi_deb
+      - name: x86_deb
+        if: matrix.target != 'x86'
+        run: make x86_deb
       - run: ls
 
 #      - name: Upload deb package
