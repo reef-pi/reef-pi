@@ -3,9 +3,6 @@ on:
   release:
     types:
       - created
-  pull_request:
-    branches:
-      - planted
 jobs:
   build:
     uses: ./.github/workflows/deb.yml
@@ -22,9 +19,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: pi3-debian-package
-      - run: ls
-#      - name: Upload deb package
-#        uses: AButler/upload-release-assets@v3.0
-#        with:
-#          files: "*.deb"
-#          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload deb package
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: "reef-pi-*.deb"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
