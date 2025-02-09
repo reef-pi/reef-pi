@@ -4,54 +4,23 @@ on:
     types:
       - created
 jobs:
-  go:
-    uses: ./.github/workflows/go.yml
-  jest:
-    uses: ./.github/workflows/jest.yml
-  translations:
-    uses: ./.github/workflows/translations.yml
-  smoke:
-    uses: ./.github/workflows/smoke_.yml
-  deb:
+  build:
     uses: ./.github/workflows/deb.yml
   release:
-    needs:
-      - jest
-      - deb
-      - go
-      - translations
-      - smoke
     runs-on: ubuntu-latest
+    needs: build
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/download-artifact@v4
         with:
-          ruby-version: 3.2.0
-      - uses: actions/setup-go@v5
+          name: x86-debian-package
+      - uses: actions/download-artifact@v4
         with:
-          go-version: '^1.20'
-      - uses: actions/setup-node@v4
+          name: pi0-debian-package
+      - uses: actions/download-artifact@v4
         with:
-          node-version: 18.13.0
-      - uses: actions/cache@v4.2.0
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-      - name: Install
-        run: yarn
-      - name: pi-zero
-        run: make pi-zero
-      - name: bundler
-        run: gem install bundler -v 2.4 --no-document
-      - name: fpm
-        run: bundle install
-      - name: deb
-        run: make pi_deb
-
+          name: pi3-debian-package
       - name: Upload deb package
         uses: AButler/upload-release-assets@v3.0
         with:
-          files: "*.deb"
+          files: "reef-pi-*.deb"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
