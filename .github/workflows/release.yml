@@ -13,7 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - run: ls -l
+      - uses: actions/download-artifact@v4
+        with:
+          name: x86-debian-package
+      - uses: actions/download-artifact@v4
+        with:
+          name: pi0-debian-package
+      - uses: actions/download-artifact@v4
+        with:
+          name: pi3-debian-package
+      - run: ls
 #      - name: Upload deb package
 #        uses: AButler/upload-release-assets@v3.0
 #        with:

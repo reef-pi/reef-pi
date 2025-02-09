@@ -27,6 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: 'yarn'
       - name: Install
         run: yarn
       - name: x86
