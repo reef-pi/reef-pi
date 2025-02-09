@@ -65,7 +65,8 @@ jobs:
         run: make x86_deb
       - name: Rename deb package
         run: |
-          VERSION=$(shell git describe --always --tags)
+          VERSION=$(git describe --always --tags)
+          echo "Version: $VERSION"
           mv reef-pi-${VERSION}.deb reef-pi-${VERSION}-${{ matrix.target }}.deb
       - run: ls *.deb
 
