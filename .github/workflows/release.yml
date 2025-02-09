@@ -61,9 +61,13 @@ jobs:
         if: matrix.target != 'x86'
         run: make pi_deb
       - name: x86_deb
-        if: matrix.target != 'x86'
+        if: matrix.target == 'x86'
         run: make x86_deb
-      - run: ls
+      - name: Rename deb package
+        run: |
+          VERSION=$(shell git describe --always --tags)
+          mv reef-pi-${VERSION}.deb reef-pi-${VERSION}-${{ matrix.target }}.deb
+      - run: ls *.deb
 
 #      - name: Upload deb package
 #        uses: AButler/upload-release-assets@v3.0
