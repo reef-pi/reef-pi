@@ -20,18 +20,18 @@ require (
 	github.com/reef-pi/rpi v0.0.0-20250130173510-47fda5a629dd
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/shirou/gopsutil/v4 v4.24.11
+	github.com/shirou/gopsutil/v4 v4.25.1
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.9.0 // indirect
 	go.etcd.io/bbolt v1.3.9
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.32.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/ebitengine/purego v0.8.1 // indirect
+	github.com/ebitengine/purego v0.8.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
@@ -46,6 +46,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 )
