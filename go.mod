@@ -23,7 +23,7 @@ require (
 	github.com/shirou/gopsutil/v4 v4.25.1
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.9.0 // indirect
-	go.etcd.io/bbolt v1.3.9
+	go.etcd.io/bbolt v1.4.0
 	golang.org/x/crypto v0.32.0
 	gopkg.in/yaml.v2 v2.4.0
 )
