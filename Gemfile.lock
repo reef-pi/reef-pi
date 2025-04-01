@@ -15,7 +15,7 @@ GEM
       rexml
       stud
     insist (1.0.0)
-    json (2.9.1)
+    json (2.10.2)
     mustache (0.99.8)
     pleaserun (0.0.32)
       cabin (> 0)
