@@ -2,6 +2,8 @@ module github.com/reef-pi/reef-pi
 
 go 1.23.2
 
+toolchain go1.24.1
+
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/coreos/go-systemd/v22 v22.5.0
@@ -13,7 +15,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/reef-pi/adafruitio v0.0.0-20171007064130-a3cae37cdd64
 	github.com/reef-pi/drivers v0.0.0-20250128072720-92eb51c1f19f
 	github.com/reef-pi/hal v0.0.0-20241230081938-0bb4bbd0e03a
