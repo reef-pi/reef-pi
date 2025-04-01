@@ -2,6 +2,8 @@ module github.com/reef-pi/reef-pi
 
 go 1.23.2
 
+toolchain go1.24.1
+
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/coreos/go-systemd/v22 v22.5.0
@@ -20,7 +22,7 @@ require (
 	github.com/reef-pi/rpi v0.0.0-20250130173510-47fda5a629dd
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/shirou/gopsutil/v4 v4.25.2
+	github.com/shirou/gopsutil/v4 v4.25.3
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.9.0 // indirect
 	go.etcd.io/bbolt v1.4.0
