@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
-	github.com/coreos/go-systemd/v22 v22.5.0
+	github.com/coreos/go-systemd/v22 v22.6.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/go-ole/go-ole v1.3.0 // indirect
