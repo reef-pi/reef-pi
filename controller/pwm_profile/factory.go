@@ -7,15 +7,16 @@ import (
 )
 
 const (
-	_loopProfileName      = "loop"
-	_fixedProfileName     = "fixed"
-	_autoProfileName      = "auto"
-	_diurnalProfileName   = "diurnal"
-	_compositeProfileName = "composite"
-	_lunarProfileName     = "lunar"
-	_intervalProfileName  = "interval"
-	_sineProfileName      = "sine"
-	_randomProfileName    = "random"
+	_loopProfileName       = "loop"
+	_fixedProfileName      = "fixed"
+	_autoProfileName       = "auto"
+	_diurnalProfileName    = "diurnal"
+	_compositeProfileName  = "composite"
+	_lunarProfileName      = "lunar"
+	_intervalProfileName   = "interval"
+	_sineProfileName       = "sine"
+	_randomProfileName     = "random"
+	_circadianProfileName  = "circadian"
 )
 
 type Profile interface {
@@ -56,6 +57,8 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 		return Sine(p.Config, p.Min, p.Max)
 	case _randomProfileName:
 		return Random(p.Config, p.Min, p.Max)
+	case _circadianProfileName:
+		return NewCircadian(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}
