@@ -70,4 +70,18 @@ describe('DoserValidation', () => {
     DoserSchema.validate(repeatedDoser, {abortEarly: false})
   })
 
+  it('allows */N interval notation (regression #1978)', () => {
+    expect.assertions(1)
+    const doser = {
+      ...basicDoser,
+      minute: '*/15',
+      second: '0',
+      hour: '*',
+      day: '*',
+      month: '*',
+      week: '*',
+    }
+    return DoserSchema.isValid(doser).then(valid => expect(valid).toBe(true))
+  })
+
 })
