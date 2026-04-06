@@ -32,7 +32,7 @@ const EditDriver = ({
   const driverTypeChangeHandler = (e) => {
     values.config = {}
     driverOptions[e.target.value].forEach(item => {
-      values.config[item.name.toLowerCase()] = ''
+      values.config[item.name.toLowerCase()] = item.default.toString()
     })
     handleChange(e)
   }

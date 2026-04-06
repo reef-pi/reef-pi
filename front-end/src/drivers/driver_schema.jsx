@@ -9,7 +9,16 @@ const DriverSchema = Yup.object().shape({
   config: Yup.lazy(value => {
     const shape = {}
     Object.keys(value).forEach(prop => {
-      shape[prop] = Yup.string().required(i18n.t('validation:entry_required'))
+      const v = value[prop]
+      // Numeric fields (integer/decimal counts) must be >= 0; string fields must be non-empty
+      if (v !== '' && !isNaN(v) && isFinite(v)) {
+        shape[prop] = Yup.number()
+          .typeError(i18n.t('validation:number_required'))
+          .min(0, i18n.t('validation:integer_min_required'))
+          .required(i18n.t('validation:number_required'))
+      } else {
+        shape[prop] = Yup.string().required(i18n.t('validation:entry_required'))
+      }
     })
     return Yup.object().shape(shape)
   })
