@@ -36,11 +36,17 @@ func (s *Subsystem) Start() {
 func (s *Subsystem) Stop() {
 }
 func (s *Subsystem) On(id string, b bool) error {
+	if !b {
+		// For macros there is no "turn off" operation; when the ATO sensor reads
+		// full (b=false) we simply do nothing rather than running the macro in
+		// reverse (which may not even be configured).
+		return nil
+	}
 	m, err := s.Get(id)
 	if err != nil {
 		return err
 	}
-	return s.Run(m, b)
+	return s.Run(m, false)
 }
 
 func (s *Subsystem) InUse(depType, id string) ([]string, error) {
