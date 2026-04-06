@@ -24,8 +24,13 @@ func TestMacro(t *testing.T) {
 	if err := s.Setup(); err != nil {
 		t.Error(err)
 	}
+	// On with b=false is always a no-op (water-full signal, nothing to run)
+	if err := s.On("", false); err != nil {
+		t.Error("On(false) should be a no-op for macro subsystem, got error:", err)
+	}
+	// On with b=true and a missing ID should return an error
 	if err := s.On("", true); err == nil {
-		t.Error("Macro subsystem does not support On api yet")
+		t.Error("On(true) with invalid macro ID should return an error")
 	}
 	s.Start()
 	tr := utils.NewTestRouter()
