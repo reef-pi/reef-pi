@@ -25,15 +25,15 @@ class Driver {
     await select(this.driverSelect, type)
 
     if (config.address) {
-      await t.typeText('.add-driver [name*="config.address"]', config.address)
+      await t.typeText('.add-driver [name*="config.address"]', config.address, { replace: true })
     }
 
     if (config.frequency) {
-      await t.typeText('.add-driver [name*="config.frequency"]', config.frequency)
+      await t.typeText('.add-driver [name*="config.frequency"]', config.frequency, { replace: true })
     }
 
     if (config.path) {
-      await t.typeText('add-driver [name*="config.frequency"]', config.path)
+      await t.typeText('add-driver [name*="config.frequency"]', config.path, { replace: true })
     }
 
     await t
