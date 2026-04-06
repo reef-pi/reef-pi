@@ -7,7 +7,8 @@ const SettingsSchema = Yup.object().shape({
   interface: Yup.string()
     .required(i18n.t('configuration:settings:network_interface_required')),
   address: Yup.string()
-    .required(i18n.t('configuration:settings:network_address_required')),
+    .required(i18n.t('configuration:settings:network_address_required'))
+    .matches(/^[^:]+:\d+$/, i18n.t('configuration:settings:network_address_format')),
   display: Yup.bool(),
   cors: Yup.bool(),
   notification: Yup.bool(),

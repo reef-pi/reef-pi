@@ -32,4 +32,20 @@ describe('Settings schema validation', () => {
       valid => expect(valid).toBe(true)
     )
   })
+
+  it('rejects address without port', () => {
+    settings.address = 'localhost'
+    expect.assertions(1)
+    return SettingsSchema.isValid(settings).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
+
+  it('rejects address with non-numeric port', () => {
+    settings.address = 'localhost:abc'
+    expect.assertions(1)
+    return SettingsSchema.isValid(settings).then(
+      valid => expect(valid).toBe(false)
+    )
+  })
 })

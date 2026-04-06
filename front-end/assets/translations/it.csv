@@ -148,6 +148,7 @@ configuration:settings:max_cpu,
 configuration:settings:max_memory,
 configuration:settings:name,
 configuration:settings:network_address_required,
+configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
 configuration:settings:network_interface_required,
 configuration:settings:notification,
 configuration:settings:pprof,
