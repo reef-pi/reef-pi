@@ -148,6 +148,7 @@ configuration:settings:max_cpu,Maximo de CPU
 configuration:settings:max_memory,Maximo de Memoria
 configuration:settings:name,Nome
 configuration:settings:network_address_required,Endereço de rede é obrigatório
+configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
 configuration:settings:network_interface_required,Nome do interface de rede é obrigatório
 configuration:settings:notification,Notificação
 configuration:settings:pprof,Activar profiling

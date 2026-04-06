@@ -148,6 +148,7 @@ configuration:settings:max_cpu,CPU Nutzung % größer
 configuration:settings:max_memory,Speicherbelegung MB größer
 configuration:settings:name,Netzwerkname
 configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
+configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
 configuration:settings:network_interface_required,Eine Netzwerk-Schnittstelle wird benötigt!
 configuration:settings:notification,Email-Benachrichtigung
 configuration:settings:pprof,Profiling

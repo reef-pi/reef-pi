@@ -148,6 +148,7 @@ configuration:settings:max_cpu,Max CPU
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:name,Naam
 configuration:settings:network_address_required,Netwerkadres is nodig
+configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
 configuration:settings:network_interface_required,Netwerkinterface is nodig
 configuration:settings:notification,Notificatie
 configuration:settings:pprof,Profiling inschakelen

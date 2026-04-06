@@ -1,5 +1,10 @@
 package settings
 
+import (
+	"fmt"
+	"net"
+)
+
 //swagger:model settings
 type Settings struct {
 	Name         string            `json:"name"`
@@ -14,6 +19,13 @@ type Settings struct {
 	RPI_PWMFreq  int               `json:"rpi_pwm_freq"`
 	Prometheus   bool              `json:"prometheus"`
 	CORS         bool              `json:"cors"`
+}
+
+func (s Settings) Validate() error {
+	if _, _, err := net.SplitHostPort(s.Address); err != nil {
+		return fmt.Errorf("invalid address %q: must be in host:port format (e.g. 0.0.0.0:80)", s.Address)
+	}
+	return nil
 }
 
 var DefaultSettings = Settings{
