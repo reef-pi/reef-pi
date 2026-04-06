@@ -17,7 +17,7 @@ jobs:
           - pi0
           - pi3
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
