@@ -16,14 +16,17 @@ registerLocale('hi', hi)
 registerLocale('fa', faIR)
 registerLocale('zh', zhCN)
 
+const supportedDateLocales = new Set(['en', 'fr', 'es', 'pt', 'de', 'it', 'hi', 'fa', 'zh'])
+
 const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext()
   const [field] = useField(props)
+  const locale = supportedDateLocales.has(i18n.language) ? i18n.language : 'en'
   return (
     <DatePicker
       {...field}
       {...props}
-      locale={i18n.language}
+      locale={locale}
       selected={(field.value && new Date(field.value)) || null}
       onChange={val => {
         setFieldValue(field.name, val)
