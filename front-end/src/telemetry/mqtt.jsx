@@ -14,7 +14,7 @@ export default class Mqtt extends React.Component {
   onChange (label) {
     return function (ev) {
       const config = this.state.config
-      config[label] = ev.target.value
+      config[label] = ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value
       config.qos = parseInt(config.qos)
       this.setState({ config: config })
       this.props.update(this.state.config)
@@ -37,7 +37,9 @@ export default class Mqtt extends React.Component {
         <label htmlFor={'telemetry-mqtt-' + label}>{text}</label>
         <input
           type={iType}
-          value={this.state.config[label]}
+          {...(iType === 'checkbox'
+            ? { checked: this.state.config[label] }
+            : { value: this.state.config[label] })}
           onChange={this.onChange(label)}
           id={'telemetry-mqtt-' + label}
           className='form-control'
