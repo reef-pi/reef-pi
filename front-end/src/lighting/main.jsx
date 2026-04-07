@@ -59,7 +59,7 @@ class main extends React.Component {
       name: values.config.name,
       channels: values.config.channels,
       jack: values.config.jack,
-      enable: true
+      enable: values.config.enable
     }
 
     for (const x in payload.channels) {

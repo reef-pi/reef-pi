@@ -23,7 +23,6 @@ export default class ManualLight extends React.Component {
 
   updateLight (name, value) {
     this.props.light.channels[name].value = parseFloat(value)
-    this.props.light.enable = true
     this.props.handleChange(this.props.light.id, this.props.light)
   }
 
