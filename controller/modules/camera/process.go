@@ -2,7 +2,9 @@ package camera
 
 import (
 	"encoding/json"
-	"image/png"
+	"image"
+	"image/jpeg"
+	_ "image/png"
 	"os"
 	"path/filepath"
 
@@ -25,7 +27,7 @@ func (c *Controller) Process(name string) error {
 		return err
 	}
 	defer file.Close()
-	img, err := png.Decode(file)
+	img, _, err := image.Decode(file)
 	if err != nil {
 		return err
 	}
@@ -40,7 +42,7 @@ func (c *Controller) Process(name string) error {
 		return err
 	}
 	defer out.Close()
-	png.Encode(out, m)
+	jpeg.Encode(out, m, nil)
 	i := ImageItem{
 		Name: name,
 	}

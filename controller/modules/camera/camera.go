@@ -113,9 +113,9 @@ func (c *Controller) Capture() (string, error) {
 	if pathErr != nil {
 		return "", pathErr
 	}
-	imgName := time.Now().Format("15-04-05-Mon-Jan-2-2006.png")
+	imgName := time.Now().Format("15-04-05-Mon-Jan-2-2006.jpg")
 	imgPath := filepath.Join(imgDir, imgName)
-	command := "raspistill -e png " + c.config.CaptureFlags + " -o " + imgPath
+	command := "libcamera-jpeg " + c.config.CaptureFlags + " -o " + imgPath
 	parts := strings.Fields(command)
 	err := utils.Command(parts[0], parts[1:]...).WithDevMode(c.DevMode).Run()
 	if err != nil {
