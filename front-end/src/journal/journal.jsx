@@ -3,7 +3,7 @@ import JournalForm from './form'
 import EntryForm from './entry_form'
 import Chart from './chart'
 import i18next from 'i18next'
-import { fetchJournal, recordJournal, updateJournal } from 'redux/actions/journal'
+import { fetchJournal, fetchJournalUsage, recordJournal, updateJournal } from 'redux/actions/journal'
 import { useDispatch } from 'react-redux'
 
 const Journal = (props) => {
@@ -16,7 +16,7 @@ const Journal = (props) => {
 
   const handleRecord = (payload) => {
     dispatch(recordJournal(props.config.id, payload))
-    dispatch(fetchJournal(props.config.id))
+    dispatch(fetchJournalUsage(props.config.id))
     toggle()
   }
 
