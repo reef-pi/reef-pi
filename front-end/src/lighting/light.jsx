@@ -66,6 +66,20 @@ const EditLight = ({
             <ErrorFor errors={errors} touched={touched} name='config.name' />
           </div>
         </div>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label className='form-check-label' htmlFor='config.enable'>
+              <Field
+                type='checkbox'
+                name='config.enable'
+                id='config.enable'
+                disabled={readOnly}
+                className='form-check-input'
+              />
+              &nbsp;{i18next.t('enabled')}
+            </label>
+          </div>
+        </div>
       </div>
 
       {channels()}
