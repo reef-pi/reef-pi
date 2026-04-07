@@ -363,6 +363,8 @@ timers:turn_back_off,重新关闭
 timers:turn_back_on,重新开启
 timers:turn_off,关闭
 timers:turn_on,开启
+timers:run,
+timers:reverse,
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
