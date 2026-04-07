@@ -2,7 +2,7 @@ import React from 'react'
 import NotificationSettings from './notification'
 import AdafruitIO from './adafruit_io'
 import Mqtt from './mqtt'
-import { showError, showUpdateSuccessful } from 'utils/alert'
+import { showError, showSuccess, showUpdateSuccessful } from 'utils/alert'
 import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/telemetry'
 import { connect } from 'react-redux'
 import i18n from '../utils/i18n'
@@ -43,6 +43,7 @@ class telemetry extends React.Component {
 
   handleTestMessage () {
     this.props.sendTestMessage()
+    showSuccess(i18n.t('telemetry:main:test-message-sent'))
   }
 
   static getDerivedStateFromProps (props, state) {

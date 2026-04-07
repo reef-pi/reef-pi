@@ -309,6 +309,7 @@ telemetry:main:email-alerts,Alertas por email
 telemetry:main:historical-limit,Límite del histórico
 telemetry:main:limit-per-hour,Límite por hora
 telemetry:main:send-test-message,Enviar mensaje de prueba
+telemetry:main:test-message-sent,
 telemetry:notification:from,Desde
 telemetry:notification:password,Contraseña
 telemetry:notification:port,Puerto

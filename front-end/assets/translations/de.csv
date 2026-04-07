@@ -309,6 +309,7 @@ telemetry:main:email-alerts,Email Alarme
 telemetry:main:historical-limit,Einträge im Diagr. 'Verlauf' (1/h)
 telemetry:main:limit-per-hour,max. Nachrichten pro Std.
 telemetry:main:send-test-message,Sende Testnachricht
+telemetry:main:test-message-sent,
 telemetry:notification:from,Absender
 telemetry:notification:password,Passwort
 telemetry:notification:port,Port

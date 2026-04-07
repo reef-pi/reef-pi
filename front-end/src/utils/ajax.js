@@ -96,7 +96,7 @@ export function reduxPost (params) {
       fParams.body = params.raw
     } else {
       fParams.body = JSON.stringify(params.data)
-      fParams.headers = makeHeaders
+      fParams.headers = makeHeaders()
     }
     return fetch(params.url, fParams).then(response => {
       if (!response.ok) {
