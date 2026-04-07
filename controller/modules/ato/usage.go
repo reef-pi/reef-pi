@@ -27,7 +27,26 @@ func (u1 Usage) Before(ux telemetry.Metric) bool {
 	return u1.Time.Before(u2.Time)
 }
 
-func (c *Controller) NotifyIfNeeded(a ATO) {
+func (c *Controller) NotifyIfNeeded(a ATO, reading int) {
+	if !a.Control {
+		if !a.Notify.Enable {
+			return
+		}
+		if reading == 0 {
+			log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' sensor triggered. Sending alert")
+			subject := fmt.Sprintf("ATO '%s' sensor triggered", a.Name)
+			body := fmt.Sprintf("ATO '%s' sensor has been triggered", a.Name)
+			c.c.Telemetry().Alert(subject, body)
+			if a.DisableOnAlert {
+				log.Println("WARNING: ato-subsystem: ATO '", a.Name, "' sensor triggered. Disabling ATO")
+				a.Enable = false
+				if err := c.Update(a.ID, a); err != nil {
+					log.Println("ERROR:ato-subsystem: Failed to disable ato:", a.ID, "Error:", err)
+				}
+			}
+		}
+		return
+	}
 	resp, err := c.statsMgr.Get(a.ID)
 	if err != nil {
 		log.Println("ERROR: ato-subsystem. Failed to get usage statistics for ato:", a.Name, "Error:", err)

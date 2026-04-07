@@ -85,7 +85,7 @@ func TestController(t *testing.T) {
 	if _, err := c.statsMgr.Get("1"); err != nil {
 		t.Error(err)
 	}
-	c.NotifyIfNeeded(a)
+	c.NotifyIfNeeded(a, 0)
 
 	body = new(bytes.Buffer)
 	json.NewEncoder(body).Encode(a)
