@@ -174,7 +174,7 @@ func (c *Controller) Check(a ATO) (int, error) {
 		}
 	}
 	c.statsMgr.Update(a.ID, usage)
-	c.NotifyIfNeeded(a)
+	c.NotifyIfNeeded(a, reading)
 	return reading, nil
 }
 
