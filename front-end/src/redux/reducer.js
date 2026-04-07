@@ -117,12 +117,12 @@ export const rootReducer = (state, action) => {
       return { ...state, instances: action.payload }
     case 'JOURNALS_LOADED':
       return { ...state, journals: action.payload }
-    case 'JOURNAL_UPDATED':
-    case 'JOURNAL_LOADED':
     case 'JOURNAL_USAGE_LOADED':
       jUsage[action.payload.id] = action.payload.data
       return { ...state, journal_usage: jUsage }
     case 'JOURNAL_RECORDED':
+    case 'JOURNAL_UPDATED':
+    case 'JOURNAL_LOADED':
     case 'CREDS_UPDATED':
     case 'EQUIPMENT_UPDATED':
     case 'RELOADED':
