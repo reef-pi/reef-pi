@@ -308,6 +308,7 @@ telemetry:main:email-alerts,Email alerts
 telemetry:main:historical-limit,Historical limit
 telemetry:main:limit-per-hour,Limit per hour
 telemetry:main:send-test-message,Send test message
+telemetry:main:test-message-sent,Test message sent
 telemetry:notification:from,From
 telemetry:notification:password,Password
 telemetry:notification:port,Port
