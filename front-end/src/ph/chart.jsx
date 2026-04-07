@@ -27,8 +27,7 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return (<div />)
     }
-    const metrics = this.props.readings[this.props.type]
-    metrics.sort((a, b) => {
+    const metrics = [...this.props.readings[this.props.type]].sort((a, b) => {
       return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
     })
     let current = ''
