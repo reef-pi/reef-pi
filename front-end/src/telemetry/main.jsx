@@ -80,16 +80,12 @@ class telemetry extends React.Component {
         showError('Please set a valid mail server')
         error = true
       }
-      if (c.mailer.password === '') {
-        showError('Please set a valid mail password')
-        error = true
-      }
-      if (c.mailer.To === '') {
-        showError('Please set a valid mail recepient (To)')
-        error = true
-      }
-      if (c.mailer.From === '') {
+      if (!c.mailer.from || c.mailer.from === '') {
         showError('Please set a valid mail sender (From)')
+        error = true
+      }
+      if (!c.mailer.to || c.mailer.to.length === 0) {
+        showError('Please set a valid mail recipient (To)')
         error = true
       }
       if (error) {

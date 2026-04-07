@@ -47,7 +47,7 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fn := func(_ string) error {
-		if readErr != nil {
+		if readErr == nil {
 			if c.AdafruitIO.Token == AdafruitIOTokenStoredPlaceholder {
 				c.AdafruitIO.Token = existingConfig.AdafruitIO.Token
 			}
