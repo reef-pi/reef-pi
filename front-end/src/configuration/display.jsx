@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchDisplay, switchDisplay, setBrightness } from '../redux/actions/display'
 import { connect } from 'react-redux'
+import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 
 class display extends React.Component {
@@ -34,6 +35,7 @@ class display extends React.Component {
     this.props.switchDisplay(this.state.on)
     this.setState({ on: !this.state.on })
     this.props.fetchDisplay()
+    showUpdateSuccessful()
   }
 
   handleSetBrightness (ev) {
