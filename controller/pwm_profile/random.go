@@ -32,6 +32,7 @@ func Random(conf json.RawMessage, min, max float64) (*random, error) {
 }
 
 func NewRandom(t temporal) *random {
+	//nolint:gosec // fixed seed is intentional for deterministic lighting profiles
 	rng := rand.New(rand.NewSource(seed))
 	numPeaks := int(t.TotalSeconds() / peakInterval)
 	if numPeaks == 0 {
