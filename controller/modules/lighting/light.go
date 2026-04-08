@@ -64,6 +64,15 @@ func (c *Controller) validate(l *Light) error {
 	if l.Name == "" {
 		return fmt.Errorf("Light name can not be empty")
 	}
+	existing, err := c.List()
+	if err != nil {
+		return err
+	}
+	for _, e := range existing {
+		if e.ID != l.ID && e.Jack == l.Jack {
+			return fmt.Errorf("jack '%s' is already in use by light '%s'", l.Jack, e.Name)
+		}
+	}
 	j, err := c.jacks.Get(l.Jack)
 	if err != nil {
 		return fmt.Errorf("Non existent jack: '%s'. Error: %s", l.Jack, err.Error())
