@@ -2,7 +2,7 @@ import React from 'react'
 import FormData from 'form-data'
 import SignIn from 'sign_in'
 import { confirm } from 'utils/confirm'
-import { showError } from 'utils/alert'
+import { showError, showUpdateSuccessful } from 'utils/alert'
 import { upgrade, reload, reboot, powerOff, dbImport } from 'redux/actions/admin'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
@@ -26,7 +26,14 @@ class admin extends React.Component {
   }
 
   handleInstall () {
-    this.props.upgrade(this.state.version)
+    if (!this.state.version) {
+      showError(i18n.t('validation:entry_required'))
+      return
+    }
+    confirm(i18n.t('are_you_sure')).then(() => {
+      this.props.upgrade(this.state.version)
+      showUpdateSuccessful()
+    })
   }
 
   handleVersionChange (ev) {
