@@ -364,6 +364,8 @@ timers:turn_back_off,wieder ausschalten
 timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
+timers:run,
+timers:reverse,
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!

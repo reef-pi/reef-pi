@@ -364,6 +364,8 @@ timers:turn_back_off,Voltar a desligar
 timers:turn_back_on,Voltar a Ligar
 timers:turn_off,Desligar
 timers:turn_on,Ligar é Obrigatório
+timers:run,
+timers:reverse,
 timers:warn_delete,apagar
 validation:a_must_be_greater_than_b, A tem que ser maior do que B
 validation:a_must_be_less_than_b,A tem que ser menos do que B

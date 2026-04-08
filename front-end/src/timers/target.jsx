@@ -70,8 +70,8 @@ const target = (props) => {
                 'is-invalid': ShowError(NameFor(props.name, 'on'), props.touched, props.errors)
               })}
             >
-              <option value='true'>{i18n.t('timers:turn_on')}</option>
-              <option value='false'>{i18n.t('timers:turn_off')}</option>
+              <option value='true'>{kind === 'macro' ? i18n.t('timers:run') : i18n.t('timers:turn_on')}</option>
+              <option value='false'>{kind === 'macro' ? i18n.t('timers:reverse') : i18n.t('timers:turn_off')}</option>
             </Field>
             <ErrorFor {...props} name={NameFor(props.name, 'on')} />
           </div>

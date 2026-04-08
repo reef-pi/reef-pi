@@ -364,6 +364,8 @@ timers:turn_back_off,Terug uitschakelen
 timers:turn_back_on,Terug inschakelen
 timers:turn_off,Uitschakelen
 timers:turn_on,Inschakelen
+timers:run,
+timers:reverse,
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,

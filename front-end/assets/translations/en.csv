@@ -364,6 +364,8 @@ timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
+timers:run,Run
+timers:reverse,Reverse
 timers:warn_delete,This action will delete timer {{name}}
 validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
 validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
