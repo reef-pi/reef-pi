@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"github.com/reef-pi/reef-pi/controller/storage"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 //swagger:model credentials
