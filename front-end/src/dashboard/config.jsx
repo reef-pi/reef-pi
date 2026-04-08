@@ -55,14 +55,17 @@ class config extends React.Component {
 
   toRow (key, label, Min, Max) {
     const fn = function (ev) {
+      const raw = ev.target.value
       const config = this.state.config
-      const v = parseInt(ev.target.value)
-      if (!isNaN(v) && v <= Max && v >= Min) {
+      if (raw === '') {
+        config[key] = ''
+        this.setState({ updated: true, config: config })
+        return
+      }
+      const v = parseInt(raw)
+      if (!isNaN(v)) {
         config[key] = v
-        this.setState({
-          updated: true,
-          config: config
-        })
+        this.setState({ updated: true, config: config })
       }
     }.bind(this)
     return (
