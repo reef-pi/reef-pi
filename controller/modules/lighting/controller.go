@@ -97,7 +97,15 @@ func (c *Controller) On(id string, on bool) error {
 		return err
 	}
 	l.Enable = on
-	return c.Update(id, l)
+	if err := c.Update(id, l); err != nil {
+		return err
+	}
+	if !on {
+		for _, ch := range l.Channels {
+			c.UpdateChannel(l.Jack, *ch, 0)
+		}
+	}
+	return nil
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {
