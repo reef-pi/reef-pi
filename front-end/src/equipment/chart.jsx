@@ -35,15 +35,11 @@ class chart extends React.Component {
     if (this.props.equipment === undefined) {
       return <div />
     }
-    const equipment = []
-    this.props.equipment.forEach((eq, i) => {
-      if (eq.on) {
-        eq.onstate = 1
-      } else {
-        eq.offstate = 1
-      }
-      equipment.push(eq)
-    })
+    const equipment = this.props.equipment.map(eq => ({
+      ...eq,
+      onstate: eq.on ? 1 : undefined,
+      offstate: eq.on ? undefined : 1
+    }))
     return (
       <div className='container'>
         <span className='h6'>{i18next.t('capabilities:equipment')}</span>
