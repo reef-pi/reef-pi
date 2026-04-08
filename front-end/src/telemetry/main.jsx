@@ -50,8 +50,10 @@ class telemetry extends React.Component {
     if (props.config === undefined) {
       return null
     }
-    state.config = props.config
-    return state
+    if (state.updated) {
+      return null
+    }
+    return { ...state, config: JSON.parse(JSON.stringify(props.config)) }
   }
 
   handleEnableMailer (ev) {
