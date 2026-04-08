@@ -13,10 +13,10 @@ const (
 
 type random struct {
 	temporal
+	rng          *rand.Rand
 	previous     float64
 	peaks        []float64
 	peakInterval float64
-	rng          *rand.Rand
 }
 
 func (r *random) Name() string {
@@ -43,10 +43,10 @@ func NewRandom(t temporal) *random {
 	}
 	return &random{
 		temporal:     t,
+		rng:          rng,
 		previous:     peaks[0],
 		peakInterval: peakInterval,
 		peaks:        peaks,
-		rng:          rng,
 	}
 }
 

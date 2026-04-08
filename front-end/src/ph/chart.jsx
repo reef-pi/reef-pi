@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, filterToday } from 'utils/timestamp'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
@@ -27,7 +27,10 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return (<div />)
     }
-    const metrics = [...this.props.readings[this.props.type]].sort((a, b) => {
+    const raw = this.props.type === 'current'
+      ? filterToday(this.props.readings[this.props.type])
+      : [...this.props.readings[this.props.type]]
+    const metrics = raw.sort((a, b) => {
       return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
     })
     let current = ''
