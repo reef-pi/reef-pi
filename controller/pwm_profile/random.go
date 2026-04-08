@@ -38,7 +38,7 @@ func NewRandom(t temporal) *random {
 		numPeaks = 1
 	}
 	peaks := make([]float64, numPeaks)
-	for i, _ := range peaks {
+	for i := range peaks {
 		peaks[i] = rng.Float64()*t.ValueRange() + t.min
 	}
 	return &random{
