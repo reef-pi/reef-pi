@@ -50,7 +50,7 @@ func (c *Controller) Get(id string) (ATO, error) {
 	var a ATO
 	return a, c.c.Store().Get(Bucket, id, &a)
 }
-func (c Controller) List() ([]ATO, error) {
+func (c *Controller) List() ([]ATO, error) {
 	atos := []ATO{}
 	fn := func(_ string, v []byte) error {
 		var a ATO
