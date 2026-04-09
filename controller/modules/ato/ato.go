@@ -80,7 +80,11 @@ func (c *Controller) Create(a ATO) error {
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.wg.Add(1)
+		go func(ato ATO, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(ato, q)
+		}(a, quit)
 	}
 	return nil
 }
@@ -103,7 +107,11 @@ func (c *Controller) Update(id string, a ATO) error {
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.wg.Add(1)
+		go func(ato ATO, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(ato, q)
+		}(a, quit)
 	}
 	return nil
 }
@@ -186,6 +194,12 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
 	defer ticker.Stop()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("ERROR: ato-subsystem. Panic in Run goroutine for sensor:%s: %v\n", a.Name, r)
+			c.c.LogError("ato-"+a.ID, fmt.Sprintf("ato controller goroutine panicked: %v", r))
+		}
+	}()
 	for {
 		select {
 		case <-ticker.C:

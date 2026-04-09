@@ -107,7 +107,11 @@ func (c *Controller) Create(tc *TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		go c.Run(tc, quit)
+		c.wg.Add(1)
+		go func(t *TC, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(t, q)
+		}(tc, quit)
 	}
 	return nil
 }
@@ -132,7 +136,11 @@ func (c *Controller) Update(id string, tc *TC) error {
 	if tc.Enable {
 		quit := make(chan struct{})
 		c.quitters[tc.ID] = quit
-		go c.Run(tc, quit)
+		c.wg.Add(1)
+		go func(t *TC, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(t, q)
+		}(tc, quit)
 	}
 	return nil
 }
@@ -203,8 +211,15 @@ func (c *Controller) Run(t *TC, quit chan struct{}) error {
 		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
 		return nil
 	}
-	ticker := time.NewTicker(t.Period * time.Second)
 	t.loadHomeostasis(c.c)
+	ticker := time.NewTicker(t.Period * time.Second)
+	defer ticker.Stop()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("ERROR: temperature sub-system. Panic in Run goroutine for sensor:%s: %v\n", t.Name, r)
+			c.c.LogError("tc-"+t.ID, fmt.Sprintf("temperature controller goroutine panicked: %v", r))
+		}
+	}()
 	for {
 		select {
 		case <-ticker.C:
@@ -219,7 +234,6 @@ func (c *Controller) Run(t *TC, quit chan struct{}) error {
 				}
 			}
 		case <-quit:
-			ticker.Stop()
 			return nil
 		}
 	}
