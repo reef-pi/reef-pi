@@ -167,7 +167,7 @@ func (c *Controller) Poweroff(w http.ResponseWriter, r *http.Request) {
 		log.Println("Shutting down reef-pi controller")
 		out, err := utils.Command("/bin/systemctl", "poweroff").WithDevMode(c.config.DevMode).CombinedOutput()
 		if err != nil {
-			return "", fmt.Errorf("Failed to power off reef-pi. Output: %s. Error: %w", string(out), err)
+			return "", fmt.Errorf("failed to power off reef-pi. Output: %s. Error: %w", string(out), err)
 		}
 		return out, nil
 	}
@@ -179,7 +179,7 @@ func (c *Controller) Reboot(w http.ResponseWriter, r *http.Request) {
 		log.Println("Rebooting reef-pi controller")
 		out, err := utils.Command("/bin/systemctl", "reboot").WithDevMode(c.config.DevMode).CombinedOutput()
 		if err != nil {
-			return "", fmt.Errorf("Failed to reboot reef-pi. Output: %s. Error: %w", string(out), err)
+			return "", fmt.Errorf("failed to reboot reef-pi. Output: %s. Error: %w", string(out), err)
 		}
 		return out, nil
 	}
@@ -191,7 +191,7 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 		log.Println("Reloading reef-pi controller")
 		out, err := utils.Command("/bin/systemctl", "restart", "reef-pi.service").WithDevMode(c.config.DevMode).CombinedOutput()
 		if err != nil {
-			return "", fmt.Errorf("Failed to reload reef-pi. Output: %s. Error: %w", string(out), err)
+			return "", fmt.Errorf("failed to reload reef-pi. Output: %s. Error: %w", string(out), err)
 		}
 		return out, nil
 	}

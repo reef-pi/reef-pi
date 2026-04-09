@@ -28,8 +28,10 @@ class config extends React.Component {
     if (Object.keys(props.config).length === 0) {
       return null
     }
-    state.config = props.config
-    return state
+    if (state.updated) {
+      return null
+    }
+    return { ...state, config: JSON.parse(JSON.stringify(props.config)) }
   }
 
   handleSave () {
@@ -56,16 +58,13 @@ class config extends React.Component {
   toRow (key, label, Min, Max) {
     const fn = function (ev) {
       const raw = ev.target.value
-      const config = this.state.config
       if (raw === '') {
-        config[key] = ''
-        this.setState({ updated: true, config: config })
+        this.setState({ updated: true, config: { ...this.state.config, [key]: '' } })
         return
       }
       const v = parseInt(raw)
       if (!isNaN(v)) {
-        config[key] = v
-        this.setState({ updated: true, config: config })
+        this.setState({ updated: true, config: { ...this.state.config, [key]: v } })
       }
     }.bind(this)
     return (
@@ -86,24 +85,19 @@ class config extends React.Component {
 
   updateHook (cells) {
     const config = this.state.config
+    const gridDetails = []
     let i, j
     for (i = 0; i < config.row; i++) {
-      if (config.grid_details[i] === undefined) {
-        config.grid_details[i] = []
-      }
+      const rowArr = []
       for (j = 0; j < config.column; j++) {
         const row = cells[i] ? cells[i] : []
         const cell = row[j] ? row[j] : { id: 'none', type: 'blank_panel' }
-        config.grid_details[i][j] = {
-          id: cell.id,
-          type: cell.type
-        }
+        rowArr[j] = { id: cell.id, type: cell.type }
       }
-      config.grid_details[i].length = config.column
+      gridDetails[i] = rowArr
     }
-    config.grid_details.length = config.row
     this.setState({
-      config: config,
+      config: { ...config, grid_details: gridDetails },
       updated: true
     })
   }
