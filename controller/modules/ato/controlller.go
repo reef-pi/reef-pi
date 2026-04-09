@@ -19,6 +19,7 @@ type Controller struct {
 	statsMgr telemetry.StatsManager
 	devMode  bool
 	quitters map[string]chan struct{}
+	wg       sync.WaitGroup
 	mu       *sync.Mutex
 	inlets   *connectors.Inlets
 	c        controller.Controller
@@ -71,21 +72,27 @@ func (c *Controller) Start() {
 		}
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.wg.Add(1)
+		go func(ato ATO, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(ato, q)
+		}(a, quit)
 	}
 }
 
 func (c *Controller) Stop() {
 	c.mu.Lock()
-	defer c.mu.Unlock()
-	for id, quit := range c.quitters {
+	quitters := c.quitters
+	c.quitters = make(map[string]chan struct{})
+	c.mu.Unlock()
+	for id, quit := range quitters {
 		close(quit)
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
 		}
-		log.Println("ato sub-system: Saved usaged data of sensor:", id)
-		delete(c.quitters, id)
+		log.Println("ato sub-system: Saved usage data of sensor:", id)
 	}
+	c.wg.Wait()
 }
 
 func (c *Controller) Control(a ATO, reading int) error {

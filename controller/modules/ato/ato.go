@@ -50,7 +50,7 @@ func (c *Controller) Get(id string) (ATO, error) {
 	var a ATO
 	return a, c.c.Store().Get(Bucket, id, &a)
 }
-func (c Controller) List() ([]ATO, error) {
+func (c *Controller) List() ([]ATO, error) {
 	atos := []ATO{}
 	fn := func(_ string, v []byte) error {
 		var a ATO
@@ -80,7 +80,11 @@ func (c *Controller) Create(a ATO) error {
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.wg.Add(1)
+		go func(ato ATO, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(ato, q)
+		}(a, quit)
 	}
 	return nil
 }
@@ -103,7 +107,11 @@ func (c *Controller) Update(id string, a ATO) error {
 	if a.Enable {
 		quit := make(chan struct{})
 		c.quitters[a.ID] = quit
-		go c.Run(a, quit)
+		c.wg.Add(1)
+		go func(ato ATO, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(ato, q)
+		}(a, quit)
 	}
 	return nil
 }
@@ -185,6 +193,12 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	}
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("ERROR: ato-subsystem. Panic in Run goroutine for sensor:%s: %v\n", a.Name, r)
+			c.c.LogError("ato-"+a.ID, fmt.Sprintf("ato controller goroutine panicked: %v", r))
+		}
+	}()
 	defer ticker.Stop()
 	for {
 		select {

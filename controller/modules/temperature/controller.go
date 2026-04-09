@@ -22,6 +22,7 @@ type Controller struct {
 	c           controller.Controller
 	devMode     bool
 	quitters    map[string]chan struct{}
+	wg          sync.WaitGroup
 	statsMgr    telemetry.StatsManager
 	tcs         map[string]*TC
 	calibrators map[string]hal.Calibrator
@@ -90,21 +91,27 @@ func (c *Controller) Start() {
 		}
 		quit := make(chan struct{})
 		c.quitters[t.ID] = quit
-		go c.Run(t, quit)
+		c.wg.Add(1)
+		go func(tc *TC, q chan struct{}) {
+			defer c.wg.Done()
+			c.Run(tc, q)
+		}(t, quit)
 	}
 }
 
 func (c *Controller) Stop() {
 	c.Lock()
-	defer c.Unlock()
-	for id, quit := range c.quitters {
+	quitters := c.quitters
+	c.quitters = make(map[string]chan struct{})
+	c.Unlock()
+	for id, quit := range quitters {
 		close(quit)
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: temperature controller. Failed to save usage. Error:", err)
 		}
 		log.Println("temperature sub-system: Saved usage data of sensor:", id)
-		delete(c.quitters, id)
 	}
+	c.wg.Wait()
 }
 
 func (c *Controller) On(id string, on bool) error {
