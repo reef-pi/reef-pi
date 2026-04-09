@@ -193,13 +193,13 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 	}
 	a.CreateFeed(c.c.Telemetry())
 	ticker := time.NewTicker(a.Period * time.Second)
-	defer ticker.Stop()
 	defer func() {
 		if r := recover(); r != nil {
 			log.Printf("ERROR: ato-subsystem. Panic in Run goroutine for sensor:%s: %v\n", a.Name, r)
 			c.c.LogError("ato-"+a.ID, fmt.Sprintf("ato controller goroutine panicked: %v", r))
 		}
 	}()
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
