@@ -22,6 +22,13 @@ var config = {
   module: {
     rules: [
       {
+        test: /\.m?js$/,
+        include: /node_modules/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      {
         test: /\.jsx?/,
         include: APP_DIR,
         loader: 'babel-loader',
