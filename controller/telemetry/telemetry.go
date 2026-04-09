@@ -264,6 +264,36 @@ func (t *telemetry) CreateFeedIfNotExist(f string) {
 	}
 }
 
+func (t *telemetry) applyConfig(c TelemetryConfig) {
+	var newDispatcher Mailer
+	if c.Notify {
+		newDispatcher = c.Mailer.Mailer()
+	} else {
+		newDispatcher = &NoopMailer{}
+	}
+	var newAClient *adafruitio.Client
+	if c.AdafruitIO.Enable {
+		newAClient = adafruitio.NewClient(c.AdafruitIO.Token)
+	}
+	var newMClient *MQTTClient
+	if c.MQTT.Enable {
+		mc, err := NewMQTTClient(c.MQTT)
+		if err != nil {
+			log.Println("ERROR: Failed to reinitialize MQTT client after config update:", err)
+		} else {
+			newMClient = mc
+		}
+	}
+	oldMClient := t.mClient
+	t.config = c
+	t.dispatcher = newDispatcher
+	t.aClient = newAClient
+	t.mClient = newMClient
+	if oldMClient != nil {
+		oldMClient.client.Disconnect(250)
+	}
+}
+
 func (t *telemetry) DeleteFeedIfExist(f string) {
 	aio := t.config.AdafruitIO
 	f = strings.ToLower(aio.Prefix + f)
