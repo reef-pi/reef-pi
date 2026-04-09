@@ -3,6 +3,7 @@ package macro
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"sync"
 
 	"github.com/reef-pi/reef-pi/controller"
@@ -13,9 +14,10 @@ const Bucket = storage.MacroBucket
 const UsageBucket = storage.MacroUsageBucket
 
 type Subsystem struct {
-	sync.Mutex
+	mu         sync.Mutex
+	wg         sync.WaitGroup
 	devMode    bool
-	quitters   map[string]chan struct{}
+	running    map[string]struct{}
 	controller controller.Controller
 }
 
@@ -23,6 +25,7 @@ func New(devMode bool, c controller.Controller) (*Subsystem, error) {
 	return &Subsystem{
 		devMode:    devMode,
 		controller: c,
+		running:    make(map[string]struct{}),
 	}, nil
 }
 
@@ -34,7 +37,9 @@ func (s *Subsystem) Start() {
 }
 
 func (s *Subsystem) Stop() {
+	s.wg.Wait()
 }
+
 func (s *Subsystem) On(id string, b bool) error {
 	if !b {
 		// For macros there is no "turn off" operation; when the ATO sensor reads
@@ -46,7 +51,28 @@ func (s *Subsystem) On(id string, b bool) error {
 	if err != nil {
 		return err
 	}
-	return s.Run(m, false)
+	s.mu.Lock()
+	if _, alreadyRunning := s.running[id]; alreadyRunning {
+		s.mu.Unlock()
+		log.Println("macro-subsystem: macro already running, skipping:", m.Name)
+		return nil
+	}
+	s.running[id] = struct{}{}
+	s.mu.Unlock()
+
+	s.wg.Add(1)
+	go func() {
+		defer s.wg.Done()
+		defer func() {
+			s.mu.Lock()
+			delete(s.running, id)
+			s.mu.Unlock()
+		}()
+		if err := s.Run(m, false); err != nil {
+			log.Println("ERROR: macro-subsystem. Failed to run macro:", m.Name, err)
+		}
+	}()
+	return nil
 }
 
 func (s *Subsystem) InUse(depType, id string) ([]string, error) {

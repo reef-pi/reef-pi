@@ -40,7 +40,7 @@ export default class Jack extends React.Component {
 
   handleSetDriver (e) {
     this.setState({
-      JackDriver: e.target.value,
+      driver: e.target.value,
       driver_name: (this.props.drivers.filter(d => d.id === e.target.value)[0] || {}).name
     })
   }
@@ -123,7 +123,7 @@ export default class Jack extends React.Component {
               id={'jack-' + this.props.jack_id + '-driver-select'}
               className='custom-select form-control'
               onChange={this.handleSetDriver}
-              value={this.state.JackDriver}
+              value={this.state.driver}
             >
               {this.props.drivers.filter(byCapability('pwm')).map(item => {
                 return (

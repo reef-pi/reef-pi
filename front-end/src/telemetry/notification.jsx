@@ -85,7 +85,7 @@ export default class NotificationSettings extends React.Component {
           />
         </div>
         <div className='form-group col-12'>
-          <label htmlFor='email-password'>{i18n.t('telemetry:notification:password')}</label>
+          <label htmlFor='email-password'>{i18n.t('telemetry:notification:password')} ({i18n.t('optional')})</label>
           <input
             type='password'
             id='email-password'
