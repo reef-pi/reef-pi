@@ -1,8 +1,9 @@
 package daemon
 
 import (
-	yaml "gopkg.in/yaml.v2"
 	"os"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Config struct {
