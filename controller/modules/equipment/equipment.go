@@ -2,6 +2,7 @@ package equipment
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -36,7 +37,23 @@ func (c Controller) List() ([]Equipment, error) {
 	return es, c.store.List(Bucket, fn)
 }
 
+func (c *Controller) validateOutlet(eq Equipment) error {
+	existing, err := c.List()
+	if err != nil {
+		return err
+	}
+	for _, e := range existing {
+		if e.ID != eq.ID && e.Outlet == eq.Outlet {
+			return fmt.Errorf("outlet '%s' is already in use by equipment '%s'", eq.Outlet, e.Name)
+		}
+	}
+	return nil
+}
+
 func (c *Controller) Create(eq Equipment) error {
+	if err := c.validateOutlet(eq); err != nil {
+		return err
+	}
 	fn := func(id string) interface{} {
 		eq.ID = id
 		return &eq
@@ -53,6 +70,9 @@ func (c *Controller) Create(eq Equipment) error {
 
 func (c *Controller) Update(id string, eq Equipment) error {
 	eq.ID = id
+	if err := c.validateOutlet(eq); err != nil {
+		return err
+	}
 	if err := c.store.Update(Bucket, id, eq); err != nil {
 		return err
 	}
