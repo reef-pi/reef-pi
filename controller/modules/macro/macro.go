@@ -72,5 +72,5 @@ func (s *Subsystem) Run(m Macro, reverse bool) error {
 		}
 	}
 	log.Println("macro-subsystem. Finished:", m.Name)
-	return s.Update(m.ID, m)
+	return nil
 }
