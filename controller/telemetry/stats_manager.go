@@ -124,7 +124,6 @@ func (m *mgr) Save(id string) error {
 
 func (m *mgr) Update(id string, metric Metric) {
 	m.Lock()
-	defer m.Unlock()
 	stats, ok := m.inMemory[id]
 	if !ok {
 		stats = m.NewStats()
@@ -132,6 +131,7 @@ func (m *mgr) Update(id string, metric Metric) {
 		stats.Current.Value = metric
 		stats.Current = stats.Current.Next()
 		m.inMemory[id] = stats
+		m.Unlock()
 		return
 	}
 	var move bool
@@ -149,6 +149,7 @@ func (m *mgr) Update(id string, metric Metric) {
 		stats.Historical.Value = m1
 	}
 	m.inMemory[id] = stats
+	m.Unlock()
 	if move {
 		m.Save(id)
 	}
