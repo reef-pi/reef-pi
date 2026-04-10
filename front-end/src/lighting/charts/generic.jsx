@@ -4,7 +4,7 @@ import { fetchLightUsage } from 'redux/actions/lights'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -41,24 +41,22 @@ class chart extends React.Component {
         />)
     })
 
-    const usage = this.props.usage.current
-
-    usage.sort((a, b) => {
-      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
-    })
-
-    usage.forEach((v, i) => {
-      Object.entries(v.channels).forEach(([ch, v]) => {
-        usage[i][ch] = v
+    const usage = [...this.props.usage.current]
+      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
+      .map(v => {
+        const point = { ts: timestampToEpoch(v.time) }
+        Object.entries(v.channels).forEach(([ch, val]) => {
+          point[ch] = val
+        })
+        return point
       })
-    })
     return (
       <div className='container'>
         <span className='h6'>{l.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
           <LineChart data={usage}>
             <YAxis />
-            <XAxis dataKey='time' />
+            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip formatter={(value, name) => [TwoDecimalParse(value)]} />
             {lines}
           </LineChart>
