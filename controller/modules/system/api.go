@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 
@@ -165,11 +166,17 @@ func (t *Controller) GetSummary(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) Poweroff(w http.ResponseWriter, r *http.Request) {
 	fn := func(string) (interface{}, error) {
 		log.Println("Shutting down reef-pi controller")
-		out, err := utils.Command("/bin/systemctl", "poweroff").WithDevMode(c.config.DevMode).CombinedOutput()
-		if err != nil {
-			return "", fmt.Errorf("Failed to power off reef-pi. Output:" + string(out) + ". Error: " + err.Error())
-		}
-		return out, nil
+		devMode := c.config.DevMode
+		go func() {
+			// Delay so the HTTP response is sent before the shutdown sequence
+			// begins. systemd will then send SIGTERM to reef-pi, giving it time
+			// to flush and close the database cleanly before the power-off.
+			time.Sleep(2 * time.Second)
+			if out, err := utils.Command("/bin/systemctl", "poweroff").WithDevMode(devMode).CombinedOutput(); err != nil {
+				log.Println("ERROR: Failed to power off reef-pi. Output:", string(out), "Error:", err)
+			}
+		}()
+		return "shutting down", nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
@@ -177,11 +184,17 @@ func (c *Controller) Poweroff(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) Reboot(w http.ResponseWriter, r *http.Request) {
 	fn := func(string) (interface{}, error) {
 		log.Println("Rebooting reef-pi controller")
-		out, err := utils.Command("/bin/systemctl", "reboot").WithDevMode(c.config.DevMode).CombinedOutput()
-		if err != nil {
-			return "", fmt.Errorf("Failed to reboot reef-pi. Output:" + string(out) + ". Error: " + err.Error())
-		}
-		return out, nil
+		devMode := c.config.DevMode
+		go func() {
+			// Delay so the HTTP response is sent before the reboot sequence
+			// begins. systemd will then send SIGTERM to reef-pi, giving it time
+			// to flush and close the database cleanly before the reboot.
+			time.Sleep(2 * time.Second)
+			if out, err := utils.Command("/bin/systemctl", "reboot").WithDevMode(devMode).CombinedOutput(); err != nil {
+				log.Println("ERROR: Failed to reboot reef-pi. Output:", string(out), "Error:", err)
+			}
+		}()
+		return "rebooting", nil
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
@@ -191,7 +204,7 @@ func (c *Controller) reload(w http.ResponseWriter, r *http.Request) {
 		log.Println("Reloading reef-pi controller")
 		out, err := utils.Command("/bin/systemctl", "restart", "reef-pi.service").WithDevMode(c.config.DevMode).CombinedOutput()
 		if err != nil {
-			return "", fmt.Errorf("Failed to reload reef-pi. Output:" + string(out) + ". Error: " + err.Error())
+			return "", fmt.Errorf("failed to reload reef-pi. Output: %s. Error: %w", string(out), err)
 		}
 		return out, nil
 	}

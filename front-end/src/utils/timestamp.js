@@ -22,3 +22,8 @@ export const ParseTimestamp = (v) => {
   const year = v.slice(14, 18)
   return new Date(year, months[month], day, hours, minutes)
 }
+
+export const filterToday = (readings) => {
+  const today = new Date().toDateString()
+  return readings.filter(r => ParseTimestamp(r.time).toDateString() === today)
+}

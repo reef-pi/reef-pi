@@ -55,7 +55,11 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 				c.Mailer.Password = existingConfig.Mailer.Password
 			}
 		}
-		return t.store.Update(t.bucket, DBKey, c)
+		if err := t.store.Update(t.bucket, DBKey, c); err != nil {
+			return err
+		}
+		t.applyConfig(c)
+		return nil
 	}
 	utils.JSONUpdateResponse(&c, fn, w, req)
 }

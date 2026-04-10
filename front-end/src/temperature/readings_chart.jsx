@@ -3,7 +3,7 @@ import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'rec
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, filterToday } from 'utils/timestamp'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -31,8 +31,7 @@ class chart extends React.Component {
     }
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
-    const readings = this.props.usage.current
-    readings.sort((a, b) => {
+    const readings = filterToday([...this.props.usage.current]).sort((a, b) => {
       return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
     })
 

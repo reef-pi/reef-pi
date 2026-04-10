@@ -66,6 +66,10 @@ func (c *Controller) Start() {
 		if err := c.statsMgr.Load(l.ID, fn); err != nil {
 			log.Println("ERROR: lighting subsystem. Failed to load usage. Error:", err)
 		}
+		if err := c.validate(&l); err != nil {
+			log.Println("ERROR: lighting subsystem. Failed to validate light on startup:", l.Name, "Error:", err)
+			continue
+		}
 		quit := make(chan struct{})
 		c.quitters[l.ID] = quit
 		go c.Run(l, quit)
@@ -97,7 +101,15 @@ func (c *Controller) On(id string, on bool) error {
 		return err
 	}
 	l.Enable = on
-	return c.Update(id, l)
+	if err := c.Update(id, l); err != nil {
+		return err
+	}
+	if !on {
+		for _, ch := range l.Channels {
+			c.UpdateChannel(l.Jack, *ch, 0)
+		}
+	}
+	return nil
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {

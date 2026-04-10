@@ -42,10 +42,14 @@ const routes = [
 
 function CurrentPageHeader() {
   const location = useLocation()
-  // TODO(#1842): this should really be using the component's title which is translated
-  // this just keeps parity with the old version, so if you go to "/log" it'll show "log"
-  const headingName = location.pathname.slice(1)
-  return <span>{headingName}</span>
+  const route = routes.find(r => {
+    const path = r.props.path
+    if (!path) return location.pathname === '/'
+    const basePath = path.replace('/*', '')
+    return location.pathname === basePath || location.pathname.startsWith(basePath + '/')
+  })
+  const label = route ? route.props.label : location.pathname.slice(1)
+  return <span>{label}</span>
 }
 
 

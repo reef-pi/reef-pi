@@ -36,7 +36,7 @@ func (c *MailerConfig) Mailer(opts ...MailerCustomizer) Mailer {
 		opt(m)
 	}
 
-	if m.auth == nil {
+	if m.auth == nil && (c.Username != "" || c.Password != "") {
 		var username string
 		if c.Username != "" {
 			username = c.Username

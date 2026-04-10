@@ -213,13 +213,13 @@ func (c *Controller) Run(t *TC, quit chan struct{}) error {
 	}
 	t.loadHomeostasis(c.c)
 	ticker := time.NewTicker(t.Period * time.Second)
-	defer ticker.Stop()
 	defer func() {
 		if r := recover(); r != nil {
 			log.Printf("ERROR: temperature sub-system. Panic in Run goroutine for sensor:%s: %v\n", t.Name, r)
 			c.c.LogError("tc-"+t.ID, fmt.Sprintf("temperature controller goroutine panicked: %v", r))
 		}
 	}()
+	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
