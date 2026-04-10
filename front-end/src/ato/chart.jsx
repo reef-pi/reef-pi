@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, BarChart, Bar, Label } from 'recharts'
 import { fetchATOUsage } from '../redux/actions/ato'
 import { connect } from 'react-redux'
@@ -35,14 +35,13 @@ class chart extends React.Component {
       return <div />
     }
     const metrics = this.props.usage.historical
-    metrics.sort((a, b) => {
-      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
-    })
+      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
+      .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     return (
       <>
         <span className='h6'>{this.props.config.name}</span>
         <ResponsiveContainer height={this.props.height} width='100%'>
-          <BarChart data={metrics}>
+          <BarChart data={metrics} barSize={8}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
             <YAxis type="number">
                 <Label
@@ -52,7 +51,7 @@ class chart extends React.Component {
                     style={{ textAnchor: 'middle' }}
                     />
             </YAxis>
-            <XAxis dataKey='time' />
+            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip />
           </BarChart>
         </ResponsiveContainer>

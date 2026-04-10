@@ -27,3 +27,10 @@ export const filterToday = (readings) => {
   const today = new Date().toDateString()
   return readings.filter(r => ParseTimestamp(r.time).toDateString() === today)
 }
+
+export const timestampToEpoch = (v) => ParseTimestamp(v).getTime()
+
+export const formatChartTime = (epoch) => {
+  const d = new Date(epoch)
+  return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0')
+}
