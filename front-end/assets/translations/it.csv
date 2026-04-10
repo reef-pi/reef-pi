@@ -123,6 +123,7 @@ configuration:about:status,
 configuration:about:uptime,
 configuration:about:version,
 configuration:about:website,
+configuration:errors:alert,Alert
 configuration:admin:db_export,
 configuration:admin:db_import,
 configuration:admin:poweroff,

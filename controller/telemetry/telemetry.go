@@ -170,7 +170,7 @@ func (t *telemetry) LogError(a, b string) error {
 
 func (t *telemetry) Alert(subject, body string) (bool, error) {
 	prefix := "[" + t.name + ":Alert]"
-	t.logError(prefix, subject)
+	t.logError("alert:"+subject, subject)
 	return t.Mail(prefix+subject, body)
 }
 

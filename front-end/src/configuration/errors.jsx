@@ -20,10 +20,15 @@ class errors extends React.Component {
   render () {
     const items = []
     this.props.errors.forEach(el => {
+      const isAlert = el.id && el.id.startsWith('alert:')
       items.push(
-        <div className='row' key={'error-' + el.id}>
+        <div className='row align-items-center' key={'error-' + el.id}>
           <div className='col-lg-2'>{el.time}</div>
-          <div className='col-lg-8'>{el.message}</div>
+          <div className='col-lg-8'>
+            {isAlert && <span className='badge badge-warning mr-1'>{i18n.t('configuration:errors:alert')}</span>}
+            {el.message}
+            {el.count > 1 && <span className='badge badge-secondary ml-1'>{el.count}x</span>}
+          </div>
           <div className='col-lg-1'>
             <input
               className='btn btn-sm btn-outline-secondary'
