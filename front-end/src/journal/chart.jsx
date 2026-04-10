@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
+import { ParseTimestamp } from 'utils/timestamp'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchJournalUsage } from 'redux/actions/journal'
 import { connect } from 'react-redux'
@@ -26,9 +26,9 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return (<div />)
     }
-    const metrics = [...this.props.readings.historical]
-      .sort((a, b) => ParseTimestamp(a.timestamp) > ParseTimestamp(b.timestamp) ? 1 : -1)
-      .map(m => ({ ...m, ts: timestampToEpoch(m.timestamp) }))
+    const metrics = [...this.props.readings.historical].sort((a, b) => {
+      return ParseTimestamp(a.timestamp) > ParseTimestamp(b.timestamp) ? 1 : -1
+    })
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
@@ -39,7 +39,7 @@ class chart extends React.Component {
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
             <Line dataKey='value' isAnimationActive={false} dot={false} />
-            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
+            <XAxis dataKey='timestamp' />
             <Tooltip formatter={(value, name) => [value, this.props.config.unit]} />
             <YAxis dataKey='value' />
           </LineChart>

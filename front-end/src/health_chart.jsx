@@ -28,12 +28,13 @@ class healthChart extends React.Component {
     if (this.props.health_stats === undefined || this.props.health_stats.length <= 0) {
       return (<div />)
     }
-    const rawStats = this.props.health_stats[this.state.trend]
-    const healthStats = rawStats
-      ? [...rawStats]
-        .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
-        .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
-      : rawStats
+    const healthStats = this.props.health_stats[this.state.trend]
+    if(healthStats){
+      healthStats.sort((a, b) => {
+        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+      })
+      healthStats.forEach((m, i) => { healthStats[i] = { ...m, ts: timestampToEpoch(m.time) } })
+    }
     return (
       <div className='container'>
         <span className='h6'>{i18next.t('health_chart:cpu_memory')} ({i18next.t('health_chart:' + this.props.trend)})</span>

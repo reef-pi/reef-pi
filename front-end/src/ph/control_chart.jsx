@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
+import { ParseTimestamp } from 'utils/timestamp'
 import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
@@ -28,9 +28,9 @@ class chart extends React.Component {
     if (this.props.readings === undefined) {
       return <div />
     }
-    const metrics = [...this.props.readings.historical]
-      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
-      .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
+    const metrics = [...this.props.readings.historical].sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
@@ -54,7 +54,7 @@ class chart extends React.Component {
             />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
-            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
+            <XAxis dataKey='time' />
             <Tooltip
               formatter={(value, name) => {
                 switch (name) {

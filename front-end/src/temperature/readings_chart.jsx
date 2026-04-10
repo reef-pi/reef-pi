@@ -3,7 +3,7 @@ import { Tooltip, Area, YAxis, XAxis, AreaChart, ResponsiveContainer } from 'rec
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
-import { ParseTimestamp, filterToday, timestampToEpoch, formatChartTime } from 'utils/timestamp'
+import { ParseTimestamp, filterToday } from 'utils/timestamp'
 
 class chart extends React.Component {
   componentDidMount () {
@@ -31,9 +31,9 @@ class chart extends React.Component {
     }
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
-    const readings = filterToday([...this.props.usage.current])
-      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
-      .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
+    const readings = filterToday([...this.props.usage.current]).sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
 
     return (
       <div className='container'>
@@ -47,7 +47,7 @@ class chart extends React.Component {
               </linearGradient>
             </defs>
             <YAxis dataKey='value' allowDecimals='false' domain={[c.ymin, c.ymax]} />
-            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
+            <XAxis dataKey='time' />
             <Tooltip formatter={(value, name) => [TwoDecimalParse(value), unit]} />
             <Area
               type='linear'

@@ -34,7 +34,7 @@ class chart extends React.Component {
     if (this.props.config === undefined) {
       return <div />
     }
-    const metrics = [...this.props.usage.historical]
+    const metrics = this.props.usage.historical
       .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
       .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     return (

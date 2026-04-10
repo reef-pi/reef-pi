@@ -29,10 +29,15 @@ class chart extends React.Component {
     if (this.props.usage === undefined) {
       return <div />
     }
-    const usage = this.props.usage.historical
-      .map(v => ({ ...v, cooler: v.cooler * -1 }))
-      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
-      .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
+    const usage = []
+    this.props.usage.historical.forEach((v, i) => {
+      v.cooler *= -1
+      usage.push(v)
+    })
+    usage.sort((a, b) => {
+      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+    })
+    usage.forEach((m, i) => { usage[i] = { ...m, ts: timestampToEpoch(m.time) } })
 
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
