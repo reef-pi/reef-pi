@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
@@ -21,6 +22,11 @@ type WaitStep struct {
 type AlertStep struct {
 	Title   string `json:"title"`
 	Message string `json:"message"`
+}
+
+type PWMStep struct {
+	ID    string  `json:"id"`
+	Value float64 `json:"value"`
 }
 
 type Step struct {
@@ -81,6 +87,21 @@ func (s *Step) Run(c controller.Controller, reverse bool) error {
 		log.Println("macro-subsystem: executing step: alert")
 		_, err := c.Telemetry().Mail(a.Title, a.Message)
 		return err
+	case "pwm":
+		var p PWMStep
+		if err := json.Unmarshal(s.Config, &p); err != nil {
+			return err
+		}
+		j, err := c.DM().Jacks().Get(p.ID)
+		if err != nil {
+			return err
+		}
+		values := connectors.PinValues{}
+		for _, pin := range j.Pins {
+			values[pin] = p.Value
+		}
+		log.Println("macro-subsystem: executing step: pwm jack:", j.Name, "value:", p.Value)
+		return c.DM().Jacks().Control(p.ID, values)
 	default:
 		return fmt.Errorf("Unknown step type:%s", s.Type)
 	}

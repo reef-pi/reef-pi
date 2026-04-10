@@ -1,6 +1,6 @@
 import React from 'react'
 import { ParseTimestamp, filterToday, timestampToEpoch, formatChartTime } from 'utils/timestamp'
-import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
+import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line, ReferenceLine } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
@@ -41,6 +41,9 @@ class chart extends React.Component {
       }
     }
     const c = this.props.config.chart
+    const notify = this.props.config.notify
+    const showMin = notify && notify.enable && notify.min > 0
+    const showMax = notify && notify.enable && notify.max > 0
     return (
       <div className='container'>
         <span className='h6'>{this.props.config.name}({current})</span>
@@ -50,6 +53,22 @@ class chart extends React.Component {
             <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip formatter={(value, name) => [TwoDecimalParse(value), c.unit]} />
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
+            {showMin && (
+              <ReferenceLine
+                y={notify.min}
+                stroke='orange'
+                strokeDasharray='4 2'
+                label={{ value: `Min: ${notify.min}`, position: 'insideBottomRight', fontSize: 11, fill: 'orange' }}
+              />
+            )}
+            {showMax && (
+              <ReferenceLine
+                y={notify.max}
+                stroke='orange'
+                strokeDasharray='4 2'
+                label={{ value: `Max: ${notify.max}`, position: 'insideTopRight', fontSize: 11, fill: 'orange' }}
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

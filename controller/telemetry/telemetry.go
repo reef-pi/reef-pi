@@ -21,6 +21,13 @@ const DBKey = "telemetry"
 
 var sanitizePrometheusMetricRegex = regexp.MustCompile("[^a-zA-Z0-9_]")
 
+// adafruitIOFeedKeyRegex strips any character that is not a lowercase letter,
+// digit, or hyphen — the only characters accepted in Adafruit IO feed keys.
+var adafruitIOFeedKeyRegex = regexp.MustCompile("[^a-z0-9-]")
+
+// consecutiveDashRegex collapses multiple adjacent hyphens into one.
+var consecutiveDashRegex = regexp.MustCompile("-{2,}")
+
 type ErrorLogger func(string, string) error
 
 type Telemetry interface {
@@ -124,11 +131,44 @@ func NewTelemetry(name, bucket string, store storage.Store, config TelemetryConf
 		mClient, err := NewMQTTClient(config.MQTT)
 		if err != nil {
 			lr("telemety-subsystem", "Failed to initialize mqtt client:"+err.Error())
+			// Network may not be ready at boot (DHCP/DNS still pending). Retry in background.
+			go t.mqttReconnectLoop()
 		} else {
 			t.mClient = mClient
 		}
 	}
 	return t
+}
+
+// mqttReconnectLoop retries the MQTT connection every 30 seconds until it
+// succeeds or MQTT is disabled. It is started as a goroutine when the initial
+// connection attempt at startup fails (common on Pi due to network not being
+// ready before reef-pi starts).
+func (t *telemetry) mqttReconnectLoop() {
+	for {
+		time.Sleep(30 * time.Second)
+		t.mu.Lock()
+		enabled := t.config.MQTT.Enable
+		already := t.mClient != nil
+		t.mu.Unlock()
+		if !enabled || already {
+			return
+		}
+		mClient, err := NewMQTTClient(t.config.MQTT)
+		if err != nil {
+			log.Println("WARNING: telemetry: mqtt reconnect failed:", err)
+			continue
+		}
+		t.mu.Lock()
+		if t.mClient == nil { // check again in case applyConfig ran concurrently
+			t.mClient = mClient
+			log.Println("INFO: telemetry: mqtt client reconnected successfully")
+		} else {
+			mClient.client.Disconnect(250) // applyConfig already set a new one
+		}
+		t.mu.Unlock()
+		return
+	}
 }
 
 func (t *telemetry) NewStatsManager(b string) StatsManager {
@@ -170,7 +210,7 @@ func (t *telemetry) LogError(a, b string) error {
 
 func (t *telemetry) Alert(subject, body string) (bool, error) {
 	prefix := "[" + t.name + ":Alert]"
-	t.logError(prefix, subject)
+	t.logError("alert:"+subject, subject)
 	return t.Mail(prefix+subject, body)
 }
 
@@ -190,7 +230,15 @@ func (t *telemetry) Mail(subject, body string) (bool, error) {
 
 func SanitizeAdafruitIOFeedName(name string) string {
 	name = strings.ToLower(name)
-	return strings.Replace(name, " ", "-", -1)
+	// Replace spaces with dashes first, then strip all remaining characters
+	// that Adafruit IO does not allow in feed keys (only a-z, 0-9, hyphen).
+	name = strings.ReplaceAll(name, " ", "-")
+	name = adafruitIOFeedKeyRegex.ReplaceAllString(name, "")
+	// Collapse consecutive hyphens that result from stripping characters such
+	// as parentheses, colons, etc.  e.g. "foo-(bar)-baz" → "foo-bar-baz".
+	name = consecutiveDashRegex.ReplaceAllString(name, "-")
+	// Trim any leading/trailing hyphens.
+	return strings.Trim(name, "-")
 }
 func SanitizePrometheusMetricName(name string) string {
 	name = strings.ToLower(name)
@@ -231,10 +279,13 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 }
 
 func (t *telemetry) EmitMQTT(topic string, v float64) error {
-	if t.mClient == nil {
+	t.mu.Lock()
+	client := t.mClient
+	t.mu.Unlock()
+	if client == nil {
 		return errors.New("mqtt client is not initialized")
 	}
-	return t.mClient.Publish(topic, fmt.Sprintf("%f", v))
+	return client.Publish(topic, fmt.Sprintf("%f", v))
 }
 
 func (t *telemetry) EmitAIO(user, feed string, v float64) error {
@@ -284,11 +335,13 @@ func (t *telemetry) applyConfig(c TelemetryConfig) {
 			newMClient = mc
 		}
 	}
+	t.mu.Lock()
 	oldMClient := t.mClient
 	t.config = c
+	t.mClient = newMClient
+	t.mu.Unlock()
 	t.dispatcher = newDispatcher
 	t.aClient = newAClient
-	t.mClient = newMClient
 	if oldMClient != nil {
 		oldMClient.client.Disconnect(250)
 	}

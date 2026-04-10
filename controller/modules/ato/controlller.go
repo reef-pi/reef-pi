@@ -96,8 +96,6 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Control(a ATO, reading int) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
 	if a.Pump == "" {
 		log.Println("ato-subsystem: control enabled but pump not set. Skipping")
 		return nil

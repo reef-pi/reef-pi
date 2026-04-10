@@ -18,7 +18,7 @@ func (i *interval) Name() string {
 }
 
 func (i *interval) Get(t time.Time) float64 {
-	if i.IsOutside(t.Add(time.Second)) {
+	if i.IsOutside(t) {
 		return 0
 	}
 	past := i.PastSeconds(t)

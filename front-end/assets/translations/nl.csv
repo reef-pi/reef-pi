@@ -123,6 +123,7 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Versie
 configuration:about:website,Website
+configuration:errors:alert,Alert
 configuration:admin:db_export,
 configuration:admin:db_import,
 configuration:admin:poweroff,Uitschakelen
@@ -145,6 +146,7 @@ configuration:settings:cors,cors inschakelen
 configuration:settings:display,Display
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:name,Naam
 configuration:settings:network_address_required,Netwerkadres is nodig
@@ -199,6 +201,11 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,Connectie verloren
@@ -217,6 +224,7 @@ function:reminder,
 function:subsystem,
 function:temperature,
 function:timers,
+function:pwm,PWM
 function:wait,
 health_chart:cpu_memory,CPU/Geheugen
 health_chart:current,
@@ -272,6 +280,8 @@ macro:turn_off,Uitschakelen
 macro:turn_on,Inschakelen
 macro:wait:duration,
 macro:warn_delete,
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,Alarm boven
 ph:alert_below,Alarm onder
 ph:calibrate,Calibreren
