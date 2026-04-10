@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
 import { ResponsiveContainer, Line, Tooltip, YAxis, XAxis, LineChart } from 'recharts'
 import { fetchHealth } from './redux/actions/health'
 import { connect } from 'react-redux'
@@ -33,6 +33,7 @@ class healthChart extends React.Component {
       healthStats.sort((a, b) => {
         return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
       })
+      healthStats.forEach((m, i) => { healthStats[i] = { ...m, ts: timestampToEpoch(m.time) } })
     }
     return (
       <div className='container'>
@@ -41,7 +42,7 @@ class healthChart extends React.Component {
           <LineChart data={healthStats}>
             <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
             <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
-            <XAxis dataKey='time' />
+            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip />
             <Line dot={false} type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
             <Line dot={false} type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />

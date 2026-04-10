@@ -1,5 +1,5 @@
 import React from 'react'
-import { ParseTimestamp, filterToday } from 'utils/timestamp'
+import { ParseTimestamp, filterToday, timestampToEpoch, formatChartTime } from 'utils/timestamp'
 import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'recharts'
 import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
@@ -32,7 +32,7 @@ class chart extends React.Component {
       : [...this.props.readings[this.props.type]]
     const metrics = raw.sort((a, b) => {
       return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
-    })
+    }).map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     let current = ''
     if (metrics.length >= 1) {
       current = metrics[metrics.length - 1].value
@@ -47,7 +47,7 @@ class chart extends React.Component {
         <ResponsiveContainer height={this.props.height}>
           <LineChart data={metrics}>
             <Line dataKey='value' stroke={c.color} isAnimationActive={false} dot={false} />
-            <XAxis dataKey='time' />
+            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip formatter={(value, name) => [TwoDecimalParse(value), c.unit]} />
             <YAxis dataKey='value' domain={[c.ymin, c.ymax]} />
           </LineChart>
