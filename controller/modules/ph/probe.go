@@ -302,6 +302,16 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 		if err := c.c.Store().Get(CalibrationBucket, p.ID, &calibration); err != nil {
 			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
 		}
+		// Remove any existing point with the same expected value so re-calibrating
+		// a single point does not accumulate duplicates that would push the slice
+		// past the two-point limit accepted by hal.CalibratorFactory.
+		filtered := calibration[:0]
+		for _, m := range calibration {
+			if m.Expected != point.Expected {
+				filtered = append(filtered, m)
+			}
+		}
+		calibration = filtered
 	}
 	c.Lock()
 	defer c.Unlock()
