@@ -145,6 +145,7 @@ configuration:settings:cors,
 configuration:settings:display,显示
 configuration:settings:interface,接口
 configuration:settings:max_cpu,最大CPU
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,最大内存
 configuration:settings:name,名字
 configuration:settings:network_address_required,必须填写网络地址

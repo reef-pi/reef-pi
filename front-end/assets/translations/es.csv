@@ -145,6 +145,7 @@ configuration:settings:cors,Activar cors
 configuration:settings:display,Pantalla
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Memoria Maxima
 configuration:settings:name,Nombre
 configuration:settings:network_address_required,La direccion de red es requerida
