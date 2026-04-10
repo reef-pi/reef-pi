@@ -14,6 +14,7 @@ func TestCreateProfile(t *testing.T) {
 	specs["lunar"] = []byte(`{"start": "07:05:00", "end":"16:00:00", "full_moon":"2000-01-02"}`)
 	specs["sine"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
 	specs["random"] = []byte(`{"start": "07:05:00", "end":"16:00:00"}`)
+	specs["circadian"] = []byte(`{"latitude": -33.8, "longitude": 151.2, "start_hour": 6, "end_hour": 22}`)
 	for pType, pConf := range specs {
 		spec := ProfileSpec{
 			Min:    12,

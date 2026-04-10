@@ -119,3 +119,83 @@ func TestCircadianWithMinMax(t *testing.T) {
 		t.Errorf("Expected intensity at or below max (80), got %.2f", intensity)
 	}
 }
+
+func TestCircadianName(t *testing.T) {
+	config := CircadianConfig{
+		Latitude:  -33.8,
+		Longitude: 151.2,
+		StartHour: 6,
+		EndHour:   22,
+	}
+	confBytes, _ := json.Marshal(config)
+	
+	p, err := NewCircadian(confBytes, 0, 100)
+	if err != nil {
+		t.Fatalf("Failed to create circadian profile: %v", err)
+	}
+	
+	name := p.Name()
+	if name != "circadian" {
+		t.Errorf("Expected name 'circadian', got '%s'", name)
+	}
+}
+
+func TestCircadianProfileSpec(t *testing.T) {
+	// Test with circadian type
+	spec := ProfileSpec{
+		Type: "circadian",
+		Min:  0,
+		Max:  100,
+	}
+	if !CircadianProfileSpec(spec) {
+		t.Error("Expected CircadianProfileSpec to return true for 'circadian' type")
+	}
+	
+	// Test with non-circadian type
+	spec.Type = "fixed"
+	if CircadianProfileSpec(spec) {
+		t.Error("Expected CircadianProfileSpec to return false for 'fixed' type")
+	}
+}
+
+func TestCircadianProfileError(t *testing.T) {
+	// Test ErrInvalidLatitude
+	msg := ErrInvalidLatitude.Error()
+	if msg != "latitude must be between -90 and 90" {
+		t.Errorf("Expected specific latitude error message, got '%s'", msg)
+	}
+	
+	// Test ErrInvalidLongitude
+	msg = ErrInvalidLongitude.Error()
+	if msg != "longitude must be between -180 and 180" {
+		t.Errorf("Expected specific longitude error message, got '%s'", msg)
+	}
+}
+
+func TestCircadianDuskRamp(t *testing.T) {
+	// Test the dusk ramp case: hour > endHour but hour <= endHour+2
+	// Using EndHour=22, so testing hour=23 (23 > 22 but 23 <= 24)
+	config := CircadianConfig{
+		Latitude:  -33.8,
+		Longitude: 151.2,
+		StartHour: 6,
+		EndHour:   22,
+	}
+	confBytes, _ := json.Marshal(config)
+	
+	p, err := NewCircadian(confBytes, 0, 100)
+	if err != nil {
+		t.Fatalf("Failed to create circadian profile: %v", err)
+	}
+	
+	// Test 23:00 (1 hour after end hour - dusk ramp)
+	dusk := time.Date(2026, 2, 21, 23, 0, 0, 0, time.UTC)
+	intensity := p.Get(dusk)
+	t.Logf("23:00 intensity: %.2f", intensity)
+	// Should be dimming (dusk effect) but not fully off
+	if intensity < 1 || intensity > 50 {
+		t.Errorf("Expected dim dusk intensity (1-50) at 23:00, got %.2f", intensity)
+	}
+}
+
+
