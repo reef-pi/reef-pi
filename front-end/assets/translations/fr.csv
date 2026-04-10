@@ -145,6 +145,7 @@ configuration:settings:cors,
 configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Mémoire maximum
 configuration:settings:name,Nom
 configuration:settings:network_address_required,Adresse réseau requise

@@ -8,7 +8,8 @@ export default class HealthNotify extends React.Component {
       notify: {
         enable: props.state.enable,
         max_memory: props.state.max_memory,
-        max_cpu: props.state.max_cpu
+        max_cpu: props.state.max_cpu,
+        max_cpu_temp: props.state.max_cpu_temp
       }
     }
     this.update = this.update.bind(this)
@@ -70,6 +71,18 @@ export default class HealthNotify extends React.Component {
             id='health_max_cpu'
             value={this.state.notify.max_cpu}
             onChange={this.update('max_cpu')}
+          />
+        </div>
+      )
+      ct.push(
+        <div className='form-group col-md-6 col-12' key='health_notify_max_cpu_temp'>
+          <label htmlFor='health_max_cpu_temp'>{i18n.t('configuration:settings:max_cpu_temp')}</label>
+          <input
+            type='number'
+            className='form-control'
+            id='health_max_cpu_temp'
+            value={this.state.notify.max_cpu_temp}
+            onChange={this.update('max_cpu_temp')}
           />
         </div>
       )

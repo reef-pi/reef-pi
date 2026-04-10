@@ -145,6 +145,7 @@ configuration:settings:cors,cors inschakelen
 configuration:settings:display,Display
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Max Geheugen
 configuration:settings:name,Naam
 configuration:settings:network_address_required,Netwerkadres is nodig

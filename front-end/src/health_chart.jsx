@@ -41,10 +41,12 @@ class healthChart extends React.Component {
           <LineChart data={healthStats}>
             <YAxis yAxisId='left' orientation='left' stroke='#00c851' />
             <YAxis yAxisId='right' orientation='right' stroke='#ffbb33' />
+            <YAxis yAxisId='temp' orientation='right' stroke='#ff4444' />
             <XAxis dataKey='time' />
             <Tooltip />
             <Line dot={false} type='linear' dataKey='cpu' stroke='#00c851' isAnimationActive={false} yAxisId='left' />
             <Line dot={false} type='linear' dataKey='memory' stroke='#ffbb33' isAnimationActive={false} yAxisId='right' />
+            <Line dot={false} type='linear' dataKey='cpu_temp' stroke='#ff4444' isAnimationActive={false} yAxisId='temp' />
           </LineChart>
         </ResponsiveContainer>
       </div>
