@@ -200,6 +200,11 @@ doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,Delete {{name}} ?
 equipment:warn_delete,This action will delete equipment {{name}}
 fatal_error:connection_lost,Connection Lost

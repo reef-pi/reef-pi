@@ -200,6 +200,11 @@ doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,{{name}} löschen?
 equipment:warn_delete,Wollen Sie das Gerät {{name}} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren

@@ -200,6 +200,11 @@ doser:warn_delete,Aviso Apagar
 doser:warn_reset,Aviso Reninciar
 equipment:chart:barchart,Grafico
 equipment:chart:ctrlpanel,Painel de Control
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,Apagar
 equipment:warn_delete,Aviso Apagar
 fatal_error:connection_lost,Ligação Perdida
