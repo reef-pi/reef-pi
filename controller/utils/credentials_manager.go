@@ -46,7 +46,6 @@ func (cs *CredentialsManager) Validate(credentials Credentials) (bool, error) {
 		return false, err
 	}
 	return credentials.User == bucketCredentials.User &&
-		(credentials.Password == bucketCredentials.Password ||
-			bcrypt.CompareHashAndPassword([]byte(bucketCredentials.Password), []byte(credentials.Password)) == nil), nil
+		bcrypt.CompareHashAndPassword([]byte(bucketCredentials.Password), []byte(credentials.Password)) == nil, nil
 
 }
