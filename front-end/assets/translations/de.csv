@@ -123,6 +123,7 @@ configuration:about:status,Status
 configuration:about:uptime,Letzter Neustart
 configuration:about:version,Version
 configuration:about:website,Web Site
+configuration:errors:alert,Alert
 configuration:admin:db_export,DB Exportieren
 configuration:admin:db_import,DB Importieren
 configuration:admin:poweroff,Ausschalten

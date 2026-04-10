@@ -123,6 +123,7 @@ configuration:about:status,状态
 configuration:about:uptime,运行时间
 configuration:about:version,版本
 configuration:about:website,网站
+configuration:errors:alert,Alert
 configuration:admin:db_export,
 configuration:admin:db_import,
 configuration:admin:poweroff,关机
