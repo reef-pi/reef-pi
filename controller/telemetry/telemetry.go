@@ -124,11 +124,44 @@ func NewTelemetry(name, bucket string, store storage.Store, config TelemetryConf
 		mClient, err := NewMQTTClient(config.MQTT)
 		if err != nil {
 			lr("telemety-subsystem", "Failed to initialize mqtt client:"+err.Error())
+			// Network may not be ready at boot (DHCP/DNS still pending). Retry in background.
+			go t.mqttReconnectLoop()
 		} else {
 			t.mClient = mClient
 		}
 	}
 	return t
+}
+
+// mqttReconnectLoop retries the MQTT connection every 30 seconds until it
+// succeeds or MQTT is disabled. It is started as a goroutine when the initial
+// connection attempt at startup fails (common on Pi due to network not being
+// ready before reef-pi starts).
+func (t *telemetry) mqttReconnectLoop() {
+	for {
+		time.Sleep(30 * time.Second)
+		t.mu.Lock()
+		enabled := t.config.MQTT.Enable
+		already := t.mClient != nil
+		t.mu.Unlock()
+		if !enabled || already {
+			return
+		}
+		mClient, err := NewMQTTClient(t.config.MQTT)
+		if err != nil {
+			log.Println("WARNING: telemetry: mqtt reconnect failed:", err)
+			continue
+		}
+		t.mu.Lock()
+		if t.mClient == nil { // check again in case applyConfig ran concurrently
+			t.mClient = mClient
+			log.Println("INFO: telemetry: mqtt client reconnected successfully")
+		} else {
+			mClient.client.Disconnect(250) // applyConfig already set a new one
+		}
+		t.mu.Unlock()
+		return
+	}
 }
 
 func (t *telemetry) NewStatsManager(b string) StatsManager {
@@ -231,10 +264,13 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 }
 
 func (t *telemetry) EmitMQTT(topic string, v float64) error {
-	if t.mClient == nil {
+	t.mu.Lock()
+	client := t.mClient
+	t.mu.Unlock()
+	if client == nil {
 		return errors.New("mqtt client is not initialized")
 	}
-	return t.mClient.Publish(topic, fmt.Sprintf("%f", v))
+	return client.Publish(topic, fmt.Sprintf("%f", v))
 }
 
 func (t *telemetry) EmitAIO(user, feed string, v float64) error {
@@ -284,11 +320,13 @@ func (t *telemetry) applyConfig(c TelemetryConfig) {
 			newMClient = mc
 		}
 	}
+	t.mu.Lock()
 	oldMClient := t.mClient
 	t.config = c
+	t.mClient = newMClient
+	t.mu.Unlock()
 	t.dispatcher = newDispatcher
 	t.aClient = newAClient
-	t.mClient = newMClient
 	if oldMClient != nil {
 		oldMClient.client.Disconnect(250)
 	}
