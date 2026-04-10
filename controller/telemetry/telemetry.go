@@ -21,6 +21,13 @@ const DBKey = "telemetry"
 
 var sanitizePrometheusMetricRegex = regexp.MustCompile("[^a-zA-Z0-9_]")
 
+// adafruitIOFeedKeyRegex strips any character that is not a lowercase letter,
+// digit, or hyphen — the only characters accepted in Adafruit IO feed keys.
+var adafruitIOFeedKeyRegex = regexp.MustCompile("[^a-z0-9-]")
+
+// consecutiveDashRegex collapses multiple adjacent hyphens into one.
+var consecutiveDashRegex = regexp.MustCompile("-{2,}")
+
 type ErrorLogger func(string, string) error
 
 type Telemetry interface {
@@ -223,7 +230,15 @@ func (t *telemetry) Mail(subject, body string) (bool, error) {
 
 func SanitizeAdafruitIOFeedName(name string) string {
 	name = strings.ToLower(name)
-	return strings.Replace(name, " ", "-", -1)
+	// Replace spaces with dashes first, then strip all remaining characters
+	// that Adafruit IO does not allow in feed keys (only a-z, 0-9, hyphen).
+	name = strings.ReplaceAll(name, " ", "-")
+	name = adafruitIOFeedKeyRegex.ReplaceAllString(name, "")
+	// Collapse consecutive hyphens that result from stripping characters such
+	// as parentheses, colons, etc.  e.g. "foo-(bar)-baz" → "foo-bar-baz".
+	name = consecutiveDashRegex.ReplaceAllString(name, "-")
+	// Trim any leading/trailing hyphens.
+	return strings.Trim(name, "-")
 }
 func SanitizePrometheusMetricName(name string) string {
 	name = strings.ToLower(name)
