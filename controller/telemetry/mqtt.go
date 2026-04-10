@@ -47,7 +47,7 @@ func NewMQTTClient(conf MQTTConfig) (*MQTTClient, error) {
 			connOpts.SetPassword(conf.Password)
 		}
 	}
-	tlsConfig := &tls.Config{InsecureSkipVerify: true, ClientAuth: tls.NoClientCert}
+	tlsConfig := &tls.Config{ClientAuth: tls.NoClientCert}
 	connOpts.SetTLSConfig(tlsConfig)
 
 	client := mqtt.NewClient(connOpts)
