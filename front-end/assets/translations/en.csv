@@ -224,6 +224,7 @@ function:reminder,email reminder
 function:subsystem,subsystem
 function:temperature,temperature
 function:timers,timer
+function:pwm,PWM
 function:wait,wait
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,current
@@ -279,6 +280,8 @@ macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration
 macro:warn_delete,This action will delete macro {{name}}
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:calibrate,Calibrate

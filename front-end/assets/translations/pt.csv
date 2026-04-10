@@ -224,6 +224,7 @@ function:reminder,Lembretes
 function:subsystem,Subsistema
 function:temperature,Temperatura
 function:timers,Temporizadores
+function:pwm,PWM
 function:wait,Aguarda
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,Atual
@@ -279,6 +280,8 @@ macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
 macro:wait:duration,Duração
 macro:warn_delete,Apagar
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:calibrate,Calibrar
