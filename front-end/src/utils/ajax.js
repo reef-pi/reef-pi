@@ -30,7 +30,7 @@ export function reduxGet (params) {
       .then(response => response.json())
       .then(data => dispatch(params.success(data)))
       .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
+        dispatch({ type: 'API_FAILURE', params })
       })
   }
 }
@@ -55,7 +55,7 @@ export function reduxDelete (params) {
       })
       .then(() => dispatch(params.success()))
       .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
+        dispatch({ type: 'API_FAILURE', params })
       })
   }
 }
@@ -81,7 +81,7 @@ export function reduxPut (params) {
       })
       .then(() => dispatch(params.success()))
       .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
+        dispatch({ type: 'API_FAILURE', params })
       })
   }
 }
@@ -115,7 +115,7 @@ export function reduxPost (params) {
     })
       .then(data => dispatch(params.success(data)))
       .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
+        dispatch({ type: 'API_FAILURE', params })
       })
   }
 }

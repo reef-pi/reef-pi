@@ -35,7 +35,7 @@ class main extends React.Component {
     // TODO: [ML] Consider Server Events, Long Polling, or Web Sockets after 2.0
     // Polling for macro status.
     const timer = window.setInterval(this.props.fetch, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

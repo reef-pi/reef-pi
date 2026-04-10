@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 export function confirm (message, options = {}) {
-  const props = Object.assign({ message: message }, options)
+  const props = Object.assign({ message }, options)
   return showModal(<Confirm {...props} />)
 }
 

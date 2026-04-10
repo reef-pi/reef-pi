@@ -15,7 +15,7 @@ export default class Capabilities extends React.Component {
     return function (ev) {
       const capabilities = this.state.capabilities
       capabilities[cap] = ev.target.checked
-      this.setState({ capabilities: capabilities })
+      this.setState({ capabilities })
       this.props.update(this.state.capabilities)
     }.bind(this)
   }

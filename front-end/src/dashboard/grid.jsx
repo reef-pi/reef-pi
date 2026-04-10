@@ -7,13 +7,12 @@ export const numColsToColSize = (numCols) => {
   /*
   Given a number of columns, returns the maximum bootstrap column size in order
   to fit all columns on one row
-  
+
   i.e. 1->12, 2->6, 3->4, 4->3, 5->2, 6->2, 7->1, 8->1, 9->1, 10->1, 11->1, 12->1
   */
-  let colSize = 1;
-  if (numCols <= 12)
-    colSize = Math.floor(12 / numCols);
-  return colSize;
+  let colSize = 1
+  if (numCols <= 12) { colSize = Math.floor(12 / numCols) }
+  return colSize
 }
 
 // props: rows, columns, hook, cells, tcs, atos
@@ -45,7 +44,7 @@ export default class Grid extends React.Component {
       id = cell.id
     }
 
-    let colSize = numColsToColSize(this.props.columns);
+    const colSize = numColsToColSize(this.props.columns)
 
     return (
       <div className={'col-xs-12 col-md-' + colSize + ' grid-cell-container'} key={'chart-type-' + i + '-' + j}>
@@ -79,7 +78,7 @@ export default class Grid extends React.Component {
       cell.id = id
       row[j] = cell
       cells[i] = row
-      this.setState({ cells: cells })
+      this.setState({ cells })
       this.props.hook(cells)
     }.bind(this))
   }
@@ -92,7 +91,7 @@ export default class Grid extends React.Component {
       cell.type = type
       row[j] = cell
       cells[i] = row
-      this.setState({ cells: cells })
+      this.setState({ cells })
       this.props.hook(cells)
     }.bind(this))
   }
@@ -144,7 +143,7 @@ export default class Grid extends React.Component {
       }
       rows.push(
         <div className='row grid-row' key={'chart-row-' + i}>
-          <label className='d-block d-md-none'>Row {i+1}</label>
+          <label className='d-block d-md-none'>Row {i + 1}</label>
           {columns}
         </div>
       )

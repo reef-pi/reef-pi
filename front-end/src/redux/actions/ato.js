@@ -38,7 +38,7 @@ export const atoUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'ATO_USAGE_LOADED',
-      payload: { data: s, id: id }
+      payload: { data: s, id }
     })
   }
 }

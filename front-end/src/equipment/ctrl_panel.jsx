@@ -16,7 +16,7 @@ class CtrlPanel extends React.Component {
 
   componentDidMount () {
     const timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

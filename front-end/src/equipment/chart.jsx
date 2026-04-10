@@ -24,7 +24,7 @@ class chart extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
     const timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

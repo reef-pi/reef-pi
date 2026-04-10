@@ -77,7 +77,7 @@ class mainPanel extends React.Component {
 
       panels.push(
         <li className='nav-item' key={'li-tab-' + cap}>
-          <NavLink to={route.props.path || ''} id={'tab-' + cap} className="nav-link">
+          <NavLink to={(route.props.path || '').replace(/\/\*$/, '')} id={'tab-' + cap} className="nav-link">
             {label}
           </NavLink>
         </li>

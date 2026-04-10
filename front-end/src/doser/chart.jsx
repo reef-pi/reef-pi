@@ -18,7 +18,7 @@ class chart extends React.Component {
   componentDidMount () {
     this.updateUsage()
     const timer = window.setInterval(this.updateUsage, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

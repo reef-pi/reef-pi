@@ -104,13 +104,13 @@ export const rootReducer = (state, action) => {
       return { ...state, display: action.payload }
     case 'IMAGES_LOADED':
       camera.images = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera }
     case 'LATEST_IMAGE_LOADED':
       camera.latest = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera }
     case 'CAMERA_CONFIG_LOADED':
       camera.config = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera }
     case 'DOSING_PUMPS_LOADED':
       return { ...state, dosers: action.payload }
     case 'INSTANCES_LOADED':
