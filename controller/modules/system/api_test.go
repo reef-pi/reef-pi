@@ -96,4 +96,18 @@ func TestSystemController(t *testing.T) {
 	if err := c.disableDisplay(); err != nil {
 		t.Error(err)
 	}
+
+	// InUse always returns empty
+	deps, err := c.InUse("equipment", "1")
+	if err != nil {
+		t.Error("InUse should not error:", err)
+	}
+	if len(deps) != 0 {
+		t.Error("Expected empty deps from system InUse")
+	}
+
+	// GetEntity is not supported
+	if _, err := c.GetEntity("1"); err == nil {
+		t.Error("GetEntity should return error (not supported)")
+	}
 }
