@@ -100,11 +100,14 @@ func (p Probe) Validate() error {
 	}
 	if p.Transformer != "" {
 		expr, err := govaluate.NewEvaluableExpression(p.Transformer)
+		if err != nil {
+			return fmt.Errorf("invalid transformer expression '%s'. Failed to parse: %w", p.Transformer, err)
+		}
 		parameters := make(map[string]interface{}, 1)
 		parameters["v"] = 0.0
 		result, err := expr.Evaluate(parameters)
 		if err != nil {
-			return fmt.Errorf("invalid transformer expresssion '%s'. Failed to parse:%w", p.Transformer, err)
+			return fmt.Errorf("invalid transformer expression '%s'. Failed to evaluate: %w", p.Transformer, err)
 		}
 		_, ok := result.(float64)
 		if !ok {
