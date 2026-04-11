@@ -394,4 +394,5 @@ validation:name_required,
 validation:number_required,
 validation:selection_required,
 validation:time_required,
+ato:debounce,Debounce
 lighting:jack,Jack

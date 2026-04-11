@@ -21,6 +21,7 @@ type ATO struct {
 	Inlet          string        `json:"inlet"`
 	Pump           string        `json:"pump"`
 	Period         time.Duration `json:"period"`
+	Debounce       time.Duration `json:"debounce"`
 	Control        bool          `json:"control"`
 	Enable         bool          `json:"enable"`
 	Notify         Notify        `json:"notify"`
@@ -173,8 +174,27 @@ func (c *Controller) Check(a ATO) (int, error) {
 	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
 	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
 	if a.Control {
-		if err := c.Control(a, reading); err != nil {
-			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
+		shouldControl := true
+		if a.Debounce > 0 && reading == 0 {
+			c.mu.Lock()
+			ls, ok := c.lowSince[a.ID]
+			if !ok || ls == nil {
+				now := time.Now()
+				c.lowSince[a.ID] = &now
+				shouldControl = false
+			} else if time.Since(*ls) < a.Debounce*time.Second {
+				shouldControl = false
+			}
+			c.mu.Unlock()
+		} else if reading == 1 {
+			c.mu.Lock()
+			c.lowSince[a.ID] = nil
+			c.mu.Unlock()
+		}
+		if shouldControl {
+			if err := c.Control(a, reading); err != nil {
+				log.Println("ERROR: Failed to execute ato control logic. Error:", err)
+			}
 		}
 		usage.Pump = int(a.Period)
 		if reading == 1 {

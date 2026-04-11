@@ -133,6 +133,30 @@ const EditAto = ({
 
         <div className='col-12 col-sm-6 col-md-3'>
           <div className='form-group'>
+            <label htmlFor='debounce'>{i18next.t('ato:debounce')}</label>
+            <div className='input-group'>
+              <Field
+                name='debounce'
+                readOnly={readOnly}
+                type='number'
+                min='0'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('debounce', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text d-none d-lg-flex'>
+                  {i18next.t('second_s')}
+                </span>
+                <span className='input-group-text d-flex d-lg-none'>sec</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='debounce' />
+            </div>
+          </div>
+        </div>
+
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
             <label htmlFor='enable'>{i18next.t('status')}</label>
             <Field
               name='enable'
