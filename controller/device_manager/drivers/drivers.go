@@ -24,6 +24,7 @@ type Drivers struct {
 	bus           i2c.Bus
 	t             telemetry.Telemetry
 	isRaspberryPi bool
+	OnCreate      func(id string)
 }
 
 func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemetry.Telemetry) (*Drivers, error) {
@@ -156,6 +157,9 @@ func (d *Drivers) Create(d1 Driver) error {
 		// Registration has failed, we need to de-allocate the DB entry
 		_ = d.store.Delete(DriverBucket, d1.ID)
 		return err
+	}
+	if d.OnCreate != nil {
+		d.OnCreate(d1.ID)
 	}
 	return nil
 }

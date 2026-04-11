@@ -135,6 +135,8 @@ configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
 configuration:connectors:title_delete,Delete {{name}} ?
 configuration:connectors:warn_delete,This action will delete connector {{name}}
+configuration:drivers:provision,Provision
+configuration:drivers:provision_title,Auto-create outlets/inlets/jacks for all pins of this driver
 configuration:drivers:title_delete,Remove driver {{name}}?
 configuration:drivers:type,Type
 configuration:drivers:warn_delete,This action will remove the driver for {{name}}

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { confirm } from 'utils/confirm'
+import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 import DriverForm from './driver_form'
 
@@ -103,6 +104,7 @@ export default class Driver extends React.Component {
   render () {
     let btnEdit = null
     let btnDelete = null
+    let btnProvision = null
 
     if (this.props.read_only !== true) {
       if (!this.state.edit) {
@@ -112,6 +114,18 @@ export default class Driver extends React.Component {
             className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
             value={this.state.lbl}
             onClick={this.handleEdit}
+          />
+        )
+        btnProvision = (
+          <input
+            type='button'
+            className='btn btn-sm btn-outline-info float-right d-block d-sm-inline ml-2'
+            title={i18n.t('configuration:drivers:provision_title')}
+            value={i18n.t('configuration:drivers:provision')}
+            onClick={() => {
+              this.props.provision(this.props.driver.id)
+              showUpdateSuccessful()
+            }}
           />
         )
       }
@@ -131,6 +145,7 @@ export default class Driver extends React.Component {
         <div className='col-4 col-md-3'>
           {btnDelete}
           {btnEdit}
+          {btnProvision}
         </div>
       </div>
     )
@@ -141,5 +156,6 @@ Driver.propTypes = {
   driver: PropTypes.object,
   remove: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
+  provision: PropTypes.func.isRequired,
   driverOptions: PropTypes.object
 }

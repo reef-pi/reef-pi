@@ -1,5 +1,5 @@
 import React from 'react'
-import { fetchDrivers, fetchDriverOptions, deleteDriver, createDriver, updateDriver } from 'redux/actions/drivers'
+import { fetchDrivers, fetchDriverOptions, deleteDriver, createDriver, updateDriver, provisionDriver } from 'redux/actions/drivers'
 import { connect } from 'react-redux'
 import Driver from './driver'
 import New from './new'
@@ -41,6 +41,7 @@ class drivers extends React.Component {
             read_only={(d.type === 'rpi')}
             remove={this.props.delete}
             update={this.props.update}
+            provision={this.props.provision}
           />
         )
       })
@@ -79,7 +80,8 @@ const mapDispatchToProps = dispatch => {
     fetchDriverOptions: () => dispatch(fetchDriverOptions()),
     create: d => dispatch(createDriver(d)),
     delete: id => dispatch(deleteDriver(id)),
-    update: (id, p) => dispatch(updateDriver(id, p))
+    update: (id, p) => dispatch(updateDriver(id, p)),
+    provision: id => dispatch(provisionDriver(id))
   }
 }
 

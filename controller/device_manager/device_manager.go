@@ -1,10 +1,12 @@
 package device_manager
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/rpi/i2c"
 
 	"github.com/shirou/gopsutil/v4/host"
@@ -14,6 +16,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
+	"github.com/reef-pi/reef-pi/controller/utils"
+	"net/http"
 )
 
 type DeviceManager struct {
@@ -53,7 +57,7 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 	}
 	log.Println("device-manager subsystem initialized with", drvrs.Size(), "drivers")
 
-	return &DeviceManager{
+	dm := &DeviceManager{
 		bus:       bus,
 		drivers:   drvrs,
 		jacks:     connectors.NewJacks(drvrs, store),
@@ -62,6 +66,12 @@ func New(s settings.Settings, store storage.Store, t telemetry.Telemetry) *Devic
 		ais:       connectors.NewAnalogInputs(drvrs, store),
 		telemetry: t,
 	}
+	drvrs.OnCreate = func(id string) {
+		if err := dm.Provision(id); err != nil {
+			log.Println("device-manager: auto-provision failed for driver", id, ":", err)
+		}
+	}
+	return dm
 }
 
 func (dm *DeviceManager) Setup() error {
@@ -98,12 +108,84 @@ func (dm *DeviceManager) Drivers() *drivers.Drivers {
 	return dm.drivers
 }
 
+// Provision auto-creates connectors for all pins exposed by the driver with the given ID.
+// Outlets are created for DigitalOutput pins, Inlets for DigitalInput pins,
+// Jacks for PWM pins, and AnalogInputs for AnalogInput pins.
+// Errors for individual connectors are logged but do not abort provisioning.
+func (dm *DeviceManager) Provision(driverID string) error {
+	dr, err := dm.drivers.Get(driverID)
+	if err != nil {
+		return fmt.Errorf("provision: driver %s not found: %w", driverID, err)
+	}
+	driverName := dr.Name
+
+	for capStr, pins := range dr.PinMap {
+		switch capStr {
+		case hal.DigitalOutput.String():
+			for _, pin := range pins {
+				o := connectors.Outlet{
+					Name:   fmt.Sprintf("%s-%d", driverName, pin),
+					Driver: driverID,
+					Pin:    pin,
+				}
+				if err := dm.outlets.Create(o); err != nil {
+					log.Printf("device-manager: provision outlet pin %d for driver %s: %v", pin, driverName, err)
+				}
+			}
+		case hal.DigitalInput.String():
+			for _, pin := range pins {
+				i := connectors.Inlet{
+					Name:   fmt.Sprintf("%s-%d", driverName, pin),
+					Driver: driverID,
+					Pin:    pin,
+				}
+				if err := dm.inlets.Create(i); err != nil {
+					log.Printf("device-manager: provision inlet pin %d for driver %s: %v", pin, driverName, err)
+				}
+			}
+		case hal.PWM.String():
+			for _, pin := range pins {
+				j := connectors.Jack{
+					Name:   fmt.Sprintf("%s-%d", driverName, pin),
+					Driver: driverID,
+					Pins:   []int{pin},
+				}
+				if err := dm.jacks.Create(j); err != nil {
+					log.Printf("device-manager: provision jack pin %d for driver %s: %v", pin, driverName, err)
+				}
+			}
+		case hal.AnalogInput.String():
+			for _, pin := range pins {
+				ai := connectors.AnalogInput{
+					Name:   fmt.Sprintf("%s-%d", driverName, pin),
+					Driver: driverID,
+					Pin:    pin,
+				}
+				if err := dm.ais.Create(ai); err != nil {
+					log.Printf("device-manager: provision analog input pin %d for driver %s: %v", pin, driverName, err)
+				}
+			}
+		}
+	}
+	return nil
+}
+
 func (dm *DeviceManager) LoadAPI(r *mux.Router) {
 	dm.outlets.LoadAPI(r)
 	dm.inlets.LoadAPI(r)
 	dm.jacks.LoadAPI(r)
 	dm.ais.LoadAPI(r)
 	dm.drivers.LoadAPI(r)
+	r.HandleFunc("/api/drivers/{id}/provision", dm.provisionHandler).Methods("POST")
+}
+
+func (dm *DeviceManager) provisionHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if err := dm.Provision(id); err != nil {
+		utils.ErrorResponse(http.StatusInternalServerError, "Failed to provision. Error: "+err.Error(), w)
+		return
+	}
 }
 
 func (dm *DeviceManager) Close() error {
