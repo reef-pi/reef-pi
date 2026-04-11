@@ -80,6 +80,7 @@ ato:control_target,Objetivo
 ato:controlequipment,Equipo
 ato:controlmacro,Macro
 ato:controlnothing,Nada
+ato:debounce,Debounce
 ato:disable_on_alert,Desactivar si ocurre la alerta
 ato:reset_usage,
 ato:title_delete,
@@ -123,7 +124,6 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
-configuration:errors:alert,Alert
 configuration:admin:db_export,Descargue Base de Datos
 configuration:admin:db_import,Importar una Base de Datos
 configuration:admin:poweroff,Apagar
@@ -135,9 +135,12 @@ configuration:authentication:error_pass,Proporcione una contraseña
 configuration:authentication:error_user,Proporcione un nombre de usuario
 configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
+configuration:drivers:provision,
+configuration:drivers:provision_title,
 configuration:drivers:title_delete,
 configuration:drivers:type,
 configuration:drivers:warn_delete,
+configuration:errors:alert,Alert
 configuration:settings:address,Direccion
 configuration:settings:alert_health_check,Alerta de estado
 configuration:settings:brightness,
@@ -148,16 +151,16 @@ configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
 configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Memoria Maxima
-configuration:settings:report_enable,Enable periodic status reports
-configuration:settings:report_schedule,Report schedule (cron)
-configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:name,Nombre
-configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
+configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_interface_required,La interfaz de red es requerida
 configuration:settings:notification,Notificacion
 configuration:settings:pprof,Activar perfilado
 configuration:settings:prometheus,Activar prometheus
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frecuencia
 configuration:settings:use_https,Usar HTTPS
 configuration:tab:about,Acerca De
@@ -207,8 +210,8 @@ equipment:chart:ctrlpanel,Equipo(Panel de Interruptores)
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
-equipment:sort_on_first,On first
 equipment:sort_off_first,Off first
+equipment:sort_on_first,On first
 equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,Conexion Perdida
@@ -223,11 +226,11 @@ function:equipment,equipo
 function:lightings,luz
 function:macro,macro
 function:phprobes,pH
+function:pwm,PWM
 function:reminder,
 function:subsystem,
 function:temperature,temperatura
 function:timers,cronómetro
-function:pwm,PWM
 function:wait,
 health_chart:cpu_memory,Procesador/Memoria
 health_chart:current,
@@ -256,6 +259,7 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,Nombre del Canal
 lighting:chart_color,Color
+lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
 lighting:mode_mixed,
@@ -270,7 +274,10 @@ log:type,Tipo
 macro:action,
 macro:alert:message,
 macro:alert:title,
+macro:drag_to_reorder,Drag to reorder
 macro:one_step_required,
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 macro:reversible,
 macro:revert,
 macro:reverting,
@@ -283,8 +290,6 @@ macro:turn_off,Apagar
 macro:turn_on,Encender
 macro:wait:duration,
 macro:warn_delete,
-macro:pwm:jack,Jack
-macro:pwm:value,Value (%)
 ph:alert_above,Alerta Sobre
 ph:alert_below,Alerta Bajo
 ph:calibrate,Calibrar
@@ -348,8 +353,8 @@ temperature:controlequipment,Equipo
 temperature:controlmacro,Macro
 temperature:controlnothing,Nada
 temperature:current_reading,Lectura Actual
-temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Calentador/Enfriador
 temperature:hysteresis,Histéresis
 temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
@@ -368,7 +373,9 @@ timers:and_then,Luego
 timers:duration,
 timers:function,Funcion
 timers:message,Mensaje
+timers:reverse,
 timers:revert,
+timers:run,
 timers:sec,seg
 timers:stay_off,Mantener Apagado
 timers:stay_on,Mantener Encendido
@@ -378,8 +385,6 @@ timers:turn_back_off,Regresar a Apagado
 timers:turn_back_on,Regresar a Encendido
 timers:turn_off,Apagar
 timers:turn_on,Encender
-timers:run,
-timers:reverse,
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
@@ -397,6 +402,3 @@ validation:name_required,
 validation:number_required,
 validation:selection_required,
 validation:time_required,
-ato:debounce,Debounce
-macro:drag_to_reorder,Drag to reorder
-lighting:jack,Jack

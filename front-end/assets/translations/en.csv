@@ -80,6 +80,7 @@ ato:control_target,Target
 ato:controlequipment,Equipment
 ato:controlmacro,Macro
 ato:controlnothing,Nothing
+ato:debounce,Debounce
 ato:disable_on_alert,Disable on alert
 ato:reset_usage,Reset
 ato:title_delete,Delete {{name}} ?
@@ -123,7 +124,6 @@ configuration:about:status,Status
 configuration:about:uptime,Uptime
 configuration:about:version,Version
 configuration:about:website,Website
-configuration:errors:alert,Alert
 configuration:admin:db_export,Download current database
 configuration:admin:db_import,Import database
 configuration:admin:poweroff,Power Off
@@ -135,9 +135,12 @@ configuration:authentication:error_pass,You Must Provide a password
 configuration:authentication:error_user,You Must Provide a username
 configuration:connectors:title_delete,Delete {{name}} ?
 configuration:connectors:warn_delete,This action will delete connector {{name}}
+configuration:drivers:provision,Provision
+configuration:drivers:provision_title,Auto-create outlets/inlets/jacks for all pins of this driver
 configuration:drivers:title_delete,Remove driver {{name}}?
 configuration:drivers:type,Type
 configuration:drivers:warn_delete,This action will remove the driver for {{name}}
+configuration:errors:alert,Alert
 configuration:settings:address,Address
 configuration:settings:alert_health_check,Alert on health check
 configuration:settings:brightness,Brightness
@@ -148,16 +151,16 @@ configuration:settings:interface,Interface
 configuration:settings:max_cpu,Max CPU
 configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Max memory
-configuration:settings:report_enable,Enable periodic status reports
-configuration:settings:report_schedule,Report schedule (cron)
-configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:name,Name
-configuration:settings:network_address_required,Network address is required
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
+configuration:settings:network_address_required,Network address is required
 configuration:settings:network_interface_required,Network Interface is required
 configuration:settings:notification,Notification
 configuration:settings:pprof,Enable profiling
 configuration:settings:prometheus,Enable Prometheus
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:rpi_pwm_freq,Rpi Pwm Frequency
 configuration:settings:use_https,Use HTTPS
 configuration:tab:about,About
@@ -207,8 +210,8 @@ equipment:chart:ctrlpanel,Equipment(Switch Panel)
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
-equipment:sort_on_first,On first
 equipment:sort_off_first,Off first
+equipment:sort_on_first,On first
 equipment:title_delete,Delete {{name}} ?
 equipment:warn_delete,This action will delete equipment {{name}}
 fatal_error:connection_lost,Connection Lost
@@ -223,11 +226,11 @@ function:equipment,equipment
 function:lightings,light
 function:macro,macro
 function:phprobes,pH probe
+function:pwm,PWM
 function:reminder,email reminder
 function:subsystem,subsystem
 function:temperature,temperature
 function:timers,timer
-function:pwm,PWM
 function:wait,wait
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,current
@@ -256,6 +259,7 @@ lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel_name,Channel Name
 lighting:chart_color,Color
+lighting:jack,Jack
 lighting:mode_auto,Auto
 lighting:mode_manual,Manual
 lighting:mode_mixed,Mixed
@@ -270,7 +274,10 @@ log:type,Type
 macro:action,Action
 macro:alert:message,message
 macro:alert:title,title
+macro:drag_to_reorder,Drag to reorder
 macro:one_step_required,At least one step is required!
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 macro:reversible,Reversible
 macro:revert,Revert
 macro:reverting,Reverting
@@ -283,8 +290,6 @@ macro:turn_off,Turn Off
 macro:turn_on,Turn On
 macro:wait:duration,Duration
 macro:warn_delete,This action will delete macro {{name}}
-macro:pwm:jack,Jack
-macro:pwm:value,Value (%)
 ph:alert_above,Alert Above
 ph:alert_below,Alert Below
 ph:calibrate,Calibrate
@@ -348,8 +353,8 @@ temperature:controlequipment, Equipment
 temperature:controlmacro, Macro
 temperature:controlnothing, Nothing
 temperature:current_reading, Current Reading
-temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Heater/Cooler
 temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
@@ -368,7 +373,9 @@ timers:and_then,And Then
 timers:duration,Duration
 timers:function,Function
 timers:message,Message
+timers:reverse,Reverse
 timers:revert,Revert
+timers:run,Run
 timers:sec,sec
 timers:stay_off,Stay off
 timers:stay_on,Stay on
@@ -378,8 +385,6 @@ timers:turn_back_off,Turn back off
 timers:turn_back_on,Turn back on
 timers:turn_off,Turn Off
 timers:turn_on,Turn On
-timers:run,Run
-timers:reverse,Reverse
 timers:warn_delete,This action will delete timer {{name}}
 validation:a_must_be_greater_than_b,{{a}} must be greater than {{b}}
 validation:a_must_be_less_than_b,{{a}} must be less than {{b}}
@@ -397,6 +402,3 @@ validation:name_required,Name is required
 validation:number_required,A number is required
 validation:selection_required,Select one entry
 validation:time_required,Enter a time as HH:mm:ss
-ato:debounce,Debounce
-macro:drag_to_reorder,Drag to reorder
-lighting:jack,Jack

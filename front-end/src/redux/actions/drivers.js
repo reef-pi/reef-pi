@@ -56,3 +56,12 @@ export const driverOptionsLoaded = (options) => {
     payload: options
   })
 }
+
+export const provisionDriver = (id) => {
+  return (
+    reduxPost({
+      url: '/api/drivers/' + id + '/provision',
+      data: {},
+      success: fetchDrivers
+    }))
+}
