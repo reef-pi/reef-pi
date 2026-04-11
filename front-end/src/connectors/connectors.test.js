@@ -9,6 +9,10 @@ import InletSelector from './inlet_selector'
 import Jacks from './jacks'
 import Jack from './jack'
 import Outlets from './outlets'
+import Pin from './pin'
+import AnalogInput from './analog_input'
+import AnalogInputs from './analog_inputs'
+import { byCapability } from './driver_filter'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -163,5 +167,113 @@ describe('Connectors', () => {
     m.find('.custom-select').simulate('change', { target: { value: '1' } })
     m.find('.outlet-reverse').simulate('change')
     m.find('.edit-outlet').simulate('click')
+  })
+
+  it('byCapability returns true for matching capability', () => {
+    const driver = { id: '1', pinmap: { 'analog-input': [0, 1, 2], 'digital-output': [3, 4] } }
+    expect(byCapability('analog-input')(driver)).toBe(true)
+    expect(byCapability('digital-output')(driver)).toBe(true)
+    expect(byCapability('pwm')(driver)).toBe(false)
+  })
+
+  it('byCapability returns false for driver without pinmap', () => {
+    const driver = { id: '1' }
+    expect(byCapability('analog-input')(driver)).toBe(false)
+  })
+
+  it('<Pin /> renders select with options for driver pins', () => {
+    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
+    const m = shallow(<Pin driver={driver} update={() => {}} type='digital-output' current={1} />)
+    expect(m.find('select').length).toBe(1)
+    expect(m.find('option').length).toBe(3)
+  })
+
+  it('<Pin /> calls update on change', () => {
+    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
+    const update = jest.fn()
+    const m = shallow(<Pin driver={driver} update={update} type='digital-output' current={1} />)
+    m.find('select').simulate('change', { target: { value: '2' } })
+    expect(update).toHaveBeenCalledWith(2)
+  })
+
+  it('<Pin /> renders empty for undefined driver', () => {
+    const m = shallow(<Pin driver={undefined} update={() => {}} type='digital-output' />)
+    expect(m.find('option').length).toBe(0)
+  })
+
+  it('<AnalogInput /> renders view mode by default', () => {
+    const m = shallow(
+      <AnalogInput
+        name='pH Sensor'
+        pin={0}
+        analog_input_id='1'
+        driver={stockDrivers[0]}
+        drivers={stockDrivers}
+        update={() => {}}
+        remove={() => {}}
+      />
+    )
+    expect(m.find('.analog_input-edit').length).toBe(1)
+  })
+
+  it('<AnalogInput /> toggles to edit and saves', () => {
+    const update = jest.fn()
+    const m = shallow(
+      <AnalogInput
+        name='pH Sensor'
+        pin={0}
+        analog_input_id='1'
+        driver={stockDrivers[0]}
+        drivers={stockDrivers}
+        update={update}
+        remove={() => {}}
+      />
+    )
+    // click edit
+    m.find('.analog_input-edit').simulate('click')
+    expect(m.instance().state.edit).toBe(true)
+    // change name
+    m.find('.analog_input-name').simulate('change', { target: { value: 'New Name' } })
+    expect(m.instance().state.name).toBe('New Name')
+    // save
+    m.find('.analog_input-edit').simulate('click')
+    expect(update).toHaveBeenCalled()
+    expect(m.instance().state.edit).toBe(false)
+  })
+
+  it('<AnalogInput /> handleRemove calls remove', () => {
+    const remove = jest.fn()
+    const m = shallow(
+      <AnalogInput
+        name='Test'
+        pin={0}
+        analog_input_id='1'
+        driver={stockDrivers[0]}
+        drivers={stockDrivers}
+        update={() => {}}
+        remove={remove}
+      />
+    )
+    m.find('.analog_input-remove').simulate('click')
+    expect(remove).toHaveBeenCalled()
+  })
+
+  it('<AnalogInputs /> renders and adds analog input', () => {
+    const aiDrivers = [
+      { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } }
+    ]
+    const state = {
+      analog_inputs: [{ id: '1', name: 'pH', pin: 0, driver: 'ads' }],
+      drivers: aiDrivers
+    }
+    const wrapper = mount(
+      <Provider store={mockStore(state)}>
+        <AnalogInputs />
+      </Provider>
+    )
+    wrapper.find('#add_analog_input').simulate('click')
+    wrapper.find('#analog_inputName').simulate('change', { target: { value: 'New Sensor' } })
+    wrapper.find('#createAnalogInput').simulate('click')
+    expect(wrapper.find(AnalogInput).length).toBe(1)
   })
 })
