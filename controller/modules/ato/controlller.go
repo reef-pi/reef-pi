@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
@@ -16,13 +17,14 @@ const Bucket = storage.ATOBucket
 const UsageBucket = storage.ATOUsageBucket
 
 type Controller struct {
-	statsMgr telemetry.StatsManager
-	devMode  bool
-	quitters map[string]chan struct{}
-	wg       sync.WaitGroup
-	mu       *sync.Mutex
-	inlets   *connectors.Inlets
-	c        controller.Controller
+	statsMgr   telemetry.StatsManager
+	devMode    bool
+	quitters   map[string]chan struct{}
+	wg         sync.WaitGroup
+	mu         *sync.Mutex
+	inlets     *connectors.Inlets
+	c          controller.Controller
+	lowSince   map[string]*time.Time
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -33,6 +35,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		quitters: make(map[string]chan struct{}),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
+		lowSince: make(map[string]*time.Time),
 	}
 	return con, nil
 }

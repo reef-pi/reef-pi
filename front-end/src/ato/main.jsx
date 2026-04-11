@@ -35,6 +35,7 @@ class main extends React.Component {
       enable: values.enable,
       inlet: values.inlet,
       period: parseInt(values.period),
+      debounce: parseInt(values.debounce) || 0,
       control: (values.control === 'macro' || values.control === 'equipment'),
       pump: values.pump,
       disable_on_alert: values.disable_on_alert,
