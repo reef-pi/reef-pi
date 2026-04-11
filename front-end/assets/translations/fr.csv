@@ -394,3 +394,4 @@ validation:name_required,
 validation:number_required,
 validation:selection_required,
 validation:time_required,
+lighting:jack,Jack
