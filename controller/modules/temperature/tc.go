@@ -41,6 +41,7 @@ type TC struct {
 	FailSafe     bool          `json:"fail_safe"`
 	Notify       Notify        `json:"notify"`
 	Sensor       string        `json:"sensor"`
+	AnalogInput  string        `json:"analog_input"`
 	Fahrenheit   bool          `json:"fahrenheit"`
 	IsMacro      bool          `json:"is_macro"`
 	OneShot      bool          `json:"one_shot"`

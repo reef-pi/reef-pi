@@ -360,6 +360,7 @@ temperature:hysteresis,
 temperature:hysteresis_less_than,
 temperature:lower_function,下层功能
 temperature:lower_threshold,下阈值
+temperature:analog_input,模拟输入
 temperature:sensor,传感器
 temperature:temperature,温度
 temperature:unit,单位

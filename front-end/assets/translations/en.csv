@@ -360,6 +360,7 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
+temperature:analog_input,Analog Input
 temperature:sensor,Sensor
 temperature:temperature,Temperature
 temperature:unit,Unit

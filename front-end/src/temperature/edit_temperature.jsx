@@ -15,6 +15,7 @@ const EditTemperature = ({
   errors,
   touched,
   sensors,
+  analogInputs,
   equipment,
   macros,
   submitForm,
@@ -83,6 +84,17 @@ const EditTemperature = ({
     })
   }
 
+  const analogInputOptions = () => {
+    if (!analogInputs) return null
+    return analogInputs.map(item => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      )
+    })
+  }
+
   const controlOptions = () => {
     let opts = []
 
@@ -123,7 +135,7 @@ const EditTemperature = ({
               <Field
                 name='sensor'
                 component='select'
-                disabled={readOnly}
+                disabled={readOnly || values.analog_input !== ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('sensor', touched, errors)
                 })}
@@ -134,6 +146,26 @@ const EditTemperature = ({
                 {sensorOptions()}
               </Field>
               <ErrorFor errors={errors} touched={touched} name='sensor' />
+            </div>
+          </div>
+
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='analog_input'>{i18next.t('temperature:analog_input')}</label>
+              <Field
+                name='analog_input'
+                component='select'
+                disabled={readOnly || values.sensor !== ''}
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('analog_input', touched, errors)
+                })}
+              >
+                <option value=''>
+                  {i18next.t('none')}
+                </option>
+                {analogInputOptions()}
+              </Field>
+              <ErrorFor errors={errors} touched={touched} name='analog_input' />
             </div>
           </div>
 
@@ -489,6 +521,7 @@ EditTemperature.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   sensors: PropTypes.array,
+  analogInputs: PropTypes.array,
   handleBlur: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,

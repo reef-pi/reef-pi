@@ -360,6 +360,7 @@ temperature:hysteresis,hysteresis
 temperature:hysteresis_less_than,hysteresis menos de 
 temperature:lower_function,função caso seja menor
 temperature:lower_threshold,Abaixo do desejado
+temperature:analog_input,Entrada Analogica
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades

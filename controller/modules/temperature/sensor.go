@@ -15,16 +15,27 @@ import (
 )
 
 func (c *Controller) Read(tc *TC) (float64, error) {
-	log.Println("Reading temperature from device:", tc.Sensor)
 	if c.devMode {
 		log.Println("Temperature controller is running in dev mode, skipping sensor reading.")
 		if tc.Fahrenheit {
 			return utils.RoundToTwoDecimal(78.0 + (3 * rand.Float64())), nil
 		}
-
 		return utils.RoundToTwoDecimal(24.4 + (1.5 * rand.Float64())), nil
 	}
 
+	if tc.AnalogInput != "" {
+		log.Println("Reading temperature from analog input:", tc.AnalogInput)
+		v, err := c.ais.Read(tc.AnalogInput)
+		if err != nil {
+			return -1, err
+		}
+		if tc.Fahrenheit {
+			v = ((v * 9.0) / 5.0) + 32.0
+		}
+		return utils.RoundToTwoDecimal(v), nil
+	}
+
+	log.Println("Reading temperature from device:", tc.Sensor)
 	var v float64
 	var err error
 

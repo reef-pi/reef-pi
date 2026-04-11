@@ -19,12 +19,15 @@ import (
 	"github.com/reef-pi/drivers/tplink"
 	"github.com/reef-pi/hal"
 	rpihal "github.com/reef-pi/rpi/hal"
+
+	"github.com/reef-pi/reef-pi/controller/device_manager/drivers/ds18b20"
 )
 
 var driversMap = map[string]hal.DriverFactory{
 	"ads1015":      ads1x15.Ads1015Factory(),
 	"ads1115":      ads1x15.Ads1115Factory(),
 	"dli-wpsp":     dli.Adapter(),
+	"ds18b20":      ds18b20.Factory(),
 	"esp32":        esp32.Factory(),
 	"file-analog":  file.AnalogFactory(),
 	"file-digital": file.DigitalFactory(),
