@@ -274,6 +274,7 @@ log:type,Typ
 macro:action,Aktion
 macro:alert:message,Nachricht
 macro:alert:title,Titel
+macro:drag_to_reorder,Drag to reorder
 macro:one_step_required,Mindestens ein Schritt ist erforderlich!
 macro:pwm:jack,Jack
 macro:pwm:value,Value (%)
