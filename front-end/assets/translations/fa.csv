@@ -80,6 +80,7 @@ ato:control_target,
 ato:controlequipment,
 ato:controlmacro,
 ato:controlnothing,
+ato:debounce,Debounce
 ato:disable_on_alert,
 ato:reset_usage,
 ato:title_delete,
@@ -123,7 +124,6 @@ configuration:about:status,پیکربندی:در باره: وضعیت
 configuration:about:uptime,پیکربندی:در باره: زمان فعلی
 configuration:about:version,پیکربندی:در باره: نسخه
 configuration:about:website,پیکربندی:در باره: سایت اینترنتی
-configuration:errors:alert,Alert
 configuration:admin:db_export,
 configuration:admin:db_import,
 configuration:admin:poweroff,پیکربندی:مدیر: خاموش
@@ -135,9 +135,12 @@ configuration:authentication:error_pass,پیکربندی: احراز هویت:خ
 configuration:authentication:error_user,پیکربندی: احراز هویت :خطای کاربر
 configuration:connectors:title_delete,
 configuration:connectors:warn_delete,
+configuration:drivers:provision,
+configuration:drivers:provision_title,
 configuration:drivers:title_delete,
 configuration:drivers:type,
 configuration:drivers:warn_delete,
+configuration:errors:alert,Alert
 configuration:settings:address,
 configuration:settings:alert_health_check,
 configuration:settings:brightness,
@@ -148,16 +151,16 @@ configuration:settings:interface,
 configuration:settings:max_cpu,
 configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,
-configuration:settings:report_enable,Enable periodic status reports
-configuration:settings:report_schedule,Report schedule (cron)
-configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:name,
-configuration:settings:network_address_required,
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
+configuration:settings:network_address_required,
 configuration:settings:network_interface_required,
 configuration:settings:notification,
 configuration:settings:pprof,
 configuration:settings:prometheus,
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:rpi_pwm_freq,
 configuration:settings:use_https,
 configuration:tab:about,پیکربندی:برگه: در باره
@@ -207,8 +210,8 @@ equipment:chart:ctrlpanel,
 equipment:sort,Sort
 equipment:sort_name_az,Name (A→Z)
 equipment:sort_name_za,Name (Z→A)
-equipment:sort_on_first,On first
 equipment:sort_off_first,Off first
+equipment:sort_on_first,On first
 equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,
@@ -223,11 +226,11 @@ function:equipment,
 function:lightings,
 function:macro,
 function:phprobes,
+function:pwm,PWM
 function:reminder,
 function:subsystem,
 function:temperature,
 function:timers,
-function:pwm,PWM
 function:wait,
 health_chart:cpu_memory,
 health_chart:current,
@@ -256,6 +259,7 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
 lighting:chart_color,
+lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
 lighting:mode_mixed,
@@ -271,6 +275,8 @@ macro:action,
 macro:alert:message,
 macro:alert:title,
 macro:one_step_required,
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 macro:reversible,
 macro:revert,
 macro:reverting,
@@ -283,8 +289,6 @@ macro:turn_off,
 macro:turn_on,
 macro:wait:duration,
 macro:warn_delete,
-macro:pwm:jack,Jack
-macro:pwm:value,Value (%)
 ph:alert_above,
 ph:alert_below,
 ph:calibrate,
@@ -348,8 +352,8 @@ temperature:controlequipment,
 temperature:controlmacro,
 temperature:controlnothing,
 temperature:current_reading,
-temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,
 temperature:hysteresis,
 temperature:hysteresis_less_than,
@@ -368,7 +372,9 @@ timers:and_then,
 timers:duration,
 timers:function,
 timers:message,
+timers:reverse,
 timers:revert,
+timers:run,
 timers:sec,
 timers:stay_off,
 timers:stay_on,
@@ -378,8 +384,6 @@ timers:turn_back_off,
 timers:turn_back_on,
 timers:turn_off,
 timers:turn_on,
-timers:run,
-timers:reverse,
 timers:warn_delete,
 validation:a_must_be_greater_than_b,
 validation:a_must_be_less_than_b,
@@ -397,5 +401,3 @@ validation:name_required,
 validation:number_required,
 validation:selection_required,
 validation:time_required,
-ato:debounce,Debounce
-lighting:jack,Jack
