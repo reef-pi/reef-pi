@@ -1,0 +1,27 @@
+# Global fallback
+* @ranjib
+
+# Backend
+/commands/ @ranjib
+/controller/ @ranjib
+/go.mod @ranjib
+/go.sum @ranjib
+
+# Frontend
+/front-end/ @ranjib
+/package.json @ranjib
+/yarn.lock @ranjib
+/webpack.config.js @ranjib
+
+# CI and release automation
+/.github/ @ranjib
+/Makefile @ranjib
+/Dockerfile @ranjib
+/build/ @ranjib
+
+# Documentation and API definitions
+/docs/ @ranjib
+/README.md @ranjib
+/openapi.yaml @ranjib
+/swagger.json @ranjib
+/swagger.yml @ranjib
