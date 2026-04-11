@@ -3,6 +3,7 @@ package telemetry
 import (
 	"testing"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
@@ -106,6 +107,40 @@ func TestEmitMQTTWithoutClient(t *testing.T) {
 	if err := tele.EmitMQTT("topic", 1.0); err == nil {
 		t.Error("Expected error when MQTT client is not initialized")
 	}
+}
+
+func TestEmitMetricWithPrometheus(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	tele := TestTelemetry(store)
+	tele.config.Prometheus = true
+	tele.pMs = make(map[string]prometheus.Gauge)
+
+	// First call registers the gauge; second call reuses it
+	tele.EmitMetric("test", "prom_metric", 1.0)
+	tele.EmitMetric("test", "prom_metric", 2.0)
+}
+
+func TestApplyConfig(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	tele := TestTelemetry(store)
+	// Apply a config with Notify enabled — exercises the non-noop mailer path
+	c := DefaultTelemetryConfig
+	c.Notify = true
+	tele.applyConfig(c)
+
+	// Apply a config with Notify disabled
+	c.Notify = false
+	tele.applyConfig(c)
 }
 
 func TestSanitizePrometheusMetricName(t *testing.T) {

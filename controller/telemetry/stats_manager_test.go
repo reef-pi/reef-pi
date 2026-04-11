@@ -3,6 +3,7 @@ package telemetry
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
@@ -120,5 +121,92 @@ func TestStatsManagerLoad(t *testing.T) {
 	})
 	if err == nil {
 		t.Error("Expected error loading non-existent stats, got nil")
+	}
+}
+
+func TestStatsManagerLoadSuccess(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	m := newTestMgr(store)
+	// Write some metrics first so Load can read them back
+	m.Initialize("sensor-load")
+	m.Update("sensor-load", testMetric{V: 1.0})
+	m.Update("sensor-load", testMetric{V: 2.0})
+	if err := m.Save("sensor-load"); err != nil {
+		t.Fatal("Save failed:", err)
+	}
+
+	// Load them back into a fresh manager
+	m2 := newTestMgr(store)
+	fn := func(raw json.RawMessage) interface{} {
+		var tm testMetric
+		json.Unmarshal(raw, &tm)
+		return tm
+	}
+	if err := m2.Load("sensor-load", fn); err != nil {
+		t.Error("Load failed:", err)
+	}
+	if !m2.IsLoaded("sensor-load") {
+		t.Error("Expected sensor-load to be loaded after Load")
+	}
+}
+
+func TestStatsManagerUpdateRollupSameHour(t *testing.T) {
+	// Use a metric whose Rollup always returns moved=false (same hour)
+	type sameHourMetric struct {
+		V float64
+		T TeleTime
+	}
+	type shmWrapper struct {
+		sameHourMetric
+	}
+	// Use the existing testMetric which returns moved=true — test the
+	// opposite by pre-populating with a metric that rolls up in-place
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	// inPlaceMetric always rolls up without moving (moved=false)
+	type inPlaceMetric struct {
+		V float64
+		T TeleTime
+	}
+	_ = inPlaceMetric{}
+
+	m := newTestMgr(store)
+	m.Initialize("sensor-rollup")
+
+	// Push enough metrics to trigger the Rollup path via testMetric (moved=true path already exercised)
+	// Now test with a custom metric type that rolls up in-place (same hour — moved=false)
+	// We simulate this by using HealthMetric same-hour rollup
+	now := TeleTime(time.Now())
+	hm1 := HealthMetric{Load5: 1.0, UsedMemory: 10.0, len: 1, loadSum: 1.0, memorySum: 10.0, Time: now}
+	hm2 := HealthMetric{Load5: 2.0, UsedMemory: 20.0, len: 1, loadSum: 2.0, memorySum: 20.0, Time: now}
+
+	store.CreateBucket("health-rollup-test")
+	hMgr := &mgr{
+		inMemory:        make(map[string]Stats),
+		bucket:          "health-rollup-test",
+		store:           store,
+		CurrentLimit:    10,
+		HistoricalLimit: 10,
+	}
+	hMgr.Initialize("hm")
+	hMgr.Update("hm", hm1)
+	// Second update with same hour — Rollup returns moved=false
+	hMgr.Update("hm", hm2)
+
+	resp, err := hMgr.Get("hm")
+	if err != nil {
+		t.Error("Get failed:", err)
+	}
+	if len(resp.Current) == 0 {
+		t.Error("Expected at least one current reading after rollup")
 	}
 }
