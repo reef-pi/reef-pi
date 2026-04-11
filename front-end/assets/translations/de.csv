@@ -345,6 +345,7 @@ temperature:controlequipment,Gerät schalten
 temperature:controlmacro,Makro ausführen
 temperature:controlnothing,-keine Steuerung-
 temperature:current_reading,Messwert
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heizung/Kühler
 temperature:hysteresis,Hysterese

@@ -345,6 +345,7 @@ temperature:controlequipment,
 temperature:controlmacro,
 temperature:controlnothing,
 temperature:current_reading,
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,
 temperature:heater_cooler,
 temperature:hysteresis,

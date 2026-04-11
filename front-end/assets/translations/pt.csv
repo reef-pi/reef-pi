@@ -345,6 +345,7 @@ temperature:controlequipment,controlar equipamento
 temperature:controlmacro,controlar macro
 temperature:controlnothing,não controlar
 temperature:current_reading,Leitura atual
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
 temperature:hysteresis,hysteresis

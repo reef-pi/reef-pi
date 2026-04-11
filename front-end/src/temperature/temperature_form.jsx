@@ -26,6 +26,7 @@ const TemperatureForm = withFormik({
       alerts: (tc.notify && tc.notify.enable) || false,
       minAlert: (tc.notify && tc.notify.min) || '77',
       maxAlert: (tc.notify && tc.notify.max) || '81',
+      fail_safe: tc.fail_safe || false,
       heater: tc.heater || '',
       min: tc.min || '',
       hysteresis: tc.hysteresis || 0,

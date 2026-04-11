@@ -345,6 +345,7 @@ temperature:controlequipment,设备
 temperature:controlmacro,宏
 temperature:controlnothing,
 temperature:current_reading,当前读数
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,华氏的
 temperature:heater_cooler,加热器/冷水机
 temperature:hysteresis,
