@@ -214,14 +214,19 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 				if err != nil {
 					return err
 				}
-				if reading == 1 {
+				// With pump control: disable once tank is full (reading==1)
+				// Without pump control (Nothing): disable once low level detected (reading==0)
+				if (a.Control && reading == 1) || (!a.Control && reading == 0) {
 					a.Enable = false
 					return c.Update(a.ID, a)
 				}
 			}
 		case <-quit:
-			// always turn off pump befor quitting
-			return c.Control(a, 1)
+			// turn off pump on quit only when a pump is configured
+			if a.Control && a.Pump != "" {
+				return c.Control(a, 1)
+			}
+			return nil
 		}
 	}
 }
