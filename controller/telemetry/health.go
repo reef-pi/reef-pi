@@ -6,6 +6,8 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -44,10 +46,12 @@ type hc struct {
 type HealthMetric struct {
 	Load5        float64  `json:"cpu"`
 	UsedMemory   float64  `json:"memory"`
+	CPUTemp      float64  `json:"cpu_temp"`
 	Time         TeleTime `json:"time"`
 	len          int
 	loadSum      float64
 	memorySum    float64
+	cpuTempSum   float64
 	UnderVoltage float64 `json:"throttle"`
 }
 
@@ -58,16 +62,20 @@ func (m1 HealthMetric) Rollup(mx Metric) (Metric, bool) {
 			Time:         m1.Time,
 			Load5:        m1.Load5,
 			UsedMemory:   m1.UsedMemory,
+			CPUTemp:      m1.CPUTemp,
 			len:          m1.len,
 			loadSum:      m1.loadSum,
 			memorySum:    m1.memorySum,
+			cpuTempSum:   m1.cpuTempSum,
 			UnderVoltage: m2.UnderVoltage,
 		}
 		m.loadSum += m2.Load5
 		m.memorySum += m2.UsedMemory
+		m.cpuTempSum += m2.CPUTemp
 		m.len += 1
 		m.Load5 = utils.RoundToTwoDecimal(m.loadSum / float64(m.len))
 		m.UsedMemory = utils.RoundToTwoDecimal(m.memorySum / float64(m.len))
+		m.CPUTemp = utils.RoundToTwoDecimal(m.cpuTempSum / float64(m.len))
 		if m.UnderVoltage == 0 {
 			m.UnderVoltage = m2.UnderVoltage
 		}
@@ -97,6 +105,18 @@ func NewHealthChecker(b string, i time.Duration, notify settings.HealthCheckNoti
 	return h
 }
 
+func readCPUTemp() (float64, error) {
+	data, err := os.ReadFile("/sys/class/thermal/thermal_zone0/temp")
+	if err != nil {
+		return 0, err
+	}
+	millideg, err := strconv.ParseFloat(strings.TrimSpace(string(data)), 64)
+	if err != nil {
+		return 0, err
+	}
+	return utils.RoundToTwoDecimal(millideg / 1000.0), nil
+}
+
 func (h *hc) Check() {
 	loadStat, err := load.Avg()
 	if err != nil {
@@ -119,6 +139,16 @@ func (h *hc) Check() {
 		memorySum:  usedMemory,
 		Time:       TeleTime(time.Now()),
 	}
+
+	cpuTemp, err := readCPUTemp()
+	if err != nil {
+		log.Println("WARNING: Failed to read CPU temperature. Error:", err)
+	} else {
+		metric.CPUTemp = cpuTemp
+		metric.cpuTempSum = cpuTemp
+		h.t.EmitMetric("system", "cpu-temp", cpuTemp)
+	}
+
 	if h.isRaspberryPi {
 		throttles, err := VcgencmdGetThrottled()
 		if err != nil {
@@ -135,13 +165,13 @@ func (h *hc) Check() {
 
 	h.t.EmitMetric("system", "mem-used", usedMemory)
 	h.t.EmitMetric("system", "under-voltage", metric.UnderVoltage)
-	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5)
+	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5, " CPUTemp:", metric.CPUTemp)
 	h.statsMgr.Update(HealthStatsKey, metric)
 	h.lastMetric = metric
-	h.NotifyIfNeeded(usedMemory, loadStat.Load5)
+	h.NotifyIfNeeded(usedMemory, loadStat.Load5, metric.CPUTemp)
 }
 
-func (h *hc) NotifyIfNeeded(memory, load float64) {
+func (h *hc) NotifyIfNeeded(memory, load, cpuTemp float64) {
 	if h.Notify.Enable {
 		if load >= h.Notify.MaxCPU {
 			subject := "CPU Load is high"
@@ -155,6 +185,12 @@ func (h *hc) NotifyIfNeeded(memory, load float64) {
 			body := fmt.Sprintf(format, memory, h.Notify.MaxMemory)
 			h.t.Alert(subject, body)
 		}
+		if h.Notify.MaxCPUTemp > 0 && cpuTemp >= h.Notify.MaxCPUTemp {
+			subject := "CPU temperature is high"
+			format := "Current CPU temperature %f°C is above threshold ( %f°C )"
+			body := fmt.Sprintf(format, cpuTemp, h.Notify.MaxCPUTemp)
+			h.t.Alert(subject, body)
+		}
 	}
 }
 
@@ -162,8 +198,8 @@ func (h *hc) sendReport() {
 	m := h.lastMetric
 	subject := fmt.Sprintf("[reef-pi] Status Report - %s", time.Now().Format("Jan 2 15:04"))
 	body := fmt.Sprintf(
-		"reef-pi Status Report\n\nCPU Load (5m avg): %.2f\nMemory used: %.2f%%\nUnder-voltage events: %.0f\nTime: %s",
-		m.Load5, m.UsedMemory, m.UnderVoltage, time.Now().Format(time.RFC1123),
+		"reef-pi Status Report\n\nCPU Load (5m avg): %.2f\nMemory used: %.2f%%\nCPU Temp: %.2f°C\nUnder-voltage events: %.0f\nTime: %s",
+		m.Load5, m.UsedMemory, m.CPUTemp, m.UnderVoltage, time.Now().Format(time.RFC1123),
 	)
 	if _, err := h.t.Mail(subject, body); err != nil {
 		log.Println("ERROR: health checker: failed to send status report:", err)
@@ -187,6 +223,7 @@ func (h *hc) setup() {
 	h.t.CreateFeedIfNotExist("system-load5")
 	h.t.CreateFeedIfNotExist("system-mem-used")
 	h.t.CreateFeedIfNotExist("system-under-voltage")
+	h.t.CreateFeedIfNotExist("system-cpu-temp")
 }
 
 func (h *hc) Start() {

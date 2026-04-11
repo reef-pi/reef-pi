@@ -123,6 +123,7 @@ configuration:about:status,Statut
 configuration:about:uptime,Durée de fonctionnement
 configuration:about:version,Version
 configuration:about:website,Site Web
+configuration:errors:alert,Alert
 configuration:admin:db_export,
 configuration:admin:db_import,
 configuration:admin:poweroff,Arrêt
@@ -145,6 +146,7 @@ configuration:settings:cors,
 configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Mémoire maximum
 configuration:settings:report_enable,Enable periodic status reports
 configuration:settings:report_schedule,Report schedule (cron)
@@ -202,6 +204,11 @@ doser:warn_delete,
 doser:warn_reset,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,
 equipment:warn_delete,
 fatal_error:connection_lost,
@@ -220,6 +227,7 @@ function:reminder,
 function:subsystem,
 function:temperature,
 function:timers,
+function:pwm,PWM
 function:wait,
 health_chart:cpu_memory,
 health_chart:current,
@@ -275,6 +283,8 @@ macro:turn_off,
 macro:turn_on,
 macro:wait:duration,
 macro:warn_delete,
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,
 ph:alert_below,
 ph:calibrate,
@@ -338,6 +348,7 @@ temperature:controlequipment,
 temperature:controlmacro,
 temperature:controlnothing,
 temperature:current_reading,
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,
 temperature:heater_cooler,
 temperature:hysteresis,

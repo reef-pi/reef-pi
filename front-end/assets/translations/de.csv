@@ -123,6 +123,7 @@ configuration:about:status,Status
 configuration:about:uptime,Letzter Neustart
 configuration:about:version,Version
 configuration:about:website,Web Site
+configuration:errors:alert,Alert
 configuration:admin:db_export,DB Exportieren
 configuration:admin:db_import,DB Importieren
 configuration:admin:poweroff,Ausschalten
@@ -145,6 +146,7 @@ configuration:settings:cors,cors
 configuration:settings:display,Display
 configuration:settings:interface,Netzwerkinterface
 configuration:settings:max_cpu,CPU Nutzung % größer
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Speicherbelegung MB größer
 configuration:settings:report_enable,Enable periodic status reports
 configuration:settings:report_schedule,Report schedule (cron)
@@ -202,6 +204,11 @@ doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,{{name}} löschen?
 equipment:warn_delete,Wollen Sie das Gerät {{name}} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
@@ -220,6 +227,7 @@ function:reminder,Email-Erinnerung
 function:subsystem,Funktionsgruppe
 function:temperature,Temperatur
 function:timers,Schaltuhr
+function:pwm,PWM
 function:wait,Pause
 health_chart:cpu_memory,CPU / Speicher
 health_chart:current,aktuell
@@ -275,6 +283,8 @@ macro:turn_off,Ausschalten
 macro:turn_on,Einschalten
 macro:wait:duration,Dauer
 macro:warn_delete,Wollen Sie das Makro {{name}} wirklich löschen?
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,obere Warnschwelle
 ph:alert_below,untere Warnschwelle
 ph:calibrate,Kalibrieren
@@ -338,6 +348,7 @@ temperature:controlequipment,Gerät schalten
 temperature:controlmacro,Makro ausführen
 temperature:controlnothing,-keine Steuerung-
 temperature:current_reading,Messwert
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Heizung/Kühler
 temperature:hysteresis,Hysterese

@@ -123,6 +123,7 @@ configuration:about:status,Estado
 configuration:about:uptime,Uptime
 configuration:about:version,Versão
 configuration:about:website,Site
+configuration:errors:alert,Alert
 configuration:admin:db_export,Exportar DB
 configuration:admin:db_import,Importar DB
 configuration:admin:poweroff,Desligar
@@ -145,6 +146,7 @@ configuration:settings:cors,Activar cors
 configuration:settings:display,Ecrã
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,Maximo de CPU
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Maximo de Memoria
 configuration:settings:report_enable,Enable periodic status reports
 configuration:settings:report_schedule,Report schedule (cron)
@@ -202,6 +204,11 @@ doser:warn_delete,Aviso Apagar
 doser:warn_reset,Aviso Reninciar
 equipment:chart:barchart,Grafico
 equipment:chart:ctrlpanel,Painel de Control
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_on_first,On first
+equipment:sort_off_first,Off first
 equipment:title_delete,Apagar
 equipment:warn_delete,Aviso Apagar
 fatal_error:connection_lost,Ligação Perdida
@@ -220,6 +227,7 @@ function:reminder,Lembretes
 function:subsystem,Subsistema
 function:temperature,Temperatura
 function:timers,Temporizadores
+function:pwm,PWM
 function:wait,Aguarda
 health_chart:cpu_memory,CPU/Memory
 health_chart:current,Atual
@@ -275,6 +283,8 @@ macro:turn_off,Desligar
 macro:turn_on,Ligar é Obrigatório
 macro:wait:duration,Duração
 macro:warn_delete,Apagar
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 ph:alert_above,Alerta superior de
 ph:alert_below,Alerta inferior de
 ph:calibrate,Calibrar
@@ -338,6 +348,7 @@ temperature:controlequipment,controlar equipamento
 temperature:controlmacro,controlar macro
 temperature:controlnothing,não controlar
 temperature:current_reading,Leitura atual
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:fahrenheit,Fahrenheit
 temperature:heater_cooler,Aquecedor/refrigeração
 temperature:hysteresis,hysteresis

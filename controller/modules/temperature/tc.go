@@ -38,6 +38,7 @@ type TC struct {
 	Period       time.Duration `json:"period"`
 	Control      bool          `json:"control"`
 	Enable       bool          `json:"enable"`
+	FailSafe     bool          `json:"fail_safe"`
 	Notify       Notify        `json:"notify"`
 	Sensor       string        `json:"sensor"`
 	Fahrenheit   bool          `json:"fahrenheit"`

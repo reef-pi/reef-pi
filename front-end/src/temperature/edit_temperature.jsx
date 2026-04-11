@@ -215,6 +215,24 @@ const EditTemperature = ({
               <ErrorFor errors={errors} touched={touched} name='one_shot' />
             </div>
           </div>
+
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='fail_safe'>{i18next.t('temperature:fail_safe')}</label>
+              <Field
+                name='fail_safe'
+                component={BooleanSelect}
+                disabled={readOnly}
+                className={classNames('custom-select', {
+                  'is-invalid': ShowError('fail_safe', touched, errors)
+                })}
+              >
+                <option value='true'>{i18next.t('enabled')}</option>
+                <option value='false'>{i18next.t('disabled')}</option>
+              </Field>
+              <ErrorFor errors={errors} touched={touched} name='fail_safe' />
+            </div>
+          </div>
         </div>
 
         <div className='row'>
