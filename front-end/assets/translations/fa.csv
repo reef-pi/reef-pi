@@ -352,6 +352,7 @@ temperature:hysteresis,
 temperature:hysteresis_less_than,
 temperature:lower_function,
 temperature:lower_threshold,
+temperature:analog_input,ورودی آنالوگ
 temperature:sensor,
 temperature:temperature,
 temperature:unit,واحد

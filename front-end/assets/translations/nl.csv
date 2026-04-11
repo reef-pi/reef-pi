@@ -352,6 +352,7 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
+temperature:analog_input,Analoge Ingang
 temperature:sensor,Sensor
 temperature:temperature,Temperatuur
 temperature:unit,Eenheid

@@ -352,6 +352,7 @@ temperature:hysteresis,Histéresis
 temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
 temperature:lower_function,Calentador
 temperature:lower_threshold,Límite de Calentador
+temperature:analog_input,Entrada Análoga
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidad
