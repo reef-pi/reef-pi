@@ -9,6 +9,7 @@ import (
 	"github.com/reef-pi/hal"
 
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
@@ -26,6 +27,7 @@ type Controller struct {
 	statsMgr    telemetry.StatsManager
 	tcs         map[string]*TC
 	calibrators map[string]hal.Calibrator
+	ais         *connectors.AnalogInputs
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -36,6 +38,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		tcs:         make(map[string]*TC),
 		calibrators: make(map[string]hal.Calibrator),
 		statsMgr:    c.Telemetry().NewStatsManager(UsageBucket),
+		ais:         c.DM().AnalogInputs(),
 	}, nil
 }
 
