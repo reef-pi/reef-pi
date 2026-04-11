@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { ErrorFor, ShowError } from '../utils/validation_helper'
 import { showError, showUpdateSuccessful } from 'utils/alert'
@@ -21,6 +21,8 @@ const EditMacro = ({
   dirty,
   readOnly
 }) => {
+  const dragIndex = useRef(null)
+
   const handleSubmit = event => {
     event.preventDefault()
 
@@ -88,7 +90,26 @@ const EditMacro = ({
               {nosteps(values.steps.length)}
               {values.steps.map((step, index) => {
                 return (
-                  <div className='row macro-step' name={`step-${index}`} key={index}>
+                  <div
+                    className='row macro-step'
+                    name={`step-${index}`}
+                    key={index}
+                    draggable={!readOnly}
+                    onDragStart={() => { dragIndex.current = index }}
+                    onDragOver={e => e.preventDefault()}
+                    onDrop={() => {
+                      if (dragIndex.current !== null && dragIndex.current !== index) {
+                        arrayHelpers.move(dragIndex.current, index)
+                        dragIndex.current = null
+                      }
+                    }}
+                    style={{ cursor: readOnly ? 'default' : 'grab' }}
+                  >
+                    {!readOnly && (
+                      <div className='col-auto d-flex align-items-center pr-0' title={i18n.t('macro:drag_to_reorder')}>
+                        <span style={{ fontSize: '1.2rem', color: '#aaa', userSelect: 'none' }}>&#8942;</span>
+                      </div>
+                    )}
                     <div className='col-12 col-sm-4 col-md-3'>
                       <SelectType
                         name={`steps.${index}.type`}

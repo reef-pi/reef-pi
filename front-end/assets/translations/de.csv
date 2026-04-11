@@ -398,4 +398,5 @@ validation:number_required,Das muss eine Zahl sein!
 validation:selection_required,Eine Auswahl ist erforderlich!
 validation:time_required,Eine Zeit im Format HH:mm:ss ist erforderlich!
 ato:debounce,Debounce
+macro:drag_to_reorder,Drag to reorder
 lighting:jack,Jack

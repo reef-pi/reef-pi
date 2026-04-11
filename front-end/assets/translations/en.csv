@@ -398,4 +398,5 @@ validation:number_required,A number is required
 validation:selection_required,Select one entry
 validation:time_required,Enter a time as HH:mm:ss
 ato:debounce,Debounce
+macro:drag_to_reorder,Drag to reorder
 lighting:jack,Jack
