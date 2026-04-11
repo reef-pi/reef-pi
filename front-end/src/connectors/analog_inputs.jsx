@@ -88,15 +88,31 @@ class analogInputs extends React.Component {
   }
 
   list () {
-    const list = []
+    const driverMap = {}
+    this.props.drivers.forEach(d => { driverMap[d.id] = d })
+
+    const groups = {}
     this.props.analog_inputs.sort((a, b) => SortByName(a, b))
-      .forEach((j, i) => {
+      .forEach(j => {
+        const driverName = (driverMap[j.driver] || {}).name || j.driver
+        if (!groups[driverName]) groups[driverName] = []
+        groups[driverName].push(j)
+      })
+
+    const list = []
+    Object.keys(groups).sort().forEach(driverName => {
+      list.push(
+        <div key={'driver-' + driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{driverName}</small>
+        </div>
+      )
+      groups[driverName].forEach(j => {
         list.push(
           <AnalogInput
             name={j.name}
             key={j.id}
             pin={j.pin}
-            driver={this.props.drivers.filter(d => d.id === j.driver)[0] || {}}
+            driver={driverMap[j.driver] || {}}
             drivers={this.props.drivers}
             analog_input_id={j.id}
             remove={this.remove(j)}
@@ -107,6 +123,7 @@ class analogInputs extends React.Component {
           />
         )
       })
+    })
     return list
   }
 
