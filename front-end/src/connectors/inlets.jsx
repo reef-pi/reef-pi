@@ -90,10 +90,25 @@ class inlets extends React.Component {
   }
 
   list () {
-    const items = []
+    const driverMap = {}
+    this.props.drivers.forEach(d => { driverMap[d.id] = d })
+
+    const groups = {}
     this.props.inlets.sort((a, b) => SortByName(a, b))
-      .forEach((i, n) => {
-        const d = this.props.drivers.filter(d => d.id === i.driver)[0] || {}
+      .forEach(i => {
+        const driverName = (driverMap[i.driver] || {}).name || i.driver
+        if (!groups[driverName]) groups[driverName] = []
+        groups[driverName].push(i)
+      })
+
+    const items = []
+    Object.keys(groups).sort().forEach(driverName => {
+      items.push(
+        <div key={'driver-' + driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{driverName}</small>
+        </div>
+      )
+      groups[driverName].forEach(i => {
         items.push(
           <Inlet
             name={i.name}
@@ -101,7 +116,7 @@ class inlets extends React.Component {
             reverse={i.reverse}
             equipment={i.equipment}
             inlet_id={i.id}
-            driver={d}
+            driver={driverMap[i.driver] || {}}
             drivers={this.props.drivers}
             key={i.id}
             remove={this.remove(i)}
@@ -112,6 +127,7 @@ class inlets extends React.Component {
           />
         )
       })
+    })
     return items
   }
 

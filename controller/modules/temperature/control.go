@@ -20,6 +20,15 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		subject := fmt.Sprintf("Temperature sensor '%s' failed", tc.Name)
 		c.c.Telemetry().Alert(subject, "Error:"+err.Error())
+		if tc.FailSafe && tc.Control && tc.Heater != "" {
+			if sub, sErr := c.c.Subsystem("equipment"); sErr == nil {
+				if oErr := sub.On(tc.Heater, false); oErr != nil {
+					log.Println("ERROR: temperature sub-system: failsafe: failed to turn off heater:", oErr)
+				} else {
+					log.Println("temperature sub-system: failsafe: turned off heater due to sensor read failure:", tc.Name)
+				}
+			}
+		}
 		return reading, err
 	}
 

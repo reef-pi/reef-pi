@@ -80,6 +80,7 @@ ato:control_target,Steuerung durch
 ato:controlequipment,Gerät schalten
 ato:controlmacro,Makro ausführen
 ato:controlnothing,-keine Steuerung-
+ato:debounce,Debounce
 ato:disable_on_alert,ATO nach Alarm ausschalten
 ato:reset_usage,Verlauf löschen
 ato:title_delete,{{name}} löschen?
@@ -134,9 +135,12 @@ configuration:authentication:error_pass,falsches Passwort
 configuration:authentication:error_user,falscher Benutzername
 configuration:connectors:title_delete,{{name}} löschen?
 configuration:connectors:warn_delete,Wollen Sie den Anschluss {{name}} wirklich löschen?
+configuration:drivers:provision,
+configuration:drivers:provision_title,
 configuration:drivers:title_delete,{{name}} entfernen?
 configuration:drivers:type,Typ
 configuration:drivers:warn_delete,Wollen Sie den Treiber für {{name}} wirklich entfernen?
+configuration:errors:alert,Alert
 configuration:settings:address,Protokoll / IP-Adresse und Port
 configuration:settings:alert_health_check,Überlastwarnung
 configuration:settings:brightness,Brightness
@@ -145,14 +149,18 @@ configuration:settings:cors,cors
 configuration:settings:display,Display
 configuration:settings:interface,Netzwerkinterface
 configuration:settings:max_cpu,CPU Nutzung % größer
+configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Speicherbelegung MB größer
 configuration:settings:name,Netzwerkname
-configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
+configuration:settings:network_address_required,Eine Netzwerkadresse wird benötigt!
 configuration:settings:network_interface_required,Eine Netzwerk-Schnittstelle wird benötigt!
 configuration:settings:notification,Email-Benachrichtigung
 configuration:settings:pprof,Profiling
 configuration:settings:prometheus,Prometheus
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:rpi_pwm_freq,PWM Fequenz (RPi)
 configuration:settings:use_https,Verwende HTTPS
 configuration:tab:about,Über ...
@@ -199,6 +207,11 @@ doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
+equipment:sort,Sort
+equipment:sort_name_az,Name (A→Z)
+equipment:sort_name_za,Name (Z→A)
+equipment:sort_off_first,Off first
+equipment:sort_on_first,On first
 equipment:title_delete,{{name}} löschen?
 equipment:warn_delete,Wollen Sie das Gerät {{name}} wirklich löschen?
 fatal_error:connection_lost,Verbindung verloren
@@ -213,6 +226,7 @@ function:equipment,Gerät
 function:lightings,Lampe
 function:macro,Makro
 function:phprobes,pH Sonde
+function:pwm,PWM
 function:reminder,Email-Erinnerung
 function:subsystem,Funktionsgruppe
 function:temperature,Temperatur
@@ -245,6 +259,7 @@ lighting:add_point,Neuer Punkt
 lighting:change_mode,Modus ändern
 lighting:channel_name,Kanalname
 lighting:chart_color,Diagrammfarbe
+lighting:jack,Jack
 lighting:mode_auto,Auto
 lighting:mode_manual,Manuell
 lighting:mode_mixed,Mix
@@ -259,7 +274,10 @@ log:type,Typ
 macro:action,Aktion
 macro:alert:message,Nachricht
 macro:alert:title,Titel
+macro:drag_to_reorder,Drag to reorder
 macro:one_step_required,Mindestens ein Schritt ist erforderlich!
+macro:pwm:jack,Jack
+macro:pwm:value,Value (%)
 macro:reversible,Umkehrbar
 macro:revert,Umgekehrt
 macro:reverting,Umkehr
@@ -336,11 +354,13 @@ temperature:controlmacro,Makro ausführen
 temperature:controlnothing,-keine Steuerung-
 temperature:current_reading,Messwert
 temperature:fahrenheit,Fahrenheit
+temperature:fail_safe,Fail safe (disable heater on sensor error)
 temperature:heater_cooler,Heizung/Kühler
 temperature:hysteresis,Hysterese
 temperature:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
 temperature:lower_function,Heizungssteuerung
 temperature:lower_threshold,unterer Schwellwert
+temperature:analog_input,analoger Eingang
 temperature:sensor,Sensor
 temperature:temperature,Temperatur
 temperature:unit,Einheit
@@ -354,7 +374,9 @@ timers:and_then,... danach
 timers:duration,Dauer
 timers:function,Funktion
 timers:message,Nachricht
+timers:reverse,
 timers:revert,Umgekehrt
+timers:run,
 timers:sec,s
 timers:stay_off,aus lassen
 timers:stay_on,an lassen
@@ -364,8 +386,6 @@ timers:turn_back_off,wieder ausschalten
 timers:turn_back_on,wieder einschalten
 timers:turn_off,Ausschalten
 timers:turn_on,Einschalten
-timers:run,
-timers:reverse,
 timers:warn_delete,Wollen Sie die Schaltuhr {{name}} wirklich löschen?
 validation:a_must_be_greater_than_b,{{a}} muss größer als {{b}} sein!
 validation:a_must_be_less_than_b,{{a}} muss kleiner als {{b}} sein!

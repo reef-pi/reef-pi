@@ -22,6 +22,7 @@ const AtoForm = withFormik({
       one_shot: data.one_shot || false,
       disable_on_alert: data.disable_on_alert || false,
       period: data.period || 60,
+      debounce: data.debounce || 0,
       pump: data.pump || '',
       notify: (data.notify && data.notify.enable) || false,
       maxAlert: (data.notify && data.notify.max) || 120

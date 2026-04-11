@@ -21,6 +21,7 @@ type ATO struct {
 	Inlet          string        `json:"inlet"`
 	Pump           string        `json:"pump"`
 	Period         time.Duration `json:"period"`
+	Debounce       time.Duration `json:"debounce"`
 	Control        bool          `json:"control"`
 	Enable         bool          `json:"enable"`
 	Notify         Notify        `json:"notify"`
@@ -173,8 +174,27 @@ func (c *Controller) Check(a ATO) (int, error) {
 	c.c.Telemetry().EmitMetric("ato", a.Name+"-state", float64(reading))
 	log.Println("ato-subsystem: sensor:", a.Name, "state:", reading)
 	if a.Control {
-		if err := c.Control(a, reading); err != nil {
-			log.Println("ERROR: Failed to execute ato control logic. Error:", err)
+		shouldControl := true
+		if a.Debounce > 0 && reading == 0 {
+			c.mu.Lock()
+			ls, ok := c.lowSince[a.ID]
+			if !ok || ls == nil {
+				now := time.Now()
+				c.lowSince[a.ID] = &now
+				shouldControl = false
+			} else if time.Since(*ls) < a.Debounce*time.Second {
+				shouldControl = false
+			}
+			c.mu.Unlock()
+		} else if reading == 1 {
+			c.mu.Lock()
+			c.lowSince[a.ID] = nil
+			c.mu.Unlock()
+		}
+		if shouldControl {
+			if err := c.Control(a, reading); err != nil {
+				log.Println("ERROR: Failed to execute ato control logic. Error:", err)
+			}
 		}
 		usage.Pump = int(a.Period)
 		if reading == 1 {
@@ -200,6 +220,12 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 		}
 	}()
 	defer ticker.Stop()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("ERROR: ato-subsystem. Panic in Run goroutine for sensor:%s: %v\n", a.Name, r)
+			c.c.LogError("ato-"+a.ID, fmt.Sprintf("ato controller goroutine panicked: %v", r))
+		}
+	}()
 	for {
 		select {
 		case <-ticker.C:
@@ -208,14 +234,19 @@ func (c *Controller) Run(a ATO, quit chan struct{}) error {
 				if err != nil {
 					return err
 				}
-				if reading == 1 {
+				// With pump control: disable once tank is full (reading==1)
+				// Without pump control (Nothing): disable once low level detected (reading==0)
+				if (a.Control && reading == 1) || (!a.Control && reading == 0) {
 					a.Enable = false
 					return c.Update(a.ID, a)
 				}
 			}
 		case <-quit:
-			// always turn off pump befor quitting
-			return c.Control(a, 1)
+			// turn off pump on quit only when a pump is configured
+			if a.Control && a.Pump != "" {
+				return c.Control(a, 1)
+			}
+			return nil
 		}
 	}
 }

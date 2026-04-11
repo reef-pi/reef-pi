@@ -80,18 +80,29 @@ func TestLogError(t *testing.T) {
 	}
 }
 
+// https://github.com/reef-pi/reef-pi/issues/1996
 func TestSanitizeAdafruitIOFeedName(t *testing.T) {
-	cases := []struct {
-		input, expected string
+	checks := []struct {
+		input  string
+		output string
 	}{
-		{"pH sensor", "ph-sensor"},
-		{"Temperature", "temperature"},
-		{"Alk Weekly", "alk-weekly"},
-		{"already-lower", "already-lower"},
+		{input: "simple", output: "simple"},
+		{input: "with space", output: "with-space"},
+		// parentheses must be stripped (caused "invalid URL" on adafruit.io)
+		{input: "rpato-auto-fill-(ato)-state", output: "rpato-auto-fill-ato-state"},
+		// colon must be stripped
+		{input: "rpato-alarm:-water-high", output: "rpato-alarm-water-high"},
+		// consecutive dashes from stripped characters collapse to one
+		{input: "rpdaylight---sera-(30w)-led", output: "rpdaylight-sera-30w-led"},
+		// leading/trailing hyphens trimmed
+		{input: "(foo)", output: "foo"},
+		// uppercase is lowercased
+		{input: "MyFeed", output: "myfeed"},
 	}
-	for _, c := range cases {
-		if got := SanitizeAdafruitIOFeedName(c.input); got != c.expected {
-			t.Errorf("SanitizeAdafruitIOFeedName(%q) = %q, want %q", c.input, got, c.expected)
+	for _, c := range checks {
+		out := SanitizeAdafruitIOFeedName(c.input)
+		if out != c.output {
+			t.Errorf("feed name not sanitized: input %q output %q expected %q", c.input, out, c.output)
 		}
 	}
 }
@@ -142,6 +153,7 @@ func TestApplyConfig(t *testing.T) {
 	c.Notify = false
 	tele.applyConfig(c)
 }
+
 
 func TestSanitizePrometheusMetricName(t *testing.T) {
 	checks := []struct {

@@ -60,12 +60,12 @@ func TestNotifyIfNeeded(t *testing.T) {
 	checker := NewHealthChecker("reef-pi", 1, c, TestTelemetry(store), store).(*hc)
 
 	// Both memory and load above threshold — should trigger both notifications
-	checker.NotifyIfNeeded(90, 90)
+	checker.NotifyIfNeeded(90, 90, 0)
 
 	// Both below threshold — should be no-op
-	checker.NotifyIfNeeded(10, 10)
+	checker.NotifyIfNeeded(10, 10, 0)
 
 	// Notify disabled — should be no-op even if over threshold
 	checker.Notify.Enable = false
-	checker.NotifyIfNeeded(90, 90)
+	checker.NotifyIfNeeded(90, 90, 0)
 }

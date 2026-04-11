@@ -18,6 +18,7 @@ const EditLight = ({
   handleChange,
   dirty,
   readOnly,
+  jacks,
   ...props
 }) => {
   const handleFormSubmit = event => {
@@ -82,6 +83,27 @@ const EditLight = ({
         </div>
       </div>
 
+      <div className={classNames('row', { 'd-none': readOnly })}>
+        <div className='col col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='config.jack'>{i18next.t('lighting:jack')}</label>
+            <Field
+              name='config.jack'
+              component='select'
+              disabled={readOnly}
+              className={classNames('custom-select', {
+                'is-invalid': ShowError('config.jack', touched, errors)
+              })}
+            >
+              {(jacks || []).map(j => (
+                <option key={j.id} value={String(j.id)}>{j.name}</option>
+              ))}
+            </Field>
+            <ErrorFor errors={errors} touched={touched} name='config.jack' />
+          </div>
+        </div>
+      </div>
+
       {channels()}
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
@@ -108,7 +130,8 @@ EditLight.propTypes = {
   dirty: PropTypes.bool,
   readOnly: PropTypes.bool,
   touched: PropTypes.object,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  jacks: PropTypes.array
 }
 
 export default EditLight

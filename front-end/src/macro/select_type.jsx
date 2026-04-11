@@ -5,7 +5,7 @@ import i18n from 'utils/i18n'
 
 const SelectType = ({ name, className, readOnly }) => {
   const list = () => {
-    const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'lightings', 'doser', 'timers', 'phprobes', 'subsystem', 'macro']
+    const validTypes = ['alert', 'wait', 'equipment', 'ato', 'temperature', 'lightings', 'doser', 'timers', 'phprobes', 'subsystem', 'macro', 'pwm']
     // capabilities:..  are the subsytem names (plural or cathegory), correspinding to the tab pages, whereas
     // function:... are individual devices in these cathegories
     return validTypes.map((item) => {

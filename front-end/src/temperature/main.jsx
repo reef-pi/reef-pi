@@ -3,6 +3,7 @@ import TemperatureForm from './temperature_form'
 import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC, calibrateTemperature } from 'redux/actions/tcs'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
+import { fetchAnalogInputs } from 'redux/actions/analog_inputs'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import CalibrationModal from './calibration_modal'
@@ -34,6 +35,7 @@ class main extends React.Component {
     this.props.fetchSensors()
     this.props.fetchTCs()
     this.props.fetchEquipment()
+    this.props.fetchAnalogInputs()
     this.props.probes.forEach(probe => {
       this.props.readTC(probe.id)
     })
@@ -52,12 +54,14 @@ class main extends React.Component {
       control: (values.control === 'macro' || values.control === 'equipment'),
       is_macro: (values.control === 'macro'),
       one_shot: values.one_shot,
+      fail_safe: values.fail_safe,
       heater: values.heater,
       cooler: values.cooler,
       min: parseFloat(values.min),
       max: parseFloat(values.max),
       hysteresis: parseFloat(values.hysteresis),
       sensor: values.sensor,
+      analog_input: values.analog_input || '',
       period: parseInt(values.period),
       fahrenheit: values.fahrenheit,
       notify: {
@@ -107,6 +111,7 @@ class main extends React.Component {
               tc={probe}
               showChart
               sensors={this.props.sensors}
+              analogInputs={this.props.analogInputs}
               equipment={this.props.equipment}
               macros={this.props.macros}
               onSubmit={this.handleUpdate}
@@ -191,6 +196,7 @@ class main extends React.Component {
       newProbe = (
         <TemperatureForm
           sensors={this.props.sensors}
+          analogInputs={this.props.analogInputs}
           equipment={this.props.equipment}
           macros={this.props.macros}
           onSubmit={this.handleCreate}
@@ -242,6 +248,7 @@ const mapStateToProps = state => {
   return {
     probes: state.tcs,
     sensors: state.tc_sensors,
+    analogInputs: state.analog_inputs,
     equipment: state.equipment,
     macros: state.macros,
     currentReading: state.tc_reading
@@ -253,6 +260,7 @@ const mapDispatchToProps = dispatch => {
     fetchTCs: () => dispatch(fetchTCs()),
     fetchSensors: () => dispatch(fetchSensors()),
     fetchEquipment: () => dispatch(fetchEquipment()),
+    fetchAnalogInputs: () => dispatch(fetchAnalogInputs()),
     create: t => dispatch(createTC(t)),
     delete: id => dispatch(deleteTC(id)),
     update: (id, t) => dispatch(updateTC(id, t)),

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import WaitStep from './wait_step'
 import AlertStep from './alert_step'
 import GenericStep from './generic_step'
+import PWMStep from './pwm_step'
 
 const StepSelector = ({
   type,
@@ -27,6 +28,15 @@ const StepSelector = ({
       case 'alert':
         return (
           <AlertStep
+            name={name}
+            errors={errors}
+            touched={touched}
+            readOnly={readOnly}
+          />
+        )
+      case 'pwm':
+        return (
+          <PWMStep
             name={name}
             errors={errors}
             touched={touched}

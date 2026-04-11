@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
-import { ParseTimestamp } from 'utils/timestamp'
+import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
@@ -37,6 +37,7 @@ class chart extends React.Component {
     usage.sort((a, b) => {
       return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
     })
+    usage.forEach((m, i) => { usage[i] = { ...m, ts: timestampToEpoch(m.time) } })
 
     const c = this.props.config.chart
     const unit = this.props.config.fahrenheit ? '°F' : '°C'
@@ -57,7 +58,7 @@ class chart extends React.Component {
             />
             <YAxis yAxisId='right' orientation='right' />
             <ReferenceLine yAxisId='right' y={0} />
-            <XAxis dataKey='time' />
+            <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip formatter={(value, name) => formatLegend(value, name, unit)} />
             <Bar dataKey='up' fill='#ffbb33' isAnimationActive={false} yAxisId='right' stackId='t' />
             <Bar dataKey='down' fill='#33b5e5' isAnimationActive={false} yAxisId='right' stackId='t' />

@@ -36,7 +36,11 @@ type MQTTClient struct {
 
 func NewMQTTClient(conf MQTTConfig) (*MQTTClient, error) {
 	mqtt.ERROR = log.New(os.Stdout, "", 0)
-	connOpts := mqtt.NewClientOptions().AddBroker(conf.Server).SetClientID(conf.ClientID).SetCleanSession(true)
+	connOpts := mqtt.NewClientOptions().
+		AddBroker(conf.Server).
+		SetClientID(conf.ClientID).
+		SetCleanSession(true).
+		SetAutoReconnect(true)
 	if conf.Username != "" {
 		connOpts.SetUsername(conf.Username)
 		if conf.Password != "" {
