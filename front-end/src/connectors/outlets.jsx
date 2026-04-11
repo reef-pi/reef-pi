@@ -91,10 +91,26 @@ class outlets extends React.Component {
   }
 
   list () {
-    const list = []
+    const driverMap = {}
+    this.props.drivers.forEach(d => { driverMap[d.id] = d })
+
+    const groups = {}
     this.props.outlets
       .sort((a, b) => SortByName(a, b))
-      .forEach((o, i) => {
+      .forEach(o => {
+        const driverName = (driverMap[o.driver] || {}).name || o.driver
+        if (!groups[driverName]) groups[driverName] = []
+        groups[driverName].push(o)
+      })
+
+    const list = []
+    Object.keys(groups).sort().forEach(driverName => {
+      list.push(
+        <div key={'driver-' + driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{driverName}</small>
+        </div>
+      )
+      groups[driverName].forEach(o => {
         list.push(
           <Outlet
             name={o.name}
@@ -105,7 +121,7 @@ class outlets extends React.Component {
             equipment={o.equipment}
             remove={this.remove(o)}
             drivers={this.props.drivers}
-            driver={this.props.drivers.filter(d => d.id === o.driver)[0] || {}}
+            driver={driverMap[o.driver] || {}}
             update={p => {
               this.props.update(o.id, p)
               this.props.fetch()
@@ -113,6 +129,7 @@ class outlets extends React.Component {
           />
         )
       })
+    })
     return list
   }
 

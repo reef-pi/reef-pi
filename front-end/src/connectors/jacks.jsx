@@ -99,9 +99,25 @@ class jacks extends React.Component {
   }
 
   list () {
-    const list = []
+    const driverMap = {}
+    this.props.drivers.forEach(d => { driverMap[d.id] = d })
+
+    const groups = {}
     this.props.jacks.sort((a, b) => SortByName(a, b))
-      .forEach((j, i) => {
+      .forEach(j => {
+        const driverName = (driverMap[j.driver] || {}).name || j.driver
+        if (!groups[driverName]) groups[driverName] = []
+        groups[driverName].push(j)
+      })
+
+    const list = []
+    Object.keys(groups).sort().forEach(driverName => {
+      list.push(
+        <div key={'driver-' + driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{driverName}</small>
+        </div>
+      )
+      groups[driverName].forEach(j => {
         list.push(
           <Jack
             name={j.name}
@@ -119,6 +135,7 @@ class jacks extends React.Component {
           />
         )
       })
+    })
     return list
   }
 
