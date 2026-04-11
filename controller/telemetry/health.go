@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	cron "github.com/robfig/cron/v3"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/v4/mem"
 
@@ -38,6 +39,8 @@ type hc struct {
 	store         storage.Store
 	statsMgr      StatsManager
 	isRaspberryPi bool
+	reporter      *cron.Cron
+	lastMetric    HealthMetric
 }
 
 type HealthMetric struct {
@@ -164,6 +167,7 @@ func (h *hc) Check() {
 	h.t.EmitMetric("system", "under-voltage", metric.UnderVoltage)
 	log.Println("health check: Used memory:", usedMemory, " Load5:", loadStat.Load5, " CPUTemp:", metric.CPUTemp)
 	h.statsMgr.Update(HealthStatsKey, metric)
+	h.lastMetric = metric
 	h.NotifyIfNeeded(usedMemory, loadStat.Load5, metric.CPUTemp)
 }
 
@@ -190,8 +194,25 @@ func (h *hc) NotifyIfNeeded(memory, load, cpuTemp float64) {
 	}
 }
 
+func (h *hc) sendReport() {
+	m := h.lastMetric
+	subject := fmt.Sprintf("[reef-pi] Status Report - %s", time.Now().Format("Jan 2 15:04"))
+	body := fmt.Sprintf(
+		"reef-pi Status Report\n\nCPU Load (5m avg): %.2f\nMemory used: %.2f%%\nCPU Temp: %.2f°C\nUnder-voltage events: %.0f\nTime: %s",
+		m.Load5, m.UsedMemory, m.CPUTemp, m.UnderVoltage, time.Now().Format(time.RFC1123),
+	)
+	if _, err := h.t.Mail(subject, body); err != nil {
+		log.Println("ERROR: health checker: failed to send status report:", err)
+	} else {
+		log.Println("health checker: status report sent")
+	}
+}
+
 func (h *hc) Stop() {
 	log.Println("Stopping health checker")
+	if h.reporter != nil {
+		h.reporter.Stop()
+	}
 	h.stopCh <- struct{}{}
 	if err := h.statsMgr.Save(HealthStatsKey); err != nil {
 		log.Println("ERROR: health checker. Failed to save usage. Error:", err)
@@ -214,6 +235,15 @@ func (h *hc) Start() {
 	}
 	if err := h.statsMgr.Load(HealthStatsKey, fn); err != nil {
 		log.Println("ERROR: health checker. Failed to load usage. Error:", err)
+	}
+	if h.Notify.ReportEnable && h.Notify.ReportSchedule != "" {
+		h.reporter = cron.New()
+		if _, err := h.reporter.AddFunc(h.Notify.ReportSchedule, h.sendReport); err != nil {
+			log.Println("ERROR: health checker: invalid report schedule:", h.Notify.ReportSchedule, err)
+		} else {
+			h.reporter.Start()
+			log.Println("Starting health report scheduler:", h.Notify.ReportSchedule)
+		}
 	}
 	log.Println("Starting health checker")
 	metric := HealthMetric{

@@ -148,6 +148,9 @@ configuration:settings:interface,Interface
 configuration:settings:max_cpu,Procesador Maximo
 configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,Memoria Maxima
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:name,Nombre
 configuration:settings:network_address_required,La direccion de red es requerida
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)

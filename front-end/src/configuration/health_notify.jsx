@@ -9,11 +9,14 @@ export default class HealthNotify extends React.Component {
         enable: props.state.enable,
         max_memory: props.state.max_memory,
         max_cpu: props.state.max_cpu,
-        max_cpu_temp: props.state.max_cpu_temp
+        max_cpu_temp: props.state.max_cpu_temp,
+        report_enable: props.state.report_enable,
+        report_schedule: props.state.report_schedule || ''
       }
     }
     this.update = this.update.bind(this)
     this.handleUpdateEnable = this.handleUpdateEnable.bind(this)
+    this.handleUpdateReportEnable = this.handleUpdateReportEnable.bind(this)
   }
 
   handleUpdateEnable (ev) {
@@ -23,10 +26,17 @@ export default class HealthNotify extends React.Component {
     this.props.update(h)
   }
 
+  handleUpdateReportEnable (ev) {
+    const h = this.state.notify
+    h.report_enable = ev.target.checked
+    this.setState({ notify: h })
+    this.props.update(h)
+  }
+
   update (key) {
     return function (ev) {
       const h = this.state.notify
-      h[key] = Number(ev.target.value)
+      h[key] = key === 'report_schedule' ? ev.target.value : Number(ev.target.value)
       this.setState({ notify: h })
       this.props.update(h)
     }.bind(this)
@@ -87,6 +97,38 @@ export default class HealthNotify extends React.Component {
         </div>
       )
     }
-    return ct
+    ct.push(
+      <div className='col-12' key='health_report_enable'>
+        <div className='form-check'>
+          <label className='form-check-label'>
+            <input
+              className='form-check-input'
+              type='checkbox'
+              id='health_report_enable'
+              defaultChecked={this.state.notify.report_enable}
+              onClick={this.handleUpdateReportEnable}
+            />
+            <b>{i18n.t('configuration:settings:report_enable')}</b>
+          </label>
+        </div>
+      </div>
+    )
+    if (this.state.notify.report_enable) {
+      ct.push(
+        <div className='form-group col-md-8 col-12' key='health_report_schedule'>
+          <label htmlFor='health_report_schedule'>{i18n.t('configuration:settings:report_schedule')}</label>
+          <input
+            type='text'
+            className='form-control'
+            id='health_report_schedule'
+            placeholder='0 8 * * *'
+            value={this.state.notify.report_schedule}
+            onChange={this.update('report_schedule')}
+          />
+          <small className='form-text text-muted'>{i18n.t('configuration:settings:report_schedule_help')}</small>
+        </div>
+      )
+    }
+    return <>{ct}</>
   }
 }
