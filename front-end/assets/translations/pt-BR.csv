@@ -1,0 +1,406 @@
+Key,Translation
+action,ação
+add,Adicionar
+alerts,Alertas
+analog_input,Entrada Analógica
+analog_inputs,Entradas Analógicas
+apply,Aplicar
+are_you_sure,Tem certeza?
+ato,ação
+cancel,cancelar
+capabilities,
+charts,tabelas
+clear,Limpar
+columns,Colunas
+configure,Configurar
+delete,Excluir
+devmode_warning,Aviso
+disabled,desativar
+documentation,Documentação
+done,Feito
+doser,dosador
+driver,controlador
+edit,Editar
+enabled,ativar
+end_time,Hora de Fim
+equipment,Equipamento
+errors,Erros
+full_moon,Lua Cheia
+health,Saúde
+height,Altura
+in-use,Em Uso
+inlet,entrada
+inlets,entradas
+install,instalação
+jack,jack
+jacks,jacks
+journal,diário
+light,luz
+lights,luzes
+loading,Carregando
+maximum,máximo
+minimum,mínimo
+name,Nome
+no,Não
+none,nenhum
+off,desligar
+ok,Ok
+on,ligar
+one_shot,uma vez
+optional,opcional
+outlet,tomada
+outlets,tomadas
+pin,pino
+pins,pinos
+profile,perfil
+reset,redefinir
+reverse,inverter
+rows,linhas
+running,Executando
+save,Salvar
+save_successful,Salvo com sucesso
+schedule,agendar
+sec,seg
+second_s,segundos
+select,Selecionar
+select_file,selecionar arquivo
+since,Desde
+start_time,Hora de Início
+status,Estado
+stayoffonboot,Permanece ligado
+update,Atualizar
+upgrade_reef_pi,Atualizar
+width,largura
+yes,sim
+ato:alert_after,Alertar após
+ato:ato_usage,Uso do ATO
+ato:chk_freq,Verificar frequência
+ato:control,Controle
+ato:control_target,objetivo
+ato:controlequipment,Controlar equipamento
+ato:controlmacro,Macro do equipamento
+ato:controlnothing,Não controlar
+ato:debounce,Debounce
+ato:disable_on_alert,Desativar em alerta
+ato:reset_usage,Reiniciar uso
+ato:title_delete,Excluir
+ato:total_seconds_pump_on,Número de segundos para ligar a bomba
+ato:warn_delete,Aviso de exclusão
+ato:warn_reset,Aviso de reinicialização
+camera:capture_flags,Capturar bandeira
+camera:enable,Ativar
+camera:take_photo,Tirar Foto
+camera:target_dir,Diretório
+camera:tick_interval,Intervalo de tempo
+camera:tick_must_be_positive,O tempo deve ser um valor positivo
+camera:to_gdrive,para o Google Drive
+capabilities:ato,ATO
+capabilities:camera,Câmera
+capabilities:configuration,Configuração
+capabilities:dashboard,Painel
+capabilities:dev_mode,Modo Dev
+capabilities:doser,Dosador
+capabilities:dosing_pumps,Bombas Dosadoras
+capabilities:equipment,Equipamento
+capabilities:health_check,Verificação de Saúde
+capabilities:journal,diário
+capabilities:lighting,Iluminação
+capabilities:lights,Luzes
+capabilities:log,Registro
+capabilities:macro,Macro
+capabilities:macros,Macros
+capabilities:manager,Instâncias
+capabilities:ph,pH
+capabilities:phprobes,Sondas
+capabilities:system,sistema
+capabilities:temperature,Temperatura
+capabilities:timers,Temporizadores
+collapsible:delete,Excluir
+collapsible:edit,Editar
+color_picker:choose,Escolher
+configuration:about:current_time,Hora Atual
+configuration:about:modifications,Modificações
+configuration:about:status,Estado
+configuration:about:uptime,Uptime
+configuration:about:version,Versão
+configuration:about:website,Site
+configuration:admin:db_export,Exportar DB
+configuration:admin:db_import,Importar DB
+configuration:admin:poweroff,Desligar
+configuration:admin:reboot,Reiniciar
+configuration:admin:reload,Recarregar
+configuration:admin:sign_out,Sair
+configuration:authentication:credentials,Credenciais
+configuration:authentication:error_pass,Você deve inserir uma senha
+configuration:authentication:error_user,Você deve inserir um nome de usuário
+configuration:connectors:title_delete,Excluir
+configuration:connectors:warn_delete,Aviso de exclusão
+configuration:drivers:provision,Provisionar
+configuration:drivers:provision_title,Criar automaticamente tomadas/entradas/jacks para todos os pinos deste controlador
+configuration:drivers:title_delete,Excluir
+configuration:drivers:type,Tipo
+configuration:drivers:warn_delete,Aviso de exclusão
+configuration:errors:alert,Alerta
+configuration:settings:address,Endereço
+configuration:settings:alert_health_check,Alertas de Saúde Geral
+configuration:settings:brightness,Brilho
+configuration:settings:capabilities,Capacidades
+configuration:settings:cors,Ativar cors
+configuration:settings:display,Tela
+configuration:settings:interface,Interface
+configuration:settings:max_cpu,CPU Máximo
+configuration:settings:max_cpu_temp,Temp CPU Máx (°C)
+configuration:settings:max_memory,Memória Máxima
+configuration:settings:name,Nome
+configuration:settings:network_address_format,O endereço deve estar no formato host:porta (ex: 0.0.0.0:80)
+configuration:settings:network_address_required,Endereço de rede é obrigatório
+configuration:settings:network_interface_required,Nome da interface de rede é obrigatório
+configuration:settings:notification,Notificação
+configuration:settings:pprof,Ativar profiling
+configuration:settings:prometheus,Ativar prometheus
+configuration:settings:report_enable,Ativar relatórios de status periódicos
+configuration:settings:report_schedule,Agendamento de relatório (cron)
+configuration:settings:report_schedule_help,"Expressão cron padrão de 5 campos, ex: ""0 8 * * *"" para diariamente às 8h"
+configuration:settings:rpi_pwm_freq,Frequência PWM do Rpi
+configuration:settings:use_https,Usar HTTPS
+configuration:tab:about,Sobre
+configuration:tab:admin,Admin
+configuration:tab:authentication,Autenticação
+configuration:tab:connectors,Conexões
+configuration:tab:drivers,Controladores
+configuration:tab:errors,Erros
+configuration:tab:settings,Configurações
+configuration:tab:telemetry,Telemetria
+cron:day_of_month,dias do mês
+cron:hour,Horas
+cron:minute,Minutos
+cron:month,Meses
+cron:second,Segundos
+cron:week,Semana
+dashboard:back_to_dashboard,Voltar ao Painel
+dashboard:blank_panel,Painel em branco
+doser:calibrate,calibrar
+doser:calibration:run,executar calibração
+doser:delay,espera
+doser:direction,direção
+doser:direction_pin,pino de direção
+doser:doser_usage,Uso do dosador
+doser:duration,duração
+doser:microstep:1/16,1/16
+doser:microstep:1/2,1/2
+doser:microstep:1/32,1/32
+doser:microstep:1/4,1/4
+doser:microstep:1/8,1/8
+doser:microstep:full,Total
+doser:microstepping,micropasso
+doser:ms_pin_a,Pino A
+doser:ms_pin_b,Pino B
+doser:ms_pin_c,Pino C
+doser:speed,Velocidade
+doser:spr,spr
+doser:step_pin,Pino de passo
+doser:title_delete,Excluir
+doser:type,Tipo
+doser:volume,Volume
+doser:vpr,vpr
+doser:warn_delete,Aviso de exclusão
+doser:warn_reset,Aviso de reinicialização
+equipment:chart:barchart,Gráfico
+equipment:chart:ctrlpanel,Painel de Controle
+equipment:sort,Ordenar
+equipment:sort_name_az,Nome (A→Z)
+equipment:sort_name_za,Nome (Z→A)
+equipment:sort_off_first,Desligado primeiro
+equipment:sort_on_first,Ligado primeiro
+equipment:title_delete,Excluir
+equipment:warn_delete,Aviso de exclusão
+fatal_error:connection_lost,Conexão Perdida
+fatal_error:fatal_error,Erro Fatal
+fatal_error:message,Algo deu errado, por favor reinicie o servidor.
+fatal_error:troubleshoot,Solucionar problemas
+function:alert,Alerta
+function:ato,Ação
+function:camera,Câmera
+function:doser,Dosador
+function:equipment,Equipamento
+function:lightings,Luzes
+function:macro,Macro
+function:phprobes,Sonda de pH
+function:pwm,PWM
+function:reminder,Lembretes
+function:subsystem,Subsistema
+function:temperature,Temperatura
+function:timers,Temporizadores
+function:wait,Aguardar
+health_chart:cpu_memory,CPU/Memória
+health_chart:current,Atual
+health_chart:historical,Histórico
+instances:warn_delete,Aviso de exclusão
+journal:add_entry,Adicionar entrada
+journal:comment,Comentário
+journal:description,descrição
+journal:timestamp,registro de tempo
+journal:title_delete,Excluir
+journal:unit,Unidades
+journal:value,Valor
+journal:warn_delete,Aviso de exclusão
+language:de,Deutsch
+language:en,English
+language:es,Español
+language:fa,فارسی
+language:fr,Français
+language:hi,हिन्दी
+language:it,Italiano
+language:language,Idioma
+language:nl,Nederlands
+language:pt,Português
+language:pt-BR,Português (Brasil)
+language:zh,
+lighting:add_point,Adicionar Ponto
+lighting:change_mode,Mudar Modo
+lighting:channel_name,Nome do Canal
+lighting:chart_color,Cor
+lighting:jack,Jack
+lighting:mode_auto,Modo Automático
+lighting:mode_manual,Modo Manual
+lighting:mode_mixed,Modo Misto
+lighting:remove,Remover
+lighting:title_delete,Excluir
+lighting:warn_change,Mudar
+lighting:warn_delete,Excluir
+log:content,Conteúdo
+log:emitter,Emissor
+log:time,Tempo
+log:type,Tipo
+macro:action,Ação
+macro:alert:message,Mensagem
+macro:alert:title,Título
+macro:drag_to_reorder,Arraste para reordenar
+macro:one_step_required,Um passo é necessário
+macro:pwm:jack,Jack
+macro:pwm:value,Valor (%)
+macro:reversible,Reversível
+macro:revert,Reverter
+macro:reverting,Revertendo
+macro:run,Executar
+macro:running,Executando
+macro:steps,Passo
+macro:system,Sistema
+macro:title_delete,Excluir
+macro:turn_off,Desligar
+macro:turn_on,Ligar é Obrigatório
+macro:wait:duration,Duração
+macro:warn_delete,Excluir
+ph:alert_above,Alerta acima de
+ph:alert_below,Alerta abaixo de
+ph:calibrate,Calibrar
+ph:chart:current,Atualmente
+ph:chart:historical,histórico
+ph:chart:usage,Uso
+ph:chart_color,cor
+ph:chart_unit,unidade
+ph:chart_ymax,Y máximo
+ph:chart_ymin,Y mínimo
+ph:check_frequency,Verificar frequência
+ph:control,Controle
+ph:controlequipment,Equipamento
+ph:controlmacro,Macro
+ph:controlnothing,Nada
+ph:current_reading,Leitura Atual
+ph:hysteresis,histerese
+ph:hysteresis_less_than,histerese menor que
+ph:lower_function,Função inferior
+ph:lower_threshold,Limite inferior
+ph:midpoint,Ponto médio
+ph:run_calibration,Executar Calibração
+ph:second_point,Segundo ponto
+ph:transformer,Transformador
+ph:upper_function,Função superior
+ph:upper_threshold,Limite superior
+ph:warn_delete,Esta ação será removida
+ph:warn_reset,Redefinir
+signin:invalidcredentials,Credenciais inválidas
+signin:password,Senha
+signin:signin,Entrar
+signin:username,Nome de usuário
+telemetry:main:current-limit,Limite Atual
+telemetry:main:email-alerts,Alertas por e-mail
+telemetry:main:historical-limit,Limite histórico
+telemetry:main:limit-per-hour,Limite por hora
+telemetry:main:send-test-message,Enviar uma mensagem de teste
+telemetry:main:test-message-sent,
+telemetry:notification:from,de
+telemetry:notification:password,senha
+telemetry:notification:port,porta
+telemetry:notification:server,servidor
+telemetry:notification:to,para
+telemetry:notification:username,nome de usuário
+temperature:alert_above,alerta acima
+temperature:alert_below,alerta abaixo
+temperature:calibrate,calibrar
+temperature:calibration:apply,aplicar
+temperature:calibration:set_temperature,Definir temperatura
+temperature:celsius,Celsius
+temperature:chart:current,Atualmente
+temperature:chart:down,Resfriamento
+temperature:chart:historical,histórico
+temperature:chart:up,Aquecedor
+temperature:chart_color,cor
+temperature:chart_ymax,Y máximo
+temperature:chart_ymin,Y mínimo
+temperature:check_frequency,Verificar frequência
+temperature:control,controle
+temperature:controlequipment,controlar equipamento
+temperature:controlmacro,controlar macro
+temperature:controlnothing,não controlar
+temperature:current_reading,Leitura atual
+temperature:fahrenheit,Fahrenheit
+temperature:fail_safe,Fail safe (desativar aquecedor em erro de sensor)
+temperature:heater_cooler,Aquecedor/Resfriamento
+temperature:hysteresis,histerese
+temperature:hysteresis_less_than,histerese menor que
+temperature:lower_function,função caso menor
+temperature:lower_threshold,Abaixo do desejado
+temperature:analog_input,Entrada Analógica
+temperature:sensor,Sensor
+temperature:temperature,Temperatura
+temperature:unit,Unidades
+temperature:upper_function,função caso maior
+temperature:upper_threshold,Acima do desejado
+temperature:warn_delete,excluir
+temperature:warn_reset,redefinir
+timers:action,ação
+timers:after,após
+timers:and_then,e depois
+timers:duration,duração
+timers:function,Função
+timers:message,Mensagem
+timers:reverse,
+timers:revert,reverter
+timers:run,
+timers:sec,seg
+timers:stay_off,manter desligado
+timers:stay_on,Manter ligado
+timers:subject,Assunto
+timers:title_delete,excluir
+timers:turn_back_off,Voltar a desligar
+timers:turn_back_on,Voltar a ligar
+timers:turn_off,Desligar
+timers:turn_on,Ligar é Obrigatório
+timers:warn_delete,excluir
+validation:a_must_be_greater_than_b,A deve ser maior que B
+validation:a_must_be_less_than_b,A deve ser menor que B
+validation:a_must_differ_from_b,A deve ser diferente de B
+validation:comma_separated_numbers,Vírgulas separam os números
+validation:cron_nojoker_required,cron job
+validation:cron_required,cron job é necessário
+validation:date_required,data é obrigatória
+validation:entry_required,entrada é obrigatória
+validation:error,erro
+validation:integer_max_required,Número máximo é obrigatório
+validation:integer_min_required,Número mínimo é obrigatório
+validation:last_full_moon_required,A última lua cheia é obrigatória
+validation:name_required,nome é obrigatório
+validation:number_required,número é obrigatório
+validation:selection_required,Seleção é obrigatória
+validation:time_required,Tempo é obrigatório
