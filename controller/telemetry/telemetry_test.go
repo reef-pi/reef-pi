@@ -39,6 +39,75 @@ func TestEmitMetric(t *testing.T) {
 	}
 }
 
+func TestNewTelemetry(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	store.CreateBucket("telemetry")
+	lr := func(_, _ string) error { return nil }
+	tel := NewTelemetry("reef-pi", "telemetry", store, DefaultTelemetryConfig, lr)
+	if tel == nil {
+		t.Fatal("Expected non-nil telemetry")
+	}
+}
+
+func TestInitialize(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	store.CreateBucket("telemetry")
+	lr := func(_, _ string) error { return nil }
+	tel := Initialize("reef-pi", "telemetry", store, lr, false)
+	if tel == nil {
+		t.Fatal("Expected non-nil telemetry from Initialize")
+	}
+}
+
+func TestLogError(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	tele := TestTelemetry(store)
+	if err := tele.LogError("module", "something went wrong"); err != nil {
+		t.Error("LogError should not fail with noop logError:", err)
+	}
+}
+
+func TestSanitizeAdafruitIOFeedName(t *testing.T) {
+	cases := []struct {
+		input, expected string
+	}{
+		{"pH sensor", "ph-sensor"},
+		{"Temperature", "temperature"},
+		{"Alk Weekly", "alk-weekly"},
+		{"already-lower", "already-lower"},
+	}
+	for _, c := range cases {
+		if got := SanitizeAdafruitIOFeedName(c.input); got != c.expected {
+			t.Errorf("SanitizeAdafruitIOFeedName(%q) = %q, want %q", c.input, got, c.expected)
+		}
+	}
+}
+
+func TestEmitMQTTWithoutClient(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	tele := TestTelemetry(store)
+	// mClient is nil — should return an error
+	if err := tele.EmitMQTT("topic", 1.0); err == nil {
+		t.Error("Expected error when MQTT client is not initialized")
+	}
+}
+
 func TestSanitizePrometheusMetricName(t *testing.T) {
 	checks := []struct {
 		input  string
