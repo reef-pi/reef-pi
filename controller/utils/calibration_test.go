@@ -34,3 +34,42 @@ func TestCalibration(t *testing.T) {
 		t.Error("Expected 38.9, found:", c1.Calibrate(37))
 	}
 }
+
+func TestCalibratorFactoryErrors(t *testing.T) {
+	// Unknown type
+	_, err := CalibratorFactory(CalibrationConfiguration{Type: 99})
+	if err == nil {
+		t.Error("Expected error for unknown calibration type")
+	}
+
+	// OnePoint with wrong measurement count
+	_, err = CalibratorFactory(CalibrationConfiguration{
+		Type:         OnePointCalibration,
+		Measurements: []Measurement{{}, {}},
+	})
+	if err == nil {
+		t.Error("Expected error for OnePoint with 2 measurements")
+	}
+
+	// TwoPoint with wrong measurement count
+	_, err = CalibratorFactory(CalibrationConfiguration{
+		Type:         TwoPointCalibration,
+		Measurements: []Measurement{{}},
+	})
+	if err == nil {
+		t.Error("Expected error for TwoPoint with 1 measurement")
+	}
+
+	// TwoPoint where m1.Expected >= m2.Expected (exercises minMax swap branch)
+	c, err := CalibratorFactory(CalibrationConfiguration{
+		Type: TwoPointCalibration,
+		Measurements: []Measurement{
+			{Actual: 96.0, Expected: 100},
+			{Actual: -0.5, Expected: 0.01},
+		},
+	})
+	if err != nil {
+		t.Error("Unexpected error:", err)
+	}
+	_ = c.Calibrate(50)
+}
