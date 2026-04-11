@@ -383,3 +383,4 @@ validation:name_required,nome é obrigatório
 validation:number_required,numero é obrigatória
 validation:selection_required,Selecção é obrigatória
 validation:time_required,Tempo é obrigatória
+lighting:jack,Jack

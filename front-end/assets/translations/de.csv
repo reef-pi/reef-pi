@@ -383,3 +383,4 @@ validation:name_required,Ein Name ist erforderlich!
 validation:number_required,Das muss eine Zahl sein!
 validation:selection_required,Eine Auswahl ist erforderlich!
 validation:time_required,Eine Zeit im Format HH:mm:ss ist erforderlich!
+lighting:jack,Jack
