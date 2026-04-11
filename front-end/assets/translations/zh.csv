@@ -148,6 +148,9 @@ configuration:settings:interface,接口
 configuration:settings:max_cpu,最大CPU
 configuration:settings:max_cpu_temp,Max CPU Temp (°C)
 configuration:settings:max_memory,最大内存
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,"Standard 5-field cron expression, e.g. ""0 8 * * *"" for daily at 8am"
 configuration:settings:name,名字
 configuration:settings:network_address_required,必须填写网络地址
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
@@ -394,5 +397,6 @@ validation:name_required,
 validation:number_required,
 validation:selection_required,
 validation:time_required,
+ato:debounce,Debounce
 macro:drag_to_reorder,Drag to reorder
 lighting:jack,Jack
