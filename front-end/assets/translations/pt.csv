@@ -395,3 +395,4 @@ validation:number_required,numero é obrigatória
 validation:selection_required,Selecção é obrigatória
 validation:time_required,Tempo é obrigatória
 macro:drag_to_reorder,Drag to reorder
+lighting:jack,Jack

@@ -145,6 +145,7 @@ class main extends React.Component {
           let panelContent = (
             <Light
               config={light}
+              jacks={this.props.jacks}
               onSubmit={this.handleUpdateLight}
               remove={this.props.deleteLight}
             />
