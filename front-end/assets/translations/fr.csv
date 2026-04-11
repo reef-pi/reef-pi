@@ -146,6 +146,9 @@ configuration:settings:display,Affichage
 configuration:settings:interface,Interface
 configuration:settings:max_cpu,CPU maximum
 configuration:settings:max_memory,Mémoire maximum
+configuration:settings:report_enable,Enable periodic status reports
+configuration:settings:report_schedule,Report schedule (cron)
+configuration:settings:report_schedule_help,Standard 5-field cron expression, e.g. "0 8 * * *" for daily at 8am
 configuration:settings:name,Nom
 configuration:settings:network_address_required,Adresse réseau requise
 configuration:settings:network_address_format,Address must be in host:port format (e.g. 0.0.0.0:80)
