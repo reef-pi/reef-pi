@@ -23,6 +23,9 @@ const DoserSchema = Yup.object().shape({
   stepper: Stepperchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
+  soft_start: Yup.number()
+    .typeError(i18n.t('validation:number_required'))
+    .min(0, i18n.t('validation:integer_min_required')),
   duration: Yup.number()
     .typeError(i18n.t('validation:number_required'))
     .min(1, i18n.t('validation:integer_min_required')),
