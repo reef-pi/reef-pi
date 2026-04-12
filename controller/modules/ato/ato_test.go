@@ -88,35 +88,34 @@ func TestATOInUse(t *testing.T) {
 		t.Fatal("Failed to create ato:", err)
 	}
 
-	// equipment dep
-	deps, err := c.InUse("equipment", "1")
-	if err != nil {
-		t.Error("InUse(equipment) error:", err)
-	}
-	if len(deps) == 0 {
-		t.Error("Expected at least one equipment dep")
-	}
-
-	// inlet dep
-	deps, err = c.InUse("inlets", "1")
-	if err != nil {
-		t.Error("InUse(inlets) error:", err)
-	}
-	if len(deps) == 0 {
-		t.Error("Expected at least one inlet dep")
+	tests := []struct {
+		name    string
+		depType string
+		wantLen int
+		wantErr bool
+	}{
+		{name: "equipment", depType: "equipment", wantLen: 1},
+		{name: "inlet", depType: "inlets", wantLen: 1},
+		{name: "macro", depType: "macro", wantLen: 0},
+		{name: "unknown", depType: "unknown", wantErr: true},
 	}
 
-	// macro dep — none expected since IsMacro=false for the created ATO
-	deps, err = c.InUse("macro", "1")
-	if err != nil {
-		t.Error("InUse(macro) error:", err)
-	}
-	// IsMacro=false for our test ATO, so pump "1" won't match as a macro dep
-	_ = deps
-
-	// unknown dep type should error
-	if _, err := c.InUse("unknown", "1"); err == nil {
-		t.Error("Expected error for unknown dep type")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			deps, err := c.InUse(tt.depType, "1")
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("expected error for dependency type %q", tt.depType)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("InUse(%s) error: %v", tt.depType, err)
+			}
+			if len(deps) != tt.wantLen {
+				t.Fatalf("InUse(%s) returned %d deps, want %d", tt.depType, len(deps), tt.wantLen)
+			}
+		})
 	}
 }
 
