@@ -24,31 +24,37 @@ import Journal from 'journal/main'
 
 
 const routes = [
-  <Route key="dashboard" index element={<Dashboard />} label={i18n.t('capabilities:dashboard')} />,
-  <Route key="equipment" path="/equipment" element={<Equipment />} label={i18n.t('capabilities:equipment')} />,
-  <Route key="timers" path="/timers" element={<Timers />} label={i18n.t('capabilities:timers')} />,
-  <Route key="lighting" path="/lighting" element={<Lighting />} label={i18n.t('capabilities:lights')} />,
-  <Route key="temperature" path="/temperature" element={<Temperature />} label={i18n.t('capabilities:temperature')} />,
-  <Route key="ato" path="/ato" element={<Ato />} label={i18n.t('capabilities:ato')} />,
-  <Route key="ph" path="/ph" element={<Ph />} label={i18n.t('capabilities:ph')} />,
-  <Route key="doser" path="/doser" element={<Doser />} label={i18n.t('capabilities:dosing_pumps')} />,
-  <Route key="macro" path="/macro" element={<Macro />} label={i18n.t('capabilities:macros')} />,
-  <Route key="camera" path="/camera" element={<Camera />} label={i18n.t('capabilities:camera')} />,
-  <Route key="manager" path="/manager" element={<Instances />} label={i18n.t('capabilities:manager')} />,
-  <Route key="journal" path="/journal" element={<Journal />} label={i18n.t('capabilities:journal')} />,
-  <Route key="configuration" path="/configuration/*" element={<Configuration />} label={i18n.t('capabilities:configuration')} />,
+  { key: 'dashboard', index: true, path: '', element: <Dashboard />, label: i18n.t('capabilities:dashboard') },
+  { key: 'equipment', path: '/equipment', element: <Equipment />, label: i18n.t('capabilities:equipment') },
+  { key: 'timers', path: '/timers', element: <Timers />, label: i18n.t('capabilities:timers') },
+  { key: 'lighting', path: '/lighting', element: <Lighting />, label: i18n.t('capabilities:lights') },
+  { key: 'temperature', path: '/temperature', element: <Temperature />, label: i18n.t('capabilities:temperature') },
+  { key: 'ato', path: '/ato', element: <Ato />, label: i18n.t('capabilities:ato') },
+  { key: 'ph', path: '/ph', element: <Ph />, label: i18n.t('capabilities:ph') },
+  { key: 'doser', path: '/doser', element: <Doser />, label: i18n.t('capabilities:dosing_pumps') },
+  { key: 'macro', path: '/macro', element: <Macro />, label: i18n.t('capabilities:macros') },
+  { key: 'camera', path: '/camera', element: <Camera />, label: i18n.t('capabilities:camera') },
+  { key: 'manager', path: '/manager', element: <Instances />, label: i18n.t('capabilities:manager') },
+  { key: 'journal', path: '/journal', element: <Journal />, label: i18n.t('capabilities:journal') },
+  { key: 'configuration', path: '/configuration/*', element: <Configuration />, label: i18n.t('capabilities:configuration') }
 ]
 
+const routeElements = routes.map(route => (
+  <Route key={route.key} index={route.index} path={route.path} element={route.element} />
+))
+
+const routeMatchesLocation = (route, pathname) => {
+  if (route.index) {
+    return pathname === '/'
+  }
+  const basePath = route.path.replace('/*', '')
+  return pathname === basePath || pathname.startsWith(basePath + '/')
+}
 
 function CurrentPageHeader() {
   const location = useLocation()
-  const route = routes.find(r => {
-    const path = r.props.path
-    if (!path) return location.pathname === '/'
-    const basePath = path.replace('/*', '')
-    return location.pathname === basePath || location.pathname.startsWith(basePath + '/')
-  })
-  const label = route ? route.props.label : location.pathname.slice(1)
+  const route = routes.find(r => routeMatchesLocation(r, location.pathname))
+  const label = route ? route.label : location.pathname.slice(1)
   return <span>{label}</span>
 }
 
@@ -64,25 +70,15 @@ class mainPanel extends React.Component {
   }
 
   navs (currentCaps) {
-    const panels = []
-    for (const route of routes) {
-      const cap = route.key
-      if (currentCaps[cap] === undefined) {
-        continue
-      }
-      if (!currentCaps[cap]) {
-        continue
-      }
-      const label = route.props.label
-
-      panels.push(
-        <li className='nav-item' key={'li-tab-' + cap}>
-          <NavLink to={route.props.path || ''} id={'tab-' + cap} className="nav-link">
-            {label}
+    const panels = routes
+      .filter(route => currentCaps[route.key] !== undefined && currentCaps[route.key])
+      .map(route => (
+        <li className='nav-item' key={'li-tab-' + route.key}>
+          <NavLink to={route.path || ''} id={'tab-' + route.key} className="nav-link">
+            {route.label}
           </NavLink>
         </li>
-      )
-    }
+      ))
     return (
       <ul className='navbar-nav'>{panels}</ul>
     )
@@ -124,7 +120,7 @@ class mainPanel extends React.Component {
               <div className='col'>
                 <ErrorBoundary>
                   <Routes>
-                    {routes}
+                    {routeElements}
                   </Routes>
                 </ErrorBoundary>
               </div>
