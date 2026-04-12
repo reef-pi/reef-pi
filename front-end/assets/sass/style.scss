@@ -70,6 +70,14 @@ body {
   padding-right: var(--reefpi-shell-gutter);
 }
 
+#content,
+.container-fluid,
+.row,
+[class^='col'],
+[class*=' col'] {
+  min-width: 0;
+}
+
 .body-panel {
   margin-top: 10px;
   margin-bottom: 20px;
@@ -112,6 +120,41 @@ small.text-muted {
 
 div.dropdown-menu {
   z-index: 1031;
+  max-width: 24rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dropdown-item,
+.list-group-item,
+.card-body,
+.card-footer {
+  overflow-wrap: anywhere;
+}
+
+.btn-group,
+.btn-group-vertical,
+.dropdown,
+.input-group,
+.custom-select,
+.form-control {
+  max-width: 100%;
+}
+
+.table-responsive,
+.reef-pi-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.recharts-responsive-container,
+.recharts-wrapper,
+.recharts-surface {
+  max-width: 100%;
+}
+
+.recharts-legend-wrapper {
+  max-width: 100%;
 }
 
 input[type=number].no-spinner::-webkit-inner-spin-button,
@@ -157,6 +200,14 @@ textarea:focus,
     padding-bottom: 90px;
   }
 
+  .body-panel .row {
+    row-gap: 0.75rem;
+  }
+
+  div.dropdown-menu {
+    max-width: calc(100vw - 1.5rem);
+  }
+
   .conf-nav {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -167,6 +218,25 @@ textarea:focus,
 
   .conf-nav .nav-link {
     white-space: nowrap;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .btn-group > .btn,
+  .dropdown > .btn,
+  .dropdown-toggle,
+  .input-group > .form-control,
+  .input-group > .custom-select {
+    max-width: 100%;
+  }
+
+  .recharts-cartesian-axis-tick-value,
+  .recharts-legend-item-text {
+    font-size: 0.75rem;
   }
 }
 
