@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Analog {
 
@@ -19,6 +20,12 @@ class Analog {
   }
 
   async addAnalog(name, pin, driver) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_analog_input')
     .typeText('input#analog_inputName', name)
@@ -26,6 +33,8 @@ class Analog {
     await select(this.driverSelect, driver)
     await select(this.pinSelect, pin)
     await t.click('input#createAnalogInput')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 

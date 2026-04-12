@@ -13,17 +13,31 @@ import ato from './ato'
 import doser from './doser'
 import tc from './tc'
 import dashboard from './dashboard'
+import { assertNoFatalError, login, waitForShell } from './runtime'
 
-fixture `Getting Started`
+fixture `Smoke`
     .page `http://localhost:8080/`
 
-test('Smoke Test', async t => {
+test('sign in and load shell', async t => {
+  await login()
+  await waitForShell()
+  await t.expect(Selector('#tab-dashboard').innerText).eql('Dashboard')
+  await assertNoFatalError()
+})
 
-  await t
-    .typeText('#reef-pi-user', 'reef-pi')
-    .typeText('#reef-pi-pass', 'reef-pi')
-    .click('#btnSaveCreds')
-    .expect(Selector('#tab-dashboard').innerText).eql('Dashboard')
+test('create configuration dependencies', async () => {
+  await login()
+  await waitForShell()
+  await driver.create()
+  await outlet.create()
+  await inlet.create()
+  await jack.create()
+  await analog.create()
+})
+
+test('create subsystem entities', async () => {
+  await login()
+  await waitForShell()
   await driver.create()
   await outlet.create()
   await inlet.create()
@@ -38,5 +52,19 @@ test('Smoke Test', async t => {
   await doser.create()
   await tc.create()
   await ato.edit()
+})
+
+test('configure dashboard', async () => {
+  await login()
+  await waitForShell()
+  await driver.create()
+  await outlet.create()
+  await inlet.create()
+  await jack.create()
+  await analog.create()
+  await equipment.create()
+  await light.create()
+  await ph.create()
+  await ato.create()
   await dashboard.configure()
 })

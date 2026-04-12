@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, setText } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Tc {
 
@@ -32,6 +33,12 @@ class Tc {
   }
 
   async addTc(tc) {
+    if (await bodyContains(tc.name)) {
+      await expectBodyContains(tc.name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
       .click('input#add_probe')
       .typeText(this.name, tc.name)
@@ -45,6 +52,8 @@ class Tc {
     await setText(this.max, tc.max)
 
     await t.click(this.submit)
+    await expectBodyContains(tc.name)
+    await assertNoFatalError()
   }
 }
 

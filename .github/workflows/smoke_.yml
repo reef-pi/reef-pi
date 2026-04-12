@@ -22,5 +22,11 @@ jobs:
       - run: make go
       - run: make ui
       - run: |
-          make start-dev &
+          set -euo pipefail
+          trap 'if [ -f smoke-server.pid ]; then kill "$(cat smoke-server.pid)" || true; fi' EXIT
+          make start-dev > smoke-server.log 2>&1 &
+          echo $! > smoke-server.pid
+          bash scripts/wait-http.sh http://127.0.0.1:8080/ 60
           make smoke
+      - if: failure()
+        run: tail -n 200 smoke-server.log || true

@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Light {
 
@@ -13,6 +14,12 @@ class Light {
   }
 
   async addLight(name) {
+    if (await bodyContains('Kessil A360')) {
+      await expectBodyContains('Kessil A360')
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_light')
     .typeText('input#lightName', name)
@@ -28,6 +35,8 @@ class Light {
     .typeText('#form-light-1 input[name="config.channels.0.profile.config.start"]', '10:00:00')
     .typeText('#form-light-1 input[name="config.channels.0.profile.config.end"]', '14:00:00')
     .click('input#save-light-1')
+    await expectBodyContains('Kessil A360')
+    await assertNoFatalError()
   }
 }
 

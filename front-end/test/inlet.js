@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Inlet {
 
@@ -19,12 +20,20 @@ class Inlet {
   }
 
   async addInlet(name, pin) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_inlet')
     .typeText('input#inletName', name)
 
     await select(this.pinSelect, pin)
     await t.click('input#createInlet')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 

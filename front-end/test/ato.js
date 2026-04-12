@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, clear, setText } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Ato {
 
@@ -26,6 +27,12 @@ class Ato {
   }
 
   async addAto(name, inlet, period, enable) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_new_ato_sensor')
     .typeText('.add-ato [name*="name"]', name)
@@ -35,6 +42,8 @@ class Ato {
     await select(this.enable, enable)
 
     await t.click('input[type*="submit"]')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 
   async editAto(period, enable, control, pump) {
@@ -43,6 +52,8 @@ class Ato {
     await select(this.control, control)
     await select(this.pump, pump)
     await t.click('input[type*="submit"]')
+    await expectBodyContains('Biocube29')
+    await assertNoFatalError()
   }
 }
 export default new Ato()
