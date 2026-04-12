@@ -11,28 +11,29 @@ import Errors from './errors'
 import i18n from 'utils/i18n'
 
 const configRoutes = [
-  <Route key='nomatch' index path='*' element={<Settings />} label={i18n.t('configuration:tab:settings')} />,
-  <Route key='connectors' path='connectors' element={<Connectors />} label={i18n.t('configuration:tab:connectors')} />,
-  <Route key='telemetry' path='telemetry' element={<Telemetry />} label={i18n.t('configuration:tab:telemetry')} />,
-  <Route key='authentication' path='authentication' element={<Auth />} label={i18n.t('configuration:tab:authentication')} />,
-  <Route key='drivers' path='drivers' element={<Drivers />} label={i18n.t('configuration:tab:drivers')} />,
-  <Route key='errors' path='errors' element={<Errors />} label={i18n.t('configuration:tab:errors')} />,
-  <Route key='admin' path='admin' element={<Admin />} label={i18n.t('configuration:tab:admin')} />,
-  <Route key='about' path='about' element={<About />} label={i18n.t('configuration:tab:about')} />
+  { key: 'nomatch', index: true, path: '*', element: <Settings />, label: i18n.t('configuration:tab:settings') },
+  { key: 'connectors', path: 'connectors', element: <Connectors />, label: i18n.t('configuration:tab:connectors') },
+  { key: 'telemetry', path: 'telemetry', element: <Telemetry />, label: i18n.t('configuration:tab:telemetry') },
+  { key: 'authentication', path: 'authentication', element: <Auth />, label: i18n.t('configuration:tab:authentication') },
+  { key: 'drivers', path: 'drivers', element: <Drivers />, label: i18n.t('configuration:tab:drivers') },
+  { key: 'errors', path: 'errors', element: <Errors />, label: i18n.t('configuration:tab:errors') },
+  { key: 'admin', path: 'admin', element: <Admin />, label: i18n.t('configuration:tab:admin') },
+  { key: 'about', path: 'about', element: <About />, label: i18n.t('configuration:tab:about') }
 ]
+
+const configRouteElements = configRoutes.map(route => (
+  <Route key={route.key} index={route.index} path={route.path} element={route.element} />
+))
 
 class Configuration extends React.Component {
   render () {
-    const panels = []
-    for (const route of configRoutes) {
-      panels.push(
+    const panels = configRoutes.map(route => (
         <li key={'conf-tabs' + route.key}>
-          <NavLink id={'config-' + route.key} className='nav-link' to={route.props.path || ''}>
-            {route.props.label}
+          <NavLink id={'config-' + route.key} className='nav-link' to={route.path || ''}>
+            {route.label}
           </NavLink>
         </li>
-      )
-    }
+    ))
 
     return (
       <>
@@ -42,7 +43,7 @@ class Configuration extends React.Component {
 
         <div className='row' key='body'>
           <Routes>
-            {configRoutes}
+            {configRouteElements}
           </Routes>
         </div>
       </>

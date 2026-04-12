@@ -17,14 +17,14 @@ const Bucket = storage.ATOBucket
 const UsageBucket = storage.ATOUsageBucket
 
 type Controller struct {
-	statsMgr   telemetry.StatsManager
-	devMode    bool
-	quitters   map[string]chan struct{}
-	wg         sync.WaitGroup
-	mu         *sync.Mutex
-	inlets     *connectors.Inlets
-	c          controller.Controller
-	lowSince   map[string]*time.Time
+	statsMgr telemetry.StatsManager
+	devMode  bool
+	quitters map[string]chan struct{}
+	wg       sync.WaitGroup
+	mu       *sync.Mutex
+	inlets   *connectors.Inlets
+	c        controller.Controller
+	lowSince map[string]*time.Time
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -39,6 +39,22 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 	}
 	return con, nil
 }
+
+func (c *Controller) inUseBy(matches func(ATO) bool) ([]string, error) {
+	atos, err := c.List()
+	if err != nil {
+		return nil, err
+	}
+
+	deps := make([]string, 0, len(atos))
+	for _, a := range atos {
+		if matches(a) {
+			deps = append(deps, a.Name)
+		}
+	}
+	return deps, nil
+}
+
 func (c *Controller) sub(a ATO) (controller.Subsystem, error) {
 	if a.IsMacro {
 		return c.c.Subsystem(storage.MacroBucket)
@@ -116,43 +132,21 @@ func (c *Controller) Control(a ATO, reading int) error {
 }
 
 func (c *Controller) InUse(depType, id string) ([]string, error) {
-	var deps []string
 	switch depType {
 	case storage.EquipmentBucket:
-		atos, err := c.List()
-		if err != nil {
-			return deps, err
-		}
-		for _, a := range atos {
-			if a.Pump == id && !a.IsMacro {
-				deps = append(deps, a.Name)
-			}
-		}
-		return deps, nil
+		return c.inUseBy(func(a ATO) bool {
+			return a.Pump == id && !a.IsMacro
+		})
 	case storage.InletBucket:
-		atos, err := c.List()
-		if err != nil {
-			return deps, err
-		}
-		for _, a := range atos {
-			if a.Inlet == id {
-				deps = append(deps, a.Name)
-			}
-		}
-		return deps, nil
+		return c.inUseBy(func(a ATO) bool {
+			return a.Inlet == id
+		})
 	case storage.MacroBucket:
-		atos, err := c.List()
-		if err != nil {
-			return deps, err
-		}
-		for _, a := range atos {
-			if a.IsMacro && a.Pump == id {
-				deps = append(deps, a.Name)
-			}
-		}
-		return deps, nil
+		return c.inUseBy(func(a ATO) bool {
+			return a.IsMacro && a.Pump == id
+		})
 	default:
-		return deps, fmt.Errorf("unknown dependency type:%s", depType)
+		return nil, fmt.Errorf("unknown dependency type:%s", depType)
 	}
 }
 

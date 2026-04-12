@@ -1,13 +1,14 @@
-name: smoke
+name: Frontend Smoke
 on: [push, pull_request]
 jobs:
-  builds:
+  frontend-smoke:
+    name: Smoke Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
-          go-version: '^1.20'
+          go-version-file: go.mod
       - uses: actions/setup-node@v6
         with:
           node-version: 22

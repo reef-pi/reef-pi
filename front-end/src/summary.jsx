@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import i18n from 'utils/i18n'
-import { Link } from 'react-router-dom'
 
 export default class Summary extends React.Component {
   constructor (props) {
@@ -18,8 +17,8 @@ export default class Summary extends React.Component {
   }
 
   render () {
-    let devModeWarning = <React.Fragment />
-    if(this.props.devMode){
+    let devModeWarning = <></>
+    if (this.props.devMode) {
       devModeWarning = <li className='list-inline-item'><span className='text-danger'>{i18n.t('devmode_warning')} </span>| </li>
     }
     return (
@@ -33,7 +32,7 @@ export default class Summary extends React.Component {
           <li className='list-inline-item'><a href='/assets/api.html'>API</a> | </li>
           {devModeWarning}
           <li className='list-inline-item'>
-            <a href="/configuration/errors" className="text-danger">
+            <a href='/configuration/errors' className='text-danger'>
               {i18n.t('errors')}({this.props.errors.length})
             </a>
           </li>

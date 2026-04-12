@@ -1,0 +1,54 @@
+name: CI Regression
+description: Track a workflow failure discovered during refactor work that is not local to the current slice.
+title: "CI Regression: "
+labels:
+  - refactor
+  - refactor:ci
+body:
+  - type: input
+    id: workflow
+    attributes:
+      label: Workflow or check name
+      placeholder: "go / builds"
+    validations:
+      required: true
+  - type: input
+    id: pr
+    attributes:
+      label: Related PR
+      placeholder: "#1234"
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Failure summary
+      description: Describe the failing step and the observed behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: class
+    attributes:
+      label: Failure class
+      options:
+        - toolchain drift
+        - flaky test
+        - hidden coupling
+        - behavior regression
+        - environment assumption
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Local reproduction
+      description: Record the exact local command and notes used to reproduce the failure.
+    validations:
+      required: true
+  - type: textarea
+    id: prevention
+    attributes:
+      label: Prevention artifact
+      description: State what should be added so this failure class is less likely to recur.
+    validations:
+      required: true
