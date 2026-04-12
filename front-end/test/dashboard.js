@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, clear, setText } from './helpers'
+import { assertNoFatalError, expectExists } from './runtime'
 
 class Dashboard {
 
@@ -49,6 +50,8 @@ class Dashboard {
 
       .click('input#save_dashboard')
       .click('button#configure-dashboard')
+    await expectExists('button#configure-dashboard')
+    await assertNoFatalError()
   }
 }
 

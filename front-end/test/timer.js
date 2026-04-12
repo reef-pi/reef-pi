@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Timer {
 
@@ -18,6 +19,12 @@ class Timer {
   }
 
   async addTimer(name, equipment, revert, duration, hour, minute, second) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_timer')
     .typeText('.add-timer input[name="name"]', name)
@@ -38,6 +45,8 @@ class Timer {
     await t
     .typeText(this.second, second)
     .click('.add-timer input[type*="submit"]')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 

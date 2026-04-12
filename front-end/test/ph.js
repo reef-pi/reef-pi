@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Ph {
 
@@ -14,6 +15,11 @@ class Ph {
   }
 
   async addPh(name, period, analogInput, control, lowerThreshold, upperThreshold, lowerFunction, upperFunction) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
 
     await t
     .click('input#add_probe')
@@ -31,6 +37,8 @@ class Ph {
     .typeText('.add-probe input[name="upperThreshold"]', upperThreshold, { replace: true })
 
     await t.click('.add-probe input[type*="submit"]')
+    await expectBodyContains(name)
+    await assertNoFatalError()
 
   }
 }

@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Macro {
 
@@ -43,6 +44,12 @@ class Macro {
   }
 
   async addMacro(macro) {
+    if (await bodyContains(macro.name)) {
+      await expectBodyContains(macro.name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_macro')
     .typeText('.add-macro input[name="name"]', macro.name)
@@ -52,6 +59,8 @@ class Macro {
     }
 
     await t.click('.add-macro input[type*="submit"]')
+    await expectBodyContains(macro.name)
+    await assertNoFatalError()
   }
 
   async addStep(idx, step) {

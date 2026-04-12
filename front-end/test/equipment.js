@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Equipment {
 
@@ -21,6 +22,12 @@ class Equipment {
   }
 
   async addEquipment(name, outlet) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_equipment')
     .typeText('.add-equipment [name*="name"]', name)
@@ -29,6 +36,8 @@ class Equipment {
 
     await t
     .click('.add-equipment button[type*="submit"]')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 

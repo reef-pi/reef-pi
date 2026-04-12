@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Driver {
 
@@ -18,6 +19,12 @@ class Driver {
   }
 
   async addDriver(type, name, config) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_new_driver')
     .typeText('.add-driver [name*="name"]', name)
@@ -38,6 +45,8 @@ class Driver {
 
     await t
     .click('.add-driver input[type*="submit"]')
+    await expectBodyContains(name)
+    await assertNoFatalError()
 
   }
 }

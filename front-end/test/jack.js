@@ -1,4 +1,5 @@
 import { Selector, t } from 'testcafe'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Jack {
 
@@ -18,11 +19,19 @@ class Jack {
   }
 
   async addJack(name, pins) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_jack')
     .typeText(this.name, name)
     .typeText(this.pins, pins)
     .click('input#createJack')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 

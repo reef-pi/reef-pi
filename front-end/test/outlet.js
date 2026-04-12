@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
+import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
 
 class Outlet {
 
@@ -26,12 +27,20 @@ class Outlet {
   }
 
   async addOutlet(name, pin) {
+    if (await bodyContains(name)) {
+      await expectBodyContains(name)
+      await assertNoFatalError()
+      return
+    }
+
     await t
     .click('input#add_outlet')
     .typeText('input#outletName', name)
 
     await select(this.pinSelect, pin)
     await t.click('input#createOutlet')
+    await expectBodyContains(name)
+    await assertNoFatalError()
   }
 }
 
