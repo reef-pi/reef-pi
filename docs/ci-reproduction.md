@@ -6,6 +6,8 @@ This file captures the local command equivalents for the repository workflows so
 
 Workflow: `.github/workflows/go.yml`
 
+Use Go `1.26.2` for local reproduction.
+
 ```bash
 go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 go install golang.org/x/tools/cmd/goimports@latest
