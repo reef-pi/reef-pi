@@ -1,5 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
-@import './colors';
+@import './tokens';
 @import './auth-page';
 @import './navbar';
 @import './sign-in';
@@ -8,6 +8,37 @@
 @import './alert';
 @import './fatal_error';
 
+:root {
+  --reefpi-color-brand: #{$main-color};
+  --reefpi-color-brand-dark: #{$main-dark-color};
+  --reefpi-color-brand-alt: #{$main-alternate-color};
+  --reefpi-color-surface: #{$surface-color};
+  --reefpi-color-surface-elevated: #{$surface-elevated-color};
+  --reefpi-color-border: #{$border-color};
+  --reefpi-color-text: #{$text-color};
+  --reefpi-color-text-muted: #{$text-muted-color};
+  --reefpi-color-focus: #{$focus-color};
+  --reefpi-color-surface-auth: #{$surface-auth-color};
+  --reefpi-color-text-strong: #{$text-strong-color};
+  --reefpi-color-border-subtle: #{$border-subtle-color};
+  --reefpi-color-border-strong: #{$border-strong-color};
+  --reefpi-color-shadow: #{$shadow-color};
+  --reefpi-color-nav-text: #{$nav-text-color};
+  --reefpi-color-nav-text-muted: #{$nav-text-muted-color};
+  --reefpi-color-nav-overlay: #{$nav-overlay-color};
+  --reefpi-color-nav-border: #{$nav-border-color};
+  --reefpi-color-nav-text-strong: #{$nav-text-strong-color};
+  --reefpi-shell-gutter: #{$space-sm};
+  --reefpi-panel-gap: #{$space-md};
+  --reefpi-space-xxs: #{$space-xxs};
+  --reefpi-space-xs: #{$space-xs};
+  --reefpi-space-sm: #{$space-sm};
+  --reefpi-space-md: #{$space-md};
+  --reefpi-space-lg: #{$space-lg};
+  --reefpi-radius-sm: #{$radius-sm};
+  --reefpi-radius-md: #{$radius-md};
+  --reefpi-tap-target-min: 2.75rem;
+}
 
 .reef_pi_panel {
   border-style: none;
@@ -18,25 +49,65 @@
 }
 
 .bottom-bar {
-  border-top: solid 1px #CCC;
+  border-top: solid 1px var(--reefpi-color-border-subtle);
 }
 
 html {
   font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
 }
 
+body {
+  background-color: var(--reefpi-color-surface);
+  color: var(--reefpi-color-text);
+}
+
+#main-panel {
+  min-height: 100vh;
+}
+
+.container-fluid {
+  padding-left: var(--reefpi-shell-gutter);
+  padding-right: var(--reefpi-shell-gutter);
+}
+
 .body-panel {
   margin-top: 10px;
   margin-bottom: 20px;
   padding-bottom: 70px;
+  row-gap: var(--reefpi-panel-gap);
 }
 
 .nav-item {
   cursor: pointer;
 }
 
+.list-group-item,
+.reef_pi_panel,
+.conf-nav,
+.navbar-reefpi {
+  border-color: var(--reefpi-color-border);
+}
+
+.list-group-item {
+  background-color: var(--reefpi-color-surface-elevated);
+}
+
 .conf-nav {
   margin-bottom: 10px;
+  row-gap: 0.25rem;
+}
+
+.conf-nav .nav-link,
+.navbar-reefpi .nav-link,
+.btn {
+  min-height: var(--reefpi-tap-target-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.text-muted,
+small.text-muted {
+  color: var(--reefpi-color-text-muted) !important;
 }
 
 div.dropdown-menu {
@@ -53,7 +124,23 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
   width: 100%;
 }
 
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.nav-link:focus,
+.btn:focus {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
 @media screen and (min-width: 768px) {
+  :root {
+    --reefpi-shell-gutter: #{$space-md};
+  }
+
   .body-panel {
     margin-bottom: 85px;
   }
@@ -62,6 +149,24 @@ input[type=number].no-spinner::-webkit-outer-spin-button {
     -webkit-transition:none;
     -moz-transition:none;
     overflow:visible;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .body-panel {
+    padding-bottom: 90px;
+  }
+
+  .conf-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .conf-nav .nav-link {
+    white-space: nowrap;
   }
 }
 

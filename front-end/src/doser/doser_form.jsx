@@ -21,6 +21,7 @@ const DoserForm = withFormik({
       jack: data.jack || '',
       pin: data.pin === undefined ? '' : data.pin,
       enable: data.regiment.enable === undefined ? true : data.regiment.enable,
+      soft_start: data.regiment.soft_start || 0,
       duration: data.regiment.duration || 0,
       volume: data.regiment.volume || 0,
       speed: data.regiment.speed || 0,

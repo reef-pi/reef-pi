@@ -196,6 +196,7 @@ doser:microstepping,micropasso
 doser:ms_pin_a,Pino A
 doser:ms_pin_b,Pino B
 doser:ms_pin_c,Pino C
+doser:soft_start,
 doser:speed,Velocidade
 doser:spr,spr
 doser:step_pin,Pino de passo
@@ -260,6 +261,8 @@ lighting:add_point,Adicionar Ponto
 lighting:change_mode,Mudar Modo
 lighting:channel_name,Nome do Canal
 lighting:chart_color,Cor
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,Modo Automático
 lighting:mode_manual,Modo Manual
@@ -337,6 +340,7 @@ telemetry:notification:to,para
 telemetry:notification:username,nome de usuário
 temperature:alert_above,alerta acima
 temperature:alert_below,alerta abaixo
+temperature:analog_input,Entrada Analógica
 temperature:calibrate,calibrar
 temperature:calibration:apply,aplicar
 temperature:calibration:set_temperature,Definir temperatura
@@ -361,7 +365,6 @@ temperature:hysteresis,histerese
 temperature:hysteresis_less_than,histerese menor que
 temperature:lower_function,função caso menor
 temperature:lower_threshold,Abaixo do desejado
-temperature:analog_input,Entrada Analógica
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades

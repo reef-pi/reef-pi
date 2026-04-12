@@ -178,6 +178,30 @@ const EditDcPump = ({
           </div>
         </div>
       </div>
+
+      <div className='col-12 col-sm-6 col-md-3'>
+        <div className='form-group'>
+          <label htmlFor='soft_start'>{i18n.t('doser:soft_start')}</label>
+          <div className='input-group'>
+            <Field
+              name='soft_start'
+              readOnly={readOnly}
+              type='number'
+              min='0'
+              className={classNames('form-control', {
+                'is-invalid': ShowError('soft_start', touched, errors)
+              })}
+            />
+            <div className='input-group-append'>
+              <span className='input-group-text d-none d-lg-flex'>
+                {i18n.t('second_s')}
+              </span>
+              <span className='input-group-text d-flex d-lg-none'>sec</span>
+            </div>
+            <ErrorFor errors={errors} touched={touched} name='soft_start' />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
