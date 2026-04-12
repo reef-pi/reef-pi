@@ -357,7 +357,7 @@ describe('Lighting ui', () => {
   it('<ProfileSelector />', () => {
     const fn = jest.fn()
     const wrapper = shallow(<ProfileSelector name='name' value='fixed' onChangeHandler={fn} />)
-    expect(wrapper.find('input').length).toBe(7)
+    expect(wrapper.find('input').length).toBe(8)
     wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
   })
 

@@ -45,6 +45,8 @@ const channelSchema = Yup.object().shape({
         return randomSchema
       case 'sine':
         return sineSchema
+      case 'circadian':
+        return circadianSchema
       case 'cyclic':
         return cyclicSchema
       default:
@@ -157,6 +159,31 @@ const lunarSchema = Yup.object().shape({
         .required(i18n.t('validation:last_full_moon_required'))
         .typeError(i18n.t('validation:last_full_moon_required'))
         .max(new Date(), i18n.t('validation:last_full_moon_required'))
+    })
+})
+
+const circadianSchema = Yup.object().shape({
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
+  config: Yup.object()
+    .typeError(i18n.t('validation:selection_required'))
+    .shape({
+      start: Yup.string()
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
+      end: Yup.string()
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
+      dawn_value: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0, i18n.t('validation:integer_min_required'))
+        .max(100, i18n.t('validation:integer_max_required')),
+      noon_value: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0, i18n.t('validation:integer_min_required'))
+        .max(100, i18n.t('validation:integer_max_required'))
     })
 })
 
