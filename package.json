@@ -114,7 +114,9 @@
       "beforeEach"
     ],
     "ignore": [
-      "*.test.js"
+      "*.test.js",
+      "**/__snapshots__",
+      "**/__snapshots__/**"
     ]
   },
   "jest": {
