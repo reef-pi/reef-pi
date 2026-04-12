@@ -1,4 +1,4 @@
-@import './colors';
+@import './tokens';
 
 body,html,#main-panel {
   &.auth-page{
@@ -7,11 +7,11 @@ body,html,#main-panel {
 }
 #main-panel {
   &.auth-page{
-    background-color: rgb(237, 248, 232);
+    background-color: $surface-auth-color;
   }
 }
 .auth-page{
   .reef-pi-title{
-    color: #2e2e2e;
+    color: $text-strong-color;
   }
 }
