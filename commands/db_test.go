@@ -255,7 +255,7 @@ func TestDBCmdUpdate(t *testing.T) {
 func TestLoadConfig_Default(t *testing.T) {
 	cfg, err := loadConfig("")
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal("loadConfig failed:", err)
 	}
 	if cfg.Database == "" {
 		t.Error("Expected non-empty default database path")
