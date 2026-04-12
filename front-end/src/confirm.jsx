@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import $ from 'jquery'
 import Modal from 'modal'
 import i18next from 'i18next'
@@ -10,6 +9,7 @@ export default class Confirm extends React.Component {
       confirmLabel: props.confirmLabel === undefined ? i18next.t('ok') : props.confirmLabel,
       abortLabel: props.abortLabel === undefined ? i18next.t('cancel') : props.abortLabel
     }
+    this.confirmRef = React.createRef()
     this.handleAbort = this.handleAbort.bind(this)
     this.handleConfirm = this.handleConfirm.bind(this)
   }
@@ -24,7 +24,9 @@ export default class Confirm extends React.Component {
 
   componentDidMount () {
     this.promise = new $.Deferred()
-    return ReactDOM.findDOMNode(this.refs.confirm).focus()
+    if (this.confirmRef.current) {
+      this.confirmRef.current.focus()
+    }
   }
 
   render () {
@@ -51,7 +53,7 @@ export default class Confirm extends React.Component {
               {this.state.abortLabel}
             </button>
             {' '}
-            <button role='confirm' type='button' className='btn btn-primary' ref='confirm' onClick={this.handleConfirm}>
+            <button role='confirm' type='button' className='btn btn-primary' ref={this.confirmRef} onClick={this.handleConfirm}>
               {this.state.confirmLabel}
             </button>
           </div>

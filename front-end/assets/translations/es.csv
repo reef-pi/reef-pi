@@ -196,6 +196,7 @@ doser:microstepping,
 doser:ms_pin_a,
 doser:ms_pin_b,
 doser:ms_pin_c,
+doser:soft_start,
 doser:speed,
 doser:spr,
 doser:step_pin,
@@ -260,8 +261,8 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,Nombre del Canal
 lighting:chart_color,Color
-lighting:circadian_dawn_value,
-lighting:circadian_noon_value,
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
