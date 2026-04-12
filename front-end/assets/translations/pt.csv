@@ -180,7 +180,11 @@ cron:week,Semana
 dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,Painel em branco
 doser:calibrate,calibrar
+doser:calibration:current_rate,
+doser:calibration:measured_volume,
+doser:calibration:rate,
 doser:calibration:run,correr calibração
+doser:calibration:save_result,
 doser:delay,espera
 doser:direction,direcção
 doser:direction_pin,pin de direcção
@@ -203,6 +207,7 @@ doser:step_pin,Pin de Passo
 doser:title_delete,Apagar
 doser:type,Tipo
 doser:volume,Volume
+doser:volume_ml,
 doser:vpr,vpr
 doser:warn_delete,Aviso Apagar
 doser:warn_reset,Aviso Reninciar

@@ -180,7 +180,11 @@ cron:week,Wochentag (0=So - 6=Sa)
 dashboard:back_to_dashboard,zurück zur Übersicht
 dashboard:blank_panel,-leer-
 doser:calibrate,Kalibrieren
+doser:calibration:current_rate,
+doser:calibration:measured_volume,
+doser:calibration:rate,
 doser:calibration:run,Start
+doser:calibration:save_result,
 doser:delay,
 doser:direction,
 doser:direction_pin,
@@ -203,6 +207,7 @@ doser:step_pin,
 doser:title_delete,{{name}} löschen?
 doser:type,
 doser:volume,
+doser:volume_ml,
 doser:vpr,
 doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
