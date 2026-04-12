@@ -1,6 +1,7 @@
 import Confirm from 'confirm'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { flushSync } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 export function confirm (message, options = {}) {
   const props = Object.assign({ message: message }, options)
@@ -9,12 +10,19 @@ export function confirm (message, options = {}) {
 
 export function showModal (modal) {
   const wrapper = document.body.appendChild(document.createElement('div'))
+  const root = createRoot(wrapper)
+  const modalRef = React.createRef()
 
   const cleanup = function () {
-    ReactDOM.unmountComponentAtNode(wrapper)
+    root.unmount()
     return setTimeout(function () {
       return wrapper.remove()
     })
   }
-  return ReactDOM.render(modal, wrapper).promise.always(cleanup).promise()
+
+  flushSync(function () {
+    root.render(React.cloneElement(modal, { ref: modalRef }))
+  })
+
+  return modalRef.current.promise.always(cleanup).promise()
 }

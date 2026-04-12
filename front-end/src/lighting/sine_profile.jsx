@@ -31,11 +31,6 @@ const SineProfile = (props) => {
   )
 }
 
-SineProfile.defaultProps = {
-  start: '',
-  end: ''
-}
-
 SineProfile.propTypes = {
   name: PropTypes.string.isRequired,
   config: PropTypes.object,

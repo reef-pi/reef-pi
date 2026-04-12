@@ -62,13 +62,6 @@ const CircadianProfile = (props) => {
   )
 }
 
-CircadianProfile.defaultProps = {
-  start: '',
-  end: '',
-  dawn_value: 10,
-  noon_value: 100
-}
-
 CircadianProfile.propTypes = {
   name: PropTypes.string.isRequired,
   config: PropTypes.object,
