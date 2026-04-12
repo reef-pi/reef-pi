@@ -1,39 +1,52 @@
 import FatalError from './fatal_error'
-import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-// import configureMockStore from 'redux-mock-store'
-// import thunk from 'redux-thunk'
-// const mockStore = configureMockStore([thunk])
-Enzyme.configure({ adapter: new Adapter() })
 
-describe('Sign_In', () => {
-  beforeEach(() => {})
+function mountClassComponent (Component) {
+  const instance = new Component({})
+  instance.setState = update => {
+    const patch = typeof update === 'function' ? update(instance.state, instance.props) : update
+    instance.state = { ...instance.state, ...patch }
+  }
+  return instance
+}
+
+async function flushPromises () {
+  await Promise.resolve()
+  await Promise.resolve()
+}
+
+describe('FatalError', () => {
   afterEach(() => {
     jest.resetAllMocks()
+    jest.useRealTimers()
   })
-  it('<FatalError />', async () => {
+
+  it('updates state from successful and failed health checks', async () => {
+    const instance = mountClassComponent(FatalError)
+
+    global.fetch = jest.fn()
+      .mockResolvedValueOnce({ ok: true, status: 200 })
+      .mockRejectedValueOnce(new Error('network error'))
+
+    instance.checkHealth()
+    await flushPromises()
+    expect(instance.state.up).toBe(true)
+
+    instance.checkHealth()
+    await flushPromises()
+    expect(instance.state.up).toBe(false)
+  })
+
+  it('starts and clears the polling timer', () => {
     jest.useFakeTimers()
-    global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise(resolve => {
-        resolve({
-          ok: true,
-          status: 200
-        })
-      })
-      return p
-    })
-    const m = shallow(<FatalError />).instance()
-    expect(m.state.up).toBe(true)
-    jest.advanceTimersByTime(5000)
-    expect(m.state.up).toBe(true)
-    global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
-        reject(Error)
-      })
-      return p
-    })
-    jest.advanceTimersByTime(5000)
-    m.componentWillUnmount()
+    const setIntervalSpy = jest.spyOn(global, 'setInterval')
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
+    const instance = mountClassComponent(FatalError)
+
+    instance.componentDidMount()
+    expect(setIntervalSpy).toHaveBeenCalledTimes(1)
+    expect(instance.timer).toBeDefined()
+
+    instance.componentWillUnmount()
+    expect(clearIntervalSpy).toHaveBeenCalledWith(instance.timer)
   })
 })
