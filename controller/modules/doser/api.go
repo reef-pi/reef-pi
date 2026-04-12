@@ -135,6 +135,30 @@ func (c *Controller) LoadAPI(r *mux.Router) {
 	//   description: Not Found
 	r.HandleFunc("/api/doser/pumps/{id}/calibrate", c.calibrate).Methods("POST")
 
+	// swagger:operation POST /api/doser/pumps/{id}/calibrate/save Doser doserCalibrateSave
+	// Save calibration result.
+	// Store the measured volume dispensed during a calibration run to compute mL/second ratio.
+	// ---
+	// parameters:
+	//  - in: path
+	//    name: id
+	//    description: The Id of the doser
+	//    required: true
+	//    schema:
+	//     type: integer
+	//  - in: body
+	//    name:
+	//    description:
+	//    required: true
+	//    schema:
+	//     $ref: '#/definitions/doserCalibrationDetails'
+	// responses:
+	//  200:
+	//   description: OK
+	//  404:
+	//   description: Not Found
+	r.HandleFunc("/api/doser/pumps/{id}/calibrate/save", c.calibrateSave).Methods("POST")
+
 	// swagger:operation POST /api/doser/pumps/{id}/schedule Doser doserSchedule
 	// Schedule dosing.
 	// Schedule dosing.
@@ -187,6 +211,14 @@ func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
 		return c.Delete(id)
 	}
 	utils.JSONDeleteResponse(fn, w, r)
+}
+
+func (c *Controller) calibrateSave(w http.ResponseWriter, r *http.Request) {
+	var cal CalibrationDetails
+	fn := func(id string) error {
+		return c.SaveCalibrationResult(id, cal)
+	}
+	utils.JSONUpdateResponse(&cal, fn, w, r)
 }
 
 func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {

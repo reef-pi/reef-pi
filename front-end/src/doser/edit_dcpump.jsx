@@ -116,29 +116,55 @@ const EditDcPump = ({
         </div>
       </div>
 
-      {!values.continuous && (
-        <div className='col-12 col-sm-6 col-md-3'>
-          <div className='form-group'>
-            <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
-            <div className='input-group'>
-              <Field
-                name='duration'
-                readOnly={readOnly}
-                type='number'
-                className={classNames('form-control', {
-                  'is-invalid': ShowError('duration', touched, errors)
-                })}
-              />
-              <div className='input-group-append'>
-                <span className='input-group-text d-none d-lg-flex'>
-                  {i18n.t('second_s')}
-                </span>
-                <span className='input-group-text d-flex d-lg-none'>sec</span>
+      {!values.continuous && (values.volume_per_second > 0
+        ? (
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='volume'>{i18n.t('doser:volume_ml')}</label>
+              <div className='input-group'>
+                <Field
+                  name='volume'
+                  readOnly={readOnly}
+                  type='number'
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('volume', touched, errors)
+                  })}
+                />
+                <div className='input-group-append'>
+                  <span className='input-group-text'>mL</span>
+                </div>
+                <ErrorFor errors={errors} touched={touched} name='volume' />
               </div>
-              <ErrorFor errors={errors} touched={touched} name='duration' />
+              <small className='form-text text-muted'>
+                {i18n.t('doser:calibration:rate')}: {parseFloat(values.volume_per_second).toFixed(3)} mL/s
+              </small>
             </div>
           </div>
-        </div>
+        )
+        : (
+          <div className='col-12 col-sm-6 col-md-3'>
+            <div className='form-group'>
+              <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
+              <div className='input-group'>
+                <Field
+                  name='duration'
+                  readOnly={readOnly}
+                  type='number'
+                  className={classNames('form-control', {
+                    'is-invalid': ShowError('duration', touched, errors)
+                  })}
+                />
+                <div className='input-group-append'>
+                  <span className='input-group-text d-none d-lg-flex'>
+                    {i18n.t('second_s')}
+                  </span>
+                  <span className='input-group-text d-flex d-lg-none'>sec</span>
+                </div>
+                <ErrorFor errors={errors} touched={touched} name='duration' />
+              </div>
+            </div>
+          </div>
+        )
       )}
 
       <div className='col col-sm-6 col-md-3'>

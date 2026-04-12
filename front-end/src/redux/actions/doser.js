@@ -65,6 +65,14 @@ export const calibrateDosingPump = (id, s) => {
   }))
 }
 
+export const saveDosingPumpCalibration = (id, s) => {
+  return (reduxPost({
+    url: '/api/doser/pumps/' + id + '/calibrate/save',
+    success: fetchDosingPumps,
+    data: s
+  }))
+}
+
 export const fetchDoserUsage = (id) => {
   return (reduxGet({
     url: '/api/doser/pumps/' + id + '/usage',
