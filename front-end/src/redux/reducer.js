@@ -1,17 +1,19 @@
-export const rootReducer = (state, action) => {
+import { createInitialState } from './state'
+
+const updateByID = (collection = {}, id, value) => ({
+  ...collection,
+  [id]: value
+})
+
+const updateCamera = (camera = {}, updates) => ({
+  ...camera,
+  ...updates
+})
+
+export const rootReducer = (state = createInitialState(), action) => {
   if (action.type.startsWith('@@redux/INIT')) {
     return state
   }
-  const camera = state.camera
-  const atoUsage = state.ato_usage
-  const doserUsage = state.doser_usage
-  const macroUsage = state.macro_usage
-  const tcUsage = state.tc_usage
-  const lightUsage = state.light_usage
-  const jUsage = state.journal_usage
-  const tcReading = []
-  const pHreadings = state.ph_readings
-  const phReading = []
 
   switch (action.type) {
     case 'LOG_DELETED':
@@ -45,41 +47,33 @@ export const rootReducer = (state, action) => {
     case 'ATO_LOADED':
       return { ...state, config: action.payload }
     case 'ATO_USAGE_LOADED':
-      atoUsage[action.payload.id] = action.payload.data
-      return { ...state, ato_usage: atoUsage }
+      return { ...state, ato_usage: updateByID(state.ato_usage, action.payload.id, action.payload.data) }
     case 'DOSER_USAGE_LOADED':
-      doserUsage[action.payload.id] = action.payload.data
-      return { ...state, doser_usage: doserUsage }
+      return { ...state, doser_usage: updateByID(state.doser_usage, action.payload.id, action.payload.data) }
     case 'MACROS_LOADED':
       return { ...state, macros: action.payload }
     case 'MACRO_USAGE_LOADED':
-      macroUsage[action.payload.id] = action.payload.data
-      return { ...state, macro_usage: macroUsage }
+      return { ...state, macro_usage: updateByID(state.macro_usage, action.payload.id, action.payload.data) }
     case 'TCS_LOADED':
       return { ...state, tcs: action.payload }
     case 'TC_SENSORS_LOADED':
       return { ...state, tc_sensors: action.payload }
     case 'TC_USAGE_LOADED':
-      tcUsage[action.payload.id] = action.payload.usage
-      return { ...state, tc_usage: tcUsage }
+      return { ...state, tc_usage: updateByID(state.tc_usage, action.payload.id, action.payload.usage) }
     case 'TC_READING_COMPLETE':
-      tcReading[action.payload.id] = action.payload.reading
-      return { ...state, tc_reading: { ...tcReading } }
+      return { ...state, tc_reading: updateByID(state.tc_reading, action.payload.id, action.payload.reading) }
     case 'LIGHTS_LOADED':
       return { ...state, lights: action.payload }
     case 'LIGHT_USAGE_LOADED':
-      lightUsage[action.payload.id] = action.payload.usage
-      return { ...state, light_usage: lightUsage }
+      return { ...state, light_usage: updateByID(state.light_usage, action.payload.id, action.payload.usage) }
     case 'DASHBOARD_LOADED':
       return { ...state, dashboard: action.payload }
     case 'PH_PROBES_LOADED':
       return { ...state, phprobes: action.payload }
     case 'PH_PROBE_READINGS_LOADED':
-      pHreadings[action.payload.id] = action.payload.readings
-      return { ...state, ph_readings: pHreadings }
+      return { ...state, ph_readings: updateByID(state.ph_readings, action.payload.id, action.payload.readings) }
     case 'PH_PROBE_READING_COMPLETE':
-      phReading[action.payload.id] = action.payload.reading
-      return { ...state, ph_reading: { ...phReading } }
+      return { ...state, ph_reading: updateByID(state.ph_reading, action.payload.id, action.payload.reading) }
     case 'CAPABILITIES_LOADED':
       return { ...state, capabilities: action.payload }
     case 'SETTINGS_LOADED':
@@ -103,14 +97,11 @@ export const rootReducer = (state, action) => {
     case 'DISPLAY_LOADED':
       return { ...state, display: action.payload }
     case 'IMAGES_LOADED':
-      camera.images = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera: updateCamera(state.camera, { images: action.payload }) }
     case 'LATEST_IMAGE_LOADED':
-      camera.latest = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera: updateCamera(state.camera, { latest: action.payload }) }
     case 'CAMERA_CONFIG_LOADED':
-      camera.config = action.payload
-      return { ...state, camera: camera }
+      return { ...state, camera: updateCamera(state.camera, { config: action.payload }) }
     case 'DOSING_PUMPS_LOADED':
       return { ...state, dosers: action.payload }
     case 'INSTANCES_LOADED':
@@ -118,8 +109,7 @@ export const rootReducer = (state, action) => {
     case 'JOURNALS_LOADED':
       return { ...state, journals: action.payload }
     case 'JOURNAL_USAGE_LOADED':
-      jUsage[action.payload.id] = action.payload.data
-      return { ...state, journal_usage: jUsage }
+      return { ...state, journal_usage: updateByID(state.journal_usage, action.payload.id, action.payload.data) }
     case 'JOURNAL_RECORDED':
     case 'JOURNAL_UPDATED':
     case 'JOURNAL_LOADED':

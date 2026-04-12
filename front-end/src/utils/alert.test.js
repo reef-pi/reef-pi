@@ -2,14 +2,14 @@ import { showInfo, showError, showSuccess, showWarning, showUpdateSuccessful, sh
 import * as store from 'redux/store'
 
 jest.mock('redux/store', () => ({
-  configureStore: jest.fn(() => ({
+  getStore: jest.fn(() => ({
     dispatch: jest.fn()
   }))
 }))
 
 describe('alert utils', () => {
   beforeEach(() => {
-    store.configureStore.mockReturnValue({ dispatch: jest.fn() })
+    store.getStore.mockReturnValue({ dispatch: jest.fn() })
     jest.useFakeTimers()
   })
 
@@ -19,27 +19,27 @@ describe('alert utils', () => {
 
   it('showInfo dispatches an action', () => {
     expect(() => showInfo('test info')).not.toThrow()
-    expect(store.configureStore).toHaveBeenCalled()
+    expect(store.getStore).toHaveBeenCalled()
   })
 
   it('showError dispatches an action', () => {
     expect(() => showError('test error')).not.toThrow()
-    expect(store.configureStore).toHaveBeenCalled()
+    expect(store.getStore).toHaveBeenCalled()
   })
 
   it('showSuccess dispatches an action', () => {
     expect(() => showSuccess('test success')).not.toThrow()
-    expect(store.configureStore).toHaveBeenCalled()
+    expect(store.getStore).toHaveBeenCalled()
   })
 
   it('showWarning dispatches an action', () => {
     expect(() => showWarning('test warning')).not.toThrow()
-    expect(store.configureStore).toHaveBeenCalled()
+    expect(store.getStore).toHaveBeenCalled()
   })
 
   it('showUpdateSuccessful dispatches and auto-dismisses', () => {
     const dispatch = jest.fn()
-    store.configureStore.mockReturnValue({ dispatch })
+    store.getStore.mockReturnValue({ dispatch })
     showUpdateSuccessful()
     expect(dispatch).toHaveBeenCalledTimes(1)
     jest.runAllTimers()
