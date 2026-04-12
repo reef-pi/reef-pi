@@ -24,6 +24,7 @@ const DoserForm = withFormik({
       duration: data.regiment.duration || 0,
       volume: data.regiment.volume || 0,
       speed: data.regiment.speed || 0,
+      volume_per_second: data.regiment.volume_per_second || 0,
       month: data.regiment.schedule.month || '*',
       week: data.regiment.schedule.week || '*',
       day: data.regiment.schedule.day || '*',

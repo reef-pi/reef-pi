@@ -180,7 +180,11 @@ cron:week,Day of the week (0=Sun - 6=Sat)
 dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
 doser:calibrate,Calibrate
+doser:calibration:current_rate,Calibrated rate
+doser:calibration:measured_volume,Measured volume (mL)
+doser:calibration:rate,Dosing rate
 doser:calibration:run,Run
+doser:calibration:save_result,Save calibration
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin
@@ -202,6 +206,7 @@ doser:step_pin,Step Pin
 doser:title_delete,Delete {{name}} ?
 doser:type,Type
 doser:volume,Volume
+doser:volume_ml,Volume (mL per dose)
 doser:vpr,Volume Per Rotation
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}

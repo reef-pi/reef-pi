@@ -27,12 +27,16 @@ func (r *Runner) Run() {
 		}
 		usage.Pump = int(r.pump.Regiment.Duration)
 	} else {
-		log.Println("doser sub system: running doser(dcmotor)", r.pump.Name, "at", r.pump.Regiment.Speed, "%speed for", r.pump.Regiment.Duration, "(s)")
-		if err := r.PWMDose(r.pump.Regiment.Speed, r.pump.Regiment.Duration); err != nil {
+		duration := r.pump.Regiment.Duration
+		if r.pump.Regiment.Volume > 0 && r.pump.Regiment.VolumePerSecond > 0 {
+			duration = r.pump.Regiment.Volume / r.pump.Regiment.VolumePerSecond
+		}
+		log.Println("doser sub system: running doser(dcmotor)", r.pump.Name, "at", r.pump.Regiment.Speed, "%speed for", duration, "(s)")
+		if err := r.PWMDose(r.pump.Regiment.Speed, duration); err != nil {
 			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
 			return
 		}
-		usage.Pump = int(r.pump.Regiment.Duration)
+		usage.Pump = int(duration)
 	}
 	r.statsMgr.Update(r.pump.ID, usage)
 	r.statsMgr.Save(r.pump.ID)

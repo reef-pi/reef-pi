@@ -13,11 +13,12 @@ import (
 
 //swagger:model dosingRegiment
 type DosingRegiment struct {
-	Enable   bool     `json:"enable"`
-	Schedule Schedule `json:"schedule"`
-	Duration float64  `json:"duration"`
-	Speed    float64  `json:"speed"`
-	Volume   float64  `json:"volume"`
+	Enable          bool     `json:"enable"`
+	Schedule        Schedule `json:"schedule"`
+	Duration        float64  `json:"duration"`
+	Speed           float64  `json:"speed"`
+	Volume          float64  `json:"volume"`
+	VolumePerSecond float64  `json:"volume_per_second"`
 }
 
 // swagger:model pump
@@ -98,6 +99,24 @@ type CalibrationDetails struct {
 	Speed    float64 `json:"speed"`
 	Duration float64 `json:"duration"`
 	Volume   float64 `json:"volume"`
+}
+
+// SaveCalibrationResult stores the mL/second ratio derived from a calibration run.
+// After running the pump with Calibrate(), the user measures the actual volume dispensed
+// and submits it here to compute VolumePerSecond = volume / duration.
+func (c *Controller) SaveCalibrationResult(id string, cal CalibrationDetails) error {
+	if cal.Duration <= 0 {
+		return fmt.Errorf("calibration duration must be positive")
+	}
+	if cal.Volume <= 0 {
+		return fmt.Errorf("calibration volume must be positive")
+	}
+	p, err := c.Get(id)
+	if err != nil {
+		return err
+	}
+	p.Regiment.VolumePerSecond = cal.Volume / cal.Duration
+	return c.c.Store().Update(Bucket, id, p)
 }
 
 func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {

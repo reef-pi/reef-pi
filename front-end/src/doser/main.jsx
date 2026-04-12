@@ -1,7 +1,7 @@
 import React from 'react'
 import { confirm, showModal } from 'utils/confirm'
 import DoserForm from './doser_form'
-import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump } from 'redux/actions/doser'
+import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump, saveDosingPumpCalibration } from 'redux/actions/doser'
 import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
@@ -79,6 +79,7 @@ class doser extends React.Component {
       type: values.type,
       regiment: {
         volume: parseFloat(values.volume),
+        volume_per_second: parseFloat(values.volume_per_second) || 0,
         enable: values.enable,
         duration: parseFloat(values.duration),
         speed: parseInt(values.speed),
@@ -127,6 +128,7 @@ class doser extends React.Component {
       <CalibrationModal
         doser={doser}
         calibrateDoser={this.props.calibrateDoser}
+        saveCalibration={this.props.saveCalibration}
       />
     )
   }
@@ -175,7 +177,8 @@ const mapDispatchToProps = dispatch => {
     create: t => dispatch(createDosingPump(t)),
     delete: id => dispatch(deleteDosingPump(id)),
     update: (id, t) => dispatch(updateDosingPump(id, t)),
-    calibrateDoser: (id, p) => dispatch(calibrateDosingPump(id, p))
+    calibrateDoser: (id, p) => dispatch(calibrateDosingPump(id, p)),
+    saveCalibration: (id, p) => dispatch(saveDosingPumpCalibration(id, p))
   }
 }
 
