@@ -9,31 +9,44 @@ function mountClassComponent (Component) {
   return instance
 }
 
+async function flushPromises () {
+  await Promise.resolve()
+  await Promise.resolve()
+}
+
 describe('FatalError', () => {
   afterEach(() => {
     jest.resetAllMocks()
     jest.useRealTimers()
   })
 
-  it('polls health and updates state', async () => {
-    jest.useFakeTimers()
+  it('updates state from successful and failed health checks', async () => {
     const instance = mountClassComponent(FatalError)
 
     global.fetch = jest.fn()
       .mockResolvedValueOnce({ ok: true, status: 200 })
-      .mockRejectedValueOnce(Error)
+      .mockRejectedValueOnce(new Error('network error'))
+
+    instance.checkHealth()
+    await flushPromises()
+    expect(instance.state.up).toBe(true)
+
+    instance.checkHealth()
+    await flushPromises()
+    expect(instance.state.up).toBe(false)
+  })
+
+  it('starts and clears the polling timer', () => {
+    jest.useFakeTimers()
+    const setIntervalSpy = jest.spyOn(global, 'setInterval')
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
+    const instance = mountClassComponent(FatalError)
 
     instance.componentDidMount()
-    expect(instance.state.up).toBe(true)
+    expect(setIntervalSpy).toHaveBeenCalledTimes(1)
+    expect(instance.timer).toBeDefined()
 
-    jest.advanceTimersByTime(10000)
-    await Promise.resolve()
-    expect(instance.state.up).toBe(true)
-
-    jest.advanceTimersByTime(10000)
-    await Promise.resolve()
-    expect(instance.state.up).toBe(false)
-
-    expect(() => instance.componentWillUnmount()).not.toThrow()
+    instance.componentWillUnmount()
+    expect(clearIntervalSpy).toHaveBeenCalledWith(instance.timer)
   })
 })
