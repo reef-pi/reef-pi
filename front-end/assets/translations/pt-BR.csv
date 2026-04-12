@@ -261,6 +261,8 @@ lighting:add_point,Adicionar Ponto
 lighting:change_mode,Mudar Modo
 lighting:channel_name,Nome do Canal
 lighting:chart_color,Cor
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,Modo Automático
 lighting:mode_manual,Modo Manual

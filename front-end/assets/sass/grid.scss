@@ -1,7 +1,9 @@
+@import './tokens';
+
 .reef-pi-grid {
 
   .grid-row {
-    padding: 5px 5px 0 5px;
+    padding: $space-xxs $space-xxs 0 $space-xxs;
   }
 
   .grid-row>label {
@@ -9,13 +11,13 @@
   }
 
   .grid-cell-container {
-    padding: 0 5px 0 0;
+    padding: 0 $space-xxs 0 0;
   }
   
   .grid-cell {
-    border: 1px solid #000;
-    border-radius: 10px;
-    padding: 5px
+    border: 1px solid $border-strong-color;
+    border-radius: $radius-md;
+    padding: $space-xxs;
   }
 
 }

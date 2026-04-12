@@ -112,6 +112,20 @@ const Channel = (props) => {
           end: ''
         }
       }
+      case 'cyclic': {
+        if (config) {
+          config = {
+            period: false,
+            phase_shift: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          period: 60,
+          phase_shift: 0
+        }
+      }
       default:
         return {}
     }

@@ -1,5 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
-@import './colors';
+@import './tokens';
 @import './auth-page';
 @import './navbar';
 @import './sign-in';
@@ -18,8 +18,25 @@
   --reefpi-color-text: #{$text-color};
   --reefpi-color-text-muted: #{$text-muted-color};
   --reefpi-color-focus: #{$focus-color};
-  --reefpi-shell-gutter: 0.75rem;
-  --reefpi-panel-gap: 1rem;
+  --reefpi-color-surface-auth: #{$surface-auth-color};
+  --reefpi-color-text-strong: #{$text-strong-color};
+  --reefpi-color-border-subtle: #{$border-subtle-color};
+  --reefpi-color-border-strong: #{$border-strong-color};
+  --reefpi-color-shadow: #{$shadow-color};
+  --reefpi-color-nav-text: #{$nav-text-color};
+  --reefpi-color-nav-text-muted: #{$nav-text-muted-color};
+  --reefpi-color-nav-overlay: #{$nav-overlay-color};
+  --reefpi-color-nav-border: #{$nav-border-color};
+  --reefpi-color-nav-text-strong: #{$nav-text-strong-color};
+  --reefpi-shell-gutter: #{$space-sm};
+  --reefpi-panel-gap: #{$space-md};
+  --reefpi-space-xxs: #{$space-xxs};
+  --reefpi-space-xs: #{$space-xs};
+  --reefpi-space-sm: #{$space-sm};
+  --reefpi-space-md: #{$space-md};
+  --reefpi-space-lg: #{$space-lg};
+  --reefpi-radius-sm: #{$radius-sm};
+  --reefpi-radius-md: #{$radius-md};
   --reefpi-tap-target-min: 2.75rem;
 }
 
@@ -32,7 +49,7 @@
 }
 
 .bottom-bar {
-  border-top: solid 1px #CCC;
+  border-top: solid 1px var(--reefpi-color-border-subtle);
 }
 
 html {
@@ -164,7 +181,7 @@ textarea:focus,
 
 @media screen and (min-width: 768px) {
   :root {
-    --reefpi-shell-gutter: 1rem;
+    --reefpi-shell-gutter: #{$space-md};
   }
 
   .body-panel {

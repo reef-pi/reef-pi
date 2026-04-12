@@ -1,75 +1,56 @@
 import SignIn from './sign_in'
-import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-const mockStore = configureMockStore([thunk])
-Enzyme.configure({ adapter: new Adapter() })
+import { mountClassComponent } from '../test/class_component'
 
 describe('SignIn', () => {
   beforeEach(() => {
-    SignIn.refreshPage = jest.fn().mockImplementation(() => {
-      return true
-    })
-    global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve) => {
-        resolve({
-          ok: true,
-          status: 200
-        })
-      })
-      return p
+    SignIn.refreshPage = jest.fn().mockImplementation(() => true)
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200
     })
   })
+
   afterEach(() => {
     jest.resetAllMocks()
   })
-  it('<SignIn />', async () => {
-    const m = shallow(<SignIn store={mockStore()} />).instance()
-    m.handleUserChange({ target: { value: 'foo' } })
-    m.handlePasswordChange({ target: { value: 'bar' } })
-    await m.handleLogin({
-      preventDefault: function () {
-        return true
-      }
-    })
-    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
-    global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
-        resolve({
-          ok: false,
-          status: 500
-        })
-      })
-      return p
-    })
-    await m.handleLogin({
-      preventDefault: function () {
-        return true
-      }
-    })
-    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
 
-    global.fetch = jest.fn().mockImplementation(() => {
-      let p = new Promise((resolve, reject) => {
-        resolve({
-          ok: false,
-          status: 401
-        })
-      })
-      return p
+  it('handles login status transitions', async () => {
+    const instance = mountClassComponent(SignIn)
+
+    instance.handleUserChange({ target: { value: 'foo' } })
+    instance.handlePasswordChange({ target: { value: 'bar' } })
+
+    await instance.handleLogin({
+      preventDefault: () => true
     })
-    await m.handleLogin({
-      preventDefault: function () {
-        return true
-      }
+    expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 500
     })
-    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
+    await instance.handleLogin({
+      preventDefault: () => true
+    })
+    expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
+    expect(instance.state.invalidCredentials).toBe(false)
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 401
+    })
+    await instance.handleLogin({
+      preventDefault: () => true
+    })
+    expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
+    expect(instance.state.invalidCredentials).toBe(true)
   })
-  it('SignIn statics', async () => {
+
+  it('exercises sign-in statics', async () => {
     await SignIn.logout()
-    expect(SignIn.refreshPage.mock.calls.length).toBe(1)
-    SignIn.isSignedIn()
+    expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
+
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, status: 200 })
+    await expect(SignIn.isSignedIn()).resolves.toBe(true)
   })
 })
