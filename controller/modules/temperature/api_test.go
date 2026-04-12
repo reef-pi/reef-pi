@@ -124,6 +124,13 @@ func TestTemperatureAPI(t *testing.T) {
 	if inUse {
 		t.Error("Equipment should not be in use")
 	}
+	if err := tr.Do("GET", "/api/tcs/1/current_reading", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to get current reading using api")
+	}
+	if err := tr.Do("GET", "/api/tcs/1/read", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to read tc using api")
+	}
+
 	if err := tr.Do("DELETE", "/api/tcs/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete temperature controller config using api")
 	}

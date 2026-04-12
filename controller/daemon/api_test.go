@@ -3,6 +3,7 @@ package daemon
 import (
 	"bytes"
 	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -12,8 +13,15 @@ import (
 )
 
 func TestAPI(t *testing.T) {
-	store, err := storage.NewStore("api-test.db")
-	defer store.Close()
+	const dbFile = "api-test.db"
+	os.Remove(dbFile)
+	store, err := storage.NewStore(dbFile)
+	if store != nil {
+		defer func() {
+			store.Close()
+			os.Remove(dbFile)
+		}()
+	}
 
 	if err != nil {
 		t.Fatal(err)

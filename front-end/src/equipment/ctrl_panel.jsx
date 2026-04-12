@@ -3,36 +3,26 @@ import { fetchEquipment, updateEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from 'react-toggle-switch'
-import { SortByName } from 'utils/sort_by_name'
+import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
 
 class CtrlPanel extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      timer: undefined
-    }
     this.toggleState = this.toggleState.bind(this)
   }
 
   componentDidMount () {
-    const timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
-    this.setState({ timer: timer })
+    this.timer = window.setInterval(this.props.fetchEquipment, EQUIPMENT_POLL_INTERVAL_MS)
   }
 
   componentWillUnmount () {
-    window.clearInterval(this.state.timer)
+    window.clearInterval(this.timer)
   }
 
-  toggleState (e, equipmentId, equipmentName, equipmentOn, equipmentOutlet, equipmentStayOffOnBoot) {
+  toggleState (e, equipment) {
     e.preventDefault()
-    const values = {
-      id: equipmentId,
-      name: equipmentName,
-      on: !equipmentOn,
-      outlet: equipmentOutlet,
-      stay_off_on_boot: equipmentStayOffOnBoot
-    }
-    this.props.updateEquipment(parseInt(equipmentId), values)
+    const values = buildEquipmentPayload(equipment, { on: !equipment.on })
+    this.props.updateEquipment(parseInt(equipment.id), values)
   }
 
   render () {
@@ -43,12 +33,12 @@ class CtrlPanel extends React.Component {
     return (
       <div className='container' style={{ marginBottom: '3px' }}>
         <div className='row'>
-          {this.props.equipment.sort((a, b) => SortByName(a, b))
+          {sortEquipment(this.props.equipment)
             .map(item => {
               return (
                 <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                   <FormControlLabel
-                    control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item.id, item.name, item.on, item.outlet, item.stay_off_on_boot) }} />}
+                    control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item) }} />}
                     label={item.name}
                   />
                 </div>
