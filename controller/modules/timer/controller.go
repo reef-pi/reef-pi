@@ -17,6 +17,7 @@ type Controller struct {
 	runner  *cron.Cron
 	cronIDs map[string]cron.EntryID
 	c       controller.Controller
+	repo    repository
 }
 
 func New(c controller.Controller) *Controller {
@@ -26,12 +27,13 @@ func New(c controller.Controller) *Controller {
 			cron.WithParser(cron.NewParser(_cronParserSpec)),
 			cron.WithChain(cron.Recover(cron.DefaultLogger)),
 		),
-		c:       c,
+		c:    c,
+		repo: newRepository(c.Store()),
 	}
 }
 
 func (c *Controller) Setup() error {
-	return c.c.Store().CreateBucket(Bucket)
+	return c.repo.Setup()
 }
 
 func (c *Controller) Start() {
