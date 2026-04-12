@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,Terug naar dashboard
 dashboard:blank_panel,
 doser:calibrate,
 doser:calibration:run,
+doser:continuous,
 doser:delay,
 doser:direction,
 doser:direction_pin,
@@ -336,6 +337,7 @@ telemetry:notification:to,
 telemetry:notification:username,
 temperature:alert_above,Alarm boven
 temperature:alert_below,Alarm onder
+temperature:analog_input,Analoge Ingang
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen
 temperature:calibration:set_temperature,Overschrijf temperatuur
@@ -360,7 +362,6 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
-temperature:analog_input,Analoge Ingang
 temperature:sensor,Sensor
 temperature:temperature,Temperatuur
 temperature:unit,Eenheid

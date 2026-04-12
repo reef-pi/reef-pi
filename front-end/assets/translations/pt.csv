@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,Painel em branco
 doser:calibrate,calibrar
 doser:calibration:run,correr calibração
+doser:continuous,
 doser:delay,espera
 doser:direction,direcção
 doser:direction_pin,pin de direcção
@@ -336,6 +337,7 @@ telemetry:notification:to,para
 telemetry:notification:username,nome de utilizador
 temperature:alert_above,alerta sobre
 temperature:alert_below,alerta abaixo
+temperature:analog_input,Entrada Analogica
 temperature:calibrate,calibrar
 temperature:calibration:apply,aplicar
 temperature:calibration:set_temperature,Definir temperatura
@@ -360,7 +362,6 @@ temperature:hysteresis,hysteresis
 temperature:hysteresis_less_than,hysteresis menos de 
 temperature:lower_function,função caso seja menor
 temperature:lower_threshold,Abaixo do desejado
-temperature:analog_input,Entrada Analogica
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades
