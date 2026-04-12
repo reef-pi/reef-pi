@@ -216,7 +216,7 @@ equipment:title_delete,Excluir
 equipment:warn_delete,Aviso de exclusão
 fatal_error:connection_lost,Conexão Perdida
 fatal_error:fatal_error,Erro Fatal
-fatal_error:message,Algo deu errado, por favor reinicie o servidor.
+fatal_error:message,"Algo deu errado, por favor reinicie o servidor."
 fatal_error:troubleshoot,Solucionar problemas
 function:alert,Alerta
 function:ato,Ação
