@@ -35,7 +35,7 @@ jest.mock('utils/confirm', () => {
 describe('Doser ui', () => {
   it('<Main />', () => {
     const mock = {
-      dosers: [{ foo: 'bar', regiment: {} }]
+      dosers: [{ id: 1, name: 'doser', regiment: { enable: false } }]
     }
     const m = mount(
       <Provider store={mockStore(mock)}>

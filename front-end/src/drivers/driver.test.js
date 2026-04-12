@@ -25,6 +25,7 @@ describe('driver UI', () => {
         driver={driver}
         remove={() => true}
         update={() => true}
+        provision={() => true}
       />)
   })
 

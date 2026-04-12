@@ -2,7 +2,7 @@ import React from 'react'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import { Provider } from 'react-redux'
-import { Formik, Form } from 'formik'
+import { Formik } from 'formik'
 import EditJournal from './edit_journal'
 import * as Alert from 'utils/alert'
 import configureMockStore from 'redux-mock-store'
@@ -23,19 +23,17 @@ const render = (extraProps = {}) => {
     <Provider store={store}>
       <Formik initialValues={initialValues} onSubmit={submitForm}>
         {(formikProps) => (
-          <Form>
-            <EditJournal
-              values={formikProps.values}
-              errors={formikProps.errors}
-              touched={formikProps.touched}
-              submitForm={formikProps.submitForm}
-              handleBlur={formikProps.handleBlur}
-              isValid={formikProps.isValid}
-              dirty={formikProps.dirty}
-              readOnly={false}
-              {...extraProps}
-            />
-          </Form>
+          <EditJournal
+            values={formikProps.values}
+            errors={formikProps.errors}
+            touched={formikProps.touched}
+            submitForm={formikProps.submitForm}
+            handleBlur={formikProps.handleBlur}
+            isValid={formikProps.isValid}
+            dirty={formikProps.dirty}
+            readOnly={false}
+            {...extraProps}
+          />
         )}
       </Formik>
     </Provider>
