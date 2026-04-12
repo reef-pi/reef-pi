@@ -11,9 +11,10 @@ export default class Instance extends React.Component {
       readOnly: true
     }
 
-    this.toggleEdit = this.toggleEdit.bind(this)
+    this.handleToggleEdit = this.handleToggleEdit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
   }
 
   handleToggleEdit (e) {
