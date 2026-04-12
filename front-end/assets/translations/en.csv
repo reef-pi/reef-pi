@@ -203,6 +203,7 @@ doser:title_delete,Delete {{name}} ?
 doser:type,Type
 doser:volume,Volume
 doser:vpr,Volume Per Rotation
+doser:soft_start,Soft Start (ramp up/down)
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)

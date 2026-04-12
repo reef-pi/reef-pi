@@ -13,11 +13,12 @@ import (
 
 //swagger:model dosingRegiment
 type DosingRegiment struct {
-	Enable   bool     `json:"enable"`
-	Schedule Schedule `json:"schedule"`
-	Duration float64  `json:"duration"`
-	Speed    float64  `json:"speed"`
-	Volume   float64  `json:"volume"`
+	Enable     bool     `json:"enable"`
+	Schedule   Schedule `json:"schedule"`
+	Duration   float64  `json:"duration"`
+	Speed      float64  `json:"speed"`
+	Volume     float64  `json:"volume"`
+	SoftStart  float64  `json:"soft_start"`  // ramp duration in seconds (0 = disabled)
 }
 
 // swagger:model pump
