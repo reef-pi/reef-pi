@@ -1,34 +1,30 @@
-import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
 import ErrorBoundary from './error_boundary'
-
-Enzyme.configure({ adapter: new Adapter() })
+import { mountClassComponent } from '../../test/class_component'
 
 describe('ErrorBoundary', () => {
-  it('should show child when there are no errors', () => {
-    const wrapper = shallow(<ErrorBoundary><span>Child</span></ErrorBoundary>)
-    expect(wrapper.find('span').length).toBe(1)
-    expect(wrapper.find('details').length).toBe(0)
+  it('renders children when there is no error', () => {
+    const instance = mountClassComponent(ErrorBoundary, { children: 'Child' })
+    expect(instance.render()).toBe('Child')
   })
 
-  it('should show the error when there is an error', () => {
-    const wrapper = shallow(<ErrorBoundary><span>Child</span></ErrorBoundary>)
-    wrapper.instance().componentDidCatch('error', { componentStack: 'stackTrace' })
+  it('renders error details after componentDidCatch', () => {
+    const instance = mountClassComponent(ErrorBoundary, { children: 'Child' })
+    instance.componentDidCatch(new Error('error'), { componentStack: 'stackTrace' })
+    const rendered = instance.render()
 
-    expect(wrapper.find('span').length).toBe(0)
-    expect(wrapper.find('details').length).toBe(1)
+    expect(rendered.props.children[0].type).toBe('h2')
+    expect(rendered.props.children[1].type).toBe('details')
   })
 
-  it('should reset once tab is changed', () => {
-    const wrapper = shallow(<ErrorBoundary tab='tab1'><span>Child</span></ErrorBoundary>)
-    wrapper.instance().componentDidCatch('error', { componentStack: 'stackTrace' })
+  it('resets state when the tab prop changes', () => {
+    const instance = mountClassComponent(ErrorBoundary, { tab: 'tab1', children: 'Child' })
+    instance.componentDidCatch(new Error('error'), { componentStack: 'stackTrace' })
 
-    expect(wrapper.find('span').length).toBe(0)
-    expect(wrapper.find('details').length).toBe(1)
+    const nextState = ErrorBoundary.getDerivedStateFromProps({ tab: 'tab2' }, instance.state)
+    instance.state = nextState
 
-    wrapper.setProps({ tab: 'tab2' })
-    expect(wrapper.find('span').length).toBe(1)
-    expect(wrapper.find('details').length).toBe(0)
+    expect(instance.state.error).toBeNull()
+    expect(instance.state.errorInfo).toBeNull()
+    expect(instance.render()).toBe('Child')
   })
 })
