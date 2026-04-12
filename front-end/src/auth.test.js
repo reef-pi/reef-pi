@@ -1,33 +1,43 @@
-import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import Auth from './auth'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import 'isomorphic-fetch'
+import { auth as Auth } from './auth'
+import { mountClassComponent, flushPromises } from '../test/class_component'
 
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
-global.fetch = jest.fn().mockImplementation(() => {
-  let p = new Promise((resolve) => {
-    resolve({
+describe('Auth', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200
     })
   })
-  return p
-})
-describe('Auth', () => {
-  it('<Auth />', () => {
-    const m = shallow(<Auth store={mockStore()} />)
-      .dive()
-      .instance()
-    m.handleUserChange({ target: { value: 'foo' } })
-    m.handlePasswordChange({ target: { value: 'bar' } })
-    m.handleUpdateCreds()
-    m.handleUserChange({ target: { value: '' } })
-    m.handlePasswordChange({ target: { value: '' } })
-    m.handleUpdateCreds()
-    m.props.updateCreds({})
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('validates creds before posting updates', async () => {
+    const updateCreds = jest.fn()
+    const instance = mountClassComponent(Auth, { updateCreds })
+
+    instance.handleUserChange({ target: { value: 'foo' } })
+    instance.handlePasswordChange({ target: { value: 'bar' } })
+    instance.handleUpdateCreds()
+    await flushPromises()
+
+    expect(global.fetch).toHaveBeenCalledWith('/api/credentials', expect.objectContaining({
+      method: 'POST',
+      credentials: 'same-origin'
+    }))
+    expect(instance.state.usernameError).toBe(false)
+    expect(instance.state.passwordError).toBe(false)
+
+    global.fetch.mockClear()
+    instance.handleUserChange({ target: { value: '' } })
+    instance.handlePasswordChange({ target: { value: '' } })
+    instance.handleUpdateCreds()
+
+    expect(global.fetch).not.toHaveBeenCalled()
+    expect(instance.state.usernameError).toBe(true)
+    expect(instance.state.passwordError).toBe(true)
+    updateCreds({})
+    expect(updateCreds).toHaveBeenCalledWith({})
   })
 })
