@@ -1,6 +1,8 @@
 package daemon
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"time"
 
@@ -29,24 +31,18 @@ func New(version, database string) (*ReefPi, error) {
 	store, err := storage.NewStore(database)
 	if err != nil {
 		log.Println("ERROR: Failed to create store. DB:", database)
-		return nil, err
+		return nil, fmt.Errorf("create store %q: %w", database, err)
 	}
-	s, err := loadSettings(store)
+	s, err := loadOrInitializeSettings(store)
 	if err != nil {
-		log.Println("Warning: Failed to load settings from db, Error:", err)
-		log.Println("Warning: Initializing default settings in database")
-		initialSettings, err := initializeSettings(store)
-		if err != nil {
-			return nil, err
-		}
-		s = initialSettings
+		return nil, err
 	}
 	fn := func(t, m string) error { return logError(store, t, m) }
 	tele := telemetry.Initialize(s.Name, Bucket, store, fn, s.Prometheus)
 
 	auth, err := utils.NewAuth(Bucket, store)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("initialize auth: %w", err)
 	}
 
 	r := &ReefPi{
@@ -92,10 +88,7 @@ func (r *ReefPi) Stop() error {
 	dmError := r.dm.Close()
 	log.Println("reef-pi is shutting down")
 	storeError := r.store.Close()
-	if dmError != nil {
-		return dmError
-	}
-	return storeError
+	return errors.Join(dmError, storeError)
 }
 
 func (r *ReefPi) Subsystem(s string) (controller.Subsystem, error) {
@@ -112,4 +105,19 @@ func (r *ReefPi) Store() storage.Store {
 
 func (r *ReefPi) Telemetry() telemetry.Telemetry {
 	return r.telemetry
+}
+
+func loadOrInitializeSettings(store storage.Store) (settings.Settings, error) {
+	s, err := loadSettings(store)
+	if err == nil {
+		return s, nil
+	}
+
+	log.Println("Warning: Failed to load settings from db, Error:", err)
+	log.Println("Warning: Initializing default settings in database")
+	initialSettings, initErr := initializeSettings(store)
+	if initErr != nil {
+		return settings.Settings{}, fmt.Errorf("initialize default settings: %w", initErr)
+	}
+	return initialSettings, nil
 }

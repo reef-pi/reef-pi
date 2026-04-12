@@ -8,6 +8,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
+	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -128,6 +129,51 @@ func TestEquipmentController(t *testing.T) {
 		t.Error("Controlling invalid equipment should fail")
 	}
 
+}
+
+func TestEquipmentInUseAndGetEntity(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+
+	if err := con.DM().Outlets().Setup(); err != nil {
+		t.Fatal(err)
+	}
+	c := New(con)
+	if err := c.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create an outlet then equipment referencing it
+	o := connectors.Outlet{Name: "O-inuse", Pin: 10, Driver: "rpi"}
+	if err := con.DM().Outlets().Create(o); err != nil {
+		t.Fatal(err)
+	}
+	eq := Equipment{Name: "EQ-inuse", Outlet: "1"}
+	if err := c.Create(eq); err != nil {
+		t.Fatal("Create equipment failed:", err)
+	}
+
+	// InUse for outlet — should find the equipment
+	deps, err := c.InUse(storage.OutletBucket, "1")
+	if err != nil {
+		t.Error("InUse(outlets) error:", err)
+	}
+	if len(deps) == 0 {
+		t.Error("Expected equipment dep for outlet '1'")
+	}
+
+	// InUse for unknown type — should error
+	if _, err := c.InUse("unknown", "1"); err == nil {
+		t.Error("Expected error for unknown dep type")
+	}
+
+	// GetEntity — not supported
+	if _, err := c.GetEntity("1"); err == nil {
+		t.Error("Expected error from GetEntity")
+	}
 }
 
 func TestUpdateEquipment(t *testing.T) {

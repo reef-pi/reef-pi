@@ -1,3 +1,4 @@
+// Package ato implements automatic top-off control.
 package ato
 
 // A BodyParams model for ATO.
