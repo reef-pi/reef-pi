@@ -161,19 +161,7 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 		return err
 	}
 	p.Regiment = r
-	if err := c.Update(id, p); err != nil {
-		return err
-	}
-	c.mu.Lock()
-	if cID, ok := c.cronIDs[id]; ok {
-		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
-		c.runner.Remove(cID)
-	}
-	c.mu.Unlock()
-	if p.Regiment.Enable {
-		return c.addToCron(p)
-	}
-	return nil
+	return c.Update(id, p)
 }
 
 func (c *Controller) Delete(id string) error {
