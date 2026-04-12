@@ -1,121 +1,106 @@
 import { showError } from 'utils/alert'
+
 function makeHeaders () {
   const headers = new Headers()
   headers.append('Content-Type', 'application/json')
   return headers
 }
 
-export function reduxGet (params) {
-  return dispatch => {
-    return fetch(params.url, {
-      method: 'GET',
-      credentials: 'same-origin',
-      headers: makeHeaders()
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            showError('Authentication failure')
-            return
-          }
-          if (params.suppressError) {
-            return
-          }
-          response.text().then(err => {
-            showError(err + ' | HTTP ' + response.status)
-          })
-        }
-        return response
-      })
-      .then(response => response.json())
-      .then(data => dispatch(params.success(data)))
-      .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
-      })
+function buildRequestOptions (params) {
+  const options = {
+    method: params.method,
+    credentials: 'same-origin'
   }
+
+  if (params.raw) {
+    options.body = params.raw
+    return options
+  }
+
+  if (params.method === 'GET' || params.method === 'DELETE') {
+    options.headers = makeHeaders()
+    return options
+  }
+
+  options.headers = makeHeaders()
+  options.body = JSON.stringify(params.data)
+  return options
 }
 
-export function reduxDelete (params) {
-  return dispatch => {
-    return fetch(params.url, {
-      method: 'DELETE',
-      credentials: 'same-origin',
-      headers: makeHeaders()
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (params.suppressError) {
-            return
-          }
-          response.text().then(err => {
-            showError(err + ' | HTTP ' + response.status)
-          })
-        }
-        return response
-      })
-      .then(() => dispatch(params.success()))
-      .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
-      })
+function handleErrorResponse (response, params) {
+  if (response.status === 401) {
+    showError('Authentication failure')
+    return
   }
-}
-
-export function reduxPut (params) {
-  return dispatch => {
-    return fetch(params.url, {
-      method: 'PUT',
-      credentials: 'same-origin',
-      headers: makeHeaders(),
-      body: JSON.stringify(params.data)
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (params.suppressError) {
-            return
-          }
-          response.text().then(err => {
-            showError(err + ' | HTTP ' + response.status)
-          })
-        }
-        return response
-      })
-      .then(() => dispatch(params.success()))
-      .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
-      })
+  if (params.suppressError) {
+    return response
   }
-}
 
-export function reduxPost (params) {
-  return dispatch => {
-    const fParams = {
-      method: 'POST',
-      credentials: 'same-origin'
+  response.text().then(err => {
+    if (params.failure) {
+      params.failure(response)
+      return
     }
-    if (params.raw) {
-      fParams.body = params.raw
-    } else {
-      fParams.body = JSON.stringify(params.data)
-      fParams.headers = makeHeaders()
-    }
-    return fetch(params.url, fParams).then(response => {
+    showError(err + ' | HTTP ' + response.status)
+  })
+
+  return response
+}
+
+function parseResponse (response, params) {
+  if (response === undefined) {
+    return Promise.resolve(undefined)
+  }
+  if (!params.parseJSON) {
+    return Promise.resolve(response)
+  }
+  return response.json()
+}
+
+function request (params, dispatch) {
+  return fetch(params.url, buildRequestOptions(params))
+    .then(response => {
       if (!response.ok) {
-        if (params.suppressError) {
-          return
-        }
-        response.text().then(err => {
-          if (params.failure) {
-            params.failure(response)
-            return
-          }
-          showError(err + ' | HTTP ' + response.status)
-        })
+        return handleErrorResponse(response, params)
       }
       return response
     })
-      .then(data => dispatch(params.success(data)))
-      .catch(() => {
-        dispatch({ type: 'API_FAILURE', params: params })
-      })
-  }
+    .then(response => parseResponse(response, params))
+    .then(data => dispatch(params.success(data)))
+    .catch(() => {
+      dispatch({ type: 'API_FAILURE', params: params })
+    })
+}
+
+function makeReduxRequest (params) {
+  return dispatch => request(params, dispatch)
+}
+
+export function reduxGet (params) {
+  return makeReduxRequest({
+    ...params,
+    method: 'GET',
+    parseJSON: true
+  })
+}
+
+export function reduxDelete (params) {
+  return makeReduxRequest({
+    ...params,
+    method: 'DELETE'
+  })
+}
+
+export function reduxPut (params) {
+  return makeReduxRequest({
+    ...params,
+    method: 'PUT'
+  })
+}
+
+export function reduxPost (params) {
+  return makeReduxRequest({
+    ...params,
+    method: 'POST'
+  })
 }
