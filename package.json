@@ -118,6 +118,9 @@
     ]
   },
   "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/front-end/test/setup.js"
+    ],
     "moduleDirectories": [
       "node_modules",
       "front-end/src/",
