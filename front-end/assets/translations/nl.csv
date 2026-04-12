@@ -259,6 +259,8 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
 lighting:chart_color,
+lighting:circadian_dawn_value,
+lighting:circadian_noon_value,
 lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
@@ -336,6 +338,7 @@ telemetry:notification:to,
 telemetry:notification:username,
 temperature:alert_above,Alarm boven
 temperature:alert_below,Alarm onder
+temperature:analog_input,Analoge Ingang
 temperature:calibrate,Kalibreer
 temperature:calibration:apply,Bevestigen
 temperature:calibration:set_temperature,Overschrijf temperatuur
@@ -360,7 +363,6 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than,Hysteresis kleiner dan de aanvaardbaar drempelwaarde
 temperature:lower_function,Verwarming
 temperature:lower_threshold,Verwarming drempelwaarde
-temperature:analog_input,Analoge Ingang
 temperature:sensor,Sensor
 temperature:temperature,Temperatuur
 temperature:unit,Eenheid
