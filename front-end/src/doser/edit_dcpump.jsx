@@ -105,26 +105,41 @@ const EditDcPump = ({
       </div>
       <div className='col-12 col-sm-6 col-md-3'>
         <div className='form-group'>
-          <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
-          <div className='input-group'>
-            <Field
-              name='duration'
-              readOnly={readOnly}
-              type='number'
-              className={classNames('form-control', {
-                'is-invalid': ShowError('duration', touched, errors)
-              })}
-            />
-            <div className='input-group-append'>
-              <span className='input-group-text d-none d-lg-flex'>
-                {i18n.t('second_s')}
-              </span>
-              <span className='input-group-text d-flex d-lg-none'>sec</span>
-            </div>
-            <ErrorFor errors={errors} touched={touched} name='duration' />
-          </div>
+          <label htmlFor='continuous'>{i18n.t('doser:continuous')}</label>
+          <Field
+            name='continuous'
+            type='checkbox'
+            disabled={readOnly}
+            checked={values.continuous}
+            className='form-control'
+          />
         </div>
       </div>
+
+      {!values.continuous && (
+        <div className='col-12 col-sm-6 col-md-3'>
+          <div className='form-group'>
+            <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
+            <div className='input-group'>
+              <Field
+                name='duration'
+                readOnly={readOnly}
+                type='number'
+                className={classNames('form-control', {
+                  'is-invalid': ShowError('duration', touched, errors)
+                })}
+              />
+              <div className='input-group-append'>
+                <span className='input-group-text d-none d-lg-flex'>
+                  {i18n.t('second_s')}
+                </span>
+                <span className='input-group-text d-flex d-lg-none'>sec</span>
+              </div>
+              <ErrorFor errors={errors} touched={touched} name='duration' />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className='col col-sm-6 col-md-3'>
         <div className='form-group'>

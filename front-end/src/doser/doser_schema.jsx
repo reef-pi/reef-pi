@@ -23,26 +23,29 @@ const DoserSchema = Yup.object().shape({
   stepper: Stepperchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
+  continuous: Yup.bool(),
   duration: Yup.number()
     .typeError(i18n.t('validation:number_required'))
-    .min(1, i18n.t('validation:integer_min_required')),
+    .when('continuous', {
+      is: false,
+      then: schema => schema.min(1, i18n.t('validation:integer_min_required'))
+    }),
   speed: Yup.number()
     .typeError(i18n.t('validation:number_required'))
     .min(1, i18n.t('validation:integer_min_required'))
     .max(100, i18n.t('validation:integer_max_required')),
   month: Yup.string()
-    .required(i18n.t('validation:cron_required')),
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   week: Yup.string()
-    .required(i18n.t('validation:cron_required')),
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   day: Yup.string()
-    .required(i18n.t('validation:cron_required')),
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   hour: Yup.string()
-  // 6,12,19
-    .required(i18n.t('validation:cron_required')),
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   minute: Yup.string()
-    .required(i18n.t('validation:cron_required')),
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   second: Yup.string()
-    .required(i18n.t('validation:cron_nojoker_required'))
+    .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_nojoker_required')) })
 })
 
 export default DoserSchema

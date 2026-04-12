@@ -13,11 +13,12 @@ import (
 
 //swagger:model dosingRegiment
 type DosingRegiment struct {
-	Enable   bool     `json:"enable"`
-	Schedule Schedule `json:"schedule"`
-	Duration float64  `json:"duration"`
-	Speed    float64  `json:"speed"`
-	Volume   float64  `json:"volume"`
+	Enable     bool     `json:"enable"`
+	Schedule   Schedule `json:"schedule"`
+	Duration   float64  `json:"duration"`
+	Speed      float64  `json:"speed"`
+	Volume     float64  `json:"volume"`
+	Continuous bool     `json:"continuous"` // run at Speed% indefinitely without a schedule
 }
 
 // swagger:model pump
@@ -50,9 +51,15 @@ func (p *Pump) IsValid() error {
 		if p.Jack == "" {
 			return fmt.Errorf("jack is not defined")
 		}
+		if p.Regiment.Continuous {
+			return nil // continuous pumps need no schedule or duration
+		}
 		if p.Regiment.Duration < 0 {
 			return fmt.Errorf("Invalid Duration")
 		}
+	}
+	if p.Regiment.Continuous {
+		return nil
 	}
 	return p.Regiment.Schedule.Validate()
 }
@@ -75,6 +82,10 @@ func (c *Controller) Create(p Pump) error {
 	}
 	c.statsMgr.Initialize(p.ID)
 	if p.Regiment.Enable {
+		if p.Regiment.Continuous {
+			c.startContinuous(p)
+			return nil
+		}
 		return c.addToCron(p)
 	}
 	return nil
@@ -130,9 +141,15 @@ func (c *Controller) Update(id string, p Pump) error {
 	if cID, ok := c.cronIDs[id]; ok {
 		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
+		delete(c.cronIDs, id)
 	}
 	c.mu.Unlock()
+	c.stopContinuous(id)
 	if p.Regiment.Enable {
+		if p.Regiment.Continuous {
+			c.startContinuous(p)
+			return nil
+		}
 		return c.addToCron(p)
 	}
 	return nil
@@ -161,11 +178,13 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 
 func (c *Controller) Delete(id string) error {
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	if cID, ok := c.cronIDs[id]; ok {
 		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
+		delete(c.cronIDs, id)
 	}
+	c.mu.Unlock()
+	c.stopContinuous(id)
 	return c.c.Store().Delete(Bucket, id)
 }
 

@@ -122,19 +122,21 @@ const EditDoser = ({
       </div>
       {driverUI()}
 
-      <div className='row'>
-        <div className='col'>
-          <div className='row form-group'>
-            <label htmlFor='enable'>{i18next.t('schedule')}</label>
+      {!values.continuous && (
+        <div className='row'>
+          <div className='col'>
+            <div className='row form-group'>
+              <label htmlFor='enable'>{i18next.t('schedule')}</label>
+            </div>
+            <Cron
+              values={values}
+              touched={touched}
+              errors={errors}
+              readOnly={readOnly}
+            />
           </div>
-          <Cron
-            values={values}
-            touched={touched}
-            errors={errors}
-            readOnly={readOnly}
-          />
         </div>
-      </div>
+      )}
 
       <div className={classNames('row', { 'd-none': readOnly })}>
         <div className='col-12'>
