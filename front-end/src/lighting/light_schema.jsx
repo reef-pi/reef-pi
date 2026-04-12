@@ -45,6 +45,8 @@ const channelSchema = Yup.object().shape({
         return randomSchema
       case 'sine':
         return sineSchema
+      case 'cyclic':
+        return cyclicSchema
       default:
         return Yup.object().shape({
           type: Yup.string().required(i18n.t('validation:selection_required'))
@@ -155,6 +157,24 @@ const lunarSchema = Yup.object().shape({
         .required(i18n.t('validation:last_full_moon_required'))
         .typeError(i18n.t('validation:last_full_moon_required'))
         .max(new Date(), i18n.t('validation:last_full_moon_required'))
+    })
+})
+
+const cyclicSchema = Yup.object().shape({
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
+  config: Yup.object()
+    .typeError(i18n.t('validation:selection_required'))
+    .shape({
+      period: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(1, i18n.t('validation:integer_min_required')),
+      phase_shift: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0, i18n.t('validation:integer_min_required'))
+        .max(99, i18n.t('validation:integer_max_required'))
     })
 })
 

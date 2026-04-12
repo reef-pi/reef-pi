@@ -267,6 +267,8 @@ lighting:remove,Remove
 lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
+lighting:cyclic_period,Period
+lighting:cyclic_phase_shift,Phase Shift
 log:content,Content
 log:emitter,Emitter
 log:time,Time
