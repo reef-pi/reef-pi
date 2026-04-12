@@ -24,6 +24,9 @@ const DoserSchema = Yup.object().shape({
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
   continuous: Yup.bool(),
+  soft_start: Yup.number()
+    .typeError(i18n.t('validation:number_required'))
+    .min(0, i18n.t('validation:integer_min_required')),
   duration: Yup.number()
     .typeError(i18n.t('validation:number_required'))
     .when('continuous', {

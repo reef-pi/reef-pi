@@ -1,22 +1,23 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import renderer from 'react-test-renderer'
 import BlankPanel from './blank_panel'
 
-Enzyme.configure({ adapter: new Adapter() })
+jest.mock('recharts', () => ({
+  ResponsiveContainer: ({ children }) => <div className='responsive-container'>{children}</div>
+}))
 
 describe('<BlankPanel />', () => {
   it('renders without throwing', () => {
-    expect(() => shallow(<BlankPanel height={200} />)).not.toThrow()
+    expect(() => renderer.create(<BlankPanel height={200} />)).not.toThrow()
   })
 
   it('renders a container div', () => {
-    const wrapper = shallow(<BlankPanel height={200} />)
-    expect(wrapper.find('.container')).toHaveLength(1)
+    const tree = renderer.create(<BlankPanel height={200} />).toJSON()
+    expect(tree.props.className).toBe('container')
   })
 
   it('handles componentWillUnmount gracefully', () => {
-    const wrapper = shallow(<BlankPanel height={200} />)
-    expect(() => wrapper.unmount()).not.toThrow()
+    const component = renderer.create(<BlankPanel height={200} />)
+    expect(() => component.unmount()).not.toThrow()
   })
 })

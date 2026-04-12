@@ -19,6 +19,7 @@ type DosingRegiment struct {
 	Speed      float64  `json:"speed"`
 	Volume     float64  `json:"volume"`
 	Continuous bool     `json:"continuous"` // run at Speed% indefinitely without a schedule
+	SoftStart  float64  `json:"soft_start"` // ramp duration in seconds (0 = disabled)
 }
 
 // swagger:model pump
@@ -35,6 +36,9 @@ type Pump struct {
 func (p *Pump) IsValid() error {
 	if p.Name == "" {
 		return fmt.Errorf("name can not be empty")
+	}
+	if p.Regiment.SoftStart < 0 {
+		return fmt.Errorf("soft start must be non-negative")
 	}
 	switch p.Type {
 	case "stepper":
