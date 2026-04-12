@@ -16,6 +16,7 @@ const (
 	_intervalProfileName  = "interval"
 	_sineProfileName      = "sine"
 	_randomProfileName    = "random"
+	_circadianProfileName = "circadian"
 )
 
 type Profile interface {
@@ -56,6 +57,8 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 		return Sine(p.Config, p.Min, p.Max)
 	case _randomProfileName:
 		return Random(p.Config, p.Min, p.Max)
+	case _circadianProfileName:
+		return Circadian(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}

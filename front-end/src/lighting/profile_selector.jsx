@@ -26,6 +26,7 @@ const ProfileSelector = (props) => {
           <option value='random'>Random</option>
           <option value='sine'>Sine</option>
           <option value='lunar'>Lunar</option>
+          <option value='circadian'>Circadian</option>
         </select>
       </div>
       <div className='btn-group  d-none d-sm-inline'>
@@ -100,6 +101,18 @@ const ProfileSelector = (props) => {
             disabled={props.readOnly}
           />
           Lunar
+        </label>
+        <label className='btn btn-secondary'>
+          <input
+            type='radio' value='circadian'
+            className='mr-1'
+            checked={props.value === 'circadian'}
+            name={props.name + uuid}
+            id={props.name + uuid + '-circadian'}
+            onChange={handleChange}
+            disabled={props.readOnly}
+          />
+          Circadian
         </label>
       </div>
     </div>
