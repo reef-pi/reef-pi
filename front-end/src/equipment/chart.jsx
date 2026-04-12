@@ -3,6 +3,7 @@ import { ResponsiveContainer, Tooltip, XAxis, BarChart, Bar } from 'recharts'
 import { fetchEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
+import { EQUIPMENT_POLL_INTERVAL_MS } from './utils'
 
 class CustomToolTip extends React.Component {
   render () {
@@ -23,12 +24,11 @@ class CustomToolTip extends React.Component {
 class chart extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
-    const timer = window.setInterval(this.props.fetchEquipment, 10 * 1000)
-    this.setState({ timer: timer })
+    this.timer = window.setInterval(this.props.fetchEquipment, EQUIPMENT_POLL_INTERVAL_MS)
   }
 
   componentWillUnmount () {
-    window.clearInterval(this.state.timer)
+    window.clearInterval(this.timer)
   }
 
   render () {
