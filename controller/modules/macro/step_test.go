@@ -52,4 +52,22 @@ func TestStep(t *testing.T) {
 	if err := s.Run(c, false); err == nil {
 		t.Error("Invalid subsystem system config should raise error")
 	}
+
+	// alert step
+	s.Type = "alert"
+	s.Config = []byte(`{"title":"Test Alert","message":"test msg"}`)
+	if err := s.Run(c, false); err != nil {
+		t.Error("Valid alert step should not error:", err)
+	}
+	s.Config = []byte(`[]`)
+	if err := s.Run(c, false); err == nil {
+		t.Error("Invalid alert step config should raise error")
+	}
+
+	// reverse flag on equipment step
+	s.Type = "equipment"
+	s.Config = []byte(`{"id":"1","on":true}`)
+	if err := s.Run(c, true); err != nil {
+		t.Error("reverse equipment step should not error:", err)
+	}
 }

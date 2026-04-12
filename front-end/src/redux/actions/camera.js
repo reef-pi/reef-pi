@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost } from '../../utils/ajax'
+import { getAction, postAction } from './api'
 
 export const configLoaded = (s) => {
   return ({
@@ -22,38 +22,21 @@ export const imagesLoaded = (s) => {
 }
 
 export const fetchConfig = () => {
-  return (reduxGet({
-    url: '/api/camera/config',
-    success: configLoaded
-  }))
+  return getAction(['camera', 'config'], configLoaded)
 }
 
 export const updateConfig = (a) => {
-  return (reduxPost({
-    url: '/api/camera/config',
-    data: a,
-    success: fetchConfig
-  }))
+  return postAction(['camera', 'config'], a, fetchConfig)
 }
 
 export const takeImage = () => {
-  return (reduxPost({
-    url: '/api/camera/shoot',
-    data: {},
-    success: listImages
-  }))
+  return postAction(['camera', 'shoot'], {}, listImages)
 }
 
 export const getLatestImage = () => {
-  return (reduxGet({
-    url: '/api/camera/latest',
-    success: latestImageLoaded
-  }))
+  return getAction(['camera', 'latest'], latestImageLoaded)
 }
 
 export const listImages = () => {
-  return (reduxGet({
-    url: '/api/camera/images',
-    success: imagesLoaded
-  }))
+  return getAction(['camera', 'images'], imagesLoaded)
 }

@@ -68,37 +68,23 @@ func (j *Job) Validate() error {
 }
 
 func (c *Controller) Get(id string) (Job, error) {
-	var job Job
-	return job, c.c.Store().Get(Bucket, id, &job)
+	return c.repo.Get(id)
 }
 
 func (c *Controller) List() ([]Job, error) {
-	jobs := []Job{}
-	fn := func(_ string, v []byte) error {
-		var job Job
-		if err := json.Unmarshal(v, &job); err != nil {
-			return err
-		}
-		jobs = append(jobs, job)
-		return nil
-	}
-	return jobs, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (c *Controller) Create(job Job) error {
 	if err := job.Validate(); err != nil {
 		return err
 	}
-
-	fn := func(id string) interface{} {
-		job.ID = id
-		return job
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	created, err := c.repo.Create(job)
+	if err != nil {
 		return err
 	}
-	if job.Enable {
-		return c.addToCron(job)
+	if created.Enable {
+		return c.addToCron(created)
 	}
 	return nil
 }
@@ -118,7 +104,7 @@ func (c *Controller) Update(id string, payload Job) error {
 		}
 	}
 	payload.ID = id
-	if err := c.c.Store().Update(Bucket, id, &payload); err != nil {
+	if err := c.repo.Update(id, payload); err != nil {
 		return err
 	}
 	if payload.Enable {
@@ -132,7 +118,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	if err := c.c.Store().Delete(Bucket, id); err != nil {
+	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
 	if j.Enable {
