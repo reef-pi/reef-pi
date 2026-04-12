@@ -2,16 +2,39 @@ import { confirm, showModal } from './confirm'
 
 jest.mock('confirm', () => {
   const React = require('react')
-  return function MockConfirm () { return React.createElement('div', null, 'confirm') }
+  return class MockConfirm extends React.Component {
+    componentDidMount () {
+      this.promise = {
+        always: jest.fn(() => ({ promise: jest.fn(() => Promise.resolve()) }))
+      }
+    }
+
+    render () {
+      return React.createElement('div', null, 'confirm')
+    }
+  }
 }, { virtual: true })
 
+const mockAlways = jest.fn(callback => {
+  callback()
+  return { promise: jest.fn(() => Promise.resolve()) }
+})
+const mockRender = jest.fn(element => {
+  if (element && element.ref) {
+    element.ref.current = { promise: { always: mockAlways } }
+  }
+})
+const mockUnmount = jest.fn()
+
 jest.mock('react-dom', () => ({
-  render: jest.fn(() => ({
-    promise: {
-      always: jest.fn(() => ({ promise: jest.fn(() => Promise.resolve()) }))
-    }
-  })),
-  unmountComponentAtNode: jest.fn()
+  flushSync: jest.fn(fn => fn())
+}))
+
+jest.mock('react-dom/client', () => ({
+  createRoot: jest.fn(() => ({
+    render: mockRender,
+    unmount: mockUnmount
+  }))
 }))
 
 describe('confirm utils', () => {
@@ -25,8 +48,12 @@ describe('confirm utils', () => {
 
   it('showModal appends a div and renders into it', () => {
     const React = require('react')
-    const ReactDOM = require('react-dom')
-    showModal(React.createElement('div'))
-    expect(ReactDOM.render).toHaveBeenCalled()
+    return showModal(React.createElement(require('confirm')))
+      .then(() => new Promise(resolve => setTimeout(resolve, 0)))
+      .then(() => {
+      expect(mockRender).toHaveBeenCalled()
+      expect(mockAlways).toHaveBeenCalled()
+      expect(mockUnmount).toHaveBeenCalled()
+      })
   })
 })

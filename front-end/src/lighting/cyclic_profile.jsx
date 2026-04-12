@@ -43,11 +43,6 @@ const CyclicProfile = (props) => {
   )
 }
 
-CyclicProfile.defaultProps = {
-  period: 60,
-  phase_shift: 0
-}
-
 CyclicProfile.propTypes = {
   name: PropTypes.string.isRequired,
   config: PropTypes.object,

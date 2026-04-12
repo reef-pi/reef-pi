@@ -43,12 +43,6 @@ const LunarProfile = (props) => {
   )
 }
 
-LunarProfile.defaultProps = {
-  start: '',
-  end: '',
-  full_moon: ''
-}
-
 LunarProfile.propTypes = {
   config: PropTypes.object,
   readOnly: PropTypes.bool,
