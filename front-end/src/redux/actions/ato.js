@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from 'utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const atoUpdated = () => {
   return ({
@@ -14,10 +14,7 @@ export const atosLoaded = (s) => {
 }
 
 export const fetchATOs = () => {
-  return (reduxGet({
-    url: '/api/atos',
-    success: atosLoaded
-  }))
+  return getAction('atos', atosLoaded)
 }
 
 export const atoLoaded = (s) => {
@@ -28,10 +25,7 @@ export const atoLoaded = (s) => {
 }
 
 export const fetchATO = (id) => {
-  return (reduxGet({
-    url: '/api/atos/' + id,
-    success: atoLoaded
-  }))
+  return getAction(['atos', id], atoLoaded)
 }
 
 export const atoUsageLoaded = (id) => {
@@ -44,38 +38,21 @@ export const atoUsageLoaded = (id) => {
 }
 
 export const fetchATOUsage = (id) => {
-  return (reduxGet({
-    url: '/api/atos/' + id + '/usage',
-    success: atoUsageLoaded(id)
-  }))
+  return getAction(['atos', id, 'usage'], atoUsageLoaded(id))
 }
 
 export const createATO = (a) => {
-  return (reduxPut({
-    url: '/api/atos',
-    data: a,
-    success: fetchATOs
-  }))
+  return putAction('atos', a, fetchATOs)
 }
 
 export const updateATO = (id, a) => {
-  return (reduxPost({
-    url: '/api/atos/' + id,
-    data: a,
-    success: fetchATOs
-  }))
+  return postAction(['atos', id], a, fetchATOs)
 }
 
 export const deleteATO = (id) => {
-  return (reduxDelete({
-    url: '/api/atos/' + id,
-    success: fetchATOs
-  }))
+  return deleteAction(['atos', id], fetchATOs)
 }
 
 export const resetATO = (id) => {
-  return (reduxPost({
-    url: '/api/atos/' + id + '/reset',
-    success: fetchATOs
-  }))
+  return postAction(['atos', id, 'reset'], undefined, fetchATOs)
 }
