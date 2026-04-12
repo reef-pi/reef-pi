@@ -1,0 +1,66 @@
+name: Refactor Slice
+description: Track one behavior-preserving refactor slice from the reef-pi refactor plan.
+title: "Slice XX: "
+labels:
+  - refactor
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Source plan section
+      description: Reference the relevant section in docs/refactor-plan.md.
+      placeholder: "Phase 1 / PR 3"
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: List the exact modules, packages, or screens included in this slice.
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Record what must not change in this slice.
+      placeholder: "No API schema changes. No UI/UX drift."
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants
+      description: List behavior-preserving constraints for this issue.
+      value: |
+        - no API drift
+        - no UI or UX drift
+        - no hardware behavior drift
+        - each task starts from fresh main
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation commands
+      description: List the commands expected to be run before opening the PR.
+      placeholder: |
+        go test ./...
+        make lint
+        make jest
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks
+      description: Call out the main regression risks for reviewers.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Completion criteria
+      description: State what must be true for this slice to be considered done.
+    validations:
+      required: true

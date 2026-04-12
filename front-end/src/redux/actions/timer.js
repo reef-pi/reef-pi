@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const timersLoaded = (s) => {
   return ({
@@ -14,31 +14,17 @@ export const timerDeleted = () => {
 }
 
 export const fetchTimers = () => {
-  return (reduxGet({
-    url: '/api/timers',
-    success: timersLoaded
-  }))
+  return getAction('timers', timersLoaded)
 }
 
 export const createTimer = (a) => {
-  return (reduxPut({
-    url: '/api/timers',
-    data: a,
-    success: fetchTimers
-  }))
+  return putAction('timers', a, fetchTimers)
 }
 
 export const updateTimer = (id, a) => {
-  return (reduxPost({
-    url: '/api/timers/' + id,
-    data: a,
-    success: fetchTimers
-  }))
+  return postAction(['timers', id], a, fetchTimers)
 }
 
 export const deleteTimer = (id) => {
-  return (reduxDelete({
-    url: '/api/timers/' + id,
-    success: fetchTimers
-  }))
+  return deleteAction(['timers', id], fetchTimers)
 }

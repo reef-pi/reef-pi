@@ -36,3 +36,15 @@ func TestAPI(t *testing.T) {
 		t.Fatal("Failed to config using api. Error:", err)
 	}
 }
+
+func TestDeleteFeedIfExist(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	tele := TestTelemetry(store)
+	// AdafruitIO disabled (default) — should be a no-op
+	tele.DeleteFeedIfExist("test-feed")
+}

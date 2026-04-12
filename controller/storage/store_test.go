@@ -64,5 +64,59 @@ func TestStore(t *testing.T) {
 	if err := store.CreateWithID(testBucket, "test-id", data); err != nil {
 		t.Fatal("Failed to store with explicit ID. Error:", err)
 	}
+
+	// Buckets
+	buckets, err := store.Buckets()
+	if err != nil {
+		t.Fatal("Buckets() failed:", err)
+	}
+	found := false
+	for _, b := range buckets {
+		if b == testBucket {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("Expected test bucket in Buckets() output")
+	}
+
+	// Path
+	if p := store.Path(); p == "" {
+		t.Error("Expected non-empty path from store.Path()")
+	}
+
+	// SubBucket returns a store
+	sub := store.SubBucket(testBucket, "sub")
+	if sub == nil {
+		t.Error("Expected non-nil SubBucket")
+	}
+
 	store.Close()
+}
+
+func TestSubBuckets(t *testing.T) {
+	db, err := TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := db.CreateBucket("parent"); err != nil {
+		t.Fatal(err)
+	}
+
+	// TestDB returns a *store; since we are in the same package we can use NewStore directly
+	path := db.Path()
+	db.Close()
+
+	conc, err := NewStore(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conc.Close()
+
+	if err := conc.CreateSubBucket("parent", "child"); err != nil {
+		t.Error("CreateSubBucket failed:", err)
+	}
+	if err := conc.CreateSubBucket("missing-parent", "child"); err == nil {
+		t.Error("Expected error for non-existent parent bucket")
+	}
 }

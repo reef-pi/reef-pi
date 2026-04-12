@@ -72,7 +72,11 @@ func main() {
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
-		config := loadConfig(*configFile)
+		config, err := loadConfig(*configFile)
+		if err != nil {
+			fmt.Println("Failed to load config file. Error:", err)
+			os.Exit(1)
+		}
 		resetPassword(config.Database, *user, *password)
 	case "restore-db":
 		cmd := flag.NewFlagSet("restore-db", flag.ExitOnError)
@@ -121,7 +125,11 @@ func main() {
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
-		config := loadConfig(*configFile)
+		config, err := loadConfig(*configFile)
+		if err != nil {
+			fmt.Println("Failed to load config file. Error:", err)
+			os.Exit(1)
+		}
 		daemonize(config.Database)
 	default:
 		fmt.Println("Unknown command: '", v, "'")
@@ -129,15 +137,9 @@ func main() {
 	}
 }
 
-func loadConfig(file string) daemon.Config {
-	config := daemon.DefaultConfig
-	if file != "" {
-		conf, err := daemon.ParseConfig(file)
-		if err != nil {
-			fmt.Println("Failed to parse config file", err)
-			os.Exit(1)
-		}
-		config = conf
+func loadConfig(file string) (daemon.Config, error) {
+	if file == "" {
+		return daemon.DefaultConfig, nil
 	}
-	return config
+	return daemon.ParseConfig(file)
 }

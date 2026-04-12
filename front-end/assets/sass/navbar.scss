@@ -1,26 +1,48 @@
 @import './colors';
 
 .navbar-reefpi {
-  background-color: $main-color;
+  background: linear-gradient(180deg, $main-color 0%, $main-alternate-color 100%);
+  box-shadow: 0 2px 8px rgba(31, 42, 31, 0.14);
 }
+
 .navbar-reefpi .navbar-brand {
   color: #FFF;
 }
-.current-tab{
-  border:none;
-  cursor:default;
+
+.current-tab {
+  border: none;
+  cursor: default;
+  max-width: calc(100vw - 7rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-/* change the brand and text color */
-.navbar-reefpi
+
 .navbar-reefpi .navbar-text {
-  color: rgba(255,255,255,.8);
+  color: rgba(255, 255, 255, 0.84);
 }
-/* change the link color */
+
 .navbar-reefpi .navbar-nav .nav-link {
-  color: rgba(255,255,255,.5);
+  color: rgba(255, 255, 255, 0.82);
+  border-radius: 0.375rem;
+  padding: 0.625rem 0.875rem;
 }
-/* change the color of active or hovered links */
+
+.navbar-reefpi .navbar-nav .nav-link:hover,
+.navbar-reefpi .navbar-nav .nav-link:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
 .navbar-reefpi .nav-item.active .nav-link,
 .navbar-reefpi .nav-item:hover .nav-link {
   color: #ffffff;
+}
+
+.navbar-reefpi .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-reefpi .navbar-toggler:focus {
+  border-color: #ffffff;
 }
