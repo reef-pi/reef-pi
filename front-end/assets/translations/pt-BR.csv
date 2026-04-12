@@ -185,6 +185,7 @@ doser:calibration:measured_volume,
 doser:calibration:rate,
 doser:calibration:run,executar calibração
 doser:calibration:save_result,
+doser:continuous,
 doser:delay,espera
 doser:direction,direção
 doser:direction_pin,pino de direção

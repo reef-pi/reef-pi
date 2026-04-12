@@ -27,12 +27,14 @@ type Controller struct {
 	mu       *sync.Mutex
 	runner   *cron.Cron
 	cronIDs  map[string]cron.EntryID
+	quitters map[string]chan struct{} // for continuous pumps
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		DevMode:  devMode,
 		cronIDs:  make(map[string]cron.EntryID),
+		quitters: make(map[string]chan struct{}),
 		mu:       &sync.Mutex{},
 		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
@@ -45,6 +47,12 @@ func (c *Controller) GetEntity(id string) (controller.Entity, error) {
 
 func (c *Controller) Stop() {
 	c.runner.Stop()
+	c.mu.Lock()
+	for id, quit := range c.quitters {
+		close(quit)
+		delete(c.quitters, id)
+	}
+	c.mu.Unlock()
 	log.Println("Stopped dosing sub-system")
 }
 
@@ -65,7 +73,11 @@ func (c *Controller) Start() {
 		if !p.Regiment.Enable {
 			continue
 		}
-		c.addToCron(p)
+		if p.Regiment.Continuous {
+			c.startContinuous(p)
+		} else {
+			c.addToCron(p)
+		}
 		fn := func(d json.RawMessage) interface{} {
 			u := Usage{}
 			json.Unmarshal(d, &u)
@@ -77,6 +89,39 @@ func (c *Controller) Start() {
 	}
 	c.runner.Start()
 	return
+}
+
+func (c *Controller) startContinuous(p Pump) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if quit, ok := c.quitters[p.ID]; ok {
+		close(quit)
+	}
+	quit := make(chan struct{})
+	c.quitters[p.ID] = quit
+	go func() {
+		log.Println("doser-subsystem: starting continuous pump:", p.Name, "at", p.Regiment.Speed, "%")
+		v := map[int]float64{p.Pin: p.Regiment.Speed}
+		if err := c.c.DM().Jacks().Control(p.Jack, v); err != nil {
+			log.Println("ERROR: doser-subsystem: failed to start continuous pump:", p.Name, "error:", err)
+			return
+		}
+		<-quit
+		v[p.Pin] = 0
+		if err := c.c.DM().Jacks().Control(p.Jack, v); err != nil {
+			log.Println("ERROR: doser-subsystem: failed to stop continuous pump:", p.Name, "error:", err)
+		}
+		log.Println("doser-subsystem: stopped continuous pump:", p.Name)
+	}()
+}
+
+func (c *Controller) stopContinuous(id string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if quit, ok := c.quitters[id]; ok {
+		close(quit)
+		delete(c.quitters, id)
+	}
 }
 
 func (c *Controller) addToCron(p Pump) error {

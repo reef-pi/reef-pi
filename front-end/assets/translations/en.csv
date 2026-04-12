@@ -185,6 +185,7 @@ doser:calibration:measured_volume,Measured volume (mL)
 doser:calibration:rate,Dosing rate
 doser:calibration:run,Run
 doser:calibration:save_result,Save calibration
+doser:continuous,Continuous (run indefinitely)
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin

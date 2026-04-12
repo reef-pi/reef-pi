@@ -1,9 +1,6 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
+import renderer from 'react-test-renderer'
 import * as v from './validation_helper'
-import Adapter from 'enzyme-adapter-react-16'
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('Validation Helper', () => {
   it('NameFor', () => {
@@ -60,13 +57,15 @@ describe('Validation Helper', () => {
     const errors = { field1: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    const tree = renderer.create(<v.ErrorFor name='field1' touched={touched} errors={errors} />).toJSON()
+    expect(tree.children).toContain('some error')
   })
 
   it('<ErrorFor /> without error', () => {
     const errors = { field2: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    shallow(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    const tree = renderer.create(<v.ErrorFor name='field1' touched={touched} errors={errors} />).toJSON()
+    expect(tree).toBe('')
   })
 })

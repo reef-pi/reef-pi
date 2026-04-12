@@ -6,6 +6,7 @@ import Auto from './auto_profile'
 import Random from './random_profile'
 import Lunar from './lunar_profile'
 import Sine from './sine_profile'
+import Circadian from './circadian_profile'
 import Cyclic from './cyclic_profile'
 
 const Profile = (props) => {
@@ -74,6 +75,16 @@ const Profile = (props) => {
     case 'lunar': {
       return (
         <Lunar
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange}
+        />
+      )
+    }
+    case 'circadian': {
+      return (
+        <Circadian
           {...props}
           readOnly={props.readOnly}
           config={props.value}

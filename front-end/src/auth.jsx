@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 
-class auth extends React.Component {
+export class auth extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

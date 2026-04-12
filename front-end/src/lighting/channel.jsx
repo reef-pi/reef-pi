@@ -112,6 +112,24 @@ const Channel = (props) => {
           end: ''
         }
       }
+      case 'circadian': {
+        if (config) {
+          config = {
+            start: false,
+            end: false,
+            dawn_value: false,
+            noon_value: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          start: '',
+          end: '',
+          dawn_value: 10,
+          noon_value: 100
+        }
+      }
       case 'cyclic': {
         if (config) {
           config = {

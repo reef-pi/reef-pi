@@ -103,7 +103,20 @@ const EditDcPump = ({
           <ErrorFor errors={errors} touched={touched} name='enable' />
         </div>
       </div>
-      {values.volume_per_second > 0
+      <div className='col-12 col-sm-6 col-md-3'>
+        <div className='form-group'>
+          <label htmlFor='continuous'>{i18n.t('doser:continuous')}</label>
+          <Field
+            name='continuous'
+            type='checkbox'
+            disabled={readOnly}
+            checked={values.continuous}
+            className='form-control'
+          />
+        </div>
+      </div>
+
+      {!values.continuous && (values.volume_per_second > 0
         ? (
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
@@ -152,7 +165,7 @@ const EditDcPump = ({
             </div>
           </div>
         )
-      }
+      )}
 
       <div className='col col-sm-6 col-md-3'>
         <div className='form-group'>

@@ -11,6 +11,7 @@ describe('Summary', () => {
     const m = shallow(
       <Summary
         info={{}}
+        devMode={false}
         fetch={() => true}
         errors={[]}
         timer={window.setInterval(() => true, 1800 * 1000)}
