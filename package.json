@@ -78,8 +78,8 @@
     "build": "webpack",
     "ui": "webpack --mode=production",
     "ui-dev": "webpack --watch --mode=development",
-    "js-lint": "standard  front-end/src/**/*",
-    "standard": "standard --fix front-end/src/**/**",
+    "js-lint": "standard \"front-end/src/**/*.{js,jsx}\"",
+    "standard": "standard --fix \"front-end/src/**/*.{js,jsx}\"",
     "jest": "cross-env NODE_ENV=testing jest --env=jsdom",
     "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot --env=jsdom",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage --env=jsdom",
@@ -114,7 +114,9 @@
       "beforeEach"
     ],
     "ignore": [
-      "*.test.js"
+      "*.test.js",
+      "**/__snapshots__",
+      "**/__snapshots__/**"
     ]
   },
   "jest": {
