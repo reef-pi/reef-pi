@@ -4,7 +4,7 @@ This document extends the refactor program with a version modernization track fo
 
 ## Current stack
 
-- Go: `1.24.0`
+- Go: `1.26.0` directive, `1.26.2` toolchain target
 - Node in CI: `22`
 - React: `16.14.0`
 - React DOM: `16.12.0`
