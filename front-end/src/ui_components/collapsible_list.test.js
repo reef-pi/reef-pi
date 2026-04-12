@@ -1,9 +1,7 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import CollapsibleList from './collapsible_list'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 const Item = (props) => <div name={props.name}>{props.name}</div>
 

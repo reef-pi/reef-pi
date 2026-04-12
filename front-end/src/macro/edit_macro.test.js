@@ -1,12 +1,10 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import EditMacro from './edit_macro'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 import { FieldArray } from 'formik'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditMacro />', () => {
   let values = {

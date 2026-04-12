@@ -22,7 +22,7 @@
     "csv-parse": "^5.6.0",
     "csv-stringify": "6.5.2",
     "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "npm:@cfaester/enzyme-adapter-react-18@0.8.0",
+    "@cfaester/enzyme-adapter-react-18": "0.8.0",
     "eslint": "9.26.0",
     "eslint-plugin-react": "7.33.2",
     "fetch-mock": "9.11.0",

@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import Equipment from './equipment'
 import ViewEquipment from './view_equipment'
 import EditEquipment from './edit_equipment'
@@ -13,7 +12,6 @@ import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {

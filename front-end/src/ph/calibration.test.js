@@ -1,12 +1,10 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import CalibrateForm, { Calibrate } from './calibrate'
 import CalibrationWizard from './calibration_wizard'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('Ph Calibration', () => {
   let values = { enable: true }

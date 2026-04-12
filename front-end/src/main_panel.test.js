@@ -1,13 +1,11 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import MainPanel from './main_panel'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('MainPanel', () => {
