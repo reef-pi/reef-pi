@@ -7,6 +7,7 @@
 
 .navbar-reefpi .navbar-brand {
   color: #FFF;
+  min-width: 0;
 }
 
 .current-tab {
@@ -45,4 +46,24 @@
 
 .navbar-reefpi .navbar-toggler:focus {
   border-color: #ffffff;
+}
+
+@media screen and (max-width: 991.98px) {
+  .navbar-reefpi .navbar-brand {
+    max-width: calc(100vw - 8rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .navbar-reefpi .navbar-nav {
+    width: 100%;
+    padding-top: 0.5rem;
+    row-gap: 0.25rem;
+  }
+
+  .navbar-reefpi .nav-item,
+  .navbar-reefpi .nav-link {
+    width: 100%;
+  }
 }
