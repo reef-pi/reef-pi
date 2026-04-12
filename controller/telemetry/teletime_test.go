@@ -20,4 +20,7 @@ func TestTeleTime(t *testing.T) {
 	if err := t1.UnmarshalJSON([]byte("\"Jan-12-23:04, 2020\"")); err != nil {
 		t.Error(err)
 	}
+	if d := t1.Day(); d < 1 || d > 31 {
+		t.Error("Expected valid day, got:", d)
+	}
 }

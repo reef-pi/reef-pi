@@ -1,4 +1,4 @@
-import { configureStore } from 'redux/store'
+import { getStore } from 'redux/store'
 import { setAlert } from 'notifications/statics'
 import { addAlert, delAlert} from 'redux/actions/alert'
 import { MsgLevel } from 'utils/enums'
@@ -20,12 +20,12 @@ export function showUpdateSuccessful () {
   let alert = _showAlert(MsgLevel.success, i18n.t("save_successful"))
   setTimeout(() => {
     // only show alert for a second to not block page content
-    configureStore().dispatch(delAlert(alert))
+    getStore().dispatch(delAlert(alert))
   }, 1000)
 }
 function _showAlert (type, msg) {
-  let alert = setAlert(type, msg) 
-  configureStore().dispatch(addAlert(alert))
+  let alert = setAlert(type, msg)
+  getStore().dispatch(addAlert(alert))
   return alert
 }
 export function showAlert (msg) {

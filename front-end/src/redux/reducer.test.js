@@ -1,28 +1,48 @@
 import { rootReducer } from './reducer'
 import { configureStore } from './store'
+import { createInitialState } from './state'
+
+function getPayload () {
+  return {
+    foo: 'bar',
+    id: 1,
+    data: 'foobar:data',
+    usage: 'foobar:usage',
+    readings: 'foobar:readings'
+  }
+}
+
+function getState () {
+  return {
+    ...createInitialState(),
+    camera: {},
+    ato_usage: {},
+    macro_usage: {},
+    tc_usage: {},
+    ph_readings: {}
+  }
+}
+
+function getNestedState () {
+  return {
+    ...createInitialState(),
+    ato_usage: { existing: 'value' },
+    camera: {
+      config: { existing: true },
+      images: ['one'],
+      latest: 'latest'
+    }
+  }
+}
+
 describe('Redux Reducer', () => {
   it('Store', () => {
-    configureStore()
+    const firstStore = configureStore()
+    const secondStore = configureStore()
+    expect(firstStore).not.toBe(secondStore)
   })
+
   it('reducer', () => {
-    function getPayload () {
-      return {
-        foo: 'bar',
-        id: 1,
-        data: 'foobar:data',
-        usage: 'foobar:usage',
-        readings: 'foobar:readings'
-      }
-    }
-    function getState () {
-      return {
-        camera: {},
-        ato_usage: [],
-        macro_usage: {},
-        tc_usage: {},
-        ph_readings: {}
-      }
-    }
     console.log = jest.fn()
     let result
     result = rootReducer(getState(), { type: 'ERRORS_LOADED', payload: getPayload() })
@@ -38,7 +58,7 @@ describe('Redux Reducer', () => {
     result = rootReducer(getState(), { type: 'ATO_LOADED', payload: getPayload() })
     expect(result).toEqual({ ...getState(), config: getPayload() })
     result = rootReducer(getState(), { type: 'ATO_USAGE_LOADED', payload: getPayload() })
-    expect(result).toEqual({ ...getState(), ato_usage: [undefined, 'foobar:data'] })
+    expect(result).toEqual({ ...getState(), ato_usage: { 1: 'foobar:data' } })
     result = rootReducer(getState(), { type: 'MACROS_LOADED', payload: getPayload() })
     expect(result).toEqual({ ...getState(), macros: getPayload() })
     result = rootReducer(getState(), { type: 'MACRO_USAGE_LOADED', payload: getPayload() })
@@ -130,5 +150,15 @@ describe('Redux Reducer', () => {
     result = rootReducer(getState(), { type: 'foo' })
     expect(result).toEqual(getState())
     expect(console.log.mock.calls.length).toBe(1)
+  })
+
+  it('does not mutate nested state objects', () => {
+    const state = getNestedState()
+
+    rootReducer(state, { type: 'ATO_USAGE_LOADED', payload: { id: 1, data: 'updated' } })
+    expect(state.ato_usage).toEqual({ existing: 'value' })
+
+    rootReducer(state, { type: 'CAMERA_CONFIG_LOADED', payload: { foo: 'bar' } })
+    expect(state.camera).toEqual({ config: { existing: true }, images: ['one'], latest: 'latest' })
   })
 })

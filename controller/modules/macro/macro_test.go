@@ -70,3 +70,123 @@ func TestMacro(t *testing.T) {
 	}
 	s.Stop()
 }
+
+func TestMacroInUseAndGetEntity(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	s, err := New(true, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	s.Start()
+
+	// Create a macro with an equipment step
+	steps := []Step{
+		{Type: "equipment", Config: []byte(`{"id":"42","on":true}`)},
+	}
+	m := Macro{Name: "TestMacro", Steps: steps}
+	if err := s.Create(m); err != nil {
+		t.Fatal("Failed to create macro:", err)
+	}
+
+	// InUse for equipment type — should find macro
+	deps, err := s.InUse("equipment", "42")
+	if err != nil {
+		t.Error("InUse(equipment) should not error:", err)
+	}
+	if len(deps) == 0 {
+		t.Error("Expected at least one dep for equipment '42'")
+	}
+
+	// InUse for macro type — should also work (macro steps can reference other macros)
+	_, err = s.InUse("macro", "99")
+	if err != nil {
+		t.Error("InUse(macro) should not error:", err)
+	}
+
+	// InUse for unknown dep type — should error
+	if _, err := s.InUse("unknown", "1"); err == nil {
+		t.Error("Expected error for unknown dep type")
+	}
+
+	// GetEntity — not supported
+	if _, err := s.GetEntity("1"); err == nil {
+		t.Error("GetEntity should return error (not supported)")
+	}
+}
+
+func TestMacroRevertAPI(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	s, err := New(true, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	tr := utils.NewTestRouter()
+	s.LoadAPI(tr.Router)
+
+	steps := []Step{
+		{Type: "equipment", Config: []byte(`{"id":"1","on":true}`)},
+	}
+	m := Macro{Name: "RevMacro", Steps: steps, Reversible: true}
+	if err := s.Create(m); err != nil {
+		t.Fatal("Failed to create macro:", err)
+	}
+
+	if err := tr.Do("POST", "/api/macros/1/revert", strings.NewReader("{}"), nil); err != nil {
+		t.Error("revert API failed:", err)
+	}
+}
+
+func TestMacroReversible(t *testing.T) {
+	c, err := controller.TestController()
+	defer c.Store().Close()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	s, err := New(true, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	steps := []Step{
+		{Type: "equipment", Config: []byte(`{"id":"1","on":true}`)},
+	}
+	rev := Macro{Name: "Reversible", Steps: steps, Reversible: true}
+	if err := s.Create(rev); err != nil {
+		t.Fatal("Failed to create reversible macro:", err)
+	}
+	rev.ID = "1"
+	if err := s.Run(rev, true); err != nil {
+		t.Error("Reversible macro with reverse=true should not error:", err)
+	}
+
+	// Non-reversible macro run with reverse=true should error
+	nonRev := Macro{Name: "NonReversible", Steps: steps, Reversible: false}
+	if err := s.Create(nonRev); err != nil {
+		t.Fatal("Failed to create non-reversible macro:", err)
+	}
+	nonRev.ID = "2"
+	if err := s.Run(nonRev, true); err == nil {
+		t.Error("Expected error running non-reversible macro in reverse")
+	}
+}

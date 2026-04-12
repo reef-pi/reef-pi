@@ -58,6 +58,19 @@ func TestJSONResponses(t *testing.T) {
 	JSONDeleteResponse(func(_ string) error { return fmt.Errorf("") }, resp, req)
 }
 
+func TestJSONResponseWithStatus(t *testing.T) {
+	req, err := http.NewRequest("GET", "/api/test", strings.NewReader("{}"))
+	if err != nil {
+		t.Fatal("Failed to create http request. Error:", err)
+	}
+	rr := httptest.NewRecorder()
+	payload := map[string]string{"key": "value"}
+	JSONResponseWithStatus(http.StatusCreated, payload, rr, req)
+	if rr.Code != http.StatusCreated {
+		t.Errorf("Expected status %d, got %d", http.StatusCreated, rr.Code)
+	}
+}
+
 type testDoer struct{}
 
 func (t *testDoer) Do(_ func(interface{})) {}

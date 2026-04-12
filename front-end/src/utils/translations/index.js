@@ -6,6 +6,7 @@ import translationsFA from 'fa.csv'
 import translationsHI from 'hi.csv'
 import translationsES from 'es.csv'
 import translationsPT from 'pt.csv'
+import translationsPTBR from 'pt-BR.csv'
 import translationsNL from 'nl.csv'
 import translationsZH from 'zh.csv'
 const ts = {
@@ -17,6 +18,7 @@ const ts = {
   hi: translationsHI,
   es: translationsES,
   pt: translationsPT,
+  'pt-BR': translationsPTBR,
   zh: translationsZH,
   nl: translationsNL
 }
