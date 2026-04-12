@@ -7,6 +7,7 @@ import EditEquipment from './edit_equipment'
 import EquipmentForm from './equipment_form'
 import Chart from './chart'
 import Main from './main'
+import { buildEquipmentPayload, SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipment } from './utils'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -41,6 +42,28 @@ describe('Equipment ui', () => {
   it('<Main />', () => {
     const m = shallow(<Main store={mockStore({ outlets: outlets, equipment: eqs })} />)
       .dive()
+  })
+
+  it('sortEquipment supports all sort modes without mutating input', () => {
+    const unsorted = [
+      { id: '1', name: 'Beta', on: false },
+      { id: '2', name: 'Alpha', on: true }
+    ]
+    expect(sortEquipment(unsorted, SORT_NAME_AZ).map(e => e.name)).toEqual(['Alpha', 'Beta'])
+    expect(sortEquipment(unsorted, SORT_NAME_ZA).map(e => e.name)).toEqual(['Beta', 'Alpha'])
+    expect(sortEquipment(unsorted, SORT_ON_FIRST).map(e => e.name)).toEqual(['Alpha', 'Beta'])
+    expect(sortEquipment(unsorted, SORT_OFF_FIRST).map(e => e.name)).toEqual(['Beta', 'Alpha'])
+    expect(unsorted.map(e => e.name)).toEqual(['Beta', 'Alpha'])
+  })
+
+  it('buildEquipmentPayload preserves existing fields and applies updates', () => {
+    expect(buildEquipmentPayload(eqs[0], { on: false })).toEqual({
+      id: '1',
+      name: 'Foo',
+      on: false,
+      outlet: '1',
+      stay_off_on_boot: undefined
+    })
   })
 
   it('<Equipment />', () => {
