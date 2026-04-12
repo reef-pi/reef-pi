@@ -1,18 +1,5 @@
 import FatalError from './fatal_error'
-
-function mountClassComponent (Component) {
-  const instance = new Component({})
-  instance.setState = update => {
-    const patch = typeof update === 'function' ? update(instance.state, instance.props) : update
-    instance.state = { ...instance.state, ...patch }
-  }
-  return instance
-}
-
-async function flushPromises () {
-  await Promise.resolve()
-  await Promise.resolve()
-}
+import { mountClassComponent, flushPromises } from '../test/class_component'
 
 describe('FatalError', () => {
   afterEach(() => {

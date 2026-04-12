@@ -1,13 +1,5 @@
 import SignIn from './sign_in'
-
-function mountClassComponent (Component) {
-  const instance = new Component({})
-  instance.setState = update => {
-    const patch = typeof update === 'function' ? update(instance.state, instance.props) : update
-    instance.state = { ...instance.state, ...patch }
-  }
-  return instance
-}
+import { mountClassComponent } from '../test/class_component'
 
 describe('SignIn', () => {
   beforeEach(() => {
