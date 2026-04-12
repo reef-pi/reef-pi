@@ -13,12 +13,12 @@ import (
 
 //swagger:model dosingRegiment
 type DosingRegiment struct {
-	Enable     bool     `json:"enable"`
-	Schedule   Schedule `json:"schedule"`
-	Duration   float64  `json:"duration"`
-	Speed      float64  `json:"speed"`
-	Volume     float64  `json:"volume"`
-	SoftStart  float64  `json:"soft_start"`  // ramp duration in seconds (0 = disabled)
+	Enable    bool     `json:"enable"`
+	Schedule  Schedule `json:"schedule"`
+	Duration  float64  `json:"duration"`
+	Speed     float64  `json:"speed"`
+	Volume    float64  `json:"volume"`
+	SoftStart float64  `json:"soft_start"` // ramp duration in seconds (0 = disabled)
 }
 
 // swagger:model pump
@@ -35,6 +35,9 @@ type Pump struct {
 func (p *Pump) IsValid() error {
 	if p.Name == "" {
 		return fmt.Errorf("name can not be empty")
+	}
+	if p.Regiment.SoftStart < 0 {
+		return fmt.Errorf("soft start must be non-negative")
 	}
 	switch p.Type {
 	case "stepper":

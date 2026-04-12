@@ -13,6 +13,8 @@ type Runner struct {
 	dm       *device_manager.DeviceManager
 	statsMgr telemetry.StatsManager
 	t        telemetry.Telemetry
+	control  func(string, map[int]float64) error
+	sleep    func(time.Duration)
 }
 
 func (r *Runner) Run() {
@@ -42,36 +44,51 @@ func (r *Runner) Run() {
 
 const _softStartSteps = 10
 
+func (r *Runner) controlJack(jack string, values map[int]float64) error {
+	if r.control != nil {
+		return r.control(jack, values)
+	}
+	return r.dm.Jacks().Control(jack, values)
+}
+
+func (r *Runner) pause(d time.Duration) {
+	if r.sleep != nil {
+		r.sleep(d)
+		return
+	}
+	time.Sleep(d)
+}
+
+func (r *Runner) setPWM(value float64) error {
+	return r.controlJack(r.pump.Jack, map[int]float64{r.pump.Pin: value})
+}
+
+func (r *Runner) rampPWM(speed float64, start int, end int, step int, stepDur time.Duration) error {
+	for i := start; i != end; i += step {
+		if err := r.setPWM(speed * float64(i) / _softStartSteps); err != nil {
+			return err
+		}
+		r.pause(stepDur)
+	}
+	return nil
+}
+
 func (r *Runner) PWMDose(speed float64, duration float64) error {
-	v := make(map[int]float64)
 	softStart := r.pump.Regiment.SoftStart
 	if softStart > 0 {
 		stepDur := time.Duration(softStart / _softStartSteps * float64(time.Second))
-		for i := 1; i <= _softStartSteps; i++ {
-			v[r.pump.Pin] = speed * float64(i) / _softStartSteps
-			if err := r.dm.Jacks().Control(r.pump.Jack, v); err != nil {
-				return err
-			}
-			time.Sleep(stepDur)
+		if err := r.rampPWM(speed, 1, _softStartSteps+1, 1, stepDur); err != nil {
+			return err
 		}
 	} else {
-		v[r.pump.Pin] = speed
-		if err := r.dm.Jacks().Control(r.pump.Jack, v); err != nil {
+		if err := r.setPWM(speed); err != nil {
 			return err
 		}
 	}
-	time.Sleep(time.Duration(duration * float64(time.Second)))
+	r.pause(time.Duration(duration * float64(time.Second)))
 	if softStart > 0 {
 		stepDur := time.Duration(softStart / _softStartSteps * float64(time.Second))
-		for i := _softStartSteps - 1; i >= 0; i-- {
-			v[r.pump.Pin] = speed * float64(i) / _softStartSteps
-			if err := r.dm.Jacks().Control(r.pump.Jack, v); err != nil {
-				return err
-			}
-			time.Sleep(stepDur)
-		}
-		return nil
+		return r.rampPWM(speed, _softStartSteps-1, -1, -1, stepDur)
 	}
-	v[r.pump.Pin] = 0
-	return r.dm.Jacks().Control(r.pump.Jack, v)
+	return r.setPWM(0)
 }
