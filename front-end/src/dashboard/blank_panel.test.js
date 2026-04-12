@@ -2,6 +2,10 @@ import React from 'react'
 import renderer from 'react-test-renderer'
 import BlankPanel from './blank_panel'
 
+jest.mock('recharts', () => ({
+  ResponsiveContainer: ({ children }) => <div className='responsive-container'>{children}</div>
+}))
+
 describe('<BlankPanel />', () => {
   it('renders without throwing', () => {
     expect(() => renderer.create(<BlankPanel height={200} />)).not.toThrow()
