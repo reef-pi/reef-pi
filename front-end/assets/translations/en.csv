@@ -259,6 +259,8 @@ lighting:add_point,Add point
 lighting:change_mode,Change Mode
 lighting:channel_name,Channel Name
 lighting:chart_color,Color
+lighting:cyclic_period,Period
+lighting:cyclic_phase_shift,Phase Shift
 lighting:jack,Jack
 lighting:mode_auto,Auto
 lighting:mode_manual,Manual
@@ -267,8 +269,6 @@ lighting:remove,Remove
 lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}
-lighting:cyclic_period,Period
-lighting:cyclic_phase_shift,Phase Shift
 log:content,Content
 log:emitter,Emitter
 log:time,Time
@@ -338,6 +338,7 @@ telemetry:notification:to,To
 telemetry:notification:username,Username
 temperature:alert_above,Alert Above
 temperature:alert_below,Alert Below
+temperature:analog_input,Analog Input
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
 temperature:calibration:set_temperature, Set Temperature
@@ -362,7 +363,6 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
-temperature:analog_input,Analog Input
 temperature:sensor,Sensor
 temperature:temperature,Temperature
 temperature:unit,Unit

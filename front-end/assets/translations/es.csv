@@ -259,6 +259,8 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,Nombre del Canal
 lighting:chart_color,Color
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
@@ -336,6 +338,7 @@ telemetry:notification:to,Para
 telemetry:notification:username,Usuario
 temperature:alert_above,Alerta Sobre
 temperature:alert_below,Alerta Bajo
+temperature:analog_input,Entrada Análoga
 temperature:calibrate,Calibración
 temperature:calibration:apply,Aplicar
 temperature:calibration:set_temperature,Configurar Temperatura
@@ -360,7 +363,6 @@ temperature:hysteresis,Histéresis
 temperature:hysteresis_less_than,Histéresis es menor que límite aceptable
 temperature:lower_function,Calentador
 temperature:lower_threshold,Límite de Calentador
-temperature:analog_input,Entrada Análoga
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidad

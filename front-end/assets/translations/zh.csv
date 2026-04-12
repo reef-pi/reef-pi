@@ -259,6 +259,8 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
 lighting:chart_color,
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
@@ -336,6 +338,7 @@ telemetry:notification:to,
 telemetry:notification:username,
 temperature:alert_above,告警上限
 temperature:alert_below,告警下限
+temperature:analog_input,模拟输入
 temperature:calibrate,校准
 temperature:calibration:apply,应用
 temperature:calibration:set_temperature,设置温度
@@ -360,7 +363,6 @@ temperature:hysteresis,
 temperature:hysteresis_less_than,
 temperature:lower_function,下层功能
 temperature:lower_threshold,下阈值
-temperature:analog_input,模拟输入
 temperature:sensor,传感器
 temperature:temperature,温度
 temperature:unit,单位
