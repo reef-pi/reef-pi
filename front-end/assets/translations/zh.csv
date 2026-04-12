@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,回到面板
 dashboard:blank_panel,
 doser:calibrate,
 doser:calibration:run,
+doser:continuous,
 doser:delay,
 doser:direction,
 doser:direction_pin,

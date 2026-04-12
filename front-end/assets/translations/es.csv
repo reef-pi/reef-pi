@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,Volver al dashboard
 dashboard:blank_panel,Sin Asignar (En Blanco)
 doser:calibrate,
 doser:calibration:run,
+doser:continuous,
 doser:delay,
 doser:direction,
 doser:direction_pin,

@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,Voltas ao  Painel Inicial
 dashboard:blank_panel,Painel em branco
 doser:calibrate,calibrar
 doser:calibration:run,correr calibração
+doser:continuous,
 doser:delay,espera
 doser:direction,direcção
 doser:direction_pin,pin de direcção

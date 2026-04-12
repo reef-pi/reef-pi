@@ -181,6 +181,7 @@ dashboard:back_to_dashboard,Back to dashboard
 dashboard:blank_panel,Unassigned (Blank)
 doser:calibrate,Calibrate
 doser:calibration:run,Run
+doser:continuous,Continuous (run indefinitely)
 doser:delay,Delay
 doser:direction, Direction
 doser:direction_pin,Direction Pin
