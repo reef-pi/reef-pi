@@ -196,6 +196,7 @@ doser:microstepping,micropassos
 doser:ms_pin_a,Pin A
 doser:ms_pin_b,Pin B
 doser:ms_pin_c,Pin C
+doser:soft_start,
 doser:speed,Velocidade
 doser:spr,spr
 doser:step_pin,Pin de Passo
@@ -337,6 +338,7 @@ telemetry:notification:to,para
 telemetry:notification:username,nome de utilizador
 temperature:alert_above,alerta sobre
 temperature:alert_below,alerta abaixo
+temperature:analog_input,Entrada Analogica
 temperature:calibrate,calibrar
 temperature:calibration:apply,aplicar
 temperature:calibration:set_temperature,Definir temperatura
@@ -361,7 +363,6 @@ temperature:hysteresis,hysteresis
 temperature:hysteresis_less_than,hysteresis menos de 
 temperature:lower_function,função caso seja menor
 temperature:lower_threshold,Abaixo do desejado
-temperature:analog_input,Entrada Analogica
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades

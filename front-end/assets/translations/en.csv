@@ -196,6 +196,7 @@ doser:microstepping,Microstepping
 doser:ms_pin_a,MicroStepping Pin A
 doser:ms_pin_b,MicroStepping Pin B
 doser:ms_pin_c,MicroStepping Pin C 
+doser:soft_start,Soft Start (ramp up/down)
 doser:speed,Speed
 doser:spr,Steps Per Rotation
 doser:step_pin,Step Pin
@@ -203,7 +204,6 @@ doser:title_delete,Delete {{name}} ?
 doser:type,Type
 doser:volume,Volume
 doser:vpr,Volume Per Rotation
-doser:soft_start,Soft Start (ramp up/down)
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
 equipment:chart:barchart,Equipment(Bar Chart)
@@ -338,6 +338,7 @@ telemetry:notification:to,To
 telemetry:notification:username,Username
 temperature:alert_above,Alert Above
 temperature:alert_below,Alert Below
+temperature:analog_input,Analog Input
 temperature:calibrate, Calibrate
 temperature:calibration:apply, Apply
 temperature:calibration:set_temperature, Set Temperature
@@ -362,7 +363,6 @@ temperature:hysteresis,Hysteresis
 temperature:hysteresis_less_than, Hysteresis is less than acceptable threshold
 temperature:lower_function, Heater
 temperature:lower_threshold, Heater Threshold
-temperature:analog_input,Analog Input
 temperature:sensor,Sensor
 temperature:temperature,Temperature
 temperature:unit,Unit
