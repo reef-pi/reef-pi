@@ -260,6 +260,8 @@ lighting:add_point,Adicionar Ponto
 lighting:change_mode,Mudar Modo
 lighting:channel_name,Nome do Canal
 lighting:chart_color,Cor
+lighting:circadian_dawn_value,
+lighting:circadian_noon_value,
 lighting:jack,Jack
 lighting:mode_auto,Modo Automático
 lighting:mode_manual,Modo Manual
@@ -337,6 +339,7 @@ telemetry:notification:to,para
 telemetry:notification:username,nome de usuário
 temperature:alert_above,alerta acima
 temperature:alert_below,alerta abaixo
+temperature:analog_input,Entrada Analógica
 temperature:calibrate,calibrar
 temperature:calibration:apply,aplicar
 temperature:calibration:set_temperature,Definir temperatura
@@ -361,7 +364,6 @@ temperature:hysteresis,histerese
 temperature:hysteresis_less_than,histerese menor que
 temperature:lower_function,função caso menor
 temperature:lower_threshold,Abaixo do desejado
-temperature:analog_input,Entrada Analógica
 temperature:sensor,Sensor
 temperature:temperature,Temperatura
 temperature:unit,Unidades
