@@ -261,6 +261,8 @@ lighting:add_point,
 lighting:change_mode,
 lighting:channel_name,
 lighting:chart_color,
+lighting:cyclic_period,
+lighting:cyclic_phase_shift,
 lighting:jack,Jack
 lighting:mode_auto,
 lighting:mode_manual,
