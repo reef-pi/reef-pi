@@ -1,7 +1,8 @@
-name: jest
+name: Frontend Jest
 on: [push, pull_request]
 jobs:
-  builds:
+  frontend-jest:
+    name: Jest and Standard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
