@@ -12,29 +12,11 @@ import (
 )
 
 func (r *ReefPi) API() error {
-	err, router := startAPIServer(r.settings.Address, r.settings.HTTPS)
-	if err != nil {
-		return err
-	}
-	r.AuthenticatedAPI(router)
-	r.UnAuthenticatedAPI(router)
-	if r.settings.Prometheus {
-		r.prometheus()
-	}
+	handler := r.serverHandler()
 	if os.Getenv("REEF_PI_LIST_API") == "1" {
 		utils.SummarizeAPI()
 	}
-	if r.settings.CORS {
-		router.Use(func(next http.Handler) http.Handler {
-			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Set("Access-Control-Allow-Origin", "*")
-				w.Header().Set("Access-Control-Allow-Methods", "*")
-				w.Header().Set("Access-Control-Allow-Headers", "*")
-				next.ServeHTTP(w, r)
-			})
-		})
-	}
-	return nil
+	return startAPIServer(r.settings.Address, r.settings.HTTPS, handler)
 }
 
 func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
@@ -44,8 +26,6 @@ func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
 
 // Authenticated API using the BasicAuth middleware
 func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
-	http.Handle("/api/", r.a.Authenticate(router.ServeHTTP))
-
 	// swagger:route GET /api/capabilities Capabilities capabilitiesList
 	// List all capabilities.
 	// List all capabilities in reef-pi.
@@ -213,36 +193,67 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	}
 }
 
-func startAPIServer(address string, https bool) (error, *mux.Router) {
-	assets := http.FileServer(http.Dir("ui/assets"))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+func (r *ReefPi) serverHandler() http.Handler {
+	root := mux.NewRouter()
+
+	root.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/home.html")
 	})
-	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+	root.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "ui/favicon.ico")
 	})
-	router := mux.NewRouter()
-	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
-	images := http.FileServer(http.Dir("images"))
-	http.Handle("/images/", http.StripPrefix("/images/", images))
-	http.Handle("/auth/", router)
+	root.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("ui/assets"))))
+	root.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
+
+	authRouter := mux.NewRouter()
+	r.UnAuthenticatedAPI(authRouter)
+	root.PathPrefix("/auth/").Handler(authRouter)
+
+	apiRouter := mux.NewRouter()
+	if r.settings.CORS {
+		apiRouter.Use(corsMiddleware)
+	}
+	r.AuthenticatedAPI(apiRouter)
+	root.PathPrefix("/api/").Handler(r.a.Authenticate(apiRouter.ServeHTTP))
+
+	if r.h != nil {
+		apiRouter.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
+	}
+	if r.settings.Prometheus {
+		r.prometheus(root)
+	}
+
+	return root
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func startAPIServer(address string, https bool, handler http.Handler) error {
 	if https {
 		if err := utils.GenerateCerts(); err != nil {
-			return err, nil
+			return err
 		}
 		go func() {
 			log.Printf("Starting https server at: %s\n", address)
-			if err := http.ListenAndServeTLS(address, "server.crt", "server.key", nil); err != nil {
+			if err := http.ListenAndServeTLS(address, "server.crt", "server.key", handler); err != nil {
 				log.Println("ERROR: Failed to run https server. Error:", err)
 			}
 		}()
-	} else {
-		go func() {
-			log.Printf("Starting http server at: %s\n", address)
-			if err := http.ListenAndServe(address, nil); err != nil {
-				log.Println("ERROR: Failed to run http server. Error:", err)
-			}
-		}()
+		return nil
 	}
-	return nil, router
+
+	go func() {
+		log.Printf("Starting http server at: %s\n", address)
+		if err := http.ListenAndServe(address, handler); err != nil {
+			log.Println("ERROR: Failed to run http server. Error:", err)
+		}
+	}()
+	return nil
 }
