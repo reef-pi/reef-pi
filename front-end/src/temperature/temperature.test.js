@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import ControlChart from './control_chart'
 import Main from './main'
 import ReadingsChart from './readings_chart'
@@ -9,7 +8,6 @@ import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
 import TemperatureForm from './temperature_form'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {

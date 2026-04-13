@@ -1,15 +1,13 @@
 import React from 'react'
 import ComponentSelector from './component_selector'
 import Config from './config'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import Grid from './grid'
 import Main from './main'
 import 'isomorphic-fetch'
 import thunk from 'redux-thunk'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('Dashboard', () => {

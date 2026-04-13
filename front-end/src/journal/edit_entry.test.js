@@ -1,10 +1,8 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import EditEntry from './edit_entry'
 import * as Alert from 'utils/alert'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 const defaultProps = {
   values: { value: 7.2, comment: '', timestamp: 'Jul-08-23:38, 2022' },
