@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Timer {
 
@@ -8,9 +8,9 @@ class Timer {
     this.equipmentSelect = Selector('.add-timer [name="target.id"]')
     this.revertSelect = Selector('.add-timer [name="target.revert"]')
     this.duration = Selector('.add-timer [name="target.duration"]')
-    this.hour = Selector('.add-timer [name="hour"]')
-    this.minute = Selector('.add-timer [name="minute"]')
-    this.second = Selector('.add-timer [name="second"]')
+    this.hour = Selector(tid('smoke-cron-hour'))
+    this.minute = Selector(tid('smoke-cron-minute'))
+    this.second = Selector(tid('smoke-cron-second'))
   }
 
   async create() {
@@ -26,8 +26,8 @@ class Timer {
     }
 
     await t
-    .click('input#add_timer')
-    .typeText('.add-timer input[name="name"]', name)
+    .click(tid('smoke-timer-add-toggle'))
+    .typeText(tid('smoke-timer-name'), name)
 
     await select(this.equipmentSelect, equipment)
     await select(this.revertSelect, revert)
@@ -44,7 +44,7 @@ class Timer {
     await clear(this.second)
     await t
     .typeText(this.second, second)
-    .click('.add-timer input[type*="submit"]')
+    .click(tid('smoke-timer-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

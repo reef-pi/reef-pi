@@ -149,6 +149,7 @@ class outlets extends React.Component {
           <div className='col-12'>
             <input
               id='add_outlet'
+              data-testid='smoke-outlet-add-toggle'
               type='button'
               value={this.state.add ? '-' : '+'}
               onClick={this.handleAdd}
@@ -164,6 +165,7 @@ class outlets extends React.Component {
               <input
                 type='text'
                 id='outletName'
+                data-testid='smoke-outlet-name'
                 onChange={this.handleNameChange}
                 value={this.state.outName}
                 className='form-control'
@@ -183,6 +185,7 @@ class outlets extends React.Component {
               <span className='input-group-addon'>{i18n.t('driver')}</span>
               <select
                 name='driver'
+                data-testid='smoke-outlet-driver'
                 className='form-control custom-select'
                 onChange={this.handleDriverChange}
                 value={this.state.driver.id}
@@ -213,6 +216,7 @@ class outlets extends React.Component {
             <input
               type='button'
               id='createOutlet'
+              data-testid='smoke-outlet-submit'
               value={i18n.t('add')}
               onClick={this.handleSave}
               className='btn btn-outline-primary col-12 col-md-4'

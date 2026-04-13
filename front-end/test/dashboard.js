@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, clear, setText } from './helpers'
-import { assertNoFatalError, expectExists } from './runtime'
+import { assertNoFatalError, expectExists, tid } from './runtime'
 
 class Dashboard {
 
@@ -13,7 +13,7 @@ class Dashboard {
 
   async configure() {
     await t.click('a#tab-dashboard')
-    .click('button#configure-dashboard')
+    .click(tid('smoke-dashboard-configure'))
 
     await setText(this.rows, 3)
     await setText(this.columns, 2)
@@ -48,9 +48,9 @@ class Dashboard {
       .click('button#select-component-2-1')
       .click('span#component-2-1-current')
 
-      .click('input#save_dashboard')
-      .click('button#configure-dashboard')
-    await expectExists('button#configure-dashboard')
+      .click(tid('smoke-dashboard-save'))
+      .click(tid('smoke-dashboard-configure'))
+    await expectExists(tid('smoke-dashboard-configure'))
     await assertNoFatalError()
   }
 }

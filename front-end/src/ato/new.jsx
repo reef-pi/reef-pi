@@ -67,7 +67,7 @@ class newATO extends React.Component {
   render () {
     return (
       <div className='list-group-item add-ato'>
-        <input id='add_new_ato_sensor' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
+        <input id='add_new_ato_sensor' data-testid='smoke-ato-add-toggle' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )

@@ -263,7 +263,7 @@ class main extends React.Component {
           <label htmlFor='lightName'>{i18n.t('name')}</label>
         </div>
         <div className='col-12 col-sm-9 col-md-3 col-lg-3 mb-1'>
-          <input type='text' id='lightName' className='form-control' required />
+          <input type='text' id='lightName' data-testid='smoke-light-name' className='form-control' required />
         </div>
         <div className='col-12 col-sm-3 col-md-1 col-lg-1'>
           <label htmlFor='jack'>{i18n.t('jack')}</label>
@@ -274,6 +274,7 @@ class main extends React.Component {
               className='btn btn-secondary dropdown-toggle w-100'
               type='button'
               id='jack'
+              data-testid='smoke-light-jack'
               data-toggle='dropdown'
               aria-haspopup='true'
               aria-expanded='false'
@@ -289,6 +290,7 @@ class main extends React.Component {
           <input
             type='button'
             id='createLight'
+            data-testid='smoke-light-submit'
             value={i18n.t('add')}
             onClick={this.handleAddLight}
             className='btn btn-outline-primary'
@@ -313,6 +315,7 @@ class main extends React.Component {
             <div className='col'>
               <input
                 id='add_light'
+                data-testid='smoke-light-add-toggle'
                 type='button'
                 value={this.state.addLight ? '-' : '+'}
                 onClick={this.handleToggleAddLightDiv}

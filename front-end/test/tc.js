@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, setText } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Tc {
 
@@ -40,7 +40,7 @@ class Tc {
     }
 
     await t
-      .click('input#add_probe')
+      .click(tid('smoke-temperature-add-toggle'))
       .typeText(this.name, tc.name)
 
     await select(this.sensor, tc.sensor)

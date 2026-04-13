@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Analog {
 
@@ -27,12 +27,12 @@ class Analog {
     }
 
     await t
-    .click('input#add_analog_input')
-    .typeText('input#analog_inputName', name)
+    .click(tid('smoke-analog-add-toggle'))
+    .typeText(tid('smoke-analog-name'), name)
 
     await select(this.driverSelect, driver)
     await select(this.pinSelect, pin)
-    await t.click('input#createAnalogInput')
+    await t.click(tid('smoke-analog-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

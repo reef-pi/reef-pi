@@ -13,6 +13,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='month'>{i18next.t('cron:month')}</label>
         <Field
           name='month'
+          data-testid='smoke-cron-month'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('month', touched, errors)
@@ -25,6 +26,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='week'>{i18next.t('cron:week')}</label>
         <Field
           name='week'
+          data-testid='smoke-cron-week'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('week', touched, errors)
@@ -37,6 +39,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='day'>{i18next.t('cron:day_of_month')}</label>
         <Field
           name='day'
+          data-testid='smoke-cron-day'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('day', touched, errors)
@@ -49,6 +52,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='hour'>{i18next.t('cron:hour')}</label>
         <Field
           name='hour'
+          data-testid='smoke-cron-hour'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('hour', touched, errors)
@@ -61,6 +65,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='minute'>{i18next.t('cron:minute')}</label>
         <Field
           name='minute'
+          data-testid='smoke-cron-minute'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('minute', touched, errors)
@@ -73,6 +78,7 @@ const Cron = ({ values, errors, touched, readOnly }) => {
         <label htmlFor='second'>{i18next.t('cron:second')}</label>
         <Field
           name='second'
+          data-testid='smoke-cron-second'
           disabled={readOnly}
           className={classNames('col form-control', {
             'is-invalid': ShowError('second', touched, errors)

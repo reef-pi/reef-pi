@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Inlet {
 
@@ -27,11 +27,11 @@ class Inlet {
     }
 
     await t
-    .click('input#add_inlet')
-    .typeText('input#inletName', name)
+    .click(tid('smoke-inlet-add-toggle'))
+    .typeText(tid('smoke-inlet-name'), name)
 
     await select(this.pinSelect, pin)
-    await t.click('input#createInlet')
+    await t.click(tid('smoke-inlet-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

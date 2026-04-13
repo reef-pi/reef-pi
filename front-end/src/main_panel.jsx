@@ -74,7 +74,7 @@ class mainPanel extends React.Component {
       .filter(route => currentCaps[route.key] !== undefined && currentCaps[route.key])
       .map(route => (
         <li className='nav-item' key={'li-tab-' + route.key}>
-          <NavLink to={route.path || ''} id={'tab-' + route.key} className="nav-link">
+          <NavLink to={route.path || ''} id={'tab-' + route.key} data-testid={'smoke-tab-' + route.key} className="nav-link">
             {route.label}
           </NavLink>
         </li>
@@ -89,10 +89,10 @@ class mainPanel extends React.Component {
 
     return (
       <BrowserRouter>
-        <div id='content'>
+          <div id='content' data-testid='smoke-shell-root'>
           <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
-            <span className='navbar-brand mb-0 h1'>{this.props.info.name}</span>
-            <span className='navbar-brand mb-0 h1 navbar-toggler current-tab'><CurrentPageHeader /></span>
+            <span className='navbar-brand mb-0 h1' data-testid='smoke-brand'>{this.props.info.name}</span>
+            <span className='navbar-brand mb-0 h1 navbar-toggler current-tab' data-testid='smoke-current-tab'><CurrentPageHeader /></span>
             <button
               className='navbar-toggler'
               type='button'
@@ -107,6 +107,7 @@ class mainPanel extends React.Component {
             <div
               className='collapse navbar-collapse navHeaderCollapse'
               id='navbarNav'
+              data-testid='smoke-nav'
               data-toggle='collapse'
               data-target='.navbar-collapse'
             >

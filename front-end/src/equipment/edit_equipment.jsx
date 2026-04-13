@@ -50,6 +50,7 @@ const EditEquipment = ({
           <input
             type='text'
             name='name'
+            data-testid='smoke-equipment-name'
             onChange={handleChange}
             onBlur={handleBlur}
             className={classNames('form-control', { 'is-invalid': ShowError('name', touched, errors) })}
@@ -61,6 +62,7 @@ const EditEquipment = ({
           <label className='mr-2'>{i18next.t('outlet')}</label>
           <select
             name='outlet'
+            data-testid='smoke-equipment-outlet'
             onChange={handleChange}
             onBlur={handleBlur}
             className={classNames('form-control', { 'is-invalid': ShowError('outlet', touched, errors) })}
@@ -95,7 +97,7 @@ const EditEquipment = ({
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
         <div className='p-2 mr-auto'>
-          <button type='submit' id='add_equipment'>
+          <button type='submit' id='add_equipment' data-testid='smoke-equipment-submit'>
             {FaSave()}
           </button>
         </div>

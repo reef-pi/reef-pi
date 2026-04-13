@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Light {
 
@@ -21,11 +21,11 @@ class Light {
     }
 
     await t
-    .click('input#add_light')
-    .typeText('input#lightName', name)
-    .click('button#jack')
+    .click(tid('smoke-light-add-toggle'))
+    .typeText(tid('smoke-light-name'), name)
+    .click(tid('smoke-light-jack'))
     .click('span#select-jack-J0')
-    .click('input#createLight')
+    .click(tid('smoke-light-submit'))
     .click('button#edit-light-1')
 
     await clear(this.name)

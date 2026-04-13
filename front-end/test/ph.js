@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Ph {
 
@@ -22,7 +22,7 @@ class Ph {
     }
 
     await t
-    .click('input#add_probe')
+    .click(tid('smoke-ph-add-toggle'))
     .typeText('.add-probe input[name="name"]', name)
     .typeText('.add-probe input[name="period"]', period, {replace: true})
 

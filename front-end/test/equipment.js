@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Equipment {
 
@@ -29,13 +29,13 @@ class Equipment {
     }
 
     await t
-    .click('input#add_equipment')
-    .typeText('.add-equipment [name*="name"]', name)
+    .click(tid('smoke-equipment-add-toggle'))
+    .typeText(tid('smoke-equipment-name'), name)
 
     await select(this.outletSelect, outlet)
 
     await t
-    .click('.add-equipment button[type*="submit"]')
+    .click(tid('smoke-equipment-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

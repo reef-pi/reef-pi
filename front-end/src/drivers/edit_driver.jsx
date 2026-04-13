@@ -89,6 +89,7 @@ const EditDriver = ({
             <label htmlFor='name'>{i18n.t('name')}</label>
             <Field
               name='name'
+              data-testid='smoke-driver-name'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('name', touched, errors)
@@ -105,6 +106,7 @@ const EditDriver = ({
             <Field
               name='type'
               component='select'
+              data-testid='smoke-driver-type'
               onChange={driverTypeChangeHandler}
               disabled={mode === 'edit' || readOnly}
               className={classNames('custom-select', {
@@ -125,6 +127,7 @@ const EditDriver = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-driver-submit'
             value={i18n.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

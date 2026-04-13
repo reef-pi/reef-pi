@@ -208,7 +208,7 @@ class dashboard extends React.Component {
           </div>
           <div className='row' key='configure'>
             <div className='col-12'>
-              <button className='btn btn-outline-dark btn-sm' onClick={this.handleToggle} id='configure-dashboard'>
+              <button className='btn btn-outline-dark btn-sm' onClick={this.handleToggle} id='configure-dashboard' data-testid='smoke-dashboard-configure'>
                 {lbl}
               </button>
             </div>

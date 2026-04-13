@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Outlet {
 
@@ -34,11 +34,11 @@ class Outlet {
     }
 
     await t
-    .click('input#add_outlet')
-    .typeText('input#outletName', name)
+    .click(tid('smoke-outlet-add-toggle'))
+    .typeText(tid('smoke-outlet-name'), name)
 
     await select(this.pinSelect, pin)
-    await t.click('input#createOutlet')
+    await t.click(tid('smoke-outlet-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

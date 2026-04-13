@@ -55,6 +55,7 @@ const EditDcPump = ({
           <Field
             name='jack'
             component='select'
+            data-testid='smoke-doser-jack'
             onChange={jackChanged}
             disabled={readOnly}
             className={classNames('custom-select', {
@@ -74,6 +75,7 @@ const EditDcPump = ({
           <Field
             name='pin'
             component='select'
+            data-testid='smoke-doser-pin'
             disabled={readOnly}
             className={classNames('custom-select', {
               'is-invalid': ShowError('pin', touched, errors)
@@ -146,9 +148,10 @@ const EditDcPump = ({
             <div className='form-group'>
               <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
               <div className='input-group'>
-                <Field
-                  name='duration'
-                  readOnly={readOnly}
+              <Field
+                name='duration'
+                data-testid='smoke-doser-duration'
+                readOnly={readOnly}
                   type='number'
                   className={classNames('form-control', {
                     'is-invalid': ShowError('duration', touched, errors)
@@ -173,6 +176,7 @@ const EditDcPump = ({
           <div className='input-group'>
             <Percent
               type='number'
+              data-testid='smoke-doser-speed'
               className={classNames('form-control', {
                 'is-invalid': ShowError('speed', touched, errors)
               })}
@@ -198,6 +202,7 @@ const EditDcPump = ({
           <div className='input-group'>
             <Field
               name='soft_start'
+              data-testid='smoke-doser-soft-start'
               readOnly={readOnly}
               type='number'
               min='0'

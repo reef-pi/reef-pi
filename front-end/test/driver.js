@@ -1,11 +1,11 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Driver {
 
   constructor(){
-    this.driverSelect = Selector('.add-driver [name*="type"]')
+    this.driverSelect = Selector(tid('smoke-driver-type'))
   }
 
   async create() {
@@ -26,8 +26,8 @@ class Driver {
     }
 
     await t
-    .click('input#add_new_driver')
-    .typeText('.add-driver [name*="name"]', name)
+    .click(tid('smoke-driver-add-toggle'))
+    .typeText(tid('smoke-driver-name'), name)
 
     await select(this.driverSelect, type)
 
@@ -44,7 +44,7 @@ class Driver {
     }
 
     await t
-    .click('.add-driver input[type*="submit"]')
+    .click(tid('smoke-driver-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
 

@@ -230,6 +230,7 @@ class main extends React.Component {
                 <input
                   type='button'
                   id='add_probe'
+                  data-testid='smoke-temperature-add-toggle'
                   value={this.state.addProbe ? '-' : '+'}
                   onClick={this.handleToggleAddProbeDiv}
                   className='btn btn-outline-success'

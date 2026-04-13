@@ -154,6 +154,7 @@ const EditMacro = ({
                     value='+'
                     onClick={() => arrayHelpers.push({ duration: '', id: '', on: '', title: '', message: '' })}
                     id='add-step'
+                    data-testid='smoke-macro-add-step'
                   >
                     +
                   </button>
@@ -168,6 +169,7 @@ const EditMacro = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-macro-submit'
             value={i18n.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'
