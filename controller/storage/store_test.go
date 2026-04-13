@@ -79,6 +79,12 @@ func TestStore(t *testing.T) {
 	if !found {
 		t.Error("Expected test bucket in Buckets() output")
 	}
+	if err := store.DeleteBucket(testBucket); err != nil {
+		t.Fatal("DeleteBucket() failed:", err)
+	}
+	if err := store.List(testBucket, lsFn); err == nil {
+		t.Fatal("Expected deleted bucket to be unavailable")
+	}
 
 	// Path
 	if p := store.Path(); p == "" {

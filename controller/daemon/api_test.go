@@ -103,6 +103,9 @@ func TestAPI(t *testing.T) {
 	if err := tr.Do("DELETE", "/api/errors/clear", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to clear errors using api. Error:", err)
 	}
+	if err := tr.Do("POST", "/api/dev/smoke/reset", new(bytes.Buffer), nil); err != nil {
+		t.Error("Failed to reset smoke state using api. Error:", err)
+	}
 	if err := tr.Do("POST", "/api/telemetry/test_message", new(bytes.Buffer), nil); err != nil {
 		t.Error("Failed to send test message using api. Error:", err)
 	}

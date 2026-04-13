@@ -63,6 +63,15 @@ func (s *store) CreateBucket(bucket string) error {
 	})
 }
 
+func (s *store) DeleteBucket(bucket string) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		if tx.Bucket([]byte(bucket)) == nil {
+			return nil
+		}
+		return tx.DeleteBucket([]byte(bucket))
+	})
+}
+
 func (s *store) RawGet(bucket, id string) ([]byte, error) {
 	var data []byte
 	err := s.db.View(func(tx *bolt.Tx) error {
