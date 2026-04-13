@@ -1,11 +1,15 @@
 import { Selector, t } from 'testcafe'
 import { select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
+import { assertNoFatalError, expectBodyContains, tid } from './runtime'
 
 class Driver {
 
   constructor(){
     this.driverSelect = Selector(tid('smoke-driver-type'))
+  }
+
+  driverName(name) {
+    return Selector('.row.border-bottom.py-1 .col-4').withExactText(name)
   }
 
   async create() {
@@ -19,8 +23,8 @@ class Driver {
   }
 
   async addDriver(type, name, config) {
-    if (await bodyContains(name)) {
-      await expectBodyContains(name)
+    if (await this.driverName(name).exists) {
+      await t.expect(this.driverName(name).exists).ok()
       await assertNoFatalError()
       return
     }

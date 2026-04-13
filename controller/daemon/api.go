@@ -161,6 +161,10 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	// 	200:
 	router.HandleFunc("/api/me", r.a.Me).Methods("GET")
 
+	if r.settings.Capabilities.DevMode {
+		router.HandleFunc("/api/dev/smoke/reset", r.ResetSmokeState).Methods("POST")
+	}
+
 	if r.h != nil {
 		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
 	}

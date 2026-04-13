@@ -107,3 +107,31 @@ func TestDrivers_API(t *testing.T) {
 		t.Error("Failed to list options")
 	}
 }
+
+func TestDrivers_DeleteAllowsIDReuseAfterBucketReset(t *testing.T) {
+	d, s := newDrivers(t)
+	defer s.Close()
+
+	if err := d.Delete("1"); err != nil {
+		t.Fatal("Failed to delete driver. Error:", err)
+	}
+	if err := s.DeleteBucket(storage.DriverBucket); err != nil {
+		t.Fatal("Failed to delete driver bucket. Error:", err)
+	}
+	if err := s.CreateBucket(storage.DriverBucket); err != nil {
+		t.Fatal("Failed to recreate driver bucket. Error:", err)
+	}
+
+	err := d.Create(Driver{
+		Name:   "bar",
+		Type:   "pca9685",
+		Config: []byte(`{}`),
+		Parameters: map[string]interface{}{
+			"Address":   0x41,
+			"Frequency": 1200,
+		},
+	})
+	if err != nil {
+		t.Fatal("Expected driver create to succeed after delete and bucket reset. Error:", err)
+	}
+}

@@ -177,9 +177,12 @@ func (d *Drivers) Delete(id string) error {
 	if id == _rpi {
 		return fmt.Errorf("rpi driver is readonly")
 	}
+	d.Lock()
+	defer d.Unlock()
 	driver, ok := d.drivers[id]
 	if ok {
 		driver.Close()
+		delete(d.drivers, id)
 	}
 	return d.store.Delete(DriverBucket, id)
 }

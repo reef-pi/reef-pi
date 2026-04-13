@@ -13,7 +13,7 @@ import ato from './ato'
 import doser from './doser'
 import tc from './tc'
 import dashboard from './dashboard'
-import { assertNoFatalError, login, tid, waitForShell } from './runtime'
+import { assertNoFatalError, login, prepareCleanSession, tid, waitForShell } from './runtime'
 
 fixture `Smoke`
     .page `http://localhost:8080/`
@@ -26,8 +26,7 @@ test('sign in and load shell', async t => {
 })
 
 test('create configuration dependencies', async () => {
-  await login()
-  await waitForShell()
+  await prepareCleanSession()
   await driver.create()
   await outlet.create()
   await inlet.create()
@@ -36,8 +35,7 @@ test('create configuration dependencies', async () => {
 })
 
 test('create subsystem entities', async () => {
-  await login()
-  await waitForShell()
+  await prepareCleanSession()
   await driver.create()
   await outlet.create()
   await inlet.create()
@@ -55,8 +53,7 @@ test('create subsystem entities', async () => {
 })
 
 test('configure dashboard', async () => {
-  await login()
-  await waitForShell()
+  await prepareCleanSession()
   await driver.create()
   await outlet.create()
   await inlet.create()
@@ -64,7 +61,9 @@ test('configure dashboard', async () => {
   await analog.create()
   await equipment.create()
   await light.create()
+  await macro.create()
   await ph.create()
   await ato.create()
+  await tc.create()
   await dashboard.configure()
 })
