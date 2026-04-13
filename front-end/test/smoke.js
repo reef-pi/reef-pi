@@ -13,7 +13,7 @@ import ato from './ato'
 import doser from './doser'
 import tc from './tc'
 import dashboard from './dashboard'
-import { assertNoFatalError, login, waitForShell } from './runtime'
+import { assertNoFatalError, login, tid, waitForShell } from './runtime'
 
 fixture `Smoke`
     .page `http://localhost:8080/`
@@ -21,7 +21,7 @@ fixture `Smoke`
 test('sign in and load shell', async t => {
   await login()
   await waitForShell()
-  await t.expect(Selector('#tab-dashboard').innerText).eql('Dashboard')
+  await t.expect(Selector(tid('smoke-tab-dashboard')).innerText).eql('Dashboard')
   await assertNoFatalError()
 })
 

@@ -175,6 +175,7 @@ class main extends React.Component {
               <input
                 type='button'
                 id='add_macro'
+                data-testid='smoke-macro-add-toggle'
                 value={this.state.addMacro ? '-' : '+'}
                 onClick={this.handleToggleAddMacroDiv}
                 className='btn btn-outline-success'

@@ -1,19 +1,21 @@
 import { Selector, t } from 'testcafe'
 
-const shellRoot = Selector('#content')
+export const tid = (name) => `[data-testid="${name}"]`
+
+const shellRoot = Selector(tid('smoke-shell-root'))
 const fatalError = Selector('.fatal-error-container')
 
 export async function login () {
   await t
-    .typeText('#reef-pi-user', 'reef-pi', { replace: true })
-    .typeText('#reef-pi-pass', 'reef-pi', { replace: true })
-    .click('#btnSaveCreds')
+    .typeText(tid('smoke-sign-in-user'), 'reef-pi', { replace: true })
+    .typeText(tid('smoke-sign-in-pass'), 'reef-pi', { replace: true })
+    .click(tid('smoke-sign-in-submit'))
 }
 
 export async function waitForShell () {
   await t
     .expect(shellRoot.exists).ok({ timeout: 15000 })
-    .expect(Selector('#tab-dashboard').exists).ok({ timeout: 15000 })
+    .expect(Selector(tid('smoke-tab-dashboard')).exists).ok({ timeout: 15000 })
 }
 
 export async function assertNoFatalError () {

@@ -79,7 +79,7 @@ export default class SignIn extends React.Component {
       <div className='container d-flex h-100'>
         <div className='align-self-center w-100'>
           <div className='col-md-12 col-lg-6 mx-auto'>
-            <form id='sign-in-form'>
+            <form id='sign-in-form' data-testid='smoke-sign-in-form'>
               <div className='form'>
                 <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
                 {this.state.invalidCredentials ? (
@@ -96,6 +96,7 @@ export default class SignIn extends React.Component {
                   onChange={this.handleUserChange}
                   type='text'
                   id='reef-pi-user'
+                  data-testid='smoke-sign-in-user'
                   className='form-control'
                   name='username'
                   placeholder={i18n.t('signin:username')}
@@ -109,6 +110,7 @@ export default class SignIn extends React.Component {
                   onChange={this.handlePasswordChange}
                   type='password'
                   id='reef-pi-pass'
+                  data-testid='smoke-sign-in-pass'
                   className='form-control'
                   name='password'
                   placeholder={i18n.t('signin:password')}
@@ -120,6 +122,7 @@ export default class SignIn extends React.Component {
                   onClick={this.handleLogin}
                   type='submit'
                   id='btnSaveCreds'
+                  data-testid='smoke-sign-in-submit'
                 >
                   {i18n.t('signin:signin')}
                 </button>

@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { clear, select } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Macro {
 
@@ -51,20 +51,20 @@ class Macro {
     }
 
     await t
-    .click('input#add_macro')
+    .click(tid('smoke-macro-add-toggle'))
     .typeText('.add-macro input[name="name"]', macro.name)
 
     for (var idx = 0; idx < macro.steps.length; idx++) {
       await this.addStep(idx, macro.steps[idx])
     }
 
-    await t.click('.add-macro input[type*="submit"]')
+    await t.click(tid('smoke-macro-submit'))
     await expectBodyContains(macro.name)
     await assertNoFatalError()
   }
 
   async addStep(idx, step) {
-    await t.click('.add-macro button#add-step')
+    await t.click(tid('smoke-macro-add-step'))
     await select(Selector(this.type(idx)), step.type)
     if (step.system !== undefined) {
       await select(Selector(this.system(idx)), step.system)

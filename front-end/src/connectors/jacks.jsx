@@ -155,6 +155,7 @@ class jacks extends React.Component {
           <div className='col-12'>
             <input
               id='add_jack'
+              data-testid='smoke-jack-add-toggle'
               type='button'
               value={this.state.add ? '-' : '+'}
               onClick={this.handleAdd}
@@ -171,6 +172,7 @@ class jacks extends React.Component {
                   <input
                     type='text'
                     id='jackName'
+                    data-testid='smoke-jack-name'
                     value={this.state.JackName}
                     onChange={this.handleNameChange}
                     className='form-control'
@@ -195,6 +197,7 @@ class jacks extends React.Component {
                   <input
                     type='text'
                     id='jackPins'
+                    data-testid='smoke-jack-pins'
                     value={this.state.JackPins}
                     onChange={this.handlePinChange}
                     className='form-control'
@@ -207,6 +210,7 @@ class jacks extends React.Component {
                   <label>{i18n.t('driver')}</label>
                   <select
                     name='driver'
+                    data-testid='smoke-jack-driver'
                     className='form-control custom-select'
                     onChange={this.handleSetDriver}
                     value={this.state.JackDriver}
@@ -225,6 +229,7 @@ class jacks extends React.Component {
                 <input
                   type='button'
                   id='createJack'
+                  data-testid='smoke-jack-submit'
                   value={i18n.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'

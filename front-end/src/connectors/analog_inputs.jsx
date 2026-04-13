@@ -143,6 +143,7 @@ class analogInputs extends React.Component {
           <div className='col-12'>
             <input
               id='add_analog_input'
+              data-testid='smoke-analog-add-toggle'
               type='button'
               value={this.state.add ? '-' : '+'}
               onClick={this.handleAdd}
@@ -159,6 +160,7 @@ class analogInputs extends React.Component {
                   <input
                     type='text'
                     id='analog_inputName'
+                    data-testid='smoke-analog-name'
                     value={this.state.name}
                     onChange={this.handleNameChange}
                     className='form-control'
@@ -178,6 +180,7 @@ class analogInputs extends React.Component {
                   <label>{i18n.t('driver')}</label>
                   <select
                     name='driver'
+                    data-testid='smoke-analog-driver'
                     className='form-control custom-select'
                     onChange={this.handleSetDriver}
                     value={this.state.driver.id}
@@ -196,6 +199,7 @@ class analogInputs extends React.Component {
                 <input
                   type='button'
                   id='createAnalogInput'
+                  data-testid='smoke-analog-submit'
                   value={i18n.t('add')}
                   onClick={this.handleSave}
                   className='btn btn-outline-primary col-12 col-md-4'

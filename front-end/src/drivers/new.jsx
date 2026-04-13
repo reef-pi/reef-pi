@@ -63,7 +63,7 @@ export default class New extends React.Component {
   render () {
     return (
       <div className='container add-driver'>
-        <input id='add_new_driver' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
+        <input id='add_new_driver' data-testid='smoke-driver-add-toggle' type='button' value={this.state.add ? '-' : '+'} onClick={this.handleToggle} className='btn btn-outline-success' />
         {this.ui()}
       </div>
     )

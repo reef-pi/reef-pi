@@ -1,5 +1,5 @@
 import { Selector, t } from 'testcafe'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Jack {
 
@@ -26,10 +26,10 @@ class Jack {
     }
 
     await t
-    .click('input#add_jack')
-    .typeText(this.name, name)
-    .typeText(this.pins, pins)
-    .click('input#createJack')
+    .click(tid('smoke-jack-add-toggle'))
+    .typeText(tid('smoke-jack-name'), name)
+    .typeText(tid('smoke-jack-pins'), pins)
+    .click(tid('smoke-jack-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }

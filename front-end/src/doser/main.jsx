@@ -150,6 +150,7 @@ class doser extends React.Component {
               <input
                 type='button'
                 id='add_doser'
+                data-testid='smoke-doser-add-toggle'
                 value={this.state.addDoser ? '-' : '+'}
                 onClick={this.handleToggleAddDoserDiv}
                 className='btn btn-outline-success'

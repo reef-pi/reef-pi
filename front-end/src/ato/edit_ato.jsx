@@ -77,6 +77,7 @@ const EditAto = ({
             <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
+              data-testid='smoke-ato-name'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('name', touched, errors)
@@ -94,6 +95,7 @@ const EditAto = ({
             <Field
               name='inlet'
               component='select'
+              data-testid='smoke-ato-inlet'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('inlet', touched, errors)
@@ -114,6 +116,7 @@ const EditAto = ({
             <div className='input-group'>
               <Field
                 name='period'
+                data-testid='smoke-ato-period'
                 readOnly={readOnly}
                 type='number'
                 className={classNames('form-control', {
@@ -181,6 +184,7 @@ const EditAto = ({
             <Field
               name='control'
               component='select'
+              data-testid='smoke-ato-control'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('control', touched, errors)
@@ -200,6 +204,7 @@ const EditAto = ({
             <Field
               name='pump'
               component='select'
+              data-testid='smoke-ato-pump'
               disabled={readOnly || values.control === ''}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('pump', touched, errors)
@@ -303,6 +308,7 @@ const EditAto = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-ato-submit'
             value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

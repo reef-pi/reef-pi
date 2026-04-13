@@ -1,19 +1,19 @@
 import { Selector, t } from 'testcafe'
 import { select, setText } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Doser {
 
   constructor(){
-    this.name = Selector('.add-doser input[name="name"]')
-    this.jackSelect = Selector('.add-doser [name="jack"]')
-    this.pinSelect = Selector('.add-doser [name="pin"]')
-    this.hour = Selector('.add-doser [name="hour"]')
-    this.minute = Selector('.add-doser [name="minute"]')
-    this.second = Selector('.add-doser [name="second"]')
-    this.duration = Selector('.add-doser [name="duration"]')
-    this.speed = Selector('.add-doser [name="speed"]')
-    this.submit = Selector('.add-doser input[type*="submit"]')
+    this.name = Selector(tid('smoke-doser-name'))
+    this.jackSelect = Selector(tid('smoke-doser-jack'))
+    this.pinSelect = Selector(tid('smoke-doser-pin'))
+    this.hour = Selector(tid('smoke-cron-hour'))
+    this.minute = Selector(tid('smoke-cron-minute'))
+    this.second = Selector(tid('smoke-cron-second'))
+    this.duration = Selector(tid('smoke-doser-duration'))
+    this.speed = Selector(tid('smoke-doser-speed'))
+    this.submit = Selector(tid('smoke-doser-submit'))
   }
 
   async create() {
@@ -29,7 +29,7 @@ class Doser {
     }
 
     await t
-      .click('input#add_doser')
+      .click(tid('smoke-doser-add-toggle'))
       .typeText(this.name, name)
 
     await select(this.jackSelect, jack)

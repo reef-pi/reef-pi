@@ -122,6 +122,7 @@ class Main extends React.Component {
               <input
                 type='button'
                 id='add_timer'
+                data-testid='smoke-timer-add-toggle'
                 value={this.state.addTimer ? '-' : '+'}
                 onClick={this.handleToggleAddTimerDiv}
                 className='btn btn-outline-success'

@@ -1,6 +1,6 @@
 import { Selector, t } from 'testcafe'
 import { select, clear, setText } from './helpers'
-import { assertNoFatalError, bodyContains, expectBodyContains } from './runtime'
+import { assertNoFatalError, bodyContains, expectBodyContains, tid } from './runtime'
 
 class Ato {
 
@@ -34,24 +34,24 @@ class Ato {
     }
 
     await t
-    .click('input#add_new_ato_sensor')
-    .typeText('.add-ato [name*="name"]', name)
+    .click(tid('smoke-ato-add-toggle'))
+    .typeText(tid('smoke-ato-name'), name)
 
-    await select(this.inlet, inlet)
-    await setText(this.period, period)
+    await select(Selector(tid('smoke-ato-inlet')), inlet)
+    await setText(Selector(tid('smoke-ato-period')), period)
     await select(this.enable, enable)
 
-    await t.click('input[type*="submit"]')
+    await t.click(tid('smoke-ato-submit'))
     await expectBodyContains(name)
     await assertNoFatalError()
   }
 
   async editAto(period, enable, control, pump) {
-    await setText(this.period, period)
+    await setText(Selector(tid('smoke-ato-period')), period)
     await select(this.enable, enable)
-    await select(this.control, control)
-    await select(this.pump, pump)
-    await t.click('input[type*="submit"]')
+    await select(Selector(tid('smoke-ato-control')), control)
+    await select(Selector(tid('smoke-ato-pump')), pump)
+    await t.click(tid('smoke-ato-submit'))
     await expectBodyContains('Biocube29')
     await assertNoFatalError()
   }

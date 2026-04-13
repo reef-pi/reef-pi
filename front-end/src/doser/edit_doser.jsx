@@ -78,6 +78,7 @@ const EditDoser = ({
             <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
+              data-testid='smoke-doser-name'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('name', touched, errors)
@@ -108,6 +109,7 @@ const EditDoser = ({
             <Field
               name='type'
               component='select'
+              data-testid='smoke-doser-type'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('type', touched, errors)
@@ -142,6 +144,7 @@ const EditDoser = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-doser-submit'
             value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

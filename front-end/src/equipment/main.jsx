@@ -96,6 +96,7 @@ class main extends React.Component {
             <div className='col'>
               <input
                 id='add_equipment'
+                data-testid='smoke-equipment-add-toggle'
                 type='button'
                 value={this.state.addEquipment ? '-' : '+'}
                 onClick={this.handleToggleAddEquipmentDiv}
