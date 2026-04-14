@@ -1,11 +1,9 @@
 import React from 'react'
 import * as Alert from '../utils/alert'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import EditDriver from './edit_driver'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditDriver />', () => {
   let values = {}

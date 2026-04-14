@@ -31,11 +31,6 @@ const RandomProfile = (props) => {
   )
 }
 
-RandomProfile.defaultProps = {
-  start: '',
-  end: ''
-}
-
 RandomProfile.propTypes = {
   config: PropTypes.object,
   readOnly: PropTypes.bool,

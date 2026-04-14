@@ -1,13 +1,11 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import ControlChart from './control_chart'
 import EditTemperature from './edit_temperature'
 import ReadingsChart from './readings_chart'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('<EditTemperature />', () => {
   let values = {chart: {}}

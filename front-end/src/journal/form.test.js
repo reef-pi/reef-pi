@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import JournalForm from './form'
 import configureMockStore from 'redux-mock-store'
@@ -8,7 +7,6 @@ import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('<JournalForm />', () => {

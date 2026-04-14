@@ -1,5 +1,6 @@
 import Enzyme from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+
+const Adapter = require('@cfaester/enzyme-adapter-react-18').default
 
 Enzyme.configure({ adapter: new Adapter() })
 

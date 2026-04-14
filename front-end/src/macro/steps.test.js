@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import { Formik, Form } from 'formik'
 import configureMockStore from 'redux-mock-store'
@@ -13,7 +12,6 @@ import GenericStep from './generic_step'
 import StepSelector from './step_selector'
 import SelectType from './select_type'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 const storeState = {

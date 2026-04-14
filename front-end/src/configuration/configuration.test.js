@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
 import Capabilities from './capabilities'
@@ -15,7 +14,6 @@ import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 import SignIn from 'sign_in'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('Configuration ui', () => {

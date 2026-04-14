@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow, mount } from 'enzyme'
 import Main from './main'
 import Inlets from './inlets'
 import Inlet from './inlet'
@@ -18,7 +17,6 @@ import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import { Provider } from 'react-redux'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 const stockDrivers = [
   { id: 'rpi', name: 'Rasoverry Pi',pinmap: {'digital-output': [1,2,3,4,5]}},

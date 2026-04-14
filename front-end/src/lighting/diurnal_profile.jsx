@@ -30,11 +30,6 @@ const DiurnalProfile = (props) => {
   )
 }
 
-DiurnalProfile.defaultProps = {
-  start: '',
-  end: ''
-}
-
 DiurnalProfile.propTypes = {
   name: PropTypes.string.isRequired,
   config: PropTypes.object,

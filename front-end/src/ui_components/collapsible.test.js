@@ -1,10 +1,8 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow, mount } from 'enzyme'
 import CollapsibleList from './collapsible_list'
 import Collapsible from './collapsible'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('Collapsible', () => {
   const noop = () => {}

@@ -66,6 +66,6 @@ describe('Validation Helper', () => {
     const touched = { field1: true }
 
     const tree = renderer.create(<v.ErrorFor name='field1' touched={touched} errors={errors} />).toJSON()
-    expect(tree).toBe('')
+    expect(tree).toBeNull()
   })
 })

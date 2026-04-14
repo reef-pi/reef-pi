@@ -1,9 +1,7 @@
 import React from 'react'
-import Enzyme, { mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
 import CollapsibleList from './collapsible_list'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 const Item = (props) => <div name={props.name}>{props.name}</div>
 
@@ -51,9 +49,15 @@ describe('CollapsibleList', () => {
         <Item name='t' />
       </CollapsibleList>
     )
-    wrapper.instance().onToggle('t')
+    React.act(() => {
+      wrapper.instance().onToggle('t')
+    })
+    wrapper.update()
     expect(wrapper.state('expanded').t).toBe(true)
-    wrapper.instance().onToggle('t')
+    React.act(() => {
+      wrapper.instance().onToggle('t')
+    })
+    wrapper.update()
     expect(wrapper.state('expanded').t).toBe(false)
   })
 
@@ -63,9 +67,15 @@ describe('CollapsibleList', () => {
         <Item name='e' />
       </CollapsibleList>
     )
-    wrapper.instance().onEdit('e')
+    React.act(() => {
+      wrapper.instance().onEdit('e')
+    })
+    wrapper.update()
     expect(wrapper.state('readOnly').e).toBe(false)
-    wrapper.instance().onToggle('e')
+    React.act(() => {
+      wrapper.instance().onToggle('e')
+    })
+    wrapper.update()
     // Still expanded because editing prevents toggle
     expect(wrapper.state('expanded').e).toBe(true)
   })
@@ -76,7 +86,10 @@ describe('CollapsibleList', () => {
         <Item name='ed' />
       </CollapsibleList>
     )
-    wrapper.instance().onEdit('ed')
+    React.act(() => {
+      wrapper.instance().onEdit('ed')
+    })
+    wrapper.update()
     expect(wrapper.state('expanded').ed).toBe(true)
     expect(wrapper.state('readOnly').ed).toBe(false)
   })
@@ -87,8 +100,14 @@ describe('CollapsibleList', () => {
         <Item name='s' />
       </CollapsibleList>
     )
-    wrapper.instance().onEdit('s')
-    wrapper.instance().onSubmit('s')
+    React.act(() => {
+      wrapper.instance().onEdit('s')
+    })
+    wrapper.update()
+    React.act(() => {
+      wrapper.instance().onSubmit('s')
+    })
+    wrapper.update()
     expect(wrapper.state('expanded').s).toBe(false)
     expect(wrapper.state('readOnly').s).toBe(true)
   })

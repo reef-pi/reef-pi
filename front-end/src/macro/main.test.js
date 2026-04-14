@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow, mount } from 'enzyme'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -9,7 +8,6 @@ import fetchMock from 'fetch-mock'
 import MacroForm from './macro_form'
 import { Provider } from 'react-redux'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
