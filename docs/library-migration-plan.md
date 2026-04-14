@@ -69,6 +69,20 @@ For every slice:
 - run the broad suite before opening or promoting the PR
 - treat CI failures as plan feedback and add follow-up checks or notes when a new failure class is discovered
 
+## Slice 22 status
+
+React 19 migration is materially underway on the working branch, but it is not green yet.
+
+- Progress and attempt history: [react19-migration-status.md](/home/ranjib/workspace/reef-pi-codex/docs/react19-migration-status.md)
+- File-level local execution backlog: [react19-local-llm-tasks.md](/home/ranjib/workspace/reef-pi-codex/docs/react19-local-llm-tasks.md)
+
+Current guidance:
+
+- treat the remaining work as a multi-session tail, not a small cleanup
+- prefer file-level or tiny subsystem-level tasks
+- reassess continuation if several consecutive attempts recover only one or two failing suites
+- use the local-LLM task list when cloud usage pressure is high
+
 ## Official references
 
 - React versions: <https://react.dev/versions>
