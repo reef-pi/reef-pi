@@ -1,5 +1,5 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { renderToStaticMarkup } from 'react-dom/server'
 import BlankPanel from './blank_panel'
 
 jest.mock('recharts', () => ({
@@ -8,16 +8,18 @@ jest.mock('recharts', () => ({
 
 describe('<BlankPanel />', () => {
   it('renders without throwing', () => {
-    expect(() => renderer.create(<BlankPanel height={200} />)).not.toThrow()
+    expect(() => renderToStaticMarkup(<BlankPanel height={200} />)).not.toThrow()
   })
 
   it('renders a container div', () => {
-    const tree = renderer.create(<BlankPanel height={200} />).toJSON()
-    expect(tree.props.className).toBe('container')
+    const html = renderToStaticMarkup(<BlankPanel height={200} />)
+    expect(html).toContain('class="container"')
   })
 
   it('handles componentWillUnmount gracefully', () => {
-    const component = renderer.create(<BlankPanel height={200} />)
-    expect(() => component.unmount()).not.toThrow()
+    const panel = new BlankPanel({ height: 200 })
+    panel.setState = jest.fn()
+    expect(() => panel.componentWillUnmount()).not.toThrow()
+    expect(panel.setState).toHaveBeenCalledWith({ active: false })
   })
 })

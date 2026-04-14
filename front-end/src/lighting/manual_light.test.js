@@ -1,72 +1,44 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { renderToStaticMarkup } from 'react-dom/server'
 import ManualLight from './manual_light'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import 'isomorphic-fetch'
-
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
 
 describe('Lighting ui - Manual Control', () => {
-
   const light = {
+    id: '1',
     channels: {
-      '0': { value: 10 },
-      '1': { value: 20 }
+      '0': { name: 'Blue', value: 10 },
+      '1': { name: 'White', value: 20 }
     }
   }
 
-  it('<ManualLight /> should show a slider for each channel', () => {
+  it('shows a slider for each channel', () => {
     const fn = jest.fn()
-
-    let m = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
-
-    expect(m.find('input[type="range"]').length).toBe(2)
+    const html = renderToStaticMarkup(<ManualLight light={light} handleChange={fn} />)
+    expect((html.match(/type="range"/g) || []).length).toBe(2)
   })
 
-  it('<ManualLight /> should not raise a change for alpha values', () => {
+  it('does not change state for alpha values', () => {
     const fn = jest.fn()
-    const e = {
-      target: {
-        name: '0',
-        value: 'abc'
-      }
-    }
+    const manual = new ManualLight({ light, handleChange: fn })
+    manual.setState = jest.fn(update => {
+      manual.state = { ...manual.state, ...update }
+    })
 
-    let wrapper = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
-
-    let instance = wrapper.instance()
-
-    instance.handleValueChange(e)
-    expect(instance.state.channels[0].value).toBe(10)
+    manual.handleValueChange({ target: { name: '0', value: 'abc' } })
+    expect(manual.state.channels[0].value).toBe(10)
+    expect(fn).not.toHaveBeenCalled()
   })
 
-  it('<ManualLight /> should raise a change for numeric values', () => {
+  it('changes state for numeric values', () => {
     const fn = jest.fn()
-    const e = {
-      target: {
-        name: '0',
-        value: '44.5'
-      }
-    }
+    const manual = new ManualLight({ light: JSON.parse(JSON.stringify(light)), handleChange: fn })
+    manual.setState = jest.fn(update => {
+      manual.state = { ...manual.state, ...update }
+    })
+    manual.debouncedChange = jest.fn()
 
-    let wrapper = shallow(<ManualLight
-      light = {light}
-      handleChange = {fn}
-    />)
-
-    let instance = wrapper.instance()
-
-    instance.handleValueChange(e)
-    expect(instance.state.channels[0].value).toBe('44.5')
+    manual.handleValueChange({ target: { name: '0', value: '44.5' } })
+    expect(manual.state.channels[0].value).toBe('44.5')
+    expect(manual.debouncedChange).toHaveBeenCalledWith('0', 44.5)
   })
-
 })

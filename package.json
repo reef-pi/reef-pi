@@ -45,16 +45,16 @@
     "postcss": "^8.4.24",
     "postcss-loader": "8.1.1",
     "precss": "4.0.0",
-    "react": "18.3.1",
+    "react": "19.2.1",
     "react-color": "2.19.3",
     "react-datepicker": "^7.6.0",
-    "react-dom": "18.3.1",
+    "react-dom": "19.2.1",
     "react-i18next": "12.0.0",
     "react-icons": "5.5.0",
     "react-images": "1.1.7",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.30.2",
-    "react-test-renderer": "18.3.1",
+    "react-test-renderer": "19.2.1",
     "react-toggle-switch": "3.0.4",
     "recharts": "^2.15.4",
     "redoc-cli": "^0.13.21",
@@ -123,6 +123,9 @@
     "setupFilesAfterEnv": [
       "<rootDir>/front-end/test/setup.js"
     ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(@belzile/enzyme-adapter-react-19|@belzile/react-shallow-renderer)/)"
+    ],
     "moduleDirectories": [
       "node_modules",
       "front-end/src/",
@@ -144,5 +147,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@belzile/enzyme-adapter-react-19": "19.0.0"
   }
 }

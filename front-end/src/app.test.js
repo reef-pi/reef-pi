@@ -1,36 +1,41 @@
 import React from 'react'
-import Enzyme, { mount, shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+jest.mock('bootstrap/dist/js/bootstrap.min.js', () => ({}))
 import App from './app'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import JackSelector from './jack_selector'
-import SelectEquipment from './select_equipment'
 import SignIn from './sign_in'
 import fetchMock from 'fetch-mock'
-import {Provider} from 'react-redux'
+import MainPanel from './main_panel'
 
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
+jest.mock('jquery', () => jest.fn(() => ({
+  addClass: jest.fn(),
+  removeClass: jest.fn()
+})))
 
 describe('App', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
-  it('<App />', () => {
+  it('<App />', async () => {
     SignIn.isSignedIn = jest.fn().mockImplementation(() => {
-      return new Promise(function (resolve) {
-        return resolve(true)
-      })
+      return Promise.resolve(true)
     })
-    const m = shallow(<App />).instance()
-    m.setState({loaded: true})
-    m.render()
-    m.state.logged = true
-    m.getComponent()
-    m.componentDidMount()
-  })
 
+    const app = new App({})
+    app.setState = jest.fn(update => {
+      app.state = { ...app.state, ...update }
+    })
+
+    expect(app.render().props.children).toBe('loading')
+
+    app.state = { loaded: true, logged: false }
+    expect(app.getComponent().type).toBe(SignIn)
+
+    app.state.logged = true
+    expect(app.getComponent().type).toBe(MainPanel)
+
+    await app.componentDidMount()
+    expect(SignIn.isSignedIn).toHaveBeenCalled()
+    expect(app.setState).toHaveBeenCalledWith({ loaded: true, logged: true })
+  })
 })

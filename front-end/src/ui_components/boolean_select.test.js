@@ -1,12 +1,9 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { renderToStaticMarkup } from 'react-dom/server'
 import BooleanSelect from './boolean_select'
 
-Enzyme.configure({ adapter: new Adapter() })
-
 describe('<BooleanSelect />', () => {
-  it('<BooleanSelect /> should bind true', () => {
+  it('binds true', () => {
     let val = ''
     const field = {
       name: 'name',
@@ -14,17 +11,26 @@ describe('<BooleanSelect />', () => {
         val = e.target.value
       }
     }
-    const wrapper = shallow(
+    const html = renderToStaticMarkup(
       <BooleanSelect field={field}>
         <option value='true'>Yes</option>
         <option value='false'>No</option>
       </BooleanSelect>
     )
-    wrapper.find('select').simulate('change', { target: { value: 'true' } })
+    expect(html).toContain('<select')
+
+    const select = BooleanSelect({
+      field,
+      children: [
+        <option key='true' value='true'>Yes</option>,
+        <option key='false' value='false'>No</option>
+      ]
+    })
+    select.props.onChange({ target: { name: 'name', value: 'true' } })
     expect(val).toBe(true)
   })
 
-  it('<BooleanSelect /> should bind false', () => {
+  it('binds false', () => {
     let val = ''
     const field = {
       name: 'name',
@@ -32,13 +38,14 @@ describe('<BooleanSelect />', () => {
         val = e.target.value
       }
     }
-    const wrapper = shallow(
-      <BooleanSelect field={field}>
-        <option value='true'>Yes</option>
-        <option value='false'>No</option>
-      </BooleanSelect>
-    )
-    wrapper.find('select').simulate('change', { target: { value: 'false' } })
+    const select = BooleanSelect({
+      field,
+      children: [
+        <option key='true' value='true'>Yes</option>,
+        <option key='false' value='false'>No</option>
+      ]
+    })
+    select.props.onChange({ target: { name: 'name', value: 'false' } })
     expect(val).toBe(false)
   })
 })

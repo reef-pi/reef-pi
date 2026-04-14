@@ -1,13 +1,11 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import Main from './main'
 import TimerForm from './timer_form'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 jest.mock('utils/confirm', () => {

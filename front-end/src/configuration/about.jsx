@@ -3,7 +3,7 @@ import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
-class about extends React.Component {
+export class AboutView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -70,5 +70,5 @@ const mapDispatchToProps = dispatch => {
 const About = connect(
   mapStateToProps,
   mapDispatchToProps
-)(about)
+)(AboutView)
 export default About

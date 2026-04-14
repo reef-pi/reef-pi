@@ -1,15 +1,11 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import { Provider } from 'react-redux'
-import Main from './main'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { renderToStaticMarkup } from 'react-dom/server'
+import Main, { MainView } from './main'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
+jest.mock('./new', () => () => <li>new journal</li>)
+jest.mock('./journal', () => ({ config }) => <div>{config.name}</div>)
 
 jest.mock('utils/confirm', () => ({
   confirm: jest.fn().mockImplementation(() => Promise.resolve(true))
@@ -28,22 +24,28 @@ describe('<Main />', () => {
   })
 
   it('renders without throwing with journals', () => {
-    const store = mockStore({ journals: journals })
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
+    expect(() => renderToStaticMarkup(
+      <MainView journals={journals} fetchJournals={() => {}} delete={() => {}} />
+    )).not.toThrow()
   })
 
   it('renders without throwing with empty journals', () => {
-    const store = mockStore({ journals: [] })
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
+    expect(() => renderToStaticMarkup(
+      <MainView journals={[]} fetchJournals={() => {}} delete={() => {}} />
+    )).not.toThrow()
   })
 
-  it('renders ConnectedMain in Provider', () => {
-    const store = mockStore({ journals: journals })
-    const wrapper = shallow(<Provider store={store}><Main /></Provider>)
-    expect(wrapper.find('Connect(main)')).toHaveLength(1)
+  it('lists journals in sorted order and deletes by confirmation', async () => {
+    const del = jest.fn()
+    const view = new MainView({ journals, fetchJournals: () => {}, delete: del })
+    const items = view.list()
+    expect(items).toHaveLength(2)
+    expect(items[0].props.item.name).toBe('Alkalinity')
+    expect(items[1].props.item.name).toBe('pH Log')
+
+    view.handleDelete(items[1].props.item)
+    await Promise.resolve()
+    expect(del).toHaveBeenCalledWith('1')
+    expect(Main).toBeDefined()
   })
 })

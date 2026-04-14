@@ -5,7 +5,7 @@ import FixedChart from './charts/fixed'
 import DiurnalChart from './charts/diurnal'
 import GenericLightChart from './charts/generic'
 
-class chart extends React.Component {
+export class ChartView extends React.Component {
   render () {
     if (this.props.config === undefined) {
       return <span />
@@ -39,5 +39,5 @@ const mapStateToProps = (state, ownProps) => {
 const Chart = connect(
   mapStateToProps,
   null
-)(chart)
+)(ChartView)
 export default Chart

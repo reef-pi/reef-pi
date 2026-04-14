@@ -13,7 +13,7 @@ import ManualLight from './manual_light'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 
-class main extends React.Component {
+export class MainView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -347,6 +347,6 @@ const mapDispatchToProps = dispatch => {
 const Main = connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
+)(MainView)
 export default Main
-export const TestMain = main
+export const TestMain = MainView

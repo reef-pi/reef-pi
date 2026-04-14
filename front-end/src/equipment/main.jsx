@@ -14,7 +14,7 @@ const sortOptions = [
   { value: SORT_OFF_FIRST, label: 'equipment:sort_off_first' }
 ]
 
-class main extends React.Component {
+export class MainView extends React.Component {
   constructor (props) {
     super(props)
 
@@ -130,5 +130,5 @@ const mapDispatchToProps = dispatch => {
 const Main = connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
+)(MainView)
 export default Main

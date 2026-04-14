@@ -1,22 +1,29 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Summary from './summary'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('Summary', () => {
   it('<Summary />', () => {
-    const m = shallow(
-      <Summary
-        info={{}}
-        devMode={false}
-        fetch={() => true}
-        errors={[]}
-        timer={window.setInterval(() => true, 1800 * 1000)}
-      />
-    ).instance()
-    m.componentWillUnmount()
+    const fetch = jest.fn()
+    const timer = window.setInterval(() => true, 1800 * 1000)
+    const summary = new Summary({
+      info: {},
+      devMode: false,
+      fetch,
+      errors: []
+    })
+
+    expect(summary.state.timer).toBeDefined()
+    expect(renderToStaticMarkup(
+      <Summary info={{}} devMode={false} fetch={fetch} errors={[]} />
+    )).toContain('API')
+
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
+    summary.componentWillUnmount()
+    expect(clearIntervalSpy).toHaveBeenCalledWith(summary.state.timer)
+    clearIntervalSpy.mockRestore()
+    window.clearInterval(timer)
   })
 })

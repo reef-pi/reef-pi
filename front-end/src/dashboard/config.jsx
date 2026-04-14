@@ -5,7 +5,7 @@ import { fetchDashboard, updateDashboard } from 'redux/actions/dashboard'
 import { showError, showUpdateSuccessful } from 'utils/alert'
 import i18next from 'i18next'
 
-class config extends React.Component {
+export class ConfigView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -167,5 +167,5 @@ const mapDispatchToProps = dispatch => {
 const Config = connect(
   mapStateToProps,
   mapDispatchToProps
-)(config)
+)(ConfigView)
 export default Config

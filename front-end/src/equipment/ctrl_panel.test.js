@@ -1,15 +1,8 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import { Provider } from 'react-redux'
-import EquipmentCtrlPanel from './ctrl_panel'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { renderToStaticMarkup } from 'react-dom/server'
+import EquipmentCtrlPanel, { CtrlPanelView } from './ctrl_panel'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
-
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
 
 const equipment = [
   { id: '1', name: 'Heater', on: true, outlet: '1', stay_off_on_boot: false },
@@ -28,30 +21,42 @@ describe('<EquipmentCtrlPanel />', () => {
   })
 
   it('renders without throwing with equipment', () => {
-    const store = mockStore({ equipment, outlets })
-    expect(() =>
-      shallow(<Provider store={store}><EquipmentCtrlPanel /></Provider>)
-    ).not.toThrow()
+    expect(() => renderToStaticMarkup(
+      <CtrlPanelView equipment={equipment} outlets={outlets} fetchEquipment={() => {}} updateEquipment={() => {}} />
+    )).not.toThrow()
   })
 
   it('renders without throwing with undefined equipment', () => {
-    const store = mockStore({ equipment: undefined, outlets: [] })
-    expect(() =>
-      shallow(<Provider store={store}><EquipmentCtrlPanel /></Provider>)
-    ).not.toThrow()
+    expect(() => renderToStaticMarkup(
+      <CtrlPanelView equipment={undefined} outlets={[]} fetchEquipment={() => {}} updateEquipment={() => {}} />
+    )).not.toThrow()
   })
 
-  it('renders connected component via dive', () => {
-    const store = mockStore({ equipment, outlets })
-    fetchMock.getOnce('/api/equipment', equipment)
-    const wrapper = shallow(<EquipmentCtrlPanel store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('polls and toggles equipment state', () => {
+    jest.useFakeTimers()
+    const fetchEquipment = jest.fn()
+    const updateEquipment = jest.fn()
+    const view = new CtrlPanelView({ equipment, outlets, fetchEquipment, updateEquipment })
+    view.componentDidMount()
+    expect(fetchEquipment).not.toHaveBeenCalled()
+    view.toggleState({ preventDefault: jest.fn() }, equipment[0])
+    expect(updateEquipment).toHaveBeenCalledWith(1, {
+      id: '1',
+      name: 'Heater',
+      on: false,
+      outlet: '1',
+      stay_off_on_boot: false
+    })
+    view.componentWillUnmount()
+    jest.useRealTimers()
+    expect(EquipmentCtrlPanel).toBeDefined()
   })
 
-  it('renders via dive', () => {
-    const store = mockStore({ equipment, outlets })
-    fetchMock.getOnce('/api/equipment', equipment)
-    const wrapper = shallow(<EquipmentCtrlPanel store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('renders connected control labels', () => {
+    const html = renderToStaticMarkup(
+      <CtrlPanelView equipment={equipment} outlets={outlets} fetchEquipment={() => {}} updateEquipment={() => {}} />
+    )
+    expect(html).toContain('Heater')
+    expect(html).toContain('Pump')
   })
 })

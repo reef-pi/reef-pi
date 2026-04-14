@@ -1,279 +1,324 @@
 import React from 'react'
-import Enzyme, { shallow, mount } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import Main from './main'
-import Inlets from './inlets'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { ConnectorsView } from './main'
+import { InletsView } from './inlets'
 import Inlet from './inlet'
 import Outlet from './outlet'
-import InletSelector from './inlet_selector'
-import Jacks from './jacks'
+import { InletSelectorView } from './inlet_selector'
+import { JacksView } from './jacks'
 import Jack from './jack'
-import Outlets from './outlets'
+import { OutletsView } from './outlets'
 import Pin from './pin'
 import AnalogInput from './analog_input'
-import AnalogInputs from './analog_inputs'
+import { AnalogInputsView } from './analog_inputs'
 import { byCapability } from './driver_filter'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import { Provider } from 'react-redux'
+import * as Alert from '../utils/alert'
 
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
 const stockDrivers = [
-  { id: 'rpi', name: 'Rasoverry Pi',pinmap: {'digital-output': [1,2,3,4,5]}},
-  { id: '1', name: 'PCA9685', pinmap: {'digital-output':[0,1,2,3,4], 'pwm':[0,1,2,3]} }
+  { id: 'rpi', name: 'Rasoverry Pi', pinmap: { 'digital-output': [1, 2, 3, 4, 5], 'digital-input': [1, 2, 3], pwm: [1, 2], 'analog-input': [0, 1] } },
+  { id: '1', name: 'PCA9685', pinmap: { 'digital-output': [0, 1, 2, 3, 4], pwm: [0, 1, 2, 3] } }
 ]
-jest.mock('utils/confirm', () => {
-  return {
-    confirm: jest
-      .fn()
-      .mockImplementation(() => {
-        return new Promise(resolve => {
-          return resolve(true)
-        })
-      })
-      .bind(this)
-  }
-})
+
+jest.mock('utils/confirm', () => ({
+  confirm: jest.fn().mockResolvedValue(true)
+}))
+
 describe('Connectors', () => {
-  it('<Main />', () => {
-    shallow(<Provider store={mockStore({})}><Main /></Provider>)
+  it('<ConnectorsView /> renders loading without drivers', () => {
+    const html = renderToStaticMarkup(<ConnectorsView drivers={[]} />)
+    expect(html).toContain('loading')
   })
 
-  it('<InletSelector />', () => {
-    const state = {
+  it('<ConnectorsView /> renders sections with drivers', () => {
+    const view = new ConnectorsView({ drivers: stockDrivers })
+    const tree = view.render()
+    const sectionClasses = tree.props.children
+      .filter(child => child && child.props && child.props.className)
+      .map(child => child.props.className)
+    expect(sectionClasses).toContain('row inlets')
+    expect(sectionClasses).toContain('row outlets')
+    expect(sectionClasses).toContain('row analog-inputs')
+    expect(sectionClasses).toContain('row jacks')
+  })
+
+  it('<InletSelectorView /> updates selected inlet', () => {
+    const update = jest.fn()
+    const selector = new InletSelectorView({
       inlets: [{ id: '1', name: 'foo', pin: 1 }, { id: '2', name: 'bar', pin: 2 }],
-      drivers: stockDrivers
-    }
-    const m = mount(
-      <Provider store={mockStore(state)}>
-        <InletSelector active='1' update={() => true} />
-      </Provider>
-    )
-    m.find('a')
-      .first()
-      .simulate('click')
+      active: '1',
+      update,
+      fetchInlets: jest.fn(),
+      name: 'test'
+    })
+    selector.setState = jest.fn((next) => {
+      selector.state = { ...selector.state, ...next }
+    })
+    selector.componentDidMount()
+    expect(selector.props.fetchInlets).toHaveBeenCalled()
+    selector.set(1)()
+    expect(update).toHaveBeenCalledWith('2')
+    expect(selector.state.inlet.id).toBe('2')
   })
 
-  it('<Inlets />', () => {
-    const state = {
+  it('<InletsView /> toggles add and creates inlet payload', () => {
+    const create = jest.fn()
+    const view = new InletsView({
       inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true }],
       drivers: stockDrivers,
+      fetch: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    view.setState = jest.fn((next) => {
+      view.state = { ...view.state, ...next }
+    })
+    view.componentDidMount()
+    expect(view.props.fetch).toHaveBeenCalled()
+    view.handleAdd()
+    expect(view.state.add).toBe(true)
+    view.handleNameChange({ target: { value: 'new inlet' } })
+    view.handleDriverChange({ target: { value: 'rpi' } })
+    view.handleReverseChange()
+    view.onPinChange(2)
+    view.handleSave()
+    expect(create).toHaveBeenCalledWith({
+      name: 'new inlet',
+      pin: 2,
+      reverse: true,
+      driver: 'rpi'
+    })
+  })
+
+  it('<Inlet /> edits and saves', () => {
+    const update = jest.fn()
+    const inlet = new Inlet({
+      inlet_id: '1',
+      name: 'foo',
+      pin: 1,
+      reverse: false,
+      update,
+      remove: jest.fn(),
+      equipment: '',
+      drivers: stockDrivers,
       driver: stockDrivers[0]
-    }
-    const wrapper = mount(<Provider store={mockStore(state)}>
-        <Inlets />
-      </Provider>
-    )
-    wrapper.find('#add_inlet').simulate('click')
-    wrapper.find('#inletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: 'rpi' } })
-    wrapper.find('#inletReverse').simulate('change')
-    wrapper.find('#createInlet').simulate('click')
-    expect(wrapper.find(Inlet).length).toBe(1)
+    })
+    inlet.setState = jest.fn((next) => {
+      inlet.state = { ...inlet.state, ...next }
+    })
+    inlet.handleEdit()
+    inlet.handleNameChange({ target: { value: 'reef inlet' } })
+    inlet.handleDriverChange({ target: { value: 'rpi' } })
+    inlet.handleReverseChange()
+    inlet.onPinChange(3)
+    inlet.handleEdit()
+    expect(update).toHaveBeenCalledWith({
+      name: 'reef inlet',
+      pin: 3,
+      reverse: true,
+      equipment: '',
+      driver: 'rpi'
+    })
   })
 
-  it('<Inlet />', () => {
-    const m = shallow(
-      <Inlet
-        inlet_id='1'
-        name='foo'
-        pin={1}
-        reverse={false}
-        update={() => true}
-        remove={() => true}
-        drivers={stockDrivers}
-        driver={stockDrivers[0]}
-      />)
-    m.find('.edit-inlet').simulate('click')
-    m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.custom-select').simulate('change', { target: { value: 'rpi' } })
-    m.find('.inlet-reverse').simulate('change')
-    m.find('.edit-inlet').simulate('click')
-  })
-
-  it('<Jacks />', () => {
-    const state = {
+  it('<JacksView /> validates jack pins before create', () => {
+    jest.spyOn(Alert, 'showError')
+    const create = jest.fn()
+    const view = new JacksView({
       jacks: [{ id: '1', name: 'J2', pins: [0, 2], reverse: false }],
-      drivers: stockDrivers
-    }
-    //const m = shallow(<Jacks store={mockStore(state)} />).dive()
-    const m = mount(<Provider store={mockStore(state)}>
-      <Jacks />
-    </Provider>
-    )
-    m.find('#add_jack').simulate('click')
-    m.find('#jackName').simulate('change', { target: { value: 'foo' } })
-    m.find('#jackPins').simulate('change', { target: { value: '4,L' } })
-    m.find('.jack-type [name*="driver"]').simulate('click')
-    m.find('#createJack').simulate('click')
-    m.find('#jackPins').simulate('change', { target: { value: '4' } })
-    m.find('#createJack').simulate('click')
+      drivers: stockDrivers,
+      fetch: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    view.setState = jest.fn((next) => {
+      view.state = { ...view.state, ...next }
+    })
+    view.handleAdd()
+    view.handleNameChange({ target: { value: 'jack-a' } })
+    view.handlePinChange({ target: { value: '4,L' } })
+    view.handleSave()
+    expect(Alert.showError).toHaveBeenCalled()
+    view.handlePinChange({ target: { value: '4,5' } })
+    view.handleSave()
+    expect(create).toHaveBeenCalledWith({
+      name: 'jack-a',
+      pins: [4, 5],
+      driver: 'rpi',
+      reverse: false
+    })
+    Alert.showError.mockRestore()
   })
 
-  it('<Jack />', () => {
-    const m = shallow(
-      <Jack
-        jack_id='1'
-        name='foo'
-        pins={[1, 2]}
-        update={() => true}
-        remove={() => true}
-        driver='rpi'
-        drivers={stockDrivers}
-        reverse={false}
-      />
-    )
-    m.find('.jack-edit').simulate('click')
-    m.find('.jack-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.jack-pin').simulate('change', { target: { value: '4,L' } })
-    m.find('.jack-edit').simulate('click')
-    m.find('#jack-1-driver-select').simulate('click')
-    m.find('#jack-1-driver-1').simulate('click')
-    m.find('.jack-pin').simulate('change', { target: { value: '4' } })
-    m.find('.jack-edit').simulate('click')
+  it('<Jack /> edits and saves valid pins', () => {
+    const update = jest.fn()
+    const jack = new Jack({
+      jack_id: '1',
+      name: 'foo',
+      pins: [1, 2],
+      update,
+      remove: jest.fn(),
+      driver: 'rpi',
+      drivers: stockDrivers,
+      reverse: false
+    })
+    jack.setState = jest.fn((next) => {
+      jack.state = { ...jack.state, ...next }
+    })
+    jack.handleEdit()
+    jack.handleNameChange({ target: { value: 'bar' } })
+    jack.handleSetDriver({ target: { value: '1' } })
+    jack.handlePinChange({ target: { value: '4,5' } })
+    jack.handleReverseChange()
+    jack.handleEdit()
+    expect(update).toHaveBeenCalledWith({
+      name: 'bar',
+      pins: [4, 5],
+      driver: '1',
+      reverse: true
+    })
   })
-  it('<Outlets />', () => {
-    const state = {
+
+  it('<OutletsView /> toggles add and creates outlet payload', () => {
+    const create = jest.fn()
+    const view = new OutletsView({
       outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true }],
-      drivers: stockDrivers
-    }
-    //const wrapper = shallow(<Outlets store={mockStore(state)} />).dive()
-    const wrapper = mount(<Provider store={mockStore(state)}>
-      <Outlets />
-    </Provider>
-    )
-    wrapper.find('#add_outlet').simulate('click')
-    wrapper.find('#outletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: '1' } })
-    wrapper.find('#outletReverse').simulate('change')
-    wrapper.find('#createOutlet').simulate('click')
-    expect(wrapper.find(Outlet).length).toBe(1)
-  })
-  it('<Outlet />', () => {
-    const m = shallow(
-      <Outlet
-        name='foo'
-        reverse pin={1}
-        outlet_id='1'
-        update={() => true}
-        remove={() => true}
-        driver={stockDrivers[0]}
-        drivers={stockDrivers}
-      />)
-    m.find('.edit-outlet').simulate('click')
-    m.find('.outlet-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.custom-select').simulate('change', { target: { value: '1' } })
-    m.find('.outlet-reverse').simulate('change')
-    m.find('.edit-outlet').simulate('click')
+      drivers: stockDrivers,
+      fetch: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    view.setState = jest.fn((next) => {
+      view.state = { ...view.state, ...next }
+    })
+    view.handleAdd()
+    view.handleNameChange({ target: { value: 'heater' } })
+    view.handleDriverChange({ target: { value: '1' } })
+    view.handleReverseChange()
+    view.onPinChange(2)
+    view.handleSave()
+    expect(create).toHaveBeenCalledWith({
+      name: 'heater',
+      pin: 2,
+      reverse: true,
+      driver: '1'
+    })
   })
 
-  it('byCapability returns true for matching capability', () => {
+  it('<Outlet /> edits and saves', () => {
+    const update = jest.fn()
+    const outlet = new Outlet({
+      name: 'foo',
+      reverse: true,
+      pin: 1,
+      outlet_id: '1',
+      update,
+      remove: jest.fn(),
+      equipment: '',
+      driver: stockDrivers[0],
+      drivers: stockDrivers
+    })
+    outlet.setState = jest.fn((next) => {
+      outlet.state = { ...outlet.state, ...next }
+    })
+    outlet.handleEdit()
+    outlet.handleNameChange({ target: { value: 'return pump' } })
+    outlet.handleDriverChange({ target: { value: '1' } })
+    outlet.handleReverseChange()
+    outlet.onPinChange(4)
+    outlet.handleEdit()
+    expect(update).toHaveBeenCalledWith({
+      name: 'return pump',
+      pin: 4,
+      reverse: false,
+      equipment: '',
+      driver: '1'
+    })
+  })
+
+  it('byCapability returns expected matches', () => {
     const driver = { id: '1', pinmap: { 'analog-input': [0, 1, 2], 'digital-output': [3, 4] } }
     expect(byCapability('analog-input')(driver)).toBe(true)
     expect(byCapability('digital-output')(driver)).toBe(true)
     expect(byCapability('pwm')(driver)).toBe(false)
+    expect(byCapability('analog-input')({ id: '2' })).toBe(false)
   })
 
-  it('byCapability returns false for driver without pinmap', () => {
-    const driver = { id: '1' }
-    expect(byCapability('analog-input')(driver)).toBe(false)
-  })
-
-  it('<Pin /> renders select with options for driver pins', () => {
-    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
-    const m = shallow(<Pin driver={driver} update={() => {}} type='digital-output' current={1} />)
-    expect(m.find('select').length).toBe(1)
-    expect(m.find('option').length).toBe(3)
-  })
-
-  it('<Pin /> calls update on change', () => {
-    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
+  it('<Pin /> renders options and updates', () => {
+    const driver = { id: 'rpi', pinmap: { 'digital-output': [3, 1, 2] } }
     const update = jest.fn()
-    const m = shallow(<Pin driver={driver} update={update} type='digital-output' current={1} />)
-    m.find('select').simulate('change', { target: { value: '2' } })
+    const html = renderToStaticMarkup(<Pin driver={driver} update={update} type='digital-output' current={1} />)
+    expect(html).toContain('<option value="1"')
+    expect(html).toContain('<option value="2"')
+    expect(html).toContain('<option value="3"')
+    const pin = new Pin({ driver, update, type: 'digital-output', current: 1 })
+    pin.handleChange({ target: { value: '2' } })
     expect(update).toHaveBeenCalledWith(2)
   })
 
   it('<Pin /> renders empty for undefined driver', () => {
-    const m = shallow(<Pin driver={undefined} update={() => {}} type='digital-output' />)
-    expect(m.find('option').length).toBe(0)
+    const html = renderToStaticMarkup(<Pin driver={undefined} update={() => {}} type='digital-output' />)
+    expect(html).not.toContain('<option')
   })
 
-  it('<AnalogInput /> renders view mode by default', () => {
-    const m = shallow(
-      <AnalogInput
-        name='pH Sensor'
-        pin={0}
-        analog_input_id='1'
-        driver={stockDrivers[0]}
-        drivers={stockDrivers}
-        update={() => {}}
-        remove={() => {}}
-      />
-    )
-    expect(m.find('.analog_input-edit').length).toBe(1)
-  })
-
-  it('<AnalogInput /> toggles to edit and saves', () => {
+  it('<AnalogInput /> toggles to edit, saves, and removes', () => {
     const update = jest.fn()
-    const m = shallow(
-      <AnalogInput
-        name='pH Sensor'
-        pin={0}
-        analog_input_id='1'
-        driver={stockDrivers[0]}
-        drivers={stockDrivers}
-        update={update}
-        remove={() => {}}
-      />
-    )
-    // click edit
-    m.find('.analog_input-edit').simulate('click')
-    expect(m.instance().state.edit).toBe(true)
-    // change name
-    m.find('.analog_input-name').simulate('change', { target: { value: 'New Name' } })
-    expect(m.instance().state.name).toBe('New Name')
-    // save
-    m.find('.analog_input-edit').simulate('click')
-    expect(update).toHaveBeenCalled()
-    expect(m.instance().state.edit).toBe(false)
-  })
-
-  it('<AnalogInput /> handleRemove calls remove', () => {
     const remove = jest.fn()
-    const m = shallow(
-      <AnalogInput
-        name='Test'
-        pin={0}
-        analog_input_id='1'
-        driver={stockDrivers[0]}
-        drivers={stockDrivers}
-        update={() => {}}
-        remove={remove}
-      />
-    )
-    m.find('.analog_input-remove').simulate('click')
+    const input = new AnalogInput({
+      name: 'pH Sensor',
+      pin: 0,
+      analog_input_id: '1',
+      driver: stockDrivers[0],
+      drivers: stockDrivers,
+      update,
+      remove
+    })
+    input.setState = jest.fn((next) => {
+      input.state = { ...input.state, ...next }
+    })
+    input.handleEdit()
+    input.handleNameChange({ target: { value: 'New Name' } })
+    input.handleSetDriver({ target: { value: 'rpi' } })
+    input.onPinChange(1)
+    input.handleEdit()
+    expect(update).toHaveBeenCalledWith({
+      name: 'New Name',
+      pin: 1,
+      driver: 'rpi'
+    })
+    input.handleRemove()
     expect(remove).toHaveBeenCalled()
   })
 
-  it('<AnalogInputs /> renders and adds analog input', () => {
+  it('<AnalogInputsView /> renders and adds analog input', () => {
     const aiDrivers = [
       { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } }
     ]
-    const state = {
+    const create = jest.fn()
+    const view = new AnalogInputsView({
       analog_inputs: [{ id: '1', name: 'pH', pin: 0, driver: 'ads' }],
-      drivers: aiDrivers
-    }
-    const wrapper = mount(
-      <Provider store={mockStore(state)}>
-        <AnalogInputs />
-      </Provider>
-    )
-    wrapper.find('#add_analog_input').simulate('click')
-    wrapper.find('#analog_inputName').simulate('change', { target: { value: 'New Sensor' } })
-    wrapper.find('#createAnalogInput').simulate('click')
-    expect(wrapper.find(AnalogInput).length).toBe(1)
+      drivers: aiDrivers,
+      fetch: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    view.setState = jest.fn((next) => {
+      view.state = { ...view.state, ...next }
+    })
+    view.componentDidMount()
+    expect(view.props.fetch).toHaveBeenCalled()
+    view.handleAdd()
+    view.handleNameChange({ target: { value: 'New Sensor' } })
+    view.onPinChange(1)
+    view.handleSave()
+    expect(create).toHaveBeenCalledWith({
+      name: 'New Sensor',
+      pin: 1,
+      driver: 'ads'
+    })
   })
 })

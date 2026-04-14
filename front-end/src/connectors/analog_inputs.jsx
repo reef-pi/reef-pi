@@ -15,7 +15,7 @@ import {
 
 import AnalogInput from './analog_input'
 
-class analogInputs extends React.Component {
+export class AnalogInputsView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -228,5 +228,5 @@ const mapDispatchToProps = dispatch => {
 const AnalogInputs = connect(
   mapStateToProps,
   mapDispatchToProps
-)(analogInputs)
+)(AnalogInputsView)
 export default AnalogInputs

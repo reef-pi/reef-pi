@@ -6,7 +6,7 @@ import i18next from 'i18next'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 import { ParseTimestamp } from 'utils/timestamp'
 
-class chart extends React.Component {
+export class Chart extends React.Component {
   componentDidMount () {
     this.props.fetch(this.props.light_id)
     const timer = window.setInterval(() => { this.props.fetch(this.props.light.id) }, 10 * 1000)
@@ -81,5 +81,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const GenericLightChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+const GenericLightChart = connect(mapStateToProps, mapDispatchToProps)(Chart)
 export default GenericLightChart

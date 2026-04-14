@@ -1,15 +1,9 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import PhForm from './ph_form'
-import Chart from './chart'
-import Main from './main'
-import configureMockStore from 'redux-mock-store'
+import { renderToStaticMarkup } from 'react-dom/server'
+import PhForm, { phFormValues, submitPhForm } from './ph_form'
+import Chart, { ChartView } from './chart'
+import Main, { PhView } from './main'
 import 'isomorphic-fetch'
-import thunk from 'redux-thunk'
-
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
     showModal: jest
@@ -33,35 +27,54 @@ jest.mock('utils/confirm', () => {
 
 describe('Ph ui', () => {
   it('<Main />', () => {
-    const state = {
-      phprobes: [
-        {
-          id: 1,
-          name: 'probe',
-          enable: false,
-          chart: {},
-          notify: {
-            enable: false
-          },
-          control: true,
-          is_macro: true,
-          min: 7,
-          downer_eq: '3',
-          max: 8.6,
-          upper_eq: '1'
-        }
-      ]
+    const probe = {
+      id: 1,
+      name: 'probe',
+      enable: false,
+      chart: {},
+      notify: { enable: false },
+      control: true,
+      is_macro: true,
+      min: 7,
+      downer_eq: '3',
+      max: 8.6,
+      upper_eq: '1'
     }
+    const fetchPhProbes = jest.fn()
+    const update = jest.fn()
+    const create = jest.fn()
+    const deleteProbe = jest.fn()
+    const view = new PhView({
+      probes: [probe],
+      ais: [],
+      macros: [],
+      equipment: [],
+      currentReading: {},
+      fetchPhProbes,
+      update,
+      create,
+      delete: deleteProbe,
+      readProbe: jest.fn(),
+      calibrateProbe: jest.fn()
+    })
+    view.setState = jest.fn(updateState => {
+      view.state = { ...view.state, ...updateState }
+    })
 
-    const m = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+    view.componentDidMount()
+    expect(fetchPhProbes).toHaveBeenCalled()
+    expect(() => renderToStaticMarkup(<PhView probes={[probe]} ais={[]} macros={[]} equipment={[]} currentReading={{}} fetchPhProbes={fetchPhProbes} update={update} create={create} delete={deleteProbe} readProbe={() => {}} calibrateProbe={() => {}} />)).not.toThrow()
+    view.handleToggleAddProbeDiv()
+    expect(view.state.addProbe).toBe(true)
+    view.handleCreateProbe(phFormValues({ probe }))
+    expect(create).toHaveBeenCalled()
+    expect(Main).toBeDefined()
   })
 
   it('<PhForm/> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<PhForm onSubmit={fn} />)
-    wrapper.simulate('submit', {})
+    const values = phFormValues({})
+    submitPhForm(values, { props: { onSubmit: fn } })
     expect(fn).toHaveBeenCalled()
   })
 
@@ -78,8 +91,8 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
-    wrapper.simulate('submit', {})
+    const values = phFormValues({ probe })
+    submitPhForm(values, { props: { onSubmit: fn } })
     expect(fn).toHaveBeenCalled()
   })
 
@@ -96,8 +109,7 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('macro')
+    expect(phFormValues({ probe }).control).toBe('macro')
   })
 
   it('<PhForm /> for edit without control', () => {
@@ -113,23 +125,32 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('')
+    expect(phFormValues({ probe }).control).toBe('')
   })
 
-  it('<Chart />', () => {
+  it('<ChartView />', () => {
     const probes = [{ id: '1', name: 'foo' , chart: {}}]
     const readings = { 1: { name: 'foo', current: [] } }
-    const m = shallow(
-      <Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />
-    )
-      .dive()
-      .instance()
-    shallow(<Chart probe_id='1' store={mockStore({ phprobes: [], ph_readings: readings })} type='current' />)
-      .dive()
-      .instance()
-    shallow(<Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: [] })} type='current' />)
-      .dive()
-      .instance()
+    jest.useFakeTimers()
+    const fetchProbeReadings = jest.fn()
+    const chart = new ChartView({
+      probe_id: '1',
+      config: { name: 'foo', chart: { color: '#000', unit: 'pH', ymin: 0, ymax: 14 }, notify: { enable: false } },
+      readings: readings[1],
+      type: 'current',
+      fetchProbeReadings,
+      height: 100
+    })
+    chart.setState = jest.fn(updateState => {
+      chart.state = { ...(chart.state || {}), ...updateState }
+    })
+    chart.componentDidMount()
+    expect(fetchProbeReadings).toHaveBeenCalledWith('1')
+    expect(() => renderToStaticMarkup(<ChartView probe_id='1' config={{ name: 'foo', chart: { color: '#000', unit: 'pH', ymin: 0, ymax: 14 }, notify: { enable: false } }} readings={readings[1]} type='current' fetchProbeReadings={fetchProbeReadings} height={100} />)).not.toThrow()
+    expect(() => renderToStaticMarkup(<ChartView probe_id='1' readings={readings[1]} type='current' fetchProbeReadings={fetchProbeReadings} />)).not.toThrow()
+    expect(() => renderToStaticMarkup(<ChartView probe_id='1' config={probes[0]} type='current' fetchProbeReadings={fetchProbeReadings} />)).not.toThrow()
+    chart.componentWillUnmount()
+    jest.useRealTimers()
+    expect(Chart).toBeDefined()
   })
 })

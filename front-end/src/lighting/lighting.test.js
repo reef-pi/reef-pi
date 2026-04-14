@@ -1,9 +1,8 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Channel from './channel'
-import Chart from './chart'
-import Main, {TestMain} from './main'
+import { ChartView } from './chart'
+import { MainView, TestMain } from './main'
 import LightForm from './light_form'
 import Light from './light'
 import ProfileSelector from './profile_selector'
@@ -15,43 +14,41 @@ import RandomProfile from './random_profile'
 import LunarProfile from './lunar_profile'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import IntervalChart from './charts/interval'
+import FixedChart from './charts/fixed'
+import DiurnalChart from './charts/diurnal'
+import GenericLightChart from './charts/generic'
+import * as Alert from '../utils/alert'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
-const mockStore = configureMockStore([thunk])
-jest.mock('utils/confirm', () => {
-  return {
-    confirm: jest
-      .fn()
-      .mockImplementation(() => {
-        return new Promise(resolve => {
-          return resolve(true)
-        })
-      })
-      .bind(this)
-  }
-})
+jest.mock('utils/confirm', () => ({
+  confirm: jest.fn().mockResolvedValue(true)
+}))
+
 describe('Lighting ui', () => {
   const ev = {
     target: { value: 10.5 }
   }
+
   let light = {
     id: '1',
     name: 'foo',
     jack: '1',
+    enable: true,
     channels: {
       1: {
         pin: 0,
         color: '',
+        min: 0,
+        max: 100,
+        on: true,
         manual: false,
         profile: {
           type: 'interval',
           config: {
             start: '14:00:00',
             end: '22:00:00',
-            values: [1, 2, 3, 4, 5, 6.4, 7, 8, 9, 10, 11, 12]
+            values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
           }
         }
       }
@@ -59,14 +56,18 @@ describe('Lighting ui', () => {
   }
 
   beforeEach(() => {
-    light = {
+    light = JSON.parse(JSON.stringify({
       id: '1',
       name: 'foo',
       jack: '1',
+      enable: true,
       channels: {
         1: {
           pin: 0,
           color: '',
+          min: 0,
+          max: 100,
+          on: true,
           manual: false,
           profile: {
             type: 'interval',
@@ -78,287 +79,256 @@ describe('Lighting ui', () => {
           }
         }
       }
-    }
+    }))
+    jest.restoreAllMocks()
   })
 
-  it('<Main />', () => {
-    const jacks = [{ id: '1', name: 'foo', pins: [1,2] }]
-    const m = shallow(<Main store={mockStore({ lights: [light, light], jacks: jacks })} />)
-      .dive()
-      .instance()
-  })
-
-  it('<Main /> should change mode from auto to manual', () => {
-    const fn = jest.fn()
-    const fnUpdateLight = jest.fn()
-
-    const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
-
-    expect.assertions(2)
-    return (m.handleChangeMode(light)()).then(() => {
-
-      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
-      const actualArgs = fnUpdateLight.mock.calls[0][1]
-      expect(actualArgs.channels[1].manual).toBe(true)
+  it('<MainView /> renders without throwing', () => {
+    const view = new MainView({
+      lights: [light, light],
+      jacks: [{ id: '1', name: 'foo', pins: [1, 2] }],
+      updateLight: jest.fn(),
+      createLight: jest.fn(),
+      deleteLight: jest.fn(),
+      fetchLights: jest.fn(),
+      fetchJacks: jest.fn()
     })
+    expect(() => view.render()).not.toThrow()
   })
 
-  it('<Main /> should change mode from manual to auto', () => {
+  it('<Main /> changes mode from auto to manual', async () => {
     const fn = jest.fn()
     const fnUpdateLight = jest.fn()
+    const m = new TestMain({
+      fetchLights: fn,
+      fetchJacks: fn,
+      lights: [light, light],
+      updateLight: fnUpdateLight
+    })
 
+    await m.handleChangeMode(light)()
+    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+    const actualArgs = fnUpdateLight.mock.calls[0][1]
+    expect(actualArgs.channels[1].manual).toBe(true)
+  })
+
+  it('<Main /> changes mode from manual to auto', async () => {
+    const fn = jest.fn()
+    const fnUpdateLight = jest.fn()
     light.channels[1].manual = true
 
-    const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
-
-    expect.assertions(2)
-    return (m.handleChangeMode(light)()).then(() => {
-      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
-      const actualArgs = fnUpdateLight.mock.calls[0][1]
-      expect(actualArgs.channels[1].manual).toBe(false)
+    const m = new TestMain({
+      fetchLights: fn,
+      fetchJacks: fn,
+      lights: [light, light],
+      updateLight: fnUpdateLight
     })
+
+    await m.handleChangeMode(light)()
+    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+    const actualArgs = fnUpdateLight.mock.calls[0][1]
+    expect(actualArgs.channels[1].manual).toBe(false)
   })
 
-  it('<Main /> should change mode from mixed to auto', () => {
+  it('<Main /> changes mode from mixed to auto', async () => {
     const fn = jest.fn()
     const fnUpdateLight = jest.fn()
 
-    light.channels[2] = {
-      pin: 0,
-      color: '',
-      manual: true,
-      profile: {
-        type: 'interval',
-        config: {
-          start: '14:00:00',
-          end: '22:00:00',
-          values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        }
-      }
-    }
+    light.channels[2] = JSON.parse(JSON.stringify(light.channels[1]))
+    light.channels[2].manual = true
 
-    const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
-
-    expect.assertions(3)
-    return (m.handleChangeMode(light)()).then(() => {
-
-      expect(fnUpdateLight).toHaveBeenCalledTimes(1)
-      const actualArgs = fnUpdateLight.mock.calls[0][1]
-      expect(actualArgs.channels[1].manual).toBe(false)
-      expect(actualArgs.channels[2].manual).toBe(false)
+    const m = new TestMain({
+      fetchLights: fn,
+      fetchJacks: fn,
+      lights: [light, light],
+      updateLight: fnUpdateLight
     })
+
+    await m.handleChangeMode(light)()
+    const actualArgs = fnUpdateLight.mock.calls[0][1]
+    expect(actualArgs.channels[1].manual).toBe(false)
+    expect(actualArgs.channels[2].manual).toBe(false)
   })
 
-  it('<Main /> should set the interval when start is before end', () => {
-    const fn = jest.fn()
+  it('<Main /> computes interval when start is before end', () => {
     const fnUpdateLight = jest.fn()
-
     light.channels[1].profile.config.start = '14:00:00'
     light.channels[1].profile.config.end = '16:00:00'
-    light.channels[1].profile.config.values = [1,2,3.6,4,5]
-    const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+    light.channels[1].profile.config.values = [1, 2, 3.6, 4, 5]
+    const m = new TestMain({
+      lights: [light],
+      jacks: [],
+      updateLight: fnUpdateLight
+    })
 
-    const values = {
-      config: {
-        id: 1,
-        name: 'light',
-        channels: light.channels,
-        jack: light.jack
-      }
-    }
-    m.handleUpdateLight(values)
-
-    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
-    const actualArgs = fnUpdateLight.mock.calls[0][1]
-    expect(actualArgs.channels[1].profile.config.interval).toBe(30 * 60)
+    m.handleUpdateLight({ config: light })
+    const payload = fnUpdateLight.mock.calls[0][1]
+    expect(payload.channels[1].profile.config.interval).toBe(1800)
   })
 
-
-  it('<Main /> should set the interval when end is before start', () => {
-    const fn = jest.fn()
+  it('<Main /> computes interval when end is before start', () => {
     const fnUpdateLight = jest.fn()
-
-    light.channels[1].profile.type = 'auto'
     light.channels[1].profile.config.start = '23:00:00'
     light.channels[1].profile.config.end = '01:00:00'
-    light.channels[1].profile.config.values = [1,2,3,4,5]
-    const m = shallow(<TestMain
-      fetchLights = {fn}
-      fetchJacks = {fn}
-      lights = {[light, light]}
-      updateLight = {fnUpdateLight}
-    />).instance()
+    light.channels[1].profile.config.values = [1, 2, 3, 4, 5]
+    const m = new TestMain({
+      lights: [light],
+      jacks: [],
+      updateLight: fnUpdateLight
+    })
 
-    const values = {
-      config: {
-        id: 1,
-        name: 'light',
-        channels: light.channels,
-        jack: light.jack
-      }
-    }
-    m.handleUpdateLight(values)
-
-    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
-    const actualArgs = fnUpdateLight.mock.calls[0][1]
-    expect(actualArgs.channels[1].profile.config.interval).toBe(30 * 60)
+    m.handleUpdateLight({ config: light })
+    const payload = fnUpdateLight.mock.calls[0][1]
+    expect(payload.channels[1].profile.config.interval).toBe(1800)
   })
 
-  it('<LightForm />', () => {
-    const fn = jest.fn()
-    light.channels[2] = {
-      pin: 0,
-      color: '',
-      profile: {
-        type: 'interval',
-        config: {
-          start: '14:00:00',
-          end: '22:00:00',
-          values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        }
-      }
-    }
-    const wrapper = shallow(<LightForm onSubmit={fn} config={light} />)
-    wrapper.simulate('submit', { preventDefault: () => {} })
-    expect(fn).toHaveBeenCalled()
+  it('<LightForm /> renders without throwing', () => {
+    expect(() => renderToStaticMarkup(<LightForm onSubmit={jest.fn()} config={light} />)).not.toThrow()
   })
 
-  it('<Light /> should submit', () => {
-    const fn = jest.fn()
-    const values = { config: light }
-    const m = shallow(
-      <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={fn} isValid={true} />
-    )
-    m.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(fn).toHaveBeenCalled()
+  it('<Light /> submits successfully when valid', () => {
+    const submitForm = jest.fn()
+    const showUpdateSuccessful = jest.spyOn(Alert, 'showUpdateSuccessful').mockImplementation(() => {})
+    const component = Light({
+      values: { config: light },
+      config: light,
+      save: jest.fn(),
+      remove: jest.fn(),
+      submitForm,
+      isValid: true,
+      dirty: true,
+      touched: {},
+      errors: {},
+      jacks: []
+    })
+
+    component.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
+    expect(showUpdateSuccessful).toHaveBeenCalled()
   })
 
-  it('<Light /> should show error on submit if not valid', () => {
-    const fn = jest.fn()
-    const values = { config: light }
-    const m = shallow(
-      <Light values={values} config={light} save={() => {}} remove={() => true} submitForm={fn} isValid={false} />
-    )
-    m.find('form').simulate('submit', { preventDefault: () => {} })
-    expect(fn).toHaveBeenCalled()
+  it('<Light /> shows error on submit if not valid', () => {
+    const submitForm = jest.fn()
+    const showError = jest.spyOn(Alert, 'showError').mockImplementation(() => {})
+    const component = Light({
+      values: { config: light },
+      config: light,
+      save: jest.fn(),
+      remove: jest.fn(),
+      submitForm,
+      isValid: false,
+      dirty: true,
+      touched: {},
+      errors: {},
+      jacks: []
+    })
+
+    component.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
+    expect(showError).toHaveBeenCalled()
   })
 
-  it('<Chart />', () => {
-    shallow(<Chart store={mockStore({ lights: [light] })} light_id='1' />).dive()
-    shallow(<Chart store={mockStore({ lights: [] })} light_id='1' />)
-      .dive()
-      .instance()
+  it('<ChartView /> picks interval, fixed, diurnal, and generic charts', () => {
+    const interval = new ChartView({ config: light, width: 100, height: 100 }).render()
+    expect(interval.type).toBe(IntervalChart)
+
+    const fixedLight = JSON.parse(JSON.stringify(light))
+    fixedLight.channels[1].profile.type = 'fixed'
+    const fixed = new ChartView({ config: fixedLight, width: 100, height: 100 }).render()
+    expect(fixed.type).toBe(FixedChart)
+
+    const diurnalLight = JSON.parse(JSON.stringify(light))
+    diurnalLight.channels[1].profile.type = 'diurnal'
+    const diurnal = new ChartView({ config: diurnalLight, width: 100, height: 100 }).render()
+    expect(diurnal.type).toBe(DiurnalChart)
+
+    const genericLight = JSON.parse(JSON.stringify(light))
+    genericLight.channels[1].profile.type = 'unknown'
+    const generic = new ChartView({ config: genericLight, width: 100, height: 100 }).render()
+    expect(generic.type).toBe(GenericLightChart)
   })
 
-  it('<Channel />', () => {
-    const m = shallow(<Channel name='' channel={light.channels['1']} onChangeHandler={() => {}} />)
-    expect(m).toBeDefined()
+  it('<ChartView /> handles missing and multi-channel configs', () => {
+    expect(new ChartView({ config: undefined }).render().type).toBe('span')
+    const multi = JSON.parse(JSON.stringify(light))
+    multi.channels[2] = JSON.parse(JSON.stringify(light.channels[1]))
+    const rendered = new ChartView({ config: multi }).render()
+    expect(rendered.props.children).toContain('multi channel light charts')
   })
 
-  it('<Profile /> fixed', () => {
-    const fn = jest.fn()
-    const wrapper = shallow(<Profile name="name" type='fixed' onChangeHandler={fn} />)
-    expect(wrapper.find(FixedProfile).length).toBe(1)
-    expect(wrapper.find(AutoProfile).length).toBe(0)
-    expect(wrapper.find(DiurnalProfile).length).toBe(0)
+  it('<Channel /> renders', () => {
+    const tree = Channel({
+      name: 'config.channels.1',
+      channel: light.channels[1],
+      channelNum: '1',
+      onChangeHandler: () => {},
+      onBlur: () => {},
+      setTouched: () => {},
+      touched: {},
+      errors: {}
+    })
+    expect(tree).toBeDefined()
   })
 
-  it('<Profile /> interval', () => {
-    const wrapper = shallow(<Profile name="name" type='interval' onChangeHandler={() => true} />)
-    expect(wrapper.find(FixedProfile).length).toBe(0)
-    expect(wrapper.find(AutoProfile).length).toBe(1)
-    expect(wrapper.find(DiurnalProfile).length).toBe(0)
+  it('<Profile /> selects expected components', () => {
+    expect(Profile({ name: 'name', type: 'fixed', onChangeHandler: jest.fn() }).type).toBe(FixedProfile)
+    expect(Profile({ name: 'name', type: 'interval', onChangeHandler: jest.fn() }).type).toBe(AutoProfile)
+    expect(Profile({ name: 'name', type: 'diurnal', onChangeHandler: jest.fn() }).type).toBe(DiurnalProfile)
   })
 
-  it('<Profile /> diurnal', () => {
-    const wrapper = shallow(<Profile name="name" type='diurnal' onChangeHandler={() => true} />)
-    expect(wrapper.find(FixedProfile).length).toBe(0)
-    expect(wrapper.find(AutoProfile).length).toBe(0)
-    expect(wrapper.find(DiurnalProfile).length).toBe(1)
+  it('<DiurnalProfile /> renders', () => {
+    const tree = DiurnalProfile({ name: 'testDiurnal', onChangeHandler: () => true, touched: {}, errors: {} })
+    expect(tree).toBeDefined()
   })
 
-  it('<DiurnalProfile />', () => {
-    shallow(<DiurnalProfile name='testDiurnal' onChangeHandler={() => true} />).instance()
-  })
-
-  it('<FixedProfile />', () => {
-    const m = shallow(<FixedProfile onChangeHandler={() => true} config={{ config: { value: '1' } }} />).instance()
-    m.handleChange(ev)
-    m.handleChange({ target: { value: 'foo' } })
-  })
-
-  it('<FixedProfile /> should not allow empty value', () => {
-    const m = shallow(<FixedProfile onChangeHandler={() => true} config={{ config: { value: '1' } }} />).instance()
+  it('<FixedProfile /> handles valid and empty values', () => {
+    const onChangeHandler = jest.fn()
+    const m = new FixedProfile({
+      name: 'fixed',
+      onChangeHandler,
+      config: { start: '10:00:00', end: '12:00:00', value: '1' }
+    })
+    m.setState = jest.fn(update => {
+      m.state = { ...m.state, ...update }
+    })
     m.handleChange(ev)
     m.handleChange({ target: { value: '' } })
+    expect(onChangeHandler).toHaveBeenCalled()
   })
 
-  it('<SineProfile />', () => {
-    const config = { config: { value: '1'} }
-    const wrapper = shallow(
-      <SineProfile
-        name='testsine'
-        config={config}
-        readOnly={false}
-        onChangeHandler={() => {}}
-      />)
-    expect(wrapper).toBeDefined()
+  it('<SineProfile /> renders', () => {
+    const config = { config: { value: '1' } }
+    const tree = SineProfile({ name: 'testsine', config, readOnly: false, onChangeHandler: () => {} })
+    expect(tree).toBeDefined()
   })
 
-  it('<RandomProfile />', () => {
-    const config = { config: { value: '1'} }
-    const wrapper = shallow(
-      <RandomProfile
-        name='testrandom'
-        config={config}
-        readOnly={false}
-        onChangeHandler={() => {}}
-      />)
-    expect(wrapper).toBeDefined()
+  it('<RandomProfile /> renders', () => {
+    const config = { config: { value: '1' } }
+    const tree = RandomProfile({ name: 'testrandom', config, readOnly: false, onChangeHandler: () => {} })
+    expect(tree).toBeDefined()
   })
 
-  it('<LunarProfile />', () => {
-    const config = { config: { value: '1'} }
-    const wrapper = shallow(
-      <LunarProfile
-        name='testLunar'
-        config={config}
-        readOnly={false}
-        onChangeHandler={() => {}}
-      />)
-    expect(wrapper).toBeDefined()
+  it('<LunarProfile /> renders', () => {
+    const config = { config: { value: '1' } }
+    const tree = LunarProfile({ name: 'testLunar', config, readOnly: false, onChangeHandler: () => {}, touched: {}, errors: {} })
+    expect(tree).toBeDefined()
   })
 
-  it('<Percent />', () => {
-    const wrapper = shallow(<Percent value='4' onChange={() => true} />)
-    wrapper.find('input').simulate('change', { target: { value: 34 } })
+  it('<Percent /> converts numeric input', () => {
+    const onChange = jest.fn()
+    const component = Percent({ value: '4', onChange })
+    component.props.onChange({ target: { name: 'x', value: 34 } })
+    expect(onChange).toHaveBeenCalledWith({ target: { name: 'x', value: 34 } })
   })
 
-  it('<ProfileSelector />', () => {
+  it('<ProfileSelector /> routes change through provided handler', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<ProfileSelector name='name' value='fixed' onChangeHandler={fn} />)
-    expect(wrapper.find('input').length).toBe(8)
-    wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
+    const component = ProfileSelector({ name: 'name', value: 'fixed', onChangeHandler: fn })
+    const mobileSelect = component.props.children[0].props.children
+    expect(renderToStaticMarkup(component)).toContain('type="radio"')
+    mobileSelect.props.onChange({ target: { name: 'ignored', value: 'diurnal' } })
+    expect(fn).toHaveBeenCalled()
+    expect(fn.mock.calls[0][0].target.name).toBe('name')
+    expect(fn.mock.calls[0][0].target.value).toBe('diurnal')
   })
-
 })

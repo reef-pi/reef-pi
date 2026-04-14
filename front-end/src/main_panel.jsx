@@ -59,7 +59,7 @@ function CurrentPageHeader() {
 }
 
 
-class mainPanel extends React.Component {
+export class MainPanelView extends React.Component {
   constructor (props) {
     super(props)
     this.navs = this.navs.bind(this)
@@ -160,5 +160,5 @@ const mapDispatchToProps = dispatch => {
 const MainPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(mainPanel)
+)(MainPanelView)
 export default MainPanel

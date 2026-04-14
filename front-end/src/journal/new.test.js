@@ -1,6 +1,5 @@
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import { Provider } from 'react-redux'
 import New from './new'
 import configureMockStore from 'redux-mock-store'
@@ -8,7 +7,6 @@ import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
-Enzyme.configure({ adapter: new Adapter() })
 const mockStore = configureMockStore([thunk])
 
 describe('<New />', () => {

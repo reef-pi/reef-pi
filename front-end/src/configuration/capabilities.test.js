@@ -1,14 +1,14 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Capabilities from './capabilities'
 
 describe('render capabilities component', () => {
   it('<Capabilities />', () => {
-    const component = renderer.create(
+    const html = renderToStaticMarkup(
       <Capabilities capabilities={[]} update={() => {}} />
     )
-
-    const tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
+    expect(html).toContain('id="update-equipment"')
+    expect(html).toContain('id="update-dev_mode"')
+    expect(html).toContain('type="checkbox"')
   })
 })

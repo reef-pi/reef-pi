@@ -21,7 +21,7 @@ class CustomToolTip extends React.Component {
   }
 }
 
-class chart extends React.Component {
+export class ChartView extends React.Component {
   componentDidMount () {
     this.props.fetchEquipment()
     this.timer = window.setInterval(this.props.fetchEquipment, EQUIPMENT_POLL_INTERVAL_MS)
@@ -71,5 +71,5 @@ const mapDispatchToProps = dispatch => {
 const EquipmentChart = connect(
   mapStateToProps,
   mapDispatchToProps
-)(chart)
+)(ChartView)
 export default EquipmentChart

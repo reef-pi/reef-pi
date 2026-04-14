@@ -1,20 +1,24 @@
-import JackSelector from './jack_selector'
+import JackSelector, { JackSelectorView } from './jack_selector'
 import React from 'react'
-import Enzyme, { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import { Provider } from 'react-redux'
-const mockStore = configureMockStore([thunk])
-
-Enzyme.configure({ adapter: new Adapter() })
+import { renderToStaticMarkup } from 'react-dom/server'
 
 describe('JackSelector', () => {
-  it('<JackSelector />', () => {
+  it('<JackSelectorView /> renders and updates jack/pin', () => {
     const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
-    shallow(
-      <Provider store={mockStore({ jacks })}>
-        <JackSelector id='1' update={() => {}} />
-      </Provider>)
+    const update = jest.fn()
+    const fetchJacks = jest.fn()
+    const selector = new JackSelectorView({ id: '1', jacks, update, fetchJacks })
+    selector.setState = jest.fn(next => {
+      selector.state = { ...selector.state, ...next }
+    })
+
+    selector.componentDidMount()
+    expect(fetchJacks).toHaveBeenCalled()
+    expect(() => renderToStaticMarkup(<JackSelectorView id='1' jacks={jacks} update={update} fetchJacks={fetchJacks} />)).not.toThrow()
+    selector.setJack(0)()
+    expect(update).toHaveBeenCalledWith('1', 1)
+    selector.setPin(2)()
+    expect(update).toHaveBeenCalledWith('1', 2)
+    expect(JackSelector).toBeDefined()
   })
 })
