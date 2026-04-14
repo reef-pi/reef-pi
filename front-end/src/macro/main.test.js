@@ -21,11 +21,13 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
 describe('Macro UI', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
   })
+
   const macro = {
     id: 1,
     name: 'Foo',
@@ -44,8 +46,8 @@ describe('Macro UI', () => {
     fetchMock.delete('/api/macros/1', {})
 
     const wrapper = shallow(<Main store={mockStore({ macros: [macro] })} />)
-    const n = wrapper.dive()
-      .instance()
+    const n = wrapper.dive().instance()
+    expect(n).toBeInstanceOf(Main)
   })
 
   it('<MacroForm/> for create', () => {
