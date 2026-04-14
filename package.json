@@ -42,7 +42,7 @@
     "marked": "^13.0.1",
     "mini-css-extract-plugin": "2.7.6",
     "popper.js": "^1.16.1",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.32",
     "postcss-loader": "8.1.1",
     "precss": "4.0.0",
     "react": "18.3.1",
@@ -67,7 +67,7 @@
     "standard": "17.1.0",
     "style-loader": "3.3.3",
     "testcafe": "^2.4.0",
-    "webpack": "5.103.0",
+    "webpack": "5.104.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.2.2",
     "yup": "0.32.11"
