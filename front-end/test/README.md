@@ -5,6 +5,7 @@
 - Purpose: verify the app shell, login flow, and a small set of end-to-end subsystem paths without trying to exhaustively validate every form combination.
 - Current structure: `front-end/test/smoke.js` groups the suite into multiple TestCafe tests and reuses helper modules for each subsystem flow.
 - Runtime helpers: shared login, shell readiness, fatal-error assertions, and API-backed smoke reset helpers live in `front-end/test/runtime.js`.
+- Parallel migration track: `front-end/e2e/` contains the first Playwright smoke slice. It currently covers auth, seeded configuration visibility, dashboard persistence, and a mobile-shell sanity check without replacing the TestCafe gate yet.
 
 ## Smoke local run
 
@@ -36,3 +37,6 @@ Each grouped smoke test clears the prior TestCafe-created data through the authe
 - `yarn jest --runInBand`
 - `yarn jest front-end/src/configuration/capabilities.test.js --runInBand`
 - `yarn jest-update-snapshot`
+- `npx playwright install chromium`
+- `make go && make ui`
+- `yarn pw-smoke`

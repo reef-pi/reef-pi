@@ -1,0 +1,33 @@
+name: Playwright Smoke
+on: [push, pull_request]
+jobs:
+  playwright-smoke:
+    name: Playwright Smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.2'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: actions/cache@v4.3.0
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - run: make install
+      - run: npx playwright install --with-deps chromium
+      - run: make go
+      - run: make ui
+      - run: yarn pw-smoke
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report
+            test-results/playwright
+          if-no-files-found: ignore
