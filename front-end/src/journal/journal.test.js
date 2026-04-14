@@ -1,5 +1,4 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import Journal from './journal'
 import configureMockStore from 'redux-mock-store'
@@ -13,17 +12,6 @@ const config = { id: '1', name: 'pH Log', description: 'daily', unit: 'pH' }
 
 const makeStore = () => mockStore({ journals: [config], journal_usage: {} })
 
-const render = (extraProps = {}) => {
-  const store = makeStore()
-  fetchMock.getOnce('/api/journal/1/usage', {})
-  fetchMock.getOnce('/api/journal/1', config)
-  return mount(
-    <Provider store={store}>
-      <Journal config={config} readOnly={false} expanded={false} {...extraProps} />
-    </Provider>
-  )
-}
-
 describe('<Journal />', () => {
   afterEach(() => {
     fetchMock.reset()
@@ -32,11 +20,18 @@ describe('<Journal />', () => {
   })
 
   it('renders without throwing', () => {
-    expect(() => render()).not.toThrow()
+    const store = makeStore()
+    fetchMock.getOnce('/api/journal/1/usage', {})
+    fetchMock.getOnce('/api/journal/1', config)
+    expect(() => {
+      render(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
+    }).not.toThrow()
   })
 
   it('renders Add Entry button', () => {
-    const wrapper = render()
+    const store = makeStore()
+    fetchMock.getOnce('/api/journal/1/usage', {})
+    const wrapper = render(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
     const btn = wrapper.find('input#add_entry')
     expect(btn).toHaveLength(1)
   })
@@ -44,20 +39,16 @@ describe('<Journal />', () => {
   it('renders entry form after clicking Add Entry', () => {
     const store = makeStore()
     fetchMock.getOnce('/api/journal/1/usage', {})
-    const wrapper = mount(
-      <Provider store={store}>
-        <Journal config={config} readOnly={false} expanded={false} />
-      </Provider>
-    )
-    wrapper.find('input#add_entry').simulate('click')
-    // After toggle, entry form should appear
+    const wrapper = render(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
+    const btn = wrapper.find('input#add_entry')
+    btn.simulate('click')
     expect(wrapper.find('input#add_entry').prop('value')).toBe('-')
   })
 
   it('shallow renders without throwing', () => {
     const store = makeStore()
-    expect(() =>
+    expect(() => {
       shallow(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
-    ).not.toThrow()
+    }).not.toThrow()
   })
 })
