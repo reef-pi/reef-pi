@@ -4,7 +4,7 @@ import { ResponsiveContainer, Tooltip, YAxis, XAxis, LineChart, Line } from 'rec
 import { fetchJournalUsage } from 'redux/actions/journal'
 import { connect } from 'react-redux'
 
-class chart extends React.Component {
+class Chart extends React.Component {
   componentDidMount () {
     this.props.fetch(this.props.journal_id)
     const timer = window.setInterval(() => {
@@ -62,5 +62,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Chart = connect(mapStateToProps, mapDispatchToProps)(chart)
-export default Chart
+const ConnectedChart = connect(mapStateToProps, mapDispatchToProps)(Chart)
+export default ConnectedChart
+export { Chart as RawChart }

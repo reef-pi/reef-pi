@@ -1,7 +1,7 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { Provider } from 'react-redux'
-import Chart from './chart'
+import { ConnectedChart, RawChart } from './chart'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
@@ -28,7 +28,7 @@ describe('<Chart />', () => {
     fetchMock.getOnce('/api/journal/1/usage', readings)
     const store = mockStore({ journals: [], journal_usage: {} })
     expect(() =>
-      shallow(<Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>)
+      mount(<Provider store={store}><ConnectedChart journal_id='1' width={500} height={300} /></Provider>)
     ).not.toThrow()
   })
 
@@ -39,16 +39,16 @@ describe('<Chart />', () => {
       journal_usage: { '1': readings }
     })
     expect(() =>
-      shallow(<Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>)
+      mount(<Provider store={store}><ConnectedChart journal_id='1' width={500} height={300} /></Provider>)
     ).not.toThrow()
   })
 
-  it('renders ConnectedChart inside Provider', () => {
+  it('renders RawChart inside Provider', () => {
     fetchMock.getOnce('/api/journal/1/usage', readings)
     const store = mockStore({ journals: [journal], journal_usage: {} })
-    const wrapper = shallow(
-      <Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>
+    const wrapper = mount(
+      <Provider store={store}><RawChart journal_id='1' width={500} height={300} /></Provider>
     )
-    expect(wrapper.find('Connect(chart)')).toHaveLength(1)
+    expect(wrapper.find('RawChart')).toHaveLength(1)
   })
 })
