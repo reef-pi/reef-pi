@@ -21,3 +21,6 @@ coverage
 front-end/src/utils/translations/*.json
 test-data
 .vendor-new/*
+playwright-report
+test-results
+front-end/e2e/.auth
