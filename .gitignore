@@ -21,3 +21,4 @@ coverage
 front-end/src/utils/translations/*.json
 test-data
 .vendor-new/*
+.aider*
