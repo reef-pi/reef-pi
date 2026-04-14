@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 import Main from './main'
 import Capture from './capture'
 import Config from './config'
@@ -19,55 +20,50 @@ describe('Camera module', () => {
         images: [{ name: 'foo' }, { name: 'bar' }]
       }
     }
-    const m = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+    const store = mockStore(state)
+    const { getByText } = render(<Main store={store} />)
 
-    const d = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+    expect(getByText('configure')).toBeInTheDocument()
   })
 
   it('<Capture />', () => {
-    const d = shallow(<Capture store={mockStore({ camera: { latest: '' } })} />)
-      .dive()
-      .instance()
+    const store = mockStore({ camera: { latest: '' } })
+    const { getByText } = render(<Capture store={store} />)
+
+    expect(getByText('camera:take_photo')).toBeInTheDocument()
   })
 
   it('<Config />', () => {
-    let m = shallow(<Config config={{ tick_interval: 1 }} update={() => {}} />)
-    m.instance().updateBool('enable')({ target: { checked: true } })
-    m.instance().updateText('bar')({ target: {} })
-    m.update()
-    m.instance().handleSave()
-    m = m.instance()
-    m.state.config.tick_interval = 'foo'
-    m.handleSave()
+    let m = render(<Config config={{ tick_interval: 1 }} update={() => {}} />)
+    const input = m.container.querySelector('input[name="enable"]')
+    input.click()
+    m.rerender(<Config config={{ tick_interval: 1 }} update={() => {}} />)
+    const saveButton = m.container.querySelector('input[name="updateCamera"]')
+    saveButton.click()
+    m.rerender(<Config config={{ tick_interval: 'foo' }} update={() => {}} />)
+    saveButton.click()
   })
 
   it('<Gallery />', () => {
     const images = [{ thumbnail: '', src: '' }]
-    const ev = {
-      preventDefault: () => true
-    }
-    const wrapper = shallow(<Gallery images={images} />)
-    wrapper
-      .find('a')
-      .first()
-      .simulate('click', ev)
-    const m = wrapper.instance()
-
-    m.handleClose()
-    m.handleGotoPrevious()
-    m.handleGotoNext()
-    m.handleGotoImage(0)
-    m.handleOnClick()
-    m.state.current = -1
-    m.handleOnClick()
-    shallow(<Gallery />).instance()
+    const { getByRole } = render(<Gallery images={images} />)
+    const link = getByRole('link')
+    link.click()
+    const closeButton = getByRole('button', { name: /close/i })
+    closeButton.click()
+    const prevButton = getByRole('button', { name: /previous/i })
+    prevButton.click()
+    const nextButton = getByRole('button', { name: /next/i })
+    nextButton.click()
+    const thumbnail = getByRole('img')
+    thumbnail.click()
   })
 
   it('<Motion />', () => {
-    shallow(<Motion url='/foo' width={300} height={600} />)
+    const { getByRole } = render(<Motion url='/foo' width={300} height={600} />)
+    const img = getByRole('img')
+    expect(img).toHaveAttribute('src', '/foo')
+    expect(img).toHaveAttribute('width', '300')
+    expect(img).toHaveAttribute('height', '600')
   })
 })
