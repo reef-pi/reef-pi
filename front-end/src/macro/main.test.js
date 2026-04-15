@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import Main from './main'
+import { RawMain as Main } from './main'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
@@ -46,7 +46,7 @@ describe('Macro UI', () => {
     fetchMock.delete('/api/macros/1', {})
 
     const wrapper = shallow(<Main store={mockStore({ macros: [macro] })} />)
-    const n = wrapper.dive().instance()
+    const n = wrapper.instance()
     expect(n).toBeInstanceOf(Main)
   })
 

@@ -15,7 +15,7 @@ import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 
-class main extends React.Component {
+class Main extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -205,8 +205,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const Main = connect(
+export { Main as RawMain }
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
-export default Main
+)(Main)
