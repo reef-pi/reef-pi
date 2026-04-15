@@ -122,4 +122,4 @@ api-doc:
 
 .PHONY: smoke
 smoke:
-	yarn run ci-smoke
+	yarn run smoke

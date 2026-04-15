@@ -1,28 +1,29 @@
 # Frontend test notes
 
-## Smoke suite
+## E2E smoke suite
 
 - Purpose: verify the app shell, login flow, and a small set of end-to-end subsystem paths without trying to exhaustively validate every form combination.
-- Current structure: `front-end/test/smoke.js` groups the suite into multiple TestCafe tests and reuses helper modules for each subsystem flow.
-- Runtime helpers: shared login, shell readiness, fatal-error assertions, and API-backed smoke reset helpers live in `front-end/test/runtime.js`.
-- Parallel migration track: `front-end/e2e/` contains the first Playwright smoke slice. It currently covers auth, seeded configuration visibility, dashboard persistence, and a mobile-shell sanity check without replacing the TestCafe gate yet.
+- Authoritative runner: `front-end/e2e/` contains the Playwright smoke suite used by `make smoke` and CI.
+- Coverage: auth, seeded configuration visibility, dashboard persistence, and a mobile-shell sanity check.
+- Helpers: auth bootstrap, seeded API setup, and page objects live alongside the specs under `front-end/e2e/`.
+
+## Jest support files
+
+- `front-end/test/setup.js` and `front-end/test/jest_config.js` remain the shared support layer for Jest.
+- `front-end/test/class_component.js` remains a small Jest utility.
 
 ## Smoke local run
 
 - `make install`
-- `make go`
-- `make ui`
-- `make start-dev`
 - `make smoke`
 
-The CI workflow waits for `http://127.0.0.1:8080/` before running smoke. If a local run fails before the login form appears, verify the backend is still starting and inspect the server log output.
-Each grouped smoke test clears the prior TestCafe-created data through the authenticated REST API before it starts creating fixtures, so reruns no longer depend on a manually cleaned development database.
+Playwright starts the dev server itself through `playwright.config.js`, and the seeded smoke helpers clear and rebuild state through the authenticated REST API before each scenario.
 
 ## Smoke debugging
 
-- If the UI never loads, reproduce the CI order exactly instead of starting with `yarn run ci-smoke` alone.
-- If a grouped smoke test fails, fix the subsystem helper that owns that flow instead of extending later steps around it.
-- In CI, inspect `smoke-server.log` from the workflow output when boot or login fails.
+- If the web server does not come up in CI, inspect the Playwright artifact bundle.
+- If a seeded flow fails, fix the owning helper or seed builder under `front-end/e2e/` instead of broadening later assertions around it.
+- Run a headed local pass with `yarn pw-smoke:headed` when you need browser-visible debugging.
 
 ## Snapshot policy
 
@@ -38,5 +39,5 @@ Each grouped smoke test clears the prior TestCafe-created data through the authe
 - `yarn jest front-end/src/configuration/capabilities.test.js --runInBand`
 - `yarn jest-update-snapshot`
 - `npx playwright install chromium`
-- `make go && make ui`
+- `make smoke`
 - `yarn pw-smoke`
