@@ -1,0 +1,10 @@
+Task: Execute t7: Telemetry cluster
+
+Requirements:
+- Keep runtime behavior unchanged.
+- Export raw views where needed.
+- Rewrite tests to direct instance method assertions for AdafruitIO, Mqtt, and Notification.
+- Only edit the currently added files.
+
+After making the changes, commit them yourself with this exact commit message:
+Execute t7: Telemetry cluster

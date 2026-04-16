@@ -1,0 +1,11 @@
+Task: Execute t5: Macro main
+
+Requirements:
+- Keep runtime behavior unchanged.
+- Export a raw main view only if needed.
+- If MacroForm is a Formik wrapper, expose value/submit helpers only if they are needed for testability.
+- Replace shallow or mount assumptions with direct instance, helper, or element-tree assertions.
+- Only edit the currently added files.
+
+After making the changes, commit them yourself with this exact commit message:
+Execute t5: Macro main

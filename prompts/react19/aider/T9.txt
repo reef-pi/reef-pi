@@ -1,0 +1,9 @@
+Task: Execute t9: pH calibration
+
+Requirements:
+- Keep runtime behavior unchanged.
+- Migrate shallow tests to direct form or helper assertions.
+- Only edit the currently added files.
+
+After making the changes, commit them yourself with this exact commit message:
+Execute t9: pH calibration

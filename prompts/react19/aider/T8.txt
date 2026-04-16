@@ -1,0 +1,9 @@
+Task: Execute t8: Journal entry form
+
+Requirements:
+- Keep runtime behavior unchanged.
+- Replace mount-based render tests with direct helper tests or static assertions that do not require Enzyme.
+- Only edit the currently added files.
+
+After making the changes, commit them yourself with this exact commit message:
+Execute t8: Journal entry form

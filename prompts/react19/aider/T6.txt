@@ -1,0 +1,10 @@
+Task: Execute t6: Collapsible component
+
+Requirements:
+- Keep runtime behavior unchanged.
+- Replace wrapper-based tests with direct instance and returned element-tree assertions.
+- Verify edit, delete, toggle, and submit handlers stay wired.
+- Only edit the currently added files.
+
+After making the changes, commit them yourself with this exact commit message:
+Execute t6: Collapsible component
