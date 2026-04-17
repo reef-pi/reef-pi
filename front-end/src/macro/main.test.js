@@ -70,6 +70,13 @@ describe('Macro UI', () => {
     expect(fn).toHaveBeenCalled()
   })
 
+  it('<Main /> with reversible macro renders revert button', () => {
+    fetchMock.get('/api/macros', {})
+    const reversibleMacro = { ...macro, reversible: true }
+    const wrapper = shallow(<Main store={mockStore({ macros: [reversibleMacro] })} />).dive()
+    expect(wrapper).toBeDefined()
+  })
+
   it('<MacroForm /> for diving', () => {
     const fn = jest.fn()
     const wrapper = mount(
