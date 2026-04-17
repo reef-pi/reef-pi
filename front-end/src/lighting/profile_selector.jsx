@@ -28,6 +28,7 @@ const ProfileSelector = (props) => {
           <option value='lunar'>Lunar</option>
           <option value='circadian'>Circadian</option>
           <option value='cyclic'>Cyclic</option>
+          <option value='lightning'>Lightning</option>
         </select>
       </div>
       <div className='btn-group  d-none d-sm-inline'>
@@ -126,6 +127,18 @@ const ProfileSelector = (props) => {
             disabled={props.readOnly}
           />
           Cyclic
+        </label>
+        <label className='btn btn-secondary'>
+          <input
+            type='radio' value='lightning'
+            className='mr-1'
+            checked={props.value === 'lightning'}
+            name={props.name + uuid}
+            id={props.name + uuid + '-lightning'}
+            onChange={handleChange}
+            disabled={props.readOnly}
+          />
+          Lightning
         </label>
       </div>
     </div>

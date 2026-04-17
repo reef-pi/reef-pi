@@ -49,6 +49,8 @@ const channelSchema = Yup.object().shape({
         return circadianSchema
       case 'cyclic':
         return cyclicSchema
+      case 'lightning':
+        return lightningSchema
       default:
         return Yup.object().shape({
           type: Yup.string().required(i18n.t('validation:selection_required'))
@@ -202,6 +204,34 @@ const cyclicSchema = Yup.object().shape({
         .typeError(i18n.t('validation:number_required'))
         .min(0, i18n.t('validation:integer_min_required'))
         .max(99, i18n.t('validation:integer_max_required'))
+    })
+})
+
+const lightningSchema = Yup.object().shape({
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
+  config: Yup.object()
+    .typeError(i18n.t('validation:selection_required'))
+    .shape({
+      start: Yup.string()
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
+      end: Yup.string()
+        .required(i18n.t('validation:time_required'))
+        .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, i18n.t('validation:time_required')),
+      frequency: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0.1, i18n.t('validation:integer_min_required')),
+      flash_slot: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(0.1, i18n.t('validation:integer_min_required')),
+      intensity: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(1, i18n.t('validation:integer_min_required'))
+        .max(100, i18n.t('validation:integer_max_required'))
     })
 })
 
