@@ -70,6 +70,7 @@ describe('Ph Calibration', () => {
       .instance()
 
     wrapper.handleCalibrate('mid', 7)
-    wrapper.handleCalibrate('second', 4)
+    wrapper.handleCalibrate('second', 10)
+    wrapper.handleCalibrate('low', 4)
   })
 })

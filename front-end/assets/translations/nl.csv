@@ -321,6 +321,7 @@ ph:controlnothing,Niets
 ph:current_reading,Huidige meting
 ph:hysteresis,Hysteresis
 ph:hysteresis_less_than,
+ph:low_point,
 ph:lower_function,Laagste functie
 ph:lower_threshold,Laagste drempelwaarde
 ph:midpoint,Middelpunt
