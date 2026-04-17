@@ -18,6 +18,7 @@ const (
 	_randomProfileName    = "random"
 	_circadianProfileName = "circadian"
 	_cyclicProfileName    = "cyclic"
+	_lightningProfileName = "lightning"
 )
 
 type Profile interface {
@@ -62,6 +63,8 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 		return Circadian(p.Config, p.Min, p.Max)
 	case _cyclicProfileName:
 		return Cyclic(p.Config, p.Min, p.Max)
+	case _lightningProfileName:
+		return Lightning(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}

@@ -144,6 +144,26 @@ const Channel = (props) => {
           phase_shift: 0
         }
       }
+      case 'lightning': {
+        if (config) {
+          config = {
+            start: false,
+            end: false,
+            frequency: false,
+            flash_slot: false,
+            intensity: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          start: '',
+          end: '',
+          frequency: 2,
+          flash_slot: 1,
+          intensity: 100
+        }
+      }
       default:
         return {}
     }

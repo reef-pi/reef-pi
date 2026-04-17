@@ -270,6 +270,9 @@ lighting:chart_color,Color
 lighting:cyclic_period,Period
 lighting:cyclic_phase_shift,Phase Shift
 lighting:jack,Jack
+lighting:lightning_flash_slot,Flash Slot
+lighting:lightning_frequency,Frequency
+lighting:lightning_intensity,Intensity
 lighting:mode_auto,Auto
 lighting:mode_manual,Manual
 lighting:mode_mixed,Mixed
