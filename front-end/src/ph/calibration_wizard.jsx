@@ -10,7 +10,9 @@ export default class CalibrationWizard extends React.Component {
       enableMid: true,
       midCalibrated: false,
       enableSecond: false,
-      secondCalibrated: false
+      secondCalibrated: false,
+      enableLow: false,
+      lowCalibrated: false
     }
     this.handleCalibrate = this.handleCalibrate.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
@@ -45,7 +47,9 @@ export default class CalibrationWizard extends React.Component {
     if (point === 'mid') {
       this.setState({ enableMid: false, enableSecond: true })
     } else if (point === 'second') {
-      this.setState({ secondCalibrated: true, enableSecond: false })
+      this.setState({ secondCalibrated: true, enableSecond: false, enableLow: true })
+    } else if (point === 'low') {
+      this.setState({ lowCalibrated: true, enableLow: false })
     }
 
     this.props.calibrateProbe(this.props.probe.id, payload).then(() => {
@@ -55,8 +59,10 @@ export default class CalibrationWizard extends React.Component {
           enableMid: false,
           enableSecond: true
         })
+      } else if (point === 'second') {
+        this.setState({ secondCalibrated: true, enableSecond: false, enableLow: true })
       } else {
-        this.setState({ secondCalibrated: true, enableSecond: false })
+        this.setState({ lowCalibrated: true, enableLow: false })
       }
     })
   }
@@ -100,6 +106,14 @@ export default class CalibrationWizard extends React.Component {
             defaultValue='10'
             complete={this.state.secondCalibrated}
             readOnly={!this.state.enableSecond}
+            onSubmit={this.handleCalibrate}
+          />
+          <Calibrate
+            point='low'
+            label={i18next.t('ph:low_point')}
+            defaultValue='4'
+            complete={this.state.lowCalibrated}
+            readOnly={!this.state.enableLow}
             onSubmit={this.handleCalibrate}
           />
           <div className='row'>

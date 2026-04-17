@@ -321,6 +321,7 @@ ph:controlnothing,-keine Steuerung-
 ph:current_reading,aktueller Wert
 ph:hysteresis,Hysterese
 ph:hysteresis_less_than,Die Hysterese muss kleiner als der Abstand der Schwellwerte sein!
+ph:low_point,
 ph:lower_function,pH senken
 ph:lower_threshold,unterer Schwellwert
 ph:midpoint,Mittenwert

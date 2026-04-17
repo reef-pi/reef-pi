@@ -321,6 +321,7 @@ ph:controlnothing,无
 ph:current_reading,当前读数
 ph:hysteresis,
 ph:hysteresis_less_than,
+ph:low_point,
 ph:lower_function,下层功能
 ph:lower_threshold,下阈值
 ph:midpoint,正中央

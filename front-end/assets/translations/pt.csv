@@ -321,6 +321,7 @@ ph:controlnothing,Nada
 ph:current_reading,Leitura Atual
 ph:hysteresis,hysteresis
 ph:hysteresis_less_than, hysteresis Menos de 
+ph:low_point,
 ph:lower_function,Função em baixo
 ph:lower_threshold,Função na zona
 ph:midpoint,Ponto médio

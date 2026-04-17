@@ -55,11 +55,17 @@ func (c *Controller) Setup() error {
 		c.Lock()
 		defer c.Unlock()
 
-		calibrator, err := hal.CalibratorFactory(ms)
-		if err == nil {
+		var calibrator hal.Calibrator
+		var cerr error
+		if len(ms) == 3 {
+			calibrator, cerr = newThreePointCalibrator(ms)
+		} else {
+			calibrator, cerr = hal.CalibratorFactory(ms)
+		}
+		if cerr == nil {
 			c.calibrators[k] = calibrator
 		}
-		return err
+		return cerr
 	})
 	if err != nil {
 		return err

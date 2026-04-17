@@ -277,7 +277,12 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 		return fmt.Errorf("Probe must be disabled from automatic polling before running calibration")
 	}
 
-	cal, err := hal.CalibratorFactory(ms)
+	var cal hal.Calibrator
+	if len(ms) == 3 {
+		cal, err = newThreePointCalibrator(ms)
+	} else {
+		cal, err = hal.CalibratorFactory(ms)
+	}
 	if err != nil {
 		return err
 	}
@@ -306,8 +311,7 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
 		}
 		// Remove any existing point with the same expected value so re-calibrating
-		// a single point does not accumulate duplicates that would push the slice
-		// past the two-point limit accepted by hal.CalibratorFactory.
+		// a single point does not accumulate duplicates.
 		filtered := calibration[:0]
 		for _, m := range calibration {
 			if m.Expected != point.Expected {
@@ -320,7 +324,13 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 	defer c.Unlock()
 
 	calibration = append(calibration, hal.Measurement{Expected: point.Expected, Observed: point.Observed})
-	cal, err := hal.CalibratorFactory(calibration)
+
+	var cal hal.Calibrator
+	if len(calibration) == 3 {
+		cal, err = newThreePointCalibrator(calibration)
+	} else {
+		cal, err = hal.CalibratorFactory(calibration)
+	}
 	if err != nil {
 		return err
 	}
