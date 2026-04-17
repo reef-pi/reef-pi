@@ -62,6 +62,22 @@ describe('LightSchema', () => {
     return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(false)
   })
 
+  it('validates a lightning profile', () => {
+    const ch = validChannel('lightning', {
+      start: '08:00:00',
+      end: '20:00:00',
+      frequency: 2,
+      flash_slot: 1,
+      intensity: 100
+    })
+    return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
+  })
+
+  it('rejects lightning profile missing required fields', () => {
+    const ch = validChannel('lightning', { start: '08:00:00' })
+    return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(false)
+  })
+
   it('uses default (unknown type) profile schema — accepts when type string is present', () => {
     const ch = validChannel('unknown', {})
     return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
