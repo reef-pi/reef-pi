@@ -60,14 +60,16 @@ describe('Ph Calibration', () => {
       })
     })
     const probe = { id: 1 }
-    const wrapper = shallow(<CalibrationWizard
-      probe={probe}
-      currentReading={[8.7, 9.0, 7.5]}
-      cancel={fn}
-      confirm={fn}
-      calibrateProbe={fn}
-    />)
-      .instance()
+    const wrapper = new CalibrationWizard(
+      {
+        probe,
+        currentReading: [8.7, 9.0, 7.5],
+        cancel: fn,
+        confirm: fn,
+        calibrateProbe: fn
+      }
+    )
+    wrapper.setState = jest.fn()
 
     wrapper.handleCalibrate('mid', 7)
     wrapper.handleCalibrate('second', 4)
