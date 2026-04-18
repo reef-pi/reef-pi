@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import Main from './main'
 import Inlets from './inlets'
@@ -35,6 +35,18 @@ jest.mock('utils/confirm', () => {
   }
 })
 describe('Connectors', () => {
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
+
+  const change = (node, event) => {
+    act(() => {
+      node.prop('onChange')(event)
+    })
+  }
+
   it('<Main />', () => {
     shallow(<Provider store={mockStore({})}><Main /></Provider>)
   })
@@ -49,9 +61,7 @@ describe('Connectors', () => {
         <InletSelector active='1' update={() => true} />
       </Provider>
     )
-    m.find('a')
-      .first()
-      .simulate('click')
+    click(m.find('a').first())
   })
 
   it('<Inlets />', () => {
@@ -64,11 +74,13 @@ describe('Connectors', () => {
         <Inlets />
       </Provider>
     )
-    wrapper.find('#add_inlet').simulate('click')
-    wrapper.find('#inletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: 'rpi' } })
-    wrapper.find('#inletReverse').simulate('change')
-    wrapper.find('#createInlet').simulate('click')
+    click(wrapper.find('#add_inlet'))
+    wrapper.update()
+    change(wrapper.find('#inletName'), { target: { value: 'foo' } })
+    change(wrapper.find('.custom-select').slice(1, 2), { target: { value: 'rpi' } })
+    change(wrapper.find('#inletReverse'), {})
+    click(wrapper.find('#createInlet'))
+    wrapper.update()
     expect(wrapper.find(Inlet).length).toBe(1)
   })
 
@@ -84,11 +96,12 @@ describe('Connectors', () => {
         drivers={stockDrivers}
         driver={stockDrivers[0]}
       />)
-    m.find('.edit-inlet').simulate('click')
-    m.find('.inlet-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.custom-select').simulate('change', { target: { value: 'rpi' } })
-    m.find('.inlet-reverse').simulate('change')
-    m.find('.edit-inlet').simulate('click')
+    click(m.find('.edit-inlet'))
+    m.update()
+    change(m.find('.inlet-name'), { target: { value: 'foo' } })
+    change(m.find('.custom-select'), { target: { value: 'rpi' } })
+    change(m.find('.inlet-reverse'), {})
+    click(m.find('.edit-inlet'))
   })
 
   it('<Jacks />', () => {
@@ -101,13 +114,14 @@ describe('Connectors', () => {
       <Jacks />
     </Provider>
     )
-    m.find('#add_jack').simulate('click')
-    m.find('#jackName').simulate('change', { target: { value: 'foo' } })
-    m.find('#jackPins').simulate('change', { target: { value: '4,L' } })
-    m.find('.jack-type [name*="driver"]').simulate('click')
-    m.find('#createJack').simulate('click')
-    m.find('#jackPins').simulate('change', { target: { value: '4' } })
-    m.find('#createJack').simulate('click')
+    click(m.find('#add_jack'))
+    m.update()
+    change(m.find('#jackName'), { target: { value: 'foo' } })
+    change(m.find('#jackPins'), { target: { value: '4,L' } })
+    change(m.find('.jack-type [name*="driver"]'), { target: { value: '1' } })
+    click(m.find('#createJack'))
+    change(m.find('#jackPins'), { target: { value: '4' } })
+    click(m.find('#createJack'))
   })
 
   it('<Jack />', () => {
@@ -123,14 +137,14 @@ describe('Connectors', () => {
         reverse={false}
       />
     )
-    m.find('.jack-edit').simulate('click')
-    m.find('.jack-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.jack-pin').simulate('change', { target: { value: '4,L' } })
-    m.find('.jack-edit').simulate('click')
-    m.find('#jack-1-driver-select').simulate('click')
-    m.find('#jack-1-driver-1').simulate('click')
-    m.find('.jack-pin').simulate('change', { target: { value: '4' } })
-    m.find('.jack-edit').simulate('click')
+    click(m.find('.jack-edit'))
+    m.update()
+    change(m.find('.jack-name'), { target: { value: 'foo' } })
+    change(m.find('.jack-pin'), { target: { value: '4,L' } })
+    click(m.find('.jack-edit'))
+    change(m.find('#jack-1-driver-select'), { target: { value: '1' } })
+    change(m.find('.jack-pin'), { target: { value: '4' } })
+    click(m.find('.jack-edit'))
   })
   it('<Outlets />', () => {
     const state = {
@@ -142,11 +156,13 @@ describe('Connectors', () => {
       <Outlets />
     </Provider>
     )
-    wrapper.find('#add_outlet').simulate('click')
-    wrapper.find('#outletName').simulate('change', { target: { value: 'foo' } })
-    wrapper.find('.custom-select').slice(1,2).simulate('change', { target: { value: '1' } })
-    wrapper.find('#outletReverse').simulate('change')
-    wrapper.find('#createOutlet').simulate('click')
+    click(wrapper.find('#add_outlet'))
+    wrapper.update()
+    change(wrapper.find('#outletName'), { target: { value: 'foo' } })
+    change(wrapper.find('.custom-select').slice(1, 2), { target: { value: '1' } })
+    change(wrapper.find('#outletReverse'), {})
+    click(wrapper.find('#createOutlet'))
+    wrapper.update()
     expect(wrapper.find(Outlet).length).toBe(1)
   })
   it('<Outlet />', () => {
@@ -160,11 +176,12 @@ describe('Connectors', () => {
         driver={stockDrivers[0]}
         drivers={stockDrivers}
       />)
-    m.find('.edit-outlet').simulate('click')
-    m.find('.outlet-name').simulate('change', { target: { value: 'foo' } })
-    m.find('.custom-select').simulate('change', { target: { value: '1' } })
-    m.find('.outlet-reverse').simulate('change')
-    m.find('.edit-outlet').simulate('click')
+    click(m.find('.edit-outlet'))
+    m.update()
+    change(m.find('.outlet-name'), { target: { value: 'foo' } })
+    change(m.find('.custom-select'), { target: { value: '1' } })
+    change(m.find('.outlet-reverse'), {})
+    click(m.find('.edit-outlet'))
   })
 
   it('byCapability returns true for matching capability', () => {
@@ -190,7 +207,7 @@ describe('Connectors', () => {
     const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
     const update = jest.fn()
     const m = shallow(<Pin driver={driver} update={update} type='digital-output' current={1} />)
-    m.find('select').simulate('change', { target: { value: '2' } })
+    change(m.find('select'), { target: { value: '2' } })
     expect(update).toHaveBeenCalledWith(2)
   })
 
@@ -228,13 +245,14 @@ describe('Connectors', () => {
       />
     )
     // click edit
-    m.find('.analog_input-edit').simulate('click')
+    click(m.find('.analog_input-edit'))
     expect(m.instance().state.edit).toBe(true)
     // change name
-    m.find('.analog_input-name').simulate('change', { target: { value: 'New Name' } })
+    m.update()
+    change(m.find('.analog_input-name'), { target: { value: 'New Name' } })
     expect(m.instance().state.name).toBe('New Name')
     // save
-    m.find('.analog_input-edit').simulate('click')
+    click(m.find('.analog_input-edit'))
     expect(update).toHaveBeenCalled()
     expect(m.instance().state.edit).toBe(false)
   })
@@ -252,7 +270,7 @@ describe('Connectors', () => {
         remove={remove}
       />
     )
-    m.find('.analog_input-remove').simulate('click')
+    click(m.find('.analog_input-remove'))
     expect(remove).toHaveBeenCalled()
   })
 
@@ -269,9 +287,11 @@ describe('Connectors', () => {
         <AnalogInputs />
       </Provider>
     )
-    wrapper.find('#add_analog_input').simulate('click')
-    wrapper.find('#analog_inputName').simulate('change', { target: { value: 'New Sensor' } })
-    wrapper.find('#createAnalogInput').simulate('click')
+    click(wrapper.find('#add_analog_input'))
+    wrapper.update()
+    change(wrapper.find('#analog_inputName'), { target: { value: 'New Sensor' } })
+    click(wrapper.find('#createAnalogInput'))
+    wrapper.update()
     expect(wrapper.find(AnalogInput).length).toBe(1)
   })
 })

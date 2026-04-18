@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow } from 'enzyme'
 import Equipment from './equipment'
 import ViewEquipment from './view_equipment'
@@ -28,6 +28,11 @@ jest.mock('utils/confirm', () => {
 describe('Equipment ui', () => {
   const eqs = [{ id: '1', outlet: '1', name: 'Foo', on: true }]
   const outlets = [{ id: '1', name: 'O1' }]
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -142,7 +147,7 @@ describe('Equipment ui', () => {
       />
     )
 
-    wrapper.find('Switch').simulate('click')
+    click(wrapper.find('Switch'))
   })
 
   it('<EditEquipment />', () => {

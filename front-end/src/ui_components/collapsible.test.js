@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import CollapsibleList from './collapsible_list'
 import Collapsible from './collapsible'
@@ -6,11 +6,16 @@ import Collapsible from './collapsible'
 
 describe('Collapsible', () => {
   const noop = () => {}
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
   const Content = (props) => {
     return (
       <div>
         This is inner content
-        <button type='button' id='submit' onClick={props.onSubmit()}>click</button>
+        <button type='button' id='submit' onClick={props.onSubmit}>click</button>
       </div>
     )
   }
@@ -59,7 +64,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
+    click(wrapper.find('#edit-test'), { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -70,7 +75,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#delete-test').simulate('click', { stopPropagation: noop })
+    click(wrapper.find('#delete-test'), { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -81,7 +86,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('div.collapsible-title').simulate('click')
+    click(wrapper.find('div.collapsible-title'))
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -92,7 +97,7 @@ describe('Collapsible', () => {
         <Content onSubmit={noop} />
       </Collapsible>
     )
-    wrapper.find('#submit').simulate('click', { stopPropagation: noop })
+    click(wrapper.find('#submit'), { stopPropagation: noop })
     expect(jestFn).toHaveBeenCalled()
   })
 
@@ -104,7 +109,7 @@ describe('Collapsible', () => {
         </Collapsible>
       </CollapsibleList>
     )
-    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
+    click(wrapper.find('#edit-test'), { stopPropagation: noop })
   })
 
   it('should add new panel as collapsed', () => {
