@@ -13,7 +13,7 @@ class inletSelector extends React.Component {
       }
     })
     this.state = {
-      inlet: inlet
+      inlet
     }
     this.inlets = this.inlets.bind(this)
     this.set = this.set.bind(this)

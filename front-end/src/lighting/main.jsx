@@ -112,7 +112,7 @@ class main extends React.Component {
         max: 100,
         name: 'Channel-' + (idx + 1),
         on: true,
-        pin: pin,
+        pin,
         value: 0,
         profile: {
           type: 'fixed',
@@ -128,7 +128,7 @@ class main extends React.Component {
       name: $('#lightName').val(),
       jack: String(jack.id),
       enable: true,
-      channels: channels
+      channels
     }
 
     this.props.createLight(payload)

@@ -18,7 +18,7 @@ class chart extends React.Component {
   componentDidMount () {
     this.updateUsage()
     const timer = window.setInterval(this.updateUsage, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {
@@ -43,13 +43,13 @@ class chart extends React.Component {
         <ResponsiveContainer height={this.props.height} width='100%'>
           <BarChart data={metrics} barSize={8}>
             <Bar dataKey='pump' fill='#33b5e5' isAnimationActive={false} />
-            <YAxis type="number">
-                <Label
-                    value={i18next.t('sec')}
-                    position="insideLeft"
-                    angle={-90}
-                    style={{ textAnchor: 'middle' }}
-                    />
+            <YAxis type='number'>
+              <Label
+                value={i18next.t('sec')}
+                position='insideLeft'
+                angle={-90}
+                style={{ textAnchor: 'middle' }}
+              />
             </YAxis>
             <XAxis dataKey='ts' type='number' scale='time' domain={['auto', 'auto']} tickFormatter={formatChartTime} />
             <Tooltip />

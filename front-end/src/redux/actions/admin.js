@@ -70,6 +70,6 @@ export const upgrade = (version) => {
     reduxPost({
       url: '/api/admin/upgrade',
       success: upgraded,
-      data: { version: version }
+      data: { version }
     }))
 }

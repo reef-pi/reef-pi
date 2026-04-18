@@ -22,11 +22,11 @@ export default class FixedProfile extends React.Component {
       if (isNaN(value)) {
         value = ''
       }
-      this.setState({ value: value })
+      this.setState({ value })
       this.props.onChangeHandler({
         start: this.props.config.start,
         end: this.props.config.end,
-        value: value
+        value
       })
     }
   }

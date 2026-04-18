@@ -29,7 +29,7 @@ export default class Inlet extends React.Component {
   handleDriverChange (e) {
     const driver = this.props.drivers.filter(d => d.id === e.target.value)[0] || {}
     this.setState({
-      driver: driver
+      driver
     })
   }
 

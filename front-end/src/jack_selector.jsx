@@ -13,7 +13,7 @@ class jackSelector extends React.Component {
       }
     })
     this.state = {
-      jack: jack,
+      jack,
       pin: jack === undefined ? undefined : jack.pins[0]
     }
 

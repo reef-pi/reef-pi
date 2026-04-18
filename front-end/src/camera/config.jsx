@@ -31,7 +31,7 @@ export default class Config extends React.Component {
       const config = this.state.config
       config[k] = ev.target.checked
       this.setState({
-        config: config,
+        config,
         updated: true
       })
     }.bind(this))
@@ -42,7 +42,7 @@ export default class Config extends React.Component {
       const config = this.state.config
       config[k] = ev.target.value
       this.setState({
-        config: config,
+        config,
         updated: true
       })
     }.bind(this)

@@ -13,7 +13,7 @@ export default class AutoProfile extends React.Component {
     if (props.config && props.config.values && Array.isArray(props.config.values)) {
       values = props.config.values
     }
-    this.state = { values: values }
+    this.state = { values }
 
     this.curry = this.curry.bind(this)
     this.handleAddPoint = this.handleAddPoint.bind(this)
@@ -35,9 +35,9 @@ export default class AutoProfile extends React.Component {
     this.props.onChangeHandler({
       start: this.props.config.start,
       end: this.props.config.end,
-      values: values
+      values
     })
-    this.setState({ values: values })
+    this.setState({ values })
   }
 
   handleRemovePoint (x) {
@@ -46,9 +46,9 @@ export default class AutoProfile extends React.Component {
     this.props.onChangeHandler({
       start: this.props.config.start,
       end: this.props.config.end,
-      values: values
+      values
     })
-    this.setState({ values: values })
+    this.setState({ values })
   }
 
   curry (i) {
@@ -62,9 +62,9 @@ export default class AutoProfile extends React.Component {
         this.props.onChangeHandler({
           start: this.props.config.start,
           end: this.props.config.end,
-          values: values
+          values
         })
-        this.setState({ values: values })
+        this.setState({ values })
       }
     }
   }

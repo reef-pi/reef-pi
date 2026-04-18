@@ -9,7 +9,6 @@ import 'isomorphic-fetch'
 const mockStore = configureMockStore([thunk])
 
 const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
-
 describe('JackSelector', () => {
   it('renders without throwing with matching jack', () => {
     const store = mockStore({ jacks })
