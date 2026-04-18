@@ -97,6 +97,19 @@ const EditEquipment = ({
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
         <div className='p-2 mr-auto'>
+          <label className='mr-2'>{i18next.t('equipment:boot_delay')}</label>
+          <input
+            type='number'
+            min='0'
+            name='boot_delay'
+            value={values.boot_delay}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={classNames('form-control', { 'is-invalid': ShowError('boot_delay', touched, errors) })}
+          />
+          <ErrorFor errors={errors} touched={touched} name='boot_delay' />
+        </div>
+        <div className='p-2 mr-auto'>
           <button type='submit' id='add_equipment' data-testid='smoke-equipment-submit'>
             {FaSave()}
           </button>

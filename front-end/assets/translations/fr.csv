@@ -212,6 +212,7 @@ doser:volume_ml,
 doser:vpr,
 doser:warn_delete,
 doser:warn_reset,
+equipment:boot_delay,
 equipment:chart:barchart,
 equipment:chart:ctrlpanel,
 equipment:sort,Sort
