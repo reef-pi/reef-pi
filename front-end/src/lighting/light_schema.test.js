@@ -62,6 +62,16 @@ describe('LightSchema', () => {
     return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(false)
   })
 
+  it('validates a solar profile', () => {
+    const ch = validChannel('solar', { latitude: 37.7, longitude: -122.4 })
+    return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
+  })
+
+  it('rejects solar profile with latitude out of range', () => {
+    const ch = validChannel('solar', { latitude: 91, longitude: 0 })
+    return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(false)
+  })
+
   it('validates a lightning profile', () => {
     const ch = validChannel('lightning', {
       start: '08:00:00',
