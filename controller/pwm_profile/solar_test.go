@@ -88,7 +88,8 @@ func TestSolar_CachesForDay(t *testing.T) {
 	cfg, _ := json.Marshal(solarConfig{Latitude: 37.7, Longitude: -122.4})
 	s, _ := SolarWithFetcher(cfg, 0, 100, fetcher)
 
-	now := time.Now()
+	// Use a fixed noon UTC time so the 3 calls never straddle a UTC-day boundary.
+	now := time.Date(2026, 1, 15, 12, 0, 0, 0, time.UTC)
 	s.Get(now)
 	s.Get(now.Add(1 * time.Hour))
 	s.Get(now.Add(2 * time.Hour))
