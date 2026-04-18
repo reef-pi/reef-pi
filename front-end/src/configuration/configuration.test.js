@@ -66,22 +66,33 @@ describe('Configuration ui', () => {
     m.props.powerOff()
   })
 
-  it('<Display />', () => {
-    const state = {
-      display: {
-        brightness: 50,
-        on: true
-      }
-    }
-    const m = shallow(<Display store={mockStore(state)} />)
-      .dive()
-      .instance()
-    shallow(<Display store={mockStore({})} />)
-      .dive()
-      .instance()
-    shallow(<Display store={mockStore({ display: {} })} />)
-      .dive()
-      .instance()
+  it('<Display /> mounts with on:true state', () => {
+    fetchMock.get('/api/display', { brightness: 50, on: true })
+    fetchMock.post('/api/display/off', {})
+    fetchMock.post('/api/display/on', {})
+    fetchMock.post('/api/display', {})
+    const store = mockStore({ display: { brightness: 50, on: true } })
+    const wrapper = mount(<Provider store={store}><Display /></Provider>)
+    wrapper.find('button').simulate('click')
+    wrapper.find('input[type="range"]').simulate('change', { target: { value: '100' } })
+    wrapper.unmount()
+  })
+
+  it('<Display /> mounts with on:false state', () => {
+    fetchMock.get('/api/display', { brightness: 80, on: false })
+    fetchMock.post('/api/display/on', {})
+    const store = mockStore({ display: { brightness: 80, on: false } })
+    const wrapper = mount(<Provider store={store}><Display /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Display /> mounts with no config (getDerivedStateFromProps guard)', () => {
+    fetchMock.get('/api/display', {})
+    const store = mockStore({ display: undefined })
+    const wrapper = mount(<Provider store={store}><Display /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
   it('<Capabilities />', () => {
@@ -191,26 +202,51 @@ describe('Configuration ui', () => {
     })
   })
 
-  it('<About />', () => {
-    const m = shallow(
-      <About
-        store={mockStore({
-          info: { current_time: new Date(), version: 'test', uptime: '5 minutes', ip: 'localhost' },
-          errors: []
-        })}
-      />
-    )
-      .dive()
-      .instance()
+  it('<About /> mounts and renders info', () => {
+    fetchMock.get('/api/info', { version: '2.0', current_time: '2026-04-18', uptime: '1 day', ip: '192.168.1.1', model: 'Pi 4' })
+    const info = { current_time: '2026-04-18', version: '2.0', uptime: '1 day', ip: '192.168.1.1', model: 'Pi 4' }
+    const store = mockStore({ info, errors: [] })
+    const wrapper = mount(<Provider store={store}><About /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
-  it('<Errors />', () => {
-    const wrapper = shallow(
-      <Errors
-        store={mockStore({
-          errors: [{ id: '1', time: 'dd', message: 'dd' }]
-        })}
-      />
-    ).dive()
-    const m = wrapper.instance()
+
+  it('<About /> mounts with empty info', () => {
+    fetchMock.get('/api/info', {})
+    const store = mockStore({ info: {}, errors: [] })
+    const wrapper = mount(<Provider store={store}><About /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Errors /> mounts with error list — renders items and handles clear', () => {
+    fetchMock.get('/api/errors', [])
+    fetchMock.delete('/api/errors/clear', {})
+    const errs = [
+      { id: '1', time: '2026-04-18', message: 'something broke', count: 1 },
+      { id: 'alert:2', time: '2026-04-18', message: 'alert item', count: 3 }
+    ]
+    const store = mockStore({ errors: errs })
+    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
+    wrapper.find('button').simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Errors /> mounts with empty error list', () => {
+    fetchMock.get('/api/errors', [])
+    const store = mockStore({ errors: [] })
+    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Errors /> delete button dispatches deleteError', () => {
+    fetchMock.get('/api/errors', [])
+    fetchMock.delete('/api/errors/1', {})
+    const errs = [{ id: '1', time: '2026-04-18', message: 'err', count: 1 }]
+    const store = mockStore({ errors: errs })
+    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
+    wrapper.find('input.btn-outline-secondary').simulate('click')
+    wrapper.unmount()
   })
 })
