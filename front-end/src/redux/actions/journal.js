@@ -38,7 +38,7 @@ export const journalUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'JOURNAL_USAGE_LOADED',
-      payload: { data: s, id: id }
+      payload: { data: s, id }
     })
   }
 }
@@ -85,7 +85,7 @@ export const journalRecorded = (id) => {
   return (s) => {
     return ({
       type: 'JOURNAL_RECORDED',
-      payload: { data: s, id: id }
+      payload: { data: s, id }
     })
   }
 }

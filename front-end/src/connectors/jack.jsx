@@ -64,7 +64,7 @@ export default class Jack extends React.Component {
     }
     const payload = {
       name: this.state.name,
-      pins: pins,
+      pins,
       driver: this.state.driver,
       reverse: this.state.reverse
     }

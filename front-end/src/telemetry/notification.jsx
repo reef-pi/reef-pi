@@ -19,7 +19,7 @@ export default class NotificationSettings extends React.Component {
       const config = this.state.config
       config[key] = ev.target.value
       this.setState({
-        config: config
+        config
       })
       this.props.update(config)
     }.bind(this)
@@ -31,7 +31,7 @@ export default class NotificationSettings extends React.Component {
       const recipients = ev.target.value.split(',')
       config.to = recipients.map(s => s.trim())
       this.setState({
-        config: config
+        config
       })
       this.props.update(config)
     }.bind(this)

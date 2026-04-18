@@ -84,7 +84,7 @@ class settings extends React.Component {
     if (notify !== undefined) {
       const settings = this.state.settings
       settings.health_check = notify
-      this.setState({ settings: settings, updated: true })
+      this.setState({ settings, updated: true })
     }
     return this.state
   }
@@ -94,7 +94,7 @@ class settings extends React.Component {
       const settings = this.state.settings
       settings[key] = ev.target.checked
       this.setState({
-        settings: settings,
+        settings,
         updated: true
       })
     }.bind(this)
@@ -104,7 +104,7 @@ class settings extends React.Component {
     const settings = this.state.settings
     settings.address = ev.target.value
     this.setState({
-      settings: settings,
+      settings,
       updated: true
     })
   }
@@ -134,7 +134,7 @@ class settings extends React.Component {
 
     settings.https = value
     this.setState({
-      settings: settings,
+      settings,
       updated: true
     })
   }
@@ -158,7 +158,7 @@ class settings extends React.Component {
     const settings = this.state.settings
     settings.capabilities = capabilities
     this.setState({
-      settings: settings,
+      settings,
       updated: true
     })
   }
@@ -167,7 +167,7 @@ class settings extends React.Component {
     let settings = this.state.settings
     if (SettingsSchema.isValidSync(settings)) {
       settings = SettingsSchema.cast(settings)
-      this.setState({ updated: false, settings: settings })
+      this.setState({ updated: false, settings })
       this.props.updateSettings(settings)
       showUpdateSuccessful()
       return
@@ -186,7 +186,7 @@ class settings extends React.Component {
       const settings = this.state.settings
       settings[label] = ev.target.value
       this.setState({
-        settings: settings,
+        settings,
         updated: true
       })
     }.bind(this)

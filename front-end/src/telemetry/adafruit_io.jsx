@@ -15,7 +15,7 @@ export default class AdafruitIO extends React.Component {
     return function (ev) {
       const adafruitio = this.state.adafruitio
       adafruitio[label] = ev.target.value
-      this.setState({ adafruitio: adafruitio })
+      this.setState({ adafruitio })
       this.props.update(this.state.adafruitio)
     }.bind(this)
   }
@@ -23,7 +23,7 @@ export default class AdafruitIO extends React.Component {
   handleUpdateEnable (ev) {
     const adafruitio = this.state.adafruitio
     adafruitio.enable = ev.target.checked
-    this.setState({ adafruitio: adafruitio })
+    this.setState({ adafruitio })
     this.props.update(this.state.adafruitio)
   }
 

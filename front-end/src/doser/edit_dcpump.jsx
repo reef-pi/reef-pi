@@ -142,16 +142,16 @@ const EditDcPump = ({
               </small>
             </div>
           </div>
-        )
+          )
         : (
           <div className='col-12 col-sm-6 col-md-3'>
             <div className='form-group'>
               <label htmlFor='duration'>{i18n.t('doser:duration')}</label>
               <div className='input-group'>
-              <Field
-                name='duration'
-                data-testid='smoke-doser-duration'
-                readOnly={readOnly}
+                <Field
+                  name='duration'
+                  data-testid='smoke-doser-duration'
+                  readOnly={readOnly}
                   type='number'
                   className={classNames('form-control', {
                     'is-invalid': ShowError('duration', touched, errors)
@@ -167,7 +167,7 @@ const EditDcPump = ({
               </div>
             </div>
           </div>
-        )
+          )
       )}
 
       <div className='col col-sm-6 col-md-3'>

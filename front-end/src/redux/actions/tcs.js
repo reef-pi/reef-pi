@@ -18,7 +18,7 @@ export const tcUsageLoaded = (id) => {
   return (s) => {
     return ({
       type: 'TC_USAGE_LOADED',
-      payload: { id: id, usage: s }
+      payload: { id, usage: s }
     })
   }
 }
@@ -78,7 +78,7 @@ export const tcReadComplete = (id) => {
   return (s) => {
     return ({
       type: 'TC_READING_COMPLETE',
-      payload: { reading: s, id: id }
+      payload: { reading: s, id }
     })
   }
 }
