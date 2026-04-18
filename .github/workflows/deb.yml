@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - snapshot_deb_package
   pull_request:
     branches:
       - main
@@ -18,7 +19,10 @@ jobs:
           - pi0
           - pi3
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.0
