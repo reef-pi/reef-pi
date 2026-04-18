@@ -100,21 +100,21 @@ func (f *factory) NewDriver(params map[string]interface{}, _ interface{}) (hal.D
 	address := fmt.Sprint(params[paramAddress])
 	outlets := 1
 	if v, ok := params[paramOutlets]; ok {
-		if n, err := strconv.Atoi(fmt.Sprint(v)); err == nil && n > 0 {
+		if n, err := strconv.Atoi(fmt.Sprint(v)); err == nil && n > 0 && n <= maxOutlets {
 			outlets = n
 		}
 	}
 	username := fmt.Sprint(params[paramUsername])
 	password := fmt.Sprint(params[paramPassword])
 
-	pins := make([]hal.DigitalOutputPin, outlets)
+	pins := make([]hal.DigitalOutputPin, 0, maxOutlets)
 	for i := 0; i < outlets; i++ {
-		pins[i] = &outletPin{
+		pins = append(pins, &outletPin{
 			index:    i + 1, // Tasmota uses 1-based Power numbering
 			address:  address,
 			username: username,
 			password: password,
-		}
+		})
 	}
 	return &driver{meta: f.meta, pins: pins}, nil
 }
