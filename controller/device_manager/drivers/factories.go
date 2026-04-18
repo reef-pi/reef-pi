@@ -21,6 +21,7 @@ import (
 	rpihal "github.com/reef-pi/rpi/hal"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers/ds18b20"
+	"github.com/reef-pi/reef-pi/controller/device_manager/drivers/esphome"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers/wled"
 )
 
@@ -44,6 +45,7 @@ var driversMap = map[string]hal.DriverFactory{
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
 	"sht31d":       sht3x.Factory(),
+	"esphome":      esphome.Factory(),
 	"tasmota-http": tasmota.HttpDriverFactory(),
 	"wled":         wled.Factory(),
 }

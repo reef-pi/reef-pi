@@ -20,8 +20,9 @@ const mockAlways = jest.fn(callback => {
   return { promise: jest.fn(() => Promise.resolve()) }
 })
 const mockRender = jest.fn(element => {
-  if (element && element.ref) {
-    element.ref.current = { promise: { always: mockAlways } }
+  const modalRef = element?.props?.ref
+  if (modalRef) {
+    modalRef.current = { promise: { always: mockAlways } }
   }
 })
 const mockUnmount = jest.fn()

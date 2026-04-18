@@ -16,7 +16,7 @@ export default class Mqtt extends React.Component {
       const config = this.state.config
       config[label] = ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value
       config.qos = parseInt(config.qos)
-      this.setState({ config: config })
+      this.setState({ config })
       this.props.update(this.state.config)
     }.bind(this)
   }
@@ -24,7 +24,7 @@ export default class Mqtt extends React.Component {
   handleUpdateEnable (ev) {
     const config = this.state.config
     config.enable = ev.target.checked
-    this.setState({ config: config })
+    this.setState({ config })
     this.props.update(this.state.config)
   }
 

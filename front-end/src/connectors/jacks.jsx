@@ -90,7 +90,7 @@ class jacks extends React.Component {
     }
     const payload = {
       name: this.state.JackName,
-      pins: pins,
+      pins,
       driver: this.state.JackDriver,
       reverse: this.state.JackReverse
     }

@@ -1,5 +1,7 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
+import fetchMock from 'fetch-mock'
 import Main from './main'
 import Instance from './instance'
 import InstanceForm from './instance_form'
@@ -18,22 +20,34 @@ const instanceData = { id: '1', name: 'Remote Tank', address: 'http://192.168.1.
 const fn = jest.fn()
 
 describe('Instances Main', () => {
-  it('renders list with instances', () => {
-    const store = mockStore({ instances: [instanceData] })
-    const wrapper = shallow(<Main store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
   })
 
-  it('renders empty list', () => {
-    const store = mockStore({ instances: [] })
-    const wrapper = shallow(<Main store={store} />).dive()
+  it('mounts with instance list', () => {
+    fetchMock.get('/api/instances', [instanceData])
+    const store = mockStore({ instances: [instanceData] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
     expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('mounts with empty instance list', () => {
+    fetchMock.get('/api/instances', [])
+    const store = mockStore({ instances: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
   it('toggles add form via button click', () => {
+    fetchMock.get('/api/instances', [])
     const store = mockStore({ instances: [] })
-    const wrapper = shallow(<Main store={store} />).dive()
-    expect(wrapper).toBeDefined()
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#add_instance').simulate('click')
+    wrapper.find('#add_instance').simulate('click')
+    wrapper.unmount()
   })
 })
 

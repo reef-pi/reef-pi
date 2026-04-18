@@ -13,7 +13,7 @@ export default class ManualLight extends React.Component {
       }
     }
     this.state = {
-      channels: channels
+      channels
     }
 
     this.handleValueChange = this.handleValueChange.bind(this)
@@ -31,7 +31,7 @@ export default class ManualLight extends React.Component {
     if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
       const channels = Object.assign({}, this.state.channels)
       channels[e.target.name].value = e.target.value
-      this.setState({ channels: channels })
+      this.setState({ channels })
 
       if (isNaN(parseFloat(e.target.value)) === false) {
         this.debouncedChange(e.target.name, parseFloat(e.target.value))

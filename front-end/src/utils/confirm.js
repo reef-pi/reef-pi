@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 
 export function confirm (message, options = {}) {
-  const props = Object.assign({ message: message }, options)
+  const props = Object.assign({ message }, options)
   return showModal(<Confirm {...props} />)
 }
 

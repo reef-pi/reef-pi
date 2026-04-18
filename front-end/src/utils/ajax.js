@@ -68,7 +68,7 @@ function request (params, dispatch) {
     .then(response => parseResponse(response, params))
     .then(data => dispatch(params.success(data)))
     .catch(() => {
-      dispatch({ type: 'API_FAILURE', params: params })
+      dispatch({ type: 'API_FAILURE', params })
     })
 }
 

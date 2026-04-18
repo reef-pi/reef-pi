@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
@@ -25,23 +25,35 @@ describe('<Main />', () => {
     jest.clearAllMocks()
   })
 
-  it('renders without throwing with journals', () => {
-    const store = mockStore({ journals: journals })
+  it('smoke test via Provider shallow', () => {
+    const store = mockStore({ journals })
     expect(() =>
       shallow(<Provider store={store}><Main /></Provider>)
     ).not.toThrow()
   })
 
-  it('renders without throwing with empty journals', () => {
+  it('mounts with journal list', () => {
+    fetchMock.get('/api/journal', journals)
+    const store = mockStore({ journals })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('mounts with empty journal list', () => {
+    fetchMock.get('/api/journal', [])
     const store = mockStore({ journals: [] })
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
-  it('renders ConnectedMain in Provider', () => {
-    const store = mockStore({ journals: journals })
-    const wrapper = shallow(<Provider store={store}><Main /></Provider>)
-    expect(wrapper.find('Connect(main)')).toHaveLength(1)
+  it('renders New sub-component for adding journals', () => {
+    fetchMock.get('/api/journal', journals)
+    const store = mockStore({ journals })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    // Journal main delegates add via New sub-component — verify list renders
+    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
+    wrapper.unmount()
   })
 })

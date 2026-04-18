@@ -22,7 +22,6 @@ import i18n from 'utils/i18n'
 import Instances from 'instances/main'
 import Journal from 'journal/main'
 
-
 const routes = [
   { key: 'dashboard', index: true, path: '', element: <Dashboard />, label: i18n.t('capabilities:dashboard') },
   { key: 'equipment', path: '/equipment', element: <Equipment />, label: i18n.t('capabilities:equipment') },
@@ -51,13 +50,12 @@ const routeMatchesLocation = (route, pathname) => {
   return pathname === basePath || pathname.startsWith(basePath + '/')
 }
 
-function CurrentPageHeader() {
+function CurrentPageHeader () {
   const location = useLocation()
   const route = routes.find(r => routeMatchesLocation(r, location.pathname))
   const label = route ? route.label : location.pathname.slice(1)
   return <span>{label}</span>
 }
-
 
 class mainPanel extends React.Component {
   constructor (props) {
@@ -74,7 +72,7 @@ class mainPanel extends React.Component {
       .filter(route => currentCaps[route.key] !== undefined && currentCaps[route.key])
       .map(route => (
         <li className='nav-item' key={'li-tab-' + route.key}>
-          <NavLink to={route.path || ''} id={'tab-' + route.key} data-testid={'smoke-tab-' + route.key} className="nav-link">
+          <NavLink to={route.path || ''} id={'tab-' + route.key} data-testid={'smoke-tab-' + route.key} className='nav-link'>
             {route.label}
           </NavLink>
         </li>
@@ -89,7 +87,7 @@ class mainPanel extends React.Component {
 
     return (
       <BrowserRouter>
-          <div id='content' data-testid='smoke-shell-root'>
+        <div id='content' data-testid='smoke-shell-root'>
           <nav className='navbar navbar-dark navbar-reefpi navbar-expand-lg'>
             <span className='navbar-brand mb-0 h1' data-testid='smoke-brand'>{this.props.info.name}</span>
             <span className='navbar-brand mb-0 h1 navbar-toggler current-tab' data-testid='smoke-current-tab'><CurrentPageHeader /></span>

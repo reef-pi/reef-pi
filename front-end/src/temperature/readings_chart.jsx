@@ -9,7 +9,7 @@ class chart extends React.Component {
   componentDidMount () {
     this.props.fetch(this.props.sensor_id)
     const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

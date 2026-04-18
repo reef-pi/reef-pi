@@ -1,5 +1,5 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render } from '@testing-library/react'
 import BlankPanel from './blank_panel'
 
 jest.mock('recharts', () => ({
@@ -8,16 +8,16 @@ jest.mock('recharts', () => ({
 
 describe('<BlankPanel />', () => {
   it('renders without throwing', () => {
-    expect(() => renderer.create(<BlankPanel height={200} />)).not.toThrow()
+    expect(() => render(<BlankPanel height={200} />)).not.toThrow()
   })
 
   it('renders a container div', () => {
-    const tree = renderer.create(<BlankPanel height={200} />).toJSON()
-    expect(tree.props.className).toBe('container')
+    const { container } = render(<BlankPanel height={200} />)
+    expect(container.firstChild.className).toBe('container')
   })
 
   it('handles componentWillUnmount gracefully', () => {
-    const component = renderer.create(<BlankPanel height={200} />)
+    const component = render(<BlankPanel height={200} />)
     expect(() => component.unmount()).not.toThrow()
   })
 })

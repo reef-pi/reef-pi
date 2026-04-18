@@ -19,7 +19,7 @@ export const lightLoaded = (id) => {
   return (l) => {
     return ({
       type: 'LIGHT_LOADED',
-      payload: { light: l, id: id }
+      payload: { light: l, id }
     })
   }
 }
@@ -28,7 +28,7 @@ export const lightUsageLoaded = (id) => {
   return (u) => {
     return ({
       type: 'LIGHT_USAGE_LOADED',
-      payload: { usage: u, id: id }
+      payload: { usage: u, id }
     })
   }
 }

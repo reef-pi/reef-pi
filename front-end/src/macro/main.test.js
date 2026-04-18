@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
@@ -106,14 +107,14 @@ describe('Macro UI', () => {
 
   it('<MacroForm/> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<MacroForm onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
 
   it('<MacroForm /> for edit', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<MacroForm macro={macro} onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm macro={macro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
@@ -121,7 +122,7 @@ describe('Macro UI', () => {
   it('<MacroForm /> for edit with bad macro', () => {
     const fn = jest.fn()
     const badMacro = { name: 'bad' }
-    const wrapper = shallow(<MacroForm macro={badMacro} onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm macro={badMacro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
@@ -137,15 +138,21 @@ describe('Macro UI', () => {
     const fn = jest.fn()
     const wrapper = mount(
       <Provider store={mockStore({ macros: [macro], equipment: [{ id: 1, name: 'test' }] })}>
-        <MacroForm macro={macro} onSubmit={fn} />
+        <MacroForm macro={macro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />
       </Provider>
     )
     let macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(2)
-    wrapper.find('#add-step').simulate('click')
+    act(() => {
+      wrapper.find('#add-step').prop('onClick')()
+    })
+    wrapper.update()
     macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(3)
-    wrapper.find('[name="remove-step-2"]').simulate('click')
+    act(() => {
+      wrapper.find('[name="remove-step-2"]').prop('onClick')()
+    })
+    wrapper.update()
     macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(2)
   })
