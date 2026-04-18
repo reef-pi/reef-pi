@@ -74,6 +74,13 @@ describe('Profile', () => {
     expect(wrapper).toBeDefined()
   })
 
+  it('renders solar profile', () => {
+    const wrapper = shallow(
+      <Profile {...baseProps} type='solar' value={{ latitude: 37.7, longitude: -122.4 }} />
+    )
+    expect(wrapper).toBeDefined()
+  })
+
   it('renders unknown profile type with fallback span', () => {
     const wrapper = shallow(
       <Profile {...baseProps} type='unknown_type' value={{}} />
