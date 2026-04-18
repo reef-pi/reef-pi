@@ -21,6 +21,7 @@ import (
 	rpihal "github.com/reef-pi/rpi/hal"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers/ds18b20"
+	reefpitasmota "github.com/reef-pi/reef-pi/controller/device_manager/drivers/tasmota"
 )
 
 var driversMap = map[string]hal.DriverFactory{
@@ -43,7 +44,8 @@ var driversMap = map[string]hal.DriverFactory{
 	"shelly1":      shelly.Shelly1Adapter(false),
 	"shelly2.5":    shelly.Shelly25Adapter(false),
 	"sht31d":       sht3x.Factory(),
-	"tasmota-http": tasmota.HttpDriverFactory(),
+	"tasmota-http":  tasmota.HttpDriverFactory(),
+	"tasmota-multi": reefpitasmota.Factory(),
 }
 
 func AbstractFactory(t string) (hal.DriverFactory, error) {
