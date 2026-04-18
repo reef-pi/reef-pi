@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Lightbox from 'react-images'
 
 export default class Gallery extends React.Component {
   constructor (props) {
@@ -61,6 +60,7 @@ export default class Gallery extends React.Component {
       return <div />
     }
 
+    const currentImage = this.props.images[this.state.current]
     const gallery = []
     this.props.images.forEach((k, i) => {
       gallery.push(
@@ -72,17 +72,17 @@ export default class Gallery extends React.Component {
 
     return (
       <div className='container'>
-        <Lightbox
-          images={this.props.images}
-          onClose={this.handleClose}
-          currentImage={this.state.current}
-          isOpen={this.state.isOpen}
-          onClickImage={this.handleOnClick}
-          onClickNext={this.handleGotoNext}
-          onClickPrev={this.handleGotoPrevious}
-          onClickThumbnail={this.handleGotoImage}
-          showThumbnails
-        />
+        {this.state.isOpen && currentImage && (
+          <div className='camera-gallery-lightbox'>
+            <button type='button' className='btn btn-secondary' onClick={this.handleClose}>Close</button>
+            <button type='button' className='btn btn-secondary' onClick={this.handleGotoPrevious} disabled={this.state.current === 0}>Previous</button>
+            <button type='button' className='btn btn-secondary' onClick={this.handleGotoNext} disabled={this.state.current >= this.props.images.length - 1}>Next</button>
+            <img
+              src={currentImage.src}
+              onClick={this.handleOnClick}
+            />
+          </div>
+        )}
         {gallery}
       </div>
     )
