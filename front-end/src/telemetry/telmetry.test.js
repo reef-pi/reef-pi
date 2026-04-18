@@ -1,135 +1,114 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import Main from './main'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { RawTelemetry as Main } from './main'
 import AdafruitIO from './adafruit_io'
 import Mqtt from './mqtt'
 import Notification from './notification'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-
-jest.mock('utils/alert', () => ({
-  showError: jest.fn(),
-  showSuccess: jest.fn(),
-  showUpdateSuccessful: jest.fn()
-}))
-
-const mockStore = configureMockStore([thunk])
-
-const fullTelemetry = {
-  mailer: { port: 546, server: 'test.example.com', from: 'a@b.com', to: ['c@d.com'] },
-  throttle: 10,
-  notify: true,
-  adafruitio: { enable: true, user: 'u', token: 'foo' },
-  mqtt: { enable: true, server: 'mqtt.local', username: '', client_id: '', password: '', qos: 0, prefix: '', retained: false },
-  current_limit: 100,
-  historical_limit: 720
-}
 
 describe('Telemetry UI', () => {
-  afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
-  })
+  const makeMain = (props = {}) => {
+    const mailer = {
+      port: 546,
+      server: 'test.example.com',
+      from: 'reef@example.com',
+      to: ['reefer@example.com']
+    }
+    const aio = {
+      enable: true,
+      user: 'u',
+      token: 'foo',
+      prefix: 'reef'
+    }
+    const mqtt = {
+      enable: true,
+      server: 'mqtt.example.com',
+      username: '',
+      client_id: '',
+      password: '',
+      qos: 0,
+      prefix: '',
+      retained: false
+    }
+    const telemetry = {
+      mailer: mailer,
+      throttle: 10,
+      notify: true,
+      adafruitio: aio,
+      mqtt: mqtt,
+      current_limit: 100,
+      historical_limit: 720
+    }
+    const instance = new Main({
+      config: telemetry,
+      fetch: jest.fn(),
+      update: jest.fn(),
+      sendTestMessage: jest.fn(),
+      ...props
+    })
+    instance.setState = update => {
+      const next = typeof update === 'function' ? update(instance.state, instance.props) : update
+      instance.state = { ...instance.state, ...next }
+    }
+    return instance
+  }
 
-  it('<Main /> smoke test via Provider', () => {
-    fetchMock.get('/api/telemetry', fullTelemetry)
-    const store = mockStore({ telemetry: fullTelemetry })
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
-  })
+  it('<Main />', () => {
+    const m = makeMain()
+    expect(m).toBeInstanceOf(Main)
 
-  it('<Main /> mounts with full config including notify', () => {
-    fetchMock.get('/api/telemetry', fullTelemetry)
-    fetchMock.post('/api/telemetry', fullTelemetry)
-    const store = mockStore({ telemetry: fullTelemetry })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    const derived = Main.getDerivedStateFromProps({ config: m.props.config }, m.state)
+    expect(derived.config).toEqual(m.props.config)
 
-  it('<Main /> mounts with no notify (notification hidden)', () => {
-    fetchMock.get('/api/telemetry', {})
-    const config = { ...fullTelemetry, notify: false }
-    const store = mockStore({ telemetry: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    m.componentDidMount()
+    expect(m.props.fetch).toHaveBeenCalled()
 
-  it('<Main /> mounts with no adafruitio (showAdafruitIO hidden)', () => {
-    fetchMock.get('/api/telemetry', {})
-    const config = { ...fullTelemetry, adafruitio: undefined }
-    const store = mockStore({ telemetry: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    m.handleEnableMailer({ target: { checked: false } })
+    expect(m.state.config.notify).toBe(false)
 
-  it('<Main /> mounts with no mqtt (showMqtt hidden)', () => {
-    fetchMock.get('/api/telemetry', {})
-    const config = { ...fullTelemetry, mqtt: undefined }
-    const store = mockStore({ telemetry: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    m.updateLimit('current_limit')({ target: { value: '42' } })
+    expect(m.state.config.current_limit).toBe('42')
 
-  it('<Main /> handleSave — valid config with adafruitio and notify', () => {
-    fetchMock.get('/api/telemetry', fullTelemetry)
-    fetchMock.post('/api/telemetry', fullTelemetry)
-    const store = mockStore({ telemetry: fullTelemetry })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateTelemetry').simulate('click')
-    wrapper.unmount()
-  })
+    m.handleUpdateThrottle({ target: { value: '15' } })
+    expect(m.state.config.throttle).toBe('15')
 
-  it('<Main /> handleSave — adafruitio enabled with empty user rejects', () => {
-    fetchMock.get('/api/telemetry', {})
-    const badAio = { ...fullTelemetry, adafruitio: { enable: true, user: '', token: '' } }
-    const store = mockStore({ telemetry: badAio })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateTelemetry').simulate('click')
-    wrapper.unmount()
-  })
+    m.handleTestMessage()
+    expect(m.props.sendTestMessage).toHaveBeenCalled()
 
-  it('<Main /> handleEnableMailer toggles notify', () => {
-    fetchMock.get('/api/telemetry', {})
-    const store = mockStore({ telemetry: fullTelemetry })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#enable-mailer').simulate('click', { target: { checked: false } })
-    wrapper.unmount()
-  })
+    m.updateAio({ enable: true, user: 'u2', token: 'bar', prefix: 'reef' })
+    expect(m.state.config.adafruitio.user).toBe('u2')
 
-  it('<Main /> updateLimit changes current_limit', () => {
-    fetchMock.get('/api/telemetry', {})
-    const store = mockStore({ telemetry: fullTelemetry })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateCurrentLimit').simulate('change', { target: { value: '50' } })
-    wrapper.unmount()
-  })
+    m.updateMqtt({ enable: true, server: 'broker.local', qos: 1, retained: true })
+    expect(m.state.config.mqtt.server).toBe('broker.local')
 
-  it('<Main /> getDerivedStateFromProps — skips update when state.updated is true', () => {
-    fetchMock.get('/api/telemetry', fullTelemetry)
-    const store = mockStore({ telemetry: fullTelemetry })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    m.updateMailer({ server: 'smtp.local', port: '2525', from: 'reef@example.com', to: ['reef@example.com'] })
+    expect(m.state.config.mailer.server).toBe('smtp.local')
 
-  it('<Main /> old dive still works for smoke', () => {
-    fetchMock.get('/api/telemetry', fullTelemetry)
-    const m = shallow(<Main store={mockStore({ telemetry: fullTelemetry })} />).dive()
-    expect(m).toBeDefined()
+    m.handleSave()
+    expect(m.props.update).toHaveBeenCalledWith(expect.objectContaining({
+      current_limit: 42,
+      historical_limit: 720,
+      throttle: '15'
+    }))
+
+    const markup = renderToStaticMarkup(m.render())
+    expect(markup).toContain('updateTelemetry')
   })
 
   it('<AdafruitIO />', () => {
-    const m = shallow(<AdafruitIO adafruitio={{}} update={() => true} />).instance()
+    let updated = {}
+    const m = new AdafruitIO({
+      adafruitio: {},
+      update: c => { updated = c }
+    })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
     m.handleUpdateEnable({ target: { checked: true } })
+    expect(updated.enable).toBe(true)
     m.onChange('foo')({ target: { value: 1 } })
+    expect(updated.foo).toBe(1)
   })
 
   it('<Mqtt /> onChange sends boolean for checkbox, string for text', () => {
@@ -144,7 +123,11 @@ describe('Telemetry UI', () => {
       retained: false
     }
     let updated = {}
-    const m = shallow(<Mqtt config={mqttConfig} update={(c) => { updated = c }} />).instance()
+    const m = new Mqtt({ config: mqttConfig, update: (c) => { updated = c } })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
 
     // Text input should send string value
     m.onChange('server')({ target: { type: 'text', value: 'broker.local' } })
@@ -160,7 +143,18 @@ describe('Telemetry UI', () => {
   })
 
   it('<Notification />', () => {
-    const m = shallow(<Notification update={() => true} mailer={{ to: [] }} />).instance()
+    let updated = {}
+    const m = new Notification({
+      update: c => { updated = c },
+      mailer: { to: [], server: '', port: '', from: '', username: '', password: '' }
+    })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
     m.update(1)({ target: { value: 'foo' } })
+    expect(updated[1]).toBe('foo')
+    m.updateTo()({ target: { value: 'a@example.com, b@example.com' } })
+    expect(updated.to).toEqual(['a@example.com', 'b@example.com'])
   })
 })
