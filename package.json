@@ -160,5 +160,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1"
+  },
+  "resolutions": {
+    "@belzile/enzyme-adapter-react-19/react-is": "19.2.5"
   }
 }
