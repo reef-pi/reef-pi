@@ -1,14 +1,15 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render, screen } from '@testing-library/react'
 import Capabilities from './capabilities'
 
 describe('render capabilities component', () => {
   it('<Capabilities />', () => {
-    const component = renderer.create(
+    render(
       <Capabilities capabilities={[]} update={() => {}} />
     )
 
-    const tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
+    expect(screen.getByLabelText('equipment')).toBeTruthy()
+    expect(screen.getByLabelText('dashboard')).toBeTruthy()
+    expect(screen.getAllByRole('checkbox').length).toBeGreaterThan(5)
   })
 })

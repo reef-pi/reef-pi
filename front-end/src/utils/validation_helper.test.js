@@ -1,5 +1,5 @@
 import React from 'react'
-import renderer from 'react-test-renderer'
+import { render, screen } from '@testing-library/react'
 import * as v from './validation_helper'
 
 describe('Validation Helper', () => {
@@ -57,15 +57,15 @@ describe('Validation Helper', () => {
     const errors = { field1: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    const tree = renderer.create(<v.ErrorFor name='field1' touched={touched} errors={errors} />).toJSON()
-    expect(tree.children).toContain('some error')
+    render(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    expect(screen.getByText('some error')).toBeTruthy()
   })
 
   it('<ErrorFor /> without error', () => {
     const errors = { field2: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    const tree = renderer.create(<v.ErrorFor name='field1' touched={touched} errors={errors} />).toJSON()
-    expect(tree).toBeNull()
+    const { container } = render(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    expect(container.firstChild).toBeNull()
   })
 })

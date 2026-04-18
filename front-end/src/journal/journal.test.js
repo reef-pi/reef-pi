@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import Journal from './journal'
@@ -49,7 +50,10 @@ describe('<Journal />', () => {
         <Journal config={config} readOnly={false} expanded={false} />
       </Provider>
     )
-    wrapper.find('input#add_entry').simulate('click')
+    act(() => {
+      wrapper.find('input#add_entry').prop('onClick')()
+    })
+    wrapper.update()
     // After toggle, entry form should appear
     expect(wrapper.find('input#add_entry').prop('value')).toBe('-')
   })

@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
@@ -86,10 +87,16 @@ describe('Macro UI', () => {
     )
     let macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(2)
-    wrapper.find('#add-step').simulate('click')
+    act(() => {
+      wrapper.find('#add-step').prop('onClick')()
+    })
+    wrapper.update()
     macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(3)
-    wrapper.find('[name="remove-step-2"]').simulate('click')
+    act(() => {
+      wrapper.find('[name="remove-step-2"]').prop('onClick')()
+    })
+    wrapper.update()
     macroSteps = wrapper.find('.macro-step')
     expect(macroSteps.length).toBe(2)
   })
