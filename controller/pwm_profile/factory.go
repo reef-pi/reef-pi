@@ -65,6 +65,8 @@ func (p *ProfileSpec) CreateProfile() (Profile, error) {
 		return Cyclic(p.Config, p.Min, p.Max)
 	case _lightningProfileName:
 		return Lightning(p.Config, p.Min, p.Max)
+	case _solarProfileName:
+		return Solar(p.Config, p.Min, p.Max)
 	default:
 		return nil, fmt.Errorf("unknown profile type: %s", p.Type)
 	}

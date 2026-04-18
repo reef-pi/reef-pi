@@ -9,6 +9,7 @@ import Sine from './sine_profile'
 import Circadian from './circadian_profile'
 import Cyclic from './cyclic_profile'
 import Lightning from './lightning_profile'
+import Solar from './solar_profile'
 
 const Profile = (props) => {
   const handleConfigChange = e => {
@@ -106,6 +107,16 @@ const Profile = (props) => {
     case 'lightning': {
       return (
         <Lightning
+          {...props}
+          readOnly={props.readOnly}
+          config={props.value}
+          onChangeHandler={handleConfigChange}
+        />
+      )
+    }
+    case 'solar': {
+      return (
+        <Solar
           {...props}
           readOnly={props.readOnly}
           config={props.value}

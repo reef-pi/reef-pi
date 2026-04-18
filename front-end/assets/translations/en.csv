@@ -277,6 +277,8 @@ lighting:mode_auto,Auto
 lighting:mode_manual,Manual
 lighting:mode_mixed,Mixed
 lighting:remove,Remove
+lighting:solar_latitude,Latitude
+lighting:solar_longitude,Longitude
 lighting:title_delete,Delete lighting {{name}} ?
 lighting:warn_change,This action will change {{name}} from mode {{oldmode}} to {{newmode}}.
 lighting:warn_delete,This action will delete lighting {{name}}

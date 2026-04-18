@@ -277,6 +277,8 @@ lighting:mode_auto,Auto
 lighting:mode_manual,Manuell
 lighting:mode_mixed,Mix
 lighting:remove,Entfernen
+lighting:solar_latitude,
+lighting:solar_longitude,
 lighting:title_delete,Beleuchtung {{name}} löschen?
 lighting:warn_change,Wollen Sie '{{name}}' vom Modus {{oldmode}} auf {{newmode}} umschalten?
 lighting:warn_delete,Wollen Sie die Beleuchtung {{name}} wirklich löschen?
