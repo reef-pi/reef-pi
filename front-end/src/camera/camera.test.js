@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
 import Main from './main'
 import Capture from './capture'
 import Config from './config'
@@ -7,25 +8,39 @@ import Gallery from './gallery'
 import Motion from './motion'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
+import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
 const mockStore = configureMockStore([thunk])
 
-describe('Camera module', () => {
-  it('<Main />', () => {
-    const state = {
-      camera: {
-        config: {},
-        images: [{ name: 'foo' }, { name: 'bar' }]
-      }
-    }
-    const m = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+const cameraState = {
+  camera: { config: { tick_interval: 60, enable: false }, images: [{ name: 'foo.jpg' }, { name: 'bar.jpg' }] }
+}
 
-    const d = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+describe('Camera module', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+
+  it('<Main /> mounts with images', () => {
+    fetchMock.get('/api/camera/config', cameraState.camera.config)
+    fetchMock.get('/api/camera/images', cameraState.camera.images)
+    fetchMock.get('/api/camera/latest', '')
+    const store = mockStore(cameraState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with empty state', () => {
+    fetchMock.get('/api/camera/config', {})
+    fetchMock.get('/api/camera/images', [])
+    fetchMock.get('/api/camera/latest', '')
+    const store = mockStore({ camera: { config: {}, images: [] } })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
   it('<Capture />', () => {
