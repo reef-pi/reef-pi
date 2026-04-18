@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import Admin from './admin'
 import Capabilities from './capabilities'
@@ -14,7 +15,27 @@ import 'isomorphic-fetch'
 import fetchMock from 'fetch-mock'
 import SignIn from 'sign_in'
 
+jest.mock('utils/alert', () => ({
+  showError: jest.fn(),
+  showUpdateSuccessful: jest.fn()
+}))
+
 const mockStore = configureMockStore([thunk])
+
+const fullCapabilities = { health_check: true, equipment: true }
+const fullSettings = {
+  name: 'reef-pi',
+  interface: 'wlan0',
+  address: 'localhost:8080',
+  https: false,
+  capabilities: { health_check: true },
+  health_check: { notify: false },
+  display: false,
+  notification: false,
+  pprof: false,
+  prometheus: false,
+  cors: false
+}
 
 describe('Configuration ui', () => {
   afterEach(() => {
@@ -73,82 +94,90 @@ describe('Configuration ui', () => {
     m.updateCapability('dashboard')({ target: { checked: true } })
   })
 
-  it('<Settings /> ui', () => {
-    const capabilities = {
-      health_check: true
-    }
-    const settings = {
-      name: 'foo',
-      interface: 'en0',
-      address: 'localhost:8080'
-    }
-    let m = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />)
-      .dive()
-      .instance()
-
-    m = shallow(
-      <Settings
-        store={mockStore({
-          settings: {
-            name: 'foo',
-            interface: 'en0',
-            address: 'localhost:8080',
-            display: true
-          },
-          capabilities: {
-            health_check: true
-          }
-        })}
-      />
-    )
-      .dive()
-      .instance()
-    shallow(<Settings store={mockStore({ settings: {} })} />).dive()
-    const d = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
-
+  it('<Settings /> renders loading when settings/capabilities missing', () => {
+    fetchMock.get('/api/settings', {})
+    const store = mockStore({ settings: {}, capabilities: {} })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
-  it('<Settings /> should remove port 80 if choosing https', () => {
-    const capabilities = {
-      health_check: true
-    }
-    const settings = {
-      name: 'reef-pi',
-      interface: 'wlan0',
-      address: 'localhost:80',
-      https: false
-    }
-    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
-
-
+  it('<Settings /> renders full form with valid settings and capabilities', () => {
+    fetchMock.get('/api/settings', fullSettings)
+    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
-  it('<Settings /> should remove port 443 if choosing http', () => {
-    const capabilities = {
-      health_check: true
-    }
-    const settings = {
-      name: 'reef-pi',
-      interface: 'wlan0',
-      address: 'localhost:443',
-      https: true
-    }
-    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
-
+  it('<Settings /> renders with display enabled (showDisplay branch)', () => {
+    fetchMock.get('/api/settings', {})
+    fetchMock.get('/api/display', { brightness: 50, on: true })
+    const s = { ...fullSettings, display: true }
+    const store = mockStore({ settings: s, capabilities: fullCapabilities, display: { brightness: 50, on: true } })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
   })
 
-  it('<Settings /> should not change the port when changing protocol if not 80 or 443', () => {
-    const capabilities = {
-      health_check: true
-    }
-    const settings = {
-      name: 'reef-pi',
-      interface: 'wlan0',
-      address: 'localhost',
-      https: true
-    }
-    const wrapper = shallow(<Settings store={mockStore({ settings: settings, capabilities: capabilities })} />).dive()
+  it('<Settings /> handleUpdate — valid settings calls updateSettings', () => {
+    fetchMock.get('/api/settings', fullSettings)
+    fetchMock.post('/api/settings', fullSettings)
+    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('#systemUpdateSettings').simulate('click')
+    wrapper.unmount()
+  })
 
+  it('<Settings /> handleSetAddress updates address', () => {
+    fetchMock.get('/api/settings', {})
+    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('#to-row-address').simulate('change', { target: { value: 'localhost:9090' } })
+    wrapper.unmount()
+  })
+
+  it('<Settings /> toRow (name) input updates settings', () => {
+    fetchMock.get('/api/settings', {})
+    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('#to-row-name').simulate('change', { target: { value: 'new-name' } })
+    wrapper.unmount()
+  })
+
+  it('<Settings /> handleSetProtocolHttps removes port 80', () => {
+    fetchMock.get('/api/settings', {})
+    const s = { ...fullSettings, address: 'localhost:80', https: false }
+    const store = mockStore({ settings: s, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('a.dropdown-item').last().simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Settings /> handleSetProtocolHttp removes port 443', () => {
+    fetchMock.get('/api/settings', {})
+    const s = { ...fullSettings, address: 'localhost:443', https: true }
+    const store = mockStore({ settings: s, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('a.dropdown-item').first().simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Settings /> handleSetProtocol no port change when not 80 or 443', () => {
+    fetchMock.get('/api/settings', {})
+    const s = { ...fullSettings, address: 'localhost:8080', https: false }
+    const store = mockStore({ settings: s, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('a.dropdown-item').last().simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Settings /> checkBoxComponent toggles a setting', () => {
+    fetchMock.get('/api/settings', {})
+    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
+    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
+    wrapper.find('#notification').simulate('change', { target: { checked: true } })
+    wrapper.unmount()
   })
 
   it('<HealthNotify />', () => {

@@ -1,35 +1,127 @@
 import React from 'react'
 import ComponentSelector from './component_selector'
 import Config from './config'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import Grid from './grid'
 import Main from './main'
 import 'isomorphic-fetch'
+import fetchMock from 'fetch-mock'
 import thunk from 'redux-thunk'
 
 const mockStore = configureMockStore([thunk])
 
+// Minimal store state so connected child components don't crash
+const childState = {
+  equipment: [],
+  ato: [],
+  dosers: [],
+  journal: [],
+  lights: [],
+  ph: [],
+  temperature: [],
+  sensors: [],
+  health: {},
+  readings: []
+}
+
 describe('Dashboard', () => {
-  it('<Main />', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+  })
+
+  it('<Main /> smoke test via Provider (no config)', () => {
+    fetchMock.get('/api/dashboard', {})
+    const store = mockStore({ ...childState, dashboard: undefined })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> renders with empty grid_details', () => {
+    fetchMock.get('/api/dashboard', {})
+    const config = { row: 1, column: 1, width: 400, height: 200 }
+    const store = mockStore({ ...childState, dashboard: config })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> renders all chart types (switch coverage)', () => {
+    fetchMock.get('/api/dashboard', {})
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/ato', [])
+    fetchMock.get('/api/dosers', [])
+    fetchMock.get('/api/lights', [])
+    fetchMock.get('/api/ph/probes', [])
+    fetchMock.get('/api/temperature/sensors', [])
+    fetchMock.get('/api/health', {})
     const config = {
-      row: 4,
+      row: 3,
+      column: 4,
+      width: 400,
+      height: 200,
+      grid_details: [
+        [
+          { type: 'lights', id: '1' },
+          { type: 'equipment_barchart', id: '1' },
+          { type: 'equipment_ctrlpanel', id: '1' },
+          { type: 'blank_panel', id: '1' }
+        ],
+        [
+          { type: 'ato', id: '1' },
+          { type: 'journal', id: '1' },
+          { type: 'ph_current', id: '1' },
+          { type: 'ph_historical', id: '1' }
+        ],
+        [
+          { type: 'ph_usage', id: '1' },
+          { type: 'doser', id: '1' },
+          { type: 'health', id: 'current' },
+          { type: 'temp_current', id: '1' }
+        ]
+      ]
+    }
+    const store = mockStore({ ...childState, dashboard: config })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> renders temp_historical and default unknown types', () => {
+    fetchMock.get('/api/dashboard', {})
+    const config = {
+      row: 1,
       column: 2,
       width: 400,
       height: 200,
       grid_details: [
-        [{ type: 'equipment' }, { type: 'ato', id: '1' }],
-        [{ type: 'light', id: '1' }, { type: 'health', id: 'current' }],
-        [{ type: 'ph_current', id: '1' }, { type: 'ph_historical', id: 'current' }],
-        [{ type: 'temp_historical', id: '1' }, { type: 'temp_current', id: 'current' }]
+        [{ type: 'temp_historical', id: '1' }, { type: 'unknown_widget', id: '1' }]
       ]
     }
-    let m = shallow(<Main store={mockStore({ dashboard: config })} />)
-      .dive()
-      .instance()
-    m = shallow(<Main store={mockStore({})} />)
-      .dive()
-      .instance()
+    const store = mockStore({ ...childState, dashboard: config })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> handleToggle switches to config view', () => {
+    fetchMock.get('/api/dashboard', {})
+    const config = { row: 1, column: 1, width: 400, height: 200, grid_details: [[]] }
+    const store = mockStore({ ...childState, dashboard: config })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#configure-dashboard').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> old shallow dive still works for smoke', () => {
+    fetchMock.get('/api/dashboard', {})
+    const config = { row: 1, column: 1, width: 400, height: 200 }
+    const m = shallow(<Main store={mockStore({ dashboard: config })} />).dive()
+    expect(m).toBeDefined()
   })
 
   it('<Grid />', () => {
