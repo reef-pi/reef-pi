@@ -22,6 +22,7 @@ const (
 	paramOutlets  = "Outlets"
 	paramUsername = "Username"
 	paramPassword = "Password"
+	maxOutlets    = 64
 )
 
 // factory is the singleton DriverFactory for the multi-outlet Tasmota driver.
@@ -85,8 +86,8 @@ func (f *factory) ValidateParameters(params map[string]interface{}) (bool, map[s
 	}
 	if v, ok := params[paramOutlets]; ok {
 		n, err := strconv.Atoi(fmt.Sprint(v))
-		if err != nil || n < 1 {
-			failures[paramOutlets] = append(failures[paramOutlets], paramOutlets+" must be a positive integer")
+		if err != nil || n < 1 || n > maxOutlets {
+			failures[paramOutlets] = append(failures[paramOutlets], fmt.Sprintf("%s must be between 1 and %d", paramOutlets, maxOutlets))
 		}
 	}
 	return len(failures) == 0, failures
