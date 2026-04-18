@@ -14,6 +14,7 @@ import (
 var (
 	mockSensors = []string{
 		"/sys/bus/w1/devices/28-devmodeenable",
+		"/sys/bus/w1/devices/10-devmodeenable",
 	}
 )
 
@@ -236,11 +237,15 @@ func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		fs := mockSensors
 		if !t.devMode {
-			files, err := filepath.Glob("/sys/bus/w1/devices/28-*")
+			files28, err := filepath.Glob("/sys/bus/w1/devices/28-*")
 			if err != nil {
 				return nil, err
 			}
-			fs = files
+			files10, err := filepath.Glob("/sys/bus/w1/devices/10-*")
+			if err != nil {
+				return nil, err
+			}
+			fs = append(files28, files10...)
 		}
 		sensors := []string{}
 		for _, f := range fs {
