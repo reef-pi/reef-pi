@@ -212,6 +212,7 @@ doser:volume_ml,
 doser:vpr,vpr
 doser:warn_delete,Aviso de exclusão
 doser:warn_reset,Aviso de reinicialização
+equipment:boot_delay,
 equipment:chart:barchart,Gráfico
 equipment:chart:ctrlpanel,Painel de Controle
 equipment:sort,Ordenar

@@ -3,6 +3,7 @@ package equipment
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
@@ -43,6 +44,10 @@ func (c *Controller) Start() {
 		}
 		if err := c.updateOutlet(eq); err != nil {
 			log.Println("ERROR: equipment subsystem: Failed to sync equipment", eq.Name, ". Error:", err)
+		}
+		if !eq.StayOffOnBoot && eq.On && eq.BootDelay > 0 {
+			log.Printf("INFO: equipment subsystem: waiting %d second(s) after powering on %s\n", eq.BootDelay, eq.Name)
+			time.Sleep(time.Duration(eq.BootDelay) * time.Second)
 		}
 	}
 	log.Println("INFO: equipment subsystem: Finished syncing all equipment")

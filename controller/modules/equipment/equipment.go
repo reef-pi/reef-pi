@@ -17,6 +17,7 @@ type Equipment struct {
 	Outlet        string `json:"outlet"`
 	On            bool   `json:"on"`
 	StayOffOnBoot bool   `json:"stay_off_on_boot"`
+	BootDelay     int    `json:"boot_delay"` // seconds to wait after powering on during boot
 }
 
 func (c *Controller) Get(id string) (Equipment, error) {

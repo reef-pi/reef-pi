@@ -37,7 +37,8 @@ export default class Equipment extends React.Component {
       name: values.name,
       outlet: values.outlet,
       on: values.on,
-      stay_off_on_boot: values.stay_off_on_boot
+      stay_off_on_boot: values.stay_off_on_boot,
+      boot_delay: parseInt(values.boot_delay, 10) || 0
     }
 
     this.props.update(id, payload).then(() => {

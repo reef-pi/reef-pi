@@ -212,6 +212,7 @@ doser:volume_ml,
 doser:vpr,
 doser:warn_delete,Wollen Sie die Dosierpumpe {{name}} wirklich löschen?
 doser:warn_reset,Wollen Sie den Verlauf von {{name}} wirklich löschen?
+equipment:boot_delay,
 equipment:chart:barchart,Geräte (Balken)
 equipment:chart:ctrlpanel,Geräte (Schalter)
 equipment:sort,Sort

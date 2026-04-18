@@ -6,7 +6,10 @@ const EquipmentSchema = Yup.object().shape({
     .required(i18n.t('validation:name_required')),
   outlet: Yup.string()
     .required(i18n.t('validation:selection_required')),
-  stay_off_on_boot: Yup.bool().default(false)
+  stay_off_on_boot: Yup.bool().default(false),
+  boot_delay: Yup.number()
+    .min(0, i18n.t('validation:integer_min_required'))
+    .default(0)
 })
 
 export default EquipmentSchema

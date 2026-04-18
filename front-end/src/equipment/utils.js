@@ -27,6 +27,7 @@ export function buildEquipmentPayload (equipment, updates = {}) {
     on: equipment.on,
     outlet: equipment.outlet,
     stay_off_on_boot: equipment.stay_off_on_boot,
+    boot_delay: equipment.boot_delay || 0,
     ...updates
   }
 }

@@ -60,7 +60,8 @@ describe('Equipment ui', () => {
       name: 'Foo',
       on: false,
       outlet: '1',
-      stay_off_on_boot: undefined
+      stay_off_on_boot: undefined,
+      boot_delay: 0
     })
   })
 

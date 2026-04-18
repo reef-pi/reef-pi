@@ -212,6 +212,7 @@ doser:volume_ml,Volume (mL per dose)
 doser:vpr,Volume Per Rotation
 doser:warn_delete,This action will delete doser {{name}}
 doser:warn_reset,This action will reset usage data for doser {{name}}
+equipment:boot_delay,Boot Delay (seconds)
 equipment:chart:barchart,Equipment(Bar Chart)
 equipment:chart:ctrlpanel,Equipment(Switch Panel)
 equipment:sort,Sort
