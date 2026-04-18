@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow } from 'enzyme'
 import AutoProfile from './auto_profile'
 import configureMockStore from 'redux-mock-store'
@@ -10,6 +10,11 @@ const mockStore = configureMockStore([thunk])
 describe('Lighting ui - Auto Profile', () => {
   const ev = {
     target: { value: 10 }
+  }
+  const click = (node) => {
+    act(() => {
+      node.prop('onClick')()
+    })
   }
 
   it('<AutoProfile />', () => {
@@ -57,8 +62,8 @@ describe('Lighting ui - Auto Profile', () => {
 
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
 
-    m.find('.btn-add-point').simulate('click')
-    m.find('.btn-add-point').simulate('click')
+    click(m.find('.btn-add-point'))
+    click(m.find('.btn-add-point'))
 
     const labels = m.find('div.px-0')
     expect(labels.length).toBe(5)
@@ -78,7 +83,7 @@ describe('Lighting ui - Auto Profile', () => {
 
     let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
 
-    m.find('.btn-remove-point').at(1).simulate('click')
+    click(m.find('.btn-remove-point').at(1))
 
     const labels = m.find('div.px-0')
     expect(labels.length).toBe(2)

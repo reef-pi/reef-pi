@@ -51,14 +51,14 @@ describe('Macro UI', () => {
 
   it('<MacroForm/> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<MacroForm onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
 
   it('<MacroForm /> for edit', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<MacroForm macro={macro} onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm macro={macro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
@@ -66,7 +66,7 @@ describe('Macro UI', () => {
   it('<MacroForm /> for edit with bad macro', () => {
     const fn = jest.fn()
     const badMacro = { name: 'bad' }
-    const wrapper = shallow(<MacroForm macro={badMacro} onSubmit={fn} />)
+    const wrapper = shallow(<MacroForm macro={badMacro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />)
     wrapper.simulate('submit', {})
     expect(fn).toHaveBeenCalled()
   })
@@ -75,7 +75,7 @@ describe('Macro UI', () => {
     const fn = jest.fn()
     const wrapper = mount(
       <Provider store={mockStore({ macros: [macro], equipment: [{ id: 1, name: 'test' }] })}>
-        <MacroForm macro={macro} onSubmit={fn} />
+        <MacroForm macro={macro} onSubmit={fn} validateOnBlur={false} validateOnChange={false} />
       </Provider>
     )
     let macroSteps = wrapper.find('.macro-step')
