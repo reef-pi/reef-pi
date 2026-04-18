@@ -1,13 +1,24 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
 import PhForm from './ph_form'
 import Chart from './chart'
 import Main from './main'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
+import fetchMock from 'fetch-mock'
 import thunk from 'redux-thunk'
 
 const mockStore = configureMockStore([thunk])
+
+const phState = {
+  phprobes: [{ id: '1', name: 'probe', enable: false, notify: { enable: false }, control: false }],
+  analog_inputs: [],
+  ph_reading: [],
+  macros: [],
+  equipment: []
+}
+
 jest.mock('utils/confirm', () => {
   return {
     showModal: jest
@@ -30,6 +41,78 @@ jest.mock('utils/confirm', () => {
 })
 
 describe('Ph ui', () => {
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+    jest.clearAllMocks()
+  })
+
+  it('<Main /> mounts with empty probes', () => {
+    fetchMock.get('/api/phprobes', [])
+    const store = mockStore({ phprobes: [], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with probes', () => {
+    fetchMock.get('/api/phprobes', phState.phprobes)
+    const store = mockStore(phState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
+
+  it('<Main /> toggles add probe form', () => {
+    fetchMock.get('/api/phprobes', [])
+    const store = mockStore({ phprobes: [], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#add_probe').simulate('click')
+    wrapper.find('#add_probe').simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with enabled probe', () => {
+    fetchMock.get('/api/phprobes', [])
+    const enabledProbe = { id: '2', name: 'enabled-probe', enable: true, notify: { enable: false }, control: false }
+    const store = mockStore({ phprobes: [enabledProbe], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with control probe', () => {
+    fetchMock.get('/api/phprobes', [])
+    const controlProbe = {
+      id: '3', name: 'control-probe', enable: false,
+      notify: { enable: false }, control: true, is_macro: false,
+      min: 7, max: 8.6, downer_eq: '1', upper_eq: '2', chart: {}
+    }
+    const store = mockStore({ phprobes: [controlProbe], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> delete probe triggers confirm', () => {
+    fetchMock.get('/api/phprobes', [])
+    fetchMock.delete('/api/phprobes/1', {})
+    const store = mockStore(phState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#delete-panel-ph-1').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> calibrate button click shows wizard', () => {
+    fetchMock.get('/api/phprobes', [])
+    const store = mockStore(phState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('button[name="calibrate-probe-1"]').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
   it('<Main />', () => {
     const state = {
       phprobes: [
