@@ -25,9 +25,10 @@ describe('Macro UI', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
+    jest.clearAllMocks()
   })
   const macro = {
-    id: 1,
+    id: '1',
     name: 'Foo',
     steps: [
       { type: 'wait', config: { duration: 10 } },
@@ -35,7 +36,62 @@ describe('Macro UI', () => {
     ]
   }
 
+  it('<Main /> mounts with empty macros', () => {
+    fetchMock.get('/api/macros', [])
+    const store = mockStore({ macros: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with macros', () => {
+    fetchMock.get('/api/macros', [macro])
+    const store = mockStore({ macros: [macro] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
+
+  it('<Main /> toggles add macro form', () => {
+    fetchMock.get('/api/macros', [])
+    const store = mockStore({ macros: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#add_macro').simulate('click')
+    wrapper.find('#add_macro').simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Main /> run macro button click', () => {
+    fetchMock.get('/api/macros', [])
+    fetchMock.post('/api/macros/1/run', {})
+    const store = mockStore({ macros: [macro] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('button[name="run-macro-1"]').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> delete macro triggers confirm', () => {
+    fetchMock.get('/api/macros', [])
+    fetchMock.delete('/api/macros/1', {})
+    const store = mockStore({ macros: [macro] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#delete-panel-macro-1').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with reversible macro', () => {
+    fetchMock.get('/api/macros', [])
+    const reversibleMacro = { ...macro, reversible: true }
+    const store = mockStore({ macros: [reversibleMacro] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper.find('button[name="reverse-macro-1"]').length).toBe(1)
+    wrapper.unmount()
+  })
+
   it('<Main />', () => {
+    const legacyMacro = { id: 1, name: 'Foo', steps: [{ type: 'wait', config: { duration: 10 } }] }
     fetchMock.get('/api/macros', {})
     fetchMock.post('/api/macros/1', {})
     fetchMock.put('/api/macros', {})
@@ -43,7 +99,7 @@ describe('Macro UI', () => {
     fetchMock.post('/api/macros/1/run', {})
     fetchMock.delete('/api/macros/1', {})
 
-    const wrapper = shallow(<Main store={mockStore({ macros: [macro] })} />)
+    const wrapper = shallow(<Main store={mockStore({ macros: [legacyMacro] })} />)
     const n = wrapper.dive()
       .instance()
   })
@@ -70,7 +126,7 @@ describe('Macro UI', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  it('<Main /> with reversible macro renders revert button', () => {
+  it('<Main /> with reversible macro renders revert button (shallow)', () => {
     fetchMock.get('/api/macros', {})
     const reversibleMacro = { ...macro, reversible: true }
     const wrapper = shallow(<Main store={mockStore({ macros: [reversibleMacro] })} />).dive()
