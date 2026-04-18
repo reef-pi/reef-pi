@@ -277,6 +277,8 @@ lighting:mode_auto,Modo Automatico
 lighting:mode_manual,Modo Manual
 lighting:mode_mixed,Modo Misto
 lighting:remove,Remover
+lighting:solar_latitude,
+lighting:solar_longitude,
 lighting:title_delete,Apagar
 lighting:warn_change,Mudar
 lighting:warn_delete,Apagar

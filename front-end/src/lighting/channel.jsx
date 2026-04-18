@@ -164,6 +164,20 @@ const Channel = (props) => {
           intensity: 100
         }
       }
+      case 'solar': {
+        if (config) {
+          config = {
+            latitude: false,
+            longitude: false
+          }
+          props.setTouched(touched)
+        }
+
+        return {
+          latitude: 0,
+          longitude: 0
+        }
+      }
       default:
         return {}
     }

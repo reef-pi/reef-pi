@@ -51,6 +51,8 @@ const channelSchema = Yup.object().shape({
         return cyclicSchema
       case 'lightning':
         return lightningSchema
+      case 'solar':
+        return solarSchema
       default:
         return Yup.object().shape({
           type: Yup.string().required(i18n.t('validation:selection_required'))
@@ -232,6 +234,25 @@ const lightningSchema = Yup.object().shape({
         .typeError(i18n.t('validation:number_required'))
         .min(1, i18n.t('validation:integer_min_required'))
         .max(100, i18n.t('validation:integer_max_required'))
+    })
+})
+
+const solarSchema = Yup.object().shape({
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
+  config: Yup.object()
+    .typeError(i18n.t('validation:selection_required'))
+    .shape({
+      latitude: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(-90, i18n.t('validation:integer_min_required'))
+        .max(90, i18n.t('validation:integer_max_required')),
+      longitude: Yup.number()
+        .required(i18n.t('validation:number_required'))
+        .typeError(i18n.t('validation:number_required'))
+        .min(-180, i18n.t('validation:integer_min_required'))
+        .max(180, i18n.t('validation:integer_max_required'))
     })
 })
 
