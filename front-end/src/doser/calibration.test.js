@@ -60,8 +60,9 @@ describe('Doser Calibration', () => {
       })
     })
     const doser = { id: 1, regiment: { speed: 100, duration: 15 } }
-    const wrapper = shallow(<CalibrationModal doser={doser} calibrateDoser={fn} />)
-      .instance()
+    const wrapper = new CalibrationModal({ doser, calibrateDoser: fn, saveCalibration: fn })
+    wrapper.promise = { resolve: fn, reject: fn }
+    wrapper.setState = jest.fn()
 
     wrapper.cancel()
     wrapper.handleConfirm()
