@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import InstanceForm from './instance_form'
 import i18next from 'i18next'
 
-class main extends React.Component {
+export class RawInstancesMain extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -92,5 +92,5 @@ const mapDispatchToProps = dispatch => {
 const Main = connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
+)(RawInstancesMain)
 export default Main

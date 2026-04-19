@@ -9,7 +9,7 @@ import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
 
-class main extends React.Component {
+export class RawJournalMain extends React.Component {
   constructor (props) {
     super(props)
     this.handleDelete = this.handleDelete.bind(this)
@@ -76,5 +76,5 @@ const mapDispatchToProps = dispatch => {
 const Main = connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
+)(RawJournalMain)
 export default Main

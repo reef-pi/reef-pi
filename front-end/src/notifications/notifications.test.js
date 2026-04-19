@@ -1,72 +1,64 @@
-import Alert from './alert'
-import AlertItem from './alert_item'
 import React from 'react'
-import { shallow } from 'enzyme'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import {Provider} from 'react-redux'
-const mockStore = configureMockStore([thunk])
+import AlertItem from './alert_item'
+import { RawNotificationAlert } from './alert'
 
 describe('Notifications', () => {
-  it('<Alert />', () => {
-    jest.useFakeTimers()
-    const alerts = [
-      {
-        ts: 1538562759,
-        content: 'foo',
-        type: 'ERROR'
-      },
-      {
-        ts: 1538562751,
-        content: 'foo',
-        type: 'INFO'
-      },
-      {
-        ts: 1538562752,
-        content: 'foo',
-        type: 'SUCCESS'
-      },
-      {
-        ts: 1538562753,
-        content: 'foo',
-        type: 'WARNING'
-      }
-    ]
-    const store = mockStore({ alerts: alerts })
-    const wrapper = shallow(
-      <Provider store={store}>
-        <Alert />
-        </Provider>
-       ).dive()
-    /* refactor for ract16 connected component
-    expect(wrapper.find(AlertItem).length).toBe(4)
-    const l = wrapper.instance()
-    expect(l.state.containerFix).toEqual('')
-    global.window.scrollY = 60
-    l.handleScroll()
-    expect(l.state.containerFix).toEqual('fix')
-    global.window.scrollY = 0
-    l.handleScroll()
-    expect(l.state.containerFix).toEqual('')
-    */
+  afterEach(() => {
+    jest.useRealTimers()
+    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
-  it('<AlertItem />', () => {
+
+  it('<Alert /> renders alerts and toggles fixed positioning on scroll', () => {
+    const alerts = [
+      { ts: 1538562759, content: 'foo', type: 'ERROR' },
+      { ts: 1538562751, content: 'bar', type: 'INFO' },
+      { ts: 1538562752, content: 'baz', type: 'SUCCESS' },
+      { ts: 1538562753, content: 'qux', type: 'WARNING' }
+    ]
+    const delAlert = jest.fn()
+    const alert = new RawNotificationAlert({ alerts, delAlert })
+    alert.setState = jest.fn(update => {
+      alert.state = { ...alert.state, ...update }
+    })
+
+    const rendered = alert.render()
+    expect(React.Children.count(rendered.props.children)).toBe(4)
+
+    expect(alert.state.containerFix).toBe('')
+    Object.defineProperty(window, 'scrollY', { value: 60, configurable: true })
+    alert.handleScroll()
+    expect(alert.state.containerFix).toBe('fix')
+
+    Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
+    alert.handleScroll()
+    expect(alert.state.containerFix).toBe('')
+  })
+
+  it('<AlertItem /> closes on click and timeout', () => {
+    jest.useFakeTimers()
     const close = jest.fn()
-    const alert = {
+    const notification = {
       ts: 1538562753,
       content: 'foo',
       type: 'WARNING'
     }
-    const wrapper = shallow(<AlertItem notification={alert} close={close} />)
+    const item = new AlertItem({ notification, close })
+    item.setState = jest.fn(update => {
+      item.state = { ...item.state, ...update }
+    })
 
-    wrapper
-      .find('button')
-      .first()
-      .simulate('click')
+    item.componentDidMount()
+    item.handleClose()
     jest.runAllTimers()
-    expect(close.mock.calls.length).toBe(1)
-    shallow(<AlertItem notification={alert} close={close} />)
+    expect(close).toHaveBeenCalledTimes(1)
+
+    const timedItem = new AlertItem({ notification, close })
+    timedItem.setState = jest.fn(update => {
+      timedItem.state = { ...timedItem.state, ...update }
+    })
+    timedItem.componentDidMount()
     jest.runAllTimers()
-    expect(close.mock.calls.length).toBe(2)
+    expect(close).toHaveBeenCalledTimes(2)
   })
 })

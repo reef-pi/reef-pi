@@ -1,16 +1,15 @@
-import React, { act } from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
+import React from 'react'
 import fetchMock from 'fetch-mock'
-import Main from './main'
+import Main, { RawInstancesMain } from './main'
 import Instance from './instance'
-import InstanceForm from './instance_form'
+import InstanceForm, {
+  mapInstancePropsToValues,
+  submitInstanceForm
+} from './instance_form'
 import EditInstance from './edit_instance'
-import configureMockStore from 'redux-mock-store'
+import { confirm } from 'utils/confirm'
 import 'isomorphic-fetch'
-import thunk from 'redux-thunk'
-
-const mockStore = configureMockStore([thunk])
+import * as Alert from '../utils/alert'
 
 jest.mock('utils/confirm', () => ({
   confirm: jest.fn().mockImplementation(() => Promise.resolve(true))
@@ -19,87 +18,170 @@ jest.mock('utils/confirm', () => ({
 const instanceData = { id: '1', name: 'Remote Tank', address: 'http://192.168.1.10', user: 'reef-pi', password: 'reef-pi' }
 const fn = jest.fn()
 
-describe('Instances Main', () => {
-  const click = (node, event = {}) => {
-    act(() => {
-      node.prop('onClick')(event)
-    })
+const countByType = (node, predicate) => {
+  if (!node || typeof node !== 'object') {
+    return 0
   }
 
+  let count = predicate(node) ? 1 : 0
+  const children = React.Children.toArray(node.props?.children)
+  children.forEach(child => {
+    count += countByType(child, predicate)
+  })
+  return count
+}
+
+const findNode = (node, predicate) => {
+  if (!node || typeof node !== 'object') {
+    return null
+  }
+  if (predicate(node)) {
+    return node
+  }
+  const children = React.Children.toArray(node.props?.children)
+  for (const child of children) {
+    const found = findNode(child, predicate)
+    if (found) {
+      return found
+    }
+  }
+  return null
+}
+
+describe('Instances Main', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
+    jest.clearAllMocks()
   })
 
-  it('mounts with instance list', () => {
-    fetchMock.get('/api/instances', [instanceData])
-    const store = mockStore({ instances: [instanceData] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with instance list and fetches on mount', () => {
+    const fetch = jest.fn()
+    const create = jest.fn()
+    const update = jest.fn()
+    const remove = jest.fn()
+    const main = new RawInstancesMain({
+      instances: [instanceData],
+      fetch,
+      create,
+      update,
+      delete: remove
+    })
+
+    main.componentDidMount()
+    expect(fetch).toHaveBeenCalled()
+
+    const rendered = main.render()
+    expect(countByType(rendered, node => node.type === Instance)).toBe(1)
   })
 
-  it('mounts with empty instance list', () => {
-    fetchMock.get('/api/instances', [])
-    const store = mockStore({ instances: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with empty instance list', () => {
+    const main = new RawInstancesMain({
+      instances: [],
+      fetch: fn,
+      create: fn,
+      update: fn,
+      delete: fn
+    })
+
+    const rendered = main.render()
+    expect(countByType(rendered, node => node.type === Instance)).toBe(0)
   })
 
-  it('toggles add form via button click', () => {
-    fetchMock.get('/api/instances', [])
-    const store = mockStore({ instances: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    click(wrapper.find('#add_instance'))
-    click(wrapper.find('#add_instance'))
-    wrapper.unmount()
+  it('toggles add form via handler', () => {
+    const main = new RawInstancesMain({
+      instances: [],
+      fetch: fn,
+      create: fn,
+      update: fn,
+      delete: fn
+    })
+    main.setState = jest.fn(update => {
+      main.state = { ...main.state, ...update }
+    })
+
+    main.handleToggle()
+    expect(main.state.add).toBe(true)
+    expect(countByType(main.render(), node => node.type === InstanceForm)).toBe(1)
+
+    main.handleToggle()
+    expect(main.state.add).toBe(false)
   })
 })
 
 describe('Instance', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('renders in readOnly mode by default', () => {
-    const wrapper = shallow(
-      <Instance
-        instance={instanceData}
-        update={fn}
-        delete={fn}
-      />
-    )
-    expect(wrapper.instance().state.readOnly).toBe(true)
+    const instance = new Instance({
+      instance: instanceData,
+      update: fn,
+      delete: fn
+    })
+
+    expect(instance.state.readOnly).toBe(true)
   })
 
   it('switches to edit mode on toggleEdit', () => {
-    const wrapper = shallow(
-      <Instance instance={instanceData} update={fn} delete={fn} />
-    )
-    const inst = wrapper.instance()
-    inst.handleToggleEdit({ stopPropagation: fn })
-    expect(inst.state.readOnly).toBe(false)
+    const instance = new Instance({
+      instance: instanceData,
+      update: fn,
+      delete: fn
+    })
+    instance.setState = jest.fn(update => {
+      instance.state = { ...instance.state, ...update }
+    })
+
+    instance.handleToggleEdit({ stopPropagation: fn })
+    expect(instance.state.readOnly).toBe(false)
   })
 
-  it('calls delete prop after confirm', () => {
+  it('calls delete prop after confirm', async () => {
     const deleteFn = jest.fn()
-    const wrapper = shallow(
-      <Instance instance={instanceData} update={fn} delete={deleteFn} />
-    )
-    wrapper.instance().handleDelete({ stopPropagation: fn })
-    // confirm mock resolves, delete will be called async
-    expect(wrapper).toBeDefined()
+    const instance = new Instance({
+      instance: instanceData,
+      update: fn,
+      delete: deleteFn
+    })
+
+    await instance.handleDelete({ stopPropagation: fn })
+    await Promise.resolve()
+
+    expect(confirm).toHaveBeenCalled()
+    expect(deleteFn).toHaveBeenCalledWith(instanceData.id)
   })
 })
 
 describe('InstanceForm (withFormik)', () => {
-  it('renders create form without instance prop', () => {
-    const wrapper = shallow(<InstanceForm onSubmit={fn} actionLabel='Save' />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+  it('maps create form values without instance prop', () => {
+    expect(mapInstancePropsToValues({ remove: false })).toEqual({
+      name: '',
+      id: '',
+      address: '',
+      user: '',
+      password: '',
+      ignore_https: false,
+      remove: false
+    })
   })
 
-  it('renders edit form with instance prop', () => {
-    const wrapper = shallow(<InstanceForm instance={instanceData} onSubmit={fn} actionLabel='Update' />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+  it('maps edit form values with instance prop and submits', () => {
+    expect(mapInstancePropsToValues({ instance: instanceData })).toEqual({
+      name: instanceData.name,
+      id: instanceData.id,
+      address: instanceData.address,
+      user: instanceData.user,
+      password: instanceData.password,
+      ignore_https: false,
+      remove: undefined
+    })
+
+    const onSubmit = jest.fn()
+    submitInstanceForm(instanceData, { onSubmit })
+    expect(onSubmit).toHaveBeenCalledWith(instanceData)
+    expect(Main).toBeDefined()
   })
 })
 
@@ -117,28 +199,39 @@ describe('EditInstance', () => {
     isValid: true
   }
 
+  beforeEach(() => {
+    jest.spyOn(Alert, 'showError')
+    jest.spyOn(Alert, 'showUpdateSuccessful')
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('renders form fields', () => {
-    const wrapper = shallow(<EditInstance {...baseProps} />)
-    expect(wrapper.find('form').length).toBe(1)
+    const element = EditInstance(baseProps)
+    expect(element.type).toBe('form')
   })
 
   it('submits when valid', () => {
-    const submitFn = jest.fn()
-    const wrapper = shallow(<EditInstance {...baseProps} submitForm={submitFn} />)
-    wrapper.find('form').simulate('submit', { preventDefault: fn })
-    expect(submitFn).toHaveBeenCalled()
+    const submitForm = jest.fn()
+    const element = EditInstance({ ...baseProps, submitForm })
+    element.props.onSubmit({ preventDefault: fn })
+    expect(submitForm).toHaveBeenCalled()
+    expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
   })
 
   it('submits to show errors when dirty and invalid', () => {
-    const submitFn = jest.fn()
-    const wrapper = shallow(<EditInstance {...baseProps} submitForm={submitFn} dirty isValid={false} />)
-    wrapper.find('form').simulate('submit', { preventDefault: fn })
-    expect(submitFn).toHaveBeenCalled()
+    const submitForm = jest.fn()
+    const element = EditInstance({ ...baseProps, submitForm, dirty: true, isValid: false })
+    element.props.onSubmit({ preventDefault: fn })
+    expect(submitForm).toHaveBeenCalled()
+    expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('does not show delete button when id is absent', () => {
     const props = { ...baseProps, values: { ...baseProps.values, id: undefined } }
-    const wrapper = shallow(<EditInstance {...props} />)
-    expect(wrapper.find('button[type="button"]').length).toBe(0)
+    const element = EditInstance(props)
+    expect(findNode(element, node => node.type === 'button' && node.props.type === 'button')).toBeNull()
   })
 })
