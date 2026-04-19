@@ -97,19 +97,25 @@ const CalibrateSchema = Yup.object().shape({
   volume: Yup.number()
 })
 
+export const mapCalibratePropsToValues = props => {
+  return {
+    duration: props.duration,
+    speed: props.speed,
+    volume: props.volume,
+    pumpType: props.pumpType
+  }
+}
+
+export const submitCalibration = (values, props) => {
+  props.onSubmit(parseFloat(values.duration), parseInt(values.speed), parseFloat(values.volume))
+}
+
 const CalibrateForm = withFormik({
   displayName: 'CalibrateForm',
-  mapPropsToValues: props => {
-    return {
-      duration: props.duration,
-      speed: props.speed,
-      volume: props.volume,
-      pumpType: props.pumpType
-    }
-  },
+  mapPropsToValues: mapCalibratePropsToValues,
   validationSchema: CalibrateSchema,
   handleSubmit: (values, { props }) => {
-    props.onSubmit(parseFloat(values.duration), parseInt(values.speed), parseFloat(values.volume))
+    submitCalibration(values, props)
   }
 })(Calibrate)
 

@@ -1,71 +1,96 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import CalibrateForm, { Calibrate } from './calibrate'
+import CalibrateForm, {
+  Calibrate,
+  mapCalibratePropsToValues,
+  submitCalibration
+} from './calibrate'
 import CalibrationModal from './calibration_modal'
 import 'isomorphic-fetch'
-import * as Alert from '../utils/alert'
-
 
 describe('Doser Calibration', () => {
-  let values = { enable: true }
-  let fn = jest.fn()
-
-  beforeEach(() => {
-    jest.spyOn(Alert, 'showAlert')
-  })
+  const values = { enable: true, pumpType: 'dp' }
+  const fn = jest.fn()
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('<Calibrate />', () => {
-    shallow(
-      <Calibrate
-        values={values}
-        errors={{}}
-        touched={{}}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-      />
-    )
+  it('<Calibrate /> renders a form', () => {
+    const element = Calibrate({
+      values,
+      errors: {},
+      touched: {},
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn
+    })
+
+    expect(element.type).toBe('form')
   })
 
   it('<Calibrate /> should submit', () => {
-    const wrapper = shallow(
-      <Calibrate
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const element = Calibrate({
+      values,
+      errors: {},
+      touched: {},
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm,
+      dirty: true,
+      isValid: true
+    })
+
+    element.props.onSubmit({ preventDefault: jest.fn() })
+    expect(submitForm).toHaveBeenCalled()
   })
 
-  it('<CalibrateForm/>', () => {
-    const wrapper = shallow(<CalibrateForm onSubmit={fn} duration='15' speed='100' />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+  it('<CalibrateForm/> maps and submits values', () => {
+    expect(
+      mapCalibratePropsToValues({
+        duration: '15',
+        speed: '100',
+        volume: '5',
+        pumpType: 'stepper'
+      })
+    ).toEqual({
+      duration: '15',
+      speed: '100',
+      volume: '5',
+      pumpType: 'stepper'
+    })
+
+    const onSubmit = jest.fn()
+    submitCalibration(
+      { duration: '15', speed: '100', volume: '5' },
+      { onSubmit }
+    )
+    expect(onSubmit).toHaveBeenCalledWith(15, 100, 5)
+
+    expect(CalibrateForm).toBeDefined()
   })
 
   it('<CalibrationWizard />', () => {
-    const fn = jest.fn((duration, speed) => {
-      return new Promise(resolve => {
-        return resolve(true)
-      })
+    const calibrateDoser = jest.fn(() => Promise.resolve(true))
+    const saveCalibration = jest.fn()
+    const doser = {
+      id: 1,
+      type: 'dp',
+      regiment: { speed: 100, duration: 15, volume_per_second: 0 }
+    }
+    const wrapper = new CalibrationModal({
+      doser,
+      calibrateDoser,
+      saveCalibration
     })
-    const doser = { id: 1, regiment: { speed: 100, duration: 15 } }
-    const wrapper = new CalibrationModal({ doser, calibrateDoser: fn, saveCalibration: fn })
+
     wrapper.promise = { resolve: fn, reject: fn }
     wrapper.setState = jest.fn()
 
     wrapper.cancel()
     wrapper.handleConfirm()
     wrapper.handleCalibrate(20, 50)
+
+    expect(calibrateDoser).toHaveBeenCalledWith(1, { duration: 20, speed: 50 })
   })
 })

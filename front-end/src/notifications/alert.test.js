@@ -1,42 +1,43 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import NotificationAlert from './alert'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { RawNotificationAlert } from './alert'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
-
-const alerts = [
-  { ts: 1, level: 'info', message: 'Test info' },
-  { ts: 2, level: 'error', message: 'Test error' }
-]
 
 describe('NotificationAlert', () => {
   it('renders without throwing with alerts', () => {
-    const store = mockStore({ alerts })
-    expect(() =>
-      shallow(<Provider store={store}><NotificationAlert /></Provider>)
-    ).not.toThrow()
+    const alert = new RawNotificationAlert({
+      alerts: [
+        { ts: 1, content: 'Test info', type: 'INFO' },
+        { ts: 2, content: 'Test error', type: 'ERROR' }
+      ],
+      delAlert: jest.fn()
+    })
+
+    expect(() => alert.render()).not.toThrow()
   })
 
   it('renders without throwing with no alerts', () => {
-    const store = mockStore({ alerts: [] })
-    expect(() =>
-      shallow(<Provider store={store}><NotificationAlert /></Provider>)
-    ).not.toThrow()
+    const alert = new RawNotificationAlert({
+      alerts: [],
+      delAlert: jest.fn()
+    })
+
+    expect(() => alert.render()).not.toThrow()
+    expect(React.Children.count(alert.render().props.children)).toBe(0)
   })
 
-  it('renders via dive with alerts', () => {
-    const store = mockStore({ alerts })
-    const wrapper = shallow(<NotificationAlert store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('renders alert items from props', () => {
+    const alerts = [
+      { ts: 1, content: 'Test info', type: 'INFO' },
+      { ts: 2, content: 'Test error', type: 'ERROR' }
+    ]
+    const alert = new RawNotificationAlert({ alerts, delAlert: jest.fn() })
+
+    expect(React.Children.count(alert.render().props.children)).toBe(2)
   })
 
-  it('renders via dive with empty alerts', () => {
-    const store = mockStore({ alerts: [] })
-    const wrapper = shallow(<NotificationAlert store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('renders empty alert list', () => {
+    const alert = new RawNotificationAlert({ alerts: [], delAlert: jest.fn() })
+
+    expect(React.Children.count(alert.render().props.children)).toBe(0)
   })
 })

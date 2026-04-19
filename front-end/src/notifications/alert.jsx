@@ -2,7 +2,7 @@ import React from 'react'
 import AlertItem from './alert_item'
 import { delAlert } from 'redux/actions/alert'
 import { connect } from 'react-redux'
-class NotificationAlert extends React.Component {
+export class RawNotificationAlert extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -58,5 +58,5 @@ const mapDispatchToProps = dispatch => {
 const notifalert = connect(
   mapStateToProps,
   mapDispatchToProps
-)(NotificationAlert)
+)(RawNotificationAlert)
 export default notifalert
