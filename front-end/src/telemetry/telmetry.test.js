@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
@@ -29,6 +29,18 @@ const fullTelemetry = {
 }
 
 describe('Telemetry UI', () => {
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
+
+  const change = (node, event) => {
+    act(() => {
+      node.prop('onChange')(event)
+    })
+  }
+
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -83,7 +95,7 @@ describe('Telemetry UI', () => {
     fetchMock.post('/api/telemetry', fullTelemetry)
     const store = mockStore({ telemetry: fullTelemetry })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateTelemetry').simulate('click')
+    click(wrapper.find('#updateTelemetry'))
     wrapper.unmount()
   })
 
@@ -92,7 +104,7 @@ describe('Telemetry UI', () => {
     const badAio = { ...fullTelemetry, adafruitio: { enable: true, user: '', token: '' } }
     const store = mockStore({ telemetry: badAio })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateTelemetry').simulate('click')
+    click(wrapper.find('#updateTelemetry'))
     wrapper.unmount()
   })
 
@@ -100,7 +112,7 @@ describe('Telemetry UI', () => {
     fetchMock.get('/api/telemetry', {})
     const store = mockStore({ telemetry: fullTelemetry })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#enable-mailer').simulate('click', { target: { checked: false } })
+    click(wrapper.find('#enable-mailer'), { target: { checked: false } })
     wrapper.unmount()
   })
 
@@ -108,7 +120,7 @@ describe('Telemetry UI', () => {
     fetchMock.get('/api/telemetry', {})
     const store = mockStore({ telemetry: fullTelemetry })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#updateCurrentLimit').simulate('change', { target: { value: '50' } })
+    change(wrapper.find('#updateCurrentLimit'), { target: { value: '50' } })
     wrapper.unmount()
   })
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import fetchMock from 'fetch-mock'
@@ -20,6 +20,12 @@ const instanceData = { id: '1', name: 'Remote Tank', address: 'http://192.168.1.
 const fn = jest.fn()
 
 describe('Instances Main', () => {
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
+
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -45,8 +51,8 @@ describe('Instances Main', () => {
     fetchMock.get('/api/instances', [])
     const store = mockStore({ instances: [] })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#add_instance').simulate('click')
-    wrapper.find('#add_instance').simulate('click')
+    click(wrapper.find('#add_instance'))
+    click(wrapper.find('#add_instance'))
     wrapper.unmount()
   })
 })

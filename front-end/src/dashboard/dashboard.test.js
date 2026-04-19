@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import ComponentSelector from './component_selector'
 import Config from './config'
 import { shallow, mount } from 'enzyme'
@@ -15,18 +15,30 @@ const mockStore = configureMockStore([thunk])
 // Minimal store state so connected child components don't crash
 const childState = {
   equipment: [],
-  ato: [],
+  atos: [],
   dosers: [],
-  journal: [],
+  journals: [],
   lights: [],
-  ph: [],
-  temperature: [],
+  light_usage: {},
+  ato_usage: {},
+  doser_usage: {},
+  journal_usage: {},
+  phprobes: [],
+  ph_readings: {},
+  tcs: [],
+  tc_usage: {},
   sensors: [],
-  health: {},
+  health_stats: {},
   readings: []
 }
 
 describe('Dashboard', () => {
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
+
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -52,11 +64,14 @@ describe('Dashboard', () => {
   it('<Main /> renders all chart types (switch coverage)', () => {
     fetchMock.get('/api/dashboard', {})
     fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/ato', [])
-    fetchMock.get('/api/dosers', [])
+    fetchMock.get('/api/atos/1/usage', { historical: [] })
+    fetchMock.get('/api/doser/pumps/1/usage', { historical: [] })
+    fetchMock.get('/api/journal/1/usage', { historical: [] })
+    fetchMock.get('/api/lights/1/usage', { current: [] })
+    fetchMock.get('/api/phprobes/1/readings', { current: [], historical: [] })
+    fetchMock.get('/api/tcs/1/usage', { current: [], historical: [] })
+    fetchMock.get('/api/health_stats', {})
     fetchMock.get('/api/lights', [])
-    fetchMock.get('/api/ph/probes', [])
-    fetchMock.get('/api/temperature/sensors', [])
     fetchMock.get('/api/health', {})
     const config = {
       row: 3,
@@ -84,7 +99,22 @@ describe('Dashboard', () => {
         ]
       ]
     }
-    const store = mockStore({ ...childState, dashboard: config })
+    const store = mockStore({
+      ...childState,
+      atos: [{ id: '1', name: 'ATO 1' }],
+      dosers: [{ id: '1', name: 'Doser 1' }],
+      journals: [{ id: '1', name: 'Journal 1', unit: 'ml' }],
+      lights: [{ id: '1', name: 'Light 1', channels: { blue: { name: 'Blue', color: '#00f' } } }],
+      light_usage: { 1: { current: [] } },
+      ato_usage: { 1: { historical: [] } },
+      phprobes: [{ id: '1', name: 'PH 1', chart: { color: '#00f', ymin: 0, ymax: 14, unit: 'pH' }, notify: { enable: false, min: 0, max: 0 } }],
+      journal_usage: { 1: { historical: [] } },
+      ph_readings: { 1: { current: [], historical: [] } },
+      doser_usage: { 1: { historical: [] } },
+      tcs: [{ id: '1', name: 'Temp 1', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true }],
+      tc_usage: { 1: { current: [], historical: [] } },
+      dashboard: config
+    })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
     expect(wrapper).toBeDefined()
     wrapper.unmount()
@@ -92,6 +122,7 @@ describe('Dashboard', () => {
 
   it('<Main /> renders temp_historical and default unknown types', () => {
     fetchMock.get('/api/dashboard', {})
+    fetchMock.get('/api/tcs/1/usage', { current: [], historical: [] })
     const config = {
       row: 1,
       column: 2,
@@ -101,7 +132,12 @@ describe('Dashboard', () => {
         [{ type: 'temp_historical', id: '1' }, { type: 'unknown_widget', id: '1' }]
       ]
     }
-    const store = mockStore({ ...childState, dashboard: config })
+    const store = mockStore({
+      ...childState,
+      tcs: [{ id: '1', name: 'Temp 1', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true }],
+      tc_usage: { 1: { current: [], historical: [] } },
+      dashboard: config
+    })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
     expect(wrapper).toBeDefined()
     wrapper.unmount()
@@ -112,7 +148,7 @@ describe('Dashboard', () => {
     const config = { row: 1, column: 1, width: 400, height: 200, grid_details: [[]] }
     const store = mockStore({ ...childState, dashboard: config })
     const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#configure-dashboard').simulate('click')
+    click(wrapper.find('#configure-dashboard'))
     expect(wrapper).toBeDefined()
     wrapper.unmount()
   })
