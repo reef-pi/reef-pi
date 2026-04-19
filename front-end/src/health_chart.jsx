@@ -5,7 +5,7 @@ import { fetchHealth } from './redux/actions/health'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
-class healthChart extends React.Component {
+export class RawHealthChart extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -62,5 +62,5 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return { fetchHealth: () => dispatch(fetchHealth()) }
 }
-const HealthChart = connect(mapStateToProps, mapDispatchToProps)(healthChart)
+const HealthChart = connect(mapStateToProps, mapDispatchToProps)(RawHealthChart)
 export default HealthChart

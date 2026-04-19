@@ -3,7 +3,7 @@ import { takeImage, getLatestImage } from '../redux/actions/camera'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
-class capture extends React.Component {
+export class RawCapture extends React.Component {
   componentDidMount () {
     this.props.getLatestImage()
   }
@@ -56,5 +56,5 @@ const mapDispatchToProps = dispatch => {
 const Capture = connect(
   mapStateToProps,
   mapDispatchToProps
-)(capture)
+)(RawCapture)
 export default Capture

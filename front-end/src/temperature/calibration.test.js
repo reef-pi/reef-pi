@@ -1,126 +1,123 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import CalibrationModal, { CalibrationForm } from './calibration_modal'
+import {
+  CalibrationForm,
+  mapCalibrationPropsToValues,
+  submitCalibrationForm
+} from './calibration_modal'
 import 'isomorphic-fetch'
-import * as Alert from '../utils/alert'
-
 
 describe('Temperature Calibration', () => {
-  let values = { enable: true }
-  let fn = jest.fn()
-  const probe={
+  const values = { enable: true }
+  const probe = {
     id: 1,
     name: 'probe'
   }
-  const currentReading = [ 77, 76 ]
-
+  const currentReading = [77, 76]
+  const fn = jest.fn()
 
   beforeEach(() => {
-    jest.spyOn(Alert, 'showError')
+    jest.spyOn(window, 'setInterval').mockReturnValue(123)
+    jest.spyOn(window, 'clearInterval').mockImplementation(() => {})
   })
 
   afterEach(() => {
+    jest.restoreAllMocks()
     jest.clearAllMocks()
   })
 
-  it('<CalibrationModal /> should render form', () => {
-    const submitFn = jest.fn()
+  it('maps modal props into default form values', () => {
+    expect(
+      mapCalibrationPropsToValues({
+        probe,
+        currentReading,
+        defaultValue: 77
+      })
+    ).toEqual({ value: 77 })
 
-    const wrapper = shallow(
-      <CalibrationModal
-        probe={probe}
-        currentReading={currentReading}
-        defaultValue={77}
-        readProbe={fn}
-        calibrateProbe={fn}
-        cancel={fn}
-        onSubmit={submitFn}
-      />).dive()
-
-    expect(wrapper.find(CalibrationForm).length).toBe(1)
-    wrapper.find(CalibrationForm).dive().find('form').simulate('submit', {})
+    expect(
+      mapCalibrationPropsToValues({
+        probe,
+        currentReading
+      })
+    ).toEqual({ value: currentReading[probe.id] })
   })
 
-  it('<CalibrationModal /> should default to currentReading', () => {
-    const submitFn = jest.fn()
+  it('submits parsed calibration values', () => {
+    const onSubmit = jest.fn()
 
-    const wrapper = shallow(
-      <CalibrationModal
-        probe={probe}
-        currentReading={currentReading}
-        readProbe={fn}
-        calibrateProbe={fn}
-        cancel={fn}
-        onSubmit={submitFn}
-      />).dive()
+    submitCalibrationForm({ value: '77.5' }, { onSubmit, probe })
 
-    expect(wrapper.find(CalibrationForm).prop('values').value).toEqual(currentReading[1])
+    expect(onSubmit).toHaveBeenCalledWith(probe, 77.5)
   })
 
-  it('<CalibrationForm /> should submit', () => {
+  it('renders the calibration form and wires submit', () => {
+    const handleSubmit = jest.fn()
+    const form = new CalibrationForm({
+      values,
+      probe,
+      currentReading,
+      defaultValue: 77,
+      readProbe: fn,
+      calibrateProbe: fn,
+      cancel: fn,
+      handleSubmit,
+      touched: {},
+      errors: {}
+    })
 
-    const submitFn = jest.fn()
+    const element = form.render()
+    const renderedForm = element.props.children
 
-    const wrapper = shallow(
-      <CalibrationForm
-        values={values}
-        probe={probe}
-        currentReading={currentReading}
-        defaultValue={77}
-        readProbe={fn}
-        calibrateProbe={fn}
-        cancel={fn}
-        handleSubmit={submitFn}
-      />)
+    expect(renderedForm.type).toBe('form')
 
-    wrapper.find('form').simulate('submit', {})
-    expect(submitFn).toHaveBeenCalled()
-
+    renderedForm.props.onSubmit({})
+    expect(handleSubmit).toHaveBeenCalled()
   })
 
-  it('<CalibrationForm /> should cancel', () => {
+  it('cancels calibration', () => {
+    const cancel = jest.fn()
+    const form = new CalibrationForm({
+      values,
+      probe,
+      currentReading,
+      defaultValue: 77,
+      readProbe: fn,
+      calibrateProbe: fn,
+      cancel,
+      handleSubmit: fn,
+      touched: {},
+      errors: {}
+    })
 
-    const cancelFn = jest.fn()
+    form.handleCancel()
 
-    const wrapper = shallow(
-      <CalibrationForm
-        values={values}
-        probe={probe}
-        currentReading={currentReading}
-        defaultValue={77}
-        readProbe={fn}
-        calibrateProbe={fn}
-        cancel={cancelFn}
-        handleSubmit={fn}
-      />)
-
-    wrapper.find('button[role="abort"]').simulate('click', () => {})
-    expect(cancelFn).toHaveBeenCalled()
-    wrapper.unmount()
-
+    expect(cancel).toHaveBeenCalled()
   })
 
-  it('<CalibrationForm /> should update readings', () => {
-
-    const readFn = jest.fn()
+  it('starts and stops polling readings', () => {
+    const readProbe = jest.fn()
     jest.useFakeTimers()
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
 
-    const wrapper = shallow(
-      <CalibrationForm
-        values={values}
-        probe={probe}
-        currentReading={currentReading}
-        defaultValue={77}
-        readProbe={readFn}
-        calibrateProbe={fn}
-        cancel={fn}
-        handleSubmit={fn}
-      />)
+    const form = new CalibrationForm({
+      values,
+      probe,
+      currentReading,
+      defaultValue: 77,
+      readProbe,
+      calibrateProbe: fn,
+      cancel: fn,
+      handleSubmit: fn,
+      touched: {},
+      errors: {}
+    })
 
+    form.componentDidMount()
     jest.runOnlyPendingTimers()
-    expect(readFn).toHaveBeenCalled()
-    wrapper.unmount()
+    expect(readProbe).toHaveBeenCalledWith(probe.id)
 
+    form.componentWillUnmount()
+    expect(clearIntervalSpy).toHaveBeenCalledWith(form.timer)
+    jest.useRealTimers()
   })
-
 })

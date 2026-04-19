@@ -1,13 +1,9 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import Main from './main'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
+import { RawJournalMain } from './main'
+import Collapsible from '../ui_components/collapsible'
+import New from './new'
+import { confirm } from 'utils/confirm'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 jest.mock('utils/confirm', () => ({
   confirm: jest.fn().mockImplementation(() => Promise.resolve(true))
@@ -18,42 +14,56 @@ const journals = [
   { id: '2', name: 'Alkalinity', description: 'weekly', unit: 'dKH' }
 ]
 
+const countByType = (node, predicate) => {
+  if (!node || typeof node !== 'object') {
+    return 0
+  }
+  let count = predicate(node) ? 1 : 0
+  React.Children.toArray(node.props?.children).forEach(child => {
+    count += countByType(child, predicate)
+  })
+  return count
+}
+
 describe('<Main />', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
-  it('smoke test via Provider shallow', () => {
-    const store = mockStore({ journals })
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
+  it('renders without throwing', () => {
+    const main = new RawJournalMain({ journals, delete: jest.fn() })
+    expect(() => main.render()).not.toThrow()
   })
 
-  it('mounts with journal list', () => {
-    fetchMock.get('/api/journal', journals)
-    const store = mockStore({ journals })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with journal list', () => {
+    const main = new RawJournalMain({ journals, delete: jest.fn() })
+    const rendered = main.render()
+
+    expect(countByType(rendered, node => node.type === Collapsible)).toBe(2)
   })
 
-  it('mounts with empty journal list', () => {
-    fetchMock.get('/api/journal', [])
-    const store = mockStore({ journals: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with empty journal list', () => {
+    const main = new RawJournalMain({ journals: [], delete: jest.fn() })
+    const rendered = main.render()
+
+    expect(countByType(rendered, node => node.type === Collapsible)).toBe(0)
   })
 
   it('renders New sub-component for adding journals', () => {
-    fetchMock.get('/api/journal', journals)
-    const store = mockStore({ journals })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    // Journal main delegates add via New sub-component — verify list renders
-    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
-    wrapper.unmount()
+    const main = new RawJournalMain({ journals, delete: jest.fn() })
+    const rendered = main.render()
+
+    expect(countByType(rendered, node => node.type === New)).toBe(1)
+  })
+
+  it('calls delete after confirm resolves', async () => {
+    const deleteJournal = jest.fn()
+    const main = new RawJournalMain({ journals, delete: deleteJournal })
+
+    await main.handleDelete(journals[0])
+    await Promise.resolve()
+
+    expect(confirm).toHaveBeenCalled()
+    expect(deleteJournal).toHaveBeenCalledWith(journals[0].id)
   })
 })
