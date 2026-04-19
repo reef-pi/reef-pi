@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { shallow, mount } from 'enzyme'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
@@ -38,6 +38,18 @@ const fullSettings = {
 }
 
 describe('Configuration ui', () => {
+  const click = (node, event = {}) => {
+    act(() => {
+      node.prop('onClick')(event)
+    })
+  }
+
+  const change = (node, event) => {
+    act(() => {
+      node.prop('onChange')(event)
+    })
+  }
+
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -73,8 +85,8 @@ describe('Configuration ui', () => {
     fetchMock.post('/api/display', {})
     const store = mockStore({ display: { brightness: 50, on: true } })
     const wrapper = mount(<Provider store={store}><Display /></Provider>)
-    wrapper.find('button').simulate('click')
-    wrapper.find('input[type="range"]').simulate('change', { target: { value: '100' } })
+    click(wrapper.find('button').first())
+    change(wrapper.find('input[type="range"]'), { target: { value: '100' } })
     wrapper.unmount()
   })
 
@@ -136,7 +148,7 @@ describe('Configuration ui', () => {
     fetchMock.post('/api/settings', fullSettings)
     const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#systemUpdateSettings').simulate('click')
+    click(wrapper.find('#systemUpdateSettings'))
     wrapper.unmount()
   })
 
@@ -144,7 +156,7 @@ describe('Configuration ui', () => {
     fetchMock.get('/api/settings', {})
     const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#to-row-address').simulate('change', { target: { value: 'localhost:9090' } })
+    change(wrapper.find('#to-row-address'), { target: { value: 'localhost:9090' } })
     wrapper.unmount()
   })
 
@@ -152,7 +164,7 @@ describe('Configuration ui', () => {
     fetchMock.get('/api/settings', {})
     const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#to-row-name').simulate('change', { target: { value: 'new-name' } })
+    change(wrapper.find('#to-row-name'), { target: { value: 'new-name' } })
     wrapper.unmount()
   })
 
@@ -161,7 +173,7 @@ describe('Configuration ui', () => {
     const s = { ...fullSettings, address: 'localhost:80', https: false }
     const store = mockStore({ settings: s, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').last().simulate('click')
+    click(wrapper.find('a.dropdown-item').last(), { preventDefault: () => {} })
     wrapper.unmount()
   })
 
@@ -170,7 +182,7 @@ describe('Configuration ui', () => {
     const s = { ...fullSettings, address: 'localhost:443', https: true }
     const store = mockStore({ settings: s, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').first().simulate('click')
+    click(wrapper.find('a.dropdown-item').first(), { preventDefault: () => {} })
     wrapper.unmount()
   })
 
@@ -179,7 +191,7 @@ describe('Configuration ui', () => {
     const s = { ...fullSettings, address: 'localhost:8080', https: false }
     const store = mockStore({ settings: s, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').last().simulate('click')
+    click(wrapper.find('a.dropdown-item').last(), { preventDefault: () => {} })
     wrapper.unmount()
   })
 
@@ -187,7 +199,7 @@ describe('Configuration ui', () => {
     fetchMock.get('/api/settings', {})
     const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
     const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#notification').simulate('change', { target: { checked: true } })
+    change(wrapper.find('#notification'), { target: { checked: true } })
     wrapper.unmount()
   })
 
@@ -228,7 +240,7 @@ describe('Configuration ui', () => {
     ]
     const store = mockStore({ errors: errs })
     const wrapper = mount(<Provider store={store}><Errors /></Provider>)
-    wrapper.find('button').simulate('click')
+    click(wrapper.find('button').first())
     wrapper.unmount()
   })
 
@@ -246,7 +258,7 @@ describe('Configuration ui', () => {
     const errs = [{ id: '1', time: '2026-04-18', message: 'err', count: 1 }]
     const store = mockStore({ errors: errs })
     const wrapper = mount(<Provider store={store}><Errors /></Provider>)
-    wrapper.find('input.btn-outline-secondary').simulate('click')
+    click(wrapper.find('input.btn-outline-secondary'))
     wrapper.unmount()
   })
 })

@@ -129,11 +129,9 @@ describe('Telemetry UI', () => {
       m.state = { ...m.state, ...next }
     }
 
-    // Text input should send string value
     m.onChange('server')({ target: { type: 'text', value: 'broker.local' } })
     expect(updated.server).toBe('broker.local')
 
-    // Checkbox input must send boolean true, not the string "on"
     m.onChange('retained')({ target: { type: 'checkbox', checked: true, value: 'on' } })
     expect(typeof updated.retained).toBe('boolean')
     expect(updated.retained).toBe(true)
