@@ -12,7 +12,7 @@ class chart extends React.Component {
     const timer = window.setInterval(() => {
       this.props.fetchProbeReadings(this.props.probe_id)
     }, 10 * 1000)
-    this.setState({ timer: timer })
+    this.setState({ timer })
   }
 
   componentWillUnmount () {

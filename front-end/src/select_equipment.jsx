@@ -12,7 +12,7 @@ class selectEquipment extends React.Component {
       }
     })
     this.state = {
-      equipment: equipment
+      equipment
     }
     this.equipmentList = this.equipmentList.bind(this)
     this.setEquipment = this.setEquipment.bind(this)
@@ -25,7 +25,7 @@ class selectEquipment extends React.Component {
   equipmentList () {
     const menuItems = [
       <a className='dropdown-item' href='#' key='none' onClick={this.setEquipment('none')}>
-        {'--'}
+        --
       </a>
     ]
     this.props.equipment.forEach((v, k) => {

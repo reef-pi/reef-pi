@@ -86,7 +86,7 @@ class Main extends React.Component {
       minute: values.minute,
       second: values.second,
       enable: values.enable,
-      target: target
+      target
     }
     return timer
   }

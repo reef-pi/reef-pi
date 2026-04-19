@@ -44,8 +44,8 @@ class dashboard extends React.Component {
     if (config.grid_details === undefined) {
       return
     }
-    
-    let colSize = numColsToColSize(config.column);
+
+    const colSize = numColsToColSize(config.column)
 
     let i, j
     const rows = []
@@ -212,7 +212,7 @@ class dashboard extends React.Component {
                 {lbl}
               </button>
             </div>
-        </div>
+          </div>
         </div>
       </>
     )

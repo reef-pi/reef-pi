@@ -82,9 +82,9 @@ class Collapsible extends React.Component {
         </div>
         {expanded
           ? cloneElement(children, {
-              readOnly: readOnly,
-              onSubmit: handleSubmit
-            })
+            readOnly,
+            onSubmit: handleSubmit
+          })
           : null}
       </li>
     )

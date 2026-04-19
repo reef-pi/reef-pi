@@ -1,10 +1,12 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Provider } from 'react-redux'
 import ControlChart from './control_chart'
 import Main from './main'
 import ReadingsChart from './readings_chart'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
+import fetchMock from 'fetch-mock'
 import thunk from 'redux-thunk'
 import TemperatureForm from './temperature_form'
 
@@ -21,6 +23,17 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
+const tcState = {
+  tcs: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
+  tc_usage: {},
+  tc_reading: [],
+  tc_sensors: [],
+  analog_inputs: [],
+  equipment: [],
+  macros: []
+}
+
 describe('Temperature controller ui', () => {
   const state = {
     tcs: [{ id: '1', name: 'Water', chart:{} }, { id: '2', name: 'Air', chart:{} } ],
@@ -29,6 +42,74 @@ describe('Temperature controller ui', () => {
     equipment: [{ id: '1', name: 'bar', on: false }],
     macros: [{id: '1', name: 'macro'}]
   }
+
+  afterEach(() => {
+    fetchMock.reset()
+    fetchMock.restore()
+    jest.clearAllMocks()
+  })
+
+  it('<Main /> mounts with empty tcs', () => {
+    fetchMock.get('/api/tcs', [])
+    fetchMock.get('/api/tcs/sensors', [])
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/analog_inputs', [])
+    const store = mockStore({ tcs: [], tc_reading: [], tc_usage: {}, tc_sensors: [], analog_inputs: [], equipment: [], macros: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> mounts with tcs', () => {
+    fetchMock.get('/api/tcs', tcState.tcs)
+    fetchMock.get('/api/tcs/sensors', [])
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/analog_inputs', [])
+    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
+    const store = mockStore(tcState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
+
+  it('<Main /> toggles add probe form', () => {
+    fetchMock.get('/api/tcs', [])
+    fetchMock.get('/api/tcs/sensors', [])
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/analog_inputs', [])
+    const store = mockStore({ tcs: [], tc_reading: [], tc_usage: {}, tc_sensors: [], analog_inputs: [], equipment: [], macros: [] })
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#add_probe').simulate('click')
+    wrapper.find('#add_probe').simulate('click')
+    wrapper.unmount()
+  })
+
+  it('<Main /> delete tc triggers confirm', () => {
+    fetchMock.get('/api/tcs', [])
+    fetchMock.get('/api/tcs/sensors', [])
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/analog_inputs', [])
+    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
+    fetchMock.delete('/api/tcs/1', {})
+    const store = mockStore(tcState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('#delete-panel-temperature-1').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('<Main /> calibrate button opens wizard', () => {
+    fetchMock.get('/api/tcs', [])
+    fetchMock.get('/api/tcs/sensors', [])
+    fetchMock.get('/api/equipment', [])
+    fetchMock.get('/api/analog_inputs', [])
+    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
+    const store = mockStore(tcState)
+    const wrapper = mount(<Provider store={store}><Main /></Provider>)
+    wrapper.find('button[name="calibrate-probe-1"]').simulate('click')
+    expect(wrapper).toBeDefined()
+    wrapper.unmount()
+  })
 
   it('<Main />', () => {
     let wrapper = shallow(<Main store={mockStore(state)} />)

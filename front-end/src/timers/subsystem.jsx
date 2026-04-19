@@ -12,7 +12,7 @@ export default class Subsystem extends React.Component {
       }
     })
     this.state = {
-      name: name,
+      name,
       duration: props.duration,
       revert: props.revert,
       on: props.on,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { act } from 'react'
 import { mount } from 'enzyme'
 import { Form, Formik } from 'formik'
 import { useDatepicker } from './useDatepicker'
@@ -12,7 +12,12 @@ const TestComponent = ({ name, onHandlers }) => {
 }
 
 const wrap = (name, onHandlers) => mount(
-  <Formik initialValues={{ [name]: '' }} onSubmit={() => {}}>
+  <Formik
+    initialValues={{ [name]: '' }}
+    onSubmit={() => {}}
+    validateOnBlur={false}
+    validateOnChange={false}
+  >
     <Form>
       <TestComponent name={name} onHandlers={onHandlers} />
     </Form>
@@ -34,7 +39,11 @@ describe('useDatepicker', () => {
       target: { name: 'date', value: '01/01/2023' },
       preventDefault: jest.fn()
     }
-    expect(() => handlers.handleChangeRaw(event)).not.toThrow()
+    expect(() => {
+      act(() => {
+        handlers.handleChangeRaw(event)
+      })
+    }).not.toThrow()
     expect(event.preventDefault).not.toHaveBeenCalled()
   })
 
@@ -45,7 +54,9 @@ describe('useDatepicker', () => {
       target: { name: 'date', value: 'abc!@#' },
       preventDefault: jest.fn()
     }
-    handlers.handleChangeRaw(event)
+    act(() => {
+      handlers.handleChangeRaw(event)
+    })
     expect(event.preventDefault).toHaveBeenCalled()
   })
 
@@ -53,18 +64,24 @@ describe('useDatepicker', () => {
     let handlers
     wrap('date', (h) => { handlers = h })
     const validDate = new Date(2023, 0, 1)
-    await expect(handlers.handleChange(validDate)).resolves.not.toThrow()
+    await act(async () => {
+      await handlers.handleChange(validDate)
+    })
   })
 
   it('handleChange handles null date gracefully', async () => {
     let handlers
     wrap('date', (h) => { handlers = h })
-    await expect(handlers.handleChange(null)).resolves.not.toThrow()
+    await act(async () => {
+      await handlers.handleChange(null)
+    })
   })
 
   it('handleChange handles invalid date string gracefully', async () => {
     let handlers
     wrap('date', (h) => { handlers = h })
-    await expect(handlers.handleChange('not-a-date')).resolves.not.toThrow()
+    await act(async () => {
+      await handlers.handleChange('not-a-date')
+    })
   })
 })

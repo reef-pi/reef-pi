@@ -1,8 +1,7 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { renderToStaticMarkup } from 'react-dom/server'
 import CollapsibleList from './collapsible_list'
 import Collapsible from './collapsible'
-
 
 describe('Collapsible', () => {
   const noop = () => {}
@@ -10,114 +9,150 @@ describe('Collapsible', () => {
     return (
       <div>
         This is inner content
-        <button type='button' id='submit' onClick={props.onSubmit()}>click</button>
+        <button type='button' id='submit' onClick={() => props.onSubmit('ok')}>click</button>
       </div>
     )
   }
 
-  it('should not show content when collapsed', () => {
-    const wrapper = mount(
-      <Collapsible name='test' title='title' expanded={false} readOnly onToggle={noop} onDelete={noop} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    expect(wrapper.find('button#submit').length).toBe(0)
+  const makeCollapsible = (props = {}) => {
+    const instance = new Collapsible({
+      name: 'test',
+      title: 'title',
+      expanded: false,
+      readOnly: true,
+      item: { id: 1, name: 'item' },
+      onToggle: jest.fn(),
+      onDelete: jest.fn(),
+      onEdit: jest.fn(),
+      onSubmit: jest.fn(),
+      children: <Content onSubmit={jest.fn()} />,
+      ...props
+    })
+    instance.setState = update => {
+      const next = typeof update === 'function' ? update(instance.state, instance.props) : update
+      instance.state = { ...instance.state, ...next }
+    }
+    return instance
+  }
+
+  const makeCollapsibleList = (children) => {
+    const instance = new CollapsibleList({ children })
+    instance.setState = update => {
+      const next = typeof update === 'function' ? update(instance.state, instance.props) : update
+      instance.state = { ...instance.state, ...next }
+    }
+    return instance
+  }
+
+  const visitElements = (node, predicate, matches = []) => {
+    if (node == null || typeof node === 'boolean') {
+      return matches
+    }
+    if (Array.isArray(node)) {
+      node.forEach(child => visitElements(child, predicate, matches))
+      return matches
+    }
+    if (React.isValidElement(node)) {
+      if (predicate(node)) {
+        matches.push(node)
+      }
+      visitElements(node.props && node.props.children, predicate, matches)
+    }
+    return matches
+  }
+
+  it('does not show content when collapsed', () => {
+    const instance = makeCollapsible({ expanded: false })
+    const markup = renderToStaticMarkup(instance.render())
+    expect(markup).not.toContain('This is inner content')
+    expect(markup).not.toContain('id="submit"')
   })
 
-  it('should show content when expanded', () => {
-    const wrapper = mount(
-      <Collapsible name='test' title='title' expanded readOnly={false} onToggle={noop} onDelete={noop} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-
-    expect(wrapper.find('button#submit').length).toBe(1)
+  it('shows content when expanded', () => {
+    const instance = makeCollapsible({ expanded: true, readOnly: false })
+    const markup = renderToStaticMarkup(instance.render())
+    expect(markup).toContain('This is inner content')
+    expect(markup).toContain('id="submit"')
   })
 
-  it('should show Edit button when readOnly', () => {
-    const wrapper = shallow(
-      <Collapsible name='test' title='title' expanded readOnly onToggle={noop} onDelete={noop} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    expect(wrapper.find('#edit-test').length).toBe(1)
+  it('shows Edit button when readOnly', () => {
+    const instance = makeCollapsible({ expanded: true, readOnly: true })
+    const markup = renderToStaticMarkup(instance.render())
+    expect(markup).toContain('id="edit-test"')
   })
 
-  it('should not show Edit button when readOnly is false', () => {
-    const wrapper = shallow(
-      <Collapsible name='test' title='title' expanded readOnly={false} onToggle={noop} onDelete={noop} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    expect(wrapper.find('#edit-test').length).toBe(0)
+  it('does not show Edit button when readOnly is false', () => {
+    const instance = makeCollapsible({ expanded: true, readOnly: false })
+    const markup = renderToStaticMarkup(instance.render())
+    expect(markup).not.toContain('id="edit-test"')
   })
 
-  it('should fire edit function', () => {
-    const jestFn = jest.fn()
-    const wrapper = shallow(
-      <Collapsible name='test' title='title' expanded readOnly onToggle={noop} onDelete={noop} onEdit={jestFn} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
-    expect(jestFn).toHaveBeenCalled()
+  it('fires edit function', () => {
+    const onEdit = jest.fn()
+    const instance = makeCollapsible({ onEdit })
+    const event = { stopPropagation: jest.fn() }
+    instance.handleEdit(event)
+    expect(event.stopPropagation).toHaveBeenCalled()
+    expect(onEdit).toHaveBeenCalledWith('test')
   })
 
-  it('should fire delete function', () => {
-    const jestFn = jest.fn()
-    const wrapper = shallow(
-      <Collapsible name='test' title='title' expanded readOnly onToggle={noop} onDelete={jestFn} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    wrapper.find('#delete-test').simulate('click', { stopPropagation: noop })
-    expect(jestFn).toHaveBeenCalled()
+  it('fires delete function', () => {
+    const item = { id: 7 }
+    const onDelete = jest.fn()
+    const instance = makeCollapsible({ item, onDelete })
+    const event = { stopPropagation: jest.fn() }
+    instance.handleDelete(event)
+    expect(event.stopPropagation).toHaveBeenCalled()
+    expect(onDelete).toHaveBeenCalledWith(item)
   })
 
-  it('should fire onToggle function', () => {
-    const jestFn = jest.fn()
-    const wrapper = shallow(
-      <Collapsible name='test' title='title' expanded readOnly onToggle={jestFn} onDelete={noop} onEdit={noop} onSubmit={noop}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    wrapper.find('div.collapsible-title').simulate('click')
-    expect(jestFn).toHaveBeenCalled()
+  it('fires onToggle function', () => {
+    const onToggle = jest.fn()
+    const instance = makeCollapsible({ expanded: true, onToggle })
+    const titleNode = visitElements(
+      instance.render(),
+      element => typeof element.props.className === 'string' && element.props.className.includes('collapsible-title')
+    )[0]
+
+    titleNode.props.onClick()
+    expect(onToggle).toHaveBeenCalledWith('test')
   })
 
-  it('should fire submit function', () => {
-    const jestFn = jest.fn()
-    const wrapper = mount(
-      <Collapsible name='test' title='title' expanded readOnly onToggle={noop} onDelete={noop} onEdit={noop} onSubmit={jestFn}>
-        <Content onSubmit={noop} />
-      </Collapsible>
-    )
-    wrapper.find('#submit').simulate('click', { stopPropagation: noop })
-    expect(jestFn).toHaveBeenCalled()
+  it('fires submit function and forwards values to the child submit handler', () => {
+    const onSubmit = jest.fn()
+    const childSubmit = jest.fn()
+    const instance = makeCollapsible({
+      expanded: true,
+      onSubmit,
+      children: <Content onSubmit={childSubmit} />
+    })
+
+    const child = visitElements(instance.render(), element => element.type === Content)[0]
+    child.props.onSubmit('done')
+
+    expect(onSubmit).toHaveBeenCalledWith('test')
+    expect(childSubmit).toHaveBeenCalledWith('done')
   })
 
-  it('should expand and set readonly false when edit is clicked', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Collapsible name='test' title='title'>
-          <Content onSubmit={noop} />
-        </Collapsible>
-      </CollapsibleList>
-    )
-    wrapper.find('#edit-test').simulate('click', { stopPropagation: noop })
+  it('expands and clears readOnly when edit is clicked in CollapsibleList', () => {
+    const child = <Collapsible name='test' title='title'><Content onSubmit={noop} /></Collapsible>
+    const list = makeCollapsibleList(child)
+
+    expect(list.state.expanded.test).toBe(false)
+    expect(list.state.readOnly.test).toBe(true)
+
+    list.onEdit('test')
+    expect(list.state.expanded.test).toBe(true)
+    expect(list.state.readOnly.test).toBe(false)
   })
 
-  it('should add new panel as collapsed', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Collapsible name='test' title='title'>
-          <Content onSubmit={noop} />
-        </Collapsible>
-      </CollapsibleList>
-    )
-    wrapper.setProps({ children: [<Collapsible name='another'><div /></Collapsible>] })
+  it('adds a new panel as collapsed', () => {
+    const initialChild = <Collapsible name='test' title='title'><Content onSubmit={noop} /></Collapsible>
+    const state = makeCollapsibleList(initialChild).state
+    const nextChildren = [<Collapsible key='another' name='another' title='another'><div /></Collapsible>]
 
-    const expanded = wrapper.state('expanded')
-    expect(expanded.another).toBe(false)
+    const derived = CollapsibleList.getDerivedStateFromProps({ children: nextChildren }, state)
+    expect(derived.expanded.another).toBe(false)
+    expect(derived.readOnly.another).toBe(true)
   })
 })

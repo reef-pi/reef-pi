@@ -40,7 +40,7 @@ export default class CalibrationWizard extends React.Component {
   handleCalibrate (point, expected) {
     const payload = {
       type: point,
-      expected: expected,
+      expected,
       observed: this.props.currentReading[this.props.probe.id]
     }
 

@@ -9,8 +9,8 @@ export default class FatalError extends React.Component {
       up: true
     }
   }
-  componentDidMount () {
 
+  componentDidMount () {
     this.timer = setInterval(() => {
       this.checkHealth()
     }, RefreshTime)
