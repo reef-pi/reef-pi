@@ -5,7 +5,7 @@ import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timesta
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
-class chart extends React.Component {
+export class RawDoserChart extends React.Component {
   constructor (props) {
     super(props)
     this.updateUsage = this.updateUsage.bind(this)
@@ -69,5 +69,5 @@ const mapDispatchToProps = dispatch => {
 const Chart = connect(
   mapStateToProps,
   mapDispatchToProps
-)(chart)
+)(RawDoserChart)
 export default Chart

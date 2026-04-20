@@ -5,7 +5,7 @@ import { fetchATOUsage } from '../redux/actions/ato'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
-class chart extends React.Component {
+export class RawATOChart extends React.Component {
   constructor (props) {
     super(props)
     this.updateUsage = this.updateUsage.bind(this)
@@ -76,5 +76,5 @@ const mapDispatchToProps = dispatch => {
 const Chart = connect(
   mapStateToProps,
   mapDispatchToProps
-)(chart)
+)(RawATOChart)
 export default Chart
