@@ -3,7 +3,7 @@ import { createJournal } from 'redux/actions/journal'
 import JournalForm from './form'
 import { connect } from 'react-redux'
 
-class newJournal extends React.Component {
+export class RawNewJournal extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -63,5 +63,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const New = connect(null, mapDispatchToProps)(newJournal)
+const New = connect(null, mapDispatchToProps)(RawNewJournal)
 export default New

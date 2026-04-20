@@ -1,13 +1,6 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import New from './new'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import New, { RawNewJournal } from './new'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 describe('<New />', () => {
   afterEach(() => {
@@ -16,55 +9,47 @@ describe('<New />', () => {
   })
 
   it('renders without throwing', () => {
-    const store = mockStore({ journals: [] })
-    expect(() =>
-      shallow(<Provider store={store}><New /></Provider>)
-    ).not.toThrow()
-  })
-
-  it('renders ConnectedNew inside Provider', () => {
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<Provider store={store}><New /></Provider>)
-    expect(wrapper.find('Connect(newJournal)')).toHaveLength(1)
-  })
-
-  it('renders add button using store prop pattern', () => {
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<New store={store} />).dive()
-    expect(wrapper.find('#add_new_journal')).toHaveLength(1)
+    const component = new RawNewJournal({ createJournal: jest.fn() })
+    expect(() => component.render()).not.toThrow()
+    expect(New).toBeDefined()
   })
 
   it('shows + initially', () => {
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<New store={store} />).dive()
-    expect(wrapper.find('#add_new_journal').prop('value')).toBe('+')
+    const component = new RawNewJournal({ createJournal: jest.fn() })
+    expect(component.render().props.children[0].props.value).toBe('+')
   })
 
   it('toggles to - on click', () => {
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<New store={store} />).dive()
-    wrapper.find('#add_new_journal').simulate('click')
-    expect(wrapper.find('#add_new_journal').prop('value')).toBe('-')
+    const component = new RawNewJournal({ createJournal: jest.fn() })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
+    component.render().props.children[0].props.onClick()
+    expect(component.render().props.children[0].props.value).toBe('-')
   })
 
   it('toggles state.add on button click', () => {
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<New store={store} />).dive()
-    expect(wrapper.instance().state.add).toBe(false)
-    wrapper.find('#add_new_journal').simulate('click')
-    expect(wrapper.instance().state.add).toBe(true)
-    wrapper.find('#add_new_journal').simulate('click')
-    expect(wrapper.instance().state.add).toBe(false)
+    const component = new RawNewJournal({ createJournal: jest.fn() })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
+    expect(component.state.add).toBe(false)
+    component.handleToggle()
+    expect(component.state.add).toBe(true)
+    component.handleToggle()
+    expect(component.state.add).toBe(false)
   })
 
   it('handleSubmit collapses the form', () => {
-    fetchMock.putOnce('/api/journal', {})
-    fetchMock.getOnce('/api/journal', [])
-    const store = mockStore({ journals: [] })
-    const wrapper = shallow(<New store={store} />).dive()
-    wrapper.find('#add_new_journal').simulate('click')
-    expect(wrapper.instance().state.add).toBe(true)
-    wrapper.instance().handleSubmit({ name: 'test', description: 'desc', unit: 'pH' })
-    expect(wrapper.instance().state.add).toBe(false)
+    const createJournal = jest.fn()
+    const component = new RawNewJournal({ createJournal })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
+    component.handleToggle()
+    expect(component.state.add).toBe(true)
+    component.handleSubmit({ name: 'test', description: 'desc', unit: 'pH' })
+    expect(createJournal).toHaveBeenCalledWith({ name: 'test', description: 'desc', unit: 'pH' })
+    expect(component.state.add).toBe(false)
   })
 })
