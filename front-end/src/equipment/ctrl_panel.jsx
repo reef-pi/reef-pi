@@ -5,7 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from 'react-toggle-switch'
 import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
 
-class CtrlPanel extends React.Component {
+export class RawEquipmentCtrlPanel extends React.Component {
   constructor (props) {
     super(props)
     this.toggleState = this.toggleState.bind(this)
@@ -67,6 +67,6 @@ const mapDispatchToProps = dispatch => {
 const EquipmentCtrlPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CtrlPanel)
+)(RawEquipmentCtrlPanel)
 
 export default EquipmentCtrlPanel
