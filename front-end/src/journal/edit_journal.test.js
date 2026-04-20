@@ -1,40 +1,36 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { Provider } from 'react-redux'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Formik } from 'formik'
 import EditJournal from './edit_journal'
 import * as Alert from 'utils/alert'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
-const mockStore = configureMockStore([thunk])
+jest.mock('react-redux', () => ({
+  useDispatch: () => jest.fn()
+}))
 
 const initialValues = { id: '1', name: 'pH', description: 'log', unit: 'pH' }
 
 const render = (extraProps = {}) => {
-  const store = mockStore({ journal_usage: {} })
   fetchMock.getOnce('/api/journal/1/usage', {})
   const submitForm = extraProps.submitForm || jest.fn()
-  return mount(
-    <Provider store={store}>
-      <Formik initialValues={initialValues} onSubmit={submitForm}>
-        {(formikProps) => (
-          <EditJournal
-            values={formikProps.values}
-            errors={formikProps.errors}
-            touched={formikProps.touched}
-            submitForm={formikProps.submitForm}
-            handleBlur={formikProps.handleBlur}
-            isValid={formikProps.isValid}
-            dirty={formikProps.dirty}
-            readOnly={false}
-            {...extraProps}
-          />
-        )}
-      </Formik>
-    </Provider>
+  return renderToStaticMarkup(
+    <Formik initialValues={initialValues} onSubmit={submitForm}>
+      {(formikProps) => (
+        <EditJournal
+          values={formikProps.values}
+          errors={formikProps.errors}
+          touched={formikProps.touched}
+          submitForm={formikProps.submitForm}
+          handleBlur={formikProps.handleBlur}
+          isValid={formikProps.isValid}
+          dirty={formikProps.dirty}
+          readOnly={false}
+          {...extraProps}
+        />
+      )}
+    </Formik>
   )
 }
 
@@ -55,17 +51,14 @@ describe('EditJournal', () => {
   })
 
   it('renders name, description, unit fields', () => {
-    const wrapper = render()
-    const names = wrapper.find('Field').map(f => f.prop('name'))
-    expect(names).toContain('name')
-    expect(names).toContain('description')
-    expect(names).toContain('unit')
+    const markup = render()
+    expect(markup).toContain('name="name"')
+    expect(markup).toContain('name="description"')
+    expect(markup).toContain('name="unit"')
   })
 
   it('disables fields when readOnly', () => {
-    const wrapper = render({ readOnly: true })
-    wrapper.find('Field').forEach(f => {
-      expect(f.prop('disabled')).toBe(true)
-    })
+    const markup = render({ readOnly: true })
+    expect(markup.match(/disabled=""/g)).toHaveLength(4)
   })
 })
