@@ -43,11 +43,11 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 ## Snapshot Builds
 
-After every merge to the `main` branch, the [deb workflow](https://github.com/hectorespert/planted-pi/actions/workflows/deb.yml) automatically builds and uploads Debian packages as GitHub Actions artifacts. These snapshot builds are available for 30 days.
+Snapshot builds are published by the upstream [`reef-pi/reef-pi`](https://github.com/reef-pi/reef-pi) repository. After every merge to the `main` branch, the [deb workflow](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml) automatically builds and uploads Debian packages as GitHub Actions artifacts. These snapshot builds are available for 30 days.
 
 To download a snapshot build:
 
-1. Go to the [deb workflow runs](https://github.com/hectorespert/planted-pi/actions/workflows/deb.yml).
+1. Go to the upstream [deb workflow runs](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml).
 2. Click on the latest successful run on the `main` branch.
 3. Scroll down to the **Artifacts** section at the bottom of the run page.
 4. Download the package for your target platform:
