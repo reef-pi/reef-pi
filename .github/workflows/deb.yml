@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - snapshot_deb_package
   pull_request:
     branches:
       - main
