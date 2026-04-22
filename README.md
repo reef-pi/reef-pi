@@ -43,7 +43,7 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 
 ## Snapshot Builds
 
-Snapshot builds are published by the upstream [`reef-pi/reef-pi`](https://github.com/reef-pi/reef-pi) repository. After every merge to the `main` branch, the [deb workflow](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml) automatically builds and uploads Debian packages as GitHub Actions artifacts. These snapshot builds are available for 30 days.
+After every change published to the `main` branch, the [deb workflow](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml) automatically builds and uploads Debian packages as GitHub Actions artifacts. These snapshot builds are available for 30 days.
 
 To download a snapshot build:
 
