@@ -47,7 +47,7 @@ After every change published to the `main` branch, the [deb workflow](https://gi
 
 To download a snapshot build:
 
-1. Go to the upstream [deb workflow runs](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml).
+1. Go to the [deb workflow runs](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml).
 2. Click on the latest successful run on the `main` branch.
 3. Scroll down to the **Artifacts** section at the bottom of the run page.
 4. Download the package for your target platform:
