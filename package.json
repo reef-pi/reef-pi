@@ -45,7 +45,7 @@
     "marked": "^13.0.1",
     "mini-css-extract-plugin": "2.7.6",
     "popper.js": "^1.16.1",
-    "postcss": "^8.4.34",
+    "postcss": "^8.5.10",
     "postcss-loader": "8.1.1",
     "precss": "4.0.0",
     "react": "19.2.5",
