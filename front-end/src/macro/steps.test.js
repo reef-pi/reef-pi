@@ -11,6 +11,9 @@ import AlertStep from './alert_step'
 import GenericStep from './generic_step'
 import StepSelector from './step_selector'
 import SelectType from './select_type'
+import PWMStep from './pwm_step'
+import MacroForm from './macro_form'
+import MacroSchema from './macro_schema'
 
 const mockStore = configureMockStore([thunk])
 
@@ -132,5 +135,91 @@ describe('Macro step components', () => {
       </Provider>
     )
     expect(wrapper.find('select').length).toBeGreaterThan(0)
+  })
+
+  it('<PWMStep /> renders jack selector and value field', () => {
+    const store = mockStore({ jacks: [{ id: '1', name: 'PWM Jack', pins: [1, 2] }] })
+    const wrapper = mount(
+      <Provider store={store}>
+        {withFormik(
+          <PWMStep name='steps[0]' errors={{}} touched={{}} readOnly={false} />,
+          { 'steps[0]': { id: '', value: 0 } }
+        )}
+      </Provider>
+    )
+    expect(wrapper.find('select').length).toBeGreaterThan(0)
+  })
+
+  it('<PWMStep /> renders in readOnly mode', () => {
+    const store = mockStore({ jacks: [{ id: '1', name: 'PWM Jack', pins: [1, 2] }] })
+    const wrapper = mount(
+      <Provider store={store}>
+        {withFormik(
+          <PWMStep name='steps[0]' errors={{}} touched={{}} readOnly />,
+          { 'steps[0]': { id: '1', value: 50 } }
+        )}
+      </Provider>
+    )
+    expect(wrapper.find('select[disabled]').length).toBeGreaterThan(0)
+  })
+
+  it('<PWMStep /> renders with empty jacks', () => {
+    const store = mockStore({ jacks: [] })
+    const wrapper = mount(
+      <Provider store={store}>
+        {withFormik(
+          <PWMStep name='steps[0]' errors={{}} touched={{}} readOnly={false} />,
+          { 'steps[0]': { id: '', value: 0 } }
+        )}
+      </Provider>
+    )
+    expect(wrapper.find('select').length).toBeGreaterThan(0)
+  })
+
+  it('<MacroForm /> renders with macro data', () => {
+    const macro = { name: 'test', enable: false, reversible: false, steps: [] }
+    const wrapper = shallow(<MacroForm macro={macro} onSubmit={jest.fn()} />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('<MacroForm /> renders with undefined macro (defaults)', () => {
+    const wrapper = shallow(<MacroForm onSubmit={jest.fn()} />)
+    expect(wrapper).toBeDefined()
+  })
+
+  it('MacroSchema validates a valid macro', () => {
+    return expect(MacroSchema.isValid({ name: 'test', steps: [] })).resolves.toBe(true)
+  })
+
+  it('MacroSchema rejects missing name', () => {
+    return expect(MacroSchema.isValid({ name: '', steps: [] })).resolves.toBe(false)
+  })
+
+  it('MacroSchema validates a wait step', () => {
+    return expect(MacroSchema.isValid({
+      name: 'test',
+      steps: [{ type: 'wait', duration: 5 }]
+    })).resolves.toBe(true)
+  })
+
+  it('MacroSchema rejects wait step missing duration', () => {
+    return expect(MacroSchema.isValid({
+      name: 'test',
+      steps: [{ type: 'wait' }]
+    })).resolves.toBe(false)
+  })
+
+  it('MacroSchema validates an alert step', () => {
+    return expect(MacroSchema.isValid({
+      name: 'test',
+      steps: [{ type: 'alert', title: 'hi', message: 'msg' }]
+    })).resolves.toBe(true)
+  })
+
+  it('MacroSchema validates an equipment step', () => {
+    return expect(MacroSchema.isValid({
+      name: 'test',
+      steps: [{ type: 'equipment', id: '1', on: true }]
+    })).resolves.toBe(true)
   })
 })
