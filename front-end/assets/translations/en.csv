@@ -94,6 +94,13 @@ camera:target_dir,Image Directory
 camera:tick_interval,Tick Interval (in minutes)
 camera:tick_must_be_positive,Tick interval has to be a positive integer
 camera:to_gdrive,Upload to gDrive
+flow_meter:min_flow,Min Flow
+flow_meter:notify_enable,Notify on Low Flow
+flow_meter:period,Period
+flow_meter:pulses_per_liter,Pulses per Liter
+flow_meter:sensor_path,Sensor Path
+flow_meter:title_delete,Delete Flow Meter
+flow_meter:warn_delete,Are you sure you want to delete {{name}}?
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuration
@@ -110,6 +117,7 @@ capabilities:log,Log
 capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instances
+capabilities:flow_meter,Flow Meter
 capabilities:ph,pH
 capabilities:phprobes,Probes (pH)
 capabilities:system,System

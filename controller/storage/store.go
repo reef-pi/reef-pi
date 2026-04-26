@@ -32,6 +32,8 @@ const (
 	DriverBucket                 = "drivers"
 	JournalBucket                = "journal"
 	JournalUsageBucket           = "journal_usage"
+	FlowMeterBucket              = "flow_meters"
+	FlowMeterUsageBucket         = "flow_meter_usage"
 )
 
 type ObjectStore interface {

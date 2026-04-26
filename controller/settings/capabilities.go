@@ -16,6 +16,7 @@ type Capabilities struct {
 	Macro         bool `json:"macro"`
 	Configuration bool `json:"configuration"`
 	Journal       bool `json:"journal"`
+	FlowMeter     bool `json:"flow_meter"`
 }
 
 var DefaultCapabilities = Capabilities{
