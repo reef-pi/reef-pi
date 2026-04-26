@@ -1,45 +1,48 @@
-import JackSelector from './jack_selector'
-import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import JackSelector, { RawJackSelector } from './jack_selector'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
 describe('JackSelector', () => {
   it('renders without throwing with matching jack', () => {
-    const store = mockStore({ jacks })
-    expect(() =>
-      shallow(<Provider store={store}><JackSelector id='1' update={() => {}} /></Provider>)
-    ).not.toThrow()
+    const component = new RawJackSelector({ id: '1', jacks, update: jest.fn(), fetchJacks: jest.fn() })
+    expect(() => component.render()).not.toThrow()
+    expect(JackSelector).toBeDefined()
   })
 
   it('renders without throwing with no matching jack', () => {
-    const store = mockStore({ jacks })
-    expect(() =>
-      shallow(<Provider store={store}><JackSelector id='99' update={() => {}} /></Provider>)
-    ).not.toThrow()
+    const component = new RawJackSelector({ id: '99', jacks, update: jest.fn(), fetchJacks: jest.fn() })
+    expect(() => component.render()).not.toThrow()
   })
 
   it('renders without throwing with empty jacks list', () => {
-    const store = mockStore({ jacks: [] })
-    expect(() =>
-      shallow(<Provider store={store}><JackSelector id='1' update={() => {}} /></Provider>)
-    ).not.toThrow()
+    const component = new RawJackSelector({ id: '1', jacks: [], update: jest.fn(), fetchJacks: jest.fn() })
+    expect(() => component.render()).not.toThrow()
   })
 
-  it('renders via dive', () => {
-    const store = mockStore({ jacks })
-    const wrapper = shallow(<JackSelector id='1' update={() => {}} store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('selects a jack and its first pin', () => {
+    const update = jest.fn()
+    const component = new RawJackSelector({ id: '99', jacks, update, fetchJacks: jest.fn() })
+    component.setState = jest.fn(updateState => {
+      component.state = { ...component.state, ...updateState }
+    })
+
+    component.setJack(0)()
+
+    expect(component.state.jack).toEqual(jacks[0])
+    expect(component.state.pin).toBe(1)
+    expect(update).toHaveBeenCalledWith('1', 1)
   })
 
-  it('renders via dive with no match', () => {
-    const store = mockStore({ jacks })
-    const wrapper = shallow(<JackSelector id='99' update={() => {}} store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('updates the selected pin', () => {
+    const update = jest.fn()
+    const component = new RawJackSelector({ id: '1', jacks, update, fetchJacks: jest.fn() })
+    component.setState = jest.fn(updateState => {
+      component.state = { ...component.state, ...updateState }
+    })
+
+    component.setPin(2)()
+
+    expect(component.state.pin).toBe(2)
+    expect(update).toHaveBeenCalledWith('1', 2)
   })
 })

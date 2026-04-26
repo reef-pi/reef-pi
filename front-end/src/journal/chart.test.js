@@ -1,13 +1,5 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import Chart from './chart'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
+import Chart, { RawJournalChart } from './chart'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 const journal = { id: '1', name: 'pH', unit: 'pH' }
 const readings = {
@@ -19,36 +11,52 @@ const readings = {
 
 describe('<Chart />', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
   it('renders without throwing when journal not in store', () => {
-    fetchMock.getOnce('/api/journal/1/usage', readings)
-    const store = mockStore({ journals: [], journal_usage: {} })
-    expect(() =>
-      shallow(<Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>)
-    ).not.toThrow()
+    const chart = new RawJournalChart({
+      journal_id: '1',
+      width: 500,
+      height: 300,
+      config: undefined,
+      readings,
+      fetch: jest.fn()
+    })
+    expect(chart.render().type).toBe('div')
+    expect(Chart).toBeDefined()
   })
 
   it('renders without throwing when readings available', () => {
-    fetchMock.getOnce('/api/journal/1/usage', readings)
-    const store = mockStore({
-      journals: [journal],
-      journal_usage: { '1': readings }
+    const chart = new RawJournalChart({
+      journal_id: '1',
+      width: 500,
+      height: 300,
+      config: journal,
+      readings,
+      fetch: jest.fn()
     })
-    expect(() =>
-      shallow(<Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>)
-    ).not.toThrow()
+    expect(() => chart.render()).not.toThrow()
   })
 
-  it('renders ConnectedChart inside Provider', () => {
-    fetchMock.getOnce('/api/journal/1/usage', readings)
-    const store = mockStore({ journals: [journal], journal_usage: {} })
-    const wrapper = shallow(
-      <Provider store={store}><Chart journal_id='1' width={500} height={300} /></Provider>
-    )
-    expect(wrapper.find('Connect(chart)')).toHaveLength(1)
+  it('polls on mount and clears timer on unmount', () => {
+    jest.useFakeTimers()
+    const fetch = jest.fn()
+    const chart = new RawJournalChart({
+      journal_id: '1',
+      width: 500,
+      height: 300,
+      config: journal,
+      readings,
+      fetch
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    jest.advanceTimersByTime(15000)
+    chart.componentWillUnmount()
+    jest.useRealTimers()
+    expect(fetch).toHaveBeenCalledWith('1')
   })
 })

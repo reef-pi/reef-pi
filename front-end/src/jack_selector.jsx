@@ -3,7 +3,7 @@ import { fetchJacks } from './redux/actions/jacks'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
-class jackSelector extends React.Component {
+export class RawJackSelector extends React.Component {
   constructor (props) {
     super(props)
     let jack
@@ -144,5 +144,5 @@ const mapDispatchToProps = dispatch => {
 const JackSelector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(jackSelector)
+)(RawJackSelector)
 export default JackSelector

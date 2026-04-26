@@ -1,13 +1,5 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import EquipmentCtrlPanel from './ctrl_panel'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
+import EquipmentCtrlPanel, { RawEquipmentCtrlPanel } from './ctrl_panel'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 const equipment = [
   { id: '1', name: 'Heater', on: true, outlet: '1', stay_off_on_boot: false },
@@ -20,36 +12,57 @@ const outlets = [
 
 describe('<EquipmentCtrlPanel />', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
   it('renders without throwing with equipment', () => {
-    const store = mockStore({ equipment, outlets })
-    expect(() =>
-      shallow(<Provider store={store}><EquipmentCtrlPanel /></Provider>)
-    ).not.toThrow()
+    const panel = new RawEquipmentCtrlPanel({
+      equipment,
+      outlets,
+      fetchEquipment: jest.fn(),
+      updateEquipment: jest.fn()
+    })
+    expect(() => panel.render()).not.toThrow()
+    expect(EquipmentCtrlPanel).toBeDefined()
   })
 
   it('renders without throwing with undefined equipment', () => {
-    const store = mockStore({ equipment: undefined, outlets: [] })
-    expect(() =>
-      shallow(<Provider store={store}><EquipmentCtrlPanel /></Provider>)
-    ).not.toThrow()
+    const panel = new RawEquipmentCtrlPanel({
+      equipment: undefined,
+      outlets: [],
+      fetchEquipment: jest.fn(),
+      updateEquipment: jest.fn()
+    })
+    expect(panel.render().type).toBe('div')
   })
 
-  it('renders connected component via dive', () => {
-    const store = mockStore({ equipment, outlets })
-    fetchMock.getOnce('/api/equipment', equipment)
-    const wrapper = shallow(<EquipmentCtrlPanel store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('starts polling on mount and clears interval on unmount', () => {
+    jest.useFakeTimers()
+    const fetchEquipment = jest.fn()
+    const panel = new RawEquipmentCtrlPanel({
+      equipment,
+      outlets,
+      fetchEquipment,
+      updateEquipment: jest.fn()
+    })
+    panel.componentDidMount()
+    jest.advanceTimersByTime(16000)
+    panel.componentWillUnmount()
+    jest.useRealTimers()
+    expect(fetchEquipment).toHaveBeenCalled()
   })
 
-  it('renders via dive', () => {
-    const store = mockStore({ equipment, outlets })
-    fetchMock.getOnce('/api/equipment', equipment)
-    const wrapper = shallow(<EquipmentCtrlPanel store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('toggles equipment state', () => {
+    const updateEquipment = jest.fn()
+    const panel = new RawEquipmentCtrlPanel({
+      equipment,
+      outlets,
+      fetchEquipment: jest.fn(),
+      updateEquipment
+    })
+    const preventDefault = jest.fn()
+    panel.toggleState({ preventDefault }, equipment[0])
+    expect(preventDefault).toHaveBeenCalled()
+    expect(updateEquipment).toHaveBeenCalled()
   })
 })
