@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import SettingsSchema from './settings_schema'
 import i18n from 'utils/i18n'
 
-class settings extends React.Component {
+export class RawSettings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -332,5 +332,5 @@ const mapDispatchToProps = dispatch => {
 const Settings = connect(
   mapStateToProps,
   mapDispatchToProps
-)(settings)
+)(RawSettings)
 export default Settings

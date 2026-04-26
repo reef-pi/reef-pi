@@ -1,12 +1,8 @@
-import React from 'react'
-import { shallow } from 'enzyme'
 import Driver from './driver'
 import 'isomorphic-fetch'
-import DriverFrom from './driver_form'
-
+import DriverForm, { mapDriverPropsToValues, submitDriverForm } from './driver_form'
 
 describe('driver UI', () => {
-
   let driver = {
     id: 1,
     name: 'test',
@@ -17,22 +13,40 @@ describe('driver UI', () => {
     }
   }
 
-  it('<Driver />', () => {
-    shallow(
-      <Driver
-        driver={driver}
-        remove={() => true}
-        update={() => true}
-        provision={() => true}
-      />)
+  it('<Driver /> toggles edit state', () => {
+    const component = new Driver({
+      driver,
+      remove: jest.fn(),
+      update: jest.fn(),
+      validate: jest.fn(() => Promise.resolve({ status: 200 })),
+      provision: jest.fn(),
+      driverOptions: {}
+    })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
+
+    expect(component.ui().type).toBe('div')
+    component.handleEdit()
+    expect(component.state.edit).toBe(true)
+    expect(component.state.lbl).toBe('save')
   })
 
-  it('<DriverForm />', () => {
-    const wrapper = shallow(
-      <DriverFrom
-        data={{}}
-        onSubmit={() => true}
-      />).instance()
-    wrapper.handleSubmit()
+  it('<DriverForm /> maps and submits', () => {
+    const onSubmit = jest.fn()
+
+    expect(mapDriverPropsToValues({ data: driver })).toEqual({
+      id: 1,
+      name: 'test',
+      type: 'pca9685',
+      config: {
+        address: 45,
+        freqency: 1000
+      }
+    })
+
+    submitDriverForm({ id: 1 }, { props: { onSubmit } })
+    expect(onSubmit).toHaveBeenCalledWith({ id: 1 }, { props: { onSubmit } })
+    expect(DriverForm).toBeDefined()
   })
 })

@@ -9,7 +9,7 @@ import CalibrationModal from './calibration_modal'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 
-class doser extends React.Component {
+export class RawDoser extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -186,5 +186,5 @@ const mapDispatchToProps = dispatch => {
 const Doser = connect(
   mapStateToProps,
   mapDispatchToProps
-)(doser)
+)(RawDoser)
 export default Doser

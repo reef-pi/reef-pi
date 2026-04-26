@@ -1,5 +1,4 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import SolarProfile from './solar_profile'
 
 const baseProps = {
@@ -11,30 +10,41 @@ const baseProps = {
   errors: {}
 }
 
+const findFields = (node, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (node.type && node.type.name === 'Field') {
+    acc.push(node)
+  }
+  React.Children.toArray(node.props?.children).forEach(child => findFields(child, acc))
+  return acc
+}
+
 describe('SolarProfile', () => {
   it('renders without throwing', () => {
-    const wrapper = shallow(<SolarProfile {...baseProps} />)
-    expect(wrapper).toBeDefined()
+    expect(() => SolarProfile(baseProps)).not.toThrow()
   })
 
   it('renders in readOnly mode', () => {
-    const wrapper = shallow(<SolarProfile {...baseProps} readOnly />)
-    expect(wrapper).toBeDefined()
+    const fields = findFields(SolarProfile({ ...baseProps, readOnly: true }))
+    fields.forEach(field => {
+      expect(field.props.disabled).toBe(true)
+    })
   })
 
   it('renders with validation errors', () => {
-    const wrapper = shallow(
-      <SolarProfile
-        {...baseProps}
-        errors={{ 'profile.latitude': 'required' }}
-        touched={{ 'profile.latitude': true }}
-      />
+    const fields = findFields(
+      SolarProfile({
+        ...baseProps,
+        errors: { 'profile.latitude': 'required' },
+        touched: { 'profile.latitude': true }
+      })
     )
-    expect(wrapper).toBeDefined()
+    expect(fields.find(field => field.props.name === 'profile.latitude')).toBeTruthy()
   })
 
   it('renders with no config', () => {
-    const wrapper = shallow(<SolarProfile {...baseProps} config={undefined} />)
-    expect(wrapper).toBeDefined()
+    expect(() => SolarProfile({ ...baseProps, config: undefined })).not.toThrow()
   })
 })

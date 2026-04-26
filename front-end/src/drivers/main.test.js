@@ -1,13 +1,8 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import Drivers from './main'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import Drivers, { RawDriversMain } from './main'
+import Driver from './driver'
+import New from './new'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-
-const mockStore = configureMockStore([thunk])
 
 const drivers = [
   { id: '1', name: 'RPI', type: 'rpi', config: {} },
@@ -15,52 +10,111 @@ const drivers = [
 ]
 const driverOptions = [{ name: 'pca9685', display: 'PCA9685' }]
 
+const findNodes = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  React.Children.toArray(node.props?.children).forEach(child => {
+    findNodes(child, predicate, acc)
+  })
+  return acc
+}
+
 describe('Drivers Main', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
-  it('mounts with empty drivers', () => {
-    fetchMock.get('/api/drivers', [])
-    fetchMock.get('/api/drivers/options', [])
-    const store = mockStore({ drivers: [], driverOptions: [] })
-    const wrapper = mount(<Provider store={store}><Drivers /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with empty drivers and fetches on mount', () => {
+    const fetch = jest.fn()
+    const fetchDriverOptions = jest.fn()
+    const main = new RawDriversMain({
+      drivers: [],
+      driverOptions: [],
+      fetch,
+      fetchDriverOptions,
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+
+    main.componentDidMount()
+    expect(fetch).toHaveBeenCalled()
+    expect(fetchDriverOptions).toHaveBeenCalled()
+    expect(() => main.render()).not.toThrow()
   })
 
-  it('mounts with drivers including rpi type (read_only)', () => {
-    fetchMock.get('/api/drivers', drivers)
-    fetchMock.get('/api/drivers/options', driverOptions)
-    const store = mockStore({ drivers, driverOptions })
-    const wrapper = mount(<Provider store={store}><Drivers /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders drivers including rpi type as read_only', () => {
+    const main = new RawDriversMain({
+      drivers,
+      driverOptions,
+      fetch: jest.fn(),
+      fetchDriverOptions: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+
+    const rendered = main.render()
+    const driverNodes = findNodes(rendered, node => node.type === Driver)
+    expect(driverNodes).toHaveLength(2)
+    const byId = Object.fromEntries(driverNodes.map(node => [node.props.driver.id, node.props]))
+    expect(byId['1'].read_only).toBe(true)
+    expect(byId['2'].read_only).toBe(false)
   })
 
-  it('mounts with non-rpi driver', () => {
-    fetchMock.get('/api/drivers', [])
-    fetchMock.get('/api/drivers/options', driverOptions)
+  it('renders with non-rpi driver', () => {
     const pcaOnly = [{ id: '2', name: 'PCA', type: 'pca9685', config: {} }]
-    const store = mockStore({ drivers: pcaOnly, driverOptions })
-    const wrapper = mount(<Provider store={store}><Drivers /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const main = new RawDriversMain({
+      drivers: pcaOnly,
+      driverOptions,
+      fetch: jest.fn(),
+      fetchDriverOptions: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+
+    const driverNodes = findNodes(main.render(), node => node.type === Driver)
+    expect(driverNodes).toHaveLength(1)
+    expect(driverNodes[0].props.read_only).toBe(false)
   })
 
-  it('shallow render without throwing with drivers', () => {
-    const store = mockStore({ drivers, driverOptions })
-    expect(() =>
-      shallow(<Provider store={store}><Drivers /></Provider>)
-    ).not.toThrow()
+  it('renders without throwing with drivers', () => {
+    const main = new RawDriversMain({
+      drivers,
+      driverOptions,
+      fetch: jest.fn(),
+      fetchDriverOptions: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+
+    expect(() => main.render()).not.toThrow()
+    expect(findNodes(main.render(), node => node.type === New)).toHaveLength(1)
   })
 
-  it('shallow render without throwing with empty list', () => {
-    const store = mockStore({ drivers: [], driverOptions: [] })
-    expect(() =>
-      shallow(<Provider store={store}><Drivers /></Provider>)
-    ).not.toThrow()
+  it('renders without throwing with empty list', () => {
+    const main = new RawDriversMain({
+      drivers: [],
+      driverOptions: [],
+      fetch: jest.fn(),
+      fetchDriverOptions: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+
+    expect(() => main.render()).not.toThrow()
+    expect(Drivers).toBeDefined()
   })
 })

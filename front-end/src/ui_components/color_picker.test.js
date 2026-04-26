@@ -1,33 +1,42 @@
-import React from 'react'
-import { shallow } from 'enzyme'
 import ColorPicker from './color_picker'
-import { SketchPicker } from 'react-color'
-
 
 describe('ColorPicker', () => {
-  const ev = {
-    target: { name: 'color', value: 10 }
-  }
+  it('starts collapsed and expands', () => {
+    const component = new ColorPicker({
+      name: 'picker',
+      color: '',
+      onChangeHandler: jest.fn()
+    })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
 
-  it('<ColorPicker />', () => {
-    shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />)
+    expect(component.render().type).toBe('button')
+
+    component.render().props.onClick()
+    expect(component.state.expand).toBe(true)
+    expect(component.render().props.onChangeComplete).toBe(component.handleColorChange)
   })
 
-  it('should start collapsed', () => {
-    const wrapper = shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />)
-    expect(wrapper.find('button').length).toBe(1)
-    expect(wrapper.find(SketchPicker).length).toBe(0)
-  })
+  it('handles color change and collapses', () => {
+    const onChangeHandler = jest.fn()
+    const component = new ColorPicker({
+      name: 'picker',
+      color: '',
+      onChangeHandler
+    })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
 
-  it('should handle color change', () => {
-    const instance = shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />).instance()
-    instance.handleColorChange(ev)
-  })
+    component.handleColorChange({ hex: '#abcdef' })
 
-  it('should expand', () => {
-    const wrapper = shallow(<ColorPicker name='picker' color='' onChangeHandler={() => true} />)
-    wrapper.find('button').simulate('click')
-    expect(wrapper.find('button').length).toBe(0)
-    expect(wrapper.find(SketchPicker).length).toBe(1)
+    expect(onChangeHandler).toHaveBeenCalledWith({
+      target: {
+        name: 'picker',
+        value: '#abcdef'
+      }
+    })
+    expect(component.state).toEqual({ expand: false, color: '#abcdef' })
   })
 })
