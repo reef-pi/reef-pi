@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
+import { Formik, Form } from 'formik'
 import Channel from './channel'
 import Chart from './chart'
 import Main, {TestMain} from './main'
@@ -12,11 +13,19 @@ import FixedProfile from './fixed_profile'
 import SineProfile from './sine_profile'
 import RandomProfile from './random_profile'
 import LunarProfile from './lunar_profile'
+import CircadianProfile from './circadian_profile'
+import CyclicProfile from './cyclic_profile'
 import Profile from './profile'
 import Percent from '../ui_components/percent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+
+const wrapFormik = (component, initialValues = {}) => (
+  <Formik initialValues={initialValues} onSubmit={() => {}}>
+    <Form>{component}</Form>
+  </Formik>
+)
 
 const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
@@ -357,6 +366,68 @@ describe('Lighting ui', () => {
     const wrapper = shallow(<ProfileSelector name='name' value='fixed' onChangeHandler={fn} />)
     expect(wrapper.find('input').length).toBe(10)
     wrapper.find('select').simulate('change', { target: { value: 'diurnal' } })
+  })
+
+  it('<Profile /> circadian', () => {
+    const wrapper = shallow(<Profile name='name' type='circadian' onChangeHandler={() => true} />)
+    expect(wrapper.find(CircadianProfile).length).toBe(1)
+  })
+
+  it('<Profile /> cyclic', () => {
+    const wrapper = shallow(<Profile name='name' type='cyclic' onChangeHandler={() => true} />)
+    expect(wrapper.find(CyclicProfile).length).toBe(1)
+  })
+
+  it('<CircadianProfile />', () => {
+    const wrapper = mount(
+      wrapFormik(
+        <CircadianProfile
+          name='channels[1].profile.config'
+          onChangeHandler={() => {}}
+          readOnly={false}
+          touched={{}}
+          errors={{}}
+        />,
+        { 'channels[1].profile.config': { start: '08:00:00', end: '20:00:00', dawn_value: 10, noon_value: 80 } }
+      )
+    )
+    expect(wrapper.find('input').length).toBeGreaterThan(0)
+  })
+
+  it('<CircadianProfile /> readOnly', () => {
+    const wrapper = mount(
+      wrapFormik(
+        <CircadianProfile name='circadian' onChangeHandler={() => {}} readOnly touched={{}} errors={{}} />,
+        {}
+      )
+    )
+    expect(wrapper.find('input').length).toBeGreaterThan(0)
+  })
+
+  it('<CyclicProfile />', () => {
+    const wrapper = mount(
+      wrapFormik(
+        <CyclicProfile
+          name='channels[1].profile.config'
+          onChangeHandler={() => {}}
+          readOnly={false}
+          touched={{}}
+          errors={{}}
+        />,
+        { 'channels[1].profile.config': { period: 3600, phase_shift: 0 } }
+      )
+    )
+    expect(wrapper.find('input').length).toBeGreaterThan(0)
+  })
+
+  it('<CyclicProfile /> readOnly', () => {
+    const wrapper = mount(
+      wrapFormik(
+        <CyclicProfile name='cyclic' onChangeHandler={() => {}} readOnly touched={{}} errors={{}} />,
+        {}
+      )
+    )
+    expect(wrapper.find('input').length).toBeGreaterThan(0)
   })
 
 })
