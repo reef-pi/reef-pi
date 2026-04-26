@@ -149,4 +149,29 @@ describe('<EditTimer />', () => {
     expect(changeHandler.mock.calls.length).toBe(2)
     expect(changeHandler.mock.calls[1][0].target.value).toEqual({title: '', message: ''})
   })
+
+  it('EditTimer /> should set lightings target with correct defaults when lightings is selected', () => {
+    values.type = 'lightings'
+
+    const changeHandler = jest.fn()
+
+    const wrapper = shallow(
+      <EditTimer values={values}
+        equipment={equipment}
+        handleBlur={fn}
+        handleChange={changeHandler}
+        submitForm={fn}
+        macros={macros}
+        showChart
+        errors={{}}
+        touched={{}}
+        dirty
+        isValid={false} />
+    )
+
+    wrapper.find({component: 'select', name: 'type'}).simulate('change', {target: {name: 'type', value: 'lightings'}})
+
+    expect(changeHandler.mock.calls.length).toBe(2)
+    expect(changeHandler.mock.calls[1][0].target.value).toEqual({ id: '', on: true, revert: false, duration: 60 })
+  })
 })
