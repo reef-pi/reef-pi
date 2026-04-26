@@ -1,20 +1,25 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import Summary from './summary'
 import 'isomorphic-fetch'
 
-
 describe('Summary', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    jest.clearAllMocks()
+  })
+
   it('<Summary />', () => {
-    const m = shallow(
-      <Summary
-        info={{}}
-        devMode={false}
-        fetch={() => true}
-        errors={[]}
-        timer={window.setInterval(() => true, 1800 * 1000)}
-      />
-    ).instance()
-    m.componentWillUnmount()
+    jest.spyOn(window, 'setInterval').mockReturnValue(123)
+    jest.spyOn(window, 'clearInterval').mockImplementation(() => {})
+    const summary = new Summary({
+      info: {},
+      devMode: false,
+      fetch: () => true,
+      errors: []
+    })
+
+    expect(summary.render().type).toBe('nav')
+    summary.componentWillUnmount()
+    expect(window.clearInterval).toHaveBeenCalledWith(123)
   })
 })

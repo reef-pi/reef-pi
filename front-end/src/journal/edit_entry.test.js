@@ -1,8 +1,19 @@
-import React from 'react'
-import { shallow } from 'enzyme'
 import EditEntry from './edit_entry'
 import * as Alert from 'utils/alert'
 
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  const children = node.props?.children
+  if (children !== undefined) {
+    ;[].concat(children).forEach(child => findAll(child, predicate, acc))
+  }
+  return acc
+}
 
 const defaultProps = {
   values: { value: 7.2, comment: '', timestamp: 'Jul-08-23:38, 2022' },
@@ -25,12 +36,12 @@ describe('EditEntry', () => {
   })
 
   it('renders without throwing', () => {
-    expect(() => shallow(<EditEntry {...defaultProps} />)).not.toThrow()
+    expect(() => EditEntry(defaultProps)).not.toThrow()
   })
 
   it('renders value, comment, timestamp fields', () => {
-    const wrapper = shallow(<EditEntry {...defaultProps} />)
-    const names = wrapper.find('Field').map(f => f.prop('name'))
+    const names = findAll(EditEntry(defaultProps), node => node.props?.name)
+      .map(node => node.props.name)
     expect(names).toContain('value')
     expect(names).toContain('comment')
     expect(names).toContain('timestamp')
@@ -38,28 +49,28 @@ describe('EditEntry', () => {
 
   it('calls submitForm and showUpdateSuccessful on valid submit', () => {
     const submitForm = jest.fn()
-    const wrapper = shallow(<EditEntry {...defaultProps} submitForm={submitForm} />)
-    wrapper.find('form').simulate('submit', { preventDefault: jest.fn() })
+    const form = EditEntry({ ...defaultProps, submitForm })
+    form.props.onSubmit({ preventDefault: jest.fn() })
     expect(submitForm).toHaveBeenCalled()
     expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
   })
 
   it('calls showError when not valid and dirty', () => {
     const submitForm = jest.fn()
-    const wrapper = shallow(<EditEntry {...defaultProps} submitForm={submitForm} isValid={false} dirty />)
-    wrapper.find('form').simulate('submit', { preventDefault: jest.fn() })
+    const form = EditEntry({ ...defaultProps, submitForm, isValid: false, dirty: true })
+    form.props.onSubmit({ preventDefault: jest.fn() })
     expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('shows is-invalid class on value field when there is a touched error', () => {
-    const wrapper = shallow(
-      <EditEntry
-        {...defaultProps}
-        errors={{ value: 'required' }}
-        touched={{ value: true }}
-      />
-    )
-    const valueField = wrapper.find('Field[name="value"]')
-    expect(valueField.prop('className')).toContain('is-invalid')
+    const valueField = findAll(
+      EditEntry({
+        ...defaultProps,
+        errors: { value: 'required' },
+        touched: { value: true }
+      }),
+      node => node.props?.name === 'value'
+    )[0]
+    expect(valueField.props.className).toContain('is-invalid')
   })
 })

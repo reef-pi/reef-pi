@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import * as v from './validation_helper'
 
 describe('Validation Helper', () => {
@@ -57,15 +57,15 @@ describe('Validation Helper', () => {
     const errors = { field1: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    render(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
-    expect(screen.getByText('some error')).toBeTruthy()
+    const html = renderToStaticMarkup(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    expect(html).toContain('some error')
   })
 
   it('<ErrorFor /> without error', () => {
     const errors = { field2: [null, null, 'some error', 'error 2'] }
     const touched = { field1: true }
 
-    const { container } = render(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
-    expect(container.firstChild).toBeNull()
+    const html = renderToStaticMarkup(<v.ErrorFor name='field1' touched={touched} errors={errors} />)
+    expect(html).toBe('')
   })
 })

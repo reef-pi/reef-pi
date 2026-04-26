@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { showUpdateSuccessful } from 'utils/alert'
 import i18n from 'utils/i18n'
 
-class display extends React.Component {
+export class RawDisplay extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -92,5 +92,5 @@ const mapDispatchToProps = dispatch => {
 const Display = connect(
   mapStateToProps,
   mapDispatchToProps
-)(display)
+)(RawDisplay)
 export default Display

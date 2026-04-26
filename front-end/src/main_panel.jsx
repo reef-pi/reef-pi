@@ -57,7 +57,7 @@ function CurrentPageHeader () {
   return <span>{label}</span>
 }
 
-class mainPanel extends React.Component {
+export class RawMainPanel extends React.Component {
   constructor (props) {
     super(props)
     this.navs = this.navs.bind(this)
@@ -159,5 +159,5 @@ const mapDispatchToProps = dispatch => {
 const MainPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(mainPanel)
+)(RawMainPanel)
 export default MainPanel

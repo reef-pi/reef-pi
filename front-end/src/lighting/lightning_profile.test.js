@@ -1,6 +1,23 @@
-import React from 'react'
-import { shallow } from 'enzyme'
 import LightningProfile from './lightning_profile'
+
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  const children = node.props?.children
+  if (children !== undefined) {
+    ;[].concat(children).forEach(child => findAll(child, predicate, acc))
+  }
+  return acc
+}
+
+const findField = (tree, name) => findAll(
+  tree,
+  node => node.props?.name === name && Object.prototype.hasOwnProperty.call(node.props || {}, 'onChange')
+)[0]
 
 describe('LightningProfile', () => {
   const config = {
@@ -13,73 +30,69 @@ describe('LightningProfile', () => {
 
   it('renders without throwing with full config', () => {
     const handler = jest.fn()
-    const wrapper = shallow(
-      <LightningProfile
-        config={config}
-        errors={{}}
-        touched={{}}
-        readOnly={false}
-        onChangeHandler={handler}
-      />
-    )
-    expect(wrapper).toBeDefined()
+    expect(() => LightningProfile({
+      config,
+      errors: {},
+      touched: {},
+      readOnly: false,
+      onChangeHandler: handler
+    })).not.toThrow()
   })
 
   it('renders without throwing with no config (uses fallback defaults)', () => {
     const handler = jest.fn()
-    const wrapper = shallow(
-      <LightningProfile
-        config={undefined}
-        errors={{}}
-        touched={{}}
-        readOnly={false}
-        onChangeHandler={handler}
-      />
-    )
-    expect(wrapper).toBeDefined()
+    expect(() => LightningProfile({
+      config: undefined,
+      errors: {},
+      touched: {},
+      readOnly: false,
+      onChangeHandler: handler
+    })).not.toThrow()
   })
 
   it('calls onChangeHandler with merged config on field change', () => {
     const handler = jest.fn()
-    const wrapper = shallow(
-      <LightningProfile
-        config={config}
-        errors={{}}
-        touched={{}}
-        readOnly={false}
-        onChangeHandler={handler}
-      />
-    )
-    // Simulate a change on the start Field (use 'Field' tag to avoid matching ErrorFor with same name prop)
-    wrapper.find('Field[name="config.start"]').simulate('change', {
+    const startField = findField(LightningProfile({
+      config,
+      errors: {},
+      touched: {},
+      readOnly: false,
+      onChangeHandler: handler
+    }), 'config.start')
+    startField.props.onChange({
       target: { name: 'start', value: '09:00:00' }
     })
     expect(handler).toHaveBeenCalledWith({ ...config, start: '09:00:00' })
   })
 
   it('renders in readOnly mode without throwing', () => {
-    const wrapper = shallow(
-      <LightningProfile
-        config={config}
-        errors={{}}
-        touched={{}}
-        readOnly
-        onChangeHandler={() => {}}
-      />
-    )
-    expect(wrapper).toBeDefined()
+    const tree = LightningProfile({
+      config,
+      errors: {},
+      touched: {},
+      readOnly: true,
+      onChangeHandler: () => {}
+    })
+    const fields = [
+      findField(tree, 'config.start'),
+      findField(tree, 'config.end'),
+      findField(tree, 'config.frequency'),
+      findField(tree, 'config.flash_slot'),
+      findField(tree, 'config.intensity')
+    ]
+    fields.forEach(field => {
+      expect(field.props.readOnly).toBe(true)
+    })
   })
 
   it('renders with validation errors applied', () => {
-    const wrapper = shallow(
-      <LightningProfile
-        config={config}
-        errors={{ 'config.start': 'required' }}
-        touched={{ 'config.start': true }}
-        readOnly={false}
-        onChangeHandler={() => {}}
-      />
-    )
-    expect(wrapper).toBeDefined()
+    const startField = findField(LightningProfile({
+      config,
+      errors: { 'config.start': 'required' },
+      touched: { 'config.start': true },
+      readOnly: false,
+      onChangeHandler: () => {}
+    }), 'config.start')
+    expect(startField).toBeTruthy()
   })
 })

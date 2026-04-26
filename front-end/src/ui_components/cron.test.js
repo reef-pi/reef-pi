@@ -1,7 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import Cron from './cron'
-
 
 const defaultProps = {
   values: { month: '*', week: '*', day: '*', hour: '*', minute: '*', second: '0' },
@@ -9,19 +7,29 @@ const defaultProps = {
   touched: {}
 }
 
+const findFields = (node, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (node.type && node.type.name === 'Field' && node.props && node.props.name) {
+    acc.push(node)
+  }
+  React.Children.toArray(node.props?.children).forEach(child => findFields(child, acc))
+  return acc
+}
+
 describe('Cron', () => {
   it('renders without throwing', () => {
-    expect(() => shallow(<Cron {...defaultProps} />)).not.toThrow()
+    expect(() => Cron(defaultProps)).not.toThrow()
   })
 
   it('renders 6 Field inputs (month, week, day, hour, minute, second)', () => {
-    const wrapper = shallow(<Cron {...defaultProps} />)
-    expect(wrapper.find('Field')).toHaveLength(6)
+    const fields = findFields(Cron(defaultProps))
+    expect(fields).toHaveLength(6)
   })
 
   it('renders a field for each cron part', () => {
-    const wrapper = shallow(<Cron {...defaultProps} />)
-    const names = wrapper.find('Field').map(f => f.prop('name'))
+    const names = findFields(Cron(defaultProps)).map(f => f.props.name)
     expect(names).toContain('month')
     expect(names).toContain('week')
     expect(names).toContain('day')
@@ -31,42 +39,40 @@ describe('Cron', () => {
   })
 
   it('disables all fields when readOnly is true', () => {
-    const wrapper = shallow(<Cron {...defaultProps} readOnly />)
-    const fields = wrapper.find('Field')
+    const fields = findFields(Cron({ ...defaultProps, readOnly: true }))
     fields.forEach(field => {
-      expect(field.prop('disabled')).toBe(true)
+      expect(field.props.disabled).toBe(true)
     })
   })
 
   it('does not disable fields when readOnly is false', () => {
-    const wrapper = shallow(<Cron {...defaultProps} readOnly={false} />)
-    const fields = wrapper.find('Field')
+    const fields = findFields(Cron({ ...defaultProps, readOnly: false }))
     fields.forEach(field => {
-      expect(field.prop('disabled')).toBe(false)
+      expect(field.props.disabled).toBe(false)
     })
   })
 
   it('adds is-invalid class when minute has an error and is touched', () => {
-    const wrapper = shallow(
-      <Cron
-        {...defaultProps}
-        errors={{ minute: 'required' }}
-        touched={{ minute: true }}
-      />
-    )
-    const minuteField = wrapper.find('Field[name="minute"]')
-    expect(minuteField.prop('className')).toContain('is-invalid')
+    const minuteField = findFields(
+      Cron({
+        ...defaultProps,
+        errors: { minute: 'required' },
+        touched: { minute: true }
+      })
+    ).find(f => f.props.name === 'minute')
+
+    expect(minuteField.props.className).toContain('is-invalid')
   })
 
   it('does not add is-invalid class when field is not touched', () => {
-    const wrapper = shallow(
-      <Cron
-        {...defaultProps}
-        errors={{ minute: 'required' }}
-        touched={{ minute: false }}
-      />
-    )
-    const minuteField = wrapper.find('Field[name="minute"]')
-    expect(minuteField.prop('className')).not.toContain('is-invalid')
+    const minuteField = findFields(
+      Cron({
+        ...defaultProps,
+        errors: { minute: 'required' },
+        touched: { minute: false }
+      })
+    ).find(f => f.props.name === 'minute')
+
+    expect(minuteField.props.className).not.toContain('is-invalid')
   })
 })

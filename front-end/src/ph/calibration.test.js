@@ -1,64 +1,61 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import CalibrateForm, { Calibrate } from './calibrate'
+import CalibrateForm, {
+  Calibrate,
+  mapCalibrationPropsToValues,
+  submitCalibrationForm
+} from './calibrate'
 import CalibrationWizard from './calibration_wizard'
 import 'isomorphic-fetch'
-import * as Alert from '../utils/alert'
-
 
 describe('Ph Calibration', () => {
-  let values = { enable: true }
-  let fn = jest.fn()
-
-  beforeEach(() => {
-    jest.spyOn(Alert, 'showError')
-  })
+  const values = { enable: true }
+  const fn = jest.fn()
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('<Calibrate />', () => {
-    shallow(
-      <Calibrate
-        values={values}
-        errors={{}}
-        touched={{}}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-      />
-    )
+  it('<Calibrate /> renders a form', () => {
+    const element = Calibrate({
+      values,
+      errors: {},
+      touched: {},
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn
+    })
+
+    expect(element.type).toBe('form')
   })
 
   it('<Calibrate /> should submit', () => {
-    const wrapper = shallow(
-      <Calibrate
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const element = Calibrate({
+      values,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: true
+    })
+
+    element.props.onSubmit({ preventDefault: jest.fn() })
+    expect(submitForm).toHaveBeenCalled()
   })
 
-  it('<CalibrateForm/>', () => {
-    const wrapper = shallow(<CalibrateForm onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+  it('<CalibrateForm/> maps and submits values', () => {
+    expect(mapCalibrationPropsToValues({ defaultValue: 7 })).toEqual({ value: 7 })
+
+    const onSubmit = jest.fn()
+    submitCalibrationForm({ value: '8.4' }, { onSubmit, point: 'mid' })
+    expect(onSubmit).toHaveBeenCalledWith('mid', 8.4)
+    expect(CalibrateForm).toBeDefined()
   })
 
   it('<CalibrationWizard />', () => {
-    const fn = jest.fn((id, obj) => {
-      return new Promise(resolve => {
-        return resolve(true)
-      })
-    })
+    const calibrateProbe = jest.fn(() => Promise.resolve(true))
     const probe = { id: 1 }
     const wrapper = new CalibrationWizard(
       {
@@ -66,7 +63,7 @@ describe('Ph Calibration', () => {
         currentReading: [8.7, 9.0, 7.5],
         cancel: fn,
         confirm: fn,
-        calibrateProbe: fn
+        calibrateProbe
       }
     )
     wrapper.setState = jest.fn()
@@ -74,5 +71,9 @@ describe('Ph Calibration', () => {
     wrapper.handleCalibrate('mid', 7)
     wrapper.handleCalibrate('second', 10)
     wrapper.handleCalibrate('low', 4)
+
+    expect(calibrateProbe).toHaveBeenCalledWith(1, { type: 'mid', expected: 7, observed: 9 })
+    expect(calibrateProbe).toHaveBeenCalledWith(1, { type: 'second', expected: 10, observed: 9 })
+    expect(calibrateProbe).toHaveBeenCalledWith(1, { type: 'low', expected: 4, observed: 9 })
   })
 })

@@ -3,7 +3,7 @@ import { createATO } from 'redux/actions/ato'
 import AtoForm from './ato_form'
 import { connect } from 'react-redux'
 
-class newATO extends React.Component {
+export class RawNewATO extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -80,5 +80,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const New = connect(null, mapDispatchToProps)(newATO)
+const New = connect(null, mapDispatchToProps)(RawNewATO)
 export default New

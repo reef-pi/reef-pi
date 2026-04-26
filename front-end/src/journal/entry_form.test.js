@@ -1,25 +1,25 @@
-import React from 'react'
-import { mount } from 'enzyme'
-import EntryForm from './entry_form'
-
+import EntryForm, { mapEntryPropsToValues, submitEntryForm } from './entry_form'
 
 describe('<EntryForm />', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('renders without throwing with no data (uses defaults)', () => {
-    const onSubmit = jest.fn()
-    expect(() =>
-      mount(<EntryForm onSubmit={onSubmit} readOnly={false} />)
-    ).not.toThrow()
+  it('maps defaults with generated timestamp', () => {
+    const values = mapEntryPropsToValues({})
+
+    expect(values.value).toBe('')
+    expect(values.comment).toBe('')
+    expect(values.timestamp).toMatch(/^[A-Z][a-z]{2}-\d{2}-\d{2}:\d{2}, \d{4}$/)
+    expect(EntryForm).toBeDefined()
   })
 
-  it('renders without throwing with data', () => {
+  it('maps explicit data and submits', () => {
     const onSubmit = jest.fn()
     const data = { value: '7.4', comment: 'after water change', timestamp: 'Jan-01-10:00, 2024' }
-    expect(() =>
-      mount(<EntryForm data={data} onSubmit={onSubmit} readOnly={false} />)
-    ).not.toThrow()
+
+    expect(mapEntryPropsToValues({ data })).toEqual(data)
+    submitEntryForm(data, { onSubmit })
+    expect(onSubmit).toHaveBeenCalledWith(data)
   })
 })

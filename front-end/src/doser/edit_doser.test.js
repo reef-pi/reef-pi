@@ -1,9 +1,20 @@
-import React from 'react'
-import { shallow } from 'enzyme'
 import EditDoser from './edit_doser'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  const children = node.props?.children
+  if (children !== undefined) {
+    ;[].concat(children).forEach(child => findAll(child, predicate, acc))
+  }
+  return acc
+}
 
 describe('<EditPh />', () => {
   let values = { enable: true }
@@ -20,72 +31,64 @@ describe('<EditPh />', () => {
   })
 
   it('<EditDoser />', () => {
-    shallow(
-      <EditDoser
-        values={values}
-        jacks={jacks}
-        doser={doser}
-        errors={{}}
-        touched={{}}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-      />
-    )
+    expect(() => EditDoser({
+      values,
+      jacks,
+      doser,
+      errors: {},
+      touched: {},
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn
+    })).not.toThrow()
   })
 
-  it('<EditDoser /> should update pins', () => {
-    const wrapper = shallow(
-      <EditDoser
-        values={values}
-        jacks={jacks}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        setFieldValue={fn}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('[component][name="type"]').simulate('change', { target: { value: 'dcpump' } })
+  it('<EditDoser /> renders the type field', () => {
+    const typeField = findAll(EditDoser({
+      values,
+      jacks,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      setFieldValue: fn,
+      dirty: true,
+      isValid: true
+    }), node => node.props?.name === 'type')[0]
+    expect(typeField).toBeTruthy()
   })
 
   it('<EditDoser /> should submit', () => {
-    const wrapper = shallow(
-      <EditDoser
-        values={values}
-        jacks={jacks}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const form = EditDoser({
+      values,
+      jacks,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: true
+    })
+    form.props.onSubmit({ preventDefault: () => {} })
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditDoser /> should show alert when invalid', () => {
-    const wrapper = shallow(
-      <EditDoser
-        values={values}
-        jacks={jacks}
-        doser={doser}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid={false}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const form = EditDoser({
+      values,
+      jacks,
+      doser,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: false
+    })
+    form.props.onSubmit({ preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
 })
