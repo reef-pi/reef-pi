@@ -19,7 +19,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-26-nightly-node_modules-
       - run: yarn --ignore-engines
-      - run: npx playwright install --with-deps chromium
+      - run: yarn --ignore-engines playwright install --with-deps chromium
       - run: make go
       - run: make ui
       - run: make smoke
