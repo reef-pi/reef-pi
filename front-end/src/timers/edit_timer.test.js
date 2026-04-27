@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import EditTimer from './edit_timer'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
