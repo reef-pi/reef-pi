@@ -130,6 +130,10 @@
     "testPathIgnorePatterns": [
       "<rootDir>/front-end/e2e/"
     ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/build/translations/",
+      "<rootDir>/front-end/test/"
+    ],
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"
     },
