@@ -41,3 +41,4 @@ const Chart = connect(
   null
 )(chart)
 export default Chart
+export { chart as RawChart }

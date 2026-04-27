@@ -3,7 +3,7 @@ import { fetchInlets } from '../redux/actions/inlets'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
-class inletSelector extends React.Component {
+export class RawInletSelector extends React.Component {
   constructor (props) {
     super(props)
     let inlet
@@ -113,5 +113,5 @@ const mapDispatchToProps = dispatch => {
 const InletSelector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(inletSelector)
+)(RawInletSelector)
 export default InletSelector

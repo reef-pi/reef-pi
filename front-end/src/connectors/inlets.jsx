@@ -8,7 +8,7 @@ import Pin from './pin'
 import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 
-class inlets extends React.Component {
+export class RawInlets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -244,5 +244,5 @@ const mapDispatchToProps = dispatch => {
 const Inlets = connect(
   mapStateToProps,
   mapDispatchToProps
-)(inlets)
+)(RawInlets)
 export default Inlets

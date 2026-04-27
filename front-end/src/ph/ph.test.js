@@ -1,155 +1,232 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import PhForm from './ph_form'
-import Chart from './chart'
-import Main from './main'
-import configureMockStore from 'redux-mock-store'
-import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-import thunk from 'redux-thunk'
+import PhForm, { mapPhPropsToValues, submitPhForm } from './ph_form'
+import Chart, { RawPhChart } from './chart'
+import Main, { RawPhMain } from './main'
 
-const mockStore = configureMockStore([thunk])
+jest.mock('utils/confirm', () => {
+  return {
+    showModal: jest.fn().mockImplementation(() => Promise.resolve(true)).bind(this),
+    confirm: jest.fn().mockImplementation(() => Promise.resolve(true)).bind(this)
+  }
+})
 
 const phState = {
-  phprobes: [{ id: '1', name: 'probe', enable: false, notify: { enable: false }, control: false }],
+  phprobes: [{ id: '1', name: 'probe', enable: false, notify: { enable: false }, control: false, chart: {} }],
   analog_inputs: [],
   ph_reading: [],
   macros: [],
   equipment: []
 }
 
-jest.mock('utils/confirm', () => {
-  return {
-    showModal: jest
-      .fn()
-      .mockImplementation(() => {
-        return new Promise(resolve => {
-          return resolve(true)
-        })
-      })
-      .bind(this),
-    confirm: jest
-      .fn()
-      .mockImplementation(() => {
-        return new Promise(resolve => {
-          return resolve(true)
-        })
-      })
-      .bind(this)
-  }
-})
-
 describe('Ph ui', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
   it('<Main /> mounts with empty probes', () => {
-    fetchMock.get('/api/phprobes', [])
-    const store = mockStore({ phprobes: [], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const main = new RawPhMain({
+      probes: [],
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    expect(main.render().type).toBe('div')
+    expect(Main).toBeDefined()
   })
 
   it('<Main /> mounts with probes', () => {
-    fetchMock.get('/api/phprobes', phState.phprobes)
-    const store = mockStore(phState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
-    wrapper.unmount()
+    const main = new RawPhMain({
+      probes: phState.phprobes,
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    expect(main.probeList()).toHaveLength(1)
   })
 
   it('<Main /> toggles add probe form', () => {
-    fetchMock.get('/api/phprobes', [])
-    const store = mockStore({ phprobes: [], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#add_probe').simulate('click')
-    wrapper.find('#add_probe').simulate('click')
-    wrapper.unmount()
+    const main = new RawPhMain({
+      probes: [],
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    main.setState = update => { main.state = { ...main.state, ...update } }
+    main.handleToggleAddProbeDiv()
+    expect(main.state.addProbe).toBe(true)
+    main.handleToggleAddProbeDiv()
+    expect(main.state.addProbe).toBe(false)
   })
 
   it('<Main /> mounts with enabled probe', () => {
-    fetchMock.get('/api/phprobes', [])
-    const enabledProbe = { id: '2', name: 'enabled-probe', enable: true, notify: { enable: false }, control: false }
-    const store = mockStore({ phprobes: [enabledProbe], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const enabledProbe = { id: '2', name: 'enabled-probe', enable: true, notify: { enable: false }, control: false, chart: {} }
+    const main = new RawPhMain({
+      probes: [enabledProbe],
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    expect(main.probeList()).toHaveLength(1)
   })
 
   it('<Main /> mounts with control probe', () => {
-    fetchMock.get('/api/phprobes', [])
     const controlProbe = {
-      id: '3', name: 'control-probe', enable: false,
-      notify: { enable: false }, control: true, is_macro: false,
-      min: 7, max: 8.6, downer_eq: '1', upper_eq: '2', chart: {}
+      id: '3',
+      name: 'control-probe',
+      enable: false,
+      notify: { enable: false },
+      control: true,
+      is_macro: false,
+      min: 7,
+      max: 8.6,
+      downer_eq: '1',
+      upper_eq: '2',
+      chart: {}
     }
-    const store = mockStore({ phprobes: [controlProbe], analog_inputs: [], ph_reading: [], macros: [], equipment: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const main = new RawPhMain({
+      probes: [controlProbe],
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    expect(main.probeList()).toHaveLength(1)
   })
 
-  it('<Main /> delete probe triggers confirm', () => {
-    fetchMock.get('/api/phprobes', [])
-    fetchMock.delete('/api/phprobes/1', {})
-    const store = mockStore(phState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#delete-panel-ph-1').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('<Main /> delete probe triggers confirm', async () => {
+    const del = jest.fn()
+    const main = new RawPhMain({
+      probes: phState.phprobes,
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: del,
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    main.handleDeleteProbe(phState.phprobes[0])
+    await Promise.resolve()
+    expect(del).toHaveBeenCalledWith('1')
   })
 
   it('<Main /> calibrate button click shows wizard', () => {
-    fetchMock.get('/api/phprobes', [])
-    const store = mockStore(phState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('button[name="calibrate-probe-1"]').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const main = new RawPhMain({
+      probes: phState.phprobes,
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    main.setState = update => { main.state = { ...main.state, ...update } }
+    main.calibrateProbe({}, phState.phprobes[0])
+    expect(main.state.showCalibrate).toBe(true)
+    expect(main.state.currentProbe).toEqual(phState.phprobes[0])
   })
 
-  it('<Main />', () => {
-    const state = {
-      phprobes: [
-        {
-          id: 1,
-          name: 'probe',
-          enable: false,
-          chart: {},
-          notify: {
-            enable: false
-          },
-          control: true,
-          is_macro: true,
-          min: 7,
-          downer_eq: '3',
-          max: 8.6,
-          upper_eq: '1'
-        }
-      ]
+  it('<Main /> valuesToProbe and handlers', () => {
+    const create = jest.fn()
+    const update = jest.fn()
+    const main = new RawPhMain({
+      probes: [],
+      ais: [],
+      currentReading: [],
+      macros: [],
+      equipment: [],
+      fetchPhProbes: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update,
+      calibrateProbe: jest.fn(),
+      readProbe: jest.fn()
+    })
+    main.setState = nextState => { main.state = { ...main.state, ...nextState } }
+    const values = {
+      id: '1',
+      name: 'probe',
+      enable: true,
+      period: '60',
+      analog_input: '2',
+      notify: true,
+      minAlert: '7.1',
+      maxAlert: '8.6',
+      chart: { ymin: 0, ymax: 14, color: '#000', unit: '' },
+      control: 'macro',
+      one_shot: false,
+      lowerThreshold: '7',
+      lowerFunction: '3',
+      upperThreshold: '8.6',
+      upperFunction: '1',
+      transformer: '',
+      hysteresis: '0.1',
+      chart_y_min: '0',
+      chart_y_max: '14'
     }
-
-    const m = shallow(<Main store={mockStore(state)} />)
-      .dive()
-      .instance()
+    const payload = main.valuesToProbe(values)
+    expect(payload.control).toBe(true)
+    expect(payload.is_macro).toBe(true)
+    expect(payload.notify.min).toBe(7.1)
+    main.handleUpdateProbe(values)
+    main.handleCreateProbe(values)
+    expect(update).toHaveBeenCalledWith('1', expect.objectContaining({ name: 'probe' }))
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ name: 'probe' }))
   })
 
   it('<PhForm/> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<PhForm onSubmit={fn} />)
-    wrapper.simulate('submit', {})
+    const values = mapPhPropsToValues({})
+    submitPhForm(values, { props: { onSubmit: fn } })
     expect(fn).toHaveBeenCalled()
+    expect(PhForm).toBeDefined()
   })
 
   it('<PhForm /> for edit', () => {
     const fn = jest.fn()
-
     const probe = {
+      id: '4',
       name: 'name',
       enable: true,
       address: 99,
@@ -159,14 +236,13 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+    const values = mapPhPropsToValues({ probe })
+    submitPhForm(values, { props: { onSubmit: fn } })
+    expect(fn).toHaveBeenCalledWith(expect.objectContaining({ name: 'name' }))
+    expect(values.control).toBe('equipment')
   })
 
   it('<PhForm /> for edit with macro', () => {
-    const fn = jest.fn()
-
     const probe = {
       name: 'name',
       enable: true,
@@ -177,13 +253,11 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('macro')
+    const values = mapPhPropsToValues({ probe })
+    expect(values.control).toBe('macro')
   })
 
   it('<PhForm /> for edit without control', () => {
-    const fn = jest.fn()
-
     const probe = {
       name: 'name',
       enable: true,
@@ -194,23 +268,22 @@ describe('Ph ui', () => {
       chart_y_min: 0,
       chart_y_max: 14
     }
-    const wrapper = shallow(<PhForm probe={probe} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('')
+    const values = mapPhPropsToValues({ probe })
+    expect(values.control).toBe('')
   })
 
   it('<Chart />', () => {
-    const probes = [{ id: '1', name: 'foo' , chart: {}}]
-    const readings = { 1: { name: 'foo', current: [] } }
-    const m = shallow(
-      <Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: readings })} type='current' />
-    )
-      .dive()
-      .instance()
-    shallow(<Chart probe_id='1' store={mockStore({ phprobes: [], ph_readings: readings })} type='current' />)
-      .dive()
-      .instance()
-    shallow(<Chart probe_id='1' store={mockStore({ phprobes: probes, ph_readings: [] })} type='current' />)
-      .dive()
-      .instance()
+    const noConfig = new RawPhChart({ probe_id: '1', fetchProbeReadings: jest.fn(), config: undefined, readings: undefined })
+    expect(noConfig.render().type).toBe('div')
+    const withReadings = new RawPhChart({
+      probe_id: '1',
+      fetchProbeReadings: jest.fn(),
+      config: { name: 'foo', chart: { color: '#000', ymin: 0, ymax: 14, unit: 'pH' }, notify: { enable: true, min: 7, max: 8.6 } },
+      readings: { current: [{ time: '2026-04-26T00:00:00Z', value: 7.5 }, { time: '2026-04-26T01:00:00Z', value: 7.6 }] },
+      type: 'current',
+      height: 300
+    })
+    expect(withReadings.render().type).toBe('div')
+    expect(Chart).toBeDefined()
   })
 })

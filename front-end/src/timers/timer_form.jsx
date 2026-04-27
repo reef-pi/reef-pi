@@ -2,6 +2,45 @@ import EditTimer from './edit_timer'
 import TimerSchema from './timer_schema'
 import { withFormik } from 'formik'
 
+export const mapTimerPropsToValues = props => {
+  let timer = props.timer
+  if (timer === undefined) {
+    timer = {
+      enable: true,
+      ato: [],
+      equipment: [],
+      macro: [],
+      ph: [],
+      temperature: [],
+      doser: [],
+      light: []
+    }
+  }
+
+  return {
+    id: timer.id || '',
+    name: timer.name || '',
+    enable: (timer.enable === undefined ? true : timer.enable),
+    month: timer.month || '*',
+    week: timer.week || '*',
+    day: timer.day || '*',
+    hour: timer.hour || '*',
+    minute: timer.minute || '*',
+    second: timer.second || '0',
+    type: timer.type || 'equipment',
+    target: timer.target || {
+      id: '',
+      on: true,
+      duration: 60,
+      revert: false
+    }
+  }
+}
+
+export const submitTimerForm = (values, { props }) => {
+  props.onSubmit(values)
+}
+
 const TimerForm = withFormik({
   displayName: 'TimerForm',
   initialValues: {
@@ -21,44 +60,9 @@ const TimerForm = withFormik({
       revert: true
     }
   },
-  mapPropsToValues: props => {
-    let timer = props.timer
-    if (timer === undefined) {
-      timer = {
-        enable: true,
-        ato: [],
-        equipment: [],
-        macro: [],
-        ph: [],
-        temperature: [],
-        doser: [],
-        light: []
-      }
-    }
-
-    return {
-      id: timer.id || '',
-      name: timer.name || '',
-      enable: (timer.enable === undefined ? true : timer.enable),
-      month: timer.month || '*',
-      week: timer.week || '*',
-      day: timer.day || '*',
-      hour: timer.hour || '*',
-      minute: timer.minute || '*',
-      second: timer.second || '0',
-      type: timer.type || 'equipment',
-      target: timer.target || {
-        id: '',
-        on: true,
-        duration: 60,
-        revert: false
-      }
-    }
-  },
+  mapPropsToValues: mapTimerPropsToValues,
   validationSchema: TimerSchema,
-  handleSubmit: (values, { props }) => {
-    props.onSubmit(values)
-  }
+  handleSubmit: submitTimerForm
 })(EditTimer)
 
 export default TimerForm

@@ -8,7 +8,7 @@ import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 import { byCapability } from './driver_filter'
 
-class outlets extends React.Component {
+export class RawOutlets extends React.Component {
   constructor (props) {
     super(props)
     const d = props.drivers.filter(d => d.id === 'rpi')[0]
@@ -247,6 +247,6 @@ const mapDispatchToProps = dispatch => {
 const Outlets = connect(
   mapStateToProps,
   mapDispatchToProps
-)(outlets)
+)(RawOutlets)
 
 export default Outlets

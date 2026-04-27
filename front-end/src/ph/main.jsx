@@ -9,7 +9,7 @@ import CalibrationWizard from './calibration_wizard'
 import i18next from 'i18next'
 import { SortByName } from 'utils/sort_by_name'
 
-class ph extends React.Component {
+export class RawPhMain extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -235,5 +235,5 @@ const mapDispatchToProps = dispatch => {
 const Ph = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ph)
+)(RawPhMain)
 export default Ph

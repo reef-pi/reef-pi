@@ -79,3 +79,4 @@ const mapDispatchToProps = (dispatch) => {
 
 const ReadingsChart = connect(mapStateToProps, mapDispatchToProps)(chart)
 export default ReadingsChart
+export { chart as RawReadingsChart }

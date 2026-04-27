@@ -1,67 +1,67 @@
 import React from 'react'
-import { act } from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
+import TestRenderer, { act } from 'react-test-renderer'
 import Journal from './journal'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
 import 'isomorphic-fetch'
 
-const mockStore = configureMockStore([thunk])
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useDispatch: jest.fn()
+}))
+
+jest.mock('./entry_form', () => () => <div data-testid='entry-form' />)
+jest.mock('./chart', () => () => <div data-testid='chart' />)
+jest.mock('./form', () => () => <div data-testid='journal-form' />)
+
+const { useDispatch } = jest.requireMock('react-redux')
 
 const config = { id: '1', name: 'pH Log', description: 'daily', unit: 'pH' }
 
-const makeStore = () => mockStore({ journals: [config], journal_usage: {} })
-
-const render = (extraProps = {}) => {
-  const store = makeStore()
-  fetchMock.getOnce('/api/journal/1/usage', {})
-  fetchMock.getOnce('/api/journal/1', config)
-  return mount(
-    <Provider store={store}>
-      <Journal config={config} readOnly={false} expanded={false} {...extraProps} />
-    </Provider>
-  )
-}
-
 describe('<Journal />', () => {
+  const renderJournal = (extraProps = {}) => {
+    const dispatch = jest.fn()
+    useDispatch.mockReturnValue(dispatch)
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true
+    let renderer
+    act(() => {
+      renderer = TestRenderer.create(
+        <Journal config={config} readOnly={false} expanded={false} {...extraProps} />
+      )
+    })
+    return { renderer, dispatch }
+  }
+
+  const findByProps = (root, props) => {
+    return root.find(node => Object.entries(props).every(([key, value]) => node.props && node.props[key] === value))
+  }
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
   it('renders without throwing', () => {
-    expect(() => render()).not.toThrow()
+    expect(() => renderJournal()).not.toThrow()
   })
 
   it('renders Add Entry button', () => {
-    const wrapper = render()
-    const btn = wrapper.find('input#add_entry')
-    expect(btn).toHaveLength(1)
+    const { renderer } = renderJournal()
+    const btn = findByProps(renderer.root, { id: 'add_entry' })
+    expect(btn.props.value).toBeDefined()
   })
 
   it('renders entry form after clicking Add Entry', () => {
-    const store = makeStore()
-    fetchMock.getOnce('/api/journal/1/usage', {})
-    const wrapper = mount(
-      <Provider store={store}>
-        <Journal config={config} readOnly={false} expanded={false} />
-      </Provider>
-    )
+    const { renderer } = renderJournal()
+    const btn = findByProps(renderer.root, { id: 'add_entry' })
     act(() => {
-      wrapper.find('input#add_entry').prop('onClick')()
+      btn.props.onClick()
     })
-    wrapper.update()
-    // After toggle, entry form should appear
-    expect(wrapper.find('input#add_entry').prop('value')).toBe('-')
+    const toggled = findByProps(renderer.root, { id: 'add_entry' })
+    expect(toggled.props.value).toBe('-')
+    expect(renderer.root.findAll(node => node.props && node.props['data-testid'] === 'entry-form')).toHaveLength(1)
   })
 
-  it('shallow renders without throwing', () => {
-    const store = makeStore()
-    expect(() =>
-      shallow(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
-    ).not.toThrow()
+  it('renders in readOnly mode', () => {
+    const { renderer } = renderJournal({ readOnly: true })
+    const btn = findByProps(renderer.root, { id: 'add_entry' })
+    expect(btn.props.className).toBe('btn btn-outline-success')
   })
 })

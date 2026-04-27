@@ -3,7 +3,7 @@ import { fetchErrors, deleteError, deleteErrors } from 'redux/actions/errors'
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
-class errors extends React.Component {
+export class RawErrors extends React.Component {
   constructor (props) {
     super(props)
     this.handleClear = this.handleClear.bind(this)
@@ -71,5 +71,5 @@ const mapDispatchToProps = dispatch => {
 const Errors = connect(
   mapStateToProps,
   mapDispatchToProps
-)(errors)
+)(RawErrors)
 export default Errors

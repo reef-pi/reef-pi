@@ -7,7 +7,7 @@ import i18n from 'utils/i18n'
 import { connect } from 'react-redux'
 import { fetchDrivers } from 'redux/actions/drivers'
 
-class connectors extends React.Component {
+export class RawConnectorsMain extends React.Component {
   render () {
     if (this.props.drivers === undefined ||
           this.props.drivers.length === 0) {
@@ -56,5 +56,5 @@ const mapDispatchToProps = dispatch => {
 const Connectors = connect(
   mapStateToProps,
   mapDispatchToProps
-)(connectors)
+)(RawConnectorsMain)
 export default Connectors

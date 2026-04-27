@@ -1,6 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import { Form, Formik } from 'formik'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Datepicker from './datepicker'
 
 
@@ -18,15 +18,12 @@ const FormikWrapper = ({ children }) => (
 )
 
 describe('<Datepicker />', () => {
-
   it('should render', () => {
-    const wrapper = mount(
+    const html = renderToStaticMarkup(
       <FormikWrapper>
         <Datepicker name='mydatepicker' />
       </FormikWrapper>
     )
-
-    expect(wrapper).toBeDefined()
+    expect(html).toContain('mydatepicker')
   })
-
 })

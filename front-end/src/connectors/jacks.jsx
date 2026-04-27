@@ -8,7 +8,7 @@ import i18n from 'utils/i18n'
 import { SortByName } from 'utils/sort_by_name'
 import { byCapability } from './driver_filter'
 
-class jacks extends React.Component {
+export class RawJacks extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -262,5 +262,5 @@ const mapDispatchToProps = dispatch => {
 const Jacks = connect(
   mapStateToProps,
   mapDispatchToProps
-)(jacks)
+)(RawJacks)
 export default Jacks

@@ -104,3 +104,4 @@ const ControlChart = connect(
   mapDispatchToProps
 )(chart)
 export default ControlChart
+export { chart as RawControlChart }

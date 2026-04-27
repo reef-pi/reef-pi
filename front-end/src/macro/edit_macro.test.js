@@ -1,12 +1,30 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import EditMacro from './edit_macro'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
-import { FieldArray } from 'formik'
-
+import { FieldArray, Formik } from 'formik'
+import TestRenderer, { act } from 'react-test-renderer'
 
 describe('<EditMacro />', () => {
+  global.IS_REACT_ACT_ENVIRONMENT = true
+
+  const renderEditMacro = props => {
+    let renderer
+    act(() => {
+      renderer = TestRenderer.create(
+        <Formik initialValues={props.values} onSubmit={() => {}}>
+          {formik => (
+            <EditMacro
+              {...formik}
+              {...props}
+              values={props.values}
+            />
+          )}
+        </Formik>
+      )
+    })
+    return renderer
+  }
   let values = {
     enable: true,
     name: 'test macro',
@@ -14,11 +32,6 @@ describe('<EditMacro />', () => {
       {
         type: 'wait',
         duration: 30
-      },
-      {
-        type: 'equipment',
-        id: '1',
-        on: true
       }
     ]
   }
@@ -34,51 +47,45 @@ describe('<EditMacro />', () => {
   })
 
   it('<EditMacro />', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        errors={{}}
-        touched={{}}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-      />
-    )
-    let arrayField = wrapper.find(FieldArray).shallow()
-    expect(arrayField.length).toBe(1)
+    const wrapper = renderEditMacro({
+      values,
+      errors: {},
+      touched: {},
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn
+    })
+    const arrayFields = wrapper.root.findAllByType(FieldArray)
+    expect(arrayFields).toHaveLength(1)
   })
 
   it('<EditMacro /> should submit', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const wrapper = renderEditMacro({
+      values,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: true
+    })
+    wrapper.root.findByType('form').props.onSubmit({ preventDefault: () => {} })
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditMacro /> should show alert when invalid', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid={false}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const wrapper = renderEditMacro({
+      values,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: false
+    })
+    wrapper.root.findByType('form').props.onSubmit({ preventDefault: () => {} })
     expect(Alert.showError).toHaveBeenCalled()
   })
 })

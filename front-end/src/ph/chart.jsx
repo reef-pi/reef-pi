@@ -5,7 +5,7 @@ import { fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 
-class chart extends React.Component {
+export class RawPhChart extends React.Component {
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {
@@ -89,5 +89,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Chart = connect(mapStateToProps, mapDispatchToProps)(chart)
+const Chart = connect(mapStateToProps, mapDispatchToProps)(RawPhChart)
 export default Chart
