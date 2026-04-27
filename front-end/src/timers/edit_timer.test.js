@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import EditTimer from './edit_timer'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
@@ -148,12 +150,9 @@ describe('<EditTimer />', () => {
   })
 
   it('EditTimer /> should set lightings target with correct defaults when lightings is selected', () => {
-    values.type = 'lightings'
-
     const changeHandler = jest.fn()
-
     const typeField = findAll(EditTimer({
-      values,
+      values: { ...values, type: 'lightings' },
       equipment,
       handleBlur: fn,
       handleChange: changeHandler,

@@ -1,21 +1,54 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import ControlChart from './control_chart'
 import EditTemperature from './edit_temperature'
 import ReadingsChart from './readings_chart'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
+const collectElements = (node, predicate, matches = []) => {
+  if (!React.isValidElement(node)) {
+    return matches
+  }
+
+  if (predicate(node)) {
+    matches.push(node)
+  }
+
+  React.Children.forEach(node.props.children, child => collectElements(child, predicate, matches))
+  return matches
+}
+
+const findFirst = (node, predicate) => collectElements(node, predicate)[0]
 
 describe('<EditTemperature />', () => {
-  let values = {chart: {}}
-  let sensors = [{ id: 'sensor' }]
+  let values = { chart: {} }
+  let sensors = ['sensor']
   let equipment = [{ id: '1', name: 'EQ' }]
   let macros = [{ id: '1', name: 'Macro' }]
-  let fn = jest.fn()
+  let submitForm = jest.fn()
+
+  const renderComponent = (extraProps = {}) => EditTemperature({
+    values,
+    errors: {},
+    touched: {},
+    sensors,
+    equipment,
+    macros,
+    analogInputs: [],
+    submitForm,
+    handleBlur: jest.fn(),
+    handleChange: jest.fn(),
+    readOnly: false,
+    showChart: true,
+    dirty: true,
+    isValid: true,
+    ...extraProps
+  })
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
+    jest.spyOn(Alert, 'showUpdateSuccessful')
+    submitForm = jest.fn()
 
     values = {
       id: '1',
@@ -23,6 +56,7 @@ describe('<EditTemperature />', () => {
       enable: true,
       one_shot: false,
       sensor: 'sensor',
+      analog_input: '',
       fahrenheit: true,
       period: 60,
       min: 72,
@@ -31,7 +65,7 @@ describe('<EditTemperature />', () => {
       cooler: '',
       alerts: false,
       control: 'macro',
-      chart: { color: '#000'}
+      chart: { color: '#000' }
     }
   })
 
@@ -40,147 +74,74 @@ describe('<EditTemperature />', () => {
   })
 
   it('should not show charts when showChart is false', () => {
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart={false}
-      />
-    )
+    const element = renderComponent({ showChart: false })
 
-    expect(wrapper.find(ReadingsChart).length).toBe(0)
-    expect(wrapper.find(ControlChart).length).toBe(0)
+    expect(collectElements(element, child => child.type === ReadingsChart)).toHaveLength(0)
+    expect(collectElements(element, child => child.type === ControlChart)).toHaveLength(0)
   })
 
   it('should show reading charts when showChart is true but hide control chart', () => {
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-      />
-    )
+    const element = renderComponent()
 
-    expect(wrapper.find(ReadingsChart).length).toBe(1)
-    expect(wrapper.find(ControlChart).length).toBe(0)
+    expect(collectElements(element, child => child.type === ReadingsChart)).toHaveLength(1)
+    expect(collectElements(element, child => child.type === ControlChart)).toHaveLength(0)
   })
 
   it('should show both charts when heater or chiller is used', () => {
     values.heater = '2'
     values.cooler = '4'
 
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-      />
-    )
+    const element = renderComponent()
 
-    expect(wrapper.find(ReadingsChart).length).toBe(1)
-    expect(wrapper.find(ControlChart).length).toBe(1)
+    expect(collectElements(element, child => child.type === ReadingsChart)).toHaveLength(1)
+    expect(collectElements(element, child => child.type === ControlChart)).toHaveLength(1)
   })
 
-  it('<EditEquipment /> should submit', () => {
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+  it('submits successfully when the form is valid', () => {
+    const element = renderComponent()
+    const form = findFirst(element, child => child.type === 'form')
+
+    form.props.onSubmit({ preventDefault: jest.fn() })
+
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).not.toHaveBeenCalled()
+    expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
   })
 
-  it('<EditEquipment /> should show alert when invalid', () => {
+  it('shows alert when the form is invalid', () => {
     values.name = ''
     values.fahrenheit = false
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-        dirty
-        isValid={false}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+
+    const element = renderComponent({ isValid: false })
+    const form = findFirst(element, child => child.type === 'form')
+
+    form.props.onSubmit({ preventDefault: jest.fn() })
+
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
   })
 
-  it('<EditEquipment /> should disable inputs when controlling nothing', () => {
-
+  it('disables control inputs when controlling nothing', () => {
     values.control = ''
 
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-        dirty
-        isValid={false}
-      />
+    const element = renderComponent({ isValid: false })
+    const heaterField = findFirst(
+      element,
+      child => child.props.name === 'heater' && child.props.className === 'custom-select'
     )
 
-    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
-    expect(upperFunction.prop('disabled')).toBe(true)
+    expect(heaterField.props.disabled).toBe(true)
   })
 
-
-  it('<EditEquipment /> should enable inputs when controlling equipment', () => {
-
+  it('enables control inputs when controlling equipment', () => {
     values.control = 'equipment'
 
-    const wrapper = shallow(
-      <EditTemperature
-        values={values}
-        sensors={sensors}
-        equipment={equipment}
-        macros={macros}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        showChart
-        dirty
-        isValid={false}
-      />
+    const element = renderComponent({ isValid: false })
+    const heaterField = findFirst(
+      element,
+      child => child.props.name === 'heater' && child.props.className === 'custom-select'
     )
 
-    const upperFunction = wrapper.find({name: 'heater', className: 'custom-select'})
-    expect(upperFunction.prop('disabled')).toBe(false)
+    expect(heaterField.props.disabled).toBe(false)
   })
-
 })

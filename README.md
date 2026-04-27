@@ -3,10 +3,10 @@
 An open source reef tank controller based on Raspberry Pi
 
 [![GitHub release](https://img.shields.io/github/release/reef-pi/reef-pi.svg)](https://github.com/reef-pi/reef-pi/releases)
-![Build Status(backend)](https://github.com/reef-pi/reef-pi/workflows/go/badge.svg?branch=main)
-![Build Status(frontend)](https://github.com/reef-pi/reef-pi/workflows/jest/badge.svg?branch=main)
-![Build Status(smoke)](https://github.com/reef-pi/reef-pi/workflows/smoke/badge.svg?branch=main)
-![Build Status(package)](https://github.com/reef-pi/reef-pi/workflows/deb/badge.svg?branch=main)
+![Build Status(backend)](https://github.com/reef-pi/reef-pi/workflows/go.yml/badge.svg?branch=main)
+![Build Status(frontend)](https://github.com/reef-pi/reef-pi/workflows/jest.yml/badge.svg?branch=main)
+![Build Status(smoke)](https://github.com/reef-pi/reef-pi/workflows/smoke_.yml/badge.svg?branch=main)
+![Build Status(package)](https://github.com/reef-pi/reef-pi/workflows/deb.yml/badge.svg?branch=main)
 
 [![Coverage Status](https://codecov.io/gh/reef-pi/reef-pi/branch/main/graph/badge.svg)](https://codecov.io/gh/reef-pi/reef-pi)
 [![Go Report Card](https://goreportcard.com/badge/reef-pi/reef-pi)](https://goreportcard.com/report/reef-pi/reef-pi)
