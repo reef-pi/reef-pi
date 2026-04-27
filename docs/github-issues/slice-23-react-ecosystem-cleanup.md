@@ -40,26 +40,26 @@ This section reflects the current `main` branch rather than the older pre-React-
   - `front-end/src/entry.js`
   - `front-end/src/utils/confirm.js`
 - the old `enzyme-adapter-react-16` blocker is no longer the active adapter path
+- Enzyme-based test suites under `front-end/src` have been removed
+- the dead Enzyme package/setup path has been removed from the frontend toolchain
+- the only `@material-ui/core` usage has been removed from the UI code path
 
 ### Confirmed remaining targets
 
 1. Several older React-adjacent UI libraries are still in use and should be reviewed for React 19 support before any bumping or cleanup.
-   - `@material-ui/core`
-   - `react-toggle-switch`
    - `react-i18next`
    - `formik`
    - `recharts`
    - `react-datepicker`
    - `react-redux`
-   - `react-router-dom`
+    - `react-router-dom`
    - current `yarn install` output still reports React peer-range warnings for:
-     - `@material-ui/core`
      - `react-redux`
-     - `react-toggle-switch`
    - current local audit:
-     - `react-toggle-switch` is usable on React 19 but expects `prop-types`; this can be satisfied without replacing the library
      - `react-redux` upgrade is coupled to a Redux stack move because `react-redux@9.2.0` expects `redux@^5` and current `redux-thunk@2.4.1` is pinned to `redux@^4`
-     - `@material-ui/core@4.12.4` remains deprecated and explicitly peer-pinned to React 16/17, so any fix here is a broader UI migration rather than a narrow cleanup bump
+   - resolved in this slice already:
+     - `react-toggle-switch` now has its `prop-types` peer satisfied
+     - `@material-ui/core` has been removed instead of being carried as a deprecated React 16/17-pinned dependency
 
 2. The migration docs are partially stale.
    - `docs/library-migration-plan.md` still describes old blockers such as React 16 Enzyme adapter usage and legacy render APIs
@@ -67,16 +67,13 @@ This section reflects the current `main` branch rather than the older pre-React-
 
 ### Recommended execution order
 
-1. Remove Enzyme package/config leftovers now that the frontend test suite no longer uses them.
-2. Audit dependency compatibility one package at a time and record only evidence-backed changes.
-3. Remove or document temporary React 19 compatibility shims that are no longer needed.
-4. Refresh the migration docs after the concrete cleanup decisions are made.
+1. Audit dependency compatibility one package at a time and record only evidence-backed changes.
+2. Remove or document temporary React 19 compatibility shims that are no longer needed.
+3. Refresh the migration docs after the concrete cleanup decisions are made.
 
 ### Suggested first checklist
 
-- remove `enzyme`, `@belzile/enzyme-adapter-react-19`, and related Jest setup once validation confirms they are dead
 - record and triage remaining React peer-range warnings from `yarn install`
-- verify whether `@material-ui/core` and `react-toggle-switch` require upgrades, wrappers, or explicit risk notes
 - verify whether `react-i18next`, `formik`, `recharts`, and `react-datepicker` are on acceptable React 19-compatible versions
 - remove no-longer-needed compatibility code only after validation proves it is redundant
 - keep Redux stack upgrades separate unless the slice explicitly absorbs `redux`, `redux-thunk`, and `react-redux` together
