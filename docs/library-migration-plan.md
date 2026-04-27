@@ -24,7 +24,7 @@ This document extends the refactor program with a version modernization track fo
 
 ### React
 
-- `enzyme-adapter-react-16` is still present and widely used in frontend tests.
+- legacy Enzyme blockers have been removed from the active frontend test surface.
 - `ReactDOM.render` and `unmountComponentAtNode` are still used in:
   - `front-end/src/entry.js`
   - `front-end/src/utils/confirm.js`
