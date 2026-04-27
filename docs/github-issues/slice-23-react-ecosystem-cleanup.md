@@ -43,11 +43,7 @@ This section reflects the current `main` branch rather than the older pre-React-
 
 ### Confirmed remaining targets
 
-1. Remove the now-dead Enzyme dependency path.
-   - the frontend test suite no longer imports `enzyme` under `front-end/src`
-   - once the compatibility package and setup wiring are removed, the React 19 test stack is materially simpler
-
-2. Several older React-adjacent UI libraries are still in use and should be reviewed for React 19 support before any bumping or cleanup.
+1. Several older React-adjacent UI libraries are still in use and should be reviewed for React 19 support before any bumping or cleanup.
    - `@material-ui/core`
    - `react-toggle-switch`
    - `react-i18next`
@@ -60,8 +56,12 @@ This section reflects the current `main` branch rather than the older pre-React-
      - `@material-ui/core`
      - `react-redux`
      - `react-toggle-switch`
+   - current local audit:
+     - `react-toggle-switch` is usable on React 19 but expects `prop-types`; this can be satisfied without replacing the library
+     - `react-redux` upgrade is coupled to a Redux stack move because `react-redux@9.2.0` expects `redux@^5` and current `redux-thunk@2.4.1` is pinned to `redux@^4`
+     - `@material-ui/core@4.12.4` remains deprecated and explicitly peer-pinned to React 16/17, so any fix here is a broader UI migration rather than a narrow cleanup bump
 
-3. The migration docs are partially stale.
+2. The migration docs are partially stale.
    - `docs/library-migration-plan.md` still describes old blockers such as React 16 Enzyme adapter usage and legacy render APIs
    - Slice 23 should leave the migration notes matching current repo reality
 
@@ -79,6 +79,7 @@ This section reflects the current `main` branch rather than the older pre-React-
 - verify whether `@material-ui/core` and `react-toggle-switch` require upgrades, wrappers, or explicit risk notes
 - verify whether `react-i18next`, `formik`, `recharts`, and `react-datepicker` are on acceptable React 19-compatible versions
 - remove no-longer-needed compatibility code only after validation proves it is redundant
+- keep Redux stack upgrades separate unless the slice explicitly absorbs `redux`, `redux-thunk`, and `react-redux` together
 - rerun:
   - `yarn jest --runInBand`
   - `yarn build`

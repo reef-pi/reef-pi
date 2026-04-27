@@ -46,6 +46,7 @@
     "postcss": "^8.5.10",
     "postcss-loader": "8.1.1",
     "precss": "4.0.0",
+    "prop-types": "15.8.1",
     "react": "19.2.5",
     "react-color": "2.19.3",
     "react-datepicker": "^7.6.0",
