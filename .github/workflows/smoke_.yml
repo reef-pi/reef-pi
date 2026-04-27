@@ -19,10 +19,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-26-nightly-node_modules-
       - run: yarn --ignore-engines
-      - run: yarn --ignore-engines playwright install --only-shell chromium
+      - run: google-chrome --version
       - run: make go
       - run: make ui
       - run: make smoke
+        env:
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
       - if: always()
         uses: actions/upload-artifact@v4
         with:

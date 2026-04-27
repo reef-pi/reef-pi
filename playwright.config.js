@@ -1,5 +1,7 @@
 const { defineConfig } = require('@playwright/test')
 
+const chromiumChannel = process.env.PLAYWRIGHT_CHROMIUM_CHANNEL
+
 module.exports = defineConfig({
   testDir: './front-end/e2e',
   fullyParallel: false,
@@ -34,6 +36,7 @@ module.exports = defineConfig({
       dependencies: ['setup'],
       use: {
         browserName: 'chromium',
+        ...(chromiumChannel ? { channel: chromiumChannel } : {}),
         storageState: 'front-end/e2e/.auth/user.json'
       }
     }
