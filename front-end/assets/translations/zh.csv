@@ -102,6 +102,7 @@ capabilities:dev_mode,开发模式
 capabilities:doser,滴定
 capabilities:dosing_pumps,滴定泵
 capabilities:equipment,设备
+capabilities:flow_meter,
 capabilities:health_check,健康检查
 capabilities:journal,
 capabilities:lighting,灯光
@@ -226,6 +227,13 @@ fatal_error:connection_lost,连接丢失
 fatal_error:fatal_error,致命错误
 fatal_error:message,无法连接服务器，你需要重启服务器或者排除故障。
 fatal_error:troubleshoot,排除故障
+flow_meter:min_flow,
+flow_meter:notify_enable,
+flow_meter:period,
+flow_meter:pulses_per_liter,
+flow_meter:sensor_path,
+flow_meter:title_delete,
+flow_meter:warn_delete,
 function:alert,
 function:ato,
 function:camera,

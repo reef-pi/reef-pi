@@ -16,7 +16,7 @@ class Main extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
-    this.toggleAdd = this.toggleAdd.bind(this)
+    this.handleToggleAdd = this.handleToggleAdd.bind(this)
   }
 
   componentDidMount () {
@@ -53,7 +53,7 @@ class Main extends React.Component {
     )
   }
 
-  toggleAdd () {
+  handleToggleAdd () {
     this.setState(s => ({ addMeter: !s.addMeter }))
   }
 
@@ -89,7 +89,7 @@ class Main extends React.Component {
               <input
                 type='button'
                 value={this.state.addMeter ? '-' : '+'}
-                onClick={this.toggleAdd}
+                onClick={this.handleToggleAdd}
                 className='btn btn-outline-success'
               />
             </div>

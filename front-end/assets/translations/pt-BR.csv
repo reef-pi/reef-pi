@@ -102,6 +102,7 @@ capabilities:dev_mode,Modo Dev
 capabilities:doser,Dosador
 capabilities:dosing_pumps,Bombas Dosadoras
 capabilities:equipment,Equipamento
+capabilities:flow_meter,
 capabilities:health_check,Verificação de Saúde
 capabilities:journal,diário
 capabilities:lighting,Iluminação
@@ -226,6 +227,13 @@ fatal_error:connection_lost,Conexão Perdida
 fatal_error:fatal_error,Erro Fatal
 fatal_error:message,"Algo deu errado, por favor reinicie o servidor."
 fatal_error:troubleshoot,Solucionar problemas
+flow_meter:min_flow,
+flow_meter:notify_enable,
+flow_meter:period,
+flow_meter:pulses_per_liter,
+flow_meter:sensor_path,
+flow_meter:title_delete,
+flow_meter:warn_delete,
 function:alert,Alerta
 function:ato,Ação
 function:camera,Câmera

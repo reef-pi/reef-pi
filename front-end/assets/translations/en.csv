@@ -94,13 +94,6 @@ camera:target_dir,Image Directory
 camera:tick_interval,Tick Interval (in minutes)
 camera:tick_must_be_positive,Tick interval has to be a positive integer
 camera:to_gdrive,Upload to gDrive
-flow_meter:min_flow,Min Flow
-flow_meter:notify_enable,Notify on Low Flow
-flow_meter:period,Period
-flow_meter:pulses_per_liter,Pulses per Liter
-flow_meter:sensor_path,Sensor Path
-flow_meter:title_delete,Delete Flow Meter
-flow_meter:warn_delete,Are you sure you want to delete {{name}}?
 capabilities:ato,ATO
 capabilities:camera,Camera
 capabilities:configuration,Configuration
@@ -109,6 +102,7 @@ capabilities:dev_mode,Dev Mode
 capabilities:doser,Dosers
 capabilities:dosing_pumps,Dosers
 capabilities:equipment,Equipment
+capabilities:flow_meter,Flow Meter
 capabilities:health_check,Health check
 capabilities:journal,Journal
 capabilities:lighting,Lighting
@@ -117,7 +111,6 @@ capabilities:log,Log
 capabilities:macro,Macro
 capabilities:macros,Macros
 capabilities:manager,Instances
-capabilities:flow_meter,Flow Meter
 capabilities:ph,pH
 capabilities:phprobes,Probes (pH)
 capabilities:system,System
@@ -234,6 +227,13 @@ fatal_error:connection_lost,Connection Lost
 fatal_error:fatal_error,Fatal Error
 fatal_error:message,Something went wrong and the UI cannot contact the server anymore. You may need to restart the webserver or do some troubleshooting.
 fatal_error:troubleshoot,Troubleshoot
+flow_meter:min_flow,Min Flow
+flow_meter:notify_enable,Notify on Low Flow
+flow_meter:period,Period
+flow_meter:pulses_per_liter,Pulses per Liter
+flow_meter:sensor_path,Sensor Path
+flow_meter:title_delete,Delete Flow Meter
+flow_meter:warn_delete,Are you sure you want to delete {{name}}?
 function:alert,alert
 function:ato,ATO
 function:camera,camera
