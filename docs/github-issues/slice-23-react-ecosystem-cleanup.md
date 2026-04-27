@@ -43,12 +43,9 @@ This section reflects the current `main` branch rather than the older pre-React-
 
 ### Confirmed remaining targets
 
-1. Enzyme is still a major compatibility surface.
-   - `package.json` still depends on:
-     - `enzyme`
-     - `@belzile/enzyme-adapter-react-19`
-   - a large set of frontend tests still import `shallow` or `mount`
-   - this is the clearest remaining React-adjacent maintenance risk
+1. Remove the now-dead Enzyme dependency path.
+   - the frontend test suite no longer imports `enzyme` under `front-end/src`
+   - once the compatibility package and setup wiring are removed, the React 19 test stack is materially simpler
 
 2. Several older React-adjacent UI libraries are still in use and should be reviewed for React 19 support before any bumping or cleanup.
    - `@material-ui/core`
@@ -59,6 +56,10 @@ This section reflects the current `main` branch rather than the older pre-React-
    - `react-datepicker`
    - `react-redux`
    - `react-router-dom`
+   - current `yarn install` output still reports React peer-range warnings for:
+     - `@material-ui/core`
+     - `react-redux`
+     - `react-toggle-switch`
 
 3. The migration docs are partially stale.
    - `docs/library-migration-plan.md` still describes old blockers such as React 16 Enzyme adapter usage and legacy render APIs
@@ -66,18 +67,15 @@ This section reflects the current `main` branch rather than the older pre-React-
 
 ### Recommended execution order
 
-1. Audit dependency compatibility one package at a time and record only evidence-backed changes.
-2. Decide whether Enzyme stays as a tolerated compatibility layer for now or becomes the primary cleanup target for this slice.
+1. Remove Enzyme package/config leftovers now that the frontend test suite no longer uses them.
+2. Audit dependency compatibility one package at a time and record only evidence-backed changes.
 3. Remove or document temporary React 19 compatibility shims that are no longer needed.
 4. Refresh the migration docs after the concrete cleanup decisions are made.
 
 ### Suggested first checklist
 
-- inventory every remaining Enzyme-based test file
-- classify each as:
-  - leave as-is for now
-  - convert to non-Enzyme tests
-  - block on third-party component limitations
+- remove `enzyme`, `@belzile/enzyme-adapter-react-19`, and related Jest setup once validation confirms they are dead
+- record and triage remaining React peer-range warnings from `yarn install`
 - verify whether `@material-ui/core` and `react-toggle-switch` require upgrades, wrappers, or explicit risk notes
 - verify whether `react-i18next`, `formik`, `recharts`, and `react-datepicker` are on acceptable React 19-compatible versions
 - remove no-longer-needed compatibility code only after validation proves it is redundant
