@@ -1,6 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { shallow } from 'enzyme'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Formik, Form } from 'formik'
 import EditDcPump from './edit_dcpump'
 import EditStepper from './edit_stepper'
@@ -17,116 +16,112 @@ const wrapFormik = (component, initialValues = {}) => (
   </Formik>
 )
 
+const renderMarkup = (component, initialValues = {}) =>
+  renderToStaticMarkup(wrapFormik(component, initialValues))
+
 const jacks = [{ id: '1', name: 'Jack 1', pins: [1, 2, 3] }]
 const outlets = [{ id: '1', name: 'Outlet A' }, { id: '2', name: 'Outlet B' }]
 
 describe('Doser pump components', () => {
   it('<EditDcPump /> renders with jacks', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditDcPump
-          values={{ jack: '', pin: '', enable: true, continuous: false, volume_per_second: 0, duration: 10, speed: 100, soft_start: 0 }}
-          errors={{}}
-          touched={{}}
-          jacks={jacks}
-          readOnly={false}
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditDcPump
+        values={{ jack: '', pin: '', enable: true, continuous: false, volume_per_second: 0, duration: 10, speed: 100, soft_start: 0 }}
+        errors={{}}
+        touched={{}}
+        jacks={jacks}
+        readOnly={false}
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('select').length).toBeGreaterThan(0)
+    expect(html).toContain('smoke-doser-jack')
+    expect(html).toContain('Jack 1')
   })
 
   it('<EditDcPump /> shows volume field when volume_per_second > 0', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditDcPump
-          values={{ jack: '1', pin: 1, enable: true, continuous: false, volume_per_second: 1.5, volume: 50, speed: 100, soft_start: 0 }}
-          errors={{}}
-          touched={{}}
-          jacks={jacks}
-          readOnly={false}
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditDcPump
+        values={{ jack: '1', pin: 1, enable: true, continuous: false, volume_per_second: 1.5, volume: 50, speed: 100, soft_start: 0 }}
+        errors={{}}
+        touched={{}}
+        jacks={jacks}
+        readOnly={false}
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('input').length).toBeGreaterThan(0)
+    expect(html).toContain('name="volume"')
+    expect(html).toContain('1.500 mL/s')
   })
 
   it('<EditDcPump /> hides volume/duration when continuous', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditDcPump
-          values={{ jack: '1', pin: 1, enable: true, continuous: true, volume_per_second: 0, speed: 100, soft_start: 0 }}
-          errors={{}}
-          touched={{}}
-          jacks={jacks}
-          readOnly={false}
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditDcPump
+        values={{ jack: '1', pin: 1, enable: true, continuous: true, volume_per_second: 0, speed: 100, soft_start: 0 }}
+        errors={{}}
+        touched={{}}
+        jacks={jacks}
+        readOnly={false}
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('select').length).toBeGreaterThan(0)
+    expect(html).not.toContain('smoke-doser-duration')
   })
 
   it('<EditDcPump /> readOnly', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditDcPump
-          values={{ jack: '', pin: '', enable: true, continuous: false, volume_per_second: 0, duration: 10, speed: 100, soft_start: 0 }}
-          errors={{}}
-          touched={{}}
-          jacks={[]}
-          readOnly
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditDcPump
+        values={{ jack: '', pin: '', enable: true, continuous: false, volume_per_second: 0, duration: 10, speed: 100, soft_start: 0 }}
+        errors={{}}
+        touched={{}}
+        jacks={[]}
+        readOnly
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('select[disabled]').length).toBeGreaterThan(0)
+    expect(html).toContain('smoke-doser-jack')
+    expect(html).toContain('disabled=""')
   })
 
   it('<EditStepper /> renders with outlets', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditStepper
-          values={{ stepper: { step_pin: '', direction_pin: '', ms_pin_a: '', ms_pin_b: '', ms_pin_c: '', spr: 200, vpr: 0, delay: 0, direction: true, microstepping: 'Full' } }}
-          errors={{}}
-          touched={{}}
-          outlets={outlets}
-          readOnly={false}
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditStepper
+        values={{ stepper: { step_pin: '', direction_pin: '', ms_pin_a: '', ms_pin_b: '', ms_pin_c: '', spr: 200, vpr: 0, delay: 0, direction: true, microstepping: 'Full' } }}
+        errors={{}}
+        touched={{}}
+        outlets={outlets}
+        readOnly={false}
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('select').length).toBeGreaterThan(0)
+    expect(html).toContain('Outlet A')
+    expect(html).toContain('stepper.step_pin')
   })
 
   it('<EditStepper /> readOnly', () => {
-    const wrapper = mount(
-      wrapFormik(
-        <EditStepper
-          values={{ stepper: { step_pin: '1', direction_pin: '', ms_pin_a: '', ms_pin_b: '', ms_pin_c: '', spr: 200, vpr: 0, delay: 0, direction: true, microstepping: 'Full' } }}
-          errors={{}}
-          touched={{}}
-          outlets={outlets}
-          readOnly
-          handleChange={jest.fn()}
-          setFieldValue={jest.fn()}
-          onBlur={jest.fn()}
-        />
-      )
+    const html = renderMarkup(
+      <EditStepper
+        values={{ stepper: { step_pin: '1', direction_pin: '', ms_pin_a: '', ms_pin_b: '', ms_pin_c: '', spr: 200, vpr: 0, delay: 0, direction: true, microstepping: 'Full' } }}
+        errors={{}}
+        touched={{}}
+        outlets={outlets}
+        readOnly
+        handleChange={jest.fn()}
+        setFieldValue={jest.fn()}
+        onBlur={jest.fn()}
+      />
     )
-    expect(wrapper.find('select[disabled]').length).toBeGreaterThan(0)
+    expect(html).toContain('stepper.step_pin')
+    expect(html).toContain('disabled=""')
   })
 
   it('<CalibrationModal /> renders for DC pump', () => {
@@ -136,16 +131,15 @@ describe('Doser pump components', () => {
       type: 'dcpump',
       regiment: { duration: 10, speed: 100, volume: 0, volume_per_second: 0.5 }
     }
-    const wrapper = shallow(
-      <CalibrationModal
-        doser={doser}
-        calibrateDoser={jest.fn()}
-        saveCalibration={jest.fn()}
-        cancel={jest.fn()}
-        confirm={jest.fn()}
-      />
-    )
-    expect(wrapper).toBeDefined()
+    const instance = new CalibrationModal({
+      doser,
+      calibrateDoser: jest.fn(),
+      saveCalibration: jest.fn(),
+      cancel: jest.fn(),
+      confirm: jest.fn()
+    })
+
+    expect(React.isValidElement(instance.render())).toBe(true)
   })
 
   it('<CalibrationModal /> handleCalibrate for DC pump', () => {

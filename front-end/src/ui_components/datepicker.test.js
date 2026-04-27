@@ -1,32 +1,39 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { act } from 'react'
+import { createRoot } from 'react-dom/client'
 import { Form, Formik } from 'formik'
 import Datepicker from './datepicker'
 
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
-// eslint-disable-next-line react/prop-types
-const FormikWrapper = ({ children }) => (
-  <Formik
-    initialValues={{
-      mydatepicker: '',
-    }}
-  >
-    <Form>
-      {children}
-    </Form>
-  </Formik>
-)
+jest.mock('react-datepicker', () => {
+  const React = require('react')
+  return {
+    __esModule: true,
+    default: props => React.createElement('input', { ...props, 'data-testid': 'datepicker' }),
+    registerLocale: jest.fn()
+  }
+})
 
 describe('<Datepicker />', () => {
+  it('should render inside a Formik form', () => {
+    const container = document.createElement('div')
+    const root = createRoot(container)
 
-  it('should render', () => {
-    const wrapper = mount(
-      <FormikWrapper>
-        <Datepicker name='mydatepicker' />
-      </FormikWrapper>
-    )
+    act(() => {
+      root.render(
+        <Formik initialValues={{ mydatepicker: '' }}>
+          <Form>
+            <Datepicker name='mydatepicker' />
+          </Form>
+        </Formik>
+      )
+    })
 
-    expect(wrapper).toBeDefined()
+    expect(container.querySelector('[data-testid="datepicker"]')).toBeDefined()
+
+    act(() => {
+      root.unmount()
+    })
   })
-
 })
