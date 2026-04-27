@@ -11,13 +11,13 @@ jobs:
           go-version: '1.26.2'
       - uses: actions/setup-node@v6
         with:
-          node-version: 26
+          node-version: 26-nightly
       - uses: actions/cache@v4.3.0
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-26-node_modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-26-nightly-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-26-node_modules-
+            ${{ runner.os }}-node-26-nightly-node_modules-
       - run: make install
       - run: npx playwright install --with-deps chromium
       - run: make go
