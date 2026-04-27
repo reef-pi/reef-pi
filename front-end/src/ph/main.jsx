@@ -236,4 +236,5 @@ const Ph = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ph)
+export { ph as RawPhMain }
 export default Ph

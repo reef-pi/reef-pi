@@ -1,12 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import SelectEquipment, { RawSelectEquipment } from './select_equipment'
-
-const mockStore = configureMockStore([thunk])
 
 const equipment = [
   { id: '1', name: 'Heater' },
@@ -107,28 +101,31 @@ describe('SelectEquipment', () => {
 
   it('setEquipment none clears selection and calls update with empty string', () => {
     const update = jest.fn()
-    const store = mockStore({ equipment })
-    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='1' update={update} /></Provider>)
-    wrapper.find('a.dropdown-item').first().prop('onClick')()
+    const component = new RawSelectEquipment({ id: 'eq-sel', active: '1', equipment, update, fetchEquipment: jest.fn() })
+    component.setState = jest.fn(next => {
+      component.state = { ...component.state, ...next }
+    })
+    component.equipmentList()[0].props.onClick()
     expect(update).toHaveBeenCalledWith('')
-    wrapper.unmount()
   })
 
   it('setEquipment by index sets selection and calls update with id', () => {
     const update = jest.fn()
-    const store = mockStore({ equipment })
-    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='' update={update} /></Provider>)
-    wrapper.find('a.dropdown-item').at(1).prop('onClick')()
+    const component = new RawSelectEquipment({ id: 'eq-sel', active: '', equipment, update, fetchEquipment: jest.fn() })
+    component.setState = jest.fn(next => {
+      component.state = { ...component.state, ...next }
+    })
+    component.equipmentList()[1].props.onClick()
     expect(update).toHaveBeenCalledWith('1')
-    wrapper.unmount()
   })
 
   it('setEquipment selects second equipment item', () => {
     const update = jest.fn()
-    const store = mockStore({ equipment })
-    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='' update={update} /></Provider>)
-    wrapper.find('a.dropdown-item').at(2).prop('onClick')()
+    const component = new RawSelectEquipment({ id: 'eq-sel', active: '', equipment, update, fetchEquipment: jest.fn() })
+    component.setState = jest.fn(next => {
+      component.state = { ...component.state, ...next }
+    })
+    component.equipmentList()[2].props.onClick()
     expect(update).toHaveBeenCalledWith('2')
-    wrapper.unmount()
   })
 })

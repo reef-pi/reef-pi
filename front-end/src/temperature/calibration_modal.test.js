@@ -1,5 +1,4 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import { CalibrationForm, mapCalibrationPropsToValues, submitCalibrationForm } from './calibration_modal'
 import 'isomorphic-fetch'
 
@@ -25,33 +24,35 @@ describe('Temperature CalibrationModal', () => {
   })
 
   it('<CalibrationForm /> renders', () => {
-    const wrapper = shallow(<CalibrationForm {...makeProps()} />)
-    expect(wrapper).toBeDefined()
-    wrapper.instance().componentWillUnmount()
+    const wrapper = new CalibrationForm(makeProps())
+    expect(React.isValidElement(wrapper.render())).toBe(true)
+    wrapper.componentWillUnmount()
   })
 
   it('componentDidMount polls readProbe every 500ms', () => {
     const readProbe = jest.fn()
-    const wrapper = shallow(<CalibrationForm {...makeProps({ readProbe })} />)
+    const wrapper = new CalibrationForm(makeProps({ readProbe }))
+    wrapper.componentDidMount()
     jest.advanceTimersByTime(500)
     expect(readProbe).toHaveBeenCalledWith('1')
-    wrapper.instance().componentWillUnmount()
+    wrapper.componentWillUnmount()
   })
 
   it('componentWillUnmount clears interval', () => {
     const readProbe = jest.fn()
-    const wrapper = shallow(<CalibrationForm {...makeProps({ readProbe })} />)
-    wrapper.instance().componentWillUnmount()
+    const wrapper = new CalibrationForm(makeProps({ readProbe }))
+    wrapper.componentDidMount()
+    wrapper.componentWillUnmount()
     jest.advanceTimersByTime(1000)
     expect(readProbe).not.toHaveBeenCalled()
   })
 
   it('handleCancel calls props.cancel', () => {
     const cancel = jest.fn()
-    const wrapper = shallow(<CalibrationForm {...makeProps({ cancel })} />)
-    wrapper.instance().handleCancel()
+    const wrapper = new CalibrationForm(makeProps({ cancel }))
+    wrapper.handleCancel()
     expect(cancel).toHaveBeenCalled()
-    wrapper.instance().componentWillUnmount()
+    wrapper.componentWillUnmount()
   })
 
   it('mapCalibrationPropsToValues uses defaultValue when provided', () => {

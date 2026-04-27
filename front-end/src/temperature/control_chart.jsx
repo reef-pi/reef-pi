@@ -7,7 +7,7 @@ import { TwoDecimalParse } from 'utils/two_decimal_parse'
 import { PercentOf } from 'utils/percent_of'
 import i18next from 'i18next'
 
-class chart extends React.Component {
+export class RawControlChart extends React.Component {
   componentDidMount () {
     this.props.fetchTCUsage(this.props.sensor_id)
     const timer = window.setInterval(() => {
@@ -102,5 +102,5 @@ const mapDispatchToProps = dispatch => {
 const ControlChart = connect(
   mapStateToProps,
   mapDispatchToProps
-)(chart)
+)(RawControlChart)
 export default ControlChart

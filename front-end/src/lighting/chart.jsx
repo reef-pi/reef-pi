@@ -40,4 +40,5 @@ const Chart = connect(
   mapStateToProps,
   null
 )(chart)
+export { chart as RawLightingChart }
 export default Chart

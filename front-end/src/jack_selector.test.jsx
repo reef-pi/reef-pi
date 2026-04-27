@@ -1,14 +1,21 @@
 import JackSelector, { RawJackSelector } from './jack_selector'
 import React from 'react'
-import { mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
-const mockStore = configureMockStore([thunk])
-
 const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
+
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  const children = React.Children.toArray(node.props?.children)
+  children.forEach(child => findAll(child, predicate, acc))
+  return acc
+}
+
 describe('JackSelector', () => {
   it('renders without throwing with matching jack', () => {
     const component = new RawJackSelector({ id: '1', jacks, update: jest.fn(), fetchJacks: jest.fn() })
@@ -55,22 +62,29 @@ describe('JackSelector', () => {
 
   it('setJack updates and calls update', () => {
     const update = jest.fn()
-    const store = mockStore({ jacks })
-    const wrapper = mount(<Provider store={store}><JackSelector id='1' update={update} /></Provider>)
-    wrapper.find('a.dropdown-item').first().prop('onClick')()
+    const component = new RawJackSelector({ id: '1', jacks, update, fetchJacks: jest.fn() })
+    component.setState = jest.fn(updateState => {
+      component.state = { ...component.state, ...updateState }
+    })
+
+    const items = findAll(component.jacks(), node => node.type === 'a')
+    items[0].props.onClick()
+
     expect(update).toHaveBeenCalledWith('1', 1)
-    wrapper.unmount()
+    expect(JackSelector).toBeDefined()
   })
 
   it('setPin updates and calls update', () => {
     const update = jest.fn()
-    const store = mockStore({ jacks })
-    const wrapper = mount(<Provider store={store}><JackSelector id='1' update={update} /></Provider>)
-    const pinItems = wrapper.find('a.dropdown-item')
+    const component = new RawJackSelector({ id: '1', jacks, update, fetchJacks: jest.fn() })
+    component.setState = jest.fn(updateState => {
+      component.state = { ...component.state, ...updateState }
+    })
+
+    const pinItems = findAll(component.pins(), node => node.type === 'a')
     if (pinItems.length > 1) {
-      pinItems.last().prop('onClick')()
-      expect(update).toHaveBeenCalled()
+      pinItems[1].props.onClick()
+      expect(update).toHaveBeenCalledWith('1', 2)
     }
-    wrapper.unmount()
   })
 })
