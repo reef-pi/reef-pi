@@ -1,7 +1,6 @@
 import React from 'react'
 import { fetchEquipment, updateEquipment } from '../redux/actions/equipment'
 import { connect } from 'react-redux'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from 'react-toggle-switch'
 import { buildEquipmentPayload, EQUIPMENT_POLL_INTERVAL_MS, sortEquipment } from './utils'
 
@@ -37,10 +36,10 @@ export class RawEquipmentCtrlPanel extends React.Component {
             .map(item => {
               return (
                 <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
-                  <FormControlLabel
-                    control={<Switch on={item.on} onClick={(e) => { this.toggleState(e, item) }} />}
-                    label={item.name}
-                  />
+                  <label className='d-inline-flex align-items-center mb-0'>
+                    <Switch on={item.on} onClick={(e) => { this.toggleState(e, item) }} />
+                    <span className='ml-2'>{item.name}</span>
+                  </label>
                 </div>
               )
             })}
