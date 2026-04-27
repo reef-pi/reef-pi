@@ -17,6 +17,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-26-nightly-node_modules-
       - name: Install
-        run: yarn
+        run: yarn --ignore-engines
       - name: Check Translations
         run: yarn run translations:chk
