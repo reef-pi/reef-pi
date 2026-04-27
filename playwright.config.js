@@ -18,7 +18,8 @@ module.exports = defineConfig({
     baseURL: 'http://127.0.0.1:8080',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    video: 'retain-on-failure',
+    ...(chromiumChannel ? { channel: chromiumChannel } : {})
   },
   webServer: {
     command: 'make start-dev',
@@ -36,7 +37,6 @@ module.exports = defineConfig({
       dependencies: ['setup'],
       use: {
         browserName: 'chromium',
-        ...(chromiumChannel ? { channel: chromiumChannel } : {}),
         storageState: 'front-end/e2e/.auth/user.json'
       }
     }
