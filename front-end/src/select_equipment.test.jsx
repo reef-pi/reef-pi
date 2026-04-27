@@ -1,6 +1,12 @@
 import React from 'react'
+import { mount } from 'enzyme'
+import { Provider } from 'react-redux'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import SelectEquipment, { RawSelectEquipment } from './select_equipment'
+
+const mockStore = configureMockStore([thunk])
 
 const equipment = [
   { id: '1', name: 'Heater' },
@@ -97,5 +103,32 @@ describe('SelectEquipment', () => {
     expect(fetchEquipment).toHaveBeenCalled()
     expect(SelectEquipment).toBeDefined()
     expect(countByType(component.render(), node => node.type === 'a')).toBeGreaterThan(0)
+  })
+
+  it('setEquipment none clears selection and calls update with empty string', () => {
+    const update = jest.fn()
+    const store = mockStore({ equipment })
+    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='1' update={update} /></Provider>)
+    wrapper.find('a.dropdown-item').first().prop('onClick')()
+    expect(update).toHaveBeenCalledWith('')
+    wrapper.unmount()
+  })
+
+  it('setEquipment by index sets selection and calls update with id', () => {
+    const update = jest.fn()
+    const store = mockStore({ equipment })
+    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='' update={update} /></Provider>)
+    wrapper.find('a.dropdown-item').at(1).prop('onClick')()
+    expect(update).toHaveBeenCalledWith('1')
+    wrapper.unmount()
+  })
+
+  it('setEquipment selects second equipment item', () => {
+    const update = jest.fn()
+    const store = mockStore({ equipment })
+    const wrapper = mount(<Provider store={store}><SelectEquipment id='eq-sel' active='' update={update} /></Provider>)
+    wrapper.find('a.dropdown-item').at(2).prop('onClick')()
+    expect(update).toHaveBeenCalledWith('2')
+    wrapper.unmount()
   })
 })

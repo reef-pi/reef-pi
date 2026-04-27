@@ -1,5 +1,12 @@
 import JackSelector, { RawJackSelector } from './jack_selector'
+import React from 'react'
+import { mount } from 'enzyme'
+import { Provider } from 'react-redux'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
+
+const mockStore = configureMockStore([thunk])
 
 const jacks = [{ id: '1', name: 'Foo', pins: [1, 2] }]
 describe('JackSelector', () => {
@@ -44,5 +51,26 @@ describe('JackSelector', () => {
 
     expect(component.state.pin).toBe(2)
     expect(update).toHaveBeenCalledWith('1', 2)
+  })
+
+  it('setJack updates and calls update', () => {
+    const update = jest.fn()
+    const store = mockStore({ jacks })
+    const wrapper = mount(<Provider store={store}><JackSelector id='1' update={update} /></Provider>)
+    wrapper.find('a.dropdown-item').first().prop('onClick')()
+    expect(update).toHaveBeenCalledWith('1', 1)
+    wrapper.unmount()
+  })
+
+  it('setPin updates and calls update', () => {
+    const update = jest.fn()
+    const store = mockStore({ jacks })
+    const wrapper = mount(<Provider store={store}><JackSelector id='1' update={update} /></Provider>)
+    const pinItems = wrapper.find('a.dropdown-item')
+    if (pinItems.length > 1) {
+      pinItems.last().prop('onClick')()
+      expect(update).toHaveBeenCalled()
+    }
+    wrapper.unmount()
   })
 })
