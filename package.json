@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "A Raspberry Pi based reeftank automation system",
+  "engines": {
+    "node": ">=26 <27",
+    "yarn": ">=1.22 <2"
+  },
   "dependencies": {
     "@babel/core": "7.28.4",
     "@babel/plugin-transform-modules-commonjs": "7.18.6",
