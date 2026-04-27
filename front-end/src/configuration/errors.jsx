@@ -72,4 +72,5 @@ const Errors = connect(
   mapStateToProps,
   mapDispatchToProps
 )(errors)
+export { errors as RawErrors }
 export default Errors

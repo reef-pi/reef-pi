@@ -249,4 +249,5 @@ const Outlets = connect(
   mapDispatchToProps
 )(outlets)
 
+export { outlets as RawOutlets }
 export default Outlets

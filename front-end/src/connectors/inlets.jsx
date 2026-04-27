@@ -245,4 +245,5 @@ const Inlets = connect(
   mapStateToProps,
   mapDispatchToProps
 )(inlets)
+export { inlets as RawInlets }
 export default Inlets

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 import { ParseTimestamp, filterToday } from 'utils/timestamp'
 
-class chart extends React.Component {
+export class RawReadingsChart extends React.Component {
   componentDidMount () {
     this.props.fetch(this.props.sensor_id)
     const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
@@ -77,5 +77,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const ReadingsChart = connect(mapStateToProps, mapDispatchToProps)(chart)
+const ReadingsChart = connect(mapStateToProps, mapDispatchToProps)(RawReadingsChart)
 export default ReadingsChart

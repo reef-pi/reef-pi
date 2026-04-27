@@ -114,4 +114,5 @@ const InletSelector = connect(
   mapStateToProps,
   mapDispatchToProps
 )(inletSelector)
+export { inletSelector as RawInletSelector }
 export default InletSelector

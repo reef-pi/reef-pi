@@ -1,9 +1,21 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import Chart from './chart'
 import EditPh from './edit_ph'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
 
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  React.Children.toArray(node.props?.children).forEach(child => findAll(child, predicate, acc))
+  return acc
+}
+
+const findFirst = (node, predicate) => findAll(node, predicate)[0]
 
 describe('<EditPh />', () => {
   let values = { enable: true, control: 'macro', chart: {color: '#000'} }
@@ -27,114 +39,119 @@ describe('<EditPh />', () => {
   })
 
   it('<EditPh /> mount', () => {
-    shallow(
-      <EditPh
-        values={values}
-        probe={probe}
-        errors={{}}
-        touched={{}}
-        analogInputs={analogInputs}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        equipment={equipment}
-        macros={macros}
-      />
-    )
+    expect(() => EditPh({
+      values,
+      probe,
+      errors: {},
+      touched: {},
+      analogInputs,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      equipment,
+      macros
+    })).not.toThrow()
   })
 
   it('<EditPh /> should submit', () => {
-    const wrapper = shallow(
-      <EditPh
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        analogInputs={analogInputs}
-        dirty
-        isValid
-        equipment={equipment}
-        macros={macros}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const form = EditPh({
+      values,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty: true,
+      isValid: true,
+      equipment,
+      macros
+    })
+    form.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditPh /> should show alert when invalid', () => {
-
-    const wrapper = shallow(
-      <EditPh
-        values={values}
-        probe={probe}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        analogInputs={analogInputs}
-        dirty
-        isValid={false}
-        equipment={equipment}
-        macros={macros}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const form = EditPh({
+      values,
+      probe,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty: true,
+      isValid: false,
+      equipment,
+      macros
+    })
+    form.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('<EditPh /> should disable inputs when controlling nothing', () => {
-
     values.control = ''
+    const tree = EditPh({
+      values,
+      probe,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty: true,
+      isValid: false,
+      equipment,
+      macros
+    })
 
-    const wrapper = shallow(
-      <EditPh
-        values={values}
-        probe={probe}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        analogInputs={analogInputs}
-        dirty
-        isValid={false}
-        equipment={equipment}
-        macros={macros}
-      />
-    )
-
-    const upperFunction = wrapper.find({name: 'upperFunction', className: 'custom-select'})
-    expect(upperFunction.prop('disabled')).toBe(true)
+    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
+    expect(upperFunction.props.disabled).toBe(true)
   })
-
 
   it('<EditPh /> should enable inputs when controlling equipment', () => {
-
     values.control = 'equipment'
+    const tree = EditPh({
+      values,
+      probe,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty: true,
+      isValid: false,
+      equipment,
+      macros
+    })
 
-    const wrapper = shallow(
-      <EditPh
-        values={values}
-        probe={probe}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        analogInputs={analogInputs}
-        dirty
-        isValid={false}
-        equipment={equipment}
-        macros={macros}
-      />
-    )
-
-    const upperFunction = wrapper.find({name: 'upperFunction', className: 'custom-select'})
-    //upperFunction.dive()
-    expect(upperFunction.prop('disabled')).toBe(false)
+    const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
+    expect(upperFunction.props.disabled).toBe(false)
   })
 
+  it('<EditPh /> renders charts only when enabled and probe exists', () => {
+    const tree = EditPh({
+      values,
+      probe,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty: true,
+      isValid: true,
+      equipment,
+      macros
+    })
+
+    expect(findAll(tree, node => node.type === Chart)).toHaveLength(2)
+  })
 })

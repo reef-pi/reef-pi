@@ -71,4 +71,5 @@ const About = connect(
   mapStateToProps,
   mapDispatchToProps
 )(about)
+export { about as RawAbout }
 export default About

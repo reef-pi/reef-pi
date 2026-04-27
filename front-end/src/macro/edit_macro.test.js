@@ -1,10 +1,38 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { act } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Formik } from 'formik'
+import { Provider } from 'react-redux'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import EditMacro from './edit_macro'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
-import { FieldArray } from 'formik'
 
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+const mockStore = configureMockStore([thunk])
+
+const renderMacro = props => {
+  const container = document.createElement('div')
+  const root = createRoot(container)
+  const store = mockStore({ equipment: [], macros: [], lights: [], atos: [], tcs: [], phprobes: [], cameras: [], dosers: [] })
+
+  act(() => {
+    root.render(
+      <Provider store={store}>
+        <Formik initialValues={props.values} onSubmit={() => {}}>
+          <EditMacro {...props} />
+        </Formik>
+      </Provider>
+    )
+  })
+
+  return {
+    container,
+    unmount: () => act(() => root.unmount())
+  }
+}
 
 describe('<EditMacro />', () => {
   let values = {
@@ -34,51 +62,59 @@ describe('<EditMacro />', () => {
   })
 
   it('<EditMacro />', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        errors={{}}
-        touched={{}}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-      />
-    )
-    let arrayField = wrapper.find(FieldArray).shallow()
-    expect(arrayField.length).toBe(1)
+    const { container, unmount } = renderMacro({
+      values,
+      errors: {},
+      touched: {},
+      onBlur: fn,
+      handleChange: fn,
+      submitForm: fn
+    })
+    expect(container.querySelectorAll('.macro-step').length).toBe(2)
+    unmount()
   })
 
   it('<EditMacro /> should submit', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const { container, unmount } = renderMacro({
+      values,
+      onBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: true
+    })
+
+    act(() => {
+      container.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+    })
+
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).not.toHaveBeenCalled()
+    unmount()
   })
 
   it('<EditMacro /> should show alert when invalid', () => {
-    const wrapper = shallow(
-      <EditMacro
-        values={values}
-        handleBlur={fn}
-        handleChange={fn}
-        submitForm={fn}
-        errors={{}}
-        touched={{}}
-        dirty
-        isValid={false}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const { container, unmount } = renderMacro({
+      values,
+      onBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      dirty: true,
+      isValid: false
+    })
+
+    act(() => {
+      container.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+    })
+
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
+    unmount()
   })
 })
