@@ -1,18 +1,14 @@
 import React, { act } from 'react'
-import { shallow } from 'enzyme'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Equipment from './equipment'
 import ViewEquipment from './view_equipment'
 import EditEquipment from './edit_equipment'
 import EquipmentForm from './equipment_form'
-import Chart from './chart'
-import Main from './main'
+import { RawEquipmentChart } from './chart'
+import { RawEquipmentMain } from './main'
 import { buildEquipmentPayload, SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipment } from './utils'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 import * as Alert from '../utils/alert'
-
-const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -25,12 +21,28 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
+const collectElements = (node, predicate, matches = []) => {
+  if (!React.isValidElement(node)) {
+    return matches
+  }
+
+  if (predicate(node)) {
+    matches.push(node)
+  }
+
+  React.Children.forEach(node.props.children, child => collectElements(child, predicate, matches))
+  return matches
+}
+
+const findFirst = (node, predicate) => collectElements(node, predicate)[0]
+
 describe('Equipment ui', () => {
   const eqs = [{ id: '1', outlet: '1', name: 'Foo', on: true }]
   const outlets = [{ id: '1', name: 'O1' }]
   const click = (node, event = {}) => {
     act(() => {
-      node.prop('onClick')(event)
+      node.props.onClick(event)
     })
   }
 
@@ -43,8 +55,22 @@ describe('Equipment ui', () => {
   })
 
   it('<Main />', () => {
-    const m = shallow(<Main store={mockStore({ outlets: outlets, equipment: eqs })} />)
-      .dive()
+    const props = {
+      outlets,
+      equipment: eqs,
+      fetch: jest.fn(),
+      fetchOutlets: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    }
+    const component = new RawEquipmentMain(props)
+
+    component.componentDidMount()
+
+    expect(props.fetch).toHaveBeenCalled()
+    expect(props.fetchOutlets).toHaveBeenCalled()
+    expect(component.render().type).toBe('ul')
   })
 
   it('sortEquipment supports all sort modes without mutating input', () => {
@@ -71,13 +97,12 @@ describe('Equipment ui', () => {
   })
 
   it('<Equipment />', () => {
-    shallow(<Equipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={outlets} />).instance()
+    const instance = new Equipment({ equipment: eqs[0], update: () => Promise.resolve(true), delete: () => true, outlets })
+    expect(instance.selectedOutlet().name).toBe('O1')
   })
 
   it('should handle delete', () => {
-    const instance = shallow(
-      <Equipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={outlets} />
-    ).instance()
+    const instance = new Equipment({ equipment: eqs[0], update: () => Promise.resolve(true), delete: () => true, outlets })
     const ev = {
       stopPropagation: () => {}
     }
@@ -85,18 +110,13 @@ describe('Equipment ui', () => {
   })
 
   it('should handle submit', () => {
-    const instance = shallow(
-      <Equipment
-        equipment={eqs[0]}
-        update={() => {
-          return new Promise(resolve => {
-            return resolve(true)
-          })
-        }}
-        delete={() => true}
-        outlets={outlets}
-      />
-    ).instance()
+    const instance = new Equipment({
+      equipment: eqs[0],
+      update: () => Promise.resolve(true),
+      delete: () => true,
+      outlets
+    })
+    instance.setState = update => { instance.state = { ...instance.state, ...update } }
     const values = {
       id: 1,
       name: 'test',
@@ -107,113 +127,141 @@ describe('Equipment ui', () => {
   })
 
   it('should handle an unrecognized outlet', () => {
-    shallow(
-      <Equipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={[{ id: '2', name: 'O1' }]} />
-    ).instance()
+    const instance = new Equipment({
+      equipment: eqs[0],
+      update: () => Promise.resolve(true),
+      delete: () => true,
+      outlets: [{ id: '2', name: 'O1' }]
+    })
+    expect(instance.selectedOutlet()).toEqual({ name: '' })
   })
 
   it('should toggle edit', () => {
-    const instance = shallow(
-      <Equipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={[{ id: '2', name: 'O1' }]} />
-    ).instance()
+    const instance = new Equipment({
+      equipment: eqs[0],
+      update: () => Promise.resolve(true),
+      delete: () => true,
+      outlets: [{ id: '2', name: 'O1' }]
+    })
+    instance.setState = update => { instance.state = { ...instance.state, ...update } }
 
     const e = {
       stopPropagation: () => {}
     }
     instance.handleToggleEdit(e)
+    expect(instance.state.readOnly).toBe(false)
   })
 
   it('<ViewEquipment />', () => {
-    shallow(
-      <ViewEquipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={[{ id: '2', name: 'O1' }]} />
+    const tree = ViewEquipment(
+      { equipment: eqs[0], outletName: 'O1', onStateChange: () => true, onDelete: () => true, onEdit: () => true }
     )
+    expect(tree.type).toBe('div')
   })
 
   it('<ViewEquipment /> off', () => {
-    eqs[0].on = false
-    shallow(
-      <ViewEquipment equipment={eqs[0]} update={() => true} delete={() => true} outlets={[{ id: '2', name: 'O1' }]} />
+    const tree = ViewEquipment(
+      { equipment: { ...eqs[0], on: false }, outletName: 'O1', onStateChange: () => true, onDelete: () => true, onEdit: () => true }
     )
+    expect(tree.type).toBe('div')
   })
 
   it('<ViewEquipment /> should toggle state', () => {
-    const wrapper = shallow(
-      <ViewEquipment
-        onStateChange={() => true}
-        equipment={eqs[0]}
-        update={() => true}
-        delete={() => true}
-        outlets={[{ id: '2', name: 'O1' }]}
-      />
-    )
+    const onStateChange = jest.fn()
+    const tree = ViewEquipment({
+      onStateChange,
+      equipment: eqs[0],
+      outletName: 'O1',
+      onDelete: () => true,
+      onEdit: () => true
+    })
+    const toggle = findFirst(tree, child => child.props && typeof child.props.onClick === 'function' && child.props.on === true)
 
-    click(wrapper.find('Switch'))
+    click(toggle)
+    expect(onStateChange).toHaveBeenCalledWith('1', {
+      name: 'Foo',
+      on: false,
+      outlet: '1',
+      stay_off_on_boot: undefined
+    })
   })
 
   it('<EditEquipment />', () => {
-    shallow(
-      <EditEquipment
-        actionLabel='save'
-        values={{ id: 1 }}
-        update={() => true}
-        delete={() => true}
-        outlets={[{ id: '1', name: 'O1' }]}
-        handleBlur={() => true}
-        submitForm={() => true}
-      />
-    )
+    const tree = EditEquipment({
+      actionLabel: 'save',
+      values: { id: 1, name: '', outlet: '', stay_off_on_boot: false, boot_delay: 0 },
+      errors: {},
+      touched: {},
+      update: () => true,
+      delete: () => true,
+      outlets: [{ id: '1', name: 'O1' }],
+      handleBlur: () => true,
+      submitForm: () => true,
+      handleChange: () => true
+    })
+    expect(tree.type).toBe('form')
   })
 
   it('<EditEquipment /> New Item', () => {
-    shallow(
-      <EditEquipment
-        actionLabel='save'
-        values={{ id: null }}
-        update={() => true}
-        delete={() => true}
-        outlets={[{ id: '1', name: 'O1' }]}
-        handleBlur={() => true}
-        submitForm={() => true}
-      />
-    )
+    const tree = EditEquipment({
+      actionLabel: 'save',
+      values: { id: null, name: '', outlet: '', stay_off_on_boot: false, boot_delay: 0 },
+      errors: {},
+      touched: {},
+      update: () => true,
+      delete: () => true,
+      outlets: [{ id: '1', name: 'O1' }],
+      handleBlur: () => true,
+      submitForm: () => true,
+      handleChange: () => true
+    })
+    expect(tree.type).toBe('form')
   })
 
   it('<EditEquipment /> should submit', () => {
-    const wrapper = shallow(
-      <EditEquipment
-        actionLabel='save'
-        values={{ id: null }}
-        update={() => true}
-        delete={() => true}
-        handleBlur={() => true}
-        submitForm={() => true}
-        isValid
-        outlets={[{ id: '1', name: 'O1' }]}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const tree = EditEquipment({
+      actionLabel: 'save',
+      values: { id: null, name: '', outlet: '', stay_off_on_boot: false, boot_delay: 0 },
+      errors: {},
+      touched: {},
+      update: () => true,
+      delete: () => true,
+      handleBlur: () => true,
+      submitForm,
+      handleChange: () => true,
+      isValid: true,
+      dirty: true,
+      outlets: [{ id: '1', name: 'O1' }]
+    })
+    tree.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).not.toHaveBeenCalled()
   })
 
   it('<EditEquipment /> should show alert when invalid', () => {
-    const wrapper = shallow(
-      <EditEquipment
-        actionLabel='save'
-        values={{ id: null }}
-        update={() => true}
-        delete={() => true}
-        handleBlur={() => true}
-        submitForm={() => true}
-        isValid={false}
-        outlets={[{ id: '1', name: 'O1' }]}
-      />
-    )
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+    const submitForm = jest.fn()
+    const tree = EditEquipment({
+      actionLabel: 'save',
+      values: { id: null, name: '', outlet: '', stay_off_on_boot: false, boot_delay: 0 },
+      errors: {},
+      touched: {},
+      update: () => true,
+      delete: () => true,
+      handleBlur: () => true,
+      submitForm,
+      handleChange: () => true,
+      isValid: false,
+      dirty: true,
+      outlets: [{ id: '1', name: 'O1' }]
+    })
+    tree.props.onSubmit({ preventDefault: () => {} })
+    expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('<EquipmentForm />', () => {
-    const wrapper = shallow(
+    const html = renderToStaticMarkup(
       <EquipmentForm
         actionLabel='save'
         values={{ id: null }}
@@ -224,17 +272,25 @@ describe('Equipment ui', () => {
         isValid={false}
         outlets={[{ id: '1', name: 'O1' }]}
       />
-    ).instance()
-    wrapper.handleSubmit()
+    )
+    expect(html).toContain('smoke-equipment-name')
   })
 
   it('<Chart />', () => {
-    const m = shallow(<Chart store={mockStore({ equipment: eqs })} />)
-      .dive()
-      .instance()
+    jest.useFakeTimers()
+    const fetchEquipment = jest.fn()
+    const component = new RawEquipmentChart({ equipment: eqs, fetchEquipment, height: 200 })
+
+    component.componentDidMount()
+
+    expect(fetchEquipment).toHaveBeenCalled()
+    expect(component.render().props.className).toBe('container')
+    component.componentWillUnmount()
+    jest.useRealTimers()
   })
 
   it('<Chart />', () => {
-    shallow(<Chart store={mockStore()} />).dive()
+    const component = new RawEquipmentChart({ equipment: undefined, fetchEquipment: jest.fn(), height: 200 })
+    expect(component.render().type).toBe('div')
   })
 })

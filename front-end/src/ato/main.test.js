@@ -1,17 +1,10 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import Main from './main'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
+import { RawATOMain } from './main'
 import 'isomorphic-fetch'
 
 jest.mock('utils/confirm', () => ({
   confirm: jest.fn().mockImplementation(() => Promise.resolve(true))
 }))
-
-const mockStore = configureMockStore([thunk])
 
 const ato = {
   id: '1', name: 'Top-off', enable: true,
@@ -23,49 +16,57 @@ const equipment = [{ id: 'pump1', name: 'ATO Pump' }]
 const inlets = [{ id: 'inlet1', name: 'Float Switch' }]
 const macros = []
 
-const storeState = { atos: [ato], equipment, inlets, macros }
-
 describe('ATO Main', () => {
+  const makeProps = (extra = {}) => ({
+    atos: [ato],
+    equipment,
+    inlets,
+    macros,
+    fetchATOs: jest.fn(),
+    fetchEquipment: jest.fn(),
+    fetchInlets: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+    reset: jest.fn(),
+    ...extra
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    jest.clearAllMocks()
   })
 
-  it('smoke test via Provider shallow', () => {
-    const store = mockStore(storeState)
-    expect(() =>
-      shallow(<Provider store={store}><Main /></Provider>)
-    ).not.toThrow()
+  it('fetches ATO dependencies on mount', () => {
+    const props = makeProps()
+    const component = new RawATOMain(props)
+
+    component.componentDidMount()
+
+    expect(props.fetchATOs).toHaveBeenCalled()
+    expect(props.fetchEquipment).toHaveBeenCalled()
+    expect(props.fetchInlets).toHaveBeenCalled()
   })
 
-  it('mounts with ATO list', () => {
-    fetchMock.get('/api/atos', [ato])
-    fetchMock.get('/api/equipment', equipment)
-    fetchMock.get('/api/inlets', inlets)
-    const store = mockStore(storeState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders a collapsible entry for each ATO', () => {
+    const component = new RawATOMain(makeProps())
+    const panels = component.probeList()
+
+    expect(panels).toHaveLength(1)
+    expect(panels[0].props.name).toBe('panel-ato-1')
   })
 
-  it('mounts with empty ATO list', () => {
-    fetchMock.get('/api/atos', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/inlets', [])
-    const store = mockStore({ atos: [], equipment: [], inlets: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('renders with an empty ATO list', () => {
+    const component = new RawATOMain(makeProps({ atos: [] }))
+    const panels = component.probeList()
+
+    expect(panels).toHaveLength(0)
   })
 
-  it('renders New sub-component for adding ATOs', () => {
-    fetchMock.get('/api/atos', [ato])
-    fetchMock.get('/api/equipment', equipment)
-    fetchMock.get('/api/inlets', inlets)
-    const store = mockStore(storeState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    // ATO main delegates add via New sub-component — just verify it renders
-    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
-    wrapper.unmount()
+  it('renders the add-new section', () => {
+    const component = new RawATOMain(makeProps())
+    const tree = component.render()
+    const list = tree.props.children
+
+    expect(list.type).toBe('ul')
+    expect(list.props.children).toHaveLength(2)
   })
 })

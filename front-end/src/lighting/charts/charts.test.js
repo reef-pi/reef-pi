@@ -1,14 +1,9 @@
 import React from 'react'
-import { shallow } from 'enzyme'
 import DiurnalChart from './diurnal'
 import FixedChart from './fixed'
 import IntervalChart from './interval'
-import GenericLightChart from './generic'
-import configureMockStore from 'redux-mock-store'
+import { RawGenericLightChart } from './generic'
 import 'isomorphic-fetch'
-import thunk from 'redux-thunk'
-
-const mockStore = configureMockStore([thunk])
 
 const baseChannel = {
   name: 'Blue LED',
@@ -17,10 +12,23 @@ const baseChannel = {
   max: 100
 }
 
+const collectElements = (node, predicate, matches = []) => {
+  if (!React.isValidElement(node)) {
+    return matches
+  }
+
+  if (predicate(node)) {
+    matches.push(node)
+  }
+
+  React.Children.forEach(node.props.children, child => collectElements(child, predicate, matches))
+  return matches
+}
+
 describe('DiurnalChart', () => {
   it('renders loading span when channel is undefined', () => {
-    const wrapper = shallow(<DiurnalChart height={200} />)
-    expect(wrapper.find('span').length).toBeGreaterThan(0)
+    const tree = new DiurnalChart({ height: 200 }).render()
+    expect(tree.type).toBe('span')
   })
 
   it('renders chart with a normal channel (start before end)', () => {
@@ -28,8 +36,8 @@ describe('DiurnalChart', () => {
       ...baseChannel,
       profile: { config: { start: '08:00:00', end: '20:00:00' } }
     }
-    const wrapper = shallow(<DiurnalChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new DiurnalChart({ channel: ch, height: 200 }).render()
+    expect(tree.props.className).toBe('container')
   })
 
   it('renders chart when start is after end (crosses midnight)', () => {
@@ -37,8 +45,8 @@ describe('DiurnalChart', () => {
       ...baseChannel,
       profile: { config: { start: '22:00:00', end: '06:00:00' } }
     }
-    const wrapper = shallow(<DiurnalChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new DiurnalChart({ channel: ch, height: 200 }).render()
+    expect(tree.props.className).toBe('container')
   })
 
   it('uses black stroke when color is empty string', () => {
@@ -47,15 +55,16 @@ describe('DiurnalChart', () => {
       color: '',
       profile: { config: { start: '08:00:00', end: '20:00:00' } }
     }
-    const wrapper = shallow(<DiurnalChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new DiurnalChart({ channel: ch, height: 200 }).render()
+    const line = collectElements(tree, child => child.props && child.props.stroke !== undefined)[0]
+    expect(line.props.stroke).toBe('#000')
   })
 })
 
 describe('FixedChart', () => {
   it('renders loading span when channel is undefined', () => {
-    const wrapper = shallow(<FixedChart height={200} />)
-    expect(wrapper.find('span').length).toBeGreaterThan(0)
+    const tree = new FixedChart({ height: 200 }).render()
+    expect(tree.type).toBe('span')
   })
 
   it('renders bar chart with channel data', () => {
@@ -63,8 +72,8 @@ describe('FixedChart', () => {
       ...baseChannel,
       profile: { config: { start: '08:00:00', end: '20:00:00', value: 75 } }
     }
-    const wrapper = shallow(<FixedChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new FixedChart({ channel: ch, height: 200 }).render()
+    expect(tree.props.className).toBe('container')
   })
 
   it('uses black fill when color is undefined', () => {
@@ -72,15 +81,16 @@ describe('FixedChart', () => {
       name: 'Blue LED',
       profile: { config: { start: '08:00:00', end: '20:00:00', value: 75 } }
     }
-    const wrapper = shallow(<FixedChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new FixedChart({ channel: ch, height: 200 }).render()
+    const bar = collectElements(tree, child => child.props && child.props.fill !== undefined)[0]
+    expect(bar.props.fill).toBe('#000')
   })
 })
 
 describe('IntervalChart', () => {
   it('renders loading span when channel is undefined', () => {
-    const wrapper = shallow(<IntervalChart height={200} />)
-    expect(wrapper.find('span').length).toBeGreaterThan(0)
+    const tree = new IntervalChart({ height: 200 }).render()
+    expect(tree.type).toBe('span')
   })
 
   it('renders line chart with interval values', () => {
@@ -88,8 +98,8 @@ describe('IntervalChart', () => {
       ...baseChannel,
       profile: { config: { start: '08:00:00', interval: '3600', values: [10, 50, 90] } }
     }
-    const wrapper = shallow(<IntervalChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new IntervalChart({ channel: ch, height: 200 }).render()
+    expect(tree.props.className).toBe('container')
   })
 
   it('uses black stroke when color is empty string', () => {
@@ -98,8 +108,9 @@ describe('IntervalChart', () => {
       color: '',
       profile: { config: { start: '08:00:00', interval: '3600', values: [20, 80] } }
     }
-    const wrapper = shallow(<IntervalChart channel={ch} height={200} />)
-    expect(wrapper.find('.container').length).toBe(1)
+    const tree = new IntervalChart({ channel: ch, height: 200 }).render()
+    const line = collectElements(tree, child => child.props && child.props.stroke !== undefined)[0]
+    expect(line.props.stroke).toBe('#000')
   })
 })
 
@@ -113,32 +124,59 @@ describe('GenericLightChart', () => {
   }
 
   it('renders loading span when usage is missing', () => {
-    const store = mockStore({ lights: [lightConfig], light_usage: {} })
-    const wrapper = shallow(<GenericLightChart light_id='1' store={store} />).dive()
-    expect(wrapper).toBeDefined()
+    const tree = new RawGenericLightChart({
+      light_id: '1',
+      light: lightConfig,
+      usage: undefined,
+      fetch: jest.fn(),
+      height: 200
+    }).render()
+    expect(tree.type).toBe('span')
   })
 
   it('renders loading span when light config is missing', () => {
-    const store = mockStore({ lights: [], light_usage: { 1: { current: [] } } })
-    const wrapper = shallow(<GenericLightChart light_id='1' store={store} />).dive()
-    expect(wrapper).toBeDefined()
+    const tree = new RawGenericLightChart({
+      light_id: '1',
+      light: undefined,
+      usage: { current: [] },
+      fetch: jest.fn(),
+      height: 200
+    }).render()
+    expect(tree.type).toBe('span')
   })
 
   it('renders chart when light and usage are present', () => {
     const usage = { current: [{ time: '10:00', channels: { 1: 50 } }] }
-    const store = mockStore({ lights: [lightConfig], light_usage: { 1: usage } })
-    const wrapper = shallow(<GenericLightChart light_id='1' store={store} />).dive()
-    expect(wrapper).toBeDefined()
+    const tree = new RawGenericLightChart({
+      light_id: '1',
+      light: lightConfig,
+      usage,
+      fetch: jest.fn(),
+      height: 200
+    }).render()
+    expect(tree.props.className).toBe('container')
   })
 
   it('clears interval on unmount', () => {
     jest.useFakeTimers()
-    const usage = { current: [] }
-    const store = mockStore({ lights: [lightConfig], light_usage: { 1: usage } })
-    const wrapper = shallow(<GenericLightChart light_id='1' store={store} />).dive()
+    const fetch = jest.fn()
+    const clearIntervalSpy = jest.spyOn(window, 'clearInterval')
+    const component = new RawGenericLightChart({
+      light_id: '1',
+      light: lightConfig,
+      usage: { current: [] },
+      fetch,
+      height: 200
+    })
+    component.setState = update => { component.state = { ...component.state, ...update } }
+
+    component.componentDidMount()
     jest.advanceTimersByTime(15000)
-    wrapper.unmount()
+    component.componentWillUnmount()
+
+    expect(fetch).toHaveBeenCalledWith('1')
+    expect(clearIntervalSpy).toHaveBeenCalled()
+    clearIntervalSpy.mockRestore()
     jest.useRealTimers()
-    expect(wrapper).toBeDefined()
   })
 })

@@ -18,7 +18,7 @@ import { numColsToColSize } from './grid'
 import ErrorBoundary from '../ui_components/error_boundary'
 import i18n from 'utils/i18n'
 
-class dashboard extends React.Component {
+export class RawDashboardMain extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -234,5 +234,5 @@ const mapDispatchToProps = dispatch => {
 const Dashboard = connect(
   mapStateToProps,
   mapDispatchToProps
-)(dashboard)
+)(RawDashboardMain)
 export default Dashboard
