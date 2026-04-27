@@ -108,6 +108,10 @@ export const rootReducer = (state = createInitialState(), action) => {
       return { ...state, instances: action.payload }
     case 'JOURNALS_LOADED':
       return { ...state, journals: action.payload }
+    case 'FLOW_METERS_LOADED':
+      return { ...state, flow_meters: action.payload }
+    case 'FLOW_METER_READINGS_LOADED':
+      return { ...state, flow_meter_readings: updateByID(state.flow_meter_readings, action.payload.id, action.payload.readings) }
     case 'JOURNAL_USAGE_LOADED':
       return { ...state, journal_usage: updateByID(state.journal_usage, action.payload.id, action.payload.data) }
     case 'JOURNAL_RECORDED':

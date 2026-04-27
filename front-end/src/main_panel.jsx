@@ -10,6 +10,7 @@ import Temperature from 'temperature/main'
 import Timers from 'timers/main'
 import Doser from 'doser/main'
 import Ph from 'ph/main'
+import FlowMeters from 'flow_meter/main'
 import Macro from 'macro/main'
 import Dashboard from 'dashboard/main'
 import { fetchUIData } from 'redux/actions/ui'
@@ -30,6 +31,7 @@ const routes = [
   { key: 'temperature', path: '/temperature', element: <Temperature />, label: i18n.t('capabilities:temperature') },
   { key: 'ato', path: '/ato', element: <Ato />, label: i18n.t('capabilities:ato') },
   { key: 'ph', path: '/ph', element: <Ph />, label: i18n.t('capabilities:ph') },
+  { key: 'flow_meter', path: '/flow_meter', element: <FlowMeters />, label: i18n.t('capabilities:flow_meter') },
   { key: 'doser', path: '/doser', element: <Doser />, label: i18n.t('capabilities:dosing_pumps') },
   { key: 'macro', path: '/macro', element: <Macro />, label: i18n.t('capabilities:macros') },
   { key: 'camera', path: '/camera', element: <Camera />, label: i18n.t('capabilities:camera') },

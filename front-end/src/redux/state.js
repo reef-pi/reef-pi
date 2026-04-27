@@ -53,5 +53,7 @@ export const createInitialState = () => ({
   },
   logs: [],
   alerts: [],
-  instances: []
+  instances: [],
+  flow_meters: [],
+  flow_meter_readings: {}
 })

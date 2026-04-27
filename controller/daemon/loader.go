@@ -9,6 +9,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/modules/camera"
 	"github.com/reef-pi/reef-pi/controller/modules/doser"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
+	flow_meter "github.com/reef-pi/reef-pi/controller/modules/flow_meter"
 	"github.com/reef-pi/reef-pi/controller/modules/journal"
 	"github.com/reef-pi/reef-pi/controller/modules/lighting"
 	"github.com/reef-pi/reef-pi/controller/modules/macro"
@@ -53,6 +54,15 @@ func (r *ReefPi) loadJournalSubsystem() error {
 		return nil
 	}
 	r.subsystems.Load(journal.Bucket, journal.New(r))
+	return nil
+}
+
+func (r *ReefPi) loadFlowMeterSubsystem() error {
+	if !r.settings.Capabilities.FlowMeter {
+		return nil
+	}
+	fm := flow_meter.New(r.settings.Capabilities.DevMode, r)
+	r.subsystems.Load(flow_meter.Bucket, fm)
 	return nil
 }
 
@@ -184,6 +194,10 @@ func (r *ReefPi) loadSubsystems() error {
 	if err := r.loadJournalSubsystem(); err != nil {
 		log.Println("ERROR: Failed to load journal subsystem. Error:", err)
 		r.LogError("subsystem-journal", "Failed to load journal subsystem. Error:"+err.Error())
+	}
+	if err := r.loadFlowMeterSubsystem(); err != nil {
+		log.Println("ERROR: Failed to load flow_meter subsystem. Error:", err)
+		r.LogError("subsystem-flow_meter", "Failed to load flow_meter subsystem. Error:"+err.Error())
 	}
 	if err := r.subsystems.Setup(); err != nil {
 		log.Println("ERROR: Failed to setup subsystems. Error:", err)

@@ -102,6 +102,7 @@ capabilities:dev_mode,Entwickler-Modus
 capabilities:doser,Dosierpumpe
 capabilities:dosing_pumps,Dosierer
 capabilities:equipment,Geräte
+capabilities:flow_meter,
 capabilities:health_check,Auslastung
 capabilities:journal,Notizen
 capabilities:lighting,Beleuchtung
@@ -226,6 +227,13 @@ fatal_error:connection_lost,Verbindung verloren
 fatal_error:fatal_error,Fataler Fehler
 fatal_error:message,Es ist ein Fehler aufgetreten. Der Server ist nicht erreichbar. Möglicherweise muss der Web-Server neu gestartet oder ein anderer Fehler gesucht werden.
 fatal_error:troubleshoot,Fehlersuche
+flow_meter:min_flow,
+flow_meter:notify_enable,
+flow_meter:period,
+flow_meter:pulses_per_liter,
+flow_meter:sensor_path,
+flow_meter:title_delete,
+flow_meter:warn_delete,
 function:alert,Alarm
 function:ato,ATO (Pegel)
 function:camera,Kamera
