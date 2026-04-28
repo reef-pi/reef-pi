@@ -3,10 +3,10 @@
 An open source reef tank controller based on Raspberry Pi
 
 [![GitHub release](https://img.shields.io/github/release/reef-pi/reef-pi.svg)](https://github.com/reef-pi/reef-pi/releases)
-![Build Status(backend)](https://github.com/reef-pi/reef-pi/workflows/go/badge.svg?branch=main)
-![Build Status(frontend)](https://github.com/reef-pi/reef-pi/workflows/jest/badge.svg?branch=main)
-![Build Status(smoke)](https://github.com/reef-pi/reef-pi/workflows/smoke/badge.svg?branch=main)
-![Build Status(package)](https://github.com/reef-pi/reef-pi/workflows/deb/badge.svg?branch=main)
+![Build Status(backend)](https://github.com/reef-pi/reef-pi/actions/workflows/go.yml/badge.svg?branch=main)
+![Build Status(frontend)](https://github.com/reef-pi/reef-pi/actions/workflows/jest.yml/badge.svg?branch=main)
+![Build Status(smoke)](https://github.com/reef-pi/reef-pi/actions/workflows/smoke_.yml/badge.svg?branch=main)
+![Build Status(package)](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml/badge.svg?branch=main)
 
 [![Coverage Status](https://codecov.io/gh/reef-pi/reef-pi/branch/main/graph/badge.svg)](https://codecov.io/gh/reef-pi/reef-pi)
 [![Go Report Card](https://goreportcard.com/badge/reef-pi/reef-pi)](https://goreportcard.com/report/reef-pi/reef-pi)
@@ -40,6 +40,26 @@ reef-pi is an [award winning](https://reef-pi.github.io/blogs/makerfaire-2017/),
 - [Vincent le Goff](https://github.com/zekth)
 - [Michael Lane](https://github.com/Ranthalion)
 
+
+## Snapshot Builds
+
+After every change published to the `main` branch, the [deb workflow](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml) automatically builds and uploads Debian packages as GitHub Actions artifacts. These snapshot builds are available for 30 days.
+
+To download a snapshot build:
+
+1. Go to the [deb workflow runs](https://github.com/reef-pi/reef-pi/actions/workflows/deb.yml).
+2. Click on the latest successful run on the `main` branch.
+3. Scroll down to the **Artifacts** section at the bottom of the run page.
+4. Download the package for your target platform:
+   - `x86-debian-package` — for x86 machines
+   - `pi0-debian-package` — for Raspberry Pi Zero
+   - `pi3-debian-package` — for Raspberry Pi 3 (and compatible boards)
+
+Each artifact is a `.zip` file containing the `.deb` package. Extract the archive and install the package with:
+
+```sh
+dpkg -i reef-pi-*.deb
+```
 
 ## Development
 

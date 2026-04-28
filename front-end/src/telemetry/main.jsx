@@ -290,4 +290,5 @@ const Telemetry = connect(
   mapStateToProps,
   mapDispatchToProps
 )(telemetry)
+export { telemetry as RawTelemetry }
 export default Telemetry

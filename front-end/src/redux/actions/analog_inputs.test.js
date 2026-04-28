@@ -5,7 +5,7 @@ import {
   createAnalogInput,
   updateAnalogInput
 } from './analog_inputs'
-import thunk from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'

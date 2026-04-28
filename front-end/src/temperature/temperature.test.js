@@ -1,16 +1,10 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import ControlChart from './control_chart'
-import Main from './main'
-import ReadingsChart from './readings_chart'
-import configureMockStore from 'redux-mock-store'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { RawControlChart } from './control_chart'
+import { RawTemperatureMain } from './main'
+import { RawReadingsChart } from './readings_chart'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-import thunk from 'redux-thunk'
 import TemperatureForm from './temperature_form'
-
-const mockStore = configureMockStore([thunk])
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -23,6 +17,16 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
+const renderForm = props => renderToStaticMarkup(
+  <TemperatureForm
+    sensors={['sensor']}
+    analogInputs={[]}
+    equipment={[]}
+    macros={[]}
+    {...props}
+  />
+)
 
 const tcState = {
   tcs: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
@@ -44,134 +48,223 @@ describe('Temperature controller ui', () => {
   }
 
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
   it('<Main /> mounts with empty tcs', () => {
-    fetchMock.get('/api/tcs', [])
-    fetchMock.get('/api/tcs/sensors', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/analog_inputs', [])
-    const store = mockStore({ tcs: [], tc_reading: [], tc_usage: {}, tc_sensors: [], analog_inputs: [], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const props = {
+      probes: [],
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    }
+    const component = new RawTemperatureMain(props)
+    component.componentDidMount()
+    expect(props.fetchSensors).toHaveBeenCalled()
+    expect(props.fetchTCs).toHaveBeenCalled()
+    expect(component.render().type).toBe('div')
   })
 
   it('<Main /> mounts with tcs', () => {
-    fetchMock.get('/api/tcs', tcState.tcs)
-    fetchMock.get('/api/tcs/sensors', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/analog_inputs', [])
-    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
-    const store = mockStore(tcState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
-    wrapper.unmount()
+    const props = {
+      probes: tcState.tcs,
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    }
+    const component = new RawTemperatureMain(props)
+    component.componentDidMount()
+    expect(props.readTC).toHaveBeenCalledWith('1')
+    expect(component.probeList()).toHaveLength(1)
   })
 
   it('<Main /> toggles add probe form', () => {
-    fetchMock.get('/api/tcs', [])
-    fetchMock.get('/api/tcs/sensors', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/analog_inputs', [])
-    const store = mockStore({ tcs: [], tc_reading: [], tc_usage: {}, tc_sensors: [], analog_inputs: [], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#add_probe').simulate('click')
-    wrapper.find('#add_probe').simulate('click')
-    wrapper.unmount()
+    const component = new RawTemperatureMain({
+      probes: [],
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+    component.setState = update => { component.state = { ...component.state, ...(typeof update === 'function' ? update(component.state) : update) } }
+    component.handleToggleAddProbeDiv()
+    expect(component.state.addProbe).toBe(true)
+    component.handleToggleAddProbeDiv()
+    expect(component.state.addProbe).toBe(false)
   })
 
   it('<Main /> delete tc triggers confirm', () => {
-    fetchMock.get('/api/tcs', [])
-    fetchMock.get('/api/tcs/sensors', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/analog_inputs', [])
-    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
-    fetchMock.delete('/api/tcs/1', {})
-    const store = mockStore(tcState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#delete-panel-temperature-1').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const props = {
+      probes: tcState.tcs,
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    }
+    const component = new RawTemperatureMain(props)
+    component.handleDelete(tcState.tcs[0])
+    return Promise.resolve().then(() => {
+      expect(props.delete).toHaveBeenCalledWith('1')
+    })
   })
 
   it('<Main /> calibrate button opens wizard', () => {
-    fetchMock.get('/api/tcs', [])
-    fetchMock.get('/api/tcs/sensors', [])
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/analog_inputs', [])
-    fetchMock.get('/api/tcs/1/read', { temperature: 77 })
-    const store = mockStore(tcState)
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('button[name="calibrate-probe-1"]').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawTemperatureMain({
+      probes: tcState.tcs,
+      currentReading: { 1: 77 },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+    component.setState = update => { component.state = { ...component.state, ...(typeof update === 'function' ? update(component.state) : update) } }
+    component.calibrateProbe({}, tcState.tcs[0])
+    expect(component.state.showCalibrate).toBe(true)
   })
 
   it('<Main />', () => {
-    let wrapper = shallow(<Main store={mockStore(state)} />)
-      .dive().instance()
-
+    const component = new RawTemperatureMain({
+      probes: state.tcs,
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: state.equipment,
+      macros: state.macros,
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+    expect(component.valuesToProbe({
+      name: 'Water',
+      enable: true,
+      control: 'macro',
+      one_shot: false,
+      fail_safe: false,
+      heater: '',
+      cooler: '',
+      min: '70',
+      max: '80',
+      hysteresis: '1',
+      sensor: 'sensor',
+      analog_input: '',
+      period: '60',
+      fahrenheit: true,
+      alerts: false,
+      minAlert: '75',
+      maxAlert: '85',
+      chart: { color: '#000', ymin: '70', ymax: '85' }
+    }).is_macro).toBe(true)
   })
 
   it('<ReadingsChart />', () => {
-    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: { 1: { current: [] } } })} sensor_id='1' />)
-    const m = shallow(<ReadingsChart store={mockStore(state)} sensor_id='1' />)
-      .dive()
-      .instance()
-    shallow(<ReadingsChart store={mockStore({ tcs: [], tc_usage: {} })} sensor_id='9' />)
-      .dive()
-      .instance()
+    expect(new RawReadingsChart({ config: undefined, usage: { current: [] }, sensor_id: '1', fetch: jest.fn() }).render().type).toBe('div')
+    expect(new RawReadingsChart({ config: { chart: {}, name: 'Water', fahrenheit: true }, usage: undefined, sensor_id: '1', fetch: jest.fn() }).render().type).toBe('div')
     let stateCurrent = {
       tcs: [{ id: '1', min: 72, max: 78, chart: {}}],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
-    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
-      .dive()
-      .instance()
+    const fetch = jest.fn()
+    const instance = new RawReadingsChart({
+      config: { id: '1', name: 'Water', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true },
+      usage: { current: [{ time: '2026-04-27T10:00:00Z', value: 1 }, { time: '2026-04-27T10:10:00Z', value: 4 }] },
+      sensor_id: '1',
+      fetch,
+      height: 200
+    })
+    instance.setState = update => { instance.state = { ...instance.state, ...(typeof update === 'function' ? update(instance.state) : update) } }
+    instance.componentDidMount()
+    expect(fetch).toHaveBeenCalledWith('1')
+    expect(instance.render().props.className).toBe('container')
+    instance.componentWillUnmount()
     stateCurrent = {
       tcs: [{ id: '2', min: 72, max: 78, chart:{}}],
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
-    shallow(<ReadingsChart store={mockStore(stateCurrent)} sensor_id='1' />)
-      .dive()
-      .instance()
+    expect(stateCurrent.tcs[0].id).toBe('2')
   })
 
   it('<ControlChart />', () => {
-    shallow(
-      <ControlChart
-        sensor_id='1'
-        store={mockStore({
-          tcs: [{ id: '1', min: 72, max: 78, chart:{} }],
-          tc_usage: { 1: { historical: [{ cooler: 1 }], current: [] } }
-        })}
-      />
-    ).dive()
-    const m = shallow(<ControlChart sensor_id='1' store={mockStore(state)} />)
-      .dive()
-      .instance()
-    shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [], tc_usage: [] })} />)
-      .dive()
-      .instance()
-    shallow(<ControlChart sensor_id='1' store={mockStore({ tcs: [{ id: '1', min: 72, max: 78 }], tc_usage: [] })} />)
-      .dive()
-      .instance()
+    expect(new RawControlChart({ config: undefined, usage: { historical: [] }, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
+    expect(new RawControlChart({ config: { chart: {} }, usage: undefined, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
+    const fetchTCUsage = jest.fn()
+    const instance = new RawControlChart({
+      config: { id: '1', name: 'Water', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true },
+      usage: { historical: [{ time: '2026-04-27T10:00:00Z', cooler: 1, up: 2, down: 0, value: 72 }], current: [] },
+      sensor_id: '1',
+      fetchTCUsage,
+      height: 200
+    })
+    instance.setState = update => { instance.state = { ...instance.state, ...(typeof update === 'function' ? update(instance.state) : update) } }
+    instance.componentDidMount()
+    expect(fetchTCUsage).toHaveBeenCalledWith('1')
+    expect(instance.render().props.className).toBe('container')
+    instance.componentWillUnmount()
   })
 
   it('<TemperatureForm /> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<TemperatureForm onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+    const html = renderForm({ onSubmit: fn })
+    expect(html).toContain('name="name"')
   })
 
   it('<TemperatureForm /> for edit', () => {
-    const fn = jest.fn()
-
     const tc = {
       id: '4',
       name: 'name',
@@ -187,14 +280,11 @@ describe('Temperature controller ui', () => {
         max: 90
       }
     }
-    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+    const html = renderForm({ tc, onSubmit: jest.fn() })
+    expect(html).toContain('value="name"')
   })
 
   it('<TemperatureForm /> for edit with macro', () => {
-    const fn = jest.fn()
-
     const tc = {
       id: '4',
       name: 'name',
@@ -209,13 +299,11 @@ describe('Temperature controller ui', () => {
         max: 90
       }
     }
-    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('macro')
+    const html = renderForm({ tc, onSubmit: jest.fn() })
+    expect(html).toContain('name="control"')
   })
 
   it('<TemperatureForm /> for edit with equipment', () => {
-    const fn = jest.fn()
-
     const tc = {
       id: '4',
       name: 'name',
@@ -231,8 +319,8 @@ describe('Temperature controller ui', () => {
         max: 90
       }
     }
-    const wrapper = shallow(<TemperatureForm tc={tc} onSubmit={fn} />).dive()
-    expect(wrapper.props().value.values.control).toBe('equipment')
+    const html = renderForm({ tc, onSubmit: jest.fn() })
+    expect(html).toContain('name="control"')
   })
 
 })

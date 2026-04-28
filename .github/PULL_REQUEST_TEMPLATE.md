@@ -18,7 +18,7 @@ Closes #
 List the exact commands you ran locally.
 
 ```text
-go test ./...
+make test
 ```
 
 ## Risk review

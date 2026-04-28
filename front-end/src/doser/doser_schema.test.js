@@ -84,4 +84,59 @@ describe('DoserValidation', () => {
     return DoserSchema.isValid(doser).then(valid => expect(valid).toBe(true))
   })
 
+  it('requires cron fields for scheduled dosers', () => {
+    expect.assertions(1)
+    const doser = {
+      ...basicDoser,
+      continuous: false,
+      month: '',
+      week: '',
+      day: '',
+      hour: '',
+      minute: '',
+      second: ''
+    }
+    return DoserSchema.validate(doser, { abortEarly: false })
+      .catch(err => expect(err.inner.map(e => e.path)).toEqual(expect.arrayContaining([
+        'month',
+        'week',
+        'day',
+        'hour',
+        'minute',
+        'second'
+      ])))
+  })
+
+  it('allows continuous dosers without cron fields', () => {
+    expect.assertions(1)
+    const doser = {
+      ...basicDoser,
+      continuous: true,
+      month: '',
+      week: '',
+      day: '',
+      hour: '',
+      minute: '',
+      second: ''
+    }
+    return DoserSchema.isValid(doser).then(valid => expect(valid).toBe(true))
+  })
+
+  it('rejects invalid numeric dosing limits', () => {
+    expect.assertions(1)
+    const doser = {
+      ...basicDoser,
+      continuous: false,
+      soft_start: -1,
+      duration: 0,
+      speed: 101
+    }
+    return DoserSchema.validate(doser, { abortEarly: false })
+      .catch(err => expect(err.inner.map(e => e.path)).toEqual(expect.arrayContaining([
+        'soft_start',
+        'duration',
+        'speed'
+      ])))
+  })
+
 })

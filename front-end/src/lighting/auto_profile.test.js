@@ -1,20 +1,46 @@
-import React, { act } from 'react'
-import { shallow } from 'enzyme'
+import React from 'react'
 import AutoProfile from './auto_profile'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
 
-const mockStore = configureMockStore([thunk])
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  React.Children.toArray(node.props?.children).forEach(child => findAll(child, predicate, acc))
+  return acc
+}
+
+const textContent = (node) => {
+  if (node === undefined || node === null || typeof node === 'boolean') {
+    return ''
+  }
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node)
+  }
+  return React.Children.toArray(node.props?.children).map(textContent).join('')
+}
+
+const renderProfile = (config, extraProps = {}) => {
+  const component = new AutoProfile({
+    name: 'profile',
+    config,
+    onChangeHandler: extraProps.onChangeHandler || jest.fn(),
+    touched: {},
+    errors: {},
+    ...extraProps
+  })
+  component.setState = jest.fn(update => {
+    component.state = { ...component.state, ...update }
+  })
+  return component
+}
 
 describe('Lighting ui - Auto Profile', () => {
   const ev = {
     target: { value: 10 }
-  }
-  const click = (node) => {
-    act(() => {
-      node.prop('onClick')()
-    })
   }
 
   it('<AutoProfile />', () => {
@@ -23,9 +49,9 @@ describe('Lighting ui - Auto Profile', () => {
       end: '20:00:00',
       values: []
     }
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />).instance()
+    let m = renderProfile(config)
     m.curry(1)(ev)
-    m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />).instance()
+    m = renderProfile(config)
     m.curry(1)({ target: { value: 'foo' } })
   })
 
@@ -34,8 +60,8 @@ describe('Lighting ui - Auto Profile', () => {
       start: '14:00:00',
       end: '20:00:00'
     }
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    expect(m.find('input.no-spinner').length).toBe(12)
+    const m = renderProfile(config)
+    expect(findAll(m.render(), node => node.type === 'input' && String(node.props?.className).includes('no-spinner'))).toHaveLength(12)
   })
 
   it('<AutoProfile /> should set labels based on start end and values', () => {
@@ -45,12 +71,12 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20.3, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = renderProfile(config)
+    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
     expect(labels.length).toBe(3)
-    expect(labels.at(0).text()).toBe('14:00')
-    expect(labels.at(1).text()).toBe('14:30')
-    expect(labels.at(2).text()).toBe('15:00')
+    expect(textContent(labels[0])).toBe('14:00')
+    expect(textContent(labels[1])).toBe('14:30')
+    expect(textContent(labels[2])).toBe('15:00')
   })
 
   it('<AutoProfile /> should set add labels based when Add Point is clicked', () => {
@@ -60,18 +86,18 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20.3, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const m = renderProfile(config)
+    const addButton = findAll(m.render(), node => String(node.props?.className).includes('btn-add-point'))[0]
+    addButton.props.onClick()
+    findAll(m.render(), node => String(node.props?.className).includes('btn-add-point'))[0].props.onClick()
 
-    click(m.find('.btn-add-point'))
-    click(m.find('.btn-add-point'))
-
-    const labels = m.find('div.px-0')
+    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
     expect(labels.length).toBe(5)
-    expect(labels.at(0).text()).toBe('14:00')
-    expect(labels.at(1).text()).toBe('14:15')
-    expect(labels.at(2).text()).toBe('14:30')
-    expect(labels.at(3).text()).toBe('14:45')
-    expect(labels.at(4).text()).toBe('15:00')
+    expect(textContent(labels[0])).toBe('14:00')
+    expect(textContent(labels[1])).toBe('14:15')
+    expect(textContent(labels[2])).toBe('14:30')
+    expect(textContent(labels[3])).toBe('14:45')
+    expect(textContent(labels[4])).toBe('15:00')
   })
 
   it('<AutoProfile /> should set remove labels based when Remove Point is clicked', () => {
@@ -81,14 +107,13 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
+    const m = renderProfile(config)
+    findAll(m.render(), node => String(node.props?.className).includes('btn-remove-point'))[1].props.onClick()
 
-    click(m.find('.btn-remove-point').at(1))
-
-    const labels = m.find('div.px-0')
+    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
     expect(labels.length).toBe(2)
-    expect(labels.at(0).text()).toBe('14:00')
-    expect(labels.at(1).text()).toBe('15:00')
+    expect(textContent(labels[0])).toBe('14:00')
+    expect(textContent(labels[1])).toBe('15:00')
   })
 
   it('<AutoProfile /> Should allow end time before start time to represent overnight', () => {
@@ -98,13 +123,13 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30, 40]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = renderProfile(config)
+    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
     expect(labels.length).toBe(4)
-    expect(labels.at(0).text()).toBe('23:00')
-    expect(labels.at(1).text()).toBe('00:00')
-    expect(labels.at(2).text()).toBe('01:00')
-    expect(labels.at(3).text()).toBe('02:00')
+    expect(textContent(labels[0])).toBe('23:00')
+    expect(textContent(labels[1])).toBe('00:00')
+    expect(textContent(labels[2])).toBe('01:00')
+    expect(textContent(labels[3])).toBe('02:00')
   })
 
   it('<AutoProfile /> Should allow end time before start time with same hour to represent overnight', () => {
@@ -114,11 +139,11 @@ describe('Lighting ui - Auto Profile', () => {
       values: [10, 20, 30]
     }
 
-    let m = shallow(<AutoProfile store={mockStore()} config={config} onChangeHandler={() => true} />)
-    let labels = m.find('div.px-0')
+    const m = renderProfile(config)
+    const labels = findAll(m.render(), node => String(node.props?.className).includes('order-md-last'))
     expect(labels.length).toBe(3)
-    expect(labels.at(0).text()).toBe('02:45')
-    expect(labels.at(1).text()).toBe('14:30')
-    expect(labels.at(2).text()).toBe('02:15')
+    expect(textContent(labels[0])).toBe('02:45')
+    expect(textContent(labels[1])).toBe('14:30')
+    expect(textContent(labels[2])).toBe('02:15')
   })
 })

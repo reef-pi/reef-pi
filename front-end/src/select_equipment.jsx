@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { fetchEquipment } from './redux/actions/equipment'
 
-class selectEquipment extends React.Component {
+export class RawSelectEquipment extends React.Component {
   constructor (props) {
     super(props)
     let equipment = { id: props.active, name: '' }
@@ -98,5 +98,5 @@ const mapDispatchToProps = dispatch => {
 const SelectEquipment = connect(
   mapStateToProps,
   mapDispatchToProps
-)(selectEquipment)
+)(RawSelectEquipment)
 export default SelectEquipment

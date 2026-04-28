@@ -11,7 +11,7 @@ import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
 
-class main extends React.Component {
+export class RawTemperatureMain extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -273,5 +273,5 @@ const mapDispatchToProps = dispatch => {
 const Main = connect(
   mapStateToProps,
   mapDispatchToProps
-)(main)
+)(RawTemperatureMain)
 export default Main

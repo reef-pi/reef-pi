@@ -7,7 +7,7 @@ import { ErrorFor, ShowError } from '../utils/validation_helper'
 import classNames from 'classnames'
 import i18n from 'utils/i18n'
 
-const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
+export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
   const options = () => {
     return props[type].map((item) => {
       return (
@@ -57,7 +57,7 @@ const GenericStep = ({ type, name, readOnly, touched, errors, ...props }) => {
   )
 }
 
-GenericStep.propTypes = {
+RawGenericStep.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   touched: PropTypes.object,
@@ -92,5 +92,5 @@ const mapStateToProps = state => {
 const GenericStepConfig = connect(
   mapStateToProps,
   null
-)(GenericStep)
+)(RawGenericStep)
 export default GenericStepConfig

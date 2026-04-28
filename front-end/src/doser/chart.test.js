@@ -1,49 +1,78 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import { Provider } from 'react-redux'
-import Chart from './chart'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import Chart, { RawDoserChart } from './chart'
 import 'isomorphic-fetch'
-
-const mockStore = configureMockStore([thunk])
 
 const doserConfig = { id: '1', name: 'Kalk Doser' }
 const usage = { historical: [{ time: 'Jul-01-10:00, 2024', pump: 3 }] }
 
 describe('Doser Chart', () => {
-  it('renders without throwing via Provider', () => {
-    const store = mockStore({ dosers: [doserConfig], doser_usage: { 1: usage } })
-    expect(() =>
-      shallow(<Provider store={store}><Chart doser_id='1' height={200} /></Provider>)
-    ).not.toThrow()
+  it('renders without throwing with config and usage present', () => {
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: doserConfig,
+      usage,
+      fetchDoserUsage: jest.fn()
+    })
+    expect(() => chart.render()).not.toThrow()
+    expect(Chart).toBeDefined()
   })
 
-  it('renders via dive when usage is missing', () => {
-    const store = mockStore({ dosers: [doserConfig], doser_usage: {} })
-    const wrapper = shallow(<Chart doser_id='1' height={200} store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('renders empty div when usage is missing', () => {
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: doserConfig,
+      usage: undefined,
+      fetchDoserUsage: jest.fn()
+    })
+    expect(chart.render().type).toBe('div')
   })
 
-  it('renders via dive when config is missing', () => {
-    const store = mockStore({ dosers: [], doser_usage: { 1: usage } })
-    const wrapper = shallow(<Chart doser_id='1' height={200} store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('renders empty div when config is missing', () => {
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: undefined,
+      usage,
+      fetchDoserUsage: jest.fn()
+    })
+    expect(chart.render().type).toBe('div')
   })
 
-  it('renders via dive with config and usage present', () => {
-    const store = mockStore({ dosers: [doserConfig], doser_usage: { 1: usage } })
-    const wrapper = shallow(<Chart doser_id='1' height={200} store={store} />).dive()
-    expect(wrapper).toBeDefined()
+  it('fetches usage on mount', () => {
+    const fetchDoserUsage = jest.fn()
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: doserConfig,
+      usage,
+      fetchDoserUsage
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchDoserUsage).toHaveBeenCalledWith('1')
+    expect(chart.state.timer).toBeTruthy()
   })
 
   it('clears interval on unmount', () => {
     jest.useFakeTimers()
-    const store = mockStore({ dosers: [doserConfig], doser_usage: { 1: usage } })
-    const wrapper = shallow(<Chart doser_id='1' height={200} store={store} />).dive()
+    const fetchDoserUsage = jest.fn()
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: doserConfig,
+      usage,
+      fetchDoserUsage
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
     jest.advanceTimersByTime(15000)
-    wrapper.unmount()
+    chart.componentWillUnmount()
     jest.useRealTimers()
-    expect(wrapper).toBeDefined()
+    expect(fetchDoserUsage).toHaveBeenCalled()
   })
 })

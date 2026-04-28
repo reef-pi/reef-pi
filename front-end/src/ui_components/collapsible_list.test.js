@@ -1,139 +1,91 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import CollapsibleList from './collapsible_list'
-
 
 const Item = (props) => <div name={props.name}>{props.name}</div>
 
 describe('CollapsibleList', () => {
+  const makeList = (children) => {
+    const instance = new CollapsibleList({ children })
+    instance.setState = update => {
+      const next = typeof update === 'function' ? update(instance.state, instance.props) : update
+      instance.state = { ...instance.state, ...next }
+    }
+    return instance
+  }
+
+  const renderedChildren = (instance) => React.Children.toArray(instance.render().props.children)
+
   it('renders children', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='a' />
-        <Item name='b' />
-      </CollapsibleList>
-    )
-    expect(wrapper.find(Item)).toHaveLength(2)
+    const list = makeList([
+      <Item key='a' name='a' />,
+      <Item key='b' name='b' />
+    ])
+    expect(renderedChildren(list)).toHaveLength(2)
   })
 
   it('starts collapsed (expanded false) for items without defaultOpen', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='x' />
-      </CollapsibleList>
-    )
-    expect(wrapper.state('expanded').x).toBe(false)
+    const list = makeList(<Item name='x' />)
+    expect(list.state.expanded.x).toBe(false)
   })
 
   it('starts expanded for items with defaultOpen', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='y' defaultOpen />
-      </CollapsibleList>
-    )
-    expect(wrapper.state('expanded').y).toBe(true)
+    const list = makeList(<Item name='y' defaultOpen />)
+    expect(list.state.expanded.y).toBe(true)
   })
 
   it('starts readOnly for all items', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='z' />
-      </CollapsibleList>
-    )
-    expect(wrapper.state('readOnly').z).toBe(true)
+    const list = makeList(<Item name='z' />)
+    expect(list.state.readOnly.z).toBe(true)
   })
 
   it('onToggle toggles expanded state when readOnly', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='t' />
-      </CollapsibleList>
-    )
-    React.act(() => {
-      wrapper.instance().onToggle('t')
-    })
-    wrapper.update()
-    expect(wrapper.state('expanded').t).toBe(true)
-    React.act(() => {
-      wrapper.instance().onToggle('t')
-    })
-    wrapper.update()
-    expect(wrapper.state('expanded').t).toBe(false)
+    const list = makeList(<Item name='t' />)
+    list.onToggle('t')
+    expect(list.state.expanded.t).toBe(true)
+    list.onToggle('t')
+    expect(list.state.expanded.t).toBe(false)
   })
 
   it('onToggle does not toggle when not readOnly (editing)', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='e' />
-      </CollapsibleList>
-    )
-    React.act(() => {
-      wrapper.instance().onEdit('e')
-    })
-    wrapper.update()
-    expect(wrapper.state('readOnly').e).toBe(false)
-    React.act(() => {
-      wrapper.instance().onToggle('e')
-    })
-    wrapper.update()
-    // Still expanded because editing prevents toggle
-    expect(wrapper.state('expanded').e).toBe(true)
+    const list = makeList(<Item name='e' />)
+    list.onEdit('e')
+    expect(list.state.readOnly.e).toBe(false)
+    list.onToggle('e')
+    expect(list.state.expanded.e).toBe(true)
   })
 
   it('onEdit expands and sets readOnly to false', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='ed' />
-      </CollapsibleList>
-    )
-    React.act(() => {
-      wrapper.instance().onEdit('ed')
-    })
-    wrapper.update()
-    expect(wrapper.state('expanded').ed).toBe(true)
-    expect(wrapper.state('readOnly').ed).toBe(false)
+    const list = makeList(<Item name='ed' />)
+    list.onEdit('ed')
+    expect(list.state.expanded.ed).toBe(true)
+    expect(list.state.readOnly.ed).toBe(false)
   })
 
   it('onSubmit collapses and sets readOnly to true', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='s' />
-      </CollapsibleList>
-    )
-    React.act(() => {
-      wrapper.instance().onEdit('s')
-    })
-    wrapper.update()
-    React.act(() => {
-      wrapper.instance().onSubmit('s')
-    })
-    wrapper.update()
-    expect(wrapper.state('expanded').s).toBe(false)
-    expect(wrapper.state('readOnly').s).toBe(true)
+    const list = makeList(<Item name='s' />)
+    list.onEdit('s')
+    list.onSubmit('s')
+    expect(list.state.expanded.s).toBe(false)
+    expect(list.state.readOnly.s).toBe(true)
   })
 
   it('getDerivedStateFromProps adds new child as collapsed', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='first' />
-      </CollapsibleList>
+    const initial = makeList(<Item name='first' />)
+    const derived = CollapsibleList.getDerivedStateFromProps(
+      { children: [<Item key='new' name='new' />] },
+      initial.state
     )
-    wrapper.setProps({ children: [<Item key='new' name='new' />] })
-    expect(wrapper.state('expanded').new).toBe(false)
-    expect(wrapper.state('readOnly').new).toBe(true)
+    expect(derived.expanded.new).toBe(false)
+    expect(derived.readOnly.new).toBe(true)
   })
 
   it('passes expanded, readOnly, onToggle, onEdit, onSubmit to children', () => {
-    const wrapper = mount(
-      <CollapsibleList>
-        <Item name='p' />
-      </CollapsibleList>
-    )
-    const child = wrapper.find(Item).first()
-    expect(child.prop('expanded')).toBeDefined()
-    expect(child.prop('readOnly')).toBeDefined()
-    expect(typeof child.prop('onToggle')).toBe('function')
-    expect(typeof child.prop('onEdit')).toBe('function')
-    expect(typeof child.prop('onSubmit')).toBe('function')
+    const list = makeList(<Item name='p' />)
+    const child = renderedChildren(list)[0]
+    expect(child.props.expanded).toBeDefined()
+    expect(child.props.readOnly).toBeDefined()
+    expect(typeof child.props.onToggle).toBe('function')
+    expect(typeof child.props.onEdit).toBe('function')
+    expect(typeof child.props.onSubmit).toBe('function')
   })
 })

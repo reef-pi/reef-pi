@@ -1,87 +1,133 @@
 import React, { act } from 'react'
-import { mount } from 'enzyme'
-import { Form, Formik } from 'formik'
+import { createRoot } from 'react-dom/client'
+import { useFormikContext } from 'formik'
 import { useDatepicker } from './useDatepicker'
 
+jest.mock('formik', () => ({
+  useFormikContext: jest.fn()
+}))
 
-// Test component that exposes hook handlers via refs
 const TestComponent = ({ name, onHandlers }) => {
   const [handleChangeRaw, handleChange] = useDatepicker(name)
-  if (onHandlers) onHandlers({ handleChangeRaw, handleChange })
-  return <input name={name} onChange={handleChangeRaw} />
+  onHandlers({ handleChangeRaw, handleChange })
+  return null
 }
 
-const wrap = (name, onHandlers) => mount(
-  <Formik
-    initialValues={{ [name]: '' }}
-    onSubmit={() => {}}
-    validateOnBlur={false}
-    validateOnChange={false}
-  >
-    <Form>
-      <TestComponent name={name} onHandlers={onHandlers} />
-    </Form>
-  </Formik>
-)
-
 describe('useDatepicker', () => {
+  let container
+  let root
+  let setFieldValue
+  let setFieldTouched
+  let handlers
+
+  const renderHook = name => {
+    act(() => {
+      root.render(
+        <TestComponent
+          name={name}
+          onHandlers={nextHandlers => {
+            handlers = nextHandlers
+          }}
+        />
+      )
+    })
+  }
+
+  beforeEach(() => {
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true
+    container = document.createElement('div')
+    document.body.appendChild(container)
+    root = createRoot(container)
+    setFieldValue = jest.fn().mockResolvedValue(undefined)
+    setFieldTouched = jest.fn()
+    handlers = undefined
+    useFormikContext.mockReturnValue({
+      setFieldValue,
+      setFieldTouched
+    })
+  })
+
+  afterEach(() => {
+    act(() => {
+      root.unmount()
+    })
+    container.remove()
+    jest.clearAllMocks()
+  })
+
+  afterAll(() => {
+    delete globalThis.IS_REACT_ACT_ENVIRONMENT
+  })
+
   it('returns two handler functions', () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
+
     expect(typeof handlers.handleChangeRaw).toBe('function')
     expect(typeof handlers.handleChange).toBe('function')
   })
 
   it('handleChangeRaw accepts valid date characters', () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
     const event = {
       target: { name: 'date', value: '01/01/2023' },
       preventDefault: jest.fn()
     }
-    expect(() => {
-      act(() => {
-        handlers.handleChangeRaw(event)
-      })
-    }).not.toThrow()
+
+    act(() => {
+      handlers.handleChangeRaw(event)
+    })
+
     expect(event.preventDefault).not.toHaveBeenCalled()
+    expect(setFieldValue).toHaveBeenCalledWith('date', '01/01/2023')
+    expect(setFieldTouched).toHaveBeenCalledWith('date', true)
   })
 
   it('handleChangeRaw calls preventDefault for invalid chars', () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
     const event = {
       target: { name: 'date', value: 'abc!@#' },
       preventDefault: jest.fn()
     }
+
     act(() => {
       handlers.handleChangeRaw(event)
     })
+
     expect(event.preventDefault).toHaveBeenCalled()
+    expect(setFieldValue).not.toHaveBeenCalled()
   })
 
   it('handleChange accepts a valid Date object', async () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
     const validDate = new Date(2023, 0, 1)
+
     await act(async () => {
       await handlers.handleChange(validDate)
     })
+
+    expect(setFieldValue).toHaveBeenCalledWith('date', validDate)
+    expect(setFieldTouched).toHaveBeenCalledWith('date', true)
   })
 
   it('handleChange handles null date gracefully', async () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
+
     await act(async () => {
       await handlers.handleChange(null)
     })
+
+    expect(setFieldValue).toHaveBeenCalledWith('date', '')
+    expect(setFieldTouched).toHaveBeenCalledWith('date', true)
   })
 
   it('handleChange handles invalid date string gracefully', async () => {
-    let handlers
-    wrap('date', (h) => { handlers = h })
+    renderHook('date')
+
     await act(async () => {
       await handlers.handleChange('not-a-date')
     })
+
+    expect(setFieldValue).toHaveBeenCalledWith('date', '')
+    expect(setFieldTouched).toHaveBeenCalledWith('date', true)
   })
 })

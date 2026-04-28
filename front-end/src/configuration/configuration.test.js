@@ -1,26 +1,32 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
-import Admin from './admin'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { MemoryRouter } from 'react-router-dom'
+import { RawAdmin } from './admin'
 import Capabilities from './capabilities'
-import Display from './display'
-import Errors from './errors'
-import About from './about'
+import { RawDisplay } from './display'
+import { RawErrors } from './errors'
+import { RawAbout } from './about'
 import HealthNotify from './health_notify'
-import Main from './main'
-import Settings from './settings'
-import thunk from 'redux-thunk'
-import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
+import Main, { configRoutes } from './main'
+import { RawSettings } from './settings'
 import SignIn from 'sign_in'
+import 'isomorphic-fetch'
+import * as Alert from 'utils/alert'
+import i18n from 'utils/i18n'
 
 jest.mock('utils/alert', () => ({
   showError: jest.fn(),
   showUpdateSuccessful: jest.fn()
 }))
 
-const mockStore = configureMockStore([thunk])
+jest.mock('utils/confirm', () => {
+  return {
+    confirm: jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(true))
+      .bind(this)
+  }
+})
 
 const fullCapabilities = { health_check: true, equipment: true }
 const fullSettings = {
@@ -29,224 +35,309 @@ const fullSettings = {
   address: 'localhost:8080',
   https: false,
   capabilities: { health_check: true },
-  health_check: { notify: false },
+  health_check: { enable: false, max_memory: 100, max_cpu: 80, max_cpu_temp: 70, report_enable: false, report_schedule: '' },
   display: false,
   notification: false,
   pprof: false,
   prometheus: false,
-  cors: false
+  cors: false,
+  rpi_pwm_freq: 1000
+}
+
+const patchSetState = component => {
+  component.setState = update => {
+    component.state = {
+      ...component.state,
+      ...(typeof update === 'function' ? update(component.state) : update)
+    }
+  }
 }
 
 describe('Configuration ui', () => {
+  beforeEach(() => {
+    jest.spyOn(Alert, 'showError')
+    jest.spyOn(Alert, 'showUpdateSuccessful')
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+    jest.clearAllMocks()
   })
 
   it('<Main />', () => {
-    const m = shallow(<Main store={mockStore()} />).instance()
+    const component = new Main({})
+    const tree = component.render()
+    const panels = tree.props.children[0].props.children.props.children
+    expect(panels).toHaveLength(configRoutes.length)
+    expect(panels[0].props.children.props.id).toBe('config-nomatch')
+    expect(panels[6].props.children.props.id).toBe('config-admin')
   })
 
   it('<Admin />', () => {
-    const m = shallow(<Admin store={mockStore()} />)
-      .dive()
-      .instance()
-    fetchMock.postOnce('/api/admin/reload', {})
-    fetchMock.postOnce('/api/admin/reboot', {})
-    fetchMock.postOnce('/api/admin/poweroff', {})
-    SignIn.logout = jest.fn().mockImplementation(() => {
-      return true
-    })
+    const reload = jest.fn()
+    const reboot = jest.fn()
+    const powerOff = jest.fn()
+    const dbImport = jest.fn().mockReturnValue(jest.fn())
+    const upgrade = jest.fn()
+    const m = new RawAdmin({ reload, reboot, powerOff, dbImport, upgrade })
+    patchSetState(m)
+    SignIn.logout = jest.fn().mockImplementation(() => true)
+
     m.handleReload()
     m.handlePowerOff()
     m.handleReboot()
     m.handleSignout()
-    m.props.reload()
-    m.props.reboot()
-    m.props.powerOff()
-  })
+    m.handleVersionChange({ target: { value: '4.0.0' } })
+    m.handleInstall()
+    expect(SignIn.logout).toHaveBeenCalled()
 
-  it('<Display /> mounts with on:true state', () => {
-    fetchMock.get('/api/display', { brightness: 50, on: true })
-    fetchMock.post('/api/display/off', {})
-    fetchMock.post('/api/display/on', {})
-    fetchMock.post('/api/display', {})
-    const store = mockStore({ display: { brightness: 50, on: true } })
-    const wrapper = mount(<Provider store={store}><Display /></Provider>)
-    wrapper.find('button').simulate('click')
-    wrapper.find('input[type="range"]').simulate('change', { target: { value: '100' } })
-    wrapper.unmount()
-  })
-
-  it('<Display /> mounts with on:false state', () => {
-    fetchMock.get('/api/display', { brightness: 80, on: false })
-    fetchMock.post('/api/display/on', {})
-    const store = mockStore({ display: { brightness: 80, on: false } })
-    const wrapper = mount(<Provider store={store}><Display /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
-
-  it('<Display /> mounts with no config (getDerivedStateFromProps guard)', () => {
-    fetchMock.get('/api/display', {})
-    const store = mockStore({ display: undefined })
-    const wrapper = mount(<Provider store={store}><Display /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
-
-  it('<Capabilities />', () => {
-    const caps = {
-      equipment: true,
-      timer: false,
-      dashboard: true
-    }
-    const m = shallow(<Capabilities capabilities={caps} update={() => true} />).instance()
-    m.updateCapability('dashboard')({ target: { checked: true } })
-  })
-
-  it('<Settings /> renders loading when settings/capabilities missing', () => {
-    fetchMock.get('/api/settings', {})
-    const store = mockStore({ settings: {}, capabilities: {} })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
-
-  it('<Settings /> renders full form with valid settings and capabilities', () => {
-    fetchMock.get('/api/settings', fullSettings)
-    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
-
-  it('<Settings /> renders with display enabled (showDisplay branch)', () => {
-    fetchMock.get('/api/settings', {})
-    fetchMock.get('/api/display', { brightness: 50, on: true })
-    const s = { ...fullSettings, display: true }
-    const store = mockStore({ settings: s, capabilities: fullCapabilities, display: { brightness: 50, on: true } })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
-
-  it('<Settings /> handleUpdate — valid settings calls updateSettings', () => {
-    fetchMock.get('/api/settings', fullSettings)
-    fetchMock.post('/api/settings', fullSettings)
-    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#systemUpdateSettings').simulate('click')
-    wrapper.unmount()
-  })
-
-  it('<Settings /> handleSetAddress updates address', () => {
-    fetchMock.get('/api/settings', {})
-    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#to-row-address').simulate('change', { target: { value: 'localhost:9090' } })
-    wrapper.unmount()
-  })
-
-  it('<Settings /> toRow (name) input updates settings', () => {
-    fetchMock.get('/api/settings', {})
-    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#to-row-name').simulate('change', { target: { value: 'new-name' } })
-    wrapper.unmount()
-  })
-
-  it('<Settings /> handleSetProtocolHttps removes port 80', () => {
-    fetchMock.get('/api/settings', {})
-    const s = { ...fullSettings, address: 'localhost:80', https: false }
-    const store = mockStore({ settings: s, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').last().simulate('click')
-    wrapper.unmount()
-  })
-
-  it('<Settings /> handleSetProtocolHttp removes port 443', () => {
-    fetchMock.get('/api/settings', {})
-    const s = { ...fullSettings, address: 'localhost:443', https: true }
-    const store = mockStore({ settings: s, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').first().simulate('click')
-    wrapper.unmount()
-  })
-
-  it('<Settings /> handleSetProtocol no port change when not 80 or 443', () => {
-    fetchMock.get('/api/settings', {})
-    const s = { ...fullSettings, address: 'localhost:8080', https: false }
-    const store = mockStore({ settings: s, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('a.dropdown-item').last().simulate('click')
-    wrapper.unmount()
-  })
-
-  it('<Settings /> checkBoxComponent toggles a setting', () => {
-    fetchMock.get('/api/settings', {})
-    const store = mockStore({ settings: fullSettings, capabilities: fullCapabilities })
-    const wrapper = mount(<Provider store={store}><Settings /></Provider>)
-    wrapper.find('#notification').simulate('change', { target: { checked: true } })
-    wrapper.unmount()
-  })
-
-  it('<HealthNotify />', () => {
-    const m = shallow(<HealthNotify state={{}} update={() => true} />).instance()
-    m.handleUpdateEnable({ target: {} })
-    m.update('foo')({ target: {} })
-    m.setState({
-      notify: {
-        enable: true
-      }
+    return Promise.resolve().then(() => {
+      expect(reload).toHaveBeenCalled()
+      expect(reboot).toHaveBeenCalled()
+      expect(powerOff).toHaveBeenCalled()
+      expect(upgrade).toHaveBeenCalledWith('4.0.0')
+      expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
     })
   })
 
+  it('<Display /> mounts with on:true state', () => {
+    const props = {
+      config: { brightness: 50, on: true },
+      fetchDisplay: jest.fn(),
+      switchDisplay: jest.fn(),
+      setBrightness: jest.fn()
+    }
+    const component = new RawDisplay(props)
+    patchSetState(component)
+    component.componentDidMount()
+    component.handleToggle()
+    component.handleSetBrightness({ target: { value: '100' } })
+    expect(props.fetchDisplay).toHaveBeenCalled()
+    expect(props.switchDisplay).toHaveBeenCalled()
+    expect(props.setBrightness).toHaveBeenCalledWith(100)
+  })
+
+  it('<Display /> mounts with on:false state', () => {
+    const component = new RawDisplay({
+      config: { brightness: 80, on: false },
+      fetchDisplay: jest.fn(),
+      switchDisplay: jest.fn(),
+      setBrightness: jest.fn()
+    })
+    expect(component.render().props.className).toBe('container')
+  })
+
+  it('<Display /> mounts with no config (getDerivedStateFromProps guard)', () => {
+    expect(RawDisplay.getDerivedStateFromProps({ config: undefined }, {})).toBeNull()
+  })
+
+  it('<Capabilities />', () => {
+    const update = jest.fn()
+    const m = new Capabilities({
+      capabilities: {
+        equipment: true,
+        timer: false,
+        dashboard: true
+      },
+      update
+    })
+    patchSetState(m)
+    m.updateCapability('dashboard')({ target: { checked: true } })
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ dashboard: true }))
+  })
+
+  it('<Settings /> renders loading when settings/capabilities missing', () => {
+    const component = new RawSettings({
+      settings: {},
+      capabilities: {},
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    expect(renderToStaticMarkup(component.render())).toContain('loading')
+  })
+
+  it('<Settings /> renders full form with valid settings and capabilities', () => {
+    const component = new RawSettings({
+      settings: fullSettings,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    expect(renderToStaticMarkup(component.render())).toContain('systemUpdateSettings')
+  })
+
+  it('<Settings /> renders with display enabled (showDisplay branch)', () => {
+    const s = { ...fullSettings, display: true }
+    const component = new RawSettings({
+      settings: s,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    const display = component.showDisplay()
+    expect(display.type).toBe('div')
+  })
+
+  it('<Settings /> handleUpdate valid settings calls updateSettings', () => {
+    const updateSettings = jest.fn()
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings
+    })
+    patchSetState(component)
+    component.handleUpdate()
+    expect(updateSettings).toHaveBeenCalled()
+    expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
+  })
+
+  it('<Settings /> handleSetAddress updates address', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    component.handleSetAddress({ target: { value: 'localhost:9090' } })
+    expect(component.state.settings.address).toBe('localhost:9090')
+  })
+
+  it('<Settings /> toRow (name) input updates settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const row = component.toRow('name')
+    row.props.children[1].props.onChange({ target: { value: 'new-name' } })
+    expect(component.state.settings.name).toBe('new-name')
+  })
+
+  it('<Settings /> handleSetProtocolHttps removes port 80', () => {
+    const s = { ...fullSettings, address: 'localhost:80', https: false }
+    const component = new RawSettings({
+      settings: s,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    component.handleSetProtocolHttps()
+    expect(component.state.settings.address).toBe('localhost')
+    expect(component.state.settings.https).toBe(true)
+  })
+
+  it('<Settings /> handleSetProtocolHttp removes port 443', () => {
+    const s = { ...fullSettings, address: 'localhost:443', https: true }
+    const component = new RawSettings({
+      settings: s,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    component.handleSetProtocolHttp()
+    expect(component.state.settings.address).toBe('localhost')
+    expect(component.state.settings.https).toBe(false)
+  })
+
+  it('<Settings /> handleSetProtocol no port change when not 80 or 443', () => {
+    const s = { ...fullSettings, address: 'localhost:8080', https: false }
+    const component = new RawSettings({
+      settings: s,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    component.handleSetProtocolHttps()
+    expect(component.state.settings.address).toBe('localhost:8080')
+    expect(component.state.settings.https).toBe(true)
+  })
+
+  it('<Settings /> checkBoxComponent toggles a setting', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const checkbox = component.checkBoxComponent('notification')
+    checkbox.props.children.props.children[0].props.onChange({ target: { checked: true } })
+    expect(component.state.settings.notification).toBe(true)
+  })
+
+  it('<HealthNotify />', () => {
+    const update = jest.fn()
+    const m = new HealthNotify({
+      state: {
+        enable: false,
+        max_memory: 10,
+        max_cpu: 20,
+        max_cpu_temp: 30,
+        report_enable: false,
+        report_schedule: ''
+      },
+      update
+    })
+    patchSetState(m)
+    m.handleUpdateEnable({ target: { checked: true } })
+    m.update('max_cpu')({ target: { value: '11' } })
+    m.setState({ notify: { ...m.state.notify, enable: true } })
+    expect(update).toHaveBeenCalled()
+  })
+
   it('<About /> mounts and renders info', () => {
-    fetchMock.get('/api/info', { version: '2.0', current_time: '2026-04-18', uptime: '1 day', ip: '192.168.1.1', model: 'Pi 4' })
     const info = { current_time: '2026-04-18', version: '2.0', uptime: '1 day', ip: '192.168.1.1', model: 'Pi 4' }
-    const store = mockStore({ info, errors: [] })
-    const wrapper = mount(<Provider store={store}><About /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawAbout({ info, fetchInfo: jest.fn(), errors: [] })
+    patchSetState(component)
+    expect(renderToStaticMarkup(component.render())).toContain('reef-pi')
+    component.componentWillUnmount()
   })
 
   it('<About /> mounts with empty info', () => {
-    fetchMock.get('/api/info', {})
-    const store = mockStore({ info: {}, errors: [] })
-    const wrapper = mount(<Provider store={store}><About /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawAbout({ info: {}, fetchInfo: jest.fn(), errors: [] })
+    patchSetState(component)
+    expect(renderToStaticMarkup(component.render())).toContain('reef-pi')
+    component.componentWillUnmount()
   })
 
-  it('<Errors /> mounts with error list — renders items and handles clear', () => {
-    fetchMock.get('/api/errors', [])
-    fetchMock.delete('/api/errors/clear', {})
-    const errs = [
-      { id: '1', time: '2026-04-18', message: 'something broke', count: 1 },
-      { id: 'alert:2', time: '2026-04-18', message: 'alert item', count: 3 }
-    ]
-    const store = mockStore({ errors: errs })
-    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
-    wrapper.find('button').simulate('click')
-    wrapper.unmount()
+  it('<Errors /> mounts with error list renders items and handles clear', () => {
+    const clear = jest.fn()
+    const component = new RawErrors({
+      errors: [
+        { id: '1', time: '2026-04-18', message: 'something broke', count: 1 },
+        { id: 'alert:2', time: '2026-04-18', message: 'alert item', count: 3 }
+      ],
+      clear,
+      fetch: jest.fn(),
+      delete: jest.fn()
+    })
+    component.componentDidMount()
+    component.handleClear()
+    expect(clear).toHaveBeenCalled()
+    expect(renderToStaticMarkup(component.render())).toContain('alert item')
   })
 
   it('<Errors /> mounts with empty error list', () => {
-    fetchMock.get('/api/errors', [])
-    const store = mockStore({ errors: [] })
-    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawErrors({ errors: [], clear: jest.fn(), fetch: jest.fn(), delete: jest.fn() })
+    expect(renderToStaticMarkup(component.render())).toContain('btn btn-outline-secondary')
   })
 
   it('<Errors /> delete button dispatches deleteError', () => {
-    fetchMock.get('/api/errors', [])
-    fetchMock.delete('/api/errors/1', {})
-    const errs = [{ id: '1', time: '2026-04-18', message: 'err', count: 1 }]
-    const store = mockStore({ errors: errs })
-    const wrapper = mount(<Provider store={store}><Errors /></Provider>)
-    wrapper.find('input.btn-outline-secondary').simulate('click')
-    wrapper.unmount()
+    const deleteError = jest.fn()
+    const component = new RawErrors({
+      errors: [{ id: '1', time: '2026-04-18', message: 'err', count: 1 }],
+      clear: jest.fn(),
+      fetch: jest.fn(),
+      delete: deleteError
+    })
+    const row = component.render().props.children[0][0]
+    row.props.children[2].props.children.props.onClick()
+    expect(deleteError).toHaveBeenCalledWith('1')
   })
 })

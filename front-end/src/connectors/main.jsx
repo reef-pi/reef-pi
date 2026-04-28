@@ -57,4 +57,5 @@ const Connectors = connect(
   mapStateToProps,
   mapDispatchToProps
 )(connectors)
+export { connectors as RawConnectors }
 export default Connectors

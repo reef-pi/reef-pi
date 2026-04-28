@@ -90,4 +90,5 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Chart = connect(mapStateToProps, mapDispatchToProps)(chart)
+export { chart as RawPhChart }
 export default Chart

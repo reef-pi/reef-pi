@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import Motion from './motion'
 import i18next from 'i18next'
 
-class camera extends React.Component {
+export class RawCamera extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -97,5 +97,5 @@ const mapDispatchToProps = dispatch => {
 const Camera = connect(
   mapStateToProps,
   mapDispatchToProps
-)(camera)
+)(RawCamera)
 export default Camera

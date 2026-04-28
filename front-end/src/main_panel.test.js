@@ -1,38 +1,41 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import MainPanel from './main_panel'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import MainPanel, { RawMainPanel } from './main_panel'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
 
-const mockStore = configureMockStore([thunk])
+const countByType = (node, predicate) => {
+  if (!node || typeof node !== 'object') {
+    return 0
+  }
+  let count = predicate(node) ? 1 : 0
+  React.Children.toArray(node.props?.children).forEach(child => {
+    count += countByType(child, predicate)
+  })
+  return count
+}
 
 describe('MainPanel', () => {
-  afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
-  })
   it('<MainPanel />', () => {
     const state = {
-      info: {},
+      info: { name: 'reef-pi' },
       errors: [],
       capabilities: {
         dashboard: true,
         equipment: true,
-        timers: false
+        timers: false,
+        dev_mode: false
       }
     }
-    const m = shallow(<MainPanel store={mockStore(state)} />).dive().instance()
-    shallow(<MainPanel store={mockStore({
-      info: {},
-      errors: [],
-      capabilities: {
-        dashboard: false,
-        equipment: true,
-        timers: false
-      }
-    })}
-    />).dive().instance()
+
+    const panel = new RawMainPanel({
+      ...state,
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+
+    panel.componentDidMount()
+    expect(panel.props.fetchUIData).toHaveBeenCalled()
+    expect(() => panel.render()).not.toThrow()
+    expect(MainPanel).toBeDefined()
+    expect(countByType(panel.render(), node => node.type === 'nav')).toBeGreaterThan(0)
   })
 })

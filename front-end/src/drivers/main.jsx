@@ -5,7 +5,7 @@ import Driver from './driver'
 import New from './new'
 import { SortByName } from 'utils/sort_by_name'
 
-class drivers extends React.Component {
+export class RawDriversMain extends React.Component {
   constructor (props) {
     super(props)
     this.list = this.list.bind(this)
@@ -88,5 +88,5 @@ const mapDispatchToProps = dispatch => {
 const Drivers = connect(
   mapStateToProps,
   mapDispatchToProps
-)(drivers)
+)(RawDriversMain)
 export default Drivers

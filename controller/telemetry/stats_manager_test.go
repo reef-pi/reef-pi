@@ -210,3 +210,16 @@ func TestStatsManagerUpdateRollupSameHour(t *testing.T) {
 		t.Error("Expected at least one current reading after rollup")
 	}
 }
+
+func TestStatsManagerSaveMissingStats(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	m := newTestMgr(store)
+	if err := m.Save("missing"); err == nil {
+		t.Fatal("expected saving missing stats to fail")
+	}
+}

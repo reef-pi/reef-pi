@@ -233,4 +233,5 @@ const AnalogInputs = connect(
   mapStateToProps,
   mapDispatchToProps
 )(analogInputs)
+export { analogInputs as RawAnalogInputs }
 export default AnalogInputs

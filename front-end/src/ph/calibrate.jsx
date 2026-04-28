@@ -60,16 +60,22 @@ const CalibrateSchema = Yup.object().shape({
     .typeError(i18n.t('validation:number_required'))
 })
 
+export const mapCalibrationPropsToValues = props => {
+  return {
+    value: props.defaultValue
+  }
+}
+
+export const submitCalibrationForm = (values, props) => {
+  props.onSubmit(props.point, parseFloat(values.value))
+}
+
 const CalibrateForm = withFormik({
   displayName: 'CalibrateForm',
-  mapPropsToValues: props => {
-    return {
-      value: props.defaultValue
-    }
-  },
+  mapPropsToValues: mapCalibrationPropsToValues,
   validationSchema: CalibrateSchema,
   handleSubmit: (values, { props }) => {
-    props.onSubmit(props.point, parseFloat(values.value))
+    submitCalibrationForm(values, props)
   }
 })(Calibrate)
 

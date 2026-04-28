@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
 import humanizeDuration from 'humanize-duration'
 
-class chart extends React.Component {
+export class RawControlChart extends React.Component {
   componentDidMount () {
     this.props.fetchProbeReadings(this.props.probe_id)
     const timer = window.setInterval(() => {
@@ -100,5 +100,5 @@ const mapDispatchToProps = dispatch => {
 const ControlChart = connect(
   mapStateToProps,
   mapDispatchToProps
-)(chart)
+)(RawControlChart)
 export default ControlChart

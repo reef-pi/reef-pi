@@ -1,5 +1,4 @@
 import React from 'react'
-import { render } from '@testing-library/react'
 import BlankPanel from './blank_panel'
 
 jest.mock('recharts', () => ({
@@ -8,16 +7,25 @@ jest.mock('recharts', () => ({
 
 describe('<BlankPanel />', () => {
   it('renders without throwing', () => {
-    expect(() => render(<BlankPanel height={200} />)).not.toThrow()
+    const panel = new BlankPanel({ height: 200 })
+    expect(() => panel.render()).not.toThrow()
   })
 
   it('renders a container div', () => {
-    const { container } = render(<BlankPanel height={200} />)
-    expect(container.firstChild.className).toBe('container')
+    const panel = new BlankPanel({ height: 200 })
+    const element = panel.render()
+    expect(element.props.className).toBe('container')
   })
 
-  it('handles componentWillUnmount gracefully', () => {
-    const component = render(<BlankPanel height={200} />)
-    expect(() => component.unmount()).not.toThrow()
+  it('handles lifecycle transitions gracefully', () => {
+    const panel = new BlankPanel({ height: 200 })
+    panel.setState = jest.fn(update => {
+      panel.state = { ...panel.state, ...update }
+    })
+
+    expect(() => panel.componentDidMount()).not.toThrow()
+    expect(panel.state.active).toBe(true)
+    expect(() => panel.componentWillUnmount()).not.toThrow()
+    expect(panel.state.active).toBe(false)
   })
 })

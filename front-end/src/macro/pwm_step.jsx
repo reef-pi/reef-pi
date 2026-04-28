@@ -71,4 +71,5 @@ PWMStep.propTypes = {
 const mapStateToProps = state => ({ jacks: state.jacks })
 const mapDispatchToProps = dispatch => ({ fetch: () => dispatch(fetchJacks()) })
 
+export { PWMStep as RawPWMStep }
 export default connect(mapStateToProps, mapDispatchToProps)(PWMStep)

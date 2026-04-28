@@ -1,63 +1,38 @@
-import React from 'react'
+import React, { act } from 'react'
 import ComponentSelector from './component_selector'
-import Config from './config'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
-import configureMockStore from 'redux-mock-store'
+import { RawDashboardConfig } from './config'
 import Grid from './grid'
-import Main from './main'
+import { RawDashboardMain } from './main'
+import * as Alert from 'utils/alert'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-import thunk from 'redux-thunk'
 
-const mockStore = configureMockStore([thunk])
-
-// Minimal store state so connected child components don't crash
-const childState = {
-  equipment: [],
-  ato: [],
-  dosers: [],
-  journal: [],
-  lights: [],
-  ph: [],
-  temperature: [],
-  sensors: [],
-  health: {},
-  readings: []
-}
+jest.mock('utils/alert', () => ({
+  showError: jest.fn(),
+  showUpdateSuccessful: jest.fn()
+}))
 
 describe('Dashboard', () => {
-  afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
-  })
+  const click = (node, event = {}) => {
+    act(() => {
+      node.props.onClick(event)
+    })
+  }
 
   it('<Main /> smoke test via Provider (no config)', () => {
-    fetchMock.get('/api/dashboard', {})
-    const store = mockStore({ ...childState, dashboard: undefined })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const props = { config: undefined, fetchDashboard: jest.fn() }
+    const component = new RawDashboardMain(props)
+    component.componentDidMount()
+    expect(props.fetchDashboard).toHaveBeenCalled()
+    expect(component.charts()).toBeUndefined()
   })
 
   it('<Main /> renders with empty grid_details', () => {
-    fetchMock.get('/api/dashboard', {})
     const config = { row: 1, column: 1, width: 400, height: 200 }
-    const store = mockStore({ ...childState, dashboard: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
+    expect(component.charts()).toBeUndefined()
   })
 
   it('<Main /> renders all chart types (switch coverage)', () => {
-    fetchMock.get('/api/dashboard', {})
-    fetchMock.get('/api/equipment', [])
-    fetchMock.get('/api/ato', [])
-    fetchMock.get('/api/dosers', [])
-    fetchMock.get('/api/lights', [])
-    fetchMock.get('/api/ph/probes', [])
-    fetchMock.get('/api/temperature/sensors', [])
-    fetchMock.get('/api/health', {})
     const config = {
       row: 3,
       column: 4,
@@ -84,14 +59,15 @@ describe('Dashboard', () => {
         ]
       ]
     }
-    const store = mockStore({ ...childState, dashboard: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
+    const rows = component.charts()
+    expect(rows).toHaveLength(3)
+    expect(rows[0].props.children).toHaveLength(4)
+    expect(rows[1].props.children).toHaveLength(4)
+    expect(rows[2].props.children).toHaveLength(4)
   })
 
   it('<Main /> renders temp_historical and default unknown types', () => {
-    fetchMock.get('/api/dashboard', {})
     const config = {
       row: 1,
       column: 2,
@@ -101,27 +77,19 @@ describe('Dashboard', () => {
         [{ type: 'temp_historical', id: '1' }, { type: 'unknown_widget', id: '1' }]
       ]
     }
-    const store = mockStore({ ...childState, dashboard: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
+    const rows = component.charts()
+    expect(rows).toHaveLength(1)
+    expect(rows[0].props.children).toHaveLength(1)
   })
 
   it('<Main /> handleToggle switches to config view', () => {
-    fetchMock.get('/api/dashboard', {})
     const config = { row: 1, column: 1, width: 400, height: 200, grid_details: [[]] }
-    const store = mockStore({ ...childState, dashboard: config })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#configure-dashboard').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
-  })
+    const component = new RawDashboardMain({ config, fetchDashboard: jest.fn() })
+    component.setState = update => { component.state = { ...component.state, ...update } }
 
-  it('<Main /> old shallow dive still works for smoke', () => {
-    fetchMock.get('/api/dashboard', {})
-    const config = { row: 1, column: 1, width: 400, height: 200 }
-    const m = shallow(<Main store={mockStore({ dashboard: config })} />).dive()
-    expect(m).toBeDefined()
+    click(component.render().props.children.props.children[1].props.children.props.children)
+    expect(component.state.showConfig).toBe(true)
   })
 
   it('<Grid />', () => {
@@ -129,7 +97,8 @@ describe('Dashboard', () => {
       [{ id: '1', type: 'light' }, { id: '2', type: 'light' }],
       [{ id: '1', type:'equipment' }, { id: '2',type: 'ato' }],
     ]
-    const m = shallow(<Grid rows={2} columns={2} cells={cells} hook={() => {}} />).instance()
+    const m = new Grid({ rows: 2, columns: 2, cells, hook: () => {} })
+    m.setState = update => { m.state = { ...m.state, ...update } }
     m.setType(0, 0, 'equipment')()
     m.setID(0, 0)('1')
     m.menuItem('ato', true, 0, 1)
@@ -141,15 +110,111 @@ describe('Dashboard', () => {
       c1: { id: '1', name: 'foo' },
       c2: undefined
     }
-    const m = shallow(<ComponentSelector hook={() => {}} components={comps} current_id='1' />).instance()
+    const m = new ComponentSelector({ hook: () => {}, components: comps, current_id: '1' })
+    m.setState = update => { m.state = { ...m.state, ...update } }
     m.setID(1, 'foo')({})
   })
 
   it('<Config />', () => {
     const cells = [[{ type: 'ato', id: '1' }]]
     const config = { row: 1, column: 1, grid_details: cells }
-    const m = shallow(<Config store={mockStore({ dashboard: config })} />)
-      .dive()
-      .instance()
+    const m = new RawDashboardConfig({
+      config,
+      fetchDashboard: jest.fn(),
+      updateDashboard: jest.fn(),
+      atos: [],
+      phs: [],
+      tcs: [],
+      lights: [],
+      dosers: [],
+      equips: [],
+      journals: [],
+      blank: []
+    })
+    m.state = RawDashboardConfig.getDerivedStateFromProps({ config }, m.state) || { updated: false, config }
+    expect(m.render().props.className).toBe('col-12')
+  })
+
+  it('<Config /> fetches dashboard on mount and handles empty props', () => {
+    const fetchDashboard = jest.fn()
+    const m = new RawDashboardConfig({ fetchDashboard })
+
+    m.componentDidMount()
+
+    expect(fetchDashboard).toHaveBeenCalled()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: undefined }, m.state)).toBeNull()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: {} }, m.state)).toBeNull()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: { row: 1 }, updated: true }, { updated: true })).toBeNull()
+  })
+
+  it('<Config /> edits numeric rows and saves valid config', () => {
+    const cells = [[{ type: 'ato', id: '1' }]]
+    const updateDashboard = jest.fn()
+    const m = new RawDashboardConfig({
+      config: { row: 1, column: 1, width: 100, height: 100, grid_details: cells },
+      fetchDashboard: jest.fn(),
+      updateDashboard,
+      atos: [],
+      phs: [],
+      tcs: [],
+      lights: [],
+      dosers: [],
+      equips: [],
+      journals: [],
+      blank: []
+    })
+    m.state = { updated: false, config: { row: 1, column: 1, width: 100, height: 100, grid_details: cells } }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    const row = m.toRow('row', 'Rows', 1, 12)
+    row.props.children[1].props.onChange({ target: { value: '' } })
+    expect(m.state.config.row).toBe('')
+    row.props.children[1].props.onChange({ target: { value: '2' } })
+    expect(m.state.config.row).toBe(2)
+    row.props.children[1].props.onChange({ target: { value: 'x' } })
+    expect(m.state.config.row).toBe(2)
+
+    m.handleSave()
+
+    expect(updateDashboard).toHaveBeenCalledWith({
+      row: 2,
+      column: 1,
+      width: 100,
+      height: 100,
+      grid_details: cells
+    })
+    expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
+  })
+
+  it('<Config /> rejects invalid save values and rebuilds grid details', () => {
+    const cells = [[{ type: 'ato', id: '1' }]]
+    const updateDashboard = jest.fn()
+    const m = new RawDashboardConfig({
+      fetchDashboard: jest.fn(),
+      updateDashboard,
+      atos: [],
+      phs: [],
+      tcs: [],
+      lights: [],
+      dosers: [],
+      equips: [],
+      journals: [],
+      blank: []
+    })
+    m.state = { updated: false, config: { row: 2, column: 2, width: 0, height: 100, grid_details: cells } }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    m.handleSave()
+
+    expect(Alert.showError).toHaveBeenCalled()
+    expect(updateDashboard).not.toHaveBeenCalled()
+
+    m.state.config.width = 100
+    m.updateHook([[{ id: 'a', type: 'ato' }]])
+    expect(m.state.updated).toBe(true)
+    expect(m.state.config.grid_details).toEqual([
+      [{ id: 'a', type: 'ato' }, { id: 'none', type: 'blank_panel' }],
+      [{ id: 'none', type: 'blank_panel' }, { id: 'none', type: 'blank_panel' }]
+    ])
   })
 })

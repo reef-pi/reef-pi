@@ -7,7 +7,7 @@ import { upgrade, reload, reboot, powerOff, dbImport } from 'redux/actions/admin
 import { connect } from 'react-redux'
 import i18n from 'utils/i18n'
 
-class admin extends React.Component {
+export class RawAdmin extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -158,5 +158,5 @@ const mapDispatchToProps = dispatch => {
 const Admin = connect(
   null,
   mapDispatchToProps
-)(admin)
+)(RawAdmin)
 export default Admin

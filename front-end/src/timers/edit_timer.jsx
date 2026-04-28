@@ -51,26 +51,22 @@ const EditTimer = ({
   }
 
   const targetFor = targetType => {
-    let target = {}
     switch (targetType) {
-      // TODO: some types missing, intentionally?
-      // FIXME: initial states of UI and target.on/target.revert are out of sync
-      // other all types must have on/revert/duration initialized similar to  eq.
-      // or macro and others (except equip.) shouldn't show revert&duration
-      // The schema suggests the later, but has a special case for lighting!?
       case 'macro':
-        target = {
-          id: ''
-        }
-        break
-      case 'equipment':
-        target = { id: '', on: true, revert: true, duration: 60 }
-        break
+        return { id: '' }
       case 'reminder':
-        target = { title: '', message: '' }
-        break
+        return { title: '', message: '' }
+      case 'equipment':
+        return { id: '', on: true, revert: true, duration: 60 }
+      case 'lightings':
+      case 'ato':
+      case 'doser':
+      case 'phprobes':
+      case 'temperature':
+      case 'camera':
+        return { id: '', on: true, revert: false, duration: 60 }
     }
-    return target
+    return {}
   }
 
   return (

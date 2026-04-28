@@ -6,12 +6,14 @@ This document extends the refactor program with a version modernization track fo
 
 - Go: `1.26.0` directive, `1.26.2` toolchain target
 - Node in CI: `22`
-- React: `16.14.0`
-- React DOM: `16.12.0`
-- React test renderer: `16.14.0`
-- Jest: `29.7.0`
+- React: `19.2.5`
+- React DOM: `19.2.5`
+- React Redux: `9.2.0`
+- Redux: `5.0.1`
+- Redux Thunk: `3.1.0`
+- Jest: `30.2.0`
 - Babel Jest: `30.2.0`
-- Jest jsdom environment: `30.3.0`
+- Jest jsdom environment: `30.2.0`
 
 ## Target stack
 
@@ -24,19 +26,21 @@ This document extends the refactor program with a version modernization track fo
 
 ### React
 
-- `enzyme-adapter-react-16` is still present and widely used in frontend tests.
-- `ReactDOM.render` and `unmountComponentAtNode` are still used in:
+- legacy Enzyme blockers have been removed from the active frontend test surface.
+- `ReactDOM.render` and `unmountComponentAtNode` have been removed from:
   - `front-end/src/entry.js`
   - `front-end/src/utils/confirm.js`
-- function-component `defaultProps` still exist in several lighting profile components.
+- Redux bindings are aligned with the React 19 runtime:
+  - `react-redux` is on `9.x`
+  - `redux` is on `5.x`
+  - `redux-thunk` is on `3.x`
+- app-local `redux/store` and `redux/actions/...` imports now require explicit resolver aliases in Jest and webpack to avoid colliding with the published `redux` package name.
+- no remaining function-component `defaultProps` blocker is present in `front-end/src`; current `defaultProps` matches are test fixture variables only.
 
 ### Jest
 
-- the repo already has version skew between:
-  - `jest`
-  - `babel-jest`
-  - `jest-environment-jsdom`
-- the suite is stable locally, but still carries a large Enzyme legacy surface.
+- the core Jest packages are aligned on the `30.2.0` line.
+- the suite is stable locally and the `front-end/src` Enzyme legacy surface has been removed.
 
 ### Go
 
@@ -55,9 +59,15 @@ This document extends the refactor program with a version modernization track fo
 ## Why this order
 
 - Go is the least coupled to the frontend stack.
-- React 19 is blocked by legacy render APIs and Enzyme.
+- React 19 was previously blocked by legacy render APIs and Enzyme.
 - Jest 30 is safer after some test decoupling work.
 - ecosystem cleanup should follow the core React move, not precede it.
+
+## Current status
+
+- Slices 18 through 23 have landed on `main`.
+- The core migration track is complete.
+- Remaining follow-up work, if any, should be tracked as standalone cleanup items rather than new slices in this program.
 
 ## Validation expectations
 

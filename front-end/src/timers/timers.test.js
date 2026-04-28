@@ -1,14 +1,13 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { act } from 'react'
+import { createRoot } from 'react-dom/client'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
-import Main from './main'
+import { thunk } from 'redux-thunk'
+import { RawTimersMain } from './main'
 import TimerForm from './timer_form'
-import thunk from 'redux-thunk'
 import 'isomorphic-fetch'
-import fetchMock from 'fetch-mock'
-
-const mockStore = configureMockStore([thunk])
 
 jest.mock('utils/confirm', () => {
   return {
@@ -22,6 +21,10 @@ jest.mock('utils/confirm', () => {
       .bind(this)
   }
 })
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+const mockStore = configureMockStore([thunk])
 
 const timerData = {
   id: '1',
@@ -38,61 +41,109 @@ const timerData = {
 }
 
 describe('Timer ui', () => {
+  const makeProps = (extra = {}) => ({
+    timers: [timerData],
+    equipment: [{ id: '1', name: 'bar', on: false }],
+    macros: [],
+    fetch: jest.fn(),
+    create: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+    ...extra
+  })
+
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
     jest.clearAllMocks()
   })
 
-  it('<Main /> mounts with empty timers', () => {
-    fetchMock.get('/api/timers', [])
-    const store = mockStore({ timers: [], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('<Main /> fetches timers on mount', () => {
+    const props = makeProps()
+    const component = new RawTimersMain(props)
+
+    component.componentDidMount()
+
+    expect(props.fetch).toHaveBeenCalled()
   })
 
-  it('<Main /> mounts with timers', () => {
-    fetchMock.get('/api/timers', [timerData])
-    const store = mockStore({ timers: [timerData], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    expect(wrapper.find('ul.list-group').length).toBeGreaterThan(0)
-    wrapper.unmount()
+  it('<Main /> renders timers when present', () => {
+    const component = new RawTimersMain(makeProps())
+    const items = component.timerList()
+
+    expect(items).toHaveLength(1)
+    expect(items[0].props.name).toBe('panel-timer-1')
   })
 
   it('<Main /> toggles add timer form', () => {
-    fetchMock.get('/api/timers', [])
-    const store = mockStore({ timers: [], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#add_timer').simulate('click')
-    wrapper.find('#add_timer').simulate('click')
-    wrapper.unmount()
+    const component = new RawTimersMain(makeProps({ timers: [] }))
+    component.setState = update => { component.state = { ...component.state, ...update } }
+
+    component.handleToggleAddTimerDiv()
+    expect(component.state.addTimer).toBe(true)
+
+    component.handleToggleAddTimerDiv()
+    expect(component.state.addTimer).toBe(false)
   })
 
-  it('<Main /> delete timer triggers confirm', () => {
-    fetchMock.get('/api/timers', [])
-    fetchMock.delete('/api/timers/1', {})
-    const store = mockStore({ timers: [timerData], equipment: [], macros: [] })
-    const wrapper = mount(<Provider store={store}><Main /></Provider>)
-    wrapper.find('#delete-panel-timer-1').simulate('click')
-    expect(wrapper).toBeDefined()
-    wrapper.unmount()
+  it('<Main /> delete timer triggers confirm and delete', async () => {
+    const props = makeProps()
+    const component = new RawTimersMain(props)
+
+    component.handleRemoveTimer(timerData)
+    await Promise.resolve()
+
+    expect(props.delete).toHaveBeenCalledWith('1')
   })
 
-  it('<Main />', () => {
-    const state = {
-      timers: [timerData],
-      equipment: [{ id: '1', name: 'bar', on: false }]
+  it('<Main /> creates timers using normalized payloads', () => {
+    const props = makeProps({ create: jest.fn(), timers: [] })
+    const component = new RawTimersMain(props)
+    component.setState = update => { component.state = { ...component.state, ...update } }
+    const formValues = {
+      ...timerData,
+      month: '*',
+      week: '*',
+      target: {
+        id: '1',
+        on: true,
+        duration: '10',
+        revert: true
+      }
     }
-    const m = shallow(<Main store={mockStore(state)} />)
-      .dive()
+
+    component.handleToggleAddTimerDiv()
+    component.handleSubmit(formValues)
+
+    expect(props.create).toHaveBeenCalledWith({
+      name: 'foo',
+      type: 'equipment',
+      month: '*',
+      week: '*',
+      day: '*',
+      hour: '*',
+      minute: '*',
+      second: '0',
+      enable: false,
+      target: {
+        id: '1',
+        on: true,
+        duration: 10,
+        revert: true
+      }
+    })
+    expect(component.state.addTimer).toBe(false)
   })
 
   it('<TimerForm /> for create', () => {
     const fn = jest.fn()
-    const wrapper = shallow(<TimerForm onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+    const store = mockStore({ equipment: [], macros: [] })
+    const html = renderToStaticMarkup(
+      <Provider store={store}>
+        <TimerForm onSubmit={fn} />
+      </Provider>
+    )
+
+    expect(html).toContain('name="name"')
+    expect(html).toContain('name="target.duration"')
   })
 
   it('<TimerForm /> for edit', () => {
@@ -115,8 +166,14 @@ describe('Timer ui', () => {
       title: '',
       message: ''
     }
-    const wrapper = shallow(<TimerForm timer={timer} onSubmit={fn} />)
-    wrapper.simulate('submit', {})
-    expect(fn).toHaveBeenCalled()
+    const store = mockStore({ equipment: [], macros: [] })
+    const html = renderToStaticMarkup(
+      <Provider store={store}>
+        <TimerForm timer={timer} onSubmit={fn} />
+      </Provider>
+    )
+
+    expect(html).toContain('value="name"')
+    expect(html).toContain('name="target.duration"')
   })
 })

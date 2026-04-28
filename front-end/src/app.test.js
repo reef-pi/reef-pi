@@ -1,34 +1,45 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
-import App from './app'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import 'isomorphic-fetch'
-import JackSelector from './jack_selector'
-import SelectEquipment from './select_equipment'
 import SignIn from './sign_in'
-import fetchMock from 'fetch-mock'
-import {Provider} from 'react-redux'
+import MainPanel from './main_panel'
+import 'isomorphic-fetch'
 
-const mockStore = configureMockStore([thunk])
+jest.mock('bootstrap/dist/js/bootstrap.min.js', () => ({}))
+jest.mock('jquery', () => {
+  const fn = jest.fn(() => ({
+    addClass: jest.fn(),
+    removeClass: jest.fn()
+  }))
+  return fn
+})
+
+import App from './app'
 
 describe('App', () => {
   afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
-  })
-  it('<App />', () => {
-    SignIn.isSignedIn = jest.fn().mockImplementation(() => {
-      return new Promise(function (resolve) {
-        return resolve(true)
-      })
-    })
-    const m = shallow(<App />).instance()
-    m.setState({loaded: true})
-    m.render()
-    m.state.logged = true
-    m.getComponent()
-    m.componentDidMount()
+    jest.clearAllMocks()
   })
 
+  it('<App /> loads sign-in state and renders main panel when logged in', async () => {
+    SignIn.isSignedIn = jest.fn().mockResolvedValue(true)
+    const app = new App({})
+    app.setState = jest.fn(update => {
+      app.state = { ...app.state, ...update }
+    })
+
+    expect(app.render().type).toBe('div')
+
+    await app.componentDidMount()
+    await Promise.resolve()
+
+    expect(app.state.loaded).toBe(true)
+    expect(app.state.logged).toBe(true)
+    expect(app.getComponent().type).toBe(MainPanel)
+  })
+
+  it('renders sign-in when not logged in', () => {
+    const app = new App({})
+    app.state = { loaded: true, logged: false }
+
+    expect(app.getComponent().type).toBe(SignIn)
+  })
 })

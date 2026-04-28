@@ -1,67 +1,164 @@
 import React from 'react'
 import { act } from 'react'
-import { shallow, mount } from 'enzyme'
-import { Provider } from 'react-redux'
+import { createRoot } from 'react-dom/client'
 import Journal from './journal'
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
-import 'isomorphic-fetch'
+import { useDispatch } from 'react-redux'
+import { fetchJournal, fetchJournalUsage, recordJournal, updateJournal } from 'redux/actions/journal'
 
-const mockStore = configureMockStore([thunk])
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+jest.mock('i18next', () => ({
+  t: key => key
+}))
+
+jest.mock('react-redux', () => ({
+  useDispatch: jest.fn()
+}))
+
+jest.mock('redux/actions/journal', () => ({
+  fetchJournal: jest.fn(id => ({ type: 'FETCH_JOURNAL', id })),
+  fetchJournalUsage: jest.fn(id => ({ type: 'FETCH_JOURNAL_USAGE', id })),
+  recordJournal: jest.fn((id, payload) => ({ type: 'RECORD_JOURNAL', id, payload })),
+  updateJournal: jest.fn((id, payload) => ({ type: 'UPDATE_JOURNAL', id, payload }))
+}))
+
+jest.mock('./form', () => {
+  const React = require('react')
+  return function MockJournalForm (props) {
+    return React.createElement(
+      'button',
+      {
+        type: 'button',
+        'data-testid': 'journal-form-submit',
+        onClick: () => props.onSubmit({
+          id: props.data.id,
+          name: 'Updated Journal',
+          description: 'updated description',
+          unit: 'dKH'
+        })
+      },
+      'journal-form'
+    )
+  }
+})
+
+jest.mock('./entry_form', () => {
+  const React = require('react')
+  return function MockEntryForm (props) {
+    return React.createElement(
+      'button',
+      {
+        type: 'button',
+        'data-testid': 'entry-form-submit',
+        onClick: () => props.onSubmit({ value: '8.2', comment: 'daily check' })
+      },
+      'entry-form'
+    )
+  }
+})
+
+jest.mock('./chart', () => {
+  const React = require('react')
+  return function MockChart (props) {
+    return React.createElement('div', { 'data-testid': 'journal-chart', 'data-journal-id': props.journal_id })
+  }
+})
 
 const config = { id: '1', name: 'pH Log', description: 'daily', unit: 'pH' }
 
-const makeStore = () => mockStore({ journals: [config], journal_usage: {} })
-
-const render = (extraProps = {}) => {
-  const store = makeStore()
-  fetchMock.getOnce('/api/journal/1/usage', {})
-  fetchMock.getOnce('/api/journal/1', config)
-  return mount(
-    <Provider store={store}>
-      <Journal config={config} readOnly={false} expanded={false} {...extraProps} />
-    </Provider>
-  )
-}
-
 describe('<Journal />', () => {
-  afterEach(() => {
-    fetchMock.reset()
-    fetchMock.restore()
+  const dispatch = jest.fn()
+
+  beforeEach(() => {
+    dispatch.mockClear()
     jest.clearAllMocks()
+    useDispatch.mockReturnValue(dispatch)
   })
 
-  it('renders without throwing', () => {
-    expect(() => render()).not.toThrow()
-  })
+  const renderJournal = (extraProps = {}) => {
+    const container = document.createElement('div')
+    const root = createRoot(container)
 
-  it('renders Add Entry button', () => {
-    const wrapper = render()
-    const btn = wrapper.find('input#add_entry')
-    expect(btn).toHaveLength(1)
-  })
-
-  it('renders entry form after clicking Add Entry', () => {
-    const store = makeStore()
-    fetchMock.getOnce('/api/journal/1/usage', {})
-    const wrapper = mount(
-      <Provider store={store}>
-        <Journal config={config} readOnly={false} expanded={false} />
-      </Provider>
-    )
     act(() => {
-      wrapper.find('input#add_entry').prop('onClick')()
+      root.render(<Journal config={config} readOnly={false} expanded={false} {...extraProps} />)
     })
-    wrapper.update()
-    // After toggle, entry form should appear
-    expect(wrapper.find('input#add_entry').prop('value')).toBe('-')
+
+    return {
+      container,
+      unmount: () => act(() => root.unmount())
+    }
+  }
+
+  it('renders the chart and add entry button', () => {
+    const { container, unmount } = renderJournal()
+
+    expect(container.querySelector('[data-testid="journal-chart"]')).toBeDefined()
+    expect(container.querySelector('input#add_entry')).toBeDefined()
+
+    unmount()
   })
 
-  it('shallow renders without throwing', () => {
-    const store = makeStore()
-    expect(() =>
-      shallow(<Provider store={store}><Journal config={config} readOnly={false} expanded={false} /></Provider>)
-    ).not.toThrow()
+  it('renders the entry form after clicking Add Entry', () => {
+    const { container, unmount } = renderJournal()
+    const addEntryButton = container.querySelector('input#add_entry')
+
+    act(() => {
+      addEntryButton.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expect(addEntryButton.value).toBe('-')
+    expect(container.querySelector('[data-testid="entry-form-submit"]')).toBeDefined()
+
+    unmount()
+  })
+
+  it('dispatches update and reload when the journal form submits', () => {
+    const { container, unmount } = renderJournal()
+
+    act(() => {
+      container.querySelector('[data-testid="journal-form-submit"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expect(updateJournal).toHaveBeenCalledWith('1', {
+      name: 'Updated Journal',
+      description: 'updated description',
+      unit: 'dKH'
+    })
+    expect(fetchJournal).toHaveBeenCalledWith('1')
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: 'UPDATE_JOURNAL',
+      id: '1',
+      payload: {
+        name: 'Updated Journal',
+        description: 'updated description',
+        unit: 'dKH'
+      }
+    })
+    expect(dispatch).toHaveBeenNthCalledWith(2, { type: 'FETCH_JOURNAL', id: '1' })
+
+    unmount()
+  })
+
+  it('dispatches record and usage refresh when the entry form submits', () => {
+    const { container, unmount } = renderJournal()
+
+    act(() => {
+      container.querySelector('input#add_entry').dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+    act(() => {
+      container.querySelector('[data-testid="entry-form-submit"]').dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expect(recordJournal).toHaveBeenCalledWith('1', { value: '8.2', comment: 'daily check' })
+    expect(fetchJournalUsage).toHaveBeenCalledWith('1')
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: 'RECORD_JOURNAL',
+      id: '1',
+      payload: { value: '8.2', comment: 'daily check' }
+    })
+    expect(dispatch).toHaveBeenNthCalledWith(2, { type: 'FETCH_JOURNAL_USAGE', id: '1' })
+    expect(container.querySelector('input#add_entry').value).toBe('journal:add_entry')
+
+    unmount()
   })
 })

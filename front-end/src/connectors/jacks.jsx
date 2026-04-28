@@ -263,4 +263,5 @@ const Jacks = connect(
   mapStateToProps,
   mapDispatchToProps
 )(jacks)
+export { jacks as RawJacks }
 export default Jacks

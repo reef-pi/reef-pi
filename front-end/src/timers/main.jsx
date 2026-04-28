@@ -8,7 +8,7 @@ import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 
-class Main extends React.Component {
+export class RawTimersMain extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -73,7 +73,7 @@ class Main extends React.Component {
 
   valuesToTimer (values) {
     const target = values.target
-    if (values.type === 'equipment') {
+    if (target.duration !== undefined) {
       target.duration = parseInt(target.duration)
     }
     const timer = {
@@ -156,5 +156,5 @@ const mapDispatchToProps = dispatch => {
 const Timers = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Main)
+)(RawTimersMain)
 export default Timers
