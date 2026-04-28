@@ -123,7 +123,7 @@ spec:
 serve-spec:
 	npx @redoc-cli serve swagger.json -p 8888
 api-doc:
-	npx @redocly/cli build-docs swagger.json --output ui/assets/api.html
+	npx redoc-cli bundle swagger.json -o ui/assets/api.html
 
 .PHONY: smoke
 smoke:
