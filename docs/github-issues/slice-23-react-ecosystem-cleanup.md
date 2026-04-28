@@ -43,6 +43,11 @@ This section reflects the current `main` branch rather than the older pre-React-
 - Enzyme-based test suites under `front-end/src` have been removed
 - the dead Enzyme package/setup path has been removed from the frontend toolchain
 - the only `@material-ui/core` usage has been removed from the UI code path
+- the Redux stack is aligned with current React bindings:
+  - `react-redux` is on the React 19-compatible `9.x` line
+  - `redux` is on `5.x`
+  - `redux-thunk` is on `3.x`
+  - Jest and webpack now explicitly resolve app-local `redux/store` and `redux/actions/...` aliases so they no longer collide with the published `redux` package name
 
 ### Confirmed remaining targets
 
@@ -51,15 +56,19 @@ This section reflects the current `main` branch rather than the older pre-React-
    - `formik`
    - `recharts`
    - `react-datepicker`
-   - `react-redux`
-    - `react-router-dom`
-   - current `yarn install` output still reports React peer-range warnings for:
-     - `react-redux`
-   - current local audit:
-     - `react-redux` upgrade is coupled to a Redux stack move because `react-redux@9.2.0` expects `redux@^5` and current `redux-thunk@2.4.1` is pinned to `redux@^4`
+   - `react-router-dom`
    - resolved in this slice already:
      - `react-toggle-switch` now has its `prop-types` peer satisfied
      - `@material-ui/core` has been removed instead of being carried as a deprecated React 16/17-pinned dependency
+     - `react-redux` has been upgraded together with `redux` and `redux-thunk`, clearing the last React-core peer-range warning from `yarn install`
+   - current package-manifest audit:
+     - `react-i18next@12.0.0` peers on `react >= 16.8.0`
+     - `formik@2.4.6` peers on `react >= 16.8.0`
+     - `recharts@2.15.4` explicitly peers on `react` / `react-dom` `^19.0.0`
+     - `react-datepicker@7.6.0` explicitly peers on `react` / `react-dom` `^19`
+     - `react-router-dom@6.30.2` peers on `react` / `react-dom >= 16.8`
+   - conclusion:
+     - no additional React 19-driven package bump is required for those libraries in this slice
 
 2. The migration docs are partially stale.
    - `docs/library-migration-plan.md` still describes old blockers such as React 16 Enzyme adapter usage and legacy render APIs
@@ -73,10 +82,10 @@ This section reflects the current `main` branch rather than the older pre-React-
 
 ### Suggested first checklist
 
-- record and triage remaining React peer-range warnings from `yarn install`
+- confirm `yarn install` no longer reports React-core peer-range warnings
 - verify whether `react-i18next`, `formik`, `recharts`, and `react-datepicker` are on acceptable React 19-compatible versions
 - remove no-longer-needed compatibility code only after validation proves it is redundant
-- keep Redux stack upgrades separate unless the slice explicitly absorbs `redux`, `redux-thunk`, and `react-redux` together
+- document any remaining non-React peer warnings separately so they are not confused with React 19 compatibility blockers
 - rerun:
   - `yarn jest --runInBand`
   - `yarn build`

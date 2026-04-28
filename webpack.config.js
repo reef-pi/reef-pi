@@ -11,6 +11,10 @@ var config = {
   entry: APP_DIR + '/entry',
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
+    alias: {
+      'redux/actions': path.resolve(__dirname, 'front-end', 'src', 'redux', 'actions'),
+      'redux/store': path.resolve(__dirname, 'front-end', 'src', 'redux', 'store.js')
+    },
     modules: [
       'node_modules',
       path.resolve(__dirname, 'front-end', 'src'),

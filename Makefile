@@ -72,6 +72,7 @@ common_deb: ui api-doc
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
+	cp swagger.json dist/var/lib/reef-pi/ui/assets/swagger.json
 	cp build/config.yaml dist/etc/reef-pi/config.yaml
 	mkdir dist/var/lib/reef-pi/images
 
@@ -123,7 +124,22 @@ spec:
 serve-spec:
 	npx @redoc-cli serve swagger.json -p 8888
 api-doc:
-	npx @redocly/cli build-docs swagger.json --output ui/assets/api.html
+	printf '%s\n' \
+	'<!DOCTYPE html>' \
+	'<html>' \
+	'  <head>' \
+	'    <meta charset="utf-8" />' \
+	'    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />' \
+	'    <title>reef-pi API</title>' \
+	'    <style>' \
+	'      body { margin: 0; padding: 0; }' \
+	'    </style>' \
+	'  </head>' \
+	'  <body>' \
+	'    <redoc spec-url="/assets/swagger.json"></redoc>' \
+	'    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>' \
+	'  </body>' \
+	'</html>' > ui/assets/api.html
 
 .PHONY: smoke
 smoke:

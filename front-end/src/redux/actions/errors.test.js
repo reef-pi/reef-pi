@@ -1,5 +1,5 @@
 import { errorsLoaded, fetchErrors, deleteError, deleteErrors } from './errors'
-import thunk from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
