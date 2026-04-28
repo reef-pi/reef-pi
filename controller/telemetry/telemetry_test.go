@@ -1,9 +1,16 @@
 package telemetry
 
 import (
+	"errors"
+	"io"
+	"net/http"
+	"strings"
 	"testing"
+	"time"
 
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/reef-pi/adafruitio"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
@@ -154,7 +161,6 @@ func TestApplyConfig(t *testing.T) {
 	tele.applyConfig(c)
 }
 
-
 func TestSanitizePrometheusMetricName(t *testing.T) {
 	checks := []struct {
 		input  string
@@ -186,5 +192,184 @@ func TestSanitizePrometheusMetricName(t *testing.T) {
 		if out != c.output {
 			t.Errorf("metric name not sanitized: input '%s', output '%s', expected '%s'", c.input, out, c.output)
 		}
+	}
+}
+
+type fakeMQTTToken struct {
+	err error
+}
+
+func (t fakeMQTTToken) Wait() bool                     { return true }
+func (t fakeMQTTToken) WaitTimeout(time.Duration) bool { return true }
+func (t fakeMQTTToken) Done() <-chan struct{} {
+	ch := make(chan struct{})
+	close(ch)
+	return ch
+}
+func (t fakeMQTTToken) Error() error { return t.err }
+
+type fakeMQTTClient struct {
+	topic    string
+	qos      byte
+	retained bool
+	payload  interface{}
+	err      error
+}
+
+func (c *fakeMQTTClient) IsConnected() bool      { return true }
+func (c *fakeMQTTClient) IsConnectionOpen() bool { return true }
+func (c *fakeMQTTClient) Connect() mqtt.Token    { return fakeMQTTToken{} }
+func (c *fakeMQTTClient) Disconnect(uint)        {}
+func (c *fakeMQTTClient) Subscribe(string, byte, mqtt.MessageHandler) mqtt.Token {
+	return fakeMQTTToken{}
+}
+func (c *fakeMQTTClient) SubscribeMultiple(map[string]byte, mqtt.MessageHandler) mqtt.Token {
+	return fakeMQTTToken{}
+}
+func (c *fakeMQTTClient) Unsubscribe(...string) mqtt.Token        { return fakeMQTTToken{} }
+func (c *fakeMQTTClient) AddRoute(string, mqtt.MessageHandler)    {}
+func (c *fakeMQTTClient) OptionsReader() mqtt.ClientOptionsReader { return mqtt.ClientOptionsReader{} }
+func (c *fakeMQTTClient) Publish(topic string, qos byte, retained bool, payload interface{}) mqtt.Token {
+	c.topic = topic
+	c.qos = qos
+	c.retained = retained
+	c.payload = payload
+	return fakeMQTTToken{err: c.err}
+}
+
+func TestEmitMQTTPublishesWithConfiguredPrefix(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	client := &fakeMQTTClient{}
+	tele := TestTelemetry(store)
+	tele.mClient = &MQTTClient{
+		config: MQTTConfig{
+			Prefix:   "reef",
+			QoS:      1,
+			Retained: true,
+		},
+		client: client,
+	}
+
+	if err := tele.EmitMQTT("system_load5", 2.5); err != nil {
+		t.Fatal(err)
+	}
+	if client.topic != "reef/system_load5" {
+		t.Fatalf("expected prefixed topic, got %q", client.topic)
+	}
+	if client.qos != 1 || !client.retained {
+		t.Fatalf("unexpected publish options: qos=%d retained=%t", client.qos, client.retained)
+	}
+	if client.payload != "2.500000" {
+		t.Fatalf("expected formatted payload, got %#v", client.payload)
+	}
+}
+
+func TestEmitMetricMQTTErrorLogs(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	var logged bool
+	tele := TestTelemetry(store)
+	tele.config.MQTT.Enable = true
+	tele.logError = func(subject, body string) error {
+		logged = subject == "telemtry-mqtt" && strings.Contains(body, "publish failed")
+		return nil
+	}
+	tele.mClient = &MQTTClient{
+		client: &fakeMQTTClient{err: errors.New("publish failed")},
+	}
+
+	tele.EmitMetric("system", "load", 1.2)
+	if !logged {
+		t.Fatal("expected MQTT publish error to be logged")
+	}
+}
+
+type aioRoundTripper struct {
+	statusByMethod map[string]int
+	requests       []*http.Request
+}
+
+func (rt *aioRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	rt.requests = append(rt.requests, req)
+	status := rt.statusByMethod[req.Method]
+	if status == 0 {
+		status = http.StatusOK
+	}
+	body := `{}`
+	if status >= 400 {
+		body = `aio error`
+	}
+	return &http.Response{
+		StatusCode: status,
+		Header:     make(http.Header),
+		Body:       io.NopCloser(strings.NewReader(body)),
+		Request:    req,
+	}, nil
+}
+
+func withAIORoundTripper(t *testing.T, rt http.RoundTripper) {
+	t.Helper()
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = rt
+	t.Cleanup(func() {
+		http.DefaultTransport = oldTransport
+	})
+}
+
+func TestEmitAIO(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	rt := &aioRoundTripper{statusByMethod: map[string]int{http.MethodPost: http.StatusCreated}}
+	withAIORoundTripper(t, rt)
+	tele := TestTelemetry(store)
+	tele.aClient = adafruitio.NewClient("token")
+
+	if err := tele.EmitAIO("reef", "system-load5", 12.3); err != nil {
+		t.Fatal(err)
+	}
+	if len(rt.requests) != 1 || rt.requests[0].URL.Path != "/api/v2/reef/feeds/system-load5/data" {
+		t.Fatalf("unexpected AIO request path: %#v", rt.requests)
+	}
+}
+
+func TestCreateAndDeleteFeedFailurePaths(t *testing.T) {
+	store, err := storage.TestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	rt := &aioRoundTripper{statusByMethod: map[string]int{
+		http.MethodGet:    http.StatusNotFound,
+		http.MethodPost:   http.StatusInternalServerError,
+		http.MethodDelete: http.StatusInternalServerError,
+	}}
+	withAIORoundTripper(t, rt)
+
+	tele := TestTelemetry(store)
+	tele.config.AdafruitIO = AdafruitIO{Enable: true, User: "reef", Token: "token", Prefix: "tank-"}
+	tele.aClient = adafruitio.NewClient("token")
+
+	tele.CreateFeedIfNotExist("System Load")
+	tele.DeleteFeedIfExist("System Load")
+
+	if len(rt.requests) != 3 {
+		t.Fatalf("expected get, create, and delete requests, got %d", len(rt.requests))
+	}
+	if rt.requests[0].Method != http.MethodGet || rt.requests[1].Method != http.MethodPost || rt.requests[2].Method != http.MethodDelete {
+		t.Fatalf("unexpected request methods: %s %s %s", rt.requests[0].Method, rt.requests[1].Method, rt.requests[2].Method)
 	}
 }
