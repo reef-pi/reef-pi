@@ -1,12 +1,90 @@
 package daemon
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 
 	"net/http"
 	"testing"
 )
+
+type failingStore struct {
+	closed bool
+}
+
+func (s *failingStore) Close() error {
+	s.closed = true
+	return nil
+}
+
+func (s *failingStore) Buckets() ([]string, error) {
+	return nil, errors.New("not implemented")
+}
+
+func (s *failingStore) CreateBucket(string) error {
+	return errors.New("create bucket failed")
+}
+
+func (s *failingStore) DeleteBucket(string) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) Path() string {
+	return ""
+}
+
+func (s *failingStore) SubBucket(string, string) storage.ObjectStore {
+	return s
+}
+
+func (s *failingStore) RawGet(string, string) ([]byte, error) {
+	return nil, errors.New("get failed")
+}
+
+func (s *failingStore) Get(string, string, interface{}) error {
+	return errors.New("get failed")
+}
+
+func (s *failingStore) List(string, func(string, []byte) error) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) Create(string, func(string) interface{}) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) CreateWithID(string, string, interface{}) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) Update(string, string, interface{}) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) RawUpdate(string, string, []byte) error {
+	return errors.New("not implemented")
+}
+
+func (s *failingStore) Delete(string, string) error {
+	return errors.New("not implemented")
+}
+
+func TestNewReefPiClosesStoreOnInitializationFailure(t *testing.T) {
+	store := &failingStore{}
+	_, err := newReefPi("0.1", store)
+	if err == nil {
+		t.Fatal("expected initialization error")
+	}
+	if !strings.Contains(err.Error(), "initialize default settings") {
+		t.Fatalf("expected settings initialization error, got %v", err)
+	}
+	if !store.closed {
+		t.Fatal("expected store to be closed after initialization failure")
+	}
+}
 
 func TestReefPi(t *testing.T) {
 	http.DefaultServeMux = new(http.ServeMux)

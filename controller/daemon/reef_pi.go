@@ -33,6 +33,17 @@ func New(version, database string) (*ReefPi, error) {
 		log.Println("ERROR: Failed to create store. DB:", database)
 		return nil, fmt.Errorf("create store %q: %w", database, err)
 	}
+
+	return newReefPi(version, store)
+}
+
+func newReefPi(version string, store storage.Store) (r *ReefPi, err error) {
+	defer func() {
+		if err != nil {
+			err = errors.Join(err, store.Close())
+		}
+	}()
+
 	s, err := loadOrInitializeSettings(store)
 	if err != nil {
 		return nil, err
@@ -45,7 +56,7 @@ func New(version, database string) (*ReefPi, error) {
 		return nil, fmt.Errorf("initialize auth: %w", err)
 	}
 
-	r := &ReefPi{
+	r = &ReefPi{
 		store:      store,
 		settings:   s,
 		telemetry:  tele,
