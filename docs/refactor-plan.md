@@ -32,24 +32,26 @@ The product is intentionally modular. Users enable only the capabilities they ne
 
 Backend:
 
-- Go backend in `commands/` and `controller/`
-- BoltDB storage through `go.etcd.io/bbolt`
-- Gorilla Mux routing
+- Go 1.26 backend in `commands/` and `controller/`
+- BoltDB storage through `go.etcd.io/bbolt` v1.4
+- Gorilla Mux routing through `github.com/gorilla/mux` v1.8
 - modular subsystems loaded through the controller composite
 - OpenAPI and Swagger artifacts committed in-repo
 
 Frontend:
 
-- React 16 UI in `front-end/src`
-- Redux with `redux-thunk`
-- class components plus `connect`
+- React 19 UI in `front-end/src`
+- Redux 5 with `redux-thunk` 3
+- React Redux 9 with a mix of class components, `connect`, and touched function components
+- React Router 6 routing
 - Webpack build
 - Bootstrap 4 and SCSS styling
-- Jest, Enzyme-era tests, and TestCafe smoke coverage
+- Jest tests, legacy Enzyme-era patterns in some tests, and Playwright smoke coverage
 
 CI and automation:
 
 - Go, Jest, smoke, deb packaging, release, translations, CodeQL, Dependabot
+- workflows use Go 1.26.2 and Node 22
 - Claude review workflow already present
 
 ## Refactor Principles
