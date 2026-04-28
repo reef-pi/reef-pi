@@ -1,11 +1,13 @@
 package doser
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func TestPumpIsValid(t *testing.T) {
@@ -58,6 +60,99 @@ func TestPumpIsValid(t *testing.T) {
 	p = Pump{Name: "P2", Type: "stepper", Regiment: DosingRegiment{Volume: 5}, Stepper: &DRV8825{}}
 	if err := p.IsValid(); err == nil {
 		t.Error("expected error for stepper with invalid stepper config")
+	}
+}
+
+func TestControllerCalibrationAndDependencyPaths(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+
+	ctrl, err := New(true, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := ctrl.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := ctrl.GetEntity("1"); err == nil {
+		t.Fatal("expected GetEntity to fail")
+	}
+	if _, err := ctrl.InUse("unknown", "1"); err == nil || !strings.Contains(err.Error(), "unknown deptype") {
+		t.Fatalf("expected unknown dependency type error, got %v", err)
+	}
+
+	p := Pump{
+		Name: "pump-1",
+		Pin:  1,
+		Jack: "jack-1",
+		Regiment: DosingRegiment{
+			Schedule: Schedule{Second: "0", Minute: "*", Hour: "*", Day: "*", Month: "*", Week: "*"},
+		},
+	}
+	if err := ctrl.Create(p); err != nil {
+		t.Fatal(err)
+	}
+
+	deps, err := ctrl.InUse(storage.JackBucket, "jack-1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(deps) != 1 || deps[0] != "jack-1" {
+		t.Fatalf("unexpected jack dependencies: %v", deps)
+	}
+
+	if err := ctrl.SaveCalibrationResult("1", CalibrationDetails{Duration: 0, Volume: 5}); err == nil {
+		t.Fatal("expected zero calibration duration to fail")
+	}
+	if err := ctrl.SaveCalibrationResult("1", CalibrationDetails{Duration: 10, Volume: 0}); err == nil {
+		t.Fatal("expected zero calibration volume to fail")
+	}
+	if err := ctrl.SaveCalibrationResult("1", CalibrationDetails{Duration: 10, Volume: 25}); err != nil {
+		t.Fatal(err)
+	}
+	got, err := ctrl.Get("1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Regiment.VolumePerSecond != 2.5 {
+		t.Fatalf("expected volume per second 2.5, got %f", got.Regiment.VolumePerSecond)
+	}
+}
+
+func TestControllerOnRejectsEnabledPumpBeforeControl(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+
+	ctrl, err := New(true, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := ctrl.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	p := Pump{
+		Name: "pump-1",
+		Pin:  1,
+		Jack: "missing-jack",
+		Regiment: DosingRegiment{
+			Enable:   true,
+			Schedule: Schedule{Second: "0", Minute: "*", Hour: "*", Day: "*", Month: "*", Week: "*"},
+		},
+	}
+	if err := ctrl.Create(p); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ctrl.On("1", true); err == nil || !strings.Contains(err.Error(), "enabled doser") {
+		t.Fatalf("expected enabled doser On error, got %v", err)
 	}
 }
 

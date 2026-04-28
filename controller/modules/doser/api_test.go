@@ -70,6 +70,14 @@ func TestDoserAPI(t *testing.T) {
 	if err := tr.Do("GET", "/api/doser/pumps/1", new(bytes.Buffer), nil); err != nil {
 		t.Fatal("Failed to delete get pump using api. Error:", err)
 	}
+	body.Reset()
+	json.NewEncoder(body).Encode(&CalibrationDetails{Duration: 10, Volume: 25})
+	if err := tr.Do("POST", "/api/doser/pumps/1/calibrate/save", body, nil); err != nil {
+		t.Fatal("Failed to save dosing pump calibration using api. Error:", err)
+	}
+	if err := tr.Do("GET", "/api/doser/pumps/1/usage", new(bytes.Buffer), nil); err != nil {
+		t.Fatal("Failed to get dosing pump usage using api. Error:", err)
+	}
 	c.Start()
 	body.Reset()
 	regiment := DosingRegiment{
