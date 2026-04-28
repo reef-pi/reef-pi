@@ -3,6 +3,7 @@ SOURCES = $(shell find $(SOURCEDIR) -name '*.go')
 VERSION:=$(shell git describe --always --tags)
 BINARY=bin/reef-pi
 DETECT_RACE='-race'
+GO_TEST_PACKAGES=$(shell go list -f '{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}' ./commands ./controller/...)
 
 .PHONY:bin
 bin:
@@ -31,7 +32,11 @@ x86:
 
 .PHONY: test
 test:
-	go test -count=1 -cover $(DETECT_RACE) ./...
+	go test -count=1 -cover $(DETECT_RACE) $(GO_TEST_PACKAGES)
+
+.PHONY: coverage
+coverage:
+	go test -race -coverprofile=coverage.txt -covermode=atomic $(GO_TEST_PACKAGES)
 
 .PHONY: js-lint
 js-lint:
