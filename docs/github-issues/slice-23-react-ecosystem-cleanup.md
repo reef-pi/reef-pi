@@ -74,6 +74,13 @@ This section reflects the current `main` branch rather than the older pre-React-
    - `docs/library-migration-plan.md` still describes old blockers such as React 16 Enzyme adapter usage and legacy render APIs
    - Slice 23 should leave the migration notes matching current repo reality
 
+### Closeout status
+
+- the last React-core peer-range warning from `yarn install` has been cleared
+- the remaining React-adjacent package audit is complete
+- no further code change is required to satisfy Slice 23 goals
+- any remaining work is documentation cleanup or unrelated product follow-up, not React 19 compatibility blocking work
+
 ### Recommended execution order
 
 1. Audit dependency compatibility one package at a time and record only evidence-backed changes.

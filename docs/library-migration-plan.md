@@ -30,12 +30,12 @@ This document extends the refactor program with a version modernization track fo
 - `ReactDOM.render` and `unmountComponentAtNode` have been removed from:
   - `front-end/src/entry.js`
   - `front-end/src/utils/confirm.js`
-- function-component `defaultProps` still exist in several lighting profile components.
 - Redux bindings are aligned with the React 19 runtime:
   - `react-redux` is on `9.x`
   - `redux` is on `5.x`
   - `redux-thunk` is on `3.x`
 - app-local `redux/store` and `redux/actions/...` imports now require explicit resolver aliases in Jest and webpack to avoid colliding with the published `redux` package name.
+- no remaining function-component `defaultProps` blocker is present in `front-end/src`; current `defaultProps` matches are test fixture variables only.
 
 ### Jest
 
@@ -62,6 +62,12 @@ This document extends the refactor program with a version modernization track fo
 - React 19 was previously blocked by legacy render APIs and Enzyme.
 - Jest 30 is safer after some test decoupling work.
 - ecosystem cleanup should follow the core React move, not precede it.
+
+## Current status
+
+- Slices 18 through 23 have landed on `main`.
+- The core migration track is complete.
+- Remaining follow-up work, if any, should be tracked as standalone cleanup items rather than new slices in this program.
 
 ## Validation expectations
 
