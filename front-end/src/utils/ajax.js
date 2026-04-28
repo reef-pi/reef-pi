@@ -1,5 +1,7 @@
 import { showError } from 'utils/alert'
 
+const handledError = Symbol('handledError')
+
 function makeHeaders () {
   const headers = new Headers()
   headers.append('Content-Type', 'application/json')
@@ -30,31 +32,34 @@ function buildRequestOptions (params) {
 function handleErrorResponse (response, params) {
   if (response.status === 401) {
     showError('Authentication failure')
-    return
+    return Promise.resolve(handledError)
   }
   if (params.suppressError) {
-    return response
+    return Promise.resolve(handledError)
   }
 
-  response.text().then(err => {
+  return response.text().then(err => {
     if (params.failure) {
       params.failure(response)
-      return
+      return handledError
     }
     showError(err + ' | HTTP ' + response.status)
+    return handledError
   })
-
-  return response
 }
 
 function parseResponse (response, params) {
-  if (response === undefined) {
-    return Promise.resolve(undefined)
-  }
   if (!params.parseJSON) {
     return Promise.resolve(response)
   }
   return response.json()
+}
+
+function dispatchSuccess (data, params, dispatch) {
+  if (data === handledError) {
+    return undefined
+  }
+  return dispatch(params.success(data))
 }
 
 function request (params, dispatch) {
@@ -63,10 +68,9 @@ function request (params, dispatch) {
       if (!response.ok) {
         return handleErrorResponse(response, params)
       }
-      return response
+      return parseResponse(response, params)
     })
-    .then(response => parseResponse(response, params))
-    .then(data => dispatch(params.success(data)))
+    .then(data => dispatchSuccess(data, params, dispatch))
     .catch(() => {
       dispatch({ type: 'API_FAILURE', params })
     })
