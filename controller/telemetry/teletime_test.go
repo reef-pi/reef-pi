@@ -23,4 +23,7 @@ func TestTeleTime(t *testing.T) {
 	if d := t1.Day(); d < 1 || d > 31 {
 		t.Error("Expected valid day, got:", d)
 	}
+	if err := t1.UnmarshalJSON([]byte("\"not-a-time\"")); err == nil {
+		t.Error("expected invalid time to fail")
+	}
 }
