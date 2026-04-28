@@ -2,11 +2,20 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
+	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
 
+	"github.com/reef-pi/reef-pi/controller/daemon"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 // setupTestDB creates a temp BoltDB file with an "atos" bucket and returns the
@@ -64,29 +73,15 @@ func TestDBCmdExecute_MissingFile(t *testing.T) {
 }
 
 func TestDBCmdNoSubcommand(t *testing.T) {
-	// Test the "no sub-command" error by bypassing the store-open step and
-	// invoking the dispatch logic directly via a pre-populated store.
 	dbPath, cleanup := setupTestDB(t)
 	defer cleanup()
 
-	s, err := storage.NewStore(dbPath)
+	cmd, err := NewDBCmd([]string{"-store", dbPath})
 	if err != nil {
 		t.Fatal(err)
 	}
-	cmd := &dbCmd{sPath: dbPath, args: []string{}, store: s}
-	// Simulate the dispatch logic: args is empty so we should get an error
-	if len(cmd.args) >= 1 {
-		t.Fatal("test setup error: expected empty args")
-	}
-	// The error should come from "please specify a sub command"
-	gotErr := func() error {
-		if len(cmd.args) < 1 {
-			return os.ErrInvalid // stand-in for the "no subcommand" branch
-		}
-		return nil
-	}()
-	s.Close()
-	if gotErr == nil {
+	defer cmd.Close()
+	if err := cmd.Execute(); err == nil {
 		t.Error("Expected error with no sub-command")
 	}
 }
@@ -95,24 +90,58 @@ func TestDBCmdUnknownAction(t *testing.T) {
 	dbPath, cleanup := setupTestDB(t)
 	defer cleanup()
 
-	s, err := storage.NewStore(dbPath)
+	cmd, err := NewDBCmd([]string{"-store", dbPath, "unknown_action"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	cmd := &dbCmd{sPath: dbPath, args: []string{"unknown_action"}, store: s}
-	// Call Execute but since the store is already set and the sPath is valid,
-	// Execute will try to re-open it. Instead, test the action dispatch directly.
-	action := cmd.args[0]
-	var gotErr error
-	switch action {
-	case "show", "list", "create", "update", "delete", "buckets":
-		gotErr = nil
-	default:
-		gotErr = os.ErrInvalid // stand-in
-	}
-	s.Close()
-	if gotErr == nil {
+	defer cmd.Close()
+	if err := cmd.Execute(); err == nil {
 		t.Error("Expected error for unknown action")
+	}
+}
+
+func TestDBCmdExecuteDispatch(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+	}{
+		{name: "buckets", args: []string{"buckets"}},
+		{name: "list", args: []string{"list", "atos"}},
+		{name: "show", args: []string{"show", "atos", "1"}},
+		{name: "create", args: []string{"create", "atos"}},
+		{name: "update", args: []string{"update", "atos", "1"}},
+		{name: "delete", args: []string{"delete", "atos", "1"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			dbPath, cleanup := setupTestDB(t)
+			defer cleanup()
+
+			s, err := storage.NewStore(dbPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if tc.name == "show" || tc.name == "update" || tc.name == "delete" {
+				if err := s.Create("atos", func(id string) interface{} { return map[string]string{"name": "test"} }); err != nil {
+					t.Fatal(err)
+				}
+			}
+			s.Close()
+
+			input := filepath.Join(t.TempDir(), "input.json")
+			if err := os.WriteFile(input, []byte(`{"name":"updated"}`), 0644); err != nil {
+				t.Fatal(err)
+			}
+			output := filepath.Join(t.TempDir(), "output.json")
+			args := append([]string{"-store", dbPath, "-input", input, "-output", output}, tc.args...)
+			cmd, err := NewDBCmd(args)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer cmd.Close()
+			if err := cmd.Execute(); err != nil {
+				t.Fatalf("Execute(%s) failed: %v", tc.name, err)
+			}
+		})
 	}
 }
 
@@ -252,6 +281,31 @@ func TestDBCmdUpdate(t *testing.T) {
 	}
 }
 
+func TestDBCmdInputStdin(t *testing.T) {
+	oldStdin := os.Stdin
+	t.Cleanup(func() { os.Stdin = oldStdin })
+
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.Stdin = reader
+	if _, err := writer.Write([]byte(`{"name":"stdin"}`)); err != nil {
+		t.Fatal(err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	data, err := (&dbCmd{}).Input()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != `{"name":"stdin"}` {
+		t.Fatalf("unexpected stdin input: %s", string(data))
+	}
+}
+
 func TestLoadConfig_Default(t *testing.T) {
 	cfg, err := loadConfig("")
 	if err != nil {
@@ -259,5 +313,280 @@ func TestLoadConfig_Default(t *testing.T) {
 	}
 	if cfg.Database == "" {
 		t.Error("Expected non-empty default database path")
+	}
+}
+
+func TestLoadConfig_File(t *testing.T) {
+	cfg, err := loadConfig("../build/config.yaml")
+	if err != nil {
+		t.Fatal("loadConfig failed:", err)
+	}
+	if cfg.Database != "/var/lib/reef-pi/reef-pi.db" {
+		t.Fatalf("unexpected database path: %s", cfg.Database)
+	}
+}
+
+func TestLoadConfig_Error(t *testing.T) {
+	if _, err := loadConfig("../build/missing-config.yaml"); err == nil {
+		t.Fatal("expected loadConfig to fail for missing file")
+	}
+}
+
+func TestMainVersion(t *testing.T) {
+	if os.Getenv("REEF_PI_TEST_MAIN_VERSION") == "1" {
+		Version = "v-test"
+		os.Args = []string{"reef-pi", "-version"}
+		main()
+		return
+	}
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainVersion")
+	cmd.Env = append(os.Environ(), "REEF_PI_TEST_MAIN_VERSION=1")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("main -version failed: %v\n%s", err, string(out))
+	}
+	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
+	if len(lines) == 0 || lines[0] != "v-test" {
+		t.Fatalf("unexpected version output: %q", string(out))
+	}
+}
+
+func TestMainUnknownCommand(t *testing.T) {
+	if os.Getenv("REEF_PI_TEST_MAIN_UNKNOWN") == "1" {
+		os.Args = []string{"reef-pi", "bogus"}
+		main()
+		return
+	}
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainUnknownCommand")
+	cmd.Env = append(os.Environ(), "REEF_PI_TEST_MAIN_UNKNOWN=1")
+	out, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("expected main unknown command to exit non-zero, output: %s", string(out))
+	}
+	if !strings.Contains(string(out), "Unknown command") {
+		t.Fatalf("expected unknown command output, got: %s", string(out))
+	}
+}
+
+func TestResetPassword(t *testing.T) {
+	dbPath, cleanup := setupTestDB(t)
+	defer cleanup()
+
+	s, err := storage.NewStore(dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.CreateBucket(daemon.Bucket); err != nil {
+		t.Fatal(err)
+	}
+	s.Close()
+
+	resetPassword(dbPath, "reef", "secret")
+
+	s, err = storage.NewStore(dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Close()
+	ok, err := utils.NewCredentialsManager(s, daemon.Bucket).Validate(utils.Credentials{
+		User:     "reef",
+		Password: "secret",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Fatal("expected updated credentials to validate")
+	}
+}
+
+type fakeOutputCommand struct {
+	out []byte
+	err error
+}
+
+func (c fakeOutputCommand) CombinedOutput() ([]byte, error) {
+	return c.out, c.err
+}
+
+func withCommandStubs(t *testing.T) {
+	t.Helper()
+	origCommandFn := commandFn
+	origDownloadDebFn := downloadDebFn
+	origHTTPGetFn := httpGetFn
+	origSleepFn := sleepFn
+	t.Cleanup(func() {
+		commandFn = origCommandFn
+		downloadDebFn = origDownloadDebFn
+		httpGetFn = origHTTPGetFn
+		sleepFn = origSleepFn
+	})
+	sleepFn = func(time.Duration) {}
+}
+
+func TestDownloadDeb(t *testing.T) {
+	withCommandStubs(t)
+	httpGetFn = func(rawURL string) (*http.Response, error) {
+		u, err := url.Parse(rawURL)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(rawURL, "/v1.2.3/reef-pi-v1.2.3-pi3.deb") {
+			t.Fatalf("unexpected URL: %s", rawURL)
+		}
+		return &http.Response{
+			Request: &http.Request{URL: u},
+			Body:    io.NopCloser(strings.NewReader("deb payload")),
+		}, nil
+	}
+
+	file, err := downloadDeb("3", "v1.2.3")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(file)
+	data, err := os.ReadFile(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != "deb payload" {
+		t.Fatalf("unexpected downloaded payload: %q", string(data))
+	}
+}
+
+func TestInstall(t *testing.T) {
+	withCommandStubs(t)
+
+	var calls []string
+	commandFn = func(bin string, args ...string) outputCommand {
+		calls = append(calls, bin+" "+strings.Join(args, " "))
+		if bin == "/bin/uname" {
+			return fakeOutputCommand{out: []byte("armv6l")}
+		}
+		return fakeOutputCommand{}
+	}
+	downloadDebFn = func(pi, version string) (string, error) {
+		if pi != "0" {
+			t.Fatalf("expected pi zero package, got pi%s", pi)
+		}
+		if version != "v1.2.3" {
+			t.Fatalf("unexpected version: %s", version)
+		}
+		return "/tmp/reef-pi.deb", nil
+	}
+
+	if err := install("v1.2.3"); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{
+		"/bin/systemctl stop reef-pi.service",
+		"/bin/uname -m",
+		"/usr/bin/dpkg -i /tmp/reef-pi.deb",
+		"/bin/systemctl start reef-pi.service",
+	}
+	if strings.Join(calls, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("unexpected command calls:\n%s", strings.Join(calls, "\n"))
+	}
+}
+
+func TestInstallReturnsUnameError(t *testing.T) {
+	withCommandStubs(t)
+	wantErr := errors.New("uname failed")
+	commandFn = func(bin string, args ...string) outputCommand {
+		if bin == "/bin/uname" {
+			return fakeOutputCommand{err: wantErr}
+		}
+		return fakeOutputCommand{}
+	}
+	if err := install("v1.2.3"); !errors.Is(err, wantErr) {
+		t.Fatalf("expected uname error, got %v", err)
+	}
+}
+
+func TestInstallReturnsDownloadError(t *testing.T) {
+	withCommandStubs(t)
+	wantErr := errors.New("download failed")
+	commandFn = func(bin string, args ...string) outputCommand {
+		if bin == "/bin/uname" {
+			return fakeOutputCommand{out: []byte("armv7l")}
+		}
+		return fakeOutputCommand{}
+	}
+	downloadDebFn = func(pi, version string) (string, error) {
+		return "", wantErr
+	}
+	if err := install("v1.2.3"); !errors.Is(err, wantErr) {
+		t.Fatalf("expected download error, got %v", err)
+	}
+}
+
+func TestRestoreDb(t *testing.T) {
+	withCommandStubs(t)
+
+	var calls []string
+	commandFn = func(bin string, args ...string) outputCommand {
+		calls = append(calls, bin+" "+strings.Join(args, " "))
+		return fakeOutputCommand{}
+	}
+	dir := t.TempDir()
+	current := filepath.Join(dir, "reef-pi.db")
+	backup := filepath.Join(dir, "reef-pi.db.old")
+	next := filepath.Join(dir, "reef-pi.db.new")
+	if err := os.WriteFile(current, []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(next, []byte("next"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	restoreDb(current, backup, next)
+
+	currentData, err := os.ReadFile(current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	backupData, err := os.ReadFile(backup)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(currentData) != "next" || string(backupData) != "current" {
+		t.Fatalf("unexpected restore result: current=%q backup=%q", string(currentData), string(backupData))
+	}
+	want := []string{
+		"/bin/systemctl stop reef-pi.service",
+		"/bin/systemctl start reef-pi.service",
+	}
+	if strings.Join(calls, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("unexpected command calls:\n%s", strings.Join(calls, "\n"))
+	}
+}
+
+func TestRestoreDbReturnsAfterStopError(t *testing.T) {
+	withCommandStubs(t)
+	commandFn = func(bin string, args ...string) outputCommand {
+		return fakeOutputCommand{err: errors.New("stop failed")}
+	}
+	dir := t.TempDir()
+	current := filepath.Join(dir, "reef-pi.db")
+	backup := filepath.Join(dir, "reef-pi.db.old")
+	next := filepath.Join(dir, "reef-pi.db.new")
+	if err := os.WriteFile(current, []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(next, []byte("next"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	restoreDb(current, backup, next)
+
+	currentData, err := os.ReadFile(current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(currentData) != "current" {
+		t.Fatalf("expected current db to remain untouched, got %q", string(currentData))
+	}
+	if _, err := os.Stat(backup); !os.IsNotExist(err) {
+		t.Fatalf("expected no backup file, stat err=%v", err)
 	}
 }

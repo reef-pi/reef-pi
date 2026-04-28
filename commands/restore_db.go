@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/reef-pi/reef-pi/controller/utils"
 	"log"
 	"os"
 	"time"
@@ -20,13 +19,13 @@ asynchronously via systemd.
 
 func restoreDb(cPath, oPath, nPath string) { // current, old and new db file path
 	log.Println("Executing reef-pi db restore command")
-	time.Sleep(time.Second)
-	if _, err := utils.Command("/bin/systemctl", "stop", "reef-pi.service").CombinedOutput(); err != nil {
+	sleepFn(time.Second)
+	if _, err := commandFn("/bin/systemctl", "stop", "reef-pi.service").CombinedOutput(); err != nil {
 		log.Println("Failed to stop reef-pi:", err)
 		return
 	}
 	log.Println("Stopped reef-pi service")
-	time.Sleep(time.Second)
+	sleepFn(time.Second)
 	if err := os.Rename(cPath, oPath); err != nil {
 		log.Println("Failed to rename existing reef-pi database:", err)
 	} else {
@@ -37,7 +36,7 @@ func restoreDb(cPath, oPath, nPath string) { // current, old and new db file pat
 		return
 	}
 	log.Println("New database:", nPath, "  moved as:", oPath)
-	if _, err := utils.Command("/bin/systemctl", "start", "reef-pi.service").CombinedOutput(); err != nil {
+	if _, err := commandFn("/bin/systemctl", "start", "reef-pi.service").CombinedOutput(); err != nil {
 		log.Println("Failed to start reef-pi:", err)
 		return
 	}
