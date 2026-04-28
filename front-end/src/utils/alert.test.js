@@ -1,49 +1,60 @@
-import { showInfo, showError, showSuccess, showWarning, showUpdateSuccessful, showAlert, clearAlert } from './alert'
-import * as store from 'redux/store'
-
-jest.mock('redux/store', () => ({
-  getStore: jest.fn(() => ({
-    dispatch: jest.fn()
-  }))
-}))
+import {
+  showInfo,
+  showError,
+  showSuccess,
+  showWarning,
+  showUpdateSuccessful,
+  showAlert,
+  clearAlert,
+  setAlertDispatcher,
+  clearAlertDispatcher
+} from './alert'
 
 describe('alert utils', () => {
+  let dispatch
+
   beforeEach(() => {
-    store.getStore.mockReturnValue({ dispatch: jest.fn() })
+    dispatch = jest.fn()
+    setAlertDispatcher(dispatch)
     jest.useFakeTimers()
   })
 
   afterEach(() => {
+    clearAlertDispatcher()
     jest.useRealTimers()
   })
 
   it('showInfo dispatches an action', () => {
     expect(() => showInfo('test info')).not.toThrow()
-    expect(store.getStore).toHaveBeenCalled()
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'ALERT_ADDED' }))
   })
 
   it('showError dispatches an action', () => {
     expect(() => showError('test error')).not.toThrow()
-    expect(store.getStore).toHaveBeenCalled()
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'ALERT_ADDED' }))
   })
 
   it('showSuccess dispatches an action', () => {
     expect(() => showSuccess('test success')).not.toThrow()
-    expect(store.getStore).toHaveBeenCalled()
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'ALERT_ADDED' }))
   })
 
   it('showWarning dispatches an action', () => {
     expect(() => showWarning('test warning')).not.toThrow()
-    expect(store.getStore).toHaveBeenCalled()
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'ALERT_ADDED' }))
   })
 
   it('showUpdateSuccessful dispatches and auto-dismisses', () => {
-    const dispatch = jest.fn()
-    store.getStore.mockReturnValue({ dispatch })
     showUpdateSuccessful()
     expect(dispatch).toHaveBeenCalledTimes(1)
     jest.runAllTimers()
     expect(dispatch).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not create or require a store when no dispatcher is registered', () => {
+    clearAlertDispatcher()
+    expect(() => showError('test error')).not.toThrow()
+    expect(dispatch).not.toHaveBeenCalled()
   })
 
   it('showAlert logs deprecation warning and calls showError', () => {
