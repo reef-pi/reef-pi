@@ -1,5 +1,5 @@
 import { reboot, powerOff, reload, reloaded, rebooted, powerOffed } from './admin'
-import thunk from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
