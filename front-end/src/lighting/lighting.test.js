@@ -26,6 +26,22 @@ const wrapFormik = (component, initialValues = {}) => renderToStaticMarkup(
   </Formik>
 )
 
+const findNode = (node, predicate) => {
+  if (!node || typeof node !== 'object') {
+    return undefined
+  }
+  if (predicate(node)) {
+    return node
+  }
+  for (const child of React.Children.toArray(node.props?.children)) {
+    const found = findNode(child, predicate)
+    if (found) {
+      return found
+    }
+  }
+  return undefined
+}
+
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -288,6 +304,68 @@ describe('Lighting ui', () => {
       />,
       { config: light }
     )).toContain('channel_name')
+  })
+
+  it('<Channel /> resets profile config when profile type changes', () => {
+    const profileTypes = {
+      fixed: { start: '', end: '', value: 0 },
+      diurnal: { start: '', end: '' },
+      interval: {
+        start: '00:00:00',
+        end: '22:00:00',
+        interval: 120,
+        values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      },
+      lunar: { start: '', end: '', full_moon: null },
+      random: { start: '', end: '' },
+      sine: { start: '', end: '' },
+      circadian: { start: '', end: '', dawn_value: 10, noon_value: 100 },
+      cyclic: { period: 60, phase_shift: 0 },
+      lightning: { start: '', end: '', frequency: 2, flash_slot: 1, intensity: 100 },
+      solar: { latitude: 0, longitude: 0 },
+      unknown: {}
+    }
+
+    Object.entries(profileTypes).forEach(([type, config]) => {
+      const onChangeHandler = jest.fn()
+      const setTouched = jest.fn()
+      const touched = {
+        config: {
+          channels: {
+            1: {
+              profile: {
+                config: { start: true }
+              }
+            }
+          }
+        }
+      }
+      const tree = Channel({
+        name: 'config.channels.1',
+        channel: light.channels['1'],
+        channelNum: '1',
+        onChangeHandler,
+        onBlur: jest.fn(),
+        touched,
+        errors: {},
+        setTouched
+      })
+      const selector = findNode(tree, node => node.type === ProfileSelector)
+      selector.props.onChangeHandler({ target: { name: 'profile', value: type } })
+
+      expect(onChangeHandler).toHaveBeenCalledWith({
+        target: {
+          name: 'profile',
+          value: {
+            type,
+            config
+          }
+        }
+      }, '1')
+      if (type !== 'unknown') {
+        expect(setTouched).toHaveBeenCalledWith(touched)
+      }
+    })
   })
 
   it('<Profile /> fixed', () => {

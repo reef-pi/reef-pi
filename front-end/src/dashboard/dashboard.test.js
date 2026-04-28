@@ -3,7 +3,13 @@ import ComponentSelector from './component_selector'
 import { RawDashboardConfig } from './config'
 import Grid from './grid'
 import { RawDashboardMain } from './main'
+import * as Alert from 'utils/alert'
 import 'isomorphic-fetch'
+
+jest.mock('utils/alert', () => ({
+  showError: jest.fn(),
+  showUpdateSuccessful: jest.fn()
+}))
 
 describe('Dashboard', () => {
   const click = (node, event = {}) => {
@@ -127,5 +133,88 @@ describe('Dashboard', () => {
     })
     m.state = RawDashboardConfig.getDerivedStateFromProps({ config }, m.state) || { updated: false, config }
     expect(m.render().props.className).toBe('col-12')
+  })
+
+  it('<Config /> fetches dashboard on mount and handles empty props', () => {
+    const fetchDashboard = jest.fn()
+    const m = new RawDashboardConfig({ fetchDashboard })
+
+    m.componentDidMount()
+
+    expect(fetchDashboard).toHaveBeenCalled()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: undefined }, m.state)).toBeNull()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: {} }, m.state)).toBeNull()
+    expect(RawDashboardConfig.getDerivedStateFromProps({ config: { row: 1 }, updated: true }, { updated: true })).toBeNull()
+  })
+
+  it('<Config /> edits numeric rows and saves valid config', () => {
+    const cells = [[{ type: 'ato', id: '1' }]]
+    const updateDashboard = jest.fn()
+    const m = new RawDashboardConfig({
+      config: { row: 1, column: 1, width: 100, height: 100, grid_details: cells },
+      fetchDashboard: jest.fn(),
+      updateDashboard,
+      atos: [],
+      phs: [],
+      tcs: [],
+      lights: [],
+      dosers: [],
+      equips: [],
+      journals: [],
+      blank: []
+    })
+    m.state = { updated: false, config: { row: 1, column: 1, width: 100, height: 100, grid_details: cells } }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    const row = m.toRow('row', 'Rows', 1, 12)
+    row.props.children[1].props.onChange({ target: { value: '' } })
+    expect(m.state.config.row).toBe('')
+    row.props.children[1].props.onChange({ target: { value: '2' } })
+    expect(m.state.config.row).toBe(2)
+    row.props.children[1].props.onChange({ target: { value: 'x' } })
+    expect(m.state.config.row).toBe(2)
+
+    m.handleSave()
+
+    expect(updateDashboard).toHaveBeenCalledWith({
+      row: 2,
+      column: 1,
+      width: 100,
+      height: 100,
+      grid_details: cells
+    })
+    expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
+  })
+
+  it('<Config /> rejects invalid save values and rebuilds grid details', () => {
+    const cells = [[{ type: 'ato', id: '1' }]]
+    const updateDashboard = jest.fn()
+    const m = new RawDashboardConfig({
+      fetchDashboard: jest.fn(),
+      updateDashboard,
+      atos: [],
+      phs: [],
+      tcs: [],
+      lights: [],
+      dosers: [],
+      equips: [],
+      journals: [],
+      blank: []
+    })
+    m.state = { updated: false, config: { row: 2, column: 2, width: 0, height: 100, grid_details: cells } }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    m.handleSave()
+
+    expect(Alert.showError).toHaveBeenCalled()
+    expect(updateDashboard).not.toHaveBeenCalled()
+
+    m.state.config.width = 100
+    m.updateHook([[{ id: 'a', type: 'ato' }]])
+    expect(m.state.updated).toBe(true)
+    expect(m.state.config.grid_details).toEqual([
+      [{ id: 'a', type: 'ato' }, { id: 'none', type: 'blank_panel' }],
+      [{ id: 'none', type: 'blank_panel' }, { id: 'none', type: 'blank_panel' }]
+    ])
   })
 })
