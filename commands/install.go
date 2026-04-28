@@ -15,10 +15,21 @@ import (
 
 const urlTemplate = "https://github.com/reef-pi/reef-pi/releases/download/%s/reef-pi-%s-pi%s.deb"
 
+type outputCommand interface {
+	CombinedOutput() ([]byte, error)
+}
+
+var (
+	commandFn     = func(bin string, args ...string) outputCommand { return utils.Command(bin, args...) }
+	downloadDebFn = downloadDeb
+	httpGetFn     = http.Get
+	sleepFn       = time.Sleep
+)
+
 func downloadDeb(pi, version string) (string, error) {
 	url := fmt.Sprintf(urlTemplate, version, version, pi)
 	log.Println("Downloading reef-pi from:", url)
-	resp, err := http.Get(url)
+	resp, err := httpGetFn(url)
 	if err != nil {
 		return "", err
 	}
@@ -41,13 +52,13 @@ func downloadDeb(pi, version string) (string, error) {
 
 func install(version string) error { // version to upgrade to
 	log.Println("Executing reef-pi upgrade command")
-	time.Sleep(time.Second)
-	if _, err := utils.Command("/bin/systemctl", "stop", "reef-pi.service").CombinedOutput(); err != nil {
+	sleepFn(time.Second)
+	if _, err := commandFn("/bin/systemctl", "stop", "reef-pi.service").CombinedOutput(); err != nil {
 		log.Println("Failed to stop reef-pi:", err)
 	}
-	time.Sleep(time.Second)
+	sleepFn(time.Second)
 
-	out, err := utils.Command("/bin/uname", "-m").CombinedOutput()
+	out, err := commandFn("/bin/uname", "-m").CombinedOutput()
 	if err != nil {
 		log.Println("Failed to detect pi version:", err)
 		return err
@@ -57,19 +68,19 @@ func install(version string) error { // version to upgrade to
 		pi = "0"
 	}
 
-	file, err := downloadDeb(pi, version)
+	file, err := downloadDebFn(pi, version)
 	if err != nil {
 		log.Println("Failed to download reef-pi")
 		return err
 	}
 
-	if out, err := utils.Command("/usr/bin/dpkg", "-i", file).CombinedOutput(); err != nil {
+	if out, err := commandFn("/usr/bin/dpkg", "-i", file).CombinedOutput(); err != nil {
 		log.Println("Failed to install new reef-pi:", err, "\n", string(out))
 		return err
 
 	}
 
-	if _, err := utils.Command("/bin/systemctl", "start", "reef-pi.service").CombinedOutput(); err != nil {
+	if _, err := commandFn("/bin/systemctl", "start", "reef-pi.service").CombinedOutput(); err != nil {
 		log.Println("Failed to start reef-pi:", err)
 		return err
 	}
