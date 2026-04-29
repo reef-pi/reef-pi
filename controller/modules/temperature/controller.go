@@ -21,6 +21,7 @@ const CalibrationBucket = storage.TemperatureCalibrationBucket
 type Controller struct {
 	sync.Mutex
 	c           controller.Controller
+	repo        repository
 	devMode     bool
 	quitters    map[string]chan struct{}
 	wg          sync.WaitGroup
@@ -33,6 +34,7 @@ type Controller struct {
 func New(devMode bool, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		c:           c,
+		repo:        newRepository(c.Store()),
 		devMode:     devMode,
 		quitters:    make(map[string]chan struct{}),
 		tcs:         make(map[string]*TC),
@@ -45,13 +47,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 func (c *Controller) Setup() error {
 	c.Lock()
 	defer c.Unlock()
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
-		return err
-	}
-	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
-		return err
-	}
-	if err := c.c.Store().CreateBucket(UsageBucket); err != nil {
+	if err := c.repo.Setup(); err != nil {
 		return err
 	}
 	tcs, err := c.List()
@@ -62,19 +58,21 @@ func (c *Controller) Setup() error {
 		c.tcs[tc.ID] = tc
 	}
 
-	err = c.c.Store().List(CalibrationBucket, func(k string, v []byte) error {
-		var ms []hal.Measurement
-		if err := json.Unmarshal(v, &ms); err != nil {
-			return err
-		}
+	calibrations, err := c.repo.ListCalibrations()
+	if err != nil {
+		return err
+	}
+	for k, ms := range calibrations {
 		calibrator, err := hal.CalibratorFactory(ms)
 		if err == nil {
 			c.calibrators[k] = calibrator
 		}
-		return err
-	})
+		if err != nil {
+			return err
+		}
+	}
 
-	return err
+	return nil
 }
 
 func (c *Controller) Start() {
