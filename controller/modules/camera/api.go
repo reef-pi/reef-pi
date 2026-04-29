@@ -81,9 +81,9 @@ func (c *Controller) shoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) latest(w http.ResponseWriter, r *http.Request) {
-	var data map[string]string
 	fn := func(_ string) (interface{}, error) {
-		return &data, c.c.Store().Get(Bucket, "latest", &data)
+		data, err := c.repo.Latest()
+		return &data, err
 	}
 	utils.JSONGetResponse(fn, w, r)
 }
@@ -91,7 +91,7 @@ func (c *Controller) latest(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) update(w http.ResponseWriter, r *http.Request) {
 	var conf Config
 	fn := func(id string) error {
-		if err := saveConfig(c.c.Store(), conf); err != nil {
+		if err := c.repo.SaveConfig(conf); err != nil {
 			return err
 		}
 		c.Stop()
