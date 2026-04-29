@@ -13,20 +13,20 @@ import (
 
 type Controller struct {
 	telemetry telemetry.Telemetry
-	store     storage.Store
+	repo      repository
 	outlets   *connectors.Outlets
 }
 
 func New(c controller.Controller) *Controller {
 	return &Controller{
 		telemetry: c.Telemetry(),
-		store:     c.Store(),
+		repo:      newRepository(c.Store()),
 		outlets:   c.DM().Outlets(),
 	}
 }
 
 func (c *Controller) Setup() error {
-	return c.store.CreateBucket(Bucket)
+	return c.repo.Setup()
 }
 
 func (c *Controller) Start() {
