@@ -1,7 +1,6 @@
 package equipment
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -21,21 +20,11 @@ type Equipment struct {
 }
 
 func (c *Controller) Get(id string) (Equipment, error) {
-	var eq Equipment
-	return eq, c.store.Get(Bucket, id, &eq)
+	return c.repo.Get(id)
 }
 
 func (c Controller) List() ([]Equipment, error) {
-	es := []Equipment{}
-	fn := func(_ string, v []byte) error {
-		var eq Equipment
-		if err := json.Unmarshal(v, &eq); err != nil {
-			return err
-		}
-		es = append(es, eq)
-		return nil
-	}
-	return es, c.store.List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (c *Controller) validateOutlet(eq Equipment) error {
@@ -55,14 +44,11 @@ func (c *Controller) Create(eq Equipment) error {
 	if err := c.validateOutlet(eq); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		eq.ID = id
-		return &eq
-	}
-	if err := c.store.Create(Bucket, fn); err != nil {
+	created, err := c.repo.Create(eq)
+	if err != nil {
 		return err
 	}
-	if err := c.updateOutlet(eq); err != nil {
+	if err := c.updateOutlet(created); err != nil {
 		log.Println("Failed to configure outlet")
 		return err
 	}
@@ -74,7 +60,7 @@ func (c *Controller) Update(id string, eq Equipment) error {
 	if err := c.validateOutlet(eq); err != nil {
 		return err
 	}
-	if err := c.store.Update(Bucket, id, eq); err != nil {
+	if err := c.repo.Update(id, eq); err != nil {
 		return err
 	}
 	return c.updateOutlet(eq)
@@ -85,7 +71,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	return c.store.Delete(Bucket, id)
+	return c.repo.Delete(id)
 }
 
 func (c *Controller) synEquipment() {
