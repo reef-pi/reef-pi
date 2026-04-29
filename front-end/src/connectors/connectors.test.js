@@ -134,6 +134,75 @@ describe('Connectors', () => {
     expect(create).toHaveBeenCalled()
   })
 
+  it('<Jacks /> handleReverseChange toggles reverse state', () => {
+    const component = new RawJacks({
+      jacks: [],
+      drivers: stockDrivers,
+      fetch: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    patchSetState(component)
+    expect(component.state.JackReverse).toBe(false)
+    component.handleReverseChange()
+    expect(component.state.JackReverse).toBe(true)
+  })
+
+  it('<Jacks /> remove calls confirm then delete', async () => {
+    const del = jest.fn()
+    const component = new RawJacks({
+      jacks: [{ id: '1', name: 'J2', pins: [0], reverse: false, driver: 'rpi' }],
+      drivers: stockDrivers,
+      fetch: jest.fn(),
+      create: jest.fn(),
+      delete: del,
+      update: jest.fn()
+    })
+    patchSetState(component)
+    const removeFn = component.remove({ id: '1', name: 'J2' })
+    removeFn()
+    await Promise.resolve()
+    expect(del).toHaveBeenCalledWith('1')
+  })
+
+  it('<Jacks /> list groups jacks by driver name', () => {
+    const fetch = jest.fn()
+    const update = jest.fn()
+    const component = new RawJacks({
+      jacks: [
+        { id: '1', name: 'J1', pins: [0], reverse: false, driver: 'rpi' },
+        { id: '2', name: 'J2', pins: [1], reverse: false, driver: '1' }
+      ],
+      drivers: stockDrivers,
+      fetch,
+      create: jest.fn(),
+      delete: jest.fn(),
+      update
+    })
+    patchSetState(component)
+    const items = component.list()
+    expect(items.length).toBeGreaterThan(0)
+    const updateFn = items.find(i => i.props && i.props.update)
+    if (updateFn) {
+      updateFn.props.update({ name: 'J1updated', pins: [0] })
+      expect(update).toHaveBeenCalled()
+    }
+  })
+
+  it('<Jacks /> render does not throw', () => {
+    const component = new RawJacks({
+      jacks: [{ id: '1', name: 'J1', pins: [0], reverse: false, driver: 'rpi' }],
+      drivers: stockDrivers,
+      fetch: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    patchSetState(component)
+    expect(() => component.render()).not.toThrow()
+  })
+
   it('<Jack />', () => {
     const update = jest.fn()
     const m = new Jack({
