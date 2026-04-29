@@ -1,7 +1,6 @@
 package lighting
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -43,21 +42,11 @@ func (l *Light) LoadChannels() error {
 }
 
 func (c *Controller) Get(id string) (Light, error) {
-	var l Light
-	return l, c.c.Store().Get(Bucket, id, &l)
+	return c.repo.Get(id)
 }
 
 func (c *Controller) List() ([]Light, error) {
-	ls := []Light{}
-	fn := func(_ string, v []byte) error {
-		var l Light
-		if err := json.Unmarshal(v, &l); err != nil {
-			return err
-		}
-		ls = append(ls, l)
-		return nil
-	}
-	return ls, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (c *Controller) validate(l *Light) error {
@@ -110,11 +99,9 @@ func (c *Controller) Create(l Light) error {
 	if err := c.validate(&l); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		l.ID = id
-		return &l
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	var err error
+	l, err = c.repo.Create(l)
+	if err != nil {
 		return nil
 	}
 	c.statsMgr.Initialize(l.ID)
@@ -133,7 +120,7 @@ func (c *Controller) Update(id string, l Light) error {
 	if err := c.validate(&l); err != nil {
 		return err
 	}
-	if err := c.c.Store().Update(Bucket, id, l); err != nil {
+	if err := c.repo.Update(id, l); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[l.ID]
@@ -154,7 +141,7 @@ func (c *Controller) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	if err := c.c.Store().Delete(Bucket, id); err != nil {
+	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[id]
