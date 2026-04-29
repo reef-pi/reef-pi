@@ -19,18 +19,20 @@ type Subsystem struct {
 	devMode    bool
 	running    map[string]struct{}
 	controller controller.Controller
+	repo       repository
 }
 
 func New(devMode bool, c controller.Controller) (*Subsystem, error) {
 	return &Subsystem{
 		devMode:    devMode,
 		controller: c,
+		repo:       newRepository(c.Store()),
 		running:    make(map[string]struct{}),
 	}, nil
 }
 
 func (s *Subsystem) Setup() error {
-	return s.controller.Store().CreateBucket(Bucket)
+	return s.repo.Setup()
 }
 
 func (s *Subsystem) Start() {
