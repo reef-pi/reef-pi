@@ -21,6 +21,7 @@ const CalibrationBucket = storage.PhCalibrationBucket
 type Controller struct {
 	sync.Mutex
 	c           controller.Controller
+	repo        repository
 	quitters    map[string]chan struct{}
 	statsMgr    telemetry.StatsManager
 	devMode     bool
@@ -32,6 +33,7 @@ func New(devMode bool, c controller.Controller) *Controller {
 	return &Controller{
 		quitters:    make(map[string]chan struct{}),
 		c:           c,
+		repo:        newRepository(c.Store()),
 		devMode:     devMode,
 		ais:         c.DM().AnalogInputs(),
 		statsMgr:    c.Telemetry().NewStatsManager(ReadingsBucket),
@@ -40,20 +42,15 @@ func New(devMode bool, c controller.Controller) *Controller {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
+	if err := c.repo.Setup(); err != nil {
 		return err
 	}
-	if err := c.c.Store().CreateBucket(CalibrationBucket); err != nil {
+	calibrations, err := c.repo.ListCalibrations()
+	if err != nil {
 		return err
 	}
-
-	err := c.c.Store().List(CalibrationBucket, func(k string, v []byte) error {
-		var ms []hal.Measurement
-		if err := json.Unmarshal(v, &ms); err != nil {
-			return err
-		}
+	for id, ms := range calibrations {
 		c.Lock()
-		defer c.Unlock()
 
 		var calibrator hal.Calibrator
 		var cerr error
@@ -63,15 +60,14 @@ func (c *Controller) Setup() error {
 			calibrator, cerr = hal.CalibratorFactory(ms)
 		}
 		if cerr == nil {
-			c.calibrators[k] = calibrator
+			c.calibrators[id] = calibrator
 		}
-		return cerr
-	})
-	if err != nil {
-		return err
+		c.Unlock()
+		if cerr != nil {
+			return cerr
+		}
 	}
-
-	return c.c.Store().CreateBucket(ReadingsBucket)
+	return nil
 }
 
 func (c *Controller) Start() {
