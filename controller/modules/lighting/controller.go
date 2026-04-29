@@ -31,6 +31,7 @@ type Controller struct {
 	jacks    *connectors.Jacks
 	config   Config
 	c        controller.Controller
+	repo     repository
 	quitters map[string]chan struct{}
 	statsMgr telemetry.StatsManager
 }
@@ -39,6 +40,7 @@ func New(conf Config, c controller.Controller) (*Controller, error) {
 	return &Controller{
 		Mutex:    sync.Mutex{},
 		c:        c,
+		repo:     newRepository(c.Store()),
 		jacks:    c.DM().Jacks(),
 		config:   conf,
 		quitters: make(map[string]chan struct{}),
@@ -89,10 +91,7 @@ func (c *Controller) Stop() {
 func (c *Controller) Setup() error {
 	c.Lock()
 	defer c.Unlock()
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
-		return err
-	}
-	return c.c.Store().CreateBucket(UsageBucket)
+	return c.repo.Setup()
 }
 
 func (c *Controller) On(id string, on bool) error {
