@@ -24,6 +24,7 @@ type Controller struct {
 	DevMode  bool
 	statsMgr telemetry.StatsManager
 	c        controller.Controller
+	repo     repository
 	mu       *sync.Mutex
 	runner   *cron.Cron
 	cronIDs  map[string]cron.EntryID
@@ -39,6 +40,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		runner:   cron.New(cron.WithParser(cron.NewParser(_cronParserSpec))),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
+		repo:     newRepository(c.Store()),
 	}, nil
 }
 func (c *Controller) GetEntity(id string) (controller.Entity, error) {
@@ -57,10 +59,7 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
-		return err
-	}
-	return c.c.Store().CreateBucket(UsageBucket)
+	return c.repo.Setup()
 }
 
 func (c *Controller) Start() {
