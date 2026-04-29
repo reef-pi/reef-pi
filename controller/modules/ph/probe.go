@@ -1,7 +1,6 @@
 package ph
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -77,21 +76,11 @@ type CalibrationPoint struct {
 }
 
 func (c *Controller) Get(id string) (Probe, error) {
-	var p Probe
-	return p, c.c.Store().Get(Bucket, id, &p)
+	return c.repo.Get(id)
 }
 
 func (c *Controller) List() ([]Probe, error) {
-	probes := []Probe{}
-	fn := func(_ string, v []byte) error {
-		var p Probe
-		if err := json.Unmarshal(v, &p); err != nil {
-			return err
-		}
-		probes = append(probes, p)
-		return nil
-	}
-	return probes, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (p Probe) Validate() error {
@@ -121,11 +110,8 @@ func (c *Controller) Create(p Probe) error {
 	if err := p.Validate(); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		p.ID = id
-		return &p
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	p, err := c.repo.Create(p)
+	if err != nil {
 		return err
 	}
 	c.statsMgr.Initialize(p.ID)
@@ -143,7 +129,7 @@ func (c *Controller) Update(id string, p Probe) error {
 	if err := p.Validate(); err != nil {
 		return err
 	}
-	if err := c.c.Store().Update(Bucket, id, p); err != nil {
+	if err := c.repo.Update(id, p); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[p.ID]
@@ -163,14 +149,13 @@ func (c *Controller) Update(id string, p Probe) error {
 func (c *Controller) Delete(id string) error {
 	c.Lock()
 	defer c.Unlock()
-	if err := c.c.Store().Delete(Bucket, id); err != nil {
+	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
 	}
 
-	c.c.Store().Delete(CalibrationBucket, id)
 	delete(c.calibrators, id)
 
 	quit, ok := c.quitters[id]
@@ -290,7 +275,7 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	defer c.Unlock()
 
 	c.calibrators[p.ID] = cal
-	return c.c.Store().Update(CalibrationBucket, p.ID, ms)
+	return c.repo.SaveCalibration(p.ID, ms)
 }
 
 func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
@@ -307,7 +292,9 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 	//Append to existing calibration unless the point is the mid point.
 	//Receiving a mid point calibration resets the calibration process.
 	if point.Type != "mid" {
-		if err := c.c.Store().Get(CalibrationBucket, p.ID, &calibration); err != nil {
+		var err error
+		calibration, err = c.repo.GetCalibration(p.ID)
+		if err != nil {
 			log.Println("ph-subsystem. No calibration data found for probe:", p.Name)
 		}
 		// Remove any existing point with the same expected value so re-calibrating
@@ -335,7 +322,7 @@ func (c *Controller) CalibratePoint(id string, point CalibrationPoint) error {
 		return err
 	}
 	c.calibrators[p.ID] = cal
-	return c.c.Store().Update(CalibrationBucket, p.ID, calibration)
+	return c.repo.SaveCalibration(p.ID, calibration)
 }
 
 func (p Probe) CreateFeed(t telemetry.Telemetry) {
