@@ -35,47 +35,27 @@ func (s *Subsystem) On(_ string, _ bool) error {
 }
 
 func (s *Subsystem) Get(id string) (Parameter, error) {
-	var p Parameter
-	return p, s.c.Store().Get(Bucket, id, &p)
+	return s.repo.Get(id)
 }
 func (s *Subsystem) List() ([]Parameter, error) {
-	params := []Parameter{}
-	fn := func(_ string, v []byte) error {
-		var p Parameter
-		if err := json.Unmarshal(v, &p); err != nil {
-			return err
-		}
-		params = append(params, p)
-		return nil
-	}
-	return params, s.c.Store().List(Bucket, fn)
+	return s.repo.List()
 }
 
 func (s *Subsystem) Create(p Parameter) error {
-	fn := func(id string) interface{} {
-		p.ID = id
-		return &p
-	}
-	if err := s.c.Store().Create(Bucket, fn); err != nil {
+	created, err := s.repo.Create(p)
+	if err != nil {
 		return err
 	}
-	s.statsMgr.Initialize(p.ID)
+	s.statsMgr.Initialize(created.ID)
 	return nil
 }
 
 func (s *Subsystem) Update(id string, p Parameter) error {
-	p.ID = id
-	return s.c.Store().Update(Bucket, id, p)
+	return s.repo.Update(id, p)
 }
 
 func (s *Subsystem) Delete(id string) error {
-	if err := s.c.Store().Delete(Bucket, id); err != nil {
-		return err
-	}
-	if err := s.c.Store().Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR: journal-subsystem: Failed to deleted usage details for journal:", id)
-	}
-	return nil
+	return s.repo.Delete(id)
 }
 
 func (s *Subsystem) AddEntry(id string, e Entry) error {
