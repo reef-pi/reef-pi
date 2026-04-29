@@ -25,6 +25,7 @@ type Config struct {
 type Controller struct {
 	config                    Config
 	c                         controller.Controller
+	repo                      repository
 	PowerFile, BrightnessFile string
 	isRaspberryPi             bool
 	model, ip                 string
@@ -34,6 +35,7 @@ func New(conf Config, c controller.Controller) *Controller {
 	con := &Controller{
 		config:         conf,
 		c:              c,
+		repo:           newRepository(c.Store()),
 		PowerFile:      PowerFile,
 		BrightnessFile: BrightnessFile,
 	}
@@ -55,7 +57,7 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	return c.c.Store().CreateBucket(Bucket)
+	return c.repo.Setup()
 }
 func (c *Controller) On(id string, on bool) error {
 	return nil
