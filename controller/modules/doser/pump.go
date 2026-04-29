@@ -1,7 +1,6 @@
 package doser
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -70,19 +69,16 @@ func (p *Pump) IsValid() error {
 }
 
 func (c *Controller) Get(id string) (Pump, error) {
-	var p Pump
-	return p, c.c.Store().Get(Bucket, id, &p)
+	return c.repo.Get(id)
 }
 
 func (c *Controller) Create(p Pump) error {
 	if err := p.IsValid(); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		p.ID = id
-		return &p
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	var err error
+	p, err = c.repo.Create(p)
+	if err != nil {
 		return err
 	}
 	c.statsMgr.Initialize(p.ID)
@@ -97,16 +93,7 @@ func (c *Controller) Create(p Pump) error {
 }
 
 func (c *Controller) List() ([]Pump, error) {
-	pumps := []Pump{}
-	fn := func(_ string, v []byte) error {
-		var p Pump
-		if err := json.Unmarshal(v, &p); err != nil {
-			return err
-		}
-		pumps = append(pumps, p)
-		return nil
-	}
-	return pumps, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 //swagger:model doserCalibrationDetails
@@ -131,7 +118,7 @@ func (c *Controller) SaveCalibrationResult(id string, cal CalibrationDetails) er
 		return err
 	}
 	p.Regiment.VolumePerSecond = cal.Volume / cal.Duration
-	return c.c.Store().Update(Bucket, id, p)
+	return c.repo.Update(id, p)
 }
 
 func (c *Controller) Calibrate(id string, cal CalibrationDetails) error {
@@ -157,7 +144,7 @@ func (c *Controller) Update(id string, p Pump) error {
 		return err
 	}
 	p.ID = id
-	if err := c.c.Store().Update(Bucket, id, p); err != nil {
+	if err := c.repo.Update(id, p); err != nil {
 		return err
 	}
 	c.mu.Lock()
@@ -196,7 +183,7 @@ func (c *Controller) Delete(id string) error {
 	}
 	c.mu.Unlock()
 	c.stopContinuous(id)
-	return c.c.Store().Delete(Bucket, id)
+	return c.repo.Delete(id)
 }
 
 func (p *Pump) Runner(dm *device_manager.DeviceManager, t telemetry.Telemetry, sm telemetry.StatsManager) cron.Job {
