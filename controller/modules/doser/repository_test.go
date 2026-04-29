@@ -19,13 +19,13 @@ func TestStoreRepositoryCRUD(t *testing.T) {
 	}
 
 	pump := Pump{
-		Name: "alk",
+		Name: "Alkalinity",
 		Jack: "jack-1",
 		Pin:  1,
 		Regiment: DosingRegiment{
 			Schedule: Schedule{Second: "0", Minute: "*", Hour: "*", Day: "*", Month: "*", Week: "*"},
-			Duration: 2,
-			Speed:    50,
+			Duration: 5,
+			Speed:    60,
 		},
 	}
 	created, err := repo.Create(pump)
@@ -40,12 +40,13 @@ func TestStoreRepositoryCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.Name != "alk" || got.Jack != "jack-1" {
+	if got.ID != "1" || got.Name != "Alkalinity" || got.Jack != "jack-1" {
 		t.Fatalf("unexpected pump: %#v", got)
 	}
 
-	got.Name = "calcium"
-	if err := repo.Update(got.ID, got); err != nil {
+	got.ID = "stale"
+	got.Name = "Calcium"
+	if err := repo.Update(created.ID, got); err != nil {
 		t.Fatal(err)
 	}
 
@@ -53,14 +54,14 @@ func TestStoreRepositoryCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(pumps) != 1 || pumps[0].Name != "calcium" {
+	if len(pumps) != 1 || pumps[0].ID != "1" || pumps[0].Name != "Calcium" {
 		t.Fatalf("unexpected pumps: %#v", pumps)
 	}
 
-	if err := repo.Delete(got.ID); err != nil {
+	if err := repo.Delete(created.ID); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := repo.Get(got.ID); err == nil {
+	if _, err := repo.Get(created.ID); err == nil {
 		t.Fatal("expected deleted pump lookup to fail")
 	}
 }
