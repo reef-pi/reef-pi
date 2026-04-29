@@ -22,6 +22,7 @@ type Controller struct {
 	mu      sync.Mutex
 	DevMode bool
 	c       controller.Controller
+	repo    repository
 }
 
 func New(devMode bool, c controller.Controller) (*Controller, error) {
@@ -31,6 +32,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		DevMode: devMode,
 		stopCh:  make(chan struct{}),
 		c:       c,
+		repo:    newRepository(c.Store()),
 	}, nil
 }
 
@@ -85,14 +87,14 @@ func (c *Controller) Stop() {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
+	if err := c.repo.Setup(); err != nil {
 		return err
 	}
-	conf, err := loadConfig(c.c.Store())
+	conf, err := c.repo.LoadConfig()
 	if err != nil {
 		log.Println("WARNING: camera config not found. Initializing default config")
 		conf = Default
-		if err := saveConfig(c.c.Store(), conf); err != nil {
+		if err := c.repo.SaveConfig(conf); err != nil {
 			log.Println("ERROR: Failed to save camera config. Error:", err)
 			return err
 		}
@@ -100,9 +102,6 @@ func (c *Controller) Setup() error {
 	c.mu.Lock()
 	c.config = conf
 	c.mu.Unlock()
-	if err := c.c.Store().CreateBucket(ItemBucket); err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -122,10 +121,8 @@ func (c *Controller) Capture() (string, error) {
 		log.Println("ERROR: Failed to execute image capture command:", command, "Error:", err)
 		return "", err
 	}
-	data := make(map[string]string)
-	data["image"] = imgName
 	log.Println("Camera subsystem: Image captured:", imgPath)
-	return imgName, c.c.Store().Update(Bucket, "latest", data)
+	return imgName, c.repo.SaveLatest(imgName)
 }
 
 func (c *Controller) uploadImage(imgName string) {

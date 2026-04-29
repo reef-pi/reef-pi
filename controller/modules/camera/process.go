@@ -1,7 +1,6 @@
 package camera
 
 import (
-	"encoding/json"
 	"image"
 	"image/jpeg"
 	_ "image/png"
@@ -46,22 +45,9 @@ func (c *Controller) Process(name string) error {
 	i := ImageItem{
 		Name: name,
 	}
-	fn := func(id string) interface{} {
-		i.ID = id
-		return &i
-	}
-	return c.c.Store().Create(ItemBucket, fn)
+	return c.repo.CreateItem(i)
 }
 
 func (c *Controller) List() ([]ImageItem, error) {
-	items := []ImageItem{}
-	fn := func(_ string, v []byte) error {
-		var i ImageItem
-		if err := json.Unmarshal(v, &i); err != nil {
-			return err
-		}
-		items = append(items, i)
-		return nil
-	}
-	return items, c.c.Store().List(ItemBucket, fn)
+	return c.repo.ListItems()
 }

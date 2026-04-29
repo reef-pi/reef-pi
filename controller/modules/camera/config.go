@@ -3,8 +3,6 @@ package camera
 import (
 	"fmt"
 	"time"
-
-	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 const DefaulCaptureFlags = ""
@@ -36,17 +34,12 @@ var Default = Config{
 	},
 }
 
-func loadConfig(store storage.Store) (Config, error) {
-	var conf Config
-	return conf, store.Get(Bucket, "config", &conf)
-}
-
-func saveConfig(store storage.Store, conf Config) error {
+func validateConfig(conf Config) error {
 	if conf.TickInterval <= 0 {
 		return fmt.Errorf("Tick Interval for camera controller must be greater than zero")
 	}
 	if conf.ImageDirectory == "" {
 		return fmt.Errorf("Image directory cant not be empty")
 	}
-	return store.Update(Bucket, "config", conf)
+	return nil
 }

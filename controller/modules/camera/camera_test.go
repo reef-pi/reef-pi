@@ -75,12 +75,12 @@ func TestCamera(t *testing.T) {
 	c.run()
 	conf := c.config
 	conf.TickInterval = -1
-	if err := saveConfig(con.Store(), conf); err == nil {
+	if err := c.repo.SaveConfig(conf); err == nil {
 		t.Error("config should not be saved if period is negative")
 	}
 	conf = c.config
 	conf.ImageDirectory = ""
-	if err := saveConfig(con.Store(), conf); err == nil {
+	if err := c.repo.SaveConfig(conf); err == nil {
 		t.Error("config should not be saved if image directory is empty")
 	}
 	if err := c.On("1", true); err == nil {
