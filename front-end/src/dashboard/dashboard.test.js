@@ -115,6 +115,39 @@ describe('Dashboard', () => {
     m.setID(1, 'foo')({})
   })
 
+  it('<ComponentSelector /> renders dropdown with active item', () => {
+    const hook = jest.fn()
+    const comps = {
+      c1: { id: '1', name: 'Alpha' },
+      c2: { id: '2', name: 'Beta' }
+    }
+    const m = new ComponentSelector({ hook, components: comps, current_id: '2', selector_id: 'test-sel' })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+    const tree = m.render()
+    expect(tree.type).toBe('div')
+    expect(tree.props.className).toBe('dropdown')
+  })
+
+  it('<ComponentSelector /> setID updates state and calls hook', () => {
+    const hook = jest.fn()
+    const comps = { c1: { id: '1', name: 'Alpha' } }
+    const m = new ComponentSelector({ hook, components: comps, current_id: '', selector_id: 'sel' })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+    m.setID('1', 'Alpha')({})
+    expect(m.state.current_id).toBe('1')
+    expect(m.state.title).toBe('Alpha')
+    expect(hook).toHaveBeenCalledWith('1')
+  })
+
+  it('<ComponentSelector /> render shows current item name as title when active', () => {
+    const comps = { c1: { id: '1', name: 'ActiveOne' } }
+    const m = new ComponentSelector({ hook: jest.fn(), components: comps, current_id: '1', selector_id: 'sel' })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+    const tree = m.render()
+    const button = tree.props.children[0]
+    expect(button.props.children).toBe('ActiveOne')
+  })
+
   it('<Config />', () => {
     const cells = [[{ type: 'ato', id: '1' }]]
     const config = { row: 1, column: 1, grid_details: cells }
