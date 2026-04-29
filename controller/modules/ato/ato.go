@@ -1,7 +1,6 @@
 package ato
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -48,20 +47,10 @@ func (c *Controller) On(id string, b bool) error {
 }
 
 func (c *Controller) Get(id string) (ATO, error) {
-	var a ATO
-	return a, c.c.Store().Get(Bucket, id, &a)
+	return c.repo.Get(id)
 }
 func (c *Controller) List() ([]ATO, error) {
-	atos := []ATO{}
-	fn := func(_ string, v []byte) error {
-		var a ATO
-		if err := json.Unmarshal(v, &a); err != nil {
-			return err
-		}
-		atos = append(atos, a)
-		return nil
-	}
-	return atos, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (c *Controller) Create(a ATO) error {
@@ -70,11 +59,9 @@ func (c *Controller) Create(a ATO) error {
 	if a.Period <= 0 {
 		return fmt.Errorf("Check period for ato controller must be greater than zero")
 	}
-	fn := func(id string) interface{} {
-		a.ID = id
-		return &a
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	var err error
+	a, err = c.repo.Create(a)
+	if err != nil {
 		return err
 	}
 	c.statsMgr.Initialize(a.ID)
@@ -97,7 +84,7 @@ func (c *Controller) Update(id string, a ATO) error {
 	if a.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", a.Period)
 	}
-	if err := c.c.Store().Update(Bucket, id, a); err != nil {
+	if err := c.repo.Update(id, a); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[a.ID]
@@ -130,7 +117,7 @@ func (c *Controller) Reset(id string) error {
 	if err := c.statsMgr.Delete(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
 	}
-	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
+	if err := c.repo.DeleteUsage(id); err != nil {
 		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
 	}
 	c.mu.Lock()
@@ -144,11 +131,8 @@ func (c *Controller) Reset(id string) error {
 }
 
 func (c *Controller) Delete(id string) error {
-	if err := c.c.Store().Delete(Bucket, id); err != nil {
+	if err := c.repo.Delete(id); err != nil {
 		return err
-	}
-	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id)
 	}
 	quit, ok := c.quitters[id]
 	if ok {

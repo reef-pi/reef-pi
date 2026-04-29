@@ -24,6 +24,7 @@ type Controller struct {
 	mu       *sync.Mutex
 	inlets   *connectors.Inlets
 	c        controller.Controller
+	repo     repository
 	lowSince map[string]*time.Time
 }
 
@@ -35,6 +36,7 @@ func New(devMode bool, c controller.Controller) (*Controller, error) {
 		quitters: make(map[string]chan struct{}),
 		statsMgr: c.Telemetry().NewStatsManager(UsageBucket),
 		c:        c,
+		repo:     newRepository(c.Store()),
 		lowSince: make(map[string]*time.Time),
 	}
 	return con, nil
@@ -63,10 +65,7 @@ func (c *Controller) sub(a ATO) (controller.Subsystem, error) {
 }
 
 func (c *Controller) Setup() error {
-	if err := c.c.Store().CreateBucket(Bucket); err != nil {
-		return err
-	}
-	return c.c.Store().CreateBucket(UsageBucket)
+	return c.repo.Setup()
 }
 
 func (c *Controller) Start() {
