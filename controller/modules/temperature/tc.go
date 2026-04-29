@@ -1,7 +1,6 @@
 package temperature
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"sync"
@@ -78,16 +77,7 @@ func (c *Controller) Get(id string) (*TC, error) {
 }
 
 func (c *Controller) List() ([]*TC, error) {
-	tcs := []*TC{}
-	fn := func(_ string, v []byte) error {
-		var tc TC
-		if err := json.Unmarshal(v, &tc); err != nil {
-			return err
-		}
-		tcs = append(tcs, &tc)
-		return nil
-	}
-	return tcs, c.c.Store().List(Bucket, fn)
+	return c.repo.List()
 }
 
 func (c *Controller) Create(tc *TC) error {
@@ -96,11 +86,7 @@ func (c *Controller) Create(tc *TC) error {
 	if tc.Period <= 0 {
 		return fmt.Errorf("Check period for temperature controller must be greater than zero")
 	}
-	fn := func(id string) interface{} {
-		tc.ID = id
-		return tc
-	}
-	if err := c.c.Store().Create(Bucket, fn); err != nil {
+	if err := c.repo.Create(tc); err != nil {
 		return err
 	}
 
@@ -125,7 +111,7 @@ func (c *Controller) Update(id string, tc *TC) error {
 	if tc.Period <= 0 {
 		return fmt.Errorf("Period should be positive. Supplied:%d", tc.Period)
 	}
-	if err := c.c.Store().Update(Bucket, id, tc); err != nil {
+	if err := c.repo.Update(id, tc); err != nil {
 		return err
 	}
 	quit, ok := c.quitters[tc.ID]
@@ -169,14 +155,14 @@ func (c *Controller) Delete(id string) error {
 
 	if deleteCalibration {
 
-		c.c.Store().Delete(CalibrationBucket, tc.Sensor)
+		c.repo.DeleteCalibration(tc.Sensor)
 		delete(c.calibrators, tc.Sensor)
 	}
 
-	if err := c.c.Store().Delete(Bucket, id); err != nil {
+	if err := c.repo.Delete(id); err != nil {
 		return err
 	}
-	if err := c.c.Store().Delete(UsageBucket, id); err != nil {
+	if err := c.repo.DeleteUsage(id); err != nil {
 		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
 	}
 
@@ -278,7 +264,7 @@ func (c *Controller) Calibrate(id string, ms []hal.Measurement) error {
 	defer c.Unlock()
 
 	c.calibrators[tc.Sensor] = cal
-	return c.c.Store().Update(CalibrationBucket, tc.Sensor, ms)
+	return c.repo.UpdateCalibration(tc.Sensor, ms)
 }
 
 func (t *TC) WithinRange(v float64) bool {
