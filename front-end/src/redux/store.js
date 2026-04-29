@@ -15,8 +15,5 @@ export const setStore = (store) => {
 }
 
 export const getStore = () => {
-  if (!appStore) {
-    appStore = configureStore()
-  }
   return appStore
 }
