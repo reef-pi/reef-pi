@@ -13,20 +13,17 @@ type Credentials struct {
 }
 
 type CredentialsManager struct {
-	store  storage.Store
-	bucket string
+	repo credentialsRepository
 }
 
 func NewCredentialsManager(store storage.Store, bucket string) *CredentialsManager {
 	return &CredentialsManager{
-		store:  store,
-		bucket: bucket,
+		repo: newCredentialsRepository(store, bucket),
 	}
 }
 
 func (cs *CredentialsManager) Get() (Credentials, error) {
-	var c Credentials
-	return c, cs.store.Get(cs.bucket, "credentials", &c)
+	return cs.repo.Get()
 }
 
 func (cs *CredentialsManager) Update(credentials Credentials) error {
@@ -34,7 +31,7 @@ func (cs *CredentialsManager) Update(credentials Credentials) error {
 	if err != nil {
 		return err
 	}
-	return cs.store.Update(cs.bucket, "credentials", Credentials{
+	return cs.repo.Update(Credentials{
 		User:     credentials.User,
 		Password: string(hash),
 	})
