@@ -153,7 +153,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
-		log.Println("ERROR: ph sub-system: Failed to deleted readings for probe:", id)
+		log.Println("ERROR: ph sub-system: Failed to delete readings for probe:", id)
 	}
 
 	delete(c.calibrators, id)

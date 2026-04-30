@@ -115,10 +115,10 @@ func (c *Controller) Reset(id string) error {
 		delete(c.quitters, id)
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
-		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
+		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
 	if err := c.repo.DeleteUsage(id); err != nil {
-		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id, "error:", err)
+		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id, "error:", err)
 	}
 	c.mu.Lock()
 	defer c.mu.Unlock()

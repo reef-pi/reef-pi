@@ -68,7 +68,7 @@ func (r storeRepository) Delete(id string) error {
 		return err
 	}
 	if err := r.store.Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR: journal-subsystem: Failed to deleted usage details for journal:", id)
+		log.Println("ERROR: journal-subsystem: Failed to delete usage details for journal:", id)
 	}
 	return nil
 }
