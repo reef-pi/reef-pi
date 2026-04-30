@@ -25,13 +25,6 @@ func (r *driverRepository) get(id string) (Driver, error) {
 	return d, nil
 }
 
-func (r *driverRepository) Get(bucket, id string, d interface{}) error {
-	if bucket != DriverBucket {
-		return storage.ErrDoesNotExist
-	}
-	return r.store.Get(DriverBucket, id, d)
-}
-
 func (r *driverRepository) create(d Driver) (Driver, error) {
 	fn := func(id string) interface{} {
 		d.ID = id
