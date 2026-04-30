@@ -100,7 +100,7 @@ func (c *Controller) Stop() {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ph controller. Failed to save usage. Error:", err)
 		}
-		log.Println("ph sub-system: Saved usaged data of sensor:", id)
+		log.Println("ph subsystem: Saved usage data of sensor:", id)
 		delete(c.quitters, id)
 	}
 }

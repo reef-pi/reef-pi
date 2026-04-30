@@ -153,7 +153,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.statsMgr.Delete(id); err != nil {
-		log.Println("ERROR: ph sub-system: Failed to delete readings for probe:", id)
+		log.Println("ERROR: ph subsystem: Failed to delete readings for probe:", id)
 	}
 
 	delete(c.calibrators, id)
@@ -197,7 +197,7 @@ func (c *Controller) Read(p Probe) (float64, error) {
 
 func (c *Controller) Run(p Probe, quit chan struct{}) error {
 	if p.Period <= 0 {
-		log.Printf("ERROR:ph sub-system. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
+		log.Printf("ERROR: ph subsystem. Invalid period set for probe:%s. Expected positive, found:%d\n", p.Name, p.Period)
 		return fmt.Errorf("invalid period: %d for probe: %s", p.Period, p.Name)
 	}
 	if p.Control {
@@ -228,7 +228,7 @@ func (c *Controller) Run(p Probe, quit chan struct{}) error {
 func (c *Controller) checkAndControl(p Probe) (float64, error) {
 	reading, err := c.Read(p)
 	if err != nil {
-		log.Println("ph sub-system: ERROR: Failed to read probe:", p.Name, ". Error:", err)
+		log.Println("ph subsystem: ERROR: Failed to read probe:", p.Name, ". Error:", err)
 		c.c.LogError("ph-"+p.ID, "ph subsystem: Failed read probe:"+p.Name+"Error:"+err.Error())
 		return 0, err
 	}
@@ -240,7 +240,7 @@ func (c *Controller) checkAndControl(p Probe) (float64, error) {
 		reading = calibrator.Calibrate(reading)
 	}
 
-	log.Println("ph sub-system: Probe:", p.Name, "Reading:", reading)
+	log.Println("ph subsystem: Probe:", p.Name, "Reading:", reading)
 	notifyIfNeeded(c.c.Telemetry(), p, reading)
 	u := controller.NewObservation(reading)
 	if p.Control {
