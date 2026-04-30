@@ -79,9 +79,9 @@ var _wrongArguments = errors.New("incorrect number of arguments at least action 
 const dbHelpText = `
     Usage: reef-pi db [sub-command] [OPTIONS]
 
-    A command line tool to introspect and manipulate objects in reef-pi databse. reef-pi
-    controller must be stopped before using this tool. It is intended to for diagnostic
-    and troubleshooting purpoose.
+    A command line tool to introspect and manipulate objects in reef-pi database. reef-pi
+    controller must be stopped before using this tool. It is intended for diagnostic
+    and troubleshooting purpose.
 
     valid sub-commands: buckets |  list | show | create | update | delete
 
@@ -95,7 +95,7 @@ const dbHelpText = `
      Show an individual entry with given id from a bucket
          reef-pi db show atos 1
 
-     Crate an item in a bucket from a json input file
+     Create an item in a bucket from a json input file
          reef-pi db create atos -input sample_ato.json
 
      Update an item in a bucket from a json input file
@@ -208,14 +208,14 @@ func (cmd *dbCmd) Show() error {
 	id := cmd.args[2]
 	d, err := cmd.repo.RawGet(cmd.bucket(), id)
 	if err != nil {
-		return fmt.Errorf("failed to get item %s due database eror:%w", id, err)
+		return fmt.Errorf("failed to get item %s due database error:%w", id, err)
 	}
 	return cmd.Output(d)
 }
 func (cmd *dbCmd) Buckets() error {
 	buckets, err := cmd.repo.Buckets()
 	if err != nil {
-		return fmt.Errorf("failed to get list buckets  due database eror:%w", err)
+		return fmt.Errorf("failed to get list buckets  due database error:%w", err)
 	}
 	sort.Strings(buckets)
 	return cmd.Output([]byte(strings.Join(buckets, "\n")))
