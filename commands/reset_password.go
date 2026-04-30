@@ -12,11 +12,11 @@ import (
 func resetPassword(db, u, p string) {
 	store, err := storage.NewStore(db)
 	if u == "" {
-		fmt.Println("username can not be empty")
+		fmt.Println("username cannot be empty")
 		os.Exit(1)
 	}
 	if p == "" {
-		fmt.Println("password can not be empty")
+		fmt.Println("password cannot be empty")
 		os.Exit(1)
 	}
 	if err != nil {

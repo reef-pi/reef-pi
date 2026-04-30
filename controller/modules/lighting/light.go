@@ -51,7 +51,7 @@ func (c *Controller) List() ([]Light, error) {
 
 func (c *Controller) validate(l *Light) error {
 	if l.Name == "" {
-		return fmt.Errorf("Light name can not be empty")
+		return fmt.Errorf("Light name cannot be empty")
 	}
 	existing, err := c.List()
 	if err != nil {

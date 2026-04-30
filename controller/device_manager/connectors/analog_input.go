@@ -39,7 +39,7 @@ func (j AnalogInput) channel(drvrs *drivers.Drivers) (hal.AnalogInputPin, error)
 
 func (j AnalogInput) IsValid(drvrs *drivers.Drivers) error {
 	if j.Name == "" {
-		return fmt.Errorf("AnalogInput name can not be empty")
+		return fmt.Errorf("AnalogInput name cannot be empty")
 	}
 	_, err := j.channel(drvrs)
 	if err != nil {

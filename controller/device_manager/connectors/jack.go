@@ -41,7 +41,7 @@ func (j Jack) pwmChannel(channel int, drvrs *drivers.Drivers) (hal.PWMChannel, e
 
 func (j Jack) IsValid(drvrs *drivers.Drivers) error {
 	if j.Name == "" {
-		return fmt.Errorf("Jack name can not be empty")
+		return fmt.Errorf("Jack name cannot be empty")
 	}
 	if len(j.Pins) == 0 {
 		return fmt.Errorf("Jack should have pins associated with it")
