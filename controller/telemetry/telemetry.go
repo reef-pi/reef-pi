@@ -311,9 +311,9 @@ func (t *telemetry) CreateFeedIfNotExist(f string) {
 		Enabled: true,
 	}
 	if _, err := t.aClient.GetFeed(aio.User, f); err != nil {
-		log.Println("Telemetry sub-system: Creating missing feed:", f)
+		log.Println("Telemetry subsystem: Creating missing feed:", f)
 		if e := t.aClient.CreateFeed(aio.User, feed); e != nil {
-			log.Println("ERROR: Telemetry sub-system: Failed to create feed:", f, "Error:", e)
+			log.Println("ERROR: Telemetry subsystem: Failed to create feed:", f, "Error:", e)
 		}
 	}
 }
@@ -356,8 +356,8 @@ func (t *telemetry) DeleteFeedIfExist(f string) {
 	if !aio.Enable {
 		return
 	}
-	log.Println("Telemetry sub-system: Deleting feed:", f)
+	log.Println("Telemetry subsystem: Deleting feed:", f)
 	if err := t.aClient.DeleteFeed(aio.User, f); err != nil {
-		log.Println("ERROR: Telemetry sub-system: Failed to delete feed:", f, "Error:", err)
+		log.Println("ERROR: Telemetry subsystem: Failed to delete feed:", f, "Error:", err)
 	}
 }
