@@ -1,7 +1,6 @@
 package connectors
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -28,7 +27,7 @@ type Inlet struct {
 }
 
 type Inlets struct {
-	store   storage.Store
+	repo    inletRepository
 	drivers *drivers.Drivers
 }
 
@@ -161,13 +160,13 @@ func (i Inlet) IsValid(drivers *drivers.Drivers) error {
 
 func NewInlets(drivers *drivers.Drivers, store storage.Store) *Inlets {
 	return &Inlets{
-		store:   store,
+		repo:    newInletRepository(store),
 		drivers: drivers,
 	}
 }
 
 func (c *Inlets) Setup() error {
-	return c.store.CreateBucket(InletBucket)
+	return c.repo.Setup()
 }
 
 func (c *Inlets) Read(id string) (int, error) {
@@ -195,11 +194,7 @@ func (c *Inlets) Create(i Inlet) error {
 	if err := i.IsValid(c.drivers); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		i.ID = id
-		return &i
-	}
-	return c.store.Create(InletBucket, fn)
+	return c.repo.Create(i)
 }
 
 func (c *Inlets) Update(id string, i Inlet) error {
@@ -207,20 +202,11 @@ func (c *Inlets) Update(id string, i Inlet) error {
 	if err := i.IsValid(c.drivers); err != nil {
 		return err
 	}
-	return c.store.Update(InletBucket, id, i)
+	return c.repo.Update(id, i)
 }
 
 func (c *Inlets) List() ([]Inlet, error) {
-	inlets := []Inlet{}
-	fn := func(_ string, v []byte) error {
-		var i Inlet
-		if err := json.Unmarshal(v, &i); err != nil {
-			return err
-		}
-		inlets = append(inlets, i)
-		return nil
-	}
-	return inlets, c.store.List(InletBucket, fn)
+	return c.repo.List()
 }
 
 func (c *Inlets) Delete(id string) error {
@@ -231,12 +217,11 @@ func (c *Inlets) Delete(id string) error {
 	if i.Equipment != "" {
 		return fmt.Errorf("Inlet: %s has equipment: %s attached to it.", i.Name, i.Equipment)
 	}
-	return c.store.Delete(InletBucket, id)
+	return c.repo.Delete(id)
 }
 
 func (c *Inlets) Get(id string) (Inlet, error) {
-	var i Inlet
-	return i, c.store.Get(InletBucket, id, &i)
+	return c.repo.Get(id)
 }
 
 func (c *Inlets) get(w http.ResponseWriter, r *http.Request) {
