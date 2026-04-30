@@ -108,7 +108,7 @@ func (c *Controller) Stop() {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: ato controller. Failed to save usage. Error:", err)
 		}
-		log.Println("ato sub-system: Saved usage data of sensor:", id)
+		log.Println("ato subsystem: Saved usage data of sensor:", id)
 	}
 	c.wg.Wait()
 }
