@@ -280,7 +280,7 @@ func TestEmitMetricMQTTErrorLogs(t *testing.T) {
 	tele := TestTelemetry(store)
 	tele.config.MQTT.Enable = true
 	tele.logError = func(subject, body string) error {
-		logged = subject == "telemtry-mqtt" && strings.Contains(body, "publish failed")
+		logged = subject == "telemetry-mqtt" && strings.Contains(body, "publish failed")
 		return nil
 	}
 	tele.mClient = &MQTTClient{
