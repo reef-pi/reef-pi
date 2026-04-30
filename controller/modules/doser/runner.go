@@ -24,7 +24,7 @@ func (r *Runner) Run() {
 	if r.pump.Type == "stepper" && r.pump.Stepper != nil {
 		log.Println("doser sub system: running doser(stepper)", r.pump.Name, "for", r.pump.Regiment.Volume, "(ml)")
 		if err := r.pump.Stepper.Dose(r.dm.Outlets(), r.pump.Regiment.Volume); err != nil {
-			log.Println("ERROR: dosing sub-system. Failed to run stepper. Error:", err)
+			log.Println("ERROR: dosing subsystem. Failed to run stepper. Error:", err)
 			return
 		}
 		usage.Pump = int(r.pump.Regiment.Duration)
@@ -35,7 +35,7 @@ func (r *Runner) Run() {
 		}
 		log.Println("doser sub system: running doser(dcmotor)", r.pump.Name, "at", r.pump.Regiment.Speed, "%speed for", duration, "(s)")
 		if err := r.PWMDose(r.pump.Regiment.Speed, duration); err != nil {
-			log.Println("ERROR: dosing sub-system. Failed to control jack. Error:", err)
+			log.Println("ERROR: dosing subsystem. Failed to control jack. Error:", err)
 			return
 		}
 		usage.Pump = int(duration)

@@ -149,7 +149,7 @@ func (c *Controller) Update(id string, p Pump) error {
 	}
 	c.mu.Lock()
 	if cID, ok := c.cronIDs[id]; ok {
-		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
+		log.Printf("doser subsystem. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 		delete(c.cronIDs, id)
 	}
@@ -177,7 +177,7 @@ func (c *Controller) Schedule(id string, r DosingRegiment) error {
 func (c *Controller) Delete(id string) error {
 	c.mu.Lock()
 	if cID, ok := c.cronIDs[id]; ok {
-		log.Printf("doser sub-system. Removing cron entry %d for pump id: %s.\n", cID, id)
+		log.Printf("doser subsystem. Removing cron entry %d for pump id: %s.\n", cID, id)
 		c.runner.Remove(cID)
 		delete(c.cronIDs, id)
 	}
