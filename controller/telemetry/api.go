@@ -19,8 +19,8 @@ const AdafruitIOTokenStoredPlaceholder = "<stored>"
 
 func (t *telemetry) GetConfig(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
-		var c TelemetryConfig
-		if err := t.store.Get(t.bucket, DBKey, &c); err != nil {
+		c, err := t.configRepository().get()
+		if err != nil {
 			return nil, err
 		}
 		if c.AdafruitIO.Token != "" {
@@ -37,8 +37,7 @@ func (t *telemetry) GetConfig(w http.ResponseWriter, req *http.Request) {
 func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 	var c TelemetryConfig
 
-	var existingConfig TelemetryConfig
-	var readErr = t.store.Get(t.bucket, DBKey, &existingConfig)
+	existingConfig, readErr := t.configRepository().get()
 	if readErr != nil {
 		if errors.Is(readErr, storage.ErrDoesNotExist) {
 			utils.ErrorResponse(http.StatusInternalServerError, "Failed to update. Error: "+readErr.Error(), w)
@@ -55,7 +54,7 @@ func (t *telemetry) UpdateConfig(w http.ResponseWriter, req *http.Request) {
 				c.Mailer.Password = existingConfig.Mailer.Password
 			}
 		}
-		if err := t.store.Update(t.bucket, DBKey, c); err != nil {
+		if err := t.configRepository().update(c); err != nil {
 			return err
 		}
 		t.applyConfig(c)
