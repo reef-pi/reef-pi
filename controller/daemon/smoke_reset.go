@@ -1,11 +1,23 @@
 package daemon
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
+
+type smokeResetStore interface {
+	DeleteBucket(string) error
+	CreateBucket(string) error
+	Update(string, string, interface{}) error
+}
+
+type smokeResetService struct {
+	store   smokeResetStore
+	buckets []string
+}
 
 var smokeResetBuckets = []string{
 	storage.ATOBucket,
@@ -32,25 +44,38 @@ var smokeResetBuckets = []string{
 	storage.TimerBucket,
 }
 
+func newSmokeResetService(store smokeResetStore) smokeResetService {
+	return smokeResetService{
+		store:   store,
+		buckets: smokeResetBuckets,
+	}
+}
+
+func (s smokeResetService) Reset() error {
+	for _, bucket := range s.buckets {
+		if err := s.store.DeleteBucket(bucket); err != nil {
+			return fmt.Errorf("Failed to reset smoke bucket. Error: %w", err)
+		}
+		if err := s.store.CreateBucket(bucket); err != nil {
+			return fmt.Errorf("Failed to initialize smoke bucket. Error: %w", err)
+		}
+	}
+
+	if err := s.store.Update(Bucket, "dashboard", DefaultDashboard); err != nil {
+		return fmt.Errorf("Failed to reset dashboard. Error: %w", err)
+	}
+
+	return nil
+}
+
 func (r *ReefPi) ResetSmokeState(w http.ResponseWriter, req *http.Request) {
 	if !r.settings.Capabilities.DevMode {
 		utils.ErrorResponse(http.StatusNotFound, "dev smoke reset unavailable", w)
 		return
 	}
 
-	for _, bucket := range smokeResetBuckets {
-		if err := r.store.DeleteBucket(bucket); err != nil {
-			utils.ErrorResponse(http.StatusInternalServerError, "Failed to reset smoke bucket. Error: "+err.Error(), w)
-			return
-		}
-		if err := r.store.CreateBucket(bucket); err != nil {
-			utils.ErrorResponse(http.StatusInternalServerError, "Failed to initialize smoke bucket. Error: "+err.Error(), w)
-			return
-		}
-	}
-
-	if err := r.store.Update(Bucket, "dashboard", DefaultDashboard); err != nil {
-		utils.ErrorResponse(http.StatusInternalServerError, "Failed to reset dashboard. Error: "+err.Error(), w)
+	if err := newSmokeResetService(r.store).Reset(); err != nil {
+		utils.ErrorResponse(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
 
