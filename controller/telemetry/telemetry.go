@@ -94,7 +94,7 @@ func Initialize(name, bucket string, store storage.Store, logError ErrorLogger, 
 	repo := newTelemetryConfigRepository(store, bucket)
 	c, err := repo.get()
 	if err != nil {
-		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
+		log.Println("ERROR: Failed to load telemetry config from saved settings. Initializing")
 		c = DefaultTelemetryConfig
 		repo.update(c)
 	}
@@ -133,7 +133,7 @@ func NewTelemetry(name, bucket string, store storage.Store, config TelemetryConf
 	if config.MQTT.Enable {
 		mClient, err := NewMQTTClient(config.MQTT)
 		if err != nil {
-			lr("telemety-subsystem", "Failed to initialize mqtt client:"+err.Error())
+			lr("telemetry-subsystem", "Failed to initialize mqtt client:"+err.Error())
 			// Network may not be ready at boot (DHCP/DNS still pending). Retry in background.
 			go t.mqttReconnectLoop()
 		} else {
@@ -270,13 +270,13 @@ func (t *telemetry) EmitMetric(module, name string, v float64) {
 		aFeed := SanitizeAdafruitIOFeedName(aio.Prefix + module + "-" + name)
 		if err := t.EmitAIO(aio.User, aFeed, v); err != nil {
 			log.Println("ERROR: Failed to submit data to adafruit.io. User: ", aio.User, "Feed:", aFeed, "Error:", err)
-			t.logError("telemtry-"+aFeed, err.Error())
+			t.logError("telemetry-"+aFeed, err.Error())
 		}
 	}
 	if t.config.MQTT.Enable {
 		if err := t.EmitMQTT(pName, v); err != nil {
 			log.Println("ERROR: Failed to publish data via mqtt. Error:", err)
-			t.logError("telemtry-mqtt", err.Error())
+			t.logError("telemetry-mqtt", err.Error())
 		}
 	}
 }
