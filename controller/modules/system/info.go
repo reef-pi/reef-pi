@@ -47,18 +47,18 @@ func (c *Controller) ComputeSummary() Summary {
 	return s
 }
 
-const _unknwonIface = "unknown"
+const unknownIface = "unknown"
 
 func HostIP(i string) string {
 	iface, err := net.InterfaceByName(i)
 	if err != nil {
-		log.Println("WARN: Failed to obatin interface details: "+i+". Error:", err)
-		return _unknwonIface
+		log.Println("WARN: Failed to obtain interface details: "+i+". Error:", err)
+		return unknownIface
 	}
 	addrs, err := iface.Addrs()
 	if err != nil {
 		log.Println("WARN: Failed to fetch address for interface: "+i+". Error:", err)
-		return _unknwonIface
+		return unknownIface
 	}
 	for _, v := range addrs {
 		switch s := v.(type) {
@@ -69,7 +69,7 @@ func HostIP(i string) string {
 		}
 	}
 	log.Println("WARN: interface " + i + " has no associated ip")
-	return _unknwonIface
+	return unknownIface
 }
 
 // temp=36.9'C
