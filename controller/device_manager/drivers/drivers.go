@@ -19,7 +19,7 @@ import (
 type Drivers struct {
 	sync.Mutex
 	drivers       map[string]hal.Driver
-	store         storage.Store
+	store         *driverRepository
 	pwm_freq      int
 	bus           i2c.Bus
 	t             telemetry.Telemetry
@@ -28,12 +28,13 @@ type Drivers struct {
 }
 
 func NewDrivers(s settings.Settings, bus i2c.Bus, store storage.Store, t telemetry.Telemetry) (*Drivers, error) {
-	if err := store.CreateBucket(DriverBucket); err != nil {
+	repository, err := newDriverRepository(store)
+	if err != nil {
 		return nil, err
 	}
 	d := &Drivers{
 		drivers:  make(map[string]hal.Driver),
-		store:    store,
+		store:    repository,
 		pwm_freq: s.RPI_PWMFreq,
 		bus:      bus,
 		t:        t,
@@ -59,8 +60,8 @@ func isPiArch(a string) bool {
 }
 
 func (d *Drivers) Get(id string) (Driver, error) {
-	var dr Driver
-	if err := d.store.Get(DriverBucket, id, &dr); err != nil {
+	dr, err := d.store.get(id)
+	if err != nil {
 		return dr, err
 	}
 	driver, ok := d.drivers[id]
@@ -135,10 +136,6 @@ func parseParams(data json.RawMessage) map[string]interface{} {
 }
 
 func (d *Drivers) Create(d1 Driver) error {
-	fn := func(id string) interface{} {
-		d1.ID = id
-		return &d1
-	}
 	factory, err := AbstractFactory(d1.Type)
 	if err != nil {
 		return err
@@ -149,13 +146,14 @@ func (d *Drivers) Create(d1 Driver) error {
 	}
 	factory.ValidateParameters(d1.Parameters)
 
-	if err := d.store.Create(DriverBucket, fn); err != nil {
+	d1, err = d.store.create(d1)
+	if err != nil {
 		return err
 	}
 
 	if err := d.register(d1, factory); err != nil {
 		// Registration has failed, we need to de-allocate the DB entry
-		_ = d.store.Delete(DriverBucket, d1.ID)
+		_ = d.store.delete(d1.ID)
 		return err
 	}
 	if d.OnCreate != nil {
@@ -170,7 +168,7 @@ func (d *Drivers) Update(id string, d1 Driver) error {
 	}
 
 	d1.ID = id
-	return d.store.Update(DriverBucket, id, d1)
+	return d.store.update(id, d1)
 }
 
 func (d *Drivers) Delete(id string) error {
@@ -184,27 +182,25 @@ func (d *Drivers) Delete(id string) error {
 		driver.Close()
 		delete(d.drivers, id)
 	}
-	return d.store.Delete(DriverBucket, id)
+	return d.store.delete(id)
 }
 
 func (d *Drivers) Size() int {
 	return len(d.drivers)
 }
 func (d *Drivers) List() ([]Driver, error) {
-	ds := []Driver{}
-	fn := func(_ string, v []byte) error {
-		var d1 Driver
-		if err := json.Unmarshal(v, &d1); err != nil {
-			return err
-		}
+	ds, err := d.store.list()
+	if err != nil {
+		return nil, err
+	}
+	for i := range ds {
+		d1 := &ds[i]
 		dr, ok := d.drivers[d1.ID]
 		if ok {
 			d1.loadPinMap(dr)
 		}
-		ds = append(ds, d1)
-		return nil
 	}
-	return ds, d.store.List(DriverBucket, fn)
+	return ds, nil
 }
 
 func (d *Drivers) ListOptions() (map[string][]hal.ConfigParameter, error) {
