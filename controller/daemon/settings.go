@@ -12,8 +12,7 @@ import (
 )
 
 func loadSettings(store storage.Store) (settings.Settings, error) {
-	var s settings.Settings
-	return s, store.Get(Bucket, "settings", &s)
+	return newSettingsRepository(store).Load()
 }
 
 func initializeSettings(store storage.Store) (settings.Settings, error) {
@@ -32,17 +31,17 @@ func initializeSettings(store storage.Store) (settings.Settings, error) {
 		settings.DefaultSettings.Address = "0.0.0.0:8080"
 		log.Println("DEV_MODE environment variable set. Turning on dev_mode. Address set to localhost:8080")
 	}
-	if err := store.CreateBucket(Bucket); err != nil {
+	if err := newSettingsRepository(store).Setup(settings.DefaultSettings); err != nil {
 		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
 		return settings.DefaultSettings, err
 	}
-	return settings.DefaultSettings, store.Update(Bucket, "settings", settings.DefaultSettings)
+	return settings.DefaultSettings, nil
 }
 
 func (r *ReefPi) GetSettings(w http.ResponseWriter, req *http.Request) {
 	fn := func(_ string) (interface{}, error) {
-		var s settings.Settings
-		return &s, r.store.Get(Bucket, "settings", &s)
+		s, err := newSettingsRepository(r.store).Load()
+		return &s, err
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
@@ -53,7 +52,7 @@ func (r *ReefPi) UpdateSettings(w http.ResponseWriter, req *http.Request) {
 		if err := s.Validate(); err != nil {
 			return err
 		}
-		return r.store.Update(Bucket, "settings", s)
+		return newSettingsRepository(r.store).Update(s)
 	}
 	utils.JSONUpdateResponse(&s, fn, w, req)
 }
