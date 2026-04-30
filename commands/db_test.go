@@ -41,14 +41,14 @@ func setupTestDB(t *testing.T) (string, func()) {
 }
 
 // openStore opens a BoltDB store (already seeded by setupTestDB) and returns a
-// dbCmd whose store is set and a cleanup func.
+// dbCmd whose repository is set and a cleanup func.
 func openCmd(t *testing.T, dbPath string, args []string) (*dbCmd, func()) {
 	t.Helper()
 	s, err := storage.NewStore(dbPath)
 	if err != nil {
 		t.Fatalf("openCmd: failed to open %s: %v", dbPath, err)
 	}
-	return &dbCmd{sPath: dbPath, args: args, store: s}, func() { s.Close() }
+	return &dbCmd{sPath: dbPath, args: args, repo: newDBRepository(s)}, func() { s.Close() }
 }
 
 func TestNewDBCmd(t *testing.T) {
