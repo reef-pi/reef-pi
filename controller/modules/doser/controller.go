@@ -55,7 +55,7 @@ func (c *Controller) Stop() {
 		delete(c.quitters, id)
 	}
 	c.mu.Unlock()
-	log.Println("Stopped dosing sub-system")
+	log.Println("Stopped dosing subsystem")
 }
 
 func (c *Controller) Setup() error {
