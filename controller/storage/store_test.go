@@ -17,7 +17,7 @@ func TestStore(t *testing.T) {
 	testBucket := "test"
 	store, err := TestDB()
 	if err != nil {
-		t.Fatal("Failed to create test databse")
+		t.Fatal("Failed to create test database")
 	}
 	if err := store.CreateBucket(testBucket); err != nil {
 		t.Fatal("Failed to create test bucket. Error:", err)
@@ -37,7 +37,7 @@ func TestStore(t *testing.T) {
 		t.Fatal("Failed to fetch test object. Error:", err)
 	}
 	if nData.Name != "fake" {
-		t.Fatal("Fetched data is inconsitent with stored data. Expected: 'fake', Found: ", nData.Name)
+		t.Fatal("Fetched data is inconsistent with stored data. Expected: 'fake', Found: ", nData.Name)
 	}
 	var ls []testData
 	lsFn := func(_ string, bs []byte) error {

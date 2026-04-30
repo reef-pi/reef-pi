@@ -22,7 +22,7 @@ func TestDevModeDetection(t *testing.T) {
 			t.Error(err)
 		}
 		if s.Capabilities.DevMode {
-			t.Error("Devmode is turned on, expected off")
+			t.Error("Dev mode is turned on, expected off")
 		}
 		os.Setenv("DEV_MODE", "1")
 		s, err = initializeSettings(store)
@@ -30,7 +30,7 @@ func TestDevModeDetection(t *testing.T) {
 			t.Error(err)
 		}
 		if !s.Capabilities.DevMode {
-			t.Error("Devmode is turned off, expected on")
+			t.Error("Dev mode is turned off, expected on")
 		}
 		os.Unsetenv("DEV_MODE")
 	}
