@@ -110,7 +110,7 @@ func (c *Controller) Stop() {
 		if err := c.statsMgr.Save(id); err != nil {
 			log.Println("ERROR: temperature controller. Failed to save usage. Error:", err)
 		}
-		log.Println("temperature sub-system: Saved usage data of sensor:", id)
+		log.Println("temperature subsystem: Saved usage data of sensor:", id)
 	}
 	c.wg.Wait()
 }

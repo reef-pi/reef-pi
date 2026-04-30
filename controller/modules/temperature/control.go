@@ -16,16 +16,16 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 
 	reading, err := c.Read(tc)
 	if err != nil {
-		log.Println("ERROR: temperature sub-system. Failed to read  sensor. Error:", err)
-		c.c.LogError("tc-"+tc.ID, "temperature sub-system. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
+		log.Println("ERROR: temperature subsystem. Failed to read  sensor. Error:", err)
+		c.c.LogError("tc-"+tc.ID, "temperature subsystem. Failed to read  sensor "+tc.Name+". Error:"+err.Error())
 		subject := fmt.Sprintf("Temperature sensor '%s' failed", tc.Name)
 		c.c.Telemetry().Alert(subject, "Error:"+err.Error())
 		if tc.FailSafe && tc.Control && tc.Heater != "" {
 			if sub, sErr := c.c.Subsystem("equipment"); sErr == nil {
 				if oErr := sub.On(tc.Heater, false); oErr != nil {
-					log.Println("ERROR: temperature sub-system: failsafe: failed to turn off heater:", oErr)
+					log.Println("ERROR: temperature subsystem: failsafe: failed to turn off heater:", oErr)
 				} else {
-					log.Println("temperature sub-system: failsafe: turned off heater due to sensor read failure:", tc.Name)
+					log.Println("temperature subsystem: failsafe: turned off heater due to sensor read failure:", tc.Name)
 				}
 			}
 		}
@@ -38,7 +38,7 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 	}
 
 	tc.currentValue = reading
-	log.Println("temperature sub-system:  sensor", tc.Name, "value:", reading)
+	log.Println("temperature subsystem:  sensor", tc.Name, "value:", reading)
 	c.c.Telemetry().EmitMetric(tc.Name, "reading", reading)
 	u := controller.Observation{
 		Time:  telemetry.TeleTime(time.Now()),
@@ -46,7 +46,7 @@ func (c *Controller) Check(tc *TC) (float64, error) {
 	}
 	if tc.Control {
 		if err := tc.h.Sync(&u); err != nil {
-			log.Println("temperature sub-system: ERROR: Failed to execute:", err)
+			log.Println("temperature subsystem: ERROR: Failed to execute:", err)
 			c.c.LogError("tc-"+tc.ID, "Failed to execute temperature control logic for:"+tc.Name+". Error:"+err.Error())
 		}
 	}
