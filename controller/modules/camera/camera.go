@@ -59,7 +59,7 @@ func (c *Controller) run() {
 		return
 	}
 	if err := c.Process(img); err != nil {
-		log.Println("ERROR: camera sub-system : Failed to process image. Error:", err)
+		log.Println("ERROR: camera subsystem: Failed to process image. Error:", err)
 		c.c.LogError("camera-process", "Failed to process image. Error:"+err.Error())
 	}
 	if c.config.Upload {

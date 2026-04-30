@@ -43,13 +43,13 @@ func NewSubSystemRunner(j Job, c controller.Controller) (cron.Job, error) {
 func (m *SubSystemRunner) Run() {
 	log.Println("timer subsystem. Executing module ", m.Type, "element", m.trigger.ID)
 	if err := m.sub.On(m.trigger.ID, m.trigger.On); err != nil {
-		log.Println("ERROR:", m.Type, "sub-system, Failed to trigger. Error:", err)
+		log.Println("ERROR:", m.Type, "subsystem, Failed to trigger. Error:", err)
 	}
 	if m.trigger.Revert {
 		select {
 		case <-time.After(m.trigger.Duration * time.Second):
 			if err := m.sub.On(m.trigger.ID, !m.trigger.On); err != nil {
-				log.Println("ERROR:", m.Type, "sub-system, Failed to revert. Error:", err)
+				log.Println("ERROR:", m.Type, "subsystem, Failed to revert. Error:", err)
 			}
 			log.Println("timer subsystem. Executing module ", m.Type, "element", m.trigger.ID, "reversed")
 		}
