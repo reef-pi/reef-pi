@@ -27,7 +27,7 @@ func newTestMgr(store storage.Store) StatsManager {
 	return &mgr{
 		inMemory:        make(map[string]Stats),
 		bucket:          "stats-test",
-		store:           store,
+		repo:            newStatsRepository(store, "stats-test"),
 		CurrentLimit:    10,
 		HistoricalLimit: 10,
 	}
@@ -193,7 +193,7 @@ func TestStatsManagerUpdateRollupSameHour(t *testing.T) {
 	hMgr := &mgr{
 		inMemory:        make(map[string]Stats),
 		bucket:          "health-rollup-test",
-		store:           store,
+		repo:            newStatsRepository(store, "health-rollup-test"),
 		CurrentLimit:    10,
 		HistoricalLimit: 10,
 	}
