@@ -16,8 +16,62 @@ import (
 
 type dbCmd struct {
 	input, output, sPath string
-	store                storage.Store
+	repo                 dbRepository
 	args                 []string
+}
+
+type dbRepository interface {
+	Close() error
+	RawGet(string, string) ([]byte, error)
+	Buckets() ([]string, error)
+	List(string) (map[string]json.RawMessage, error)
+	Create(string, []byte) error
+	Update(string, string, []byte) error
+	Delete(string, string) error
+}
+
+type storeDBRepository struct {
+	store storage.Store
+}
+
+func newDBRepository(store storage.Store) dbRepository {
+	return storeDBRepository{store: store}
+}
+
+func (r storeDBRepository) Close() error {
+	return r.store.Close()
+}
+
+func (r storeDBRepository) RawGet(bucket, id string) ([]byte, error) {
+	return r.store.RawGet(bucket, id)
+}
+
+func (r storeDBRepository) Buckets() ([]string, error) {
+	return r.store.Buckets()
+}
+
+func (r storeDBRepository) List(bucket string) (map[string]json.RawMessage, error) {
+	res := make(map[string]json.RawMessage)
+	fn := func(id string, bs []byte) error {
+		res[id] = bs
+		return nil
+	}
+	return res, r.store.List(bucket, fn)
+}
+
+func (r storeDBRepository) Create(bucket string, data []byte) error {
+	fn := func(_ string) interface{} {
+		return data
+	}
+	return r.store.Create(bucket, fn)
+}
+
+func (r storeDBRepository) Update(bucket, id string, data []byte) error {
+	return r.store.RawUpdate(bucket, id, data)
+}
+
+func (r storeDBRepository) Delete(bucket, id string) error {
+	return r.store.Delete(bucket, id)
 }
 
 var _wrongArguments = errors.New("incorrect number of arguments at least action and module needs to be specified")
@@ -74,10 +128,10 @@ func NewDBCmd(args []string) (*dbCmd, error) {
 }
 
 func (d *dbCmd) Close() error {
-	if d.store == nil {
+	if d.repo == nil {
 		return nil
 	}
-	return d.store.Close()
+	return d.repo.Close()
 }
 
 func (cmd *dbCmd) Execute() error {
@@ -94,7 +148,7 @@ func (cmd *dbCmd) Execute() error {
 	if err != nil {
 		return fmt.Errorf("Failed to open database. Check if reef-pi is already running")
 	}
-	cmd.store = store
+	cmd.repo = newDBRepository(store)
 
 	if len(cmd.args) < 1 {
 		return errors.New("please specify a sub command [show|list|create|update|delete|buckets]")
@@ -152,14 +206,14 @@ func (cmd *dbCmd) Show() error {
 		return fmt.Errorf("must provide id of the item to show")
 	}
 	id := cmd.args[2]
-	d, err := cmd.store.RawGet(cmd.bucket(), id)
+	d, err := cmd.repo.RawGet(cmd.bucket(), id)
 	if err != nil {
 		return fmt.Errorf("failed to get item %s due database eror:%w", id, err)
 	}
 	return cmd.Output(d)
 }
 func (cmd *dbCmd) Buckets() error {
-	buckets, err := cmd.store.Buckets()
+	buckets, err := cmd.repo.Buckets()
 	if err != nil {
 		return fmt.Errorf("failed to get list buckets  due database eror:%w", err)
 	}
@@ -168,12 +222,8 @@ func (cmd *dbCmd) Buckets() error {
 }
 
 func (cmd *dbCmd) List() error {
-	res := make(map[string]json.RawMessage)
-	fn := func(id string, bs []byte) error {
-		res[id] = bs
-		return nil
-	}
-	if err := cmd.store.List(cmd.bucket(), fn); err != nil {
+	res, err := cmd.repo.List(cmd.bucket())
+	if err != nil {
 		return fmt.Errorf("failed to list items from storage. %w", err)
 	}
 	data, err := json.MarshalIndent(res, "", "  ")
@@ -200,10 +250,7 @@ func (cmd *dbCmd) Create() error {
 	if err != nil {
 		return err
 	}
-	fn := func(_ string) interface{} {
-		return data
-	}
-	return cmd.store.Create(cmd.bucket(), fn)
+	return cmd.repo.Create(cmd.bucket(), data)
 }
 
 func (cmd *dbCmd) Update() error {
@@ -215,12 +262,12 @@ func (cmd *dbCmd) Update() error {
 	if err != nil {
 		return err
 	}
-	return cmd.store.RawUpdate(cmd.bucket(), id, data)
+	return cmd.repo.Update(cmd.bucket(), id, data)
 }
 func (cmd *dbCmd) Delete() error {
 	if len(cmd.args) < 3 {
 		return fmt.Errorf("must provide id of the item to show")
 	}
 	id := cmd.args[2]
-	return cmd.store.Delete(cmd.bucket(), id)
+	return cmd.repo.Delete(cmd.bucket(), id)
 }
