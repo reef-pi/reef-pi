@@ -69,7 +69,7 @@ func (r storeRepository) Delete(id string) error {
 		return err
 	}
 	if err := r.DeleteUsage(id); err != nil {
-		log.Println("ERROR:  ato-subsystem: Failed to deleted usage details for ato:", id)
+		log.Println("ERROR:  ato-subsystem: Failed to delete usage details for ato:", id)
 	}
 	return nil
 }

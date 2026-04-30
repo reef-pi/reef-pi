@@ -64,7 +64,7 @@ func (r storeRepository) Delete(id string) error {
 		return err
 	}
 	if err := r.store.Delete(UsageBucket, id); err != nil {
-		log.Println("ERROR:  macro-subsystem: Failed to deleted usage details for macro:", id)
+		log.Println("ERROR:  macro-subsystem: Failed to delete usage details for macro:", id)
 	}
 	return nil
 }
