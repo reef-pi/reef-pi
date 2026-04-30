@@ -1,7 +1,6 @@
 package connectors
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -28,7 +27,7 @@ type Jack struct {
 }
 
 type Jacks struct {
-	store   storage.Store
+	repo    jackRepository
 	drivers *drivers.Drivers
 }
 
@@ -58,35 +57,21 @@ func (j Jack) IsValid(drvrs *drivers.Drivers) error {
 
 func NewJacks(drivers *drivers.Drivers, store storage.Store) *Jacks {
 	return &Jacks{
-		store:   store,
+		repo:    newJackRepository(store),
 		drivers: drivers,
 	}
 }
 
 func (c *Jacks) Setup() error {
-	if err := c.store.CreateBucket(JackBucket); err != nil {
-		return err
-	}
-
-	return nil
+	return c.repo.Setup()
 }
 
 func (c *Jacks) Get(id string) (Jack, error) {
-	var j Jack
-	return j, c.store.Get(JackBucket, id, &j)
+	return c.repo.Get(id)
 }
 
 func (c *Jacks) List() ([]Jack, error) {
-	jacks := []Jack{}
-	fn := func(_ string, v []byte) error {
-		var j Jack
-		if err := json.Unmarshal(v, &j); err != nil {
-			return err
-		}
-		jacks = append(jacks, j)
-		return nil
-	}
-	return jacks, c.store.List(JackBucket, fn)
+	return c.repo.List()
 }
 
 func (c *Jacks) Create(j Jack) error {
@@ -94,25 +79,14 @@ func (c *Jacks) Create(j Jack) error {
 		return err
 	}
 
-	fn := func(id string) interface{} {
-		j.ID = id
-		return &j
-	}
-	if err := c.store.Create(JackBucket, fn); err != nil {
-		return err
-	}
-	return nil
+	return c.repo.Create(j)
 }
 
 func (c *Jacks) Update(id string, j Jack) error {
 	if err := j.IsValid(c.drivers); err != nil {
 		return err
 	}
-	j.ID = id
-	if err := c.store.Update(JackBucket, id, j); err != nil {
-		return err
-	}
-	return nil
+	return c.repo.Update(id, j)
 }
 
 func (c *Jacks) Delete(id string) error {
@@ -120,7 +94,7 @@ func (c *Jacks) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	return c.store.Delete(JackBucket, id)
+	return c.repo.Delete(id)
 }
 
 func (c *Jacks) LoadAPI(r *mux.Router) {
