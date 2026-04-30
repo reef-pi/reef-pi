@@ -150,7 +150,7 @@ func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.DigitalInputPin, error) {
 
 func (i Inlet) IsValid(drivers *drivers.Drivers) error {
 	if i.Name == "" {
-		return errors.New("Inlet name can not be empty")
+		return errors.New("Inlet name cannot be empty")
 	}
 	if _, err := i.inputPin(drivers); err != nil {
 		return fmt.Errorf("inlet %s did not get associated with a driver pin: %v", i.Name, err)

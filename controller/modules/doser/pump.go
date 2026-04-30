@@ -35,7 +35,7 @@ type Pump struct {
 
 func (p *Pump) IsValid() error {
 	if p.Name == "" {
-		return fmt.Errorf("name can not be empty")
+		return fmt.Errorf("name cannot be empty")
 	}
 	if p.Regiment.SoftStart < 0 {
 		return fmt.Errorf("soft start must be non-negative")

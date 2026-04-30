@@ -48,7 +48,7 @@ func (o Outlet) outputPin(drivers *drivers.Drivers) (hal.DigitalOutputPin, error
 
 func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 	if o.Name == "" {
-		return fmt.Errorf("Outlet name can not be empty")
+		return fmt.Errorf("Outlet name cannot be empty")
 	}
 	_, err := o.outputPin(drivers)
 	return err

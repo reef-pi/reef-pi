@@ -144,7 +144,7 @@ func (c *Controller) On(id string, b bool) error {
 		return err
 	}
 	if p.Regiment.Enable {
-		return errors.New("enabled doser can not be On/Off -ed")
+		return errors.New("enabled doser cannot be On/Off -ed")
 	}
 	log.Println("doser-subsystem: Switching doser :", p.Name, "to", b)
 	v := make(map[int]float64)
