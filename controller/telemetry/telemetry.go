@@ -86,15 +86,17 @@ type telemetry struct {
 	logError   ErrorLogger
 	store      storage.Store
 	bucket     string
+	configRepo *telemetryConfigRepository
 	pMs        map[string]prometheus.Gauge
 }
 
 func Initialize(name, bucket string, store storage.Store, logError ErrorLogger, prom bool) Telemetry {
-	var c TelemetryConfig
-	if err := store.Get(bucket, DBKey, &c); err != nil {
+	repo := newTelemetryConfigRepository(store, bucket)
+	c, err := repo.get()
+	if err != nil {
 		log.Println("ERROR: Failed to load telemtry config from saved settings. Initializing")
 		c = DefaultTelemetryConfig
-		store.Update(bucket, DBKey, c)
+		repo.update(c)
 	}
 	c.Prometheus = prom
 	// for upgrades, this value will be 0. Remove in 3.0
@@ -122,6 +124,7 @@ func NewTelemetry(name, bucket string, store storage.Store, config TelemetryConf
 		logError:   lr,
 		store:      store,
 		bucket:     bucket,
+		configRepo: newTelemetryConfigRepository(store, bucket),
 		pMs:        make(map[string]prometheus.Gauge),
 	}
 	if config.AdafruitIO.Enable {
