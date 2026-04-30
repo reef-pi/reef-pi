@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"sort"
 	"sync"
-
-	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 type Metric interface {
@@ -47,7 +45,7 @@ type mgr struct {
 	bucket          string
 	CurrentLimit    int
 	HistoricalLimit int
-	store           storage.Store
+	repo            statsRepository
 }
 
 func (m *mgr) IsLoaded(id string) bool {
@@ -94,7 +92,7 @@ func (m *mgr) NewStats() Stats {
 
 func (m *mgr) Load(id string, fn func(json.RawMessage) interface{}) error {
 	var resp StatsOnDisk
-	if err := m.store.Get(m.bucket, id, &resp); err != nil {
+	if err := m.repo.Load(id, &resp); err != nil {
 		return err
 	}
 	stats := m.NewStats()
@@ -119,7 +117,7 @@ func (m *mgr) Save(id string) error {
 	if err != nil {
 		return err
 	}
-	return m.store.Update(m.bucket, id, stats)
+	return m.repo.Save(id, stats)
 }
 
 func (m *mgr) Update(id string, metric Metric) {
@@ -143,7 +141,7 @@ func (m *mgr) Update(id string, metric Metric) {
 		m1, moved := stats.Historical.Value.(Metric).Rollup(metric)
 		move = moved
 		if moved {
-			m.store.Update(m.bucket, id, stats)
+			m.repo.Save(id, stats)
 			stats.Historical = stats.Historical.Next()
 		}
 		stats.Historical.Value = m1
@@ -165,5 +163,5 @@ func (m *mgr) Delete(id string) error {
 	m.Lock()
 	defer m.Unlock()
 	delete(m.inMemory, id)
-	return m.store.Delete(m.bucket, id)
+	return m.repo.Delete(id)
 }

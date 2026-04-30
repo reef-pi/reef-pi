@@ -178,7 +178,7 @@ func (t *telemetry) NewStatsManager(b string) StatsManager {
 	return &mgr{
 		inMemory:        make(map[string]Stats),
 		bucket:          b,
-		store:           t.store,
+		repo:            newStatsRepository(t.store, b),
 		HistoricalLimit: t.config.HistoricalLimit,
 		CurrentLimit:    t.config.CurrentLimit,
 	}
