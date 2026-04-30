@@ -1,10 +1,8 @@
 package daemon
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/utils"
@@ -19,7 +17,7 @@ type Error struct {
 }
 
 func (r *ReefPi) setUpErrorBucket() error {
-	return r.store.CreateBucket(storage.ErrorBucket)
+	return newErrorRepository(r.store).Setup()
 }
 
 func (r *ReefPi) DeleteErrors() error {
@@ -43,16 +41,7 @@ func (r *ReefPi) clearErrors(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *ReefPi) ListErrors() ([]Error, error) {
-	errors := []Error{}
-	fn := func(_ string, v []byte) error {
-		var a Error
-		if err := json.Unmarshal(v, &a); err != nil {
-			return err
-		}
-		errors = append(errors, a)
-		return nil
-	}
-	return errors, r.store.List(storage.ErrorBucket, fn)
+	return newErrorRepository(r.store).List()
 }
 
 func (r *ReefPi) listErrors(w http.ResponseWriter, req *http.Request) {
@@ -74,7 +63,7 @@ func (r *ReefPi) deleteError(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *ReefPi) DeleteError(id string) error {
-	return r.store.Delete(storage.ErrorBucket, id)
+	return newErrorRepository(r.store).Delete(id)
 }
 
 func (r *ReefPi) LogError(id, msg string) error {
@@ -82,17 +71,9 @@ func (r *ReefPi) LogError(id, msg string) error {
 }
 
 func logError(store storage.Store, id, msg string) error {
-	var e Error
-	if err := store.Get(storage.ErrorBucket, id, &e); err != nil {
-		e = Error{ID: id}
-	}
-	e.Message = msg
-	e.Time = time.Now().Format("Jan 2 15:04:05")
-	e.Count++
-	return store.Update(storage.ErrorBucket, id, e)
+	return newErrorRepository(store).Log(id, msg)
 }
 
 func (r *ReefPi) GetError(id string) (Error, error) {
-	var a Error
-	return a, r.store.Get(storage.ErrorBucket, id, &a)
+	return newErrorRepository(r.store).Get(id)
 }
