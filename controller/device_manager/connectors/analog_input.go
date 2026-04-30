@@ -1,7 +1,6 @@
 package connectors
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -26,7 +25,7 @@ type AnalogInput struct {
 }
 
 type AnalogInputs struct {
-	store   storage.Store
+	repo    analogInputRepository
 	drivers *drivers.Drivers
 }
 
@@ -51,35 +50,21 @@ func (j AnalogInput) IsValid(drvrs *drivers.Drivers) error {
 
 func NewAnalogInputs(drivers *drivers.Drivers, store storage.Store) *AnalogInputs {
 	return &AnalogInputs{
-		store:   store,
+		repo:    newAnalogInputRepository(store),
 		drivers: drivers,
 	}
 }
 
 func (c *AnalogInputs) Setup() error {
-	if err := c.store.CreateBucket(AnalogInputBucket); err != nil {
-		return err
-	}
-
-	return nil
+	return c.repo.Setup()
 }
 
 func (c *AnalogInputs) Get(id string) (AnalogInput, error) {
-	var j AnalogInput
-	return j, c.store.Get(AnalogInputBucket, id, &j)
+	return c.repo.Get(id)
 }
 
 func (c *AnalogInputs) List() ([]AnalogInput, error) {
-	ais := []AnalogInput{}
-	fn := func(_ string, v []byte) error {
-		var j AnalogInput
-		if err := json.Unmarshal(v, &j); err != nil {
-			return err
-		}
-		ais = append(ais, j)
-		return nil
-	}
-	return ais, c.store.List(AnalogInputBucket, fn)
+	return c.repo.List()
 }
 
 func (c *AnalogInputs) Create(j AnalogInput) error {
@@ -87,25 +72,14 @@ func (c *AnalogInputs) Create(j AnalogInput) error {
 		return err
 	}
 
-	fn := func(id string) interface{} {
-		j.ID = id
-		return &j
-	}
-	if err := c.store.Create(AnalogInputBucket, fn); err != nil {
-		return err
-	}
-	return nil
+	return c.repo.Create(j)
 }
 
 func (c *AnalogInputs) Update(id string, j AnalogInput) error {
 	if err := j.IsValid(c.drivers); err != nil {
 		return err
 	}
-	j.ID = id
-	if err := c.store.Update(AnalogInputBucket, id, j); err != nil {
-		return err
-	}
-	return nil
+	return c.repo.Update(id, j)
 }
 
 func (c *AnalogInputs) Delete(id string) error {
@@ -113,7 +87,7 @@ func (c *AnalogInputs) Delete(id string) error {
 	if err != nil {
 		return err
 	}
-	return c.store.Delete(AnalogInputBucket, id)
+	return c.repo.Delete(id)
 }
 
 func (c *AnalogInputs) LoadAPI(r *mux.Router) {
