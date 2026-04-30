@@ -33,32 +33,30 @@ var DefaultDashboard = Dashboard{
 }
 
 func loadDashboard(store storage.Store) (Dashboard, error) {
-	var d Dashboard
-	if err := store.Get(Bucket, "dashboard", &d); err != nil {
-		return d, err
-	}
-	return d, nil
+	return newDashboardRepository(store).Get()
 }
 
 func initializeDashboard(store storage.Store) (Dashboard, error) {
-	if err := store.CreateBucket(Bucket); err != nil {
+	if err := newDashboardRepository(store).Setup(); err != nil {
 		log.Println("ERROR:Failed to create bucket:", Bucket, ". Error:", err)
 		return DefaultDashboard, err
 	}
-	return DefaultDashboard, store.Update(Bucket, "dashboard", DefaultDashboard)
+	return DefaultDashboard, nil
 }
 
 func (r *ReefPi) GetDashboard(w http.ResponseWriter, req *http.Request) {
+	repo := newDashboardRepository(r.store)
 	fn := func(_ string) (interface{}, error) {
-		return loadDashboard(r.store)
+		return repo.Get()
 	}
 	utils.JSONGetResponse(fn, w, req)
 }
 
 func (r *ReefPi) UpdateDashboard(w http.ResponseWriter, req *http.Request) {
 	var d Dashboard
+	repo := newDashboardRepository(r.store)
 	fn := func(_ string) error {
-		return r.store.Update(Bucket, "dashboard", d)
+		return repo.Update(d)
 	}
 	utils.JSONUpdateResponse(&d, fn, w, req)
 }
