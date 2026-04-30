@@ -1,7 +1,6 @@
 package connectors
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -56,19 +55,19 @@ func (o Outlet) IsValid(drivers *drivers.Drivers) error {
 }
 
 type Outlets struct {
-	store   storage.Store
+	repo    outletRepository
 	drivers *drivers.Drivers
 }
 
 func NewOutlets(drivers *drivers.Drivers, store storage.Store) *Outlets {
 	return &Outlets{
-		store:   store,
+		repo:    newOutletRepository(store),
 		drivers: drivers,
 	}
 }
 
 func (c *Outlets) Setup() error {
-	return c.store.CreateBucket(OutletBucket)
+	return c.repo.Setup()
 }
 
 func (c *Outlets) Configure(id string, on bool) error {
@@ -91,11 +90,7 @@ func (c *Outlets) Create(o Outlet) error {
 	if err := o.IsValid(c.drivers); err != nil {
 		return err
 	}
-	fn := func(id string) interface{} {
-		o.ID = id
-		return &o
-	}
-	return c.store.Create(OutletBucket, fn)
+	return c.repo.Create(o)
 }
 
 func (c *Outlets) Update(id string, o Outlet) error {
@@ -103,20 +98,11 @@ func (c *Outlets) Update(id string, o Outlet) error {
 	if err := o.IsValid(c.drivers); err != nil {
 		return err
 	}
-	return c.store.Update(OutletBucket, id, o)
+	return c.repo.Update(id, o)
 }
 
 func (c *Outlets) List() ([]Outlet, error) {
-	outlets := []Outlet{}
-	fn := func(_ string, v []byte) error {
-		var o Outlet
-		if err := json.Unmarshal(v, &o); err != nil {
-			return err
-		}
-		outlets = append(outlets, o)
-		return nil
-	}
-	return outlets, c.store.List(OutletBucket, fn)
+	return c.repo.List()
 }
 
 func (c *Outlets) Delete(id string) error {
@@ -127,12 +113,11 @@ func (c *Outlets) Delete(id string) error {
 	if o.Equipment != "" {
 		return fmt.Errorf("Outlet: %s has equipment: %s attached to it.", o.Name, o.Equipment)
 	}
-	return c.store.Delete(OutletBucket, id)
+	return c.repo.Delete(id)
 }
 
 func (c *Outlets) Get(id string) (Outlet, error) {
-	var o Outlet
-	return o, c.store.Get(OutletBucket, id, &o)
+	return c.repo.Get(id)
 }
 
 func (e *Outlets) LoadAPI(r *mux.Router) {
