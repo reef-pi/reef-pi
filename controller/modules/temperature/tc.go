@@ -163,7 +163,7 @@ func (c *Controller) Delete(id string) error {
 		return err
 	}
 	if err := c.repo.DeleteUsage(id); err != nil {
-		log.Println("ERROR:  temperature sub-system: Failed to delete usage details for sensor:", id)
+		log.Println("ERROR:  temperature subsystem: Failed to delete usage details for sensor:", id)
 	}
 
 	quit, ok := c.quitters[id]
@@ -196,14 +196,14 @@ func (c *Controller) IsEquipmentInUse(id string) (bool, error) {
 func (c *Controller) Run(t *TC, quit chan struct{}) error {
 	t.CreateFeed(c.c.Telemetry())
 	if t.Period <= 0 {
-		log.Printf("ERROR: temperature sub-system. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
+		log.Printf("ERROR: temperature subsystem. Invalid period set for sensor:%s. Expected positive, found:%d\n", t.Name, t.Period)
 		return nil
 	}
 	t.loadHomeostasis(c.c)
 	ticker := time.NewTicker(t.Period * time.Second)
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("ERROR: temperature sub-system. Panic in Run goroutine for sensor:%s: %v\n", t.Name, r)
+			log.Printf("ERROR: temperature subsystem. Panic in Run goroutine for sensor:%s: %v\n", t.Name, r)
 			c.c.LogError("tc-"+t.ID, fmt.Sprintf("temperature controller goroutine panicked: %v", r))
 		}
 	}()
