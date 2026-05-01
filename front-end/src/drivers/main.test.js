@@ -28,6 +28,29 @@ describe('Drivers Main', () => {
     jest.clearAllMocks()
   })
 
+  it('validates drivers through the driver validation API', () => {
+    const response = Promise.resolve({ ok: true })
+    global.fetch = jest.fn(() => response)
+    const main = new RawDriversMain({
+      drivers: [],
+      driverOptions: [],
+      fetch: jest.fn(),
+      fetchDriverOptions: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      provision: jest.fn()
+    })
+    const payload = { type: 'pca9685', config: { address: 64 } }
+
+    expect(main.validate(payload)).toBe(response)
+    expect(global.fetch).toHaveBeenCalledWith('api/drivers/validate', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify(payload)
+    })
+  })
+
   it('renders with empty drivers and fetches on mount', () => {
     const fetch = jest.fn()
     const fetchDriverOptions = jest.fn()
