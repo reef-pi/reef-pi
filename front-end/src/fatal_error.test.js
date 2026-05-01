@@ -16,6 +16,10 @@ describe('FatalError', () => {
 
     instance.checkHealth()
     await flushPromises()
+    expect(global.fetch).toHaveBeenLastCalledWith('/api/me', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
     expect(instance.state.up).toBe(true)
 
     instance.checkHealth()

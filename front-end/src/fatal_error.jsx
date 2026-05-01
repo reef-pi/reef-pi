@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaMedkit } from 'react-icons/fa'
 import i18next from 'i18next'
+import { isSignedIn } from './session_api'
 const RefreshTime = 10000
 export default class FatalError extends React.Component {
   constructor (props) {
@@ -22,12 +23,9 @@ export default class FatalError extends React.Component {
 
   checkHealth () {
     const that = this
-    fetch('/api/me', {
-      method: 'GET',
-      credentials: 'same-origin'
-    })
-      .then(r => {
-        that.setState({ up: r.ok })
+    isSignedIn()
+      .then(up => {
+        that.setState({ up })
       })
       .catch(() => {
         that.setState({ up: false })

@@ -23,6 +23,14 @@ describe('SignIn', () => {
     await instance.handleLogin({
       preventDefault: () => true
     })
+    expect(global.fetch).toHaveBeenLastCalledWith('/auth/signin', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        user: 'foo',
+        password: 'bar'
+      })
+    })
     expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
 
     global.fetch = jest.fn().mockResolvedValue({
@@ -48,9 +56,17 @@ describe('SignIn', () => {
 
   it('exercises sign-in statics', async () => {
     await SignIn.logout()
+    expect(global.fetch).toHaveBeenLastCalledWith('/auth/signout', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
     expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
 
     global.fetch = jest.fn().mockResolvedValue({ ok: true, status: 200 })
     await expect(SignIn.isSignedIn()).resolves.toBe(true)
+    expect(global.fetch).toHaveBeenLastCalledWith('/api/me', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
   })
 })
