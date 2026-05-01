@@ -1,4 +1,4 @@
-import { reduxDelete, reduxPut, reduxGet, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const lightsLoaded = (s) => {
   for (const i in s) {
@@ -34,45 +34,25 @@ export const lightUsageLoaded = (id) => {
 }
 
 export const fetchLights = () => {
-  return (reduxGet({
-    url: '/api/lights',
-    success: lightsLoaded
-  }))
+  return getAction('lights', lightsLoaded)
 }
 
 export const fetchLight = (id) => {
-  return (reduxGet({
-    url: '/api/lights/' + id,
-    success: lightLoaded(id)
-  }))
+  return getAction(['lights', id], lightLoaded(id))
 }
 
 export const createLight = (s) => {
-  return (reduxPut({
-    url: '/api/lights',
-    success: fetchLights,
-    data: s
-  }))
+  return putAction('lights', s, fetchLights)
 }
 
 export const updateLight = (id, l) => {
-  return (reduxPost({
-    url: '/api/lights/' + id,
-    success: fetchLights,
-    data: l
-  }))
+  return postAction(['lights', id], l, fetchLights)
 }
 
 export const deleteLight = (s) => {
-  return (reduxDelete({
-    url: '/api/lights/' + s,
-    success: fetchLights
-  }))
+  return deleteAction(['lights', s], fetchLights)
 }
 
 export const fetchLightUsage = (id) => {
-  return (reduxGet({
-    url: '/api/lights/' + id + '/usage',
-    success: lightUsageLoaded(id)
-  }))
+  return getAction(['lights', id, 'usage'], lightUsageLoaded(id))
 }
