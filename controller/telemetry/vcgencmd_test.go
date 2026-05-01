@@ -20,7 +20,7 @@ func TestGetThrottles(t *testing.T) {
 		}
 	}
 	bytes = []byte("throttled=0x1")
-	issues, err := GetThrottled(context.TODO(), stubFactory)
+	issues, err := GetThrottled(context.Background(), stubFactory)
 	if err != nil {
 		t.Error(err)
 	}
