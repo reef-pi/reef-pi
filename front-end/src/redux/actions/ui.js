@@ -1,4 +1,4 @@
-import { reduxGet } from 'utils/ajax'
+import { getAction } from './api'
 import { fetchATOs } from './ato'
 import { fetchDosingPumps } from './doser'
 import { fetchDrivers } from './drivers'
@@ -68,16 +68,15 @@ export const fetchManagerData = (dispatch) => {
 }
 
 export const fetchUIData = (dispatch) => {
-  return (reduxGet({
-    url: '/api/capabilities',
-    success: (capabilities) => {
+  return getAction(
+    'capabilities',
+    (capabilities) => {
       if (capabilities.manager) {
         fetchManagerData(dispatch)
         return (capabilitiesLoaded(capabilities))
-      } else {
-        fetchControllerData(dispatch, capabilities)
-        return (capabilitiesLoaded(capabilities))
       }
+      fetchControllerData(dispatch, capabilities)
+      return (capabilitiesLoaded(capabilities))
     }
-  }))
+  )
 }
