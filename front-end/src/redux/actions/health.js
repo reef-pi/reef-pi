@@ -1,4 +1,4 @@
-import { reduxGet } from '../../utils/ajax'
+import { getAction } from './api'
 
 export const healthStatsLoaded = (stats) => {
   return ({
@@ -9,8 +9,5 @@ export const healthStatsLoaded = (stats) => {
 
 export const fetchHealth = () => {
   return (
-    reduxGet({
-      url: '/api/health_stats',
-      success: healthStatsLoaded
-    }))
+    getAction('health_stats', healthStatsLoaded))
 }
