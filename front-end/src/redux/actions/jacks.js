@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const jacksLoaded = (jacks) => {
   return ({
@@ -8,35 +8,17 @@ export const jacksLoaded = (jacks) => {
 }
 
 export const fetchJacks = () => {
-  return (
-    reduxGet({
-      url: '/api/jacks',
-      success: jacksLoaded
-    }))
+  return getAction('jacks', jacksLoaded)
 }
 
 export const deleteJack = (id) => {
-  return (
-    reduxDelete({
-      url: '/api/jacks/' + id,
-      success: fetchJacks
-    }))
+  return deleteAction(['jacks', id], fetchJacks)
 }
 
 export const createJack = (jack) => {
-  return (
-    reduxPut({
-      url: '/api/jacks',
-      data: jack,
-      success: fetchJacks
-    }))
+  return putAction('jacks', jack, fetchJacks)
 }
 
 export const updateJack = (id, jack) => {
-  return (
-    reduxPost({
-      url: '/api/jacks/' + id,
-      data: jack,
-      success: fetchJacks
-    }))
+  return postAction(['jacks', id], jack, fetchJacks)
 }

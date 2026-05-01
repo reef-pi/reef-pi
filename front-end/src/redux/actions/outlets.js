@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost, reduxPut, reduxDelete } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const outletsLoaded = (outlets) => {
   return ({
@@ -8,35 +8,17 @@ export const outletsLoaded = (outlets) => {
 }
 
 export const fetchOutlets = () => {
-  return (
-    reduxGet({
-      url: '/api/outlets',
-      success: outletsLoaded
-    }))
+  return getAction('outlets', outletsLoaded)
 }
 
 export const deleteOutlet = (id) => {
-  return (
-    reduxDelete({
-      url: '/api/outlets/' + id,
-      success: fetchOutlets
-    }))
+  return deleteAction(['outlets', id], fetchOutlets)
 }
 
 export const createOutlet = (outlet) => {
-  return (
-    reduxPut({
-      url: '/api/outlets',
-      data: outlet,
-      success: fetchOutlets
-    }))
+  return putAction('outlets', outlet, fetchOutlets)
 }
 
 export const updateOutlet = (id, outlet) => {
-  return (
-    reduxPost({
-      url: '/api/outlets/' + id,
-      data: outlet,
-      success: fetchOutlets
-    }))
+  return postAction(['outlets', id], outlet, fetchOutlets)
 }

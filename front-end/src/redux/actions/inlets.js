@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost, reduxPut, reduxDelete } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const inletsLoaded = (inlets) => {
   return ({
@@ -8,35 +8,17 @@ export const inletsLoaded = (inlets) => {
 }
 
 export const fetchInlets = () => {
-  return (
-    reduxGet({
-      url: '/api/inlets',
-      success: inletsLoaded
-    }))
+  return getAction('inlets', inletsLoaded)
 }
 
 export const deleteInlet = (id) => {
-  return (
-    reduxDelete({
-      url: '/api/inlets/' + id,
-      success: fetchInlets
-    }))
+  return deleteAction(['inlets', id], fetchInlets)
 }
 
 export const createInlet = (inlet) => {
-  return (
-    reduxPut({
-      url: '/api/inlets',
-      data: inlet,
-      success: fetchInlets
-    }))
+  return putAction('inlets', inlet, fetchInlets)
 }
 
 export const updateInlet = (id, inlet) => {
-  return (
-    reduxPost({
-      url: '/api/inlets/' + id,
-      data: inlet,
-      success: fetchInlets
-    }))
+  return postAction(['inlets', id], inlet, fetchInlets)
 }
