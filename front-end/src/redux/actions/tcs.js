@@ -1,4 +1,4 @@
-import { reduxGet, reduxPut, reduxDelete, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const tcsLoaded = (s) => {
   return ({
@@ -24,54 +24,31 @@ export const tcUsageLoaded = (id) => {
 }
 
 export const fetchTCs = () => {
-  return (reduxGet({
-    url: '/api/tcs',
-    success: tcsLoaded
-  }))
+  return getAction('tcs', tcsLoaded)
 }
 
 export const createTC = (t) => {
-  return (reduxPut({
-    url: '/api/tcs',
-    data: t,
-    success: fetchTCs
-  }))
+  return putAction('tcs', t, fetchTCs)
 }
 
 export const updateTC = (id, t) => {
-  return (reduxPost({
-    url: '/api/tcs/' + id,
-    data: t,
-    success: fetchTCs
-  }))
+  return postAction(['tcs', id], t, fetchTCs)
 }
 
 export const deleteTC = (id) => {
-  return (reduxDelete({
-    url: '/api/tcs/' + id,
-    success: fetchTCs
-  }))
+  return deleteAction(['tcs', id], fetchTCs)
 }
 
 export const fetchSensors = () => {
-  return (reduxGet({
-    url: '/api/tcs/sensors',
-    success: sensorsLoaded
-  }))
+  return getAction(['tcs', 'sensors'], sensorsLoaded)
 }
 
 export const fetchTCUsage = (id) => {
-  return (reduxGet({
-    url: '/api/tcs/' + id + '/usage',
-    success: tcUsageLoaded(id)
-  }))
+  return getAction(['tcs', id, 'usage'], tcUsageLoaded(id))
 }
 
 export const readTC = (id) => {
-  return (reduxGet({
-    url: '/api/tcs/' + id + '/read',
-    success: tcReadComplete(id)
-  }))
+  return getAction(['tcs', id, 'read'], tcReadComplete(id))
 }
 
 export const tcReadComplete = (id) => {
@@ -84,11 +61,7 @@ export const tcReadComplete = (id) => {
 }
 
 export const calibrateTemperature = (id, c) => {
-  return (reduxPost({
-    url: '/api/tcs/' + id + '/calibrate',
-    data: c,
-    success: tcCalibrated
-  }))
+  return postAction(['tcs', id, 'calibrate'], c, tcCalibrated)
 }
 
 export const tcCalibrated = () => {

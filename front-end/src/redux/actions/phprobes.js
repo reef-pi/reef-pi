@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const phProbesLoaded = (s) => {
   return ({
@@ -28,17 +28,11 @@ export const probeCalibrated = () => {
 }
 
 export const fetchPhProbes = () => {
-  return (reduxGet({
-    url: '/api/phprobes',
-    success: phProbesLoaded
-  }))
+  return getAction('phprobes', phProbesLoaded)
 }
 
 export const readProbe = (id) => {
-  return (reduxGet({
-    url: '/api/phprobes/' + id + '/read',
-    success: probeReadComplete(id)
-  }))
+  return getAction(['phprobes', id, 'read'], probeReadComplete(id))
 }
 
 export const probeReadComplete = (id) => {
@@ -51,39 +45,21 @@ export const probeReadComplete = (id) => {
 }
 
 export const fetchProbeReadings = (id) => {
-  return (reduxGet({
-    url: '/api/phprobes/' + id + '/readings',
-    success: probeReadingsLoaded(id)
-  }))
+  return getAction(['phprobes', id, 'readings'], probeReadingsLoaded(id))
 }
 
 export const updateProbe = (id, a) => {
-  return (reduxPost({
-    url: '/api/phprobes/' + id,
-    data: a,
-    success: fetchPhProbes
-  }))
+  return postAction(['phprobes', id], a, fetchPhProbes)
 }
 
 export const createProbe = (a) => {
-  return (reduxPut({
-    url: '/api/phprobes',
-    data: a,
-    success: fetchPhProbes
-  }))
+  return putAction('phprobes', a, fetchPhProbes)
 }
 
 export const deleteProbe = (id) => {
-  return (reduxDelete({
-    url: '/api/phprobes/' + id,
-    success: fetchPhProbes
-  }))
+  return deleteAction(['phprobes', id], fetchPhProbes)
 }
 
 export const calibrateProbe = (id, a) => {
-  return (reduxPost({
-    url: '/api/phprobes/' + id + '/calibratepoint',
-    data: a,
-    success: probeCalibrated
-  }))
+  return postAction(['phprobes', id, 'calibratepoint'], a, probeCalibrated)
 }
