@@ -1,4 +1,4 @@
-import { reboot, powerOff, reload, reloaded, rebooted, powerOffed } from './admin'
+import { reboot, powerOff, reload, reloaded, rebooted, powerOffed, dbImport, dbImported, upgrade, upgraded } from './admin'
 import { thunk } from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import configureMockStore from 'redux-mock-store'
@@ -56,6 +56,32 @@ describe('admin actions', () => {
     const store = mockStore()
     return store.dispatch(powerOff()).then(() => {
       expect(store.getActions()).toEqual([powerOffed()])
+    })
+  })
+
+  it('dbImported', () => {
+    expect(dbImported().type).toEqual('DB_IMPORTED')
+  })
+
+  it('dbImport', () => {
+    const formData = new window.FormData()
+    fetchMock.postOnce('/api/admin/reef-pi.db', {})
+    const store = mockStore()
+    return store.dispatch(dbImport(formData)).then(() => {
+      expect(store.getActions()).toEqual([dbImported()])
+      expect(fetchMock.lastOptions('/api/admin/reef-pi.db').body).toBe(formData)
+    })
+  })
+
+  it('upgraded', () => {
+    expect(upgraded().type).toEqual('UPGRADED')
+  })
+
+  it('upgrade', () => {
+    fetchMock.postOnce('/api/admin/upgrade', {})
+    const store = mockStore()
+    return store.dispatch(upgrade('1.2.3')).then(() => {
+      expect(store.getActions()).toEqual([upgraded()])
     })
   })
 })
