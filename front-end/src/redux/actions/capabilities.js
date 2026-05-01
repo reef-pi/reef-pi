@@ -1,4 +1,4 @@
-import { reduxGet } from '../../utils/ajax'
+import { getAction } from './api'
 
 export const capabilitiesLoaded = (capabilities) => {
   const MandatoryCapabilities = {
@@ -12,8 +12,5 @@ export const capabilitiesLoaded = (capabilities) => {
 
 export const fetchCapabilities = () => {
   return (
-    reduxGet({
-      url: '/api/capabilities',
-      success: capabilitiesLoaded
-    }))
+    getAction('capabilities', capabilitiesLoaded))
 }

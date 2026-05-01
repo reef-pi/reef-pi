@@ -1,4 +1,4 @@
-import { reduxGet } from '../../utils/ajax'
+import { getAction } from './api'
 
 export const infoLoaded = (info) => {
   document.title = info.name
@@ -9,8 +9,5 @@ export const infoLoaded = (info) => {
 }
 
 export const fetchInfo = () => {
-  return (reduxGet({
-    url: '/api/info',
-    success: infoLoaded
-  }))
+  return (getAction('info', infoLoaded))
 }
