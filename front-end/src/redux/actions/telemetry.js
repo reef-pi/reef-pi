@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost } from '../../utils/ajax'
+import { getAction, postAction } from './api'
 
 export const telemetryLoaded = (s) => {
   return ({
@@ -14,24 +14,13 @@ export const testMessageSent = () => {
 }
 
 export const fetchTelemetry = () => {
-  return (reduxGet({
-    url: '/api/telemetry',
-    success: telemetryLoaded
-  }))
+  return getAction('telemetry', telemetryLoaded)
 }
 
 export const updateTelemetry = (a) => {
-  return (reduxPost({
-    url: '/api/telemetry',
-    data: a,
-    success: fetchTelemetry
-  }))
+  return postAction('telemetry', a, fetchTelemetry)
 }
 
 export const sendTestMessage = () => {
-  return (reduxPost({
-    url: '/api/telemetry/test_message',
-    success: testMessageSent,
-    data: {}
-  }))
+  return postAction(['telemetry', 'test_message'], {}, testMessageSent)
 }
