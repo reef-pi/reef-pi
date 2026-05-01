@@ -1,5 +1,6 @@
 import React from 'react'
 import i18n from 'utils/i18n'
+import { isSignedIn, signIn, signOut } from './session_api'
 
 export default class SignIn extends React.Component {
   constructor (props) {
@@ -15,19 +16,11 @@ export default class SignIn extends React.Component {
   }
 
   static isSignedIn () {
-    return fetch('/api/me', {
-      method: 'GET',
-      credentials: 'same-origin'
-    }).then(r => {
-      return r.ok
-    })
+    return isSignedIn()
   }
 
   static logout () {
-    return fetch('/auth/signout', {
-      method: 'GET',
-      credentials: 'same-origin'
-    }).then(() => {
+    return signOut().then(() => {
       SignIn.refreshPage()
     })
   }
@@ -45,11 +38,7 @@ export default class SignIn extends React.Component {
       password: this.state.password
     }
     const setState = this.setState.bind(this)
-    return fetch('/auth/signin', {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify(creds)
-    }).then(response => {
+    return signIn(creds).then(response => {
       switch (response.status) {
         case 500:
           console.log('Internal Server Error')

@@ -3,6 +3,7 @@ import { fetchDrivers, fetchDriverOptions, deleteDriver, createDriver, updateDri
 import { connect } from 'react-redux'
 import Driver from './driver'
 import New from './new'
+import { validateDriver } from './api'
 import { SortByName } from 'utils/sort_by_name'
 
 export class RawDriversMain extends React.Component {
@@ -18,14 +19,7 @@ export class RawDriversMain extends React.Component {
   }
 
   validate (payload) {
-    // This doesn't seem to belong in redux
-    // since it isn't really part of app state.
-    // It's here since I'm not sure where else it should belong.
-    return fetch('api/drivers/validate', {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify(payload)
-    })
+    return validateDriver(payload)
   }
 
   list () {

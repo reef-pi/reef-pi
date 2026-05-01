@@ -43,11 +43,7 @@ export class auth extends React.Component {
       error = true
     }
     if (!error) {
-      fetch('/api/credentials', {
-        method: 'POST',
-        credentials: 'same-origin',
-        body: JSON.stringify(creds)
-      })
+      this.props.updateCreds(creds)
       showUpdateSuccessful()
     }
   }
