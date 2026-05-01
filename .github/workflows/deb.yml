@@ -30,10 +30,10 @@ jobs:
           go-version: '1.26.2'
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 26-nightly
           cache: 'yarn'
       - name: Install
-        run: yarn
+        run: yarn --ignore-engines
       - name: x86
         if: matrix.target == 'x86'
         run: make x86

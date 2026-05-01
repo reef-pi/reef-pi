@@ -1,5 +1,7 @@
 const { defineConfig } = require('@playwright/test')
 
+const chromiumChannel = process.env.PLAYWRIGHT_CHROMIUM_CHANNEL
+
 module.exports = defineConfig({
   testDir: './front-end/e2e',
   fullyParallel: false,
@@ -16,7 +18,8 @@ module.exports = defineConfig({
     baseURL: 'http://127.0.0.1:8080',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    video: process.env.CI ? 'off' : 'retain-on-failure',
+    ...(chromiumChannel ? { channel: chromiumChannel } : {})
   },
   webServer: {
     command: 'make start-dev',
