@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const macroUpdated = () => {
   return ({
@@ -25,10 +25,7 @@ export const macrosLoaded = (s) => {
 }
 
 export const fetchMacros = () => {
-  return (reduxGet({
-    url: '/api/macros',
-    success: macrosLoaded
-  }))
+  return getAction('macros', macrosLoaded)
 }
 
 export const macroUsageLoaded = (id) => {
@@ -41,44 +38,24 @@ export const macroUsageLoaded = (id) => {
 }
 
 export const fetchMacroUsage = (id) => {
-  return (reduxGet({
-    url: '/api/macros/' + id + '/usage',
-    success: macroUsageLoaded(id)
-  }))
+  return getAction(['macros', id, 'usage'], macroUsageLoaded(id))
 }
 
 export const createMacro = (a) => {
-  return (reduxPut({
-    url: '/api/macros',
-    data: a,
-    success: fetchMacros
-  }))
+  return putAction('macros', a, fetchMacros)
 }
 
 export const updateMacro = (id, a) => {
-  return (reduxPost({
-    url: '/api/macros/' + id,
-    data: a,
-    success: fetchMacros
-  }))
+  return postAction(['macros', id], a, fetchMacros)
 }
 
 export const deleteMacro = (id) => {
-  return (reduxDelete({
-    url: '/api/macros/' + id,
-    success: fetchMacros
-  }))
+  return deleteAction(['macros', id], fetchMacros)
 }
 
 export const runMacro = (id) => {
-  return (reduxPost({
-    url: '/api/macros/' + id + '/run',
-    success: macroRun
-  }))
+  return postAction(['macros', id, 'run'], undefined, macroRun)
 }
 export const revertMacro = (id) => {
-  return (reduxPost({
-    url: '/api/macros/' + id + '/revert',
-    success: macroRevert
-  }))
+  return postAction(['macros', id, 'revert'], undefined, macroRevert)
 }

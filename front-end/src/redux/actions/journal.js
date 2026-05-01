@@ -1,4 +1,4 @@
-import { reduxPut, reduxDelete, reduxGet, reduxPost } from 'utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const journalUpdated = () => {
   return ({
@@ -14,10 +14,7 @@ export const journalsLoaded = (s) => {
 }
 
 export const fetchJournals = () => {
-  return (reduxGet({
-    url: '/api/journal',
-    success: journalsLoaded
-  }))
+  return getAction('journal', journalsLoaded)
 }
 
 export const journalLoaded = (s) => {
@@ -28,10 +25,7 @@ export const journalLoaded = (s) => {
 }
 
 export const fetchJournal = (id) => {
-  return (reduxGet({
-    url: '/api/journal/' + id,
-    success: journalLoaded
-  }))
+  return getAction(['journal', id], journalLoaded)
 }
 
 export const journalUsageLoaded = (id) => {
@@ -44,41 +38,23 @@ export const journalUsageLoaded = (id) => {
 }
 
 export const fetchJournalUsage = (id) => {
-  return (reduxGet({
-    url: '/api/journal/' + id + '/usage',
-    success: journalUsageLoaded(id)
-  }))
+  return getAction(['journal', id, 'usage'], journalUsageLoaded(id))
 }
 
 export const createJournal = (a) => {
-  return (reduxPut({
-    url: '/api/journal',
-    data: a,
-    success: fetchJournals
-  }))
+  return putAction('journal', a, fetchJournals)
 }
 
 export const updateJournal = (id, a) => {
-  return (reduxPost({
-    url: '/api/journal/' + id,
-    data: a,
-    success: fetchJournals
-  }))
+  return postAction(['journal', id], a, fetchJournals)
 }
 
 export const deleteJournal = (id) => {
-  return (reduxDelete({
-    url: '/api/journal/' + id,
-    success: fetchJournals
-  }))
+  return deleteAction(['journal', id], fetchJournals)
 }
 
 export const recordJournal = (id, j) => {
-  return (reduxPost({
-    url: '/api/journal/' + id + '/record',
-    data: j,
-    success: journalRecorded(id)
-  }))
+  return postAction(['journal', id, 'record'], j, journalRecorded(id))
 }
 
 export const journalRecorded = (id) => {
