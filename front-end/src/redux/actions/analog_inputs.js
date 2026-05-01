@@ -1,9 +1,4 @@
-import {
-  reduxPut,
-  reduxDelete,
-  reduxGet,
-  reduxPost
-} from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const analogInputsLoaded = (ais) => {
   return ({
@@ -13,35 +8,17 @@ export const analogInputsLoaded = (ais) => {
 }
 
 export const fetchAnalogInputs = () => {
-  return (
-    reduxGet({
-      url: '/api/analog_inputs',
-      success: analogInputsLoaded
-    }))
+  return getAction('analog_inputs', analogInputsLoaded)
 }
 
 export const deleteAnalogInput = (id) => {
-  return (
-    reduxDelete({
-      url: '/api/analog_inputs/' + id,
-      success: fetchAnalogInputs
-    }))
+  return deleteAction(['analog_inputs', id], fetchAnalogInputs)
 }
 
 export const createAnalogInput = (ai) => {
-  return (
-    reduxPut({
-      url: '/api/analog_inputs',
-      data: ai,
-      success: fetchAnalogInputs
-    }))
+  return putAction('analog_inputs', ai, fetchAnalogInputs)
 }
 
 export const updateAnalogInput = (id, ai) => {
-  return (
-    reduxPost({
-      url: '/api/analog_inputs/' + id,
-      data: ai,
-      success: fetchAnalogInputs
-    }))
+  return postAction(['analog_inputs', id], ai, fetchAnalogInputs)
 }
