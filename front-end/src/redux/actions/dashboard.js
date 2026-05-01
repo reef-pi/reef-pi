@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost } from '../../utils/ajax'
+import { getAction, postAction } from './api'
 
 export const dashboardLoaded = (s) => {
   return ({
@@ -8,10 +8,7 @@ export const dashboardLoaded = (s) => {
 }
 
 export const fetchDashboard = () => {
-  return (reduxGet({
-    url: '/api/dashboard',
-    success: dashboardLoaded
-  }))
+  return getAction('dashboard', dashboardLoaded)
 }
 
 export const dashboardUpdated = () => {
@@ -21,9 +18,5 @@ export const dashboardUpdated = () => {
 }
 
 export const updateDashboard = (s) => {
-  return (reduxPost({
-    url: '/api/dashboard',
-    success: dashboardUpdated,
-    data: s
-  }))
+  return postAction('dashboard', s, dashboardUpdated)
 }

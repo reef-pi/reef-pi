@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost } from '../../utils/ajax'
+import { getAction, postAction } from './api'
 
 export const displayLoaded = (s) => {
   return ({
@@ -20,25 +20,14 @@ export const brightnessSet = () => {
 }
 
 export const fetchDisplay = () => {
-  return (reduxGet({
-    url: '/api/display',
-    success: displayLoaded
-  }))
+  return getAction('display', displayLoaded)
 }
 
 export const switchDisplay = (on) => {
   const action = on ? 'off' : 'on'
-  return (reduxPost({
-    url: '/api/display/' + action,
-    success: displaySwitched,
-    data: {}
-  }))
+  return postAction(['display', action], {}, displaySwitched)
 }
 
 export const setBrightness = (b) => {
-  return (reduxPost({
-    url: '/api/display',
-    success: brightnessSet,
-    data: { brightness: b }
-  }))
+  return postAction('display', { brightness: b }, brightnessSet)
 }

@@ -1,4 +1,4 @@
-import { reduxGet, reduxPost } from '../../utils/ajax'
+import { getAction, postAction } from './api'
 
 export const settingsLoaded = (s) => {
   return ({
@@ -14,16 +14,9 @@ export const settingsUpdated = () => {
 }
 
 export const fetchSettings = () => {
-  return (reduxGet({
-    url: '/api/settings',
-    success: settingsLoaded
-  }))
+  return getAction('settings', settingsLoaded)
 }
 
 export const updateSettings = (s) => {
-  return (reduxPost({
-    url: '/api/settings',
-    success: settingsUpdated,
-    data: s
-  }))
+  return postAction('settings', s, settingsUpdated)
 }
