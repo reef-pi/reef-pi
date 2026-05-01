@@ -1,4 +1,4 @@
-import { reduxDelete, reduxGet } from 'utils/ajax'
+import { deleteAction, getAction } from './api'
 
 export const errorsLoaded = (s) => {
   return ({
@@ -8,22 +8,13 @@ export const errorsLoaded = (s) => {
 }
 
 export const fetchErrors = () => {
-  return (reduxGet({
-    url: '/api/errors',
-    success: errorsLoaded
-  }))
+  return (getAction('errors', errorsLoaded))
 }
 
 export const deleteError = (id) => {
-  return (reduxDelete({
-    url: '/api/errors/' + id,
-    success: fetchErrors
-  }))
+  return (deleteAction(['errors', id], fetchErrors))
 }
 
 export const deleteErrors = () => {
-  return (reduxDelete({
-    url: '/api/errors/clear',
-    success: fetchErrors
-  }))
+  return (deleteAction(['errors', 'clear'], fetchErrors))
 }

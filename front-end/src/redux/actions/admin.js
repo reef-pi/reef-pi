@@ -1,4 +1,4 @@
-import { reduxPost } from '../../utils/ajax'
+import { postAction } from './api'
 
 export const reloaded = () => {
   return ({
@@ -8,11 +8,7 @@ export const reloaded = () => {
 
 export const reload = () => {
   return (
-    reduxPost({
-      url: '/api/admin/reload',
-      success: reloaded,
-      failure: () => {}
-    }))
+    postAction(['admin', 'reload'], undefined, reloaded, { failure: () => {} }))
 }
 
 export const rebooted = () => {
@@ -23,10 +19,7 @@ export const rebooted = () => {
 
 export const reboot = () => {
   return (
-    reduxPost({
-      url: '/api/admin/reboot',
-      success: rebooted
-    }))
+    postAction(['admin', 'reboot'], undefined, rebooted))
 }
 
 export const powerOffed = () => {
@@ -37,11 +30,7 @@ export const powerOffed = () => {
 
 export const powerOff = () => {
   return (
-    reduxPost({
-      url: '/api/admin/poweroff',
-      success: powerOffed,
-      data: {}
-    }))
+    postAction(['admin', 'poweroff'], {}, powerOffed))
 }
 
 export const dbImported = () => {
@@ -52,11 +41,7 @@ export const dbImported = () => {
 
 export const dbImport = (formData) => {
   return (
-    reduxPost({
-      url: '/api/admin/reef-pi.db',
-      success: dbImported,
-      raw: formData
-    }))
+    postAction(['admin', 'reef-pi.db'], undefined, dbImported, { raw: formData }))
 }
 
 export const upgraded = () => {
@@ -67,9 +52,5 @@ export const upgraded = () => {
 
 export const upgrade = (version) => {
   return (
-    reduxPost({
-      url: '/api/admin/upgrade',
-      success: upgraded,
-      data: { version }
-    }))
+    postAction(['admin', 'upgrade'], { version }, upgraded))
 }
