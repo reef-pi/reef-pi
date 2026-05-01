@@ -14,7 +14,7 @@ type Usage struct {
 }
 
 func (u1 Usage) Rollup(ux telemetry.Metric) (telemetry.Metric, bool) {
-	return u1, true // TODO
+	return u1, true // Keep the latest lighting usage sample as the rollup value.
 }
 
 func (u1 Usage) Before(ux telemetry.Metric) bool {
