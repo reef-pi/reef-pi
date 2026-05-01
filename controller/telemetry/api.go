@@ -9,11 +9,9 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-// TODO: translate these
-// TODO: this is a bit of a hack in that it means someone can't have their
-//
-//	actual token/password be the string "<stored>", but that seems rare
-//	enough a reasonable trade-off for a quick fix to unsaveable form bugs
+// PasswordStoredPlaceholder and AdafruitIOTokenStoredPlaceholder are sentinel
+// values returned for stored secrets and accepted on update to preserve the
+// existing secret value.
 const PasswordStoredPlaceholder = "<stored>"
 const AdafruitIOTokenStoredPlaceholder = "<stored>"
 
