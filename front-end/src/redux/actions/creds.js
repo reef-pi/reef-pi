@@ -1,4 +1,4 @@
-import { reduxPost } from '../../utils/ajax'
+import { postAction } from './api'
 
 export const credsUpdated = () => {
   return ({
@@ -7,10 +7,5 @@ export const credsUpdated = () => {
 }
 
 export const updateCreds = (creds) => {
-  return (
-    reduxPost({
-      url: '/api/credentials',
-      data: creds,
-      success: credsUpdated
-    }))
+  return postAction('credentials', creds, credsUpdated)
 }
