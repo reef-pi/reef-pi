@@ -1,4 +1,4 @@
-import { reduxPut, reduxGet, reduxPost, reduxDelete } from '../../utils/ajax'
+import { deleteAction, getAction, postAction, putAction } from './api'
 
 export const dosingPumpsLoaded = (s) => {
   return ({
@@ -20,64 +20,35 @@ export const dosingPumpCalibrated = () => {
 }
 
 export const fetchDosingPumps = () => {
-  return (reduxGet({
-    url: '/api/doser/pumps',
-    success: dosingPumpsLoaded
-  }))
+  return getAction(['doser', 'pumps'], dosingPumpsLoaded)
 }
 
 export const createDosingPump = (s) => {
-  return (reduxPut({
-    url: '/api/doser/pumps',
-    success: fetchDosingPumps,
-    data: s
-  }))
+  return putAction(['doser', 'pumps'], s, fetchDosingPumps)
 }
 
 export const updateDosingPump = (id, s) => {
-  return (reduxPost({
-    url: '/api/doser/pumps/' + id,
-    success: fetchDosingPumps,
-    data: s
-  }))
+  return postAction(['doser', 'pumps', id], s, fetchDosingPumps)
 }
 
 export const deleteDosingPump = (s) => {
-  return (reduxDelete({
-    url: '/api/doser/pumps/' + s,
-    success: fetchDosingPumps
-  }))
+  return deleteAction(['doser', 'pumps', s], fetchDosingPumps)
 }
 
 export const updateDosingPumpSchedule = (id, s) => {
-  return (reduxPost({
-    url: '/api/doser/pumps/' + id + '/schedule',
-    success: dosingPumpScheduleUpdated,
-    data: s
-  }))
+  return postAction(['doser', 'pumps', id, 'schedule'], s, dosingPumpScheduleUpdated)
 }
 
 export const calibrateDosingPump = (id, s) => {
-  return (reduxPost({
-    url: '/api/doser/pumps/' + id + '/calibrate',
-    success: dosingPumpCalibrated,
-    data: s
-  }))
+  return postAction(['doser', 'pumps', id, 'calibrate'], s, dosingPumpCalibrated)
 }
 
 export const saveDosingPumpCalibration = (id, s) => {
-  return (reduxPost({
-    url: '/api/doser/pumps/' + id + '/calibrate/save',
-    success: fetchDosingPumps,
-    data: s
-  }))
+  return postAction(['doser', 'pumps', id, 'calibrate', 'save'], s, fetchDosingPumps)
 }
 
 export const fetchDoserUsage = (id) => {
-  return (reduxGet({
-    url: '/api/doser/pumps/' + id + '/usage',
-    success: doserUsageLoaded(id)
-  }))
+  return getAction(['doser', 'pumps', id, 'usage'], doserUsageLoaded(id))
 }
 
 export const doserUsageLoaded = (id) => {
