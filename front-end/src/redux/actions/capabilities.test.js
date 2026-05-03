@@ -14,7 +14,16 @@ describe('capabilities actions', () => {
   })
 
   it('capabilitiesLoaded', () => {
-    expect(capabilitiesLoaded({}).type).toEqual('CAPABILITIES_LOADED')
+    const capabilities = { equipment: true }
+
+    expect(capabilitiesLoaded(capabilities)).toEqual({
+      type: 'CAPABILITIES_LOADED',
+      payload: {
+        equipment: true,
+        log: true
+      }
+    })
+    expect(capabilities).toEqual({ equipment: true })
   })
 
   it('fetchCapabilities', () => {
