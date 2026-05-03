@@ -1,12 +1,15 @@
 import { getAction } from './api'
 
 export const capabilitiesLoaded = (capabilities) => {
-  const MandatoryCapabilities = {
+  const mandatoryCapabilities = {
     log: true
   }
   return ({
     type: 'CAPABILITIES_LOADED',
-    payload: Object.assign(capabilities, MandatoryCapabilities)
+    payload: {
+      ...capabilities,
+      ...mandatoryCapabilities
+    }
   })
 }
 
