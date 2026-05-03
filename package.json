@@ -27,7 +27,7 @@
     "fetch-mock": "9.11.0",
     "form-data": "^4.0.1",
     "formik": "2.4.6",
-    "html-webpack-plugin": "5.5.0",
+    "html-webpack-plugin": "5.6.7",
     "humanize-duration": "^3.31.0",
     "i18next": "25.5.3",
     "i18next-browser-languagedetector": "8.2.1",
