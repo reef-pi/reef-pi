@@ -1,11 +1,11 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { configureStore, setStore } from 'redux/store'
+import { configureStore } from 'redux/store'
 import { setAlertDispatcher } from 'utils/alert'
 import App from 'app'
 
-const store = setStore(configureStore())
+const store = configureStore()
 setAlertDispatcher(store.dispatch)
 const root = createRoot(document.getElementById('main-panel'))
 

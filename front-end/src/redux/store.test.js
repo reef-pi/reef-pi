@@ -1,19 +1,14 @@
+import { configureStore } from './store'
+
 describe('redux store ownership', () => {
-  beforeEach(() => {
-    jest.resetModules()
-  })
+  it('creates a Redux store with the initial app state', () => {
+    const store = configureStore()
 
-  it('does not create a store before one is registered', () => {
-    const { getStore } = require('./store')
-
-    expect(getStore()).toBeUndefined()
-  })
-
-  it('returns the registered store', () => {
-    const { getStore, setStore } = require('./store')
-    const store = { dispatch: jest.fn(), getState: jest.fn() }
-
-    expect(setStore(store)).toBe(store)
-    expect(getStore()).toBe(store)
+    expect(store.dispatch).toEqual(expect.any(Function))
+    expect(store.getState()).toEqual(expect.objectContaining({
+      info: expect.any(Object),
+      errors: expect.any(Array),
+      capabilities: expect.any(Object)
+    }))
   })
 })

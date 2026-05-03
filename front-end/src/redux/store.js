@@ -6,14 +6,3 @@ import { createInitialState } from './state'
 export const configureStore = (preloadedState = createInitialState()) => {
   return createStore(rootReducer, preloadedState, applyMiddleware(thunk))
 }
-
-let appStore
-
-export const setStore = (store) => {
-  appStore = store
-  return appStore
-}
-
-export const getStore = () => {
-  return appStore
-}
