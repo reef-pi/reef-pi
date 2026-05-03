@@ -107,7 +107,7 @@ describe('MainPanel', () => {
 
     expect(links.map(link => link.props.id)).toEqual(['tab-dashboard', 'tab-timers', 'tab-configuration'])
     expect(links.map(link => link.props['data-testid'])).toEqual(['smoke-tab-dashboard', 'smoke-tab-timers', 'smoke-tab-configuration'])
-    expect(links.map(link => link.props.to)).toEqual(['', '/timers', '/configuration/*'])
+    expect(links.map(link => link.props.to)).toEqual(['', '/timers', '/configuration'])
   })
 
   it('matches current page routes including nested configuration pages', () => {
@@ -127,6 +127,6 @@ describe('MainPanel', () => {
 
   it('normalizes only dashboard navigation to the empty path', () => {
     expect(routeNavigationPath(mainPanelRoutes[0])).toBe('')
-    expect(routeNavigationPath(mainPanelRoutes[12])).toBe('/configuration/*')
+    expect(routeNavigationPath(mainPanelRoutes[12])).toBe('/configuration')
   })
 })

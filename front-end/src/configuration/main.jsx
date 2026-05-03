@@ -27,13 +27,16 @@ const configRouteElements = configRoutes.map(route => (
 
 class Configuration extends React.Component {
   render () {
-    const panels = configRoutes.map(route => (
-      <li key={'conf-tabs' + route.key}>
-        <NavLink id={'config-' + route.key} className='nav-link' to={route.path || ''}>
-          {route.label}
-        </NavLink>
-      </li>
-    ))
+    const panels = configRoutes.map(route => {
+      const to = route.path === '*' ? '/configuration' : `/configuration/${route.path}`.replace(/\/+/g, '/')
+      return (
+        <li key={'conf-tabs' + route.key}>
+          <NavLink id={'config-' + route.key} className='nav-link' to={to}>
+            {route.label}
+          </NavLink>
+        </li>
+      )
+    })
 
     return (
       <>

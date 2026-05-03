@@ -35,7 +35,7 @@ export const mainPanelRouteElements = mainPanelRoutes.map(route => (
   <Route key={route.key} index={route.index} path={route.path} element={route.element} />
 ))
 
-export const routeNavigationPath = route => route.path || ''
+export const routeNavigationPath = route => (route.path || '').replace(/\/\*$/, '')
 
 export const routeEnabled = (route, capabilities) => (
   capabilities[route.key] !== undefined && capabilities[route.key]
