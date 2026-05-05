@@ -6,6 +6,12 @@ const usage = { historical: [{ time: 'Jul-01-10:00, 2024', pump: 3 }] }
 
 describe('Doser Chart', () => {
   it('renders without throwing with config and usage present', () => {
+    const usage = {
+      historical: [
+        { time: 'Jul-01-10:10, 2024', pump: 4 },
+        { time: 'Jul-01-10:00, 2024', pump: 3 }
+      ]
+    }
     const chart = new RawDoserChart({
       doser_id: '1',
       height: 200,
@@ -14,6 +20,8 @@ describe('Doser Chart', () => {
       fetchDoserUsage: jest.fn()
     })
     expect(() => chart.render()).not.toThrow()
+    expect(usage.historical.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
+    expect(usage.historical[0].ts).toBeUndefined()
     expect(Chart).toBeDefined()
   })
 

@@ -146,7 +146,12 @@ describe('GenericLightChart', () => {
   })
 
   it('renders chart when light and usage are present', () => {
-    const usage = { current: [{ time: '10:00', channels: { 1: 50 } }] }
+    const usage = {
+      current: [
+        { time: '10:10', channels: { 1: 75 } },
+        { time: '10:00', channels: { 1: 50 } }
+      ]
+    }
     const tree = new RawGenericLightChart({
       light_id: '1',
       light: lightConfig,
@@ -155,6 +160,8 @@ describe('GenericLightChart', () => {
       height: 200
     }).render()
     expect(tree.props.className).toBe('container')
+    expect(usage.current.map(item => item.time)).toEqual(['10:10', '10:00'])
+    expect(usage.current[0][1]).toBeUndefined()
   })
 
   it('clears interval on unmount', () => {

@@ -42,16 +42,17 @@ export class RawGenericLightChart extends React.Component {
     })
 
     const usage = this.props.usage.current
-
-    usage.sort((a, b) => {
-      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
-    })
-
-    usage.forEach((v, i) => {
-      Object.entries(v.channels).forEach(([ch, v]) => {
-        usage[i][ch] = v
+      .slice()
+      .sort((a, b) => {
+        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
       })
-    })
+      .map(v => {
+        const row = { ...v }
+        Object.entries(v.channels).forEach(([ch, value]) => {
+          row[ch] = value
+        })
+        return row
+      })
     return (
       <div className='container'>
         <span className='h6'>{l.name}</span>
