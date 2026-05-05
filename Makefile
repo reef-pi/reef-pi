@@ -68,13 +68,7 @@ ui-dev:
 	yarn run ui-dev
 
 .PHONY: common_deb
-common_deb: ui api-doc
-	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi
-	cp bin/reef-pi dist/usr/bin/reef-pi
-	cp -r ui/* dist/var/lib/reef-pi/ui
-	cp swagger.json dist/var/lib/reef-pi/ui/assets/swagger.json
-	cp build/config.yaml dist/etc/reef-pi/config.yaml
-	mkdir dist/var/lib/reef-pi/images
+common_deb: ui api-doc _dist_layout
 
 .PHONY: pi_deb
 pi_deb: common_deb
@@ -84,8 +78,11 @@ pi_deb: common_deb
 x86_deb: common_deb
 	bundle exec fpm -t deb -s dir -a all -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
+# Internal helper: populate dist/ from a pre-built ui/ and bin/reef-pi. Called by
+# common_deb (via prerequisites) and pi_deb_prebuilt/x86_deb_prebuilt.
 .PHONY: _dist_layout
 _dist_layout:
+	@test -d ui || (echo "ERROR: ui/ not found. Run 'make ui' or download the CI artifact." && exit 1)
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi dist/var/lib/reef-pi/images
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
