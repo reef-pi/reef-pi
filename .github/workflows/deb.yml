@@ -4,13 +4,57 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'jsx/**'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
+      - 'build/**'
   pull_request:
     branches:
       - main
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'jsx/**'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
+      - 'build/**'
+
 jobs:
+  build-ui:
+    name: Build UI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - name: Install
+        run: yarn
+      - name: Build UI
+        run: make ui
+      - name: Generate API doc
+        run: make api-doc
+      - name: Upload UI artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ui-dist
+          path: ui/
+          if-no-files-found: error
+          retention-days: 1
+
   build:
     name: Build Package (${{ matrix.target }})
     runs-on: ubuntu-latest
+    needs: build-ui
     strategy:
       matrix:
         target:
@@ -28,12 +72,11 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: '1.26.2'
-      - uses: actions/setup-node@v6
+      - name: Download UI artifact
+        uses: actions/download-artifact@v6
         with:
-          node-version: 22
-          cache: 'yarn'
-      - name: Install
-        run: yarn
+          name: ui-dist
+          path: ui/
       - name: x86
         if: matrix.target == 'x86'
         run: make x86
@@ -49,10 +92,10 @@ jobs:
         run: bundle install
       - name: pi_deb
         if: matrix.target != 'x86'
-        run: make pi_deb
+        run: make pi_deb_prebuilt
       - name: x86_deb
         if: matrix.target == 'x86'
-        run: make x86_deb
+        run: make x86_deb_prebuilt
       - name: Rename deb package
         run: |
           VERSION=$(git describe --always --tags)
