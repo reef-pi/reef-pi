@@ -79,7 +79,7 @@ export class RawTemperatureMain extends React.Component {
   }
 
   probeList () {
-    return this.props.probes
+    return this.props.probes.slice()
       .sort((a, b) => SortByName(a, b))
       .map(probe => {
         const calibrationButton = (

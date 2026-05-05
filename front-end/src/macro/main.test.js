@@ -47,8 +47,12 @@ describe('Macro UI', () => {
   })
 
   it('<Main /> mounts with macros', () => {
+    const macros = [
+      { ...macro, id: '1', name: 'Macro B' },
+      { ...macro, id: '2', name: 'Macro A' }
+    ]
     const main = new RawMacroMain({
-      macros: [macro],
+      macros,
       fetch: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
@@ -57,6 +61,7 @@ describe('Macro UI', () => {
       revert: jest.fn()
     })
     expect(main.render().type).toBe('ul')
+    expect(macros.map(item => item.name)).toEqual(['Macro B', 'Macro A'])
   })
 
   it('<Main /> toggles add macro form', () => {

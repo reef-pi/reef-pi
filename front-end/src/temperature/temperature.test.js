@@ -77,8 +77,12 @@ describe('Temperature controller ui', () => {
   })
 
   it('<Main /> mounts with tcs', () => {
+    const probes = [
+      { id: '1', name: 'Water B', chart: {}, enable: false, notify: { enable: false } },
+      { id: '2', name: 'Water A', chart: {}, enable: false, notify: { enable: false } }
+    ]
     const props = {
-      probes: tcState.tcs,
+      probes,
       currentReading: [],
       sensors: [],
       analogInputs: [],
@@ -97,7 +101,10 @@ describe('Temperature controller ui', () => {
     const component = new RawTemperatureMain(props)
     component.componentDidMount()
     expect(props.readTC).toHaveBeenCalledWith('1')
-    expect(component.probeList()).toHaveLength(1)
+    const items = component.probeList()
+    expect(items).toHaveLength(2)
+    expect(items[0].props.name).toBe('panel-temperature-2')
+    expect(probes.map(probe => probe.name)).toEqual(['Water B', 'Water A'])
   })
 
   it('<Main /> toggles add probe form', () => {
