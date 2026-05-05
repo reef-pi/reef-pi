@@ -60,8 +60,12 @@ describe('Instances Main', () => {
     const create = jest.fn()
     const update = jest.fn()
     const remove = jest.fn()
+    const instances = [
+      { ...instanceData, id: '2', name: 'Remote Tank B' },
+      { ...instanceData, id: '1', name: 'Remote Tank A' }
+    ]
     const main = new RawInstancesMain({
-      instances: [instanceData],
+      instances,
       fetch,
       create,
       update,
@@ -72,7 +76,8 @@ describe('Instances Main', () => {
     expect(fetch).toHaveBeenCalled()
 
     const rendered = main.render()
-    expect(countByType(rendered, node => node.type === Instance)).toBe(1)
+    expect(countByType(rendered, node => node.type === Instance)).toBe(2)
+    expect(instances.map(instance => instance.name)).toEqual(['Remote Tank B', 'Remote Tank A'])
   })
 
   it('renders with empty instance list', () => {

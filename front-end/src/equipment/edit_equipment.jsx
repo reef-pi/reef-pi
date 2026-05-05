@@ -69,7 +69,7 @@ const EditEquipment = ({
             value={values.outlet}
           >
             <option value='' className='d-none'>-- {i18next.t('select')} --</option>
-            {outlets.sort((a, b) => SortByName(a, b))
+            {outlets.slice().sort((a, b) => SortByName(a, b))
               .map((item) => {
                 return (
                   <option

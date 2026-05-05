@@ -72,8 +72,12 @@ describe('Drivers Main', () => {
   })
 
   it('renders drivers including rpi type as read_only', () => {
+    const unsortedDrivers = [
+      { id: '1', name: 'RPI B', type: 'rpi', config: {} },
+      { id: '2', name: 'PCA A', type: 'pca9685', config: {} }
+    ]
     const main = new RawDriversMain({
-      drivers,
+      drivers: unsortedDrivers,
       driverOptions,
       fetch: jest.fn(),
       fetchDriverOptions: jest.fn(),
@@ -89,6 +93,7 @@ describe('Drivers Main', () => {
     const byId = Object.fromEntries(driverNodes.map(node => [node.props.driver.id, node.props]))
     expect(byId['1'].read_only).toBe(true)
     expect(byId['2'].read_only).toBe(false)
+    expect(unsortedDrivers.map(driver => driver.name)).toEqual(['RPI B', 'PCA A'])
   })
 
   it('renders with non-rpi driver', () => {

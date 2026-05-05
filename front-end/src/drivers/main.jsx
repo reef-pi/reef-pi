@@ -24,7 +24,7 @@ export class RawDriversMain extends React.Component {
 
   list () {
     const items = []
-    this.props.drivers.sort((a, b) => SortByName(a, b))
+    this.props.drivers.slice().sort((a, b) => SortByName(a, b))
       .forEach((d, n) => {
         items.push(
           <Driver
