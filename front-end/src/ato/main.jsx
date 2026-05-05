@@ -80,7 +80,7 @@ export class RawATOMain extends React.Component {
   }
 
   probeList () {
-    return this.props.atos.sort((a, b) => SortByName(a, b))
+    return this.props.atos.slice().sort((a, b) => SortByName(a, b))
       .map(probe => {
         const handleToggleState = () => {
           probe.enable = !probe.enable
