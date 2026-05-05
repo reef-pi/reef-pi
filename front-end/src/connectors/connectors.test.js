@@ -70,8 +70,12 @@ describe('Connectors', () => {
 
   it('<Inlets />', () => {
     const create = jest.fn()
+    const inlets = [
+      { id: '1', name: 'foo', pin: 1, reverse: true, driver: 'rpi' },
+      { id: '2', name: 'bar', pin: 2, reverse: false, driver: 'rpi' }
+    ]
     const component = new RawInlets({
-      inlets: [{ id: '1', name: 'foo', pin: 1, reverse: true, driver: 'rpi' }],
+      inlets,
       drivers: stockDrivers,
       fetch: jest.fn(),
       create,
@@ -87,6 +91,7 @@ describe('Connectors', () => {
     component.handleSave()
     expect(create).toHaveBeenCalled()
     expect(component.list().length).toBeGreaterThan(0)
+    expect(inlets.map(i => i.name)).toEqual(['foo', 'bar'])
   })
 
   it('<Inlet />', () => {
@@ -169,11 +174,12 @@ describe('Connectors', () => {
   it('<Jacks /> list groups jacks by driver name', () => {
     const fetch = jest.fn()
     const update = jest.fn()
+    const jacks = [
+      { id: '1', name: 'J2', pins: [0], reverse: false, driver: 'rpi' },
+      { id: '2', name: 'J1', pins: [1], reverse: false, driver: '1' }
+    ]
     const component = new RawJacks({
-      jacks: [
-        { id: '1', name: 'J1', pins: [0], reverse: false, driver: 'rpi' },
-        { id: '2', name: 'J2', pins: [1], reverse: false, driver: '1' }
-      ],
+      jacks,
       drivers: stockDrivers,
       fetch,
       create: jest.fn(),
@@ -188,6 +194,7 @@ describe('Connectors', () => {
       updateFn.props.update({ name: 'J1updated', pins: [0] })
       expect(update).toHaveBeenCalled()
     }
+    expect(jacks.map(j => j.name)).toEqual(['J2', 'J1'])
   })
 
   it('<Jacks /> render does not throw', () => {
@@ -229,8 +236,12 @@ describe('Connectors', () => {
 
   it('<Outlets />', () => {
     const create = jest.fn()
+    const outlets = [
+      { id: '1', name: 'J2', pin: 1, reverse: true, driver: 'rpi' },
+      { id: '2', name: 'J1', pin: 2, reverse: false, driver: 'rpi' }
+    ]
     const component = new RawOutlets({
-      outlets: [{ id: '1', name: 'J2', pin: 1, reverse: true, driver: 'rpi' }],
+      outlets,
       drivers: stockDrivers,
       fetch: jest.fn(),
       create,
@@ -246,6 +257,7 @@ describe('Connectors', () => {
     component.handleSave()
     expect(create).toHaveBeenCalled()
     expect(component.list().length).toBeGreaterThan(0)
+    expect(outlets.map(o => o.name)).toEqual(['J2', 'J1'])
   })
 
   it('<Outlet />', () => {
@@ -355,8 +367,12 @@ describe('Connectors', () => {
       { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } }
     ]
     const create = jest.fn()
+    const analogInputs = [
+      { id: '1', name: 'pH', pin: 0, driver: 'ads' },
+      { id: '2', name: 'ORP', pin: 1, driver: 'ads' }
+    ]
     const component = new RawAnalogInputs({
-      analog_inputs: [{ id: '1', name: 'pH', pin: 0, driver: 'ads' }],
+      analog_inputs: analogInputs,
       drivers: aiDrivers,
       fetch: jest.fn(),
       create,
@@ -370,5 +386,6 @@ describe('Connectors', () => {
     component.handleSave()
     expect(create).toHaveBeenCalled()
     expect(component.list().length).toBeGreaterThan(0)
+    expect(analogInputs.map(input => input.name)).toEqual(['pH', 'ORP'])
   })
 })

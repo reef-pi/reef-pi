@@ -103,7 +103,7 @@ class jacks extends React.Component {
     this.props.drivers.forEach(d => { driverMap[d.id] = d })
 
     const groups = {}
-    this.props.jacks.sort((a, b) => SortByName(a, b))
+    this.props.jacks.slice().sort((a, b) => SortByName(a, b))
       .forEach(j => {
         const driverName = (driverMap[j.driver] || {}).name || j.driver
         if (!groups[driverName]) groups[driverName] = []
