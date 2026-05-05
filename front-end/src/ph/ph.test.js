@@ -87,10 +87,17 @@ describe('Ph ui', () => {
   })
 
   it('<Main /> mounts with probes', () => {
-    const props = createProps({ probes: phState.phprobes })
+    const probes = [
+      { id: '1', name: 'probe B', enable: false, notify: { enable: false }, control: false },
+      { id: '2', name: 'probe A', enable: false, notify: { enable: false }, control: false }
+    ]
+    const props = createProps({ probes })
     const component = new RawPhMain(props)
     component.componentDidMount()
-    expect(component.probeList()).toHaveLength(1)
+    const items = component.probeList()
+    expect(items).toHaveLength(2)
+    expect(items[0].props.name).toBe('panel-ph-2')
+    expect(probes.map(probe => probe.name)).toEqual(['probe B', 'probe A'])
   })
 
   it('<Main /> toggles add probe form', () => {

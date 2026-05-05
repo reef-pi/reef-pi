@@ -127,8 +127,15 @@ describe('Lighting ui', () => {
   })
 
   it('<Main />', () => {
-    const m = createMain()
-    expect(m.lightsList()).toHaveLength(2)
+    const lights = [
+      { ...light, id: '1', name: 'light B' },
+      { ...light, id: '2', name: 'light A' }
+    ]
+    const m = createMain({ lights })
+    const items = m.lightsList()
+    expect(items).toHaveLength(2)
+    expect(items[0].props.name).toBe('light-2')
+    expect(lights.map(item => item.name)).toEqual(['light B', 'light A'])
   })
 
   it('<Main /> should change mode from auto to manual', () => {

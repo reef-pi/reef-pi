@@ -140,7 +140,7 @@ class main extends React.Component {
 
   lightsList () {
     return (
-      this.props.lights.sort((a, b) => SortByName(a, b))
+      this.props.lights.slice().sort((a, b) => SortByName(a, b))
         .map(light => {
           let panelContent = (
             <Light

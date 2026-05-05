@@ -52,7 +52,7 @@ export class RawMacroMain extends React.Component {
 
   macroList () {
     return (
-      this.props.macros.sort((a, b) => SortByName(a, b))
+      this.props.macros.slice().sort((a, b) => SortByName(a, b))
         .map(macro => {
           const buttons = []
           buttons.push(
