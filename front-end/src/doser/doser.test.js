@@ -153,10 +153,15 @@ describe('Doser ui', () => {
   }
 
   it('<Main /> doserList renders one entry per doser', () => {
-    const component = makeComponent()
+    const dosers = [
+      makeDoser({ id: '1', name: 'doser B' }),
+      makeDoser({ id: '2', name: 'doser A' })
+    ]
+    const component = makeComponent({ dosers })
     const items = component.doserList()
-    expect(items).toHaveLength(1)
-    expect(items[0].props.name).toBe('panel-doser-1')
+    expect(items).toHaveLength(2)
+    expect(items[0].props.name).toBe('panel-doser-2')
+    expect(dosers.map(item => item.name)).toEqual(['doser B', 'doser A'])
   })
 
   it('<Main /> doserList toggle enable calls update', () => {

@@ -32,7 +32,7 @@ export class RawDoser extends React.Component {
 
   doserList () {
     return (
-      this.props.dosers.sort((a, b) => SortByName(a, b))
+      this.props.dosers.slice().sort((a, b) => SortByName(a, b))
         .map(doser => {
           const calibrationButton = (
             <button

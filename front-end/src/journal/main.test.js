@@ -40,6 +40,7 @@ describe('<Main />', () => {
     const rendered = main.render()
 
     expect(countByType(rendered, node => node.type === Collapsible)).toBe(2)
+    expect(journals.map(journal => journal.name)).toEqual(['pH Log', 'Alkalinity'])
   })
 
   it('renders with empty journal list', () => {

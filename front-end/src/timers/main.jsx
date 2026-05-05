@@ -26,7 +26,7 @@ export class RawTimersMain extends React.Component {
   }
 
   timerList () {
-    return this.props.timers.sort((a, b) => SortByName(a, b))
+    return this.props.timers.slice().sort((a, b) => SortByName(a, b))
       .map(timer => {
         const handleToggleState = () => {
           timer.enable = !timer.enable

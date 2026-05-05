@@ -66,11 +66,16 @@ describe('Timer ui', () => {
   })
 
   it('<Main /> renders timers when present', () => {
-    const component = new RawTimersMain(makeProps())
+    const timers = [
+      { ...timerData, id: '1', name: 'timer B' },
+      { ...timerData, id: '2', name: 'timer A' }
+    ]
+    const component = new RawTimersMain(makeProps({ timers }))
     const items = component.timerList()
 
-    expect(items).toHaveLength(1)
-    expect(items[0].props.name).toBe('panel-timer-1')
+    expect(items).toHaveLength(2)
+    expect(items[0].props.name).toBe('panel-timer-2')
+    expect(timers.map(item => item.name)).toEqual(['timer B', 'timer A'])
   })
 
   it('<Main /> toggles add timer form', () => {

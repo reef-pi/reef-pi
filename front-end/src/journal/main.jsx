@@ -32,7 +32,7 @@ export class RawJournalMain extends React.Component {
   }
 
   list () {
-    return this.props.journals.sort((a, b) => SortByName(a, b))
+    return this.props.journals.slice().sort((a, b) => SortByName(a, b))
       .map(j => {
         return (
           <Collapsible

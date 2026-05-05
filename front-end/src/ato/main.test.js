@@ -47,11 +47,16 @@ describe('ATO Main', () => {
   })
 
   it('renders a collapsible entry for each ATO', () => {
-    const component = new RawATOMain(makeProps())
+    const atos = [
+      { ...ato, id: '1', name: 'Top-off B' },
+      { ...ato, id: '2', name: 'Top-off A' }
+    ]
+    const component = new RawATOMain(makeProps({ atos }))
     const panels = component.probeList()
 
-    expect(panels).toHaveLength(1)
-    expect(panels[0].props.name).toBe('panel-ato-1')
+    expect(panels).toHaveLength(2)
+    expect(panels[0].props.name).toBe('panel-ato-2')
+    expect(atos.map(item => item.name)).toEqual(['Top-off B', 'Top-off A'])
   })
 
   it('renders with an empty ATO list', () => {
