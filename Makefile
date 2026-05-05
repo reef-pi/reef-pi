@@ -84,6 +84,22 @@ pi_deb: common_deb
 x86_deb: common_deb
 	bundle exec fpm -t deb -s dir -a all -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
 
+.PHONY: _dist_layout
+_dist_layout:
+	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi dist/var/lib/reef-pi/images
+	cp bin/reef-pi dist/usr/bin/reef-pi
+	cp -r ui/* dist/var/lib/reef-pi/ui
+	cp swagger.json dist/var/lib/reef-pi/ui/assets/swagger.json
+	cp build/config.yaml dist/etc/reef-pi/config.yaml
+
+.PHONY: pi_deb_prebuilt
+pi_deb_prebuilt: _dist_layout
+	bundle exec fpm -t deb -s dir -a armhf -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
+
+.PHONY: x86_deb_prebuilt
+x86_deb_prebuilt: _dist_layout
+	bundle exec fpm -t deb -s dir -a all -n reef-pi -v $(VERSION) -m ranjib@linux.com --deb-systemd build/reef-pi.service -C dist  -p reef-pi-$(VERSION).deb .
+
 .PHONY: clean
 clean:
 	-rm -rf *.deb
