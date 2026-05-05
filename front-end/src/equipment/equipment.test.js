@@ -187,6 +187,10 @@ describe('Equipment ui', () => {
   })
 
   it('<EditEquipment />', () => {
+    const unsortedOutlets = [
+      { id: '1', name: 'Outlet B' },
+      { id: '2', name: 'Outlet A' }
+    ]
     const tree = EditEquipment({
       actionLabel: 'save',
       values: { id: 1, name: '', outlet: '', stay_off_on_boot: false, boot_delay: 0 },
@@ -194,12 +198,13 @@ describe('Equipment ui', () => {
       touched: {},
       update: () => true,
       delete: () => true,
-      outlets: [{ id: '1', name: 'O1' }],
+      outlets: unsortedOutlets,
       handleBlur: () => true,
       submitForm: () => true,
       handleChange: () => true
     })
     expect(tree.type).toBe('form')
+    expect(unsortedOutlets.map(outlet => outlet.name)).toEqual(['Outlet B', 'Outlet A'])
   })
 
   it('<EditEquipment /> New Item', () => {
