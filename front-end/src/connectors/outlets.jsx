@@ -95,7 +95,7 @@ class outlets extends React.Component {
     this.props.drivers.forEach(d => { driverMap[d.id] = d })
 
     const groups = {}
-    this.props.outlets
+    this.props.outlets.slice()
       .sort((a, b) => SortByName(a, b))
       .forEach(o => {
         const driverName = (driverMap[o.driver] || {}).name || o.driver

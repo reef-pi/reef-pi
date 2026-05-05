@@ -94,7 +94,7 @@ class inlets extends React.Component {
     this.props.drivers.forEach(d => { driverMap[d.id] = d })
 
     const groups = {}
-    this.props.inlets.sort((a, b) => SortByName(a, b))
+    this.props.inlets.slice().sort((a, b) => SortByName(a, b))
       .forEach(i => {
         const driverName = (driverMap[i.driver] || {}).name || i.driver
         if (!groups[driverName]) groups[driverName] = []
