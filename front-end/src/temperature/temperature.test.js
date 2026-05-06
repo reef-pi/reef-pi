@@ -251,9 +251,10 @@ describe('Temperature controller ui', () => {
     expect(new RawControlChart({ config: undefined, usage: { historical: [] }, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
     expect(new RawControlChart({ config: { chart: {} }, usage: undefined, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
     const fetchTCUsage = jest.fn()
+    const historical = [{ time: '2026-04-27T10:00:00Z', cooler: 1, up: 2, down: 0, value: 72 }]
     const instance = new RawControlChart({
       config: { id: '1', name: 'Water', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true },
-      usage: { historical: [{ time: '2026-04-27T10:00:00Z', cooler: 1, up: 2, down: 0, value: 72 }], current: [] },
+      usage: { historical, current: [] },
       sensor_id: '1',
       fetchTCUsage,
       height: 200
@@ -262,6 +263,8 @@ describe('Temperature controller ui', () => {
     instance.componentDidMount()
     expect(fetchTCUsage).toHaveBeenCalledWith('1')
     expect(instance.render().props.className).toBe('container')
+    expect(historical[0].cooler).toBe(1)
+    expect(historical[0].ts).toBeUndefined()
     instance.componentWillUnmount()
   })
 
