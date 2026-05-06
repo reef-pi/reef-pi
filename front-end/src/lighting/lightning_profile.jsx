@@ -12,7 +12,7 @@ const LightningProfile = ({
   onChangeHandler
 }) => {
   const handleChange = e => {
-    const updated = Object.assign({}, config, { [e.target.name]: e.target.value })
+    const updated = { ...config, [e.target.name]: e.target.value }
     onChangeHandler(updated)
   }
 
