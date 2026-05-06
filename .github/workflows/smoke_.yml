@@ -1,5 +1,23 @@
 name: Frontend Smoke
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'jsx/**'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
+  pull_request:
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - 'jsx/**'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
 jobs:
   frontend-smoke:
     name: Smoke Test
