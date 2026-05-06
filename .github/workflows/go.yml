@@ -7,6 +7,7 @@ on:
       - 'go.sum'
       - 'Makefile'
       - 'scripts/**'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
       - '**/*.go'
@@ -14,6 +15,7 @@ on:
       - 'go.sum'
       - 'Makefile'
       - 'scripts/**'
+      - '.github/workflows/*.yml'
 
 jobs:
   lint:

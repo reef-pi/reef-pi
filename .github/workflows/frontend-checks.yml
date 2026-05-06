@@ -6,12 +6,14 @@ on:
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
       - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
 
 jobs:
   jest-standard:
