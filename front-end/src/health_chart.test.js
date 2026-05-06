@@ -42,4 +42,22 @@ describe('Health', () => {
 
     expect(window.clearInterval).toHaveBeenCalledWith(123)
   })
+
+  it('does not mutate health stats while preparing chart rows', () => {
+    const current = [
+      { time: 'Jul-01-10:10, 2024', cpu: 2, memory: 3, cpu_temp: 4 },
+      { time: 'Jul-01-10:00, 2024', cpu: 1, memory: 2, cpu_temp: 3 }
+    ]
+    const chart = new RawHealthChart({
+      fetchHealth,
+      health_stats: { current },
+      trend: 'current',
+      height: 100
+    })
+
+    chart.render()
+
+    expect(current.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
+    expect(current[0].ts).toBeUndefined()
+  })
 })

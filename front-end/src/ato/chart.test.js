@@ -6,6 +6,12 @@ const usage = { historical: [{ time: 'Jul-01-10:00, 2024', pump: 5 }] }
 
 describe('ATO Chart', () => {
   it('renders without throwing with config and usage present', () => {
+    const usage = {
+      historical: [
+        { time: 'Jul-01-10:10, 2024', pump: 6 },
+        { time: 'Jul-01-10:00, 2024', pump: 5 }
+      ]
+    }
     const chart = new RawATOChart({
       ato_id: '1',
       height: 200,
@@ -14,6 +20,8 @@ describe('ATO Chart', () => {
       fetchATOUsage: jest.fn()
     })
     expect(() => chart.render()).not.toThrow()
+    expect(usage.historical.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
+    expect(usage.historical[0].ts).toBeUndefined()
     expect(Chart).toBeDefined()
   })
 
