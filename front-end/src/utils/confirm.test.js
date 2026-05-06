@@ -47,6 +47,19 @@ describe('confirm utils', () => {
     expect(typeof showModal).toBe('function')
   })
 
+  it('confirm merges message and options for the modal props', () => {
+    confirm('Delete item?', { confirmLabel: 'Delete', message: 'Override message' })
+
+    expect(mockRender).toHaveBeenCalledWith(
+      expect.objectContaining({
+        props: expect.objectContaining({
+          confirmLabel: 'Delete',
+          message: 'Override message'
+        })
+      })
+    )
+  })
+
   it('showModal appends a div and renders into it', () => {
     const React = require('react')
     return showModal(React.createElement(require('confirm')))
