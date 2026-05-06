@@ -19,15 +19,6 @@ export default class AutoProfile extends React.Component {
     this.handleAddPoint = this.handleAddPoint.bind(this)
     this.handleRemovePoint = this.handleRemovePoint.bind(this)
     this.sliderList = this.sliderList.bind(this)
-    if (props.config && props.config.values && Array.isArray(props.config.values)) {
-      this.state = {
-        values: props.config.values
-      }
-    } else {
-      this.state = {
-        values: Array(12).fill(0)
-      }
-    }
   }
 
   handleAddPoint () {
@@ -70,7 +61,7 @@ export default class AutoProfile extends React.Component {
   }
 
   sliderList () {
-    const values = Object.assign({}, this.state).values
+    const values = this.state.values.map(value => value === undefined ? 0 : value)
 
     const rangeStyle = {
       WebkitAppearance: 'slider-vertical',
@@ -112,9 +103,6 @@ export default class AutoProfile extends React.Component {
     }
 
     for (let i = 0; i < values.length; i++) {
-      if (values[i] === undefined) {
-        values[i] = 0
-      }
       list.push(
         <div className='col-12 col-md-1 text-center' key={i + 1}>
           <div className='row'>

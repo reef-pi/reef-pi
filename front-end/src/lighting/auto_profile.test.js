@@ -79,6 +79,19 @@ describe('Lighting ui - Auto Profile', () => {
     expect(textContent(labels[2])).toBe('15:00')
   })
 
+  it('<AutoProfile /> sliderList does not mutate state values', () => {
+    const config = {
+      start: '14:00:00',
+      end: '15:00:00',
+      values: [10, undefined, 30]
+    }
+
+    const m = renderProfile(config)
+    m.sliderList()
+
+    expect(m.state.values).toEqual([10, undefined, 30])
+  })
+
   it('<AutoProfile /> should set add labels based when Add Point is clicked', () => {
     const config = {
       start: '14:00:00',
