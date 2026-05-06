@@ -71,4 +71,54 @@ describe('Lighting ui - Manual Control', () => {
     expect(component.state.channels[0].value).toBe('44.5')
     expect(component.debouncedChange).toHaveBeenCalledWith('0', 44.5)
   })
+
+  it('<ManualLight /> should update channel state without mutating existing channel objects', () => {
+    const handleChange = jest.fn()
+    const component = new ManualLight({
+      light: JSON.parse(JSON.stringify(light)),
+      handleChange
+    })
+    component.setState = jest.fn(next => {
+      component.state = { ...component.state, ...next }
+    })
+    component.debouncedChange = jest.fn()
+    const previousChannel = component.state.channels[0]
+
+    component.handleValueChange({
+      target: {
+        name: '0',
+        value: '44.5'
+      }
+    })
+
+    expect(previousChannel.value).toBe(10)
+    expect(component.state.channels[0]).not.toBe(previousChannel)
+    expect(component.state.channels[0].value).toBe('44.5')
+  })
+
+  it('<ManualLight /> should emit updated light values without mutating props', () => {
+    const handleChange = jest.fn()
+    const originalLight = JSON.parse(JSON.stringify(light))
+    const component = new ManualLight({
+      light: originalLight,
+      handleChange
+    })
+    const previousChannel = originalLight.channels[0]
+
+    component.updateLight('0', '44.5')
+
+    expect(originalLight.channels[0].value).toBe(10)
+    expect(handleChange).toHaveBeenCalledWith('1', {
+      ...originalLight,
+      channels: {
+        ...originalLight.channels,
+        0: {
+          ...originalLight.channels[0],
+          value: 44.5
+        }
+      }
+    })
+    expect(handleChange.mock.calls[0][1]).not.toBe(originalLight)
+    expect(handleChange.mock.calls[0][1].channels[0]).not.toBe(previousChannel)
+  })
 })
