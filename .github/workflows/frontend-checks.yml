@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '**/*.jsx'
+      - '**/*.js'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
@@ -10,6 +11,7 @@ on:
   pull_request:
     paths:
       - '**/*.jsx'
+      - '**/*.js'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
