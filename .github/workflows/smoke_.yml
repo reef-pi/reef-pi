@@ -9,6 +9,7 @@ on:
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
       - '**/*.go'
@@ -18,6 +19,7 @@ on:
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
 jobs:
   frontend-smoke:
     name: Smoke Test
