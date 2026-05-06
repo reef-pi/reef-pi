@@ -83,9 +83,18 @@ describe('<EditDriver />', () => {
   })
 
   it('driverConfig renders param fields when type has options', () => {
+    const selectedType = [
+      { name: 'Enabled', default: 'true', type: 4, order: 1 },
+      { name: 'Address', default: '99', type: 1, order: 0 }
+    ]
+    const driverOptions = {
+      ...options,
+      ezo: selectedType
+    }
     const values = { type: 'ezo', config: { address: '99', enabled: 'true' } }
-    const form = EditDriver(baseProps({ values }))
+    const form = EditDriver(baseProps({ values, driverOptions }))
     expect(form).not.toBeNull()
+    expect(selectedType.map(item => item.name)).toEqual(['Enabled', 'Address'])
   })
 
   it('renders in readOnly mode with disabled inputs', () => {

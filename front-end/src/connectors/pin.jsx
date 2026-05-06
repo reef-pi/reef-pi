@@ -25,7 +25,7 @@ export default class Pin extends React.Component {
       return
     }
 
-    return pins.sort((a, b) => { return a - b }).map(item => {
+    return pins.slice().sort((a, b) => { return a - b }).map(item => {
       return (
         <option key={'pin-' + item} value={item}>
           {item}
