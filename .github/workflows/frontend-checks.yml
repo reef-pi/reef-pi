@@ -2,16 +2,18 @@ name: Frontend Checks
 on:
   push:
     paths:
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
 
 jobs:
   jest-standard:

@@ -8,11 +8,12 @@ on:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
       - 'build/**'
+      - '.github/workflows/*.yml'
   pull_request:
     branches:
       - main
@@ -20,11 +21,12 @@ on:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
       - 'build/**'
+      - '.github/workflows/*.yml'
 
 jobs:
   build-ui:

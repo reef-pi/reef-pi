@@ -5,19 +5,21 @@ on:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
   pull_request:
     paths:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
+      - '.github/workflows/*.yml'
 jobs:
   frontend-smoke:
     name: Smoke Test
