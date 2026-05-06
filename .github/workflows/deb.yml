@@ -44,7 +44,7 @@ jobs:
       - name: Generate API doc
         run: make api-doc
       - name: Upload UI artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ui-dist
           path: ui/
@@ -73,7 +73,7 @@ jobs:
         with:
           go-version: '1.26.2'
       - name: Download UI artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: ui-dist
           path: ui/
@@ -101,7 +101,11 @@ jobs:
           VERSION=$(git describe --always --tags)
           mv reef-pi-${VERSION}.deb reef-pi-${VERSION}-${{ matrix.target }}.deb
       - name: "Upload ${{ matrix.target }} deb package"
+
         uses: actions/upload-artifact@v7
+
+        uses: actions/upload-artifact@v7
+
         with:
           name: ${{ matrix.target }}-debian-package
           path: 'reef-pi-*.deb'
