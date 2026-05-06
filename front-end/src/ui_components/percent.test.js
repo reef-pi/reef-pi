@@ -43,6 +43,14 @@ describe('Percent', () => {
     expect(called).toBe(false)
   })
 
+  it('does not treat non-dot separators as decimals', () => {
+    let called = false
+    const onChange = () => { called = true }
+    const input = renderInput({ value: 0, onChange, name: 'pct' })
+    input.props.onChange({ target: { name: 'pct', value: '99x5' } })
+    expect(called).toBe(false)
+  })
+
   it('calls onChange with NaN for empty input', () => {
     let received
     const onChange = e => { received = e.target.value }
