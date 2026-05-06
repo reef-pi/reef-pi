@@ -63,6 +63,8 @@ describe('LightningProfile', () => {
       target: { name: 'start', value: '09:00:00' }
     })
     expect(handler).toHaveBeenCalledWith({ ...config, start: '09:00:00' })
+    expect(config.start).toBe('08:00:00')
+    expect(handler.mock.calls[0][0]).not.toBe(config)
   })
 
   it('renders in readOnly mode without throwing', () => {
