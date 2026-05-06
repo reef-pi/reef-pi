@@ -294,10 +294,12 @@ describe('Connectors', () => {
   })
 
   it('<Pin /> renders select with options for driver pins', () => {
-    const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
+    const pins = [3, 1, 2]
+    const driver = { id: 'rpi', pinmap: { 'digital-output': pins } }
     const html = renderToStaticMarkup(<Pin driver={driver} update={() => {}} type='digital-output' current={1} />)
     expect(html).toContain('<select')
     expect((html.match(/<option/g) || []).length).toBe(3)
+    expect(pins).toEqual([3, 1, 2])
   })
 
   it('<Pin /> calls update on change', () => {
