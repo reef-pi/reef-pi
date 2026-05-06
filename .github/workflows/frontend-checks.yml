@@ -2,13 +2,13 @@ name: Frontend Checks
 on:
   push:
     paths:
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
   pull_request:
     paths:
-      - 'jsx/**'
+      - '**/*.jsx'
       - '*.json'
       - 'yarn.lock'
       - 'Makefile'
