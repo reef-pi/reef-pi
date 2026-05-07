@@ -62,9 +62,11 @@ export default class CollapsibleList extends React.Component {
         readOnly[child.props.name] = true
       }
     })
-    state.expanded = expanded
-    state.readOnly = readOnly
-    return state
+    return {
+      ...state,
+      expanded,
+      readOnly
+    }
   }
 
   render () {

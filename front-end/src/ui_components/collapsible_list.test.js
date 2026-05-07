@@ -79,6 +79,33 @@ describe('CollapsibleList', () => {
     expect(derived.readOnly.new).toBe(true)
   })
 
+  it('getDerivedStateFromProps does not mutate previous state', () => {
+    const state = {
+      expanded: { first: true },
+      readOnly: { first: false },
+      other: 'value'
+    }
+
+    const derived = CollapsibleList.getDerivedStateFromProps(
+      { children: [<Item key='new' name='new' />] },
+      state
+    )
+
+    expect(derived).not.toBe(state)
+    expect(derived.expanded).not.toBe(state.expanded)
+    expect(derived.readOnly).not.toBe(state.readOnly)
+    expect(state).toEqual({
+      expanded: { first: true },
+      readOnly: { first: false },
+      other: 'value'
+    })
+    expect(derived).toEqual({
+      expanded: { first: true, new: false },
+      readOnly: { first: false, new: true },
+      other: 'value'
+    })
+  })
+
   it('passes expanded, readOnly, onToggle, onEdit, onSubmit to children', () => {
     const list = makeList(<Item name='p' />)
     const child = renderedChildren(list)[0]
