@@ -111,7 +111,8 @@ describe('Telemetry UI', () => {
     const m = makeMain({ update })
     const derived = Main.getDerivedStateFromProps({ config: m.props.config }, m.state)
     m.state = { ...m.state, ...derived }
-    m.state.config = {
+    m.setState({
+      config: {
       ...m.state.config,
       current_limit: '100',
       historical_limit: '720',
@@ -120,7 +121,8 @@ describe('Telemetry UI', () => {
         ...m.state.config.mailer,
         port: '546'
       }
-    }
+      }
+    })
     const previousConfig = m.state.config
     const previousMailer = m.state.config.mailer
 
