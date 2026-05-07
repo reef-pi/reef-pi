@@ -6,7 +6,7 @@ const EntrySchema = Yup.object().shape({
     .required(i18next.t('validation:entry_required')),
   comment: Yup.string(),
   timestamp: Yup.string()
-    // TODO: date strings don't sort well, differ by locale, and implicit cast may fail
+    // Journal timestamps are persisted as display strings; parsing and sorting happen outside this schema.
     .required(i18next.t('validation:date_required'))
 })
 
