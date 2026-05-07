@@ -13,6 +13,8 @@ import ManualLight from './manual_light'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
 
+export const DEFAULT_CHANNEL_COLOR = '#000000'
+
 class main extends React.Component {
   constructor (props) {
     super(props)
@@ -106,7 +108,7 @@ class main extends React.Component {
     const channels = {}
     jack.pins.map((pin, idx) => (
       channels[pin] = {
-        color: '#000000', // FIXME this avoids undefined color
+        color: DEFAULT_CHANNEL_COLOR,
         manual: false,
         min: 0,
         max: 100,
