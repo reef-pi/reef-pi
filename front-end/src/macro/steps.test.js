@@ -176,8 +176,22 @@ describe('Macro step components', () => {
     expect(mapMacroPropsToValues({ onSubmit: jest.fn() })).toMatchObject({ name: '', steps: [] })
   })
 
-  it('MacroSchema validates a valid macro', () => {
+  it('MacroSchema validates a macro with no steps', () => {
     return expect(MacroSchema.isValid({ name: 'test', steps: [] })).resolves.toBe(true)
+  })
+
+  it('MacroSchema rejects a macro without the steps array', () => {
+    return expect(MacroSchema.isValid({ name: 'test' })).resolves.toBe(false)
+  })
+
+  it('MacroSchema validates a macro with multiple steps', () => {
+    return expect(MacroSchema.isValid({
+      name: 'test',
+      steps: [
+        { type: 'wait', duration: 5 },
+        { type: 'alert', title: 'hi', message: 'msg' }
+      ]
+    })).resolves.toBe(true)
   })
 
   it('MacroSchema rejects missing name', () => {
