@@ -22,9 +22,11 @@ export class RawDisplay extends React.Component {
     if (Object.keys(props.config).length === 0) {
       return null
     }
-    state.on = props.config.on
-    state.brightness = props.config.brightness
-    return state
+    return {
+      ...state,
+      on: props.config.on,
+      brightness: props.config.brightness
+    }
   }
 
   componentDidMount () {
