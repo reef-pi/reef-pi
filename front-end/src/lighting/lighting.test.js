@@ -16,6 +16,7 @@ import LunarProfile from './lunar_profile'
 import CircadianProfile from './circadian_profile'
 import CyclicProfile from './cyclic_profile'
 import Profile from './profile'
+import { DEFAULT_CHANNEL_COLOR } from './main'
 import Percent from '../ui_components/percent'
 import * as Alert from 'utils/alert'
 import 'isomorphic-fetch'
@@ -373,6 +374,10 @@ describe('Lighting ui', () => {
         expect(setTouched).toHaveBeenCalledWith(touched)
       }
     })
+  })
+
+  it('<Main /> defines a default color for new light channels', () => {
+    expect(DEFAULT_CHANNEL_COLOR).toBe('#000000')
   })
 
   it('<Profile /> fixed', () => {
