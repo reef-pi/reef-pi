@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { IsPercentageInput } from '../utils/percentage_input'
 
 const Percent = props => {
   const { value, ...other } = props
 
   const handleChange = e => {
-    // TODO: [ML] Allow decimal in regex
-    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
+    if (IsPercentageInput(e.target.value)) {
       let val = parseFloat(e.target.value)
       if (isNaN(e.target.value)) { val = '' }
       const event = {

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
+import { IsPercentageInput } from '../utils/percentage_input'
 
 export default class ManualLight extends React.Component {
   constructor (props) {
@@ -36,8 +37,7 @@ export default class ManualLight extends React.Component {
   }
 
   handleValueChange (e) {
-    // TODO: [ML] Allow decimal in regex
-    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
+    if (IsPercentageInput(e.target.value)) {
       const channels = {
         ...this.state.channels,
         [e.target.name]: {

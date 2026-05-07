@@ -4,6 +4,7 @@ import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
+import { IsPercentageInput } from '../utils/percentage_input'
 
 export default class FixedProfile extends React.Component {
   constructor (props) {
@@ -16,8 +17,7 @@ export default class FixedProfile extends React.Component {
   }
 
   handleChange (e) {
-    // TODO: [ML] Allow decimal in regex
-    if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(e.target.value)) {
+    if (IsPercentageInput(e.target.value)) {
       let value = parseFloat(e.target.value)
       if (isNaN(value)) {
         value = ''

@@ -4,6 +4,7 @@ import { ErrorFor, NameFor, ShowError } from 'utils/validation_helper'
 import classNames from 'classnames'
 import { Field } from 'formik'
 import i18next from 'i18next'
+import { IsPercentageInput } from '../utils/percentage_input'
 
 export default class AutoProfile extends React.Component {
   constructor (props) {
@@ -44,8 +45,7 @@ export default class AutoProfile extends React.Component {
 
   curry (i) {
     return (ev) => {
-      // TODO: [ML] Allow decimal in regex
-      if (/^([0-9]{0,2}$)|(100)$|^([0-9]{1,2}.[0-9]+$)/.test(ev.target.value)) {
+      if (IsPercentageInput(ev.target.value)) {
         const val = parseFloat(ev.target.value)
 
         const values = [...this.state.values]
