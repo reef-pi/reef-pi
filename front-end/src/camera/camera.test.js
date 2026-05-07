@@ -46,7 +46,7 @@ describe('Camera module', () => {
     jest.clearAllMocks()
   })
 
-  it('<Main /> mounts with images', () => {
+  it('<Main /> passes image route URLs to <Gallery />', () => {
     const fetchConfig = jest.fn()
     const listImages = jest.fn()
     const updateConfig = jest.fn()
@@ -64,7 +64,8 @@ describe('Camera module', () => {
 
     const rendered = camera.render()
     expect(rendered.type).toBe('div')
-    expect(findByType(rendered, Gallery).props.images).toEqual([
+    const galleryImages = findByType(rendered, Gallery).props.images
+    expect(galleryImages).toEqual([
       { src: '/images/foo.jpg', thumbnail: '/images/thumbnail-foo.jpg' },
       { src: '/images/bar.jpg', thumbnail: '/images/thumbnail-bar.jpg' }
     ])
@@ -89,6 +90,18 @@ describe('Camera module', () => {
     capture.componentDidMount()
     expect(getLatestImage).toHaveBeenCalled()
     expect(capture.render().type).toBe('div')
+  })
+
+  it('<Capture /> renders the latest image route URL', () => {
+    const capture = new RawCapture({
+      latest: { image: 'latest.jpg' },
+      getLatestImage: jest.fn(),
+      takeImage: jest.fn()
+    })
+
+    const image = findByType(capture.render(), 'img')
+
+    expect(image.props.src).toBe('/images/latest.jpg')
   })
 
   it('<Config />', () => {
