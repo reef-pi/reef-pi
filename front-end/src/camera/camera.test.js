@@ -23,6 +23,21 @@ const countByType = (node, predicate) => {
   return count
 }
 
+const findByType = (node, type) => {
+  if (!node || typeof node !== 'object') {
+    return undefined
+  }
+  if (node.type === type) {
+    return node
+  }
+  for (const child of React.Children.toArray(node.props?.children)) {
+    const found = findByType(child, type)
+    if (found) {
+      return found
+    }
+  }
+}
+
 describe('Camera module', () => {
   afterEach(() => {
     fetchMock.reset()
@@ -49,6 +64,10 @@ describe('Camera module', () => {
 
     const rendered = camera.render()
     expect(rendered.type).toBe('div')
+    expect(findByType(rendered, Gallery).props.images).toEqual([
+      { src: '/images/foo.jpg', thumbnail: '/images/thumbnail-foo.jpg' },
+      { src: '/images/bar.jpg', thumbnail: '/images/thumbnail-bar.jpg' }
+    ])
   })
 
   it('<Main /> mounts with empty state', () => {

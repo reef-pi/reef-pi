@@ -68,7 +68,7 @@ export class RawCamera extends React.Component {
           {config}
         </div>
         <div className='row'>
-          <Gallery images={this.state.images} />
+          <Gallery images={images} />
         </div>
         <div className='row'>
           <Capture />
