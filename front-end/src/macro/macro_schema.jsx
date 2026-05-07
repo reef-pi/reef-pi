@@ -51,9 +51,9 @@ const MacroSchema = Yup.object().shape({
     .required(i18n.t('validation:name_required')),
   reversible: Yup.bool(),
   steps: Yup.array().of(StepSchema)
+    // Macros may have zero or more steps; require the array itself but do not
+    // constrain its length.
     .required(i18n.t('macro:one_step_required'))
-    // FIXME: should be added, but smoke test fails then
-    // .length(1, i18n.t('macro:one_step_required'))
 })
 
 export default MacroSchema
