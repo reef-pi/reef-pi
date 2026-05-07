@@ -29,8 +29,8 @@ const channelSchema = Yup.object().shape({
     .typeError(i18n.t('validation:number_required'))
     .min(0, i18n.t('validation:integer_min_required'))
     .max(100, i18n.t('validation:integer_max_required')),
-  // FIXME this is not touched when created and thus never shows the error
-  // color: Yup.string().required(i18n.t('validation:selection_required')),
+  // Color is optional here because the create flow supplies/defaults it outside
+  // LightSchema.
   profile: Yup.lazy(value => {
     switch (value.type) {
       case 'diurnal':
