@@ -129,6 +129,26 @@ describe('Lighting ui - Auto Profile', () => {
     expect(textContent(labels[1])).toBe('15:00')
   })
 
+  it('<AutoProfile /> removes a point without mutating the original values', () => {
+    const onChangeHandler = jest.fn()
+    const config = {
+      start: '14:00:00',
+      end: '15:00:00',
+      values: [10, 20, 30]
+    }
+
+    const m = renderProfile(config, { onChangeHandler })
+    m.handleRemovePoint(1)
+
+    expect(onChangeHandler).toHaveBeenCalledWith({
+      start: '14:00:00',
+      end: '15:00:00',
+      values: [10, 30]
+    })
+    expect(m.state.values).toEqual([10, 30])
+    expect(config.values).toEqual([10, 20, 30])
+  })
+
   it('<AutoProfile /> Should allow end time before start time to represent overnight', () => {
     const config = {
       start: '23:00:00',
