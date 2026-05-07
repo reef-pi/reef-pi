@@ -130,6 +130,17 @@ describe('Configuration ui', () => {
     expect(RawDisplay.getDerivedStateFromProps({ config: undefined }, {})).toBeNull()
   })
 
+  it('<Display /> derives config state without mutating previous state', () => {
+    const previousState = { brightness: 25, on: false, local: true }
+    const derived = RawDisplay.getDerivedStateFromProps({
+      config: { brightness: 80, on: true }
+    }, previousState)
+
+    expect(previousState).toEqual({ brightness: 25, on: false, local: true })
+    expect(derived).toEqual({ brightness: 80, on: true, local: true })
+    expect(derived).not.toBe(previousState)
+  })
+
   it('<Capabilities />', () => {
     const update = jest.fn()
     const m = new Capabilities({
