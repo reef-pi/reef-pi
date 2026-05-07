@@ -124,8 +124,9 @@ describe('Camera module', () => {
     gallery.handleGotoNext()
     gallery.handleGotoImage(0)
     gallery.handleOnClick()
-    gallery.state.current = -1
+    gallery.setState({ current: -1 })
     gallery.handleOnClick()
+    expect(gallery.state.current).toBe(0)
     expect(() => new Gallery({}).render()).not.toThrow()
   })
 
