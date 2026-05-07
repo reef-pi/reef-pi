@@ -19,10 +19,14 @@ describe('ErrorBoundary', () => {
   it('resets state when the tab prop changes', () => {
     const instance = mountClassComponent(ErrorBoundary, { tab: 'tab1', children: 'Child' })
     instance.componentDidCatch(new Error('error'), { componentStack: 'stackTrace' })
+    const previousState = instance.state
 
     const nextState = ErrorBoundary.getDerivedStateFromProps({ tab: 'tab2' }, instance.state)
     instance.state = nextState
 
+    expect(previousState.error).toEqual(new Error('error'))
+    expect(previousState.errorInfo).toEqual({ componentStack: 'stackTrace' })
+    expect(nextState).not.toBe(previousState)
     expect(instance.state.error).toBeNull()
     expect(instance.state.errorInfo).toBeNull()
     expect(instance.render()).toBe('Child')

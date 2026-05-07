@@ -10,10 +10,12 @@ class ErrorBoundary extends React.Component {
     if (props.tab === state.currentTab) {
       return null
     }
-    state.error = null
-    state.errorInfo = null
-    state.currentTab = props.tab
-    return state
+    return {
+      ...state,
+      error: null,
+      errorInfo: null,
+      currentTab: props.tab
+    }
   }
 
   componentDidCatch (error, errorInfo) {
