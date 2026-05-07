@@ -72,9 +72,9 @@ export default class Grid extends React.Component {
 
   setID (i, j) {
     return (function (id) {
-      const cells = this.state.cells
-      const row = cells[i] ? cells[i] : []
-      const cell = row[j] ? row[j] : {}
+      const cells = this.state.cells.slice()
+      const row = cells[i] ? cells[i].slice() : []
+      const cell = row[j] ? { ...row[j] } : {}
       cell.id = id
       row[j] = cell
       cells[i] = row
@@ -85,9 +85,9 @@ export default class Grid extends React.Component {
 
   setType (i, j, type) {
     return (function () {
-      const cells = this.state.cells
-      const row = cells[i] ? cells[i] : []
-      const cell = row[j] ? row[j] : {}
+      const cells = this.state.cells.slice()
+      const row = cells[i] ? cells[i].slice() : []
+      const cell = row[j] ? { ...row[j] } : {}
       cell.type = type
       row[j] = cell
       cells[i] = row

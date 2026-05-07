@@ -105,6 +105,68 @@ describe('Dashboard', () => {
     m.render()
   })
 
+  it('<Grid /> setType does not mutate previous cells', () => {
+    const cells = [
+      [{ id: '1', type: 'light' }, { id: '2', type: 'light' }],
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'ato' }]
+    ]
+    const hook = jest.fn()
+    const m = new Grid({ rows: 2, columns: 2, cells, hook })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    const previousCells = m.state.cells
+    const previousRow = previousCells[0]
+    const previousCell = previousRow[0]
+    Object.freeze(previousCell)
+    Object.freeze(previousRow)
+    Object.freeze(previousCells)
+
+    m.setType(0, 0, 'equipment')()
+
+    expect(previousCells[0]).toBe(previousRow)
+    expect(previousRow[0]).toBe(previousCell)
+    expect(previousCell).toEqual({ id: '1', type: 'light' })
+    expect(m.state.cells).not.toBe(previousCells)
+    expect(m.state.cells[0]).not.toBe(previousRow)
+    expect(m.state.cells[0][0]).not.toBe(previousCell)
+    expect(hook).toHaveBeenCalledWith(m.state.cells)
+    expect(hook).toHaveBeenCalledWith([
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'light' }],
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'ato' }]
+    ])
+  })
+
+  it('<Grid /> setID does not mutate previous cells', () => {
+    const cells = [
+      [{ id: '1', type: 'light' }, { id: '2', type: 'light' }],
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'ato' }]
+    ]
+    const hook = jest.fn()
+    const m = new Grid({ rows: 2, columns: 2, cells, hook })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    const previousCells = m.state.cells
+    const previousRow = previousCells[0]
+    const previousCell = previousRow[0]
+    Object.freeze(previousCell)
+    Object.freeze(previousRow)
+    Object.freeze(previousCells)
+
+    m.setID(0, 0)('3')
+
+    expect(previousCells[0]).toBe(previousRow)
+    expect(previousRow[0]).toBe(previousCell)
+    expect(previousCell).toEqual({ id: '1', type: 'light' })
+    expect(m.state.cells).not.toBe(previousCells)
+    expect(m.state.cells[0]).not.toBe(previousRow)
+    expect(m.state.cells[0][0]).not.toBe(previousCell)
+    expect(hook).toHaveBeenCalledWith(m.state.cells)
+    expect(hook).toHaveBeenCalledWith([
+      [{ id: '3', type: 'light' }, { id: '2', type: 'light' }],
+      [{ id: '1', type: 'equipment' }, { id: '2', type: 'ato' }]
+    ])
+  })
+
   it('<ComponentSelector />', () => {
     const comps = {
       c1: { id: '1', name: 'foo' },
