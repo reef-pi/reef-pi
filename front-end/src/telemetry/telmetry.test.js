@@ -95,6 +95,49 @@ describe('Telemetry UI', () => {
     expect(markup).toContain('updateTelemetry')
   })
 
+  it('<Main /> updates telemetry config without mutating previous state', () => {
+    const m = makeMain()
+    const previousConfig = m.state.config
+
+    m.handleEnableMailer({ target: { checked: false } })
+
+    expect(previousConfig.notify).toBeUndefined()
+    expect(m.state.config.notify).toBe(false)
+    expect(m.state.config).not.toBe(previousConfig)
+  })
+
+  it('<Main /> saves parsed telemetry config without mutating state config', () => {
+    const update = jest.fn()
+    const m = makeMain({ update })
+    const derived = Main.getDerivedStateFromProps({ config: m.props.config }, m.state)
+    m.state = { ...m.state, ...derived }
+    m.state.config = {
+      ...m.state.config,
+      current_limit: '100',
+      historical_limit: '720',
+      throttle: '10',
+      mailer: {
+        ...m.state.config.mailer,
+        port: '546'
+      }
+    }
+    const previousConfig = m.state.config
+    const previousMailer = m.state.config.mailer
+
+    m.handleSave()
+
+    expect(previousConfig.current_limit).toBe('100')
+    expect(previousConfig.mailer.port).toBe('546')
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({
+      current_limit: 100,
+      historical_limit: 720,
+      throttle: 10,
+      mailer: expect.objectContaining({ port: 546 })
+    }))
+    expect(update.mock.calls[0][0]).not.toBe(previousConfig)
+    expect(update.mock.calls[0][0].mailer).not.toBe(previousMailer)
+  })
+
   it('<AdafruitIO />', () => {
     let updated = {}
     const m = new AdafruitIO({
