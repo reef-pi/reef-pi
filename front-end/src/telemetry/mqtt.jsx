@@ -13,19 +13,23 @@ export default class Mqtt extends React.Component {
 
   onChange (label) {
     return function (ev) {
-      const config = this.state.config
-      config[label] = ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value
+      const config = {
+        ...this.state.config,
+        [label]: ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value
+      }
       config.qos = parseInt(config.qos)
       this.setState({ config })
-      this.props.update(this.state.config)
+      this.props.update(config)
     }.bind(this)
   }
 
   handleUpdateEnable (ev) {
-    const config = this.state.config
-    config.enable = ev.target.checked
+    const config = {
+      ...this.state.config,
+      enable: ev.target.checked
+    }
     this.setState({ config })
-    this.props.update(this.state.config)
+    this.props.update(config)
   }
 
   toRow (label, text, iType) {
