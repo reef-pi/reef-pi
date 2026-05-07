@@ -20,6 +20,12 @@ describe('LightSchema', () => {
     return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
   })
 
+  it('accepts a channel without color', () => {
+    const ch = validChannel('fixed', { value: 50, start: '08:00:00', end: '20:00:00' })
+    expect(ch.color).toBeUndefined()
+    return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
+  })
+
   it('validates a diurnal profile', () => {
     const ch = validChannel('diurnal', { start: '06:00:00', end: '20:00:00' })
     return expect(LightSchema.isValid(validLight(ch))).resolves.toBe(true)
