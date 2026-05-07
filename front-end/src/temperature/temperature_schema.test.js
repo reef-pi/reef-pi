@@ -59,12 +59,12 @@ describe('Validation', () => {
 
     expect.assertions(2)
 
-    const tc1 = Object.assign(tc, { heater: '' })
+    const tc1 = Object.assign({}, tc, { heater: '' })
     const valid1 = TemperatureSchema.isValid(tc1).then(
       valid => expect(valid).toBe(true)
     )
 
-    const tc2 = Object.assign(tc, { cooler: '' })
+    const tc2 = Object.assign({}, tc, { cooler: '' })
     const valid2 = TemperatureSchema.isValid(tc2).then(
       valid => expect(valid).toBe(true)
     )
