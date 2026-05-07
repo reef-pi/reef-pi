@@ -156,6 +156,26 @@ describe('Telemetry UI', () => {
     expect(updated.foo).toBe(1)
   })
 
+  it('<AdafruitIO /> updates without mutating previous state', () => {
+    const adafruitio = { enable: true, user: 'u', token: 'foo', prefix: 'reef' }
+    let updated = {}
+    const m = new AdafruitIO({
+      adafruitio,
+      update: c => { updated = c }
+    })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
+    const previous = m.state.adafruitio
+
+    m.onChange('user')({ target: { value: 'u2' } })
+
+    expect(previous.user).toBe('u')
+    expect(m.state.adafruitio).not.toBe(previous)
+    expect(updated.user).toBe('u2')
+  })
+
   it('<Mqtt /> onChange sends boolean for checkbox, string for text', () => {
     const mqttConfig = {
       enable: true,
@@ -185,6 +205,32 @@ describe('Telemetry UI', () => {
     expect(updated.retained).toBe(false)
   })
 
+  it('<Mqtt /> updates without mutating previous state', () => {
+    const mqttConfig = {
+      enable: true,
+      server: 'mqtt.example.com',
+      username: '',
+      client_id: '',
+      password: '',
+      qos: 0,
+      prefix: '',
+      retained: false
+    }
+    let updated = {}
+    const m = new Mqtt({ config: mqttConfig, update: (c) => { updated = c } })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
+    const previous = m.state.config
+
+    m.onChange('server')({ target: { type: 'text', value: 'broker.local' } })
+
+    expect(previous.server).toBe('mqtt.example.com')
+    expect(m.state.config).not.toBe(previous)
+    expect(updated.server).toBe('broker.local')
+  })
+
   it('<Notification />', () => {
     let updated = {}
     const m = new Notification({
@@ -199,5 +245,22 @@ describe('Telemetry UI', () => {
     expect(updated[1]).toBe('foo')
     m.updateTo()({ target: { value: 'a@example.com, b@example.com' } })
     expect(updated.to).toEqual(['a@example.com', 'b@example.com'])
+  })
+
+  it('<Notification /> updates without mutating previous state', () => {
+    const mailer = { server: 'smtp.example.com', port: 25, from: 'reef@example.com', to: ['old@example.com'] }
+    let updated = {}
+    const m = new Notification({ mailer, update: (c) => { updated = c } })
+    m.setState = update => {
+      const next = typeof update === 'function' ? update(m.state, m.props) : update
+      m.state = { ...m.state, ...next }
+    }
+    const previous = m.state.config
+
+    m.update('server')({ target: { value: 'smtp.local' } })
+
+    expect(previous.server).toBe('smtp.example.com')
+    expect(m.state.config).not.toBe(previous)
+    expect(updated.server).toBe('smtp.local')
   })
 })

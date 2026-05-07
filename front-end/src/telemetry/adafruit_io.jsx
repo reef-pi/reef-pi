@@ -13,18 +13,22 @@ export default class AdafruitIO extends React.Component {
 
   onChange (label) {
     return function (ev) {
-      const adafruitio = this.state.adafruitio
-      adafruitio[label] = ev.target.value
+      const adafruitio = {
+        ...this.state.adafruitio,
+        [label]: ev.target.value
+      }
       this.setState({ adafruitio })
-      this.props.update(this.state.adafruitio)
+      this.props.update(adafruitio)
     }.bind(this)
   }
 
   handleUpdateEnable (ev) {
-    const adafruitio = this.state.adafruitio
-    adafruitio.enable = ev.target.checked
+    const adafruitio = {
+      ...this.state.adafruitio,
+      enable: ev.target.checked
+    }
     this.setState({ adafruitio })
-    this.props.update(this.state.adafruitio)
+    this.props.update(adafruitio)
   }
 
   toRow (label, text) {
