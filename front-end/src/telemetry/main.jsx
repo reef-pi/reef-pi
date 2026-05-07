@@ -7,6 +7,18 @@ import { updateTelemetry, fetchTelemetry, sendTestMessage } from 'redux/actions/
 import { connect } from 'react-redux'
 import i18n from '../utils/i18n'
 
+const cloneTelemetryConfig = config => ({
+  ...config,
+  adafruitio: config.adafruitio ? { ...config.adafruitio } : config.adafruitio,
+  mailer: config.mailer
+    ? {
+        ...config.mailer,
+        to: Array.isArray(config.mailer.to) ? [...config.mailer.to] : config.mailer.to
+      }
+    : config.mailer,
+  mqtt: config.mqtt ? { ...config.mqtt } : config.mqtt
+})
+
 class telemetry extends React.Component {
   constructor (props) {
     super(props)
@@ -35,8 +47,10 @@ class telemetry extends React.Component {
 
   updateLimit (k) {
     return (e) => {
-      const conf = this.state.config
-      conf[k] = e.target.value
+      const conf = {
+        ...this.state.config,
+        [k]: e.target.value
+      }
       this.setState({ config: conf })
     }
   }
@@ -57,8 +71,10 @@ class telemetry extends React.Component {
   }
 
   handleEnableMailer (ev) {
-    const c = this.state.config
-    c.notify = ev.target.checked
+    const c = {
+      ...this.state.config,
+      notify: ev.target.checked
+    }
     this.setState({
       config: c,
       updated: true
@@ -66,7 +82,7 @@ class telemetry extends React.Component {
   }
 
   handleSave () {
-    const c = this.state.config
+    const c = cloneTelemetryConfig(this.state.config)
     if (c.adafruitio.enable) {
       if (c.adafruitio.user === '') {
         showError('Please set a valid adafruit.io user')
@@ -105,8 +121,10 @@ class telemetry extends React.Component {
   }
 
   updateMailer (mailer) {
-    const c = this.state.config
-    c.mailer = mailer
+    const c = {
+      ...this.state.config,
+      mailer
+    }
     this.setState({
       config: c,
       updated: true
@@ -118,8 +136,10 @@ class telemetry extends React.Component {
   }
 
   updateAio (adafruitio) {
-    const c = this.state.config
-    c.adafruitio = adafruitio
+    const c = {
+      ...this.state.config,
+      adafruitio
+    }
     this.setState({
       config: c,
       updated: true
@@ -127,8 +147,10 @@ class telemetry extends React.Component {
   }
 
   updateMqtt (m) {
-    const c = this.state.config
-    c.mqtt = m
+    const c = {
+      ...this.state.config,
+      mqtt: m
+    }
     this.setState({
       config: c,
       updated: true
@@ -202,8 +224,10 @@ class telemetry extends React.Component {
   }
 
   handleUpdateThrottle (ev) {
-    const c = this.state.config
-    c.throttle = ev.target.value
+    const c = {
+      ...this.state.config,
+      throttle: ev.target.value
+    }
     this.setState({
       config: c,
       updated: true
