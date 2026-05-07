@@ -1,7 +1,7 @@
 import React from 'react'
 import Gallery from './gallery'
 import Config from './config'
-import Capture from './capture'
+import Capture, { cameraImageURL } from './capture'
 import { fetchConfig, updateConfig, listImages } from 'redux/actions/camera'
 import { connect } from 'react-redux'
 import Motion from './motion'
@@ -46,9 +46,8 @@ export class RawCamera extends React.Component {
     const images = []
     this.props.images.forEach((d, i) => {
       images.push({
-        // FIXME: very likely '/images/' should be this.props.config.image_path
-        src: '/images/' + d.name,
-        thumbnail: '/images/thumbnail-' + d.name
+        src: cameraImageURL(d.name),
+        thumbnail: cameraImageURL('thumbnail-' + d.name)
       })
     })
     let config = <div />

@@ -3,6 +3,10 @@ import { takeImage, getLatestImage } from '../redux/actions/camera'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
 
+export const cameraImageRoute = '/images/'
+
+export const cameraImageURL = image => cameraImageRoute + image
+
 export class RawCapture extends React.Component {
   componentDidMount () {
     this.props.getLatestImage()
@@ -20,8 +24,7 @@ export class RawCapture extends React.Component {
     }
     let img = <div className='container' />
     if (this.props.latest !== undefined) {
-      // FIXME: very likely '/images/' should be this.props.config.image_path
-      img = <img src={'/images/' + this.props.latest.image} style={imgStyle} />
+      img = <img src={cameraImageURL(this.props.latest.image)} style={imgStyle} />
     }
     return (
       <div className='container'>
