@@ -187,7 +187,7 @@ describe('Doser ui', () => {
   it('<Main /> handleCreateDoser calls create and toggles form closed', () => {
     const create = jest.fn()
     const component = makeComponent({ create, dosers: [] })
-    component.state.addDoser = true
+    component.setState({ addDoser: true })
     component.handleCreateDoser({
       name: 'n', jack: 'j1', pin: '0', stepper: {}, type: 't',
       volume: '1', volume_per_second: '0', enable: true,
@@ -215,7 +215,7 @@ describe('Doser ui', () => {
 
   it('<Main /> render shows add form when addDoser is true', () => {
     const component = makeComponent()
-    component.state = { addDoser: true }
+    component.setState({ addDoser: true })
     const tree = component.render()
     expect(tree).not.toBeNull()
   })
