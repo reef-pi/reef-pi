@@ -68,6 +68,20 @@ describe('Connectors', () => {
     expect(renderToStaticMarkup(component.inlets())).toContain('foo')
   })
 
+  it('<InletSelector /> getDerivedStateFromProps does not mutate previous state', () => {
+    const previousInlet = { id: '1', name: 'foo', pin: 1 }
+    const activeInlet = { id: '2', name: 'bar', pin: 2 }
+    const previousState = { inlet: previousInlet }
+    const nextState = RawInletSelector.getDerivedStateFromProps({
+      inlets: [previousInlet, activeInlet],
+      active: '2'
+    }, previousState)
+
+    expect(previousState.inlet).toBe(previousInlet)
+    expect(nextState).not.toBe(previousState)
+    expect(nextState.inlet).toBe(activeInlet)
+  })
+
   it('<Inlets />', () => {
     const create = jest.fn()
     const inlets = [

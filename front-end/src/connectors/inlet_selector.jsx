@@ -30,12 +30,19 @@ class inletSelector extends React.Component {
     if (Object.keys(props.inlets).length === 0) {
       return null
     }
+    let inlet
     props.inlets.forEach((v, k) => {
       if (v.id === props.active) {
-        state.inlet = v
+        inlet = v
       }
     })
-    return state
+    if (inlet === undefined) {
+      return state
+    }
+    return {
+      ...state,
+      inlet
+    }
   }
 
   inlets () {
