@@ -20,14 +20,14 @@ export default class HealthNotify extends React.Component {
   }
 
   handleUpdateEnable (ev) {
-    const h = this.state.notify
+    const h = { ...this.state.notify }
     h.enable = ev.target.checked
     this.setState({ notify: h })
     this.props.update(h)
   }
 
   handleUpdateReportEnable (ev) {
-    const h = this.state.notify
+    const h = { ...this.state.notify }
     h.report_enable = ev.target.checked
     this.setState({ notify: h })
     this.props.update(h)
@@ -35,7 +35,7 @@ export default class HealthNotify extends React.Component {
 
   update (key) {
     return function (ev) {
-      const h = this.state.notify
+      const h = { ...this.state.notify }
       h[key] = key === 'report_schedule' ? ev.target.value : Number(ev.target.value)
       this.setState({ notify: h })
       this.props.update(h)

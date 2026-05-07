@@ -296,8 +296,39 @@ describe('Configuration ui', () => {
       update
     })
     patchSetState(m)
+    const previousNotify = m.state.notify
     m.handleUpdateEnable({ target: { checked: true } })
+    expect(previousNotify).toEqual({
+      enable: false,
+      max_memory: 10,
+      max_cpu: 20,
+      max_cpu_temp: 30,
+      report_enable: false,
+      report_schedule: ''
+    })
+    expect(m.state.notify).not.toBe(previousNotify)
+    const previousEnableNotify = m.state.notify
     m.update('max_cpu')({ target: { value: '11' } })
+    expect(previousEnableNotify).toEqual({
+      enable: true,
+      max_memory: 10,
+      max_cpu: 20,
+      max_cpu_temp: 30,
+      report_enable: false,
+      report_schedule: ''
+    })
+    expect(m.state.notify).not.toBe(previousEnableNotify)
+    const previousCpuNotify = m.state.notify
+    m.handleUpdateReportEnable({ target: { checked: true } })
+    expect(previousCpuNotify).toEqual({
+      enable: true,
+      max_memory: 10,
+      max_cpu: 11,
+      max_cpu_temp: 30,
+      report_enable: false,
+      report_schedule: ''
+    })
+    expect(m.state.notify).not.toBe(previousCpuNotify)
     m.setState({ notify: { ...m.state.notify, enable: true } })
     expect(update).toHaveBeenCalled()
   })
