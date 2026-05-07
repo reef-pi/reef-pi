@@ -1,4 +1,5 @@
 import JournalSchema from './schema'
+import i18n from 'utils/i18n'
 
 describe('JournalSchema', () => {
   it('accepts a valid journal', () => {
@@ -25,11 +26,11 @@ describe('JournalSchema', () => {
       })
   })
 
-  it('rejects when unit is missing', () => {
+  it('requires unit with the entry required validation message', () => {
     expect.assertions(1)
     return JournalSchema.validate({ name: 'pH Log', description: 'Daily readings' })
       .catch(err => {
-        expect(err.message).toBeTruthy()
+        expect(err.message).toBe(i18n.t('validation:entry_required'))
       })
   })
 
