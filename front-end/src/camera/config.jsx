@@ -16,7 +16,7 @@ export default class Config extends React.Component {
   }
 
   handleSave (ev) {
-    const config = this.state.config
+    const config = { ...this.state.config }
     config.tick_interval = parseInt(config.tick_interval)
     if (isNaN(config.tick_interval)) {
       showError(i18next.t('camera:tick_must_be_positive'))
@@ -28,8 +28,10 @@ export default class Config extends React.Component {
 
   updateBool (k) {
     return (function (ev) {
-      const config = this.state.config
-      config[k] = ev.target.checked
+      const config = {
+        ...this.state.config,
+        [k]: ev.target.checked
+      }
       this.setState({
         config,
         updated: true
@@ -39,8 +41,10 @@ export default class Config extends React.Component {
 
   updateText (k) {
     return (function (ev) {
-      const config = this.state.config
-      config[k] = ev.target.value
+      const config = {
+        ...this.state.config,
+        [k]: ev.target.value
+      }
       this.setState({
         config,
         updated: true
