@@ -33,8 +33,7 @@ export default class AutoProfile extends React.Component {
   }
 
   handleRemovePoint (x) {
-    const values = [...this.state.values]
-    values.splice(x, 1)
+    const values = this.state.values.filter((_, i) => i !== x)
     this.props.onChangeHandler({
       start: this.props.config.start,
       end: this.props.config.end,
