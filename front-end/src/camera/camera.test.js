@@ -109,6 +109,34 @@ describe('Camera module', () => {
     expect(Alert.showError).toHaveBeenCalled()
   })
 
+  it('<Config /> updates local config without mutating previous state', () => {
+    const config = new Config({ config: { tick_interval: 1, enable: false }, update: jest.fn() })
+    config.setState = jest.fn(next => {
+      config.state = { ...config.state, ...next }
+    })
+    const previousConfig = config.state.config
+
+    config.updateBool('enable')({ target: { checked: true } })
+
+    expect(previousConfig).toEqual({ tick_interval: 1, enable: false })
+    expect(config.state.config).toEqual({ tick_interval: 1, enable: true })
+    expect(config.state.config).not.toBe(previousConfig)
+  })
+
+  it('<Config /> saves parsed config without mutating state config', () => {
+    const update = jest.fn()
+    const config = new Config({ config: { tick_interval: '5', enable: true }, update })
+    config.setState = jest.fn(next => {
+      config.state = { ...config.state, ...next }
+    })
+    const previousConfig = config.state.config
+
+    config.handleSave()
+
+    expect(previousConfig).toEqual({ tick_interval: '5', enable: true })
+    expect(update).toHaveBeenCalledWith({ tick_interval: 5, enable: true })
+  })
+
   it('<Gallery />', () => {
     const images = [{ thumbnail: '', src: '' }]
     const gallery = new Gallery({ images })
