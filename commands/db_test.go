@@ -51,6 +51,38 @@ func openCmd(t *testing.T, dbPath string, args []string) (*dbCmd, func()) {
 	return &dbCmd{sPath: dbPath, args: args, repo: newDBRepository(s)}, func() { s.Close() }
 }
 
+type testDBRepository struct {
+	deleteErr error
+}
+
+func (r testDBRepository) Close() error {
+	return nil
+}
+
+func (r testDBRepository) RawGet(string, string) ([]byte, error) {
+	return nil, nil
+}
+
+func (r testDBRepository) Buckets() ([]string, error) {
+	return nil, nil
+}
+
+func (r testDBRepository) List(string) (map[string]json.RawMessage, error) {
+	return nil, nil
+}
+
+func (r testDBRepository) Create(string, []byte) error {
+	return nil
+}
+
+func (r testDBRepository) Update(string, string, []byte) error {
+	return nil
+}
+
+func (r testDBRepository) Delete(string, string) error {
+	return r.deleteErr
+}
+
 func TestNewDBCmd(t *testing.T) {
 	cmd, err := NewDBCmd([]string{})
 	if err != nil {
@@ -69,6 +101,23 @@ func TestDBCmdExecute_MissingFile(t *testing.T) {
 	}
 	if err := cmd.Execute(); err == nil {
 		t.Error("Expected error for non-existent database file")
+	}
+}
+
+func TestDBCmdExecute_OpenStoreError(t *testing.T) {
+	cmd := &dbCmd{
+		sPath: t.TempDir(),
+		args:  []string{"list", "atos"},
+	}
+	err := cmd.Execute()
+	if err == nil {
+		t.Fatal("Expected error for database open failure")
+	}
+	if !strings.Contains(err.Error(), "failed to open database; check if reef-pi is already running") {
+		t.Fatalf("unexpected error message: %v", err)
+	}
+	if errors.Unwrap(err) == nil {
+		t.Fatalf("expected wrapped open error, got: %v", err)
 	}
 }
 
@@ -196,8 +245,12 @@ func TestDBCmdShowMissingID(t *testing.T) {
 
 func TestDBCmdDeleteMissingID(t *testing.T) {
 	cmd := &dbCmd{args: []string{"delete", "testbucket"}}
-	if err := cmd.Delete(); err == nil {
-		t.Error("Expected error for missing id")
+	err := cmd.Delete()
+	if err == nil {
+		t.Fatal("Expected error for missing id")
+	}
+	if err.Error() != "must provide id of the item to delete" {
+		t.Fatalf("unexpected missing id error: %v", err)
 	}
 }
 
@@ -259,6 +312,23 @@ func TestDBCmdDelete(t *testing.T) {
 	defer close()
 	if err := cmd.Delete(); err != nil {
 		t.Error("Delete() failed:", err)
+	}
+}
+
+func TestDBCmdDeleteWrapsRepositoryError(t *testing.T) {
+	wantErr := errors.New("delete failed")
+	cmd := &dbCmd{
+		args: []string{"delete", "atos", "1"},
+		repo: testDBRepository{
+			deleteErr: wantErr,
+		},
+	}
+	err := cmd.Delete()
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("expected wrapped delete error, got %v", err)
+	}
+	if !strings.Contains(err.Error(), "failed to delete item 1") {
+		t.Fatalf("unexpected delete error message: %v", err)
 	}
 }
 

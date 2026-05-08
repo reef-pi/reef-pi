@@ -93,7 +93,7 @@ func (cmd *dbCmd) Execute() error {
 	}
 	store, err := storage.NewStore(cmd.sPath)
 	if err != nil {
-		return fmt.Errorf("Failed to open database. Check if reef-pi is already running")
+		return fmt.Errorf("failed to open database; check if reef-pi is already running: %w", err)
 	}
 	cmd.repo = newDBRepository(store)
 
@@ -213,8 +213,11 @@ func (cmd *dbCmd) Update() error {
 }
 func (cmd *dbCmd) Delete() error {
 	if len(cmd.args) < 3 {
-		return fmt.Errorf("must provide id of the item to show")
+		return fmt.Errorf("must provide id of the item to delete")
 	}
 	id := cmd.args[2]
-	return cmd.repo.Delete(cmd.bucket(), id)
+	if err := cmd.repo.Delete(cmd.bucket(), id); err != nil {
+		return fmt.Errorf("failed to delete item %s: %w", id, err)
+	}
+	return nil
 }
