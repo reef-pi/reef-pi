@@ -4,7 +4,7 @@ import { RawControlChart } from './control_chart'
 import { RawTemperatureMain } from './main'
 import { RawReadingsChart } from './readings_chart'
 import 'isomorphic-fetch'
-import TemperatureForm from './temperature_form'
+import TemperatureForm, { mapTemperaturePropsToValues } from './temperature_form'
 jest.mock('utils/confirm', () => {
   return {
     confirm: jest
@@ -49,6 +49,95 @@ describe('Temperature controller ui', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('maps <TemperatureForm /> defaults for create', () => {
+    expect(mapTemperaturePropsToValues({})).toEqual({
+      id: '',
+      name: '',
+      sensor: '',
+      analog_input: '',
+      one_shot: false,
+      fahrenheit: true,
+      period: '60',
+      enable: true,
+      alerts: false,
+      minAlert: '77',
+      maxAlert: '81',
+      fail_safe: false,
+      heater: '',
+      min: '',
+      hysteresis: 0,
+      cooler: '',
+      max: '',
+      control: '',
+      chart: { ymax: 86, ymin: 74, color: '#000' }
+    })
+  })
+
+  it('maps <TemperatureForm /> equipment control', () => {
+    const tc = {
+      id: '4',
+      name: 'Water',
+      sensor: 'sensor',
+      analog_input: 'analog-input',
+      one_shot: true,
+      fahrenheit: false,
+      period: '30',
+      enable: false,
+      control: true,
+      is_macro: false,
+      notify: { enable: true, min: 70, max: 90 },
+      fail_safe: true,
+      heater: 'heater',
+      min: 70,
+      hysteresis: 2,
+      cooler: 'cooler',
+      max: 85,
+      chart: { ymax: 90, ymin: 70, color: '#f00' }
+    }
+
+    expect(mapTemperaturePropsToValues({ tc })).toEqual({
+      id: '4',
+      name: 'Water',
+      sensor: 'sensor',
+      analog_input: 'analog-input',
+      one_shot: true,
+      fahrenheit: false,
+      period: '30',
+      enable: false,
+      alerts: true,
+      minAlert: 70,
+      maxAlert: 90,
+      fail_safe: true,
+      heater: 'heater',
+      min: 70,
+      hysteresis: 2,
+      cooler: 'cooler',
+      max: 85,
+      control: 'equipment',
+      chart: { ymax: 90, ymin: 70, color: '#f00' }
+    })
+  })
+
+  it('maps <TemperatureForm /> macro control', () => {
+    const tc = {
+      control: true,
+      is_macro: true,
+      notify: {}
+    }
+
+    expect(mapTemperaturePropsToValues({ tc }).control).toBe('macro')
+  })
+
+  it('maps <TemperatureForm /> no control', () => {
+    const tc = {
+      control: false,
+      is_macro: true,
+      notify: {}
+    }
+
+    expect(mapTemperaturePropsToValues({ tc }).control).toBe('')
   })
 
   it('<Main /> mounts with empty tcs', () => {
