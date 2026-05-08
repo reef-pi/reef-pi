@@ -113,7 +113,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchUIData: () => dispatch(fetchUIData(dispatch)),
+    fetchUIData: () => dispatch(fetchUIData()),
     fetchInfo: () => dispatch(fetchInfo(dispatch))
   }
 }

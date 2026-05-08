@@ -44,8 +44,24 @@ describe('ui actions', () => {
     fetchMock.getOnce('/api/outlets', [])
     fetchMock.getOnce('/api/errors', [])
     const store = mockStore()
-    return store.dispatch(fetchUIData(store.dispatch)).then(() => {
+    return store.dispatch(fetchUIData()).then(() => {
       expect(store.getActions()).not.toEqual([])
+    })
+  })
+
+  it('fetchUIData fetches manager data when manager capability is enabled', () => {
+    const caps = {
+      manager: true
+    }
+    fetchMock.getOnce('/api/capabilities', caps)
+    fetchMock.getOnce('/api/instances', [])
+    const store = mockStore()
+    return store.dispatch(fetchUIData()).then(() => {
+      expect(fetchMock.called('/api/instances')).toBe(true)
+      expect(store.getActions()).toContainEqual(expect.objectContaining({
+        type: 'CAPABILITIES_LOADED',
+        payload: expect.objectContaining(caps)
+      }))
     })
   })
 })
