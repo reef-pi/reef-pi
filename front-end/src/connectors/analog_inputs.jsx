@@ -3,8 +3,8 @@ import { confirm } from 'utils/confirm'
 import { connect } from 'react-redux'
 import Pin from './pin'
 import i18n from 'utils/i18n'
-import { SortByName } from 'utils/sort_by_name'
 import { byCapability } from './driver_filter'
+import { groupByDriverName } from './driver_groups'
 
 import {
   fetchAnalogInputs,
@@ -88,31 +88,22 @@ class analogInputs extends React.Component {
   }
 
   list () {
-    const driverMap = {}
-    this.props.drivers.forEach(d => { driverMap[d.id] = d })
-
-    const groups = {}
-    this.props.analog_inputs.slice().sort((a, b) => SortByName(a, b))
-      .forEach(j => {
-        const driverName = (driverMap[j.driver] || {}).name || j.driver
-        if (!groups[driverName]) groups[driverName] = []
-        groups[driverName].push(j)
-      })
+    const driverGroups = groupByDriverName(this.props.analog_inputs, this.props.drivers)
 
     const list = []
-    Object.keys(groups).sort().forEach(driverName => {
+    driverGroups.groups.forEach(group => {
       list.push(
-        <div key={'driver-' + driverName} className='mt-2'>
-          <small className='text-muted font-weight-bold'>{driverName}</small>
+        <div key={'driver-' + group.driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{group.driverName}</small>
         </div>
       )
-      groups[driverName].forEach(j => {
+      group.connectors.forEach(j => {
         list.push(
           <AnalogInput
             name={j.name}
             key={j.id}
             pin={j.pin}
-            driver={driverMap[j.driver] || {}}
+            driver={driverGroups.driverMap[j.driver] || {}}
             drivers={this.props.drivers}
             analog_input_id={j.id}
             remove={this.remove(j)}

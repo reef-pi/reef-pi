@@ -12,6 +12,7 @@ import Pin from './pin'
 import AnalogInput from './analog_input'
 import { RawAnalogInputs } from './analog_inputs'
 import { byCapability } from './driver_filter'
+import { groupByDriverName } from './driver_groups'
 import 'isomorphic-fetch'
 
 const stockDrivers = [
@@ -305,6 +306,21 @@ describe('Connectors', () => {
   it('byCapability returns false for driver without pinmap', () => {
     const driver = { id: '1' }
     expect(byCapability('analog-input')(driver)).toBe(false)
+  })
+
+  it('groups connectors by display driver name without mutating input', () => {
+    const connectors = [
+      { id: '2', name: 'Outlet B', driver: 'missing' },
+      { id: '1', name: 'Outlet A', driver: 'rpi' },
+      { id: '3', name: 'Outlet C', driver: 'rpi' }
+    ]
+
+    const grouped = groupByDriverName(connectors, stockDrivers)
+
+    expect(grouped.driverMap.rpi).toBe(stockDrivers[0])
+    expect(grouped.groups.map(group => group.driverName)).toEqual(['Rasoverry Pi', 'missing'])
+    expect(grouped.groups[0].connectors.map(connector => connector.name)).toEqual(['Outlet A', 'Outlet C'])
+    expect(connectors.map(connector => connector.name)).toEqual(['Outlet B', 'Outlet A', 'Outlet C'])
   })
 
   it('<Pin /> renders select with options for driver pins', () => {

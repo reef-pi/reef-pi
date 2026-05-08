@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import { fetchJacks, updateJack, deleteJack, createJack } from 'redux/actions/jacks'
 import Jack from './jack'
 import i18n from 'utils/i18n'
-import { SortByName } from 'utils/sort_by_name'
 import { byCapability } from './driver_filter'
+import { groupByDriverName } from './driver_groups'
 
 class jacks extends React.Component {
   constructor (props) {
@@ -99,25 +99,16 @@ class jacks extends React.Component {
   }
 
   list () {
-    const driverMap = {}
-    this.props.drivers.forEach(d => { driverMap[d.id] = d })
-
-    const groups = {}
-    this.props.jacks.slice().sort((a, b) => SortByName(a, b))
-      .forEach(j => {
-        const driverName = (driverMap[j.driver] || {}).name || j.driver
-        if (!groups[driverName]) groups[driverName] = []
-        groups[driverName].push(j)
-      })
+    const driverGroups = groupByDriverName(this.props.jacks, this.props.drivers)
 
     const list = []
-    Object.keys(groups).sort().forEach(driverName => {
+    driverGroups.groups.forEach(group => {
       list.push(
-        <div key={'driver-' + driverName} className='mt-2'>
-          <small className='text-muted font-weight-bold'>{driverName}</small>
+        <div key={'driver-' + group.driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{group.driverName}</small>
         </div>
       )
-      groups[driverName].forEach(j => {
+      group.connectors.forEach(j => {
         list.push(
           <Jack
             name={j.name}
