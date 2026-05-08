@@ -231,6 +231,23 @@ describe('Configuration ui', () => {
     expect(component.state.settings.address).toBe('localhost:9090')
   })
 
+  it('<Settings /> handleSetAddress updates without mutating previous settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+
+    component.handleSetAddress({ target: { value: 'localhost:9090' } })
+
+    expect(previousSettings.address).toBe('localhost:8080')
+    expect(component.state.settings).not.toBe(previousSettings)
+    expect(component.state.settings.address).toBe('localhost:9090')
+  })
+
   it('<Settings /> toRow (name) input updates settings', () => {
     const component = new RawSettings({
       settings: { ...fullSettings },
@@ -244,6 +261,24 @@ describe('Configuration ui', () => {
     expect(component.state.settings.name).toBe('new-name')
   })
 
+  it('<Settings /> toRow input updates without mutating previous settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+    const row = component.toRow('name')
+
+    row.props.children[1].props.onChange({ target: { value: 'new-name' } })
+
+    expect(previousSettings.name).toBe('reef-pi')
+    expect(component.state.settings).not.toBe(previousSettings)
+    expect(component.state.settings.name).toBe('new-name')
+  })
+
   it('<Settings /> handleSetProtocolHttps removes port 80', () => {
     const s = { ...fullSettings, address: 'localhost:80', https: false }
     const component = new RawSettings({
@@ -254,6 +289,26 @@ describe('Configuration ui', () => {
     })
     patchSetState(component)
     component.handleSetProtocolHttps()
+    expect(component.state.settings.address).toBe('localhost')
+    expect(component.state.settings.https).toBe(true)
+  })
+
+  it('<Settings /> handleSetProtocolHttps updates without mutating previous settings', () => {
+    const s = { ...fullSettings, address: 'localhost:80', https: false }
+    const component = new RawSettings({
+      settings: s,
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+
+    component.handleSetProtocolHttps()
+
+    expect(previousSettings.address).toBe('localhost:80')
+    expect(previousSettings.https).toBe(false)
+    expect(component.state.settings).not.toBe(previousSettings)
     expect(component.state.settings.address).toBe('localhost')
     expect(component.state.settings.https).toBe(true)
   })
@@ -297,6 +352,60 @@ describe('Configuration ui', () => {
     const checkbox = component.checkBoxComponent('notification')
     checkbox.props.children.props.children[0].props.onChange({ target: { checked: true } })
     expect(component.state.settings.notification).toBe(true)
+  })
+
+  it('<Settings /> checkbox updates without mutating previous settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+    const checkbox = component.checkBoxComponent('notification')
+
+    checkbox.props.children.props.children[0].props.onChange({ target: { checked: true } })
+
+    expect(previousSettings.notification).toBe(false)
+    expect(component.state.settings).not.toBe(previousSettings)
+    expect(component.state.settings.notification).toBe(true)
+  })
+
+  it('<Settings /> updateCapabilities updates without mutating previous settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+    const capabilities = { ...previousSettings.capabilities, dashboard: true }
+
+    component.updateCapabilities(capabilities)
+
+    expect(previousSettings.capabilities).toEqual({ health_check: true })
+    expect(component.state.settings).not.toBe(previousSettings)
+    expect(component.state.settings.capabilities).toEqual({ health_check: true, dashboard: true })
+  })
+
+  it('<Settings /> updateHealthNotify updates without mutating previous settings', () => {
+    const component = new RawSettings({
+      settings: { ...fullSettings },
+      capabilities: fullCapabilities,
+      fetchSettings: jest.fn(),
+      updateSettings: jest.fn()
+    })
+    patchSetState(component)
+    const previousSettings = component.state.settings
+    const healthCheck = { ...previousSettings.health_check, enable: true }
+
+    component.updateHealthNotify(healthCheck)
+
+    expect(previousSettings.health_check.enable).toBe(false)
+    expect(component.state.settings).not.toBe(previousSettings)
+    expect(component.state.settings.health_check.enable).toBe(true)
   })
 
   it('<HealthNotify />', () => {
