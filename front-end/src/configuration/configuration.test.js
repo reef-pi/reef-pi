@@ -156,6 +156,23 @@ describe('Configuration ui', () => {
     expect(update).toHaveBeenCalledWith(expect.objectContaining({ dashboard: true }))
   })
 
+  it('<Capabilities /> updates without mutating previous state', () => {
+    const update = jest.fn()
+    const capabilities = {
+      equipment: true,
+      dashboard: false
+    }
+    const m = new Capabilities({ capabilities, update })
+    patchSetState(m)
+    const previous = m.state.capabilities
+
+    m.updateCapability('dashboard')({ target: { checked: true } })
+
+    expect(previous.dashboard).toBe(false)
+    expect(m.state.capabilities).not.toBe(previous)
+    expect(update).toHaveBeenCalledWith({ equipment: true, dashboard: true })
+  })
+
   it('<Settings /> renders loading when settings/capabilities missing', () => {
     const component = new RawSettings({
       settings: {},
