@@ -1,4 +1,4 @@
-import AtoForm, { mapAtoPropsToValues, submitAtoForm } from './ato_form'
+import AtoForm, { atoControlValue, mapAtoPropsToValues, submitAtoForm } from './ato_form'
 import 'isomorphic-fetch'
 
 describe('AtoForm', () => {
@@ -65,5 +65,11 @@ describe('AtoForm', () => {
 
     expect(mapAtoPropsToValues({ data: macroData }).control).toBe('macro')
     expect(mapAtoPropsToValues({ data: sensorOnlyData }).control).toBe('')
+  })
+
+  it('derives control value from control flags', () => {
+    expect(atoControlValue({ control: true, is_macro: false })).toBe('equipment')
+    expect(atoControlValue({ control: true, is_macro: true })).toBe('macro')
+    expect(atoControlValue({ control: false, is_macro: true })).toBe('')
   })
 })
