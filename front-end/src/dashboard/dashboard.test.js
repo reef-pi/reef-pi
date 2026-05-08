@@ -281,6 +281,45 @@ describe('Dashboard', () => {
     expect(Alert.showUpdateSuccessful).toHaveBeenCalled()
   })
 
+  it('<Config /> saves parsed payload without mutating state config', () => {
+    const updateDashboard = jest.fn()
+    const m = new RawDashboardConfig({
+      config: {},
+      fetchDashboard: jest.fn(),
+      updateDashboard
+    })
+    m.state = {
+      updated: false,
+      config: {
+        row: '2',
+        column: '3',
+        width: '400',
+        height: '200',
+        grid_details: []
+      }
+    }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+    const previousConfig = m.state.config
+
+    m.handleSave()
+
+    expect(previousConfig).toEqual({
+      row: '2',
+      column: '3',
+      width: '400',
+      height: '200',
+      grid_details: []
+    })
+    expect(updateDashboard).toHaveBeenCalledWith({
+      row: 2,
+      column: 3,
+      width: 400,
+      height: 200,
+      grid_details: []
+    })
+    expect(updateDashboard.mock.calls[0][0]).not.toBe(previousConfig)
+  })
+
   it('<Config /> rejects invalid save values and rebuilds grid details', () => {
     const cells = [[{ type: 'ato', id: '1' }]]
     const updateDashboard = jest.fn()
