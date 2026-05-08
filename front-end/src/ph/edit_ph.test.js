@@ -18,17 +18,42 @@ const findAll = (node, predicate, acc = []) => {
 const findFirst = (node, predicate) => findAll(node, predicate)[0]
 
 describe('<EditPh />', () => {
-  let values = { enable: true, control: 'macro', chart: {color: '#000'} }
-  let probe = { id: 1, chart: {color: '#000'}}
-  let fn = jest.fn()
-  let analogInputs = [{
-    id:'1',
-    name:'AI1',
-    pin:0,
-    driver:'2'
+  const values = { enable: true, control: 'macro', chart: { color: '#000' } }
+  const probe = { id: 1, chart: { color: '#000' } }
+  const fn = jest.fn()
+  const analogInputs = [{
+    id: '1',
+    name: 'AI1',
+    pin: 0,
+    driver: '2'
   }]
-  let equipment = [{id: 1, name: 'equipment'}]
-  let macros = [{id: 1, name: 'macro'}]
+  const equipment = [{ id: 1, name: 'equipment' }]
+  const macros = [{ id: 1, name: 'macro' }]
+
+  const renderEditPh = (overrides = {}) => {
+    const {
+      values: valueOverrides = {},
+      submitForm = fn,
+      isValid = false,
+      dirty = true,
+      ...props
+    } = overrides
+    return EditPh({
+      values: { ...values, ...valueOverrides },
+      probe,
+      handleBlur: fn,
+      handleChange: fn,
+      submitForm,
+      errors: {},
+      touched: {},
+      analogInputs,
+      dirty,
+      isValid,
+      equipment,
+      macros,
+      ...props
+    })
+  }
 
   beforeEach(() => {
     jest.spyOn(Alert, 'showError')
@@ -39,35 +64,12 @@ describe('<EditPh />', () => {
   })
 
   it('<EditPh /> mount', () => {
-    expect(() => EditPh({
-      values,
-      probe,
-      errors: {},
-      touched: {},
-      analogInputs,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm: fn,
-      equipment,
-      macros
-    })).not.toThrow()
+    expect(() => renderEditPh({ dirty: undefined, isValid: undefined })).not.toThrow()
   })
 
   it('<EditPh /> should submit', () => {
     const submitForm = jest.fn()
-    const form = EditPh({
-      values,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm,
-      errors: {},
-      touched: {},
-      analogInputs,
-      dirty: true,
-      isValid: true,
-      equipment,
-      macros
-    })
+    const form = renderEditPh({ submitForm, isValid: true })
     form.props.onSubmit({ preventDefault: () => {} })
     expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).not.toHaveBeenCalled()
@@ -75,82 +77,28 @@ describe('<EditPh />', () => {
 
   it('<EditPh /> should show alert when invalid', () => {
     const submitForm = jest.fn()
-    const form = EditPh({
-      values,
-      probe,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm,
-      errors: {},
-      touched: {},
-      analogInputs,
-      dirty: true,
-      isValid: false,
-      equipment,
-      macros
-    })
+    const form = renderEditPh({ submitForm })
     form.props.onSubmit({ preventDefault: () => {} })
     expect(submitForm).toHaveBeenCalled()
     expect(Alert.showError).toHaveBeenCalled()
   })
 
   it('<EditPh /> should disable inputs when controlling nothing', () => {
-    values.control = ''
-    const tree = EditPh({
-      values,
-      probe,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm: fn,
-      errors: {},
-      touched: {},
-      analogInputs,
-      dirty: true,
-      isValid: false,
-      equipment,
-      macros
-    })
+    const tree = renderEditPh({ values: { control: '' } })
 
     const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
     expect(upperFunction.props.disabled).toBe(true)
   })
 
   it('<EditPh /> should enable inputs when controlling equipment', () => {
-    values.control = 'equipment'
-    const tree = EditPh({
-      values,
-      probe,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm: fn,
-      errors: {},
-      touched: {},
-      analogInputs,
-      dirty: true,
-      isValid: false,
-      equipment,
-      macros
-    })
+    const tree = renderEditPh({ values: { control: 'equipment' } })
 
     const upperFunction = findFirst(tree, node => node.props?.name === 'upperFunction' && node.props?.className === 'custom-select')
     expect(upperFunction.props.disabled).toBe(false)
   })
 
   it('<EditPh /> renders charts only when enabled and probe exists', () => {
-    const tree = EditPh({
-      values,
-      probe,
-      handleBlur: fn,
-      handleChange: fn,
-      submitForm: fn,
-      errors: {},
-      touched: {},
-      analogInputs,
-      dirty: true,
-      isValid: true,
-      equipment,
-      macros
-    })
+    const tree = renderEditPh({ isValid: true })
 
     expect(findAll(tree, node => node.type === Chart)).toHaveLength(2)
   })
