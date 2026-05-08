@@ -82,8 +82,10 @@ export class RawSettings extends React.Component {
 
   updateHealthNotify (notify) {
     if (notify !== undefined) {
-      const settings = this.state.settings
-      settings.health_check = notify
+      const settings = {
+        ...this.state.settings,
+        health_check: notify
+      }
       this.setState({ settings, updated: true })
     }
     return this.state
@@ -91,8 +93,10 @@ export class RawSettings extends React.Component {
 
   updateCheckbox (key) {
     return function (ev) {
-      const settings = this.state.settings
-      settings[key] = ev.target.checked
+      const settings = {
+        ...this.state.settings,
+        [key]: ev.target.checked
+      }
       this.setState({
         settings,
         updated: true
@@ -101,8 +105,10 @@ export class RawSettings extends React.Component {
   }
 
   handleSetAddress (ev) {
-    const settings = this.state.settings
-    settings.address = ev.target.value
+    const settings = {
+      ...this.state.settings,
+      address: ev.target.value
+    }
     this.setState({
       settings,
       updated: true
@@ -118,21 +124,24 @@ export class RawSettings extends React.Component {
   }
 
   handleSetProtocol (value) {
-    const settings = this.state.settings
-    const port = settings.address.split(':')[1]
+    const current = this.state.settings
+    const port = current.address.split(':')[1]
+    let address = current.address
 
     // Technically redundant, but improves readability
     // Remove the port if https and port 80
     // Also remove the port if http and port 443
     if (port === '80' && value === true) {
-      const address = settings.address.split(':')[0]
-      settings.address = address // Remove port
+      address = current.address.split(':')[0]
     } else if (port === '443' && value === false) {
-      const address = settings.address.split(':')[0]
-      settings.address = address // Remove port
+      address = current.address.split(':')[0]
     }
 
-    settings.https = value
+    const settings = {
+      ...current,
+      address,
+      https: value
+    }
     this.setState({
       settings,
       updated: true
@@ -155,8 +164,10 @@ export class RawSettings extends React.Component {
   }
 
   updateCapabilities (capabilities) {
-    const settings = this.state.settings
-    settings.capabilities = capabilities
+    const settings = {
+      ...this.state.settings,
+      capabilities
+    }
     this.setState({
       settings,
       updated: true
@@ -183,8 +194,10 @@ export class RawSettings extends React.Component {
 
   toRow (label) {
     const fn = function (ev) {
-      const settings = this.state.settings
-      settings[label] = ev.target.value
+      const settings = {
+        ...this.state.settings,
+        [label]: ev.target.value
+      }
       this.setState({
         settings,
         updated: true
