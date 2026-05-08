@@ -2,7 +2,7 @@ import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
-import PhForm from './ph_form'
+import PhForm, { mapPhPropsToValues, phControlValue } from './ph_form'
 import { RawPhChart } from './chart'
 import { RawPhMain } from './main'
 import 'isomorphic-fetch'
@@ -209,6 +209,19 @@ describe('Ph ui', () => {
       chart_y_max: 14
     }
     expect(renderForm({ probe, onSubmit: jest.fn() })).toContain('option value="" selected=""')
+  })
+
+  it('maps pH form values with derived control modes', () => {
+    expect(mapPhPropsToValues({}).control).toBe('')
+    expect(mapPhPropsToValues({ probe: { notify: {}, control: true, is_macro: false } }).control).toBe('equipment')
+    expect(mapPhPropsToValues({ probe: { notify: {}, control: true, is_macro: true } }).control).toBe('macro')
+    expect(mapPhPropsToValues({ probe: { notify: {}, control: false, is_macro: true } }).control).toBe('')
+  })
+
+  it('derives pH control value from control flags', () => {
+    expect(phControlValue({ control: true, is_macro: false })).toBe('equipment')
+    expect(phControlValue({ control: true, is_macro: true })).toBe('macro')
+    expect(phControlValue({ control: false, is_macro: true })).toBe('')
   })
 
   it('<Chart />', () => {
