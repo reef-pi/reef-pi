@@ -74,12 +74,35 @@ describe('<EditDriver />', () => {
 
   it('driverTypeChangeHandler sets config defaults and calls handleChange', () => {
     const handleChange = jest.fn()
+    const setValues = jest.fn()
+    const values = { type: '', config: { old: 'value' } }
+    const form = EditDriver(baseProps({ handleChange, setValues, values }))
+    const typeField = findNode(form, n => n.props?.name === 'type' && n.props?.onChange)
+
+    typeField.props.onChange({ target: { value: 'ezo' } })
+
+    expect(values.config).toEqual({ old: 'value' })
+    expect(setValues).toHaveBeenCalledWith({
+      type: 'ezo',
+      config: {
+        address: '99',
+        enabled: 'true'
+      }
+    })
+    expect(handleChange).not.toHaveBeenCalled()
+  })
+
+  it('driverTypeChangeHandler falls back to handleChange when setValues is missing', () => {
+    const handleChange = jest.fn()
     const values = { type: '', config: {} }
+    const event = { target: { value: 'ezo' } }
     const form = EditDriver(baseProps({ handleChange, values }))
     const typeField = findNode(form, n => n.props?.name === 'type' && n.props?.onChange)
-    typeField.props.onChange({ target: { value: 'ezo' } })
-    expect(values.config.address).toBe('99')
-    expect(handleChange).toHaveBeenCalled()
+
+    typeField.props.onChange(event)
+
+    expect(values.config).toEqual({})
+    expect(handleChange).toHaveBeenCalledWith(event)
   })
 
   it('driverConfig renders param fields when type has options', () => {

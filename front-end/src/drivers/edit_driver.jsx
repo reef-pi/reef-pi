@@ -12,6 +12,7 @@ const EditDriver = ({
   touched,
   submitForm,
   handleChange,
+  setValues,
   mode,
   isValid,
   dirty,
@@ -30,10 +31,15 @@ const EditDriver = ({
   }
 
   const driverTypeChangeHandler = (e) => {
-    values.config = {}
-    driverOptions[e.target.value].forEach(item => {
-      values.config[item.name.toLowerCase()] = item.default.toString()
+    const type = e.target.value
+    const config = {}
+    driverOptions[type].forEach(item => {
+      config[item.name.toLowerCase()] = item.default.toString()
     })
+    if (setValues) {
+      setValues({ ...values, type, config })
+      return
+    }
     handleChange(e)
   }
 
@@ -146,6 +152,7 @@ EditDriver.propTypes = {
   submitForm: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   handleChange: PropTypes.func,
+  setValues: PropTypes.func,
   driverOptions: PropTypes.object
 }
 
