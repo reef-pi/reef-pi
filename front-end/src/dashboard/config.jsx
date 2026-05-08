@@ -36,7 +36,7 @@ export class RawDashboardConfig extends React.Component {
 
   handleSave () {
     let error = false
-    const payload = this.state.config
+    const payload = { ...this.state.config }
     payload.width = parseInt(payload.width)
     payload.height = parseInt(payload.height)
     payload.column = parseInt(payload.column)
