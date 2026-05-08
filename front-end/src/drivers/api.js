@@ -1,7 +1,9 @@
+import { nonReduxRequest } from '../utils/ajax'
+
 export const validateDriver = payload => {
-  return fetch('api/drivers/validate', {
+  return nonReduxRequest({
+    url: 'api/drivers/validate',
     method: 'POST',
-    credentials: 'same-origin',
-    body: JSON.stringify(payload)
+    data: payload
   })
 }

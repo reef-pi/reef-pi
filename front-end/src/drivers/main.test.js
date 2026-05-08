@@ -47,6 +47,7 @@ describe('Drivers Main', () => {
     expect(global.fetch).toHaveBeenCalledWith('api/drivers/validate', {
       method: 'POST',
       credentials: 'same-origin',
+      headers: expect.any(Headers),
       body: JSON.stringify(payload)
     })
   })

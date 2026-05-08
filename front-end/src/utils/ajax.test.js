@@ -1,4 +1,4 @@
-import { reduxGet, reduxDelete, reduxPut, reduxPost } from './ajax'
+import { nonReduxRequest, reduxGet, reduxDelete, reduxPut, reduxPost } from './ajax'
 import { showError } from 'utils/alert'
 import 'isomorphic-fetch'
 
@@ -81,6 +81,24 @@ describe('Ajax', () => {
         body: raw
       })
       expect(dispatch).toHaveBeenCalledWith(success(res))
+    })
+  })
+
+  it('nonReduxRequest returns the raw fetch response with shared request options', () => {
+    const res = response()
+    global.fetch.mockResolvedValue(res)
+
+    return expect(nonReduxRequest({
+      url: '/foo',
+      method: 'POST',
+      data: { name: 'reef-pi' }
+    })).resolves.toBe(res).then(() => {
+      expect(global.fetch).toHaveBeenCalledWith('/foo', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: expect.any(Headers),
+        body: JSON.stringify({ name: 'reef-pi' })
+      })
     })
   })
 

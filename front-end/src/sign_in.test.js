@@ -1,5 +1,6 @@
 import SignIn from './sign_in'
 import { mountClassComponent } from '../test/class_component'
+import 'isomorphic-fetch'
 
 describe('SignIn', () => {
   beforeEach(() => {
@@ -26,6 +27,7 @@ describe('SignIn', () => {
     expect(global.fetch).toHaveBeenLastCalledWith('/auth/signin', {
       method: 'POST',
       credentials: 'same-origin',
+      headers: expect.any(Headers),
       body: JSON.stringify({
         user: 'foo',
         password: 'bar'
@@ -58,7 +60,8 @@ describe('SignIn', () => {
     await SignIn.logout()
     expect(global.fetch).toHaveBeenLastCalledWith('/auth/signout', {
       method: 'GET',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: expect.any(Headers)
     })
     expect(SignIn.refreshPage).toHaveBeenCalledTimes(1)
 
@@ -66,7 +69,8 @@ describe('SignIn', () => {
     await expect(SignIn.isSignedIn()).resolves.toBe(true)
     expect(global.fetch).toHaveBeenLastCalledWith('/api/me', {
       method: 'GET',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: expect.any(Headers)
     })
   })
 })
