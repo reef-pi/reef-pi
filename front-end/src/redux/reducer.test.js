@@ -161,4 +161,66 @@ describe('Redux Reducer', () => {
     rootReducer(state, { type: 'CAMERA_CONFIG_LOADED', payload: { foo: 'bar' } })
     expect(state.camera).toEqual({ config: { existing: true }, images: ['one'], latest: 'latest' })
   })
+
+  it('handles reducer action cases that load usage, readings, and connector state', () => {
+    const cases = [
+      {
+        type: 'DOSER_USAGE_LOADED',
+        payload: { id: 1, data: 'doser:usage' },
+        expected: { doser_usage: { 1: 'doser:usage' } }
+      },
+      {
+        type: 'LIGHT_USAGE_LOADED',
+        payload: { id: 2, usage: 'light:usage' },
+        expected: { light_usage: { 2: 'light:usage' } }
+      },
+      {
+        type: 'PH_PROBE_READING_COMPLETE',
+        payload: { id: 3, reading: 'ph:reading' },
+        expected: { ph_reading: { 3: 'ph:reading' } }
+      },
+      {
+        type: 'TC_READING_COMPLETE',
+        payload: { id: 4, reading: 'tc:reading' },
+        expected: { tc_reading: { 4: 'tc:reading' } }
+      },
+      {
+        type: 'DRIVERS_LOADED',
+        payload: [{ id: 'driver-1' }],
+        expected: { drivers: [{ id: 'driver-1' }] }
+      },
+      {
+        type: 'DRIVER_OPTIONS_LOADED',
+        payload: { rpi: [] },
+        expected: { driverOptions: { rpi: [] } }
+      },
+      {
+        type: 'ANALOG_INPUTS_LOADED',
+        payload: [{ id: 'analog-input-1' }],
+        expected: { analog_inputs: [{ id: 'analog-input-1' }] }
+      },
+      {
+        type: 'INSTANCES_LOADED',
+        payload: [{ id: 'instance-1' }],
+        expected: { instances: [{ id: 'instance-1' }] }
+      },
+      {
+        type: 'JOURNALS_LOADED',
+        payload: [{ id: 'journal-1' }],
+        expected: { journals: [{ id: 'journal-1' }] }
+      },
+      {
+        type: 'JOURNAL_USAGE_LOADED',
+        payload: { id: 5, data: 'journal:usage' },
+        expected: { journal_usage: { 5: 'journal:usage' } }
+      }
+    ]
+
+    cases.forEach(({ type, payload, expected }) => {
+      expect(rootReducer(getState(), { type, payload })).toEqual({
+        ...getState(),
+        ...expected
+      })
+    })
+  })
 })
