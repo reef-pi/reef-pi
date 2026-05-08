@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import Outlet from './outlet'
 import Pin from './pin'
 import i18n from 'utils/i18n'
-import { SortByName } from 'utils/sort_by_name'
 import { byCapability } from './driver_filter'
+import { groupByDriverName } from './driver_groups'
 
 class outlets extends React.Component {
   constructor (props) {
@@ -91,26 +91,16 @@ class outlets extends React.Component {
   }
 
   list () {
-    const driverMap = {}
-    this.props.drivers.forEach(d => { driverMap[d.id] = d })
-
-    const groups = {}
-    this.props.outlets.slice()
-      .sort((a, b) => SortByName(a, b))
-      .forEach(o => {
-        const driverName = (driverMap[o.driver] || {}).name || o.driver
-        if (!groups[driverName]) groups[driverName] = []
-        groups[driverName].push(o)
-      })
+    const driverGroups = groupByDriverName(this.props.outlets, this.props.drivers)
 
     const list = []
-    Object.keys(groups).sort().forEach(driverName => {
+    driverGroups.groups.forEach(group => {
       list.push(
-        <div key={'driver-' + driverName} className='mt-2'>
-          <small className='text-muted font-weight-bold'>{driverName}</small>
+        <div key={'driver-' + group.driverName} className='mt-2'>
+          <small className='text-muted font-weight-bold'>{group.driverName}</small>
         </div>
       )
-      groups[driverName].forEach(o => {
+      group.connectors.forEach(o => {
         list.push(
           <Outlet
             name={o.name}
@@ -121,7 +111,7 @@ class outlets extends React.Component {
             equipment={o.equipment}
             remove={this.remove(o)}
             drivers={this.props.drivers}
-            driver={driverMap[o.driver] || {}}
+            driver={driverGroups.driverMap[o.driver] || {}}
             update={p => {
               this.props.update(o.id, p)
               this.props.fetch()
