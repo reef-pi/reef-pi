@@ -2,12 +2,15 @@ package utils
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/gorilla/mux"
 )
 
 type mockResponseWriter struct {
@@ -30,6 +33,27 @@ func TestErrorResponse(t *testing.T) {
 	if rw.Header().Get("Content-Type") != "application/json" {
 		t.Fatal("Wrong content type header.", rw.Header().Get("Content-Type"))
 	}
+}
+
+func assertJSONError(t *testing.T, rr *httptest.ResponseRecorder, status int, message string) {
+	t.Helper()
+	if rr.Code != status {
+		t.Fatalf("expected status %d, got %d", status, rr.Code)
+	}
+	var payload map[string]string
+	if err := json.Unmarshal(rr.Body.Bytes(), &payload); err != nil {
+		t.Fatalf("expected JSON error response, got %q: %v", rr.Body.String(), err)
+	}
+	if payload["error"] != message {
+		t.Fatalf("expected error %q, got %q", message, payload["error"])
+	}
+}
+
+func TestErrorResponseWritesStatusAndJSONBody(t *testing.T) {
+	rr := httptest.NewRecorder()
+	ErrorResponse(425, "throttle", rr)
+
+	assertJSONError(t, rr, 425, "throttle")
 }
 
 func TestJSONResponses(t *testing.T) {
@@ -69,6 +93,134 @@ func TestJSONResponseWithStatus(t *testing.T) {
 	if rr.Code != http.StatusCreated {
 		t.Errorf("Expected status %d, got %d", http.StatusCreated, rr.Code)
 	}
+}
+
+func TestJSONGetResponseWritesPayloadAndNotFound(t *testing.T) {
+	req := httptest.NewRequest("GET", "/api/test/7", strings.NewReader("{}"))
+	req = mux.SetURLVars(req, map[string]string{"id": "7"})
+	rr := httptest.NewRecorder()
+
+	JSONGetResponse(func(id string) (interface{}, error) {
+		if id != "7" {
+			t.Fatalf("expected id 7, got %q", id)
+		}
+		return map[string]string{"id": id}, nil
+	}, rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+	if strings.TrimSpace(rr.Body.String()) != `{"id":"7"}` {
+		t.Fatalf("unexpected body: %q", rr.Body.String())
+	}
+
+	req = httptest.NewRequest("GET", "/api/test/8", strings.NewReader("{}"))
+	req = mux.SetURLVars(req, map[string]string{"id": "8"})
+	rr = httptest.NewRecorder()
+	JSONGetResponse(func(string) (interface{}, error) {
+		return nil, fmt.Errorf("missing")
+	}, rr, req)
+
+	assertJSONError(t, rr, http.StatusNotFound, "missing")
+}
+
+func TestJSONListResponseWritesPayloadAndErrors(t *testing.T) {
+	req := httptest.NewRequest("GET", "/api/test", strings.NewReader("{}"))
+	rr := httptest.NewRecorder()
+
+	JSONListResponse(func() (interface{}, error) {
+		return []string{"a", "b"}, nil
+	}, rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+	if strings.TrimSpace(rr.Body.String()) != `["a","b"]` {
+		t.Fatalf("unexpected body: %q", rr.Body.String())
+	}
+
+	req = httptest.NewRequest("GET", "/api/test", strings.NewReader("{}"))
+	rr = httptest.NewRecorder()
+	JSONListResponse(func() (interface{}, error) {
+		return nil, fmt.Errorf("boom")
+	}, rr, req)
+
+	assertJSONError(t, rr, http.StatusInternalServerError, "Failed to list")
+}
+
+func TestJSONCreateUpdateDeleteResponseStatusPaths(t *testing.T) {
+	t.Run("create decodes payload and returns ok", func(t *testing.T) {
+		var payload map[string]string
+		req := httptest.NewRequest("PUT", "/api/test", strings.NewReader(`{"name":"reef-pi"}`))
+		rr := httptest.NewRecorder()
+		called := false
+
+		JSONCreateResponse(&payload, func() error {
+			called = true
+			return nil
+		}, rr, req)
+
+		if !called {
+			t.Fatal("expected create callback to run")
+		}
+		if payload["name"] != "reef-pi" {
+			t.Fatalf("unexpected decoded payload: %#v", payload)
+		}
+		if rr.Code != http.StatusOK {
+			t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+		}
+	})
+
+	t.Run("create reports invalid json", func(t *testing.T) {
+		var payload map[string]string
+		req := httptest.NewRequest("PUT", "/api/test", strings.NewReader(`{`))
+		rr := httptest.NewRecorder()
+
+		JSONCreateResponse(&payload, func() error {
+			t.Fatal("create callback should not run")
+			return nil
+		}, rr, req)
+
+		if rr.Code != http.StatusBadRequest {
+			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, rr.Code)
+		}
+	})
+
+	t.Run("update passes route id", func(t *testing.T) {
+		var payload map[string]string
+		req := httptest.NewRequest("POST", "/api/test/9", strings.NewReader(`{"name":"updated"}`))
+		req = mux.SetURLVars(req, map[string]string{"id": "9"})
+		rr := httptest.NewRecorder()
+
+		JSONUpdateResponse(&payload, func(id string) error {
+			if id != "9" {
+				t.Fatalf("expected id 9, got %q", id)
+			}
+			return nil
+		}, rr, req)
+
+		if payload["name"] != "updated" {
+			t.Fatalf("unexpected decoded payload: %#v", payload)
+		}
+		if rr.Code != http.StatusOK {
+			t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+		}
+	})
+
+	t.Run("delete reports callback errors", func(t *testing.T) {
+		req := httptest.NewRequest("DELETE", "/api/test/10", strings.NewReader("{}"))
+		req = mux.SetURLVars(req, map[string]string{"id": "10"})
+		rr := httptest.NewRecorder()
+
+		JSONDeleteResponse(func(id string) error {
+			if id != "10" {
+				t.Fatalf("expected id 10, got %q", id)
+			}
+			return fmt.Errorf("delete failed")
+		}, rr, req)
+
+		assertJSONError(t, rr, http.StatusInternalServerError, "Failed to delete. Error: delete failed")
+	})
 }
 
 type testDoer struct{}
