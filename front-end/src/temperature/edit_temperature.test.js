@@ -27,8 +27,11 @@ describe('<EditTemperature />', () => {
   let macros = [{ id: '1', name: 'Macro' }]
   let submitForm = jest.fn()
 
-  const renderComponent = (extraProps = {}) => EditTemperature({
-    values,
+  const renderComponent = (extraProps = {}, valueOverrides = {}) => EditTemperature({
+    values: {
+      ...values,
+      ...valueOverrides
+    },
     errors: {},
     touched: {},
     sensors,
@@ -88,10 +91,7 @@ describe('<EditTemperature />', () => {
   })
 
   it('should show both charts when heater or chiller is used', () => {
-    values.heater = '2'
-    values.cooler = '4'
-
-    const element = renderComponent()
+    const element = renderComponent({}, { heater: '2', cooler: '4' })
 
     expect(collectElements(element, child => child.type === ReadingsChart)).toHaveLength(1)
     expect(collectElements(element, child => child.type === ControlChart)).toHaveLength(1)
@@ -109,10 +109,7 @@ describe('<EditTemperature />', () => {
   })
 
   it('shows alert when the form is invalid', () => {
-    values.name = ''
-    values.fahrenheit = false
-
-    const element = renderComponent({ isValid: false })
+    const element = renderComponent({ isValid: false }, { name: '', fahrenheit: false })
     const form = findFirst(element, child => child.type === 'form')
 
     form.props.onSubmit({ preventDefault: jest.fn() })
@@ -122,9 +119,7 @@ describe('<EditTemperature />', () => {
   })
 
   it('disables control inputs when controlling nothing', () => {
-    values.control = ''
-
-    const element = renderComponent({ isValid: false })
+    const element = renderComponent({ isValid: false }, { control: '' })
     const heaterField = findFirst(
       element,
       child => child.props.name === 'heater' && child.props.className === 'custom-select'
@@ -134,9 +129,7 @@ describe('<EditTemperature />', () => {
   })
 
   it('enables control inputs when controlling equipment', () => {
-    values.control = 'equipment'
-
-    const element = renderComponent({ isValid: false })
+    const element = renderComponent({ isValid: false }, { control: 'equipment' })
     const heaterField = findFirst(
       element,
       child => child.props.name === 'heater' && child.props.className === 'custom-select'
