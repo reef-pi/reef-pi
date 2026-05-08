@@ -63,7 +63,11 @@ export class RawAdmin extends React.Component {
       this.state.dbFile,
       this.state.dbFile.name
     )
-    confirm(i18n.t('are_you_sure')).then(this.props.dbImport(formData))
+    confirm(i18n.t('are_you_sure')).then(confirmed => {
+      if (confirmed) {
+        this.props.dbImport(formData)
+      }
+    })
   }
 
   handleSignout () {
