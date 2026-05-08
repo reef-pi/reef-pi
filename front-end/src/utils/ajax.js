@@ -62,8 +62,12 @@ function dispatchSuccess (data, params, dispatch) {
   return dispatch(params.success(data))
 }
 
-function request (params, dispatch) {
+export function nonReduxRequest (params) {
   return fetch(params.url, buildRequestOptions(params))
+}
+
+function request (params, dispatch) {
+  return nonReduxRequest(params)
     .then(response => {
       if (!response.ok) {
         return handleErrorResponse(response, params)
