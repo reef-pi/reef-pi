@@ -67,16 +67,16 @@ export const fetchManagerData = (dispatch) => {
   dispatch(fetchInstances())
 }
 
-export const fetchUIData = (dispatch) => {
-  return getAction(
+export const fetchUIData = () => {
+  return dispatch => dispatch(getAction(
     'capabilities',
     (capabilities) => {
       if (capabilities.manager) {
         fetchManagerData(dispatch)
-        return (capabilitiesLoaded(capabilities))
+        return capabilitiesLoaded(capabilities)
       }
       fetchControllerData(dispatch, capabilities)
-      return (capabilitiesLoaded(capabilities))
+      return capabilitiesLoaded(capabilities)
     }
-  )
+  ))
 }
