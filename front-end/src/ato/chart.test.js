@@ -19,7 +19,10 @@ describe('ATO Chart', () => {
       usage,
       fetchATOUsage: jest.fn()
     })
-    expect(() => chart.render()).not.toThrow()
+    const rendered = chart.render()
+    const barChart = rendered.props.children[1].props.children
+
+    expect(barChart.props.data.map(item => item.time)).toEqual(['Jul-01-10:00, 2024', 'Jul-01-10:10, 2024'])
     expect(usage.historical.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
     expect(usage.historical[0].ts).toBeUndefined()
     expect(Chart).toBeDefined()
