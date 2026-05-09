@@ -27,16 +27,26 @@ describe('<Chart />', () => {
     expect(Chart).toBeDefined()
   })
 
-  it('renders without throwing when readings available', () => {
+  it('renders sorted chart data without mutating readings', () => {
+    const historical = [
+      { timestamp: 'Jan-01-11:00, 2023', value: 7.4 },
+      { timestamp: 'Jan-01-10:00, 2023', value: 7.2 },
+      { timestamp: 'Jan-01-10:00, 2023', value: 7.3 }
+    ]
+    const originalHistorical = historical.map(reading => ({ ...reading }))
     const chart = new RawJournalChart({
       journal_id: '1',
       width: 500,
       height: 300,
       config: journal,
-      readings,
+      readings: { historical },
       fetch: jest.fn()
     })
-    expect(() => chart.render()).not.toThrow()
+    const rendered = chart.render()
+    const lineChart = rendered.props.children[1].props.children
+
+    expect(lineChart.props.data.map(reading => reading.value)).toEqual([7.2, 7.3, 7.4])
+    expect(historical).toEqual(originalHistorical)
   })
 
   it('polls on mount and clears timer on unmount', () => {

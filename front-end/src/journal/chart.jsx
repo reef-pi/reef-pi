@@ -27,7 +27,7 @@ export class RawJournalChart extends React.Component {
       return (<div />)
     }
     const metrics = [...this.props.readings.historical].sort((a, b) => {
-      return ParseTimestamp(a.timestamp) > ParseTimestamp(b.timestamp) ? 1 : -1
+      return ParseTimestamp(a.timestamp).getTime() - ParseTimestamp(b.timestamp).getTime()
     })
     let current = ''
     if (metrics.length >= 1) {
