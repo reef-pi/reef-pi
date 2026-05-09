@@ -38,6 +38,17 @@ const findByType = (node, type) => {
   }
 }
 
+const findAllByType = (node, type) => {
+  if (!node || typeof node !== 'object') {
+    return []
+  }
+  const matches = node.type === type ? [node] : []
+  React.Children.toArray(node.props?.children).forEach(child => {
+    matches.push(...findAllByType(child, type))
+  })
+  return matches
+}
+
 describe('Camera module', () => {
   afterEach(() => {
     fetchMock.reset()
@@ -150,25 +161,88 @@ describe('Camera module', () => {
     expect(update).toHaveBeenCalledWith({ tick_interval: 5, enable: true })
   })
 
-  it('<Gallery />', () => {
-    const images = [{ thumbnail: '', src: '' }]
+  it('<Gallery /> renders nothing for empty images', () => {
+    const gallery = new Gallery({ images: [] })
+    const rendered = gallery.render()
+
+    expect(rendered.type).toBe('div')
+    expect(rendered.props.children).toBeUndefined()
+    expect(() => new Gallery({}).render()).not.toThrow()
+  })
+
+  it('<Gallery /> opens the clicked image', () => {
+    const images = [
+      { thumbnail: '/images/thumbnail-foo.jpg', src: '/images/foo.jpg' },
+      { thumbnail: '/images/thumbnail-bar.jpg', src: '/images/bar.jpg' }
+    ]
     const gallery = new Gallery({ images })
     gallery.setState = jest.fn(next => {
       gallery.state = { ...gallery.state, ...next }
     })
     const ev = { preventDefault: jest.fn() }
 
-    gallery.open(0, ev)
+    const thumbnails = findAllByType(gallery.render(), 'a')
+    thumbnails[1].props.onClick(ev)
+
     expect(ev.preventDefault).toHaveBeenCalled()
-    gallery.handleClose()
-    gallery.handleGotoPrevious()
+    expect(gallery.state).toEqual({ current: 1, isOpen: true })
+    expect(findAllByType(gallery.render(), 'img')[0].props.src).toBe('/images/bar.jpg')
+  })
+
+  it('<Gallery /> disables previous and next at image boundaries', () => {
+    const images = [
+      { thumbnail: '/images/thumbnail-foo.jpg', src: '/images/foo.jpg' },
+      { thumbnail: '/images/thumbnail-bar.jpg', src: '/images/bar.jpg' }
+    ]
+    const gallery = new Gallery({ images })
+    gallery.setState = jest.fn(next => {
+      gallery.state = { ...gallery.state, ...next }
+    })
+
+    gallery.open(0, { preventDefault: jest.fn() })
+    let buttons = findAllByType(gallery.render(), 'button')
+
+    expect(buttons[1].props.disabled).toBe(true)
+    expect(buttons[2].props.disabled).toBe(false)
+
     gallery.handleGotoNext()
+    buttons = findAllByType(gallery.render(), 'button')
+
+    expect(buttons[1].props.disabled).toBe(false)
+    expect(buttons[2].props.disabled).toBe(true)
+  })
+
+  it('<Gallery /> advances image clicks until the final image', () => {
+    const images = [
+      { thumbnail: '/images/thumbnail-foo.jpg', src: '/images/foo.jpg' },
+      { thumbnail: '/images/thumbnail-bar.jpg', src: '/images/bar.jpg' }
+    ]
+    const gallery = new Gallery({ images })
+    gallery.setState = jest.fn(next => {
+      gallery.state = { ...gallery.state, ...next }
+    })
+
+    gallery.open(0, { preventDefault: jest.fn() })
+    findAllByType(gallery.render(), 'img')[0].props.onClick()
+    expect(gallery.state.current).toBe(1)
+
+    findAllByType(gallery.render(), 'img')[0].props.onClick()
+    expect(gallery.state.current).toBe(1)
+  })
+
+  it('<Gallery /> closes and jumps to a selected image', () => {
+    const images = [{ thumbnail: '', src: '' }]
+    const gallery = new Gallery({ images })
+    gallery.setState = jest.fn(next => {
+      gallery.state = { ...gallery.state, ...next }
+    })
+
+    gallery.open(0, { preventDefault: jest.fn() })
+    gallery.handleClose()
+    expect(gallery.state).toEqual({ current: 0, isOpen: false })
+
     gallery.handleGotoImage(0)
-    gallery.handleOnClick()
-    gallery.setState({ current: -1 })
-    gallery.handleOnClick()
     expect(gallery.state.current).toBe(0)
-    expect(() => new Gallery({}).render()).not.toThrow()
   })
 
   it('<Motion />', () => {
