@@ -1,4 +1,4 @@
-import { ParseTimestamp, filterToday } from './timestamp'
+import { ParseTimestamp, filterToday, formatChartTime, timestampToEpoch } from './timestamp'
 
 describe('ParseTimestamp', () => {
   it('parses timestamp string into a Date', () => {
@@ -21,6 +21,22 @@ describe('ParseTimestamp', () => {
     const d = ParseTimestamp('Dec-31-12:59, 2021')
     expect(d.getMonth()).toBe(11)
     expect(d.getDate()).toBe(31)
+  })
+})
+
+describe('timestampToEpoch', () => {
+  it('returns the epoch milliseconds for reef-pi timestamps', () => {
+    const timestamp = 'Jul-08-23:38, 2022'
+
+    expect(timestampToEpoch(timestamp)).toBe(ParseTimestamp(timestamp).getTime())
+  })
+})
+
+describe('formatChartTime', () => {
+  it('formats chart epochs as zero-padded local hours and minutes', () => {
+    const epoch = new Date(2022, 6, 8, 3, 4).getTime()
+
+    expect(formatChartTime(epoch)).toBe('03:04')
   })
 })
 
