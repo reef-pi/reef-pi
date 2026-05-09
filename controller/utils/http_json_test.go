@@ -223,6 +223,84 @@ func TestJSONCreateUpdateDeleteResponseStatusPaths(t *testing.T) {
 	})
 }
 
+func TestJSONCreateResponseCallbackErrorWritesStatusAndBody(t *testing.T) {
+	var payload map[string]string
+	req := httptest.NewRequest("PUT", "/api/test", strings.NewReader(`{"name":"reef-pi"}`))
+	rr := httptest.NewRecorder()
+
+	JSONCreateResponse(&payload, func() error {
+		return fmt.Errorf("create failed")
+	}, rr, req)
+
+	assertJSONError(t, rr, http.StatusInternalServerError, "Failed to create. Error: create failed")
+}
+
+func TestJSONUpdateResponseInvalidJSONAndCallbackError(t *testing.T) {
+	t.Run("invalid json", func(t *testing.T) {
+		var payload map[string]string
+		req := httptest.NewRequest("POST", "/api/test/11", strings.NewReader(`{`))
+		req = mux.SetURLVars(req, map[string]string{"id": "11"})
+		rr := httptest.NewRecorder()
+
+		JSONUpdateResponse(&payload, func(string) error {
+			t.Fatal("update callback should not run")
+			return nil
+		}, rr, req)
+
+		if rr.Code != http.StatusBadRequest {
+			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, rr.Code)
+		}
+		var errPayload map[string]string
+		if err := json.Unmarshal(rr.Body.Bytes(), &errPayload); err != nil {
+			t.Fatalf("expected JSON error response, got %q: %v", rr.Body.String(), err)
+		}
+		if errPayload["error"] == "" {
+			t.Fatalf("expected non-empty JSON decode error, got %#v", errPayload)
+		}
+	})
+
+	t.Run("callback error", func(t *testing.T) {
+		var payload map[string]string
+		req := httptest.NewRequest("POST", "/api/test/12", strings.NewReader(`{"name":"updated"}`))
+		req = mux.SetURLVars(req, map[string]string{"id": "12"})
+		rr := httptest.NewRecorder()
+
+		JSONUpdateResponse(&payload, func(id string) error {
+			if id != "12" {
+				t.Fatalf("expected id 12, got %q", id)
+			}
+			return fmt.Errorf("update failed")
+		}, rr, req)
+
+		assertJSONError(t, rr, http.StatusInternalServerError, "Failed to update. Error: update failed")
+	})
+}
+
+func TestJSONDeleteResponseSuccessPassesRouteID(t *testing.T) {
+	req := httptest.NewRequest("DELETE", "/api/test/13", strings.NewReader("{}"))
+	req = mux.SetURLVars(req, map[string]string{"id": "13"})
+	rr := httptest.NewRecorder()
+	called := false
+
+	JSONDeleteResponse(func(id string) error {
+		called = true
+		if id != "13" {
+			t.Fatalf("expected id 13, got %q", id)
+		}
+		return nil
+	}, rr, req)
+
+	if !called {
+		t.Fatal("expected delete callback to run")
+	}
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+	if rr.Body.Len() != 0 {
+		t.Fatalf("expected empty response body, got %q", rr.Body.String())
+	}
+}
+
 type testDoer struct{}
 
 func (t *testDoer) Do(_ func(interface{})) {}
