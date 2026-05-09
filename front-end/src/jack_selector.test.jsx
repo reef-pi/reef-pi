@@ -19,7 +19,11 @@ const findAll = (node, predicate, acc = []) => {
 describe('JackSelector', () => {
   it('renders without throwing with matching jack', () => {
     const component = new RawJackSelector({ id: '1', jacks, update: jest.fn(), fetchJacks: jest.fn() })
-    expect(() => component.render()).not.toThrow()
+    const rendered = component.render()
+    const buttons = findAll(rendered, node => node.type === 'button')
+
+    expect(buttons[0].props.children).toBe('Foo')
+    expect(buttons[1].props.children).toBe('1')
     expect(JackSelector).toBeDefined()
   })
 
@@ -47,6 +51,15 @@ describe('JackSelector', () => {
     expect(update).toHaveBeenCalledWith('1', 1)
   })
 
+  it('fetches jacks on mount', () => {
+    const fetchJacks = jest.fn()
+    const component = new RawJackSelector({ id: '1', jacks, update: jest.fn(), fetchJacks })
+
+    component.componentDidMount()
+
+    expect(fetchJacks).toHaveBeenCalled()
+  })
+
   it('updates the selected pin', () => {
     const update = jest.fn()
     const component = new RawJackSelector({ id: '1', jacks, update, fetchJacks: jest.fn() })
@@ -72,6 +85,17 @@ describe('JackSelector', () => {
 
     expect(update).toHaveBeenCalledWith('1', 1)
     expect(JackSelector).toBeDefined()
+  })
+
+  it('setJack ignores missing index', () => {
+    const update = jest.fn()
+    const component = new RawJackSelector({ id: '1', jacks, update, fetchJacks: jest.fn() })
+    const previousState = component.state
+
+    component.setJack(99)()
+
+    expect(component.state).toBe(previousState)
+    expect(update).not.toHaveBeenCalled()
   })
 
   it('setPin updates and calls update', () => {
