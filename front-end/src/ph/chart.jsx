@@ -31,7 +31,7 @@ class chart extends React.Component {
       ? filterToday(this.props.readings[this.props.type])
       : [...this.props.readings[this.props.type]]
     const metrics = raw.sort((a, b) => {
-      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+      return ParseTimestamp(a.time).getTime() - ParseTimestamp(b.time).getTime()
     }).map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     let current = ''
     if (metrics.length >= 1) {
