@@ -323,26 +323,31 @@ describe('Connectors', () => {
     expect(connectors.map(connector => connector.name)).toEqual(['Outlet B', 'Outlet A', 'Outlet C'])
   })
 
-  it('<Pin /> renders select with options for driver pins', () => {
-    const pins = [3, 1, 2]
+  it('<Pin /> renders options in numeric order without mutating the pinmap', () => {
+    const pins = [10, 2, 1]
     const driver = { id: 'rpi', pinmap: { 'digital-output': pins } }
+    const component = new Pin({ driver, update: () => {}, type: 'digital-output', current: 1 })
+    const options = component.options()
     const html = renderToStaticMarkup(<Pin driver={driver} update={() => {}} type='digital-output' current={1} />)
+    expect(options.map(option => option.props.value)).toEqual([1, 2, 10])
     expect(html).toContain('<select')
     expect((html.match(/<option/g) || []).length).toBe(3)
-    expect(pins).toEqual([3, 1, 2])
+    expect(pins).toEqual([10, 2, 1])
   })
 
-  it('<Pin /> calls update on change', () => {
+  it('<Pin /> calls update with parsed numeric value on change', () => {
     const driver = { id: 'rpi', pinmap: { 'digital-output': [1, 2, 3] } }
     const update = jest.fn()
     const m = new Pin({ driver, update, type: 'digital-output', current: 1 })
-    m.handleChange({ target: { value: '2' } })
+    m.handleChange({ target: { value: '02' } })
     expect(update).toHaveBeenCalledWith(2)
   })
 
-  it('<Pin /> renders empty for undefined driver', () => {
-    const m = new Pin({ driver: undefined, update: () => {}, type: 'digital-output' })
-    expect(m.options()).toBeUndefined()
+  it('<Pin /> returns no options without a driver pinmap or matching type', () => {
+    expect(new Pin({ driver: undefined, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
+    expect(new Pin({ driver: { id: 'rpi' }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
+    expect(new Pin({ driver: { id: 'rpi', pinmap: null }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
+    expect(new Pin({ driver: { id: 'rpi', pinmap: { pwm: [1] } }, update: () => {}, type: 'digital-output' }).options()).toBeUndefined()
   })
 
   it('<AnalogInput /> renders view mode by default', () => {
