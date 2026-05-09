@@ -284,12 +284,24 @@ describe('Equipment ui', () => {
   it('<Chart />', () => {
     jest.useFakeTimers()
     const fetchEquipment = jest.fn()
-    const component = new RawEquipmentChart({ equipment: eqs, fetchEquipment, height: 200 })
+    const equipment = [
+      { id: '1', outlet: '1', name: 'Foo', on: true },
+      { id: '2', outlet: '2', name: 'Bar', on: false }
+    ]
+    const originalEquipment = equipment.map(eq => ({ ...eq }))
+    const component = new RawEquipmentChart({ equipment, fetchEquipment, height: 200 })
 
     component.componentDidMount()
 
     expect(fetchEquipment).toHaveBeenCalled()
-    expect(component.render().props.className).toBe('container')
+    const rendered = component.render()
+    expect(rendered.props.className).toBe('container')
+    const chart = rendered.props.children[1].props.children
+    expect(chart.props.data).toEqual([
+      { id: '1', outlet: '1', name: 'Foo', on: true, onstate: 1, offstate: undefined },
+      { id: '2', outlet: '2', name: 'Bar', on: false, onstate: undefined, offstate: 1 }
+    ])
+    expect(equipment).toEqual(originalEquipment)
     component.componentWillUnmount()
     jest.useRealTimers()
   })
