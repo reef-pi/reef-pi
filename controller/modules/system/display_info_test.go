@@ -39,6 +39,33 @@ func TestDisplayStateReadsFilesAndReportsBrightnessErrors(t *testing.T) {
 	}
 }
 
+func TestDisplayFileWrites(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	powerFile := filepath.Join(dir, "power")
+	brightnessFile := filepath.Join(dir, "brightness")
+	c := &Controller{
+		PowerFile:      powerFile,
+		BrightnessFile: brightnessFile,
+	}
+
+	if err := c.enableDisplay(); err != nil {
+		t.Fatal(err)
+	}
+	assertFileContents(t, powerFile, "0")
+
+	if err := c.disableDisplay(); err != nil {
+		t.Fatal(err)
+	}
+	assertFileContents(t, powerFile, "1")
+
+	if err := c.setBrightness(73); err != nil {
+		t.Fatal(err)
+	}
+	assertFileContents(t, brightnessFile, "73")
+}
+
 func TestDisplayFileOperationErrors(t *testing.T) {
 	t.Parallel()
 
@@ -60,6 +87,38 @@ func TestDisplayFileOperationErrors(t *testing.T) {
 	}
 }
 
+func TestDisplayDevModeDoesNotModifyFiles(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	powerFile := filepath.Join(dir, "power")
+	brightnessFile := filepath.Join(dir, "brightness")
+	if err := os.WriteFile(powerFile, []byte("power-original"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(brightnessFile, []byte("brightness-original"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	c := &Controller{
+		config:         Config{DevMode: true},
+		PowerFile:      powerFile,
+		BrightnessFile: brightnessFile,
+	}
+	if err := c.enableDisplay(); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.disableDisplay(); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.setBrightness(73); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContents(t, powerFile, "power-original")
+	assertFileContents(t, brightnessFile, "brightness-original")
+}
+
 func TestCPUTemperatureDevMode(t *testing.T) {
 	t.Parallel()
 
@@ -72,5 +131,17 @@ func TestCPUTemperatureDevMode(t *testing.T) {
 	}
 	if temp != "23.23 " {
 		t.Fatalf("expected dev-mode temperature, got %q", temp)
+	}
+}
+
+func assertFileContents(t *testing.T, path, expected string) {
+	t.Helper()
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != expected {
+		t.Fatalf("expected %s to contain %q, got %q", path, expected, string(data))
 	}
 }
