@@ -162,6 +162,50 @@ describe('Redux Reducer', () => {
     expect(state.camera).toEqual({ config: { existing: true }, images: ['one'], latest: 'latest' })
   })
 
+  it('adds and deletes logs without mutating existing logs', () => {
+    const logs = [
+      { ts: '2020-01-02T00:00:00Z', message: 'keep me' },
+      { ts: '2020-01-03T00:00:00Z', message: 'delete me' }
+    ]
+    const state = {
+      ...getState(),
+      logs
+    }
+    const addedLog = { ts: '2020-01-01T00:00:00Z', message: 'added' }
+
+    let result = rootReducer(state, { type: 'LOG_ADDED', payload: addedLog })
+    expect(result.logs).toEqual([addedLog].concat(logs))
+    expect(result.logs).not.toBe(logs)
+    expect(state.logs).toEqual(logs)
+
+    result = rootReducer(state, { type: 'LOG_DELETED', payload: { ts: '2020-01-03T00:00:00Z' } })
+    expect(result.logs).toEqual([{ ts: '2020-01-02T00:00:00Z', message: 'keep me' }])
+    expect(result.logs).not.toBe(logs)
+    expect(state.logs).toEqual(logs)
+  })
+
+  it('adds and deletes alerts without mutating existing alerts', () => {
+    const alerts = [
+      { ts: '2020-01-02T00:00:00Z', message: 'keep me' },
+      { ts: '2020-01-03T00:00:00Z', message: 'delete me' }
+    ]
+    const state = {
+      ...getState(),
+      alerts
+    }
+    const addedAlert = { ts: '2020-01-01T00:00:00Z', message: 'added' }
+
+    let result = rootReducer(state, { type: 'ALERT_ADDED', payload: addedAlert })
+    expect(result.alerts).toEqual([addedAlert].concat(alerts))
+    expect(result.alerts).not.toBe(alerts)
+    expect(state.alerts).toEqual(alerts)
+
+    result = rootReducer(state, { type: 'ALERT_DELETED', payload: { ts: '2020-01-03T00:00:00Z' } })
+    expect(result.alerts).toEqual([{ ts: '2020-01-02T00:00:00Z', message: 'keep me' }])
+    expect(result.alerts).not.toBe(alerts)
+    expect(state.alerts).toEqual(alerts)
+  })
+
   it('handles reducer action cases that load usage, readings, and connector state', () => {
     const cases = [
       {
