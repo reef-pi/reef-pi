@@ -1,43 +1,68 @@
 import React from 'react'
+import AlertItem from './alert_item'
 import { RawNotificationAlert } from './alert'
 import 'isomorphic-fetch'
 
 describe('NotificationAlert', () => {
-  it('renders without throwing with alerts', () => {
-    const alert = new RawNotificationAlert({
-      alerts: [
-        { ts: 1, content: 'Test info', type: 'INFO' },
-        { ts: 2, content: 'Test error', type: 'ERROR' }
-      ],
-      delAlert: jest.fn()
-    })
-
-    expect(() => alert.render()).not.toThrow()
+  afterEach(() => {
+    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
-  it('renders without throwing with no alerts', () => {
-    const alert = new RawNotificationAlert({
-      alerts: [],
-      delAlert: jest.fn()
-    })
+  const makeAlert = props => {
+    const alert = new RawNotificationAlert(props)
+    alert.setState = update => {
+      alert.state = { ...alert.state, ...update }
+    }
+    return alert
+  }
 
-    expect(() => alert.render()).not.toThrow()
-    expect(React.Children.count(alert.render().props.children)).toBe(0)
+  it('registers and removes the scroll listener', () => {
+    const alert = makeAlert({ alerts: [], delAlert: jest.fn() })
+    const addEventListener = jest.spyOn(window, 'addEventListener')
+    const removeEventListener = jest.spyOn(window, 'removeEventListener')
+
+    alert.componentDidMount()
+    alert.componentWillUnmount()
+
+    expect(addEventListener).toHaveBeenCalledWith('scroll', alert.handleScroll)
+    expect(removeEventListener).toHaveBeenCalledWith('scroll', alert.handleScroll)
   })
 
-  it('renders alert items from props', () => {
+  it('toggles fixed class when window scroll passes threshold', () => {
+    const alert = makeAlert({ alerts: [], delAlert: jest.fn() })
+
+    Object.defineProperty(window, 'scrollY', { value: 60, configurable: true })
+    alert.handleScroll()
+    expect(alert.state.containerFix).toBe('fix')
+    expect(alert.render().props.className).toContain('fix')
+
+    Object.defineProperty(window, 'scrollY', { value: 56, configurable: true })
+    alert.handleScroll()
+    expect(alert.state.containerFix).toBe('')
+    expect(alert.render().props.className).not.toContain('fix')
+  })
+
+  it('renders alert items with notification and close props', () => {
     const alerts = [
       { ts: 1, content: 'Test info', type: 'INFO' },
       { ts: 2, content: 'Test error', type: 'ERROR' }
     ]
-    const alert = new RawNotificationAlert({ alerts, delAlert: jest.fn() })
+    const delAlert = jest.fn()
+    const alert = makeAlert({ alerts, delAlert })
+    const children = React.Children.toArray(alert.render().props.children)
 
-    expect(React.Children.count(alert.render().props.children)).toBe(2)
+    expect(children).toHaveLength(2)
+    children.forEach((child, index) => {
+      expect(child.type).toBe(AlertItem)
+      expect(child.props.notification).toBe(alerts[index])
+      expect(child.props.close).toBe(delAlert)
+    })
   })
 
-  it('renders empty alert list', () => {
-    const alert = new RawNotificationAlert({ alerts: [], delAlert: jest.fn() })
+  it('renders no children with empty alerts', () => {
+    const alert = makeAlert({ alerts: [], delAlert: jest.fn() })
 
-    expect(React.Children.count(alert.render().props.children)).toBe(0)
+    expect(React.Children.toArray(alert.render().props.children)).toHaveLength(0)
   })
 })
