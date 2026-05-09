@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tooltip, ResponsiveContainer, ComposedChart, Line, YAxis, XAxis, Bar, ReferenceLine } from 'recharts'
-import { ParseTimestamp, timestampToEpoch, formatChartTime } from 'utils/timestamp'
+import { timestampToEpoch, formatChartTime } from 'utils/timestamp'
 import { fetchTCUsage } from '../redux/actions/tcs'
 import { connect } from 'react-redux'
 import { TwoDecimalParse } from 'utils/two_decimal_parse'
@@ -31,9 +31,7 @@ export class RawControlChart extends React.Component {
     }
     const usage = this.props.usage.historical
       .map(v => ({ ...v, cooler: v.cooler * -1 }))
-      .sort((a, b) => {
-        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
-      })
+      .sort((a, b) => timestampToEpoch(a.time) - timestampToEpoch(b.time))
       .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
 
     const c = this.props.config.chart
