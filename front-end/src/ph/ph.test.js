@@ -229,6 +229,13 @@ describe('Ph ui', () => {
     expect(new RawPhChart({ config: { chart: {} }, readings: undefined, probe_id: '1', fetchProbeReadings: jest.fn() }).render().type).toBe('div')
 
     const fetchProbeReadings = jest.fn()
+    const historical = [
+      { time: 'Jul-01-10:10, 2024', value: 7.4 },
+      { time: 'Jul-01-10:00, 2024', value: 7.1 },
+      { time: 'Jul-01-10:05, 2024', value: 7.2 },
+      { time: 'Jul-01-10:05, 2024', value: 7.3 }
+    ]
+    const originalHistorical = historical.map(reading => ({ ...reading }))
     const instance = new RawPhChart({
       config: {
         id: '1',
@@ -237,20 +244,28 @@ describe('Ph ui', () => {
         notify: { enable: true, min: 7, max: 8.5 }
       },
       readings: {
-        current: [
-          { time: '2026-04-27T10:00:00Z', value: 7.1 },
-          { time: '2026-04-27T10:10:00Z', value: 7.2 }
-        ]
+        historical
       },
       probe_id: '1',
       fetchProbeReadings,
-      type: 'current',
+      type: 'historical',
       height: 200
     })
     setComponentState(instance)
     instance.componentDidMount()
     expect(fetchProbeReadings).toHaveBeenCalledWith('1')
-    expect(instance.render().props.className).toBe('container')
+    const rendered = instance.render()
+    expect(rendered.props.className).toBe('container')
+    const chartData = rendered.props.children[1].props.children.props.data
+    expect(chartData.map(reading => reading.time)).toEqual([
+      'Jul-01-10:00, 2024',
+      'Jul-01-10:05, 2024',
+      'Jul-01-10:05, 2024',
+      'Jul-01-10:10, 2024'
+    ])
+    expect(chartData.map(reading => reading.value)).toEqual([7.1, 7.2, 7.3, 7.4])
+    expect(chartData.map(reading => reading.ts)).toEqual([...chartData.map(reading => reading.ts)].sort((a, b) => a - b))
+    expect(historical).toEqual(originalHistorical)
     instance.componentWillUnmount()
   })
 })

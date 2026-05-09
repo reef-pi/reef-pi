@@ -29,7 +29,7 @@ export class RawControlChart extends React.Component {
       return <div />
     }
     const metrics = [...this.props.readings.historical].sort((a, b) => {
-      return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+      return ParseTimestamp(a.time).getTime() - ParseTimestamp(b.time).getTime()
     })
     let current = ''
     if (metrics.length >= 1) {
