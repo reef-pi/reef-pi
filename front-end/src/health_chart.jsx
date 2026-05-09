@@ -31,7 +31,7 @@ export class RawHealthChart extends React.Component {
     const healthStats = this.props.health_stats[this.state.trend]
       ?.slice()
       .sort((a, b) => {
-        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+        return ParseTimestamp(a.time).getTime() - ParseTimestamp(b.time).getTime()
       })
       .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     return (
