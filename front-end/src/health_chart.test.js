@@ -55,7 +55,10 @@ describe('Health', () => {
       height: 100
     })
 
-    chart.render()
+    const rendered = chart.render()
+    const lineChart = rendered.props.children[1].props.children
+
+    expect(lineChart.props.data.map(item => item.time)).toEqual(['Jul-01-10:00, 2024', 'Jul-01-10:10, 2024'])
 
     expect(current.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
     expect(current[0].ts).toBeUndefined()
