@@ -44,7 +44,7 @@ export class RawGenericLightChart extends React.Component {
     const usage = this.props.usage.current
       .slice()
       .sort((a, b) => {
-        return ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1
+        return ParseTimestamp(a.time).getTime() - ParseTimestamp(b.time).getTime()
       })
       .map(v => {
         const row = { ...v }

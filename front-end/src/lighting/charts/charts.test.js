@@ -3,6 +3,7 @@ import DiurnalChart from './diurnal'
 import FixedChart from './fixed'
 import IntervalChart from './interval'
 import { RawGenericLightChart } from './generic'
+import { LineChart } from 'recharts'
 import 'isomorphic-fetch'
 
 const baseChannel = {
@@ -146,11 +147,16 @@ describe('GenericLightChart', () => {
   })
 
   it('renders chart when light and usage are present', () => {
+    const originalCurrent = [
+      { time: 'Jul-01-10:10, 2024', channels: { 1: 75 } },
+      { time: 'Jul-01-10:00, 2024', channels: { 1: 50 } },
+      { time: 'Jul-01-10:00, 2024', channels: { 1: 55 } }
+    ]
     const usage = {
-      current: [
-        { time: '10:10', channels: { 1: 75 } },
-        { time: '10:00', channels: { 1: 50 } }
-      ]
+      current: originalCurrent.map(item => ({
+        time: item.time,
+        channels: { ...item.channels }
+      }))
     }
     const tree = new RawGenericLightChart({
       light_id: '1',
@@ -160,8 +166,13 @@ describe('GenericLightChart', () => {
       height: 200
     }).render()
     expect(tree.props.className).toBe('container')
-    expect(usage.current.map(item => item.time)).toEqual(['10:10', '10:00'])
-    expect(usage.current[0][1]).toBeUndefined()
+    const chart = collectElements(tree, child => child.type === LineChart)[0]
+    expect(chart.props.data).toEqual([
+      { time: 'Jul-01-10:00, 2024', channels: { 1: 50 }, 1: 50 },
+      { time: 'Jul-01-10:00, 2024', channels: { 1: 55 }, 1: 55 },
+      { time: 'Jul-01-10:10, 2024', channels: { 1: 75 }, 1: 75 }
+    ])
+    expect(usage.current).toEqual(originalCurrent)
   })
 
   it('clears interval on unmount', () => {
