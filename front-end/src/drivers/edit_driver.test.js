@@ -13,6 +13,15 @@ const findNode = (node, predicate) => {
   return undefined
 }
 
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') return acc
+  if (predicate(node)) acc.push(node)
+  for (const child of [].concat(node.props?.children || [])) {
+    findAll(child, predicate, acc)
+  }
+  return acc
+}
+
 jest.mock('utils/alert', () => ({
   showError: jest.fn(),
   showUpdateSuccessful: jest.fn()
@@ -116,7 +125,10 @@ describe('<EditDriver />', () => {
     }
     const values = { type: 'ezo', config: { address: '99', enabled: 'true' } }
     const form = EditDriver(baseProps({ values, driverOptions }))
-    expect(form).not.toBeNull()
+    const labels = findAll(form, node => node.type === 'label' && node.props?.htmlFor?.startsWith('config.'))
+      .map(node => node.props.children)
+
+    expect(labels).toEqual(['Address', 'Enabled'])
     expect(selectedType.map(item => item.name)).toEqual(['Enabled', 'Address'])
   })
 
