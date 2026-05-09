@@ -9,9 +9,11 @@ describe('Doser Chart', () => {
     const usage = {
       historical: [
         { time: 'Jul-01-10:10, 2024', pump: 4 },
-        { time: 'Jul-01-10:00, 2024', pump: 3 }
+        { time: 'Jul-01-10:00, 2024', pump: 3 },
+        { time: 'Jul-01-10:00, 2024', pump: 5 }
       ]
     }
+    const originalHistorical = usage.historical.map(item => ({ ...item }))
     const chart = new RawDoserChart({
       doser_id: '1',
       height: 200,
@@ -20,8 +22,17 @@ describe('Doser Chart', () => {
       fetchDoserUsage: jest.fn()
     })
     expect(() => chart.render()).not.toThrow()
-    expect(usage.historical.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
-    expect(usage.historical[0].ts).toBeUndefined()
+    const rendered = chart.render()
+    const renderedData = rendered.props.children[1].props.children.props.data
+
+    expect(renderedData.map(item => item.pump)).toEqual([3, 5, 4])
+    expect(renderedData.map(item => item.ts)).toEqual([
+      renderedData[0].ts,
+      renderedData[1].ts,
+      renderedData[2].ts
+    ].sort((a, b) => a - b))
+    expect(usage.historical).toEqual(originalHistorical)
+    expect(usage.historical.map(item => item.ts)).toEqual([undefined, undefined, undefined])
     expect(Chart).toBeDefined()
   })
 

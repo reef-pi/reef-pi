@@ -35,7 +35,7 @@ export class RawDoserChart extends React.Component {
       return <div />
     }
     const metrics = this.props.usage.historical.slice()
-      .sort((a, b) => ParseTimestamp(a.time) > ParseTimestamp(b.time) ? 1 : -1)
+      .sort((a, b) => ParseTimestamp(a.time) - ParseTimestamp(b.time))
       .map(m => ({ ...m, ts: timestampToEpoch(m.time) }))
     return (
       <>
