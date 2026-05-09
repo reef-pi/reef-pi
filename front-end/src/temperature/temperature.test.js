@@ -28,6 +28,13 @@ const renderForm = props => renderToStaticMarkup(
   />
 )
 
+const renderedChartData = component => component.render().props.children[1].props.children.props.data
+const todayTimestamp = time => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const today = new Date()
+  return `${months[today.getMonth()]}-${String(today.getDate()).padStart(2, '0')}-${time}, ${today.getFullYear()}`
+}
+
 const tcState = {
   tcs: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
   tc_usage: {},
@@ -317,9 +324,15 @@ describe('Temperature controller ui', () => {
       tc_usage: { 1: { historical: [{ cooler: 1 }], current: [{ temperature: 1 }, { temperature: 4 }] } }
     }
     const fetch = jest.fn()
+    const current = [
+      { time: todayTimestamp('10:10'), value: 4 },
+      { time: todayTimestamp('10:00'), value: 1 },
+      { time: todayTimestamp('10:00'), value: 2 }
+    ]
+    const originalCurrent = current.map(reading => ({ ...reading }))
     const instance = new RawReadingsChart({
       config: { id: '1', name: 'Water', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true },
-      usage: { current: [{ time: '2026-04-27T10:00:00Z', value: 1 }, { time: '2026-04-27T10:10:00Z', value: 4 }] },
+      usage: { current },
       sensor_id: '1',
       fetch,
       height: 200
@@ -328,6 +341,8 @@ describe('Temperature controller ui', () => {
     instance.componentDidMount()
     expect(fetch).toHaveBeenCalledWith('1')
     expect(instance.render().props.className).toBe('container')
+    expect(renderedChartData(instance).map(reading => reading.value)).toEqual([1, 2, 4])
+    expect(current).toEqual(originalCurrent)
     instance.componentWillUnmount()
     stateCurrent = {
       tcs: [{ id: '2', min: 72, max: 78, chart:{}}],
@@ -340,7 +355,12 @@ describe('Temperature controller ui', () => {
     expect(new RawControlChart({ config: undefined, usage: { historical: [] }, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
     expect(new RawControlChart({ config: { chart: {} }, usage: undefined, sensor_id: '1', fetchTCUsage: jest.fn() }).render().type).toBe('div')
     const fetchTCUsage = jest.fn()
-    const historical = [{ time: '2026-04-27T10:00:00Z', cooler: 1, up: 2, down: 0, value: 72 }]
+    const historical = [
+      { time: 'Jul-01-10:10, 2024', cooler: 4, up: 4, down: 0, value: 74 },
+      { time: 'Jul-01-10:00, 2024', cooler: 1, up: 2, down: 0, value: 72 },
+      { time: 'Jul-01-10:00, 2024', cooler: 2, up: 3, down: 0, value: 73 }
+    ]
+    const originalHistorical = historical.map(reading => ({ ...reading }))
     const instance = new RawControlChart({
       config: { id: '1', name: 'Water', chart: { color: '#f00', ymin: 70, ymax: 90 }, fahrenheit: true },
       usage: { historical, current: [] },
@@ -352,7 +372,9 @@ describe('Temperature controller ui', () => {
     instance.componentDidMount()
     expect(fetchTCUsage).toHaveBeenCalledWith('1')
     expect(instance.render().props.className).toBe('container')
-    expect(historical[0].cooler).toBe(1)
+    expect(renderedChartData(instance).map(reading => reading.value)).toEqual([72, 73, 74])
+    expect(renderedChartData(instance).map(reading => reading.cooler)).toEqual([-1, -2, -4])
+    expect(historical).toEqual(originalHistorical)
     expect(historical[0].ts).toBeUndefined()
     instance.componentWillUnmount()
   })
