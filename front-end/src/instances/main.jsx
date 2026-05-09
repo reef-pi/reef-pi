@@ -45,7 +45,7 @@ export class RawInstancesMain extends React.Component {
     }
     return (
       <ul className='list-group list-group-flush'>
-        {this.props.instances.slice().sort((a, b) => { return parseInt(a.id) < parseInt(b.id) }).map(item => {
+        {this.props.instances.slice().sort((a, b) => parseInt(b.id) - parseInt(a.id)).map(item => {
           return (
             <Instance
               key={item.id}

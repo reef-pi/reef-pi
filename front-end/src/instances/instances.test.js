@@ -31,6 +31,18 @@ const countByType = (node, predicate) => {
   return count
 }
 
+const findAll = (node, predicate, acc = []) => {
+  if (!node || typeof node !== 'object') {
+    return acc
+  }
+  if (predicate(node)) {
+    acc.push(node)
+  }
+  const children = React.Children.toArray(node.props?.children)
+  children.forEach(child => findAll(child, predicate, acc))
+  return acc
+}
+
 const findNode = (node, predicate) => {
   if (!node || typeof node !== 'object') {
     return null
@@ -76,7 +88,9 @@ describe('Instances Main', () => {
     expect(fetch).toHaveBeenCalled()
 
     const rendered = main.render()
-    expect(countByType(rendered, node => node.type === Instance)).toBe(2)
+    const renderedInstances = findAll(rendered, node => node.type === Instance)
+    expect(renderedInstances).toHaveLength(2)
+    expect(renderedInstances.map(node => node.props.instance.name)).toEqual(['Remote Tank B', 'Remote Tank A'])
     expect(instances.map(instance => instance.name)).toEqual(['Remote Tank B', 'Remote Tank A'])
   })
 
