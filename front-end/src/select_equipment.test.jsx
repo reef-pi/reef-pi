@@ -28,7 +28,10 @@ describe('SelectEquipment', () => {
       fetchEquipment: jest.fn()
     })
 
-    expect(() => component.render()).not.toThrow()
+    const rendered = component.render()
+    const button = rendered.props.children[0]
+
+    expect(button.props.children).toBe('Heater')
   })
 
   it('renders without throwing with empty equipment', () => {
@@ -40,7 +43,24 @@ describe('SelectEquipment', () => {
       fetchEquipment: jest.fn()
     })
 
-    expect(() => component.render()).not.toThrow()
+    const rendered = component.render()
+    const button = rendered.props.children[0]
+    const menu = rendered.props.children[1]
+
+    expect(button.props.children).toBe('')
+    expect(React.Children.toArray(menu.props.children)).toHaveLength(1)
+  })
+
+  it('renders a blank selection when active equipment is missing', () => {
+    const component = new RawSelectEquipment({
+      id: 'eq-sel',
+      active: '99',
+      equipment,
+      update: jest.fn(),
+      fetchEquipment: jest.fn()
+    })
+
+    expect(component.render().props.children[0].props.children).toBe('')
   })
 
   it('renders without throwing in readOnly mode', () => {
@@ -56,6 +76,21 @@ describe('SelectEquipment', () => {
     const rendered = component.render()
     const button = rendered.props.children[0]
     expect(button.props.disabled).toBe(true)
+  })
+
+  it('marks the active equipment menu item', () => {
+    const component = new RawSelectEquipment({
+      id: 'eq-sel',
+      active: '2',
+      equipment,
+      update: jest.fn(),
+      fetchEquipment: jest.fn()
+    })
+
+    const menuItems = component.equipmentList()
+
+    expect(menuItems[2].props.className).toContain('active')
+    expect(menuItems[1].props.className).not.toContain('active')
   })
 
   it('renders menu and updates selected equipment', () => {
