@@ -6,26 +6,35 @@ jest.mock('recharts', () => ({
 }))
 
 describe('<BlankPanel />', () => {
-  it('renders without throwing', () => {
-    const panel = new BlankPanel({ height: 200 })
-    expect(() => panel.render()).not.toThrow()
-  })
-
-  it('renders a container div', () => {
+  it('renders a container div with an empty responsive placeholder', () => {
     const panel = new BlankPanel({ height: 200 })
     const element = panel.render()
+    const responsiveContainer = element.props.children
+    const placeholder = responsiveContainer.props.children
+
     expect(element.props.className).toBe('container')
+    expect(responsiveContainer.props.height).toBe(200)
+    expect(responsiveContainer.props.width).toBe('100%')
+    expect(placeholder.type).toBe('p')
+    expect(placeholder.props.children).toBe('\u00a0')
   })
 
-  it('handles lifecycle transitions gracefully', () => {
+  it('toggles active state during lifecycle transitions', () => {
     const panel = new BlankPanel({ height: 200 })
     panel.setState = jest.fn(update => {
       panel.state = { ...panel.state, ...update }
     })
 
-    expect(() => panel.componentDidMount()).not.toThrow()
+    expect(panel.state.active).toBeUndefined()
+
+    panel.componentDidMount()
+
+    expect(panel.setState).toHaveBeenCalledWith({ active: true })
     expect(panel.state.active).toBe(true)
-    expect(() => panel.componentWillUnmount()).not.toThrow()
+
+    panel.componentWillUnmount()
+
+    expect(panel.setState).toHaveBeenCalledWith({ active: false })
     expect(panel.state.active).toBe(false)
   })
 })
