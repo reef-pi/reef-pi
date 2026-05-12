@@ -55,7 +55,7 @@ export default class FatalError extends React.Component {
                         <a
                           target='_blank' rel='noopener noreferrer'
                           href='http://reef-pi.com/additional-documentation/troubleshooting/'
-                          className='btn btn-primary mr-2'
+                          className='btn btn-primary me-2'
                         >
                           {FaMedkit()} {i18next.t('fatal_error:troubleshoot')}
                         </a>

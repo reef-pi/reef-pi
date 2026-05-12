@@ -7,9 +7,9 @@ import i18next from 'i18next'
 
 const CyclicProfile = (props) => {
   return (
-    <div className='form-inline'>
-      <label className='mr-2'>{i18next.t('lighting:cyclic_period')}</label>
-      <div className='input-group mr-3'>
+    <div className='d-flex align-items-center flex-wrap gap-2'>
+      <label className='me-2'>{i18next.t('lighting:cyclic_period')}</label>
+      <div className='input-group me-3'>
         <Field
           name={NameFor(props.name, 'period')}
           type='number'
@@ -22,8 +22,8 @@ const CyclicProfile = (props) => {
           <span className='input-group-text'>{i18next.t('second_s')}</span>
         </div>
       </div>
-      <label className='mr-2'>{i18next.t('lighting:cyclic_phase_shift')}</label>
-      <div className='input-group mr-3'>
+      <label className='me-2'>{i18next.t('lighting:cyclic_phase_shift')}</label>
+      <div className='input-group me-3'>
         <Field
           name={NameFor(props.name, 'phase_shift')}
           type='number'

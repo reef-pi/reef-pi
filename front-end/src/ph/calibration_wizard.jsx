@@ -79,7 +79,7 @@ export default class CalibrationWizard extends React.Component {
     let cancelButton = null
     if (this.state.midCalibrated === false) {
       cancelButton = (
-        <button role='abort' type='button' className='btn btn-light mr-2' onClick={this.handleCancel}>
+        <button role='abort' type='button' className='btn btn-light me-2' onClick={this.handleCancel}>
           {i18next.t('cancel')}
         </button>
       )

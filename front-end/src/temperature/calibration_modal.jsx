@@ -68,7 +68,7 @@ export class CalibrationForm extends React.Component {
               <button
                 role='abort'
                 type='button'
-                className='btn btn-light mr-2'
+                className='btn btn-light me-2'
                 onClick={this.handleCancel}
               >
                 {i18n.t('cancel')}

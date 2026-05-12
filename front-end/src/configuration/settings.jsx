@@ -228,9 +228,9 @@ export class RawSettings extends React.Component {
       )
     }
 
-    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    let updateButtonClass = 'btn btn-outline-success col-12 col-md-3 offset-md-9'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
+      updateButtonClass = 'btn btn-outline-danger col-12 col-md-3 offset-md-9'
     }
 
     return (
@@ -247,7 +247,7 @@ export class RawSettings extends React.Component {
                   <label htmlFor='to-row-address'> {i18n.t('configuration:settings:address')}</label>
                   <div className='input-group'>
                     <div className='input-group-prepend'>
-                      <button className='btn btn-outline-secondary dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                      <button className='btn btn-outline-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                         {this.state.settings.https === true ? 'https' : 'http'}://
                       </button>
                       <div className='dropdown-menu'>
@@ -307,7 +307,7 @@ export class RawSettings extends React.Component {
         <hr />
         <div className='row'>
           <div className='col-12'>
-            <label className='h5 font-weight-normal'>
+            <label className='h5 fw-normal'>
               {i18n.t('capabilities')}
             </label>
             {this.showCapabilities()}

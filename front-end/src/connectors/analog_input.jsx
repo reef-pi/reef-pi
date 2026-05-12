@@ -88,7 +88,7 @@ export default class AnalogInput extends React.Component {
             <select
               name='driver'
               id={'analog_input-' + this.props.analog_input_id + '-driver-select'}
-              className='custom-select form-control'
+              className='form-select'
               onChange={this.handleSetDriver}
               value={this.state.driver.id}
             >
@@ -136,13 +136,13 @@ export default class AnalogInput extends React.Component {
         <div className='col-4 col-md-3 mb-'>
           <input
             type='button'
-            className='analog_input-remove btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            className='analog_input-remove btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
             value='X'
             onClick={this.handleRemove}
           />
           <input
             type='button'
-            className='analog_input-edit btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            className='analog_input-edit btn btn-sm btn-outline-primary float-end d-block d-sm-inline ms-2'
             value={this.state.lbl}
             onClick={this.handleEdit}
           />

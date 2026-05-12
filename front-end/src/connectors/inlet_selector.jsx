@@ -71,7 +71,7 @@ class inletSelector extends React.Component {
           className='btn btn-secondary dropdown-toggle'
           type='button'
           id={this.props.name + '-inlet'}
-          data-toggle='dropdown'
+          data-bs-toggle='dropdown'
           aria-haspopup='true'
           aria-expanded='false'
           disabled={readOnly}

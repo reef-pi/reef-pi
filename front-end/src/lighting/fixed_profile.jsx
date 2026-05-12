@@ -34,20 +34,20 @@ export default class FixedProfile extends React.Component {
   render () {
     return (
       <>
-        <div className='form-inline'>
-          <label className='mr-2'>{i18next.t('start_time')}</label>
+        <div className='d-flex align-items-center flex-wrap gap-2'>
+          <label className='me-2'>{i18next.t('start_time')}</label>
           <Field
             name={NameFor(this.props.name, 'start')}
             readOnly={this.props.readOnly}
-            className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
+            className={classNames('form-control me-3 col-12 col-sm-3 col-md-2 col-lg-2',
               { 'is-invalid': ShowError(NameFor(this.props.name, 'start'), this.props.touched, this.props.errors) })}
             placeholder='HH:mm:ss'
           />
-          <label className='mr-2'>{i18next.t('end_time')}</label>
+          <label className='me-2'>{i18next.t('end_time')}</label>
           <Field
             name={NameFor(this.props.name, 'end')}
             readOnly={this.props.readOnly}
-            className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2 col-lg-2',
+            className={classNames('form-control me-3 col-12 col-sm-3 col-md-2 col-lg-2',
               { 'is-invalid': ShowError(NameFor(this.props.name, 'end'), this.props.touched, this.props.errors) })}
             placeholder='HH:mm:ss'
           />

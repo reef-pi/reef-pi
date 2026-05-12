@@ -49,7 +49,7 @@ export class auth extends React.Component {
   }
 
   render () {
-    const btnClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    const btnClass = 'btn btn-outline-success col-12 col-md-3 offset-md-9'
     return (
       <div className='container'>
         <div className='row'>

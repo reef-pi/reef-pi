@@ -128,7 +128,7 @@ export default class Subsystem extends React.Component {
                 className='btn btn-secondary dropdown-toggle'
                 type='button'
                 id={this.props.id_prefix + '-entity'}
-                data-toggle='dropdown'
+                data-bs-toggle='dropdown'
                 disabled={this.props.disabled}
               >
                 {eqName}
@@ -146,7 +146,7 @@ export default class Subsystem extends React.Component {
                 type='button'
                 id={this.props.id_prefix + '-entity-action'}
                 disabled={this.props.disabled}
-                data-toggle='dropdown'
+                data-bs-toggle='dropdown'
               >
                 {eqAction}
               </button>

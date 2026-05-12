@@ -33,7 +33,7 @@ class Collapsible extends React.Component {
         onClick={this.handleEdit}
         disabled={disableEdit}
         id={'edit-' + name}
-        className='btn btn-sm float-right d-block d-sm-inline ml-2'
+        className='btn btn-sm float-end d-block d-sm-inline ms-2'
       >
         {FaEdit()}
       </button>
@@ -46,7 +46,7 @@ class Collapsible extends React.Component {
     if (onToggleState) {
       toggleStateButton = (
         <Switch onClick={onToggleState} on={enabled}>
-          <small className='ml-1 align-top'>{enabled ? i18next.t('on') : i18next.t('off')}</small>
+          <small className='ms-1 align-top'>{enabled ? i18next.t('on') : i18next.t('off')}</small>
         </Switch>
       )
     }
@@ -54,12 +54,12 @@ class Collapsible extends React.Component {
     return (
       <li className='list-group-item'>
         <div
-          className={classNames('row mb-1 text-center text-md-left', {
+          className={classNames('row mb-1 text-center text-md-start', {
             pointer: readOnly
           })}
         >
           <div
-            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first form-inline', {
+            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first d-flex align-items-center flex-wrap gap-2', {
               pointer: readOnly
             })} onClick={() => onToggle(name)}
           >
@@ -71,7 +71,7 @@ class Collapsible extends React.Component {
               type='button'
               onClick={this.handleDelete}
               id={'delete-' + name}
-              className='btn btn-sm float-right d-block d-sm-inline ml-2'
+              className='btn btn-sm float-end d-block d-sm-inline ms-2'
             >
               {FaTrashAlt()}
             </button>

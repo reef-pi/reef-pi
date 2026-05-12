@@ -58,7 +58,7 @@ const EditDcPump = ({
             data-testid='smoke-doser-jack'
             onChange={jackChanged}
             disabled={readOnly}
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('jack', touched, errors)
             })}
           >
@@ -77,7 +77,7 @@ const EditDcPump = ({
             component='select'
             data-testid='smoke-doser-pin'
             disabled={readOnly}
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('pin', touched, errors)
             })}
           >
@@ -95,7 +95,7 @@ const EditDcPump = ({
             name='enable'
             component={BooleanSelect}
             disabled={readOnly}
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('enable', touched, errors)
             })}
           >

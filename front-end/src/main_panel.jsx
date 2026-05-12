@@ -56,8 +56,8 @@ export class RawMainPanel extends React.Component {
             <button
               className='navbar-toggler'
               type='button'
-              data-toggle='collapse'
-              data-target='#navbarNav'
+              data-bs-toggle='collapse'
+              data-bs-target='#navbarNav'
               aria-controls='navbarNav'
               aria-expanded='false'
               aria-label='Toggle navigation'
@@ -68,8 +68,8 @@ export class RawMainPanel extends React.Component {
               className='collapse navbar-collapse navHeaderCollapse'
               id='navbarNav'
               data-testid='smoke-nav'
-              data-toggle='collapse'
-              data-target='.navbar-collapse'
+              data-bs-toggle='collapse'
+              data-bs-target='.navbar-collapse'
             >
               {this.navs(currentCaps)}
             </div>

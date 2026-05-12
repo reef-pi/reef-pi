@@ -86,7 +86,7 @@ const EditJournal = ({
             type='submit'
             value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

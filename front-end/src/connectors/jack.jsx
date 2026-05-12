@@ -121,7 +121,7 @@ export default class Jack extends React.Component {
             <select
               name='driver'
               id={'jack-' + this.props.jack_id + '-driver-select'}
-              className='custom-select form-control'
+              className='form-select'
               onChange={this.handleSetDriver}
               value={this.state.driver}
             >
@@ -170,13 +170,13 @@ export default class Jack extends React.Component {
         <div className='col-4 col-md-3'>
           <input
             type='button'
-            className='jack-remove btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            className='jack-remove btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
             value='X'
             onClick={this.handleRemove}
           />
           <input
             type='button'
-            className='jack-edit btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            className='jack-edit btn btn-sm btn-outline-primary float-end d-block d-sm-inline ms-2'
             value={this.state.lbl}
             onClick={this.handleEdit}
           />

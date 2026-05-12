@@ -203,7 +203,7 @@ const Channel = (props) => {
           <div className='form-group'>
             <label className='w-100'>
               {i18next.t('lighting:channel_name')}
-              <small className='float-right badge badge-info mt-1'>(pin {props.channel.pin})</small>
+              <small className='float-end badge text-bg-info mt-1'>(pin {props.channel.pin})</small>
             </label>
             <Field
               name={NameFor(props.name, 'name')}
@@ -219,7 +219,7 @@ const Channel = (props) => {
           </div>
         </div>
 
-        <div className='form-group col-sm-6 col-md-4 col-xl-2 form-inline'>
+        <div className='form-group col-sm-6 col-md-4 col-xl-2 d-flex align-items-center flex-wrap gap-2'>
           <label className='mb-2'>{i18next.t('lighting:chart_color')}</label>
           <ColorPicker
             name={NameFor(props.name, 'color')}
@@ -268,7 +268,7 @@ const Channel = (props) => {
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
               disabled={props.readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('enable', props.touched, props.errors)
               })}
             >
@@ -282,7 +282,7 @@ const Channel = (props) => {
       <div className='row'>
         <div className='col'>
           <div className='form-group'>
-            <label className='mr-3'>{i18next.t('profile')}</label>
+            <label className='me-3'>{i18next.t('profile')}</label>
             <ProfileSelector
               className={classNames('form-control',
                 { 'is-invalid': ShowError(NameFor(props.name, 'profile'), props.touched, props.errors) })}

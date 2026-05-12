@@ -136,7 +136,7 @@ const EditTemperature = ({
                 name='sensor'
                 component='select'
                 disabled={readOnly || values.analog_input !== ''}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('sensor', touched, errors)
                 })}
               >
@@ -156,7 +156,7 @@ const EditTemperature = ({
                 name='analog_input'
                 component='select'
                 disabled={readOnly || values.sensor !== ''}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('analog_input', touched, errors)
                 })}
               >
@@ -176,7 +176,7 @@ const EditTemperature = ({
                 name='fahrenheit'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('fahrenheit', touched, errors)
                 })}
               >
@@ -217,7 +217,7 @@ const EditTemperature = ({
                 name='enable'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('enable', touched, errors)
                 })}
               >
@@ -237,7 +237,7 @@ const EditTemperature = ({
                 name='one_shot'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('one_shot', touched, errors)
                 })}
               >
@@ -255,7 +255,7 @@ const EditTemperature = ({
                 name='fail_safe'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('fail_safe', touched, errors)
                 })}
               >
@@ -317,7 +317,7 @@ const EditTemperature = ({
                 name='alerts'
                 component={BooleanSelect}
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('alerts', touched, errors)
                 })}
               >
@@ -388,7 +388,7 @@ const EditTemperature = ({
                 name='control'
                 component='select'
                 disabled={readOnly}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('control', touched, errors)
                 })}
               >
@@ -410,7 +410,7 @@ const EditTemperature = ({
                 name='heater'
                 component='select'
                 disabled={readOnly || values.control === ''}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('heater', touched, errors)
                 })}
               >
@@ -448,7 +448,7 @@ const EditTemperature = ({
                 name='cooler'
                 component='select'
                 disabled={readOnly || values.control === ''}
-                className={classNames('custom-select', {
+                className={classNames('form-select', {
                   'is-invalid': ShowError('cooler', touched, errors)
                 })}
               >
@@ -508,7 +508,7 @@ const EditTemperature = ({
             type='submit'
             value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

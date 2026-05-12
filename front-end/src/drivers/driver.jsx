@@ -111,7 +111,7 @@ export default class Driver extends React.Component {
         btnEdit = (
           <input
             type='button'
-            className='edit-outlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            className='edit-outlet btn btn-sm btn-outline-primary float-end d-block d-sm-inline ms-2'
             value={this.state.lbl}
             onClick={this.handleEdit}
           />
@@ -119,7 +119,7 @@ export default class Driver extends React.Component {
         btnProvision = (
           <input
             type='button'
-            className='btn btn-sm btn-outline-info float-right d-block d-sm-inline ml-2'
+            className='btn btn-sm btn-outline-info float-end d-block d-sm-inline ms-2'
             title={i18n.t('configuration:drivers:provision_title')}
             value={i18n.t('configuration:drivers:provision')}
             onClick={() => {
@@ -132,7 +132,7 @@ export default class Driver extends React.Component {
       btnDelete = (
         <input
           type='button'
-          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+          className='btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
           value='X'
           onClick={() => { this.handleRemove(this.props.driver) }}
         />

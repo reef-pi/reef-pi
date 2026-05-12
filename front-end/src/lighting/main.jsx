@@ -158,7 +158,7 @@ class main extends React.Component {
           }
 
           const modeButton = (
-            <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-right'>
+            <button type='button' onClick={this.handleChangeMode(light)} className='btn btn-sm btn-outline-info float-end'>
               <><IoMdSwitch /> {this.getModeLabel(mode)}</>
             </button>
           )
@@ -169,7 +169,7 @@ class main extends React.Component {
               name={'light-' + light.id}
               item={light}
               buttons={modeButton}
-              title={<b className='ml-2 aligtn-middle'>{light.name}</b>}
+              title={<b className='ms-2 aligtn-middle'>{light.name}</b>}
               onDelete={this.handleDeleteLight}
               disableEdit={mode === 'manual'}
             >
@@ -277,7 +277,7 @@ class main extends React.Component {
               type='button'
               id='jack'
               data-testid='smoke-light-jack'
-              data-toggle='dropdown'
+              data-bs-toggle='dropdown'
               aria-haspopup='true'
               aria-expanded='false'
             >

@@ -49,7 +49,7 @@ const target = (props) => {
               name={NameFor(props.name, 'id')}
               component='select'
               disabled={props.readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError(NameFor(props.name, 'id'), props.touched, props.errors)
               })}
             >
@@ -66,7 +66,7 @@ const target = (props) => {
               name={NameFor(props.name, 'on')}
               component={BooleanSelect}
               disabled={props.readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError(NameFor(props.name, 'on'), props.touched, props.errors)
               })}
             >
@@ -84,7 +84,7 @@ const target = (props) => {
               name={NameFor(props.name, 'revert')}
               component={BooleanSelect}
               disabled={props.readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError(NameFor(props.name, 'revert'), props.touched, props.errors)
               })}
             >

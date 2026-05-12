@@ -108,7 +108,7 @@ export default class Inlet extends React.Component {
             <label htmlFor='driver'>{i18next.t('driver')}</label>
             <select
               name='driver'
-              className='custom-select form-control'
+              className='form-select'
               onChange={this.handleDriverChange}
               value={this.state.driver.id}
             >
@@ -154,13 +154,13 @@ export default class Inlet extends React.Component {
         <div className='col-4 col-md-3'>
           <input
             type='button'
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            className='btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
             value='X'
             onClick={this.handleRemove}
           />
           <input
             type='button'
-            className='edit-inlet btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+            className='edit-inlet btn btn-sm btn-outline-primary float-end d-block d-sm-inline ms-2'
             value={this.state.lbl}
             onClick={this.handleEdit}
           />

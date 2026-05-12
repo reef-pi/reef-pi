@@ -115,7 +115,7 @@ const EditDriver = ({
               data-testid='smoke-driver-type'
               onChange={driverTypeChangeHandler}
               disabled={mode === 'edit' || readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}
             >
@@ -136,7 +136,7 @@ const EditDriver = ({
             data-testid='smoke-driver-submit'
             value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

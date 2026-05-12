@@ -86,7 +86,7 @@ const EditMacro = ({
         name='steps'
         render={arrayHelpers => {
           return (
-            <div className='ml-2'>
+            <div className='ms-2'>
               {nosteps(values.steps.length)}
               {values.steps.map((step, index) => {
                 return (
@@ -106,7 +106,7 @@ const EditMacro = ({
                     style={{ cursor: readOnly ? 'default' : 'grab' }}
                   >
                     {!readOnly && (
-                      <div className='col-auto d-flex align-items-center pr-0' title={i18n.t('macro:drag_to_reorder')}>
+                      <div className='col-auto d-flex align-items-center pe-0' title={i18n.t('macro:drag_to_reorder')}>
                         <span style={{ fontSize: '1.2rem', color: '#aaa', userSelect: 'none' }}>&#8942;</span>
                       </div>
                     )}
@@ -115,7 +115,7 @@ const EditMacro = ({
                         name={`steps.${index}.type`}
                         aria-label='Step Type'
                         title='Step Type'
-                        className={classNames('form-control custom-select', {
+                        className={classNames('form-select', {
                           'is-invalid': ShowError(`steps.${index}.type`, touched, errors)
                         })}
                         readOnly={readOnly}
@@ -130,7 +130,7 @@ const EditMacro = ({
                       readOnly={readOnly}
                     />
 
-                    <div className={classNames('col-12 col-sm-1 col-md-3 ml-auto', { 'd-none': readOnly })}>
+                    <div className={classNames('col-12 col-sm-1 col-md-3 ms-auto', { 'd-none': readOnly })}>
                       <button
                         aria-label={i18n.t('delete')}
                         title={i18n.t('delete')}
@@ -150,7 +150,7 @@ const EditMacro = ({
                 <div className='col-12'>
                   <button
                     type='button'
-                    className='btn btn-outline-success float-right'
+                    className='btn btn-outline-success float-end'
                     value='+'
                     onClick={() => arrayHelpers.push({ duration: '', id: '', on: '', title: '', message: '' })}
                     id='add-step'
@@ -172,7 +172,7 @@ const EditMacro = ({
             data-testid='smoke-macro-submit'
             value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

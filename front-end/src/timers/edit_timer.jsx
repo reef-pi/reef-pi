@@ -95,7 +95,7 @@ const EditTimer = ({
               name='enable'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
@@ -117,7 +117,7 @@ const EditTimer = ({
               data-testid='smoke-timer-type'
               disabled={readOnly}
               onChange={handleConfigChange}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}
             >
@@ -170,7 +170,7 @@ const EditTimer = ({
             data-testid='smoke-timer-submit'
             value={i18n.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

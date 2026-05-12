@@ -122,7 +122,7 @@ describe('<EditTemperature />', () => {
     const element = renderComponent({ isValid: false }, { control: '' })
     const heaterField = findFirst(
       element,
-      child => child.props.name === 'heater' && child.props.className === 'custom-select'
+      child => child.props.name === 'heater' && child.props.className === 'form-select'
     )
 
     expect(heaterField.props.disabled).toBe(true)
@@ -132,7 +132,7 @@ describe('<EditTemperature />', () => {
     const element = renderComponent({ isValid: false }, { control: 'equipment' })
     const heaterField = findFirst(
       element,
-      child => child.props.name === 'heater' && child.props.className === 'custom-select'
+      child => child.props.name === 'heater' && child.props.className === 'form-select'
     )
 
     expect(heaterField.props.disabled).toBe(false)

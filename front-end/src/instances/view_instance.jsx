@@ -16,17 +16,17 @@ const ViewInstance = ({ instance, onStateChange, onDelete, onEdit }) => {
   */
 
   return (
-    <div className='row text-center text-md-left'>
+    <div className='row text-center text-md-start'>
       <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
         <button
           type='button' onClick={onDelete}
-          className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+          className='btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
         >
           {i18next.t('delete')}
         </button>
         <button
           type='button' onClick={onEdit}
-          className='btn btn-sm btn-outline-primary float-right d-block d-sm-inline ml-2'
+          className='btn btn-sm btn-outline-primary float-end d-block d-sm-inline ms-2'
         >
           {i18next.t('edit')}
         </button>

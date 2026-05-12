@@ -90,7 +90,7 @@ export class RawATOMain extends React.Component {
           <button
             type='button'
             name={'reset-ato-' + probe.id}
-            className='btn btn-sm btn-outline-info float-right'
+            className='btn btn-sm btn-outline-info float-end'
             onClick={() => { this.handleReset(probe) }}
           >
             {i18n.t('ato:reset_usage')}
@@ -101,7 +101,7 @@ export class RawATOMain extends React.Component {
             key={'panel-ato-' + probe.id}
             name={'panel-ato-' + probe.id}
             item={probe}
-            title={<b className='ml-2 align-middle'>{probe.name} </b>}
+            title={<b className='ms-2 align-middle'>{probe.name} </b>}
             onDelete={this.handleDelete}
             onToggleState={handleToggleState}
             enabled={probe.enable}

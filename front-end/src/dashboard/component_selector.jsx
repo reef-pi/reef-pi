@@ -47,7 +47,7 @@ export default class ComponentSelector extends React.Component {
           id={'select-' + this.props.selector_id}
           className='btn btn-secondary dropdown-toggle'
           type='button'
-          data-toggle='dropdown'
+          data-bs-toggle='dropdown'
           aria-haspopup='true'
           aria-expanded='false'
         >

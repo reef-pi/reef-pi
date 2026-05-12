@@ -183,7 +183,7 @@ class inlets extends React.Component {
               <select
                 name='driver'
                 data-testid='smoke-inlet-driver'
-                className='form-control custom-select'
+                className='form-select'
                 onChange={this.handleDriverChange}
                 value={this.state.driver.id}
               >
@@ -209,7 +209,7 @@ class inlets extends React.Component {
               />
             </div>
           </div>
-          <div className='col-12 col-md-3 text-right'>
+          <div className='col-12 col-md-3 text-end'>
             <input
               type='button'
               id='createInlet'

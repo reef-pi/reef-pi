@@ -91,7 +91,7 @@ const EditLight = ({
               name='config.jack'
               component='select'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('config.jack', touched, errors)
               })}
             >
@@ -112,7 +112,7 @@ const EditLight = ({
             value={i18next.t('save')}
             id={'save-light-' + config.id}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

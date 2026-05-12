@@ -36,7 +36,7 @@ const EditStepper = ({
             name='stepper.step_pin'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.step_pin', touched, errors)
             })}
           >
@@ -54,7 +54,7 @@ const EditStepper = ({
             name='stepper.direction_pin'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.direction_pin', touched, errors)
             })}
           >
@@ -72,7 +72,7 @@ const EditStepper = ({
             name='stepper.ms_pin_a'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.ms_pin_a', touched, errors)
             })}
           >
@@ -90,7 +90,7 @@ const EditStepper = ({
             name='stepper.ms_pin_b'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.ms_pin_b', touched, errors)
             })}
           >
@@ -108,7 +108,7 @@ const EditStepper = ({
             name='stepper.ms_pin_c'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.ms_pin_c', touched, errors)
             })}
           >
@@ -171,7 +171,7 @@ const EditStepper = ({
             name='stepper.direction'
             disabled={readOnly}
             component={BooleanSelect}
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.direction', touched, errors)
             })}
           >
@@ -189,7 +189,7 @@ const EditStepper = ({
             name='stepper.microstepping'
             disabled={readOnly}
             component='select'
-            className={classNames('custom-select', {
+            className={classNames('form-select', {
               'is-invalid': ShowError('stepper.microstepping', touched, errors)
             })}
           >

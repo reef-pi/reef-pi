@@ -23,7 +23,7 @@ class about extends React.Component {
         <div className='row justify-content-md-center'>
           <div className='card mb-4 box-shadow'>
             <div className='card-header'>
-              <h4 className='my-0 font-weight-normal text-center'>reef-pi</h4>
+              <h4 className='my-0 fw-normal text-center'>reef-pi</h4>
             </div>
             <div className='card-body'>
               <ul className='list-unstyled mt-3 mb-4'>

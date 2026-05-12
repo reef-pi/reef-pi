@@ -70,7 +70,7 @@ export default class SignIn extends React.Component {
           <div className='col-md-12 col-lg-6 mx-auto'>
             <form id='sign-in-form' data-testid='smoke-sign-in-form'>
               <div className='form'>
-                <h1 className='h3 mb-3 font-weight-normal reef-pi-title'>reef-pi</h1>
+                <h1 className='h3 mb-3 fw-normal reef-pi-title'>reef-pi</h1>
                 {this.state.invalidCredentials
                   ? (
                     <div className='alert alert-danger' role='alert'>

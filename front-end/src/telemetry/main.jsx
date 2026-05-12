@@ -187,7 +187,7 @@ class telemetry extends React.Component {
           </div>
           <div className='row'>
             <div className='col'>
-              <div className='float-right'>
+              <div className='float-end'>
                 <input
                   type='button'
                   className='btn btn-outline-secondary'
@@ -235,9 +235,9 @@ class telemetry extends React.Component {
   }
 
   render () {
-    let updateButtonClass = 'btn btn-outline-success col-xs-12 col-md-3 offset-md-9'
+    let updateButtonClass = 'btn btn-outline-success col-12 col-md-3 offset-md-9'
     if (this.state.updated) {
-      updateButtonClass = 'btn btn-outline-danger col-xs-12 col-md-3 offset-md-9'
+      updateButtonClass = 'btn btn-outline-danger col-12 col-md-3 offset-md-9'
     }
     return (
       <div className='container'>

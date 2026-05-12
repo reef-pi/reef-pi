@@ -3,7 +3,7 @@ import SignIn from './sign_in'
 import MainPanel from './main_panel'
 import 'isomorphic-fetch'
 
-jest.mock('bootstrap/dist/js/bootstrap.min.js', () => ({}))
+jest.mock('bootstrap/dist/js/bootstrap.bundle.min.js', () => ({}))
 jest.mock('jquery', () => {
   const fn = jest.fn(() => ({
     addClass: jest.fn(),

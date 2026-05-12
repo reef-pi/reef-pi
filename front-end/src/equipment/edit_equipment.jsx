@@ -45,8 +45,8 @@ const EditEquipment = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className='d-flex flex-wrap'>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('name')}</label>
+        <div className='p-2 me-auto'>
+          <label className='me-2'>{i18next.t('name')}</label>
           <input
             type='text'
             name='name'
@@ -58,8 +58,8 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('outlet')}</label>
+        <div className='p-2 me-auto'>
+          <label className='me-2'>{i18next.t('outlet')}</label>
           <select
             name='outlet'
             data-testid='smoke-equipment-outlet'
@@ -83,8 +83,8 @@ const EditEquipment = ({
           </select>
           <ErrorFor errors={errors} touched={touched} name='outlet' />
         </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('stayoffonboot')}</label>
+        <div className='p-2 me-auto'>
+          <label className='me-2'>{i18next.t('stayoffonboot')}</label>
           <input
             type='checkbox'
             name='stay_off_on_boot'
@@ -96,8 +96,8 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='stay_off_on_boot' />
         </div>
-        <div className='p-2 mr-auto'>
-          <label className='mr-2'>{i18next.t('equipment:boot_delay')}</label>
+        <div className='p-2 me-auto'>
+          <label className='me-2'>{i18next.t('equipment:boot_delay')}</label>
           <input
             type='number'
             min='0'
@@ -109,7 +109,7 @@ const EditEquipment = ({
           />
           <ErrorFor errors={errors} touched={touched} name='boot_delay' />
         </div>
-        <div className='p-2 mr-auto'>
+        <div className='p-2 me-auto'>
           <button type='submit' id='add_equipment' data-testid='smoke-equipment-submit'>
             {FaSave()}
           </button>

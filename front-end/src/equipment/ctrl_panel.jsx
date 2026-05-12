@@ -38,7 +38,7 @@ export class RawEquipmentCtrlPanel extends React.Component {
                 <div className='col-12 col-sm-6 col-md-2 col-lg-3 order-sm-3' key={'eq-' + item.id}>
                   <label className='d-inline-flex align-items-center mb-0'>
                     <Switch on={item.on} onClick={(e) => { this.toggleState(e, item) }} />
-                    <span className='ml-2'>{item.name}</span>
+                    <span className='ms-2'>{item.name}</span>
                   </label>
                 </div>
               )

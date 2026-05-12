@@ -15,7 +15,7 @@ describe('<Modal />', () => {
     expect(children[0].type).toBe('div')
     expect(children[0].props.className).toBe('modal-backdrop show')
     expect(children[1].type).toBe('div')
-    expect(children[1].props.className).toBe('modal in')
+    expect(children[1].props.className).toBe('modal show')
   })
 
   it('renders modal attributes', () => {

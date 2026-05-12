@@ -73,7 +73,7 @@ export class RawSelectEquipment extends React.Component {
           className='btn btn-secondary dropdown-toggle'
           type='button'
           id={this.props.id}
-          data-toggle='dropdown'
+          data-bs-toggle='dropdown'
           aria-haspopup='true'
           aria-expanded='false'
           disabled={readOnly}

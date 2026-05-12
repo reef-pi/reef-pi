@@ -37,7 +37,7 @@ export class RawDoser extends React.Component {
           const calibrationButton = (
             <button
               type='button' name={'calibrate-doser-' + doser.id}
-              className='btn btn-sm btn-outline-info float-right'
+              className='btn btn-sm btn-outline-info float-end'
               onClick={(e) => this.calibrateDoser(e, doser)}
             >
               {i18n.t('doser:calibrate')}
@@ -55,7 +55,7 @@ export class RawDoser extends React.Component {
               onToggleState={handleTState}
               enabled={doser.regiment.enable}
               buttons={calibrationButton}
-              title={<b className='ml-2 align-middle'>{doser.name} </b>}
+              title={<b className='ms-2 align-middle'>{doser.name} </b>}
               onDelete={this.handleDeleteDoser}
             >
               <DoserForm

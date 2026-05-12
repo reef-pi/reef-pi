@@ -40,7 +40,7 @@ export default class Pin extends React.Component {
         <span className='input-group-addon'>{i18next.t('pin')}</span>
         <select
           name='pin'
-          className='custom-select'
+          className='form-select'
           onChange={this.handleChange}
           value={this.props.current}
         >

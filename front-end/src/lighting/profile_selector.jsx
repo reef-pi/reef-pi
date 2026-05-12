@@ -15,7 +15,7 @@ const ProfileSelector = (props) => {
     <div className='d-sm-inline-flex'>
       <div className='d-sm-none'>
         <select
-          className='custom-select'
+          className='form-select'
           name={props.name + uuid}
           value={props.value}
           onChange={handleChange}
@@ -36,7 +36,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='fixed'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'fixed'}
             name={props.name + uuid}
             id={props.name + uuid + '-fixed'}
@@ -48,7 +48,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='interval'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'interval'}
             name={props.name + uuid}
             id={props.name + uuid + '-interval'}
@@ -60,7 +60,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='diurnal'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'diurnal'}
             name={props.name + uuid}
             id={props.name + uuid + '-diurnal'}
@@ -72,7 +72,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='random'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'random'}
             name={props.name + uuid}
             id={props.name + uuid + '-random'}
@@ -84,7 +84,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='sine'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'sine'}
             name={props.name + uuid}
             id={props.name + uuid + '-sine'}
@@ -96,7 +96,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='lunar'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'lunar'}
             name={props.name + uuid}
             id={props.name + uuid + '-lunar'}
@@ -108,7 +108,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='circadian'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'circadian'}
             name={props.name + uuid}
             id={props.name + uuid + '-circadian'}
@@ -120,7 +120,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='cyclic'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'cyclic'}
             name={props.name + uuid}
             id={props.name + uuid + '-cyclic'}
@@ -132,7 +132,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='lightning'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'lightning'}
             name={props.name + uuid}
             id={props.name + uuid + '-lightning'}
@@ -144,7 +144,7 @@ const ProfileSelector = (props) => {
         <label className='btn btn-secondary'>
           <input
             type='radio' value='solar'
-            className='mr-1'
+            className='me-1'
             checked={props.value === 'solar'}
             name={props.name + uuid}
             id={props.name + uuid + '-solar'}

@@ -39,7 +39,7 @@ export class RawTimersMain extends React.Component {
             item={timer}
             onToggleState={handleToggleState}
             enabled={timer.enable}
-            title={<b className='ml-2 align-middle'>{timer.name}</b>}
+            title={<b className='ms-2 align-middle'>{timer.name}</b>}
             onDelete={this.handleRemoveTimer}
           >
             <TimerForm

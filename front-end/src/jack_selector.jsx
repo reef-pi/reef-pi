@@ -52,7 +52,7 @@ export class RawJackSelector extends React.Component {
           className='btn btn-secondary dropdown-toggle'
           type='button'
           id={this.props.id + 'jack'}
-          data-toggle='dropdown'
+          data-bs-toggle='dropdown'
           aria-haspopup='true'
           aria-expanded='false'
         >
@@ -106,7 +106,7 @@ export class RawJackSelector extends React.Component {
           className='btn btn-secondary dropdown-toggle'
           type='button'
           id={this.props.id + '-pin'}
-          data-toggle='dropdown'
+          data-bs-toggle='dropdown'
           aria-haspopup='true'
           aria-expanded='false'
         >

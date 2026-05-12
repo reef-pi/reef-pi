@@ -72,7 +72,7 @@ const EditEntry = ({
           <input
             type='submit'
             value={i18next.t('journal:add_entry')}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

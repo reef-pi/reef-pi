@@ -25,9 +25,9 @@ class errors extends React.Component {
         <div className='row align-items-center' key={'error-' + el.id}>
           <div className='col-lg-2'>{el.time}</div>
           <div className='col-lg-8'>
-            {isAlert && <span className='badge badge-warning mr-1'>{i18n.t('configuration:errors:alert')}</span>}
+            {isAlert && <span className='badge text-bg-warning me-1'>{i18n.t('configuration:errors:alert')}</span>}
             {el.message}
-            {el.count > 1 && <span className='badge badge-secondary ml-1'>{el.count}x</span>}
+            {el.count > 1 && <span className='badge text-bg-secondary ms-1'>{el.count}x</span>}
           </div>
           <div className='col-lg-1'>
             <input

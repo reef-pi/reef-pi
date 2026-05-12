@@ -67,7 +67,7 @@ describe('Macro step components', () => {
 
   it('<SelectType /> renders all valid type options', () => {
     const html = renderMarkup(
-      <SelectType name='steps[0].type' className='custom-select' readOnly={false} />,
+      <SelectType name='steps[0].type' className='form-select' readOnly={false} />,
       { 'steps[0]': { type: 'wait' } }
     )
     expect((html.match(/<option/g) || []).length).toBeGreaterThanOrEqual(11)

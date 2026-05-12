@@ -35,7 +35,7 @@ const EditInstance = ({
           <button
             type='button'
             onClick={onDelete}
-            className='btn btn-sm btn-outline-danger float-right d-block d-sm-inline ml-2'
+            className='btn btn-sm btn-outline-danger float-end d-block d-sm-inline ms-2'
           >
             {i18next.t('delete')}
           </button>
@@ -50,7 +50,7 @@ const EditInstance = ({
       <div className='row align-items-start'>
         {deleteAction()}
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('name')}</label>
+          <label className='me-2'>{i18next.t('name')}</label>
           <input
             type='text' name='name'
             onChange={handleChange}
@@ -61,7 +61,7 @@ const EditInstance = ({
           <ErrorFor errors={errors} touched={touched} name='name' />
         </div>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('address')}</label>
+          <label className='me-2'>{i18next.t('address')}</label>
           <input
             type='text' name='address'
             onChange={handleChange}
@@ -74,7 +74,7 @@ const EditInstance = ({
       </div>
       <div className='row'>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('user')}</label>
+          <label className='me-2'>{i18next.t('user')}</label>
           <input
             type='text' name='user'
             onChange={handleChange}
@@ -85,7 +85,7 @@ const EditInstance = ({
           <ErrorFor errors={errors} touched={touched} name='user' />
         </div>
         <div className='col-12 col-sm-5 col-lg-5 order-sm-1'>
-          <label className='mr-2'>{i18next.t('password')}</label>
+          <label className='me-2'>{i18next.t('password')}</label>
           <input
             type='password' name='password'
             onChange={handleChange}
@@ -98,7 +98,7 @@ const EditInstance = ({
       </div>
       <div className='row'>
         <div className='col-12'>
-          <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-right mt-1' />
+          <input type='submit' value={actionLabel} className='btn btn-sm btn-primary float-end mt-1' />
         </div>
       </div>
     </form>

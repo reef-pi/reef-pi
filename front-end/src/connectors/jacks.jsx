@@ -202,7 +202,7 @@ class jacks extends React.Component {
                   <select
                     name='driver'
                     data-testid='smoke-jack-driver'
-                    className='form-control custom-select'
+                    className='form-select'
                     onChange={this.handleSetDriver}
                     value={this.state.JackDriver}
                   >
@@ -216,7 +216,7 @@ class jacks extends React.Component {
                   </select>
                 </div>
               </div>
-              <div className='col-12 col-md-3 text-right'>
+              <div className='col-12 col-md-3 text-end'>
                 <input
                   type='button'
                   id='createJack'

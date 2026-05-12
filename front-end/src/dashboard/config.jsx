@@ -134,7 +134,7 @@ export class RawDashboardConfig extends React.Component {
           />
         </div>
         <div className='row'>
-          <div className='col-xs-12'>
+          <div className='col-12'>
             <input type='button' className={updateButtonClass} onClick={this.handleSave} id='save_dashboard' data-testid='smoke-dashboard-save' value={i18next.t('update')} />
           </div>
         </div>

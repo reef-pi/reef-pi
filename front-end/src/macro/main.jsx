@@ -58,7 +58,7 @@ export class RawMacroMain extends React.Component {
           buttons.push(
             <button
               type='button' name={'run-macro-' + macro.id}
-              className='btn btn-sm btn-outline-info float-right'
+              className='btn btn-sm btn-outline-info float-end'
               disabled={macro.enable}
               onClick={(e) => this.runMacro(e, macro)}
               key='run'
@@ -70,7 +70,7 @@ export class RawMacroMain extends React.Component {
             buttons.push(
               <button
                 type='button' name={'reverse-macro-' + macro.id}
-                className='btn btn-sm btn-outline-info float-right'
+                className='btn btn-sm btn-outline-info float-end'
                 disabled={macro.enable}
                 onClick={(e) => this.revertMacro(e, macro)}
                 key='revert'
@@ -86,7 +86,7 @@ export class RawMacroMain extends React.Component {
               name={'panel-macro-' + macro.id}
               item={macro}
               buttons={buttons}
-              title={<b className='ml-2 align-middle'>{macro.name} </b>}
+              title={<b className='ms-2 align-middle'>{macro.name} </b>}
               onDelete={this.handleDeleteMacro}
             >
               <MacroForm

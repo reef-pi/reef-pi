@@ -103,7 +103,7 @@ const EditPh = ({
               name='analog_input'
               component='select'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('analog_input', touched, errors)
               })}
             >
@@ -161,7 +161,7 @@ const EditPh = ({
               name='enable'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
@@ -179,7 +179,7 @@ const EditPh = ({
               name='one_shot'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('one_shot', touched, errors)
               })}
             >
@@ -242,7 +242,7 @@ const EditPh = ({
               name='notify'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('notify', touched, errors)
               })}
             >
@@ -303,7 +303,7 @@ const EditPh = ({
               name='control'
               component='select'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('control', touched, errors)
               })}
             >
@@ -340,7 +340,7 @@ const EditPh = ({
               name='upperFunction'
               component='select'
               disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('upperFunction', touched, errors)
               })}
             >
@@ -379,7 +379,7 @@ const EditPh = ({
               name='lowerFunction'
               component='select'
               disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('lowerFunction', touched, errors)
               })}
             >
@@ -435,7 +435,7 @@ const EditPh = ({
             type='submit'
             value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

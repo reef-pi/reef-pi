@@ -7,24 +7,24 @@ import i18next from 'i18next'
 
 const SolarProfile = (props) => {
   return (
-    <div className='form-inline'>
-      <label className='mr-2'>{i18next.t('lighting:solar_latitude')}</label>
+    <div className='d-flex align-items-center flex-wrap gap-2'>
+      <label className='me-2'>{i18next.t('lighting:solar_latitude')}</label>
       <Field
         name={NameFor(props.name, 'latitude')}
         type='number'
         step='any'
         disabled={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2',
+        className={classNames('form-control me-3 col-12 col-sm-3 col-md-2',
           { 'is-invalid': ShowError(NameFor(props.name, 'latitude'), props.touched, props.errors) })}
         placeholder='0.0'
       />
-      <label className='mr-2'>{i18next.t('lighting:solar_longitude')}</label>
+      <label className='me-2'>{i18next.t('lighting:solar_longitude')}</label>
       <Field
         name={NameFor(props.name, 'longitude')}
         type='number'
         step='any'
         disabled={props.readOnly}
-        className={classNames('form-control mr-3 col-12 col-sm-3 col-md-2',
+        className={classNames('form-control me-3 col-12 col-sm-3 col-md-2',
           { 'is-invalid': ShowError(NameFor(props.name, 'longitude'), props.touched, props.errors) })}
         placeholder='0.0'
       />

@@ -47,10 +47,10 @@ export default class Grid extends React.Component {
     const colSize = numColsToColSize(this.props.columns)
 
     return (
-      <div className={'col-xs-12 col-md-' + colSize + ' grid-cell-container'} key={'chart-type-' + i + '-' + j}>
+      <div className={'col-12 col-md-' + colSize + ' grid-cell-container'} key={'chart-type-' + i + '-' + j}>
         <div className='grid-cell'>
           <div className='col-12 dropdown'>
-            <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+            <button className='btn btn-secondary dropdown-toggle' type='button' id={'db-' + i + '-' + j} data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
               {label}
             </button>
             <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>

@@ -111,7 +111,7 @@ const EditDoser = ({
               component='select'
               data-testid='smoke-doser-type'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('type', touched, errors)
               })}
             >
@@ -147,7 +147,7 @@ const EditDoser = ({
             data-testid='smoke-doser-submit'
             value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

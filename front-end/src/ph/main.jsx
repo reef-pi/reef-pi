@@ -45,7 +45,7 @@ class ph extends React.Component {
             name={'calibrate-probe-' + probe.id}
             disabled={probe.enable}
             title={probe.enable ? 'Ph probe must be disabled before calibration' : null}
-            className='btn btn-sm btn-outline-info float-right'
+            className='btn btn-sm btn-outline-info float-end'
             onClick={e => this.calibrateProbe(e, probe)}
           >
             {i18next.t('ph:calibrate')}
@@ -57,7 +57,7 @@ class ph extends React.Component {
             name={'panel-ph-' + probe.id}
             item={probe}
             buttons={calibrationButton}
-            title={<b className='ml-2 align-middle'>{probe.name} </b>}
+            title={<b className='ms-2 align-middle'>{probe.name} </b>}
             onDelete={this.handleDeleteProbe}
             onToggleState={handleToggleState}
             enabled={probe.enable}

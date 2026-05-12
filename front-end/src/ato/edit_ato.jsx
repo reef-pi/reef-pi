@@ -97,7 +97,7 @@ const EditAto = ({
               component='select'
               data-testid='smoke-ato-inlet'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('inlet', touched, errors)
               })}
             >
@@ -165,7 +165,7 @@ const EditAto = ({
               name='enable'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('enable', touched, errors)
               })}
             >
@@ -186,7 +186,7 @@ const EditAto = ({
               component='select'
               data-testid='smoke-ato-control'
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('control', touched, errors)
               })}
             >
@@ -206,7 +206,7 @@ const EditAto = ({
               component='select'
               data-testid='smoke-ato-pump'
               disabled={readOnly || values.control === ''}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('pump', touched, errors)
               })}
             >
@@ -226,7 +226,7 @@ const EditAto = ({
               name='one_shot'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('one_shot', touched, errors)
               })}
             >
@@ -246,7 +246,7 @@ const EditAto = ({
               name='notify'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('notify', touched, errors)
               })}
             >
@@ -292,7 +292,7 @@ const EditAto = ({
               name='disable_on_alert'
               component={BooleanSelect}
               disabled={readOnly}
-              className={classNames('custom-select', {
+              className={classNames('form-select', {
                 'is-invalid': ShowError('disable_on_alert', touched, errors)
               })}
             >
@@ -311,7 +311,7 @@ const EditAto = ({
             data-testid='smoke-ato-submit'
             value={i18next.t('save')}
             disabled={readOnly}
-            className='btn btn-sm btn-primary float-right mt-1'
+            className='btn btn-sm btn-primary float-end mt-1'
           />
         </div>
       </div>

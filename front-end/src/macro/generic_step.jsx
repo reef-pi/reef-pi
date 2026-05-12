@@ -27,7 +27,7 @@ export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props
           title={i18n.t('macro:system')}
           component='select'
           readOnly={readOnly}
-          className={classNames('form-control custom-select', {
+          className={classNames('form-select', {
             'is-invalid': ShowError(`${name}.id`, touched, errors)
           })}
         >
@@ -43,7 +43,7 @@ export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props
           title={i18n.t('macro:action')}
           component={BooleanSelect}
           disabled={readOnly}
-          className={classNames('form-control custom-select', {
+          className={classNames('form-select', {
             'is-invalid': ShowError(`${name}.id`, touched, errors)
           })}
         >

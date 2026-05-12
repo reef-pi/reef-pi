@@ -20,12 +20,12 @@ const ViewEquipment = ({ equipment, outletName, onStateChange, onDelete, onEdit 
       <div className='p-2'>
         {equipment.name}
       </div>
-      <div className='p-2 mr-auto font-italic'>
+      <div className='p-2 me-auto font-italic'>
         <small>{outletName}</small>
       </div>
       <div className='p-2'>
         <Switch onClick={toggleState} on={equipment.on}>
-          <small className='ml-1 align-top'>{equipment.on ? i18next.t('on') : i18next.t('off')}</small>
+          <small className='ms-1 align-top'>{equipment.on ? i18next.t('on') : i18next.t('off')}</small>
         </Switch>
       </div>
       <div className='p2'>

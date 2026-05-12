@@ -59,16 +59,15 @@ class NotificationAlertItem extends React.Component {
           this.state.lifeStatus
         } alert alert-dismissible fade show notification-item`}
       >
-        <div className='font-weight-normal'>{this.props.notification.content}</div>
+        <div className='fw-normal'>{this.props.notification.content}</div>
         <button
           type='button'
+          aria-label='Close'
           onClick={() => {
             this.handleClose()
           }}
-          className='close'
-        >
-          <span>&times;</span>
-        </button>
+          className='btn-close'
+        />
       </div>
     )
   }

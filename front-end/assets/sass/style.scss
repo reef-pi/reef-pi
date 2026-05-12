@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 @import './tokens';
 @import './auth-page';
 @import './navbar';
@@ -85,6 +85,10 @@ body {
   row-gap: var(--reefpi-panel-gap);
 }
 
+.form-group {
+  margin-bottom: 1rem;
+}
+
 .nav-item {
   cursor: pointer;
 }
@@ -136,9 +140,39 @@ div.dropdown-menu {
 .btn-group-vertical,
 .dropdown,
 .input-group,
-.custom-select,
+.form-select,
 .form-control {
   max-width: 100%;
+}
+
+.input-group-prepend,
+.input-group-append {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.input-group-prepend > .btn,
+.input-group-prepend > .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group-prepend + .form-control,
+.input-group-prepend + .form-select {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.input-group > .form-control + .input-group-append,
+.input-group > .form-select + .input-group-append {
+  margin-left: calc(var(--bs-border-width) * -1);
+}
+
+.input-group-append > .btn,
+.input-group-append > .input-group-text {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .table-responsive,
@@ -230,7 +264,7 @@ textarea:focus,
   .dropdown > .btn,
   .dropdown-toggle,
   .input-group > .form-control,
-  .input-group > .custom-select {
+  .input-group > .form-select {
     max-width: 100%;
   }
 

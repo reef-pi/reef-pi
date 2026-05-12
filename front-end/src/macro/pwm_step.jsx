@@ -25,7 +25,7 @@ const PWMStep = ({ name, readOnly, touched, errors, jacks, fetch }) => {
           title={i18n.t('macro:pwm:jack')}
           component='select'
           disabled={readOnly}
-          className={classNames('form-control custom-select', {
+          className={classNames('form-select', {
             'is-invalid': ShowError(`${name}.id`, touched, errors)
           })}
         >
