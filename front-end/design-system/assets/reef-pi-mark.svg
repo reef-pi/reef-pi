@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <defs>
+    <linearGradient id="rpm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#27a822"></stop>
+      <stop offset="100%" stop-color="#1c7e19"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="16" fill="url(#rpm)"></rect>
+  <text x="48" y="66" text-anchor="middle" font-family="Questrial, &#39;Century Gothic&#39;, sans-serif" font-size="52" font-weight="400" fill="#ffffff" letter-spacing="-1">rp</text>
+</svg>

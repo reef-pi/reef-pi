@@ -1,0 +1,217 @@
+/* reef-pi app kit — Bootstrap 4.6 overrides
+   All color values reference var(--reefpi-*) from colors_and_type.css.
+   No raw hex literals. */
+
+/* ── Layout ─────────────────────────────────────── */
+
+html {
+  font-family: var(--reefpi-font-app);
+  font-size: var(--reefpi-font-size-base);
+  line-height: var(--reefpi-line-height);
+}
+
+body {
+  background-color: var(--reefpi-color-surface);
+  color: var(--reefpi-color-text);
+}
+
+#main-panel {
+  min-height: 100vh;
+}
+
+.container-fluid {
+  padding-left: var(--reefpi-shell-gutter);
+  padding-right: var(--reefpi-shell-gutter);
+}
+
+.body-panel {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 70px;
+  row-gap: var(--reefpi-panel-gap);
+}
+
+/* ── Interactive elements ────────────────────────── */
+
+.conf-nav .nav-link,
+.navbar-reefpi .nav-link,
+.btn {
+  min-height: var(--reefpi-tap-target-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.nav-link:focus,
+.btn:focus {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+/* ── List groups + panels ────────────────────────── */
+
+.list-group-item,
+.reef_pi_panel,
+.conf-nav,
+.navbar-reefpi {
+  border-color: var(--reefpi-color-border);
+}
+
+.list-group-item {
+  background-color: var(--reefpi-color-surface-elevated);
+}
+
+.reef_pi_panel {
+  border-style: none;
+}
+
+/* ── Typography helpers ──────────────────────────── */
+
+.text-muted,
+small.text-muted {
+  color: var(--reefpi-color-text-muted) !important;
+}
+
+/* ── State — pending ─────────────────────────────── */
+
+.state-pending {
+  color: var(--reefpi-color-pending);
+  background-color: var(--reefpi-color-pending-bg);
+}
+
+.spinner-pending {
+  color: var(--reefpi-color-pending);
+}
+
+/* ── State — error ───────────────────────────────── */
+
+.state-error,
+.alert-danger {
+  color: var(--reefpi-color-error);
+  background-color: var(--reefpi-color-error-bg);
+  border-color: var(--reefpi-color-error-border);
+}
+
+/* ── State — warning ─────────────────────────────── */
+
+.state-warn,
+.alert-warning {
+  color: var(--reefpi-color-warn);
+  background-color: var(--reefpi-color-warn-bg);
+}
+
+/* ── State — success (hover / active) ────────────── */
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active {
+  background-color: var(--reefpi-color-success-strong);
+  border-color: var(--reefpi-color-success-strong);
+}
+
+/* ── Threshold bands ─────────────────────────────── */
+
+.band-safe {
+  background-color: var(--reefpi-color-band-safe);
+}
+
+.band-warn {
+  background-color: var(--reefpi-color-band-warn);
+}
+
+.band-critical {
+  background-color: var(--reefpi-color-band-critical);
+}
+
+/* ── Misc ────────────────────────────────────────── */
+
+.bottom-bar {
+  border-top: solid 1px var(--reefpi-color-border-subtle);
+}
+
+.conf-nav {
+  margin-bottom: 10px;
+  row-gap: 0.25rem;
+}
+
+div.dropdown-menu {
+  z-index: 1031;
+  max-width: 24rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive,
+.reef-pi-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+
+@media screen and (min-width: 768px) {
+  :root {
+    --reefpi-shell-gutter: var(--reefpi-space-md);
+  }
+
+  .body-panel {
+    margin-bottom: 85px;
+  }
+
+  .navHeaderCollapse.collapsing {
+    transition: none;
+    -webkit-transition: none;
+    overflow: visible;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .body-panel {
+    padding-bottom: 90px;
+  }
+
+  .body-panel .row {
+    row-gap: 0.75rem;
+  }
+
+  div.dropdown-menu {
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .conf-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .conf-nav .nav-link {
+    white-space: nowrap;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .body-panel {
+    margin-bottom: 70px;
+  }
+}

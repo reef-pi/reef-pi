@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>reef-pi · Bento OS · Full system</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"/>
+<style>
+  html, body { margin: 0; height: 100%; background: #f0eee9; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="styles/05-bento-os.jsx"></script>
+<script type="text/babel" src="styles/bento-os-screens.jsx"></script>
+<script type="text/babel" src="styles/bento-os-mobile.jsx"></script>
+<script type="text/babel" src="styles/bento-os-extras.jsx"></script>
+<script type="text/babel" src="styles/bento-os-system.jsx"></script>
+<script type="text/babel" data-presets="env,react">
+const {
+  BentoOS,
+  BentoOSEquipment, BentoOSTempDetail, BentoOSAlerts, BentoOSFeeding,
+  BentoOSSchedules, BentoOSSettings, BentoOSSignIn, BentoOSEmptyStates,
+  BentoOSComponentSheet, BentoOSDarkDashboard,
+  BentoOSMDash, BentoOSMEquip, BentoOSMAlerts,
+  IOSDevice,
+} = window;
+
+function MobileFrame({ children, dark = false }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+      <IOSDevice width={402} height={874} dark={dark}>{children}</IOSDevice>
+    </div>
+  );
+}
+
+function App() {
+  const W = 900, H = 520;
+  const MW = 460, MH = 900;
+  return (
+    <DesignCanvas>
+      <DCSection id="foundation" title="Foundation" subtitle="Tokens, type, atoms — the contract">
+        <DCArtboard id="bs-components" label="Component sheet" width={W} height={H}><BentoOSComponentSheet/></DCArtboard>
+      </DCSection>
+      <DCSection id="core" title="Core screens" subtitle="The everyday surfaces">
+        <DCArtboard id="bs-dash"   label="Dashboard"  width={W} height={H}><BentoOS/></DCArtboard>
+        <DCArtboard id="bs-eq"     label="Equipment"  width={W} height={H}><BentoOSEquipment/></DCArtboard>
+        <DCArtboard id="bs-temp"   label="Temperature detail" width={W} height={H}><BentoOSTempDetail/></DCArtboard>
+        <DCArtboard id="bs-alerts" label="Alerts"     width={W} height={H}><BentoOSAlerts/></DCArtboard>
+      </DCSection>
+      <DCSection id="control" title="Control surfaces" subtitle="Scheduling, settings, modal flows">
+        <DCArtboard id="bs-sched"   label="Schedules & automations" width={W} height={H}><BentoOSSchedules/></DCArtboard>
+        <DCArtboard id="bs-set"     label="Settings · Network"      width={W} height={H}><BentoOSSettings/></DCArtboard>
+        <DCArtboard id="bs-feed"    label="Feeding mode"             width={W} height={H}><BentoOSFeeding/></DCArtboard>
+      </DCSection>
+      <DCSection id="onboarding" title="Onboarding & edges" subtitle="First-run, lost connection, empty states">
+        <DCArtboard id="bs-signin" label="Sign-in"            width={W} height={H}><BentoOSSignIn/></DCArtboard>
+        <DCArtboard id="bs-empty"  label="Empty & error states · 2×2" width={W} height={H}><BentoOSEmptyStates/></DCArtboard>
+      </DCSection>
+      <DCSection id="dark" title="Dark mode" subtitle="Companion theme for the same tokens">
+        <DCArtboard id="bs-dark" label="Dashboard · dark" width={W} height={H}><BentoOSDarkDashboard/></DCArtboard>
+      </DCSection>
+      <DCSection id="mobile" title="Mobile" subtitle="iPhone · daily-use trio">
+        <DCArtboard id="bs-m-dash"   label="Mobile · Dashboard" width={MW} height={MH}><MobileFrame><BentoOSMDash/></MobileFrame></DCArtboard>
+        <DCArtboard id="bs-m-eq"     label="Mobile · Equipment" width={MW} height={MH}><MobileFrame><BentoOSMEquip/></MobileFrame></DCArtboard>
+        <DCArtboard id="bs-m-alerts" label="Mobile · Alerts"    width={MW} height={MH}><MobileFrame><BentoOSMAlerts/></MobileFrame></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
