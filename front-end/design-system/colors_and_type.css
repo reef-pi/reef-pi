@@ -29,7 +29,7 @@
   --reefpi-color-shadow: rgba(31, 42, 31, 0.14);
 
   /* ---------- Navbar (on brand gradient) ---------- */
-  --reefpi-color-nav-text:         rgba(255, 255, 255, 0.84);
+  --reefpi-color-nav-text:         rgba(255, 255, 255, 0.97); /* ≥3:1 on #27a822 */
   --reefpi-color-nav-text-muted:   rgba(255, 255, 255, 0.82);
   --reefpi-color-nav-text-strong:  #ffffff;
   --reefpi-color-nav-overlay:      rgba(255, 255, 255, 0.12);
@@ -119,6 +119,8 @@
   --reefpi-color-border-strong:     #4a5949;
   /* brand stays #27A822 — increase brand-alt luminance for contrast */
   --reefpi-color-brand-alt:         #2cc127;
+  /* pending must be lighter on dark surfaces for ≥3:1 contrast */
+  --reefpi-color-pending:           #9aaf9a;
 }
 
 /* ---------- Theme: actinic (night, reef blue) (E1 #2) ---------- */
@@ -130,6 +132,8 @@
   --reefpi-color-text-muted:        #7a90b5;
   --reefpi-color-border:            #10284d;
   --reefpi-color-border-strong:     #2a4a80;
+  /* pending must be lighter on actinic surfaces for ≥3:1 contrast */
+  --reefpi-color-pending:           #9aaf9a;
 }
 
 /* ---------- Semantic element styles ---------- */

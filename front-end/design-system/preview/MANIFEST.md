@@ -67,6 +67,14 @@ Before shipping a PR that touches tokens or components, verify each row is up to
 | `--reefpi-chart-yellow` | `#ffbb33` | Memory |
 | `--reefpi-chart-red` | `#ff4444` | CPU temperature |
 
+## CI scripts
+
+| Script | Command | Output |
+|---|---|---|
+| Contrast audit (E1 #3) | `node scripts/contrast-check.mjs` | `contrast-report.md` |
+
+Exit code 0 = all non-skipped pairs pass. Exit code 1 = at least one failure; see report for details. Known architectural skips are documented inline in the script.
+
 ## Themes (E1 #2)
 
 Applied via `data-theme` on `<html>`. Light is the default (no attribute).

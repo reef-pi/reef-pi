@@ -65,6 +65,7 @@
   --reefpi-color-border:            #{$dark-border};
   --reefpi-color-border-strong:     #{$dark-border-strong};
   --reefpi-color-brand-alt:         #{$dark-brand-alt};
+  --reefpi-color-pending:           #{$dark-pending};
 }
 
 // Theme: actinic (night / reef blue)
@@ -76,6 +77,7 @@
   --reefpi-color-text-muted:        #{$actinic-text-muted};
   --reefpi-color-border:            #{$actinic-border};
   --reefpi-color-border-strong:     #{$actinic-border-strong};
+  --reefpi-color-pending:           #{$actinic-pending};
 }
 
 .reef_pi_panel {
