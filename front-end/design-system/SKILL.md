@@ -43,6 +43,17 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 | `--reefpi-shadow-navbar` | `0 2px 8px rgba(31,42,31,.14)` | Navbar only |
 | `--reefpi-tap-target-min` | `44px` | All interactive elements |
 | `--reefpi-font-app` | `'Questrial', 'Century Gothic', sans-serif` | All UI |
+| `--reefpi-color-pending` | `#4E5F4E` | Spinner ink, in-flight state |
+| `--reefpi-color-pending-bg` | `#EEF3EC` | Pending background |
+| `--reefpi-color-error` | `#DC3545` | Error state |
+| `--reefpi-color-error-bg` | `#FDECEE` | Error background |
+| `--reefpi-color-error-border` | `#F5C6CB` | Error border |
+| `--reefpi-color-warn` | `#B77400` | Warning state (AA on white) |
+| `--reefpi-color-warn-bg` | `#FFF8E6` | Warning background |
+| `--reefpi-color-success-strong` | `#1E7E34` | Success hover/active |
+| `--reefpi-color-band-safe` | `#D6E5D0` | Threshold band safe |
+| `--reefpi-color-band-warn` | `#FFE6B0` | Threshold band warn |
+| `--reefpi-color-band-critical` | `#F5C6CB` | Threshold band critical |
 
 ## When designing new pages
 
