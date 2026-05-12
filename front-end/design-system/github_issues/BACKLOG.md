@@ -9,7 +9,7 @@
 - [x] #4 Migrate `preview/` cards to `var()`-only — `issue-04-preview-migrate.md`
 
 ## E2 · Monitoring primitives
-- [ ] #5 ThresholdGauge component — `issue-05-threshold-gauge.md`
+- [x] #5 ThresholdGauge component — `issue-05-threshold-gauge.md`
 - [ ] #6 Sparkline v2 (gradient fill, threshold band, hover) — `issue-06-sparkline-v2.md`
 - [ ] #7 RangeSelector (1H / 6H / 1D / 7D / 30D) — `issue-07-range-selector.md`
 - [ ] #8 `useTimeSeries` hook — `issue-08-use-time-series.md`

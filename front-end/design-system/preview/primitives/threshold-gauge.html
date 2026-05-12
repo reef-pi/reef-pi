@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — ThresholdGauge</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .story-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Gauge host ───────────────────────────────── */
+
+    .gauge-host {
+      padding: 1.25rem 1rem 0.75rem;
+    }
+
+    /* ── Track + indicator ───────────────────────── */
+
+    .gauge-track-wrap {
+      position: relative;
+      height: 14px;
+      border-radius: 7px;
+      overflow: visible;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+    }
+
+    .gauge-zones {
+      position: absolute;
+      inset: 0;
+      border-radius: 7px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .zone {
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .zone-safe     { background: var(--reefpi-color-band-safe); }
+    .zone-warn     { background: var(--reefpi-color-band-warn); }
+    .zone-critical { background: var(--reefpi-color-band-critical); }
+
+    .gauge-needle {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 2px;
+      height: 20px;
+      border-radius: 1px;
+      z-index: 1;
+    }
+
+    .gauge-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--reefpi-color-surface-elevated);
+      border: 2px solid var(--reefpi-color-text-strong);
+      z-index: 2;
+    }
+
+    .gauge-indicator.out-of-bounds {
+      border-color: var(--reefpi-color-band-critical);
+    }
+
+    /* ── Value + label row ────────────────────────── */
+
+    .gauge-value-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .gauge-value {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+    }
+
+    .gauge-value.in-warn  { color: var(--reefpi-color-warn); }
+    .gauge-value.out-of-bounds { color: var(--reefpi-color-error); }
+
+    .gauge-label {
+      font-size: 0.75rem;
+      color: var(--reefpi-color-text-muted);
+    }
+
+    /* ── Min/max row ────────────────────────────────── */
+
+    .gauge-minmax {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .gauge-minmax span {
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+    }
+  </style>
+</head>
+<body>
+  <h1>ThresholdGauge</h1>
+  <p class="subtitle">Full-width track with coloured safe / warn / critical zones. Indicator snaps to value; turns red when out of bounds.</p>
+
+  <div class="story-grid">
+
+    <!-- Story 1: Within safe range -->
+    <div class="card">
+      <div class="card-header">Within safe range — 78.4 °F</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="Display Tank temperature"
+          aria-valuemin="70" aria-valuemax="86"
+          aria-valuenow="78.4"
+          aria-valuetext="78.4°F, within safe range">
+
+          <div class="gauge-value-row">
+            <span class="gauge-value">78.4°F</span>
+            <span class="gauge-label">Display Tank</span>
+          </div>
+
+          <!--
+            critical: [70, 86]  → 0 % – 100 %  (track span)
+            warn:     [74, 82]  → 25 % – 75 %
+            safe:     [76, 80]  → 37.5 % – 62.5 %
+            value:    78.4      → 52.5 %
+          -->
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <!-- left critical  0 → 25 %  -->
+              <div class="zone zone-critical" style="width:25%"></div>
+              <!-- left warn      25 → 37.5 % -->
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <!-- safe           37.5 → 62.5 % -->
+              <div class="zone zone-safe"     style="width:25%"></div>
+              <!-- right warn     62.5 → 75 % -->
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <!-- right critical 75 → 100 % -->
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:52.5%; background:var(--reefpi-color-text-strong)"></div>
+            <div class="gauge-indicator" style="left:52.5%"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>70°F</span><span>86°F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 2: In warn zone -->
+    <div class="card">
+      <div class="card-header">In warn zone — 75.1 °F</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="Sump temperature"
+          aria-valuemin="70" aria-valuemax="86"
+          aria-valuenow="75.1"
+          aria-valuetext="75.1°F, in warning zone">
+
+          <div class="gauge-value-row">
+            <!-- 75.1 is between warn[0]=74 and safe[0]=76 → warn zone -->
+            <span class="gauge-value in-warn">75.1°F</span>
+            <span class="gauge-label">Sump</span>
+          </div>
+
+          <!-- value: 75.1 → (75.1-70)/(86-70)*100 = 31.875 % -->
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <div class="zone zone-critical" style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-safe"     style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:31.875%; background:var(--reefpi-color-warn)"></div>
+            <div class="gauge-indicator" style="left:31.875%; border-color:var(--reefpi-color-warn)"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>70°F</span><span>86°F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 3: Out of bounds (value > critical max) -->
+    <div class="card">
+      <div class="card-header">Out of bounds — 90.0 °F</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="Refugium temperature"
+          aria-valuemin="70" aria-valuemax="86"
+          aria-valuenow="90"
+          aria-valuetext="90°F, out of bounds">
+
+          <div class="gauge-value-row">
+            <span class="gauge-value out-of-bounds">90.0°F</span>
+            <span class="gauge-label">Refugium</span>
+          </div>
+
+          <!-- indicator clamped to 100 % (right edge) -->
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <div class="zone zone-critical" style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-safe"     style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:100%; background:var(--reefpi-color-band-critical)"></div>
+            <div class="gauge-indicator out-of-bounds" style="left:100%"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>70°F</span><span>86°F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 4: No warn band -->
+    <div class="card">
+      <div class="card-header">No warn band — safe + critical only</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="pH"
+          aria-valuemin="7.8" aria-valuemax="8.6"
+          aria-valuenow="8.2"
+          aria-valuetext="8.2, within safe range">
+
+          <div class="gauge-value-row">
+            <span class="gauge-value">8.20</span>
+            <span class="gauge-label">pH</span>
+          </div>
+
+          <!--
+            critical: [7.8, 8.6]
+            safe:     [8.1, 8.4]
+            warn:     none
+            value:    8.2  → (8.2-7.8)/(8.6-7.8)*100 = 50 %
+            safe left  → (8.1-7.8)/0.8*100 = 37.5 %
+            safe right → (8.4-7.8)/0.8*100 = 75 %
+            safe width → 37.5 %
+          -->
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <div class="zone zone-critical" style="width:37.5%"></div>
+              <div class="zone zone-safe"     style="width:37.5%"></div>
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:50%; background:var(--reefpi-color-text-strong)"></div>
+            <div class="gauge-indicator" style="left:50%"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>7.8</span><span>8.6</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 5: No safe band — warn band only -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">No safe band — warn band only (Salinity)</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="Salinity"
+          aria-valuemin="33" aria-valuemax="37"
+          aria-valuenow="35"
+          aria-valuetext="35 ppt, within safe range">
+
+          <div class="gauge-value-row">
+            <span class="gauge-value">35 ppt</span>
+            <span class="gauge-label">Salinity</span>
+          </div>
+
+          <!--
+            critical: [33, 37]
+            warn:     [34, 36]  → 25 % – 75 %
+            safe:     none
+            value:    35  → 50 %
+          -->
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <div class="zone zone-critical" style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:50%"></div>
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:50%; background:var(--reefpi-color-text-strong)"></div>
+            <div class="gauge-indicator" style="left:50%"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>33 ppt</span><span>37 ppt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../_card.js"></script>
+</body>
+</html>
