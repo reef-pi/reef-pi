@@ -15,6 +15,25 @@ $color-band-safe:      #d6e5d0;
 $color-band-warn:      #ffe6b0;
 $color-band-critical:  #f5c6cb;
 
+// Dark theme overrides (E1 #2)
+$dark-surface:           #0f1410;
+$dark-surface-elevated:  #1a211a;
+$dark-surface-auth:      #0b0f0b;
+$dark-text:              #e6efe0;
+$dark-text-muted:        #9aa89a;
+$dark-border:            #2a3329;
+$dark-border-strong:     #4a5949;
+$dark-brand-alt:         #2cc127;
+
+// Actinic theme overrides (E1 #2)
+$actinic-surface:          #05101f;
+$actinic-surface-elevated: #0a1a33;
+$actinic-surface-auth:     #030a14;
+$actinic-text:             #cfe3ff;
+$actinic-text-muted:       #7a90b5;
+$actinic-border:           #10284d;
+$actinic-border-strong:    #2a4a80;
+
 $surface-auth-color: #edf8e8;
 $text-strong-color: #2e2e2e;
 $border-subtle-color: #cccccc;

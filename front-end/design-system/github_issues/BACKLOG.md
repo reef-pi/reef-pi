@@ -3,8 +3,8 @@
 > One PR per row. Commit prefix: `[claude design]`. Read `CLAUDE.md` first.
 
 ## E1 · Design tokens v2
-- [ ] #1 Extend `--reefpi-*` scale with state tokens — `issue-01-state-tokens.md`
-- [ ] #2 Add dark + actinic theme tokens — `issue-02-theme-tokens.md`
+- [x] #1 Extend `--reefpi-*` scale with state tokens — `issue-01-state-tokens.md`
+- [x] #2 Add dark + actinic theme tokens — `issue-02-theme-tokens.md`
 - [ ] #3 Token contrast audit + automated test — `issue-03-contrast-audit.md`
 - [ ] #4 Migrate `preview/` cards to `var()`-only — `issue-04-preview-migrate.md`
 

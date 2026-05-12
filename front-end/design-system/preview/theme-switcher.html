@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi Design System — Theme Switcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--reefpi-font-app);
+      background-color: var(--reefpi-color-surface);
+      color: var(--reefpi-color-text);
+      min-height: 100vh;
+      padding: 2rem;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Theme tabs ─────────────────────────────────── */
+
+    .theme-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .theme-tab {
+      min-height: var(--reefpi-tap-target-min);
+      padding: 0 1.25rem;
+      border-radius: var(--reefpi-radius-sm);
+      border: 1px solid var(--reefpi-color-border);
+      background: var(--reefpi-color-surface-elevated);
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+    }
+
+    .theme-tab:focus-visible {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: 2px;
+    }
+
+    .theme-tab.active {
+      border-color: var(--reefpi-color-brand);
+      color: var(--reefpi-color-text);
+      font-weight: 500;
+    }
+
+    .theme-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-light  { background: #f5faf3; border: 1px solid #d6e5d0; }
+    .dot-dark   { background: #1a211a; border: 1px solid #4a5949; }
+    .dot-actinic{ background: #0a1a33; border: 1px solid #2a4a80; }
+
+    /* ── Preview canvas ──────────────────────────────── */
+
+    .preview-canvas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .preview-canvas { grid-template-columns: 1fr; }
+    }
+
+    /* ── Shared card chrome ─────────────────────────── */
+
+    .card {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .card-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+      transition: border-color 0.2s;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    /* ── Navbar sample ──────────────────────────────── */
+
+    .navbar-sample {
+      background: var(--reefpi-gradient-brand);
+      border-radius: var(--reefpi-radius-md);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .navbar-sample .brand {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .navbar-sample .nav-links {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .navbar-sample .nav-link {
+      color: rgba(255,255,255,0.84);
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: var(--reefpi-radius-sm);
+      cursor: pointer;
+    }
+
+    .navbar-sample .nav-link.active {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+    }
+
+    /* ── Surface sample ─────────────────────────────── */
+
+    .surface-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .surface-chip {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .surface-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--reefpi-radius-sm);
+      border: 1px solid var(--reefpi-color-border-strong);
+    }
+
+    .swatch-label {
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text-muted);
+      text-align: center;
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    }
+
+    /* ── Typography sample ──────────────────────────── */
+
+    .type-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .type-label {
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+
+    .type-text-strong { color: var(--reefpi-color-text); font-size: 0.9rem; }
+    .type-text-muted  { color: var(--reefpi-color-text-muted); font-size: 0.85rem; }
+    .type-text-brand  { color: var(--reefpi-color-brand); font-size: 0.85rem; font-weight: 500; }
+    .type-text-alt    { color: var(--reefpi-color-brand-alt); font-size: 0.85rem; }
+
+    /* ── State sample ───────────────────────────────── */
+
+    .state-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .state-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--reefpi-radius-sm);
+      font-size: 0.8rem;
+    }
+
+    .state-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .state-pending {
+      background-color: var(--reefpi-color-pending-bg);
+      color: var(--reefpi-color-pending);
+    }
+    .state-pending .state-dot { background: var(--reefpi-color-pending); }
+
+    .state-error {
+      background-color: var(--reefpi-color-error-bg);
+      color: var(--reefpi-color-error);
+      border: 1px solid var(--reefpi-color-error-border);
+    }
+    .state-error .state-dot { background: var(--reefpi-color-error); }
+
+    .state-warn {
+      background-color: var(--reefpi-color-warn-bg);
+      color: var(--reefpi-color-warn);
+    }
+    .state-warn .state-dot { background: var(--reefpi-color-warn); }
+
+    /* ── Button sample ──────────────────────────────── */
+
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-sample {
+      min-height: var(--reefpi-tap-target-min);
+      padding: 0 1rem;
+      border-radius: var(--reefpi-radius-sm);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid transparent;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .btn-sample:focus-visible {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--reefpi-color-brand);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--reefpi-color-success-strong);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--reefpi-color-border-strong);
+      color: var(--reefpi-color-text);
+    }
+
+    /* ── Border sample ──────────────────────────────── */
+
+    .border-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .border-example {
+      height: 36px;
+      border-radius: var(--reefpi-radius-sm);
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      font-size: 0.75rem;
+      color: var(--reefpi-color-text-muted);
+    }
+
+    .border-default  { border: 1px solid var(--reefpi-color-border); background: var(--reefpi-color-surface-elevated); }
+    .border-strong   { border: 1px solid var(--reefpi-color-border-strong); background: var(--reefpi-color-surface-elevated); }
+
+    /* ── Theme label ────────────────────────────────── */
+
+    .theme-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      background: var(--reefpi-color-surface-elevated);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>reef-pi Design System — Theme Switcher</h1>
+  <p class="subtitle">Three themes, one token set. All overrides scope via <code>data-theme</code> on <code>&lt;html&gt;</code>.</p>
+
+  <div class="theme-tabs" role="tablist" aria-label="Theme selection">
+    <button class="theme-tab active" data-theme="light" role="tab" aria-selected="true">
+      <span class="theme-dot dot-light"></span>
+      Light
+    </button>
+    <button class="theme-tab" data-theme="dark" role="tab" aria-selected="false">
+      <span class="theme-dot dot-dark"></span>
+      Dark
+    </button>
+    <button class="theme-tab" data-theme="actinic" role="tab" aria-selected="false">
+      <span class="theme-dot dot-actinic"></span>
+      Actinic
+    </button>
+  </div>
+
+  <div class="theme-label">
+    <span>data-theme=</span><span id="theme-display">"light" (default)"</span>
+  </div>
+
+  <div class="preview-canvas">
+
+    <!-- Navbar -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">Navbar — gradient unchanged across all themes</div>
+      <div class="card-body">
+        <div class="navbar-sample">
+          <span class="brand">reef-pi</span>
+          <div class="nav-links">
+            <span class="nav-link active">Dashboard</span>
+            <span class="nav-link">Equipment</span>
+            <span class="nav-link">Temperature</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Surfaces -->
+    <div class="card">
+      <div class="card-header">Surfaces</div>
+      <div class="card-body">
+        <div class="surface-row">
+          <div class="surface-chip">
+            <div class="surface-swatch" style="background:var(--reefpi-color-surface)"></div>
+            <span class="swatch-label">surface</span>
+          </div>
+          <div class="surface-chip">
+            <div class="surface-swatch" style="background:var(--reefpi-color-surface-elevated)"></div>
+            <span class="swatch-label">elevated</span>
+          </div>
+          <div class="surface-chip">
+            <div class="surface-swatch" style="background:var(--reefpi-color-surface-auth)"></div>
+            <span class="swatch-label">auth</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="card">
+      <div class="card-header">Typography</div>
+      <div class="card-body">
+        <div class="type-stack">
+          <div class="type-row">
+            <span class="type-label">--text</span>
+            <span class="type-text-strong">Heater Threshold</span>
+          </div>
+          <div class="type-row">
+            <span class="type-label">--text-muted</span>
+            <span class="type-text-muted">Last updated 2 min ago</span>
+          </div>
+          <div class="type-row">
+            <span class="type-label">--brand</span>
+            <span class="type-text-brand">Save</span>
+          </div>
+          <div class="type-row">
+            <span class="type-label">--brand-alt</span>
+            <span class="type-text-alt">Documentation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State colors -->
+    <div class="card">
+      <div class="card-header">State colors</div>
+      <div class="card-body">
+        <div class="state-list">
+          <div class="state-row state-pending">
+            <span class="state-dot"></span>
+            Heater — command in flight
+          </div>
+          <div class="state-row state-error">
+            <span class="state-dot"></span>
+            Oops! pH Outside Range
+          </div>
+          <div class="state-row state-warn">
+            <span class="state-dot"></span>
+            ATO Low Water Warning
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="card">
+      <div class="card-header">Interactive elements</div>
+      <div class="card-body">
+        <div class="btn-row">
+          <button class="btn-sample btn-primary">Save</button>
+          <button class="btn-sample btn-outline">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Borders -->
+    <div class="card">
+      <div class="card-header">Borders</div>
+      <div class="card-body">
+        <div class="border-row">
+          <div class="border-example border-default">--reefpi-color-border (default card)</div>
+          <div class="border-example border-strong">--reefpi-color-border-strong (grid cell)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.theme-tab');
+    const display = document.getElementById('theme-display');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const theme = tab.dataset.theme;
+
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        if (theme === 'light') {
+          document.documentElement.removeAttribute('data-theme');
+          display.textContent = '"light" (default, no attribute)';
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+          display.textContent = `"${theme}"`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
