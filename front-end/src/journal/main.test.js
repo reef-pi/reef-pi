@@ -14,15 +14,17 @@ const journals = [
   { id: '2', name: 'Alkalinity', description: 'weekly', unit: 'dKH' }
 ]
 
-const countByType = (node, predicate) => {
+const findAll = (node, predicate, matches = []) => {
   if (!node || typeof node !== 'object') {
-    return 0
+    return matches
   }
-  let count = predicate(node) ? 1 : 0
+  if (predicate(node)) {
+    matches.push(node)
+  }
   React.Children.toArray(node.props?.children).forEach(child => {
-    count += countByType(child, predicate)
+    findAll(child, predicate, matches)
   })
-  return count
+  return matches
 }
 
 describe('<Main />', () => {
@@ -30,31 +32,31 @@ describe('<Main />', () => {
     jest.clearAllMocks()
   })
 
-  it('renders without throwing', () => {
+  it('renders journal panels in name order without mutating props', () => {
     const main = new RawJournalMain({ journals, delete: jest.fn() })
-    expect(() => main.render()).not.toThrow()
-  })
-
-  it('renders with journal list', () => {
-    const main = new RawJournalMain({ journals, delete: jest.fn() })
+    const originalJournals = journals.map(journal => ({ ...journal }))
     const rendered = main.render()
+    const panels = findAll(rendered, node => node.type === Collapsible)
 
-    expect(countByType(rendered, node => node.type === Collapsible)).toBe(2)
-    expect(journals.map(journal => journal.name)).toEqual(['pH Log', 'Alkalinity'])
+    expect(panels).toHaveLength(2)
+    expect(panels.map(panel => panel.props.name)).toEqual(['panel-journal-2', 'panel-journal-1'])
+    expect(panels.map(panel => panel.props.item.name)).toEqual(['Alkalinity', 'pH Log'])
+    expect(panels.map(panel => panel.props.onDelete)).toEqual([main.handleDelete, main.handleDelete])
+    expect(journals).toEqual(originalJournals)
   })
 
   it('renders with empty journal list', () => {
     const main = new RawJournalMain({ journals: [], delete: jest.fn() })
     const rendered = main.render()
 
-    expect(countByType(rendered, node => node.type === Collapsible)).toBe(0)
+    expect(findAll(rendered, node => node.type === Collapsible)).toHaveLength(0)
   })
 
   it('renders New sub-component for adding journals', () => {
     const main = new RawJournalMain({ journals, delete: jest.fn() })
     const rendered = main.render()
 
-    expect(countByType(rendered, node => node.type === New)).toBe(1)
+    expect(findAll(rendered, node => node.type === New)).toHaveLength(1)
   })
 
   it('calls delete after confirm resolves', async () => {
