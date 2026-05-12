@@ -54,7 +54,6 @@ var config = {
             options: {
               postcssOptions: {
                 plugins: [
-                  'precss',
                   'autoprefixer'
                 ]
               }
