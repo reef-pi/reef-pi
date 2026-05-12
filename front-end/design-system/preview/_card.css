@@ -1,0 +1,113 @@
+/*
+ * reef-pi Design System — shared preview card baseline
+ *
+ * Load order:
+ *   <link rel="stylesheet" href="_card.css">
+ *   <script src="_card.js"></script>   (query-string theme handler)
+ *
+ * This file imports colors_and_type.css and the Questrial webfont so each
+ * card only needs one <link> tag.  Card-specific styles live in inline
+ * <style> blocks inside the individual card file.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+@import url('../colors_and_type.css');
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+
+body {
+  font-family: var(--reefpi-font-app);
+  background-color: var(--reefpi-color-surface);
+  color: var(--reefpi-color-text);
+  min-height: 100vh;
+  padding: 2rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--reefpi-font-mono);
+}
+
+:focus-visible {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: 2px;
+}
+
+/* ── Card chrome ─────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--reefpi-color-surface-elevated);
+  border: 1px solid var(--reefpi-color-border);
+  border-radius: var(--reefpi-radius-md);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.card-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--reefpi-color-border);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--reefpi-color-text-muted);
+  transition: border-color 0.2s;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+/* ── Swatch grid ─────────────────────────────────────────────────────────── */
+
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 80px;
+}
+
+.swatch-color {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--reefpi-radius-sm);
+  border: 1px solid var(--reefpi-color-border);
+}
+
+.swatch-name {
+  font-size: 0.75rem;
+  color: var(--reefpi-color-text-muted);
+}
+
+.swatch-value {
+  font-family: var(--reefpi-font-mono);
+  font-size: 0.75rem;
+  color: var(--reefpi-color-text-strong);
+}

@@ -4,28 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>reef-pi Design System — Theme Switcher</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="_card.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--reefpi-font-app);
-      background-color: var(--reefpi-color-surface);
-      color: var(--reefpi-color-text);
-      min-height: 100vh;
-      padding: 2rem;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 500;
-      margin-bottom: 0.25rem;
-    }
-
     .subtitle {
       font-size: 0.875rem;
       color: var(--reefpi-color-text-muted);
@@ -74,9 +54,10 @@
       flex-shrink: 0;
     }
 
-    .dot-light  { background: #f5faf3; border: 1px solid #d6e5d0; }
-    .dot-dark   { background: #1a211a; border: 1px solid #4a5949; }
-    .dot-actinic{ background: #0a1a33; border: 1px solid #2a4a80; }
+    /* literal: brand swatch — intentional per-theme hex so dots don't change when theme toggles */
+    .dot-light  { background: #f5faf3; border: 1px solid #d6e5d0; } /* literal: brand swatch */
+    .dot-dark   { background: #1a211a; border: 1px solid #4a5949; } /* literal: brand swatch */
+    .dot-actinic{ background: #0a1a33; border: 1px solid #2a4a80; } /* literal: brand swatch */
 
     /* ── Preview canvas ──────────────────────────────── */
 
@@ -88,31 +69,6 @@
 
     @media (max-width: 700px) {
       .preview-canvas { grid-template-columns: 1fr; }
-    }
-
-    /* ── Shared card chrome ─────────────────────────── */
-
-    .card {
-      background: var(--reefpi-color-surface-elevated);
-      border: 1px solid var(--reefpi-color-border);
-      border-radius: var(--reefpi-radius-md);
-      overflow: hidden;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .card-header {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--reefpi-color-border);
-      font-size: 0.75rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--reefpi-color-text-muted);
-      transition: border-color 0.2s;
-    }
-
-    .card-body {
-      padding: 1rem;
     }
 
     /* ── Navbar sample ──────────────────────────────── */
@@ -130,7 +86,7 @@
     .navbar-sample .brand {
       font-size: 1.1rem;
       font-weight: 500;
-      color: #fff;
+      color: var(--reefpi-color-nav-text-strong);
     }
 
     .navbar-sample .nav-links {
@@ -139,7 +95,7 @@
     }
 
     .navbar-sample .nav-link {
-      color: rgba(255,255,255,0.84);
+      color: var(--reefpi-color-nav-text);
       font-size: 0.8rem;
       padding: 0.3rem 0.6rem;
       border-radius: var(--reefpi-radius-sm);
@@ -147,8 +103,8 @@
     }
 
     .navbar-sample .nav-link.active {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
+      background: var(--reefpi-color-nav-overlay);
+      color: var(--reefpi-color-nav-text-strong);
     }
 
     /* ── Surface sample ─────────────────────────────── */
@@ -278,7 +234,7 @@
 
     .btn-primary {
       background: var(--reefpi-color-brand);
-      color: #fff;
+      color: var(--reefpi-color-nav-text-strong);
     }
 
     .btn-primary:hover {
@@ -460,6 +416,7 @@
 
   </div>
 
+  <script src="_card.js"></script>
   <script>
     const tabs = document.querySelectorAll('.theme-tab');
     const display = document.getElementById('theme-display');
