@@ -55,6 +55,35 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 | `--reefpi-color-band-warn` | `#FFE6B0` | Threshold band warn |
 | `--reefpi-color-band-critical` | `#F5C6CB` | Threshold band critical |
 
+## Theme overrides
+
+Applied via `[data-theme="dark"]` or `[data-theme="actinic"]` on `<html>`. Light is the default (no attribute). Tokens not listed here inherit their `:root` value unchanged.
+
+### `dark` — low-light general
+
+| Token | Dark value |
+|---|---|
+| `--reefpi-color-surface` | `#0f1410` |
+| `--reefpi-color-surface-elevated` | `#1a211a` |
+| `--reefpi-color-surface-auth` | `#0b0f0b` |
+| `--reefpi-color-text` | `#e6efe0` |
+| `--reefpi-color-text-muted` | `#9aa89a` |
+| `--reefpi-color-border` | `#2a3329` |
+| `--reefpi-color-border-strong` | `#4a5949` |
+| `--reefpi-color-brand-alt` | `#2cc127` (luminance bump for contrast) |
+
+### `actinic` — night / reef blue
+
+| Token | Actinic value |
+|---|---|
+| `--reefpi-color-surface` | `#05101f` |
+| `--reefpi-color-surface-elevated` | `#0a1a33` |
+| `--reefpi-color-surface-auth` | `#030a14` |
+| `--reefpi-color-text` | `#cfe3ff` |
+| `--reefpi-color-text-muted` | `#7a90b5` |
+| `--reefpi-color-border` | `#10284d` |
+| `--reefpi-color-border-strong` | `#2a4a80` |
+
 ## When designing new pages
 
 - Start from the live app kit; clone a page file in `ui_kits/reef-pi-app/` and modify.

@@ -67,6 +67,18 @@ Before shipping a PR that touches tokens or components, verify each row is up to
 | `--reefpi-chart-yellow` | `#ffbb33` | Memory |
 | `--reefpi-chart-red` | `#ff4444` | CPU temperature |
 
+## Themes (E1 #2)
+
+Applied via `data-theme` on `<html>`. Light is the default (no attribute).
+
+| Theme | Scoping attribute | Preview card |
+|---|---|---|
+| Light | *(default — no attribute)* | [theme-switcher.html](theme-switcher.html) |
+| Dark | `data-theme="dark"` | [theme-switcher.html](theme-switcher.html) |
+| Actinic | `data-theme="actinic"` | [theme-switcher.html](theme-switcher.html) |
+
+Tokens overridden per theme: `--reefpi-color-surface`, `--reefpi-color-surface-elevated`, `--reefpi-color-surface-auth`, `--reefpi-color-text`, `--reefpi-color-text-muted`, `--reefpi-color-border`, `--reefpi-color-border-strong`. Dark also overrides `--reefpi-color-brand-alt`.
+
 ## Typography
 
 | Token | Value |

@@ -55,6 +55,29 @@
   --reefpi-color-band-critical:  #{$color-band-critical};
 }
 
+// Theme: dark (low-light general)
+[data-theme="dark"] {
+  --reefpi-color-surface:           #{$dark-surface};
+  --reefpi-color-surface-elevated:  #{$dark-surface-elevated};
+  --reefpi-color-surface-auth:      #{$dark-surface-auth};
+  --reefpi-color-text:              #{$dark-text};
+  --reefpi-color-text-muted:        #{$dark-text-muted};
+  --reefpi-color-border:            #{$dark-border};
+  --reefpi-color-border-strong:     #{$dark-border-strong};
+  --reefpi-color-brand-alt:         #{$dark-brand-alt};
+}
+
+// Theme: actinic (night / reef blue)
+[data-theme="actinic"] {
+  --reefpi-color-surface:           #{$actinic-surface};
+  --reefpi-color-surface-elevated:  #{$actinic-surface-elevated};
+  --reefpi-color-surface-auth:      #{$actinic-surface-auth};
+  --reefpi-color-text:              #{$actinic-text};
+  --reefpi-color-text-muted:        #{$actinic-text-muted};
+  --reefpi-color-border:            #{$actinic-border};
+  --reefpi-color-border-strong:     #{$actinic-border-strong};
+}
+
 .reef_pi_panel {
   border-style: none;
 }
