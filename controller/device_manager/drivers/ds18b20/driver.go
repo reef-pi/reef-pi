@@ -129,9 +129,9 @@ func newChannel(device string) hal.AnalogInputPin {
 	}
 }
 
-func (c *channel) Name() string  { return "temperature" }
-func (c *channel) Number() int   { return 0 }
-func (c *channel) Close() error  { return nil }
+func (c *channel) Name() string { return "temperature" }
+func (c *channel) Number() int  { return 0 }
+func (c *channel) Close() error { return nil }
 
 func (c *channel) Calibrate(points []hal.Measurement) error {
 	cal, err := hal.CalibratorFactory(points)

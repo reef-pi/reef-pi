@@ -54,7 +54,7 @@ func Factory() hal.DriverFactory {
 	return drv
 }
 
-func (f *factory) Metadata() hal.Metadata              { return f.meta }
+func (f *factory) Metadata() hal.Metadata               { return f.meta }
 func (f *factory) GetParameters() []hal.ConfigParameter { return f.parameters }
 
 func (f *factory) ValidateParameters(params map[string]interface{}) (bool, map[string][]string) {
