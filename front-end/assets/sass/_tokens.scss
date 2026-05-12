@@ -1,5 +1,20 @@
 @import './colors';
 
+// State tokens (E1 #1)
+$color-pending:        #4e5f4e;
+$color-pending-bg:     #eef3ec;
+$color-error:          #dc3545;
+$color-error-bg:       #fdecee;
+$color-error-border:   #f5c6cb;
+$color-warn:           #b77400;
+$color-warn-bg:        #fff8e6;
+$color-success-strong: #1e7e34;
+
+// Threshold bands (gauges, sparkline shading)
+$color-band-safe:      #d6e5d0;
+$color-band-warn:      #ffe6b0;
+$color-band-critical:  #f5c6cb;
+
 $surface-auth-color: #edf8e8;
 $text-strong-color: #2e2e2e;
 $border-subtle-color: #cccccc;

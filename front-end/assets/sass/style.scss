@@ -38,6 +38,21 @@
   --reefpi-radius-sm: #{$radius-sm};
   --reefpi-radius-md: #{$radius-md};
   --reefpi-tap-target-min: 2.75rem;
+
+  // State tokens (E1 #1)
+  --reefpi-color-pending:        #{$color-pending};
+  --reefpi-color-pending-bg:     #{$color-pending-bg};
+  --reefpi-color-error:          #{$color-error};
+  --reefpi-color-error-bg:       #{$color-error-bg};
+  --reefpi-color-error-border:   #{$color-error-border};
+  --reefpi-color-warn:           #{$color-warn};
+  --reefpi-color-warn-bg:        #{$color-warn-bg};
+  --reefpi-color-success-strong: #{$color-success-strong};
+
+  // Threshold bands (gauges, sparkline shading)
+  --reefpi-color-band-safe:      #{$color-band-safe};
+  --reefpi-color-band-warn:      #{$color-band-warn};
+  --reefpi-color-band-critical:  #{$color-band-critical};
 }
 
 .reef_pi_panel {
