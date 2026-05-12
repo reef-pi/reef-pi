@@ -67,6 +67,10 @@ Before shipping a PR that touches tokens or components, verify each row is up to
 | `--reefpi-chart-yellow` | `#ffbb33` | Memory |
 | `--reefpi-chart-red` | `#ff4444` | CPU temperature |
 
+## Card infrastructure
+
+All preview cards load `_card.css` (shared base styles + Questrial + token import) and `_card.js` (query-string theme handler). Open any card with `?theme=dark` or `?theme=actinic` to preview it in that theme.
+
 ## CI scripts
 
 | Script | Command | Output |

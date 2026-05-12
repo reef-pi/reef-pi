@@ -6,7 +6,7 @@
 - [x] #1 Extend `--reefpi-*` scale with state tokens — `issue-01-state-tokens.md`
 - [x] #2 Add dark + actinic theme tokens — `issue-02-theme-tokens.md`
 - [x] #3 Token contrast audit + automated test — `issue-03-contrast-audit.md`
-- [ ] #4 Migrate `preview/` cards to `var()`-only — `issue-04-preview-migrate.md`
+- [x] #4 Migrate `preview/` cards to `var()`-only — `issue-04-preview-migrate.md`
 
 ## E2 · Monitoring primitives
 - [ ] #5 ThresholdGauge component — `issue-05-threshold-gauge.md`
