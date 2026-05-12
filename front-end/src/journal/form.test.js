@@ -17,14 +17,24 @@ describe('<JournalForm />', () => {
     expect(JournalForm).toBeDefined()
   })
 
-  it('maps defaults and submits', () => {
-    const onSubmit = jest.fn()
-
+  it('maps defaults when no journal data is supplied', () => {
     expect(mapJournalPropsToValues({})).toEqual({
       name: '',
       description: '',
       unit: ''
     })
+  })
+
+  it('fills missing journal data fields with empty strings', () => {
+    expect(mapJournalPropsToValues({ data: { name: 'Alkalinity' } })).toEqual({
+      name: 'Alkalinity',
+      description: '',
+      unit: ''
+    })
+  })
+
+  it('submits values to the caller', () => {
+    const onSubmit = jest.fn()
 
     submitJournalForm({ name: 'alk' }, { onSubmit })
     expect(onSubmit).toHaveBeenCalledWith({ name: 'alk' })
