@@ -24,6 +24,7 @@ $dark-text-muted:        #9aa89a;
 $dark-border:            #2a3329;
 $dark-border-strong:     #4a5949;
 $dark-brand-alt:         #2cc127;
+$dark-pending:           #9aaf9a; // lighter for ≥3:1 on dark surfaces
 
 // Actinic theme overrides (E1 #2)
 $actinic-surface:          #05101f;
@@ -33,13 +34,14 @@ $actinic-text:             #cfe3ff;
 $actinic-text-muted:       #7a90b5;
 $actinic-border:           #10284d;
 $actinic-border-strong:    #2a4a80;
+$actinic-pending:          #9aaf9a; // lighter for ≥3:1 on actinic surfaces
 
 $surface-auth-color: #edf8e8;
 $text-strong-color: #2e2e2e;
 $border-subtle-color: #cccccc;
 $border-strong-color: #000000;
 $shadow-color: rgba(31, 42, 31, 0.14);
-$nav-text-color: rgba(255, 255, 255, 0.84);
+$nav-text-color: rgba(255, 255, 255, 0.97); // ≥3:1 on #27a822
 $nav-text-muted-color: rgba(255, 255, 255, 0.82);
 $nav-overlay-color: rgba(255, 255, 255, 0.12);
 $nav-border-color: rgba(255, 255, 255, 0.4);
