@@ -1,0 +1,145 @@
+/* ============================================================
+   reef-pi Design System — Colors & Type
+   Source: front-end/assets/sass/_colors.scss + _tokens.scss + style.scss
+   ============================================================ */
+
+:root {
+  /* ---------- Brand ---------- */
+  --reefpi-color-brand:        #27a822;  /* main green            */
+  --reefpi-color-brand-dark:   #267723;  /* hover / pressed       */
+  --reefpi-color-brand-alt:    #1c7e19;  /* deep green accent     */
+  --reefpi-color-focus:        #174d16;  /* a11y focus ring       */
+
+  /* ---------- Surfaces ---------- */
+  --reefpi-color-surface:           #f5faf3; /* page bg (mint tint) */
+  --reefpi-color-surface-elevated:  #ffffff; /* cards, list items   */
+  --reefpi-color-surface-auth:      #edf8e8; /* sign-in page bg     */
+
+  /* ---------- Borders ---------- */
+  --reefpi-color-border:         #d6e5d0;
+  --reefpi-color-border-subtle:  #cccccc;
+  --reefpi-color-border-strong:  #000000;
+
+  /* ---------- Text ---------- */
+  --reefpi-color-text:         #1f2a1f;
+  --reefpi-color-text-muted:   #4e5f4e;
+  --reefpi-color-text-strong:  #2e2e2e;
+
+  /* ---------- Shadow ---------- */
+  --reefpi-color-shadow: rgba(31, 42, 31, 0.14);
+
+  /* ---------- Navbar (on brand gradient) ---------- */
+  --reefpi-color-nav-text:         rgba(255, 255, 255, 0.84);
+  --reefpi-color-nav-text-muted:   rgba(255, 255, 255, 0.82);
+  --reefpi-color-nav-text-strong:  #ffffff;
+  --reefpi-color-nav-overlay:      rgba(255, 255, 255, 0.12);
+  --reefpi-color-nav-border:       rgba(255, 255, 255, 0.40);
+
+  /* ---------- Semantic (Bootstrap 4.6 defaults reef-pi inherits) ---------- */
+  --reefpi-color-success: #28a745;
+  --reefpi-color-danger:  #dc3545;
+  --reefpi-color-warning: #ffc107;
+  --reefpi-color-info:    #17a2b8;
+  --reefpi-color-light:   #f8f9fa;
+  --reefpi-color-dark:    #343a40;
+
+  /* ---------- State tokens (E1 #1) ----------
+     First-class state tokens so components stop reaching for raw Bootstrap
+     hex values. Designed to pass WCAG AA on the default surface. */
+  --reefpi-color-pending:        #4e5f4e;  /* spinner ring, in-flight ink   */
+  --reefpi-color-pending-bg:     #eef3ec;  /* pending fill / pulse halo     */
+  --reefpi-color-error:          #dc3545;
+  --reefpi-color-error-bg:       #fdecee;
+  --reefpi-color-error-border:   #f5c6cb;
+  --reefpi-color-warn:           #b77400;  /* AA on #fff, unlike BS #ffc107 */
+  --reefpi-color-warn-bg:        #fff8e6;
+  --reefpi-color-success-strong: #1e7e34;  /* button hover/active           */
+
+  /* ---------- Threshold bands (gauges, sparkline shading) ---------- */
+  --reefpi-color-band-safe:      #d6e5d0;
+  --reefpi-color-band-warn:      #ffe6b0;
+  --reefpi-color-band-critical:  #f5c6cb;
+
+  /* ---------- Chart palette (from health_chart.jsx) ---------- */
+  --reefpi-chart-green:  #00c851; /* cpu            */
+  --reefpi-chart-yellow: #ffbb33; /* memory         */
+  --reefpi-chart-red:    #ff4444; /* cpu temp       */
+
+  /* ---------- Brand gradient (navbar) ---------- */
+  --reefpi-gradient-brand:
+    linear-gradient(180deg, #27a822 0%, #1c7e19 100%);
+
+  /* ---------- Spacing scale ---------- */
+  --reefpi-space-xxs: 0.3125rem; /*  5px */
+  --reefpi-space-xs:  0.625rem;  /* 10px */
+  --reefpi-space-sm:  0.75rem;   /* 12px */
+  --reefpi-space-md:  1rem;      /* 16px */
+  --reefpi-space-lg:  1.25rem;   /* 20px */
+
+  /* ---------- Radii ---------- */
+  --reefpi-radius-sm: 0.375rem;  /*  6px - nav links, buttons */
+  --reefpi-radius-md: 0.625rem;  /* 10px - grid cells, cards  */
+
+  /* ---------- Shadow ---------- */
+  --reefpi-shadow-navbar: 0 2px 8px var(--reefpi-color-shadow);
+
+  /* ---------- Layout ---------- */
+  --reefpi-shell-gutter:  0.75rem; /* 1rem on ≥768px */
+  --reefpi-panel-gap:     1rem;
+  --reefpi-tap-target-min: 2.75rem; /* 44px — min touch target */
+
+  /* ---------- Type ---------- */
+  --reefpi-font-app:  'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
+  --reefpi-font-web:  'Source Sans Pro', 'Century Gothic', sans-serif;
+  --reefpi-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Bootstrap 4.6 type scale used by reef-pi */
+  --reefpi-font-size-base: 1rem;      /* 16px */
+  --reefpi-line-height:    1.5;
+  --reefpi-h1: 2.5rem;   /* 40 */
+  --reefpi-h2: 2rem;     /* 32 */
+  --reefpi-h3: 1.75rem;  /* 28 — sign-in title */
+  --reefpi-h4: 1.5rem;   /* 24 */
+  --reefpi-h5: 1.25rem;  /* 20 */
+  --reefpi-h6: 1rem;     /* 16 */
+  --reefpi-small: 0.875rem;
+
+  --reefpi-weight-normal: 400;
+  --reefpi-weight-bold:   700;
+}
+
+/* ---------- Semantic element styles ---------- */
+html, body {
+  font-family: var(--reefpi-font-app);
+  font-size: var(--reefpi-font-size-base);
+  line-height: var(--reefpi-line-height);
+  color: var(--reefpi-color-text);
+  background-color: var(--reefpi-color-surface);
+}
+
+h1, .h1 { font-size: var(--reefpi-h1); font-weight: 500; }
+h2, .h2 { font-size: var(--reefpi-h2); font-weight: 500; }
+h3, .h3 { font-size: var(--reefpi-h3); font-weight: 500; }
+h4, .h4 { font-size: var(--reefpi-h4); font-weight: 500; }
+h5, .h5 { font-size: var(--reefpi-h5); font-weight: 500; }
+h6, .h6 { font-size: var(--reefpi-h6); font-weight: 500; }
+
+small { font-size: var(--reefpi-small); }
+
+.text-muted { color: var(--reefpi-color-text-muted) !important; }
+
+code, pre, kbd, samp {
+  font-family: var(--reefpi-font-mono);
+}
+
+a {
+  color: var(--reefpi-color-brand-alt);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+:focus-visible {
+  outline: 2px solid var(--reefpi-color-focus);
+  outline-offset: 2px;
+  box-shadow: none;
+}
