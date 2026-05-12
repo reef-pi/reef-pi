@@ -201,9 +201,9 @@ const Channel = (props) => {
       <div className='row align-items-start'>
         <div className='col-sm-6 col-md-4 col-xl-2'>
           <div className='form-group'>
-            <label className='w-100'>
+            <label className='d-flex justify-content-between align-items-center gap-2 w-100'>
               {i18next.t('lighting:channel_name')}
-              <small className='float-end badge text-bg-info mt-1'>(pin {props.channel.pin})</small>
+              <small className='badge text-bg-info'>(pin {props.channel.pin})</small>
             </label>
             <Field
               name={NameFor(props.name, 'name')}

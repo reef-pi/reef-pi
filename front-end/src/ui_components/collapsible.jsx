@@ -59,11 +59,11 @@ class Collapsible extends React.Component {
           })}
         >
           <div
-            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first d-flex align-items-center flex-wrap gap-2', {
+            className={classNames('collapsible-title col-12 col-sm-6 col-md-8 col-lg-9 order-sm-first d-flex align-items-center flex-wrap', {
               pointer: readOnly
             })} onClick={() => onToggle(name)}
           >
-            {expanded ? FaAngleUp() : FaAngleDown()}
+            <span className='me-2'>{expanded ? FaAngleUp() : FaAngleDown()}</span>
             {this.props.title}
           </div>
           <div className='col-12 col-sm-6 col-md-4 col-lg-3 order-sm-2 order-md-last'>
