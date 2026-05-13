@@ -276,6 +276,120 @@ describe('Temperature controller ui', () => {
     expect(component.state.showCalibrate).toBe(true)
   })
 
+  it('<Main /> calibrate button uses first calibration point as default', () => {
+    const component = new RawTemperatureMain({
+      probes: tcState.tcs,
+      currentReading: { 1: 77 },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+    component.setState = update => { component.state = { ...component.state, ...(typeof update === 'function' ? update(component.state) : update) } }
+    component.calibrateProbe({}, { id: '1', calibration_points: [{ expected: 76.5 }] })
+    expect(component.state.defaultCalibrationPoint).toBe(76.5)
+  })
+
+  it('<Main /> dismisses and submits calibration modal state', () => {
+    const calibrateSensor = jest.fn()
+    const component = new RawTemperatureMain({
+      probes: tcState.tcs,
+      currentReading: { 1: 77.4 },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      calibrateSensor
+    })
+    component.setState = update => { component.state = { ...component.state, ...(typeof update === 'function' ? update(component.state) : update) } }
+    component.setState({ currentProbe: tcState.tcs[0], showCalibrate: true })
+    component.dismissModal()
+    expect(component.state).toMatchObject({ currentProbe: null, showCalibrate: false })
+
+    component.handleCalibrate(tcState.tcs[0], 76)
+    expect(calibrateSensor).toHaveBeenCalledWith('1', [{ expected: 76, observed: 77.4 }])
+    expect(component.state).toMatchObject({ currentProbe: null, showCalibrate: false })
+  })
+
+  it('<Main /> update and create handlers normalize probe payloads', () => {
+    const update = jest.fn()
+    const create = jest.fn()
+    const component = new RawTemperatureMain({
+      probes: [],
+      currentReading: [],
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create,
+      delete: jest.fn(),
+      update,
+      readTC: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+    component.setState = update => { component.state = { ...component.state, ...(typeof update === 'function' ? update(component.state) : update) } }
+    const values = {
+      id: '1',
+      name: 'Water',
+      enable: true,
+      control: 'equipment',
+      one_shot: false,
+      fail_safe: true,
+      heater: 'heater',
+      cooler: 'cooler',
+      min: '76.1',
+      max: '80.2',
+      hysteresis: '0.3',
+      sensor: 'sensor',
+      analog_input: '',
+      period: '30',
+      fahrenheit: true,
+      alerts: true,
+      minAlert: '75',
+      maxAlert: '82',
+      chart: { color: '#f00', ymin: '70', ymax: '90' }
+    }
+
+    component.handleUpdate(values)
+    expect(update).toHaveBeenCalledWith('1', expect.objectContaining({
+      name: 'Water',
+      control: true,
+      is_macro: false,
+      min: 76.1,
+      max: 80.2,
+      hysteresis: 0.3,
+      period: 30,
+      notify: { enable: true, min: 75, max: 82 },
+      chart: { color: '#f00', ymin: 70, ymax: 90 }
+    }))
+
+    component.handleToggleAddProbeDiv()
+    component.handleCreate({ ...values, id: undefined, control: 'macro' })
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ control: true, is_macro: true }))
+    expect(component.state.addProbe).toBe(false)
+  })
+
   it('<Main />', () => {
     const component = new RawTemperatureMain({
       probes: state.tcs,
