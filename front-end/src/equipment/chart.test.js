@@ -54,6 +54,21 @@ describe('Equipment Chart', () => {
     expect(tooltip.props.content.type.name).toBe('CustomToolTip')
   })
 
+  it('renders tooltip states for missing, on, and off payloads', () => {
+    const chart = new RawEquipmentChart({
+      equipment,
+      height: 180,
+      fetchEquipment: jest.fn()
+    })
+    const tooltipElement = chart.render().props.children[1].props.children.props.children[3].props.content
+    const TooltipContent = tooltipElement.type
+
+    expect(new TooltipContent({}).render().type).toBe('span')
+    expect(new TooltipContent({ payload: [] }).render().type).toBe('span')
+    expect(new TooltipContent({ payload: [{ dataKey: 'onstate' }] }).render().props.children).toBe('on')
+    expect(new TooltipContent({ payload: [{ dataKey: 'offstate' }] }).render().props.children).toBe('off')
+  })
+
   it('polls equipment on mount and clears the timer on unmount', () => {
     jest.useFakeTimers()
     const fetchEquipment = jest.fn()
