@@ -2,7 +2,8 @@ import React from 'react'
 import DiurnalChart from './diurnal'
 import FixedChart from './fixed'
 import IntervalChart from './interval'
-import { RawGenericLightChart } from './generic'
+import GenericLightChart, { RawGenericLightChart } from './generic'
+import { RawLightingChart } from '../chart'
 import { LineChart } from 'recharts'
 import 'isomorphic-fetch'
 
@@ -25,6 +26,87 @@ const collectElements = (node, predicate, matches = []) => {
   React.Children.forEach(node.props.children, child => collectElements(child, predicate, matches))
   return matches
 }
+
+describe('RawLightingChart', () => {
+  const lightingConfig = profileType => ({
+    id: '1',
+    name: 'Main Reef',
+    channels: {
+      1: {
+        ...baseChannel,
+        profile: { type: profileType, config: {} }
+      }
+    }
+  })
+
+  it('renders loading span when config is undefined', () => {
+    const tree = new RawLightingChart({ config: undefined, width: 300, height: 200 }).render()
+    expect(tree.type).toBe('span')
+  })
+
+  it('renders unsupported message for multi-channel configs', () => {
+    const config = lightingConfig('interval')
+    config.channels[2] = {
+      name: 'White LED',
+      color: '#ffffff',
+      min: 0,
+      max: 100,
+      profile: { type: 'fixed', config: {} }
+    }
+
+    const tree = new RawLightingChart({ config, width: 300, height: 200 }).render()
+    expect(tree.type).toBe('span')
+    expect(tree.props.children).toBe(' multi channel light charts are not supported')
+  })
+
+  it('routes interval profiles to IntervalChart', () => {
+    const config = lightingConfig('interval')
+    const tree = new RawLightingChart({ config, width: 300, height: 200 }).render()
+
+    expect(tree.type).toBe(IntervalChart)
+    expect(tree.props).toEqual({
+      channel: config.channels[1],
+      width: 300,
+      height: 200
+    })
+  })
+
+  it('routes fixed profiles to FixedChart', () => {
+    const config = lightingConfig('fixed')
+    const tree = new RawLightingChart({ config, width: 300, height: 200 }).render()
+
+    expect(tree.type).toBe(FixedChart)
+    expect(tree.props).toEqual({
+      channel: config.channels[1],
+      width: 300,
+      height: 200
+    })
+  })
+
+  it('routes diurnal profiles to DiurnalChart', () => {
+    const config = lightingConfig('diurnal')
+    const tree = new RawLightingChart({ config, width: 300, height: 200 }).render()
+
+    expect(tree.type).toBe(DiurnalChart)
+    expect(tree.props).toEqual({
+      channel: config.channels[1],
+      width: 300,
+      height: 200
+    })
+  })
+
+  it('routes unknown profiles to GenericLightChart', () => {
+    const config = lightingConfig('manual')
+    const tree = new RawLightingChart({ config, width: 300, height: 200 }).render()
+
+    expect(tree.type).toBe(GenericLightChart)
+    expect(tree.props).toEqual({
+      light: config,
+      width: 300,
+      height: 200
+    })
+  })
+})
 
 describe('DiurnalChart', () => {
   it('renders loading span when channel is undefined', () => {
