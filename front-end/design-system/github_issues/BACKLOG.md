@@ -24,7 +24,7 @@
 
 ## E4 · Control trust (flags: `pending_states`, `alert_center`)
 - [x] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
-- [ ] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
+- [x] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
 - [ ] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
 - [ ] #18 Inline tile alerts — `issue-18-inline-alerts.md`
 - [ ] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
