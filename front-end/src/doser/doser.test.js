@@ -123,6 +123,77 @@ describe('Doser ui', () => {
     })
   })
 
+  it('<DoserForm /> maps complete edit values', () => {
+    const doser = {
+      id: '2',
+      name: 'alk doser',
+      jack: 'jack-1',
+      pin: 0,
+      type: 'stepper',
+      stepper: { steps_per_ml: 20 },
+      regiment: {
+        enable: false,
+        continuous: true,
+        soft_start: 2,
+        duration: 30,
+        volume: 15,
+        speed: 80,
+        volume_per_second: 0.5,
+        schedule: {
+          month: '1',
+          week: '2',
+          day: '3',
+          hour: '4',
+          minute: '5',
+          second: '6'
+        }
+      }
+    }
+
+    expect(mapDoserPropsToValues({ doser })).toEqual({
+      id: '2',
+      name: 'alk doser',
+      jack: 'jack-1',
+      pin: 0,
+      enable: false,
+      continuous: true,
+      soft_start: 2,
+      duration: 30,
+      volume: 15,
+      speed: 80,
+      volume_per_second: 0.5,
+      month: '1',
+      week: '2',
+      day: '3',
+      hour: '4',
+      minute: '5',
+      second: '6',
+      type: 'stepper',
+      stepper: { steps_per_ml: 20 }
+    })
+  })
+
+  it('<DoserForm /> falls back missing schedule fields', () => {
+    expect(mapDoserPropsToValues({
+      doser: {
+        name: 'partial doser',
+        regiment: {
+          enable: undefined,
+          schedule: {}
+        }
+      }
+    })).toMatchObject({
+      name: 'partial doser',
+      enable: true,
+      month: '*',
+      week: '*',
+      day: '*',
+      hour: '0',
+      minute: '0',
+      second: '0'
+    })
+  })
+
   const makeDoser = (overrides = {}) => ({
     id: '1',
     name: 'doser',
