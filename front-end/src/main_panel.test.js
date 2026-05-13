@@ -57,6 +57,34 @@ describe('MainPanel', () => {
     expect(countByType(panel.render(), node => node.type === 'nav')).toBeGreaterThan(0)
   })
 
+  it('renders shell chrome, summary, and route container with supplied state', () => {
+    const panel = new RawMainPanel({
+      info: { name: 'reef-pi-test' },
+      errors: [{ id: '1', message: 'boom' }],
+      capabilities: {
+        dashboard: true,
+        equipment: true,
+        configuration: true,
+        dev_mode: true
+      },
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+    const rendered = panel.render()
+    const smokeRoot = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-shell-root')[0]
+    const brand = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-brand')[0]
+    const nav = findAll(rendered, node => node.props?.['data-testid'] === 'smoke-nav')[0]
+    const summary = findAll(rendered, node => node.type?.name === 'Summary')[0]
+
+    expect(smokeRoot.props.id).toBe('content')
+    expect(brand.props.children).toBe('reef-pi-test')
+    expect(nav.props.id).toBe('navbarNav')
+    expect(summary.props.info.name).toBe('reef-pi-test')
+    expect(summary.props.errors).toHaveLength(1)
+    expect(summary.props.devMode).toBe(true)
+    expect(countByType(rendered, node => node.type?.name === 'Routes')).toBe(1)
+  })
+
   it('keeps route metadata order and paths stable', () => {
     expect(mainPanelRoutes.map(route => [route.key, route.path])).toEqual([
       ['dashboard', ''],
