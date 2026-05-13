@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — TemperatureTile</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size:.875rem; color:var(--reefpi-color-text-muted); margin-bottom:2rem; }
+
+    .flag-banner {
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-size:.7rem; font-family:var(--reefpi-font-mono);
+      color:var(--reefpi-color-text-muted);
+      background:var(--reefpi-color-surface-elevated);
+      border:1px solid var(--reefpi-color-border);
+      border-radius:var(--reefpi-radius-sm);
+      padding:2px 8px; margin-bottom:1.5rem;
+    }
+
+    /* ── Tile shell ────────────────────────────── */
+    .temp-tile {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+      overflow: hidden;
+      font-family: var(--reefpi-font-app);
+    }
+
+    @media (max-width: 600px) { .temp-tile { min-height: 260px; } }
+
+    .tile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      flex-shrink: 0;
+    }
+
+    .tile-header-label {
+      font-size:.75rem; font-weight:500; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--reefpi-color-text-muted);
+    }
+
+    .tile-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: .75rem;
+      min-height: 0;
+    }
+
+    /* ── Gauge track ───────────────────────────── */
+    .gauge-wrap { position:relative; height:14px; border-radius:7px; overflow:visible; background:var(--reefpi-color-surface-elevated); border:1px solid var(--reefpi-color-border); }
+    .gauge-zones { position:absolute; inset:0; border-radius:7px; overflow:hidden; display:flex; }
+    .zone { height:100%; flex-shrink:0; }
+    .zone-safe     { background:var(--reefpi-color-band-safe); }
+    .zone-warn     { background:var(--reefpi-color-band-warn); }
+    .zone-critical { background:var(--reefpi-color-band-critical); }
+    .gauge-needle { position:absolute; top:50%; transform:translate(-50%,-50%); width:2px; height:20px; border-radius:1px; z-index:1; }
+    .gauge-indicator { position:absolute; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; background:var(--reefpi-color-surface-elevated); border:2px solid var(--reefpi-color-text-strong); z-index:2; }
+    .gauge-minmax { display:flex; justify-content:space-between; margin-top:4px; font-size:.65rem; color:var(--reefpi-color-text-muted); font-family:var(--reefpi-font-mono); }
+
+    /* ── Readout ───────────────────────────────── */
+    .readout-row { display:flex; align-items:baseline; gap:.5rem; }
+    .readout-value { font-size:3rem; font-weight:500; line-height:1; color:var(--reefpi-color-text); font-variant-numeric:tabular-nums; }
+    .readout-unit  { font-size:1rem; color:var(--reefpi-color-text-muted); }
+    .readout-delta { font-size:.8rem; font-variant-numeric:tabular-nums; }
+    .delta-up   { color:var(--reefpi-color-warn); }
+    .delta-down { color:var(--reefpi-color-brand); }
+    .scrub-hint { font-size:.8rem; color:var(--reefpi-color-text-muted); }
+
+    /* ── Sparkline ─────────────────────────────── */
+    .spark-wrap { flex:1 1 auto; min-height:80px; position:relative; }
+    svg.spark { display:block; width:100%; overflow:visible; cursor:crosshair; }
+    svg.spark:focus { outline:2px solid var(--reefpi-color-focus); outline-offset:2px; border-radius:4px; }
+    .spark-tooltip {
+      position:absolute; display:none;
+      background:var(--reefpi-color-surface-elevated); border:1px solid var(--reefpi-color-border);
+      border-radius:var(--reefpi-radius-sm); font-family:var(--reefpi-font-mono);
+      font-size:.65rem; color:var(--reefpi-color-text);
+      padding:3px 7px; pointer-events:none; white-space:nowrap; z-index:10;
+    }
+
+    /* ── Skeleton ──────────────────────────────── */
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skel {
+      border-radius:var(--reefpi-radius-sm);
+      background:linear-gradient(90deg,var(--reefpi-color-surface) 25%,var(--reefpi-color-border) 50%,var(--reefpi-color-surface) 75%);
+      background-size:200% 100%;
+      animation:shimmer 1.4s infinite;
+    }
+
+    /* ── Error state ───────────────────────────── */
+    .error-state { flex:1 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; }
+    .error-banner { padding:.5rem .75rem; background:var(--reefpi-color-error-bg); border:1px solid var(--reefpi-color-error-border); border-radius:var(--reefpi-radius-sm); color:var(--reefpi-color-error); font-size:.8rem; }
+
+    /* ── RangeSelector ─────────────────────────── */
+    .rs { display:inline-flex; border:1px solid var(--reefpi-color-border); border-radius:var(--reefpi-radius-sm); overflow:hidden; background:var(--reefpi-color-surface-elevated); }
+    .rs-sep { width:1px; background:var(--reefpi-color-border); flex-shrink:0; }
+    .rs-btn { display:inline-flex; align-items:center; justify-content:center; min-width:32px; min-height:28px; padding:0 .4rem; cursor:pointer; font-size:.7rem; font-family:var(--reefpi-font-app); background:transparent; color:var(--reefpi-color-text); border:none; transition:background-color .12s; }
+    .rs-btn.active { background:var(--reefpi-color-brand); color:var(--reefpi-color-nav-text-strong); font-weight:500; }
+    .rs-btn:focus-visible { outline:2px solid var(--reefpi-color-focus); outline-offset:-2px; z-index:1; }
+
+    .story-caption { font-size:.7rem; color:var(--reefpi-color-text-muted); margin-top:.75rem; font-family:var(--reefpi-font-mono); }
+  </style>
+</head>
+<body>
+  <h1>TemperatureTile (Hero)</h1>
+  <p class="subtitle">2-col hero tile: ThresholdGauge + 48px readout + gradient Sparkline with scrub. <code>col-md-8</code>, min 320px.</p>
+  <div class="flag-banner">flag: dashboard_v2 (default off)</div>
+
+  <!-- Story 1: Loaded + hover scrub -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Loaded — hover sparkline to scrub readout</div>
+    <div class="card-body" style="padding:0;">
+      <div class="temp-tile" id="tile-loaded">
+        <div class="tile-header">
+          <span class="tile-header-label">Temperature</span>
+          <fieldset class="rs" id="rs-main" aria-label="Time range">
+            <legend style="position:absolute;width:1px;height:1px;overflow:hidden">Time range</legend>
+          </fieldset>
+        </div>
+        <div class="tile-body">
+          <!-- gauge -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+              <span id="gauge-val-label" style="font-size:.875rem;font-weight:500;color:var(--reefpi-color-text)">78.4°F</span>
+              <span style="font-size:.75rem;color:var(--reefpi-color-text-muted)">Display Tank</span>
+            </div>
+            <div class="gauge-wrap">
+              <div class="gauge-zones">
+                <div class="zone zone-critical" style="width:25%"></div>
+                <div class="zone zone-warn"     style="width:12.5%"></div>
+                <div class="zone zone-safe"     style="width:25%"></div>
+                <div class="zone zone-warn"     style="width:12.5%"></div>
+                <div class="zone zone-critical" style="width:25%"></div>
+              </div>
+              <div class="gauge-needle" id="gauge-needle" style="left:52.5%;background:var(--reefpi-color-text-strong)"></div>
+              <div class="gauge-indicator" id="gauge-indicator" style="left:52.5%"></div>
+            </div>
+            <div class="gauge-minmax"><span>70°F</span><span>86°F</span></div>
+          </div>
+          <!-- readout -->
+          <div class="readout-row">
+            <span class="readout-value" id="readout-value">78.4</span>
+            <span class="readout-unit">°F</span>
+            <span class="readout-delta delta-up" id="readout-delta">+0.6 vs 1h ago</span>
+            <span class="scrub-hint" id="scrub-hint" style="display:none">scrubbing history</span>
+          </div>
+          <!-- sparkline -->
+          <div class="spark-wrap">
+            <svg class="spark" id="spark-main" height="120" viewBox="0 0 400 120"
+              preserveAspectRatio="none" role="img" aria-label="Temperature last 24 hours" tabindex="0"></svg>
+            <div class="spark-tooltip" id="spark-tooltip"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 2: Loading skeleton -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Loading skeleton</div>
+    <div class="card-body" style="padding:0;">
+      <div class="temp-tile">
+        <div class="tile-header">
+          <span class="tile-header-label">Temperature</span>
+        </div>
+        <div class="tile-body">
+          <div class="skel" style="height:14px;"></div>
+          <div class="skel" style="height:3rem;width:45%;"></div>
+          <div class="skel" style="flex:1 1 auto;min-height:80px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 3: Error -->
+  <div class="card">
+    <div class="card-header">Error state</div>
+    <div class="card-body" style="padding:0;">
+      <div class="temp-tile">
+        <div class="tile-header">
+          <span class="tile-header-label">Temperature</span>
+        </div>
+        <div class="tile-body">
+          <div class="error-state">
+            <div class="error-banner">HTTP 503 — telemetry unavailable</div>
+            <button style="background:none;border:1px solid var(--reefpi-color-border-strong);border-radius:var(--reefpi-radius-sm);color:var(--reefpi-color-text);font-size:.8rem;padding:0 1rem;min-height:44px;cursor:pointer;font-family:var(--reefpi-font-app);">
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    // ── Fixture data ──────────────────────────────────────────────────────────
+    var POINTS = (function () {
+      var pts = []
+      for (var i = 0; i < 120; i++) {
+        pts.push({ t: i, v: 78.2 + Math.sin(i / 120 * Math.PI * 4) * 0.9 + Math.random() * 0.15 })
+      }
+      return pts
+    }())
+
+    var SAFE = [76, 80], CRIT = [70, 86]
+    var W = 400, H = 120, PAD_Y = 4
+
+    function project(pts, w, h) {
+      var vs = pts.map(function(p){ return p.v })
+      var minV = Math.min.apply(null,vs), maxV = Math.max.apply(null,vs)
+      var rangeV = maxV - minV || 1
+      return pts.map(function(p,i){
+        return { t:p.t, v:p.v, x:(i/(pts.length-1))*w, y:PAD_Y+(1-(p.v-minV)/rangeV)*(h-PAD_Y*2) }
+      })
+    }
+
+    function tok(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim() }
+    function svgNS(t){ return document.createElementNS('http://www.w3.org/2000/svg',t) }
+
+    // ── Build sparkline ───────────────────────────────────────────────────────
+    var svg = document.getElementById('spark-main')
+    var proj = project(POINTS, W, H)
+    var stroke = tok('--reefpi-color-brand')
+
+    // Band
+    var vs = POINTS.map(function(p){return p.v})
+    var minV = Math.min.apply(null,vs), maxV = Math.max.apply(null,vs), rangeV = maxV-minV||1
+    var bTop = PAD_Y+(1-(SAFE[1]-minV)/rangeV)*(H-PAD_Y*2)
+    var bBot = PAD_Y+(1-(SAFE[0]-minV)/rangeV)*(H-PAD_Y*2)
+    var band = svgNS('rect')
+    band.setAttribute('x',0); band.setAttribute('y',Math.max(PAD_Y,bTop))
+    band.setAttribute('width',W); band.setAttribute('height',Math.max(0,bBot-bTop))
+    band.setAttribute('fill',tok('--reefpi-color-band-safe')); band.setAttribute('opacity','0.5')
+    svg.appendChild(band)
+
+    // Gradient fill
+    var defs = svgNS('defs')
+    var grad = svgNS('linearGradient'); grad.setAttribute('id','tg')
+    grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1')
+    var s0=svgNS('stop');s0.setAttribute('offset','0%');s0.setAttribute('stop-color',stroke);s0.setAttribute('stop-opacity','0.4')
+    var s1=svgNS('stop');s1.setAttribute('offset','100%');s1.setAttribute('stop-color',stroke);s1.setAttribute('stop-opacity','0')
+    grad.appendChild(s0);grad.appendChild(s1);defs.appendChild(grad);svg.appendChild(defs)
+    var last=proj[proj.length-1],first=proj[0]
+    var areaD='M '+proj.map(function(p){return p.x+' '+p.y}).join(' L ')+' L '+last.x+' '+H+' L '+first.x+' '+H+' Z'
+    var area=svgNS('path');area.setAttribute('d',areaD);area.setAttribute('fill','url(#tg)');svg.appendChild(area)
+
+    // Line
+    var line=svgNS('polyline')
+    line.setAttribute('points',proj.map(function(p){return p.x+','+p.y}).join(' '))
+    line.setAttribute('fill','none');line.setAttribute('stroke',stroke);line.setAttribute('stroke-width','1.5')
+    line.setAttribute('stroke-linejoin','round');line.setAttribute('stroke-linecap','round')
+    svg.appendChild(line)
+
+    // Crosshair + dot
+    var xhair=svgNS('line');xhair.setAttribute('stroke',tok('--reefpi-color-text-muted'));xhair.setAttribute('stroke-width','1');xhair.setAttribute('stroke-dasharray','3 3');xhair.style.display='none';svg.appendChild(xhair)
+    var dot=svgNS('circle');dot.setAttribute('r','4');dot.setAttribute('fill',tok('--reefpi-color-surface-elevated'));dot.setAttribute('stroke',stroke);dot.setAttribute('stroke-width','2');dot.style.display='none';svg.appendChild(dot)
+
+    // ── Gauge indicator helpers ───────────────────────────────────────────────
+    function pct(v){ return ((v-CRIT[0])/(CRIT[1]-CRIT[0])*100).toFixed(2)+'%' }
+
+    function updateReadout(v) {
+      var valLabel = document.getElementById('gauge-val-label')
+      var readout  = document.getElementById('readout-value')
+      var needle   = document.getElementById('gauge-needle')
+      var indicator= document.getElementById('gauge-indicator')
+      var p = pct(Math.min(Math.max(v, CRIT[0]), CRIT[1]))
+      valLabel.textContent = v.toFixed(1)+'°F'
+      readout.textContent  = v.toFixed(1)
+      needle.style.left = p; indicator.style.left = p
+    }
+
+    // ── Hover scrub ───────────────────────────────────────────────────────────
+    var tooltip = document.getElementById('spark-tooltip')
+    var scrubHint = document.getElementById('scrub-hint')
+    var deltaEl   = document.getElementById('readout-delta')
+
+    function showAt(idx) {
+      var p = proj[idx]
+      xhair.setAttribute('x1',p.x);xhair.setAttribute('y1',0);xhair.setAttribute('x2',p.x);xhair.setAttribute('y2',H)
+      xhair.style.display='';dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.style.display=''
+      tooltip.textContent='i='+POINTS[idx].t+': '+POINTS[idx].v.toFixed(2)+'°F'
+      tooltip.style.display='block'
+      var rect=svg.getBoundingClientRect(), scaleX=rect.width/W
+      var px=p.x*scaleX
+      tooltip.style.left=(px+tooltip.offsetWidth+12>rect.width ? px-tooltip.offsetWidth-8 : px+8)+'px'
+      tooltip.style.top=Math.max(0,p.y*(rect.height/H)-11)+'px'
+      updateReadout(POINTS[idx].v)
+      scrubHint.style.display=''; deltaEl.style.display='none'
+    }
+
+    function hideHover() {
+      xhair.style.display='none';dot.style.display='none';tooltip.style.display='none'
+      scrubHint.style.display='none';deltaEl.style.display=''
+      updateReadout(POINTS[POINTS.length-1].v)
+    }
+
+    svg.addEventListener('pointermove', function(e){
+      var rect=svg.getBoundingClientRect(), mx=(e.clientX-rect.left)/rect.width*W
+      var best=0,bestD=Infinity
+      proj.forEach(function(p,i){var d=Math.abs(p.x-mx);if(d<bestD){bestD=d;best=i}})
+      showAt(best)
+    })
+    svg.addEventListener('pointerleave', hideHover)
+    svg.addEventListener('keydown', function(e){
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key)) return
+      e.preventDefault()
+      var cur = parseInt(svg.dataset.kbIdx||POINTS.length-1)
+      if(e.key==='ArrowRight') cur=Math.min(cur+1,POINTS.length-1)
+      else if(e.key==='ArrowLeft') cur=Math.max(cur-1,0)
+      else if(e.key==='Home') cur=0
+      else cur=POINTS.length-1
+      svg.dataset.kbIdx=cur; showAt(cur)
+    })
+    svg.addEventListener('blur', hideHover)
+
+    // ── RangeSelector ─────────────────────────────────────────────────────────
+    var OPTS=['1h','6h','1d','7d','30d'], curRange='1d'
+    function buildRS() {
+      var fs=document.getElementById('rs-main'); fs.innerHTML=''
+      OPTS.forEach(function(opt,i){
+        if(i>0){var sep=document.createElement('span');sep.className='rs-sep';sep.setAttribute('aria-hidden','true');fs.appendChild(sep)}
+        var btn=document.createElement('button');btn.type='button';btn.className='rs-btn'+(opt===curRange?' active':'')
+        btn.textContent=opt.replace(/[a-z]/g,'')
+        btn.addEventListener('click',function(){curRange=opt;buildRS()})
+        fs.appendChild(btn)
+      })
+    }
+    buildRS()
+  </script>
+</body>
+</html>
