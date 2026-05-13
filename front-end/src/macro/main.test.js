@@ -183,6 +183,30 @@ describe('Macro UI', () => {
     })
   })
 
+  it('<MacroForm /> maps alert and wait step config into flat form values', () => {
+    expect(mapMacroPropsToValues({
+      macro: {
+        id: '2',
+        name: 'Notify',
+        enable: true,
+        reversible: true,
+        steps: [
+          { type: 'alert', config: { title: 'ATO', message: 'Low reservoir' } },
+          { type: 'wait', config: { duration: 30 } }
+        ]
+      }
+    })).toEqual({
+      id: '2',
+      name: 'Notify',
+      enable: true,
+      reversible: true,
+      steps: [
+        { type: 'alert', duration: undefined, id: undefined, on: undefined, title: 'ATO', message: 'Low reservoir' },
+        { type: 'wait', duration: 30, id: undefined, on: undefined, title: undefined, message: undefined }
+      ]
+    })
+  })
+
   it('<MacroForm /> for edit with bad macro', () => {
     const badMacro = { name: 'bad' }
     expect(mapMacroPropsToValues({ macro: badMacro })).toEqual({
