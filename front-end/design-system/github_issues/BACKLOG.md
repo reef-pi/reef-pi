@@ -16,7 +16,7 @@
 - [ ] #9 Storybook entries for primitives — `issue-09-storybook-primitives.md`
 
 ## E3 · Dashboard v2 (flag: `dashboard_v2`)
-- [ ] #10 System status strip — `issue-10-system-strip.md`
+- [x] #10 System status strip — `issue-10-system-strip.md`
 - [ ] #11 Hero TemperatureTile — `issue-11-hero-temp.md`
 - [ ] #12 Secondary PhTile / AtoTile — `issue-12-ph-ato-tiles.md`
 - [ ] #13 Equipment strip (footer) — `issue-13-equipment-strip.md`
