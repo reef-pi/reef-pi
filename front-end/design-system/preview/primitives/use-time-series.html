@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — useTimeSeries</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) { .story-grid { grid-template-columns: 1fr; } }
+
+    /* ── Tile chrome ─────────────────────────────── */
+
+    .tile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--reefpi-color-text-muted);
+    }
+
+    .tile-value {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Loading skeleton ────────────────────────── */
+
+    .skeleton-bar {
+      height: 60px;
+      border-radius: var(--reefpi-radius-sm);
+      background: linear-gradient(
+        90deg,
+        var(--reefpi-color-surface) 25%,
+        var(--reefpi-color-border) 50%,
+        var(--reefpi-color-surface) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-text {
+      height: 0.875rem;
+      width: 40%;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(
+        90deg,
+        var(--reefpi-color-surface) 25%,
+        var(--reefpi-color-border) 50%,
+        var(--reefpi-color-surface) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    /* ── Error banner ────────────────────────────── */
+
+    .error-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--reefpi-color-error-bg);
+      border: 1px solid var(--reefpi-color-error-border);
+      border-radius: var(--reefpi-radius-sm);
+      font-size: 0.75rem;
+      color: var(--reefpi-color-error);
+    }
+
+    .error-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--reefpi-color-error);
+      flex-shrink: 0;
+    }
+
+    .retry-btn {
+      margin-left: auto;
+      background: none;
+      border: 1px solid var(--reefpi-color-error-border);
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-error);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      cursor: pointer;
+      font-family: var(--reefpi-font-app);
+      min-height: 24px;
+    }
+
+    /* ── Stale badge ─────────────────────────────── */
+
+    .stale-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.65rem;
+      color: var(--reefpi-color-warn);
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .stale-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--reefpi-color-warn);
+    }
+
+    /* ── Caption ─────────────────────────────────── */
+
+    .story-caption {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      font-family: var(--reefpi-font-mono);
+    }
+
+    /* ── Sparkline (inline SVG) ─────────────────── */
+
+    svg.spark {
+      display: block;
+      width: 100%;
+      overflow: visible;
+    }
+  </style>
+</head>
+<body>
+  <h1>useTimeSeries</h1>
+  <p class="subtitle">Fetch + cache hook for telemetry. LTTB-downsampled to <code>maxPoints</code>. Stale-while-revalidate, deduplicated network calls.</p>
+
+  <div class="story-grid">
+
+    <!-- Story 1: Loading state -->
+    <div class="card">
+      <div class="card-header">Loading</div>
+      <div class="card-body">
+        <div class="tile-header">
+          <span>Display Tank · Temperature</span>
+          <span>1D</span>
+        </div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-bar"></div>
+        <p class="story-caption">{ loading: true, points: [] }</p>
+      </div>
+    </div>
+
+    <!-- Story 2: Loaded (fixture data) -->
+    <div class="card">
+      <div class="card-header">Loaded — 120 downsampled points</div>
+      <div class="card-body">
+        <div class="tile-header">
+          <span>Display Tank · Temperature</span>
+          <span>1D</span>
+        </div>
+        <div class="tile-value" id="loaded-value">78.4°F</div>
+        <svg class="spark" id="spark-loaded" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+          role="img" aria-label="Temperature over last 24 hours"></svg>
+        <p class="story-caption">{ loading: false, points: fixture (120 pts) }</p>
+      </div>
+    </div>
+
+    <!-- Story 3: Error -->
+    <div class="card">
+      <div class="card-header">Error — fetch failed</div>
+      <div class="card-body">
+        <div class="tile-header">
+          <span>Sump · pH</span>
+          <span>6H</span>
+        </div>
+        <div class="error-banner">
+          <span class="error-dot"></span>
+          <span>HTTP 503 — telemetry unavailable</span>
+          <button class="retry-btn" onclick="this.closest('.card').querySelector('.error-banner').style.opacity='0.5';this.textContent='…'">
+            Retry
+          </button>
+        </div>
+        <p class="story-caption">{ loading: false, error: 'HTTP 503', points: [] }</p>
+      </div>
+    </div>
+
+    <!-- Story 4: Stale-while-revalidate -->
+    <div class="card">
+      <div class="card-header">Stale-while-revalidate</div>
+      <div class="card-body">
+        <div class="tile-header">
+          <span>Display Tank · Temperature</span>
+          <span class="stale-badge">
+            <span class="stale-dot"></span>
+            revalidating…
+          </span>
+        </div>
+        <div class="tile-value">78.1°F</div>
+        <svg class="spark" id="spark-stale" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+          role="img" aria-label="Stale temperature data, revalidating" style="opacity:0.55"></svg>
+        <p class="story-caption">{ loading: true, points: stale (120 pts) } — previous cache shown</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    // ── Fixture: synthetic 24h of temperature data downsampled to 120 pts ──
+
+    function makeFixture (n, baseV, amp) {
+      return Array.from({ length: n }, function (_, i) {
+        return { t: i, v: baseV + Math.sin(i / n * Math.PI * 6) * amp + (Math.random() - 0.5) * 0.15 }
+      })
+    }
+
+    var FIXTURE = makeFixture(120, 78.2, 0.9)
+
+    // ── Minimal SVG sparkline renderer ───────────────────────────────────────
+
+    function svgNS (tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag) }
+
+    function renderSpark (svgEl, pts, W, H) {
+      var vs = pts.map(function (p) { return p.v })
+      var minV = Math.min.apply(null, vs), maxV = Math.max.apply(null, vs)
+      var rangeV = maxV - minV || 1
+      var padY = 4
+
+      var projected = pts.map(function (p, i) {
+        return {
+          x: (i / (pts.length - 1)) * W,
+          y: padY + (1 - (p.v - minV) / rangeV) * (H - padY * 2)
+        }
+      })
+
+      // Gradient fill
+      var defs = svgNS('defs')
+      var grad = svgNS('linearGradient')
+      grad.setAttribute('id', 'sg-' + svgEl.id)
+      grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0')
+      grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1')
+      var s0 = svgNS('stop'); s0.setAttribute('offset', '0%')
+      var stroke = getComputedStyle(document.documentElement).getPropertyValue('--reefpi-color-brand').trim()
+      s0.setAttribute('stop-color', stroke); s0.setAttribute('stop-opacity', '0.35')
+      var s1 = svgNS('stop'); s1.setAttribute('offset', '100%')
+      s1.setAttribute('stop-color', stroke); s1.setAttribute('stop-opacity', '0')
+      grad.appendChild(s0); grad.appendChild(s1); defs.appendChild(grad)
+      svgEl.appendChild(defs)
+
+      var last = projected[projected.length - 1], first = projected[0]
+      var d = 'M ' + projected.map(function (p) { return p.x + ' ' + p.y }).join(' L ')
+        + ' L ' + last.x + ' ' + H + ' L ' + first.x + ' ' + H + ' Z'
+      var area = svgNS('path')
+      area.setAttribute('d', d)
+      area.setAttribute('fill', 'url(#sg-' + svgEl.id + ')')
+      svgEl.appendChild(area)
+
+      var line = svgNS('polyline')
+      line.setAttribute('points', projected.map(function (p) { return p.x + ',' + p.y }).join(' '))
+      line.setAttribute('fill', 'none')
+      line.setAttribute('stroke', stroke)
+      line.setAttribute('stroke-width', '1.5')
+      line.setAttribute('stroke-linejoin', 'round')
+      line.setAttribute('stroke-linecap', 'round')
+      svgEl.appendChild(line)
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init)
+    } else {
+      init()
+    }
+
+    function init () {
+      renderSpark(document.getElementById('spark-loaded'), FIXTURE, 300, 60)
+      renderSpark(document.getElementById('spark-stale'),  FIXTURE, 300, 60)
+    }
+  </script>
+</body>
+</html>

@@ -105,11 +105,7 @@ jobs:
           VERSION=$(git describe --always --tags)
           mv reef-pi-${VERSION}.deb reef-pi-${VERSION}-${{ matrix.target }}.deb
       - name: "Upload ${{ matrix.target }} deb package"
-
         uses: actions/upload-artifact@v7
-
-        uses: actions/upload-artifact@v7
-
         with:
           name: ${{ matrix.target }}-debian-package
           path: 'reef-pi-*.deb'
