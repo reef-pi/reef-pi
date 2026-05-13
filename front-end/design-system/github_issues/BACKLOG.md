@@ -27,7 +27,7 @@
 - [x] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
 - [x] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
 - [x] #18 Inline tile alerts — `issue-18-inline-alerts.md`
-- [ ] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
+- [x] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
 
 ## E5 · Shell + theming (flag: `new_shell`)
 - [ ] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
