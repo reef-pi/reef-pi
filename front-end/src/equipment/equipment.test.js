@@ -73,6 +73,50 @@ describe('Equipment ui', () => {
     expect(component.render().type).toBe('ul')
   })
 
+  it('<Main /> toggles add form and creates equipment payloads', () => {
+    const props = {
+      outlets,
+      equipment: [],
+      fetch: jest.fn(),
+      fetchOutlets: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    }
+    const component = new RawEquipmentMain(props)
+    component.setState = update => { component.state = { ...component.state, ...update } }
+
+    component.handleToggleAddEquipmentDiv()
+    expect(component.state.addEquipment).toBe(true)
+
+    component.handleAddEquipment({ name: 'Return Pump', outlet: '1', on: true })
+    expect(props.create).toHaveBeenCalledWith({ name: 'Return Pump', outlet: '1' })
+    expect(component.state.addEquipment).toBe(false)
+  })
+
+  it('<Main /> changes sort mode and renders sorted equipment items', () => {
+    const component = new RawEquipmentMain({
+      outlets,
+      equipment: [
+        { id: '1', outlet: '1', name: 'Beta', on: true },
+        { id: '2', outlet: '1', name: 'Alpha', on: false }
+      ],
+      fetch: jest.fn(),
+      fetchOutlets: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn()
+    })
+    component.setState = update => { component.state = { ...component.state, ...update } }
+
+    component.handleSortChange({ target: { value: SORT_NAME_ZA } })
+    expect(component.state.sortMode).toBe(SORT_NAME_ZA)
+
+    const rendered = component.render()
+    const equipmentItems = collectElements(rendered, node => node.type === Equipment)
+    expect(equipmentItems.map(item => item.props.equipment.name)).toEqual(['Beta', 'Alpha'])
+  })
+
   it('sortEquipment supports all sort modes without mutating input', () => {
     const unsorted = [
       { id: '1', name: 'Beta', on: false },
