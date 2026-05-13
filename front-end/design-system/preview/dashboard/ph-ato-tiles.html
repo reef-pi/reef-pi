@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — PhTile / AtoTile</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size:.875rem;color:var(--reefpi-color-text-muted);margin-bottom:2rem; }
+    .flag-banner { display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-family:var(--reefpi-font-mono);color:var(--reefpi-color-text-muted);background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-sm);padding:2px 8px;margin-bottom:1.5rem; }
+
+    /* ── Tile grid ─────────────────────────────── */
+    .tile-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem; }
+    @media(max-width:600px){.tile-row{grid-template-columns:1fr;}}
+
+    /* ── Tile shell ────────────────────────────── */
+    .metric-tile { background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-md);display:flex;flex-direction:column;min-height:220px;overflow:hidden;font-family:var(--reefpi-font-app); }
+    .tile-header { display:flex;align-items:center;justify-content:space-between;padding:.625rem .875rem;border-bottom:1px solid var(--reefpi-color-border);flex-shrink:0; }
+    .tile-header-label { font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--reefpi-color-text-muted); }
+    .tile-body { flex:1 1 auto;display:flex;flex-direction:column;padding:.75rem .875rem;gap:.5rem;min-height:0; }
+
+    /* ── Value row ─────────────────────────────── */
+    .value-row { display:flex;align-items:baseline;gap:.35rem; }
+    .value-big { font-size:1.75rem;font-weight:500;line-height:1;color:var(--reefpi-color-text);font-variant-numeric:tabular-nums; }
+    .value-unit { font-size:.8rem;color:var(--reefpi-color-text-muted); }
+    .trend-up   { font-size:.72rem;color:var(--reefpi-color-warn); }
+    .trend-down { font-size:.72rem;color:var(--reefpi-color-brand); }
+    .sub-label  { font-size:.65rem;font-family:var(--reefpi-font-mono); }
+    .sub-ok   { color:var(--reefpi-color-brand); }
+    .sub-warn { color:var(--reefpi-color-warn); }
+
+    /* ── RangeSelector ─────────────────────────── */
+    .rs { display:inline-flex;border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-sm);overflow:hidden;background:var(--reefpi-color-surface-elevated); }
+    .rs-sep { width:1px;background:var(--reefpi-color-border);flex-shrink:0; }
+    .rs-btn { display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:26px;padding:0 .35rem;cursor:pointer;font-size:.65rem;font-family:var(--reefpi-font-app);background:transparent;color:var(--reefpi-color-text);border:none; }
+    .rs-btn.active { background:var(--reefpi-color-brand);color:var(--reefpi-color-nav-text-strong);font-weight:500; }
+
+    /* ── Sparkline ─────────────────────────────── */
+    .spark-wrap { flex:1 1 auto;min-height:60px;position:relative; }
+    svg.spark { display:block;width:100%;overflow:visible;cursor:crosshair; }
+    .spark-tooltip { position:absolute;display:none;background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-sm);font-family:var(--reefpi-font-mono);font-size:.65rem;color:var(--reefpi-color-text);padding:3px 7px;pointer-events:none;white-space:nowrap;z-index:10; }
+
+    /* ── Skeletons ─────────────────────────────── */
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skel { border-radius:var(--reefpi-radius-sm);background:linear-gradient(90deg,var(--reefpi-color-surface) 25%,var(--reefpi-color-border) 50%,var(--reefpi-color-surface) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite; }
+
+    /* ── Error / empty ─────────────────────────── */
+    .tile-error,.tile-empty { flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem; }
+    .error-pill { font-size:.75rem;color:var(--reefpi-color-error);background:var(--reefpi-color-error-bg);border:1px solid var(--reefpi-color-error-border);border-radius:var(--reefpi-radius-sm);padding:.4rem .75rem; }
+
+    .story-caption { font-size:.7rem;color:var(--reefpi-color-text-muted);margin-top:.5rem;font-family:var(--reefpi-font-mono); }
+  </style>
+</head>
+<body>
+  <h1>PhTile / AtoTile</h1>
+  <p class="subtitle"><code>col-md-4</code> secondary tiles sharing a <code>MetricTile</code> wrapper. Compact RangeSelector; local scope overrides global.</p>
+  <div class="flag-banner">flag: dashboard_v2 (default off)</div>
+
+  <!-- Story 1: Loaded side-by-side -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Loaded — pH within safe + ATO OK</div>
+    <div class="card-body" style="padding:1rem;">
+      <div class="tile-row">
+        <div class="metric-tile" id="tile-ph">
+          <div class="tile-header">
+            <span class="tile-header-label">pH</span>
+            <fieldset class="rs" id="rs-ph" aria-label="pH time range"><legend style="position:absolute;width:1px;height:1px;overflow:hidden">Time range</legend></fieldset>
+          </div>
+          <div class="tile-body" id="body-ph"></div>
+        </div>
+        <div class="metric-tile" id="tile-ato">
+          <div class="tile-header">
+            <span class="tile-header-label">ATO</span>
+            <fieldset class="rs" id="rs-ato" aria-label="ATO time range"><legend style="position:absolute;width:1px;height:1px;overflow:hidden">Time range</legend></fieldset>
+          </div>
+          <div class="tile-body" id="body-ato"></div>
+        </div>
+      </div>
+      <p class="story-caption">pH 8.21 (within safe [8.1–8.4]) · ATO 74% (OK)</p>
+    </div>
+  </div>
+
+  <!-- Story 2: Warn states -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Warn states — pH outside safe + ATO low</div>
+    <div class="card-body" style="padding:1rem;">
+      <div class="tile-row">
+        <div class="metric-tile">
+          <div class="tile-header"><span class="tile-header-label">pH</span></div>
+          <div class="tile-body">
+            <div class="value-row">
+              <span class="value-big">7.98</span>
+              <span class="value-unit"></span>
+              <span class="trend-down">▼ 0.06</span>
+            </div>
+            <span class="sub-label sub-warn">outside safe range</span>
+            <div class="spark-wrap"><svg class="spark" id="spark-ph-warn" height="80" viewBox="0 0 240 80" preserveAspectRatio="none" role="img" aria-label="pH trend, below safe range"></svg></div>
+          </div>
+        </div>
+        <div class="metric-tile">
+          <div class="tile-header"><span class="tile-header-label">ATO</span></div>
+          <div class="tile-body">
+            <div class="value-row">
+              <span class="value-big" style="color:var(--reefpi-color-warn)">14</span>
+              <span class="value-unit">%</span>
+              <span class="trend-down">▼ 8.2</span>
+            </div>
+            <span class="sub-label sub-warn">low — refill soon</span>
+            <div class="spark-wrap"><svg class="spark" id="spark-ato-warn" height="80" viewBox="0 0 240 80" preserveAspectRatio="none" role="img" aria-label="ATO level, low"></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 3: Skeleton + Error -->
+  <div class="card">
+    <div class="card-header">Loading + Error states</div>
+    <div class="card-body" style="padding:1rem;">
+      <div class="tile-row">
+        <div class="metric-tile">
+          <div class="tile-header"><span class="tile-header-label">pH</span></div>
+          <div class="tile-body">
+            <div class="skel" style="height:1.75rem;width:50%;"></div>
+            <div class="skel" style="flex:1 1 auto;min-height:60px;"></div>
+          </div>
+        </div>
+        <div class="metric-tile">
+          <div class="tile-header"><span class="tile-header-label">ATO</span></div>
+          <div class="tile-body">
+            <div class="tile-error">
+              <span class="error-pill">HTTP 503 — unavailable</span>
+              <button style="background:none;border:1px solid var(--reefpi-color-border-strong);border-radius:var(--reefpi-radius-sm);color:var(--reefpi-color-text);font-size:.75rem;padding:0 .75rem;min-height:44px;cursor:pointer;font-family:var(--reefpi-font-app);">Retry</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+    function svgNS(t){return document.createElementNS('http://www.w3.org/2000/svg',t)}
+
+    // ── Fixture generators ────────────────────────────────────────────────────
+    function makePH(n){return Array.from({length:n},(_,i)=>({t:i,v:8.21+Math.sin(i/n*Math.PI*3)*0.08+(Math.random()-.5)*.02}))}
+    function makeATO(n){return Array.from({length:n},(_,i)=>({t:i,v:74-i/n*10+(Math.random()-.5)*1}))}
+    function makePHWarn(n){return Array.from({length:n},(_,i)=>({t:i,v:8.04-i/n*0.06+(Math.random()-.5)*.02}))}
+    function makeATOWarn(n){return Array.from({length:n},(_,i)=>({t:i,v:22-i/n*8+(Math.random()-.5)*1}))}
+
+    function project(pts,W,H,padY){
+      padY=padY||4;var vs=pts.map(p=>p.v),minV=Math.min(...vs),maxV=Math.max(...vs),rV=maxV-minV||1
+      return pts.map((p,i)=>({...p,x:(i/(pts.length-1))*W,y:padY+(1-(p.v-minV)/rV)*(H-padY*2)}))
+    }
+
+    function renderSpark(svgEl,pts,W,H,band,bandColor){
+      svgEl.setAttribute('viewBox','0 0 '+W+' '+H)
+      var stroke=tok('--reefpi-color-brand'),proj=project(pts,W,H)
+      var vs=pts.map(p=>p.v),minV=Math.min(...vs),maxV=Math.max(...vs),rV=maxV-minV||1
+      var padY=4,h=H-padY*2
+
+      if(band){
+        var bTop=padY+(1-(band[1]-minV)/rV)*h,bBot=padY+(1-(band[0]-minV)/rV)*h
+        var br=svgNS('rect');br.setAttribute('x',0);br.setAttribute('y',Math.max(padY,bTop))
+        br.setAttribute('width',W);br.setAttribute('height',Math.max(0,bBot-bTop))
+        br.setAttribute('fill',bandColor||tok('--reefpi-color-band-safe'));br.setAttribute('opacity','0.5')
+        svgEl.appendChild(br)
+      }
+
+      var defs=svgNS('defs'),grad=svgNS('linearGradient'),uid='sg'+Math.random().toString(36).slice(2)
+      grad.setAttribute('id',uid);grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1')
+      var s0=svgNS('stop');s0.setAttribute('offset','0%');s0.setAttribute('stop-color',stroke);s0.setAttribute('stop-opacity','0.35')
+      var s1=svgNS('stop');s1.setAttribute('offset','100%');s1.setAttribute('stop-color',stroke);s1.setAttribute('stop-opacity','0')
+      grad.appendChild(s0);grad.appendChild(s1);defs.appendChild(grad);svgEl.appendChild(defs)
+
+      var last=proj[proj.length-1],first=proj[0]
+      var d='M '+proj.map(p=>p.x+' '+p.y).join(' L ')+' L '+last.x+' '+H+' L '+first.x+' '+H+' Z'
+      var area=svgNS('path');area.setAttribute('d',d);area.setAttribute('fill','url(#'+uid+')');svgEl.appendChild(area)
+      var line=svgNS('polyline');line.setAttribute('points',proj.map(p=>p.x+','+p.y).join(' '))
+      line.setAttribute('fill','none');line.setAttribute('stroke',stroke);line.setAttribute('stroke-width','1.5')
+      line.setAttribute('stroke-linejoin','round');line.setAttribute('stroke-linecap','round');svgEl.appendChild(line)
+    }
+
+    function buildRS(fs,opts,cur,onChange){
+      fs.innerHTML=''
+      opts.forEach((opt,i)=>{
+        if(i>0){var sep=document.createElement('span');sep.className='rs-sep';sep.setAttribute('aria-hidden','true');fs.appendChild(sep)}
+        var btn=document.createElement('button');btn.type='button';btn.className='rs-btn'+(opt===cur?' active':'')
+        btn.textContent=opt.replace(/[a-z]/g,'')
+        btn.addEventListener('click',()=>{cur=opt;buildRS(fs,opts,cur,onChange);onChange(opt)})
+        fs.appendChild(btn)
+      })
+    }
+
+    function buildTileBody(bodyEl, pts, band, valueStr, subLabel, subClass, trendHtml, W, H){
+      bodyEl.innerHTML=''
+      var valueRow=document.createElement('div');valueRow.className='value-row'
+      var big=document.createElement('span');big.className='value-big';big.id='val-'+bodyEl.id;big.textContent=valueStr
+      var trend=document.createElement('span');trend.innerHTML=trendHtml
+      valueRow.appendChild(big);valueRow.appendChild(trend);bodyEl.appendChild(valueRow)
+      var sub=document.createElement('span');sub.className='sub-label '+subClass;sub.textContent=subLabel;bodyEl.appendChild(sub)
+      var wrap=document.createElement('div');wrap.className='spark-wrap'
+      var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','spark')
+      svg.setAttribute('height',H);svg.setAttribute('viewBox','0 0 '+W+' '+H)
+      svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('role','img');svg.setAttribute('aria-label','Metric sparkline')
+      wrap.appendChild(svg);bodyEl.appendChild(wrap)
+      var tooltip=document.createElement('div');tooltip.className='spark-tooltip';wrap.appendChild(tooltip)
+      renderSpark(svg,pts,W,H,band)
+      addHover(svg,pts,W,H,big,tooltip,wrap)
+    }
+
+    function addHover(svg,pts,W,H,valEl,tooltip,wrap){
+      var proj=project(pts,W,H)
+      var xhair=svgNS('line');xhair.setAttribute('stroke',tok('--reefpi-color-text-muted'));xhair.setAttribute('stroke-width','1');xhair.setAttribute('stroke-dasharray','3 3');xhair.style.display='none';svg.appendChild(xhair)
+      var dot=svgNS('circle');dot.setAttribute('r','3');dot.setAttribute('fill',tok('--reefpi-color-surface-elevated'));dot.setAttribute('stroke',tok('--reefpi-color-brand'));dot.setAttribute('stroke-width','2');dot.style.display='none';svg.appendChild(dot)
+      svg.addEventListener('pointermove',function(e){
+        var rect=svg.getBoundingClientRect(),mx=(e.clientX-rect.left)/rect.width*W
+        var best=0,bestD=Infinity;proj.forEach((p,i)=>{var d=Math.abs(p.x-mx);if(d<bestD){bestD=d;best=i}})
+        var p=proj[best]
+        xhair.setAttribute('x1',p.x);xhair.setAttribute('y1',0);xhair.setAttribute('x2',p.x);xhair.setAttribute('y2',H);xhair.style.display=''
+        dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.style.display=''
+        tooltip.textContent=pts[best].v.toFixed(2);tooltip.style.display='block'
+        var px=p.x*(rect.width/W)
+        tooltip.style.left=(px+tooltip.offsetWidth+10>rect.width?px-tooltip.offsetWidth-6:px+6)+'px'
+        tooltip.style.top=Math.max(0,p.y*(rect.height/H)-10)+'px'
+        valEl.textContent=pts[best].v.toFixed(2)
+      })
+      svg.addEventListener('pointerleave',function(){
+        xhair.style.display='none';dot.style.display='none';tooltip.style.display='none'
+        valEl.textContent=pts[pts.length-1].v.toFixed(2)
+      })
+    }
+
+    // ── Render story 1 ────────────────────────────────────────────────────────
+    var OPTS=['1h','6h','1d','7d','30d'],curPH='1d',curATO='1d'
+    var phPts=makePH(80),atoPts=makeATO(80)
+
+    buildTileBody(document.getElementById('body-ph'),phPts,[8.1,8.4],'8.21','within safe range','sub-ok','<span class="trend-up">▲ 0.03</span>',240,80)
+    buildTileBody(document.getElementById('body-ato'),atoPts,null,'74','reservoir OK','sub-ok','<span class="trend-down">▼ 1.2</span>',240,80)
+
+    buildRS(document.getElementById('rs-ph'),OPTS,curPH,r=>{curPH=r;phPts=makePH(80);buildTileBody(document.getElementById('body-ph'),phPts,[8.1,8.4],phPts[phPts.length-1].v.toFixed(2),'within safe range','sub-ok','',240,80)})
+    buildRS(document.getElementById('rs-ato'),OPTS,curATO,r=>{curATO=r;atoPts=makeATO(80);buildTileBody(document.getElementById('body-ato'),atoPts,null,atoPts[atoPts.length-1].v.toFixed(0)+'%','reservoir OK','sub-ok','',240,80)})
+
+    // ── Render story 2 warn sparks ────────────────────────────────────────────
+    renderSpark(document.getElementById('spark-ph-warn'),makePHWarn(80),240,80,[8.1,8.4])
+    renderSpark(document.getElementById('spark-ato-warn'),makeATOWarn(80),240,80)
+  </script>
+</body>
+</html>
