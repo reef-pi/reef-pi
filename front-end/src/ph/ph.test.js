@@ -218,6 +218,69 @@ describe('Ph ui', () => {
     expect(mapPhPropsToValues({ probe: { notify: {}, control: false, is_macro: true } }).control).toBe('')
   })
 
+  it('maps pH form defaults for create', () => {
+    expect(mapPhPropsToValues({})).toEqual({
+      id: '',
+      name: '',
+      analog_input: '',
+      enable: true,
+      period: 60,
+      one_shot: false,
+      notify: false,
+      maxAlert: 0,
+      minAlert: 0,
+      control: '',
+      lowerThreshold: 0,
+      lowerFunction: '',
+      upperThreshold: 0,
+      upperFunction: '',
+      hysteresis: 0,
+      transformer: '',
+      chart: { ymin: 0, ymax: 100, color: '#000', unit: '' }
+    })
+  })
+
+  it('maps pH form edit values with alerts and control', () => {
+    expect(mapPhPropsToValues({
+      probe: {
+        id: '1',
+        name: 'Tank pH',
+        analog_input: 'a1',
+        enable: false,
+        period: 30,
+        one_shot: true,
+        notify: { enable: true, min: 7, max: 8.5 },
+        control: true,
+        is_macro: false,
+        min: 7.1,
+        downer_eq: 'co2',
+        max: 8.3,
+        upper_eq: 'alk',
+        hysteresis: 0.1,
+        transformer: 'scale',
+        chart: { ymin: 6, ymax: 9, color: '#0f0', unit: 'pH' }
+      }
+    })).toEqual({
+      id: '1',
+      name: 'Tank pH',
+      analog_input: 'a1',
+      enable: false,
+      period: 30,
+      one_shot: true,
+      notify: true,
+      maxAlert: 8.5,
+      minAlert: 7,
+      control: 'equipment',
+      lowerThreshold: 7.1,
+      lowerFunction: 'co2',
+      upperThreshold: 8.3,
+      upperFunction: 'alk',
+      hysteresis: 0.1,
+      transformer: 'scale',
+      chart: { ymin: 6, ymax: 9, color: '#0f0', unit: 'pH' }
+    })
+  })
+
   it('derives pH control value from control flags', () => {
     expect(phControlValue({ control: true, is_macro: false })).toBe('equipment')
     expect(phControlValue({ control: true, is_macro: true })).toBe('macro')
