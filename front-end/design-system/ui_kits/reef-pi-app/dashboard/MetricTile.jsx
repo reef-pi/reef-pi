@@ -4,6 +4,18 @@ import Sparkline from '../primitives/Sparkline'
 import RangeSelector from '../primitives/RangeSelector'
 import { useTimeSeries } from '../hooks/useTimeSeries'
 
+const ALERT_BORDER_COLOR = {
+  critical: 'var(--reefpi-color-error)',
+  warn:     'var(--reefpi-color-warn)'
+}
+
+function alertRelTime (ts) {
+  const s = Math.floor((Date.now() - ts) / 1000)
+  if (s < 60)   return `${s}s`
+  if (s < 3600) return `${Math.floor(s / 60)}m`
+  return `${Math.floor(s / 3600)}h`
+}
+
 /**
  * Shared col-md-4 tile shell used by PhTile and AtoTile.
  * Handles fetch, loading/error/empty states, and the compact header layout.
@@ -18,6 +30,8 @@ export default function MetricTile ({
   defaultRange = '1d',
   formatValue = v => v.toFixed(2),
   trendPrecision = 2,
+  alert,
+  onAlertClick,
   children
 }) {
   const [localRange, setLocalRange] = useState(null)
@@ -42,12 +56,15 @@ export default function MetricTile ({
 
   const displayValue = hoverValue !== null ? hoverValue : latest
 
+  const alertBorderColor = alert ? (ALERT_BORDER_COLOR[alert.severity] ?? ALERT_BORDER_COLOR.warn) : null
+
   return (
     <div
       className='reefpi-metric-tile col-md-4'
       style={{
         background: 'var(--reefpi-color-surface-elevated)',
         border: '1px solid var(--reefpi-color-border)',
+        borderTop: alertBorderColor ? `3px solid ${alertBorderColor}` : '1px solid var(--reefpi-color-border)',
         borderRadius: 'var(--reefpi-radius-md)',
         display: 'flex',
         flexDirection: 'column',
@@ -127,7 +144,63 @@ export default function MetricTile ({
           </>
         )}
       </div>
+
+      {/* Inline alert footer */}
+      {alert && (
+        <button
+          aria-live='polite'
+          onClick={onAlertClick}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.35rem 0.875rem',
+            borderTop: '1px solid var(--reefpi-color-border)',
+            background: 'none',
+            border: 'none',
+            borderTop: '1px solid var(--reefpi-color-border)',
+            cursor: onAlertClick ? 'pointer' : 'default',
+            width: '100%',
+            textAlign: 'left',
+            flexShrink: 0,
+            fontFamily: 'var(--reefpi-font-app)'
+          }}
+        >
+          <WarnIcon color={alertBorderColor} />
+          <span style={{
+            fontSize: '0.72rem',
+            color: alertBorderColor,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            flex: '1 1 auto'
+          }}>
+            {alert.message}
+          </span>
+          {alert.at && (
+            <span style={{
+              fontSize: '0.65rem',
+              color: 'var(--reefpi-color-text-muted)',
+              fontFamily: 'var(--reefpi-font-mono)',
+              flexShrink: 0
+            }}>
+              {alertRelTime(alert.at)}
+            </span>
+          )}
+        </button>
+      )}
     </div>
+  )
+}
+
+function WarnIcon ({ color }) {
+  return (
+    <svg width='12' height='12' viewBox='0 0 12 12' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+      <path d='M6 1L11 10H1L6 1Z' fill={color} opacity='0.2' />
+      <path d='M6 1L11 10H1L6 1Z' stroke={color} strokeWidth='1.2' strokeLinejoin='round' />
+      <line x1='6' y1='4.5' x2='6' y2='7' stroke={color} strokeWidth='1.2' strokeLinecap='round' />
+      <circle cx='6' cy='8.5' r='0.6' fill={color} />
+    </svg>
   )
 }
 
@@ -206,5 +279,11 @@ MetricTile.propTypes = {
   defaultRange: PropTypes.string,
   formatValue: PropTypes.func,
   trendPrecision: PropTypes.number,
+  alert: PropTypes.shape({
+    severity: PropTypes.oneOf(['warn', 'critical']),
+    message: PropTypes.string.isRequired,
+    at: PropTypes.number
+  }),
+  onAlertClick: PropTypes.func,
   children: PropTypes.func
 }
