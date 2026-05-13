@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — AlertCenter</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size:.875rem;color:var(--reefpi-color-text-muted);margin-bottom:2rem; }
+    .flag-banner { display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-family:var(--reefpi-font-mono);color:var(--reefpi-color-text-muted);background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-sm);padding:2px 8px;margin-bottom:1.5rem; }
+
+    .story-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    @media(max-width:700px){.story-grid{grid-template-columns:1fr;}}
+    .story-caption { font-size:.7rem;color:var(--reefpi-color-text-muted);margin-top:.75rem;font-family:var(--reefpi-font-mono); }
+
+    /* ── Simulated navbar bar ────────────────────── */
+    .navbar-bar { display:flex;align-items:center;justify-content:flex-end;gap:.25rem;padding:.5rem .75rem;background:var(--reefpi-gradient-brand);border-radius:var(--reefpi-radius-md);margin-bottom:.75rem; }
+    .bell-btn { position:relative;background:none;border:none;cursor:pointer;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--reefpi-color-nav-text);border-radius:var(--reefpi-radius-sm); }
+    .bell-btn:focus-visible { outline:2px solid var(--reefpi-color-focus);outline-offset:2px; }
+    .bell-badge { position:absolute;top:6px;right:6px;min-width:16px;height:16px;border-radius:8px;background:var(--reefpi-color-error);color:var(--reefpi-color-nav-text-strong);font-size:.6rem;font-family:var(--reefpi-font-app);font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 3px;pointer-events:none; }
+
+    /* ── Slide-over panel ──────────────────────── */
+    .slide-over { position:fixed;top:0;right:0;bottom:0;width:380px;max-width:100vw;background:var(--reefpi-color-surface-elevated);border-left:1px solid var(--reefpi-color-border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);outline:none;font-family:var(--reefpi-font-app); }
+    .slide-over.open { transform:translateX(0); }
+    .backdrop { position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:200;display:none; }
+    .backdrop.open { display:block; }
+
+    .panel-header { display:flex;align-items:center;justify-content:space-between;padding:1rem;border-bottom:1px solid var(--reefpi-color-border);flex-shrink:0; }
+    .panel-title { font-weight:500;font-size:.95rem;color:var(--reefpi-color-text); }
+    .close-btn { background:none;border:none;cursor:pointer;color:var(--reefpi-color-text-muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--reefpi-radius-sm); }
+    .close-btn:focus-visible { outline:2px solid var(--reefpi-color-focus);outline-offset:2px; }
+
+    .panel-body { flex:1 1 auto;overflow-y:auto;padding:.5rem 0; }
+    .panel-footer { padding:.5rem 1rem;border-top:1px solid var(--reefpi-color-border);font-size:.65rem;color:var(--reefpi-color-text-muted);font-family:var(--reefpi-font-mono);flex-shrink:0; }
+
+    /* ── Section header ────────────────────────── */
+    .section-hdr { padding:.5rem 1rem .25rem;font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--reefpi-color-text-muted); }
+
+    /* ── Alert row ─────────────────────────────── */
+    .alert-row { display:flex;align-items:flex-start;gap:.75rem;padding:.625rem 1rem;border-left:3px solid transparent;transition:background .1s; }
+    .alert-row.focused { border-left-color:var(--row-color,var(--reefpi-color-warn));background:var(--row-bg,var(--reefpi-color-warn-bg)); }
+    .alert-row.acked { opacity:.55; }
+    .sev-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px; }
+    .alert-content { flex:1 1 auto;min-width:0; }
+    .alert-title { font-size:.85rem;font-weight:500;color:var(--reefpi-color-text);margin-bottom:1px; }
+    .alert-detail { font-size:.75rem;color:var(--reefpi-color-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+    .alert-time { font-size:.65rem;color:var(--reefpi-color-text-muted);margin-top:2px;font-family:var(--reefpi-font-mono); }
+    .alert-actions { display:flex;flex-direction:column;gap:4px;flex-shrink:0; }
+    .act-btn { background:none;border:1px solid;border-radius:var(--reefpi-radius-sm);font-size:.65rem;padding:2px 6px;cursor:pointer;min-height:28px;font-family:var(--reefpi-font-app);white-space:nowrap; }
+    .act-ack  { border-color:var(--reefpi-color-brand);color:var(--reefpi-color-brand); }
+    .act-dis  { border-color:var(--reefpi-color-text-muted);color:var(--reefpi-color-text-muted); }
+
+    /* ── Empty state ───────────────────────────── */
+    .empty-state { padding:3rem 1.5rem;text-align:center;color:var(--reefpi-color-text-muted);font-size:.85rem; }
+    .empty-check { font-size:1.5rem;margin-bottom:.5rem; }
+
+    /* ── Inline preview (static, no overlay) ──── */
+    .panel-inline { background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-md);display:flex;flex-direction:column;height:420px;overflow:hidden;font-family:var(--reefpi-font-app); }
+  </style>
+</head>
+<body>
+  <h1>AlertCenter</h1>
+  <p class="subtitle">380px right-edge slide-over with bell badge. Keyboard: ↑↓ navigate, <kbd>a</kbd> acknowledge, <kbd>Esc</kbd> close.</p>
+  <div class="flag-banner">flag: alert_center (default off)</div>
+
+  <!-- Live demo: bell + backdrop + real panel -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">Live demo — click bell to open slide-over</div>
+    <div class="card-body">
+      <div class="navbar-bar">
+        <button class="bell-btn" id="bell-demo" aria-label="Alerts — 2 unacknowledged" aria-expanded="false">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2a5 5 0 0 1 5 5v3l1.5 2H2.5L4 10V7a5 5 0 0 1 5-5z"/><path d="M7 15a2 2 0 0 0 4 0"/></svg>
+          <span class="bell-badge" id="badge-demo">2</span>
+        </button>
+      </div>
+      <p class="story-caption">bell shows unacknowledged count · badge hidden at 0</p>
+    </div>
+  </div>
+
+  <!-- Static previews side by side -->
+  <div class="story-grid">
+
+    <!-- Active alerts -->
+    <div class="card">
+      <div class="card-header">Active alerts (2 critical, 1 warn)</div>
+      <div class="card-body" style="padding:0;">
+        <div class="panel-inline">
+          <div class="panel-header">
+            <span class="panel-title">Alerts</span>
+            <button class="close-btn" aria-label="Close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            </button>
+          </div>
+          <div class="panel-body">
+            <div class="section-hdr">Active (3)</div>
+            <div class="alert-row focused" style="--row-color:var(--reefpi-color-error);--row-bg:var(--reefpi-color-error-bg);">
+              <span class="sev-dot" style="background:var(--reefpi-color-error)"></span>
+              <div class="alert-content">
+                <div class="alert-title">pH Outside Range</div>
+                <div class="alert-detail">pH 7.98 — below safe minimum 8.1</div>
+                <div class="alert-time">2m ago</div>
+              </div>
+              <div class="alert-actions">
+                <button class="act-btn act-ack">Ack</button>
+                <button class="act-btn act-dis">Dismiss</button>
+              </div>
+            </div>
+            <div class="alert-row">
+              <span class="sev-dot" style="background:var(--reefpi-color-error)"></span>
+              <div class="alert-content">
+                <div class="alert-title">Relay did not respond</div>
+                <div class="alert-detail">Heater command timed out after 3 retries</div>
+                <div class="alert-time">5m ago</div>
+              </div>
+              <div class="alert-actions">
+                <button class="act-btn act-ack">Ack</button>
+                <button class="act-btn act-dis">Dismiss</button>
+              </div>
+            </div>
+            <div class="alert-row">
+              <span class="sev-dot" style="background:var(--reefpi-color-warn)"></span>
+              <div class="alert-content">
+                <div class="alert-title">ATO Low Water</div>
+                <div class="alert-detail">Reservoir at 14% — refill recommended</div>
+                <div class="alert-time">12m ago</div>
+              </div>
+              <div class="alert-actions">
+                <button class="act-btn act-ack">Ack</button>
+                <button class="act-btn act-dis">Dismiss</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">↑↓ navigate · a acknowledge · Esc close</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="card">
+      <div class="card-header">Empty state</div>
+      <div class="card-body" style="padding:0;">
+        <div class="panel-inline">
+          <div class="panel-header">
+            <span class="panel-title">Alerts</span>
+            <button class="close-btn" aria-label="Close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            </button>
+          </div>
+          <div class="panel-body">
+            <div class="empty-state">
+              <div class="empty-check">&#10003;</div>
+              No active alerts — all systems nominal.
+            </div>
+          </div>
+          <div class="panel-footer">↑↓ navigate · a acknowledge · Esc close</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Full-screen slide-over (live demo) -->
+  <div class="backdrop" id="backdrop-demo"></div>
+  <div class="slide-over" id="panel-demo" role="dialog" aria-label="Alert center" aria-modal="true" tabindex="-1">
+    <div class="panel-header">
+      <span class="panel-title">Alerts</span>
+      <button class="close-btn" id="close-demo" aria-label="Close alert center">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+      </button>
+    </div>
+    <div class="panel-body" id="panel-body-demo"></div>
+    <div class="panel-footer">↑↓ navigate · a acknowledge · Esc close</div>
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    var ALERTS = [
+      { id:'1', severity:'critical', title:'pH Outside Range',         detail:'pH 7.98 — below safe minimum 8.1',           ts:Date.now()-120000,  acked:false },
+      { id:'2', severity:'critical', title:'Relay did not respond',    detail:'Heater command timed out after 3 retries',    ts:Date.now()-300000,  acked:false },
+      { id:'3', severity:'warn',     title:'ATO Low Water',            detail:'Reservoir at 14% — refill recommended',      ts:Date.now()-720000,  acked:true  }
+    ]
+
+    var focusIdx = 0
+
+    function relTime(ts){ var d=Math.floor((Date.now()-ts)/1000); return d<60?d+'s ago':d<3600?Math.floor(d/60)+'m ago':Math.floor(d/3600)+'h ago' }
+
+    function renderPanel(){
+      var body = document.getElementById('panel-body-demo')
+      body.innerHTML = ''
+      var active   = ALERTS.filter(a=>!a.acked)
+      var resolved = ALERTS.filter(a=>a.acked)
+      var all = [...active,...resolved]
+
+      if(all.length===0){
+        body.innerHTML='<div class="empty-state"><div class="empty-check">&#10003;</div>No active alerts — all systems nominal.</div>'
+        return
+      }
+
+      function mkSection(label,arr){
+        if(!arr.length) return
+        var sh=document.createElement('div');sh.className='section-hdr';sh.textContent=label+' ('+arr.length+')';body.appendChild(sh)
+        arr.forEach(function(alert){
+          var color=alert.severity==='critical'?'var(--reefpi-color-error)':'var(--reefpi-color-warn)'
+          var bg=alert.severity==='critical'?'var(--reefpi-color-error-bg)':'var(--reefpi-color-warn-bg)'
+          var row=document.createElement('div');row.className='alert-row'+(alert.acked?' acked':'')+(all.indexOf(alert)===focusIdx?' focused':'')
+          row.style.setProperty('--row-color',color);row.style.setProperty('--row-bg',bg)
+          var dot=document.createElement('span');dot.className='sev-dot';dot.style.background=color
+          var content=document.createElement('div');content.className='alert-content'
+          content.innerHTML='<div class="alert-title">'+alert.title+'</div><div class="alert-detail">'+alert.detail+'</div><div class="alert-time">'+relTime(alert.ts)+'</div>'
+          var actions=document.createElement('div');actions.className='alert-actions'
+          if(!alert.acked){
+            var ackBtn=document.createElement('button');ackBtn.className='act-btn act-ack';ackBtn.textContent='Ack'
+            ackBtn.addEventListener('click',function(){alert.acked=true;updateBadge();renderPanel()})
+            actions.appendChild(ackBtn)
+          }
+          var disBtn=document.createElement('button');disBtn.className='act-btn act-dis';disBtn.textContent='Dismiss'
+          disBtn.addEventListener('click',function(){ALERTS=ALERTS.filter(a=>a.id!==alert.id);updateBadge();renderPanel()})
+          actions.appendChild(disBtn)
+          row.appendChild(dot);row.appendChild(content);row.appendChild(actions)
+          body.appendChild(row)
+        })
+      }
+
+      mkSection('Active',active)
+      mkSection('Resolved',resolved)
+    }
+
+    function updateBadge(){
+      var unacked=ALERTS.filter(a=>!a.acked).length
+      var badge=document.getElementById('badge-demo')
+      badge.textContent=unacked
+      badge.style.display=unacked>0?'flex':'none'
+      document.getElementById('bell-demo').setAttribute('aria-label','Alerts'+(unacked?' — '+unacked+' unacknowledged':''))
+    }
+
+    function openPanel(){
+      document.getElementById('panel-demo').classList.add('open')
+      document.getElementById('backdrop-demo').classList.add('open')
+      document.getElementById('bell-demo').setAttribute('aria-expanded','true')
+      renderPanel()
+      setTimeout(()=>document.getElementById('panel-demo').focus(),50)
+    }
+
+    function closePanel(){
+      document.getElementById('panel-demo').classList.remove('open')
+      document.getElementById('backdrop-demo').classList.remove('open')
+      document.getElementById('bell-demo').setAttribute('aria-expanded','false')
+    }
+
+    document.getElementById('bell-demo').addEventListener('click',function(){
+      document.getElementById('panel-demo').classList.contains('open')?closePanel():openPanel()
+    })
+    document.getElementById('close-demo').addEventListener('click',closePanel)
+    document.getElementById('backdrop-demo').addEventListener('click',closePanel)
+
+    document.addEventListener('keydown',function(e){
+      if(!document.getElementById('panel-demo').classList.contains('open')) return
+      var all=[...ALERTS.filter(a=>!a.acked),...ALERTS.filter(a=>a.acked)]
+      if(e.key==='Escape') closePanel()
+      if(e.key==='ArrowDown'){e.preventDefault();focusIdx=Math.min(focusIdx+1,all.length-1);renderPanel()}
+      if(e.key==='ArrowUp'){e.preventDefault();focusIdx=Math.max(focusIdx-1,0);renderPanel()}
+      if(e.key==='a'&&all[focusIdx]){all[focusIdx].acked=true;updateBadge();renderPanel()}
+    })
+
+    updateBadge()
+  </script>
+</body>
+</html>
