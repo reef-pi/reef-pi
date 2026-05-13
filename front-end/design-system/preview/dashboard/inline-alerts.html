@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Inline Tile Alerts</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── MetricTile mockup ─────────────────────────── */
+    .metric-tile {
+      width: 320px;
+      min-height: 220px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .tile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 0.875rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      flex-shrink: 0;
+    }
+
+    .tile-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+    }
+
+    .tile-range {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .tile-body {
+      flex: 1 1 auto;
+      padding: 0.75rem 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tile-value {
+      font-size: 1.75rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--reefpi-color-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tile-unit {
+      font-size: 0.8rem;
+      color: var(--reefpi-color-text-muted);
+    }
+
+    /* Fake sparkline */
+    .sparkline-mock {
+      flex: 1 1 auto;
+      min-height: 60px;
+      background: var(--reefpi-color-surface);
+      border-radius: var(--reefpi-radius-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .sparkline-mock svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Alert footer ─────────────────────────────── */
+    .tile-alert {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.875rem;
+      border-top: 1px solid var(--reefpi-color-border);
+      cursor: pointer;
+      flex-shrink: 0;
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--reefpi-font-app);
+    }
+    .tile-alert:hover { background: var(--reefpi-color-surface); }
+
+    .alert-msg {
+      font-size: 0.72rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1 1 auto;
+    }
+
+    .alert-time {
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      flex-shrink: 0;
+    }
+
+    .tile-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .log-box {
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+    }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Inline Tile Alerts</div>
+    <div class="card-desc">3px top-border + footer copy on MetricTile — alert_center flag</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: alert states side-by-side -->
+  <section class="story">
+    <h2 class="story-title">Alert states</h2>
+    <p class="subtitle">warn (orange top-border) · critical (red top-border) · no alert (normal)</p>
+    <div class="tile-grid" id="tile-grid-1"></div>
+    <div class="log-box" id="log1">Click an alert footer to see the event</div>
+  </section>
+
+  <!-- Story 2: long message truncation -->
+  <section class="story">
+    <h2 class="story-title">Long message truncation</h2>
+    <p class="subtitle">Alert message overflows — ellipsis keeps footer single-line</p>
+    <div class="tile-grid" id="tile-grid-2"></div>
+  </section>
+
+  <!-- Story 3: no alert (baseline) -->
+  <section class="story">
+    <h2 class="story-title">No alert (baseline)</h2>
+    <p class="subtitle">Normal 1px top-border; no footer row rendered</p>
+    <div class="tile-grid" id="tile-grid-3"></div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+function warnIcon(color) {
+  return `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="flex-shrink:0">
+    <path d="M6 1L11 10H1L6 1Z" fill="${color}" opacity="0.2"/>
+    <path d="M6 1L11 10H1L6 1Z" stroke="${color}" stroke-width="1.2" stroke-linejoin="round"/>
+    <line x1="6" y1="4.5" x2="6" y2="7" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="6" cy="8.5" r="0.6" fill="${color}"/>
+  </svg>`
+}
+
+function sparklinePath() {
+  const pts = [18,20,19,22,24,23,25,26,24,27,26,28,27,29,28,30]
+  const w = 280, h = 60
+  const mn = Math.min(...pts), mx = Math.max(...pts)
+  const xs = pts.map((_,i) => (i / (pts.length-1)) * w)
+  const ys = pts.map(v => h - ((v - mn) / (mx - mn + 0.001)) * (h * 0.8) - h * 0.1)
+  const d = xs.map((x,i) => `${i===0?'M':'L'}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ')
+  const fill = `${d} L${w},${h} L0,${h} Z`
+  return { line: d, fill, w, h }
+}
+
+function buildTile({ label, value, unit, severity, message, at, log }) {
+  const COLORS = {
+    critical: 'var(--reefpi-color-error)',
+    warn: 'var(--reefpi-color-warn)'
+  }
+  const color = severity ? COLORS[severity] : null
+  const sp = sparklinePath()
+
+  const tile = document.createElement('div')
+  tile.className = 'metric-tile'
+  if (color) {
+    tile.style.borderTop = `3px solid ${color}`
+  }
+
+  const header = `
+    <div class="tile-header">
+      <span class="tile-label">${label}</span>
+      <span class="tile-range">1d</span>
+    </div>`
+
+  const body = `
+    <div class="tile-body">
+      <div>
+        <span class="tile-value">${value}</span>
+        <span class="tile-unit">${unit}</span>
+      </div>
+      <div class="sparkline-mock">
+        <svg viewBox="0 0 ${sp.w} ${sp.h}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sg${label.replace(/\s/g,'')}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--reefpi-color-brand)" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="var(--reefpi-color-brand)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="${sp.fill}" fill="url(#sg${label.replace(/\s/g,'')})" />
+          <path d="${sp.line}" fill="none" stroke="var(--reefpi-color-brand)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>`
+
+  tile.innerHTML = header + body
+
+  if (severity && message) {
+    const btn = document.createElement('button')
+    btn.className = 'tile-alert'
+    btn.setAttribute('aria-live', 'polite')
+    const timeStr = at ? `${Math.floor((Date.now() - at) / 60000)}m` : ''
+    btn.innerHTML = `
+      ${warnIcon(color)}
+      <span class="alert-msg" style="color:${color}">${message}</span>
+      ${at ? `<span class="alert-time">${timeStr}</span>` : ''}
+    `
+    btn.addEventListener('click', () => {
+      if (log) log.textContent = `Alert clicked: ${message} (${severity})`
+    })
+    tile.appendChild(btn)
+  }
+
+  return tile
+}
+
+// Story 1: warn, critical, none
+const g1 = document.getElementById('tile-grid-1')
+const log1 = document.getElementById('log1')
+const NOW = Date.now()
+g1.appendChild(buildTile({ label: 'pH', value: '8.5', unit: 'pH',
+  severity: 'warn', message: 'Reading above safe threshold', at: NOW - 720000, log: log1 }))
+g1.appendChild(buildTile({ label: 'Temperature', value: '83.2', unit: '°F',
+  severity: 'critical', message: 'Critical: outside safe range', at: NOW - 180000, log: log1 }))
+g1.appendChild(buildTile({ label: 'Salinity', value: '35.0', unit: 'ppt',
+  severity: null, message: null, at: null }))
+
+// Story 2: long message
+const g2 = document.getElementById('tile-grid-2')
+g2.appendChild(buildTile({ label: 'ATO Level', value: '18', unit: '%',
+  severity: 'warn',
+  message: 'Reading above safe threshold — consider manual refill and check float sensor calibration',
+  at: NOW - 3600000 }))
+
+// Story 3: no alert baseline
+const g3 = document.getElementById('tile-grid-3')
+g3.appendChild(buildTile({ label: 'pH', value: '8.2', unit: 'pH',
+  severity: null, message: null, at: null }))
+g3.appendChild(buildTile({ label: 'Temperature', value: '78.4', unit: '°F',
+  severity: null, message: null, at: null }))
+</script>
+</body>
+</html>

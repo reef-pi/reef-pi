@@ -26,7 +26,7 @@
 - [x] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
 - [x] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
 - [x] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
-- [ ] #18 Inline tile alerts — `issue-18-inline-alerts.md`
+- [x] #18 Inline tile alerts — `issue-18-inline-alerts.md`
 - [ ] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
 
 ## E5 · Shell + theming (flag: `new_shell`)
