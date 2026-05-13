@@ -384,6 +384,27 @@ describe('Connectors', () => {
     expect(m.state.edit).toBe(false)
   })
 
+  it('<AnalogInput /> updates pin and driver while editing', () => {
+    const update = jest.fn()
+    const m = new AnalogInput({
+      name: 'pH Sensor',
+      pin: 0,
+      analog_input_id: '1',
+      driver: stockDrivers[0],
+      drivers: stockDrivers,
+      update,
+      remove: () => {}
+    })
+    patchSetState(m)
+    m.handleEdit()
+    m.onPinChange(1)
+    m.handleSetDriver({ target: { value: 'missing' } })
+    expect(m.state.driver).toEqual({})
+    m.handleSetDriver({ target: { value: 'rpi' } })
+    m.handleEdit()
+    expect(update).toHaveBeenCalledWith({ name: 'pH Sensor', pin: 1, driver: 'rpi' })
+  })
+
   it('<AnalogInput /> handleRemove calls remove', () => {
     const remove = jest.fn()
     const m = new AnalogInput({
@@ -423,6 +444,48 @@ describe('Connectors', () => {
     component.handleSave()
     expect(create).toHaveBeenCalled()
     expect(component.list().length).toBeGreaterThan(0)
+    expect(analogInputs.map(input => input.name)).toEqual(['pH', 'ORP'])
+  })
+
+  it('<AnalogInputs /> handles driver changes, updates, and deletes', async () => {
+    const fetch = jest.fn()
+    const update = jest.fn()
+    const del = jest.fn()
+    const analogInputs = [
+      { id: '1', name: 'pH', pin: 0, driver: 'ads' },
+      { id: '2', name: 'ORP', pin: 1, driver: 'missing' }
+    ]
+    const aiDrivers = [
+      { id: 'ads', name: 'ADS1115', pinmap: { 'analog-input': [0, 1, 2, 3] } },
+      { id: 'other', name: 'Other', pinmap: { 'analog-input': [4, 5] } }
+    ]
+    const component = new RawAnalogInputs({
+      analog_inputs: analogInputs,
+      drivers: aiDrivers,
+      fetch,
+      create: jest.fn(),
+      delete: del,
+      update
+    })
+    patchSetState(component)
+
+    component.componentDidMount()
+    component.handleSetDriver({ target: { value: 'other' } })
+    expect(component.state.driver.id).toBe('other')
+    component.handleSetDriver({ target: { value: 'missing' } })
+    expect(component.state.driver).toEqual({})
+    component.onPinChange(3)
+    expect(component.state.pin).toBe(3)
+
+    const items = component.list()
+    const analogInput = items.find(item => item.type === AnalogInput)
+    analogInput.props.update({ name: 'pH updated', pin: 2, driver: 'ads' })
+    expect(update).toHaveBeenCalledWith('1', { name: 'pH updated', pin: 2, driver: 'ads' })
+    expect(fetch).toHaveBeenCalled()
+
+    component.remove({ id: '2', name: 'ORP' })()
+    await Promise.resolve()
+    expect(del).toHaveBeenCalledWith('2')
     expect(analogInputs.map(input => input.name)).toEqual(['pH', 'ORP'])
   })
 })
