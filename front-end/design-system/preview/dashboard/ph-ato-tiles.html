@@ -168,7 +168,9 @@
         svgEl.appendChild(br)
       }
 
-      var defs=svgNS('defs'),grad=svgNS('linearGradient'),uid='sg'+Math.random().toString(36).slice(2)
+      var defs=svgNS('defs'),grad=svgNS('linearGradient')
+      var randBytes=new Uint8Array(8);window.crypto.getRandomValues(randBytes)
+      var uid='sg'+Array.from(randBytes,b=>b.toString(16).padStart(2,'0')).join('')
       grad.setAttribute('id',uid);grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1')
       var s0=svgNS('stop');s0.setAttribute('offset','0%');s0.setAttribute('stop-color',stroke);s0.setAttribute('stop-opacity','0.35')
       var s1=svgNS('stop');s1.setAttribute('offset','100%');s1.setAttribute('stop-color',stroke);s1.setAttribute('stop-opacity','0')
