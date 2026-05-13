@@ -20,7 +20,7 @@
 - [x] #11 Hero TemperatureTile — `issue-11-hero-temp.md`
 - [x] #12 Secondary PhTile / AtoTile — `issue-12-ph-ato-tiles.md`
 - [x] #13 Equipment strip (footer) — `issue-13-equipment-strip.md`
-- [ ] #14 Wire behind `dashboard_v2` flag — `issue-14-dashboard-flag.md`
+- [x] #14 Wire behind `dashboard_v2` flag — `issue-14-dashboard-flag.md`
 
 ## E4 · Control trust (flags: `pending_states`, `alert_center`)
 - [x] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`

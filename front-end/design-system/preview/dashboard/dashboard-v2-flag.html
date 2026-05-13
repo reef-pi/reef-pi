@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — DashboardV2 flag</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Flag toggle UI ─────────────────────────── */
+    .flag-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.78rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .flag-label {
+      flex: 1 1 auto;
+    }
+    .flag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      font-family: var(--reefpi-font-mono);
+    }
+    .flag-pill.on  { background: var(--reefpi-color-brand); color: #fff; }
+    .flag-pill.off { background: var(--reefpi-color-surface-elevated); border: 1px solid var(--reefpi-color-border); color: var(--reefpi-color-text-muted); }
+
+    .flag-btn {
+      background: none;
+      border: 1px solid var(--reefpi-color-border-strong);
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-text);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.78rem;
+      padding: 0 0.75rem;
+      min-height: 36px;
+      cursor: pointer;
+    }
+    .flag-btn:hover { border-color: var(--reefpi-color-brand); color: var(--reefpi-color-brand); }
+
+    /* ── Legacy dashboard mock ──────────────────── */
+    .legacy-dashboard {
+      padding: 1.5rem;
+      background: var(--reefpi-color-surface);
+      border: 2px dashed var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      text-align: center;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.85rem;
+    }
+    .legacy-dashboard .badge {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--reefpi-radius-sm);
+      background: var(--reefpi-color-border);
+      font-size: 0.65rem;
+      font-family: var(--reefpi-font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── V2 dashboard mock ──────────────────────── */
+    .v2-dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .sys-strip-mock {
+      height: 56px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0.75rem;
+    }
+    .health-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--reefpi-color-brand);
+    }
+    .strip-name { font-size: 0.9rem; font-weight: 500; color: var(--reefpi-color-text); }
+    .strip-uptime { font-size: 0.7rem; color: var(--reefpi-color-text-muted); font-family: var(--reefpi-font-mono); margin-left: auto; }
+
+    .metric-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tile-mock {
+      flex: 1 1 180px;
+      min-height: 180px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .tile-mock.wide { flex: 2 1 300px; }
+
+    .tile-mock-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+    }
+    .tile-mock-value {
+      font-size: 1.75rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      font-variant-numeric: tabular-nums;
+    }
+    .tile-mock-sparkline {
+      flex: 1 1 auto;
+      background: var(--reefpi-color-surface);
+      border-radius: var(--reefpi-radius-sm);
+      min-height: 50px;
+      overflow: hidden;
+    }
+    .tile-mock-sparkline svg { width: 100%; height: 100%; }
+
+    .equip-strip-mock {
+      height: 96px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+    .equip-item-mock {
+      flex-shrink: 0;
+      width: 108px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border-right: 1px solid var(--reefpi-color-border);
+      scroll-snap-align: start;
+      padding: 0 0.5rem;
+    }
+    .equip-item-mock:last-child { border-right: none; }
+    .equip-toggle-mock {
+      width: 44px; height: 24px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .equip-toggle-thumb {
+      position: absolute;
+      top: 2px; width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+    }
+    .equip-name-mock {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      white-space: nowrap;
+    }
+    .equip-meta-mock {
+      font-size: 0.68rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+    }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">DashboardV2 flag</div>
+    <div class="card-desc">dashboard_v2 feature flag — toggles between legacy and new layout</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: interactive flag toggle -->
+  <section class="story">
+    <h2 class="story-title">Flag toggle (interactive)</h2>
+    <p class="subtitle">Simulates window.FEATURE_FLAGS.dashboard_v2 switching</p>
+
+    <div class="flag-bar">
+      <span class="flag-label">window.FEATURE_FLAGS.dashboard_v2</span>
+      <span class="flag-pill off" id="flag-pill">false</span>
+      <button class="flag-btn" id="flag-toggle-btn">Enable flag</button>
+    </div>
+
+    <div id="dashboard-container"></div>
+  </section>
+
+  <!-- Story 2: flag=true (always-on preview) -->
+  <section class="story">
+    <h2 class="story-title">flag = true</h2>
+    <p class="subtitle">New DashboardV2 layout</p>
+    <div class="v2-dashboard">
+      <div class="sys-strip-mock">
+        <div class="health-dot"></div>
+        <span class="strip-name">My Reef</span>
+        <span class="strip-uptime">uptime 14d 6h · v4.2.1</span>
+      </div>
+      <div class="metric-row" id="metric-row-wide"></div>
+      <div class="metric-row" id="metric-row-narrow"></div>
+      <div class="equip-strip-mock" id="equip-strip-wide"></div>
+    </div>
+  </section>
+
+  <!-- Story 3: flag=false (legacy passthrough) -->
+  <section class="story">
+    <h2 class="story-title">flag = false</h2>
+    <p class="subtitle">Legacy dashboard renders unchanged (children passthrough)</p>
+    <div class="legacy-dashboard">
+      <div class="badge">legacy</div>
+      <div>Original dashboard content renders here unchanged.</div>
+      <div style="margin-top:0.5rem;font-size:0.75rem;">DashboardV2 returns children when flag is off.</div>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+// ── Flag toggle demo ─────────────────────────────────────────────────────────
+let flagOn = false
+
+function renderLegacy() {
+  return `<div class="legacy-dashboard">
+    <div class="badge">legacy</div>
+    <div>Original dashboard renders unchanged — window.FEATURE_FLAGS.dashboard_v2 = false</div>
+  </div>`
+}
+
+function sparklineSVG(color) {
+  const pts = [20,22,21,24,23,25,27,26,28,27,29,28,30,29,31]
+  const w=260, h=50
+  const mn=Math.min(...pts), mx=Math.max(...pts)
+  const xs = pts.map((_,i) => (i/(pts.length-1))*w)
+  const ys = pts.map(v => h - ((v-mn)/(mx-mn+0.001))*(h*0.8) - h*0.1)
+  const d = xs.map((x,i) => `${i===0?'M':'L'}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ')
+  const fill = `${d} L${w},${h} L0,${h} Z`
+  const uid = color.replace(/[^a-z]/gi,'')
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs><linearGradient id="g${uid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${fill}" fill="url(#g${uid})"/>
+    <path d="${d}" fill="none" stroke="${color}" stroke-width="1.5"/>
+  </svg>`
+}
+
+function renderV2() {
+  const brand = getComputedStyle(document.documentElement).getPropertyValue('--reefpi-color-brand').trim() || '#27A822'
+  return `<div class="v2-dashboard">
+    <div class="sys-strip-mock">
+      <div class="health-dot"></div>
+      <span class="strip-name">My Reef</span>
+      <span class="strip-uptime">uptime 14d 6h · v4.2.1</span>
+    </div>
+    <div class="metric-row">
+      <div class="tile-mock wide">
+        <div class="tile-mock-label">Temperature</div>
+        <div class="tile-mock-value">78.4 <span style="font-size:0.8rem;color:var(--reefpi-color-text-muted)">°F</span></div>
+        <div class="tile-mock-sparkline">${sparklineSVG(brand)}</div>
+      </div>
+      <div class="tile-mock">
+        <div class="tile-mock-label">pH</div>
+        <div class="tile-mock-value">8.2 <span style="font-size:0.8rem;color:var(--reefpi-color-text-muted)">pH</span></div>
+        <div class="tile-mock-sparkline">${sparklineSVG(brand)}</div>
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="tile-mock">
+        <div class="tile-mock-label">ATO</div>
+        <div class="tile-mock-value">72 <span style="font-size:0.8rem;color:var(--reefpi-color-text-muted)">%</span></div>
+        <div class="tile-mock-sparkline">${sparklineSVG(brand)}</div>
+      </div>
+    </div>
+    <div class="equip-strip-mock">
+      ${[['Return Pump','on','on 2h'],['Skimmer','off',''],['Heater','on','on 45m'],['UV','on','on 6h'],['Fan','off','']].map(([name,state,meta]) => `
+        <div class="equip-item-mock">
+          <div class="equip-toggle-mock" style="background:${state==='on'?'var(--reefpi-color-brand)':'var(--reefpi-color-border-strong)'}">
+            <div class="equip-toggle-thumb" style="${state==='on'?'left:22px':'left:2px'}"></div>
+          </div>
+          <div class="equip-name-mock">${name}</div>
+          <div class="equip-meta-mock">${meta}</div>
+        </div>`).join('')}
+    </div>
+  </div>`
+}
+
+function refresh() {
+  document.getElementById('dashboard-container').innerHTML = flagOn ? renderV2() : renderLegacy()
+  const pill = document.getElementById('flag-pill')
+  pill.textContent = flagOn ? 'true' : 'false'
+  pill.className = `flag-pill ${flagOn ? 'on' : 'off'}`
+  document.getElementById('flag-toggle-btn').textContent = flagOn ? 'Disable flag' : 'Enable flag'
+}
+
+document.getElementById('flag-toggle-btn').addEventListener('click', () => {
+  flagOn = !flagOn
+  refresh()
+})
+
+refresh()
+
+// ── Static story 2: always-on metric row ─────────────────────────────────────
+const brand2 = 'var(--reefpi-color-brand)'
+const mr = document.getElementById('metric-row-wide')
+const mr2 = document.getElementById('metric-row-narrow')
+
+function staticTile(label, value, unit, wide) {
+  const d = document.createElement('div')
+  d.className = `tile-mock${wide ? ' wide' : ''}`
+  d.innerHTML = `
+    <div class="tile-mock-label">${label}</div>
+    <div class="tile-mock-value">${value} <span style="font-size:0.8rem;color:var(--reefpi-color-text-muted)">${unit}</span></div>
+    <div class="tile-mock-sparkline"><svg viewBox="0 0 260 50" preserveAspectRatio="none">
+      <path d="M0,40 C40,35 80,20 130,25 C180,30 220,15 260,18 L260,50 L0,50 Z"
+        fill="${brand2}" opacity="0.15"/>
+      <path d="M0,40 C40,35 80,20 130,25 C180,30 220,15 260,18"
+        fill="none" stroke="${brand2}" stroke-width="1.5"/>
+    </svg></div>`
+  return d
+}
+mr.appendChild(staticTile('Temperature', '78.4', '°F', true))
+mr.appendChild(staticTile('pH', '8.2', 'pH', false))
+mr2.appendChild(staticTile('ATO', '72', '%', false))
+
+const es = document.getElementById('equip-strip-wide')
+;[['Return Pump','on','on 2h'],['Skimmer','off',''],['Heater','on','on 45m'],['UV','on','on 6h'],['Fan','off',''],['Frag Light','on','on 1h']].forEach(([name,state,meta], i, arr) => {
+  const d = document.createElement('div')
+  d.className = 'equip-item-mock'
+  if (i === arr.length - 1) d.style.borderRight = 'none'
+  d.innerHTML = `
+    <div class="equip-toggle-mock" style="background:${state==='on'?'var(--reefpi-color-brand)':'var(--reefpi-color-border-strong)'}">
+      <div class="equip-toggle-thumb" style="${state==='on'?'left:22px':'left:2px'}"></div>
+    </div>
+    <div class="equip-name-mock">${name}</div>
+    <div class="equip-meta-mock">${meta}</div>`
+  es.appendChild(d)
+})
+</script>
+</body>
+</html>
