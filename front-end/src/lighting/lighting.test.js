@@ -125,6 +125,7 @@ describe('Lighting ui', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+    document.body.innerHTML = ''
   })
 
   it('<Main />', () => {
@@ -378,6 +379,143 @@ describe('Lighting ui', () => {
 
   it('<Main /> defines a default color for new light channels', () => {
     expect(DEFAULT_CHANNEL_COLOR).toBe('#000000')
+  })
+
+  it('<Main /> should require a jack when adding a light', () => {
+    const fnCreateLight = jest.fn()
+    const m = createMain({ createLight: fnCreateLight })
+
+    m.handleAddLight()
+
+    expect(Alert.showError).toHaveBeenCalled()
+    expect(fnCreateLight).not.toHaveBeenCalled()
+  })
+
+  it('<Main /> should require a light name when adding a light', () => {
+    document.body.innerHTML = '<input id="lightName" value="">'
+    const fnCreateLight = jest.fn()
+    const m = createMain({ createLight: fnCreateLight })
+    m.state.selectedJack = 0
+
+    m.handleAddLight()
+
+    expect(Alert.showError).toHaveBeenCalled()
+    expect(fnCreateLight).not.toHaveBeenCalled()
+  })
+
+  it('<Main /> should create a light with default channels and reset the add form', () => {
+    document.body.innerHTML = '<input id="lightName" value="Frag Rack">'
+    const fnCreateLight = jest.fn()
+    const m = createMain({ createLight: fnCreateLight })
+    m.state = {
+      ...m.state,
+      addLight: true,
+      selectedJack: 0
+    }
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    m.handleAddLight()
+
+    expect(fnCreateLight).toHaveBeenCalledWith({
+      name: 'Frag Rack',
+      jack: '1',
+      enable: true,
+      channels: {
+        1: {
+          color: DEFAULT_CHANNEL_COLOR,
+          manual: false,
+          min: 0,
+          max: 100,
+          name: 'Channel-1',
+          on: true,
+          pin: 1,
+          value: 0,
+          profile: {
+            type: 'fixed',
+            config: {
+              start: '00:00:00',
+              end: '23:59:59',
+              value: 0
+            }
+          }
+        },
+        2: {
+          color: DEFAULT_CHANNEL_COLOR,
+          manual: false,
+          min: 0,
+          max: 100,
+          name: 'Channel-2',
+          on: true,
+          pin: 2,
+          value: 0,
+          profile: {
+            type: 'fixed',
+            config: {
+              start: '00:00:00',
+              end: '23:59:59',
+              value: 0
+            }
+          }
+        }
+      }
+    })
+    expect(m.state.addLight).toBe(false)
+    expect(document.getElementById('lightName').value).toBe('')
+  })
+
+  it('<Main /> should render jacks and set selected jack', () => {
+    const m = createMain({
+      jacks: [
+        { id: '1', name: 'alpha', pins: [1] },
+        { id: '2', name: 'beta', pins: [2] }
+      ]
+    })
+    m.setState = update => { m.state = { ...m.state, ...update } }
+
+    const jacks = m.jacksList()
+    jacks[1].props.onClick()
+
+    expect(jacks).toHaveLength(2)
+    expect(jacks[0].props.children.props.id).toBe('select-jack-alpha')
+    expect(m.state.selectedJack).toBe(1)
+    expect(renderToStaticMarkup(m.newLightUI())).toContain('beta')
+  })
+
+  it('<Main /> should normalize lunar full moon date when updating a light', () => {
+    const fnUpdateLight = jest.fn()
+    light.channels[1].profile = {
+      type: 'lunar',
+      config: {
+        start: '00:00:00',
+        end: '23:59:59',
+        full_moon: new Date(2024, 1, 24)
+      }
+    }
+    const m = createMain({ updateLight: fnUpdateLight })
+
+    m.handleUpdateLight({
+      config: {
+        id: 1,
+        name: 'light',
+        channels: light.channels,
+        jack: light.jack
+      }
+    })
+
+    expect(fnUpdateLight).toHaveBeenCalledTimes(1)
+    expect(fnUpdateLight.mock.calls[0][1].channels[1].profile.config.full_moon).toBe('2024-02-24')
+  })
+
+  it('<Main /> should confirm before deleting a light', () => {
+    const fnDeleteLight = jest.fn()
+    const m = createMain({ deleteLight: fnDeleteLight })
+
+    expect.assertions(2)
+    m.handleDeleteLight(light)
+    expect(fnDeleteLight).not.toHaveBeenCalled()
+    return Promise.resolve().then(() => {
+      expect(fnDeleteLight).toHaveBeenCalledWith('1')
+    })
   })
 
   it('<Profile /> fixed', () => {
