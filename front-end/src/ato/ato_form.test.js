@@ -67,6 +67,49 @@ describe('AtoForm', () => {
     expect(mapAtoPropsToValues({ data: sensorOnlyData }).control).toBe('')
   })
 
+  it('maps missing edit fields to defaults', () => {
+    expect(mapAtoPropsToValues({ data: { id: '4', name: 'Fallback ATO', notify: {} } })).toEqual({
+      id: '4',
+      name: 'Fallback ATO',
+      enable: true,
+      control: '',
+      inlet: '',
+      one_shot: false,
+      disable_on_alert: false,
+      period: 60,
+      debounce: 0,
+      pump: '',
+      notify: false,
+      maxAlert: 120
+    })
+  })
+
+  it('preserves disabled booleans while zero numeric values fall back to defaults', () => {
+    expect(mapAtoPropsToValues({
+      data: {
+        enable: false,
+        one_shot: false,
+        disable_on_alert: false,
+        period: 0,
+        debounce: 0,
+        notify: { enable: false, max: 0 }
+      }
+    })).toEqual({
+      id: '',
+      name: '',
+      enable: false,
+      control: '',
+      inlet: '',
+      one_shot: false,
+      disable_on_alert: false,
+      period: 60,
+      debounce: 0,
+      pump: '',
+      notify: false,
+      maxAlert: 120
+    })
+  })
+
   it('derives control value from control flags', () => {
     expect(atoControlValue({ control: true, is_macro: false })).toBe('equipment')
     expect(atoControlValue({ control: true, is_macro: true })).toBe('macro')
