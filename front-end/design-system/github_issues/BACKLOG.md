@@ -23,7 +23,7 @@
 - [ ] #14 Wire behind `dashboard_v2` flag — `issue-14-dashboard-flag.md`
 
 ## E4 · Control trust (flags: `pending_states`, `alert_center`)
-- [ ] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
+- [x] #15 ToggleSwitch pending + error — `issue-15-toggle-states.md`
 - [ ] #16 `useAckMutation` + equipment wire-up — `issue-16-ack-mutation.md`
 - [ ] #17 Alert center slide-over + bell — `issue-17-alert-center.md`
 - [ ] #18 Inline tile alerts — `issue-18-inline-alerts.md`

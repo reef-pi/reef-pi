@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — ToggleSwitch</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) { .story-grid { grid-template-columns: 1fr; } }
+
+    /* ── Toggle host ─────────────────────────────── */
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.25rem 0;
+    }
+
+    .toggle-label {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text);
+    }
+
+    .toggle-sublabel {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      margin-top: 0.25rem;
+    }
+
+    .error-msg {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-error);
+      margin-top: 2px;
+    }
+
+    /* ── Switch SVG base ────────────────────────── */
+
+    .sw-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      line-height: 0;
+      display: inline-block;
+    }
+
+    .sw-btn:focus-visible {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: 3px;
+      border-radius: 14px;
+    }
+
+    .sw-btn[disabled] {
+      cursor: default;
+    }
+
+    /* Spinner animation */
+    @keyframes reefpi-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .spinner-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: reefpi-spin 0.9s linear infinite;
+    }
+
+    .story-caption {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .flag-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-text-muted);
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      padding: 2px 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Interactive demo state machine */
+    .demo-log {
+      margin-top: 0.75rem;
+      font-size: 0.7rem;
+      font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-brand);
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>ToggleSwitch</h1>
+  <p class="subtitle">Four-state controlled switch: off / on / pending / error. Parent owns state; component fires callbacks.</p>
+  <div class="flag-banner">flag: pending_states (default off)</div>
+
+  <div class="story-grid">
+
+    <!-- Story 1: Static states -->
+    <div class="card">
+      <div class="card-header">All four states</div>
+      <div class="card-body">
+        <!-- Off -->
+        <div class="toggle-row">
+          <div>
+            <svg class="sw-btn" role="switch" aria-checked="false" aria-label="Heater — off"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12"
+                fill="var(--reefpi-color-border-strong)"/>
+              <circle cx="12" cy="12" r="10"
+                fill="var(--reefpi-color-surface-elevated)"
+                stroke="var(--reefpi-color-border)" stroke-width="1"/>
+            </svg>
+            <div class="toggle-sublabel">state="off"</div>
+          </div>
+          <span class="toggle-label">Heater</span>
+        </div>
+
+        <!-- On -->
+        <div class="toggle-row" style="margin-top:1rem">
+          <div>
+            <svg class="sw-btn" role="switch" aria-checked="true" aria-label="Return pump — on"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12"
+                fill="var(--reefpi-color-brand)"/>
+              <circle cx="32" cy="12" r="10"
+                fill="var(--reefpi-color-surface-elevated)"
+                stroke="var(--reefpi-color-border)" stroke-width="1"/>
+            </svg>
+            <div class="toggle-sublabel">state="on"</div>
+          </div>
+          <span class="toggle-label">Return pump</span>
+        </div>
+
+        <!-- Pending -->
+        <div class="toggle-row" style="margin-top:1rem">
+          <div>
+            <svg role="img" aria-label="Skimmer — command in flight"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12"
+                fill="var(--reefpi-color-brand)"/>
+              <circle cx="22" cy="12" r="10"
+                fill="var(--reefpi-color-surface-elevated)"
+                stroke="var(--reefpi-color-border)" stroke-width="1"/>
+              <!-- Spinner ring centered on thumb -->
+              <circle class="spinner-ring" cx="22" cy="12" r="13"
+                fill="none"
+                stroke="var(--reefpi-color-pending)"
+                stroke-width="2"
+                stroke-dasharray="25.6 13.8"/>
+            </svg>
+            <div class="toggle-sublabel">state="pending"</div>
+          </div>
+          <span class="toggle-label">Skimmer</span>
+        </div>
+
+        <!-- Error -->
+        <div class="toggle-row" style="margin-top:1rem">
+          <div>
+            <svg class="sw-btn" role="switch" aria-checked="false" aria-label="Dosing pump — error, click to retry"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12"
+                fill="var(--reefpi-color-border-strong)"/>
+              <circle cx="22" cy="12" r="10"
+                fill="var(--reefpi-color-surface-elevated)"
+                stroke="var(--reefpi-color-border)" stroke-width="1"/>
+              <circle cx="22" cy="12" r="13"
+                fill="none"
+                stroke="var(--reefpi-color-error)"
+                stroke-width="2"/>
+              <!-- Retry arc -->
+              <path d="M 35 10 A 13 13 0 0 0 9 10"
+                fill="none" stroke="var(--reefpi-color-error)"
+                stroke-width="1.5" stroke-linecap="round"/>
+              <polygon points="35,10 39,7 39,13" fill="var(--reefpi-color-error)"/>
+            </svg>
+            <div class="error-msg">Relay did not respond</div>
+            <div class="toggle-sublabel">state="error"</div>
+          </div>
+          <span class="toggle-label">Dosing pump</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 2: Interactive state machine -->
+    <div class="card">
+      <div class="card-header">Interactive — click to advance states</div>
+      <div class="card-body">
+        <div class="toggle-row">
+          <div id="demo-switch-wrap">
+            <!-- rendered by JS -->
+          </div>
+          <div>
+            <div class="toggle-label" id="demo-label">Heater</div>
+            <div class="toggle-sublabel" id="demo-state-label">state="off"</div>
+          </div>
+        </div>
+        <p class="story-caption">off → pending (500ms) → on → pending (500ms) → error → off</p>
+        <div class="demo-log" id="demo-log"></div>
+      </div>
+    </div>
+
+    <!-- Story 3: Nested in horizontal scroll container -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">Horizontal scroll container — no layout jump</div>
+      <div class="card-body">
+        <div style="display:flex; gap:1.5rem; overflow-x:auto; padding-bottom:0.5rem;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg role="switch" aria-checked="true" aria-label="Heater on"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12" fill="var(--reefpi-color-brand)"/>
+              <circle cx="32" cy="12" r="10" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1"/>
+            </svg>
+            <span style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">Heater</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg role="img" aria-label="Return pump pending"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12" fill="var(--reefpi-color-brand)"/>
+              <circle cx="22" cy="12" r="10" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1"/>
+              <circle class="spinner-ring" cx="22" cy="12" r="13" fill="none" stroke="var(--reefpi-color-pending)" stroke-width="2" stroke-dasharray="25.6 13.8"/>
+            </svg>
+            <span style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">Return pump</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg role="switch" aria-checked="false" aria-label="Skimmer off"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12" fill="var(--reefpi-color-border-strong)"/>
+              <circle cx="12" cy="12" r="10" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1"/>
+            </svg>
+            <span style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">Skimmer</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg role="switch" aria-label="Dosing pump error"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12" fill="var(--reefpi-color-border-strong)"/>
+              <circle cx="22" cy="12" r="10" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1"/>
+              <circle cx="22" cy="12" r="13" fill="none" stroke="var(--reefpi-color-error)" stroke-width="2"/>
+              <path d="M 35 10 A 13 13 0 0 0 9 10" fill="none" stroke="var(--reefpi-color-error)" stroke-width="1.5" stroke-linecap="round"/>
+              <polygon points="35,10 39,7 39,13" fill="var(--reefpi-color-error)"/>
+            </svg>
+            <span style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">Dosing pump</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0">
+            <svg role="switch" aria-checked="true" aria-label="ATO on"
+              width="44" height="24" viewBox="0 0 44 24" overflow="visible">
+              <rect x="0" y="0" width="44" height="24" rx="12" fill="var(--reefpi-color-brand)"/>
+              <circle cx="32" cy="12" r="10" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1"/>
+            </svg>
+            <span style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">ATO</span>
+          </div>
+        </div>
+        <p class="story-caption">All four states in a flex scroll row — widths are fixed, no reflow</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    // ── Interactive state machine demo ──────────────────────────────────────
+
+    var SEQUENCE = ['off', 'pending-to-on', 'on', 'pending-to-error', 'error', 'off']
+    var LABELS = {
+      'off': 'state="off"',
+      'on': 'state="on"',
+      'pending-to-on': 'state="pending" (→ on)',
+      'pending-to-error': 'state="pending" (→ error)',
+      'error': 'state="error"'
+    }
+
+    var seqIdx = 0
+    var pendingTimer = null
+
+    function currentVisualState () {
+      var s = SEQUENCE[seqIdx]
+      if (s === 'pending-to-on' || s === 'pending-to-error') return 'pending'
+      return s
+    }
+
+    function renderSwitch (wrap, visualState) {
+      var W = 44, H = 24, R = 10
+      var tx = visualState === 'on' ? W - R - 2 : visualState === 'off' ? R + 2 : W / 2
+
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      svg.setAttribute('width', W)
+      svg.setAttribute('height', H)
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+      svg.setAttribute('overflow', 'visible')
+      svg.setAttribute('aria-hidden', 'true')
+
+      var tok = function (n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() }
+
+      var track = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      track.setAttribute('x', 0); track.setAttribute('y', 0)
+      track.setAttribute('width', W); track.setAttribute('height', H)
+      track.setAttribute('rx', H / 2)
+      var trackFill = (visualState === 'on' || visualState === 'pending')
+        ? tok('--reefpi-color-brand') : tok('--reefpi-color-border-strong')
+      track.setAttribute('fill', trackFill)
+      svg.appendChild(track)
+
+      var thumb = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+      thumb.setAttribute('cx', tx); thumb.setAttribute('cy', H / 2); thumb.setAttribute('r', R)
+      thumb.setAttribute('fill', tok('--reefpi-color-surface-elevated'))
+      thumb.setAttribute('stroke', tok('--reefpi-color-border'))
+      thumb.setAttribute('stroke-width', '1')
+      svg.appendChild(thumb)
+
+      if (visualState === 'pending') {
+        var ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        ring.setAttribute('cx', tx); ring.setAttribute('cy', H / 2); ring.setAttribute('r', R + 3)
+        ring.setAttribute('fill', 'none')
+        ring.setAttribute('stroke', tok('--reefpi-color-pending'))
+        ring.setAttribute('stroke-width', '2')
+        ring.setAttribute('stroke-dasharray', '25.6 13.8')
+        ring.classList.add('spinner-ring')
+        svg.appendChild(ring)
+      }
+
+      if (visualState === 'error') {
+        var ering = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        ering.setAttribute('cx', tx); ering.setAttribute('cy', H / 2); ering.setAttribute('r', R + 3)
+        ering.setAttribute('fill', 'none')
+        ering.setAttribute('stroke', tok('--reefpi-color-error'))
+        ering.setAttribute('stroke-width', '2')
+        svg.appendChild(ering)
+        var arc = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        arc.setAttribute('d', 'M 35 10 A 13 13 0 0 0 9 10')
+        arc.setAttribute('fill', 'none')
+        arc.setAttribute('stroke', tok('--reefpi-color-error'))
+        arc.setAttribute('stroke-width', '1.5')
+        arc.setAttribute('stroke-linecap', 'round')
+        svg.appendChild(arc)
+        var arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+        arrow.setAttribute('points', '35,10 39,7 39,13')
+        arrow.setAttribute('fill', tok('--reefpi-color-error'))
+        svg.appendChild(arrow)
+      }
+
+      var btn = document.createElement('button')
+      btn.className = 'sw-btn'
+      btn.setAttribute('role', 'switch')
+      btn.setAttribute('aria-checked', visualState === 'on' ? 'true' : 'false')
+      btn.setAttribute('aria-label', 'Heater — ' + visualState)
+      if (visualState === 'pending') btn.disabled = true
+      btn.appendChild(svg)
+      wrap.innerHTML = ''
+      wrap.appendChild(btn)
+      return btn
+    }
+
+    function advance () {
+      if (pendingTimer) { clearTimeout(pendingTimer); pendingTimer = null }
+      seqIdx = (seqIdx + 1) % SEQUENCE.length
+
+      var s = SEQUENCE[seqIdx]
+      var visualState = currentVisualState()
+      var wrap = document.getElementById('demo-switch-wrap')
+      var log = document.getElementById('demo-log')
+      var stateLabel = document.getElementById('demo-state-label')
+
+      var btn = renderSwitch(wrap, visualState)
+      stateLabel.textContent = LABELS[s] || ('state="' + s + '"')
+      log.textContent = 'onRequestChange("' + s + '")'
+
+      if (s === 'pending-to-on' || s === 'pending-to-error') {
+        pendingTimer = setTimeout(function () {
+          seqIdx = (seqIdx + 1) % SEQUENCE.length
+          var next = SEQUENCE[seqIdx]
+          var vs = next === 'pending-to-on' || next === 'pending-to-error' ? 'pending' : next
+          var b2 = renderSwitch(wrap, vs)
+          stateLabel.textContent = LABELS[next] || ('state="' + next + '"')
+          log.textContent = 'resolved → state="' + next + '"'
+          b2.addEventListener('click', advance)
+        }, 700)
+        return
+      }
+
+      btn.addEventListener('click', advance)
+    }
+
+    // Initial render
+    ;(function () {
+      var wrap = document.getElementById('demo-switch-wrap')
+      var btn = renderSwitch(wrap, 'off')
+      btn.addEventListener('click', advance)
+    }())
+  </script>
+</body>
+</html>
