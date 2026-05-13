@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — SystemStrip</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Strip chrome ─────────────────────────────── */
+
+    .sys-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      height: 56px;
+      padding: 0 1rem;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      font-family: var(--reefpi-font-app);
+    }
+
+    @media (max-width: 480px) { .sys-strip { height: 48px; } }
+
+    .health-pill {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .strip-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .strip-meta {
+      font-size: 0.72rem;
+      color: var(--reefpi-color-text-muted);
+      white-space: nowrap;
+      flex-shrink: 1;
+    }
+
+    .alert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: var(--reefpi-radius-sm);
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      cursor: pointer;
+      min-height: 28px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: var(--reefpi-font-app);
+      border: 1px solid transparent;
+    }
+
+    .alert-badge.warn {
+      background: var(--reefpi-color-warn-bg);
+      border-color: var(--reefpi-color-warn);
+      color: var(--reefpi-color-warn);
+    }
+
+    .alert-badge.critical {
+      background: var(--reefpi-color-error-bg);
+      border-color: var(--reefpi-color-error-border);
+      color: var(--reefpi-color-error);
+    }
+
+    .alert-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Kebab */
+    .kebab-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 8px;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-text-muted);
+      flex-shrink: 0;
+    }
+
+    .kebab-btn:focus-visible {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: 2px;
+    }
+
+    .story-caption {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .flag-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-text-muted);
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      padding: 2px 8px;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>SystemStrip</h1>
+  <p class="subtitle">56px header strip. Health pill derives from alert severity. Kebab replaces the bottom Configure button.</p>
+  <div class="flag-banner">flag: dashboard_v2 (default off)</div>
+
+  <!-- Story 1: All OK -->
+  <div class="card">
+    <div class="card-header">All OK — no alerts</div>
+    <div class="card-body">
+      <div class="sys-strip">
+        <span class="health-pill" style="background:var(--reefpi-color-brand)" aria-label="System health: ok"></span>
+        <span class="strip-name">Reef Tank 1</span>
+        <span class="strip-meta">up 4 days · v5.2.0</span>
+        <button class="kebab-btn" aria-label="System menu">
+          <svg width="4" height="16" viewBox="0 0 4 16" fill="currentColor" aria-hidden="true">
+            <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <p class="story-caption">alerts=[] → health="ok" (green pill)</p>
+    </div>
+  </div>
+
+  <!-- Story 2: Warn -->
+  <div class="card">
+    <div class="card-header">1 warning alert</div>
+    <div class="card-body">
+      <div class="sys-strip">
+        <span class="health-pill" style="background:var(--reefpi-color-warn)" aria-label="System health: warn"></span>
+        <span class="strip-name">Reef Tank 1</span>
+        <span class="strip-meta">up 4 days · v5.2.0</span>
+        <button class="alert-badge warn" aria-label="1 alert — open alert center">
+          <span class="alert-dot"></span>
+          1 alert
+        </button>
+        <button class="kebab-btn" aria-label="System menu">
+          <svg width="4" height="16" viewBox="0 0 4 16" fill="currentColor" aria-hidden="true">
+            <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <p class="story-caption">alerts=[{severity:"warn"}] → amber pill + badge</p>
+    </div>
+  </div>
+
+  <!-- Story 3: Critical -->
+  <div class="card">
+    <div class="card-header">2 critical alerts</div>
+    <div class="card-body">
+      <div class="sys-strip">
+        <span class="health-pill" style="background:var(--reefpi-color-error)" aria-label="System health: critical"></span>
+        <span class="strip-name">Reef Tank 1</span>
+        <span class="strip-meta">up 4 days · v5.2.0</span>
+        <button class="alert-badge critical" aria-label="2 alerts — open alert center">
+          <span class="alert-dot"></span>
+          2 alerts
+        </button>
+        <button class="kebab-btn" aria-label="System menu">
+          <svg width="4" height="16" viewBox="0 0 4 16" fill="currentColor" aria-hidden="true">
+            <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <p class="story-caption">alerts=[{severity:"critical"},…] → red pill + badge</p>
+    </div>
+  </div>
+
+  <!-- Story 4: Narrow viewport simulation -->
+  <div class="card">
+    <div class="card-header">Narrow (400px) — meta collapses</div>
+    <div class="card-body">
+      <div class="sys-strip" style="max-width:400px">
+        <span class="health-pill" style="background:var(--reefpi-color-brand)" aria-label="System health: ok"></span>
+        <span class="strip-name">Nano Reef Desk</span>
+        <!-- meta hidden at narrow width via flex shrink -->
+        <span class="strip-meta" style="max-width:0;overflow:hidden;padding:0"></span>
+        <button class="kebab-btn" aria-label="System menu">
+          <svg width="4" height="16" viewBox="0 0 4 16" fill="currentColor" aria-hidden="true">
+            <circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <p class="story-caption">max-width:400px — uptime/version squeezed out by flex</p>
+    </div>
+  </div>
+
+  <script src="../_card.js"></script>
+</body>
+</html>
