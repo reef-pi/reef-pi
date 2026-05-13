@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Sparkline v2</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .story-grid { grid-template-columns: 1fr; }
+    }
+
+    .sparkline-host {
+      position: relative;
+      width: 100%;
+    }
+
+    svg.sparkline {
+      display: block;
+      width: 100%;
+      overflow: visible;
+      cursor: crosshair;
+    }
+
+    svg.sparkline:focus {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* Tooltip */
+    .spark-tooltip {
+      position: absolute;
+      display: none;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text);
+      padding: 3px 7px;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    .story-caption {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.5rem;
+      font-family: var(--reefpi-font-mono);
+    }
+  </style>
+</head>
+<body>
+  <h1>Sparkline v2</h1>
+  <p class="subtitle">SVG sparkline with gradient fill, threshold band, hover crosshair, and keyboard navigation.</p>
+
+  <div class="story-grid">
+
+    <!-- Story 1: No fill -->
+    <div class="card">
+      <div class="card-header">No fill — line only</div>
+      <div class="card-body">
+        <div class="sparkline-host">
+          <svg class="sparkline" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+            role="img" aria-label="Temperature sparkline, no fill"></svg>
+        </div>
+        <p class="story-caption">fill="none"</p>
+      </div>
+    </div>
+
+    <!-- Story 2: Gradient fill -->
+    <div class="card">
+      <div class="card-header">Gradient fill</div>
+      <div class="card-body">
+        <div class="sparkline-host">
+          <svg class="sparkline" id="spark-gradient" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+            role="img" aria-label="Temperature sparkline, gradient fill"></svg>
+        </div>
+        <p class="story-caption">fill="gradient"</p>
+      </div>
+    </div>
+
+    <!-- Story 3: Band -->
+    <div class="card">
+      <div class="card-header">Threshold band</div>
+      <div class="card-body">
+        <div class="sparkline-host">
+          <svg class="sparkline" id="spark-band" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+            role="img" aria-label="Temperature sparkline with safe band"></svg>
+        </div>
+        <p class="story-caption">band={[76, 80]}</p>
+      </div>
+    </div>
+
+    <!-- Story 4: Band + hover -->
+    <div class="card">
+      <div class="card-header">Band + hover (pointer + keyboard)</div>
+      <div class="card-body">
+        <div class="sparkline-host">
+          <svg class="sparkline" id="spark-hover" height="60" viewBox="0 0 300 60" preserveAspectRatio="none"
+            role="img" aria-label="Interactive temperature sparkline" tabindex="0"></svg>
+          <div class="spark-tooltip" id="tooltip-hover"></div>
+        </div>
+        <p class="story-caption">hover ← → Home End</p>
+      </div>
+    </div>
+
+    <!-- Story 5: Back-compat (number array) — full width -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">Back-compat — points=[number, …] (no time axis)</div>
+      <div class="card-body">
+        <div class="sparkline-host">
+          <svg class="sparkline" id="spark-compat" height="60" viewBox="0 0 600 60" preserveAspectRatio="none"
+            role="img" aria-label="Salinity sparkline (number array)"></svg>
+        </div>
+        <p class="story-caption">points={[34.9, 35.1, 35.0, 35.3, 35.2, 35.4, 35.1]}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    // ── Shared data ─────────────────────────────────────────────────────────
+
+    const tempData = [
+      { t: 0,  v: 77.8 }, { t: 1,  v: 78.1 }, { t: 2,  v: 78.5 },
+      { t: 3,  v: 79.0 }, { t: 4,  v: 79.3 }, { t: 5,  v: 79.6 },
+      { t: 6,  v: 79.2 }, { t: 7,  v: 78.8 }, { t: 8,  v: 78.3 },
+      { t: 9,  v: 77.9 }, { t: 10, v: 77.5 }, { t: 11, v: 77.2 },
+      { t: 12, v: 77.8 }, { t: 13, v: 78.4 }, { t: 14, v: 79.1 }
+    ]
+
+    const salinityData = [34.9, 35.1, 35.0, 35.3, 35.2, 35.4, 35.1]
+
+    const safe = [76, 80]
+
+    // ── Projection helpers ───────────────────────────────────────────────────
+
+    function project (pts, W, H, padX, padY) {
+      padX = padX || 0; padY = padY || 4
+      const vs = pts.map(p => p.v)
+      const ts = pts.map(p => p.t)
+      const minV = Math.min.apply(null, vs), maxV = Math.max.apply(null, vs)
+      const minT = Math.min.apply(null, ts), maxT = Math.max.apply(null, ts)
+      const rangeV = maxV - minV || 1
+      const rangeT = maxT - minT || 1
+      const w = W - padX * 2, h = H - padY * 2
+      return pts.map(function (p) {
+        return {
+          t: p.t, v: p.v,
+          x: padX + ((p.t - minT) / rangeT) * w,
+          y: padY + (1 - (p.v - minV) / rangeV) * h
+        }
+      })
+    }
+
+    function normalise (pts) {
+      if (typeof pts[0] === 'number') return pts.map(function (v, i) { return { t: i, v: v } })
+      return pts
+    }
+
+    function polyPts (proj) {
+      return proj.map(function (p) { return p.x + ',' + p.y }).join(' ')
+    }
+
+    function svgNS (tag) {
+      return document.createElementNS('http://www.w3.org/2000/svg', tag)
+    }
+
+    // ── Token helper: read computed CSS var ─────────────────────────────────
+
+    function tok (name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+    }
+
+    // ── Draw helpers ─────────────────────────────────────────────────────────
+
+    function drawLine (svg, proj, stroke) {
+      var pl = svgNS('polyline')
+      pl.setAttribute('points', polyPts(proj))
+      pl.setAttribute('fill', 'none')
+      pl.setAttribute('stroke', stroke || tok('--reefpi-color-brand'))
+      pl.setAttribute('stroke-width', '1.5')
+      pl.setAttribute('stroke-linejoin', 'round')
+      pl.setAttribute('stroke-linecap', 'round')
+      svg.appendChild(pl)
+    }
+
+    function drawGradientFill (svg, proj, stroke, W, H, uid) {
+      var defs = svg.querySelector('defs') || svg.insertBefore(svgNS('defs'), svg.firstChild)
+      var grad = svgNS('linearGradient')
+      grad.setAttribute('id', 'sg-' + uid)
+      grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0')
+      grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1')
+      var s0 = svgNS('stop'); s0.setAttribute('offset', '0%')
+      s0.setAttribute('stop-color', stroke); s0.setAttribute('stop-opacity', '0.4')
+      var s1 = svgNS('stop'); s1.setAttribute('offset', '100%')
+      s1.setAttribute('stop-color', stroke); s1.setAttribute('stop-opacity', '0')
+      grad.appendChild(s0); grad.appendChild(s1); defs.appendChild(grad)
+
+      var last = proj[proj.length - 1], first = proj[0]
+      var d = 'M ' + proj.map(function (p) { return p.x + ' ' + p.y }).join(' L ')
+        + ' L ' + last.x + ' ' + H + ' L ' + first.x + ' ' + H + ' Z'
+      var path = svgNS('path')
+      path.setAttribute('d', d)
+      path.setAttribute('fill', 'url(#sg-' + uid + ')')
+      svg.insertBefore(path, svg.querySelector('polyline'))
+    }
+
+    function drawBand (svg, pts, band, W, H, color) {
+      var vs = pts.map(function (p) { return p.v })
+      var minV = Math.min.apply(null, vs), maxV = Math.max.apply(null, vs)
+      var rangeV = maxV - minV || 1
+      var padY = 4, h = H - padY * 2
+      var top = padY + (1 - (band[1] - minV) / rangeV) * h
+      var bot = padY + (1 - (band[0] - minV) / rangeV) * h
+      top = Math.max(padY, top); bot = Math.min(H - padY, bot)
+      var rect = svgNS('rect')
+      rect.setAttribute('x', '0'); rect.setAttribute('y', top)
+      rect.setAttribute('width', W); rect.setAttribute('height', Math.max(0, bot - top))
+      rect.setAttribute('fill', color || tok('--reefpi-color-band-safe'))
+      rect.setAttribute('opacity', '0.5')
+      svg.insertBefore(rect, svg.firstChild)
+    }
+
+    // ── Render all stories ────────────────────────────────────────────────────
+
+    function renderAll () {
+      var stroke = tok('--reefpi-color-brand')
+      var bandColor = tok('--reefpi-color-band-safe')
+
+      // Story 1: No fill
+      ;(function () {
+        var svg = document.querySelector('.story-grid .card:nth-child(1) svg')
+        var W = 300, H = 60
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+        var proj = project(normalise(tempData), W, H)
+        drawLine(svg, proj, stroke)
+      }())
+
+      // Story 2: Gradient fill
+      ;(function () {
+        var svg = document.getElementById('spark-gradient')
+        var W = 300, H = 60
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+        var norm = normalise(tempData)
+        var proj = project(norm, W, H)
+        drawLine(svg, proj, stroke)
+        drawGradientFill(svg, proj, stroke, W, H, 'g2')
+      }())
+
+      // Story 3: Band
+      ;(function () {
+        var svg = document.getElementById('spark-band')
+        var W = 300, H = 60
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+        var norm = normalise(tempData)
+        var proj = project(norm, W, H)
+        drawBand(svg, norm, safe, W, H, bandColor)
+        drawLine(svg, proj, stroke)
+      }())
+
+      // Story 4: Band + hover + keyboard
+      ;(function () {
+        var svg = document.getElementById('spark-hover')
+        var tooltip = document.getElementById('tooltip-hover')
+        var W = 300, H = 60
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+        var norm = normalise(tempData)
+        var proj = project(norm, W, H)
+        drawBand(svg, norm, safe, W, H, bandColor)
+        drawLine(svg, proj, stroke)
+
+        var crosshair = svgNS('line')
+        crosshair.setAttribute('stroke', tok('--reefpi-color-text-muted'))
+        crosshair.setAttribute('stroke-width', '1')
+        crosshair.setAttribute('stroke-dasharray', '3 3')
+        crosshair.style.display = 'none'
+        svg.appendChild(crosshair)
+
+        var dot = svgNS('circle')
+        dot.setAttribute('r', '4')
+        dot.setAttribute('fill', tok('--reefpi-color-surface-elevated'))
+        dot.setAttribute('stroke', stroke)
+        dot.setAttribute('stroke-width', '2')
+        dot.style.display = 'none'
+        svg.appendChild(dot)
+
+        var activeIdx = null
+
+        function showAt (idx) {
+          activeIdx = idx
+          var p = proj[idx]
+          crosshair.setAttribute('x1', p.x); crosshair.setAttribute('y1', '0')
+          crosshair.setAttribute('x2', p.x); crosshair.setAttribute('y2', H)
+          crosshair.style.display = ''
+          dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y)
+          dot.style.display = ''
+
+          var pt = norm[idx]
+          var label = 'i=' + pt.t + ': ' + pt.v + '°F'
+          tooltip.textContent = label
+          tooltip.style.display = 'block'
+
+          var host = svg.closest('.sparkline-host')
+          var hRect = host.getBoundingClientRect()
+          var svgRect = svg.getBoundingClientRect()
+          var scaleX = svgRect.width / W
+          var px = p.x * scaleX
+          var flipRight = px + tooltip.offsetWidth + 12 > svgRect.width
+          tooltip.style.left = (flipRight ? px - tooltip.offsetWidth - 8 : px + 8) + 'px'
+          tooltip.style.top = Math.max(0, p.y * (svgRect.height / H) - 11) + 'px'
+        }
+
+        function hide () {
+          crosshair.style.display = 'none'
+          dot.style.display = 'none'
+          tooltip.style.display = 'none'
+          activeIdx = null
+        }
+
+        svg.addEventListener('pointermove', function (e) {
+          var rect = svg.getBoundingClientRect()
+          var mx = (e.clientX - rect.left) / rect.width * W
+          var best = 0, bestD = Infinity
+          proj.forEach(function (p, i) {
+            var d = Math.abs(p.x - mx)
+            if (d < bestD) { bestD = d; best = i }
+          })
+          showAt(best)
+        })
+
+        svg.addEventListener('pointerleave', hide)
+
+        svg.addEventListener('keydown', function (e) {
+          if (['ArrowRight', 'ArrowLeft', 'Home', 'End'].indexOf(e.key) === -1) return
+          e.preventDefault()
+          var cur = activeIdx !== null ? activeIdx : 0
+          if (e.key === 'ArrowRight') cur = Math.min(cur + 1, norm.length - 1)
+          else if (e.key === 'ArrowLeft') cur = Math.max(cur - 1, 0)
+          else if (e.key === 'Home') cur = 0
+          else if (e.key === 'End') cur = norm.length - 1
+          showAt(cur)
+        })
+
+        svg.addEventListener('blur', hide)
+      }())
+
+      // Story 5: Back-compat number array
+      ;(function () {
+        var svg = document.getElementById('spark-compat')
+        var W = 600, H = 60
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H)
+        var norm = normalise(salinityData)
+        var proj = project(norm, W, H)
+        drawGradientFill(svg, proj, stroke, W, H, 'g5')
+        drawLine(svg, proj, stroke)
+      }())
+    }
+
+    // Run after fonts/tokens are available
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderAll)
+    } else {
+      renderAll()
+    }
+  </script>
+</body>
+</html>
