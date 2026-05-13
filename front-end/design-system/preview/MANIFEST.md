@@ -71,6 +71,17 @@ Before shipping a PR that touches tokens or components, verify each row is up to
 
 All preview cards load `_card.css` (shared base styles + Questrial + token import) and `_card.js` (query-string theme handler). Open any card with `?theme=dark` or `?theme=actinic` to preview it in that theme.
 
+## Components (E2)
+
+All stories live under `preview/primitives/`. Open with `?theme=dark` or `?theme=actinic` for theme verification. No network calls — fixtures only.
+
+| Component | Stories | Preview card |
+|---|---|---|
+| `ThresholdGauge` | within safe / in warn zone / out of bounds / no warn band / no safe band | [primitives/threshold-gauge.html](primitives/threshold-gauge.html) |
+| `Sparkline` | no fill / gradient fill / threshold band / band+hover / back-compat (number[]) | [primitives/sparkline.html](primitives/sparkline.html) |
+| `RangeSelector` | default / compact / keyboard / custom options+scope | [primitives/range-selector.html](primitives/range-selector.html) |
+| `useTimeSeries` | loading / loaded (120 pts LTTB) / error / stale-while-revalidate | [primitives/use-time-series.html](primitives/use-time-series.html) |
+
 ## CI scripts
 
 | Script | Command | Output |
