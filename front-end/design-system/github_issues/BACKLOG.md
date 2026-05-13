@@ -18,7 +18,7 @@
 ## E3 · Dashboard v2 (flag: `dashboard_v2`)
 - [x] #10 System status strip — `issue-10-system-strip.md`
 - [x] #11 Hero TemperatureTile — `issue-11-hero-temp.md`
-- [ ] #12 Secondary PhTile / AtoTile — `issue-12-ph-ato-tiles.md`
+- [x] #12 Secondary PhTile / AtoTile — `issue-12-ph-ato-tiles.md`
 - [ ] #13 Equipment strip (footer) — `issue-13-equipment-strip.md`
 - [ ] #14 Wire behind `dashboard_v2` flag — `issue-14-dashboard-flag.md`
 
