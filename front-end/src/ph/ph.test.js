@@ -5,6 +5,7 @@ import configureMockStore from 'redux-mock-store'
 import PhForm, { mapPhPropsToValues, phControlValue } from './ph_form'
 import { RawPhChart } from './chart'
 import { RawPhMain } from './main'
+import CalibrationWizard from './calibration_wizard'
 import 'isomorphic-fetch'
 
 const mockStore = configureMockStore([])
@@ -51,6 +52,29 @@ describe('Ph ui', () => {
     update: jest.fn(),
     calibrateProbe: jest.fn(),
     readProbe: jest.fn(),
+    ...overrides
+  })
+
+  const probeValues = overrides => ({
+    id: 'probe-id',
+    name: 'Tank pH',
+    enable: true,
+    period: '45',
+    analog_input: 'analog-1',
+    notify: true,
+    minAlert: '6.7',
+    maxAlert: '8.4',
+    control: 'equipment',
+    one_shot: true,
+    lowerThreshold: '7.1',
+    lowerFunction: 'heater',
+    upperThreshold: '8.3',
+    upperFunction: 'co2',
+    transformer: 'scale',
+    hysteresis: '0.15',
+    chart_y_min: '6',
+    chart_y_max: '9',
+    chart: { color: '#00f', ymin: 6, ymax: 9, unit: 'pH' },
     ...overrides
   })
 
@@ -139,6 +163,97 @@ describe('Ph ui', () => {
     setComponentState(component)
     component.calibrateProbe({}, phState.phprobes[0])
     expect(component.state.showCalibrate).toBe(true)
+  })
+
+  it('<Main /> updates probe with normalized form values', () => {
+    const props = createProps()
+    const component = new RawPhMain(props)
+    component.handleUpdateProbe(probeValues())
+
+    expect(props.update).toHaveBeenCalledWith('probe-id', {
+      name: 'Tank pH',
+      enable: true,
+      period: '45',
+      analog_input: 'analog-1',
+      notify: {
+        enable: true,
+        min: 6.7,
+        max: 8.4
+      },
+      chart: { color: '#00f', ymin: 6, ymax: 9, unit: 'pH' },
+      control: true,
+      is_macro: false,
+      one_shot: true,
+      min: 7.1,
+      downer_eq: 'heater',
+      max: 8.3,
+      upper_eq: 'co2',
+      transformer: 'scale',
+      hysteresis: 0.15,
+      chart_y_min: 6,
+      chart_y_max: 9
+    })
+  })
+
+  it('<Main /> creates probe with normalized values and hides add form', () => {
+    const props = createProps()
+    const component = new RawPhMain(props)
+    setComponentState(component)
+    component.state.addProbe = true
+
+    component.handleCreateProbe(probeValues({
+      id: undefined,
+      control: 'macro',
+      one_shot: false
+    }))
+
+    expect(props.create).toHaveBeenCalledWith(expect.objectContaining({
+      name: 'Tank pH',
+      control: true,
+      is_macro: true,
+      one_shot: false,
+      notify: expect.objectContaining({ min: 6.7, max: 8.4 }),
+      chart_y_min: 6,
+      chart_y_max: 9
+    }))
+    expect(component.state.addProbe).toBe(false)
+  })
+
+  it('<Main /> dismisses calibration modal state', () => {
+    const component = new RawPhMain(createProps())
+    setComponentState(component)
+    component.state.currentProbe = phState.phprobes[0]
+    component.state.showCalibrate = true
+
+    component.dismissModal()
+
+    expect(component.state.currentProbe).toBeNull()
+    expect(component.state.showCalibrate).toBe(false)
+  })
+
+  it('<Main /> probe list toggle flips probe enable and updates it', () => {
+    const probe = { id: '1', name: 'probe', enable: false, notify: { enable: false }, control: false }
+    const props = createProps({ probes: [probe] })
+    const component = new RawPhMain(props)
+
+    component.probeList()[0].props.onToggleState()
+
+    expect(probe.enable).toBe(true)
+    expect(props.update).toHaveBeenCalledWith('1', probe)
+  })
+
+  it('<Main /> renders CalibrationWizard when calibration is shown', () => {
+    const component = new RawPhMain(createProps({ currentReading: { 1: 7.2 } }))
+    setComponentState(component)
+    component.state.currentProbe = phState.phprobes[0]
+    component.state.showCalibrate = true
+
+    const calibrationModal = component.render().props.children[0]
+
+    expect(calibrationModal.type).toBe(CalibrationWizard)
+    expect(calibrationModal.props.probe).toBe(phState.phprobes[0])
+    expect(calibrationModal.props.confirm).toBe(component.dismissModal)
+    expect(calibrationModal.props.cancel).toBe(component.dismissModal)
   })
 
   it('<Main />', () => {
