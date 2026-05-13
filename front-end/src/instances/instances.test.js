@@ -202,6 +202,34 @@ describe('InstanceForm (withFormik)', () => {
     expect(onSubmit).toHaveBeenCalledWith(instanceData)
     expect(Main).toBeDefined()
   })
+
+  it('maps partial instance data with empty string fallbacks', () => {
+    expect(mapInstancePropsToValues({
+      instance: {
+        id: '2',
+        name: 'Backup reef-pi',
+        ignore_https: true
+      },
+      remove: true
+    })).toEqual({
+      name: 'Backup reef-pi',
+      id: '2',
+      address: '',
+      user: '',
+      password: '',
+      ignore_https: true,
+      remove: true
+    })
+  })
+
+  it('preserves explicit false ignore_https on edit', () => {
+    expect(mapInstancePropsToValues({
+      instance: {
+        ...instanceData,
+        ignore_https: false
+      }
+    }).ignore_https).toBe(false)
+  })
 })
 
 describe('EditInstance', () => {
