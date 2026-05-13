@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — RangeSelector</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) { .story-grid { grid-template-columns: 1fr; } }
+
+    /* ── RangeSelector chrome ──────────────────────────── */
+
+    .rs {
+      display: inline-flex;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      overflow: hidden;
+      background: var(--reefpi-color-surface-elevated);
+    }
+
+    .rs-sep {
+      width: 1px;
+      background: var(--reefpi-color-border);
+      flex-shrink: 0;
+    }
+
+    .rs-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      min-height: 32px;
+      padding: 0 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-family: var(--reefpi-font-app);
+      font-weight: 400;
+      background: transparent;
+      color: var(--reefpi-color-text);
+      border: none;
+      transition: background-color 0.12s, color 0.12s;
+    }
+
+    .rs-btn:hover {
+      background: var(--reefpi-color-surface);
+    }
+
+    .rs-btn.active {
+      background: var(--reefpi-color-brand);
+      color: var(--reefpi-color-nav-text-strong);
+      font-weight: 500;
+    }
+
+    .rs-btn:focus-visible {
+      outline: 2px solid var(--reefpi-color-focus);
+      outline-offset: -2px;
+      z-index: 1;
+    }
+
+    .story-caption {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .event-log {
+      margin-top: 0.75rem;
+      font-size: 0.7rem;
+      font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-brand);
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>RangeSelector</h1>
+  <p class="subtitle">Segmented radio control for time-range selection. Persists to <code>localStorage</code> with 250ms debounce.</p>
+
+  <div class="story-grid">
+
+    <!-- Story 1: Default (1d selected) -->
+    <div class="card">
+      <div class="card-header">Default — value="1d"</div>
+      <div class="card-body">
+        <fieldset class="rs" id="rs-default" aria-label="Time range">
+          <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
+        </fieldset>
+        <p class="story-caption">options=['1h','6h','1d','7d','30d']</p>
+        <div class="event-log" id="log-default"></div>
+      </div>
+    </div>
+
+    <!-- Story 2: Compact -->
+    <div class="card">
+      <div class="card-header">Compact — labels trimmed to digits</div>
+      <div class="card-body">
+        <fieldset class="rs" id="rs-compact" aria-label="Time range compact">
+          <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
+        </fieldset>
+        <p class="story-caption">compact — "1H" → "1"</p>
+        <div class="event-log" id="log-compact"></div>
+      </div>
+    </div>
+
+    <!-- Story 3: Keyboard focus demo -->
+    <div class="card">
+      <div class="card-header">Keyboard — tab in, arrow keys</div>
+      <div class="card-body">
+        <fieldset class="rs" id="rs-keyboard" aria-label="Time range keyboard">
+          <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Time range</legend>
+        </fieldset>
+        <p class="story-caption">Tab → focus ring. ←/→ to step. Enter/Space to select.</p>
+        <div class="event-log" id="log-keyboard"></div>
+      </div>
+    </div>
+
+    <!-- Story 4: Custom short range set (tile-scoped) -->
+    <div class="card">
+      <div class="card-header">Custom options — scope="dashboard"</div>
+      <div class="card-body">
+        <fieldset class="rs" id="rs-custom" aria-label="Dashboard time range">
+          <legend style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Dashboard time range</legend>
+        </fieldset>
+        <p class="story-caption">options=['1h','6h','1d'] scope="dashboard"</p>
+        <div class="event-log" id="log-custom"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../_card.js"></script>
+  <script>
+    var OPTIONS_FULL    = ['1h','6h','1d','7d','30d']
+    var OPTIONS_SHORT   = ['1h','6h','1d']
+
+    function buildSelector (fieldset, options, defaultValue, compact, logEl, scope) {
+      var name = 'rs-' + (scope || 'global') + '-' + Math.random().toString(36).slice(2)
+      var current = defaultValue || options[0]
+
+      function render () {
+        fieldset.innerHTML = ''
+        options.forEach(function (opt, i) {
+          if (i > 0) {
+            var sep = document.createElement('span')
+            sep.className = 'rs-sep'
+            sep.setAttribute('aria-hidden', 'true')
+            fieldset.appendChild(sep)
+          }
+
+          var label = compact ? opt.replace(/[a-z]/g, '') : opt.toUpperCase()
+
+          var btn = document.createElement('button')
+          btn.type = 'button'
+          btn.className = 'rs-btn' + (opt === current ? ' active' : '')
+          btn.textContent = label
+          btn.setAttribute('aria-pressed', opt === current ? 'true' : 'false')
+          btn.dataset.opt = opt
+
+          btn.addEventListener('click', function () {
+            current = opt
+            render()
+            if (logEl) logEl.textContent = 'onChange("' + opt + '")'
+            try { localStorage.setItem('reefpi.range.' + (scope || 'global'), opt) } catch (e) {}
+          })
+
+          fieldset.appendChild(btn)
+        })
+      }
+
+      render()
+    }
+
+    buildSelector(
+      document.getElementById('rs-default'),
+      OPTIONS_FULL, '1d', false,
+      document.getElementById('log-default'), 'global'
+    )
+
+    buildSelector(
+      document.getElementById('rs-compact'),
+      OPTIONS_FULL, '6h', true,
+      document.getElementById('log-compact'), 'compact'
+    )
+
+    buildSelector(
+      document.getElementById('rs-keyboard'),
+      OPTIONS_FULL, '1h', false,
+      document.getElementById('log-keyboard'), 'keyboard'
+    )
+
+    buildSelector(
+      document.getElementById('rs-custom'),
+      OPTIONS_SHORT, '1h', false,
+      document.getElementById('log-custom'), 'dashboard'
+    )
+  </script>
+</body>
+</html>
