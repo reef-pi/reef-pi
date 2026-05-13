@@ -1,4 +1,5 @@
 import Chart, { RawATOChart } from './chart'
+import { Bar, Label, Tooltip, XAxis, YAxis } from 'recharts'
 import 'isomorphic-fetch'
 
 const atoConfig = { id: '1', name: 'Main ATO' }
@@ -20,9 +21,23 @@ describe('ATO Chart', () => {
       fetchATOUsage: jest.fn()
     })
     const rendered = chart.render()
+    const responsiveContainer = rendered.props.children[1]
     const barChart = rendered.props.children[1].props.children
+    const [bar, yAxis, xAxis, tooltip] = barChart.props.children
 
+    expect(rendered.props.children[0].props.children).toBe('Main ATO')
+    expect(responsiveContainer.props).toMatchObject({ height: 200, width: '100%' })
     expect(barChart.props.data.map(item => item.time)).toEqual(['Jul-01-10:00, 2024', 'Jul-01-10:10, 2024'])
+    expect(barChart.props.barSize).toBe(8)
+    expect(bar.type).toBe(Bar)
+    expect(bar.props).toMatchObject({ dataKey: 'pump', fill: '#33b5e5', isAnimationActive: false })
+    expect(yAxis.type).toBe(YAxis)
+    expect(yAxis.props.type).toBe('number')
+    expect(yAxis.props.children.type).toBe(Label)
+    expect(yAxis.props.children.props.value).toBe('sec')
+    expect(xAxis.type).toBe(XAxis)
+    expect(xAxis.props).toMatchObject({ dataKey: 'ts', type: 'number', scale: 'time', domain: ['auto', 'auto'] })
+    expect(tooltip.type).toBe(Tooltip)
     expect(usage.historical.map(item => item.time)).toEqual(['Jul-01-10:10, 2024', 'Jul-01-10:00, 2024'])
     expect(usage.historical[0].ts).toBeUndefined()
     expect(Chart).toBeDefined()
