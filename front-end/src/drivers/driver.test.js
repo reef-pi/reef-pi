@@ -172,4 +172,22 @@ describe('driver UI', () => {
     expect(onSubmit).toHaveBeenCalledWith({ id: 1 }, { props: { onSubmit } })
     expect(DriverForm).toBeDefined()
   })
+
+  it('<DriverForm /> maps defaults for create', () => {
+    expect(mapDriverPropsToValues({})).toEqual({
+      id: '',
+      name: '',
+      type: '',
+      config: {}
+    })
+  })
+
+  it('<DriverForm /> fills missing edit fields with defaults', () => {
+    expect(mapDriverPropsToValues({ data: { id: 'driver-2', name: 'Secondary driver' } })).toEqual({
+      id: 'driver-2',
+      name: 'Secondary driver',
+      type: '',
+      config: {}
+    })
+  })
 })
