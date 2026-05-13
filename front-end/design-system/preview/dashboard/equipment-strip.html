@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — EquipmentStrip</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Strip chrome ──────────────────────────── */
+    .equip-strip {
+      width: 100%;
+      height: 96px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      flex-direction: row;
+      scroll-snap-type: x mandatory;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      font-family: var(--reefpi-font-app);
+    }
+
+    .equip-item {
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 0 1.25rem;
+      height: 100%;
+      border-right: 1px solid var(--reefpi-color-border);
+      min-width: 108px;
+      outline: none;
+    }
+    .equip-item:last-child { border-right: none; }
+    .equip-item:focus { background: var(--reefpi-color-surface); }
+
+    .equip-name {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 96px;
+      text-align: center;
+    }
+    .equip-name:hover { color: var(--reefpi-color-brand); }
+
+    .equip-meta {
+      font-size: 0.68rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      height: 11px;
+      line-height: 11px;
+    }
+
+    /* ── Toggle ────────────────────────────────── */
+    .toggle-wrap {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      transition: left 0.2s;
+    }
+
+    /* Spinner for pending */
+    @keyframes reefpi-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .spin-ring {
+      position: absolute;
+      top: -3px; left: -3px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--reefpi-color-pending);
+      border-top-color: transparent;
+      animation: reefpi-spin 0.9s linear infinite;
+    }
+
+    .state-log {
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+    }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">EquipmentStrip</div>
+    <div class="card-desc">Full-width 96px horizontal-scroll footer strip · dashboard_v2 flag</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: mixed states -->
+  <section class="story">
+    <h2 class="story-title">Mixed states</h2>
+    <p class="subtitle">off / on / pending / error — sorted by last-toggled desc</p>
+    <div class="equip-strip" id="strip-main" role="list" aria-label="Equipment"></div>
+    <div class="state-log" id="log-main">Click a toggle to interact</div>
+  </section>
+
+  <!-- Story 2: many items (overflow / scroll) -->
+  <section class="story">
+    <h2 class="story-title">Overflow scroll (12 items)</h2>
+    <p class="subtitle">Scroll-snap per item — arrow keys step focus</p>
+    <div class="equip-strip" id="strip-many" role="list" aria-label="Equipment"></div>
+  </section>
+
+  <!-- Story 3: empty -->
+  <section class="story">
+    <h2 class="story-title">Empty state</h2>
+    <div class="equip-strip" style="align-items:center;">
+      <span style="font-size:0.8rem;color:var(--reefpi-color-text-muted);font-family:var(--reefpi-font-app);padding:0 1rem;">
+        No equipment configured
+      </span>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+const NOW = Date.now()
+
+const MAIN_ITEMS = [
+  { id: 'e1', name: 'Return Pump',  state: 'on',      lastToggledAt: NOW - 1000,   onSince: NOW - 7200000  },
+  { id: 'e2', name: 'Skimmer',      state: 'off',     lastToggledAt: NOW - 60000,  onSince: null           },
+  { id: 'e3', name: 'Heater',       state: 'pending', lastToggledAt: NOW - 120000, onSince: NOW - 1800000  },
+  { id: 'e4', name: 'Sump Light',   state: 'error',   lastToggledAt: NOW - 300000, onSince: null, error: 'Timeout'  },
+  { id: 'e5', name: 'UV Sterilizer',state: 'on',      lastToggledAt: NOW - 900000, onSince: NOW - 3600000  },
+]
+
+const MANY_ITEMS = [
+  'Return Pump','Skimmer','Heater','Sump Light','UV Sterilizer',
+  'Refugium Light','Fan','Dosing Pump A','Dosing Pump B','CO2','Frag Light','Kalk Stirrer'
+].map((name, i) => ({
+  id: `m${i}`, name,
+  state: ['on','off','on','pending','off','on','off','on','error','off','on','pending'][i],
+  lastToggledAt: NOW - i * 60000,
+  onSince: [0,1,2,5].includes(i) ? NOW - (i+1) * 1800000 : null
+}))
+
+function formatOnSince(ts) {
+  if (!ts) return ''
+  const s = Math.floor((Date.now() - ts) / 1000)
+  if (s < 60)   return `on ${s}s`
+  if (s < 3600) return `on ${Math.floor(s / 60)}m`
+  const h = Math.floor(s / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  return m ? `on ${h}h ${m}m` : `on ${h}h`
+}
+
+function buildToggle(item) {
+  const wrap = document.createElement('div')
+  wrap.className = 'toggle-wrap'
+
+  const track = document.createElement('div')
+  track.className = 'toggle-track'
+
+  const thumbWrap = document.createElement('div')
+  thumbWrap.style.cssText = 'position:relative;width:44px;height:24px;'
+
+  const thumb = document.createElement('div')
+  thumb.className = 'toggle-thumb'
+
+  updateToggleVisual(track, thumb, null, item)
+
+  thumbWrap.appendChild(track)
+  thumbWrap.appendChild(thumb)
+
+  if (item.state === 'pending') {
+    const ring = document.createElement('div')
+    ring.className = 'spin-ring'
+    thumb.style.left = '12px'
+    thumb.appendChild(ring)
+  }
+
+  return thumbWrap
+}
+
+function updateToggleVisual(track, thumb, ring, item) {
+  if (item.state === 'on' || item.state === 'pending') {
+    track.style.background = 'var(--reefpi-color-brand)'
+  } else {
+    track.style.background = 'var(--reefpi-color-border-strong)'
+  }
+  if (item.state === 'on') {
+    thumb.style.left = '22px'
+  } else if (item.state === 'off') {
+    thumb.style.left = '2px'
+  } else {
+    thumb.style.left = '12px'
+  }
+  if (item.state === 'error') {
+    track.style.background = 'var(--reefpi-color-border-strong)'
+    track.style.outline = '2px solid var(--reefpi-color-error)'
+    track.style.outlineOffset = '1px'
+  }
+}
+
+function buildItem(item, stripId, log) {
+  const div = document.createElement('div')
+  div.className = 'equip-item'
+  div.setAttribute('tabindex', '0')
+  div.setAttribute('role', 'listitem')
+
+  const toggle = buildToggle(item)
+  div.appendChild(toggle)
+
+  const a = document.createElement('a')
+  a.href = `/equipment?edit=${item.id}`
+  a.className = 'equip-name'
+  a.textContent = item.name
+  a.title = item.name
+  a.addEventListener('click', e => { e.preventDefault() })
+  div.appendChild(a)
+
+  const meta = document.createElement('div')
+  meta.className = 'equip-meta'
+  meta.textContent = (item.state === 'on' || item.state === 'pending') && item.onSince
+    ? formatOnSince(item.onSince)
+    : ''
+  div.appendChild(meta)
+
+  if ((item.state === 'on' || item.state === 'off') && log) {
+    div.addEventListener('click', () => {
+      const next = item.state === 'on' ? 'off' : 'on'
+      log.textContent = `toggle ${item.name}: ${item.state} → ${next}`
+    })
+  }
+
+  return div
+}
+
+function mountStrip(containerId, items, logId) {
+  const container = document.getElementById(containerId)
+  if (!container) return
+  const log = logId ? document.getElementById(logId) : null
+
+  items.forEach(item => {
+    container.appendChild(buildItem(item, containerId, log))
+  })
+
+  container.addEventListener('keydown', e => {
+    const focusable = Array.from(container.querySelectorAll('[tabindex="0"]'))
+    const cur = focusable.findIndex(n => n === document.activeElement)
+    if (e.key === 'ArrowRight' && cur < focusable.length - 1) {
+      e.preventDefault()
+      focusable[cur + 1].focus()
+      focusable[cur + 1].scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' })
+    }
+    if (e.key === 'ArrowLeft' && cur > 0) {
+      e.preventDefault()
+      focusable[cur - 1].focus()
+      focusable[cur - 1].scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' })
+    }
+  })
+}
+
+mountStrip('strip-main', MAIN_ITEMS, 'log-main')
+mountStrip('strip-many', MANY_ITEMS, null)
+</script>
+</body>
+</html>
