@@ -126,6 +126,93 @@ describe('Instances Main', () => {
     main.handleToggle()
     expect(main.state.add).toBe(false)
   })
+
+  it('creates instances with normalized payload and closes add form', () => {
+    const create = jest.fn()
+    const main = new RawInstancesMain({
+      instances: [],
+      fetch: fn,
+      create,
+      update: fn,
+      delete: fn
+    })
+    main.state = { add: true }
+    main.setState = jest.fn(update => {
+      main.state = { ...main.state, ...update }
+    })
+    main.toggle = () => main.handleToggle()
+
+    main.handleCreate({
+      id: '99',
+      name: 'Frag Tank',
+      address: 'https://frag.local',
+      user: 'admin',
+      password: 'secret',
+      ignore_https: true,
+      remove: true
+    })
+
+    expect(create).toHaveBeenCalledWith({
+      name: 'Frag Tank',
+      address: 'https://frag.local',
+      user: 'admin',
+      password: 'secret',
+      ignore_https: true
+    })
+    expect(main.state.add).toBe(false)
+  })
+
+  it('renders add form with submit action label when add is true', () => {
+    const main = new RawInstancesMain({
+      instances: [],
+      fetch: fn,
+      create: fn,
+      update: fn,
+      delete: fn
+    })
+    main.state = { add: true }
+
+    const rendered = main.render()
+    const form = findNode(rendered, node => node.type === InstanceForm)
+
+    expect(form).not.toBeNull()
+    expect(form.props.onSubmit).toBe(main.handleCreate)
+    expect(form.props.actionLabel).toBe('save')
+  })
+
+  it('renders add button value from add state', () => {
+    const main = new RawInstancesMain({
+      instances: [],
+      fetch: fn,
+      create: fn,
+      update: fn,
+      delete: fn
+    })
+
+    let addButton = findNode(main.render(), node => node.type === 'input' && node.props.id === 'add_instance')
+    expect(addButton.props.value).toBe('+')
+
+    main.state = { add: true }
+    addButton = findNode(main.render(), node => node.type === 'input' && node.props.id === 'add_instance')
+    expect(addButton.props.value).toBe('-')
+  })
+
+  it('renders instances sorted by numeric id descending', () => {
+    const main = new RawInstancesMain({
+      instances: [
+        { ...instanceData, id: '2', name: 'Second' },
+        { ...instanceData, id: '10', name: 'Tenth' },
+        { ...instanceData, id: '1', name: 'First' }
+      ],
+      fetch: fn,
+      create: fn,
+      update: fn,
+      delete: fn
+    })
+
+    const renderedInstances = findAll(main.render(), node => node.type === Instance)
+    expect(renderedInstances.map(node => node.props.instance.id)).toEqual(['10', '2', '1'])
+  })
 })
 
 describe('Instance', () => {
