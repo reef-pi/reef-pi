@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Dark Theme Pass</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    /* ── Surface tokens audit ───────────────────── */
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .token-swatch {
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+    }
+    .swatch-color { height: 40px; }
+    .swatch-info  { padding: 0.5rem 0.75rem; background: var(--reefpi-color-surface-elevated); }
+    .swatch-name  { color: var(--reefpi-color-text); font-weight: 500; margin-bottom: 2px; }
+    .swatch-value { color: var(--reefpi-color-text-muted); }
+
+    /* ── Component samples ──────────────────────── */
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    /* Alert center row */
+    .alert-row-sample {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
+      background: var(--reefpi-color-error-bg);
+      border-left: 3px solid var(--reefpi-color-error);
+      border-radius: var(--reefpi-radius-sm);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.85rem;
+      color: var(--reefpi-color-text);
+      max-width: 340px;
+    }
+
+    .metric-tile-sample {
+      width: 240px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 0.875rem;
+      font-family: var(--reefpi-font-app);
+    }
+    .tile-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--reefpi-color-text-muted); font-weight: 500; }
+    .tile-value { font-size: 1.75rem; font-weight: 500; color: var(--reefpi-color-text); margin: 0.25rem 0; }
+    .tile-unit  { font-size: 0.8rem; color: var(--reefpi-color-text-muted); }
+    .sparkline-bar { height: 48px; background: var(--reefpi-color-surface); border-radius: var(--reefpi-radius-sm); margin-top: 0.5rem; overflow: hidden; }
+    .sparkline-bar svg { width: 100%; height: 100%; }
+
+    /* Toggle */
+    .toggle-sample {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.85rem;
+      color: var(--reefpi-color-text);
+    }
+    .track-on  { width: 44px; height: 24px; border-radius: 12px; background: var(--reefpi-color-brand); position: relative; }
+    .track-off { width: 44px; height: 24px; border-radius: 12px; background: var(--reefpi-color-border-strong); position: relative; }
+    .thumb { position: absolute; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--reefpi-color-surface-elevated); border: 1px solid var(--reefpi-color-border); }
+
+    /* Gauge band */
+    .gauge-sample {
+      width: 240px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 0.875rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    /* Token pass checklist */
+    .checklist { list-style: none; padding: 0; margin: 0; font-family: var(--reefpi-font-app); font-size: 0.85rem; }
+    .checklist li {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      color: var(--reefpi-color-text);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon { color: var(--reefpi-color-brand); font-size: 0.9rem; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Dark Theme Pass</div>
+    <div class="card-desc">[data-theme="dark"] — all surfaces, charts, and modals verified var()-only</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: surface token audit -->
+  <section class="story">
+    <h2 class="story-title">Surface tokens in dark</h2>
+    <p class="subtitle">Switch to dark using the buttons above — all swatches adapt via var()</p>
+    <div class="audit-grid">
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-surface)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">surface</div>
+          <div class="swatch-value">light: #f5faf3 / dark: #0f1410</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-surface-elevated)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">surface-elevated</div>
+          <div class="swatch-value">light: #ffffff / dark: #1a211a</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-text);height:20px;margin:10px"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">text</div>
+          <div class="swatch-value">light: #1f2a1f / dark: #e6efe0</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-border)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">border</div>
+          <div class="swatch-value">light: #d6e5d0 / dark: #2a3329</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-brand)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">brand (invariant)</div>
+          <div class="swatch-value">#27a822 — same in all themes</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-pending)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">pending</div>
+          <div class="swatch-value">light: #4e5f4e / dark: #9aaf9a</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 2: component samples -->
+  <section class="story">
+    <h2 class="story-title">Component samples in dark</h2>
+    <p class="subtitle">All use var() — no hardcoded strokes</p>
+    <div class="component-row">
+
+      <!-- MetricTile -->
+      <div class="metric-tile-sample">
+        <div class="tile-label">Temperature</div>
+        <div><span class="tile-value">78.4</span> <span class="tile-unit">°F</span></div>
+        <div class="sparkline-bar">
+          <svg viewBox="0 0 240 48" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--reefpi-color-brand)" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="var(--reefpi-color-brand)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,36 C40,30 80,18 120,22 C160,26 200,12 240,14 L240,48 L0,48 Z" fill="url(#sg)"/>
+            <path d="M0,36 C40,30 80,18 120,22 C160,26 200,12 240,14" fill="none" stroke="var(--reefpi-color-brand)" stroke-width="1.5"/>
+            <!-- Safe band: no hardcoded colors -->
+            <rect x="0" y="20" width="240" height="12" fill="var(--reefpi-color-band-safe)" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div class="toggle-sample">
+          <div class="track-on"><div class="thumb" style="left:22px"></div></div>
+          Return Pump — on
+        </div>
+        <div class="toggle-sample">
+          <div class="track-off"><div class="thumb" style="left:2px"></div></div>
+          Skimmer — off
+        </div>
+      </div>
+
+      <!-- Alert row -->
+      <div class="alert-row-sample">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--reefpi-color-error);flex-shrink:0;margin-top:5px;"></div>
+        <div>
+          <div style="font-weight:500;margin-bottom:1px;">Temperature critical</div>
+          <div style="font-size:0.75rem;color:var(--reefpi-color-text-muted)">Outside safe range</div>
+          <div style="font-size:0.65rem;color:var(--reefpi-color-text-muted);font-family:var(--reefpi-font-mono);margin-top:2px;">2m ago</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Story 3: pass checklist -->
+  <section class="story">
+    <h2 class="story-title">Pass checklist</h2>
+    <ul class="checklist">
+      <li><span class="check-icon">&#10003;</span> All component surfaces use var(--reefpi-color-surface*)</li>
+      <li><span class="check-icon">&#10003;</span> Text tokens: var(--reefpi-color-text) + text-muted</li>
+      <li><span class="check-icon">&#10003;</span> Borders: var(--reefpi-color-border) + border-strong</li>
+      <li><span class="check-icon">&#10003;</span> Sparkline fill: var(--reefpi-color-brand) — no hex strokes</li>
+      <li><span class="check-icon">&#10003;</span> ThresholdGauge bands: var(--reefpi-color-band-*)</li>
+      <li><span class="check-icon">&#10003;</span> Alert center panel: var(--reefpi-color-surface-elevated)</li>
+      <li><span class="check-icon">&#10003;</span> ToggleSwitch: track/thumb/ring use var()</li>
+      <li><span class="check-icon">&#10003;</span> Pending spinner: var(--reefpi-color-pending) — lighter in dark (9aaf9a)</li>
+      <li><span class="check-icon">&#10003;</span> NavBar gradient: var(--reefpi-gradient-brand) — invariant</li>
+    </ul>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+</body>
+</html>
