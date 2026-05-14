@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TemperatureForm from './temperature_form'
-import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, readTC, calibrateTemperature } from 'redux/actions/tcs'
+import { fetchSensors, createTC, deleteTC, updateTC, fetchTCs, fetchTCUsage, readTC, calibrateTemperature } from 'redux/actions/tcs'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
 import { fetchAnalogInputs } from 'redux/actions/analog_inputs'
@@ -10,6 +10,57 @@ import CalibrationModal from './calibration_modal'
 import i18next from 'i18next'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
+import { timestampToEpoch } from 'utils/timestamp'
+import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
+import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
+import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/ThresholdGauge'
+
+const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
+
+function TemperaturePrimitives ({ probe, usage, currentReading }) {
+  const [range, setRange] = useState('1d')
+  if (!usage || !usage.current) return null
+
+  const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
+  const points = usage.current
+    .filter(d => timestampToEpoch(d.time) >= cutoff)
+    .map(d => ({ t: timestampToEpoch(d.time), v: d.value }))
+    .sort((a, b) => a.t - b.t)
+
+  const latestValue = currentReading != null ? currentReading : (points.length ? points[points.length - 1].v : null)
+  const unit = probe.fahrenheit ? '°F' : '°C'
+  const safe = (probe.min != null && probe.max != null) ? [probe.min, probe.max] : undefined
+  const warn = (probe.notify && probe.notify.enable && probe.notify.min != null && probe.notify.max != null)
+    ? [probe.notify.min, probe.notify.max]
+    : undefined
+
+  return (
+    <div style={{ padding: '8px 0' }}>
+      <RangeSelector value={range} onChange={setRange} compact scope={`temp-${probe.id}`} />
+      <div style={{ marginTop: '8px' }}>
+        <Sparkline
+          points={points}
+          stroke='var(--reefpi-color-brand)'
+          fill='var(--reefpi-color-brand)'
+          band={safe}
+          height={56}
+          hover
+        />
+      </div>
+      {latestValue != null && (
+        <div style={{ marginTop: '8px' }}>
+          <ThresholdGauge
+            value={latestValue}
+            safe={safe}
+            warn={warn}
+            unit={unit}
+            label={probe.name}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export class RawTemperatureMain extends React.Component {
   constructor (props) {
@@ -38,6 +89,9 @@ export class RawTemperatureMain extends React.Component {
     this.props.fetchAnalogInputs()
     this.props.probes.forEach(probe => {
       this.props.readTC(probe.id)
+      if (window.FEATURE_FLAGS?.dashboard_v2) {
+        this.props.fetchTCUsage(probe.id)
+      }
     })
   }
 
@@ -96,6 +150,13 @@ export class RawTemperatureMain extends React.Component {
           probe.enable = !probe.enable
           this.props.update(probe.id, probe)
         }
+        const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+          <TemperaturePrimitives
+            probe={probe}
+            usage={this.props.tcUsage[probe.id]}
+            currentReading={this.props.currentReading[probe.id]}
+          />
+        )
         return (
           <Collapsible
             key={'panel-temperature-' + probe.id}
@@ -107,9 +168,10 @@ export class RawTemperatureMain extends React.Component {
             onToggleState={handleToggleState}
             enabled={probe.enable}
           >
+            {enhancedView}
             <TemperatureForm
               tc={probe}
-              showChart
+              showChart={!window.FEATURE_FLAGS?.dashboard_v2}
               sensors={this.props.sensors}
               analogInputs={this.props.analogInputs}
               equipment={this.props.equipment}
@@ -252,7 +314,8 @@ const mapStateToProps = state => {
     analogInputs: state.analog_inputs,
     equipment: state.equipment,
     macros: state.macros,
-    currentReading: state.tc_reading
+    currentReading: state.tc_reading,
+    tcUsage: state.tc_usage || {}
   }
 }
 
@@ -266,6 +329,7 @@ const mapDispatchToProps = dispatch => {
     delete: id => dispatch(deleteTC(id)),
     update: (id, t) => dispatch(updateTC(id, t)),
     readTC: id => dispatch(readTC(id)),
+    fetchTCUsage: id => dispatch(fetchTCUsage(id)),
     calibrateSensor: (id, t) => dispatch(calibrateTemperature(id, t))
   }
 }
