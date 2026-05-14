@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — BottomNav</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    .phone-frame {
+      width: 375px;
+      height: 520px;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background: var(--reefpi-color-surface);
+      box-shadow: var(--reefpi-shadow-navbar);
+    }
+
+    .phone-content {
+      position: absolute;
+      inset: 0;
+      bottom: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.85rem;
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 56px;
+      background: var(--reefpi-gradient-brand);
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid var(--reefpi-color-nav-border);
+    }
+
+    .tab-btn {
+      flex: 1 1 0;
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      font-family: var(--reefpi-font-app);
+      padding: 4px 0;
+      color: var(--reefpi-color-nav-text-muted);
+    }
+    .tab-btn.active {
+      color: var(--reefpi-color-nav-text-strong);
+      font-weight: 600;
+    }
+    .tab-label { font-size: 0.6rem; letter-spacing: 0.01em; line-height: 1; }
+
+    /* ── Drawer ─────────────────────────────────── */
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 10;
+      display: none;
+    }
+    .drawer {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 260px;
+      background: var(--reefpi-gradient-brand);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 64px; padding: 0 1rem;
+      border-bottom: 1px solid var(--reefpi-color-nav-border);
+      flex-shrink: 0;
+    }
+    .drawer-title {
+      color: var(--reefpi-color-nav-text-strong);
+      font-family: var(--reefpi-font-app);
+      font-weight: 700; font-size: 1.1rem;
+    }
+    .drawer-close {
+      background: none; border: none;
+      color: var(--reefpi-color-nav-text-muted);
+      min-width: 44px; min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border-radius: var(--reefpi-radius-sm);
+    }
+    .drawer-body { flex: 1 1 auto; overflow-y: auto; padding: 0.5rem; }
+    .drawer-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      min-height: 44px; width: 100%; padding: 0 1rem;
+      border-radius: var(--reefpi-radius-sm);
+      background: none; border: none;
+      color: var(--reefpi-color-nav-text);
+      font-family: var(--reefpi-font-app); font-size: 0.875rem;
+      cursor: pointer; text-align: left;
+    }
+    .drawer-item.active {
+      background: var(--reefpi-color-nav-overlay);
+      color: var(--reefpi-color-nav-text-strong);
+      font-weight: 600;
+    }
+    .drawer-footer {
+      padding: 0.5rem;
+      border-top: 1px solid var(--reefpi-color-nav-border);
+      flex-shrink: 0;
+    }
+
+    .demo-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start; }
+
+    .tablet-frame {
+      width: 500px;
+      height: 340px;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      position: relative;
+      background: var(--reefpi-color-surface);
+    }
+    .hamburger-btn {
+      position: absolute;
+      top: 12px; left: 12px; z-index: 5;
+      background: var(--reefpi-gradient-brand);
+      border: none; border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-nav-text-strong);
+      min-width: 44px; min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .tablet-content {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--reefpi-font-app); font-size: 0.85rem;
+      color: var(--reefpi-color-text-muted);
+    }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">BottomNav</div>
+    <div class="card-desc">&lt;768px bottom bar · 768–991px hamburger drawer · closes on route change · new_shell flag</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: mobile bottom nav -->
+  <section class="story">
+    <h2 class="story-title">Mobile (&lt;768px) — bottom nav + More drawer</h2>
+    <p class="subtitle">Tap a route or "More" to open the full-route drawer</p>
+    <div class="demo-row">
+      <div>
+        <div class="phone-frame">
+          <div class="phone-content" id="mobile-content">Dashboard</div>
+          <div class="bottom-bar" id="mobile-bar"></div>
+          <div class="drawer-backdrop" id="mobile-backdrop" onclick="closeDrawer('mobile')"></div>
+          <div class="drawer" id="mobile-drawer">
+            <div class="drawer-header">
+              <span class="drawer-title">reef-pi</span>
+              <button class="drawer-close" onclick="closeDrawer('mobile')">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+              </button>
+            </div>
+            <div class="drawer-body" id="mobile-drawer-body"></div>
+            <div class="drawer-footer">
+              <button class="drawer-item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h9M13 7l3 3-3 3"/><path d="M10 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h6"/></svg>
+                <span>Sign out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 2: tablet hamburger -->
+  <section class="story">
+    <h2 class="story-title">Tablet (768–991px) — hamburger drawer</h2>
+    <p class="subtitle">Top-left button opens same full-height drawer</p>
+    <div class="tablet-frame">
+      <button class="hamburger-btn" onclick="openDrawer('tablet')">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="4" x2="16" y2="4"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="14" x2="16" y2="14"/></svg>
+      </button>
+      <div class="tablet-content" id="tablet-content">Equipment</div>
+      <div class="drawer-backdrop" id="tablet-backdrop" onclick="closeDrawer('tablet')"></div>
+      <div class="drawer" id="tablet-drawer">
+        <div class="drawer-header">
+          <span class="drawer-title">reef-pi</span>
+          <button class="drawer-close" onclick="closeDrawer('tablet')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+          </button>
+        </div>
+        <div class="drawer-body" id="tablet-drawer-body"></div>
+        <div class="drawer-footer">
+          <button class="drawer-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h9M13 7l3 3-3 3"/><path d="M10 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h6"/></svg>
+            <span>Sign out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+const ROUTES = [
+  { id: 'dashboard',     label: 'Dashboard', primary: true,  path: 'M3 7l7-5 7 5v11H3V7z M7 18v-5h6v5' },
+  { id: 'equipment',     label: 'Equipment', primary: true,  path: 'M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v4l3 2' },
+  { id: 'lighting',      label: 'Lighting',  primary: true,  path: 'M10 2v2M10 16v2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M2 10h2M16 10h2M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4M10 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z' },
+  { id: 'temperature',   label: 'Temp',      primary: true,  path: 'M10 3v9M10 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM7 12V5a3 3 0 0 1 6 0v7' },
+  { id: 'ato',           label: 'ATO',       primary: false, path: 'M5 18s2-6 5-6 5 6 5 6M10 6v6' },
+  { id: 'ph',            label: 'pH',        primary: false, path: 'M3 10h14M10 3v14' },
+  { id: 'timers',        label: 'Timers',    primary: false, path: 'M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zM10 6v4l3 2' },
+  { id: 'configuration', label: 'Settings',  primary: false, path: 'M10 1l1.5 3 3.3.5-2.4 2.3.6 3.2L10 8.5 7 10l.6-3.2L5.2 4.5 8.5 4z' },
+  { id: 'health',        label: 'Health',    primary: false, path: 'M3 10h3l2-5 3 10 2-7 2 2h2' }
+]
+
+let mobileActive = 'dashboard'
+let tabletActive = 'equipment'
+
+function svgIcon(path, size=20) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`
+}
+
+function renderMobileBar() {
+  const bar = document.getElementById('mobile-bar')
+  const primary = ROUTES.filter(r => r.primary)
+  bar.innerHTML = primary.map(r => `
+    <button class="tab-btn ${r.id === mobileActive ? 'active' : ''}" onclick="setMobileActive('${r.id}')">
+      ${svgIcon(r.path)}
+      <span class="tab-label">${r.label}</span>
+    </button>`).join('') +
+  `<button class="tab-btn" onclick="openDrawer('mobile')">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/>
+    </svg>
+    <span class="tab-label">More</span>
+  </button>`
+}
+
+function renderDrawerBody(containerId, activeId, onSelect) {
+  const c = document.getElementById(containerId)
+  c.innerHTML = ROUTES.map(r => `
+    <button class="drawer-item ${r.id === activeId ? 'active' : ''}" onclick="${onSelect}('${r.id}')">
+      ${svgIcon(r.path)}
+      <span>${r.label}</span>
+    </button>`).join('')
+}
+
+function setMobileActive(id) {
+  mobileActive = id
+  document.getElementById('mobile-content').textContent = ROUTES.find(r=>r.id===id)?.label ?? id
+  renderMobileBar()
+  closeDrawer('mobile')
+}
+
+function setTabletActive(id) {
+  tabletActive = id
+  document.getElementById('tablet-content').textContent = ROUTES.find(r=>r.id===id)?.label ?? id
+  renderDrawerBody('tablet-drawer-body', tabletActive, 'setTabletActive')
+  closeDrawer('tablet')
+}
+
+function openDrawer(ns) {
+  document.getElementById(`${ns}-drawer`).classList.add('open')
+  document.getElementById(`${ns}-backdrop`).style.display = 'block'
+}
+function closeDrawer(ns) {
+  document.getElementById(`${ns}-drawer`).classList.remove('open')
+  document.getElementById(`${ns}-backdrop`).style.display = 'none'
+}
+
+renderMobileBar()
+renderDrawerBody('mobile-drawer-body', mobileActive, 'setMobileActive')
+renderDrawerBody('tablet-drawer-body', tabletActive, 'setTabletActive')
+</script>
+</body>
+</html>
