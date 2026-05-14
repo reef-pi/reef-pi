@@ -251,6 +251,27 @@ describe('Lighting ui', () => {
     )).toContain('form-light-1')
   })
 
+  it('<LightForm /> maps legacy auto profiles to interval profiles', () => {
+    const config = {
+      ...light,
+      channels: {
+        1: {
+          ...light.channels[1],
+          profile: {
+            ...light.channels[1].profile,
+            type: 'auto'
+          }
+        }
+      }
+    }
+
+    renderToStaticMarkup(
+      <LightForm onSubmit={jest.fn()} config={config} jacks={[{ id: '1', name: 'foo' }]} />
+    )
+
+    expect(config.channels[1].profile.type).toBe('interval')
+  })
+
   it('<Light /> should submit', () => {
     const fn = jest.fn()
     const values = { config: light }
