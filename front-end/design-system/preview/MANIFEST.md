@@ -82,6 +82,42 @@ All stories live under `preview/primitives/`. Open with `?theme=dark` or `?theme
 | `RangeSelector` | default / compact / keyboard / custom options+scope | [primitives/range-selector.html](primitives/range-selector.html) |
 | `useTimeSeries` | loading / loaded (120 pts LTTB) / error / stale-while-revalidate | [primitives/use-time-series.html](primitives/use-time-series.html) |
 
+## Components (E3 · Dashboard v2)
+
+All stories live under `preview/dashboard/`. Flag: `dashboard_v2`. Open with `?theme=dark` or `?theme=actinic` for theme verification.
+
+| Component | Stories | Preview card |
+|---|---|---|
+| `SystemStrip` | live / warning / critical / offline | [dashboard/system-strip.html](dashboard/system-strip.html) |
+| `TemperatureTile` | within range / too high / too low / loading | [dashboard/temperature-tile.html](dashboard/temperature-tile.html) |
+| `PhTile` + `AtoTile` | nominal / warning / critical / loading | [dashboard/ph-ato-tiles.html](dashboard/ph-ato-tiles.html) |
+| `EquipmentStrip` | mixed states / 12-item overflow / empty | [dashboard/equipment-strip.html](dashboard/equipment-strip.html) |
+| `DashboardV2` + flag wire-up | flag on / flag off (children fallback) | [dashboard/dashboard-v2-flag.html](dashboard/dashboard-v2-flag.html) |
+
+## Components (E4 · Control trust)
+
+All stories live under `preview/dashboard/`. Flags: `pending_states`, `alert_center`.
+
+| Component / Hook | Stories | Preview card |
+|---|---|---|
+| `AlertCenter` + bell | empty / 1 warn / 2 warn+critical / acknowledged | [dashboard/alert-center.html](dashboard/alert-center.html) |
+| `MetricTile` inline alerts | warn + critical + none / truncation / baseline | [dashboard/inline-alerts.html](dashboard/inline-alerts.html) |
+| `useEquipmentToggle` retry UX | interactive state machine / error copy table / static alert row with Retry | [dashboard/retry-backoff.html](dashboard/retry-backoff.html) |
+
+## Shell (E5 · Shell + theming)
+
+All stories live under `preview/shell/`. Flag: `new_shell` (Sidebar, BottomNav). Theme hooks are unflagged.
+
+| Component / Hook | Stories | Preview card |
+|---|---|---|
+| `Sidebar` | interactive rail↔expanded / static expanded | [shell/sidebar.html](shell/sidebar.html) |
+| `BottomNav` | mobile bottom bar + More drawer / tablet hamburger drawer | [shell/bottom-nav.html](shell/bottom-nav.html) |
+| `ThemePicker` + `useTheme` | interactive picker / swatches / no-flash script | [shell/theme-picker.html](shell/theme-picker.html) |
+| `AcitnicSchedule` | token swatches / schedule toggle / timeline / transition checklist | [shell/actinic.html](shell/actinic.html) |
+| Dark theme pass | surface audit / component samples / checklist | [shell/dark-pass.html](shell/dark-pass.html) |
+| `SignInConfidenceCard` | with data / minimal / hidden-on-error | [shell/signin-confidence.html](shell/signin-confidence.html) |
+| `EmptyState` | Equipment / Timers / Lighting / Doser / no-CTA variant | [shell/empty-states.html](shell/empty-states.html) |
+
 ## CI scripts
 
 | Script | Command | Output |
