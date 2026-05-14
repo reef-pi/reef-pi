@@ -94,6 +94,59 @@ describe('Camera module', () => {
     expect(() => camera.render()).not.toThrow()
   })
 
+  it('<Main /> toggles config form rendering', () => {
+    const updateConfig = jest.fn()
+    const camera = new RawCamera({
+      config: cameraState.camera.config,
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig
+    })
+    camera.setState = next => {
+      camera.state = { ...camera.state, ...next }
+    }
+
+    let rendered = camera.render()
+    expect(countByType(rendered, node => node.type === Config)).toBe(0)
+
+    camera.handleToggleConfig()
+    rendered = camera.render()
+    const config = findByType(rendered, Config)
+
+    expect(camera.state.showConfig).toBe(true)
+    expect(config.props.config).toBe(cameraState.camera.config)
+    expect(config.props.update).toBe(updateConfig)
+  })
+
+  it('<Main /> renders motion preview only when motion config is available', () => {
+    const camera = new RawCamera({
+      config: {},
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig: jest.fn()
+    })
+
+    expect(camera.motion()).toBeUndefined()
+
+    camera.state.config = {
+      motion: {
+        width: 320,
+        height: 240,
+        url: '/motion'
+      }
+    }
+
+    const motion = camera.motion()
+    expect(motion.type).toBe(Motion)
+    expect(motion.props).toEqual({
+      width: 320,
+      height: 240,
+      url: '/motion'
+    })
+  })
+
   it('<Capture />', () => {
     const getLatestImage = jest.fn()
     const capture = new RawCapture({ latest: '', getLatestImage, takeImage: jest.fn() })
