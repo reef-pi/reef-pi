@@ -30,7 +30,7 @@
 - [x] #19 Retry + backoff UX — `issue-19-retry-backoff.md`
 
 ## E5 · Shell + theming (flag: `new_shell`)
-- [ ] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
+- [x] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
 - [ ] #21 Bottom nav + drawer — `issue-21-bottom-nav.md`
 - [ ] #22 Dark theme pass — `issue-22-dark-pass.md`
 - [ ] #23 Actinic theme — `issue-23-actinic.md`
