@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — SignInConfidenceCard</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    .signin-frame {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .signin-form-mock {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 1.75rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .form-title {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-field {
+      margin-bottom: 0.75rem;
+    }
+    .form-field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .form-field input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      background: var(--reefpi-color-surface);
+      color: var(--reefpi-color-text);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.875rem;
+      min-height: var(--reefpi-tap-target-min);
+    }
+
+    .signin-btn {
+      width: 100%;
+      min-height: var(--reefpi-tap-target-min);
+      background: var(--reefpi-gradient-brand);
+      border: none;
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-nav-text-strong);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Confidence card ────────────────────────── */
+    .confidence-card {
+      margin-top: 1.25rem;
+      padding: 0.75rem 1rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      text-align: center;
+      font-family: var(--reefpi-font-app);
+    }
+    .conf-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      margin-bottom: 0.2rem;
+    }
+    .conf-meta {
+      font-size: 0.72rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      line-height: 1.6;
+    }
+
+    .story-row { display: flex; gap: 2rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">SignInConfidenceCard</div>
+    <div class="card-desc">Below sign-in form · /api/meta · hides silently on error</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: with data -->
+  <section class="story">
+    <h2 class="story-title">With controller info</h2>
+    <p class="subtitle">GET /api/meta returns name, IP, version, device, uptime</p>
+    <div class="signin-frame">
+      <div class="signin-form-mock">
+        <div class="form-title">Sign in</div>
+        <div class="form-field">
+          <label>Username</label>
+          <input type="text" placeholder="reef-pi" value="reef-pi" readonly>
+        </div>
+        <div class="form-field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" value="password" readonly>
+        </div>
+        <button class="signin-btn">Sign in</button>
+      </div>
+      <footer aria-label="Controller info" class="confidence-card">
+        <div class="conf-name">My Reef Controller</div>
+        <div class="conf-meta">192.168.1.40 · v5.2.0</div>
+        <div class="conf-meta">Raspberry Pi 4 Model B · up 4d 6h</div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- Story 2: minimal data -->
+  <section class="story">
+    <h2 class="story-title">Minimal (IP + version only)</h2>
+    <p class="subtitle">device and uptime fields absent from /api/meta response</p>
+    <div class="signin-frame">
+      <div class="signin-form-mock">
+        <div class="form-title">Sign in</div>
+        <div class="form-field">
+          <label>Username</label>
+          <input type="text" placeholder="reef-pi" readonly>
+        </div>
+        <div class="form-field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" readonly>
+        </div>
+        <button class="signin-btn">Sign in</button>
+      </div>
+      <footer aria-label="Controller info" class="confidence-card">
+        <div class="conf-meta">10.0.0.5 · v5.2.0</div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- Story 3: hidden (error) -->
+  <section class="story">
+    <h2 class="story-title">Hidden on fetch failure</h2>
+    <p class="subtitle">/api/meta unreachable — card renders nothing, no error banner</p>
+    <div class="signin-frame">
+      <div class="signin-form-mock">
+        <div class="form-title">Sign in</div>
+        <div class="form-field">
+          <label>Username</label>
+          <input type="text" placeholder="reef-pi" readonly>
+        </div>
+        <div class="form-field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" readonly>
+        </div>
+        <button class="signin-btn">Sign in</button>
+      </div>
+      <!-- no confidence card — renders null -->
+      <p style="text-align:center;font-size:0.72rem;color:var(--reefpi-color-text-muted);font-family:var(--reefpi-font-mono);margin-top:0.5rem;">(card hidden — fetch failed silently)</p>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+</body>
+</html>
