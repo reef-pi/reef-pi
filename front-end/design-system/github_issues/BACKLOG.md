@@ -31,6 +31,10 @@
 
 ## E5 · Shell + theming (flag: `new_shell`)
 - [x] #20 Collapsible left sidebar (≥992px) — `issue-20-sidebar.md`
+- [ ] #21 Bottom nav + drawer — `issue-21-bottom-nav.md`
+- [ ] #22 Dark theme pass — `issue-22-dark-pass.md`
+- [x] #23 Actinic theme — `issue-23-actinic.md`
+- [ ] #24 Sign-in confidence card — `issue-24-signin-confidence.md`
 - [x] #21 Bottom nav + drawer — `issue-21-bottom-nav.md`
 - [x] #22 Dark theme pass — `issue-22-dark-pass.md`
 - [ ] #23 Actinic theme — `issue-23-actinic.md`
