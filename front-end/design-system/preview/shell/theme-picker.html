@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- No-flash theme apply — runs before CSS -->
+  <script>(function(){var t=localStorage.getItem('reefpi.theme')||'system';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;if(r!=='light')document.documentElement.setAttribute('data-theme',r);})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — ThemePicker</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    .settings-card {
+      max-width: 420px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 1.5rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    fieldset.theme-field {
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 1rem;
+      margin: 0;
+    }
+    legend.theme-legend {
+      font-size: 0.75rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+      padding: 0 0.25rem;
+    }
+
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-height: var(--reefpi-tap-target-min, 2.75rem);
+      padding: 0 0.5rem;
+      border-radius: var(--reefpi-radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .theme-option.selected {
+      background: var(--reefpi-color-pending-bg);
+      border-color: var(--reefpi-color-brand);
+    }
+    .theme-option input[type="radio"] {
+      accent-color: var(--reefpi-color-brand);
+      width: 16px; height: 16px; flex-shrink: 0;
+    }
+    .option-name { font-size: 0.88rem; font-weight: 500; color: var(--reefpi-color-text); }
+    .option-desc { font-size: 0.75rem; color: var(--reefpi-color-text-muted); margin-left: 0.4rem; }
+    .active-pill {
+      margin-left: auto;
+      font-size: 0.65rem; font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-brand);
+      background: var(--reefpi-color-band-safe);
+      padding: 1px 6px; border-radius: 999px;
+    }
+
+    .persist-note {
+      font-size: 0.7rem; font-family: var(--reefpi-font-mono);
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      padding: 0.4rem 0.6rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+    }
+
+    /* ── Theme swatch grid ─────────────────────── */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .swatch-card {
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      border: 1px solid var(--reefpi-color-border);
+      font-size: 0.75rem;
+      font-family: var(--reefpi-font-app);
+    }
+    .swatch-bar {
+      height: 8px;
+    }
+    .swatch-body {
+      padding: 0.625rem 0.75rem;
+    }
+    .swatch-label { font-weight: 500; margin-bottom: 4px; }
+    .swatch-tokens { font-size: 0.65rem; font-family: var(--reefpi-font-mono); line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">ThemePicker</div>
+    <div class="card-desc">useTheme hook · Light / Dark / Actinic / System · localStorage + custom event</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: interactive picker -->
+  <section class="story">
+    <h2 class="story-title">Settings › Appearance (interactive)</h2>
+    <p class="subtitle">Selecting a theme applies it immediately, persists to localStorage</p>
+    <div class="settings-card">
+      <fieldset class="theme-field">
+        <legend class="theme-legend">Appearance</legend>
+        <div id="picker-options" style="display:flex;flex-direction:column;gap:0.5rem;"></div>
+      </fieldset>
+      <div class="persist-note" id="persist-note">localStorage.reefpi.theme = "system"</div>
+    </div>
+  </section>
+
+  <!-- Story 2: theme token swatches -->
+  <section class="story">
+    <h2 class="story-title">Theme surface tokens</h2>
+    <p class="subtitle">All three themes — brand green is the only invariant accent</p>
+    <div class="swatch-grid">
+      <div class="swatch-card">
+        <div class="swatch-bar" style="background:linear-gradient(90deg,#f5faf3,#ffffff)"></div>
+        <div class="swatch-body">
+          <div class="swatch-label">Light (default)</div>
+          <div class="swatch-tokens">
+            surface: #f5faf3<br>
+            elevated: #ffffff<br>
+            text: #1f2a1f<br>
+            border: #d6e5d0
+          </div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-bar" style="background:linear-gradient(90deg,#0f1410,#1a211a)"></div>
+        <div class="swatch-body" style="background:#0f1410;color:#e6efe0;">
+          <div class="swatch-label">Dark</div>
+          <div class="swatch-tokens" style="color:#9aa89a">
+            surface: #0f1410<br>
+            elevated: #1a211a<br>
+            text: #e6efe0<br>
+            border: #2a3329
+          </div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-bar" style="background:linear-gradient(90deg,#05101f,#0a1a33)"></div>
+        <div class="swatch-body" style="background:#05101f;color:#cfe3ff;">
+          <div class="swatch-label">Actinic</div>
+          <div class="swatch-tokens" style="color:#7a90b5">
+            surface: #05101f<br>
+            elevated: #0a1a33<br>
+            text: #cfe3ff<br>
+            border: #10284d
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 3: no-flash script -->
+  <section class="story">
+    <h2 class="story-title">No-flash first-paint script</h2>
+    <p class="subtitle">Paste into &lt;head&gt; before any CSS — reads localStorage and sets data-theme before render</p>
+    <pre style="font-family:var(--reefpi-font-mono);font-size:0.72rem;background:var(--reefpi-color-surface);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-sm);padding:1rem;overflow-x:auto;color:var(--reefpi-color-text)">(function(){
+  var t = localStorage.getItem('reefpi.theme') || 'system';
+  var r = t === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : t;
+  if (r !== 'light') document.documentElement.setAttribute('data-theme', r);
+})();</pre>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+const OPTIONS = [
+  { value: 'system',  label: 'System',  desc: 'Follow device preference' },
+  { value: 'light',   label: 'Light',   desc: 'Always light'             },
+  { value: 'dark',    label: 'Dark',    desc: 'Low-light general mode'   },
+  { value: 'actinic', label: 'Actinic', desc: 'Reef blue night mode'     }
+]
+
+let currentTheme = localStorage.getItem('reefpi.theme') || 'system'
+
+function applyTheme(choice) {
+  currentTheme = choice
+  try { localStorage.setItem('reefpi.theme', choice) } catch {}
+  const resolved = choice === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : choice
+  if (resolved === 'light') document.documentElement.removeAttribute('data-theme')
+  else document.documentElement.setAttribute('data-theme', resolved)
+  document.getElementById('persist-note').textContent =
+    `localStorage.reefpi.theme = "${choice}" → resolved: "${resolved}"`
+  document.dispatchEvent(new CustomEvent('reefpi:theme-change', { detail: { theme: resolved } }))
+  renderPicker()
+}
+
+function renderPicker() {
+  const container = document.getElementById('picker-options')
+  container.innerHTML = OPTIONS.map(opt => `
+    <label class="theme-option ${currentTheme === opt.value ? 'selected' : ''}"
+           onclick="applyTheme('${opt.value}')">
+      <input type="radio" name="reefpi-theme" value="${opt.value}"
+             ${currentTheme === opt.value ? 'checked' : ''} onchange="applyTheme('${opt.value}')">
+      <span>
+        <span class="option-name">${opt.label}</span>
+        <span class="option-desc">— ${opt.desc}</span>
+      </span>
+      ${currentTheme === opt.value ? '<span class="active-pill">active</span>' : ''}
+    </label>`).join('')
+}
+
+renderPicker()
+document.getElementById('persist-note').textContent =
+  `localStorage.reefpi.theme = "${currentTheme}"`
+</script>
+</body>
+</html>
