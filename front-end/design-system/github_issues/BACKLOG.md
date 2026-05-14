@@ -35,5 +35,5 @@
 - [ ] #22 Dark theme pass — `issue-22-dark-pass.md`
 - [ ] #23 Actinic theme — `issue-23-actinic.md`
 - [ ] #24 Sign-in confidence card — `issue-24-signin-confidence.md`
-- [ ] #25 Empty states for every list page — `issue-25-empty-states.md`
+- [x] #25 Empty states for every list page — `issue-25-empty-states.md`
 - [ ] #26 Theme picker + persistence — `issue-26-theme-picker.md`
