@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Actinic Theme</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    /* 120ms cross-fade on theme change, respects prefers-reduced-motion */
+    @media (prefers-reduced-motion: no-preference) {
+      html { transition: background-color 0.12s ease, color 0.12s ease; }
+    }
+
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    /* ── Actinic surface audit ──────────────────── */
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .token-swatch {
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+    }
+    .swatch-color { height: 40px; }
+    .swatch-info  { padding: 0.5rem 0.75rem; background: var(--reefpi-color-surface-elevated); }
+    .swatch-name  { color: var(--reefpi-color-text); font-weight: 500; margin-bottom: 2px; }
+    .swatch-value { color: var(--reefpi-color-text-muted); }
+
+    /* ── Schedule toggle ────────────────────────── */
+    .schedule-card {
+      max-width: 400px;
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 1rem;
+      font-family: var(--reefpi-font-app);
+    }
+    .schedule-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+    }
+    .schedule-info { flex: 1 1 auto; }
+    .schedule-title { font-size: 0.88rem; font-weight: 500; color: var(--reefpi-color-text); }
+    .schedule-desc  { font-size: 0.75rem; color: var(--reefpi-color-text-muted); margin-top: 2px; }
+
+    .sched-toggle {
+      background: none; border: none; padding: 0; cursor: pointer; line-height: 0;
+    }
+
+    /* ── Night window timeline ──────────────────── */
+    .timeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 20px;
+      border: 1px solid var(--reefpi-color-border);
+      font-size: 0.6rem;
+      font-family: var(--reefpi-font-mono);
+      background: var(--reefpi-color-surface);
+    }
+    .tl-day     { flex: 15; background: var(--reefpi-color-surface-elevated); display: flex; align-items: center; justify-content: center; color: var(--reefpi-color-text-muted); }
+    .tl-night   { flex: 9;  background: var(--reefpi-color-surface); border-left: 1px solid var(--reefpi-color-border); border-right: 1px solid var(--reefpi-color-border); display: flex; align-items: center; justify-content: center; }
+    .tl-actinic { flex: 9;  background: #05101f; display: flex; align-items: center; justify-content: center; color: #cfe3ff; border-right: 1px solid var(--reefpi-color-border); }
+
+    .pass-checklist { list-style: none; padding: 0; margin: 0; font-family: var(--reefpi-font-app); font-size: 0.85rem; }
+    .pass-checklist li {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      color: var(--reefpi-color-text);
+    }
+    .pass-checklist li:last-child { border-bottom: none; }
+    .check-icon { color: var(--reefpi-color-brand); flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Actinic Theme</div>
+    <div class="card-desc">[data-theme="actinic"] · deep blue night mode · 120ms fade · reef schedule auto-switch</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: surface tokens in actinic -->
+  <section class="story">
+    <h2 class="story-title">Actinic surface tokens</h2>
+    <p class="subtitle">Switch to Actinic above — deep blue surfaces, brand green stays invariant</p>
+    <div class="audit-grid">
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-surface)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">surface</div>
+          <div class="swatch-value">actinic: #05101f</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-surface-elevated)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">surface-elevated</div>
+          <div class="swatch-value">actinic: #0a1a33</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-text);height:20px;margin:10px"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">text</div>
+          <div class="swatch-value">actinic: #cfe3ff</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-border)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">border</div>
+          <div class="swatch-value">actinic: #10284d</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-brand)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">brand (invariant)</div>
+          <div class="swatch-value">#27a822 — same in all themes</div>
+        </div>
+      </div>
+      <div class="token-swatch">
+        <div class="swatch-color" style="background:var(--reefpi-color-pending)"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">pending</div>
+          <div class="swatch-value">actinic: #9aaf9a</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 2: auto-schedule toggle -->
+  <section class="story">
+    <h2 class="story-title">Auto-schedule toggle (interactive)</h2>
+    <p class="subtitle">Switches to actinic between 21:00–06:00; checks every minute</p>
+    <div class="schedule-card">
+      <div style="font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--reefpi-color-text-muted);margin-bottom:0.75rem;">Appearance</div>
+      <div class="schedule-row">
+        <div class="schedule-info">
+          <div class="schedule-title">Follow reef schedule</div>
+          <div class="schedule-desc">Enable actinic between 21:00–06:00</div>
+        </div>
+        <button class="sched-toggle" role="switch" aria-checked="false" id="sched-btn" onclick="toggleSchedule()">
+          <svg width="44" height="24" viewBox="0 0 44 24" aria-hidden="true">
+            <rect id="sched-track" x="0" y="0" width="44" height="24" rx="12"
+              fill="var(--reefpi-color-border-strong)" style="transition:fill 0.2s"/>
+            <circle id="sched-thumb" cx="12" cy="12" r="10"
+              fill="var(--reefpi-color-surface-elevated)"
+              stroke="var(--reefpi-color-border)" stroke-width="1"
+              style="transition:cx 0.2s"/>
+          </svg>
+        </button>
+      </div>
+      <div id="sched-status" style="font-size:0.72rem;color:var(--reefpi-color-text-muted);font-family:var(--reefpi-font-mono);padding-top:0.5rem;border-top:1px solid var(--reefpi-color-border)">
+        Schedule off — theme unchanged
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 3: night window timeline -->
+  <section class="story">
+    <h2 class="story-title">Night window</h2>
+    <p class="subtitle">21:00–06:00 default (9 hours actinic)</p>
+    <div class="timeline">
+      <div class="tl-day">06:00 – 21:00 (day)</div>
+      <div class="tl-actinic">21:00–00:00</div>
+      <div class="tl-actinic" style="border-left:none;">00:00–06:00</div>
+    </div>
+  </section>
+
+  <!-- Story 4: transition -->
+  <section class="story">
+    <h2 class="story-title">120ms cross-fade transition</h2>
+    <p class="subtitle">Switches smoothly between themes; respects prefers-reduced-motion</p>
+    <ul class="pass-checklist">
+      <li><span class="check-icon">&#10003;</span> CSS transition on html element: background-color + color 0.12s ease</li>
+      <li><span class="check-icon">&#10003;</span> Wrapped in @media (prefers-reduced-motion: no-preference)</li>
+      <li><span class="check-icon">&#10003;</span> Fires reefpi:theme-change CustomEvent for chart re-render listeners</li>
+      <li><span class="check-icon">&#10003;</span> Manual override (ThemePicker) wins over schedule for the session</li>
+    </ul>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+let schedEnabled = false
+
+function toggleSchedule() {
+  schedEnabled = !schedEnabled
+  const btn   = document.getElementById('sched-btn')
+  const track = document.getElementById('sched-track')
+  const thumb = document.getElementById('sched-thumb')
+  const status = document.getElementById('sched-status')
+
+  btn.setAttribute('aria-checked', String(schedEnabled))
+  track.setAttribute('fill', schedEnabled ? 'var(--reefpi-color-brand)' : 'var(--reefpi-color-border-strong)')
+  thumb.setAttribute('cx', schedEnabled ? '32' : '12')
+
+  if (schedEnabled) {
+    const h = new Date().getHours()
+    const isNight = h >= 21 || h < 6
+    status.textContent = isNight
+      ? 'Schedule on — actinic active (night window)'
+      : `Schedule on — light mode (next switch at 21:00)`
+    if (isNight) setTheme('actinic')
+  } else {
+    status.textContent = 'Schedule off — theme unchanged'
+  }
+}
+</script>
+</body>
+</html>
