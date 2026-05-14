@@ -53,6 +53,22 @@ describe('Connectors', () => {
     expect(new RawConnectors({ drivers: stockDrivers }).render().props.className).toBe('container')
   })
 
+  it('<Main /> renders loading state and connector sections', () => {
+    const loading = new RawConnectors({ drivers: undefined }).render()
+    expect(loading.props.children).toBe('loading')
+
+    const rendered = new RawConnectors({ drivers: stockDrivers }).render()
+    const sectionRows = React.Children.toArray(rendered.props.children)
+      .filter(child => child.props && String(child.props.className).includes('row'))
+
+    expect(sectionRows.map(row => row.props.className)).toEqual([
+      'row inlets',
+      'row outlets',
+      'row analog-inputs',
+      'row jacks'
+    ])
+  })
+
   it('<InletSelector />', () => {
     const update = jest.fn()
     const component = new RawInletSelector({
@@ -272,6 +288,53 @@ describe('Connectors', () => {
     component.handleSave()
     expect(create).toHaveBeenCalled()
     expect(component.list().length).toBeGreaterThan(0)
+    expect(outlets.map(o => o.name)).toEqual(['J2', 'J1'])
+  })
+
+  it('<Outlets /> handles driver, pin, reverse, update, and delete flows', async () => {
+    const create = jest.fn()
+    const update = jest.fn()
+    const fetch = jest.fn()
+    const del = jest.fn()
+    const outlets = [
+      { id: '1', name: 'J2', pin: 1, reverse: true, driver: 'rpi' },
+      { id: '2', name: 'J1', pin: 2, reverse: false, driver: 'missing' }
+    ]
+    const component = new RawOutlets({
+      outlets,
+      drivers: stockDrivers,
+      fetch,
+      create,
+      delete: del,
+      update
+    })
+    patchSetState(component)
+
+    component.handleAdd()
+    component.handleNameChange({ target: { value: 'Skimmer' } })
+    component.handleDriverChange({ target: { value: 'missing' } })
+    expect(component.state.driver).toEqual({})
+    component.handleDriverChange({ target: { value: 'rpi' } })
+    component.onPinChange(3)
+    component.handleReverseChange()
+    component.handleSave()
+
+    expect(create).toHaveBeenCalledWith({
+      name: 'Skimmer',
+      pin: 3,
+      reverse: true,
+      driver: 'rpi'
+    })
+    expect(component.state.add).toBe(false)
+
+    const outletNode = component.list().find(item => item.type === Outlet && item.props.outlet_id === '1')
+    outletNode.props.update({ name: 'Updated', pin: 4, reverse: false, driver: 'rpi' })
+    expect(update).toHaveBeenCalledWith('1', { name: 'Updated', pin: 4, reverse: false, driver: 'rpi' })
+    expect(fetch).toHaveBeenCalled()
+
+    component.remove({ id: '2', name: 'J1' })()
+    await Promise.resolve()
+    expect(del).toHaveBeenCalledWith('2')
     expect(outlets.map(o => o.name)).toEqual(['J2', 'J1'])
   })
 
