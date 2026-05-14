@@ -1,4 +1,5 @@
-import EquipmentCtrlPanel, { RawEquipmentCtrlPanel } from './ctrl_panel'
+import Switch from 'react-toggle-switch'
+import EquipmentCtrlPanel, { RawEquipmentCtrlPanel, mapDispatchToProps, mapStateToProps } from './ctrl_panel'
 import 'isomorphic-fetch'
 
 const equipment = [
@@ -64,5 +65,31 @@ describe('<EquipmentCtrlPanel />', () => {
     panel.toggleState({ preventDefault }, equipment[0])
     expect(preventDefault).toHaveBeenCalled()
     expect(updateEquipment).toHaveBeenCalled()
+  })
+
+  it('renders sorted switches with toggle handlers', () => {
+    const panel = new RawEquipmentCtrlPanel({
+      equipment: [equipment[1], equipment[0]],
+      outlets,
+      fetchEquipment: jest.fn(),
+      updateEquipment: jest.fn()
+    })
+
+    const switches = panel.render().props.children.props.children
+      .map(col => col.props.children.props.children[0])
+
+    expect(switches).toHaveLength(2)
+    expect(switches[0].type).toBe(Switch)
+    expect(switches[0].props.on).toBe(true)
+    expect(switches[1].props.on).toBe(false)
+  })
+
+  it('maps state and dispatch props for the connected control panel', () => {
+    expect(mapStateToProps({ equipment, outlets })).toEqual({ equipment, outlets })
+    const dispatch = jest.fn(action => action)
+    const props = mapDispatchToProps(dispatch)
+    props.fetchEquipment()
+    props.updateEquipment(1, { on: false })
+    expect(dispatch).toHaveBeenCalledTimes(2)
   })
 })
