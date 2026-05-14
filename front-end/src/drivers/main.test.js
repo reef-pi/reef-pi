@@ -1,5 +1,5 @@
 import React from 'react'
-import Drivers, { RawDriversMain } from './main'
+import Drivers, { RawDriversMain, mapDispatchToProps, mapStateToProps } from './main'
 import Driver from './driver'
 import New from './new'
 import 'isomorphic-fetch'
@@ -200,5 +200,21 @@ describe('Drivers Main', () => {
 
     expect(() => main.render()).not.toThrow()
     expect(Drivers).toBeDefined()
+  })
+
+  it('maps state and dispatch props for the connected driver container', () => {
+    const state = { drivers, driverOptions }
+    expect(mapStateToProps(state)).toEqual({ drivers, driverOptions })
+
+    const dispatch = jest.fn(action => action)
+    const props = mapDispatchToProps(dispatch)
+    props.fetch()
+    props.fetchDriverOptions()
+    props.create({ name: 'new' })
+    props.delete('1')
+    props.update('2', { name: 'updated' })
+    props.provision('2')
+
+    expect(dispatch).toHaveBeenCalledTimes(6)
   })
 })
