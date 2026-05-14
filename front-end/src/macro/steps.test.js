@@ -2,6 +2,8 @@ import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { Formik, Form } from 'formik'
+import { act } from 'react'
+import { createRoot } from 'react-dom/client'
 import configureMockStore from 'redux-mock-store'
 import 'isomorphic-fetch'
 
@@ -40,6 +42,8 @@ const withFormik = (component, initialValues = {}, store = null) => {
 const renderMarkup = (component, initialValues = {}, store = null) => renderToStaticMarkup(
   withFormik(component, initialValues, store)
 )
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
 describe('Macro step components', () => {
   it('<WaitStep /> renders duration field', () => {
@@ -165,6 +169,32 @@ describe('Macro step components', () => {
       { 'steps[0]': { id: '', value: 0 } }
     )
     expect(html).toContain('name="steps[0].id"')
+  })
+
+  it('<PWMStep /> fetches jacks on mount', () => {
+    const fetch = jest.fn()
+    const container = document.createElement('div')
+    const root = createRoot(container)
+
+    act(() => {
+      root.render(withFormik(
+        <RawPWMStep
+          name='steps[0]'
+          errors={{}}
+          touched={{}}
+          readOnly={false}
+          jacks={[{ id: '1', name: 'PWM Jack', pins: [1, 2] }]}
+          fetch={fetch}
+        />,
+        { 'steps[0]': { id: '', value: 0 } }
+      ))
+    })
+
+    expect(fetch).toHaveBeenCalled()
+    expect(container.querySelector('select').disabled).toBe(false)
+    expect(container.querySelector('input[type="number"]').getAttribute('max')).toBe('100')
+
+    act(() => root.unmount())
   })
 
   it('<MacroForm /> renders with macro data', () => {
