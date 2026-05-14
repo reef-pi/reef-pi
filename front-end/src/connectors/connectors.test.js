@@ -1,6 +1,6 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { RawConnectors } from './main'
+import { RawConnectors, mapDispatchToProps, mapStateToProps } from './main'
 import { RawInlets } from './inlets'
 import Inlet from './inlet'
 import Outlet from './outlet'
@@ -67,6 +67,13 @@ describe('Connectors', () => {
       'row analog-inputs',
       'row jacks'
     ])
+  })
+
+  it('<Main /> maps state and fetch dispatch props', () => {
+    expect(mapStateToProps({ drivers: stockDrivers })).toEqual({ drivers: stockDrivers })
+    const dispatch = jest.fn(action => action)
+    mapDispatchToProps(dispatch).fetchDrivers()
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 
   it('<InletSelector />', () => {
