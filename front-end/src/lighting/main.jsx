@@ -4,6 +4,7 @@ import Light from './light_form'
 import { showError } from 'utils/alert'
 import { confirm } from 'utils/confirm'
 import { updateLight, fetchLights, createLight, deleteLight } from 'redux/actions/lights'
+import EmptyState, { LightingIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import { fetchJacks } from 'redux/actions/jacks'
 import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
@@ -307,6 +308,18 @@ class main extends React.Component {
     if (this.state.addLight) {
       nLight = this.newLightUI()
     }
+
+    if (this.props.lights.length === 0 && !this.state.addLight) {
+      return (
+        <EmptyState
+          icon={<LightingIcon />}
+          title='No lights configured'
+          body='Add an LED fixture or light channel to automate your reef lighting schedule.'
+          action={{ label: 'Add light', onClick: this.handleToggleAddLightDiv }}
+        />
+      )
+    }
+
     return (
       <ul className='list-group list-group-flush'>
         <CollapsibleList>

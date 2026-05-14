@@ -3,6 +3,7 @@ import { fetchPhProbes, createProbe, updateProbe, deleteProbe, calibrateProbe, r
 import { connect } from 'react-redux'
 import PhForm from './ph_form'
 import Collapsible from '../ui_components/collapsible'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { confirm } from 'utils/confirm'
 import CalibrationWizard from './calibration_wizard'
@@ -181,6 +182,16 @@ class ph extends React.Component {
           calibrateProbe={this.props.calibrateProbe}
           confirm={this.dismissModal}
           cancel={this.dismissModal}
+        />
+      )
+    }
+
+    if (this.props.probes.length === 0 && !this.state.addProbe) {
+      return (
+        <EmptyState
+          title='No pH probes yet'
+          body='Add a probe to monitor and control reef pH.'
+          action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv }}
         />
       )
     }

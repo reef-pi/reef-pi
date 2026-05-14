@@ -3,6 +3,7 @@ import New from './new'
 import AtoForm from './ato_form'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import { fetchATOs, deleteATO, updateATO, resetATO } from 'redux/actions/ato'
 import { connect } from 'react-redux'
 import { fetchEquipment } from 'redux/actions/equipment'
@@ -121,6 +122,16 @@ export class RawATOMain extends React.Component {
   }
 
   render () {
+    if (this.props.atos.length === 0) {
+      return (
+        <EmptyState
+          title='No ATO configured'
+          body='Connect a water level sensor to automate top-off dosing.'
+          action={{ label: 'Add ATO', onClick: () => {} }}
+        />
+      )
+    }
+
     return (
       <div>
         <ul className='list-group list-group-flush'>

@@ -3,6 +3,7 @@ import New from './new'
 import Journal from './journal'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import { fetchJournals, deleteJournal } from 'redux/actions/journal'
 import { connect } from 'react-redux'
 import i18next from 'i18next'
@@ -49,6 +50,16 @@ export class RawJournalMain extends React.Component {
   }
 
   render () {
+    if (this.props.journals.length === 0) {
+      return (
+        <EmptyState
+          title='No journal entries'
+          body='Log observations, parameter changes, and livestock additions.'
+          action={{ label: 'Add entry', onClick: () => {} }}
+        />
+      )
+    }
+
     return (
       <div>
         <ul className='list-group list-group-flush'>
