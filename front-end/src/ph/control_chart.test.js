@@ -1,4 +1,5 @@
-import ControlChart, { RawControlChart } from './control_chart'
+import { Tooltip } from 'recharts'
+import ControlChart, { RawControlChart, mapDispatchToProps, mapStateToProps } from './control_chart'
 import 'isomorphic-fetch'
 
 const probeConfig = {
@@ -57,6 +58,23 @@ describe('Ph ControlChart', () => {
     expect(readings.historical).toEqual(originalHistorical)
   })
 
+  it('formats tooltip values by metric type', () => {
+    const chart = new RawControlChart({
+      probe_id: '1',
+      config: probeConfig,
+      readings: { historical: [{ time: 'Jul-01-10:00, 2024', value: 7.8, up: 10, down: 5 }] },
+      fetchProbeReadings: jest.fn(),
+      height: 200
+    })
+    const tooltip = chart.render().props.children[1].props.children.props.children
+      .find(child => child.type === Tooltip)
+
+    expect(tooltip.props.formatter(7.891, 'value')).toEqual(['7.89', 'pH'])
+    expect(tooltip.props.formatter(10, 'up')).toBe('10 seconds')
+    expect(tooltip.props.formatter(5, 'down')).toBe('5 seconds')
+    expect(tooltip.props.formatter(1, 'unknown')).toBeUndefined()
+  })
+
   it('fetches probe readings on mount via interval', () => {
     jest.useFakeTimers()
     const readings = { historical: [] }
@@ -75,5 +93,20 @@ describe('Ph ControlChart', () => {
     chart.componentWillUnmount()
     jest.useRealTimers()
     expect(fetchProbeReadings).toHaveBeenCalledWith('1')
+  })
+
+  it('maps state and dispatch props for the connected chart', () => {
+    const state = {
+      phprobes: [probeConfig],
+      ph_readings: { 1: { historical: [] } }
+    }
+    expect(mapStateToProps(state, { probe_id: '1' })).toEqual({
+      config: probeConfig,
+      readings: { historical: [] }
+    })
+
+    const dispatch = jest.fn(action => action)
+    mapDispatchToProps(dispatch).fetchProbeReadings('1')
+    expect(dispatch).toHaveBeenCalledTimes(1)
   })
 })
