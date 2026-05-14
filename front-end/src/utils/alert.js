@@ -2,6 +2,14 @@ import { setAlert } from 'notifications/statics'
 import { addAlert, delAlert } from 'redux/actions/alert'
 import { MsgLevel } from 'utils/enums'
 import i18n from 'utils/i18n'
+import { dispatchAlert as dispatchToAlertCenter } from '../../design-system/ui_kits/reef-pi-app/hooks/useAlertsStore'
+
+// Maps Redux MsgLevel to AlertCenter severity
+function toSeverity (type) {
+  if (type === MsgLevel.error)   return 'critical'
+  if (type === MsgLevel.warning) return 'warn'
+  return null // info + success don't surface in AlertCenter
+}
 
 let dispatchAlertAction
 
@@ -36,6 +44,12 @@ export function showUpdateSuccessful () {
 function _showAlert (type, msg) {
   const alert = setAlert(type, msg)
   _dispatchAlert(addAlert(alert))
+  if (window.FEATURE_FLAGS?.alert_center) {
+    const severity = toSeverity(type)
+    if (severity) {
+      dispatchToAlertCenter({ severity, title: msg, ts: Date.now() })
+    }
+  }
   return alert
 }
 function _dispatchAlert (action) {
