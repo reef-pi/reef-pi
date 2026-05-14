@@ -1,4 +1,9 @@
 import React from 'react'
+import { act } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import configureMockStore from 'redux-mock-store'
+import { thunk } from 'redux-thunk'
 import MainPanel, { RawMainPanel } from './main_panel'
 import {
   currentRouteForPath,
@@ -8,6 +13,10 @@ import {
   routeNavigationPath
 } from './main_panel_routes'
 import 'isomorphic-fetch'
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+const mockStore = configureMockStore([thunk])
 
 const countByType = (node, predicate) => {
   if (!node || typeof node !== 'object') {
@@ -32,6 +41,43 @@ const findAll = (node, predicate) => {
 }
 
 describe('MainPanel', () => {
+  const renderDomPanel = props => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = createRoot(container)
+    const store = mockStore({
+      alerts: [],
+      errors: props.errors,
+      timers: [],
+      equipment: [],
+      macros: [],
+      capabilities: props.capabilities,
+      info: props.info
+    })
+
+    act(() => {
+      root.render(
+        <Provider store={store}>
+          <RawMainPanel {...props} />
+        </Provider>
+      )
+    })
+
+    return {
+      container,
+      unmount: () => act(() => {
+        root.unmount()
+        container.remove()
+      })
+    }
+  }
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+    window.history.pushState({}, '', '/')
+    document.body.innerHTML = ''
+  })
+
   it('<MainPanel />', () => {
     const state = {
       info: { name: 'reef-pi' },
@@ -83,6 +129,51 @@ describe('MainPanel', () => {
     expect(summary.props.errors).toHaveLength(1)
     expect(summary.props.devMode).toBe(true)
     expect(countByType(rendered, node => node.type?.name === 'Routes')).toBe(1)
+  })
+
+  it('renders DOM shell and current route label from browser location', () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    window.history.pushState({}, '', '/timers')
+    const fetchUIData = jest.fn()
+    const fetchInfo = jest.fn()
+    const { container, unmount } = renderDomPanel({
+      info: { name: 'reef-pi-dom' },
+      errors: [],
+      capabilities: {
+        dashboard: true,
+        timers: true,
+        configuration: true,
+        dev_mode: false
+      },
+      fetchUIData,
+      fetchInfo
+    })
+
+    expect(fetchUIData).toHaveBeenCalled()
+    expect(container.querySelector('[data-testid="smoke-brand"]').textContent).toBe('reef-pi-dom')
+    expect(container.querySelector('[data-testid="smoke-current-tab"]').textContent).toBe('timers')
+    expect(container.querySelector('[data-testid="smoke-nav"]').id).toBe('navbarNav')
+    expect(Array.from(container.querySelectorAll('.nav-link')).map(link => link.id)).toEqual([
+      'tab-dashboard',
+      'tab-timers',
+      'tab-configuration'
+    ])
+    unmount()
+  })
+
+  it('renders fallback current route label for unknown paths', () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    window.history.pushState({}, '', '/custom-page')
+    const { container, unmount } = renderDomPanel({
+      info: { name: 'reef-pi-dom' },
+      errors: [],
+      capabilities: {},
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+
+    expect(container.querySelector('[data-testid="smoke-current-tab"]').textContent).toBe('custom-page')
+    unmount()
   })
 
   it('keeps route metadata order and paths stable', () => {
