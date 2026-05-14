@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Retry + Backoff UX</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── State machine demo ─────────────────────── */
+    .demo-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .demo-panel {
+      flex: 1 1 280px;
+      min-width: 0;
+    }
+
+    .demo-panel-title {
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+      margin-bottom: 0.75rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    /* ── Equipment item ─────────────────────────── */
+    .equip-card {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .equip-info { flex: 1 1 auto; min-width: 0; }
+    .equip-name-text {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+    }
+    .equip-status {
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-mono);
+      margin-top: 2px;
+      min-height: 1em;
+    }
+    .equip-status.error  { color: var(--reefpi-color-error); }
+    .equip-status.pending { color: var(--reefpi-color-pending); }
+
+    /* ── Toggle ─────────────────────────────────── */
+    .toggle-btn {
+      position: relative;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      line-height: 0;
+    }
+    .toggle-btn:disabled { cursor: default; }
+
+    @keyframes reefpi-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ── Attempt progress ───────────────────────── */
+    .attempt-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .attempt-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--reefpi-color-border-strong);
+    }
+    .attempt-dot.active  { background: var(--reefpi-color-pending); }
+    .attempt-dot.failed  { background: var(--reefpi-color-error); }
+    .attempt-dot.success { background: var(--reefpi-color-brand); }
+
+    /* ── Alert center row mock ──────────────────── */
+    .alert-panel {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .alert-panel-header {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .alert-row-mock {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
+      border-left: 3px solid transparent;
+    }
+    .alert-row-mock.focused {
+      border-left-color: var(--reefpi-color-error);
+      background: var(--reefpi-color-error-bg);
+    }
+
+    .alert-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .alert-body { flex: 1 1 auto; min-width: 0; }
+    .alert-title-text {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      margin-bottom: 1px;
+    }
+    .alert-detail {
+      font-size: 0.75rem;
+      color: var(--reefpi-color-text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .alert-ts {
+      font-size: 0.65rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 2px;
+      font-family: var(--reefpi-font-mono);
+    }
+
+    .alert-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .action-btn {
+      background: none;
+      border-radius: var(--reefpi-radius-sm);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      cursor: pointer;
+      min-height: 28px;
+      font-family: var(--reefpi-font-app);
+      white-space: nowrap;
+    }
+    .action-btn.retry   { border: 1px solid var(--reefpi-color-pending); color: var(--reefpi-color-pending); }
+    .action-btn.ack     { border: 1px solid var(--reefpi-color-brand);   color: var(--reefpi-color-brand);   }
+    .action-btn.dismiss { border: 1px solid var(--reefpi-color-text-muted); color: var(--reefpi-color-text-muted); }
+
+    /* ── Error copy variants ────────────────────── */
+    .error-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      font-family: var(--reefpi-font-app);
+    }
+    .error-table th {
+      text-align: left;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+      border-bottom: 1px solid var(--reefpi-color-border);
+    }
+    .error-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      color: var(--reefpi-color-text);
+      vertical-align: top;
+    }
+    .error-table td:first-child { color: var(--reefpi-color-error); font-family: var(--reefpi-font-mono); font-size: 0.7rem; white-space: nowrap; }
+    .error-table tr:last-child td { border-bottom: none; }
+
+    .log-box {
+      font-family: var(--reefpi-font-mono);
+      font-size: 0.7rem;
+      color: var(--reefpi-color-text-muted);
+      margin-top: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--reefpi-color-surface);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-sm);
+      min-height: 2.5em;
+    }
+
+    .ctrl-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      background: none;
+      border: 1px solid var(--reefpi-color-border-strong);
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-text);
+      font-size: 0.75rem;
+      font-family: var(--reefpi-font-app);
+      padding: 0 0.75rem;
+      min-height: 36px;
+      cursor: pointer;
+    }
+    .ctrl-btn:hover { border-color: var(--reefpi-color-brand); color: var(--reefpi-color-brand); }
+    .ctrl-btn.danger:hover { border-color: var(--reefpi-color-error); color: var(--reefpi-color-error); }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Retry + Backoff UX</div>
+    <div class="card-desc">useEquipmentToggle — error classification, auto-retry (1s→2s→4s), alert center Retry button</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: interactive state machine -->
+  <section class="story">
+    <h2 class="story-title">State machine (interactive)</h2>
+    <p class="subtitle">Simulate toggle → pending → error path; retry from toggle or alert center</p>
+    <div class="demo-row">
+      <div class="demo-panel">
+        <div class="demo-panel-title">Equipment toggle</div>
+        <div class="equip-card">
+          <div id="toggle-wrap"></div>
+          <div class="equip-info">
+            <div class="equip-name-text">Return Pump</div>
+            <div class="equip-status" id="equip-status">off</div>
+            <div class="attempt-dots" id="attempt-dots"></div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="btn-succeed">Next toggle succeeds</button>
+          <button class="ctrl-btn danger" id="btn-fail">Next toggle fails (network)</button>
+          <button class="ctrl-btn danger" id="btn-timeout">Next toggle times out (relay)</button>
+          <button class="ctrl-btn danger" id="btn-perm">Next toggle 403 (permission)</button>
+        </div>
+        <div class="log-box" id="state-log">Click toggle to start</div>
+      </div>
+
+      <div class="demo-panel">
+        <div class="demo-panel-title">Alert center</div>
+        <div class="alert-panel">
+          <div class="alert-panel-header">
+            Alerts <span id="alert-count" style="font-size:0.7rem;color:var(--reefpi-color-text-muted)">(0)</span>
+          </div>
+          <div id="alert-list">
+            <div style="padding:2rem 1rem;text-align:center;color:var(--reefpi-color-text-muted);font-size:0.8rem;font-family:var(--reefpi-font-app)">
+              No alerts yet
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story 2: error copy variants -->
+  <section class="story">
+    <h2 class="story-title">Error copy by failure type</h2>
+    <p class="subtitle">classifyError() adapts the message for each failure category</p>
+    <div style="background:var(--reefpi-color-surface-elevated);border:1px solid var(--reefpi-color-border);border-radius:var(--reefpi-radius-md);overflow:hidden;">
+      <table class="error-table">
+        <thead>
+          <tr>
+            <th>Failure type</th>
+            <th>Alert center copy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>relay-no-ack (timeout)</td>
+            <td>Relay did not acknowledge — device may be offline</td>
+          </tr>
+          <tr>
+            <td>permission (403)</td>
+            <td>Permission denied — check access control</td>
+          </tr>
+          <tr>
+            <td>network (TypeError)</td>
+            <td>Network error — check connection</td>
+          </tr>
+          <tr>
+            <td>other</td>
+            <td><em>raw error message</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Story 3: alert row with retry button -->
+  <section class="story">
+    <h2 class="story-title">Alert center row — Retry button</h2>
+    <p class="subtitle">Retry re-enters pending on the toggle and acknowledges the alert</p>
+    <div class="alert-panel" style="max-width:400px">
+      <div class="alert-panel-header">Alerts</div>
+      <div class="alert-row-mock focused">
+        <div class="alert-dot" style="background:var(--reefpi-color-error)"></div>
+        <div class="alert-body">
+          <div class="alert-title-text">Return Pump: command failed</div>
+          <div class="alert-detail">Relay did not acknowledge — device may be offline</div>
+          <div class="alert-ts">12s ago</div>
+        </div>
+        <div class="alert-actions">
+          <button class="action-btn retry">Retry</button>
+          <button class="action-btn ack">Ack</button>
+          <button class="action-btn dismiss">Dismiss</button>
+        </div>
+      </div>
+      <div class="alert-row-mock" style="opacity:0.55">
+        <div class="alert-dot" style="background:var(--reefpi-color-error)"></div>
+        <div class="alert-body">
+          <div class="alert-title-text">Skimmer: command failed</div>
+          <div class="alert-detail">Permission denied — check access control</div>
+          <div class="alert-ts">2m ago</div>
+        </div>
+        <div class="alert-actions">
+          <button class="action-btn dismiss">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+// ── State machine ─────────────────────────────────────────────────────────────
+const MAX_RETRIES = 3
+const BACKOFF_MS  = [500, 1000, 2000]   // display only; actual hook uses 1s/2s/4s
+
+let toggleState   = 'off'
+let attempts      = 0
+let nextOutcome   = 'succeed'   // succeed | fail-network | fail-timeout | fail-perm
+let alerts        = []
+let pendingTimer  = null
+
+const log      = document.getElementById('state-log')
+const statusEl = document.getElementById('equip-status')
+const dotsEl   = document.getElementById('attempt-dots')
+const alertList = document.getElementById('alert-list')
+const alertCount = document.getElementById('alert-count')
+
+function classifyError(type) {
+  if (type === 'fail-timeout') return 'Relay did not acknowledge — device may be offline'
+  if (type === 'fail-perm')    return 'Permission denied — check access control'
+  if (type === 'fail-network') return 'Network error — check connection'
+  return 'Command failed'
+}
+
+function renderDots() {
+  dotsEl.innerHTML = ''
+  for (let i = 0; i < MAX_RETRIES; i++) {
+    const d = document.createElement('div')
+    d.className = 'attempt-dot'
+    if (i < attempts && toggleState === 'error') d.classList.add('failed')
+    else if (i < attempts) d.classList.add('active')
+    dotsEl.appendChild(d)
+  }
+}
+
+function renderAlerts() {
+  if (alerts.length === 0) {
+    alertList.innerHTML = `<div style="padding:2rem 1rem;text-align:center;color:var(--reefpi-color-text-muted);font-size:0.8rem;font-family:var(--reefpi-font-app)">No alerts yet</div>`
+    alertCount.textContent = '(0)'
+    return
+  }
+  alertCount.textContent = `(${alerts.filter(a => !a.acked).length})`
+  alertList.innerHTML = alerts.map((a, i) => `
+    <div class="alert-row-mock ${a.acked ? '' : 'focused'}" style="opacity:${a.acked ? 0.55 : 1}">
+      <div class="alert-dot" style="background:var(--reefpi-color-error)"></div>
+      <div class="alert-body">
+        <div class="alert-title-text">${a.title}</div>
+        <div class="alert-detail">${a.detail}</div>
+        <div class="alert-ts">just now</div>
+      </div>
+      <div class="alert-actions">
+        ${!a.acked ? `<button class="action-btn retry" data-idx="${i}" onclick="retryFromAlert(${i})">Retry</button>` : ''}
+        ${!a.acked ? `<button class="action-btn ack"   onclick="ackAlert(${i})">Ack</button>` : ''}
+        <button class="action-btn dismiss" onclick="dismissAlert(${i})">Dismiss</button>
+      </div>
+    </div>`).join('')
+}
+
+function dispatchAlert(detail) {
+  alerts.unshift({ title: 'Return Pump: command failed', detail, acked: false })
+  renderAlerts()
+}
+
+function ackAlert(i)     { alerts[i].acked = true; renderAlerts() }
+function dismissAlert(i) { alerts.splice(i, 1); renderAlerts() }
+
+function retryFromAlert(i) {
+  ackAlert(i)
+  log.textContent = 'Retry from alert center → re-entering pending...'
+  startPending()
+}
+
+function setToggleState(s) {
+  toggleState = s
+  renderToggle()
+  statusEl.textContent = s
+  statusEl.className = `equip-status ${s === 'error' ? 'error' : s === 'pending' ? 'pending' : ''}`
+  renderDots()
+}
+
+function startPending() {
+  clearTimeout(pendingTimer)
+  setToggleState('pending')
+  log.textContent = `Attempt ${attempts + 1}/${MAX_RETRIES} — waiting for ack...`
+
+  pendingTimer = setTimeout(() => {
+    attempts++
+    if (nextOutcome === 'succeed') {
+      const next = toggleState === 'off' || toggleState === 'error' ? 'on' : 'off'
+      attempts = 0
+      setToggleState(next)
+      log.textContent = `Command acknowledged — toggle is now ${next}`
+    } else {
+      if (attempts < MAX_RETRIES) {
+        const delay = BACKOFF_MS[attempts - 1] ?? 2000
+        log.textContent = `Attempt ${attempts} failed — retrying in ${delay}ms...`
+        pendingTimer = setTimeout(startPending, delay)
+      } else {
+        setToggleState('error')
+        const copy = classifyError(nextOutcome)
+        log.textContent = `All ${MAX_RETRIES} attempts failed — alert dispatched`
+        dispatchAlert(copy)
+        attempts = 0
+      }
+    }
+  }, 600)
+}
+
+function renderToggle() {
+  const TRACK_W = 44, TRACK_H = 24, THUMB_R = 10
+  const CX = TRACK_W / 2, CY = TRACK_H / 2
+  const tx = toggleState === 'on' ? TRACK_W - THUMB_R - 2
+           : toggleState === 'off' ? THUMB_R + 2
+           : CX
+
+  const trackColor = (toggleState === 'on' || toggleState === 'pending')
+    ? 'var(--reefpi-color-brand)'
+    : 'var(--reefpi-color-border-strong)'
+
+  const spinner = toggleState === 'pending' ? `
+    <circle cx="${tx}" cy="${CY}" r="${THUMB_R+3}"
+      fill="none" stroke="var(--reefpi-color-pending)" stroke-width="2"
+      stroke-dasharray="${Math.PI*(THUMB_R+3)*0.65} ${Math.PI*(THUMB_R+3)*0.35}"
+      style="transform-origin:${tx}px ${CY}px;animation:reefpi-spin 0.9s linear infinite"/>` : ''
+
+  const errorRing = toggleState === 'error' ? `
+    <circle cx="${tx}" cy="${CY}" r="${THUMB_R+3}"
+      fill="none" stroke="var(--reefpi-color-error)" stroke-width="2"/>
+    <path d="M ${tx+THUMB_R+3} ${CY-2} A ${THUMB_R+3} ${THUMB_R+3} 0 0 0 ${tx-(THUMB_R+3)} ${CY-2}"
+      fill="none" stroke="var(--reefpi-color-error)" stroke-width="1.5" stroke-linecap="round"/>
+    <polygon points="${tx+THUMB_R+3} ${CY-2},${tx+THUMB_R+7} ${CY-5},${tx+THUMB_R+7} ${CY+1}"
+      fill="var(--reefpi-color-error)"/>` : ''
+
+  const disabled = toggleState === 'pending'
+  document.getElementById('toggle-wrap').innerHTML = `
+    <button class="toggle-btn" ${disabled ? 'disabled' : ''} onclick="onToggleClick()" style="min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;">
+      <svg width="${TRACK_W}" height="${TRACK_H}" viewBox="0 0 ${TRACK_W} ${TRACK_H}" overflow="visible" aria-hidden="true">
+        <rect x="0" y="0" width="${TRACK_W}" height="${TRACK_H}" rx="${TRACK_H/2}" fill="${trackColor}" style="transition:fill 0.2s"/>
+        <circle cx="${tx}" cy="${CY}" r="${THUMB_R}" fill="var(--reefpi-color-surface-elevated)" stroke="var(--reefpi-color-border)" stroke-width="1" style="transition:cx 0.2s"/>
+        ${spinner}${errorRing}
+      </svg>
+    </button>
+    <style>@keyframes reefpi-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>`
+}
+
+function onToggleClick() {
+  if (toggleState === 'pending') return
+  attempts = 0
+  startPending()
+}
+
+document.getElementById('btn-succeed').addEventListener('click', () => { nextOutcome = 'succeed';      log.textContent = 'Next toggle will succeed' })
+document.getElementById('btn-fail').addEventListener('click',    () => { nextOutcome = 'fail-network'; log.textContent = 'Next toggle will fail (network error)' })
+document.getElementById('btn-timeout').addEventListener('click', () => { nextOutcome = 'fail-timeout'; log.textContent = 'Next toggle will time out (relay no-ack)' })
+document.getElementById('btn-perm').addEventListener('click',    () => { nextOutcome = 'fail-perm';    log.textContent = 'Next toggle will 403 (permission denied)' })
+
+renderToggle()
+renderDots()
+</script>
+</body>
+</html>

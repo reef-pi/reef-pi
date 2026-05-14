@@ -5,7 +5,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
  * Shared across all consumers via module-level state.
  *
  * Shape of an alert object:
- *   { id, severity: 'warn'|'critical', title, detail, ts, acknowledged }
+ *   { id, severity: 'warn'|'critical', title, detail, ts, acknowledged, retry? }
+ *
+ * retry is an optional function — only present for client-dispatched alerts
+ * (e.g. failed mutations). SSE-sourced alerts will never have it.
  *
  * SSE: subscribes to /api/alerts?since=<cursor> when mount() is called.
  * Consumers that only need to read/dispatch can import dispatchAlert directly.
@@ -27,7 +30,9 @@ export function dispatchAlert (alert) {
     title: alert.title ?? alert.message ?? 'Alert',
     detail: alert.detail ?? alert.message ?? '',
     ts: alert.ts ?? Date.now(),
-    acknowledged: false
+    acknowledged: false,
+    // retry is a client-only function; SSE-parsed alerts never carry it
+    retry: typeof alert.retry === 'function' ? alert.retry : null
   }
   _alerts = [item, ..._alerts]
   notify()

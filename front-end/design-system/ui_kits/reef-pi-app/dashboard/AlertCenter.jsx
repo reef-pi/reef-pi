@@ -280,6 +280,14 @@ function AlertRow ({ alert, focused, onAcknowledge, onDismiss }) {
 
       {/* Actions */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flexShrink: 0 }}>
+        {alert.retry && !alert.acknowledged && (
+          <button
+            onClick={() => { alert.retry(); onAcknowledge() }}
+            style={actionBtnStyle('var(--reefpi-color-pending)')}
+          >
+            Retry
+          </button>
+        )}
         {!alert.acknowledged && (
           <button
             onClick={onAcknowledge}
