@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Sidebar</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    /* ── Preview wrapper: fixed-size frame ──────── */
+    .preview-frame {
+      height: 520px;
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+      position: relative;
+      background: var(--reefpi-color-surface);
+    }
+
+    .sidebar {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      background: var(--reefpi-gradient-brand);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.22s cubic-bezier(0.4,0,0.2,1);
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      min-height: 64px;
+      border-bottom: 1px solid var(--reefpi-color-nav-border);
+      flex-shrink: 0;
+      transition: padding 0.22s, justify-content 0.22s;
+    }
+
+    .logo-text {
+      color: var(--reefpi-color-nav-text-strong);
+      font-family: var(--reefpi-font-app);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      flex: 1 1 auto;
+      transition: font-size 0.22s;
+    }
+
+    .expand-btn {
+      background: none; border: none;
+      color: var(--reefpi-color-nav-text-muted);
+      cursor: pointer;
+      min-width: 36px; min-height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--reefpi-radius-sm);
+      flex-shrink: 0;
+    }
+    .expand-btn:hover { background: var(--reefpi-color-nav-overlay); }
+
+    .sidebar-body {
+      flex: 1 1 auto;
+      overflow-y: auto; overflow-x: hidden;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      border-radius: var(--reefpi-radius-sm);
+      border: none;
+      cursor: pointer;
+      color: var(--reefpi-color-nav-text);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.875rem;
+      text-decoration: none;
+      background: none;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      transition: background 0.12s, padding 0.22s, justify-content 0.22s;
+      gap: 0.75rem;
+    }
+    .nav-item.active {
+      background: var(--reefpi-color-nav-overlay);
+      color: var(--reefpi-color-nav-text-strong);
+      font-weight: 600;
+    }
+    .nav-item:hover:not(.active) { background: rgba(255,255,255,0.08); }
+
+    .nav-icon {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .sidebar-footer {
+      padding: 0.5rem;
+      border-top: 1px solid var(--reefpi-color-nav-border);
+      flex-shrink: 0;
+    }
+
+    .content-area {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-app);
+      font-size: 0.85rem;
+      transition: left 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Tooltip */
+    .sidebar-tooltip {
+      position: fixed;
+      background: var(--reefpi-color-text);
+      color: var(--reefpi-color-surface);
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: var(--reefpi-radius-sm);
+      pointer-events: none;
+      z-index: 200;
+      font-family: var(--reefpi-font-app);
+      white-space: nowrap;
+      display: none;
+    }
+
+    .ctrl-row {
+      display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      background: none;
+      border: 1px solid var(--reefpi-color-border-strong);
+      border-radius: var(--reefpi-radius-sm);
+      color: var(--reefpi-color-text);
+      font-size: 0.75rem;
+      font-family: var(--reefpi-font-app);
+      padding: 0 0.75rem;
+      min-height: 36px;
+      cursor: pointer;
+    }
+    .ctrl-btn:hover { border-color: var(--reefpi-color-brand); color: var(--reefpi-color-brand); }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Sidebar</div>
+    <div class="card-desc">72px icon rail ↔ 240px expanded · gradient brand · localStorage persistence · new_shell flag</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: interactive collapsed/expanded -->
+  <section class="story">
+    <h2 class="story-title">Collapsed (72px) ↔ Expanded (240px)</h2>
+    <p class="subtitle">Click the chevron or the button below to toggle. Persisted to localStorage.</p>
+    <div class="preview-frame" id="frame1">
+      <div class="sidebar" id="sb1" style="width:72px">
+        <div class="sidebar-header" id="sb1-header" style="justify-content:center;padding:0">
+          <span class="logo-text" id="sb1-logo" style="text-align:center;font-size:1rem;">rp</span>
+          <button class="expand-btn" onclick="toggleSidebar()" aria-label="Expand sidebar">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline id="chevron" points="6,4 10,8 6,12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="sidebar-body" id="sb1-body"></div>
+        <div class="sidebar-footer">
+          <button class="nav-item" id="sb1-signout" style="justify-content:center;padding:0;" title="Sign out">
+            <span class="nav-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 10h9M13 7l3 3-3 3"/><path d="M10 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h6"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="content-area" id="content1" style="left:72px">
+        Dashboard content area
+      </div>
+    </div>
+    <div class="sidebar-tooltip" id="tooltip1"></div>
+    <div class="ctrl-row">
+      <button class="ctrl-btn" onclick="toggleSidebar()">Toggle expand</button>
+      <button class="ctrl-btn" onclick="setActive('equipment')">Set active: Equipment</button>
+      <button class="ctrl-btn" onclick="setActive('dashboard')">Set active: Dashboard</button>
+    </div>
+  </section>
+
+  <!-- Story 2: expanded (always on) -->
+  <section class="story">
+    <h2 class="story-title">Expanded (240px) — static</h2>
+    <div class="preview-frame" id="frame2" style="height:420px">
+      <div class="sidebar" style="width:240px;position:absolute;">
+        <div class="sidebar-header" style="justify-content:space-between;padding:0 1rem 0 1.25rem;">
+          <span class="logo-text" style="font-size:1.1rem;">reef-pi</span>
+          <button class="expand-btn" title="Collapse">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="10,4 6,8 10,12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="sidebar-body" id="sb2-body"></div>
+        <div class="sidebar-footer">
+          <button class="nav-item" style="justify-content:flex-start;padding:0 1rem;gap:0.75rem;">
+            <span class="nav-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 10h9M13 7l3 3-3 3"/><path d="M10 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h6"/>
+              </svg>
+            </span>
+            <span>Sign out</span>
+          </button>
+        </div>
+      </div>
+      <div class="content-area" style="left:240px;">Dashboard content</div>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+<script>
+const ROUTES = [
+  { id: 'dashboard',     label: 'Dashboard',   path: 'M3 7l7-5 7 5v11H3V7z M7 18v-5h6v5' },
+  { id: 'equipment',     label: 'Equipment',   path: 'M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v4l3 2' },
+  { id: 'lighting',      label: 'Lighting',    path: 'M10 2v2M10 16v2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M2 10h2M16 10h2M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4M10 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z' },
+  { id: 'temperature',   label: 'Temperature', path: 'M10 3v9M10 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM7 12V5a3 3 0 0 1 6 0v7' },
+  { id: 'ato',           label: 'ATO',         path: 'M5 18s2-6 5-6 5 6 5 6M10 6v6' },
+  { id: 'ph',            label: 'pH',          path: 'M3 10h14M10 3v14' },
+  { id: 'timers',        label: 'Timers',      path: 'M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zM10 6v4l3 2' },
+  { id: 'configuration', label: 'Settings',    path: 'M10 1l1.5 3 3.3.5-2.4 2.3.6 3.2L10 8.5 7 10l.6-3.2L5.2 4.5 8.5 4z' },
+  { id: 'health',        label: 'Health',      path: 'M3 10h3l2-5 3 10 2-7 2 2h2' }
+]
+
+function svgIcon(path) {
+  return `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`
+}
+
+let expanded = false
+let activeId = 'dashboard'
+
+function renderBody(containerId, exp, actId) {
+  const c = document.getElementById(containerId)
+  c.innerHTML = ROUTES.map(r => {
+    const isActive = r.id === actId
+    return `<a class="nav-item ${isActive?'active':''}"
+      href="#" onclick="return setActive('${r.id}')"
+      style="justify-content:${exp?'flex-start':'center'};padding:${exp?'0 1rem':'0'};"
+      title="${r.label}"
+      data-id="${r.id}"
+      onmouseenter="showTip(event,'${r.label}',${exp})"
+      onmouseleave="hideTip()">
+      <span class="nav-icon">${svgIcon(r.path)}</span>
+      ${exp ? `<span style="overflow:hidden;text-overflow:ellipsis;">${r.label}</span>` : ''}
+    </a>`
+  }).join('')
+}
+
+function toggleSidebar() {
+  expanded = !expanded
+  const sb = document.getElementById('sb1')
+  const content = document.getElementById('content1')
+  const logo = document.getElementById('sb1-logo')
+  const chevron = document.getElementById('chevron')
+  const signout = document.getElementById('sb1-signout')
+
+  sb.style.width = expanded ? '240px' : '72px'
+  content.style.left = expanded ? '240px' : '72px'
+  logo.textContent = expanded ? 'reef-pi' : 'rp'
+  logo.style.textAlign = expanded ? 'left' : 'center'
+  logo.style.fontSize = expanded ? '1.1rem' : '1rem'
+  document.getElementById('sb1-header').style.justifyContent = expanded ? 'space-between' : 'center'
+  document.getElementById('sb1-header').style.padding = expanded ? '0 1rem 0 1.25rem' : '0'
+  chevron.setAttribute('points', expanded ? '10,4 6,8 10,12' : '6,4 10,8 6,12')
+  signout.style.justifyContent = expanded ? 'flex-start' : 'center'
+  signout.style.padding = expanded ? '0 1rem' : '0'
+  renderBody('sb1-body', expanded, activeId)
+  try { localStorage.setItem('reefpi.sidebar-expanded', String(expanded)) } catch {}
+}
+
+function setActive(id) {
+  activeId = id
+  renderBody('sb1-body', expanded, activeId)
+  return false
+}
+
+function showTip(e, label, exp) {
+  if (exp) return
+  const tip = document.getElementById('tooltip1')
+  tip.textContent = label
+  tip.style.display = 'block'
+  tip.style.top = (e.target.closest('.nav-item')?.getBoundingClientRect().top ?? e.clientY) + 'px'
+  tip.style.left = (72 + 8) + 'px'
+}
+function hideTip() {
+  document.getElementById('tooltip1').style.display = 'none'
+}
+
+renderBody('sb1-body', false, activeId)
+renderBody('sb2-body', true, activeId)
+</script>
+</body>
+</html>
