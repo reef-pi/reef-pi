@@ -2,6 +2,7 @@ import React from 'react'
 import fetchMock from 'fetch-mock'
 import Main, { RawInstancesMain } from './main'
 import Instance from './instance'
+import ViewInstance from './view_instance'
 import InstanceForm, {
   mapInstancePropsToValues,
   submitInstanceForm
@@ -319,6 +320,31 @@ describe('Instance', () => {
 
     expect(confirm).toHaveBeenCalled()
     expect(deleteFn).toHaveBeenCalledWith(instanceData.id)
+  })
+})
+
+describe('ViewInstance', () => {
+  it('renders instance details and wires edit/delete handlers', () => {
+    const onEdit = jest.fn()
+    const onDelete = jest.fn()
+    const view = ViewInstance({
+      instance: instanceData,
+      onEdit,
+      onDelete,
+      onStateChange: fn
+    })
+    const buttons = findAll(view, node => node.type === 'button')
+
+    expect(view.props.className).toBe('row text-center text-md-left')
+    expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.name)).not.toBeNull()
+    expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.address)).not.toBeNull()
+    expect(buttons).toHaveLength(2)
+
+    buttons[0].props.onClick()
+    buttons[1].props.onClick()
+
+    expect(onDelete).toHaveBeenCalled()
+    expect(onEdit).toHaveBeenCalled()
   })
 })
 
