@@ -34,7 +34,7 @@ var config = {
       },
       {
         test: /\.jsx?/,
-        include: APP_DIR,
+        include: [APP_DIR, path.resolve(__dirname, 'front-end', 'design-system')],
         loader: 'babel-loader',
         options: {
           presets: [['@babel/preset-env', { modules: false }], '@babel/preset-react']
