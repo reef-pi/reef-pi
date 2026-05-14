@@ -1,6 +1,6 @@
 import React from 'react'
 import { RawCamera } from './main'
-import { RawCapture } from './capture'
+import { RawCapture, cameraImageURL } from './capture'
 import Config from './config'
 import Gallery from './gallery'
 import Motion from './motion'
@@ -166,6 +166,29 @@ describe('Camera module', () => {
     const image = findByType(capture.render(), 'img')
 
     expect(image.props.src).toBe('/images/latest.jpg')
+  })
+
+  it('<Capture /> handles take image click and empty latest state', () => {
+    const takeImage = jest.fn()
+    const capture = new RawCapture({
+      latest: undefined,
+      getLatestImage: jest.fn(),
+      takeImage
+    })
+
+    const rendered = capture.render()
+    const button = findByType(rendered, 'input')
+    const placeholder = rendered.props.children[1].props.children
+
+    button.props.onClick.call(capture)
+
+    expect(takeImage).toHaveBeenCalled()
+    expect(button.props.id).toBe('captureImage')
+    expect(placeholder.props.className).toBe('container')
+  })
+
+  it('cameraImageURL prefixes image route', () => {
+    expect(cameraImageURL('reef.jpg')).toBe('/images/reef.jpg')
   })
 
   it('<Config />', () => {
