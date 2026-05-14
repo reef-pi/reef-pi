@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, NavLink, useLocation } from 'react-router-dom'
 import NotificationAlert from 'notifications/alert'
+import { AlertCenterBell } from '../design-system/ui_kits/reef-pi-app/dashboard/AlertCenter'
 import { fetchUIData } from 'redux/actions/ui'
 import { fetchInfo } from 'redux/actions/info'
 import { connect } from 'react-redux'
@@ -76,7 +77,7 @@ export class RawMainPanel extends React.Component {
           </nav>
           <div className='container-fluid'>
             <FatalError />
-            <NotificationAlert />
+            {window.FEATURE_FLAGS?.alert_center ? <AlertCenterBell /> : <NotificationAlert />}
             <div className='row body-panel'>
               <div className='col'>
                 <ErrorBoundary>
