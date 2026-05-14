@@ -117,4 +117,63 @@ describe('<EditMacro />', () => {
     expect(Alert.showError).toHaveBeenCalled()
     unmount()
   })
+
+  it('<EditMacro /> renders empty step warning', () => {
+    const { container, unmount } = renderMacro({
+      values: { ...values, steps: [] },
+      onBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {}
+    })
+
+    expect(container.querySelector('.alert.text-danger').textContent).toContain('none')
+    unmount()
+  })
+
+  it('<EditMacro /> hides editing controls when readOnly', () => {
+    const { container, unmount } = renderMacro({
+      values,
+      onBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {},
+      readOnly: true
+    })
+
+    expect(container.querySelector('.macro-step').getAttribute('draggable')).toBe('false')
+    expect(container.querySelector('#add-step').closest('.row').className).toContain('d-none')
+    expect(container.querySelector('[data-testid="smoke-macro-submit"]').closest('.row').className).toContain('d-none')
+    unmount()
+  })
+
+  it('<EditMacro /> reorders steps on drop', async () => {
+    const { container, unmount } = renderMacro({
+      values: {
+        ...values,
+        steps: [
+          { type: 'wait', duration: 30, id: '', on: '', title: '', message: '' },
+          { type: 'equipment', duration: '', id: '1', on: true, title: '', message: '' }
+        ]
+      },
+      onBlur: fn,
+      handleChange: fn,
+      submitForm: fn,
+      errors: {},
+      touched: {}
+    })
+    const firstStep = container.querySelector('[name="step-0"]')
+    const secondStep = container.querySelector('[name="step-1"]')
+
+    await act(async () => {
+      firstStep.dispatchEvent(new Event('dragstart', { bubbles: true }))
+      secondStep.dispatchEvent(new Event('drop', { bubbles: true }))
+      await Promise.resolve()
+    })
+
+    expect(container.querySelector('[name="steps.0.type"]').value).toBe('equipment')
+    unmount()
+  })
 })
