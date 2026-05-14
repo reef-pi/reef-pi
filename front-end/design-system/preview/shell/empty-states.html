@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>reef-pi — Empty States</title>
+  <link rel="stylesheet" href="../_card.css">
+  <style>
+    .subtitle { font-size: 0.875rem; color: var(--reefpi-color-text-muted); margin-bottom: 1.5rem; }
+
+    .states-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .empty-card {
+      background: var(--reefpi-color-surface-elevated);
+      border: 1px solid var(--reefpi-color-border);
+      border-radius: var(--reefpi-radius-md);
+      overflow: hidden;
+    }
+
+    .empty-card-header {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--reefpi-color-border);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--reefpi-color-text-muted);
+      font-family: var(--reefpi-font-app);
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      font-family: var(--reefpi-font-app);
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1.25rem;
+      color: var(--reefpi-color-border-strong);
+      opacity: 0.35;
+    }
+
+    .empty-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--reefpi-color-text);
+      margin-bottom: 0.4rem;
+    }
+
+    .empty-body {
+      font-size: 0.82rem;
+      color: var(--reefpi-color-text-muted);
+      max-width: 26ch;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .empty-cta {
+      background: var(--reefpi-gradient-brand);
+      border: none;
+      border-radius: var(--reefpi-radius-sm);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--reefpi-font-app);
+      padding: 0 1.25rem;
+      min-height: var(--reefpi-tap-target-min, 2.75rem);
+      cursor: pointer;
+    }
+    .empty-cta:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+<div class="card-page">
+  <header class="card-header">
+    <div class="card-title">Empty States</div>
+    <div class="card-desc">Shared EmptyState component — icon + title + body + CTA for every list route</div>
+    <div class="theme-toggle">
+      <button onclick="setTheme('')">Light</button>
+      <button onclick="setTheme('dark')">Dark</button>
+      <button onclick="setTheme('actinic')">Actinic</button>
+    </div>
+  </header>
+
+  <!-- Story 1: all routes -->
+  <section class="story">
+    <h2 class="story-title">All list routes</h2>
+    <p class="subtitle">Each uses EmptyState with route-specific icon, copy, and CTA</p>
+    <div class="states-grid">
+
+      <!-- Equipment -->
+      <div class="empty-card">
+        <div class="empty-card-header">Equipment</div>
+        <div class="empty-state" role="status">
+          <div class="empty-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="32" cy="32" r="10"/>
+              <path d="M32 8v8M32 48v8M8 32h8M48 32h8M15.5 15.5l5.6 5.6M42.9 42.9l5.6 5.6M15.5 48.5l5.6-5.6M42.9 21.1l5.6-5.6"/>
+            </svg>
+          </div>
+          <div class="empty-title">No equipment yet</div>
+          <div class="empty-body">Add your first pump, heater, or skimmer.</div>
+          <button class="empty-cta" onclick="alert('Add equipment')">Add equipment</button>
+        </div>
+      </div>
+
+      <!-- Timers -->
+      <div class="empty-card">
+        <div class="empty-card-header">Timers</div>
+        <div class="empty-state" role="status">
+          <div class="empty-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="32" cy="36" r="20"/>
+              <line x1="32" y1="36" x2="32" y2="22"/>
+              <line x1="32" y1="36" x2="42" y2="36"/>
+              <line x1="24" y1="10" x2="40" y2="10"/>
+              <line x1="32" y1="8" x2="32" y2="16"/>
+            </svg>
+          </div>
+          <div class="empty-title">No schedules yet</div>
+          <div class="empty-body">Set one to automate feeding or skimmer cycles.</div>
+          <button class="empty-cta" onclick="alert('Add timer')">Add timer</button>
+        </div>
+      </div>
+
+      <!-- Lighting -->
+      <div class="empty-card">
+        <div class="empty-card-header">Lighting</div>
+        <div class="empty-state" role="status">
+          <div class="empty-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="32" cy="24" r="10"/>
+              <path d="M26 34l-4 14h20l-4-14H26z"/>
+              <line x1="28" y1="48" x2="36" y2="48"/>
+              <line x1="30" y1="52" x2="34" y2="52"/>
+            </svg>
+          </div>
+          <div class="empty-title">No lighting profile</div>
+          <div class="empty-body">Pick a channel layout to start.</div>
+          <button class="empty-cta" onclick="alert('Add channel')">Add channel</button>
+        </div>
+      </div>
+
+      <!-- Dosers -->
+      <div class="empty-card">
+        <div class="empty-card-header">Dosers</div>
+        <div class="empty-state" role="status">
+          <div class="empty-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="20" y="8" width="24" height="40" rx="4"/>
+              <line x1="20" y1="24" x2="44" y2="24"/>
+              <path d="M32 38v8"/>
+              <circle cx="32" cy="50" r="4"/>
+            </svg>
+          </div>
+          <div class="empty-title">No dosers configured</div>
+          <div class="empty-body">Configure a doser to automate two-part or kalkwasser.</div>
+          <button class="empty-cta" onclick="alert('Add doser')">Add doser</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Story 2: no-CTA variant -->
+  <section class="story">
+    <h2 class="story-title">No CTA (informational only)</h2>
+    <p class="subtitle">action prop omitted — no dead-end button rendered</p>
+    <div style="max-width:300px">
+      <div class="empty-card">
+        <div class="empty-card-header">Macros</div>
+        <div class="empty-state" role="status">
+          <div class="empty-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="8" y="16" width="48" height="36" rx="3"/>
+              <line x1="8" y1="26" x2="56" y2="26"/>
+              <line x1="24" y1="16" x2="24" y2="26"/>
+            </svg>
+          </div>
+          <div class="empty-title">No macros yet</div>
+          <div class="empty-body">Macros let you trigger multiple actions at once.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="../_card.js"></script>
+</body>
+</html>
