@@ -24,6 +24,18 @@ const findNodes = (node, predicate, acc = []) => {
 }
 
 describe('Drivers Main', () => {
+  const makeProps = overrides => ({
+    drivers: [],
+    driverOptions: [],
+    fetch: jest.fn(),
+    fetchDriverOptions: jest.fn(),
+    create: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+    provision: jest.fn(),
+    ...overrides
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -95,6 +107,49 @@ describe('Drivers Main', () => {
     expect(byId['1'].read_only).toBe(true)
     expect(byId['2'].read_only).toBe(false)
     expect(unsortedDrivers.map(driver => driver.name)).toEqual(['RPI B', 'PCA A'])
+  })
+
+  it('passes driver actions and options through sorted driver rows', () => {
+    const remove = jest.fn()
+    const update = jest.fn()
+    const provision = jest.fn()
+    const unsortedDrivers = [
+      { id: '2', name: 'Zulu', type: 'pca9685', config: {} },
+      { id: '1', name: 'Alpha', type: 'rpi', config: {} }
+    ]
+    const main = new RawDriversMain(makeProps({
+      drivers: unsortedDrivers,
+      driverOptions,
+      delete: remove,
+      update,
+      provision
+    }))
+
+    const driverNodes = main.list()
+
+    expect(driverNodes.map(node => node.props.driver.name)).toEqual(['Alpha', 'Zulu'])
+    expect(driverNodes[0].props.driverOptions).toBe(driverOptions)
+    expect(driverNodes[0].props.validate).toBe(main.validate)
+    expect(driverNodes[0].props.remove).toBe(remove)
+    expect(driverNodes[0].props.update).toBe(update)
+    expect(driverNodes[0].props.provision).toBe(provision)
+    expect(unsortedDrivers.map(driver => driver.name)).toEqual(['Zulu', 'Alpha'])
+  })
+
+  it('passes create hook, options, and validate callback to New driver form', () => {
+    const create = jest.fn()
+    const main = new RawDriversMain(makeProps({
+      drivers,
+      driverOptions,
+      create
+    }))
+
+    const newDriver = findNodes(main.render(), node => node.type === New)[0]
+
+    expect(newDriver.props.drivers).toBe(drivers)
+    expect(newDriver.props.driverOptions).toBe(driverOptions)
+    expect(newDriver.props.hook).toBe(create)
+    expect(newDriver.props.validate).toBe(main.validate)
   })
 
   it('renders with non-rpi driver', () => {
