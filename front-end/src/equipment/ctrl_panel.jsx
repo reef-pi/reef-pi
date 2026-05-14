@@ -49,14 +49,14 @@ export class RawEquipmentCtrlPanel extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
     equipment: state.equipment,
     outlets: state.outlets
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = dispatch => {
   return {
     fetchEquipment: () => dispatch(fetchEquipment()),
     updateEquipment: (id, e) => dispatch(updateEquipment(id, e))
