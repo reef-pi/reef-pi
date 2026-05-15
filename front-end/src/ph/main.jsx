@@ -1,5 +1,5 @@
-import React from 'react'
-import { fetchPhProbes, createProbe, updateProbe, deleteProbe, calibrateProbe, readProbe } from 'redux/actions/phprobes'
+import React, { useState } from 'react'
+import { fetchPhProbes, createProbe, updateProbe, deleteProbe, calibrateProbe, readProbe, fetchProbeReadings } from 'redux/actions/phprobes'
 import { connect } from 'react-redux'
 import PhForm from './ph_form'
 import Collapsible from '../ui_components/collapsible'
@@ -9,6 +9,56 @@ import { confirm } from 'utils/confirm'
 import CalibrationWizard from './calibration_wizard'
 import i18next from 'i18next'
 import { SortByName } from 'utils/sort_by_name'
+import { timestampToEpoch } from 'utils/timestamp'
+import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
+import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
+import ThresholdGauge from '../../design-system/ui_kits/reef-pi-app/primitives/ThresholdGauge'
+
+const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
+
+function PhPrimitives ({ probe, readings, currentReading }) {
+  const [range, setRange] = useState('1d')
+  if (!readings || !readings.current) return null
+
+  const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
+  const points = readings.current
+    .filter(d => timestampToEpoch(d.time) >= cutoff)
+    .map(d => ({ t: timestampToEpoch(d.time), v: d.value }))
+    .sort((a, b) => a.t - b.t)
+
+  const latestValue = currentReading != null ? currentReading : (points.length ? points[points.length - 1].v : null)
+  const safe = (probe.min != null && probe.max != null) ? [probe.min, probe.max] : undefined
+  const warn = (probe.notify && probe.notify.enable && probe.notify.min != null && probe.notify.max != null)
+    ? [probe.notify.min, probe.notify.max]
+    : undefined
+
+  return (
+    <div style={{ padding: '8px 0' }}>
+      <RangeSelector value={range} onChange={setRange} compact scope={`ph-${probe.id}`} />
+      <div style={{ marginTop: '8px' }}>
+        <Sparkline
+          points={points}
+          stroke='var(--reefpi-color-brand)'
+          fill='var(--reefpi-color-brand)'
+          band={safe}
+          height={56}
+          hover
+        />
+      </div>
+      {latestValue != null && (
+        <div style={{ marginTop: '8px' }}>
+          <ThresholdGauge
+            value={latestValue}
+            safe={safe}
+            warn={warn}
+            unit='pH'
+            label={probe.name}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
 class ph extends React.Component {
   constructor (props) {
@@ -30,6 +80,9 @@ class ph extends React.Component {
 
   componentDidMount () {
     this.props.fetchPhProbes()
+    if (window.FEATURE_FLAGS?.dashboard_v2) {
+      this.props.probes.forEach(probe => this.props.fetchProbeReadings(probe.id))
+    }
   }
 
   probeList () {
@@ -52,6 +105,13 @@ class ph extends React.Component {
             {i18next.t('ph:calibrate')}
           </button>
         )
+        const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+          <PhPrimitives
+            probe={probe}
+            readings={this.props.phReadings[probe.id]}
+            currentReading={this.props.currentReading[probe.id]}
+          />
+        )
         return (
           <Collapsible
             key={'panel-ph-' + probe.id}
@@ -63,6 +123,7 @@ class ph extends React.Component {
             onToggleState={handleToggleState}
             enabled={probe.enable}
           >
+            {enhancedView}
             <PhForm
               onSubmit={this.handleUpdateProbe}
               key={Number(probe.id)}
@@ -230,6 +291,7 @@ const mapStateToProps = state => {
     probes: state.phprobes,
     ais: state.analog_inputs,
     currentReading: state.ph_reading,
+    phReadings: state.ph_readings || {},
     macros: state.macros,
     equipment: state.equipment
   }
@@ -242,7 +304,8 @@ const mapDispatchToProps = dispatch => {
     delete: id => dispatch(deleteProbe(id)),
     update: (id, t) => dispatch(updateProbe(id, t)),
     calibrateProbe: (id, p) => dispatch(calibrateProbe(id, p)),
-    readProbe: id => dispatch(readProbe(id))
+    readProbe: id => dispatch(readProbe(id)),
+    fetchProbeReadings: id => dispatch(fetchProbeReadings(id))
   }
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import fetchMock from 'fetch-mock'
 import Main, { RawInstancesMain } from './main'
 import Instance from './instance'
+import ViewInstance from './view_instance'
 import InstanceForm, {
   mapInstancePropsToValues,
   submitInstanceForm
@@ -244,6 +245,68 @@ describe('Instance', () => {
     expect(instance.state.readOnly).toBe(false)
   })
 
+  it('renders edit form after toggling out of readOnly mode', () => {
+    const instance = new Instance({
+      instance: instanceData,
+      update: fn,
+      delete: fn
+    })
+    instance.state.readOnly = false
+
+    const rendered = instance.render()
+    const form = findNode(rendered, node => node.type === InstanceForm)
+
+    expect(form).not.toBeNull()
+    expect(form.props.instance).toBe(instanceData)
+    expect(form.props.actionLabel).toBe('save')
+    expect(form.props.onSubmit).toBe(instance.handleSubmit)
+    expect(form.props.onUpdate).toBe(instance.handleUpdate)
+    expect(form.props.onDelete).toBe(instance.handleDelete)
+  })
+
+  it('submits instance updates and returns to readOnly mode', async () => {
+    const update = jest.fn().mockResolvedValue(true)
+    const instance = new Instance({
+      instance: instanceData,
+      update,
+      delete: fn
+    })
+    instance.state.readOnly = false
+    instance.setState = jest.fn(update => {
+      instance.state = { ...instance.state, ...update }
+    })
+
+    instance.handleSubmit({
+      id: '1',
+      name: 'Updated Tank',
+      address: 'https://reef.local',
+      user: 'ignored',
+      password: 'ignored'
+    })
+    await Promise.resolve()
+
+    expect(update).toHaveBeenCalledWith('1', {
+      name: 'Updated Tank',
+      address: 'https://reef.local',
+      user: 'reef-pi',
+      password: 'reef-pi'
+    })
+    expect(instance.state.readOnly).toBe(true)
+  })
+
+  it('delegates state refresh through handleUpdate', () => {
+    const update = jest.fn()
+    const instance = new Instance({
+      instance: instanceData,
+      update,
+      delete: fn
+    })
+
+    instance.handleUpdate()
+
+    expect(update).toHaveBeenCalledWith()
+  })
+
   it('calls delete prop after confirm', async () => {
     const deleteFn = jest.fn()
     const instance = new Instance({
@@ -257,6 +320,31 @@ describe('Instance', () => {
 
     expect(confirm).toHaveBeenCalled()
     expect(deleteFn).toHaveBeenCalledWith(instanceData.id)
+  })
+})
+
+describe('ViewInstance', () => {
+  it('renders instance details and wires edit/delete handlers', () => {
+    const onEdit = jest.fn()
+    const onDelete = jest.fn()
+    const view = ViewInstance({
+      instance: instanceData,
+      onEdit,
+      onDelete,
+      onStateChange: fn
+    })
+    const buttons = findAll(view, node => node.type === 'button')
+
+    expect(view.props.className).toBe('row text-center text-md-left')
+    expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.name)).not.toBeNull()
+    expect(findNode(view, node => node.type === 'b' && node.props.children === instanceData.address)).not.toBeNull()
+    expect(buttons).toHaveLength(2)
+
+    buttons[0].props.onClick()
+    buttons[1].props.onClick()
+
+    expect(onDelete).toHaveBeenCalled()
+    expect(onEdit).toHaveBeenCalled()
   })
 })
 

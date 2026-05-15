@@ -84,14 +84,14 @@ export class RawControlChart extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps) => {
   return {
     config: state.phprobes.find((p) => p.id === ownProps.probe_id),
     readings: state.ph_readings[ownProps.probe_id]
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = dispatch => {
   return {
     fetchProbeReadings: (id) => dispatch(fetchProbeReadings(id))
   }

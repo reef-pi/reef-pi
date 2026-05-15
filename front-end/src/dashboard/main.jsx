@@ -12,11 +12,14 @@ import HealthChart from 'health_chart'
 import PhChart from 'ph/chart'
 import PhUsageChart from 'ph/control_chart'
 import { fetchDashboard } from 'redux/actions/dashboard'
+import { updateEquipment } from 'redux/actions/equipment'
 import { connect } from 'react-redux'
 import Config from './config'
 import { numColsToColSize } from './grid'
 import ErrorBoundary from '../ui_components/error_boundary'
 import i18n from 'utils/i18n'
+import DashboardV2 from '../../design-system/ui_kits/reef-pi-app/dashboard/DashboardV2'
+import { buildEquipmentPayload } from 'equipment/utils'
 
 export class RawDashboardMain extends React.Component {
   constructor (props) {
@@ -26,6 +29,7 @@ export class RawDashboardMain extends React.Component {
     }
     this.charts = this.charts.bind(this)
     this.handleToggle = this.handleToggle.bind(this)
+    this.handleEquipmentToggle = this.handleEquipmentToggle.bind(this)
   }
 
   componentDidMount () {
@@ -34,6 +38,12 @@ export class RawDashboardMain extends React.Component {
 
   handleToggle () {
     this.setState({ showConfig: !this.state.showConfig })
+  }
+
+  handleEquipmentToggle (id, next) {
+    const eq = (this.props.equipment || []).find(e => String(e.id) === String(id))
+    if (!eq) return
+    this.props.updateEquipment(parseInt(id), buildEquipmentPayload(eq, { on: next === 'on' }))
   }
 
   charts () {
@@ -198,36 +208,46 @@ export class RawDashboardMain extends React.Component {
       lbl = i18n.t('configure')
     }
 
-    return (
-      <>
-        <div key='content'>
-          <div className='row'>
-            <div className='col'>
-              {content}
-            </div>
-          </div>
-          <div className='row' key='configure'>
-            <div className='col-12'>
-              <button className='btn btn-outline-dark btn-sm' onClick={this.handleToggle} id='configure-dashboard' data-testid='smoke-dashboard-configure'>
-                {lbl}
-              </button>
-            </div>
+    const legacyDashboard = (
+      <div key='content'>
+        <div className='row'>
+          <div className='col'>
+            {content}
           </div>
         </div>
-      </>
+        <div className='row' key='configure'>
+          <div className='col-12'>
+            <button className='btn btn-outline-dark btn-sm' onClick={this.handleToggle} id='configure-dashboard' data-testid='smoke-dashboard-configure'>
+              {lbl}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <DashboardV2
+        equipment={this.props.equipment}
+        onToggle={this.handleEquipmentToggle}
+        sseEndpoint='/api/alerts'
+      >
+        {legacyDashboard}
+      </DashboardV2>
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    config: state.dashboard
+    config: state.dashboard,
+    equipment: state.equipment
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDashboard: () => dispatch(fetchDashboard())
+    fetchDashboard: () => dispatch(fetchDashboard()),
+    updateEquipment: (id, payload) => dispatch(updateEquipment(id, payload))
   }
 }
 

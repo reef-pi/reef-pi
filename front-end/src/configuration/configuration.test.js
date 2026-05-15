@@ -130,6 +130,60 @@ describe('Configuration ui', () => {
     expect(RawDisplay.getDerivedStateFromProps({ config: undefined }, {})).toBeNull()
   })
 
+  it('<Errors /> fetches, renders alert/count badges, deletes, and clears', () => {
+    const props = {
+      errors: [
+        { id: 'alert:1', time: '10:00', message: 'ATO low', count: 2 },
+        { id: 'system:1', time: '11:00', message: 'Rebooted', count: 1 }
+      ],
+      fetch: jest.fn(),
+      delete: jest.fn(),
+      clear: jest.fn()
+    }
+    const component = new RawErrors(props)
+
+    component.componentDidMount()
+    const rendered = component.render()
+    const html = renderToStaticMarkup(rendered)
+
+    expect(props.fetch).toHaveBeenCalled()
+    expect(html).toContain('ATO low')
+    expect(html).toContain('2x')
+    expect(html).toContain('alert')
+
+    const rows = rendered.props.children[0]
+    rows[0].props.children[2].props.children.props.onClick()
+    rendered.props.children[1].props.children.props.children.props.onClick()
+
+    expect(props.delete).toHaveBeenCalledWith('alert:1')
+    expect(props.clear).toHaveBeenCalled()
+  })
+
+  it('<About /> renders info and clears polling timer on unmount', () => {
+    const fetchInfo = jest.fn()
+    const setInterval = jest.spyOn(window, 'setInterval').mockReturnValue(123)
+    const clearInterval = jest.spyOn(window, 'clearInterval').mockImplementation(() => {})
+    const component = new RawAbout({
+      fetchInfo,
+      info: {
+        version: '5.0',
+        current_time: 'now',
+        uptime: '1h',
+        ip: '127.0.0.1',
+        model: 'Pi'
+      }
+    })
+
+    expect(setInterval).toHaveBeenCalledWith(fetchInfo, 1800 * 1000)
+    expect(renderToStaticMarkup(component.render())).toContain('5.0')
+
+    component.componentWillUnmount()
+    expect(clearInterval).toHaveBeenCalledWith(123)
+
+    setInterval.mockRestore()
+    clearInterval.mockRestore()
+  })
+
   it('<Display /> derives config state without mutating previous state', () => {
     const previousState = { brightness: 25, on: false, local: true }
     const derived = RawDisplay.getDerivedStateFromProps({
