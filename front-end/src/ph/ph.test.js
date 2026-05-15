@@ -446,4 +446,43 @@ describe('Ph ui', () => {
     expect(historical).toEqual(originalHistorical)
     instance.componentWillUnmount()
   })
+
+  it('<Main /> fetches probe readings and renders primitives under dashboard_v2 flag', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const fetchProbeReadings = jest.fn()
+    const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: true, min: 7.5, max: 8.5 }, notify_enable: false, control: false }
+    const now = new Date()
+    const component = new RawPhMain(createProps({
+      probes: [probe],
+      currentReading: { 1: 8.1 },
+      phReadings: {
+        1: {
+          current: [
+            { time: now.toISOString(), value: 8.1 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), value: 8.0 }
+          ]
+        }
+      },
+      fetchProbeReadings
+    }))
+
+    component.componentDidMount()
+    const probeListItem = component.probeList()[0]
+    const primitives = probeListItem.props.children[0]
+
+    expect(fetchProbeReadings).toHaveBeenCalledWith('1')
+    expect(primitives.props.probe).toBe(probe)
+    expect(primitives.props.readings.current).toHaveLength(2)
+    expect(primitives.props.currentReading).toBe(8.1)
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('<Main /> renders EmptyState with calibration modal slot when no probes', () => {
+    const component = new RawPhMain(createProps())
+    const rendered = component.render()
+    expect(rendered.type).toBe('div')
+    const children = rendered.props.children
+    expect(children[0]).toBeNull()
+    expect(children[1].type.name).toBe('EmptyState')
+  })
 })
