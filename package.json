@@ -76,6 +76,7 @@
     "build": "webpack",
     "ui": "webpack --mode=production",
     "ui-dev": "webpack --watch --mode=development",
+    "token-diff": "node front-end/scripts/token-diff.mjs",
     "js-lint": "standard \"front-end/src/**/*.{js,jsx}\"",
     "standard": "standard --fix \"front-end/src/**/*.{js,jsx}\"",
     "jest": "cross-env NODE_ENV=testing jest --env=jsdom",
