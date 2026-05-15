@@ -248,4 +248,38 @@ describe('MainPanel', () => {
     expect(routeNavigationPath(mainPanelRoutes[0])).toBe('')
     expect(routeNavigationPath(mainPanelRoutes[12])).toBe('/configuration')
   })
+
+  it('renders NewShellNav instead of navbar when new_shell flag is on', () => {
+    window.FEATURE_FLAGS = { new_shell: true }
+    const panel = new RawMainPanel({
+      info: { name: 'reef-pi' },
+      errors: [],
+      capabilities: { dashboard: true, equipment: true },
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+    const rendered = panel.render()
+    const newShellNav = findAll(rendered, node => node.type && node.type.name === 'NewShellNav')[0]
+    expect(newShellNav).toBeDefined()
+    expect(newShellNav.props.capabilities).toEqual({ dashboard: true, equipment: true })
+    expect(countByType(rendered, node => node.type === 'nav')).toBe(0)
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('renders AlertCenterBell instead of NotificationAlert when alert_center flag is on', () => {
+    window.FEATURE_FLAGS = { alert_center: true }
+    const panel = new RawMainPanel({
+      info: { name: 'reef-pi' },
+      errors: [],
+      capabilities: { dashboard: true },
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+    const rendered = panel.render()
+    const bell = findAll(rendered, node => node.type && node.type.name === 'AlertCenterBell')[0]
+    const legacyNotify = findAll(rendered, node => node.type && node.type.name === 'NotificationAlert')[0]
+    expect(bell).toBeDefined()
+    expect(legacyNotify).toBeUndefined()
+    window.FEATURE_FLAGS = {}
+  })
 })
