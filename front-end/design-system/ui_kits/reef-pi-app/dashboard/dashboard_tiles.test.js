@@ -154,4 +154,30 @@ describe('design-system dashboard tiles', () => {
     expect(html).toContain('78.3')
     expect(html).toContain('vs 1h ago')
   })
+
+  it('renders TemperatureTile alert footer and handles alert clicks', () => {
+    const onAlertClick = jest.fn()
+    const container = document.createElement('div')
+    const root = createRoot(container)
+
+    act(() => {
+      root.render(
+        <TemperatureTile
+          metric='temp'
+          alert={{ severity: 'info', message: 'Sensor drift detected', at: Date.now() - 3 * 3600 * 1000 }}
+          onAlertClick={onAlertClick}
+        />
+      )
+    })
+
+    expect(container.textContent).toContain('Sensor drift detected')
+    expect(container.textContent).toContain('3h')
+    const alertButton = Array.from(container.querySelectorAll('button'))
+      .find(button => button.textContent.includes('Sensor drift detected'))
+
+    act(() => alertButton.click())
+    expect(onAlertClick).toHaveBeenCalled()
+
+    act(() => root.unmount())
+  })
 })
