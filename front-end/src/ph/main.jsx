@@ -188,11 +188,14 @@ class ph extends React.Component {
 
     if (this.props.probes.length === 0 && !this.state.addProbe) {
       return (
-        <EmptyState
-          title='No pH probes yet'
-          body='Add a probe to monitor and control reef pH.'
-          action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv }}
-        />
+        <div>
+          {calibrationModal}
+          <EmptyState
+            title='No pH probes yet'
+            body='Add a probe to monitor and control reef pH.'
+            action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv }}
+          />
+        </div>
       )
     }
 
