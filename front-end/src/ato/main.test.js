@@ -22,9 +22,11 @@ describe('ATO Main', () => {
     equipment,
     inlets,
     macros,
+    atoUsage: {},
     fetchATOs: jest.fn(),
     fetchEquipment: jest.fn(),
     fetchInlets: jest.fn(),
+    fetchATOUsage: jest.fn(),
     delete: jest.fn(),
     update: jest.fn(),
     reset: jest.fn(),
@@ -148,5 +150,31 @@ describe('ATO Main', () => {
     const items = component.probeList()
     items[0].props.onToggleState()
     expect(update).toHaveBeenCalledWith('1', expect.objectContaining({ enable: false }))
+  })
+
+  it('fetches usage and renders dashboard primitives behind feature flag', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const fetchATOUsage = jest.fn()
+    const now = new Date()
+    const component = new RawATOMain(makeProps({
+      fetchATOUsage,
+      atoUsage: {
+        1: {
+          historical: [
+            { time: now.toISOString(), pump: 1 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), pump: 0 }
+          ]
+        }
+      }
+    }))
+
+    component.componentDidMount()
+    const children = component.probeList()[0].props.children
+
+    expect(fetchATOUsage).toHaveBeenCalledWith('1')
+    expect(children[0].props.ato).toBe(ato)
+    expect(children[0].props.usage.historical).toHaveLength(2)
+    expect(children[1].props.data).toBe(ato)
+    window.FEATURE_FLAGS = {}
   })
 })
