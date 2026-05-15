@@ -10,6 +10,7 @@ import {
 import { connect } from 'react-redux'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
+import EmptyState from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import MacroForm from './macro_form'
 import { confirm } from 'utils/confirm'
 import { SortByName } from 'utils/sort_by_name'
@@ -162,6 +163,16 @@ export class RawMacroMain extends React.Component {
     let newMacro = null
     if (this.state.addMacro) {
       newMacro = <MacroForm onSubmit={this.handleCreateMacro} />
+    }
+
+    if (this.props.macros.length === 0 && !this.state.addMacro) {
+      return (
+        <EmptyState
+          title='No macros yet'
+          body='Create a macro to run multiple equipment actions in sequence.'
+          action={{ label: 'Add macro', onClick: this.handleToggleAddMacroDiv }}
+        />
+      )
     }
 
     return (

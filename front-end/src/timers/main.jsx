@@ -3,6 +3,7 @@ import { confirm } from 'utils/confirm'
 import { updateTimer, fetchTimers, createTimer, deleteTimer } from 'redux/actions/timer'
 import { connect } from 'react-redux'
 import TimerForm from './timer_form'
+import EmptyState, { TimerIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import Collapsible from '../ui_components/collapsible'
 import CollapsibleList from '../ui_components/collapsible_list'
 import { SortByName } from 'utils/sort_by_name'
@@ -113,6 +114,17 @@ export class RawTimersMain extends React.Component {
     if (this.state.addTimer) {
       nT = <TimerForm equipment={this.props.equipment} onSubmit={this.handleSubmit} macros={this.props.macros} />
     }
+    if (this.props.timers.length === 0 && !this.state.addTimer) {
+      return (
+        <EmptyState
+          icon={<TimerIcon />}
+          title='No timers yet'
+          body='Schedule equipment on/off events by creating a timer.'
+          action={{ label: 'Add timer', onClick: this.handleToggleAddTimerDiv }}
+        />
+      )
+    }
+
     return (
       <ul className='list-group list-group-flush'>
         <CollapsibleList>{this.timerList()}</CollapsibleList>

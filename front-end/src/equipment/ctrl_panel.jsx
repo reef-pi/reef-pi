@@ -85,17 +85,20 @@ export class RawEquipmentCtrlPanel extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  equipment: state.equipment,
-  outlets: state.outlets,
-  dispatch: ownProps.dispatch
-})
+export const mapStateToProps = state => {
+  return {
+    equipment: state.equipment,
+    outlets: state.outlets
+  }
+}
 
-const mapDispatchToProps = dispatch => ({
-  fetchEquipment: () => dispatch(fetchEquipment()),
-  updateEquipment: (id, e) => dispatch(updateEquipment(id, e)),
-  dispatch
-})
+export const mapDispatchToProps = dispatch => {
+  return {
+    fetchEquipment: () => dispatch(fetchEquipment()),
+    updateEquipment: (id, e) => dispatch(updateEquipment(id, e)),
+    dispatch
+  }
+}
 
 const EquipmentCtrlPanel = connect(
   mapStateToProps,

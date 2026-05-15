@@ -1,13 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { confirm, showModal } from 'utils/confirm'
 import DoserForm from './doser_form'
-import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump, saveDosingPumpCalibration } from 'redux/actions/doser'
+import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump, saveDosingPumpCalibration, fetchDoserUsage } from 'redux/actions/doser'
 import { connect } from 'react-redux'
+import EmptyState, { DoserIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import CalibrationModal from './calibration_modal'
 import { SortByName } from 'utils/sort_by_name'
 import i18n from 'utils/i18n'
+import { timestampToEpoch } from 'utils/timestamp'
+import RangeSelector from '../../design-system/ui_kits/reef-pi-app/primitives/RangeSelector'
+import Sparkline from '../../design-system/ui_kits/reef-pi-app/primitives/Sparkline'
+
+const RANGE_MS = { '1h': 3600000, '6h': 21600000, '1d': 86400000, '7d': 604800000, '30d': 2592000000 }
+
+function DoserPrimitives ({ doser, usage }) {
+  const [range, setRange] = useState('1d')
+  if (!usage || !usage.historical) return null
+
+  const cutoff = Date.now() - (RANGE_MS[range] || RANGE_MS['1d'])
+  const points = usage.historical
+    .filter(d => timestampToEpoch(d.time) >= cutoff)
+    .map(d => ({ t: timestampToEpoch(d.time), v: d.pump }))
+    .sort((a, b) => a.t - b.t)
+
+  return (
+    <div style={{ padding: '8px 0' }}>
+      <RangeSelector value={range} onChange={setRange} compact scope={`doser-${doser.id}`} />
+      <div style={{ marginTop: '8px' }}>
+        <Sparkline
+          points={points}
+          stroke='var(--reefpi-color-brand)'
+          fill='var(--reefpi-color-brand)'
+          height={56}
+          hover
+        />
+      </div>
+    </div>
+  )
+}
 
 export class RawDoser extends React.Component {
   constructor (props) {
@@ -22,6 +54,12 @@ export class RawDoser extends React.Component {
     this.handleUpdateDoser = this.handleUpdateDoser.bind(this)
     this.calibrateDoser = this.calibrateDoser.bind(this)
     this.valuesToDoser = this.valuesToDoser.bind(this)
+  }
+
+  componentDidMount () {
+    if (window.FEATURE_FLAGS?.dashboard_v2) {
+      this.props.dosers.forEach(doser => this.props.fetchDoserUsage(doser.id))
+    }
   }
 
   handleToggleAddDoserDiv () {
@@ -47,6 +85,12 @@ export class RawDoser extends React.Component {
             doser.regiment.enable = !doser.regiment.enable
             this.props.update(doser.id, doser)
           }
+          const enhancedView = !!window.FEATURE_FLAGS?.dashboard_v2 && (
+            <DoserPrimitives
+              doser={doser}
+              usage={this.props.doserUsage[doser.id]}
+            />
+          )
           return (
             <Collapsible
               key={'panel-doser-' + doser.id}
@@ -58,6 +102,7 @@ export class RawDoser extends React.Component {
               title={<b className='ml-2 align-middle'>{doser.name} </b>}
               onDelete={this.handleDeleteDoser}
             >
+              {enhancedView}
               <DoserForm
                 onSubmit={this.handleUpdateDoser}
                 jacks={this.props.jacks}
@@ -139,6 +184,17 @@ export class RawDoser extends React.Component {
       newDoser = <DoserForm onSubmit={this.handleCreateDoser} jacks={this.props.jacks} outlets={this.props.outlets} />
     }
 
+    if (this.props.dosers.length === 0 && !this.state.addDoser) {
+      return (
+        <EmptyState
+          icon={<DoserIcon />}
+          title='No dosing pumps yet'
+          body='Add a pump to automate two-part, calcium, or kalkwasser dosing.'
+          action={{ label: 'Add dosing pump', onClick: this.handleToggleAddDoserDiv }}
+        />
+      )
+    }
+
     return (
       <ul className='list-group list-group-flush'>
         <CollapsibleList>
@@ -168,7 +224,8 @@ const mapStateToProps = state => {
   return {
     dosers: state.dosers,
     jacks: state.jacks,
-    outlets: state.outlets
+    outlets: state.outlets,
+    doserUsage: state.doser_usage || {}
   }
 }
 
@@ -179,7 +236,8 @@ const mapDispatchToProps = dispatch => {
     delete: id => dispatch(deleteDosingPump(id)),
     update: (id, t) => dispatch(updateDosingPump(id, t)),
     calibrateDoser: (id, p) => dispatch(calibrateDosingPump(id, p)),
-    saveCalibration: (id, p) => dispatch(saveDosingPumpCalibration(id, p))
+    saveCalibration: (id, p) => dispatch(saveDosingPumpCalibration(id, p)),
+    fetchDoserUsage: id => dispatch(fetchDoserUsage(id))
   }
 }
 

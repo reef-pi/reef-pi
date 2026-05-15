@@ -61,14 +61,14 @@ export class RawDriversMain extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
     drivers: state.drivers,
     driverOptions: state.driverOptions
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = dispatch => {
   return {
     fetch: () => dispatch(fetchDrivers()),
     fetchDriverOptions: () => dispatch(fetchDriverOptions()),

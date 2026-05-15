@@ -325,6 +325,44 @@ describe('Equipment ui', () => {
     expect(html).toContain('smoke-equipment-name')
   })
 
+  it('<EquipmentForm /> maps defaults for create mode', () => {
+    const html = renderToStaticMarkup(
+      <EquipmentForm
+        actionLabel='add'
+        outlets={[{ id: '1', name: 'O1' }]}
+        onSubmit={() => true}
+      />
+    )
+
+    expect(html).toContain('name="name"')
+    expect(html).toContain('name="outlet"')
+    expect(html).toContain('name="boot_delay"')
+    expect(html).toContain('value="0"')
+  })
+
+  it('<EquipmentForm /> maps edit values including boot flags', () => {
+    const html = renderToStaticMarkup(
+      <EquipmentForm
+        actionLabel='save'
+        equipment={{
+          id: 'eq-1',
+          name: 'Heater',
+          outlet: '1',
+          on: true,
+          stay_off_on_boot: true,
+          boot_delay: 15
+        }}
+        outlets={[{ id: '1', name: 'O1' }]}
+        remove
+        onSubmit={() => true}
+      />
+    )
+
+    expect(html).toContain('value="Heater"')
+    expect(html).toContain('value="15"')
+    expect(html).toContain('checked=""')
+  })
+
   it('<Chart />', () => {
     jest.useFakeTimers()
     const fetchEquipment = jest.fn()

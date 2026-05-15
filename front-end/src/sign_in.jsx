@@ -1,6 +1,7 @@
 import React from 'react'
 import i18n from 'utils/i18n'
 import { isSignedIn, signIn, signOut } from './session_api'
+import SignInConfidenceCard from '../design-system/ui_kits/reef-pi-app/shell/SignInConfidenceCard'
 
 export default class SignIn extends React.Component {
   constructor (props) {
@@ -119,6 +120,7 @@ export default class SignIn extends React.Component {
                 </button>
               </div>
             </form>
+            <SignInConfidenceCard />
           </div>
         </div>
       </div>

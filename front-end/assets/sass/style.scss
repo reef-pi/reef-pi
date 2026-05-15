@@ -39,6 +39,16 @@
   --reefpi-radius-md: #{$radius-md};
   --reefpi-tap-target-min: 2.75rem;
 
+  // Typography
+  --reefpi-font-app:  'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
+  --reefpi-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  // Gradient (navbar + shell components)
+  --reefpi-gradient-brand: linear-gradient(180deg, #{$main-color} 0%, #{$main-alternate-color} 100%);
+
+  // Shadow
+  --reefpi-shadow-navbar: 0 2px 8px #{$shadow-color};
+
   // State tokens (E1 #1)
   --reefpi-color-pending:        #{$color-pending};
   --reefpi-color-pending-bg:     #{$color-pending-bg};

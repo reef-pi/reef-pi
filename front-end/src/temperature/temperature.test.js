@@ -192,6 +192,7 @@ describe('Temperature controller ui', () => {
       delete: jest.fn(),
       update: jest.fn(),
       readTC: jest.fn(),
+      fetchTCUsage: jest.fn(),
       calibrateSensor: jest.fn()
     }
     const component = new RawTemperatureMain(props)
@@ -201,6 +202,58 @@ describe('Temperature controller ui', () => {
     expect(items).toHaveLength(2)
     expect(items[0].props.name).toBe('panel-temperature-2')
     expect(probes.map(probe => probe.name)).toEqual(['Water B', 'Water A'])
+  })
+
+  it('<Main /> fetches usage and renders dashboard primitives behind feature flag', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const fetchTCUsage = jest.fn()
+    const now = new Date()
+    const probe = {
+      id: '1',
+      name: 'Water',
+      chart: {},
+      enable: false,
+      fahrenheit: true,
+      min: 76,
+      max: 80,
+      notify: { enable: true, min: 74, max: 82 }
+    }
+    const component = new RawTemperatureMain({
+      probes: [probe],
+      currentReading: { 1: 78.2 },
+      tcUsage: {
+        1: {
+          current: [
+            { time: now.toISOString(), value: 78.2 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), value: 77.9 }
+          ]
+        }
+      },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      fetchTCUsage,
+      calibrateSensor: jest.fn()
+    })
+
+    component.componentDidMount()
+    const children = component.probeList()[0].props.children
+
+    expect(fetchTCUsage).toHaveBeenCalledWith('1')
+    expect(children[0].props.probe).toBe(probe)
+    expect(children[0].props.usage.current).toHaveLength(2)
+    expect(children[0].props.currentReading).toBe(78.2)
+    expect(children[1].props.showChart).toBe(false)
+    window.FEATURE_FLAGS = {}
   })
 
   it('<Main /> toggles add probe form', () => {

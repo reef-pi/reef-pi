@@ -5,8 +5,19 @@ import AdafruitIO from './adafruit_io'
 import Mqtt from './mqtt'
 import Notification from './notification'
 import 'isomorphic-fetch'
+import * as Alert from '../utils/alert'
 
 describe('Telemetry UI', () => {
+  beforeEach(() => {
+    jest.spyOn(Alert, 'showError')
+    jest.spyOn(Alert, 'showSuccess')
+    jest.spyOn(Alert, 'showUpdateSuccessful')
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   const makeMain = (props = {}) => {
     const mailer = {
       port: 546,
@@ -104,6 +115,86 @@ describe('Telemetry UI', () => {
     expect(previousConfig.notify).toBeUndefined()
     expect(m.state.config.notify).toBe(false)
     expect(m.state.config).not.toBe(previousConfig)
+  })
+
+  it('<Main /> skips derived state when config is missing or local edits are pending', () => {
+    const m = makeMain()
+    m.state.updated = true
+
+    expect(Main.getDerivedStateFromProps({ config: undefined }, m.state)).toBeNull()
+    expect(Main.getDerivedStateFromProps({ config: m.props.config }, m.state)).toBeNull()
+  })
+
+  it('<Main /> hides optional sections when config blocks are missing or disabled', () => {
+    const m = makeMain()
+
+    m.state.config = undefined
+    expect(m.notification()).toBeUndefined()
+    expect(m.showAdafruitIO()).toBeUndefined()
+    expect(m.showMqtt()).toBeUndefined()
+
+    m.state.config = { mailer: undefined, notify: true }
+    expect(m.notification()).toBeUndefined()
+
+    m.state.config = { mailer: {}, notify: false }
+    expect(m.notification()).toBeUndefined()
+
+    m.state.config = { adafruitio: undefined, mqtt: undefined, mailer: {}, notify: false }
+    expect(m.showAdafruitIO()).toBeUndefined()
+    expect(m.showMqtt()).toBeUndefined()
+  })
+
+  it('<Main /> rejects invalid adafruit.io settings before saving', () => {
+    const update = jest.fn()
+    const m = makeMain({ update })
+    m.state.config = {
+      ...m.props.config,
+      adafruitio: { ...m.props.config.adafruitio, user: '' }
+    }
+
+    m.handleSave()
+    expect(Alert.showError).toHaveBeenCalledWith('Please set a valid adafruit.io user')
+    expect(update).not.toHaveBeenCalled()
+
+    m.state.config.adafruitio = { ...m.props.config.adafruitio, token: '' }
+    m.handleSave()
+    expect(Alert.showError).toHaveBeenCalledWith('Please set a valid adafruit.io key')
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it('<Main /> rejects invalid mailer settings before saving', () => {
+    const update = jest.fn()
+    const m = makeMain({ update })
+    m.state.config = {
+      ...m.props.config,
+      notify: true,
+      mailer: {
+        server: '',
+        port: '25',
+        from: '',
+        to: []
+      }
+    }
+
+    m.handleSave()
+
+    expect(Alert.showError).toHaveBeenCalledWith('Please set a valid mail server')
+    expect(Alert.showError).toHaveBeenCalledWith('Please set a valid mail sender (From)')
+    expect(Alert.showError).toHaveBeenCalledWith('Please set a valid mail recipient (To)')
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it('<Main /> renders notification controls and sends test messages', () => {
+    const m = makeMain()
+    m.state = { ...m.state, ...Main.getDerivedStateFromProps({ config: m.props.config }, m.state) }
+    const notification = m.notification()
+
+    expect(notification.props.className).toBe('row')
+    expect(renderToStaticMarkup(notification)).toContain('send-test-email')
+
+    m.handleTestMessage()
+    expect(m.props.sendTestMessage).toHaveBeenCalled()
+    expect(Alert.showSuccess).toHaveBeenCalled()
   })
 
   it('<Main /> saves parsed telemetry config without mutating state config', () => {

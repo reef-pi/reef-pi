@@ -1,6 +1,6 @@
 import React from 'react'
 import { RawCamera } from './main'
-import { RawCapture } from './capture'
+import { RawCapture, cameraImageURL } from './capture'
 import Config from './config'
 import Gallery from './gallery'
 import Motion from './motion'
@@ -94,6 +94,59 @@ describe('Camera module', () => {
     expect(() => camera.render()).not.toThrow()
   })
 
+  it('<Main /> toggles config form rendering', () => {
+    const updateConfig = jest.fn()
+    const camera = new RawCamera({
+      config: cameraState.camera.config,
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig
+    })
+    camera.setState = next => {
+      camera.state = { ...camera.state, ...next }
+    }
+
+    let rendered = camera.render()
+    expect(countByType(rendered, node => node.type === Config)).toBe(0)
+
+    camera.handleToggleConfig()
+    rendered = camera.render()
+    const config = findByType(rendered, Config)
+
+    expect(camera.state.showConfig).toBe(true)
+    expect(config.props.config).toBe(cameraState.camera.config)
+    expect(config.props.update).toBe(updateConfig)
+  })
+
+  it('<Main /> renders motion preview only when motion config is available', () => {
+    const camera = new RawCamera({
+      config: {},
+      images: [],
+      fetchConfig: jest.fn(),
+      listImages: jest.fn(),
+      updateConfig: jest.fn()
+    })
+
+    expect(camera.motion()).toBeUndefined()
+
+    camera.state.config = {
+      motion: {
+        width: 320,
+        height: 240,
+        url: '/motion'
+      }
+    }
+
+    const motion = camera.motion()
+    expect(motion.type).toBe(Motion)
+    expect(motion.props).toEqual({
+      width: 320,
+      height: 240,
+      url: '/motion'
+    })
+  })
+
   it('<Capture />', () => {
     const getLatestImage = jest.fn()
     const capture = new RawCapture({ latest: '', getLatestImage, takeImage: jest.fn() })
@@ -113,6 +166,29 @@ describe('Camera module', () => {
     const image = findByType(capture.render(), 'img')
 
     expect(image.props.src).toBe('/images/latest.jpg')
+  })
+
+  it('<Capture /> handles take image click and empty latest state', () => {
+    const takeImage = jest.fn()
+    const capture = new RawCapture({
+      latest: undefined,
+      getLatestImage: jest.fn(),
+      takeImage
+    })
+
+    const rendered = capture.render()
+    const button = findByType(rendered, 'input')
+    const placeholder = rendered.props.children[1].props.children
+
+    button.props.onClick.call(capture)
+
+    expect(takeImage).toHaveBeenCalled()
+    expect(button.props.id).toBe('captureImage')
+    expect(placeholder.props.className).toBe('container')
+  })
+
+  it('cameraImageURL prefixes image route', () => {
+    expect(cameraImageURL('reef.jpg')).toBe('/images/reef.jpg')
   })
 
   it('<Config />', () => {
