@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { RawATOMain } from './main'
 import 'isomorphic-fetch'
 
@@ -175,6 +176,37 @@ describe('ATO Main', () => {
     expect(children[0].props.ato).toBe(ato)
     expect(children[0].props.usage.historical).toHaveLength(2)
     expect(children[1].props.data).toBe(ato)
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('renders dashboard primitives with filtered historical usage', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const now = new Date()
+    const component = new RawATOMain(makeProps({
+      atoUsage: {
+        1: {
+          historical: [
+            { time: now.toISOString(), pump: 1 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), pump: 0 },
+            { time: new Date(now.getTime() - 3 * 86400000).toISOString(), pump: 1 }
+          ]
+        }
+      }
+    }))
+
+    const primitives = component.probeList()[0].props.children[0]
+    const html = renderToStaticMarkup(primitives)
+
+    expect(html).toContain('ato-1')
+    expect(html).toContain('reefpi-range-selector')
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('omits dashboard primitives when usage history is not available', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const component = new RawATOMain(makeProps({ atoUsage: { 1: {} } }))
+
+    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
     window.FEATURE_FLAGS = {}
   })
 })
