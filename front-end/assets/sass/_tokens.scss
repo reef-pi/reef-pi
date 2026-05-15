@@ -53,3 +53,8 @@ $space-md: 1rem;
 $space-lg: 1.25rem;
 $radius-sm: 0.375rem;
 $radius-md: 0.625rem;
+
+// Chart palette — SVG fill/stroke (can't use CSS vars in presentation attrs)
+$chart-green:  #00c851;
+$chart-yellow: #ffbb33;
+$chart-red:    #ff4444;
