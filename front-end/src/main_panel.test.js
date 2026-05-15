@@ -74,6 +74,7 @@ describe('MainPanel', () => {
 
   afterEach(() => {
     jest.restoreAllMocks()
+    window.FEATURE_FLAGS = {}
     window.history.pushState({}, '', '/')
     document.body.innerHTML = ''
   })
@@ -173,6 +174,38 @@ describe('MainPanel', () => {
     })
 
     expect(container.querySelector('[data-testid="smoke-current-tab"]').textContent).toBe('custom-page')
+    unmount()
+  })
+
+  it('renders new shell navigation when feature flag is enabled', () => {
+    window.FEATURE_FLAGS = { new_shell: true }
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 480 })
+    window.matchMedia = jest.fn(() => ({
+      matches: false,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn()
+    }))
+    window.history.pushState({}, '', '/equipment')
+    const { container, unmount } = renderDomPanel({
+      info: { name: 'reef-pi-new-shell' },
+      errors: [],
+      capabilities: {
+        dashboard: true,
+        equipment: true,
+        lighting: true,
+        temperature: true,
+        ato: true,
+        dev_mode: false
+      },
+      fetchUIData: jest.fn(),
+      fetchInfo: jest.fn()
+    })
+
+    expect(container.querySelector('[data-testid="smoke-nav"]')).toBeNull()
+    expect(container.querySelector('[aria-label="Main navigation"]')).not.toBeNull()
+    expect(container.querySelector('#content .container-fluid').style.paddingLeft).toBe('72px')
+    expect(Array.from(container.querySelectorAll('[aria-label]')).map(node => node.getAttribute('aria-label'))).toContain('equipment')
+
     unmount()
   })
 
