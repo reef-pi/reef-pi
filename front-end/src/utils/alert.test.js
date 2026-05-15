@@ -9,6 +9,11 @@ import {
   setAlertDispatcher,
   clearAlertDispatcher
 } from './alert'
+import { dispatchAlert as dispatchToAlertCenter } from '../../design-system/ui_kits/reef-pi-app/hooks/useAlertsStore'
+
+jest.mock('../../design-system/ui_kits/reef-pi-app/hooks/useAlertsStore', () => ({
+  dispatchAlert: jest.fn()
+}))
 
 describe('alert utils', () => {
   let dispatch
@@ -16,12 +21,15 @@ describe('alert utils', () => {
   beforeEach(() => {
     dispatch = jest.fn()
     setAlertDispatcher(dispatch)
+    window.FEATURE_FLAGS = {}
     jest.useFakeTimers()
   })
 
   afterEach(() => {
     clearAlertDispatcher()
+    window.FEATURE_FLAGS = {}
     jest.useRealTimers()
+    jest.clearAllMocks()
   })
 
   it('showInfo dispatches an action', () => {
@@ -69,5 +77,33 @@ describe('alert utils', () => {
     expect(() => clearAlert()).not.toThrow()
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('deprecated'))
     warnSpy.mockRestore()
+  })
+
+  it('mirrors warning and error alerts into AlertCenter when feature flag is enabled', () => {
+    jest.setSystemTime?.(new Date('2026-05-15T12:00:00Z'))
+    window.FEATURE_FLAGS = { alert_center: true }
+
+    showError('critical failure')
+    showWarning('needs attention')
+
+    expect(dispatchToAlertCenter).toHaveBeenCalledWith({
+      severity: 'critical',
+      title: 'critical failure',
+      ts: Date.now()
+    })
+    expect(dispatchToAlertCenter).toHaveBeenCalledWith({
+      severity: 'warn',
+      title: 'needs attention',
+      ts: Date.now()
+    })
+  })
+
+  it('does not mirror info and success alerts into AlertCenter', () => {
+    window.FEATURE_FLAGS = { alert_center: true }
+
+    showInfo('just so you know')
+    showSuccess('saved')
+
+    expect(dispatchToAlertCenter).not.toHaveBeenCalled()
   })
 })
