@@ -8,6 +8,6 @@
   </head>
   <body>
     <div id="main-panel"></div>
-    <script>window.FEATURE_FLAGS = window.FEATURE_FLAGS || {};</script>
+    <script>window.FEATURE_FLAGS = Object.assign({ pending_states: true, alert_center: true, dashboard_v2: true, new_shell: true }, window.FEATURE_FLAGS);</script>
   </body>
 </html>
