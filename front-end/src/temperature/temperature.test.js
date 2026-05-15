@@ -256,6 +256,81 @@ describe('Temperature controller ui', () => {
     window.FEATURE_FLAGS = {}
   })
 
+  it('<Main /> renders dashboard primitives with readings and threshold gauge', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const now = new Date()
+    const probe = {
+      id: '1',
+      name: 'Water',
+      chart: {},
+      enable: false,
+      fahrenheit: false,
+      min: 24,
+      max: 27,
+      notify: { enable: true, min: 22, max: 29 }
+    }
+    const component = new RawTemperatureMain({
+      probes: [probe],
+      currentReading: { 1: 26.2 },
+      tcUsage: {
+        1: {
+          current: [
+            { time: now.toISOString(), value: 26.2 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), value: 25.8 },
+            { time: new Date(now.getTime() - 3 * 86400000).toISOString(), value: 24.1 }
+          ]
+        }
+      },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      fetchTCUsage: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+
+    const html = renderToStaticMarkup(component.probeList()[0].props.children[0])
+
+    expect(html).toContain('temp-1')
+    expect(html).toContain('Water')
+    expect(html).toContain('°C')
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('<Main /> omits dashboard primitives when usage is unavailable', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const component = new RawTemperatureMain({
+      probes: [{ id: '1', name: 'Water', chart: {}, enable: false, notify: { enable: false } }],
+      currentReading: {},
+      tcUsage: { 1: {} },
+      sensors: [],
+      analogInputs: [],
+      equipment: [],
+      macros: [],
+      fetchSensors: jest.fn(),
+      fetchTCs: jest.fn(),
+      fetchEquipment: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+      readTC: jest.fn(),
+      fetchTCUsage: jest.fn(),
+      calibrateSensor: jest.fn()
+    })
+
+    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
+    window.FEATURE_FLAGS = {}
+  })
+
   it('<Main /> toggles add probe form', () => {
     const component = new RawTemperatureMain({
       probes: [],
