@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import EquipmentForm from './equipment_form'
 import { SORT_NAME_AZ, SORT_NAME_ZA, SORT_ON_FIRST, SORT_OFF_FIRST, sortEquipment } from './utils'
 import i18next from 'i18next'
+import EmptyState, { EquipmentIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 
 const sortOptions = [
   { value: SORT_NAME_AZ, label: 'equipment:sort_name_az' },
@@ -58,6 +59,17 @@ export class RawEquipmentMain extends React.Component {
     const newEquipmentForm = this.state.addEquipment
       ? <EquipmentForm outlets={this.props.outlets} actionLabel={i18next.t('add')} onSubmit={this.handleAddEquipment} />
       : <div />
+
+    if (sorted.length === 0 && !this.state.addEquipment) {
+      return (
+        <EmptyState
+          icon={<EquipmentIcon />}
+          title={i18next.t('equipment:no_equipment', 'No equipment yet')}
+          body={i18next.t('equipment:no_equipment_body', 'Add your first pump, heater, or skimmer.')}
+          action={{ label: i18next.t('equipment:add', 'Add equipment'), onClick: this.handleToggleAddEquipmentDiv }}
+        />
+      )
+    }
 
     return (
       <ul className='list-group list-group-flush'>

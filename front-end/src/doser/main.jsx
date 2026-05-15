@@ -3,6 +3,7 @@ import { confirm, showModal } from 'utils/confirm'
 import DoserForm from './doser_form'
 import { fetchDosingPumps, createDosingPump, deleteDosingPump, updateDosingPump, calibrateDosingPump, saveDosingPumpCalibration, fetchDoserUsage } from 'redux/actions/doser'
 import { connect } from 'react-redux'
+import EmptyState, { DoserIcon } from '../../design-system/ui_kits/reef-pi-app/shell/EmptyState'
 import CollapsibleList from '../ui_components/collapsible_list'
 import Collapsible from '../ui_components/collapsible'
 import CalibrationModal from './calibration_modal'
@@ -181,6 +182,17 @@ export class RawDoser extends React.Component {
     let newDoser = null
     if (this.state.addDoser) {
       newDoser = <DoserForm onSubmit={this.handleCreateDoser} jacks={this.props.jacks} outlets={this.props.outlets} />
+    }
+
+    if (this.props.dosers.length === 0 && !this.state.addDoser) {
+      return (
+        <EmptyState
+          icon={<DoserIcon />}
+          title='No dosing pumps yet'
+          body='Add a pump to automate two-part, calcium, or kalkwasser dosing.'
+          action={{ label: 'Add dosing pump', onClick: this.handleToggleAddDoserDiv }}
+        />
+      )
     }
 
     return (
