@@ -1,6 +1,12 @@
+import React from 'react'
+import { render, screen } from '@testing-library/react'
 import Switch from 'react-toggle-switch'
 import EquipmentCtrlPanel, { RawEquipmentCtrlPanel, mapDispatchToProps, mapStateToProps } from './ctrl_panel'
 import 'isomorphic-fetch'
+
+jest.mock('../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle', () => ({
+  useEquipmentToggle: jest.fn(() => ({ mutate: jest.fn(), state: 'idle', retry: jest.fn() }))
+}))
 
 const equipment = [
   { id: '1', name: 'Heater', on: true, outlet: '1', stay_off_on_boot: false },
@@ -91,5 +97,41 @@ describe('<EquipmentCtrlPanel />', () => {
     props.fetchEquipment()
     props.updateEquipment(1, { on: false })
     expect(dispatch).toHaveBeenCalledTimes(2)
+  })
+
+  it('renders ToggleSwitch per item when pending_states flag is enabled', () => {
+    window.FEATURE_FLAGS = { pending_states: true }
+    const dispatch = jest.fn()
+    render(
+      <RawEquipmentCtrlPanel
+        equipment={equipment}
+        outlets={outlets}
+        fetchEquipment={jest.fn()}
+        updateEquipment={jest.fn()}
+        dispatch={dispatch}
+      />
+    )
+    const switches = screen.getAllByRole('switch')
+    expect(switches).toHaveLength(2)
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('PendingEquipmentToggle receives id and name from useEquipmentToggle', () => {
+    const { useEquipmentToggle } = require('../../design-system/ui_kits/reef-pi-app/hooks/useEquipmentToggle')
+    window.FEATURE_FLAGS = { pending_states: true }
+    const dispatch = jest.fn()
+    render(
+      <RawEquipmentCtrlPanel
+        equipment={[equipment[0]]}
+        outlets={outlets}
+        fetchEquipment={jest.fn()}
+        updateEquipment={jest.fn()}
+        dispatch={dispatch}
+      />
+    )
+    expect(useEquipmentToggle).toHaveBeenCalledWith(
+      expect.objectContaining({ id: equipment[0].id, name: equipment[0].name })
+    )
+    window.FEATURE_FLAGS = {}
   })
 })
