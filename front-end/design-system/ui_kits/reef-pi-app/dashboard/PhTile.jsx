@@ -4,7 +4,7 @@ import MetricTile from './MetricTile'
 
 const PH_BAND = [8.1, 8.4]
 
-export default function PhTile ({ globalRange }) {
+export default function PhTile ({ globalRange, alert, onAlertClick }) {
   return (
     <MetricTile
       metric='ph.display'
@@ -14,6 +14,8 @@ export default function PhTile ({ globalRange }) {
       globalRange={globalRange}
       formatValue={v => v.toFixed(2)}
       trendPrecision={2}
+      alert={alert}
+      onAlertClick={onAlertClick}
     >
       {({ value }) => value !== null && (
         <span style={{
@@ -22,7 +24,8 @@ export default function PhTile ({ globalRange }) {
           color: value >= PH_BAND[0] && value <= PH_BAND[1]
             ? 'var(--reefpi-color-brand)'
             : 'var(--reefpi-color-warn)'
-        }}>
+        }}
+        >
           {value >= PH_BAND[0] && value <= PH_BAND[1] ? 'within safe range' : 'outside safe range'}
         </span>
       )}
@@ -30,4 +33,8 @@ export default function PhTile ({ globalRange }) {
   )
 }
 
-PhTile.propTypes = { globalRange: PropTypes.string }
+PhTile.propTypes = {
+  globalRange: PropTypes.string,
+  alert: PropTypes.shape({ severity: PropTypes.string, message: PropTypes.string, at: PropTypes.number }),
+  onAlertClick: PropTypes.func
+}
