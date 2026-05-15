@@ -5,9 +5,9 @@ import Sparkline from '../primitives/Sparkline'
 import RangeSelector from '../primitives/RangeSelector'
 import { useTimeSeries } from '../hooks/useTimeSeries'
 
-const SAFE  = [76, 80]
-const WARN  = [74, 82]
-const CRIT  = [70, 86]
+const SAFE = [76, 80]
+const WARN = [74, 82]
+const CRIT = [70, 86]
 
 function delta (points) {
   if (!points || points.length < 2) return null
@@ -16,15 +16,29 @@ function delta (points) {
   return (now - hour).toFixed(1)
 }
 
-export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F' }) {
-  const [range, setRange]         = useState('1d')
+const ALERT_BORDER = {
+  critical: 'var(--reefpi-color-error)',
+  warn: 'var(--reefpi-color-warn)'
+}
+
+function alertRelTime (ts) {
+  const s = Math.floor((Date.now() - ts) / 1000)
+  if (s < 60) return s + 's'
+  if (s < 3600) return Math.floor(s / 60) + 'm'
+  return Math.floor(s / 3600) + 'h'
+}
+
+export default function TemperatureTile ({ metric = 'temperature.display', unit = '°F', alert, onAlertClick }) {
+  const [range, setRange] = useState('1d')
   const [hoverValue, setHoverValue] = useState(null)
 
   const { points, loading, error, refetch } = useTimeSeries({ metric, range, maxPoints: 120 })
 
-  const latest  = points.length ? points[points.length - 1].v : null
+  const latest = points.length ? points[points.length - 1].v : null
   const display = hoverValue !== null ? hoverValue : latest
-  const diff    = delta(points)
+  const diff = delta(points)
+
+  const alertBorder = alert ? (ALERT_BORDER[alert.severity] ?? ALERT_BORDER.warn) : null
 
   return (
     <div
@@ -32,6 +46,7 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
       style={{
         background: 'var(--reefpi-color-surface-elevated)',
         border: '1px solid var(--reefpi-color-border)',
+        borderTop: alertBorder ? `3px solid ${alertBorder}` : '1px solid var(--reefpi-color-border)',
         borderRadius: 'var(--reefpi-radius-md)',
         display: 'flex',
         flexDirection: 'column',
@@ -48,7 +63,8 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
         padding: '0.75rem 1rem',
         borderBottom: '1px solid var(--reefpi-color-border)',
         flexShrink: 0
-      }}>
+      }}
+      >
         <span style={{ fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--reefpi-color-text-muted)' }}>
           Temperature
         </span>
@@ -82,7 +98,8 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
                 lineHeight: 1,
                 color: 'var(--reefpi-color-text)',
                 fontVariantNumeric: 'tabular-nums'
-              }}>
+              }}
+              >
                 {display !== null ? display.toFixed(1) : '—'}
               </span>
               <span style={{ fontSize: '1rem', color: 'var(--reefpi-color-text-muted)' }}>{unit}</span>
@@ -91,7 +108,8 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
                   fontSize: '0.8rem',
                   color: parseFloat(diff) >= 0 ? 'var(--reefpi-color-warn)' : 'var(--reefpi-color-brand)',
                   fontVariantNumeric: 'tabular-nums'
-                }}>
+                }}
+                >
                   {parseFloat(diff) >= 0 ? '+' : ''}{diff} vs 1h ago
                 </span>
               )}
@@ -117,6 +135,36 @@ export default function TemperatureTile ({ metric = 'temperature.display', unit 
           </>
         )}
       </div>
+
+      {/* Inline alert footer */}
+      {alert && (
+        <button
+          onClick={onAlertClick}
+          aria-live='polite'
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.375rem',
+            padding: '0.375rem 0.875rem',
+            background: 'transparent',
+            border: 'none',
+            borderTop: `1px solid ${alertBorder}`,
+            width: '100%',
+            cursor: onAlertClick ? 'pointer' : 'default',
+            fontFamily: 'var(--reefpi-font-app)',
+            flexShrink: 0
+          }}
+        >
+          <span style={{ fontSize: '0.72rem', color: alertBorder, flex: '1 1 auto', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {alert.message}
+          </span>
+          {alert.at && (
+            <span style={{ fontSize: '0.65rem', color: 'var(--reefpi-color-text-muted)', fontFamily: 'var(--reefpi-font-mono)', flexShrink: 0 }}>
+              {alertRelTime(alert.at)}
+            </span>
+          )}
+        </button>
+      )}
     </div>
   )
 }
@@ -131,7 +179,7 @@ function LoadingSkeleton () {
   })
   return (
     <>
-      <style>{`@keyframes reefpi-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}`}</style>
+      <style>{'@keyframes reefpi-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'}</style>
       <div style={bar('14px')} />
       <div style={{ ...bar('3rem'), width: '45%' }} />
       <div style={{ ...bar('120px'), flex: '1 1 auto' }} />
@@ -148,7 +196,8 @@ function ErrorState ({ message, onRetry }) {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '0.75rem'
-    }}>
+    }}
+    >
       <div style={{
         padding: '0.5rem 0.75rem',
         background: 'var(--reefpi-color-error-bg)',
@@ -157,7 +206,8 @@ function ErrorState ({ message, onRetry }) {
         color: 'var(--reefpi-color-error)',
         fontSize: '0.8rem',
         textAlign: 'center'
-      }}>
+      }}
+      >
         {message}
       </div>
       {onRetry && (
@@ -184,5 +234,7 @@ function ErrorState ({ message, onRetry }) {
 
 TemperatureTile.propTypes = {
   metric: PropTypes.string,
-  unit: PropTypes.string
+  unit: PropTypes.string,
+  alert: PropTypes.shape({ severity: PropTypes.string, message: PropTypes.string, at: PropTypes.number }),
+  onAlertClick: PropTypes.func
 }

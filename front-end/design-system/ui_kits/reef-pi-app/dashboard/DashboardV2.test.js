@@ -1,5 +1,10 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+
+jest.mock('../hooks/useAlertsStore', () => ({
+  useAlertsStore: () => ({ alerts: [] })
+}))
+
 import DashboardV2 from './DashboardV2'
 import AtoTile from './AtoTile'
 import EquipmentStrip from './EquipmentStrip'
