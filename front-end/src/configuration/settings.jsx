@@ -7,6 +7,7 @@ import { updateSettings, fetchSettings } from 'redux/actions/settings'
 import { connect } from 'react-redux'
 import SettingsSchema from './settings_schema'
 import i18n from 'utils/i18n'
+import ThemePicker from '../../design-system/ui_kits/reef-pi-app/shell/ThemePicker'
 
 export class RawSettings extends React.Component {
   constructor (props) {
@@ -302,6 +303,12 @@ export class RawSettings extends React.Component {
             {this.checkBoxComponent('pprof')}
             {this.checkBoxComponent('prometheus')}
             {this.checkBoxComponent('cors')}
+          </div>
+        </div>
+        <hr />
+        <div className='row'>
+          <div className='col-12'>
+            <ThemePicker />
           </div>
         </div>
         <hr />

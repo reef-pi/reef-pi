@@ -6,6 +6,13 @@ import 'style.scss'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'react-toggle-switch/dist/css/switch.min.css'
 import i18n from 'utils/i18n'
+import { useTheme } from '../design-system/ui_kits/reef-pi-app/hooks/useTheme'
+
+// Mounts the system-preference change listener for the duration of the session
+function ThemeInitializer () {
+  useTheme()
+  return null
+}
 
 export default class App extends React.Component {
   constructor (props) {
@@ -41,7 +48,12 @@ export default class App extends React.Component {
     if (!this.state.loaded) {
       return <div>{i18n.t('loading')}</div>
     } else {
-      return this.getComponent()
+      return (
+        <>
+          <ThemeInitializer />
+          {this.getComponent()}
+        </>
+      )
     }
   }
 }
