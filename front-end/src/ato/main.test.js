@@ -209,4 +209,10 @@ describe('ATO Main', () => {
     expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
     window.FEATURE_FLAGS = {}
   })
+
+  it('render shows EmptyState when atos list is empty', () => {
+    const component = new RawATOMain(makeProps({ atos: [] }))
+    const tree = component.render()
+    expect(tree.props.title).toBe('No ATO configured')
+  })
 })
