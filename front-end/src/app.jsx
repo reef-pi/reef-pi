@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import $ from 'jquery'
 import MainPanel from 'main_panel'
 import SignIn from 'sign_in'
