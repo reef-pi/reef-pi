@@ -284,4 +284,18 @@ describe('Timer ui', () => {
     expect(html).toContain('value="name"')
     expect(html).toContain('name="target.duration"')
   })
+
+  it('<Main /> render returns EmptyState when timers list is empty and form is hidden', () => {
+    const component = new RawTimersMain(makeProps({ timers: [] }))
+    const tree = component.render()
+    expect(tree.props.title).toBe('No timers yet')
+  })
+
+  it('<Main /> EmptyState action calls handleToggleAddTimerDiv', () => {
+    const component = new RawTimersMain(makeProps({ timers: [] }))
+    component.setState = update => { component.state = { ...component.state, ...update } }
+    const tree = component.render()
+    tree.props.action.onClick()
+    expect(component.state.addTimer).toBe(true)
+  })
 })
