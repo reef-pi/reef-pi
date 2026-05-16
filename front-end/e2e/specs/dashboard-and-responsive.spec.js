@@ -35,9 +35,8 @@ test.describe('mobile shell', () => {
 
     await page.goto('/')
     await expect(page.getByTestId('smoke-shell-root')).toBeVisible()
-    await expect(page.getByTestId('smoke-brand')).toBeVisible()
-    await expect(page.getByTestId('smoke-current-tab')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Toggle navigation' })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
     await expect(page.getByTestId('smoke-dashboard-configure')).toBeVisible()
   })
 })
