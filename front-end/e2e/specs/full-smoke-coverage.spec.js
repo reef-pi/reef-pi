@@ -13,6 +13,29 @@ async function expectPageText (page, values) {
   await expectNoFatalError(page)
 }
 
+async function expectDashboardSmokeContent (page) {
+  const dashboardV2 = page.getByTestId('smoke-dashboard-v2')
+  if (await dashboardV2.count()) {
+    await expect(dashboardV2).toBeVisible()
+    await expectPageText(page, [
+      'Temperature',
+      'pH',
+      'ATO',
+      'Return',
+      'Light',
+      'Heater'
+    ])
+  } else {
+    await expectPageText(page, [
+      'Biocube29 Temperature',
+      'Biocube29 pH',
+      'Biocube29 ATO',
+      'Kessil A360'
+    ])
+    await expect(page.getByTestId('smoke-dashboard-configure')).toBeVisible()
+  }
+}
+
 test('full smoke configuration covers the major reef-pi modules', async ({ page, baseURL }) => {
   const api = await createSmokeApi(baseURL)
   const navBar = new NavBar(page)
@@ -25,13 +48,7 @@ test('full smoke configuration covers the major reef-pi modules', async ({ page,
 
   await page.goto('/')
   await navBar.expectShell()
-  await expectPageText(page, [
-    'Biocube29 Temperature',
-    'Biocube29 pH',
-    'Biocube29 ATO',
-    'Kessil A360'
-  ])
-  await expect(page.getByTestId('smoke-dashboard-configure')).toBeVisible()
+  await expectDashboardSmokeContent(page)
 
   await navBar.open('configuration')
   await page.locator('#config-drivers').click()
