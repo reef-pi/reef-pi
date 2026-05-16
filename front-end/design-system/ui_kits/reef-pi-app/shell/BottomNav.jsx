@@ -70,6 +70,7 @@ export default function BottomNav ({
       {mode === 'tablet' && (
         <button
           aria-label='Open navigation'
+          data-testid='smoke-nav'
           aria-expanded={drawerOpen}
           onClick={() => setDrawer(true)}
           style={{
@@ -97,6 +98,7 @@ export default function BottomNav ({
       {mode === 'mobile' && (
         <nav
           aria-label='Main navigation'
+          data-testid='smoke-nav'
           style={{
             position:   'fixed',
             bottom:     0,
@@ -148,6 +150,7 @@ export default function BottomNav ({
           />
           <nav
             aria-label='Navigation drawer'
+            data-testid='smoke-nav'
             style={{
               position:   'fixed',
               top:        0,
@@ -169,11 +172,14 @@ export default function BottomNav ({
               borderBottom: '1px solid var(--reefpi-color-nav-border)',
               flexShrink: 0
             }}>
-              <span style={{
+              <span
+                data-testid='smoke-brand'
+                style={{
                 color: 'var(--reefpi-color-nav-text-strong)',
                 fontFamily: 'var(--reefpi-font-app)',
                 fontWeight: 700, fontSize: '1.1rem'
-              }}>
+                }}
+              >
                 reef-pi
               </span>
               <button
@@ -226,6 +232,7 @@ function BottomTab ({ route, active, onPress }) {
   return (
     <button
       aria-label={route.label}
+      data-testid={`smoke-tab-${route.id}`}
       aria-current={active ? 'page' : undefined}
       onClick={onPress}
       style={{
@@ -242,7 +249,7 @@ function BottomTab ({ route, active, onPress }) {
 
 function DrawerItem ({ route, active, onPress }) {
   return (
-    <button onClick={onPress} style={DRAWER_ITEM_STYLE(active)}>
+    <button data-testid={`smoke-tab-${route.id}`} onClick={onPress} style={DRAWER_ITEM_STYLE(active)}>
       <span style={{ flexShrink: 0, width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {route.icon}
       </span>
