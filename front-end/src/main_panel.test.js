@@ -201,7 +201,8 @@ describe('MainPanel', () => {
       fetchInfo: jest.fn()
     })
 
-    expect(container.querySelector('[data-testid="smoke-nav"]')).toBeNull()
+    expect(container.querySelector('[data-testid="smoke-nav"]')).not.toBeNull()
+    expect(container.querySelector('[data-testid="smoke-tab-dashboard"]')).not.toBeNull()
     expect(container.querySelector('[aria-label="Main navigation"]')).not.toBeNull()
     expect(container.querySelector('#content .container-fluid').style.paddingLeft).toBe('72px')
     expect(Array.from(container.querySelectorAll('[aria-label]')).map(node => node.getAttribute('aria-label'))).toContain('equipment')

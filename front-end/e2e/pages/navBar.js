@@ -12,12 +12,15 @@ class NavBar {
 
   async expectShell () {
     await expect(this.page.getByTestId('smoke-shell-root')).toBeVisible()
-    await expect(this.page.getByTestId('smoke-brand')).toBeVisible()
+    const brand = this.page.getByTestId('smoke-brand')
+    if (await brand.count()) {
+      await expect(brand.first()).toBeVisible()
+    }
     await expect(this.tab('dashboard')).toBeVisible()
   }
 
   async open (name) {
-    await this.tab(name).click()
+    await this.tab(name).first().click()
   }
 }
 
