@@ -477,6 +477,45 @@ describe('Ph ui', () => {
     window.FEATURE_FLAGS = {}
   })
 
+  it('<Main /> renders pH dashboard primitives with readings and threshold gauge', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const now = new Date()
+    const probe = { id: '1', name: 'Tank pH', enable: false, min: 7.8, max: 8.3, notify: { enable: true, min: 7.5, max: 8.5 }, control: false }
+    const component = new RawPhMain(createProps({
+      probes: [probe],
+      currentReading: { 1: 8.2 },
+      phReadings: {
+        1: {
+          current: [
+            { time: now.toISOString(), value: 8.2 },
+            { time: new Date(now.getTime() - 3600000).toISOString(), value: 8.0 },
+            { time: new Date(now.getTime() - 3 * 86400000).toISOString(), value: 7.9 }
+          ]
+        }
+      }
+    }))
+
+    const html = renderToStaticMarkup(component.probeList()[0].props.children[0])
+
+    expect(html).toContain('ph-1')
+    expect(html).toContain('Tank pH')
+    expect(html).toContain('pH')
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('<Main /> omits pH dashboard primitives when readings are unavailable', () => {
+    window.FEATURE_FLAGS = { dashboard_v2: true }
+    const probe = { id: '1', name: 'Tank pH', enable: false, notify: { enable: false }, control: false }
+    const component = new RawPhMain(createProps({
+      probes: [probe],
+      currentReading: {},
+      phReadings: { 1: {} }
+    }))
+
+    expect(renderToStaticMarkup(component.probeList()[0].props.children[0])).toBe('')
+    window.FEATURE_FLAGS = {}
+  })
+
   it('<Main /> renders EmptyState with calibration modal slot when no probes', () => {
     const component = new RawPhMain(createProps())
     const rendered = component.render()
