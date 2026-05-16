@@ -205,6 +205,40 @@ func TestDRV8825IsValid(t *testing.T) {
 	}
 }
 
+func TestDRV8825StepperOperationErrors(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+	outlets := con.DM().Outlets()
+	if err := outlets.Setup(); err != nil {
+		t.Fatal(err)
+	}
+
+	d := &DRV8825{
+		StepPin:       "missing-step",
+		DirectionPin:  "missing-direction",
+		MSPinA:        "missing-a",
+		MSPinB:        "missing-b",
+		MSPinC:        "missing-c",
+		SPR:           200,
+		VPR:           1,
+		Delay:         1,
+		MicroStepping: "Full",
+	}
+
+	if err := d.Microstep(outlets, true, false, true); err == nil {
+		t.Fatal("expected missing microstep pins to fail")
+	}
+	if err := d.Step(outlets, 1); err == nil {
+		t.Fatal("expected missing direction/step pins to fail")
+	}
+	if err := d.Dose(outlets, 1); err == nil {
+		t.Fatal("expected dose with missing pins to fail")
+	}
+}
+
 func TestScheduleContinuousDoesNotAddCronEntry(t *testing.T) {
 	con, err := controller.TestController()
 	if err != nil {
