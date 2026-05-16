@@ -101,4 +101,42 @@ describe('<Inlets />', () => {
 
     expect(del).toHaveBeenCalledWith('1')
   })
+
+  it('render returns container with add button showing + when add is false', () => {
+    const component = new RawInlets({
+      inlets: [],
+      drivers,
+      fetch: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+
+    const tree = component.render()
+    expect(tree.type).toBe('div')
+    expect(tree.props.className).toBe('container')
+    const addButton = tree.props.children[1].props.children.props.children
+    expect(addButton.props.id).toBe('add_inlet')
+    expect(addButton.props.value).toBe('+')
+  })
+
+  it('render shows form row when add is true', () => {
+    const component = new RawInlets({
+      inlets: [],
+      drivers,
+      fetch: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn()
+    })
+    patchSetState(component)
+    component.handleAdd()
+
+    const tree = component.render()
+    const addButton = tree.props.children[1].props.children.props.children
+    const formRow = tree.props.children[2]
+
+    expect(addButton.props.value).toBe('-')
+    expect(formRow.props.style).toEqual({ display: '' })
+  })
 })
