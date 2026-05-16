@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 )
 
 func TestStep(t *testing.T) {
@@ -69,5 +70,35 @@ func TestStep(t *testing.T) {
 	s.Config = []byte(`{"id":"1","on":true}`)
 	if err := s.Run(c, true); err != nil {
 		t.Error("reverse equipment step should not error:", err)
+	}
+}
+
+func TestStepPWMBranches(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	s := Step{Type: "pwm", Config: []byte(`[]`)}
+	if err := s.Run(c, false); err == nil {
+		t.Fatal("invalid pwm config should fail")
+	}
+
+	jacks := c.DM().Jacks()
+	if err := jacks.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	if err := jacks.Create(connectors.Jack{Name: "macro-jack", Pins: []int{0, 1}, Driver: "rpi"}); err != nil {
+		t.Fatal(err)
+	}
+
+	s.Config = []byte(`{"id":"1","value":33}`)
+	if err := s.Run(c, false); err != nil {
+		t.Fatal(err)
+	}
+	s.Config = []byte(`{"id":"missing","value":33}`)
+	if err := s.Run(c, false); err == nil {
+		t.Fatal("missing pwm jack should fail")
 	}
 }
