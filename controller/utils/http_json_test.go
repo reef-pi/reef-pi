@@ -305,6 +305,14 @@ type testDoer struct{}
 
 func (t *testDoer) Do(_ func(interface{})) {}
 
+type usageDoer []interface{}
+
+func (u usageDoer) Do(fn func(interface{})) {
+	for _, item := range u {
+		fn(item)
+	}
+}
+
 func Test_JSONGetUsage(t *testing.T) {
 	d := &testDoer{}
 	fn := JSONGetUsage(d)
@@ -315,4 +323,57 @@ func Test_JSONGetUsage(t *testing.T) {
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(fn)
 	handler.ServeHTTP(rr, req)
+}
+
+func TestJSONResponseEncoderErrorWritesInternalServerError(t *testing.T) {
+	req := httptest.NewRequest("GET", "/api/test", strings.NewReader("{}"))
+	rr := httptest.NewRecorder()
+
+	JSONResponse(make(chan int), rr, req)
+
+	assertJSONError(t, rr, http.StatusInternalServerError, "Failed to json decode. Error: json: unsupported type: chan int")
+}
+
+func TestJSONResponseWithStatusEncoderErrorKeepsInitialStatus(t *testing.T) {
+	req := httptest.NewRequest("GET", "/api/test", strings.NewReader("{}"))
+	rr := httptest.NewRecorder()
+
+	JSONResponseWithStatus(http.StatusAccepted, make(chan int), rr, req)
+
+	if rr.Code != http.StatusAccepted {
+		t.Fatalf("expected initial status %d, got %d", http.StatusAccepted, rr.Code)
+	}
+	var payload map[string]string
+	if err := json.Unmarshal(rr.Body.Bytes(), &payload); err != nil {
+		t.Fatalf("expected JSON error response, got %q: %v", rr.Body.String(), err)
+	}
+	if payload["error"] != "Failed to json decode. Error: json: unsupported type: chan int" {
+		t.Fatalf("unexpected error payload: %#v", payload)
+	}
+}
+
+func TestJSONGetUsageFiltersNilItems(t *testing.T) {
+	fn := JSONGetUsage(usageDoer{
+		map[string]string{"name": "temperature"},
+		nil,
+		map[string]string{"name": "heater"},
+	})
+	req := httptest.NewRequest("GET", "/api/usage", strings.NewReader("{}"))
+	rr := httptest.NewRecorder()
+
+	http.HandlerFunc(fn).ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+	var payload []map[string]string
+	if err := json.Unmarshal(rr.Body.Bytes(), &payload); err != nil {
+		t.Fatalf("expected usage JSON array, got %q: %v", rr.Body.String(), err)
+	}
+	if len(payload) != 2 {
+		t.Fatalf("expected nil usage items to be filtered, got %#v", payload)
+	}
+	if payload[0]["name"] != "temperature" || payload[1]["name"] != "heater" {
+		t.Fatalf("unexpected usage payload: %#v", payload)
+	}
 }
