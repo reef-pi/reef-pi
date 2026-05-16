@@ -44,6 +44,7 @@ describe('design-system DashboardV2', () => {
     })
 
     const rows = tree.props.children
+    expect(tree.props['data-testid']).toBe('smoke-dashboard-v2')
     expect(rows[0].type).toBe(SystemStrip)
     expect(rows[0].props.sseEndpoint).toBe('/api/alerts')
     expect(rows[1].props.children[0].props.children.type).toBe(TemperatureTile)
