@@ -130,6 +130,21 @@ describe('Configuration ui', () => {
     expect(RawDisplay.getDerivedStateFromProps({ config: undefined }, {})).toBeNull()
   })
 
+  it('<Display /> getDerivedStateFromProps returns null for empty config object', () => {
+    expect(RawDisplay.getDerivedStateFromProps({ config: {} }, {})).toBeNull()
+  })
+
+  it('<Display /> render applies danger style when state.on is true', () => {
+    const component = new RawDisplay({
+      config: { brightness: 50, on: true },
+      fetchDisplay: jest.fn(),
+      switchDisplay: jest.fn(),
+      setBrightness: jest.fn()
+    })
+    const button = component.render().props.children[0].props.children[0]
+    expect(button.props.className).toBe('btn btn-outline-danger')
+  })
+
   it('<Errors /> fetches, renders alert/count badges, deletes, and clears', () => {
     const props = {
       errors: [

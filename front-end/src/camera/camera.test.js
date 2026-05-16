@@ -223,6 +223,24 @@ describe('Camera module', () => {
     expect(config.state.config).not.toBe(previousConfig)
   })
 
+  it('<Config /> render returns loading div when enable is undefined', () => {
+    const config = new Config({ config: { tick_interval: 1 }, update: jest.fn() })
+    const rendered = config.render()
+    expect(rendered.type).toBe('div')
+    expect(rendered.props.className).toBe('container')
+    expect(rendered.props.children).toBeTruthy()
+  })
+
+  it('<Config /> render shows danger save button when updated is true', () => {
+    const config = new Config({ config: { tick_interval: 1, enable: true }, update: jest.fn() })
+    config.setState = jest.fn(next => {
+      config.state = { ...config.state, ...next }
+    })
+    config.state.updated = true
+    const saveButton = config.render().props.children[5].props.children
+    expect(saveButton.props.className).toContain('btn-outline-danger')
+  })
+
   it('<Config /> saves parsed config without mutating state config', () => {
     const update = jest.fn()
     const config = new Config({ config: { tick_interval: '5', enable: true }, update })
