@@ -134,6 +134,23 @@ func TestATOReset(t *testing.T) {
 	}
 }
 
+func TestATOGetEntity(t *testing.T) {
+	c, _ := setupATOController(t)
+
+	a := ATO{Name: "EntityTest", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: false}
+	if err := c.Create(a); err != nil {
+		t.Fatal("Failed to create ato:", err)
+	}
+
+	entity, err := c.GetEntity("1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if entity.EName() != "EntityTest" {
+		t.Fatalf("expected entity name EntityTest, got %q", entity.EName())
+	}
+}
+
 func TestATONotifyIfNeeded(t *testing.T) {
 	c, _ := setupATOController(t)
 
