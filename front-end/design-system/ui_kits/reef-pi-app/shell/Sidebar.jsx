@@ -81,6 +81,7 @@ export default function Sidebar ({
   return (
     <nav
       aria-label='Main navigation'
+      data-testid='smoke-nav'
       style={{
         position:   'fixed',
         top:        0,
@@ -107,6 +108,7 @@ export default function Sidebar ({
       }}>
         <a
           href='/'
+          data-testid='smoke-brand'
           style={{
             color:          'var(--reefpi-color-nav-text-strong)',
             fontFamily:     'var(--reefpi-font-app)',
@@ -204,6 +206,7 @@ function NavItem ({ route, active, expanded, onNavigate, onTooltip }) {
     <a
       ref={ref}
       href={route.href}
+      data-testid={`smoke-tab-${route.id}`}
       aria-current={active ? 'page' : undefined}
       onClick={e => { if (onNavigate) { e.preventDefault(); onNavigate(route) } }}
       onMouseEnter={() => {
