@@ -136,6 +136,15 @@ func TestAddEntry(t *testing.T) {
 	}
 }
 
+func TestAddEntryUnknownParameter(t *testing.T) {
+	s, cleanup := newTestSubsystem(t)
+	defer cleanup()
+
+	if err := s.AddEntry("missing", Entry{Value: 1.23}); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestAPI(t *testing.T) {
 	con, err := controller.TestController()
 	if err != nil {
@@ -197,6 +206,9 @@ func TestAPI(t *testing.T) {
 	// GET /api/journal/{id}/usage
 	if err := tr.Do("GET", "/api/journal/"+id+"/usage", strings.NewReader("{}"), nil); err != nil {
 		t.Fatal("GET /api/journal/<id>/usage failed:", err)
+	}
+	if err := tr.Do("GET", "/api/journal/missing/usage", strings.NewReader("{}"), nil); err == nil {
+		t.Fatal("expected GET /api/journal/missing/usage to fail")
 	}
 
 	// DELETE /api/journal/{id}
