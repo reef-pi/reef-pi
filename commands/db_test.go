@@ -52,7 +52,16 @@ func openCmd(t *testing.T, dbPath string, args []string) (*dbCmd, func()) {
 }
 
 type testDBRepository struct {
-	deleteErr error
+	rawGet []byte
+
+	rawGetErr  error
+	buckets    []string
+	bucketsErr error
+	list       map[string]json.RawMessage
+	listErr    error
+	createErr  error
+	updateErr  error
+	deleteErr  error
 }
 
 func (r testDBRepository) Close() error {
@@ -60,23 +69,23 @@ func (r testDBRepository) Close() error {
 }
 
 func (r testDBRepository) RawGet(string, string) ([]byte, error) {
-	return nil, nil
+	return r.rawGet, r.rawGetErr
 }
 
 func (r testDBRepository) Buckets() ([]string, error) {
-	return nil, nil
+	return r.buckets, r.bucketsErr
 }
 
 func (r testDBRepository) List(string) (map[string]json.RawMessage, error) {
-	return nil, nil
+	return r.list, r.listErr
 }
 
 func (r testDBRepository) Create(string, []byte) error {
-	return nil
+	return r.createErr
 }
 
 func (r testDBRepository) Update(string, string, []byte) error {
-	return nil
+	return r.updateErr
 }
 
 func (r testDBRepository) Delete(string, string) error {
@@ -329,6 +338,63 @@ func TestDBCmdDeleteWrapsRepositoryError(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "failed to delete item 1") {
 		t.Fatalf("unexpected delete error message: %v", err)
+	}
+}
+
+func TestDBCmdRepositoryErrors(t *testing.T) {
+	tests := []struct {
+		name    string
+		cmd     *dbCmd
+		run     func(*dbCmd) error
+		wantMsg string
+	}{
+		{
+			name:    "show",
+			cmd:     &dbCmd{args: []string{"show", "atos", "1"}, repo: testDBRepository{rawGetErr: errors.New("raw get failed")}},
+			run:     (*dbCmd).Show,
+			wantMsg: "failed to get item 1",
+		},
+		{
+			name:    "buckets",
+			cmd:     &dbCmd{args: []string{"buckets"}, repo: testDBRepository{bucketsErr: errors.New("buckets failed")}},
+			run:     (*dbCmd).Buckets,
+			wantMsg: "failed to get list buckets",
+		},
+		{
+			name:    "list",
+			cmd:     &dbCmd{args: []string{"list", "atos"}, repo: testDBRepository{listErr: errors.New("list failed")}},
+			run:     (*dbCmd).List,
+			wantMsg: "failed to list items",
+		},
+		{
+			name:    "create",
+			cmd:     &dbCmd{args: []string{"create", "atos"}, input: filepath.Join(t.TempDir(), "create.json"), repo: testDBRepository{createErr: errors.New("create failed")}},
+			run:     (*dbCmd).Create,
+			wantMsg: "create failed",
+		},
+		{
+			name:    "update",
+			cmd:     &dbCmd{args: []string{"update", "atos", "1"}, input: filepath.Join(t.TempDir(), "update.json"), repo: testDBRepository{updateErr: errors.New("update failed")}},
+			run:     (*dbCmd).Update,
+			wantMsg: "update failed",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.cmd.input != "" {
+				if err := os.WriteFile(tt.cmd.input, []byte(`{"name":"test"}`), 0644); err != nil {
+					t.Fatal(err)
+				}
+			}
+			err := tt.run(tt.cmd)
+			if err == nil {
+				t.Fatal("expected error")
+			}
+			if !strings.Contains(err.Error(), tt.wantMsg) {
+				t.Fatalf("expected error containing %q, got %v", tt.wantMsg, err)
+			}
+		})
 	}
 }
 
