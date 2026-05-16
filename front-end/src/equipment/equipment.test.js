@@ -1,4 +1,5 @@
 import React, { act } from 'react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Equipment from './equipment'
 import ViewEquipment from './view_equipment'
@@ -391,5 +392,27 @@ describe('Equipment ui', () => {
   it('<Chart />', () => {
     const component = new RawEquipmentChart({ equipment: undefined, fetchEquipment: jest.fn(), height: 200 })
     expect(component.render().type).toBe('div')
+  })
+
+  it('<EquipmentForm /> handleSubmit calls onSubmit with validated values', async () => {
+    const onSubmit = jest.fn()
+    render(
+      <EquipmentForm
+        actionLabel='save'
+        outlets={[{ id: '1', name: 'O1' }]}
+        onSubmit={onSubmit}
+      />
+    )
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('smoke-equipment-name'), { target: { value: 'Heater' } })
+      fireEvent.change(screen.getByTestId('smoke-equipment-outlet'), { target: { value: '1' } })
+    })
+
+    await act(async () => {
+      fireEvent.submit(screen.getByTestId('smoke-equipment-submit').closest('form'))
+    })
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ name: 'Heater', outlet: '1' }))
   })
 })
