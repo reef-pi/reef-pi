@@ -504,6 +504,69 @@ func TestMainUnknownCommand(t *testing.T) {
 	}
 }
 
+func TestRunResetPasswordDispatch(t *testing.T) {
+	configPath := filepath.Join(t.TempDir(), "reef-pi.yml")
+	if err := os.WriteFile(configPath, []byte("database: /tmp/reef-pi-test.db\n"), 0600); err != nil {
+		t.Fatal(err)
+	}
+
+	orig := runResetPassword
+	t.Cleanup(func() { runResetPassword = orig })
+	var gotDB, gotUser, gotPassword string
+	runResetPassword = func(db, user, password string) {
+		gotDB = db
+		gotUser = user
+		gotPassword = password
+	}
+
+	if err := run([]string{"reset-password", "-user", "reef", "-password", "secret", "-config", configPath}); err != nil {
+		t.Fatal(err)
+	}
+	if gotDB != "/tmp/reef-pi-test.db" || gotUser != "reef" || gotPassword != "secret" {
+		t.Fatalf("unexpected reset-password dispatch: db=%q user=%q password=%q", gotDB, gotUser, gotPassword)
+	}
+}
+
+func TestRunRestoreDbDispatch(t *testing.T) {
+	orig := runRestoreDb
+	t.Cleanup(func() { runRestoreDb = orig })
+	var gotCurrent, gotBackup, gotNext string
+	runRestoreDb = func(current, backup, next string) {
+		gotCurrent = current
+		gotBackup = backup
+		gotNext = next
+	}
+
+	if err := run([]string{"restore-db", "-current", "current.db", "-backup", "backup.db", "-new", "new.db"}); err != nil {
+		t.Fatal(err)
+	}
+	if gotCurrent != "current.db" || gotBackup != "backup.db" || gotNext != "new.db" {
+		t.Fatalf("unexpected restore-db dispatch: current=%q backup=%q new=%q", gotCurrent, gotBackup, gotNext)
+	}
+}
+
+func TestRunInstallError(t *testing.T) {
+	wantErr := errors.New("download failed")
+	orig := runInstall
+	t.Cleanup(func() { runInstall = orig })
+	runInstall = func(version string) error {
+		if version != "v1.2.3" {
+			t.Fatalf("unexpected install version: %q", version)
+		}
+		return wantErr
+	}
+
+	if err := run([]string{"install", "-version", "v1.2.3"}); !errors.Is(err, wantErr) {
+		t.Fatalf("expected install error %v, got %v", wantErr, err)
+	}
+}
+
+func TestRunDaemonConfigError(t *testing.T) {
+	if err := run([]string{"daemon", "-config", filepath.Join(t.TempDir(), "missing.yml")}); err == nil {
+		t.Fatal("expected daemon config load to fail")
+	}
+}
+
 func TestResetPassword(t *testing.T) {
 	dbPath, cleanup := setupTestDB(t)
 	defer cleanup()

@@ -11,10 +11,24 @@ import (
 
 var Version string
 
-func main() {
+var (
+	runDaemonize     = daemonize
+	runResetPassword = resetPassword
+	runRestoreDb     = restoreDb
+	runInstall       = install
+)
 
-	version := flag.Bool("version", false, "Print version information")
-	flag.Usage = func() {
+func main() {
+	if err := run(os.Args[1:]); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func run(argv []string) error {
+	flags := flag.NewFlagSet("reef-pi", flag.ContinueOnError)
+	version := flags.Bool("version", false, "Print version information")
+	flags.Usage = func() {
 		text := `
     Usage: reef-pi [command] [OPTIONS]
 
@@ -32,31 +46,32 @@ func main() {
     `
 		fmt.Println(strings.TrimSpace(text))
 	}
-	flag.Parse()
+	if err := flags.Parse(argv); err != nil {
+		return err
+	}
 	if *version {
 		fmt.Println(Version)
-		return
+		return nil
 	}
 	var v string
 	args := []string{}
-	if len(os.Args) > 1 {
-		v = os.Args[1]
+	parsedArgs := flags.Args()
+	if len(parsedArgs) > 0 {
+		v = parsedArgs[0]
 	}
-	if len(os.Args) > 2 {
-		args = os.Args[2:]
+	if len(parsedArgs) > 1 {
+		args = parsedArgs[1:]
 	}
 	switch v {
 	case "db":
 		cmd, err := NewDBCmd(args)
 		if err != nil {
-			fmt.Println("Failed to parse command line flags. Error:", err)
-			os.Exit(1)
-		}
-		if err := cmd.Execute(); err != nil {
-			fmt.Println("Failed due to error:", err)
-			os.Exit(1)
+			return fmt.Errorf("Failed to parse command line flags. Error: %w", err)
 		}
 		defer cmd.Close()
+		if err := cmd.Execute(); err != nil {
+			return fmt.Errorf("Failed due to error: %w", err)
+		}
 	case "reset-password":
 		cmd := flag.NewFlagSet("reset-password", flag.ExitOnError)
 		user := cmd.String("user", "", "New reef-pi web ui username")
@@ -74,10 +89,9 @@ func main() {
 		cmd.Parse(args)
 		config, err := loadConfig(*configFile)
 		if err != nil {
-			fmt.Println("Failed to load config file. Error:", err)
-			os.Exit(1)
+			return fmt.Errorf("Failed to load config file. Error: %w", err)
 		}
-		resetPassword(config.Database, *user, *password)
+		runResetPassword(config.Database, *user, *password)
 	case "restore-db":
 		cmd := flag.NewFlagSet("restore-db", flag.ExitOnError)
 		cPath := cmd.String("current", "/var/lib/reef-pi/reef-pi.db", "Current database file path")
@@ -93,7 +107,7 @@ func main() {
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
-		restoreDb(*cPath, *oPath, *nPath)
+		runRestoreDb(*cPath, *oPath, *nPath)
 	case "install":
 		cmd := flag.NewFlagSet("install", flag.ExitOnError)
 		version := cmd.String("version", "", "Version to be installed")
@@ -107,9 +121,8 @@ func main() {
 			cmd.PrintDefaults()
 		}
 		cmd.Parse(args)
-		if err := install(*version); err != nil {
-			fmt.Println("reef-pi installed failed. Error:", err)
-			os.Exit(1)
+		if err := runInstall(*version); err != nil {
+			return fmt.Errorf("reef-pi installed failed. Error: %w", err)
 		}
 	case "", "daemon":
 		cmd := flag.NewFlagSet("daemon", flag.ExitOnError)
@@ -127,14 +140,13 @@ func main() {
 		cmd.Parse(args)
 		config, err := loadConfig(*configFile)
 		if err != nil {
-			fmt.Println("Failed to load config file. Error:", err)
-			os.Exit(1)
+			return fmt.Errorf("Failed to load config file. Error: %w", err)
 		}
-		daemonize(config.Database)
+		runDaemonize(config.Database)
 	default:
-		fmt.Println("Unknown command: '", v, "'")
-		os.Exit(1)
+		return fmt.Errorf("Unknown command: '%s'", v)
 	}
+	return nil
 }
 
 func loadConfig(file string) (daemon.Config, error) {
