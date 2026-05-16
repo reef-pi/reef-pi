@@ -2,8 +2,11 @@ package ph
 
 import (
 	"testing"
+	"time"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
+	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 func TestProbeValidate(t *testing.T) {
@@ -31,6 +34,18 @@ func TestProbeValidate(t *testing.T) {
 	p = Probe{Period: 5, Transformer: "v +++ invalid"}
 	if err := p.Validate(); err == nil {
 		t.Error("expected error for invalid transformer expression")
+	}
+
+	// transformer that parses but fails at evaluation
+	p = Probe{Period: 5, Transformer: "missing + 1"}
+	if err := p.Validate(); err == nil {
+		t.Error("expected error for transformer with missing parameter")
+	}
+
+	// transformer result must be numeric
+	p = Probe{Period: 5, Transformer: "v > 1"}
+	if err := p.Validate(); err == nil {
+		t.Error("expected error for non-numeric transformer result")
 	}
 }
 
@@ -123,11 +138,12 @@ func TestPHControllerInUse(t *testing.T) {
 
 	// Create a probe referencing equipment "eq1" for UpperEq
 	p := Probe{
-		Name:     "TestProbe",
-		Period:   5,
-		UpperEq:  "eq1",
-		DownerEq: "eq2",
-		IsMacro:  false,
+		Name:        "TestProbe",
+		Period:      5,
+		AnalogInput: "ain1",
+		UpperEq:     "eq1",
+		DownerEq:    "eq2",
+		IsMacro:     false,
 	}
 	if err := ctrl.Create(p); err != nil {
 		t.Fatal("Create probe failed:", err)
@@ -152,9 +168,46 @@ func TestPHControllerInUse(t *testing.T) {
 	}
 
 	// InUse for macro type
-	_, err = ctrl.InUse("macro", "eq1")
+	deps, err = ctrl.InUse(storage.MacroBucket, "eq1")
 	if err != nil {
 		t.Error("InUse(macro) should not error:", err)
+	}
+	if len(deps) != 0 {
+		t.Error("Expected no macro deps for non-macro probe")
+	}
+
+	// InUse for analog input
+	deps, err = ctrl.InUse(storage.AnalogInputBucket, "ain1")
+	if err != nil {
+		t.Error("InUse(analog_inputs) error:", err)
+	}
+	if len(deps) == 0 {
+		t.Error("Expected dep for AnalogInput 'ain1'")
+	}
+
+	macroProbe := Probe{
+		Name:     "MacroProbe",
+		Period:   5,
+		UpperEq:  "macro1",
+		DownerEq: "macro2",
+		IsMacro:  true,
+	}
+	if err := ctrl.Create(macroProbe); err != nil {
+		t.Fatal("Create macro probe failed:", err)
+	}
+	deps, err = ctrl.InUse(storage.MacroBucket, "macro1")
+	if err != nil {
+		t.Error("InUse(macro) UpperEq error:", err)
+	}
+	if len(deps) == 0 {
+		t.Error("Expected dep for macro UpperEq 'macro1'")
+	}
+	deps, err = ctrl.InUse(storage.MacroBucket, "macro2")
+	if err != nil {
+		t.Error("InUse(macro) DownerEq error:", err)
+	}
+	if len(deps) == 0 {
+		t.Error("Expected dep for macro DownerEq 'macro2'")
 	}
 
 	// InUse for unknown type — should error
@@ -169,5 +222,68 @@ func TestPHControllerGetEntity(t *testing.T) {
 
 	if _, err := ctrl.GetEntity("1"); err == nil {
 		t.Error("GetEntity should return error (not supported)")
+	}
+}
+
+func TestPHControllerSetupLoadsCalibrations(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	ctrl := New(true, c)
+	if err := ctrl.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	probe, err := ctrl.repo.Create(Probe{Name: "Calibrated", Period: time.Second})
+	if err != nil {
+		t.Fatal(err)
+	}
+	measurements := []hal.Measurement{
+		{Expected: 4, Observed: 3.9},
+		{Expected: 7, Observed: 7.1},
+		{Expected: 10, Observed: 10.2},
+	}
+	if err := ctrl.repo.SaveCalibration(probe.ID, measurements); err != nil {
+		t.Fatal(err)
+	}
+
+	reloaded := New(true, c)
+	if err := reloaded.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := reloaded.calibrators[probe.ID]; !ok {
+		t.Fatal("expected setup to load calibrator")
+	}
+}
+
+func TestPHControllerSetupReturnsCalibrationError(t *testing.T) {
+	c, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Store().Close()
+
+	ctrl := New(true, c)
+	if err := ctrl.Setup(); err != nil {
+		t.Fatal(err)
+	}
+	probe, err := ctrl.repo.Create(Probe{Name: "BadCalibration", Period: time.Second})
+	if err != nil {
+		t.Fatal(err)
+	}
+	measurements := []hal.Measurement{
+		{Expected: 4, Observed: 7},
+		{Expected: 7, Observed: 7},
+		{Expected: 10, Observed: 10},
+	}
+	if err := ctrl.repo.SaveCalibration(probe.ID, measurements); err != nil {
+		t.Fatal(err)
+	}
+
+	reloaded := New(true, c)
+	if err := reloaded.Setup(); err == nil {
+		t.Fatal("expected setup to fail on invalid three point calibration")
 	}
 }
