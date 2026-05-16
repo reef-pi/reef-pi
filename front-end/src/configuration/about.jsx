@@ -57,7 +57,6 @@ class about extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    errors: state.errors,
     info: state.info
   }
 }

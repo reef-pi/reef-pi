@@ -1,11 +1,13 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MemoryRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import configureMockStore from 'redux-mock-store'
 import { RawAdmin } from './admin'
 import Capabilities from './capabilities'
 import { RawDisplay } from './display'
-import { RawErrors } from './errors'
-import { RawAbout } from './about'
+import Errors, { RawErrors } from './errors'
+import About, { RawAbout } from './about'
 import HealthNotify from './health_notify'
 import Main, { configRoutes } from './main'
 import { RawSettings } from './settings'
@@ -13,6 +15,8 @@ import SignIn from 'sign_in'
 import 'isomorphic-fetch'
 import * as Alert from 'utils/alert'
 import i18n from 'utils/i18n'
+
+const mockStore = configureMockStore([])
 
 jest.mock('utils/alert', () => ({
   showError: jest.fn(),
@@ -197,6 +201,30 @@ describe('Configuration ui', () => {
 
     setInterval.mockRestore()
     clearInterval.mockRestore()
+  })
+
+  it('<Errors /> connected component maps state.errors and dispatch props', () => {
+    const store = mockStore({
+      errors: [{ id: 'alert:1', time: '10:00', message: 'Tank low', count: 2 }]
+    })
+    const html = renderToStaticMarkup(
+      <Provider store={store}><Errors /></Provider>
+    )
+    expect(html).toContain('Tank low')
+    expect(html).toContain('2x')
+  })
+
+  it('<About /> connected component maps state.info and dispatch props', () => {
+    const setInterval = jest.spyOn(window, 'setInterval').mockReturnValue(42)
+    const store = mockStore({
+      info: { version: '5.0', current_time: 'now', uptime: '2h', ip: '10.0.0.1', model: 'Pi 4' }
+    })
+    const html = renderToStaticMarkup(
+      <Provider store={store}><About /></Provider>
+    )
+    expect(html).toContain('5.0')
+    expect(html).toContain('10.0.0.1')
+    setInterval.mockRestore()
   })
 
   it('<Display /> derives config state without mutating previous state', () => {
