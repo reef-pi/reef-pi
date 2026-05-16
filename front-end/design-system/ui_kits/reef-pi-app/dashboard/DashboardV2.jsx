@@ -70,6 +70,7 @@ export default function DashboardV2 ({
       padding: '1rem',
       fontFamily: 'var(--reefpi-font-app)'
     }}
+    data-testid='smoke-dashboard-v2'
     >
       {/* System strip — full width */}
       <SystemStrip sseEndpoint={sseEndpoint} />
