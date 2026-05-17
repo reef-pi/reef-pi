@@ -83,9 +83,11 @@
     "jest-update-snapshot": "cross-env NODE_ENV=testing jest --coverage --all --updateSnapshot --env=jsdom",
     "test": "cross-env NODE_ENV=testing jest --all --updateSnapshot --no-cache --coverage --env=jsdom",
     "sass-lint": "sass-lint 'front-end/assets/sass/**/*.scss' --verbose",
-    "smoke": "playwright test",
-    "pw-smoke": "playwright test",
-    "pw-smoke:headed": "playwright test --headed"
+    "smoke": "playwright test --project=smoke-chromium",
+    "pw-smoke": "playwright test --project=smoke-chromium",
+    "pw-smoke:headed": "playwright test --project=smoke-chromium --headed",
+    "integration": "playwright test --project=integration-chromium",
+    "integration:headed": "playwright test --project=integration-chromium --headed"
   },
   "repository": {
     "type": "git",

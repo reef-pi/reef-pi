@@ -30,8 +30,19 @@ module.exports = defineConfig({
       testMatch: /.*\.setup\.js/
     },
     {
-      name: 'chromium',
+      name: 'smoke-chromium',
       dependencies: ['setup'],
+      testMatch: /specs\/(auth-and-shell|dashboard-and-responsive|seeded-configuration|full-smoke-coverage)\.spec\.js/,
+      use: {
+        browserName: 'chromium',
+        storageState: 'front-end/e2e/.auth/user.json'
+      }
+    },
+    {
+      name: 'integration-chromium',
+      dependencies: ['setup'],
+      testMatch: /specs\/integration\/.*\.spec\.js/,
+      timeout: 180000,
       use: {
         browserName: 'chromium',
         storageState: 'front-end/e2e/.auth/user.json'

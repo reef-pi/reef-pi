@@ -157,3 +157,7 @@ api-doc:
 .PHONY: smoke
 smoke:
 	yarn run smoke
+
+.PHONY: integration-smoke
+integration-smoke:
+	yarn run integration
