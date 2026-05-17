@@ -8,6 +8,7 @@ import (
 	"compress/flate"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,15 +17,148 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
+	"github.com/oapi-codegen/runtime"
 )
+
+const (
+	SessionAuthScopes sessionAuthContextKey = "sessionAuth.Scopes"
+)
+
+// Equipment defines model for Equipment.
+type Equipment struct {
+	// BootDelay Seconds to wait after powering on during boot sequence
+	BootDelay *int `json:"boot_delay,omitempty"`
+
+	// Id Unique identifier for the equipment
+	Id *string `json:"id,omitempty"`
+
+	// Name Name of the equipment (e.g., "Main Light", "Heater")
+	Name string `json:"name"`
+
+	// On Current power state of the equipment
+	On *bool `json:"on,omitempty"`
+
+	// Outlet Identifier of the outlet this equipment is connected to
+	Outlet string `json:"outlet"`
+
+	// StayOffOnBoot If true, equipment will not be powered on during boot sequence
+	StayOffOnBoot *bool `json:"stay_off_on_boot,omitempty"`
+}
+
+// EquipmentAction defines model for EquipmentAction.
+type EquipmentAction struct {
+	// On Desired power state for the equipment
+	On bool `json:"on"`
+}
+
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
+
+// sessionAuthContextKey is the context key for sessionAuth security scheme
+type sessionAuthContextKey string
+
+// CreateEquipmentJSONBody defines parameters for CreateEquipment.
+type CreateEquipmentJSONBody struct {
+	// BootDelay Seconds to wait before powering on during boot
+	BootDelay *int `json:"boot_delay,omitempty"`
+
+	// Name Name of the equipment
+	Name string `json:"name"`
+
+	// Outlet Outlet identifier
+	Outlet string `json:"outlet"`
+
+	// StayOffOnBoot If true, equipment will not be powered on during boot
+	StayOffOnBoot *bool `json:"stay_off_on_boot,omitempty"`
+}
+
+// UpdateEquipmentJSONBody defines parameters for UpdateEquipment.
+type UpdateEquipmentJSONBody struct {
+	// BootDelay Seconds to wait before powering on during boot
+	BootDelay *int `json:"boot_delay,omitempty"`
+
+	// Name Name of the equipment
+	Name *string `json:"name,omitempty"`
+
+	// Outlet Outlet identifier
+	Outlet *string `json:"outlet,omitempty"`
+
+	// StayOffOnBoot If true, equipment will not be powered on during boot
+	StayOffOnBoot *bool `json:"stay_off_on_boot,omitempty"`
+}
+
+// CreateEquipmentJSONRequestBody defines body for CreateEquipment for application/json ContentType.
+type CreateEquipmentJSONRequestBody CreateEquipmentJSONBody
+
+// UpdateEquipmentJSONRequestBody defines body for UpdateEquipment for application/json ContentType.
+type UpdateEquipmentJSONRequestBody UpdateEquipmentJSONBody
+
+// ControlEquipmentJSONRequestBody defines body for ControlEquipment for application/json ContentType.
+type ControlEquipmentJSONRequestBody = EquipmentAction
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// List all equipment
+	// (GET /api/equipment)
+	ListEquipment(w http.ResponseWriter, r *http.Request)
+	// Create new equipment
+	// (PUT /api/equipment)
+	CreateEquipment(w http.ResponseWriter, r *http.Request)
+	// Delete equipment
+	// (DELETE /api/equipment/{id})
+	DeleteEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// Get equipment by ID
+	// (GET /api/equipment/{id})
+	GetEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// Update equipment
+	// (POST /api/equipment/{id})
+	UpdateEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// Control equipment power state
+	// (POST /api/equipment/{id}/control)
+	ControlEquipment(w http.ResponseWriter, r *http.Request, id string)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
 
 type Unimplemented struct{}
+
+// List all equipment
+// (GET /api/equipment)
+func (_ Unimplemented) ListEquipment(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create new equipment
+// (PUT /api/equipment)
+func (_ Unimplemented) CreateEquipment(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete equipment
+// (DELETE /api/equipment/{id})
+func (_ Unimplemented) DeleteEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get equipment by ID
+// (GET /api/equipment/{id})
+func (_ Unimplemented) GetEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update equipment
+// (POST /api/equipment/{id})
+func (_ Unimplemented) UpdateEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Control equipment power state
+// (POST /api/equipment/{id}/control)
+func (_ Unimplemented) ControlEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
 
 // ServerInterfaceWrapper converts contexts to parameters.
 type ServerInterfaceWrapper struct {
@@ -34,6 +168,174 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// ListEquipment operation middleware
+func (siw *ServerInterfaceWrapper) ListEquipment(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListEquipment(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateEquipment operation middleware
+func (siw *ServerInterfaceWrapper) CreateEquipment(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateEquipment(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteEquipment operation middleware
+func (siw *ServerInterfaceWrapper) DeleteEquipment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetEquipment operation middleware
+func (siw *ServerInterfaceWrapper) GetEquipment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateEquipment operation middleware
+func (siw *ServerInterfaceWrapper) UpdateEquipment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ControlEquipment operation middleware
+func (siw *ServerInterfaceWrapper) ControlEquipment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ControlEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 type UnescapedCookieParamError struct {
 	ParamName string
@@ -142,12 +444,369 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 	}
+	wrapper := ServerInterfaceWrapper{
+		Handler:            si,
+		HandlerMiddlewares: options.Middlewares,
+		ErrorHandlerFunc:   options.ErrorHandlerFunc,
+	}
+
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/equipment", wrapper.ListEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/equipment", wrapper.CreateEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/equipment/{id}", wrapper.DeleteEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/equipment/{id}", wrapper.GetEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/equipment/{id}", wrapper.UpdateEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/equipment/{id}/control", wrapper.ControlEquipment)
+	})
 
 	return r
 }
 
+type ListEquipmentRequestObject struct {
+}
+
+type ListEquipmentResponseObject interface {
+	VisitListEquipmentResponse(w http.ResponseWriter) error
+}
+
+type ListEquipment200JSONResponse []Equipment
+
+func (response ListEquipment200JSONResponse) VisitListEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListEquipment401JSONResponse ErrorResponse
+
+func (response ListEquipment401JSONResponse) VisitListEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateEquipmentRequestObject struct {
+	Body *CreateEquipmentJSONRequestBody
+}
+
+type CreateEquipmentResponseObject interface {
+	VisitCreateEquipmentResponse(w http.ResponseWriter) error
+}
+
+type CreateEquipment200JSONResponse Equipment
+
+func (response CreateEquipment200JSONResponse) VisitCreateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateEquipment400JSONResponse ErrorResponse
+
+func (response CreateEquipment400JSONResponse) VisitCreateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateEquipment401JSONResponse ErrorResponse
+
+func (response CreateEquipment401JSONResponse) VisitCreateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteEquipmentRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteEquipmentResponseObject interface {
+	VisitDeleteEquipmentResponse(w http.ResponseWriter) error
+}
+
+type DeleteEquipment200JSONResponse ErrorResponse
+
+func (response DeleteEquipment200JSONResponse) VisitDeleteEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteEquipment401JSONResponse ErrorResponse
+
+func (response DeleteEquipment401JSONResponse) VisitDeleteEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteEquipment404JSONResponse ErrorResponse
+
+func (response DeleteEquipment404JSONResponse) VisitDeleteEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetEquipmentRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetEquipmentResponseObject interface {
+	VisitGetEquipmentResponse(w http.ResponseWriter) error
+}
+
+type GetEquipment200JSONResponse Equipment
+
+func (response GetEquipment200JSONResponse) VisitGetEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetEquipment401JSONResponse ErrorResponse
+
+func (response GetEquipment401JSONResponse) VisitGetEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetEquipment404JSONResponse ErrorResponse
+
+func (response GetEquipment404JSONResponse) VisitGetEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateEquipmentRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateEquipmentJSONRequestBody
+}
+
+type UpdateEquipmentResponseObject interface {
+	VisitUpdateEquipmentResponse(w http.ResponseWriter) error
+}
+
+type UpdateEquipment200JSONResponse Equipment
+
+func (response UpdateEquipment200JSONResponse) VisitUpdateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateEquipment400JSONResponse ErrorResponse
+
+func (response UpdateEquipment400JSONResponse) VisitUpdateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateEquipment401JSONResponse ErrorResponse
+
+func (response UpdateEquipment401JSONResponse) VisitUpdateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateEquipment404JSONResponse ErrorResponse
+
+func (response UpdateEquipment404JSONResponse) VisitUpdateEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlEquipmentRequestObject struct {
+	Id   string `json:"id"`
+	Body *ControlEquipmentJSONRequestBody
+}
+
+type ControlEquipmentResponseObject interface {
+	VisitControlEquipmentResponse(w http.ResponseWriter) error
+}
+
+type ControlEquipment200JSONResponse Equipment
+
+func (response ControlEquipment200JSONResponse) VisitControlEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlEquipment400JSONResponse ErrorResponse
+
+func (response ControlEquipment400JSONResponse) VisitControlEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlEquipment401JSONResponse ErrorResponse
+
+func (response ControlEquipment401JSONResponse) VisitControlEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlEquipment404JSONResponse ErrorResponse
+
+func (response ControlEquipment404JSONResponse) VisitControlEquipmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
+	// List all equipment
+	// (GET /api/equipment)
+	ListEquipment(ctx context.Context, request ListEquipmentRequestObject) (ListEquipmentResponseObject, error)
+	// Create new equipment
+	// (PUT /api/equipment)
+	CreateEquipment(ctx context.Context, request CreateEquipmentRequestObject) (CreateEquipmentResponseObject, error)
+	// Delete equipment
+	// (DELETE /api/equipment/{id})
+	DeleteEquipment(ctx context.Context, request DeleteEquipmentRequestObject) (DeleteEquipmentResponseObject, error)
+	// Get equipment by ID
+	// (GET /api/equipment/{id})
+	GetEquipment(ctx context.Context, request GetEquipmentRequestObject) (GetEquipmentResponseObject, error)
+	// Update equipment
+	// (POST /api/equipment/{id})
+	UpdateEquipment(ctx context.Context, request UpdateEquipmentRequestObject) (UpdateEquipmentResponseObject, error)
+	// Control equipment power state
+	// (POST /api/equipment/{id}/control)
+	ControlEquipment(ctx context.Context, request ControlEquipmentRequestObject) (ControlEquipmentResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -179,13 +838,202 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
+// ListEquipment operation middleware
+func (sh *strictHandler) ListEquipment(w http.ResponseWriter, r *http.Request) {
+	var request ListEquipmentRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListEquipment(ctx, request.(ListEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListEquipmentResponseObject); ok {
+		if err := validResponse.VisitListEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateEquipment operation middleware
+func (sh *strictHandler) CreateEquipment(w http.ResponseWriter, r *http.Request) {
+	var request CreateEquipmentRequestObject
+
+	var body CreateEquipmentJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateEquipment(ctx, request.(CreateEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateEquipmentResponseObject); ok {
+		if err := validResponse.VisitCreateEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteEquipment operation middleware
+func (sh *strictHandler) DeleteEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteEquipmentRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteEquipment(ctx, request.(DeleteEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteEquipmentResponseObject); ok {
+		if err := validResponse.VisitDeleteEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetEquipment operation middleware
+func (sh *strictHandler) GetEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetEquipmentRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetEquipment(ctx, request.(GetEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetEquipmentResponseObject); ok {
+		if err := validResponse.VisitGetEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateEquipment operation middleware
+func (sh *strictHandler) UpdateEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateEquipmentRequestObject
+
+	request.Id = id
+
+	var body UpdateEquipmentJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateEquipment(ctx, request.(UpdateEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateEquipmentResponseObject); ok {
+		if err := validResponse.VisitUpdateEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ControlEquipment operation middleware
+func (sh *strictHandler) ControlEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	var request ControlEquipmentRequestObject
+
+	request.Id = id
+
+	var body ControlEquipmentJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ControlEquipment(ctx, request.(ControlEquipmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ControlEquipment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ControlEquipmentResponseObject); ok {
+		if err := validResponse.VisitControlEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"RM2xCkIxDEbhV5F/jqXils3RzVe4XFMMaBLa4FL67oIOrocD38Tur3ATywGei6DWHDxxl7F3jVQ3MLpI",
-	"O4YeLrcrCKn5lH8F4S19/M5aajlhETzEtlAwzqWWCkJs+fgq6xMAAP//",
+	"7FjfUxs3EP5XdtQ+tB3jc5o8+Y0AkzKlhYHwFBhGPu3Zm95JZ2kFc2X8v3ckHf55LpBME9zhKXc5+dO3",
+	"u9+3K3QvclPVRqNmJ4b3wuUTrGR8PJp6qivUHF5qa2q0TBg/jYzhG4WlbMKbQpdbqpmMFkNxgbnRygEb",
+	"uJPEIAtGC7W5Q0t6DEaD8vEpgIDDqUedo+gJbmoUQ0GacYxWzHqC1Cb8paapRyCFmqkgtFAYCzxBwDnf",
+	"nrAo1akuGzFk63GO7TjsHKC1rHAT/E9ZIZhiFQ5+wv6434Mr8YckDSc0nvCVCO+/oWS0V+Jn0bFDAFzH",
+	"P/DWBsSYDXAseXO77exHxpQodQT3XCJvbnC8SEuLm1YCT8gthUQOcqM15owK2HTxdyybG1MUN0bfhFJ1",
+	"bFZA5LeEe0dlCdowjDAFierxis/jmoXQp54sKjH8lGo0j/V6vt6MPmPOgeNcovt54rQu1K4iHKILO6wU",
+	"oUtDj7AzupuStcaeo6uNdrhJqELn5Dh+WMv4GvzDws09Qm0w95a4uQhuTcAOnSOj9z1PujwZP0JuzF+E",
+	"4JBh1MDZ6cVHyKTnSeZorEn34bxlEBMiyxIyWVP2C1jjGV3/SoueoICYkMSDkURAWeRM1vQ7NmIWuJIu",
+	"zCaj86OLj7B/djzPvEUs9moCOfXSkq+CPtmaskQbcInLAPywav/sWPTELVqX4Ab9Qf9NNEaNWtYkhuJt",
+	"f9B/K3qiljyJGYqh4HJTGycLhfrIwOtYiaE4IcdHK2ZMtYwYvw4G4Z/ArcWQdV1SHn+efXZJb6mJhidi",
+	"rOIPf7RYiKH4IVu026zttdlit9kig9bKNoGriQv0grdDcRa+cz7P0bnCl2UDFtkS3qIKeO8Gb57F+F+J",
+	"rmi7g9ylDjowlv5GBXtwK0tS0CoT5uqOCvZVJW3zENBKNKHecuyCCxapuZ71RO076nVgQxderdjUo+P3",
+	"RjXPCv3LZ9wIC2Nx25DrnG3PGECd02XLADhN7X4xHr9ha//6jr66PjCYfaUBn+i7TSnPP0IeBaZWPJac",
+	"Nfh2znovFbS6hj0gnaxFOlhiF1yeXAoa7x71+ay31qqze1KzpNESGTdbwGH8/+UWUEsrK2S0Af1+a2mP",
+	"Dx/mWZgSi2lGSqwLsbeUvfXJff1fivSxaiyiSenpEurLE0dg9e57JCl0sMJ4vS7QpKEnDKHOQ8MH5P+p",
+	"/J7WI9uMvmrtSVr7gLw0WEdNEsKWM49xHXq7rJX87h3v9ZT1ck5Zu3CQ8lG0rwepne9fqft84UEua/+w",
+	"j72gs7kdpAU72d2eZJP2tuplujRdiOUTqcevXt19r7ZmWhoxS/ee24y7dMUY/bZyufjpOhjEob3ttuOJ",
+	"yWU5v88j7Vim615vSzEUmZhdz/4JAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,
