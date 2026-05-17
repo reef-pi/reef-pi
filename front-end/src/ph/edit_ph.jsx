@@ -85,6 +85,7 @@ const EditPh = ({
             <label htmlFor='name'>{i18next.t('name')}</label>
             <Field
               name='name'
+              data-testid='smoke-ph-name'
               disabled={readOnly}
               className={classNames('form-control', {
                 'is-invalid': ShowError('name', touched, errors)
@@ -102,6 +103,7 @@ const EditPh = ({
             <Field
               name='analog_input'
               component='select'
+              data-testid='smoke-ph-analog-input'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('analog_input', touched, errors)
@@ -137,6 +139,7 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='period'
+                data-testid='smoke-ph-period'
                 readOnly={readOnly}
                 type='number'
                 className={classNames('form-control', {
@@ -302,6 +305,7 @@ const EditPh = ({
             <Field
               name='control'
               component='select'
+              data-testid='smoke-ph-control'
               disabled={readOnly}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('control', touched, errors)
@@ -321,6 +325,7 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='upperThreshold'
+                data-testid='smoke-ph-upper-threshold'
                 readOnly={readOnly || values.control === '' || values.lowerFunction === undefined || values.lowerFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('upperThreshold', touched, errors)
@@ -339,6 +344,7 @@ const EditPh = ({
             <Field
               name='upperFunction'
               component='select'
+              data-testid='smoke-ph-upper-function'
               disabled={readOnly || values.control === ''}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('upperFunction', touched, errors)
@@ -360,6 +366,7 @@ const EditPh = ({
             <div className='input-group'>
               <Field
                 name='lowerThreshold'
+                data-testid='smoke-ph-lower-threshold'
                 readOnly={readOnly || values.control === '' || values.upperFunction === undefined || values.upperFunction === ''}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('lowerThreshold', touched, errors)
@@ -378,6 +385,7 @@ const EditPh = ({
             <Field
               name='lowerFunction'
               component='select'
+              data-testid='smoke-ph-lower-function'
               disabled={readOnly || values.control === ''}
               className={classNames('custom-select', {
                 'is-invalid': ShowError('lowerFunction', touched, errors)
@@ -433,6 +441,7 @@ const EditPh = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-ph-submit'
             value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

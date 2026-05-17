@@ -14,21 +14,21 @@ class TemperaturePage {
 
   async expectValidation () {
     await this.page.getByTestId('smoke-temperature-add-toggle').click()
-    await this.page.locator('.add-temperature input[type*="submit"]').click()
+    await this.page.getByTestId('smoke-temperature-submit').click()
     await expectValidationVisible(this.page)
   }
 
   async create (temperature) {
     await this.page.getByTestId('smoke-temperature-add-toggle').click()
-    await this.page.locator('.add-temperature [name="name"]').fill(temperature.name)
-    await selectByLabelOrValue(this.page.locator('.add-temperature [name="sensor"]'), temperature.sensor)
-    await this.page.locator('.add-temperature [name="period"]').fill(temperature.period)
-    await selectByLabelOrValue(this.page.locator('.add-temperature [name="control"]'), 'equipment')
-    await selectByLabelOrValue(this.page.locator('.add-temperature [name="heater"]'), temperature.heater)
-    await this.page.locator('.add-temperature [name="min"]').fill(temperature.min)
-    await selectByLabelOrValue(this.page.locator('.add-temperature [name="cooler"]'), temperature.cooler)
-    await this.page.locator('.add-temperature [name="max"]').fill(temperature.max)
-    await this.page.locator('.add-temperature input[type*="submit"]').click()
+    await this.page.getByTestId('smoke-temperature-name').fill(temperature.name)
+    await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-sensor'), temperature.sensor)
+    await this.page.getByTestId('smoke-temperature-period').fill(temperature.period)
+    await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-control'), 'equipment')
+    await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-heater'), temperature.heater)
+    await this.page.getByTestId('smoke-temperature-min').fill(temperature.min)
+    await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-cooler'), temperature.cooler)
+    await this.page.getByTestId('smoke-temperature-max').fill(temperature.max)
+    await this.page.getByTestId('smoke-temperature-submit').click()
     await expect(this.page.locator('body')).toContainText(temperature.name)
   }
 }

@@ -14,18 +14,18 @@ class PhPage {
 
   async expectValidation () {
     await this.page.getByTestId('smoke-ph-add-toggle').click()
-    await this.page.locator('.add-probe input[type*="submit"]').click()
+    await this.page.getByTestId('smoke-ph-submit').click()
     await expectValidationVisible(this.page)
   }
 
   async create (probe) {
     await this.page.getByTestId('smoke-ph-add-toggle').click()
-    await this.page.locator('.add-probe [name="name"]').fill(probe.name)
-    await this.page.locator('.add-probe [name="period"]').fill(probe.period)
-    await selectByLabelOrValue(this.page.locator('.add-probe [name="analog_input"]'), probe.analogInput)
-    await this.page.locator('.add-probe [name="lowerThreshold"]').fill(probe.min)
-    await this.page.locator('.add-probe [name="upperThreshold"]').fill(probe.max)
-    await this.page.locator('.add-probe input[type*="submit"]').click()
+    await this.page.getByTestId('smoke-ph-name').fill(probe.name)
+    await this.page.getByTestId('smoke-ph-period').fill(probe.period)
+    await selectByLabelOrValue(this.page.getByTestId('smoke-ph-analog-input'), probe.analogInput)
+    await this.page.getByTestId('smoke-ph-lower-threshold').fill(probe.min)
+    await this.page.getByTestId('smoke-ph-upper-threshold').fill(probe.max)
+    await this.page.getByTestId('smoke-ph-submit').click()
     await expect(this.page.locator('body')).toContainText(probe.name)
   }
 }
