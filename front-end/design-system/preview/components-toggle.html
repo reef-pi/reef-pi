@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Toggle switches</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 180px; padding: 20px 24px; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .ctrl { display:flex; align-items:center; gap: 10px; font-size: 14px; }
+  .sw { width: 48px; height: 26px; background: #ced4da; border-radius: 13px; position: relative; transition: background .12s; cursor: pointer; }
+  .sw::after { content:''; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: #fff; border-radius: 50%; transition: left .12s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+  .sw.on { background: #27a822; }
+  .sw.on::after { left: 24px; }
+  .meta { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; flex-basis: 100%; }
+</style>
+</head><body>
+<div class="card">
+  <div class="ctrl"><div class="sw on"></div><span>Return Pump</span></div>
+  <div class="ctrl"><div class="sw"></div><span>Skimmer</span></div>
+  <div class="ctrl"><div class="sw on"></div><span>Heater</span></div>
+  <div class="ctrl"><div class="sw"></div><span>ATO</span></div>
+  <div class="meta">react-toggle-switch · on = brand #27A822 · off = #CED4DA · thumb 22px</div>
+</div>
+</body></html>

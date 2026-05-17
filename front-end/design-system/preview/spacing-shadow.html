@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Shadow & elevation</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 180px; background:#f5faf3; padding: 28px 28px; align-items: center; gap: 24px; }
+  .ex { display:flex; flex-direction: column; align-items: center; gap: 10px; }
+  .box { width: 180px; height: 60px; background: #fff; border-radius: 10px; display:flex; align-items:center; padding: 0 14px; font-size: 13px; color:#1f2a1f; }
+  .a { border: 1px solid #d6e5d0; }
+  .b { box-shadow: 0 2px 8px rgba(31,42,31,0.14); }
+  .c { border: 1px solid #000; }
+  .lbl { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; text-align: center; }
+</style>
+</head><body>
+<div class="card">
+  <div class="ex"><div class="box a">border · base card</div><span class="lbl">1px #D6E5D0 · no shadow</span></div>
+  <div class="ex"><div class="box b">shadow · navbar only</div><span class="lbl">0 2px 8px rgba(31,42,31,.14)</span></div>
+  <div class="ex"><div class="box c">grid cell</div><span class="lbl">1px solid #000 · 10px radius</span></div>
+</div>
+</body></html>

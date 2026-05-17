@@ -1,144 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>reef-pi Design System — State Colors</title>
-  <link rel="stylesheet" href="_card.css">
-  <style>
-    h1 { margin-bottom: 2rem; }
-
-    /* Padded cards (no separate header/body split on this card) */
-    .card {
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card h2 {
-      margin: 0 0 1rem 0;
-      color: var(--reefpi-color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Swatch border uses a translucent overlay so it adapts across themes
-       without needing a separate token — rgba is not a hex literal. */
-    .swatch-color {
-      border-color: rgba(0, 0, 0, 0.10);
-    }
-
-    .label-value {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .label {
-      font-size: 0.75rem;
-      color: var(--reefpi-color-text-muted);
-    }
-  </style>
-</head>
-<body>
-  <h1>reef-pi Design System — State Colors</h1>
-
-  <div class="card">
-    <h2>State Colors</h2>
-    <div class="swatch-row">
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-pending);"></div>
-        <div class="swatch-name">pending</div>
-        <div class="swatch-value">--reefpi-color-pending</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-error);"></div>
-        <div class="swatch-name">error</div>
-        <div class="swatch-value">--reefpi-color-error</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-warn);"></div>
-        <div class="swatch-name">warn</div>
-        <div class="swatch-value">--reefpi-color-warn</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-success-strong);"></div>
-        <div class="swatch-name">success-strong</div>
-        <div class="swatch-value">--reefpi-color-success-strong</div>
-      </div>
+<!doctype html><html><head><meta charset="utf-8"><title>State tokens</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 200px; flex-direction: column; padding: 16px 20px; gap: 10px; }
+  .row { display: flex; gap: 10px; }
+  .swatch {
+    flex: 1; height: 64px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 12px; font-size: 12px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .swatch .n { font-weight: 700; }
+  .swatch .h { font-family: ui-monospace, Menlo, monospace; opacity: .85; }
+  .bands { display:flex; gap: 0; height: 22px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+  .band { flex: 1; display:flex; align-items:center; justify-content:center; font-family: ui-monospace, Menlo, monospace; font-size: 10px; }
+  .meta { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; }
+</style>
+</head><body>
+<div class="card">
+  <div class="row">
+    <div class="swatch" style="background:#eef3ec; color:#4e5f4e;">
+      <span class="n">pending</span><span class="h">#4E5F4E on #EEF3EC</span>
+    </div>
+    <div class="swatch" style="background:#fdecee; color:#dc3545; border-color:#f5c6cb;">
+      <span class="n">error</span><span class="h">#DC3545 on #FDECEE</span>
+    </div>
+    <div class="swatch" style="background:#fff8e6; color:#b77400;">
+      <span class="n">warn</span><span class="h">#B77400 on #FFF8E6</span>
+    </div>
+    <div class="swatch" style="background:#1e7e34; color:#fff;">
+      <span class="n">success-strong</span><span class="h">#1E7E34</span>
     </div>
   </div>
 
-  <div class="card">
-    <h2>Background Colors</h2>
-    <div class="swatch-row">
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-pending-bg);"></div>
-        <div class="swatch-name">pending-bg</div>
-        <div class="swatch-value">--reefpi-color-pending-bg</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-error-bg);"></div>
-        <div class="swatch-name">error-bg</div>
-        <div class="swatch-value">--reefpi-color-error-bg</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-warn-bg);"></div>
-        <div class="swatch-name">warn-bg</div>
-        <div class="swatch-value">--reefpi-color-warn-bg</div>
-      </div>
+  <div>
+    <div class="meta" style="margin-bottom: 4px;">band-safe / band-warn / band-critical (gauge ranges)</div>
+    <div class="bands">
+      <div class="band" style="background:#f5c6cb; color:#721c24;">critical</div>
+      <div class="band" style="background:#ffe6b0; color:#856404;">warn</div>
+      <div class="band" style="background:#d6e5d0; color:#267723;">safe</div>
+      <div class="band" style="background:#ffe6b0; color:#856404;">warn</div>
+      <div class="band" style="background:#f5c6cb; color:#721c24;">critical</div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>Border Colors</h2>
-    <div class="swatch-row">
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-error-border);"></div>
-        <div class="swatch-name">error-border</div>
-        <div class="swatch-value">--reefpi-color-error-border</div>
-      </div>
-    </div>
+  <div class="meta">
+    Warn ink is <b>#B77400</b> not <b>#FFC107</b> — the Bootstrap warning fails 4.5:1 on white; this passes.
   </div>
-
-  <div class="card">
-    <h2>Threshold Bands</h2>
-    <div class="swatch-row">
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-band-safe);"></div>
-        <div class="swatch-name">band-safe</div>
-        <div class="swatch-value">--reefpi-color-band-safe</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-band-warn);"></div>
-        <div class="swatch-name">band-warn</div>
-        <div class="swatch-value">--reefpi-color-band-warn</div>
-      </div>
-      <div class="swatch">
-        <div class="swatch-color" style="background-color: var(--reefpi-color-band-critical);"></div>
-        <div class="swatch-name">band-critical</div>
-        <div class="swatch-value">--reefpi-color-band-critical</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Use Cases</h2>
-    <div class="label-value">
-      <div>
-        <div class="label">Pending (in-flight state)</div>
-        <div style="padding: 1rem; background-color: var(--reefpi-color-pending-bg); border-radius: var(--reefpi-radius-sm);">Heater</div>
-      </div>
-      <div>
-        <div class="label">Error (active state)</div>
-        <div style="padding: 1rem; background-color: var(--reefpi-color-error-bg); border: 1px solid var(--reefpi-color-error-border); border-radius: var(--reefpi-radius-sm);">pH Outside Range</div>
-      </div>
-      <div>
-        <div class="label">Warn (warning state)</div>
-        <div style="padding: 1rem; background-color: var(--reefpi-color-warn-bg); border-radius: var(--reefpi-radius-sm);">LowWater ATO</div>
-      </div>
-    </div>
-  </div>
-
-  <script src="_card.js"></script>
-</body>
-</html>
+</div>
+</body></html>

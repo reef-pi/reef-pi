@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Chart palette</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 170px; flex-direction: column; padding: 16px 20px; gap: 10px; }
+  .row-top { display:flex; gap: 10px; height: 48px; }
+  .sw { flex:1; border-radius: 8px; display:flex; align-items:center; justify-content:space-between; padding: 0 12px; color: #1f2a1f; font-size: 12px; }
+  .sw .n { font-weight: 700; }
+  .chart { flex: 1; border-radius: 8px; background: #fafcf8; border: 1px solid #d6e5d0; padding: 8px; }
+  svg { width: 100%; height: 100%; display: block; }
+</style>
+</head><body>
+<div class="card">
+  <div class="row-top">
+    <div class="sw" style="background:#d4f5dc"><span class="n">CPU</span><span>#00C851</span></div>
+    <div class="sw" style="background:#ffeac2"><span class="n">Memory</span><span>#FFBB33</span></div>
+    <div class="sw" style="background:#ffd6d6"><span class="n">CPU Temp</span><span>#FF4444</span></div>
+  </div>
+  <div class="chart">
+    <svg viewBox="0 0 600 60" preserveAspectRatio="none">
+      <polyline fill="none" stroke="#00c851" stroke-width="2" points="0,40 60,35 120,32 180,28 240,30 300,25 360,20 420,22 480,18 540,22 600,19"/>
+      <polyline fill="none" stroke="#ffbb33" stroke-width="2" points="0,45 60,42 120,44 180,40 240,38 300,42 360,45 420,40 480,38 540,41 600,39"/>
+      <polyline fill="none" stroke="#ff4444" stroke-width="2" points="0,50 60,50 120,49 180,48 240,50 300,49 360,48 420,49 480,50 540,50 600,49"/>
+    </svg>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Tap target & gutters</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 160px; padding: 20px 24px; gap: 24px; align-items: center; }
+  .tap { width: 44px; height: 44px; border-radius: 6px; background: #27a822; color:#fff; display:flex; align-items:center; justify-content:center; font-weight: 700; }
+  .ruler { display:flex; align-items:center; gap: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; }
+  .gutter-box { flex: 1; background: #f5faf3; border: 1px solid #d6e5d0; border-radius: 10px; padding: 12px; display:flex; flex-direction: column; gap: 6px; }
+  .row-gutter { display:flex; align-items:center; gap: 10px; }
+  .edge { width: 12px; height: 24px; background: #27a822; border-radius: 2px; }
+  .edge-md { width: 16px; }
+  .inner { flex:1; height: 24px; background: #fff; border: 1px dashed #d6e5d0; border-radius: 4px; display:flex; align-items:center; justify-content:center; font-size: 11px; color:#4e5f4e; }
+</style>
+</head><body>
+<div class="card">
+  <div style="display:flex; flex-direction: column; align-items: center; gap: 8px;">
+    <div class="tap">+</div>
+    <div class="ruler">44px min</div>
+    <div class="ruler" style="font-size: 10px;">--tap-target-min</div>
+  </div>
+  <div class="gutter-box">
+    <div style="font-size:12px; font-weight:700;">Shell gutter</div>
+    <div class="row-gutter"><span class="edge"></span><span class="inner">viewport &lt; 768px · 12px</span><span class="edge"></span></div>
+    <div class="row-gutter"><span class="edge edge-md"></span><span class="inner">viewport ≥ 768px · 16px</span><span class="edge edge-md"></span></div>
+    <div style="font-size:11px; color:#4e5f4e; font-family: ui-monospace, Menlo, monospace;">.container-fluid · row-gap: 1rem on .body-panel</div>
+  </div>
+</div>
+</body></html>
