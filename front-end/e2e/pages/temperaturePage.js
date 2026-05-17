@@ -19,8 +19,11 @@ class TemperaturePage {
   }
 
   async create (temperature) {
-    await this.page.getByTestId('smoke-temperature-add-toggle').click()
-    await this.page.getByTestId('smoke-temperature-name').fill(temperature.name)
+    const name = this.page.getByTestId('smoke-temperature-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-temperature-add-toggle').click()
+    }
+    await name.fill(temperature.name)
     await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-sensor'), temperature.sensor)
     await this.page.getByTestId('smoke-temperature-period').fill(temperature.period)
     await selectByLabelOrValue(this.page.getByTestId('smoke-temperature-control'), 'equipment')

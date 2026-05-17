@@ -19,8 +19,11 @@ class PhPage {
   }
 
   async create (probe) {
-    await this.page.getByTestId('smoke-ph-add-toggle').click()
-    await this.page.getByTestId('smoke-ph-name').fill(probe.name)
+    const name = this.page.getByTestId('smoke-ph-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-ph-add-toggle').click()
+    }
+    await name.fill(probe.name)
     await this.page.getByTestId('smoke-ph-period').fill(probe.period)
     await selectByLabelOrValue(this.page.getByTestId('smoke-ph-analog-input'), probe.analogInput)
     await this.page.getByTestId('smoke-ph-lower-threshold').fill(probe.min)

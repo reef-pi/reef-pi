@@ -19,8 +19,11 @@ class EquipmentPage {
   }
 
   async create (equipment) {
-    await this.page.getByTestId('smoke-equipment-add-toggle').click()
-    await this.page.getByTestId('smoke-equipment-name').fill(equipment.name)
+    const name = this.page.getByTestId('smoke-equipment-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-equipment-add-toggle').click()
+    }
+    await name.fill(equipment.name)
     await selectByLabelOrValue(this.page.getByTestId('smoke-equipment-outlet'), equipment.outlet)
     await this.page.getByTestId('smoke-equipment-submit').click()
     await expect(this.page.locator('body')).toContainText(equipment.name)

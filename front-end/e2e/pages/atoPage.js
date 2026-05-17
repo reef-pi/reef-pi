@@ -19,8 +19,11 @@ class AtoPage {
   }
 
   async create (ato) {
-    await this.page.getByTestId('smoke-ato-add-toggle').click()
-    await this.page.getByTestId('smoke-ato-name').fill(ato.name)
+    const name = this.page.getByTestId('smoke-ato-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-ato-add-toggle').click()
+    }
+    await name.fill(ato.name)
     await selectByLabelOrValue(this.page.getByTestId('smoke-ato-inlet'), ato.inlet)
     await this.page.getByTestId('smoke-ato-period').fill(ato.period)
     await selectByLabelOrValue(this.page.getByTestId('smoke-ato-control'), 'equipment')

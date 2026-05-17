@@ -19,8 +19,11 @@ class LightingPage {
   }
 
   async create (light) {
-    await this.page.getByTestId('smoke-light-add-toggle').click()
-    await this.page.getByTestId('smoke-light-name').fill(light.name)
+    const name = this.page.getByTestId('smoke-light-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-light-add-toggle').click()
+    }
+    await name.fill(light.name)
     await selectByLabelOrValue(this.page.getByTestId('smoke-light-jack'), light.jack)
     await this.page.getByTestId('smoke-light-submit').click()
     await expect(this.page.locator('body')).toContainText(light.name)

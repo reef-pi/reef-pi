@@ -19,8 +19,11 @@ class MacrosPage {
   }
 
   async createEquipmentWaitMacro (name, equipmentName) {
-    await this.page.getByTestId('smoke-macro-add-toggle').click()
-    await this.page.locator('.add-macro [name="name"]').fill(name)
+    const nameInput = this.page.locator('.add-macro [name="name"]')
+    if (!await nameInput.isVisible()) {
+      await this.page.getByTestId('smoke-macro-add-toggle').click()
+    }
+    await nameInput.fill(name)
     await this.page.getByTestId('smoke-macro-add-step').click()
     await selectByLabelOrValue(this.page.locator('[name="steps.0.type"]'), 'equipment')
     await selectByLabelOrValue(this.page.locator('[name="steps.0.id"]'), equipmentName)

@@ -19,8 +19,11 @@ class DoserPage {
   }
 
   async createDcPump (doser) {
-    await this.page.getByTestId('smoke-doser-add-toggle').click()
-    await this.page.getByTestId('smoke-doser-name').fill(doser.name)
+    const name = this.page.getByTestId('smoke-doser-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-doser-add-toggle').click()
+    }
+    await name.fill(doser.name)
     await this.page.getByTestId('smoke-doser-type').selectOption('dcpump')
     await selectByLabelOrValue(this.page.getByTestId('smoke-doser-jack'), doser.jack)
     await selectByLabelOrValue(this.page.getByTestId('smoke-doser-pin'), doser.pin)

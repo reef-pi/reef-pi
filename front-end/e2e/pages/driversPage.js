@@ -18,8 +18,11 @@ class DriversPage {
   }
 
   async create (driver) {
-    await this.page.getByTestId('smoke-driver-add-toggle').click()
-    await this.page.getByTestId('smoke-driver-name').fill(driver.name)
+    const name = this.page.getByTestId('smoke-driver-name')
+    if (!await name.isVisible()) {
+      await this.page.getByTestId('smoke-driver-add-toggle').click()
+    }
+    await name.fill(driver.name)
     await this.page.getByTestId('smoke-driver-type').selectOption(driver.type)
 
     const address = this.page.locator('[name="config.address"]')
