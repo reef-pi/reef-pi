@@ -137,7 +137,7 @@ func TestSignInFailure(t *testing.T) {
 	defer func() { store.Close(); os.Remove("auth-signin-fail-test.db") }()
 
 	tr := NewTestRouter()
-	tr.Router.HandleFunc("/sign_in", a.SignIn).Methods("POST")
+	tr.Router.Post("/sign_in", a.SignIn)
 
 	// Wrong password — should not succeed
 	body := new(bytes.Buffer)
@@ -155,7 +155,7 @@ func TestSignInEmptyBody(t *testing.T) {
 	defer func() { store.Close(); os.Remove("auth-signin-empty-test.db") }()
 
 	tr := NewTestRouter()
-	tr.Router.HandleFunc("/sign_in", a.SignIn).Methods("POST")
+	tr.Router.Post("/sign_in", a.SignIn)
 
 	// No body should return 400
 	req := httptest.NewRequest("POST", "/sign_in", nil)
@@ -260,10 +260,10 @@ func TestAuth(t *testing.T) {
 		t.Fatal(err)
 	}
 	tr := NewTestRouter()
-	tr.Router.HandleFunc("/sign_in", r.SignIn).Methods("GET")
-	tr.Router.HandleFunc("/sign_out", r.SignOut).Methods("GET")
-	tr.Router.HandleFunc("/creds", r.UpdateCredentials).Methods("POST")
-	tr.Router.HandleFunc("/me", r.Me).Methods("GET")
+	tr.Router.Get("/sign_in", r.SignIn)
+	tr.Router.Get("/sign_out", r.SignOut)
+	tr.Router.Post("/creds", r.UpdateCredentials)
+	tr.Router.Get("/me", r.Me)
 	body := new(bytes.Buffer)
 	body.Write([]byte(`{"user":"reef-pi", "password":"reef-pi"}`))
 	if err := tr.Do("GET", "/sign_in", body, nil); err != nil {
