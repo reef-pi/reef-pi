@@ -149,6 +149,7 @@ func (r *ReefPi) loadSubsystems() error {
 	if r.settings.Capabilities.Equipment {
 		eqs = equipment.New(r)
 		r.subsystems.Load(equipment.Bucket, eqs)
+		r.equipment = eqs
 	}
 	if err := r.loadATOSubsystem(eqs); err != nil {
 		log.Println("ERROR: Failed to load ATO subsystem. Error:", err)

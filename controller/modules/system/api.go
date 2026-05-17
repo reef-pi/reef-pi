@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -18,106 +18,24 @@ type InstallReq struct {
 	Version string `json:"version"`
 }
 
-func (c *Controller) LoadAPI(r *mux.Router) {
-
-	// swagger:route POST /api/display/on Display systemDisplayOn
-	// Turn display on.
-	// Turn display on.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/display/on", c.EnableDisplay).Methods("POST")
-
-	// swagger:route POST /api/display/off Display systemDisplayOff
-	// Turn display off.
-	// Turn display off.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/display/off", c.DisableDisplay).Methods("POST")
-
-	// swagger:operation POST /api/display Display systemDisplayPost
-	// Set display brigthness
-	// Set display brightness
-	// ---
-	// parameters:
-	//  - in: body
-	//    name: displayconfig
-	//    required: true
-	//    schema:
-	//     $ref: '#/definitions/displayConfig'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/display", c.SetBrightness).Methods("POST")
-
-	// swagger:route GET /api/display Display systemDisplayGet
-	// Get current display state.
-	// Get current display state.
-	// responses:
-	//  200: displayState
-	r.HandleFunc("/api/display", c.GetDisplayState).Methods("GET")
-
-	// swagger:route POST /api/admin/poweroff Admin adminPowerOff
-	// Shut down the raspberry pi.
-	// Shut down the raspberry pi.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/poweroff", c.Poweroff).Methods("POST")
-
-	// swagger:route POST /api/admin/reboot Admin adminReboot
-	// Reboot the raspberry pi.
-	// Reboot the raspberry pi.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/reboot", c.Reboot).Methods("POST")
-
-	// swagger:route POST /api/admin/reload Admin adminReload
-	// Reload reef-pi.
-	// Reload reef-pi to apply any capability changes or other modules that are registered at startup.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/reload", c.reload).Methods("POST")
-
-	// swagger:route POST /api/admin/upgrade Admin adminUpgrade
-	// Upgrade reef-pi.
-	// Upgrade reef-pi.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/upgrade", c.upgrade).Methods("POST")
-
-	// swagger:route GET /api/admin/reef-pi.db Admin dbExport
-	// Download current reef-pi database.
-	// Download current reef-pi database.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/reef-pi.db", c.dbExport).Methods("GET")
-
-	// swagger:route POST /api/admin/reef-pi.db Admin dbImport
-	// Import reef-pi database.
-	// Import reef-pi database.
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/admin/reef-pi.db", c.dbImport).Methods("POST")
-
-	// swagger:route GET /api/info Admin adminInfo
-	// Get system summary.
-	// Get system summary.
-	// responses:
-	//  200: systemSummary
-	r.HandleFunc("/api/info", c.GetSummary).Methods("GET")
+func (c *Controller) LoadAPI(r chi.Router) {
+	r.Post("/api/display/on", c.EnableDisplay)
+	r.Post("/api/display/off", c.DisableDisplay)
+	r.Post("/api/display", c.SetBrightness)
+	r.Get("/api/display", c.GetDisplayState)
+	r.Post("/api/admin/poweroff", c.Poweroff)
+	r.Post("/api/admin/reboot", c.Reboot)
+	r.Post("/api/admin/reload", c.reload)
+	r.Post("/api/admin/upgrade", c.upgrade)
+	r.Get("/api/admin/reef-pi.db", c.dbExport)
+	r.Post("/api/admin/reef-pi.db", c.dbImport)
+	r.Get("/api/info", c.GetSummary)
 	if c.config.Pprof {
 		c.enablePprof(r)
 	}
 }
 
-func (c *Controller) enablePprof(r *mux.Router) {
+func (c *Controller) enablePprof(r chi.Router) {
 	r.HandleFunc("/debug/pprof/", pprof.Index)
 	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
 	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
