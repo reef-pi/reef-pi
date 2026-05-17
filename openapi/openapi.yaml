@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: reef-pi API
+  description: REST API for the reef-pi aquarium controller
+  version: 0.0.1
+servers:
+  - url: /
+    description: Local reef-pi instance
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: auth
+      description: >
+        Session cookie set by POST /auth/signin. Required for all /api/* routes.
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+security:
+  - sessionAuth: []
+paths: {}
