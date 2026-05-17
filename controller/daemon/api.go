@@ -6,6 +6,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/reef-pi/reef-pi/controller/api"
+	"github.com/reef-pi/reef-pi/controller/api/gen"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -21,6 +23,12 @@ func (r *ReefPi) UnAuthenticatedAPI(router chi.Router) {
 
 // Authenticated API using the BasicAuth middleware
 func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
+	// Generated strict handler — handles all OpenAPI-migrated modules.
+	if r.equipment != nil {
+		apiServer := api.NewReefPiServer(r.equipment)
+		gen.HandlerWithOptions(gen.NewStrictHandler(apiServer, nil), gen.ChiServerOptions{BaseRouter: router})
+	}
+
 	r.registerCoreAPI(router)
 	r.registerTelemetryAPI(router)
 	r.registerErrorAPI(router)
