@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Text & borders</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 180px; flex-direction: column; gap: 10px; }
+  .group { display:flex; gap: 10px; flex: 1; }
+  .swatch { flex: 1; }
+  .tok { color: #fff; }
+  .dot { border: 2px solid; border-radius: 6px; background: #fff; color: #1f2a1f; }
+</style>
+</head><body>
+<div class="card">
+  <div class="group">
+    <div class="swatch tok" style="background:#1f2a1f"><span class="name">Text</span><span class="hex">#1F2A1F</span></div>
+    <div class="swatch tok" style="background:#4e5f4e"><span class="name">Text · Muted</span><span class="hex">#4E5F4E</span></div>
+    <div class="swatch tok" style="background:#2e2e2e"><span class="name">Text · Strong</span><span class="hex">#2E2E2E</span></div>
+  </div>
+  <div class="group">
+    <div class="swatch dot" style="border-color:#d6e5d0"><span class="name">Border</span><span class="hex">#D6E5D0</span></div>
+    <div class="swatch dot" style="border-color:#cccccc"><span class="name">Border · Subtle</span><span class="hex">#CCCCCC</span></div>
+    <div class="swatch dot" style="border-color:#000000"><span class="name">Border · Strong</span><span class="hex">#000000</span></div>
+  </div>
+</div>
+</body></html>
