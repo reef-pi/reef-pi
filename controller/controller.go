@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -10,7 +10,7 @@ import (
 
 type Subsystem interface {
 	Setup() error
-	LoadAPI(*mux.Router)
+	LoadAPI(chi.Router)
 	Start()
 	Stop()
 	On(string, bool) error
