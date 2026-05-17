@@ -1,0 +1,35 @@
+Equipment:
+  type: object
+  required:
+    - name
+    - outlet
+  properties:
+    id:
+      type: string
+      readOnly: true
+      description: Unique identifier for the equipment
+    name:
+      type: string
+      description: Name of the equipment (e.g., "Main Light", "Heater")
+    outlet:
+      type: string
+      description: Identifier of the outlet this equipment is connected to
+    on:
+      type: boolean
+      readOnly: true
+      description: Current power state of the equipment
+    stay_off_on_boot:
+      type: boolean
+      description: If true, equipment will not be powered on during boot sequence
+    boot_delay:
+      type: integer
+      description: Seconds to wait after powering on during boot sequence
+
+EquipmentAction:
+  type: object
+  required:
+    - on
+  properties:
+    on:
+      type: boolean
+      description: Desired power state for the equipment
