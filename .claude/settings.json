@@ -9,15 +9,6 @@
             "command": "bash .claude/hooks/block-commit-on-main.sh"
           }
         ]
-      },
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/block-execution-on-main.sh"
-          }
-        ]
       }
     ]
   }
