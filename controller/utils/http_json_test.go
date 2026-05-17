@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 type mockResponseWriter struct {
@@ -97,7 +98,9 @@ func TestJSONResponseWithStatus(t *testing.T) {
 
 func TestJSONGetResponseWritesPayloadAndNotFound(t *testing.T) {
 	req := httptest.NewRequest("GET", "/api/test/7", strings.NewReader("{}"))
-	req = mux.SetURLVars(req, map[string]string{"id": "7"})
+	rctx7 := chi.NewRouteContext()
+	rctx7.URLParams.Add("id", "7")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx7))
 	rr := httptest.NewRecorder()
 
 	JSONGetResponse(func(id string) (interface{}, error) {
@@ -115,7 +118,9 @@ func TestJSONGetResponseWritesPayloadAndNotFound(t *testing.T) {
 	}
 
 	req = httptest.NewRequest("GET", "/api/test/8", strings.NewReader("{}"))
-	req = mux.SetURLVars(req, map[string]string{"id": "8"})
+	rctx8 := chi.NewRouteContext()
+	rctx8.URLParams.Add("id", "8")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx8))
 	rr = httptest.NewRecorder()
 	JSONGetResponse(func(string) (interface{}, error) {
 		return nil, fmt.Errorf("missing")
@@ -189,7 +194,9 @@ func TestJSONCreateUpdateDeleteResponseStatusPaths(t *testing.T) {
 	t.Run("update passes route id", func(t *testing.T) {
 		var payload map[string]string
 		req := httptest.NewRequest("POST", "/api/test/9", strings.NewReader(`{"name":"updated"}`))
-		req = mux.SetURLVars(req, map[string]string{"id": "9"})
+		rctx9 := chi.NewRouteContext()
+		rctx9.URLParams.Add("id", "9")
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx9))
 		rr := httptest.NewRecorder()
 
 		JSONUpdateResponse(&payload, func(id string) error {
@@ -209,7 +216,9 @@ func TestJSONCreateUpdateDeleteResponseStatusPaths(t *testing.T) {
 
 	t.Run("delete reports callback errors", func(t *testing.T) {
 		req := httptest.NewRequest("DELETE", "/api/test/10", strings.NewReader("{}"))
-		req = mux.SetURLVars(req, map[string]string{"id": "10"})
+		rctx10 := chi.NewRouteContext()
+		rctx10.URLParams.Add("id", "10")
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx10))
 		rr := httptest.NewRecorder()
 
 		JSONDeleteResponse(func(id string) error {
@@ -239,7 +248,9 @@ func TestJSONUpdateResponseInvalidJSONAndCallbackError(t *testing.T) {
 	t.Run("invalid json", func(t *testing.T) {
 		var payload map[string]string
 		req := httptest.NewRequest("POST", "/api/test/11", strings.NewReader(`{`))
-		req = mux.SetURLVars(req, map[string]string{"id": "11"})
+		rctx11 := chi.NewRouteContext()
+		rctx11.URLParams.Add("id", "11")
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx11))
 		rr := httptest.NewRecorder()
 
 		JSONUpdateResponse(&payload, func(string) error {
@@ -262,7 +273,9 @@ func TestJSONUpdateResponseInvalidJSONAndCallbackError(t *testing.T) {
 	t.Run("callback error", func(t *testing.T) {
 		var payload map[string]string
 		req := httptest.NewRequest("POST", "/api/test/12", strings.NewReader(`{"name":"updated"}`))
-		req = mux.SetURLVars(req, map[string]string{"id": "12"})
+		rctx12 := chi.NewRouteContext()
+		rctx12.URLParams.Add("id", "12")
+		req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx12))
 		rr := httptest.NewRecorder()
 
 		JSONUpdateResponse(&payload, func(id string) error {
@@ -278,7 +291,9 @@ func TestJSONUpdateResponseInvalidJSONAndCallbackError(t *testing.T) {
 
 func TestJSONDeleteResponseSuccessPassesRouteID(t *testing.T) {
 	req := httptest.NewRequest("DELETE", "/api/test/13", strings.NewReader("{}"))
-	req = mux.SetURLVars(req, map[string]string{"id": "13"})
+	rctx13 := chi.NewRouteContext()
+	rctx13.URLParams.Add("id", "13")
+	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx13))
 	rr := httptest.NewRecorder()
 	called := false
 

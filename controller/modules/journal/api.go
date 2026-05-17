@@ -6,19 +6,19 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (s *Subsystem) LoadAPI(r *mux.Router) {
-	r.HandleFunc("/api/journal/{id}", s.get).Methods("GET")
-	r.HandleFunc("/api/journal", s.list).Methods("GET")
-	r.HandleFunc("/api/journal", s.create).Methods("PUT")
-	r.HandleFunc("/api/journal/{id}", s.update).Methods("POST")
-	r.HandleFunc("/api/journal/{id}", s.delete).Methods("DELETE")
-	r.HandleFunc("/api/journal/{id}/record", s.record).Methods("POST")
-	r.HandleFunc("/api/journal/{id}/usage", s.getUsage).Methods("GET")
+func (s *Subsystem) LoadAPI(r chi.Router) {
+	r.Get("/api/journal/{id}", s.get)
+	r.Get("/api/journal", s.list)
+	r.Put("/api/journal", s.create)
+	r.Post("/api/journal/{id}", s.update)
+	r.Delete("/api/journal/{id}", s.delete)
+	r.Post("/api/journal/{id}/record", s.record)
+	r.Get("/api/journal/{id}/usage", s.getUsage)
 }
 
 func (s *Subsystem) get(w http.ResponseWriter, r *http.Request) {

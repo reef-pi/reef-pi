@@ -6,7 +6,7 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/hal"
 
@@ -97,114 +97,13 @@ func (c *Jacks) Delete(id string) error {
 	return c.repo.Delete(id)
 }
 
-func (c *Jacks) LoadAPI(r *mux.Router) {
-
-	// swagger:route GET /api/jacks Jack jackList
-	// List all jacks.
-	// List all jacks in reef-pi.
-	// responses:
-	// 	200: body:[]jack
-	// 	500:
-	r.HandleFunc("/api/jacks", c.list).Methods("GET")
-
-	// swagger:operation GET /api/jacks/{id} Jack jackGet
-	// Get a Jack by id.
-	// Get an existing Jack.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the jack
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//   schema:
-	//    $ref: '#/definitions/jack'
-	//  404:
-	//   description: Not Found
-	r.HandleFunc("/api/jacks/{id}", c.get).Methods("GET")
-
-	// swagger:operation PUT /api/jacks Jack jackCreate
-	// Create a Jack.
-	// Create a new Jack.
-	// ---
-	// parameters:
-	//  - in: body
-	//    name: jack
-	//    description: The jack to create
-	//    required: true
-	//    schema:
-	//     $ref: '#/definitions/jack'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/jacks", c.create).Methods("PUT")
-
-	//swagger:operation POST /api/jacks/{id} Jack jackUpdate
-	// Update a Jack.
-	// Update an existing Jack.
-	//
-	//---
-	//parameters:
-	// - in: path
-	//   name: id
-	//   description: The Id of the jack to update
-	//   required: true
-	//   schema:
-	//    type: integer
-	// - in: body
-	//   name: jack
-	//   description: The jack to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/jack'
-	//responses:
-	// 200:
-	//  description: OK
-	// 404:
-	//  description: Not Found
-	r.HandleFunc("/api/jacks/{id}", c.update).Methods("POST")
-
-	// swagger:operation DELETE /api/jacks/{id} Jack jackDelete
-	// Delete a Jack.
-	// Delete an existing Jack.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the jack to delete
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/jacks/{id}", c.delete).Methods("DELETE")
-
-	// swagger:operation POST /api/jacks/{id}/control Jack jackControl
-	// Control a Jack.
-	// Control a Jack.
-	// ---
-	//parameters:
-	// - in: path
-	//   name: id
-	//   description: The Id of the jack to control
-	//   required: true
-	//   schema:
-	//    type: integer
-	// - in: body
-	//   name: jack
-	//   description: The jack to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/jack'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/jacks/{id}/control", c.control).Methods("POST")
+func (c *Jacks) LoadAPI(r chi.Router) {
+	r.Get("/api/jacks", c.list)
+	r.Get("/api/jacks/{id}", c.get)
+	r.Put("/api/jacks", c.create)
+	r.Post("/api/jacks/{id}", c.update)
+	r.Delete("/api/jacks/{id}", c.delete)
+	r.Post("/api/jacks/{id}/control", c.control)
 }
 
 type PinValues map[int]float64

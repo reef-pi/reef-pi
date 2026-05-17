@@ -21,9 +21,9 @@ func TestAPI(t *testing.T) {
 	store.CreateBucket("telemetry")
 	store.Update("telemetry", DBKey, DefaultTelemetryConfig)
 	tele := TestTelemetry(store)
-	tr.Router.HandleFunc("/api/telemetry", tele.GetConfig).Methods("GET")
-	tr.Router.HandleFunc("/api/telemetry", tele.UpdateConfig).Methods("POST")
-	tr.Router.HandleFunc("/api/telemetry/test_message", tele.SendTestMessage).Methods("POST")
+	tr.Router.Get("/api/telemetry", tele.GetConfig)
+	tr.Router.Post("/api/telemetry", tele.UpdateConfig)
+	tr.Router.Post("/api/telemetry/test_message", tele.SendTestMessage)
 	body := new(bytes.Buffer)
 	if err := tr.Do("GET", "/api/telemetry", body, nil); err != nil {
 		t.Fatal("Failed to config using api. Error:", err)

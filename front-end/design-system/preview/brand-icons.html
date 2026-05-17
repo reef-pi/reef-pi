@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Iconography</title>
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  .card { height: 170px; flex-direction: column; padding: 20px 24px; gap: 12px; }
+  .row { display:flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .icon { width: 40px; height: 40px; border-radius: 8px; background:#f5faf3; border:1px solid #d6e5d0; display:flex; align-items:center; justify-content:center; color: #267723; font-size: 18px; }
+  .lbl { font-size: 11px; color:#4e5f4e; font-family: ui-monospace, Menlo, monospace; }
+  .cell { display:flex; flex-direction: column; align-items:center; gap: 4px; }
+  .note { font-size: 12px; color:#4e5f4e; line-height: 1.5; }
+</style>
+</head><body>
+<div class="card">
+  <div class="row">
+    <div class="cell"><div class="icon"><i class="fa-solid fa-gauge-high"></i></div><span class="lbl">dashboard</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-plug"></i></div><span class="lbl">equipment</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-lightbulb"></i></div><span class="lbl">lighting</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-temperature-half"></i></div><span class="lbl">temperature</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-droplet"></i></div><span class="lbl">ph</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-fill-drip"></i></div><span class="lbl">doser</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-camera"></i></div><span class="lbl">camera</span></div>
+    <div class="cell"><div class="icon"><i class="fa-solid fa-clock"></i></div><span class="lbl">timers</span></div>
+  </div>
+  <div class="note">
+    <b>Font Awesome 6</b> via CDN · matches the marketing site's FA4.7 family · flat, monochromatic, thin stroke. No emoji. No custom SVG set.
+  </div>
+</div>
+</body></html>

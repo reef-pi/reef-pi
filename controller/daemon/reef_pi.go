@@ -8,6 +8,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
+	equipmentModule "github.com/reef-pi/reef-pi/controller/modules/equipment"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
@@ -25,6 +26,7 @@ type ReefPi struct {
 	h          telemetry.HealthChecker
 	dm         *device_manager.DeviceManager
 	subsystems *controller.SubsystemComposite
+	equipment  *equipmentModule.Controller
 }
 
 func New(version, database string) (*ReefPi, error) {

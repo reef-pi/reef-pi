@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>reef-pi · font candidates</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Jost:wght@400;500;600&family=Outfit:wght@400;500;600&family=Nunito:wght@400;500;600;700&family=Questrial&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"/>
+<style>
+  :root {
+    --paper: #FAFAF7;
+    --cream: #F0EEE9;
+    --ink: #1B1B1F;
+    --mute: #6B6B73;
+    --brand: #1F8A5B;
+    --brandDeep: #155E40;
+    --brandLight: #EAF4EE;
+    --border: #EDEDE6;
+    --coral: #FF6B5B;
+  }
+  html, body { margin: 0; background: var(--cream); color: var(--ink); }
+  body { font-family: 'Manrope', system-ui, sans-serif; padding: 48px 32px 96px; max-width: 1160px; margin: 0 auto; }
+
+  h1 { font-size: 36px; font-weight: 600; letter-spacing: -.02em; margin: 0 0 6px; }
+  h1 + p { color: var(--mute); margin: 0 0 32px; font-size: 15px; }
+
+  .pick {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--brandDeep) 100%);
+    color: #fff; border-radius: 18px; padding: 28px 32px; margin-bottom: 28px;
+    display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end;
+  }
+  .pick .kicker { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; opacity: .8; }
+  .pick h2 { margin: 6px 0 4px; font-size: 32px; font-weight: 600; letter-spacing: -.02em; }
+  .pick p { margin: 4px 0 0; opacity: .9; max-width: 56ch; line-height: 1.5; }
+  .pick .pair {
+    text-align: right; font-size: 13px; opacity: .92;
+  }
+  .pick .pair strong { display: block; font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+  .pick .pair em { font-style: normal; opacity: .7; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card {
+    background: var(--paper); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px 22px 18px; box-shadow: 0 1px 0 rgba(20,20,40,.02), 0 1px 3px rgba(20,20,40,.03);
+  }
+  .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .head .name { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .head .meta { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .08em; }
+
+  .specimen .alpha { font-size: 30px; letter-spacing: -.015em; line-height: 1.1; margin: 4px 0 6px; font-weight: 500; }
+  .specimen .lower { font-size: 16px; color: var(--mute); margin: 0 0 14px; letter-spacing: 0; }
+
+  .tile {
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px;
+    margin-top: 6px;
+  }
+  .tile .label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); font-weight: 500; }
+  .tile .num { font-size: 36px; font-weight: 500; line-height: 1; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
+  .tile .num .unit { font-size: 16px; color: var(--mute); margin-left: 2px; }
+  .tile .trend { font-size: 11px; color: var(--brand); }
+
+  .notes { margin-top: 12px; font-size: 12px; color: var(--mute); line-height: 1.5; }
+  .notes b { color: var(--ink); font-weight: 600; }
+
+  /* font families per card */
+  .f-manrope, .f-manrope .num, .f-manrope .specimen { font-family: 'Manrope', system-ui, sans-serif; }
+  .f-jost { font-family: 'Jost', system-ui, sans-serif; }
+  .f-outfit { font-family: 'Outfit', system-ui, sans-serif; }
+  .f-nunito { font-family: 'Nunito', system-ui, sans-serif; }
+  .f-questrial { font-family: 'Questrial', system-ui, sans-serif; }
+
+  .num.jb { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .num.plex { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .summary { margin-top: 36px; background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+  .summary h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+  .summary table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary th, .summary td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
+  .summary th { font-weight: 500; color: var(--mute); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+  .summary tr:last-child td { border-bottom: none; }
+  .summary .pickRow { background: rgba(31,138,91,.06); }
+  .summary .pickRow td:first-child { font-weight: 600; color: var(--brand); }
+
+  .mono-row { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mono-card .num { font-size: 28px; }
+</style>
+</head>
+<body>
+
+<h1>An open-source font for reef-pi</h1>
+<p>Five geometric sans candidates, each shown with body copy and a Bento OS tile readout. Picked against Century Gothic DNA, weight range needs, and Pi-over-LAN bundle size.</p>
+
+<section class="pick">
+  <div>
+    <div class="kicker">Recommendation</div>
+    <h2 style="font-family:'Manrope', sans-serif;">Manrope + JetBrains Mono</h2>
+    <p>Manrope keeps the geometric, round Century Gothic character that defines the reef-pi voice — but supplies the 400 / 500 / 600 / 700 range Bento OS tiles depend on. JetBrains Mono pairs naturally for the big monospace numerics (gauges, sparkline readouts, threshold values). Both are SIL OFL, both load fast.</p>
+  </div>
+  <div class="pair">
+    <em>Body / display</em>
+    <strong style="font-family:'Manrope', sans-serif;">Manrope</strong>
+    <em style="margin-top:10px;display:block;">Numeric / mono</em>
+    <strong style="font-family:'JetBrains Mono', monospace;">JetBrains Mono</strong>
+  </div>
+</section>
+
+<div class="grid">
+
+  <!-- Manrope -->
+  <div class="card f-manrope">
+    <div class="head">
+      <span class="name">Manrope · pick</span>
+      <span class="meta">SIL OFL · 200–800</span>
+    </div>
+    <div class="specimen">
+      <div class="alpha">Auto Top Off</div>
+      <p class="lower">Temperature · pH · Salinity · Equipment</p>
+      <div class="tile">
+        <div>
+          <div class="label">Display tank</div>
+          <div class="num jb">78.4<span class="unit">°F</span></div>
+        </div>
+        <div class="trend">▲ 0.2 · 1h</div>
+      </div>
+      <p class="notes"><b>Why:</b> Round geometric bowls, single-story 'a', humanist proportions — closest open-source match to Century Gothic that also ships a real weight ladder. Calm, modern, technical without being cold.</p>
+    </div>
+  </div>
+
+  <!-- Jost -->
+  <div class="card f-jost">
+    <div class="head">
+      <span class="name">Jost · closest to Futura</span>
+      <span class="meta">SIL OFL · 100–900</span>
+    </div>
+    <div class="specimen">
+      <div class="alpha">Auto Top Off</div>
+      <p class="lower">Temperature · pH · Salinity · Equipment</p>
+      <div class="tile">
+        <div>
+          <div class="label">Display tank</div>
+          <div class="num jb">78.4<span class="unit">°F</span></div>
+        </div>
+        <div class="trend">▲ 0.2 · 1h</div>
+      </div>
+      <p class="notes"><b>Why:</b> The most literal Century Gothic substitute — single-story 'a', perfectly geometric. <b>But:</b> reads slightly retro / mid-century. Loses the workshop-engineer character the reef-pi voice cultivates.</p>
+    </div>
+  </div>
+
+  <!-- Outfit -->
+  <div class="card f-outfit">
+    <div class="head">
+      <span class="name">Outfit · modern</span>
+      <span class="meta">SIL OFL · 100–900</span>
+    </div>
+    <div class="specimen">
+      <div class="alpha">Auto Top Off</div>
+      <p class="lower">Temperature · pH · Salinity · Equipment</p>
+      <div class="tile">
+        <div>
+          <div class="label">Display tank</div>
+          <div class="num jb">78.4<span class="unit">°F</span></div>
+        </div>
+        <div class="trend">▲ 0.2 · 1h</div>
+      </div>
+      <p class="notes"><b>Why:</b> Clean, contemporary geometric sans, full weight range. <b>But:</b> tighter spacing, narrower bowls — drifts toward generic "designer brand" feel. Not enough Century Gothic DNA.</p>
+    </div>
+  </div>
+
+  <!-- Nunito -->
+  <div class="card f-nunito">
+    <div class="head">
+      <span class="name">Nunito · softer</span>
+      <span class="meta">SIL OFL · 200–1000</span>
+    </div>
+    <div class="specimen">
+      <div class="alpha">Auto Top Off</div>
+      <p class="lower">Temperature · pH · Salinity · Equipment</p>
+      <div class="tile">
+        <div>
+          <div class="label">Display tank</div>
+          <div class="num jb">78.4<span class="unit">°F</span></div>
+        </div>
+        <div class="trend">▲ 0.2 · 1h</div>
+      </div>
+      <p class="notes"><b>Why:</b> Round, friendly, very legible at small sizes. <b>But:</b> rounded terminals + two-story 'a' make it feel consumer-app friendly. The lab-bench, hobbyist-engineer voice prefers something more matter-of-fact.</p>
+    </div>
+  </div>
+
+  <!-- Questrial -->
+  <div class="card f-questrial">
+    <div class="head">
+      <span class="name">Questrial · status quo</span>
+      <span class="meta">SIL OFL · 400 only</span>
+    </div>
+    <div class="specimen">
+      <div class="alpha">Auto Top Off</div>
+      <p class="lower">Temperature · pH · Salinity · Equipment</p>
+      <div class="tile">
+        <div>
+          <div class="label">Display tank</div>
+          <div class="num jb">78.4<span class="unit">°F</span></div>
+        </div>
+        <div class="trend">▲ 0.2 · 1h</div>
+      </div>
+      <p class="notes"><b>Why retire it:</b> single weight (400). Bento OS tile labels, gauge captions, and section headers all need 500/600. Faking weight with CSS <code>font-weight:bold</code> degrades on Pi rendering — boldens by stroke-thickening, not real ink.</p>
+    </div>
+  </div>
+
+  <!-- IBM Plex Sans for completeness -->
+  <div class="card" style="font-family:'IBM Plex Mono', monospace;">
+    <div class="head" style="font-family: 'Manrope', sans-serif;">
+      <span class="name">Wildcard · IBM Plex Sans</span>
+      <span class="meta">SIL OFL · 100–700</span>
+    </div>
+    <div class="specimen" style="font-family: 'Manrope', sans-serif;">
+      <div class="alpha" style="font-family: 'Manrope', sans-serif; font-style: italic; color: var(--mute);">Not shown</div>
+      <p class="lower">Considered, rejected.</p>
+      <p class="notes" style="margin-top: 30px;"><b>Why not:</b> Worth naming because every engineer-y SaaS uses it. Strong tech voice — but loses the round geometric Century Gothic DNA entirely. Would re-brand reef-pi away from itself.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="mono-row">
+  <div class="card mono-card">
+    <div class="head">
+      <span class="name">Mono · JetBrains Mono <span style="color:var(--brand);">← pick</span></span>
+      <span class="meta">SIL OFL · 100–800</span>
+    </div>
+    <div class="tile" style="margin-top:0;">
+      <div>
+        <div class="label">Heater · run-time</div>
+        <div class="num jb">12:47<span class="unit">min</span></div>
+      </div>
+      <div class="trend" style="font-family:'JetBrains Mono', monospace;">▲ 3.4%</div>
+    </div>
+    <p class="notes"><b>Why:</b> Tabular by default, six-style 0 vs O distinction (matters when relay channel names like O3 sit next to readings), full weight range. Same vibe as Geist Mono from the Bento OS comps without taking the rest of the Geist family.</p>
+  </div>
+  <div class="card mono-card">
+    <div class="head">
+      <span class="name">Mono · IBM Plex Mono · backup</span>
+      <span class="meta">SIL OFL · 100–700</span>
+    </div>
+    <div class="tile" style="margin-top:0;">
+      <div>
+        <div class="label">Heater · run-time</div>
+        <div class="num plex">12:47<span class="unit">min</span></div>
+      </div>
+      <div class="trend" style="font-family:'IBM Plex Mono', monospace;">▲ 3.4%</div>
+    </div>
+    <p class="notes"><b>Why:</b> Classic, very legible, slightly more "instrument panel" character. Pair with Manrope if you want the dashboard to read more lab-equipment than software-app.</p>
+  </div>
+</div>
+
+<div class="summary">
+  <h3>Side-by-side scorecard</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Font</th>
+        <th>Century Gothic DNA</th>
+        <th>Weight ladder</th>
+        <th>Tabular nums</th>
+        <th>Bundle (woff2, 4 wts)</th>
+        <th>Vibe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="pickRow">
+        <td>Manrope</td>
+        <td>★★★★☆</td>
+        <td>200–800</td>
+        <td>yes (OT feature)</td>
+        <td>~75 KB</td>
+        <td>calm, technical, modern</td>
+      </tr>
+      <tr>
+        <td>Jost</td>
+        <td>★★★★★</td>
+        <td>100–900</td>
+        <td>yes</td>
+        <td>~70 KB</td>
+        <td>retro / mid-century</td>
+      </tr>
+      <tr>
+        <td>Outfit</td>
+        <td>★★★☆☆</td>
+        <td>100–900</td>
+        <td>yes</td>
+        <td>~70 KB</td>
+        <td>generic designer brand</td>
+      </tr>
+      <tr>
+        <td>Nunito</td>
+        <td>★★★☆☆</td>
+        <td>200–1000</td>
+        <td>yes</td>
+        <td>~85 KB</td>
+        <td>friendly consumer app</td>
+      </tr>
+      <tr>
+        <td>Questrial (current)</td>
+        <td>★★★★☆</td>
+        <td>400 only</td>
+        <td>no</td>
+        <td>~22 KB</td>
+        <td>quiet, but one-weight cripple</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

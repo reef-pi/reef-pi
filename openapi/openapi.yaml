@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: reef-pi API
+  description: REST API for the reef-pi aquarium controller
+  version: 0.0.1
+servers:
+  - url: /
+    description: Local reef-pi instance
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: auth
+      description: >
+        Session cookie set by POST /auth/signin. Required for all /api/* routes.
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+    Equipment:
+      type: object
+      required:
+        - name
+        - outlet
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier for the equipment
+        name:
+          type: string
+          description: Name of the equipment (e.g., "Main Light", "Heater")
+        outlet:
+          type: string
+          description: Identifier of the outlet this equipment is connected to
+        on:
+          type: boolean
+          readOnly: true
+          description: Current power state of the equipment
+        stay_off_on_boot:
+          type: boolean
+          description: If true, equipment will not be powered on during boot sequence
+        boot_delay:
+          type: integer
+          description: Seconds to wait after powering on during boot sequence
+    EquipmentAction:
+      type: object
+      required:
+        - on
+      properties:
+        on:
+          type: boolean
+          description: Desired power state for the equipment
+security:
+  - sessionAuth: []
+paths:
+  /api/equipment:
+    get:
+      operationId: listEquipment
+      summary: List all equipment
+      tags:
+        - Equipment
+      responses:
+        '200':
+          description: List of all equipment successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipment'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createEquipment
+      summary: Create new equipment
+      tags:
+        - Equipment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - outlet
+              properties:
+                name:
+                  type: string
+                  description: Name of the equipment
+                outlet:
+                  type: string
+                  description: Outlet identifier
+                stay_off_on_boot:
+                  type: boolean
+                  description: If true, equipment will not be powered on during boot
+                boot_delay:
+                  type: integer
+                  description: Seconds to wait before powering on during boot
+      responses:
+        '200':
+          description: Equipment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/equipment/{id}:
+    get:
+      operationId: getEquipment
+      summary: Get equipment by ID
+      tags:
+        - Equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Equipment ID
+      responses:
+        '200':
+          description: Equipment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Equipment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateEquipment
+      summary: Update equipment
+      tags:
+        - Equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Equipment ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the equipment
+                outlet:
+                  type: string
+                  description: Outlet identifier
+                stay_off_on_boot:
+                  type: boolean
+                  description: If true, equipment will not be powered on during boot
+                boot_delay:
+                  type: integer
+                  description: Seconds to wait before powering on during boot
+      responses:
+        '200':
+          description: Equipment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Equipment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteEquipment
+      summary: Delete equipment
+      tags:
+        - Equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Equipment ID
+      responses:
+        '200':
+          description: Equipment deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Equipment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/equipment/{id}/control:
+    post:
+      operationId: controlEquipment
+      summary: Control equipment power state
+      tags:
+        - Equipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Equipment ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentAction'
+      responses:
+        '200':
+          description: Equipment state changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - valid session required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Equipment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

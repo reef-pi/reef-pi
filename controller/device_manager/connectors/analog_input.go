@@ -5,7 +5,7 @@ import (
 
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/hal"
 
@@ -90,109 +90,13 @@ func (c *AnalogInputs) Delete(id string) error {
 	return c.repo.Delete(id)
 }
 
-func (c *AnalogInputs) LoadAPI(r *mux.Router) {
-
-	// swagger:route GET /api/analog_inputs AnalogInput analogInputList
-	// List all Analog Inputs.
-	// List all Analog Inputs in reef-pi.
-	// responses:
-	// 	200: body:[]analogInput
-	// 	500:
-	r.HandleFunc("/api/analog_inputs", c.list).Methods("GET")
-
-	// swagger:operation GET /api/analog_inputs/{id} AnalogInput analogInputGet
-	// Get an Analog Input by id.
-	// Get an existing Analog Input.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the analog input
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//   schema:
-	//    $ref: '#/definitions/analogInput'
-	//  404:
-	//   description: Not Found
-	r.HandleFunc("/api/analog_inputs/{id}", c.get).Methods("GET")
-
-	// swagger:operation PUT /api/analog_inputs AnalogInput analogInputCreate
-	// Create an analog input.
-	// Create a new analog input.
-	// ---
-	// parameters:
-	//  - in: body
-	//    name: analog input
-	//    description: The analog input to create
-	//    required: true
-	//    schema:
-	//     $ref: '#/definitions/analogInput'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/analog_inputs", c.create).Methods("PUT")
-
-	//swagger:operation POST /api/analog_inputs/{id} AnalogInput analogInputUpdate
-	// Update an Analog Input.
-	// Update an existing Analog Input.
-	//---
-	//parameters:
-	// - in: path
-	//   name: id
-	//   description: The Id of the analog input to update
-	//   required: true
-	//   schema:
-	//    type: integer
-	// - in: body
-	//   name: analog input
-	//   description: The analog input to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/analogInput'
-	//responses:
-	// 200:
-	//  description: OK
-	// 404:
-	//  description: Not Found
-	r.HandleFunc("/api/analog_inputs/{id}", c.update).Methods("POST")
-
-	// swagger:operation DELETE /api/analog_inputs/{id} AnalogInput analogInputDelete
-	// Delete an Analog Input.
-	// Delete an existing Analog Input.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the analog input to delete
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/analog_inputs/{id}", c.delete).Methods("DELETE")
-
-	// swagger:operation POST /api/analog_inputs/{id}/read AnalogInput analogInputRead
-	// Read an Analog Input.
-	// Read an Analog Input.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the analog input to read
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//  404:
-	//   description: Not Found
-	r.HandleFunc("/api/analog_inputs/{id}/read", c.read).Methods("POST")
+func (c *AnalogInputs) LoadAPI(r chi.Router) {
+	r.Get("/api/analog_inputs", c.list)
+	r.Get("/api/analog_inputs/{id}", c.get)
+	r.Put("/api/analog_inputs", c.create)
+	r.Post("/api/analog_inputs/{id}", c.update)
+	r.Delete("/api/analog_inputs/{id}", c.delete)
+	r.Post("/api/analog_inputs/{id}/read", c.read)
 }
 
 func (ais *AnalogInputs) Read(id string) (float64, error) {

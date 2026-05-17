@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Radii</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 160px; align-items: center; padding: 20px 24px; gap: 24px; }
+  .r { display:flex; flex-direction: column; align-items: center; gap: 8px; }
+  .box { width: 80px; height: 80px; background: #ffffff; border: 1px solid #d6e5d0; }
+  .name { font-size: 12px; font-weight: 700; }
+  .lbl { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; }
+  .hint { flex:1; font-size: 12px; color:#4e5f4e; line-height: 1.5; }
+</style>
+</head><body>
+<div class="card">
+  <div class="r"><div class="box" style="border-radius:0"></div><span class="name">0</span><span class="lbl">flush lists</span></div>
+  <div class="r"><div class="box" style="border-radius:4px"></div><span class="name">.btn</span><span class="lbl">4px · BS default</span></div>
+  <div class="r"><div class="box" style="border-radius:6px"></div><span class="name">sm</span><span class="lbl">6px · nav links</span></div>
+  <div class="r"><div class="box" style="border-radius:10px"></div><span class="name">md</span><span class="lbl">10px · cards, grid cells</span></div>
+  <div class="hint">
+    reef-pi uses just two custom radii.<br>
+    <b>md</b> is reserved for dashboard grid cells and elevated cards.<br>
+    Bootstrap defaults apply elsewhere.
+  </div>
+</div>
+</body></html>

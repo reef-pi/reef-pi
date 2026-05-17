@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>reef-pi · web app kit</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/reef-pi-mark.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" data-testid="smoke-root"></div>
+
+  <!-- Tweakable defaults -->
+  <script>
+    const TWEAKS = /*EDITMODE-BEGIN*/{
+      "startSignedIn": true,
+      "startRoute": "dashboard",
+      "devMode": false
+    }/*EDITMODE-END*/;
+  </script>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="Navbar.jsx"></script>
+  <script type="text/babel" src="SignIn.jsx"></script>
+  <script type="text/babel" src="Primitives.jsx"></script>
+  <script type="text/babel" src="Dashboard.jsx"></script>
+  <script type="text/babel" src="Equipment.jsx"></script>
+  <script type="text/babel" src="Pages.jsx"></script>
+  <script type="text/babel" src="Summary.jsx"></script>
+  <script type="text/babel" src="App.jsx"></script>
+
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('app'));
+    function mount() {
+      root.render(
+        <App
+          initialRoute={TWEAKS.startRoute}
+          signedInAtStart={TWEAKS.startSignedIn}
+          devMode={TWEAKS.devMode}
+        />
+      );
+    }
+    mount();
+
+    // Tweaks panel wiring
+    let tweakPanel = null;
+    function renderTweaks() {
+      if (!tweakPanel) return;
+      tweakPanel.innerHTML = `
+        <div class="tw-hdr">Tweaks</div>
+        <label class="tw-row"><input type="checkbox" ${TWEAKS.startSignedIn ? 'checked' : ''} data-k="startSignedIn"> Start signed in</label>
+        <label class="tw-row"><input type="checkbox" ${TWEAKS.devMode ? 'checked' : ''} data-k="devMode"> DevMode (show error footer)</label>
+        <label class="tw-row">Start route
+          <select data-k="startRoute">
+            ${['dashboard','equipment','lighting','temperature','ato','ph','doser','timers','configuration']
+              .map(r => `<option ${r === TWEAKS.startRoute ? 'selected' : ''}>${r}</option>`).join('')}
+          </select>
+        </label>
+        <button class="tw-reset">Reset session</button>
+      `;
+      tweakPanel.querySelectorAll('[data-k]').forEach(inp => {
+        inp.addEventListener('change', e => {
+          const k = inp.dataset.k;
+          const v = inp.type === 'checkbox' ? inp.checked : inp.value;
+          TWEAKS[k] = v;
+          window.parent.postMessage({type:'__edit_mode_set_keys', edits:{[k]: v}}, '*');
+          mount();
+        });
+      });
+      tweakPanel.querySelector('.tw-reset').addEventListener('click', () => {
+        try { localStorage.removeItem('reefpi.route'); } catch(e) {}
+        mount();
+      });
+    }
+
+    window.addEventListener('message', e => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') {
+        if (!tweakPanel) {
+          tweakPanel = document.createElement('div');
+          tweakPanel.id = 'tweak-panel';
+          tweakPanel.style.cssText = `
+            position:fixed; right:16px; bottom:80px; z-index:2000;
+            background:#fff; border:1px solid #d6e5d0; border-radius:10px;
+            padding:14px 16px; width:260px; font-family:'Questrial',sans-serif;
+            box-shadow:0 10px 30px rgba(0,0,0,.12);`;
+          document.body.appendChild(tweakPanel);
+          const st = document.createElement('style');
+          st.textContent = `
+            #tweak-panel .tw-hdr { font-weight:700; margin-bottom:8px; font-size:14px; }
+            #tweak-panel .tw-row { display:flex; gap:8px; align-items:center; margin:6px 0; font-size:13px; }
+            #tweak-panel select { flex:1; padding:4px 6px; border:1px solid #ced4da; border-radius:4px; }
+            #tweak-panel .tw-reset { margin-top: 10px; width:100%; padding:6px; border:1px solid #343a40; background:#fff; border-radius:4px; cursor:pointer; }`;
+          document.head.appendChild(st);
+        }
+        tweakPanel.style.display = 'block';
+        renderTweaks();
+      }
+      if (d.type === '__deactivate_edit_mode' && tweakPanel) {
+        tweakPanel.style.display = 'none';
+      }
+    });
+    window.parent.postMessage({type:'__edit_mode_available'}, '*');
+  </script>
+</body>
+</html>
