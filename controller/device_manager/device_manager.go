@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/mux"
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/rpi/i2c"
@@ -180,8 +181,7 @@ func (dm *DeviceManager) LoadAPI(r *mux.Router) {
 }
 
 func (dm *DeviceManager) provisionHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := chi.URLParam(r, "id")
 	if err := dm.Provision(id); err != nil {
 		utils.ErrorResponse(http.StatusInternalServerError, "Failed to provision. Error: "+err.Error(), w)
 		return
