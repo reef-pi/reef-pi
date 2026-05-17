@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/reef-pi/hal"
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
@@ -135,4 +136,36 @@ func TestTemperatureAPI(t *testing.T) {
 		t.Fatal("Failed to delete temperature controller config using api")
 	}
 	c.Stop()
+}
+
+func TestTemperatureCalibrateAPI(t *testing.T) {
+	c := setupTempController(t)
+	defer c.c.Store().Close()
+
+	tc := &TC{
+		Name:   "Water",
+		Period: 1,
+		Sensor: "28-api-calibration",
+	}
+	if err := c.Create(tc); err != nil {
+		t.Fatal(err)
+	}
+
+	tr := utils.NewTestRouter()
+	c.LoadAPI(tr.Router)
+
+	measurements := []hal.Measurement{
+		{Expected: 77, Observed: 76},
+		{Expected: 82, Observed: 80},
+	}
+	body := new(bytes.Buffer)
+	if err := json.NewEncoder(body).Encode(measurements); err != nil {
+		t.Fatal(err)
+	}
+	if err := tr.Do("POST", "/api/tcs/1/calibrate", body, nil); err != nil {
+		t.Fatal("failed to calibrate temperature controller using api:", err)
+	}
+	if _, ok := c.calibrators[tc.Sensor]; !ok {
+		t.Fatal("expected calibrator to be registered")
+	}
 }

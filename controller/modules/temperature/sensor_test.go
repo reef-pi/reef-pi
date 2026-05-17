@@ -123,6 +123,7 @@ func TestReadMissingDevice(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer con.Store().Close()
 	c, err := New(false, con)
 	if err != nil {
 		t.Fatal(err)
@@ -130,6 +131,25 @@ func TestReadMissingDevice(t *testing.T) {
 
 	if v, err := c.Read(&TC{Sensor: "28-missing"}); err == nil {
 		t.Fatalf("expected missing sensor read to fail, got value %v", v)
+	}
+}
+
+func TestReadMissingAnalogInput(t *testing.T) {
+	con, err := controller.TestController()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer con.Store().Close()
+	if err := con.DM().AnalogInputs().Setup(); err != nil {
+		t.Fatal(err)
+	}
+	c, err := New(false, con)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if v, err := c.Read(&TC{AnalogInput: "missing"}); err == nil {
+		t.Fatalf("expected missing analog input read to fail, got value %v", v)
 	}
 }
 
