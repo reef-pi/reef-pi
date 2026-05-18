@@ -8,7 +8,15 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/api"
 	"github.com/reef-pi/reef-pi/controller/api/gen"
+	atoModule "github.com/reef-pi/reef-pi/controller/modules/ato"
+	cameraModule "github.com/reef-pi/reef-pi/controller/modules/camera"
+	doserModule "github.com/reef-pi/reef-pi/controller/modules/doser"
 	journalModule "github.com/reef-pi/reef-pi/controller/modules/journal"
+	lightingModule "github.com/reef-pi/reef-pi/controller/modules/lighting"
+	macroModule "github.com/reef-pi/reef-pi/controller/modules/macro"
+	phModule "github.com/reef-pi/reef-pi/controller/modules/ph"
+	systemModule "github.com/reef-pi/reef-pi/controller/modules/system"
+	temperatureModule "github.com/reef-pi/reef-pi/controller/modules/temperature"
 	timerModule "github.com/reef-pi/reef-pi/controller/modules/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -34,6 +42,30 @@ func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
 	}
 	if sub, err := r.subsystems.Sub(journalModule.Bucket); err == nil {
 		cfg.Journal, _ = sub.(*journalModule.Subsystem)
+	}
+	if sub, err := r.subsystems.Sub(macroModule.Bucket); err == nil {
+		cfg.Macro, _ = sub.(*macroModule.Subsystem)
+	}
+	if sub, err := r.subsystems.Sub(lightingModule.Bucket); err == nil {
+		cfg.Lighting, _ = sub.(*lightingModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(atoModule.Bucket); err == nil {
+		cfg.ATO, _ = sub.(*atoModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(cameraModule.Bucket); err == nil {
+		cfg.Camera, _ = sub.(*cameraModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(doserModule.Bucket); err == nil {
+		cfg.Doser, _ = sub.(*doserModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(phModule.Bucket); err == nil {
+		cfg.PH, _ = sub.(*phModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(temperatureModule.Bucket); err == nil {
+		cfg.Temperature, _ = sub.(*temperatureModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(systemModule.Bucket); err == nil {
+		cfg.System, _ = sub.(*systemModule.Controller)
 	}
 	gen.HandlerWithOptions(gen.NewStrictHandler(api.NewReefPiServer(cfg), nil), gen.ChiServerOptions{BaseRouter: router})
 

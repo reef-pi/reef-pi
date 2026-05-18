@@ -1,14 +1,11 @@
 package system
 
 import (
-	"bytes"
 	"io/ioutil"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestSystemController(t *testing.T) {
@@ -27,34 +24,28 @@ func TestSystemController(t *testing.T) {
 	c.Setup()
 	c.Start()
 	c.Stop()
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
 
-	if err := tr.Do("POST", "/api/display/on", strings.NewReader("{}"), nil); err != nil {
-		t.Fatal("Failed to switch  on display using api")
+	if err := c.enableDisplay(); err != nil {
+		t.Fatal("Failed to enable display:", err)
 	}
-	if err := tr.Do("POST", "/api/display/off", strings.NewReader("{}"), nil); err != nil {
-		t.Fatal("Failed to switch  on display using api")
+	if err := c.disableDisplay(); err != nil {
+		t.Fatal("Failed to disable display:", err)
 	}
-	if err := tr.Do("GET", "/api/display", strings.NewReader("{}"), nil); err != nil {
-		t.Fatal("Failed to get display brightness using api")
+	if _, err := c.currentDisplayState(); err != nil {
+		t.Fatal("Failed to get display state:", err)
 	}
-	if err := tr.Do("POST", "/api/display", strings.NewReader("{}"), nil); err != nil {
-		t.Fatal("Failed to set display brightness using api")
+	if err := c.setBrightness(0); err != nil {
+		t.Fatal("Failed to set display brightness:", err)
 	}
-	if err := tr.Do("POST", "/api/admin/poweroff", new(bytes.Buffer), nil); err != nil {
-		t.Fatal(err)
+
+	c.SystemPoweroff()
+	c.SystemReboot()
+	if err := c.SystemReload(); err != nil {
+		t.Fatal("Failed to reload system:", err)
 	}
-	if err := tr.Do("POST", "/api/admin/reboot", new(bytes.Buffer), nil); err != nil {
-		t.Fatal(err)
-	}
-	if err := tr.Do("POST", "/api/admin/reload", new(bytes.Buffer), nil); err != nil {
-		t.Fatal(err)
-	}
-	var resp Summary
-	if err := tr.Do("GET", "/api/info", strings.NewReader("{}"), &resp); err != nil {
-		t.Fatal(err)
-	}
+
+	_ = c.ComputeSummary()
+
 	if _, err := c.lastStartTime(); err != nil {
 		t.Error(err)
 	}

@@ -9,15 +9,8 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (t *Subsystem) LoadAPI(r chi.Router) {
-	r.Get("/api/macros", t.list)
-	r.Put("/api/macros", t.create)
-	r.Get("/api/macros/{id}", t.get)
-	r.Post("/api/macros/{id}", t.update)
-	r.Delete("/api/macros/{id}", t.delete)
-	r.Post("/api/macros/{id}/run", t.run)
-	r.Post("/api/macros/{id}/revert", t.revert)
-}
+// LoadAPI is a no-op: macro routes are owned by the generated OA3 handler in controller/api.
+func (t *Subsystem) LoadAPI(_ chi.Router) {}
 
 func (t *Subsystem) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {

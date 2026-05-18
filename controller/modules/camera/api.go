@@ -8,13 +8,25 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/camera/config", c.get)
-	r.Post("/api/camera/config", c.update)
-	r.Post("/api/camera/shoot", c.shoot)
-	r.Get("/api/camera/latest", c.latest)
-	r.Get("/api/camera/list", c.list)
+// LoadAPI is a no-op: camera routes are owned by the generated OA3 handler in controller/api.
+func (c *Controller) LoadAPI(_ chi.Router) {}
+
+func (c *Controller) GetConfig() Config { return c.config }
+
+func (c *Controller) SaveConfig(conf Config) error {
+	if err := c.repo.SaveConfig(conf); err != nil {
+		return err
+	}
+	c.Stop()
+	c.mu.Lock()
+	c.config = conf
+	c.mu.Unlock()
+	c.Start()
+	return nil
 }
+
+func (c *Controller) GetLatest() (map[string]string, error) { return c.repo.Latest() }
+func (c *Controller) ListImages() ([]ImageItem, error)      { return c.repo.ListItems() }
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(_ string) (interface{}, error) {

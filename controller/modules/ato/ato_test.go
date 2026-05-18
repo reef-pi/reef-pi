@@ -1,18 +1,15 @@
 package ato
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func setupATOController(t *testing.T) (*Controller, *utils.TestRouter) {
+func setupATOController(t *testing.T) *Controller {
 	t.Helper()
 	con, err := controller.TestController()
 	if err != nil {
@@ -47,9 +44,7 @@ func setupATOController(t *testing.T) (*Controller, *utils.TestRouter) {
 	if err := c.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
-	return c, tr
+	return c
 }
 
 func TestATOEntityMethods(t *testing.T) {
@@ -79,12 +74,10 @@ func TestATOCreateFeed(t *testing.T) {
 }
 
 func TestATOInUse(t *testing.T) {
-	c, tr := setupATOController(t)
+	c := setupATOController(t)
 
 	a := ATO{Name: "InUseTest", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: false}
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(a)
-	if err := tr.Do("PUT", "/api/atos", body, nil); err != nil {
+	if err := c.Create(a); err != nil {
 		t.Fatal("Failed to create ato:", err)
 	}
 
@@ -120,22 +113,20 @@ func TestATOInUse(t *testing.T) {
 }
 
 func TestATOReset(t *testing.T) {
-	_, tr := setupATOController(t)
+	c := setupATOController(t)
 
 	a := ATO{Name: "ResetTest", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: false}
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(a)
-	if err := tr.Do("PUT", "/api/atos", body, nil); err != nil {
+	if err := c.Create(a); err != nil {
 		t.Fatal("Failed to create ato:", err)
 	}
 
-	if err := tr.Do("POST", "/api/atos/1/reset", new(bytes.Buffer), nil); err != nil {
-		t.Error("Reset via API should not fail:", err)
+	if err := c.Reset("1"); err != nil {
+		t.Error("Reset should not fail:", err)
 	}
 }
 
 func TestATOGetEntity(t *testing.T) {
-	c, _ := setupATOController(t)
+	c := setupATOController(t)
 
 	a := ATO{Name: "EntityTest", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: false}
 	if err := c.Create(a); err != nil {
@@ -152,7 +143,7 @@ func TestATOGetEntity(t *testing.T) {
 }
 
 func TestATONotifyIfNeeded(t *testing.T) {
-	c, _ := setupATOController(t)
+	c := setupATOController(t)
 
 	// Control=false, Notify.Enable=false: should be a no-op
 	a := ATO{Name: "notify-test", Control: false, Notify: Notify{Enable: false}}

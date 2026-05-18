@@ -25,6 +25,77 @@ const (
 	SessionAuthScopes sessionAuthContextKey = "sessionAuth.Scopes"
 )
 
+// ATO defines model for ATO.
+type ATO struct {
+	Control *bool `json:"control,omitempty"`
+
+	// Debounce Debounce duration in seconds
+	Debounce       *int    `json:"debounce,omitempty"`
+	DisableOnAlert *bool   `json:"disable_on_alert,omitempty"`
+	Enable         *bool   `json:"enable,omitempty"`
+	Id             *string `json:"id,omitempty"`
+	Inlet          *string `json:"inlet,omitempty"`
+	IsMacro        *bool   `json:"is_macro,omitempty"`
+	Name           string  `json:"name"`
+	Notify         *struct {
+		Enable *bool `json:"enable,omitempty"`
+		Max    *int  `json:"max,omitempty"`
+	} `json:"notify,omitempty"`
+	OneShot *bool `json:"one_shot,omitempty"`
+
+	// Period Check period in seconds
+	Period int     `json:"period"`
+	Pump   *string `json:"pump,omitempty"`
+}
+
+// CameraConfig defines model for CameraConfig.
+type CameraConfig struct {
+	CaptureFlags   *string `json:"capture_flags,omitempty"`
+	Enable         *bool   `json:"enable,omitempty"`
+	ImageDirectory *string `json:"image_directory,omitempty"`
+	Motion         *struct {
+		Enable *bool   `json:"enable,omitempty"`
+		Height *int    `json:"height,omitempty"`
+		Url    *string `json:"url,omitempty"`
+		Width  *int    `json:"width,omitempty"`
+	} `json:"motion,omitempty"`
+	TickInterval *int  `json:"tick_interval,omitempty"`
+	Upload       *bool `json:"upload,omitempty"`
+}
+
+// DisplayState defines model for DisplayState.
+type DisplayState struct {
+	// Brightness Brightness level 0-100
+	Brightness *int  `json:"brightness,omitempty"`
+	On         *bool `json:"on,omitempty"`
+}
+
+// DoserPump defines model for DoserPump.
+type DoserPump struct {
+	Id   *string `json:"id,omitempty"`
+	Jack *string `json:"jack,omitempty"`
+	Name string  `json:"name"`
+	Pin  *int    `json:"pin,omitempty"`
+
+	// Regiment Dosing regiment configuration
+	Regiment *map[string]interface{} `json:"regiment,omitempty"`
+
+	// Stepper Stepper motor configuration (if type is stepper)
+	Stepper *map[string]interface{} `json:"stepper,omitempty"`
+
+	// Type Pump type (pwm or stepper)
+	Type *string `json:"type,omitempty"`
+}
+
+// DosingSchedule defines model for DosingSchedule.
+type DosingSchedule struct {
+	// Duration Duration in seconds
+	Duration *int `json:"duration,omitempty"`
+
+	// Frequency Frequency per day
+	Frequency *int `json:"frequency,omitempty"`
+}
+
 // Equipment defines model for Equipment.
 type Equipment struct {
 	// BootDelay Seconds to wait after powering on during boot sequence
@@ -72,6 +143,72 @@ type JournalParameter struct {
 	Unit        *string `json:"unit,omitempty"`
 }
 
+// Light defines model for Light.
+type Light struct {
+	// Channels Map of channel index to channel config
+	Channels *map[string]interface{} `json:"channels,omitempty"`
+	Enable   *bool                   `json:"enable,omitempty"`
+	Id       *string                 `json:"id,omitempty"`
+	Jack     *string                 `json:"jack,omitempty"`
+	Name     string                  `json:"name"`
+}
+
+// Macro defines model for Macro.
+type Macro struct {
+	Id         *string                   `json:"id,omitempty"`
+	Name       string                    `json:"name"`
+	Reversible *bool                     `json:"reversible,omitempty"`
+	Steps      *[]map[string]interface{} `json:"steps,omitempty"`
+}
+
+// PhCalibrationPoint defines model for PhCalibrationPoint.
+type PhCalibrationPoint struct {
+	Expected float64 `json:"expected"`
+	Observed float64 `json:"observed"`
+}
+
+// PhProbe defines model for PhProbe.
+type PhProbe struct {
+	AnalogInput *string                 `json:"analog_input,omitempty"`
+	Chart       *map[string]interface{} `json:"chart,omitempty"`
+	Control     *bool                   `json:"control,omitempty"`
+	DownerEq    *string                 `json:"downer_eq,omitempty"`
+	Enable      *bool                   `json:"enable,omitempty"`
+	Hysteresis  *float64                `json:"hysteresis,omitempty"`
+	Id          *string                 `json:"id,omitempty"`
+	IsMacro     *bool                   `json:"is_macro,omitempty"`
+	Max         *float64                `json:"max,omitempty"`
+	Min         *float64                `json:"min,omitempty"`
+	Name        string                  `json:"name"`
+	Notify      *map[string]interface{} `json:"notify,omitempty"`
+	OneShot     *bool                   `json:"one_shot,omitempty"`
+	Period      *int                    `json:"period,omitempty"`
+	Transformer *string                 `json:"transformer,omitempty"`
+	UpperEq     *string                 `json:"upper_eq,omitempty"`
+}
+
+// TemperatureController defines model for TemperatureController.
+type TemperatureController struct {
+	AnalogInput *string                 `json:"analog_input,omitempty"`
+	Chart       *map[string]interface{} `json:"chart,omitempty"`
+	Control     *bool                   `json:"control,omitempty"`
+	Cooler      *string                 `json:"cooler,omitempty"`
+	Enable      *bool                   `json:"enable,omitempty"`
+	Fahrenheit  *bool                   `json:"fahrenheit,omitempty"`
+	FailSafe    *bool                   `json:"fail_safe,omitempty"`
+	Heater      *string                 `json:"heater,omitempty"`
+	Hysteresis  *float64                `json:"hysteresis,omitempty"`
+	Id          *string                 `json:"id,omitempty"`
+	IsMacro     *bool                   `json:"is_macro,omitempty"`
+	Max         *float64                `json:"max,omitempty"`
+	Min         *float64                `json:"min,omitempty"`
+	Name        string                  `json:"name"`
+	Notify      *map[string]interface{} `json:"notify,omitempty"`
+	OneShot     *bool                   `json:"one_shot,omitempty"`
+	Period      *int                    `json:"period,omitempty"`
+	Sensor      *string                 `json:"sensor,omitempty"`
+}
+
 // TimerJob defines model for TimerJob.
 type TimerJob struct {
 	// Day Cron day-of-month field
@@ -117,6 +254,12 @@ type UsageStats struct {
 // sessionAuthContextKey is the context key for sessionAuth security scheme
 type sessionAuthContextKey string
 
+// SaveDoserPumpCalibrationJSONBody defines parameters for SaveDoserPumpCalibration.
+type SaveDoserPumpCalibrationJSONBody struct {
+	Duration *int     `json:"duration,omitempty"`
+	Volume   *float64 `json:"volume,omitempty"`
+}
+
 // CreateEquipmentJSONBody defines parameters for CreateEquipment.
 type CreateEquipmentJSONBody struct {
 	// BootDelay Seconds to wait before powering on during boot
@@ -147,6 +290,35 @@ type UpdateEquipmentJSONBody struct {
 	StayOffOnBoot *bool `json:"stay_off_on_boot,omitempty"`
 }
 
+// CalibrateTemperatureSensorJSONBody defines parameters for CalibrateTemperatureSensor.
+type CalibrateTemperatureSensorJSONBody struct {
+	Expected *float64 `json:"expected,omitempty"`
+}
+
+// CreateATOJSONRequestBody defines body for CreateATO for application/json ContentType.
+type CreateATOJSONRequestBody = ATO
+
+// UpdateATOJSONRequestBody defines body for UpdateATO for application/json ContentType.
+type UpdateATOJSONRequestBody = ATO
+
+// UpdateCameraConfigJSONRequestBody defines body for UpdateCameraConfig for application/json ContentType.
+type UpdateCameraConfigJSONRequestBody = CameraConfig
+
+// SetDisplayBrightnessJSONRequestBody defines body for SetDisplayBrightness for application/json ContentType.
+type SetDisplayBrightnessJSONRequestBody = DisplayState
+
+// CreateDoserPumpJSONRequestBody defines body for CreateDoserPump for application/json ContentType.
+type CreateDoserPumpJSONRequestBody = DoserPump
+
+// UpdateDoserPumpJSONRequestBody defines body for UpdateDoserPump for application/json ContentType.
+type UpdateDoserPumpJSONRequestBody = DoserPump
+
+// SaveDoserPumpCalibrationJSONRequestBody defines body for SaveDoserPumpCalibration for application/json ContentType.
+type SaveDoserPumpCalibrationJSONRequestBody SaveDoserPumpCalibrationJSONBody
+
+// ScheduleDoserPumpJSONRequestBody defines body for ScheduleDoserPump for application/json ContentType.
+type ScheduleDoserPumpJSONRequestBody = DosingSchedule
+
 // CreateEquipmentJSONRequestBody defines body for CreateEquipment for application/json ContentType.
 type CreateEquipmentJSONRequestBody CreateEquipmentJSONBody
 
@@ -165,6 +337,39 @@ type UpdateJournalParameterJSONRequestBody = JournalParameter
 // RecordJournalEntryJSONRequestBody defines body for RecordJournalEntry for application/json ContentType.
 type RecordJournalEntryJSONRequestBody = JournalEntry
 
+// CreateLightJSONRequestBody defines body for CreateLight for application/json ContentType.
+type CreateLightJSONRequestBody = Light
+
+// UpdateLightJSONRequestBody defines body for UpdateLight for application/json ContentType.
+type UpdateLightJSONRequestBody = Light
+
+// CreateMacroJSONRequestBody defines body for CreateMacro for application/json ContentType.
+type CreateMacroJSONRequestBody = Macro
+
+// UpdateMacroJSONRequestBody defines body for UpdateMacro for application/json ContentType.
+type UpdateMacroJSONRequestBody = Macro
+
+// CreatePhProbeJSONRequestBody defines body for CreatePhProbe for application/json ContentType.
+type CreatePhProbeJSONRequestBody = PhProbe
+
+// UpdatePhProbeJSONRequestBody defines body for UpdatePhProbe for application/json ContentType.
+type UpdatePhProbeJSONRequestBody = PhProbe
+
+// CalibratePhProbeJSONRequestBody defines body for CalibratePhProbe for application/json ContentType.
+type CalibratePhProbeJSONRequestBody = PhCalibrationPoint
+
+// CalibratePhProbePointJSONRequestBody defines body for CalibratePhProbePoint for application/json ContentType.
+type CalibratePhProbePointJSONRequestBody = PhCalibrationPoint
+
+// CreateTemperatureControllerJSONRequestBody defines body for CreateTemperatureController for application/json ContentType.
+type CreateTemperatureControllerJSONRequestBody = TemperatureController
+
+// UpdateTemperatureControllerJSONRequestBody defines body for UpdateTemperatureController for application/json ContentType.
+type UpdateTemperatureControllerJSONRequestBody = TemperatureController
+
+// CalibrateTemperatureSensorJSONRequestBody defines body for CalibrateTemperatureSensor for application/json ContentType.
+type CalibrateTemperatureSensorJSONRequestBody CalibrateTemperatureSensorJSONBody
+
 // CreateTimerJobJSONRequestBody defines body for CreateTimerJob for application/json ContentType.
 type CreateTimerJobJSONRequestBody = TimerJob
 
@@ -173,6 +378,93 @@ type UpdateTimerJobJSONRequestBody = TimerJob
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Power off the system
+	// (POST /api/admin/poweroff)
+	SystemPoweroff(w http.ResponseWriter, r *http.Request)
+	// Reboot the system
+	// (POST /api/admin/reboot)
+	SystemReboot(w http.ResponseWriter, r *http.Request)
+	// Reload reef-pi
+	// (POST /api/admin/reload)
+	SystemReload(w http.ResponseWriter, r *http.Request)
+	// Upgrade reef-pi
+	// (POST /api/admin/upgrade)
+	SystemUpgrade(w http.ResponseWriter, r *http.Request)
+	// List all ATO controllers
+	// (GET /api/atos)
+	ListATOs(w http.ResponseWriter, r *http.Request)
+	// Create an ATO controller
+	// (PUT /api/atos)
+	CreateATO(w http.ResponseWriter, r *http.Request)
+	// Delete an ATO controller
+	// (DELETE /api/atos/{id})
+	DeleteATO(w http.ResponseWriter, r *http.Request, id string)
+	// Get an ATO controller by ID
+	// (GET /api/atos/{id})
+	GetATO(w http.ResponseWriter, r *http.Request, id string)
+	// Update an ATO controller
+	// (POST /api/atos/{id})
+	UpdateATO(w http.ResponseWriter, r *http.Request, id string)
+	// Reset ATO usage stats
+	// (POST /api/atos/{id}/reset)
+	ResetATO(w http.ResponseWriter, r *http.Request, id string)
+	// Get ATO usage stats
+	// (GET /api/atos/{id}/usage)
+	GetATOUsage(w http.ResponseWriter, r *http.Request, id string)
+	// Get camera configuration
+	// (GET /api/camera/config)
+	GetCameraConfig(w http.ResponseWriter, r *http.Request)
+	// Update camera configuration
+	// (POST /api/camera/config)
+	UpdateCameraConfig(w http.ResponseWriter, r *http.Request)
+	// Get the latest camera image path
+	// (GET /api/camera/latest)
+	GetCameraLatest(w http.ResponseWriter, r *http.Request)
+	// List camera images
+	// (GET /api/camera/list)
+	ListCameraImages(w http.ResponseWriter, r *http.Request)
+	// Capture a camera image
+	// (POST /api/camera/shoot)
+	CameraShoot(w http.ResponseWriter, r *http.Request)
+	// Get current display state
+	// (GET /api/display)
+	GetDisplayState(w http.ResponseWriter, r *http.Request)
+	// Set display brightness
+	// (POST /api/display)
+	SetDisplayBrightness(w http.ResponseWriter, r *http.Request)
+	// Turn off the display
+	// (POST /api/display/off)
+	DisableDisplay(w http.ResponseWriter, r *http.Request)
+	// Turn on the display
+	// (POST /api/display/on)
+	EnableDisplay(w http.ResponseWriter, r *http.Request)
+	// List all doser pumps
+	// (GET /api/doser/pumps)
+	ListDoserPumps(w http.ResponseWriter, r *http.Request)
+	// Create a doser pump
+	// (PUT /api/doser/pumps)
+	CreateDoserPump(w http.ResponseWriter, r *http.Request)
+	// Delete a doser pump
+	// (DELETE /api/doser/pumps/{id})
+	DeleteDoserPump(w http.ResponseWriter, r *http.Request, id string)
+	// Get a doser pump by ID
+	// (GET /api/doser/pumps/{id})
+	GetDoserPump(w http.ResponseWriter, r *http.Request, id string)
+	// Update a doser pump
+	// (POST /api/doser/pumps/{id})
+	UpdateDoserPump(w http.ResponseWriter, r *http.Request, id string)
+	// Start calibration for a doser pump
+	// (POST /api/doser/pumps/{id}/calibrate)
+	CalibrateDoserPump(w http.ResponseWriter, r *http.Request, id string)
+	// Save calibration for a doser pump
+	// (POST /api/doser/pumps/{id}/calibrate/save)
+	SaveDoserPumpCalibration(w http.ResponseWriter, r *http.Request, id string)
+	// Set dosing schedule for a pump
+	// (POST /api/doser/pumps/{id}/schedule)
+	ScheduleDoserPump(w http.ResponseWriter, r *http.Request, id string)
+	// Get doser pump usage stats
+	// (GET /api/doser/pumps/{id}/usage)
+	GetDoserPumpUsage(w http.ResponseWriter, r *http.Request, id string)
 	// List all equipment
 	// (GET /api/equipment)
 	ListEquipment(w http.ResponseWriter, r *http.Request)
@@ -212,6 +504,102 @@ type ServerInterface interface {
 	// Get journal usage stats
 	// (GET /api/journal/{id}/usage)
 	GetJournalUsage(w http.ResponseWriter, r *http.Request, id string)
+	// List all lights
+	// (GET /api/lights)
+	ListLights(w http.ResponseWriter, r *http.Request)
+	// Create a light
+	// (PUT /api/lights)
+	CreateLight(w http.ResponseWriter, r *http.Request)
+	// Delete a light
+	// (DELETE /api/lights/{id})
+	DeleteLight(w http.ResponseWriter, r *http.Request, id string)
+	// Get a light by ID
+	// (GET /api/lights/{id})
+	GetLight(w http.ResponseWriter, r *http.Request, id string)
+	// Update a light
+	// (POST /api/lights/{id})
+	UpdateLight(w http.ResponseWriter, r *http.Request, id string)
+	// Get light usage stats
+	// (GET /api/lights/{id}/usage)
+	GetLightUsage(w http.ResponseWriter, r *http.Request, id string)
+	// List all macros
+	// (GET /api/macros)
+	ListMacros(w http.ResponseWriter, r *http.Request)
+	// Create a macro
+	// (PUT /api/macros)
+	CreateMacro(w http.ResponseWriter, r *http.Request)
+	// Delete a macro
+	// (DELETE /api/macros/{id})
+	DeleteMacro(w http.ResponseWriter, r *http.Request, id string)
+	// Get a macro by ID
+	// (GET /api/macros/{id})
+	GetMacro(w http.ResponseWriter, r *http.Request, id string)
+	// Update a macro
+	// (POST /api/macros/{id})
+	UpdateMacro(w http.ResponseWriter, r *http.Request, id string)
+	// Revert (run in reverse) a macro
+	// (POST /api/macros/{id}/revert)
+	RevertMacro(w http.ResponseWriter, r *http.Request, id string)
+	// Run a macro
+	// (POST /api/macros/{id}/run)
+	RunMacro(w http.ResponseWriter, r *http.Request, id string)
+	// List all pH probes
+	// (GET /api/phprobes)
+	ListPhProbes(w http.ResponseWriter, r *http.Request)
+	// Create a pH probe
+	// (PUT /api/phprobes)
+	CreatePhProbe(w http.ResponseWriter, r *http.Request)
+	// Delete a pH probe
+	// (DELETE /api/phprobes/{id})
+	DeletePhProbe(w http.ResponseWriter, r *http.Request, id string)
+	// Get a pH probe by ID
+	// (GET /api/phprobes/{id})
+	GetPhProbe(w http.ResponseWriter, r *http.Request, id string)
+	// Update a pH probe
+	// (POST /api/phprobes/{id})
+	UpdatePhProbe(w http.ResponseWriter, r *http.Request, id string)
+	// Calibrate a pH probe
+	// (POST /api/phprobes/{id}/calibrate)
+	CalibratePhProbe(w http.ResponseWriter, r *http.Request, id string)
+	// Add a calibration point for a pH probe
+	// (POST /api/phprobes/{id}/calibratepoint)
+	CalibratePhProbePoint(w http.ResponseWriter, r *http.Request, id string)
+	// Take a live reading from a pH probe
+	// (GET /api/phprobes/{id}/read)
+	ReadPhProbe(w http.ResponseWriter, r *http.Request, id string)
+	// Get pH probe readings (usage stats)
+	// (GET /api/phprobes/{id}/readings)
+	GetPhReadings(w http.ResponseWriter, r *http.Request, id string)
+	// List all temperature controllers
+	// (GET /api/tcs)
+	ListTemperatureControllers(w http.ResponseWriter, r *http.Request)
+	// Create a temperature controller
+	// (PUT /api/tcs)
+	CreateTemperatureController(w http.ResponseWriter, r *http.Request)
+	// List available temperature sensors
+	// (GET /api/tcs/sensors)
+	ListTemperatureSensors(w http.ResponseWriter, r *http.Request)
+	// Delete a temperature controller
+	// (DELETE /api/tcs/{id})
+	DeleteTemperatureController(w http.ResponseWriter, r *http.Request, id string)
+	// Get a temperature controller by ID
+	// (GET /api/tcs/{id})
+	GetTemperatureController(w http.ResponseWriter, r *http.Request, id string)
+	// Update a temperature controller
+	// (POST /api/tcs/{id})
+	UpdateTemperatureController(w http.ResponseWriter, r *http.Request, id string)
+	// Calibrate a temperature sensor
+	// (POST /api/tcs/{id}/calibrate)
+	CalibrateTemperatureSensor(w http.ResponseWriter, r *http.Request, id string)
+	// Get the current temperature reading
+	// (GET /api/tcs/{id}/current_reading)
+	GetCurrentTemperature(w http.ResponseWriter, r *http.Request, id string)
+	// Take a live temperature reading
+	// (GET /api/tcs/{id}/read)
+	ReadTemperatureSensor(w http.ResponseWriter, r *http.Request, id string)
+	// Get temperature usage stats
+	// (GET /api/tcs/{id}/usage)
+	GetTemperatureUsage(w http.ResponseWriter, r *http.Request, id string)
 	// List all timer jobs
 	// (GET /api/timers)
 	ListTimerJobs(w http.ResponseWriter, r *http.Request)
@@ -232,6 +620,180 @@ type ServerInterface interface {
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
 
 type Unimplemented struct{}
+
+// Power off the system
+// (POST /api/admin/poweroff)
+func (_ Unimplemented) SystemPoweroff(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Reboot the system
+// (POST /api/admin/reboot)
+func (_ Unimplemented) SystemReboot(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Reload reef-pi
+// (POST /api/admin/reload)
+func (_ Unimplemented) SystemReload(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Upgrade reef-pi
+// (POST /api/admin/upgrade)
+func (_ Unimplemented) SystemUpgrade(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all ATO controllers
+// (GET /api/atos)
+func (_ Unimplemented) ListATOs(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create an ATO controller
+// (PUT /api/atos)
+func (_ Unimplemented) CreateATO(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete an ATO controller
+// (DELETE /api/atos/{id})
+func (_ Unimplemented) DeleteATO(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get an ATO controller by ID
+// (GET /api/atos/{id})
+func (_ Unimplemented) GetATO(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update an ATO controller
+// (POST /api/atos/{id})
+func (_ Unimplemented) UpdateATO(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Reset ATO usage stats
+// (POST /api/atos/{id}/reset)
+func (_ Unimplemented) ResetATO(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get ATO usage stats
+// (GET /api/atos/{id}/usage)
+func (_ Unimplemented) GetATOUsage(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get camera configuration
+// (GET /api/camera/config)
+func (_ Unimplemented) GetCameraConfig(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update camera configuration
+// (POST /api/camera/config)
+func (_ Unimplemented) UpdateCameraConfig(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get the latest camera image path
+// (GET /api/camera/latest)
+func (_ Unimplemented) GetCameraLatest(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List camera images
+// (GET /api/camera/list)
+func (_ Unimplemented) ListCameraImages(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Capture a camera image
+// (POST /api/camera/shoot)
+func (_ Unimplemented) CameraShoot(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get current display state
+// (GET /api/display)
+func (_ Unimplemented) GetDisplayState(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Set display brightness
+// (POST /api/display)
+func (_ Unimplemented) SetDisplayBrightness(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Turn off the display
+// (POST /api/display/off)
+func (_ Unimplemented) DisableDisplay(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Turn on the display
+// (POST /api/display/on)
+func (_ Unimplemented) EnableDisplay(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all doser pumps
+// (GET /api/doser/pumps)
+func (_ Unimplemented) ListDoserPumps(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a doser pump
+// (PUT /api/doser/pumps)
+func (_ Unimplemented) CreateDoserPump(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a doser pump
+// (DELETE /api/doser/pumps/{id})
+func (_ Unimplemented) DeleteDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a doser pump by ID
+// (GET /api/doser/pumps/{id})
+func (_ Unimplemented) GetDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a doser pump
+// (POST /api/doser/pumps/{id})
+func (_ Unimplemented) UpdateDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Start calibration for a doser pump
+// (POST /api/doser/pumps/{id}/calibrate)
+func (_ Unimplemented) CalibrateDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Save calibration for a doser pump
+// (POST /api/doser/pumps/{id}/calibrate/save)
+func (_ Unimplemented) SaveDoserPumpCalibration(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Set dosing schedule for a pump
+// (POST /api/doser/pumps/{id}/schedule)
+func (_ Unimplemented) ScheduleDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get doser pump usage stats
+// (GET /api/doser/pumps/{id}/usage)
+func (_ Unimplemented) GetDoserPumpUsage(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
 
 // List all equipment
 // (GET /api/equipment)
@@ -311,6 +873,198 @@ func (_ Unimplemented) GetJournalUsage(w http.ResponseWriter, r *http.Request, i
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
+// List all lights
+// (GET /api/lights)
+func (_ Unimplemented) ListLights(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a light
+// (PUT /api/lights)
+func (_ Unimplemented) CreateLight(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a light
+// (DELETE /api/lights/{id})
+func (_ Unimplemented) DeleteLight(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a light by ID
+// (GET /api/lights/{id})
+func (_ Unimplemented) GetLight(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a light
+// (POST /api/lights/{id})
+func (_ Unimplemented) UpdateLight(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get light usage stats
+// (GET /api/lights/{id}/usage)
+func (_ Unimplemented) GetLightUsage(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all macros
+// (GET /api/macros)
+func (_ Unimplemented) ListMacros(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a macro
+// (PUT /api/macros)
+func (_ Unimplemented) CreateMacro(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a macro
+// (DELETE /api/macros/{id})
+func (_ Unimplemented) DeleteMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a macro by ID
+// (GET /api/macros/{id})
+func (_ Unimplemented) GetMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a macro
+// (POST /api/macros/{id})
+func (_ Unimplemented) UpdateMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Revert (run in reverse) a macro
+// (POST /api/macros/{id}/revert)
+func (_ Unimplemented) RevertMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Run a macro
+// (POST /api/macros/{id}/run)
+func (_ Unimplemented) RunMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all pH probes
+// (GET /api/phprobes)
+func (_ Unimplemented) ListPhProbes(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a pH probe
+// (PUT /api/phprobes)
+func (_ Unimplemented) CreatePhProbe(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a pH probe
+// (DELETE /api/phprobes/{id})
+func (_ Unimplemented) DeletePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a pH probe by ID
+// (GET /api/phprobes/{id})
+func (_ Unimplemented) GetPhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a pH probe
+// (POST /api/phprobes/{id})
+func (_ Unimplemented) UpdatePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Calibrate a pH probe
+// (POST /api/phprobes/{id}/calibrate)
+func (_ Unimplemented) CalibratePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Add a calibration point for a pH probe
+// (POST /api/phprobes/{id}/calibratepoint)
+func (_ Unimplemented) CalibratePhProbePoint(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Take a live reading from a pH probe
+// (GET /api/phprobes/{id}/read)
+func (_ Unimplemented) ReadPhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get pH probe readings (usage stats)
+// (GET /api/phprobes/{id}/readings)
+func (_ Unimplemented) GetPhReadings(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all temperature controllers
+// (GET /api/tcs)
+func (_ Unimplemented) ListTemperatureControllers(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a temperature controller
+// (PUT /api/tcs)
+func (_ Unimplemented) CreateTemperatureController(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List available temperature sensors
+// (GET /api/tcs/sensors)
+func (_ Unimplemented) ListTemperatureSensors(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a temperature controller
+// (DELETE /api/tcs/{id})
+func (_ Unimplemented) DeleteTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a temperature controller by ID
+// (GET /api/tcs/{id})
+func (_ Unimplemented) GetTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a temperature controller
+// (POST /api/tcs/{id})
+func (_ Unimplemented) UpdateTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Calibrate a temperature sensor
+// (POST /api/tcs/{id}/calibrate)
+func (_ Unimplemented) CalibrateTemperatureSensor(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get the current temperature reading
+// (GET /api/tcs/{id}/current_reading)
+func (_ Unimplemented) GetCurrentTemperature(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Take a live temperature reading
+// (GET /api/tcs/{id}/read)
+func (_ Unimplemented) ReadTemperatureSensor(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get temperature usage stats
+// (GET /api/tcs/{id}/usage)
+func (_ Unimplemented) GetTemperatureUsage(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
 // List all timer jobs
 // (GET /api/timers)
 func (_ Unimplemented) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
@@ -349,6 +1103,730 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// SystemPoweroff operation middleware
+func (siw *ServerInterfaceWrapper) SystemPoweroff(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SystemPoweroff(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SystemReboot operation middleware
+func (siw *ServerInterfaceWrapper) SystemReboot(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SystemReboot(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SystemReload operation middleware
+func (siw *ServerInterfaceWrapper) SystemReload(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SystemReload(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SystemUpgrade operation middleware
+func (siw *ServerInterfaceWrapper) SystemUpgrade(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SystemUpgrade(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListATOs operation middleware
+func (siw *ServerInterfaceWrapper) ListATOs(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListATOs(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateATO operation middleware
+func (siw *ServerInterfaceWrapper) CreateATO(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateATO(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteATO operation middleware
+func (siw *ServerInterfaceWrapper) DeleteATO(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteATO(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetATO operation middleware
+func (siw *ServerInterfaceWrapper) GetATO(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetATO(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateATO operation middleware
+func (siw *ServerInterfaceWrapper) UpdateATO(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateATO(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ResetATO operation middleware
+func (siw *ServerInterfaceWrapper) ResetATO(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ResetATO(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetATOUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetATOUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetATOUsage(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCameraConfig operation middleware
+func (siw *ServerInterfaceWrapper) GetCameraConfig(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCameraConfig(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateCameraConfig operation middleware
+func (siw *ServerInterfaceWrapper) UpdateCameraConfig(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateCameraConfig(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCameraLatest operation middleware
+func (siw *ServerInterfaceWrapper) GetCameraLatest(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCameraLatest(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListCameraImages operation middleware
+func (siw *ServerInterfaceWrapper) ListCameraImages(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListCameraImages(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CameraShoot operation middleware
+func (siw *ServerInterfaceWrapper) CameraShoot(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CameraShoot(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetDisplayState operation middleware
+func (siw *ServerInterfaceWrapper) GetDisplayState(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetDisplayState(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SetDisplayBrightness operation middleware
+func (siw *ServerInterfaceWrapper) SetDisplayBrightness(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SetDisplayBrightness(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DisableDisplay operation middleware
+func (siw *ServerInterfaceWrapper) DisableDisplay(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DisableDisplay(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// EnableDisplay operation middleware
+func (siw *ServerInterfaceWrapper) EnableDisplay(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.EnableDisplay(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListDoserPumps operation middleware
+func (siw *ServerInterfaceWrapper) ListDoserPumps(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListDoserPumps(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) CreateDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateDoserPump(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) DeleteDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteDoserPump(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) GetDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetDoserPump(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) UpdateDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateDoserPump(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CalibrateDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) CalibrateDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CalibrateDoserPump(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SaveDoserPumpCalibration operation middleware
+func (siw *ServerInterfaceWrapper) SaveDoserPumpCalibration(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SaveDoserPumpCalibration(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ScheduleDoserPump operation middleware
+func (siw *ServerInterfaceWrapper) ScheduleDoserPump(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ScheduleDoserPump(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetDoserPumpUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetDoserPumpUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetDoserPumpUsage(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // ListEquipment operation middleware
 func (siw *ServerInterfaceWrapper) ListEquipment(w http.ResponseWriter, r *http.Request) {
@@ -718,6 +2196,922 @@ func (siw *ServerInterfaceWrapper) GetJournalUsage(w http.ResponseWriter, r *htt
 	handler.ServeHTTP(w, r)
 }
 
+// ListLights operation middleware
+func (siw *ServerInterfaceWrapper) ListLights(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListLights(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateLight operation middleware
+func (siw *ServerInterfaceWrapper) CreateLight(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateLight(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteLight operation middleware
+func (siw *ServerInterfaceWrapper) DeleteLight(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteLight(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetLight operation middleware
+func (siw *ServerInterfaceWrapper) GetLight(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetLight(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateLight operation middleware
+func (siw *ServerInterfaceWrapper) UpdateLight(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateLight(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetLightUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetLightUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetLightUsage(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListMacros operation middleware
+func (siw *ServerInterfaceWrapper) ListMacros(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListMacros(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateMacro operation middleware
+func (siw *ServerInterfaceWrapper) CreateMacro(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateMacro(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteMacro operation middleware
+func (siw *ServerInterfaceWrapper) DeleteMacro(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetMacro operation middleware
+func (siw *ServerInterfaceWrapper) GetMacro(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateMacro operation middleware
+func (siw *ServerInterfaceWrapper) UpdateMacro(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RevertMacro operation middleware
+func (siw *ServerInterfaceWrapper) RevertMacro(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RevertMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RunMacro operation middleware
+func (siw *ServerInterfaceWrapper) RunMacro(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RunMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListPhProbes operation middleware
+func (siw *ServerInterfaceWrapper) ListPhProbes(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListPhProbes(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreatePhProbe operation middleware
+func (siw *ServerInterfaceWrapper) CreatePhProbe(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreatePhProbe(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeletePhProbe operation middleware
+func (siw *ServerInterfaceWrapper) DeletePhProbe(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeletePhProbe(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetPhProbe operation middleware
+func (siw *ServerInterfaceWrapper) GetPhProbe(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPhProbe(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdatePhProbe operation middleware
+func (siw *ServerInterfaceWrapper) UpdatePhProbe(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdatePhProbe(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CalibratePhProbe operation middleware
+func (siw *ServerInterfaceWrapper) CalibratePhProbe(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CalibratePhProbe(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CalibratePhProbePoint operation middleware
+func (siw *ServerInterfaceWrapper) CalibratePhProbePoint(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CalibratePhProbePoint(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReadPhProbe operation middleware
+func (siw *ServerInterfaceWrapper) ReadPhProbe(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReadPhProbe(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetPhReadings operation middleware
+func (siw *ServerInterfaceWrapper) GetPhReadings(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPhReadings(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListTemperatureControllers operation middleware
+func (siw *ServerInterfaceWrapper) ListTemperatureControllers(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListTemperatureControllers(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateTemperatureController operation middleware
+func (siw *ServerInterfaceWrapper) CreateTemperatureController(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateTemperatureController(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListTemperatureSensors operation middleware
+func (siw *ServerInterfaceWrapper) ListTemperatureSensors(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListTemperatureSensors(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteTemperatureController operation middleware
+func (siw *ServerInterfaceWrapper) DeleteTemperatureController(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteTemperatureController(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetTemperatureController operation middleware
+func (siw *ServerInterfaceWrapper) GetTemperatureController(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTemperatureController(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateTemperatureController operation middleware
+func (siw *ServerInterfaceWrapper) UpdateTemperatureController(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateTemperatureController(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CalibrateTemperatureSensor operation middleware
+func (siw *ServerInterfaceWrapper) CalibrateTemperatureSensor(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CalibrateTemperatureSensor(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCurrentTemperature operation middleware
+func (siw *ServerInterfaceWrapper) GetCurrentTemperature(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCurrentTemperature(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReadTemperatureSensor operation middleware
+func (siw *ServerInterfaceWrapper) ReadTemperatureSensor(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReadTemperatureSensor(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetTemperatureUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetTemperatureUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTemperatureUsage(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListTimerJobs operation middleware
 func (siw *ServerInterfaceWrapper) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
 
@@ -968,6 +3362,93 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/admin/poweroff", wrapper.SystemPoweroff)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/admin/reboot", wrapper.SystemReboot)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/admin/reload", wrapper.SystemReload)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/admin/upgrade", wrapper.SystemUpgrade)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/atos", wrapper.ListATOs)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/atos", wrapper.CreateATO)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/atos/{id}", wrapper.DeleteATO)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/atos/{id}", wrapper.GetATO)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/atos/{id}", wrapper.UpdateATO)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/atos/{id}/reset", wrapper.ResetATO)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/atos/{id}/usage", wrapper.GetATOUsage)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/camera/config", wrapper.GetCameraConfig)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/camera/config", wrapper.UpdateCameraConfig)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/camera/latest", wrapper.GetCameraLatest)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/camera/list", wrapper.ListCameraImages)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/camera/shoot", wrapper.CameraShoot)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/display", wrapper.GetDisplayState)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/display", wrapper.SetDisplayBrightness)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/display/off", wrapper.DisableDisplay)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/display/on", wrapper.EnableDisplay)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/doser/pumps", wrapper.ListDoserPumps)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/doser/pumps", wrapper.CreateDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/doser/pumps/{id}", wrapper.DeleteDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/doser/pumps/{id}", wrapper.GetDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/doser/pumps/{id}", wrapper.UpdateDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/doser/pumps/{id}/calibrate", wrapper.CalibrateDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/doser/pumps/{id}/calibrate/save", wrapper.SaveDoserPumpCalibration)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/doser/pumps/{id}/schedule", wrapper.ScheduleDoserPump)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/doser/pumps/{id}/usage", wrapper.GetDoserPumpUsage)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/equipment", wrapper.ListEquipment)
 	})
 	r.Group(func(r chi.Router) {
@@ -1007,6 +3488,102 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Get(options.BaseURL+"/api/journal/{id}/usage", wrapper.GetJournalUsage)
 	})
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/lights", wrapper.ListLights)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/lights", wrapper.CreateLight)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/lights/{id}", wrapper.DeleteLight)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/lights/{id}", wrapper.GetLight)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/lights/{id}", wrapper.UpdateLight)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/lights/{id}/usage", wrapper.GetLightUsage)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/macros", wrapper.ListMacros)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/macros", wrapper.CreateMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/macros/{id}", wrapper.DeleteMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/macros/{id}", wrapper.GetMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/macros/{id}", wrapper.UpdateMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/macros/{id}/revert", wrapper.RevertMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/macros/{id}/run", wrapper.RunMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/phprobes", wrapper.ListPhProbes)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/phprobes", wrapper.CreatePhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/phprobes/{id}", wrapper.DeletePhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/phprobes/{id}", wrapper.GetPhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/phprobes/{id}", wrapper.UpdatePhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/phprobes/{id}/calibrate", wrapper.CalibratePhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/phprobes/{id}/calibratepoint", wrapper.CalibratePhProbePoint)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/phprobes/{id}/read", wrapper.ReadPhProbe)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/phprobes/{id}/readings", wrapper.GetPhReadings)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs", wrapper.ListTemperatureControllers)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/tcs", wrapper.CreateTemperatureController)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs/sensors", wrapper.ListTemperatureSensors)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/tcs/{id}", wrapper.DeleteTemperatureController)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs/{id}", wrapper.GetTemperatureController)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/tcs/{id}", wrapper.UpdateTemperatureController)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/tcs/{id}/calibrate", wrapper.CalibrateTemperatureSensor)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs/{id}/current_reading", wrapper.GetCurrentTemperature)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs/{id}/read", wrapper.ReadTemperatureSensor)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/tcs/{id}/usage", wrapper.GetTemperatureUsage)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/timers", wrapper.ListTimerJobs)
 	})
 	r.Group(func(r chi.Router) {
@@ -1023,6 +3600,1265 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 
 	return r
+}
+
+type SystemPoweroffRequestObject struct {
+}
+
+type SystemPoweroffResponseObject interface {
+	VisitSystemPoweroffResponse(w http.ResponseWriter) error
+}
+
+type SystemPoweroff200JSONResponse ErrorResponse
+
+func (response SystemPoweroff200JSONResponse) VisitSystemPoweroffResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemPoweroff401JSONResponse ErrorResponse
+
+func (response SystemPoweroff401JSONResponse) VisitSystemPoweroffResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemRebootRequestObject struct {
+}
+
+type SystemRebootResponseObject interface {
+	VisitSystemRebootResponse(w http.ResponseWriter) error
+}
+
+type SystemReboot200JSONResponse ErrorResponse
+
+func (response SystemReboot200JSONResponse) VisitSystemRebootResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemReboot401JSONResponse ErrorResponse
+
+func (response SystemReboot401JSONResponse) VisitSystemRebootResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemReloadRequestObject struct {
+}
+
+type SystemReloadResponseObject interface {
+	VisitSystemReloadResponse(w http.ResponseWriter) error
+}
+
+type SystemReload200JSONResponse ErrorResponse
+
+func (response SystemReload200JSONResponse) VisitSystemReloadResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemReload401JSONResponse ErrorResponse
+
+func (response SystemReload401JSONResponse) VisitSystemReloadResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemUpgradeRequestObject struct {
+}
+
+type SystemUpgradeResponseObject interface {
+	VisitSystemUpgradeResponse(w http.ResponseWriter) error
+}
+
+type SystemUpgrade200JSONResponse ErrorResponse
+
+func (response SystemUpgrade200JSONResponse) VisitSystemUpgradeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SystemUpgrade401JSONResponse ErrorResponse
+
+func (response SystemUpgrade401JSONResponse) VisitSystemUpgradeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListATOsRequestObject struct {
+}
+
+type ListATOsResponseObject interface {
+	VisitListATOsResponse(w http.ResponseWriter) error
+}
+
+type ListATOs200JSONResponse []ATO
+
+func (response ListATOs200JSONResponse) VisitListATOsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListATOs401JSONResponse ErrorResponse
+
+func (response ListATOs401JSONResponse) VisitListATOsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateATORequestObject struct {
+	Body *CreateATOJSONRequestBody
+}
+
+type CreateATOResponseObject interface {
+	VisitCreateATOResponse(w http.ResponseWriter) error
+}
+
+type CreateATO200JSONResponse ATO
+
+func (response CreateATO200JSONResponse) VisitCreateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateATO400JSONResponse ErrorResponse
+
+func (response CreateATO400JSONResponse) VisitCreateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateATO401JSONResponse ErrorResponse
+
+func (response CreateATO401JSONResponse) VisitCreateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteATORequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteATOResponseObject interface {
+	VisitDeleteATOResponse(w http.ResponseWriter) error
+}
+
+type DeleteATO200JSONResponse ErrorResponse
+
+func (response DeleteATO200JSONResponse) VisitDeleteATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteATO401JSONResponse ErrorResponse
+
+func (response DeleteATO401JSONResponse) VisitDeleteATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteATO404JSONResponse ErrorResponse
+
+func (response DeleteATO404JSONResponse) VisitDeleteATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATORequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetATOResponseObject interface {
+	VisitGetATOResponse(w http.ResponseWriter) error
+}
+
+type GetATO200JSONResponse ATO
+
+func (response GetATO200JSONResponse) VisitGetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATO401JSONResponse ErrorResponse
+
+func (response GetATO401JSONResponse) VisitGetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATO404JSONResponse ErrorResponse
+
+func (response GetATO404JSONResponse) VisitGetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateATORequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateATOJSONRequestBody
+}
+
+type UpdateATOResponseObject interface {
+	VisitUpdateATOResponse(w http.ResponseWriter) error
+}
+
+type UpdateATO200JSONResponse ATO
+
+func (response UpdateATO200JSONResponse) VisitUpdateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateATO400JSONResponse ErrorResponse
+
+func (response UpdateATO400JSONResponse) VisitUpdateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateATO401JSONResponse ErrorResponse
+
+func (response UpdateATO401JSONResponse) VisitUpdateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateATO404JSONResponse ErrorResponse
+
+func (response UpdateATO404JSONResponse) VisitUpdateATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ResetATORequestObject struct {
+	Id string `json:"id"`
+}
+
+type ResetATOResponseObject interface {
+	VisitResetATOResponse(w http.ResponseWriter) error
+}
+
+type ResetATO200JSONResponse ErrorResponse
+
+func (response ResetATO200JSONResponse) VisitResetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ResetATO401JSONResponse ErrorResponse
+
+func (response ResetATO401JSONResponse) VisitResetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ResetATO404JSONResponse ErrorResponse
+
+func (response ResetATO404JSONResponse) VisitResetATOResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATOUsageRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetATOUsageResponseObject interface {
+	VisitGetATOUsageResponse(w http.ResponseWriter) error
+}
+
+type GetATOUsage200JSONResponse UsageStats
+
+func (response GetATOUsage200JSONResponse) VisitGetATOUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATOUsage401JSONResponse ErrorResponse
+
+func (response GetATOUsage401JSONResponse) VisitGetATOUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetATOUsage404JSONResponse ErrorResponse
+
+func (response GetATOUsage404JSONResponse) VisitGetATOUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCameraConfigRequestObject struct {
+}
+
+type GetCameraConfigResponseObject interface {
+	VisitGetCameraConfigResponse(w http.ResponseWriter) error
+}
+
+type GetCameraConfig200JSONResponse CameraConfig
+
+func (response GetCameraConfig200JSONResponse) VisitGetCameraConfigResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCameraConfig401JSONResponse ErrorResponse
+
+func (response GetCameraConfig401JSONResponse) VisitGetCameraConfigResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateCameraConfigRequestObject struct {
+	Body *UpdateCameraConfigJSONRequestBody
+}
+
+type UpdateCameraConfigResponseObject interface {
+	VisitUpdateCameraConfigResponse(w http.ResponseWriter) error
+}
+
+type UpdateCameraConfig200JSONResponse CameraConfig
+
+func (response UpdateCameraConfig200JSONResponse) VisitUpdateCameraConfigResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateCameraConfig400JSONResponse ErrorResponse
+
+func (response UpdateCameraConfig400JSONResponse) VisitUpdateCameraConfigResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateCameraConfig401JSONResponse ErrorResponse
+
+func (response UpdateCameraConfig401JSONResponse) VisitUpdateCameraConfigResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCameraLatestRequestObject struct {
+}
+
+type GetCameraLatestResponseObject interface {
+	VisitGetCameraLatestResponse(w http.ResponseWriter) error
+}
+
+type GetCameraLatest200JSONResponse ErrorResponse
+
+func (response GetCameraLatest200JSONResponse) VisitGetCameraLatestResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCameraLatest401JSONResponse ErrorResponse
+
+func (response GetCameraLatest401JSONResponse) VisitGetCameraLatestResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListCameraImagesRequestObject struct {
+}
+
+type ListCameraImagesResponseObject interface {
+	VisitListCameraImagesResponse(w http.ResponseWriter) error
+}
+
+type ListCameraImages200JSONResponse []string
+
+func (response ListCameraImages200JSONResponse) VisitListCameraImagesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListCameraImages401JSONResponse ErrorResponse
+
+func (response ListCameraImages401JSONResponse) VisitListCameraImagesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CameraShootRequestObject struct {
+}
+
+type CameraShootResponseObject interface {
+	VisitCameraShootResponse(w http.ResponseWriter) error
+}
+
+type CameraShoot200JSONResponse ErrorResponse
+
+func (response CameraShoot200JSONResponse) VisitCameraShootResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CameraShoot401JSONResponse ErrorResponse
+
+func (response CameraShoot401JSONResponse) VisitCameraShootResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDisplayStateRequestObject struct {
+}
+
+type GetDisplayStateResponseObject interface {
+	VisitGetDisplayStateResponse(w http.ResponseWriter) error
+}
+
+type GetDisplayState200JSONResponse DisplayState
+
+func (response GetDisplayState200JSONResponse) VisitGetDisplayStateResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDisplayState401JSONResponse ErrorResponse
+
+func (response GetDisplayState401JSONResponse) VisitGetDisplayStateResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SetDisplayBrightnessRequestObject struct {
+	Body *SetDisplayBrightnessJSONRequestBody
+}
+
+type SetDisplayBrightnessResponseObject interface {
+	VisitSetDisplayBrightnessResponse(w http.ResponseWriter) error
+}
+
+type SetDisplayBrightness200JSONResponse ErrorResponse
+
+func (response SetDisplayBrightness200JSONResponse) VisitSetDisplayBrightnessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SetDisplayBrightness401JSONResponse ErrorResponse
+
+func (response SetDisplayBrightness401JSONResponse) VisitSetDisplayBrightnessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DisableDisplayRequestObject struct {
+}
+
+type DisableDisplayResponseObject interface {
+	VisitDisableDisplayResponse(w http.ResponseWriter) error
+}
+
+type DisableDisplay200JSONResponse ErrorResponse
+
+func (response DisableDisplay200JSONResponse) VisitDisableDisplayResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DisableDisplay401JSONResponse ErrorResponse
+
+func (response DisableDisplay401JSONResponse) VisitDisableDisplayResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EnableDisplayRequestObject struct {
+}
+
+type EnableDisplayResponseObject interface {
+	VisitEnableDisplayResponse(w http.ResponseWriter) error
+}
+
+type EnableDisplay200JSONResponse ErrorResponse
+
+func (response EnableDisplay200JSONResponse) VisitEnableDisplayResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EnableDisplay401JSONResponse ErrorResponse
+
+func (response EnableDisplay401JSONResponse) VisitEnableDisplayResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDoserPumpsRequestObject struct {
+}
+
+type ListDoserPumpsResponseObject interface {
+	VisitListDoserPumpsResponse(w http.ResponseWriter) error
+}
+
+type ListDoserPumps200JSONResponse []DoserPump
+
+func (response ListDoserPumps200JSONResponse) VisitListDoserPumpsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDoserPumps401JSONResponse ErrorResponse
+
+func (response ListDoserPumps401JSONResponse) VisitListDoserPumpsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDoserPumpRequestObject struct {
+	Body *CreateDoserPumpJSONRequestBody
+}
+
+type CreateDoserPumpResponseObject interface {
+	VisitCreateDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type CreateDoserPump200JSONResponse DoserPump
+
+func (response CreateDoserPump200JSONResponse) VisitCreateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDoserPump400JSONResponse ErrorResponse
+
+func (response CreateDoserPump400JSONResponse) VisitCreateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDoserPump401JSONResponse ErrorResponse
+
+func (response CreateDoserPump401JSONResponse) VisitCreateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDoserPumpRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteDoserPumpResponseObject interface {
+	VisitDeleteDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type DeleteDoserPump200JSONResponse ErrorResponse
+
+func (response DeleteDoserPump200JSONResponse) VisitDeleteDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDoserPump401JSONResponse ErrorResponse
+
+func (response DeleteDoserPump401JSONResponse) VisitDeleteDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDoserPump404JSONResponse ErrorResponse
+
+func (response DeleteDoserPump404JSONResponse) VisitDeleteDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPumpRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetDoserPumpResponseObject interface {
+	VisitGetDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type GetDoserPump200JSONResponse DoserPump
+
+func (response GetDoserPump200JSONResponse) VisitGetDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPump401JSONResponse ErrorResponse
+
+func (response GetDoserPump401JSONResponse) VisitGetDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPump404JSONResponse ErrorResponse
+
+func (response GetDoserPump404JSONResponse) VisitGetDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDoserPumpRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateDoserPumpJSONRequestBody
+}
+
+type UpdateDoserPumpResponseObject interface {
+	VisitUpdateDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type UpdateDoserPump200JSONResponse DoserPump
+
+func (response UpdateDoserPump200JSONResponse) VisitUpdateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDoserPump400JSONResponse ErrorResponse
+
+func (response UpdateDoserPump400JSONResponse) VisitUpdateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDoserPump401JSONResponse ErrorResponse
+
+func (response UpdateDoserPump401JSONResponse) VisitUpdateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDoserPump404JSONResponse ErrorResponse
+
+func (response UpdateDoserPump404JSONResponse) VisitUpdateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibrateDoserPumpRequestObject struct {
+	Id string `json:"id"`
+}
+
+type CalibrateDoserPumpResponseObject interface {
+	VisitCalibrateDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type CalibrateDoserPump200JSONResponse ErrorResponse
+
+func (response CalibrateDoserPump200JSONResponse) VisitCalibrateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibrateDoserPump401JSONResponse ErrorResponse
+
+func (response CalibrateDoserPump401JSONResponse) VisitCalibrateDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SaveDoserPumpCalibrationRequestObject struct {
+	Id   string `json:"id"`
+	Body *SaveDoserPumpCalibrationJSONRequestBody
+}
+
+type SaveDoserPumpCalibrationResponseObject interface {
+	VisitSaveDoserPumpCalibrationResponse(w http.ResponseWriter) error
+}
+
+type SaveDoserPumpCalibration200JSONResponse ErrorResponse
+
+func (response SaveDoserPumpCalibration200JSONResponse) VisitSaveDoserPumpCalibrationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SaveDoserPumpCalibration400JSONResponse ErrorResponse
+
+func (response SaveDoserPumpCalibration400JSONResponse) VisitSaveDoserPumpCalibrationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SaveDoserPumpCalibration401JSONResponse ErrorResponse
+
+func (response SaveDoserPumpCalibration401JSONResponse) VisitSaveDoserPumpCalibrationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ScheduleDoserPumpRequestObject struct {
+	Id   string `json:"id"`
+	Body *ScheduleDoserPumpJSONRequestBody
+}
+
+type ScheduleDoserPumpResponseObject interface {
+	VisitScheduleDoserPumpResponse(w http.ResponseWriter) error
+}
+
+type ScheduleDoserPump200JSONResponse ErrorResponse
+
+func (response ScheduleDoserPump200JSONResponse) VisitScheduleDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ScheduleDoserPump400JSONResponse ErrorResponse
+
+func (response ScheduleDoserPump400JSONResponse) VisitScheduleDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ScheduleDoserPump401JSONResponse ErrorResponse
+
+func (response ScheduleDoserPump401JSONResponse) VisitScheduleDoserPumpResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPumpUsageRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetDoserPumpUsageResponseObject interface {
+	VisitGetDoserPumpUsageResponse(w http.ResponseWriter) error
+}
+
+type GetDoserPumpUsage200JSONResponse UsageStats
+
+func (response GetDoserPumpUsage200JSONResponse) VisitGetDoserPumpUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPumpUsage401JSONResponse ErrorResponse
+
+func (response GetDoserPumpUsage401JSONResponse) VisitGetDoserPumpUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDoserPumpUsage404JSONResponse ErrorResponse
+
+func (response GetDoserPumpUsage404JSONResponse) VisitGetDoserPumpUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type ListEquipmentRequestObject struct {
@@ -1705,6 +5541,1558 @@ func (response GetJournalUsage404JSONResponse) VisitGetJournalUsageResponse(w ht
 	return err
 }
 
+type ListLightsRequestObject struct {
+}
+
+type ListLightsResponseObject interface {
+	VisitListLightsResponse(w http.ResponseWriter) error
+}
+
+type ListLights200JSONResponse []Light
+
+func (response ListLights200JSONResponse) VisitListLightsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListLights401JSONResponse ErrorResponse
+
+func (response ListLights401JSONResponse) VisitListLightsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLightRequestObject struct {
+	Body *CreateLightJSONRequestBody
+}
+
+type CreateLightResponseObject interface {
+	VisitCreateLightResponse(w http.ResponseWriter) error
+}
+
+type CreateLight200JSONResponse Light
+
+func (response CreateLight200JSONResponse) VisitCreateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLight400JSONResponse ErrorResponse
+
+func (response CreateLight400JSONResponse) VisitCreateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLight401JSONResponse ErrorResponse
+
+func (response CreateLight401JSONResponse) VisitCreateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLightRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteLightResponseObject interface {
+	VisitDeleteLightResponse(w http.ResponseWriter) error
+}
+
+type DeleteLight200JSONResponse ErrorResponse
+
+func (response DeleteLight200JSONResponse) VisitDeleteLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLight401JSONResponse ErrorResponse
+
+func (response DeleteLight401JSONResponse) VisitDeleteLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLight404JSONResponse ErrorResponse
+
+func (response DeleteLight404JSONResponse) VisitDeleteLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLightRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetLightResponseObject interface {
+	VisitGetLightResponse(w http.ResponseWriter) error
+}
+
+type GetLight200JSONResponse Light
+
+func (response GetLight200JSONResponse) VisitGetLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLight401JSONResponse ErrorResponse
+
+func (response GetLight401JSONResponse) VisitGetLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLight404JSONResponse ErrorResponse
+
+func (response GetLight404JSONResponse) VisitGetLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateLightRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateLightJSONRequestBody
+}
+
+type UpdateLightResponseObject interface {
+	VisitUpdateLightResponse(w http.ResponseWriter) error
+}
+
+type UpdateLight200JSONResponse Light
+
+func (response UpdateLight200JSONResponse) VisitUpdateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateLight400JSONResponse ErrorResponse
+
+func (response UpdateLight400JSONResponse) VisitUpdateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateLight401JSONResponse ErrorResponse
+
+func (response UpdateLight401JSONResponse) VisitUpdateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateLight404JSONResponse ErrorResponse
+
+func (response UpdateLight404JSONResponse) VisitUpdateLightResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLightUsageRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetLightUsageResponseObject interface {
+	VisitGetLightUsageResponse(w http.ResponseWriter) error
+}
+
+type GetLightUsage200JSONResponse UsageStats
+
+func (response GetLightUsage200JSONResponse) VisitGetLightUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLightUsage401JSONResponse ErrorResponse
+
+func (response GetLightUsage401JSONResponse) VisitGetLightUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLightUsage404JSONResponse ErrorResponse
+
+func (response GetLightUsage404JSONResponse) VisitGetLightUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListMacrosRequestObject struct {
+}
+
+type ListMacrosResponseObject interface {
+	VisitListMacrosResponse(w http.ResponseWriter) error
+}
+
+type ListMacros200JSONResponse []Macro
+
+func (response ListMacros200JSONResponse) VisitListMacrosResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListMacros401JSONResponse ErrorResponse
+
+func (response ListMacros401JSONResponse) VisitListMacrosResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateMacroRequestObject struct {
+	Body *CreateMacroJSONRequestBody
+}
+
+type CreateMacroResponseObject interface {
+	VisitCreateMacroResponse(w http.ResponseWriter) error
+}
+
+type CreateMacro200JSONResponse Macro
+
+func (response CreateMacro200JSONResponse) VisitCreateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateMacro400JSONResponse ErrorResponse
+
+func (response CreateMacro400JSONResponse) VisitCreateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateMacro401JSONResponse ErrorResponse
+
+func (response CreateMacro401JSONResponse) VisitCreateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMacroRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteMacroResponseObject interface {
+	VisitDeleteMacroResponse(w http.ResponseWriter) error
+}
+
+type DeleteMacro200JSONResponse ErrorResponse
+
+func (response DeleteMacro200JSONResponse) VisitDeleteMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMacro401JSONResponse ErrorResponse
+
+func (response DeleteMacro401JSONResponse) VisitDeleteMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMacro404JSONResponse ErrorResponse
+
+func (response DeleteMacro404JSONResponse) VisitDeleteMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetMacroRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetMacroResponseObject interface {
+	VisitGetMacroResponse(w http.ResponseWriter) error
+}
+
+type GetMacro200JSONResponse Macro
+
+func (response GetMacro200JSONResponse) VisitGetMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetMacro401JSONResponse ErrorResponse
+
+func (response GetMacro401JSONResponse) VisitGetMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetMacro404JSONResponse ErrorResponse
+
+func (response GetMacro404JSONResponse) VisitGetMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateMacroRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateMacroJSONRequestBody
+}
+
+type UpdateMacroResponseObject interface {
+	VisitUpdateMacroResponse(w http.ResponseWriter) error
+}
+
+type UpdateMacro200JSONResponse Macro
+
+func (response UpdateMacro200JSONResponse) VisitUpdateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateMacro400JSONResponse ErrorResponse
+
+func (response UpdateMacro400JSONResponse) VisitUpdateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateMacro401JSONResponse ErrorResponse
+
+func (response UpdateMacro401JSONResponse) VisitUpdateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateMacro404JSONResponse ErrorResponse
+
+func (response UpdateMacro404JSONResponse) VisitUpdateMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RevertMacroRequestObject struct {
+	Id string `json:"id"`
+}
+
+type RevertMacroResponseObject interface {
+	VisitRevertMacroResponse(w http.ResponseWriter) error
+}
+
+type RevertMacro200JSONResponse ErrorResponse
+
+func (response RevertMacro200JSONResponse) VisitRevertMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RevertMacro400JSONResponse ErrorResponse
+
+func (response RevertMacro400JSONResponse) VisitRevertMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RevertMacro401JSONResponse ErrorResponse
+
+func (response RevertMacro401JSONResponse) VisitRevertMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RevertMacro404JSONResponse ErrorResponse
+
+func (response RevertMacro404JSONResponse) VisitRevertMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RunMacroRequestObject struct {
+	Id string `json:"id"`
+}
+
+type RunMacroResponseObject interface {
+	VisitRunMacroResponse(w http.ResponseWriter) error
+}
+
+type RunMacro200JSONResponse ErrorResponse
+
+func (response RunMacro200JSONResponse) VisitRunMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RunMacro401JSONResponse ErrorResponse
+
+func (response RunMacro401JSONResponse) VisitRunMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RunMacro404JSONResponse ErrorResponse
+
+func (response RunMacro404JSONResponse) VisitRunMacroResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPhProbesRequestObject struct {
+}
+
+type ListPhProbesResponseObject interface {
+	VisitListPhProbesResponse(w http.ResponseWriter) error
+}
+
+type ListPhProbes200JSONResponse []PhProbe
+
+func (response ListPhProbes200JSONResponse) VisitListPhProbesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPhProbes401JSONResponse ErrorResponse
+
+func (response ListPhProbes401JSONResponse) VisitListPhProbesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePhProbeRequestObject struct {
+	Body *CreatePhProbeJSONRequestBody
+}
+
+type CreatePhProbeResponseObject interface {
+	VisitCreatePhProbeResponse(w http.ResponseWriter) error
+}
+
+type CreatePhProbe200JSONResponse PhProbe
+
+func (response CreatePhProbe200JSONResponse) VisitCreatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePhProbe400JSONResponse ErrorResponse
+
+func (response CreatePhProbe400JSONResponse) VisitCreatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePhProbe401JSONResponse ErrorResponse
+
+func (response CreatePhProbe401JSONResponse) VisitCreatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeletePhProbeRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeletePhProbeResponseObject interface {
+	VisitDeletePhProbeResponse(w http.ResponseWriter) error
+}
+
+type DeletePhProbe200JSONResponse ErrorResponse
+
+func (response DeletePhProbe200JSONResponse) VisitDeletePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeletePhProbe401JSONResponse ErrorResponse
+
+func (response DeletePhProbe401JSONResponse) VisitDeletePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeletePhProbe404JSONResponse ErrorResponse
+
+func (response DeletePhProbe404JSONResponse) VisitDeletePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhProbeRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetPhProbeResponseObject interface {
+	VisitGetPhProbeResponse(w http.ResponseWriter) error
+}
+
+type GetPhProbe200JSONResponse PhProbe
+
+func (response GetPhProbe200JSONResponse) VisitGetPhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhProbe401JSONResponse ErrorResponse
+
+func (response GetPhProbe401JSONResponse) VisitGetPhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhProbe404JSONResponse ErrorResponse
+
+func (response GetPhProbe404JSONResponse) VisitGetPhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdatePhProbeRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdatePhProbeJSONRequestBody
+}
+
+type UpdatePhProbeResponseObject interface {
+	VisitUpdatePhProbeResponse(w http.ResponseWriter) error
+}
+
+type UpdatePhProbe200JSONResponse PhProbe
+
+func (response UpdatePhProbe200JSONResponse) VisitUpdatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdatePhProbe400JSONResponse ErrorResponse
+
+func (response UpdatePhProbe400JSONResponse) VisitUpdatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdatePhProbe401JSONResponse ErrorResponse
+
+func (response UpdatePhProbe401JSONResponse) VisitUpdatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdatePhProbe404JSONResponse ErrorResponse
+
+func (response UpdatePhProbe404JSONResponse) VisitUpdatePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbeRequestObject struct {
+	Id   string `json:"id"`
+	Body *CalibratePhProbeJSONRequestBody
+}
+
+type CalibratePhProbeResponseObject interface {
+	VisitCalibratePhProbeResponse(w http.ResponseWriter) error
+}
+
+type CalibratePhProbe200JSONResponse ErrorResponse
+
+func (response CalibratePhProbe200JSONResponse) VisitCalibratePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbe400JSONResponse ErrorResponse
+
+func (response CalibratePhProbe400JSONResponse) VisitCalibratePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbe401JSONResponse ErrorResponse
+
+func (response CalibratePhProbe401JSONResponse) VisitCalibratePhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbePointRequestObject struct {
+	Id   string `json:"id"`
+	Body *CalibratePhProbePointJSONRequestBody
+}
+
+type CalibratePhProbePointResponseObject interface {
+	VisitCalibratePhProbePointResponse(w http.ResponseWriter) error
+}
+
+type CalibratePhProbePoint200JSONResponse ErrorResponse
+
+func (response CalibratePhProbePoint200JSONResponse) VisitCalibratePhProbePointResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbePoint400JSONResponse ErrorResponse
+
+func (response CalibratePhProbePoint400JSONResponse) VisitCalibratePhProbePointResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibratePhProbePoint401JSONResponse ErrorResponse
+
+func (response CalibratePhProbePoint401JSONResponse) VisitCalibratePhProbePointResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadPhProbeRequestObject struct {
+	Id string `json:"id"`
+}
+
+type ReadPhProbeResponseObject interface {
+	VisitReadPhProbeResponse(w http.ResponseWriter) error
+}
+
+type ReadPhProbe200JSONResponse struct {
+	Value *float64 `json:"value,omitempty"`
+}
+
+func (response ReadPhProbe200JSONResponse) VisitReadPhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadPhProbe401JSONResponse ErrorResponse
+
+func (response ReadPhProbe401JSONResponse) VisitReadPhProbeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhReadingsRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetPhReadingsResponseObject interface {
+	VisitGetPhReadingsResponse(w http.ResponseWriter) error
+}
+
+type GetPhReadings200JSONResponse UsageStats
+
+func (response GetPhReadings200JSONResponse) VisitGetPhReadingsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhReadings401JSONResponse ErrorResponse
+
+func (response GetPhReadings401JSONResponse) VisitGetPhReadingsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPhReadings404JSONResponse ErrorResponse
+
+func (response GetPhReadings404JSONResponse) VisitGetPhReadingsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListTemperatureControllersRequestObject struct {
+}
+
+type ListTemperatureControllersResponseObject interface {
+	VisitListTemperatureControllersResponse(w http.ResponseWriter) error
+}
+
+type ListTemperatureControllers200JSONResponse []TemperatureController
+
+func (response ListTemperatureControllers200JSONResponse) VisitListTemperatureControllersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListTemperatureControllers401JSONResponse ErrorResponse
+
+func (response ListTemperatureControllers401JSONResponse) VisitListTemperatureControllersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTemperatureControllerRequestObject struct {
+	Body *CreateTemperatureControllerJSONRequestBody
+}
+
+type CreateTemperatureControllerResponseObject interface {
+	VisitCreateTemperatureControllerResponse(w http.ResponseWriter) error
+}
+
+type CreateTemperatureController200JSONResponse TemperatureController
+
+func (response CreateTemperatureController200JSONResponse) VisitCreateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTemperatureController400JSONResponse ErrorResponse
+
+func (response CreateTemperatureController400JSONResponse) VisitCreateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTemperatureController401JSONResponse ErrorResponse
+
+func (response CreateTemperatureController401JSONResponse) VisitCreateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListTemperatureSensorsRequestObject struct {
+}
+
+type ListTemperatureSensorsResponseObject interface {
+	VisitListTemperatureSensorsResponse(w http.ResponseWriter) error
+}
+
+type ListTemperatureSensors200JSONResponse []string
+
+func (response ListTemperatureSensors200JSONResponse) VisitListTemperatureSensorsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListTemperatureSensors401JSONResponse ErrorResponse
+
+func (response ListTemperatureSensors401JSONResponse) VisitListTemperatureSensorsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTemperatureControllerRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteTemperatureControllerResponseObject interface {
+	VisitDeleteTemperatureControllerResponse(w http.ResponseWriter) error
+}
+
+type DeleteTemperatureController200JSONResponse ErrorResponse
+
+func (response DeleteTemperatureController200JSONResponse) VisitDeleteTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTemperatureController401JSONResponse ErrorResponse
+
+func (response DeleteTemperatureController401JSONResponse) VisitDeleteTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTemperatureController404JSONResponse ErrorResponse
+
+func (response DeleteTemperatureController404JSONResponse) VisitDeleteTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureControllerRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetTemperatureControllerResponseObject interface {
+	VisitGetTemperatureControllerResponse(w http.ResponseWriter) error
+}
+
+type GetTemperatureController200JSONResponse TemperatureController
+
+func (response GetTemperatureController200JSONResponse) VisitGetTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureController401JSONResponse ErrorResponse
+
+func (response GetTemperatureController401JSONResponse) VisitGetTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureController404JSONResponse ErrorResponse
+
+func (response GetTemperatureController404JSONResponse) VisitGetTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTemperatureControllerRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateTemperatureControllerJSONRequestBody
+}
+
+type UpdateTemperatureControllerResponseObject interface {
+	VisitUpdateTemperatureControllerResponse(w http.ResponseWriter) error
+}
+
+type UpdateTemperatureController200JSONResponse TemperatureController
+
+func (response UpdateTemperatureController200JSONResponse) VisitUpdateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTemperatureController400JSONResponse ErrorResponse
+
+func (response UpdateTemperatureController400JSONResponse) VisitUpdateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTemperatureController401JSONResponse ErrorResponse
+
+func (response UpdateTemperatureController401JSONResponse) VisitUpdateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTemperatureController404JSONResponse ErrorResponse
+
+func (response UpdateTemperatureController404JSONResponse) VisitUpdateTemperatureControllerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibrateTemperatureSensorRequestObject struct {
+	Id   string `json:"id"`
+	Body *CalibrateTemperatureSensorJSONRequestBody
+}
+
+type CalibrateTemperatureSensorResponseObject interface {
+	VisitCalibrateTemperatureSensorResponse(w http.ResponseWriter) error
+}
+
+type CalibrateTemperatureSensor200JSONResponse ErrorResponse
+
+func (response CalibrateTemperatureSensor200JSONResponse) VisitCalibrateTemperatureSensorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CalibrateTemperatureSensor401JSONResponse ErrorResponse
+
+func (response CalibrateTemperatureSensor401JSONResponse) VisitCalibrateTemperatureSensorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCurrentTemperatureRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetCurrentTemperatureResponseObject interface {
+	VisitGetCurrentTemperatureResponse(w http.ResponseWriter) error
+}
+
+type GetCurrentTemperature200JSONResponse struct {
+	Value *float64 `json:"value,omitempty"`
+}
+
+func (response GetCurrentTemperature200JSONResponse) VisitGetCurrentTemperatureResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCurrentTemperature401JSONResponse ErrorResponse
+
+func (response GetCurrentTemperature401JSONResponse) VisitGetCurrentTemperatureResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadTemperatureSensorRequestObject struct {
+	Id string `json:"id"`
+}
+
+type ReadTemperatureSensorResponseObject interface {
+	VisitReadTemperatureSensorResponse(w http.ResponseWriter) error
+}
+
+type ReadTemperatureSensor200JSONResponse struct {
+	Value *float64 `json:"value,omitempty"`
+}
+
+func (response ReadTemperatureSensor200JSONResponse) VisitReadTemperatureSensorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadTemperatureSensor401JSONResponse ErrorResponse
+
+func (response ReadTemperatureSensor401JSONResponse) VisitReadTemperatureSensorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureUsageRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetTemperatureUsageResponseObject interface {
+	VisitGetTemperatureUsageResponse(w http.ResponseWriter) error
+}
+
+type GetTemperatureUsage200JSONResponse UsageStats
+
+func (response GetTemperatureUsage200JSONResponse) VisitGetTemperatureUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureUsage401JSONResponse ErrorResponse
+
+func (response GetTemperatureUsage401JSONResponse) VisitGetTemperatureUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTemperatureUsage404JSONResponse ErrorResponse
+
+func (response GetTemperatureUsage404JSONResponse) VisitGetTemperatureUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListTimerJobsRequestObject struct {
 }
 
@@ -1957,6 +7345,93 @@ func (response UpdateTimerJob404JSONResponse) VisitUpdateTimerJobResponse(w http
 
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
+	// Power off the system
+	// (POST /api/admin/poweroff)
+	SystemPoweroff(ctx context.Context, request SystemPoweroffRequestObject) (SystemPoweroffResponseObject, error)
+	// Reboot the system
+	// (POST /api/admin/reboot)
+	SystemReboot(ctx context.Context, request SystemRebootRequestObject) (SystemRebootResponseObject, error)
+	// Reload reef-pi
+	// (POST /api/admin/reload)
+	SystemReload(ctx context.Context, request SystemReloadRequestObject) (SystemReloadResponseObject, error)
+	// Upgrade reef-pi
+	// (POST /api/admin/upgrade)
+	SystemUpgrade(ctx context.Context, request SystemUpgradeRequestObject) (SystemUpgradeResponseObject, error)
+	// List all ATO controllers
+	// (GET /api/atos)
+	ListATOs(ctx context.Context, request ListATOsRequestObject) (ListATOsResponseObject, error)
+	// Create an ATO controller
+	// (PUT /api/atos)
+	CreateATO(ctx context.Context, request CreateATORequestObject) (CreateATOResponseObject, error)
+	// Delete an ATO controller
+	// (DELETE /api/atos/{id})
+	DeleteATO(ctx context.Context, request DeleteATORequestObject) (DeleteATOResponseObject, error)
+	// Get an ATO controller by ID
+	// (GET /api/atos/{id})
+	GetATO(ctx context.Context, request GetATORequestObject) (GetATOResponseObject, error)
+	// Update an ATO controller
+	// (POST /api/atos/{id})
+	UpdateATO(ctx context.Context, request UpdateATORequestObject) (UpdateATOResponseObject, error)
+	// Reset ATO usage stats
+	// (POST /api/atos/{id}/reset)
+	ResetATO(ctx context.Context, request ResetATORequestObject) (ResetATOResponseObject, error)
+	// Get ATO usage stats
+	// (GET /api/atos/{id}/usage)
+	GetATOUsage(ctx context.Context, request GetATOUsageRequestObject) (GetATOUsageResponseObject, error)
+	// Get camera configuration
+	// (GET /api/camera/config)
+	GetCameraConfig(ctx context.Context, request GetCameraConfigRequestObject) (GetCameraConfigResponseObject, error)
+	// Update camera configuration
+	// (POST /api/camera/config)
+	UpdateCameraConfig(ctx context.Context, request UpdateCameraConfigRequestObject) (UpdateCameraConfigResponseObject, error)
+	// Get the latest camera image path
+	// (GET /api/camera/latest)
+	GetCameraLatest(ctx context.Context, request GetCameraLatestRequestObject) (GetCameraLatestResponseObject, error)
+	// List camera images
+	// (GET /api/camera/list)
+	ListCameraImages(ctx context.Context, request ListCameraImagesRequestObject) (ListCameraImagesResponseObject, error)
+	// Capture a camera image
+	// (POST /api/camera/shoot)
+	CameraShoot(ctx context.Context, request CameraShootRequestObject) (CameraShootResponseObject, error)
+	// Get current display state
+	// (GET /api/display)
+	GetDisplayState(ctx context.Context, request GetDisplayStateRequestObject) (GetDisplayStateResponseObject, error)
+	// Set display brightness
+	// (POST /api/display)
+	SetDisplayBrightness(ctx context.Context, request SetDisplayBrightnessRequestObject) (SetDisplayBrightnessResponseObject, error)
+	// Turn off the display
+	// (POST /api/display/off)
+	DisableDisplay(ctx context.Context, request DisableDisplayRequestObject) (DisableDisplayResponseObject, error)
+	// Turn on the display
+	// (POST /api/display/on)
+	EnableDisplay(ctx context.Context, request EnableDisplayRequestObject) (EnableDisplayResponseObject, error)
+	// List all doser pumps
+	// (GET /api/doser/pumps)
+	ListDoserPumps(ctx context.Context, request ListDoserPumpsRequestObject) (ListDoserPumpsResponseObject, error)
+	// Create a doser pump
+	// (PUT /api/doser/pumps)
+	CreateDoserPump(ctx context.Context, request CreateDoserPumpRequestObject) (CreateDoserPumpResponseObject, error)
+	// Delete a doser pump
+	// (DELETE /api/doser/pumps/{id})
+	DeleteDoserPump(ctx context.Context, request DeleteDoserPumpRequestObject) (DeleteDoserPumpResponseObject, error)
+	// Get a doser pump by ID
+	// (GET /api/doser/pumps/{id})
+	GetDoserPump(ctx context.Context, request GetDoserPumpRequestObject) (GetDoserPumpResponseObject, error)
+	// Update a doser pump
+	// (POST /api/doser/pumps/{id})
+	UpdateDoserPump(ctx context.Context, request UpdateDoserPumpRequestObject) (UpdateDoserPumpResponseObject, error)
+	// Start calibration for a doser pump
+	// (POST /api/doser/pumps/{id}/calibrate)
+	CalibrateDoserPump(ctx context.Context, request CalibrateDoserPumpRequestObject) (CalibrateDoserPumpResponseObject, error)
+	// Save calibration for a doser pump
+	// (POST /api/doser/pumps/{id}/calibrate/save)
+	SaveDoserPumpCalibration(ctx context.Context, request SaveDoserPumpCalibrationRequestObject) (SaveDoserPumpCalibrationResponseObject, error)
+	// Set dosing schedule for a pump
+	// (POST /api/doser/pumps/{id}/schedule)
+	ScheduleDoserPump(ctx context.Context, request ScheduleDoserPumpRequestObject) (ScheduleDoserPumpResponseObject, error)
+	// Get doser pump usage stats
+	// (GET /api/doser/pumps/{id}/usage)
+	GetDoserPumpUsage(ctx context.Context, request GetDoserPumpUsageRequestObject) (GetDoserPumpUsageResponseObject, error)
 	// List all equipment
 	// (GET /api/equipment)
 	ListEquipment(ctx context.Context, request ListEquipmentRequestObject) (ListEquipmentResponseObject, error)
@@ -1996,6 +7471,102 @@ type StrictServerInterface interface {
 	// Get journal usage stats
 	// (GET /api/journal/{id}/usage)
 	GetJournalUsage(ctx context.Context, request GetJournalUsageRequestObject) (GetJournalUsageResponseObject, error)
+	// List all lights
+	// (GET /api/lights)
+	ListLights(ctx context.Context, request ListLightsRequestObject) (ListLightsResponseObject, error)
+	// Create a light
+	// (PUT /api/lights)
+	CreateLight(ctx context.Context, request CreateLightRequestObject) (CreateLightResponseObject, error)
+	// Delete a light
+	// (DELETE /api/lights/{id})
+	DeleteLight(ctx context.Context, request DeleteLightRequestObject) (DeleteLightResponseObject, error)
+	// Get a light by ID
+	// (GET /api/lights/{id})
+	GetLight(ctx context.Context, request GetLightRequestObject) (GetLightResponseObject, error)
+	// Update a light
+	// (POST /api/lights/{id})
+	UpdateLight(ctx context.Context, request UpdateLightRequestObject) (UpdateLightResponseObject, error)
+	// Get light usage stats
+	// (GET /api/lights/{id}/usage)
+	GetLightUsage(ctx context.Context, request GetLightUsageRequestObject) (GetLightUsageResponseObject, error)
+	// List all macros
+	// (GET /api/macros)
+	ListMacros(ctx context.Context, request ListMacrosRequestObject) (ListMacrosResponseObject, error)
+	// Create a macro
+	// (PUT /api/macros)
+	CreateMacro(ctx context.Context, request CreateMacroRequestObject) (CreateMacroResponseObject, error)
+	// Delete a macro
+	// (DELETE /api/macros/{id})
+	DeleteMacro(ctx context.Context, request DeleteMacroRequestObject) (DeleteMacroResponseObject, error)
+	// Get a macro by ID
+	// (GET /api/macros/{id})
+	GetMacro(ctx context.Context, request GetMacroRequestObject) (GetMacroResponseObject, error)
+	// Update a macro
+	// (POST /api/macros/{id})
+	UpdateMacro(ctx context.Context, request UpdateMacroRequestObject) (UpdateMacroResponseObject, error)
+	// Revert (run in reverse) a macro
+	// (POST /api/macros/{id}/revert)
+	RevertMacro(ctx context.Context, request RevertMacroRequestObject) (RevertMacroResponseObject, error)
+	// Run a macro
+	// (POST /api/macros/{id}/run)
+	RunMacro(ctx context.Context, request RunMacroRequestObject) (RunMacroResponseObject, error)
+	// List all pH probes
+	// (GET /api/phprobes)
+	ListPhProbes(ctx context.Context, request ListPhProbesRequestObject) (ListPhProbesResponseObject, error)
+	// Create a pH probe
+	// (PUT /api/phprobes)
+	CreatePhProbe(ctx context.Context, request CreatePhProbeRequestObject) (CreatePhProbeResponseObject, error)
+	// Delete a pH probe
+	// (DELETE /api/phprobes/{id})
+	DeletePhProbe(ctx context.Context, request DeletePhProbeRequestObject) (DeletePhProbeResponseObject, error)
+	// Get a pH probe by ID
+	// (GET /api/phprobes/{id})
+	GetPhProbe(ctx context.Context, request GetPhProbeRequestObject) (GetPhProbeResponseObject, error)
+	// Update a pH probe
+	// (POST /api/phprobes/{id})
+	UpdatePhProbe(ctx context.Context, request UpdatePhProbeRequestObject) (UpdatePhProbeResponseObject, error)
+	// Calibrate a pH probe
+	// (POST /api/phprobes/{id}/calibrate)
+	CalibratePhProbe(ctx context.Context, request CalibratePhProbeRequestObject) (CalibratePhProbeResponseObject, error)
+	// Add a calibration point for a pH probe
+	// (POST /api/phprobes/{id}/calibratepoint)
+	CalibratePhProbePoint(ctx context.Context, request CalibratePhProbePointRequestObject) (CalibratePhProbePointResponseObject, error)
+	// Take a live reading from a pH probe
+	// (GET /api/phprobes/{id}/read)
+	ReadPhProbe(ctx context.Context, request ReadPhProbeRequestObject) (ReadPhProbeResponseObject, error)
+	// Get pH probe readings (usage stats)
+	// (GET /api/phprobes/{id}/readings)
+	GetPhReadings(ctx context.Context, request GetPhReadingsRequestObject) (GetPhReadingsResponseObject, error)
+	// List all temperature controllers
+	// (GET /api/tcs)
+	ListTemperatureControllers(ctx context.Context, request ListTemperatureControllersRequestObject) (ListTemperatureControllersResponseObject, error)
+	// Create a temperature controller
+	// (PUT /api/tcs)
+	CreateTemperatureController(ctx context.Context, request CreateTemperatureControllerRequestObject) (CreateTemperatureControllerResponseObject, error)
+	// List available temperature sensors
+	// (GET /api/tcs/sensors)
+	ListTemperatureSensors(ctx context.Context, request ListTemperatureSensorsRequestObject) (ListTemperatureSensorsResponseObject, error)
+	// Delete a temperature controller
+	// (DELETE /api/tcs/{id})
+	DeleteTemperatureController(ctx context.Context, request DeleteTemperatureControllerRequestObject) (DeleteTemperatureControllerResponseObject, error)
+	// Get a temperature controller by ID
+	// (GET /api/tcs/{id})
+	GetTemperatureController(ctx context.Context, request GetTemperatureControllerRequestObject) (GetTemperatureControllerResponseObject, error)
+	// Update a temperature controller
+	// (POST /api/tcs/{id})
+	UpdateTemperatureController(ctx context.Context, request UpdateTemperatureControllerRequestObject) (UpdateTemperatureControllerResponseObject, error)
+	// Calibrate a temperature sensor
+	// (POST /api/tcs/{id}/calibrate)
+	CalibrateTemperatureSensor(ctx context.Context, request CalibrateTemperatureSensorRequestObject) (CalibrateTemperatureSensorResponseObject, error)
+	// Get the current temperature reading
+	// (GET /api/tcs/{id}/current_reading)
+	GetCurrentTemperature(ctx context.Context, request GetCurrentTemperatureRequestObject) (GetCurrentTemperatureResponseObject, error)
+	// Take a live temperature reading
+	// (GET /api/tcs/{id}/read)
+	ReadTemperatureSensor(ctx context.Context, request ReadTemperatureSensorRequestObject) (ReadTemperatureSensorResponseObject, error)
+	// Get temperature usage stats
+	// (GET /api/tcs/{id}/usage)
+	GetTemperatureUsage(ctx context.Context, request GetTemperatureUsageRequestObject) (GetTemperatureUsageResponseObject, error)
 	// List all timer jobs
 	// (GET /api/timers)
 	ListTimerJobs(ctx context.Context, request ListTimerJobsRequestObject) (ListTimerJobsResponseObject, error)
@@ -2040,6 +7611,782 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// SystemPoweroff operation middleware
+func (sh *strictHandler) SystemPoweroff(w http.ResponseWriter, r *http.Request) {
+	var request SystemPoweroffRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SystemPoweroff(ctx, request.(SystemPoweroffRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SystemPoweroff")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SystemPoweroffResponseObject); ok {
+		if err := validResponse.VisitSystemPoweroffResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SystemReboot operation middleware
+func (sh *strictHandler) SystemReboot(w http.ResponseWriter, r *http.Request) {
+	var request SystemRebootRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SystemReboot(ctx, request.(SystemRebootRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SystemReboot")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SystemRebootResponseObject); ok {
+		if err := validResponse.VisitSystemRebootResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SystemReload operation middleware
+func (sh *strictHandler) SystemReload(w http.ResponseWriter, r *http.Request) {
+	var request SystemReloadRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SystemReload(ctx, request.(SystemReloadRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SystemReload")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SystemReloadResponseObject); ok {
+		if err := validResponse.VisitSystemReloadResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SystemUpgrade operation middleware
+func (sh *strictHandler) SystemUpgrade(w http.ResponseWriter, r *http.Request) {
+	var request SystemUpgradeRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SystemUpgrade(ctx, request.(SystemUpgradeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SystemUpgrade")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SystemUpgradeResponseObject); ok {
+		if err := validResponse.VisitSystemUpgradeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListATOs operation middleware
+func (sh *strictHandler) ListATOs(w http.ResponseWriter, r *http.Request) {
+	var request ListATOsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListATOs(ctx, request.(ListATOsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListATOs")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListATOsResponseObject); ok {
+		if err := validResponse.VisitListATOsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateATO operation middleware
+func (sh *strictHandler) CreateATO(w http.ResponseWriter, r *http.Request) {
+	var request CreateATORequestObject
+
+	var body CreateATOJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateATO(ctx, request.(CreateATORequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateATO")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateATOResponseObject); ok {
+		if err := validResponse.VisitCreateATOResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteATO operation middleware
+func (sh *strictHandler) DeleteATO(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteATORequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteATO(ctx, request.(DeleteATORequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteATO")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteATOResponseObject); ok {
+		if err := validResponse.VisitDeleteATOResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetATO operation middleware
+func (sh *strictHandler) GetATO(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetATORequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetATO(ctx, request.(GetATORequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetATO")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetATOResponseObject); ok {
+		if err := validResponse.VisitGetATOResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateATO operation middleware
+func (sh *strictHandler) UpdateATO(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateATORequestObject
+
+	request.Id = id
+
+	var body UpdateATOJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateATO(ctx, request.(UpdateATORequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateATO")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateATOResponseObject); ok {
+		if err := validResponse.VisitUpdateATOResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ResetATO operation middleware
+func (sh *strictHandler) ResetATO(w http.ResponseWriter, r *http.Request, id string) {
+	var request ResetATORequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ResetATO(ctx, request.(ResetATORequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ResetATO")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ResetATOResponseObject); ok {
+		if err := validResponse.VisitResetATOResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetATOUsage operation middleware
+func (sh *strictHandler) GetATOUsage(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetATOUsageRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetATOUsage(ctx, request.(GetATOUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetATOUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetATOUsageResponseObject); ok {
+		if err := validResponse.VisitGetATOUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCameraConfig operation middleware
+func (sh *strictHandler) GetCameraConfig(w http.ResponseWriter, r *http.Request) {
+	var request GetCameraConfigRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCameraConfig(ctx, request.(GetCameraConfigRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCameraConfig")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCameraConfigResponseObject); ok {
+		if err := validResponse.VisitGetCameraConfigResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateCameraConfig operation middleware
+func (sh *strictHandler) UpdateCameraConfig(w http.ResponseWriter, r *http.Request) {
+	var request UpdateCameraConfigRequestObject
+
+	var body UpdateCameraConfigJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateCameraConfig(ctx, request.(UpdateCameraConfigRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateCameraConfig")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateCameraConfigResponseObject); ok {
+		if err := validResponse.VisitUpdateCameraConfigResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCameraLatest operation middleware
+func (sh *strictHandler) GetCameraLatest(w http.ResponseWriter, r *http.Request) {
+	var request GetCameraLatestRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCameraLatest(ctx, request.(GetCameraLatestRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCameraLatest")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCameraLatestResponseObject); ok {
+		if err := validResponse.VisitGetCameraLatestResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListCameraImages operation middleware
+func (sh *strictHandler) ListCameraImages(w http.ResponseWriter, r *http.Request) {
+	var request ListCameraImagesRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListCameraImages(ctx, request.(ListCameraImagesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListCameraImages")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListCameraImagesResponseObject); ok {
+		if err := validResponse.VisitListCameraImagesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CameraShoot operation middleware
+func (sh *strictHandler) CameraShoot(w http.ResponseWriter, r *http.Request) {
+	var request CameraShootRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CameraShoot(ctx, request.(CameraShootRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CameraShoot")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CameraShootResponseObject); ok {
+		if err := validResponse.VisitCameraShootResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetDisplayState operation middleware
+func (sh *strictHandler) GetDisplayState(w http.ResponseWriter, r *http.Request) {
+	var request GetDisplayStateRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetDisplayState(ctx, request.(GetDisplayStateRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetDisplayState")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetDisplayStateResponseObject); ok {
+		if err := validResponse.VisitGetDisplayStateResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SetDisplayBrightness operation middleware
+func (sh *strictHandler) SetDisplayBrightness(w http.ResponseWriter, r *http.Request) {
+	var request SetDisplayBrightnessRequestObject
+
+	var body SetDisplayBrightnessJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SetDisplayBrightness(ctx, request.(SetDisplayBrightnessRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SetDisplayBrightness")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SetDisplayBrightnessResponseObject); ok {
+		if err := validResponse.VisitSetDisplayBrightnessResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DisableDisplay operation middleware
+func (sh *strictHandler) DisableDisplay(w http.ResponseWriter, r *http.Request) {
+	var request DisableDisplayRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DisableDisplay(ctx, request.(DisableDisplayRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DisableDisplay")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DisableDisplayResponseObject); ok {
+		if err := validResponse.VisitDisableDisplayResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// EnableDisplay operation middleware
+func (sh *strictHandler) EnableDisplay(w http.ResponseWriter, r *http.Request) {
+	var request EnableDisplayRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.EnableDisplay(ctx, request.(EnableDisplayRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "EnableDisplay")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(EnableDisplayResponseObject); ok {
+		if err := validResponse.VisitEnableDisplayResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListDoserPumps operation middleware
+func (sh *strictHandler) ListDoserPumps(w http.ResponseWriter, r *http.Request) {
+	var request ListDoserPumpsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListDoserPumps(ctx, request.(ListDoserPumpsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListDoserPumps")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListDoserPumpsResponseObject); ok {
+		if err := validResponse.VisitListDoserPumpsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateDoserPump operation middleware
+func (sh *strictHandler) CreateDoserPump(w http.ResponseWriter, r *http.Request) {
+	var request CreateDoserPumpRequestObject
+
+	var body CreateDoserPumpJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateDoserPump(ctx, request.(CreateDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateDoserPumpResponseObject); ok {
+		if err := validResponse.VisitCreateDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteDoserPump operation middleware
+func (sh *strictHandler) DeleteDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteDoserPumpRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteDoserPump(ctx, request.(DeleteDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteDoserPumpResponseObject); ok {
+		if err := validResponse.VisitDeleteDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetDoserPump operation middleware
+func (sh *strictHandler) GetDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetDoserPumpRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetDoserPump(ctx, request.(GetDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetDoserPumpResponseObject); ok {
+		if err := validResponse.VisitGetDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateDoserPump operation middleware
+func (sh *strictHandler) UpdateDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateDoserPumpRequestObject
+
+	request.Id = id
+
+	var body UpdateDoserPumpJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateDoserPump(ctx, request.(UpdateDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateDoserPumpResponseObject); ok {
+		if err := validResponse.VisitUpdateDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CalibrateDoserPump operation middleware
+func (sh *strictHandler) CalibrateDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	var request CalibrateDoserPumpRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CalibrateDoserPump(ctx, request.(CalibrateDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CalibrateDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CalibrateDoserPumpResponseObject); ok {
+		if err := validResponse.VisitCalibrateDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SaveDoserPumpCalibration operation middleware
+func (sh *strictHandler) SaveDoserPumpCalibration(w http.ResponseWriter, r *http.Request, id string) {
+	var request SaveDoserPumpCalibrationRequestObject
+
+	request.Id = id
+
+	var body SaveDoserPumpCalibrationJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SaveDoserPumpCalibration(ctx, request.(SaveDoserPumpCalibrationRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SaveDoserPumpCalibration")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SaveDoserPumpCalibrationResponseObject); ok {
+		if err := validResponse.VisitSaveDoserPumpCalibrationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ScheduleDoserPump operation middleware
+func (sh *strictHandler) ScheduleDoserPump(w http.ResponseWriter, r *http.Request, id string) {
+	var request ScheduleDoserPumpRequestObject
+
+	request.Id = id
+
+	var body ScheduleDoserPumpJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ScheduleDoserPump(ctx, request.(ScheduleDoserPumpRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ScheduleDoserPump")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ScheduleDoserPumpResponseObject); ok {
+		if err := validResponse.VisitScheduleDoserPumpResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetDoserPumpUsage operation middleware
+func (sh *strictHandler) GetDoserPumpUsage(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetDoserPumpUsageRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetDoserPumpUsage(ctx, request.(GetDoserPumpUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetDoserPumpUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetDoserPumpUsageResponseObject); ok {
+		if err := validResponse.VisitGetDoserPumpUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // ListEquipment operation middleware
@@ -2414,6 +8761,897 @@ func (sh *strictHandler) GetJournalUsage(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// ListLights operation middleware
+func (sh *strictHandler) ListLights(w http.ResponseWriter, r *http.Request) {
+	var request ListLightsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListLights(ctx, request.(ListLightsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListLights")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListLightsResponseObject); ok {
+		if err := validResponse.VisitListLightsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateLight operation middleware
+func (sh *strictHandler) CreateLight(w http.ResponseWriter, r *http.Request) {
+	var request CreateLightRequestObject
+
+	var body CreateLightJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateLight(ctx, request.(CreateLightRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateLight")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateLightResponseObject); ok {
+		if err := validResponse.VisitCreateLightResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteLight operation middleware
+func (sh *strictHandler) DeleteLight(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteLightRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteLight(ctx, request.(DeleteLightRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteLight")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteLightResponseObject); ok {
+		if err := validResponse.VisitDeleteLightResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetLight operation middleware
+func (sh *strictHandler) GetLight(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetLightRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetLight(ctx, request.(GetLightRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetLight")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetLightResponseObject); ok {
+		if err := validResponse.VisitGetLightResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateLight operation middleware
+func (sh *strictHandler) UpdateLight(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateLightRequestObject
+
+	request.Id = id
+
+	var body UpdateLightJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateLight(ctx, request.(UpdateLightRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateLight")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateLightResponseObject); ok {
+		if err := validResponse.VisitUpdateLightResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetLightUsage operation middleware
+func (sh *strictHandler) GetLightUsage(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetLightUsageRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetLightUsage(ctx, request.(GetLightUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetLightUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetLightUsageResponseObject); ok {
+		if err := validResponse.VisitGetLightUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListMacros operation middleware
+func (sh *strictHandler) ListMacros(w http.ResponseWriter, r *http.Request) {
+	var request ListMacrosRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListMacros(ctx, request.(ListMacrosRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListMacros")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListMacrosResponseObject); ok {
+		if err := validResponse.VisitListMacrosResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateMacro operation middleware
+func (sh *strictHandler) CreateMacro(w http.ResponseWriter, r *http.Request) {
+	var request CreateMacroRequestObject
+
+	var body CreateMacroJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateMacro(ctx, request.(CreateMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateMacroResponseObject); ok {
+		if err := validResponse.VisitCreateMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteMacro operation middleware
+func (sh *strictHandler) DeleteMacro(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteMacroRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteMacro(ctx, request.(DeleteMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteMacroResponseObject); ok {
+		if err := validResponse.VisitDeleteMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetMacro operation middleware
+func (sh *strictHandler) GetMacro(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetMacroRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetMacro(ctx, request.(GetMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetMacroResponseObject); ok {
+		if err := validResponse.VisitGetMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateMacro operation middleware
+func (sh *strictHandler) UpdateMacro(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateMacroRequestObject
+
+	request.Id = id
+
+	var body UpdateMacroJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateMacro(ctx, request.(UpdateMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateMacroResponseObject); ok {
+		if err := validResponse.VisitUpdateMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RevertMacro operation middleware
+func (sh *strictHandler) RevertMacro(w http.ResponseWriter, r *http.Request, id string) {
+	var request RevertMacroRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RevertMacro(ctx, request.(RevertMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RevertMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RevertMacroResponseObject); ok {
+		if err := validResponse.VisitRevertMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RunMacro operation middleware
+func (sh *strictHandler) RunMacro(w http.ResponseWriter, r *http.Request, id string) {
+	var request RunMacroRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RunMacro(ctx, request.(RunMacroRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RunMacro")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RunMacroResponseObject); ok {
+		if err := validResponse.VisitRunMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListPhProbes operation middleware
+func (sh *strictHandler) ListPhProbes(w http.ResponseWriter, r *http.Request) {
+	var request ListPhProbesRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListPhProbes(ctx, request.(ListPhProbesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListPhProbes")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListPhProbesResponseObject); ok {
+		if err := validResponse.VisitListPhProbesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreatePhProbe operation middleware
+func (sh *strictHandler) CreatePhProbe(w http.ResponseWriter, r *http.Request) {
+	var request CreatePhProbeRequestObject
+
+	var body CreatePhProbeJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreatePhProbe(ctx, request.(CreatePhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreatePhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreatePhProbeResponseObject); ok {
+		if err := validResponse.VisitCreatePhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeletePhProbe operation middleware
+func (sh *strictHandler) DeletePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeletePhProbeRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeletePhProbe(ctx, request.(DeletePhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeletePhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeletePhProbeResponseObject); ok {
+		if err := validResponse.VisitDeletePhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetPhProbe operation middleware
+func (sh *strictHandler) GetPhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetPhProbeRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetPhProbe(ctx, request.(GetPhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetPhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetPhProbeResponseObject); ok {
+		if err := validResponse.VisitGetPhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdatePhProbe operation middleware
+func (sh *strictHandler) UpdatePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdatePhProbeRequestObject
+
+	request.Id = id
+
+	var body UpdatePhProbeJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdatePhProbe(ctx, request.(UpdatePhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdatePhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdatePhProbeResponseObject); ok {
+		if err := validResponse.VisitUpdatePhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CalibratePhProbe operation middleware
+func (sh *strictHandler) CalibratePhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	var request CalibratePhProbeRequestObject
+
+	request.Id = id
+
+	var body CalibratePhProbeJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CalibratePhProbe(ctx, request.(CalibratePhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CalibratePhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CalibratePhProbeResponseObject); ok {
+		if err := validResponse.VisitCalibratePhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CalibratePhProbePoint operation middleware
+func (sh *strictHandler) CalibratePhProbePoint(w http.ResponseWriter, r *http.Request, id string) {
+	var request CalibratePhProbePointRequestObject
+
+	request.Id = id
+
+	var body CalibratePhProbePointJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CalibratePhProbePoint(ctx, request.(CalibratePhProbePointRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CalibratePhProbePoint")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CalibratePhProbePointResponseObject); ok {
+		if err := validResponse.VisitCalibratePhProbePointResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReadPhProbe operation middleware
+func (sh *strictHandler) ReadPhProbe(w http.ResponseWriter, r *http.Request, id string) {
+	var request ReadPhProbeRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReadPhProbe(ctx, request.(ReadPhProbeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReadPhProbe")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReadPhProbeResponseObject); ok {
+		if err := validResponse.VisitReadPhProbeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetPhReadings operation middleware
+func (sh *strictHandler) GetPhReadings(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetPhReadingsRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetPhReadings(ctx, request.(GetPhReadingsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetPhReadings")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetPhReadingsResponseObject); ok {
+		if err := validResponse.VisitGetPhReadingsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListTemperatureControllers operation middleware
+func (sh *strictHandler) ListTemperatureControllers(w http.ResponseWriter, r *http.Request) {
+	var request ListTemperatureControllersRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListTemperatureControllers(ctx, request.(ListTemperatureControllersRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListTemperatureControllers")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListTemperatureControllersResponseObject); ok {
+		if err := validResponse.VisitListTemperatureControllersResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateTemperatureController operation middleware
+func (sh *strictHandler) CreateTemperatureController(w http.ResponseWriter, r *http.Request) {
+	var request CreateTemperatureControllerRequestObject
+
+	var body CreateTemperatureControllerJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateTemperatureController(ctx, request.(CreateTemperatureControllerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateTemperatureController")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateTemperatureControllerResponseObject); ok {
+		if err := validResponse.VisitCreateTemperatureControllerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListTemperatureSensors operation middleware
+func (sh *strictHandler) ListTemperatureSensors(w http.ResponseWriter, r *http.Request) {
+	var request ListTemperatureSensorsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListTemperatureSensors(ctx, request.(ListTemperatureSensorsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListTemperatureSensors")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListTemperatureSensorsResponseObject); ok {
+		if err := validResponse.VisitListTemperatureSensorsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteTemperatureController operation middleware
+func (sh *strictHandler) DeleteTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteTemperatureControllerRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteTemperatureController(ctx, request.(DeleteTemperatureControllerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteTemperatureController")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteTemperatureControllerResponseObject); ok {
+		if err := validResponse.VisitDeleteTemperatureControllerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetTemperatureController operation middleware
+func (sh *strictHandler) GetTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetTemperatureControllerRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetTemperatureController(ctx, request.(GetTemperatureControllerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetTemperatureController")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetTemperatureControllerResponseObject); ok {
+		if err := validResponse.VisitGetTemperatureControllerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateTemperatureController operation middleware
+func (sh *strictHandler) UpdateTemperatureController(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateTemperatureControllerRequestObject
+
+	request.Id = id
+
+	var body UpdateTemperatureControllerJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateTemperatureController(ctx, request.(UpdateTemperatureControllerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateTemperatureController")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateTemperatureControllerResponseObject); ok {
+		if err := validResponse.VisitUpdateTemperatureControllerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CalibrateTemperatureSensor operation middleware
+func (sh *strictHandler) CalibrateTemperatureSensor(w http.ResponseWriter, r *http.Request, id string) {
+	var request CalibrateTemperatureSensorRequestObject
+
+	request.Id = id
+
+	var body CalibrateTemperatureSensorJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CalibrateTemperatureSensor(ctx, request.(CalibrateTemperatureSensorRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CalibrateTemperatureSensor")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CalibrateTemperatureSensorResponseObject); ok {
+		if err := validResponse.VisitCalibrateTemperatureSensorResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCurrentTemperature operation middleware
+func (sh *strictHandler) GetCurrentTemperature(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetCurrentTemperatureRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCurrentTemperature(ctx, request.(GetCurrentTemperatureRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCurrentTemperature")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCurrentTemperatureResponseObject); ok {
+		if err := validResponse.VisitGetCurrentTemperatureResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReadTemperatureSensor operation middleware
+func (sh *strictHandler) ReadTemperatureSensor(w http.ResponseWriter, r *http.Request, id string) {
+	var request ReadTemperatureSensorRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReadTemperatureSensor(ctx, request.(ReadTemperatureSensorRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReadTemperatureSensor")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReadTemperatureSensorResponseObject); ok {
+		if err := validResponse.VisitReadTemperatureSensorResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetTemperatureUsage operation middleware
+func (sh *strictHandler) GetTemperatureUsage(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetTemperatureUsageRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetTemperatureUsage(ctx, request.(GetTemperatureUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetTemperatureUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetTemperatureUsageResponseObject); ok {
+		if err := validResponse.VisitGetTemperatureUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListTimerJobs operation middleware
 func (sh *strictHandler) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
 	var request ListTimerJobsRequestObject
@@ -2559,37 +9797,75 @@ func (sh *strictHandler) UpdateTimerJob(w http.ResponseWriter, r *http.Request, 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7FtLc9s4Ev4rKOweZrYoybMzJ90ySTbjbDZx+VF7GLtcENmU4CEBGg+7tC79960GKIoPUJInZT3GviSS",
-	"ATYa3d/X3WhCTzSWeSEFCKPp+InqeAY5cx8/3lte5CAMfimULEAZDm5oIqW5TSBjc/yWgI4VLwyXgo7p",
-	"BcRSJJoYSR4ZN4SlBhQp5CMoLqZECpJY9wmFEA33FkQMNKJmXgAdUy4MTEHRRUR50hV/Jfi9BcITEIan",
-	"HBRJpSJmBgQqfSOqgCXfRDanY6MsVLK1wZVRtGA5dIV/ZTkQmTbFkR9gOB1G5Jr+h3FBvvDpzFxT/P4b",
-	"MAPqmv5IAyugwLb891YplOisQbRhprtcv/YTKTNgwgm3JgPTXeB0ZZZSrp9JzIzr2pa4JrEUAmIDCTEy",
-	"pL82bH4r0/RWilt0VWCxlDj9anIfeZYRIQ2ZgN8kJJs9Xu1rgVu/t1xBQse/ex9Ve72p5svJHcQGdawg",
-	"+i72OrWBGnLCB9C4QsMJIQxt0E6KsEpKSXUOupBCQ1ehHLRmUzfQsnhL/HJiaI3P0irBso/CqHl3iVjm",
-	"S9Z2nGp4DtqwvMDRVKqcGTqmCTMwwKEQDh5YZqE5XdpJVpsrbD5BwrZ24B9co/8ZUywHA6q7h4bHAvvw",
-	"kWFrlncGrOBmsw/c46ENXPIc1Gc5CSgeConvFXKAzQcyHeRSmBlJOWRJyNogGNq2I+K/MzAzUJ7H6CpF",
-	"7uQEecxiwx9CbIroTFrVow0O9WvxvMBbqbNN4M25sAZ6tPKD/Xo54/U9u96w4YD/m82ZGKDSaHaCk4Lb",
-	"6kZHl+V6VPGD/boYpqah6P354ttXUrB5JlmyNPQcA6dTxz1EFGhpVQw+K5Gn6+tryhP8d4z/sEmM/y1+",
-	"dOu4hdurXHpB2k70XBvICU4jP1ShLyI5i5WMCDMyIjHLQbGIJFKDikiG2Y+LaUSKWUQM5AUoZqyCiCjI",
-	"uUhABbPhI8Af64mBM/pMFk4MbtISFOUSkWNgCf0KbZW/QmS+wjh7YZjRAVvxHAYaFAftMoUmCoxVAhIy",
-	"mROLTxIQSSE51k9ROxL7dI8fuYEc/1Z5hTKl2NyxlGsjFY9ZtnbioqO6h6FV3MwvsGzzi2rQmkvxzoaY",
-	"cuEHSSzlHxyIBoP7OPt2cUlGzJrZSPOp4GJIzktzOzawLCMjVvDRP4iS1oAeXgsaUY4SvSS6JBhFKSsH",
-	"soL/G1B5DCoilV2Nzj9eXJJ3Z6cV7RRAOig4YfeWKW5zLFSMklkG6FDDDYZHupz17uyURvQBlPbiToYn",
-	"w59chVSAYAWnY/rz8GT4M/qGmZmzkNsK1Kvbko3SgZlLcZrQMf3CtfnYqMp8Uncy/nly4nOtMKUMVhQZ",
-	"j93jozvt85avputupX9XkNIx/dtoVXePyqJ7tFqt6/1F1DIcqodFHjpnVYBpG8egdWqzbI5YVRweIEF5",
-	"v5z89CyN1yraKHICyl0JxIFU/H+QkAF5YBlPSIlMUlHZIdjmOcMyxm+osRv0N5tqpPzKNDeLiBY24K/3",
-	"CsvxpsfuLWjzq0zmz9r6nz/sTCCVCvpOO8FDzjNOIsFjRs9J4Juv+1fpeoc1/veX9s35qMHiOwm4Je+6",
-	"UK4GSewAljQ45pl1sjtm/coSUuKaDAgXnlpcICWOgeWepUTA40aeL6JWqB498WThMZqBLyKbIeCD+3s9",
-	"BBTLMwZKf+p17emHZT7DLLHKZjyhbSBGNeu1y5SblwTpJm+sduPNEwLq4YEDtfplH0bCCJZKK9oA9Rja",
-	"IgkFi4ZPYP6i8NsuRpYWfcPaVlj7BKaWWCdzD4SemkfqAN6uioTtPeK9VVmHU2UdQyFlHWjfCqmjj18+",
-	"+vzJQm5UHuxdLAgGt/d+wlFGt61oUr62OEyW+jcj8YyJ6RtXj5+rJZlqKab2AmwDce/8C5u1rbL2Sx29",
-	"k5ZZ51XSMzpn5a5ILabsE0x97bCAmitvlfvf1BXrmOllAlvXG7uNbOH12+8cXBdnnzHskGBW9mNYF2ZB",
-	"lLUiwpYdmQD8Won8yHsvfpvJnh2745zzdX0HZVtI9XdSjh0224Sjf+29YXIwuPkEJgSaTl+kkfPWdEV2",
-	"Bp/XmUi9kV9zIj0Q3pSn8O9J4SMFsVRJ/1H83I03Lp4dHZu82rs+bG88uaFWxNv/jU37Z5NHeo1NUKJ9",
-	"SybZ5f3ODVWNu3Z0bBVN7a5UyJ/uPpT2w29Y8hXNEka2Zpx1YHLXDvXaVsvy+uluWizVZddntFaqu5OH",
-	"2VKpqbdyxaU3/IZOSmWNl0lVK2PvNk011+1egvTXjeM99U5OD6bj29c9EfDYvDDcBlWT3lv2TWpg+2v1",
-	"S1aQSl5j52S1fbGph7IWVP2tk2NFznZxKH19TZPNkPHtk9VvQ9ptk3p+W9M1eXHkvLakaffUJzmkpHlw",
-	"ZKl6JuuTdu0nFo4CjR9X/H6DgNagHsLXEb7ImGXV7xm40Ib53z1aldExHdHFzeL/AQAA//8=",
+	"7F1Lc9u4lv4rKM4skinZck/3yju3k54447RdtlN30XG5IPJIREICDADK0U35v9/Cg+ILfCiJZErmpuMW",
+	"QeLg4DuvDyD43fNZnDAKVArv9Lsn/BBirP88u7tS/yScJcAlAf2jz6jkLFJ/ylUC3qk3YywCTL2niRfA",
+	"jKXUB3U1AOFzkkjCqHfqvbFXUJByrH5DhCIBPqOB8CbZowiVsACuH0UEnkXwwOgDjoBLd4dAVSP3NRKo",
+	"3zng4IpGK+9U8hTWPQnJCV3oZjSC4tMLV8RDjH3O3I+nOAbnbZRJMl/VNdcma4y/FS6s1fC0lpfNPoMv",
+	"VVNG4UGErEEhCXDCgrr+z0PwvyBztUv1SRonjpE9TTwOX1PCIfBO/zHjX3d475D0HMfA8Tmjc7JwAAkn",
+	"MuXwMI/wQjgV2Tq5MV7AQ0A4+JLxlfP+mJnBbzIRIZBFKF1zMfFSHjn7eSSBDPtOnyT+lwfVgi9x1NBP",
+	"EjEcuORzPfANEUmEV7cSS6iPdcbVeCgIUcfEn+trKIIlROjk6LeTEyckjBp7icME8GuLoLIsPQ3yM/a/",
+	"uA2ryeISQt2a5LAgMVA9nzgIiBo4jq4LUhkZKr6KCUIXKLsZ+RrB1m95jjELCUkCfLNebs1NKGaS8XIf",
+	"6BWZI9ULIgLZh792dWx+qM6r0r65/VXyGCPGHc9oM+p797QSurj1QwjSyIGzzK07PH9Phz9XcgD1V/VH",
+	"/JVdUg4MBXjleIALi2+/piTJ5r9iF4zJhwAi7Oju1kiJJEOPmEiE5xI4StgjKJ0hRlUQU3+phyBhZAPn",
+	"oIjDFX+k5GsKiARAJZkT4GjOOJIhIFjLO+k2k8wayg//G8eA2Lz8OPQKjhfHE/TJ+4AJRZfK7D956v/f",
+	"AZbAP3kOZGRGX4kjKefqiVobSCinU+uuWfqCo2WptHG33MFFrhb7XNMSyZCIwpCIUDZDwZcQIMlc8guJ",
+	"Vw9sPlc5hJoqR2dzpOUrPPeRRBGiTKIZmEFC0D3jRY/oiJF2rPdtED3z3cHKaVIgVA+lSXBhqEM6Rt0i",
+	"cc74DYiEUeGw9BiEwAvoThCyhq4+3rOUUxy9pZKvXDlmnFltbVIliUFIbOLLnPEYS+/UC7CEI3XJhYMl",
+	"jlIoN2epygDWbWkaz6wTKY7A3Ngi/zXmOAZpXH/FIRZnzJVc9guGjTEvpUT2TNJcA7jM0pyK5kNMKURi",
+	"s1D2ASfKWO3NiNAAvinvmf1ggpsrgP2C/H3TdKGvhj5kqf8PJTGN88ZhCVyQxlGrUG06khB3zkNDRuBh",
+	"zvGq/1ivw3MckZkJ1NeMuCImfEu0s+1lSBOPzQTwZc/mFTnXXRUe4xb7mrOZw0dhiiO2eCA0Sd1exA8x",
+	"lxsrt732ZY8U+AN83biWCVdCAgdBRE/d9q1sW+tXW3L26C426XWPlj1q4o0U3rfWrSdekmMqlMTGN9fd",
+	"p8qH3ZPV12juIE6AY1XEnhtgRK5A8BxY9NWffGMgznHIgYZAZNN1Ej0IPG+snbFs6HWE+K+HuAAqGP8Z",
+	"AJMY+Hs2cyQvrrLonKs8GK+O2PwoZlSGaE4gClwZVw6y8iP+FYIMgZtcXqVrHH1mM5XLY1+SpSujnngh",
+	"S3mDNOpSsxSbFV9rcfoUXzGhqYQGqczFZrm08prubVesu+h7l8aYHimhldqRauQcVr1C0pVugyjmYrMs",
+	"EvOFq4J7f3v1N0rwKmI4yBS9UsWTFkffhDgIlnIfTGWKvn/69MkjgfrvqfoPnvnqn6fXzSTHnXmQSGdC",
+	"+ZbYEh7r8meCtGOYICzZBPmaipyggAngExSp7JfQxQQl4QTJ3JFPEIdY5a/cWRE/AnxpNwzVokll7uJQ",
+	"N8pAYbuYeIbk0NBfo209Xy5j/qhqrVuJpYPoU4Z+JIATELpaFIiDTDmFAM1WKFV3IqBBohI/4U2qNYEp",
+	"+Ys5aS3RnHghEZJx4htSs7FhnaYxMEw5katbP4TYdCpACMLoWeqylFtzEfmMfSGABEg1juur2zs0xakM",
+	"p4IsKKHH6MaqW1sDjiI0xQmZ/g/iLJUgjj9Rb+Ipz++ZJ3mZgXnqKfkE4oT8Pyjh9XLBnNUlunl7e4fO",
+	"ri/WZscB5kcJQfhrijlJY+TnKYIqYqVyj17W6uz6wpt4ujDQjzs5Pjn+TUeHBChOiHfq/X58cvy7mhss",
+	"Q60hPRQcxIRONQ/A5nPtyJnQU8U0pAmjF4HSmLaR66ydAqKp7/Wj/vfkJFvaycjSJImIr++ffhamhDUr",
+	"Q+qv/+Yw9069/5rmS0dTu240LbMHWmUVdtIKgQglkmCV5j9NvD9OftudCB+pml/Gyb9V5wqAaRxjvsqk",
+	"Q0o8NYvGtagJ02sU/1g9evfqpsIEcMj4pTb135hWz6l8I8IwVW9l20zv2UpJu951q+fVu4mGw9S7ls36",
+	"om6lp8mC4wC6tP7RNntOtVsZhqn3TLg+ipdMK8/mW2V1XxIhz+6uxM9qek04tQ347O7KQTPVhq1kQmyO",
+	"tFwD0rmWSyUCZ3dXhZAsCspXI7zXq+AOXZ9zVeOqJiaXAyH/ZMHql41Nq7ecKKoK5GmLRrTusprUQm4w",
+	"OzTZP7Ur0podEnCMOhCmFeTUgFM02el3EjyZZDECUy6W4fRG/27glGRrCeph301aqpK9PCklgVcFxqQw",
+	"9Gq1cf+cnteM7Ln9rer8j911/jeTaM5SWgWPUUYP8EzcHv7/QO4hRhocy19GQSMu9LzWQaFK2Ys3roDk",
+	"TLY+JgHergs55ChntPeSo9xATMFMxI/E1ykHAS219426fIghVg9sRM8qU4VGjiEzNcnZAzpptpOlJexq",
+	"YnXfwFNgg11zWFDSiB8biPuixywlTP31tuYm7JS2P29xrkv9uCo5fT3bhDOgmkpp3S8KV9hia1VvZO9M",
+	"f2qq/vU5S13Lu0teumZ4zGJcuURfaFUMO8ISDNLaDfvStHvODMCIgPS7EEMzbBkCMqrMJkKLiWzI7JwF",
+	"0jIHl0TYSbhQz/x1zGd9jbsnz5mPbXh0Z1H9oofqRdi6lmVuuw2feylLTz2ybxENitg/NzIhXFJ9m+YD",
+	"8w5Pm9MpveazRb2X+nERe+a62XU+uGzCvp0QlIR0LKw0pRO3a0XnL0dtKaGoK3p3CUV3ZM9fDUuLycUw",
+	"pvoW8imeFeepcQHNtp62bpJ4Y145tRPzrM4tszL7FuygtH+XcrreIRGsldWte9qs+rd0aJo3WxgHqHja",
+	"W+9MAJ8maZy0rx2v39jczQpy/oLoBvmVGcUQF5K1lq18+WToQXYtI+ea2FKEyTW92/BS6XhcWO6xsFwA",
+	"kgNHDpvuubhcBNm4xHzwS8ztMGpeX95bmLT6mnGtubzWXEBHbZm5ELJamNbt4+SlxMGRtB3Y0vOPReCp",
+	"b9+chTbKzDY53GBceH8YCYn50BgDJRLyC0LqN0J+dsqnAi/bNkLjZT7lBQ0NzHc2n+RSf+lwyaI07n2Y",
+	"QvVVn2GRXCXM4uVYk6ytBS/hlxmLKJ4Z5DYT22JPc4viuUhDg3gmWJnFHRGuGWRzzFeGTwvyTeHduYVo",
+	"jepxI9HLqLIKNZZ7P1EVU1A8pqyRpn1bOl5r2yxt3tsGLC2OosJJWiL1fRBinkbRCnGQnMDymbNCdISW",
+	"OCIBsq8Xo7WRNbC7pdO07PTlqungd8sz9itys01OrZvBnHFoOrbOeVrdBkfKOc+LazjS7coc4JafubDD",
+	"w9p+/oy2HUf03O7qUF5fRL4h0Us29pyxHR0hQo1pmYNu9sHKLfVO4bHTzmuuuif7XnQBlbjfNLWalNtz",
+	"NiAfjVGPC6jDA8eOc4hcSbSd1O8OQk2554HCr5+PnD87+b9PWFOZax5Yq4sDlZynZYHgmSE3ZlnDybL2",
+	"IZGyvMiYSO27/7KrOD+WyE0Lpyk2LOGYBnvp3XqZiT1/ephWao649kNMF6Ot7r+tWmMqhJjCSeYdhvvZ",
+	"nLzdSpVVT+fezcbG2pngGzBndlSo4FOGuNnRIWY+W3b8XaxYTU3bcWz12ditZ3P3P26F7LMVsgYzJ8oq",
+	"HqEnI+OA37gt8vC3RfaDVDOTsu+w6eOOxt2Sld2SNdDUeJFSzGthRXYGn5cZSMe9lEPbS/njIXzKwWc8",
+	"aDvQR10vfUFo76zJiD203UJaKmT0P1rTEI41UjNRsCawaO9pSZ17k+z9486kl5HRZDByb0uqg0l/JqH9",
+	"5dFL02QX/Ir5ZNkGpIoVf4hESpSpLVP+pf0iRRd7YpSwndhkFbzboFTodCRH+pAjkUWAAzllu+1JiGSI",
+	"GlmQw2dBWrDTTH3sJUAa3cpIclRIDo2JGrFRjkctzMZ20XHoQW4kLoZGXGwWXrtLLH3/WGC9DG9qfKm7",
+	"vHIASX+hrr2++mCa7KK+Mh883qC+suIPsb6KM7Vl2rd67KiujAq2E3isencbeAqdjtVVn+oqtgio4aZs",
+	"sz1rqwxPY211+LVVI3KaK6u9hEejSxkrq0plpRFRq6yKkailrtouNg49vI111dDqqk0C65TDEnjrN13U",
+	"9cOMrnpUyGigfJTOzoWgTBpBBJlFMAJ6tYYeesVTigi16oHXGyM8bTkN9yalh4ztYZwPNRQ8pbQPdpIw",
+	"4WwG7WTBdXhtGu2CLrCdbXSK7ztkRzFEziCXLp+H63ddlEGmhu1kVWsl7zavKnU7Egd9iIMMPVXwVA24",
+	"J3OQw2rkDg6fO2gCTzN1sKf4aHEsI31QoQ8yUNQYhCwotbAH24bHS4h0I4cwNA5hoxi70cG8+2gvheNL",
+	"rxmhwz1fdcwW8y+DWY38OJgTPdW9EW2QMcJ6S8cG69kYDw8uYvwsCPSX76pKsserboR6DjhoZDxuAAcD",
+	"ToPLZwotcZT+zLHZFQja79wp/diTfQbzkSr8xWyjWkImHppzFv/Q3BO6EG2bq67Dm6zVQW2uWo9qzP9s",
+	"ObQuhjJYoFeFbVavmyAl/XbG9A5i/VvKwR5KEu3quBBn15uwqXfnw+RRZT4w5JeUmk1RYehd9KpbS9vJ",
+	"PRpmZLfpR4sQIxHbh4h1w68RfQVPMRVABeO9Pcatbf7sX582cqOLNwN0CEtMIjyLoDQvYq257knpx5c3",
+	"+YmRPT989nxDi28m1Q8CRL0DyEi4Vwh3N45q9Hste2nh4XeLqJeeEo2M/dAY+59Ixjbm8GuZ2aA/swbf",
+	"EvAVWA/qU2rD+upfkW6vp58boNDQbQ8Z3dbCSFlmrvjAkZscCh5UmJchIDufJUxk4vYGRSc3vTt/NFAk",
+	"XBY44KFS1D8Fgc6Xfwv3j68Av4wyoggo94vADaAiMXRRT6rJezbbET9te9uEiNKDQJ+ViINkpnPxCtNh",
+	"FN/FQ2fa2FKdtVb2jkurUr9ljd5l2sq+NrbzuupiMKfrN5HNFB5zVLlAVTbvvmRmDrbD4i9zSAUvkcnM",
+	"h087Oc02ULUwmHuKnH5+aP7yGMtuyFjuct2uRlcW4lsbU7lt5Ly0oPlcX9weUtAcnLHkxGRr0Fb3gJ9y",
+	"IlfaBOw3dc5SGXqn/9wrQAvgS/enny6ZjyPEAeZHCUGECompr0q/lEfeqTf1nu6f/hMAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

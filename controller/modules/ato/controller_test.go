@@ -1,15 +1,12 @@
 package ato
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestController(t *testing.T) {
@@ -41,7 +38,6 @@ func TestController(t *testing.T) {
 		t.Error(err)
 	}
 	c, e := New(true, con)
-
 	if e != nil {
 		t.Error(e)
 	}
@@ -49,27 +45,21 @@ func TestController(t *testing.T) {
 		t.Error(err)
 	}
 	c.Start()
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
 	a := ATO{Name: "fooo", Control: true, Inlet: "1", Period: 1, Pump: "1", Enable: true}
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(a)
-	if err := tr.Do("PUT", "/api/atos", body, nil); err != nil {
-		t.Error("Failed to create ato using api. Error:", err)
+	if err := c.Create(a); err != nil {
+		t.Error("Failed to create ato:", err)
 	}
-	if err := tr.Do("GET", "/api/atos", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to list ato using api. Error:", err)
+	if _, err := c.List(); err != nil {
+		t.Error("Failed to list atos:", err)
 	}
-	if err := tr.Do("GET", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to get ato using api. Error:", err)
+	if _, err := c.Get("1"); err != nil {
+		t.Error("Failed to get ato:", err)
 	}
-
 	if err := c.On("1", true); err != nil {
 		t.Error(err)
 	}
 
 	a.ID = "1"
-
 	c.Check(a)
 	_, err = c.Read(a)
 	if err != nil {
@@ -82,15 +72,13 @@ func TestController(t *testing.T) {
 		t.Error(err)
 	}
 	a.Notify.Enable = true
-	if _, err := c.statsMgr.Get("1"); err != nil {
+	if _, err := c.Usage("1"); err != nil {
 		t.Error(err)
 	}
 	c.NotifyIfNeeded(a, 0)
 
-	body = new(bytes.Buffer)
-	json.NewEncoder(body).Encode(a)
-	if err := tr.Do("POST", "/api/atos/1", body, nil); err != nil {
-		t.Error("Failed to update udate exitsing using api. Error:", err)
+	if err := c.Update("1", a); err != nil {
+		t.Error("Failed to update ato:", err)
 	}
 	c.Stop()
 	c.Start()
@@ -117,12 +105,11 @@ func TestController(t *testing.T) {
 	if err := c.Update("1", a1); err == nil {
 		t.Error("ATO update should fail if period is set to zero")
 	}
-	if err := tr.Do("GET", "/api/atos/1/usage", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to get ato usage using api. Error:", err)
+	if _, err := c.Usage("1"); err != nil {
+		t.Error("Failed to get ato usage:", err)
 	}
-	if err := tr.Do("DELETE", "/api/atos/1", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to delete ato using api. Error:", err)
+	if err := c.Delete("1"); err != nil {
+		t.Error("Failed to delete ato:", err)
 	}
-
 	c.Stop()
 }

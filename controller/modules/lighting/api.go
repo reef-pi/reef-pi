@@ -5,17 +5,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/lights", c.ListLights)
-	r.Put("/api/lights", c.CreateLight)
-	r.Get("/api/lights/{id}", c.GetLight)
-	r.Post("/api/lights/{id}", c.UpdateLight)
-	r.Delete("/api/lights/{id}", c.DeleteLight)
-	r.Get("/api/lights/{id}/usage", c.getUsage)
+func (c *Controller) Usage(id string) (telemetry.StatsResponse, error) {
+	return c.statsMgr.Get(id)
 }
+
+// LoadAPI is a no-op: lighting routes are owned by the generated OA3 handler in controller/api.
+func (c *Controller) LoadAPI(_ chi.Router) {}
 
 func (c *Controller) GetLight(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
