@@ -2,26 +2,33 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"github.com/reef-pi/reef-pi/controller/api/gen"
 	equipmentModule "github.com/reef-pi/reef-pi/controller/modules/equipment"
+	timerModule "github.com/reef-pi/reef-pi/controller/modules/timer"
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
 // ServerConfig holds optional module controllers. Nil means the module is not loaded.
 type ServerConfig struct {
 	Equipment *equipmentModule.Controller
+	Timer     *timerModule.Controller
 }
 
 // ReefPiServer implements gen.StrictServerInterface for all migrated modules.
 type ReefPiServer struct {
 	equipment *equipmentModule.Controller
+	timer     *timerModule.Controller
 }
 
 // NewReefPiServer constructs a ReefPiServer from the provided config.
 func NewReefPiServer(cfg ServerConfig) *ReefPiServer {
-	return &ReefPiServer{equipment: cfg.Equipment}
+	return &ReefPiServer{
+		equipment: cfg.Equipment,
+		timer:     cfg.Timer,
+	}
 }
 
 // isNotFound returns true when the error originates from a missing storage entity.
@@ -164,4 +171,137 @@ func (s *ReefPiServer) ControlEquipment(_ context.Context, request gen.ControlEq
 		return gen.ControlEquipment400JSONResponse{Message: err.Error()}, nil
 	}
 	return gen.ControlEquipment200JSONResponse(toGenEquipment(e)), nil
+}
+
+// ---- Timer ----
+
+func toGenTimerJob(j timerModule.Job) gen.TimerJob {
+	var target interface{}
+	if len(j.Target) > 0 {
+		_ = json.Unmarshal(j.Target, &target)
+	}
+	enable := j.Enable
+	id := j.ID
+	return gen.TimerJob{
+		Id:     &id,
+		Name:   j.Name,
+		Enable: &enable,
+		Type:   j.Type,
+		Month:  j.Month,
+		Week:   j.Week,
+		Day:    j.Day,
+		Hour:   j.Hour,
+		Minute: j.Minute,
+		Second: j.Second,
+		Target: target,
+	}
+}
+
+func fromGenTimerJob(j gen.TimerJob) timerModule.Job {
+	var raw json.RawMessage
+	if j.Target != nil {
+		raw, _ = json.Marshal(j.Target)
+	}
+	var enable bool
+	if j.Enable != nil {
+		enable = *j.Enable
+	}
+	return timerModule.Job{
+		Name:   j.Name,
+		Enable: enable,
+		Type:   j.Type,
+		Month:  j.Month,
+		Week:   j.Week,
+		Day:    j.Day,
+		Hour:   j.Hour,
+		Minute: j.Minute,
+		Second: j.Second,
+		Target: raw,
+	}
+}
+
+func (s *ReefPiServer) ListTimerJobs(_ context.Context, _ gen.ListTimerJobsRequestObject) (gen.ListTimerJobsResponseObject, error) {
+	if s.timer == nil {
+		return gen.ListTimerJobs401JSONResponse{Message: "timer subsystem not loaded"}, nil
+	}
+	jobs, err := s.timer.List()
+	if err != nil {
+		return gen.ListTimerJobs401JSONResponse{Message: err.Error()}, nil
+	}
+	resp := make(gen.ListTimerJobs200JSONResponse, len(jobs))
+	for i, j := range jobs {
+		resp[i] = toGenTimerJob(j)
+	}
+	return resp, nil
+}
+
+func (s *ReefPiServer) CreateTimerJob(_ context.Context, request gen.CreateTimerJobRequestObject) (gen.CreateTimerJobResponseObject, error) {
+	if s.timer == nil {
+		return gen.CreateTimerJob401JSONResponse{Message: "timer subsystem not loaded"}, nil
+	}
+	if request.Body == nil {
+		return gen.CreateTimerJob400JSONResponse{Message: "missing request body"}, nil
+	}
+	job := fromGenTimerJob(*request.Body)
+	if err := s.timer.Create(job); err != nil {
+		return gen.CreateTimerJob400JSONResponse{Message: err.Error()}, nil
+	}
+	jobs, err := s.timer.List()
+	if err != nil {
+		return gen.CreateTimerJob400JSONResponse{Message: err.Error()}, nil
+	}
+	for _, j := range jobs {
+		if j.Name == job.Name && j.Type == job.Type {
+			return gen.CreateTimerJob200JSONResponse(toGenTimerJob(j)), nil
+		}
+	}
+	return gen.CreateTimerJob200JSONResponse(toGenTimerJob(job)), nil
+}
+
+func (s *ReefPiServer) GetTimerJob(_ context.Context, request gen.GetTimerJobRequestObject) (gen.GetTimerJobResponseObject, error) {
+	if s.timer == nil {
+		return gen.GetTimerJob401JSONResponse{Message: "timer subsystem not loaded"}, nil
+	}
+	j, err := s.timer.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetTimerJob404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetTimerJob401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetTimerJob200JSONResponse(toGenTimerJob(j)), nil
+}
+
+func (s *ReefPiServer) UpdateTimerJob(_ context.Context, request gen.UpdateTimerJobRequestObject) (gen.UpdateTimerJobResponseObject, error) {
+	if s.timer == nil {
+		return gen.UpdateTimerJob401JSONResponse{Message: "timer subsystem not loaded"}, nil
+	}
+	if request.Body == nil {
+		return gen.UpdateTimerJob400JSONResponse{Message: "missing request body"}, nil
+	}
+	job := fromGenTimerJob(*request.Body)
+	if err := s.timer.Update(request.Id, job); err != nil {
+		if isNotFound(err) {
+			return gen.UpdateTimerJob404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.UpdateTimerJob400JSONResponse{Message: err.Error()}, nil
+	}
+	updated, err := s.timer.Get(request.Id)
+	if err != nil {
+		return gen.UpdateTimerJob400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateTimerJob200JSONResponse(toGenTimerJob(updated)), nil
+}
+
+func (s *ReefPiServer) DeleteTimerJob(_ context.Context, request gen.DeleteTimerJobRequestObject) (gen.DeleteTimerJobResponseObject, error) {
+	if s.timer == nil {
+		return gen.DeleteTimerJob401JSONResponse{Message: "timer subsystem not loaded"}, nil
+	}
+	if err := s.timer.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteTimerJob404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteTimerJob401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteTimerJob200JSONResponse{Message: "deleted"}, nil
 }

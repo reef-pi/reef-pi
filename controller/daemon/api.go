@@ -8,6 +8,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/api"
 	"github.com/reef-pi/reef-pi/controller/api/gen"
+	timerModule "github.com/reef-pi/reef-pi/controller/modules/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -24,10 +25,13 @@ func (r *ReefPi) UnAuthenticatedAPI(router chi.Router) {
 // Authenticated API using the BasicAuth middleware
 func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
 	// Generated strict handler — handles all OpenAPI-migrated modules.
-	apiServer := api.NewReefPiServer(api.ServerConfig{
+	cfg := api.ServerConfig{
 		Equipment: r.equipment,
-	})
-	gen.HandlerWithOptions(gen.NewStrictHandler(apiServer, nil), gen.ChiServerOptions{BaseRouter: router})
+	}
+	if sub, err := r.subsystems.Sub(timerModule.Bucket); err == nil {
+		cfg.Timer, _ = sub.(*timerModule.Controller)
+	}
+	gen.HandlerWithOptions(gen.NewStrictHandler(api.NewReefPiServer(cfg), nil), gen.ChiServerOptions{BaseRouter: router})
 
 	r.registerCoreAPI(router)
 	r.registerTelemetryAPI(router)

@@ -56,6 +56,42 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
+// TimerJob defines model for TimerJob.
+type TimerJob struct {
+	// Day Cron day-of-month field
+	Day string `json:"day"`
+
+	// Enable Whether this timer job is active
+	Enable *bool `json:"enable,omitempty"`
+
+	// Hour Cron hour field
+	Hour string `json:"hour"`
+
+	// Id Unique identifier for the timer job
+	Id *string `json:"id,omitempty"`
+
+	// Minute Cron minute field
+	Minute string `json:"minute"`
+
+	// Month Cron month field
+	Month string `json:"month"`
+
+	// Name Human-readable name for the timer job
+	Name string `json:"name"`
+
+	// Second Cron second field
+	Second string `json:"second"`
+
+	// Target JSON payload identifying the target resource (e.g. {\"id\":\"abc\"})
+	Target interface{} `json:"target,omitempty"`
+
+	// Type Target subsystem type (equipment, macro, ato, camera, doser, lighting, ph, temperature, reminder)
+	Type string `json:"type"`
+
+	// Week Cron day-of-week field
+	Week string `json:"week"`
+}
+
 // sessionAuthContextKey is the context key for sessionAuth security scheme
 type sessionAuthContextKey string
 
@@ -98,6 +134,12 @@ type UpdateEquipmentJSONRequestBody UpdateEquipmentJSONBody
 // ControlEquipmentJSONRequestBody defines body for ControlEquipment for application/json ContentType.
 type ControlEquipmentJSONRequestBody = EquipmentAction
 
+// CreateTimerJobJSONRequestBody defines body for CreateTimerJob for application/json ContentType.
+type CreateTimerJobJSONRequestBody = TimerJob
+
+// UpdateTimerJobJSONRequestBody defines body for UpdateTimerJob for application/json ContentType.
+type UpdateTimerJobJSONRequestBody = TimerJob
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// List all equipment
@@ -118,6 +160,21 @@ type ServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// List all timer jobs
+	// (GET /api/timers)
+	ListTimerJobs(w http.ResponseWriter, r *http.Request)
+	// Create a new timer job
+	// (PUT /api/timers)
+	CreateTimerJob(w http.ResponseWriter, r *http.Request)
+	// Delete a timer job
+	// (DELETE /api/timers/{id})
+	DeleteTimerJob(w http.ResponseWriter, r *http.Request, id string)
+	// Get a timer job by ID
+	// (GET /api/timers/{id})
+	GetTimerJob(w http.ResponseWriter, r *http.Request, id string)
+	// Update a timer job
+	// (POST /api/timers/{id})
+	UpdateTimerJob(w http.ResponseWriter, r *http.Request, id string)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -157,6 +214,36 @@ func (_ Unimplemented) UpdateEquipment(w http.ResponseWriter, r *http.Request, i
 // Control equipment power state
 // (POST /api/equipment/{id}/control)
 func (_ Unimplemented) ControlEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all timer jobs
+// (GET /api/timers)
+func (_ Unimplemented) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a new timer job
+// (PUT /api/timers)
+func (_ Unimplemented) CreateTimerJob(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a timer job
+// (DELETE /api/timers/{id})
+func (_ Unimplemented) DeleteTimerJob(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a timer job by ID
+// (GET /api/timers/{id})
+func (_ Unimplemented) GetTimerJob(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a timer job
+// (POST /api/timers/{id})
+func (_ Unimplemented) UpdateTimerJob(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -337,6 +424,142 @@ func (siw *ServerInterfaceWrapper) ControlEquipment(w http.ResponseWriter, r *ht
 	handler.ServeHTTP(w, r)
 }
 
+// ListTimerJobs operation middleware
+func (siw *ServerInterfaceWrapper) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListTimerJobs(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateTimerJob operation middleware
+func (siw *ServerInterfaceWrapper) CreateTimerJob(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateTimerJob(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteTimerJob operation middleware
+func (siw *ServerInterfaceWrapper) DeleteTimerJob(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteTimerJob(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetTimerJob operation middleware
+func (siw *ServerInterfaceWrapper) GetTimerJob(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTimerJob(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateTimerJob operation middleware
+func (siw *ServerInterfaceWrapper) UpdateTimerJob(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateTimerJob(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 type UnescapedCookieParamError struct {
 	ParamName string
 	Err       error
@@ -467,6 +690,21 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/equipment/{id}/control", wrapper.ControlEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/timers", wrapper.ListTimerJobs)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/timers", wrapper.CreateTimerJob)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/timers/{id}", wrapper.DeleteTimerJob)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/timers/{id}", wrapper.GetTimerJob)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/timers/{id}", wrapper.UpdateTimerJob)
 	})
 
 	return r
@@ -787,6 +1025,256 @@ func (response ControlEquipment404JSONResponse) VisitControlEquipmentResponse(w 
 	return err
 }
 
+type ListTimerJobsRequestObject struct {
+}
+
+type ListTimerJobsResponseObject interface {
+	VisitListTimerJobsResponse(w http.ResponseWriter) error
+}
+
+type ListTimerJobs200JSONResponse []TimerJob
+
+func (response ListTimerJobs200JSONResponse) VisitListTimerJobsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListTimerJobs401JSONResponse ErrorResponse
+
+func (response ListTimerJobs401JSONResponse) VisitListTimerJobsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTimerJobRequestObject struct {
+	Body *CreateTimerJobJSONRequestBody
+}
+
+type CreateTimerJobResponseObject interface {
+	VisitCreateTimerJobResponse(w http.ResponseWriter) error
+}
+
+type CreateTimerJob200JSONResponse TimerJob
+
+func (response CreateTimerJob200JSONResponse) VisitCreateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTimerJob400JSONResponse ErrorResponse
+
+func (response CreateTimerJob400JSONResponse) VisitCreateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateTimerJob401JSONResponse ErrorResponse
+
+func (response CreateTimerJob401JSONResponse) VisitCreateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTimerJobRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteTimerJobResponseObject interface {
+	VisitDeleteTimerJobResponse(w http.ResponseWriter) error
+}
+
+type DeleteTimerJob200JSONResponse ErrorResponse
+
+func (response DeleteTimerJob200JSONResponse) VisitDeleteTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTimerJob401JSONResponse ErrorResponse
+
+func (response DeleteTimerJob401JSONResponse) VisitDeleteTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteTimerJob404JSONResponse ErrorResponse
+
+func (response DeleteTimerJob404JSONResponse) VisitDeleteTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTimerJobRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetTimerJobResponseObject interface {
+	VisitGetTimerJobResponse(w http.ResponseWriter) error
+}
+
+type GetTimerJob200JSONResponse TimerJob
+
+func (response GetTimerJob200JSONResponse) VisitGetTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTimerJob401JSONResponse ErrorResponse
+
+func (response GetTimerJob401JSONResponse) VisitGetTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTimerJob404JSONResponse ErrorResponse
+
+func (response GetTimerJob404JSONResponse) VisitGetTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTimerJobRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateTimerJobJSONRequestBody
+}
+
+type UpdateTimerJobResponseObject interface {
+	VisitUpdateTimerJobResponse(w http.ResponseWriter) error
+}
+
+type UpdateTimerJob200JSONResponse TimerJob
+
+func (response UpdateTimerJob200JSONResponse) VisitUpdateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTimerJob400JSONResponse ErrorResponse
+
+func (response UpdateTimerJob400JSONResponse) VisitUpdateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTimerJob401JSONResponse ErrorResponse
+
+func (response UpdateTimerJob401JSONResponse) VisitUpdateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateTimerJob404JSONResponse ErrorResponse
+
+func (response UpdateTimerJob404JSONResponse) VisitUpdateTimerJobResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 	// List all equipment
@@ -807,6 +1295,21 @@ type StrictServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(ctx context.Context, request ControlEquipmentRequestObject) (ControlEquipmentResponseObject, error)
+	// List all timer jobs
+	// (GET /api/timers)
+	ListTimerJobs(ctx context.Context, request ListTimerJobsRequestObject) (ListTimerJobsResponseObject, error)
+	// Create a new timer job
+	// (PUT /api/timers)
+	CreateTimerJob(ctx context.Context, request CreateTimerJobRequestObject) (CreateTimerJobResponseObject, error)
+	// Delete a timer job
+	// (DELETE /api/timers/{id})
+	DeleteTimerJob(ctx context.Context, request DeleteTimerJobRequestObject) (DeleteTimerJobResponseObject, error)
+	// Get a timer job by ID
+	// (GET /api/timers/{id})
+	GetTimerJob(ctx context.Context, request GetTimerJobRequestObject) (GetTimerJobResponseObject, error)
+	// Update a timer job
+	// (POST /api/timers/{id})
+	UpdateTimerJob(ctx context.Context, request UpdateTimerJobRequestObject) (UpdateTimerJobResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -1011,29 +1514,176 @@ func (sh *strictHandler) ControlEquipment(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// ListTimerJobs operation middleware
+func (sh *strictHandler) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
+	var request ListTimerJobsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListTimerJobs(ctx, request.(ListTimerJobsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListTimerJobs")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListTimerJobsResponseObject); ok {
+		if err := validResponse.VisitListTimerJobsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateTimerJob operation middleware
+func (sh *strictHandler) CreateTimerJob(w http.ResponseWriter, r *http.Request) {
+	var request CreateTimerJobRequestObject
+
+	var body CreateTimerJobJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateTimerJob(ctx, request.(CreateTimerJobRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateTimerJob")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateTimerJobResponseObject); ok {
+		if err := validResponse.VisitCreateTimerJobResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteTimerJob operation middleware
+func (sh *strictHandler) DeleteTimerJob(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteTimerJobRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteTimerJob(ctx, request.(DeleteTimerJobRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteTimerJob")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteTimerJobResponseObject); ok {
+		if err := validResponse.VisitDeleteTimerJobResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetTimerJob operation middleware
+func (sh *strictHandler) GetTimerJob(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetTimerJobRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetTimerJob(ctx, request.(GetTimerJobRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetTimerJob")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetTimerJobResponseObject); ok {
+		if err := validResponse.VisitGetTimerJobResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateTimerJob operation middleware
+func (sh *strictHandler) UpdateTimerJob(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateTimerJobRequestObject
+
+	request.Id = id
+
+	var body UpdateTimerJobJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateTimerJob(ctx, request.(UpdateTimerJobRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateTimerJob")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateTimerJobResponseObject); ok {
+		if err := validResponse.VisitUpdateTimerJobResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7FjfUxs3EP5XdtQ+tB3jc5o8+Y0AkzKlhYHwFBhGPu3Zm95JZ2kFc2X8v3ckHf55LpBME9zhKXc5+dO3",
-	"u9+3K3QvclPVRqNmJ4b3wuUTrGR8PJp6qivUHF5qa2q0TBg/jYzhG4WlbMKbQpdbqpmMFkNxgbnRygEb",
-	"uJPEIAtGC7W5Q0t6DEaD8vEpgIDDqUedo+gJbmoUQ0GacYxWzHqC1Cb8paapRyCFmqkgtFAYCzxBwDnf",
-	"nrAo1akuGzFk63GO7TjsHKC1rHAT/E9ZIZhiFQ5+wv6434Mr8YckDSc0nvCVCO+/oWS0V+Jn0bFDAFzH",
-	"P/DWBsSYDXAseXO77exHxpQodQT3XCJvbnC8SEuLm1YCT8gthUQOcqM15owK2HTxdyybG1MUN0bfhFJ1",
-	"bFZA5LeEe0dlCdowjDAFierxis/jmoXQp54sKjH8lGo0j/V6vt6MPmPOgeNcovt54rQu1K4iHKILO6wU",
-	"oUtDj7AzupuStcaeo6uNdrhJqELn5Dh+WMv4GvzDws09Qm0w95a4uQhuTcAOnSOj9z1PujwZP0JuzF+E",
-	"4JBh1MDZ6cVHyKTnSeZorEn34bxlEBMiyxIyWVP2C1jjGV3/SoueoICYkMSDkURAWeRM1vQ7NmIWuJIu",
-	"zCaj86OLj7B/djzPvEUs9moCOfXSkq+CPtmaskQbcInLAPywav/sWPTELVqX4Ab9Qf9NNEaNWtYkhuJt",
-	"f9B/K3qiljyJGYqh4HJTGycLhfrIwOtYiaE4IcdHK2ZMtYwYvw4G4Z/ArcWQdV1SHn+efXZJb6mJhidi",
-	"rOIPf7RYiKH4IVu026zttdlit9kig9bKNoGriQv0grdDcRa+cz7P0bnCl2UDFtkS3qIKeO8Gb57F+F+J",
-	"rmi7g9ylDjowlv5GBXtwK0tS0CoT5uqOCvZVJW3zENBKNKHecuyCCxapuZ71RO076nVgQxderdjUo+P3",
-	"RjXPCv3LZ9wIC2Nx25DrnG3PGECd02XLADhN7X4xHr9ha//6jr66PjCYfaUBn+i7TSnPP0IeBaZWPJac",
-	"Nfh2znovFbS6hj0gnaxFOlhiF1yeXAoa7x71+ay31qqze1KzpNESGTdbwGH8/+UWUEsrK2S0Af1+a2mP",
-	"Dx/mWZgSi2lGSqwLsbeUvfXJff1fivSxaiyiSenpEurLE0dg9e57JCl0sMJ4vS7QpKEnDKHOQ8MH5P+p",
-	"/J7WI9uMvmrtSVr7gLw0WEdNEsKWM49xHXq7rJX87h3v9ZT1ck5Zu3CQ8lG0rwepne9fqft84UEua/+w",
-	"j72gs7kdpAU72d2eZJP2tuplujRdiOUTqcevXt19r7ZmWhoxS/ee24y7dMUY/bZyufjpOhjEob3ttuOJ",
-	"yWU5v88j7Vim615vSzEUmZhdz/4JAAD//w==",
+	"7FpRc9M4EP4rO7p7gBs3KQdPeSuFgXIcZWiZeyCdjmKvE4EtudKqHV8n//1GkmPHid2kMLTN0Zcmwcrq",
+	"0+737W5WXLNY5YWSKMmw0TUz8Qxz7t++vrCiyFGS+1BoVaAmgf7RRCk6TzDjpfuUoIm1KEgoyUbsBGMl",
+	"EwOk4IoLAp4SaijUFWohp6AkJNa/c0bA4IVFGSOLGJUFshETknCKms0jJpJ185+luLAIIkFJIhWoIVUa",
+	"aIaANd6IaeTJscxKNiJtsbZtyO3sTEue47rxDzxHUGnbHDzBwXQQwZj9zYWE92I6ozFzn98iJ9Rj9pR1",
+	"7OAMrto/tFo7i94bYIjT+nb96CdKZcilN24pQ1rf4KhxS2U3rASaCbN0JGEgVlJiTJgAqS78hnh5rtL0",
+	"XMlzF6qOzVLw+JbsXoksA6kIJhgOicnmiNfnmrujX1ihMWGjLyFG9VnP6vVq8hVjchhrih7EAdMqUbuC",
+	"8AqN26EVhC4ObUCnZDckrZX+hKZQ0uA6oByN4VP/YMXjK+YXC7v2OBU56ndqsm4+6VLkoXYh4OWeSvdy",
+	"JWkGqcAs6Qo6Sj7JOoTxzwxphjrQiNz28FVNHI14TOKyK5gRmymre9C4R/0obqf7Gs42us+FtIQ9qMLD",
+	"flzeeX3fvdmx3fnmrc253HOgndvBLeo81ro4fZLtgRIe9mMhrqddyePdyfEHKHiZKZ4sHF063Xo4/kug",
+	"0SirYwxJEa7H4zETifs7cn/4JHYv86d+H7/x6i6nwZCxE1MawhzcMnhSKy+CnMdaRcBJRRDzHDWPIFEG",
+	"dQSZS75CTiMoZhEQ5gVqTlZjBBpzIRPUncn4CvHbzcJwK/pc1p2X/KIFKaotIq/Aivo12+p4rYs5xNJq",
+	"QeWJK71BxgaNEUoe2C66nYSHECv1TSAYJJiU8PH45BSG3NJsaMRUCjmATxVmTymeZTDkhRj+AVpZQjMY",
+	"SxYx4SwGS2zBUuasNF7ghfgLSzZ3WIVM1TqiT69PTuHg41HNXY2Y7hUC+IXlWtjcFRvSKsvQeYUEuRzD",
+	"FqsOPh6xiF2iNsHc/mB/8MxXuQIlLwQbseeD/cFzFrGC08x7yB8FlzuUitLKM0IoeZSwEXsvDL1uVdaQ",
+	"mL2NP/f33YvDVtngRZGJ2H99+NWE4hE6IvdOEOb+i79rTNmI/TZseqdh1TgNm93mjQe15pUD245z8Fyh",
+	"dsFpiqixcYzGpDbLStBIWuAlJs7ei/1nt0J8I9BWoeoA91k6Higt/sUE9uCSZyKBiplQ68Ez2OY51+Xi",
+	"QK3TuHjzqXG6aVxzNo9YYTvidahdS9WO2IVFQy9VUt7q6N/fsE4wVRr7OtbORvUW3WRnq9jTzR2H3q2p",
+	"eXfYp/14e9Ze7xDMf1CAW+puncr1Q4g9wZKWxoKy9u9OWS95AhWvYQ+EDNIS0kliF1QeVAoSrzbqfB6t",
+	"pOrhtUjmgaMZhk6snQJe+X9fTgEF1zxHQu2sX/eG9ujVop65KtFUM5GwVSJGS95brfVnP5Okm6LRnCa4",
+	"p4uoD48cDtWL+3CSy2CpsnKVoIFDWxShzqbhDdL/lH7b5cjKo49c24prb5CWCuukDETo6XmU6eDb5yLh",
+	"957xHrush9Nl7UIjZT1pHxupnc9fIft8ZyM3rH7Y+1zQmdwOw4KdzG5byaQaPT9MlYbpdjzjcvqo1d3X",
+	"aiWmpRKzdImxQbh+nmxunJQt7hXMnUzK6luMWwzK6qG4uVfO9E29luA1wTgNjt8w86q98XPSVePsu81T",
+	"7X1XbgLqe6RqKnPnOenowWSh7gkL9zOW1k3QKqna8t5yurJEtpVivOPzk4ZS1fzknoN6xxWkOf6GyQi/",
+	"mVT9g5FdZc52eej+Jx8PkDJvkJb5sjbiWK5vN8w3fjpzfrWiWf0C/6WL5oMTS/VrekN+Xb729xJoXfh/",
+	"OXOENqgvu38iv1cxz+o7diEN8fD/qazO2IgN2fxs/l8AAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

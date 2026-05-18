@@ -12,7 +12,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func newTestEquipmentController(t *testing.T) (*Controller, *utils.TestRouter) {
+func newTestEquipmentController(t *testing.T) *Controller {
 	t.Helper()
 	con, err := controller.TestController()
 	if err != nil {
@@ -28,10 +28,7 @@ func newTestEquipmentController(t *testing.T) (*Controller, *utils.TestRouter) {
 	if err := c.Setup(); err != nil {
 		t.Fatal("Failed to setup equipment subsystem. Error:", err)
 	}
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
-	con.DM().Outlets().LoadAPI(tr.Router)
-	return c, tr
+	return c
 }
 
 func createTestOutlet(t *testing.T, c *Controller, outlet connectors.Outlet) {
@@ -41,94 +38,66 @@ func createTestOutlet(t *testing.T, c *Controller, outlet connectors.Outlet) {
 	}
 }
 
-func equipmentBody(t *testing.T, eq Equipment) *bytes.Buffer {
-	t.Helper()
-	body := new(bytes.Buffer)
-	if err := json.NewEncoder(body).Encode(eq); err != nil {
-		t.Fatal(err)
-	}
-	return body
-}
-
-func equipmentActionBody(t *testing.T, on bool) *bytes.Buffer {
-	t.Helper()
-	body := new(bytes.Buffer)
-	if err := json.NewEncoder(body).Encode(EquipmentAction{On: on}); err != nil {
-		t.Fatal(err)
-	}
-	return body
-}
-
 func TestEquipmentAPICRUD(t *testing.T) {
-	c, tr := newTestEquipmentController(t)
-	createTestOutlet(t, c, connectors.Outlet{
-		Name:   "return",
-		Pin:    23,
-		Driver: "rpi",
-	})
+	c := newTestEquipmentController(t)
+	createTestOutlet(t, c, connectors.Outlet{Name: "return", Pin: 23, Driver: "rpi"})
 
-	eq := Equipment{
-		Name:   "Return Pump",
-		Outlet: "1",
-	}
-	if err := tr.Do("PUT", "/api/equipment", equipmentBody(t, eq), nil); err != nil {
-		t.Fatal("Failed to create equipment using api")
+	eq := Equipment{Name: "Return Pump", Outlet: "1"}
+	if err := c.Create(eq); err != nil {
+		t.Fatal("Failed to create equipment:", err)
 	}
 
-	var resp []Equipment
-	if err := tr.Do("GET", "/api/equipment", strings.NewReader("{}"), &resp); err != nil {
-		t.Fatal("GET /api/equipment API failure. Error:", err)
+	eqs, err := c.List()
+	if err != nil {
+		t.Fatal("Failed to list equipment:", err)
 	}
-	if len(resp) != 1 {
-		t.Fatal("Expected 1 equipment. Found:", len(resp))
+	if len(eqs) != 1 {
+		t.Fatalf("Expected 1 equipment, got %d", len(eqs))
 	}
-	id := resp[0].ID
-	var e1 Equipment
-	if err := tr.Do("GET", "/api/equipment/"+id, strings.NewReader("{}"), &e1); err != nil {
-		t.Fatal("GET '/api/equipment/<id>' API failure. Error:", err)
+	id := eqs[0].ID
+
+	e1, err := c.Get(id)
+	if err != nil {
+		t.Fatal("Failed to get equipment:", err)
 	}
 	if e1.Name != "Return Pump" || e1.Outlet != "1" {
-		t.Fatalf("Unexpected equipment response: %#v", e1)
-	}
-	e1.Name = "Skimmer"
-	if err := tr.Do("POST", "/api/equipment/"+e1.ID, equipmentBody(t, e1), nil); err != nil {
-		t.Fatal("Failed to update  equipment using api. Error:", err)
+		t.Fatalf("Unexpected equipment: %#v", e1)
 	}
 
-	var updated Equipment
-	if err := tr.Do("GET", "/api/equipment/"+e1.ID, strings.NewReader("{}"), &updated); err != nil {
-		t.Fatal("GET updated equipment API failure. Error:", err)
+	e1.Name = "Skimmer"
+	if err := c.Update(id, e1); err != nil {
+		t.Fatal("Failed to update equipment:", err)
+	}
+	updated, err := c.Get(id)
+	if err != nil {
+		t.Fatal("Failed to get updated equipment:", err)
 	}
 	if updated.Name != "Skimmer" {
-		t.Fatalf("Expected updated equipment name. Found: %s", updated.Name)
+		t.Fatalf("Expected 'Skimmer', got %q", updated.Name)
 	}
 
-	if err := tr.Do("DELETE", "/api/equipment/"+e1.ID, new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to delete equipment using api. Error:", err)
+	if err := c.Delete(id); err != nil {
+		t.Fatal("Failed to delete equipment:", err)
 	}
 }
 
 func TestEquipmentAPIControl(t *testing.T) {
-	c, tr := newTestEquipmentController(t)
-	createTestOutlet(t, c, connectors.Outlet{
-		Name:   "heater",
-		Pin:    23,
-		Driver: "rpi",
-	})
-	if err := tr.Do("PUT", "/api/equipment", equipmentBody(t, Equipment{Name: "Heater", Outlet: "1"}), nil); err != nil {
-		t.Fatal("Failed to create equipment using api")
+	c := newTestEquipmentController(t)
+	createTestOutlet(t, c, connectors.Outlet{Name: "heater", Pin: 23, Driver: "rpi"})
+	if err := c.Create(Equipment{Name: "Heater", Outlet: "1"}); err != nil {
+		t.Fatal("Failed to create equipment:", err)
 	}
 
 	c.Start()
-	if err := tr.Do("POST", "/api/equipment/1/control", equipmentActionBody(t, true), nil); err != nil {
-		t.Fatal("Failed to control equipment using api")
+	if err := c.Control("1", true); err != nil {
+		t.Fatal("Failed to control equipment:", err)
 	}
 	eq, err := c.Get("1")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !eq.On {
-		t.Fatal("Expected equipment to be on after control API call")
+		t.Fatal("Expected equipment to be on after control call")
 	}
 
 	if err := c.On("-11", true); err == nil {
@@ -137,44 +106,43 @@ func TestEquipmentAPIControl(t *testing.T) {
 }
 
 func TestEquipmentOutletSync(t *testing.T) {
-	c, tr := newTestEquipmentController(t)
-	createTestOutlet(t, c, connectors.Outlet{
-		Name:   "return",
-		Pin:    23,
-		Driver: "rpi",
-	})
-	createTestOutlet(t, c, connectors.Outlet{
-		Name:      "skimmer",
-		Pin:       24,
-		Driver:    "rpi",
-		Equipment: "1",
-	})
+	c := newTestEquipmentController(t)
+	createTestOutlet(t, c, connectors.Outlet{Name: "return", Pin: 23, Driver: "rpi"})
+	createTestOutlet(t, c, connectors.Outlet{Name: "skimmer", Pin: 24, Driver: "rpi", Equipment: "1"})
 
 	eq := Equipment{Name: "Return Pump", Outlet: "1", On: true}
 	if err := c.Create(eq); err != nil {
 		t.Fatal(err)
 	}
 	if err := c.outlets.Configure(eq.Outlet, true); err != nil {
-		t.Fatal("Failed to configure outlet. Error:", err)
+		t.Fatal("Failed to configure outlet:", err)
 	}
 
-	var outletsList []connectors.Outlet
-	if err := tr.Do("GET", "/api/outlets", strings.NewReader("{}"), &outletsList); err != nil {
-		t.Fatal("Failed to list outlets using api")
+	outlets, err := c.outlets.List()
+	if err != nil {
+		t.Fatal("Failed to list outlets:", err)
 	}
-	if len(outletsList) != 2 {
-		t.Fatal("Expected 2 outlets, found:", len(outletsList))
-	}
-
-	var outlet connectors.Outlet
-	if err := tr.Do("GET", "/api/outlets/1", strings.NewReader("{}"), &outlet); err != nil {
-		t.Fatal("Failed to get individual outlet using api. Error:", err)
+	if len(outlets) != 2 {
+		t.Fatalf("Expected 2 outlets, found %d", len(outlets))
 	}
 
+	outlet, err := c.outlets.Get("1")
+	if err != nil {
+		t.Fatal("Failed to get outlet:", err)
+	}
+
+	// Outlet LoadAPI is still legacy chi — wire it for this test.
+	tr := utils.NewTestRouter()
+	c.outlets.LoadAPI(tr.Router)
 	outlet.Name = "updated"
-	if err := tr.Do("POST", "/api/outlets/1", outletBody(t, outlet), nil); err != nil {
-		t.Fatal("Failed to update individual outlet using api. Error:", err)
+	body := new(bytes.Buffer)
+	if err := json.NewEncoder(body).Encode(outlet); err != nil {
+		t.Fatal(err)
 	}
+	if err := tr.Do("POST", "/api/outlets/1", body, nil); err != nil {
+		t.Fatal("Failed to update outlet via api:", err)
+	}
+
 	c.synEquipment()
 	if err := c.On("1", true); err != nil {
 		t.Error(err)
@@ -186,13 +154,13 @@ func TestEquipmentOutletSync(t *testing.T) {
 	}
 }
 
-func outletBody(t *testing.T, outlet connectors.Outlet) *bytes.Buffer {
+func outletBody(t *testing.T, outlet connectors.Outlet) *strings.Reader {
 	t.Helper()
-	body := new(bytes.Buffer)
-	if err := json.NewEncoder(body).Encode(outlet); err != nil {
+	b, err := json.Marshal(outlet)
+	if err != nil {
 		t.Fatal(err)
 	}
-	return body
+	return strings.NewReader(string(b))
 }
 
 func TestEquipmentInUseAndGetEntity(t *testing.T) {
@@ -210,7 +178,6 @@ func TestEquipmentInUseAndGetEntity(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Create an outlet then equipment referencing it
 	o := connectors.Outlet{Name: "O-inuse", Pin: 10, Driver: "rpi"}
 	if err := con.DM().Outlets().Create(o); err != nil {
 		t.Fatal(err)
@@ -220,7 +187,6 @@ func TestEquipmentInUseAndGetEntity(t *testing.T) {
 		t.Fatal("Create equipment failed:", err)
 	}
 
-	// InUse for outlet — should find the equipment
 	deps, err := c.InUse(storage.OutletBucket, "1")
 	if err != nil {
 		t.Error("InUse(outlets) error:", err)
@@ -229,12 +195,10 @@ func TestEquipmentInUseAndGetEntity(t *testing.T) {
 		t.Error("Expected equipment dep for outlet '1'")
 	}
 
-	// InUse for unknown type — should error
 	if _, err := c.InUse("unknown", "1"); err == nil {
 		t.Error("Expected error for unknown dep type")
 	}
 
-	// GetEntity — not supported
 	if _, err := c.GetEntity("1"); err == nil {
 		t.Error("Expected error from GetEntity")
 	}
@@ -254,30 +218,14 @@ func TestUpdateEquipment(t *testing.T) {
 	c := New(con)
 	c.Setup()
 
-	o1 := connectors.Outlet{
-		Name:   "O1",
-		Pin:    23,
-		Driver: "rpi",
+	if err := outlets.Create(connectors.Outlet{Name: "O1", Pin: 23, Driver: "rpi"}); err != nil {
+		t.Fatal(err)
 	}
-	if err := outlets.Create(o1); err != nil {
+	if err := outlets.Create(connectors.Outlet{Name: "O2", Pin: 4, Driver: "rpi"}); err != nil {
 		t.Fatal(err)
 	}
 
-	o2 := connectors.Outlet{
-		Name:   "O2",
-		Pin:    4,
-		Driver: "rpi",
-	}
-	if err := outlets.Create(o2); err != nil {
-		t.Fatal(err)
-	}
-
-	//create equipment
-	eq := Equipment{
-		Name:   "Equipment 1",
-		Outlet: "1",
-	}
-
+	eq := Equipment{Name: "Equipment 1", Outlet: "1"}
 	if err := c.Create(eq); err != nil {
 		t.Fatal(err)
 	}

@@ -55,6 +55,51 @@ components:
         on:
           type: boolean
           description: Desired power state for the equipment
+    TimerJob:
+      type: object
+      required:
+        - name
+        - type
+        - month
+        - week
+        - day
+        - hour
+        - minute
+        - second
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Unique identifier for the timer job
+        name:
+          type: string
+          description: Human-readable name for the timer job
+        enable:
+          type: boolean
+          description: Whether this timer job is active
+        type:
+          type: string
+          description: Target subsystem type (equipment, macro, ato, camera, doser, lighting, ph, temperature, reminder)
+        month:
+          type: string
+          description: Cron month field
+        week:
+          type: string
+          description: Cron day-of-week field
+        day:
+          type: string
+          description: Cron day-of-month field
+        hour:
+          type: string
+          description: Cron hour field
+        minute:
+          type: string
+          description: Cron minute field
+        second:
+          type: string
+          description: Cron second field
+        target:
+          description: JSON payload identifying the target resource (e.g. {\"id\":\"abc\"})
 security:
   - sessionAuth: []
 paths:
@@ -284,6 +329,160 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Equipment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/timers:
+    get:
+      operationId: listTimerJobs
+      summary: List all timer jobs
+      tags:
+        - Timers
+      responses:
+        '200':
+          description: List of timer jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimerJob'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createTimerJob
+      summary: Create a new timer job
+      tags:
+        - Timers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerJob'
+      responses:
+        '200':
+          description: Timer job created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerJob'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/timers/{id}:
+    get:
+      operationId: getTimerJob
+      summary: Get a timer job by ID
+      tags:
+        - Timers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Timer job found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerJob'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Timer job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateTimerJob
+      summary: Update a timer job
+      tags:
+        - Timers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerJob'
+      responses:
+        '200':
+          description: Timer job updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerJob'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Timer job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteTimerJob
+      summary: Delete a timer job
+      tags:
+        - Timers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Timer job deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Timer job not found
           content:
             application/json:
               schema:
