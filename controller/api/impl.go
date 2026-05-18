@@ -638,12 +638,11 @@ func (s *ReefPiServer) RevertMacro(_ context.Context, request gen.RevertMacroReq
 }
 
 func toGenMacro(m macroModule.Macro) gen.Macro {
-	rev := m.Reversible
-	return gen.Macro{
-		Id:         &m.ID,
-		Name:       m.Name,
-		Reversible: &rev,
-	}
+	var out gen.Macro
+	raw, _ := json.Marshal(m)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &m.ID
+	return out
 }
 
 // ---- Lighting ----
@@ -760,18 +759,11 @@ func (s *ReefPiServer) GetLightUsage(_ context.Context, request gen.GetLightUsag
 }
 
 func toGenLight(l lightingModule.Light) gen.Light {
-	g := gen.Light{Id: &l.ID, Name: l.Name, Enable: &l.Enable}
-	if l.Jack != "" {
-		g.Jack = &l.Jack
-	}
-	if len(l.Channels) > 0 {
-		raw, _ := json.Marshal(l.Channels)
-		var ch map[string]interface{}
-		if json.Unmarshal(raw, &ch) == nil {
-			g.Channels = &ch
-		}
-	}
-	return g
+	var out gen.Light
+	raw, _ := json.Marshal(l)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &l.ID
+	return out
 }
 
 func fromGenLight(g gen.Light) lightingModule.Light {
@@ -908,16 +900,11 @@ func (s *ReefPiServer) GetATOUsage(_ context.Context, request gen.GetATOUsageReq
 }
 
 func toGenATO(a atoModule.ATO) gen.ATO {
-	enable := a.Enable
-	control := a.Control
-	return gen.ATO{
-		Id:      &a.ID,
-		Name:    a.Name,
-		Inlet:   &a.Inlet,
-		Pump:    &a.Pump,
-		Enable:  &enable,
-		Control: &control,
-	}
+	var out gen.ATO
+	raw, _ := json.Marshal(a)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &a.ID
+	return out
 }
 
 func fromGenATO(a gen.ATO) atoModule.ATO {
@@ -1154,7 +1141,11 @@ func (s *ReefPiServer) GetDoserPumpUsage(_ context.Context, request gen.GetDoser
 }
 
 func toGenPump(p doserModule.Pump) gen.DoserPump {
-	return gen.DoserPump{Id: &p.ID, Name: p.Name, Jack: &p.Jack, Pin: &p.Pin}
+	var out gen.DoserPump
+	raw, _ := json.Marshal(p)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &p.ID
+	return out
 }
 
 func fromGenPump(p gen.DoserPump) doserModule.Pump {
@@ -1318,7 +1309,11 @@ func (s *ReefPiServer) GetPhReadings(_ context.Context, request gen.GetPhReading
 }
 
 func toGenPhProbe(p phModule.Probe) gen.PhProbe {
-	return gen.PhProbe{Id: &p.ID, Name: p.Name}
+	var out gen.PhProbe
+	raw, _ := json.Marshal(p)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &p.ID
+	return out
 }
 
 func fromGenPhProbe(p gen.PhProbe) phModule.Probe {
@@ -1486,7 +1481,11 @@ func (s *ReefPiServer) GetTemperatureUsage(_ context.Context, request gen.GetTem
 }
 
 func toGenTC(tc *temperatureModule.TC) gen.TemperatureController {
-	return gen.TemperatureController{Id: &tc.ID, Name: tc.Name}
+	var out gen.TemperatureController
+	raw, _ := json.Marshal(tc)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &tc.ID
+	return out
 }
 
 func fromGenTC(g gen.TemperatureController) *temperatureModule.TC {
