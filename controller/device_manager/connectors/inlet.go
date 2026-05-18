@@ -31,14 +31,7 @@ type Inlets struct {
 	drivers *drivers.Drivers
 }
 
-func (e *Inlets) LoadAPI(r chi.Router) {
-	r.Get("/api/inlets/{id}", e.get)
-	r.Get("/api/inlets", e.list)
-	r.Put("/api/inlets", e.create)
-	r.Delete("/api/inlets/{id}", e.delete)
-	r.Post("/api/inlets/{id}", e.update)
-	r.Post("/api/inlets/{id}/read", e.read)
-}
+func (e *Inlets) LoadAPI(_ chi.Router) {}
 
 func (i Inlet) inputPin(drivers *drivers.Drivers) (hal.DigitalInputPin, error) {
 	d, err := drivers.DigitalInputDriver(i.Driver)

@@ -1,13 +1,10 @@
 package connectors
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestInletsAPI(t *testing.T) {
@@ -18,60 +15,52 @@ func TestInletsAPI(t *testing.T) {
 	}
 	drvrs := drivers.TestDrivers(store)
 
-	tr := utils.NewTestRouter()
 	i := Inlet{Name: "Foo", Pin: 21, Driver: "rpi"}
 	inlets := NewInlets(drvrs, store)
 
 	if err := inlets.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	inlets.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(i)
-	if err := tr.Do("PUT", "/api/inlets", body, nil); err != nil {
-		t.Error(err)
+
+	if err := inlets.Create(i); err != nil {
+		t.Error("Failed to create inlet:", err)
 	}
-	body.Reset()
 	i.Equipment = "1"
-	json.NewEncoder(body).Encode(i)
-	if err := tr.Do("POST", "/api/inlets/1", body, nil); err != nil {
-		t.Error(err)
+	if err := inlets.Update("1", i); err != nil {
+		t.Error("Failed to update inlet:", err)
 	}
-	if err := tr.Do("GET", "/api/inlets", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if _, err := inlets.List(); err != nil {
+		t.Error("Failed to list inlets:", err)
 	}
-	if err := tr.Do("POST", "/api/inlets/1/read", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if _, err := inlets.Read("1"); err != nil {
+		t.Error("Failed to read inlet:", err)
 	}
 
-	body.Reset()
+	// Create with no name should fail
 	i.Name = ""
-	json.NewEncoder(body).Encode(i)
-	if err := tr.Do("PUT", "/api/inlets", body, nil); err == nil {
+	if err := inlets.Create(i); err == nil {
 		t.Error("Inlet creation expected to fail when name is not set")
 	}
-	body.Reset()
+	// Update with invalid pin should fail
 	i.Name = "zsd"
 	i.Pin = 1
-	json.NewEncoder(body).Encode(i)
-	if err := tr.Do("POST", "/api/inlets/1", body, nil); err == nil {
+	if err := inlets.Update("1", i); err == nil {
 		t.Error("Inlet update expected to fail when GPIO pin number is not valid")
 	}
 
-	if err := tr.Do("GET", "/api/inlets/1", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if _, err := inlets.Get("1"); err != nil {
+		t.Error("Failed to get inlet:", err)
 	}
-	if err := tr.Do("DELETE", "/api/inlets/1", new(bytes.Buffer), nil); err == nil {
+	// Delete should fail since equipment is assigned
+	if err := inlets.Delete("1"); err == nil {
 		t.Error("Inlet deletion expected to fail due to equipment being assigned to it")
 	}
-	body.Reset()
 	i.Equipment = ""
 	i.Pin = 16
-	json.NewEncoder(body).Encode(i)
-	if err := tr.Do("POST", "/api/inlets/1", body, nil); err != nil {
-		t.Error(err)
+	if err := inlets.Update("1", i); err != nil {
+		t.Error("Failed to update inlet:", err)
 	}
-	if err := tr.Do("DELETE", "/api/inlets/1", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if err := inlets.Delete("1"); err != nil {
+		t.Error("Failed to delete inlet:", err)
 	}
 }

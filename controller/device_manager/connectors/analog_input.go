@@ -90,14 +90,7 @@ func (c *AnalogInputs) Delete(id string) error {
 	return c.repo.Delete(id)
 }
 
-func (c *AnalogInputs) LoadAPI(r chi.Router) {
-	r.Get("/api/analog_inputs", c.list)
-	r.Get("/api/analog_inputs/{id}", c.get)
-	r.Put("/api/analog_inputs", c.create)
-	r.Post("/api/analog_inputs/{id}", c.update)
-	r.Delete("/api/analog_inputs/{id}", c.delete)
-	r.Post("/api/analog_inputs/{id}/read", c.read)
-}
+func (c *AnalogInputs) LoadAPI(_ chi.Router) {}
 
 func (ais *AnalogInputs) Read(id string) (float64, error) {
 	j, err := ais.Get(id)

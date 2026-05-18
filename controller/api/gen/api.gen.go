@@ -48,6 +48,14 @@ type ATO struct {
 	Pump   *string `json:"pump,omitempty"`
 }
 
+// AnalogInput defines model for AnalogInput.
+type AnalogInput struct {
+	Driver string  `json:"driver"`
+	Id     *string `json:"id,omitempty"`
+	Name   string  `json:"name"`
+	Pin    *int    `json:"pin,omitempty"`
+}
+
 // CameraConfig defines model for CameraConfig.
 type CameraConfig struct {
 	CaptureFlags   *string `json:"capture_flags,omitempty"`
@@ -96,6 +104,27 @@ type DosingSchedule struct {
 	Frequency *int `json:"frequency,omitempty"`
 }
 
+// Driver defines model for Driver.
+type Driver struct {
+	// Config Driver-specific JSON config
+	Config     interface{}             `json:"config,omitempty"`
+	Id         *string                 `json:"id,omitempty"`
+	Name       string                  `json:"name"`
+	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Pinmap     *map[string][]int       `json:"pinmap,omitempty"`
+	Type       string                  `json:"type"`
+}
+
+// DriverValidationRequest defines model for DriverValidationRequest.
+type DriverValidationRequest struct {
+	// Config Driver-specific JSON config
+	Config     interface{}             `json:"config,omitempty"`
+	Id         *string                 `json:"id,omitempty"`
+	Name       *string                 `json:"name,omitempty"`
+	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Type       *string                 `json:"type,omitempty"`
+}
+
 // Equipment defines model for Equipment.
 type Equipment struct {
 	// BootDelay Seconds to wait after powering on during boot sequence
@@ -128,6 +157,28 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
+// Inlet defines model for Inlet.
+type Inlet struct {
+	Driver    string  `json:"driver"`
+	Equipment *string `json:"equipment,omitempty"`
+	Id        *string `json:"id,omitempty"`
+	Name      string  `json:"name"`
+	Pin       *int    `json:"pin,omitempty"`
+	Reverse   *bool   `json:"reverse,omitempty"`
+}
+
+// Jack defines model for Jack.
+type Jack struct {
+	Driver  string  `json:"driver"`
+	Id      *string `json:"id,omitempty"`
+	Name    string  `json:"name"`
+	Pins    *[]int  `json:"pins,omitempty"`
+	Reverse *bool   `json:"reverse,omitempty"`
+}
+
+// JackControlRequest Map of pin number to PWM value (0-100)
+type JackControlRequest map[string]float64
+
 // JournalEntry defines model for JournalEntry.
 type JournalEntry struct {
 	Comment   *string    `json:"comment,omitempty"`
@@ -159,6 +210,16 @@ type Macro struct {
 	Name       string                    `json:"name"`
 	Reversible *bool                     `json:"reversible,omitempty"`
 	Steps      *[]map[string]interface{} `json:"steps,omitempty"`
+}
+
+// Outlet defines model for Outlet.
+type Outlet struct {
+	Driver    string  `json:"driver"`
+	Equipment *string `json:"equipment,omitempty"`
+	Id        *string `json:"id,omitempty"`
+	Name      string  `json:"name"`
+	Pin       *int    `json:"pin,omitempty"`
+	Reverse   *bool   `json:"reverse,omitempty"`
 }
 
 // PhCalibrationPoint defines model for PhCalibrationPoint.
@@ -295,6 +356,12 @@ type CalibrateTemperatureSensorJSONBody struct {
 	Expected *float64 `json:"expected,omitempty"`
 }
 
+// CreateAnalogInputJSONRequestBody defines body for CreateAnalogInput for application/json ContentType.
+type CreateAnalogInputJSONRequestBody = AnalogInput
+
+// UpdateAnalogInputJSONRequestBody defines body for UpdateAnalogInput for application/json ContentType.
+type UpdateAnalogInputJSONRequestBody = AnalogInput
+
 // CreateATOJSONRequestBody defines body for CreateATO for application/json ContentType.
 type CreateATOJSONRequestBody = ATO
 
@@ -319,6 +386,15 @@ type SaveDoserPumpCalibrationJSONRequestBody SaveDoserPumpCalibrationJSONBody
 // ScheduleDoserPumpJSONRequestBody defines body for ScheduleDoserPump for application/json ContentType.
 type ScheduleDoserPumpJSONRequestBody = DosingSchedule
 
+// CreateDriverJSONRequestBody defines body for CreateDriver for application/json ContentType.
+type CreateDriverJSONRequestBody = Driver
+
+// ValidateDriverJSONRequestBody defines body for ValidateDriver for application/json ContentType.
+type ValidateDriverJSONRequestBody = DriverValidationRequest
+
+// UpdateDriverJSONRequestBody defines body for UpdateDriver for application/json ContentType.
+type UpdateDriverJSONRequestBody = Driver
+
 // CreateEquipmentJSONRequestBody defines body for CreateEquipment for application/json ContentType.
 type CreateEquipmentJSONRequestBody CreateEquipmentJSONBody
 
@@ -327,6 +403,21 @@ type UpdateEquipmentJSONRequestBody UpdateEquipmentJSONBody
 
 // ControlEquipmentJSONRequestBody defines body for ControlEquipment for application/json ContentType.
 type ControlEquipmentJSONRequestBody = EquipmentAction
+
+// CreateInletJSONRequestBody defines body for CreateInlet for application/json ContentType.
+type CreateInletJSONRequestBody = Inlet
+
+// UpdateInletJSONRequestBody defines body for UpdateInlet for application/json ContentType.
+type UpdateInletJSONRequestBody = Inlet
+
+// CreateJackJSONRequestBody defines body for CreateJack for application/json ContentType.
+type CreateJackJSONRequestBody = Jack
+
+// UpdateJackJSONRequestBody defines body for UpdateJack for application/json ContentType.
+type UpdateJackJSONRequestBody = Jack
+
+// ControlJackJSONRequestBody defines body for ControlJack for application/json ContentType.
+type ControlJackJSONRequestBody = JackControlRequest
 
 // CreateJournalParameterJSONRequestBody defines body for CreateJournalParameter for application/json ContentType.
 type CreateJournalParameterJSONRequestBody = JournalParameter
@@ -348,6 +439,12 @@ type CreateMacroJSONRequestBody = Macro
 
 // UpdateMacroJSONRequestBody defines body for UpdateMacro for application/json ContentType.
 type UpdateMacroJSONRequestBody = Macro
+
+// CreateOutletJSONRequestBody defines body for CreateOutlet for application/json ContentType.
+type CreateOutletJSONRequestBody = Outlet
+
+// UpdateOutletJSONRequestBody defines body for UpdateOutlet for application/json ContentType.
+type UpdateOutletJSONRequestBody = Outlet
 
 // CreatePhProbeJSONRequestBody defines body for CreatePhProbe for application/json ContentType.
 type CreatePhProbeJSONRequestBody = PhProbe
@@ -390,6 +487,24 @@ type ServerInterface interface {
 	// Upgrade reef-pi
 	// (POST /api/admin/upgrade)
 	SystemUpgrade(w http.ResponseWriter, r *http.Request)
+	// List all analog inputs
+	// (GET /api/analog_inputs)
+	ListAnalogInputs(w http.ResponseWriter, r *http.Request)
+	// Create an analog input
+	// (PUT /api/analog_inputs)
+	CreateAnalogInput(w http.ResponseWriter, r *http.Request)
+	// Delete an analog input
+	// (DELETE /api/analog_inputs/{id})
+	DeleteAnalogInput(w http.ResponseWriter, r *http.Request, id string)
+	// Get an analog input by ID
+	// (GET /api/analog_inputs/{id})
+	GetAnalogInput(w http.ResponseWriter, r *http.Request, id string)
+	// Update an analog input
+	// (POST /api/analog_inputs/{id})
+	UpdateAnalogInput(w http.ResponseWriter, r *http.Request, id string)
+	// Read current value from an analog input
+	// (POST /api/analog_inputs/{id}/read)
+	ReadAnalogInput(w http.ResponseWriter, r *http.Request, id string)
 	// List all ATO controllers
 	// (GET /api/atos)
 	ListATOs(w http.ResponseWriter, r *http.Request)
@@ -465,6 +580,27 @@ type ServerInterface interface {
 	// Get doser pump usage stats
 	// (GET /api/doser/pumps/{id}/usage)
 	GetDoserPumpUsage(w http.ResponseWriter, r *http.Request, id string)
+	// List all drivers
+	// (GET /api/drivers)
+	ListDrivers(w http.ResponseWriter, r *http.Request)
+	// Create a driver
+	// (PUT /api/drivers)
+	CreateDriver(w http.ResponseWriter, r *http.Request)
+	// List driver type options and their config parameters
+	// (GET /api/drivers/options)
+	ListDriverOptions(w http.ResponseWriter, r *http.Request)
+	// Validate driver parameters
+	// (POST /api/drivers/validate)
+	ValidateDriver(w http.ResponseWriter, r *http.Request)
+	// Delete a driver
+	// (DELETE /api/drivers/{id})
+	DeleteDriver(w http.ResponseWriter, r *http.Request, id string)
+	// Get a driver by ID
+	// (GET /api/drivers/{id})
+	GetDriver(w http.ResponseWriter, r *http.Request, id string)
+	// Update a driver
+	// (POST /api/drivers/{id})
+	UpdateDriver(w http.ResponseWriter, r *http.Request, id string)
 	// List all equipment
 	// (GET /api/equipment)
 	ListEquipment(w http.ResponseWriter, r *http.Request)
@@ -483,6 +619,42 @@ type ServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// List all inlets
+	// (GET /api/inlets)
+	ListInlets(w http.ResponseWriter, r *http.Request)
+	// Create an inlet
+	// (PUT /api/inlets)
+	CreateInlet(w http.ResponseWriter, r *http.Request)
+	// Delete an inlet
+	// (DELETE /api/inlets/{id})
+	DeleteInlet(w http.ResponseWriter, r *http.Request, id string)
+	// Get an inlet by ID
+	// (GET /api/inlets/{id})
+	GetInlet(w http.ResponseWriter, r *http.Request, id string)
+	// Update an inlet
+	// (POST /api/inlets/{id})
+	UpdateInlet(w http.ResponseWriter, r *http.Request, id string)
+	// Read current value from an inlet
+	// (POST /api/inlets/{id}/read)
+	ReadInlet(w http.ResponseWriter, r *http.Request, id string)
+	// List all jacks
+	// (GET /api/jacks)
+	ListJacks(w http.ResponseWriter, r *http.Request)
+	// Create a jack
+	// (PUT /api/jacks)
+	CreateJack(w http.ResponseWriter, r *http.Request)
+	// Delete a jack
+	// (DELETE /api/jacks/{id})
+	DeleteJack(w http.ResponseWriter, r *http.Request, id string)
+	// Get a jack by ID
+	// (GET /api/jacks/{id})
+	GetJack(w http.ResponseWriter, r *http.Request, id string)
+	// Update a jack
+	// (POST /api/jacks/{id})
+	UpdateJack(w http.ResponseWriter, r *http.Request, id string)
+	// Set PWM values on jack pins
+	// (POST /api/jacks/{id}/control)
+	ControlJack(w http.ResponseWriter, r *http.Request, id string)
 	// List all journal parameters
 	// (GET /api/journal)
 	ListJournalParameters(w http.ResponseWriter, r *http.Request)
@@ -543,6 +715,21 @@ type ServerInterface interface {
 	// Run a macro
 	// (POST /api/macros/{id}/run)
 	RunMacro(w http.ResponseWriter, r *http.Request, id string)
+	// List all outlets
+	// (GET /api/outlets)
+	ListOutlets(w http.ResponseWriter, r *http.Request)
+	// Create an outlet
+	// (PUT /api/outlets)
+	CreateOutlet(w http.ResponseWriter, r *http.Request)
+	// Delete an outlet
+	// (DELETE /api/outlets/{id})
+	DeleteOutlet(w http.ResponseWriter, r *http.Request, id string)
+	// Get an outlet by ID
+	// (GET /api/outlets/{id})
+	GetOutlet(w http.ResponseWriter, r *http.Request, id string)
+	// Update an outlet
+	// (POST /api/outlets/{id})
+	UpdateOutlet(w http.ResponseWriter, r *http.Request, id string)
 	// List all pH probes
 	// (GET /api/phprobes)
 	ListPhProbes(w http.ResponseWriter, r *http.Request)
@@ -642,6 +829,42 @@ func (_ Unimplemented) SystemReload(w http.ResponseWriter, r *http.Request) {
 // Upgrade reef-pi
 // (POST /api/admin/upgrade)
 func (_ Unimplemented) SystemUpgrade(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all analog inputs
+// (GET /api/analog_inputs)
+func (_ Unimplemented) ListAnalogInputs(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create an analog input
+// (PUT /api/analog_inputs)
+func (_ Unimplemented) CreateAnalogInput(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete an analog input
+// (DELETE /api/analog_inputs/{id})
+func (_ Unimplemented) DeleteAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get an analog input by ID
+// (GET /api/analog_inputs/{id})
+func (_ Unimplemented) GetAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update an analog input
+// (POST /api/analog_inputs/{id})
+func (_ Unimplemented) UpdateAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Read current value from an analog input
+// (POST /api/analog_inputs/{id}/read)
+func (_ Unimplemented) ReadAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -795,6 +1018,48 @@ func (_ Unimplemented) GetDoserPumpUsage(w http.ResponseWriter, r *http.Request,
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
+// List all drivers
+// (GET /api/drivers)
+func (_ Unimplemented) ListDrivers(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a driver
+// (PUT /api/drivers)
+func (_ Unimplemented) CreateDriver(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List driver type options and their config parameters
+// (GET /api/drivers/options)
+func (_ Unimplemented) ListDriverOptions(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Validate driver parameters
+// (POST /api/drivers/validate)
+func (_ Unimplemented) ValidateDriver(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a driver
+// (DELETE /api/drivers/{id})
+func (_ Unimplemented) DeleteDriver(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a driver by ID
+// (GET /api/drivers/{id})
+func (_ Unimplemented) GetDriver(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a driver
+// (POST /api/drivers/{id})
+func (_ Unimplemented) UpdateDriver(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
 // List all equipment
 // (GET /api/equipment)
 func (_ Unimplemented) ListEquipment(w http.ResponseWriter, r *http.Request) {
@@ -828,6 +1093,78 @@ func (_ Unimplemented) UpdateEquipment(w http.ResponseWriter, r *http.Request, i
 // Control equipment power state
 // (POST /api/equipment/{id}/control)
 func (_ Unimplemented) ControlEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all inlets
+// (GET /api/inlets)
+func (_ Unimplemented) ListInlets(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create an inlet
+// (PUT /api/inlets)
+func (_ Unimplemented) CreateInlet(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete an inlet
+// (DELETE /api/inlets/{id})
+func (_ Unimplemented) DeleteInlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get an inlet by ID
+// (GET /api/inlets/{id})
+func (_ Unimplemented) GetInlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update an inlet
+// (POST /api/inlets/{id})
+func (_ Unimplemented) UpdateInlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Read current value from an inlet
+// (POST /api/inlets/{id}/read)
+func (_ Unimplemented) ReadInlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all jacks
+// (GET /api/jacks)
+func (_ Unimplemented) ListJacks(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a jack
+// (PUT /api/jacks)
+func (_ Unimplemented) CreateJack(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a jack
+// (DELETE /api/jacks/{id})
+func (_ Unimplemented) DeleteJack(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a jack by ID
+// (GET /api/jacks/{id})
+func (_ Unimplemented) GetJack(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a jack
+// (POST /api/jacks/{id})
+func (_ Unimplemented) UpdateJack(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Set PWM values on jack pins
+// (POST /api/jacks/{id}/control)
+func (_ Unimplemented) ControlJack(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -948,6 +1285,36 @@ func (_ Unimplemented) RevertMacro(w http.ResponseWriter, r *http.Request, id st
 // Run a macro
 // (POST /api/macros/{id}/run)
 func (_ Unimplemented) RunMacro(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all outlets
+// (GET /api/outlets)
+func (_ Unimplemented) ListOutlets(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create an outlet
+// (PUT /api/outlets)
+func (_ Unimplemented) CreateOutlet(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete an outlet
+// (DELETE /api/outlets/{id})
+func (_ Unimplemented) DeleteOutlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get an outlet by ID
+// (GET /api/outlets/{id})
+func (_ Unimplemented) GetOutlet(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update an outlet
+// (POST /api/outlets/{id})
+func (_ Unimplemented) UpdateOutlet(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -1175,6 +1542,174 @@ func (siw *ServerInterfaceWrapper) SystemUpgrade(w http.ResponseWriter, r *http.
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.SystemUpgrade(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListAnalogInputs operation middleware
+func (siw *ServerInterfaceWrapper) ListAnalogInputs(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListAnalogInputs(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateAnalogInput operation middleware
+func (siw *ServerInterfaceWrapper) CreateAnalogInput(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateAnalogInput(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteAnalogInput operation middleware
+func (siw *ServerInterfaceWrapper) DeleteAnalogInput(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteAnalogInput(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetAnalogInput operation middleware
+func (siw *ServerInterfaceWrapper) GetAnalogInput(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAnalogInput(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateAnalogInput operation middleware
+func (siw *ServerInterfaceWrapper) UpdateAnalogInput(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateAnalogInput(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReadAnalogInput operation middleware
+func (siw *ServerInterfaceWrapper) ReadAnalogInput(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReadAnalogInput(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1828,6 +2363,182 @@ func (siw *ServerInterfaceWrapper) GetDoserPumpUsage(w http.ResponseWriter, r *h
 	handler.ServeHTTP(w, r)
 }
 
+// ListDrivers operation middleware
+func (siw *ServerInterfaceWrapper) ListDrivers(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListDrivers(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateDriver operation middleware
+func (siw *ServerInterfaceWrapper) CreateDriver(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateDriver(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListDriverOptions operation middleware
+func (siw *ServerInterfaceWrapper) ListDriverOptions(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListDriverOptions(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ValidateDriver operation middleware
+func (siw *ServerInterfaceWrapper) ValidateDriver(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ValidateDriver(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteDriver operation middleware
+func (siw *ServerInterfaceWrapper) DeleteDriver(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteDriver(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetDriver operation middleware
+func (siw *ServerInterfaceWrapper) GetDriver(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetDriver(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateDriver operation middleware
+func (siw *ServerInterfaceWrapper) UpdateDriver(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateDriver(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListEquipment operation middleware
 func (siw *ServerInterfaceWrapper) ListEquipment(w http.ResponseWriter, r *http.Request) {
 
@@ -1987,6 +2698,342 @@ func (siw *ServerInterfaceWrapper) ControlEquipment(w http.ResponseWriter, r *ht
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ControlEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListInlets operation middleware
+func (siw *ServerInterfaceWrapper) ListInlets(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListInlets(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateInlet operation middleware
+func (siw *ServerInterfaceWrapper) CreateInlet(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateInlet(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteInlet operation middleware
+func (siw *ServerInterfaceWrapper) DeleteInlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteInlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetInlet operation middleware
+func (siw *ServerInterfaceWrapper) GetInlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetInlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateInlet operation middleware
+func (siw *ServerInterfaceWrapper) UpdateInlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateInlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReadInlet operation middleware
+func (siw *ServerInterfaceWrapper) ReadInlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReadInlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListJacks operation middleware
+func (siw *ServerInterfaceWrapper) ListJacks(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListJacks(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateJack operation middleware
+func (siw *ServerInterfaceWrapper) CreateJack(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateJack(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteJack operation middleware
+func (siw *ServerInterfaceWrapper) DeleteJack(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteJack(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetJack operation middleware
+func (siw *ServerInterfaceWrapper) GetJack(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetJack(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateJack operation middleware
+func (siw *ServerInterfaceWrapper) UpdateJack(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateJack(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ControlJack operation middleware
+func (siw *ServerInterfaceWrapper) ControlJack(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ControlJack(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2555,6 +3602,142 @@ func (siw *ServerInterfaceWrapper) RunMacro(w http.ResponseWriter, r *http.Reque
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.RunMacro(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListOutlets operation middleware
+func (siw *ServerInterfaceWrapper) ListOutlets(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListOutlets(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateOutlet operation middleware
+func (siw *ServerInterfaceWrapper) CreateOutlet(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateOutlet(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteOutlet operation middleware
+func (siw *ServerInterfaceWrapper) DeleteOutlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteOutlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetOutlet operation middleware
+func (siw *ServerInterfaceWrapper) GetOutlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetOutlet(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateOutlet operation middleware
+func (siw *ServerInterfaceWrapper) UpdateOutlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateOutlet(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3374,6 +4557,24 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Post(options.BaseURL+"/api/admin/upgrade", wrapper.SystemUpgrade)
 	})
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/analog_inputs", wrapper.ListAnalogInputs)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/analog_inputs", wrapper.CreateAnalogInput)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/analog_inputs/{id}", wrapper.DeleteAnalogInput)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/analog_inputs/{id}", wrapper.GetAnalogInput)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/analog_inputs/{id}", wrapper.UpdateAnalogInput)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/analog_inputs/{id}/read", wrapper.ReadAnalogInput)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/atos", wrapper.ListATOs)
 	})
 	r.Group(func(r chi.Router) {
@@ -3449,6 +4650,27 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Get(options.BaseURL+"/api/doser/pumps/{id}/usage", wrapper.GetDoserPumpUsage)
 	})
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/drivers", wrapper.ListDrivers)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/drivers", wrapper.CreateDriver)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/drivers/options", wrapper.ListDriverOptions)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/drivers/validate", wrapper.ValidateDriver)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/drivers/{id}", wrapper.DeleteDriver)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/drivers/{id}", wrapper.GetDriver)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/drivers/{id}", wrapper.UpdateDriver)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/equipment", wrapper.ListEquipment)
 	})
 	r.Group(func(r chi.Router) {
@@ -3465,6 +4687,42 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/equipment/{id}/control", wrapper.ControlEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/inlets", wrapper.ListInlets)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/inlets", wrapper.CreateInlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/inlets/{id}", wrapper.DeleteInlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/inlets/{id}", wrapper.GetInlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/inlets/{id}", wrapper.UpdateInlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/inlets/{id}/read", wrapper.ReadInlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/jacks", wrapper.ListJacks)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/jacks", wrapper.CreateJack)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/jacks/{id}", wrapper.DeleteJack)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/jacks/{id}", wrapper.GetJack)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/jacks/{id}", wrapper.UpdateJack)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/jacks/{id}/control", wrapper.ControlJack)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/journal", wrapper.ListJournalParameters)
@@ -3525,6 +4783,21 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/macros/{id}/run", wrapper.RunMacro)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/outlets", wrapper.ListOutlets)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/outlets", wrapper.CreateOutlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/outlets/{id}", wrapper.DeleteOutlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/outlets/{id}", wrapper.GetOutlet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/outlets/{id}", wrapper.UpdateOutlet)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/phprobes", wrapper.ListPhProbes)
@@ -3738,6 +5011,292 @@ func (response SystemUpgrade401JSONResponse) VisitSystemUpgradeResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListAnalogInputsRequestObject struct {
+}
+
+type ListAnalogInputsResponseObject interface {
+	VisitListAnalogInputsResponse(w http.ResponseWriter) error
+}
+
+type ListAnalogInputs200JSONResponse []AnalogInput
+
+func (response ListAnalogInputs200JSONResponse) VisitListAnalogInputsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListAnalogInputs401JSONResponse ErrorResponse
+
+func (response ListAnalogInputs401JSONResponse) VisitListAnalogInputsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateAnalogInputRequestObject struct {
+	Body *CreateAnalogInputJSONRequestBody
+}
+
+type CreateAnalogInputResponseObject interface {
+	VisitCreateAnalogInputResponse(w http.ResponseWriter) error
+}
+
+type CreateAnalogInput200JSONResponse ErrorResponse
+
+func (response CreateAnalogInput200JSONResponse) VisitCreateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateAnalogInput400JSONResponse ErrorResponse
+
+func (response CreateAnalogInput400JSONResponse) VisitCreateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateAnalogInput401JSONResponse ErrorResponse
+
+func (response CreateAnalogInput401JSONResponse) VisitCreateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteAnalogInputRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteAnalogInputResponseObject interface {
+	VisitDeleteAnalogInputResponse(w http.ResponseWriter) error
+}
+
+type DeleteAnalogInput200JSONResponse ErrorResponse
+
+func (response DeleteAnalogInput200JSONResponse) VisitDeleteAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteAnalogInput401JSONResponse ErrorResponse
+
+func (response DeleteAnalogInput401JSONResponse) VisitDeleteAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteAnalogInput404JSONResponse ErrorResponse
+
+func (response DeleteAnalogInput404JSONResponse) VisitDeleteAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAnalogInputRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetAnalogInputResponseObject interface {
+	VisitGetAnalogInputResponse(w http.ResponseWriter) error
+}
+
+type GetAnalogInput200JSONResponse AnalogInput
+
+func (response GetAnalogInput200JSONResponse) VisitGetAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAnalogInput401JSONResponse ErrorResponse
+
+func (response GetAnalogInput401JSONResponse) VisitGetAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAnalogInput404JSONResponse ErrorResponse
+
+func (response GetAnalogInput404JSONResponse) VisitGetAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateAnalogInputRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateAnalogInputJSONRequestBody
+}
+
+type UpdateAnalogInputResponseObject interface {
+	VisitUpdateAnalogInputResponse(w http.ResponseWriter) error
+}
+
+type UpdateAnalogInput200JSONResponse ErrorResponse
+
+func (response UpdateAnalogInput200JSONResponse) VisitUpdateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateAnalogInput400JSONResponse ErrorResponse
+
+func (response UpdateAnalogInput400JSONResponse) VisitUpdateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateAnalogInput401JSONResponse ErrorResponse
+
+func (response UpdateAnalogInput401JSONResponse) VisitUpdateAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadAnalogInputRequestObject struct {
+	Id string `json:"id"`
+}
+
+type ReadAnalogInputResponseObject interface {
+	VisitReadAnalogInputResponse(w http.ResponseWriter) error
+}
+
+type ReadAnalogInput200JSONResponse float64
+
+func (response ReadAnalogInput200JSONResponse) VisitReadAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadAnalogInput401JSONResponse ErrorResponse
+
+func (response ReadAnalogInput401JSONResponse) VisitReadAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadAnalogInput404JSONResponse ErrorResponse
+
+func (response ReadAnalogInput404JSONResponse) VisitReadAnalogInputResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4861,6 +6420,327 @@ func (response GetDoserPumpUsage404JSONResponse) VisitGetDoserPumpUsageResponse(
 	return err
 }
 
+type ListDriversRequestObject struct {
+}
+
+type ListDriversResponseObject interface {
+	VisitListDriversResponse(w http.ResponseWriter) error
+}
+
+type ListDrivers200JSONResponse []Driver
+
+func (response ListDrivers200JSONResponse) VisitListDriversResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDrivers401JSONResponse ErrorResponse
+
+func (response ListDrivers401JSONResponse) VisitListDriversResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDriverRequestObject struct {
+	Body *CreateDriverJSONRequestBody
+}
+
+type CreateDriverResponseObject interface {
+	VisitCreateDriverResponse(w http.ResponseWriter) error
+}
+
+type CreateDriver200JSONResponse ErrorResponse
+
+func (response CreateDriver200JSONResponse) VisitCreateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDriver400JSONResponse ErrorResponse
+
+func (response CreateDriver400JSONResponse) VisitCreateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateDriver401JSONResponse ErrorResponse
+
+func (response CreateDriver401JSONResponse) VisitCreateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDriverOptionsRequestObject struct {
+}
+
+type ListDriverOptionsResponseObject interface {
+	VisitListDriverOptionsResponse(w http.ResponseWriter) error
+}
+
+type ListDriverOptions200JSONResponse map[string][]map[string]interface{}
+
+func (response ListDriverOptions200JSONResponse) VisitListDriverOptionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDriverOptions401JSONResponse ErrorResponse
+
+func (response ListDriverOptions401JSONResponse) VisitListDriverOptionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ValidateDriverRequestObject struct {
+	Body *ValidateDriverJSONRequestBody
+}
+
+type ValidateDriverResponseObject interface {
+	VisitValidateDriverResponse(w http.ResponseWriter) error
+}
+
+type ValidateDriver200JSONResponse map[string]interface{}
+
+func (response ValidateDriver200JSONResponse) VisitValidateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ValidateDriver400JSONResponse map[string]interface{}
+
+func (response ValidateDriver400JSONResponse) VisitValidateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ValidateDriver401JSONResponse ErrorResponse
+
+func (response ValidateDriver401JSONResponse) VisitValidateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDriverRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteDriverResponseObject interface {
+	VisitDeleteDriverResponse(w http.ResponseWriter) error
+}
+
+type DeleteDriver200JSONResponse ErrorResponse
+
+func (response DeleteDriver200JSONResponse) VisitDeleteDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDriver401JSONResponse ErrorResponse
+
+func (response DeleteDriver401JSONResponse) VisitDeleteDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteDriver404JSONResponse ErrorResponse
+
+func (response DeleteDriver404JSONResponse) VisitDeleteDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDriverRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetDriverResponseObject interface {
+	VisitGetDriverResponse(w http.ResponseWriter) error
+}
+
+type GetDriver200JSONResponse Driver
+
+func (response GetDriver200JSONResponse) VisitGetDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDriver401JSONResponse ErrorResponse
+
+func (response GetDriver401JSONResponse) VisitGetDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetDriver404JSONResponse ErrorResponse
+
+func (response GetDriver404JSONResponse) VisitGetDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDriverRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateDriverJSONRequestBody
+}
+
+type UpdateDriverResponseObject interface {
+	VisitUpdateDriverResponse(w http.ResponseWriter) error
+}
+
+type UpdateDriver200JSONResponse ErrorResponse
+
+func (response UpdateDriver200JSONResponse) VisitUpdateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDriver400JSONResponse ErrorResponse
+
+func (response UpdateDriver400JSONResponse) VisitUpdateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDriver401JSONResponse ErrorResponse
+
+func (response UpdateDriver401JSONResponse) VisitUpdateDriverResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListEquipmentRequestObject struct {
 }
 
@@ -5172,6 +7052,579 @@ func (response ControlEquipment404JSONResponse) VisitControlEquipmentResponse(w 
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListInletsRequestObject struct {
+}
+
+type ListInletsResponseObject interface {
+	VisitListInletsResponse(w http.ResponseWriter) error
+}
+
+type ListInlets200JSONResponse []Inlet
+
+func (response ListInlets200JSONResponse) VisitListInletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListInlets401JSONResponse ErrorResponse
+
+func (response ListInlets401JSONResponse) VisitListInletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateInletRequestObject struct {
+	Body *CreateInletJSONRequestBody
+}
+
+type CreateInletResponseObject interface {
+	VisitCreateInletResponse(w http.ResponseWriter) error
+}
+
+type CreateInlet200JSONResponse ErrorResponse
+
+func (response CreateInlet200JSONResponse) VisitCreateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateInlet400JSONResponse ErrorResponse
+
+func (response CreateInlet400JSONResponse) VisitCreateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateInlet401JSONResponse ErrorResponse
+
+func (response CreateInlet401JSONResponse) VisitCreateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteInletRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteInletResponseObject interface {
+	VisitDeleteInletResponse(w http.ResponseWriter) error
+}
+
+type DeleteInlet200JSONResponse ErrorResponse
+
+func (response DeleteInlet200JSONResponse) VisitDeleteInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteInlet401JSONResponse ErrorResponse
+
+func (response DeleteInlet401JSONResponse) VisitDeleteInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteInlet404JSONResponse ErrorResponse
+
+func (response DeleteInlet404JSONResponse) VisitDeleteInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetInletRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetInletResponseObject interface {
+	VisitGetInletResponse(w http.ResponseWriter) error
+}
+
+type GetInlet200JSONResponse Inlet
+
+func (response GetInlet200JSONResponse) VisitGetInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetInlet401JSONResponse ErrorResponse
+
+func (response GetInlet401JSONResponse) VisitGetInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetInlet404JSONResponse ErrorResponse
+
+func (response GetInlet404JSONResponse) VisitGetInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateInletRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateInletJSONRequestBody
+}
+
+type UpdateInletResponseObject interface {
+	VisitUpdateInletResponse(w http.ResponseWriter) error
+}
+
+type UpdateInlet200JSONResponse ErrorResponse
+
+func (response UpdateInlet200JSONResponse) VisitUpdateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateInlet400JSONResponse ErrorResponse
+
+func (response UpdateInlet400JSONResponse) VisitUpdateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateInlet401JSONResponse ErrorResponse
+
+func (response UpdateInlet401JSONResponse) VisitUpdateInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadInletRequestObject struct {
+	Id string `json:"id"`
+}
+
+type ReadInletResponseObject interface {
+	VisitReadInletResponse(w http.ResponseWriter) error
+}
+
+type ReadInlet200JSONResponse int
+
+func (response ReadInlet200JSONResponse) VisitReadInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadInlet401JSONResponse ErrorResponse
+
+func (response ReadInlet401JSONResponse) VisitReadInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReadInlet404JSONResponse ErrorResponse
+
+func (response ReadInlet404JSONResponse) VisitReadInletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListJacksRequestObject struct {
+}
+
+type ListJacksResponseObject interface {
+	VisitListJacksResponse(w http.ResponseWriter) error
+}
+
+type ListJacks200JSONResponse []Jack
+
+func (response ListJacks200JSONResponse) VisitListJacksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListJacks401JSONResponse ErrorResponse
+
+func (response ListJacks401JSONResponse) VisitListJacksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJackRequestObject struct {
+	Body *CreateJackJSONRequestBody
+}
+
+type CreateJackResponseObject interface {
+	VisitCreateJackResponse(w http.ResponseWriter) error
+}
+
+type CreateJack200JSONResponse ErrorResponse
+
+func (response CreateJack200JSONResponse) VisitCreateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJack400JSONResponse ErrorResponse
+
+func (response CreateJack400JSONResponse) VisitCreateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJack401JSONResponse ErrorResponse
+
+func (response CreateJack401JSONResponse) VisitCreateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJackRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteJackResponseObject interface {
+	VisitDeleteJackResponse(w http.ResponseWriter) error
+}
+
+type DeleteJack200JSONResponse ErrorResponse
+
+func (response DeleteJack200JSONResponse) VisitDeleteJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJack401JSONResponse ErrorResponse
+
+func (response DeleteJack401JSONResponse) VisitDeleteJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJack404JSONResponse ErrorResponse
+
+func (response DeleteJack404JSONResponse) VisitDeleteJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJackRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetJackResponseObject interface {
+	VisitGetJackResponse(w http.ResponseWriter) error
+}
+
+type GetJack200JSONResponse Jack
+
+func (response GetJack200JSONResponse) VisitGetJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJack401JSONResponse ErrorResponse
+
+func (response GetJack401JSONResponse) VisitGetJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJack404JSONResponse ErrorResponse
+
+func (response GetJack404JSONResponse) VisitGetJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJackRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateJackJSONRequestBody
+}
+
+type UpdateJackResponseObject interface {
+	VisitUpdateJackResponse(w http.ResponseWriter) error
+}
+
+type UpdateJack200JSONResponse ErrorResponse
+
+func (response UpdateJack200JSONResponse) VisitUpdateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJack400JSONResponse ErrorResponse
+
+func (response UpdateJack400JSONResponse) VisitUpdateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJack401JSONResponse ErrorResponse
+
+func (response UpdateJack401JSONResponse) VisitUpdateJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlJackRequestObject struct {
+	Id   string `json:"id"`
+	Body *ControlJackJSONRequestBody
+}
+
+type ControlJackResponseObject interface {
+	VisitControlJackResponse(w http.ResponseWriter) error
+}
+
+type ControlJack200JSONResponse ErrorResponse
+
+func (response ControlJack200JSONResponse) VisitControlJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlJack400JSONResponse ErrorResponse
+
+func (response ControlJack400JSONResponse) VisitControlJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ControlJack401JSONResponse ErrorResponse
+
+func (response ControlJack401JSONResponse) VisitControlJackResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -6201,6 +8654,242 @@ func (response RunMacro404JSONResponse) VisitRunMacroResponse(w http.ResponseWri
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListOutletsRequestObject struct {
+}
+
+type ListOutletsResponseObject interface {
+	VisitListOutletsResponse(w http.ResponseWriter) error
+}
+
+type ListOutlets200JSONResponse []Outlet
+
+func (response ListOutlets200JSONResponse) VisitListOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListOutlets401JSONResponse ErrorResponse
+
+func (response ListOutlets401JSONResponse) VisitListOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateOutletRequestObject struct {
+	Body *CreateOutletJSONRequestBody
+}
+
+type CreateOutletResponseObject interface {
+	VisitCreateOutletResponse(w http.ResponseWriter) error
+}
+
+type CreateOutlet200JSONResponse ErrorResponse
+
+func (response CreateOutlet200JSONResponse) VisitCreateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateOutlet400JSONResponse ErrorResponse
+
+func (response CreateOutlet400JSONResponse) VisitCreateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateOutlet401JSONResponse ErrorResponse
+
+func (response CreateOutlet401JSONResponse) VisitCreateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteOutletRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteOutletResponseObject interface {
+	VisitDeleteOutletResponse(w http.ResponseWriter) error
+}
+
+type DeleteOutlet200JSONResponse ErrorResponse
+
+func (response DeleteOutlet200JSONResponse) VisitDeleteOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteOutlet401JSONResponse ErrorResponse
+
+func (response DeleteOutlet401JSONResponse) VisitDeleteOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteOutlet404JSONResponse ErrorResponse
+
+func (response DeleteOutlet404JSONResponse) VisitDeleteOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetOutletRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetOutletResponseObject interface {
+	VisitGetOutletResponse(w http.ResponseWriter) error
+}
+
+type GetOutlet200JSONResponse Outlet
+
+func (response GetOutlet200JSONResponse) VisitGetOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetOutlet401JSONResponse ErrorResponse
+
+func (response GetOutlet401JSONResponse) VisitGetOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetOutlet404JSONResponse ErrorResponse
+
+func (response GetOutlet404JSONResponse) VisitGetOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateOutletRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateOutletJSONRequestBody
+}
+
+type UpdateOutletResponseObject interface {
+	VisitUpdateOutletResponse(w http.ResponseWriter) error
+}
+
+type UpdateOutlet200JSONResponse ErrorResponse
+
+func (response UpdateOutlet200JSONResponse) VisitUpdateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateOutlet400JSONResponse ErrorResponse
+
+func (response UpdateOutlet400JSONResponse) VisitUpdateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateOutlet401JSONResponse ErrorResponse
+
+func (response UpdateOutlet401JSONResponse) VisitUpdateOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -7357,6 +10046,24 @@ type StrictServerInterface interface {
 	// Upgrade reef-pi
 	// (POST /api/admin/upgrade)
 	SystemUpgrade(ctx context.Context, request SystemUpgradeRequestObject) (SystemUpgradeResponseObject, error)
+	// List all analog inputs
+	// (GET /api/analog_inputs)
+	ListAnalogInputs(ctx context.Context, request ListAnalogInputsRequestObject) (ListAnalogInputsResponseObject, error)
+	// Create an analog input
+	// (PUT /api/analog_inputs)
+	CreateAnalogInput(ctx context.Context, request CreateAnalogInputRequestObject) (CreateAnalogInputResponseObject, error)
+	// Delete an analog input
+	// (DELETE /api/analog_inputs/{id})
+	DeleteAnalogInput(ctx context.Context, request DeleteAnalogInputRequestObject) (DeleteAnalogInputResponseObject, error)
+	// Get an analog input by ID
+	// (GET /api/analog_inputs/{id})
+	GetAnalogInput(ctx context.Context, request GetAnalogInputRequestObject) (GetAnalogInputResponseObject, error)
+	// Update an analog input
+	// (POST /api/analog_inputs/{id})
+	UpdateAnalogInput(ctx context.Context, request UpdateAnalogInputRequestObject) (UpdateAnalogInputResponseObject, error)
+	// Read current value from an analog input
+	// (POST /api/analog_inputs/{id}/read)
+	ReadAnalogInput(ctx context.Context, request ReadAnalogInputRequestObject) (ReadAnalogInputResponseObject, error)
 	// List all ATO controllers
 	// (GET /api/atos)
 	ListATOs(ctx context.Context, request ListATOsRequestObject) (ListATOsResponseObject, error)
@@ -7432,6 +10139,27 @@ type StrictServerInterface interface {
 	// Get doser pump usage stats
 	// (GET /api/doser/pumps/{id}/usage)
 	GetDoserPumpUsage(ctx context.Context, request GetDoserPumpUsageRequestObject) (GetDoserPumpUsageResponseObject, error)
+	// List all drivers
+	// (GET /api/drivers)
+	ListDrivers(ctx context.Context, request ListDriversRequestObject) (ListDriversResponseObject, error)
+	// Create a driver
+	// (PUT /api/drivers)
+	CreateDriver(ctx context.Context, request CreateDriverRequestObject) (CreateDriverResponseObject, error)
+	// List driver type options and their config parameters
+	// (GET /api/drivers/options)
+	ListDriverOptions(ctx context.Context, request ListDriverOptionsRequestObject) (ListDriverOptionsResponseObject, error)
+	// Validate driver parameters
+	// (POST /api/drivers/validate)
+	ValidateDriver(ctx context.Context, request ValidateDriverRequestObject) (ValidateDriverResponseObject, error)
+	// Delete a driver
+	// (DELETE /api/drivers/{id})
+	DeleteDriver(ctx context.Context, request DeleteDriverRequestObject) (DeleteDriverResponseObject, error)
+	// Get a driver by ID
+	// (GET /api/drivers/{id})
+	GetDriver(ctx context.Context, request GetDriverRequestObject) (GetDriverResponseObject, error)
+	// Update a driver
+	// (POST /api/drivers/{id})
+	UpdateDriver(ctx context.Context, request UpdateDriverRequestObject) (UpdateDriverResponseObject, error)
 	// List all equipment
 	// (GET /api/equipment)
 	ListEquipment(ctx context.Context, request ListEquipmentRequestObject) (ListEquipmentResponseObject, error)
@@ -7450,6 +10178,42 @@ type StrictServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(ctx context.Context, request ControlEquipmentRequestObject) (ControlEquipmentResponseObject, error)
+	// List all inlets
+	// (GET /api/inlets)
+	ListInlets(ctx context.Context, request ListInletsRequestObject) (ListInletsResponseObject, error)
+	// Create an inlet
+	// (PUT /api/inlets)
+	CreateInlet(ctx context.Context, request CreateInletRequestObject) (CreateInletResponseObject, error)
+	// Delete an inlet
+	// (DELETE /api/inlets/{id})
+	DeleteInlet(ctx context.Context, request DeleteInletRequestObject) (DeleteInletResponseObject, error)
+	// Get an inlet by ID
+	// (GET /api/inlets/{id})
+	GetInlet(ctx context.Context, request GetInletRequestObject) (GetInletResponseObject, error)
+	// Update an inlet
+	// (POST /api/inlets/{id})
+	UpdateInlet(ctx context.Context, request UpdateInletRequestObject) (UpdateInletResponseObject, error)
+	// Read current value from an inlet
+	// (POST /api/inlets/{id}/read)
+	ReadInlet(ctx context.Context, request ReadInletRequestObject) (ReadInletResponseObject, error)
+	// List all jacks
+	// (GET /api/jacks)
+	ListJacks(ctx context.Context, request ListJacksRequestObject) (ListJacksResponseObject, error)
+	// Create a jack
+	// (PUT /api/jacks)
+	CreateJack(ctx context.Context, request CreateJackRequestObject) (CreateJackResponseObject, error)
+	// Delete a jack
+	// (DELETE /api/jacks/{id})
+	DeleteJack(ctx context.Context, request DeleteJackRequestObject) (DeleteJackResponseObject, error)
+	// Get a jack by ID
+	// (GET /api/jacks/{id})
+	GetJack(ctx context.Context, request GetJackRequestObject) (GetJackResponseObject, error)
+	// Update a jack
+	// (POST /api/jacks/{id})
+	UpdateJack(ctx context.Context, request UpdateJackRequestObject) (UpdateJackResponseObject, error)
+	// Set PWM values on jack pins
+	// (POST /api/jacks/{id}/control)
+	ControlJack(ctx context.Context, request ControlJackRequestObject) (ControlJackResponseObject, error)
 	// List all journal parameters
 	// (GET /api/journal)
 	ListJournalParameters(ctx context.Context, request ListJournalParametersRequestObject) (ListJournalParametersResponseObject, error)
@@ -7510,6 +10274,21 @@ type StrictServerInterface interface {
 	// Run a macro
 	// (POST /api/macros/{id}/run)
 	RunMacro(ctx context.Context, request RunMacroRequestObject) (RunMacroResponseObject, error)
+	// List all outlets
+	// (GET /api/outlets)
+	ListOutlets(ctx context.Context, request ListOutletsRequestObject) (ListOutletsResponseObject, error)
+	// Create an outlet
+	// (PUT /api/outlets)
+	CreateOutlet(ctx context.Context, request CreateOutletRequestObject) (CreateOutletResponseObject, error)
+	// Delete an outlet
+	// (DELETE /api/outlets/{id})
+	DeleteOutlet(ctx context.Context, request DeleteOutletRequestObject) (DeleteOutletResponseObject, error)
+	// Get an outlet by ID
+	// (GET /api/outlets/{id})
+	GetOutlet(ctx context.Context, request GetOutletRequestObject) (GetOutletResponseObject, error)
+	// Update an outlet
+	// (POST /api/outlets/{id})
+	UpdateOutlet(ctx context.Context, request UpdateOutletRequestObject) (UpdateOutletResponseObject, error)
 	// List all pH probes
 	// (GET /api/phprobes)
 	ListPhProbes(ctx context.Context, request ListPhProbesRequestObject) (ListPhProbesResponseObject, error)
@@ -7702,6 +10481,172 @@ func (sh *strictHandler) SystemUpgrade(w http.ResponseWriter, r *http.Request) {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(SystemUpgradeResponseObject); ok {
 		if err := validResponse.VisitSystemUpgradeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListAnalogInputs operation middleware
+func (sh *strictHandler) ListAnalogInputs(w http.ResponseWriter, r *http.Request) {
+	var request ListAnalogInputsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListAnalogInputs(ctx, request.(ListAnalogInputsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListAnalogInputs")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListAnalogInputsResponseObject); ok {
+		if err := validResponse.VisitListAnalogInputsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateAnalogInput operation middleware
+func (sh *strictHandler) CreateAnalogInput(w http.ResponseWriter, r *http.Request) {
+	var request CreateAnalogInputRequestObject
+
+	var body CreateAnalogInputJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateAnalogInput(ctx, request.(CreateAnalogInputRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateAnalogInput")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateAnalogInputResponseObject); ok {
+		if err := validResponse.VisitCreateAnalogInputResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteAnalogInput operation middleware
+func (sh *strictHandler) DeleteAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteAnalogInputRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteAnalogInput(ctx, request.(DeleteAnalogInputRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteAnalogInput")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteAnalogInputResponseObject); ok {
+		if err := validResponse.VisitDeleteAnalogInputResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetAnalogInput operation middleware
+func (sh *strictHandler) GetAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetAnalogInputRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetAnalogInput(ctx, request.(GetAnalogInputRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetAnalogInput")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetAnalogInputResponseObject); ok {
+		if err := validResponse.VisitGetAnalogInputResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateAnalogInput operation middleware
+func (sh *strictHandler) UpdateAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateAnalogInputRequestObject
+
+	request.Id = id
+
+	var body UpdateAnalogInputJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateAnalogInput(ctx, request.(UpdateAnalogInputRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateAnalogInput")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateAnalogInputResponseObject); ok {
+		if err := validResponse.VisitUpdateAnalogInputResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReadAnalogInput operation middleware
+func (sh *strictHandler) ReadAnalogInput(w http.ResponseWriter, r *http.Request, id string) {
+	var request ReadAnalogInputRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReadAnalogInput(ctx, request.(ReadAnalogInputRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReadAnalogInput")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReadAnalogInputResponseObject); ok {
+		if err := validResponse.VisitReadAnalogInputResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -8389,6 +11334,201 @@ func (sh *strictHandler) GetDoserPumpUsage(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+// ListDrivers operation middleware
+func (sh *strictHandler) ListDrivers(w http.ResponseWriter, r *http.Request) {
+	var request ListDriversRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListDrivers(ctx, request.(ListDriversRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListDrivers")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListDriversResponseObject); ok {
+		if err := validResponse.VisitListDriversResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateDriver operation middleware
+func (sh *strictHandler) CreateDriver(w http.ResponseWriter, r *http.Request) {
+	var request CreateDriverRequestObject
+
+	var body CreateDriverJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateDriver(ctx, request.(CreateDriverRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateDriver")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateDriverResponseObject); ok {
+		if err := validResponse.VisitCreateDriverResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListDriverOptions operation middleware
+func (sh *strictHandler) ListDriverOptions(w http.ResponseWriter, r *http.Request) {
+	var request ListDriverOptionsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListDriverOptions(ctx, request.(ListDriverOptionsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListDriverOptions")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListDriverOptionsResponseObject); ok {
+		if err := validResponse.VisitListDriverOptionsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ValidateDriver operation middleware
+func (sh *strictHandler) ValidateDriver(w http.ResponseWriter, r *http.Request) {
+	var request ValidateDriverRequestObject
+
+	var body ValidateDriverJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ValidateDriver(ctx, request.(ValidateDriverRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ValidateDriver")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ValidateDriverResponseObject); ok {
+		if err := validResponse.VisitValidateDriverResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteDriver operation middleware
+func (sh *strictHandler) DeleteDriver(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteDriverRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteDriver(ctx, request.(DeleteDriverRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteDriver")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteDriverResponseObject); ok {
+		if err := validResponse.VisitDeleteDriverResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetDriver operation middleware
+func (sh *strictHandler) GetDriver(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetDriverRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetDriver(ctx, request.(GetDriverRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetDriver")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetDriverResponseObject); ok {
+		if err := validResponse.VisitGetDriverResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateDriver operation middleware
+func (sh *strictHandler) UpdateDriver(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateDriverRequestObject
+
+	request.Id = id
+
+	var body UpdateDriverJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateDriver(ctx, request.(UpdateDriverRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateDriver")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateDriverResponseObject); ok {
+		if err := validResponse.VisitUpdateDriverResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListEquipment operation middleware
 func (sh *strictHandler) ListEquipment(w http.ResponseWriter, r *http.Request) {
 	var request ListEquipmentRequestObject
@@ -8555,6 +11695,345 @@ func (sh *strictHandler) ControlEquipment(w http.ResponseWriter, r *http.Request
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(ControlEquipmentResponseObject); ok {
 		if err := validResponse.VisitControlEquipmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListInlets operation middleware
+func (sh *strictHandler) ListInlets(w http.ResponseWriter, r *http.Request) {
+	var request ListInletsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListInlets(ctx, request.(ListInletsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListInlets")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListInletsResponseObject); ok {
+		if err := validResponse.VisitListInletsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateInlet operation middleware
+func (sh *strictHandler) CreateInlet(w http.ResponseWriter, r *http.Request) {
+	var request CreateInletRequestObject
+
+	var body CreateInletJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateInlet(ctx, request.(CreateInletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateInlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateInletResponseObject); ok {
+		if err := validResponse.VisitCreateInletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteInlet operation middleware
+func (sh *strictHandler) DeleteInlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteInletRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteInlet(ctx, request.(DeleteInletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteInlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteInletResponseObject); ok {
+		if err := validResponse.VisitDeleteInletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetInlet operation middleware
+func (sh *strictHandler) GetInlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetInletRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetInlet(ctx, request.(GetInletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetInlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetInletResponseObject); ok {
+		if err := validResponse.VisitGetInletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateInlet operation middleware
+func (sh *strictHandler) UpdateInlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateInletRequestObject
+
+	request.Id = id
+
+	var body UpdateInletJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateInlet(ctx, request.(UpdateInletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateInlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateInletResponseObject); ok {
+		if err := validResponse.VisitUpdateInletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReadInlet operation middleware
+func (sh *strictHandler) ReadInlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request ReadInletRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReadInlet(ctx, request.(ReadInletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReadInlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReadInletResponseObject); ok {
+		if err := validResponse.VisitReadInletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListJacks operation middleware
+func (sh *strictHandler) ListJacks(w http.ResponseWriter, r *http.Request) {
+	var request ListJacksRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListJacks(ctx, request.(ListJacksRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListJacks")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListJacksResponseObject); ok {
+		if err := validResponse.VisitListJacksResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateJack operation middleware
+func (sh *strictHandler) CreateJack(w http.ResponseWriter, r *http.Request) {
+	var request CreateJackRequestObject
+
+	var body CreateJackJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateJack(ctx, request.(CreateJackRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateJack")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateJackResponseObject); ok {
+		if err := validResponse.VisitCreateJackResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteJack operation middleware
+func (sh *strictHandler) DeleteJack(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteJackRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteJack(ctx, request.(DeleteJackRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteJack")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteJackResponseObject); ok {
+		if err := validResponse.VisitDeleteJackResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetJack operation middleware
+func (sh *strictHandler) GetJack(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetJackRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetJack(ctx, request.(GetJackRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetJack")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetJackResponseObject); ok {
+		if err := validResponse.VisitGetJackResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateJack operation middleware
+func (sh *strictHandler) UpdateJack(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateJackRequestObject
+
+	request.Id = id
+
+	var body UpdateJackJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateJack(ctx, request.(UpdateJackRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateJack")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateJackResponseObject); ok {
+		if err := validResponse.VisitUpdateJackResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ControlJack operation middleware
+func (sh *strictHandler) ControlJack(w http.ResponseWriter, r *http.Request, id string) {
+	var request ControlJackRequestObject
+
+	request.Id = id
+
+	var body ControlJackJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ControlJack(ctx, request.(ControlJackRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ControlJack")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ControlJackResponseObject); ok {
+		if err := validResponse.VisitControlJackResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -9112,6 +12591,146 @@ func (sh *strictHandler) RunMacro(w http.ResponseWriter, r *http.Request, id str
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(RunMacroResponseObject); ok {
 		if err := validResponse.VisitRunMacroResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListOutlets operation middleware
+func (sh *strictHandler) ListOutlets(w http.ResponseWriter, r *http.Request) {
+	var request ListOutletsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListOutlets(ctx, request.(ListOutletsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListOutlets")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListOutletsResponseObject); ok {
+		if err := validResponse.VisitListOutletsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateOutlet operation middleware
+func (sh *strictHandler) CreateOutlet(w http.ResponseWriter, r *http.Request) {
+	var request CreateOutletRequestObject
+
+	var body CreateOutletJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateOutlet(ctx, request.(CreateOutletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateOutlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateOutletResponseObject); ok {
+		if err := validResponse.VisitCreateOutletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteOutlet operation middleware
+func (sh *strictHandler) DeleteOutlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteOutletRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteOutlet(ctx, request.(DeleteOutletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteOutlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteOutletResponseObject); ok {
+		if err := validResponse.VisitDeleteOutletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetOutlet operation middleware
+func (sh *strictHandler) GetOutlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetOutletRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetOutlet(ctx, request.(GetOutletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetOutlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetOutletResponseObject); ok {
+		if err := validResponse.VisitGetOutletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateOutlet operation middleware
+func (sh *strictHandler) UpdateOutlet(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateOutletRequestObject
+
+	request.Id = id
+
+	var body UpdateOutletJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateOutlet(ctx, request.(UpdateOutletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateOutlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateOutletResponseObject); ok {
+		if err := validResponse.VisitUpdateOutletResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -9797,75 +13416,92 @@ func (sh *strictHandler) UpdateTimerJob(w http.ResponseWriter, r *http.Request, 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"wPIkJohQITH1VemX8NA79ebew+3DvwMAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

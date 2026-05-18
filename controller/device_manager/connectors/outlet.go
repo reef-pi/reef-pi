@@ -120,13 +120,7 @@ func (c *Outlets) Get(id string) (Outlet, error) {
 	return c.repo.Get(id)
 }
 
-func (e *Outlets) LoadAPI(r chi.Router) {
-	r.Get("/api/outlets/{id}", e.get)
-	r.Get("/api/outlets", e.list)
-	r.Put("/api/outlets", e.create)
-	r.Delete("/api/outlets/{id}", e.delete)
-	r.Post("/api/outlets/{id}", e.update)
-}
+func (e *Outlets) LoadAPI(_ chi.Router) {}
 func (c *Outlets) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
 		return c.Get(id)
