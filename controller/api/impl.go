@@ -7,19 +7,23 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/api/gen"
 	equipmentModule "github.com/reef-pi/reef-pi/controller/modules/equipment"
+	journalModule "github.com/reef-pi/reef-pi/controller/modules/journal"
 	timerModule "github.com/reef-pi/reef-pi/controller/modules/timer"
 	"github.com/reef-pi/reef-pi/controller/storage"
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 )
 
 // ServerConfig holds optional module controllers. Nil means the module is not loaded.
 type ServerConfig struct {
 	Equipment *equipmentModule.Controller
+	Journal   *journalModule.Subsystem
 	Timer     *timerModule.Controller
 }
 
 // ReefPiServer implements gen.StrictServerInterface for all migrated modules.
 type ReefPiServer struct {
 	equipment *equipmentModule.Controller
+	journal   *journalModule.Subsystem
 	timer     *timerModule.Controller
 }
 
@@ -27,6 +31,7 @@ type ReefPiServer struct {
 func NewReefPiServer(cfg ServerConfig) *ReefPiServer {
 	return &ReefPiServer{
 		equipment: cfg.Equipment,
+		journal:   cfg.Journal,
 		timer:     cfg.Timer,
 	}
 }
@@ -304,4 +309,161 @@ func (s *ReefPiServer) DeleteTimerJob(_ context.Context, request gen.DeleteTimer
 		return gen.DeleteTimerJob401JSONResponse{Message: err.Error()}, nil
 	}
 	return gen.DeleteTimerJob200JSONResponse{Message: "deleted"}, nil
+}
+
+// ---- Journal ----
+
+func toGenJournalParameter(p journalModule.Parameter) gen.JournalParameter {
+	return gen.JournalParameter{
+		Id:          &p.ID,
+		Name:        p.Name,
+		Unit:        &p.Unit,
+		Description: &p.Description,
+	}
+}
+
+func toGenUsageStats(stats telemetry.StatsResponse) gen.UsageStats {
+	current := make([]interface{}, len(stats.Current))
+	for i, m := range stats.Current {
+		current[i] = m
+	}
+	historical := make([]interface{}, len(stats.Historical))
+	for i, m := range stats.Historical {
+		historical[i] = m
+	}
+	return gen.UsageStats{Current: &current, Historical: &historical}
+}
+
+func (s *ReefPiServer) ListJournalParameters(_ context.Context, _ gen.ListJournalParametersRequestObject) (gen.ListJournalParametersResponseObject, error) {
+	if s.journal == nil {
+		return gen.ListJournalParameters401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	params, err := s.journal.List()
+	if err != nil {
+		return gen.ListJournalParameters401JSONResponse{Message: err.Error()}, nil
+	}
+	resp := make(gen.ListJournalParameters200JSONResponse, len(params))
+	for i, p := range params {
+		resp[i] = toGenJournalParameter(p)
+	}
+	return resp, nil
+}
+
+func (s *ReefPiServer) CreateJournalParameter(_ context.Context, request gen.CreateJournalParameterRequestObject) (gen.CreateJournalParameterResponseObject, error) {
+	if s.journal == nil {
+		return gen.CreateJournalParameter401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	if request.Body == nil {
+		return gen.CreateJournalParameter400JSONResponse{Message: "missing request body"}, nil
+	}
+	b := request.Body
+	param := journalModule.Parameter{Name: b.Name}
+	if b.Unit != nil {
+		param.Unit = *b.Unit
+	}
+	if b.Description != nil {
+		param.Description = *b.Description
+	}
+	if err := s.journal.Create(param); err != nil {
+		return gen.CreateJournalParameter400JSONResponse{Message: err.Error()}, nil
+	}
+	params, err := s.journal.List()
+	if err != nil {
+		return gen.CreateJournalParameter400JSONResponse{Message: err.Error()}, nil
+	}
+	for _, p := range params {
+		if p.Name == param.Name {
+			return gen.CreateJournalParameter200JSONResponse(toGenJournalParameter(p)), nil
+		}
+	}
+	return gen.CreateJournalParameter200JSONResponse(toGenJournalParameter(param)), nil
+}
+
+func (s *ReefPiServer) GetJournalParameter(_ context.Context, request gen.GetJournalParameterRequestObject) (gen.GetJournalParameterResponseObject, error) {
+	if s.journal == nil {
+		return gen.GetJournalParameter401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	p, err := s.journal.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetJournalParameter404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetJournalParameter401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetJournalParameter200JSONResponse(toGenJournalParameter(p)), nil
+}
+
+func (s *ReefPiServer) UpdateJournalParameter(_ context.Context, request gen.UpdateJournalParameterRequestObject) (gen.UpdateJournalParameterResponseObject, error) {
+	if s.journal == nil {
+		return gen.UpdateJournalParameter401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	if request.Body == nil {
+		return gen.UpdateJournalParameter400JSONResponse{Message: "missing request body"}, nil
+	}
+	b := request.Body
+	param := journalModule.Parameter{Name: b.Name}
+	if b.Unit != nil {
+		param.Unit = *b.Unit
+	}
+	if b.Description != nil {
+		param.Description = *b.Description
+	}
+	if err := s.journal.Update(request.Id, param); err != nil {
+		if isNotFound(err) {
+			return gen.UpdateJournalParameter404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.UpdateJournalParameter400JSONResponse{Message: err.Error()}, nil
+	}
+	updated, err := s.journal.Get(request.Id)
+	if err != nil {
+		return gen.UpdateJournalParameter400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateJournalParameter200JSONResponse(toGenJournalParameter(updated)), nil
+}
+
+func (s *ReefPiServer) DeleteJournalParameter(_ context.Context, request gen.DeleteJournalParameterRequestObject) (gen.DeleteJournalParameterResponseObject, error) {
+	if s.journal == nil {
+		return gen.DeleteJournalParameter401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	if err := s.journal.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteJournalParameter404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteJournalParameter401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteJournalParameter200JSONResponse{Message: "deleted"}, nil
+}
+
+func (s *ReefPiServer) RecordJournalEntry(_ context.Context, request gen.RecordJournalEntryRequestObject) (gen.RecordJournalEntryResponseObject, error) {
+	if s.journal == nil {
+		return gen.RecordJournalEntry401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	if request.Body == nil {
+		return gen.RecordJournalEntry400JSONResponse{Message: "missing request body"}, nil
+	}
+	entry := journalModule.Entry{Value: request.Body.Value}
+	if request.Body.Comment != nil {
+		entry.Comment = *request.Body.Comment
+	}
+	if err := s.journal.AddEntry(request.Id, entry); err != nil {
+		if isNotFound(err) {
+			return gen.RecordJournalEntry404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.RecordJournalEntry400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.RecordJournalEntry200JSONResponse{Message: "recorded"}, nil
+}
+
+func (s *ReefPiServer) GetJournalUsage(_ context.Context, request gen.GetJournalUsageRequestObject) (gen.GetJournalUsageResponseObject, error) {
+	if s.journal == nil {
+		return gen.GetJournalUsage401JSONResponse{Message: "journal subsystem not loaded"}, nil
+	}
+	stats, err := s.journal.Usage(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetJournalUsage404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetJournalUsage401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetJournalUsage200JSONResponse(toGenUsageStats(stats)), nil
 }

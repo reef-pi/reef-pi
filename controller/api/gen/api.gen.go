@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
@@ -56,6 +57,21 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
+// JournalEntry defines model for JournalEntry.
+type JournalEntry struct {
+	Comment   *string    `json:"comment,omitempty"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
+	Value     float64    `json:"value"`
+}
+
+// JournalParameter defines model for JournalParameter.
+type JournalParameter struct {
+	Description *string `json:"description,omitempty"`
+	Id          *string `json:"id,omitempty"`
+	Name        string  `json:"name"`
+	Unit        *string `json:"unit,omitempty"`
+}
+
 // TimerJob defines model for TimerJob.
 type TimerJob struct {
 	// Day Cron day-of-month field
@@ -90,6 +106,12 @@ type TimerJob struct {
 
 	// Week Cron day-of-week field
 	Week string `json:"week"`
+}
+
+// UsageStats Time-series stats returned by usage endpoints
+type UsageStats struct {
+	Current    *[]interface{} `json:"current,omitempty"`
+	Historical *[]interface{} `json:"historical,omitempty"`
 }
 
 // sessionAuthContextKey is the context key for sessionAuth security scheme
@@ -134,6 +156,15 @@ type UpdateEquipmentJSONRequestBody UpdateEquipmentJSONBody
 // ControlEquipmentJSONRequestBody defines body for ControlEquipment for application/json ContentType.
 type ControlEquipmentJSONRequestBody = EquipmentAction
 
+// CreateJournalParameterJSONRequestBody defines body for CreateJournalParameter for application/json ContentType.
+type CreateJournalParameterJSONRequestBody = JournalParameter
+
+// UpdateJournalParameterJSONRequestBody defines body for UpdateJournalParameter for application/json ContentType.
+type UpdateJournalParameterJSONRequestBody = JournalParameter
+
+// RecordJournalEntryJSONRequestBody defines body for RecordJournalEntry for application/json ContentType.
+type RecordJournalEntryJSONRequestBody = JournalEntry
+
 // CreateTimerJobJSONRequestBody defines body for CreateTimerJob for application/json ContentType.
 type CreateTimerJobJSONRequestBody = TimerJob
 
@@ -160,6 +191,27 @@ type ServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(w http.ResponseWriter, r *http.Request, id string)
+	// List all journal parameters
+	// (GET /api/journal)
+	ListJournalParameters(w http.ResponseWriter, r *http.Request)
+	// Create a journal parameter
+	// (PUT /api/journal)
+	CreateJournalParameter(w http.ResponseWriter, r *http.Request)
+	// Delete a journal parameter
+	// (DELETE /api/journal/{id})
+	DeleteJournalParameter(w http.ResponseWriter, r *http.Request, id string)
+	// Get a journal parameter by ID
+	// (GET /api/journal/{id})
+	GetJournalParameter(w http.ResponseWriter, r *http.Request, id string)
+	// Update a journal parameter
+	// (POST /api/journal/{id})
+	UpdateJournalParameter(w http.ResponseWriter, r *http.Request, id string)
+	// Record a journal entry
+	// (POST /api/journal/{id}/record)
+	RecordJournalEntry(w http.ResponseWriter, r *http.Request, id string)
+	// Get journal usage stats
+	// (GET /api/journal/{id}/usage)
+	GetJournalUsage(w http.ResponseWriter, r *http.Request, id string)
 	// List all timer jobs
 	// (GET /api/timers)
 	ListTimerJobs(w http.ResponseWriter, r *http.Request)
@@ -214,6 +266,48 @@ func (_ Unimplemented) UpdateEquipment(w http.ResponseWriter, r *http.Request, i
 // Control equipment power state
 // (POST /api/equipment/{id}/control)
 func (_ Unimplemented) ControlEquipment(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// List all journal parameters
+// (GET /api/journal)
+func (_ Unimplemented) ListJournalParameters(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create a journal parameter
+// (PUT /api/journal)
+func (_ Unimplemented) CreateJournalParameter(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete a journal parameter
+// (DELETE /api/journal/{id})
+func (_ Unimplemented) DeleteJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a journal parameter by ID
+// (GET /api/journal/{id})
+func (_ Unimplemented) GetJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update a journal parameter
+// (POST /api/journal/{id})
+func (_ Unimplemented) UpdateJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Record a journal entry
+// (POST /api/journal/{id}/record)
+func (_ Unimplemented) RecordJournalEntry(w http.ResponseWriter, r *http.Request, id string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get journal usage stats
+// (GET /api/journal/{id}/usage)
+func (_ Unimplemented) GetJournalUsage(w http.ResponseWriter, r *http.Request, id string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -415,6 +509,206 @@ func (siw *ServerInterfaceWrapper) ControlEquipment(w http.ResponseWriter, r *ht
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ControlEquipment(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListJournalParameters operation middleware
+func (siw *ServerInterfaceWrapper) ListJournalParameters(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListJournalParameters(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateJournalParameter operation middleware
+func (siw *ServerInterfaceWrapper) CreateJournalParameter(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateJournalParameter(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteJournalParameter operation middleware
+func (siw *ServerInterfaceWrapper) DeleteJournalParameter(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteJournalParameter(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetJournalParameter operation middleware
+func (siw *ServerInterfaceWrapper) GetJournalParameter(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetJournalParameter(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateJournalParameter operation middleware
+func (siw *ServerInterfaceWrapper) UpdateJournalParameter(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateJournalParameter(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RecordJournalEntry operation middleware
+func (siw *ServerInterfaceWrapper) RecordJournalEntry(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RecordJournalEntry(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetJournalUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetJournalUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, SessionAuthScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetJournalUsage(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -690,6 +984,27 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/equipment/{id}/control", wrapper.ControlEquipment)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/journal", wrapper.ListJournalParameters)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/journal", wrapper.CreateJournalParameter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/journal/{id}", wrapper.DeleteJournalParameter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/journal/{id}", wrapper.GetJournalParameter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/journal/{id}", wrapper.UpdateJournalParameter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/journal/{id}/record", wrapper.RecordJournalEntry)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/journal/{id}/usage", wrapper.GetJournalUsage)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/timers", wrapper.ListTimerJobs)
@@ -1025,6 +1340,371 @@ func (response ControlEquipment404JSONResponse) VisitControlEquipmentResponse(w 
 	return err
 }
 
+type ListJournalParametersRequestObject struct {
+}
+
+type ListJournalParametersResponseObject interface {
+	VisitListJournalParametersResponse(w http.ResponseWriter) error
+}
+
+type ListJournalParameters200JSONResponse []JournalParameter
+
+func (response ListJournalParameters200JSONResponse) VisitListJournalParametersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListJournalParameters401JSONResponse ErrorResponse
+
+func (response ListJournalParameters401JSONResponse) VisitListJournalParametersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJournalParameterRequestObject struct {
+	Body *CreateJournalParameterJSONRequestBody
+}
+
+type CreateJournalParameterResponseObject interface {
+	VisitCreateJournalParameterResponse(w http.ResponseWriter) error
+}
+
+type CreateJournalParameter200JSONResponse JournalParameter
+
+func (response CreateJournalParameter200JSONResponse) VisitCreateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJournalParameter400JSONResponse ErrorResponse
+
+func (response CreateJournalParameter400JSONResponse) VisitCreateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateJournalParameter401JSONResponse ErrorResponse
+
+func (response CreateJournalParameter401JSONResponse) VisitCreateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJournalParameterRequestObject struct {
+	Id string `json:"id"`
+}
+
+type DeleteJournalParameterResponseObject interface {
+	VisitDeleteJournalParameterResponse(w http.ResponseWriter) error
+}
+
+type DeleteJournalParameter200JSONResponse ErrorResponse
+
+func (response DeleteJournalParameter200JSONResponse) VisitDeleteJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJournalParameter401JSONResponse ErrorResponse
+
+func (response DeleteJournalParameter401JSONResponse) VisitDeleteJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJournalParameter404JSONResponse ErrorResponse
+
+func (response DeleteJournalParameter404JSONResponse) VisitDeleteJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalParameterRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetJournalParameterResponseObject interface {
+	VisitGetJournalParameterResponse(w http.ResponseWriter) error
+}
+
+type GetJournalParameter200JSONResponse JournalParameter
+
+func (response GetJournalParameter200JSONResponse) VisitGetJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalParameter401JSONResponse ErrorResponse
+
+func (response GetJournalParameter401JSONResponse) VisitGetJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalParameter404JSONResponse ErrorResponse
+
+func (response GetJournalParameter404JSONResponse) VisitGetJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalParameterRequestObject struct {
+	Id   string `json:"id"`
+	Body *UpdateJournalParameterJSONRequestBody
+}
+
+type UpdateJournalParameterResponseObject interface {
+	VisitUpdateJournalParameterResponse(w http.ResponseWriter) error
+}
+
+type UpdateJournalParameter200JSONResponse JournalParameter
+
+func (response UpdateJournalParameter200JSONResponse) VisitUpdateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalParameter400JSONResponse ErrorResponse
+
+func (response UpdateJournalParameter400JSONResponse) VisitUpdateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalParameter401JSONResponse ErrorResponse
+
+func (response UpdateJournalParameter401JSONResponse) VisitUpdateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalParameter404JSONResponse ErrorResponse
+
+func (response UpdateJournalParameter404JSONResponse) VisitUpdateJournalParameterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RecordJournalEntryRequestObject struct {
+	Id   string `json:"id"`
+	Body *RecordJournalEntryJSONRequestBody
+}
+
+type RecordJournalEntryResponseObject interface {
+	VisitRecordJournalEntryResponse(w http.ResponseWriter) error
+}
+
+type RecordJournalEntry200JSONResponse ErrorResponse
+
+func (response RecordJournalEntry200JSONResponse) VisitRecordJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RecordJournalEntry400JSONResponse ErrorResponse
+
+func (response RecordJournalEntry400JSONResponse) VisitRecordJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RecordJournalEntry401JSONResponse ErrorResponse
+
+func (response RecordJournalEntry401JSONResponse) VisitRecordJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RecordJournalEntry404JSONResponse ErrorResponse
+
+func (response RecordJournalEntry404JSONResponse) VisitRecordJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalUsageRequestObject struct {
+	Id string `json:"id"`
+}
+
+type GetJournalUsageResponseObject interface {
+	VisitGetJournalUsageResponse(w http.ResponseWriter) error
+}
+
+type GetJournalUsage200JSONResponse UsageStats
+
+func (response GetJournalUsage200JSONResponse) VisitGetJournalUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalUsage401JSONResponse ErrorResponse
+
+func (response GetJournalUsage401JSONResponse) VisitGetJournalUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetJournalUsage404JSONResponse ErrorResponse
+
+func (response GetJournalUsage404JSONResponse) VisitGetJournalUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListTimerJobsRequestObject struct {
 }
 
@@ -1295,6 +1975,27 @@ type StrictServerInterface interface {
 	// Control equipment power state
 	// (POST /api/equipment/{id}/control)
 	ControlEquipment(ctx context.Context, request ControlEquipmentRequestObject) (ControlEquipmentResponseObject, error)
+	// List all journal parameters
+	// (GET /api/journal)
+	ListJournalParameters(ctx context.Context, request ListJournalParametersRequestObject) (ListJournalParametersResponseObject, error)
+	// Create a journal parameter
+	// (PUT /api/journal)
+	CreateJournalParameter(ctx context.Context, request CreateJournalParameterRequestObject) (CreateJournalParameterResponseObject, error)
+	// Delete a journal parameter
+	// (DELETE /api/journal/{id})
+	DeleteJournalParameter(ctx context.Context, request DeleteJournalParameterRequestObject) (DeleteJournalParameterResponseObject, error)
+	// Get a journal parameter by ID
+	// (GET /api/journal/{id})
+	GetJournalParameter(ctx context.Context, request GetJournalParameterRequestObject) (GetJournalParameterResponseObject, error)
+	// Update a journal parameter
+	// (POST /api/journal/{id})
+	UpdateJournalParameter(ctx context.Context, request UpdateJournalParameterRequestObject) (UpdateJournalParameterResponseObject, error)
+	// Record a journal entry
+	// (POST /api/journal/{id}/record)
+	RecordJournalEntry(ctx context.Context, request RecordJournalEntryRequestObject) (RecordJournalEntryResponseObject, error)
+	// Get journal usage stats
+	// (GET /api/journal/{id}/usage)
+	GetJournalUsage(ctx context.Context, request GetJournalUsageRequestObject) (GetJournalUsageResponseObject, error)
 	// List all timer jobs
 	// (GET /api/timers)
 	ListTimerJobs(ctx context.Context, request ListTimerJobsRequestObject) (ListTimerJobsResponseObject, error)
@@ -1514,6 +2215,205 @@ func (sh *strictHandler) ControlEquipment(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// ListJournalParameters operation middleware
+func (sh *strictHandler) ListJournalParameters(w http.ResponseWriter, r *http.Request) {
+	var request ListJournalParametersRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListJournalParameters(ctx, request.(ListJournalParametersRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListJournalParameters")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListJournalParametersResponseObject); ok {
+		if err := validResponse.VisitListJournalParametersResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateJournalParameter operation middleware
+func (sh *strictHandler) CreateJournalParameter(w http.ResponseWriter, r *http.Request) {
+	var request CreateJournalParameterRequestObject
+
+	var body CreateJournalParameterJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateJournalParameter(ctx, request.(CreateJournalParameterRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateJournalParameter")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateJournalParameterResponseObject); ok {
+		if err := validResponse.VisitCreateJournalParameterResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteJournalParameter operation middleware
+func (sh *strictHandler) DeleteJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	var request DeleteJournalParameterRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteJournalParameter(ctx, request.(DeleteJournalParameterRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteJournalParameter")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteJournalParameterResponseObject); ok {
+		if err := validResponse.VisitDeleteJournalParameterResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetJournalParameter operation middleware
+func (sh *strictHandler) GetJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetJournalParameterRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetJournalParameter(ctx, request.(GetJournalParameterRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetJournalParameter")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetJournalParameterResponseObject); ok {
+		if err := validResponse.VisitGetJournalParameterResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateJournalParameter operation middleware
+func (sh *strictHandler) UpdateJournalParameter(w http.ResponseWriter, r *http.Request, id string) {
+	var request UpdateJournalParameterRequestObject
+
+	request.Id = id
+
+	var body UpdateJournalParameterJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateJournalParameter(ctx, request.(UpdateJournalParameterRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateJournalParameter")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateJournalParameterResponseObject); ok {
+		if err := validResponse.VisitUpdateJournalParameterResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RecordJournalEntry operation middleware
+func (sh *strictHandler) RecordJournalEntry(w http.ResponseWriter, r *http.Request, id string) {
+	var request RecordJournalEntryRequestObject
+
+	request.Id = id
+
+	var body RecordJournalEntryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RecordJournalEntry(ctx, request.(RecordJournalEntryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RecordJournalEntry")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RecordJournalEntryResponseObject); ok {
+		if err := validResponse.VisitRecordJournalEntryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetJournalUsage operation middleware
+func (sh *strictHandler) GetJournalUsage(w http.ResponseWriter, r *http.Request, id string) {
+	var request GetJournalUsageRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetJournalUsage(ctx, request.(GetJournalUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetJournalUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetJournalUsageResponseObject); ok {
+		if err := validResponse.VisitGetJournalUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListTimerJobs operation middleware
 func (sh *strictHandler) ListTimerJobs(w http.ResponseWriter, r *http.Request) {
 	var request ListTimerJobsRequestObject
@@ -1659,31 +2559,37 @@ func (sh *strictHandler) UpdateTimerJob(w http.ResponseWriter, r *http.Request, 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

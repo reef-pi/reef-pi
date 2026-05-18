@@ -8,6 +8,7 @@ import (
 
 	"github.com/reef-pi/reef-pi/controller/api"
 	"github.com/reef-pi/reef-pi/controller/api/gen"
+	journalModule "github.com/reef-pi/reef-pi/controller/modules/journal"
 	timerModule "github.com/reef-pi/reef-pi/controller/modules/timer"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
@@ -30,6 +31,9 @@ func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
 	}
 	if sub, err := r.subsystems.Sub(timerModule.Bucket); err == nil {
 		cfg.Timer, _ = sub.(*timerModule.Controller)
+	}
+	if sub, err := r.subsystems.Sub(journalModule.Bucket); err == nil {
+		cfg.Journal, _ = sub.(*journalModule.Subsystem)
 	}
 	gen.HandlerWithOptions(gen.NewStrictHandler(api.NewReefPiServer(cfg), nil), gen.ChiServerOptions{BaseRouter: router})
 

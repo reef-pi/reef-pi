@@ -58,19 +58,29 @@ func (s *Subsystem) Delete(id string) error {
 	return s.repo.Delete(id)
 }
 
+func (s *Subsystem) entryDecoder(d json.RawMessage) interface{} {
+	var u Entry
+	if err := json.Unmarshal(d, &u); err != nil {
+		log.Println("ERROR:[journal-subsystem] Failed to unmarshal usage value. ", err)
+	}
+	return u
+}
+
 func (s *Subsystem) AddEntry(id string, e Entry) error {
 	if !s.statsMgr.IsLoaded(id) {
-		dec := func(d json.RawMessage) interface{} {
-			var u Entry
-			if err := json.Unmarshal(d, &u); err != nil {
-				log.Println("ERROR:[journal-subsystem] Failed to unmarshal usage value. ", err)
-			}
-			return u
-		}
-		if err := s.statsMgr.Load(id, dec); err != nil {
+		if err := s.statsMgr.Load(id, s.entryDecoder); err != nil {
 			log.Println("ERROR:[journal-subsystem] Failed to load usage value. ", err)
 		}
 	}
 	s.statsMgr.Update(id, e)
 	return s.statsMgr.Save(id)
+}
+
+func (s *Subsystem) Usage(id string) (telemetry.StatsResponse, error) {
+	if !s.statsMgr.IsLoaded(id) {
+		if err := s.statsMgr.Load(id, s.entryDecoder); err != nil {
+			log.Println("ERROR:[journal-subsystem] Failed to load usage value. ", err)
+		}
+	}
+	return s.statsMgr.Get(id)
 }
