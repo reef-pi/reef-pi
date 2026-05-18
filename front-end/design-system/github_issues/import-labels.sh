@@ -39,4 +39,3 @@ create "needs: api"          "F9D0C4" "Backend/API work required"
 
 echo
 echo "Done. Verify with: gh label list"
-

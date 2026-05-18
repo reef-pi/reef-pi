@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/hal"
 
@@ -120,91 +120,12 @@ func (c *Outlets) Get(id string) (Outlet, error) {
 	return c.repo.Get(id)
 }
 
-func (e *Outlets) LoadAPI(r *mux.Router) {
-
-	// swagger:operation GET /api/outlets/{id} Outlet outletGet
-	// Get an Outlet by id.
-	// Get an existing Outlet.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the outlet
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//   schema:
-	//    $ref: '#/definitions/outlet'
-	//  404:
-	//   description: Not Found
-	r.HandleFunc("/api/outlets/{id}", e.get).Methods("GET")
-
-	// swagger:route GET /api/outlets Outlet outletList
-	// List all Outlets.
-	// List all Outlets in reef-pi.
-	// responses:
-	// 	200: body:[]outlet
-	// 	500:
-	r.HandleFunc("/api/outlets", e.list).Methods("GET")
-
-	// swagger:operation PUT /api/outlets Outlet outletCreate
-	// Create an Outlet.
-	// Create a new Outlet.
-	// ---
-	// parameters:
-	//  - in: body
-	//    name: outlet
-	//    description: The outlet to create
-	//    required: true
-	//    schema:
-	//     $ref: '#/definitions/outlet'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/outlets", e.create).Methods("PUT")
-
-	// swagger:operation DELETE /api/outlets/{id} Outlet outletDelete
-	// Delete an Outlet.
-	// Delete an existing Outlet.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the outlet to delete
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/outlets/{id}", e.delete).Methods("DELETE")
-
-	// swagger:operation POST /api/outlets/{id} Outlet outletUpdate
-	// Update an Outlet.
-	// Update an existing Outlet.
-	//---
-	//parameters:
-	// - in: path
-	//   name: id
-	//   description: The Id of the outlet to update
-	//   required: true
-	//   schema:
-	//    type: integer
-	// - in: body
-	//   name: outlet
-	//   description: The outlet to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/outlet'
-	//responses:
-	// 200:
-	//  description: OK
-	// 404:
-	//  description: Not Found
-	r.HandleFunc("/api/outlets/{id}", e.update).Methods("POST")
+func (e *Outlets) LoadAPI(r chi.Router) {
+	r.Get("/api/outlets/{id}", e.get)
+	r.Get("/api/outlets", e.list)
+	r.Put("/api/outlets", e.create)
+	r.Delete("/api/outlets/{id}", e.delete)
+	r.Post("/api/outlets/{id}", e.update)
 }
 func (c *Outlets) get(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {

@@ -3,7 +3,7 @@ package controller
 import (
 	"sync"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager"
 	"github.com/reef-pi/reef-pi/controller/settings"
@@ -34,7 +34,7 @@ func (e *mockEntity) EName() string                { return e.name }
 func (e *mockEntity) Status() (interface{}, error) { return e.State, nil }
 
 func (m *mockSubsystem) Setup() error                        { return nil }
-func (m *mockSubsystem) LoadAPI(r *mux.Router)               {}
+func (m *mockSubsystem) LoadAPI(r chi.Router)                {}
 func (m *mockSubsystem) Start()                              {}
 func (m *mockSubsystem) InUse(_, _ string) ([]string, error) { return []string{}, nil }
 func (m *mockSubsystem) Stop()                               {}

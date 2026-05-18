@@ -25,3 +25,8 @@ playwright-report
 test-results
 front-end/e2e/.auth
 .worktrees/
+
+# Explicitly track Claude Code project configuration
+# (overrides global gitignore which blocks these by default)
+!.claude/
+!CLAUDE.md

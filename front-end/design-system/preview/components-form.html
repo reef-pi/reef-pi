@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Form controls</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 220px; flex-direction: column; padding: 20px 24px; gap: 12px; }
+  label { font-size: 13px; color:#1f2a1f; display:block; margin-bottom: 4px; }
+  .form-control { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; font-family: 'Questrial','Century Gothic',sans-serif; background: #fff; color:#1f2a1f; }
+  .form-control:focus { outline: 2px solid #174d16; outline-offset: 2px; border-color: #27a822; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #4e5f4e 50%), linear-gradient(135deg, #4e5f4e 50%, transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 28px; }
+  .alert-danger { background: #f8d7da; border: 1px solid #f5c6cb; color:#721c24; padding: 8px 12px; border-radius: 4px; font-size: 13px; }
+</style>
+</head><body>
+<div class="card">
+  <div>
+    <label>Username</label>
+    <input class="form-control" value="reefer" />
+  </div>
+  <div class="form-row">
+    <div><label>Sort</label><select class="form-control select"><option>Name (A→Z)</option></select></div>
+    <div><label>Unit</label><select class="form-control select"><option>Celsius</option></select></div>
+    <div><label>Frequency (s)</label><input class="form-control" value="30" /></div>
+  </div>
+  <div class="alert-danger"><b>Oops!</b> Invalid Credentials</div>
+</div>
+</body></html>

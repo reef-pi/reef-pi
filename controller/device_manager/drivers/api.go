@@ -5,146 +5,19 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (d *Drivers) LoadAPI(r *mux.Router) {
-
-	// swagger:route GET /api/drivers Driver driverList
-	// List all Drivers.
-	// List all Drivers in reef-pi.
-	// responses:
-	// 	200: body:[]driver
-	// 	500:
-	r.HandleFunc("/api/drivers", d.list).Methods("GET")
-
-	// swagger:operation GET /api/drivers/options Driver driverListOptions
-	// Get driver parametres
-	// List all drivers with configuration options.
-	// ---
-	// responses:
-	//  200:
-	//   description: Map of drivers and parameters
-	//   schema:
-	//    type: object
-	//    additionalProperties:
-	//     type: array
-	//     items:
-	//      type: object
-	//      properties:
-	//       name:
-	//        type: string
-	//        example: address
-	//        description: The name of the parameter
-	//       type:
-	//        type: string
-	//        example: string
-	//        description: The data type of the parameter
-	//       order:
-	//        type: integer
-	//        example: 1
-	//        description: The order in which to display the parameter
-	//       default:
-	//        type: object
-	//        example: 192.168.1.23:9999
-	//        description: The recommended default value
-	r.HandleFunc("/api/drivers/options", d.listOptions).Methods("GET")
-
-	// swagger:operation GET /api/drivers/{id} Driver driverGet
-	// Get a driver by id.
-	// Get an existing driver.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the driver
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//   schema:
-	//    $ref: '#/definitions/driver'
-	//  404:
-	//   description: Not Found
-	r.HandleFunc("/api/drivers/{id:[0-9]+}", d.get).Methods("GET")
-
-	// swagger:operation PUT /api/drivers Driver driverCreate
-	// Create a Driver.
-	// Create a new Driver.
-	// ---
-	// parameters:
-	//  - in: body
-	//    name: driver
-	//    description: The driver to create
-	//    required: true
-	//    schema:
-	//     $ref: '#/definitions/driver'
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/drivers", d.create).Methods("PUT")
-
-	// swagger:operation DELETE /api/drivers/{id} Driver driverDelete
-	// Delete an Driver.
-	// Delete an existing Driver.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the driver to delete
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	r.HandleFunc("/api/drivers/{id}", d.delete).Methods("DELETE")
-
-	// swagger:operation POST /api/drivers/{id} Driver driverUpdate
-	// Update a Driver.
-	// Update an existing Driver.
-	//---
-	//parameters:
-	// - in: path
-	//   name: id
-	//   description: The Id of the driver to update
-	//   required: true
-	//   schema:
-	//    type: integer
-	// - in: body
-	//   name: driver
-	//   description: The driver to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/driver'
-	//responses:
-	// 200:
-	//  description: OK
-	// 404:
-	//  description: Not Found
-	r.HandleFunc("/api/drivers/{id:[0-9]+}", d.update).Methods("POST")
-
-	// swagger:operation POST /api/drivers/validate Driver driverValidate
-	// Validate a driver configuration.
-	// Validate a driver configuration.
-	//---
-	//parameters:
-	// - in: body
-	//   name: outlet
-	//   description: The driver to validate
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/driver'
-	//responses:
-	// 200:
-	//  description: OK
-	// 400:
-	//  description: Not Valid
-	r.HandleFunc("/api/drivers/validate", d.validate).Methods("POST")
+func (d *Drivers) LoadAPI(r chi.Router) {
+	r.Get("/api/drivers", d.list)
+	r.Get("/api/drivers/options", d.listOptions)
+	r.Get("/api/drivers/{id}", d.get)
+	r.Put("/api/drivers", d.create)
+	r.Delete("/api/drivers/{id}", d.delete)
+	r.Post("/api/drivers/{id}", d.update)
+	r.Post("/api/drivers/validate", d.validate)
 }
 
 func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {

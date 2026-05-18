@@ -8,6 +8,7 @@ Five epics, 26 shippable issues, ordered so each ships standalone behind flags/t
 - **E3 (Dashboard hierarchy)** rebuilds the dashboard around the new atoms. First user-visible win.
 - **E4 (Control trust)** is independent of E3 — can run in parallel. Adds pending/error toggle states + alert center.
 - **E5 (Shell + theming)** is the heaviest lift; ship behind a `new_shell` flag and flip when ready.
+- **E6 (Framework exit)** runs in parallel after E1/E2 — one route per PR, no flag. Retires Bootstrap 4.6 and Material-UI v4. **Do not** migrate to Bootstrap 5 or MUI v5; the destination is `var(--reefpi-*)` + E2 primitives + plain CSS.
 
 ## Rollout
 | Epic | Week | User-visible? | Flag |
@@ -17,6 +18,7 @@ Five epics, 26 shippable issues, ordered so each ships standalone behind flags/t
 | E3 Dashboard v2 | 2–3 | Yes | `dashboard_v2` |
 | E4 Trust + alerts | 3–4 | Yes | `pending_states`, `alert_center` |
 | E5 Shell + dark/actinic | 4–6 | Yes | `new_shell`, theme picker in Settings |
+| E6 Framework exit | 3–8 (parallel) | Indirectly | — |
 
 ## Files in this pack
 ```
@@ -36,10 +38,10 @@ github_issues/
 ### Option A — `gh` CLI one-shot
 ```bash
 cd github_issues
-# create labels
-./import-labels.sh          # generated below
+# create labels (idempotent — re-running just updates colors/descriptions)
+bash import-labels.sh
 # create epics + children
-./import-issues.sh
+bash import-issues.sh
 ```
 
 ### Option B — paste manually
@@ -52,7 +54,8 @@ E1 · design-tokens-v2
  ├─ #1 extend --reefpi-* scale with states (pending, error, warn)
  ├─ #2 add dark + actinic theme tokens
  ├─ #3 token contrast audit + automated test
- └─ #4 migrate preview/ cards to var()-only (no hardcoded hex)
+ ├─ #4 migrate preview/ cards to var()-only (no hardcoded hex)
+ └─ #29 adopt Manrope + JetBrains Mono (retire Questrial)
 
 E2 · monitoring-primitives
  ├─ #5 ThresholdGauge component
@@ -83,4 +86,8 @@ E5 · shell-theming
  ├─ #24 Sign-in confidence card (device + version + network)
  ├─ #25 Empty states for every list page
  └─ #26 Theme picker + persistence in Configuration · Settings
+
+E6 · framework-exit
+ ├─ #27 Bootstrap 4.6 exit plan (utilities → controls → JS)
+ └─ #28 Material-UI v4 exit plan (Switch + FormControlLabel)
 ```

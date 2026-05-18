@@ -3,29 +3,32 @@ package daemon
 import (
 	"log"
 	"net/http"
-	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
-	"github.com/reef-pi/reef-pi/controller/settings"
+	"github.com/reef-pi/reef-pi/controller/api"
+	"github.com/reef-pi/reef-pi/controller/api/gen"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func (r *ReefPi) API() error {
 	handler := r.serverHandler()
-	if os.Getenv("REEF_PI_LIST_API") == "1" {
-		utils.SummarizeAPI()
-	}
 	return startAPIServer(r.settings.Address, r.settings.HTTPS, handler)
 }
 
-func (r *ReefPi) UnAuthenticatedAPI(router *mux.Router) {
-	router.HandleFunc("/auth/signin", r.a.SignIn).Methods("POST")
-	router.HandleFunc("/auth/signout", r.a.SignOut).Methods("GET")
+func (r *ReefPi) UnAuthenticatedAPI(router chi.Router) {
+	router.Post("/auth/signin", r.a.SignIn)
+	router.Get("/auth/signout", r.a.SignOut)
 }
 
 // Authenticated API using the BasicAuth middleware
-func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
+func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
+	// Generated strict handler — handles all OpenAPI-migrated modules.
+	if r.equipment != nil {
+		apiServer := api.NewReefPiServer(r.equipment)
+		gen.HandlerWithOptions(gen.NewStrictHandler(apiServer, nil), gen.ChiServerOptions{BaseRouter: router})
+	}
+
 	r.registerCoreAPI(router)
 	r.registerTelemetryAPI(router)
 	r.registerErrorAPI(router)
@@ -35,206 +38,70 @@ func (r *ReefPi) AuthenticatedAPI(router *mux.Router) {
 	r.registerDashboardAPI(router)
 }
 
-func (r *ReefPi) registerCoreAPI(router *mux.Router) {
-	// swagger:route GET /api/capabilities Capabilities capabilitiesList
-	// List all capabilities.
-	// List all capabilities in reef-pi.
-	// responses:
-	// 	200: body:capabilities
-	router.HandleFunc("/api/capabilities", r.GetCapabilities).Methods("GET")
-
-	// swagger:route GET /api/settings Settings settingsList
-	// List all settings.
-	// List all settings in reef-pi.
-	// responses:
-	// 	200: body:settings
-	utils.APIDoc(router.HandleFunc("/api/settings", r.GetSettings).Methods("GET"), nil, &settings.DefaultSettings)
-
-	// swagger:operation POST /api/settings Settings settingsUpdate
-	// Update settings.
-	// Update settings.
-	//---
-	//parameters:
-	// - in: body
-	//   name: settings
-	//   description: The settings to update
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/settings'
-	//responses:
-	// 200:
-	//  description: OK
-	router.HandleFunc("/api/settings", r.UpdateSettings).Methods("POST")
-
-	// swagger:operation POST /api/credentials Credentials credentialsUpdate
-	// Update credentials.
-	// Update username and password.
-	//---
-	//parameters:
-	// - in: body
-	//   name: credentials
-	//   description: The new credentials
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/credentials'
-	//responses:
-	// 200:
-	//  description: OK
-	router.HandleFunc("/api/credentials", r.a.UpdateCredentials).Methods("POST")
+func (r *ReefPi) registerCoreAPI(router chi.Router) {
+	router.Get("/api/capabilities", r.GetCapabilities)
+	router.Get("/api/settings", r.GetSettings)
+	router.Post("/api/settings", r.UpdateSettings)
+	router.Post("/api/credentials", r.a.UpdateCredentials)
 }
 
-func (r *ReefPi) registerTelemetryAPI(router *mux.Router) {
-	// swagger:route GET /api/telemetry Telemetry telemetryGet
-	// List telemetry configuration.
-	// List telemetry configuration.
-	// responses:
-	// 	200: body:telemetryConfig
-	router.HandleFunc("/api/telemetry", r.telemetry.GetConfig).Methods("GET")
-
-	// swagger:operation POST /api/telemetry Telemetry telemetryUpdate
-	// Update telemetry configuration.
-	// Update telemetry configuration.
-	//---
-	//parameters:
-	// - in: body
-	//   name: telemetryConfig
-	//   description: The telemetry configuration
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/telemetryConfig'
-	//responses:
-	// 200:
-	//  description: OK
-	router.HandleFunc("/api/telemetry", r.telemetry.UpdateConfig).Methods("POST")
-
-	// swagger:route POST /api/telemetry/test_message Telemetry telemetryTest
-	// Test telemetry.
-	// Send a telemetry test message.
-	// responses:
-	//  200:
-	router.HandleFunc("/api/telemetry/test_message", r.telemetry.SendTestMessage).Methods("POST")
+func (r *ReefPi) registerTelemetryAPI(router chi.Router) {
+	router.Get("/api/telemetry", r.telemetry.GetConfig)
+	router.Post("/api/telemetry", r.telemetry.UpdateConfig)
+	router.Post("/api/telemetry/test_message", r.telemetry.SendTestMessage)
 }
 
-func (r *ReefPi) registerErrorAPI(router *mux.Router) {
-	// swagger:route DELETE /api/errors/clear Errors errorsClear
-	// Clear errors.
-	// Clear errors.
-	// responses:
-	//  200:
-	router.HandleFunc("/api/errors/clear", r.clearErrors).Methods("DELETE")
-
-	// swagger:operation DELETE /api/errors/{id} Errors errorsDelete
-	// Delete an error.
-	// Delete an error.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the error to delete
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	router.HandleFunc("/api/errors/{id}", r.deleteError).Methods("DELETE")
-
-	// swagger:operation GET /api/errors/{id} Errors errorGet
-	// Get an error by id.
-	// Get an existing error.
-	// ---
-	// parameters:
-	//  - in: path
-	//    name: id
-	//    description: The Id of the error
-	//    required: true
-	//    schema:
-	//     type: integer
-	// responses:
-	//  200:
-	//   description: OK
-	//   schema:
-	//    $ref: '#/definitions/error'
-	//  404:
-	//   description: Not Found
-	router.HandleFunc("/api/errors/{id}", r.getError).Methods("GET")
-
-	// swagger:route GET /api/errors Errors errorsList
-	// List errors.
-	// List errors.
-	// responses:
-	// 	200: body:[]error
-	router.HandleFunc("/api/errors", r.listErrors).Methods("GET")
+func (r *ReefPi) registerErrorAPI(router chi.Router) {
+	router.Delete("/api/errors/clear", r.clearErrors)
+	router.Delete("/api/errors/{id}", r.deleteError)
+	router.Get("/api/errors/{id}", r.getError)
+	router.Get("/api/errors", r.listErrors)
 }
 
-func (r *ReefPi) registerRuntimeAPI(router *mux.Router) {
-	// swagger:route GET /api/me Me meGet
-	// Ping API.
-	// Ping API to determine if server is running.
-	// responses:
-	// 	200:
-	router.HandleFunc("/api/me", r.a.Me).Methods("GET")
+func (r *ReefPi) registerRuntimeAPI(router chi.Router) {
+	router.Get("/api/me", r.a.Me)
 
 	if r.settings.Capabilities.DevMode {
-		router.HandleFunc("/api/dev/smoke/reset", r.ResetSmokeState).Methods("POST")
+		router.Post("/api/dev/smoke/reset", r.ResetSmokeState)
 	}
 
 	if r.h != nil {
-		router.HandleFunc("/api/health_stats", r.h.GetStats).Methods("GET")
+		router.Get("/api/health_stats", r.h.GetStats)
 	}
 }
 
-func (r *ReefPi) registerDashboardAPI(router *mux.Router) {
+func (r *ReefPi) registerDashboardAPI(router chi.Router) {
 	if !r.settings.Capabilities.Dashboard {
 		return
 	}
 
-	// swagger:route GET /api/dashboard Dashboard dashboardGet
-	// Get dashboard.
-	// Get dashboard.
-	// responses:
-	// 	200: body:dashboard
-	router.HandleFunc("/api/dashboard", r.GetDashboard).Methods("GET")
-
-	// swagger:operation POST /api/dashboard Dashboard dashboardUpdate
-	// Update dasboard configuration.
-	// Update dasboard configuration.
-	//---
-	//parameters:
-	// - in: body
-	//   name: dashboardConfiguration
-	//   description: The dashboard configuration
-	//   required: true
-	//   schema:
-	//    $ref: '#/definitions/dashboard'
-	//responses:
-	// 200:
-	//  description: OK
-	router.HandleFunc("/api/dashboard", r.UpdateDashboard).Methods("POST")
+	router.Get("/api/dashboard", r.GetDashboard)
+	router.Post("/api/dashboard", r.UpdateDashboard)
 }
 
 func (r *ReefPi) serverHandler() http.Handler {
-	root := mux.NewRouter()
+	root := chi.NewRouter()
 
-	root.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui/home.html")
+	root.Get("/", func(w http.ResponseWriter, req *http.Request) {
+		http.ServeFile(w, req, "ui/home.html")
 	})
-	root.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "ui/favicon.ico")
+	root.Get("/favicon.ico", func(w http.ResponseWriter, req *http.Request) {
+		http.ServeFile(w, req, "ui/favicon.ico")
 	})
-	root.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("ui/assets"))))
-	root.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
+	root.Handle("/assets/*", http.StripPrefix("/assets/", http.FileServer(http.Dir("ui/assets"))))
+	root.Handle("/images/*", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
-	authRouter := mux.NewRouter()
-	r.UnAuthenticatedAPI(authRouter)
-	root.PathPrefix("/auth/").Handler(authRouter)
+	r.UnAuthenticatedAPI(root)
 
-	apiRouter := mux.NewRouter()
-	if r.settings.CORS {
-		apiRouter.Use(corsMiddleware)
-	}
-	r.AuthenticatedAPI(apiRouter)
-	root.PathPrefix("/api/").Handler(r.a.Authenticate(apiRouter.ServeHTTP))
+	root.Group(func(router chi.Router) {
+		router.Use(func(next http.Handler) http.Handler {
+			return r.a.Authenticate(next.ServeHTTP)
+		})
+		if r.settings.CORS {
+			router.Use(corsMiddleware)
+		}
+		r.AuthenticatedAPI(router)
+	})
 
 	if r.settings.Prometheus {
 		r.prometheus(root)
@@ -274,3 +141,4 @@ func startAPIServer(address string, https bool, handler http.Handler) error {
 	}()
 	return nil
 }
+

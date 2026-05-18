@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 	"github.com/reef-pi/hal"
 	"github.com/reef-pi/rpi/i2c"
 
@@ -170,18 +170,17 @@ func (dm *DeviceManager) Provision(driverID string) error {
 	return nil
 }
 
-func (dm *DeviceManager) LoadAPI(r *mux.Router) {
+func (dm *DeviceManager) LoadAPI(r chi.Router) {
 	dm.outlets.LoadAPI(r)
 	dm.inlets.LoadAPI(r)
 	dm.jacks.LoadAPI(r)
 	dm.ais.LoadAPI(r)
 	dm.drivers.LoadAPI(r)
-	r.HandleFunc("/api/drivers/{id}/provision", dm.provisionHandler).Methods("POST")
+	r.Post("/api/drivers/{id}/provision", dm.provisionHandler)
 }
 
 func (dm *DeviceManager) provisionHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := chi.URLParam(r, "id")
 	if err := dm.Provision(id); err != nil {
 		utils.ErrorResponse(http.StatusInternalServerError, "Failed to provision. Error: "+err.Error(), w)
 		return

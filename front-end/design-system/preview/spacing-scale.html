@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Spacing scale</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { height: 160px; align-items: flex-end; padding: 20px 24px; gap: 16px; }
+  .stop { display:flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: 1; }
+  .bar { background: #27a822; border-radius: 4px; height: 24px; }
+  .lbl { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; }
+  .name { font-size: 12px; font-weight: 700; color:#1f2a1f; }
+</style>
+</head><body>
+<div class="card">
+  <div class="stop"><span class="bar" style="width:5px"></span>  <span class="name">xxs</span><span class="lbl">5px · .3125rem</span></div>
+  <div class="stop"><span class="bar" style="width:10px"></span> <span class="name">xs</span> <span class="lbl">10px · .625rem</span></div>
+  <div class="stop"><span class="bar" style="width:12px"></span> <span class="name">sm</span> <span class="lbl">12px · .75rem</span></div>
+  <div class="stop"><span class="bar" style="width:16px"></span> <span class="name">md</span> <span class="lbl">16px · 1rem</span></div>
+  <div class="stop"><span class="bar" style="width:20px"></span> <span class="name">lg</span> <span class="lbl">20px · 1.25rem</span></div>
+</div>
+</body></html>

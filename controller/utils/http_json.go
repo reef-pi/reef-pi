@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 type Doer interface {
@@ -47,8 +47,7 @@ func JSONResponseWithStatus(httpStatus int, payload interface{}, w http.Response
 
 func JSONGetResponse(fn func(string) (interface{}, error), w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := chi.URLParam(r, "id")
 	payload, err := fn(id)
 	if err != nil {
 		ErrorResponse(http.StatusNotFound, err.Error(), w)
@@ -85,8 +84,7 @@ func JSONCreateResponse(i interface{}, fn func() error, w http.ResponseWriter, r
 
 func JSONUpdateResponse(i interface{}, fn func(string) error, w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := chi.URLParam(r, "id")
 	dec := json.NewDecoder(r.Body)
 	if err := dec.Decode(i); err != nil {
 		ErrorResponse(http.StatusBadRequest, err.Error(), w)
@@ -100,8 +98,7 @@ func JSONUpdateResponse(i interface{}, fn func(string) error, w http.ResponseWri
 
 func JSONDeleteResponse(fn func(string) error, w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := chi.URLParam(r, "id")
 	if err := fn(id); err != nil {
 		ErrorResponse(http.StatusInternalServerError, "Failed to delete. Error: "+err.Error(), w)
 		return

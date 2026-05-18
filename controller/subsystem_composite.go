@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 type SubsystemComposite struct {
@@ -51,7 +51,7 @@ func (s *SubsystemComposite) Sub(name string) (Subsystem, error) {
 	return sub, nil
 }
 
-func (s *SubsystemComposite) LoadAPI(router *mux.Router) {
+func (s *SubsystemComposite) LoadAPI(router chi.Router) {
 	for _, sController := range s.components {
 		sController.LoadAPI(router)
 	}

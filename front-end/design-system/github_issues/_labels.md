@@ -26,6 +26,9 @@ Create these in **Settings → Labels** (or `gh label create`) before importing 
 
 ## `gh` CLI import script
 
+The runnable version of this lives at [`import-labels.sh`](./import-labels.sh).
+Below is the same content, kept here as reference / copy-paste fallback.
+
 ```bash
 #!/usr/bin/env bash
 # github_issues/import-labels.sh

@@ -7,16 +7,16 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 type TestRouter struct {
-	Router *mux.Router
+	Router chi.Router
 }
 
 func NewTestRouter() *TestRouter {
 	return &TestRouter{
-		Router: mux.NewRouter(),
+		Router: chi.NewRouter(),
 	}
 }
 

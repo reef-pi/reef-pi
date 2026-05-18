@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager"
@@ -23,10 +23,10 @@ type apiLoadCountingSubsystem struct {
 	loadCount int
 }
 
-func (s *apiLoadCountingSubsystem) Setup() error          { return nil }
-func (s *apiLoadCountingSubsystem) LoadAPI(r *mux.Router) { s.loadCount++ }
-func (s *apiLoadCountingSubsystem) Start()                {}
-func (s *apiLoadCountingSubsystem) Stop()                 {}
+func (s *apiLoadCountingSubsystem) Setup() error         { return nil }
+func (s *apiLoadCountingSubsystem) LoadAPI(r chi.Router) { s.loadCount++ }
+func (s *apiLoadCountingSubsystem) Start()               {}
+func (s *apiLoadCountingSubsystem) Stop()                {}
 func (s *apiLoadCountingSubsystem) On(string, bool) error { return nil }
 func (s *apiLoadCountingSubsystem) InUse(string, string) ([]string, error) {
 	return nil, nil
@@ -72,7 +72,7 @@ func TestAuthenticatedAPILoadsSubsystemRoutesOnce(t *testing.T) {
 	subsystem := &apiLoadCountingSubsystem{}
 	r.subsystems.Load("test-subsystem", subsystem)
 
-	r.AuthenticatedAPI(mux.NewRouter())
+	r.AuthenticatedAPI(chi.NewRouter())
 
 	if subsystem.loadCount != 1 {
 		t.Fatalf("expected subsystem API to load once, got %d", subsystem.loadCount)

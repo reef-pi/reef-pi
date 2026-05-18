@@ -86,7 +86,6 @@ _dist_layout:
 	mkdir -p dist/var/lib/reef-pi/ui dist/usr/bin dist/etc/reef-pi dist/var/lib/reef-pi/images
 	cp bin/reef-pi dist/usr/bin/reef-pi
 	cp -r ui/* dist/var/lib/reef-pi/ui
-	cp swagger.json dist/var/lib/reef-pi/ui/assets/swagger.json
 	cp build/config.yaml dist/etc/reef-pi/config.yaml
 
 .PHONY: pi_deb_prebuilt
@@ -131,11 +130,22 @@ race:
 
 .PHONY: spec
 spec:
-	swagger generate spec /w ./commands/ -i swagger.yml -o swagger.json -m
+	go generate ./controller/api/...
+
+.PHONY: lint-spec
+lint-spec:
+	npx @redocly/cli lint openapi/openapi.yaml
 
 .PHONY: serve-spec
 serve-spec:
-	npx @redoc-cli serve swagger.json -p 8888
+	npx @redocly/cli preview-docs openapi/openapi.yaml -p 8888
+
+.PHONY: check-spec
+check-spec:
+	go generate ./controller/api/...
+	git diff --exit-code controller/api/gen/
+
+.PHONY: api-doc
 api-doc:
 	printf '%s\n' \
 	'<!DOCTYPE html>' \
@@ -149,7 +159,7 @@ api-doc:
 	'    </style>' \
 	'  </head>' \
 	'  <body>' \
-	'    <redoc spec-url="/assets/swagger.json"></redoc>' \
+	'    <redoc spec-url="/assets/openapi.yaml"></redoc>' \
 	'    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>' \
 	'  </body>' \
 	'</html>' > ui/assets/api.html
