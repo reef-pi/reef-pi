@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"

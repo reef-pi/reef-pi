@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gorilla/sessions"
+
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 

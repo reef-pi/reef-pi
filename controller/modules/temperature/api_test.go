@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
@@ -77,16 +78,11 @@ func TestTemperatureAPI(t *testing.T) {
 		t.Error(err)
 	}
 	c.Stop()
-	c.Start()
 	got.loadHomeostasis(con)
 	c.Check(got)
-	u := controller.Observation{Value: 67}
 	c.Check(got)
-	u.Value = 83
 	c.Check(got)
-	u.Value = 70
 	c.Check(got)
-	u.Value = 79
 	c.Check(got)
 
 	if _, err := c.Usage("1"); err != nil {

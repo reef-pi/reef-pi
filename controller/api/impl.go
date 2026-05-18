@@ -670,7 +670,7 @@ func (s *ReefPiServer) CreateLight(_ context.Context, request gen.CreateLightReq
 	if request.Body == nil {
 		return gen.CreateLight400JSONResponse{Message: "missing request body"}, nil
 	}
-	l := lightingModule.Light{Name: request.Body.Name}
+	l := fromGenLight(*request.Body)
 	if err := s.lighting.Create(l); err != nil {
 		return gen.CreateLight400JSONResponse{Message: err.Error()}, nil
 	}
@@ -714,18 +714,22 @@ func (s *ReefPiServer) UpdateLight(_ context.Context, request gen.UpdateLightReq
 		}
 		return gen.UpdateLight401JSONResponse{Message: err.Error()}, nil
 	}
-	existing.Name = request.Body.Name
-	if err := s.lighting.Update(request.Id, existing); err != nil {
+	updated := fromGenLight(*request.Body)
+	updated.ID = existing.ID
+	if updated.Channels == nil {
+		updated.Channels = existing.Channels
+	}
+	if err := s.lighting.Update(request.Id, updated); err != nil {
 		if isNotFound(err) {
 			return gen.UpdateLight404JSONResponse{Message: err.Error()}, nil
 		}
 		return gen.UpdateLight400JSONResponse{Message: err.Error()}, nil
 	}
-	updated, err := s.lighting.Get(request.Id)
+	result, err := s.lighting.Get(request.Id)
 	if err != nil {
 		return gen.UpdateLight400JSONResponse{Message: err.Error()}, nil
 	}
-	return gen.UpdateLight200JSONResponse(toGenLight(updated)), nil
+	return gen.UpdateLight200JSONResponse(toGenLight(result)), nil
 }
 
 func (s *ReefPiServer) DeleteLight(_ context.Context, request gen.DeleteLightRequestObject) (gen.DeleteLightResponseObject, error) {
@@ -756,7 +760,36 @@ func (s *ReefPiServer) GetLightUsage(_ context.Context, request gen.GetLightUsag
 }
 
 func toGenLight(l lightingModule.Light) gen.Light {
-	return gen.Light{Id: &l.ID, Name: l.Name}
+	g := gen.Light{Id: &l.ID, Name: l.Name, Enable: &l.Enable}
+	if l.Jack != "" {
+		g.Jack = &l.Jack
+	}
+	if len(l.Channels) > 0 {
+		raw, _ := json.Marshal(l.Channels)
+		var ch map[string]interface{}
+		if json.Unmarshal(raw, &ch) == nil {
+			g.Channels = &ch
+		}
+	}
+	return g
+}
+
+func fromGenLight(g gen.Light) lightingModule.Light {
+	l := lightingModule.Light{Name: g.Name}
+	if g.Jack != nil {
+		l.Jack = *g.Jack
+	}
+	if g.Enable != nil {
+		l.Enable = *g.Enable
+	}
+	if g.Channels != nil {
+		raw, _ := json.Marshal(g.Channels)
+		var ch map[int]*lightingModule.Channel
+		if json.Unmarshal(raw, &ch) == nil {
+			l.Channels = ch
+		}
+	}
+	return l
 }
 
 // ---- ATO ----
@@ -1313,7 +1346,7 @@ func (s *ReefPiServer) ListTemperatureControllers(_ context.Context, _ gen.ListT
 	}
 	resp := make(gen.ListTemperatureControllers200JSONResponse, len(tcs))
 	for i, tc := range tcs {
-		resp[i] = toGenTC(*tc)
+		resp[i] = toGenTC(tc)
 	}
 	return resp, nil
 }
@@ -1335,10 +1368,10 @@ func (s *ReefPiServer) CreateTemperatureController(_ context.Context, request ge
 	}
 	for _, found := range tcs {
 		if found.Name == tc.Name {
-			return gen.CreateTemperatureController200JSONResponse(toGenTC(*found)), nil
+			return gen.CreateTemperatureController200JSONResponse(toGenTC(found)), nil
 		}
 	}
-	return gen.CreateTemperatureController200JSONResponse(toGenTC(tc)), nil
+	return gen.CreateTemperatureController200JSONResponse(toGenTC(&tc)), nil
 }
 
 func (s *ReefPiServer) GetTemperatureController(_ context.Context, request gen.GetTemperatureControllerRequestObject) (gen.GetTemperatureControllerResponseObject, error) {
@@ -1352,7 +1385,7 @@ func (s *ReefPiServer) GetTemperatureController(_ context.Context, request gen.G
 		}
 		return gen.GetTemperatureController401JSONResponse{Message: err.Error()}, nil
 	}
-	return gen.GetTemperatureController200JSONResponse(toGenTC(*tc)), nil
+	return gen.GetTemperatureController200JSONResponse(toGenTC(tc)), nil
 }
 
 func (s *ReefPiServer) UpdateTemperatureController(_ context.Context, request gen.UpdateTemperatureControllerRequestObject) (gen.UpdateTemperatureControllerResponseObject, error) {
@@ -1380,7 +1413,7 @@ func (s *ReefPiServer) UpdateTemperatureController(_ context.Context, request ge
 	if err != nil {
 		return gen.UpdateTemperatureController400JSONResponse{Message: err.Error()}, nil
 	}
-	return gen.UpdateTemperatureController200JSONResponse(toGenTC(*updated)), nil
+	return gen.UpdateTemperatureController200JSONResponse(toGenTC(updated)), nil
 }
 
 func (s *ReefPiServer) DeleteTemperatureController(_ context.Context, request gen.DeleteTemperatureControllerRequestObject) (gen.DeleteTemperatureControllerResponseObject, error) {
@@ -1457,7 +1490,7 @@ func (s *ReefPiServer) GetTemperatureUsage(_ context.Context, request gen.GetTem
 	return gen.GetTemperatureUsage200JSONResponse(toGenUsageStats(stats)), nil
 }
 
-func toGenTC(tc temperatureModule.TC) gen.TemperatureController {
+func toGenTC(tc *temperatureModule.TC) gen.TemperatureController {
 	return gen.TemperatureController{Id: &tc.ID, Name: tc.Name}
 }
 

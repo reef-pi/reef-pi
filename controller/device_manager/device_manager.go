@@ -11,13 +11,14 @@ import (
 
 	"github.com/shirou/gopsutil/v4/host"
 
+	"net/http"
+
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
 	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
-	"net/http"
 )
 
 type DeviceManager struct {

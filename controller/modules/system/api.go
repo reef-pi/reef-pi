@@ -14,7 +14,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-
 type InstallReq struct {
 	Version string `json:"version"`
 }
@@ -36,8 +35,8 @@ func (c *Controller) CurrentDisplayState() (DisplayState, error) {
 	return c.currentDisplayState()
 }
 
-func (c *Controller) EnableDisplayPublic() error  { return c.enableDisplay() }
-func (c *Controller) DisableDisplayPublic() error { return c.disableDisplay() }
+func (c *Controller) EnableDisplayPublic() error      { return c.enableDisplay() }
+func (c *Controller) DisableDisplayPublic() error     { return c.disableDisplay() }
 func (c *Controller) SetBrightnessPublic(b int) error { return c.setBrightness(b) }
 
 func (c *Controller) SystemPoweroff() {

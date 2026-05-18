@@ -181,4 +181,3 @@ func startAPIServer(address string, https bool, handler http.Handler) error {
 	}()
 	return nil
 }
-
