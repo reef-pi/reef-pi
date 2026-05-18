@@ -921,19 +921,9 @@ func toGenATO(a atoModule.ATO) gen.ATO {
 }
 
 func fromGenATO(a gen.ATO) atoModule.ATO {
-	out := atoModule.ATO{Name: a.Name}
-	if a.Inlet != nil {
-		out.Inlet = *a.Inlet
-	}
-	if a.Pump != nil {
-		out.Pump = *a.Pump
-	}
-	if a.Enable != nil {
-		out.Enable = *a.Enable
-	}
-	if a.Control != nil {
-		out.Control = *a.Control
-	}
+	var out atoModule.ATO
+	raw, _ := json.Marshal(a)
+	json.Unmarshal(raw, &out) //nolint:errcheck
 	return out
 }
 
@@ -1168,13 +1158,9 @@ func toGenPump(p doserModule.Pump) gen.DoserPump {
 }
 
 func fromGenPump(p gen.DoserPump) doserModule.Pump {
-	out := doserModule.Pump{Name: p.Name}
-	if p.Jack != nil {
-		out.Jack = *p.Jack
-	}
-	if p.Pin != nil {
-		out.Pin = *p.Pin
-	}
+	var out doserModule.Pump
+	raw, _ := json.Marshal(p)
+	json.Unmarshal(raw, &out) //nolint:errcheck
 	return out
 }
 
@@ -1202,7 +1188,7 @@ func (s *ReefPiServer) CreatePhProbe(_ context.Context, request gen.CreatePhProb
 	if request.Body == nil {
 		return gen.CreatePhProbe400JSONResponse{Message: "missing request body"}, nil
 	}
-	p := phModule.Probe{Name: request.Body.Name}
+	p := fromGenPhProbe(*request.Body)
 	if err := s.ph.Create(p); err != nil {
 		return gen.CreatePhProbe400JSONResponse{Message: err.Error()}, nil
 	}
@@ -1246,18 +1232,19 @@ func (s *ReefPiServer) UpdatePhProbe(_ context.Context, request gen.UpdatePhProb
 		}
 		return gen.UpdatePhProbe401JSONResponse{Message: err.Error()}, nil
 	}
-	existing.Name = request.Body.Name
-	if err := s.ph.Update(request.Id, existing); err != nil {
+	probe := fromGenPhProbe(*request.Body)
+	probe.ID = existing.ID
+	if err := s.ph.Update(request.Id, probe); err != nil {
 		if isNotFound(err) {
 			return gen.UpdatePhProbe404JSONResponse{Message: err.Error()}, nil
 		}
 		return gen.UpdatePhProbe400JSONResponse{Message: err.Error()}, nil
 	}
-	updated, err := s.ph.Get(request.Id)
+	result, err := s.ph.Get(request.Id)
 	if err != nil {
 		return gen.UpdatePhProbe400JSONResponse{Message: err.Error()}, nil
 	}
-	return gen.UpdatePhProbe200JSONResponse(toGenPhProbe(updated)), nil
+	return gen.UpdatePhProbe200JSONResponse(toGenPhProbe(result)), nil
 }
 
 func (s *ReefPiServer) DeletePhProbe(_ context.Context, request gen.DeletePhProbeRequestObject) (gen.DeletePhProbeResponseObject, error) {
@@ -1334,6 +1321,13 @@ func toGenPhProbe(p phModule.Probe) gen.PhProbe {
 	return gen.PhProbe{Id: &p.ID, Name: p.Name}
 }
 
+func fromGenPhProbe(p gen.PhProbe) phModule.Probe {
+	var out phModule.Probe
+	raw, _ := json.Marshal(p)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
 // ---- Temperature ----
 
 func (s *ReefPiServer) ListTemperatureControllers(_ context.Context, _ gen.ListTemperatureControllersRequestObject) (gen.ListTemperatureControllersResponseObject, error) {
@@ -1358,8 +1352,8 @@ func (s *ReefPiServer) CreateTemperatureController(_ context.Context, request ge
 	if request.Body == nil {
 		return gen.CreateTemperatureController400JSONResponse{Message: "missing request body"}, nil
 	}
-	tc := temperatureModule.TC{Name: request.Body.Name}
-	if err := s.temperature.Create(&tc); err != nil {
+	tc := fromGenTC(*request.Body)
+	if err := s.temperature.Create(tc); err != nil {
 		return gen.CreateTemperatureController400JSONResponse{Message: err.Error()}, nil
 	}
 	tcs, err := s.temperature.List()
@@ -1371,7 +1365,7 @@ func (s *ReefPiServer) CreateTemperatureController(_ context.Context, request ge
 			return gen.CreateTemperatureController200JSONResponse(toGenTC(found)), nil
 		}
 	}
-	return gen.CreateTemperatureController200JSONResponse(toGenTC(&tc)), nil
+	return gen.CreateTemperatureController200JSONResponse(toGenTC(tc)), nil
 }
 
 func (s *ReefPiServer) GetTemperatureController(_ context.Context, request gen.GetTemperatureControllerRequestObject) (gen.GetTemperatureControllerResponseObject, error) {
@@ -1402,18 +1396,19 @@ func (s *ReefPiServer) UpdateTemperatureController(_ context.Context, request ge
 		}
 		return gen.UpdateTemperatureController401JSONResponse{Message: err.Error()}, nil
 	}
-	existing.Name = request.Body.Name
-	if err := s.temperature.Update(request.Id, existing); err != nil {
+	tc := fromGenTC(*request.Body)
+	tc.ID = existing.ID
+	if err := s.temperature.Update(request.Id, tc); err != nil {
 		if isNotFound(err) {
 			return gen.UpdateTemperatureController404JSONResponse{Message: err.Error()}, nil
 		}
 		return gen.UpdateTemperatureController400JSONResponse{Message: err.Error()}, nil
 	}
-	updated, err := s.temperature.Get(request.Id)
+	result, err := s.temperature.Get(request.Id)
 	if err != nil {
 		return gen.UpdateTemperatureController400JSONResponse{Message: err.Error()}, nil
 	}
-	return gen.UpdateTemperatureController200JSONResponse(toGenTC(updated)), nil
+	return gen.UpdateTemperatureController200JSONResponse(toGenTC(result)), nil
 }
 
 func (s *ReefPiServer) DeleteTemperatureController(_ context.Context, request gen.DeleteTemperatureControllerRequestObject) (gen.DeleteTemperatureControllerResponseObject, error) {
@@ -1492,6 +1487,13 @@ func (s *ReefPiServer) GetTemperatureUsage(_ context.Context, request gen.GetTem
 
 func toGenTC(tc *temperatureModule.TC) gen.TemperatureController {
 	return gen.TemperatureController{Id: &tc.ID, Name: tc.Name}
+}
+
+func fromGenTC(g gen.TemperatureController) *temperatureModule.TC {
+	out := new(temperatureModule.TC)
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, out) //nolint:errcheck
+	return out
 }
 
 // ---- System ----
