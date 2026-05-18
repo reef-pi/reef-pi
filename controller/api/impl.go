@@ -9,14 +9,19 @@ import (
 	"github.com/reef-pi/reef-pi/controller/storage"
 )
 
+// ServerConfig holds optional module controllers. Nil means the module is not loaded.
+type ServerConfig struct {
+	Equipment *equipmentModule.Controller
+}
+
 // ReefPiServer implements gen.StrictServerInterface for all migrated modules.
 type ReefPiServer struct {
 	equipment *equipmentModule.Controller
 }
 
-// NewReefPiServer constructs a ReefPiServer.
-func NewReefPiServer(equipment *equipmentModule.Controller) *ReefPiServer {
-	return &ReefPiServer{equipment: equipment}
+// NewReefPiServer constructs a ReefPiServer from the provided config.
+func NewReefPiServer(cfg ServerConfig) *ReefPiServer {
+	return &ReefPiServer{equipment: cfg.Equipment}
 }
 
 // isNotFound returns true when the error originates from a missing storage entity.

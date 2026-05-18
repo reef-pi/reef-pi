@@ -24,10 +24,10 @@ func (r *ReefPi) UnAuthenticatedAPI(router chi.Router) {
 // Authenticated API using the BasicAuth middleware
 func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
 	// Generated strict handler — handles all OpenAPI-migrated modules.
-	if r.equipment != nil {
-		apiServer := api.NewReefPiServer(r.equipment)
-		gen.HandlerWithOptions(gen.NewStrictHandler(apiServer, nil), gen.ChiServerOptions{BaseRouter: router})
-	}
+	apiServer := api.NewReefPiServer(api.ServerConfig{
+		Equipment: r.equipment,
+	})
+	gen.HandlerWithOptions(gen.NewStrictHandler(apiServer, nil), gen.ChiServerOptions{BaseRouter: router})
 
 	r.registerCoreAPI(router)
 	r.registerTelemetryAPI(router)
