@@ -11,7 +11,7 @@ export class RawNewATO extends React.Component {
       enable: false,
       inlet: '',
       period: 60,
-      add: false
+      add: !!props.initialAdd
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleToggle = this.handleToggle.bind(this)

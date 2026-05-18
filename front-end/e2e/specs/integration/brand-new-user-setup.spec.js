@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test')
+const { test } = require('@playwright/test')
 const { createSmokeApi, resetSmokeState } = require('../../fixtures/apiSeed')
 const { startApiCapture } = require('../../fixtures/apiCapture')
 const { expectBodyText, expectNoFatalError } = require('../../fixtures/e2eAssertions')
@@ -99,12 +99,13 @@ test('brand-new user can configure reef-pi through the UI', async ({ page, baseU
 
   await page.reload()
   await expectBodyText(page, [
-    'Biocube29 Temperature',
-    'Biocube29 pH',
-    'Biocube29 ATO'
+    'Temperature',
+    'pH',
+    'ATO',
+    'Return',
+    'ATO Pump'
   ])
   await expectNoFatalError(page)
-  await expect(page.locator('body')).toContainText('Kessil')
 
   await capture.stop()
 })

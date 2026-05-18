@@ -254,7 +254,7 @@ class ph extends React.Component {
           <EmptyState
             title='No pH probes yet'
             body='Add a probe to monitor and control reef pH.'
-            action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv }}
+            action={{ label: 'Add pH probe', onClick: this.handleToggleAddProbeDiv, testId: 'smoke-ph-add-toggle' }}
           />
         </div>
       )

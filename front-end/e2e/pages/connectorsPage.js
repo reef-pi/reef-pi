@@ -2,10 +2,18 @@ const { expect } = require('@playwright/test')
 const { expectValidationVisible } = require('../fixtures/e2eAssertions')
 
 async function selectByLabelOrValue (locator, value) {
-  try {
-    await locator.selectOption({ label: value })
-  } catch (_) {
+  const option = await locator.locator('option').evaluateAll((options, target) => {
+    const match = options.find(option => option.value === target || option.textContent.trim() === target)
+    if (!match) return null
+    return { value: match.value, label: match.textContent.trim() }
+  }, value)
+
+  if (option?.value === value) {
     await locator.selectOption(value)
+  } else if (option) {
+    await locator.selectOption({ label: option.label })
+  } else {
+    throw new Error(`Option '${value}' was not found`)
   }
 }
 
@@ -54,6 +62,9 @@ class ConnectorsPage {
     }
     await name.fill(jack.name)
     await this.page.getByTestId('smoke-jack-pins').fill(jack.pins)
+    if (jack.driver) {
+      await selectByLabelOrValue(this.page.getByTestId('smoke-jack-driver'), jack.driver)
+    }
     await this.page.getByTestId('smoke-jack-submit').click()
     await expect(this.page.locator('body')).toContainText(jack.name)
   }

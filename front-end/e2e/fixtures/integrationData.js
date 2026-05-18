@@ -21,8 +21,10 @@ const connectors = {
     { name: 'I3', pin: '27' }
   ],
   jacks: [
-    { name: 'J0', pins: '0' },
-    { name: 'J1', pins: '0,1' }
+    { name: 'J0', pins: '0', driver: 'pca9685' },
+    { name: 'J1', pins: '1', driver: 'pca9685' },
+    { name: 'J2', pins: '2', driver: 'pca9685' },
+    { name: 'J3', pins: '3', driver: 'pca9685' }
   ],
   analogInputs: [
     { name: 'AI1', pin: '0', driver: 'ph' },
@@ -51,7 +53,7 @@ const modules = {
     },
     {
       name: 'Kessil Interval',
-      jack: 'J0',
+      jack: 'J1',
       profile: 'interval',
       start: '10:00:00',
       end: '14:00:00',
@@ -59,7 +61,7 @@ const modules = {
     },
     {
       name: 'Kessil Diurnal',
-      jack: 'J0',
+      jack: 'J2',
       profile: 'diurnal',
       start: '06:00:00',
       end: '21:00:00'
@@ -70,7 +72,10 @@ const modules = {
     period: '5',
     analogInput: 'AI1',
     min: '7.5',
-    max: '8.5'
+    max: '8.5',
+    control: 'equipment',
+    lowerFunction: 'Heater',
+    upperFunction: 'Fan'
   },
   ato: {
     name: 'Biocube29 ATO',
@@ -80,8 +85,8 @@ const modules = {
   },
   doser: {
     name: 'Two Part - CaCO3',
-    jack: 'J1',
-    pin: '0',
+    jack: 'J3',
+    pin: '3',
     hour: '1,9,17',
     minute: '1',
     second: '1',

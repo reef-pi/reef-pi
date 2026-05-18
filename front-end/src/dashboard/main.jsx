@@ -225,10 +225,15 @@ export class RawDashboardMain extends React.Component {
       </div>
     )
 
+    if (this.state.showConfig) {
+      return legacyDashboard
+    }
+
     return (
       <DashboardV2
         equipment={this.props.equipment}
         onToggle={this.handleEquipmentToggle}
+        onConfigure={this.handleToggle}
         sseEndpoint='/api/alerts'
       >
         {legacyDashboard}

@@ -1,4 +1,5 @@
 const { expect } = require('@playwright/test')
+const { dismissAlertCenter } = require('../fixtures/e2eAssertions')
 
 class DashboardPage {
   constructor (page, navBar) {
@@ -11,7 +12,17 @@ class DashboardPage {
   }
 
   async configureStandardDashboard () {
-    await this.page.getByTestId('smoke-dashboard-configure').click()
+    await dismissAlertCenter(this.page)
+
+    const legacyConfigure = this.page.getByTestId('smoke-dashboard-configure')
+    if (await legacyConfigure.isVisible()) {
+      await legacyConfigure.click()
+    } else {
+      await this.page.getByRole('button', { name: 'System menu' }).click()
+      await this.page.getByRole('menuitem', { name: 'Configure' }).click()
+    }
+
+    await expect(this.page.locator('#to-row-row')).toBeVisible({ timeout: 5000 })
     await this.page.locator('#to-row-row').fill('3')
     await this.page.locator('#to-row-column').fill('2')
     await this.page.locator('#db-0-0').click()

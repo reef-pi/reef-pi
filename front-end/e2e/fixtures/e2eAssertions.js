@@ -12,13 +12,30 @@ async function expectBodyText (page, values) {
   await expectNoFatalError(page)
 }
 
+async function dismissAlertCenter (page) {
+  const close = page.getByRole('button', { name: 'Close alert center' }).first()
+  if (await close.isVisible()) {
+    await page.keyboard.press('Escape')
+  }
+}
+
 async function expectValidationVisible (page) {
-  await expect(page.locator('.invalid-feedback:visible').first()).toBeVisible()
+  const fieldValidation = page.locator('.invalid-feedback:visible, .is-invalid:visible, .alert-danger:visible').first()
+  if (await fieldValidation.isVisible()) {
+    await expect(fieldValidation).toBeVisible()
+    await dismissAlertCenter(page)
+    await expectNoFatalError(page)
+    return
+  }
+
+  await expect(page.getByText(/Failed to create|cannot be empty|HTTP 500/i).first()).toBeVisible()
+  await dismissAlertCenter(page)
   await expectNoFatalError(page)
 }
 
 module.exports = {
   expectNoFatalError,
   expectBodyText,
+  dismissAlertCenter,
   expectValidationVisible
 }

@@ -1,6 +1,10 @@
 const { expect } = require('@playwright/test')
 const { expectValidationVisible } = require('../fixtures/e2eAssertions')
-const { selectByLabelOrValue } = require('./connectorsPage')
+
+async function selectLightJack (page, jackName) {
+  await page.getByTestId('smoke-light-jack').click()
+  await page.locator(`#select-jack-${jackName}`).click()
+}
 
 class LightingPage {
   constructor (page, navBar) {
@@ -24,7 +28,7 @@ class LightingPage {
       await this.page.getByTestId('smoke-light-add-toggle').click()
     }
     await name.fill(light.name)
-    await selectByLabelOrValue(this.page.getByTestId('smoke-light-jack'), light.jack)
+    await selectLightJack(this.page, light.jack)
     await this.page.getByTestId('smoke-light-submit').click()
     await expect(this.page.locator('body')).toContainText(light.name)
   }

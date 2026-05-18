@@ -21,6 +21,7 @@ class DriversPage {
     const name = this.page.getByTestId('smoke-driver-name')
     if (!await name.isVisible()) {
       await this.page.getByTestId('smoke-driver-add-toggle').click()
+      await expect(name).toBeVisible({ timeout: 5000 })
     }
     await name.fill(driver.name)
     await this.page.getByTestId('smoke-driver-type').selectOption(driver.type)
@@ -37,6 +38,7 @@ class DriversPage {
 
     await this.page.getByTestId('smoke-driver-submit').click()
     await expect(this.page.locator('body')).toContainText(driver.name)
+    await expect(name).toBeHidden({ timeout: 5000 })
   }
 }
 
