@@ -15,6 +15,8 @@ import PropTypes from 'prop-types'
  */
 
 export default function EmptyState ({ icon, title, body, action }) {
+  const handleActionClick = action?.onClick
+
   return (
     <div
       role='status'
@@ -29,40 +31,47 @@ export default function EmptyState ({ icon, title, body, action }) {
       }}
     >
       {/* SVG illustration slot */}
-      <div style={{
-        width: '64px',
-        height: '64px',
-        marginBottom: '1.25rem',
-        color: 'var(--reefpi-color-border-strong)',
-        opacity: 0.35
-      }}>
+      <div
+        style={{
+          width: '64px',
+          height: '64px',
+          marginBottom: '1.25rem',
+          color: 'var(--reefpi-color-border-strong)',
+          opacity: 0.35
+        }}
+      >
         {icon ?? <DefaultIcon />}
       </div>
 
-      <div style={{
-        fontSize: '1rem',
-        fontWeight: 500,
-        color: 'var(--reefpi-color-text)',
-        marginBottom: '0.4rem'
-      }}>
+      <div
+        style={{
+          fontSize: '1rem',
+          fontWeight: 500,
+          color: 'var(--reefpi-color-text)',
+          marginBottom: '0.4rem'
+        }}
+      >
         {title}
       </div>
 
       {body && (
-        <div style={{
-          fontSize: '0.85rem',
-          color: 'var(--reefpi-color-text-muted)',
-          maxWidth: '28ch',
-          lineHeight: 1.5,
-          marginBottom: '1.5rem'
-        }}>
+        <div
+          style={{
+            fontSize: '0.85rem',
+            color: 'var(--reefpi-color-text-muted)',
+            maxWidth: '28ch',
+            lineHeight: 1.5,
+            marginBottom: '1.5rem'
+          }}
+        >
           {body}
         </div>
       )}
 
       {action && (
         <button
-          onClick={action.onClick}
+          onClick={handleActionClick}
+          data-testid={action.testId}
           style={{
             background: 'var(--reefpi-gradient-brand)',
             border: 'none',
@@ -144,6 +153,7 @@ EmptyState.propTypes = {
   body: PropTypes.string,
   action: PropTypes.shape({
     label: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    testId: PropTypes.string
   })
 }

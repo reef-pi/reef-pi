@@ -53,6 +53,7 @@ export class RawATOMain extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleReset = this.handleReset.bind(this)
+    this.handleToggleAddDiv = this.handleToggleAddDiv.bind(this)
   }
 
   componentDidMount () {
@@ -97,6 +98,10 @@ export class RawATOMain extends React.Component {
         this.props.reset(probe.id)
       }.bind(this)
     )
+  }
+
+  handleToggleAddDiv () {
+    this.setState({ add: !this.state.add })
   }
 
   handleDelete (probe) {
@@ -162,12 +167,25 @@ export class RawATOMain extends React.Component {
   }
 
   render () {
+    const newATO = (
+      <New
+        initialAdd={this.state.add}
+        inlets={this.props.inlets}
+        equipment={this.props.equipment}
+        macros={this.props.macros}
+      />
+    )
+
+    if (this.props.atos.length === 0 && this.state.add) {
+      return newATO
+    }
+
     if (this.props.atos.length === 0) {
       return (
         <EmptyState
           title='No ATO configured'
           body='Connect a water level sensor to automate top-off dosing.'
-          action={{ label: 'Add ATO', onClick: () => {} }}
+          action={{ label: 'Add ATO', onClick: this.handleToggleAddDiv, testId: 'smoke-ato-add-toggle' }}
         />
       )
     }
@@ -176,11 +194,7 @@ export class RawATOMain extends React.Component {
       <div>
         <ul className='list-group list-group-flush'>
           <CollapsibleList>{this.probeList()}</CollapsibleList>
-          <New
-            inlets={this.props.inlets}
-            equipment={this.props.equipment}
-            macros={this.props.macros}
-          />
+          {newATO}
         </ul>
       </div>
     )

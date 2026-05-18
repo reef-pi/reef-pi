@@ -66,7 +66,7 @@ export class RawEquipmentMain extends React.Component {
           icon={<EquipmentIcon />}
           title={i18next.t('equipment:no_equipment', 'No equipment yet')}
           body={i18next.t('equipment:no_equipment_body', 'Add your first pump, heater, or skimmer.')}
-          action={{ label: i18next.t('equipment:add', 'Add equipment'), onClick: this.handleToggleAddEquipmentDiv }}
+          action={{ label: i18next.t('equipment:add', 'Add equipment'), onClick: this.handleToggleAddEquipmentDiv, testId: 'smoke-equipment-add-toggle' }}
         />
       )
     }

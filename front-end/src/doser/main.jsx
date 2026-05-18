@@ -190,7 +190,7 @@ export class RawDoser extends React.Component {
           icon={<DoserIcon />}
           title='No dosing pumps yet'
           body='Add a pump to automate two-part, calcium, or kalkwasser dosing.'
-          action={{ label: 'Add dosing pump', onClick: this.handleToggleAddDoserDiv }}
+          action={{ label: 'Add dosing pump', onClick: this.handleToggleAddDoserDiv, testId: 'smoke-doser-add-toggle' }}
         />
       )
     }

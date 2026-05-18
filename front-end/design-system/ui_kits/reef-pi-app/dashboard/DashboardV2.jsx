@@ -47,6 +47,7 @@ function toTileAlert (a) {
 export default function DashboardV2 ({
   equipment,
   onToggle,
+  onConfigure,
   sseEndpoint,
   globalRange,
   targetAtoLevel,
@@ -63,17 +64,21 @@ export default function DashboardV2 ({
   const atoAlert = toTileAlert(firstAlertFor(alerts, 'ato.reservoir'))
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
-      padding: '1rem',
-      fontFamily: 'var(--reefpi-font-app)'
-    }}
-    data-testid='smoke-dashboard-v2'
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        padding: '1rem',
+        fontFamily: 'var(--reefpi-font-app)'
+      }}
+      data-testid='smoke-dashboard-v2'
     >
       {/* System strip — full width */}
-      <SystemStrip sseEndpoint={sseEndpoint} />
+      <SystemStrip
+        sseEndpoint={sseEndpoint}
+        onConfigure={onConfigure}
+      />
 
       {/* Primary metric row */}
       <div className='row' style={{ margin: 0, gap: '1rem', display: 'flex', flexWrap: 'wrap' }}>
@@ -101,6 +106,7 @@ export default function DashboardV2 ({
 DashboardV2.propTypes = {
   equipment: PropTypes.array,
   onToggle: PropTypes.func,
+  onConfigure: PropTypes.func,
   sseEndpoint: PropTypes.string,
   globalRange: PropTypes.string,
   targetAtoLevel: PropTypes.number,

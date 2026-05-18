@@ -170,7 +170,7 @@ export class RawMacroMain extends React.Component {
         <EmptyState
           title='No macros yet'
           body='Create a macro to run multiple equipment actions in sequence.'
-          action={{ label: 'Add macro', onClick: this.handleToggleAddMacroDiv }}
+          action={{ label: 'Add macro', onClick: this.handleToggleAddMacroDiv, testId: 'smoke-macro-add-toggle' }}
         />
       )
     }

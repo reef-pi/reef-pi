@@ -120,7 +120,7 @@ export class RawTimersMain extends React.Component {
           icon={<TimerIcon />}
           title='No timers yet'
           body='Schedule equipment on/off events by creating a timer.'
-          action={{ label: 'Add timer', onClick: this.handleToggleAddTimerDiv }}
+          action={{ label: 'Add timer', onClick: this.handleToggleAddTimerDiv, testId: 'smoke-timer-add-toggle' }}
         />
       )
     }

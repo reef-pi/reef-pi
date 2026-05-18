@@ -118,6 +118,7 @@ const EditTemperature = ({
               <label htmlFor='name'>{i18next.t('name')}</label>
               <Field
                 name='name'
+                data-testid='smoke-temperature-name'
                 disabled={readOnly}
                 className={classNames('form-control', {
                   'is-invalid': ShowError('name', touched, errors)
@@ -135,6 +136,7 @@ const EditTemperature = ({
               <Field
                 name='sensor'
                 component='select'
+                data-testid='smoke-temperature-sensor'
                 disabled={readOnly || values.analog_input !== ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('sensor', touched, errors)
@@ -193,6 +195,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='period'
+                  data-testid='smoke-temperature-period'
                   readOnly={readOnly}
                   type='number'
                   className={classNames('form-control', {
@@ -387,6 +390,7 @@ const EditTemperature = ({
               <Field
                 name='control'
                 component='select'
+                data-testid='smoke-temperature-control'
                 disabled={readOnly}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('control', touched, errors)
@@ -409,6 +413,7 @@ const EditTemperature = ({
               <Field
                 name='heater'
                 component='select'
+                data-testid='smoke-temperature-heater'
                 disabled={readOnly || values.control === ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('heater', touched, errors)
@@ -426,6 +431,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='min'
+                  data-testid='smoke-temperature-min'
                   readOnly={readOnly || values.control === '' || values.heater === undefined || values.heater === ''}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('min', touched, errors)
@@ -447,6 +453,7 @@ const EditTemperature = ({
               <Field
                 name='cooler'
                 component='select'
+                data-testid='smoke-temperature-cooler'
                 disabled={readOnly || values.control === ''}
                 className={classNames('custom-select', {
                   'is-invalid': ShowError('cooler', touched, errors)
@@ -464,6 +471,7 @@ const EditTemperature = ({
               <div className='input-group'>
                 <Field
                   name='max'
+                  data-testid='smoke-temperature-max'
                   readOnly={readOnly || values.control === '' || values.cooler === undefined || values.cooler === ''}
                   className={classNames('form-control', {
                     'is-invalid': ShowError('max', touched, errors)
@@ -506,6 +514,7 @@ const EditTemperature = ({
         <div className='col-12'>
           <input
             type='submit'
+            data-testid='smoke-temperature-submit'
             value={i18next.t('save')}
             disabled={readOnly}
             className='btn btn-sm btn-primary float-right mt-1'

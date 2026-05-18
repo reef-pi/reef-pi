@@ -315,7 +315,7 @@ class main extends React.Component {
           icon={<LightingIcon />}
           title='No lights configured'
           body='Add an LED fixture or light channel to automate your reef lighting schedule.'
-          action={{ label: 'Add light', onClick: this.handleToggleAddLightDiv }}
+          action={{ label: 'Add light', onClick: this.handleToggleAddLightDiv, testId: 'smoke-light-add-toggle' }}
         />
       )
     }
