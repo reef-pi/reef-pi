@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
-
 	"github.com/reef-pi/hal"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
@@ -18,18 +18,8 @@ var (
 	}
 )
 
-func (t *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/tcs", t.list)
-	r.Get("/api/tcs/sensors", t.sensors)
-	r.Put("/api/tcs", t.create)
-	r.Get("/api/tcs/{id}", t.get)
-	r.Get("/api/tcs/{id}/current_reading", t.currentReading)
-	r.Get("/api/tcs/{id}/read", t.read)
-	r.Post("/api/tcs/{id}", t.update)
-	r.Delete("/api/tcs/{id}", t.delete)
-	r.Get("/api/tcs/{id}/usage", t.getUsage)
-	r.Post("/api/tcs/{id}/calibrate", t.calibrate)
-}
+// LoadAPI is a no-op: temperature routes are owned by the generated OA3 handler in controller/api.
+func (t *Controller) LoadAPI(_ chi.Router) {}
 
 func (t *Controller) currentReading(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
@@ -110,6 +100,18 @@ func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
 func (t *Controller) getUsage(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) { return t.statsMgr.Get(id) }
 	utils.JSONGetResponse(fn, w, r)
+}
+
+func (t *Controller) Usage(id string) (telemetry.StatsResponse, error) {
+	return t.statsMgr.Get(id)
+}
+
+func (t *Controller) CurrentReading(id string) (float64, error) {
+	tc, err := t.Get(id)
+	if err != nil {
+		return 0, err
+	}
+	return tc.currentValue, nil
 }
 
 func (c *Controller) update(w http.ResponseWriter, r *http.Request) {

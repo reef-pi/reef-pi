@@ -1,14 +1,11 @@
 package camera
 
 import (
-	"bytes"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestCamera(t *testing.T) {
@@ -16,7 +13,6 @@ func TestCamera(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
 	c, err := New(true, con)
 	if err != nil {
 		t.Fatal(err)
@@ -24,23 +20,25 @@ func TestCamera(t *testing.T) {
 	if err := c.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	c.LoadAPI(tr.Router)
-	if err := tr.Do("GET", "/api/camera/config", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to get camera config using api. Error:", err)
-	}
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(&Default)
+
+	// GetConfig
+	_ = c.GetConfig()
+
+	// SaveConfig
 	c.Start()
-	if err := tr.Do("POST", "/api/camera/config", body, nil); err != nil {
-		t.Error("Failed to update camera config using api. Error:", err)
+	if err := c.SaveConfig(Default); err != nil {
+		t.Error("Failed to save camera config:", err)
 	}
 	c.Stop()
-	if err := tr.Do("POST", "/api/camera/shoot", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to photo shoot using api. Error:", err)
+
+	// Capture (shoot)
+	if _, err := c.Capture(); err != nil {
+		t.Error("Failed to capture image:", err)
 	}
 
-	if err := tr.Do("GET", "/api/camera/latest", new(bytes.Buffer), nil); err != nil {
-		t.Error("Failed to get latest image using api. Error:", err)
+	// GetLatest
+	if _, err := c.GetLatest(); err != nil {
+		t.Error("Failed to get latest image:", err)
 	}
 
 	cwd, err := os.Getwd()
@@ -63,9 +61,10 @@ func TestCamera(t *testing.T) {
 		}
 		break
 	}
-	body.Reset()
-	if err := tr.Do("GET", "/api/camera/list", body, nil); err != nil {
-		t.Error("Failed to list images using api. Error:", err)
+
+	// ListImages
+	if _, err := c.ListImages(); err != nil {
+		t.Error("Failed to list images:", err)
 	}
 
 	c.uploadImage(images[0])

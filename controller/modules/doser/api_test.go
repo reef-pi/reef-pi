@@ -1,16 +1,12 @@
 package doser
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"testing"
 
-	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
-
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
-	"github.com/reef-pi/reef-pi/controller/utils"
+	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 )
 
 func TestDoserAPI(t *testing.T) {
@@ -44,42 +40,48 @@ func TestDoserAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
 	if err := c.Setup(); err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
-	c.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
 
 	js, err := jacks.List()
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Println(js)
-	json.NewEncoder(body).Encode(&Pump{
+
+	pump := Pump{
 		Name: "Foo",
 		Pin:  0,
 		Jack: "1",
 		Regiment: DosingRegiment{
 			Schedule: Schedule{"*", "*", "*", "*", "*", "*"},
 		},
-	})
-	if err := tr.Do("PUT", "/api/doser/pumps", body, nil); err != nil {
-		t.Fatal("Failed to create dosing pump using api. Error:", err)
 	}
-	if err := tr.Do("GET", "/api/doser/pumps/1", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to delete get pump using api. Error:", err)
+	if err := c.Create(pump); err != nil {
+		t.Fatal("Create failed:", err)
 	}
-	body.Reset()
-	json.NewEncoder(body).Encode(&CalibrationDetails{Duration: 10, Volume: 25})
-	if err := tr.Do("POST", "/api/doser/pumps/1/calibrate/save", body, nil); err != nil {
-		t.Fatal("Failed to save dosing pump calibration using api. Error:", err)
+
+	pumps, err := c.List()
+	if err != nil {
+		t.Fatal("List failed:", err)
 	}
-	if err := tr.Do("GET", "/api/doser/pumps/1/usage", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to get dosing pump usage using api. Error:", err)
+	if len(pumps) == 0 {
+		t.Fatal("Expected at least one pump")
 	}
+	id := pumps[0].ID
+
+	if _, err := c.Get(id); err != nil {
+		t.Fatal("Get failed:", err)
+	}
+
+	c.SaveCalibrationResult(id, CalibrationDetails{Duration: 10, Volume: 25})
+
+	if _, err := c.Usage(id); err != nil {
+		t.Error("Usage failed:", err)
+	}
+
 	c.Start()
-	body.Reset()
 	regiment := DosingRegiment{
 		Schedule: Schedule{
 			Hour:   "*",
@@ -91,47 +93,31 @@ func TestDoserAPI(t *testing.T) {
 		},
 		Enable: true,
 	}
-	json.NewEncoder(body).Encode(&regiment)
-	if err := tr.Do("POST", "/api/doser/pumps/1/schedule", body, nil); err != nil {
-		t.Fatal("Failed to schedule dosing pump using api. Error:", err)
-	}
-	body.Reset()
-	json.NewEncoder(body).Encode(&CalibrationDetails{})
-	if err := tr.Do("POST", "/api/doser/pumps/1/calibrate", body, nil); err != nil {
-		t.Fatal("Failed to calibrate dosing pump using api. Error:", err)
-	}
-	if err := tr.Do("GET", "/api/doser/pumps", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to list dosing pumps using api. Error:", err)
-	}
-	body.Reset()
-	json.NewEncoder(body).Encode(&Pump{
-		Name: "Bar",
-		Pin:  1,
-		Jack: "1",
-		Regiment: DosingRegiment{
-			Schedule: Schedule{
-				Hour:   "*",
-				Minute: "*",
-				Day:    "*",
-				Second: "0",
-				Month:  "*",
-				Week:   "?",
-			},
-		},
-	})
-	if err := tr.Do("POST", "/api/doser/pumps/1", body, nil); err != nil {
-		t.Fatal("Failed to update dosing pump using api. Error:", err)
+	if err := c.Schedule(id, regiment); err != nil {
+		t.Fatal("Schedule failed:", err)
 	}
 
-	if err := c.On("1", true); err != nil {
+	if err := c.Calibrate(id, CalibrationDetails{}); err != nil {
+		t.Error("Calibrate:", err)
+	}
+
+	updated := pump
+	updated.Name = "Bar"
+	updated.Pin = 1
+	if err := c.Update(id, updated); err != nil {
+		t.Fatal("Update failed:", err)
+	}
+
+	if err := c.On(id, true); err != nil {
 		t.Error(err)
 	}
-	if err := tr.Do("DELETE", "/api/doser/pumps/1", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to delete dosing pump using api. Error:", err)
+
+	if err := c.Delete(id); err != nil {
+		t.Fatal("Delete failed:", err)
 	}
-	regimen := DosingRegiment{}
-	if err := c.Schedule("1", regimen); err == nil {
-		t.Errorf("Invalid dosing regimen should fail")
+
+	if err := c.Schedule(id, DosingRegiment{}); err == nil {
+		t.Errorf("Schedule on deleted pump should fail")
 	}
 	c.Stop()
 }

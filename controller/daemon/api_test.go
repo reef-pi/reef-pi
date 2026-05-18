@@ -23,10 +23,10 @@ type apiLoadCountingSubsystem struct {
 	loadCount int
 }
 
-func (s *apiLoadCountingSubsystem) Setup() error         { return nil }
-func (s *apiLoadCountingSubsystem) LoadAPI(r chi.Router) { s.loadCount++ }
-func (s *apiLoadCountingSubsystem) Start()               {}
-func (s *apiLoadCountingSubsystem) Stop()                {}
+func (s *apiLoadCountingSubsystem) Setup() error          { return nil }
+func (s *apiLoadCountingSubsystem) LoadAPI(r chi.Router)  { s.loadCount++ }
+func (s *apiLoadCountingSubsystem) Start()                {}
+func (s *apiLoadCountingSubsystem) Stop()                 {}
 func (s *apiLoadCountingSubsystem) On(string, bool) error { return nil }
 func (s *apiLoadCountingSubsystem) InUse(string, string) ([]string, error) {
 	return nil, nil

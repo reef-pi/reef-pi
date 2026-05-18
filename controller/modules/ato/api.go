@@ -5,18 +5,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/atos/{id}", c.get)
-	r.Get("/api/atos", c.list)
-	r.Put("/api/atos", c.create)
-	r.Post("/api/atos/{id}", c.update)
-	r.Delete("/api/atos/{id}", c.delete)
-	r.Get("/api/atos/{id}/usage", c.getUsage)
-	r.Post("/api/atos/{id}/reset", c.reset)
+func (c *Controller) Usage(id string) (telemetry.StatsResponse, error) {
+	return c.statsMgr.Get(id)
 }
+
+// LoadAPI is a no-op: ato routes are owned by the generated OA3 handler in controller/api.
+func (c *Controller) LoadAPI(_ chi.Router) {}
 
 func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 

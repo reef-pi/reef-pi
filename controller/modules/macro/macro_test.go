@@ -1,13 +1,9 @@
 package macro
 
 import (
-	"bytes"
-	"encoding/json"
-	"strings"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestMacro(t *testing.T) {
@@ -19,10 +15,10 @@ func TestMacro(t *testing.T) {
 	}
 	s, err := New(true, c)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	if err := s.Setup(); err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	// On with b=false is always a no-op (water-full signal, nothing to run)
 	if err := s.On("", false); err != nil {
@@ -33,40 +29,39 @@ func TestMacro(t *testing.T) {
 		t.Error("On(true) with invalid macro ID should return an error")
 	}
 	s.Start()
-	tr := utils.NewTestRouter()
-	s.LoadAPI(tr.Router)
+
 	steps := []Step{
 		{Type: "equipment", Config: []byte("{}")},
 	}
 	m := Macro{Name: "Foo", Steps: steps}
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(m)
-	if err := tr.Do("PUT", "/api/macros", body, nil); err != nil {
-		t.Error("Failed to create ato using api. Error:", err)
+	if err := s.Create(m); err != nil {
+		t.Fatal("Create failed:", err)
 	}
-	body.Reset()
-	json.NewEncoder(body).Encode(m)
-	if err := tr.Do("POST", "/api/macros/1", body, nil); err != nil {
-		t.Error("Failed to update ato using api. Error:", err)
+
+	macros, err := s.List()
+	if err != nil {
+		t.Fatal("List failed:", err)
 	}
-	body.Reset()
-	if err := tr.Do("GET", "/api/macros/1", body, nil); err != nil {
-		t.Error("Failed to get using api. Error:", err)
+	if len(macros) != 1 {
+		t.Fatalf("Expected 1 macro, got %d", len(macros))
 	}
-	m.ID = "1"
-	if err := s.Run(m, false); err != nil {
-		t.Error(err)
+	id := macros[0].ID
+
+	got, err := s.Get(id)
+	if err != nil {
+		t.Fatal("Get failed:", err)
 	}
-	if err := tr.Do("GET", "/api/macros", strings.NewReader(`{}`), nil); err != nil {
-		t.Error("Failed to list macros using api. Error:", err)
+	got.Name = "Bar"
+	if err := s.Update(id, got); err != nil {
+		t.Fatal("Update failed:", err)
 	}
-	body.Reset()
-	if err := tr.Do("POST", "/api/macros/1/run", strings.NewReader(`{}`), nil); err != nil {
-		t.Error("Failed to run  macro using api. Error:", err)
+
+	if err := s.Run(got, false); err != nil {
+		t.Error("Run failed:", err)
 	}
-	body.Reset()
-	if err := tr.Do("DELETE", "/api/macros/1", body, nil); err != nil {
-		t.Error("Failed to delete macro using api. Error:", err)
+
+	if err := s.Delete(id); err != nil {
+		t.Fatal("Delete failed:", err)
 	}
 	s.Stop()
 }
@@ -137,9 +132,6 @@ func TestMacroRevertAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	tr := utils.NewTestRouter()
-	s.LoadAPI(tr.Router)
-
 	steps := []Step{
 		{Type: "equipment", Config: []byte(`{"id":"1","on":true}`)},
 	}
@@ -148,8 +140,15 @@ func TestMacroRevertAPI(t *testing.T) {
 		t.Fatal("Failed to create macro:", err)
 	}
 
-	if err := tr.Do("POST", "/api/macros/1/revert", strings.NewReader("{}"), nil); err != nil {
-		t.Error("revert API failed:", err)
+	macros, err := s.List()
+	if err != nil {
+		t.Fatal("List failed:", err)
+	}
+	if len(macros) == 0 {
+		t.Fatal("Expected at least one macro")
+	}
+	if err := s.Run(macros[0], true); err != nil {
+		t.Error("revert failed:", err)
 	}
 }
 

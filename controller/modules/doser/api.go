@@ -5,20 +5,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (c *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/doser/pumps", c.list)
-	r.Get("/api/doser/pumps/{id}", c.get)
-	r.Put("/api/doser/pumps", c.create)
-	r.Post("/api/doser/pumps/{id}", c.update)
-	r.Delete("/api/doser/pumps/{id}", c.delete)
-	r.Get("/api/doser/pumps/{id}/usage", c.getUsage)
-	r.Post("/api/doser/pumps/{id}/calibrate", c.calibrate)
-	r.Post("/api/doser/pumps/{id}/calibrate/save", c.calibrateSave)
-	r.Post("/api/doser/pumps/{id}/schedule", c.schedule)
+func (c *Controller) Usage(id string) (telemetry.StatsResponse, error) {
+	return c.statsMgr.Get(id)
 }
+
+// LoadAPI is a no-op: doser routes are owned by the generated OA3 handler in controller/api.
+func (c *Controller) LoadAPI(_ chi.Router) {}
 
 func (c *Controller) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {

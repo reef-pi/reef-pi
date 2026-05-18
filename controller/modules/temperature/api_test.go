@@ -1,15 +1,13 @@
 package temperature
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/hal"
+
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/modules/equipment"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestTemperatureAPI(t *testing.T) {
@@ -65,50 +63,34 @@ func TestTemperatureAPI(t *testing.T) {
 		},
 	}
 	c.Start()
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(&tc)
-	if err := tr.Do("PUT", "/api/tcs", body, nil); err != nil {
-		t.Fatal("Failed to create temperature controller config using api")
+	if err := c.Create(tc); err != nil {
+		t.Fatal("Failed to create temperature controller config:", err)
 	}
-	body.Reset()
-	json.NewEncoder(body).Encode(&tc)
-	if err := tr.Do("POST", "/api/tcs/1", body, nil); err != nil {
-		t.Fatal("Failed to update temperature controller config using api")
+	if err := c.Update("1", tc); err != nil {
+		t.Fatal("Failed to update temperature controller config:", err)
 	}
-	if err := tr.Do("GET", "/api/tcs/1", new(bytes.Buffer), &tc); err != nil {
-		t.Fatal("Failed to get temperature controller config using api")
+	got, err := c.Get("1")
+	if err != nil {
+		t.Fatal("Failed to get temperature controller config:", err)
 	}
 
 	if err := c.On("1", true); err != nil {
 		t.Error(err)
 	}
 	c.Stop()
-	c.Start()
-	tc.loadHomeostasis(con)
-	c.Check(tc)
-	u := controller.Observation{
-		Value: 67,
-	}
-	c.Check(tc)
-	u.Value = 83
-	c.Check(tc)
-	u.Value = 70
-	c.Check(tc)
-	u.Value = 79
-	c.Check(tc)
+	got.loadHomeostasis(con)
+	c.Check(got)
+	c.Check(got)
+	c.Check(got)
+	c.Check(got)
+	c.Check(got)
 
-	if err := tr.Do("GET", "/api/tcs/1/usage", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to get temperature controller usage using api")
+	if _, err := c.Usage("1"); err != nil {
+		t.Fatal("Failed to get temperature controller usage:", err)
 	}
 
-	var sensors []TC
-	if err := tr.Do("GET", "/api/tcs/sensors", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to list temperature sensors using api", err)
-	}
-	if err := tr.Do("GET", "/api/tcs", new(bytes.Buffer), &sensors); err != nil {
-		t.Fatal("Failed to list temperature controller config using api")
+	if _, err := c.List(); err != nil {
+		t.Fatal("Failed to list temperature controllers:", err)
 	}
 
 	inUse, err := c.IsEquipmentInUse("1")
@@ -125,15 +107,16 @@ func TestTemperatureAPI(t *testing.T) {
 	if inUse {
 		t.Error("Equipment should not be in use")
 	}
-	if err := tr.Do("GET", "/api/tcs/1/current_reading", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to get current reading using api")
+
+	if _, err := c.CurrentReading("1"); err != nil {
+		t.Fatal("Failed to get current reading:", err)
 	}
-	if err := tr.Do("GET", "/api/tcs/1/read", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to read tc using api")
+	if _, err := c.Read(got); err != nil {
+		t.Fatal("Failed to read tc:", err)
 	}
 
-	if err := tr.Do("DELETE", "/api/tcs/1", new(bytes.Buffer), nil); err != nil {
-		t.Fatal("Failed to delete temperature controller config using api")
+	if err := c.Delete("1"); err != nil {
+		t.Fatal("Failed to delete temperature controller config:", err)
 	}
 	c.Stop()
 }
@@ -151,19 +134,12 @@ func TestTemperatureCalibrateAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
-
 	measurements := []hal.Measurement{
 		{Expected: 77, Observed: 76},
 		{Expected: 82, Observed: 80},
 	}
-	body := new(bytes.Buffer)
-	if err := json.NewEncoder(body).Encode(measurements); err != nil {
-		t.Fatal(err)
-	}
-	if err := tr.Do("POST", "/api/tcs/1/calibrate", body, nil); err != nil {
-		t.Fatal("failed to calibrate temperature controller using api:", err)
+	if err := c.Calibrate("1", measurements); err != nil {
+		t.Fatal("failed to calibrate temperature controller:", err)
 	}
 	if _, ok := c.calibrators[tc.Sensor]; !ok {
 		t.Fatal("expected calibrator to be registered")

@@ -1,16 +1,12 @@
 package lighting
 
 import (
-	"bytes"
-	"encoding/json"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestLightingAPI(t *testing.T) {
@@ -41,8 +37,6 @@ func TestLightingAPI(t *testing.T) {
 	if err := c.Setup(); err != nil {
 		t.Fatal("Failed to setup lighting controller")
 	}
-	tr := utils.NewTestRouter()
-	c.LoadAPI(tr.Router)
 	c.Start()
 	time.Sleep(2 * time.Second)
 	c.Stop()
@@ -59,7 +53,6 @@ func TestLightingAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	channels := make(map[int]*Channel)
-
 	channels[1] = &Channel{
 		Name:   "ch1",
 		Min:    12,
@@ -70,35 +63,34 @@ func TestLightingAPI(t *testing.T) {
 		Name:     "Foo",
 		Channels: channels,
 	}
-	body := new(bytes.Buffer)
-	enc := json.NewEncoder(body)
-	enc.Encode(l)
-	if err := tr.Do("PUT", "/api/lights", body, nil); err != nil {
-		t.Fatal("Failed to create light using api")
+	if err := c.Create(l); err != nil {
+		t.Fatal("Failed to create light:", err)
 	}
-	var lights []Light
-	if err := tr.Do("GET", "/api/lights", strings.NewReader("{}"), &lights); err != nil {
-		t.Fatal("Failed to light using api")
+	lights, err := c.List()
+	if err != nil {
+		t.Fatal("Failed to list lights:", err)
 	}
-	body.Reset()
-	if err := tr.Do("GET", "/api/lights/1", body, nil); err != nil {
-		t.Fatal("get light using api")
+	if len(lights) == 0 {
+		t.Fatal("Expected at least one light")
 	}
-	body.Reset()
-	enc.Encode(l)
-	if err := tr.Do("POST", "/api/lights/1", body, nil); err != nil {
-		t.Fatal("update light using api")
+	id := lights[0].ID
+
+	if _, err := c.Get(id); err != nil {
+		t.Fatal("Failed to get light:", err)
 	}
-	c.Setup()
-	body.Reset()
+	if err := c.Update(id, l); err != nil {
+		t.Fatal("Failed to update light:", err)
+	}
+
+	c.Setup() //nolint:errcheck
 	ch, _ := channels[1]
 	l.Channels[1] = ch
-	c.UpdateChannel("1", *ch, 10)
-	if err := c.On("1", true); err != nil {
+	c.UpdateChannel(id, *ch, 10)
+	if err := c.On(id, true); err != nil {
 		t.Error(err)
 	}
-	if err := tr.Do("DELETE", "/api/lights/1", body, nil); err != nil {
-		t.Fatal("Delete light using api")
+	if err := c.Delete(id); err != nil {
+		t.Fatal("Delete light failed:", err)
 	}
 
 	l.Name = ""

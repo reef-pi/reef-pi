@@ -19,20 +19,50 @@ type InstallReq struct {
 }
 
 func (c *Controller) LoadAPI(r chi.Router) {
-	r.Post("/api/display/on", c.EnableDisplay)
-	r.Post("/api/display/off", c.DisableDisplay)
-	r.Post("/api/display", c.SetBrightness)
-	r.Get("/api/display", c.GetDisplayState)
-	r.Post("/api/admin/poweroff", c.Poweroff)
-	r.Post("/api/admin/reboot", c.Reboot)
-	r.Post("/api/admin/reload", c.reload)
-	r.Post("/api/admin/upgrade", c.upgrade)
+	// Display and admin routes are migrated to OA3; keep only routes not yet migrated.
 	r.Get("/api/admin/reef-pi.db", c.dbExport)
 	r.Post("/api/admin/reef-pi.db", c.dbImport)
 	r.Get("/api/info", c.GetSummary)
 	if c.config.Pprof {
 		c.enablePprof(r)
 	}
+}
+
+func (c *Controller) CurrentDisplayState() (DisplayState, error) {
+	if !c.config.Display {
+		return DisplayState{}, nil
+	}
+	return c.currentDisplayState()
+}
+
+func (c *Controller) EnableDisplayPublic() error      { return c.enableDisplay() }
+func (c *Controller) DisableDisplayPublic() error     { return c.disableDisplay() }
+func (c *Controller) SetBrightnessPublic(b int) error { return c.setBrightness(b) }
+
+func (c *Controller) SystemPoweroff() {
+	go func() {
+		time.Sleep(2 * time.Second)
+		utils.Command("/bin/systemctl", "poweroff").WithDevMode(c.config.DevMode).CombinedOutput() //nolint:errcheck
+	}()
+}
+
+func (c *Controller) SystemReboot() {
+	go func() {
+		time.Sleep(2 * time.Second)
+		utils.Command("/bin/systemctl", "reboot").WithDevMode(c.config.DevMode).CombinedOutput() //nolint:errcheck
+	}()
+}
+
+func (c *Controller) SystemReload() error {
+	out, err := utils.Command("/bin/systemctl", "restart", "reef-pi.service").WithDevMode(c.config.DevMode).CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to reload reef-pi. Output: %s. Error: %w", string(out), err)
+	}
+	return nil
+}
+
+func (c *Controller) SystemUpgrade(version string) error {
+	return utils.SystemdExecute("reef-pi-install.service", "/usr/bin/reef-pi install -version "+version, false)
 }
 
 func (c *Controller) enablePprof(r chi.Router) {

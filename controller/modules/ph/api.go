@@ -7,20 +7,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/reef-pi/reef-pi/controller/telemetry"
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (e *Controller) LoadAPI(r chi.Router) {
-	r.Get("/api/phprobes/{id}", e.getProbe)
-	r.Get("/api/phprobes", e.listProbes)
-	r.Put("/api/phprobes", e.createProbe)
-	r.Post("/api/phprobes/{id}", e.updateProbe)
-	r.Delete("/api/phprobes/{id}", e.deleteProbe)
-	r.Get("/api/phprobes/{id}/readings", e.getReadings)
-	r.Post("/api/phprobes/{id}/calibrate", e.calibrate)
-	r.Get("/api/phprobes/{id}/read", e.read)
-	r.Post("/api/phprobes/{id}/calibratepoint", e.calibratePoint)
+func (c *Controller) Readings(id string) (telemetry.StatsResponse, error) {
+	return c.statsMgr.Get(id)
 }
+
+// LoadAPI is a no-op: ph routes are owned by the generated OA3 handler in controller/api.
+func (e *Controller) LoadAPI(_ chi.Router) {}
 
 func (c *Controller) calibrate(w http.ResponseWriter, r *http.Request) {
 	var ms []hal.Measurement
