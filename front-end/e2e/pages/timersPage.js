@@ -33,6 +33,11 @@ class TimersPage {
     await expect(nameInput).toBeHidden({ timeout: 5000 })
   }
 
+  async submitInvalidTimer () {
+    await this.page.getByTestId('smoke-timer-submit').click()
+    await expectValidationVisible(this.page)
+  }
+
   async fillSchedule (hour, minute, second) {
     await this.page.getByTestId('smoke-cron-hour').fill(hour)
     await this.page.getByTestId('smoke-cron-minute').fill(minute)
@@ -65,6 +70,32 @@ class TimersPage {
     await selectByLabelOrValue(this.page.locator('[name="target.id"]'), macroName)
     await this.fillSchedule('12', '30', '0')
     await this.submitTimer(name, nameInput)
+  }
+
+  async createModuleTimer (name, type, targetName, schedule = ['6', '45', '0']) {
+    const nameInput = await this.openAddForm()
+    await nameInput.fill(name)
+    await this.page.getByTestId('smoke-timer-type').selectOption(type)
+    await selectByLabelOrValue(this.page.locator('[name="target.id"]'), targetName)
+    await this.fillSchedule(...schedule)
+    await this.submitTimer(name, nameInput)
+  }
+
+  async expectMissingTargetValidation () {
+    const nameInput = await this.openAddForm()
+    await nameInput.fill('Missing Target Timer')
+    await this.page.getByTestId('smoke-timer-type').selectOption('equipment')
+    await this.fillSchedule('7', '0', '0')
+    await this.submitInvalidTimer()
+  }
+
+  async expectMissingCronValidation (equipmentName) {
+    const nameInput = await this.openAddForm()
+    await nameInput.fill('Missing Cron Timer')
+    await this.page.getByTestId('smoke-timer-type').selectOption('equipment')
+    await selectByLabelOrValue(this.page.locator('[name="target.id"]'), equipmentName)
+    await this.fillSchedule('7', '15', '')
+    await this.submitInvalidTimer()
   }
 }
 

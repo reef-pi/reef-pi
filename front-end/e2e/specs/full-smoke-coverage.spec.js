@@ -2,6 +2,16 @@ const { test, expect } = require('@playwright/test')
 const { createSmokeApi, seedFullSmokeConfiguration } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 
+async function expectSavedDashboardTypes (page, types) {
+  const response = await page.request.get('/api/dashboard')
+  await expect(response).toBeOK()
+  const dashboard = await response.json()
+  const savedTypes = (dashboard.grid_details || []).flat().map(cell => cell.type)
+  for (const type of types) {
+    expect(savedTypes).toContain(type)
+  }
+}
+
 async function expectNoFatalError (page) {
   await expect(page.getByText('Something went wrong')).toHaveCount(0)
 }
@@ -49,6 +59,7 @@ test('full smoke configuration covers the major reef-pi modules', async ({ page,
   await page.goto('/')
   await navBar.expectShell()
   await expectDashboardSmokeContent(page)
+  await expectSavedDashboardTypes(page, ['lights', 'health'])
 
   await navBar.open('configuration')
   await page.locator('#config-drivers').click()

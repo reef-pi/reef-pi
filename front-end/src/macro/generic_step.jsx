@@ -44,7 +44,7 @@ export const RawGenericStep = ({ type, name, readOnly, touched, errors, ...props
           component={BooleanSelect}
           disabled={readOnly}
           className={classNames('form-control custom-select', {
-            'is-invalid': ShowError(`${name}.id`, touched, errors)
+            'is-invalid': ShowError(`${name}.on`, touched, errors)
           })}
         >
           <option value='' className='d-none'>-- {i18n.t('select')} --</option>
