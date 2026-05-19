@@ -34,6 +34,7 @@ const EditStepper = ({
           <label htmlFor='step_pin'>{i18n.t('doser:step_pin')}</label>
           <Field
             name='stepper.step_pin'
+            data-testid='smoke-doser-step-pin'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {
@@ -52,6 +53,7 @@ const EditStepper = ({
           <label htmlFor='direction_pin'>{i18n.t('doser:direction_pin')}</label>
           <Field
             name='stepper.direction_pin'
+            data-testid='smoke-doser-direction-pin'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {
@@ -70,6 +72,7 @@ const EditStepper = ({
           <label htmlFor='ms_pin_a'>{i18n.t('doser:ms_pin_a')}</label>
           <Field
             name='stepper.ms_pin_a'
+            data-testid='smoke-doser-ms-pin-a'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {
@@ -88,6 +91,7 @@ const EditStepper = ({
           <label htmlFor='ms_pin_b'>{i18n.t('doser:ms_pin_b')}</label>
           <Field
             name='stepper.ms_pin_b'
+            data-testid='smoke-doser-ms-pin-b'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {
@@ -106,6 +110,7 @@ const EditStepper = ({
           <label htmlFor='ms_pin_c'>{i18n.t('doser:ms_pin_c')}</label>
           <Field
             name='stepper.ms_pin_c'
+            data-testid='smoke-doser-ms-pin-c'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {
@@ -124,6 +129,7 @@ const EditStepper = ({
           <label htmlFor='spr'>{i18n.t('doser:spr')}</label>
           <Field
             name='stepper.spr'
+            data-testid='smoke-doser-spr'
             disabled={readOnly}
             type='number'
             className={classNames('form-control', {
@@ -139,6 +145,7 @@ const EditStepper = ({
           <label htmlFor='vpr'>{i18n.t('doser:vpr')}</label>
           <Field
             name='stepper.vpr'
+            data-testid='smoke-doser-vpr'
             disabled={readOnly}
             type='number'
             className={classNames('form-control', {
@@ -154,13 +161,14 @@ const EditStepper = ({
           <label htmlFor='delay'>{i18n.t('doser:delay')}</label>
           <Field
             name='stepper.delay'
+            data-testid='smoke-doser-delay'
             disabled={readOnly}
             type='number'
             className={classNames('form-control', {
               'is-invalid': ShowError('stepper.delay', touched, errors)
             })}
           />
-          <ErrorFor errors={errors} touched={touched} name='stepper.vpr' />
+          <ErrorFor errors={errors} touched={touched} name='stepper.delay' />
         </div>
       </div>
 
@@ -169,6 +177,7 @@ const EditStepper = ({
           <label htmlFor='direction'>{i18n.t('doser:direction')}</label>
           <Field
             name='stepper.direction'
+            data-testid='smoke-doser-direction'
             disabled={readOnly}
             component={BooleanSelect}
             className={classNames('custom-select', {
@@ -187,6 +196,7 @@ const EditStepper = ({
           <label htmlFor='microstepping'>{i18n.t('doser:microstepping')}</label>
           <Field
             name='stepper.microstepping'
+            data-testid='smoke-doser-microstepping'
             disabled={readOnly}
             component='select'
             className={classNames('custom-select', {

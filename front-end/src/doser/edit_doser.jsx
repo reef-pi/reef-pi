@@ -93,6 +93,7 @@ const EditDoser = ({
             <label htmlFor='volume'>{i18next.t('doser:volume')}</label>
             <Field
               name='volume'
+              data-testid='smoke-doser-volume'
               readOnly={readOnly}
               type='number'
               className={classNames('form-control', {

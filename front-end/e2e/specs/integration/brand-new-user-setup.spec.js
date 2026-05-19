@@ -1,4 +1,4 @@
-const { test } = require('@playwright/test')
+const { test, expect } = require('@playwright/test')
 const { createSmokeApi, resetSmokeState } = require('../../fixtures/apiSeed')
 const { startApiCapture } = require('../../fixtures/apiCapture')
 const { expectBodyText, expectNoFatalError } = require('../../fixtures/e2eAssertions')
@@ -16,6 +16,39 @@ const { TemperaturePage } = require('../../pages/temperaturePage')
 const { TimersPage } = require('../../pages/timersPage')
 const { MacrosPage } = require('../../pages/macrosPage')
 const { DashboardPage } = require('../../pages/dashboardPage')
+
+async function expectLightProfiles (page, expectedLights) {
+  const response = await page.request.get('/api/lights')
+  await expect(response).toBeOK()
+  const lights = await response.json()
+
+  for (const expected of expectedLights) {
+    const light = lights.find(item => item.name === expected.name)
+    expect(light).toBeTruthy()
+    const channel = Object.values(light.channels)[0]
+    expect(channel.profile.type).toBe(expected.profile)
+    expect(channel.profile.config.start).toBe(expected.start)
+    expect(channel.profile.config.end).toBe(expected.end)
+    if (expected.value !== undefined) {
+      expect(String(channel.profile.config.value)).toBe(expected.value)
+    }
+    if (expected.values !== undefined) {
+      expect(channel.profile.config.values.map(String)).toEqual(expected.values)
+    }
+  }
+}
+
+async function expectDoserTypes (page, expectedDosers) {
+  const response = await page.request.get('/api/doser/pumps')
+  await expect(response).toBeOK()
+  const dosers = await response.json()
+
+  for (const expected of expectedDosers) {
+    const doser = dosers.find(item => item.name === expected.name)
+    expect(doser).toBeTruthy()
+    expect(doser.type).toBe(expected.type)
+  }
+}
 
 test('brand-new user can configure reef-pi through the UI', async ({ page, baseURL }) => {
   const api = await createSmokeApi(baseURL)
@@ -65,6 +98,7 @@ test('brand-new user can configure reef-pi through the UI', async ({ page, baseU
     await lightingPage.open()
     await lightingPage.expectValidation()
     for (const light of modules.lights) await lightingPage.create(light)
+    await expectLightProfiles(page, modules.lights)
 
     await phPage.open()
     await phPage.expectValidation()
@@ -77,6 +111,11 @@ test('brand-new user can configure reef-pi through the UI', async ({ page, baseU
     await doserPage.open()
     await doserPage.expectValidation()
     await doserPage.createDcPump(modules.doser)
+    await doserPage.createStepper(modules.stepperDoser)
+    await expectDoserTypes(page, [
+      { name: modules.doser.name, type: 'dcpump' },
+      { name: modules.stepperDoser.name, type: 'stepper' }
+    ])
 
     await temperaturePage.open()
     await temperaturePage.expectValidation()

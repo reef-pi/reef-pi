@@ -1441,7 +1441,11 @@ func (s *ReefPiServer) ListTemperatureSensors(_ context.Context, _ gen.ListTempe
 	if s.temperature == nil {
 		return gen.ListTemperatureSensors401JSONResponse{Message: "temperature subsystem not loaded"}, nil
 	}
-	return gen.ListTemperatureSensors200JSONResponse{}, nil
+	sensors, err := s.temperature.Sensors()
+	if err != nil {
+		return gen.ListTemperatureSensors401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.ListTemperatureSensors200JSONResponse(sensors), nil
 }
 
 func (s *ReefPiServer) GetCurrentTemperature(_ context.Context, request gen.GetCurrentTemperatureRequestObject) (gen.GetCurrentTemperatureResponseObject, error) {
