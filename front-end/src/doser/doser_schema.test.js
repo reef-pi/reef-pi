@@ -6,7 +6,7 @@ describe('DoserValidation', () => {
   beforeEach(() => {
     basicDoser = {
       name: 'dosername',
-      type: '',
+      type: 'dcpump',
       jack: '',
       pin: '',
 
@@ -23,18 +23,20 @@ describe('DoserValidation', () => {
         microstepping: ''
       },
       enable: true,
+      continuous: false,
+      duration: 1,
       speed: 2,
       month: '1',
       week: '1',
       day: '1',
       hour: '1',
       minute: '1',
-      second: '1',
+      second: '1'
     }
   })
 
   it('should be valid', () => {
-    DoserSchema.validate(basicDoser, {abortEarly: false})
+    return DoserSchema.validate(basicDoser, { abortEarly: false })
   })
 
   it('allows for some complicated invocations', () => {
@@ -44,16 +46,16 @@ describe('DoserValidation', () => {
       day: 'L',
       hour: '4',
       minute: '49',
-      second: '0',
+      second: '0'
     }
     const repeatedDoser = { ...basicDoser, doserUpdates }
-    DoserSchema.validate(repeatedDoser, {abortEarly: false})
+    DoserSchema.validate(repeatedDoser, { abortEarly: false })
 
     const doserUpdateWithW = { ...repeatedDoser, day: '12W' }
-    DoserSchema.validate(doserUpdateWithW, {abortEarly: false})
+    DoserSchema.validate(doserUpdateWithW, { abortEarly: false })
 
-    const doserUpdateWithMultiComplicated = { ...repeatedDoser,  day: '1,12W' }
-    DoserSchema.validate(doserUpdateWithMultiComplicated, {abortEarly: false})
+    const doserUpdateWithMultiComplicated = { ...repeatedDoser, day: '1,12W' }
+    DoserSchema.validate(doserUpdateWithMultiComplicated, { abortEarly: false })
   })
 
   it('allows * for timings', () => {
@@ -63,11 +65,11 @@ describe('DoserValidation', () => {
       day: '1',
       hour: '0',
       minute: '0',
-      second: '0',
+      second: '0'
     }
     const repeatedDoser = { ...basicDoser, ...doserUpdates }
 
-    DoserSchema.validate(repeatedDoser, {abortEarly: false})
+    DoserSchema.validate(repeatedDoser, { abortEarly: false })
   })
 
   it('allows */N interval notation (regression #1978)', () => {
@@ -79,7 +81,7 @@ describe('DoserValidation', () => {
       hour: '*',
       day: '*',
       month: '*',
-      week: '*',
+      week: '*'
     }
     return DoserSchema.isValid(doser).then(valid => expect(valid).toBe(true))
   })
@@ -137,6 +139,30 @@ describe('DoserValidation', () => {
         'duration',
         'speed'
       ])))
+  })
+
+  it('allows a stepper doser without dc pump duration and speed', () => {
+    expect.assertions(1)
+    const doser = {
+      ...basicDoser,
+      type: 'stepper',
+      volume: 5,
+      duration: 0,
+      speed: 0,
+      stepper: {
+        direction_pin: '2',
+        step_pin: '1',
+        ms_pin_a: '3',
+        ms_pin_b: '4',
+        ms_pin_c: '5',
+        spr: 200,
+        delay: 1000,
+        vpr: 1.5,
+        direction: true,
+        microstepping: 'Full'
+      }
+    }
+    return DoserSchema.isValid(doser).then(valid => expect(valid).toBe(true))
   })
 
 })

@@ -61,25 +61,29 @@ func (c *Controller) list(w http.ResponseWriter, r *http.Request) {
 
 func (t *Controller) sensors(w http.ResponseWriter, r *http.Request) {
 	fn := func(id string) (interface{}, error) {
-		fs := mockSensors
-		if !t.devMode {
-			files28, err := filepath.Glob("/sys/bus/w1/devices/28-*")
-			if err != nil {
-				return nil, err
-			}
-			files10, err := filepath.Glob("/sys/bus/w1/devices/10-*")
-			if err != nil {
-				return nil, err
-			}
-			fs = append(files28, files10...)
-		}
-		sensors := []string{}
-		for _, f := range fs {
-			sensors = append(sensors, filepath.Base(f))
-		}
-		return sensors, nil
+		return t.Sensors()
 	}
 	utils.JSONGetResponse(fn, w, r)
+}
+
+func (t *Controller) Sensors() ([]string, error) {
+	fs := mockSensors
+	if !t.devMode {
+		files28, err := filepath.Glob("/sys/bus/w1/devices/28-*")
+		if err != nil {
+			return nil, err
+		}
+		files10, err := filepath.Glob("/sys/bus/w1/devices/10-*")
+		if err != nil {
+			return nil, err
+		}
+		fs = append(files28, files10...)
+	}
+	sensors := []string{}
+	for _, f := range fs {
+		sensors = append(sensors, filepath.Base(f))
+	}
+	return sensors, nil
 }
 
 func (c *Controller) create(w http.ResponseWriter, r *http.Request) {

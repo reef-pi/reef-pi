@@ -93,6 +93,23 @@ const modules = {
     duration: '15',
     speed: '50'
   },
+  stepperDoser: {
+    name: 'Stepper Alk',
+    volume: '5',
+    hour: '2',
+    minute: '15',
+    second: '0',
+    stepPin: 'O1',
+    directionPin: 'O2',
+    msPinA: 'O3',
+    msPinB: 'O4',
+    msPinC: 'O5',
+    spr: '200',
+    vpr: '1.5',
+    delay: '1000',
+    direction: 'true',
+    microstepping: 'Full'
+  },
   temperature: {
     name: 'Biocube29 Temperature',
     sensor: '28-devmodeenable',

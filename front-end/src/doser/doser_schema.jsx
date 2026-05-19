@@ -17,26 +17,35 @@ const Stepperchema = Yup.object().shape({
 const DoserSchema = Yup.object().shape({
   name: Yup.string()
     .required(i18n.t('validation:name_required')),
-  type: Yup.string(),
+  type: Yup.string()
+    .required(i18n.t('validation:selection_required')),
   jack: Yup.string(),
   pin: Yup.string(),
   stepper: Stepperchema,
   enable: Yup.bool()
     .required(i18n.t('validation:selection_required')),
   continuous: Yup.bool(),
+  volume: Yup.number()
+    .typeError(i18n.t('validation:number_required'))
+    .when('type', {
+      is: 'stepper',
+      then: schema => schema.required(i18n.t('validation:number_required')).min(1, i18n.t('validation:integer_min_required'))
+    }),
   soft_start: Yup.number()
     .typeError(i18n.t('validation:number_required'))
     .min(0, i18n.t('validation:integer_min_required')),
   duration: Yup.number()
     .typeError(i18n.t('validation:number_required'))
-    .when('continuous', {
-      is: false,
+    .when(['type', 'continuous'], {
+      is: (type, continuous) => type !== 'stepper' && continuous === false,
       then: schema => schema.min(1, i18n.t('validation:integer_min_required'))
     }),
   speed: Yup.number()
     .typeError(i18n.t('validation:number_required'))
-    .min(1, i18n.t('validation:integer_min_required'))
-    .max(100, i18n.t('validation:integer_max_required')),
+    .when('type', {
+      is: type => type !== 'stepper',
+      then: schema => schema.min(1, i18n.t('validation:integer_min_required')).max(100, i18n.t('validation:integer_max_required'))
+    }),
   month: Yup.string()
     .when('continuous', { is: false, then: schema => schema.required(i18n.t('validation:cron_required')) }),
   week: Yup.string()
