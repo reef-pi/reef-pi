@@ -1663,6 +1663,10 @@ func toGenJack(j connectors.Jack) gen.Jack {
 	raw, _ := json.Marshal(j)
 	json.Unmarshal(raw, &out) //nolint:errcheck
 	out.Id = &j.ID
+	if out.Pins == nil {
+		empty := []int{}
+		out.Pins = &empty
+	}
 	return out
 }
 
@@ -1696,11 +1700,11 @@ func (s *ReefPiServer) ListDrivers(_ context.Context, _ gen.ListDriversRequestOb
 	if s.drivers == nil {
 		return gen.ListDrivers401JSONResponse{Message: "drivers not loaded"}, nil
 	}
-	ds, err := s.drivers.List()
+	ds, err := s.drivers.ListAll()
 	if err != nil {
 		return gen.ListDrivers401JSONResponse{Message: err.Error()}, nil
 	}
-	var out []gen.Driver
+	out := make([]gen.Driver, 0, len(ds))
 	for _, d := range ds {
 		out = append(out, toGenDriver(d))
 	}
@@ -1815,7 +1819,7 @@ func (s *ReefPiServer) ListOutlets(_ context.Context, _ gen.ListOutletsRequestOb
 	if err != nil {
 		return gen.ListOutlets401JSONResponse{Message: err.Error()}, nil
 	}
-	var out []gen.Outlet
+	out := make([]gen.Outlet, 0, len(os))
 	for _, o := range os {
 		out = append(out, toGenOutlet(o))
 	}
@@ -1881,7 +1885,7 @@ func (s *ReefPiServer) ListInlets(_ context.Context, _ gen.ListInletsRequestObje
 	if err != nil {
 		return gen.ListInlets401JSONResponse{Message: err.Error()}, nil
 	}
-	var out []gen.Inlet
+	out := make([]gen.Inlet, 0, len(is))
 	for _, i := range is {
 		out = append(out, toGenInlet(i))
 	}
@@ -1961,7 +1965,7 @@ func (s *ReefPiServer) ListJacks(_ context.Context, _ gen.ListJacksRequestObject
 	if err != nil {
 		return gen.ListJacks401JSONResponse{Message: err.Error()}, nil
 	}
-	var out []gen.Jack
+	out := make([]gen.Jack, 0, len(js))
 	for _, j := range js {
 		out = append(out, toGenJack(j))
 	}
@@ -2048,7 +2052,7 @@ func (s *ReefPiServer) ListAnalogInputs(_ context.Context, _ gen.ListAnalogInput
 	if err != nil {
 		return gen.ListAnalogInputs401JSONResponse{Message: err.Error()}, nil
 	}
-	var out []gen.AnalogInput
+	out := make([]gen.AnalogInput, 0, len(as))
 	for _, a := range as {
 		out = append(out, toGenAnalogInput(a))
 	}
