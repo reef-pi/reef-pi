@@ -97,14 +97,7 @@ func (c *Jacks) Delete(id string) error {
 	return c.repo.Delete(id)
 }
 
-func (c *Jacks) LoadAPI(r chi.Router) {
-	r.Get("/api/jacks", c.list)
-	r.Get("/api/jacks/{id}", c.get)
-	r.Put("/api/jacks", c.create)
-	r.Post("/api/jacks/{id}", c.update)
-	r.Delete("/api/jacks/{id}", c.delete)
-	r.Post("/api/jacks/{id}/control", c.control)
-}
+func (c *Jacks) LoadAPI(_ chi.Router) {}
 
 type PinValues map[int]float64
 

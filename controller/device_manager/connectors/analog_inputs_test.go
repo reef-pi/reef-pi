@@ -1,15 +1,12 @@
 package connectors
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/hal"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestAnalogInputsAPI(t *testing.T) {
@@ -19,11 +16,7 @@ func TestAnalogInputsAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
 
-	if err != nil {
-		t.Error(err)
-	}
 	drvrs := drivers.TestDrivers(store)
 	d1 := drivers.Driver{
 		Name:   "pH Board",
@@ -38,55 +31,45 @@ func TestAnalogInputsAPI(t *testing.T) {
 	if err := ais.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	ais.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/analog_inputs", body, nil); err != nil {
-		t.Error(err)
+
+	if err := ais.Create(j); err != nil {
+		t.Error("Failed to create analog input:", err)
 	}
 
-	body.Reset()
 	j.Driver = "1"
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("POST", "/api/analog_inputs/1", body, nil); err != nil {
-		t.Error(err)
+	if err := ais.Update("1", j); err != nil {
+		t.Error("Failed to update analog input:", err)
 	}
 
-	body.Reset()
+	// Create with no name should fail
 	j.Name = ""
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/analog_inputs", body, nil); err == nil {
+	if err := ais.Create(j); err == nil {
 		t.Error("AnalogInput creation expected to fail when analog_input name is absent")
 	}
-	body.Reset()
+	// Create with invalid pin should fail
 	j.Pin = 16
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/analog_inputs", body, nil); err == nil {
+	if err := ais.Create(j); err == nil {
 		t.Error("AnalogInput creation expected to fail when pca9685 pin is invalid (not 0-14)")
 	}
-	body.Reset()
+	// Update with invalid driver should fail
 	j.Driver = ""
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("POST", "/api/analog_inputs/1", body, nil); err == nil {
-		t.Error("AnalogInput updateexpected to fail when driver is invalid (rpi and pca9685 are only valid values)")
+	if err := ais.Update("1", j); err == nil {
+		t.Error("AnalogInput update expected to fail when driver is invalid")
 	}
 
-	if err := tr.Do("GET", "/api/analog_inputs/1", body, nil); err != nil {
-		t.Error(err)
+	if _, err := ais.Get("1"); err != nil {
+		t.Error("Failed to get analog input:", err)
 	}
 	if err := ais.Calibrate("1", []hal.Measurement{}); err != nil {
-		t.Error(err)
+		t.Error("Failed to calibrate analog input:", err)
 	}
-	if err := tr.Do("GET", "/api/analog_inputs", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if _, err := ais.List(); err != nil {
+		t.Error("Failed to list analog inputs:", err)
 	}
-	x := AnalogReading{Value: 12.23}
-	body.Reset()
-	json.NewEncoder(body).Encode(&x)
-	if err := tr.Do("POST", "/api/analog_inputs/1/read", body, nil); err != nil {
-		t.Error(err)
+	if _, err := ais.Read("1"); err != nil {
+		t.Error("Failed to read analog input:", err)
 	}
-	if err := tr.Do("DELETE", "/api/analog_inputs/1", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if err := ais.Delete("1"); err != nil {
+		t.Error("Failed to delete analog input:", err)
 	}
 }

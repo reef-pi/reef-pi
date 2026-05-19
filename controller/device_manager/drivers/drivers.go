@@ -203,6 +203,19 @@ func (d *Drivers) List() ([]Driver, error) {
 	return ds, nil
 }
 
+// ListAll returns all persisted drivers plus the built-in Raspberry Pi driver.
+func (d *Drivers) ListAll() ([]Driver, error) {
+	ds, err := d.List()
+	if err != nil {
+		return nil, err
+	}
+	if dr, ok := d.drivers[_rpi]; ok {
+		piDriver.loadPinMap(dr)
+		ds = append(ds, piDriver)
+	}
+	return ds, nil
+}
+
 func (d *Drivers) ListOptions() (map[string][]hal.ConfigParameter, error) {
 	options := make(map[string][]hal.ConfigParameter)
 

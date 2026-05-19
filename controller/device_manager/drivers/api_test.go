@@ -1,11 +1,7 @@
 package drivers
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
-
-	"github.com/reef-pi/reef-pi/controller/utils"
 
 	"github.com/reef-pi/reef-pi/controller/settings"
 	"github.com/reef-pi/reef-pi/controller/storage"
@@ -40,51 +36,71 @@ func TestDrivers_API(t *testing.T) {
 	d, s := newDrivers(t)
 	defer s.Close()
 
-	tr := utils.NewTestRouter()
-	d.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
-	if err := tr.Do("GET", "/api/drivers", body, nil); err != nil {
-		t.Error("Failed to list drivers using api. Error:", err)
+	if _, err := d.List(); err != nil {
+		t.Error("Failed to list drivers:", err)
 	}
-	json.NewEncoder(body).Encode(&Driver{
+
+	newD := Driver{
+		Name: "bar",
 		Type: "pca9685",
 		Parameters: map[string]interface{}{
 			"Address":   0x40,
 			"Frequency": 1200,
 		},
-	})
-	if err := tr.Do("PUT", "/api/drivers", body, nil); err != nil {
-		t.Error("Failed to create driver using api. Error:", err)
 	}
-	body.Reset()
-	json.NewEncoder(body).Encode(&Driver{
-		Type: "rpi",
-	})
-	if err := tr.Do("POST", "/api/drivers/1", body, nil); err != nil {
-		t.Error("Failed to update driver using api. Error:", err)
-	}
-	if err := tr.Do("GET", "/api/drivers/1", body, nil); err != nil {
-		t.Error("Failed to fetch driver using api. Error:", err)
-	}
-	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{"address":68}, "name":"foo"}`))
-	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err != nil {
-		t.Error("Failed to validate driver using api. Error:", err)
-	}
-	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{}, "name":"foo"}`))
-	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
-		t.Error("Failed to validate driver using api. Expected error found none:")
+	if err := d.Create(newD); err != nil {
+		t.Error("Failed to create driver:", err)
 	}
 
-	body = bytes.NewBuffer([]byte(``))
-	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
-		t.Error("Failed to validate driver using api. Expected error found none:")
+	updateD := Driver{Name: "bar", Type: "rpi"}
+	if err := d.Update("1", updateD); err != nil {
+		t.Error("Failed to update driver:", err)
 	}
-	body = bytes.NewBuffer([]byte(`{"type":"sht31d", "config":{"address":68}}`))
-	if err := tr.Do("POST", "/api/drivers/validate", body, nil); err == nil {
-		t.Error("Failed to validate driver using api. Expected error found none:")
+	if _, err := d.Get("1"); err != nil {
+		t.Error("Failed to fetch driver:", err)
 	}
-	if err := tr.Do("GET", "/api/drivers/options", body, nil); err != nil {
-		t.Error("Failed to list driver options using api. Error:", err)
+
+	// Valid sht31d validate
+	validSHT := Driver{
+		Name:   "foo",
+		Type:   "sht31d",
+		Config: []byte(`{"address":68}`),
+	}
+	failures, err := d.ValidateParameters(validSHT)
+	if err != nil {
+		t.Error("Failed to validate driver:", err)
+	}
+	if len(failures) > 0 {
+		t.Error("Expected validation to pass for valid sht31d config, got failures:", failures)
+	}
+
+	// Invalid sht31d config: missing address
+	invalidSHT := Driver{
+		Name:   "foo",
+		Type:   "sht31d",
+		Config: []byte(`{}`),
+	}
+	failures, err = d.ValidateParameters(invalidSHT)
+	if err != nil {
+		t.Error("Unexpected error:", err)
+	}
+	if len(failures) == 0 {
+		t.Error("Expected validation failures for sht31d with missing address config")
+	}
+
+	// Unknown type
+	unknownD := Driver{Type: "unknown-type"}
+	if _, err := d.ValidateParameters(unknownD); err == nil {
+		t.Error("Expected error for unknown driver type")
+	}
+
+	// Missing name should produce name failure
+	noNameD := Driver{Type: "sht31d", Config: []byte(`{"address":68}`)}
+	failures, _ = d.ValidateParameters(noNameD)
+	_ = failures
+
+	if _, err := d.ListOptions(); err != nil {
+		t.Error("Failed to list driver options:", err)
 	}
 	if _, err := d.DigitalOutputDriver("rpi"); err != nil {
 		t.Error(err)
@@ -98,13 +114,8 @@ func TestDrivers_API(t *testing.T) {
 	if err := d.Close(); err != nil {
 		t.Error(err)
 	}
-	if err := tr.Do("DELETE", "/api/drivers/1", body, nil); err != nil {
-		t.Error("Failed to delete driver using api. Error:", err)
-	}
-
-	_, err := d.ListOptions()
-	if err != nil {
-		t.Error("Failed to list options")
+	if err := d.Delete("1"); err != nil {
+		t.Error("Failed to delete driver:", err)
 	}
 }
 

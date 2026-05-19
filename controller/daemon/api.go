@@ -67,6 +67,11 @@ func (r *ReefPi) AuthenticatedAPI(router chi.Router) {
 	if sub, err := r.subsystems.Sub(systemModule.Bucket); err == nil {
 		cfg.System, _ = sub.(*systemModule.Controller)
 	}
+	cfg.Drivers = r.dm.Drivers()
+	cfg.Outlets = r.dm.Outlets()
+	cfg.Inlets = r.dm.Inlets()
+	cfg.Jacks = r.dm.Jacks()
+	cfg.AnalogInputs = r.dm.AnalogInputs()
 	gen.HandlerWithOptions(gen.NewStrictHandler(api.NewReefPiServer(cfg), nil), gen.ChiServerOptions{BaseRouter: router})
 
 	r.registerCoreAPI(router)

@@ -10,15 +10,7 @@ import (
 	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
-func (d *Drivers) LoadAPI(r chi.Router) {
-	r.Get("/api/drivers", d.list)
-	r.Get("/api/drivers/options", d.listOptions)
-	r.Get("/api/drivers/{id}", d.get)
-	r.Put("/api/drivers", d.create)
-	r.Delete("/api/drivers/{id}", d.delete)
-	r.Post("/api/drivers/{id}", d.update)
-	r.Post("/api/drivers/validate", d.validate)
-}
+func (d *Drivers) LoadAPI(_ chi.Router) {}
 
 func (d *Drivers) list(w http.ResponseWriter, r *http.Request) {
 	fn := func() (interface{}, error) {

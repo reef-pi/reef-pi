@@ -4,10 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/reef-pi/hal"
 
 	"github.com/reef-pi/reef-pi/controller/api/gen"
+	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
+	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
 	atoModule "github.com/reef-pi/reef-pi/controller/modules/ato"
 	cameraModule "github.com/reef-pi/reef-pi/controller/modules/camera"
 	doserModule "github.com/reef-pi/reef-pi/controller/modules/doser"
@@ -25,48 +28,63 @@ import (
 
 // ServerConfig holds optional module controllers. Nil means the module is not loaded.
 type ServerConfig struct {
-	Equipment   *equipmentModule.Controller
-	Journal     *journalModule.Subsystem
-	Timer       *timerModule.Controller
-	Macro       *macroModule.Subsystem
-	Lighting    *lightingModule.Controller
-	ATO         *atoModule.Controller
-	Camera      *cameraModule.Controller
-	Doser       *doserModule.Controller
-	PH          *phModule.Controller
-	Temperature *temperatureModule.Controller
-	System      *systemModule.Controller
+	Equipment    *equipmentModule.Controller
+	Journal      *journalModule.Subsystem
+	Timer        *timerModule.Controller
+	Macro        *macroModule.Subsystem
+	Lighting     *lightingModule.Controller
+	ATO          *atoModule.Controller
+	Camera       *cameraModule.Controller
+	Doser        *doserModule.Controller
+	PH           *phModule.Controller
+	Temperature  *temperatureModule.Controller
+	System       *systemModule.Controller
+	Drivers      *drivers.Drivers
+	Outlets      *connectors.Outlets
+	Inlets       *connectors.Inlets
+	Jacks        *connectors.Jacks
+	AnalogInputs *connectors.AnalogInputs
 }
 
 // ReefPiServer implements gen.StrictServerInterface for all migrated modules.
 type ReefPiServer struct {
-	equipment   *equipmentModule.Controller
-	journal     *journalModule.Subsystem
-	timer       *timerModule.Controller
-	macro       *macroModule.Subsystem
-	lighting    *lightingModule.Controller
-	ato         *atoModule.Controller
-	camera      *cameraModule.Controller
-	doser       *doserModule.Controller
-	ph          *phModule.Controller
-	temperature *temperatureModule.Controller
-	system      *systemModule.Controller
+	equipment    *equipmentModule.Controller
+	journal      *journalModule.Subsystem
+	timer        *timerModule.Controller
+	macro        *macroModule.Subsystem
+	lighting     *lightingModule.Controller
+	ato          *atoModule.Controller
+	camera       *cameraModule.Controller
+	doser        *doserModule.Controller
+	ph           *phModule.Controller
+	temperature  *temperatureModule.Controller
+	system       *systemModule.Controller
+	drivers      *drivers.Drivers
+	outlets      *connectors.Outlets
+	inlets       *connectors.Inlets
+	jacks        *connectors.Jacks
+	analogInputs *connectors.AnalogInputs
 }
 
 // NewReefPiServer constructs a ReefPiServer from the provided config.
 func NewReefPiServer(cfg ServerConfig) *ReefPiServer {
 	return &ReefPiServer{
-		equipment:   cfg.Equipment,
-		journal:     cfg.Journal,
-		timer:       cfg.Timer,
-		macro:       cfg.Macro,
-		lighting:    cfg.Lighting,
-		ato:         cfg.ATO,
-		camera:      cfg.Camera,
-		doser:       cfg.Doser,
-		ph:          cfg.PH,
-		temperature: cfg.Temperature,
-		system:      cfg.System,
+		equipment:    cfg.Equipment,
+		journal:      cfg.Journal,
+		timer:        cfg.Timer,
+		macro:        cfg.Macro,
+		lighting:     cfg.Lighting,
+		ato:          cfg.ATO,
+		camera:       cfg.Camera,
+		doser:        cfg.Doser,
+		ph:           cfg.PH,
+		temperature:  cfg.Temperature,
+		system:       cfg.System,
+		drivers:      cfg.Drivers,
+		outlets:      cfg.Outlets,
+		inlets:       cfg.Inlets,
+		jacks:        cfg.Jacks,
+		analogInputs: cfg.AnalogInputs,
 	}
 }
 
@@ -1578,4 +1596,528 @@ func (s *ReefPiServer) DisableDisplay(_ context.Context, _ gen.DisableDisplayReq
 		return gen.DisableDisplay401JSONResponse{Message: err.Error()}, nil
 	}
 	return gen.DisableDisplay200JSONResponse{Message: "disabled"}, nil
+}
+
+// ---- Mappers: drivers ----
+
+func toGenDriver(d drivers.Driver) gen.Driver {
+	var out gen.Driver
+	raw, _ := json.Marshal(d)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &d.ID
+	return out
+}
+
+func fromGenDriver(g gen.Driver) drivers.Driver {
+	var out drivers.Driver
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+func fromGenDriverValidation(g gen.DriverValidationRequest) drivers.Driver {
+	var out drivers.Driver
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+// ---- Mappers: outlets ----
+
+func toGenOutlet(o connectors.Outlet) gen.Outlet {
+	var out gen.Outlet
+	raw, _ := json.Marshal(o)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &o.ID
+	return out
+}
+
+func fromGenOutlet(g gen.Outlet) connectors.Outlet {
+	var out connectors.Outlet
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+// ---- Mappers: inlets ----
+
+func toGenInlet(i connectors.Inlet) gen.Inlet {
+	var out gen.Inlet
+	raw, _ := json.Marshal(i)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &i.ID
+	return out
+}
+
+func fromGenInlet(g gen.Inlet) connectors.Inlet {
+	var out connectors.Inlet
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+// ---- Mappers: jacks ----
+
+func toGenJack(j connectors.Jack) gen.Jack {
+	var out gen.Jack
+	raw, _ := json.Marshal(j)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &j.ID
+	if out.Pins == nil {
+		empty := []int{}
+		out.Pins = &empty
+	}
+	return out
+}
+
+func fromGenJack(g gen.Jack) connectors.Jack {
+	var out connectors.Jack
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+// ---- Mappers: analog inputs ----
+
+func toGenAnalogInput(a connectors.AnalogInput) gen.AnalogInput {
+	var out gen.AnalogInput
+	raw, _ := json.Marshal(a)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	out.Id = &a.ID
+	return out
+}
+
+func fromGenAnalogInput(g gen.AnalogInput) connectors.AnalogInput {
+	var out connectors.AnalogInput
+	raw, _ := json.Marshal(g)
+	json.Unmarshal(raw, &out) //nolint:errcheck
+	return out
+}
+
+// ---- Drivers handlers ----
+
+func (s *ReefPiServer) ListDrivers(_ context.Context, _ gen.ListDriversRequestObject) (gen.ListDriversResponseObject, error) {
+	if s.drivers == nil {
+		return gen.ListDrivers401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	ds, err := s.drivers.ListAll()
+	if err != nil {
+		return gen.ListDrivers401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make([]gen.Driver, 0, len(ds))
+	for _, d := range ds {
+		out = append(out, toGenDriver(d))
+	}
+	return gen.ListDrivers200JSONResponse(out), nil
+}
+
+func (s *ReefPiServer) CreateDriver(_ context.Context, request gen.CreateDriverRequestObject) (gen.CreateDriverResponseObject, error) {
+	if s.drivers == nil {
+		return gen.CreateDriver401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	d := fromGenDriver(*request.Body)
+	if err := s.drivers.Create(d); err != nil {
+		return gen.CreateDriver400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.CreateDriver200JSONResponse{Message: "created"}, nil
+}
+
+func (s *ReefPiServer) ListDriverOptions(_ context.Context, _ gen.ListDriverOptionsRequestObject) (gen.ListDriverOptionsResponseObject, error) {
+	if s.drivers == nil {
+		return gen.ListDriverOptions401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	opts, err := s.drivers.ListOptions()
+	if err != nil {
+		return gen.ListDriverOptions401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make(gen.ListDriverOptions200JSONResponse)
+	for k, params := range opts {
+		var ps []map[string]interface{}
+		raw, _ := json.Marshal(params)
+		json.Unmarshal(raw, &ps) //nolint:errcheck
+		out[k] = ps
+	}
+	return out, nil
+}
+
+func (s *ReefPiServer) ValidateDriver(_ context.Context, request gen.ValidateDriverRequestObject) (gen.ValidateDriverResponseObject, error) {
+	if s.drivers == nil {
+		return gen.ValidateDriver401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	d := fromGenDriverValidation(*request.Body)
+	failures, err := s.drivers.ValidateParameters(d)
+	if err != nil {
+		return gen.ValidateDriver401JSONResponse{Message: err.Error()}, nil
+	}
+	// Check for name collisions
+	ds, err := s.drivers.List()
+	if err == nil {
+		for _, existing := range ds {
+			if existing.Name == d.Name && existing.ID != d.ID {
+				if failures == nil {
+					failures = make(map[string][]string)
+				}
+				failures["name"] = []string{"The name " + d.Name + " is already in use"}
+			}
+		}
+	}
+	if len(failures) > 0 {
+		flat := make(gen.ValidateDriver400JSONResponse)
+		for k, v := range failures {
+			flat["config."+strings.ToLower(k)] = strings.Join(v, "\n")
+		}
+		return flat, nil
+	}
+	return gen.ValidateDriver200JSONResponse{}, nil
+}
+
+func (s *ReefPiServer) GetDriver(_ context.Context, request gen.GetDriverRequestObject) (gen.GetDriverResponseObject, error) {
+	if s.drivers == nil {
+		return gen.GetDriver401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	d, err := s.drivers.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetDriver404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetDriver401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetDriver200JSONResponse(toGenDriver(d)), nil
+}
+
+func (s *ReefPiServer) UpdateDriver(_ context.Context, request gen.UpdateDriverRequestObject) (gen.UpdateDriverResponseObject, error) {
+	if s.drivers == nil {
+		return gen.UpdateDriver401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	d := fromGenDriver(*request.Body)
+	if err := s.drivers.Update(request.Id, d); err != nil {
+		return gen.UpdateDriver400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateDriver200JSONResponse{Message: "updated"}, nil
+}
+
+func (s *ReefPiServer) DeleteDriver(_ context.Context, request gen.DeleteDriverRequestObject) (gen.DeleteDriverResponseObject, error) {
+	if s.drivers == nil {
+		return gen.DeleteDriver401JSONResponse{Message: "drivers not loaded"}, nil
+	}
+	if err := s.drivers.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteDriver404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteDriver401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteDriver200JSONResponse{Message: "deleted"}, nil
+}
+
+// ---- Outlets handlers ----
+
+func (s *ReefPiServer) ListOutlets(_ context.Context, _ gen.ListOutletsRequestObject) (gen.ListOutletsResponseObject, error) {
+	if s.outlets == nil {
+		return gen.ListOutlets401JSONResponse{Message: "outlets not loaded"}, nil
+	}
+	os, err := s.outlets.List()
+	if err != nil {
+		return gen.ListOutlets401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make([]gen.Outlet, 0, len(os))
+	for _, o := range os {
+		out = append(out, toGenOutlet(o))
+	}
+	return gen.ListOutlets200JSONResponse(out), nil
+}
+
+func (s *ReefPiServer) CreateOutlet(_ context.Context, request gen.CreateOutletRequestObject) (gen.CreateOutletResponseObject, error) {
+	if s.outlets == nil {
+		return gen.CreateOutlet401JSONResponse{Message: "outlets not loaded"}, nil
+	}
+	o := fromGenOutlet(*request.Body)
+	if err := s.outlets.Create(o); err != nil {
+		return gen.CreateOutlet400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.CreateOutlet200JSONResponse{Message: "created"}, nil
+}
+
+func (s *ReefPiServer) GetOutlet(_ context.Context, request gen.GetOutletRequestObject) (gen.GetOutletResponseObject, error) {
+	if s.outlets == nil {
+		return gen.GetOutlet401JSONResponse{Message: "outlets not loaded"}, nil
+	}
+	o, err := s.outlets.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetOutlet404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetOutlet401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetOutlet200JSONResponse(toGenOutlet(o)), nil
+}
+
+func (s *ReefPiServer) UpdateOutlet(_ context.Context, request gen.UpdateOutletRequestObject) (gen.UpdateOutletResponseObject, error) {
+	if s.outlets == nil {
+		return gen.UpdateOutlet401JSONResponse{Message: "outlets not loaded"}, nil
+	}
+	o := fromGenOutlet(*request.Body)
+	if err := s.outlets.Update(request.Id, o); err != nil {
+		return gen.UpdateOutlet400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateOutlet200JSONResponse{Message: "updated"}, nil
+}
+
+func (s *ReefPiServer) DeleteOutlet(_ context.Context, request gen.DeleteOutletRequestObject) (gen.DeleteOutletResponseObject, error) {
+	if s.outlets == nil {
+		return gen.DeleteOutlet401JSONResponse{Message: "outlets not loaded"}, nil
+	}
+	if err := s.outlets.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteOutlet404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteOutlet401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteOutlet200JSONResponse{Message: "deleted"}, nil
+}
+
+// ---- Inlets handlers ----
+
+func (s *ReefPiServer) ListInlets(_ context.Context, _ gen.ListInletsRequestObject) (gen.ListInletsResponseObject, error) {
+	if s.inlets == nil {
+		return gen.ListInlets401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	is, err := s.inlets.List()
+	if err != nil {
+		return gen.ListInlets401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make([]gen.Inlet, 0, len(is))
+	for _, i := range is {
+		out = append(out, toGenInlet(i))
+	}
+	return gen.ListInlets200JSONResponse(out), nil
+}
+
+func (s *ReefPiServer) CreateInlet(_ context.Context, request gen.CreateInletRequestObject) (gen.CreateInletResponseObject, error) {
+	if s.inlets == nil {
+		return gen.CreateInlet401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	i := fromGenInlet(*request.Body)
+	if err := s.inlets.Create(i); err != nil {
+		return gen.CreateInlet400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.CreateInlet200JSONResponse{Message: "created"}, nil
+}
+
+func (s *ReefPiServer) GetInlet(_ context.Context, request gen.GetInletRequestObject) (gen.GetInletResponseObject, error) {
+	if s.inlets == nil {
+		return gen.GetInlet401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	i, err := s.inlets.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetInlet404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetInlet401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetInlet200JSONResponse(toGenInlet(i)), nil
+}
+
+func (s *ReefPiServer) UpdateInlet(_ context.Context, request gen.UpdateInletRequestObject) (gen.UpdateInletResponseObject, error) {
+	if s.inlets == nil {
+		return gen.UpdateInlet401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	i := fromGenInlet(*request.Body)
+	if err := s.inlets.Update(request.Id, i); err != nil {
+		return gen.UpdateInlet400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateInlet200JSONResponse{Message: "updated"}, nil
+}
+
+func (s *ReefPiServer) DeleteInlet(_ context.Context, request gen.DeleteInletRequestObject) (gen.DeleteInletResponseObject, error) {
+	if s.inlets == nil {
+		return gen.DeleteInlet401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	if err := s.inlets.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteInlet404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteInlet401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteInlet200JSONResponse{Message: "deleted"}, nil
+}
+
+func (s *ReefPiServer) ReadInlet(_ context.Context, request gen.ReadInletRequestObject) (gen.ReadInletResponseObject, error) {
+	if s.inlets == nil {
+		return gen.ReadInlet401JSONResponse{Message: "inlets not loaded"}, nil
+	}
+	v, err := s.inlets.Read(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.ReadInlet404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.ReadInlet401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.ReadInlet200JSONResponse(v), nil
+}
+
+// ---- Jacks handlers ----
+
+func (s *ReefPiServer) ListJacks(_ context.Context, _ gen.ListJacksRequestObject) (gen.ListJacksResponseObject, error) {
+	if s.jacks == nil {
+		return gen.ListJacks401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	js, err := s.jacks.List()
+	if err != nil {
+		return gen.ListJacks401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make([]gen.Jack, 0, len(js))
+	for _, j := range js {
+		out = append(out, toGenJack(j))
+	}
+	return gen.ListJacks200JSONResponse(out), nil
+}
+
+func (s *ReefPiServer) CreateJack(_ context.Context, request gen.CreateJackRequestObject) (gen.CreateJackResponseObject, error) {
+	if s.jacks == nil {
+		return gen.CreateJack401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	j := fromGenJack(*request.Body)
+	if err := s.jacks.Create(j); err != nil {
+		return gen.CreateJack400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.CreateJack200JSONResponse{Message: "created"}, nil
+}
+
+func (s *ReefPiServer) GetJack(_ context.Context, request gen.GetJackRequestObject) (gen.GetJackResponseObject, error) {
+	if s.jacks == nil {
+		return gen.GetJack401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	j, err := s.jacks.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetJack404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetJack401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetJack200JSONResponse(toGenJack(j)), nil
+}
+
+func (s *ReefPiServer) UpdateJack(_ context.Context, request gen.UpdateJackRequestObject) (gen.UpdateJackResponseObject, error) {
+	if s.jacks == nil {
+		return gen.UpdateJack401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	j := fromGenJack(*request.Body)
+	if err := s.jacks.Update(request.Id, j); err != nil {
+		return gen.UpdateJack400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateJack200JSONResponse{Message: "updated"}, nil
+}
+
+func (s *ReefPiServer) DeleteJack(_ context.Context, request gen.DeleteJackRequestObject) (gen.DeleteJackResponseObject, error) {
+	if s.jacks == nil {
+		return gen.DeleteJack401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	if err := s.jacks.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteJack404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteJack401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteJack200JSONResponse{Message: "deleted"}, nil
+}
+
+func (s *ReefPiServer) ControlJack(_ context.Context, request gen.ControlJackRequestObject) (gen.ControlJackResponseObject, error) {
+	if s.jacks == nil {
+		return gen.ControlJack401JSONResponse{Message: "jacks not loaded"}, nil
+	}
+	pinValues := make(connectors.PinValues)
+	for k, v := range *request.Body {
+		var pin int
+		if n, err := json.Number(k).Int64(); err == nil {
+			pinValues[int(n)] = v
+		} else {
+			// fallback: unmarshal the key as JSON number
+			_ = json.Unmarshal([]byte(k), &pin)
+			pinValues[pin] = v
+		}
+	}
+	if err := s.jacks.Control(request.Id, pinValues); err != nil {
+		return gen.ControlJack400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.ControlJack200JSONResponse{Message: "ok"}, nil
+}
+
+// ---- AnalogInputs handlers ----
+
+func (s *ReefPiServer) ListAnalogInputs(_ context.Context, _ gen.ListAnalogInputsRequestObject) (gen.ListAnalogInputsResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.ListAnalogInputs401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	as, err := s.analogInputs.List()
+	if err != nil {
+		return gen.ListAnalogInputs401JSONResponse{Message: err.Error()}, nil
+	}
+	out := make([]gen.AnalogInput, 0, len(as))
+	for _, a := range as {
+		out = append(out, toGenAnalogInput(a))
+	}
+	return gen.ListAnalogInputs200JSONResponse(out), nil
+}
+
+func (s *ReefPiServer) CreateAnalogInput(_ context.Context, request gen.CreateAnalogInputRequestObject) (gen.CreateAnalogInputResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.CreateAnalogInput401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	a := fromGenAnalogInput(*request.Body)
+	if err := s.analogInputs.Create(a); err != nil {
+		return gen.CreateAnalogInput400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.CreateAnalogInput200JSONResponse{Message: "created"}, nil
+}
+
+func (s *ReefPiServer) GetAnalogInput(_ context.Context, request gen.GetAnalogInputRequestObject) (gen.GetAnalogInputResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.GetAnalogInput401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	a, err := s.analogInputs.Get(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.GetAnalogInput404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.GetAnalogInput401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.GetAnalogInput200JSONResponse(toGenAnalogInput(a)), nil
+}
+
+func (s *ReefPiServer) UpdateAnalogInput(_ context.Context, request gen.UpdateAnalogInputRequestObject) (gen.UpdateAnalogInputResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.UpdateAnalogInput401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	a := fromGenAnalogInput(*request.Body)
+	if err := s.analogInputs.Update(request.Id, a); err != nil {
+		return gen.UpdateAnalogInput400JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.UpdateAnalogInput200JSONResponse{Message: "updated"}, nil
+}
+
+func (s *ReefPiServer) DeleteAnalogInput(_ context.Context, request gen.DeleteAnalogInputRequestObject) (gen.DeleteAnalogInputResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.DeleteAnalogInput401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	if err := s.analogInputs.Delete(request.Id); err != nil {
+		if isNotFound(err) {
+			return gen.DeleteAnalogInput404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.DeleteAnalogInput401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.DeleteAnalogInput200JSONResponse{Message: "deleted"}, nil
+}
+
+func (s *ReefPiServer) ReadAnalogInput(_ context.Context, request gen.ReadAnalogInputRequestObject) (gen.ReadAnalogInputResponseObject, error) {
+	if s.analogInputs == nil {
+		return gen.ReadAnalogInput401JSONResponse{Message: "analog inputs not loaded"}, nil
+	}
+	v, err := s.analogInputs.Read(request.Id)
+	if err != nil {
+		if isNotFound(err) {
+			return gen.ReadAnalogInput404JSONResponse{Message: err.Error()}, nil
+		}
+		return gen.ReadAnalogInput401JSONResponse{Message: err.Error()}, nil
+	}
+	return gen.ReadAnalogInput200JSONResponse(v), nil
 }

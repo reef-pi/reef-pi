@@ -1,7 +1,6 @@
 package equipment
 
 import (
-	"bytes"
 	"encoding/json"
 	"strings"
 	"testing"
@@ -9,7 +8,6 @@ import (
 	"github.com/reef-pi/reef-pi/controller"
 	"github.com/reef-pi/reef-pi/controller/device_manager/connectors"
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func newTestEquipmentController(t *testing.T) *Controller {
@@ -131,15 +129,8 @@ func TestEquipmentOutletSync(t *testing.T) {
 		t.Fatal("Failed to get outlet:", err)
 	}
 
-	// Outlet LoadAPI is still legacy chi — wire it for this test.
-	tr := utils.NewTestRouter()
-	c.outlets.LoadAPI(tr.Router)
 	outlet.Name = "updated"
-	body := new(bytes.Buffer)
-	if err := json.NewEncoder(body).Encode(outlet); err != nil {
-		t.Fatal(err)
-	}
-	if err := tr.Do("POST", "/api/outlets/1", body, nil); err != nil {
+	if err := c.outlets.Update("1", outlet); err != nil {
 		t.Fatal("Failed to update outlet via api:", err)
 	}
 

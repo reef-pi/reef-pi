@@ -378,6 +378,122 @@ components:
         brightness:
           type: integer
           description: Brightness level 0-100
+    Driver:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          description: Driver-specific JSON config
+        pinmap:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: integer
+        parameters:
+          type: object
+          additionalProperties: true
+    DriverValidationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        config:
+          description: Driver-specific JSON config
+        parameters:
+          type: object
+          additionalProperties: true
+    Outlet:
+      type: object
+      required:
+        - name
+        - driver
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        pin:
+          type: integer
+        equipment:
+          type: string
+        reverse:
+          type: boolean
+        driver:
+          type: string
+    Inlet:
+      type: object
+      required:
+        - name
+        - driver
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        pin:
+          type: integer
+        equipment:
+          type: string
+        reverse:
+          type: boolean
+        driver:
+          type: string
+    Jack:
+      type: object
+      required:
+        - name
+        - driver
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        pins:
+          type: array
+          items:
+            type: integer
+        driver:
+          type: string
+        reverse:
+          type: boolean
+    JackControlRequest:
+      type: object
+      description: Map of pin number to PWM value (0-100)
+      additionalProperties:
+        type: number
+        format: double
+    AnalogInput:
+      type: object
+      required:
+        - name
+        - driver
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        pin:
+          type: integer
+        driver:
+          type: string
 security:
   - sessionAuth: []
 paths:
@@ -2680,6 +2796,873 @@ paths:
       responses:
         '200':
           description: Upgrade initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/drivers:
+    get:
+      operationId: listDrivers
+      summary: List all drivers
+      tags: [Drivers]
+      responses:
+        '200':
+          description: List of drivers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createDriver
+      summary: Create a driver
+      tags: [Drivers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '200':
+          description: Driver created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/drivers/options:
+    get:
+      operationId: listDriverOptions
+      summary: List driver type options and their config parameters
+      tags: [Drivers]
+      responses:
+        '200':
+          description: Driver options keyed by type
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/drivers/validate:
+    post:
+      operationId: validateDriver
+      summary: Validate driver parameters
+      tags: [Drivers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverValidationRequest'
+      responses:
+        '200':
+          description: Validation passed
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/drivers/{id}:
+    get:
+      operationId: getDriver
+      summary: Get a driver by ID
+      tags: [Drivers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Driver
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateDriver
+      summary: Update a driver
+      tags: [Drivers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '200':
+          description: Driver updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteDriver
+      summary: Delete a driver
+      tags: [Drivers]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Driver deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/outlets:
+    get:
+      operationId: listOutlets
+      summary: List all outlets
+      tags: [Outlets]
+      responses:
+        '200':
+          description: List of outlets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Outlet'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createOutlet
+      summary: Create an outlet
+      tags: [Outlets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Outlet'
+      responses:
+        '200':
+          description: Outlet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/outlets/{id}:
+    get:
+      operationId: getOutlet
+      summary: Get an outlet by ID
+      tags: [Outlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Outlet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Outlet'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateOutlet
+      summary: Update an outlet
+      tags: [Outlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Outlet'
+      responses:
+        '200':
+          description: Outlet updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteOutlet
+      summary: Delete an outlet
+      tags: [Outlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Outlet deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/inlets:
+    get:
+      operationId: listInlets
+      summary: List all inlets
+      tags: [Inlets]
+      responses:
+        '200':
+          description: List of inlets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inlet'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createInlet
+      summary: Create an inlet
+      tags: [Inlets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inlet'
+      responses:
+        '200':
+          description: Inlet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/inlets/{id}:
+    get:
+      operationId: getInlet
+      summary: Get an inlet by ID
+      tags: [Inlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inlet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inlet'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateInlet
+      summary: Update an inlet
+      tags: [Inlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inlet'
+      responses:
+        '200':
+          description: Inlet updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteInlet
+      summary: Delete an inlet
+      tags: [Inlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inlet deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/inlets/{id}/read:
+    post:
+      operationId: readInlet
+      summary: Read current value from an inlet
+      tags: [Inlets]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inlet current value
+          content:
+            application/json:
+              schema:
+                type: integer
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/jacks:
+    get:
+      operationId: listJacks
+      summary: List all jacks
+      tags: [Jacks]
+      responses:
+        '200':
+          description: List of jacks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Jack'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createJack
+      summary: Create a jack
+      tags: [Jacks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Jack'
+      responses:
+        '200':
+          description: Jack created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/jacks/{id}:
+    get:
+      operationId: getJack
+      summary: Get a jack by ID
+      tags: [Jacks]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Jack
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jack'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateJack
+      summary: Update a jack
+      tags: [Jacks]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Jack'
+      responses:
+        '200':
+          description: Jack updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteJack
+      summary: Delete a jack
+      tags: [Jacks]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Jack deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/jacks/{id}/control:
+    post:
+      operationId: controlJack
+      summary: Set PWM values on jack pins
+      tags: [Jacks]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JackControlRequest'
+      responses:
+        '200':
+          description: Jack updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/analog_inputs:
+    get:
+      operationId: listAnalogInputs
+      summary: List all analog inputs
+      tags: [AnalogInputs]
+      responses:
+        '200':
+          description: List of analog inputs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalogInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      operationId: createAnalogInput
+      summary: Create an analog input
+      tags: [AnalogInputs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalogInput'
+      responses:
+        '200':
+          description: Analog input created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/analog_inputs/{id}:
+    get:
+      operationId: getAnalogInput
+      summary: Get an analog input by ID
+      tags: [AnalogInputs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Analog input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalogInput'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      operationId: updateAnalogInput
+      summary: Update an analog input
+      tags: [AnalogInputs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalogInput'
+      responses:
+        '200':
+          description: Analog input updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      operationId: deleteAnalogInput
+      summary: Delete an analog input
+      tags: [AnalogInputs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Analog input deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/analog_inputs/{id}/read:
+    post:
+      operationId: readAnalogInput
+      summary: Read current value from an analog input
+      tags: [AnalogInputs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Analog input current value
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+        '404':
+          description: Not found
           content:
             application/json:
               schema:

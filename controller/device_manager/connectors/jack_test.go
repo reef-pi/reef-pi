@@ -1,14 +1,10 @@
 package connectors
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/reef-pi/reef-pi/controller/device_manager/drivers"
-
 	"github.com/reef-pi/reef-pi/controller/storage"
-	"github.com/reef-pi/reef-pi/controller/utils"
 )
 
 func TestJacksAPI(t *testing.T) {
@@ -18,11 +14,7 @@ func TestJacksAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tr := utils.NewTestRouter()
 
-	if err != nil {
-		t.Error(err)
-	}
 	drvrs := drivers.TestDrivers(store)
 	d1 := drivers.Driver{
 		Name:   "lighting",
@@ -37,68 +29,57 @@ func TestJacksAPI(t *testing.T) {
 	if err := jacks.Setup(); err != nil {
 		t.Fatal(err)
 	}
-	jacks.LoadAPI(tr.Router)
-	body := new(bytes.Buffer)
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/jacks", body, nil); err != nil {
-		t.Error(err)
+
+	if err := jacks.Create(j); err != nil {
+		t.Error("Failed to create jack:", err)
 	}
 
-	body.Reset()
 	j.Driver = "1"
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("POST", "/api/jacks/1", body, nil); err != nil {
-		t.Error(err)
+	if err := jacks.Update("1", j); err != nil {
+		t.Error("Failed to update jack:", err)
 	}
 
-	body.Reset()
+	// Create with no name should fail
 	j.Name = ""
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/jacks", body, nil); err == nil {
+	if err := jacks.Create(j); err == nil {
 		t.Error("Jack creation expected to fail when jack name is absent")
 	}
-	body.Reset()
+	// Create with empty pins should fail
 	j.Name = "zd"
 	j.Pins = []int{}
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/jacks", body, nil); err == nil {
+	if err := jacks.Create(j); err == nil {
 		t.Error("Jack creation expected to fail when jack pins are empty")
 	}
-	body.Reset()
+	// Create with invalid pca9685 pin (>14) should fail
 	j.Pins = []int{16}
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/jacks", body, nil); err == nil {
+	if err := jacks.Create(j); err == nil {
 		t.Error("Jack creation expected to fail when pca9685 pin is invalid (not 0-14)")
 	}
-	body.Reset()
+	// Create with rpi driver and invalid pin should fail
 	j.Driver = "rpi"
 	j.Pins = []int{3}
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("PUT", "/api/jacks", body, nil); err == nil {
+	if err := jacks.Create(j); err == nil {
 		t.Error("Jack creation expected to fail when rpi pin is invalid (not 0 or 1)")
 	}
-	body.Reset()
+	// Update with invalid driver should fail
 	j.Driver = ""
 	j.Pins = []int{0}
-	json.NewEncoder(body).Encode(j)
-	if err := tr.Do("POST", "/api/jacks/1", body, nil); err == nil {
-		t.Error("Jack updateexpected to fail when driver is invalid (rpi and pca9685 are only valid values)")
+	if err := jacks.Update("1", j); err == nil {
+		t.Error("Jack update expected to fail when driver is invalid")
 	}
 
-	if err := tr.Do("GET", "/api/jacks/1", body, nil); err != nil {
-		t.Error(err)
+	if _, err := jacks.Get("1"); err != nil {
+		t.Error("Failed to get jack:", err)
 	}
-	if err := tr.Do("GET", "/api/jacks", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if _, err := jacks.List(); err != nil {
+		t.Error("Failed to list jacks:", err)
 	}
-	pinValues := make(map[int]float64)
-	pinValues[0] = 73
-	body.Reset()
-	json.NewEncoder(body).Encode(pinValues)
-	if err := tr.Do("POST", "/api/jacks/1/control", body, nil); err != nil {
-		t.Error(err)
+
+	pinValues := PinValues{0: 73}
+	if err := jacks.Control("1", pinValues); err != nil {
+		t.Error("Failed to control jack:", err)
 	}
-	if err := tr.Do("DELETE", "/api/jacks/1", new(bytes.Buffer), nil); err != nil {
-		t.Error(err)
+	if err := jacks.Delete("1"); err != nil {
+		t.Error("Failed to delete jack:", err)
 	}
 }
