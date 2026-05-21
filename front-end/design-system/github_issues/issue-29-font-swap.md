@@ -70,7 +70,7 @@ Keep Century Gothic in the stack as a fallback for offline Pis on macOS/Windows 
 ## Dependencies
 - Depends on: #1, #2 (E1 token foundation must exist).
 - Blocks: nothing — but cleaning this up *before* E3 (Bento OS dashboard) ships means the dashboard launches with the right typography from day one.
-- Touches: every `prompts/*.md` boilerplate. Use a one-liner `sed` to make that change; do not hand-edit 26 files.
+- Touches: every `prompts/*.md` boilerplate. Use a one-liner `sed` to make that change; do not hand-edit prompt files one by one.
 
 ## Suggested workflow
 1. Land the design-system project PR first (this folder).
