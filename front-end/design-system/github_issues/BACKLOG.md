@@ -42,3 +42,10 @@
 ## E6 · Framework exit (no flag — incremental, one route per PR)
 - [ ] #27 Bootstrap 4.6 exit plan — `issue-27-bootstrap-exit.md`
 - [ ] #28 Material-UI v4 exit plan — `issue-28-mui-exit.md`
+
+## E7 · UI audit screenshot pipeline
+- [ ] #30 UI audit artifact foundation — `issue-30-ui-audit-artifact-foundation.md`
+- [ ] #31 Seeded route screenshot corpus — `issue-31-ui-audit-seeded-route-corpus.md`
+- [ ] #32 Objective UI audit checks — `issue-32-ui-audit-objective-ci-checks.md`
+- [ ] #33 Agent-ready UI audit reports and prompts — `issue-33-ui-audit-agent-reports.md`
+- [ ] #34 GitHub Actions UI audit integration — `issue-34-ui-audit-ci-integration.md`

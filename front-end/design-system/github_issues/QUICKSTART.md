@@ -1,11 +1,11 @@
 # [claude design] artifacts — quickstart
 
-You now have two ways to drive the 26 fixes through Claude Code, plus a script that creates real GitHub issues with `[claude design]` in every title.
+You now have two ways to drive the 34 fixes through Claude Code, plus a script that creates real GitHub issues with `[claude design]` in every title.
 
 ## Path A — Claude Code only (no GitHub)
 Everything an agent needs is in `github_issues/`:
 - `CLAUDE.md` — operating manual: definition of done, file conventions, sequencing rules.
-- `STRATEGY.md` — five epics, parent→child map, rollout flags.
+- `STRATEGY.md` — seven epics, parent→child map, rollout flags.
 - `BACKLOG.md` — checklist; tick rows as PRs merge.
 - `issue-NN-*.md` — full spec for each fix (API, visual, acceptance).
 - `prompts/NN.md` — one-shot system prompt per issue, ready to paste into Claude Code.
@@ -25,7 +25,7 @@ claude code --system "$(cat github_issues/prompts/01.md)" \
 cd github_issues
 # 1. Create labels once
 bash _labels.md          # or copy the gh label create block out
-# 2. Create all 31 issues (5 epics + 26 children) with [claude design] prefix
+# 2. Create all 41 issues (7 epics + 34 children) with [claude design] prefix
 REPO=owner/name bash import-as-claude-design.sh
 ```
 

@@ -1,6 +1,6 @@
 # reef-pi UI modernization — shipping plan
 
-Five epics, 26 shippable issues, ordered so each ships standalone behind flags/tweaks without blocking the next.
+Seven epics, 34 shippable issues, ordered so each ships standalone behind flags/tweaks without blocking the next.
 
 ## Sequencing rationale
 - **E1 (Design tokens v2)** first — every later epic inherits from it. Ship alone, no UX visible yet.
@@ -9,6 +9,7 @@ Five epics, 26 shippable issues, ordered so each ships standalone behind flags/t
 - **E4 (Control trust)** is independent of E3 — can run in parallel. Adds pending/error toggle states + alert center.
 - **E5 (Shell + theming)** is the heaviest lift; ship behind a `new_shell` flag and flip when ready.
 - **E6 (Framework exit)** runs in parallel after E1/E2 — one route per PR, no flag. Retires Bootstrap 4.6 and Material-UI v4. **Do not** migrate to Bootstrap 5 or MUI v5; the destination is `var(--reefpi-*)` + E2 primitives + plain CSS.
+- **E7 (UI audit screenshot pipeline)** runs before broad route redesign work. It captures current module screens with Playwright, fails CI on objective design-system violations, and generates agent-ready reports for Codex/Claude Design review.
 
 ## Rollout
 | Epic | Week | User-visible? | Flag |
@@ -19,6 +20,7 @@ Five epics, 26 shippable issues, ordered so each ships standalone behind flags/t
 | E4 Trust + alerts | 3–4 | Yes | `pending_states`, `alert_center` |
 | E5 Shell + dark/actinic | 4–6 | Yes | `new_shell`, theme picker in Settings |
 | E6 Framework exit | 3–8 (parallel) | Indirectly | — |
+| E7 UI audit screenshot pipeline | 1–2 | Dev/CI only | — |
 
 ## Files in this pack
 ```
@@ -30,7 +32,9 @@ github_issues/
   epic-03-dashboard-v2.md
   epic-04-control-trust.md
   epic-05-shell-theming.md
-  issue-*.md                           21 child issues
+  epic-06-framework-exit.md
+  epic-07-ui-audit.md
+  issue-*.md                           34 child issues
 ```
 
 ## Import options
@@ -90,4 +94,11 @@ E5 · shell-theming
 E6 · framework-exit
  ├─ #27 Bootstrap 4.6 exit plan (utilities → controls → JS)
  └─ #28 Material-UI v4 exit plan (Switch + FormControlLabel)
+
+E7 · ui-audit-screenshot-pipeline
+ ├─ #30 UI audit artifact foundation
+ ├─ #31 Seeded route screenshot corpus
+ ├─ #32 Objective UI audit checks
+ ├─ #33 Agent-ready UI audit reports and prompts
+ └─ #34 GitHub Actions UI audit integration
 ```
