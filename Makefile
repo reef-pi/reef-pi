@@ -168,6 +168,10 @@ api-doc:
 smoke:
 	yarn run smoke
 
+.PHONY: ui-audit
+ui-audit:
+	yarn run ui-audit
+
 .PHONY: integration-smoke
 integration-smoke:
 	yarn run integration

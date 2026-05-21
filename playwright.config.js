@@ -39,6 +39,17 @@ module.exports = defineConfig({
       }
     },
     {
+      name: 'ui-audit-chromium',
+      dependencies: ['setup'],
+      testMatch: /specs\/ui-audit\/.*\.spec\.js/,
+      outputDir: 'test-results/ui-audit/playwright',
+      use: {
+        browserName: 'chromium',
+        storageState: 'front-end/e2e/.auth/user.json',
+        viewport: { width: 1440, height: 1000 }
+      }
+    },
+    {
       name: 'integration-chromium',
       dependencies: ['setup'],
       testMatch: /specs\/integration\/.*\.spec\.js/,
