@@ -86,9 +86,10 @@
     "smoke": "playwright test --project=smoke-chromium",
     "pw-smoke": "playwright test --project=smoke-chromium",
     "pw-smoke:headed": "playwright test --project=smoke-chromium --headed",
-    "ui-audit": "node -e \"require('./front-end/e2e/fixtures/uiAudit').resetUiAuditArtifacts()\" && playwright test --project=ui-audit-chromium",
+    "ui-audit": "node -e \"require('./front-end/e2e/fixtures/uiAudit').resetUiAuditArtifacts()\" && playwright test --project=ui-audit-chromium && node front-end/scripts/ui-audit-report.mjs",
     "integration": "playwright test --project=integration-chromium",
-    "integration:headed": "playwright test --project=integration-chromium --headed"
+    "integration:headed": "playwright test --project=integration-chromium --headed",
+    "ui-audit-report": "node front-end/scripts/ui-audit-report.mjs"
   },
   "repository": {
     "type": "git",
