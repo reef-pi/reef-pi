@@ -45,8 +45,9 @@ test('stale dashboard config shows no error toasts', async ({ page, baseURL }) =
     await api.dispose()
   }
 
+  const navBar = new NavBar(page)
   await page.goto('/')
-  await expect(page.getByTestId('smoke-dashboard-configure')).toBeVisible({ timeout: 10000 })
+  await navBar.expectShell()
 
   await page.waitForTimeout(2000)
   await expect(page.locator('.alert-danger')).toHaveCount(0)
