@@ -40,8 +40,14 @@ async function expectShellForViewport (page, viewport) {
   }
 
   if (viewport.name === 'mobile') {
-    await expect(page.getByTestId('smoke-current-tab')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Toggle navigation' })).toBeVisible()
+    if (await page.getByTestId('smoke-current-tab').count()) {
+      await expect(page.getByTestId('smoke-current-tab')).toBeVisible()
+      await expect(page.getByRole('button', { name: 'Toggle navigation' })).toBeVisible()
+    } else {
+      await expect(page.getByTestId('smoke-nav')).toBeVisible()
+      await expect(page.getByTestId('smoke-tab-dashboard')).toBeVisible()
+      await expect(page.getByRole('button', { name: 'More routes' })).toBeVisible()
+    }
   } else {
     await expect(page.getByTestId('smoke-tab-dashboard')).toBeVisible()
   }
@@ -50,7 +56,12 @@ async function expectShellForViewport (page, viewport) {
 async function openRoute (page, navBar, viewport, moduleId) {
   const tab = navBar.tab(moduleId).first()
   if (!await tab.isVisible()) {
-    await page.getByRole('button', { name: 'Toggle navigation' }).click()
+    const moreRoutes = page.getByRole('button', { name: 'More routes' })
+    if (viewport.name === 'mobile' && await moreRoutes.isVisible()) {
+      await moreRoutes.click()
+    } else {
+      await page.getByRole('button', { name: 'Toggle navigation' }).click()
+    }
     await expect(tab).toBeVisible()
   }
   await tab.click()
