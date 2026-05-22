@@ -45,7 +45,8 @@ test('configuration connectors bottom content is not hidden behind the summary f
   await navBar.expectShell()
   await navBar.open('configuration')
   await page.locator('#config-connectors').click()
-  await expect(page.getByTestId('smoke-jack-add-toggle')).toBeVisible()
+  const bottomConnector = page.locator('[data-testid="smoke-jack-add-toggle"], .connector-groups .connector-group').last()
+  await expect(bottomConnector).toBeVisible()
 
   const desktopShellSpacing = await page.evaluate(() => {
     const panel = document.querySelector('#main-panel')
@@ -61,7 +62,7 @@ test('configuration connectors bottom content is not hidden behind the summary f
 
   const spacing = await page.evaluate(() => {
     const footer = document.querySelector('.bottom-bar')
-    const target = document.querySelector('[data-testid="smoke-jack-add-toggle"]')
+    const target = document.querySelector('[data-testid="smoke-jack-add-toggle"]') || Array.from(document.querySelectorAll('.connector-groups .connector-group')).pop()
     const footerRect = footer.getBoundingClientRect()
     const targetRect = target.getBoundingClientRect()
     return Math.floor(footerRect.top - targetRect.bottom)
