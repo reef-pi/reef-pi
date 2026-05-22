@@ -30,6 +30,7 @@
   --reefpi-color-nav-text-strong: #{$nav-text-strong-color};
   --reefpi-shell-gutter: #{$space-sm};
   --reefpi-panel-gap: #{$space-md};
+  --reefpi-summary-height: 64px;
   --reefpi-space-xxs: #{$space-xxs};
   --reefpi-space-xs: #{$space-xs};
   --reefpi-space-sm: #{$space-sm};
@@ -124,7 +125,12 @@
 }
 
 .bottom-bar {
+  min-height: var(--reefpi-summary-height, 64px);
   border-top: solid 1px var(--reefpi-color-border-subtle);
+}
+
+.bottom-bar .list-inline {
+  margin-bottom: 0;
 }
 
 html {
@@ -316,6 +322,10 @@ textarea:focus,
 }
 
 @media screen and (min-width: 992px) {
+  #main-panel {
+    padding-bottom: var(--reefpi-summary-height, 64px);
+  }
+
   .body-panel {
     margin-bottom: 70px;
   }
@@ -527,5 +537,11 @@ textarea:focus,
   .connector-channel-cell {
     grid-template-columns: auto auto 1fr;
     justify-items: start;
+  }
+}
+
+@media screen and (max-width: 991.98px) {
+  #main-panel {
+    padding-bottom: 0;
   }
 }
