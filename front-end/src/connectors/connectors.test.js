@@ -96,7 +96,12 @@ describe('Connectors', () => {
         { id: 'out-1', name: 'Return Pump', pin: 0, driver: '1', equipment: 'eq-1' },
         { id: 'out-2', name: 'Skimmer', pin: 1, driver: '1' }
       ],
-      jacks: [{ id: 'jack-1', name: 'Moon', pins: [2], driver: '1' }],
+      jacks: [
+        { id: 'jack-auto-0', name: 'PCA9685-0', pins: [0], driver: '1' },
+        { id: 'jack-0', name: 'J0', pins: [0], driver: '1' },
+        { id: 'jack-1', name: 'J1', pins: [0, 1], driver: '1' },
+        { id: 'jack-2', name: 'Moon', pins: [2], driver: '1' }
+      ],
       inlets: [{ id: 'in-1', name: 'Float', pin: 1, driver: 'rpi' }],
       analog_inputs: [
         { id: 'ai-1', name: 'pH', pin: 0, driver: 'rpi' },
@@ -122,8 +127,11 @@ describe('Connectors', () => {
     expect(html).toContain('connectors-shell')
     expect(html).toContain('Rasoverry Pi')
     expect(html).toContain('PCA9685')
-    expect(html).toContain('3 / 9 used')
+    expect(html).toContain('6 / 9 used')
     expect(html).toContain('connector-channel-grid')
+    expect(html).toContain('Moon')
+    expect(html).toContain('J0')
+    expect(html).toContain('J1')
     expect((html.match(/connector-channel-cell/g) || []).length).toBe(9)
     expect(html).toContain('connector-conflict')
     window.FEATURE_FLAGS = {}

@@ -51,9 +51,19 @@ const pinmapKindToConnectorKind = kind => {
 const gridChannelsForGroup = group => {
   if (!group.driver || !group.driver.pinmap) return group.channels
   const byKindAndPin = {}
+  const driverName = group.driver.name || group.driver.id
+  const autoProvisionedName = pin => driverName + '-' + pin
+  const channelScore = (channel, pin) => {
+    const explicitName = channel.name !== autoProvisionedName(pin)
+    const singlePin = (channel.pins || []).length === 1
+    return (explicitName ? 4 : 0) + (singlePin ? 2 : 0)
+  }
   group.channels.forEach(channel => {
     channel.pins.forEach(pin => {
-      byKindAndPin[channel.kind + ':' + pin] = channel
+      const key = channel.kind + ':' + pin
+      if (!byKindAndPin[key] || channelScore(channel, pin) > channelScore(byKindAndPin[key], pin)) {
+        byKindAndPin[key] = channel
+      }
     })
   })
   const displayChannels = []
@@ -98,6 +108,13 @@ const markConflicts = channels => {
 }
 
 const selectedKey = channel => channel.kind + ':' + channel.id
+
+const channelDisplayName = channel => {
+  if (!channel.placeholder) return channel.name
+  const pin = (channel.pins || [])[0]
+  if (channel.kind === 'jack') return 'J' + pin
+  return String(pin)
+}
 
 const batchMovePayload = (channel, driver) => {
   const payload = {
@@ -330,7 +347,7 @@ class connectors extends React.Component {
               onClick={channel.placeholder ? undefined : () => this.toggleSelection(channel)}
               title={channel.name}
             >
-              <span className='connector-cell-pin'>{(channel.pins || []).join(', ')}</span>
+              <span className='connector-cell-pin'>{channelDisplayName(channel)}</span>
               <span className='connector-status-dot' />
               <span className='connector-cell-kind'>{CONNECTOR_KINDS[channel.kind].label}</span>
             </button>
