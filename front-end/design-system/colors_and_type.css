@@ -86,6 +86,7 @@
   /* ---------- Layout ---------- */
   --reefpi-shell-gutter:  0.75rem; /* 1rem on ≥768px */
   --reefpi-panel-gap:     1rem;
+  --reefpi-summary-height: 64px;
   --reefpi-tap-target-min: 2.75rem; /* 44px — min touch target */
 
   /* ---------- Type ---------- */
