@@ -15,8 +15,8 @@ function healthFromAlerts (alerts) {
 }
 
 const PILL_COLORS = {
-  ok:       'var(--reefpi-color-brand)',
-  warn:     'var(--reefpi-color-warn)',
+  ok: 'var(--reefpi-color-brand)',
+  warn: 'var(--reefpi-color-warn)',
   critical: 'var(--reefpi-color-error)'
 }
 
@@ -27,6 +27,7 @@ export default function SystemStrip ({
   alerts = [],
   onAlertClick,
   onConfigure,
+  onResetDashboardConfig,
   onSignOut
 }) {
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -73,28 +74,32 @@ export default function SystemStrip ({
       />
 
       {/* Tank name */}
-      <span style={{
-        fontSize: '0.9rem',
-        fontWeight: 500,
-        color: 'var(--reefpi-color-text)',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        flex: '1 1 auto',
-        minWidth: 0
-      }}>
+      <span
+        style={{
+          fontSize: '0.9rem',
+          fontWeight: 500,
+          color: 'var(--reefpi-color-text)',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          flex: '1 1 auto',
+          minWidth: 0
+        }}
+      >
         {displayName}
       </span>
 
       {/* Uptime + version (hidden on very narrow viewports via flex shrink) */}
       {(uptimeLabel || version) && (
-        <span style={{
-          fontSize: '0.72rem',
-          color: 'var(--reefpi-color-text-muted)',
-          whiteSpace: 'nowrap',
-          flexShrink: 1,
-          overflow: 'hidden'
-        }}>
+        <span
+          style={{
+            fontSize: '0.72rem',
+            color: 'var(--reefpi-color-text-muted)',
+            whiteSpace: 'nowrap',
+            flexShrink: 1,
+            overflow: 'hidden'
+          }}
+        >
           {[uptimeLabel, version].filter(Boolean).join(' · ')}
         </span>
       )}
@@ -127,10 +132,15 @@ export default function SystemStrip ({
             flexShrink: 0
           }}
         >
-          <span style={{
-            width: '6px', height: '6px', borderRadius: '50%',
-            background: 'currentColor', flexShrink: 0
-          }} />
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: 'currentColor',
+              flexShrink: 0
+            }}
+          />
           {alertCount} alert{alertCount !== 1 ? 's' : ''}
         </button>
       )}
@@ -157,8 +167,8 @@ export default function SystemStrip ({
           }}
         >
           <svg width='4' height='16' viewBox='0 0 4 16' fill='currentColor' aria-hidden='true'>
-            <circle cx='2' cy='2'  r='1.5' />
-            <circle cx='2' cy='8'  r='1.5' />
+            <circle cx='2' cy='2' r='1.5' />
+            <circle cx='2' cy='8' r='1.5' />
             <circle cx='2' cy='14' r='1.5' />
           </svg>
         </button>
@@ -185,6 +195,13 @@ export default function SystemStrip ({
               style={menuItemStyle}
             >
               Configure
+            </button>
+            <button
+              role='menuitem'
+              onClick={() => { setMenuOpen(false); onResetDashboardConfig?.() }}
+              style={{ ...menuItemStyle, borderTop: '1px solid var(--reefpi-color-border)' }}
+            >
+              Reset dashboard config
             </button>
             <button
               role='menuitem'
@@ -223,5 +240,6 @@ SystemStrip.propTypes = {
   })),
   onAlertClick: PropTypes.func,
   onConfigure: PropTypes.func,
+  onResetDashboardConfig: PropTypes.func,
   onSignOut: PropTypes.func
 }

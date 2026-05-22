@@ -232,6 +232,9 @@ export class RawDashboardMain extends React.Component {
     return (
       <DashboardV2
         equipment={this.props.equipment}
+        temperatureControllers={this.props.temperatureControllers}
+        phProbes={this.props.phProbes}
+        atos={this.props.atos}
         onToggle={this.handleEquipmentToggle}
         onConfigure={this.handleToggle}
         sseEndpoint='/api/alerts'
@@ -245,7 +248,10 @@ export class RawDashboardMain extends React.Component {
 const mapStateToProps = state => {
   return {
     config: state.dashboard,
-    equipment: state.equipment
+    equipment: state.equipment,
+    temperatureControllers: state.tcs,
+    phProbes: state.phprobes,
+    atos: state.atos
   }
 }
 
