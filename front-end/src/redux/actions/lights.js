@@ -54,5 +54,5 @@ export const deleteLight = (s) => {
 }
 
 export const fetchLightUsage = (id) => {
-  return getAction(['lights', id, 'usage'], lightUsageLoaded(id))
+  return getAction(['lights', id, 'usage'], lightUsageLoaded(id), { silent404: true })
 }

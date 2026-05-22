@@ -44,7 +44,7 @@ export const fetchSensors = () => {
 }
 
 export const fetchTCUsage = (id) => {
-  return getAction(['tcs', id, 'usage'], tcUsageLoaded(id))
+  return getAction(['tcs', id, 'usage'], tcUsageLoaded(id), { silent404: true })
 }
 
 export const readTC = (id) => {

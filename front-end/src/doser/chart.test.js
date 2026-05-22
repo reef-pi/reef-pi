@@ -72,6 +72,41 @@ describe('Doser Chart', () => {
     expect(chart.render().type).toBe('div')
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetchDoserUsage = jest.fn()
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: undefined,
+      usage: undefined,
+      fetchDoserUsage
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetchDoserUsage).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    const fetchDoserUsage = jest.fn()
+    const chart = new RawDoserChart({
+      doser_id: '1',
+      height: 200,
+      config: undefined,
+      usage: undefined,
+      fetchDoserUsage
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchDoserUsage).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config: doserConfig }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetchDoserUsage).toHaveBeenCalledWith('1')
+  })
+
   it('fetches usage on mount', () => {
     const fetchDoserUsage = jest.fn()
     const chart = new RawDoserChart({

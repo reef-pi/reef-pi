@@ -8,9 +8,19 @@ import { ParseTimestamp } from 'utils/timestamp'
 
 export class RawGenericLightChart extends React.Component {
   componentDidMount () {
-    this.props.fetch(this.props.light_id)
-    const timer = window.setInterval(() => { this.props.fetch(this.props.light.id) }, 10 * 1000)
-    this.setState({ timer })
+    if (this.props.light !== undefined) {
+      this.props.fetch(this.props.light_id)
+      const timer = window.setInterval(() => { this.props.fetch(this.props.light_id) }, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.light === undefined && this.props.light !== undefined) {
+      this.props.fetch(this.props.light_id)
+      const timer = window.setInterval(() => { this.props.fetch(this.props.light_id) }, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

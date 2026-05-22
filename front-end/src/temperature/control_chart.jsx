@@ -9,11 +9,23 @@ import i18next from 'i18next'
 
 export class RawControlChart extends React.Component {
   componentDidMount () {
-    this.props.fetchTCUsage(this.props.sensor_id)
-    const timer = window.setInterval(() => {
+    if (this.props.config !== undefined) {
       this.props.fetchTCUsage(this.props.sensor_id)
-    }, 10 * 1000)
-    this.setState({ timer })
+      const timer = window.setInterval(() => {
+        this.props.fetchTCUsage(this.props.sensor_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.config === undefined && this.props.config !== undefined) {
+      this.props.fetchTCUsage(this.props.sensor_id)
+      const timer = window.setInterval(() => {
+        this.props.fetchTCUsage(this.props.sensor_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

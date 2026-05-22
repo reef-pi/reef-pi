@@ -16,9 +16,19 @@ export class RawDoserChart extends React.Component {
   }
 
   componentDidMount () {
-    this.updateUsage()
-    const timer = window.setInterval(this.updateUsage, 10 * 1000)
-    this.setState({ timer })
+    if (this.props.config !== undefined) {
+      this.updateUsage()
+      const timer = window.setInterval(this.updateUsage, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.config === undefined && this.props.config !== undefined) {
+      this.updateUsage()
+      const timer = window.setInterval(this.updateUsage, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

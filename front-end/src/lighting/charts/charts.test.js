@@ -257,6 +257,41 @@ describe('GenericLightChart', () => {
     expect(usage.current).toEqual(originalCurrent)
   })
 
+  it('skips fetch on mount when light is not in store (deleted)', () => {
+    const fetch = jest.fn()
+    const component = new RawGenericLightChart({
+      light_id: '1',
+      light: undefined,
+      usage: undefined,
+      fetch,
+      height: 200
+    })
+    component.setState = jest.fn()
+    component.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+    expect(component.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when light loads after mount', () => {
+    const fetch = jest.fn()
+    const component = new RawGenericLightChart({
+      light_id: '1',
+      light: undefined,
+      usage: undefined,
+      fetch,
+      height: 200
+    })
+    component.setState = jest.fn(update => {
+      component.state = { ...component.state, ...update }
+    })
+    component.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+
+    component.props = { ...component.props, light: lightConfig }
+    component.componentDidUpdate({ light: undefined })
+    expect(fetch).toHaveBeenCalledWith('1')
+  })
+
   it('clears interval on unmount', () => {
     jest.useFakeTimers()
     const fetch = jest.fn()

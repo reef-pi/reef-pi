@@ -75,6 +75,39 @@ describe('Ph ControlChart', () => {
     expect(tooltip.props.formatter(1, 'unknown')).toBeUndefined()
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetchProbeReadings = jest.fn()
+    const chart = new RawControlChart({
+      probe_id: '1',
+      config: undefined,
+      readings: undefined,
+      fetchProbeReadings
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetchProbeReadings).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    const fetchProbeReadings = jest.fn()
+    const chart = new RawControlChart({
+      probe_id: '1',
+      config: undefined,
+      readings: undefined,
+      fetchProbeReadings
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchProbeReadings).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config: probeConfig }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetchProbeReadings).toHaveBeenCalledWith('1')
+  })
+
   it('fetches probe readings on mount via interval', () => {
     jest.useFakeTimers()
     const readings = { historical: [] }

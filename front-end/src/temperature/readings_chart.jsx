@@ -7,9 +7,19 @@ import { filterToday, timestampToEpoch } from 'utils/timestamp'
 
 export class RawReadingsChart extends React.Component {
   componentDidMount () {
-    this.props.fetch(this.props.sensor_id)
-    const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
-    this.setState({ timer })
+    if (this.props.config !== undefined) {
+      this.props.fetch(this.props.sensor_id)
+      const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.config === undefined && this.props.config !== undefined) {
+      this.props.fetch(this.props.sensor_id)
+      const timer = window.setInterval(() => { this.props.fetch(this.props.sensor_id) }, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

@@ -48,7 +48,7 @@ export const saveDosingPumpCalibration = (id, s) => {
 }
 
 export const fetchDoserUsage = (id) => {
-  return getAction(['doser', 'pumps', id, 'usage'], doserUsageLoaded(id))
+  return getAction(['doser', 'pumps', id, 'usage'], doserUsageLoaded(id), { silent404: true })
 }
 
 export const doserUsageLoaded = (id) => {
