@@ -70,10 +70,121 @@ describe('Connectors', () => {
   })
 
   it('<Main /> maps state and fetch dispatch props', () => {
-    expect(mapStateToProps({ drivers: stockDrivers })).toEqual({ drivers: stockDrivers })
+    expect(mapStateToProps({
+      drivers: stockDrivers,
+      outlets: [],
+      inlets: [],
+      jacks: [],
+      analog_inputs: []
+    })).toEqual({
+      drivers: stockDrivers,
+      outlets: [],
+      inlets: [],
+      jacks: [],
+      analog_inputs: []
+    })
     const dispatch = jest.fn(action => action)
     mapDispatchToProps(dispatch).fetchDrivers()
     expect(dispatch).toHaveBeenCalledTimes(1)
+  })
+
+  it('<Main /> renders new shell connector groups behind the feature flag', () => {
+    window.FEATURE_FLAGS = { new_shell: true }
+    const component = new RawConnectors({
+      drivers: stockDrivers,
+      outlets: [
+        { id: 'out-1', name: 'Return Pump', pin: 0, driver: '1', equipment: 'eq-1' },
+        { id: 'out-2', name: 'Skimmer', pin: 1, driver: '1' }
+      ],
+      jacks: [{ id: 'jack-1', name: 'Moon', pins: [2], driver: '1' }],
+      inlets: [{ id: 'in-1', name: 'Float', pin: 1, driver: 'rpi' }],
+      analog_inputs: [
+        { id: 'ai-1', name: 'pH', pin: 0, driver: 'rpi' },
+        { id: 'ai-2', name: 'ORP', pin: 0, driver: 'rpi' }
+      ],
+      fetchDrivers: jest.fn(),
+      fetchOutlets: jest.fn(),
+      fetchInlets: jest.fn(),
+      fetchJacks: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      deleteOutlet: jest.fn(),
+      deleteInlet: jest.fn(),
+      deleteJack: jest.fn(),
+      deleteAnalogInput: jest.fn(),
+      updateOutlet: jest.fn(),
+      updateInlet: jest.fn(),
+      updateJack: jest.fn(),
+      updateAnalogInput: jest.fn()
+    })
+    patchSetState(component)
+    const html = renderToStaticMarkup(component.render())
+
+    expect(html).toContain('connectors-shell')
+    expect(html).toContain('Rasoverry Pi')
+    expect(html).toContain('PCA9685')
+    expect(html).toContain('3 / 9 used')
+    expect(html).toContain('connector-channel-grid')
+    expect((html.match(/connector-channel-cell/g) || []).length).toBe(9)
+    expect(html).toContain('connector-conflict')
+    window.FEATURE_FLAGS = {}
+  })
+
+  it('<Main /> filters, persists group state, and batch deletes selected channels', async () => {
+    window.FEATURE_FLAGS = { new_shell: true }
+    const setItem = jest.fn()
+    const getItem = jest.fn(() => 'false')
+    Object.defineProperty(window, 'localStorage', {
+      value: { getItem, setItem },
+      configurable: true
+    })
+    const deleteOutlet = jest.fn()
+    const deleteJack = jest.fn()
+    const updateOutlet = jest.fn()
+    const updateJack = jest.fn()
+    const component = new RawConnectors({
+      drivers: stockDrivers,
+      outlets: [{ id: 'out-1', name: 'Return Pump', pin: 0, driver: '1', equipment: 'eq-1' }],
+      jacks: [{ id: 'jack-1', name: 'Moon', pins: [2], driver: '1' }],
+      inlets: [],
+      analog_inputs: [],
+      fetchDrivers: jest.fn(),
+      fetchOutlets: jest.fn(),
+      fetchInlets: jest.fn(),
+      fetchJacks: jest.fn(),
+      fetchAnalogInputs: jest.fn(),
+      deleteOutlet,
+      deleteInlet: jest.fn(),
+      deleteJack,
+      deleteAnalogInput: jest.fn(),
+      updateOutlet,
+      updateInlet: jest.fn(),
+      updateJack,
+      updateAnalogInput: jest.fn()
+    })
+    patchSetState(component)
+
+    expect(component.state.openGroups.PCA9685).toBe(false)
+    component.toggleGroup('PCA9685')
+    expect(setItem).toHaveBeenCalledWith('reefpi.connectors.PCA9685.open', 'true')
+
+    component.handleFilterChange({ target: { value: 'moon' } })
+    expect(renderToStaticMarkup(component.render())).toContain('Moon')
+    expect(renderToStaticMarkup(component.render())).not.toContain('Return Pump')
+
+    component.toggleSelection({ id: 'out-1', kind: 'outlet', name: 'Return Pump', pin: 0, driver: '1', equipment: 'eq-1' })
+    component.toggleSelection({ id: 'jack-1', kind: 'jack', name: 'Moon', pins: [2], driver: '1' })
+    component.handleBatchDriverChange({ target: { value: 'rpi' } })
+    component.handleBatchMove()
+    expect(updateOutlet).toHaveBeenCalledWith('out-1', { name: 'Return Pump', driver: 'rpi', pin: 0, equipment: 'eq-1' })
+    expect(updateJack).toHaveBeenCalledWith('jack-1', { name: 'Moon', driver: 'rpi', pins: [2] })
+
+    component.toggleSelection({ id: 'out-1', kind: 'outlet', name: 'Return Pump' })
+    component.toggleSelection({ id: 'jack-1', kind: 'jack', name: 'Moon' })
+    component.handleBatchDelete()
+    await Promise.resolve()
+    expect(deleteOutlet).toHaveBeenCalledWith('out-1')
+    expect(deleteJack).toHaveBeenCalledWith('jack-1')
+    window.FEATURE_FLAGS = {}
   })
 
   it('<InletSelector />', () => {
