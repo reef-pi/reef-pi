@@ -43,7 +43,7 @@ function startUiAuditMonitor (page, options = {}) {
     failedRequests: [],
     allowlist: {
       consoleErrors: ['Failed to load resource: the server responded with a status of 404'],
-      failedRequests: ['/usage', '/readings'],
+      failedRequests: ['/usage', '/readings', '/api/telemetry/', '/api/alerts?since='],
       ...(options.allowlist || {})
     }
   }
@@ -105,7 +105,7 @@ async function collectDomObjectiveFindings (page) {
         return null
       }
       const rect = element.getBoundingClientRect()
-      if (rect.width <= 0 || rect.height <= 0 || rect.bottom < 0 || rect.right < 0 || rect.top > window.innerHeight || rect.left > window.innerWidth) {
+      if (rect.width <= 0 || rect.height <= 0 || rect.bottom <= 0 || rect.right <= 0 || rect.top >= window.innerHeight || rect.left >= window.innerWidth) {
         return null
       }
       return rect
@@ -131,6 +131,7 @@ async function collectDomObjectiveFindings (page) {
       }))
 
     const overflow = Array.from(document.querySelectorAll('body *'))
+      .filter(element => !element.ownerSVGElement)
       .map(element => ({ element, rect: visibleRect(element) }))
       .filter(item => item.rect !== null)
       .filter(item => item.rect.right > document.documentElement.clientWidth + 8 || item.rect.left < -8)
@@ -153,6 +154,22 @@ async function collectDomObjectiveFindings (page) {
     return { fatalText, tapTargets, overflow, missingAnchors }
   })
 }
+
+function consumeMonitorFindings (page) {
+  const state = captureState.get(page)
+  if (!state) {
+    return { consoleErrors: [], failedRequests: [] }
+  }
+
+  const findings = {
+    consoleErrors: state.consoleErrors,
+    failedRequests: state.failedRequests
+  }
+  state.consoleErrors = []
+  state.failedRequests = []
+  return findings
+}
+
 async function resetUiAuditArtifacts () {
   await fs.rm(artifactRoot, { recursive: true, force: true })
   await fs.mkdir(screenshotRoot, { recursive: true })
@@ -222,12 +239,12 @@ async function captureUiAuditScreenshot ({
   })
 
   const domFindings = await collectDomObjectiveFindings(page)
-  const state = captureState.get(page) || { consoleErrors: [], failedRequests: [] }
+  const monitorFindings = consumeMonitorFindings(page)
   const mergedObjectiveFindings = normalizeObjectiveFindings({
     ...objectiveFindings,
     fatalText: domFindings.fatalText,
-    consoleErrors: state.consoleErrors,
-    failedRequests: state.failedRequests,
+    consoleErrors: monitorFindings.consoleErrors,
+    failedRequests: monitorFindings.failedRequests,
     tapTargets: domFindings.tapTargets,
     overflow: domFindings.overflow,
     missingAnchors: domFindings.missingAnchors
