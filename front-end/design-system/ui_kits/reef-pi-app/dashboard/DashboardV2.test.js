@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { act } from 'react'
+import { createRoot } from 'react-dom/client'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 let mockAlerts = []
@@ -6,16 +7,53 @@ jest.mock('../hooks/useAlertsStore', () => ({
   useAlertsStore: () => ({ alerts: mockAlerts })
 }))
 
+jest.mock('./SystemStrip', () => function MockSystemStrip (props) {
+  return <section data-testid='system-strip' data-sse-endpoint={props.sseEndpoint} />
+})
+jest.mock('./TemperatureTile', () => function MockTemperatureTile (props) {
+  return <section data-testid='temperature-tile' data-global-range={props.globalRange} data-alert={JSON.stringify(props.alert || null)} />
+})
+jest.mock('./PhTile', () => function MockPhTile (props) {
+  return <section data-testid='ph-tile' data-global-range={props.globalRange} data-alert={JSON.stringify(props.alert || null)} />
+})
+jest.mock('./AtoTile', () => function MockAtoTile (props) {
+  return <section data-testid='ato-tile' data-global-range={props.globalRange} data-target-level={props.targetLevel} data-alert={JSON.stringify(props.alert || null)} />
+})
+jest.mock('./EquipmentStrip', () => function MockEquipmentStrip (props) {
+  return <section data-testid='equipment-strip' data-items={props.items?.length || 0} data-toggle={props.onToggle ? 'yes' : 'no'} />
+})
+
 import DashboardV2 from './DashboardV2'
-import AtoTile from './AtoTile'
-import EquipmentStrip from './EquipmentStrip'
-import PhTile from './PhTile'
-import SystemStrip from './SystemStrip'
-import TemperatureTile from './TemperatureTile'
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+function renderDashboard (props = {}) {
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  const root = createRoot(container)
+
+  act(() => {
+    root.render(<DashboardV2 {...props} />)
+  })
+
+  return {
+    container,
+    root,
+    cleanup: () => {
+      act(() => root.unmount())
+      container.remove()
+    }
+  }
+}
+
+function dataAlert (container, testId) {
+  return JSON.parse(container.querySelector(`[data-testid="${testId}"]`).getAttribute('data-alert'))
+}
 
 describe('design-system DashboardV2', () => {
   beforeEach(() => {
     mockAlerts = []
+    window.localStorage.clear()
   })
 
   afterEach(() => {
@@ -34,8 +72,11 @@ describe('design-system DashboardV2', () => {
     window.FEATURE_FLAGS = { dashboard_v2: true }
     const onToggle = jest.fn()
     const equipment = [{ id: 'pump', name: 'Pump', state: 'on' }]
-    const tree = DashboardV2({
+    const { container, cleanup } = renderDashboard({
       equipment,
+      temperatureControllers: [{ id: '1' }],
+      phProbes: [{ id: '1' }],
+      atos: [{ id: '1' }],
       onToggle,
       sseEndpoint: '/api/alerts',
       globalRange: '7d',
@@ -43,18 +84,15 @@ describe('design-system DashboardV2', () => {
       children: <span>Legacy dashboard</span>
     })
 
-    const rows = tree.props.children
-    expect(tree.props['data-testid']).toBe('smoke-dashboard-v2')
-    expect(rows[0].type).toBe(SystemStrip)
-    expect(rows[0].props.sseEndpoint).toBe('/api/alerts')
-    expect(rows[1].props.children[0].props.children.type).toBe(TemperatureTile)
-    expect(rows[1].props.children[0].props.children.props.globalRange).toBe('7d')
-    expect(rows[1].props.children[1].props.children.type).toBe(PhTile)
-    expect(rows[2].props.children.props.children.type).toBe(AtoTile)
-    expect(rows[2].props.children.props.children.props.targetLevel).toBe(50)
-    expect(rows[3].type).toBe(EquipmentStrip)
-    expect(rows[3].props.items).toBe(equipment)
-    expect(rows[3].props.onToggle).toBe(onToggle)
+    expect(container.querySelector('[data-testid="smoke-dashboard-v2"]')).not.toBeNull()
+    expect(container.querySelector('[data-testid="system-strip"]').getAttribute('data-sse-endpoint')).toBe('/api/alerts')
+    expect(container.querySelector('[data-testid="temperature-tile"]').getAttribute('data-global-range')).toBe('7d')
+    expect(container.querySelector('[data-testid="ph-tile"]').getAttribute('data-global-range')).toBe('7d')
+    expect(container.querySelector('[data-testid="ato-tile"]').getAttribute('data-target-level')).toBe('50')
+    expect(container.querySelector('[data-testid="equipment-strip"]').getAttribute('data-items')).toBe('1')
+    expect(container.querySelector('[data-testid="equipment-strip"]').getAttribute('data-toggle')).toBe('yes')
+
+    cleanup()
   })
 
   it('maps unacknowledged alert-center messages to matching tiles', () => {
@@ -66,24 +104,31 @@ describe('design-system DashboardV2', () => {
       { title: 'Temperature old', detail: 'acknowledged alert', severity: 'critical', ts: 104, acknowledged: true }
     ]
 
-    const tree = DashboardV2({ equipment: [], sseEndpoint: '/api/alerts' })
-    const rows = tree.props.children
+    const { container, cleanup } = renderDashboard({
+      equipment: [],
+      temperatureControllers: [{ id: '1' }],
+      phProbes: [{ id: '1' }],
+      atos: [{ id: '1' }],
+      sseEndpoint: '/api/alerts'
+    })
 
-    expect(rows[1].props.children[0].props.children.props.alert).toEqual({
+    expect(dataAlert(container, 'temperature-tile')).toEqual({
       severity: 'critical',
       message: 'Water temperature exceeded limit',
       at: 101
     })
-    expect(rows[1].props.children[1].props.children.props.alert).toEqual({
+    expect(dataAlert(container, 'ph-tile')).toEqual({
       severity: 'warn',
       message: 'pH warning',
       at: 102
     })
-    expect(rows[2].props.children.props.children.props.alert).toEqual({
+    expect(dataAlert(container, 'ato-tile')).toEqual({
       severity: 'warn',
       message: 'Water level low',
       at: 103
     })
+
+    cleanup()
   })
 
   it('leaves tile alerts unset when no alert keywords match', () => {
@@ -92,10 +137,17 @@ describe('design-system DashboardV2', () => {
       { title: 'Camera offline', detail: 'No recent images', severity: 'critical', ts: 105 }
     ]
 
-    const rows = DashboardV2({ equipment: [] }).props.children
+    const { container, cleanup } = renderDashboard({
+      equipment: [],
+      temperatureControllers: [{ id: '1' }],
+      phProbes: [{ id: '1' }],
+      atos: [{ id: '1' }]
+    })
 
-    expect(rows[1].props.children[0].props.children.props.alert).toBeUndefined()
-    expect(rows[1].props.children[1].props.children.props.alert).toBeUndefined()
-    expect(rows[2].props.children.props.children.props.alert).toBeUndefined()
+    expect(dataAlert(container, 'temperature-tile')).toBeNull()
+    expect(dataAlert(container, 'ph-tile')).toBeNull()
+    expect(dataAlert(container, 'ato-tile')).toBeNull()
+
+    cleanup()
   })
 })

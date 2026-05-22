@@ -30,6 +30,7 @@ describe('design-system SystemStrip', () => {
   it('opens menu, invokes actions, and closes on outside pointer down', () => {
     const onAlertClick = jest.fn()
     const onConfigure = jest.fn()
+    const onResetDashboardConfig = jest.fn()
     const onSignOut = jest.fn()
     const container = document.createElement('div')
     document.body.appendChild(container)
@@ -41,6 +42,7 @@ describe('design-system SystemStrip', () => {
           alerts={[{ severity: 'warn' }]}
           onAlertClick={onAlertClick}
           onConfigure={onConfigure}
+          onResetDashboardConfig={onResetDashboardConfig}
           onSignOut={onSignOut}
         />
       )
@@ -54,12 +56,19 @@ describe('design-system SystemStrip', () => {
     act(() => menuButton.click())
     expect(container.querySelector('[role="menu"]')).not.toBeNull()
 
-    act(() => container.querySelectorAll('[role="menuitem"]')[0].click())
+    const menuItemNamed = name => Array.from(container.querySelectorAll('[role="menuitem"]'))
+      .find(item => item.textContent === name)
+
+    act(() => menuItemNamed('Configure').click())
     expect(onConfigure).toHaveBeenCalled()
     expect(container.querySelector('[role="menu"]')).toBeNull()
 
     act(() => menuButton.click())
-    act(() => container.querySelectorAll('[role="menuitem"]')[1].click())
+    act(() => menuItemNamed('Reset dashboard config').click())
+    expect(onResetDashboardConfig).toHaveBeenCalled()
+
+    act(() => menuButton.click())
+    act(() => menuItemNamed('Sign out').click())
     expect(onSignOut).toHaveBeenCalled()
 
     act(() => menuButton.click())
