@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 /*
@@ -42,7 +42,7 @@ const NAV_ITEM_STYLE = (active, expanded) => ({
   transition:     'background 0.12s, color 0.12s',
   position:       'relative',
   whiteSpace:     'nowrap',
-  overflow:       'hidden'
+  overflow:       expanded ? 'hidden' : 'visible'
 })
 
 export default function Sidebar ({
@@ -55,7 +55,6 @@ export default function Sidebar ({
     try { return localStorage.getItem(STORAGE_KEY) === 'true' } catch { return false }
   })
   const [visible, setVisible] = useState(false)
-  const [tooltip, setTooltip] = useState(null)
 
   // Only mount at ≥992px
   useEffect(() => {
@@ -93,7 +92,7 @@ export default function Sidebar ({
         flexDirection: 'column',
         zIndex:     100,
         transition: 'width 0.22s cubic-bezier(0.4,0,0.2,1)',
-        overflow:   'hidden'
+        overflow:   expanded ? 'hidden' : 'visible'
       }}
     >
       {/* Logo + expand toggle */}
@@ -144,9 +143,9 @@ export default function Sidebar ({
       {/* Route items */}
       <div style={{
         flex:       '1 1 auto',
-        overflowY:  'auto',
-        overflowX:  'hidden',
-        padding:    '0.5rem',
+        overflowY:  expanded ? 'auto' : 'visible',
+        overflowX:  'visible',
+        padding:    expanded ? '0.5rem' : '0.5rem 0',
         display:    'flex',
         flexDirection: 'column',
         gap:        '2px'
@@ -158,7 +157,6 @@ export default function Sidebar ({
             active={activeRoute === route.id}
             expanded={expanded}
             onNavigate={onNavigate}
-            onTooltip={setTooltip}
           />
         ))}
       </div>
@@ -173,54 +171,50 @@ export default function Sidebar ({
           {expanded && <span>Sign out</span>}
         </button>
       </div>
-
-      {/* Tooltip (rail-only) */}
-      {tooltip && !expanded && (
-        <div
-          role='tooltip'
-          style={{
-            position:   'fixed',
-            left:       `${RAIL_W + 8}px`,
-            top:        tooltip.top,
-            background: 'var(--reefpi-color-text)',
-            color:      'var(--reefpi-color-surface)',
-            fontSize:   '0.75rem',
-            padding:    '4px 8px',
-            borderRadius: 'var(--reefpi-radius-sm)',
-            pointerEvents: 'none',
-            zIndex:     200,
-            fontFamily: 'var(--reefpi-font-app)',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {tooltip.label}
-        </div>
-      )}
     </nav>
   )
 }
 
-function NavItem ({ route, active, expanded, onNavigate, onTooltip }) {
-  const ref = useRef(null)
+function NavItem ({ route, active, expanded, onNavigate }) {
+  const [hovered, setHovered] = useState(false)
+
   return (
     <a
-      ref={ref}
       href={route.href}
       data-testid={`smoke-tab-${route.id}`}
       aria-current={active ? 'page' : undefined}
       onClick={e => { if (onNavigate) { e.preventDefault(); onNavigate(route) } }}
-      onMouseEnter={() => {
-        if (expanded) return
-        const rect = ref.current?.getBoundingClientRect()
-        onTooltip?.({ label: route.label, top: (rect?.top ?? 0) + 'px' })
-      }}
-      onMouseLeave={() => onTooltip?.(null)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={NAV_ITEM_STYLE(active, expanded)}
     >
       <span style={{ flexShrink: 0, width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {route.icon}
       </span>
       {expanded && <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{route.label}</span>}
+      {hovered && !expanded && (
+        <span
+          role='tooltip'
+          style={{
+            position:   'absolute',
+            left:       '100%',
+            top:        '50%',
+            transform:  'translateY(-50%)',
+            marginLeft: '8px',
+            background: 'var(--reefpi-color-text)',
+            color:      'var(--reefpi-color-surface)',
+            fontSize:   '0.75rem',
+            padding:    '4px 8px',
+            borderRadius: 'var(--reefpi-radius-sm)',
+            pointerEvents: 'none',
+            zIndex:     1000,
+            fontFamily: 'var(--reefpi-font-app)',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {route.label}
+        </span>
+      )}
     </a>
   )
 }
