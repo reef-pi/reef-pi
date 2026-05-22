@@ -124,7 +124,12 @@
 }
 
 .bottom-bar {
+  min-height: var(--reefpi-summary-height, 64px);
   border-top: solid 1px var(--reefpi-color-border-subtle);
+}
+
+.bottom-bar .list-inline {
+  margin-bottom: 0;
 }
 
 html {
@@ -137,6 +142,7 @@ body {
 }
 
 #main-panel {
+  --reefpi-summary-height: 64px;
   min-height: 100vh;
 }
 
@@ -316,6 +322,10 @@ textarea:focus,
 }
 
 @media screen and (min-width: 992px) {
+  #main-panel {
+    padding-bottom: var(--reefpi-summary-height, 64px);
+  }
+
   .body-panel {
     margin-bottom: 70px;
   }
@@ -527,5 +537,11 @@ textarea:focus,
   .connector-channel-cell {
     grid-template-columns: auto auto 1fr;
     justify-items: start;
+  }
+}
+
+@media screen and (max-width: 991.98px) {
+  #main-panel {
+    padding-bottom: 0;
   }
 }
