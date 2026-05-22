@@ -53,6 +53,38 @@ test('stale dashboard config shows no error toasts', async ({ page, baseURL }) =
   await expect(page.locator('.alert-danger')).toHaveCount(0)
 })
 
+test('prunes orphaned dashboard chart subscriptions from local storage', async ({ page, baseURL }) => {
+  const api = await createSmokeApi(baseURL)
+
+  try {
+    await seedDashboard(api)
+  } finally {
+    await api.dispose()
+  }
+
+  await page.addInitScript(() => {
+    window.localStorage.setItem('dashboard_config', JSON.stringify({
+      subscriptions: [
+        { resource: 'temperature', id: '999', metric: 'temperature.display' }
+      ]
+    }))
+  })
+
+  const navBar = new NavBar(page)
+  await page.goto('/')
+  await navBar.expectShell()
+
+  const dashboard = page.getByTestId('smoke-dashboard-v2')
+  await expect(dashboard).toBeVisible()
+  const temperatureTile = page.getByTestId('dashboard-tile-temperature')
+  await expect(temperatureTile).toContainText('Not configured')
+  await expect(temperatureTile).toContainText('Configure temperature probe')
+  await expect(temperatureTile).not.toContainText('HTTP 404')
+  await expect(temperatureTile).not.toContainText('Retry')
+
+  await expect.poll(async () => page.evaluate(() => window.localStorage.getItem('dashboard_config'))).not.toContain('999')
+})
+
 test.describe('mobile shell', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
