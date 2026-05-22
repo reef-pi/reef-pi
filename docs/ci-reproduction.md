@@ -39,6 +39,20 @@ make smoke
 
 Stop the background `reef-pi` process after the smoke run completes.
 
+## UI Audit
+
+Workflow: `.github/workflows/smoke_.yml` (`UI Audit` job)
+
+```bash
+make install
+npx playwright install --with-deps chromium
+make go
+make ui
+yarn ui-audit
+```
+
+The UI audit command captures screenshots, writes `test-results/ui-audit/manifest.json`, runs objective checks, and generates `objective-report.json`, `agent-report.json`, `agent-report.md`, and per-module prompts under `test-results/ui-audit/prompts/`. CI uploads those files with the screenshot bundle when the job fails.
+
 ## Debian Package
 
 Workflow: `.github/workflows/deb.yml`

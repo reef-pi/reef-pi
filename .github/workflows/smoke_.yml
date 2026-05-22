@@ -53,3 +53,40 @@ jobs:
             playwright-report
             test-results/playwright
           if-no-files-found: ignore
+
+  frontend-ui-audit:
+    name: UI Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.2'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: actions/cache@v5.0.5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - run: make install
+      - run: npx playwright install --with-deps chromium
+      - run: make go
+      - run: make ui
+      - run: make ui-audit
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-audit-artifacts
+          path: |
+            test-results/ui-audit/screenshots
+            test-results/ui-audit/manifest.json
+            test-results/ui-audit/objective-report.json
+            test-results/ui-audit/agent-report.json
+            test-results/ui-audit/agent-report.md
+            test-results/ui-audit/prompts
+            test-results/ui-audit/playwright
+            playwright-report
+          if-no-files-found: ignore
