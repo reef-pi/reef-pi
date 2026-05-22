@@ -65,6 +65,41 @@ describe('ATO Chart', () => {
     expect(chart.render().type).toBe('div')
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetchATOUsage = jest.fn()
+    const chart = new RawATOChart({
+      ato_id: '1',
+      height: 200,
+      config: undefined,
+      usage: undefined,
+      fetchATOUsage
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetchATOUsage).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    const fetchATOUsage = jest.fn()
+    const chart = new RawATOChart({
+      ato_id: '1',
+      height: 200,
+      config: undefined,
+      usage: undefined,
+      fetchATOUsage
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchATOUsage).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config: atoConfig }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetchATOUsage).toHaveBeenCalledWith('1')
+  })
+
   it('fetches usage on mount', () => {
     const fetchATOUsage = jest.fn()
     const chart = new RawATOChart({

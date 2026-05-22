@@ -45,7 +45,7 @@ export const probeReadComplete = (id) => {
 }
 
 export const fetchProbeReadings = (id) => {
-  return getAction(['phprobes', id, 'readings'], probeReadingsLoaded(id))
+  return getAction(['phprobes', id, 'readings'], probeReadingsLoaded(id), { silent404: true })
 }
 
 export const updateProbe = (id, a) => {

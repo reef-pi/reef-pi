@@ -141,6 +141,27 @@ describe('Ajax', () => {
     })
   })
 
+  it('console.warns instead of toasting for 404 when silent404 is set', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    global.fetch.mockResolvedValue(response({ ok: false, status: 404, text: 'not found' }))
+
+    return reduxGet({ url: '/foo', success, silent404: true })(dispatch).then(() => {
+      expect(showError).not.toHaveBeenCalled()
+      expect(warnSpy).toHaveBeenCalledWith('not found')
+      expect(dispatch).not.toHaveBeenCalled()
+      warnSpy.mockRestore()
+    })
+  })
+
+  it('still toasts for non-404 errors when silent404 is set', () => {
+    global.fetch.mockResolvedValue(response({ ok: false, status: 500, text: 'server error' }))
+
+    return reduxGet({ url: '/foo', success, silent404: true })(dispatch).then(() => {
+      expect(showError).toHaveBeenCalledWith('server error | HTTP 500')
+      expect(dispatch).not.toHaveBeenCalled()
+    })
+  })
+
   it('dispatches API_FAILURE when fetch rejects', () => {
     global.fetch.mockRejectedValue(new Error('offline'))
 

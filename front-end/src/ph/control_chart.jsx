@@ -8,11 +8,23 @@ import humanizeDuration from 'humanize-duration'
 
 export class RawControlChart extends React.Component {
   componentDidMount () {
-    this.props.fetchProbeReadings(this.props.probe_id)
-    const timer = window.setInterval(() => {
+    if (this.props.config !== undefined) {
       this.props.fetchProbeReadings(this.props.probe_id)
-    }, 10 * 1000)
-    this.setState({ timer })
+      const timer = window.setInterval(() => {
+        this.props.fetchProbeReadings(this.props.probe_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.config === undefined && this.props.config !== undefined) {
+      this.props.fetchProbeReadings(this.props.probe_id)
+      const timer = window.setInterval(() => {
+        this.props.fetchProbeReadings(this.props.probe_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

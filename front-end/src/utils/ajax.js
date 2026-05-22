@@ -43,6 +43,10 @@ function handleErrorResponse (response, params) {
       params.failure(response)
       return handledError
     }
+    if (response.status === 404 && params.silent404) {
+      console.warn(err)
+      return handledError
+    }
     showError(err + ' | HTTP ' + response.status)
     return handledError
   })

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test')
-const { createSmokeApi, seedDashboard } = require('../fixtures/apiSeed')
+const { createSmokeApi, seedDashboard, updateDashboard } = require('../fixtures/apiSeed')
 const { NavBar } = require('../pages/navBar')
 
 async function expectDashboardReady (page) {
@@ -28,6 +28,29 @@ test('seeded dashboard survives reload', async ({ page, baseURL }) => {
   await page.reload()
   await expect(page.locator('body')).toContainText('Return')
   await expectDashboardReady(page)
+})
+
+test('stale dashboard config shows no error toasts', async ({ page, baseURL }) => {
+  const api = await createSmokeApi(baseURL)
+
+  try {
+    await updateDashboard(api, {
+      row: 1,
+      column: 1,
+      width: 400,
+      height: 200,
+      grid_details: [[{ type: 'temp_current', id: '99999' }]]
+    })
+  } finally {
+    await api.dispose()
+  }
+
+  const navBar = new NavBar(page)
+  await page.goto('/')
+  await navBar.expectShell()
+
+  await page.waitForTimeout(2000)
+  await expect(page.locator('.alert-danger')).toHaveCount(0)
 })
 
 test.describe('mobile shell', () => {

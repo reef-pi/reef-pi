@@ -92,6 +92,40 @@ describe('Temperature ControlChart', () => {
     })
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetchTCUsage = jest.fn()
+    const chart = new RawControlChart({
+      sensor_id: '1',
+      config: undefined,
+      usage: undefined,
+      fetchTCUsage
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetchTCUsage).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    jest.useFakeTimers()
+    const fetchTCUsage = jest.fn()
+    const chart = new RawControlChart({
+      sensor_id: '1',
+      config: undefined,
+      usage: undefined,
+      fetchTCUsage
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchTCUsage).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetchTCUsage).toHaveBeenCalledWith('1')
+  })
+
   it('polls control usage on mount and clears the timer on unmount', () => {
     jest.useFakeTimers()
     const fetchTCUsage = jest.fn()

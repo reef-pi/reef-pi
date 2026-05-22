@@ -77,6 +77,40 @@ describe('Temperature ReadingsChart', () => {
     })
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetch = jest.fn()
+    const chart = new RawReadingsChart({
+      sensor_id: '1',
+      config: undefined,
+      usage: undefined,
+      fetch
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    jest.useFakeTimers()
+    const fetch = jest.fn()
+    const chart = new RawReadingsChart({
+      sensor_id: '1',
+      config: undefined,
+      usage: undefined,
+      fetch
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetch).toHaveBeenCalledWith('1')
+  })
+
   it('polls readings on mount and clears the timer on unmount', () => {
     jest.useFakeTimers()
     const fetch = jest.fn()

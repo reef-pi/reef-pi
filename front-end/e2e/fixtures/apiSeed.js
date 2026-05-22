@@ -455,5 +455,6 @@ module.exports = {
   resetSmokeState,
   seedConfiguration,
   seedFullSmokeConfiguration,
-  seedDashboard
+  seedDashboard,
+  updateDashboard
 }

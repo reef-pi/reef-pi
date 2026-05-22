@@ -38,7 +38,7 @@ export const atoUsageLoaded = (id) => {
 }
 
 export const fetchATOUsage = (id) => {
-  return getAction(['atos', id, 'usage'], atoUsageLoaded(id))
+  return getAction(['atos', id, 'usage'], atoUsageLoaded(id), { silent404: true })
 }
 
 export const createATO = (a) => {

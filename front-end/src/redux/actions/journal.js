@@ -38,7 +38,7 @@ export const journalUsageLoaded = (id) => {
 }
 
 export const fetchJournalUsage = (id) => {
-  return getAction(['journal', id, 'usage'], journalUsageLoaded(id))
+  return getAction(['journal', id, 'usage'], journalUsageLoaded(id), { silent404: true })
 }
 
 export const createJournal = (a) => {

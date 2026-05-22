@@ -6,11 +6,23 @@ import { connect } from 'react-redux'
 
 export class RawJournalChart extends React.Component {
   componentDidMount () {
-    this.props.fetch(this.props.journal_id)
-    const timer = window.setInterval(() => {
+    if (this.props.config !== undefined) {
       this.props.fetch(this.props.journal_id)
-    }, 10 * 1000)
-    this.setState({ timer })
+      const timer = window.setInterval(() => {
+        this.props.fetch(this.props.journal_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.config === undefined && this.props.config !== undefined) {
+      this.props.fetch(this.props.journal_id)
+      const timer = window.setInterval(() => {
+        this.props.fetch(this.props.journal_id)
+      }, 10 * 1000)
+      this.setState({ timer })
+    }
   }
 
   componentWillUnmount () {

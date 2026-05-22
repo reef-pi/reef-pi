@@ -76,6 +76,41 @@ describe('pH Chart', () => {
     expect(maxLine.props).toMatchObject({ y: 8.5, stroke: 'orange', strokeDasharray: '4 2' })
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetchProbeReadings = jest.fn()
+    const chart = new RawPhChart({
+      probe_id: '1',
+      config: undefined,
+      readings: undefined,
+      type: 'historical',
+      fetchProbeReadings
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetchProbeReadings).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    const fetchProbeReadings = jest.fn()
+    const chart = new RawPhChart({
+      probe_id: '1',
+      config: undefined,
+      readings: undefined,
+      type: 'historical',
+      fetchProbeReadings
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetchProbeReadings).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config: probeConfig }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetchProbeReadings).toHaveBeenCalledWith('1')
+  })
+
   it('polls readings on mount and clears the timer on unmount', () => {
     jest.useFakeTimers()
     const fetchProbeReadings = jest.fn()

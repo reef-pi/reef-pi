@@ -90,6 +90,39 @@ describe('<Chart />', () => {
     expect(yAxis.props.dataKey).toBe('value')
   })
 
+  it('skips fetch on mount when entity is not in store (deleted)', () => {
+    const fetch = jest.fn()
+    const chart = new RawJournalChart({
+      journal_id: '1',
+      config: undefined,
+      readings: undefined,
+      fetch
+    })
+    chart.setState = jest.fn()
+    chart.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+    expect(chart.setState).not.toHaveBeenCalled()
+  })
+
+  it('starts polling via componentDidUpdate when entity loads after mount', () => {
+    const fetch = jest.fn()
+    const chart = new RawJournalChart({
+      journal_id: '1',
+      config: undefined,
+      readings: undefined,
+      fetch
+    })
+    chart.setState = jest.fn(update => {
+      chart.state = { ...chart.state, ...update }
+    })
+    chart.componentDidMount()
+    expect(fetch).not.toHaveBeenCalled()
+
+    chart.props = { ...chart.props, config: journal }
+    chart.componentDidUpdate({ config: undefined })
+    expect(fetch).toHaveBeenCalledWith('1')
+  })
+
   it('polls on mount and clears timer on unmount', () => {
     jest.useFakeTimers()
     const fetch = jest.fn()
