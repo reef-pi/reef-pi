@@ -90,3 +90,25 @@ yarn
 make standard
 make jest
 ```
+
+## UI Audit
+
+Workflow: `.github/workflows/ui-audit.yml`
+
+The UI audit captures the seeded reef-pi module corpus, checks objective browser facts against the design-system rules, and writes agent-ready artifacts.
+
+Run locally from the repo root:
+
+```bash
+rtk yarn run ui-audit
+```
+
+Artifacts are written to:
+
+- `test-results/ui-audit/manifest.json`
+- `test-results/ui-audit/agent-report.json`
+- `test-results/ui-audit/agent-report.md`
+- `test-results/ui-audit/prompts/`
+- `test-results/ui-audit/screenshots/`
+
+A non-zero exit means the audit found objective failures such as missing screenshots, fatal app text, unexpected failed app/API requests, or missing audit anchors. Tap-target and overflow observations are recorded as warnings for design review prompts and do not block CI by themselves.

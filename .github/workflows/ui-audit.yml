@@ -1,0 +1,61 @@
+name: UI Audit
+on:
+  push:
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '**/*.jsx'
+      - '**/*.js'
+      - '**/*.css'
+      - '**/*.scss'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
+      - '.github/workflows/*.yml'
+  pull_request:
+    paths:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '**/*.jsx'
+      - '**/*.js'
+      - '**/*.css'
+      - '**/*.scss'
+      - '*.json'
+      - 'yarn.lock'
+      - 'Makefile'
+      - '.github/workflows/*.yml'
+
+jobs:
+  ui-audit:
+    name: UI Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.2'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: actions/cache@v5.0.5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - run: make install
+      - run: npx playwright install --with-deps chromium
+      - run: make go
+      - run: make ui
+      - run: make ui-audit
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-audit-artifacts
+          path: |
+            test-results/ui-audit
+            playwright-report
+            test-results/playwright
+          if-no-files-found: ignore
