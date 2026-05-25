@@ -1,7 +1,9 @@
 const { test, expect } = require('@playwright/test')
 const { NavBar } = require('../../pages/navBar')
 const {
-  captureUiAuditScreenshot
+  captureUiAuditScreenshot,
+  collectObjectiveFindings,
+  createUiAuditObserver
 } = require('../../fixtures/uiAudit')
 
 const designSystemReferences = [
@@ -13,17 +15,31 @@ const designSystemReferences = [
 test('captures the authenticated shell audit baseline', async ({ page }) => {
   const navBar = new NavBar(page)
 
-  await page.goto('/')
-  await navBar.expectShell()
-  await expect(page.getByTestId('smoke-shell-root')).toBeVisible()
+  const auditObserver = createUiAuditObserver(page)
 
-  await captureUiAuditScreenshot({
-    page,
-    moduleId: 'shell',
-    screenName: 'authenticated-shell',
-    viewportName: 'desktop',
-    seedProfile: 'auth-only',
-    route: '/',
-    designSystemReferences
-  })
+  try {
+    await page.goto('/')
+    await navBar.expectShell()
+    await expect(page.getByTestId('smoke-shell-root')).toBeVisible()
+
+    const objectiveFindings = await collectObjectiveFindings(page, {
+      requiredAnchors: ['[data-testid="smoke-shell-root"]']
+    })
+    const eventFindings = auditObserver.findings()
+    objectiveFindings.consoleErrors = eventFindings.consoleErrors
+    objectiveFindings.failedRequests = eventFindings.failedRequests
+
+    await captureUiAuditScreenshot({
+      page,
+      moduleId: 'shell',
+      screenName: 'authenticated-shell',
+      viewportName: 'desktop',
+      seedProfile: 'auth-only',
+      route: '/',
+      objectiveFindings,
+      designSystemReferences
+    })
+  } finally {
+    auditObserver.dispose()
+  }
 })
