@@ -1,7 +1,11 @@
 const { test, expect } = require('@playwright/test')
 const { createSmokeApi, seedFullSmokeConfiguration } = require('../../fixtures/apiSeed')
 const { NavBar } = require('../../pages/navBar')
-const { captureUiAuditScreenshot } = require('../../fixtures/uiAudit')
+const {
+  captureUiAuditScreenshot,
+  collectObjectiveFindings,
+  createUiAuditObserver
+} = require('../../fixtures/uiAudit')
 
 const designSystemReferences = [
   'front-end/design-system/SKILL.md',
@@ -67,7 +71,17 @@ async function openRoute (page, navBar, viewport, moduleId) {
   await tab.click()
 }
 
-async function captureCurrentScreen ({ page, moduleId, screenName, viewport, route, tab = null }) {
+async function captureCurrentScreen ({ page, moduleId, screenName, viewport, route, tab = null, auditObserver }) {
+  const objectiveFindings = await collectObjectiveFindings(page, {
+    requiredAnchors: ['[data-testid="smoke-shell-root"]']
+  })
+  if (auditObserver) {
+    const eventFindings = auditObserver.findings()
+    objectiveFindings.consoleErrors = eventFindings.consoleErrors
+    objectiveFindings.failedRequests = eventFindings.failedRequests
+    auditObserver.reset()
+  }
+
   await captureUiAuditScreenshot({
     page,
     moduleId,
@@ -77,11 +91,12 @@ async function captureCurrentScreen ({ page, moduleId, screenName, viewport, rou
     seedProfile: 'full-smoke',
     route,
     tab,
+    objectiveFindings,
     designSystemReferences
   })
 }
 
-async function openDashboard (page, navBar, viewport) {
+async function openDashboard (page, navBar, viewport, auditObserver) {
   await page.goto('/')
   await expectShellForViewport(page, viewport)
   await expectPageText(page, ['Temperature', 'pH', 'ATO'])
@@ -90,11 +105,12 @@ async function openDashboard (page, navBar, viewport) {
     moduleId: 'dashboard',
     screenName: 'landing',
     viewport,
-    route: '/'
+    route: '/',
+    auditObserver
   })
 }
 
-async function openConfigurationTab (page, navBar, viewport, tabId, moduleId, expectedText) {
+async function openConfigurationTab (page, navBar, viewport, tabId, moduleId, expectedText, auditObserver) {
   await openRoute(page, navBar, viewport, 'configuration')
   await page.locator(tabId).click()
   await expectPageText(page, expectedText)
@@ -104,11 +120,12 @@ async function openConfigurationTab (page, navBar, viewport, tabId, moduleId, ex
     screenName: 'landing',
     viewport,
     route: '/configuration',
-    tab: tabId.replace(/^#config-/, '')
+    tab: tabId.replace(/^#config-/, ''),
+    auditObserver
   })
 }
 
-async function openModule (page, navBar, viewport, moduleId, expectedText) {
+async function openModule (page, navBar, viewport, moduleId, expectedText, auditObserver) {
   await openRoute(page, navBar, viewport, moduleId)
   await expectPageText(page, expectedText)
   await captureCurrentScreen({
@@ -116,7 +133,8 @@ async function openModule (page, navBar, viewport, moduleId, expectedText) {
     moduleId,
     screenName: 'landing',
     viewport,
-    route: `/${moduleId}`
+    route: `/${moduleId}`,
+    auditObserver
   })
 }
 
@@ -128,17 +146,22 @@ test.describe('seeded UI audit screenshot corpus', () => {
     await seedForCapture(baseURL)
 
     const navBar = new NavBar(page)
-    await openDashboard(page, navBar, desktopViewport)
-    await openConfigurationTab(page, navBar, desktopViewport, '#config-drivers', 'configuration-drivers', ['pca9685', 'ph', 'hs103'])
-    await openConfigurationTab(page, navBar, desktopViewport, '#config-connectors', 'configuration-connectors', ['O1', 'O8', 'I1', 'I3', 'J0', 'J1', 'AI1', 'AI2'])
-    await openModule(page, navBar, desktopViewport, 'equipment', ['Return', 'Light', 'Heater', 'Skimmer', 'Fan', 'ATO Pump'])
-    await openModule(page, navBar, desktopViewport, 'timers', ['Nightly Skimmer Run'])
-    await openModule(page, navBar, desktopViewport, 'lighting', ['Kessil A360'])
-    await openModule(page, navBar, desktopViewport, 'temperature', ['Biocube29 Temperature'])
-    await openModule(page, navBar, desktopViewport, 'ato', ['Biocube29 ATO'])
-    await openModule(page, navBar, desktopViewport, 'ph', ['Biocube29 pH'])
-    await openModule(page, navBar, desktopViewport, 'doser', ['Two Part - CaCO3'])
-    await openModule(page, navBar, desktopViewport, 'macro', ['Feed Start', 'Water Change'])
+    const auditObserver = createUiAuditObserver(page)
+    try {
+      await openDashboard(page, navBar, desktopViewport, auditObserver)
+      await openConfigurationTab(page, navBar, desktopViewport, '#config-drivers', 'configuration-drivers', ['pca9685', 'ph', 'hs103'], auditObserver)
+      await openConfigurationTab(page, navBar, desktopViewport, '#config-connectors', 'configuration-connectors', ['O1', 'O8', 'I1', 'I3', 'J0', 'J1', 'AI1', 'AI2'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'equipment', ['Return', 'Light', 'Heater', 'Skimmer', 'Fan', 'ATO Pump'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'timers', ['Nightly Skimmer Run'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'lighting', ['Kessil A360'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'temperature', ['Biocube29 Temperature'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'ato', ['Biocube29 ATO'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'ph', ['Biocube29 pH'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'doser', ['Two Part - CaCO3'], auditObserver)
+      await openModule(page, navBar, desktopViewport, 'macro', ['Feed Start', 'Water Change'], auditObserver)
+    } finally {
+      auditObserver.dispose()
+    }
   })
 
   test('captures mobile shell and major module landing states', async ({ page, baseURL }) => {
@@ -146,11 +169,16 @@ test.describe('seeded UI audit screenshot corpus', () => {
     await seedForCapture(baseURL)
 
     const navBar = new NavBar(page)
-    await openDashboard(page, navBar, mobileViewport)
-    await openModule(page, navBar, mobileViewport, 'equipment', ['Return', 'Light', 'Heater'])
-    await openModule(page, navBar, mobileViewport, 'lighting', ['Kessil A360'])
-    await openModule(page, navBar, mobileViewport, 'temperature', ['Biocube29 Temperature'])
-    await openModule(page, navBar, mobileViewport, 'ato', ['Biocube29 ATO'])
-    await openModule(page, navBar, mobileViewport, 'ph', ['Biocube29 pH'])
+    const auditObserver = createUiAuditObserver(page)
+    try {
+      await openDashboard(page, navBar, mobileViewport, auditObserver)
+      await openModule(page, navBar, mobileViewport, 'equipment', ['Return', 'Light', 'Heater'], auditObserver)
+      await openModule(page, navBar, mobileViewport, 'lighting', ['Kessil A360'], auditObserver)
+      await openModule(page, navBar, mobileViewport, 'temperature', ['Biocube29 Temperature'], auditObserver)
+      await openModule(page, navBar, mobileViewport, 'ato', ['Biocube29 ATO'], auditObserver)
+      await openModule(page, navBar, mobileViewport, 'ph', ['Biocube29 pH'], auditObserver)
+    } finally {
+      auditObserver.dispose()
+    }
   })
 })
