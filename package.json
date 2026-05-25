@@ -130,7 +130,7 @@
       "**/?(*.)+(test).[jt]s?(x)"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/front-end/e2e/"
+      "<rootDir>/front-end/e2e/specs/"
     ],
     "coveragePathIgnorePatterns": [
       "<rootDir>/build/translations/",
