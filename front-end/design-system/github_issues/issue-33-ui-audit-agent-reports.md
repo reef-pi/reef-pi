@@ -12,13 +12,16 @@ Generate structured outputs that let Codex or Claude Design review one reef-pi m
 - Write `test-results/ui-audit/agent-report.json`.
 - Write `test-results/ui-audit/agent-report.md`.
 - Write per-module prompt bundles under `test-results/ui-audit/prompts/`.
-- Include screenshot paths, objective findings, design-system references, and recommended next actions.
-- Explain tool choice: Codex for repo implementation, Claude Design for subjective visual critique.
+- Include screenshot paths, objective findings, design-system references, and per-module follow-up prompts.
+- Keep follow-up prompts constrained to existing design-system references.
 
 ## Acceptance
-- [ ] `agent-report.json` groups findings by module, viewport, and severity.
-- [ ] `agent-report.md` links each module to its screenshots and summarizes next actions.
-- [ ] Each prompt names the relevant screenshots and current findings.
-- [ ] Each prompt references `front-end/design-system/SKILL.md`, `colors_and_type.css`, and `ui_kits/reef-pi-app`.
-- [ ] Prompts state that agents must not invent new design rules, raw hex colors, or fonts.
-- [ ] Prompts keep subjective critique separate from objective CI failures.
+- [x] `agent-report.json` groups findings by module, viewport, and severity.
+- [x] `agent-report.md` links each module to its screenshots and summarizes next actions.
+- [x] Each prompt names the relevant screenshots and current findings.
+- [x] Each prompt references `front-end/design-system/SKILL.md`, `colors_and_type.css`, and `ui_kits/reef-pi-app`.
+- [x] Prompts state that agents must not invent new design rules, raw hex colors, or fonts.
+- [x] Prompts keep subjective critique separate from objective CI failures.
+
+## Status
+Shipped in PR #3075.

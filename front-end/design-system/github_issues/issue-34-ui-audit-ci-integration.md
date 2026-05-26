@@ -15,8 +15,11 @@ Run the UI audit in GitHub Actions after the local lane is stable and upload use
 - Document local reproduction.
 
 ## Acceptance
-- [ ] The workflow installs the same dependencies used by existing Playwright jobs.
-- [ ] The job fails when `ui-audit-report.mjs` reports objective violations.
-- [ ] Existing smoke CI remains a separate check.
-- [ ] Failure artifacts include screenshots, manifest, report files, and prompts.
-- [ ] `docs/ci-reproduction.md` or the frontend test README documents the local `yarn ui-audit` reproduction command.
+- [x] The workflow installs the same dependencies used by existing Playwright jobs.
+- [x] The job fails when `ui-audit-report.mjs` reports objective violations.
+- [x] Existing smoke CI remains a separate check.
+- [x] Failure artifacts include screenshots, manifest, report files, and prompts.
+- [x] `docs/ci-reproduction.md` or the frontend test README documents the local `yarn ui-audit` reproduction command.
+
+## Status
+Shipped in PR #3075.

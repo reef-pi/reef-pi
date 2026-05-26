@@ -16,22 +16,25 @@ The first release is not a redesign. It is the capture and audit foundation that
 See `docs/superpowers/specs/2026-05-21-ui-audit-design.md`.
 
 ## Success criteria
-- [ ] `ui-audit-chromium` runs separately from the existing smoke and integration projects.
-- [ ] The audit captures desktop and mobile screenshots for the seeded module corpus.
-- [ ] `manifest.json` maps every screenshot to module, viewport, route/tab, theme, seed profile, and audit findings.
-- [ ] CI fails on objective, high-confidence violations only.
-- [ ] Subjective visual findings are written to agent-ready Markdown/JSON reports, not used as CI truth.
-- [ ] Generated prompts explain when to use Codex for implementation and Claude Design for subjective critique.
-- [ ] GitHub Actions uploads screenshots and reports when the audit job fails.
+- [x] `ui-audit-chromium` runs separately from the existing smoke and integration projects.
+- [x] The audit captures desktop and mobile screenshots for the seeded module corpus.
+- [x] `manifest.json` maps every screenshot to module, viewport, route/tab, theme, seed profile, and audit findings.
+- [x] CI fails on objective, high-confidence violations only.
+- [x] Subjective visual findings are written to agent-ready Markdown/JSON reports, not used as CI truth.
+- [x] Generated prompts constrain follow-up agents to existing design-system references.
+- [x] GitHub Actions uploads screenshots and reports when the audit job fails.
 
 ## Sub-tasks
-- [ ] #30 UI audit artifact foundation
-- [ ] #31 Seeded route screenshot corpus
-- [ ] #32 Objective UI audit checks
-- [ ] #33 Agent-ready report and prompt generation
-- [ ] #34 GitHub Actions UI audit integration
+- [x] #30 UI audit artifact foundation
+- [x] #31 Seeded route screenshot corpus
+- [x] #32 Objective UI audit checks
+- [x] #33 Agent-ready report and prompt generation
+- [x] #34 GitHub Actions UI audit integration
 
 ## Dependencies
 - Requires the existing Playwright auth setup and seeded smoke helpers.
 - Uses the design-system constraints in `front-end/design-system/SKILL.md`.
 - Must not change existing `yarn pw-smoke` behavior.
+
+## Status
+Shipped in PR #3075.
