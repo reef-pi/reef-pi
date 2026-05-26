@@ -28,11 +28,14 @@ Add first-class state tokens so components stop reaching for raw Bootstrap hex v
 ```
 
 ## Acceptance
-- [ ] Tokens added + documented in `SKILL.md` token table.
-- [ ] `preview/colors-states.html` card added showing pending/error/warn swatches.
-- [ ] Registered in the asset review manifest under **Colors**.
-- [ ] No raw hex for these states remains in `ui_kits/reef-pi-app/styles.css` — everything references the new vars.
+- [x] Tokens added + documented in `SKILL.md` token table.
+- [x] `preview/colors-states.html` card added showing pending/error/warn swatches.
+- [x] Registered in the asset review manifest under **Colors**.
+- [x] No raw hex for these states remains in `ui_kits/reef-pi-app/styles.css` — everything references the new vars.
 
 ## Notes
 - Warn is intentionally `#B77400`, not `#FFC107`. The Bootstrap warning color fails 4.5:1 on white; this one passes.
 - `success-strong` replaces `#218838` hover currently hardcoded in button rules.
+
+## Status
+Implemented in PR #3077.

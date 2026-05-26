@@ -39,6 +39,11 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 | `--reefpi-color-surface-elevated` | `#FFFFFF` | Cards, list items |
 | `--reefpi-color-border` | `#D6E5D0` | Default card/list border |
 | `--reefpi-color-border-strong` | `#000000` | Dashboard grid cells only |
+| `--reefpi-color-pending` / `-bg` | `#4E5F4E` / `#EEF3EC` | Pending spinner ring and in-flight background |
+| `--reefpi-color-error` / `-bg` / `-border` | `#DC3545` / `#FDECEE` / `#F5C6CB` | Error text, background, and border |
+| `--reefpi-color-warn` / `-bg` | `#B77400` / `#FFF8E6` | Warning text and background with AA contrast on white |
+| `--reefpi-color-success-strong` | `#1E7E34` | Success hover and active state |
+| `--reefpi-color-band-safe` / `-warn` / `-critical` | `#D6E5D0` / `#FFE6B0` / `#F5C6CB` | Threshold gauge and sparkline bands |
 | `--reefpi-radius-sm` / `-md` | `6px` / `10px` | Nav link / grid cell |
 | `--reefpi-shadow-navbar` | `0 2px 8px rgba(31,42,31,.14)` | Navbar only |
 | `--reefpi-tap-target-min` | `44px` | All interactive elements |
