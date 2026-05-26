@@ -7,27 +7,27 @@
     flex: 1; height: 64px; border-radius: 8px;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 12px; font-size: 12px;
-    border: 1px solid rgba(0,0,0,0.06);
+    border: 1px solid var(--reefpi-color-border);
   }
   .swatch .n { font-weight: 700; }
   .swatch .h { font-family: ui-monospace, Menlo, monospace; opacity: .85; }
-  .bands { display:flex; gap: 0; height: 22px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+  .bands { display:flex; gap: 0; height: 22px; border-radius: 6px; overflow: hidden; border: 1px solid var(--reefpi-color-border); }
   .band { flex: 1; display:flex; align-items:center; justify-content:center; font-family: ui-monospace, Menlo, monospace; font-size: 10px; }
-  .meta { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e; }
+  .meta { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--reefpi-color-text-muted); }
 </style>
 </head><body>
 <div class="card">
   <div class="row">
-    <div class="swatch" style="background:#eef3ec; color:#4e5f4e;">
+    <div class="swatch" style="background: var(--reefpi-color-pending-bg); color: var(--reefpi-color-pending);">
       <span class="n">pending</span><span class="h">#4E5F4E on #EEF3EC</span>
     </div>
-    <div class="swatch" style="background:#fdecee; color:#dc3545; border-color:#f5c6cb;">
+    <div class="swatch" style="background: var(--reefpi-color-error-bg); color: var(--reefpi-color-error); border-color: var(--reefpi-color-error-border);">
       <span class="n">error</span><span class="h">#DC3545 on #FDECEE</span>
     </div>
-    <div class="swatch" style="background:#fff8e6; color:#b77400;">
+    <div class="swatch" style="background: var(--reefpi-color-warn-bg); color: var(--reefpi-color-warn);">
       <span class="n">warn</span><span class="h">#B77400 on #FFF8E6</span>
     </div>
-    <div class="swatch" style="background:#1e7e34; color:#fff;">
+    <div class="swatch" style="background: var(--reefpi-color-success-strong); color: var(--reefpi-color-nav-text-strong);">
       <span class="n">success-strong</span><span class="h">#1E7E34</span>
     </div>
   </div>
@@ -35,11 +35,11 @@
   <div>
     <div class="meta" style="margin-bottom: 4px;">band-safe / band-warn / band-critical (gauge ranges)</div>
     <div class="bands">
-      <div class="band" style="background:#f5c6cb; color:#721c24;">critical</div>
-      <div class="band" style="background:#ffe6b0; color:#856404;">warn</div>
-      <div class="band" style="background:#d6e5d0; color:#267723;">safe</div>
-      <div class="band" style="background:#ffe6b0; color:#856404;">warn</div>
-      <div class="band" style="background:#f5c6cb; color:#721c24;">critical</div>
+      <div class="band" style="background: var(--reefpi-color-band-critical); color: var(--reefpi-color-error);">critical</div>
+      <div class="band" style="background: var(--reefpi-color-band-warn); color: var(--reefpi-color-warn);">warn</div>
+      <div class="band" style="background: var(--reefpi-color-band-safe); color: var(--reefpi-color-brand-dark);">safe</div>
+      <div class="band" style="background: var(--reefpi-color-band-warn); color: var(--reefpi-color-warn);">warn</div>
+      <div class="band" style="background: var(--reefpi-color-band-critical); color: var(--reefpi-color-error);">critical</div>
     </div>
   </div>
 
