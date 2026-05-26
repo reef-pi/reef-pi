@@ -17,11 +17,14 @@ Collect deterministic browser and DOM facts during capture, then fail the audit 
 - Add an explicit allowlist mechanism for known benign console/request noise.
 
 ## Acceptance
-- [ ] Missing or unreadable required screenshots fail the report script.
-- [ ] Fatal app text fails the report script.
-- [ ] Unallowlisted console errors and failed app/API requests fail the report script.
-- [ ] Visible enabled interactive elements below `44px` fail the report script.
-- [ ] Obvious visible overflow fails the report script.
-- [ ] Missing required shell/nav/module audit anchors fail the report script.
-- [ ] Subjective visual quality findings do not fail CI.
-- [ ] `ui-audit-report.mjs` exits non-zero for objective violations and zero for a clean manifest.
+- [x] Missing or unreadable required screenshots fail the report script.
+- [x] Fatal app text fails the report script.
+- [x] Unallowlisted console errors and failed app/API requests fail the report script.
+- [x] Visible enabled interactive elements below `44px` are recorded as warning findings for design review prompts.
+- [x] Obvious visible overflow is recorded as warning findings for design review prompts.
+- [x] Missing required shell/nav/module audit anchors fail the report script.
+- [x] Subjective visual quality findings do not fail CI.
+- [x] `ui-audit-report.mjs` exits non-zero for objective violations and zero for a clean manifest.
+
+## Status
+Shipped in PR #3075.

@@ -17,9 +17,12 @@ Add the dedicated Playwright spec that seeds a configured reef and captures the 
 - Include login/shell sanity capture where useful.
 
 ## Acceptance
-- [ ] The spec seeds state once per viewport run using existing smoke helpers.
-- [ ] Desktop screenshots exist for every module in the corpus.
-- [ ] Mobile screenshots exist for shell usability and major module landing states.
-- [ ] Each capture waits for stable module content before screenshotting.
-- [ ] The corpus does not require new backend fixtures.
-- [ ] The first version does not attempt to capture every form branch or transient state.
+- [x] The spec seeds state once per viewport run using existing smoke helpers.
+- [x] Desktop screenshots exist for every module in the corpus.
+- [x] Mobile screenshots exist for shell usability and major module landing states.
+- [x] Each capture waits for stable module content before screenshotting.
+- [x] The corpus does not require new backend fixtures.
+- [x] The first version does not attempt to capture every form branch or transient state.
+
+## Status
+Shipped in PR #3075.

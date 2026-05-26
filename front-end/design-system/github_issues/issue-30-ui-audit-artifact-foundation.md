@@ -17,9 +17,12 @@ Add the dedicated Playwright project, package scripts, capture helper shell, and
 - Write `manifest.json` entries for screenshots captured by the helper.
 
 ## Acceptance
-- [ ] `yarn ui-audit` runs only the `ui-audit-chromium` project.
-- [ ] Existing `yarn pw-smoke` and `make smoke` behavior is unchanged.
-- [ ] `uiAudit.js` exposes a capture helper that accepts module ID, screen name, viewport name, design-system references, and a Playwright page.
-- [ ] Screenshots are named with stable IDs, not visible display text.
-- [ ] A successful local run writes `test-results/ui-audit/manifest.json`.
-- [ ] Manifest entries include screenshot path, module, screen, viewport, theme, seed profile, route/tab, and objective finding arrays.
+- [x] `yarn ui-audit` runs only the `ui-audit-chromium` project.
+- [x] Existing `yarn pw-smoke` and `make smoke` behavior is unchanged.
+- [x] `uiAudit.js` exposes a capture helper that accepts module ID, screen name, viewport name, design-system references, and a Playwright page.
+- [x] Screenshots are named with stable IDs, not visible display text.
+- [x] A successful local run writes `test-results/ui-audit/manifest.json`.
+- [x] Manifest entries include screenshot path, module, screen, viewport, theme, seed profile, route/tab, and objective finding arrays.
+
+## Status
+Shipped in PR #3075.
