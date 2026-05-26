@@ -321,6 +321,15 @@ textarea:focus,
   }
 }
 
+
+.bottom-bar .list-inline-item > a {
+  min-width: var(--reefpi-tap-target-min);
+  min-height: var(--reefpi-tap-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media screen and (min-width: 992px) {
   #main-panel {
     padding-bottom: var(--reefpi-summary-height, 64px);
@@ -453,7 +462,7 @@ textarea:focus,
 
 .connector-channel-grid {
   display: grid;
-  grid-template-columns: repeat(16, minmax(2.75rem, 1fr));
+  grid-template-columns: repeat(16, minmax(5.25rem, 1fr));
   gap: var(--reefpi-space-xs);
   padding: var(--reefpi-space-sm);
 }

@@ -114,7 +114,12 @@ export default function Sidebar ({
             fontWeight:     700,
             fontSize:       expanded ? '1.1rem' : '1rem',
             textDecoration: 'none',
-            letterSpacing:  expanded ? 0 : '0.04em'
+            letterSpacing:  expanded ? 0 : '0.04em',
+            minWidth:       '44px',
+            minHeight:      '44px',
+            display:        'inline-flex',
+            alignItems:     'center',
+            justifyContent: 'center'
           }}
         >
           {expanded ? 'reef-pi' : 'rp'}
@@ -127,8 +132,8 @@ export default function Sidebar ({
             border:     'none',
             color:      'var(--reefpi-color-nav-text-muted)',
             cursor:     'pointer',
-            minWidth:   '36px',
-            minHeight:  '36px',
+            minWidth:   '44px',
+            minHeight:  '44px',
             display:    'flex',
             alignItems: 'center',
             justifyContent: 'center',
