@@ -10,13 +10,13 @@ html, body {
   padding: 0;
   font-family: var(--reefpi-font-app);
   color: var(--reefpi-color-text);
-  background: #ffffff;
+  background: var(--reefpi-color-surface-elevated);
 }
 
 .card {
   width: 700px;
   padding: 20px;
-  background: #ffffff;
+  background: var(--reefpi-color-surface-elevated);
   display: flex;
   gap: 20px;
   align-items: stretch;
