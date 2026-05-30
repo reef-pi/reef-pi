@@ -48,4 +48,4 @@ Deep blue surface, cooler text, brand green kept as the only accent.
 Blocks #22, #23, #26.
 
 ## Status
-Implemented in PR #3078.
+Shipped in PR #3078.

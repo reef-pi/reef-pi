@@ -40,6 +40,8 @@ jobs:
         run: yarn
       - name: token-diff
         run: yarn run token-diff
+      - name: contrast-check
+        run: yarn run contrast-check
       - name: standard
         run: make standard
       - name: jest
