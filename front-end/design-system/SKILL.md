@@ -37,6 +37,8 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 | `--reefpi-gradient-brand` | `linear-gradient(180deg, brand 0%, brand-alt 100%)` | Navbar only |
 | `--reefpi-color-surface` | `#F5FAF3` | Page bg |
 | `--reefpi-color-surface-elevated` | `#FFFFFF` | Cards, list items |
+| `data-theme="dark"` surfaces | `#0F1410` / `#1A211A` | Low-light surface and elevated surface |
+| `data-theme="actinic"` surfaces | `#05101F` / `#0A1A33` | Reef-blue night surface and elevated surface |
 | `--reefpi-color-border` | `#D6E5D0` | Default card/list border |
 | `--reefpi-color-border-strong` | `#000000` | Dashboard grid cells only |
 | `--reefpi-color-pending` / `-bg` | `#4E5F4E` / `#EEF3EC` | Pending spinner ring and in-flight background |
