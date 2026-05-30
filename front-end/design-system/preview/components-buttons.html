@@ -4,16 +4,16 @@
   .card { height: 180px; flex-direction: column; padding: 20px 24px; gap: 12px; align-items: flex-start; }
   .row { gap: 10px; flex-wrap: wrap; }
   .btn { min-height: 44px; border-radius: 4px; padding: 8px 16px; font-family: 'Questrial','Century Gothic',sans-serif; font-size: 14px; border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-  .btn-success { background:#28a745; color:#fff; }
-  .btn-success:hover { background:#218838; }
-  .btn-outline-success { background:#fff; color:#28a745; border-color:#28a745; }
-  .btn-outline-success:hover { background:#28a745; color:#fff; }
-  .btn-outline-dark { background:#fff; color:#343a40; border-color:#343a40; }
-  .btn-outline-dark:hover { background:#343a40; color:#fff; }
-  .btn-danger { background:#dc3545; color:#fff; }
+  .btn-success { background:var(--reefpi-color-success); color:var(--reefpi-color-nav-text-strong); }
+  .btn-success:hover { background:var(--reefpi-color-success-hover); }
+  .btn-outline-success { background: var(--reefpi-color-surface-elevated); color:var(--reefpi-color-success); border-color:var(--reefpi-color-success); }
+  .btn-outline-success:hover { background:var(--reefpi-color-success); color:var(--reefpi-color-nav-text-strong); }
+  .btn-outline-dark { background: var(--reefpi-color-surface-elevated); color:var(--reefpi-color-dark); border-color:var(--reefpi-color-dark); }
+  .btn-outline-dark:hover { background:var(--reefpi-color-dark); color:var(--reefpi-color-nav-text-strong); }
+  .btn-danger { background:var(--reefpi-color-danger); color:var(--reefpi-color-nav-text-strong); }
   .btn-sm { min-height: 32px; padding: 4px 10px; font-size: 13px; }
   .btn-lg { min-height: 48px; padding: 10px 20px; font-size: 16px; }
-  .toggle { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #28a745; color: #28a745; background:#fff; font-weight: 700; cursor: pointer; }
+  .toggle { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--reefpi-color-success); color: var(--reefpi-color-success); background: var(--reefpi-color-surface-elevated); font-weight: 700; cursor: pointer; }
 </style>
 </head><body>
 <div class="card">
@@ -29,8 +29,9 @@
     <button class="toggle">+</button>
     <button class="toggle">−</button>
   </div>
-  <div style="font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:#4e5f4e;">
+  <div style="font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:var(--reefpi-color-text-muted);">
     min-height 44px · radius 4px · focus: 2px solid #174d16 outline
   </div>
 </div>
+<script src="_card.js"></script>
 </body></html>

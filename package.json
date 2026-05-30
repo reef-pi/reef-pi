@@ -92,7 +92,8 @@
     "ui-audit:report": "node front-end/scripts/ui-audit-report.mjs",
     "ui-audit": "yarn run ui-audit:capture && yarn run ui-audit:report",
     "integration": "playwright test --project=integration-chromium",
-    "integration:headed": "playwright test --project=integration-chromium --headed"
+    "integration:headed": "playwright test --project=integration-chromium --headed",
+    "preview-card-check": "node front-end/design-system/scripts/preview-card-check.mjs"
   },
   "repository": {
     "type": "git",

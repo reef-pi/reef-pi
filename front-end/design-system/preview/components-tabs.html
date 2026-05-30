@@ -2,13 +2,13 @@
 <link rel="stylesheet" href="_card.css">
 <style>
   .card { height: 150px; flex-direction: column; padding: 0; }
-  .nav { background: linear-gradient(180deg,#27a822 0%,#1c7e19 100%); padding: 12px 20px; display:flex; gap: 4px; align-items:center; }
-  .brand { color:#fff; font-size: 18px; font-weight: 700; margin-right: 16px; }
+  .nav { background: linear-gradient(180deg,var(--reefpi-color-brand) 0%,var(--reefpi-color-brand-alt) 100%); padding: 12px 20px; display:flex; gap: 4px; align-items:center; }
+  .brand { color:var(--reefpi-color-nav-text-strong); font-size: 18px; font-weight: 700; margin-right: 16px; }
   .tab { color: rgba(255,255,255,0.84); padding: 10px 14px; border-radius: 6px; font-size: 14px; }
-  .tab.active { background: rgba(255,255,255,0.12); color: #fff; }
-  .confnav { padding: 12px 20px; display:flex; gap: 6px; border-top: 1px solid #d6e5d0; }
-  .ctab { padding: 10px 14px; border-radius: 6px; font-size: 14px; color: #267723; border: 1px solid #d6e5d0; background:#fff; }
-  .ctab.active { background: #27a822; color: #fff; border-color: #27a822; }
+  .tab.active { background: rgba(255,255,255,0.12); color: var(--reefpi-color-nav-text-strong); }
+  .confnav { padding: 12px 20px; display:flex; gap: 6px; border-top: 1px solid var(--reefpi-color-border); }
+  .ctab { padding: 10px 14px; border-radius: 6px; font-size: 14px; color: var(--reefpi-color-brand-dark); border: 1px solid var(--reefpi-color-border); background: var(--reefpi-color-surface-elevated); }
+  .ctab.active { background: var(--reefpi-color-brand); color: var(--reefpi-color-nav-text-strong); border-color: var(--reefpi-color-brand); }
 </style>
 </head><body>
 <div class="card">
@@ -26,4 +26,5 @@
     <span class="ctab">Telemetry</span>
   </div>
 </div>
+<script src="_card.js"></script>
 </body></html>

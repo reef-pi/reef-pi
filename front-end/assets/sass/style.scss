@@ -72,6 +72,20 @@
   --reefpi-color-warn-bg:        #{$color-warn-bg};
   --reefpi-color-success-strong: #{$color-success-strong};
 
+  // Bootstrap context colors captured for legacy previews
+  --reefpi-color-success-hover: #{$color-success-hover};
+  --reefpi-color-secondary: #{$color-secondary};
+  --reefpi-color-control-border: #{$color-control-border};
+  --reefpi-color-disabled-bg: #{$color-disabled-bg};
+  --reefpi-color-danger-bg-bootstrap: #{$color-danger-bg-bootstrap};
+  --reefpi-color-danger-text-bootstrap: #{$color-danger-text-bootstrap};
+  --reefpi-color-warning-bg-bootstrap: #{$color-warning-bg-bootstrap};
+  --reefpi-color-warning-border-bootstrap: #{$color-warning-border-bootstrap};
+  --reefpi-color-warning-text-bootstrap: #{$color-warning-text-bootstrap};
+  --reefpi-color-success-bg-bootstrap: #{$color-success-bg-bootstrap};
+  --reefpi-color-success-border-bootstrap: #{$color-success-border-bootstrap};
+  --reefpi-color-success-text-bootstrap: #{$color-success-text-bootstrap};
+
   // Threshold bands (gauges, sparkline shading)
   --reefpi-color-band-safe:      #{$color-band-safe};
   --reefpi-color-band-warn:      #{$color-band-warn};
@@ -81,6 +95,25 @@
   --reefpi-chart-green:  #00c851;
   --reefpi-chart-yellow: #ffbb33;
   --reefpi-chart-red:    #ff4444;
+  --reefpi-chart-green-bg: #{$chart-green-bg};
+  --reefpi-chart-yellow-bg: #{$chart-yellow-bg};
+  --reefpi-chart-red-bg: #{$chart-red-bg};
+  --reefpi-chart-surface: #{$chart-surface};
+
+  // Preview support tokens
+  --reefpi-preview-text-disabled: #{$preview-text-disabled};
+  --reefpi-preview-type-rule: #{$preview-type-rule};
+  --reefpi-preview-dark-surface: #{$preview-dark-surface};
+  --reefpi-preview-dark-surface-elevated: #{$preview-dark-surface-elevated};
+  --reefpi-preview-dark-text: #{$preview-dark-text};
+  --reefpi-preview-dark-text-muted: #{$preview-dark-text-muted};
+  --reefpi-preview-dark-border-strong: #{$preview-dark-border-strong};
+  --reefpi-preview-actinic-surface: #{$preview-actinic-surface};
+  --reefpi-preview-actinic-surface-elevated: #{$preview-actinic-surface-elevated};
+  --reefpi-preview-actinic-text: #{$preview-actinic-text};
+  --reefpi-preview-actinic-text-muted: #{$preview-actinic-text-muted};
+  --reefpi-preview-actinic-border: #{$preview-actinic-border};
+  --reefpi-preview-actinic-border-strong: #{$preview-actinic-border-strong};
 
   // Bootstrap 4.6 semantic aliases
   --reefpi-color-success: #28a745;

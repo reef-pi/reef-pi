@@ -37,11 +37,15 @@
 
   /* ---------- Semantic (Bootstrap 4.6 defaults reef-pi inherits) ---------- */
   --reefpi-color-success: #28a745;
+  --reefpi-color-success-hover: #218838;
   --reefpi-color-danger:  #dc3545;
   --reefpi-color-warning: #ffc107;
   --reefpi-color-info:    #17a2b8;
+  --reefpi-color-secondary: #6c757d;
   --reefpi-color-light:   #f8f9fa;
   --reefpi-color-dark:    #343a40;
+  --reefpi-color-control-border: #ced4da;
+  --reefpi-color-disabled-bg: #ced4da;
 
   /* ---------- State tokens (E1 #1) ----------
      First-class state tokens so components stop reaching for raw Bootstrap
@@ -55,6 +59,16 @@
   --reefpi-color-warn-bg:        #fff8e6;
   --reefpi-color-success-strong: #1e7e34;  /* button hover/active           */
 
+  /* ---------- Bootstrap context colors captured for legacy previews ---------- */
+  --reefpi-color-danger-bg-bootstrap: #f8d7da;
+  --reefpi-color-danger-text-bootstrap: #721c24;
+  --reefpi-color-warning-bg-bootstrap: #fff3cd;
+  --reefpi-color-warning-border-bootstrap: #ffeeba;
+  --reefpi-color-warning-text-bootstrap: #856404;
+  --reefpi-color-success-bg-bootstrap: #d4edda;
+  --reefpi-color-success-border-bootstrap: #c3e6cb;
+  --reefpi-color-success-text-bootstrap: #155724;
+
   /* ---------- Threshold bands (gauges, sparkline shading) ---------- */
   --reefpi-color-band-safe:      #d6e5d0;
   --reefpi-color-band-warn:      #ffe6b0;
@@ -64,6 +78,25 @@
   --reefpi-chart-green:  #00c851; /* cpu            */
   --reefpi-chart-yellow: #ffbb33; /* memory         */
   --reefpi-chart-red:    #ff4444; /* cpu temp       */
+  --reefpi-chart-green-bg: #d4f5dc;
+  --reefpi-chart-yellow-bg: #ffeac2;
+  --reefpi-chart-red-bg: #ffd6d6;
+  --reefpi-chart-surface: #fafcf8;
+
+  /* ---------- Preview support tokens ---------- */
+  --reefpi-preview-text-disabled: #9aa19a;
+  --reefpi-preview-type-rule: #e6efe0;
+  --reefpi-preview-dark-surface: #0f1410;
+  --reefpi-preview-dark-surface-elevated: #1a211a;
+  --reefpi-preview-dark-text: #e6efe0;
+  --reefpi-preview-dark-text-muted: #9aa89a;
+  --reefpi-preview-dark-border-strong: #4a5949;
+  --reefpi-preview-actinic-surface: #05101f;
+  --reefpi-preview-actinic-surface-elevated: #0a1a33;
+  --reefpi-preview-actinic-text: #cfe3ff;
+  --reefpi-preview-actinic-text-muted: #7a90b5;
+  --reefpi-preview-actinic-border: #10284d;
+  --reefpi-preview-actinic-border-strong: #2a4a80;
 
   /* ---------- Brand gradient (navbar) ---------- */
   --reefpi-gradient-brand:

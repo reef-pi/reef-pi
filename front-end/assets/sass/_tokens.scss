@@ -10,6 +10,20 @@ $color-warn:           #b77400;
 $color-warn-bg:        #fff8e6;
 $color-success-strong: #1e7e34;
 
+// Bootstrap context colors captured for legacy previews
+$color-success-hover: #218838;
+$color-secondary: #6c757d;
+$color-control-border: #ced4da;
+$color-disabled-bg: #ced4da;
+$color-danger-bg-bootstrap: #f8d7da;
+$color-danger-text-bootstrap: #721c24;
+$color-warning-bg-bootstrap: #fff3cd;
+$color-warning-border-bootstrap: #ffeeba;
+$color-warning-text-bootstrap: #856404;
+$color-success-bg-bootstrap: #d4edda;
+$color-success-border-bootstrap: #c3e6cb;
+$color-success-text-bootstrap: #155724;
+
 // Threshold bands (gauges, sparkline shading)
 $color-band-safe:      #d6e5d0;
 $color-band-warn:      #ffe6b0;
@@ -58,3 +72,22 @@ $radius-md: 0.625rem;
 $chart-green:  #00c851;
 $chart-yellow: #ffbb33;
 $chart-red:    #ff4444;
+$chart-green-bg: #d4f5dc;
+$chart-yellow-bg: #ffeac2;
+$chart-red-bg: #ffd6d6;
+$chart-surface: #fafcf8;
+
+// Preview support tokens
+$preview-text-disabled: #9aa19a;
+$preview-type-rule: #e6efe0;
+$preview-dark-surface: #0f1410;
+$preview-dark-surface-elevated: #1a211a;
+$preview-dark-text: #e6efe0;
+$preview-dark-text-muted: #9aa89a;
+$preview-dark-border-strong: #4a5949;
+$preview-actinic-surface: #05101f;
+$preview-actinic-surface-elevated: #0a1a33;
+$preview-actinic-text: #cfe3ff;
+$preview-actinic-text-muted: #7a90b5;
+$preview-actinic-border: #10284d;
+$preview-actinic-border-strong: #2a4a80;

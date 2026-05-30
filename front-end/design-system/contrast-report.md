@@ -1,6 +1,6 @@
 # reef-pi token contrast report
 
-Generated: 2026-05-30T08:45:43.124Z
+Generated: 2026-05-30T14:46:04.745Z
 Tokens file: /home/ranjib/workspace/reef-pi-codex/front-end/design-system/colors_and_type.css
 
 ## Summary
