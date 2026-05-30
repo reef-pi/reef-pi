@@ -40,9 +40,12 @@ Deep blue surface, cooler text, brand green kept as the only accent.
 ```
 
 ## Acceptance
-- [ ] Light is still the default — nothing breaks when `data-theme` absent.
-- [ ] `preview/theme-switcher.html` card added that cycles the three themes on a sample tile.
-- [ ] Charts + focus rings render with enough contrast in every theme (automated test in #3).
+- [x] Light is still the default — nothing breaks when `data-theme` absent.
+- [x] `preview/theme-switcher.html` card added that cycles the three themes on a sample tile.
+- [x] Charts + focus rings render with enough contrast in every theme (automated test in #3).
 
 ## Dependencies
 Blocks #22, #23, #26.
+
+## Status
+Implemented in PR #3078.

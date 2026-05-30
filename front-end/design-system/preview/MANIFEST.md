@@ -136,7 +136,7 @@ Applied via `data-theme` on `<html>`. Light is the default (no attribute).
 | Dark | `data-theme="dark"` | [theme-switcher.html](theme-switcher.html) |
 | Actinic | `data-theme="actinic"` | [theme-switcher.html](theme-switcher.html) |
 
-Tokens overridden per theme: `--reefpi-color-surface`, `--reefpi-color-surface-elevated`, `--reefpi-color-surface-auth`, `--reefpi-color-text`, `--reefpi-color-text-muted`, `--reefpi-color-border`, `--reefpi-color-border-strong`. Dark also overrides `--reefpi-color-brand-alt`.
+Tokens overridden per theme: `--reefpi-color-surface`, `--reefpi-color-surface-elevated`, `--reefpi-color-surface-auth`, `--reefpi-color-text`, `--reefpi-color-text-muted`, `--reefpi-color-border`, `--reefpi-color-border-strong`, and `--reefpi-color-pending`. Dark also overrides `--reefpi-color-brand-alt` for link contrast.
 
 ## Typography
 

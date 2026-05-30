@@ -38,4 +38,4 @@ Add first-class state tokens so components stop reaching for raw Bootstrap hex v
 - `success-strong` replaces `#218838` hover currently hardcoded in button rules.
 
 ## Status
-Implemented in PR #3077.
+Shipped in PR #3077.
