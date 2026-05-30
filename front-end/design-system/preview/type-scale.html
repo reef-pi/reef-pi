@@ -3,8 +3,8 @@
 <style>
   .card { height: 360px; flex-direction: column; padding: 16px 24px; gap: 6px; }
   .fam { font-family: 'Questrial', 'Century Gothic', sans-serif; font-weight: 500; white-space: nowrap; }
-  .line { display:flex; align-items: baseline; gap: 14px; border-bottom: 1px dashed #e6efe0; padding: 4px 0; min-height: 28px; }
-  .size { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: #4e5f4e; width: 120px; flex-shrink:0; }
+  .line { display:flex; align-items: baseline; gap: 14px; border-bottom: 1px dashed var(--reefpi-preview-type-rule); padding: 4px 0; min-height: 28px; }
+  .size { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--reefpi-color-text-muted); width: 120px; flex-shrink:0; }
 </style>
 </head><body>
 <div class="card">
@@ -15,6 +15,7 @@
   <div class="line"><span class="size">h5 · 20 / 1.25rem</span><span class="fam" style="font-size:20px">Check Frequency</span></div>
   <div class="line"><span class="size">h6 · 16 / 1rem</span><span class="fam" style="font-size:16px">CPU/Memory (current)</span></div>
   <div class="line"><span class="size">body · 16 / 1rem</span><span class="fam" style="font-size:16px">This action will delete equipment Skimmer.</span></div>
-  <div class="line"><span class="size">small · 14 / .875rem</span><span class="fam" style="font-size:14px; color:#4e5f4e">running v5.2.0, on Raspberry Pi 4 Model B</span></div>
+  <div class="line"><span class="size">small · 14 / .875rem</span><span class="fam" style="font-size:14px; color:var(--reefpi-color-text-muted)">running v5.2.0, on Raspberry Pi 4 Model B</span></div>
 </div>
+<script src="_card.js"></script>
 </body></html>

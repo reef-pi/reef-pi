@@ -3,16 +3,16 @@
 <style>
   .card { height: 210px; flex-direction: column; padding: 20px 24px; gap: 10px; }
   .alert { padding: 10px 14px; border-radius: 4px; font-size: 13px; border: 1px solid; }
-  .alert-danger  { background:#f8d7da; border-color:#f5c6cb; color:#721c24; }
-  .alert-warning { background:#fff3cd; border-color:#ffeeba; color:#856404; }
-  .alert-success { background:#d4edda; border-color:#c3e6cb; color:#155724; }
-  .modal { border: 1px solid #d6e5d0; border-radius: 10px; padding: 14px 16px; background:#fff; }
+  .alert-danger  { background:var(--reefpi-color-danger-bg-bootstrap); border-color:var(--reefpi-color-error-border); color:var(--reefpi-color-danger-text-bootstrap); }
+  .alert-warning { background:var(--reefpi-color-warning-bg-bootstrap); border-color:var(--reefpi-color-warning-border-bootstrap); color:var(--reefpi-color-warning-text-bootstrap); }
+  .alert-success { background:var(--reefpi-color-success-bg-bootstrap); border-color:var(--reefpi-color-success-border-bootstrap); color:var(--reefpi-color-success-text-bootstrap); }
+  .modal { border: 1px solid var(--reefpi-color-border); border-radius: 10px; padding: 14px 16px; background: var(--reefpi-color-surface-elevated); }
   .mt { font-weight: 700; font-size: 14px; }
-  .mb { font-size: 13px; color:#4e5f4e; margin: 4px 0 10px 0; }
+  .mb { font-size: 13px; color:var(--reefpi-color-text-muted); margin: 4px 0 10px 0; }
   .btn-row { display:flex; gap: 8px; justify-content: flex-end; }
   .btn { padding: 6px 12px; font-size: 13px; border-radius: 4px; border: 1px solid transparent; cursor: pointer; }
-  .btn-secondary { background:#6c757d; color:#fff; }
-  .btn-danger { background:#dc3545; color:#fff; }
+  .btn-secondary { background:var(--reefpi-color-secondary); color:var(--reefpi-color-nav-text-strong); }
+  .btn-danger { background:var(--reefpi-color-danger); color:var(--reefpi-color-nav-text-strong); }
 </style>
 </head><body>
 <div class="card">
@@ -25,4 +25,5 @@
     <div class="btn-row"><button class="btn btn-secondary">Cancel</button><button class="btn btn-danger">Delete</button></div>
   </div>
 </div>
+<script src="_card.js"></script>
 </body></html>
