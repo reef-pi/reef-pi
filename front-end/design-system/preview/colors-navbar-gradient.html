@@ -2,14 +2,14 @@
 <link rel="stylesheet" href="_card.css">
 <style>
   .card { height: 160px; padding: 0; flex-direction: column; }
-  .nav { height: 72px; background: linear-gradient(180deg, #27a822 0%, #1c7e19 100%);
+  .nav { height: 72px; background: linear-gradient(180deg, var(--reefpi-color-brand) 0%, var(--reefpi-color-brand-alt) 100%);
          box-shadow: 0 2px 8px rgba(31,42,31,0.14);
-         color:#fff; display:flex; align-items:center; padding: 0 20px; gap: 10px; }
+         color:var(--reefpi-color-nav-text-strong); display:flex; align-items:center; padding: 0 20px; gap: 10px; }
   .brand { font-size: 22px; font-weight: 700; }
   .tabs { display:flex; gap: 4px; margin-left: 24px; }
   .tab  { padding: 8px 14px; border-radius: 6px; color: rgba(255,255,255,0.84); font-size: 14px; }
-  .tab.active, .tab:hover { background: rgba(255,255,255,0.12); color:#fff; }
-  .meta-line { padding: 18px 20px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color:#4e5f4e; }
+  .tab.active, .tab:hover { background: rgba(255,255,255,0.12); color:var(--reefpi-color-nav-text-strong); }
+  .meta-line { padding: 18px 20px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color:var(--reefpi-color-text-muted); }
   .dot { display:inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: middle; margin: 0 6px 2px 0; }
 </style>
 </head><body>
@@ -23,9 +23,10 @@
     </div>
   </div>
   <div class="meta-line">
-    <span class="dot" style="background:#27a822"></span>#27A822 &rarr;
-    <span class="dot" style="background:#1c7e19"></span>#1C7E19 &nbsp; · &nbsp;
+    <span class="dot" style="background:var(--reefpi-color-brand)"></span>#27A822 &rarr;
+    <span class="dot" style="background:var(--reefpi-color-brand-alt)"></span>#1C7E19 &nbsp; · &nbsp;
     linear-gradient(180deg, brand 0%, brand-alt 100%) &nbsp; · &nbsp; shadow 0 2px 8px rgba(31,42,31,.14)
   </div>
 </div>
+<script src="_card.js"></script>
 </body></html>

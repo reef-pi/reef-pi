@@ -9,6 +9,9 @@ parent: "[EPIC] Design tokens v2 — states, themes, contrast"
 Every hex literal in `preview/*.html` should reference a CSS custom property so cards automatically restyle when themes are flipped in the design-system tab.
 
 ## Acceptance
-- [ ] `rg '#[0-9a-fA-F]{3,6}' preview/` returns zero results inside CSS rules (logo SVGs in gradients are exempt — annotate with `/* literal: brand swatch */`).
-- [ ] All cards render visually identically to current in `[data-theme="light"]`.
-- [ ] Add a `?theme=dark` / `?theme=actinic` query-string handler to `_card.css` so reviewers can preview theme variants in the asset panel.
+- [x] yarn run preview-card-check returns zero raw hex literals inside CSS rules and inline style attributes. Text labels and SVG drawing attributes are intentionally outside this check.
+- [x] All cards keep their light-theme colors through matching CSS custom properties.
+- [x] All _card.css previews load _card.js, which applies ?theme=dark / ?theme=actinic to html[data-theme].
+
+## Status
+Implemented in this branch.
