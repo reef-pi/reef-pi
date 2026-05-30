@@ -19,6 +19,9 @@ Lock down a11y so future token edits can't silently regress.
   - `focus` on `brand` gradient stops (both)
 
 ## Acceptance
-- [ ] Script runs in CI; exit code drives PR check.
-- [ ] Report output (both pass + fail) written to `contrast-report.md`.
-- [ ] Failing any pair fails the build with a clear line pointing at the offending token.
+- [x] Script runs in CI; exit code drives PR check.
+- [x] Report output (both pass + fail) written to `contrast-report.md`.
+- [x] Failing any pair fails the build with a clear line pointing at the offending token.
+
+## Status
+Implemented in PR #3079.
