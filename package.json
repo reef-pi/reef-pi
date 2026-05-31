@@ -94,7 +94,8 @@
     "integration": "playwright test --project=integration-chromium",
     "integration:headed": "playwright test --project=integration-chromium --headed",
     "preview-card-check": "node front-end/design-system/scripts/preview-card-check.mjs",
-    "font-policy-check": "node front-end/design-system/scripts/font-policy-check.mjs"
+    "font-policy-check": "node front-end/design-system/scripts/font-policy-check.mjs",
+    "lint:no-bootstrap": "eslint front-end/src"
   },
   "repository": {
     "type": "git",
