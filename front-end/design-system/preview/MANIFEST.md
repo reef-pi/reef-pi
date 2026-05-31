@@ -77,8 +77,8 @@ All stories live under `preview/primitives/`. Open with `?theme=dark` or `?theme
 
 | Component | Stories | Preview card |
 |---|---|---|
-| `ThresholdGauge` | within safe / in warn zone / out of bounds / no warn band / no safe band | [primitives/threshold-gauge.html](primitives/threshold-gauge.html) |
-| `Sparkline` | no fill / gradient fill / threshold band / band+hover / back-compat (number[]) | [primitives/sparkline.html](primitives/sparkline.html) |
+| `ThresholdGauge` | safe / warn / critical / outside / no-warn-band / no-safe-band | [primitives/threshold-gauge.html](primitives/threshold-gauge.html) |
+| `Sparkline` | bare / gradient / band / hover / keyboard / back-compat (number[]) | [primitives/sparkline.html](primitives/sparkline.html) |
 | `RangeSelector` | default / compact / keyboard / custom options+scope | [primitives/range-selector.html](primitives/range-selector.html) |
 | `useTimeSeries` | loading / loaded (120 pts LTTB) / error / stale-while-revalidate | [primitives/use-time-series.html](primitives/use-time-series.html) |
 

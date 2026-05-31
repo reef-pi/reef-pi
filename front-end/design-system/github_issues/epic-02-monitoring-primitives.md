@@ -15,14 +15,14 @@ Introduce the atomic monitoring components every telemetry tile needs: a thresho
 - [x] `Sparkline v2` supports `fill=gradient`, `band=[min, max]`, hover crosshair.
 - [x] `RangeSelector` emits `{ '1h' | '6h' | '1d' | '7d' | '30d' }` and persists to `localStorage` globally.
 - [x] `useTimeSeries(metric, range)` hook returns downsampled points appropriate for the selected range.
-- [ ] Storybook has interactive examples for each.
+- [x] Storybook has interactive examples for each.
 
 ## Sub-tasks
 - [x] #5 ThresholdGauge component
 - [x] #6 Sparkline v2 (gradient fill, threshold band, hover)
 - [x] #7 RangeSelector (1H / 6H / 1D / 7D / 30D)
 - [x] #8 `useTimeSeries` hook with range + downsample
-- [ ] #9 Storybook entries for all primitives
+- [x] #9 Storybook entries for all primitives
 
 ## Dependencies
 - Requires #1 (state tokens) for gauge colors.

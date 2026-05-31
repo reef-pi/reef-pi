@@ -245,7 +245,42 @@
       </div>
     </div>
 
-    <!-- Story 4: No warn band -->
+    <!-- Story 4: Critical zone -->
+    <div class="card">
+      <div class="card-header">Critical zone — 72.0 °F</div>
+      <div class="card-body">
+        <div class="gauge-host"
+          role="meter"
+          aria-label="Frag tank temperature"
+          aria-valuemin="70" aria-valuemax="86"
+          aria-valuenow="72"
+          aria-valuetext="72°F, critical low">
+
+          <div class="gauge-value-row">
+            <span class="gauge-value out-of-bounds">72.0°F</span>
+            <span class="gauge-label">Frag Tank</span>
+          </div>
+
+          <div class="gauge-track-wrap">
+            <div class="gauge-zones">
+              <div class="zone zone-critical" style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-safe"     style="width:25%"></div>
+              <div class="zone zone-warn"     style="width:12.5%"></div>
+              <div class="zone zone-critical" style="width:25%"></div>
+            </div>
+            <div class="gauge-needle" style="left:12.5%; background:var(--reefpi-color-band-critical)"></div>
+            <div class="gauge-indicator out-of-bounds" style="left:12.5%"></div>
+          </div>
+
+          <div class="gauge-minmax">
+            <span>70°F</span><span>86°F</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story 5: No warn band -->
     <div class="card">
       <div class="card-header">No warn band — safe + critical only</div>
       <div class="card-body">
@@ -287,7 +322,7 @@
       </div>
     </div>
 
-    <!-- Story 5: No safe band — target band only -->
+    <!-- Story 6: No safe band — target band only -->
     <div class="card" style="grid-column: 1 / -1;">
       <div class="card-header">No safe band — target band only (Salinity)</div>
       <div class="card-body">
