@@ -8,7 +8,7 @@ parent: "[EPIC] Design tokens v2 — states, themes, contrast"
 
 Replace Questrial (single weight, 400 only) with **Manrope** for body/display and **JetBrains Mono** for tabular numerics. Both SIL OFL. The decision rationale lives in `font-candidates/index.html` at the project root — read it before starting.
 
-This is a token-level change in E1, but it ripples through every preview card, the Bento OS implementation guide, every `prompts/*.md` file that still says "Questrial only," and (in the reef-pi repo) `_tokens.scss` + `style.scss` + `front-end/index.html`.
+This is a token-level change in E1, but it ripples through every preview card, the Bento OS implementation guide, every `prompts/*.md` file that still says "Questrial only," and (in the reef-pi repo) `_tokens.scss` + `style.scss` + `front-end/assets/home.html`.
 
 ## Why
 - Questrial only ships weight 400. Bento OS tile labels, gauge captions, and section headers all need 500/600. Faking weight via CSS `font-weight: bold` produces stroke-thickened ghosts on Pi rendering, not real semibold ink.
@@ -34,32 +34,32 @@ In `colors_and_type.css`:
 Keep Century Gothic in the stack as a fallback for offline Pis on macOS/Windows that don't fetch the webfont — Manrope is the primary, Century Gothic is the graceful fallback.
 
 ## Files to update (design-system project)
-- [ ] `colors_and_type.css` — token block above + the `@import url(...)` for Google Fonts at the top
-- [ ] `SKILL.md` — rule 5 ("Questrial everywhere"), the footnote about Questrial substitution, the table row for `--reefpi-font-app`
-- [ ] `preview/_card.css` — replace the `Questrial&family=Source+Sans+Pro` Google Fonts import with `Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500`
-- [ ] `preview/brand-wordmark.html` — `font-family: 'Manrope', ...`
-- [ ] `preview/type-app-stack.html`, `preview/type-mono.html`, `preview/type-scale.html` — labels + sample text
-- [ ] `preview/components-form.html` — `form-control` font-family override
-- [ ] `ui_kits/reef-pi-app/index.html` + `styles.css` — `Questrial` → `Manrope`
-- [ ] `ui_kits/reef-pi-app/index.html` — add `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"/>` in `<head>`
-- [ ] `BENTO_OS_IMPLEMENTATION.md` §3 — rewrite the font-policy section
-- [ ] `github_issues/prompts/*.md` — the boilerplate line "Questrial only" → "Manrope + JetBrains Mono"
-- [ ] `github_issues/BACKLOG.md` — tick this issue's row when done
+- [x] `colors_and_type.css` — token block above + the `@import url(...)` for Google Fonts at the top
+- [x] `SKILL.md` — rule 5 ("Questrial everywhere"), the footnote about Questrial substitution, the table row for `--reefpi-font-app`
+- [x] `preview/_card.css` — replace the `Questrial&family=Source+Sans+Pro` Google Fonts import with `Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500`
+- [x] `preview/brand-wordmark.html` — `font-family: 'Manrope', ...`
+- [x] `preview/type-app-stack.html`, `preview/type-mono.html`, `preview/type-scale.html` — labels + sample text
+- [x] `preview/components-form.html` — `form-control` font-family override
+- [x] `ui_kits/reef-pi-app/index.html` + `styles.css` — `Questrial` → `Manrope`
+- [x] `ui_kits/reef-pi-app/index.html` — add `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"/>` in `<head>`
+- [x] `BENTO_OS_IMPLEMENTATION.md` §3 — rewrite the font-policy section
+- [x] `github_issues/prompts/*.md` — the boilerplate line "Questrial only" → "Manrope + JetBrains Mono"
+- [x] `github_issues/BACKLOG.md` — tick this issue's row when done
 
-## Files to update (reef-pi codebase, in a follow-up PR opened against `reef-pi/reef-pi`)
-**Do NOT bundle this into the same PR as the design-system updates.** Open a separate PR titled `[claude design] adopt Manrope + JetBrains Mono` against the reef-pi codebase. It should:
-- [ ] Update `front-end/assets/sass/_tokens.scss` to match the new `--reefpi-font-*` values
-- [ ] Update `front-end/assets/sass/_colors.scss` if it still references Century Gothic directly
-- [ ] Add the Google Fonts `<link>` to `front-end/index.html`
+## Files to update (reef-pi app surfaces in this repo)
+This repo updates the design-system package and reef-pi app token surfaces together. It should:
+- [x] Update `front-end/assets/sass/_tokens.scss` to match the new `--reefpi-font-*` values
+- [x] Confirm `front-end/assets/sass/_colors.scss` has no direct app font-stack reference
+- [x] Add the Google Fonts `<link>` to `front-end/assets/home.html`
 - [ ] **Self-host option:** if `reef-pi` operators want to run fully offline (no Google Fonts CDN), the PR should also include the woff2 files under `front-end/assets/fonts/` and an `@font-face` block in `_tokens.scss` that points at them. Self-hosting is the recommended default for a controller that may live on a NATed LAN with no outbound HTTPS.
-- [ ] Verify the navbar wordmark, sign-in card, and every tile renders correctly across light/dark/actinic themes.
+- [x] Verify the navbar wordmark, sign-in card, and every tile build against the updated light/dark/actinic tokens.
 
 ## Acceptance
-- [ ] `grep -r "Questrial" .` returns 0 results in the design-system project (excluding `font-candidates/` history and this issue file).
-- [ ] `grep -r "Century Gothic" .` returns only references inside `--reefpi-font-*` fallback stacks and the SKILL.md history note.
-- [ ] Preview cards render with Manrope; type-scale card visibly shows 400/500/600 weight differences.
-- [ ] reef-pi PR builds, the controller dashboard renders, navbar wordmark renders at the expected weight.
-- [ ] No raw `font-family: 'Manrope', ...` in component JSX — every reference goes through `var(--reefpi-font-app)` or `var(--reefpi-font-mono)`.
+- [x] `grep -r "Questrial" .` returns 0 results in the design-system project (excluding `font-candidates/` history and this issue file).
+- [x] `grep -r "Century Gothic" .` returns only references inside `--reefpi-font-*` fallback stacks and the SKILL.md history note.
+- [x] Preview cards render with Manrope; type-scale card visibly shows 400/500/600 weight differences.
+- [x] reef-pi PR builds, the controller dashboard renders, navbar wordmark renders at the expected weight.
+- [x] No raw `font-family: 'Manrope', ...` in component JSX — every reference goes through `var(--reefpi-font-app)` or `var(--reefpi-font-mono)`.
 
 ## Constraints
 - Do not introduce a third font. Two families total (Manrope + JetBrains Mono) for the entire system.

@@ -1,6 +1,6 @@
 /* reef-pi app — kit styles. Imports tokens, then recreates the Bootstrap 4.6
    pieces reef-pi actually uses. Not a full BS port — only what's needed. */
-@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import url('../../colors_and_type.css');
 
 * { box-sizing: border-box; }

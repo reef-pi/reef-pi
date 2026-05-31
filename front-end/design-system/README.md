@@ -13,7 +13,7 @@ This system was extracted from the following public repositories. The reader may
   - Layout / components: `front-end/assets/sass/navbar.scss`, `grid.scss`, `sign-in.scss`, `auth-page.scss`, `fatal_error.scss`
   - React source: `front-end/src/**` (Bootstrap 4.6 + Material-UI + react-toggle-switch)
   - UI copy / tone: `front-end/assets/translations/en.csv`
-- **Website** — `github.com/reef-pi/reef-pi.github.io` (Hugo + Bootstrap 5, Source Sans Pro)
+- **Website** — `github.com/reef-pi/reef-pi.github.io` (Hugo + Bootstrap 5, Manrope)
 - **Landing copy** — `layouts/index.html` on the website
 
 ## Products
@@ -21,7 +21,7 @@ This system was extracted from the following public repositories. The reader may
 reef-pi is a single-surface product with two related web faces:
 
 1. **reef-pi controller web app** — a responsive React SPA served from the Raspberry Pi itself. Features a top navbar (brand-green gradient), a tile-based Dashboard, and per-capability pages for Equipment, Timers, Lighting, Temperature, ATO (auto top-off), pH, Dosers, Macros, Camera, Journal, Instances, and Configuration. This is the **primary** UI kit. Built with Bootstrap 4.6 + Material-UI + recharts.
-2. **reef-pi.com marketing / docs website** — a static Hugo site with build guides and tutorials. Minimal styling — Bootstrap 5 + Source Sans Pro. Not the focus of this system.
+2. **reef-pi.com marketing / docs website** — a static Hugo site with build guides and tutorials. Minimal styling — Bootstrap 5 + Manrope. Not the focus of this system.
 
 ## Tech stack observed
 
@@ -76,12 +76,12 @@ The palette is **monochromatic green** — a single brand hue (`#27a822`) with a
 
 ### Type
 
-Two stacks exist, depending on surface:
+Two tokenized stacks exist:
 
-- **App:** `'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif` — a round, geometric sans. **FLAG:** Century Gothic is a system font shipped with macOS/Windows; on Linux/Chromebook/Android it will fall back. For the design system we substitute **Questrial** from Google Fonts as the nearest open-source match (single-weight geometric sans with similar proportions). Ask the author to confirm the substitution.
-- **Web:** `Source Sans Pro` (via Google Fonts) — only used on reef-pi.com.
+- **App / web:** `--reefpi-font-app` and `--reefpi-font-web` start with **Manrope**, then keep local fallbacks for systems that have them.
+- **Mono / tabular:** `--reefpi-font-mono` starts with **JetBrains Mono**, then falls back to the platform monospace stack.
 
-Scale follows Bootstrap 4.6 (1rem = 16px base). `h1 2.5rem … h6 1rem`. No custom display sizes. Weights are 400 / 500 / 700.
+Scale follows Bootstrap 4.6 (1rem = 16px base). `h1 2.5rem ... h6 1rem`. No custom display sizes. Weights are 400 / 500 / 600 for the reef-pi app tokens, with Bootstrap 700 still available where legacy components request it.
 
 ### Spacing
 
@@ -180,6 +180,6 @@ Folders:
 
 ## Caveats
 
-- **Century Gothic substitution:** the app font is a system font. We substitute **Questrial** from Google Fonts. If you have a licensed Century Gothic webfont, drop the `.woff2` into `fonts/` and update `colors_and_type.css`.
+- **Font loading:** Manrope and JetBrains Mono are the canonical design-system fonts. Keep local fallback names in the token stacks so offline or cached Pi sessions still degrade gracefully.
 - **No canonical logomark** — only a wordmark exists upstream.
 - Screenshots of the real app (`dashboard.png`, `aio.png`) are on the website repo but not importable as text — refer to the repo if you need them.

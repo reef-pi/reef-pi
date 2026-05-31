@@ -1,6 +1,6 @@
 # Font swap — Manrope + JetBrains Mono — operator guide
 
-This is the play-by-play for shipping issue **#29** (adopt Manrope + JetBrains Mono, retire Questrial) using Claude Code. The font decision is documented in `font-candidates/index.html`; the full spec is in `github_issues/issue-29-font-swap.md`. This file tells you the order, the commands, and the validation gates.
+This is the play-by-play for shipping issue **#29** (adopt Manrope + JetBrains Mono, retire the legacy font stack) using Claude Code. The font decision is documented in `font-candidates/index.html`; the full spec is in `github_issues/issue-29-font-swap.md`. This file tells you the order, the commands, and the validation gates.
 
 ## TL;DR
 
@@ -38,7 +38,7 @@ claude \
   --system "$(cat github_issues/prompts/29.md)" \
   "Implement issue #29, Mode A (design-system project).
    Before writing code, echo the acceptance checklist from issue-29-font-swap.md,
-   list every file you'll touch (use git grep -li 'Questrial|Century Gothic' for proof),
+   list every file you'll touch (use git grep -li 'legacy font stack|font-family' for proof),
    and write out the exact sed command you'll run on prompts/*.md.
    Then implement, tick the BACKLOG.md row, and stop."
 ```
@@ -53,7 +53,7 @@ claude \
 3. **Mass-edit prompt files** with one command, not 26 hand-edits:
    ```bash
    find github_issues/prompts -name '*.md' -exec sed -i.bak \
-     's/Questrial only/Manrope + JetBrains Mono/g' {} \;
+     's/legacy font boilerplate/Manrope + JetBrains Mono/g' {} \;
    find github_issues/prompts -name '*.bak' -delete
    ```
 4. **Preview cards** — update `preview/_card.css` Google Fonts import, plus the three type cards (`type-app-stack.html`, `type-mono.html`, `type-scale.html`), `brand-wordmark.html`, `components-form.html`.
@@ -64,11 +64,11 @@ claude \
 ### Validate before committing
 
 ```bash
-# No Questrial references left (except in the issue file and font-candidates)
+# No legacy app face references left (except in the issue file and font-candidates)
 git grep -i questrial -- ':!github_issues/issue-29-font-swap.md' ':!font-candidates/'
 # Should output nothing.
 
-# Century Gothic should only appear in fallback stacks + the SKILL.md footnote
+# local fallback names should only appear in token fallback stacks plus the SKILL.md footnote
 git grep -i 'century gothic'
 
 # Preview cards build and look right
@@ -148,7 +148,7 @@ claude \
    $reefpi-font-web:  'Manrope', 'Century Gothic', system-ui, sans-serif;
    $reefpi-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
    ```
-3. **Grep for stragglers** in `_colors.scss`, `style.scss`, `navbar.scss`, etc. — anywhere the codebase hard-codes `'Century Gothic'` instead of using the token, swap it for the token.
+3. **Grep for stragglers** in `_colors.scss`, `style.scss`, `navbar.scss`, etc. — anywhere the codebase hard-codes a font stack instead of using the token, swap it for the token.
 4. **Copy woff2 files** into `front-end/assets/fonts/`.
 5. **Add `@font-face` blocks** at the top of `_tokens.scss` (or a dedicated `_fonts.scss` that `_tokens.scss` imports first):
    ```scss
@@ -174,7 +174,7 @@ claude \
 # Offline smoke test (the important one)
 sudo iptables -A OUTPUT -d fonts.gstatic.com -j REJECT   # or pull the Ethernet cable on the Pi
 yarn dev
-# Confirm fonts still render. Navbar wordmark should be Manrope, NOT fallback to Century Gothic / system.
+# Confirm fonts still render. Navbar wordmark should be Manrope, NOT fallback to token fallback / system.
 sudo iptables -F OUTPUT
 ```
 
@@ -215,7 +215,7 @@ gh pr create --title "[claude design] adopt Manrope + JetBrains Mono · reef-pi"
 
 After both PRs merge:
 
-- Open `colors_and_type.css` — `--reefpi-font-app` starts with Manrope, falls back to Century Gothic.
+- Open `colors_and_type.css` — `--reefpi-font-app` starts with Manrope, falls back through the local stack.
 - Open the design-system preview pane → `type-scale` card — three distinct weights visible.
 - Open `BENTO_OS_IMPLEMENTATION.md` §3 — instructs implementers to use the new tokens, no mention of "do not introduce Geist" except as a historical aside.
 - Open the running reef-pi controller dashboard with the Ethernet cable unplugged — navbar wordmark renders in Manrope, tile big-numbers in JetBrains Mono, no FOIT, no fallback to system sans.

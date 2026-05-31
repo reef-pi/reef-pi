@@ -20,7 +20,7 @@ This guide assumes you have:
 - `revamp/styles/bento-os-extras.jsx` — Sign-in, empty states, schedules, settings
 - `revamp/styles/bento-os-system.jsx` — Component sheet (tokens, atoms)
 
-It uses **Geist + Geist Mono + Inter** at design time. The real reef-pi app uses **Questrial** (our open-source stand-in for Century Gothic). You will **not** ship Geist into reef-pi — see §3.
+It uses **Bento source fonts** at design time. The real reef-pi app uses **Manrope** for app text and **JetBrains Mono** for tabular readouts. You will **not** ship Geist into reef-pi - see §3.
 
 These designs are paired with a fully-specced rollout in `github_issues/` (26 atomic issues, 5 epics, one prompt per issue). The Bento OS visuals are the *target render* for E3 (Dashboard v2) and inform E5 (Shell + theming). E1 (tokens) and E2 (primitives) are the prerequisites.
 
@@ -101,18 +101,19 @@ If the user asks for "make the dashboard look like Bento OS", the answer is "mer
 
 ## 3 · Font policy (read this before touching tokens)
 
-Bento OS uses **Geist** and **Geist Mono**. The real reef-pi app uses **Questrial** (Google Fonts stand-in for Century Gothic). **Do not introduce Geist into reef-pi.** When porting tile typography, do:
+Bento OS uses **Geist** and **Geist Mono** in the source artboards. The real reef-pi app uses **Manrope** and **JetBrains Mono** through tokens. **Do not introduce Geist into reef-pi.** When porting tile typography, do:
 
-- Display / body → keep `Questrial, "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif`.
-- Tabular numerics in tiles (the 44px big numbers, gauge readouts) → `ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace` with `font-variant-numeric: tabular-nums`.
+- Display / body -> `var(--reefpi-font-app)`.
+- Tabular numerics in tiles (the 44px big numbers, gauge readouts) -> `var(--reefpi-font-mono)` with `font-variant-numeric: tabular-nums`.
 
-Add one new token in `_tokens.scss`:
+Keep the app and design-system token files aligned:
 
 ```scss
---reefpi-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+--reefpi-font-app:  'Manrope', 'Century Gothic', CenturyGothic, Geneva, AppleGothic, system-ui, sans-serif;
+--reefpi-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 ```
 
-When Claude Code is generating tile components from Bento OS source, tell it explicitly: *"Replace `Geist Mono` with `var(--reefpi-font-mono)`, replace `Geist`/`Inter` with the existing reef-pi app stack."* The per-issue prompts already enforce "no new fonts," but Bento OS source will tempt the agent — call it out.
+When Claude Code is generating tile components from Bento OS source, tell it explicitly: *"Replace `Geist Mono` with `var(--reefpi-font-mono)`, replace `Geist`/`Inter` with `var(--reefpi-font-app)`."* The per-issue prompts already enforce "no new fonts," but Bento OS source will tempt the agent - call it out.
 
 ---
 
@@ -231,7 +232,7 @@ claude \
   "Implement issue #11. Visual target: the 2-col temperature tile in
    revamp/Bento OS.html (BentoOS component) — gauge top-left, big mono number
    middle, sparkline-with-band bottom, range selector top-right.
-   Stack: Questrial body + var(--reefpi-font-mono) for the readout.
+   Stack: Manrope body + var(--reefpi-font-mono) for the readout.
    Wire to useTimeSeries('temperature.display', range). Land it inside
    front-end/src/dashboard/v2/TemperatureHero.jsx so issue #14 can compose it."
 ```

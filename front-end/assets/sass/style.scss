@@ -41,9 +41,9 @@
   --reefpi-tap-target-min: 2.75rem;
 
   // Typography
-  --reefpi-font-app:  'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
-  --reefpi-font-web:  'Source Sans Pro', 'Century Gothic', sans-serif;
-  --reefpi-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --reefpi-font-app:  #{$reefpi-font-app};
+  --reefpi-font-web:  #{$reefpi-font-web};
+  --reefpi-font-mono: #{$reefpi-font-mono};
   --reefpi-font-size-base: 1rem;
   --reefpi-line-height:    1.5;
   --reefpi-h1: 2.5rem;
@@ -53,6 +53,9 @@
   --reefpi-h5: 1.25rem;
   --reefpi-h6: 1rem;
   --reefpi-small: 0.875rem;
+  --reefpi-font-weight-regular: #{$reefpi-font-weight-regular};
+  --reefpi-font-weight-medium: #{$reefpi-font-weight-medium};
+  --reefpi-font-weight-semibold: #{$reefpi-font-weight-semibold};
   --reefpi-weight-normal: 400;
   --reefpi-weight-bold:   700;
 
@@ -167,7 +170,7 @@
 }
 
 html {
-  font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
+  font-family: var(--reefpi-font-app);
 }
 
 body {

@@ -15,7 +15,7 @@ This package is the operating manual for a Claude Code (or any coding agent) to 
 
 - [ ] All acceptance items in the issue file are checked.
 - [ ] No new raw hex literals in code (use `var(--reefpi-*)`).
-- [ ] No new fonts introduced (Questrial only).
+- [ ] No new fonts introduced beyond Manrope + JetBrains Mono.
 - [ ] Tap targets ≥ 44px on every interactive element.
 - [ ] Light + dark + actinic themes render without obvious regressions (manual screenshot in PR).
 - [ ] Storybook entry added for any new primitive.

@@ -150,7 +150,7 @@ Do not combine all visual fixes with the audit pipeline implementation. Once the
 1. Tap-target and mobile ergonomics fixes.
 2. Gradient/shadow rule fixes outside the navbar.
 3. Brand color token cleanup, replacing hard-coded Bootstrap greens where inappropriate.
-4. Font-rule reconciliation after deciding whether `Questrial` or the existing `Century Gothic` stack is authoritative.
+4. Font-rule reconciliation after the Manrope + JetBrains Mono tokens are authoritative.
 
 This keeps the first PR about audit trust and later PRs about UI behavior.
 

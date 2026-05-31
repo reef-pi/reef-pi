@@ -3,7 +3,7 @@
 <style>
   .card { height: 160px; padding: 20px 24px; gap: 24px; align-items: center; }
   .tap { width: 44px; height: 44px; border-radius: 6px; background: var(--reefpi-color-brand); color:var(--reefpi-color-nav-text-strong); display:flex; align-items:center; justify-content:center; font-weight: 700; }
-  .ruler { display:flex; align-items:center; gap: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; color:var(--reefpi-color-text-muted); }
+  .ruler { display:flex; align-items:center; gap: 4px; font-family: var(--reefpi-font-mono); font-size: 11px; color:var(--reefpi-color-text-muted); }
   .gutter-box { flex: 1; background: var(--reefpi-color-surface); border: 1px solid var(--reefpi-color-border); border-radius: 10px; padding: 12px; display:flex; flex-direction: column; gap: 6px; }
   .row-gutter { display:flex; align-items:center; gap: 10px; }
   .edge { width: 12px; height: 24px; background: var(--reefpi-color-brand); border-radius: 2px; }
@@ -21,7 +21,7 @@
     <div style="font-size:12px; font-weight:700;">Shell gutter</div>
     <div class="row-gutter"><span class="edge"></span><span class="inner">viewport &lt; 768px · 12px</span><span class="edge"></span></div>
     <div class="row-gutter"><span class="edge edge-md"></span><span class="inner">viewport ≥ 768px · 16px</span><span class="edge edge-md"></span></div>
-    <div style="font-size:11px; color:var(--reefpi-color-text-muted); font-family: ui-monospace, Menlo, monospace;">.container-fluid · row-gap: 1rem on .body-panel</div>
+    <div style="font-size:11px; color:var(--reefpi-color-text-muted); font-family: var(--reefpi-font-mono);">.container-fluid · row-gap: 1rem on .body-panel</div>
   </div>
 </div>
 <script src="_card.js"></script>
