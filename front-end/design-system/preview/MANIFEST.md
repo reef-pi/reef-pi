@@ -69,7 +69,7 @@ Before shipping a PR that touches tokens or components, verify each row is up to
 
 ## Card infrastructure
 
-All preview cards load `_card.css` (shared base styles + Questrial + token import) and `_card.js` (query-string theme handler). Open any card with `?theme=dark` or `?theme=actinic` to preview it in that theme.
+All preview cards load `_card.css` (shared base styles + Manrope + token import) and `_card.js` (query-string theme handler). Open any card with `?theme=dark` or `?theme=actinic` to preview it in that theme.
 
 ## Components (E2)
 
@@ -142,8 +142,8 @@ Tokens overridden per theme: `--reefpi-color-surface`, `--reefpi-color-surface-e
 
 | Token | Value |
 |---|---|
-| `--reefpi-font-app` | `'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif` |
-| `--reefpi-font-mono` | `ui-monospace, SFMono-Regular, …` |
+| `--reefpi-font-app` | `'Manrope', 'Century Gothic', CenturyGothic, Geneva, AppleGothic, system-ui, sans-serif` |
+| `--reefpi-font-mono` | `'JetBrains Mono', ui-monospace, SFMono-Regular, ...` |
 | `--reefpi-font-size-base` | `1rem` |
 | `--reefpi-line-height` | `1.5` |
 

@@ -6,5 +6,5 @@
     </linearGradient>
   </defs>
   <rect width="96" height="96" rx="16" fill="url(#rpm)"></rect>
-  <text x="48" y="66" text-anchor="middle" font-family="Questrial, &#39;Century Gothic&#39;, sans-serif" font-size="52" font-weight="400" fill="#ffffff" letter-spacing="-1">rp</text>
+  <text x="48" y="66" text-anchor="middle" font-family="Manrope, &#39;Century Gothic&#39;, sans-serif" font-size="52" font-weight="400" fill="#ffffff" letter-spacing="-1">rp</text>
 </svg>

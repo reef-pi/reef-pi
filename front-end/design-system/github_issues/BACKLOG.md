@@ -7,7 +7,7 @@
 - [x] #2 Add dark + actinic theme tokens — `issue-02-theme-tokens.md`
 - [x] #3 Token contrast audit + automated test — `issue-03-contrast-audit.md`
 - [x] #4 Migrate `preview/` cards to `var()`-only — `issue-04-preview-migrate.md`
-- [ ] #29 Adopt Manrope + JetBrains Mono (retire Questrial) — `issue-29-font-swap.md`
+- [x] #29 Adopt Manrope + JetBrains Mono (retire legacy font) — `issue-29-font-swap.md`
 
 ## E2 · Monitoring primitives
 - [ ] #5 ThresholdGauge component — `issue-05-threshold-gauge.md`

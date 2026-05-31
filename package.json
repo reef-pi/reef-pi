@@ -93,7 +93,8 @@
     "ui-audit": "yarn run ui-audit:capture && yarn run ui-audit:report",
     "integration": "playwright test --project=integration-chromium",
     "integration:headed": "playwright test --project=integration-chromium --headed",
-    "preview-card-check": "node front-end/design-system/scripts/preview-card-check.mjs"
+    "preview-card-check": "node front-end/design-system/scripts/preview-card-check.mjs",
+    "font-policy-check": "node front-end/design-system/scripts/font-policy-check.mjs"
   },
   "repository": {
     "type": "git",

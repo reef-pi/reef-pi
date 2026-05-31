@@ -1,6 +1,6 @@
 # reef-pi design system
 
-A small, disciplined aquarium controller system. Single green brand. Questrial on a Bootstrap 4.6 base. Touch-friendly. No emoji, no gradients outside the navbar, no decorative color.
+A small, disciplined aquarium controller system. Single green brand. Manrope on a Bootstrap 4.6 base. Touch-friendly. No emoji, no gradients outside the navbar, no decorative color.
 
 ## Quick orientation
 
@@ -15,7 +15,7 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 2. **Navbar is the only gradient.** Everywhere else uses flat fills.
 3. **Borders over shadows.** Dashboard grid cells use `1px solid #000` + `10px` radius. Only the navbar uses a shadow.
 4. **44px minimum tap target** on every interactive element — reef-pi runs on a phone beside a wet tank.
-5. **Questrial** everywhere (substitutes for Century Gothic). No Inter, no Roboto.
+5. **Manrope + JetBrains Mono** only. No Inter, no Roboto, no raw component-level font stacks.
 6. **Bootstrap 4.6 class names are preserved.** When recreating pages, use `btn btn-success`, `list-group`, `alert alert-danger`, `form-control` — do not rename.
 7. **Copy is impersonal and object-first.** `Heater Threshold`, `Delete Skimmer ?`, `Oops! Invalid Credentials`. No "we", rarely "you".
 8. **No emoji in UI.** Font Awesome 6 for icons, matching the marketing site.
@@ -23,7 +23,7 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 ## Flags (things that were inferred, not lifted)
 
 - **Mark / favicon** (`assets/reef-pi-mark.svg`): the project ships only a wordmark. The "rp" lockup is a reasonable favicon-scale substitute — confirm before using in official channels.
-- **Questrial**: chosen as a Google Fonts substitute for Century Gothic (which is not web-licensed). Century Gothic will render locally on systems that have it; Questrial is the fallback.
+- **Font fallback:** Manrope is the primary app face. Century Gothic remains only as a local fallback in the token stack for systems that already have it installed.
 - **`#174D16` focus ring**: the repo doesn't pin a focus color — this is a darkened brand green chosen to pass contrast against both the brand gradient and white.
 - **Tap target 44px**: repo has no explicit token; 44px is the iOS standard applied here to match the mobile-first reality of the app.
 
@@ -49,7 +49,8 @@ A small, disciplined aquarium controller system. Single green brand. Questrial o
 | `--reefpi-radius-sm` / `-md` | `6px` / `10px` | Nav link / grid cell |
 | `--reefpi-shadow-navbar` | `0 2px 8px rgba(31,42,31,.14)` | Navbar only |
 | `--reefpi-tap-target-min` | `44px` | All interactive elements |
-| `--reefpi-font-app` | `'Questrial', 'Century Gothic', sans-serif` | All UI |
+| `--reefpi-font-app` | `'Manrope', 'Century Gothic', CenturyGothic, Geneva, AppleGothic, system-ui, sans-serif` | All UI |
+| `--reefpi-font-mono` | `'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace` | Tabular readouts |
 
 ## When designing new pages
 

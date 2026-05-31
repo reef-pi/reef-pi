@@ -59,7 +59,7 @@ E1 · design-tokens-v2
  ├─ #2 add dark + actinic theme tokens
  ├─ #3 token contrast audit + automated test
  ├─ #4 migrate preview/ cards to var()-only (no hardcoded hex)
- └─ #29 adopt Manrope + JetBrains Mono (retire Questrial)
+ └─ #29 adopt Manrope + JetBrains Mono (retire legacy font)
 
 E2 · monitoring-primitives
  ├─ #5 ThresholdGauge component

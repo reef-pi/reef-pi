@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 /* ============================================================
    reef-pi Design System — Colors & Type
    Source: front-end/assets/sass/_colors.scss + _tokens.scss + style.scss
@@ -123,9 +124,9 @@
   --reefpi-tap-target-min: 2.75rem; /* 44px — min touch target */
 
   /* ---------- Type ---------- */
-  --reefpi-font-app:  'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
-  --reefpi-font-web:  'Source Sans Pro', 'Century Gothic', sans-serif;
-  --reefpi-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --reefpi-font-app:  'Manrope', 'Century Gothic', CenturyGothic, Geneva, AppleGothic, system-ui, sans-serif;
+  --reefpi-font-web:  'Manrope', 'Century Gothic', system-ui, sans-serif;
+  --reefpi-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Bootstrap 4.6 type scale used by reef-pi */
   --reefpi-font-size-base: 1rem;      /* 16px */
@@ -138,6 +139,9 @@
   --reefpi-h6: 1rem;     /* 16 */
   --reefpi-small: 0.875rem;
 
+  --reefpi-font-weight-regular: 400;
+  --reefpi-font-weight-medium: 500;
+  --reefpi-font-weight-semibold: 600;
   --reefpi-weight-normal: 400;
   --reefpi-weight-bold:   700;
 }
